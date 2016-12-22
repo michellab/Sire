@@ -37,9 +37,9 @@ void register_NullIO_class(){
 
     { //::SireIO::NullIO
         typedef bp::class_< SireIO::NullIO, bp::bases< SireIO::IOBase, SireBase::Property > > NullIO_exposer_t;
-        NullIO_exposer_t NullIO_exposer = NullIO_exposer_t( "NullIO", bp::init< >() );
+        NullIO_exposer_t NullIO_exposer = NullIO_exposer_t( "NullIO", "This is the null writer - this writes nothing\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope NullIO_scope( NullIO_exposer );
-        NullIO_exposer.def( bp::init< SireIO::NullIO const & >(( bp::arg("other") )) );
+        NullIO_exposer.def( bp::init< SireIO::NullIO const & >(( bp::arg("other") ), "Copy constructor") );
         NullIO_exposer.def( bp::self != bp::self );
         { //::SireIO::NullIO::operator=
         
@@ -50,7 +50,8 @@ void register_NullIO_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullIO_exposer.def( bp::self == bp::self );
@@ -61,7 +62,8 @@ void register_NullIO_class(){
             
             NullIO_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullIO_exposer.staticmethod( "typeName" );

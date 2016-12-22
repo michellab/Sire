@@ -33,15 +33,15 @@ void register_RegularGrid_class(){
 
     { //::SireVol::RegularGrid
         typedef bp::class_< SireVol::RegularGrid, bp::bases< SireVol::Grid, SireBase::Property > > RegularGrid_exposer_t;
-        RegularGrid_exposer_t RegularGrid_exposer = RegularGrid_exposer_t( "RegularGrid", bp::init< >() );
+        RegularGrid_exposer_t RegularGrid_exposer = RegularGrid_exposer_t( "RegularGrid", "This is a regular grid, containing points which are equally spaced\nalong the three orthoganol coordinates\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope RegularGrid_scope( RegularGrid_exposer );
-        RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireUnits::Dimension::Length >(( bp::arg("min"), bp::arg("max"), bp::arg("gridsize") )) );
-        RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Matrix const &, SireUnits::Dimension::Length >(( bp::arg("min"), bp::arg("max"), bp::arg("basis"), bp::arg("gridsize") )) );
-        RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Quaternion const &, SireUnits::Dimension::Length >(( bp::arg("min"), bp::arg("max"), bp::arg("basis"), bp::arg("gridsize") )) );
-        RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, int, SireUnits::Dimension::Length >(( bp::arg("center"), bp::arg("npoints"), bp::arg("gridsize") )) );
-        RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Matrix const &, int, SireUnits::Dimension::Length >(( bp::arg("center"), bp::arg("basis"), bp::arg("npoints"), bp::arg("gridsize") )) );
-        RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Quaternion const &, int, SireUnits::Dimension::Length >(( bp::arg("center"), bp::arg("basis"), bp::arg("npoints"), bp::arg("gridsize") )) );
-        RegularGrid_exposer.def( bp::init< SireVol::RegularGrid const & >(( bp::arg("other") )) );
+        RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireUnits::Dimension::Length >(( bp::arg("min"), bp::arg("max"), bp::arg("gridsize") ), "Construct a regular grid that spans from min to max, with a grid\nspacing of spacing") );
+        RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Matrix const &, SireUnits::Dimension::Length >(( bp::arg("min"), bp::arg("max"), bp::arg("basis"), bp::arg("gridsize") ), "Construct a regular grid that spans from min to max using the\npassed three orthoganol basis vectors, using a grid spacing of spacing") );
+        RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Quaternion const &, SireUnits::Dimension::Length >(( bp::arg("min"), bp::arg("max"), bp::arg("basis"), bp::arg("gridsize") ), "Construct a regular grid that spans from min to max using the\npassed three orthoganol basis vectors, using a grid spacing of spacing") );
+        RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, int, SireUnits::Dimension::Length >(( bp::arg("center"), bp::arg("npoints"), bp::arg("gridsize") ), "Construct a regular grid that is centered at center, has a total of\nnpoints points which are spaced using a grid spacing of spacing") );
+        RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Matrix const &, int, SireUnits::Dimension::Length >(( bp::arg("center"), bp::arg("basis"), bp::arg("npoints"), bp::arg("gridsize") ), "Construct a regular grid that is centered at center, has a total of\nnpoints points which are spaced using a grid spacing of spacing,\nand arranged along the three orthoganol basis vectors supplied\nin basis") );
+        RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Quaternion const &, int, SireUnits::Dimension::Length >(( bp::arg("center"), bp::arg("basis"), bp::arg("npoints"), bp::arg("gridsize") ), "Construct a regular grid that is centered at center, has a total of\nnpoints points which are spaced using a grid spacing of spacing,\nand arranged along the three orthoganol basis vectors supplied\nin basis") );
+        RegularGrid_exposer.def( bp::init< SireVol::RegularGrid const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireVol::RegularGrid::basis
         
             typedef ::SireMaths::Matrix const & ( ::SireVol::RegularGrid::*basis_function_type)(  ) const;
@@ -50,7 +50,8 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "basis"
                 , basis_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the basis vectors for the grid" );
         
         }
         { //::SireVol::RegularGrid::dimX
@@ -60,7 +61,8 @@ void register_RegularGrid_class(){
             
             RegularGrid_exposer.def( 
                 "dimX"
-                , dimX_function_value );
+                , dimX_function_value
+                , "Return the number of points in the x dimension" );
         
         }
         { //::SireVol::RegularGrid::dimY
@@ -70,7 +72,8 @@ void register_RegularGrid_class(){
             
             RegularGrid_exposer.def( 
                 "dimY"
-                , dimY_function_value );
+                , dimY_function_value
+                , "Return the number of points in the y dimension" );
         
         }
         { //::SireVol::RegularGrid::dimZ
@@ -80,7 +83,8 @@ void register_RegularGrid_class(){
             
             RegularGrid_exposer.def( 
                 "dimZ"
-                , dimZ_function_value );
+                , dimZ_function_value
+                , "Return the number of points in the z dimension" );
         
         }
         { //::SireVol::RegularGrid::gridSpacing
@@ -90,7 +94,8 @@ void register_RegularGrid_class(){
             
             RegularGrid_exposer.def( 
                 "gridSpacing"
-                , gridSpacing_function_value );
+                , gridSpacing_function_value
+                , "Return the grid spacing (this is a cubic grid)" );
         
         }
         RegularGrid_exposer.def( bp::self != bp::self );
@@ -103,7 +108,8 @@ void register_RegularGrid_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         RegularGrid_exposer.def( bp::self == bp::self );
@@ -115,7 +121,8 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "recenter"
                 , recenter_function_value
-                , ( bp::arg("center") ) );
+                , ( bp::arg("center") )
+                , "Return a copy of this grid that has been recentered to center" );
         
         }
         { //::SireVol::RegularGrid::rotate
@@ -126,7 +133,8 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0.0) ) );
+                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) )
+                , "Return a copy of this grid that has been rotated using the passed rotation\nmatrix about center" );
         
         }
         { //::SireVol::RegularGrid::rotate
@@ -137,7 +145,8 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0.0) ) );
+                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) )
+                , "Return a copy of this grid that has been rotated using the passed rotation\nquaternion about center" );
         
         }
         { //::SireVol::RegularGrid::scale
@@ -148,7 +157,8 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "scale"
                 , scale_function_value
-                , ( bp::arg("scalefactor") ) );
+                , ( bp::arg("scalefactor") )
+                , "Return a copy of this grid that has been scaled uniformly by scalefactor" );
         
         }
         { //::SireVol::RegularGrid::toString
@@ -158,7 +168,8 @@ void register_RegularGrid_class(){
             
             RegularGrid_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of the grid" );
         
         }
         { //::SireVol::RegularGrid::translate
@@ -169,7 +180,8 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "translate"
                 , translate_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "Return a copy of this grid that has been translated by delta" );
         
         }
         RegularGrid_exposer.def( "__copy__", &__copy__);

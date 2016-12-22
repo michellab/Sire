@@ -41,10 +41,10 @@ void register_RationalPower_class(){
 
     { //::SireCAS::RationalPower
         typedef bp::class_< SireCAS::RationalPower, bp::bases< SireCAS::PowerFunction, SireCAS::ExBase > > RationalPower_exposer_t;
-        RationalPower_exposer_t RationalPower_exposer = RationalPower_exposer_t( "RationalPower", bp::init< >() );
+        RationalPower_exposer_t RationalPower_exposer = RationalPower_exposer_t( "RationalPower", "This class represents an expression raised to a rational power", bp::init< >("Null constructor") );
         bp::scope RationalPower_scope( RationalPower_exposer );
-        RationalPower_exposer.def( bp::init< SireCAS::Expression const &, SireMaths::Rational const & >(( bp::arg("expression"), bp::arg("power") )) );
-        RationalPower_exposer.def( bp::init< SireCAS::RationalPower const & >(( bp::arg("other") )) );
+        RationalPower_exposer.def( bp::init< SireCAS::Expression const &, SireMaths::Rational const & >(( bp::arg("expression"), bp::arg("power") ), "Construct expression^power") );
+        RationalPower_exposer.def( bp::init< SireCAS::RationalPower const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::RationalPower::evaluate
         
             typedef double ( ::SireCAS::RationalPower::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -53,7 +53,8 @@ void register_RationalPower_class(){
             RationalPower_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this power" );
         
         }
         { //::SireCAS::RationalPower::evaluate
@@ -64,7 +65,8 @@ void register_RationalPower_class(){
             RationalPower_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this power" );
         
         }
         { //::SireCAS::RationalPower::hash
@@ -74,7 +76,8 @@ void register_RationalPower_class(){
             
             RationalPower_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this power" );
         
         }
         RationalPower_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -85,7 +88,8 @@ void register_RationalPower_class(){
             
             RationalPower_exposer.def( 
                 "power"
-                , power_function_value );
+                , power_function_value
+                , "" );
         
         }
         { //::SireCAS::RationalPower::typeName
@@ -95,7 +99,8 @@ void register_RationalPower_class(){
             
             RationalPower_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::RationalPower::what
@@ -105,7 +110,8 @@ void register_RationalPower_class(){
             
             RationalPower_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         RationalPower_exposer.staticmethod( "typeName" );
@@ -118,6 +124,7 @@ void register_RationalPower_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         RationalPower_exposer.def( "__str__", &__str__< ::SireCAS::RationalPower > );
         RationalPower_exposer.def( "__repr__", &__str__< ::SireCAS::RationalPower > );
+        RationalPower_exposer.def( "__hash__", &::SireCAS::RationalPower::hash );
     }
 
 }

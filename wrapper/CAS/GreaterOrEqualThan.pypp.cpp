@@ -43,10 +43,10 @@ void register_GreaterOrEqualThan_class(){
 
     { //::SireCAS::GreaterOrEqualThan
         typedef bp::class_< SireCAS::GreaterOrEqualThan, bp::bases< SireCAS::Condition, SireCAS::ExBase > > GreaterOrEqualThan_exposer_t;
-        GreaterOrEqualThan_exposer_t GreaterOrEqualThan_exposer = GreaterOrEqualThan_exposer_t( "GreaterOrEqualThan", bp::init< >() );
+        GreaterOrEqualThan_exposer_t GreaterOrEqualThan_exposer = GreaterOrEqualThan_exposer_t( "GreaterOrEqualThan", "This is a conditional function that returns whether or\nnot the first expression is greater than or equal to\nthe second expression\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope GreaterOrEqualThan_scope( GreaterOrEqualThan_exposer );
-        GreaterOrEqualThan_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("left_hand_side"), bp::arg("right_hand_side") )) );
-        GreaterOrEqualThan_exposer.def( bp::init< SireCAS::GreaterOrEqualThan const & >(( bp::arg("other") )) );
+        GreaterOrEqualThan_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("left_hand_side"), bp::arg("right_hand_side") ), "Construct to compare left_hand_side with right_hand_side") );
+        GreaterOrEqualThan_exposer.def( bp::init< SireCAS::GreaterOrEqualThan const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::GreaterOrEqualThan::alwaysFalse
         
             typedef bool ( ::SireCAS::GreaterOrEqualThan::*alwaysFalse_function_type)(  ) const;
@@ -54,7 +54,8 @@ void register_GreaterOrEqualThan_class(){
             
             GreaterOrEqualThan_exposer.def( 
                 "alwaysFalse"
-                , alwaysFalse_function_value );
+                , alwaysFalse_function_value
+                , "Return whether or not we can be absolutely sure that this\ncondition will always be false. Note that this doesnt try\ntoo hard, so some things that are always false may not\nbe reported here as being always false, e.g. x > x + 1" );
         
         }
         { //::SireCAS::GreaterOrEqualThan::alwaysTrue
@@ -64,7 +65,8 @@ void register_GreaterOrEqualThan_class(){
             
             GreaterOrEqualThan_exposer.def( 
                 "alwaysTrue"
-                , alwaysTrue_function_value );
+                , alwaysTrue_function_value
+                , "Return whether or not we can be absolutely sure that this\ncondition will always be true. Note that this doesnt try\ntoo hard, so some things that are always true may not\nbe reported here as being always true, e.g. x + 1 > x" );
         
         }
         { //::SireCAS::GreaterOrEqualThan::operator=
@@ -76,7 +78,8 @@ void register_GreaterOrEqualThan_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         GreaterOrEqualThan_exposer.def( bp::self == bp::self );
@@ -88,7 +91,8 @@ void register_GreaterOrEqualThan_class(){
             
             GreaterOrEqualThan_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::GreaterOrEqualThan::what
@@ -98,7 +102,8 @@ void register_GreaterOrEqualThan_class(){
             
             GreaterOrEqualThan_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         GreaterOrEqualThan_exposer.staticmethod( "typeName" );
@@ -111,6 +116,7 @@ void register_GreaterOrEqualThan_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         GreaterOrEqualThan_exposer.def( "__str__", &__str__< ::SireCAS::GreaterOrEqualThan > );
         GreaterOrEqualThan_exposer.def( "__repr__", &__str__< ::SireCAS::GreaterOrEqualThan > );
+        GreaterOrEqualThan_exposer.def( "__hash__", &::SireCAS::GreaterOrEqualThan::hash );
     }
 
 }

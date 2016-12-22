@@ -45,7 +45,7 @@ void register_HF_class(){
 
     { //::Squire::HF
         typedef bp::class_< Squire::HF > HF_exposer_t;
-        HF_exposer_t HF_exposer = HF_exposer_t( "HF", bp::init< >() );
+        HF_exposer_t HF_exposer = HF_exposer_t( "HF", "This is my first attempt at a small HF program", bp::init< >("Constructor") );
         bp::scope HF_scope( HF_exposer );
         { //::Squire::HF::add
         
@@ -55,7 +55,8 @@ void register_HF_class(){
             HF_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("orbital") ) );
+                , ( bp::arg("orbital") )
+                , "Add an orbital that does not to be located at a particular\npoint in space" );
         
         }
         { //::Squire::HF::add
@@ -66,7 +67,8 @@ void register_HF_class(){
             HF_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("point"), bp::arg("orbital") ) );
+                , ( bp::arg("point"), bp::arg("orbital") )
+                , "Add an orbital that needs to be placed at center" );
         
         }
         { //::Squire::HF::add
@@ -77,7 +79,8 @@ void register_HF_class(){
             HF_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("point"), bp::arg("charge") ) );
+                , ( bp::arg("point"), bp::arg("charge") )
+                , "Add an orbital that needs to be placed at center" );
         
         }
         { //::Squire::HF::add
@@ -88,7 +91,8 @@ void register_HF_class(){
             HF_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("point"), bp::arg("dipole") ) );
+                , ( bp::arg("point"), bp::arg("dipole") )
+                , "Add an orbital that needs to be placed at center" );
         
         }
         { //::Squire::HF::solve
@@ -98,7 +102,8 @@ void register_HF_class(){
             
             HF_exposer.def( 
                 "solve"
-                , solve_function_value );
+                , solve_function_value
+                , "" );
         
         }
         HF_exposer.def( "__copy__", &__copy__);

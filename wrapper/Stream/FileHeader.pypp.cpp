@@ -39,11 +39,11 @@ namespace bp = boost::python;
 
 #include <QtGlobal>
 
+#include <boost/config.hpp>
+
 #include <cstdlib>
 
-#include <sys/utsname.h>
-
-#include <unistd.h>
+#include <memory>
 
 #include "streamdata.hpp"
 
@@ -57,9 +57,9 @@ void register_FileHeader_class(){
 
     { //::SireStream::FileHeader
         typedef bp::class_< SireStream::FileHeader > FileHeader_exposer_t;
-        FileHeader_exposer_t FileHeader_exposer = FileHeader_exposer_t( "FileHeader", bp::init< >() );
+        FileHeader_exposer_t FileHeader_exposer = FileHeader_exposer_t( "FileHeader", "This class provides metadata about the binary representation\nof an object. This is to allow the owner of the data to identify\nit as belonging to themselves, to provide information about\nwhat data is contained, when it was created and on what,\nand to provide some information about how much space the\ndata may require to load. The aim is to allow the provenance\n(well, at least the origin) of a file to be determined.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope FileHeader_scope( FileHeader_exposer );
-        FileHeader_exposer.def( bp::init< SireStream::FileHeader const & >(( bp::arg("other") )) );
+        FileHeader_exposer.def( bp::init< SireStream::FileHeader const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireStream::FileHeader::assertCompatible
         
             typedef void ( ::SireStream::FileHeader::*assertCompatible_function_type)(  ) const;
@@ -67,7 +67,8 @@ void register_FileHeader_class(){
             
             FileHeader_exposer.def( 
                 "assertCompatible"
-                , assertCompatible_function_value );
+                , assertCompatible_function_value
+                , "Assert that the libraries required are compatible with what has\nbeen loaded" );
         
         }
         { //::SireStream::FileHeader::assertNotCorrupted
@@ -78,7 +79,8 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "assertNotCorrupted"
                 , assertNotCorrupted_function_value
-                , ( bp::arg("compressed_data") ) );
+                , ( bp::arg("compressed_data") )
+                , "Assert that the data in compressed_data is not corrupt" );
         
         }
         { //::SireStream::FileHeader::buildVersion
@@ -88,7 +90,8 @@ void register_FileHeader_class(){
             
             FileHeader_exposer.def( 
                 "buildVersion"
-                , buildVersion_function_value );
+                , buildVersion_function_value
+                , "Return the version of the source code from the repository" );
         
         }
         { //::SireStream::FileHeader::compressionRatio
@@ -98,7 +101,8 @@ void register_FileHeader_class(){
             
             FileHeader_exposer.def( 
                 "compressionRatio"
-                , compressionRatio_function_value );
+                , compressionRatio_function_value
+                , "Return the compression ratio of the file" );
         
         }
         { //::SireStream::FileHeader::createdBy
@@ -109,7 +113,8 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "createdBy"
                 , createdBy_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the username of whoever created this data" );
         
         }
         { //::SireStream::FileHeader::createdWhen
@@ -120,7 +125,8 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "createdWhen"
                 , createdWhen_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the date and time when this was created" );
         
         }
         { //::SireStream::FileHeader::createdWhere
@@ -131,7 +137,8 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "createdWhere"
                 , createdWhere_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Where this file was created (the name of the machine)" );
         
         }
         { //::SireStream::FileHeader::dataType
@@ -141,7 +148,8 @@ void register_FileHeader_class(){
             
             FileHeader_exposer.def( 
                 "dataType"
-                , dataType_function_value );
+                , dataType_function_value
+                , "Return the name of the data type of the object in this data\nThrow: SireError::invalid_state\n" );
         
         }
         { //::SireStream::FileHeader::dataTypes
@@ -152,7 +160,8 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "dataTypes"
                 , dataTypes_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name(s) of the top-level data type in this data" );
         
         }
         { //::SireStream::FileHeader::digest
@@ -163,7 +172,8 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "digest"
                 , digest_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the digest of the data - this is used to check\nfor any data corruption" );
         
         }
         { //::SireStream::FileHeader::locale
@@ -174,7 +184,8 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "locale"
                 , locale_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the locale in which this data was written. This is useful\nas it can help with the support of multiple languages\n(as the person who saved the file may not necessarily be using\nEnglish ;-)" );
         
         }
         { //::SireStream::FileHeader::operator=
@@ -186,7 +197,8 @@ void register_FileHeader_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireStream::FileHeader::repository
@@ -196,7 +208,8 @@ void register_FileHeader_class(){
             
             FileHeader_exposer.def( 
                 "repository"
-                , repository_function_value );
+                , repository_function_value
+                , "Return the repository from which this source code was downloaded" );
         
         }
         { //::SireStream::FileHeader::requireLibrary
@@ -207,7 +220,8 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "requireLibrary"
                 , requireLibrary_function_value
-                , ( bp::arg("library") ) );
+                , ( bp::arg("library") )
+                , "Does this data require that the library library be loaded?" );
         
         }
         { //::SireStream::FileHeader::requiredLibraries
@@ -217,7 +231,8 @@ void register_FileHeader_class(){
             
             FileHeader_exposer.def( 
                 "requiredLibraries"
-                , requiredLibraries_function_value );
+                , requiredLibraries_function_value
+                , "Return the list of libraries required to load this data" );
         
         }
         { //::SireStream::FileHeader::requiredMemory
@@ -227,7 +242,8 @@ void register_FileHeader_class(){
             
             FileHeader_exposer.def( 
                 "requiredMemory"
-                , requiredMemory_function_value );
+                , requiredMemory_function_value
+                , "Return the minimum memory the will be necessary to read the file" );
         
         }
         { //::SireStream::FileHeader::requiredVersion
@@ -238,7 +254,8 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "requiredVersion"
                 , requiredVersion_function_value
-                , ( bp::arg("library") ) );
+                , ( bp::arg("library") )
+                , "Return the version number required of the library library. This\nreturns 0 if this library isnt required." );
         
         }
         { //::SireStream::FileHeader::systemInfo
@@ -249,7 +266,8 @@ void register_FileHeader_class(){
             FileHeader_exposer.def( 
                 "systemInfo"
                 , systemInfo_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return information about the system on which this data was written" );
         
         }
         { //::SireStream::FileHeader::toString
@@ -259,7 +277,8 @@ void register_FileHeader_class(){
             
             FileHeader_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this header" );
         
         }
         { //::SireStream::FileHeader::version
@@ -269,7 +288,8 @@ void register_FileHeader_class(){
             
             FileHeader_exposer.def( 
                 "version"
-                , version_function_value );
+                , version_function_value
+                , "Return the master version number for the file - this version number\nis changed only when the file format is completely changed (e.g. we\nmove away from using a compressed header, then the compressed object)\n" );
         
         }
         FileHeader_exposer.def( "__copy__", &__copy__);

@@ -59,12 +59,12 @@ void register_AtomsIn_SegID__class(){
 
     { //::SireMol::AtomsIn< SireMol::SegID >
         typedef bp::class_< SireMol::AtomsIn< SireMol::SegID >, bp::bases< SireMol::AtomID, SireID::ID > > AtomsIn_SegID__exposer_t;
-        AtomsIn_SegID__exposer_t AtomsIn_SegID__exposer = AtomsIn_SegID__exposer_t( "AtomsIn_SegID_", bp::init< >() );
+        AtomsIn_SegID__exposer_t AtomsIn_SegID__exposer = AtomsIn_SegID__exposer_t( "AtomsIn_SegID_", "", bp::init< >("") );
         bp::scope AtomsIn_SegID__scope( AtomsIn_SegID__exposer );
-        AtomsIn_SegID__exposer.def( bp::init< SireMol::SegID const & >(( bp::arg("id") )) );
-        AtomsIn_SegID__exposer.def( bp::init< SireMol::SegID const &, qint32 >(( bp::arg("id"), bp::arg("i") )) );
-        AtomsIn_SegID__exposer.def( bp::init< SireMol::SegID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") )) );
-        AtomsIn_SegID__exposer.def( bp::init< SireMol::AtomsIn< SireMol::SegID > const & >(( bp::arg("other") )) );
+        AtomsIn_SegID__exposer.def( bp::init< SireMol::SegID const & >(( bp::arg("id") ), "") );
+        AtomsIn_SegID__exposer.def( bp::init< SireMol::SegID const &, qint32 >(( bp::arg("id"), bp::arg("i") ), "") );
+        AtomsIn_SegID__exposer.def( bp::init< SireMol::SegID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") ), "") );
+        AtomsIn_SegID__exposer.def( bp::init< SireMol::AtomsIn< SireMol::SegID > const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomsIn< SireMol::SegID >::hash
         
             typedef SireMol::AtomsIn< SireMol::SegID > exported_class_t;
@@ -73,7 +73,8 @@ void register_AtomsIn_SegID__class(){
             
             AtomsIn_SegID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::SegID >::isNull
@@ -84,7 +85,8 @@ void register_AtomsIn_SegID__class(){
             
             AtomsIn_SegID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::SegID >::map
@@ -96,7 +98,8 @@ void register_AtomsIn_SegID__class(){
             AtomsIn_SegID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         AtomsIn_SegID__exposer.def( bp::self != bp::self );
@@ -111,7 +114,8 @@ void register_AtomsIn_SegID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomsIn_SegID__exposer.def( bp::self == bp::self );
@@ -124,7 +128,8 @@ void register_AtomsIn_SegID__class(){
             
             AtomsIn_SegID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::SegID >::typeName
@@ -135,7 +140,8 @@ void register_AtomsIn_SegID__class(){
             
             AtomsIn_SegID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::SegID >::what
@@ -146,7 +152,8 @@ void register_AtomsIn_SegID__class(){
             
             AtomsIn_SegID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomsIn_SegID__exposer.staticmethod( "typeName" );
@@ -159,6 +166,7 @@ void register_AtomsIn_SegID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AtomsIn_SegID__exposer.def( "__str__", &__str__< ::SireMol::AtomsIn<SireMol::SegID> > );
         AtomsIn_SegID__exposer.def( "__repr__", &__str__< ::SireMol::AtomsIn<SireMol::SegID> > );
+        AtomsIn_SegID__exposer.def( "__hash__", &::SireMol::AtomsIn<SireMol::SegID>::hash );
     }
 
 }

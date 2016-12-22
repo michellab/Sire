@@ -53,7 +53,7 @@ void register_ConnectivityBase_class(){
 
     { //::SireMol::ConnectivityBase
         typedef bp::class_< SireMol::ConnectivityBase, bp::bases< SireMol::MolViewProperty, SireBase::Property >, boost::noncopyable > ConnectivityBase_exposer_t;
-        ConnectivityBase_exposer_t ConnectivityBase_exposer = ConnectivityBase_exposer_t( "ConnectivityBase", bp::no_init );
+        ConnectivityBase_exposer_t ConnectivityBase_exposer = ConnectivityBase_exposer_t( "ConnectivityBase", "The base class of Connectivity and ConnectivityEditor\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope ConnectivityBase_scope( ConnectivityBase_exposer );
         { //::SireMol::ConnectivityBase::areAngled
         
@@ -63,7 +63,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "areAngled"
                 , areAngled_function_value
-                , ( bp::arg("atom0"), bp::arg("atom2") ) );
+                , ( bp::arg("atom0"), bp::arg("atom2") )
+                , "Return whether or not the two atoms are angled together" );
         
         }
         { //::SireMol::ConnectivityBase::areAngled
@@ -74,7 +75,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "areAngled"
                 , areAngled_function_value
-                , ( bp::arg("atom0"), bp::arg("atom2") ) );
+                , ( bp::arg("atom0"), bp::arg("atom2") )
+                , "Return whether or not the two atoms are angled together" );
         
         }
         { //::SireMol::ConnectivityBase::areBonded
@@ -85,7 +87,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "areBonded"
                 , areBonded_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Return whether or not the two atoms are bonded together" );
         
         }
         { //::SireMol::ConnectivityBase::areBonded
@@ -96,7 +99,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "areBonded"
                 , areBonded_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Return whether or not the two atoms are bonded together" );
         
         }
         { //::SireMol::ConnectivityBase::areConnected
@@ -107,7 +111,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "areConnected"
                 , areConnected_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Return whether or not the atoms at indicies atom0 and atom1\nare connected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityBase::areConnected
@@ -118,7 +123,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "areConnected"
                 , areConnected_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Return whether or not the atoms identified by atom0 and atom1\nare connected\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityBase::areConnected
@@ -129,7 +135,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "areConnected"
                 , areConnected_function_value
-                , ( bp::arg("res0"), bp::arg("res1") ) );
+                , ( bp::arg("res0"), bp::arg("res1") )
+                , "Return whether or not the residues at indicies res0 and res1\nare connected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityBase::areConnected
@@ -140,7 +147,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "areConnected"
                 , areConnected_function_value
-                , ( bp::arg("res0"), bp::arg("res1") ) );
+                , ( bp::arg("res0"), bp::arg("res1") )
+                , "Return whether the residues identified by res0 and res1 are connected" );
         
         }
         { //::SireMol::ConnectivityBase::areDihedraled
@@ -151,7 +159,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "areDihedraled"
                 , areDihedraled_function_value
-                , ( bp::arg("atom0"), bp::arg("atom3") ) );
+                , ( bp::arg("atom0"), bp::arg("atom3") )
+                , "Return whether or not the two atoms are dihedraled together" );
         
         }
         { //::SireMol::ConnectivityBase::areDihedraled
@@ -162,7 +171,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "areDihedraled"
                 , areDihedraled_function_value
-                , ( bp::arg("atom0"), bp::arg("atom3") ) );
+                , ( bp::arg("atom0"), bp::arg("atom3") )
+                , "Return whether or not the two atoms are bonded together" );
         
         }
         { //::SireMol::ConnectivityBase::connectionsTo
@@ -174,7 +184,8 @@ void register_ConnectivityBase_class(){
                 "connectionsTo"
                 , connectionsTo_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the indicies of atoms connected to the atom at index atomidx.\nThis returns an empty set if there are no atoms connected to\nthis atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityBase::connectionsTo
@@ -186,7 +197,8 @@ void register_ConnectivityBase_class(){
                 "connectionsTo"
                 , connectionsTo_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the indicies of atoms connected to the atom identified\nby resid - this returns an empty set if there are no connections\nto this atom\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityBase::connectionsTo
@@ -198,7 +210,8 @@ void register_ConnectivityBase_class(){
                 "connectionsTo"
                 , connectionsTo_function_value
                 , ( bp::arg("residx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the indicies of the residues connected to the residue at\nindex residx. This returns an empty set if there are no residues\nconnected to this residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityBase::connectionsTo
@@ -210,7 +223,8 @@ void register_ConnectivityBase_class(){
                 "connectionsTo"
                 , connectionsTo_function_value
                 , ( bp::arg("resid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the indicies of the residues connectd to the residue\nidentified by resid. This returns an empty set if there are\nno residues connected to this residue.\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityBase::findPath
@@ -221,7 +235,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "findPath"
                 , findPath_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Find the shortest bonded path between two atoms. This returns an empty\nlist if there is no bonded path between these two atoms" );
         
         }
         { //::SireMol::ConnectivityBase::findPath
@@ -232,7 +247,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "findPath"
                 , findPath_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Return all possible bonded paths between two atoms. This returns an empty\nlist if there are no bonded paths between the two atoms" );
         
         }
         { //::SireMol::ConnectivityBase::findPaths
@@ -243,7 +259,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "findPaths"
                 , findPaths_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Return all possible bonded paths between two atoms. This returns an empty\nlist if there are no bonded paths between the two atoms" );
         
         }
         { //::SireMol::ConnectivityBase::findPaths
@@ -254,7 +271,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "findPaths"
                 , findPaths_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Find the shortest bonded path between two atoms. This returns an empty\nlist if there is no bonded path between these two atoms" );
         
         }
         { //::SireMol::ConnectivityBase::getAngles
@@ -264,7 +282,8 @@ void register_ConnectivityBase_class(){
             
             ConnectivityBase_exposer.def( 
                 "getAngles"
-                , getAngles_function_value );
+                , getAngles_function_value
+                , "Return a list of angles defined by the connectivity" );
         
         }
         { //::SireMol::ConnectivityBase::getAngles
@@ -275,7 +294,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "getAngles"
                 , getAngles_function_value
-                , ( bp::arg("atom0") ) );
+                , ( bp::arg("atom0") )
+                , "Return a list of angles defined by the connectivity that involve atom0" );
         
         }
         { //::SireMol::ConnectivityBase::getAngles
@@ -286,7 +306,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "getAngles"
                 , getAngles_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Return a list of angles defined by the connectivity that involve atom0 and atom1" );
         
         }
         { //::SireMol::ConnectivityBase::getBondMatrix
@@ -297,7 +318,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "getBondMatrix"
                 , getBondMatrix_function_value
-                , ( bp::arg("order") ) );
+                , ( bp::arg("order") )
+                , "Return a matrix (organised by AtomIdx) that says which atoms are bonded up to\norder order (e.g. if order is two, it returns true for each atom pair that\nare bonded together, if order is three, then true for each atom pair that are\nbonded or angled together, if order is four, then true for each atom pair\nthat are bonded, angled or dihedraled)" );
         
         }
         { //::SireMol::ConnectivityBase::getBondMatrix
@@ -308,7 +330,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "getBondMatrix"
                 , getBondMatrix_function_value
-                , ( bp::arg("start"), bp::arg("end") ) );
+                , ( bp::arg("start"), bp::arg("end") )
+                , "Return a matrix (organised by AtomIdx) that says which atoms are bonded between\norder start and order end (e.g. if order is two, it returns true for each atom pair that\nare bonded together, if order is three, then true for each atom pair that are\nbonded or angled together, if order is four, then true for each atom pair\nthat are bonded, angled or dihedraled)" );
         
         }
         { //::SireMol::ConnectivityBase::getBonds
@@ -318,7 +341,8 @@ void register_ConnectivityBase_class(){
             
             ConnectivityBase_exposer.def( 
                 "getBonds"
-                , getBonds_function_value );
+                , getBonds_function_value
+                , "Return the list of bonds present in this connectivity" );
         
         }
         { //::SireMol::ConnectivityBase::getBonds
@@ -329,7 +353,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "getBonds"
                 , getBonds_function_value
-                , ( bp::arg("atom") ) );
+                , ( bp::arg("atom") )
+                , "Return the list of bonds in the connectivity containing atom" );
         
         }
         { //::SireMol::ConnectivityBase::getDihedrals
@@ -339,7 +364,8 @@ void register_ConnectivityBase_class(){
             
             ConnectivityBase_exposer.def( 
                 "getDihedrals"
-                , getDihedrals_function_value );
+                , getDihedrals_function_value
+                , "Return a list of dihedrals defined by the connectivity" );
         
         }
         { //::SireMol::ConnectivityBase::getDihedrals
@@ -350,7 +376,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "getDihedrals"
                 , getDihedrals_function_value
-                , ( bp::arg("atom0") ) );
+                , ( bp::arg("atom0") )
+                , "Return a list of dihedrals defined by the connectivity that involve atom0" );
         
         }
         { //::SireMol::ConnectivityBase::getDihedrals
@@ -361,7 +388,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "getDihedrals"
                 , getDihedrals_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Return a list of dihedrals defined by the connectivity that involve atom0 and atom1" );
         
         }
         { //::SireMol::ConnectivityBase::getDihedrals
@@ -372,7 +400,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "getDihedrals"
                 , getDihedrals_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , "Return a list of dihedrals defined by the connectivity that involve atom0, atom1 and atom2" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -383,7 +412,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "inRing"
                 , inRing_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "This function returns whether or not the two passed atoms are part of\nthe same ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -394,7 +424,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "inRing"
                 , inRing_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , "This function returns whether or not the three passed atoms are all part of\nthe same ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -405,7 +436,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "inRing"
                 , inRing_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") )
+                , "This function returns whether or not the four passed atoms are part of\nthe same ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -416,7 +448,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "inRing"
                 , inRing_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "This function returns whether or not the two passed atoms are part of\nthe same ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -427,7 +460,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "inRing"
                 , inRing_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , "This function returns whether or not the three passed atoms are all part of\nthe same ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -438,7 +472,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "inRing"
                 , inRing_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") )
+                , "This function returns whether or not the two passed atoms are part of\nthe same ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -449,7 +484,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "inRing"
                 , inRing_function_value
-                , ( bp::arg("bond") ) );
+                , ( bp::arg("bond") )
+                , "This function returns whether or not the two atoms in the passed bond\nare both part of the same ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -460,7 +496,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "inRing"
                 , inRing_function_value
-                , ( bp::arg("angle") ) );
+                , ( bp::arg("angle") )
+                , "This function returns whether or not the three atoms in the passed angle\nare all part of the same ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -471,7 +508,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "inRing"
                 , inRing_function_value
-                , ( bp::arg("dihedral") ) );
+                , ( bp::arg("dihedral") )
+                , "This function returns whether or not the four atoms in the passed dihedral\nare all part of the same ring" );
         
         }
         { //::SireMol::ConnectivityBase::isCompatibleWith
@@ -482,7 +520,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::ConnectivityBase::nConnections
@@ -492,7 +531,8 @@ void register_ConnectivityBase_class(){
             
             ConnectivityBase_exposer.def( 
                 "nConnections"
-                , nConnections_function_value );
+                , nConnections_function_value
+                , "Return the total number of connections between atoms\nin this connectivity object" );
         
         }
         { //::SireMol::ConnectivityBase::nConnections
@@ -503,7 +543,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "nConnections"
                 , nConnections_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Return the number of connections to the atom at index atomidx\nThrow: SireError::index_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::nConnections
@@ -514,7 +555,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "nConnections"
                 , nConnections_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return the number of connections to the atom with ID atomid\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityBase::nConnections
@@ -525,7 +567,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "nConnections"
                 , nConnections_function_value
-                , ( bp::arg("residx") ) );
+                , ( bp::arg("residx") )
+                , "Return the number of connections to the residue at index residx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityBase::nConnections
@@ -536,7 +579,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "nConnections"
                 , nConnections_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Return the number of connections to the residue identified\nby resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityBase::nConnections
@@ -547,7 +591,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "nConnections"
                 , nConnections_function_value
-                , ( bp::arg("res0"), bp::arg("res1") ) );
+                , ( bp::arg("res0"), bp::arg("res1") )
+                , "Return the number of atom connections between the residues at\nindicies res0 and res1\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityBase::nConnections
@@ -558,7 +603,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "nConnections"
                 , nConnections_function_value
-                , ( bp::arg("res0"), bp::arg("res1") ) );
+                , ( bp::arg("res0"), bp::arg("res1") )
+                , "Return the number of atom connections between the residues\nidentified by res0 and res1\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -569,7 +615,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Split this molecule into two parts about the atoms\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -580,7 +627,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Split the molecule into two parts about the bond between atom0 and atom1.\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -591,7 +639,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("bond") ) );
+                , ( bp::arg("bond") )
+                , "Split the molecule into two parts about the bond bond\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -602,7 +651,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("selected_atoms") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("selected_atoms") )
+                , "Split the selected atoms of this molecule into two parts about the atoms\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -613,7 +663,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("selected_atoms") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("selected_atoms") )
+                , "Split the selected atoms of this molecule about the atoms\natom0 and atom1\nThrow: SireMol::incompatible_error\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -624,7 +675,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("bond"), bp::arg("selected_atoms") ) );
+                , ( bp::arg("bond"), bp::arg("selected_atoms") )
+                , "Split the selected atoms of this molecule into two parts\nabout the bond bond\nThrow: SireError::incompatible_error\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -635,7 +687,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , "Split this molecule into three parts about the atoms\natom0, atom1 and atom2.\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -646,7 +699,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , "Split the molecule into two parts based on the three supplied atoms\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -657,7 +711,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("angle") ) );
+                , ( bp::arg("angle") )
+                , "Split the molecule into two parts based on the supplied angle\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -668,7 +723,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("selected_atoms") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("selected_atoms") )
+                , "Split the selected atoms of this molecule into three parts about the atoms\natom0, atom1 and atom2.\nNote that all three atoms must be contained in the selection or else\na missing_atom exception will be thrown\nAn exception will be thrown if it is not possible to split the molecule\nunambiguously in two, as the angle is part of a ring.\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -679,7 +735,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("selected_atoms") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("selected_atoms") )
+                , "Split the selected atoms of the molecule into two groups around the\nthree supplied atoms\nThrow: SireError::incompatible_error\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -690,7 +747,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("angle"), bp::arg("selected_atoms") ) );
+                , ( bp::arg("angle"), bp::arg("selected_atoms") )
+                , "Split the selected atoms selected_atoms of this molecule\ninto two parts based on the angle identified in\nangle. This splits the molecule about atom0() and atom2()\nof the angle, ignoring atom atom1().\nThrow: SireError::incompatible_error\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -701,7 +759,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") )
+                , "Split this molecule into two parts based on the passed atoms.\nThis splits the molecule between atom0 and atom3, ignoring\natom1 and atom2.\nC1   C4--C5--C6\n\ \nC2    C8--C9\n  \  \nC3   C7\n\\nC10--C11\nSplitting C4,C2,C7,C10 will return\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -712,7 +771,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") )
+                , "Split this molecule into two parts based on the passed atoms.\nThis splits the molecule between atom0 and atom3, ignoring\natom1 and atom2.\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -723,7 +783,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("dihedral") ) );
+                , ( bp::arg("dihedral") )
+                , "Split this molecule into two parts based on the dihedral identified in\ndihedral. This splits the molecule about atom0() and atom3()\nof the dihedral, ignoring atoms atom1() and atom2().\nThrow: SireError::incompatible_error\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -734,7 +795,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("selected_atoms") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("selected_atoms") )
+                , "Split the selected atoms of this molecule into two parts\nbased on the passed atoms.\nThis splits the molecule between atom0 and atom3, ignoring\natom1 and atom2.\nAll four atoms must be selected in selected_atoms or else\na missing_atom exception will be thrown\nC1   C4--C5--C6\n\ \nC2    C8--C9\n  \  \nC3   C7\n\\nC10--C11\nSplitting C4,C2,C7,C10 will return\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -745,7 +807,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("selected_atoms") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("selected_atoms") )
+                , "Split the selected atoms selected_atoms of this molecule\ninto two parts based on the passed atoms. This splits\nthe molecule between atom0 and atom3, ignoring atom1 and\natom2.\nThrow: SireError::incompatible_error\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -756,7 +819,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("dihedral"), bp::arg("selected_atoms") ) );
+                , ( bp::arg("dihedral"), bp::arg("selected_atoms") )
+                , "Split the selected atoms selected_atoms of this molecule\ninto two parts based on the dihedral identified in\ndihedral. This splits the molecule about atom0() and atom3()\nof the dihedral, ignoring atoms atom1() and atom2().\nThrow: SireError::incompatible_error\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -767,7 +831,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("improper") ) );
+                , ( bp::arg("improper") )
+                , "Split this molecule into two parts based on the improper angle\nidentified by improper. This splits the molecule about\nbond between atom0() and atom1() of the improper\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::split
@@ -778,7 +843,8 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "split"
                 , split_function_value
-                , ( bp::arg("improper"), bp::arg("selected_atoms") ) );
+                , ( bp::arg("improper"), bp::arg("selected_atoms") )
+                , "Split the selected atoms in selected_atoms in this molecule\ninto two parts based on the improper angle\nidentified by improper. This splits the molecule about\nbond between atom0() and atom1() of the improper\nThrow: SireError::incompatible_error\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
         { //::SireMol::ConnectivityBase::toString
@@ -788,7 +854,8 @@ void register_ConnectivityBase_class(){
             
             ConnectivityBase_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ConnectivityBase::typeName
@@ -798,7 +865,8 @@ void register_ConnectivityBase_class(){
             
             ConnectivityBase_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ConnectivityBase_exposer.staticmethod( "typeName" );

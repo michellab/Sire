@@ -31,7 +31,7 @@ void register_MonitorID_class(){
 
     { //::SireSystem::MonitorID
         typedef bp::class_< SireSystem::MonitorID, bp::bases< SireID::ID >, boost::noncopyable > MonitorID_exposer_t;
-        MonitorID_exposer_t MonitorID_exposer = MonitorID_exposer_t( "MonitorID", bp::no_init );
+        MonitorID_exposer_t MonitorID_exposer = MonitorID_exposer_t( "MonitorID", "The base class of all system monitor identifiers\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope MonitorID_scope( MonitorID_exposer );
         { //::SireSystem::MonitorID::map
         
@@ -41,7 +41,8 @@ void register_MonitorID_class(){
             MonitorID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("monitors") ) );
+                , ( bp::arg("monitors") )
+                , "" );
         
         }
         MonitorID_exposer.def( bp::self & bp::self );
@@ -53,7 +54,8 @@ void register_MonitorID_class(){
             MonitorID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireSystem::MonitorID::operator()
@@ -64,7 +66,8 @@ void register_MonitorID_class(){
             MonitorID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         MonitorID_exposer.def( bp::self * bp::self );
@@ -77,7 +80,8 @@ void register_MonitorID_class(){
             MonitorID_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         MonitorID_exposer.def( bp::self | bp::self );
@@ -88,12 +92,14 @@ void register_MonitorID_class(){
             
             MonitorID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         MonitorID_exposer.staticmethod( "typeName" );
         MonitorID_exposer.def( "__str__", &__str__< ::SireSystem::MonitorID > );
         MonitorID_exposer.def( "__repr__", &__str__< ::SireSystem::MonitorID > );
+        MonitorID_exposer.def( "__hash__", &::SireSystem::MonitorID::hash );
     }
 
 }

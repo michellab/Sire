@@ -33,9 +33,9 @@ void register_NullQM_class(){
 
     { //::Squire::NullQM
         typedef bp::class_< Squire::NullQM, bp::bases< Squire::QMProgram, SireBase::Property > > NullQM_exposer_t;
-        NullQM_exposer_t NullQM_exposer = NullQM_exposer_t( "NullQM", bp::init< >() );
+        NullQM_exposer_t NullQM_exposer = NullQM_exposer_t( "NullQM", "This is the null QM program that returns zero energy and force", bp::init< >("Constructor") );
         bp::scope NullQM_scope( NullQM_exposer );
-        NullQM_exposer.def( bp::init< Squire::NullQM const & >(( bp::arg("other") )) );
+        NullQM_exposer.def( bp::init< Squire::NullQM const & >(( bp::arg("other") ), "Copy constructor") );
         NullQM_exposer.def( bp::self != bp::self );
         { //::Squire::NullQM::operator=
         
@@ -46,7 +46,8 @@ void register_NullQM_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullQM_exposer.def( bp::self == bp::self );
@@ -57,7 +58,8 @@ void register_NullQM_class(){
             
             NullQM_exposer.def( 
                 "supportsLatticeCharges"
-                , supportsLatticeCharges_function_value );
+                , supportsLatticeCharges_function_value
+                , "" );
         
         }
         { //::Squire::NullQM::typeName
@@ -67,7 +69,8 @@ void register_NullQM_class(){
             
             NullQM_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullQM_exposer.staticmethod( "typeName" );

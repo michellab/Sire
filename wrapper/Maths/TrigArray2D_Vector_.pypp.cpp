@@ -47,11 +47,11 @@ void register_TrigArray2D_Vector__class(){
 
     { //::SireBase::TrigArray2D< SireMaths::Vector >
         typedef bp::class_< SireBase::TrigArray2D< SireMaths::Vector >, bp::bases< SireBase::TrigArray2DBase > > TrigArray2D_Vector__exposer_t;
-        TrigArray2D_Vector__exposer_t TrigArray2D_Vector__exposer = TrigArray2D_Vector__exposer_t( "TrigArray2D_Vector_", bp::init< >() );
+        TrigArray2D_Vector__exposer_t TrigArray2D_Vector__exposer = TrigArray2D_Vector__exposer_t( "TrigArray2D_Vector_", "", bp::init< >("") );
         bp::scope TrigArray2D_Vector__scope( TrigArray2D_Vector__exposer );
-        TrigArray2D_Vector__exposer.def( bp::init< int >(( bp::arg("dimension") )) );
-        TrigArray2D_Vector__exposer.def( bp::init< int, SireMaths::Vector const & >(( bp::arg("dimension"), bp::arg("default_value") )) );
-        TrigArray2D_Vector__exposer.def( bp::init< SireBase::TrigArray2D< SireMaths::Vector > const & >(( bp::arg("other") )) );
+        TrigArray2D_Vector__exposer.def( bp::init< int >(( bp::arg("dimension") ), "") );
+        TrigArray2D_Vector__exposer.def( bp::init< int, SireMaths::Vector const & >(( bp::arg("dimension"), bp::arg("default_value") ), "") );
+        TrigArray2D_Vector__exposer.def( bp::init< SireBase::TrigArray2D< SireMaths::Vector > const & >(( bp::arg("other") ), "") );
         { //::SireBase::TrigArray2D< SireMaths::Vector >::at
         
             typedef SireBase::TrigArray2D< SireMaths::Vector > exported_class_t;
@@ -62,7 +62,8 @@ void register_TrigArray2D_Vector__class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::TrigArray2D< SireMaths::Vector >::get
@@ -75,7 +76,8 @@ void register_TrigArray2D_Vector__class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         TrigArray2D_Vector__exposer.def( bp::self != bp::self );
@@ -89,7 +91,8 @@ void register_TrigArray2D_Vector__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::TrigArray2D< SireMaths::Vector >::operator=
@@ -102,7 +105,8 @@ void register_TrigArray2D_Vector__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         TrigArray2D_Vector__exposer.def( bp::self == bp::self );
@@ -115,7 +119,8 @@ void register_TrigArray2D_Vector__class(){
             TrigArray2D_Vector__exposer.def( 
                 "redimension"
                 , redimension_function_value
-                , ( bp::arg("dimension") ) );
+                , ( bp::arg("dimension") )
+                , "" );
         
         }
         { //::SireBase::TrigArray2D< SireMaths::Vector >::set
@@ -127,7 +132,8 @@ void register_TrigArray2D_Vector__class(){
             TrigArray2D_Vector__exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireBase::TrigArray2D< SireMaths::Vector >::setAll
@@ -139,7 +145,8 @@ void register_TrigArray2D_Vector__class(){
             TrigArray2D_Vector__exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireBase::TrigArray2D< SireMaths::Vector >::toString
@@ -150,7 +157,8 @@ void register_TrigArray2D_Vector__class(){
             
             TrigArray2D_Vector__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireBase::TrigArray2D< SireMaths::Vector >::transpose
@@ -161,7 +169,8 @@ void register_TrigArray2D_Vector__class(){
             
             TrigArray2D_Vector__exposer.def( 
                 "transpose"
-                , transpose_function_value );
+                , transpose_function_value
+                , "" );
         
         }
         TrigArray2D_Vector__exposer.def( "__copy__", &__copy__);

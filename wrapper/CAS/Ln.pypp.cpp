@@ -29,10 +29,10 @@ void register_Ln_class(){
 
     { //::SireCAS::Ln
         typedef bp::class_< SireCAS::Ln, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Ln_exposer_t;
-        Ln_exposer_t Ln_exposer = Ln_exposer_t( "Ln", bp::init< >() );
+        Ln_exposer_t Ln_exposer = Ln_exposer_t( "Ln", "This is the natural logarithm (ln) function\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty ln (ln(0))") );
         bp::scope Ln_scope( Ln_exposer );
-        Ln_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("expression") )) );
-        Ln_exposer.def( bp::init< SireCAS::Ln const & >(( bp::arg("other") )) );
+        Ln_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("expression") ), "Construct ln(expression)") );
+        Ln_exposer.def( bp::init< SireCAS::Ln const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Ln::evaluate
         
             typedef double ( ::SireCAS::Ln::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -41,7 +41,8 @@ void register_Ln_class(){
             Ln_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Ln::evaluate
@@ -52,7 +53,8 @@ void register_Ln_class(){
             Ln_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Ln_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -63,7 +65,8 @@ void register_Ln_class(){
             
             Ln_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Ln::what
@@ -73,7 +76,8 @@ void register_Ln_class(){
             
             Ln_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Ln_exposer.staticmethod( "typeName" );
@@ -86,6 +90,7 @@ void register_Ln_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Ln_exposer.def( "__str__", &__str__< ::SireCAS::Ln > );
         Ln_exposer.def( "__repr__", &__str__< ::SireCAS::Ln > );
+        Ln_exposer.def( "__hash__", &::SireCAS::Ln::hash );
     }
 
 }

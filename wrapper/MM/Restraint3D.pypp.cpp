@@ -44,7 +44,7 @@ void register_Restraint3D_class(){
 
     { //::SireMM::Restraint3D
         typedef bp::class_< SireMM::Restraint3D, bp::bases< SireMM::Restraint, SireBase::Property >, boost::noncopyable > Restraint3D_exposer_t;
-        Restraint3D_exposer_t Restraint3D_exposer = Restraint3D_exposer_t( "Restraint3D", bp::no_init );
+        Restraint3D_exposer_t Restraint3D_exposer = Restraint3D_exposer_t( "Restraint3D", "This is the base class of all restraints that operate in 3 dimensions,\nand so can thus return the force on the molecule caused by the restraint\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Restraint3D_scope( Restraint3D_exposer );
         { //::SireMM::Restraint3D::force
         
@@ -54,7 +54,8 @@ void register_Restraint3D_class(){
             Restraint3D_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "" );
         
         }
         { //::SireMM::Restraint3D::force
@@ -65,7 +66,8 @@ void register_Restraint3D_class(){
             Restraint3D_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "" );
         
         }
         { //::SireMM::Restraint3D::setSpace
@@ -76,7 +78,8 @@ void register_Restraint3D_class(){
             Restraint3D_exposer.def( 
                 "setSpace"
                 , setSpace_function_value
-                , ( bp::arg("space") ) );
+                , ( bp::arg("space") )
+                , "Set the 3D space in which this restraint operates" );
         
         }
         { //::SireMM::Restraint3D::space
@@ -87,7 +90,8 @@ void register_Restraint3D_class(){
             Restraint3D_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the 3D space in which this restraint operates" );
         
         }
         { //::SireMM::Restraint3D::typeName
@@ -97,7 +101,8 @@ void register_Restraint3D_class(){
             
             Restraint3D_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::Restraint3D::usesMoleculesIn
@@ -108,7 +113,8 @@ void register_Restraint3D_class(){
             Restraint3D_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("forcetable") ) );
+                , ( bp::arg("forcetable") )
+                , "" );
         
         }
         { //::SireMM::Restraint3D::usesMoleculesIn
@@ -119,7 +125,8 @@ void register_Restraint3D_class(){
             Restraint3D_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         Restraint3D_exposer.staticmethod( "typeName" );

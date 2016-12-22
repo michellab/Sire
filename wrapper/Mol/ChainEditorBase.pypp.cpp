@@ -89,7 +89,7 @@ void register_ChainEditorBase_class(){
 
     { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >
         typedef bp::class_< SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >, bp::bases< SireMol::Chain, SireMol::MoleculeView, SireBase::Property >, boost::noncopyable > ChainEditorBase_exposer_t;
-        ChainEditorBase_exposer_t ChainEditorBase_exposer = ChainEditorBase_exposer_t( "ChainEditorBase", bp::no_init );
+        ChainEditorBase_exposer_t ChainEditorBase_exposer = ChainEditorBase_exposer_t( "ChainEditorBase", "", bp::no_init );
         bp::scope ChainEditorBase_scope( ChainEditorBase_exposer );
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::atom
         
@@ -99,7 +99,8 @@ void register_ChainEditorBase_class(){
             
             ChainEditorBase_exposer.def( 
                 "atom"
-                , atom_function_value );
+                , atom_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::atom
@@ -111,7 +112,8 @@ void register_ChainEditorBase_class(){
             ChainEditorBase_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::chain
@@ -122,7 +124,8 @@ void register_ChainEditorBase_class(){
             
             ChainEditorBase_exposer.def( 
                 "chain"
-                , chain_function_value );
+                , chain_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::chain
@@ -134,7 +137,8 @@ void register_ChainEditorBase_class(){
             ChainEditorBase_exposer.def( 
                 "chain"
                 , chain_function_value
-                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::cutGroup
@@ -145,7 +149,8 @@ void register_ChainEditorBase_class(){
             
             ChainEditorBase_exposer.def( 
                 "cutGroup"
-                , cutGroup_function_value );
+                , cutGroup_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::cutGroup
@@ -157,7 +162,8 @@ void register_ChainEditorBase_class(){
             ChainEditorBase_exposer.def( 
                 "cutGroup"
                 , cutGroup_function_value
-                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::molecule
@@ -168,7 +174,8 @@ void register_ChainEditorBase_class(){
             
             ChainEditorBase_exposer.def( 
                 "molecule"
-                , molecule_function_value );
+                , molecule_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::operator=
@@ -181,7 +188,8 @@ void register_ChainEditorBase_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::operator=
@@ -194,7 +202,8 @@ void register_ChainEditorBase_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::removeMetadata
@@ -207,7 +216,8 @@ void register_ChainEditorBase_class(){
                 "removeMetadata"
                 , removeMetadata_function_value
                 , ( bp::arg("metakey") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::removeMetadata
@@ -220,7 +230,8 @@ void register_ChainEditorBase_class(){
                 "removeMetadata"
                 , removeMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::removeProperty
@@ -233,7 +244,8 @@ void register_ChainEditorBase_class(){
                 "removeProperty"
                 , removeProperty_function_value
                 , ( bp::arg("key") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::residue
@@ -244,7 +256,8 @@ void register_ChainEditorBase_class(){
             
             ChainEditorBase_exposer.def( 
                 "residue"
-                , residue_function_value );
+                , residue_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::residue
@@ -256,7 +269,8 @@ void register_ChainEditorBase_class(){
             ChainEditorBase_exposer.def( 
                 "residue"
                 , residue_function_value
-                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::segment
@@ -267,7 +281,8 @@ void register_ChainEditorBase_class(){
             
             ChainEditorBase_exposer.def( 
                 "segment"
-                , segment_function_value );
+                , segment_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::segment
@@ -279,7 +294,8 @@ void register_ChainEditorBase_class(){
             ChainEditorBase_exposer.def( 
                 "segment"
                 , segment_function_value
-                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::select
@@ -291,7 +307,8 @@ void register_ChainEditorBase_class(){
             ChainEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::select
@@ -303,7 +320,8 @@ void register_ChainEditorBase_class(){
             ChainEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::select
@@ -315,7 +333,8 @@ void register_ChainEditorBase_class(){
             ChainEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::select
@@ -327,7 +346,8 @@ void register_ChainEditorBase_class(){
             ChainEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >::select
@@ -339,7 +359,8 @@ void register_ChainEditorBase_class(){
             ChainEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         ChainEditorBase_exposer.def( "_set_property_QString", 

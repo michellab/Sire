@@ -39,10 +39,10 @@ void register_ArcTanh_class(){
 
     { //::SireCAS::ArcTanh
         typedef bp::class_< SireCAS::ArcTanh, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > ArcTanh_exposer_t;
-        ArcTanh_exposer_t ArcTanh_exposer = ArcTanh_exposer_t( "ArcTanh", bp::init< >() );
+        ArcTanh_exposer_t ArcTanh_exposer = ArcTanh_exposer_t( "ArcTanh", "Inverse-hyperbolic-tangent", bp::init< >("Null constructor") );
         bp::scope ArcTanh_scope( ArcTanh_exposer );
-        ArcTanh_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        ArcTanh_exposer.def( bp::init< SireCAS::ArcTanh const & >(( bp::arg("other") )) );
+        ArcTanh_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        ArcTanh_exposer.def( bp::init< SireCAS::ArcTanh const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ArcTanh::evaluate
         
             typedef double ( ::SireCAS::ArcTanh::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -51,7 +51,8 @@ void register_ArcTanh_class(){
             ArcTanh_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::ArcTanh::evaluate
@@ -62,7 +63,8 @@ void register_ArcTanh_class(){
             ArcTanh_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         ArcTanh_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -73,7 +75,8 @@ void register_ArcTanh_class(){
             
             ArcTanh_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ArcTanh::what
@@ -83,7 +86,8 @@ void register_ArcTanh_class(){
             
             ArcTanh_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ArcTanh_exposer.staticmethod( "typeName" );
@@ -96,6 +100,7 @@ void register_ArcTanh_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ArcTanh_exposer.def( "__str__", &__str__< ::SireCAS::ArcTanh > );
         ArcTanh_exposer.def( "__repr__", &__str__< ::SireCAS::ArcTanh > );
+        ArcTanh_exposer.def( "__hash__", &::SireCAS::ArcTanh::hash );
     }
 
 }

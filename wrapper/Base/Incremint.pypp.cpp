@@ -19,9 +19,9 @@ void register_Incremint_class(){
 
     { //::SireBase::Incremint
         typedef bp::class_< SireBase::Incremint > Incremint_exposer_t;
-        Incremint_exposer_t Incremint_exposer = Incremint_exposer_t( "Incremint", bp::init< bp::optional< int > >(( bp::arg("value")=(int)(0) )) );
+        Incremint_exposer_t Incremint_exposer = Incremint_exposer_t( "Incremint", "This is a simple class that provides a thread-safe\nincrementable integer. This can be used, for example,\nto give a unique version of ID number to objects.\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< int > >(( bp::arg("value")=(int)(0) ), "") );
         bp::scope Incremint_scope( Incremint_exposer );
-        Incremint_exposer.def( bp::init< SireBase::Incremint const & >(( bp::arg("other") )) );
+        Incremint_exposer.def( bp::init< SireBase::Incremint const & >(( bp::arg("other") ), "") );
         { //::SireBase::Incremint::increment
         
             typedef int ( ::SireBase::Incremint::*increment_function_type)(  ) ;
@@ -29,7 +29,8 @@ void register_Incremint_class(){
             
             Incremint_exposer.def( 
                 "increment"
-                , increment_function_value );
+                , increment_function_value
+                , "" );
         
         }
         Incremint_exposer.def( "__copy__", &__copy__);

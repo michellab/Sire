@@ -32,6 +32,7 @@
 #include <boost/rational.hpp>
 
 #include <QString>
+#include <QObject>
 
 #include "SireMaths/maths.h"
 #include "SireMaths/errors.h"

@@ -29,7 +29,7 @@ void register_SingleFunc_class(){
 
     { //::SireCAS::SingleFunc
         typedef bp::class_< SireCAS::SingleFunc, bp::bases< SireCAS::ExBase >, boost::noncopyable > SingleFunc_exposer_t;
-        SingleFunc_exposer_t SingleFunc_exposer = SingleFunc_exposer_t( "SingleFunc", bp::no_init );
+        SingleFunc_exposer_t SingleFunc_exposer = SingleFunc_exposer_t( "SingleFunc", "Base class of all single-expression functions (e.g. g( f(??) ))\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope SingleFunc_scope( SingleFunc_exposer );
         { //::SireCAS::SingleFunc::argument
         
@@ -39,7 +39,8 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "argument"
                 , argument_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireCAS::SingleFunc::children
@@ -49,7 +50,8 @@ void register_SingleFunc_class(){
             
             SingleFunc_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "Return the child expression of this function" );
         
         }
         { //::SireCAS::SingleFunc::conjugate
@@ -59,7 +61,8 @@ void register_SingleFunc_class(){
             
             SingleFunc_exposer.def( 
                 "conjugate"
-                , conjugate_function_value );
+                , conjugate_function_value
+                , "Return the conjugate of this function" );
         
         }
         { //::SireCAS::SingleFunc::differentiate
@@ -70,7 +73,8 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the differential of this function with respect to symbol" );
         
         }
         { //::SireCAS::SingleFunc::expand
@@ -81,7 +85,8 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "expand"
                 , expand_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "" );
         
         }
         { //::SireCAS::SingleFunc::functions
@@ -91,7 +96,8 @@ void register_SingleFunc_class(){
             
             SingleFunc_exposer.def( 
                 "functions"
-                , functions_function_value );
+                , functions_function_value
+                , "Return the functions used in this function" );
         
         }
         { //::SireCAS::SingleFunc::hash
@@ -101,7 +107,8 @@ void register_SingleFunc_class(){
             
             SingleFunc_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireCAS::SingleFunc::integrate
@@ -112,7 +119,8 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the integral of this function with respect to symbol" );
         
         }
         { //::SireCAS::SingleFunc::isComplex
@@ -122,7 +130,8 @@ void register_SingleFunc_class(){
             
             SingleFunc_exposer.def( 
                 "isComplex"
-                , isComplex_function_value );
+                , isComplex_function_value
+                , "Return whether this is complex" );
         
         }
         { //::SireCAS::SingleFunc::isCompound
@@ -132,7 +141,8 @@ void register_SingleFunc_class(){
             
             SingleFunc_exposer.def( 
                 "isCompound"
-                , isCompound_function_value );
+                , isCompound_function_value
+                , "A function is not compound" );
         
         }
         { //::SireCAS::SingleFunc::isConstant
@@ -142,7 +152,8 @@ void register_SingleFunc_class(){
             
             SingleFunc_exposer.def( 
                 "isConstant"
-                , isConstant_function_value );
+                , isConstant_function_value
+                , "Return whether or not this is constant" );
         
         }
         { //::SireCAS::SingleFunc::isFunction
@@ -153,7 +164,8 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "isFunction"
                 , isFunction_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return if this is a function of symbol" );
         
         }
         { //::SireCAS::SingleFunc::operator=
@@ -165,7 +177,8 @@ void register_SingleFunc_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireCAS::SingleFunc::substitute
@@ -176,7 +189,8 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Substitute into this expression" );
         
         }
         { //::SireCAS::SingleFunc::symbols
@@ -186,7 +200,8 @@ void register_SingleFunc_class(){
             
             SingleFunc_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return the symbols used in this function" );
         
         }
         { //::SireCAS::SingleFunc::toOpenMMString
@@ -196,7 +211,8 @@ void register_SingleFunc_class(){
             
             SingleFunc_exposer.def( 
                 "toOpenMMString"
-                , toOpenMMString_function_value );
+                , toOpenMMString_function_value
+                , "Return a string representation of this function in the OpenMM syntax" );
         
         }
         { //::SireCAS::SingleFunc::toString
@@ -206,7 +222,8 @@ void register_SingleFunc_class(){
             
             SingleFunc_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this function" );
         
         }
         { //::SireCAS::SingleFunc::x
@@ -217,7 +234,8 @@ void register_SingleFunc_class(){
             SingleFunc_exposer.def( 
                 "x"
                 , x_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         SingleFunc_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireCAS::SingleFunc >,
@@ -226,6 +244,7 @@ void register_SingleFunc_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         SingleFunc_exposer.def( "__str__", &__str__< ::SireCAS::SingleFunc > );
         SingleFunc_exposer.def( "__repr__", &__str__< ::SireCAS::SingleFunc > );
+        SingleFunc_exposer.def( "__hash__", &::SireCAS::SingleFunc::hash );
     }
 
 }

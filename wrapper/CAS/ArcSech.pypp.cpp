@@ -39,10 +39,10 @@ void register_ArcSech_class(){
 
     { //::SireCAS::ArcSech
         typedef bp::class_< SireCAS::ArcSech, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > ArcSech_exposer_t;
-        ArcSech_exposer_t ArcSech_exposer = ArcSech_exposer_t( "ArcSech", bp::init< >() );
+        ArcSech_exposer_t ArcSech_exposer = ArcSech_exposer_t( "ArcSech", "Inverse-hyperbolic-secant", bp::init< >("Null constructor") );
         bp::scope ArcSech_scope( ArcSech_exposer );
-        ArcSech_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        ArcSech_exposer.def( bp::init< SireCAS::ArcSech const & >(( bp::arg("other") )) );
+        ArcSech_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        ArcSech_exposer.def( bp::init< SireCAS::ArcSech const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ArcSech::evaluate
         
             typedef double ( ::SireCAS::ArcSech::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -51,7 +51,8 @@ void register_ArcSech_class(){
             ArcSech_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::ArcSech::evaluate
@@ -62,7 +63,8 @@ void register_ArcSech_class(){
             ArcSech_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         ArcSech_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -73,7 +75,8 @@ void register_ArcSech_class(){
             
             ArcSech_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ArcSech::what
@@ -83,7 +86,8 @@ void register_ArcSech_class(){
             
             ArcSech_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ArcSech_exposer.staticmethod( "typeName" );
@@ -96,6 +100,7 @@ void register_ArcSech_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ArcSech_exposer.def( "__str__", &__str__< ::SireCAS::ArcSech > );
         ArcSech_exposer.def( "__repr__", &__str__< ::SireCAS::ArcSech > );
+        ArcSech_exposer.def( "__hash__", &::SireCAS::ArcSech::hash );
     }
 
 }

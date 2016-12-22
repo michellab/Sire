@@ -33,6 +33,9 @@
 
 #include "move.h"
 
+#include "SireUnits/dimensions.h"
+#include "SireMaths/accumulator.h"
+
 SIRE_BEGIN_HEADER
 
 namespace SireMove
@@ -59,6 +62,10 @@ using SireCAS::Symbol;
 */
 class SIREMOVE_EXPORT Moves : public SireBase::Property
 {
+
+friend QDataStream& ::operator<<(QDataStream&, const Moves&);
+friend QDataStream& ::operator>>(QDataStream&, Moves&);
+
 public:
     Moves();
     
@@ -120,14 +127,30 @@ public:
                         int nmoves=1, bool record_stats=false)=0;
     
     virtual void clearStatistics()=0;
+
+    void setCheckRunningTotal(bool on);
+    void setAcceptableDelta(SireUnits::Dimension::MolarEnergy delta);
+    
+    SireUnits::Dimension::MolarEnergy acceptableDelta() const;
+    
+    bool checkingRunningTotal() const;
     
     virtual QList<MovePtr> moves() const=0;
+
+    SireUnits::Dimension::Time timing(int i) const;
+
+    virtual QList<SireUnits::Dimension::Time> timing() const=0;
+    virtual void clearTiming()=0;
 
     static const SameMoves& null();
 
 protected:
     void preCheck(System &system) const;
     void postCheck(System &system) const;
+
+    Moves& operator=(const Moves &other);
+    
+    bool operator==(const Moves &other) const;
 
     /** Set the temperature for all moves that have a constant temperature
         to 'temperature'. It has already been checked that these moves
@@ -146,6 +169,14 @@ protected:
         between them sample at constant fugacity */
     virtual void _pvt_setFugacity(
                             const SireUnits::Dimension::Pressure &fugacity)=0;
+
+private:
+    /** The acceptable delta between the running total and recalcualted total energy */
+    double acceptable_delta;
+
+    /** Whether or not to check the running total against the recalculated
+        total energy in the post-check of the moves */
+    bool check_running_total;
 };
 
 /** This is a Moves class that just applies the same move over and
@@ -195,6 +226,9 @@ public:
     
     QList<MovePtr> moves() const;
 
+    QList<SireUnits::Dimension::Time> timing() const;
+    void clearTiming();
+
 private:
     void _pvt_setTemperature(const SireUnits::Dimension::Temperature &temperature);
     void _pvt_setPressure(const SireUnits::Dimension::Pressure &pressure);
@@ -204,6 +238,9 @@ private:
 
     /** The move that will be repeatedly applied */
     MovePtr mv;
+    
+    /** The average time to run each move, in nanoseconds */
+    SireMaths::Average avgtime;
 };
 
 typedef SireBase::PropPtr<Moves> MovesPtr;

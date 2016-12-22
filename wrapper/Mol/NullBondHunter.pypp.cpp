@@ -53,9 +53,9 @@ void register_NullBondHunter_class(){
 
     { //::SireMol::NullBondHunter
         typedef bp::class_< SireMol::NullBondHunter, bp::bases< SireMol::BondHunter, SireBase::Property > > NullBondHunter_exposer_t;
-        NullBondHunter_exposer_t NullBondHunter_exposer = NullBondHunter_exposer_t( "NullBondHunter", bp::init< >() );
+        NullBondHunter_exposer_t NullBondHunter_exposer = NullBondHunter_exposer_t( "NullBondHunter", "This is a null bond hunter. This finds no bonds in a molecule and is used\nwhen you want to create an empty connectivity object for a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope NullBondHunter_scope( NullBondHunter_exposer );
-        NullBondHunter_exposer.def( bp::init< SireMol::NullBondHunter const & >(( bp::arg("other") )) );
+        NullBondHunter_exposer.def( bp::init< SireMol::NullBondHunter const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::NullBondHunter::operator()
         
             typedef ::SireMol::Connectivity ( ::SireMol::NullBondHunter::*__call___function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
@@ -64,7 +64,8 @@ void register_NullBondHunter_class(){
             NullBondHunter_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::NullBondHunter::typeName
@@ -74,7 +75,8 @@ void register_NullBondHunter_class(){
             
             NullBondHunter_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::NullBondHunter::what
@@ -84,7 +86,8 @@ void register_NullBondHunter_class(){
             
             NullBondHunter_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         NullBondHunter_exposer.staticmethod( "typeName" );

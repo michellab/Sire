@@ -48,11 +48,11 @@ void register_AssignerGroup_class(){
 
     { //::SireSystem::AssignerGroup
         typedef bp::class_< SireSystem::AssignerGroup > AssignerGroup_exposer_t;
-        AssignerGroup_exposer_t AssignerGroup_exposer = AssignerGroup_exposer_t( "AssignerGroup", bp::init< >() );
+        AssignerGroup_exposer_t AssignerGroup_exposer = AssignerGroup_exposer_t( "AssignerGroup", "This is a simple class that holds either a MoleculeGroup or an IDAssigner\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AssignerGroup_scope( AssignerGroup_exposer );
-        AssignerGroup_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") )) );
-        AssignerGroup_exposer.def( bp::init< SireSystem::IDAssigner const & >(( bp::arg("assigner") )) );
-        AssignerGroup_exposer.def( bp::init< SireSystem::AssignerGroup const & >(( bp::arg("other") )) );
+        AssignerGroup_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") ), "Construct as a holder for a MoleculeGroup") );
+        AssignerGroup_exposer.def( bp::init< SireSystem::IDAssigner const & >(( bp::arg("assigner") ), "Construct as a holder for an IDAssigner") );
+        AssignerGroup_exposer.def( bp::init< SireSystem::AssignerGroup const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::AssignerGroup::assigner
         
             typedef ::SireSystem::IDAssigner const & ( ::SireSystem::AssignerGroup::*assigner_function_type)(  ) const;
@@ -61,7 +61,8 @@ void register_AssignerGroup_class(){
             AssignerGroup_exposer.def( 
                 "assigner"
                 , assigner_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the IDAssigner" );
         
         }
         { //::SireSystem::AssignerGroup::group
@@ -72,7 +73,8 @@ void register_AssignerGroup_class(){
             AssignerGroup_exposer.def( 
                 "group"
                 , group_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group" );
         
         }
         { //::SireSystem::AssignerGroup::isAssigner
@@ -82,7 +84,8 @@ void register_AssignerGroup_class(){
             
             AssignerGroup_exposer.def( 
                 "isAssigner"
-                , isAssigner_function_value );
+                , isAssigner_function_value
+                , "Return whether or not this is holding an IDAssigner" );
         
         }
         { //::SireSystem::AssignerGroup::isCompatible
@@ -93,7 +96,8 @@ void register_AssignerGroup_class(){
             AssignerGroup_exposer.def( 
                 "isCompatible"
                 , isCompatible_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this group is compatible with other.\nCompatible means is the same type, refers to the same MoleculeGroup etc." );
         
         }
         { //::SireSystem::AssignerGroup::isEmpty
@@ -103,7 +107,8 @@ void register_AssignerGroup_class(){
             
             AssignerGroup_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is empty" );
         
         }
         { //::SireSystem::AssignerGroup::isMoleculeGroup
@@ -113,7 +118,8 @@ void register_AssignerGroup_class(){
             
             AssignerGroup_exposer.def( 
                 "isMoleculeGroup"
-                , isMoleculeGroup_function_value );
+                , isMoleculeGroup_function_value
+                , "Return whether or not this is a holding a MoleculeGroup" );
         
         }
         AssignerGroup_exposer.def( bp::self != bp::self );
@@ -126,7 +132,8 @@ void register_AssignerGroup_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AssignerGroup_exposer.def( bp::self == bp::self );
@@ -137,7 +144,8 @@ void register_AssignerGroup_class(){
             
             AssignerGroup_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireSystem::AssignerGroup::update
@@ -148,7 +156,8 @@ void register_AssignerGroup_class(){
             AssignerGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Update the contained group or assigner to match the version\nin the passed system" );
         
         }
         { //::SireSystem::AssignerGroup::views
@@ -158,7 +167,8 @@ void register_AssignerGroup_class(){
             
             AssignerGroup_exposer.def( 
                 "views"
-                , views_function_value );
+                , views_function_value
+                , "Return the molecule views contained in this group" );
         
         }
         { //::SireSystem::AssignerGroup::what
@@ -168,7 +178,8 @@ void register_AssignerGroup_class(){
             
             AssignerGroup_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AssignerGroup_exposer.staticmethod( "typeName" );

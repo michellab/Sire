@@ -43,12 +43,12 @@ void register_AtomCoords_class(){
 
     { //::SireMol::AtomProperty< SireMaths::Vector >
         typedef bp::class_< SireMol::AtomProperty< SireMaths::Vector >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomCoords_exposer_t;
-        AtomCoords_exposer_t AtomCoords_exposer = AtomCoords_exposer_t( "AtomCoords", bp::init< >() );
+        AtomCoords_exposer_t AtomCoords_exposer = AtomCoords_exposer_t( "AtomCoords", "", bp::init< >("") );
         bp::scope AtomCoords_scope( AtomCoords_exposer );
-        AtomCoords_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        AtomCoords_exposer.def( bp::init< SireVol::CoordGroup const & >(( bp::arg("cgroup") )) );
-        AtomCoords_exposer.def( bp::init< SireVol::CoordGroupArray const & >(( bp::arg("cgroups") )) );
-        AtomCoords_exposer.def( bp::init< SireMol::AtomProperty< SireMaths::Vector > const & >(( bp::arg("other") )) );
+        AtomCoords_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        AtomCoords_exposer.def( bp::init< SireVol::CoordGroup const & >(( bp::arg("cgroup") ), "") );
+        AtomCoords_exposer.def( bp::init< SireVol::CoordGroupArray const & >(( bp::arg("cgroups") ), "") );
+        AtomCoords_exposer.def( bp::init< SireMol::AtomProperty< SireMaths::Vector > const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomProperty< SireMaths::Vector >::array
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
@@ -58,7 +58,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::assertCanConvert
@@ -70,7 +71,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::assignFrom
@@ -82,7 +84,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::at
@@ -95,7 +98,8 @@ void register_AtomCoords_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::at
@@ -108,7 +112,8 @@ void register_AtomCoords_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::canConvert
@@ -120,7 +125,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::changeFrame
@@ -132,7 +138,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "changeFrame"
                 , changeFrame_function_value
-                , ( bp::arg("from_frame"), bp::arg("to_frame") ) );
+                , ( bp::arg("from_frame"), bp::arg("to_frame") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::changeFrame
@@ -144,7 +151,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "changeFrame"
                 , changeFrame_function_value
-                , ( bp::arg("cgidx"), bp::arg("from_frame"), bp::arg("to_frame") ) );
+                , ( bp::arg("cgidx"), bp::arg("from_frame"), bp::arg("to_frame") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::copyFrom
@@ -156,7 +164,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::copyFrom
@@ -168,7 +177,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values"), bp::arg("selection") ) );
+                , ( bp::arg("values"), bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::count
@@ -179,7 +189,8 @@ void register_AtomCoords_class(){
             
             AtomCoords_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::divide
@@ -191,7 +202,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("beads") ) );
+                , ( bp::arg("beads") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::divideByResidue
@@ -203,7 +215,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "divideByResidue"
                 , divideByResidue_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::fromVariant
@@ -215,7 +228,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::get
@@ -228,7 +242,8 @@ void register_AtomCoords_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::get
@@ -241,7 +256,8 @@ void register_AtomCoords_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::isCompatibleWith
@@ -253,7 +269,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::mapInto
@@ -265,7 +282,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "mapInto"
                 , mapInto_function_value
-                , ( bp::arg("axes") ) );
+                , ( bp::arg("axes") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::mapInto
@@ -277,7 +295,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "mapInto"
                 , mapInto_function_value
-                , ( bp::arg("cgidx"), bp::arg("axes") ) );
+                , ( bp::arg("cgidx"), bp::arg("axes") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::merge
@@ -289,7 +308,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::nAtoms
@@ -300,7 +320,8 @@ void register_AtomCoords_class(){
             
             AtomCoords_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::nAtoms
@@ -312,7 +333,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::nCutGroups
@@ -323,7 +345,8 @@ void register_AtomCoords_class(){
             
             AtomCoords_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         AtomCoords_exposer.def( bp::self != bp::self );
@@ -337,7 +360,8 @@ void register_AtomCoords_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomCoords_exposer.def( bp::self == bp::self );
@@ -351,7 +375,8 @@ void register_AtomCoords_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::operator[]
@@ -364,7 +389,8 @@ void register_AtomCoords_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::rotate
@@ -376,7 +402,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("quat"), bp::arg("point") ) );
+                , ( bp::arg("quat"), bp::arg("point") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::rotate
@@ -388,7 +415,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("rotmat"), bp::arg("point") ) );
+                , ( bp::arg("rotmat"), bp::arg("point") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::rotate
@@ -400,7 +428,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("cgidx"), bp::arg("quat"), bp::arg("point") ) );
+                , ( bp::arg("cgidx"), bp::arg("quat"), bp::arg("point") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::rotate
@@ -412,7 +441,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("cgidx"), bp::arg("rotmat"), bp::arg("point") ) );
+                , ( bp::arg("cgidx"), bp::arg("rotmat"), bp::arg("point") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::set
@@ -425,7 +455,8 @@ void register_AtomCoords_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::set
@@ -438,7 +469,8 @@ void register_AtomCoords_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("values") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::set
@@ -451,7 +483,8 @@ void register_AtomCoords_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("cgroup") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::size
@@ -462,7 +495,8 @@ void register_AtomCoords_class(){
             
             AtomCoords_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::toVariant
@@ -473,7 +507,8 @@ void register_AtomCoords_class(){
             
             AtomCoords_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::toVector
@@ -484,7 +519,8 @@ void register_AtomCoords_class(){
             
             AtomCoords_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::toVector
@@ -496,7 +532,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "toVector"
                 , toVector_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::transform
@@ -508,7 +545,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "transform"
                 , transform_function_value
-                , ( bp::arg("t") ) );
+                , ( bp::arg("t") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::transform
@@ -520,7 +558,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "transform"
                 , transform_function_value
-                , ( bp::arg("cgidx"), bp::arg("t") ) );
+                , ( bp::arg("cgidx"), bp::arg("t") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::translate
@@ -532,7 +571,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "translate"
                 , translate_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::translate
@@ -544,7 +584,8 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "translate"
                 , translate_function_value
-                , ( bp::arg("cgidx"), bp::arg("delta") ) );
+                , ( bp::arg("cgidx"), bp::arg("delta") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::typeName
@@ -555,7 +596,8 @@ void register_AtomCoords_class(){
             
             AtomCoords_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AtomCoords_exposer.staticmethod( "fromVariant" );

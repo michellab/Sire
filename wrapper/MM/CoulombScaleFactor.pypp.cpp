@@ -23,9 +23,9 @@ void register_CoulombScaleFactor_class(){
 
     { //::SireMM::CoulombScaleFactor
         typedef bp::class_< SireMM::CoulombScaleFactor > CoulombScaleFactor_exposer_t;
-        CoulombScaleFactor_exposer_t CoulombScaleFactor_exposer = CoulombScaleFactor_exposer_t( "CoulombScaleFactor", bp::init< bp::optional< double > >(( bp::arg("scl")=0 )) );
+        CoulombScaleFactor_exposer_t CoulombScaleFactor_exposer = CoulombScaleFactor_exposer_t( "CoulombScaleFactor", "This is the interatomic scale factor for the coulomb\nparameters for the intramolecular energy", bp::init< bp::optional< double > >(( bp::arg("scl")=0 ), "Construct with the Coulomb scale factor equal to scl") );
         bp::scope CoulombScaleFactor_scope( CoulombScaleFactor_exposer );
-        CoulombScaleFactor_exposer.def( bp::init< SireMM::CoulombScaleFactor const & >(( bp::arg("other") )) );
+        CoulombScaleFactor_exposer.def( bp::init< SireMM::CoulombScaleFactor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CoulombScaleFactor::coulomb
         
             typedef double ( ::SireMM::CoulombScaleFactor::*coulomb_function_type)(  ) const;
@@ -33,7 +33,8 @@ void register_CoulombScaleFactor_class(){
             
             CoulombScaleFactor_exposer.def( 
                 "coulomb"
-                , coulomb_function_value );
+                , coulomb_function_value
+                , "Return the Coulomb parameter scaling factor" );
         
         }
         CoulombScaleFactor_exposer.def( bp::self != bp::self );
@@ -46,7 +47,8 @@ void register_CoulombScaleFactor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CoulombScaleFactor_exposer.def( bp::self == bp::self );
@@ -57,7 +59,8 @@ void register_CoulombScaleFactor_class(){
             
             CoulombScaleFactor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CoulombScaleFactor::what
@@ -67,7 +70,8 @@ void register_CoulombScaleFactor_class(){
             
             CoulombScaleFactor_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CoulombScaleFactor_exposer.staticmethod( "typeName" );

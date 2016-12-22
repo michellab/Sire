@@ -39,9 +39,9 @@ void register_AbsFromNumber_class(){
 
     { //::SireMol::AbsFromNumber
         typedef bp::class_< SireMol::AbsFromNumber, bp::bases< SireMol::WeightFunction, SireBase::Property > > AbsFromNumber_exposer_t;
-        AbsFromNumber_exposer_t AbsFromNumber_exposer = AbsFromNumber_exposer_t( "AbsFromNumber", bp::init< >() );
+        AbsFromNumber_exposer_t AbsFromNumber_exposer = AbsFromNumber_exposer_t( "AbsFromNumber", "This class calculates the weight by assigning all of the weight to\nthe group with the largest number of atoms.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope AbsFromNumber_scope( AbsFromNumber_exposer );
-        AbsFromNumber_exposer.def( bp::init< SireMol::AbsFromNumber const & >(( bp::arg("other") )) );
+        AbsFromNumber_exposer.def( bp::init< SireMol::AbsFromNumber const & >(( bp::arg("other") ), "") );
         AbsFromNumber_exposer.def( bp::self != bp::self );
         { //::SireMol::AbsFromNumber::operator()
         
@@ -51,7 +51,8 @@ void register_AbsFromNumber_class(){
             AbsFromNumber_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("moldata"), bp::arg("group0"), bp::arg("group1"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("moldata"), bp::arg("group0"), bp::arg("group1"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::AbsFromNumber::operator()
@@ -62,7 +63,8 @@ void register_AbsFromNumber_class(){
             AbsFromNumber_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1") ) );
+                , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1") )
+                , "" );
         
         }
         { //::SireMol::AbsFromNumber::operator=
@@ -74,7 +76,8 @@ void register_AbsFromNumber_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("arg0") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AbsFromNumber_exposer.def( bp::self == bp::self );
@@ -85,7 +88,8 @@ void register_AbsFromNumber_class(){
             
             AbsFromNumber_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AbsFromNumber_exposer.staticmethod( "typeName" );

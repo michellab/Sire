@@ -59,12 +59,12 @@ void register_ResIn_ChainID__class(){
 
     { //::SireMol::ResIn< SireMol::ChainID >
         typedef bp::class_< SireMol::ResIn< SireMol::ChainID >, bp::bases< SireMol::ResID, SireID::ID > > ResIn_ChainID__exposer_t;
-        ResIn_ChainID__exposer_t ResIn_ChainID__exposer = ResIn_ChainID__exposer_t( "ResIn_ChainID_", bp::init< >() );
+        ResIn_ChainID__exposer_t ResIn_ChainID__exposer = ResIn_ChainID__exposer_t( "ResIn_ChainID_", "", bp::init< >("") );
         bp::scope ResIn_ChainID__scope( ResIn_ChainID__exposer );
-        ResIn_ChainID__exposer.def( bp::init< SireMol::ChainID const & >(( bp::arg("id") )) );
-        ResIn_ChainID__exposer.def( bp::init< SireMol::ChainID const &, qint32 >(( bp::arg("id"), bp::arg("i") )) );
-        ResIn_ChainID__exposer.def( bp::init< SireMol::ChainID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") )) );
-        ResIn_ChainID__exposer.def( bp::init< SireMol::ResIn< SireMol::ChainID > const & >(( bp::arg("other") )) );
+        ResIn_ChainID__exposer.def( bp::init< SireMol::ChainID const & >(( bp::arg("id") ), "") );
+        ResIn_ChainID__exposer.def( bp::init< SireMol::ChainID const &, qint32 >(( bp::arg("id"), bp::arg("i") ), "") );
+        ResIn_ChainID__exposer.def( bp::init< SireMol::ChainID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") ), "") );
+        ResIn_ChainID__exposer.def( bp::init< SireMol::ResIn< SireMol::ChainID > const & >(( bp::arg("other") ), "") );
         { //::SireMol::ResIn< SireMol::ChainID >::hash
         
             typedef SireMol::ResIn< SireMol::ChainID > exported_class_t;
@@ -73,7 +73,8 @@ void register_ResIn_ChainID__class(){
             
             ResIn_ChainID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::ResIn< SireMol::ChainID >::isNull
@@ -84,7 +85,8 @@ void register_ResIn_ChainID__class(){
             
             ResIn_ChainID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::ResIn< SireMol::ChainID >::map
@@ -96,7 +98,8 @@ void register_ResIn_ChainID__class(){
             ResIn_ChainID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         ResIn_ChainID__exposer.def( bp::self != bp::self );
@@ -111,7 +114,8 @@ void register_ResIn_ChainID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ResIn_ChainID__exposer.def( bp::self == bp::self );
@@ -124,7 +128,8 @@ void register_ResIn_ChainID__class(){
             
             ResIn_ChainID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ResIn< SireMol::ChainID >::typeName
@@ -135,7 +140,8 @@ void register_ResIn_ChainID__class(){
             
             ResIn_ChainID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::ResIn< SireMol::ChainID >::what
@@ -146,7 +152,8 @@ void register_ResIn_ChainID__class(){
             
             ResIn_ChainID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ResIn_ChainID__exposer.staticmethod( "typeName" );
@@ -159,6 +166,7 @@ void register_ResIn_ChainID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ResIn_ChainID__exposer.def( "__str__", &__str__< ::SireMol::ResIn<SireMol::ChainID> > );
         ResIn_ChainID__exposer.def( "__repr__", &__str__< ::SireMol::ResIn<SireMol::ChainID> > );
+        ResIn_ChainID__exposer.def( "__hash__", &::SireMol::ResIn<SireMol::ChainID>::hash );
     }
 
 }

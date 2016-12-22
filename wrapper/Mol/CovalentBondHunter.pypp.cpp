@@ -53,9 +53,9 @@ void register_CovalentBondHunter_class(){
 
     { //::SireMol::CovalentBondHunter
         typedef bp::class_< SireMol::CovalentBondHunter, bp::bases< SireMol::BondHunter, SireBase::Property > > CovalentBondHunter_exposer_t;
-        CovalentBondHunter_exposer_t CovalentBondHunter_exposer = CovalentBondHunter_exposer_t( "CovalentBondHunter", bp::init< bp::optional< double > >(( bp::arg("tolerance")=1.100000000000000088817841970012523233890533447265625e+0 )) );
+        CovalentBondHunter_exposer_t CovalentBondHunter_exposer = CovalentBondHunter_exposer_t( "CovalentBondHunter", "This is a bond hunter that finds bonded atoms by comparing\nthe distance between the atoms to the sum of their covalent radii.\nIf the distance is less than the sum of the covalent radii then the atoms\nare bonded.\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< double > >(( bp::arg("tolerance")=1.1000000000000001 ), "Construct a CovalentBondHunter with a specified tolerance") );
         bp::scope CovalentBondHunter_scope( CovalentBondHunter_exposer );
-        CovalentBondHunter_exposer.def( bp::init< SireMol::CovalentBondHunter const & >(( bp::arg("other") )) );
+        CovalentBondHunter_exposer.def( bp::init< SireMol::CovalentBondHunter const & >(( bp::arg("other") ), "Copy constructor") );
         CovalentBondHunter_exposer.def( bp::self != bp::self );
         { //::SireMol::CovalentBondHunter::operator()
         
@@ -65,7 +65,8 @@ void register_CovalentBondHunter_class(){
             CovalentBondHunter_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::CovalentBondHunter::operator=
@@ -77,7 +78,8 @@ void register_CovalentBondHunter_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CovalentBondHunter_exposer.def( bp::self == bp::self );
@@ -89,7 +91,8 @@ void register_CovalentBondHunter_class(){
             CovalentBondHunter_exposer.def( 
                 "parameters"
                 , parameters_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CovalentBondHunter::typeName
@@ -99,7 +102,8 @@ void register_CovalentBondHunter_class(){
             
             CovalentBondHunter_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CovalentBondHunter_exposer.staticmethod( "parameters" );

@@ -38,10 +38,10 @@ void register_QMComponent_class(){
 
     { //::Squire::QMComponent
         typedef bp::class_< Squire::QMComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > QMComponent_exposer_t;
-        QMComponent_exposer_t QMComponent_exposer = QMComponent_exposer_t( "QMComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() )) );
+        QMComponent_exposer_t QMComponent_exposer = QMComponent_exposer_t( "QMComponent", "This class represents a QM energy", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor for the forcefield called ffname") );
         bp::scope QMComponent_scope( QMComponent_exposer );
-        QMComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        QMComponent_exposer.def( bp::init< Squire::QMComponent const & >(( bp::arg("other") )) );
+        QMComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        QMComponent_exposer.def( bp::init< Squire::QMComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::QMComponent::changeEnergy
         
             typedef void ( ::Squire::QMComponent::*changeEnergy_function_type)( ::SireFF::FF &,::Squire::QMEnergy const & ) const;
@@ -50,7 +50,8 @@ void register_QMComponent_class(){
             QMComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("qmnrg") ) );
+                , ( bp::arg("ff"), bp::arg("qmnrg") )
+                , "Change the QM component of the energy in the forcefield ff\nby delta" );
         
         }
         { //::Squire::QMComponent::setEnergy
@@ -61,7 +62,8 @@ void register_QMComponent_class(){
             QMComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("qmnrg") ) );
+                , ( bp::arg("ff"), bp::arg("qmnrg") )
+                , "Set the QM component of the energy in the forcefield ff\nto equal to the passed QMEnergy" );
         
         }
         { //::Squire::QMComponent::symbols
@@ -71,7 +73,8 @@ void register_QMComponent_class(){
             
             QMComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::Squire::QMComponent::total
@@ -82,7 +85,8 @@ void register_QMComponent_class(){
             QMComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::Squire::QMComponent::typeName
@@ -92,7 +96,8 @@ void register_QMComponent_class(){
             
             QMComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::Squire::QMComponent::what
@@ -102,7 +107,8 @@ void register_QMComponent_class(){
             
             QMComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         QMComponent_exposer.staticmethod( "typeName" );
@@ -115,6 +121,7 @@ void register_QMComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         QMComponent_exposer.def( "__str__", &__str__< ::Squire::QMComponent > );
         QMComponent_exposer.def( "__repr__", &__str__< ::Squire::QMComponent > );
+        QMComponent_exposer.def( "__hash__", &::Squire::QMComponent::hash );
     }
 
 }

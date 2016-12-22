@@ -32,7 +32,7 @@ void register_Sampler_class(){
 
     { //::SireMove::Sampler
         typedef bp::class_< SireMove::Sampler, bp::bases< SireBase::Property >, boost::noncopyable > Sampler_exposer_t;
-        Sampler_exposer_t Sampler_exposer = Sampler_exposer_t( "Sampler", bp::no_init );
+        Sampler_exposer_t Sampler_exposer = Sampler_exposer_t( "Sampler", "This is the base class of all Samplers. A Sampler is used\nto pick a random molecule from a MoleculeGroup\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Sampler_scope( Sampler_exposer );
         { //::SireMove::Sampler::generator
         
@@ -42,7 +42,8 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "generator"
                 , generator_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMove::Sampler::group
@@ -53,7 +54,8 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "group"
                 , group_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMove::Sampler::isBiased
@@ -63,7 +65,8 @@ void register_Sampler_class(){
             
             Sampler_exposer.def( 
                 "isBiased"
-                , isBiased_function_value );
+                , isBiased_function_value
+                , "Return whether or not this sampler is biased, i.e. picks some\nmolecules  views with a higher probability than others. If this\nis a biased sampler, then this will need to be accounted for in the\nMC acceptance test. If this is not a biased sampler, then every\nmolecule or view is chosen with equal probability" );
         
         }
         { //::SireMove::Sampler::null
@@ -74,7 +77,8 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMove::Sampler::probabilityOf
@@ -85,7 +89,8 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "probabilityOf"
                 , probabilityOf_function_value
-                , ( bp::arg("molecule") ) );
+                , ( bp::arg("molecule") )
+                , "" );
         
         }
         { //::SireMove::Sampler::probabilityOfMolecule
@@ -96,7 +101,8 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "probabilityOfMolecule"
                 , probabilityOfMolecule_function_value
-                , ( bp::arg("molecule") ) );
+                , ( bp::arg("molecule") )
+                , "" );
         
         }
         { //::SireMove::Sampler::sample
@@ -106,7 +112,8 @@ void register_Sampler_class(){
             
             Sampler_exposer.def( 
                 "sample"
-                , sample_function_value );
+                , sample_function_value
+                , "" );
         
         }
         { //::SireMove::Sampler::sampleMolecule
@@ -116,7 +123,8 @@ void register_Sampler_class(){
             
             Sampler_exposer.def( 
                 "sampleMolecule"
-                , sampleMolecule_function_value );
+                , sampleMolecule_function_value
+                , "" );
         
         }
         { //::SireMove::Sampler::setGenerator
@@ -127,7 +135,8 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("generator") ) );
+                , ( bp::arg("generator") )
+                , "Set the random number generator used by this sampler" );
         
         }
         { //::SireMove::Sampler::setGroup
@@ -138,7 +147,8 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "setGroup"
                 , setGroup_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Set the molecule group from which random molecules will be sampled" );
         
         }
         { //::SireMove::Sampler::typeName
@@ -148,7 +158,8 @@ void register_Sampler_class(){
             
             Sampler_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::Sampler::updateFrom
@@ -159,7 +170,8 @@ void register_Sampler_class(){
             Sampler_exposer.def( 
                 "updateFrom"
                 , updateFrom_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Update this sampler so that it matches the state of the molecules\nin the System system" );
         
         }
         Sampler_exposer.staticmethod( "null" );

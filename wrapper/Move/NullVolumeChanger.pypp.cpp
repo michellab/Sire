@@ -41,9 +41,9 @@ void register_NullVolumeChanger_class(){
 
     { //::SireMove::NullVolumeChanger
         typedef bp::class_< SireMove::NullVolumeChanger, bp::bases< SireMove::VolumeChanger, SireBase::Property > > NullVolumeChanger_exposer_t;
-        NullVolumeChanger_exposer_t NullVolumeChanger_exposer = NullVolumeChanger_exposer_t( "NullVolumeChanger", bp::init< >() );
+        NullVolumeChanger_exposer_t NullVolumeChanger_exposer = NullVolumeChanger_exposer_t( "NullVolumeChanger", "This is a null volume changer that does nothing", bp::init< >("Constructor") );
         bp::scope NullVolumeChanger_scope( NullVolumeChanger_exposer );
-        NullVolumeChanger_exposer.def( bp::init< SireMove::NullVolumeChanger const & >(( bp::arg("other") )) );
+        NullVolumeChanger_exposer.def( bp::init< SireMove::NullVolumeChanger const & >(( bp::arg("other") ), "Copy constructor") );
         NullVolumeChanger_exposer.def( bp::self != bp::self );
         { //::SireMove::NullVolumeChanger::operator=
         
@@ -54,7 +54,8 @@ void register_NullVolumeChanger_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullVolumeChanger_exposer.def( bp::self == bp::self );
@@ -66,7 +67,8 @@ void register_NullVolumeChanger_class(){
             NullVolumeChanger_exposer.def( 
                 "setVolume"
                 , setVolume_function_value
-                , ( bp::arg("system"), bp::arg("volume"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("system"), bp::arg("volume"), bp::arg("map")=SireBase::PropertyMap() )
+                , "The null volume changer doesnt change anything" );
         
         }
         { //::SireMove::NullVolumeChanger::typeName
@@ -76,7 +78,8 @@ void register_NullVolumeChanger_class(){
             
             NullVolumeChanger_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullVolumeChanger_exposer.staticmethod( "typeName" );

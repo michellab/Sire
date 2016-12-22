@@ -26,6 +26,8 @@
   *
 \*********************************************/
 
+#include <QDataStream>
+
 #include "rational.h"
 #include "maths.h"
 

@@ -29,11 +29,11 @@ void register_VectorArrayProperty_class(){
 
     { //::SireMaths::VectorArrayProperty
         typedef bp::class_< SireMaths::VectorArrayProperty, bp::bases< SireBase::Property > > VectorArrayProperty_exposer_t;
-        VectorArrayProperty_exposer_t VectorArrayProperty_exposer = VectorArrayProperty_exposer_t( "VectorArrayProperty", bp::init< >() );
+        VectorArrayProperty_exposer_t VectorArrayProperty_exposer = VectorArrayProperty_exposer_t( "VectorArrayProperty", "", bp::init< >("") );
         bp::scope VectorArrayProperty_scope( VectorArrayProperty_exposer );
-        VectorArrayProperty_exposer.def( bp::init< QList< SireMaths::Vector > const & >(( bp::arg("array") )) );
-        VectorArrayProperty_exposer.def( bp::init< QVector< SireMaths::Vector > const & >(( bp::arg("array") )) );
-        VectorArrayProperty_exposer.def( bp::init< SireMaths::VectorArrayProperty const & >(( bp::arg("other") )) );
+        VectorArrayProperty_exposer.def( bp::init< QList< SireMaths::Vector > const & >(( bp::arg("array") ), "") );
+        VectorArrayProperty_exposer.def( bp::init< QVector< SireMaths::Vector > const & >(( bp::arg("array") ), "") );
+        VectorArrayProperty_exposer.def( bp::init< SireMaths::VectorArrayProperty const & >(( bp::arg("other") ), "") );
         VectorArrayProperty_exposer.def( bp::self != bp::self );
         VectorArrayProperty_exposer.def( bp::self + bp::self );
         { //::SireMaths::VectorArrayProperty::operator=
@@ -45,7 +45,8 @@ void register_VectorArrayProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         VectorArrayProperty_exposer.def( bp::self == bp::self );
@@ -56,7 +57,8 @@ void register_VectorArrayProperty_class(){
             
             VectorArrayProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         VectorArrayProperty_exposer.staticmethod( "typeName" );

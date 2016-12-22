@@ -38,9 +38,9 @@ void register_WeightedMoves_class(){
 
     { //::SireMove::WeightedMoves
         typedef bp::class_< SireMove::WeightedMoves, bp::bases< SireMove::Moves, SireBase::Property > > WeightedMoves_exposer_t;
-        WeightedMoves_exposer_t WeightedMoves_exposer = WeightedMoves_exposer_t( "WeightedMoves", bp::init< >() );
+        WeightedMoves_exposer_t WeightedMoves_exposer = WeightedMoves_exposer_t( "WeightedMoves", "This is a collection of moves, with each move in the collection\nchosen at random according to its weight\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope WeightedMoves_scope( WeightedMoves_exposer );
-        WeightedMoves_exposer.def( bp::init< SireMove::WeightedMoves const & >(( bp::arg("other") )) );
+        WeightedMoves_exposer.def( bp::init< SireMove::WeightedMoves const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::WeightedMoves::add
         
             typedef void ( ::SireMove::WeightedMoves::*add_function_type)( ::SireMove::Move const &,double ) ;
@@ -49,7 +49,8 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("move"), bp::arg("weight")=1 ) );
+                , ( bp::arg("move"), bp::arg("weight")=1 )
+                , "Add the move move to the list of moves, with the weight weight" );
         
         }
         { //::SireMove::WeightedMoves::clearStatistics
@@ -59,7 +60,19 @@ void register_WeightedMoves_class(){
             
             WeightedMoves_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Completely clear all of the move statistics" );
+        
+        }
+        { //::SireMove::WeightedMoves::clearTiming
+        
+            typedef void ( ::SireMove::WeightedMoves::*clearTiming_function_type)(  ) ;
+            clearTiming_function_type clearTiming_function_value( &::SireMove::WeightedMoves::clearTiming );
+            
+            WeightedMoves_exposer.def( 
+                "clearTiming"
+                , clearTiming_function_value
+                , "" );
         
         }
         { //::SireMove::WeightedMoves::energyComponent
@@ -70,7 +83,8 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "energyComponent"
                 , energyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the energy component used by these moves. An exception\nwill be raised if the component moves use different energy\ncomponents to one another\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::WeightedMoves::generator
@@ -81,7 +95,8 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "generator"
                 , generator_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the random number generator used to pick moves. This\nmay not be the same as the generator used by the moves themselves.\n" );
         
         }
         { //::SireMove::WeightedMoves::hasCombinedSpaceProperty
@@ -91,7 +106,8 @@ void register_WeightedMoves_class(){
             
             WeightedMoves_exposer.def( 
                 "hasCombinedSpaceProperty"
-                , hasCombinedSpaceProperty_function_value );
+                , hasCombinedSpaceProperty_function_value
+                , "Return whether or not these moves use a combined space to\ncalculate the volume" );
         
         }
         { //::SireMove::WeightedMoves::move
@@ -102,7 +118,8 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats") ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , "Perform nmoves moves on the system system and return the result" );
         
         }
         { //::SireMove::WeightedMoves::moves
@@ -112,7 +129,8 @@ void register_WeightedMoves_class(){
             
             WeightedMoves_exposer.def( 
                 "moves"
-                , moves_function_value );
+                , moves_function_value
+                , "Return the moves available in this set" );
         
         }
         WeightedMoves_exposer.def( bp::self != bp::self );
@@ -125,7 +143,8 @@ void register_WeightedMoves_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         WeightedMoves_exposer.def( bp::self == bp::self );
@@ -137,7 +156,8 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "setCombinedSpaceProperty"
                 , setCombinedSpaceProperty_function_value
-                , ( bp::arg("spaceproperty") ) );
+                , ( bp::arg("spaceproperty") )
+                , "Set the combined space property - this tells this moves object\nto return a different space that represents the combined space\nof all of the sub-moves. Note that this does not change the\nspace used in the sub-moves" );
         
         }
         { //::SireMove::WeightedMoves::setEnergyComponent
@@ -148,7 +168,8 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "setEnergyComponent"
                 , setEnergyComponent_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Set the energy component of all of the moves to component" );
         
         }
         { //::SireMove::WeightedMoves::setGenerator
@@ -159,7 +180,8 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("rangenerator") ) );
+                , ( bp::arg("rangenerator") )
+                , "Set the random number generator used to pick moves, and also\nused by the moves themselves during the simulation" );
         
         }
         { //::SireMove::WeightedMoves::setSpaceProperty
@@ -170,7 +192,8 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
-                , ( bp::arg("spaceproperty") ) );
+                , ( bp::arg("spaceproperty") )
+                , "Set the name of the property that all of the moves will use to\nfind the simulation space (simulation box) to spaceproperty" );
         
         }
         { //::SireMove::WeightedMoves::spaceProperty
@@ -181,7 +204,19 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "spaceProperty"
                 , spaceProperty_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the space property used by these moves. An exception\nwill be raised if the component moves use different space\nproperties to one another\nThrow: SireError::incompatible_error\n" );
+        
+        }
+        { //::SireMove::WeightedMoves::timing
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 1, 0, 0, 0, 0 > > ( ::SireMove::WeightedMoves::*timing_function_type)(  ) const;
+            timing_function_type timing_function_value( &::SireMove::WeightedMoves::timing );
+            
+            WeightedMoves_exposer.def( 
+                "timing"
+                , timing_function_value
+                , "" );
         
         }
         { //::SireMove::WeightedMoves::toString
@@ -191,7 +226,8 @@ void register_WeightedMoves_class(){
             
             WeightedMoves_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         { //::SireMove::WeightedMoves::typeName
@@ -201,7 +237,8 @@ void register_WeightedMoves_class(){
             
             WeightedMoves_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         WeightedMoves_exposer.staticmethod( "typeName" );

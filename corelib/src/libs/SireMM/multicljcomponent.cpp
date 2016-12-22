@@ -32,10 +32,34 @@
 
 #include "SireStream/datastream.h"
 
+#include <QRegExp>
+
 using namespace SireMM;
 using namespace SireFF;
 using namespace SireCAS;
 using namespace SireStream;
+
+namespace SireMM
+{
+    boost::tuple<QString,QString> getSubscriptedProperty(QString name)
+    {
+        QRegExp key_regexp("\\[(.*)\\]$");
+ 
+        int idx = key_regexp.indexIn(name);
+        if (idx != -1)
+        {
+            QString cljkey = key_regexp.cap(1).trimmed();
+            QString cljprop = name;
+            cljprop.truncate(idx);
+            cljprop = cljprop.trimmed();
+            
+            return boost::tuple<QString,QString>(cljprop,cljkey);
+        }
+        else
+            return boost::tuple<QString,QString>(name, QString::null);
+    }
+
+}
 
 //////////
 ////////// Implementation of MultiCLJEnergy
@@ -393,6 +417,12 @@ int MultiCLJComponent::indexOf(QString key) const
     }
     
     return key_to_idx.value(key);
+}
+
+/** Return whether or not there is a function with the associated key */
+bool MultiCLJComponent::hasKey(QString key) const
+{
+    return key_to_idx.contains(key);
 }
 
 /** Return all of the keys for the different CLJComponents */

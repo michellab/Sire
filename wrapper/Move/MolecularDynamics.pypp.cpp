@@ -38,13 +38,13 @@ void register_MolecularDynamics_class(){
 
     { //::SireMove::MolecularDynamics
         typedef bp::class_< SireMove::MolecularDynamics, bp::bases< SireMove::Dynamics, SireMove::Move, SireBase::Property > > MolecularDynamics_exposer_t;
-        MolecularDynamics_exposer_t MolecularDynamics_exposer = MolecularDynamics_exposer_t( "MolecularDynamics", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() )) );
+        MolecularDynamics_exposer_t MolecularDynamics_exposer = MolecularDynamics_exposer_t( "MolecularDynamics", "This class implements a molecular dynamics move.\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() ), "Constructor") );
         bp::scope MolecularDynamics_scope( MolecularDynamics_exposer );
-        MolecularDynamics_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        MolecularDynamics_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMove::Integrator const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("integrator"), bp::arg("map")=SireBase::PropertyMap() )) );
-        MolecularDynamics_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireUnits::Dimension::Time, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("timestep"), bp::arg("map")=SireBase::PropertyMap() )) );
-        MolecularDynamics_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMove::Integrator const &, SireUnits::Dimension::Time, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("integrator"), bp::arg("timestep"), bp::arg("map")=SireBase::PropertyMap() )) );
-        MolecularDynamics_exposer.def( bp::init< SireMove::MolecularDynamics const & >(( bp::arg("other") )) );
+        MolecularDynamics_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perform moves on the molecules in the group molgroup. This\ndefaults to an all-atom velocity-verlet integrator") );
+        MolecularDynamics_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMove::Integrator const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("integrator"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a move for the passed molecule group, integrated\nusing the supplied integrator") );
+        MolecularDynamics_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireUnits::Dimension::Time, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("timestep"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a move for the passed molecule group, integrated with\nthe passed timestep") );
+        MolecularDynamics_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMove::Integrator const &, SireUnits::Dimension::Time, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("integrator"), bp::arg("timestep"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a move for the passed molecule group, integrated\nusing the passed integrator using the passed timestep") );
+        MolecularDynamics_exposer.def( bp::init< SireMove::MolecularDynamics const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::MolecularDynamics::clearStatistics
         
             typedef void ( ::SireMove::MolecularDynamics::*clearStatistics_function_type)(  ) ;
@@ -52,7 +52,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Completely clear any move statistics - this clears all existing\nvelocities" );
         
         }
         { //::SireMove::MolecularDynamics::coordinatesProperty
@@ -62,7 +63,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "coordinatesProperty"
-                , coordinatesProperty_function_value );
+                , coordinatesProperty_function_value
+                , "Return the property used to find the molecular coordinates" );
         
         }
         { //::SireMove::MolecularDynamics::elementsProperty
@@ -72,7 +74,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "elementsProperty"
-                , elementsProperty_function_value );
+                , elementsProperty_function_value
+                , "Return the property used to find the atomic elements" );
         
         }
         { //::SireMove::MolecularDynamics::integrator
@@ -83,7 +86,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "integrator"
                 , integrator_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the integrator used to advance the coordinates\nfrom one timestep to the next" );
         
         }
         { //::SireMove::MolecularDynamics::kineticEnergy
@@ -93,7 +97,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "kineticEnergy"
-                , kineticEnergy_function_value );
+                , kineticEnergy_function_value
+                , "Return the kinetic energy of the system at the last move." );
         
         }
         { //::SireMove::MolecularDynamics::massesProperty
@@ -103,7 +108,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "massesProperty"
-                , massesProperty_function_value );
+                , massesProperty_function_value
+                , "Return the property used to find the molecular masses" );
         
         }
         { //::SireMove::MolecularDynamics::moleculeGroup
@@ -114,7 +120,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group on which this move operates" );
         
         }
         { //::SireMove::MolecularDynamics::move
@@ -125,7 +132,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Perform this move on the System system - perform the move\nnmoves times, optionally recording simulation statistics\nif record_stats is true" );
         
         }
         { //::SireMove::MolecularDynamics::nMoves
@@ -135,7 +143,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "nMoves"
-                , nMoves_function_value );
+                , nMoves_function_value
+                , "Return the number of moves completed using this object" );
         
         }
         MolecularDynamics_exposer.def( bp::self != bp::self );
@@ -148,7 +157,8 @@ void register_MolecularDynamics_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MolecularDynamics_exposer.def( bp::self == bp::self );
@@ -160,7 +170,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "regenerateVelocities"
                 , regenerateVelocities_function_value
-                , ( bp::arg("system"), bp::arg("generator") ) );
+                , ( bp::arg("system"), bp::arg("generator") )
+                , "Regenerate all of the velocities using the passed velocity generator" );
         
         }
         { //::SireMove::MolecularDynamics::setCoordinatesProperty
@@ -171,7 +182,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "setCoordinatesProperty"
                 , setCoordinatesProperty_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Set the property used to find the coordinates of the molecules" );
         
         }
         { //::SireMove::MolecularDynamics::setElementsProperty
@@ -182,7 +194,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "setElementsProperty"
                 , setElementsProperty_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Set the property used to find the elements of the atoms" );
         
         }
         { //::SireMove::MolecularDynamics::setGenerator
@@ -193,7 +206,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("generator") ) );
+                , ( bp::arg("generator") )
+                , "Set the random number generator used by this move\n(this move may be completely deterministic, so may not\nuse a generator)" );
         
         }
         { //::SireMove::MolecularDynamics::setIntegrator
@@ -204,7 +218,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "setIntegrator"
                 , setIntegrator_function_value
-                , ( bp::arg("integrator") ) );
+                , ( bp::arg("integrator") )
+                , "Set the integrator to be used to advance the coordinates from\none timestep to the next." );
         
         }
         { //::SireMove::MolecularDynamics::setMassesProperty
@@ -215,7 +230,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "setMassesProperty"
                 , setMassesProperty_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Set the property used to find the molecular masses" );
         
         }
         { //::SireMove::MolecularDynamics::setMoleculeGroup
@@ -226,7 +242,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "setMoleculeGroup"
                 , setMoleculeGroup_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Set the molecule group containing the molecules to be moved" );
         
         }
         { //::SireMove::MolecularDynamics::setMoleculeGroup
@@ -237,7 +254,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "setMoleculeGroup"
                 , setMoleculeGroup_function_value
-                , ( bp::arg("molgroup"), bp::arg("map") ) );
+                , ( bp::arg("molgroup"), bp::arg("map") )
+                , "Set the molecule group containing the molecules to be moved" );
         
         }
         { //::SireMove::MolecularDynamics::setSpaceProperty
@@ -248,7 +266,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Set the property used to find the system space" );
         
         }
         { //::SireMove::MolecularDynamics::setTimeStep
@@ -259,7 +278,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "setTimeStep"
                 , setTimeStep_function_value
-                , ( bp::arg("timestep") ) );
+                , ( bp::arg("timestep") )
+                , "Set the timestep for the dynamics integration" );
         
         }
         { //::SireMove::MolecularDynamics::setVelocitiesProperty
@@ -270,7 +290,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "setVelocitiesProperty"
                 , setVelocitiesProperty_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Set the property used to find the molecular velocities" );
         
         }
         { //::SireMove::MolecularDynamics::setVelocityGeneratorProperty
@@ -281,7 +302,8 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "setVelocityGeneratorProperty"
                 , setVelocityGeneratorProperty_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Set the property used to find the generator used to\ngenerate velocities when they are missing" );
         
         }
         { //::SireMove::MolecularDynamics::spaceProperty
@@ -291,7 +313,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "spaceProperty"
-                , spaceProperty_function_value );
+                , spaceProperty_function_value
+                , "Return the property used to find the system space" );
         
         }
         { //::SireMove::MolecularDynamics::temperature
@@ -301,7 +324,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "temperature"
-                , temperature_function_value );
+                , temperature_function_value
+                , "Return the temperature of the system at the last move" );
         
         }
         { //::SireMove::MolecularDynamics::timeStep
@@ -311,7 +335,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "timeStep"
-                , timeStep_function_value );
+                , timeStep_function_value
+                , "Return the timestep for the integration" );
         
         }
         { //::SireMove::MolecularDynamics::toString
@@ -321,7 +346,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this move" );
         
         }
         { //::SireMove::MolecularDynamics::totalTime
@@ -331,7 +357,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "totalTime"
-                , totalTime_function_value );
+                , totalTime_function_value
+                , "Return the total amount of time simulated using these moves" );
         
         }
         { //::SireMove::MolecularDynamics::typeName
@@ -341,7 +368,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::MolecularDynamics::velocitiesProperty
@@ -351,7 +379,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "velocitiesProperty"
-                , velocitiesProperty_function_value );
+                , velocitiesProperty_function_value
+                , "Return the property used to find the molecular velocities" );
         
         }
         { //::SireMove::MolecularDynamics::velocityGeneratorProperty
@@ -361,7 +390,8 @@ void register_MolecularDynamics_class(){
             
             MolecularDynamics_exposer.def( 
                 "velocityGeneratorProperty"
-                , velocityGeneratorProperty_function_value );
+                , velocityGeneratorProperty_function_value
+                , "Return the property used to find the generator for\nmissing velocities" );
         
         }
         MolecularDynamics_exposer.staticmethod( "typeName" );

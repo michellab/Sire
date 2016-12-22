@@ -37,10 +37,10 @@ void register_Cube_class(){
 
     { //::SireIO::Cube
         typedef bp::class_< SireIO::Cube > Cube_exposer_t;
-        Cube_exposer_t Cube_exposer = Cube_exposer_t( "Cube", bp::init< >() );
+        Cube_exposer_t Cube_exposer = Cube_exposer_t( "Cube", "This class is used to write a PotentialTable as a\nGaussian cube file\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope Cube_scope( Cube_exposer );
-        Cube_exposer.def( bp::init< SireUnits::Dimension::MolarEnergy >(( bp::arg("cutoff") )) );
-        Cube_exposer.def( bp::init< SireIO::Cube const & >(( bp::arg("other") )) );
+        Cube_exposer.def( bp::init< SireUnits::Dimension::MolarEnergy >(( bp::arg("cutoff") ), "") );
+        Cube_exposer.def( bp::init< SireIO::Cube const & >(( bp::arg("other") ), "") );
         Cube_exposer.def( bp::self != bp::self );
         { //::SireIO::Cube::operator=
         
@@ -51,7 +51,8 @@ void register_Cube_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Cube_exposer.def( bp::self == bp::self );
@@ -63,7 +64,8 @@ void register_Cube_class(){
             Cube_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("table"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("table"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireIO::Cube::write
@@ -74,7 +76,8 @@ void register_Cube_class(){
             Cube_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("table"), bp::arg("molgroup"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("table"), bp::arg("molgroup"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireIO::Cube::write
@@ -85,7 +88,8 @@ void register_Cube_class(){
             Cube_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("table"), bp::arg("molecules"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("table"), bp::arg("molecules"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         Cube_exposer.def( "__copy__", &__copy__);

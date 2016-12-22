@@ -9,7 +9,7 @@ namespace bp = boost::python;
 
 #include "SireBase/findexe.h"
 
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 
 #include "SireBase/tempdir.h"
 
@@ -55,10 +55,10 @@ void register_SQM_class(){
 
     { //::Squire::SQM
         typedef bp::class_< Squire::SQM, bp::bases< Squire::QMProgram, SireBase::Property > > SQM_exposer_t;
-        SQM_exposer_t SQM_exposer = SQM_exposer_t( "SQM", bp::init< >() );
+        SQM_exposer_t SQM_exposer = SQM_exposer_t( "SQM", "This is a wrapper that allows SQM to be used to calculate\nQM and QMMM energies (SQM is the semiempirical QM program\nthat comes free with AmberTools)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope SQM_scope( SQM_exposer );
-        SQM_exposer.def( bp::init< QString const & >(( bp::arg("SQM") )) );
-        SQM_exposer.def( bp::init< Squire::SQM const & >(( bp::arg("other") )) );
+        SQM_exposer.def( bp::init< QString const & >(( bp::arg("SQM") ), "Copy constructor") );
+        SQM_exposer.def( bp::init< Squire::SQM const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::SQM::energyTemplate
         
             typedef ::QString const & ( ::Squire::SQM::*energyTemplate_function_type)(  ) const;
@@ -67,7 +67,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "energyTemplate"
                 , energyTemplate_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the template for the command file to be used to get SQM\nto calculate the energy." );
         
         }
         { //::Squire::SQM::environment
@@ -78,7 +79,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "environment"
                 , environment_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the environmental variables that are to be set explicitly\nwhen SQM is run. This does not include any environmental variables\nthat have not been explicitly set, but do have values" );
         
         }
         { //::Squire::SQM::environment
@@ -89,7 +91,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "environment"
                 , environment_function_value
-                , ( bp::arg("variable") ) );
+                , ( bp::arg("variable") )
+                , "Return the value of the explicitly set environmental variable variable.\nA null string is returned if this variable has not been set\nexplicitly (this does not mean the variable doesnt exist - merely\nthat a specific value has not been set)" );
         
         }
         { //::Squire::SQM::executable
@@ -99,7 +102,8 @@ void register_SQM_class(){
             
             SQM_exposer.def( 
                 "executable"
-                , executable_function_value );
+                , executable_function_value
+                , "Return the executable (full path and also arguments) to be used. This\nis null if the executable is searched for in the path" );
         
         }
         { //::Squire::SQM::expectedNumberOfQMAtoms
@@ -109,7 +113,8 @@ void register_SQM_class(){
             
             SQM_exposer.def( 
                 "expectedNumberOfQMAtoms"
-                , expectedNumberOfQMAtoms_function_value );
+                , expectedNumberOfQMAtoms_function_value
+                , "Return the maximum number of expected QM atoms. This returns -1 if\nwe dont expect any QM atoms" );
         
         }
         { //::Squire::SQM::forceTemplate
@@ -120,7 +125,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "forceTemplate"
                 , forceTemplate_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the template for the command file to be used to get SQM\nto calculate the forces." );
         
         }
         { //::Squire::SQM::maximumNumberOfSQMInputLines
@@ -130,7 +136,8 @@ void register_SQM_class(){
             
             SQM_exposer.def( 
                 "maximumNumberOfSQMInputLines"
-                , maximumNumberOfSQMInputLines_function_value );
+                , maximumNumberOfSQMInputLines_function_value
+                , "Return the maximum number of supported SQM input lines. This returns\n-1 if SQM doesnt have a file size limit" );
         
         }
         { //::Squire::SQM::maximumRunTime
@@ -140,7 +147,8 @@ void register_SQM_class(){
             
             SQM_exposer.def( 
                 "maximumRunTime"
-                , maximumRunTime_function_value );
+                , maximumRunTime_function_value
+                , "Return the maximum runtime allowed for a SQM job, in milliseconds" );
         
         }
         { //::Squire::SQM::method
@@ -151,7 +159,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "method"
                 , method_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the QM method to be used to calculate the energy or\nforce (e.g. AM1, PM3, AM1d etc.). This will substitute for\n@QM_METHOD@ in the command file templates" );
         
         }
         { //::Squire::SQM::numberOfMMAtomsLimit
@@ -161,7 +170,8 @@ void register_SQM_class(){
             
             SQM_exposer.def( 
                 "numberOfMMAtomsLimit"
-                , numberOfMMAtomsLimit_function_value );
+                , numberOfMMAtomsLimit_function_value
+                , "Return the maximum number of MM atoms supported by SQM. This returns\n-1 if there is no limit on the number of atoms" );
         
         }
         { //::Squire::SQM::numberOfMMAtomsLimit
@@ -172,7 +182,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "numberOfMMAtomsLimit"
                 , numberOfMMAtomsLimit_function_value
-                , ( bp::arg("num_qm_atoms") ) );
+                , ( bp::arg("num_qm_atoms") )
+                , "Return the maximum number of MM atoms supported by SQM if there\nare num_qm_atoms QM atoms. This returns\n-1 if there is no limit on the number of atoms" );
         
         }
         SQM_exposer.def( bp::self != bp::self );
@@ -185,7 +196,8 @@ void register_SQM_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SQM_exposer.def( bp::self == bp::self );
@@ -197,7 +209,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "setEnergyTemplate"
                 , setEnergyTemplate_function_value
-                , ( bp::arg("energy_template") ) );
+                , ( bp::arg("energy_template") )
+                , "Set the template for the command file to be used to get\nSQM to calculate an energy. The following tags will\n" );
         
         }
         { //::Squire::SQM::setEnvironment
@@ -208,7 +221,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "setEnvironment"
                 , setEnvironment_function_value
-                , ( bp::arg("variable"), bp::arg("value") ) );
+                , ( bp::arg("variable"), bp::arg("value") )
+                , "Set the environmental variable variable to have the value value\nwhen the SQM executable is run. This replaces any existing\nvalue of this environmental variable" );
         
         }
         { //::Squire::SQM::setExecutable
@@ -219,7 +233,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "setExecutable"
                 , setExecutable_function_value
-                , ( bp::arg("SQM_exe") ) );
+                , ( bp::arg("SQM_exe") )
+                , "Set the SQM executable (full path and also arguments) to be used" );
         
         }
         { //::Squire::SQM::setExpectedNumberOfQMAtoms
@@ -230,7 +245,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "setExpectedNumberOfQMAtoms"
                 , setExpectedNumberOfQMAtoms_function_value
-                , ( bp::arg("natoms") ) );
+                , ( bp::arg("natoms") )
+                , "Set the maximum number of expected QM atoms. This is used, together with\nthe maximum number of lines in a SQM input file, to work out the maximum\nnumber of supported MM atoms" );
         
         }
         { //::Squire::SQM::setForceTemplate
@@ -241,7 +257,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "setForceTemplate"
                 , setForceTemplate_function_value
-                , ( bp::arg("force_template") ) );
+                , ( bp::arg("force_template") )
+                , "Set the template for the command file to be used to get\nSQM to calculate the forces. The following tags will\n" );
         
         }
         { //::Squire::SQM::setMaximumNumberOfSQMInputLines
@@ -252,7 +269,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "setMaximumNumberOfSQMInputLines"
                 , setMaximumNumberOfSQMInputLines_function_value
-                , ( bp::arg("numlines") ) );
+                , ( bp::arg("numlines") )
+                , "Set the maximum number of lines that can be parsed from an SQM input file.\nCurrently, SQM has a hard-coded limit of 1000 lines" );
         
         }
         { //::Squire::SQM::setMaximumRunTime
@@ -263,7 +281,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "setMaximumRunTime"
                 , setMaximumRunTime_function_value
-                , ( bp::arg("max_runtime") ) );
+                , ( bp::arg("max_runtime") )
+                , "Set the maximum allowed runtime for the SQM job - this is used\nto detect hangs - if the SQM job takes longer than this\ntime then it is killed and an exception raised. The maximum\nruntime is measured in milliseconds" );
         
         }
         { //::Squire::SQM::setMethod
@@ -274,7 +293,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "setMethod"
                 , setMethod_function_value
-                , ( bp::arg("method") ) );
+                , ( bp::arg("method") )
+                , "Set the QM method to be used to calculate the energy or\nforce (e.g. AM1, PM3, AM1d etc. See the AmberTools documentation\nfor SQM to find the supported methods and the string used to\nspecify that method). This will substitute for\n@QM_METHOD@ in the command file templates, and should be the same\nstring used in SQM as specified in the SQM documentation" );
         
         }
         { //::Squire::SQM::setTotalCharge
@@ -285,7 +305,8 @@ void register_SQM_class(){
             SQM_exposer.def( 
                 "setTotalCharge"
                 , setTotalCharge_function_value
-                , ( bp::arg("charge") ) );
+                , ( bp::arg("charge") )
+                , "Set the total charge of the system (in unit charges)" );
         
         }
         { //::Squire::SQM::supportsLatticeCharges
@@ -295,7 +316,8 @@ void register_SQM_class(){
             
             SQM_exposer.def( 
                 "supportsLatticeCharges"
-                , supportsLatticeCharges_function_value );
+                , supportsLatticeCharges_function_value
+                , "" );
         
         }
         { //::Squire::SQM::toString
@@ -305,7 +327,8 @@ void register_SQM_class(){
             
             SQM_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::Squire::SQM::totalCharge
@@ -315,7 +338,8 @@ void register_SQM_class(){
             
             SQM_exposer.def( 
                 "totalCharge"
-                , totalCharge_function_value );
+                , totalCharge_function_value
+                , "Return the total charge of the system" );
         
         }
         { //::Squire::SQM::typeName
@@ -325,7 +349,8 @@ void register_SQM_class(){
             
             SQM_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SQM_exposer.staticmethod( "typeName" );

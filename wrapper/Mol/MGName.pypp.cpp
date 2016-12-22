@@ -31,11 +31,11 @@ void register_MGName_class(){
 
     { //::SireMol::MGName
         typedef bp::class_< SireMol::MGName, bp::bases< SireMol::MGID, SireID::ID, SireID::Name > > MGName_exposer_t;
-        MGName_exposer_t MGName_exposer = MGName_exposer_t( "MGName", bp::init< >() );
+        MGName_exposer_t MGName_exposer = MGName_exposer_t( "MGName", "This class holds the name of a MoleculeGroup.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MGName_scope( MGName_exposer );
-        MGName_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        MGName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") )) );
-        MGName_exposer.def( bp::init< SireMol::MGName const & >(( bp::arg("other") )) );
+        MGName_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
+        MGName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") ), "") );
+        MGName_exposer.def( bp::init< SireMol::MGName const & >(( bp::arg("other") ), "") );
         { //::SireMol::MGName::hash
         
             typedef ::uint ( ::SireMol::MGName::*hash_function_type)(  ) const;
@@ -43,7 +43,8 @@ void register_MGName_class(){
             
             MGName_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::MGName::isNull
@@ -53,7 +54,8 @@ void register_MGName_class(){
             
             MGName_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::MGName::map
@@ -64,7 +66,8 @@ void register_MGName_class(){
             MGName_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "" );
         
         }
         MGName_exposer.def( bp::self != bp::self );
@@ -77,7 +80,8 @@ void register_MGName_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MGName_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -89,7 +93,8 @@ void register_MGName_class(){
             
             MGName_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::MGName::typeName
@@ -99,7 +104,8 @@ void register_MGName_class(){
             
             MGName_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::MGName::what
@@ -109,7 +115,8 @@ void register_MGName_class(){
             
             MGName_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MGName_exposer.staticmethod( "typeName" );
@@ -122,6 +129,7 @@ void register_MGName_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MGName_exposer.def( "__str__", &__str__< ::SireMol::MGName > );
         MGName_exposer.def( "__repr__", &__str__< ::SireMol::MGName > );
+        MGName_exposer.def( "__hash__", &::SireMol::MGName::hash );
     }
 
 }

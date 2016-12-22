@@ -25,15 +25,15 @@ void register_CLJProbe_class(){
 
     { //::SireMM::CLJProbe
         typedef bp::class_< SireMM::CLJProbe, bp::bases< SireFF::Probe, SireBase::Property > > CLJProbe_exposer_t;
-        CLJProbe_exposer_t CLJProbe_exposer = CLJProbe_exposer_t( "CLJProbe", bp::init< >() );
+        CLJProbe_exposer_t CLJProbe_exposer = CLJProbe_exposer_t( "CLJProbe", "This is a probe used to probe the coulomb+LJ field\nor potential at points in a forcefield", bp::init< >("Construct a default probe the represents a unit positive charge,\nand an OPLS united atom methane") );
         bp::scope CLJProbe_scope( CLJProbe_exposer );
-        CLJProbe_exposer.def( bp::init< SireUnits::Dimension::Charge >(( bp::arg("charge") )) );
-        CLJProbe_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("ljparam") )) );
-        CLJProbe_exposer.def( bp::init< SireUnits::Dimension::Charge, SireMM::LJParameter const & >(( bp::arg("charge"), bp::arg("ljparam") )) );
-        CLJProbe_exposer.def( bp::init< SireMM::CoulombProbe const & >(( bp::arg("probe") )) );
-        CLJProbe_exposer.def( bp::init< SireMM::LJProbe const & >(( bp::arg("probe") )) );
-        CLJProbe_exposer.def( bp::init< SireFF::Probe const & >(( bp::arg("probe") )) );
-        CLJProbe_exposer.def( bp::init< SireMM::CLJProbe const & >(( bp::arg("cljprobe") )) );
+        CLJProbe_exposer.def( bp::init< SireUnits::Dimension::Charge >(( bp::arg("charge") ), "Construct a probe that is just the passed charge (with dummy LJ parameters)") );
+        CLJProbe_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("ljparam") ), "Construct a probe that is just the passed LJ parameter (zero charge)") );
+        CLJProbe_exposer.def( bp::init< SireUnits::Dimension::Charge, SireMM::LJParameter const & >(( bp::arg("charge"), bp::arg("ljparam") ), "Construct a probe with the passed charge and LJ parameter") );
+        CLJProbe_exposer.def( bp::init< SireMM::CoulombProbe const & >(( bp::arg("probe") ), "Construct to hold just the charge from probe (dummy LJ)") );
+        CLJProbe_exposer.def( bp::init< SireMM::LJProbe const & >(( bp::arg("probe") ), "Construct to hold just the LJ parameters from probe (zero charge)") );
+        CLJProbe_exposer.def( bp::init< SireFF::Probe const & >(( bp::arg("probe") ), "Construct to hold just the LJ parameters from probe (zero charge)") );
+        CLJProbe_exposer.def( bp::init< SireMM::CLJProbe const & >(( bp::arg("cljprobe") ), "Construct to hold just the LJ parameters from probe (zero charge)") );
         { //::SireMM::CLJProbe::charge
         
             typedef ::SireUnits::Dimension::Charge ( ::SireMM::CLJProbe::*charge_function_type)(  ) const;
@@ -41,7 +41,8 @@ void register_CLJProbe_class(){
             
             CLJProbe_exposer.def( 
                 "charge"
-                , charge_function_value );
+                , charge_function_value
+                , "" );
         
         }
         { //::SireMM::CLJProbe::lj
@@ -52,7 +53,8 @@ void register_CLJProbe_class(){
             CLJProbe_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         CLJProbe_exposer.def( bp::self != bp::self );
@@ -65,7 +67,8 @@ void register_CLJProbe_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJProbe_exposer.def( bp::self == bp::self );
@@ -76,7 +79,8 @@ void register_CLJProbe_class(){
             
             CLJProbe_exposer.def( 
                 "reducedCharge"
-                , reducedCharge_function_value );
+                , reducedCharge_function_value
+                , "" );
         
         }
         { //::SireMM::CLJProbe::typeName
@@ -86,7 +90,8 @@ void register_CLJProbe_class(){
             
             CLJProbe_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CLJProbe_exposer.staticmethod( "typeName" );

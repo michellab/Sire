@@ -33,9 +33,9 @@ void register_NullGrid_class(){
 
     { //::SireVol::NullGrid
         typedef bp::class_< SireVol::NullGrid, bp::bases< SireVol::Grid, SireBase::Property > > NullGrid_exposer_t;
-        NullGrid_exposer_t NullGrid_exposer = NullGrid_exposer_t( "NullGrid", bp::init< >() );
+        NullGrid_exposer_t NullGrid_exposer = NullGrid_exposer_t( "NullGrid", "This is the null (empty) grid", bp::init< >("Constructor") );
         bp::scope NullGrid_scope( NullGrid_exposer );
-        NullGrid_exposer.def( bp::init< SireVol::NullGrid const & >(( bp::arg("other") )) );
+        NullGrid_exposer.def( bp::init< SireVol::NullGrid const & >(( bp::arg("other") ), "Copy constructor") );
         NullGrid_exposer.def( bp::self != bp::self );
         { //::SireVol::NullGrid::operator=
         
@@ -46,7 +46,8 @@ void register_NullGrid_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullGrid_exposer.def( bp::self == bp::self );
@@ -58,7 +59,8 @@ void register_NullGrid_class(){
             NullGrid_exposer.def( 
                 "recenter"
                 , recenter_function_value
-                , ( bp::arg("center") ) );
+                , ( bp::arg("center") )
+                , "Return a copy of this grid that has been recentered to center" );
         
         }
         { //::SireVol::NullGrid::rotate
@@ -69,7 +71,8 @@ void register_NullGrid_class(){
             NullGrid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0.0) ) );
+                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) )
+                , "Return a copy of this grid that has been rotated using the passed rotation\nmatrix about center" );
         
         }
         { //::SireVol::NullGrid::rotate
@@ -80,7 +83,8 @@ void register_NullGrid_class(){
             NullGrid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0.0) ) );
+                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) )
+                , "Return a copy of this grid that has been rotated using the passed rotation\nquaternion about center" );
         
         }
         { //::SireVol::NullGrid::scale
@@ -91,7 +95,8 @@ void register_NullGrid_class(){
             NullGrid_exposer.def( 
                 "scale"
                 , scale_function_value
-                , ( bp::arg("scalefactor") ) );
+                , ( bp::arg("scalefactor") )
+                , "Return a copy of this grid that has been scaled uniformly by scalefactor" );
         
         }
         { //::SireVol::NullGrid::translate
@@ -102,7 +107,8 @@ void register_NullGrid_class(){
             NullGrid_exposer.def( 
                 "translate"
                 , translate_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "Return a copy of this grid that has been translated by delta" );
         
         }
         { //::SireVol::NullGrid::typeName
@@ -112,7 +118,8 @@ void register_NullGrid_class(){
             
             NullGrid_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullGrid_exposer.staticmethod( "typeName" );

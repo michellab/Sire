@@ -31,10 +31,10 @@ void register_Csc_class(){
 
     { //::SireCAS::Csc
         typedef bp::class_< SireCAS::Csc, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Csc_exposer_t;
-        Csc_exposer_t Csc_exposer = Csc_exposer_t( "Csc", bp::init< >() );
+        Csc_exposer_t Csc_exposer = Csc_exposer_t( "Csc", "Cosecant", bp::init< >("Null constructor") );
         bp::scope Csc_scope( Csc_exposer );
-        Csc_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        Csc_exposer.def( bp::init< SireCAS::Csc const & >(( bp::arg("other") )) );
+        Csc_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        Csc_exposer.def( bp::init< SireCAS::Csc const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Csc::evaluate
         
             typedef double ( ::SireCAS::Csc::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -43,7 +43,8 @@ void register_Csc_class(){
             Csc_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Csc::evaluate
@@ -54,7 +55,8 @@ void register_Csc_class(){
             Csc_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Csc_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -65,7 +67,8 @@ void register_Csc_class(){
             
             Csc_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Csc::what
@@ -75,7 +78,8 @@ void register_Csc_class(){
             
             Csc_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Csc_exposer.staticmethod( "typeName" );
@@ -88,6 +92,7 @@ void register_Csc_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Csc_exposer.def( "__str__", &__str__< ::SireCAS::Csc > );
         Csc_exposer.def( "__repr__", &__str__< ::SireCAS::Csc > );
+        Csc_exposer.def( "__hash__", &::SireCAS::Csc::hash );
     }
 
 }

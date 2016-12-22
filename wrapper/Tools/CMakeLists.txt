@@ -8,6 +8,7 @@
 # Add your script to this list
 set ( SCRIPTS
         __init__.py
+        ap.py
         AmberLoader.py
         DCDFile.py
         FDTISingleBound.py
@@ -17,6 +18,7 @@ set ( SCRIPTS
         QuantumToMM.py
         OpenMMMD.py
         Plot.py
+        StandardState.py
         WaterChanger.py
         WaterView.py
         WSRC.py

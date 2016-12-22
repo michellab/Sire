@@ -45,9 +45,9 @@ void register_AtomCutting_class(){
 
     { //::SireMol::AtomCutting
         typedef bp::class_< SireMol::AtomCutting, bp::bases< SireMol::CuttingFunction, SireBase::Property > > AtomCutting_exposer_t;
-        AtomCutting_exposer_t AtomCutting_exposer = AtomCutting_exposer_t( "AtomCutting", bp::init< >() );
+        AtomCutting_exposer_t AtomCutting_exposer = AtomCutting_exposer_t( "AtomCutting", "This is a cutting function that divides up a molecule into\nCutGroups based on atoms - each atom is placed into\na different CutGroup\n\nAuthor: Gaetano Calabro\n", bp::init< >("Constructor") );
         bp::scope AtomCutting_scope( AtomCutting_exposer );
-        AtomCutting_exposer.def( bp::init< SireMol::AtomCutting const & >(( bp::arg("other") )) );
+        AtomCutting_exposer.def( bp::init< SireMol::AtomCutting const & >(( bp::arg("other") ), "Copy constructor") );
         AtomCutting_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomCutting::operator()
         
@@ -57,7 +57,8 @@ void register_AtomCutting_class(){
             AtomCutting_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("moleditor") ) );
+                , ( bp::arg("moleditor") )
+                , "" );
         
         }
         { //::SireMol::AtomCutting::operator=
@@ -69,7 +70,8 @@ void register_AtomCutting_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomCutting_exposer.def( bp::self == bp::self );
@@ -80,7 +82,8 @@ void register_AtomCutting_class(){
             
             AtomCutting_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AtomCutting_exposer.staticmethod( "typeName" );

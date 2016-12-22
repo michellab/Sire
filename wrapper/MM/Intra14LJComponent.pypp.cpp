@@ -26,10 +26,10 @@ void register_Intra14LJComponent_class(){
 
     { //::SireMM::Intra14LJComponent
         typedef bp::class_< SireMM::Intra14LJComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > Intra14LJComponent_exposer_t;
-        Intra14LJComponent_exposer_t Intra14LJComponent_exposer = Intra14LJComponent_exposer_t( "Intra14LJComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() )) );
+        Intra14LJComponent_exposer_t Intra14LJComponent_exposer = Intra14LJComponent_exposer_t( "Intra14LJComponent", "This class represents a intramolecular 1-4 nonbonded LJ energy of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope Intra14LJComponent_scope( Intra14LJComponent_exposer );
-        Intra14LJComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        Intra14LJComponent_exposer.def( bp::init< SireMM::Intra14LJComponent const & >(( bp::arg("other") )) );
+        Intra14LJComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        Intra14LJComponent_exposer.def( bp::init< SireMM::Intra14LJComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::Intra14LJComponent::changeEnergy
         
             typedef void ( ::SireMM::Intra14LJComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::Intra14LJEnergy const & ) const;
@@ -38,7 +38,8 @@ void register_Intra14LJComponent_class(){
             Intra14LJComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("nrg") ) );
+                , ( bp::arg("ff"), bp::arg("nrg") )
+                , "Change the component of the energy in the forcefield ff\nby delta" );
         
         }
         { //::SireMM::Intra14LJComponent::setEnergy
@@ -49,7 +50,8 @@ void register_Intra14LJComponent_class(){
             Intra14LJComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("nrg") ) );
+                , ( bp::arg("ff"), bp::arg("nrg") )
+                , "Set the component of the energy in the forcefield ff\nto be equal to the passed energy" );
         
         }
         { //::SireMM::Intra14LJComponent::symbols
@@ -59,7 +61,8 @@ void register_Intra14LJComponent_class(){
             
             Intra14LJComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireMM::Intra14LJComponent::total
@@ -70,7 +73,8 @@ void register_Intra14LJComponent_class(){
             Intra14LJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::Intra14LJComponent::typeName
@@ -80,7 +84,8 @@ void register_Intra14LJComponent_class(){
             
             Intra14LJComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::Intra14LJComponent::what
@@ -90,7 +95,8 @@ void register_Intra14LJComponent_class(){
             
             Intra14LJComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Intra14LJComponent_exposer.staticmethod( "typeName" );
@@ -103,6 +109,7 @@ void register_Intra14LJComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Intra14LJComponent_exposer.def( "__str__", &__str__< ::SireMM::Intra14LJComponent > );
         Intra14LJComponent_exposer.def( "__repr__", &__str__< ::SireMM::Intra14LJComponent > );
+        Intra14LJComponent_exposer.def( "__hash__", &::SireMM::Intra14LJComponent::hash );
     }
 
 }

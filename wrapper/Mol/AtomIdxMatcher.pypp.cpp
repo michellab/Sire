@@ -45,9 +45,9 @@ void register_AtomIdxMatcher_class(){
 
     { //::SireMol::AtomIdxMatcher
         typedef bp::class_< SireMol::AtomIdxMatcher, bp::bases< SireMol::AtomMatcher, SireBase::Property > > AtomIdxMatcher_exposer_t;
-        AtomIdxMatcher_exposer_t AtomIdxMatcher_exposer = AtomIdxMatcher_exposer_t( "AtomIdxMatcher", bp::init< >() );
+        AtomIdxMatcher_exposer_t AtomIdxMatcher_exposer = AtomIdxMatcher_exposer_t( "AtomIdxMatcher", "This is a simple atom matcher that matches the atoms based\non their index in the molecule - e.g. it matches the first\natom in molinfo0 to the first atom in molinfo1, the second\natom in molinfo0 to the second atom in molinfo1, and the\nnth atom in molinfo0 to the nth atom in molinfo1\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AtomIdxMatcher_scope( AtomIdxMatcher_exposer );
-        AtomIdxMatcher_exposer.def( bp::init< SireMol::AtomIdxMatcher const & >(( bp::arg("arg0") )) );
+        AtomIdxMatcher_exposer.def( bp::init< SireMol::AtomIdxMatcher const & >(( bp::arg("arg0") ), "Copy constructor") );
         AtomIdxMatcher_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomIdxMatcher::operator=
         
@@ -58,7 +58,8 @@ void register_AtomIdxMatcher_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomIdxMatcher_exposer.def( bp::self == bp::self );
@@ -69,7 +70,8 @@ void register_AtomIdxMatcher_class(){
             
             AtomIdxMatcher_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomIdxMatcher::typeName
@@ -79,7 +81,8 @@ void register_AtomIdxMatcher_class(){
             
             AtomIdxMatcher_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomIdxMatcher::what
@@ -89,7 +92,8 @@ void register_AtomIdxMatcher_class(){
             
             AtomIdxMatcher_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomIdxMatcher_exposer.staticmethod( "typeName" );

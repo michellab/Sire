@@ -20,7 +20,7 @@ void register_BeadProp_class(){
 
     { //::SireMol::BeadProp
         typedef bp::class_< SireMol::BeadProp, bp::bases< SireMol::MolViewProperty, SireBase::Property >, boost::noncopyable > BeadProp_exposer_t;
-        BeadProp_exposer_t BeadProp_exposer = BeadProp_exposer_t( "BeadProp", bp::no_init );
+        BeadProp_exposer_t BeadProp_exposer = BeadProp_exposer_t( "BeadProp", "Small class used to provide a common base for all BeadProperty types", bp::no_init );
         bp::scope BeadProp_scope( BeadProp_exposer );
         { //::SireMol::BeadProp::assertCanConvert
         
@@ -30,7 +30,8 @@ void register_BeadProp_class(){
             BeadProp_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::BeadProp::assignFrom
@@ -41,7 +42,8 @@ void register_BeadProp_class(){
             BeadProp_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::BeadProp::beading
@@ -52,7 +54,8 @@ void register_BeadProp_class(){
             BeadProp_exposer.def( 
                 "beading"
                 , beading_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the beading property used to define the beads in the molecule" );
         
         }
         { //::SireMol::BeadProp::canConvert
@@ -63,7 +66,8 @@ void register_BeadProp_class(){
             BeadProp_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::BeadProp::setBeading
@@ -74,7 +78,8 @@ void register_BeadProp_class(){
             BeadProp_exposer.def( 
                 "setBeading"
                 , setBeading_function_value
-                , ( bp::arg("beading") ) );
+                , ( bp::arg("beading") )
+                , "Set the beading property used to define the beads in the molecule" );
         
         }
         { //::SireMol::BeadProp::toVariant
@@ -84,7 +89,8 @@ void register_BeadProp_class(){
             
             BeadProp_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         BeadProp_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMol::BeadProp >,

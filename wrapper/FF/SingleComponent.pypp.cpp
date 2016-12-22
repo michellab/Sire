@@ -30,11 +30,11 @@ void register_SingleComponent_class(){
 
     { //::SireFF::SingleComponent
         typedef bp::class_< SireFF::SingleComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > SingleComponent_exposer_t;
-        SingleComponent_exposer_t SingleComponent_exposer = SingleComponent_exposer_t( "SingleComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() )) );
+        SingleComponent_exposer_t SingleComponent_exposer = SingleComponent_exposer_t( "SingleComponent", "This class represents the single component of a single component forcefield.\nThis is provides a simple default class for simple, single-component\nforcefields\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope SingleComponent_scope( SingleComponent_exposer );
-        SingleComponent_exposer.def( bp::init< SireFF::FFName const &, QString const & >(( bp::arg("ffname"), bp::arg("suffix") )) );
-        SingleComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        SingleComponent_exposer.def( bp::init< SireFF::SingleComponent const & >(( bp::arg("other") )) );
+        SingleComponent_exposer.def( bp::init< SireFF::FFName const &, QString const & >(( bp::arg("ffname"), bp::arg("suffix") ), "Construct using the passed forcefield name and suffix") );
+        SingleComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        SingleComponent_exposer.def( bp::init< SireFF::SingleComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::SingleComponent::changeEnergy
         
             typedef void ( ::SireFF::SingleComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireFF::SingleEnergy const & ) const;
@@ -43,7 +43,8 @@ void register_SingleComponent_class(){
             SingleComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("nrg") ) );
+                , ( bp::arg("ff"), bp::arg("nrg") )
+                , "Change the energy in the forcefield ff by delta" );
         
         }
         { //::SireFF::SingleComponent::setEnergy
@@ -54,7 +55,8 @@ void register_SingleComponent_class(){
             SingleComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("nrg") ) );
+                , ( bp::arg("ff"), bp::arg("nrg") )
+                , "Set the energy in the forcefield ff to equal to the passed SingleEnergy" );
         
         }
         { //::SireFF::SingleComponent::symbols
@@ -64,7 +66,8 @@ void register_SingleComponent_class(){
             
             SingleComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireFF::SingleComponent::total
@@ -75,7 +78,8 @@ void register_SingleComponent_class(){
             SingleComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireFF::SingleComponent::typeName
@@ -85,7 +89,8 @@ void register_SingleComponent_class(){
             
             SingleComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::SingleComponent::what
@@ -95,7 +100,8 @@ void register_SingleComponent_class(){
             
             SingleComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SingleComponent_exposer.staticmethod( "typeName" );
@@ -108,6 +114,7 @@ void register_SingleComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         SingleComponent_exposer.def( "__str__", &__str__< ::SireFF::SingleComponent > );
         SingleComponent_exposer.def( "__repr__", &__str__< ::SireFF::SingleComponent > );
+        SingleComponent_exposer.def( "__hash__", &::SireFF::SingleComponent::hash );
     }
 
 }

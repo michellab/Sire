@@ -44,28 +44,28 @@ void register_PrefSampler_class(){
 
     { //::SireMove::PrefSampler
         typedef bp::class_< SireMove::PrefSampler, bp::bases< SireMove::Sampler, SireBase::Property > > PrefSampler_exposer_t;
-        PrefSampler_exposer_t PrefSampler_exposer = PrefSampler_exposer_t( "PrefSampler", bp::init< >() );
+        PrefSampler_exposer_t PrefSampler_exposer = PrefSampler_exposer_t( "PrefSampler", "This is a sampler that is used to select molecules\nusing the distance-based preferential sampling algorithm.\n\nThis sampler can be used to bias the choice of molecules\nsuch that those closest to a target molecule are chosen\nwith a higher probability than those that are further\naway\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a sampler that prefers the molecules near the origin,\nusing the biasing expression 1  r^2") );
         bp::scope PrefSampler_scope( PrefSampler_exposer );
-        PrefSampler_exposer.def( bp::init< SireUnits::Dimension::Area >(( bp::arg("k") )) );
-        PrefSampler_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("f") )) );
-        PrefSampler_exposer.def( bp::init< SireCAS::Expression const &, SireUnits::Dimension::Area >(( bp::arg("f"), bp::arg("k") )) );
-        PrefSampler_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("point") )) );
-        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireUnits::Dimension::Area >(( bp::arg("point"), bp::arg("k") )) );
-        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireCAS::Expression const & >(( bp::arg("point"), bp::arg("f") )) );
-        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireCAS::Expression const &, SireUnits::Dimension::Area >(( bp::arg("point"), bp::arg("f"), bp::arg("k") )) );
-        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireMol::MoleculeGroup const & >(( bp::arg("point"), bp::arg("molgroup") )) );
-        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireMol::MoleculeGroup const &, SireUnits::Dimension::Area >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("k") )) );
-        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireMol::MoleculeGroup const &, SireCAS::Expression const & >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("f") )) );
-        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireMol::MoleculeGroup const &, SireCAS::Expression const &, SireUnits::Dimension::Area >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("f"), bp::arg("k") )) );
-        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") )) );
-        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireUnits::Dimension::Area >(( bp::arg("molview"), bp::arg("k") )) );
-        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireCAS::Expression const & >(( bp::arg("molview"), bp::arg("f") )) );
-        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireCAS::Expression const &, SireUnits::Dimension::Area >(( bp::arg("molview"), bp::arg("f"), bp::arg("k") )) );
-        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::MoleculeGroup const & >(( bp::arg("molview"), bp::arg("molgroup") )) );
-        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::MoleculeGroup const &, SireUnits::Dimension::Area >(( bp::arg("molview"), bp::arg("molgroup"), bp::arg("k") )) );
-        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::MoleculeGroup const &, SireCAS::Expression const & >(( bp::arg("molview"), bp::arg("molgroup"), bp::arg("f") )) );
-        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::MoleculeGroup const &, SireCAS::Expression const &, SireUnits::Dimension::Area >(( bp::arg("molview"), bp::arg("molgroup"), bp::arg("f"), bp::arg("k") )) );
-        PrefSampler_exposer.def( bp::init< SireMove::PrefSampler const & >(( bp::arg("other") )) );
+        PrefSampler_exposer.def( bp::init< SireUnits::Dimension::Area >(( bp::arg("k") ), "Construct a sampler that prefers the molecules near the origin\nusing the supplied preferential sampling constant k,\nusing the biasing expression 1  (r^2 + k)") );
+        PrefSampler_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("f") ), "Construct a sampler that prefers the molecules near the origin\nusing the supplied preferential sampling biasing function f") );
+        PrefSampler_exposer.def( bp::init< SireCAS::Expression const &, SireUnits::Dimension::Area >(( bp::arg("f"), bp::arg("k") ), "Construct a sampler that prefers the molecules near the origin\nusing the supplied preferential sampling biasing function f\nand sampling constant k") );
+        PrefSampler_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("point") ), "Construct a sampler that prefers the molecules that are closest\nto the point point, using the biasing expression 1  r^2") );
+        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireUnits::Dimension::Area >(( bp::arg("point"), bp::arg("k") ), "Construct a sampler that prefers the molecules that are closest\nto the point point using the supplied preferential\nsampling constant k, using the biasing expression 1  (r^2 + k)") );
+        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireCAS::Expression const & >(( bp::arg("point"), bp::arg("f") ), "Construct a sampler that prefers the molecules that are closest\nto the point point using the supplied preferential\nsampling biasing function f") );
+        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireCAS::Expression const &, SireUnits::Dimension::Area >(( bp::arg("point"), bp::arg("f"), bp::arg("k") ), "Construct a sampler that prefers the molecules that are closest\nto the point point using the supplied preferential\nsampling biasing function f and sampling constant k") );
+        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireMol::MoleculeGroup const & >(( bp::arg("point"), bp::arg("molgroup") ), "Construct a sampler that samples molecule views from the group molgroup,\nwith a preference to sample molecules that are closest to the\npoint point, using the sampling expression 1  r^2") );
+        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireMol::MoleculeGroup const &, SireUnits::Dimension::Area >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("k") ), "Construct a sampler that samples molecule views from the group molgroup,\nwith a preference to sample molecules that are closest to the\npoint point using the supplied preferential\nsampling constant k and the biasing expression 1  (r^2 + k)") );
+        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireMol::MoleculeGroup const &, SireCAS::Expression const & >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("f") ), "Construct a sampler that samples molecule views from the group molgroup,\nwith a preference to sample molecules that are closest to the\npoint point using the supplied preferential\nsampling biasing function f") );
+        PrefSampler_exposer.def( bp::init< SireMaths::Vector const &, SireMol::MoleculeGroup const &, SireCAS::Expression const &, SireUnits::Dimension::Area >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("f"), bp::arg("k") ), "Construct a sampler that samples molecule views from the group molgroup,\nwith a preference to sample molecules that are closest to the\npoint point using the supplied preferential\nsampling biasing function f and area k") );
+        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "Construct a sampler that prefers the molecules that are closest to\nthe view molview, using the biasing expression 1  r^2") );
+        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireUnits::Dimension::Area >(( bp::arg("molview"), bp::arg("k") ), "Construct a sampler that prefers the molecules that are closest to\nthe view molview using the supplied preferential\nsampling constant k and the biasing expression 1  (r^2 + k)") );
+        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireCAS::Expression const & >(( bp::arg("molview"), bp::arg("f") ), "Construct a sampler that prefers the molecules that are closest to\nthe view molview using the supplied preferential\nsampling biasing function f") );
+        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireCAS::Expression const &, SireUnits::Dimension::Area >(( bp::arg("molview"), bp::arg("f"), bp::arg("k") ), "Construct a sampler that prefers the molecules that are closest to\nthe view molview using the supplied preferential\nsampling biasing function f and sampling constant k") );
+        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::MoleculeGroup const & >(( bp::arg("molview"), bp::arg("molgroup") ), "Construct a sampler that samples the molecules in molgroup, and\nthat prefers molecules that are closest to the view molview,\nusing the biasing expression 1  r^2") );
+        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::MoleculeGroup const &, SireUnits::Dimension::Area >(( bp::arg("molview"), bp::arg("molgroup"), bp::arg("k") ), "Construct a sampler that samples the molecules in molgroup, and\nthat prefers molecules that are closest to the view molview\nusing the optionally supplied preferential sampling constant k\nand the biasing expression 1  (r^2 + k)") );
+        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::MoleculeGroup const &, SireCAS::Expression const & >(( bp::arg("molview"), bp::arg("molgroup"), bp::arg("f") ), "Construct a sampler that samples the molecules in molgroup, and\nthat prefers molecules that are closest to the view molview\nusing the supplied preferential sampling biasing\nfunction f") );
+        PrefSampler_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::MoleculeGroup const &, SireCAS::Expression const &, SireUnits::Dimension::Area >(( bp::arg("molview"), bp::arg("molgroup"), bp::arg("f"), bp::arg("k") ), "Construct a sampler that samples the molecules in molgroup, and\nthat prefers molecules that are closest to the view molview\nusing the supplied preferential sampling biasing\nfunction f and sampling constant k") );
+        PrefSampler_exposer.def( bp::init< SireMove::PrefSampler const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::PrefSampler::biasingFunction
         
             typedef ::SireCAS::Expression ( ::SireMove::PrefSampler::*biasingFunction_function_type)(  ) const;
@@ -73,7 +73,8 @@ void register_PrefSampler_class(){
             
             PrefSampler_exposer.def( 
                 "biasingFunction"
-                , biasingFunction_function_value );
+                , biasingFunction_function_value
+                , "Return the preferential sampling biasing expression" );
         
         }
         { //::SireMove::PrefSampler::coordinatesProperty
@@ -84,7 +85,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "coordinatesProperty"
                 , coordinatesProperty_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property used to find the coordinates\nof the molecules" );
         
         }
         { //::SireMove::PrefSampler::focalMolecule
@@ -95,7 +97,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "focalMolecule"
                 , focalMolecule_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the current focal molecule (this will be an empty molecule\nif a focal point is being used)" );
         
         }
         { //::SireMove::PrefSampler::focalPoint
@@ -106,7 +109,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "focalPoint"
                 , focalPoint_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the current focal point (this will be the current center of the\nmolecule view if a focal molecule is being used)" );
         
         }
         { //::SireMove::PrefSampler::isBiased
@@ -116,7 +120,8 @@ void register_PrefSampler_class(){
             
             PrefSampler_exposer.def( 
                 "isBiased"
-                , isBiased_function_value );
+                , isBiased_function_value
+                , "The preferential sampler is definitely biased" );
         
         }
         { //::SireMove::PrefSampler::k
@@ -126,7 +131,8 @@ void register_PrefSampler_class(){
             
             PrefSampler_exposer.def( 
                 "k"
-                , k_function_value );
+                , k_function_value
+                , "Return the symbol used to represent the preferential sampling constant (k)" );
         
         }
         PrefSampler_exposer.def( bp::self != bp::self );
@@ -139,7 +145,8 @@ void register_PrefSampler_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PrefSampler_exposer.def( bp::self == bp::self );
@@ -151,7 +158,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "probabilityOf"
                 , probabilityOf_function_value
-                , ( bp::arg("molecule") ) );
+                , ( bp::arg("molecule") )
+                , "Return the probability with which the molecule molecule was\nsampled from this sampler\nThrow: SireMol::missing_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::PrefSampler::probabilityOfMolecule
@@ -162,7 +170,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "probabilityOfMolecule"
                 , probabilityOfMolecule_function_value
-                , ( bp::arg("molecule") ) );
+                , ( bp::arg("molecule") )
+                , "Return the probability that the molecule mol would have been picked\nby this sampler" );
         
         }
         { //::SireMove::PrefSampler::r
@@ -172,7 +181,8 @@ void register_PrefSampler_class(){
             
             PrefSampler_exposer.def( 
                 "r"
-                , r_function_value );
+                , r_function_value
+                , "Return the symbol used to represent the distance between molecules (r)" );
         
         }
         { //::SireMove::PrefSampler::sample
@@ -182,7 +192,8 @@ void register_PrefSampler_class(){
             
             PrefSampler_exposer.def( 
                 "sample"
-                , sample_function_value );
+                , sample_function_value
+                , "Sample a molecule from the group, and return it, together\nwith the probability with which it was chosen" );
         
         }
         { //::SireMove::PrefSampler::sampleMolecule
@@ -192,7 +203,8 @@ void register_PrefSampler_class(){
             
             PrefSampler_exposer.def( 
                 "sampleMolecule"
-                , sampleMolecule_function_value );
+                , sampleMolecule_function_value
+                , "Sample a whole molecule from the group, and return it and the\nprobability with which it was chosen. This returns the whole\nmolecule, even if only part of the molecule was in the group" );
         
         }
         { //::SireMove::PrefSampler::samplingConstant
@@ -202,7 +214,8 @@ void register_PrefSampler_class(){
             
             PrefSampler_exposer.def( 
                 "samplingConstant"
-                , samplingConstant_function_value );
+                , samplingConstant_function_value
+                , "Return the preferential sampling constant (k)" );
         
         }
         { //::SireMove::PrefSampler::setBiasingFunction
@@ -213,7 +226,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "setBiasingFunction"
                 , setBiasingFunction_function_value
-                , ( bp::arg("f") ) );
+                , ( bp::arg("f") )
+                , "Set the preferential sampling biasing expression - this\nshould use the symbols k and r, which are the biasing\nconstant and distance between molecules respectively.\nThe default biasing expression is  1.0  (r^2 + k)\n" );
         
         }
         { //::SireMove::PrefSampler::setCoordinatesProperty
@@ -224,7 +238,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "setCoordinatesProperty"
                 , setCoordinatesProperty_function_value
-                , ( bp::arg("coords_property") ) );
+                , ( bp::arg("coords_property") )
+                , "Set the property name used to find the coordinates property of\nthe molecules" );
         
         }
         { //::SireMove::PrefSampler::setFocalMolecule
@@ -235,7 +250,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "setFocalMolecule"
                 , setFocalMolecule_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Set the focal molecule of this sampler" );
         
         }
         { //::SireMove::PrefSampler::setFocalPoint
@@ -246,7 +262,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "setFocalPoint"
                 , setFocalPoint_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Set the focal point of this sampler" );
         
         }
         { //::SireMove::PrefSampler::setGroup
@@ -257,7 +274,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "setGroup"
                 , setGroup_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Set the molecule group from which molecule view will be sampled" );
         
         }
         { //::SireMove::PrefSampler::setSamplingConstant
@@ -268,7 +286,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "setSamplingConstant"
                 , setSamplingConstant_function_value
-                , ( bp::arg("k") ) );
+                , ( bp::arg("k") )
+                , "Set the preferential sampling constant - this is the value\nof k in the biasing algorithm" );
         
         }
         { //::SireMove::PrefSampler::setSpaceProperty
@@ -279,7 +298,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
-                , ( bp::arg("space_property") ) );
+                , ( bp::arg("space_property") )
+                , "Set the property used to find the space property of the system" );
         
         }
         { //::SireMove::PrefSampler::spaceProperty
@@ -290,7 +310,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "spaceProperty"
                 , spaceProperty_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property used to find the system space" );
         
         }
         { //::SireMove::PrefSampler::typeName
@@ -300,7 +321,8 @@ void register_PrefSampler_class(){
             
             PrefSampler_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::PrefSampler::updateFrom
@@ -311,7 +333,8 @@ void register_PrefSampler_class(){
             PrefSampler_exposer.def( 
                 "updateFrom"
                 , updateFrom_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Update this sampler so that the molecules match the versions\nin the system system" );
         
         }
         { //::SireMove::PrefSampler::usingFocalMolecule
@@ -321,7 +344,8 @@ void register_PrefSampler_class(){
             
             PrefSampler_exposer.def( 
                 "usingFocalMolecule"
-                , usingFocalMolecule_function_value );
+                , usingFocalMolecule_function_value
+                , "Return whether we are using a focal molecule (rather\nthan a focal point)" );
         
         }
         { //::SireMove::PrefSampler::usingFocalPoint
@@ -331,7 +355,8 @@ void register_PrefSampler_class(){
             
             PrefSampler_exposer.def( 
                 "usingFocalPoint"
-                , usingFocalPoint_function_value );
+                , usingFocalPoint_function_value
+                , "Return whether we are using a focal point (rather\nthan a focal molecule)" );
         
         }
         PrefSampler_exposer.staticmethod( "k" );

@@ -3,45 +3,45 @@
 
 #include "SireBase_registrars.h"
 
-#include "properties.h"
-#include "booleanproperty.h"
-#include "numberproperty.h"
-#include "propertylist.h"
-#include "linktoproperty.h"
-#include "lengthproperty.h"
-#include "propertymap.h"
-#include "cpuid.h"
-#include "property.h"
-#include "stringproperty.h"
-#include "stringmangler.h"
 #include "majorminorversion.h"
+#include "booleanproperty.h"
+#include "propertylist.h"
+#include "propertymap.h"
+#include "property.h"
+#include "linktoproperty.h"
+#include "stringproperty.h"
+#include "cpuid.h"
+#include "numberproperty.h"
+#include "properties.h"
+#include "stringmangler.h"
+#include "lengthproperty.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_SireBase_objects()
 {
 
-    ObjectRegistry::registerConverterFor< SireBase::Properties >();
+    ObjectRegistry::registerConverterFor< SireBase::MajorMinorVersion >();
+    ObjectRegistry::registerConverterFor< SireBase::Version >();
     ObjectRegistry::registerConverterFor< SireBase::BooleanProperty >();
-    ObjectRegistry::registerConverterFor< SireBase::NumberProperty >();
     ObjectRegistry::registerConverterFor< SireBase::DoubleArrayProperty >();
     ObjectRegistry::registerConverterFor< SireBase::IntegerArrayProperty >();
     ObjectRegistry::registerConverterFor< SireBase::StringArrayProperty >();
     ObjectRegistry::registerConverterFor< SireBase::PropertyList >();
-    ObjectRegistry::registerConverterFor< SireBase::LinkToProperty >();
-    ObjectRegistry::registerConverterFor< SireBase::LengthProperty >();
     ObjectRegistry::registerConverterFor< SireBase::PropertyName >();
     ObjectRegistry::registerConverterFor< SireBase::PropertyMap >();
-    ObjectRegistry::registerConverterFor< SireBase::CPUID >();
     ObjectRegistry::registerConverterFor< SireBase::NullProperty >();
     ObjectRegistry::registerConverterFor< SireBase::VariantProperty >();
+    ObjectRegistry::registerConverterFor< SireBase::LinkToProperty >();
     ObjectRegistry::registerConverterFor< SireBase::StringProperty >();
+    ObjectRegistry::registerConverterFor< SireBase::CPUID >();
+    ObjectRegistry::registerConverterFor< SireBase::NumberProperty >();
+    ObjectRegistry::registerConverterFor< SireBase::Properties >();
     ObjectRegistry::registerConverterFor< SireBase::NoMangling >();
     ObjectRegistry::registerConverterFor< SireBase::TrimString >();
     ObjectRegistry::registerConverterFor< SireBase::UpperCaseString >();
     ObjectRegistry::registerConverterFor< SireBase::LowerCaseString >();
-    ObjectRegistry::registerConverterFor< SireBase::MajorMinorVersion >();
-    ObjectRegistry::registerConverterFor< SireBase::Version >();
+    ObjectRegistry::registerConverterFor< SireBase::LengthProperty >();
 
 }
 

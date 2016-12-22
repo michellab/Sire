@@ -23,10 +23,10 @@ void register_PointDipole_class(){
 
     { //::Squire::PointDipole
         typedef bp::class_< Squire::PointDipole > PointDipole_exposer_t;
-        PointDipole_exposer_t PointDipole_exposer = PointDipole_exposer_t( "PointDipole", bp::init< >() );
+        PointDipole_exposer_t PointDipole_exposer = PointDipole_exposer_t( "PointDipole", "This class holds a single point dipole. This class is designed\nfor speed, and is used within the integral program (the dipole\nis held in internal units, and the point is mapped into the\ncorrect space for the QM program)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope PointDipole_scope( PointDipole_exposer );
-        PointDipole_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("coords"), bp::arg("dipole") )) );
-        PointDipole_exposer.def( bp::init< Squire::PointDipole const & >(( bp::arg("other") )) );
+        PointDipole_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("coords"), bp::arg("dipole") ), "Construct a point dipole at the specified location with the\nspecified dipole") );
+        PointDipole_exposer.def( bp::init< Squire::PointDipole const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::PointDipole::center
         
             typedef ::SireMaths::Vector const & ( ::Squire::PointDipole::*center_function_type)(  ) const;
@@ -35,7 +35,8 @@ void register_PointDipole_class(){
             PointDipole_exposer.def( 
                 "center"
                 , center_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the location of this point charge" );
         
         }
         { //::Squire::PointDipole::dipole
@@ -46,7 +47,8 @@ void register_PointDipole_class(){
             PointDipole_exposer.def( 
                 "dipole"
                 , dipole_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the dipole" );
         
         }
         PointDipole_exposer.def( bp::self != bp::self );
@@ -59,7 +61,8 @@ void register_PointDipole_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PointDipole_exposer.def( bp::self == bp::self );
@@ -70,7 +73,8 @@ void register_PointDipole_class(){
             
             PointDipole_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         PointDipole_exposer.staticmethod( "typeName" );

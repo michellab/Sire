@@ -23,7 +23,7 @@ void register_IndexBase_class(){
 
     { //::SireID::IndexBase
         typedef bp::class_< SireID::IndexBase, boost::noncopyable > IndexBase_exposer_t;
-        IndexBase_exposer_t IndexBase_exposer = IndexBase_exposer_t( "IndexBase", bp::no_init );
+        IndexBase_exposer_t IndexBase_exposer = IndexBase_exposer_t( "IndexBase", "This is the base class of all Index objects. An Index object\nprovides the index of an object in an indexable list or array (or indeed\nany container that holds objects in a linear, numerical indexed\nmanner (e.g. atoms in a Molecule, Molecules in a group)\n\nThis class cannot be instantiated on its own - it must be\ninherited by a derived class to be used.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope IndexBase_scope( IndexBase_exposer );
         { //::SireID::IndexBase::hash
         
@@ -32,7 +32,8 @@ void register_IndexBase_class(){
             
             IndexBase_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Hash this Index" );
         
         }
         { //::SireID::IndexBase::isNull
@@ -42,7 +43,8 @@ void register_IndexBase_class(){
             
             IndexBase_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether this is a null index - a null\nindex is one that equals std::numeric_limits<qint32>::min(),\nwhich should be -21474833648 for a 32bit integer" );
         
         }
         { //::SireID::IndexBase::map
@@ -53,7 +55,8 @@ void register_IndexBase_class(){
             IndexBase_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("n") ) );
+                , ( bp::arg("n") )
+                , "Map this index into the container of n elements - this\nmaps the index (with negative indexing, e.g. -1 is the last\nelement), and throws an exception if the index is out\nof the bounds of the array\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireID::IndexBase::null
@@ -63,7 +66,8 @@ void register_IndexBase_class(){
             
             IndexBase_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "Return the null index" );
         
         }
         { //::SireID::IndexBase::value
@@ -73,7 +77,8 @@ void register_IndexBase_class(){
             
             IndexBase_exposer.def( 
                 "value"
-                , value_function_value );
+                , value_function_value
+                , "Return the raw value of this index" );
         
         }
         IndexBase_exposer.staticmethod( "null" );
@@ -83,6 +88,7 @@ void register_IndexBase_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         IndexBase_exposer.def( "__str__", &pvt_get_name);
         IndexBase_exposer.def( "__repr__", &pvt_get_name);
+        IndexBase_exposer.def( "__hash__", &::SireID::IndexBase::hash );
     }
 
 }

@@ -31,10 +31,10 @@ void register_MGNum_class(){
 
     { //::SireMol::MGNum
         typedef bp::class_< SireMol::MGNum, bp::bases< SireMol::MGID, SireID::ID, SireID::Number > > MGNum_exposer_t;
-        MGNum_exposer_t MGNum_exposer = MGNum_exposer_t( "MGNum", bp::init< >() );
+        MGNum_exposer_t MGNum_exposer = MGNum_exposer_t( "MGNum", "This ID number is used to identify a MoleculeGroup by\na unique, program-supplied ID number\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MGNum_scope( MGNum_exposer );
-        MGNum_exposer.def( bp::init< quint32 >(( bp::arg("num") )) );
-        MGNum_exposer.def( bp::init< SireMol::MGNum const & >(( bp::arg("other") )) );
+        MGNum_exposer.def( bp::init< quint32 >(( bp::arg("num") ), "") );
+        MGNum_exposer.def( bp::init< SireMol::MGNum const & >(( bp::arg("other") ), "") );
         { //::SireMol::MGNum::getUniqueNumber
         
             typedef ::SireMol::MGNum ( *getUniqueNumber_function_type )(  );
@@ -42,7 +42,8 @@ void register_MGNum_class(){
             
             MGNum_exposer.def( 
                 "getUniqueNumber"
-                , getUniqueNumber_function_value );
+                , getUniqueNumber_function_value
+                , "" );
         
         }
         { //::SireMol::MGNum::hash
@@ -52,7 +53,8 @@ void register_MGNum_class(){
             
             MGNum_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::MGNum::isNull
@@ -62,7 +64,8 @@ void register_MGNum_class(){
             
             MGNum_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::MGNum::map
@@ -73,7 +76,8 @@ void register_MGNum_class(){
             MGNum_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "" );
         
         }
         MGNum_exposer.def( bp::self != bp::self );
@@ -88,7 +92,8 @@ void register_MGNum_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MGNum_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -102,7 +107,8 @@ void register_MGNum_class(){
             
             MGNum_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::MGNum::typeName
@@ -112,7 +118,8 @@ void register_MGNum_class(){
             
             MGNum_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::MGNum::what
@@ -122,7 +129,8 @@ void register_MGNum_class(){
             
             MGNum_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MGNum_exposer.staticmethod( "getUniqueNumber" );
@@ -136,6 +144,7 @@ void register_MGNum_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MGNum_exposer.def( "__str__", &__str__< ::SireMol::MGNum > );
         MGNum_exposer.def( "__repr__", &__str__< ::SireMol::MGNum > );
+        MGNum_exposer.def( "__hash__", &::SireMol::MGNum::hash );
     }
 
 }

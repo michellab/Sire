@@ -2,8 +2,8 @@
 set ( PYPP_SOURCES
        _ID_enumerations.pypp.cpp
        ID.pypp.cpp
-       IndexBase.pypp.cpp
        Index.pypp.cpp
+       IndexBase.pypp.cpp
        Name.pypp.cpp
        Number.pypp.cpp
        SireID_registrars.cpp

@@ -50,11 +50,11 @@ void register_SegStructureEditor_class(){
 
     { //::SireMol::SegStructureEditor
         typedef bp::class_< SireMol::SegStructureEditor > SegStructureEditor_exposer_t;
-        SegStructureEditor_exposer_t SegStructureEditor_exposer = SegStructureEditor_exposer_t( "SegStructureEditor", bp::init< >() );
+        SegStructureEditor_exposer_t SegStructureEditor_exposer = SegStructureEditor_exposer_t( "SegStructureEditor", "This is the class used to edit a segments structure\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope SegStructureEditor_scope( SegStructureEditor_exposer );
-        SegStructureEditor_exposer.def( bp::init< SireMol::Segment const & >(( bp::arg("residue") )) );
-        SegStructureEditor_exposer.def( bp::init< SireMol::StructureEditor const &, SireMol::SegIdx >(( bp::arg("data"), bp::arg("residx") )) );
-        SegStructureEditor_exposer.def( bp::init< SireMol::SegStructureEditor const & >(( bp::arg("other") )) );
+        SegStructureEditor_exposer.def( bp::init< SireMol::Segment const & >(( bp::arg("residue") ), "Construct to edit a copy of the Segment segment") );
+        SegStructureEditor_exposer.def( bp::init< SireMol::StructureEditor const &, SireMol::SegIdx >(( bp::arg("data"), bp::arg("residx") ), "Construct to edit the Segment at index cgidx in the molecule\nalso being edited in data\nThrow: SireError::invalid_index\n") );
+        SegStructureEditor_exposer.def( bp::init< SireMol::SegStructureEditor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::SegStructureEditor::add
         
             typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*add_function_type)( ::SireMol::AtomName const & ) ;
@@ -63,7 +63,8 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atomname") ) );
+                , ( bp::arg("atomname") )
+                , "Add an atom called atomname to this Segment and return\nan editor for that atom" );
         
         }
         { //::SireMol::SegStructureEditor::add
@@ -74,7 +75,8 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atomnum") ) );
+                , ( bp::arg("atomnum") )
+                , "Add an atom with number atomnum to this Segment and return\nan editor for that atom" );
         
         }
         { //::SireMol::SegStructureEditor::atom
@@ -85,7 +87,8 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return an editor for the ith atom of this Segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::SegStructureEditor::atom
@@ -96,7 +99,8 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return an editor for the atom that matches the ID atomid in\nthis Segment\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::SegStructureEditor::commit
@@ -106,7 +110,8 @@ void register_SegStructureEditor_class(){
             
             SegStructureEditor_exposer.def( 
                 "commit"
-                , commit_function_value );
+                , commit_function_value
+                , "Commit the changes made by this editor and return the\nupdated Segment" );
         
         }
         { //::SireMol::SegStructureEditor::index
@@ -116,7 +121,8 @@ void register_SegStructureEditor_class(){
             
             SegStructureEditor_exposer.def( 
                 "index"
-                , index_function_value );
+                , index_function_value
+                , "Return the index of this Segment in the molecule" );
         
         }
         { //::SireMol::SegStructureEditor::molecule
@@ -126,7 +132,8 @@ void register_SegStructureEditor_class(){
             
             SegStructureEditor_exposer.def( 
                 "molecule"
-                , molecule_function_value );
+                , molecule_function_value
+                , "Return an editor for the molecule that contains this Segment" );
         
         }
         { //::SireMol::SegStructureEditor::nAtoms
@@ -136,7 +143,8 @@ void register_SegStructureEditor_class(){
             
             SegStructureEditor_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the number of atoms in this Segment (could be zero)" );
         
         }
         { //::SireMol::SegStructureEditor::name
@@ -147,7 +155,8 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the name of this Segment" );
         
         }
         { //::SireMol::SegStructureEditor::operator=
@@ -159,7 +168,8 @@ void register_SegStructureEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("residue") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::SegStructureEditor::operator=
@@ -171,7 +181,8 @@ void register_SegStructureEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::SegStructureEditor::reindex
@@ -183,7 +194,8 @@ void register_SegStructureEditor_class(){
                 "reindex"
                 , reindex_function_value
                 , ( bp::arg("index") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Move this Segment to index newidx - this will move it\nto the start or end if this index is out of range" );
         
         }
         { //::SireMol::SegStructureEditor::remove
@@ -194,7 +206,8 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "remove"
                 , remove_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Complete remove this Segment, and return an editor\nfor the molecule that contained it" );
         
         }
         { //::SireMol::SegStructureEditor::remove
@@ -206,7 +219,8 @@ void register_SegStructureEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Completely remove all atoms that match the ID atomid from\nthis Segment\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::SegStructureEditor::remove
@@ -218,7 +232,8 @@ void register_SegStructureEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("i") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove the ith atom from this Segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::SegStructureEditor::rename
@@ -230,7 +245,8 @@ void register_SegStructureEditor_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("name") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Rename this Segment to newname" );
         
         }
         { //::SireMol::SegStructureEditor::select
@@ -241,7 +257,8 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return an editor for the ith atom of this Segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::SegStructureEditor::select
@@ -252,7 +269,8 @@ void register_SegStructureEditor_class(){
             SegStructureEditor_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return an editor for the atom that matches the ID atomid in\nthis Segment\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::SegStructureEditor::selectedAll
@@ -262,7 +280,8 @@ void register_SegStructureEditor_class(){
             
             SegStructureEditor_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Return whether or not this segment is the whole molecule" );
         
         }
         { //::SireMol::SegStructureEditor::toString
@@ -272,7 +291,8 @@ void register_SegStructureEditor_class(){
             
             SegStructureEditor_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this editor" );
         
         }
         { //::SireMol::SegStructureEditor::transfer
@@ -284,7 +304,8 @@ void register_SegStructureEditor_class(){
                 "transfer"
                 , transfer_function_value
                 , ( bp::arg("atomid"), bp::arg("segid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Transfer all atoms that match the ID atomid in this Segment\nto the Segment that matches the ID segid\nThrow: SireMol::missing_atom\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::SegStructureEditor::transfer
@@ -296,7 +317,8 @@ void register_SegStructureEditor_class(){
                 "transfer"
                 , transfer_function_value
                 , ( bp::arg("i"), bp::arg("segid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Transfer the ith atom of this Segment into the Segment identified\nby the ID segid\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::SegStructureEditor::transferAll
@@ -308,7 +330,8 @@ void register_SegStructureEditor_class(){
                 "transferAll"
                 , transferAll_function_value
                 , ( bp::arg("segid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Completely transfer all of the atoms in this Segment to\nthe Segment that matches the ID segid\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::SegStructureEditor::typeName
@@ -318,7 +341,8 @@ void register_SegStructureEditor_class(){
             
             SegStructureEditor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::SegStructureEditor::what
@@ -328,7 +352,8 @@ void register_SegStructureEditor_class(){
             
             SegStructureEditor_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SegStructureEditor_exposer.staticmethod( "typeName" );

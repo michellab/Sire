@@ -41,10 +41,10 @@ void register_MolFieldTable_class(){
 
     { //::SireFF::MolFieldTable
         typedef bp::class_< SireFF::MolFieldTable > MolFieldTable_exposer_t;
-        MolFieldTable_exposer_t MolFieldTable_exposer = MolFieldTable_exposer_t( "MolFieldTable", bp::init< >() );
+        MolFieldTable_exposer_t MolFieldTable_exposer = MolFieldTable_exposer_t( "MolFieldTable", "This class holds the field at the points of all of the atoms of\nselected CutGroups in a molecule. The MolFieldTable is used\nto accumulate all of the fields acting on these atoms during\na field evaluation, and also to control which fields are\nevaluated (as only the fields on atoms in selected CutGroups\nare evaluated). This allows you to provide some control over\nthe calculation, e.g. only placing a few protein residues into\nthe field table, thereby preventing the fields on all atoms\nin a protein from being evaluated if they arent actually\nnecessary.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope MolFieldTable_scope( MolFieldTable_exposer );
-        MolFieldTable_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") )) );
-        MolFieldTable_exposer.def( bp::init< SireFF::MolFieldTable const & >(( bp::arg("other") )) );
+        MolFieldTable_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "Construct to hold the field acting at the points of all of the atoms\nof all of the cutgroups viewed in molview") );
+        MolFieldTable_exposer.def( bp::init< SireFF::MolFieldTable const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::MolFieldTable::add
         
             typedef bool ( ::SireFF::MolFieldTable::*add_function_type)( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
@@ -53,7 +53,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("cgatomidx"), bp::arg("field") ) );
+                , ( bp::arg("cgatomidx"), bp::arg("field") )
+                , "Add the field field onto this table - this returns whether or not the\natom is in this table\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::MolFieldTable::add
@@ -64,7 +65,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("selected_atoms"), bp::arg("field") ) );
+                , ( bp::arg("selected_atoms"), bp::arg("field") )
+                , "Add the field field onto this table for all of the atoms\nin selected_atoms - this returns whether\nor not any selected atoms are in this table\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::MolFieldTable::add
@@ -75,7 +77,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add the fields contained in other onto this field table. This will only\nadd the fields for CutGroups that are in both tables" );
         
         }
         { //::SireFF::MolFieldTable::add
@@ -86,7 +89,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("field") ) );
+                , ( bp::arg("field") )
+                , "Add the field field onto all of the atom points in this table" );
         
         }
         { //::SireFF::MolFieldTable::divide
@@ -97,7 +101,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Divide the field at all atom points by value" );
         
         }
         { //::SireFF::MolFieldTable::initialise
@@ -107,7 +112,8 @@ void register_MolFieldTable_class(){
             
             MolFieldTable_exposer.def( 
                 "initialise"
-                , initialise_function_value );
+                , initialise_function_value
+                , "Initialise this table - this clears all of the fields, resetting them to zero" );
         
         }
         { //::SireFF::MolFieldTable::map
@@ -118,7 +124,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireFF::MolFieldTable::molNum
@@ -128,7 +135,8 @@ void register_MolFieldTable_class(){
             
             MolFieldTable_exposer.def( 
                 "molNum"
-                , molNum_function_value );
+                , molNum_function_value
+                , "" );
         
         }
         { //::SireFF::MolFieldTable::molUID
@@ -139,7 +147,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "molUID"
                 , molUID_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::MolFieldTable::multiply
@@ -150,7 +159,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "multiply"
                 , multiply_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Multiply the field at all atom points by value" );
         
         }
         { //::SireFF::MolFieldTable::nCutGroups
@@ -160,7 +170,8 @@ void register_MolFieldTable_class(){
             
             MolFieldTable_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         { //::SireFF::MolFieldTable::nSelectedCutGroups
@@ -170,7 +181,8 @@ void register_MolFieldTable_class(){
             
             MolFieldTable_exposer.def( 
                 "nSelectedCutGroups"
-                , nSelectedCutGroups_function_value );
+                , nSelectedCutGroups_function_value
+                , "" );
         
         }
         MolFieldTable_exposer.def( bp::self != bp::self );
@@ -190,7 +202,8 @@ void register_MolFieldTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireFF::MolFieldTable::operator=
@@ -202,7 +215,8 @@ void register_MolFieldTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("field") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MolFieldTable_exposer.def( bp::self == bp::self );
@@ -214,7 +228,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireFF::MolFieldTable::selectedAll
@@ -224,7 +239,8 @@ void register_MolFieldTable_class(){
             
             MolFieldTable_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "" );
         
         }
         { //::SireFF::MolFieldTable::setAll
@@ -235,7 +251,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Set all of the fields at the atom points equal to field" );
         
         }
         { //::SireFF::MolFieldTable::subtract
@@ -246,7 +263,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("cgatomidx"), bp::arg("field") ) );
+                , ( bp::arg("cgatomidx"), bp::arg("field") )
+                , "Subtract the field field from this table - this returns whether or not the\natom is in this table\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::MolFieldTable::subtract
@@ -257,7 +275,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("selected_atoms"), bp::arg("field") ) );
+                , ( bp::arg("selected_atoms"), bp::arg("field") )
+                , "Subtract the field field from this table for all of the atoms\nin selected_atoms - this returns whether\nor not any selected atoms are in this table\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::MolFieldTable::subtract
@@ -268,7 +287,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Subtract the fields contained in other from this field table. This will only\nsubtract the fields for CutGroups that are in both tables" );
         
         }
         { //::SireFF::MolFieldTable::subtract
@@ -279,7 +299,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("field") ) );
+                , ( bp::arg("field") )
+                , "Subtract the field field from all of the atom points in this table" );
         
         }
         { //::SireFF::MolFieldTable::toVector
@@ -289,7 +310,8 @@ void register_MolFieldTable_class(){
             
             MolFieldTable_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "Return all of the fields in this table in a single array" );
         
         }
         { //::SireFF::MolFieldTable::toVector
@@ -300,7 +322,8 @@ void register_MolFieldTable_class(){
             MolFieldTable_exposer.def( 
                 "toVector"
                 , toVector_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "Return an array of all of the fields at the location of\nthe atoms selected in selection\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::MolFieldTable::typeName
@@ -310,7 +333,8 @@ void register_MolFieldTable_class(){
             
             MolFieldTable_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::MolFieldTable::what
@@ -320,7 +344,8 @@ void register_MolFieldTable_class(){
             
             MolFieldTable_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MolFieldTable_exposer.staticmethod( "typeName" );

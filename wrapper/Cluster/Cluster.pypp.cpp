@@ -39,7 +39,7 @@ void register_Cluster_class(){
 
     { //::SireCluster::Cluster
         typedef bp::class_< SireCluster::Cluster > Cluster_exposer_t;
-        Cluster_exposer_t Cluster_exposer = Cluster_exposer_t( "Cluster" );
+        Cluster_exposer_t Cluster_exposer = Cluster_exposer_t( "Cluster", "This class provides the global registry for all nodes in the cluster.\nA node is defined as a resource that can run a WorkPacket. A node\nconsists of a Backend (the object in which the WorkPacket is\nrun) and a Frontend (the object that allows the node to communicate\nwith the Backend)\n\nAuthor: Christopher Woods\n" );
         bp::scope Cluster_scope( Cluster_exposer );
         { //::SireCluster::Cluster::UIDs
         
@@ -48,7 +48,8 @@ void register_Cluster_class(){
             
             Cluster_exposer.def( 
                 "UIDs"
-                , UIDs_function_value );
+                , UIDs_function_value
+                , "Return the list of all of the UIDs of all of the nodes\nin this entire cluster" );
         
         }
         { //::SireCluster::Cluster::getAllNodes
@@ -58,7 +59,8 @@ void register_Cluster_class(){
             
             Cluster_exposer.def( 
                 "getAllNodes"
-                , getAllNodes_function_value );
+                , getAllNodes_function_value
+                , "Try to get hold of all of the nodes that are available on this\ncluster" );
         
         }
         { //::SireCluster::Cluster::getAllNodes
@@ -69,7 +71,8 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "getAllNodes"
                 , getAllNodes_function_value
-                , ( bp::arg("timeout") ) );
+                , ( bp::arg("timeout") )
+                , "Try to get hold of all of the nodes that are available on this\ncluster (within the specified timeout)" );
         
         }
         { //::SireCluster::Cluster::getCount
@@ -79,7 +82,8 @@ void register_Cluster_class(){
             
             Cluster_exposer.def( 
                 "getCount"
-                , getCount_function_value );
+                , getCount_function_value
+                , "Return the number of processes - this is either the\nsize of the MPI group, or it is 1" );
         
         }
         { //::SireCluster::Cluster::getNode
@@ -89,7 +93,8 @@ void register_Cluster_class(){
             
             Cluster_exposer.def( 
                 "getNode"
-                , getNode_function_value );
+                , getNode_function_value
+                , "Return a Nodes object that contains just a single node.\nThis doesnt block - it just grabs the first available\nnode, and if there are none available then it returns\nimmediately, returning an empty Nodes object" );
         
         }
         { //::SireCluster::Cluster::getNode
@@ -100,7 +105,8 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "getNode"
                 , getNode_function_value
-                , ( bp::arg("timeout") ) );
+                , ( bp::arg("timeout") )
+                , "Return a Nodes object that contains just a single node.\nThis blocks until a Node is available, or until timeout\nmilliseconds has passed (use negative timeout to wait forever).\nThere are some cases where a Node is just not available, in which\ncase an empty Nodes object will be returned\n" );
         
         }
         { //::SireCluster::Cluster::getNode
@@ -111,7 +117,8 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "getNode"
                 , getNode_function_value
-                , ( bp::arg("uid") ) );
+                , ( bp::arg("uid") )
+                , "Return a Nodes object that contains the node with UID uid.\nThere are some cases where a Node is just not available, in which\ncase an empty Nodes object will be returned.\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireCluster::Cluster::getNode
@@ -122,7 +129,8 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "getNode"
                 , getNode_function_value
-                , ( bp::arg("uid"), bp::arg("timeout") ) );
+                , ( bp::arg("uid"), bp::arg("timeout") )
+                , "Return a Nodes object that contains the node with UID uid.\nThis blocks until the Node is available, or until timeout\nmilliseconds has passed (use negative timeout to wait forever).\nThere are some cases where a Node is just not available, in which\ncase an empty Nodes object will be returned.\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireCluster::Cluster::getNodes
@@ -133,7 +141,8 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "getNodes"
                 , getNodes_function_value
-                , ( bp::arg("nnodes") ) );
+                , ( bp::arg("nnodes") )
+                , "Return a Nodes object containing up to nnodes nodes. This function\nwill do its best, but you may end with less than you asked for\n(or even none at all)." );
         
         }
         { //::SireCluster::Cluster::getNodes
@@ -144,7 +153,8 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "getNodes"
                 , getNodes_function_value
-                , ( bp::arg("nnodes"), bp::arg("timeout") ) );
+                , ( bp::arg("nnodes"), bp::arg("timeout") )
+                , "Return a Nodes object containing up to nnodes nodes. This function\nwill do its best, but you may end with less than you asked for\n(or even none at all). It is a bad idea to ask for more nodes\nthan there are backends using an infinite timeout..." );
         
         }
         { //::SireCluster::Cluster::getNodes
@@ -155,7 +165,8 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "getNodes"
                 , getNodes_function_value
-                , ( bp::arg("uids") ) );
+                , ( bp::arg("uids") )
+                , "Return a Nodes object that contains as many of the nodes with\nUIDs from uids as possible, within the time allowed. Note that\nthis may not give you all of the nodes (it may give you none).\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireCluster::Cluster::getNodes
@@ -166,7 +177,8 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "getNodes"
                 , getNodes_function_value
-                , ( bp::arg("uids"), bp::arg("timeout") ) );
+                , ( bp::arg("uids"), bp::arg("timeout") )
+                , "Return a Nodes object that contains as many of the nodes with\nUIDs from uids as possible, within the time allowed. Note that\nthis may not give you all of the nodes (it may give you none).\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireCluster::Cluster::getRank
@@ -176,7 +188,8 @@ void register_Cluster_class(){
             
             Cluster_exposer.def( 
                 "getRank"
-                , getRank_function_value );
+                , getRank_function_value
+                , "Return the rank of the process - this is either the\nrank of this process in the MPI group, or it is 0" );
         
         }
         { //::SireCluster::Cluster::isLocal
@@ -187,7 +200,8 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "isLocal"
                 , isLocal_function_value
-                , ( bp::arg("uid") ) );
+                , ( bp::arg("uid") )
+                , "Return whether or not the backend with unique ID uid\nis local to this process" );
         
         }
         { //::SireCluster::Cluster::isRunning
@@ -197,7 +211,8 @@ void register_Cluster_class(){
             
             Cluster_exposer.def( 
                 "isRunning"
-                , isRunning_function_value );
+                , isRunning_function_value
+                , "Return whether or not the cluster is running" );
         
         }
         { //::SireCluster::Cluster::localUIDs
@@ -207,7 +222,8 @@ void register_Cluster_class(){
             
             Cluster_exposer.def( 
                 "localUIDs"
-                , localUIDs_function_value );
+                , localUIDs_function_value
+                , "Return the list of all of the UIDs of the local nodes\n(the nodes that exist in this address space)" );
         
         }
         { //::SireCluster::Cluster::shutdown
@@ -217,7 +233,8 @@ void register_Cluster_class(){
             
             Cluster_exposer.def( 
                 "shutdown"
-                , shutdown_function_value );
+                , shutdown_function_value
+                , "Shutdown this cluster" );
         
         }
         { //::SireCluster::Cluster::start
@@ -228,7 +245,8 @@ void register_Cluster_class(){
             Cluster_exposer.def( 
                 "start"
                 , start_function_value
-                , ( bp::arg("ppn")=(int)(1) ) );
+                , ( bp::arg("ppn")=(int)(1) )
+                , "Start the cluster - this is like exec, but it doesnt\nblock until the cluster has been shutdown" );
         
         }
         { //::SireCluster::Cluster::supportsMPI
@@ -238,7 +256,8 @@ void register_Cluster_class(){
             
             Cluster_exposer.def( 
                 "supportsMPI"
-                , supportsMPI_function_value );
+                , supportsMPI_function_value
+                , "Return whether or not this cluster supports MPI\n(this is true if MPI is available, and there is more than\none MPI process)" );
         
         }
         { //::SireCluster::Cluster::wait
@@ -248,7 +267,8 @@ void register_Cluster_class(){
             
             Cluster_exposer.def( 
                 "wait"
-                , wait_function_value );
+                , wait_function_value
+                , "Wait for the global cluster to stop running" );
         
         }
         Cluster_exposer.staticmethod( "UIDs" );

@@ -9,7 +9,7 @@ namespace bp = boost::python;
 
 #include "SireBase/findexe.h"
 
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 
 #include "SireBase/tempdir.h"
 
@@ -51,10 +51,10 @@ void register_Mopac_class(){
 
     { //::Squire::Mopac
         typedef bp::class_< Squire::Mopac, bp::bases< Squire::QMProgram, SireBase::Property > > Mopac_exposer_t;
-        Mopac_exposer_t Mopac_exposer = Mopac_exposer_t( "Mopac", bp::init< >() );
+        Mopac_exposer_t Mopac_exposer = Mopac_exposer_t( "Mopac", "This is a wrapper that allows Mopac to be used to calculate\nsemiempirical QM energies\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope Mopac_scope( Mopac_exposer );
-        Mopac_exposer.def( bp::init< QString const & >(( bp::arg("mopac") )) );
-        Mopac_exposer.def( bp::init< Squire::Mopac const & >(( bp::arg("other") )) );
+        Mopac_exposer.def( bp::init< QString const & >(( bp::arg("mopac") ), "Construct, passing in the location of the Mopac executable") );
+        Mopac_exposer.def( bp::init< Squire::Mopac const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::Mopac::calculateCharges
         
             typedef ::SireMol::AtomCharges ( ::Squire::Mopac::*calculateCharges_function_type)( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) const;
@@ -63,7 +63,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "calculateCharges"
                 , calculateCharges_function_value
-                , ( bp::arg("molecule"), bp::arg("map") ) );
+                , ( bp::arg("molecule"), bp::arg("map") )
+                , "Use Mopac to calculate the partial charges for the passed molecule\n(using the total charge set in this program)" );
         
         }
         { //::Squire::Mopac::chargeTemplate
@@ -74,7 +75,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "chargeTemplate"
                 , chargeTemplate_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the template for the command file to be used to get Mopac\nto calculate atomic partial charges." );
         
         }
         { //::Squire::Mopac::energyTemplate
@@ -85,7 +87,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "energyTemplate"
                 , energyTemplate_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the template for the command file to be used to get Mopac\nto calculate the energy." );
         
         }
         { //::Squire::Mopac::environment
@@ -96,7 +99,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "environment"
                 , environment_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the environmental variables that are to be set explicitly\nwhen Mopac is run. This does not include any environmental variables\nthat have not been explicitly set, but do have values" );
         
         }
         { //::Squire::Mopac::environment
@@ -107,7 +111,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "environment"
                 , environment_function_value
-                , ( bp::arg("variable") ) );
+                , ( bp::arg("variable") )
+                , "Return the value of the explicitly set environmental variable variable.\nA null string is returned if this variable has not been set\nexplicitly (this does not mean the variable doesnt exist - merely\nthat a specific value has not been set)" );
         
         }
         { //::Squire::Mopac::executable
@@ -117,7 +122,8 @@ void register_Mopac_class(){
             
             Mopac_exposer.def( 
                 "executable"
-                , executable_function_value );
+                , executable_function_value
+                , "Return the executable (full path and also arguments) to be used. This\nis null if the executable is searched for in the path" );
         
         }
         { //::Squire::Mopac::forceTemplate
@@ -128,7 +134,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "forceTemplate"
                 , forceTemplate_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the template for the command file to be used to get Mopac\nto calculate the forces." );
         
         }
         { //::Squire::Mopac::method
@@ -139,7 +146,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "method"
                 , method_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the QM method to be used to calculate the energy or\nforce (e.g. AM1, PM3). This will substitute for\n@QM_METHOD@ in the energy and force command file templates" );
         
         }
         { //::Squire::Mopac::mopacInputFilename
@@ -150,7 +158,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "mopacInputFilename"
                 , mopacInputFilename_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the file mopac is using for input. This\nis hardcoded into Mopac and depends on the system on which this\nprogram is running, e.g. FOR005 is the name for the Mopac\nI am using on OS X" );
         
         }
         { //::Squire::Mopac::mopacOutputFilename
@@ -161,7 +170,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "mopacOutputFilename"
                 , mopacOutputFilename_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the file mopac is using for output. This\nis hardcoded into Mopac and depends on the system on which this\nprogram is running, e.g. FOR006 is the name for the Mopac\nI am using on OS X" );
         
         }
         Mopac_exposer.def( bp::self != bp::self );
@@ -174,7 +184,8 @@ void register_Mopac_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Mopac_exposer.def( bp::self == bp::self );
@@ -186,7 +197,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "setChargeTemplate"
                 , setChargeTemplate_function_value
-                , ( bp::arg("charge_template") ) );
+                , ( bp::arg("charge_template") )
+                , "Set the template for the command file to be used to get\nMopac to calculate atomic partial charges. The following tags will\n" );
         
         }
         { //::Squire::Mopac::setEnergyTemplate
@@ -197,7 +209,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "setEnergyTemplate"
                 , setEnergyTemplate_function_value
-                , ( bp::arg("energy_template") ) );
+                , ( bp::arg("energy_template") )
+                , "Set the template for the command file to be used to get\nMopac to calculate an energy. The following tags will\n" );
         
         }
         { //::Squire::Mopac::setEnvironment
@@ -208,7 +221,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "setEnvironment"
                 , setEnvironment_function_value
-                , ( bp::arg("variable"), bp::arg("value") ) );
+                , ( bp::arg("variable"), bp::arg("value") )
+                , "Set the environmental variable variable to have the value value\nwhen the Mopac executable is run. This replaces any existing\nvalue of this environmental variable" );
         
         }
         { //::Squire::Mopac::setExecutable
@@ -219,7 +233,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "setExecutable"
                 , setExecutable_function_value
-                , ( bp::arg("mopac_exe") ) );
+                , ( bp::arg("mopac_exe") )
+                , "Set the Mopac executable (full path and also arguments) to be used" );
         
         }
         { //::Squire::Mopac::setForceTemplate
@@ -230,7 +245,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "setForceTemplate"
                 , setForceTemplate_function_value
-                , ( bp::arg("force_template") ) );
+                , ( bp::arg("force_template") )
+                , "Set the template for the command file to be used to get\nMopac to calculate the forces. The following tags will\n" );
         
         }
         { //::Squire::Mopac::setMethod
@@ -241,7 +257,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "setMethod"
                 , setMethod_function_value
-                , ( bp::arg("method") ) );
+                , ( bp::arg("method") )
+                , "Set the QM method to be used to calculate the energy or\nforce (e.g. AM1, PM3). This will substitute for\n@QM_METHOD@ in the energy and force command file templates" );
         
         }
         { //::Squire::Mopac::setMopacInputFilename
@@ -252,7 +269,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "setMopacInputFilename"
                 , setMopacInputFilename_function_value
-                , ( bp::arg("filename") ) );
+                , ( bp::arg("filename") )
+                , "Tell this interface which name Mopac uses for the input file. This\nis hardcoded into Mopac and depends on the system on which this\nprogram is running, e.g. FOR005 is the name for the Mopac\nI am using on OS X" );
         
         }
         { //::Squire::Mopac::setMopacOutputFilename
@@ -263,7 +281,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "setMopacOutputFilename"
                 , setMopacOutputFilename_function_value
-                , ( bp::arg("filename") ) );
+                , ( bp::arg("filename") )
+                , "Tell this interface which name Mopac uses for the output file. This\nis hardcoded into Mopac and depends on the system on which this\nprogram is running, e.g. FOR006 is the name for the Mopac\nI am using on OS X" );
         
         }
         { //::Squire::Mopac::setTotalCharge
@@ -274,7 +293,8 @@ void register_Mopac_class(){
             Mopac_exposer.def( 
                 "setTotalCharge"
                 , setTotalCharge_function_value
-                , ( bp::arg("charge") ) );
+                , ( bp::arg("charge") )
+                , "Set the total charge of the system (in unit charges)" );
         
         }
         { //::Squire::Mopac::totalCharge
@@ -284,7 +304,8 @@ void register_Mopac_class(){
             
             Mopac_exposer.def( 
                 "totalCharge"
-                , totalCharge_function_value );
+                , totalCharge_function_value
+                , "Return the total charge of the system" );
         
         }
         { //::Squire::Mopac::typeName
@@ -294,7 +315,8 @@ void register_Mopac_class(){
             
             Mopac_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Mopac_exposer.staticmethod( "typeName" );

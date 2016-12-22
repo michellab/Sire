@@ -600,9 +600,9 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_AtomVariantProperty_class();
 
-    register_AtomVelocities_class();
-
     register_AtomForces_class();
+
+    register_AtomVelocities_class();
 
     register_AtomCoords_class();
 

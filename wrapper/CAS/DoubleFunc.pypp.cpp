@@ -31,7 +31,7 @@ void register_DoubleFunc_class(){
 
     { //::SireCAS::DoubleFunc
         typedef bp::class_< SireCAS::DoubleFunc, bp::bases< SireCAS::ExBase >, boost::noncopyable > DoubleFunc_exposer_t;
-        DoubleFunc_exposer_t DoubleFunc_exposer = DoubleFunc_exposer_t( "DoubleFunc", bp::no_init );
+        DoubleFunc_exposer_t DoubleFunc_exposer = DoubleFunc_exposer_t( "DoubleFunc", "Base class of all double-expression functions ( e.g. f(x(), y()) )\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope DoubleFunc_scope( DoubleFunc_exposer );
         { //::SireCAS::DoubleFunc::children
         
@@ -40,7 +40,8 @@ void register_DoubleFunc_class(){
             
             DoubleFunc_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "Return the child expression of this function" );
         
         }
         { //::SireCAS::DoubleFunc::conjugate
@@ -50,7 +51,8 @@ void register_DoubleFunc_class(){
             
             DoubleFunc_exposer.def( 
                 "conjugate"
-                , conjugate_function_value );
+                , conjugate_function_value
+                , "Return the conjugate of this function" );
         
         }
         { //::SireCAS::DoubleFunc::differentiate
@@ -61,7 +63,8 @@ void register_DoubleFunc_class(){
             DoubleFunc_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the differential of this function with respect to symbol" );
         
         }
         { //::SireCAS::DoubleFunc::expand
@@ -72,7 +75,8 @@ void register_DoubleFunc_class(){
             DoubleFunc_exposer.def( 
                 "expand"
                 , expand_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "" );
         
         }
         { //::SireCAS::DoubleFunc::functions
@@ -82,7 +86,8 @@ void register_DoubleFunc_class(){
             
             DoubleFunc_exposer.def( 
                 "functions"
-                , functions_function_value );
+                , functions_function_value
+                , "Return the functions used in this function" );
         
         }
         { //::SireCAS::DoubleFunc::hash
@@ -92,7 +97,8 @@ void register_DoubleFunc_class(){
             
             DoubleFunc_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a has for the function" );
         
         }
         { //::SireCAS::DoubleFunc::integrate
@@ -103,7 +109,8 @@ void register_DoubleFunc_class(){
             DoubleFunc_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the integral of this function with respect to symbol" );
         
         }
         { //::SireCAS::DoubleFunc::isComplex
@@ -113,7 +120,8 @@ void register_DoubleFunc_class(){
             
             DoubleFunc_exposer.def( 
                 "isComplex"
-                , isComplex_function_value );
+                , isComplex_function_value
+                , "Return whether this is complex" );
         
         }
         { //::SireCAS::DoubleFunc::isCompound
@@ -123,7 +131,8 @@ void register_DoubleFunc_class(){
             
             DoubleFunc_exposer.def( 
                 "isCompound"
-                , isCompound_function_value );
+                , isCompound_function_value
+                , "A function is not compound" );
         
         }
         { //::SireCAS::DoubleFunc::isConstant
@@ -133,7 +142,8 @@ void register_DoubleFunc_class(){
             
             DoubleFunc_exposer.def( 
                 "isConstant"
-                , isConstant_function_value );
+                , isConstant_function_value
+                , "Return whether or not this is constant" );
         
         }
         { //::SireCAS::DoubleFunc::isFunction
@@ -144,7 +154,8 @@ void register_DoubleFunc_class(){
             DoubleFunc_exposer.def( 
                 "isFunction"
                 , isFunction_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return if this is a function of symbol" );
         
         }
         { //::SireCAS::DoubleFunc::operator=
@@ -156,7 +167,8 @@ void register_DoubleFunc_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireCAS::DoubleFunc::substitute
@@ -167,7 +179,8 @@ void register_DoubleFunc_class(){
             DoubleFunc_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Substitute into this expression" );
         
         }
         { //::SireCAS::DoubleFunc::symbols
@@ -177,7 +190,8 @@ void register_DoubleFunc_class(){
             
             DoubleFunc_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return the symbols used in this function" );
         
         }
         { //::SireCAS::DoubleFunc::toString
@@ -187,7 +201,8 @@ void register_DoubleFunc_class(){
             
             DoubleFunc_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this function" );
         
         }
         { //::SireCAS::DoubleFunc::x
@@ -198,7 +213,8 @@ void register_DoubleFunc_class(){
             DoubleFunc_exposer.def( 
                 "x"
                 , x_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireCAS::DoubleFunc::y
@@ -209,7 +225,8 @@ void register_DoubleFunc_class(){
             DoubleFunc_exposer.def( 
                 "y"
                 , y_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         DoubleFunc_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireCAS::DoubleFunc >,
@@ -218,6 +235,7 @@ void register_DoubleFunc_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         DoubleFunc_exposer.def( "__str__", &__str__< ::SireCAS::DoubleFunc > );
         DoubleFunc_exposer.def( "__repr__", &__str__< ::SireCAS::DoubleFunc > );
+        DoubleFunc_exposer.def( "__hash__", &::SireCAS::DoubleFunc::hash );
     }
 
 }

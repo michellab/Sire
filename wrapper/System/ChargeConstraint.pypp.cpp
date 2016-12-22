@@ -34,7 +34,7 @@ void register_ChargeConstraint_class(){
 
     { //::SireSystem::ChargeConstraint
         typedef bp::class_< SireSystem::ChargeConstraint, bp::bases< SireSystem::MoleculeConstraint, SireSystem::Constraint, SireBase::Property >, boost::noncopyable > ChargeConstraint_exposer_t;
-        ChargeConstraint_exposer_t ChargeConstraint_exposer = ChargeConstraint_exposer_t( "ChargeConstraint", bp::no_init );
+        ChargeConstraint_exposer_t ChargeConstraint_exposer = ChargeConstraint_exposer_t( "ChargeConstraint", "This is the base class of constraints that are used to change\nthe charges on a molecule to match those of an underlying function,\ne.g. this can be used to recalculate the atomic partial charges of a\nmolecule every time it changes conformation, or it can\nbe used to modify the charges to correspond to\npolarisation caused by the environment\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope ChargeConstraint_scope( ChargeConstraint_exposer );
         { //::SireSystem::ChargeConstraint::moleculeGroup
         
@@ -44,7 +44,8 @@ void register_ChargeConstraint_class(){
             ChargeConstraint_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group that contains the molecules whose\ncharges are being constrained" );
         
         }
         { //::SireSystem::ChargeConstraint::propertyMap
@@ -55,7 +56,8 @@ void register_ChargeConstraint_class(){
             ChargeConstraint_exposer.def( 
                 "propertyMap"
                 , propertyMap_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the property map containing the locations of the properties\nneeded to apply this constraint" );
         
         }
         { //::SireSystem::ChargeConstraint::typeName
@@ -65,7 +67,8 @@ void register_ChargeConstraint_class(){
             
             ChargeConstraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ChargeConstraint_exposer.staticmethod( "typeName" );

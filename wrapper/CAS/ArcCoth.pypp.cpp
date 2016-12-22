@@ -39,10 +39,10 @@ void register_ArcCoth_class(){
 
     { //::SireCAS::ArcCoth
         typedef bp::class_< SireCAS::ArcCoth, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > ArcCoth_exposer_t;
-        ArcCoth_exposer_t ArcCoth_exposer = ArcCoth_exposer_t( "ArcCoth", bp::init< >() );
+        ArcCoth_exposer_t ArcCoth_exposer = ArcCoth_exposer_t( "ArcCoth", "Inverse-hyperbolic-cotangent", bp::init< >("Null constructor") );
         bp::scope ArcCoth_scope( ArcCoth_exposer );
-        ArcCoth_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        ArcCoth_exposer.def( bp::init< SireCAS::ArcCoth const & >(( bp::arg("other") )) );
+        ArcCoth_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        ArcCoth_exposer.def( bp::init< SireCAS::ArcCoth const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ArcCoth::evaluate
         
             typedef double ( ::SireCAS::ArcCoth::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -51,7 +51,8 @@ void register_ArcCoth_class(){
             ArcCoth_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::ArcCoth::evaluate
@@ -62,7 +63,8 @@ void register_ArcCoth_class(){
             ArcCoth_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         ArcCoth_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -73,7 +75,8 @@ void register_ArcCoth_class(){
             
             ArcCoth_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ArcCoth::what
@@ -83,7 +86,8 @@ void register_ArcCoth_class(){
             
             ArcCoth_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ArcCoth_exposer.staticmethod( "typeName" );
@@ -96,6 +100,7 @@ void register_ArcCoth_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ArcCoth_exposer.def( "__str__", &__str__< ::SireCAS::ArcCoth > );
         ArcCoth_exposer.def( "__repr__", &__str__< ::SireCAS::ArcCoth > );
+        ArcCoth_exposer.def( "__hash__", &::SireCAS::ArcCoth::hash );
     }
 
 }

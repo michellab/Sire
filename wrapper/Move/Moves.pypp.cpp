@@ -50,8 +50,30 @@ void register_Moves_class(){
 
     { //::SireMove::Moves
         typedef bp::class_< SireMove::Moves, bp::bases< SireBase::Property >, boost::noncopyable > Moves_exposer_t;
-        Moves_exposer_t Moves_exposer = Moves_exposer_t( "Moves", bp::no_init );
+        Moves_exposer_t Moves_exposer = Moves_exposer_t( "Moves", "This is the base class of all Moves objects. These are objects\nthat contain a collection of moves that are applied to a system\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Moves_scope( Moves_exposer );
+        { //::SireMove::Moves::acceptableDelta
+        
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Moves::*acceptableDelta_function_type)(  ) const;
+            acceptableDelta_function_type acceptableDelta_function_value( &::SireMove::Moves::acceptableDelta );
+            
+            Moves_exposer.def( 
+                "acceptableDelta"
+                , acceptableDelta_function_value
+                , "" );
+        
+        }
+        { //::SireMove::Moves::checkingRunningTotal
+        
+            typedef bool ( ::SireMove::Moves::*checkingRunningTotal_function_type)(  ) const;
+            checkingRunningTotal_function_type checkingRunningTotal_function_value( &::SireMove::Moves::checkingRunningTotal );
+            
+            Moves_exposer.def( 
+                "checkingRunningTotal"
+                , checkingRunningTotal_function_value
+                , "" );
+        
+        }
         { //::SireMove::Moves::chemicalPotential
         
             typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Moves::*chemicalPotential_function_type)(  ) const;
@@ -59,7 +81,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "chemicalPotential"
-                , chemicalPotential_function_value );
+                , chemicalPotential_function_value
+                , "Return the constant chemical potential that these moves sample\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Moves::clearStatistics
@@ -69,7 +92,19 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "" );
+        
+        }
+        { //::SireMove::Moves::clearTiming
+        
+            typedef void ( ::SireMove::Moves::*clearTiming_function_type)(  ) ;
+            clearTiming_function_type clearTiming_function_value( &::SireMove::Moves::clearTiming );
+            
+            Moves_exposer.def( 
+                "clearTiming"
+                , clearTiming_function_value
+                , "" );
         
         }
         { //::SireMove::Moves::count
@@ -79,7 +114,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of different move types in this set of Moves\n(this is the maximum number of Move objects that can be iterated over)" );
         
         }
         { //::SireMove::Moves::energy
@@ -90,7 +126,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "energy"
                 , energy_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Return the energy of the system that is seen by these moves" );
         
         }
         { //::SireMove::Moves::energyComponent
@@ -101,7 +138,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "energyComponent"
                 , energyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMove::Moves::ensemble
@@ -111,7 +149,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "ensemble"
-                , ensemble_function_value );
+                , ensemble_function_value
+                , "Return the ensemble that will be sampled by these moves" );
         
         }
         { //::SireMove::Moves::fugacity
@@ -121,7 +160,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "fugacity"
-                , fugacity_function_value );
+                , fugacity_function_value
+                , "Return the constant fugacity that these moves sample\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Moves::isConstantChemicalPotential
@@ -131,7 +171,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "isConstantChemicalPotential"
-                , isConstantChemicalPotential_function_value );
+                , isConstantChemicalPotential_function_value
+                , "Return whether or not these moves keep the chemical potential constant" );
         
         }
         { //::SireMove::Moves::isConstantEnergy
@@ -141,7 +182,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "isConstantEnergy"
-                , isConstantEnergy_function_value );
+                , isConstantEnergy_function_value
+                , "Return whether or not these moves keeps the total energy constant" );
         
         }
         { //::SireMove::Moves::isConstantFugacity
@@ -151,7 +193,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "isConstantFugacity"
-                , isConstantFugacity_function_value );
+                , isConstantFugacity_function_value
+                , "Return whether or not these moves keep the fugacity (related to the chemical\npotential) constant" );
         
         }
         { //::SireMove::Moves::isConstantLambda
@@ -162,7 +205,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "isConstantLambda"
                 , isConstantLambda_function_value
-                , ( bp::arg("lam") ) );
+                , ( bp::arg("lam") )
+                , "Return whether or not these moves keep the symbol lam constant" );
         
         }
         { //::SireMove::Moves::isConstantPressure
@@ -172,7 +216,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "isConstantPressure"
-                , isConstantPressure_function_value );
+                , isConstantPressure_function_value
+                , "Return whether or not these moves keep the pressure constant" );
         
         }
         { //::SireMove::Moves::isConstantTemperature
@@ -182,7 +227,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "isConstantTemperature"
-                , isConstantTemperature_function_value );
+                , isConstantTemperature_function_value
+                , "Return whether or not these moves keep the temperature constant" );
         
         }
         { //::SireMove::Moves::isConstantVolume
@@ -192,7 +238,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "isConstantVolume"
-                , isConstantVolume_function_value );
+                , isConstantVolume_function_value
+                , "Return whether or not these moves keep the volume constant" );
         
         }
         { //::SireMove::Moves::move
@@ -203,7 +250,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves")=(int)(1), bp::arg("record_stats")=(bool)(false) ) );
+                , ( bp::arg("system"), bp::arg("nmoves")=(int)(1), bp::arg("record_stats")=(bool)(false) )
+                , "" );
         
         }
         { //::SireMove::Moves::moves
@@ -213,7 +261,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "moves"
-                , moves_function_value );
+                , moves_function_value
+                , "" );
         
         }
         { //::SireMove::Moves::nMoveTypes
@@ -223,7 +272,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "nMoveTypes"
-                , nMoveTypes_function_value );
+                , nMoveTypes_function_value
+                , "Return the number of different move types in this set of Moves\n(this is the maximum number of Move objects that can be iterated over)" );
         
         }
         { //::SireMove::Moves::nMoves
@@ -233,7 +283,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "nMoves"
-                , nMoves_function_value );
+                , nMoves_function_value
+                , "Return the total number of moves performed using the moves\nin this set" );
         
         }
         { //::SireMove::Moves::null
@@ -244,7 +295,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMove::Moves::operator[]
@@ -256,7 +308,8 @@ void register_Moves_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMove::Moves::pressure
@@ -266,7 +319,32 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "pressure"
-                , pressure_function_value );
+                , pressure_function_value
+                , "Return the constant pressure that these moves sample\nThrow: SireError::incompatible_error\n" );
+        
+        }
+        { //::SireMove::Moves::setAcceptableDelta
+        
+            typedef void ( ::SireMove::Moves::*setAcceptableDelta_function_type)( ::SireUnits::Dimension::MolarEnergy ) ;
+            setAcceptableDelta_function_type setAcceptableDelta_function_value( &::SireMove::Moves::setAcceptableDelta );
+            
+            Moves_exposer.def( 
+                "setAcceptableDelta"
+                , setAcceptableDelta_function_value
+                , ( bp::arg("delta") )
+                , "" );
+        
+        }
+        { //::SireMove::Moves::setCheckRunningTotal
+        
+            typedef void ( ::SireMove::Moves::*setCheckRunningTotal_function_type)( bool ) ;
+            setCheckRunningTotal_function_type setCheckRunningTotal_function_value( &::SireMove::Moves::setCheckRunningTotal );
+            
+            Moves_exposer.def( 
+                "setCheckRunningTotal"
+                , setCheckRunningTotal_function_value
+                , ( bp::arg("on") )
+                , "" );
         
         }
         { //::SireMove::Moves::setChemicalPotential
@@ -277,7 +355,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "setChemicalPotential"
                 , setChemicalPotential_function_value
-                , ( bp::arg("chemical_potential") ) );
+                , ( bp::arg("chemical_potential") )
+                , "Set the chemical potential that these constant chemical potential moves sample\nto chemical_potential\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Moves::setEnergyComponent
@@ -288,7 +367,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "setEnergyComponent"
                 , setEnergyComponent_function_value
-                , ( bp::arg("nrg_component") ) );
+                , ( bp::arg("nrg_component") )
+                , "Set the energy component used by these moves - by default\nthis will raise an error as setting the energy component is\nnot supported\nThrow: SireError::unsupported\n" );
         
         }
         { //::SireMove::Moves::setFugacity
@@ -299,7 +379,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "setFugacity"
                 , setFugacity_function_value
-                , ( bp::arg("fugacity") ) );
+                , ( bp::arg("fugacity") )
+                , "Set the fugacity that these constant fugacity moves sample\nto fugacity\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Moves::setGenerator
@@ -310,7 +391,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("rangenerator") ) );
+                , ( bp::arg("rangenerator") )
+                , "" );
         
         }
         { //::SireMove::Moves::setPressure
@@ -321,7 +403,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "setPressure"
                 , setPressure_function_value
-                , ( bp::arg("pressure") ) );
+                , ( bp::arg("pressure") )
+                , "Set the pressure that these constant pressure moves sample\nto pressure\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Moves::setSpaceProperty
@@ -332,7 +415,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
-                , ( bp::arg("space_property") ) );
+                , ( bp::arg("space_property") )
+                , "Set the space property used by these moves - by default\nthis will raise an error as setting the space property is\nnot supported\nThrow: SireError::unsupported\n" );
         
         }
         { //::SireMove::Moves::setTemperature
@@ -343,7 +427,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "setTemperature"
                 , setTemperature_function_value
-                , ( bp::arg("temperature") ) );
+                , ( bp::arg("temperature") )
+                , "Set the temperature that these constant temperature moves sample\nto temperature\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Moves::size
@@ -353,7 +438,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of different move types in this set of Moves\n(this is the maximum number of Move objects that can be iterated over)" );
         
         }
         { //::SireMove::Moves::spaceProperty
@@ -364,7 +450,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "spaceProperty"
                 , spaceProperty_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMove::Moves::temperature
@@ -374,7 +461,31 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "temperature"
-                , temperature_function_value );
+                , temperature_function_value
+                , "Return the constant temperature that these moves sample\nThrow: SireError::incompatible_error\n" );
+        
+        }
+        { //::SireMove::Moves::timing
+        
+            typedef ::SireUnits::Dimension::Time ( ::SireMove::Moves::*timing_function_type)( int ) const;
+            timing_function_type timing_function_value( &::SireMove::Moves::timing );
+            
+            Moves_exposer.def( 
+                "timing"
+                , timing_function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMove::Moves::timing
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 1, 0, 0, 0, 0 > > ( ::SireMove::Moves::*timing_function_type)(  ) const;
+            timing_function_type timing_function_value( &::SireMove::Moves::timing );
+            
+            Moves_exposer.def( 
+                "timing"
+                , timing_function_value
+                , "" );
         
         }
         { //::SireMove::Moves::toString
@@ -384,7 +495,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMove::Moves::typeName
@@ -394,7 +506,8 @@ void register_Moves_class(){
             
             Moves_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::Moves::volume
@@ -405,7 +518,8 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "volume"
                 , volume_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Return the volume of the system as it is seen by these moves" );
         
         }
         Moves_exposer.staticmethod( "null" );

@@ -41,7 +41,7 @@ void register_PowerFunction_class(){
 
     { //::SireCAS::PowerFunction
         typedef bp::class_< SireCAS::PowerFunction, bp::bases< SireCAS::ExBase >, boost::noncopyable > PowerFunction_exposer_t;
-        PowerFunction_exposer_t PowerFunction_exposer = PowerFunction_exposer_t( "PowerFunction", bp::no_init );
+        PowerFunction_exposer_t PowerFunction_exposer = PowerFunction_exposer_t( "PowerFunction", "\nThis is the base class of all power expressions, e.g. x^y (all of the form core^power). There are several sub-classes that depend on exactly what is being raised to which power, e.g. Exp is e^y, Power is x^y, PowerConstant is c^y and ConstantPower is x^c (with ConstantPower further derived into RationalPower and RealPower based on whether the constant is rational). All of these can be constructed transparently by creating a Power and then calling reduce on the resulting object.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope PowerFunction_scope( PowerFunction_exposer );
         { //::SireCAS::PowerFunction::children
         
@@ -50,7 +50,8 @@ void register_PowerFunction_class(){
             
             PowerFunction_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "Return the child expressions of this Power - this contains the core() and the power()" );
         
         }
         { //::SireCAS::PowerFunction::core
@@ -60,7 +61,8 @@ void register_PowerFunction_class(){
             
             PowerFunction_exposer.def( 
                 "core"
-                , core_function_value );
+                , core_function_value
+                , "" );
         
         }
         { //::SireCAS::PowerFunction::differentiate
@@ -71,7 +73,8 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the differential of this expression with respect to symbol" );
         
         }
         { //::SireCAS::PowerFunction::expand
@@ -82,7 +85,8 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "expand"
                 , expand_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "" );
         
         }
         { //::SireCAS::PowerFunction::functions
@@ -92,7 +96,8 @@ void register_PowerFunction_class(){
             
             PowerFunction_exposer.def( 
                 "functions"
-                , functions_function_value );
+                , functions_function_value
+                , "" );
         
         }
         { //::SireCAS::PowerFunction::integrate
@@ -103,7 +108,8 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the integral of this power with respect to symbol" );
         
         }
         { //::SireCAS::PowerFunction::isCompound
@@ -113,7 +119,8 @@ void register_PowerFunction_class(){
             
             PowerFunction_exposer.def( 
                 "isCompound"
-                , isCompound_function_value );
+                , isCompound_function_value
+                , "" );
         
         }
         { //::SireCAS::PowerFunction::isConstant
@@ -123,7 +130,8 @@ void register_PowerFunction_class(){
             
             PowerFunction_exposer.def( 
                 "isConstant"
-                , isConstant_function_value );
+                , isConstant_function_value
+                , "Return whether or not this is a constant" );
         
         }
         { //::SireCAS::PowerFunction::isFunction
@@ -134,7 +142,8 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "isFunction"
                 , isFunction_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return whether this is a function of symbol" );
         
         }
         { //::SireCAS::PowerFunction::power
@@ -144,7 +153,8 @@ void register_PowerFunction_class(){
             
             PowerFunction_exposer.def( 
                 "power"
-                , power_function_value );
+                , power_function_value
+                , "" );
         
         }
         { //::SireCAS::PowerFunction::reduce
@@ -154,7 +164,8 @@ void register_PowerFunction_class(){
             
             PowerFunction_exposer.def( 
                 "reduce"
-                , reduce_function_value );
+                , reduce_function_value
+                , "Reduce this Power to a simplified expression (if possible)" );
         
         }
         { //::SireCAS::PowerFunction::substitute
@@ -165,7 +176,8 @@ void register_PowerFunction_class(){
             PowerFunction_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Return this expression with the supplied substitutions" );
         
         }
         { //::SireCAS::PowerFunction::symbols
@@ -175,7 +187,8 @@ void register_PowerFunction_class(){
             
             PowerFunction_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireCAS::PowerFunction::toOpenMMString
@@ -185,7 +198,8 @@ void register_PowerFunction_class(){
             
             PowerFunction_exposer.def( 
                 "toOpenMMString"
-                , toOpenMMString_function_value );
+                , toOpenMMString_function_value
+                , "Return a string representation of this power in the OpenMM syntax" );
         
         }
         { //::SireCAS::PowerFunction::toString
@@ -195,7 +209,8 @@ void register_PowerFunction_class(){
             
             PowerFunction_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this power" );
         
         }
         { //::SireCAS::PowerFunction::typeName
@@ -205,7 +220,8 @@ void register_PowerFunction_class(){
             
             PowerFunction_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         PowerFunction_exposer.staticmethod( "typeName" );
@@ -215,6 +231,7 @@ void register_PowerFunction_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         PowerFunction_exposer.def( "__str__", &__str__< ::SireCAS::PowerFunction > );
         PowerFunction_exposer.def( "__repr__", &__str__< ::SireCAS::PowerFunction > );
+        PowerFunction_exposer.def( "__hash__", &::SireCAS::PowerFunction::hash );
     }
 
 }

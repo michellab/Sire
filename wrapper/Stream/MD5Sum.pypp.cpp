@@ -31,12 +31,12 @@ void register_MD5Sum_class(){
 
     { //::SireStream::MD5Sum
         typedef bp::class_< SireStream::MD5Sum > MD5Sum_exposer_t;
-        MD5Sum_exposer_t MD5Sum_exposer = MD5Sum_exposer_t( "MD5Sum", bp::init< >() );
+        MD5Sum_exposer_t MD5Sum_exposer = MD5Sum_exposer_t( "MD5Sum", "", bp::init< >("Construct a null MD5Sum") );
         bp::scope MD5Sum_scope( MD5Sum_exposer );
-        MD5Sum_exposer.def( bp::init< QByteArray const & >(( bp::arg("buffer") )) );
-        MD5Sum_exposer.def( bp::init< char const *, unsigned int >(( bp::arg("buffer"), bp::arg("sz") )) );
-        MD5Sum_exposer.def( bp::init< QString const & >(( bp::arg("file") )) );
-        MD5Sum_exposer.def( bp::init< SireStream::MD5Sum const & >(( bp::arg("sum") )) );
+        MD5Sum_exposer.def( bp::init< QByteArray const & >(( bp::arg("buffer") ), "Construct an MD5Sum from a buffer") );
+        MD5Sum_exposer.def( bp::init< char const *, unsigned int >(( bp::arg("buffer"), bp::arg("sz") ), "\nConstruct an MD5Sum from a const char buffer.\nPar:am buffer The buffer containing the data.\nPar:am sz This size of the buffer. Dont lie otherwise it will crash\nReturn: A constructed, valid MD5Sum object.\n") );
+        MD5Sum_exposer.def( bp::init< QString const & >(( bp::arg("file") ), "Construct the MD5Sum for a file") );
+        MD5Sum_exposer.def( bp::init< SireStream::MD5Sum const & >(( bp::arg("sum") ), "Copy constructor") );
         MD5Sum_exposer.def( bp::self != bp::self );
         { //::SireStream::MD5Sum::operator=
         
@@ -47,7 +47,8 @@ void register_MD5Sum_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Assignment operator" );
         
         }
         MD5Sum_exposer.def( bp::self == bp::self );
@@ -58,7 +59,8 @@ void register_MD5Sum_class(){
             
             MD5Sum_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of the digest" );
         
         }
         MD5Sum_exposer.def( "__copy__", &__copy__);

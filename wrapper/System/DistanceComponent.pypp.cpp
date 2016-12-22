@@ -34,11 +34,11 @@ void register_DistanceComponent_class(){
 
     { //::SireSystem::DistanceComponent
         typedef bp::class_< SireSystem::DistanceComponent, bp::bases< SireSystem::GeometryComponent, SireSystem::Constraint, SireBase::Property > > DistanceComponent_exposer_t;
-        DistanceComponent_exposer_t DistanceComponent_exposer = DistanceComponent_exposer_t( "DistanceComponent", bp::init< >() );
+        DistanceComponent_exposer_t DistanceComponent_exposer = DistanceComponent_exposer_t( "DistanceComponent", "This is a constraint that constrains a symbol to equal the\nvalue of an expression that involves a distance between atoms\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope DistanceComponent_scope( DistanceComponent_exposer );
-        DistanceComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("map")=SireBase::PropertyMap() )) );
-        DistanceComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("geometry_expression"), bp::arg("map")=SireBase::PropertyMap() )) );
-        DistanceComponent_exposer.def( bp::init< SireSystem::DistanceComponent const & >(( bp::arg("other") )) );
+        DistanceComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to set the value of constrained_symbol equal to the\ndistance between the two points point0 and point1") );
+        DistanceComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("geometry_expression"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to set the value of constrained_symbol equal to the\nexpression based on the distance between the two points\npoint0 and point1") );
+        DistanceComponent_exposer.def( bp::init< SireSystem::DistanceComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::DistanceComponent::nPoints
         
             typedef int ( ::SireSystem::DistanceComponent::*nPoints_function_type)(  ) const;
@@ -46,7 +46,8 @@ void register_DistanceComponent_class(){
             
             DistanceComponent_exposer.def( 
                 "nPoints"
-                , nPoints_function_value );
+                , nPoints_function_value
+                , "Return the number of points (2)" );
         
         }
         DistanceComponent_exposer.def( bp::self != bp::self );
@@ -59,7 +60,8 @@ void register_DistanceComponent_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         DistanceComponent_exposer.def( bp::self == bp::self );
@@ -72,7 +74,8 @@ void register_DistanceComponent_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ith point\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::DistanceComponent::point0
@@ -83,7 +86,8 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first point between which the distance is calculated" );
         
         }
         { //::SireSystem::DistanceComponent::point1
@@ -94,7 +98,8 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second point between which the distance is calculated" );
         
         }
         { //::SireSystem::DistanceComponent::r
@@ -105,7 +110,8 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "r"
                 , r_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the distance between the\ntwo points (r)" );
         
         }
         { //::SireSystem::DistanceComponent::toString
@@ -115,7 +121,8 @@ void register_DistanceComponent_class(){
             
             DistanceComponent_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireSystem::DistanceComponent::typeName
@@ -125,7 +132,8 @@ void register_DistanceComponent_class(){
             
             DistanceComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         DistanceComponent_exposer.staticmethod( "r" );

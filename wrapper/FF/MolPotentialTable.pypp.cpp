@@ -41,10 +41,10 @@ void register_MolPotentialTable_class(){
 
     { //::SireFF::MolPotentialTable
         typedef bp::class_< SireFF::MolPotentialTable > MolPotentialTable_exposer_t;
-        MolPotentialTable_exposer_t MolPotentialTable_exposer = MolPotentialTable_exposer_t( "MolPotentialTable", bp::init< >() );
+        MolPotentialTable_exposer_t MolPotentialTable_exposer = MolPotentialTable_exposer_t( "MolPotentialTable", "This class holds the potential at the points of all of the atoms of\nselected CutGroups in a molecule. The MolPotentialTable is used\nto accumulate all of the potentials acting on these atoms during\na field evaluation, and also to control which potentials are\nevaluated (as only the potentials on atoms in selected CutGroups\nare evaluated). This allows you to provide some control over\nthe calculation, e.g. only placing a few protein residues into\nthe field table, thereby preventing the potentials on all atoms\nin a protein from being evaluated if they arent actually\nnecessary.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope MolPotentialTable_scope( MolPotentialTable_exposer );
-        MolPotentialTable_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") )) );
-        MolPotentialTable_exposer.def( bp::init< SireFF::MolPotentialTable const & >(( bp::arg("other") )) );
+        MolPotentialTable_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "Construct to hold the potential acting at the points of all of the atoms\nof all of the cutgroups viewed in molview") );
+        MolPotentialTable_exposer.def( bp::init< SireFF::MolPotentialTable const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::MolPotentialTable::add
         
             typedef bool ( ::SireFF::MolPotentialTable::*add_function_type)( ::SireMol::CGAtomIdx const &,::SireUnits::Dimension::MolarEnergy const & ) ;
@@ -53,7 +53,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("cgatomidx"), bp::arg("potential") ) );
+                , ( bp::arg("cgatomidx"), bp::arg("potential") )
+                , "Add the potential potential onto this table - this returns whether or not the\natom is in this table\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::MolPotentialTable::add
@@ -64,7 +65,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("selected_atoms"), bp::arg("potential") ) );
+                , ( bp::arg("selected_atoms"), bp::arg("potential") )
+                , "Add the potential potential onto this table for all of the atoms\nin selected_atoms - this returns whether\nor not any selected atoms are in this table\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::MolPotentialTable::add
@@ -75,7 +77,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add the potentials contained in other onto this potential table. This will only\nadd the potentials for CutGroups that are in both tables" );
         
         }
         { //::SireFF::MolPotentialTable::add
@@ -86,7 +89,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("potential") ) );
+                , ( bp::arg("potential") )
+                , "Add the potential potential onto all of the atom points in this table" );
         
         }
         { //::SireFF::MolPotentialTable::divide
@@ -97,7 +101,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Divide the potential at all atom points by value" );
         
         }
         { //::SireFF::MolPotentialTable::initialise
@@ -107,7 +112,8 @@ void register_MolPotentialTable_class(){
             
             MolPotentialTable_exposer.def( 
                 "initialise"
-                , initialise_function_value );
+                , initialise_function_value
+                , "Initialise this table - this clears all of the potentials, resetting them to zero" );
         
         }
         { //::SireFF::MolPotentialTable::map
@@ -118,7 +124,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireFF::MolPotentialTable::molNum
@@ -128,7 +135,8 @@ void register_MolPotentialTable_class(){
             
             MolPotentialTable_exposer.def( 
                 "molNum"
-                , molNum_function_value );
+                , molNum_function_value
+                , "" );
         
         }
         { //::SireFF::MolPotentialTable::molUID
@@ -139,7 +147,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "molUID"
                 , molUID_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::MolPotentialTable::multiply
@@ -150,7 +159,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "multiply"
                 , multiply_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Multiply the potential at all atom points by value" );
         
         }
         { //::SireFF::MolPotentialTable::nCutGroups
@@ -160,7 +170,8 @@ void register_MolPotentialTable_class(){
             
             MolPotentialTable_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         { //::SireFF::MolPotentialTable::nSelectedCutGroups
@@ -170,7 +181,8 @@ void register_MolPotentialTable_class(){
             
             MolPotentialTable_exposer.def( 
                 "nSelectedCutGroups"
-                , nSelectedCutGroups_function_value );
+                , nSelectedCutGroups_function_value
+                , "" );
         
         }
         MolPotentialTable_exposer.def( bp::self != bp::self );
@@ -190,7 +202,8 @@ void register_MolPotentialTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireFF::MolPotentialTable::operator=
@@ -202,7 +215,8 @@ void register_MolPotentialTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("potential") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MolPotentialTable_exposer.def( bp::self == bp::self );
@@ -214,7 +228,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireFF::MolPotentialTable::selectedAll
@@ -224,7 +239,8 @@ void register_MolPotentialTable_class(){
             
             MolPotentialTable_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "" );
         
         }
         { //::SireFF::MolPotentialTable::setAll
@@ -235,7 +251,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("potential") ) );
+                , ( bp::arg("potential") )
+                , "Set all of the potentials at the atom points equal to potential" );
         
         }
         { //::SireFF::MolPotentialTable::subtract
@@ -246,7 +263,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("cgatomidx"), bp::arg("potential") ) );
+                , ( bp::arg("cgatomidx"), bp::arg("potential") )
+                , "Subtract the potential potential from this table - this returns whether or not the\natom is in this table\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::MolPotentialTable::subtract
@@ -257,7 +275,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("selected_atoms"), bp::arg("potential") ) );
+                , ( bp::arg("selected_atoms"), bp::arg("potential") )
+                , "Subtract the potential potential from this table for all of the atoms\nin selected_atoms - this returns whether\nor not any selected atoms are in this table\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::MolPotentialTable::subtract
@@ -268,7 +287,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Subtract the potentials contained in other from this potential table. This will only\nsubtract the potentials for CutGroups that are in both tables" );
         
         }
         { //::SireFF::MolPotentialTable::subtract
@@ -279,7 +299,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("potential") ) );
+                , ( bp::arg("potential") )
+                , "Subtract the potential potential from all of the atom points in this table" );
         
         }
         { //::SireFF::MolPotentialTable::toVector
@@ -289,7 +310,8 @@ void register_MolPotentialTable_class(){
             
             MolPotentialTable_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "Return all of the potentials in this table in a single array" );
         
         }
         { //::SireFF::MolPotentialTable::toVector
@@ -300,7 +322,8 @@ void register_MolPotentialTable_class(){
             MolPotentialTable_exposer.def( 
                 "toVector"
                 , toVector_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "Return an array of all of the potentials at the location of\nthe atoms selected in selection\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::MolPotentialTable::typeName
@@ -310,7 +333,8 @@ void register_MolPotentialTable_class(){
             
             MolPotentialTable_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::MolPotentialTable::what
@@ -320,7 +344,8 @@ void register_MolPotentialTable_class(){
             
             MolPotentialTable_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MolPotentialTable_exposer.staticmethod( "typeName" );

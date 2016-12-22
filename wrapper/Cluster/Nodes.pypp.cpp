@@ -53,9 +53,9 @@ void register_Nodes_class(){
 
     { //::SireCluster::Nodes
         typedef bp::class_< SireCluster::Nodes > Nodes_exposer_t;
-        Nodes_exposer_t Nodes_exposer = Nodes_exposer_t( "Nodes", bp::init< >() );
+        Nodes_exposer_t Nodes_exposer = Nodes_exposer_t( "Nodes", "This class holds, and schedules, a collection of Node objects.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty set of nodes") );
         bp::scope Nodes_scope( Nodes_exposer );
-        Nodes_exposer.def( bp::init< SireCluster::Nodes const & >(( bp::arg("other") )) );
+        Nodes_exposer.def( bp::init< SireCluster::Nodes const & >(( bp::arg("other") ), "Copy constructor - Nodes are explicitly shared") );
         { //::SireCluster::Nodes::add
         
             typedef void ( ::SireCluster::Nodes::*add_function_type)( ::SireCluster::Node ) ;
@@ -64,7 +64,8 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("node") ) );
+                , ( bp::arg("node") )
+                , "Add the node node to this set. This will be added as a busy\nNode (as obviously someone is holding onto it) This does\nnothing if this node is already part of this set" );
         
         }
         { //::SireCluster::Nodes::add
@@ -75,7 +76,8 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("nodes") ) );
+                , ( bp::arg("nodes") )
+                , "Add all of the nodes in nodes to this set" );
         
         }
         { //::SireCluster::Nodes::addNode
@@ -85,7 +87,8 @@ void register_Nodes_class(){
             
             Nodes_exposer.def( 
                 "addNode"
-                , addNode_function_value );
+                , addNode_function_value
+                , "Try to add one more node to this set by taking a node from the\npool - this only looks for immediately available nodes, and may\nnot work" );
         
         }
         { //::SireCluster::Nodes::addNode
@@ -96,7 +99,8 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "addNode"
                 , addNode_function_value
-                , ( bp::arg("timeout") ) );
+                , ( bp::arg("timeout") )
+                , "Try to add one more node to this set by taking a node from the\npool - this only tries to find an available node for\ntimeout milliseconds, and so it may fail" );
         
         }
         { //::SireCluster::Nodes::addNodes
@@ -107,7 +111,8 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "addNodes"
                 , addNodes_function_value
-                , ( bp::arg("n") ) );
+                , ( bp::arg("n") )
+                , "Try to add up to n nodes to this set, by taking the nodes\nfrom the pool - this only looks for immediately available\nnodes, so you may get less than n (you may even get zero)" );
         
         }
         { //::SireCluster::Nodes::addNodes
@@ -118,7 +123,8 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "addNodes"
                 , addNodes_function_value
-                , ( bp::arg("n"), bp::arg("timeout") ) );
+                , ( bp::arg("n"), bp::arg("timeout") )
+                , "Try to add up to n nodes to this set, by taking the nodes\nfrom the pool - this only looks for available\nnodes for timeout milliseconds, so you may get less\nthan n (you may even get zero)" );
         
         }
         { //::SireCluster::Nodes::borrowThisThread
@@ -128,7 +134,8 @@ void register_Nodes_class(){
             
             Nodes_exposer.def( 
                 "borrowThisThread"
-                , borrowThisThread_function_value );
+                , borrowThisThread_function_value
+                , "Let this Nodes scheduler borrow this thread to run WorkPackets.\nTechnically, this doesnt use the current thread, but instead\ncreates a duplicate, so you are still able to use your thread.\nHowever, you should avoid doing anything compute intensive in\nyour thread while the Node has borrowed it, as otherwise you\nrisk using more CPU than is available.\nThis returns a ThisThread holder that is used to ask the Nodes\nobject to return this thread when the ThisThread object is\ndeleted, or when ThisThread::reclaim() is called.\n" );
         
         }
         { //::SireCluster::Nodes::count
@@ -138,7 +145,8 @@ void register_Nodes_class(){
             
             Nodes_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the total number of nodes available" );
         
         }
         { //::SireCluster::Nodes::getAllNodes
@@ -148,7 +156,8 @@ void register_Nodes_class(){
             
             Nodes_exposer.def( 
                 "getAllNodes"
-                , getAllNodes_function_value );
+                , getAllNodes_function_value
+                , "Return all of the nodes - this blocks until all of the\nnodes are available. Remember that this will return an\nempty list if there are no nodes.\n" );
         
         }
         { //::SireCluster::Nodes::getAllNodes
@@ -159,7 +168,8 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "getAllNodes"
                 , getAllNodes_function_value
-                , ( bp::arg("timeout") ) );
+                , ( bp::arg("timeout") )
+                , "Try to get all the nodes, within the time timeout.\nIf this fails, then no nodes are returned" );
         
         }
         { //::SireCluster::Nodes::getNode
@@ -169,7 +179,8 @@ void register_Nodes_class(){
             
             Nodes_exposer.def( 
                 "getNode"
-                , getNode_function_value );
+                , getNode_function_value
+                , "Return a free node - this blocks until a free node\nis available. In certain circumstances this will fail\nand return a null Node (e.g. at program shutdown, or\nif all nodes are removed from this set)\n" );
         
         }
         { //::SireCluster::Nodes::getNode
@@ -180,7 +191,8 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "getNode"
                 , getNode_function_value
-                , ( bp::arg("timeout") ) );
+                , ( bp::arg("timeout") )
+                , "Try to get a free node - giving only timeout milliseconds\nto get that node. This returns a null node if the call\nis unsuccessful" );
         
         }
         { //::SireCluster::Nodes::getNodes
@@ -191,7 +203,8 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "getNodes"
                 , getNodes_function_value
-                , ( bp::arg("n") ) );
+                , ( bp::arg("n") )
+                , "Return n free nodes - this blocks until all of the\nnodes are available. In some circumstances this will fail,\ne.g. if there arent enough nodes to fulfill this request\n" );
         
         }
         { //::SireCluster::Nodes::getNodes
@@ -202,7 +215,8 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "getNodes"
                 , getNodes_function_value
-                , ( bp::arg("n"), bp::arg("timeout") ) );
+                , ( bp::arg("n"), bp::arg("timeout") )
+                , "Try to get n free nodes, within the time timeout.\nIf this fails, then no nodes are returned" );
         
         }
         { //::SireCluster::Nodes::isEmpty
@@ -212,7 +226,8 @@ void register_Nodes_class(){
             
             Nodes_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is empty (contains no nodes)" );
         
         }
         { //::SireCluster::Nodes::nBusy
@@ -222,7 +237,8 @@ void register_Nodes_class(){
             
             Nodes_exposer.def( 
                 "nBusy"
-                , nBusy_function_value );
+                , nBusy_function_value
+                , "Return the number of busy nodes" );
         
         }
         { //::SireCluster::Nodes::nFree
@@ -232,7 +248,8 @@ void register_Nodes_class(){
             
             Nodes_exposer.def( 
                 "nFree"
-                , nFree_function_value );
+                , nFree_function_value
+                , "Return the number of free nodes" );
         
         }
         { //::SireCluster::Nodes::nNodes
@@ -242,7 +259,8 @@ void register_Nodes_class(){
             
             Nodes_exposer.def( 
                 "nNodes"
-                , nNodes_function_value );
+                , nNodes_function_value
+                , "Return the total number of nodes available" );
         
         }
         Nodes_exposer.def( bp::self != bp::self );
@@ -255,7 +273,8 @@ void register_Nodes_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Nodes_exposer.def( bp::self == bp::self );
@@ -267,7 +286,8 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("node") ) );
+                , ( bp::arg("node") )
+                , "Remove the node node from this set. This doesnt abort\nthe job running on the node, but the node will be automatically\nreturned to the Cluster pool once it is destroyed.\nThis does nothing if this node isnt in this set.\n" );
         
         }
         { //::SireCluster::Nodes::removeAll
@@ -277,7 +297,8 @@ void register_Nodes_class(){
             
             Nodes_exposer.def( 
                 "removeAll"
-                , removeAll_function_value );
+                , removeAll_function_value
+                , "Remove all nodes from this set - this aborts any running\njobs, then disconnects from all of the backends.\nNote that this does not block" );
         
         }
         { //::SireCluster::Nodes::toString
@@ -287,7 +308,8 @@ void register_Nodes_class(){
             
             Nodes_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of these nodes" );
         
         }
         { //::SireCluster::Nodes::waitUntilAllFree
@@ -297,7 +319,8 @@ void register_Nodes_class(){
             
             Nodes_exposer.def( 
                 "waitUntilAllFree"
-                , waitUntilAllFree_function_value );
+                , waitUntilAllFree_function_value
+                , "Wait until all of the nodes are free" );
         
         }
         { //::SireCluster::Nodes::waitUntilAllFree
@@ -308,7 +331,8 @@ void register_Nodes_class(){
             Nodes_exposer.def( 
                 "waitUntilAllFree"
                 , waitUntilAllFree_function_value
-                , ( bp::arg("timeout") ) );
+                , ( bp::arg("timeout") )
+                , "Wait until all of the nodes are free, or until\ntimeout milliseconds have passed - this returns\nwhether or not all of the nodes are free" );
         
         }
         Nodes_exposer.def( "__copy__", &__copy__);

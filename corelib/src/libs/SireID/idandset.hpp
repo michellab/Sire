@@ -29,9 +29,11 @@
 #ifndef SIREID_IDANDSET_HPP
 #define SIREID_IDANDSET_HPP
 
+#include <QObject>
 #include <QSet>
 #include <QString>
 #include <QStringList>
+#include <QObject>
 
 #include "SireID/id.h"
 

@@ -43,7 +43,7 @@ set ( SIREBASE_HEADERS
       packedarray2d.hpp
       packedarrays.h
       pairmatrix.hpp
-      process.h
+      sire_process.h
       properties.h
       property.h
       propertylist.h

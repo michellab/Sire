@@ -28,10 +28,10 @@ void register_SupraSubSimPacket_class(){
 
     { //::SireMove::SupraSubSimPacket
         typedef bp::class_< SireMove::SupraSubSimPacket, bp::bases< SireCluster::WorkPacketBase > > SupraSubSimPacket_exposer_t;
-        SupraSubSimPacket_exposer_t SupraSubSimPacket_exposer = SupraSubSimPacket_exposer_t( "SupraSubSimPacket", bp::init< >() );
+        SupraSubSimPacket_exposer_t SupraSubSimPacket_exposer = SupraSubSimPacket_exposer_t( "SupraSubSimPacket", "This is a workpacket that is used to run part of a SupraSubSim simulation\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope SupraSubSimPacket_scope( SupraSubSimPacket_exposer );
-        SupraSubSimPacket_exposer.def( bp::init< SireMove::SupraSubSystem const &, SireMove::SupraSubMoves const &, int, bp::optional< bool > >(( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )) );
-        SupraSubSimPacket_exposer.def( bp::init< SireMove::SupraSubSimPacket const & >(( bp::arg("other") )) );
+        SupraSubSimPacket_exposer.def( bp::init< SireMove::SupraSubSystem const &, SireMove::SupraSubMoves const &, int, bp::optional< bool > >(( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ), "Construct a work packet to perform nmoves sub-moves (in moves) on\nthe sub-system system, recording statistics if record_stats is true") );
+        SupraSubSimPacket_exposer.def( bp::init< SireMove::SupraSubSimPacket const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::SupraSubSimPacket::approximatePacketSize
         
             typedef int ( ::SireMove::SupraSubSimPacket::*approximatePacketSize_function_type)(  ) const;
@@ -39,7 +39,8 @@ void register_SupraSubSimPacket_class(){
             
             SupraSubSimPacket_exposer.def( 
                 "approximatePacketSize"
-                , approximatePacketSize_function_value );
+                , approximatePacketSize_function_value
+                , "This is likely to be large" );
         
         }
         { //::SireMove::SupraSubSimPacket::hasFinished
@@ -49,7 +50,8 @@ void register_SupraSubSimPacket_class(){
             
             SupraSubSimPacket_exposer.def( 
                 "hasFinished"
-                , hasFinished_function_value );
+                , hasFinished_function_value
+                , "Return whether or not this work packet has finished" );
         
         }
         { //::SireMove::SupraSubSimPacket::nSubCompleted
@@ -59,7 +61,8 @@ void register_SupraSubSimPacket_class(){
             
             SupraSubSimPacket_exposer.def( 
                 "nSubCompleted"
-                , nSubCompleted_function_value );
+                , nSubCompleted_function_value
+                , "Return the number of completed sub-moves" );
         
         }
         { //::SireMove::SupraSubSimPacket::nSubMoves
@@ -69,7 +72,8 @@ void register_SupraSubSimPacket_class(){
             
             SupraSubSimPacket_exposer.def( 
                 "nSubMoves"
-                , nSubMoves_function_value );
+                , nSubMoves_function_value
+                , "Return the number of sub-moves to be applied to the sub-system" );
         
         }
         SupraSubSimPacket_exposer.def( bp::self != bp::self );
@@ -82,7 +86,8 @@ void register_SupraSubSimPacket_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SupraSubSimPacket_exposer.def( bp::self == bp::self );
@@ -93,7 +98,8 @@ void register_SupraSubSimPacket_class(){
             
             SupraSubSimPacket_exposer.def( 
                 "recordingSubStatistics"
-                , recordingSubStatistics_function_value );
+                , recordingSubStatistics_function_value
+                , "Return whether or not we are recording statistics during the sub-moves" );
         
         }
         { //::SireMove::SupraSubSimPacket::shouldPack
@@ -103,7 +109,8 @@ void register_SupraSubSimPacket_class(){
             
             SupraSubSimPacket_exposer.def( 
                 "shouldPack"
-                , shouldPack_function_value );
+                , shouldPack_function_value
+                , "We probably shouldnt pack this workpacket as it is already\nheavily packed, and if it is large, then it is likely already\npacked to disk" );
         
         }
         { //::SireMove::SupraSubSimPacket::subMoves
@@ -114,7 +121,8 @@ void register_SupraSubSimPacket_class(){
             SupraSubSimPacket_exposer.def( 
                 "subMoves"
                 , subMoves_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the moves" );
         
         }
         { //::SireMove::SupraSubSimPacket::subSystem
@@ -125,7 +133,8 @@ void register_SupraSubSimPacket_class(){
             SupraSubSimPacket_exposer.def( 
                 "subSystem"
                 , subSystem_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the sub-system" );
         
         }
         { //::SireMove::SupraSubSimPacket::typeName
@@ -135,7 +144,8 @@ void register_SupraSubSimPacket_class(){
             
             SupraSubSimPacket_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::SupraSubSimPacket::what
@@ -145,7 +155,8 @@ void register_SupraSubSimPacket_class(){
             
             SupraSubSimPacket_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SupraSubSimPacket_exposer.staticmethod( "typeName" );

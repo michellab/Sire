@@ -19,7 +19,7 @@ void register_Unit_class(){
 
     { //::SireUnits::Dimension::Unit
         typedef bp::class_< SireUnits::Dimension::Unit, boost::noncopyable > Unit_exposer_t;
-        Unit_exposer_t Unit_exposer = Unit_exposer_t( "Unit", bp::no_init );
+        Unit_exposer_t Unit_exposer = Unit_exposer_t( "Unit", "This is the base class of all units - at its heart, this is\njust a scale factor - how many times the base unit is the\ncurrent value.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Unit_scope( Unit_exposer );
         { //::SireUnits::Dimension::Unit::convertFromInternal
         
@@ -29,7 +29,8 @@ void register_Unit_class(){
             Unit_exposer.def( 
                 "convertFromInternal"
                 , convertFromInternal_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireUnits::Dimension::Unit::convertToInternal
@@ -40,7 +41,8 @@ void register_Unit_class(){
             Unit_exposer.def( 
                 "convertToInternal"
                 , convertToInternal_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireUnits::Dimension::Unit::scaleFactor
@@ -50,7 +52,8 @@ void register_Unit_class(){
             
             Unit_exposer.def( 
                 "scaleFactor"
-                , scaleFactor_function_value );
+                , scaleFactor_function_value
+                , "" );
         
         }
         { //::SireUnits::Dimension::Unit::value
@@ -60,7 +63,8 @@ void register_Unit_class(){
             
             Unit_exposer.def( 
                 "value"
-                , value_function_value );
+                , value_function_value
+                , "" );
         
         }
         Unit_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireUnits::Dimension::Unit >,

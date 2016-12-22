@@ -34,11 +34,11 @@ void register_SystemWideDeleter_class(){
 
     { //::SireMove::SystemWideDeleter
         typedef bp::class_< SireMove::SystemWideDeleter, bp::bases< SireMove::MolDeleter, SireBase::Property > > SystemWideDeleter_exposer_t;
-        SystemWideDeleter_exposer_t SystemWideDeleter_exposer = SystemWideDeleter_exposer_t( "SystemWideDeleter", bp::init< >() );
+        SystemWideDeleter_exposer_t SystemWideDeleter_exposer = SystemWideDeleter_exposer_t( "SystemWideDeleter", "This deleter selects a molecule at random from an identified\nmolecule group (using the passed sampler) and then deletes\nthat molecule completely from the system\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope SystemWideDeleter_scope( SystemWideDeleter_exposer );
-        SystemWideDeleter_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") )) );
-        SystemWideDeleter_exposer.def( bp::init< SireMove::Sampler const & >(( bp::arg("sampler") )) );
-        SystemWideDeleter_exposer.def( bp::init< SireMove::SystemWideDeleter const & >(( bp::arg("other") )) );
+        SystemWideDeleter_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") ), "Construct a deleter that deletes molecules uniformly chosen from\nthe passed molecule group from the entire system") );
+        SystemWideDeleter_exposer.def( bp::init< SireMove::Sampler const & >(( bp::arg("sampler") ), "Construct a deleter that deletes molecules chosen using the\npassed sampler from the entire system") );
+        SystemWideDeleter_exposer.def( bp::init< SireMove::SystemWideDeleter const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::SystemWideDeleter::deleteFrom
         
             typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::SystemWideDeleter::*deleteFrom_function_type)( ::SireSystem::System & ) ;
@@ -47,7 +47,8 @@ void register_SystemWideDeleter_class(){
             SystemWideDeleter_exposer.def( 
                 "deleteFrom"
                 , deleteFrom_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Delete a molecule from the system. This returns the molecule that\nwas deleted, and the probability with which it was sampled\n(normalised so that a probability of 1 is returned if the molecule\nwas picked purely randomly). This deleter deletes the molecule\nfrom the entire system. This returns an empty molecule if\nthe molecule was not contained in the system and nothing\nwas deleted" );
         
         }
         { //::SireMove::SystemWideDeleter::generator
@@ -58,7 +59,8 @@ void register_SystemWideDeleter_class(){
             SystemWideDeleter_exposer.def( 
                 "generator"
                 , generator_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the random number generator used by the sampler" );
         
         }
         { //::SireMove::SystemWideDeleter::group
@@ -69,7 +71,8 @@ void register_SystemWideDeleter_class(){
             SystemWideDeleter_exposer.def( 
                 "group"
                 , group_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group from which molecules to be\ndeleted are chosen" );
         
         }
         SystemWideDeleter_exposer.def( bp::self != bp::self );
@@ -82,7 +85,8 @@ void register_SystemWideDeleter_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SystemWideDeleter_exposer.def( bp::self == bp::self );
@@ -94,7 +98,8 @@ void register_SystemWideDeleter_class(){
             SystemWideDeleter_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the sampler used to pick molecules to be deleted" );
         
         }
         { //::SireMove::SystemWideDeleter::setGenerator
@@ -105,7 +110,8 @@ void register_SystemWideDeleter_class(){
             SystemWideDeleter_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("generator") ) );
+                , ( bp::arg("generator") )
+                , "Set the random number generator used by the sampler" );
         
         }
         { //::SireMove::SystemWideDeleter::setGroup
@@ -116,7 +122,8 @@ void register_SystemWideDeleter_class(){
             SystemWideDeleter_exposer.def( 
                 "setGroup"
                 , setGroup_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Set the molecule group that will be sampled by the sampler" );
         
         }
         { //::SireMove::SystemWideDeleter::setSampler
@@ -127,7 +134,8 @@ void register_SystemWideDeleter_class(){
             SystemWideDeleter_exposer.def( 
                 "setSampler"
                 , setSampler_function_value
-                , ( bp::arg("sampler") ) );
+                , ( bp::arg("sampler") )
+                , "Set the sampler used to pick molecules to be deleted" );
         
         }
         { //::SireMove::SystemWideDeleter::setSampler
@@ -138,7 +146,8 @@ void register_SystemWideDeleter_class(){
             SystemWideDeleter_exposer.def( 
                 "setSampler"
                 , setSampler_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Set the sampler to be the one that selects molecules uniformly\nfrom the passed molecule group" );
         
         }
         { //::SireMove::SystemWideDeleter::typeName
@@ -148,7 +157,8 @@ void register_SystemWideDeleter_class(){
             
             SystemWideDeleter_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SystemWideDeleter_exposer.staticmethod( "typeName" );

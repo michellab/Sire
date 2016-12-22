@@ -251,7 +251,8 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
                                    bool match_light_atoms,
                                    const PropertyMap &map0,
                                    const PropertyMap &map1,
-                                   bool is_pre_match)
+                                   bool is_pre_match,
+                                   bool check_reverse_if_timeout)
 {
     //first, see if the user has specified any match
     QHash<AtomIdx,AtomIdx> user_map01;
@@ -482,8 +483,58 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
     else
     {
         qDebug() << "MATCH TOOK" << (0.000001*t_total.nsecsElapsed()) << "ms";
+    }
+
+    QHash<AtomIdx,AtomIdx> map;
     
-        if (timed_out)
+    if (not best_matches.isEmpty())
+    {
+        //we need to convert from vertex indicies back to AtomIdx values
+        QHash<int,int> best_match = best_matches.at(0);
+        
+        for (QHash<int,int>::const_iterator it = best_match.constBegin();
+             it != best_match.constEnd();
+             ++it)
+        {
+            map.insert( idx_to_atomidx0[it.key()], idx_to_atomidx1[it.value()] );
+        }
+    }
+
+    if (timed_out)
+    {
+        if (check_reverse_if_timeout)
+        {
+            //try the reverse match, as sometimes the algorithm can find the best
+            //match by going in reverse
+            qDebug() << "Initial match timed out, so trying the reverse match...";
+            QHash<AtomIdx,AtomIdx> rmap = pvt_findMCS(other, mol,
+                            AtomMatchInverter(matcher), timeout,
+                            match_light_atoms, map1, map0, is_pre_match, false);
+
+            if (rmap.count() > map.count())
+            {
+                //the reverse map is better, so lets use that
+                qDebug() << "...the reverse map is better. Using that :-)";
+                map.clear();
+
+                for (QHash<AtomIdx,AtomIdx>::const_iterator it = rmap.constBegin();
+                     it != rmap.constEnd(); ++it)
+                {
+                    map.insert( it.value(), it.key() );
+                }
+            }
+            else
+            {
+                qDebug() << "...the original forwards map was better.";
+                qDebug() << "We ran out of time when looking for a match. You can speed things"
+                        << "up by using an AtomMatcher to pre-match some of the atoms that you"
+                        << "know should be equivalent, e.g. one of the rings, or the common"
+                        << "framework of the molecules. As it is, only the best-found match"
+                        << "in the time available is being returned, which may not correspond"
+                        << "to the best possible match.";
+            }
+        }
+        else
         {
             qDebug() << "We ran out of time when looking for a match. You can speed things"
                      << "up by using an AtomMatcher to pre-match some of the atoms that you"
@@ -493,29 +544,15 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
                      << "to the best possible match.";
         }
     }
-    
-    if (best_matches.isEmpty())
+
+    if (map.isEmpty() and best_matches.isEmpty())
     {
         qDebug() << "FOUND NO MATCHES?";
         //return the original map that constrained this search
         return user_map01;
     }
     else
-    {
-        //we need to convert from vertex indicies back to AtomIdx values
-        QHash<int,int> best_match = best_matches.at(0);
-        
-        QHash<AtomIdx,AtomIdx> map;
-        
-        for (QHash<int,int>::const_iterator it = best_match.constBegin();
-             it != best_match.constEnd();
-             ++it)
-        {
-            map.insert( idx_to_atomidx0[it.key()], idx_to_atomidx1[it.value()] );
-        }
-    
         return map;
-    }
 }
 
 /** Find the maximum common substructure of this molecule view with 'other'. This
@@ -539,12 +576,12 @@ QHash<AtomIdx,AtomIdx> Evaluator::findMCS(const MoleculeView &other,
     {
         //do a pre-match using only the heavy atoms
         QHash<AtomIdx,AtomIdx> pre_match = pvt_findMCS(*this, other, matcher, timeout,
-                                                       false, map0, map1, true);
+                                                       false, map0, map1, true, true);
     
         //now use the pre-match to speed up the full match
         return pvt_findMCS(*this, other, AtomResultMatcher(pre_match), timeout,
-                           true, map0, map1, false);
+                           true, map0, map1, false, true);
     }
     else
-        return pvt_findMCS(*this, other, matcher, timeout, false, map0, map1, false);
+        return pvt_findMCS(*this, other, matcher, timeout, false, map0, map1, false, true);
 }

@@ -3,27 +3,34 @@
 ### in the Sire bundle
 ###
 
-# First, try to find the QtCore library in the "bundled" directory. If it exists,
-# then we don't need to do anything
-set( Qt5Core_DIR "${BUNDLE_STAGEDIR}/lib/cmake/Qt5Core" )
-find_package( Qt5Core QUIET )
-
-set ( NEED_BUILD_QT TRUE )
-
-if ( SIRE_BUILD_GUI )
-  message( STATUS "Need also to build QtGui to create Sire GUIs" )
-
-  set( Qt5Widgets_DIR "${BUNDLE_STAGEDIR}/lib/cmake/Qt5Widgets" )
-  find_package( Qt5Widgets QUIET )
-
-  if ( Qt5Core_FOUND AND Qt5Widgets_FOUND )
-    set ( NEED_BUILD_QT FALSE )
-    message( STATUS "Have already compiled a bundled version of Qt5Core and Qt5Widgets" )
-  endif()
+if ( MSYS )
+  message( STATUS "Looking for MSYS version of GSL..." )
+  find_package( Qt5Core REQUIRED PATHS "/msys64/lib" )
+  set ( NEED_BUILD_QT FALSE )
+  set ( SIRE_BUILD_GUI FALSE )
 else()
-  if ( Qt5Core_FOUND )
-    message( STATUS "Have already compiled a bundled version of Qt5Core" )
-    set ( NEED_BUILD_QT FALSE )
+  # First, try to find the QtCore library in the "bundled" directory. If it exists,
+  # then we don't need to do anything
+  set( Qt5Core_DIR "${BUNDLE_STAGEDIR}/lib/cmake/Qt5Core" )
+  find_package( Qt5Core QUIET )
+
+  set ( NEED_BUILD_QT TRUE )
+
+  if ( SIRE_BUILD_GUI )
+    message( STATUS "Need also to build QtGui to create Sire GUIs" )
+
+    set( Qt5Widgets_DIR "${BUNDLE_STAGEDIR}/lib/cmake/Qt5Widgets" )
+    find_package( Qt5Widgets QUIET )
+
+    if ( Qt5Core_FOUND AND Qt5Widgets_FOUND )
+      set ( NEED_BUILD_QT FALSE )
+      message( STATUS "Have already compiled a bundled version of Qt5Core and Qt5Widgets" )
+    endif()
+  else()
+    if ( Qt5Core_FOUND )
+      message( STATUS "Have already compiled a bundled version of Qt5Core" )
+      set ( NEED_BUILD_QT FALSE )
+    endif()
   endif()
 endif()
 
@@ -46,6 +53,7 @@ if ( NEED_BUILD_QT )
       execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${QT_ZIPFILE}
           WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
+          OUTPUT_QUIET ERROR_QUIET
       )
 
       if (EXISTS "${QT_PATCHFILE}")
@@ -53,6 +61,7 @@ if ( NEED_BUILD_QT )
         execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${QT_PATCHFILE}
           WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
+          OUTPUT_QUIET ERROR_QUIET
         )
       endif()
     endif()
@@ -107,7 +116,8 @@ if ( NEED_BUILD_QT )
     message( STATUS "Patience... Configuring QtCore..." )
     execute_process( COMMAND ${QT_BUILD_DIR}/configure ${QT_OPTIONS}
                      WORKING_DIRECTORY ${QT_BUILD_DIR}
-                     RESULT_VARIABLE QT_CONFIGURE_FAILED )
+                     RESULT_VARIABLE QT_CONFIGURE_FAILED
+                     OUTPUT_QUIET ERROR_QUIET )
 
     if (QT_CONFIGURE_FAILED)
       message( FATAL_ERROR "Cannot configure Qt5. Please go to the mailing list for help.")
@@ -116,7 +126,8 @@ if ( NEED_BUILD_QT )
     message( STATUS "Patience... Compiling QtCore..." )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -k -j ${NCORES}
                      WORKING_DIRECTORY ${QT_BUILD_DIR}
-                     RESULT_VARIABLE QT_BUILD_FAILED )
+                     RESULT_VARIABLE QT_BUILD_FAILED
+                     OUTPUT_QUIET ERROR_QUIET )
 
     if (QT_BUILD_FAILED)
       message( FATAL_ERROR "Cannot build Qt5. Please go to the mailing list for help.")
@@ -125,7 +136,8 @@ if ( NEED_BUILD_QT )
     message( STATUS "Patience... Installing QtCore..." )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} install
                      WORKING_DIRECTORY ${QT_BUILD_DIR}
-                     RESULT_VARIABLE QT_INSTALL_FAILED )
+                     RESULT_VARIABLE QT_INSTALL_FAILED
+                     OUTPUT_QUIET ERROR_QUIET )
 
     if (QT_INSTALL_FAILED)
       message( FATAL_ERROR "Cannot install Qt5. Please go to the mailing list for help.")
@@ -215,7 +227,11 @@ if ( SIRE_BUILD_GUI )
   endif()
 else()
   if ( Qt5Core_FOUND )
-    message( STATUS "Using Qt5Core from ${BUNDLE_STAGEDIR}" )
+    if ( MSYS )
+      message( STATUS "Using MSYS version of Qt5" )
+    else()
+      message( STATUS "Using Qt5Core from ${BUNDLE_STAGEDIR}" )
+    endif()
     get_target_property(QtCore_location Qt5::Core LOCATION)
     message( STATUS "Library: ${QtCore_location}" )
     set( SIRE_FOUND_QT TRUE )

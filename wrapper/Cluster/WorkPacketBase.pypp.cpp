@@ -29,7 +29,7 @@ void register_WorkPacketBase_class(){
 
     { //::SireCluster::WorkPacketBase
         typedef bp::class_< SireCluster::WorkPacketBase, boost::noncopyable > WorkPacketBase_exposer_t;
-        WorkPacketBase_exposer_t WorkPacketBase_exposer = WorkPacketBase_exposer_t( "WorkPacketBase", bp::no_init );
+        WorkPacketBase_exposer_t WorkPacketBase_exposer = WorkPacketBase_exposer_t( "WorkPacketBase", "This is the base class of all WorkPackets. A WorkPacket\ncontains all of the code and input data for a piece of work,\nand also contains space to return the output and current\nprogress\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope WorkPacketBase_scope( WorkPacketBase_exposer );
         { //::SireCluster::WorkPacketBase::approximatePacketSize
         
@@ -38,7 +38,8 @@ void register_WorkPacketBase_class(){
             
             WorkPacketBase_exposer.def( 
                 "approximatePacketSize"
-                , approximatePacketSize_function_value );
+                , approximatePacketSize_function_value
+                , "Return the approximate maximum size (in bytes) of the WorkPacket. This\ndoesnt have to exact (or indeed accurate) - it is used\nto help the WorkPacket::pack() function reserve enough\nspace when serialising this packet to a binary array.\nThe only penalty of getting this wrong is that youll\neither allocate too much space, or be reallocating while\nthe packet is being written" );
         
         }
         { //::SireCluster::WorkPacketBase::hasFinished
@@ -48,7 +49,8 @@ void register_WorkPacketBase_class(){
             
             WorkPacketBase_exposer.def( 
                 "hasFinished"
-                , hasFinished_function_value );
+                , hasFinished_function_value
+                , "" );
         
         }
         { //::SireCluster::WorkPacketBase::isError
@@ -58,7 +60,8 @@ void register_WorkPacketBase_class(){
             
             WorkPacketBase_exposer.def( 
                 "isError"
-                , isError_function_value );
+                , isError_function_value
+                , "Return whether or not this is an Error WorkPacket" );
         
         }
         { //::SireCluster::WorkPacketBase::progress
@@ -68,7 +71,8 @@ void register_WorkPacketBase_class(){
             
             WorkPacketBase_exposer.def( 
                 "progress"
-                , progress_function_value );
+                , progress_function_value
+                , "Return the current progress of the work (percentage)" );
         
         }
         { //::SireCluster::WorkPacketBase::runChunk
@@ -78,7 +82,8 @@ void register_WorkPacketBase_class(){
             
             WorkPacketBase_exposer.def( 
                 "runChunk"
-                , runChunk_function_value );
+                , runChunk_function_value
+                , "Perform one chunk of the calculation - Any exceptions are\ncaught in WorkPacket::runChunk, where that are converted\ninto an ErrorPacket" );
         
         }
         { //::SireCluster::WorkPacketBase::shouldPack
@@ -88,7 +93,8 @@ void register_WorkPacketBase_class(){
             
             WorkPacketBase_exposer.def( 
                 "shouldPack"
-                , shouldPack_function_value );
+                , shouldPack_function_value
+                , "Return whether or not this work packet should be stored\nas a binary array - this is used by Promise to work out\nhow to store the initial WorkPacket state. Only large\npackets should be binary packed (as they are then\ncompressed)" );
         
         }
         { //::SireCluster::WorkPacketBase::throwError
@@ -98,7 +104,8 @@ void register_WorkPacketBase_class(){
             
             WorkPacketBase_exposer.def( 
                 "throwError"
-                , throwError_function_value );
+                , throwError_function_value
+                , "Throw the error, if this is in an error state" );
         
         }
         { //::SireCluster::WorkPacketBase::typeName
@@ -108,7 +115,8 @@ void register_WorkPacketBase_class(){
             
             WorkPacketBase_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCluster::WorkPacketBase::wasAborted
@@ -118,7 +126,8 @@ void register_WorkPacketBase_class(){
             
             WorkPacketBase_exposer.def( 
                 "wasAborted"
-                , wasAborted_function_value );
+                , wasAborted_function_value
+                , "Whether or not the job has been aborted" );
         
         }
         { //::SireCluster::WorkPacketBase::what
@@ -128,7 +137,8 @@ void register_WorkPacketBase_class(){
             
             WorkPacketBase_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         WorkPacketBase_exposer.staticmethod( "typeName" );

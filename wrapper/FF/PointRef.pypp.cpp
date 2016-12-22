@@ -41,11 +41,11 @@ void register_PointRef_class(){
 
     { //::SireFF::PointRef
         typedef bp::class_< SireFF::PointRef > PointRef_exposer_t;
-        PointRef_exposer_t PointRef_exposer = PointRef_exposer_t( "PointRef", bp::init< SireMol::Atom const & >(( bp::arg("atom") )) );
+        PointRef_exposer_t PointRef_exposer = PointRef_exposer_t( "PointRef", "This is a small class used to help convert different molecule\nviews into a Point class in function signatures, e.g.\n\nDistanceRestraint(const PointRef &point0, const PointRef &point1);\n\nwould allow distance restraints to be created between pairs\nof atoms, or an atom and a vector etc.\n\nAuthor: Christopher Woods\n", bp::init< SireMol::Atom const & >(( bp::arg("atom") ), "Construct from the passed atom") );
         bp::scope PointRef_scope( PointRef_exposer );
-        PointRef_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("point") )) );
-        PointRef_exposer.def( bp::init< SireFF::Point const & >(( bp::arg("point") )) );
-        PointRef_exposer.def( bp::init< SireFF::PointPtr const & >(( bp::arg("point") )) );
+        PointRef_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("point") ), "Construct from the passed point") );
+        PointRef_exposer.def( bp::init< SireFF::Point const & >(( bp::arg("point") ), "Construct from the passed point") );
+        PointRef_exposer.def( bp::init< SireFF::PointPtr const & >(( bp::arg("point") ), "Construct from the passed point") );
         { //::SireFF::PointRef::addForce
         
             typedef bool ( ::SireFF::PointRef::*addForce_function_type)( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
@@ -54,7 +54,8 @@ void register_PointRef_class(){
             PointRef_exposer.def( 
                 "addForce"
                 , addForce_function_value
-                , ( bp::arg("molforces"), bp::arg("force") ) );
+                , ( bp::arg("molforces"), bp::arg("force") )
+                , "Decompose the force force acting on this point from the\nmolecule whose forces are in molforces and add the\nforce onto the table" );
         
         }
         { //::SireFF::PointRef::addForce
@@ -65,7 +66,8 @@ void register_PointRef_class(){
             PointRef_exposer.def( 
                 "addForce"
                 , addForce_function_value
-                , ( bp::arg("forces"), bp::arg("force") ) );
+                , ( bp::arg("forces"), bp::arg("force") )
+                , "Decompose the force force into the forces acting on\nthe molecules that contribute to this point and add those\nforces onto the table forces" );
         
         }
         { //::SireFF::PointRef::operator()
@@ -76,7 +78,8 @@ void register_PointRef_class(){
             PointRef_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::PointRef::point
@@ -87,7 +90,8 @@ void register_PointRef_class(){
             PointRef_exposer.def( 
                 "point"
                 , point_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the point in 3D space" );
         
         }
         PointRef_exposer.def( "__copy__", &__copy__);

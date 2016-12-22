@@ -37,7 +37,7 @@ void register_LJPerturbation_class(){
 
     { //::SireMM::LJPerturbation
         typedef bp::class_< SireMM::LJPerturbation, bp::bases< SireMol::Perturbation, SireBase::Property > > LJPerturbation_exposer_t;
-        LJPerturbation_exposer_t LJPerturbation_exposer = LJPerturbation_exposer_t( "LJPerturbation", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() )) );
+        LJPerturbation_exposer_t LJPerturbation_exposer = LJPerturbation_exposer_t( "LJPerturbation", "This is a perturbation that maps LJ parameters for a molecule\nfrom an initial to a final state\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() ), "Constructor - this creates a LJ perturbation that\nperturbs from LJs in initial_LJ to LJs in\nfinal_LJ, placing the current LJs in LJ,\nand using Perturbation::defaultEquation() to map the\nsigma and epsilon values of the LJ.") );
         bp::scope LJPerturbation_scope( LJPerturbation_exposer );
         bp::enum_< SireMM::LJPerturbation::MapType>("MapType")
             .value("MAP_SIGMA_AND_EPSILON", SireMM::LJPerturbation::MAP_SIGMA_AND_EPSILON)
@@ -45,12 +45,12 @@ void register_LJPerturbation_class(){
             .value("MAP_A_AND_B", SireMM::LJPerturbation::MAP_A_AND_B)
             .export_values()
             ;
-        LJPerturbation_exposer.def( bp::init< SireMM::LJPerturbation::MapType, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("maptype"), bp::arg("map")=SireBase::PropertyMap() )) );
-        LJPerturbation_exposer.def( bp::init< SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() )) );
-        LJPerturbation_exposer.def( bp::init< SireCAS::Expression const &, SireMM::LJPerturbation::MapType, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mapping_function"), bp::arg("maptype"), bp::arg("map")=SireBase::PropertyMap() )) );
-        LJPerturbation_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("sigma_mapping_function"), bp::arg("epsilon_mapping_function"), bp::arg("map")=SireBase::PropertyMap() )) );
-        LJPerturbation_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const &, SireMM::LJPerturbation::MapType, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("sigma_mapping_function"), bp::arg("epsilon_mapping_function"), bp::arg("maptype"), bp::arg("map")=SireBase::PropertyMap() )) );
-        LJPerturbation_exposer.def( bp::init< SireMM::LJPerturbation const & >(( bp::arg("other") )) );
+        LJPerturbation_exposer.def( bp::init< SireMM::LJPerturbation::MapType, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("maptype"), bp::arg("map")=SireBase::PropertyMap() ), "Construct, using the passed map to find the properties used\nby this perturbation") );
+        LJPerturbation_exposer.def( bp::init< SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() ), "Construct, using the passed map to find the properties used\nby this perturbation and the passed mapping function to map\nthe LJs between the states") );
+        LJPerturbation_exposer.def( bp::init< SireCAS::Expression const &, SireMM::LJPerturbation::MapType, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mapping_function"), bp::arg("maptype"), bp::arg("map")=SireBase::PropertyMap() ), "Construct, using the passed map to find the properties used\nby this perturbation and the passed mapping function to map\nthe LJs between the states") );
+        LJPerturbation_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("sigma_mapping_function"), bp::arg("epsilon_mapping_function"), bp::arg("map")=SireBase::PropertyMap() ), "Construct, using the passed map to find the properties used\nby this perturbation and the passed mapping function to map\nthe LJs between the states") );
+        LJPerturbation_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const &, SireMM::LJPerturbation::MapType, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("sigma_mapping_function"), bp::arg("epsilon_mapping_function"), bp::arg("maptype"), bp::arg("map")=SireBase::PropertyMap() ), "Construct, using the passed map to find the properties used\nby this perturbation and the passed mapping function to map\nthe LJs between the states") );
+        LJPerturbation_exposer.def( bp::init< SireMM::LJPerturbation const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::LJPerturbation::A_MappingFunction
         
             typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*A_MappingFunction_function_type)(  ) const;
@@ -59,7 +59,8 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "A_MappingFunction"
                 , A_MappingFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the function used to map A\nThrow: SireError::invalid_state\n" );
         
         }
         { //::SireMM::LJPerturbation::B_MappingFunction
@@ -70,7 +71,8 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "B_MappingFunction"
                 , B_MappingFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the function used to map B\nThrow: SireError::invalid_state\n" );
         
         }
         { //::SireMM::LJPerturbation::epsilonMappingFunction
@@ -81,7 +83,8 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "epsilonMappingFunction"
                 , epsilonMappingFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the function used to map epsilon\nThrow: SireError::invalid_state\n" );
         
         }
         { //::SireMM::LJPerturbation::mapAB
@@ -91,7 +94,8 @@ void register_LJPerturbation_class(){
             
             LJPerturbation_exposer.def( 
                 "mapAB"
-                , mapAB_function_value );
+                , mapAB_function_value
+                , "Return whether or not this maps A and B" );
         
         }
         { //::SireMM::LJPerturbation::mapRMinEpsilon
@@ -101,7 +105,8 @@ void register_LJPerturbation_class(){
             
             LJPerturbation_exposer.def( 
                 "mapRMinEpsilon"
-                , mapRMinEpsilon_function_value );
+                , mapRMinEpsilon_function_value
+                , "Return whether or not this maps r_min and epsilon" );
         
         }
         { //::SireMM::LJPerturbation::mapSigmaEpsilon
@@ -111,7 +116,8 @@ void register_LJPerturbation_class(){
             
             LJPerturbation_exposer.def( 
                 "mapSigmaEpsilon"
-                , mapSigmaEpsilon_function_value );
+                , mapSigmaEpsilon_function_value
+                , "Return whether or not this maps sigma and epsilon" );
         
         }
         { //::SireMM::LJPerturbation::mappingFunction
@@ -122,7 +128,8 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "mappingFunction"
                 , mappingFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the mapping function\nThrow: SireError::invalid_state\n" );
         
         }
         LJPerturbation_exposer.def( bp::self != bp::self );
@@ -135,7 +142,8 @@ void register_LJPerturbation_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         LJPerturbation_exposer.def( bp::self == bp::self );
@@ -147,7 +155,8 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "rMinMappingFunction"
                 , rMinMappingFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the function used to map r_min\nThrow: SireError::invalid_state\n" );
         
         }
         { //::SireMM::LJPerturbation::recreate
@@ -158,7 +167,8 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "recreate"
                 , recreate_function_value
-                , ( bp::arg("mapping_function") ) );
+                , ( bp::arg("mapping_function") )
+                , "" );
         
         }
         { //::SireMM::LJPerturbation::recreate
@@ -169,7 +179,8 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "recreate"
                 , recreate_function_value
-                , ( bp::arg("mapping_function"), bp::arg("map") ) );
+                , ( bp::arg("mapping_function"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireMM::LJPerturbation::requiredProperties
@@ -179,7 +190,8 @@ void register_LJPerturbation_class(){
             
             LJPerturbation_exposer.def( 
                 "requiredProperties"
-                , requiredProperties_function_value );
+                , requiredProperties_function_value
+                , "Return the properties required or changed by this perturbation" );
         
         }
         { //::SireMM::LJPerturbation::sigmaMappingFunction
@@ -190,7 +202,8 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "sigmaMappingFunction"
                 , sigmaMappingFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the function used to map sigma\nThrow: SireError::invalid_state\n" );
         
         }
         { //::SireMM::LJPerturbation::substitute
@@ -201,7 +214,8 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Substitute the identities in identities in all of the mapping functions\nused by this perturbation. This is useful if, for example, you want to\nswitch from using lambda to control the perturbation to using alpha, e.g.\n" );
         
         }
         { //::SireMM::LJPerturbation::toString
@@ -211,7 +225,8 @@ void register_LJPerturbation_class(){
             
             LJPerturbation_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this perturbation" );
         
         }
         { //::SireMM::LJPerturbation::typeName
@@ -221,7 +236,8 @@ void register_LJPerturbation_class(){
             
             LJPerturbation_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::LJPerturbation::wouldChange
@@ -232,7 +248,8 @@ void register_LJPerturbation_class(){
             LJPerturbation_exposer.def( 
                 "wouldChange"
                 , wouldChange_function_value
-                , ( bp::arg("molecule"), bp::arg("values") ) );
+                , ( bp::arg("molecule"), bp::arg("values") )
+                , "Return whether or not this perturbation with the passed values would\nchange the molecule molecule" );
         
         }
         LJPerturbation_exposer.staticmethod( "typeName" );

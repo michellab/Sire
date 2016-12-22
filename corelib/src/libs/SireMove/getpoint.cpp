@@ -426,3 +426,113 @@ Vector GetCOMPoint::getPoint(const MoleculeView &molecule,
     else
         return molecule.atoms(atomids,map).evaluate().centerOfMass(map);
 }
+
+
+///////////
+/////////// Implementation of GetCentroidPoint
+///////////
+
+static const RegisterMetaType<GetCentroidPoint> r_getcentroidpoint;
+
+QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+                                        const GetCentroidPoint &getpoint)
+{
+    writeHeader(ds, r_getcentroidpoint, 1);
+    
+    SharedDataStream sds(ds);
+    
+    sds << getpoint.atomids << static_cast<const GetPoint&>(getpoint);
+    
+    return ds;
+}
+
+QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, GetCentroidPoint &getpoint)
+{
+    VersionID v = readHeader(ds, r_getcentroidpoint);
+    
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        
+        sds >> getpoint.atomids >> static_cast<GetPoint&>(getpoint);
+    }
+    else
+        throw version_error(v, "1", r_getcentroidpoint, CODELOC);
+        
+    return ds;
+}
+
+/** Constructor */
+GetCentroidPoint::GetCentroidPoint() : ConcreteProperty<GetCentroidPoint,GetPoint>()
+{}
+
+/** Construct to get the centroid of the atoms in the molecule that match
+    the passed AtomID */
+GetCentroidPoint::GetCentroidPoint(const AtomID &atomid)
+                 : ConcreteProperty<GetCentroidPoint,GetPoint>(),
+                   atomids(atomid)
+{}
+
+/** Construct to get the centroid of the atoms in the molecule that
+    match either of the two passed AtomIDs */
+GetCentroidPoint::GetCentroidPoint(const AtomID &atomid0, const AtomID &atomid1)
+                 : ConcreteProperty<GetCentroidPoint,GetPoint>(),
+                   atomids(atomid0,atomid1)
+{}
+
+/** Construct to get the centroid of the atoms in the molecule that
+    match any of the passed AtomIDs */
+GetCentroidPoint::GetCentroidPoint(const QList<AtomIdentifier> &ids)
+                 : ConcreteProperty<GetCentroidPoint,GetPoint>(),
+                   atomids(ids)
+{}
+
+/** Copy constructor */
+GetCentroidPoint::GetCentroidPoint(const GetCentroidPoint &other)
+                 : ConcreteProperty<GetCentroidPoint,GetPoint>(other),
+                   atomids(other.atomids)
+{}
+
+/** Destructor */
+GetCentroidPoint::~GetCentroidPoint()
+{}
+
+const char* GetCentroidPoint::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<GetCentroidPoint>() );
+}
+
+/** Copy assignment operator */
+GetCentroidPoint& GetCentroidPoint::operator=(const GetCentroidPoint &other)
+{
+    GetPoint::operator=(other);
+    atomids = other.atomids;
+    return *this;
+}
+
+/** Comparison operator */
+bool GetCentroidPoint::operator==(const GetCentroidPoint &other) const
+{
+    return atomids == other.atomids and GetPoint::operator==(other);
+}
+
+/** Comparison operator */
+bool GetCentroidPoint::operator!=(const GetCentroidPoint &other) const
+{
+    return not GetCentroidPoint::operator==(other);
+}
+
+/** Return the AtomID(s) used to limit the search for the point */
+const AtomID& GetCentroidPoint::atomID() const
+{
+    return atomids;
+}
+
+Vector GetCentroidPoint::getPoint(const MoleculeView &molecule,
+                                  const PropertyMap &map) const
+{
+    if (atomids.IDs().isEmpty())
+        return Evaluator(molecule).centroid(map);
+    else
+        return molecule.atoms(atomids,map).evaluate().centroid(map);
+}

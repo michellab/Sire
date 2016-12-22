@@ -33,10 +33,10 @@ void register_Sech_class(){
 
     { //::SireCAS::Sech
         typedef bp::class_< SireCAS::Sech, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Sech_exposer_t;
-        Sech_exposer_t Sech_exposer = Sech_exposer_t( "Sech", bp::init< >() );
+        Sech_exposer_t Sech_exposer = Sech_exposer_t( "Sech", "Hyperbolic secant", bp::init< >("Null constructor") );
         bp::scope Sech_scope( Sech_exposer );
-        Sech_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        Sech_exposer.def( bp::init< SireCAS::Sech const & >(( bp::arg("other") )) );
+        Sech_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        Sech_exposer.def( bp::init< SireCAS::Sech const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Sech::evaluate
         
             typedef double ( ::SireCAS::Sech::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -45,7 +45,8 @@ void register_Sech_class(){
             Sech_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Sech::evaluate
@@ -56,7 +57,8 @@ void register_Sech_class(){
             Sech_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Sech_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -67,7 +69,8 @@ void register_Sech_class(){
             
             Sech_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Sech::what
@@ -77,7 +80,8 @@ void register_Sech_class(){
             
             Sech_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Sech_exposer.staticmethod( "typeName" );
@@ -90,6 +94,7 @@ void register_Sech_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Sech_exposer.def( "__str__", &__str__< ::SireCAS::Sech > );
         Sech_exposer.def( "__repr__", &__str__< ::SireCAS::Sech > );
+        Sech_exposer.def( "__hash__", &::SireCAS::Sech::hash );
     }
 
 }

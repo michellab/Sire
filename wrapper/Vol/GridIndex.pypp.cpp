@@ -33,9 +33,9 @@ void register_GridIndex_class(){
 
     { //::SireVol::GridIndex
         typedef bp::class_< SireVol::GridIndex > GridIndex_exposer_t;
-        GridIndex_exposer_t GridIndex_exposer = GridIndex_exposer_t( "GridIndex", bp::init< bp::optional< int, int, int > >(( bp::arg("i")=(int)(0), bp::arg("j")=(int)(0), bp::arg("k")=(int)(0) )) );
+        GridIndex_exposer_t GridIndex_exposer = GridIndex_exposer_t( "GridIndex", "Very simple class providing a grid index", bp::init< bp::optional< int, int, int > >(( bp::arg("i")=(int)(0), bp::arg("j")=(int)(0), bp::arg("k")=(int)(0) ), "") );
         bp::scope GridIndex_scope( GridIndex_exposer );
-        GridIndex_exposer.def( bp::init< SireVol::GridIndex const & >(( bp::arg("other") )) );
+        GridIndex_exposer.def( bp::init< SireVol::GridIndex const & >(( bp::arg("other") ), "") );
         { //::SireVol::GridIndex::i
         
             typedef ::qint32 ( ::SireVol::GridIndex::*i_function_type)(  ) const;
@@ -43,7 +43,8 @@ void register_GridIndex_class(){
             
             GridIndex_exposer.def( 
                 "i"
-                , i_function_value );
+                , i_function_value
+                , "" );
         
         }
         { //::SireVol::GridIndex::isNull
@@ -53,7 +54,8 @@ void register_GridIndex_class(){
             
             GridIndex_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireVol::GridIndex::j
@@ -63,7 +65,8 @@ void register_GridIndex_class(){
             
             GridIndex_exposer.def( 
                 "j"
-                , j_function_value );
+                , j_function_value
+                , "" );
         
         }
         { //::SireVol::GridIndex::k
@@ -73,7 +76,8 @@ void register_GridIndex_class(){
             
             GridIndex_exposer.def( 
                 "k"
-                , k_function_value );
+                , k_function_value
+                , "" );
         
         }
         { //::SireVol::GridIndex::null
@@ -83,7 +87,8 @@ void register_GridIndex_class(){
             
             GridIndex_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         GridIndex_exposer.def( bp::self != bp::self );
@@ -96,7 +101,8 @@ void register_GridIndex_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         GridIndex_exposer.def( bp::self == bp::self );
@@ -107,7 +113,8 @@ void register_GridIndex_class(){
             
             GridIndex_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireVol::GridIndex::typeName
@@ -117,7 +124,8 @@ void register_GridIndex_class(){
             
             GridIndex_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireVol::GridIndex::what
@@ -127,7 +135,8 @@ void register_GridIndex_class(){
             
             GridIndex_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         GridIndex_exposer.staticmethod( "null" );

@@ -26,10 +26,10 @@ void register_StretchBendTorsionComponent_class(){
 
     { //::SireMM::StretchBendTorsionComponent
         typedef bp::class_< SireMM::StretchBendTorsionComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > StretchBendTorsionComponent_exposer_t;
-        StretchBendTorsionComponent_exposer_t StretchBendTorsionComponent_exposer = StretchBendTorsionComponent_exposer_t( "StretchBendTorsionComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() )) );
+        StretchBendTorsionComponent_exposer_t StretchBendTorsionComponent_exposer = StretchBendTorsionComponent_exposer_t( "StretchBendTorsionComponent", "This class represents a StretchBendTorsion component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope StretchBendTorsionComponent_scope( StretchBendTorsionComponent_exposer );
-        StretchBendTorsionComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        StretchBendTorsionComponent_exposer.def( bp::init< SireMM::StretchBendTorsionComponent const & >(( bp::arg("other") )) );
+        StretchBendTorsionComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        StretchBendTorsionComponent_exposer.def( bp::init< SireMM::StretchBendTorsionComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::StretchBendTorsionComponent::changeEnergy
         
             typedef void ( ::SireMM::StretchBendTorsionComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::StretchBendTorsionEnergy const & ) const;
@@ -38,7 +38,8 @@ void register_StretchBendTorsionComponent_class(){
             StretchBendTorsionComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("sbtnrg") ) );
+                , ( bp::arg("ff"), bp::arg("sbtnrg") )
+                , "Change the component of the energy in the forcefield ff\nby delta" );
         
         }
         { //::SireMM::StretchBendTorsionComponent::setEnergy
@@ -49,7 +50,8 @@ void register_StretchBendTorsionComponent_class(){
             StretchBendTorsionComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("sbtnrg") ) );
+                , ( bp::arg("ff"), bp::arg("sbtnrg") )
+                , "Set the component of the energy in the forcefield ff\nto be equal to the passed energy" );
         
         }
         { //::SireMM::StretchBendTorsionComponent::symbols
@@ -59,7 +61,8 @@ void register_StretchBendTorsionComponent_class(){
             
             StretchBendTorsionComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireMM::StretchBendTorsionComponent::total
@@ -70,7 +73,8 @@ void register_StretchBendTorsionComponent_class(){
             StretchBendTorsionComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::StretchBendTorsionComponent::typeName
@@ -80,7 +84,8 @@ void register_StretchBendTorsionComponent_class(){
             
             StretchBendTorsionComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::StretchBendTorsionComponent::what
@@ -90,7 +95,8 @@ void register_StretchBendTorsionComponent_class(){
             
             StretchBendTorsionComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         StretchBendTorsionComponent_exposer.staticmethod( "typeName" );
@@ -103,6 +109,7 @@ void register_StretchBendTorsionComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         StretchBendTorsionComponent_exposer.def( "__str__", &__str__< ::SireMM::StretchBendTorsionComponent > );
         StretchBendTorsionComponent_exposer.def( "__repr__", &__str__< ::SireMM::StretchBendTorsionComponent > );
+        StretchBendTorsionComponent_exposer.def( "__hash__", &::SireMM::StretchBendTorsionComponent::hash );
     }
 
 }

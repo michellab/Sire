@@ -45,18 +45,18 @@ void register_NMatrix_class(){
 
     { //::SireMaths::NMatrix
         typedef bp::class_< SireMaths::NMatrix > NMatrix_exposer_t;
-        NMatrix_exposer_t NMatrix_exposer = NMatrix_exposer_t( "NMatrix", bp::init< >() );
+        NMatrix_exposer_t NMatrix_exposer = NMatrix_exposer_t( "NMatrix", "This is a dense, double, general NM 2-dimensional matrix.\nThe data is stored in column-major order, suitable for\nuse with Fortran BLAS or LAPACK functions. This is\ndesigned for high speed.\n\nThe data is implicitly shared (copy on write), so\ncopying a matrix is very fast.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope NMatrix_scope( NMatrix_exposer );
-        NMatrix_exposer.def( bp::init< int, int >(( bp::arg("nrows"), bp::arg("ncolumns") )) );
-        NMatrix_exposer.def( bp::init< int, int, double >(( bp::arg("nrows"), bp::arg("ncolumns"), bp::arg("initial_value") )) );
-        NMatrix_exposer.def( bp::init< SireMaths::Matrix const & >(( bp::arg("matrix") )) );
-        NMatrix_exposer.def( bp::init< SireBase::Array2D< double > const & >(( bp::arg("array") )) );
-        NMatrix_exposer.def( bp::init< QVector< QVector< double > > const & >(( bp::arg("array") )) );
-        NMatrix_exposer.def( bp::init< SireMaths::Vector const &, bp::optional< bool > >(( bp::arg("vector"), bp::arg("transpose")=(bool)(false) )) );
-        NMatrix_exposer.def( bp::init< QVector< double > const &, bp::optional< bool > >(( bp::arg("vector"), bp::arg("transpose")=(bool)(false) )) );
-        NMatrix_exposer.def( bp::init< SireMaths::NVector const &, bp::optional< bool > >(( bp::arg("vector"), bp::arg("transpose")=(bool)(false) )) );
-        NMatrix_exposer.def( bp::init< SireMaths::TrigMatrix const & >(( bp::arg("matrix") )) );
-        NMatrix_exposer.def( bp::init< SireMaths::NMatrix const & >(( bp::arg("other") )) );
+        NMatrix_exposer.def( bp::init< int, int >(( bp::arg("nrows"), bp::arg("ncolumns") ), "Construct a matrix with nrows rows and ncolumns columns.\nThe values in the matrix are not initialised") );
+        NMatrix_exposer.def( bp::init< int, int, double >(( bp::arg("nrows"), bp::arg("ncolumns"), bp::arg("initial_value") ), "Construct a matrix with nrows rows and ncolumns columns.\nThe values in the matrix are initialised to initial_value") );
+        NMatrix_exposer.def( bp::init< SireMaths::Matrix const & >(( bp::arg("matrix") ), "Construct from the passed Matrix") );
+        NMatrix_exposer.def( bp::init< SireBase::Array2D< double > const & >(( bp::arg("array") ), "Construct from the passed Array") );
+        NMatrix_exposer.def( bp::init< QVector< QVector< double > > const & >(( bp::arg("array") ), "Construct from the passed array") );
+        NMatrix_exposer.def( bp::init< SireMaths::Vector const &, bp::optional< bool > >(( bp::arg("vector"), bp::arg("transpose")=(bool)(false) ), "Construct from the passed vector - this is copied to a column\nmatrix, unless transpose is true, in which case this is\ncopied as a row matrix") );
+        NMatrix_exposer.def( bp::init< QVector< double > const &, bp::optional< bool > >(( bp::arg("vector"), bp::arg("transpose")=(bool)(false) ), "Construct from the passed vector - this is copied to a column\nmatrix, unless transpose is true, in which case this is\ncopied as a row matrix") );
+        NMatrix_exposer.def( bp::init< SireMaths::NVector const &, bp::optional< bool > >(( bp::arg("vector"), bp::arg("transpose")=(bool)(false) ), "Construct from the passed vector - this is copied to a column\nmatrix, unless transpose is true, in which case this is\ncopied as a row matrix") );
+        NMatrix_exposer.def( bp::init< SireMaths::TrigMatrix const & >(( bp::arg("matrix") ), "Construct from the passed triangular matrix") );
+        NMatrix_exposer.def( bp::init< SireMaths::NMatrix const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::NMatrix::assertNColumns
         
             typedef void ( ::SireMaths::NMatrix::*assertNColumns_function_type)( int ) const;
@@ -65,7 +65,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "assertNColumns"
                 , assertNColumns_function_value
-                , ( bp::arg("ncolumns") ) );
+                , ( bp::arg("ncolumns") )
+                , "Assert that this matrix has ncolumns columns\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::assertNRows
@@ -76,7 +77,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "assertNRows"
                 , assertNRows_function_value
-                , ( bp::arg("nrows") ) );
+                , ( bp::arg("nrows") )
+                , "Assert that this matrix has nrows rows\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::assertSquare
@@ -86,7 +88,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "assertSquare"
-                , assertSquare_function_value );
+                , assertSquare_function_value
+                , "Assert that this is a square matrix\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::assertValidColumn
@@ -97,7 +100,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "assertValidColumn"
                 , assertValidColumn_function_value
-                , ( bp::arg("j") ) );
+                , ( bp::arg("j") )
+                , "Assert that there is an jth column\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NMatrix::assertValidIndex
@@ -108,7 +112,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "assertValidIndex"
                 , assertValidIndex_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Assert that the index [i,j] is valid for this matrix\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NMatrix::assertValidRow
@@ -119,7 +124,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "assertValidRow"
                 , assertValidRow_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Assert that there is an ith row\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NMatrix::checkedOffset
@@ -130,7 +136,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "checkedOffset"
                 , checkedOffset_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Calculate the offset in the 1D array of the value\nat index [i,j]\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NMatrix::column
@@ -141,7 +148,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "column"
                 , column_function_value
-                , ( bp::arg("j") ) );
+                , ( bp::arg("j") )
+                , "Return a vector containing the contents of the ith row\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NMatrix::createColumnMajor
@@ -152,7 +160,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "createColumnMajor"
                 , createColumnMajor_function_value
-                , ( bp::arg("nrows"), bp::arg("ncolumns") ) );
+                , ( bp::arg("nrows"), bp::arg("ncolumns") )
+                , "Construct a matrix with dimension nrows by ncolumns that\nstores the data in column-major order" );
         
         }
         { //::SireMaths::NMatrix::createRowMajor
@@ -163,7 +172,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "createRowMajor"
                 , createRowMajor_function_value
-                , ( bp::arg("nrows"), bp::arg("ncolumns") ) );
+                , ( bp::arg("nrows"), bp::arg("ncolumns") )
+                , "Construct a matrix with dimension nrows by ncolumns that\nstores the data in row-major order" );
         
         }
         { //::SireMaths::NMatrix::determinant
@@ -173,7 +183,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "determinant"
-                , determinant_function_value );
+                , determinant_function_value
+                , "Return the determinant of this matrix\nThis uses LAPACK under the hood, for speed\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::diagonal
@@ -183,7 +194,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "diagonal"
-                , diagonal_function_value );
+                , diagonal_function_value
+                , "Return a vector containing the diagonal of this matrix - this is only\nvalid for a square matrix\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::diagonalise
@@ -193,7 +205,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "diagonalise"
-                , diagonalise_function_value );
+                , diagonalise_function_value
+                , "Return the eigenvalues and eigenvectors of this matrix. This\nuses LAPACK under the hood for speed\nThrow: SireError::incompatible_error\nThrow: SireMaths::domain_error\n" );
         
         }
         { //::SireMaths::NMatrix::fullTranspose
@@ -203,7 +216,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "fullTranspose"
-                , fullTranspose_function_value );
+                , fullTranspose_function_value
+                , "Fully transpose the data of this matrix" );
         
         }
         { //::SireMaths::NMatrix::inverse
@@ -213,7 +227,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "inverse"
-                , inverse_function_value );
+                , inverse_function_value
+                , "Return the inverse of this matrix\nThis uses LAPACK under the hood, for speed\nThrow: SireError::incompatible_error\nThrow: SireMaths::domain_error\n" );
         
         }
         { //::SireMaths::NMatrix::isTransposed
@@ -223,7 +238,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "isTransposed"
-                , isTransposed_function_value );
+                , isTransposed_function_value
+                , "Return whether or not this is a transposed matrix (data\nis stored in row-major order rather than column-major order)" );
         
         }
         { //::SireMaths::NMatrix::memory
@@ -233,7 +249,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "memory"
-                , memory_function_value );
+                , memory_function_value
+                , "Return the QVector containing the memory of this Matrix" );
         
         }
         { //::SireMaths::NMatrix::nColumns
@@ -243,7 +260,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "nColumns"
-                , nColumns_function_value );
+                , nColumns_function_value
+                , "Return the number of columns in this matrix" );
         
         }
         { //::SireMaths::NMatrix::nRows
@@ -253,7 +271,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "nRows"
-                , nRows_function_value );
+                , nRows_function_value
+                , "Return the number of rows in this matrix" );
         
         }
         { //::SireMaths::NMatrix::offset
@@ -264,7 +283,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "offset"
                 , offset_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         NMatrix_exposer.def( bp::self != bp::self );
@@ -277,7 +297,8 @@ void register_NMatrix_class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         NMatrix_exposer.def( bp::self * bp::self );
@@ -298,7 +319,8 @@ void register_NMatrix_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NMatrix_exposer.def( bp::self == bp::self );
@@ -310,7 +332,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "redimension"
                 , redimension_function_value
-                , ( bp::arg("nrows"), bp::arg("ncolumns") ) );
+                , ( bp::arg("nrows"), bp::arg("ncolumns") )
+                , "Redimension this matrix to have nrows rows and ncolumns\ncolumns. The contents of this matrix are undefined after\nthis redimension. This function will only reallocate\nmemory if there is not enough memory allocated to store\nthe new matrix. Use this function if you want to use\nthe same piece of memory over and over again for lots\nof different size matricies - just create a matrix with\nthe maximum dimension, then call this redimension function\nwhenever you want to change. It is very fast, as it just\nupdates the internal record of the size of the matrix" );
         
         }
         { //::SireMaths::NMatrix::reflectBottomLeftToTopRight
@@ -320,7 +343,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "reflectBottomLeftToTopRight"
-                , reflectBottomLeftToTopRight_function_value );
+                , reflectBottomLeftToTopRight_function_value
+                , "Copy the contents of the bottom left diagonal to the top\nright diagonal. This sets matrix[i,j] = matrix[j,i]\nThis must be a square matrix.\n1 2 3      1 4 7\n4 5 6  =>  4 5 8\n7 8 9      7 8 9\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::reflectBottomRightToTopLeft
@@ -330,7 +354,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "reflectBottomRightToTopLeft"
-                , reflectBottomRightToTopLeft_function_value );
+                , reflectBottomRightToTopLeft_function_value
+                , "Copy the contents of the bottom right diagonal to the top\nleft diagonal. If n == nRows(), then this sets\nmatrix[i,j] = matrix[n-j,n-i]\nThis must be a square matrix.\n1 2 3      9 6 3\n4 5 6  =>  8 5 6\n7 8 9      7 8 9\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::reflectBottomToTop
@@ -340,7 +365,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "reflectBottomToTop"
-                , reflectBottomToTop_function_value );
+                , reflectBottomToTop_function_value
+                , "Reflect the contents of the bottom half to the top\nhalf. If n == nRows(), then this sets\nmatrix[i,j] = matrix[n-i,j]\n1 2 3      7 8 9\n4 5 6  =>  4 5 6\n7 8 9      7 8 9\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::reflectLeftToRight
@@ -350,7 +376,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "reflectLeftToRight"
-                , reflectLeftToRight_function_value );
+                , reflectLeftToRight_function_value
+                , "Reflect the contents of the left half to the right\nhalf. If n == nColumns(), then this sets\nmatrix[i,n-j] = matrix[i,j]\n1 2 3      1 2 1\n4 5 6  =>  4 5 4\n7 8 9      7 8 7\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::reflectRightToLeft
@@ -360,7 +387,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "reflectRightToLeft"
-                , reflectRightToLeft_function_value );
+                , reflectRightToLeft_function_value
+                , "Reflect the contents of the left half to the right\nhalf. If n == nColumns(), then this sets\nmatrix[i,j] = matrix[i,n-j]\n1 2 3      3 2 3\n4 5 6  =>  6 5 6\n7 8 9      9 8 9\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::reflectTopLeftToBottomRight
@@ -370,7 +398,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "reflectTopLeftToBottomRight"
-                , reflectTopLeftToBottomRight_function_value );
+                , reflectTopLeftToBottomRight_function_value
+                , "Copy the contents of the top left diagonal to the bottom\nright diagonal. If n == nRows(), then this sets\nmatrix[n-j,n-i] = matrix[i,j]\n1 2 3      1 2 3       [2,1] => [1,0]    [0,2] == [0,2]\n4 5 6  =>  4 5 2       [1,2] => [0,1]    [1,1] == [1,1]\n7 8 9      7 4 1       [2,2] => [0,0]    [2,0] == [2,0]\nThis must be a square matrix.\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::reflectTopRightToBottomLeft
@@ -380,7 +409,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "reflectTopRightToBottomLeft"
-                , reflectTopRightToBottomLeft_function_value );
+                , reflectTopRightToBottomLeft_function_value
+                , "Copy the contents of the top right diagonal to the bottom\nleft diagonal. This sets matrix[j,i] = matrix[i,j]\nThis must be a square matrix.\n1 2 3      1 2 3\n4 5 6  =>  2 5 6\n7 8 9      3 6 9\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::reflectTopToBottom
@@ -390,7 +420,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "reflectTopToBottom"
-                , reflectTopToBottom_function_value );
+                , reflectTopToBottom_function_value
+                , "Reflect the contents of the top half to the bottom\nhalf. If n == nRows(), then this sets\nmatrix[n-i,j] = matrix[i,j]\n1 2 3      1 2 3\n4 5 6  =>  4 5 6\n7 8 9      1 2 3\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::row
@@ -401,7 +432,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "row"
                 , row_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return a vector containing the contents of the ith row\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NMatrix::set
@@ -412,7 +444,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("value") )
+                , "Set the value of [i,j] to value\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NMatrix::setAll
@@ -423,7 +456,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Set all entries in the matrix to the value value" );
         
         }
         { //::SireMaths::NMatrix::setColumn
@@ -434,7 +468,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "setColumn"
                 , setColumn_function_value
-                , ( bp::arg("j"), bp::arg("value") ) );
+                , ( bp::arg("j"), bp::arg("value") )
+                , "Set the values of all data in the column j to value\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NMatrix::setColumn
@@ -445,7 +480,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "setColumn"
                 , setColumn_function_value
-                , ( bp::arg("j"), bp::arg("column") ) );
+                , ( bp::arg("j"), bp::arg("column") )
+                , "Copy the vector column to column j\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::setRow
@@ -456,7 +492,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "setRow"
                 , setRow_function_value
-                , ( bp::arg("i"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("value") )
+                , "Set the values of all data in the row i to value\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NMatrix::setRow
@@ -467,7 +504,8 @@ void register_NMatrix_class(){
             NMatrix_exposer.def( 
                 "setRow"
                 , setRow_function_value
-                , ( bp::arg("i"), bp::arg("row") ) );
+                , ( bp::arg("i"), bp::arg("row") )
+                , "Copy the vector row to row i\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::toString
@@ -477,7 +515,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this matrix" );
         
         }
         { //::SireMaths::NMatrix::trace
@@ -487,7 +526,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "trace"
-                , trace_function_value );
+                , trace_function_value
+                , "Return the trace of this matrix - this is only valid for a square matrix\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NMatrix::transpose
@@ -497,7 +537,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "transpose"
-                , transpose_function_value );
+                , transpose_function_value
+                , "Return the transpose of this matrix. This is fast, as this\njust toggles a flag to say whether or not the transpose is\nto be used. If you want to fully transpose the data (e.g.\nif you want to directly access the data) the call fullTranspose()" );
         
         }
         { //::SireMaths::NMatrix::typeName
@@ -507,7 +548,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::NMatrix::what
@@ -517,7 +559,8 @@ void register_NMatrix_class(){
             
             NMatrix_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         NMatrix_exposer.staticmethod( "createColumnMajor" );

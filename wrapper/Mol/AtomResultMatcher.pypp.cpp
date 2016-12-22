@@ -45,10 +45,10 @@ void register_AtomResultMatcher_class(){
 
     { //::SireMol::AtomResultMatcher
         typedef bp::class_< SireMol::AtomResultMatcher, bp::bases< SireMol::AtomMatcher, SireBase::Property > > AtomResultMatcher_exposer_t;
-        AtomResultMatcher_exposer_t AtomResultMatcher_exposer = AtomResultMatcher_exposer_t( "AtomResultMatcher", bp::init< >() );
+        AtomResultMatcher_exposer_t AtomResultMatcher_exposer = AtomResultMatcher_exposer_t( "AtomResultMatcher", "This is a simple atom matcher that can be used to repeat a match\nbased on a prior result\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AtomResultMatcher_scope( AtomResultMatcher_exposer );
-        AtomResultMatcher_exposer.def( bp::init< QHash< SireMol::AtomIdx, SireMol::AtomIdx > const &, bp::optional< bool > >(( bp::arg("results"), bp::arg("invert")=(bool)(false) )) );
-        AtomResultMatcher_exposer.def( bp::init< SireMol::AtomResultMatcher const & >(( bp::arg("other") )) );
+        AtomResultMatcher_exposer.def( bp::init< QHash< SireMol::AtomIdx, SireMol::AtomIdx > const &, bp::optional< bool > >(( bp::arg("results"), bp::arg("invert")=(bool)(false) ), "Constructor") );
+        AtomResultMatcher_exposer.def( bp::init< SireMol::AtomResultMatcher const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AtomResultMatcher::isNull
         
             typedef bool ( ::SireMol::AtomResultMatcher::*isNull_function_type)(  ) const;
@@ -56,7 +56,8 @@ void register_AtomResultMatcher_class(){
             
             AtomResultMatcher_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         AtomResultMatcher_exposer.def( bp::self != bp::self );
@@ -69,7 +70,8 @@ void register_AtomResultMatcher_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomResultMatcher_exposer.def( bp::self == bp::self );
@@ -80,7 +82,8 @@ void register_AtomResultMatcher_class(){
             
             AtomResultMatcher_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomResultMatcher::typeName
@@ -90,7 +93,8 @@ void register_AtomResultMatcher_class(){
             
             AtomResultMatcher_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomResultMatcher::what
@@ -100,7 +104,8 @@ void register_AtomResultMatcher_class(){
             
             AtomResultMatcher_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomResultMatcher_exposer.staticmethod( "typeName" );

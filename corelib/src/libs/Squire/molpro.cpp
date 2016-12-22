@@ -42,7 +42,7 @@
 
 #include "SireBase/tempdir.h"
 #include "SireBase/findexe.h"
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 
 #include "SireUnits/units.h"
 

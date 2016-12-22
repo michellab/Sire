@@ -27,7 +27,7 @@ void register_MoleculeProperty_class(){
 
     { //::SireMol::MoleculeProperty
         typedef bp::class_< SireMol::MoleculeProperty, bp::bases< SireMol::MolViewProperty, SireBase::Property >, boost::noncopyable > MoleculeProperty_exposer_t;
-        MoleculeProperty_exposer_t MoleculeProperty_exposer = MoleculeProperty_exposer_t( "MoleculeProperty", bp::no_init );
+        MoleculeProperty_exposer_t MoleculeProperty_exposer = MoleculeProperty_exposer_t( "MoleculeProperty", "This specifically is a property that pertains to an entire\nmolecule (e.g. a selection of atoms from that molecule)\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope MoleculeProperty_scope( MoleculeProperty_exposer );
         { //::SireMol::MoleculeProperty::typeName
         
@@ -36,7 +36,8 @@ void register_MoleculeProperty_class(){
             
             MoleculeProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         MoleculeProperty_exposer.staticmethod( "typeName" );

@@ -45,11 +45,11 @@ void register_Array2D_Vector__class(){
 
     { //::SireBase::Array2D< SireMaths::Vector >
         typedef bp::class_< SireBase::Array2D< SireMaths::Vector >, bp::bases< SireBase::Array2DBase > > Array2D_Vector__exposer_t;
-        Array2D_Vector__exposer_t Array2D_Vector__exposer = Array2D_Vector__exposer_t( "Array2D_Vector_", bp::init< >() );
+        Array2D_Vector__exposer_t Array2D_Vector__exposer = Array2D_Vector__exposer_t( "Array2D_Vector_", "", bp::init< >("") );
         bp::scope Array2D_Vector__scope( Array2D_Vector__exposer );
-        Array2D_Vector__exposer.def( bp::init< int, int >(( bp::arg("nrows"), bp::arg("ncolumns") )) );
-        Array2D_Vector__exposer.def( bp::init< int, int, SireMaths::Vector const & >(( bp::arg("nrows"), bp::arg("ncolumns"), bp::arg("default_value") )) );
-        Array2D_Vector__exposer.def( bp::init< SireBase::Array2D< SireMaths::Vector > const & >(( bp::arg("other") )) );
+        Array2D_Vector__exposer.def( bp::init< int, int >(( bp::arg("nrows"), bp::arg("ncolumns") ), "") );
+        Array2D_Vector__exposer.def( bp::init< int, int, SireMaths::Vector const & >(( bp::arg("nrows"), bp::arg("ncolumns"), bp::arg("default_value") ), "") );
+        Array2D_Vector__exposer.def( bp::init< SireBase::Array2D< SireMaths::Vector > const & >(( bp::arg("other") ), "") );
         { //::SireBase::Array2D< SireMaths::Vector >::at
         
             typedef SireBase::Array2D< SireMaths::Vector > exported_class_t;
@@ -60,7 +60,8 @@ void register_Array2D_Vector__class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::Array2D< SireMaths::Vector >::get
@@ -73,7 +74,8 @@ void register_Array2D_Vector__class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         Array2D_Vector__exposer.def( bp::self != bp::self );
@@ -87,7 +89,8 @@ void register_Array2D_Vector__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::Array2D< SireMaths::Vector >::operator=
@@ -100,7 +103,8 @@ void register_Array2D_Vector__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Array2D_Vector__exposer.def( bp::self == bp::self );
@@ -113,7 +117,8 @@ void register_Array2D_Vector__class(){
             Array2D_Vector__exposer.def( 
                 "redimension"
                 , redimension_function_value
-                , ( bp::arg("nrows"), bp::arg("ncolumns") ) );
+                , ( bp::arg("nrows"), bp::arg("ncolumns") )
+                , "" );
         
         }
         { //::SireBase::Array2D< SireMaths::Vector >::set
@@ -125,7 +130,8 @@ void register_Array2D_Vector__class(){
             Array2D_Vector__exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireBase::Array2D< SireMaths::Vector >::setAll
@@ -137,7 +143,8 @@ void register_Array2D_Vector__class(){
             Array2D_Vector__exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireBase::Array2D< SireMaths::Vector >::toString
@@ -148,7 +155,8 @@ void register_Array2D_Vector__class(){
             
             Array2D_Vector__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireBase::Array2D< SireMaths::Vector >::transpose
@@ -159,7 +167,8 @@ void register_Array2D_Vector__class(){
             
             Array2D_Vector__exposer.def( 
                 "transpose"
-                , transpose_function_value );
+                , transpose_function_value
+                , "" );
         
         }
         Array2D_Vector__exposer.def( "__copy__", &__copy__);

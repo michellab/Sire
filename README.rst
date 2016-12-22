@@ -30,7 +30,8 @@ which are available for Linux and OS X, which are quick and easy to install.
 
 However, as you are here, it is likely you want to download the latest,
 greatest version of the code, which you will need to compile. To compile Sire,
-you need a working C++ compiler (gcc or clang), `cmake <http://cmake.org>`__ 
+you need a working C++ compiler with at least C++ 2011 support (gcc or clang), 
+`cmake <http://cmake.org>`__ 
 (version 2.8.11.2 or above), a Git client to download the source,
 and a working internet connection (needed by
 the Sire compilation scripts to download additional dependencies).

@@ -47,7 +47,7 @@ void register_ScaledCLJParameterNames3D_class(){
 
     { //::SireMM::ScaledCLJParameterNames3D
         typedef bp::class_< SireMM::ScaledCLJParameterNames3D, bp::bases< SireMM::CLJParameterNames3D, SireMM::CLJParameterNames, SireMM::LJParameterName, SireMM::ChargeParameterName > > ScaledCLJParameterNames3D_exposer_t;
-        ScaledCLJParameterNames3D_exposer_t ScaledCLJParameterNames3D_exposer = ScaledCLJParameterNames3D_exposer_t( "ScaledCLJParameterNames3D", bp::init< >() );
+        ScaledCLJParameterNames3D_exposer_t ScaledCLJParameterNames3D_exposer = ScaledCLJParameterNames3D_exposer_t( "ScaledCLJParameterNames3D", "This class provides the default name of the properties\nthat contain the charge, LJ, intramolecular NB scale parameters and\n3D coordinates properties", bp::init< >("") );
         bp::scope ScaledCLJParameterNames3D_scope( ScaledCLJParameterNames3D_exposer );
         ScaledCLJParameterNames3D_exposer.def( "__copy__", &__copy__);
         ScaledCLJParameterNames3D_exposer.def( "__deepcopy__", &__copy__);

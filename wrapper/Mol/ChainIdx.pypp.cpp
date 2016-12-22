@@ -63,10 +63,10 @@ void register_ChainIdx_class(){
 
     { //::SireMol::ChainIdx
         typedef bp::class_< SireMol::ChainIdx, bp::bases< SireMol::ChainID, SireID::ID, SireID::IndexBase > > ChainIdx_exposer_t;
-        ChainIdx_exposer_t ChainIdx_exposer = ChainIdx_exposer_t( "ChainIdx", bp::init< >() );
+        ChainIdx_exposer_t ChainIdx_exposer = ChainIdx_exposer_t( "ChainIdx", "This is an ID object that is used to index atoms (e.g. index\nin a list or array, or in a molecule).\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope ChainIdx_scope( ChainIdx_exposer );
-        ChainIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") )) );
-        ChainIdx_exposer.def( bp::init< SireMol::ChainIdx const & >(( bp::arg("other") )) );
+        ChainIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") ), "") );
+        ChainIdx_exposer.def( bp::init< SireMol::ChainIdx const & >(( bp::arg("other") ), "") );
         { //::SireMol::ChainIdx::hash
         
             typedef ::uint ( ::SireMol::ChainIdx::*hash_function_type)(  ) const;
@@ -74,7 +74,8 @@ void register_ChainIdx_class(){
             
             ChainIdx_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::ChainIdx::isNull
@@ -84,7 +85,8 @@ void register_ChainIdx_class(){
             
             ChainIdx_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::ChainIdx::map
@@ -95,7 +97,8 @@ void register_ChainIdx_class(){
             ChainIdx_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::ChainIdx::null
@@ -105,7 +108,8 @@ void register_ChainIdx_class(){
             
             ChainIdx_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireMol::ChainIdx::operator=
@@ -117,7 +121,8 @@ void register_ChainIdx_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ChainIdx::toString
@@ -127,7 +132,8 @@ void register_ChainIdx_class(){
             
             ChainIdx_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ChainIdx::typeName
@@ -137,7 +143,8 @@ void register_ChainIdx_class(){
             
             ChainIdx_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::ChainIdx::what
@@ -147,7 +154,8 @@ void register_ChainIdx_class(){
             
             ChainIdx_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ChainIdx_exposer.staticmethod( "null" );
@@ -161,6 +169,7 @@ void register_ChainIdx_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ChainIdx_exposer.def( "__str__", &__str__< ::SireMol::ChainIdx > );
         ChainIdx_exposer.def( "__repr__", &__str__< ::SireMol::ChainIdx > );
+        ChainIdx_exposer.def( "__hash__", &::SireMol::ChainIdx::hash );
     }
 
 }

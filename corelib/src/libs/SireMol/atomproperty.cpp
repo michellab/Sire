@@ -92,6 +92,18 @@ void AtomProp::throwIncorrectNumberOfSelectedAtoms(int nats, int nselected) cons
 //////// Lets explicitly instantiate other AtomProperty types...
 ////////
 
+namespace SireBase
+{
+    template class PackedArray2D<SireMol::BeadNum>;
+    template class PackedArray2D<SireUnits::Dimension::MolarMass>;
+    template class PackedArray2D<SireUnits::Dimension::MolarEnergy>;
+    template class PackedArray2D<SireMol::Element>;
+    template class PackedArray2D<SireUnits::Dimension::Charge>;
+    template class PackedArray2D<SireMol::Velocity3D>;
+    template class PackedArray2D<SireMol::Force3D>;
+    template class PackedArray2D<SireUnits::Dimension::Volume>;
+}
+
 namespace SireMol
 {
     template class AtomProperty<QString>;

@@ -26,10 +26,10 @@ void register_Intra14Component_class(){
 
     { //::SireMM::Intra14Component
         typedef bp::class_< SireMM::Intra14Component, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > Intra14Component_exposer_t;
-        Intra14Component_exposer_t Intra14Component_exposer = Intra14Component_exposer_t( "Intra14Component", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() )) );
+        Intra14Component_exposer_t Intra14Component_exposer = Intra14Component_exposer_t( "Intra14Component", "This class represents the sum of the intramolecular 1-4 nonbonded\ncoulomb and LJ energies", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() ), "Constructor") );
         bp::scope Intra14Component_scope( Intra14Component_exposer );
-        Intra14Component_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        Intra14Component_exposer.def( bp::init< SireMM::Intra14Component const & >(( bp::arg("other") )) );
+        Intra14Component_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        Intra14Component_exposer.def( bp::init< SireMM::Intra14Component const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::Intra14Component::changeEnergy
         
             typedef void ( ::SireMM::Intra14Component::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::Intra14Energy const & ) const;
@@ -38,7 +38,8 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("nrg") ) );
+                , ( bp::arg("ff"), bp::arg("nrg") )
+                , "Change the internal components of the forcefield ff by delta" );
         
         }
         { //::SireMM::Intra14Component::coulomb
@@ -49,7 +50,8 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::Intra14Component::lj
@@ -60,7 +62,8 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::Intra14Component::setEnergy
@@ -71,7 +74,8 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("nrg") ) );
+                , ( bp::arg("ff"), bp::arg("nrg") )
+                , "Set the internal components of the forcefield ff to the passed values" );
         
         }
         { //::SireMM::Intra14Component::symbols
@@ -81,7 +85,8 @@ void register_Intra14Component_class(){
             
             Intra14Component_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return all of the components in this set" );
         
         }
         { //::SireMM::Intra14Component::total
@@ -92,7 +97,8 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::Intra14Component::typeName
@@ -102,7 +108,8 @@ void register_Intra14Component_class(){
             
             Intra14Component_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::Intra14Component::what
@@ -112,7 +119,8 @@ void register_Intra14Component_class(){
             
             Intra14Component_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Intra14Component_exposer.staticmethod( "typeName" );
@@ -125,6 +133,7 @@ void register_Intra14Component_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Intra14Component_exposer.def( "__str__", &__str__< ::SireMM::Intra14Component > );
         Intra14Component_exposer.def( "__repr__", &__str__< ::SireMM::Intra14Component > );
+        Intra14Component_exposer.def( "__hash__", &::SireMM::Intra14Component::hash );
     }
 
 }

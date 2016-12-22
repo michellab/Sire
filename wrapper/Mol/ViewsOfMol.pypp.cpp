@@ -56,18 +56,18 @@ void register_ViewsOfMol_class(){
 
     { //::SireMol::ViewsOfMol
         typedef bp::class_< SireMol::ViewsOfMol, bp::bases< SireMol::MoleculeView, SireBase::Property > > ViewsOfMol_exposer_t;
-        ViewsOfMol_exposer_t ViewsOfMol_exposer = ViewsOfMol_exposer_t( "ViewsOfMol", bp::init< >() );
+        ViewsOfMol_exposer_t ViewsOfMol_exposer = ViewsOfMol_exposer_t( "ViewsOfMol", "This class holds multiple arbitrary views of the\nsame molecule.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope ViewsOfMol_scope( ViewsOfMol_exposer );
-        ViewsOfMol_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") )) );
-        ViewsOfMol_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("selected_atoms") )) );
-        ViewsOfMol_exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::AtomSelection > const & >(( bp::arg("moldata"), bp::arg("views") )) );
-        ViewsOfMol_exposer.def( bp::init< SireMol::Selector< SireMol::Segment > const & >(( bp::arg("segments") )) );
-        ViewsOfMol_exposer.def( bp::init< SireMol::Selector< SireMol::Chain > const & >(( bp::arg("chains") )) );
-        ViewsOfMol_exposer.def( bp::init< SireMol::Selector< SireMol::CutGroup > const & >(( bp::arg("cgroups") )) );
-        ViewsOfMol_exposer.def( bp::init< SireMol::Selector< SireMol::Residue > const & >(( bp::arg("residue") )) );
-        ViewsOfMol_exposer.def( bp::init< SireMol::Selector< SireMol::Atom > const & >(( bp::arg("atoms") )) );
-        ViewsOfMol_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("view") )) );
-        ViewsOfMol_exposer.def( bp::init< SireMol::ViewsOfMol const & >(( bp::arg("other") )) );
+        ViewsOfMol_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "Construct an empty view of the molecule whose data\nis in moldata") );
+        ViewsOfMol_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("selected_atoms") ), "Construct the view of the passed molecule") );
+        ViewsOfMol_exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::AtomSelection > const & >(( bp::arg("moldata"), bp::arg("views") ), "Construct the views of the passed molecule") );
+        ViewsOfMol_exposer.def( bp::init< SireMol::Selector< SireMol::Segment > const & >(( bp::arg("segments") ), "Construct from the set of segments") );
+        ViewsOfMol_exposer.def( bp::init< SireMol::Selector< SireMol::Chain > const & >(( bp::arg("chains") ), "Construct from the set of chains") );
+        ViewsOfMol_exposer.def( bp::init< SireMol::Selector< SireMol::CutGroup > const & >(( bp::arg("cgroups") ), "Construct from the set of CutGroups") );
+        ViewsOfMol_exposer.def( bp::init< SireMol::Selector< SireMol::Residue > const & >(( bp::arg("residue") ), "Construct from the set of residues") );
+        ViewsOfMol_exposer.def( bp::init< SireMol::Selector< SireMol::Atom > const & >(( bp::arg("atoms") ), "Construct from the set of atoms") );
+        ViewsOfMol_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("view") ), "Construct just a single view of a molecule") );
+        ViewsOfMol_exposer.def( bp::init< SireMol::ViewsOfMol const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::ViewsOfMol::add
         
             typedef void ( ::SireMol::ViewsOfMol::*add_function_type)( ::SireMol::AtomSelection const & ) ;
@@ -76,7 +76,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "Add the view view to this set - this adds the\nview even if it already exists in this set\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::ViewsOfMol::add
@@ -87,7 +88,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("views") ) );
+                , ( bp::arg("views") )
+                , "Return the views where views have been added to\nthe set - this duplicates any views that already\nexist\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::ViewsOfMol::addIfUnique
@@ -98,7 +100,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "Add the view view to this set, only if it doesnt\nalready exist - this returns whether the view has\nbeen added\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::ViewsOfMol::addIfUnique
@@ -109,7 +112,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("views") ) );
+                , ( bp::arg("views") )
+                , "Add the views in views that dont already exist\nin this set - this returns the views that were added\n(or an empty list if nothing was added)\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::ViewsOfMol::all
@@ -119,7 +123,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "all"
-                , all_function_value );
+                , all_function_value
+                , "Return the molecule that is the union of all of the\nviews in this set" );
         
         }
         { //::SireMol::ViewsOfMol::assertNoOverlap
@@ -129,7 +134,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "assertNoOverlap"
-                , assertNoOverlap_function_value );
+                , assertNoOverlap_function_value
+                , "Assert that none of the views contain the same atoms\n(i.e. there is no overlap between each view)\nThrow: SireMol::duplicate_atom\n" );
         
         }
         { //::SireMol::ViewsOfMol::at
@@ -140,7 +146,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the ith view in this set\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ViewsOfMol::contains
@@ -151,7 +158,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Return whether or not any of the views contains\nthe atom at index atomidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ViewsOfMol::contains
@@ -162,7 +170,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether or not the views between them contain\nall of the atoms identified by atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ViewsOfMol::contains
@@ -173,7 +182,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "Return whether or not the views between them contain\nall of the atoms in the selection selection\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::ViewsOfMol::contains
@@ -184,7 +194,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("selections") ) );
+                , ( bp::arg("selections") )
+                , "Return whether or not the views between them contain\nall of the atoms in all of the selections in selections\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::ViewsOfMol::count
@@ -194,7 +205,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of views in this set" );
         
         }
         { //::SireMol::ViewsOfMol::evaluate
@@ -204,7 +216,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "evaluate"
-                , evaluate_function_value );
+                , evaluate_function_value
+                , "Return an evaluator that can evaluate properties\nover all of the atoms in the views" );
         
         }
         { //::SireMol::ViewsOfMol::evaluate
@@ -215,7 +228,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return an evaluator that can evaluate properties\nover the atoms in the ith view of this set\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ViewsOfMol::hasMetadata
@@ -226,7 +240,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::hasMetadata
@@ -237,7 +252,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("arg0"), bp::arg("arg1") ) );
+                , ( bp::arg("arg0"), bp::arg("arg1") )
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::hasProperty
@@ -248,7 +264,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "hasProperty"
                 , hasProperty_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::indexOf
@@ -259,7 +276,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "indexOf"
                 , indexOf_function_value
-                , ( bp::arg("selection"), bp::arg("from")=(int)(0) ) );
+                , ( bp::arg("selection"), bp::arg("from")=(int)(0) )
+                , "Return the index of the view selection in this set,\nsearching forward from the index position from. This\nreturns -1 if this view is not present in this set\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::ViewsOfMol::intersects
@@ -270,7 +288,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether or not any of the views contains any\nof the atoms identified by atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ViewsOfMol::intersects
@@ -281,7 +300,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "Return whether or not any of the views contains any\nof the atoms in selection\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::ViewsOfMol::isEmpty
@@ -291,7 +311,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is empty" );
         
         }
         { //::SireMol::ViewsOfMol::join
@@ -301,7 +322,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "join"
-                , join_function_value );
+                , join_function_value
+                , "Return the molecule that is the union of all of the\nviews in this set" );
         
         }
         { //::SireMol::ViewsOfMol::metadataKeys
@@ -311,7 +333,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "metadataKeys"
-                , metadataKeys_function_value );
+                , metadataKeys_function_value
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::metadataKeys
@@ -322,7 +345,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::molecule
@@ -332,7 +356,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "molecule"
-                , molecule_function_value );
+                , molecule_function_value
+                , "Return the molecule that contains these views" );
         
         }
         { //::SireMol::ViewsOfMol::move
@@ -342,7 +367,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "move"
-                , move_function_value );
+                , move_function_value
+                , "Return the mover that can move all of the atoms\nin all of the views" );
         
         }
         { //::SireMol::ViewsOfMol::move
@@ -353,7 +379,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the mover that can move all of the atoms\nin the ith view in this set\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ViewsOfMol::nViews
@@ -363,7 +390,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "nViews"
-                , nViews_function_value );
+                , nViews_function_value
+                , "Return the number of views in this set" );
         
         }
         { //::SireMol::ViewsOfMol::name
@@ -374,7 +402,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the name of the molecule being viewed" );
         
         }
         { //::SireMol::ViewsOfMol::number
@@ -384,7 +413,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "number"
-                , number_function_value );
+                , number_function_value
+                , "Return the number of the molecule being viewed" );
         
         }
         ViewsOfMol_exposer.def( bp::self != bp::self );
@@ -399,7 +429,8 @@ void register_ViewsOfMol_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::operator=
@@ -411,7 +442,8 @@ void register_ViewsOfMol_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("atoms") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::operator=
@@ -423,7 +455,8 @@ void register_ViewsOfMol_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("cgroups") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::operator=
@@ -435,7 +468,8 @@ void register_ViewsOfMol_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("residues") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::operator=
@@ -447,7 +481,8 @@ void register_ViewsOfMol_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("chains") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::operator=
@@ -459,7 +494,8 @@ void register_ViewsOfMol_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("segments") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::operator=
@@ -471,7 +507,8 @@ void register_ViewsOfMol_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("view") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ViewsOfMol_exposer.def( bp::self == bp::self );
@@ -483,7 +520,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::propertyKeys
@@ -493,7 +531,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::remove
@@ -504,7 +543,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "Remove the view view from this set, if\nany copies exist. This only removes the first\ncopy of this view from this set, if multiple\ncopies of this view exist. This returns whether\nany copies were removed from this set.\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::ViewsOfMol::remove
@@ -515,7 +555,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("views") ) );
+                , ( bp::arg("views") )
+                , "Remove the views in views from this set. This removes only\nthe first copy of the view if multiple exist in this set.\nThis returns the views that were successfully removed." );
         
         }
         { //::SireMol::ViewsOfMol::removeAll
@@ -526,7 +567,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "Remove all copies of view from this set, if any\ncopies of this view are contained in this set. This\nreturn whether any views were removed\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::ViewsOfMol::removeAll
@@ -537,7 +579,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("views") ) );
+                , ( bp::arg("views") )
+                , "Remove all copies of all of the views in views. This removes\nall copies of any duplicated views in this set, and returns\na list of all of the views that were successfully removed." );
         
         }
         { //::SireMol::ViewsOfMol::removeAll
@@ -547,7 +590,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "removeAll"
-                , removeAll_function_value );
+                , removeAll_function_value
+                , "Remove all views from this set" );
         
         }
         { //::SireMol::ViewsOfMol::removeAt
@@ -558,7 +602,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "removeAt"
                 , removeAt_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Remove the ith view from this set - this returns\nthe view that was removed\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ViewsOfMol::removeDuplicates
@@ -568,7 +613,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "removeDuplicates"
-                , removeDuplicates_function_value );
+                , removeDuplicates_function_value
+                , "Remove all duplicate views from this set - this returns\ncopies of all of the removed views (multiple times\nif a view is contained more than twice in this set)" );
         
         }
         { //::SireMol::ViewsOfMol::selectedAll
@@ -578,7 +624,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Return whether or not this contains all atoms in the molecule" );
         
         }
         { //::SireMol::ViewsOfMol::selection
@@ -588,7 +635,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "selection"
-                , selection_function_value );
+                , selection_function_value
+                , "Return all of the atoms selected across all of the\nviews in this set" );
         
         }
         { //::SireMol::ViewsOfMol::selection
@@ -600,7 +648,8 @@ void register_ViewsOfMol_class(){
                 "selection"
                 , selection_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the atoms selected in the ith view in this set\nThrow: SireError:invalid_index\n" );
         
         }
         { //::SireMol::ViewsOfMol::selections
@@ -610,7 +659,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "selections"
-                , selections_function_value );
+                , selections_function_value
+                , "Return all of the selections in this set of views" );
         
         }
         { //::SireMol::ViewsOfMol::toString
@@ -620,7 +670,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of these views" );
         
         }
         { //::SireMol::ViewsOfMol::typeName
@@ -630,7 +681,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::ViewsOfMol::unite
@@ -641,7 +693,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "unite"
                 , unite_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "Synonym for ViewsOfMol::addIfUnique(view)\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::ViewsOfMol::unite
@@ -652,7 +705,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "unite"
                 , unite_function_value
-                , ( bp::arg("views") ) );
+                , ( bp::arg("views") )
+                , "Synonym for ViewsOfMol:addIfUnique(views)\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::ViewsOfMol::version
@@ -662,7 +716,8 @@ void register_ViewsOfMol_class(){
             
             ViewsOfMol_exposer.def( 
                 "version"
-                , version_function_value );
+                , version_function_value
+                , "Return the version of the molecule being viewed" );
         
         }
         { //::SireMol::ViewsOfMol::version
@@ -673,7 +728,8 @@ void register_ViewsOfMol_class(){
             ViewsOfMol_exposer.def( 
                 "version"
                 , version_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return the version of the property at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::ViewsOfMol::viewAt
@@ -685,7 +741,8 @@ void register_ViewsOfMol_class(){
                 "viewAt"
                 , viewAt_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Synonym for ViewsOfMol::selection(i)\nThrow: SireError::invalid_index\n" );
         
         }
         ViewsOfMol_exposer.staticmethod( "typeName" );

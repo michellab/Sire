@@ -35,7 +35,7 @@ void register_SwitchingFunction_class(){
 
     { //::SireMM::SwitchingFunction
         typedef bp::class_< SireMM::SwitchingFunction, bp::bases< SireBase::Property >, boost::noncopyable > SwitchingFunction_exposer_t;
-        SwitchingFunction_exposer_t SwitchingFunction_exposer = SwitchingFunction_exposer_t( "SwitchingFunction", bp::no_init );
+        SwitchingFunction_exposer_t SwitchingFunction_exposer = SwitchingFunction_exposer_t( "SwitchingFunction", "This is the virtual base class of all switching functions. These\nreturn scale factors based on the supplied distance\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope SwitchingFunction_scope( SwitchingFunction_exposer );
         { //::SireMM::SwitchingFunction::cutoffDistance
         
@@ -44,7 +44,8 @@ void register_SwitchingFunction_class(){
             
             SwitchingFunction_exposer.def( 
                 "cutoffDistance"
-                , cutoffDistance_function_value );
+                , cutoffDistance_function_value
+                , "" );
         
         }
         { //::SireMM::SwitchingFunction::dElectrostaticScaleFactor
@@ -55,7 +56,8 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "dElectrostaticScaleFactor"
                 , dElectrostaticScaleFactor_function_value
-                , ( bp::arg("dist") ) );
+                , ( bp::arg("dist") )
+                , "Return the derivative (gradient) of the electrostatic\nscale factor at the distance dist" );
         
         }
         { //::SireMM::SwitchingFunction::dVDWScaleFactor
@@ -66,7 +68,8 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "dVDWScaleFactor"
                 , dVDWScaleFactor_function_value
-                , ( bp::arg("dist") ) );
+                , ( bp::arg("dist") )
+                , "Return the derivative (gradient) of the VDW\nscale factor at the distance dist" );
         
         }
         { //::SireMM::SwitchingFunction::electrostaticCutoffDistance
@@ -76,7 +79,8 @@ void register_SwitchingFunction_class(){
             
             SwitchingFunction_exposer.def( 
                 "electrostaticCutoffDistance"
-                , electrostaticCutoffDistance_function_value );
+                , electrostaticCutoffDistance_function_value
+                , "" );
         
         }
         { //::SireMM::SwitchingFunction::electrostaticFeatherDistance
@@ -86,7 +90,8 @@ void register_SwitchingFunction_class(){
             
             SwitchingFunction_exposer.def( 
                 "electrostaticFeatherDistance"
-                , electrostaticFeatherDistance_function_value );
+                , electrostaticFeatherDistance_function_value
+                , "" );
         
         }
         { //::SireMM::SwitchingFunction::electrostaticScaleFactor
@@ -97,7 +102,8 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "electrostaticScaleFactor"
                 , electrostaticScaleFactor_function_value
-                , ( bp::arg("dist") ) );
+                , ( bp::arg("dist") )
+                , "Return the electrostatic scale factor for the distance dist" );
         
         }
         { //::SireMM::SwitchingFunction::featherDistance
@@ -107,7 +113,8 @@ void register_SwitchingFunction_class(){
             
             SwitchingFunction_exposer.def( 
                 "featherDistance"
-                , featherDistance_function_value );
+                , featherDistance_function_value
+                , "" );
         
         }
         { //::SireMM::SwitchingFunction::null
@@ -118,7 +125,8 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::SwitchingFunction::toString
@@ -128,7 +136,8 @@ void register_SwitchingFunction_class(){
             
             SwitchingFunction_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this switching function" );
         
         }
         { //::SireMM::SwitchingFunction::typeName
@@ -138,7 +147,8 @@ void register_SwitchingFunction_class(){
             
             SwitchingFunction_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::SwitchingFunction::vdwCutoffDistance
@@ -148,7 +158,8 @@ void register_SwitchingFunction_class(){
             
             SwitchingFunction_exposer.def( 
                 "vdwCutoffDistance"
-                , vdwCutoffDistance_function_value );
+                , vdwCutoffDistance_function_value
+                , "" );
         
         }
         { //::SireMM::SwitchingFunction::vdwFeatherDistance
@@ -158,7 +169,8 @@ void register_SwitchingFunction_class(){
             
             SwitchingFunction_exposer.def( 
                 "vdwFeatherDistance"
-                , vdwFeatherDistance_function_value );
+                , vdwFeatherDistance_function_value
+                , "" );
         
         }
         { //::SireMM::SwitchingFunction::vdwScaleFactor
@@ -169,7 +181,8 @@ void register_SwitchingFunction_class(){
             SwitchingFunction_exposer.def( 
                 "vdwScaleFactor"
                 , vdwScaleFactor_function_value
-                , ( bp::arg("dist") ) );
+                , ( bp::arg("dist") )
+                , "Return the VDW scale factor for the distance dist" );
         
         }
         SwitchingFunction_exposer.staticmethod( "null" );

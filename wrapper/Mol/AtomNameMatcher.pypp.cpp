@@ -45,9 +45,9 @@ void register_AtomNameMatcher_class(){
 
     { //::SireMol::AtomNameMatcher
         typedef bp::class_< SireMol::AtomNameMatcher, bp::bases< SireMol::AtomMatcher, SireBase::Property > > AtomNameMatcher_exposer_t;
-        AtomNameMatcher_exposer_t AtomNameMatcher_exposer = AtomNameMatcher_exposer_t( "AtomNameMatcher", bp::init< >() );
+        AtomNameMatcher_exposer_t AtomNameMatcher_exposer = AtomNameMatcher_exposer_t( "AtomNameMatcher", "This is a simple atom matcher that matches the atoms based\non their names, so the atom called CA1 in molinfo0 will\nbe matched to the atom called CA1 in molinfo1\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AtomNameMatcher_scope( AtomNameMatcher_exposer );
-        AtomNameMatcher_exposer.def( bp::init< SireMol::AtomNameMatcher const & >(( bp::arg("arg0") )) );
+        AtomNameMatcher_exposer.def( bp::init< SireMol::AtomNameMatcher const & >(( bp::arg("arg0") ), "Copy constructor") );
         AtomNameMatcher_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomNameMatcher::operator=
         
@@ -58,7 +58,8 @@ void register_AtomNameMatcher_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomNameMatcher_exposer.def( bp::self == bp::self );
@@ -69,7 +70,8 @@ void register_AtomNameMatcher_class(){
             
             AtomNameMatcher_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomNameMatcher::typeName
@@ -79,7 +81,8 @@ void register_AtomNameMatcher_class(){
             
             AtomNameMatcher_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomNameMatcher::what
@@ -89,7 +92,8 @@ void register_AtomNameMatcher_class(){
             
             AtomNameMatcher_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomNameMatcher_exposer.staticmethod( "typeName" );

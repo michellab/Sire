@@ -39,6 +39,13 @@ get in touch via the Sire users mailing list, or by creating a github issue.
 from Sire.Analysis import *
 import Sire.Stream
 
+# Import the asciiplot (ap) plotting library - this needs numpy
+try:
+    numpy = Sire.try_import("numpy")
+    from Sire.Tools import ap
+except:
+    pass
+
 import argparse
 import sys
 import os
@@ -102,7 +109,7 @@ if must_exit:
     sys.exit(0)
 
 if args.input:
-    input_file = args.input
+    input_file = args.input[0]
 else:
     input_file = None
 
@@ -276,6 +283,9 @@ for result in results:
     FILE.write("# %s " % result[0])
 FILE.write("\n")
 
+x = []
+y = []
+
 i = 1
 has_value = True
 while has_value:
@@ -285,6 +295,8 @@ while has_value:
         if i in result[1]:
             has_value = True
             values.append(result[1][i])
+            x.append(i)
+            y.append(result[1][i])
         else:
             values.append(0.0)
 
@@ -297,15 +309,38 @@ while has_value:
         FILE.write("\n")
         i += 1
 
+# now plot the graph of the convergence (just the last 90% of iterations)
+try:
+    p = ap.AFigure()
+    strt = int(len(x) / 10)
+    conv_plot = p.plot(numpy.array(x[strt:]), numpy.array(y[strt:]), ".")
+    print("\nPlot of free energy versus iteration")
+    print(conv_plot + "\n")
+except Exception as e:
+    print("Error plotting graph: %s" % e)
+
+
 FILE.write("# PMFs\n")
 
 for result in results:
+    x = []
+    y = []
     FILE.write("# %s\n" % result[0])
     FILE.write("# Lambda  PMF  Maximum  Minimum \n")
 
     for value in result[2].values():
         FILE.write(
             "%s  %s  %s  %s\n" % (value.x(), value.y(), value.y() + value.yMaxError(), value.y() - value.yMaxError()))
+        x.append(value.x())
+        y.append(value.y())
+
+    try:
+        p = ap.AFigure()
+        pmf_plot = p.plot(numpy.array(x), numpy.array(y), '_o')
+        print("\nPMF Plot of free energy versus lambda")
+        print(pmf_plot + "\n")
+    except:
+        pass
 
 FILE.write("# Free energies \n")
 

@@ -26,10 +26,10 @@ void register_DihedralComponent_class(){
 
     { //::SireMM::DihedralComponent
         typedef bp::class_< SireMM::DihedralComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > DihedralComponent_exposer_t;
-        DihedralComponent_exposer_t DihedralComponent_exposer = DihedralComponent_exposer_t( "DihedralComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() )) );
+        DihedralComponent_exposer_t DihedralComponent_exposer = DihedralComponent_exposer_t( "DihedralComponent", "This class represents a Dihedral component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope DihedralComponent_scope( DihedralComponent_exposer );
-        DihedralComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        DihedralComponent_exposer.def( bp::init< SireMM::DihedralComponent const & >(( bp::arg("other") )) );
+        DihedralComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        DihedralComponent_exposer.def( bp::init< SireMM::DihedralComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::DihedralComponent::changeEnergy
         
             typedef void ( ::SireMM::DihedralComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::DihedralEnergy const & ) const;
@@ -38,7 +38,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("dihnrg") ) );
+                , ( bp::arg("ff"), bp::arg("dihnrg") )
+                , "Change the component of the energy in the forcefield ff\nby delta" );
         
         }
         { //::SireMM::DihedralComponent::setEnergy
@@ -49,7 +50,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("dihnrg") ) );
+                , ( bp::arg("ff"), bp::arg("dihnrg") )
+                , "Set the component of the energy in the forcefield ff\nto be equal to the passed energy" );
         
         }
         { //::SireMM::DihedralComponent::symbols
@@ -59,7 +61,8 @@ void register_DihedralComponent_class(){
             
             DihedralComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireMM::DihedralComponent::total
@@ -70,7 +73,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::DihedralComponent::typeName
@@ -80,7 +84,8 @@ void register_DihedralComponent_class(){
             
             DihedralComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::DihedralComponent::what
@@ -90,7 +95,8 @@ void register_DihedralComponent_class(){
             
             DihedralComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         DihedralComponent_exposer.staticmethod( "typeName" );
@@ -103,6 +109,7 @@ void register_DihedralComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         DihedralComponent_exposer.def( "__str__", &__str__< ::SireMM::DihedralComponent > );
         DihedralComponent_exposer.def( "__repr__", &__str__< ::SireMM::DihedralComponent > );
+        DihedralComponent_exposer.def( "__hash__", &::SireMM::DihedralComponent::hash );
     }
 
 }

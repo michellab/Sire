@@ -23,7 +23,7 @@ void register_Orbital_class(){
 
     { //::Squire::Orbital
         typedef bp::class_< Squire::Orbital, bp::bases< SireBase::Property >, boost::noncopyable > Orbital_exposer_t;
-        Orbital_exposer_t Orbital_exposer = Orbital_exposer_t( "Orbital", bp::no_init );
+        Orbital_exposer_t Orbital_exposer = Orbital_exposer_t( "Orbital", "This is the base class of all orbitals.\n\nOrbital classes (like OrbitalShell) are designed to hold\ninformation about an orbital, and are not meant to be\nused directly in an integral program (indeed, an orbital\nnormally doesnt even have coordinate information, as\nthis is provided by the molecule that holds the orbital).\n\nOrbital classes are thus virtual and not designed for speed.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Orbital_scope( Orbital_exposer );
         { //::Squire::Orbital::toString
         
@@ -32,7 +32,8 @@ void register_Orbital_class(){
             
             Orbital_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::Squire::Orbital::typeName
@@ -42,7 +43,8 @@ void register_Orbital_class(){
             
             Orbital_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Orbital_exposer.staticmethod( "typeName" );

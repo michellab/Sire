@@ -29,6 +29,7 @@
 #ifndef SIREID_IDORSET_HPP
 #define SIREID_IDORSET_HPP
 
+#include <QObject>
 #include <QSet>
 #include <QString>
 #include <QStringList>

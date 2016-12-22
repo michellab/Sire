@@ -37,9 +37,9 @@ void register_Median_class(){
 
     { //::SireMaths::Median
         typedef bp::class_< SireMaths::Median, bp::bases< SireMaths::Accumulator, SireBase::Property > > Median_exposer_t;
-        Median_exposer_t Median_exposer = Median_exposer_t( "Median", bp::init< >() );
+        Median_exposer_t Median_exposer = Median_exposer_t( "Median", "This class is used to calculate the maximum, minimum and median\nof a collection of values\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty average") );
         bp::scope Median_scope( Median_exposer );
-        Median_exposer.def( bp::init< SireMaths::Median const & >(( bp::arg("other") )) );
+        Median_exposer.def( bp::init< SireMaths::Median const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::Median::accumulate
         
             typedef void ( ::SireMaths::Median::*accumulate_function_type)( double ) ;
@@ -48,7 +48,8 @@ void register_Median_class(){
             Median_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Accumulate the passed value onto the average" );
         
         }
         { //::SireMaths::Median::clear
@@ -58,7 +59,8 @@ void register_Median_class(){
             
             Median_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Completely clear the statistics in this accumulator" );
         
         }
         { //::SireMaths::Median::max
@@ -68,7 +70,8 @@ void register_Median_class(){
             
             Median_exposer.def( 
                 "max"
-                , max_function_value );
+                , max_function_value
+                , "Return the maximum value" );
         
         }
         { //::SireMaths::Median::maximum
@@ -78,7 +81,8 @@ void register_Median_class(){
             
             Median_exposer.def( 
                 "maximum"
-                , maximum_function_value );
+                , maximum_function_value
+                , "Return the maximum value" );
         
         }
         { //::SireMaths::Median::median
@@ -88,7 +92,8 @@ void register_Median_class(){
             
             Median_exposer.def( 
                 "median"
-                , median_function_value );
+                , median_function_value
+                , "Return the median value" );
         
         }
         { //::SireMaths::Median::min
@@ -98,7 +103,8 @@ void register_Median_class(){
             
             Median_exposer.def( 
                 "min"
-                , min_function_value );
+                , min_function_value
+                , "Return the minimum value" );
         
         }
         { //::SireMaths::Median::minimum
@@ -108,7 +114,8 @@ void register_Median_class(){
             
             Median_exposer.def( 
                 "minimum"
-                , minimum_function_value );
+                , minimum_function_value
+                , "Return the minimum value" );
         
         }
         Median_exposer.def( bp::self != bp::self );
@@ -121,7 +128,8 @@ void register_Median_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Median_exposer.def( bp::self == bp::self );
@@ -132,7 +140,8 @@ void register_Median_class(){
             
             Median_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Median_exposer.staticmethod( "typeName" );

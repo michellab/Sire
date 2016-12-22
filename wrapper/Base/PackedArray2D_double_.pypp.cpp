@@ -23,24 +23,25 @@ void register_PackedArray2D_double__class(){
 
     { //::SireBase::PackedArray2D< double >
         typedef bp::class_< SireBase::PackedArray2D< double > > PackedArray2D_double__exposer_t;
-        PackedArray2D_double__exposer_t PackedArray2D_double__exposer = PackedArray2D_double__exposer_t( "PackedArray2D_double_", bp::init< >() );
+        PackedArray2D_double__exposer_t PackedArray2D_double__exposer = PackedArray2D_double__exposer_t( "PackedArray2D_double_", "", bp::init< >("") );
         bp::scope PackedArray2D_double__scope( PackedArray2D_double__exposer );
-        PackedArray2D_double__exposer.def( bp::init< SireBase::detail::PackedArray2D_Array< double > const & >(( bp::arg("array") )) );
-        PackedArray2D_double__exposer.def( bp::init< QVector< SireBase::detail::PackedArray2D_Array< double > > const & >(( bp::arg("arrays") )) );
-        PackedArray2D_double__exposer.def( bp::init< QVector< double > const & >(( bp::arg("values") )) );
-        PackedArray2D_double__exposer.def( bp::init< QVector< QVector< double > > const & >(( bp::arg("values") )) );
-        PackedArray2D_double__exposer.def( bp::init< SireBase::PackedArray2D< double > const &, SireBase::PackedArray2D< double > const & >(( bp::arg("array0"), bp::arg("array1") )) );
-        PackedArray2D_double__exposer.def( bp::init< SireBase::PackedArray2D< double > const & >(( bp::arg("other") )) );
+        PackedArray2D_double__exposer.def( bp::init< SireBase::PackedArray2D< double >::Array const & >(( bp::arg("array") ), "") );
+        PackedArray2D_double__exposer.def( bp::init< QVector< SireBase::detail::PackedArray2D_Array< double > > const & >(( bp::arg("arrays") ), "") );
+        PackedArray2D_double__exposer.def( bp::init< QVector< double > const & >(( bp::arg("values") ), "") );
+        PackedArray2D_double__exposer.def( bp::init< QVector< QVector< double > > const & >(( bp::arg("values") ), "") );
+        PackedArray2D_double__exposer.def( bp::init< SireBase::PackedArray2D< double > const &, SireBase::PackedArray2D< double > const & >(( bp::arg("array0"), bp::arg("array1") ), "") );
+        PackedArray2D_double__exposer.def( bp::init< SireBase::PackedArray2D< double > const & >(( bp::arg("other") ), "") );
         { //::SireBase::PackedArray2D< double >::append
         
             typedef SireBase::PackedArray2D< double > exported_class_t;
-            typedef void ( ::SireBase::PackedArray2D< double >::*append_function_type)( ::SireBase::detail::PackedArray2D_Array< double > const & ) ;
+            typedef void ( ::SireBase::PackedArray2D< double >::*append_function_type)( ::SireBase::PackedArray2D< double >::Array const & ) ;
             append_function_type append_function_value( &::SireBase::PackedArray2D< double >::append );
             
             PackedArray2D_double__exposer.def( 
                 "append"
                 , append_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::append
@@ -52,7 +53,8 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "append"
                 , append_function_value
-                , ( bp::arg("arrays") ) );
+                , ( bp::arg("arrays") )
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::append
@@ -64,7 +66,8 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "append"
                 , append_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::append
@@ -76,7 +79,8 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "append"
                 , append_function_value
-                , ( bp::arg("arrays") ) );
+                , ( bp::arg("arrays") )
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::assertValidIndex
@@ -88,20 +92,22 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "assertValidIndex"
                 , assertValidIndex_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::at
         
             typedef SireBase::PackedArray2D< double > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< double > const & ( ::SireBase::PackedArray2D< double >::*at_function_type)( ::quint32 ) const;
+            typedef ::SireBase::PackedArray2D< double >::Array const & ( ::SireBase::PackedArray2D< double >::*at_function_type)( ::quint32 ) const;
             at_function_type at_function_value( &::SireBase::PackedArray2D< double >::at );
             
             PackedArray2D_double__exposer.def( 
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::at
@@ -114,7 +120,8 @@ void register_PackedArray2D_double__class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::count
@@ -125,7 +132,8 @@ void register_PackedArray2D_double__class(){
             
             PackedArray2D_double__exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::fromVariant
@@ -137,7 +145,8 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::isEmpty
@@ -148,7 +157,8 @@ void register_PackedArray2D_double__class(){
             
             PackedArray2D_double__exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::nArrays
@@ -159,7 +169,8 @@ void register_PackedArray2D_double__class(){
             
             PackedArray2D_double__exposer.def( 
                 "nArrays"
-                , nArrays_function_value );
+                , nArrays_function_value
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::nValues
@@ -170,7 +181,8 @@ void register_PackedArray2D_double__class(){
             
             PackedArray2D_double__exposer.def( 
                 "nValues"
-                , nValues_function_value );
+                , nValues_function_value
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::nValues
@@ -182,7 +194,8 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "nValues"
                 , nValues_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         PackedArray2D_double__exposer.def( bp::self != bp::self );
@@ -196,7 +209,8 @@ void register_PackedArray2D_double__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::operator=
@@ -209,21 +223,23 @@ void register_PackedArray2D_double__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PackedArray2D_double__exposer.def( bp::self == bp::self );
         { //::SireBase::PackedArray2D< double >::operator[]
         
             typedef SireBase::PackedArray2D< double > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< double > const & ( ::SireBase::PackedArray2D< double >::*__getitem___function_type)( ::quint32 ) const;
+            typedef ::SireBase::PackedArray2D< double >::Array const & ( ::SireBase::PackedArray2D< double >::*__getitem___function_type)( ::quint32 ) const;
             __getitem___function_type __getitem___function_value( &::SireBase::PackedArray2D< double >::operator[] );
             
             PackedArray2D_double__exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::remove
@@ -235,7 +251,8 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::removeAll
@@ -247,7 +264,8 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("idxs") ) );
+                , ( bp::arg("idxs") )
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::size
@@ -258,7 +276,8 @@ void register_PackedArray2D_double__class(){
             
             PackedArray2D_double__exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::toQVector
@@ -269,7 +288,8 @@ void register_PackedArray2D_double__class(){
             
             PackedArray2D_double__exposer.def( 
                 "toQVector"
-                , toQVector_function_value );
+                , toQVector_function_value
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::toQVectorVector
@@ -280,7 +300,8 @@ void register_PackedArray2D_double__class(){
             
             PackedArray2D_double__exposer.def( 
                 "toQVectorVector"
-                , toQVectorVector_function_value );
+                , toQVectorVector_function_value
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::toString
@@ -291,7 +312,8 @@ void register_PackedArray2D_double__class(){
             
             PackedArray2D_double__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::toVariant
@@ -302,19 +324,21 @@ void register_PackedArray2D_double__class(){
             
             PackedArray2D_double__exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::update
         
             typedef SireBase::PackedArray2D< double > exported_class_t;
-            typedef void ( ::SireBase::PackedArray2D< double >::*update_function_type)( ::quint32,::SireBase::detail::PackedArray2D_Array< double > const & ) ;
+            typedef void ( ::SireBase::PackedArray2D< double >::*update_function_type)( ::quint32,::SireBase::PackedArray2D< double >::Array const & ) ;
             update_function_type update_function_value( &::SireBase::PackedArray2D< double >::update );
             
             PackedArray2D_double__exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("i"), bp::arg("array") ) );
+                , ( bp::arg("i"), bp::arg("array") )
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::update
@@ -326,7 +350,8 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("i"), bp::arg("array") ) );
+                , ( bp::arg("i"), bp::arg("array") )
+                , "" );
         
         }
         { //::SireBase::PackedArray2D< double >::updateAll
@@ -338,7 +363,8 @@ void register_PackedArray2D_double__class(){
             PackedArray2D_double__exposer.def( 
                 "updateAll"
                 , updateAll_function_value
-                , ( bp::arg("idxs"), bp::arg("arrays") ) );
+                , ( bp::arg("idxs"), bp::arg("arrays") )
+                , "" );
         
         }
         PackedArray2D_double__exposer.staticmethod( "fromVariant" );

@@ -65,7 +65,6 @@
 
 #include "SireBase/tempdir.h"
 #include "SireBase/findexe.h"
-#include "SireBase/process.h"
 
 #include "SireStream/streamdata.hpp"
 

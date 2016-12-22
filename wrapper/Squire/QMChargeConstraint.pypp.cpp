@@ -44,11 +44,11 @@ void register_QMChargeConstraint_class(){
 
     { //::Squire::QMChargeConstraint
         typedef bp::class_< Squire::QMChargeConstraint, bp::bases< SireSystem::ChargeConstraint, SireSystem::MoleculeConstraint, SireSystem::Constraint, SireBase::Property > > QMChargeConstraint_exposer_t;
-        QMChargeConstraint_exposer_t QMChargeConstraint_exposer = QMChargeConstraint_exposer_t( "QMChargeConstraint", bp::init< >() );
+        QMChargeConstraint_exposer_t QMChargeConstraint_exposer = QMChargeConstraint_exposer_t( "QMChargeConstraint", "This is a charge constraint that constrains the charges\nof molecules to equal those calculated from QM calculations\n(e.g. the charges can be constrained to equal those\nfrom AM1-BCC calculations)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope QMChargeConstraint_scope( QMChargeConstraint_exposer );
-        QMChargeConstraint_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        QMChargeConstraint_exposer.def( bp::init< SireMol::MoleculeGroup const &, Squire::QMChargeCalculator const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("chargecalculator"), bp::arg("map")=SireBase::PropertyMap() )) );
-        QMChargeConstraint_exposer.def( bp::init< Squire::QMChargeConstraint const & >(( bp::arg("other") )) );
+        QMChargeConstraint_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to constrain the charges for the molecules in the\nmolecule group molgroup using the optionally supplied property\nmap to find the necessary properteis") );
+        QMChargeConstraint_exposer.def( bp::init< SireMol::MoleculeGroup const &, Squire::QMChargeCalculator const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("chargecalculator"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to constrain the charges for the molecules in the\nmolecule group molgroup to those calculated using the\nQM charge calculator chargecalculator, using the optionally\nsupplied property map to find the necessary properties") );
+        QMChargeConstraint_exposer.def( bp::init< Squire::QMChargeConstraint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::QMChargeConstraint::chargeCalculator
         
             typedef ::Squire::QMChargeCalculator const & ( ::Squire::QMChargeConstraint::*chargeCalculator_function_type)(  ) const;
@@ -57,7 +57,8 @@ void register_QMChargeConstraint_class(){
             QMChargeConstraint_exposer.def( 
                 "chargeCalculator"
                 , chargeCalculator_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the calculator used to calculate atomic partial charges\nfrom an underlying QM calculation" );
         
         }
         QMChargeConstraint_exposer.def( bp::self != bp::self );
@@ -70,7 +71,8 @@ void register_QMChargeConstraint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         QMChargeConstraint_exposer.def( bp::self == bp::self );
@@ -82,7 +84,8 @@ void register_QMChargeConstraint_class(){
             QMChargeConstraint_exposer.def( 
                 "setChargeCalculator"
                 , setChargeCalculator_function_value
-                , ( bp::arg("chargecalculator") ) );
+                , ( bp::arg("chargecalculator") )
+                , "Set the charge calculator used to calculate atomic partial charges\nfrom an underlying QM calculation" );
         
         }
         { //::Squire::QMChargeConstraint::toString
@@ -92,7 +95,8 @@ void register_QMChargeConstraint_class(){
             
             QMChargeConstraint_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this constraint" );
         
         }
         { //::Squire::QMChargeConstraint::typeName
@@ -102,7 +106,8 @@ void register_QMChargeConstraint_class(){
             
             QMChargeConstraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         QMChargeConstraint_exposer.staticmethod( "typeName" );

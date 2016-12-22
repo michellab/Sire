@@ -31,10 +31,10 @@ void register_Sin_class(){
 
     { //::SireCAS::Sin
         typedef bp::class_< SireCAS::Sin, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Sin_exposer_t;
-        Sin_exposer_t Sin_exposer = Sin_exposer_t( "Sin", bp::init< >() );
+        Sin_exposer_t Sin_exposer = Sin_exposer_t( "Sin", "Sine", bp::init< >("Null constructor") );
         bp::scope Sin_scope( Sin_exposer );
-        Sin_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        Sin_exposer.def( bp::init< SireCAS::Sin const & >(( bp::arg("other") )) );
+        Sin_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        Sin_exposer.def( bp::init< SireCAS::Sin const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Sin::evaluate
         
             typedef double ( ::SireCAS::Sin::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -43,7 +43,8 @@ void register_Sin_class(){
             Sin_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Sin::evaluate
@@ -54,7 +55,8 @@ void register_Sin_class(){
             Sin_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Sin_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -65,7 +67,8 @@ void register_Sin_class(){
             
             Sin_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Sin::what
@@ -75,7 +78,8 @@ void register_Sin_class(){
             
             Sin_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Sin_exposer.staticmethod( "typeName" );
@@ -88,6 +92,7 @@ void register_Sin_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Sin_exposer.def( "__str__", &__str__< ::SireCAS::Sin > );
         Sin_exposer.def( "__repr__", &__str__< ::SireCAS::Sin > );
+        Sin_exposer.def( "__hash__", &::SireCAS::Sin::hash );
     }
 
 }

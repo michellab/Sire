@@ -43,15 +43,15 @@ void register_CoordGroup_class(){
 
     { //::SireVol::CoordGroup
         typedef bp::class_< SireVol::CoordGroup, bp::bases< SireVol::CoordGroupBase > > CoordGroup_exposer_t;
-        CoordGroup_exposer_t CoordGroup_exposer = CoordGroup_exposer_t( "CoordGroup", bp::init< >() );
+        CoordGroup_exposer_t CoordGroup_exposer = CoordGroup_exposer_t( "CoordGroup", "This class holds a group of coordinates. This group forms the basis of the\nMolecular CutGroup, as defined in SireMol. A CoordGroup contains a list of\ncoordinates, together with an AABox which provides information as to the\ncenter and extents of this group. SireVol is designed to calculate distances\nbetween points in different CoordGroups, or to calculate distances between\npoints within a CoordGroup. A CoordGroup is implicitly shared and is\ndesigned to be fast to use, and fast to copy.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope CoordGroup_scope( CoordGroup_exposer );
-        CoordGroup_exposer.def( bp::init< quint32 >(( bp::arg("size") )) );
-        CoordGroup_exposer.def( bp::init< quint32, SireMaths::Vector const & >(( bp::arg("size"), bp::arg("value") )) );
-        CoordGroup_exposer.def( bp::init< quint32, SireMaths::Vector const * >(( bp::arg("size"), bp::arg("values") )) );
-        CoordGroup_exposer.def( bp::init< SireVol::CoordGroupArray const & >(( bp::arg("cgarray") )) );
-        CoordGroup_exposer.def( bp::init< SireVol::CoordGroupArrayArray const & >(( bp::arg("cgarrays") )) );
-        CoordGroup_exposer.def( bp::init< QVector< SireMaths::Vector > const & >(( bp::arg("points") )) );
-        CoordGroup_exposer.def( bp::init< SireVol::CoordGroup const & >(( bp::arg("other") )) );
+        CoordGroup_exposer.def( bp::init< quint32 >(( bp::arg("size") ), "Construct a CoordGroup that holds size coordinates") );
+        CoordGroup_exposer.def( bp::init< quint32, SireMaths::Vector const & >(( bp::arg("size"), bp::arg("value") ), "Construct a CoordGroup that holds size coordinates,\nall of which have the value value") );
+        CoordGroup_exposer.def( bp::init< quint32, SireMaths::Vector const * >(( bp::arg("size"), bp::arg("values") ), "Construct a CoordGroup that holds the size points\ncopied from the array values") );
+        CoordGroup_exposer.def( bp::init< SireVol::CoordGroupArray const & >(( bp::arg("cgarray") ), "Construct a CoordGroup from all of the coordinates contained\nin the passed CoordGroup array") );
+        CoordGroup_exposer.def( bp::init< SireVol::CoordGroupArrayArray const & >(( bp::arg("cgarrays") ), "Construct a CoordGroup from all of the coordinates in the\npassed collection of CoordGroup arrays") );
+        CoordGroup_exposer.def( bp::init< QVector< SireMaths::Vector > const & >(( bp::arg("points") ), "Construct a CoordGroup from the array of passed coordinates") );
+        CoordGroup_exposer.def( bp::init< SireVol::CoordGroup const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireVol::CoordGroup::edit
         
             typedef ::SireVol::CoordGroupEditor ( ::SireVol::CoordGroup::*edit_function_type)(  ) const;
@@ -59,7 +59,8 @@ void register_CoordGroup_class(){
             
             CoordGroup_exposer.def( 
                 "edit"
-                , edit_function_value );
+                , edit_function_value
+                , "Return an editor that can be used to edit the\ncoordinates in this group" );
         
         }
         { //::SireVol::CoordGroup::operator=
@@ -71,7 +72,8 @@ void register_CoordGroup_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireVol::CoordGroup::operator=
@@ -83,7 +85,8 @@ void register_CoordGroup_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireVol::CoordGroup::typeName
@@ -93,7 +96,8 @@ void register_CoordGroup_class(){
             
             CoordGroup_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireVol::CoordGroup::what
@@ -103,7 +107,8 @@ void register_CoordGroup_class(){
             
             CoordGroup_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CoordGroup_exposer.staticmethod( "typeName" );

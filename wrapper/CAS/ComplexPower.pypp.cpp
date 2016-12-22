@@ -41,10 +41,10 @@ void register_ComplexPower_class(){
 
     { //::SireCAS::ComplexPower
         typedef bp::class_< SireCAS::ComplexPower, bp::bases< SireCAS::PowerFunction, SireCAS::ExBase > > ComplexPower_exposer_t;
-        ComplexPower_exposer_t ComplexPower_exposer = ComplexPower_exposer_t( "ComplexPower", bp::init< >() );
+        ComplexPower_exposer_t ComplexPower_exposer = ComplexPower_exposer_t( "ComplexPower", "This class represents an expression raised to a complex power", bp::init< >("Null constructor") );
         bp::scope ComplexPower_scope( ComplexPower_exposer );
-        ComplexPower_exposer.def( bp::init< SireCAS::Expression const &, SireMaths::Complex const & >(( bp::arg("expression"), bp::arg("power") )) );
-        ComplexPower_exposer.def( bp::init< SireCAS::ComplexPower const & >(( bp::arg("other") )) );
+        ComplexPower_exposer.def( bp::init< SireCAS::Expression const &, SireMaths::Complex const & >(( bp::arg("expression"), bp::arg("power") ), "Construct expression^power") );
+        ComplexPower_exposer.def( bp::init< SireCAS::ComplexPower const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ComplexPower::evaluate
         
             typedef double ( ::SireCAS::ComplexPower::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -53,7 +53,8 @@ void register_ComplexPower_class(){
             ComplexPower_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this power" );
         
         }
         { //::SireCAS::ComplexPower::evaluate
@@ -64,7 +65,8 @@ void register_ComplexPower_class(){
             ComplexPower_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this power" );
         
         }
         { //::SireCAS::ComplexPower::hash
@@ -74,7 +76,8 @@ void register_ComplexPower_class(){
             
             ComplexPower_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this power" );
         
         }
         { //::SireCAS::ComplexPower::isComplex
@@ -84,7 +87,8 @@ void register_ComplexPower_class(){
             
             ComplexPower_exposer.def( 
                 "isComplex"
-                , isComplex_function_value );
+                , isComplex_function_value
+                , "" );
         
         }
         ComplexPower_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -95,7 +99,8 @@ void register_ComplexPower_class(){
             
             ComplexPower_exposer.def( 
                 "power"
-                , power_function_value );
+                , power_function_value
+                , "" );
         
         }
         { //::SireCAS::ComplexPower::typeName
@@ -105,7 +110,8 @@ void register_ComplexPower_class(){
             
             ComplexPower_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ComplexPower::what
@@ -115,7 +121,8 @@ void register_ComplexPower_class(){
             
             ComplexPower_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ComplexPower_exposer.staticmethod( "typeName" );
@@ -128,6 +135,7 @@ void register_ComplexPower_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ComplexPower_exposer.def( "__str__", &__str__< ::SireCAS::ComplexPower > );
         ComplexPower_exposer.def( "__repr__", &__str__< ::SireCAS::ComplexPower > );
+        ComplexPower_exposer.def( "__hash__", &::SireCAS::ComplexPower::hash );
     }
 
 }

@@ -25,7 +25,7 @@ void register_SupraSubMove_class(){
 
     { //::SireMove::SupraSubMove
         typedef bp::class_< SireMove::SupraSubMove, bp::bases< SireBase::Property >, boost::noncopyable > SupraSubMove_exposer_t;
-        SupraSubMove_exposer_t SupraSubMove_exposer = SupraSubMove_exposer_t( "SupraSubMove", bp::no_init );
+        SupraSubMove_exposer_t SupraSubMove_exposer = SupraSubMove_exposer_t( "SupraSubMove", "This is the base class of the controller for the sub-moves\nthat are performed on the sub-systems of each SupraSystem\nas part of a SupraMove\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope SupraSubMove_scope( SupraSubMove_exposer );
         { //::SireMove::SupraSubMove::clearStatistics
         
@@ -34,7 +34,8 @@ void register_SupraSubMove_class(){
             
             SupraSubMove_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Clear the move statistics" );
         
         }
         { //::SireMove::SupraSubMove::move
@@ -45,7 +46,8 @@ void register_SupraSubMove_class(){
             SupraSubMove_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("n_supra_moves"), bp::arg("n_supra_moves_per_block"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("n_supra_moves"), bp::arg("n_supra_moves_per_block"), bp::arg("record_stats")=(bool)(true) )
+                , "" );
         
         }
         { //::SireMove::SupraSubMove::null
@@ -56,7 +58,8 @@ void register_SupraSubMove_class(){
             SupraSubMove_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the global null SupraSubMove" );
         
         }
         { //::SireMove::SupraSubMove::toString
@@ -66,7 +69,8 @@ void register_SupraSubMove_class(){
             
             SupraSubMove_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMove::SupraSubMove::typeName
@@ -76,7 +80,8 @@ void register_SupraSubMove_class(){
             
             SupraSubMove_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SupraSubMove_exposer.staticmethod( "null" );

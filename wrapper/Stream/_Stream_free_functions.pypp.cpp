@@ -39,9 +39,11 @@ namespace bp = boost::python;
 
 #include <QtGlobal>
 
+#include <boost/config.hpp>
+
 #include <cstdlib>
 
-#include <sys/utsname.h>
+#include <memory>
 
 #include <unistd.h>
 
@@ -79,11 +81,11 @@ namespace bp = boost::python;
 
 #include <QtGlobal>
 
+#include <boost/config.hpp>
+
 #include <cstdlib>
 
-#include <sys/utsname.h>
-
-#include <unistd.h>
+#include <memory>
 
 #include "streamdata.hpp"
 
@@ -119,11 +121,11 @@ namespace bp = boost::python;
 
 #include <QtGlobal>
 
+#include <boost/config.hpp>
+
 #include <cstdlib>
 
-#include <sys/utsname.h>
-
-#include <unistd.h>
+#include <memory>
 
 #include "streamdata.hpp"
 
@@ -159,27 +161,15 @@ namespace bp = boost::python;
 
 #include <QtGlobal>
 
+#include <boost/config.hpp>
+
 #include <cstdlib>
 
-#include <sys/utsname.h>
-
-#include <unistd.h>
+#include <memory>
 
 #include "streamdata.hpp"
 
 void register_free_functions(){
-
-    { //::SireStream::getDataHeader
-    
-        typedef ::SireStream::FileHeader ( *getDataHeader_function_type )( ::QString const & );
-        getDataHeader_function_type getDataHeader_function_value( &::SireStream::getDataHeader );
-        
-        bp::def( 
-            "getDataHeader"
-            , getDataHeader_function_value
-            , ( bp::arg("filename") ) );
-    
-    }
 
     { //::SireStream::getDataHeader
     
@@ -189,7 +179,21 @@ void register_free_functions(){
         bp::def( 
             "getDataHeader"
             , getDataHeader_function_value
-            , ( bp::arg("data") ) );
+            , ( bp::arg("data") )
+            , "" );
+    
+    }
+
+    { //::SireStream::getDataHeader
+    
+        typedef ::SireStream::FileHeader ( *getDataHeader_function_type )( ::QString const & );
+        getDataHeader_function_type getDataHeader_function_value( &::SireStream::getDataHeader );
+        
+        bp::def( 
+            "getDataHeader"
+            , getDataHeader_function_value
+            , ( bp::arg("filename") )
+            , "" );
     
     }
 
@@ -201,7 +205,8 @@ void register_free_functions(){
         bp::def( 
             "getLibraryVersion"
             , getLibraryVersion_function_value
-            , ( bp::arg("library") ) );
+            , ( bp::arg("library") )
+            , "" );
     
     }
 
@@ -213,7 +218,8 @@ void register_free_functions(){
         bp::def( 
             "getMinimumSupportedVersion"
             , getMinimumSupportedVersion_function_value
-            , ( bp::arg("library") ) );
+            , ( bp::arg("library") )
+            , "" );
     
     }
 

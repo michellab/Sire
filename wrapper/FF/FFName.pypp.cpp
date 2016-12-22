@@ -25,11 +25,11 @@ void register_FFName_class(){
 
     { //::SireFF::FFName
         typedef bp::class_< SireFF::FFName, bp::bases< SireFF::FFID, SireID::ID, SireID::Name > > FFName_exposer_t;
-        FFName_exposer_t FFName_exposer = FFName_exposer_t( "FFName", bp::init< >() );
+        FFName_exposer_t FFName_exposer = FFName_exposer_t( "FFName", "This class holds the name of a forcefield\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope FFName_scope( FFName_exposer );
-        FFName_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        FFName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") )) );
-        FFName_exposer.def( bp::init< SireFF::FFName const & >(( bp::arg("other") )) );
+        FFName_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
+        FFName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") ), "") );
+        FFName_exposer.def( bp::init< SireFF::FFName const & >(( bp::arg("other") ), "") );
         { //::SireFF::FFName::hash
         
             typedef ::uint ( ::SireFF::FFName::*hash_function_type)(  ) const;
@@ -37,7 +37,8 @@ void register_FFName_class(){
             
             FFName_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireFF::FFName::isNull
@@ -47,7 +48,8 @@ void register_FFName_class(){
             
             FFName_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireFF::FFName::map
@@ -58,7 +60,8 @@ void register_FFName_class(){
             FFName_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("ffields") ) );
+                , ( bp::arg("ffields") )
+                , "Map this name to the index of the matching forcefield in the\npassed ForceFields object\nThrow: SireFF::missing_forcefield\n" );
         
         }
         FFName_exposer.def( bp::self != bp::self );
@@ -71,7 +74,8 @@ void register_FFName_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         FFName_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -83,7 +87,8 @@ void register_FFName_class(){
             
             FFName_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireFF::FFName::typeName
@@ -93,7 +98,8 @@ void register_FFName_class(){
             
             FFName_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::FFName::what
@@ -103,7 +109,8 @@ void register_FFName_class(){
             
             FFName_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         FFName_exposer.staticmethod( "typeName" );
@@ -116,6 +123,7 @@ void register_FFName_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         FFName_exposer.def( "__str__", &__str__< ::SireFF::FFName > );
         FFName_exposer.def( "__repr__", &__str__< ::SireFF::FFName > );
+        FFName_exposer.def( "__hash__", &::SireFF::FFName::hash );
     }
 
 }

@@ -31,11 +31,11 @@ void register_TIComponents_class(){
 
     { //::SireAnalysis::TIComponents
         typedef bp::class_< SireAnalysis::TIComponents, bp::bases< SireBase::Property > > TIComponents_exposer_t;
-        TIComponents_exposer_t TIComponents_exposer = TIComponents_exposer_t( "TIComponents", bp::init< bp::optional< bool > >(( bp::arg("conserve_memory")=(bool)(true) )) );
+        TIComponents_exposer_t TIComponents_exposer = TIComponents_exposer_t( "TIComponents", "This class is used to analyse the free energy components that are\ncollected by the SireSystem::FreeEnergyMonitor class\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< bool > >(( bp::arg("conserve_memory")=(bool)(true) ), "Constructor") );
         bp::scope TIComponents_scope( TIComponents_exposer );
-        TIComponents_exposer.def( bp::init< QMap< double, SireSystem::FreeEnergyMonitor > const &, bp::optional< bool > >(( bp::arg("gradients"), bp::arg("conserve_memory")=(bool)(true) )) );
-        TIComponents_exposer.def( bp::init< SireAnalysis::ComponentGradients const &, bp::optional< bool > >(( bp::arg("gradients"), bp::arg("conserve_memory")=(bool)(true) )) );
-        TIComponents_exposer.def( bp::init< SireAnalysis::TIComponents const & >(( bp::arg("other") )) );
+        TIComponents_exposer.def( bp::init< QMap< double, SireSystem::FreeEnergyMonitor > const &, bp::optional< bool > >(( bp::arg("gradients"), bp::arg("conserve_memory")=(bool)(true) ), "Construct from a single iterations worth of gradients") );
+        TIComponents_exposer.def( bp::init< SireAnalysis::ComponentGradients const &, bp::optional< bool > >(( bp::arg("gradients"), bp::arg("conserve_memory")=(bool)(true) ), "Construct from a single iterations worth of gradients") );
+        TIComponents_exposer.def( bp::init< SireAnalysis::TIComponents const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireAnalysis::TIComponents::add
         
             typedef void ( ::SireAnalysis::TIComponents::*add_function_type)( ::QMap< double, SireSystem::FreeEnergyMonitor > const & ) ;
@@ -44,7 +44,8 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("gradients") ) );
+                , ( bp::arg("gradients") )
+                , "Add the passed set of component gradients. Note that these must be compatible\nwith any that are already in this set" );
         
         }
         { //::SireAnalysis::TIComponents::add
@@ -55,7 +56,8 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("gradients") ) );
+                , ( bp::arg("gradients") )
+                , "Add the passed set of component gradients. Note that these must be compatible\nwith any that are already in this set" );
         
         }
         { //::SireAnalysis::TIComponents::at
@@ -66,7 +68,8 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the ith set of ComponentGradients" );
         
         }
         { //::SireAnalysis::TIComponents::clear
@@ -76,7 +79,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Remove all values from the histogram" );
         
         }
         { //::SireAnalysis::TIComponents::conserveMemory
@@ -86,7 +90,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "conserveMemory"
-                , conserveMemory_function_value );
+                , conserveMemory_function_value
+                , "Conserve memory by sharing as much data as possible between the different iterations" );
         
         }
         { //::SireAnalysis::TIComponents::conservesMemory
@@ -96,7 +101,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "conservesMemory"
-                , conservesMemory_function_value );
+                , conservesMemory_function_value
+                , "Whether or not this object conserves memory" );
         
         }
         { //::SireAnalysis::TIComponents::count
@@ -106,7 +112,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of iterations" );
         
         }
         { //::SireAnalysis::TIComponents::gradients
@@ -116,7 +123,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "gradients"
-                , gradients_function_value );
+                , gradients_function_value
+                , "Return the raw list of component gradients" );
         
         }
         { //::SireAnalysis::TIComponents::lambdaValues
@@ -126,7 +134,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "lambdaValues"
-                , lambdaValues_function_value );
+                , lambdaValues_function_value
+                , "Return a list of all lambda values that contain data" );
         
         }
         { //::SireAnalysis::TIComponents::merge
@@ -137,7 +146,8 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("start"), bp::arg("end") ) );
+                , ( bp::arg("start"), bp::arg("end") )
+                , "Merge (average) together the gradients from iteration start to iteration\nend inclusive" );
         
         }
         { //::SireAnalysis::TIComponents::merge
@@ -148,7 +158,8 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("indicies") ) );
+                , ( bp::arg("indicies") )
+                , "Merge together the gradients from the iterations with the passed indicies" );
         
         }
         { //::SireAnalysis::TIComponents::nComponents
@@ -158,7 +169,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "nComponents"
-                , nComponents_function_value );
+                , nComponents_function_value
+                , "Return the number of components in this collection (number of views)" );
         
         }
         { //::SireAnalysis::TIComponents::nIterations
@@ -168,7 +180,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "nIterations"
-                , nIterations_function_value );
+                , nIterations_function_value
+                , "Return the number of iterations" );
         
         }
         { //::SireAnalysis::TIComponents::nLambdaValues
@@ -178,7 +191,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "nLambdaValues"
-                , nLambdaValues_function_value );
+                , nLambdaValues_function_value
+                , "Return the number of lambda values" );
         
         }
         { //::SireAnalysis::TIComponents::nSamples
@@ -188,7 +202,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "nSamples"
-                , nSamples_function_value );
+                , nSamples_function_value
+                , "Return the total number of samples" );
         
         }
         TIComponents_exposer.def( bp::self != bp::self );
@@ -201,7 +216,8 @@ void register_TIComponents_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         TIComponents_exposer.def( bp::self == bp::self );
@@ -213,7 +229,8 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireAnalysis::TIComponents::removeAt
@@ -224,7 +241,8 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "removeAt"
                 , removeAt_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Remove the data for iteration i. This sets the data equal to ComponentGradients()" );
         
         }
         { //::SireAnalysis::TIComponents::removeRange
@@ -235,7 +253,8 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "removeRange"
                 , removeRange_function_value
-                , ( bp::arg("start"), bp::arg("end") ) );
+                , ( bp::arg("start"), bp::arg("end") )
+                , "Remove every iteration from start to end (inclusively). This sets\nthe data equal to ComponentGradients()" );
         
         }
         { //::SireAnalysis::TIComponents::rollingAverage
@@ -246,7 +265,8 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "rollingAverage"
                 , rollingAverage_function_value
-                , ( bp::arg("niterations") ) );
+                , ( bp::arg("niterations") )
+                , "Return a list of Gradients that represents the rolling average over niterations\niterations over this TI data set. If this data set contains 100 iterations, and\nwe calculate the rolling average over 50 iterations, then the returned Gradients\nwill be the average from 1-50, then 2-51, 3-52.....51-100" );
         
         }
         { //::SireAnalysis::TIComponents::set
@@ -257,7 +277,8 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("gradients") ) );
+                , ( bp::arg("i"), bp::arg("gradients") )
+                , "Set the gradients for the ith iteration. Note that these must be compatible\nwith the gradients of the other iterations" );
         
         }
         { //::SireAnalysis::TIComponents::set
@@ -268,7 +289,8 @@ void register_TIComponents_class(){
             TIComponents_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("gradients") ) );
+                , ( bp::arg("i"), bp::arg("gradients") )
+                , "Set the gradients for the ith iteration. Note that these must be compatible\nwith the gradients of the other iterations" );
         
         }
         { //::SireAnalysis::TIComponents::size
@@ -278,7 +300,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of iterations" );
         
         }
         { //::SireAnalysis::TIComponents::toString
@@ -288,7 +311,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireAnalysis::TIComponents::typeName
@@ -298,7 +322,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireAnalysis::TIComponents::what
@@ -308,7 +333,8 @@ void register_TIComponents_class(){
             
             TIComponents_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         TIComponents_exposer.staticmethod( "typeName" );

@@ -21,6 +21,12 @@ namespace bp = boost::python;
 
 #include "multiint.h"
 
+#include "multidouble.h"
+
+#include "multivector.h"
+
+#include "multiquaternion.h"
+
 SireMaths::MultiDouble __copy__(const SireMaths::MultiDouble &other){ return SireMaths::MultiDouble(other); }
 
 #include "Helpers/str.hpp"
@@ -31,14 +37,14 @@ void register_MultiDouble_class(){
 
     { //::SireMaths::MultiDouble
         typedef bp::class_< SireMaths::MultiDouble > MultiDouble_exposer_t;
-        MultiDouble_exposer_t MultiDouble_exposer = MultiDouble_exposer_t( "MultiDouble", bp::init< >() );
+        MultiDouble_exposer_t MultiDouble_exposer = MultiDouble_exposer_t( "MultiDouble", "This class provides a vectorised double. This represents\ntwo vectors of doubles on the compiled machine, e.g.\n4 doubles if we use SSE2, 8 doubles for AVX. This\nis so that it matches up with MultiFloat, with both\nvectors providing the same number of elements.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MultiDouble_scope( MultiDouble_exposer );
-        MultiDouble_exposer.def( bp::init< double >(( bp::arg("value") )) );
-        MultiDouble_exposer.def( bp::init< double const *, int >(( bp::arg("array"), bp::arg("size") )) );
-        MultiDouble_exposer.def( bp::init< QVector< float > const & >(( bp::arg("array") )) );
-        MultiDouble_exposer.def( bp::init< QVector< double > const & >(( bp::arg("array") )) );
-        MultiDouble_exposer.def( bp::init< SireMaths::MultiFloat const & >(( bp::arg("other") )) );
-        MultiDouble_exposer.def( bp::init< SireMaths::MultiDouble const & >(( bp::arg("other") )) );
+        MultiDouble_exposer.def( bp::init< double >(( bp::arg("value") ), "Construct from the passed array - this must be the same size as the vector") );
+        MultiDouble_exposer.def( bp::init< double const *, int >(( bp::arg("array"), bp::arg("size") ), "Construct from the passed array. If size is greater than MultiDouble::size()\nthen an error will be raised. If size is less than MultiDouble::size() then\nthis vector will be padded with zeroes") );
+        MultiDouble_exposer.def( bp::init< QVector< float > const & >(( bp::arg("array") ), "Construct from the passed array - this must be the same size as the vector") );
+        MultiDouble_exposer.def( bp::init< QVector< double > const & >(( bp::arg("array") ), "Construct from the passed array - this must be the same size as the vector") );
+        MultiDouble_exposer.def( bp::init< SireMaths::MultiFloat const & >(( bp::arg("other") ), "Construct from the passed array - this must be the same size as the vector") );
+        MultiDouble_exposer.def( bp::init< SireMaths::MultiDouble const & >(( bp::arg("other") ), "Construct from the passed array - this must be the same size as the vector") );
         { //::SireMaths::MultiDouble::at
         
             typedef double ( ::SireMaths::MultiDouble::*at_function_type)( int ) const;
@@ -47,7 +53,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the ith value in the multifloat" );
         
         }
         { //::SireMaths::MultiDouble::compareEqual
@@ -58,7 +65,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "compareEqual"
                 , compareEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::compareGreater
@@ -69,7 +77,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "compareGreater"
                 , compareGreater_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::compareGreaterEqual
@@ -80,7 +89,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "compareGreaterEqual"
                 , compareGreaterEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::compareLess
@@ -91,7 +101,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "compareLess"
                 , compareLess_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::compareLessEqual
@@ -102,7 +113,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "compareLessEqual"
                 , compareLessEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::compareNotEqual
@@ -113,7 +125,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "compareNotEqual"
                 , compareNotEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::count
@@ -123,7 +136,8 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::doubleSum
@@ -133,7 +147,8 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "doubleSum"
-                , doubleSum_function_value );
+                , doubleSum_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::fromArray
@@ -144,7 +159,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Create an array of MultiFloats from the passed array of doubles. This\nwill pad the end of the array with zeroes if necessary" );
         
         }
         { //::SireMaths::MultiDouble::fromArray
@@ -155,7 +171,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Create an array of MultiFloats from the passed array of floats. This will\npad the end of the array with zeroes if necessary" );
         
         }
         { //::SireMaths::MultiDouble::fromArray
@@ -166,7 +183,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array"), bp::arg("size") ) );
+                , ( bp::arg("array"), bp::arg("size") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::fromArray
@@ -177,7 +195,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array"), bp::arg("size") ) );
+                , ( bp::arg("array"), bp::arg("size") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::get
@@ -188,7 +207,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "get"
                 , get_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the ith value in the multifloat" );
         
         }
         { //::SireMaths::MultiDouble::getitem
@@ -199,7 +219,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "getitem"
                 , getitem_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::isAligned
@@ -209,7 +230,8 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "isAligned"
-                , isAligned_function_value );
+                , isAligned_function_value
+                , "Return whether or not this MultiDouble is correctly aligned. If it is not,\nthen any SSEAVX operations will fail" );
         
         }
         { //::SireMaths::MultiDouble::logicalAnd
@@ -220,7 +242,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "logicalAnd"
                 , logicalAnd_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::logicalAndNot
@@ -231,7 +254,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "logicalAndNot"
                 , logicalAndNot_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::logicalNot
@@ -241,7 +265,8 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "logicalNot"
-                , logicalNot_function_value );
+                , logicalNot_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::logicalOr
@@ -252,7 +277,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "logicalOr"
                 , logicalOr_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::logicalXor
@@ -263,7 +289,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "logicalXor"
                 , logicalXor_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::max
@@ -274,7 +301,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "max"
                 , max_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::min
@@ -285,7 +313,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "min"
                 , min_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::multiplyAdd
@@ -297,7 +326,8 @@ void register_MultiDouble_class(){
                 "multiplyAdd"
                 , multiplyAdd_function_value
                 , ( bp::arg("val0"), bp::arg("val1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MultiDouble_exposer.def( !bp::self );
@@ -319,7 +349,8 @@ void register_MultiDouble_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::operator=
@@ -331,7 +362,8 @@ void register_MultiDouble_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::operator=
@@ -343,7 +375,8 @@ void register_MultiDouble_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MultiDouble_exposer.def( bp::self == bp::self );
@@ -357,11 +390,24 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         MultiDouble_exposer.def( bp::self ^ bp::self );
         MultiDouble_exposer.def( bp::self | bp::self );
+        { //::SireMaths::MultiDouble::quickSet
+        
+            typedef void ( ::SireMaths::MultiDouble::*quickSet_function_type)( int,double ) ;
+            quickSet_function_type quickSet_function_value( &::SireMaths::MultiDouble::quickSet );
+            
+            MultiDouble_exposer.def( 
+                "quickSet"
+                , quickSet_function_value
+                , ( bp::arg("i"), bp::arg("value") )
+                , "Set the ith value without checking that i is valid" );
+        
+        }
         { //::SireMaths::MultiDouble::reciprocal
         
             typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*reciprocal_function_type)(  ) const;
@@ -369,7 +415,8 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "reciprocal"
-                , reciprocal_function_value );
+                , reciprocal_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::rotate
@@ -379,7 +426,8 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "rotate"
-                , rotate_function_value );
+                , rotate_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::rsqrt
@@ -389,7 +437,8 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "rsqrt"
-                , rsqrt_function_value );
+                , rsqrt_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::set
@@ -400,7 +449,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("value") )
+                , "Set the ith value of the multifloat to value" );
         
         }
         { //::SireMaths::MultiDouble::size
@@ -410,7 +460,8 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::sqrt
@@ -420,7 +471,8 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "sqrt"
-                , sqrt_function_value );
+                , sqrt_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::sum
@@ -430,7 +482,20 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "sum"
-                , sum_function_value );
+                , sum_function_value
+                , "" );
+        
+        }
+        { //::SireMaths::MultiDouble::swap
+        
+            typedef void ( *swap_function_type )( ::SireMaths::MultiDouble &,int,::SireMaths::MultiDouble &,int );
+            swap_function_type swap_function_value( &::SireMaths::MultiDouble::swap );
+            
+            MultiDouble_exposer.def( 
+                "swap"
+                , swap_function_value
+                , ( bp::arg("d0"), bp::arg("idx0"), bp::arg("d1"), bp::arg("idx1") )
+                , "Swap the values of the value at index idx0 in f0 with the value at index idx in f1" );
         
         }
         { //::SireMaths::MultiDouble::toArray
@@ -441,7 +506,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "toArray"
                 , toArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Return the passed MultiDouble converted back into a normal array" );
         
         }
         { //::SireMaths::MultiDouble::toBinaryString
@@ -451,7 +517,8 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "toBinaryString"
-                , toBinaryString_function_value );
+                , toBinaryString_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::toDoubleArray
@@ -462,7 +529,8 @@ void register_MultiDouble_class(){
             MultiDouble_exposer.def( 
                 "toDoubleArray"
                 , toDoubleArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Return the passed MultiFloat converted back into a normal array of doubles" );
         
         }
         { //::SireMaths::MultiDouble::toString
@@ -472,7 +540,8 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::typeName
@@ -482,7 +551,8 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiDouble::what
@@ -492,15 +562,18 @@ void register_MultiDouble_class(){
             
             MultiDouble_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MultiDouble_exposer.staticmethod( "count" );
         MultiDouble_exposer.staticmethod( "fromArray" );
         MultiDouble_exposer.staticmethod( "size" );
+        MultiDouble_exposer.staticmethod( "swap" );
         MultiDouble_exposer.staticmethod( "toArray" );
         MultiDouble_exposer.staticmethod( "toDoubleArray" );
         MultiDouble_exposer.staticmethod( "typeName" );
+        MultiDouble_exposer.def( bp::self * bp::other< SireMaths::MultiVector >() );
         MultiDouble_exposer.def( "__copy__", &__copy__);
         MultiDouble_exposer.def( "__deepcopy__", &__copy__);
         MultiDouble_exposer.def( "clone", &__copy__);

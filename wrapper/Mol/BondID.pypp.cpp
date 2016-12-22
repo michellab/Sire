@@ -36,10 +36,10 @@ void register_BondID_class(){
 
     { //::SireMol::BondID
         typedef bp::class_< SireMol::BondID, bp::bases< SireID::ID > > BondID_exposer_t;
-        BondID_exposer_t BondID_exposer = BondID_exposer_t( "BondID", bp::init< >() );
+        BondID_exposer_t BondID_exposer = BondID_exposer_t( "BondID", "This class provides a generic ID for a bond between\ntwo atoms\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope BondID_scope( BondID_exposer );
-        BondID_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const & >(( bp::arg("atom0"), bp::arg("atom1") )) );
-        BondID_exposer.def( bp::init< SireMol::BondID const & >(( bp::arg("other") )) );
+        BondID_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const & >(( bp::arg("atom0"), bp::arg("atom1") ), "Construct a bond between the two specified atoms. The order\nis important, as this bond may be between two different\nmolecules") );
+        BondID_exposer.def( bp::init< SireMol::BondID const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::BondID::atom0
         
             typedef ::SireMol::AtomID const & ( ::SireMol::BondID::*atom0_function_type)(  ) const;
@@ -48,7 +48,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ID of the first atom of the bond" );
         
         }
         { //::SireMol::BondID::atom1
@@ -59,7 +60,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ID of the second atom of the bond" );
         
         }
         { //::SireMol::BondID::hash
@@ -69,7 +71,8 @@ void register_BondID_class(){
             
             BondID_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash for this ID" );
         
         }
         { //::SireMol::BondID::isNull
@@ -79,7 +82,8 @@ void register_BondID_class(){
             
             BondID_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether this is a null ID" );
         
         }
         { //::SireMol::BondID::length
@@ -90,7 +94,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "length"
                 , length_function_value
-                , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the length of this bond in the molecule whose data\nis in moldata, using map to find the coordinates property\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::BondID::length
@@ -101,7 +106,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "length"
                 , length_function_value
-                , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the length of the bond from atom0() in the\nmolecule whose data is in mol0data to atom1() in the\nmolecule whose data is in mol1data, using map\nto the find the coordinates properties both molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::BondID::length
@@ -112,7 +118,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "length"
                 , length_function_value
-                , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1") ) );
+                , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1") )
+                , "Return the length of the bond from atom0() in the\nmolecule whose data is in mol0data to atom1() in the\nmolecule whose data is in mol1data, using map0\nto the find the coordinates property of mol0 and\nmap1 to find the coordinates property of mol1\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::BondID::map
@@ -123,7 +130,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Return the indicies of the two atoms in this bond - this returns\nthem in the order tuple(bond.atom0(),bond.atom1())\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::BondID::map
@@ -134,7 +142,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("mol0info"), bp::arg("mol1info") ) );
+                , ( bp::arg("mol0info"), bp::arg("mol1info") )
+                , "Return the indicies of the two atoms of this bond, between the\ntwo molecules whose data is in mol0info (containing bond.atom0())\nand mol1info (containing bond.atom1())\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::BondID::mirror
@@ -144,7 +153,8 @@ void register_BondID_class(){
             
             BondID_exposer.def( 
                 "mirror"
-                , mirror_function_value );
+                , mirror_function_value
+                , "Return the mirror of this BondID - i.e. if this is\nBond(atom0, atom1), this returns Bond(atom1, atom0).\nThis is useful if you know that Bond(atom0,atom1) equals\n" );
         
         }
         BondID_exposer.def( bp::self != bp::self );
@@ -157,7 +167,8 @@ void register_BondID_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         BondID_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -170,7 +181,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "size"
                 , size_function_value
-                , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Synonym for BondID::length(const MoleculeData&, const PropertyMap&)\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::BondID::size
@@ -181,7 +193,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "size"
                 , size_function_value
-                , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Synonym for BondID::length(const MoleculeData&, const MoleculeData&,\nconst PropertyMap&)\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::BondID::size
@@ -192,7 +205,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "size"
                 , size_function_value
-                , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1") ) );
+                , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1") )
+                , "Synonym for BondID::length(const MoleculeData&, const PropertyMap&,\nconst MoleculeData&, const PropertyMap&)\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::BondID::toString
@@ -202,7 +216,8 @@ void register_BondID_class(){
             
             BondID_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this ID" );
         
         }
         { //::SireMol::BondID::typeName
@@ -212,7 +227,8 @@ void register_BondID_class(){
             
             BondID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::BondID::vector
@@ -223,7 +239,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "vector"
                 , vector_function_value
-                , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the vector that goes from atom0() to atom1() in the\nmolecule whose data is in moldata, using the supplied\nproperty map to find the property that contains the\ncoordinates to be used\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::BondID::vector
@@ -234,7 +251,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "vector"
                 , vector_function_value
-                , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the vector that goes from atom0() in the molecule\nwhose data is in mol0data to atom1() in the molecule\nwhose data is in mol1data, using the supplied map\nto find the coordinates property in both molecules.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::BondID::vector
@@ -245,7 +263,8 @@ void register_BondID_class(){
             BondID_exposer.def( 
                 "vector"
                 , vector_function_value
-                , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1") ) );
+                , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1") )
+                , "Return the vector that goes from atom0() in the molecule\nwhose data is in mol0data to atom1() in the molecule\nwhose data is in mol1data, using map0 to find the\ncoordinates property of mol0 and map1 to find the\ncoordinates property of mol1\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::BondID::what
@@ -255,7 +274,8 @@ void register_BondID_class(){
             
             BondID_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         BondID_exposer.staticmethod( "typeName" );
@@ -268,6 +288,7 @@ void register_BondID_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         BondID_exposer.def( "__str__", &__str__< ::SireMol::BondID > );
         BondID_exposer.def( "__repr__", &__str__< ::SireMol::BondID > );
+        BondID_exposer.def( "__hash__", &::SireMol::BondID::hash );
     }
 
 }

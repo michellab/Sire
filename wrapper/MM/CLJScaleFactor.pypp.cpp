@@ -23,10 +23,10 @@ void register_CLJScaleFactor_class(){
 
     { //::SireMM::CLJScaleFactor
         typedef bp::class_< SireMM::CLJScaleFactor, bp::bases< SireMM::LJScaleFactor, SireMM::CoulombScaleFactor > > CLJScaleFactor_exposer_t;
-        CLJScaleFactor_exposer_t CLJScaleFactor_exposer = CLJScaleFactor_exposer_t( "CLJScaleFactor", bp::init< bp::optional< double > >(( bp::arg("scl")=0 )) );
+        CLJScaleFactor_exposer_t CLJScaleFactor_exposer = CLJScaleFactor_exposer_t( "CLJScaleFactor", "This is the interatomic scale factor for the coulomb and\nLJ parameters for the intramolecular energy.", bp::init< bp::optional< double > >(( bp::arg("scl")=0 ), "Construct with both the Coulomb and LJ scale factors equal to scl") );
         bp::scope CLJScaleFactor_scope( CLJScaleFactor_exposer );
-        CLJScaleFactor_exposer.def( bp::init< double, double >(( bp::arg("scale_coul"), bp::arg("scale_lj") )) );
-        CLJScaleFactor_exposer.def( bp::init< SireMM::CLJScaleFactor const & >(( bp::arg("other") )) );
+        CLJScaleFactor_exposer.def( bp::init< double, double >(( bp::arg("scale_coul"), bp::arg("scale_lj") ), "Construct with scale_coul Coulomb scaling, and scale_lj\nLJ scaling.") );
+        CLJScaleFactor_exposer.def( bp::init< SireMM::CLJScaleFactor const & >(( bp::arg("other") ), "Copy constructor") );
         CLJScaleFactor_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJScaleFactor::operator=
         
@@ -37,7 +37,8 @@ void register_CLJScaleFactor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJScaleFactor_exposer.def( bp::self == bp::self );
@@ -48,7 +49,8 @@ void register_CLJScaleFactor_class(){
             
             CLJScaleFactor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJScaleFactor::what
@@ -58,7 +60,8 @@ void register_CLJScaleFactor_class(){
             
             CLJScaleFactor_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJScaleFactor_exposer.staticmethod( "typeName" );

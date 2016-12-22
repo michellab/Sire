@@ -25,10 +25,10 @@ void register_CheckPoint_class(){
 
     { //::SireSystem::CheckPoint
         typedef bp::class_< SireSystem::CheckPoint, bp::bases< SireBase::Property > > CheckPoint_exposer_t;
-        CheckPoint_exposer_t CheckPoint_exposer = CheckPoint_exposer_t( "CheckPoint", bp::init< >() );
+        CheckPoint_exposer_t CheckPoint_exposer = CheckPoint_exposer_t( "CheckPoint", "This class holds a checkpoint of a system. This allows you to\nsave the current state of a system so that you can restore\nit at a later point (or even save it to diskdatabase)\n\nAuthor: Christopher Woods\n", bp::init< >("Create a null (empty) checkpoint") );
         bp::scope CheckPoint_scope( CheckPoint_exposer );
-        CheckPoint_exposer.def( bp::init< SireSystem::System const & >(( bp::arg("system") )) );
-        CheckPoint_exposer.def( bp::init< SireSystem::CheckPoint const & >(( bp::arg("other") )) );
+        CheckPoint_exposer.def( bp::init< SireSystem::System const & >(( bp::arg("system") ), "Construct a checkpoint to hold the current state of the system system") );
+        CheckPoint_exposer.def( bp::init< SireSystem::CheckPoint const & >(( bp::arg("other") ), "Copy constructor") );
         CheckPoint_exposer.def( bp::self != bp::self );
         { //::SireSystem::CheckPoint::operator=
         
@@ -39,7 +39,8 @@ void register_CheckPoint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("system") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireSystem::CheckPoint::operator=
@@ -51,7 +52,8 @@ void register_CheckPoint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CheckPoint_exposer.def( bp::self == bp::self );
@@ -62,7 +64,8 @@ void register_CheckPoint_class(){
             
             CheckPoint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CheckPoint_exposer.staticmethod( "typeName" );

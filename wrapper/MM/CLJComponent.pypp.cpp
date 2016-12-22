@@ -24,11 +24,11 @@ void register_CLJComponent_class(){
 
     { //::SireMM::CLJComponent
         typedef bp::class_< SireMM::CLJComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > CLJComponent_exposer_t;
-        CLJComponent_exposer_t CLJComponent_exposer = CLJComponent_exposer_t( "CLJComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() )) );
+        CLJComponent_exposer_t CLJComponent_exposer = CLJComponent_exposer_t( "CLJComponent", "This class represents the sum of the coulomb and LJ components\nof the forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() ), "Constructor") );
         bp::scope CLJComponent_scope( CLJComponent_exposer );
-        CLJComponent_exposer.def( bp::init< SireFF::FFName const &, QString const & >(( bp::arg("name"), bp::arg("suffix") )) );
-        CLJComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        CLJComponent_exposer.def( bp::init< SireMM::CLJComponent const & >(( bp::arg("other") )) );
+        CLJComponent_exposer.def( bp::init< SireFF::FFName const &, QString const & >(( bp::arg("name"), bp::arg("suffix") ), "Construct from the passed forcefield name and suffix") );
+        CLJComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        CLJComponent_exposer.def( bp::init< SireMM::CLJComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJComponent::changeEnergy
         
             typedef void ( ::SireMM::CLJComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::CLJEnergy const & ) const;
@@ -37,7 +37,8 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("cljnrg") ) );
+                , ( bp::arg("ff"), bp::arg("cljnrg") )
+                , "Change the CLJ components of the forcefield ff by delta" );
         
         }
         { //::SireMM::CLJComponent::coulomb
@@ -48,7 +49,8 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::CLJComponent::lj
@@ -59,7 +61,8 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::CLJComponent::setEnergy
@@ -70,7 +73,8 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("cljnrg") ) );
+                , ( bp::arg("ff"), bp::arg("cljnrg") )
+                , "Set the CLJ components of the forcefield ff to the passed values" );
         
         }
         { //::SireMM::CLJComponent::symbols
@@ -80,7 +84,8 @@ void register_CLJComponent_class(){
             
             CLJComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireMM::CLJComponent::total
@@ -91,7 +96,8 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::CLJComponent::typeName
@@ -101,7 +107,8 @@ void register_CLJComponent_class(){
             
             CLJComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJComponent::what
@@ -111,7 +118,8 @@ void register_CLJComponent_class(){
             
             CLJComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJComponent_exposer.staticmethod( "typeName" );
@@ -124,6 +132,7 @@ void register_CLJComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CLJComponent_exposer.def( "__str__", &__str__< ::SireMM::CLJComponent > );
         CLJComponent_exposer.def( "__repr__", &__str__< ::SireMM::CLJComponent > );
+        CLJComponent_exposer.def( "__hash__", &::SireMM::CLJComponent::hash );
     }
 
 }

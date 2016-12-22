@@ -25,11 +25,11 @@ void register_ChainStringProperty_class(){
 
     { //::SireMol::ChainProperty< QString >
         typedef bp::class_< SireMol::ChainProperty< QString >, bp::bases< SireMol::ChainProp, SireMol::MolViewProperty, SireBase::Property > > ChainStringProperty_exposer_t;
-        ChainStringProperty_exposer_t ChainStringProperty_exposer = ChainStringProperty_exposer_t( "ChainStringProperty", bp::init< >() );
+        ChainStringProperty_exposer_t ChainStringProperty_exposer = ChainStringProperty_exposer_t( "ChainStringProperty", "", bp::init< >("") );
         bp::scope ChainStringProperty_scope( ChainStringProperty_exposer );
-        ChainStringProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        ChainStringProperty_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("values") )) );
-        ChainStringProperty_exposer.def( bp::init< SireMol::ChainProperty< QString > const & >(( bp::arg("other") )) );
+        ChainStringProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        ChainStringProperty_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("values") ), "") );
+        ChainStringProperty_exposer.def( bp::init< SireMol::ChainProperty< QString > const & >(( bp::arg("other") ), "") );
         { //::SireMol::ChainProperty< QString >::array
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
@@ -39,7 +39,8 @@ void register_ChainStringProperty_class(){
             ChainStringProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::assertCanConvert
@@ -51,7 +52,8 @@ void register_ChainStringProperty_class(){
             ChainStringProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::assignFrom
@@ -63,7 +65,8 @@ void register_ChainStringProperty_class(){
             ChainStringProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::at
@@ -76,7 +79,8 @@ void register_ChainStringProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::canConvert
@@ -88,7 +92,8 @@ void register_ChainStringProperty_class(){
             ChainStringProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::count
@@ -99,7 +104,8 @@ void register_ChainStringProperty_class(){
             
             ChainStringProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::fromVariant
@@ -111,7 +117,8 @@ void register_ChainStringProperty_class(){
             ChainStringProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::get
@@ -124,7 +131,8 @@ void register_ChainStringProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::isCompatibleWith
@@ -136,7 +144,8 @@ void register_ChainStringProperty_class(){
             ChainStringProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::isEmpty
@@ -147,7 +156,8 @@ void register_ChainStringProperty_class(){
             
             ChainStringProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::nChains
@@ -158,7 +168,8 @@ void register_ChainStringProperty_class(){
             
             ChainStringProperty_exposer.def( 
                 "nChains"
-                , nChains_function_value );
+                , nChains_function_value
+                , "" );
         
         }
         ChainStringProperty_exposer.def( bp::self != bp::self );
@@ -172,7 +183,8 @@ void register_ChainStringProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ChainStringProperty_exposer.def( bp::self == bp::self );
@@ -186,7 +198,8 @@ void register_ChainStringProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::set
@@ -199,7 +212,8 @@ void register_ChainStringProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("chainidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::size
@@ -210,7 +224,8 @@ void register_ChainStringProperty_class(){
             
             ChainStringProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::toString
@@ -221,7 +236,8 @@ void register_ChainStringProperty_class(){
             
             ChainStringProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::toVariant
@@ -232,7 +248,8 @@ void register_ChainStringProperty_class(){
             
             ChainStringProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::ChainProperty< QString >::typeName
@@ -243,7 +260,8 @@ void register_ChainStringProperty_class(){
             
             ChainStringProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ChainStringProperty_exposer.staticmethod( "fromVariant" );

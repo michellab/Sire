@@ -31,7 +31,7 @@ void register_FFID_class(){
 
     { //::SireFF::FFID
         typedef bp::class_< SireFF::FFID, bp::bases< SireID::ID >, boost::noncopyable > FFID_exposer_t;
-        FFID_exposer_t FFID_exposer = FFID_exposer_t( "FFID", bp::no_init );
+        FFID_exposer_t FFID_exposer = FFID_exposer_t( "FFID", "The base class of all ForceField identifiers\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope FFID_scope( FFID_exposer );
         { //::SireFF::FFID::map
         
@@ -41,7 +41,8 @@ void register_FFID_class(){
             FFID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("ffields") ) );
+                , ( bp::arg("ffields") )
+                , "" );
         
         }
         FFID_exposer.def( bp::self & bp::self );
@@ -53,7 +54,8 @@ void register_FFID_class(){
             FFID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireFF::FFID::operator()
@@ -64,7 +66,8 @@ void register_FFID_class(){
             FFID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         FFID_exposer.def( bp::self * bp::self );
@@ -77,7 +80,8 @@ void register_FFID_class(){
             FFID_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         FFID_exposer.def( bp::self | bp::self );
@@ -88,12 +92,14 @@ void register_FFID_class(){
             
             FFID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         FFID_exposer.staticmethod( "typeName" );
         FFID_exposer.def( "__str__", &__str__< ::SireFF::FFID > );
         FFID_exposer.def( "__repr__", &__str__< ::SireFF::FFID > );
+        FFID_exposer.def( "__hash__", &::SireFF::FFID::hash );
     }
 
 }

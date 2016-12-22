@@ -55,12 +55,12 @@ void register_IDAndSet_MolID__class(){
 
     { //::SireID::IDAndSet< SireMol::MolID >
         typedef bp::class_< SireID::IDAndSet< SireMol::MolID >, bp::bases< SireMol::MolID, SireID::ID > > IDAndSet_MolID__exposer_t;
-        IDAndSet_MolID__exposer_t IDAndSet_MolID__exposer = IDAndSet_MolID__exposer_t( "IDAndSet_MolID_", bp::init< >() );
+        IDAndSet_MolID__exposer_t IDAndSet_MolID__exposer = IDAndSet_MolID__exposer_t( "IDAndSet_MolID_", "", bp::init< >("") );
         bp::scope IDAndSet_MolID__scope( IDAndSet_MolID__exposer );
-        IDAndSet_MolID__exposer.def( bp::init< SireMol::MolID const & >(( bp::arg("id") )) );
-        IDAndSet_MolID__exposer.def( bp::init< SireMol::MolID const &, SireMol::MolID const & >(( bp::arg("id0"), bp::arg("id1") )) );
-        IDAndSet_MolID__exposer.def( bp::init< QList< SireMol::MolIdentifier > const & >(( bp::arg("ids") )) );
-        IDAndSet_MolID__exposer.def( bp::init< SireID::IDAndSet< SireMol::MolID > const & >(( bp::arg("other") )) );
+        IDAndSet_MolID__exposer.def( bp::init< SireMol::MolID const & >(( bp::arg("id") ), "") );
+        IDAndSet_MolID__exposer.def( bp::init< SireMol::MolID const &, SireMol::MolID const & >(( bp::arg("id0"), bp::arg("id1") ), "") );
+        IDAndSet_MolID__exposer.def( bp::init< QList< SireMol::MolIdentifier > const & >(( bp::arg("ids") ), "") );
+        IDAndSet_MolID__exposer.def( bp::init< SireID::IDAndSet< SireMol::MolID > const & >(( bp::arg("other") ), "") );
         { //::SireID::IDAndSet< SireMol::MolID >::IDs
         
             typedef SireID::IDAndSet< SireMol::MolID > exported_class_t;
@@ -70,7 +70,8 @@ void register_IDAndSet_MolID__class(){
             IDAndSet_MolID__exposer.def( 
                 "IDs"
                 , IDs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MolID >::hash
@@ -81,7 +82,8 @@ void register_IDAndSet_MolID__class(){
             
             IDAndSet_MolID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MolID >::isNull
@@ -92,7 +94,8 @@ void register_IDAndSet_MolID__class(){
             
             IDAndSet_MolID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MolID >::map
@@ -104,7 +107,8 @@ void register_IDAndSet_MolID__class(){
             IDAndSet_MolID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("mols") ) );
+                , ( bp::arg("mols") )
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MolID >::map
@@ -116,7 +120,8 @@ void register_IDAndSet_MolID__class(){
             IDAndSet_MolID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MolID >::map
@@ -128,7 +133,8 @@ void register_IDAndSet_MolID__class(){
             IDAndSet_MolID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "" );
         
         }
         IDAndSet_MolID__exposer.def( bp::self != bp::other< SireID::ID >() );
@@ -144,7 +150,8 @@ void register_IDAndSet_MolID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MolID >::operator=
@@ -157,7 +164,8 @@ void register_IDAndSet_MolID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IDAndSet_MolID__exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -171,7 +179,8 @@ void register_IDAndSet_MolID__class(){
             
             IDAndSet_MolID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MolID >::typeName
@@ -182,7 +191,8 @@ void register_IDAndSet_MolID__class(){
             
             IDAndSet_MolID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MolID >::what
@@ -193,7 +203,8 @@ void register_IDAndSet_MolID__class(){
             
             IDAndSet_MolID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IDAndSet_MolID__exposer.staticmethod( "typeName" );
@@ -206,6 +217,7 @@ void register_IDAndSet_MolID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         IDAndSet_MolID__exposer.def( "__str__", &__str__< ::SireID::IDAndSet<SireMol::MolID> > );
         IDAndSet_MolID__exposer.def( "__repr__", &__str__< ::SireID::IDAndSet<SireMol::MolID> > );
+        IDAndSet_MolID__exposer.def( "__hash__", &::SireID::IDAndSet<SireMol::MolID>::hash );
     }
 
 }

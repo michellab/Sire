@@ -25,9 +25,9 @@ void register_IntegrationConstant_class(){
 
     { //::SireCAS::IntegrationConstant
         typedef bp::class_< SireCAS::IntegrationConstant, bp::bases< SireCAS::Symbol, SireCAS::ExBase > > IntegrationConstant_exposer_t;
-        IntegrationConstant_exposer_t IntegrationConstant_exposer = IntegrationConstant_exposer_t( "IntegrationConstant", bp::init< >() );
+        IntegrationConstant_exposer_t IntegrationConstant_exposer = IntegrationConstant_exposer_t( "IntegrationConstant", "\nThis class represents a constant of integration. This is not a number or\nfunction in the normal sense, but rather a placeholder that is created\nduring indefinite integration.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope IntegrationConstant_scope( IntegrationConstant_exposer );
-        IntegrationConstant_exposer.def( bp::init< SireCAS::IntegrationConstant const & >(( bp::arg("other") )) );
+        IntegrationConstant_exposer.def( bp::init< SireCAS::IntegrationConstant const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::IntegrationConstant::hash
         
             typedef ::uint ( ::SireCAS::IntegrationConstant::*hash_function_type)(  ) const;
@@ -35,7 +35,8 @@ void register_IntegrationConstant_class(){
             
             IntegrationConstant_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash for this object" );
         
         }
         { //::SireCAS::IntegrationConstant::integrate
@@ -46,7 +47,8 @@ void register_IntegrationConstant_class(){
             IntegrationConstant_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Cannot integrate an expression containing an integration constant. This\nis to prevent integration constants from multiple integrations from\nappearing in the expression." );
         
         }
         IntegrationConstant_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -57,7 +59,8 @@ void register_IntegrationConstant_class(){
             
             IntegrationConstant_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::IntegrationConstant::what
@@ -67,7 +70,8 @@ void register_IntegrationConstant_class(){
             
             IntegrationConstant_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IntegrationConstant_exposer.staticmethod( "typeName" );
@@ -80,6 +84,7 @@ void register_IntegrationConstant_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         IntegrationConstant_exposer.def( "__str__", &__str__< ::SireCAS::IntegrationConstant > );
         IntegrationConstant_exposer.def( "__repr__", &__str__< ::SireCAS::IntegrationConstant > );
+        IntegrationConstant_exposer.def( "__hash__", &::SireCAS::IntegrationConstant::hash );
     }
 
 }

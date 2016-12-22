@@ -26,10 +26,10 @@ void register_AngleComponent_class(){
 
     { //::SireMM::AngleComponent
         typedef bp::class_< SireMM::AngleComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > AngleComponent_exposer_t;
-        AngleComponent_exposer_t AngleComponent_exposer = AngleComponent_exposer_t( "AngleComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() )) );
+        AngleComponent_exposer_t AngleComponent_exposer = AngleComponent_exposer_t( "AngleComponent", "This class represents a Angle component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope AngleComponent_scope( AngleComponent_exposer );
-        AngleComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        AngleComponent_exposer.def( bp::init< SireMM::AngleComponent const & >(( bp::arg("other") )) );
+        AngleComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        AngleComponent_exposer.def( bp::init< SireMM::AngleComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::AngleComponent::changeEnergy
         
             typedef void ( ::SireMM::AngleComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::AngleEnergy const & ) const;
@@ -38,7 +38,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("angnrg") ) );
+                , ( bp::arg("ff"), bp::arg("angnrg") )
+                , "Change the component of the energy in the forcefield ff\nby delta" );
         
         }
         { //::SireMM::AngleComponent::setEnergy
@@ -49,7 +50,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("angnrg") ) );
+                , ( bp::arg("ff"), bp::arg("angnrg") )
+                , "Set the component of the energy in the forcefield ff\nto be equal to the passed energy" );
         
         }
         { //::SireMM::AngleComponent::symbols
@@ -59,7 +61,8 @@ void register_AngleComponent_class(){
             
             AngleComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireMM::AngleComponent::total
@@ -70,7 +73,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::AngleComponent::typeName
@@ -80,7 +84,8 @@ void register_AngleComponent_class(){
             
             AngleComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::AngleComponent::what
@@ -90,7 +95,8 @@ void register_AngleComponent_class(){
             
             AngleComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AngleComponent_exposer.staticmethod( "typeName" );
@@ -103,6 +109,7 @@ void register_AngleComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AngleComponent_exposer.def( "__str__", &__str__< ::SireMM::AngleComponent > );
         AngleComponent_exposer.def( "__repr__", &__str__< ::SireMM::AngleComponent > );
+        AngleComponent_exposer.def( "__hash__", &::SireMM::AngleComponent::hash );
     }
 
 }

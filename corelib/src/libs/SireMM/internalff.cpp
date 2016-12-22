@@ -2341,6 +2341,8 @@ void InternalFF::enable14Calculation()
                                          propmaps.value(mols_array[i].number(),
                                                         PropertyMap())) );
         }
+        
+        props.setProperty("calculate14", VariantProperty(true));
     }
 }
 
@@ -2351,6 +2353,8 @@ void InternalFF::disable14Calculation()
     {
         calc_14_nrgs = false;
         cljgroups.clear();
+        
+        props.setProperty("calculate14", VariantProperty(false));
     }
 }
 

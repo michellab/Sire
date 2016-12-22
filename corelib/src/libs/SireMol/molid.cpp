@@ -535,6 +535,9 @@ const char* MolName::typeName()
 
 static const RegisterMetaType< IDAndSet<MolID> > r_idandset_molid;
 
+namespace SireID
+{
+
 /** Null constructor */
 IDAndSet<MolID>::IDAndSet() : MolID()
 {}
@@ -764,11 +767,16 @@ const char* IDAndSet<MolID>::typeName()
     return QMetaType::typeName( qMetaTypeId< IDAndSet<MolID> >() );
 }
 
+} // end of namespace SireID
+
 //////
 ////// Implementation of IDOrSet<MolID>
 //////
 
 static const RegisterMetaType< IDOrSet<MolID> > r_idorset_molid;
+
+namespace SireID
+{
 
 /** Null constructor */
 IDOrSet<MolID>::IDOrSet() : MolID()
@@ -1048,6 +1056,8 @@ IDAndSet<MolID>* IDAndSet<MolID>::clone() const
 {
     return new IDAndSet<MolID>(*this);
 }
+
+} // end of namespace SireID
 
 MolIdx* MolIdx::clone() const
 {

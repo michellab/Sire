@@ -67,10 +67,10 @@ void register_AtomNum_class(){
 
     { //::SireMol::AtomNum
         typedef bp::class_< SireMol::AtomNum, bp::bases< SireMol::AtomID, SireID::ID, SireID::Number > > AtomNum_exposer_t;
-        AtomNum_exposer_t AtomNum_exposer = AtomNum_exposer_t( "AtomNum", bp::init< >() );
+        AtomNum_exposer_t AtomNum_exposer = AtomNum_exposer_t( "AtomNum", "This ID number is used to identify an atom by the user-supplied\natom number (this is typically the number assigned to the\natom from the PDB or other coordinate file)\n\nBe careful not to confuse this with AtomID, which is the\nindex of the atom in the residue or CutGroup (e.g. the\nfifth atom in the residue would have AtomID 4 but has\nwhatever AtomNum the user supplied.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope AtomNum_scope( AtomNum_exposer );
-        AtomNum_exposer.def( bp::init< quint32 >(( bp::arg("num") )) );
-        AtomNum_exposer.def( bp::init< SireMol::AtomNum const & >(( bp::arg("other") )) );
+        AtomNum_exposer.def( bp::init< quint32 >(( bp::arg("num") ), "") );
+        AtomNum_exposer.def( bp::init< SireMol::AtomNum const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomNum::hash
         
             typedef ::uint ( ::SireMol::AtomNum::*hash_function_type)(  ) const;
@@ -78,7 +78,8 @@ void register_AtomNum_class(){
             
             AtomNum_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::AtomNum::isNull
@@ -88,7 +89,8 @@ void register_AtomNum_class(){
             
             AtomNum_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::AtomNum::map
@@ -99,7 +101,8 @@ void register_AtomNum_class(){
             AtomNum_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         AtomNum_exposer.def( bp::self != bp::self );
@@ -114,7 +117,8 @@ void register_AtomNum_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomNum_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -128,7 +132,8 @@ void register_AtomNum_class(){
             
             AtomNum_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomNum::typeName
@@ -138,7 +143,8 @@ void register_AtomNum_class(){
             
             AtomNum_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomNum::what
@@ -148,7 +154,8 @@ void register_AtomNum_class(){
             
             AtomNum_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomNum_exposer.staticmethod( "typeName" );
@@ -161,6 +168,7 @@ void register_AtomNum_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AtomNum_exposer.def( "__str__", &__str__< ::SireMol::AtomNum > );
         AtomNum_exposer.def( "__repr__", &__str__< ::SireMol::AtomNum > );
+        AtomNum_exposer.def( "__hash__", &::SireMol::AtomNum::hash );
     }
 
 }

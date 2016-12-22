@@ -7,8 +7,15 @@
 # then we don't need to do anything
 unset(GSL_LIBRARY CACHE)
 unset(GSL_CBLAS_LIBRARY CACHE)
-find_library( GSL_LIBRARY "gsl" PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
-find_library( GSL_CBLAS_LIBRARY "gslcblas" PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
+
+if ( MSYS )
+  message( STATUS "Looking for MSYS version of GSL..." )
+  find_library( GSL_LIBRARY "gsl" PATHS "/msys64/lib" )
+  find_library( GSL_CBLAS_LIBRARY "gslcblas" PATHS "/msys64/lib" )
+else()
+  find_library( GSL_LIBRARY "gsl" PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
+  find_library( GSL_CBLAS_LIBRARY "gslcblas" PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
+endif()
 
 if ( GSL_LIBRARY AND GSL_CBLAS_LIBRARY )
   message( STATUS "Have already compiled a bundled version of GSL")
@@ -25,6 +32,7 @@ else()
       execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${GSL_ZIPFILE}
           WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
+          OUTPUT_QUIET ERROR_QUIET
       )
     endif()
 
@@ -33,15 +41,21 @@ else()
 
     message( STATUS "Patience... Configuring GSL..." )
     execute_process( COMMAND ${GSL_BUILD_DIR}/configure ${GSL_OPTIONS}
-                     WORKING_DIRECTORY ${GSL_BUILD_DIR} )
+                     WORKING_DIRECTORY ${GSL_BUILD_DIR}
+                     OUTPUT_QUIET ERROR_QUIET 
+                   )
 
     message( STATUS "Patience... Compiling GSL..." )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -k -j ${NCORES}
-                     WORKING_DIRECTORY ${GSL_BUILD_DIR} )
+                     WORKING_DIRECTORY ${GSL_BUILD_DIR}
+                     OUTPUT_QUIET ERROR_QUIET 
+                   )
 
     message( STATUS "Patience... Installing GSL..." )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} install
-                   WORKING_DIRECTORY ${GSL_BUILD_DIR} )
+                     WORKING_DIRECTORY ${GSL_BUILD_DIR}
+                     OUTPUT_QUIET ERROR_QUIET  
+                   )
 
     if (APPLE)
       set( GSL_LIBRARY "${BUNDLE_STAGEDIR}/lib/libgsl.dylib" )
@@ -52,6 +66,11 @@ else()
       set( GSL_LIBRARY "${BUNDLE_STAGEDIR}/lib/libgsl.so" )
       set( GSL_CBLAS_LIBRARY "${BUNDLE_STAGEDIR}/lib/libgslcblas.so" )
     endif()
+
+    if (NOT EXISTS "${GSL_LIBRARY}")
+      message( FATAL_ERROR "Cannot find GSL library ${GSL_LIBRARY}. Problem with compile?" )
+    endif()
+
   endif()
 endif()
 

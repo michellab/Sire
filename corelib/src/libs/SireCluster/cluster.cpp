@@ -45,6 +45,15 @@
 #include "SireError/errors.h"
 #include "SireError/printerror.h"
 
+#ifdef Q_OS_WIN
+   #include <windows.h>    // CONDITIONAL_INCLUDE
+#else
+   #ifdef Q_OS_UNIX
+       #include <unistd.h>  // CONDITIONAL_INCLUDE
+   #endif
+#endif
+
+
 #include <QDebug>
 
 using namespace SireCluster;
@@ -408,7 +417,11 @@ Frontend Cluster::getFrontend(int timeout)
                 return frontend;
 
             //wait a second
-            sleep(1);
+            #ifdef Q_OS_WIN
+                Sleep(1);
+            #else
+                sleep(1);
+            #endif
         }
     }
     else
@@ -432,7 +445,11 @@ Frontend Cluster::getFrontend(int timeout)
             if (t.elapsed() + 1000 > timeout)
                 return Frontend();;
                 
-            sleep(1);
+            #ifdef Q_OS_WIN
+                Sleep(1);
+            #else
+                sleep(1);
+            #endif
         }
     }
     
@@ -477,8 +494,14 @@ QList<Frontend> Cluster::getFrontends(int n, int timeout)
                 frontends += active_frontends;
 
             if (frontends.count() < n)
+            {
                 //wait a second
-                sleep(1);
+                #ifdef Q_OS_WIN
+                    Sleep(1);
+                #else
+                    sleep(1);
+                #endif
+            }
         }
     }
     else
@@ -505,7 +528,13 @@ QList<Frontend> Cluster::getFrontends(int n, int timeout)
                 return frontends;
                 
             if (frontends.count() < n)
-                sleep(1);
+            {
+                #ifdef Q_OS_WIN
+                    Sleep(1);
+                #else
+                    sleep(1);
+                #endif
+            }
         }
     }
     
@@ -544,7 +573,11 @@ Frontend Cluster::getFrontend(const QUuid &uid, int timeout)
                 return frontend;
                 
             //wait a second
-            sleep(1);
+            #ifdef Q_OS_WIN
+                Sleep(1);
+            #else
+                sleep(1);
+            #endif
         }
     }
     else
@@ -568,7 +601,11 @@ Frontend Cluster::getFrontend(const QUuid &uid, int timeout)
             if (t.elapsed() + 1000 > timeout)
                 return Frontend();;
                 
-            sleep(1);
+            #ifdef Q_OS_WIN
+                Sleep(1);
+            #else
+                sleep(1);
+            #endif
         }
     }
     

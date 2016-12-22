@@ -48,17 +48,17 @@ void register_EnergyMonitor_class(){
 
     { //::SireSystem::EnergyMonitor
         typedef bp::class_< SireSystem::EnergyMonitor, bp::bases< SireSystem::SystemMonitor, SireBase::Property > > EnergyMonitor_exposer_t;
-        EnergyMonitor_exposer_t EnergyMonitor_exposer = EnergyMonitor_exposer_t( "EnergyMonitor", bp::init< >() );
+        EnergyMonitor_exposer_t EnergyMonitor_exposer = EnergyMonitor_exposer_t( "EnergyMonitor", "This monitor is used to monitor the energy of interaction between\nmolecule views in two groups. The coulomb and LJ energy of each pair\nof molecule views in the two groups is calculated and averaged\nusing the contained accumulator\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope EnergyMonitor_scope( EnergyMonitor_exposer );
-        EnergyMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const & >(( bp::arg("group0"), bp::arg("group1") )) );
-        EnergyMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMaths::Accumulator const & >(( bp::arg("group0"), bp::arg("group1"), bp::arg("accum") )) );
-        EnergyMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireSystem::IDAssigner const & >(( bp::arg("group0"), bp::arg("group1") )) );
-        EnergyMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireSystem::IDAssigner const &, SireMaths::Accumulator const & >(( bp::arg("group0"), bp::arg("group1"), bp::arg("accum") )) );
-        EnergyMonitor_exposer.def( bp::init< SireSystem::IDAssigner const &, SireMol::MoleculeGroup const & >(( bp::arg("group0"), bp::arg("group1") )) );
-        EnergyMonitor_exposer.def( bp::init< SireSystem::IDAssigner const &, SireMol::MoleculeGroup const &, SireMaths::Accumulator const & >(( bp::arg("group0"), bp::arg("group1"), bp::arg("accum") )) );
-        EnergyMonitor_exposer.def( bp::init< SireSystem::IDAssigner const &, SireSystem::IDAssigner const & >(( bp::arg("group0"), bp::arg("group1") )) );
-        EnergyMonitor_exposer.def( bp::init< SireSystem::IDAssigner const &, SireSystem::IDAssigner const &, SireMaths::Accumulator const & >(( bp::arg("group0"), bp::arg("group1"), bp::arg("accum") )) );
-        EnergyMonitor_exposer.def( bp::init< SireSystem::EnergyMonitor const & >(( bp::arg("other") )) );
+        EnergyMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const & >(( bp::arg("group0"), bp::arg("group1") ), "Construct to monitor the energies between all pairs of molecule views in the\ntwo passed groups. This will accumulate the average and standard deviation\nof each of the energies") );
+        EnergyMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMaths::Accumulator const & >(( bp::arg("group0"), bp::arg("group1"), bp::arg("accum") ), "Construct to monitor the energies between all pairs of molecule views in\nthe two passed groups, accumulating the energies using the passed\naccumulator") );
+        EnergyMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireSystem::IDAssigner const & >(( bp::arg("group0"), bp::arg("group1") ), "Construct to monitor the energies between all pairs of molecule views in the\ntwo passed groups. This will accumulate the average and standard deviation\nof each of the energies") );
+        EnergyMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireSystem::IDAssigner const &, SireMaths::Accumulator const & >(( bp::arg("group0"), bp::arg("group1"), bp::arg("accum") ), "Construct to monitor the energies between all pairs of molecule views in\nthe two passed groups, accumulating the energies using the passed\naccumulator") );
+        EnergyMonitor_exposer.def( bp::init< SireSystem::IDAssigner const &, SireMol::MoleculeGroup const & >(( bp::arg("group0"), bp::arg("group1") ), "Construct to monitor the energies between all pairs of molecule views in the\ntwo passed groups. This will accumulate the average and standard deviation\nof each of the energies") );
+        EnergyMonitor_exposer.def( bp::init< SireSystem::IDAssigner const &, SireMol::MoleculeGroup const &, SireMaths::Accumulator const & >(( bp::arg("group0"), bp::arg("group1"), bp::arg("accum") ), "Construct to monitor the energies between all pairs of molecule views in\nthe two passed groups, accumulating the energies using the passed\naccumulator") );
+        EnergyMonitor_exposer.def( bp::init< SireSystem::IDAssigner const &, SireSystem::IDAssigner const & >(( bp::arg("group0"), bp::arg("group1") ), "Construct to monitor the energies between all pairs of molecule views in the\ntwo passed groups. This will accumulate the average and standard deviation\nof each of the energies") );
+        EnergyMonitor_exposer.def( bp::init< SireSystem::IDAssigner const &, SireSystem::IDAssigner const &, SireMaths::Accumulator const & >(( bp::arg("group0"), bp::arg("group1"), bp::arg("accum") ), "Construct to monitor the energies between all pairs of molecule views in\nthe two passed groups, accumulating the energies using the passed\naccumulator") );
+        EnergyMonitor_exposer.def( bp::init< SireSystem::EnergyMonitor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::EnergyMonitor::alpha
         
             typedef double ( ::SireSystem::EnergyMonitor::*alpha_function_type)(  ) const;
@@ -66,7 +66,8 @@ void register_EnergyMonitor_class(){
             
             EnergyMonitor_exposer.def( 
                 "alpha"
-                , alpha_function_value );
+                , alpha_function_value
+                , "Return the value of alpha (either the explicitly set value, or\nthe last value used when calculating the energy if an alpha\ncomponent is used)" );
         
         }
         { //::SireSystem::EnergyMonitor::assigner0
@@ -77,7 +78,8 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "assigner0"
                 , assigner0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the assigner used to select views0. Note that this will\nraise an exception if an assigner is not used to choose these views\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireSystem::EnergyMonitor::assigner1
@@ -88,7 +90,8 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "assigner1"
                 , assigner1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the assigner used to select views1. Note that this will\nraise an exception if an assigner is not used to choose these views\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireSystem::EnergyMonitor::clearStatistics
@@ -98,7 +101,8 @@ void register_EnergyMonitor_class(){
             
             EnergyMonitor_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Clear all statistics" );
         
         }
         { //::SireSystem::EnergyMonitor::coulombEnergies
@@ -108,7 +112,8 @@ void register_EnergyMonitor_class(){
             
             EnergyMonitor_exposer.def( 
                 "coulombEnergies"
-                , coulombEnergies_function_value );
+                , coulombEnergies_function_value
+                , "Return the array of all accumulated coulomb energies" );
         
         }
         { //::SireSystem::EnergyMonitor::coulombPower
@@ -118,7 +123,8 @@ void register_EnergyMonitor_class(){
             
             EnergyMonitor_exposer.def( 
                 "coulombPower"
-                , coulombPower_function_value );
+                , coulombPower_function_value
+                , "Return the coulomb power, if extra coulomb softening is used.\nThis returns 0 if coulomb softening is not used" );
         
         }
         { //::SireSystem::EnergyMonitor::group0
@@ -129,7 +135,8 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "group0"
                 , group0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group from which views0 are drawn. Note that this\nwill return the molecule group used by assigner0 if an assigner is\nused to choose views" );
         
         }
         { //::SireSystem::EnergyMonitor::group1
@@ -140,7 +147,8 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "group1"
                 , group1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group from which views1 are drawn. Note that this\nwill return the molecule group used by assigner1 if an assigner is\nused to choose views" );
         
         }
         { //::SireSystem::EnergyMonitor::ljEnergies
@@ -150,7 +158,8 @@ void register_EnergyMonitor_class(){
             
             EnergyMonitor_exposer.def( 
                 "ljEnergies"
-                , ljEnergies_function_value );
+                , ljEnergies_function_value
+                , "Return the array of all accumulated LJ energies" );
         
         }
         { //::SireSystem::EnergyMonitor::monitor
@@ -161,7 +170,8 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "monitor"
                 , monitor_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Accumulate energies from the passed system" );
         
         }
         EnergyMonitor_exposer.def( bp::self != bp::self );
@@ -174,7 +184,8 @@ void register_EnergyMonitor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         EnergyMonitor_exposer.def( bp::self == bp::self );
@@ -186,7 +197,8 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "setAlpha"
                 , setAlpha_function_value
-                , ( bp::arg("alpha") ) );
+                , ( bp::arg("alpha") )
+                , "Explicitly set the value of alpha used if a soft-core potential is used.\nThis clears any set alpha component symbol." );
         
         }
         { //::SireSystem::EnergyMonitor::setAlphaComponent
@@ -197,7 +209,8 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "setAlphaComponent"
                 , setAlphaComponent_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Set the system component symbol used to get the value of alpha\nif using a soft-core potential. Note that this will overwrite\nany explicitly-set value of alpha" );
         
         }
         { //::SireSystem::EnergyMonitor::setCoulombPower
@@ -208,7 +221,8 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "setCoulombPower"
                 , setCoulombPower_function_value
-                , ( bp::arg("power") ) );
+                , ( bp::arg("power") )
+                , "Set the coulomb power parameter used by the soft-core potential" );
         
         }
         { //::SireSystem::EnergyMonitor::setShiftDelta
@@ -219,7 +233,8 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "setShiftDelta"
                 , setShiftDelta_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "Set the shift delta parameter used by the soft-core potential" );
         
         }
         { //::SireSystem::EnergyMonitor::shiftDelta
@@ -229,7 +244,8 @@ void register_EnergyMonitor_class(){
             
             EnergyMonitor_exposer.def( 
                 "shiftDelta"
-                , shiftDelta_function_value );
+                , shiftDelta_function_value
+                , "Return the shift delta parameter if a soft-core potential is used.\nThis returns 0 if a LJ shifting term is not used" );
         
         }
         { //::SireSystem::EnergyMonitor::typeName
@@ -239,7 +255,8 @@ void register_EnergyMonitor_class(){
             
             EnergyMonitor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "Return the typename of the class" );
         
         }
         { //::SireSystem::EnergyMonitor::usesSoftCore
@@ -249,7 +266,8 @@ void register_EnergyMonitor_class(){
             
             EnergyMonitor_exposer.def( 
                 "usesSoftCore"
-                , usesSoftCore_function_value );
+                , usesSoftCore_function_value
+                , "Return whether or not this monitor uses a soft-core potential to\ncalculate the CLJ energy between the molecules in views0() and the\nmolecules in views1()" );
         
         }
         { //::SireSystem::EnergyMonitor::views0
@@ -259,7 +277,8 @@ void register_EnergyMonitor_class(){
             
             EnergyMonitor_exposer.def( 
                 "views0"
-                , views0_function_value );
+                , views0_function_value
+                , "Return the array of the first group of molecule views in the same order as they\nappear in the arrays of energies" );
         
         }
         { //::SireSystem::EnergyMonitor::views1
@@ -269,7 +288,8 @@ void register_EnergyMonitor_class(){
             
             EnergyMonitor_exposer.def( 
                 "views1"
-                , views1_function_value );
+                , views1_function_value
+                , "Return the array of the second group of molecule views in the same order as they\nappear in the arrays of energies" );
         
         }
         EnergyMonitor_exposer.staticmethod( "typeName" );

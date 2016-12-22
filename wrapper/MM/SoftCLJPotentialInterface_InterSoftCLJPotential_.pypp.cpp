@@ -21,7 +21,7 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
 
     { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >
         typedef bp::class_< SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >, bp::bases< SireMM::CLJPotentialInterface<SireMM::InterSoftCLJPotential> >, boost::noncopyable > SoftCLJPotentialInterface_InterSoftCLJPotential__exposer_t;
-        SoftCLJPotentialInterface_InterSoftCLJPotential__exposer_t SoftCLJPotentialInterface_InterSoftCLJPotential__exposer = SoftCLJPotentialInterface_InterSoftCLJPotential__exposer_t( "SoftCLJPotentialInterface_InterSoftCLJPotential_", bp::no_init );
+        SoftCLJPotentialInterface_InterSoftCLJPotential__exposer_t SoftCLJPotentialInterface_InterSoftCLJPotential__exposer = SoftCLJPotentialInterface_InterSoftCLJPotential__exposer_t( "SoftCLJPotentialInterface_InterSoftCLJPotential_", "", bp::no_init );
         bp::scope SoftCLJPotentialInterface_InterSoftCLJPotential__scope( SoftCLJPotentialInterface_InterSoftCLJPotential__exposer );
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::alpha
         
@@ -31,7 +31,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "alpha"
-                , alpha_function_value );
+                , alpha_function_value
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::alpha
@@ -43,7 +44,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "alpha"
                 , alpha_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::clearAlphas
@@ -54,7 +56,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "clearAlphas"
-                , clearAlphas_function_value );
+                , clearAlphas_function_value
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::coulombPower
@@ -65,7 +68,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "coulombPower"
-                , coulombPower_function_value );
+                , coulombPower_function_value
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::hasAlphaValue
@@ -77,7 +81,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "hasAlphaValue"
                 , hasAlphaValue_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::ljPower
@@ -88,7 +93,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "ljPower"
-                , ljPower_function_value );
+                , ljPower_function_value
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::nActiveAlphaComponents
@@ -99,7 +105,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "nActiveAlphaComponents"
-                , nActiveAlphaComponents_function_value );
+                , nActiveAlphaComponents_function_value
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::removeAlpha
@@ -111,7 +118,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "removeAlpha"
                 , removeAlpha_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::setAlpha
@@ -123,7 +131,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "setAlpha"
                 , setAlpha_function_value
-                , ( bp::arg("alpha") ) );
+                , ( bp::arg("alpha") )
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::setAlpha
@@ -135,7 +144,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "setAlpha"
                 , setAlpha_function_value
-                , ( bp::arg("i"), bp::arg("alpha") ) );
+                , ( bp::arg("i"), bp::arg("alpha") )
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::setCoulombPower
@@ -147,7 +157,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "setCoulombPower"
                 , setCoulombPower_function_value
-                , ( bp::arg("power") ) );
+                , ( bp::arg("power") )
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::setLJPower
@@ -159,7 +170,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "setLJPower"
                 , setLJPower_function_value
-                , ( bp::arg("power") ) );
+                , ( bp::arg("power") )
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::setShiftDelta
@@ -171,7 +183,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "setShiftDelta"
                 , setShiftDelta_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "" );
         
         }
         { //::SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential >::shiftDelta
@@ -182,7 +195,8 @@ void register_SoftCLJPotentialInterface_InterSoftCLJPotential__class(){
             
             SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( 
                 "shiftDelta"
-                , shiftDelta_function_value );
+                , shiftDelta_function_value
+                , "" );
         
         }
         SoftCLJPotentialInterface_InterSoftCLJPotential__exposer.def( "__str__", &pvt_get_name);

@@ -25,11 +25,11 @@ void register_BeadFloatProperty_class(){
 
     { //::SireMol::BeadProperty< double >
         typedef bp::class_< SireMol::BeadProperty< double >, bp::bases< SireMol::BeadProp, SireMol::MolViewProperty, SireBase::Property > > BeadFloatProperty_exposer_t;
-        BeadFloatProperty_exposer_t BeadFloatProperty_exposer = BeadFloatProperty_exposer_t( "BeadFloatProperty", bp::init< >() );
+        BeadFloatProperty_exposer_t BeadFloatProperty_exposer = BeadFloatProperty_exposer_t( "BeadFloatProperty", "", bp::init< >("") );
         bp::scope BeadFloatProperty_scope( BeadFloatProperty_exposer );
-        BeadFloatProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMol::Beading const & >(( bp::arg("molinfo"), bp::arg("beading") )) );
-        BeadFloatProperty_exposer.def( bp::init< QVector< double > const &, SireMol::Beading const & >(( bp::arg("values"), bp::arg("beading") )) );
-        BeadFloatProperty_exposer.def( bp::init< SireMol::BeadProperty< double > const & >(( bp::arg("other") )) );
+        BeadFloatProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMol::Beading const & >(( bp::arg("molinfo"), bp::arg("beading") ), "") );
+        BeadFloatProperty_exposer.def( bp::init< QVector< double > const &, SireMol::Beading const & >(( bp::arg("values"), bp::arg("beading") ), "") );
+        BeadFloatProperty_exposer.def( bp::init< SireMol::BeadProperty< double > const & >(( bp::arg("other") ), "") );
         { //::SireMol::BeadProperty< double >::array
         
             typedef SireMol::BeadProperty< double > exported_class_t;
@@ -39,7 +39,8 @@ void register_BeadFloatProperty_class(){
             BeadFloatProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::assertCanConvert
@@ -51,7 +52,8 @@ void register_BeadFloatProperty_class(){
             BeadFloatProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::assignFrom
@@ -63,7 +65,8 @@ void register_BeadFloatProperty_class(){
             BeadFloatProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::at
@@ -76,7 +79,8 @@ void register_BeadFloatProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("beadidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::canConvert
@@ -88,7 +92,8 @@ void register_BeadFloatProperty_class(){
             BeadFloatProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::count
@@ -99,7 +104,8 @@ void register_BeadFloatProperty_class(){
             
             BeadFloatProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::fromVariant
@@ -111,7 +117,8 @@ void register_BeadFloatProperty_class(){
             BeadFloatProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::get
@@ -124,7 +131,8 @@ void register_BeadFloatProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("beadidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::isCompatibleWith
@@ -136,7 +144,8 @@ void register_BeadFloatProperty_class(){
             BeadFloatProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::isEmpty
@@ -147,7 +156,8 @@ void register_BeadFloatProperty_class(){
             
             BeadFloatProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::nBeads
@@ -158,7 +168,8 @@ void register_BeadFloatProperty_class(){
             
             BeadFloatProperty_exposer.def( 
                 "nBeads"
-                , nBeads_function_value );
+                , nBeads_function_value
+                , "" );
         
         }
         BeadFloatProperty_exposer.def( bp::self != bp::self );
@@ -172,7 +183,8 @@ void register_BeadFloatProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         BeadFloatProperty_exposer.def( bp::self == bp::self );
@@ -186,7 +198,8 @@ void register_BeadFloatProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("beadidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::set
@@ -199,7 +212,8 @@ void register_BeadFloatProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("beadidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::size
@@ -210,7 +224,8 @@ void register_BeadFloatProperty_class(){
             
             BeadFloatProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::toString
@@ -221,7 +236,8 @@ void register_BeadFloatProperty_class(){
             
             BeadFloatProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::toVariant
@@ -232,7 +248,8 @@ void register_BeadFloatProperty_class(){
             
             BeadFloatProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::BeadProperty< double >::typeName
@@ -243,7 +260,8 @@ void register_BeadFloatProperty_class(){
             
             BeadFloatProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         BeadFloatProperty_exposer.staticmethod( "fromVariant" );

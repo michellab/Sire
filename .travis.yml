@@ -1,25 +1,35 @@
-language: cpp
-compiler:
-  - gcc
-
 sudo: false
 
+language: cpp
+
+compiler:
+ - gcc
+
+# Travis CI is powered with Ubuntu 12.04, whose toolchain is outdated.
 addons:
   apt:
-    sources: 
-      - kubuntu-backports
+    # Travis white list of ppa.
+    # https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
+    sources:
+      - ubuntu-toolchain-r-test     # For gcc 5.2
+      - george-edison55-precise-backports # cmake 3.2.3 / doxygen 1.8.3
+    # Travis whitelist of packages.
+    # https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
     packages:
       - cmake
-      - build-essential
-      - libgtk2.0-dev 
-      - libgl1-mesa-dev
+      - cmake-data
+      - g++-5
 
 before_install:
-  - export NCORES=2
+  - export NCORES=4
+  - export SIRE_DONT_PHONEHOME=1
   - export INSTALL_SIRE_DIR=$HOME/sire.app
-  - if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
+  - if [ "$CC" = "gcc"   ]; then export CC=gcc-5 CXX=g++-5; fi
+  - if [ "$CC" = "clang" ]; then export CC=clang-3.6 CXX=clang++-3.6; fi
 
 script:
+  - cmake --version
+  - $CXX --version
   - bash compile_sire.sh
   - $HOME/sire.app/bin/sire_test
 

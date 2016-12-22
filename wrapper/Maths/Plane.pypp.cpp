@@ -23,12 +23,12 @@ void register_Plane_class(){
 
     { //::SireMaths::Plane
         typedef bp::class_< SireMaths::Plane > Plane_exposer_t;
-        Plane_exposer_t Plane_exposer = Plane_exposer_t( "Plane", bp::init< >() );
+        Plane_exposer_t Plane_exposer = Plane_exposer_t( "Plane", "This class represents an infinite plane, represented by a normal vector\nperpendicular to the plane, and the distance from the origin\nalong that normal vector.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a default plane - this is the xy plane, lying at the origin") );
         bp::scope Plane_scope( Plane_exposer );
-        Plane_exposer.def( bp::init< SireMaths::Vector const &, double const & >(( bp::arg("normal"), bp::arg("distance") )) );
-        Plane_exposer.def( bp::init< double const &, double const &, double const &, double const & >(( bp::arg("a"), bp::arg("b"), bp::arg("c"), bp::arg("d") )) );
-        Plane_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("normal"), bp::arg("contains_point") )) );
-        Plane_exposer.def( bp::init< SireMaths::Plane const & >(( bp::arg("other") )) );
+        Plane_exposer.def( bp::init< SireMaths::Vector const &, double const & >(( bp::arg("normal"), bp::arg("distance") ), "Construct the plane lying perpendicular to normal and at a distance of dist\nfrom the origin") );
+        Plane_exposer.def( bp::init< double const &, double const &, double const &, double const & >(( bp::arg("a"), bp::arg("b"), bp::arg("c"), bp::arg("d") ), "Construct the plane that fulfills the equation ax + by + cz + d = 0") );
+        Plane_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("normal"), bp::arg("contains_point") ), "Construct a plane that lies perpendicular to normal and that also contains\nthe point contains_point") );
+        Plane_exposer.def( bp::init< SireMaths::Plane const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::Plane::a
         
             typedef double ( ::SireMaths::Plane::*a_function_type)(  ) const;
@@ -36,7 +36,8 @@ void register_Plane_class(){
             
             Plane_exposer.def( 
                 "a"
-                , a_function_value );
+                , a_function_value
+                , "" );
         
         }
         { //::SireMaths::Plane::b
@@ -46,7 +47,8 @@ void register_Plane_class(){
             
             Plane_exposer.def( 
                 "b"
-                , b_function_value );
+                , b_function_value
+                , "" );
         
         }
         { //::SireMaths::Plane::c
@@ -56,7 +58,8 @@ void register_Plane_class(){
             
             Plane_exposer.def( 
                 "c"
-                , c_function_value );
+                , c_function_value
+                , "" );
         
         }
         { //::SireMaths::Plane::d
@@ -66,7 +69,8 @@ void register_Plane_class(){
             
             Plane_exposer.def( 
                 "d"
-                , d_function_value );
+                , d_function_value
+                , "" );
         
         }
         { //::SireMaths::Plane::distance
@@ -77,7 +81,8 @@ void register_Plane_class(){
             Plane_exposer.def( 
                 "distance"
                 , distance_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "" );
         
         }
         { //::SireMaths::Plane::distanceFromOrigin
@@ -88,7 +93,8 @@ void register_Plane_class(){
             Plane_exposer.def( 
                 "distanceFromOrigin"
                 , distanceFromOrigin_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Plane::normal
@@ -99,7 +105,8 @@ void register_Plane_class(){
             Plane_exposer.def( 
                 "normal"
                 , normal_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Plane::typeName
@@ -109,7 +116,8 @@ void register_Plane_class(){
             
             Plane_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::Plane::what
@@ -119,7 +127,8 @@ void register_Plane_class(){
             
             Plane_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Plane_exposer.staticmethod( "typeName" );

@@ -59,10 +59,7 @@ public:
 
     static const char* typeName();
 
-    const char* what() const throw()
-    {
-        return version_error::typeName();
-    }
+    const char* what() const throw();
     
     void throwSelf() const
     {

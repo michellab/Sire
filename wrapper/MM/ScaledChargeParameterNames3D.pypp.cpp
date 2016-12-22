@@ -45,7 +45,7 @@ void register_ScaledChargeParameterNames3D_class(){
 
     { //::SireMM::ScaledChargeParameterNames3D
         typedef bp::class_< SireMM::ScaledChargeParameterNames3D, bp::bases< SireMM::ChargeParameterName3D, SireMM::ChargeParameterName > > ScaledChargeParameterNames3D_exposer_t;
-        ScaledChargeParameterNames3D_exposer_t ScaledChargeParameterNames3D_exposer = ScaledChargeParameterNames3D_exposer_t( "ScaledChargeParameterNames3D", bp::init< >() );
+        ScaledChargeParameterNames3D_exposer_t ScaledChargeParameterNames3D_exposer = ScaledChargeParameterNames3D_exposer_t( "ScaledChargeParameterNames3D", "This class provides the default name of the properties\nthat contain the charge and intramolecular NB scale parameters and\n3D coordinates properties", bp::init< >("") );
         bp::scope ScaledChargeParameterNames3D_scope( ScaledChargeParameterNames3D_exposer );
         ScaledChargeParameterNames3D_exposer.def( "__copy__", &__copy__);
         ScaledChargeParameterNames3D_exposer.def( "__deepcopy__", &__copy__);

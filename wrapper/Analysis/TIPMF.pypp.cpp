@@ -35,12 +35,12 @@ void register_TIPMF_class(){
 
     { //::SireAnalysis::TIPMF
         typedef bp::class_< SireAnalysis::TIPMF, bp::bases< SireAnalysis::PMF, SireBase::Property > > TIPMF_exposer_t;
-        TIPMF_exposer_t TIPMF_exposer = TIPMF_exposer_t( "TIPMF", bp::init< >() );
+        TIPMF_exposer_t TIPMF_exposer = TIPMF_exposer_t( "TIPMF", "This class contains the complete potential of mean force\nthat has been created by integrating the TI gradients\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a PMF that will use 10 polynomials to fit\nand integrate the gradients between 0 and 1") );
         bp::scope TIPMF_scope( TIPMF_exposer );
-        TIPMF_exposer.def( bp::init< int >(( bp::arg("order") )) );
-        TIPMF_exposer.def( bp::init< double, double >(( bp::arg("min_x"), bp::arg("max_x") )) );
-        TIPMF_exposer.def( bp::init< double, double, int >(( bp::arg("min_x"), bp::arg("max_x"), bp::arg("order") )) );
-        TIPMF_exposer.def( bp::init< SireAnalysis::TIPMF const & >(( bp::arg("other") )) );
+        TIPMF_exposer.def( bp::init< int >(( bp::arg("order") ), "Construct a PMF that will use the passed number of polynomials\nto fit and integrate the gradients between 0 and 1") );
+        TIPMF_exposer.def( bp::init< double, double >(( bp::arg("min_x"), bp::arg("max_x") ), "Construct a PMF that will use 10 polynomials to fit and integrate\nthe gradients in the passed range") );
+        TIPMF_exposer.def( bp::init< double, double, int >(( bp::arg("min_x"), bp::arg("max_x"), bp::arg("order") ), "Construct a PMF that will use the passed number of polynomials to fit and\nintegrate the gradients in the passed range") );
+        TIPMF_exposer.def( bp::init< SireAnalysis::TIPMF const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireAnalysis::TIPMF::dropEndPoints
         
             typedef ::SireAnalysis::TIPMF ( ::SireAnalysis::TIPMF::*dropEndPoints_function_type)(  ) const;
@@ -48,7 +48,8 @@ void register_TIPMF_class(){
             
             TIPMF_exposer.def( 
                 "dropEndPoints"
-                , dropEndPoints_function_value );
+                , dropEndPoints_function_value
+                , "Return a copy of the PMF where the gradients at the end points\n(the first and last gradients) have been removed. This can be used\nto estimate the effect of end-point error" );
         
         }
         { //::SireAnalysis::TIPMF::gradients
@@ -58,7 +59,8 @@ void register_TIPMF_class(){
             
             TIPMF_exposer.def( 
                 "gradients"
-                , gradients_function_value );
+                , gradients_function_value
+                , "Return the raw gradients used to calculate the PMF" );
         
         }
         { //::SireAnalysis::TIPMF::integral
@@ -68,7 +70,8 @@ void register_TIPMF_class(){
             
             TIPMF_exposer.def( 
                 "integral"
-                , integral_function_value );
+                , integral_function_value
+                , "Return the free energy calculated using integration of the\npolynomial fitted to the gradients" );
         
         }
         TIPMF_exposer.def( bp::self != bp::self );
@@ -81,7 +84,8 @@ void register_TIPMF_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         TIPMF_exposer.def( bp::self == bp::self );
@@ -92,7 +96,8 @@ void register_TIPMF_class(){
             
             TIPMF_exposer.def( 
                 "order"
-                , order_function_value );
+                , order_function_value
+                , "Return the order (number of polynomials) used to integrate\nthe gradients to get the PMF" );
         
         }
         { //::SireAnalysis::TIPMF::quadrature
@@ -102,7 +107,8 @@ void register_TIPMF_class(){
             
             TIPMF_exposer.def( 
                 "quadrature"
-                , quadrature_function_value );
+                , quadrature_function_value
+                , "Return the free energy calculated using trapezium quadrature\nfrom the raw gradients" );
         
         }
         { //::SireAnalysis::TIPMF::rangeMax
@@ -112,7 +118,8 @@ void register_TIPMF_class(){
             
             TIPMF_exposer.def( 
                 "rangeMax"
-                , rangeMax_function_value );
+                , rangeMax_function_value
+                , "Return the maximum value of the range of integration" );
         
         }
         { //::SireAnalysis::TIPMF::rangeMin
@@ -122,7 +129,8 @@ void register_TIPMF_class(){
             
             TIPMF_exposer.def( 
                 "rangeMin"
-                , rangeMin_function_value );
+                , rangeMin_function_value
+                , "Return the minimum value of the range of integration" );
         
         }
         { //::SireAnalysis::TIPMF::setGradients
@@ -133,7 +141,8 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "setGradients"
                 , setGradients_function_value
-                , ( bp::arg("gradients") ) );
+                , ( bp::arg("gradients") )
+                , "Set the raw gradients to be integrated" );
         
         }
         { //::SireAnalysis::TIPMF::setOrder
@@ -144,7 +153,8 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "setOrder"
                 , setOrder_function_value
-                , ( bp::arg("order") ) );
+                , ( bp::arg("order") )
+                , "Set the order (number of polynomials) to fit the gradients for\nPMF integration" );
         
         }
         { //::SireAnalysis::TIPMF::setRange
@@ -155,7 +165,8 @@ void register_TIPMF_class(){
             TIPMF_exposer.def( 
                 "setRange"
                 , setRange_function_value
-                , ( bp::arg("min_x"), bp::arg("max_x") ) );
+                , ( bp::arg("min_x"), bp::arg("max_x") )
+                , "Set the range of integration" );
         
         }
         { //::SireAnalysis::TIPMF::smoothedGradients
@@ -165,7 +176,8 @@ void register_TIPMF_class(){
             
             TIPMF_exposer.def( 
                 "smoothedGradients"
-                , smoothedGradients_function_value );
+                , smoothedGradients_function_value
+                , "Return the smoothed (fitted) gradients used to calculate the PMF" );
         
         }
         { //::SireAnalysis::TIPMF::toString
@@ -175,7 +187,8 @@ void register_TIPMF_class(){
             
             TIPMF_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireAnalysis::TIPMF::typeName
@@ -185,7 +198,8 @@ void register_TIPMF_class(){
             
             TIPMF_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireAnalysis::TIPMF::what
@@ -195,7 +209,8 @@ void register_TIPMF_class(){
             
             TIPMF_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         TIPMF_exposer.staticmethod( "typeName" );

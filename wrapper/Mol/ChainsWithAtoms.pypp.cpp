@@ -26,10 +26,10 @@ void register_ChainsWithAtoms_class(){
 
     { //::SireMol::ChainsWithAtoms
         typedef bp::class_< SireMol::ChainsWithAtoms, bp::bases< SireMol::ChainID, SireID::ID > > ChainsWithAtoms_exposer_t;
-        ChainsWithAtoms_exposer_t ChainsWithAtoms_exposer = ChainsWithAtoms_exposer_t( "ChainsWithAtoms", bp::init< >() );
+        ChainsWithAtoms_exposer_t ChainsWithAtoms_exposer = ChainsWithAtoms_exposer_t( "ChainsWithAtoms", "This ID class identifies chains that contain atoms that\nmatch the passed AtomID\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope ChainsWithAtoms_scope( ChainsWithAtoms_exposer );
-        ChainsWithAtoms_exposer.def( bp::init< SireMol::AtomID const & >(( bp::arg("atomid") )) );
-        ChainsWithAtoms_exposer.def( bp::init< SireMol::ChainsWithAtoms const & >(( bp::arg("other") )) );
+        ChainsWithAtoms_exposer.def( bp::init< SireMol::AtomID const & >(( bp::arg("atomid") ), "Construct from the passed atom ID") );
+        ChainsWithAtoms_exposer.def( bp::init< SireMol::ChainsWithAtoms const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::ChainsWithAtoms::atomID
         
             typedef ::SireMol::AtomID const & ( ::SireMol::ChainsWithAtoms::*atomID_function_type)(  ) const;
@@ -38,7 +38,8 @@ void register_ChainsWithAtoms_class(){
             ChainsWithAtoms_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the atom ID" );
         
         }
         { //::SireMol::ChainsWithAtoms::hash
@@ -48,7 +49,8 @@ void register_ChainsWithAtoms_class(){
             
             ChainsWithAtoms_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this identifier" );
         
         }
         { //::SireMol::ChainsWithAtoms::isNull
@@ -58,7 +60,8 @@ void register_ChainsWithAtoms_class(){
             
             ChainsWithAtoms_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Is this selection null?" );
         
         }
         { //::SireMol::ChainsWithAtoms::map
@@ -69,7 +72,8 @@ void register_ChainsWithAtoms_class(){
             ChainsWithAtoms_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Map this ID to the list of indicies of chains that match this ID\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         ChainsWithAtoms_exposer.def( bp::self != bp::self );
@@ -82,7 +86,8 @@ void register_ChainsWithAtoms_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ChainsWithAtoms_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -94,7 +99,8 @@ void register_ChainsWithAtoms_class(){
             
             ChainsWithAtoms_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representatio of this ID" );
         
         }
         { //::SireMol::ChainsWithAtoms::typeName
@@ -104,7 +110,8 @@ void register_ChainsWithAtoms_class(){
             
             ChainsWithAtoms_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::ChainsWithAtoms::what
@@ -114,7 +121,8 @@ void register_ChainsWithAtoms_class(){
             
             ChainsWithAtoms_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ChainsWithAtoms_exposer.staticmethod( "typeName" );
@@ -127,6 +135,7 @@ void register_ChainsWithAtoms_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ChainsWithAtoms_exposer.def( "__str__", &__str__< ::SireMol::ChainsWithAtoms > );
         ChainsWithAtoms_exposer.def( "__repr__", &__str__< ::SireMol::ChainsWithAtoms > );
+        ChainsWithAtoms_exposer.def( "__hash__", &::SireMol::ChainsWithAtoms::hash );
     }
 
 }

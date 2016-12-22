@@ -39,7 +39,7 @@ void register_AtomProp_class(){
 
     { //::SireMol::AtomProp
         typedef bp::class_< SireMol::AtomProp, bp::bases< SireMol::MolViewProperty, SireBase::Property >, boost::noncopyable > AtomProp_exposer_t;
-        AtomProp_exposer_t AtomProp_exposer = AtomProp_exposer_t( "AtomProp", bp::no_init );
+        AtomProp_exposer_t AtomProp_exposer = AtomProp_exposer_t( "AtomProp", "Small class used to give a common base to all\nAtomProperty classes", bp::no_init );
         bp::scope AtomProp_scope( AtomProp_exposer );
         { //::SireMol::AtomProp::assertCanConvert
         
@@ -49,7 +49,8 @@ void register_AtomProp_class(){
             AtomProp_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProp::assignFrom
@@ -60,7 +61,8 @@ void register_AtomProp_class(){
             AtomProp_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProp::canConvert
@@ -71,7 +73,8 @@ void register_AtomProp_class(){
             AtomProp_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProp::divide
@@ -82,7 +85,8 @@ void register_AtomProp_class(){
             AtomProp_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("beads") ) );
+                , ( bp::arg("beads") )
+                , "" );
         
         }
         { //::SireMol::AtomProp::divideByResidue
@@ -93,7 +97,8 @@ void register_AtomProp_class(){
             AtomProp_exposer.def( 
                 "divideByResidue"
                 , divideByResidue_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProp::merge
@@ -104,7 +109,8 @@ void register_AtomProp_class(){
             AtomProp_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProp::operator=
@@ -116,7 +122,8 @@ void register_AtomProp_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProp::toVariant
@@ -126,7 +133,8 @@ void register_AtomProp_class(){
             
             AtomProp_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         AtomProp_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMol::AtomProp >,

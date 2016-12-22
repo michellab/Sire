@@ -25,7 +25,7 @@ void register_StringMangler_class(){
 
     { //::SireBase::StringMangler
         typedef bp::class_< SireBase::StringMangler, bp::bases< SireBase::Property >, boost::noncopyable > StringMangler_exposer_t;
-        StringMangler_exposer_t StringMangler_exposer = StringMangler_exposer_t( "StringMangler", bp::no_init );
+        StringMangler_exposer_t StringMangler_exposer = StringMangler_exposer_t( "StringMangler", "This is the base class of all string mangling functions.\nA string mangler is just a simple function that performs\nsome transformations on an input string, e.g. changing its\ncase, trimming away extra spaces etc.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope StringMangler_scope( StringMangler_exposer );
         { //::SireBase::StringMangler::mangle
         
@@ -35,7 +35,8 @@ void register_StringMangler_class(){
             StringMangler_exposer.def( 
                 "mangle"
                 , mangle_function_value
-                , ( bp::arg("input") ) );
+                , ( bp::arg("input") )
+                , "" );
         
         }
         { //::SireBase::StringMangler::null
@@ -46,7 +47,8 @@ void register_StringMangler_class(){
             StringMangler_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::StringMangler::operator()
@@ -57,7 +59,8 @@ void register_StringMangler_class(){
             StringMangler_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("input") ) );
+                , ( bp::arg("input") )
+                , "" );
         
         }
         { //::SireBase::StringMangler::typeName
@@ -67,7 +70,8 @@ void register_StringMangler_class(){
             
             StringMangler_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         StringMangler_exposer.staticmethod( "null" );

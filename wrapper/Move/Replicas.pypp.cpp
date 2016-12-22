@@ -35,14 +35,14 @@ void register_Replicas_class(){
 
     { //::SireMove::Replicas
         typedef bp::class_< SireMove::Replicas, bp::bases< SireMove::SupraSystem, SireBase::Property > > Replicas_exposer_t;
-        Replicas_exposer_t Replicas_exposer = Replicas_exposer_t( "Replicas", bp::init< >() );
+        Replicas_exposer_t Replicas_exposer = Replicas_exposer_t( "Replicas", "This class is used to hold all of the replicas in\na replica exchange simulation\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope Replicas_scope( Replicas_exposer );
-        Replicas_exposer.def( bp::init< int >(( bp::arg("n") )) );
-        Replicas_exposer.def( bp::init< SireSystem::System const &, bp::optional< int > >(( bp::arg("system"), bp::arg("n")=(int)(1) )) );
-        Replicas_exposer.def( bp::init< QVector< SireSystem::System > const & >(( bp::arg("systems") )) );
-        Replicas_exposer.def( bp::init< SireMove::SupraSubSystem const &, bp::optional< int > >(( bp::arg("subsystem"), bp::arg("n")=(int)(1) )) );
-        Replicas_exposer.def( bp::init< SireMove::SupraSystem const & >(( bp::arg("suprasystem") )) );
-        Replicas_exposer.def( bp::init< SireMove::Replicas const & >(( bp::arg("other") )) );
+        Replicas_exposer.def( bp::init< int >(( bp::arg("n") ), "Construct a set of n replicas") );
+        Replicas_exposer.def( bp::init< SireSystem::System const &, bp::optional< int > >(( bp::arg("system"), bp::arg("n")=(int)(1) ), "Construct a set of n replicas that contain the sub-system system") );
+        Replicas_exposer.def( bp::init< QVector< SireSystem::System > const & >(( bp::arg("systems") ), "Construct a set of replicas from the passed array of systems") );
+        Replicas_exposer.def( bp::init< SireMove::SupraSubSystem const &, bp::optional< int > >(( bp::arg("subsystem"), bp::arg("n")=(int)(1) ), "Construct a Replicas object that contains n copies of the\npassed subsystem") );
+        Replicas_exposer.def( bp::init< SireMove::SupraSystem const & >(( bp::arg("suprasystem") ), "Construct from the passed SupraSystem") );
+        Replicas_exposer.def( bp::init< SireMove::Replicas const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::Replicas::at
         
             typedef ::SireMove::Replica const & ( ::SireMove::Replicas::*at_function_type)( int ) const;
@@ -52,7 +52,8 @@ void register_Replicas_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the ith replica\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::Replicas::collectSupraStats
@@ -62,7 +63,8 @@ void register_Replicas_class(){
             
             Replicas_exposer.def( 
                 "collectSupraStats"
-                , collectSupraStats_function_value );
+                , collectSupraStats_function_value
+                , "Collect statistics - this records the current lambdaTrajectory and adds it to the history" );
         
         }
         { //::SireMove::Replicas::lambdaTrajectory
@@ -72,7 +74,8 @@ void register_Replicas_class(){
             
             Replicas_exposer.def( 
                 "lambdaTrajectory"
-                , lambdaTrajectory_function_value );
+                , lambdaTrajectory_function_value
+                , "Return the lambda values for each of the replicas, in replica ID order.\nThis allows the lambda trajectory for each replica to be easily\ncollected during a simulation" );
         
         }
         { //::SireMove::Replicas::lambdaTrajectoryHistory
@@ -82,7 +85,8 @@ void register_Replicas_class(){
             
             Replicas_exposer.def( 
                 "lambdaTrajectoryHistory"
-                , lambdaTrajectoryHistory_function_value );
+                , lambdaTrajectoryHistory_function_value
+                , "Return the history of lambda values sampled by each replica" );
         
         }
         { //::SireMove::Replicas::nReplicas
@@ -92,7 +96,8 @@ void register_Replicas_class(){
             
             Replicas_exposer.def( 
                 "nReplicas"
-                , nReplicas_function_value );
+                , nReplicas_function_value
+                , "Return the number of replicas in this set" );
         
         }
         Replicas_exposer.def( bp::self != bp::self );
@@ -105,7 +110,8 @@ void register_Replicas_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Replicas_exposer.def( bp::self == bp::self );
@@ -118,7 +124,8 @@ void register_Replicas_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMove::Replicas::replicaIDs
@@ -129,7 +136,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "replicaIDs"
                 , replicaIDs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the current IDs of the replicas (in order of replica index)" );
         
         }
         { //::SireMove::Replicas::resetReplicaIDs
@@ -139,7 +147,8 @@ void register_Replicas_class(){
             
             Replicas_exposer.def( 
                 "resetReplicaIDs"
-                , resetReplicaIDs_function_value );
+                , resetReplicaIDs_function_value
+                , "Reset the replica IDs - this sets the ID of the ith replica to i" );
         
         }
         { //::SireMove::Replicas::setChemicalPotential
@@ -150,7 +159,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setChemicalPotential"
                 , setChemicalPotential_function_value
-                , ( bp::arg("chemical_potential") ) );
+                , ( bp::arg("chemical_potential") )
+                , "Set the chemical potential of the ensemble sampled by all\nreplicas to chemical_potential\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Replicas::setChemicalPotential
@@ -161,7 +171,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setChemicalPotential"
                 , setChemicalPotential_function_value
-                , ( bp::arg("i"), bp::arg("chemical_potential") ) );
+                , ( bp::arg("i"), bp::arg("chemical_potential") )
+                , "Set the chemical potential of the ensemble sampled by the ith\nreplica to chemical_potential\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Replicas::setEnergyComponent
@@ -172,7 +183,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setEnergyComponent"
                 , setEnergyComponent_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Set the energy component sampled by all replicas to symbol" );
         
         }
         { //::SireMove::Replicas::setEnergyComponent
@@ -183,7 +195,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setEnergyComponent"
                 , setEnergyComponent_function_value
-                , ( bp::arg("i"), bp::arg("symbol") ) );
+                , ( bp::arg("i"), bp::arg("symbol") )
+                , "Set the energy component sampled by the ith replica to symbol\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::Replicas::setFugacity
@@ -194,7 +207,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setFugacity"
                 , setFugacity_function_value
-                , ( bp::arg("fugacity") ) );
+                , ( bp::arg("fugacity") )
+                , "Set the fugacity of the ensemble sampled by all replicas\nto fugacity\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Replicas::setFugacity
@@ -205,7 +219,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setFugacity"
                 , setFugacity_function_value
-                , ( bp::arg("i"), bp::arg("fugacity") ) );
+                , ( bp::arg("i"), bp::arg("fugacity") )
+                , "Set the fugacity of the ensemble sampled by the ith replica\nto fugacity\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Replicas::setGenerator
@@ -216,7 +231,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("rangenerator") ) );
+                , ( bp::arg("rangenerator") )
+                , "Set the random number generator used by all of the replicas\nto rangenerator - this doesnt give all of the replicas\nthe same generator - rather it uses this generator to\nreproducibly generate new generators for each replica" );
         
         }
         { //::SireMove::Replicas::setGenerator
@@ -227,7 +243,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("i"), bp::arg("rangenerator") ) );
+                , ( bp::arg("i"), bp::arg("rangenerator") )
+                , "Set the random number generator used by the ith replica to generator\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::Replicas::setLambdaComponent
@@ -238,7 +255,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setLambdaComponent"
                 , setLambdaComponent_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Set the lambda component used for Hamiltonian replica exchange\nfor all replicas to symbol" );
         
         }
         { //::SireMove::Replicas::setLambdaComponent
@@ -249,7 +267,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setLambdaComponent"
                 , setLambdaComponent_function_value
-                , ( bp::arg("i"), bp::arg("symbol") ) );
+                , ( bp::arg("i"), bp::arg("symbol") )
+                , "Set the lambda component used by the ith replica for Hamiltonian\nreplica exchange to symbol\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::Replicas::setLambdaValue
@@ -260,7 +279,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setLambdaValue"
                 , setLambdaValue_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Set the lambda value for Hamiltonian replica exchange for all\nreplicas to value" );
         
         }
         { //::SireMove::Replicas::setLambdaValue
@@ -271,7 +291,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setLambdaValue"
                 , setLambdaValue_function_value
-                , ( bp::arg("i"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("value") )
+                , "Set the value of lambda used for Hamiltonian replica exchange for\nthe ith replica to value\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::Replicas::setPressure
@@ -282,7 +303,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setPressure"
                 , setPressure_function_value
-                , ( bp::arg("pressure") ) );
+                , ( bp::arg("pressure") )
+                , "Set the pressure of the ensemble sampled by all replicas\nto pressure" );
         
         }
         { //::SireMove::Replicas::setPressure
@@ -293,7 +315,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setPressure"
                 , setPressure_function_value
-                , ( bp::arg("i"), bp::arg("pressure") ) );
+                , ( bp::arg("i"), bp::arg("pressure") )
+                , "Set the pressure of the ensemble sampled by the ith replica\nto pressure\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Replicas::setReplica
@@ -304,7 +327,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setReplica"
                 , setReplica_function_value
-                , ( bp::arg("replica") ) );
+                , ( bp::arg("replica") )
+                , "Set the replicas to all be a copy of replica" );
         
         }
         { //::SireMove::Replicas::setReplica
@@ -315,7 +339,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setReplica"
                 , setReplica_function_value
-                , ( bp::arg("i"), bp::arg("replica") ) );
+                , ( bp::arg("i"), bp::arg("replica") )
+                , "Set the ith replica equal to replica\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::Replicas::setReplicas
@@ -326,7 +351,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setReplicas"
                 , setReplicas_function_value
-                , ( bp::arg("replicas") ) );
+                , ( bp::arg("replicas") )
+                , "Set the replicas from a copy of passed replicas" );
         
         }
         { //::SireMove::Replicas::setSpaceProperty
@@ -337,7 +363,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
-                , ( bp::arg("spaceproperty") ) );
+                , ( bp::arg("spaceproperty") )
+                , "Set the property used to find the simulation space for all replicas\nto spaceproperty" );
         
         }
         { //::SireMove::Replicas::setSpaceProperty
@@ -348,7 +375,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
-                , ( bp::arg("i"), bp::arg("spaceproperty") ) );
+                , ( bp::arg("i"), bp::arg("spaceproperty") )
+                , "Set the space property used by the ith replica to spaceproperty\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::Replicas::setSubSystem
@@ -359,7 +387,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setSubSystem"
                 , setSubSystem_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Overloaded function used to set all of the replicas equal to subsystem" );
         
         }
         { //::SireMove::Replicas::setSubSystem
@@ -370,7 +399,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setSubSystem"
                 , setSubSystem_function_value
-                , ( bp::arg("subsystem") ) );
+                , ( bp::arg("subsystem") )
+                , "Overloaded function used to set all of the replicas equal to subsystem" );
         
         }
         { //::SireMove::Replicas::setSubSystem
@@ -381,7 +411,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setSubSystem"
                 , setSubSystem_function_value
-                , ( bp::arg("i"), bp::arg("system") ) );
+                , ( bp::arg("i"), bp::arg("system") )
+                , "Overloaded function used to set the ith subsystem equal to system\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::Replicas::setSubSystem
@@ -392,7 +423,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setSubSystem"
                 , setSubSystem_function_value
-                , ( bp::arg("i"), bp::arg("subsystem") ) );
+                , ( bp::arg("i"), bp::arg("subsystem") )
+                , "Overloaded function used to ensure that this system only contains\nReplica subsystems\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::Replicas::setTemperature
@@ -403,7 +435,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setTemperature"
                 , setTemperature_function_value
-                , ( bp::arg("temperature") ) );
+                , ( bp::arg("temperature") )
+                , "Set the temperature of the ensemble sampled by all replicas\nto temperature\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Replicas::setTemperature
@@ -414,7 +447,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "setTemperature"
                 , setTemperature_function_value
-                , ( bp::arg("i"), bp::arg("temperature") ) );
+                , ( bp::arg("i"), bp::arg("temperature") )
+                , "Set the temperature of the ensemble sampled by\nthe ith replica to temperature\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Replicas::swapMolecules
@@ -425,7 +459,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "swapMolecules"
                 , swapMolecules_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Swap the molecules between replicas i and j\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::Replicas::swapSystems
@@ -436,7 +471,8 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "swapSystems"
                 , swapSystems_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("swap_monitors")=(bool)(true) ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("swap_monitors")=(bool)(true) )
+                , "Swap the systems between replicas i and j. If swap_monitors is\ntrue then the monitors are swapped as well\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::Replicas::typeName
@@ -446,7 +482,8 @@ void register_Replicas_class(){
             
             Replicas_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Replicas_exposer.staticmethod( "typeName" );

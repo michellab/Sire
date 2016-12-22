@@ -382,7 +382,7 @@ void RepExSubMove::evaluateSwappedState(const Replica &replica)
     if (partner_properties.isEmpty())
     {
         new_volume_j = new_volume_i;
-        new_energy_j = new_energy_j;
+        new_energy_j = new_energy_i;
     }
     else
     {
@@ -890,13 +890,7 @@ bool RepExMove::testPair(const Replica &replica_a, const RepExSubMove &move_a,
         double delta = beta_b * ( H_b_i - H_b_j + p_b*(V_b_i - V_b_j) ) +
                        beta_a * ( H_a_i - H_a_j + p_a*(V_a_i - V_a_j) );
         
-        qDebug() << "beta" << beta_a << beta_b;
-        qDebug() << "i" << H_a_i << H_a_j << (H_a_j - H_a_i);
-        qDebug() << "j" << H_b_i << H_b_j << (H_b_j - H_b_i);
-        
         bool move_passed = ( delta > 0 or (std::exp(delta) >= rangenerator.rand()) );
-        
-        qDebug() << "Passed?" << move_passed;
         
         return move_passed;
     }

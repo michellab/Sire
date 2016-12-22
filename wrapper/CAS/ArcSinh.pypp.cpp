@@ -39,10 +39,10 @@ void register_ArcSinh_class(){
 
     { //::SireCAS::ArcSinh
         typedef bp::class_< SireCAS::ArcSinh, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > ArcSinh_exposer_t;
-        ArcSinh_exposer_t ArcSinh_exposer = ArcSinh_exposer_t( "ArcSinh", bp::init< >() );
+        ArcSinh_exposer_t ArcSinh_exposer = ArcSinh_exposer_t( "ArcSinh", "Inverse-hyperbolic-sine", bp::init< >("Null constructor") );
         bp::scope ArcSinh_scope( ArcSinh_exposer );
-        ArcSinh_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        ArcSinh_exposer.def( bp::init< SireCAS::ArcSinh const & >(( bp::arg("other") )) );
+        ArcSinh_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        ArcSinh_exposer.def( bp::init< SireCAS::ArcSinh const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ArcSinh::evaluate
         
             typedef double ( ::SireCAS::ArcSinh::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -51,7 +51,8 @@ void register_ArcSinh_class(){
             ArcSinh_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::ArcSinh::evaluate
@@ -62,7 +63,8 @@ void register_ArcSinh_class(){
             ArcSinh_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         ArcSinh_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -73,7 +75,8 @@ void register_ArcSinh_class(){
             
             ArcSinh_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ArcSinh::what
@@ -83,7 +86,8 @@ void register_ArcSinh_class(){
             
             ArcSinh_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ArcSinh_exposer.staticmethod( "typeName" );
@@ -96,6 +100,7 @@ void register_ArcSinh_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ArcSinh_exposer.def( "__str__", &__str__< ::SireCAS::ArcSinh > );
         ArcSinh_exposer.def( "__repr__", &__str__< ::SireCAS::ArcSinh > );
+        ArcSinh_exposer.def( "__hash__", &::SireCAS::ArcSinh::hash );
     }
 
 }

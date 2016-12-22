@@ -43,7 +43,7 @@ void register_Restraint_class(){
 
     { //::SireMM::Restraint
         typedef bp::class_< SireMM::Restraint, bp::bases< SireBase::Property >, boost::noncopyable > Restraint_exposer_t;
-        Restraint_exposer_t Restraint_exposer = Restraint_exposer_t( "Restraint", bp::no_init );
+        Restraint_exposer_t Restraint_exposer = Restraint_exposer_t( "Restraint", "This is the base class of all restraints. A restraint is a\nfunction that calculates the energy or force acting on\na molecule caused by external potential, e.g. a harmonic\nrestraining potential, or a solvent cap potential, or\na dihedral restraint potential\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Restraint_scope( Restraint_exposer );
         { //::SireMM::Restraint::builtinSymbols
         
@@ -52,7 +52,8 @@ void register_Restraint_class(){
             
             Restraint_exposer.def( 
                 "builtinSymbols"
-                , builtinSymbols_function_value );
+                , builtinSymbols_function_value
+                , "" );
         
         }
         { //::SireMM::Restraint::builtinValues
@@ -62,7 +63,8 @@ void register_Restraint_class(){
             
             Restraint_exposer.def( 
                 "builtinValues"
-                , builtinValues_function_value );
+                , builtinValues_function_value
+                , "" );
         
         }
         { //::SireMM::Restraint::contains
@@ -73,7 +75,8 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "" );
         
         }
         { //::SireMM::Restraint::contains
@@ -84,7 +87,8 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "" );
         
         }
         { //::SireMM::Restraint::differentiate
@@ -95,7 +99,8 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "" );
         
         }
         { //::SireMM::Restraint::energy
@@ -105,7 +110,8 @@ void register_Restraint_class(){
             
             Restraint_exposer.def( 
                 "energy"
-                , energy_function_value );
+                , energy_function_value
+                , "" );
         
         }
         { //::SireMM::Restraint::getValue
@@ -116,7 +122,8 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "getValue"
                 , getValue_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "" );
         
         }
         { //::SireMM::Restraint::hasValue
@@ -127,7 +134,8 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "hasValue"
                 , hasValue_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "" );
         
         }
         { //::SireMM::Restraint::molecules
@@ -137,7 +145,8 @@ void register_Restraint_class(){
             
             Restraint_exposer.def( 
                 "molecules"
-                , molecules_function_value );
+                , molecules_function_value
+                , "" );
         
         }
         { //::SireMM::Restraint::null
@@ -148,7 +157,8 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the global null restraint" );
         
         }
         { //::SireMM::Restraint::setValue
@@ -159,7 +169,8 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "setValue"
                 , setValue_function_value
-                , ( bp::arg("symbol"), bp::arg("value") ) );
+                , ( bp::arg("symbol"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMM::Restraint::symbols
@@ -169,7 +180,8 @@ void register_Restraint_class(){
             
             Restraint_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireMM::Restraint::toString
@@ -179,7 +191,8 @@ void register_Restraint_class(){
             
             Restraint_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::Restraint::typeName
@@ -189,7 +202,8 @@ void register_Restraint_class(){
             
             Restraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::Restraint::update
@@ -200,7 +214,8 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "" );
         
         }
         { //::SireMM::Restraint::update
@@ -211,7 +226,8 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireMM::Restraint::userSymbols
@@ -221,7 +237,8 @@ void register_Restraint_class(){
             
             Restraint_exposer.def( 
                 "userSymbols"
-                , userSymbols_function_value );
+                , userSymbols_function_value
+                , "" );
         
         }
         { //::SireMM::Restraint::userValues
@@ -231,7 +248,8 @@ void register_Restraint_class(){
             
             Restraint_exposer.def( 
                 "userValues"
-                , userValues_function_value );
+                , userValues_function_value
+                , "" );
         
         }
         { //::SireMM::Restraint::usesMoleculesIn
@@ -242,7 +260,8 @@ void register_Restraint_class(){
             Restraint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireMM::Restraint::values
@@ -252,7 +271,8 @@ void register_Restraint_class(){
             
             Restraint_exposer.def( 
                 "values"
-                , values_function_value );
+                , values_function_value
+                , "" );
         
         }
         Restraint_exposer.staticmethod( "null" );

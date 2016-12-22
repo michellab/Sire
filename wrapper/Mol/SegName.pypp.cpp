@@ -63,11 +63,11 @@ void register_SegName_class(){
 
     { //::SireMol::SegName
         typedef bp::class_< SireMol::SegName, bp::bases< SireMol::SegID, SireID::ID, SireID::Name > > SegName_exposer_t;
-        SegName_exposer_t SegName_exposer = SegName_exposer_t( "SegName", bp::init< >() );
+        SegName_exposer_t SegName_exposer = SegName_exposer_t( "SegName", "This class holds the name of a CutGroup.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope SegName_scope( SegName_exposer );
-        SegName_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        SegName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") )) );
-        SegName_exposer.def( bp::init< SireMol::SegName const & >(( bp::arg("other") )) );
+        SegName_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
+        SegName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") ), "") );
+        SegName_exposer.def( bp::init< SireMol::SegName const & >(( bp::arg("other") ), "") );
         { //::SireMol::SegName::hash
         
             typedef ::uint ( ::SireMol::SegName::*hash_function_type)(  ) const;
@@ -75,7 +75,8 @@ void register_SegName_class(){
             
             SegName_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::SegName::isNull
@@ -85,7 +86,8 @@ void register_SegName_class(){
             
             SegName_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::SegName::map
@@ -96,7 +98,8 @@ void register_SegName_class(){
             SegName_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         SegName_exposer.def( bp::self != bp::self );
@@ -109,7 +112,8 @@ void register_SegName_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SegName_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -121,7 +125,8 @@ void register_SegName_class(){
             
             SegName_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::SegName::typeName
@@ -131,7 +136,8 @@ void register_SegName_class(){
             
             SegName_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::SegName::what
@@ -141,7 +147,8 @@ void register_SegName_class(){
             
             SegName_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SegName_exposer.staticmethod( "typeName" );
@@ -154,6 +161,7 @@ void register_SegName_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         SegName_exposer.def( "__str__", &__str__< ::SireMol::SegName > );
         SegName_exposer.def( "__repr__", &__str__< ::SireMol::SegName > );
+        SegName_exposer.def( "__hash__", &::SireMol::SegName::hash );
     }
 
 }

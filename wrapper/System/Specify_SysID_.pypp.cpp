@@ -29,11 +29,11 @@ void register_Specify_SysID__class(){
 
     { //::SireID::Specify< SireSystem::SysID >
         typedef bp::class_< SireID::Specify< SireSystem::SysID >, bp::bases< SireSystem::SysID, SireID::ID > > Specify_SysID__exposer_t;
-        Specify_SysID__exposer_t Specify_SysID__exposer = Specify_SysID__exposer_t( "Specify_SysID_", bp::init< >() );
+        Specify_SysID__exposer_t Specify_SysID__exposer = Specify_SysID__exposer_t( "Specify_SysID_", "", bp::init< >("") );
         bp::scope Specify_SysID__scope( Specify_SysID__exposer );
-        Specify_SysID__exposer.def( bp::init< SireSystem::SysID const &, qint32 >(( bp::arg("id"), bp::arg("i") )) );
-        Specify_SysID__exposer.def( bp::init< SireSystem::SysID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") )) );
-        Specify_SysID__exposer.def( bp::init< SireID::Specify< SireSystem::SysID > const & >(( bp::arg("other") )) );
+        Specify_SysID__exposer.def( bp::init< SireSystem::SysID const &, qint32 >(( bp::arg("id"), bp::arg("i") ), "") );
+        Specify_SysID__exposer.def( bp::init< SireSystem::SysID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") ), "") );
+        Specify_SysID__exposer.def( bp::init< SireID::Specify< SireSystem::SysID > const & >(( bp::arg("other") ), "") );
         { //::SireID::Specify< SireSystem::SysID >::hash
         
             typedef SireID::Specify< SireSystem::SysID > exported_class_t;
@@ -42,7 +42,8 @@ void register_Specify_SysID__class(){
             
             Specify_SysID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::SysID >::isNull
@@ -53,19 +54,21 @@ void register_Specify_SysID__class(){
             
             Specify_SysID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::SysID >::map
         
             typedef SireID::Specify< SireSystem::SysID > exported_class_t;
-            typedef ::QList< SireSystem::SysIdx > ( ::SireID::Specify< SireSystem::SysID >::*map_function_type)( ::SireSystem::Systems const & ) const;
+            typedef ::QList< SireSystem::SysIdx > ( ::SireID::Specify< SireSystem::SysID >::*map_function_type)( ::SireSystem::SysID::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireSystem::SysID >::map );
             
             Specify_SysID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("obj") ) );
+                , ( bp::arg("obj") )
+                , "" );
         
         }
         Specify_SysID__exposer.def( bp::self != bp::self );
@@ -79,7 +82,8 @@ void register_Specify_SysID__class(){
             Specify_SysID__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::SysID >::operator()
@@ -91,7 +95,8 @@ void register_Specify_SysID__class(){
             Specify_SysID__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::SysID >::operator=
@@ -104,7 +109,8 @@ void register_Specify_SysID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Specify_SysID__exposer.def( bp::self == bp::self );
@@ -118,7 +124,8 @@ void register_Specify_SysID__class(){
             Specify_SysID__exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::SysID >::toString
@@ -129,7 +136,8 @@ void register_Specify_SysID__class(){
             
             Specify_SysID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::SysID >::typeName
@@ -140,7 +148,8 @@ void register_Specify_SysID__class(){
             
             Specify_SysID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::SysID >::what
@@ -151,7 +160,8 @@ void register_Specify_SysID__class(){
             
             Specify_SysID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Specify_SysID__exposer.staticmethod( "typeName" );
@@ -164,6 +174,7 @@ void register_Specify_SysID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Specify_SysID__exposer.def( "__str__", &__str__< ::SireID::Specify<SireSystem::SysID> > );
         Specify_SysID__exposer.def( "__repr__", &__str__< ::SireID::Specify<SireSystem::SysID> > );
+        Specify_SysID__exposer.def( "__hash__", &::SireID::Specify<SireSystem::SysID>::hash );
     }
 
 }

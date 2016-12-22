@@ -68,13 +68,13 @@ void register_PolariseCharges_class(){
 
     { //::SireSystem::PolariseCharges
         typedef bp::class_< SireSystem::PolariseCharges, bp::bases< SireSystem::ChargeConstraint, SireSystem::MoleculeConstraint, SireSystem::Constraint, SireBase::Property > > PolariseCharges_exposer_t;
-        PolariseCharges_exposer_t PolariseCharges_exposer = PolariseCharges_exposer_t( "PolariseCharges", bp::init< >() );
+        PolariseCharges_exposer_t PolariseCharges_exposer = PolariseCharges_exposer_t( "PolariseCharges", "This charge constraint adjusts the partial charges of contained\nmolecules to give the impression that the molecule contains\npolarisable dipoles. This is based on the method developed\nby Reynolds et al. (see ...)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope PolariseCharges_scope( PolariseCharges_exposer );
-        PolariseCharges_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        PolariseCharges_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireFF::Probe const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("probe"), bp::arg("map")=SireBase::PropertyMap() )) );
-        PolariseCharges_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireCAS::Symbol const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("field_component"), bp::arg("map")=SireBase::PropertyMap() )) );
-        PolariseCharges_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireCAS::Symbol const &, SireFF::Probe const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("field_component"), bp::arg("probe"), bp::arg("map")=SireBase::PropertyMap() )) );
-        PolariseCharges_exposer.def( bp::init< SireSystem::PolariseCharges const & >(( bp::arg("other") )) );
+        PolariseCharges_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a constraint that uses the total energy field and a\nsingle unit charge probe to polarise the molecules in molgroup") );
+        PolariseCharges_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireFF::Probe const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("probe"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a constraint that uses the total energy field and\nthe passed probe to polarise the molecules in molgroup") );
+        PolariseCharges_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireCAS::Symbol const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("field_component"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a constraint that uses the field represented by field_component\nand a single unit charge to polarise the molecules in molgroup") );
+        PolariseCharges_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireCAS::Symbol const &, SireFF::Probe const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("field_component"), bp::arg("probe"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a constraint that uses the field represented by field_component\nand the passed probe to polarise the molecules in molgroup") );
+        PolariseCharges_exposer.def( bp::init< SireSystem::PolariseCharges const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::PolariseCharges::convergenceLimit
         
             typedef double ( ::SireSystem::PolariseCharges::*convergenceLimit_function_type)(  ) const;
@@ -82,7 +82,8 @@ void register_PolariseCharges_class(){
             
             PolariseCharges_exposer.def( 
                 "convergenceLimit"
-                , convergenceLimit_function_value );
+                , convergenceLimit_function_value
+                , "Return the convergence limit of the calculation" );
         
         }
         { //::SireSystem::PolariseCharges::fieldComponent
@@ -93,7 +94,8 @@ void register_PolariseCharges_class(){
             PolariseCharges_exposer.def( 
                 "fieldComponent"
                 , fieldComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the component of the forcefield that is used to\ncalculate the electrostatic field on the atoms to be\npolarised" );
         
         }
         PolariseCharges_exposer.def( bp::self != bp::self );
@@ -106,7 +108,8 @@ void register_PolariseCharges_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PolariseCharges_exposer.def( bp::self == bp::self );
@@ -118,7 +121,8 @@ void register_PolariseCharges_class(){
             PolariseCharges_exposer.def( 
                 "probe"
                 , probe_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the probe that is used to calculate the electrostatic\nfield on the atoms to be polarised" );
         
         }
         { //::SireSystem::PolariseCharges::selfEnergyFF
@@ -128,7 +132,8 @@ void register_PolariseCharges_class(){
             
             PolariseCharges_exposer.def( 
                 "selfEnergyFF"
-                , selfEnergyFF_function_value );
+                , selfEnergyFF_function_value
+                , "Return the forcefield that is used to calculate the self-energy of\npolarising the charges. This must be added to any system to which\nthis constraint is applied, as maintaining the constraint\n(by polarising the charges) costs energy, which must be part\nof the system Hamiltonian" );
         
         }
         { //::SireSystem::PolariseCharges::setConvergenceLimit
@@ -139,7 +144,8 @@ void register_PolariseCharges_class(){
             PolariseCharges_exposer.def( 
                 "setConvergenceLimit"
                 , setConvergenceLimit_function_value
-                , ( bp::arg("limit") ) );
+                , ( bp::arg("limit") )
+                , "Set the convergence limit of the calculation" );
         
         }
         { //::SireSystem::PolariseCharges::toString
@@ -149,7 +155,8 @@ void register_PolariseCharges_class(){
             
             PolariseCharges_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this constraint" );
         
         }
         { //::SireSystem::PolariseCharges::typeName
@@ -159,7 +166,8 @@ void register_PolariseCharges_class(){
             
             PolariseCharges_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         PolariseCharges_exposer.staticmethod( "typeName" );

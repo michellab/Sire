@@ -55,7 +55,7 @@ void register_CLJIntraFunction_class(){
 
     { //::SireMM::CLJIntraFunction
         typedef bp::class_< SireMM::CLJIntraFunction, bp::bases< SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property >, boost::noncopyable > CLJIntraFunction_exposer_t;
-        CLJIntraFunction_exposer_t CLJIntraFunction_exposer = CLJIntraFunction_exposer_t( "CLJIntraFunction", bp::no_init );
+        CLJIntraFunction_exposer_t CLJIntraFunction_exposer = CLJIntraFunction_exposer_t( "CLJIntraFunction", "This is the base class of all intramolecular CLJ functions\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope CLJIntraFunction_scope( CLJIntraFunction_exposer );
         { //::SireMM::CLJIntraFunction::connectivity
         
@@ -65,7 +65,8 @@ void register_CLJIntraFunction_class(){
             CLJIntraFunction_exposer.def( 
                 "connectivity"
                 , connectivity_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the connectivity used to find the non-bonded pairs" );
         
         }
         { //::SireMM::CLJIntraFunction::containsProperty
@@ -76,7 +77,8 @@ void register_CLJIntraFunction_class(){
             CLJIntraFunction_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not this function contains a property called name" );
         
         }
         { //::SireMM::CLJIntraFunction::properties
@@ -86,7 +88,8 @@ void register_CLJIntraFunction_class(){
             
             CLJIntraFunction_exposer.def( 
                 "properties"
-                , properties_function_value );
+                , properties_function_value
+                , "Return the properties that can be set in this function" );
         
         }
         { //::SireMM::CLJIntraFunction::property
@@ -97,7 +100,8 @@ void register_CLJIntraFunction_class(){
             CLJIntraFunction_exposer.def( 
                 "property"
                 , property_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return the value of the property with name name" );
         
         }
         { //::SireMM::CLJIntraFunction::setConnectivity
@@ -108,7 +112,8 @@ void register_CLJIntraFunction_class(){
             CLJIntraFunction_exposer.def( 
                 "setConnectivity"
                 , setConnectivity_function_value
-                , ( bp::arg("connectivity") ) );
+                , ( bp::arg("connectivity") )
+                , "Set the connectivity used to find the non-bonded pairs" );
         
         }
         { //::SireMM::CLJIntraFunction::setConnectivity
@@ -119,7 +124,8 @@ void register_CLJIntraFunction_class(){
             CLJIntraFunction_exposer.def( 
                 "setConnectivity"
                 , setConnectivity_function_value
-                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Set the connectivity by copying the specified property from the passed molecule" );
         
         }
         { //::SireMM::CLJIntraFunction::setProperty
@@ -130,7 +136,8 @@ void register_CLJIntraFunction_class(){
             CLJIntraFunction_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("value") ) );
+                , ( bp::arg("name"), bp::arg("value") )
+                , "Set the property with name name to value value" );
         
         }
         { //::SireMM::CLJIntraFunction::typeName
@@ -140,7 +147,8 @@ void register_CLJIntraFunction_class(){
             
             CLJIntraFunction_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CLJIntraFunction_exposer.staticmethod( "typeName" );

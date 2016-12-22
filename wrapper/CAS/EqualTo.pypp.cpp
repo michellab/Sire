@@ -43,10 +43,10 @@ void register_EqualTo_class(){
 
     { //::SireCAS::EqualTo
         typedef bp::class_< SireCAS::EqualTo, bp::bases< SireCAS::Condition, SireCAS::ExBase > > EqualTo_exposer_t;
-        EqualTo_exposer_t EqualTo_exposer = EqualTo_exposer_t( "EqualTo", bp::init< >() );
+        EqualTo_exposer_t EqualTo_exposer = EqualTo_exposer_t( "EqualTo", "This is a conditional function that returns whether or\nnot the first expression is equal to the second\nexpression\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope EqualTo_scope( EqualTo_exposer );
-        EqualTo_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("left_hand_side"), bp::arg("right_hand_side") )) );
-        EqualTo_exposer.def( bp::init< SireCAS::EqualTo const & >(( bp::arg("other") )) );
+        EqualTo_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("left_hand_side"), bp::arg("right_hand_side") ), "Construct to compare left_hand_side with right_hand_side") );
+        EqualTo_exposer.def( bp::init< SireCAS::EqualTo const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::EqualTo::alwaysFalse
         
             typedef bool ( ::SireCAS::EqualTo::*alwaysFalse_function_type)(  ) const;
@@ -54,7 +54,8 @@ void register_EqualTo_class(){
             
             EqualTo_exposer.def( 
                 "alwaysFalse"
-                , alwaysFalse_function_value );
+                , alwaysFalse_function_value
+                , "Return whether or not we can be absolutely sure that this\ncondition will always be false. Note that this doesnt try\ntoo hard, so some things that are always false may not\nbe reported here as being always false, e.g. x > x + 1" );
         
         }
         { //::SireCAS::EqualTo::alwaysTrue
@@ -64,7 +65,8 @@ void register_EqualTo_class(){
             
             EqualTo_exposer.def( 
                 "alwaysTrue"
-                , alwaysTrue_function_value );
+                , alwaysTrue_function_value
+                , "Return whether or not we can be absolutely sure that this\ncondition will always be true. Note that this doesnt try\ntoo hard, so some things that are always true may not\nbe reported here as being always true, e.g. x + 1 > x" );
         
         }
         { //::SireCAS::EqualTo::operator=
@@ -76,7 +78,8 @@ void register_EqualTo_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         EqualTo_exposer.def( bp::self == bp::self );
@@ -88,7 +91,8 @@ void register_EqualTo_class(){
             
             EqualTo_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::EqualTo::what
@@ -98,7 +102,8 @@ void register_EqualTo_class(){
             
             EqualTo_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         EqualTo_exposer.staticmethod( "typeName" );
@@ -111,6 +116,7 @@ void register_EqualTo_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         EqualTo_exposer.def( "__str__", &__str__< ::SireCAS::EqualTo > );
         EqualTo_exposer.def( "__repr__", &__str__< ::SireCAS::EqualTo > );
+        EqualTo_exposer.def( "__hash__", &::SireCAS::EqualTo::hash );
     }
 
 }

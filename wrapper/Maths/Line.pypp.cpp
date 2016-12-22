@@ -27,9 +27,9 @@ void register_Line_class(){
 
     { //::SireMaths::Line
         typedef bp::class_< SireMaths::Line > Line_exposer_t;
-        Line_exposer_t Line_exposer = Line_exposer_t( "Line", bp::init< >() );
+        Line_exposer_t Line_exposer = Line_exposer_t( "Line", "\nThis class represents a line in three-dimensional space. (or two points)\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a zero line") );
         bp::scope Line_scope( Line_exposer );
-        Line_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("point0"), bp::arg("point1") )) );
+        Line_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("point0"), bp::arg("point1") ), "Construct a line from point0 to point1") );
         { //::SireMaths::Line::at
         
             typedef ::SireMaths::Vector const & ( ::SireMaths::Line::*at_function_type)( int ) const;
@@ -39,7 +39,8 @@ void register_Line_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Line::count
@@ -49,7 +50,8 @@ void register_Line_class(){
             
             Line_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMaths::Line::length
@@ -59,7 +61,8 @@ void register_Line_class(){
             
             Line_exposer.def( 
                 "length"
-                , length_function_value );
+                , length_function_value
+                , "" );
         
         }
         { //::SireMaths::Line::operator[]
@@ -71,7 +74,8 @@ void register_Line_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Line::point
@@ -83,7 +87,8 @@ void register_Line_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Line::toString
@@ -93,7 +98,8 @@ void register_Line_class(){
             
             Line_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of the line" );
         
         }
         { //::SireMaths::Line::typeName
@@ -103,7 +109,8 @@ void register_Line_class(){
             
             Line_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::Line::vector
@@ -113,7 +120,8 @@ void register_Line_class(){
             
             Line_exposer.def( 
                 "vector"
-                , vector_function_value );
+                , vector_function_value
+                , "" );
         
         }
         { //::SireMaths::Line::what
@@ -123,7 +131,8 @@ void register_Line_class(){
             
             Line_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Line_exposer.staticmethod( "typeName" );

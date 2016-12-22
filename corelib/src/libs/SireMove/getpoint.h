@@ -46,8 +46,7 @@ class GetPoint;
 class NullGetPoint;
 class GetCOMPoint;
 class GetCOGPoint;
-class GetAtomPoint;
-class GetIntersectionPoint;
+class GetCentroidPoint;
 }
 
 QDataStream& operator<<(QDataStream&, const SireMove::GetPoint&);
@@ -62,11 +61,8 @@ QDataStream& operator>>(QDataStream&, SireMove::GetCOMPoint&);
 QDataStream& operator<<(QDataStream&, const SireMove::GetCOGPoint&);
 QDataStream& operator>>(QDataStream&, SireMove::GetCOGPoint&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::GetAtomPoint&);
-QDataStream& operator>>(QDataStream&, SireMove::GetAtomPoint&);
-
-QDataStream& operator<<(QDataStream&, const SireMove::GetIntersectionPoint&);
-QDataStream& operator>>(QDataStream&, SireMove::GetIntersectionPoint&);
+QDataStream& operator<<(QDataStream&, const SireMove::GetCentroidPoint&);
+QDataStream& operator>>(QDataStream&, SireMove::GetCentroidPoint&);
 
 namespace SireMaths
 {
@@ -237,6 +233,47 @@ private:
     SireID::IDOrSet<AtomID> atomids;
 };
 
+/** This function returns the centroid of the
+    atoms in the passed view of the molecule
+    
+    @author Christopher Woods
+*/
+class SIREMOVE_EXPORT GetCentroidPoint
+            : public SireBase::ConcreteProperty<GetCentroidPoint,GetPoint>
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const GetCentroidPoint&);
+friend QDataStream& ::operator>>(QDataStream&, GetCentroidPoint&);
+
+public:
+    GetCentroidPoint();
+
+    GetCentroidPoint(const AtomID &atomid);
+    GetCentroidPoint(const AtomID &atomid0, const AtomID &atomid1);
+    GetCentroidPoint(const QList<SireMol::AtomIdentifier> &atomids);
+
+    GetCentroidPoint(const GetCentroidPoint &other);
+    
+    ~GetCentroidPoint();
+    
+    static const char* typeName();
+    
+    GetCentroidPoint& operator=(const GetCentroidPoint &other);
+    
+    bool operator==(const GetCentroidPoint &other) const;
+    bool operator!=(const GetCentroidPoint &other) const;
+
+    const AtomID& atomID() const;
+   
+    Vector getPoint(const MoleculeView &molecule,
+                    const PropertyMap &map = PropertyMap()) const;
+
+private:
+    /** The list of AtomIDs to use to limit the atoms over which the 
+        COG is calculated */
+    SireID::IDOrSet<AtomID> atomids;
+};
+
 typedef SireBase::PropPtr<GetPoint> GetPointPtr;
 
 }
@@ -244,11 +281,13 @@ typedef SireBase::PropPtr<GetPoint> GetPointPtr;
 Q_DECLARE_METATYPE( SireMove::NullGetPoint )
 Q_DECLARE_METATYPE( SireMove::GetCOMPoint )
 Q_DECLARE_METATYPE( SireMove::GetCOGPoint )
+Q_DECLARE_METATYPE( SireMove::GetCentroidPoint )
 
 SIRE_EXPOSE_CLASS( SireMove::GetPoint )
 SIRE_EXPOSE_CLASS( SireMove::NullGetPoint )
 SIRE_EXPOSE_CLASS( SireMove::GetCOMPoint )
 SIRE_EXPOSE_CLASS( SireMove::GetCOGPoint )
+SIRE_EXPOSE_CLASS( SireMove::GetCentroidPoint )
 
 SIRE_EXPOSE_PROPERTY( SireMove::GetPointPtr, SireMove::GetPoint )
 

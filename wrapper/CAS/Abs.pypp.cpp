@@ -31,10 +31,10 @@ void register_Abs_class(){
 
     { //::SireCAS::Abs
         typedef bp::class_< SireCAS::Abs, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Abs_exposer_t;
-        Abs_exposer_t Abs_exposer = Abs_exposer_t( "Abs", bp::init< >() );
+        Abs_exposer_t Abs_exposer = Abs_exposer_t( "Abs", "\nThis is the absolute value, abs.\n\nabs(x) returns x if x >= 0, else -x\n\nFor complex values, this returns abs(x) + abs(y) i\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty Abs(0)") );
         bp::scope Abs_scope( Abs_exposer );
-        Abs_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("power") )) );
-        Abs_exposer.def( bp::init< SireCAS::Abs const & >(( bp::arg("other") )) );
+        Abs_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("power") ), "Construct abs(expression)") );
+        Abs_exposer.def( bp::init< SireCAS::Abs const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Abs::evaluate
         
             typedef double ( ::SireCAS::Abs::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -43,7 +43,8 @@ void register_Abs_class(){
             Abs_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Abs::evaluate
@@ -54,7 +55,8 @@ void register_Abs_class(){
             Abs_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Abs_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -65,7 +67,8 @@ void register_Abs_class(){
             
             Abs_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Abs::what
@@ -75,7 +78,8 @@ void register_Abs_class(){
             
             Abs_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Abs_exposer.staticmethod( "typeName" );
@@ -88,6 +92,7 @@ void register_Abs_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Abs_exposer.def( "__str__", &__str__< ::SireCAS::Abs > );
         Abs_exposer.def( "__repr__", &__str__< ::SireCAS::Abs > );
+        Abs_exposer.def( "__hash__", &::SireCAS::Abs::hash );
     }
 
 }

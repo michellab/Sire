@@ -59,22 +59,22 @@ if os.path.exists(unittestdir):
         gitexe = Sire.Base.findExe("git").absoluteFilePath()
         os.chdir("%s/.." % unittestdir)
         os.system("%s fetch" % gitexe)
-        os.system("%s checkout %s" % (gitexe,branch))
+        os.system("%s checkout %s" % (gitexe,"devel"))
         os.system("%s pull" % gitexe)
         os.chdir(old_cwd)
     except:
         pass
 
 else:
-    if is_clean and branch == "master":
-        testdir_exists = downloadTestsFromWebsite()
+    #if is_clean and branch == "master":
+    #    testdir_exists = downloadTestsFromWebsite()
         
     if not testdir_exists:
         #things will be cloned
         try:
             gitexe = Sire.Base.findExe("git").absoluteFilePath()
             os.chdir(testdir)
-            gitcmd = "%s clone https://github.com/michellab/SireUnitTests.git -b %s" % (gitexe,branch)
+            gitcmd = "%s clone https://github.com/michellab/SireUnitTests.git -b %s" % (gitexe,"devel")
             print("Cloning unittests from git repository - %s" % gitcmd)
             os.system(gitcmd)
             os.chdir(old_cwd)
@@ -96,6 +96,23 @@ testdir = unittestdir
 if len(sys.argv) > 1:
     testdirs = sys.argv[1:]
     sys.argv = [sys.argv[0]]
+
+    drop = []
+
+    for dir in testdirs:
+        if dir.startswith("-"):
+            drop.append(dir)
+
+    if len(drop) > 0:
+        testdirs = []
+
+        dirs = os.listdir(testdir)
+
+        for dir in dirs:
+            for d in drop:
+                if d[1:] != dir:
+                    testdirs.append(dir)
+
 else:
     testdirs = os.listdir(testdir)
 

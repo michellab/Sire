@@ -25,10 +25,10 @@ void register_MonitorName_class(){
 
     { //::SireSystem::MonitorName
         typedef bp::class_< SireSystem::MonitorName, bp::bases< SireSystem::MonitorID, SireID::ID, SireID::Name > > MonitorName_exposer_t;
-        MonitorName_exposer_t MonitorName_exposer = MonitorName_exposer_t( "MonitorName", bp::init< >() );
+        MonitorName_exposer_t MonitorName_exposer = MonitorName_exposer_t( "MonitorName", "This class holds the name of a simulation system\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MonitorName_scope( MonitorName_exposer );
-        MonitorName_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        MonitorName_exposer.def( bp::init< SireSystem::MonitorName const & >(( bp::arg("other") )) );
+        MonitorName_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
+        MonitorName_exposer.def( bp::init< SireSystem::MonitorName const & >(( bp::arg("other") ), "") );
         { //::SireSystem::MonitorName::hash
         
             typedef ::uint ( ::SireSystem::MonitorName::*hash_function_type)(  ) const;
@@ -36,7 +36,8 @@ void register_MonitorName_class(){
             
             MonitorName_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireSystem::MonitorName::isNull
@@ -46,7 +47,8 @@ void register_MonitorName_class(){
             
             MonitorName_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireSystem::MonitorName::map
@@ -57,7 +59,8 @@ void register_MonitorName_class(){
             MonitorName_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("monitors") ) );
+                , ( bp::arg("monitors") )
+                , "" );
         
         }
         MonitorName_exposer.def( bp::self != bp::self );
@@ -70,7 +73,8 @@ void register_MonitorName_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MonitorName_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -82,7 +86,8 @@ void register_MonitorName_class(){
             
             MonitorName_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireSystem::MonitorName::typeName
@@ -92,7 +97,8 @@ void register_MonitorName_class(){
             
             MonitorName_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireSystem::MonitorName::what
@@ -102,7 +108,8 @@ void register_MonitorName_class(){
             
             MonitorName_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MonitorName_exposer.staticmethod( "typeName" );
@@ -115,6 +122,7 @@ void register_MonitorName_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MonitorName_exposer.def( "__str__", &__str__< ::SireSystem::MonitorName > );
         MonitorName_exposer.def( "__repr__", &__str__< ::SireSystem::MonitorName > );
+        MonitorName_exposer.def( "__hash__", &::SireSystem::MonitorName::hash );
     }
 
 }

@@ -35,10 +35,10 @@ void register_P_GTO_class(){
 
     { //::Squire::P_GTO
         typedef bp::class_< Squire::P_GTO, bp::bases< Squire::GTO, Squire::OrbitalShell, Squire::Orbital, SireBase::Property > > P_GTO_exposer_t;
-        P_GTO_exposer_t P_GTO_exposer = P_GTO_exposer_t( "P_GTO", bp::init< >() );
+        P_GTO_exposer_t P_GTO_exposer = P_GTO_exposer_t( "P_GTO", "This is a single P-type shell of Gaussian Type Orbitals", bp::init< >("Constructor") );
         bp::scope P_GTO_scope( P_GTO_exposer );
-        P_GTO_exposer.def( bp::init< double, bp::optional< double > >(( bp::arg("alpha"), bp::arg("scale")=1 )) );
-        P_GTO_exposer.def( bp::init< Squire::P_GTO const & >(( bp::arg("other") )) );
+        P_GTO_exposer.def( bp::init< double, bp::optional< double > >(( bp::arg("alpha"), bp::arg("scale")=1 ), "Construct with the specified alpha value and scaling factor") );
+        P_GTO_exposer.def( bp::init< Squire::P_GTO const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::P_GTO::angularMomentum
         
             typedef int ( ::Squire::P_GTO::*angularMomentum_function_type)(  ) const;
@@ -46,7 +46,8 @@ void register_P_GTO_class(){
             
             P_GTO_exposer.def( 
                 "angularMomentum"
-                , angularMomentum_function_value );
+                , angularMomentum_function_value
+                , "The angular momentum of P-GTOs is 1" );
         
         }
         { //::Squire::P_GTO::nOrbitals
@@ -56,7 +57,8 @@ void register_P_GTO_class(){
             
             P_GTO_exposer.def( 
                 "nOrbitals"
-                , nOrbitals_function_value );
+                , nOrbitals_function_value
+                , "There are 3 P-orbitals per shell (px, py and pz)" );
         
         }
         P_GTO_exposer.def( bp::self != bp::self );
@@ -69,7 +71,8 @@ void register_P_GTO_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         P_GTO_exposer.def( bp::self == bp::self );
@@ -80,7 +83,8 @@ void register_P_GTO_class(){
             
             P_GTO_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this orbital" );
         
         }
         { //::Squire::P_GTO::typeName
@@ -90,7 +94,8 @@ void register_P_GTO_class(){
             
             P_GTO_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         P_GTO_exposer.staticmethod( "typeName" );

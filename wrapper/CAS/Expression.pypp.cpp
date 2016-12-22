@@ -53,15 +53,15 @@ void register_Expression_class(){
 
     { //::SireCAS::Expression
         typedef bp::class_< SireCAS::Expression > Expression_exposer_t;
-        Expression_exposer_t Expression_exposer = Expression_exposer_t( "Expression", bp::init< >() );
+        Expression_exposer_t Expression_exposer = Expression_exposer_t( "Expression", "\nAn Expression is the base class of all algebraic entities.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty (zero) expression") );
         bp::scope Expression_scope( Expression_exposer );
-        Expression_exposer.def( bp::init< int >(( bp::arg("constant") )) );
-        Expression_exposer.def( bp::init< SireMaths::Rational const & >(( bp::arg("constant") )) );
-        Expression_exposer.def( bp::init< double >(( bp::arg("constant") )) );
-        Expression_exposer.def( bp::init< SireMaths::Complex const & >(( bp::arg("constant") )) );
-        Expression_exposer.def( bp::init< SireCAS::ExpressionBase const & >(( bp::arg("base") )) );
-        Expression_exposer.def( bp::init< SireCAS::ExBase const & >(( bp::arg("base") )) );
-        Expression_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("other") )) );
+        Expression_exposer.def( bp::init< int >(( bp::arg("constant") ), "Construct a constant expression equal to constant") );
+        Expression_exposer.def( bp::init< SireMaths::Rational const & >(( bp::arg("constant") ), "Construct a constant expression equal to constant") );
+        Expression_exposer.def( bp::init< double >(( bp::arg("constant") ), "Construct a constant expression equal to constant") );
+        Expression_exposer.def( bp::init< SireMaths::Complex const & >(( bp::arg("constant") ), "Construct a constant expression equal to constant") );
+        Expression_exposer.def( bp::init< SireCAS::ExpressionBase const & >(( bp::arg("base") ), "Construct an expression that is equal to 1(base)") );
+        Expression_exposer.def( bp::init< SireCAS::ExBase const & >(( bp::arg("base") ), "Construct an expression that is equal to 1(base)") );
+        Expression_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Expression::add
         
             typedef ::SireCAS::Expression ( ::SireCAS::Expression::*add_function_type)( ::SireCAS::Expression const & ) const;
@@ -70,7 +70,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("ex") ) );
+                , ( bp::arg("ex") )
+                , "Return this expression added to ex" );
         
         }
         { //::SireCAS::Expression::add
@@ -81,7 +82,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Return this expression added to val" );
         
         }
         { //::SireCAS::Expression::add
@@ -92,7 +94,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Return this expression added to val" );
         
         }
         { //::SireCAS::Expression::base
@@ -103,7 +106,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "base"
                 , base_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the ExpressionBase base-part of this expression" );
         
         }
         { //::SireCAS::Expression::children
@@ -113,7 +117,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "Return the child expressions that make up this expression" );
         
         }
         { //::SireCAS::Expression::conjugate
@@ -123,7 +128,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "conjugate"
-                , conjugate_function_value );
+                , conjugate_function_value
+                , "Return the complex conjugate of this expression" );
         
         }
         { //::SireCAS::Expression::cubed
@@ -133,7 +139,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "cubed"
-                , cubed_function_value );
+                , cubed_function_value
+                , "Return the cube of this expression" );
         
         }
         { //::SireCAS::Expression::diff
@@ -144,7 +151,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "diff"
                 , diff_function_value
-                , ( bp::arg("symbol"), bp::arg("level")=(int)(1) ) );
+                , ( bp::arg("symbol"), bp::arg("level")=(int)(1) )
+                , "Synonym for differentiate" );
         
         }
         { //::SireCAS::Expression::differentiate
@@ -155,7 +163,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol"), bp::arg("level")=(int)(1) ) );
+                , ( bp::arg("symbol"), bp::arg("level")=(int)(1) )
+                , "Differentiate this expression with respect to symbol and return\nthe resulting expression.\nThrow: SireCAS::unavailable_differential\n" );
         
         }
         { //::SireCAS::Expression::divide
@@ -166,7 +175,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("ex") ) );
+                , ( bp::arg("ex") )
+                , "Return an expression that is this  ex" );
         
         }
         { //::SireCAS::Expression::divide
@@ -177,7 +187,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Return an expression that is this divided by val" );
         
         }
         { //::SireCAS::Expression::divide
@@ -188,7 +199,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Return an expression that is divided by the complex number z" );
         
         }
         { //::SireCAS::Expression::evaluate
@@ -199,7 +211,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate the numerical value of this expression, using the values\nsupplied in values. Any unidentified symbols or functions are\nassumed to be equal to zero. Note that this only performs real-arithmetic,\nso an exception will be thrown if any part of this expression generates\na complex result.\nThrow: SireMaths::domain_error\n" );
         
         }
         { //::SireCAS::Expression::evaluate
@@ -210,7 +223,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate the numerical value of this expression using complex\narithmetic. Any unidentified symbols or functions are assumed\nto be equal to zero.\n" );
         
         }
         { //::SireCAS::Expression::expand
@@ -221,7 +235,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "expand"
                 , expand_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the factors and powers for the symbol symbol, given the values of the\nother symbols in values. This attempts to rearrange this equation\nso that it is of the form m  symbol^i + n  symbol^j ... + constant,\nand it returns the values of m,i, n,j etc..\nNote that this will fail if such a rearrangement is not possible\nThrow: SireCAS::rearrangement_error\n" );
         
         }
         { //::SireCAS::Expression::factor
@@ -231,7 +246,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "factor"
-                , factor_function_value );
+                , factor_function_value
+                , "Return the factor of this expression" );
         
         }
         { //::SireCAS::Expression::functions
@@ -241,7 +257,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "functions"
-                , functions_function_value );
+                , functions_function_value
+                , "Return all of the functions used in this expression" );
         
         }
         { //::SireCAS::Expression::hash
@@ -251,7 +268,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireCAS::Expression::integ
@@ -262,7 +280,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "integ"
                 , integ_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Synonym for integrate" );
         
         }
         { //::SireCAS::Expression::integrate
@@ -273,7 +292,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Integrate this expression with respect to symbol and return the\nresulting expression.\nThrow: SireCAS::unavailable_integral\n" );
         
         }
         { //::SireCAS::Expression::invert
@@ -283,7 +303,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "invert"
-                , invert_function_value );
+                , invert_function_value
+                , "Return 1  expression" );
         
         }
         { //::SireCAS::Expression::isComplex
@@ -293,7 +314,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "isComplex"
-                , isComplex_function_value );
+                , isComplex_function_value
+                , "Return whether or not this expression has complex parts" );
         
         }
         { //::SireCAS::Expression::isCompound
@@ -303,7 +325,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "isCompound"
-                , isCompound_function_value );
+                , isCompound_function_value
+                , "Return whether or not this is a compound expression (contains more\nthan a single expression, e.g. Sum, Product or PowerFunction)" );
         
         }
         { //::SireCAS::Expression::isConstant
@@ -313,7 +336,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "isConstant"
-                , isConstant_function_value );
+                , isConstant_function_value
+                , "Return whether or not this expression is constant for all values" );
         
         }
         { //::SireCAS::Expression::isFunction
@@ -324,7 +348,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "isFunction"
                 , isFunction_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return whether or not this is a function of symbol" );
         
         }
         { //::SireCAS::Expression::isZero
@@ -334,7 +359,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "isZero"
-                , isZero_function_value );
+                , isZero_function_value
+                , "Return whether or not this expression is equal to 0 for all values" );
         
         }
         { //::SireCAS::Expression::multiply
@@ -345,7 +371,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "multiply"
                 , multiply_function_value
-                , ( bp::arg("ex") ) );
+                , ( bp::arg("ex") )
+                , "Return an expression that is this multiplied by ex" );
         
         }
         { //::SireCAS::Expression::multiply
@@ -356,7 +383,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "multiply"
                 , multiply_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Return an expression that is this multipled by val" );
         
         }
         { //::SireCAS::Expression::multiply
@@ -367,7 +395,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "multiply"
                 , multiply_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Return an expression that is this multiplied by the complex value z" );
         
         }
         { //::SireCAS::Expression::negate
@@ -377,7 +406,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "negate"
-                , negate_function_value );
+                , negate_function_value
+                , "Return the negative of this expression" );
         
         }
         Expression_exposer.def( bp::self != bp::self );
@@ -389,7 +419,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireCAS::Expression::operator()
@@ -400,7 +431,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         Expression_exposer.def( -bp::self );
@@ -413,7 +445,8 @@ void register_Expression_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Expression_exposer.def( bp::self == bp::self );
@@ -425,7 +458,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "pow"
                 , pow_function_value
-                , ( bp::arg("n") ) );
+                , ( bp::arg("n") )
+                , "Return this expression raised to the power n" );
         
         }
         { //::SireCAS::Expression::pow
@@ -436,7 +470,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "pow"
                 , pow_function_value
-                , ( bp::arg("n") ) );
+                , ( bp::arg("n") )
+                , "Return this expression raised to the rational power n" );
         
         }
         { //::SireCAS::Expression::pow
@@ -447,7 +482,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "pow"
                 , pow_function_value
-                , ( bp::arg("n") ) );
+                , ( bp::arg("n") )
+                , "Return this expression raised to a real number power" );
         
         }
         { //::SireCAS::Expression::pow
@@ -458,7 +494,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "pow"
                 , pow_function_value
-                , ( bp::arg("n") ) );
+                , ( bp::arg("n") )
+                , "Return this expresssion raised to a complex power" );
         
         }
         { //::SireCAS::Expression::pow
@@ -469,7 +506,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "pow"
                 , pow_function_value
-                , ( bp::arg("n") ) );
+                , ( bp::arg("n") )
+                , "Return this expression raised to a function" );
         
         }
         { //::SireCAS::Expression::root
@@ -480,7 +518,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "root"
                 , root_function_value
-                , ( bp::arg("n") ) );
+                , ( bp::arg("n") )
+                , "Return the nth root of this expression" );
         
         }
         { //::SireCAS::Expression::series
@@ -491,7 +530,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "series"
                 , series_function_value
-                , ( bp::arg("symbol"), bp::arg("order") ) );
+                , ( bp::arg("symbol"), bp::arg("order") )
+                , "Return a series expansion of this function with respect to symbol\nup to order n. If an expansion is not possible, then this just\nreturns this expression" );
         
         }
         { //::SireCAS::Expression::simplify
@@ -502,7 +542,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "simplify"
                 , simplify_function_value
-                , ( bp::arg("options")=(int)(0) ) );
+                , ( bp::arg("options")=(int)(0) )
+                , "Try to simplify this expression by using built-in identities. If\nSireCAS::UNSAFE_COMPLEX_SIMPLIFICATIONS is passed, then allow the use\nof identities that are not necessarily true in the complex domain,\ne.g. z = sin(arcsin(z))" );
         
         }
         { //::SireCAS::Expression::squared
@@ -512,7 +553,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "squared"
-                , squared_function_value );
+                , squared_function_value
+                , "Return the square of this expression" );
         
         }
         { //::SireCAS::Expression::substitute
@@ -523,7 +565,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Return an expression whereby the identities in identities have\nbeen substituted into this expression" );
         
         }
         { //::SireCAS::Expression::subtract
@@ -534,7 +577,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("ex") ) );
+                , ( bp::arg("ex") )
+                , "Return an expression that is this - ex" );
         
         }
         { //::SireCAS::Expression::subtract
@@ -545,7 +589,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Return an expression that is this - val" );
         
         }
         { //::SireCAS::Expression::subtract
@@ -556,7 +601,8 @@ void register_Expression_class(){
             Expression_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Return an expression that is this - val" );
         
         }
         { //::SireCAS::Expression::symbols
@@ -566,7 +612,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return all of the symbols used in this expression" );
         
         }
         { //::SireCAS::Expression::toOpenMMString
@@ -576,7 +623,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "toOpenMMString"
-                , toOpenMMString_function_value );
+                , toOpenMMString_function_value
+                , "Return a string representation of this expression in the OpenMM syntax" );
         
         }
         { //::SireCAS::Expression::toString
@@ -586,7 +634,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this expression" );
         
         }
         { //::SireCAS::Expression::typeName
@@ -596,7 +645,8 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Expression::what
@@ -606,28 +656,29 @@ void register_Expression_class(){
             
             Expression_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Expression_exposer.staticmethod( "typeName" );
-        Expression_exposer.def( bp::self * bp::other< SireMaths::Complex >() );
-        Expression_exposer.def( bp::self * bp::other< double >() );
-        Expression_exposer.def( bp::other< double >() * bp::self );
         Expression_exposer.def( bp::self * bp::self );
+        Expression_exposer.def( bp::other< double >() * bp::self );
+        Expression_exposer.def( bp::self * bp::other< double >() );
+        Expression_exposer.def( bp::self * bp::other< SireMaths::Complex >() );
         Expression_exposer.def( bp::self * bp::other< SireCAS::ExBase >() );
-        Expression_exposer.def( bp::self + bp::other< SireMaths::Complex >() );
-        Expression_exposer.def( bp::other< double >() + bp::self );
-        Expression_exposer.def( bp::self + bp::other< double >() );
         Expression_exposer.def( bp::self + bp::self );
+        Expression_exposer.def( bp::self + bp::other< double >() );
+        Expression_exposer.def( bp::other< double >() + bp::self );
+        Expression_exposer.def( bp::self + bp::other< SireMaths::Complex >() );
         Expression_exposer.def( bp::self + bp::other< SireCAS::ExBase >() );
-        Expression_exposer.def( bp::other< double >() - bp::self );
-        Expression_exposer.def( bp::self - bp::other< double >() );
         Expression_exposer.def( bp::self - bp::self );
+        Expression_exposer.def( bp::self - bp::other< double >() );
+        Expression_exposer.def( bp::other< double >() - bp::self );
         Expression_exposer.def( bp::self - bp::other< SireCAS::ExBase >() );
-        Expression_exposer.def( bp::self / bp::other< SireMaths::Complex >() );
-        Expression_exposer.def( bp::other< double >() / bp::self );
-        Expression_exposer.def( bp::self / bp::other< double >() );
         Expression_exposer.def( bp::self / bp::self );
+        Expression_exposer.def( bp::self / bp::other< double >() );
+        Expression_exposer.def( bp::other< double >() / bp::self );
+        Expression_exposer.def( bp::self / bp::other< SireMaths::Complex >() );
         Expression_exposer.def( bp::self / bp::other< SireCAS::ExBase >() );
         Expression_exposer.def( self + self );
         Expression_exposer.def( self - self );
@@ -666,6 +717,7 @@ void register_Expression_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Expression_exposer.def( "__str__", &__str__< ::SireCAS::Expression > );
         Expression_exposer.def( "__repr__", &__str__< ::SireCAS::Expression > );
+        Expression_exposer.def( "__hash__", &::SireCAS::Expression::hash );
     }
 
 }

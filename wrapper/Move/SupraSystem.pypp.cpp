@@ -40,13 +40,13 @@ void register_SupraSystem_class(){
 
     { //::SireMove::SupraSystem
         typedef bp::class_< SireMove::SupraSystem, bp::bases< SireBase::Property > > SupraSystem_exposer_t;
-        SupraSystem_exposer_t SupraSystem_exposer = SupraSystem_exposer_t( "SupraSystem", bp::init< >() );
+        SupraSystem_exposer_t SupraSystem_exposer = SupraSystem_exposer_t( "SupraSystem", "This is the base class of all supra-systems. A supra-system is a\ncollection of systems, used to perform a simulation that\ninvolves making moves on lots of connected sub-systems. A good\nexample is a replica exchange simulation, where each replica\nis a sub-system, and the ensemble of systems is the supra-system.\n\nAuthor: Christopher Woods\n", bp::init< >("Null Constructor") );
         bp::scope SupraSystem_scope( SupraSystem_exposer );
-        SupraSystem_exposer.def( bp::init< int >(( bp::arg("n") )) );
-        SupraSystem_exposer.def( bp::init< SireSystem::System const &, bp::optional< int > >(( bp::arg("system"), bp::arg("n")=(int)(1) )) );
-        SupraSystem_exposer.def( bp::init< QVector< SireSystem::System > const & >(( bp::arg("systems") )) );
-        SupraSystem_exposer.def( bp::init< SireMove::SupraSubSystem const &, bp::optional< int > >(( bp::arg("subsystem"), bp::arg("n")=(int)(1) )) );
-        SupraSystem_exposer.def( bp::init< SireMove::SupraSystem const & >(( bp::arg("other") )) );
+        SupraSystem_exposer.def( bp::init< int >(( bp::arg("n") ), "Construct a supra-system consisting of n sub systems") );
+        SupraSystem_exposer.def( bp::init< SireSystem::System const &, bp::optional< int > >(( bp::arg("system"), bp::arg("n")=(int)(1) ), "Construct a supra-system that consists of n sub systems,\nwhich are initially created to be equal to system") );
+        SupraSystem_exposer.def( bp::init< QVector< SireSystem::System > const & >(( bp::arg("systems") ), "Construct a supra-system that consists of the sub systems\nthat are copies of those in systems") );
+        SupraSystem_exposer.def( bp::init< SireMove::SupraSubSystem const &, bp::optional< int > >(( bp::arg("subsystem"), bp::arg("n")=(int)(1) ), "Construct a SupraSystem that consists of n copies of\nthe passed subsystem") );
+        SupraSystem_exposer.def( bp::init< SireMove::SupraSystem const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::SupraSystem::add
         
             typedef void ( ::SireMove::SupraSystem::*add_function_type)( ::QString const &,::SireSystem::SystemMonitor const &,int ) ;
@@ -55,7 +55,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("name"), bp::arg("monitor"), bp::arg("frequency")=(int)(1) ) );
+                , ( bp::arg("name"), bp::arg("monitor"), bp::arg("frequency")=(int)(1) )
+                , "Add the monitor monitor to all of the sub-systems, with the name name,\nset to update with a frequency frequency" );
         
         }
         { //::SireMove::SupraSystem::add
@@ -66,7 +67,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("i"), bp::arg("name"), bp::arg("monitor"), bp::arg("frequency")=(int)(1) ) );
+                , ( bp::arg("i"), bp::arg("name"), bp::arg("monitor"), bp::arg("frequency")=(int)(1) )
+                , "Add the monitor monitor to the ith sub-system, with the name name,\nset to update with a frequency of frequency\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::add
@@ -77,7 +79,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("monitors"), bp::arg("frequency")=(int)(1) ) );
+                , ( bp::arg("monitors"), bp::arg("frequency")=(int)(1) )
+                , "Add the monitors monitors to all of the sub-systems, set to update\nwith a frequency of frequency" );
         
         }
         { //::SireMove::SupraSystem::add
@@ -88,7 +91,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("i"), bp::arg("monitors"), bp::arg("frequency")=(int)(1) ) );
+                , ( bp::arg("i"), bp::arg("monitors"), bp::arg("frequency")=(int)(1) )
+                , "Add the monitors monitors to the ith system, set to update with\na frequency of frequency\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::anyPacked
@@ -98,7 +102,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "anyPacked"
-                , anyPacked_function_value );
+                , anyPacked_function_value
+                , "Return whether or not any of the sub-systems are packed" );
         
         }
         { //::SireMove::SupraSystem::anyPackedToDisk
@@ -108,7 +113,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "anyPackedToDisk"
-                , anyPackedToDisk_function_value );
+                , anyPackedToDisk_function_value
+                , "Return whether or not any of the sub-systems are packed to disk" );
         
         }
         { //::SireMove::SupraSystem::anyPackedToMemory
@@ -118,7 +124,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "anyPackedToMemory"
-                , anyPackedToMemory_function_value );
+                , anyPackedToMemory_function_value
+                , "Return whether or not any of the sub-systems are packed to memory" );
         
         }
         { //::SireMove::SupraSystem::at
@@ -130,7 +137,8 @@ void register_SupraSystem_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ith sub-system in this supra-system\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::clearAllStatistics
@@ -140,7 +148,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "clearAllStatistics"
-                , clearAllStatistics_function_value );
+                , clearAllStatistics_function_value
+                , "Clear all statistics collected during the moves" );
         
         }
         { //::SireMove::SupraSystem::clearStatistics
@@ -150,7 +159,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Clear the statistics that are collected between blocks of\nsub-system moves" );
         
         }
         { //::SireMove::SupraSystem::clearSubStatistics
@@ -160,7 +170,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "clearSubStatistics"
-                , clearSubStatistics_function_value );
+                , clearSubStatistics_function_value
+                , "Clear the statistics that are collected within blocks of\nsub-system moves" );
         
         }
         { //::SireMove::SupraSystem::collectSupraStats
@@ -170,7 +181,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "collectSupraStats"
-                , collectSupraStats_function_value );
+                , collectSupraStats_function_value
+                , "This function is called after each SupraMove to collect any statistics\nabout the SupraSystem" );
         
         }
         { //::SireMove::SupraSystem::count
@@ -180,7 +192,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of sub-systems in this supra-system" );
         
         }
         { //::SireMove::SupraSystem::isEmpty
@@ -190,7 +203,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this SupraSystem contains no subsystems" );
         
         }
         { //::SireMove::SupraSystem::isPacked
@@ -200,7 +214,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "isPacked"
-                , isPacked_function_value );
+                , isPacked_function_value
+                , "Return whether or not all sub-systems are packed" );
         
         }
         { //::SireMove::SupraSystem::isPackedToDisk
@@ -210,7 +225,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "isPackedToDisk"
-                , isPackedToDisk_function_value );
+                , isPackedToDisk_function_value
+                , "Return whether or not all sub-systems are packed to disk" );
         
         }
         { //::SireMove::SupraSystem::isPackedToMemory
@@ -220,7 +236,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "isPackedToMemory"
-                , isPackedToMemory_function_value );
+                , isPackedToMemory_function_value
+                , "Return whether or not all sub-systems are packed to memory" );
         
         }
         { //::SireMove::SupraSystem::mustNowRecalculateFromScratch
@@ -230,7 +247,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "mustNowRecalculateFromScratch"
-                , mustNowRecalculateFromScratch_function_value );
+                , mustNowRecalculateFromScratch_function_value
+                , "Tell all sub-systems that the next energy calculate must\nbe performed from scratch - this is useful for debugging" );
         
         }
         { //::SireMove::SupraSystem::nSubSystems
@@ -240,7 +258,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "nSubSystems"
-                , nSubSystems_function_value );
+                , nSubSystems_function_value
+                , "Return the number of sub-systems in this supra-system" );
         
         }
         { //::SireMove::SupraSystem::null
@@ -251,7 +270,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the global null SupraSystem" );
         
         }
         SupraSystem_exposer.def( bp::self != bp::self );
@@ -264,7 +284,8 @@ void register_SupraSystem_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SupraSystem_exposer.def( bp::self == bp::self );
@@ -277,7 +298,8 @@ void register_SupraSystem_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMove::SupraSystem::pack
@@ -287,7 +309,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "pack"
-                , pack_function_value );
+                , pack_function_value
+                , "Pack all sub-systems" );
         
         }
         { //::SireMove::SupraSystem::pack
@@ -298,7 +321,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "pack"
                 , pack_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Pack the ith sub-system\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::packToDisk
@@ -308,7 +332,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "packToDisk"
-                , packToDisk_function_value );
+                , packToDisk_function_value
+                , "Pack all sub-systems to disk" );
         
         }
         { //::SireMove::SupraSystem::packToDisk
@@ -319,7 +344,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "packToDisk"
                 , packToDisk_function_value
-                , ( bp::arg("tempdir") ) );
+                , ( bp::arg("tempdir") )
+                , "Pack all sub-systems to disk, in the directory tempdir. Note\nthat this will not move sub-systems that are already packed into\na different directory" );
         
         }
         { //::SireMove::SupraSystem::packToDisk
@@ -330,7 +356,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "packToDisk"
                 , packToDisk_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Pack the ith sub-system to disk\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::packToDisk
@@ -341,7 +368,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "packToDisk"
                 , packToDisk_function_value
-                , ( bp::arg("i"), bp::arg("tempdir") ) );
+                , ( bp::arg("i"), bp::arg("tempdir") )
+                , "Pack the ith sub-system to disk in the directory tempdir\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::packToMemory
@@ -351,7 +379,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "packToMemory"
-                , packToMemory_function_value );
+                , packToMemory_function_value
+                , "Pack all sub-systems to memory" );
         
         }
         { //::SireMove::SupraSystem::packToMemory
@@ -362,7 +391,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "packToMemory"
                 , packToMemory_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Pack the ith sub-system to memory\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::setNSubMoves
@@ -373,7 +403,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setNSubMoves"
                 , setNSubMoves_function_value
-                , ( bp::arg("i"), bp::arg("nmoves") ) );
+                , ( bp::arg("i"), bp::arg("nmoves") )
+                , "Set the number of moves to perform per block of sub-moves for\nthe ith sub-system\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::setNSubMoves
@@ -384,7 +415,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setNSubMoves"
                 , setNSubMoves_function_value
-                , ( bp::arg("nmoves") ) );
+                , ( bp::arg("nmoves") )
+                , "Set the number of moves to perform per block of sub-moves for\nevery sub-system in this supra-system" );
         
         }
         { //::SireMove::SupraSystem::setRecordAllStatistics
@@ -395,7 +427,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setRecordAllStatistics"
                 , setRecordAllStatistics_function_value
-                , ( bp::arg("i"), bp::arg("record_stats") ) );
+                , ( bp::arg("i"), bp::arg("record_stats") )
+                , "Set whether or not to record all statistics (both within and\nbetween sub-moves) for the ith sub-system\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::setRecordAllStatistics
@@ -406,7 +439,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setRecordAllStatistics"
                 , setRecordAllStatistics_function_value
-                , ( bp::arg("record_stats") ) );
+                , ( bp::arg("record_stats") )
+                , "Set whether or not to record all statistics (both within and\nbetween sub-moves) for all sub-systems" );
         
         }
         { //::SireMove::SupraSystem::setRecordStatistics
@@ -417,7 +451,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setRecordStatistics"
                 , setRecordStatistics_function_value
-                , ( bp::arg("i"), bp::arg("record_stats") ) );
+                , ( bp::arg("i"), bp::arg("record_stats") )
+                , "Set whether or not to record statistics between blocks of sub-moves\nat the ith sub-system\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::setRecordStatistics
@@ -428,7 +463,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setRecordStatistics"
                 , setRecordStatistics_function_value
-                , ( bp::arg("record_stats") ) );
+                , ( bp::arg("record_stats") )
+                , "Set whether or not to record statistics between blocks of sub-moves\nfor all sub-systems" );
         
         }
         { //::SireMove::SupraSystem::setRecordSubStatistics
@@ -439,7 +475,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setRecordSubStatistics"
                 , setRecordSubStatistics_function_value
-                , ( bp::arg("i"), bp::arg("record_stats") ) );
+                , ( bp::arg("i"), bp::arg("record_stats") )
+                , "Set whether or not to record statistics within blocks of sub-moves\nfor the ith sub-system\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::setRecordSubStatistics
@@ -450,7 +487,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setRecordSubStatistics"
                 , setRecordSubStatistics_function_value
-                , ( bp::arg("record_stats") ) );
+                , ( bp::arg("record_stats") )
+                , "Set whether or not to record statistics within blocks of sub-moves\nfor all sub-systems" );
         
         }
         { //::SireMove::SupraSystem::setSubMonitors
@@ -461,7 +499,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubMonitors"
                 , setSubMonitors_function_value
-                , ( bp::arg("monitors"), bp::arg("frequency")=(int)(1) ) );
+                , ( bp::arg("monitors"), bp::arg("frequency")=(int)(1) )
+                , "Set the monitors used for all sub-systems to monitors, and set\nthem all to update with a frequency of frequency" );
         
         }
         { //::SireMove::SupraSystem::setSubMonitors
@@ -472,7 +511,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubMonitors"
                 , setSubMonitors_function_value
-                , ( bp::arg("i"), bp::arg("monitors"), bp::arg("frequency")=(int)(1) ) );
+                , ( bp::arg("i"), bp::arg("monitors"), bp::arg("frequency")=(int)(1) )
+                , "Set the monitors used for the ith sub-system to monitors, and set\nthem to update with a frequency of frequency\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::setSubMoves
@@ -483,7 +523,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubMoves"
                 , setSubMoves_function_value
-                , ( bp::arg("i"), bp::arg("moves") ) );
+                , ( bp::arg("i"), bp::arg("moves") )
+                , "Set the moves that will be applied to the ith sub-system during\neach sub-move\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::setSubMoves
@@ -494,7 +535,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubMoves"
                 , setSubMoves_function_value
-                , ( bp::arg("moves") ) );
+                , ( bp::arg("moves") )
+                , "Set the moves that will be applied to all sub-systems during\neach sub-move\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::setSubSystem
@@ -505,7 +547,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubSystem"
                 , setSubSystem_function_value
-                , ( bp::arg("i"), bp::arg("subsystem") ) );
+                , ( bp::arg("i"), bp::arg("subsystem") )
+                , "Set the ith sub-system equal to subsystem\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::setSubSystem
@@ -516,7 +559,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubSystem"
                 , setSubSystem_function_value
-                , ( bp::arg("subsystem") ) );
+                , ( bp::arg("subsystem") )
+                , "Set all sub-systems equal to subsystem" );
         
         }
         { //::SireMove::SupraSystem::setSubSystem
@@ -527,7 +571,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubSystem"
                 , setSubSystem_function_value
-                , ( bp::arg("i"), bp::arg("system") ) );
+                , ( bp::arg("i"), bp::arg("system") )
+                , "Set the SireSystem::System used by the ith sub-system equal to system\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::setSubSystem
@@ -538,7 +583,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubSystem"
                 , setSubSystem_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Set the SireSystem::System used by all sub-systems equal to system" );
         
         }
         { //::SireMove::SupraSystem::setSubSystemAndMoves
@@ -549,7 +595,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubSystemAndMoves"
                 , setSubSystemAndMoves_function_value
-                , ( bp::arg("i"), bp::arg("system"), bp::arg("moves") ) );
+                , ( bp::arg("i"), bp::arg("system"), bp::arg("moves") )
+                , "Set the system and moves that will be applied to the ith sub-system\nto system and moves\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::setSubSystemAndMoves
@@ -560,7 +607,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubSystemAndMoves"
                 , setSubSystemAndMoves_function_value
-                , ( bp::arg("system"), bp::arg("moves") ) );
+                , ( bp::arg("system"), bp::arg("moves") )
+                , "Set the system and moves used by all sub-systems to\nsystem and moves" );
         
         }
         { //::SireMove::SupraSystem::setSubSystemAndMoves
@@ -571,7 +619,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubSystemAndMoves"
                 , setSubSystemAndMoves_function_value
-                , ( bp::arg("i"), bp::arg("simstore") ) );
+                , ( bp::arg("i"), bp::arg("simstore") )
+                , "Set the system and moves used for the ith sub-system to those\ncontained in simstore\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMove::SupraSystem::setSubSystemAndMoves
@@ -582,7 +631,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubSystemAndMoves"
                 , setSubSystemAndMoves_function_value
-                , ( bp::arg("simstore") ) );
+                , ( bp::arg("simstore") )
+                , "Set the system and moves used for all sub-systems to those\ncontained in simstore" );
         
         }
         { //::SireMove::SupraSystem::setSubSystems
@@ -593,7 +643,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "setSubSystems"
                 , setSubSystems_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Set all sub-systems equal to a copy of those in system. Note\nthat both this SupraSystem and other must have the same\nnumber of sub-systems\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::SupraSystem::size
@@ -603,7 +654,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of sub-systems in this supra-system" );
         
         }
         { //::SireMove::SupraSystem::typeName
@@ -613,7 +665,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::SupraSystem::unpack
@@ -623,7 +676,8 @@ void register_SupraSystem_class(){
             
             SupraSystem_exposer.def( 
                 "unpack"
-                , unpack_function_value );
+                , unpack_function_value
+                , "Unpack all sub-systems" );
         
         }
         { //::SireMove::SupraSystem::unpack
@@ -634,7 +688,8 @@ void register_SupraSystem_class(){
             SupraSystem_exposer.def( 
                 "unpack"
                 , unpack_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Unpack the ith sub-system\nThrow: SireError::invalid_index\n" );
         
         }
         SupraSystem_exposer.staticmethod( "null" );

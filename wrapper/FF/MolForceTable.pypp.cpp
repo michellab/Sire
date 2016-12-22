@@ -39,10 +39,10 @@ void register_MolForceTable_class(){
 
     { //::SireFF::MolForceTable
         typedef bp::class_< SireFF::MolForceTable > MolForceTable_exposer_t;
-        MolForceTable_exposer_t MolForceTable_exposer = MolForceTable_exposer_t( "MolForceTable", bp::init< >() );
+        MolForceTable_exposer_t MolForceTable_exposer = MolForceTable_exposer_t( "MolForceTable", "This class holds the forces acting on all of the atoms of\nselected CutGroups in a molecule. The MolForceTable is used\nto accumulate all of the forces acting on these atoms during\na force evaluation, and also to control which forces are\nevaluated (as only the forces on atoms in selected CutGroups\nare evaluated). This allows you to provide some control over\nthe calculation, e.g. only placing a few protein residues into\nthe force table, thereby preventing the forces on all atoms\nin a protein from being evaluated if they arent actually\nnecessary.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope MolForceTable_scope( MolForceTable_exposer );
-        MolForceTable_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") )) );
-        MolForceTable_exposer.def( bp::init< SireFF::MolForceTable const & >(( bp::arg("other") )) );
+        MolForceTable_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "Construct a table to hold the forces on all of the CutGroups that\nare selected in molview. The forces are initialised to zero") );
+        MolForceTable_exposer.def( bp::init< SireFF::MolForceTable const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::MolForceTable::add
         
             typedef bool ( ::SireFF::MolForceTable::*add_function_type)( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
@@ -51,7 +51,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("cgatomidx"), bp::arg("force") ) );
+                , ( bp::arg("cgatomidx"), bp::arg("force") )
+                , "Add the force force onto this table. This ignores\nforces calculated for atoms that are in CutGroups that are\nnot in this table - this returns whether or not the\natom is in this table\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::MolForceTable::add
@@ -62,7 +63,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("selected_atoms"), bp::arg("force") ) );
+                , ( bp::arg("selected_atoms"), bp::arg("force") )
+                , "Add the force force onto this table for all of the atoms\nin selected_atoms. This ignores forces calculated for atoms\nthat are in CutGroups that are not in this table - this returns whether\nor not any selected atoms are in this table\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::MolForceTable::add
@@ -73,7 +75,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add the forces contained in other onto this force table. This will only\nadd the forces for CutGroups that are in both tables" );
         
         }
         { //::SireFF::MolForceTable::add
@@ -84,7 +87,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("force") ) );
+                , ( bp::arg("force") )
+                , "Add the force force onto all of the atom points in this table" );
         
         }
         { //::SireFF::MolForceTable::divide
@@ -95,7 +99,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Divide the force at all atom points by value" );
         
         }
         { //::SireFF::MolForceTable::initialise
@@ -105,7 +110,8 @@ void register_MolForceTable_class(){
             
             MolForceTable_exposer.def( 
                 "initialise"
-                , initialise_function_value );
+                , initialise_function_value
+                , "Initialise this table - this resets all of the forces back to zero" );
         
         }
         { //::SireFF::MolForceTable::map
@@ -116,7 +122,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireFF::MolForceTable::molNum
@@ -126,7 +133,8 @@ void register_MolForceTable_class(){
             
             MolForceTable_exposer.def( 
                 "molNum"
-                , molNum_function_value );
+                , molNum_function_value
+                , "" );
         
         }
         { //::SireFF::MolForceTable::molUID
@@ -137,7 +145,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "molUID"
                 , molUID_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::MolForceTable::multiply
@@ -148,7 +157,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "multiply"
                 , multiply_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Multiply the force at all atom points by value" );
         
         }
         { //::SireFF::MolForceTable::nCutGroups
@@ -158,7 +168,8 @@ void register_MolForceTable_class(){
             
             MolForceTable_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         { //::SireFF::MolForceTable::nSelectedCutGroups
@@ -168,7 +179,8 @@ void register_MolForceTable_class(){
             
             MolForceTable_exposer.def( 
                 "nSelectedCutGroups"
-                , nSelectedCutGroups_function_value );
+                , nSelectedCutGroups_function_value
+                , "" );
         
         }
         MolForceTable_exposer.def( bp::self != bp::self );
@@ -188,7 +200,8 @@ void register_MolForceTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireFF::MolForceTable::operator=
@@ -200,7 +213,8 @@ void register_MolForceTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("force") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MolForceTable_exposer.def( bp::self == bp::self );
@@ -212,7 +226,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireFF::MolForceTable::selectedAll
@@ -222,7 +237,8 @@ void register_MolForceTable_class(){
             
             MolForceTable_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "" );
         
         }
         { //::SireFF::MolForceTable::setAll
@@ -233,7 +249,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("force") ) );
+                , ( bp::arg("force") )
+                , "Set all of the forces at the atom points equal to force" );
         
         }
         { //::SireFF::MolForceTable::subtract
@@ -244,7 +261,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("cgatomidx"), bp::arg("force") ) );
+                , ( bp::arg("cgatomidx"), bp::arg("force") )
+                , "Subtract the force force from this table. This ignores\nforces calculated for atoms that are in CutGroups that are\nnot in this table - this returns whether or not the\natom is in this table\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::MolForceTable::subtract
@@ -255,7 +273,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("selected_atoms"), bp::arg("force") ) );
+                , ( bp::arg("selected_atoms"), bp::arg("force") )
+                , "Subtract the force force from this table for all of the atoms\nin selected_atoms. This ignores forces calculated for atoms\nthat are in CutGroups that are not in this table - this returns whether\nor not any selected atoms are in this table\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::MolForceTable::subtract
@@ -266,7 +285,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Subtract the forces contained in other from this force table. This will only\nsubtract the forces for CutGroups that are in both tables" );
         
         }
         { //::SireFF::MolForceTable::subtract
@@ -277,7 +297,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("force") ) );
+                , ( bp::arg("force") )
+                , "Subtract the force force from all of the atom points in this table" );
         
         }
         { //::SireFF::MolForceTable::toVector
@@ -287,7 +308,8 @@ void register_MolForceTable_class(){
             
             MolForceTable_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "Return an array of all of the forces on the atoms, in CGAtomIdx order" );
         
         }
         { //::SireFF::MolForceTable::toVector
@@ -298,7 +320,8 @@ void register_MolForceTable_class(){
             MolForceTable_exposer.def( 
                 "toVector"
                 , toVector_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "Return an array of all of the forces on the atoms selected in selection\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::MolForceTable::typeName
@@ -308,7 +331,8 @@ void register_MolForceTable_class(){
             
             MolForceTable_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::MolForceTable::what
@@ -318,7 +342,8 @@ void register_MolForceTable_class(){
             
             MolForceTable_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MolForceTable_exposer.staticmethod( "typeName" );

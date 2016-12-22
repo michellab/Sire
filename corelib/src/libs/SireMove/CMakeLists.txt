@@ -16,7 +16,6 @@ set ( SIREMOVE_HEADERS
       ensemble.h
       errors.h
       getpoint.h
-      fastio.h
       flexibility.h
       gibbsmove.h
       hybridmc.h
@@ -36,6 +35,7 @@ set ( SIREMOVE_HEADERS
       rbworkspace.h
       rbworkspacejm.h
       repexmove.h
+      repexmove2.h
       replica.h
       replicas.h
       rigidbodymc.h
@@ -94,6 +94,7 @@ set ( SIREMOVE_SOURCES
       rbworkspace.cpp
       rbworkspacejm.cpp
       repexmove.cpp
+      repexmove2.cpp
       replica.cpp
       replicas.cpp
       rigidbodymc.cpp
@@ -129,14 +130,12 @@ set ( SIREMOVE_OPENMM_HEADERS
       openmmmdintegrator.h
       openmmfrenergydt.h
       openmmfrenergyst.h
-      dcd_writer.h
     )
 
 set ( SIREMOVE_OPENMM_SOURCES
       openmmmdintegrator.cpp
       openmmfrenergydt.cpp
       openmmfrenergyst.cpp
-      dcd_writer.cpp
     )
 
 if ( ${SIRE_USE_OPENMM} )

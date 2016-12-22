@@ -1,11 +1,17 @@
-from Sire.Tools import OpenMMMD
-from Sire.Tools import readParams
-
 import Sire.Config
 
 import argparse
 import os
 import sys
+
+try:
+    numpy = Sire.try_import("numpy")
+    from Sire.Tools import ap
+except:
+    pass
+from Sire.Tools import OpenMMMD
+from Sire.Tools import readParams
+
 
 parser = argparse.ArgumentParser(description="Perform molecular dynamics using OpenMM",
                                  epilog="somd is built using Sire and OpenMM and is distributed "

@@ -33,9 +33,9 @@ void register_NullProperty_class(){
 
     { //::SireBase::NullProperty
         typedef bp::class_< SireBase::NullProperty, bp::bases< SireBase::Property > > NullProperty_exposer_t;
-        NullProperty_exposer_t NullProperty_exposer = NullProperty_exposer_t( "NullProperty", bp::init< >() );
+        NullProperty_exposer_t NullProperty_exposer = NullProperty_exposer_t( "NullProperty", "This is a null property", bp::init< >("") );
         bp::scope NullProperty_scope( NullProperty_exposer );
-        NullProperty_exposer.def( bp::init< SireBase::NullProperty const & >(( bp::arg("other") )) );
+        NullProperty_exposer.def( bp::init< SireBase::NullProperty const & >(( bp::arg("other") ), "") );
         { //::SireBase::NullProperty::toString
         
             typedef ::QString ( ::SireBase::NullProperty::*toString_function_type)(  ) const;
@@ -43,7 +43,8 @@ void register_NullProperty_class(){
             
             NullProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireBase::NullProperty::typeName
@@ -53,7 +54,8 @@ void register_NullProperty_class(){
             
             NullProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullProperty_exposer.staticmethod( "typeName" );

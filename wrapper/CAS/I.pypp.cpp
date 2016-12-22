@@ -29,9 +29,9 @@ void register_I_class(){
 
     { //::SireCAS::I
         typedef bp::class_< SireCAS::I, bp::bases< SireCAS::Constant, SireCAS::ExBase > > I_exposer_t;
-        I_exposer_t I_exposer = I_exposer_t( "I", bp::init< >() );
+        I_exposer_t I_exposer = I_exposer_t( "I", "\nThis is the complex number, i\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope I_scope( I_exposer );
-        I_exposer.def( bp::init< SireCAS::I const & >(( bp::arg("other") )) );
+        I_exposer.def( bp::init< SireCAS::I const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::I::conjugate
         
             typedef ::SireCAS::Expression ( ::SireCAS::I::*conjugate_function_type)(  ) const;
@@ -39,7 +39,8 @@ void register_I_class(){
             
             I_exposer.def( 
                 "conjugate"
-                , conjugate_function_value );
+                , conjugate_function_value
+                , "Return the complex conjugate of i (-i)" );
         
         }
         { //::SireCAS::I::evaluate
@@ -50,7 +51,8 @@ void register_I_class(){
             I_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Cannot evaluate i as a real number, so throw a domain error" );
         
         }
         { //::SireCAS::I::evaluate
@@ -61,7 +63,8 @@ void register_I_class(){
             I_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Evaluate this as a complex number - return i" );
         
         }
         { //::SireCAS::I::hash
@@ -71,7 +74,8 @@ void register_I_class(){
             
             I_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this expression" );
         
         }
         { //::SireCAS::I::isComplex
@@ -81,7 +85,8 @@ void register_I_class(){
             
             I_exposer.def( 
                 "isComplex"
-                , isComplex_function_value );
+                , isComplex_function_value
+                , "I is definitely complex :-)" );
         
         }
         I_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -92,7 +97,8 @@ void register_I_class(){
             
             I_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         { //::SireCAS::I::typeName
@@ -102,7 +108,8 @@ void register_I_class(){
             
             I_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::I::what
@@ -112,7 +119,8 @@ void register_I_class(){
             
             I_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         I_exposer.staticmethod( "typeName" );
@@ -125,6 +133,7 @@ void register_I_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         I_exposer.def( "__str__", &__str__< ::SireCAS::I > );
         I_exposer.def( "__repr__", &__str__< ::SireCAS::I > );
+        I_exposer.def( "__hash__", &::SireCAS::I::hash );
     }
 
 }

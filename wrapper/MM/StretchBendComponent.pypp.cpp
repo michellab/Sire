@@ -26,10 +26,10 @@ void register_StretchBendComponent_class(){
 
     { //::SireMM::StretchBendComponent
         typedef bp::class_< SireMM::StretchBendComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > StretchBendComponent_exposer_t;
-        StretchBendComponent_exposer_t StretchBendComponent_exposer = StretchBendComponent_exposer_t( "StretchBendComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() )) );
+        StretchBendComponent_exposer_t StretchBendComponent_exposer = StretchBendComponent_exposer_t( "StretchBendComponent", "This class represents a StretchBend component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope StretchBendComponent_scope( StretchBendComponent_exposer );
-        StretchBendComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        StretchBendComponent_exposer.def( bp::init< SireMM::StretchBendComponent const & >(( bp::arg("other") )) );
+        StretchBendComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        StretchBendComponent_exposer.def( bp::init< SireMM::StretchBendComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::StretchBendComponent::changeEnergy
         
             typedef void ( ::SireMM::StretchBendComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::StretchBendEnergy const & ) const;
@@ -38,7 +38,8 @@ void register_StretchBendComponent_class(){
             StretchBendComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("sbnrg") ) );
+                , ( bp::arg("ff"), bp::arg("sbnrg") )
+                , "Change the component of the energy in the forcefield ff\nby delta" );
         
         }
         { //::SireMM::StretchBendComponent::setEnergy
@@ -49,7 +50,8 @@ void register_StretchBendComponent_class(){
             StretchBendComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("sbnrg") ) );
+                , ( bp::arg("ff"), bp::arg("sbnrg") )
+                , "Set the component of the energy in the forcefield ff\nto be equal to the passed energy" );
         
         }
         { //::SireMM::StretchBendComponent::symbols
@@ -59,7 +61,8 @@ void register_StretchBendComponent_class(){
             
             StretchBendComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireMM::StretchBendComponent::total
@@ -70,7 +73,8 @@ void register_StretchBendComponent_class(){
             StretchBendComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::StretchBendComponent::typeName
@@ -80,7 +84,8 @@ void register_StretchBendComponent_class(){
             
             StretchBendComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::StretchBendComponent::what
@@ -90,7 +95,8 @@ void register_StretchBendComponent_class(){
             
             StretchBendComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         StretchBendComponent_exposer.staticmethod( "typeName" );
@@ -103,6 +109,7 @@ void register_StretchBendComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         StretchBendComponent_exposer.def( "__str__", &__str__< ::SireMM::StretchBendComponent > );
         StretchBendComponent_exposer.def( "__repr__", &__str__< ::SireMM::StretchBendComponent > );
+        StretchBendComponent_exposer.def( "__hash__", &::SireMM::StretchBendComponent::hash );
     }
 
 }

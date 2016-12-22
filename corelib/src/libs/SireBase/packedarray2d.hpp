@@ -97,7 +97,7 @@ class PackedArray2D_Array;
 /** This is a simple class that is used to manage the memory and 
     reference counting for the PackedArray2D */
 template<class T>
-class PackedArray2DMemory : public PackedArray2DMemoryBase
+class SIREBASE_EXPORT PackedArray2DMemory : public PackedArray2DMemoryBase
 {
 public:
     static char* create(quint32 narrays, quint32 nvalues);
@@ -116,7 +116,7 @@ public:
     @author Christopher Woods
 */
 template<class T>
-class SharedArray2DPtr
+class SIREBASE_EXPORT SharedArray2DPtr
 {
 
 public:
@@ -208,6 +208,13 @@ public:
         return ptr;
     }
     
+    /** Detach this pointer */
+    void detach()
+    {
+        if (ptr)
+            ptr = ptr->detach();
+    }
+    
     /** Assign this pointer to point at 'weakptr' 
         but *without* changing the reference count.
         You ABSOLUTELY MUST ensure that you call 
@@ -240,7 +247,7 @@ private:
     packed array of arrays
 */
 template<class T>
-class PackedArray2DData : public PackedArray2DDataBase
+class SIREBASE_EXPORT PackedArray2DData : public PackedArray2DDataBase
 {
 
 friend class PackedArray2DMemory<T>;
@@ -277,7 +284,7 @@ public:
 /** This class holds the metadata about an individual array
     in the packed collection of arrays */
 template<class T>
-class PackedArray2D_ArrayData : public PackedArray2D_ArrayDataBase
+class SIREBASE_EXPORT PackedArray2D_ArrayData : public PackedArray2D_ArrayDataBase
 {
 
 friend class PackedArray2D<T>;
@@ -313,7 +320,7 @@ public:
     @author Christopher Woods
 */
 template<class T>
-class PackedArray2D_Array
+class SIREBASE_EXPORT PackedArray2D_Array
 {
 
 friend class PackedArray2DMemory<T>;
@@ -382,7 +389,7 @@ private:
     @author Christopher Woods
 */
 template<class T>
-class PackedArray2D
+class SIREBASE_EXPORT PackedArray2D
 {
 
 friend class detail::PackedArray2DMemory<T>;
@@ -431,6 +438,8 @@ public:
     bool isEmpty() const;
     
     QString toString() const;
+
+    void detach();
 
     const Array* data() const;
     const Array* constData() const;
@@ -1781,6 +1790,14 @@ SIRE_OUTOFLINE_TEMPLATE
 const typename PackedArray2D<T>::Array* PackedArray2D<T>::constData() const
 {
     return d->arrayData();
+}
+
+/** Detach from shared storage */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+void PackedArray2D<T>::detach()
+{
+    d->detach();
 }
 
 /** Return a raw pointer to the array of values in the ith array 

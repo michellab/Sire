@@ -59,12 +59,12 @@ void register_AtomsIn_CGID__class(){
 
     { //::SireMol::AtomsIn< SireMol::CGID >
         typedef bp::class_< SireMol::AtomsIn< SireMol::CGID >, bp::bases< SireMol::AtomID, SireID::ID > > AtomsIn_CGID__exposer_t;
-        AtomsIn_CGID__exposer_t AtomsIn_CGID__exposer = AtomsIn_CGID__exposer_t( "AtomsIn_CGID_", bp::init< >() );
+        AtomsIn_CGID__exposer_t AtomsIn_CGID__exposer = AtomsIn_CGID__exposer_t( "AtomsIn_CGID_", "", bp::init< >("") );
         bp::scope AtomsIn_CGID__scope( AtomsIn_CGID__exposer );
-        AtomsIn_CGID__exposer.def( bp::init< SireMol::CGID const & >(( bp::arg("id") )) );
-        AtomsIn_CGID__exposer.def( bp::init< SireMol::CGID const &, qint32 >(( bp::arg("id"), bp::arg("i") )) );
-        AtomsIn_CGID__exposer.def( bp::init< SireMol::CGID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") )) );
-        AtomsIn_CGID__exposer.def( bp::init< SireMol::AtomsIn< SireMol::CGID > const & >(( bp::arg("other") )) );
+        AtomsIn_CGID__exposer.def( bp::init< SireMol::CGID const & >(( bp::arg("id") ), "") );
+        AtomsIn_CGID__exposer.def( bp::init< SireMol::CGID const &, qint32 >(( bp::arg("id"), bp::arg("i") ), "") );
+        AtomsIn_CGID__exposer.def( bp::init< SireMol::CGID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") ), "") );
+        AtomsIn_CGID__exposer.def( bp::init< SireMol::AtomsIn< SireMol::CGID > const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomsIn< SireMol::CGID >::hash
         
             typedef SireMol::AtomsIn< SireMol::CGID > exported_class_t;
@@ -73,7 +73,8 @@ void register_AtomsIn_CGID__class(){
             
             AtomsIn_CGID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::CGID >::isNull
@@ -84,7 +85,8 @@ void register_AtomsIn_CGID__class(){
             
             AtomsIn_CGID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::CGID >::map
@@ -96,7 +98,8 @@ void register_AtomsIn_CGID__class(){
             AtomsIn_CGID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         AtomsIn_CGID__exposer.def( bp::self != bp::self );
@@ -111,7 +114,8 @@ void register_AtomsIn_CGID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomsIn_CGID__exposer.def( bp::self == bp::self );
@@ -124,7 +128,8 @@ void register_AtomsIn_CGID__class(){
             
             AtomsIn_CGID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::CGID >::typeName
@@ -135,7 +140,8 @@ void register_AtomsIn_CGID__class(){
             
             AtomsIn_CGID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::CGID >::what
@@ -146,7 +152,8 @@ void register_AtomsIn_CGID__class(){
             
             AtomsIn_CGID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomsIn_CGID__exposer.staticmethod( "typeName" );
@@ -159,6 +166,7 @@ void register_AtomsIn_CGID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AtomsIn_CGID__exposer.def( "__str__", &__str__< ::SireMol::AtomsIn<SireMol::CGID> > );
         AtomsIn_CGID__exposer.def( "__repr__", &__str__< ::SireMol::AtomsIn<SireMol::CGID> > );
+        AtomsIn_CGID__exposer.def( "__hash__", &::SireMol::AtomsIn<SireMol::CGID>::hash );
     }
 
 }

@@ -43,9 +43,9 @@ void register_NullGetPoint_class(){
 
     { //::SireMove::NullGetPoint
         typedef bp::class_< SireMove::NullGetPoint, bp::bases< SireMove::GetPoint, SireBase::Property > > NullGetPoint_exposer_t;
-        NullGetPoint_exposer_t NullGetPoint_exposer = NullGetPoint_exposer_t( "NullGetPoint", bp::init< >() );
+        NullGetPoint_exposer_t NullGetPoint_exposer = NullGetPoint_exposer_t( "NullGetPoint", "This is the null GetPoint function - this just returns\nthe point (0,0,0) for all passed molecule views\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope NullGetPoint_scope( NullGetPoint_exposer );
-        NullGetPoint_exposer.def( bp::init< SireMove::NullGetPoint const & >(( bp::arg("other") )) );
+        NullGetPoint_exposer.def( bp::init< SireMove::NullGetPoint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::NullGetPoint::getPoint
         
             typedef ::SireMaths::Vector ( ::SireMove::NullGetPoint::*getPoint_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
@@ -54,7 +54,8 @@ void register_NullGetPoint_class(){
             NullGetPoint_exposer.def( 
                 "getPoint"
                 , getPoint_function_value
-                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         NullGetPoint_exposer.def( bp::self != bp::self );
@@ -67,7 +68,8 @@ void register_NullGetPoint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullGetPoint_exposer.def( bp::self == bp::self );
@@ -78,7 +80,8 @@ void register_NullGetPoint_class(){
             
             NullGetPoint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullGetPoint_exposer.staticmethod( "typeName" );

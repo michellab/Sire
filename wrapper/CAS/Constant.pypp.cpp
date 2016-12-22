@@ -41,9 +41,9 @@ void register_Constant_class(){
 
     { //::SireCAS::Constant
         typedef bp::class_< SireCAS::Constant, bp::bases< SireCAS::ExBase > > Constant_exposer_t;
-        Constant_exposer_t Constant_exposer = Constant_exposer_t( "Constant", bp::init< >() );
+        Constant_exposer_t Constant_exposer = Constant_exposer_t( "Constant", "\nThis class represents a constant value (e.g. a number).\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a constant") );
         bp::scope Constant_scope( Constant_exposer );
-        Constant_exposer.def( bp::init< SireCAS::Constant const & >(( bp::arg("other") )) );
+        Constant_exposer.def( bp::init< SireCAS::Constant const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Constant::children
         
             typedef ::SireCAS::Expressions ( ::SireCAS::Constant::*children_function_type)(  ) const;
@@ -51,7 +51,8 @@ void register_Constant_class(){
             
             Constant_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "No children in a constant" );
         
         }
         { //::SireCAS::Constant::differentiate
@@ -62,7 +63,8 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Differential of a constant is zero" );
         
         }
         { //::SireCAS::Constant::evaluate
@@ -73,7 +75,8 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluation of a constant is 1" );
         
         }
         { //::SireCAS::Constant::evaluate
@@ -84,7 +87,8 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluation of a constant is 1" );
         
         }
         { //::SireCAS::Constant::expand
@@ -95,7 +99,8 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "expand"
                 , expand_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "" );
         
         }
         { //::SireCAS::Constant::functions
@@ -105,7 +110,8 @@ void register_Constant_class(){
             
             Constant_exposer.def( 
                 "functions"
-                , functions_function_value );
+                , functions_function_value
+                , "No functions in a constant" );
         
         }
         { //::SireCAS::Constant::hash
@@ -115,7 +121,8 @@ void register_Constant_class(){
             
             Constant_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Hash a constant" );
         
         }
         { //::SireCAS::Constant::integrate
@@ -126,7 +133,8 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Integral of a constant is = constantsymbol + C" );
         
         }
         Constant_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -138,7 +146,8 @@ void register_Constant_class(){
             Constant_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Cant substitute into a constant" );
         
         }
         { //::SireCAS::Constant::symbols
@@ -148,7 +157,8 @@ void register_Constant_class(){
             
             Constant_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "No symbols in a constant" );
         
         }
         { //::SireCAS::Constant::toString
@@ -158,7 +168,8 @@ void register_Constant_class(){
             
             Constant_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this constant (actually an empty string)" );
         
         }
         { //::SireCAS::Constant::typeName
@@ -168,7 +179,8 @@ void register_Constant_class(){
             
             Constant_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Constant::what
@@ -178,7 +190,8 @@ void register_Constant_class(){
             
             Constant_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Constant_exposer.staticmethod( "typeName" );
@@ -191,6 +204,7 @@ void register_Constant_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Constant_exposer.def( "__str__", &__str__< ::SireCAS::Constant > );
         Constant_exposer.def( "__repr__", &__str__< ::SireCAS::Constant > );
+        Constant_exposer.def( "__hash__", &::SireCAS::Constant::hash );
     }
 
 }

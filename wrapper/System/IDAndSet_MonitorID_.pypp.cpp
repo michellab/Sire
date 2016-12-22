@@ -31,12 +31,13 @@ void register_IDAndSet_MonitorID__class(){
 
     { //::SireID::IDAndSet< SireSystem::MonitorID >
         typedef bp::class_< SireID::IDAndSet< SireSystem::MonitorID >, bp::bases< SireSystem::MonitorID, SireID::ID > > IDAndSet_MonitorID__exposer_t;
-        IDAndSet_MonitorID__exposer_t IDAndSet_MonitorID__exposer = IDAndSet_MonitorID__exposer_t( "IDAndSet_MonitorID_", bp::init< >() );
+        IDAndSet_MonitorID__exposer_t IDAndSet_MonitorID__exposer = IDAndSet_MonitorID__exposer_t( "IDAndSet_MonitorID_", "", bp::init< >("") );
         bp::scope IDAndSet_MonitorID__scope( IDAndSet_MonitorID__exposer );
-        IDAndSet_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const & >(( bp::arg("id") )) );
-        IDAndSet_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const &, SireSystem::MonitorID const & >(( bp::arg("id0"), bp::arg("id1") )) );
-        IDAndSet_MonitorID__exposer.def( bp::init< QList< SireSystem::MonitorIdentifier > const & >(( bp::arg("ids") )) );
-        IDAndSet_MonitorID__exposer.def( bp::init< SireID::IDAndSet< SireSystem::MonitorID > const & >(( bp::arg("other") )) );
+        IDAndSet_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const & >(( bp::arg("id") ), "") );
+        IDAndSet_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const &, SireSystem::MonitorID const & >(( bp::arg("id0"), bp::arg("id1") ), "") );
+        IDAndSet_MonitorID__exposer.def( bp::init< QList< SireSystem::MonitorIdentifier > const & >(( bp::arg("ids") ), "") );
+        IDAndSet_MonitorID__exposer.def( bp::init< SireID::IDAndSet< SireSystem::MonitorID > const & >(( bp::arg("ids") ), "") );
+        IDAndSet_MonitorID__exposer.def( bp::init< SireID::IDAndSet< SireSystem::MonitorID > const & >(( bp::arg("other") ), "") );
         { //::SireID::IDAndSet< SireSystem::MonitorID >::IDs
         
             typedef SireID::IDAndSet< SireSystem::MonitorID > exported_class_t;
@@ -46,7 +47,8 @@ void register_IDAndSet_MonitorID__class(){
             IDAndSet_MonitorID__exposer.def( 
                 "IDs"
                 , IDs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireSystem::MonitorID >::hash
@@ -57,7 +59,8 @@ void register_IDAndSet_MonitorID__class(){
             
             IDAndSet_MonitorID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireSystem::MonitorID >::isNull
@@ -68,19 +71,21 @@ void register_IDAndSet_MonitorID__class(){
             
             IDAndSet_MonitorID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireSystem::MonitorID >::map
         
             typedef SireID::IDAndSet< SireSystem::MonitorID > exported_class_t;
-            typedef ::QList< SireSystem::MonitorName > ( ::SireID::IDAndSet< SireSystem::MonitorID >::*map_function_type)( ::SireSystem::SystemMonitors const & ) const;
+            typedef ::QList< SireSystem::MonitorName > ( ::SireID::IDAndSet< SireSystem::MonitorID >::*map_function_type)( ::SireID::IDAndSet< SireSystem::MonitorID >::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::IDAndSet< SireSystem::MonitorID >::map );
             
             IDAndSet_MonitorID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("obj") ) );
+                , ( bp::arg("obj") )
+                , "" );
         
         }
         IDAndSet_MonitorID__exposer.def( bp::self != bp::other< SireID::ID >() );
@@ -96,7 +101,8 @@ void register_IDAndSet_MonitorID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireSystem::MonitorID >::operator=
@@ -109,7 +115,8 @@ void register_IDAndSet_MonitorID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IDAndSet_MonitorID__exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -123,7 +130,8 @@ void register_IDAndSet_MonitorID__class(){
             
             IDAndSet_MonitorID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireSystem::MonitorID >::typeName
@@ -134,7 +142,8 @@ void register_IDAndSet_MonitorID__class(){
             
             IDAndSet_MonitorID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireSystem::MonitorID >::what
@@ -145,7 +154,8 @@ void register_IDAndSet_MonitorID__class(){
             
             IDAndSet_MonitorID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IDAndSet_MonitorID__exposer.staticmethod( "typeName" );
@@ -158,6 +168,7 @@ void register_IDAndSet_MonitorID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         IDAndSet_MonitorID__exposer.def( "__str__", &__str__< ::SireID::IDAndSet<SireSystem::MonitorID> > );
         IDAndSet_MonitorID__exposer.def( "__repr__", &__str__< ::SireID::IDAndSet<SireSystem::MonitorID> > );
+        IDAndSet_MonitorID__exposer.def( "__hash__", &::SireID::IDAndSet<SireSystem::MonitorID>::hash );
     }
 
 }

@@ -48,7 +48,6 @@ MultiVector operator+(const MultiVector &p1, const MultiVector &p2);
 MultiVector operator-(const MultiVector &p1, const MultiVector &p2);
 MultiVector operator*(const MultiVector &p1, const MultiDouble &c);
 MultiVector operator*(const MultiDouble &c, const MultiVector &p1);
-MultiVector operator/(const MultiVector &p1, const MultiVector &c);
 MultiQuaternion operator*(const MultiVector &p1, const MultiQuaternion &p2);
 MultiQuaternion operator*(const MultiQuaternion &p1, const MultiVector &p2);
 

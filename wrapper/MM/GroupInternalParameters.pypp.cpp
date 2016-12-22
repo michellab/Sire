@@ -41,9 +41,9 @@ void register_GroupInternalParameters_class(){
 
     { //::SireMM::GroupInternalParameters
         typedef bp::class_< SireMM::GroupInternalParameters > GroupInternalParameters_exposer_t;
-        GroupInternalParameters_exposer_t GroupInternalParameters_exposer = GroupInternalParameters_exposer_t( "GroupInternalParameters", bp::init< >() );
+        GroupInternalParameters_exposer_t GroupInternalParameters_exposer = GroupInternalParameters_exposer_t( "GroupInternalParameters", "This class holds all of the internal parameters for one group\ncombination within a molecule\n\nThere are several types of internal parameters, defined\nby the type of internal used to provide the coordinates,\nand the quantities calculated from those coordinates that\ncan be used in the function\n\nBond            : Input Bond - function uses interatomic distance (1-2), r\nAngle           : Input Angle - function uses angle (1-2-3), theta\nDihedral        : Input Dihedral - function uses torsion (1-2-3-4), phi\n\nImproper        : Input Improper - function uses either torsion angle\n(1-3-4-2), phi, or out of plane angle, theta\n\nUrey-Bradley    : Input Angle - function uses distance (1-3), r\n\nStretch-Stretch : Input Angle - function uses distances (1-2), r12, and\n(3-2), r32\n\nStretch-Bend    : Input Angle - function uses distances angle (1-2-3), theta,\nand distances (1-2), r12, and (3-2) r32\n\nBend-Bend       : Input Improper - function uses angles (1-2-3), (3-2-4), (4-2-1),\ntheta123, theta324, theta421\n\nStretch-Bend    : Input Dihedral - function uses torsion (1-2-3-4), phi,\n-Torsion                         distances (1-2), (2-3), (3-4), (1-4)\nr12, r23, r34, r14 and angles\n(1-2-3) and (2-3-4), theta123, theta234\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope GroupInternalParameters_scope( GroupInternalParameters_exposer );
-        GroupInternalParameters_exposer.def( bp::init< SireMM::GroupInternalParameters const & >(( bp::arg("other") )) );
+        GroupInternalParameters_exposer.def( bp::init< SireMM::GroupInternalParameters const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::GroupInternalParameters::angleForces
         
             typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*angleForces_function_type)(  ) const;
@@ -52,7 +52,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "angleForces"
                 , angleForces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the angle force ( -dEdtheta )" );
         
         }
         { //::SireMM::GroupInternalParameters::anglePotential
@@ -63,7 +64,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "anglePotential"
                 , anglePotential_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the angle potentials for this group" );
         
         }
         { //::SireMM::GroupInternalParameters::bendBendPotential
@@ -74,7 +76,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "bendBendPotential"
                 , bendBendPotential_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the bend-bend potentials for this group" );
         
         }
         { //::SireMM::GroupInternalParameters::bendBend_Theta012_Forces
@@ -85,7 +88,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "bendBend_Theta012_Forces"
                 , bendBend_Theta012_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return bend-bend force ( -dEdtheta_012 )" );
         
         }
         { //::SireMM::GroupInternalParameters::bendBend_Theta213_Forces
@@ -96,7 +100,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "bendBend_Theta213_Forces"
                 , bendBend_Theta213_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return bend-bend force ( -dEdtheta_012 )" );
         
         }
         { //::SireMM::GroupInternalParameters::bendBend_Theta310_Forces
@@ -107,7 +112,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "bendBend_Theta310_Forces"
                 , bendBend_Theta310_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return bend-bend force ( -dEdtheta_012 )" );
         
         }
         { //::SireMM::GroupInternalParameters::bondForces
@@ -118,7 +124,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "bondForces"
                 , bondForces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the bond force ( -dEdr )" );
         
         }
         { //::SireMM::GroupInternalParameters::bondPotential
@@ -129,7 +136,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "bondPotential"
                 , bondPotential_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the bond potentials for this group" );
         
         }
         { //::SireMM::GroupInternalParameters::cgIdx0
@@ -139,7 +147,8 @@ void register_GroupInternalParameters_class(){
             
             GroupInternalParameters_exposer.def( 
                 "cgIdx0"
-                , cgIdx0_function_value );
+                , cgIdx0_function_value
+                , "Return the index of the first group" );
         
         }
         { //::SireMM::GroupInternalParameters::cgIdx1
@@ -149,7 +158,8 @@ void register_GroupInternalParameters_class(){
             
             GroupInternalParameters_exposer.def( 
                 "cgIdx1"
-                , cgIdx1_function_value );
+                , cgIdx1_function_value
+                , "Return the index of the first group" );
         
         }
         { //::SireMM::GroupInternalParameters::cgIdx2
@@ -159,7 +169,8 @@ void register_GroupInternalParameters_class(){
             
             GroupInternalParameters_exposer.def( 
                 "cgIdx2"
-                , cgIdx2_function_value );
+                , cgIdx2_function_value
+                , "Return the index of the first group" );
         
         }
         { //::SireMM::GroupInternalParameters::cgIdx3
@@ -169,7 +180,8 @@ void register_GroupInternalParameters_class(){
             
             GroupInternalParameters_exposer.def( 
                 "cgIdx3"
-                , cgIdx3_function_value );
+                , cgIdx3_function_value
+                , "Return the index of the first group" );
         
         }
         { //::SireMM::GroupInternalParameters::dihedralForces
@@ -180,7 +192,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "dihedralForces"
                 , dihedralForces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the dihedral force ( -dEdphi )" );
         
         }
         { //::SireMM::GroupInternalParameters::dihedralPotential
@@ -191,7 +204,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "dihedralPotential"
                 , dihedralPotential_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the dihedral potentials for this group" );
         
         }
         { //::SireMM::GroupInternalParameters::hasCrossTerms
@@ -201,7 +215,8 @@ void register_GroupInternalParameters_class(){
             
             GroupInternalParameters_exposer.def( 
                 "hasCrossTerms"
-                , hasCrossTerms_function_value );
+                , hasCrossTerms_function_value
+                , "Return whether or not this has any cross terms\n(stretch-stretch, stretch-bend, bend-bend, stretch-bend-torsion)" );
         
         }
         { //::SireMM::GroupInternalParameters::hasNonPhysicalParameters
@@ -211,7 +226,8 @@ void register_GroupInternalParameters_class(){
             
             GroupInternalParameters_exposer.def( 
                 "hasNonPhysicalParameters"
-                , hasNonPhysicalParameters_function_value );
+                , hasNonPhysicalParameters_function_value
+                , "Return whether or not this has any non-physical parameters\n(Urey-Bradley or improper terms)" );
         
         }
         { //::SireMM::GroupInternalParameters::hasPhysicalParameters
@@ -221,7 +237,8 @@ void register_GroupInternalParameters_class(){
             
             GroupInternalParameters_exposer.def( 
                 "hasPhysicalParameters"
-                , hasPhysicalParameters_function_value );
+                , hasPhysicalParameters_function_value
+                , "Return whether or not this has any physical parameters\n(bond, angle or dihedral)" );
         
         }
         { //::SireMM::GroupInternalParameters::improperPotential
@@ -232,7 +249,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "improperPotential"
                 , improperPotential_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the improper potentials for this group" );
         
         }
         { //::SireMM::GroupInternalParameters::improper_Phi_Forces
@@ -243,7 +261,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "improper_Phi_Forces"
                 , improper_Phi_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the improper force ( -dEdphi )" );
         
         }
         { //::SireMM::GroupInternalParameters::improper_Theta_Forces
@@ -254,7 +273,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "improper_Theta_Forces"
                 , improper_Theta_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the improper force ( -dEdtheta )" );
         
         }
         { //::SireMM::GroupInternalParameters::isDoubleCutGroup
@@ -264,7 +284,8 @@ void register_GroupInternalParameters_class(){
             
             GroupInternalParameters_exposer.def( 
                 "isDoubleCutGroup"
-                , isDoubleCutGroup_function_value );
+                , isDoubleCutGroup_function_value
+                , "Return whether or not this group contains parameters from only\ntwo CutGroups" );
         
         }
         { //::SireMM::GroupInternalParameters::isDoubleCutGroup
@@ -275,7 +296,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "isDoubleCutGroup"
                 , isDoubleCutGroup_function_value
-                , ( bp::arg("cgidx0"), bp::arg("cgidx1") ) );
+                , ( bp::arg("cgidx0"), bp::arg("cgidx1") )
+                , "Return whether or not this group contains parameters from\nonly two CutGroups, with indicies cgidx0 and cgidx1" );
         
         }
         { //::SireMM::GroupInternalParameters::isEmpty
@@ -285,7 +307,8 @@ void register_GroupInternalParameters_class(){
             
             GroupInternalParameters_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether this group is empty (contains no parameters)" );
         
         }
         { //::SireMM::GroupInternalParameters::isQuadrupleCutGroup
@@ -295,7 +318,8 @@ void register_GroupInternalParameters_class(){
             
             GroupInternalParameters_exposer.def( 
                 "isQuadrupleCutGroup"
-                , isQuadrupleCutGroup_function_value );
+                , isQuadrupleCutGroup_function_value
+                , "Return whether or not this group contains parameters from\nfour CutGroups" );
         
         }
         { //::SireMM::GroupInternalParameters::isQuadrupleCutGroup
@@ -306,7 +330,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "isQuadrupleCutGroup"
                 , isQuadrupleCutGroup_function_value
-                , ( bp::arg("cgidx0"), bp::arg("cgidx1"), bp::arg("cgidx2"), bp::arg("cgidx3") ) );
+                , ( bp::arg("cgidx0"), bp::arg("cgidx1"), bp::arg("cgidx2"), bp::arg("cgidx3") )
+                , "Return whether or not this group contains parameters from\nfour CutGroups, with indicies cgidx0, cgidx1, cgidx2 and cgidx3" );
         
         }
         { //::SireMM::GroupInternalParameters::isSingleCutGroup
@@ -316,7 +341,8 @@ void register_GroupInternalParameters_class(){
             
             GroupInternalParameters_exposer.def( 
                 "isSingleCutGroup"
-                , isSingleCutGroup_function_value );
+                , isSingleCutGroup_function_value
+                , "Return whether or not this group contains parameters from only\na single CutGroup" );
         
         }
         { //::SireMM::GroupInternalParameters::isSingleCutGroup
@@ -327,7 +353,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "isSingleCutGroup"
                 , isSingleCutGroup_function_value
-                , ( bp::arg("cgidx0") ) );
+                , ( bp::arg("cgidx0") )
+                , "Return whether or not this group contains parameters from\nonly a single CutGroup, with index cgidx0" );
         
         }
         { //::SireMM::GroupInternalParameters::isTripleCutGroup
@@ -337,7 +364,8 @@ void register_GroupInternalParameters_class(){
             
             GroupInternalParameters_exposer.def( 
                 "isTripleCutGroup"
-                , isTripleCutGroup_function_value );
+                , isTripleCutGroup_function_value
+                , "Return whether or not this group contains parameters from only\nthree CutGroups" );
         
         }
         { //::SireMM::GroupInternalParameters::isTripleCutGroup
@@ -348,7 +376,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "isTripleCutGroup"
                 , isTripleCutGroup_function_value
-                , ( bp::arg("cgidx0"), bp::arg("cgidx1"), bp::arg("cgidx2") ) );
+                , ( bp::arg("cgidx0"), bp::arg("cgidx1"), bp::arg("cgidx2") )
+                , "Return whether or not this group contains parameters from\nthree CutGroups, with indicies cgidx0, cgidx1 and cgidx2" );
         
         }
         GroupInternalParameters_exposer.def( bp::self != bp::self );
@@ -361,7 +390,8 @@ void register_GroupInternalParameters_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         GroupInternalParameters_exposer.def( bp::self == bp::self );
@@ -373,7 +403,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "refersTo"
                 , refersTo_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "Return whether or not this group contains parameters\nthat involve atoms in the CutGroup at index cgidx" );
         
         }
         { //::SireMM::GroupInternalParameters::refersTo
@@ -384,7 +415,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "refersTo"
                 , refersTo_function_value
-                , ( bp::arg("cgidxs") ) );
+                , ( bp::arg("cgidxs") )
+                , "Return whether or not this group contains parameters\nthat involve atoms in any of the CutGroups whose indicies are\nin cgidxs" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchBendPotential
@@ -395,7 +427,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchBendPotential"
                 , stretchBendPotential_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-bend potentials for this group" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsionPotential
@@ -406,7 +439,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchBendTorsionPotential"
                 , stretchBendTorsionPotential_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-bend-torsion potentials for this group" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_Phi_Forces
@@ -417,7 +451,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchBendTorsion_Phi_Forces"
                 , stretchBendTorsion_Phi_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-bend-torsion force ( -dEdphi )" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_R01_Forces
@@ -428,7 +463,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchBendTorsion_R01_Forces"
                 , stretchBendTorsion_R01_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-bend-torsion force ( -dEdr_01 )" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_R03_Forces
@@ -439,7 +475,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchBendTorsion_R03_Forces"
                 , stretchBendTorsion_R03_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-bend-torsion force ( -dEdr_03 )" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_R12_Forces
@@ -450,7 +487,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchBendTorsion_R12_Forces"
                 , stretchBendTorsion_R12_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-bend-torsion force ( -dEdr_12 )" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_R32_Forces
@@ -461,7 +499,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchBendTorsion_R32_Forces"
                 , stretchBendTorsion_R32_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-bend-torsion force ( -dEdr_32 )" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_Theta012_Forces
@@ -472,7 +511,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchBendTorsion_Theta012_Forces"
                 , stretchBendTorsion_Theta012_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-bend-torsion force ( -dEdtheta_012 )" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_Theta321_Forces
@@ -483,7 +523,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchBendTorsion_Theta321_Forces"
                 , stretchBendTorsion_Theta321_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-bend-torsion force ( -dEdtheta_321 )" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchBend_R01_Forces
@@ -494,7 +535,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchBend_R01_Forces"
                 , stretchBend_R01_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-bend force ( -dEdtheta )" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchBend_R21_Forces
@@ -505,7 +547,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchBend_R21_Forces"
                 , stretchBend_R21_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-bend force ( -dEdtheta )" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchBend_Theta_Forces
@@ -516,7 +559,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchBend_Theta_Forces"
                 , stretchBend_Theta_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-bend force ( -dEdtheta )" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchStretchPotential
@@ -527,7 +571,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchStretchPotential"
                 , stretchStretchPotential_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-stretch potentials for this group" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchStretch_R01_Forces
@@ -538,7 +583,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchStretch_R01_Forces"
                 , stretchStretch_R01_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-stretch force ( -dEdr_01 )" );
         
         }
         { //::SireMM::GroupInternalParameters::stretchStretch_R21_Forces
@@ -549,7 +595,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "stretchStretch_R21_Forces"
                 , stretchStretch_R21_Forces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the stretch-stretch force ( -dEdr_01 )" );
         
         }
         { //::SireMM::GroupInternalParameters::ureyBradleyForces
@@ -560,7 +607,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "ureyBradleyForces"
                 , ureyBradleyForces_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the Urey-Bradley force ( -dEdr )" );
         
         }
         { //::SireMM::GroupInternalParameters::ureyBradleyPotential
@@ -571,7 +619,8 @@ void register_GroupInternalParameters_class(){
             GroupInternalParameters_exposer.def( 
                 "ureyBradleyPotential"
                 , ureyBradleyPotential_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the Urey-Bradley potentials for this group" );
         
         }
         GroupInternalParameters_exposer.def( "__copy__", &__copy__);

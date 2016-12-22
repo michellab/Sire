@@ -43,10 +43,10 @@ void register_CLJBoxDistance_class(){
 
     { //::SireMM::CLJBoxDistance
         typedef bp::class_< SireMM::CLJBoxDistance > CLJBoxDistance_exposer_t;
-        CLJBoxDistance_exposer_t CLJBoxDistance_exposer = CLJBoxDistance_exposer_t( "CLJBoxDistance", bp::init< >() );
+        CLJBoxDistance_exposer_t CLJBoxDistance_exposer = CLJBoxDistance_exposer_t( "CLJBoxDistance", "This simple class holds the minimum distance between the two\nCLJBoxes at specified indicies\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope CLJBoxDistance_scope( CLJBoxDistance_exposer );
-        CLJBoxDistance_exposer.def( bp::init< quint32, quint32, float >(( bp::arg("box0"), bp::arg("box1"), bp::arg("distance") )) );
-        CLJBoxDistance_exposer.def( bp::init< SireMM::CLJBoxDistance const & >(( bp::arg("other") )) );
+        CLJBoxDistance_exposer.def( bp::init< quint32, quint32, float >(( bp::arg("box0"), bp::arg("box1"), bp::arg("distance") ), "Construct saying that the minimum distance between the box with index box0\nand the box with index box1 is distance") );
+        CLJBoxDistance_exposer.def( bp::init< SireMM::CLJBoxDistance const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJBoxDistance::box0
         
             typedef ::quint32 ( ::SireMM::CLJBoxDistance::*box0_function_type)(  ) const;
@@ -54,7 +54,8 @@ void register_CLJBoxDistance_class(){
             
             CLJBoxDistance_exposer.def( 
                 "box0"
-                , box0_function_value );
+                , box0_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxDistance::box1
@@ -64,7 +65,8 @@ void register_CLJBoxDistance_class(){
             
             CLJBoxDistance_exposer.def( 
                 "box1"
-                , box1_function_value );
+                , box1_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxDistance::distance
@@ -74,7 +76,8 @@ void register_CLJBoxDistance_class(){
             
             CLJBoxDistance_exposer.def( 
                 "distance"
-                , distance_function_value );
+                , distance_function_value
+                , "" );
         
         }
         CLJBoxDistance_exposer.def( bp::self != bp::self );
@@ -88,7 +91,8 @@ void register_CLJBoxDistance_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJBoxDistance_exposer.def( bp::self == bp::self );
@@ -100,7 +104,8 @@ void register_CLJBoxDistance_class(){
             
             CLJBoxDistance_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxDistance::typeName
@@ -110,7 +115,8 @@ void register_CLJBoxDistance_class(){
             
             CLJBoxDistance_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxDistance::what
@@ -120,7 +126,8 @@ void register_CLJBoxDistance_class(){
             
             CLJBoxDistance_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJBoxDistance_exposer.staticmethod( "typeName" );

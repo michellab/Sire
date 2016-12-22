@@ -146,6 +146,121 @@ dihedral CD CG CB CA flex 10.00
 dihedral OE1 CD CG CB flex 15.00
 dihedral HE2 OE2 CD OE1 flex 10.00
 
+# Deprotonated CYS
+residue CYP
+rigidbody rotate 2.000 translate 0.050
+bbatom N
+bbatom CA
+bbatom O
+bbatom C
+backbone first aanterm middle aamiddle last aacterm single aasingle
+zmatrix CB CA N C
+zmatrix SG CB CA N
+zmatrix HB2 CB CA SG
+zmatrix HB3 CB CA SG
+angle CB CA N flex 0.50
+angle SG CB CA flex 0.50
+angle HB2 CB CA flex 0.50
+angle HB3 CB CA flex 0.50
+dihedral SG CB CA N flex 10.00
+
+residue HEM
+# disable backbone moves for this residue (not 
+rigidbody rotate 0.000 translate 0.000
+bbatom FE
+bbatom NA
+bbatom C1A
+bbatom C4A
+bbatom CHA
+bbatom NB
+bbatom C1B
+bbatom C4B
+bbatom CHB
+bbatom NC
+bbatom C1C
+bbatom C4C
+bbatom CHC
+bbatom ND
+bbatom C1D
+bbatom C4D
+bbatom CHD
+backbone first hemterm middle hemterm last hemterm single hemterm
+# First ring
+zmatrix C2A C1A NA C4A
+zmatrix C3A C4A NA C1A
+zmatrix CMA C3A C4A NA
+zmatrix HMA1 CMA C3A C4A
+zmatrix HMA2 CMA C3A HMA1
+zmatrix HMA3 CMA C3A HMA2
+zmatrix CAA C2A C1A NA
+zmatrix CBA CAA C2A C1A
+zmatrix HAA1 CAA C2A CBA
+zmatrix HAA2 CAA C2A CBA
+zmatrix CGA CBA CAA C2A
+zmatrix HBA1 CBA CAA CGA
+zmatrix HBA2 CBA CAA CGA
+zmatrix O1A CGA CBA CAA
+zmatrix O2A CGA CBA O1A
+zmatrix HHA CHA C1A C2A
+# second ring
+zmatrix C2B C1B NB C4B
+zmatrix C3B C4B NB C1B
+zmatrix CMB C2B C3B C4B
+zmatrix HMB1 CMB C2B C3B
+zmatrix HMB2 CMB C2B HMB1
+zmatrix HMB3 CMB C2B HMB2
+zmatrix CAB C3B C2B C1B
+zmatrix CBB CAB C3B C2B
+zmatrix HAB CAB C3B CBB
+zmatrix HBB1 CBB CAB C3B
+zmatrix HBB2 CBB CAB HBB1
+zmatrix HHB CHB C1B C2B
+# third ring
+zmatrix C2C C1C NC C4C
+zmatrix C3C C4C NC C1C
+zmatrix CMC C2C C3C C4C
+zmatrix HMC1 CMC C2C C3C
+zmatrix HMC2 CMC C2C HMC1
+zmatrix HMC3 CMC C2C HMC2
+zmatrix CAC C3C C2C C1C
+zmatrix CBC CAC C3C C2C
+zmatrix HAC CAC C3C CBC
+zmatrix HBC1 CBC CAC C3C
+zmatrix HBC2 CBC CAC HBC1
+zmatrix HHC CHC C1C C2C
+# fourth ring
+zmatrix C2D C1D ND C4D
+zmatrix C3D C4D ND C1D
+zmatrix CMD C3D C4D ND
+zmatrix HMD1 CMD C3D C4D
+zmatrix HMD2 CMD C3D HMD1
+zmatrix HMD3 CMD C3D HMD2
+zmatrix CAD C2D C1D ND
+zmatrix CBD CAD C2D C1D
+zmatrix HAD1 CAD C2D CBD
+zmatrix HAD2 CAD C2D CBD
+zmatrix CGD CBD CAD C2D
+zmatrix HBD1 CBD CAD CGD
+zmatrix HBD2 CBD CAD CGD
+zmatrix O1D CGD CBD CAD
+zmatrix O2D CGD CBD O1D
+zmatrix HHD CHD C1D C2D
+# flexibility - first ring
+dihedral CGA CBA CAA C2A flex 5.00
+dihedral O1A CGA CBA CAA flex 3.00
+# second ring
+dihedral HMB1 CMB C2B C3B flex 5.00
+dihedral CBB CAB C3B C2B flex 5.00
+dihedral HBB1 CBB CAB C3B flex 2.00
+# third ring
+angle HHC CHC C1C flex 0.50
+dihedral HMC1 CMC C2C C3C flex 5.00
+dihedral CBC CAC C3C C2C flex 5.00
+dihedral HBC1 CBC CAC C3C flex 2.00
+# fourth ring
+dihedral CGD CBD CAD C2D flex 5.00
+dihedral O1D CGD CBD CAD flex 3.00
+
 residue ILE
 rigidbody rotate 2.000 translate 0.050
 bbatom N

@@ -31,10 +31,10 @@ void register_Cos_class(){
 
     { //::SireCAS::Cos
         typedef bp::class_< SireCAS::Cos, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Cos_exposer_t;
-        Cos_exposer_t Cos_exposer = Cos_exposer_t( "Cos", bp::init< >() );
+        Cos_exposer_t Cos_exposer = Cos_exposer_t( "Cos", "Cosine", bp::init< >("Null constructor") );
         bp::scope Cos_scope( Cos_exposer );
-        Cos_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        Cos_exposer.def( bp::init< SireCAS::Cos const & >(( bp::arg("other") )) );
+        Cos_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        Cos_exposer.def( bp::init< SireCAS::Cos const & >(( bp::arg("other") ), "Create cos(cos(expression))") );
         { //::SireCAS::Cos::evaluate
         
             typedef double ( ::SireCAS::Cos::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -43,7 +43,8 @@ void register_Cos_class(){
             Cos_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Cos::evaluate
@@ -54,7 +55,8 @@ void register_Cos_class(){
             Cos_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Cos_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -65,7 +67,8 @@ void register_Cos_class(){
             
             Cos_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Cos::what
@@ -75,7 +78,8 @@ void register_Cos_class(){
             
             Cos_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Cos_exposer.staticmethod( "typeName" );
@@ -88,6 +92,7 @@ void register_Cos_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Cos_exposer.def( "__str__", &__str__< ::SireCAS::Cos > );
         Cos_exposer.def( "__repr__", &__str__< ::SireCAS::Cos > );
+        Cos_exposer.def( "__hash__", &::SireCAS::Cos::hash );
     }
 
 }

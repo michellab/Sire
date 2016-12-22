@@ -18,7 +18,7 @@
 #include "SireCluster/node.h"
 #include "SireCluster/promise.h"
 
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 
 #include "SireSystem/system.h"
 #include "SireMove/suprasystem.h"

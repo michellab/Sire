@@ -7,7 +7,7 @@
 
 namespace bp = boost::python;
 
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 
 #include "SireBase/tempdir.h"
 
@@ -49,9 +49,9 @@ void register_AM1BCC_class(){
 
     { //::Squire::AM1BCC
         typedef bp::class_< Squire::AM1BCC, bp::bases< Squire::QMChargeCalculator, SireBase::Property > > AM1BCC_exposer_t;
-        AM1BCC_exposer_t AM1BCC_exposer = AM1BCC_exposer_t( "AM1BCC", bp::init< >() );
+        AM1BCC_exposer_t AM1BCC_exposer = AM1BCC_exposer_t( "AM1BCC", "This charge calculator calculates AM1-BCC partial\natomic charges\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AM1BCC_scope( AM1BCC_exposer );
-        AM1BCC_exposer.def( bp::init< Squire::AM1BCC const & >(( bp::arg("other") )) );
+        AM1BCC_exposer.def( bp::init< Squire::AM1BCC const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::AM1BCC::environment
         
             typedef ::QHash< QString, QString > const & ( ::Squire::AM1BCC::*environment_function_type)(  ) const;
@@ -60,7 +60,8 @@ void register_AM1BCC_class(){
             AM1BCC_exposer.def( 
                 "environment"
                 , environment_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the environmental variables that will be overridden when\nthe charges are calculated" );
         
         }
         { //::Squire::AM1BCC::environment
@@ -71,7 +72,8 @@ void register_AM1BCC_class(){
             AM1BCC_exposer.def( 
                 "environment"
                 , environment_function_value
-                , ( bp::arg("variable") ) );
+                , ( bp::arg("variable") )
+                , "Return the value of the environmental variable variable" );
         
         }
         { //::Squire::AM1BCC::mayChangeCharges
@@ -82,7 +84,8 @@ void register_AM1BCC_class(){
             AM1BCC_exposer.def( 
                 "mayChangeCharges"
                 , mayChangeCharges_function_value
-                , ( bp::arg("oldmol"), bp::arg("newmol"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("oldmol"), bp::arg("newmol"), bp::arg("map")=SireBase::PropertyMap() )
+                , "This returns whether or not the charges will change when going\nfrom oldmol to newmol - note that this assumes that the\ncharges in oldmol are already AM1BCC charges If they are\nnot, then this will give the wrong answer" );
         
         }
         AM1BCC_exposer.def( bp::self != bp::self );
@@ -94,7 +97,8 @@ void register_AM1BCC_class(){
             AM1BCC_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::Squire::AM1BCC::operator=
@@ -106,7 +110,8 @@ void register_AM1BCC_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AM1BCC_exposer.def( bp::self == bp::self );
@@ -118,7 +123,8 @@ void register_AM1BCC_class(){
             AM1BCC_exposer.def( 
                 "setEnvironment"
                 , setEnvironment_function_value
-                , ( bp::arg("variable"), bp::arg("value") ) );
+                , ( bp::arg("variable"), bp::arg("value") )
+                , "Set the environmental variable variable to value. It is\nimportant that AMBERHOME is set, as this is needed by antechamber\nto generate the charges" );
         
         }
         { //::Squire::AM1BCC::setScaleFactor
@@ -129,7 +135,8 @@ void register_AM1BCC_class(){
             AM1BCC_exposer.def( 
                 "setScaleFactor"
                 , setScaleFactor_function_value
-                , ( bp::arg("sclfac") ) );
+                , ( bp::arg("sclfac") )
+                , "Set the scale factor for the charges" );
         
         }
         { //::Squire::AM1BCC::setTotalCharge
@@ -140,7 +147,8 @@ void register_AM1BCC_class(){
             AM1BCC_exposer.def( 
                 "setTotalCharge"
                 , setTotalCharge_function_value
-                , ( bp::arg("charge") ) );
+                , ( bp::arg("charge") )
+                , "Set the total charge of the molecule whose charges are being generated" );
         
         }
         { //::Squire::AM1BCC::totalCharge
@@ -150,7 +158,8 @@ void register_AM1BCC_class(){
             
             AM1BCC_exposer.def( 
                 "totalCharge"
-                , totalCharge_function_value );
+                , totalCharge_function_value
+                , "Return the total charge of the molecule whose charges are being generated" );
         
         }
         { //::Squire::AM1BCC::typeName
@@ -160,7 +169,8 @@ void register_AM1BCC_class(){
             
             AM1BCC_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AM1BCC_exposer.staticmethod( "typeName" );

@@ -63,12 +63,12 @@ void register_AtomsIn_ResID__class(){
 
     { //::SireMol::AtomsIn< SireMol::ResID >
         typedef bp::class_< SireMol::AtomsIn< SireMol::ResID >, bp::bases< SireMol::AtomID, SireID::ID > > AtomsIn_ResID__exposer_t;
-        AtomsIn_ResID__exposer_t AtomsIn_ResID__exposer = AtomsIn_ResID__exposer_t( "AtomsIn_ResID_", bp::init< >() );
+        AtomsIn_ResID__exposer_t AtomsIn_ResID__exposer = AtomsIn_ResID__exposer_t( "AtomsIn_ResID_", "", bp::init< >("") );
         bp::scope AtomsIn_ResID__scope( AtomsIn_ResID__exposer );
-        AtomsIn_ResID__exposer.def( bp::init< SireMol::ResID const & >(( bp::arg("id") )) );
-        AtomsIn_ResID__exposer.def( bp::init< SireMol::ResID const &, qint32 >(( bp::arg("id"), bp::arg("i") )) );
-        AtomsIn_ResID__exposer.def( bp::init< SireMol::ResID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") )) );
-        AtomsIn_ResID__exposer.def( bp::init< SireMol::AtomsIn< SireMol::ResID > const & >(( bp::arg("other") )) );
+        AtomsIn_ResID__exposer.def( bp::init< SireMol::ResID const & >(( bp::arg("id") ), "") );
+        AtomsIn_ResID__exposer.def( bp::init< SireMol::ResID const &, qint32 >(( bp::arg("id"), bp::arg("i") ), "") );
+        AtomsIn_ResID__exposer.def( bp::init< SireMol::ResID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") ), "") );
+        AtomsIn_ResID__exposer.def( bp::init< SireMol::AtomsIn< SireMol::ResID > const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomsIn< SireMol::ResID >::hash
         
             typedef SireMol::AtomsIn< SireMol::ResID > exported_class_t;
@@ -77,7 +77,8 @@ void register_AtomsIn_ResID__class(){
             
             AtomsIn_ResID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::ResID >::isNull
@@ -88,7 +89,8 @@ void register_AtomsIn_ResID__class(){
             
             AtomsIn_ResID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::ResID >::map
@@ -100,7 +102,8 @@ void register_AtomsIn_ResID__class(){
             AtomsIn_ResID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         AtomsIn_ResID__exposer.def( bp::self != bp::self );
@@ -115,7 +118,8 @@ void register_AtomsIn_ResID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomsIn_ResID__exposer.def( bp::self == bp::self );
@@ -128,7 +132,8 @@ void register_AtomsIn_ResID__class(){
             
             AtomsIn_ResID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::ResID >::typeName
@@ -139,7 +144,8 @@ void register_AtomsIn_ResID__class(){
             
             AtomsIn_ResID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::ResID >::what
@@ -150,7 +156,8 @@ void register_AtomsIn_ResID__class(){
             
             AtomsIn_ResID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomsIn_ResID__exposer.staticmethod( "typeName" );
@@ -163,6 +170,7 @@ void register_AtomsIn_ResID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AtomsIn_ResID__exposer.def( "__str__", &__str__< ::SireMol::AtomsIn<SireMol::ResID> > );
         AtomsIn_ResID__exposer.def( "__repr__", &__str__< ::SireMol::AtomsIn<SireMol::ResID> > );
+        AtomsIn_ResID__exposer.def( "__hash__", &::SireMol::AtomsIn<SireMol::ResID>::hash );
     }
 
 }

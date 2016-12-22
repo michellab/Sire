@@ -32,10 +32,10 @@ void register_SameSupraSubMoves_class(){
 
     { //::SireMove::SameSupraSubMoves
         typedef bp::class_< SireMove::SameSupraSubMoves, bp::bases< SireMove::SupraSubMoves, SireBase::Property > > SameSupraSubMoves_exposer_t;
-        SameSupraSubMoves_exposer_t SameSupraSubMoves_exposer = SameSupraSubMoves_exposer_t( "SameSupraSubMoves", bp::init< >() );
+        SameSupraSubMoves_exposer_t SameSupraSubMoves_exposer = SameSupraSubMoves_exposer_t( "SameSupraSubMoves", "This is a simple SupraSubMoves class that just repeats the\nsame SupraSubMove multiple times\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope SameSupraSubMoves_scope( SameSupraSubMoves_exposer );
-        SameSupraSubMoves_exposer.def( bp::init< SireMove::SupraSubMove const & >(( bp::arg("move") )) );
-        SameSupraSubMoves_exposer.def( bp::init< SireMove::SameSupraSubMoves const & >(( bp::arg("other") )) );
+        SameSupraSubMoves_exposer.def( bp::init< SireMove::SupraSubMove const & >(( bp::arg("move") ), "Construct to perform the move move repeatedly on a SupraSubSystem") );
+        SameSupraSubMoves_exposer.def( bp::init< SireMove::SameSupraSubMoves const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::SameSupraSubMoves::clearStatistics
         
             typedef void ( ::SireMove::SameSupraSubMoves::*clearStatistics_function_type)(  ) ;
@@ -43,7 +43,8 @@ void register_SameSupraSubMoves_class(){
             
             SameSupraSubMoves_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Clear all of the move statistics" );
         
         }
         { //::SireMove::SameSupraSubMoves::move
@@ -54,7 +55,8 @@ void register_SameSupraSubMoves_class(){
             SameSupraSubMoves_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nsubmoves"), bp::arg("nsubmoves_per_block"), bp::arg("record_substats") ) );
+                , ( bp::arg("system"), bp::arg("nsubmoves"), bp::arg("nsubmoves_per_block"), bp::arg("record_substats") )
+                , "Perform the moves" );
         
         }
         SameSupraSubMoves_exposer.def( bp::self != bp::self );
@@ -67,7 +69,8 @@ void register_SameSupraSubMoves_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SameSupraSubMoves_exposer.def( bp::self == bp::self );
@@ -80,7 +83,8 @@ void register_SameSupraSubMoves_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMove::SameSupraSubMoves::subMoves
@@ -90,7 +94,8 @@ void register_SameSupraSubMoves_class(){
             
             SameSupraSubMoves_exposer.def( 
                 "subMoves"
-                , subMoves_function_value );
+                , subMoves_function_value
+                , "Return a list of all of the types of submove in this set" );
         
         }
         { //::SireMove::SameSupraSubMoves::toString
@@ -100,7 +105,8 @@ void register_SameSupraSubMoves_class(){
             
             SameSupraSubMoves_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this set of moves" );
         
         }
         { //::SireMove::SameSupraSubMoves::typeName
@@ -110,7 +116,8 @@ void register_SameSupraSubMoves_class(){
             
             SameSupraSubMoves_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SameSupraSubMoves_exposer.staticmethod( "typeName" );

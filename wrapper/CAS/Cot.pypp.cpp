@@ -31,10 +31,10 @@ void register_Cot_class(){
 
     { //::SireCAS::Cot
         typedef bp::class_< SireCAS::Cot, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Cot_exposer_t;
-        Cot_exposer_t Cot_exposer = Cot_exposer_t( "Cot", bp::init< >() );
+        Cot_exposer_t Cot_exposer = Cot_exposer_t( "Cot", "Cotangent", bp::init< >("Null constructor") );
         bp::scope Cot_scope( Cot_exposer );
-        Cot_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        Cot_exposer.def( bp::init< SireCAS::Cot const & >(( bp::arg("other") )) );
+        Cot_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        Cot_exposer.def( bp::init< SireCAS::Cot const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Cot::evaluate
         
             typedef double ( ::SireCAS::Cot::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -43,7 +43,8 @@ void register_Cot_class(){
             Cot_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Cot::evaluate
@@ -54,7 +55,8 @@ void register_Cot_class(){
             Cot_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Cot_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -65,7 +67,8 @@ void register_Cot_class(){
             
             Cot_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Cot::what
@@ -75,7 +78,8 @@ void register_Cot_class(){
             
             Cot_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Cot_exposer.staticmethod( "typeName" );
@@ -88,6 +92,7 @@ void register_Cot_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Cot_exposer.def( "__str__", &__str__< ::SireCAS::Cot > );
         Cot_exposer.def( "__repr__", &__str__< ::SireCAS::Cot > );
+        Cot_exposer.def( "__hash__", &::SireCAS::Cot::hash );
     }
 
 }

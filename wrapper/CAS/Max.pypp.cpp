@@ -31,10 +31,10 @@ void register_Max_class(){
 
     { //::SireCAS::Max
         typedef bp::class_< SireCAS::Max, bp::bases< SireCAS::DoubleFunc, SireCAS::ExBase > > Max_exposer_t;
-        Max_exposer_t Max_exposer = Max_exposer_t( "Max", bp::init< >() );
+        Max_exposer_t Max_exposer = Max_exposer_t( "Max", "Maximum value of two expressions", bp::init< >("Constructor") );
         bp::scope Max_scope( Max_exposer );
-        Max_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("x"), bp::arg("y") )) );
-        Max_exposer.def( bp::init< SireCAS::Max const & >(( bp::arg("other") )) );
+        Max_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("x"), bp::arg("y") ), "Construct min(x(), y())") );
+        Max_exposer.def( bp::init< SireCAS::Max const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Max::evaluate
         
             typedef double ( ::SireCAS::Max::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -43,7 +43,8 @@ void register_Max_class(){
             Max_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Max::evaluate
@@ -54,7 +55,8 @@ void register_Max_class(){
             Max_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Max_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -65,7 +67,8 @@ void register_Max_class(){
             
             Max_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Max::what
@@ -75,7 +78,8 @@ void register_Max_class(){
             
             Max_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Max_exposer.staticmethod( "typeName" );
@@ -88,6 +92,7 @@ void register_Max_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Max_exposer.def( "__str__", &__str__< ::SireCAS::Max > );
         Max_exposer.def( "__repr__", &__str__< ::SireCAS::Max > );
+        Max_exposer.def( "__hash__", &::SireCAS::Max::hash );
     }
 
 }

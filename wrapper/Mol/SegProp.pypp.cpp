@@ -19,7 +19,7 @@ void register_SegProp_class(){
 
     { //::SireMol::SegProp
         typedef bp::class_< SireMol::SegProp, bp::bases< SireMol::MolViewProperty, SireBase::Property >, boost::noncopyable > SegProp_exposer_t;
-        SegProp_exposer_t SegProp_exposer = SegProp_exposer_t( "SegProp", bp::no_init );
+        SegProp_exposer_t SegProp_exposer = SegProp_exposer_t( "SegProp", "Small class used to provide a common base for all SegProperty types", bp::no_init );
         bp::scope SegProp_scope( SegProp_exposer );
         { //::SireMol::SegProp::assertCanConvert
         
@@ -29,7 +29,8 @@ void register_SegProp_class(){
             SegProp_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::SegProp::assignFrom
@@ -40,7 +41,8 @@ void register_SegProp_class(){
             SegProp_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::SegProp::canConvert
@@ -51,7 +53,8 @@ void register_SegProp_class(){
             SegProp_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::SegProp::toVariant
@@ -61,7 +64,8 @@ void register_SegProp_class(){
             
             SegProp_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         SegProp_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMol::SegProp >,

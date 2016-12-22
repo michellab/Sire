@@ -63,11 +63,11 @@ void register_CGName_class(){
 
     { //::SireMol::CGName
         typedef bp::class_< SireMol::CGName, bp::bases< SireMol::CGID, SireID::ID, SireID::Name > > CGName_exposer_t;
-        CGName_exposer_t CGName_exposer = CGName_exposer_t( "CGName", bp::init< >() );
+        CGName_exposer_t CGName_exposer = CGName_exposer_t( "CGName", "This class holds the name of a CutGroup.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope CGName_scope( CGName_exposer );
-        CGName_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        CGName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") )) );
-        CGName_exposer.def( bp::init< SireMol::CGName const & >(( bp::arg("other") )) );
+        CGName_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
+        CGName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") ), "") );
+        CGName_exposer.def( bp::init< SireMol::CGName const & >(( bp::arg("other") ), "") );
         { //::SireMol::CGName::hash
         
             typedef ::uint ( ::SireMol::CGName::*hash_function_type)(  ) const;
@@ -75,7 +75,8 @@ void register_CGName_class(){
             
             CGName_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::CGName::isNull
@@ -85,7 +86,8 @@ void register_CGName_class(){
             
             CGName_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::CGName::map
@@ -96,7 +98,8 @@ void register_CGName_class(){
             CGName_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         CGName_exposer.def( bp::self != bp::self );
@@ -109,7 +112,8 @@ void register_CGName_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CGName_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -121,7 +125,8 @@ void register_CGName_class(){
             
             CGName_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::CGName::typeName
@@ -131,7 +136,8 @@ void register_CGName_class(){
             
             CGName_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::CGName::what
@@ -141,7 +147,8 @@ void register_CGName_class(){
             
             CGName_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CGName_exposer.staticmethod( "typeName" );
@@ -154,6 +161,7 @@ void register_CGName_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CGName_exposer.def( "__str__", &__str__< ::SireMol::CGName > );
         CGName_exposer.def( "__repr__", &__str__< ::SireMol::CGName > );
+        CGName_exposer.def( "__hash__", &::SireMol::CGName::hash );
     }
 
 }

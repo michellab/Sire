@@ -31,11 +31,11 @@ void register_Specify_MonitorID__class(){
 
     { //::SireID::Specify< SireSystem::MonitorID >
         typedef bp::class_< SireID::Specify< SireSystem::MonitorID >, bp::bases< SireSystem::MonitorID, SireID::ID > > Specify_MonitorID__exposer_t;
-        Specify_MonitorID__exposer_t Specify_MonitorID__exposer = Specify_MonitorID__exposer_t( "Specify_MonitorID_", bp::init< >() );
+        Specify_MonitorID__exposer_t Specify_MonitorID__exposer = Specify_MonitorID__exposer_t( "Specify_MonitorID_", "", bp::init< >("") );
         bp::scope Specify_MonitorID__scope( Specify_MonitorID__exposer );
-        Specify_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const &, qint32 >(( bp::arg("id"), bp::arg("i") )) );
-        Specify_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") )) );
-        Specify_MonitorID__exposer.def( bp::init< SireID::Specify< SireSystem::MonitorID > const & >(( bp::arg("other") )) );
+        Specify_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const &, qint32 >(( bp::arg("id"), bp::arg("i") ), "") );
+        Specify_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") ), "") );
+        Specify_MonitorID__exposer.def( bp::init< SireID::Specify< SireSystem::MonitorID > const & >(( bp::arg("other") ), "") );
         { //::SireID::Specify< SireSystem::MonitorID >::hash
         
             typedef SireID::Specify< SireSystem::MonitorID > exported_class_t;
@@ -44,7 +44,8 @@ void register_Specify_MonitorID__class(){
             
             Specify_MonitorID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::MonitorID >::isNull
@@ -55,19 +56,21 @@ void register_Specify_MonitorID__class(){
             
             Specify_MonitorID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::MonitorID >::map
         
             typedef SireID::Specify< SireSystem::MonitorID > exported_class_t;
-            typedef ::QList< SireSystem::MonitorName > ( ::SireID::Specify< SireSystem::MonitorID >::*map_function_type)( ::SireSystem::SystemMonitors const & ) const;
+            typedef ::QList< SireSystem::MonitorName > ( ::SireID::Specify< SireSystem::MonitorID >::*map_function_type)( ::SireSystem::MonitorID::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireSystem::MonitorID >::map );
             
             Specify_MonitorID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("obj") ) );
+                , ( bp::arg("obj") )
+                , "" );
         
         }
         Specify_MonitorID__exposer.def( bp::self != bp::self );
@@ -81,7 +84,8 @@ void register_Specify_MonitorID__class(){
             Specify_MonitorID__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::MonitorID >::operator()
@@ -93,7 +97,8 @@ void register_Specify_MonitorID__class(){
             Specify_MonitorID__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::MonitorID >::operator=
@@ -106,7 +111,8 @@ void register_Specify_MonitorID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Specify_MonitorID__exposer.def( bp::self == bp::self );
@@ -120,7 +126,8 @@ void register_Specify_MonitorID__class(){
             Specify_MonitorID__exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::MonitorID >::toString
@@ -131,7 +138,8 @@ void register_Specify_MonitorID__class(){
             
             Specify_MonitorID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::MonitorID >::typeName
@@ -142,7 +150,8 @@ void register_Specify_MonitorID__class(){
             
             Specify_MonitorID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireSystem::MonitorID >::what
@@ -153,7 +162,8 @@ void register_Specify_MonitorID__class(){
             
             Specify_MonitorID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Specify_MonitorID__exposer.staticmethod( "typeName" );
@@ -166,6 +176,7 @@ void register_Specify_MonitorID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Specify_MonitorID__exposer.def( "__str__", &__str__< ::SireID::Specify<SireSystem::MonitorID> > );
         Specify_MonitorID__exposer.def( "__repr__", &__str__< ::SireID::Specify<SireSystem::MonitorID> > );
+        Specify_MonitorID__exposer.def( "__hash__", &::SireID::Specify<SireSystem::MonitorID>::hash );
     }
 
 }

@@ -33,10 +33,10 @@ void register_Cosh_class(){
 
     { //::SireCAS::Cosh
         typedef bp::class_< SireCAS::Cosh, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Cosh_exposer_t;
-        Cosh_exposer_t Cosh_exposer = Cosh_exposer_t( "Cosh", bp::init< >() );
+        Cosh_exposer_t Cosh_exposer = Cosh_exposer_t( "Cosh", "Hyperbolic cosine", bp::init< >("Null constructor") );
         bp::scope Cosh_scope( Cosh_exposer );
-        Cosh_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        Cosh_exposer.def( bp::init< SireCAS::Cosh const & >(( bp::arg("other") )) );
+        Cosh_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        Cosh_exposer.def( bp::init< SireCAS::Cosh const & >(( bp::arg("other") ), "Create cos(cos(expression))") );
         { //::SireCAS::Cosh::evaluate
         
             typedef double ( ::SireCAS::Cosh::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -45,7 +45,8 @@ void register_Cosh_class(){
             Cosh_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Cosh::evaluate
@@ -56,7 +57,8 @@ void register_Cosh_class(){
             Cosh_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Cosh_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -67,7 +69,8 @@ void register_Cosh_class(){
             
             Cosh_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Cosh::what
@@ -77,7 +80,8 @@ void register_Cosh_class(){
             
             Cosh_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Cosh_exposer.staticmethod( "typeName" );
@@ -90,6 +94,7 @@ void register_Cosh_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Cosh_exposer.def( "__str__", &__str__< ::SireCAS::Cosh > );
         Cosh_exposer.def( "__repr__", &__str__< ::SireCAS::Cosh > );
+        Cosh_exposer.def( "__hash__", &::SireCAS::Cosh::hash );
     }
 
 }

@@ -53,7 +53,7 @@ void register_UreyBradleyParameterName_class(){
 
     { //::SireMM::UreyBradleyParameterName
         typedef bp::class_< SireMM::UreyBradleyParameterName > UreyBradleyParameterName_exposer_t;
-        UreyBradleyParameterName_exposer_t UreyBradleyParameterName_exposer = UreyBradleyParameterName_exposer_t( "UreyBradleyParameterName", bp::init< >() );
+        UreyBradleyParameterName_exposer_t UreyBradleyParameterName_exposer = UreyBradleyParameterName_exposer_t( "UreyBradleyParameterName", "This class provides the default name of the\nproperty that contains the Urey-Bradley parameters", bp::init< >("") );
         bp::scope UreyBradleyParameterName_scope( UreyBradleyParameterName_exposer );
         { //::SireMM::UreyBradleyParameterName::ureyBradley
         
@@ -63,7 +63,8 @@ void register_UreyBradleyParameterName_class(){
             UreyBradleyParameterName_exposer.def( 
                 "ureyBradley"
                 , ureyBradley_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         UreyBradleyParameterName_exposer.def( "__copy__", &__copy__);

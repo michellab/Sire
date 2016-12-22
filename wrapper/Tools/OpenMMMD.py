@@ -198,7 +198,6 @@ simfile = Parameter("outdata_file", "simfile.dat", """Filename that records all 
 
 verbose = Parameter("verbose", False, """Print debug output""")
 
-
 ####################################################################################################
 #
 #   Helper functions
@@ -606,12 +605,15 @@ def setupRestraints(system):
     return system
 
 
-def setupDistanceRestraints(system):
+def setupDistanceRestraints(system, restraints=None):
     prop_list = []
 
     molecules = system[MGName("all")].molecules()
 
-    dic_items = list(distance_restraints_dict.val.items())
+    if restraints is None:
+        dic_items = list(distance_restraints_dict.val.items())
+    else:
+        dic_items = list(restraints.items())
 
     for i in range(0, molecules.nMolecules()):
         mol = molecules.molecule(MolNum(i + 1)).molecule()
@@ -747,7 +749,7 @@ increase from the heavy atom the hydrogen is bonded to.
         # Sanity check (g_per_mol)
         if total_delta.value() > 0.001:
             print ("WARNING ! The mass repartitioning algorithm is not conserving atomic masses for",
-                   "molecule %s (total delta is %s). Report bug to a Sire developer." % molnum,total_delta )
+                   "molecule %s (total delta is %s). Report bug to a Sire developer." % (molnum,total_delta.value()) )
             sys.exit(-1)
 
         # Now that have worked out mass changes per molecule, update molecule
@@ -760,7 +762,7 @@ increase from the heavy atom the hydrogen is bonded to.
             if (newmass.value() < 0.0):
                 print ("""WARNING ! The mass of atom %s is less than zero after hydrogen mass repartitioning.
                         This should not happen ! Decrease hydrogen mass repartitioning factor in your cfg file
-                        and try again.""")
+                        and try again.""" % atidx)
                 sys.exit(-1)
 
             mol = mol.edit().atom(atidx).setProperty("mass", newmass ).molecule()
@@ -1232,6 +1234,89 @@ def getAllData(integrator, steps):
             exit(-1)
     return outdata
 
+def getAtomNearCOG( molecule ):
+
+    mol_centre = molecule.evaluate().center()
+    mindist = 99999.0
+
+    for x in range(0, molecule.nAtoms()):
+        atom = molecule.atoms()[x]
+        at_coords = atom.property('coordinates')
+        dist = Vector().distance2(at_coords, mol_centre)
+        if dist < mindist:
+            mindist = dist
+            nearest_atom = atom
+
+    return nearest_atom
+
+def generateDistanceRestraintsDict(system):
+    r"""
+    Parameters
+    ----------
+    system : Sire.system
+        contains Sire system
+    Updates the contents of the Paramete distance_restraints_dict
+    """
+    # Step 1) Assume ligand is first solute
+    # Find atom nearest to COG
+    molecules = system.molecules()
+    molnums = molecules.molNums()
+    solute = molecules.at(MolNum(1)).molecule()
+    nearestcog_atom = getAtomNearCOG( solute )
+    icoord = nearestcog_atom.property("coordinates")
+    # Step 2) Find nearest 'CA' heavy atom in other solutes (skip water  & ions)
+    dmin = 9999999.0
+    closest = None
+    for molnum in molnums:
+        molecule = molecules.molecule(molnum).molecule()
+        if molecule == solute:
+            continue
+        if molecule.residues()[0].name() == ResName("WAT"):
+            continue
+        #print (molecule)
+        ca_atoms = molecule.selectAll(AtomName("CA"))
+        for ca in ca_atoms:
+            jcoord = ca.property("coordinates")
+            d = Vector().distance(icoord,jcoord)
+            if d < dmin:
+                dmin = d
+                closest = ca
+    # Step 3) Compute position of 'mirror' CA. Find nearest CA atom to that point
+    jcoord = closest.property("coordinates")
+    mirror_coord = icoord-(jcoord-icoord)
+    dmin = 9999999.0
+    mirror_closest = None
+    for molnum in molnums:
+        molecule = molecules.molecule(molnum).molecule()
+        if molecule == solute:
+            continue
+        if molecule.residues()[0].name() == ResName("WAT"):
+            continue
+        #print (molecule)
+        ca_atoms = molecule.selectAll(AtomName("CA"))
+        for ca in ca_atoms:
+            jcoord = ca.property("coordinates")
+            d = Vector().distance(mirror_coord,jcoord)
+            if d < dmin:
+                dmin = d
+                mirror_closest = ca
+    #print (mirror_closest)
+    # Step 4) Setup restraint parameters
+    kl = 10.00 # kcal/mol/Angstrom^2
+    Dl = 2.00 # Angstrom
+    i0 = nearestcog_atom.index().value()
+    i1 = closest.index().value()
+    i2 = mirror_closest.index().value()
+    r01 = Vector().distance(nearestcog_atom.property("coordinates"),closest.property("coordinates"))
+    r02 = Vector().distance(nearestcog_atom.property("coordinates"),mirror_closest.property("coordinates"))
+    restraints = { (i0, i1): (r01, kl, Dl), (i0,i2): (r02, kl, Dl) }
+    #print restraints
+    #distance_restraints_dict.val = restraints
+    #distance_restraints_dict 
+    #import pdb; pdb.set_trace()
+
+    return restraints
+
 ######## MAIN SCRIPTS  #############
 
 @resolveParameters
@@ -1274,7 +1359,16 @@ def run():
             system = setupRestraints(system)
 
         if use_distance_restraints.val:
-            system = setupDistanceRestraints(system)
+            restraints = None
+            if len(distance_restraints_dict.val) == 0:
+                print ("Distance restraints have been activated, but none have been specified. Will autogenerate.")
+                restraints = generateDistanceRestraintsDict(system)
+                # Save restraints
+                print ("Autogenerated distance restraints values: %s " % distance_restraints_dict)
+                stream = open("restraints.cfg",'w')
+                stream.write("distance restraints dictionary = %s\n" % restraints)
+                stream.close()
+            system = setupDistanceRestraints(system, restraints=restraints)
 
         if hydrogen_mass_repartitioning_factor.val is not None:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
@@ -1330,12 +1424,14 @@ def run():
             print ("Energy before the minimisation: " + str(system.energy()))
             print ('Tolerance for minimisation: ' + str(minimise_tol.val))
             print ('Maximum number of minimisation iterations: ' + str(minimise_max_iter.val))
+        integrator.setConstraintType("none")
         system = integrator.minimiseEnergy(system, minimise_tol.val, minimise_max_iter.val)
         system.mustNowRecalculateFromScratch()
         if verbose.val:
             print ("Energy after the minimization: " + str(system.energy()))
             print ("Energy minimization done.")
-        print("###===========================================================###\n")
+        integrator.setConstraintType(constraint.val)
+        print("###===========================================================###\n", flush=True)
 
     if equilibrate.val:
         print("###======================Equilibration========================###")
@@ -1349,7 +1445,7 @@ def run():
         if verbose.val:
             print ("Energy after the equilibration: " + str(system.energy()))
             print ('Equilibration done.\n')
-        print("###===========================================================###\n")
+        print("###===========================================================###\n", flush=True)
 
     simtime=nmoves.val*ncycles.val*timestep.val
     print("###=======================somd run============================###")
@@ -1358,7 +1454,7 @@ def run():
 
     s1 = timer.elapsed() / 1000.
     for i in range(cycle_start, cycle_end):
-        print("\nCycle = ", i )
+        print("\nCycle = ", i, flush=True )
         system = moves.move(system, nmoves.val, True)
 
         if (save_coords.val):
@@ -1419,7 +1515,18 @@ def runFreeNrg():
             system = setupRestraints(system)
 
         if use_distance_restraints.val:
-            system = setupDistanceRestraints(system)
+            restraints = None
+            if len(distance_restraints_dict.val) == 0:
+                print ("Distance restraints have been activated, but none have been specified. Will autogenerate.")
+                restraints = generateDistanceRestraintsDict(system)
+                # Save restraints
+                print ("Autogenerated distance restraints values: %s " % distance_restraints_dict)
+                stream = open("restraints.cfg",'w')
+                stream.write("distance restraints dictionary = %s\n" % restraints)
+                stream.close()
+            system = setupDistanceRestraints(system, restraints=restraints)
+
+            #import pdb; pdb.set_trace()
 
         if hydrogen_mass_repartitioning_factor.val is not None:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
@@ -1489,13 +1596,15 @@ def runFreeNrg():
     if minimise.val:
         print("###=======================Minimisation========================###")
         print('Running minimisation.')
-        if verbose.val:
+        #if verbose.val:
+        if True:
             print ("Energy before the minimisation: " + str(system.energy()))
             print ('Tolerance for minimisation: ' + str(minimise_tol.val))
             print ('Maximum number of minimisation iterations: ' + str(minimise_max_iter.val))
         system = integrator.minimiseEnergy(system, minimise_tol.val, minimise_max_iter.val)
         system.mustNowRecalculateFromScratch()
-        if verbose.val:
+        #if verbose.val:
+        if True:
             print ("Energy after the minimization: " + str(system.energy()))
             print ("Energy minimization done.")
         print("###===========================================================###\n")
@@ -1547,11 +1656,11 @@ def runFreeNrg():
         fmt =" ".join(["%8d"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.15e"]*(len(lambda_array.val)))
         np.savetxt(outfile, outdata, fmt=fmt)
 
-
         mean_gradient = np.average(gradients)
         outgradients.write("%5d %20.10f\n" % (i, mean_gradient))
         for gradient in gradients:
-            grads[lambda_val.val].accumulate(gradients[i-1])
+            #grads[lambda_val.val].accumulate(gradients[i-1])
+            grads[lambda_val.val].accumulate(gradient)
     s2 = timer.elapsed() / 1000.
     outfile.close()
     print("Simulation took %d s " % ( s2 - s1))

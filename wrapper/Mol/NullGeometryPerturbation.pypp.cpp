@@ -37,9 +37,9 @@ void register_NullGeometryPerturbation_class(){
 
     { //::SireMol::NullGeometryPerturbation
         typedef bp::class_< SireMol::NullGeometryPerturbation, bp::bases< SireMol::GeometryPerturbation, SireMol::Perturbation, SireBase::Property > > NullGeometryPerturbation_exposer_t;
-        NullGeometryPerturbation_exposer_t NullGeometryPerturbation_exposer = NullGeometryPerturbation_exposer_t( "NullGeometryPerturbation", bp::init< >() );
+        NullGeometryPerturbation_exposer_t NullGeometryPerturbation_exposer = NullGeometryPerturbation_exposer_t( "NullGeometryPerturbation", "", bp::init< >("") );
         bp::scope NullGeometryPerturbation_scope( NullGeometryPerturbation_exposer );
-        NullGeometryPerturbation_exposer.def( bp::init< SireMol::NullGeometryPerturbation const & >(( bp::arg("other") )) );
+        NullGeometryPerturbation_exposer.def( bp::init< SireMol::NullGeometryPerturbation const & >(( bp::arg("other") ), "") );
         NullGeometryPerturbation_exposer.def( bp::self != bp::self );
         { //::SireMol::NullGeometryPerturbation::operator=
         
@@ -50,7 +50,8 @@ void register_NullGeometryPerturbation_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullGeometryPerturbation_exposer.def( bp::self == bp::self );
@@ -62,7 +63,8 @@ void register_NullGeometryPerturbation_class(){
             NullGeometryPerturbation_exposer.def( 
                 "perturbMolecule"
                 , perturbMolecule_function_value
-                , ( bp::arg("arg0"), bp::arg("arg1") ) );
+                , ( bp::arg("arg0"), bp::arg("arg1") )
+                , "" );
         
         }
         { //::SireMol::NullGeometryPerturbation::requiredProperties
@@ -72,7 +74,8 @@ void register_NullGeometryPerturbation_class(){
             
             NullGeometryPerturbation_exposer.def( 
                 "requiredProperties"
-                , requiredProperties_function_value );
+                , requiredProperties_function_value
+                , "" );
         
         }
         { //::SireMol::NullGeometryPerturbation::requiredSymbols
@@ -82,7 +85,8 @@ void register_NullGeometryPerturbation_class(){
             
             NullGeometryPerturbation_exposer.def( 
                 "requiredSymbols"
-                , requiredSymbols_function_value );
+                , requiredSymbols_function_value
+                , "" );
         
         }
         { //::SireMol::NullGeometryPerturbation::typeName
@@ -92,7 +96,8 @@ void register_NullGeometryPerturbation_class(){
             
             NullGeometryPerturbation_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::NullGeometryPerturbation::wouldChange
@@ -103,7 +108,8 @@ void register_NullGeometryPerturbation_class(){
             NullGeometryPerturbation_exposer.def( 
                 "wouldChange"
                 , wouldChange_function_value
-                , ( bp::arg("arg0"), bp::arg("arg1") ) );
+                , ( bp::arg("arg0"), bp::arg("arg1") )
+                , "" );
         
         }
         NullGeometryPerturbation_exposer.staticmethod( "typeName" );

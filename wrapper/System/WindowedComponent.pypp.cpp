@@ -38,10 +38,10 @@ void register_WindowedComponent_class(){
 
     { //::SireSystem::WindowedComponent
         typedef bp::class_< SireSystem::WindowedComponent, bp::bases< SireSystem::Constraint, SireBase::Property > > WindowedComponent_exposer_t;
-        WindowedComponent_exposer_t WindowedComponent_exposer = WindowedComponent_exposer_t( "WindowedComponent", bp::init< >() );
+        WindowedComponent_exposer_t WindowedComponent_exposer = WindowedComponent_exposer_t( "WindowedComponent", "This constraint is used to constrain a component to adopt one of the values\nfrom a set - this is used to implement FEP windows, where lambda_forwards\ncan be constrained to be the next lambda value along\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope WindowedComponent_scope( WindowedComponent_exposer );
-        WindowedComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireCAS::Symbol const &, QVector< double > const &, bp::optional< int > >(( bp::arg("component"), bp::arg("reference"), bp::arg("values"), bp::arg("step_size")=(int)(1) )) );
-        WindowedComponent_exposer.def( bp::init< SireSystem::WindowedComponent const & >(( bp::arg("other") )) );
+        WindowedComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireCAS::Symbol const &, QVector< double > const &, bp::optional< int > >(( bp::arg("component"), bp::arg("reference"), bp::arg("values"), bp::arg("step_size")=(int)(1) ), "Construct a WindowedConstraint that constrains the component represented\nby the symbol component to lie step_size windows above (or below if\nstep_size is negative) the window in which the component represented\nby the symbol reference resides - where values contains all of\nthe values of the windows, in the order that you have arranged\nthem. Whilst this will not sort window_values, it will remove\nall duplicate values") );
+        WindowedComponent_exposer.def( bp::init< SireSystem::WindowedComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::WindowedComponent::component
         
             typedef ::SireCAS::Symbol const & ( ::SireSystem::WindowedComponent::*component_function_type)(  ) const;
@@ -50,7 +50,8 @@ void register_WindowedComponent_class(){
             WindowedComponent_exposer.def( 
                 "component"
                 , component_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the component being constrained" );
         
         }
         WindowedComponent_exposer.def( bp::self != bp::self );
@@ -63,7 +64,8 @@ void register_WindowedComponent_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         WindowedComponent_exposer.def( bp::self == bp::self );
@@ -75,7 +77,8 @@ void register_WindowedComponent_class(){
             WindowedComponent_exposer.def( 
                 "referenceComponent"
                 , referenceComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the reference component" );
         
         }
         { //::SireSystem::WindowedComponent::stepSize
@@ -85,7 +88,8 @@ void register_WindowedComponent_class(){
             
             WindowedComponent_exposer.def( 
                 "stepSize"
-                , stepSize_function_value );
+                , stepSize_function_value
+                , "Return the step size for this windows - this is the number of\nwindows above (or below if step_size is negative) for this\nwindow compared to the window containing the reference component" );
         
         }
         { //::SireSystem::WindowedComponent::toString
@@ -95,7 +99,8 @@ void register_WindowedComponent_class(){
             
             WindowedComponent_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this constraint" );
         
         }
         { //::SireSystem::WindowedComponent::typeName
@@ -105,7 +110,8 @@ void register_WindowedComponent_class(){
             
             WindowedComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireSystem::WindowedComponent::windowValues
@@ -116,7 +122,8 @@ void register_WindowedComponent_class(){
             WindowedComponent_exposer.def( 
                 "windowValues"
                 , windowValues_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the values of all of the windows" );
         
         }
         WindowedComponent_exposer.staticmethod( "typeName" );

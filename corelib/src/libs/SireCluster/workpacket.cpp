@@ -37,6 +37,14 @@
 
 #include <QDebug>
 
+#ifdef Q_OS_WIN
+   #include <windows.h>    // CONDITIONAL_INCLUDE
+#else
+   #ifdef Q_OS_UNIX
+       #include <unistd.h>  // CONDITIONAL_INCLUDE
+   #endif
+#endif
+
 using namespace SireCluster;
 using namespace SireStream;
 
@@ -700,8 +708,13 @@ float WorkTest::chunk()
         
         QTextStream ts(stdout);
         ts << "I've counted to " << current << "\n";
-        sleep(1);
-        
+
+        #ifdef Q_OS_WIN
+            Sleep(1);
+        #else
+            sleep(1);
+        #endif 
+       
         return 100.0 - ( 100.0 * double(end - current) / double(end - start) );
     }
     else
@@ -715,8 +728,13 @@ float WorkTest::chunk()
 
         QTextStream ts(stdout);
         ts << "I've counted to " << current << "\n";
-        sleep(1);
-        
+
+        #ifdef Q_OS_WIN
+            Sleep(1);
+        #else
+            sleep(1);
+        #endif
+
         return 100.0 - ( 100.0 * double(end - current) / double(end - start) );
     }
 }

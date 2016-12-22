@@ -37,10 +37,10 @@ void register_BennettsRatios_class(){
 
     { //::SireAnalysis::BennettsRatios
         typedef bp::class_< SireAnalysis::BennettsRatios, bp::bases< SireBase::Property > > BennettsRatios_exposer_t;
-        BennettsRatios_exposer_t BennettsRatios_exposer = BennettsRatios_exposer_t( "BennettsRatios", bp::init< >() );
+        BennettsRatios_exposer_t BennettsRatios_exposer = BennettsRatios_exposer_t( "BennettsRatios", "This class is used to hold a set of Bennets acceptance ratios\nfor a single iteration\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty set of deltas") );
         bp::scope BennettsRatios_scope( BennettsRatios_exposer );
-        BennettsRatios_exposer.def( bp::init< QList< double > const &, QMap< double, SireMaths::BennettsFreeEnergyAverage > const &, QMap< double, SireMaths::BennettsFreeEnergyAverage > const & >(( bp::arg("windows"), bp::arg("forwards_ratios"), bp::arg("backwards_ratios") )) );
-        BennettsRatios_exposer.def( bp::init< SireAnalysis::BennettsRatios const & >(( bp::arg("other") )) );
+        BennettsRatios_exposer.def( bp::init< QList< double > const &, QMap< double, SireMaths::BennettsFreeEnergyAverage > const &, QMap< double, SireMaths::BennettsFreeEnergyAverage > const & >(( bp::arg("windows"), bp::arg("forwards_ratios"), bp::arg("backwards_ratios") ), "Construct the ratios as the ratios between each window and the windows above\n(forwards_ratios) and windows below (backwards_ratios)") );
+        BennettsRatios_exposer.def( bp::init< SireAnalysis::BennettsRatios const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireAnalysis::BennettsRatios::backwardsData
         
             typedef ::QMap< double, SireMaths::BennettsFreeEnergyAverage > ( ::SireAnalysis::BennettsRatios::*backwardsData_function_type)(  ) const;
@@ -48,7 +48,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "backwardsData"
-                , backwardsData_function_value );
+                , backwardsData_function_value
+                , "Return the raw data for the backwards ratios" );
         
         }
         { //::SireAnalysis::BennettsRatios::backwardsRatios
@@ -58,7 +59,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "backwardsRatios"
-                , backwardsRatios_function_value );
+                , backwardsRatios_function_value
+                , "Return the raw data for the backwards ratios" );
         
         }
         { //::SireAnalysis::BennettsRatios::constants
@@ -68,7 +70,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "constants"
-                , constants_function_value );
+                , constants_function_value
+                , "Return the constants for each set of Bennetts acceptance ratios. This\nreturns the lambda value of the from window, together with the constant\nused for the numerator from this window to the next window (which must\nbe the same as the constant used for the denominator for the next window\nback to this window)" );
         
         }
         { //::SireAnalysis::BennettsRatios::denominators
@@ -78,7 +81,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "denominators"
-                , denominators_function_value );
+                , denominators_function_value
+                , "Return the denominators for the Bennetts acceptance ratio. This returns the\nlambda value of the previous window, together with the Bennetts ratio for the\nenergy difference from this window to the previous window" );
         
         }
         { //::SireAnalysis::BennettsRatios::forwardsData
@@ -88,7 +92,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "forwardsData"
-                , forwardsData_function_value );
+                , forwardsData_function_value
+                , "Return the raw data for the fowards ratios" );
         
         }
         { //::SireAnalysis::BennettsRatios::forwardsRatios
@@ -98,7 +103,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "forwardsRatios"
-                , forwardsRatios_function_value );
+                , forwardsRatios_function_value
+                , "Return the raw data for the fowards ratios" );
         
         }
         { //::SireAnalysis::BennettsRatios::integrate
@@ -108,7 +114,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "integrate"
-                , integrate_function_value );
+                , integrate_function_value
+                , "Integrate (sum) the deltas across the windows to return the PMF" );
         
         }
         { //::SireAnalysis::BennettsRatios::isEmpty
@@ -118,7 +125,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is empty" );
         
         }
         { //::SireAnalysis::BennettsRatios::lambdaValues
@@ -128,7 +136,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "lambdaValues"
-                , lambdaValues_function_value );
+                , lambdaValues_function_value
+                , "Return the lambda values for all of the windows" );
         
         }
         { //::SireAnalysis::BennettsRatios::merge
@@ -139,7 +148,8 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("deltas") ) );
+                , ( bp::arg("deltas") )
+                , "Merge together all of the passed BennettsRatios into a single object" );
         
         }
         { //::SireAnalysis::BennettsRatios::nLambdaValues
@@ -149,7 +159,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "nLambdaValues"
-                , nLambdaValues_function_value );
+                , nLambdaValues_function_value
+                , "Return the number of lambda values (windows)" );
         
         }
         { //::SireAnalysis::BennettsRatios::nSamples
@@ -159,7 +170,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "nSamples"
-                , nSamples_function_value );
+                , nSamples_function_value
+                , "Return the total number of samples in the deltas" );
         
         }
         { //::SireAnalysis::BennettsRatios::nWindows
@@ -169,7 +181,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "nWindows"
-                , nWindows_function_value );
+                , nWindows_function_value
+                , "Return the number of windows" );
         
         }
         { //::SireAnalysis::BennettsRatios::numerators
@@ -179,7 +192,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "numerators"
-                , numerators_function_value );
+                , numerators_function_value
+                , "Return the numerators for the Bennetts acceptance ratio. This returns the\nlambda value of the from window, together with the Bennetts ratio for the\nenergy difference from this window to the next window" );
         
         }
         BennettsRatios_exposer.def( bp::self != bp::self );
@@ -193,7 +207,8 @@ void register_BennettsRatios_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         BennettsRatios_exposer.def( bp::self == bp::self );
@@ -204,7 +219,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "sum"
-                , sum_function_value );
+                , sum_function_value
+                , "Integrate (sum) the deltas across the windows to return the PMF" );
         
         }
         { //::SireAnalysis::BennettsRatios::temperature
@@ -214,7 +230,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "temperature"
-                , temperature_function_value );
+                , temperature_function_value
+                , "Return the temperature at which the Bennetts deltas were all collected" );
         
         }
         { //::SireAnalysis::BennettsRatios::toString
@@ -224,7 +241,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireAnalysis::BennettsRatios::typeName
@@ -234,7 +252,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireAnalysis::BennettsRatios::values
@@ -244,7 +263,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "values"
-                , values_function_value );
+                , values_function_value
+                , "Return the values between windows. This returns the value of lambda of the from\nwindow, and the difference in free energy between this and the next window" );
         
         }
         { //::SireAnalysis::BennettsRatios::what
@@ -254,7 +274,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireAnalysis::BennettsRatios::windows
@@ -264,7 +285,8 @@ void register_BennettsRatios_class(){
             
             BennettsRatios_exposer.def( 
                 "windows"
-                , windows_function_value );
+                , windows_function_value
+                , "Return the values of all of the windows" );
         
         }
         BennettsRatios_exposer.staticmethod( "merge" );

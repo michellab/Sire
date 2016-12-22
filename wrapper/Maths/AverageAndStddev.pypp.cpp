@@ -37,9 +37,9 @@ void register_AverageAndStddev_class(){
 
     { //::SireMaths::AverageAndStddev
         typedef bp::class_< SireMaths::AverageAndStddev, bp::bases< SireMaths::Average, SireMaths::Accumulator, SireBase::Property > > AverageAndStddev_exposer_t;
-        AverageAndStddev_exposer_t AverageAndStddev_exposer = AverageAndStddev_exposer_t( "AverageAndStddev", bp::init< >() );
+        AverageAndStddev_exposer_t AverageAndStddev_exposer = AverageAndStddev_exposer_t( "AverageAndStddev", "This class is used to accumulate the mean average\nand standard deviation of a collection of values\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty average") );
         bp::scope AverageAndStddev_scope( AverageAndStddev_exposer );
-        AverageAndStddev_exposer.def( bp::init< SireMaths::AverageAndStddev const & >(( bp::arg("other") )) );
+        AverageAndStddev_exposer.def( bp::init< SireMaths::AverageAndStddev const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::AverageAndStddev::accumulate
         
             typedef void ( ::SireMaths::AverageAndStddev::*accumulate_function_type)( double ) ;
@@ -48,7 +48,8 @@ void register_AverageAndStddev_class(){
             AverageAndStddev_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Accumulate the average and standard deviation" );
         
         }
         { //::SireMaths::AverageAndStddev::clear
@@ -58,7 +59,8 @@ void register_AverageAndStddev_class(){
             
             AverageAndStddev_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Completely clear the statistics in this accumulator" );
         
         }
         { //::SireMaths::AverageAndStddev::meanOfSquares
@@ -68,7 +70,8 @@ void register_AverageAndStddev_class(){
             
             AverageAndStddev_exposer.def( 
                 "meanOfSquares"
-                , meanOfSquares_function_value );
+                , meanOfSquares_function_value
+                , "Return the mean average of the squares" );
         
         }
         AverageAndStddev_exposer.def( bp::self != bp::self );
@@ -82,7 +85,8 @@ void register_AverageAndStddev_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AverageAndStddev_exposer.def( bp::self == bp::self );
@@ -93,7 +97,8 @@ void register_AverageAndStddev_class(){
             
             AverageAndStddev_exposer.def( 
                 "standardDeviation"
-                , standardDeviation_function_value );
+                , standardDeviation_function_value
+                , "Return the standard deviation of the average\n(calculated as the sqrt of the mean of the squares minus\nthe square of the mean)" );
         
         }
         { //::SireMaths::AverageAndStddev::standardError
@@ -103,7 +108,8 @@ void register_AverageAndStddev_class(){
             
             AverageAndStddev_exposer.def( 
                 "standardError"
-                , standardError_function_value );
+                , standardError_function_value
+                , "Return the standard error on the average" );
         
         }
         { //::SireMaths::AverageAndStddev::standardError
@@ -114,7 +120,8 @@ void register_AverageAndStddev_class(){
             AverageAndStddev_exposer.def( 
                 "standardError"
                 , standardError_function_value
-                , ( bp::arg("level") ) );
+                , ( bp::arg("level") )
+                , "Return the standard error calculated to the passed level\n(66, 90, 95 or 99%)" );
         
         }
         { //::SireMaths::AverageAndStddev::stddev
@@ -124,7 +131,8 @@ void register_AverageAndStddev_class(){
             
             AverageAndStddev_exposer.def( 
                 "stddev"
-                , stddev_function_value );
+                , stddev_function_value
+                , "Return the standard deviation of the average\n(calculated as the sqrt of the mean of the squares minus\nthe square of the mean)" );
         
         }
         { //::SireMaths::AverageAndStddev::typeName
@@ -134,7 +142,8 @@ void register_AverageAndStddev_class(){
             
             AverageAndStddev_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AverageAndStddev_exposer.staticmethod( "typeName" );

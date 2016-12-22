@@ -39,10 +39,10 @@ void register_EnergyTable_class(){
 
     { //::SireFF::EnergyTable
         typedef bp::class_< SireFF::EnergyTable > EnergyTable_exposer_t;
-        EnergyTable_exposer_t EnergyTable_exposer = EnergyTable_exposer_t( "EnergyTable", bp::init< >() );
+        EnergyTable_exposer_t EnergyTable_exposer = EnergyTable_exposer_t( "EnergyTable", "A EnergyTable is a workspace within which all of the energies acting\non the atoms of several molecules may be stored. A EnergyTable is\nused as storing the energies requires lots of memory, and continually\ncreating a deleting such large amouts of memory would be inefficient.\nAlso, using a EnergyTable allows for energies to be accumulated directly,\nrather than requiring intermediate storage space for the\nindividual components.\n\nYou create an energy table to hold all of the energies of all of\nthe atoms of all of the molecules in a specified MoleculeGroup.\nThe energies are held in an array that holds the energies for\nthe molecules in the same order as the molecules appear\nin the molecule group. The energytable also comes with\nan index so you can quickly look up the energies for\na specific molecule.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope EnergyTable_scope( EnergyTable_exposer );
-        EnergyTable_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") )) );
-        EnergyTable_exposer.def( bp::init< SireFF::EnergyTable const & >(( bp::arg("other") )) );
+        EnergyTable_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") ), "Construct a table that holds all of the forces on all of the atoms\nfor all of the CutGroups viewed in all of the molecules in the passed\nmolecule group") );
+        EnergyTable_exposer.def( bp::init< SireFF::EnergyTable const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::EnergyTable::add
         
             typedef void ( ::SireFF::EnergyTable::*add_function_type)( ::SireFF::EnergyTable const & ) ;
@@ -51,7 +51,8 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add the contents of the table other onto this table. This will only\nadd the forces for the molecules  grids that are in both tables" );
         
         }
         { //::SireFF::EnergyTable::add
@@ -62,7 +63,8 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("force") ) );
+                , ( bp::arg("force") )
+                , "Add the force force onto all of the atom  grid points in this table" );
         
         }
         { //::SireFF::EnergyTable::assertContainsTableFor
@@ -73,7 +75,8 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "assertContainsTableFor"
                 , assertContainsTableFor_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Assert that this forcetable contains a table for the\nforces for the molecule at number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireFF::EnergyTable::constGetTable
@@ -85,7 +88,8 @@ void register_EnergyTable_class(){
                 "constGetTable"
                 , constGetTable_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::EnergyTable::containsTable
@@ -96,7 +100,8 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "containsTable"
                 , containsTable_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "" );
         
         }
         { //::SireFF::EnergyTable::count
@@ -106,7 +111,8 @@ void register_EnergyTable_class(){
             
             EnergyTable_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireFF::EnergyTable::divide
@@ -117,7 +123,8 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Divide the force at all atom and grid points by value" );
         
         }
         { //::SireFF::EnergyTable::getTable
@@ -129,7 +136,8 @@ void register_EnergyTable_class(){
                 "getTable"
                 , getTable_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::EnergyTable::index
@@ -140,7 +148,8 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "index"
                 , index_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::EnergyTable::indexOf
@@ -151,7 +160,8 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "indexOf"
                 , indexOf_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return the index of the molecule with number molnum in this table\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireFF::EnergyTable::initialiseTable
@@ -162,7 +172,8 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "initialiseTable"
                 , initialiseTable_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Initialise all of the forces for the table for the molecule\nwith number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireFF::EnergyTable::initialiseTables
@@ -172,7 +183,8 @@ void register_EnergyTable_class(){
             
             EnergyTable_exposer.def( 
                 "initialiseTables"
-                , initialiseTables_function_value );
+                , initialiseTables_function_value
+                , "Initialise all of the tables - this resets all of the forces\nback to zero" );
         
         }
         { //::SireFF::EnergyTable::molNums
@@ -182,7 +194,8 @@ void register_EnergyTable_class(){
             
             EnergyTable_exposer.def( 
                 "molNums"
-                , molNums_function_value );
+                , molNums_function_value
+                , "" );
         
         }
         { //::SireFF::EnergyTable::multiply
@@ -193,7 +206,8 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "multiply"
                 , multiply_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Multiply the force at all atom and grid points by value" );
         
         }
         EnergyTable_exposer.def( bp::self != bp::self );
@@ -213,7 +227,8 @@ void register_EnergyTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireFF::EnergyTable::operator=
@@ -225,7 +240,8 @@ void register_EnergyTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("force") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         EnergyTable_exposer.def( bp::self == bp::self );
@@ -237,7 +253,8 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("force") ) );
+                , ( bp::arg("force") )
+                , "Set the force at all atom and grid points equal to force" );
         
         }
         { //::SireFF::EnergyTable::subtract
@@ -248,7 +265,8 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Subtract the contents of the table other from this table. This will only\nsubtract the forces for the molecules  grids that are in both tables" );
         
         }
         { //::SireFF::EnergyTable::subtract
@@ -259,7 +277,8 @@ void register_EnergyTable_class(){
             EnergyTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("force") ) );
+                , ( bp::arg("force") )
+                , "Subtract the force force from all of the atom  grid points in this table" );
         
         }
         { //::SireFF::EnergyTable::typeName
@@ -269,7 +288,8 @@ void register_EnergyTable_class(){
             
             EnergyTable_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::EnergyTable::what
@@ -279,7 +299,8 @@ void register_EnergyTable_class(){
             
             EnergyTable_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         EnergyTable_exposer.staticmethod( "typeName" );

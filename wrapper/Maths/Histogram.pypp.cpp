@@ -33,11 +33,11 @@ void register_Histogram_class(){
 
     { //::SireMaths::Histogram
         typedef bp::class_< SireMaths::Histogram, bp::bases< SireBase::Property > > Histogram_exposer_t;
-        Histogram_exposer_t Histogram_exposer = Histogram_exposer_t( "Histogram", bp::init< >() );
+        Histogram_exposer_t Histogram_exposer = Histogram_exposer_t( "Histogram", "This class holds a simple one-dimensional (x,y) histogram of values.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty histogram with a bin spacing of 1.0") );
         bp::scope Histogram_scope( Histogram_exposer );
-        Histogram_exposer.def( bp::init< double >(( bp::arg("binwidth") )) );
-        Histogram_exposer.def( bp::init< double, QVector< double > const & >(( bp::arg("binwidth"), bp::arg("values") )) );
-        Histogram_exposer.def( bp::init< SireMaths::Histogram const & >(( bp::arg("other") )) );
+        Histogram_exposer.def( bp::init< double >(( bp::arg("binwidth") ), "Construct an empty histogram with specified bin width. Note that\nif the binwidth is less than or equal to zero, then a histogram\nwill not be collected, and only the mean and standard deviation\nwill be recorded") );
+        Histogram_exposer.def( bp::init< double, QVector< double > const & >(( bp::arg("binwidth"), bp::arg("values") ), "Construct a histogram of specified bin width, and populating it with\nthe passed values (which are all assumed to have weight 1)\nNote that if the binwidth is less than or equal to zero, then a histogram\nwill not be collected, and only the mean and standard deviation\nwill be recorded") );
+        Histogram_exposer.def( bp::init< SireMaths::Histogram const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::Histogram::accumulate
         
             typedef void ( ::SireMaths::Histogram::*accumulate_function_type)( double ) ;
@@ -46,7 +46,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Accumulate value onto the histogram" );
         
         }
         { //::SireMaths::Histogram::accumulate
@@ -57,7 +58,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("value"), bp::arg("weight") ) );
+                , ( bp::arg("value"), bp::arg("weight") )
+                , "Accumulate value with the passed weight onto the histogram" );
         
         }
         { //::SireMaths::Histogram::accumulate
@@ -68,7 +70,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Accumulate the passed values onto this histogram" );
         
         }
         { //::SireMaths::Histogram::accumulate
@@ -79,7 +82,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Accumulate the data from the passed histogram onto this histogram" );
         
         }
         { //::SireMaths::Histogram::add
@@ -90,7 +94,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Add value onto the histogram" );
         
         }
         { //::SireMaths::Histogram::add
@@ -101,7 +106,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("value"), bp::arg("weight") ) );
+                , ( bp::arg("value"), bp::arg("weight") )
+                , "Add value with the passed weight onto the histogram" );
         
         }
         { //::SireMaths::Histogram::add
@@ -112,7 +118,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Add the passed values on this histogram" );
         
         }
         { //::SireMaths::Histogram::add
@@ -123,7 +130,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add the passed histogram onto this histogram. This will match the\nbin width of the passed histogram to this histogram" );
         
         }
         { //::SireMaths::Histogram::at
@@ -134,7 +142,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the ith bin in the histogram" );
         
         }
         { //::SireMaths::Histogram::binWidth
@@ -144,7 +153,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "binWidth"
-                , binWidth_function_value );
+                , binWidth_function_value
+                , "Return the width of the bins" );
         
         }
         { //::SireMaths::Histogram::count
@@ -154,7 +164,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of bins in the histogram" );
         
         }
         { //::SireMaths::Histogram::kirtosis
@@ -164,7 +175,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "kirtosis"
-                , kirtosis_function_value );
+                , kirtosis_function_value
+                , "Return the excess kirtosis of the data. This is estimated based on the histogram\nof the data (this is the kirtosis minus 3, so that the normal distribution\nhas a kirtosis of 0)" );
         
         }
         { //::SireMaths::Histogram::maximumValue
@@ -174,7 +186,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "maximumValue"
-                , maximumValue_function_value );
+                , maximumValue_function_value
+                , "Return the highest value in the histogram" );
         
         }
         { //::SireMaths::Histogram::mean
@@ -184,7 +197,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "mean"
-                , mean_function_value );
+                , mean_function_value
+                , "Return the mean average of all values added to the histogram. This\nis calculated exactly from the added data" );
         
         }
         { //::SireMaths::Histogram::meanOfSquares
@@ -194,7 +208,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "meanOfSquares"
-                , meanOfSquares_function_value );
+                , meanOfSquares_function_value
+                , "Return the mean of the square values" );
         
         }
         { //::SireMaths::Histogram::median
@@ -204,7 +219,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "median"
-                , median_function_value );
+                , median_function_value
+                , "Return the median of all values added to the histogram. This is\nestimated based on the actual histogram of added data" );
         
         }
         { //::SireMaths::Histogram::minimumValue
@@ -214,7 +230,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "minimumValue"
-                , minimumValue_function_value );
+                , minimumValue_function_value
+                , "Return the lowest values in the histogram" );
         
         }
         { //::SireMaths::Histogram::mode
@@ -224,7 +241,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "mode"
-                , mode_function_value );
+                , mode_function_value
+                , "Return the mode of all values added to the histogram. This is\nestimated based on the actual histogram of added data" );
         
         }
         { //::SireMaths::Histogram::normalDistribution
@@ -234,7 +252,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "normalDistribution"
-                , normalDistribution_function_value );
+                , normalDistribution_function_value
+                , "Return the idealised normal distribution for the values in the histogram,\nbased on the current mean and standard deviation, and the sum of weights" );
         
         }
         { //::SireMaths::Histogram::normalise
@@ -244,7 +263,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "normalise"
-                , normalise_function_value );
+                , normalise_function_value
+                , "Return a normalised version of this histogram. The histogram\nis normalised so that the sum under the curve is 1 (e.g.\nsum_of_bins  bin_width is 1)" );
         
         }
         Histogram_exposer.def( bp::self != bp::self );
@@ -260,7 +280,8 @@ void register_Histogram_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Histogram_exposer.def( bp::self == bp::self );
@@ -272,7 +293,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMaths::Histogram::range
@@ -282,7 +304,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "range"
-                , range_function_value );
+                , range_function_value
+                , "Return the range for the data in the histogram" );
         
         }
         { //::SireMaths::Histogram::resize
@@ -293,7 +316,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "resize"
                 , resize_function_value
-                , ( bp::arg("binwidth") ) );
+                , ( bp::arg("binwidth") )
+                , "Return a resized copy of this histogram with the passed new binwidth" );
         
         }
         { //::SireMaths::Histogram::size
@@ -303,7 +327,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of bins in the histogram" );
         
         }
         { //::SireMaths::Histogram::skew
@@ -313,7 +338,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "skew"
-                , skew_function_value );
+                , skew_function_value
+                , "Return the skew of the data. This is estimated based on the histogram\nof the data" );
         
         }
         { //::SireMaths::Histogram::standardDeviation
@@ -323,7 +349,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "standardDeviation"
-                , standardDeviation_function_value );
+                , standardDeviation_function_value
+                , "Return the standard deviation of all values added to the histogram.\nThis is calculated exactly from the added data" );
         
         }
         { //::SireMaths::Histogram::standardError
@@ -333,7 +360,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "standardError"
-                , standardError_function_value );
+                , standardError_function_value
+                , "Return the standard error of the mean (standard deviation\ndivided by the square root of the number of samples)" );
         
         }
         { //::SireMaths::Histogram::standardError
@@ -344,7 +372,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "standardError"
                 , standardError_function_value
-                , ( bp::arg("level") ) );
+                , ( bp::arg("level") )
+                , "Return the standard error calculated to the passed level\n(66, 90, 95 or 99%)" );
         
         }
         { //::SireMaths::Histogram::sumOfBins
@@ -354,7 +383,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "sumOfBins"
-                , sumOfBins_function_value );
+                , sumOfBins_function_value
+                , "Return the sum of the weights over all of the bins" );
         
         }
         { //::SireMaths::Histogram::tValue
@@ -365,7 +395,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "tValue"
                 , tValue_function_value
-                , ( bp::arg("nsamples"), bp::arg("level") ) );
+                , ( bp::arg("nsamples"), bp::arg("level") )
+                , "Return the students t-value for the passed confidence level\nfor the passed number of samples for the mean" );
         
         }
         { //::SireMaths::Histogram::tValue
@@ -376,7 +407,8 @@ void register_Histogram_class(){
             Histogram_exposer.def( 
                 "tValue"
                 , tValue_function_value
-                , ( bp::arg("level") ) );
+                , ( bp::arg("level") )
+                , "Return the students t-value for the passed confidence level\nfor the number of samples in the histogram" );
         
         }
         { //::SireMaths::Histogram::toString
@@ -386,7 +418,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this histogram" );
         
         }
         { //::SireMaths::Histogram::typeName
@@ -396,7 +429,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::Histogram::values
@@ -406,7 +440,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "values"
-                , values_function_value );
+                , values_function_value
+                , "Return the set of all bins and values in the histogram. The bins\nwill be returned in numerical order" );
         
         }
         { //::SireMaths::Histogram::what
@@ -416,7 +451,8 @@ void register_Histogram_class(){
             
             Histogram_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Histogram_exposer.staticmethod( "tValue" );

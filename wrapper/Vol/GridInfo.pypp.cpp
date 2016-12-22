@@ -35,10 +35,10 @@ void register_GridInfo_class(){
 
     { //::SireVol::GridInfo
         typedef bp::class_< SireVol::GridInfo > GridInfo_exposer_t;
-        GridInfo_exposer_t GridInfo_exposer = GridInfo_exposer_t( "GridInfo", bp::init< >() );
+        GridInfo_exposer_t GridInfo_exposer = GridInfo_exposer_t( "GridInfo", "This is a simple class that describes a 3D regular grid\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope GridInfo_scope( GridInfo_exposer );
-        GridInfo_exposer.def( bp::init< SireVol::AABox const &, SireUnits::Dimension::Length >(( bp::arg("dimensions"), bp::arg("spacing") )) );
-        GridInfo_exposer.def( bp::init< SireVol::GridInfo const & >(( bp::arg("other") )) );
+        GridInfo_exposer.def( bp::init< SireVol::AABox const &, SireUnits::Dimension::Length >(( bp::arg("dimensions"), bp::arg("spacing") ), "Construct a grid of specified dimensions and spacing") );
+        GridInfo_exposer.def( bp::init< SireVol::GridInfo const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireVol::GridInfo::arrayToGridIndex
         
             typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*arrayToGridIndex_function_type)( int ) const;
@@ -47,7 +47,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "arrayToGridIndex"
                 , arrayToGridIndex_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireVol::GridInfo::at
@@ -58,7 +59,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireVol::GridInfo::at
@@ -69,7 +71,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "" );
         
         }
         { //::SireVol::GridInfo::at
@@ -80,7 +83,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("k") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("k") )
+                , "" );
         
         }
         { //::SireVol::GridInfo::at
@@ -91,7 +95,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "" );
         
         }
         { //::SireVol::GridInfo::box
@@ -102,7 +107,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "box"
                 , box_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the AABox that encompasses the grid box at point i. This\nreturns an empty box if there is no such point in the grid" );
         
         }
         { //::SireVol::GridInfo::box
@@ -113,7 +119,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "box"
                 , box_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "Return the AABox that encompasses the grid box at point idx.\nThis returns an empty box if the point is not in the grid" );
         
         }
         { //::SireVol::GridInfo::box
@@ -124,7 +131,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "box"
                 , box_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Return the AABox that encompasses the grid box that contains the\npoint p. Note that returns a null AABox if the point is not in the grid" );
         
         }
         { //::SireVol::GridInfo::closestIndexTo
@@ -135,7 +143,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "closestIndexTo"
                 , closestIndexTo_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Return the grid index that is closest to the point point. Note that\nif point lies outside the grid, then the closest grid index will\nstill be returned (it may just lie a long way from the point)" );
         
         }
         { //::SireVol::GridInfo::contains
@@ -146,7 +155,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Return whether or not this grid contains the point point" );
         
         }
         { //::SireVol::GridInfo::count
@@ -156,7 +166,8 @@ void register_GridInfo_class(){
             
             GridInfo_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireVol::GridInfo::dimX
@@ -166,7 +177,8 @@ void register_GridInfo_class(){
             
             GridInfo_exposer.def( 
                 "dimX"
-                , dimX_function_value );
+                , dimX_function_value
+                , "" );
         
         }
         { //::SireVol::GridInfo::dimY
@@ -176,7 +188,8 @@ void register_GridInfo_class(){
             
             GridInfo_exposer.def( 
                 "dimY"
-                , dimY_function_value );
+                , dimY_function_value
+                , "" );
         
         }
         { //::SireVol::GridInfo::dimZ
@@ -186,7 +199,8 @@ void register_GridInfo_class(){
             
             GridInfo_exposer.def( 
                 "dimZ"
-                , dimZ_function_value );
+                , dimZ_function_value
+                , "" );
         
         }
         { //::SireVol::GridInfo::dimensions
@@ -196,7 +210,8 @@ void register_GridInfo_class(){
             
             GridInfo_exposer.def( 
                 "dimensions"
-                , dimensions_function_value );
+                , dimensions_function_value
+                , "" );
         
         }
         { //::SireVol::GridInfo::getitem
@@ -207,7 +222,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "getitem"
                 , getitem_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireVol::GridInfo::gridToArrayIndex
@@ -218,7 +234,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "gridToArrayIndex"
                 , gridToArrayIndex_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("k") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("k") )
+                , "" );
         
         }
         { //::SireVol::GridInfo::gridToArrayIndex
@@ -229,7 +246,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "gridToArrayIndex"
                 , gridToArrayIndex_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "" );
         
         }
         { //::SireVol::GridInfo::indexOf
@@ -240,7 +258,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "indexOf"
                 , indexOf_function_value
-                , ( bp::arg("i"), bp::arg("grid") ) );
+                , ( bp::arg("i"), bp::arg("grid") )
+                , "Return the index in grid grid of point i in this grid. This returns\na null index if this index does not exist in either grid. Note that this\nreturns the index of the closest grid point if the grids do not exactly\nline up" );
         
         }
         { //::SireVol::GridInfo::indexOf
@@ -251,7 +270,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "indexOf"
                 , indexOf_function_value
-                , ( bp::arg("idx"), bp::arg("grid") ) );
+                , ( bp::arg("idx"), bp::arg("grid") )
+                , "Return the index in grid grid of point idx in this grid. This returns\na null index if this index does not exist in either grid. Note that this\nreturns the index of the closest grid point if the grids do not exactly\nline up" );
         
         }
         { //::SireVol::GridInfo::isEmpty
@@ -261,7 +281,8 @@ void register_GridInfo_class(){
             
             GridInfo_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireVol::GridInfo::nPoints
@@ -271,7 +292,8 @@ void register_GridInfo_class(){
             
             GridInfo_exposer.def( 
                 "nPoints"
-                , nPoints_function_value );
+                , nPoints_function_value
+                , "" );
         
         }
         GridInfo_exposer.def( bp::self != bp::self );
@@ -284,7 +306,8 @@ void register_GridInfo_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         GridInfo_exposer.def( bp::self == bp::self );
@@ -296,7 +319,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireVol::GridInfo::operator[]
@@ -307,7 +331,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "" );
         
         }
         { //::SireVol::GridInfo::operator[]
@@ -318,7 +343,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "" );
         
         }
         { //::SireVol::GridInfo::point
@@ -329,7 +355,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "point"
                 , point_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the point at the bottom, left, back (lowest i, j, k indicies) of the\nith box. This returns a zero vector if the point is invalid." );
         
         }
         { //::SireVol::GridInfo::point
@@ -340,7 +367,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "point"
                 , point_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "Return the point at the bottom, left, back (lowest i, j, k indicies) of the\nbox at grid index idx. This returns a zero vector if the point is invalid." );
         
         }
         { //::SireVol::GridInfo::point
@@ -351,7 +379,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "point"
                 , point_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Return the point at the bottom, left, back (lowest i, j, k indicies) of the\nbox containing the point point. This returns a zero vector if the point is invalid." );
         
         }
         { //::SireVol::GridInfo::pointToArrayIndex
@@ -362,7 +391,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "pointToArrayIndex"
                 , pointToArrayIndex_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Return the array index of the grid box that contains the point point.\nNote that this returns -1 if the point is not in the grid" );
         
         }
         { //::SireVol::GridInfo::pointToGridCorners
@@ -373,7 +403,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "pointToGridCorners"
                 , pointToGridCorners_function_value
-                , ( bp::arg("point"), bp::arg("indicies") ) );
+                , ( bp::arg("point"), bp::arg("indicies") )
+                , "Return array indicies of the eight grid points that are on the corners of the\nbox that contains the point point. This returns eight -1 values if the\npoint does not lie in the grid" );
         
         }
         { //::SireVol::GridInfo::pointToGridCorners
@@ -384,7 +415,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "pointToGridCorners"
                 , pointToGridCorners_function_value
-                , ( bp::arg("point"), bp::arg("indicies"), bp::arg("weights") ) );
+                , ( bp::arg("point"), bp::arg("indicies"), bp::arg("weights") )
+                , "Return array indicies of the eight grid points that are on the corners of the\nbox that contains the point point. This returns eight -1 values if the\npoint does not lie in the grid. This also returns the weights of the eight\npoints, using tri-linear interpolation based on the distance between the\npoint and each corner of the box" );
         
         }
         { //::SireVol::GridInfo::pointToGridCorners
@@ -395,7 +427,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "pointToGridCorners"
                 , pointToGridCorners_function_value
-                , ( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("indicies") ) );
+                , ( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("indicies") )
+                , "Return array indicies of the eight grid points that are on the corners of the\nbox that contains the point point. This returns eight -1 values if the\npoint does not lie in the grid. The return value is the number of points\nthat are in the box" );
         
         }
         { //::SireVol::GridInfo::pointToGridCorners
@@ -406,7 +439,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "pointToGridCorners"
                 , pointToGridCorners_function_value
-                , ( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("indicies"), bp::arg("weights") ) );
+                , ( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("indicies"), bp::arg("weights") )
+                , "Return array indicies of the eight grid points that are on the corners of the\nbox that contains the point point. This returns eight -1 values if the\npoint does not lie in the grid. This also returns the weights of the eight\npoints, using tri-linear interpolation based on the distance between the\npoint and each corner of the box" );
         
         }
         { //::SireVol::GridInfo::pointToGridIndex
@@ -417,7 +451,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "pointToGridIndex"
                 , pointToGridIndex_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Return the index of the grid box that contains the point point. Note\nthat this returns a null index if the point is not in the grid" );
         
         }
         { //::SireVol::GridInfo::redimension
@@ -428,7 +463,8 @@ void register_GridInfo_class(){
             GridInfo_exposer.def( 
                 "redimension"
                 , redimension_function_value
-                , ( bp::arg("values"), bp::arg("new_grid") ) );
+                , ( bp::arg("values"), bp::arg("new_grid") )
+                , "Return the values values that map to this grid, redimensioned to map to\nthe grid new_grid" );
         
         }
         { //::SireVol::GridInfo::size
@@ -438,7 +474,8 @@ void register_GridInfo_class(){
             
             GridInfo_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireVol::GridInfo::spacing
@@ -448,7 +485,8 @@ void register_GridInfo_class(){
             
             GridInfo_exposer.def( 
                 "spacing"
-                , spacing_function_value );
+                , spacing_function_value
+                , "" );
         
         }
         { //::SireVol::GridInfo::toString
@@ -458,7 +496,8 @@ void register_GridInfo_class(){
             
             GridInfo_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireVol::GridInfo::typeName
@@ -468,7 +507,8 @@ void register_GridInfo_class(){
             
             GridInfo_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireVol::GridInfo::what
@@ -478,7 +518,8 @@ void register_GridInfo_class(){
             
             GridInfo_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         GridInfo_exposer.staticmethod( "typeName" );

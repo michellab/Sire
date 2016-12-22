@@ -26,10 +26,10 @@ void register_BendBendComponent_class(){
 
     { //::SireMM::BendBendComponent
         typedef bp::class_< SireMM::BendBendComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > BendBendComponent_exposer_t;
-        BendBendComponent_exposer_t BendBendComponent_exposer = BendBendComponent_exposer_t( "BendBendComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() )) );
+        BendBendComponent_exposer_t BendBendComponent_exposer = BendBendComponent_exposer_t( "BendBendComponent", "This class represents a BendBend component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope BendBendComponent_scope( BendBendComponent_exposer );
-        BendBendComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        BendBendComponent_exposer.def( bp::init< SireMM::BendBendComponent const & >(( bp::arg("other") )) );
+        BendBendComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        BendBendComponent_exposer.def( bp::init< SireMM::BendBendComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::BendBendComponent::changeEnergy
         
             typedef void ( ::SireMM::BendBendComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::BendBendEnergy const & ) const;
@@ -38,7 +38,8 @@ void register_BendBendComponent_class(){
             BendBendComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("bbnrg") ) );
+                , ( bp::arg("ff"), bp::arg("bbnrg") )
+                , "Change the component of the energy in the forcefield ff\nby delta" );
         
         }
         { //::SireMM::BendBendComponent::setEnergy
@@ -49,7 +50,8 @@ void register_BendBendComponent_class(){
             BendBendComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("bbnrg") ) );
+                , ( bp::arg("ff"), bp::arg("bbnrg") )
+                , "Set the component of the energy in the forcefield ff\nto be equal to the passed energy" );
         
         }
         { //::SireMM::BendBendComponent::symbols
@@ -59,7 +61,8 @@ void register_BendBendComponent_class(){
             
             BendBendComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireMM::BendBendComponent::total
@@ -70,7 +73,8 @@ void register_BendBendComponent_class(){
             BendBendComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::BendBendComponent::typeName
@@ -80,7 +84,8 @@ void register_BendBendComponent_class(){
             
             BendBendComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::BendBendComponent::what
@@ -90,7 +95,8 @@ void register_BendBendComponent_class(){
             
             BendBendComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         BendBendComponent_exposer.staticmethod( "typeName" );
@@ -103,6 +109,7 @@ void register_BendBendComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         BendBendComponent_exposer.def( "__str__", &__str__< ::SireMM::BendBendComponent > );
         BendBendComponent_exposer.def( "__repr__", &__str__< ::SireMM::BendBendComponent > );
+        BendBendComponent_exposer.def( "__hash__", &::SireMM::BendBendComponent::hash );
     }
 
 }

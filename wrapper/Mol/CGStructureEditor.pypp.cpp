@@ -54,11 +54,11 @@ void register_CGStructureEditor_class(){
 
     { //::SireMol::CGStructureEditor
         typedef bp::class_< SireMol::CGStructureEditor > CGStructureEditor_exposer_t;
-        CGStructureEditor_exposer_t CGStructureEditor_exposer = CGStructureEditor_exposer_t( "CGStructureEditor", bp::init< >() );
+        CGStructureEditor_exposer_t CGStructureEditor_exposer = CGStructureEditor_exposer_t( "CGStructureEditor", "This is the class used to edit a CutGroups structure\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope CGStructureEditor_scope( CGStructureEditor_exposer );
-        CGStructureEditor_exposer.def( bp::init< SireMol::CutGroup const & >(( bp::arg("cutgroup") )) );
-        CGStructureEditor_exposer.def( bp::init< SireMol::StructureEditor const &, SireMol::CGIdx >(( bp::arg("data"), bp::arg("cgidx") )) );
-        CGStructureEditor_exposer.def( bp::init< SireMol::CGStructureEditor const & >(( bp::arg("other") )) );
+        CGStructureEditor_exposer.def( bp::init< SireMol::CutGroup const & >(( bp::arg("cutgroup") ), "Construct to edit a copy of the CutGroup cutgroup") );
+        CGStructureEditor_exposer.def( bp::init< SireMol::StructureEditor const &, SireMol::CGIdx >(( bp::arg("data"), bp::arg("cgidx") ), "Construct to edit the CutGroup at index cgidx in the molecule\nalso being edited in data\nThrow: SireError::invalid_index\n") );
+        CGStructureEditor_exposer.def( bp::init< SireMol::CGStructureEditor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::CGStructureEditor::add
         
             typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*add_function_type)( ::SireMol::AtomName const & ) ;
@@ -67,7 +67,8 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atomname") ) );
+                , ( bp::arg("atomname") )
+                , "Add an atom called atomname to this CutGroup and return\nan editor for that atom" );
         
         }
         { //::SireMol::CGStructureEditor::add
@@ -78,7 +79,8 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atomnum") ) );
+                , ( bp::arg("atomnum") )
+                , "Add an atom with number atomnum to this CutGroup and return\nan editor for that atom" );
         
         }
         { //::SireMol::CGStructureEditor::atom
@@ -89,7 +91,8 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return an editor for the ith atom of this CutGroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGStructureEditor::atom
@@ -100,7 +103,8 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return an editor for the atom that matches the ID atomid in\nthis CutGroup\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGStructureEditor::commit
@@ -110,7 +114,8 @@ void register_CGStructureEditor_class(){
             
             CGStructureEditor_exposer.def( 
                 "commit"
-                , commit_function_value );
+                , commit_function_value
+                , "Commit the changes made by this editor and return the\nupdated CutGroup" );
         
         }
         { //::SireMol::CGStructureEditor::index
@@ -120,7 +125,8 @@ void register_CGStructureEditor_class(){
             
             CGStructureEditor_exposer.def( 
                 "index"
-                , index_function_value );
+                , index_function_value
+                , "Return the index of this CutGroup in the molecule" );
         
         }
         { //::SireMol::CGStructureEditor::molecule
@@ -130,7 +136,8 @@ void register_CGStructureEditor_class(){
             
             CGStructureEditor_exposer.def( 
                 "molecule"
-                , molecule_function_value );
+                , molecule_function_value
+                , "Return an editor for the molecule that contains this CutGroup" );
         
         }
         { //::SireMol::CGStructureEditor::nAtoms
@@ -140,7 +147,8 @@ void register_CGStructureEditor_class(){
             
             CGStructureEditor_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the number of atoms in this CutGroup (could be zero)" );
         
         }
         { //::SireMol::CGStructureEditor::name
@@ -151,7 +159,8 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the name of this CutGroup" );
         
         }
         { //::SireMol::CGStructureEditor::operator=
@@ -163,7 +172,8 @@ void register_CGStructureEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("cutgroup") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::CGStructureEditor::operator=
@@ -175,7 +185,8 @@ void register_CGStructureEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::CGStructureEditor::reindex
@@ -187,7 +198,8 @@ void register_CGStructureEditor_class(){
                 "reindex"
                 , reindex_function_value
                 , ( bp::arg("index") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Move this CutGroup to index newidx - this will move it\nto the start or end if this index is out of range" );
         
         }
         { //::SireMol::CGStructureEditor::remove
@@ -198,7 +210,8 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "remove"
                 , remove_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Complete remove this CutGroup, and return an editor\nfor the molecule that contained it" );
         
         }
         { //::SireMol::CGStructureEditor::remove
@@ -210,7 +223,8 @@ void register_CGStructureEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Completely remove all atoms that match the ID atomid from\nthis CutGroup\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGStructureEditor::remove
@@ -222,7 +236,8 @@ void register_CGStructureEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("i") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove the ith atom from this CutGroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGStructureEditor::rename
@@ -234,7 +249,8 @@ void register_CGStructureEditor_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("name") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Rename this CutGroup to newname" );
         
         }
         { //::SireMol::CGStructureEditor::select
@@ -245,7 +261,8 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return an editor for the ith atom of this CutGroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGStructureEditor::select
@@ -256,7 +273,8 @@ void register_CGStructureEditor_class(){
             CGStructureEditor_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return an editor for the atom that matches the ID atomid in\nthis CutGroup\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGStructureEditor::selectedAll
@@ -266,7 +284,8 @@ void register_CGStructureEditor_class(){
             
             CGStructureEditor_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Does this hold the entire molecule" );
         
         }
         { //::SireMol::CGStructureEditor::toString
@@ -276,7 +295,8 @@ void register_CGStructureEditor_class(){
             
             CGStructureEditor_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this editor" );
         
         }
         { //::SireMol::CGStructureEditor::transfer
@@ -288,7 +308,8 @@ void register_CGStructureEditor_class(){
                 "transfer"
                 , transfer_function_value
                 , ( bp::arg("atomid"), bp::arg("cgid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Transfer all atoms that match the ID atomid in this CutGroup\nto the CutGroup that matches the ID cgid\nThrow: SireMol::missing_atom\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGStructureEditor::transfer
@@ -300,7 +321,8 @@ void register_CGStructureEditor_class(){
                 "transfer"
                 , transfer_function_value
                 , ( bp::arg("i"), bp::arg("cgid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Transfer the ith atom of this CutGroup into the CutGroup identified\nby the ID cgid\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGStructureEditor::transferAll
@@ -312,7 +334,8 @@ void register_CGStructureEditor_class(){
                 "transferAll"
                 , transferAll_function_value
                 , ( bp::arg("cgid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Completely transfer all of the atoms in this CutGroup to\nthe CutGroup that matches the ID cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGStructureEditor::typeName
@@ -322,7 +345,8 @@ void register_CGStructureEditor_class(){
             
             CGStructureEditor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::CGStructureEditor::what
@@ -332,7 +356,8 @@ void register_CGStructureEditor_class(){
             
             CGStructureEditor_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CGStructureEditor_exposer.staticmethod( "typeName" );

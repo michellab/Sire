@@ -26,10 +26,10 @@ void register_SegsWithAtoms_class(){
 
     { //::SireMol::SegsWithAtoms
         typedef bp::class_< SireMol::SegsWithAtoms, bp::bases< SireMol::SegID, SireID::ID > > SegsWithAtoms_exposer_t;
-        SegsWithAtoms_exposer_t SegsWithAtoms_exposer = SegsWithAtoms_exposer_t( "SegsWithAtoms", bp::init< >() );
+        SegsWithAtoms_exposer_t SegsWithAtoms_exposer = SegsWithAtoms_exposer_t( "SegsWithAtoms", "This ID class identifies segments that contain atoms that\nmatch the passed AtomID\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope SegsWithAtoms_scope( SegsWithAtoms_exposer );
-        SegsWithAtoms_exposer.def( bp::init< SireMol::AtomID const & >(( bp::arg("atomid") )) );
-        SegsWithAtoms_exposer.def( bp::init< SireMol::SegsWithAtoms const & >(( bp::arg("other") )) );
+        SegsWithAtoms_exposer.def( bp::init< SireMol::AtomID const & >(( bp::arg("atomid") ), "Construct from the passed atom ID") );
+        SegsWithAtoms_exposer.def( bp::init< SireMol::SegsWithAtoms const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::SegsWithAtoms::atomID
         
             typedef ::SireMol::AtomID const & ( ::SireMol::SegsWithAtoms::*atomID_function_type)(  ) const;
@@ -38,7 +38,8 @@ void register_SegsWithAtoms_class(){
             SegsWithAtoms_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the atom ID" );
         
         }
         { //::SireMol::SegsWithAtoms::hash
@@ -48,7 +49,8 @@ void register_SegsWithAtoms_class(){
             
             SegsWithAtoms_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this identifier" );
         
         }
         { //::SireMol::SegsWithAtoms::isNull
@@ -58,7 +60,8 @@ void register_SegsWithAtoms_class(){
             
             SegsWithAtoms_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Is this selection null?" );
         
         }
         { //::SireMol::SegsWithAtoms::map
@@ -69,7 +72,8 @@ void register_SegsWithAtoms_class(){
             SegsWithAtoms_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Map this ID to the list of indicies of segments that match this ID\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         SegsWithAtoms_exposer.def( bp::self != bp::self );
@@ -82,7 +86,8 @@ void register_SegsWithAtoms_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SegsWithAtoms_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -94,7 +99,8 @@ void register_SegsWithAtoms_class(){
             
             SegsWithAtoms_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representatio of this ID" );
         
         }
         { //::SireMol::SegsWithAtoms::typeName
@@ -104,7 +110,8 @@ void register_SegsWithAtoms_class(){
             
             SegsWithAtoms_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::SegsWithAtoms::what
@@ -114,7 +121,8 @@ void register_SegsWithAtoms_class(){
             
             SegsWithAtoms_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SegsWithAtoms_exposer.staticmethod( "typeName" );
@@ -127,6 +135,7 @@ void register_SegsWithAtoms_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         SegsWithAtoms_exposer.def( "__str__", &__str__< ::SireMol::SegsWithAtoms > );
         SegsWithAtoms_exposer.def( "__repr__", &__str__< ::SireMol::SegsWithAtoms > );
+        SegsWithAtoms_exposer.def( "__hash__", &::SireMol::SegsWithAtoms::hash );
     }
 
 }

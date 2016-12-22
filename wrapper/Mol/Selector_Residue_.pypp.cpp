@@ -49,14 +49,14 @@ void register_Selector_Residue__class(){
 
     { //::SireMol::Selector< SireMol::Residue >
         typedef bp::class_< SireMol::Selector< SireMol::Residue >, bp::bases< SireMol::MoleculeView, SireBase::Property > > Selector_Residue__exposer_t;
-        Selector_Residue__exposer_t Selector_Residue__exposer = Selector_Residue__exposer_t( "Selector_Residue_", bp::init< >() );
+        Selector_Residue__exposer_t Selector_Residue__exposer = Selector_Residue__exposer_t( "Selector_Residue_", "", bp::init< >("") );
         bp::scope Selector_Residue__scope( Selector_Residue__exposer );
-        Selector_Residue__exposer.def( bp::init< SireMol::Residue const & >(( bp::arg("view") )) );
-        Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") )) );
-        Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("selected_atoms") )) );
-        Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::ResID const & >(( bp::arg("moldata"), bp::arg("viewid") )) );
-        Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::ResIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") )) );
-        Selector_Residue__exposer.def( bp::init< SireMol::Selector< SireMol::Residue > const & >(( bp::arg("other") )) );
+        Selector_Residue__exposer.def( bp::init< SireMol::Residue const & >(( bp::arg("view") ), "") );
+        Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "") );
+        Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("selected_atoms") ), "") );
+        Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::Residue::ID const & >(( bp::arg("moldata"), bp::arg("viewid") ), "") );
+        Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::ResIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") ), "") );
+        Selector_Residue__exposer.def( bp::init< SireMol::Selector< SireMol::Residue > const & >(( bp::arg("other") ), "") );
         { //::SireMol::Selector< SireMol::Residue >::add
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
@@ -66,7 +66,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::add
@@ -78,19 +79,21 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::add
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*add_function_type)( ::SireMol::ResID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*add_function_type)( ::SireMol::Residue::ID const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::Residue >::add );
             
             Selector_Residue__exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::at
@@ -102,7 +105,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::at
@@ -114,7 +118,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::contains
@@ -126,7 +131,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::contains
@@ -138,19 +144,21 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::contains
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Residue >::*contains_function_type)( ::SireMol::ResID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Residue >::*contains_function_type)( ::SireMol::Residue::ID const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::Residue >::contains );
             
             Selector_Residue__exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::count
@@ -161,7 +169,8 @@ void register_Selector_Residue__class(){
             
             Selector_Residue__exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::evaluate
@@ -172,7 +181,8 @@ void register_Selector_Residue__class(){
             
             Selector_Residue__exposer.def( 
                 "evaluate"
-                , evaluate_function_value );
+                , evaluate_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::evaluate
@@ -184,7 +194,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::evaluate
@@ -196,7 +207,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::hasMetadata
@@ -208,7 +220,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::hasMetadata
@@ -220,7 +233,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::hasProperty
@@ -232,19 +246,21 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "hasProperty"
                 , hasProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::index
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::ResIdx ( ::SireMol::Selector< SireMol::Residue >::*index_function_type)( int ) const;
+            typedef ::SireMol::Residue::Index ( ::SireMol::Selector< SireMol::Residue >::*index_function_type)( int ) const;
             index_function_type index_function_value( &::SireMol::Selector< SireMol::Residue >::index );
             
             Selector_Residue__exposer.def( 
                 "index"
                 , index_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::intersection
@@ -256,7 +272,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "intersection"
                 , intersection_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::intersection
@@ -268,19 +285,21 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "intersection"
                 , intersection_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::intersection
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*intersection_function_type)( ::SireMol::ResID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*intersection_function_type)( ::SireMol::Residue::ID const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::Residue >::intersection );
             
             Selector_Residue__exposer.def( 
                 "intersection"
                 , intersection_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::intersects
@@ -292,7 +311,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::intersects
@@ -304,19 +324,21 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::intersects
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Residue >::*intersects_function_type)( ::SireMol::ResID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Residue >::*intersects_function_type)( ::SireMol::Residue::ID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::Residue >::intersects );
             
             Selector_Residue__exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::invert
@@ -327,7 +349,8 @@ void register_Selector_Residue__class(){
             
             Selector_Residue__exposer.def( 
                 "invert"
-                , invert_function_value );
+                , invert_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::isEmpty
@@ -338,7 +361,8 @@ void register_Selector_Residue__class(){
             
             Selector_Residue__exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::metadataKeys
@@ -349,7 +373,8 @@ void register_Selector_Residue__class(){
             
             Selector_Residue__exposer.def( 
                 "metadataKeys"
-                , metadataKeys_function_value );
+                , metadataKeys_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::metadataKeys
@@ -361,7 +386,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::move
@@ -372,7 +398,8 @@ void register_Selector_Residue__class(){
             
             Selector_Residue__exposer.def( 
                 "move"
-                , move_function_value );
+                , move_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::move
@@ -384,7 +411,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::move
@@ -396,7 +424,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         Selector_Residue__exposer.def( bp::self != bp::self );
@@ -409,7 +438,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::operator()
@@ -421,7 +451,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         Selector_Residue__exposer.def( bp::self + bp::self );
@@ -440,7 +471,8 @@ void register_Selector_Residue__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::operator=
@@ -453,7 +485,8 @@ void register_Selector_Residue__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("view") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Selector_Residue__exposer.def( bp::self == bp::self );
@@ -466,7 +499,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::propertyKeys
@@ -477,7 +511,8 @@ void register_Selector_Residue__class(){
             
             Selector_Residue__exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::selectedAll
@@ -488,7 +523,8 @@ void register_Selector_Residue__class(){
             
             Selector_Residue__exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::selection
@@ -499,7 +535,8 @@ void register_Selector_Residue__class(){
             
             Selector_Residue__exposer.def( 
                 "selection"
-                , selection_function_value );
+                , selection_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::selection
@@ -511,7 +548,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "selection"
                 , selection_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::selection
@@ -523,7 +561,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "selection"
                 , selection_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::selector
@@ -534,7 +573,8 @@ void register_Selector_Residue__class(){
             
             Selector_Residue__exposer.def( 
                 "selector"
-                , selector_function_value );
+                , selector_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::selector
@@ -546,7 +586,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "selector"
                 , selector_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::selector
@@ -558,7 +599,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "selector"
                 , selector_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::subtract
@@ -570,7 +612,8 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::subtract
@@ -582,19 +625,21 @@ void register_Selector_Residue__class(){
             Selector_Residue__exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::subtract
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*subtract_function_type)( ::SireMol::ResID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*subtract_function_type)( ::SireMol::Residue::ID const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::Residue >::subtract );
             
             Selector_Residue__exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::toString
@@ -605,7 +650,8 @@ void register_Selector_Residue__class(){
             
             Selector_Residue__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Residue >::typeName
@@ -616,7 +662,8 @@ void register_Selector_Residue__class(){
             
             Selector_Residue__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Selector_Residue__exposer.staticmethod( "typeName" );

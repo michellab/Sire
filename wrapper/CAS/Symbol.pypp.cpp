@@ -43,11 +43,11 @@ void register_Symbol_class(){
 
     { //::SireCAS::Symbol
         typedef bp::class_< SireCAS::Symbol, bp::bases< SireCAS::ExBase > > Symbol_exposer_t;
-        Symbol_exposer_t Symbol_exposer = Symbol_exposer_t( "Symbol", bp::init< >() );
+        Symbol_exposer_t Symbol_exposer = Symbol_exposer_t( "Symbol", "This class represents an algebraic symbol in the equation (e.g. x or y)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope Symbol_scope( Symbol_exposer );
-        Symbol_exposer.def( bp::init< SireCAS::SymbolID >(( bp::arg("symid") )) );
-        Symbol_exposer.def( bp::init< QString const & >(( bp::arg("rep") )) );
-        Symbol_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("other") )) );
+        Symbol_exposer.def( bp::init< SireCAS::SymbolID >(( bp::arg("symid") ), "Construct a symbol from the passed ID number") );
+        Symbol_exposer.def( bp::init< QString const & >(( bp::arg("rep") ), "Construct a new symbol, with string representation rep") );
+        Symbol_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Symbol::ID
         
             typedef ::SireCAS::SymbolID ( ::SireCAS::Symbol::*ID_function_type)(  ) const;
@@ -55,7 +55,8 @@ void register_Symbol_class(){
             
             Symbol_exposer.def( 
                 "ID"
-                , ID_function_value );
+                , ID_function_value
+                , "Return the unique ID number of the symbol" );
         
         }
         { //::SireCAS::Symbol::children
@@ -65,7 +66,8 @@ void register_Symbol_class(){
             
             Symbol_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "There are no child expressions in a symbol" );
         
         }
         { //::SireCAS::Symbol::differentiate
@@ -76,7 +78,8 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Differentiate this symbol with respect to sym. This returns 1.0 if this\nis sym, else it returns 0.0" );
         
         }
         { //::SireCAS::Symbol::evaluate
@@ -87,7 +90,8 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this symbol - returns the value of the symbol in values if\nit is present, else it returns 0.0" );
         
         }
         { //::SireCAS::Symbol::evaluate
@@ -98,7 +102,8 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this symbol - returns the value of the symbol in values if\nit is present, else it returns 0" );
         
         }
         { //::SireCAS::Symbol::expand
@@ -109,7 +114,8 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "expand"
                 , expand_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "" );
         
         }
         { //::SireCAS::Symbol::functions
@@ -119,7 +125,8 @@ void register_Symbol_class(){
             
             Symbol_exposer.def( 
                 "functions"
-                , functions_function_value );
+                , functions_function_value
+                , "This is not a function" );
         
         }
         { //::SireCAS::Symbol::hash
@@ -129,7 +136,8 @@ void register_Symbol_class(){
             
             Symbol_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Hash a symbol" );
         
         }
         { //::SireCAS::Symbol::integrate
@@ -140,7 +148,8 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Integrate this symbol with respect to sym. If sym == this, then\nreturn 0.5 sym^2, else return this  sym" );
         
         }
         { //::SireCAS::Symbol::isConstant
@@ -150,7 +159,8 @@ void register_Symbol_class(){
             
             Symbol_exposer.def( 
                 "isConstant"
-                , isConstant_function_value );
+                , isConstant_function_value
+                , "A symbol is by definition not constant" );
         
         }
         { //::SireCAS::Symbol::isFunction
@@ -161,7 +171,8 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "isFunction"
                 , isFunction_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Is this a function of symbol" );
         
         }
         { //::SireCAS::Symbol::isNull
@@ -171,7 +182,8 @@ void register_Symbol_class(){
             
             Symbol_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not the symbol is null" );
         
         }
         Symbol_exposer.def( bp::self < bp::self );
@@ -185,7 +197,8 @@ void register_Symbol_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireCAS::Symbol::operator=
@@ -197,7 +210,8 @@ void register_Symbol_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("symid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Symbol_exposer.def( bp::self == bp::other< double >() );
@@ -215,7 +229,8 @@ void register_Symbol_class(){
             Symbol_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Return the expression that matches this symbol in identities - or return\nan expression holding only this symbol if it does no exist in identities" );
         
         }
         { //::SireCAS::Symbol::symbols
@@ -225,7 +240,8 @@ void register_Symbol_class(){
             
             Symbol_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return this symbol" );
         
         }
         { //::SireCAS::Symbol::toString
@@ -235,7 +251,8 @@ void register_Symbol_class(){
             
             Symbol_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this symbol" );
         
         }
         { //::SireCAS::Symbol::typeName
@@ -245,7 +262,8 @@ void register_Symbol_class(){
             
             Symbol_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Symbol::what
@@ -255,7 +273,8 @@ void register_Symbol_class(){
             
             Symbol_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Symbol_exposer.staticmethod( "typeName" );
@@ -268,6 +287,7 @@ void register_Symbol_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Symbol_exposer.def( "__str__", &__str__< ::SireCAS::Symbol > );
         Symbol_exposer.def( "__repr__", &__str__< ::SireCAS::Symbol > );
+        Symbol_exposer.def( "__hash__", &::SireCAS::Symbol::hash );
     }
 
 }

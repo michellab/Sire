@@ -42,10 +42,10 @@ void register_GridFieldTable_class(){
 
     { //::SireFF::GridFieldTable
         typedef bp::class_< SireFF::GridFieldTable > GridFieldTable_exposer_t;
-        GridFieldTable_exposer_t GridFieldTable_exposer = GridFieldTable_exposer_t( "GridFieldTable", bp::init< >() );
+        GridFieldTable_exposer_t GridFieldTable_exposer = GridFieldTable_exposer_t( "GridFieldTable", "A GridFieldTable contains the fields at point specified by a grid", bp::init< >("Null constructor") );
         bp::scope GridFieldTable_scope( GridFieldTable_exposer );
-        GridFieldTable_exposer.def( bp::init< SireVol::Grid const & >(( bp::arg("grid") )) );
-        GridFieldTable_exposer.def( bp::init< SireFF::GridFieldTable const & >(( bp::arg("other") )) );
+        GridFieldTable_exposer.def( bp::init< SireVol::Grid const & >(( bp::arg("grid") ), "Construct to hold the field at each of the points of the passed grid") );
+        GridFieldTable_exposer.def( bp::init< SireFF::GridFieldTable const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::GridFieldTable::add
         
             typedef void ( ::SireFF::GridFieldTable::*add_function_type)( int,::SireMaths::Vector const & ) ;
@@ -54,7 +54,8 @@ void register_GridFieldTable_class(){
             GridFieldTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("ipoint"), bp::arg("field") ) );
+                , ( bp::arg("ipoint"), bp::arg("field") )
+                , "Add the field field onto the field for the ipointth grid point\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::GridFieldTable::add
@@ -65,7 +66,8 @@ void register_GridFieldTable_class(){
             GridFieldTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add the field in other onto that for this table - this only\nadds the field if the two grids are identical" );
         
         }
         { //::SireFF::GridFieldTable::add
@@ -76,7 +78,8 @@ void register_GridFieldTable_class(){
             GridFieldTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("field") ) );
+                , ( bp::arg("field") )
+                , "Add the field field to all of the points in this table" );
         
         }
         { //::SireFF::GridFieldTable::at
@@ -88,7 +91,8 @@ void register_GridFieldTable_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the field value of the ith grid point\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::GridFieldTable::count
@@ -98,7 +102,8 @@ void register_GridFieldTable_class(){
             
             GridFieldTable_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of grid points (and thus field values)" );
         
         }
         { //::SireFF::GridFieldTable::divide
@@ -109,7 +114,8 @@ void register_GridFieldTable_class(){
             GridFieldTable_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Divide the field at all of the points in this table by value" );
         
         }
         { //::SireFF::GridFieldTable::grid
@@ -120,7 +126,8 @@ void register_GridFieldTable_class(){
             GridFieldTable_exposer.def( 
                 "grid"
                 , grid_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the grid that contains the points at which the field is\nevaluated - the order of points in the grid is the same as the order\nof field values in this table" );
         
         }
         { //::SireFF::GridFieldTable::initialise
@@ -130,7 +137,8 @@ void register_GridFieldTable_class(){
             
             GridFieldTable_exposer.def( 
                 "initialise"
-                , initialise_function_value );
+                , initialise_function_value
+                , "Initialise the field at each grid point to equal 0" );
         
         }
         { //::SireFF::GridFieldTable::multiply
@@ -141,7 +149,8 @@ void register_GridFieldTable_class(){
             GridFieldTable_exposer.def( 
                 "multiply"
                 , multiply_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Multiply the field at all of the points in this table by value" );
         
         }
         { //::SireFF::GridFieldTable::nPoints
@@ -151,7 +160,8 @@ void register_GridFieldTable_class(){
             
             GridFieldTable_exposer.def( 
                 "nPoints"
-                , nPoints_function_value );
+                , nPoints_function_value
+                , "Return the number of grid points (and thus field values)" );
         
         }
         GridFieldTable_exposer.def( bp::self != bp::self );
@@ -171,7 +181,8 @@ void register_GridFieldTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireFF::GridFieldTable::operator=
@@ -183,7 +194,8 @@ void register_GridFieldTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("field") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         GridFieldTable_exposer.def( bp::self == bp::self );
@@ -196,7 +208,8 @@ void register_GridFieldTable_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_internal_reference< >() );
+                , bp::return_internal_reference< >()
+                , "" );
         
         }
         { //::SireFF::GridFieldTable::operator[]
@@ -208,7 +221,8 @@ void register_GridFieldTable_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::GridFieldTable::setAll
@@ -219,7 +233,8 @@ void register_GridFieldTable_class(){
             GridFieldTable_exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("field") ) );
+                , ( bp::arg("field") )
+                , "Set the field at all of the points in this table equal to field" );
         
         }
         { //::SireFF::GridFieldTable::subtract
@@ -230,7 +245,8 @@ void register_GridFieldTable_class(){
             GridFieldTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("ipoint"), bp::arg("field") ) );
+                , ( bp::arg("ipoint"), bp::arg("field") )
+                , "Subtract the field field from the field for the ipointth grid point\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::GridFieldTable::subtract
@@ -241,7 +257,8 @@ void register_GridFieldTable_class(){
             GridFieldTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Subtract the field in other from that for this table - this only\nsubtracts the field if the two grids are identical" );
         
         }
         { //::SireFF::GridFieldTable::subtract
@@ -252,7 +269,8 @@ void register_GridFieldTable_class(){
             GridFieldTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("field") ) );
+                , ( bp::arg("field") )
+                , "Subtract the field field from all of the points in this table" );
         
         }
         { //::SireFF::GridFieldTable::toVector
@@ -262,7 +280,8 @@ void register_GridFieldTable_class(){
             
             GridFieldTable_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "Return the array of field values - the order is the same\nas the order of points in the grid" );
         
         }
         { //::SireFF::GridFieldTable::typeName
@@ -272,7 +291,8 @@ void register_GridFieldTable_class(){
             
             GridFieldTable_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         GridFieldTable_exposer.staticmethod( "typeName" );

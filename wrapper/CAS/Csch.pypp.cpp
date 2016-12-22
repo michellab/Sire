@@ -33,10 +33,10 @@ void register_Csch_class(){
 
     { //::SireCAS::Csch
         typedef bp::class_< SireCAS::Csch, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Csch_exposer_t;
-        Csch_exposer_t Csch_exposer = Csch_exposer_t( "Csch", bp::init< >() );
+        Csch_exposer_t Csch_exposer = Csch_exposer_t( "Csch", "Hyperbolic cosecant", bp::init< >("Null constructor") );
         bp::scope Csch_scope( Csch_exposer );
-        Csch_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        Csch_exposer.def( bp::init< SireCAS::Csch const & >(( bp::arg("other") )) );
+        Csch_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        Csch_exposer.def( bp::init< SireCAS::Csch const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Csch::evaluate
         
             typedef double ( ::SireCAS::Csch::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -45,7 +45,8 @@ void register_Csch_class(){
             Csch_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Csch::evaluate
@@ -56,7 +57,8 @@ void register_Csch_class(){
             Csch_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Csch_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -67,7 +69,8 @@ void register_Csch_class(){
             
             Csch_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Csch::what
@@ -77,7 +80,8 @@ void register_Csch_class(){
             
             Csch_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Csch_exposer.staticmethod( "typeName" );
@@ -90,6 +94,7 @@ void register_Csch_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Csch_exposer.def( "__str__", &__str__< ::SireCAS::Csch > );
         Csch_exposer.def( "__repr__", &__str__< ::SireCAS::Csch > );
+        Csch_exposer.def( "__hash__", &::SireCAS::Csch::hash );
     }
 
 }

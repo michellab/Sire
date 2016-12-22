@@ -9,7 +9,7 @@
 
 # project version
 set (SIRE_VERSION_MAJOR "2016")
-set (SIRE_VERSION_MINOR "1")
+set (SIRE_VERSION_MINOR "3")
 set (SIRE_VERSION_PATCH "0")
 
 set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
@@ -18,12 +18,33 @@ set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PA
 ############ SETTING INITIAL SIRE VARIABLES
 ############
 
-# require cmake >= 2.8.11
+# require cmake >= 2.8.11.2
 cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
 
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
+
+if(COMMAND CMAKE_POLICY)
+  if (POLICY CMP0042)
+    cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
+  endif()
+  if (POLICY CMP0048)
+    cmake_policy(SET CMP0048 OLD)  # want to manage versions myself!
+  endif()
+  if (POLICY CMP0028)
+    cmake_policy(SET CMP0028 OLD)  # Qt has colons in names, which new cmake hates
+  endif()
+  if (POLICY CMP0045)
+    cmake_policy(SET CMP0045 OLD)  # Allow non-existant targets with -NOTFOUND
+  endif()
+  if (POLICY CMP0020)
+    cmake_policy(SET CMP0020 NEW)  # Automatically link to qtmain on windows
+  endif()
+endif()
+
+# Get rid of install messages (too verbose!)
+set( CMAKE_INSTALL_MESSAGE "NEVER" )
 
 # Absolutely can't run cmake in the source directory!
 if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
@@ -54,14 +75,27 @@ if ( ANACONDA_BUILD )
           "Install directory for Anaconda/Miniconda (python3)" )
 
   # Make sure that there is a python3 executable in the bin directory
-  if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
-    message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
+  if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" AND
+       NOT EXISTS "${ANACONDA_BASE}/python.exe"  )
+    message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3 or ${ANACONDA_BASE}/python.exe. "
                          "Please set the full path to the Anaconda or Miniconda "
                          "installation directory." )
   endif()
 
   set( SIRE_APP "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
           "Install directory for Sire within the Anaconda/Miniconda distribution" )
+elseif( WIN32 OR WIN64 )
+  # This should be MSYS2/MINGW64, so use the location of cmake to find the location
+  # of the Sire installation
+  message(STATUS "Compiling on windows using MSYS2/MINGW64...")
+  set( MINGW_BASE "C:/msys64/mingw64" CACHE PATH "MSYS MINGW64 root directory" )
+  get_filename_component(MINGW_CMAKE_BIN ${CMAKE_COMMAND} DIRECTORY)
+  get_filename_component(MINGW_CMAKE_ROOT ${MINGW_CMAKE_BIN} DIRECTORY)
+  message(STATUS "Using cmake ${CMAKE_COMMAND} from MING64 base ${MINGW_CMAKE_ROOT}")
+
+  set( MINGW_BASE "${MINGW_CMAKE_ROOT}")
+  set( SIRE_APP "${MINGW_BASE}" )
+
 else()
   # Option to set the install directory of Sire
   set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
@@ -78,7 +112,8 @@ if (EXISTS "${SIRE_COMP_CMAKE}")
 else()
   if (ANACONDA_BUILD)
     message( FATAL_ERROR "You don't appear to have built corelib into this"
-               "Anaconda/Miniconda directory. Please build corelib first." )
+               "Anaconda/Miniconda directory. Please build corelib first."
+               "(there should be a file called ${SIRE_COMP_CMAKE})" )
   else()
     message( STATUS "You need to provide the full path to sire.app and check that it contains the file ${SIRE_COMP_CMAKE}" )
     message( FATAL_ERROR "Do this by running 'cmake -DSIRE_APP=/path/to/sire.app /path/to/python/source'" )
@@ -218,15 +253,22 @@ set( CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS} ${SIRE_EXE_LINK_FLAGS}
 
 include (CheckCXXCompilerFlag)
 
-CHECK_CXX_COMPILER_FLAG( "-Wno-unused-variable" SIRE_HAS_NO_UNUSED_VARIABLE )
-CHECK_CXX_COMPILER_FLAG( "-Wno-overloaded-virtual" SIRE_HAS_NO_OVERLOADED_VIRTUAL )
+CHECK_CXX_COMPILER_FLAG( "-w" SIRE_HAS_NO_WARNINGS_FLAG )
 
-if (SIRE_HAS_NO_UNUSED_VARIABLE)
-  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-variable")
-endif()
+if (SIRE_HAS_NO_WARNINGS_FLAG)
+  message(STATUS "Inhibiting all compiler warnings, as the wrappers generate a lot!")
+  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w" )
+else()
+  CHECK_CXX_COMPILER_FLAG( "-Wno-unused-variable" SIRE_HAS_NO_UNUSED_VARIABLE )
+  CHECK_CXX_COMPILER_FLAG( "-Wno-overloaded-virtual" SIRE_HAS_NO_OVERLOADED_VIRTUAL )
 
-if (SIRE_HAS_NO_OVERLOADED_VIRTUAL)
-  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-overloaded-virtual")
+  if (SIRE_HAS_NO_UNUSED_VARIABLE)
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-variable")
+  endif()
+
+  if (SIRE_HAS_NO_OVERLOADED_VIRTUAL)
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-overloaded-virtual")
+  endif()
 endif()
 
 message( STATUS  "CMAKE_SYSTEM_NAME      == ${CMAKE_SYSTEM_NAME}" )
@@ -246,7 +288,11 @@ option( SIRE_BUNDLE_PYTHON "Whether Sire should use its bundled copy of Python 3
 option( SIRE_BUNDLE_BOOST_PYTHON "Whether Sire should use its bundled copy of boost::python" ON )
 
 if ( SIRE_PYTHON_ENABLE_BUNDLING )
-  message( STATUS "Sire Python will be compiled to use its own copy of bundled libraries." )
+  if (MSYS)
+    message( STATUS "Building a bundled msys Sire (using msys python)" )
+  else()
+    message( STATUS "Sire Python will be compiled to use its own copy of bundled libraries." )
+  endif()
 
   set( BUNDLE_BUILDDIR "${CMAKE_BINARY_DIR}/build_bundled" )
 

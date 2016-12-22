@@ -25,11 +25,11 @@ void register_SegStringProperty_class(){
 
     { //::SireMol::SegProperty< QString >
         typedef bp::class_< SireMol::SegProperty< QString >, bp::bases< SireMol::SegProp, SireMol::MolViewProperty, SireBase::Property > > SegStringProperty_exposer_t;
-        SegStringProperty_exposer_t SegStringProperty_exposer = SegStringProperty_exposer_t( "SegStringProperty", bp::init< >() );
+        SegStringProperty_exposer_t SegStringProperty_exposer = SegStringProperty_exposer_t( "SegStringProperty", "", bp::init< >("") );
         bp::scope SegStringProperty_scope( SegStringProperty_exposer );
-        SegStringProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        SegStringProperty_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("values") )) );
-        SegStringProperty_exposer.def( bp::init< SireMol::SegProperty< QString > const & >(( bp::arg("other") )) );
+        SegStringProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        SegStringProperty_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("values") ), "") );
+        SegStringProperty_exposer.def( bp::init< SireMol::SegProperty< QString > const & >(( bp::arg("other") ), "") );
         { //::SireMol::SegProperty< QString >::array
         
             typedef SireMol::SegProperty< QString > exported_class_t;
@@ -39,7 +39,8 @@ void register_SegStringProperty_class(){
             SegStringProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::assertCanConvert
@@ -51,7 +52,8 @@ void register_SegStringProperty_class(){
             SegStringProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::assignFrom
@@ -63,7 +65,8 @@ void register_SegStringProperty_class(){
             SegStringProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::at
@@ -76,7 +79,8 @@ void register_SegStringProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::canConvert
@@ -88,7 +92,8 @@ void register_SegStringProperty_class(){
             SegStringProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::count
@@ -99,7 +104,8 @@ void register_SegStringProperty_class(){
             
             SegStringProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::fromVariant
@@ -111,7 +117,8 @@ void register_SegStringProperty_class(){
             SegStringProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::get
@@ -124,7 +131,8 @@ void register_SegStringProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::isCompatibleWith
@@ -136,7 +144,8 @@ void register_SegStringProperty_class(){
             SegStringProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::isEmpty
@@ -147,7 +156,8 @@ void register_SegStringProperty_class(){
             
             SegStringProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::nSegments
@@ -158,7 +168,8 @@ void register_SegStringProperty_class(){
             
             SegStringProperty_exposer.def( 
                 "nSegments"
-                , nSegments_function_value );
+                , nSegments_function_value
+                , "" );
         
         }
         SegStringProperty_exposer.def( bp::self != bp::self );
@@ -172,7 +183,8 @@ void register_SegStringProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SegStringProperty_exposer.def( bp::self == bp::self );
@@ -186,7 +198,8 @@ void register_SegStringProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("segidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::set
@@ -199,7 +212,8 @@ void register_SegStringProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("segidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::size
@@ -210,7 +224,8 @@ void register_SegStringProperty_class(){
             
             SegStringProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::toString
@@ -221,7 +236,8 @@ void register_SegStringProperty_class(){
             
             SegStringProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::toVariant
@@ -232,7 +248,8 @@ void register_SegStringProperty_class(){
             
             SegStringProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::SegProperty< QString >::typeName
@@ -243,7 +260,8 @@ void register_SegStringProperty_class(){
             
             SegStringProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SegStringProperty_exposer.staticmethod( "fromVariant" );

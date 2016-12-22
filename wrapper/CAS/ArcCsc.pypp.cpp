@@ -35,10 +35,10 @@ void register_ArcCsc_class(){
 
     { //::SireCAS::ArcCsc
         typedef bp::class_< SireCAS::ArcCsc, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > ArcCsc_exposer_t;
-        ArcCsc_exposer_t ArcCsc_exposer = ArcCsc_exposer_t( "ArcCsc", bp::init< >() );
+        ArcCsc_exposer_t ArcCsc_exposer = ArcCsc_exposer_t( "ArcCsc", "Inverse-cosecant", bp::init< >("Null constructor") );
         bp::scope ArcCsc_scope( ArcCsc_exposer );
-        ArcCsc_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        ArcCsc_exposer.def( bp::init< SireCAS::ArcCsc const & >(( bp::arg("other") )) );
+        ArcCsc_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        ArcCsc_exposer.def( bp::init< SireCAS::ArcCsc const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ArcCsc::evaluate
         
             typedef double ( ::SireCAS::ArcCsc::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -47,7 +47,8 @@ void register_ArcCsc_class(){
             ArcCsc_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::ArcCsc::evaluate
@@ -58,7 +59,8 @@ void register_ArcCsc_class(){
             ArcCsc_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         ArcCsc_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -69,7 +71,8 @@ void register_ArcCsc_class(){
             
             ArcCsc_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ArcCsc::what
@@ -79,7 +82,8 @@ void register_ArcCsc_class(){
             
             ArcCsc_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ArcCsc_exposer.staticmethod( "typeName" );
@@ -92,6 +96,7 @@ void register_ArcCsc_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ArcCsc_exposer.def( "__str__", &__str__< ::SireCAS::ArcCsc > );
         ArcCsc_exposer.def( "__repr__", &__str__< ::SireCAS::ArcCsc > );
+        ArcCsc_exposer.def( "__hash__", &::SireCAS::ArcCsc::hash );
     }
 
 }

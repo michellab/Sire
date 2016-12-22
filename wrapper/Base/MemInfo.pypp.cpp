@@ -33,9 +33,9 @@ void register_MemInfo_class(){
 
     { //::SireBase::MemInfo
         typedef bp::class_< SireBase::MemInfo > MemInfo_exposer_t;
-        MemInfo_exposer_t MemInfo_exposer = MemInfo_exposer_t( "MemInfo", bp::init< >() );
+        MemInfo_exposer_t MemInfo_exposer = MemInfo_exposer_t( "MemInfo", "This class holds information about the current memory usage\nof the process\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope MemInfo_scope( MemInfo_exposer );
-        MemInfo_exposer.def( bp::init< SireBase::MemInfo const & >(( bp::arg("other") )) );
+        MemInfo_exposer.def( bp::init< SireBase::MemInfo const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::MemInfo::allocatedBytes
         
             typedef ::quint64 ( ::SireBase::MemInfo::*allocatedBytes_function_type)(  ) const;
@@ -43,7 +43,8 @@ void register_MemInfo_class(){
             
             MemInfo_exposer.def( 
                 "allocatedBytes"
-                , allocatedBytes_function_value );
+                , allocatedBytes_function_value
+                , "Return the total number of bytes allocated to this process by\nmemory subsystem (only on the heap - this ignores the stack and\nany memory allocated within libraries). Note that fragmentation\nmay mean that not all of this memory is in use." );
         
         }
         { //::SireBase::MemInfo::mMappedBytes
@@ -53,7 +54,8 @@ void register_MemInfo_class(){
             
             MemInfo_exposer.def( 
                 "mMappedBytes"
-                , mMappedBytes_function_value );
+                , mMappedBytes_function_value
+                , "Return the total number of bytes that have been allocated via\nmmap to this process by the memory subsystem. This total is included\nwithin allocatedBytes, therefore allocatedBytes() - mMappedBytes()\nwill return the number of bytes that have not been allocated\nvia mmap" );
         
         }
         { //::SireBase::MemInfo::operator=
@@ -65,7 +67,8 @@ void register_MemInfo_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireBase::MemInfo::startMonitoring
@@ -76,7 +79,8 @@ void register_MemInfo_class(){
             MemInfo_exposer.def( 
                 "startMonitoring"
                 , startMonitoring_function_value
-                , ( bp::arg("ms")=(int)(1000) ) );
+                , ( bp::arg("ms")=(int)(1000) )
+                , "Start a monitor that prints the memory usage of the program\nout to the screen every ms milliseconds" );
         
         }
         { //::SireBase::MemInfo::startMonitoring
@@ -87,7 +91,8 @@ void register_MemInfo_class(){
             MemInfo_exposer.def( 
                 "startMonitoring"
                 , startMonitoring_function_value
-                , ( bp::arg("filename"), bp::arg("ms")=(int)(1000) ) );
+                , ( bp::arg("filename"), bp::arg("ms")=(int)(1000) )
+                , "Start a monitor that prints the memory usage of the program\nout to the file filename every ms milliseconds" );
         
         }
         { //::SireBase::MemInfo::stopMonitoring
@@ -97,7 +102,8 @@ void register_MemInfo_class(){
             
             MemInfo_exposer.def( 
                 "stopMonitoring"
-                , stopMonitoring_function_value );
+                , stopMonitoring_function_value
+                , "Stop monitoring the memory of this process" );
         
         }
         { //::SireBase::MemInfo::takeMeasurement
@@ -107,7 +113,8 @@ void register_MemInfo_class(){
             
             MemInfo_exposer.def( 
                 "takeMeasurement"
-                , takeMeasurement_function_value );
+                , takeMeasurement_function_value
+                , "Take a measurement of the current memory usage of the process" );
         
         }
         { //::SireBase::MemInfo::toString
@@ -117,7 +124,8 @@ void register_MemInfo_class(){
             
             MemInfo_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string containing details of the memory usage. This is\na platform dependent string, but can be useful to print to the user" );
         
         }
         { //::SireBase::MemInfo::totalSystemMemory
@@ -127,7 +135,8 @@ void register_MemInfo_class(){
             
             MemInfo_exposer.def( 
                 "totalSystemMemory"
-                , totalSystemMemory_function_value );
+                , totalSystemMemory_function_value
+                , "Return the total number of bytes of system memory\n(actual memory, not virtual memory). To ensure we dont page,\nwe have to ensure that this processes memory usage is below\nthe total system memory" );
         
         }
         { //::SireBase::MemInfo::totalVirtualMemory
@@ -137,7 +146,8 @@ void register_MemInfo_class(){
             
             MemInfo_exposer.def( 
                 "totalVirtualMemory"
-                , totalVirtualMemory_function_value );
+                , totalVirtualMemory_function_value
+                , "Return the total number of bytes of virtual memory available on this system\n(this includes system memory)" );
         
         }
         { //::SireBase::MemInfo::usedBytes
@@ -147,7 +157,8 @@ void register_MemInfo_class(){
             
             MemInfo_exposer.def( 
                 "usedBytes"
-                , usedBytes_function_value );
+                , usedBytes_function_value
+                , "Return the total number of bytes in use by the program. This number\nwill be less than or equal to the number of bytes returned by allocatedBytes.\nThis will be less if memory fragmentation means that pages of memory are\nnot able to be returned to the operating system when they are freed\nby the program" );
         
         }
         { //::SireBase::MemInfo::usedSystemMemory
@@ -157,7 +168,8 @@ void register_MemInfo_class(){
             
             MemInfo_exposer.def( 
                 "usedSystemMemory"
-                , usedSystemMemory_function_value );
+                , usedSystemMemory_function_value
+                , "Return the total amount of system memory in use.\n(actual memory, not virtual memory)" );
         
         }
         { //::SireBase::MemInfo::usedVirtualMemory
@@ -167,7 +179,8 @@ void register_MemInfo_class(){
             
             MemInfo_exposer.def( 
                 "usedVirtualMemory"
-                , usedVirtualMemory_function_value );
+                , usedVirtualMemory_function_value
+                , "Return the total amount of virtual memory in use.\n(includes system memory)" );
         
         }
         MemInfo_exposer.staticmethod( "startMonitoring" );

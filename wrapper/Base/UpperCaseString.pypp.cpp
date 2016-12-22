@@ -27,9 +27,9 @@ void register_UpperCaseString_class(){
 
     { //::SireBase::UpperCaseString
         typedef bp::class_< SireBase::UpperCaseString, bp::bases< SireBase::StringMangler, SireBase::Property > > UpperCaseString_exposer_t;
-        UpperCaseString_exposer_t UpperCaseString_exposer = UpperCaseString_exposer_t( "UpperCaseString", bp::init< >() );
+        UpperCaseString_exposer_t UpperCaseString_exposer = UpperCaseString_exposer_t( "UpperCaseString", "This mangler just trims spaces away from the beginning\nand end of the string and upper-cases the whole string\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope UpperCaseString_scope( UpperCaseString_exposer );
-        UpperCaseString_exposer.def( bp::init< SireBase::UpperCaseString const & >(( bp::arg("other") )) );
+        UpperCaseString_exposer.def( bp::init< SireBase::UpperCaseString const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::UpperCaseString::mangle
         
             typedef ::QString ( ::SireBase::UpperCaseString::*mangle_function_type)( ::QString const & ) const;
@@ -38,7 +38,8 @@ void register_UpperCaseString_class(){
             UpperCaseString_exposer.def( 
                 "mangle"
                 , mangle_function_value
-                , ( bp::arg("input") ) );
+                , ( bp::arg("input") )
+                , "Mangle the string - remove all initial and trailing spaces" );
         
         }
         UpperCaseString_exposer.def( bp::self != bp::self );
@@ -51,7 +52,8 @@ void register_UpperCaseString_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         UpperCaseString_exposer.def( bp::self == bp::self );
@@ -62,7 +64,8 @@ void register_UpperCaseString_class(){
             
             UpperCaseString_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         UpperCaseString_exposer.staticmethod( "typeName" );

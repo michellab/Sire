@@ -41,7 +41,7 @@
 #include "SireUnits/dimensions.h"
 
 #include "SireBase/tempdir.h"
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 
 #include "SireIO/pdb.h"
 

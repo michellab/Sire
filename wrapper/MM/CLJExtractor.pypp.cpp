@@ -43,7 +43,7 @@ void register_CLJExtractor_class(){
 
     { //::SireMM::CLJExtractor
         typedef bp::class_< SireMM::CLJExtractor > CLJExtractor_exposer_t;
-        CLJExtractor_exposer_t CLJExtractor_exposer = CLJExtractor_exposer_t( "CLJExtractor", bp::init< >() );
+        CLJExtractor_exposer_t CLJExtractor_exposer = CLJExtractor_exposer_t( "CLJExtractor", "This class is used to convert from a MoleculeView into a set of CLJAtoms\nobjects. This class manages the extraction of data, recording of molecular\nproperties and holding of all metadata needed to minimise the work of\nextracting data, e.g. as the molecule is updated or changed during\na Monte Carlo simulation\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope CLJExtractor_scope( CLJExtractor_exposer );
         bp::enum_< SireMM::CLJExtractor::EXTRACT_SOURCE>("EXTRACT_SOURCE")
             .value("EXTRACT_BY_CUTGROUP", SireMM::CLJExtractor::EXTRACT_BY_CUTGROUP)
@@ -51,11 +51,11 @@ void register_CLJExtractor_class(){
             .value("EXTRACT_BY_MOLECULE", SireMM::CLJExtractor::EXTRACT_BY_MOLECULE)
             .export_values()
             ;
-        CLJExtractor_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mol"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CLJExtractor_exposer.def( bp::init< SireMol::MoleculeView const &, SireMM::CLJExtractor::EXTRACT_SOURCE, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mol"), bp::arg("extract_source"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CLJExtractor_exposer.def( bp::init< SireMol::MoleculeView const &, SireMM::CLJAtoms::ID_SOURCE, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mol"), bp::arg("id_source"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CLJExtractor_exposer.def( bp::init< SireMol::MoleculeView const &, SireMM::CLJAtoms::ID_SOURCE, SireMM::CLJExtractor::EXTRACT_SOURCE, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mol"), bp::arg("id_source"), bp::arg("extract_source"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CLJExtractor_exposer.def( bp::init< SireMM::CLJExtractor const & >(( bp::arg("other") )) );
+        CLJExtractor_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mol"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to extract the CLJ properties from the passed molecule, extracting\ninformation per-residue, and using the supplied property map to find the\ncorrect properties") );
+        CLJExtractor_exposer.def( bp::init< SireMol::MoleculeView const &, SireMM::CLJExtractor::EXTRACT_SOURCE, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mol"), bp::arg("extract_source"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to extract the CLJ properties from the passed molecule, specifying\nhow to extract atom data from the molecule,\nand using the supplied property map to find the\ncorrect properties") );
+        CLJExtractor_exposer.def( bp::init< SireMol::MoleculeView const &, SireMM::CLJAtoms::ID_SOURCE, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mol"), bp::arg("id_source"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to extract the CLJ properties from the passed molecule, extracting\ninformation per-residue, and using the supplied property map to find the\ncorrect properties") );
+        CLJExtractor_exposer.def( bp::init< SireMol::MoleculeView const &, SireMM::CLJAtoms::ID_SOURCE, SireMM::CLJExtractor::EXTRACT_SOURCE, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mol"), bp::arg("id_source"), bp::arg("extract_source"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to extract the CLJ properties from the passed molecule, specifying\nhow to extract atom information,\nand using the supplied property map to find the\ncorrect properties") );
+        CLJExtractor_exposer.def( bp::init< SireMM::CLJExtractor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJExtractor::add
         
             typedef void ( ::SireMM::CLJExtractor::*add_function_type)( ::SireMol::MoleculeView const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
@@ -64,7 +64,8 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("new_molecule"), bp::arg("boxes"), bp::arg("workspace") ) );
+                , ( bp::arg("new_molecule"), bp::arg("boxes"), bp::arg("workspace") )
+                , "Add the extra atoms in new_molecule to the molecule" );
         
         }
         { //::SireMM::CLJExtractor::add
@@ -75,7 +76,8 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("new_selection"), bp::arg("boxes"), bp::arg("workspace") ) );
+                , ( bp::arg("new_selection"), bp::arg("boxes"), bp::arg("workspace") )
+                , "Add the extra atoms in new_selection to the molecule" );
         
         }
         { //::SireMM::CLJExtractor::changed
@@ -85,7 +87,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "changed"
-                , changed_function_value );
+                , changed_function_value
+                , "Return whether or not this molecule has been changed during the move" );
         
         }
         { //::SireMM::CLJExtractor::chargeProperty
@@ -95,7 +98,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "chargeProperty"
-                , chargeProperty_function_value );
+                , chargeProperty_function_value
+                , "Return the property used to find the charges" );
         
         }
         { //::SireMM::CLJExtractor::commit
@@ -106,7 +110,8 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "commit"
                 , commit_function_value
-                , ( bp::arg("boxes"), bp::arg("workspace") ) );
+                , ( bp::arg("boxes"), bp::arg("workspace") )
+                , "Commit the changes" );
         
         }
         { //::SireMM::CLJExtractor::coordinatesProperty
@@ -116,7 +121,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "coordinatesProperty"
-                , coordinatesProperty_function_value );
+                , coordinatesProperty_function_value
+                , "Return the property used to find the coordinates" );
         
         }
         { //::SireMM::CLJExtractor::extractingByCutGroup
@@ -126,7 +132,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "extractingByCutGroup"
-                , extractingByCutGroup_function_value );
+                , extractingByCutGroup_function_value
+                , "Return whether or not atoms are extracted by cutgroup" );
         
         }
         { //::SireMM::CLJExtractor::extractingByMolecule
@@ -136,7 +143,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "extractingByMolecule"
-                , extractingByMolecule_function_value );
+                , extractingByMolecule_function_value
+                , "Return whether or not atoms are extracted by molecule" );
         
         }
         { //::SireMM::CLJExtractor::extractingByResidue
@@ -146,7 +154,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "extractingByResidue"
-                , extractingByResidue_function_value );
+                , extractingByResidue_function_value
+                , "Return whether or not atoms are extracted by residue" );
         
         }
         { //::SireMM::CLJExtractor::hasChangedAtoms
@@ -156,7 +165,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "hasChangedAtoms"
-                , hasChangedAtoms_function_value );
+                , hasChangedAtoms_function_value
+                , "Return whether or not there are any changes to the coordinates, charges\nor LJ properties of the atoms" );
         
         }
         { //::SireMM::CLJExtractor::idSource
@@ -166,7 +176,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "idSource"
-                , idSource_function_value );
+                , idSource_function_value
+                , "Return the source of the ID property for each CLJAtom" );
         
         }
         { //::SireMM::CLJExtractor::isEmpty
@@ -176,7 +187,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this extractor is empty (contains no atoms)" );
         
         }
         { //::SireMM::CLJExtractor::isNull
@@ -186,7 +198,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this extractor is null (contains no molecule information)" );
         
         }
         { //::SireMM::CLJExtractor::ljProperty
@@ -196,7 +209,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "ljProperty"
-                , ljProperty_function_value );
+                , ljProperty_function_value
+                , "Return the property used to find the LJ parameters" );
         
         }
         { //::SireMM::CLJExtractor::needsCommitting
@@ -206,7 +220,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "needsCommitting"
-                , needsCommitting_function_value );
+                , needsCommitting_function_value
+                , "Return whether or not this extractor needs to be committed (i.e. whether\nor not the molecule has changed in any way)" );
         
         }
         { //::SireMM::CLJExtractor::newMolecule
@@ -216,7 +231,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "newMolecule"
-                , newMolecule_function_value );
+                , newMolecule_function_value
+                , "Return the molecule as it exists after the changes have been made" );
         
         }
         { //::SireMM::CLJExtractor::oldMolecule
@@ -226,7 +242,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "oldMolecule"
-                , oldMolecule_function_value );
+                , oldMolecule_function_value
+                , "Return the molecule as it exists before any changes were made" );
         
         }
         CLJExtractor_exposer.def( bp::self != bp::self );
@@ -239,7 +256,8 @@ void register_CLJExtractor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJExtractor_exposer.def( bp::self == bp::self );
@@ -250,7 +268,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "propertyMap"
-                , propertyMap_function_value );
+                , propertyMap_function_value
+                , "Return the property map used to get the names of the coordinates,\ncharge and LJ properties from the molecule" );
         
         }
         { //::SireMM::CLJExtractor::remove
@@ -261,7 +280,8 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("new_selection"), bp::arg("boxes"), bp::arg("workspace") ) );
+                , ( bp::arg("new_selection"), bp::arg("boxes"), bp::arg("workspace") )
+                , "Remove the atoms in new_selection from the molecule" );
         
         }
         { //::SireMM::CLJExtractor::remove
@@ -272,7 +292,8 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("new_molecule"), bp::arg("boxes"), bp::arg("workspace") ) );
+                , ( bp::arg("new_molecule"), bp::arg("boxes"), bp::arg("workspace") )
+                , "Remove the atoms in new_molecule from the molecule" );
         
         }
         { //::SireMM::CLJExtractor::removeAll
@@ -283,7 +304,8 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("boxes"), bp::arg("workspace") ) );
+                , ( bp::arg("boxes"), bp::arg("workspace") )
+                , "Remove all of the atoms in this view from the molecule" );
         
         }
         { //::SireMM::CLJExtractor::revert
@@ -294,7 +316,8 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "revert"
                 , revert_function_value
-                , ( bp::arg("boxes"), bp::arg("workspace") ) );
+                , ( bp::arg("boxes"), bp::arg("workspace") )
+                , "Revert the changes" );
         
         }
         { //::SireMM::CLJExtractor::toString
@@ -304,7 +327,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJExtractor::typeName
@@ -314,7 +338,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJExtractor::update
@@ -325,7 +350,8 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("new_molecule"), bp::arg("boxes"), bp::arg("workspace") ) );
+                , ( bp::arg("new_molecule"), bp::arg("boxes"), bp::arg("workspace") )
+                , "Update the molecule, calculating the change in CLJAtoms as a CLJDelta that is\nadded to the passed CLJWorkspace. Any atoms that have changed are removed\nfrom the passed CLJBoxes" );
         
         }
         { //::SireMM::CLJExtractor::updateSelection
@@ -336,7 +362,8 @@ void register_CLJExtractor_class(){
             CLJExtractor_exposer.def( 
                 "updateSelection"
                 , updateSelection_function_value
-                , ( bp::arg("selection"), bp::arg("boxes"), bp::arg("workspace") ) );
+                , ( bp::arg("selection"), bp::arg("boxes"), bp::arg("workspace") )
+                , "This function is used to update the molecule to use only the passed\nselection as the selected atoms" );
         
         }
         { //::SireMM::CLJExtractor::what
@@ -346,7 +373,8 @@ void register_CLJExtractor_class(){
             
             CLJExtractor_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJExtractor_exposer.staticmethod( "typeName" );

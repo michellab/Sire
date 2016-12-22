@@ -91,9 +91,9 @@ void register_PDB_class(){
 
     { //::SireIO::PDB
         typedef bp::class_< SireIO::PDB, bp::bases< SireIO::IOBase, SireBase::Property > > PDB_exposer_t;
-        PDB_exposer_t PDB_exposer = PDB_exposer_t( "PDB", bp::init< >() );
+        PDB_exposer_t PDB_exposer = PDB_exposer_t( "PDB", "This is a IOBase object that has been specialised to read and\nwrite PDB format files.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope PDB_scope( PDB_exposer );
-        PDB_exposer.def( bp::init< SireIO::PDB const & >(( bp::arg("other") )) );
+        PDB_exposer.def( bp::init< SireIO::PDB const & >(( bp::arg("other") ), "Copy constructor") );
         PDB_exposer.def( bp::self != bp::self );
         { //::SireIO::PDB::operator=
         
@@ -104,7 +104,8 @@ void register_PDB_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PDB_exposer.def( bp::self == bp::self );
@@ -116,7 +117,8 @@ void register_PDB_class(){
             PDB_exposer.def( 
                 "parameters"
                 , parameters_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireIO::PDB::typeName
@@ -126,7 +128,8 @@ void register_PDB_class(){
             
             PDB_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireIO::PDB::what
@@ -136,7 +139,8 @@ void register_PDB_class(){
             
             PDB_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         PDB_exposer.staticmethod( "parameters" );

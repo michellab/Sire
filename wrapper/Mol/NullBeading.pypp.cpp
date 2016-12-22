@@ -43,9 +43,9 @@ void register_NullBeading_class(){
 
     { //::SireMol::NullBeading
         typedef bp::class_< SireMol::NullBeading, bp::bases< SireMol::Beading, SireMol::MolViewProperty, SireBase::Property > > NullBeading_exposer_t;
-        NullBeading_exposer_t NullBeading_exposer = NullBeading_exposer_t( "NullBeading", bp::init< >() );
+        NullBeading_exposer_t NullBeading_exposer = NullBeading_exposer_t( "NullBeading", "Null beading function", bp::init< >("Constructor") );
         bp::scope NullBeading_scope( NullBeading_exposer );
-        NullBeading_exposer.def( bp::init< SireMol::NullBeading const & >(( bp::arg("other") )) );
+        NullBeading_exposer.def( bp::init< SireMol::NullBeading const & >(( bp::arg("other") ), "Copy constructor") );
         NullBeading_exposer.def( bp::self != bp::self );
         { //::SireMol::NullBeading::operator=
         
@@ -56,7 +56,8 @@ void register_NullBeading_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullBeading_exposer.def( bp::self == bp::self );
@@ -67,7 +68,8 @@ void register_NullBeading_class(){
             
             NullBeading_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullBeading_exposer.staticmethod( "typeName" );

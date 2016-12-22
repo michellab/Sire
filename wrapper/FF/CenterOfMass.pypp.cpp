@@ -43,11 +43,11 @@ void register_CenterOfMass_class(){
 
     { //::SireFF::CenterOfMass
         typedef bp::class_< SireFF::CenterOfMass, bp::bases< SireFF::Point, SireBase::Property > > CenterOfMass_exposer_t;
-        CenterOfMass_exposer_t CenterOfMass_exposer = CenterOfMass_exposer_t( "CenterOfMass", bp::init< >() );
+        CenterOfMass_exposer_t CenterOfMass_exposer = CenterOfMass_exposer_t( "CenterOfMass", "This point returns the center of mass of a view of a molecule,\nor group of molecules", bp::init< >("Constructor") );
         bp::scope CenterOfMass_scope( CenterOfMass_exposer );
-        CenterOfMass_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CenterOfMass_exposer.def( bp::init< SireMol::Molecules const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CenterOfMass_exposer.def( bp::init< SireFF::CenterOfMass const & >(( bp::arg("other") )) );
+        CenterOfMass_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to get the center of the molecule view molview using the\npassed property map to find the required properties\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n") );
+        CenterOfMass_exposer.def( bp::init< SireMol::Molecules const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to get the center of the molecules in molecules, using the\npassed property map to find the required properties\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n") );
+        CenterOfMass_exposer.def( bp::init< SireFF::CenterOfMass const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::CenterOfMass::addForce
         
             typedef bool ( ::SireFF::CenterOfMass::*addForce_function_type)( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
@@ -56,7 +56,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "addForce"
                 , addForce_function_value
-                , ( bp::arg("molforces"), bp::arg("force") ) );
+                , ( bp::arg("molforces"), bp::arg("force") )
+                , "Decompose the force force acting on this point from the\nmolecule whose forces are in molforces and add the\nforce onto the table" );
         
         }
         { //::SireFF::CenterOfMass::addForce
@@ -67,7 +68,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "addForce"
                 , addForce_function_value
-                , ( bp::arg("forces"), bp::arg("force") ) );
+                , ( bp::arg("forces"), bp::arg("force") )
+                , "Decompose the force force into the forces acting on\nthe molecules that contribute to this point and add those\nforces onto the table forces" );
         
         }
         { //::SireFF::CenterOfMass::contains
@@ -78,7 +80,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return whether or not the molecule with number molnum is\nneeded to generate this point" );
         
         }
         { //::SireFF::CenterOfMass::contains
@@ -89,7 +92,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "Return whether or not this molecule with ID molid is\nneeded to generate this point" );
         
         }
         { //::SireFF::CenterOfMass::isExtraMoleculePoint
@@ -99,7 +103,8 @@ void register_CenterOfMass_class(){
             
             CenterOfMass_exposer.def( 
                 "isExtraMoleculePoint"
-                , isExtraMoleculePoint_function_value );
+                , isExtraMoleculePoint_function_value
+                , "Return whether or not this is an extramolecular point (it is independent\nof the coordinates of atoms in any molecule, i.e. it is just a point in space)" );
         
         }
         { //::SireFF::CenterOfMass::isInterMoleculePoint
@@ -109,7 +114,8 @@ void register_CenterOfMass_class(){
             
             CenterOfMass_exposer.def( 
                 "isInterMoleculePoint"
-                , isInterMoleculePoint_function_value );
+                , isInterMoleculePoint_function_value
+                , "Return whether or not this is an intermolecular point (it depends on\ncoordinates of atoms from than one molecule)" );
         
         }
         { //::SireFF::CenterOfMass::isIntraMoleculePoint
@@ -119,7 +125,8 @@ void register_CenterOfMass_class(){
             
             CenterOfMass_exposer.def( 
                 "isIntraMoleculePoint"
-                , isIntraMoleculePoint_function_value );
+                , isIntraMoleculePoint_function_value
+                , "Return whether this is an intramolecular point (it depends on coordinates\nof atoms in just one molecule)" );
         
         }
         { //::SireFF::CenterOfMass::molecules
@@ -129,7 +136,8 @@ void register_CenterOfMass_class(){
             
             CenterOfMass_exposer.def( 
                 "molecules"
-                , molecules_function_value );
+                , molecules_function_value
+                , "Return all of the molecules used to generate this point" );
         
         }
         { //::SireFF::CenterOfMass::nMolecules
@@ -139,7 +147,8 @@ void register_CenterOfMass_class(){
             
             CenterOfMass_exposer.def( 
                 "nMolecules"
-                , nMolecules_function_value );
+                , nMolecules_function_value
+                , "Return the number of molecules needed to generate this point" );
         
         }
         CenterOfMass_exposer.def( bp::self != bp::self );
@@ -152,7 +161,8 @@ void register_CenterOfMass_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CenterOfMass_exposer.def( bp::self == bp::self );
@@ -164,7 +174,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "setSpace"
                 , setSpace_function_value
-                , ( bp::arg("space") ) );
+                , ( bp::arg("space") )
+                , "Set the space used by this point - a CenterOfGeometry cannot\nbe calculated for periodic or non-cartesian spaces if there\nis more than one molecule" );
         
         }
         { //::SireFF::CenterOfMass::toString
@@ -174,7 +185,8 @@ void register_CenterOfMass_class(){
             
             CenterOfMass_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         { //::SireFF::CenterOfMass::typeName
@@ -184,7 +196,8 @@ void register_CenterOfMass_class(){
             
             CenterOfMass_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::CenterOfMass::update
@@ -195,7 +208,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Update the molecules used to create this point" );
         
         }
         { //::SireFF::CenterOfMass::update
@@ -206,7 +220,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Update the molecules used to create this point" );
         
         }
         { //::SireFF::CenterOfMass::update
@@ -217,7 +232,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Update the molecules used to create this point" );
         
         }
         { //::SireFF::CenterOfMass::update
@@ -228,7 +244,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "Update the molecules used to create this point" );
         
         }
         { //::SireFF::CenterOfMass::usesMoleculesIn
@@ -239,7 +256,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("forcetable") ) );
+                , ( bp::arg("forcetable") )
+                , "Return whether or not this point uses data from any of the\nmolecules in the passed forcetable" );
         
         }
         { //::SireFF::CenterOfMass::usesMoleculesIn
@@ -250,7 +268,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Return whether or not this point uses data from any of the\nmolecules in molecules" );
         
         }
         { //::SireFF::CenterOfMass::usesMoleculesIn
@@ -261,7 +280,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Return whether or not this point uses data from any of the\nmolecules in the group molgroup" );
         
         }
         { //::SireFF::CenterOfMass::usesMoleculesIn
@@ -272,7 +292,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "Return whether or not this point uses data from any of the\nmolecules in the groups in molgroups" );
         
         }
         { //::SireFF::CenterOfMass::wouldUpdate
@@ -283,7 +304,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Return whether or not the passed molecule would change this point" );
         
         }
         { //::SireFF::CenterOfMass::wouldUpdate
@@ -294,7 +316,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Return whether or not the passed molecules would change this point" );
         
         }
         { //::SireFF::CenterOfMass::wouldUpdate
@@ -305,7 +328,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Return whether or not the passed molecules would change this point" );
         
         }
         { //::SireFF::CenterOfMass::wouldUpdate
@@ -316,7 +340,8 @@ void register_CenterOfMass_class(){
             CenterOfMass_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "Return whether or not the passed molecules would change this point" );
         
         }
         CenterOfMass_exposer.staticmethod( "typeName" );

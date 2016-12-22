@@ -31,11 +31,11 @@ void register_Specify_FFID__class(){
 
     { //::SireID::Specify< SireFF::FFID >
         typedef bp::class_< SireID::Specify< SireFF::FFID >, bp::bases< SireFF::FFID, SireID::ID > > Specify_FFID__exposer_t;
-        Specify_FFID__exposer_t Specify_FFID__exposer = Specify_FFID__exposer_t( "Specify_FFID_", bp::init< >() );
+        Specify_FFID__exposer_t Specify_FFID__exposer = Specify_FFID__exposer_t( "Specify_FFID_", "", bp::init< >("") );
         bp::scope Specify_FFID__scope( Specify_FFID__exposer );
-        Specify_FFID__exposer.def( bp::init< SireFF::FFID const &, qint32 >(( bp::arg("id"), bp::arg("i") )) );
-        Specify_FFID__exposer.def( bp::init< SireFF::FFID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") )) );
-        Specify_FFID__exposer.def( bp::init< SireID::Specify< SireFF::FFID > const & >(( bp::arg("other") )) );
+        Specify_FFID__exposer.def( bp::init< SireFF::FFID const &, qint32 >(( bp::arg("id"), bp::arg("i") ), "") );
+        Specify_FFID__exposer.def( bp::init< SireFF::FFID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") ), "") );
+        Specify_FFID__exposer.def( bp::init< SireID::Specify< SireFF::FFID > const & >(( bp::arg("other") ), "") );
         { //::SireID::Specify< SireFF::FFID >::hash
         
             typedef SireID::Specify< SireFF::FFID > exported_class_t;
@@ -44,7 +44,8 @@ void register_Specify_FFID__class(){
             
             Specify_FFID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireFF::FFID >::isNull
@@ -55,19 +56,21 @@ void register_Specify_FFID__class(){
             
             Specify_FFID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireFF::FFID >::map
         
             typedef SireID::Specify< SireFF::FFID > exported_class_t;
-            typedef ::QList< SireFF::FFIdx > ( ::SireID::Specify< SireFF::FFID >::*map_function_type)( ::SireFF::ForceFields const & ) const;
+            typedef ::QList< SireFF::FFIdx > ( ::SireID::Specify< SireFF::FFID >::*map_function_type)( ::SireFF::FFID::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireFF::FFID >::map );
             
             Specify_FFID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("obj") ) );
+                , ( bp::arg("obj") )
+                , "" );
         
         }
         Specify_FFID__exposer.def( bp::self != bp::self );
@@ -81,7 +84,8 @@ void register_Specify_FFID__class(){
             Specify_FFID__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireID::Specify< SireFF::FFID >::operator()
@@ -93,7 +97,8 @@ void register_Specify_FFID__class(){
             Specify_FFID__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireID::Specify< SireFF::FFID >::operator=
@@ -106,7 +111,8 @@ void register_Specify_FFID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Specify_FFID__exposer.def( bp::self == bp::self );
@@ -120,7 +126,8 @@ void register_Specify_FFID__class(){
             Specify_FFID__exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireID::Specify< SireFF::FFID >::toString
@@ -131,7 +138,8 @@ void register_Specify_FFID__class(){
             
             Specify_FFID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireFF::FFID >::typeName
@@ -142,7 +150,8 @@ void register_Specify_FFID__class(){
             
             Specify_FFID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireFF::FFID >::what
@@ -153,7 +162,8 @@ void register_Specify_FFID__class(){
             
             Specify_FFID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Specify_FFID__exposer.staticmethod( "typeName" );
@@ -166,6 +176,7 @@ void register_Specify_FFID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Specify_FFID__exposer.def( "__str__", &__str__< ::SireID::Specify<SireFF::FFID> > );
         Specify_FFID__exposer.def( "__repr__", &__str__< ::SireID::Specify<SireFF::FFID> > );
+        Specify_FFID__exposer.def( "__hash__", &::SireID::Specify<SireFF::FFID>::hash );
     }
 
 }

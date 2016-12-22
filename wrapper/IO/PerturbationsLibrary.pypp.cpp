@@ -9,7 +9,7 @@ namespace bp = boost::python;
 
 #include "SireBase/findexe.h"
 
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 
 #include "SireBase/tempdir.h"
 
@@ -85,10 +85,10 @@ void register_PerturbationsLibrary_class(){
 
     { //::SireIO::PerturbationsLibrary
         typedef bp::class_< SireIO::PerturbationsLibrary, bp::bases< SireBase::Property > > PerturbationsLibrary_exposer_t;
-        PerturbationsLibrary_exposer_t PerturbationsLibrary_exposer = PerturbationsLibrary_exposer_t( "PerturbationsLibrary", bp::init< >() );
+        PerturbationsLibrary_exposer_t PerturbationsLibrary_exposer = PerturbationsLibrary_exposer_t( "PerturbationsLibrary", "", bp::init< >("Default constructor") );
         bp::scope PerturbationsLibrary_scope( PerturbationsLibrary_exposer );
-        PerturbationsLibrary_exposer.def( bp::init< QString const & >(( bp::arg("file") )) );
-        PerturbationsLibrary_exposer.def( bp::init< SireIO::PerturbationsLibrary const & >(( bp::arg("other") )) );
+        PerturbationsLibrary_exposer.def( bp::init< QString const & >(( bp::arg("file") ), "Construct, loading the library from the passed file") );
+        PerturbationsLibrary_exposer.def( bp::init< SireIO::PerturbationsLibrary const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireIO::PerturbationsLibrary::add
         
             typedef void ( ::SireIO::PerturbationsLibrary::*add_function_type)( ::SireIO::PerturbationsLibrary const & ) ;
@@ -97,7 +97,8 @@ void register_PerturbationsLibrary_class(){
             PerturbationsLibrary_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add the templates in other into this library" );
         
         }
         { //::SireIO::PerturbationsLibrary::applyTemplate
@@ -108,7 +109,8 @@ void register_PerturbationsLibrary_class(){
             PerturbationsLibrary_exposer.def( 
                 "applyTemplate"
                 , applyTemplate_function_value
-                , ( bp::arg("molecule") ) );
+                , ( bp::arg("molecule") )
+                , "Generate the perturbations property and associated properties for the passed molecule" );
         
         }
         { //::SireIO::PerturbationsLibrary::getTemplate
@@ -120,7 +122,8 @@ void register_PerturbationsLibrary_class(){
                 "getTemplate"
                 , getTemplate_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the template for the specified key\nThrow: SireError::invalid_key\n" );
         
         }
         { //::SireIO::PerturbationsLibrary::loadTemplates
@@ -131,7 +134,8 @@ void register_PerturbationsLibrary_class(){
             PerturbationsLibrary_exposer.def( 
                 "loadTemplates"
                 , loadTemplates_function_value
-                , ( bp::arg("file") ) );
+                , ( bp::arg("file") )
+                , "" );
         
         }
         PerturbationsLibrary_exposer.def( bp::self != bp::self );
@@ -145,7 +149,8 @@ void register_PerturbationsLibrary_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PerturbationsLibrary_exposer.def( bp::self == bp::self );
@@ -157,7 +162,8 @@ void register_PerturbationsLibrary_class(){
             PerturbationsLibrary_exposer.def( 
                 "setTemplate"
                 , setTemplate_function_value
-                , ( bp::arg("key"), bp::arg("tmplate") ) );
+                , ( bp::arg("key"), bp::arg("tmplate") )
+                , "Set the template associated with the passed key" );
         
         }
         { //::SireIO::PerturbationsLibrary::typeName
@@ -167,7 +173,8 @@ void register_PerturbationsLibrary_class(){
             
             PerturbationsLibrary_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         PerturbationsLibrary_exposer.staticmethod( "typeName" );

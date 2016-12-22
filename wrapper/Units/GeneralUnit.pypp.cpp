@@ -33,9 +33,9 @@ void register_GeneralUnit_class(){
 
     { //::SireUnits::Dimension::GeneralUnit
         typedef bp::class_< SireUnits::Dimension::GeneralUnit, bp::bases< SireUnits::Dimension::Unit > > GeneralUnit_exposer_t;
-        GeneralUnit_exposer_t GeneralUnit_exposer = GeneralUnit_exposer_t( "GeneralUnit", bp::init< >() );
+        GeneralUnit_exposer_t GeneralUnit_exposer = GeneralUnit_exposer_t( "GeneralUnit", "", bp::init< >("") );
         bp::scope GeneralUnit_scope( GeneralUnit_exposer );
-        GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("other") )) );
+        GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("other") ), "") );
         { //::SireUnits::Dimension::GeneralUnit::ANGLE
         
             typedef int ( ::SireUnits::Dimension::GeneralUnit::*ANGLE_function_type)(  ) const;
@@ -43,7 +43,8 @@ void register_GeneralUnit_class(){
             
             GeneralUnit_exposer.def( 
                 "ANGLE"
-                , ANGLE_function_value );
+                , ANGLE_function_value
+                , "" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::CHARGE
@@ -53,7 +54,8 @@ void register_GeneralUnit_class(){
             
             GeneralUnit_exposer.def( 
                 "CHARGE"
-                , CHARGE_function_value );
+                , CHARGE_function_value
+                , "" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::LENGTH
@@ -63,7 +65,8 @@ void register_GeneralUnit_class(){
             
             GeneralUnit_exposer.def( 
                 "LENGTH"
-                , LENGTH_function_value );
+                , LENGTH_function_value
+                , "" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::MASS
@@ -73,7 +76,8 @@ void register_GeneralUnit_class(){
             
             GeneralUnit_exposer.def( 
                 "MASS"
-                , MASS_function_value );
+                , MASS_function_value
+                , "" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::QUANTITY
@@ -83,7 +87,8 @@ void register_GeneralUnit_class(){
             
             GeneralUnit_exposer.def( 
                 "QUANTITY"
-                , QUANTITY_function_value );
+                , QUANTITY_function_value
+                , "" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::TEMPERATURE
@@ -93,7 +98,8 @@ void register_GeneralUnit_class(){
             
             GeneralUnit_exposer.def( 
                 "TEMPERATURE"
-                , TEMPERATURE_function_value );
+                , TEMPERATURE_function_value
+                , "" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::TIME
@@ -103,7 +109,8 @@ void register_GeneralUnit_class(){
             
             GeneralUnit_exposer.def( 
                 "TIME"
-                , TIME_function_value );
+                , TIME_function_value
+                , "" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::invert
@@ -113,7 +120,8 @@ void register_GeneralUnit_class(){
             
             GeneralUnit_exposer.def( 
                 "invert"
-                , invert_function_value );
+                , invert_function_value
+                , "" );
         
         }
         GeneralUnit_exposer.def( bp::self != bp::self );
@@ -137,7 +145,8 @@ void register_GeneralUnit_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         GeneralUnit_exposer.def( bp::self == bp::self );
@@ -149,7 +158,8 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "to"
                 , to_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::to
@@ -160,7 +170,8 @@ void register_GeneralUnit_class(){
             GeneralUnit_exposer.def( 
                 "to"
                 , to_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::toString
@@ -170,7 +181,8 @@ void register_GeneralUnit_class(){
             
             GeneralUnit_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::typeName
@@ -180,7 +192,8 @@ void register_GeneralUnit_class(){
             
             GeneralUnit_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireUnits::Dimension::GeneralUnit::what
@@ -190,7 +203,8 @@ void register_GeneralUnit_class(){
             
             GeneralUnit_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         GeneralUnit_exposer.def( bp::other<double>() * bp::self );

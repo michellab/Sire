@@ -25,10 +25,10 @@ void register_FFIdx_class(){
 
     { //::SireFF::FFIdx
         typedef bp::class_< SireFF::FFIdx, bp::bases< SireFF::FFID, SireID::ID, SireID::IndexBase > > FFIdx_exposer_t;
-        FFIdx_exposer_t FFIdx_exposer = FFIdx_exposer_t( "FFIdx", bp::init< >() );
+        FFIdx_exposer_t FFIdx_exposer = FFIdx_exposer_t( "FFIdx", "This is an ID object that is used to index forcefields (e.g. index\nin a list or array).\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope FFIdx_scope( FFIdx_exposer );
-        FFIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") )) );
-        FFIdx_exposer.def( bp::init< SireFF::FFIdx const & >(( bp::arg("other") )) );
+        FFIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") ), "") );
+        FFIdx_exposer.def( bp::init< SireFF::FFIdx const & >(( bp::arg("other") ), "") );
         { //::SireFF::FFIdx::hash
         
             typedef ::uint ( ::SireFF::FFIdx::*hash_function_type)(  ) const;
@@ -36,7 +36,8 @@ void register_FFIdx_class(){
             
             FFIdx_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireFF::FFIdx::isNull
@@ -46,7 +47,8 @@ void register_FFIdx_class(){
             
             FFIdx_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireFF::FFIdx::map
@@ -57,7 +59,8 @@ void register_FFIdx_class(){
             FFIdx_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("ffields") ) );
+                , ( bp::arg("ffields") )
+                , "Short cut function to map this index to the index of the\nmatching forcefield in the passed ForceFields object\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::FFIdx::null
@@ -67,7 +70,8 @@ void register_FFIdx_class(){
             
             FFIdx_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireFF::FFIdx::operator=
@@ -79,7 +83,8 @@ void register_FFIdx_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireFF::FFIdx::toString
@@ -89,7 +94,8 @@ void register_FFIdx_class(){
             
             FFIdx_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireFF::FFIdx::typeName
@@ -99,7 +105,8 @@ void register_FFIdx_class(){
             
             FFIdx_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::FFIdx::what
@@ -109,7 +116,8 @@ void register_FFIdx_class(){
             
             FFIdx_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         FFIdx_exposer.staticmethod( "null" );
@@ -123,6 +131,7 @@ void register_FFIdx_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         FFIdx_exposer.def( "__str__", &__str__< ::SireFF::FFIdx > );
         FFIdx_exposer.def( "__repr__", &__str__< ::SireFF::FFIdx > );
+        FFIdx_exposer.def( "__hash__", &::SireFF::FFIdx::hash );
     }
 
 }

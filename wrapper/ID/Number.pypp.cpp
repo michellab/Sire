@@ -19,7 +19,7 @@ void register_Number_class(){
 
     { //::SireID::Number
         typedef bp::class_< SireID::Number, boost::noncopyable > Number_exposer_t;
-        Number_exposer_t Number_exposer = Number_exposer_t( "Number", bp::no_init );
+        Number_exposer_t Number_exposer = Number_exposer_t( "Number", "This is the base class of all Number ID objects. A Number\nis used to provide an object with an identifying number.\nThis could be the number of a residue in a molecule, a\nuser-supplied number of a CutGroup in a molecule, or\nperhaps the automatic unique ID numbers of molecules,\nforcefields or molecule groups that are assigned by the\nprogram. The key point of a Number is to provide an ID\nthat can be queried and compared rapidly, and that\ndoes not change as the object is moved between different\ncontainers. Generally an object should keep its number\nthroughout its lifetime.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Number_scope( Number_exposer );
         { //::SireID::Number::hash
         
@@ -28,7 +28,8 @@ void register_Number_class(){
             
             Number_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::Number::isNull
@@ -38,7 +39,8 @@ void register_Number_class(){
             
             Number_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::Number::null
@@ -48,7 +50,8 @@ void register_Number_class(){
             
             Number_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireID::Number::value
@@ -58,7 +61,8 @@ void register_Number_class(){
             
             Number_exposer.def( 
                 "value"
-                , value_function_value );
+                , value_function_value
+                , "" );
         
         }
         Number_exposer.staticmethod( "null" );
@@ -68,6 +72,7 @@ void register_Number_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Number_exposer.def( "__str__", &pvt_get_name);
         Number_exposer.def( "__repr__", &pvt_get_name);
+        Number_exposer.def( "__hash__", &::SireID::Number::hash );
     }
 
 }

@@ -9,7 +9,7 @@ namespace bp = boost::python;
 
 #include "SireBase/findexe.h"
 
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 
 #include "SireBase/tempdir.h"
 
@@ -97,7 +97,7 @@ void register_ProtoMSParameters_class(){
 
     { //::SireIO::ProtoMSParameters
         typedef bp::class_< SireIO::ProtoMSParameters > ProtoMSParameters_exposer_t;
-        ProtoMSParameters_exposer_t ProtoMSParameters_exposer = ProtoMSParameters_exposer_t( "ProtoMSParameters", bp::init< >() );
+        ProtoMSParameters_exposer_t ProtoMSParameters_exposer = ProtoMSParameters_exposer_t( "ProtoMSParameters", "This class holds all of the source and default values of the\nproperties used by the ProtoMS parameter reader\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope ProtoMSParameters_scope( ProtoMSParameters_exposer );
         { //::SireIO::ProtoMSParameters::angle
         
@@ -107,7 +107,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "angle"
                 , angle_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\nangle parameters\n\ndefault == angle\n" );
         
         }
         { //::SireIO::ProtoMSParameters::bond
@@ -118,7 +119,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "bond"
                 , bond_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\nbond parameters\n\ndefault == bond\n" );
         
         }
         { //::SireIO::ProtoMSParameters::charge
@@ -129,7 +131,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "charge"
                 , charge_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\npartial atomic charges\n\ndefault == charge\n" );
         
         }
         { //::SireIO::ProtoMSParameters::connectivity
@@ -140,7 +143,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "connectivity"
                 , connectivity_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\nmolecular connectivity\n\ndefault == connectivity\n" );
         
         }
         { //::SireIO::ProtoMSParameters::coordinates
@@ -151,7 +155,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "coordinates"
                 , coordinates_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\ncoordinates\n\ndefault == coordinates\n" );
         
         }
         { //::SireIO::ProtoMSParameters::dihedral
@@ -162,7 +167,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "dihedral"
                 , dihedral_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\ndihedral parameters\n\ndefault == dihedral\n" );
         
         }
         { //::SireIO::ProtoMSParameters::finalCharge
@@ -173,7 +179,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "finalCharge"
                 , finalCharge_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\nfinal_partial atomic charges\n\ndefault == final_charge\n" );
         
         }
         { //::SireIO::ProtoMSParameters::finalLJ
@@ -184,7 +191,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "finalLJ"
                 , finalLJ_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\nfinal atomic Lennard Jones parameters\n\ndefault == final_LJ\n" );
         
         }
         { //::SireIO::ProtoMSParameters::initialCharge
@@ -195,7 +203,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "initialCharge"
                 , initialCharge_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\ninitial partial atomic charges\n\ndefault == initial_charge\n" );
         
         }
         { //::SireIO::ProtoMSParameters::initialLJ
@@ -206,7 +215,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "initialLJ"
                 , initialLJ_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\ninitial atomic Lennard Jones parameters\n\ndefault == initial_LJ\n" );
         
         }
         { //::SireIO::ProtoMSParameters::lj
@@ -217,7 +227,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\natomic Lennard Jones parameters\n\ndefault == LJ\n" );
         
         }
         { //::SireIO::ProtoMSParameters::nonBonded
@@ -228,7 +239,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "nonBonded"
                 , nonBonded_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\nnon-bonded pairs\n\ndefault == intrascale\n" );
         
         }
         { //::SireIO::ProtoMSParameters::perturbations
@@ -239,7 +251,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "perturbations"
                 , perturbations_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain\nthe perturbations property\n\ndefault == perturbations\n" );
         
         }
         { //::SireIO::ProtoMSParameters::ureyBradley
@@ -250,7 +263,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "ureyBradley"
                 , ureyBradley_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\nUrey-Bradley parameters\n\ndefault == Urey-Bradley\n" );
         
         }
         { //::SireIO::ProtoMSParameters::zmatrix
@@ -261,7 +275,8 @@ void register_ProtoMSParameters_class(){
             ProtoMSParameters_exposer.def( 
                 "zmatrix"
                 , zmatrix_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain the\nz-matrix\n\ndefault == zmatrix\n" );
         
         }
         ProtoMSParameters_exposer.def( "__copy__", &__copy__);

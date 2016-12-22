@@ -11,11 +11,13 @@ import os
 import sys
 import pickle
 import re
+import logging
 
 from glob import glob
 
 sys.path.append("../AutoGenerate")
 from scanheaders import *
+from doxygen import *
 
 from pyplusplus.module_builder import module_builder_t
 from pyplusplus.decl_wrappers import calldef_wrapper
@@ -24,12 +26,30 @@ from pyplusplus.code_creators import algorithm
 from pyplusplus.code_creators import free_function_t
 from pyplusplus.code_creators import mem_fun_t
 from pyplusplus.decl_wrappers import call_policies
+import pyplusplus
 
 from pygccxml.declarations.matchers import access_type_matcher_t
 from pygccxml import declarations
 import pygccxml
 
 all_exposed_classes = {}
+
+def demangle(c):
+    """Internal function that does its best job to demangle a class into
+       a recognisable string"""
+    bases = []
+
+    base = c.parent
+    while base:
+        try:
+            if base.name != "::":
+                bases.insert(0, base.name)
+            base = base.parent
+        except:
+            base = None
+
+    bases.append(c.name)
+    return "::".join(bases)
 
 def _generate_bases(self, base_creators):
     """This is a new version of the Py++ generate_bases function that only
@@ -44,10 +64,17 @@ def _generate_bases(self, base_creators):
         if base_desc.access != declarations.ACCESS_TYPES.PUBLIC:
             continue
 
-        #only include bases that are in the global list
-        if (base_desc.related_class.demangled in all_exposed_classes):
-            bases.append( algorithm.create_identifier( self, base_desc.related_class.decl_string ) )
-    
+        try:
+            #only include bases that are in the global list
+            if (base_desc.related_class.demangled in all_exposed_classes):
+                bases.append( algorithm.create_identifier( self, base_desc.related_class.decl_string ) )
+        except:
+            # doesn't work with CastXML
+            demangled = demangle(base_desc.related_class)
+
+            if (demangled in all_exposed_classes):
+                bases.append( algorithm.create_identifier( self, base_desc.related_class.decl_string ) )
+
     if not bases:
         return None
     
@@ -153,7 +180,6 @@ def find_class(mb, classname):
                if str(alias).find("%s [class]" % classname) != -1 or \
                   str(alias).find("%s [struct]" % classname) != -1 or \
                   str(alias).find("%s [typedef]" % classname) != -1:
-                   print("Found %s as alias %s of %s" % (classname, clas, alias))
                    return clas
 
    print("Cannot find the class %s" % classname)
@@ -178,7 +204,13 @@ def export_function(mb, function, includes):
                    for include in includes:
                        f.add_declaration_code("#include %s" % include)
    except:
-       print("Something went wrong exporting %s" % name)
+       for f in mb.free_functions(name):
+           # demangled doesn't work with CastXML      
+           if root.find(str(f.parent.name)) != -1:
+               f.include()
+
+               for include in includes:
+                   f.add_declaration_code("#include %s" % include)
 
 def has_clone_function(t):
     c = None
@@ -187,7 +219,6 @@ def has_clone_function(t):
         fullname = " ".join(str(t.base).split(" ")[0:-1])
         c = find_class(mb, fullname)
     except:
-        print("WARNING!!! Couldn't find the class for %s" % (t))
         return False
 
     try:
@@ -256,10 +287,7 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
    except:
        pass
 
-   print("ALL FUNCTIONS: %s" % funs)
-
    for f in funs:
-       print("%s : %s : %s" % (f, f.return_type, has_clone_function(f.return_type)))
        if has_clone_function(f.return_type):
            f.call_policies = call_policies.custom_call_policies( \
                  "bp::return_value_policy<bp::clone_const_reference>", \
@@ -284,7 +312,9 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
    for decl in c.decls():
        try:
            if str(decl.return_type) != "char const *":
-               if str(decl.return_type).endswith("*"):
+               rt = str(decl.return_type)
+               if rt.endswith("*") or \
+                  rt.endswith("::iterator") or rt.endswith("::const_iterator"):
                    decl.exclude()
        except:
            pass
@@ -294,14 +324,11 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
            if o.call_policies is None:
                o.exclude()
    except:
-       print("Class %s has no operators" % classname)
+       pass
 
    #run any class specific code
    if (classname in special_code):
-     print("Running special code for %s" % classname)
-     special_code[classname](c)
-   else:
-     print("No special code needed for %s" % classname)
+       special_code[classname](c)
 
    #if this is a noncopyable class then remove all constructors!
    if c.noncopyable:
@@ -326,7 +353,6 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
                   if not (class_name in has_copy_function):
                       has_copy_function[class_name] = True
 
-                      print("Creating a copy function for class %s" % class_name)
                       made_copy_function = True
 
                       c.add_declaration_code( \
@@ -397,6 +423,10 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
    if has_function(c, "getitem"):
        c.add_registration_code("def( \"__getitem__\", &%s::getitem )" % c.decl_string )
 
+   #is there a .hash() function?
+   if has_function(c, "hash"):
+       c.add_registration_code("def( \"__hash__\", &%s::hash )" % c.decl_string )
+
    #provide an alias for this class
    if (classname in aliases):
       c.alias = " ".join( aliases[classname].split("::")[1:] )
@@ -420,7 +450,8 @@ def register_implicit_conversions(mb, implicitly_convertible):
     for conversion in implicitly_convertible:
        mb.add_registration_code("bp::implicitly_convertible< %s, %s >();" % conversion)
 
-def write_wrappers(mb, module, huge_classes, header_files = [] ):
+def write_wrappers(mb, module, huge_classes, header_files = [],
+                   source_docs = {} ):
    """This function performs the actual work of writing the wrappers to disk"""
                    
    #make sure that the protected and private member functions and 
@@ -437,7 +468,8 @@ def write_wrappers(mb, module, huge_classes, header_files = [] ):
  
    #build a code creator - this must be done after the above, as
    #otherwise our modifications above won't take effect
-   mb.build_code_creator( module_name="_%s" % module )
+   mb.build_code_creator( module_name="_%s" % module,
+                          doc_extractor=doxygen_doc_extractor(source_docs) )
 
    #get rid of the standard headers
    mb.code_creator.replace_included_headers( header_files )
@@ -521,6 +553,9 @@ if __name__ == "__main__":
     #load up the active headers object
     active_headers = pickle.load( open("active_headers.data", "rb") )
 
+    #load up all of the source-level documentation
+    source_docs = pickle.load( open("docs.data", "rb") )
+
     #get the special code, big classes and implicit conversions
     implicitly_convertible = []
     special_code = {}
@@ -574,6 +609,10 @@ if __name__ == "__main__":
     boost_include_dirs = [ boostdir ]
     gsl_include_dirs = [ gsldir ]
 
+    generator_path, generator_name = pygccxml.utils.find_xml_generator()
+
+    print("Using %s from %s" % (generator_name, generator_path))
+
     if openmm_include_dir is not None:
         if os.path.exists("%s/OpenMM.h" % openmm_include_dir):
             print("Generating wrappers including OpenMM from %s" % openmm_include_dir)
@@ -582,30 +621,47 @@ if __name__ == "__main__":
             print("Cannot find %s/OpenMM.h - disabling generation of OpenMM wrappers." % openmm_include_dir)
             openmm_include_dirs = None
 
+    if os.getenv("VERBOSE"):
+        pygccxml.utils.loggers.cxx_parser.setLevel(logging.DEBUG)
+
     if openmm_include_dirs is None:
         #construct a module builder that will build all of the wrappers for this module
-        mb = module_builder_t( files = [ "active_headers.h" ],
-                           cflags = "-m64 -fPIC",
-                           include_paths = sire_include_dirs + qt_include_dirs +
+        xml_generator_config = pygccxml.parser.xml_generator_configuration_t( 
+                                xml_generator_path=generator_path,
+                                xml_generator=generator_name,
+                                compiler="gcc",
+                                cflags = "-m64 -fPIC",
+                                include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs,
-                           define_symbols = ["GCCXML_PARSE", "__PIE__",
-                                             "SIRE_SKIP_INLINE_FUNCTIONS",
-                                             "SIREN_SKIP_INLINE_FUNCTIONS",
-                                             "SIRE_INSTANTIATE_TEMPLATES",
-                                             "SIREN_INSTANTIATE_TEMPLATES"] )
+                                define_symbols = ["GCCXML_PARSE", "__PIE__",
+                                                  "SIRE_SKIP_INLINE_FUNCTIONS",
+                                                  "SIREN_SKIP_INLINE_FUNCTIONS",
+                                                  "SIRE_INSTANTIATE_TEMPLATES",
+                                                  "SIREN_INSTANTIATE_TEMPLATES"]
+                         )
+
+        mb = module_builder_t( files = [ "active_headers.h" ],
+                               gccxml_config=xml_generator_config )
     else:
         #construct a module builder that will build all of the wrappers for this module
-        mb = module_builder_t( files = [ "active_headers.h" ],
-                           cflags = "-m64 -fPIC",
-                           include_paths = sire_include_dirs + qt_include_dirs +
-                                           boost_include_dirs + gsl_include_dirs + 
+        xml_generator_config = pygccxml.parser.xml_generator_configuration_t(
+                                xml_generator_path=generator_path,
+                                xml_generator=generator_name,
+                                compiler="gcc",
+                                cflags = "-m64 -fPIC",
+                                include_paths = sire_include_dirs + qt_include_dirs +
+                                           boost_include_dirs + gsl_include_dirs +
                                            openmm_include_dirs,
-                           define_symbols = ["GCCXML_PARSE", "__PIE__",
-                                             "SIRE_USE_OPENMM",
-                                             "SIRE_SKIP_INLINE_FUNCTIONS",
-                                             "SIREN_SKIP_INLINE_FUNCTIONS",
-                                             "SIRE_INSTANTIATE_TEMPLATES",
-                                             "SIREN_INSTANTIATE_TEMPLATES"] )
+                                define_symbols = ["GCCXML_PARSE", "__PIE__",
+                                                  "SIRE_USE_OPENMM",
+                                                  "SIRE_SKIP_INLINE_FUNCTIONS",
+                                                  "SIREN_SKIP_INLINE_FUNCTIONS",
+                                                  "SIRE_INSTANTIATE_TEMPLATES",
+                                                  "SIREN_INSTANTIATE_TEMPLATES"]
+                         )
+
+        mb = module_builder_t( files = [ "active_headers.h" ],
+                               gccxml_config=xml_generator_config )
 
 
     #get rid of all virtual python functions - this is to stop slow wrapper code
@@ -693,7 +749,7 @@ if __name__ == "__main__":
     #now perform any last-minute fixes
     fixMB(mb)
 
-    write_wrappers(mb, module, huge_classes)  
+    write_wrappers(mb, module, huge_classes, source_docs=source_docs)  
 
     #now write a CMakeFile that contains all of the autogenerated files
     FILE = open("CMakeAutogenFile.txt", "w")

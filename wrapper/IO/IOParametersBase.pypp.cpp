@@ -35,7 +35,7 @@ void register_IOParametersBase_class(){
 
     { //::SireIO::IOParametersBase
         typedef bp::class_< SireIO::IOParametersBase > IOParametersBase_exposer_t;
-        IOParametersBase_exposer_t IOParametersBase_exposer = IOParametersBase_exposer_t( "IOParametersBase", bp::init< >() );
+        IOParametersBase_exposer_t IOParametersBase_exposer = IOParametersBase_exposer_t( "IOParametersBase", "This is the base class of the object that contains the\ndefault sources of the properties into which this molecule\nreaderwriter will place data, and the default values of\nthe parameters that control how this readerwriter works.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope IOParametersBase_scope( IOParametersBase_exposer );
         { //::SireIO::IOParametersBase::coordinates
         
@@ -45,7 +45,8 @@ void register_IOParametersBase_class(){
             IOParametersBase_exposer.def( 
                 "coordinates"
                 , coordinates_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the default name of the property into which\nthe coordinates of the atoms will be placed\n\ndefault == coordinates\n" );
         
         }
         { //::SireIO::IOParametersBase::cuttingFunction
@@ -56,7 +57,8 @@ void register_IOParametersBase_class(){
             IOParametersBase_exposer.def( 
                 "cuttingFunction"
                 , cuttingFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the function used to split the molecule\ninto CutGroups (must be an object of type CuttingFunction)\n\nsource  == cutting-function\ndefault == ResidueCutting()\n" );
         
         }
         { //::SireIO::IOParametersBase::element
@@ -67,7 +69,8 @@ void register_IOParametersBase_class(){
             IOParametersBase_exposer.def( 
                 "element"
                 , element_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the default source of the property into which\nthe chemical elements of each atom will be placed\n\ndefault == element\n" );
         
         }
         IOParametersBase_exposer.def( "__copy__", &__copy__);

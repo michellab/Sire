@@ -25,7 +25,7 @@ void register_Array2DBase_class(){
 
     { //::SireBase::Array2DBase
         typedef bp::class_< SireBase::Array2DBase, boost::noncopyable > Array2DBase_exposer_t;
-        Array2DBase_exposer_t Array2DBase_exposer = Array2DBase_exposer_t( "Array2DBase", bp::no_init );
+        Array2DBase_exposer_t Array2DBase_exposer = Array2DBase_exposer_t( "Array2DBase", "Base class of the Array2D<T> class\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Array2DBase_scope( Array2DBase_exposer );
         { //::SireBase::Array2DBase::assertValidIndex
         
@@ -35,7 +35,8 @@ void register_Array2DBase_class(){
             Array2DBase_exposer.def( 
                 "assertValidIndex"
                 , assertValidIndex_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireBase::Array2DBase::checkedOffset
@@ -46,7 +47,8 @@ void register_Array2DBase_class(){
             Array2DBase_exposer.def( 
                 "checkedOffset"
                 , checkedOffset_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireBase::Array2DBase::map
@@ -57,7 +59,8 @@ void register_Array2DBase_class(){
             Array2DBase_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireBase::Array2DBase::nColumns
@@ -67,7 +70,8 @@ void register_Array2DBase_class(){
             
             Array2DBase_exposer.def( 
                 "nColumns"
-                , nColumns_function_value );
+                , nColumns_function_value
+                , "" );
         
         }
         { //::SireBase::Array2DBase::nRows
@@ -77,7 +81,8 @@ void register_Array2DBase_class(){
             
             Array2DBase_exposer.def( 
                 "nRows"
-                , nRows_function_value );
+                , nRows_function_value
+                , "" );
         
         }
         { //::SireBase::Array2DBase::offset
@@ -88,7 +93,8 @@ void register_Array2DBase_class(){
             Array2DBase_exposer.def( 
                 "offset"
                 , offset_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         Array2DBase_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireBase::Array2DBase >,

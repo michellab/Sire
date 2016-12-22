@@ -34,17 +34,17 @@ void register_MTSMC_class(){
 
     { //::SireMove::MTSMC
         typedef bp::class_< SireMove::MTSMC, bp::bases< SireMove::MonteCarlo, SireMove::Move, SireBase::Property > > MTSMC_exposer_t;
-        MTSMC_exposer_t MTSMC_exposer = MTSMC_exposer_t( "MTSMC", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() )) );
+        MTSMC_exposer_t MTSMC_exposer = MTSMC_exposer_t( "MTSMC", "This is a multiple-time-step Monte Carlo moves. This uses\nthe Metropolis-Hamilton acceptance test to perform\nnfast Monte Carlo moves on a fast Hamiltonian,\nand then testing whether the resulting configuration\nis suitable for inclusion in the ensemble generated\nusing a slow Hamiltonian.\n\nFor an application of this method to enhance sampling\nin QMMM simulations, see Woods, Manby and Mulholland,\nJ. Chem. Phys. 2008.\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() ), "Null constructor") );
         bp::scope MTSMC_scope( MTSMC_exposer );
-        MTSMC_exposer.def( bp::init< SireMove::Moves const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("map")=SireBase::PropertyMap() )) );
-        MTSMC_exposer.def( bp::init< SireMove::Moves const &, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("nfastmoves"), bp::arg("map")=SireBase::PropertyMap() )) );
-        MTSMC_exposer.def( bp::init< SireMove::Moves const &, SireCAS::Symbol const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("fastcomponent"), bp::arg("map")=SireBase::PropertyMap() )) );
-        MTSMC_exposer.def( bp::init< SireMove::Moves const &, SireCAS::Symbol const &, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("fastcomponent"), bp::arg("nfastmoves"), bp::arg("map")=SireBase::PropertyMap() )) );
-        MTSMC_exposer.def( bp::init< SireMove::Moves const &, SireSystem::Constraints const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("slow_constraints"), bp::arg("map")=SireBase::PropertyMap() )) );
-        MTSMC_exposer.def( bp::init< SireMove::Moves const &, SireSystem::Constraints const &, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("slow_constraints"), bp::arg("nfastmoves"), bp::arg("map")=SireBase::PropertyMap() )) );
-        MTSMC_exposer.def( bp::init< SireMove::Moves const &, SireCAS::Symbol const &, SireSystem::Constraints const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("fastcomponent"), bp::arg("slow_constraints"), bp::arg("map")=SireBase::PropertyMap() )) );
-        MTSMC_exposer.def( bp::init< SireMove::Moves const &, SireCAS::Symbol const &, SireSystem::Constraints const &, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("fastcomponent"), bp::arg("slow_constraints"), bp::arg("nfastmoves"), bp::arg("map")=SireBase::PropertyMap() )) );
-        MTSMC_exposer.def( bp::init< SireMove::MTSMC const & >(( bp::arg("other") )) );
+        MTSMC_exposer.def( bp::init< SireMove::Moves const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a multiple time step Monte Carlo move that performs\n1 move using fastmoves for every slow move") );
+        MTSMC_exposer.def( bp::init< SireMove::Moves const &, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("nfastmoves"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a multiple time step Monte Carlo move that performs\nnfastmoves moves using fastmoves for every slow move") );
+        MTSMC_exposer.def( bp::init< SireMove::Moves const &, SireCAS::Symbol const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("fastcomponent"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a multiple time step Monte Carlo move that performs\n1 move using fastmoves operating on\nthe energy component fastcomponent for every slow move") );
+        MTSMC_exposer.def( bp::init< SireMove::Moves const &, SireCAS::Symbol const &, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("fastcomponent"), bp::arg("nfastmoves"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a multiple time step Monte Carlo move that performs\nnfastmoves moves using fastmoves operating on\nthe energy component fastcomponent for every slow move") );
+        MTSMC_exposer.def( bp::init< SireMove::Moves const &, SireSystem::Constraints const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("slow_constraints"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a multiple time step Monte Carlo move that performs\n1 move using fastmoves, then applies the constraints\nin slow_constraints for each slow move") );
+        MTSMC_exposer.def( bp::init< SireMove::Moves const &, SireSystem::Constraints const &, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("slow_constraints"), bp::arg("nfastmoves"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a multiple time step Monte Carlo move that performs\nnfastmoves moves using fastmoves, then applies the constraints\nin slow_constraints for each slow move") );
+        MTSMC_exposer.def( bp::init< SireMove::Moves const &, SireCAS::Symbol const &, SireSystem::Constraints const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("fastcomponent"), bp::arg("slow_constraints"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a multiple time step Monte Carlo move that performs\n1 move using fastmoves, using the energy component\nfastcomponent, then applies the constraints\nin slow_constraints for each slow move") );
+        MTSMC_exposer.def( bp::init< SireMove::Moves const &, SireCAS::Symbol const &, SireSystem::Constraints const &, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("fastmoves"), bp::arg("fastcomponent"), bp::arg("slow_constraints"), bp::arg("nfastmoves"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a multiple time step Monte Carlo move that performs\nnfastmoves moves using fastmoves, using the energy component\nfastcomponent, then applies the constraints\nin slow_constraints for each slow move") );
+        MTSMC_exposer.def( bp::init< SireMove::MTSMC const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::MTSMC::addSlowConstraint
         
             typedef void ( ::SireMove::MTSMC::*addSlowConstraint_function_type)( ::SireSystem::Constraint const & ) ;
@@ -53,7 +53,8 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "addSlowConstraint"
                 , addSlowConstraint_function_value
-                , ( bp::arg("constraint") ) );
+                , ( bp::arg("constraint") )
+                , "Add a constraint that is applied at the end of each block\nof fast moves (i.e. before the slow move is tested)" );
         
         }
         { //::SireMove::MTSMC::clearStatistics
@@ -63,7 +64,8 @@ void register_MTSMC_class(){
             
             MTSMC_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Completely clear all of the move statistics" );
         
         }
         { //::SireMove::MTSMC::fastEnergyComponent
@@ -74,7 +76,8 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "fastEnergyComponent"
                 , fastEnergyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the energy component on which the fast moves will operate" );
         
         }
         { //::SireMove::MTSMC::fastMoves
@@ -85,7 +88,8 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "fastMoves"
                 , fastMoves_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the fast moves that will be performed for every\nslow move" );
         
         }
         { //::SireMove::MTSMC::move
@@ -96,7 +100,8 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Perform the move - this will perform nfastmoves using fastmoves,\nand will then accept or reject the result based on the difference\nin the difference in energy between the fast and slow energies\nbefore and after the moves" );
         
         }
         { //::SireMove::MTSMC::nFastMoves
@@ -106,7 +111,8 @@ void register_MTSMC_class(){
             
             MTSMC_exposer.def( 
                 "nFastMoves"
-                , nFastMoves_function_value );
+                , nFastMoves_function_value
+                , "Return the number of fast moves to perform per slow move" );
         
         }
         MTSMC_exposer.def( bp::self != bp::self );
@@ -119,7 +125,8 @@ void register_MTSMC_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MTSMC_exposer.def( bp::self == bp::self );
@@ -130,7 +137,8 @@ void register_MTSMC_class(){
             
             MTSMC_exposer.def( 
                 "removeSlowConstraints"
-                , removeSlowConstraints_function_value );
+                , removeSlowConstraints_function_value
+                , "Remove all of the slow constraints" );
         
         }
         { //::SireMove::MTSMC::setFastEnergyComponent
@@ -141,7 +149,8 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "setFastEnergyComponent"
                 , setFastEnergyComponent_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Set the energy component to be used for the fast moves" );
         
         }
         { //::SireMove::MTSMC::setFastMoves
@@ -152,7 +161,8 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "setFastMoves"
                 , setFastMoves_function_value
-                , ( bp::arg("fastmoves") ) );
+                , ( bp::arg("fastmoves") )
+                , "Set the moves to be performed using the fast energy component.\nNote that these moves will be performd using the current\nfast energy component, which will override any energy\ncomponent currently set for these moves" );
         
         }
         { //::SireMove::MTSMC::setGenerator
@@ -163,7 +173,8 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("rangenerator") ) );
+                , ( bp::arg("rangenerator") )
+                , "Set the random number generator used by this and all of the\ncontained moves" );
         
         }
         { //::SireMove::MTSMC::setNFastMoves
@@ -174,7 +185,8 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "setNFastMoves"
                 , setNFastMoves_function_value
-                , ( bp::arg("nfast") ) );
+                , ( bp::arg("nfast") )
+                , "Return the number of fast moves to perform per slow move" );
         
         }
         { //::SireMove::MTSMC::setSlowConstraints
@@ -185,7 +197,8 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "setSlowConstraints"
                 , setSlowConstraints_function_value
-                , ( bp::arg("constraints") ) );
+                , ( bp::arg("constraints") )
+                , "Set the constraints that are applied at the end of each block\nof fast moves (i.e. before the slow move is tested).\nThis replaces any existing slow constraints" );
         
         }
         { //::SireMove::MTSMC::setSlowEnergyComponent
@@ -196,7 +209,8 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "setSlowEnergyComponent"
                 , setSlowEnergyComponent_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Set the energy component that will be used for the slow moves" );
         
         }
         { //::SireMove::MTSMC::slowConstraints
@@ -207,7 +221,8 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "slowConstraints"
                 , slowConstraints_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the constraints that are applied at the end of each\nblock of fast moves" );
         
         }
         { //::SireMove::MTSMC::slowEnergyComponent
@@ -218,7 +233,8 @@ void register_MTSMC_class(){
             MTSMC_exposer.def( 
                 "slowEnergyComponent"
                 , slowEnergyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the energy component that will ultimately be used\nto generate the ensemble" );
         
         }
         { //::SireMove::MTSMC::toString
@@ -228,7 +244,8 @@ void register_MTSMC_class(){
             
             MTSMC_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this move" );
         
         }
         { //::SireMove::MTSMC::typeName
@@ -238,7 +255,8 @@ void register_MTSMC_class(){
             
             MTSMC_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         MTSMC_exposer.staticmethod( "typeName" );

@@ -38,10 +38,10 @@ void register_AngleID_class(){
 
     { //::SireMol::AngleID
         typedef bp::class_< SireMol::AngleID, bp::bases< SireID::ID > > AngleID_exposer_t;
-        AngleID_exposer_t AngleID_exposer = AngleID_exposer_t( "AngleID", bp::init< >() );
+        AngleID_exposer_t AngleID_exposer = AngleID_exposer_t( "AngleID", "This class provides a generic ID for an angle between\nthree atoms\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope AngleID_scope( AngleID_exposer );
-        AngleID_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )) );
-        AngleID_exposer.def( bp::init< SireMol::AngleID const & >(( bp::arg("other") )) );
+        AngleID_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") ), "Construct a angle between the two specified atoms. The order\nis important, as this angle may be between two different\nmolecules") );
+        AngleID_exposer.def( bp::init< SireMol::AngleID const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AngleID::atom0
         
             typedef ::SireMol::AtomID const & ( ::SireMol::AngleID::*atom0_function_type)(  ) const;
@@ -50,7 +50,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ID of the first atom of the angle" );
         
         }
         { //::SireMol::AngleID::atom1
@@ -61,7 +62,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ID of the second atom of the angle" );
         
         }
         { //::SireMol::AngleID::atom2
@@ -72,7 +74,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ID of the third atom of the angle" );
         
         }
         { //::SireMol::AngleID::hash
@@ -82,7 +85,8 @@ void register_AngleID_class(){
             
             AngleID_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash for this ID" );
         
         }
         { //::SireMol::AngleID::isNull
@@ -92,7 +96,8 @@ void register_AngleID_class(){
             
             AngleID_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether this is a null ID" );
         
         }
         { //::SireMol::AngleID::map
@@ -103,7 +108,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Return the indicies of the three atoms in this angle - this returns\nthem in the order tuple(angle.atom0(),angle.atom1(),angle.atom2())\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AngleID::map
@@ -114,7 +120,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("mol0info"), bp::arg("mol1info"), bp::arg("mol2info") ) );
+                , ( bp::arg("mol0info"), bp::arg("mol1info"), bp::arg("mol2info") )
+                , "Return the indicies of the three atoms of this angle, between the\ntwo molecules whose data is in mol0info (containing angle.atom0()),\nmol1info (containing angle.atom1()) and mol2info (containing\nangle.atom2())\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AngleID::mirror
@@ -124,7 +131,8 @@ void register_AngleID_class(){
             
             AngleID_exposer.def( 
                 "mirror"
-                , mirror_function_value );
+                , mirror_function_value
+                , "Return the mirror of this AngleID - i.e. if this is\nAngleID(atom0, atom1, atom2), this returns\nAngleID(atom2, atom1, atom0).\nThis is useful if you know that AngleID(atom0,atom1,atom2) equals\n" );
         
         }
         AngleID_exposer.def( bp::self != bp::self );
@@ -137,7 +145,8 @@ void register_AngleID_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AngleID_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -150,7 +159,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "size"
                 , size_function_value
-                , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the size of this angle in the molecule whose data\nis in moldata, using map to find the coordinates property\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AngleID::size
@@ -161,7 +171,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "size"
                 , size_function_value
-                , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the size of the angle between atom0() in the\nmolecule whose data is in mol0data, atom1() in the\nmolecule whose data is in mol1data and atom2() in\nthe molecule whose data is in mol2data, using map\nto the find the coordinates property the molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AngleID::size
@@ -172,7 +183,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "size"
                 , size_function_value
-                , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1"), bp::arg("mol2data"), bp::arg("map2") ) );
+                , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1"), bp::arg("mol2data"), bp::arg("map2") )
+                , "Return the size of the angle between atom0() in the\nmolecule whose data is in mol0data, atom1() in the\nmolecule whose data is in mol1data and atom2() in\nthe molecule whose data is in mol2data, using map0\nto the find the coordinates property of mol0,\nmap1 to find the coordinates property of mol1\nand map2 to find the coordinates property of mol2\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AngleID::toString
@@ -182,7 +194,8 @@ void register_AngleID_class(){
             
             AngleID_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this ID" );
         
         }
         { //::SireMol::AngleID::triangle
@@ -193,7 +206,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "triangle"
                 , triangle_function_value
-                , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the geometric triangle formed by the three atoms\nof this angle in the molecule whose data is in moldata,\nusing map to find the coordinates property.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AngleID::triangle
@@ -204,7 +218,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "triangle"
                 , triangle_function_value
-                , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the geometric triangle formed by the three atoms,\natom0() in the molecule whose data is in mol0data,\natom1() from mol1data and atom2() from mol2data,\nusing map to find the coordinates property of the\nmolecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AngleID::triangle
@@ -215,7 +230,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "triangle"
                 , triangle_function_value
-                , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1"), bp::arg("mol2data"), bp::arg("map2") ) );
+                , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1"), bp::arg("mol2data"), bp::arg("map2") )
+                , "Return the geometric triangle formed by the three atoms,\natom0() in the molecule whose data is in mol0data,\natom1() from mol1data and atom2() from mol2data,\nusing map0 to find the coordinates property of mol0,\nmap1 to find the coordinates property of mol1 and\nmap2 to find the coordinates property of mol2.\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AngleID::typeName
@@ -225,7 +241,8 @@ void register_AngleID_class(){
             
             AngleID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AngleID::vector
@@ -236,7 +253,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "vector"
                 , vector_function_value
-                , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the vector that is perpendicular to the plane\nformed by atoms atom0(), atom1() and atom2() in the\nmolecule whose data is in moldata, using the supplied\nproperty map to find the property that contains the\ncoordinates to be used\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AngleID::vector
@@ -247,7 +265,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "vector"
                 , vector_function_value
-                , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("mol0data"), bp::arg("mol1data"), bp::arg("mol2data"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the vector that is perpendicular to the plane\nformed by the atoms atom0() in mol0data, atom1() in\nmol1data and atom2() in mol2data, using map to find the\ncoordinates property of the molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AngleID::vector
@@ -258,7 +277,8 @@ void register_AngleID_class(){
             AngleID_exposer.def( 
                 "vector"
                 , vector_function_value
-                , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1"), bp::arg("mol2data"), bp::arg("map2") ) );
+                , ( bp::arg("mol0data"), bp::arg("map0"), bp::arg("mol1data"), bp::arg("map1"), bp::arg("mol2data"), bp::arg("map2") )
+                , "Return the vector that is perpendicular to the plane\nformed by the atoms atom0() in mol0data, atom1() in\nmol1data and atom2() in mol2data, using map0 to find the\ncoordinates property of mol0, map1 to find the\ncoordinates property of mol1 and map2 to find the\ncoordinates property of mol2\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AngleID::what
@@ -268,7 +288,8 @@ void register_AngleID_class(){
             
             AngleID_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AngleID_exposer.staticmethod( "typeName" );
@@ -281,6 +302,7 @@ void register_AngleID_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AngleID_exposer.def( "__str__", &__str__< ::SireMol::AngleID > );
         AngleID_exposer.def( "__repr__", &__str__< ::SireMol::AngleID > );
+        AngleID_exposer.def( "__hash__", &::SireMol::AngleID::hash );
     }
 
 }

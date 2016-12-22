@@ -43,6 +43,7 @@ set_target_properties (Mol
 		       
 target_link_libraries (Mol
                        SirePython
+                       SIRE_SireID
                        SIRE_SireMol
                        SIRE_SireMM
                        ${BOOST_PYTHON_LIBRARY}
@@ -57,7 +58,9 @@ set( INSTALLDIR ${SIRE_PYTHON}/Sire/Mol )
 
 install( TARGETS Mol
          LIBRARY DESTINATION ${INSTALLDIR}
-       )
+         ARCHIVE DESTINATION ${INSTALLDIR}
+         RUNTIME DESTINATION ${INSTALLDIR}
+        )
 
 install( FILES __init__.py
          DESTINATION ${INSTALLDIR} 

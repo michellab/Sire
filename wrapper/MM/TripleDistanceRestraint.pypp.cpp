@@ -40,11 +40,11 @@ void register_TripleDistanceRestraint_class(){
 
     { //::SireMM::TripleDistanceRestraint
         typedef bp::class_< SireMM::TripleDistanceRestraint, bp::bases< SireMM::Restraint3D, SireMM::Restraint, SireBase::Property > > TripleDistanceRestraint_exposer_t;
-        TripleDistanceRestraint_exposer_t TripleDistanceRestraint_exposer = TripleDistanceRestraint_exposer_t( "TripleDistanceRestraint", bp::init< >() );
+        TripleDistanceRestraint_exposer_t TripleDistanceRestraint_exposer = TripleDistanceRestraint_exposer_t( "TripleDistanceRestraint", "This class provides a restraint that operates on a triple\nof inter-point distances (e.g. the differences between\nthree bond lengths). You need to supply six points to this\nrestraint which are used to calculate the three distances\n(r01 between points 0 and 1, r23 between points 2 and 3\nand r45 between points 4 and 5)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope TripleDistanceRestraint_scope( TripleDistanceRestraint_exposer );
-        TripleDistanceRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("point4"), bp::arg("point5"), bp::arg("restraint") )) );
-        TripleDistanceRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, SireCAS::Values const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("point4"), bp::arg("point5"), bp::arg("restraint"), bp::arg("values") )) );
-        TripleDistanceRestraint_exposer.def( bp::init< SireMM::TripleDistanceRestraint const & >(( bp::arg("other") )) );
+        TripleDistanceRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("point4"), bp::arg("point5"), bp::arg("restraint") ), "Construct a restraint that acts on the three distances defined\nusing the passed six points, using the expression restraint") );
+        TripleDistanceRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, SireCAS::Values const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("point4"), bp::arg("point5"), bp::arg("restraint"), bp::arg("values") ), "Construct a restraint that acts on the three distances defined\nusing the passed six points, using the expression restraint") );
+        TripleDistanceRestraint_exposer.def( bp::init< SireMM::TripleDistanceRestraint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::TripleDistanceRestraint::builtinSymbols
         
             typedef ::SireCAS::Symbols ( ::SireMM::TripleDistanceRestraint::*builtinSymbols_function_type)(  ) const;
@@ -52,7 +52,8 @@ void register_TripleDistanceRestraint_class(){
             
             TripleDistanceRestraint_exposer.def( 
                 "builtinSymbols"
-                , builtinSymbols_function_value );
+                , builtinSymbols_function_value
+                , "Return the built-in symbols of this restraint" );
         
         }
         { //::SireMM::TripleDistanceRestraint::builtinValues
@@ -62,7 +63,8 @@ void register_TripleDistanceRestraint_class(){
             
             TripleDistanceRestraint_exposer.def( 
                 "builtinValues"
-                , builtinValues_function_value );
+                , builtinValues_function_value
+                , "Return the values of the built-in symbols of this restraint" );
         
         }
         { //::SireMM::TripleDistanceRestraint::contains
@@ -73,7 +75,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return whether or not this restraint affects the molecule\nwith number molnum" );
         
         }
         { //::SireMM::TripleDistanceRestraint::contains
@@ -84,7 +87,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "Return whether or not this restraint affects the molecule\nwith ID molid" );
         
         }
         { //::SireMM::TripleDistanceRestraint::differentialRestraintFunction01
@@ -95,7 +99,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "differentialRestraintFunction01"
                 , differentialRestraintFunction01_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the function used to calculate the restraint force along the\ndistance r01" );
         
         }
         { //::SireMM::TripleDistanceRestraint::differentialRestraintFunction23
@@ -106,7 +111,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "differentialRestraintFunction23"
                 , differentialRestraintFunction23_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the function used to calculate the restraint force along the\ndistance r23" );
         
         }
         { //::SireMM::TripleDistanceRestraint::differentialRestraintFunction45
@@ -117,7 +123,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "differentialRestraintFunction45"
                 , differentialRestraintFunction45_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the function used to calculate the restraint force along the\ndistance r45" );
         
         }
         { //::SireMM::TripleDistanceRestraint::differentiate
@@ -128,7 +135,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the differential of this restraint with respect to\nthe symbol symbol" );
         
         }
         { //::SireMM::TripleDistanceRestraint::force
@@ -139,7 +147,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "Calculate the force acting on the molecule in the forcetable forcetable\ncaused by this restraint, and add it on to the forcetable scaled by\nscale_force" );
         
         }
         { //::SireMM::TripleDistanceRestraint::force
@@ -150,7 +159,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "Calculate the force acting on the molecules in the forcetable forcetable\ncaused by this restraint, and add it on to the forcetable scaled by\nscale_force" );
         
         }
         { //::SireMM::TripleDistanceRestraint::molecules
@@ -160,7 +170,8 @@ void register_TripleDistanceRestraint_class(){
             
             TripleDistanceRestraint_exposer.def( 
                 "molecules"
-                , molecules_function_value );
+                , molecules_function_value
+                , "Return the molecules used in this restraint" );
         
         }
         { //::SireMM::TripleDistanceRestraint::nPoints
@@ -170,7 +181,8 @@ void register_TripleDistanceRestraint_class(){
             
             TripleDistanceRestraint_exposer.def( 
                 "nPoints"
-                , nPoints_function_value );
+                , nPoints_function_value
+                , "This restraint involves six points" );
         
         }
         TripleDistanceRestraint_exposer.def( bp::self != bp::self );
@@ -183,7 +195,8 @@ void register_TripleDistanceRestraint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         TripleDistanceRestraint_exposer.def( bp::self == bp::self );
@@ -196,7 +209,8 @@ void register_TripleDistanceRestraint_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ith point" );
         
         }
         { //::SireMM::TripleDistanceRestraint::point0
@@ -207,7 +221,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first point" );
         
         }
         { //::SireMM::TripleDistanceRestraint::point1
@@ -218,7 +233,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second point" );
         
         }
         { //::SireMM::TripleDistanceRestraint::point2
@@ -229,7 +245,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the third point" );
         
         }
         { //::SireMM::TripleDistanceRestraint::point3
@@ -240,7 +257,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the fourth point" );
         
         }
         { //::SireMM::TripleDistanceRestraint::point4
@@ -251,7 +269,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "point4"
                 , point4_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the fifth point" );
         
         }
         { //::SireMM::TripleDistanceRestraint::point5
@@ -262,7 +281,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "point5"
                 , point5_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the sixth point" );
         
         }
         { //::SireMM::TripleDistanceRestraint::r01
@@ -273,7 +293,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the distance between the\npoints 0 and 1 (r01)" );
         
         }
         { //::SireMM::TripleDistanceRestraint::r23
@@ -284,7 +305,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "r23"
                 , r23_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the distance between the\npoints 2 and 3 (r23)" );
         
         }
         { //::SireMM::TripleDistanceRestraint::r45
@@ -295,7 +317,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "r45"
                 , r45_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the distance between the\npoints 4 and 5 (r45)" );
         
         }
         { //::SireMM::TripleDistanceRestraint::setSpace
@@ -306,7 +329,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "setSpace"
                 , setSpace_function_value
-                , ( bp::arg("space") ) );
+                , ( bp::arg("space") )
+                , "Set the space used to evaluate the energy of this restraint\nThrow: SireVol::incompatible_space\n" );
         
         }
         { //::SireMM::TripleDistanceRestraint::typeName
@@ -316,7 +340,8 @@ void register_TripleDistanceRestraint_class(){
             
             TripleDistanceRestraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::TripleDistanceRestraint::update
@@ -327,7 +352,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Update the points of this restraint using new molecule data from moldata\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMM::TripleDistanceRestraint::update
@@ -338,7 +364,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Update the points of this restraint using new molecule data from molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMM::TripleDistanceRestraint::usesMoleculesIn
@@ -349,7 +376,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("forcetable") ) );
+                , ( bp::arg("forcetable") )
+                , "Return whether or not this restraint involves any of the molecules\nthat are in the forcetable forcetable" );
         
         }
         { //::SireMM::TripleDistanceRestraint::usesMoleculesIn
@@ -360,7 +388,8 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Return whether or not this restraint involves any of the molecules\nin molecules" );
         
         }
         TripleDistanceRestraint_exposer.staticmethod( "r01" );

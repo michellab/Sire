@@ -33,10 +33,10 @@ void register_PMF_class(){
 
     { //::SireAnalysis::PMF
         typedef bp::class_< SireAnalysis::PMF, bp::bases< SireBase::Property > > PMF_exposer_t;
-        PMF_exposer_t PMF_exposer = PMF_exposer_t( "PMF", bp::init< >() );
+        PMF_exposer_t PMF_exposer = PMF_exposer_t( "PMF", "This class contains the complete potential of mean force\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty PMF") );
         bp::scope PMF_scope( PMF_exposer );
-        PMF_exposer.def( bp::init< QVector< SireAnalysis::DataPoint > const & >(( bp::arg("values") )) );
-        PMF_exposer.def( bp::init< SireAnalysis::PMF const & >(( bp::arg("other") )) );
+        PMF_exposer.def( bp::init< QVector< SireAnalysis::DataPoint > const & >(( bp::arg("values") ), "Construct a from the passed data points") );
+        PMF_exposer.def( bp::init< SireAnalysis::PMF const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireAnalysis::PMF::deltaG
         
             typedef double ( ::SireAnalysis::PMF::*deltaG_function_type)(  ) const;
@@ -44,7 +44,8 @@ void register_PMF_class(){
             
             PMF_exposer.def( 
                 "deltaG"
-                , deltaG_function_value );
+                , deltaG_function_value
+                , "Return the total free energy change along the PMF (difference in\nfree energy of the end-points)" );
         
         }
         { //::SireAnalysis::PMF::error
@@ -54,7 +55,8 @@ void register_PMF_class(){
             
             PMF_exposer.def( 
                 "error"
-                , error_function_value );
+                , error_function_value
+                , "Return the error on the total free energy calculation" );
         
         }
         { //::SireAnalysis::PMF::isEmpty
@@ -64,7 +66,8 @@ void register_PMF_class(){
             
             PMF_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this PMF is empty (has not values)" );
         
         }
         PMF_exposer.def( bp::self != bp::self );
@@ -77,7 +80,8 @@ void register_PMF_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PMF_exposer.def( bp::self == bp::self );
@@ -88,7 +92,8 @@ void register_PMF_class(){
             
             PMF_exposer.def( 
                 "rangeMax"
-                , rangeMax_function_value );
+                , rangeMax_function_value
+                , "Return the maximum x-value of the PMF" );
         
         }
         { //::SireAnalysis::PMF::rangeMin
@@ -98,7 +103,8 @@ void register_PMF_class(){
             
             PMF_exposer.def( 
                 "rangeMin"
-                , rangeMin_function_value );
+                , rangeMin_function_value
+                , "Return the minimum x-value of the PMF" );
         
         }
         { //::SireAnalysis::PMF::toString
@@ -108,7 +114,8 @@ void register_PMF_class(){
             
             PMF_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireAnalysis::PMF::typeName
@@ -118,7 +125,8 @@ void register_PMF_class(){
             
             PMF_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireAnalysis::PMF::values
@@ -128,7 +136,8 @@ void register_PMF_class(){
             
             PMF_exposer.def( 
                 "values"
-                , values_function_value );
+                , values_function_value
+                , "Return the raw data for the PMF" );
         
         }
         { //::SireAnalysis::PMF::what
@@ -138,7 +147,8 @@ void register_PMF_class(){
             
             PMF_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         PMF_exposer.staticmethod( "typeName" );

@@ -27,7 +27,7 @@ void register_AtomFunctions_class(){
 
     { //::SireMM::AtomFunctions
         typedef bp::class_< SireMM::AtomFunctions, bp::bases< SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property >, boost::noncopyable > AtomFunctions_exposer_t;
-        AtomFunctions_exposer_t AtomFunctions_exposer = AtomFunctions_exposer_t( "AtomFunctions", bp::no_init );
+        AtomFunctions_exposer_t AtomFunctions_exposer = AtomFunctions_exposer_t( "AtomFunctions", "This is the base class of all of the AtomFunctions molecular\nproperties (these are properties that contain lots of AtomFunction\nfunctions for the atoms in a molecule)\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope AtomFunctions_scope( AtomFunctions_exposer );
         { //::SireMM::AtomFunctions::isCompatibleWith
         
@@ -37,7 +37,8 @@ void register_AtomFunctions_class(){
             AtomFunctions_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Return whether or not this property is compatible with the molecule\nwhose layout information is in molinfo" );
         
         }
         { //::SireMM::AtomFunctions::symbols
@@ -48,7 +49,8 @@ void register_AtomFunctions_class(){
             AtomFunctions_exposer.def( 
                 "symbols"
                 , symbols_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         AtomFunctions_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMM::AtomFunctions >,

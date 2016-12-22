@@ -39,9 +39,9 @@ void register_NullInserter_class(){
 
     { //::SireMove::NullInserter
         typedef bp::class_< SireMove::NullInserter, bp::bases< SireMove::MolInserter, SireBase::Property > > NullInserter_exposer_t;
-        NullInserter_exposer_t NullInserter_exposer = NullInserter_exposer_t( "NullInserter", bp::init< >() );
+        NullInserter_exposer_t NullInserter_exposer = NullInserter_exposer_t( "NullInserter", "This is the null inserter - this doesnt insert anything\ninto anything\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope NullInserter_scope( NullInserter_exposer );
-        NullInserter_exposer.def( bp::init< SireMove::NullInserter const & >(( bp::arg("other") )) );
+        NullInserter_exposer.def( bp::init< SireMove::NullInserter const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::NullInserter::insert
         
             typedef double ( ::SireMove::NullInserter::*insert_function_type)( ::SireMol::Molecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
@@ -50,7 +50,8 @@ void register_NullInserter_class(){
             NullInserter_exposer.def( 
                 "insert"
                 , insert_function_value
-                , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") ) );
+                , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") )
+                , "This does nothing" );
         
         }
         { //::SireMove::NullInserter::insert
@@ -61,7 +62,8 @@ void register_NullInserter_class(){
             NullInserter_exposer.def( 
                 "insert"
                 , insert_function_value
-                , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") ) );
+                , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") )
+                , "This does nothing" );
         
         }
         NullInserter_exposer.def( bp::self != bp::self );
@@ -74,7 +76,8 @@ void register_NullInserter_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullInserter_exposer.def( bp::self == bp::self );
@@ -85,7 +88,8 @@ void register_NullInserter_class(){
             
             NullInserter_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullInserter_exposer.staticmethod( "typeName" );

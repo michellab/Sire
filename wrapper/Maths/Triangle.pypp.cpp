@@ -29,10 +29,10 @@ void register_Triangle_class(){
 
     { //::SireMaths::Triangle
         typedef bp::class_< SireMaths::Triangle > Triangle_exposer_t;
-        Triangle_exposer_t Triangle_exposer = Triangle_exposer_t( "Triangle", bp::init< >() );
+        Triangle_exposer_t Triangle_exposer = Triangle_exposer_t( "Triangle", "\nThis class represents a triangle in three-dimensional space. (or three points)\n\nAuthor: Christopher Woods\n", bp::init< >("Create a zero triangle") );
         bp::scope Triangle_scope( Triangle_exposer );
-        Triangle_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2") )) );
-        Triangle_exposer.def( bp::init< SireMaths::Triangle const & >(( bp::arg("other") )) );
+        Triangle_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2") ), "Create a triangle from point 0 -> 1 -> 2") );
+        Triangle_exposer.def( bp::init< SireMaths::Triangle const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::Triangle::angle
         
             typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Triangle::*angle_function_type)(  ) const;
@@ -40,7 +40,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "angle"
-                , angle_function_value );
+                , angle_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::angle0
@@ -50,7 +51,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "angle0"
-                , angle0_function_value );
+                , angle0_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::angle1
@@ -60,7 +62,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "angle1"
-                , angle1_function_value );
+                , angle1_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::angle2
@@ -70,7 +73,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "angle2"
-                , angle2_function_value );
+                , angle2_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::at
@@ -82,7 +86,8 @@ void register_Triangle_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Triangle::count
@@ -92,7 +97,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::line0
@@ -102,7 +108,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "line0"
-                , line0_function_value );
+                , line0_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::line1
@@ -112,7 +119,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "line1"
-                , line1_function_value );
+                , line1_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::line2
@@ -122,7 +130,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "line2"
-                , line2_function_value );
+                , line2_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::operator[]
@@ -134,7 +143,8 @@ void register_Triangle_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Triangle::point
@@ -146,7 +156,8 @@ void register_Triangle_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Triangle::toString
@@ -156,7 +167,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of the triangle" );
         
         }
         { //::SireMaths::Triangle::typeName
@@ -166,7 +178,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::vector
@@ -176,7 +189,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "vector"
-                , vector_function_value );
+                , vector_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::vector0
@@ -186,7 +200,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "vector0"
-                , vector0_function_value );
+                , vector0_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::vector1
@@ -196,7 +211,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "vector1"
-                , vector1_function_value );
+                , vector1_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::vector2
@@ -206,7 +222,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "vector2"
-                , vector2_function_value );
+                , vector2_function_value
+                , "" );
         
         }
         { //::SireMaths::Triangle::what
@@ -216,7 +233,8 @@ void register_Triangle_class(){
             
             Triangle_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Triangle_exposer.staticmethod( "typeName" );

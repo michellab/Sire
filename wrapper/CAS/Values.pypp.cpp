@@ -29,21 +29,21 @@ void register_Values_class(){
 
     { //::SireCAS::Values
         typedef bp::class_< SireCAS::Values > Values_exposer_t;
-        Values_exposer_t Values_exposer = Values_exposer_t( "Values", bp::init< >() );
+        Values_exposer_t Values_exposer = Values_exposer_t( "Values", "\nThis class holds a set of Symbols and their associated values. This is used\nwhen numerically evaluating an equation.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty set of values") );
         bp::scope Values_scope( Values_exposer );
-        Values_exposer.def( bp::init< QList< SireCAS::SymbolValue > const & >(( bp::arg("values") )) );
-        Values_exposer.def( bp::init< QHash< SireCAS::Symbol, double > const & >(( bp::arg("values") )) );
-        Values_exposer.def( bp::init< SireCAS::SymbolValue const & >(( bp::arg("symval0") )) );
-        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1") )) );
-        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2") )) );
-        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3") )) );
-        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4") )) );
-        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5") )) );
-        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6") )) );
-        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7") )) );
-        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8") )) );
-        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8"), bp::arg("symval9") )) );
-        Values_exposer.def( bp::init< SireCAS::Values const & >(( bp::arg("other") )) );
+        Values_exposer.def( bp::init< QList< SireCAS::SymbolValue > const & >(( bp::arg("values") ), "Construct from a list of values") );
+        Values_exposer.def( bp::init< QHash< SireCAS::Symbol, double > const & >(( bp::arg("values") ), "Construct from a hash of values indexed by symbols") );
+        Values_exposer.def( bp::init< SireCAS::SymbolValue const & >(( bp::arg("symval0") ), "Construct from the passed values") );
+        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1") ), "Construct from the passed values") );
+        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2") ), "Construct from the passed values") );
+        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3") ), "Construct from the passed values") );
+        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4") ), "Construct from the passed values") );
+        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5") ), "Construct from the passed values") );
+        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6") ), "Construct from the passed values") );
+        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7") ), "Construct from the passed values") );
+        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8") ), "Construct from the passed values") );
+        Values_exposer.def( bp::init< SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const &, SireCAS::SymbolValue const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8"), bp::arg("symval9") ), "Construct from the passed values") );
+        Values_exposer.def( bp::init< SireCAS::Values const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Values::add
         
             typedef void ( ::SireCAS::Values::*add_function_type)( ::SireCAS::SymbolValue const & ) ;
@@ -52,7 +52,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0") ) );
+                , ( bp::arg("symval0") )
+                , "" );
         
         }
         { //::SireCAS::Values::add
@@ -63,7 +64,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::Values::add
@@ -74,7 +76,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::Values::add
@@ -85,7 +88,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::Values::add
@@ -96,7 +100,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::Values::add
@@ -107,7 +112,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::Values::add
@@ -118,7 +124,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::Values::add
@@ -129,7 +136,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::Values::add
@@ -140,7 +148,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::Values::add
@@ -151,59 +160,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8"), bp::arg("symval9") ) );
-        
-        }
-        { //::SireCAS::Values::begin
-        
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*begin_function_type)(  ) const;
-            begin_function_type begin_function_value( &::SireCAS::Values::begin );
-            
-            Values_exposer.def( 
-                "begin"
-                , begin_function_value );
-        
-        }
-        { //::SireCAS::Values::constBegin
-        
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constBegin_function_type)(  ) const;
-            constBegin_function_type constBegin_function_value( &::SireCAS::Values::constBegin );
-            
-            Values_exposer.def( 
-                "constBegin"
-                , constBegin_function_value );
-        
-        }
-        { //::SireCAS::Values::constEnd
-        
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constEnd_function_type)(  ) const;
-            constEnd_function_type constEnd_function_value( &::SireCAS::Values::constEnd );
-            
-            Values_exposer.def( 
-                "constEnd"
-                , constEnd_function_value );
-        
-        }
-        { //::SireCAS::Values::constFind
-        
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constFind_function_type)( ::SireCAS::SymbolID ) const;
-            constFind_function_type constFind_function_value( &::SireCAS::Values::constFind );
-            
-            Values_exposer.def( 
-                "constFind"
-                , constFind_function_value
-                , ( bp::arg("symbolid") ) );
-        
-        }
-        { //::SireCAS::Values::constFind
-        
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constFind_function_type)( ::SireCAS::Symbol const & ) const;
-            constFind_function_type constFind_function_value( &::SireCAS::Values::constFind );
-            
-            Values_exposer.def( 
-                "constFind"
-                , constFind_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8"), bp::arg("symval9") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::Values::contains
@@ -214,7 +172,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "" );
         
         }
         { //::SireCAS::Values::count
@@ -224,17 +183,8 @@ void register_Values_class(){
             
             Values_exposer.def( 
                 "count"
-                , count_function_value );
-        
-        }
-        { //::SireCAS::Values::end
-        
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*end_function_type)(  ) const;
-            end_function_type end_function_value( &::SireCAS::Values::end );
-            
-            Values_exposer.def( 
-                "end"
-                , end_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireCAS::Values::isEmpty
@@ -244,7 +194,8 @@ void register_Values_class(){
             
             Values_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireCAS::Values::keys
@@ -254,7 +205,8 @@ void register_Values_class(){
             
             Values_exposer.def( 
                 "keys"
-                , keys_function_value );
+                , keys_function_value
+                , "Return a list of the symbols that are present in this set" );
         
         }
         Values_exposer.def( bp::self != bp::self );
@@ -266,7 +218,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("sym") ) );
+                , ( bp::arg("sym") )
+                , "" );
         
         }
         Values_exposer.def( bp::self == bp::self );
@@ -278,7 +231,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("sym") ) );
+                , ( bp::arg("sym") )
+                , "" );
         
         }
         { //::SireCAS::Values::remove
@@ -289,7 +243,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Remove the value for the symbol symbol" );
         
         }
         { //::SireCAS::Values::remove
@@ -300,7 +255,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("symbolid") ) );
+                , ( bp::arg("symbolid") )
+                , "Remove the value for the symbol with ID symbolid" );
         
         }
         { //::SireCAS::Values::reserve
@@ -311,7 +267,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "reserve"
                 , reserve_function_value
-                , ( bp::arg("n") ) );
+                , ( bp::arg("n") )
+                , "" );
         
         }
         { //::SireCAS::Values::set
@@ -322,18 +279,20 @@ void register_Values_class(){
             Values_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("symbol"), bp::arg("value") ) );
+                , ( bp::arg("symbol"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireCAS::Values::set
         
-            typedef void ( ::SireCAS::Values::*set_function_type)( ::QHash< unsigned int, double >::const_iterator const & ) ;
+            typedef void ( ::SireCAS::Values::*set_function_type)( ::SireCAS::Values::const_iterator const & ) ;
             set_function_type set_function_value( &::SireCAS::Values::set );
             
             Values_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("it") ) );
+                , ( bp::arg("it") )
+                , "Set the value of the symbolvalue pair pointed to by the\niterator it in this set" );
         
         }
         { //::SireCAS::Values::symbols
@@ -343,7 +302,8 @@ void register_Values_class(){
             
             Values_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return a list of the symbols that are present in this set" );
         
         }
         { //::SireCAS::Values::toString
@@ -353,7 +313,8 @@ void register_Values_class(){
             
             Values_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of these values" );
         
         }
         { //::SireCAS::Values::typeName
@@ -363,7 +324,8 @@ void register_Values_class(){
             
             Values_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Values::value
@@ -374,7 +336,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "value"
                 , value_function_value
-                , ( bp::arg("sym") ) );
+                , ( bp::arg("sym") )
+                , "Return the value of the Symbol with ID id, or 0.0 if there is no such symbol" );
         
         }
         { //::SireCAS::Values::values
@@ -385,7 +348,8 @@ void register_Values_class(){
             Values_exposer.def( 
                 "values"
                 , values_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireCAS::Values::what
@@ -395,12 +359,13 @@ void register_Values_class(){
             
             Values_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Values_exposer.staticmethod( "typeName" );
-        Values_exposer.def( bp::self + bp::self );
         Values_exposer.def( bp::self + bp::other< SireCAS::SymbolValue >() );
+        Values_exposer.def( bp::self + bp::self );
         Values_exposer.def( "__copy__", &__copy__);
         Values_exposer.def( "__deepcopy__", &__copy__);
         Values_exposer.def( "clone", &__copy__);

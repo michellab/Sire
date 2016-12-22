@@ -50,7 +50,7 @@ public:
     }
     
     GeneralUnit(const GeneralUnit &other);
-    
+
     ~GeneralUnit();
 
     QString typeName() const;

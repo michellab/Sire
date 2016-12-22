@@ -44,11 +44,11 @@ void register_DihedralRestraint_class(){
 
     { //::SireMM::DihedralRestraint
         typedef bp::class_< SireMM::DihedralRestraint, bp::bases< SireMM::Restraint3D, SireMM::Restraint, SireBase::Property > > DihedralRestraint_exposer_t;
-        DihedralRestraint_exposer_t DihedralRestraint_exposer = DihedralRestraint_exposer_t( "DihedralRestraint", bp::init< >() );
+        DihedralRestraint_exposer_t DihedralRestraint_exposer = DihedralRestraint_exposer_t( "DihedralRestraint", "This is a restraint that operates on the dihedral angle between\nfour SireMM::Point objects (e.g. four atoms in a molecule)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope DihedralRestraint_scope( DihedralRestraint_exposer );
-        DihedralRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("restraint") )) );
-        DihedralRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, SireCAS::Values const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("restraint"), bp::arg("values") )) );
-        DihedralRestraint_exposer.def( bp::init< SireMM::DihedralRestraint const & >(( bp::arg("other") )) );
+        DihedralRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("restraint") ), "Construct a restraint that acts on the angle within the\nthree points point0, point1 and point2 (theta == a(012)),\nrestraining the angle within these points using the expression\nrestraint") );
+        DihedralRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, SireCAS::Values const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("restraint"), bp::arg("values") ), "Construct a restraint that acts on the angle within the\nthree points point0, point1 and point2 (theta == a(012)),\nrestraining the angle within these points using the expression\nrestraint") );
+        DihedralRestraint_exposer.def( bp::init< SireMM::DihedralRestraint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::DihedralRestraint::builtinSymbols
         
             typedef ::SireCAS::Symbols ( ::SireMM::DihedralRestraint::*builtinSymbols_function_type)(  ) const;
@@ -56,7 +56,8 @@ void register_DihedralRestraint_class(){
             
             DihedralRestraint_exposer.def( 
                 "builtinSymbols"
-                , builtinSymbols_function_value );
+                , builtinSymbols_function_value
+                , "Return the built-in symbols for this restraint" );
         
         }
         { //::SireMM::DihedralRestraint::builtinValues
@@ -66,7 +67,8 @@ void register_DihedralRestraint_class(){
             
             DihedralRestraint_exposer.def( 
                 "builtinValues"
-                , builtinValues_function_value );
+                , builtinValues_function_value
+                , "Return the values of the built-in symbols of this restraint" );
         
         }
         { //::SireMM::DihedralRestraint::contains
@@ -77,7 +79,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return whether or not this restraint affects the molecule\nwith number molnum" );
         
         }
         { //::SireMM::DihedralRestraint::contains
@@ -88,7 +91,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "Return whether or not this restraint affects the molecule\nwith ID molid" );
         
         }
         { //::SireMM::DihedralRestraint::differentialRestraintFunction
@@ -99,7 +103,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "differentialRestraintFunction"
                 , differentialRestraintFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the function used to calculate the restraint force" );
         
         }
         { //::SireMM::DihedralRestraint::differentiate
@@ -110,7 +115,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the differential of this restraint with respect to\nthe symbol symbol\nThrow: SireCAS::unavailable_differential\n" );
         
         }
         { //::SireMM::DihedralRestraint::force
@@ -121,7 +127,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "Calculate the force acting on the molecule in the forcetable forcetable\ncaused by this restraint, and add it on to the forcetable scaled by\nscale_force" );
         
         }
         { //::SireMM::DihedralRestraint::force
@@ -132,7 +139,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "Calculate the force acting on the molecules in the forcetable forcetable\ncaused by this restraint, and add it on to the forcetable scaled by\nscale_force" );
         
         }
         { //::SireMM::DihedralRestraint::halfHarmonic
@@ -143,7 +151,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "halfHarmonic"
                 , halfHarmonic_function_value
-                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("angle"), bp::arg("force_constant") ) );
+                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("angle"), bp::arg("force_constant") )
+                , "Return a distance restraint that applied a half-harmonic potential\nbetween the points point0 and point1 above a distance distance\nusing a force constant force_constant" );
         
         }
         { //::SireMM::DihedralRestraint::harmonic
@@ -154,7 +163,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "harmonic"
                 , harmonic_function_value
-                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("force_constant") ) );
+                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("force_constant") )
+                , "Return a distance restraint that applies a harmonic potential between\nthe points point0 and point1 using a force constant force_constant" );
         
         }
         { //::SireMM::DihedralRestraint::molecules
@@ -164,7 +174,8 @@ void register_DihedralRestraint_class(){
             
             DihedralRestraint_exposer.def( 
                 "molecules"
-                , molecules_function_value );
+                , molecules_function_value
+                , "Return the molecules used in this restraint" );
         
         }
         { //::SireMM::DihedralRestraint::nPoints
@@ -174,7 +185,8 @@ void register_DihedralRestraint_class(){
             
             DihedralRestraint_exposer.def( 
                 "nPoints"
-                , nPoints_function_value );
+                , nPoints_function_value
+                , "This restraint involves four points" );
         
         }
         DihedralRestraint_exposer.def( bp::self != bp::self );
@@ -187,7 +199,8 @@ void register_DihedralRestraint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         DihedralRestraint_exposer.def( bp::self == bp::self );
@@ -199,7 +212,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "phi"
                 , phi_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the dihedral angle between the points (phi)" );
         
         }
         { //::SireMM::DihedralRestraint::point
@@ -211,7 +225,8 @@ void register_DihedralRestraint_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ith point" );
         
         }
         { //::SireMM::DihedralRestraint::point0
@@ -222,7 +237,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first point" );
         
         }
         { //::SireMM::DihedralRestraint::point1
@@ -233,7 +249,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second point" );
         
         }
         { //::SireMM::DihedralRestraint::point2
@@ -244,7 +261,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the third point" );
         
         }
         { //::SireMM::DihedralRestraint::point3
@@ -255,7 +273,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the fourth point" );
         
         }
         { //::SireMM::DihedralRestraint::setSpace
@@ -266,7 +285,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "setSpace"
                 , setSpace_function_value
-                , ( bp::arg("space") ) );
+                , ( bp::arg("space") )
+                , "Set the space used to evaluate the energy of this restraint\nThrow: SireVol::incompatible_space\n" );
         
         }
         { //::SireMM::DihedralRestraint::typeName
@@ -276,7 +296,8 @@ void register_DihedralRestraint_class(){
             
             DihedralRestraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::DihedralRestraint::update
@@ -287,7 +308,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Update the points of this restraint using new molecule data from moldata\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMM::DihedralRestraint::update
@@ -298,7 +320,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Update the points of this restraint using new molecule data from molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMM::DihedralRestraint::usesMoleculesIn
@@ -309,7 +332,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("forcetable") ) );
+                , ( bp::arg("forcetable") )
+                , "Return whether or not this restraint involves any of the molecules\nthat are in the forcetable forcetable" );
         
         }
         { //::SireMM::DihedralRestraint::usesMoleculesIn
@@ -320,7 +344,8 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Return whether or not this restraint involves any of the molecules\nin molecules" );
         
         }
         DihedralRestraint_exposer.staticmethod( "halfHarmonic" );

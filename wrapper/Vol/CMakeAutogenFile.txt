@@ -2,23 +2,23 @@
 set ( PYPP_SOURCES
        AABox.pypp.cpp
        BoxPatching.pypp.cpp
-       Space.pypp.cpp
        Cartesian.pypp.cpp
+       CombinedSpace.pypp.cpp
        CombineSpaces.pypp.cpp
-       CoordGroupBase.pypp.cpp
        CoordGroup.pypp.cpp
        CoordGroupArray.pypp.cpp
        CoordGroupArrayArray.pypp.cpp
+       CoordGroupBase.pypp.cpp
        CoordGroupEditor.pypp.cpp
        Grid.pypp.cpp
        GridIndex.pypp.cpp
        GridInfo.pypp.cpp
        NullGrid.pypp.cpp
        NullPatching.pypp.cpp
+       Patching.pypp.cpp
        PeriodicBox.pypp.cpp
        RegularGrid.pypp.cpp
-       Patching.pypp.cpp
-       CombinedSpace.pypp.cpp
+       Space.pypp.cpp
        SireVol_containers.cpp
        SireVol_properties.cpp
        SireVol_registrars.cpp

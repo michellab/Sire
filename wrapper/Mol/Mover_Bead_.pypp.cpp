@@ -79,11 +79,11 @@ void register_Mover_Bead__class(){
 
     { //::SireMol::Mover< SireMol::Bead >
         typedef bp::class_< SireMol::Mover< SireMol::Bead >, bp::bases< SireMol::MoverBase, SireMol::Bead, SireMol::MoleculeView, SireBase::Property > > Mover_Bead__exposer_t;
-        Mover_Bead__exposer_t Mover_Bead__exposer = Mover_Bead__exposer_t( "Mover_Bead_", bp::init< >() );
+        Mover_Bead__exposer_t Mover_Bead__exposer = Mover_Bead__exposer_t( "Mover_Bead_", "", bp::init< >("") );
         bp::scope Mover_Bead__scope( Mover_Bead__exposer );
-        Mover_Bead__exposer.def( bp::init< SireMol::Bead const & >(( bp::arg("view") )) );
-        Mover_Bead__exposer.def( bp::init< SireMol::Bead const &, SireMol::AtomSelection const & >(( bp::arg("view"), bp::arg("movable_atoms") )) );
-        Mover_Bead__exposer.def( bp::init< SireMol::Mover< SireMol::Bead > const & >(( bp::arg("other") )) );
+        Mover_Bead__exposer.def( bp::init< SireMol::Bead const & >(( bp::arg("view") ), "") );
+        Mover_Bead__exposer.def( bp::init< SireMol::Bead const &, SireMol::AtomSelection const & >(( bp::arg("view"), bp::arg("movable_atoms") ), "") );
+        Mover_Bead__exposer.def( bp::init< SireMol::Mover< SireMol::Bead > const & >(( bp::arg("other") ), "") );
         { //::SireMol::Mover< SireMol::Bead >::align
         
             typedef SireMol::Mover< SireMol::Bead > exported_class_t;
@@ -94,7 +94,8 @@ void register_Mover_Bead__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::align
@@ -107,7 +108,8 @@ void register_Mover_Bead__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::align
@@ -120,7 +122,8 @@ void register_Mover_Bead__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::align
@@ -133,7 +136,8 @@ void register_Mover_Bead__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::alignTo
@@ -146,7 +150,8 @@ void register_Mover_Bead__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::alignTo
@@ -159,7 +164,8 @@ void register_Mover_Bead__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::alignTo
@@ -172,7 +178,8 @@ void register_Mover_Bead__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::alignTo
@@ -185,72 +192,78 @@ void register_Mover_Bead__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::change
         
             typedef SireMol::Mover< SireMol::Bead > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::Length,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Bead >::change );
             
             Mover_Bead__exposer.def( 
                 "change"
                 , change_function_value
                 , ( bp::arg("bond"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::change
         
             typedef SireMol::Mover< SireMol::Bead > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*change_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*change_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Bead >::change );
             
             Mover_Bead__exposer.def( 
                 "change"
                 , change_function_value
                 , ( bp::arg("angle"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::change
         
             typedef SireMol::Mover< SireMol::Bead > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*change_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*change_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Bead >::change );
             
             Mover_Bead__exposer.def( 
                 "change"
                 , change_function_value
                 , ( bp::arg("dihedral"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::change
         
             typedef SireMol::Mover< SireMol::Bead > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Bead >::change );
             
             Mover_Bead__exposer.def( 
                 "change"
                 , change_function_value
                 , ( bp::arg("bond"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::change
         
             typedef SireMol::Mover< SireMol::Bead > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*change_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*change_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Bead >::change );
             
             Mover_Bead__exposer.def( 
                 "change"
                 , change_function_value
                 , ( bp::arg("improper"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::changeFrame
@@ -263,7 +276,8 @@ void register_Mover_Bead__class(){
                 "changeFrame"
                 , changeFrame_function_value
                 , ( bp::arg("from_frame"), bp::arg("to_frame"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::commit
@@ -274,7 +288,8 @@ void register_Mover_Bead__class(){
             
             Mover_Bead__exposer.def( 
                 "commit"
-                , commit_function_value );
+                , commit_function_value
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::mapInto
@@ -287,7 +302,8 @@ void register_Mover_Bead__class(){
                 "mapInto"
                 , mapInto_function_value
                 , ( bp::arg("axes"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::operator=
@@ -300,7 +316,8 @@ void register_Mover_Bead__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::operator=
@@ -313,7 +330,8 @@ void register_Mover_Bead__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::rotate
@@ -326,7 +344,8 @@ void register_Mover_Bead__class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("quat"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::rotate
@@ -339,72 +358,78 @@ void register_Mover_Bead__class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("rotmat"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::set
         
             typedef SireMol::Mover< SireMol::Bead > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*set_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*set_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::Length,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Bead >::set );
             
             Mover_Bead__exposer.def( 
                 "set"
                 , set_function_value
                 , ( bp::arg("bond"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::set
         
             typedef SireMol::Mover< SireMol::Bead > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*set_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*set_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Bead >::set );
             
             Mover_Bead__exposer.def( 
                 "set"
                 , set_function_value
                 , ( bp::arg("angle"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::set
         
             typedef SireMol::Mover< SireMol::Bead > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*set_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*set_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Bead >::set );
             
             Mover_Bead__exposer.def( 
                 "set"
                 , set_function_value
                 , ( bp::arg("dihedral"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::set
         
             typedef SireMol::Mover< SireMol::Bead > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*set_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*set_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Bead >::set );
             
             Mover_Bead__exposer.def( 
                 "set"
                 , set_function_value
                 , ( bp::arg("improper"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::setAll
         
             typedef SireMol::Mover< SireMol::Bead > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*setAll_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Bead > & ( ::SireMol::Mover< SireMol::Bead >::*setAll_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             setAll_function_type setAll_function_value( &::SireMol::Mover< SireMol::Bead >::setAll );
             
             Mover_Bead__exposer.def( 
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("dihedral"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::toString
@@ -415,7 +440,8 @@ void register_Mover_Bead__class(){
             
             Mover_Bead__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::transform
@@ -428,7 +454,8 @@ void register_Mover_Bead__class(){
                 "transform"
                 , transform_function_value
                 , ( bp::arg("transform"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::translate
@@ -441,7 +468,8 @@ void register_Mover_Bead__class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::Bead >::typeName
@@ -452,7 +480,8 @@ void register_Mover_Bead__class(){
             
             Mover_Bead__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Mover_Bead__exposer.staticmethod( "typeName" );

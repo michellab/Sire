@@ -38,10 +38,10 @@ void register_FourAtomFunction_class(){
 
     { //::SireMM::FourAtomFunction
         typedef bp::class_< SireMM::FourAtomFunction, bp::bases< SireMM::AtomFunction > > FourAtomFunction_exposer_t;
-        FourAtomFunction_exposer_t FourAtomFunction_exposer = FourAtomFunction_exposer_t( "FourAtomFunction", bp::init< >() );
+        FourAtomFunction_exposer_t FourAtomFunction_exposer = FourAtomFunction_exposer_t( "FourAtomFunction", "This class holds a function that acts using the\ncoordinate information of just four atoms", bp::init< >("Constructor") );
         bp::scope FourAtomFunction_scope( FourAtomFunction_exposer );
-        FourAtomFunction_exposer.def( bp::init< SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireCAS::Expression const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("function") )) );
-        FourAtomFunction_exposer.def( bp::init< SireMM::FourAtomFunction const & >(( bp::arg("other") )) );
+        FourAtomFunction_exposer.def( bp::init< SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireCAS::Expression const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("function") ), "Construct for the specified pair of atoms with the specified function") );
+        FourAtomFunction_exposer.def( bp::init< SireMM::FourAtomFunction const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::FourAtomFunction::atom0
         
             typedef ::SireMol::CGAtomIdx const & ( ::SireMM::FourAtomFunction::*atom0_function_type)(  ) const;
@@ -50,7 +50,8 @@ void register_FourAtomFunction_class(){
             FourAtomFunction_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::FourAtomFunction::atom1
@@ -61,7 +62,8 @@ void register_FourAtomFunction_class(){
             FourAtomFunction_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::FourAtomFunction::atom2
@@ -72,7 +74,8 @@ void register_FourAtomFunction_class(){
             FourAtomFunction_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::FourAtomFunction::atom3
@@ -83,7 +86,8 @@ void register_FourAtomFunction_class(){
             FourAtomFunction_exposer.def( 
                 "atom3"
                 , atom3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         FourAtomFunction_exposer.def( bp::self != bp::self );
@@ -96,7 +100,8 @@ void register_FourAtomFunction_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         FourAtomFunction_exposer.def( bp::self == bp::self );
@@ -107,7 +112,8 @@ void register_FourAtomFunction_class(){
             
             FourAtomFunction_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         FourAtomFunction_exposer.def( "__copy__", &__copy__);

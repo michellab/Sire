@@ -47,10 +47,10 @@ void register_FreeEnergyMonitor_class(){
 
     { //::SireSystem::FreeEnergyMonitor
         typedef bp::class_< SireSystem::FreeEnergyMonitor, bp::bases< SireSystem::SystemMonitor, SireBase::Property > > FreeEnergyMonitor_exposer_t;
-        FreeEnergyMonitor_exposer_t FreeEnergyMonitor_exposer = FreeEnergyMonitor_exposer_t( "FreeEnergyMonitor", bp::init< >() );
+        FreeEnergyMonitor_exposer_t FreeEnergyMonitor_exposer = FreeEnergyMonitor_exposer_t( "FreeEnergyMonitor", "This monitor is used to monitor the free energy difference of two\nmolecule groups against every molecule view in the third.\nThis uses dual topology to calculate\nthe free energy difference between the interaction of each view in the\nreference molecule group, and the group A and group B groups. This is intended\nto complement free energy calculations by letting you decompose\nthe free energy difference into per-residue components. The coulomb\nand LJ components are also separately calculated and accumulated.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor. By default, we dont collect a histogram of each of\nthe components energies as this is too memory hungry") );
         bp::scope FreeEnergyMonitor_scope( FreeEnergyMonitor_exposer );
-        FreeEnergyMonitor_exposer.def( bp::init< SireSystem::AssignerGroup const &, SireSystem::AssignerGroup const &, SireSystem::AssignerGroup const & >(( bp::arg("reference"), bp::arg("groupA"), bp::arg("groupB") )) );
-        FreeEnergyMonitor_exposer.def( bp::init< SireSystem::FreeEnergyMonitor const & >(( bp::arg("other") )) );
+        FreeEnergyMonitor_exposer.def( bp::init< SireSystem::AssignerGroup const &, SireSystem::AssignerGroup const &, SireSystem::AssignerGroup const & >(( bp::arg("reference"), bp::arg("groupA"), bp::arg("groupB") ), "Construct to monitor the free energy difference of the reference group\ninteracting with group A as it is perturbed into group B. By default,\nwe dont collect a histogram of each of the components energies as this\nis too memory hungry") );
+        FreeEnergyMonitor_exposer.def( bp::init< SireSystem::FreeEnergyMonitor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::FreeEnergyMonitor::binWidth
         
             typedef ::SireUnits::Dimension::MolarEnergy ( ::SireSystem::FreeEnergyMonitor::*binWidth_function_type)(  ) const;
@@ -58,7 +58,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "binWidth"
-                , binWidth_function_value );
+                , binWidth_function_value
+                , "Return the width of the histogram bins used to record the free energies" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::clearStatistics
@@ -68,7 +69,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Clear all statistics" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::conserveMemory
@@ -79,7 +81,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "conserveMemory"
                 , conserveMemory_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Conserve memory by copying the molecule data etc. from other into this monitor" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::coulombFreeEnergies
@@ -89,7 +92,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "coulombFreeEnergies"
-                , coulombFreeEnergies_function_value );
+                , coulombFreeEnergies_function_value
+                , "Return the array of all accumulated coulomb free energies" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::coulombPower
@@ -99,7 +103,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "coulombPower"
-                , coulombPower_function_value );
+                , coulombPower_function_value
+                , "Return the coulomb power, if extra coulomb softening is used.\nThis returns 0 if coulomb softening is not used" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::deltaLambda
@@ -109,7 +114,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "deltaLambda"
-                , deltaLambda_function_value );
+                , deltaLambda_function_value
+                , "Return the value of delta lambda used to calculate the free energy gradients" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::freeEnergies
@@ -119,7 +125,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "freeEnergies"
-                , freeEnergies_function_value );
+                , freeEnergies_function_value
+                , "Return the array of all accumulated total free energies" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::groupA
@@ -130,7 +137,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "groupA"
                 , groupA_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return group A (the group interacting with the reference group at lambda = 0)" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::groupB
@@ -141,7 +149,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "groupB"
                 , groupB_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return group B (the group interacting with the reference group at lambda = 1)" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::isCompatible
@@ -152,7 +161,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "isCompatible"
                 , isCompatible_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this monitor is compatible with other\n(have the same groups, soft-core parameters, delta lambda, temperature etc.)" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::isCompatibleExceptLambda
@@ -163,7 +173,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "isCompatibleExceptLambda"
                 , isCompatibleExceptLambda_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this monitor is compatible with other, ignoring that\nthe monitors have different lambda values. This will let you know if it is sensible\nto construct PMFs from a combination of these monitors" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::isEmpty
@@ -173,7 +184,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether this is empty (has no group data)" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::lambdaComponent
@@ -183,7 +195,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "lambdaComponent"
-                , lambdaComponent_function_value );
+                , lambdaComponent_function_value
+                , "Return the symbol used to find the value of lambda from the system" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::lambdaValue
@@ -193,7 +206,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "lambdaValue"
-                , lambdaValue_function_value );
+                , lambdaValue_function_value
+                , "Return the lambda value at which the free energy components were collected" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::ljFreeEnergies
@@ -203,7 +217,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "ljFreeEnergies"
-                , ljFreeEnergies_function_value );
+                , ljFreeEnergies_function_value
+                , "Return the array of all accumulated LJ free energies" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::merge
@@ -214,7 +229,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("monitors") ) );
+                , ( bp::arg("monitors") )
+                , "Merge a whole set of free energy monitors together. Note that you can\nonly merge them if they have the same groups, soft-core parameters, delta lambda,\ntemperature etc.\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::monitor
@@ -225,7 +241,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "monitor"
                 , monitor_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Accumulate energies from the passed system" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::nSamples
@@ -235,7 +252,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "nSamples"
-                , nSamples_function_value );
+                , nSamples_function_value
+                , "Return the number of samples used to form all of the free energy averages\nin this monitor" );
         
         }
         FreeEnergyMonitor_exposer.def( bp::self != bp::self );
@@ -249,7 +267,8 @@ void register_FreeEnergyMonitor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         FreeEnergyMonitor_exposer.def( bp::self == bp::self );
@@ -261,7 +280,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "referenceGroup"
                 , referenceGroup_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the reference group" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::referenceViews
@@ -271,7 +291,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "referenceViews"
-                , referenceViews_function_value );
+                , referenceViews_function_value
+                , "Return the array of the reference group molecule views in the same order as they\nappear in the arrays of free energies" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::setBinWidth
@@ -282,7 +303,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "setBinWidth"
                 , setBinWidth_function_value
-                , ( bp::arg("binwidth") ) );
+                , ( bp::arg("binwidth") )
+                , "Set the bin width for the histogram of recorded free energies.\nBy default, we dont collect a histogram of each of the components energies\nas this is too memory hungry." );
         
         }
         { //::SireSystem::FreeEnergyMonitor::setCoulombPower
@@ -293,7 +315,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "setCoulombPower"
                 , setCoulombPower_function_value
-                , ( bp::arg("power") ) );
+                , ( bp::arg("power") )
+                , "Set the coulomb power parameter used by the soft-core potential" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::setDeltaLambda
@@ -304,7 +327,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "setDeltaLambda"
                 , setDeltaLambda_function_value
-                , ( bp::arg("delta_lam") ) );
+                , ( bp::arg("delta_lam") )
+                , "Set the value of delta lambda to use to calculate the free energy gradients" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::setLambdaComponent
@@ -315,7 +339,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "setLambdaComponent"
                 , setLambdaComponent_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Set the system component symbol used to get the value of lambda" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::setShiftDelta
@@ -326,7 +351,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "setShiftDelta"
                 , setShiftDelta_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "Set the shift delta parameter used by the soft-core potential" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::setTemperature
@@ -337,7 +363,8 @@ void register_FreeEnergyMonitor_class(){
             FreeEnergyMonitor_exposer.def( 
                 "setTemperature"
                 , setTemperature_function_value
-                , ( bp::arg("temperature") ) );
+                , ( bp::arg("temperature") )
+                , "Set the temperature at which the free energies are accumulated" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::shiftDelta
@@ -347,7 +374,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "shiftDelta"
-                , shiftDelta_function_value );
+                , shiftDelta_function_value
+                , "Return the shift delta parameter if a soft-core potential is used.\nThis returns 0 if a LJ shifting term is not used" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::temperature
@@ -357,7 +385,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "temperature"
-                , temperature_function_value );
+                , temperature_function_value
+                , "Return the temperature at which the free energies are calculated" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::typeName
@@ -367,7 +396,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "Return the typename of the class" );
         
         }
         { //::SireSystem::FreeEnergyMonitor::usesSoftCore
@@ -377,7 +407,8 @@ void register_FreeEnergyMonitor_class(){
             
             FreeEnergyMonitor_exposer.def( 
                 "usesSoftCore"
-                , usesSoftCore_function_value );
+                , usesSoftCore_function_value
+                , "Return whether or not this monitor uses a soft-core potential to\ncalculate the CLJ energy between the molecules in views0() and the\nmolecules in views1()" );
         
         }
         FreeEnergyMonitor_exposer.staticmethod( "merge" );

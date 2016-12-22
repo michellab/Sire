@@ -21,7 +21,7 @@ void register_SymbolValue_class(){
 
     { //::SireCAS::SymbolValue
         typedef bp::class_< SireCAS::SymbolValue > SymbolValue_exposer_t;
-        SymbolValue_exposer_t SymbolValue_exposer = SymbolValue_exposer_t( "SymbolValue", bp::init< SireCAS::SymbolID, double >(( bp::arg("id"), bp::arg("val") )) );
+        SymbolValue_exposer_t SymbolValue_exposer = SymbolValue_exposer_t( "SymbolValue", "Small class that holds a SymbolID number and an associated value", bp::init< SireCAS::SymbolID, double >(( bp::arg("id"), bp::arg("val") ), "") );
         bp::scope SymbolValue_scope( SymbolValue_exposer );
         { //::SireCAS::SymbolValue::ID
         
@@ -30,7 +30,8 @@ void register_SymbolValue_class(){
             
             SymbolValue_exposer.def( 
                 "ID"
-                , ID_function_value );
+                , ID_function_value
+                , "" );
         
         }
         { //::SireCAS::SymbolValue::value
@@ -40,11 +41,12 @@ void register_SymbolValue_class(){
             
             SymbolValue_exposer.def( 
                 "value"
-                , value_function_value );
+                , value_function_value
+                , "" );
         
         }
-        SymbolValue_exposer.def( bp::self + bp::other< SireCAS::Values >() );
         SymbolValue_exposer.def( bp::self + bp::self );
+        SymbolValue_exposer.def( bp::self + bp::other< SireCAS::Values >() );
         SymbolValue_exposer.def( "__copy__", &__copy__);
         SymbolValue_exposer.def( "__deepcopy__", &__copy__);
         SymbolValue_exposer.def( "clone", &__copy__);

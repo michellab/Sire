@@ -94,6 +94,11 @@ namespace SireMol
         {
             p[n] = coords0.at( view0.data().info().cgAtomIdx(it.key()) );
             q[n] = coords1.at( view1.data().info().cgAtomIdx(it.value()) );
+            
+            /*qDebug() << n << view0.data().info().name(it.key()).toString() << "=="
+                          << view1.data().info().name(it.value()).toString();
+            qDebug() << n << p[n].toString() << q[n].toString();*/
+            
             n += 1;
         }
         

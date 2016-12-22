@@ -25,7 +25,7 @@ void register_SysID_class(){
 
     { //::SireSystem::SysID
         typedef bp::class_< SireSystem::SysID, bp::bases< SireID::ID >, boost::noncopyable > SysID_exposer_t;
-        SysID_exposer_t SysID_exposer = SysID_exposer_t( "SysID", bp::no_init );
+        SysID_exposer_t SysID_exposer = SysID_exposer_t( "SysID", "The base class of all system identifiers\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope SysID_scope( SysID_exposer );
         { //::SireSystem::SysID::map
         
@@ -35,7 +35,8 @@ void register_SysID_class(){
             SysID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("systems") ) );
+                , ( bp::arg("systems") )
+                , "" );
         
         }
         SysID_exposer.def( bp::self & bp::self );
@@ -47,7 +48,8 @@ void register_SysID_class(){
             SysID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireSystem::SysID::operator()
@@ -58,7 +60,8 @@ void register_SysID_class(){
             SysID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         SysID_exposer.def( bp::self * bp::self );
@@ -71,7 +74,8 @@ void register_SysID_class(){
             SysID_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         SysID_exposer.def( bp::self | bp::self );
@@ -82,12 +86,14 @@ void register_SysID_class(){
             
             SysID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SysID_exposer.staticmethod( "typeName" );
         SysID_exposer.def( "__str__", &__str__< ::SireSystem::SysID > );
         SysID_exposer.def( "__repr__", &__str__< ::SireSystem::SysID > );
+        SysID_exposer.def( "__hash__", &::SireSystem::SysID::hash );
     }
 
 }

@@ -48,6 +48,8 @@ target_link_libraries (Units
                        SirePython
                        SIRE_SireUnits
                        SIRE_SireBase
+                       SIRE_SireMol
+                       SIRE_SireMM
                        ${BOOST_PYTHON_LIBRARY}
                        ${PYTHON_LIBRARIES}
                       )
@@ -60,7 +62,9 @@ set( INSTALLDIR ${SIRE_PYTHON}/Sire/Units )
 
 install( TARGETS Units
          LIBRARY DESTINATION ${INSTALLDIR}
-       )
+         ARCHIVE DESTINATION ${INSTALLDIR}
+         RUNTIME DESTINATION ${INSTALLDIR}
+        )
 
 install( FILES __init__.py
          DESTINATION ${INSTALLDIR} 

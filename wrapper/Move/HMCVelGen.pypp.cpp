@@ -35,7 +35,7 @@ void register_HMCVelGen_class(){
 
     { //::SireMove::HMCVelGen
         typedef bp::class_< SireMove::HMCVelGen, bp::bases< SireMove::VelocityGenerator, SireBase::Property >, boost::noncopyable > HMCVelGen_exposer_t;
-        HMCVelGen_exposer_t HMCVelGen_exposer = HMCVelGen_exposer_t( "HMCVelGen", bp::no_init );
+        HMCVelGen_exposer_t HMCVelGen_exposer = HMCVelGen_exposer_t( "HMCVelGen", "This class provides the base class of an extension\nof the velocity generator that generates velocities\nin such a way that the bias can be\ncalculated and accounted for within the hybrid MC move\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope HMCVelGen_scope( HMCVelGen_exposer );
         { //::SireMove::HMCVelGen::generate
         
@@ -45,7 +45,8 @@ void register_HMCVelGen_class(){
             HMCVelGen_exposer.def( 
                 "generate"
                 , generate_function_value
-                , ( bp::arg("system"), bp::arg("md") ) );
+                , ( bp::arg("system"), bp::arg("md") )
+                , "Generate the velocites in the passed MD object,\nreturning the biasing factor for the HMC algorithm" );
         
         }
         { //::SireMove::HMCVelGen::getBias
@@ -56,7 +57,8 @@ void register_HMCVelGen_class(){
             HMCVelGen_exposer.def( 
                 "getBias"
                 , getBias_function_value
-                , ( bp::arg("md") ) );
+                , ( bp::arg("md") )
+                , "Return the bias for the velocities in the passed MD object" );
         
         }
         { //::SireMove::HMCVelGen::setGenerator
@@ -67,7 +69,8 @@ void register_HMCVelGen_class(){
             HMCVelGen_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("generator") ) );
+                , ( bp::arg("generator") )
+                , "Set the random number generator used to generate the random\nnumbers needed by this generator" );
         
         }
         { //::SireMove::HMCVelGen::setTemperature
@@ -78,7 +81,8 @@ void register_HMCVelGen_class(){
             HMCVelGen_exposer.def( 
                 "setTemperature"
                 , setTemperature_function_value
-                , ( bp::arg("temperature") ) );
+                , ( bp::arg("temperature") )
+                , "Set the temperature of the velocities to be generated" );
         
         }
         { //::SireMove::HMCVelGen::temperature
@@ -88,7 +92,8 @@ void register_HMCVelGen_class(){
             
             HMCVelGen_exposer.def( 
                 "temperature"
-                , temperature_function_value );
+                , temperature_function_value
+                , "Return the temperature of the velocities to be generated" );
         
         }
         HMCVelGen_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMove::HMCVelGen >,

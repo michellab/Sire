@@ -55,10 +55,10 @@ void register_ConnectivityEditor_class(){
 
     { //::SireMol::ConnectivityEditor
         typedef bp::class_< SireMol::ConnectivityEditor, bp::bases< SireMol::ConnectivityBase, SireMol::MolViewProperty, SireBase::Property > > ConnectivityEditor_exposer_t;
-        ConnectivityEditor_exposer_t ConnectivityEditor_exposer = ConnectivityEditor_exposer_t( "ConnectivityEditor", bp::init< >() );
+        ConnectivityEditor_exposer_t ConnectivityEditor_exposer = ConnectivityEditor_exposer_t( "ConnectivityEditor", "An editor that can be used to edit a Connectivity object\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope ConnectivityEditor_scope( ConnectivityEditor_exposer );
-        ConnectivityEditor_exposer.def( bp::init< SireMol::Connectivity const & >(( bp::arg("connectivity") )) );
-        ConnectivityEditor_exposer.def( bp::init< SireMol::ConnectivityEditor const & >(( bp::arg("other") )) );
+        ConnectivityEditor_exposer.def( bp::init< SireMol::Connectivity const & >(( bp::arg("connectivity") ), "Construct an editor to edit a copy of the passed\nConnectivity object") );
+        ConnectivityEditor_exposer.def( bp::init< SireMol::ConnectivityEditor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::ConnectivityEditor::commit
         
             typedef ::SireMol::Connectivity ( ::SireMol::ConnectivityEditor::*commit_function_type)(  ) const;
@@ -66,7 +66,8 @@ void register_ConnectivityEditor_class(){
             
             ConnectivityEditor_exposer.def( 
                 "commit"
-                , commit_function_value );
+                , commit_function_value
+                , "Return the editied connectivity" );
         
         }
         { //::SireMol::ConnectivityEditor::connect
@@ -78,7 +79,8 @@ void register_ConnectivityEditor_class(){
                 "connect"
                 , connect_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Record the connection between the atoms at indicies atom0\nand atom1\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityEditor::connect
@@ -90,7 +92,8 @@ void register_ConnectivityEditor_class(){
                 "connect"
                 , connect_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Record a connection between the atom identified by atom0 and\nthe atom identified by atom1\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityEditor::disconnect
@@ -102,7 +105,8 @@ void register_ConnectivityEditor_class(){
                 "disconnect"
                 , disconnect_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove the connection between the atoms at indicies atom0\nand atom1 - this does nothing if there isnt already a connection\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityEditor::disconnect
@@ -114,7 +118,8 @@ void register_ConnectivityEditor_class(){
                 "disconnect"
                 , disconnect_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Disconnect the atoms that are identified by atom0 and atom1 -\nthis does nothing if there isnt a connection between these atoms\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityEditor::disconnectAll
@@ -126,7 +131,8 @@ void register_ConnectivityEditor_class(){
                 "disconnectAll"
                 , disconnectAll_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all of the connections to the atom at index atomidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityEditor::disconnectAll
@@ -138,7 +144,8 @@ void register_ConnectivityEditor_class(){
                 "disconnectAll"
                 , disconnectAll_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all of the connections that involve any of the atoms\nin the residue at index residx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityEditor::disconnectAll
@@ -150,7 +157,8 @@ void register_ConnectivityEditor_class(){
                 "disconnectAll"
                 , disconnectAll_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all of the connections to the atom identified by atomid\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityEditor::disconnectAll
@@ -162,7 +170,8 @@ void register_ConnectivityEditor_class(){
                 "disconnectAll"
                 , disconnectAll_function_value
                 , ( bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all of the connections that involve any of the atoms\nin the residue identified by resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ConnectivityEditor::disconnectAll
@@ -173,7 +182,8 @@ void register_ConnectivityEditor_class(){
             ConnectivityEditor_exposer.def( 
                 "disconnectAll"
                 , disconnectAll_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all bonds from this molecule" );
         
         }
         ConnectivityEditor_exposer.def( bp::self != bp::self );
@@ -186,7 +196,8 @@ void register_ConnectivityEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ConnectivityEditor_exposer.def( bp::self == bp::self );
@@ -197,7 +208,8 @@ void register_ConnectivityEditor_class(){
             
             ConnectivityEditor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ConnectivityEditor_exposer.staticmethod( "typeName" );

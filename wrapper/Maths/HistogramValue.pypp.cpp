@@ -31,10 +31,10 @@ void register_HistogramValue_class(){
 
     { //::SireMaths::HistogramValue
         typedef bp::class_< SireMaths::HistogramValue, bp::bases< SireMaths::HistogramBin > > HistogramValue_exposer_t;
-        HistogramValue_exposer_t HistogramValue_exposer = HistogramValue_exposer_t( "HistogramValue", bp::init< >() );
+        HistogramValue_exposer_t HistogramValue_exposer = HistogramValue_exposer_t( "HistogramValue", "This class represents a single histogram bin with its associated value", bp::init< >("Null constructor") );
         bp::scope HistogramValue_scope( HistogramValue_exposer );
-        HistogramValue_exposer.def( bp::init< SireMaths::HistogramBin const &, double >(( bp::arg("bin"), bp::arg("value") )) );
-        HistogramValue_exposer.def( bp::init< SireMaths::HistogramValue const & >(( bp::arg("other") )) );
+        HistogramValue_exposer.def( bp::init< SireMaths::HistogramBin const &, double >(( bp::arg("bin"), bp::arg("value") ), "Construct the value for the bin bin equal to value") );
+        HistogramValue_exposer.def( bp::init< SireMaths::HistogramValue const & >(( bp::arg("other") ), "Copy constructor") );
         HistogramValue_exposer.def( bp::self != bp::self );
         { //::SireMaths::HistogramValue::operator=
         
@@ -45,7 +45,8 @@ void register_HistogramValue_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         HistogramValue_exposer.def( bp::self == bp::self );
@@ -56,7 +57,8 @@ void register_HistogramValue_class(){
             
             HistogramValue_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         { //::SireMaths::HistogramValue::value
@@ -66,7 +68,8 @@ void register_HistogramValue_class(){
             
             HistogramValue_exposer.def( 
                 "value"
-                , value_function_value );
+                , value_function_value
+                , "Return the value of the bin" );
         
         }
         HistogramValue_exposer.def( "__copy__", &__copy__);

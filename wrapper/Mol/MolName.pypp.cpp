@@ -35,11 +35,11 @@ void register_MolName_class(){
 
     { //::SireMol::MolName
         typedef bp::class_< SireMol::MolName, bp::bases< SireMol::MolID, SireID::ID, SireID::Name > > MolName_exposer_t;
-        MolName_exposer_t MolName_exposer = MolName_exposer_t( "MolName", bp::init< >() );
+        MolName_exposer_t MolName_exposer = MolName_exposer_t( "MolName", "This class holds the name of a Molecule.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MolName_scope( MolName_exposer );
-        MolName_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        MolName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") )) );
-        MolName_exposer.def( bp::init< SireMol::MolName const & >(( bp::arg("other") )) );
+        MolName_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
+        MolName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") ), "") );
+        MolName_exposer.def( bp::init< SireMol::MolName const & >(( bp::arg("other") ), "") );
         { //::SireMol::MolName::hash
         
             typedef ::uint ( ::SireMol::MolName::*hash_function_type)(  ) const;
@@ -47,7 +47,8 @@ void register_MolName_class(){
             
             MolName_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::MolName::isNull
@@ -57,7 +58,8 @@ void register_MolName_class(){
             
             MolName_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::MolName::map
@@ -68,7 +70,8 @@ void register_MolName_class(){
             MolName_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireMol::MolName::map
@@ -79,7 +82,8 @@ void register_MolName_class(){
             MolName_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireMol::MolName::map
@@ -90,7 +94,8 @@ void register_MolName_class(){
             MolName_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "" );
         
         }
         MolName_exposer.def( bp::self != bp::self );
@@ -103,7 +108,8 @@ void register_MolName_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MolName_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -115,7 +121,8 @@ void register_MolName_class(){
             
             MolName_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::MolName::typeName
@@ -125,7 +132,8 @@ void register_MolName_class(){
             
             MolName_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::MolName::what
@@ -135,7 +143,8 @@ void register_MolName_class(){
             
             MolName_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MolName_exposer.staticmethod( "typeName" );
@@ -148,6 +157,7 @@ void register_MolName_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MolName_exposer.def( "__str__", &__str__< ::SireMol::MolName > );
         MolName_exposer.def( "__repr__", &__str__< ::SireMol::MolName > );
+        MolName_exposer.def( "__hash__", &::SireMol::MolName::hash );
     }
 
 }

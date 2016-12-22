@@ -55,26 +55,26 @@ void register_CLJAtoms_class(){
 
     { //::SireMM::CLJAtoms
         typedef bp::class_< SireMM::CLJAtoms > CLJAtoms_exposer_t;
-        CLJAtoms_exposer_t CLJAtoms_exposer = CLJAtoms_exposer_t( "CLJAtoms", bp::init< >() );
+        CLJAtoms_exposer_t CLJAtoms_exposer = CLJAtoms_exposer_t( "CLJAtoms", "This class holds vectorised arrays of the coordinates,\nreduced charges and reduced Lennard Jones parameters of\na set of atoms. This class is intended only to be used\nin the fast functions used to calculated coulomb and LJ\nenergies, and is not intended for general use.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope CLJAtoms_scope( CLJAtoms_exposer );
         bp::enum_< SireMM::CLJAtoms::ID_SOURCE>("ID_SOURCE")
             .value("USE_MOLNUM", SireMM::CLJAtoms::USE_MOLNUM)
             .value("USE_ATOMIDX", SireMM::CLJAtoms::USE_ATOMIDX)
             .export_values()
             ;
-        CLJAtoms_exposer.def( bp::init< SireMM::CLJAtom const & >(( bp::arg("atom") )) );
-        CLJAtoms_exposer.def( bp::init< QVector< SireMM::CLJAtom > const & >(( bp::arg("atoms") )) );
-        CLJAtoms_exposer.def( bp::init< QList< SireMM::CLJAtom > const & >(( bp::arg("atoms") )) );
-        CLJAtoms_exposer.def( bp::init< SireMM::CLJAtom const *, int >(( bp::arg("atoms"), bp::arg("natoms") )) );
-        CLJAtoms_exposer.def( bp::init< QVector< SireMaths::Vector > const &, QVector< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > const &, QVector< SireMM::LJParameter > const &, bp::optional< qint32 > >(( bp::arg("coordinates"), bp::arg("charges"), bp::arg("ljparams"), bp::arg("atomid")=(::qint32)(1) )) );
-        CLJAtoms_exposer.def( bp::init< QVector< SireMaths::Vector > const &, QVector< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > const &, QVector< SireMM::LJParameter > const &, QVector< int > const & >(( bp::arg("coordinates"), bp::arg("charges"), bp::arg("ljparams"), bp::arg("ids") )) );
-        CLJAtoms_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CLJAtoms_exposer.def( bp::init< SireMol::MoleculeView const &, SireMM::CLJAtoms::ID_SOURCE, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("id_source"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CLJAtoms_exposer.def( bp::init< SireMol::Molecules const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CLJAtoms_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CLJAtoms_exposer.def( bp::init< SireMol::Molecules const &, SireMM::CLJAtoms::ID_SOURCE, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecules"), bp::arg("id_source"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CLJAtoms_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMM::CLJAtoms::ID_SOURCE, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecules"), bp::arg("id_source"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CLJAtoms_exposer.def( bp::init< SireMM::CLJAtoms const & >(( bp::arg("other") )) );
+        CLJAtoms_exposer.def( bp::init< SireMM::CLJAtom const & >(( bp::arg("atom") ), "Constructor allowing implicit conversion from a single CLJAtom") );
+        CLJAtoms_exposer.def( bp::init< QVector< SireMM::CLJAtom > const & >(( bp::arg("atoms") ), "Construct from the passed array of CLJAtom atoms") );
+        CLJAtoms_exposer.def( bp::init< QList< SireMM::CLJAtom > const & >(( bp::arg("atoms") ), "Construct from the passed list of CLJAtom atoms") );
+        CLJAtoms_exposer.def( bp::init< SireMM::CLJAtom const *, int >(( bp::arg("atoms"), bp::arg("natoms") ), "Construct from the passed array of CLJAtom atoms") );
+        CLJAtoms_exposer.def( bp::init< QVector< SireMaths::Vector > const &, QVector< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > const &, QVector< SireMM::LJParameter > const &, bp::optional< qint32 > >(( bp::arg("coordinates"), bp::arg("charges"), bp::arg("ljparams"), bp::arg("atomid")=(::qint32)(1) ), "Construct from the passed set of coordinates, partial charges and LJ parameters.\nEach atom is assumed to be part of the same molecule, with atom ID atomid") );
+        CLJAtoms_exposer.def( bp::init< QVector< SireMaths::Vector > const &, QVector< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > const &, QVector< SireMM::LJParameter > const &, QVector< int > const & >(( bp::arg("coordinates"), bp::arg("charges"), bp::arg("ljparams"), bp::arg("ids") ), "Construct from the passed set of coordinates, partial charges, LJ parameters\nand atom IDs") );
+        CLJAtoms_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "Construct from the parameters in the passed set of Molecules") );
+        CLJAtoms_exposer.def( bp::init< SireMol::MoleculeView const &, SireMM::CLJAtoms::ID_SOURCE, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("id_source"), bp::arg("map")=SireBase::PropertyMap() ), "Construct from the parameters in the passed molecule view, specifying\nhow the ID number should be obtained for each atom") );
+        CLJAtoms_exposer.def( bp::init< SireMol::Molecules const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ), "Construct from the parameters in the passed set of Molecules") );
+        CLJAtoms_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ), "Construct from the parameters in the passed set of Molecules") );
+        CLJAtoms_exposer.def( bp::init< SireMol::Molecules const &, SireMM::CLJAtoms::ID_SOURCE, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecules"), bp::arg("id_source"), bp::arg("map")=SireBase::PropertyMap() ), "Construct from the parameters in the passed molecule view, specifying\nhow the ID number should be obtained for each atom") );
+        CLJAtoms_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMM::CLJAtoms::ID_SOURCE, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecules"), bp::arg("id_source"), bp::arg("map")=SireBase::PropertyMap() ), "Construct from the parameters in the passed molecule view, specifying\nhow the ID number should be obtained for each atom") );
+        CLJAtoms_exposer.def( bp::init< SireMM::CLJAtoms const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJAtoms::ID
         
             typedef ::QVector< SireMaths::MultiInt > const & ( ::SireMM::CLJAtoms::*ID_function_type)(  ) const;
@@ -83,7 +83,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "ID"
                 , ID_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::IDs
@@ -93,7 +94,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "IDs"
-                , IDs_function_value );
+                , IDs_function_value
+                , "Return the IDs of all of the atoms" );
         
         }
         { //::SireMM::CLJAtoms::append
@@ -104,7 +106,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "append"
                 , append_function_value
-                , ( bp::arg("atom") ) );
+                , ( bp::arg("atom") )
+                , "Append the passed atom onto the end of this set. Note that this is not space efficient\nas the atom will be added with a lot of padding" );
         
         }
         { //::SireMM::CLJAtoms::append
@@ -115,7 +118,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "append"
                 , append_function_value
-                , ( bp::arg("atoms"), bp::arg("n")=(int)(-0x00000000000000001) ) );
+                , ( bp::arg("atoms"), bp::arg("n")=(int)(-1) )
+                , "Append the passed set of atoms onto the end of this set. If n is greater than or\nequal to zero, then only n of the passed atoms will be added onto this set" );
         
         }
         { //::SireMM::CLJAtoms::at
@@ -126,7 +130,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the ith atom in the vector" );
         
         }
         { //::SireMM::CLJAtoms::atoms
@@ -136,7 +141,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "atoms"
-                , atoms_function_value );
+                , atoms_function_value
+                , "Return an array of all of the atoms" );
         
         }
         { //::SireMM::CLJAtoms::charges
@@ -146,7 +152,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "charges"
-                , charges_function_value );
+                , charges_function_value
+                , "Return the charges on all of the atoms" );
         
         }
         { //::SireMM::CLJAtoms::coordinates
@@ -156,7 +163,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "coordinates"
-                , coordinates_function_value );
+                , coordinates_function_value
+                , "Return the coordinates of all of the atoms" );
         
         }
         { //::SireMM::CLJAtoms::copyIn
@@ -167,7 +175,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "copyIn"
                 , copyIn_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Copy the contents of other into this vectors, starting at index 0,\nand copying all elements of other" );
         
         }
         { //::SireMM::CLJAtoms::count
@@ -177,7 +186,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of atoms in this set. Note that vectorisation\nmay mean that the array of atoms has been padded with dummy atoms" );
         
         }
         { //::SireMM::CLJAtoms::epsilon
@@ -188,7 +198,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "epsilon"
                 , epsilon_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::getitem
@@ -199,7 +210,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "getitem"
                 , getitem_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the ith atom in the vector" );
         
         }
         { //::SireMM::CLJAtoms::hasDummies
@@ -209,7 +221,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "hasDummies"
-                , hasDummies_function_value );
+                , hasDummies_function_value
+                , "Return whether or not there are any dummy (or padded) atoms in this set" );
         
         }
         { //::SireMM::CLJAtoms::idOfDummy
@@ -219,7 +232,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "idOfDummy"
-                , idOfDummy_function_value );
+                , idOfDummy_function_value
+                , "Return a MultiFloat of the ID of a dummy atom" );
         
         }
         { //::SireMM::CLJAtoms::isDummy
@@ -230,7 +244,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "isDummy"
                 , isDummy_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::isEmpty
@@ -240,7 +255,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this array is empty" );
         
         }
         { //::SireMM::CLJAtoms::isPadded
@@ -250,7 +266,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "isPadded"
-                , isPadded_function_value );
+                , isPadded_function_value
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::ljParameters
@@ -260,7 +277,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "ljParameters"
-                , ljParameters_function_value );
+                , ljParameters_function_value
+                , "Return the LJ parameters on all of the atoms" );
         
         }
         { //::SireMM::CLJAtoms::makeDummy
@@ -271,7 +289,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "makeDummy"
                 , makeDummy_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Make the ith atom into a dummy atom (set the atom ID to 0)" );
         
         }
         { //::SireMM::CLJAtoms::maxCoords
@@ -281,7 +300,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "maxCoords"
-                , maxCoords_function_value );
+                , maxCoords_function_value
+                , "Return the maximum coordinates of these atoms (ignoring dummies)" );
         
         }
         { //::SireMM::CLJAtoms::minCoords
@@ -291,7 +311,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "minCoords"
-                , minCoords_function_value );
+                , minCoords_function_value
+                , "Return the minimum coordinates of these atoms (ignoring dummies)" );
         
         }
         { //::SireMM::CLJAtoms::nAtoms
@@ -301,7 +322,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the number of non-dummy atoms in this set. This is equal to\ncount() - nDummies()" );
         
         }
         { //::SireMM::CLJAtoms::nDummies
@@ -311,7 +333,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "nDummies"
-                , nDummies_function_value );
+                , nDummies_function_value
+                , "Return the number of dummy (or padded) atoms in this set" );
         
         }
         { //::SireMM::CLJAtoms::nPadded
@@ -321,7 +344,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "nPadded"
-                , nPadded_function_value );
+                , nPadded_function_value
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::negate
@@ -331,7 +355,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "negate"
-                , negate_function_value );
+                , negate_function_value
+                , "Return a copy of these CLJAtoms where the charge and LJ epsilon parameters\nare negated. This will mean that the negative of the energy of these CLJAtoms\nwill be calculated by the CLJFunctions (useful for calculating energy differences)" );
         
         }
         CLJAtoms_exposer.def( bp::self != bp::self );
@@ -347,7 +372,8 @@ void register_CLJAtoms_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJAtoms_exposer.def( bp::self == bp::self );
@@ -359,7 +385,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::q
@@ -370,7 +397,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "q"
                 , q_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::reconstruct
@@ -381,7 +409,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "reconstruct"
                 , reconstruct_function_value
-                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::reconstruct
@@ -392,7 +421,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "reconstruct"
                 , reconstruct_function_value
-                , ( bp::arg("molecule"), bp::arg("id_source"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("id_source"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::resize
@@ -403,7 +433,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "resize"
                 , resize_function_value
-                , ( bp::arg("new_size") ) );
+                , ( bp::arg("new_size") )
+                , "Resize this collection to hold n atoms. This will add dummy atoms (and padding)\nif necessary, or will delete elements (but keeping dummy padding) if needed" );
         
         }
         { //::SireMM::CLJAtoms::set
@@ -414,7 +445,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("atom") ) );
+                , ( bp::arg("i"), bp::arg("atom") )
+                , "Overwrite the atom at index i with the data in atom" );
         
         }
         { //::SireMM::CLJAtoms::setAllID
@@ -425,7 +457,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "setAllID"
                 , setAllID_function_value
-                , ( bp::arg("idnum") ) );
+                , ( bp::arg("idnum") )
+                , "Set the ID number of all (non-dummy) atoms to idnum" );
         
         }
         { //::SireMM::CLJAtoms::setCharge
@@ -436,7 +469,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "setCharge"
                 , setCharge_function_value
-                , ( bp::arg("i"), bp::arg("charge") ) );
+                , ( bp::arg("i"), bp::arg("charge") )
+                , "Set the charge of the ith atom to charge" );
         
         }
         { //::SireMM::CLJAtoms::setCoordinates
@@ -447,7 +481,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "setCoordinates"
                 , setCoordinates_function_value
-                , ( bp::arg("i"), bp::arg("coords") ) );
+                , ( bp::arg("i"), bp::arg("coords") )
+                , "Set the coordinates of the ith atom to coords" );
         
         }
         { //::SireMM::CLJAtoms::setID
@@ -458,7 +493,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "setID"
                 , setID_function_value
-                , ( bp::arg("i"), bp::arg("idnum") ) );
+                , ( bp::arg("i"), bp::arg("idnum") )
+                , "Set the ID number for the ith atom to idnum" );
         
         }
         { //::SireMM::CLJAtoms::setLJParameter
@@ -469,7 +505,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "setLJParameter"
                 , setLJParameter_function_value
-                , ( bp::arg("i"), bp::arg("ljparam") ) );
+                , ( bp::arg("i"), bp::arg("ljparam") )
+                , "Set the LJ parameter of the ith atom to ljparam" );
         
         }
         { //::SireMM::CLJAtoms::sigma
@@ -480,7 +517,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "sigma"
                 , sigma_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::size
@@ -490,7 +528,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of atoms in this set. Note that vectorisation\nmay mean that the array of atoms has been padded with dummy atoms" );
         
         }
         { //::SireMM::CLJAtoms::squeeze
@@ -500,7 +539,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "squeeze"
-                , squeeze_function_value );
+                , squeeze_function_value
+                , "Return a squeezed copy of these CLJAtoms whereby all of the\ndummy atoms are removed and atoms squeezed into a single, contiguous space" );
         
         }
         { //::SireMM::CLJAtoms::toString
@@ -510,7 +550,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::typeName
@@ -520,7 +561,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::what
@@ -530,7 +572,8 @@ void register_CLJAtoms_class(){
             
             CLJAtoms_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::x
@@ -541,7 +584,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "x"
                 , x_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::y
@@ -552,7 +596,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "y"
                 , y_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::CLJAtoms::z
@@ -563,7 +608,8 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "z"
                 , z_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         CLJAtoms_exposer.staticmethod( "idOfDummy" );

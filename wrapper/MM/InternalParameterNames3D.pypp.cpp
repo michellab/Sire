@@ -53,7 +53,7 @@ void register_InternalParameterNames3D_class(){
 
     { //::SireMM::InternalParameterNames3D
         typedef bp::class_< SireMM::InternalParameterNames3D, bp::bases< SireMM::InternalParameterNames, SireMM::StretchBendTorsionParameterName, SireMM::BendBendParameterName, SireMM::StretchBendParameterName, SireMM::StretchStretchParameterName, SireMM::UreyBradleyParameterName, SireMM::ImproperParameterName, SireMM::DihedralParameterName, SireMM::AngleParameterName, SireMM::BondParameterName > > InternalParameterNames3D_exposer_t;
-        InternalParameterNames3D_exposer_t InternalParameterNames3D_exposer = InternalParameterNames3D_exposer_t( "InternalParameterNames3D", bp::init< >() );
+        InternalParameterNames3D_exposer_t InternalParameterNames3D_exposer = InternalParameterNames3D_exposer_t( "InternalParameterNames3D", "This class provides the default name of the properties\nthat contain the internal and 3D coordinates properties", bp::init< >("") );
         bp::scope InternalParameterNames3D_scope( InternalParameterNames3D_exposer );
         InternalParameterNames3D_exposer.def( "__copy__", &__copy__);
         InternalParameterNames3D_exposer.def( "__deepcopy__", &__copy__);

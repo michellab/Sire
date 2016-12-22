@@ -275,49 +275,14 @@ void register_free_functions(){
 
     { //::SireMol::getAlignment
     
-        typedef ::SireMaths::Transform ( *getAlignment_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::AtomMatcher const &,bool );
+        typedef ::SireMaths::Transform ( *getAlignment_function_type )( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,bool );
         getAlignment_function_type getAlignment_function_value( &::SireMol::getAlignment );
         
         bp::def( 
             "getAlignment"
             , getAlignment_function_value
-            , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1"), bp::arg("matcher"), bp::arg("fit")=(bool)(true) ) );
-    
-    }
-
-    { //::SireMol::getAlignment
-    
-        typedef ::SireMaths::Transform ( *getAlignment_function_type )( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,bool );
-        getAlignment_function_type getAlignment_function_value( &::SireMol::getAlignment );
-        
-        bp::def( 
-            "getAlignment"
-            , getAlignment_function_value
-            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("matcher"), bp::arg("map"), bp::arg("fit")=(bool)(true) ) );
-    
-    }
-
-    { //::SireMol::getAlignment
-    
-        typedef ::SireMaths::Transform ( *getAlignment_function_type )( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,bool );
-        getAlignment_function_type getAlignment_function_value( &::SireMol::getAlignment );
-        
-        bp::def( 
-            "getAlignment"
-            , getAlignment_function_value
-            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("matcher"), bp::arg("fit")=(bool)(true) ) );
-    
-    }
-
-    { //::SireMol::getAlignment
-    
-        typedef ::SireMaths::Transform ( *getAlignment_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,bool );
-        getAlignment_function_type getAlignment_function_value( &::SireMol::getAlignment );
-        
-        bp::def( 
-            "getAlignment"
-            , getAlignment_function_value
-            , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1"), bp::arg("fit")=(bool)(true) ) );
+            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 
@@ -329,19 +294,60 @@ void register_free_functions(){
         bp::def( 
             "getAlignment"
             , getAlignment_function_value
-            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("map"), bp::arg("fit")=(bool)(true) ) );
+            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("map"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 
     { //::SireMol::getAlignment
     
-        typedef ::SireMaths::Transform ( *getAlignment_function_type )( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,bool );
+        typedef ::SireMaths::Transform ( *getAlignment_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,bool );
         getAlignment_function_type getAlignment_function_value( &::SireMol::getAlignment );
         
         bp::def( 
             "getAlignment"
             , getAlignment_function_value
-            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("fit")=(bool)(true) ) );
+            , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1"), bp::arg("fit")=(bool)(true) )
+            , "" );
+    
+    }
+
+    { //::SireMol::getAlignment
+    
+        typedef ::SireMaths::Transform ( *getAlignment_function_type )( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,bool );
+        getAlignment_function_type getAlignment_function_value( &::SireMol::getAlignment );
+        
+        bp::def( 
+            "getAlignment"
+            , getAlignment_function_value
+            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("matcher"), bp::arg("fit")=(bool)(true) )
+            , "" );
+    
+    }
+
+    { //::SireMol::getAlignment
+    
+        typedef ::SireMaths::Transform ( *getAlignment_function_type )( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,bool );
+        getAlignment_function_type getAlignment_function_value( &::SireMol::getAlignment );
+        
+        bp::def( 
+            "getAlignment"
+            , getAlignment_function_value
+            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("matcher"), bp::arg("map"), bp::arg("fit")=(bool)(true) )
+            , "" );
+    
+    }
+
+    { //::SireMol::getAlignment
+    
+        typedef ::SireMaths::Transform ( *getAlignment_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::AtomMatcher const &,bool );
+        getAlignment_function_type getAlignment_function_value( &::SireMol::getAlignment );
+        
+        bp::def( 
+            "getAlignment"
+            , getAlignment_function_value
+            , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1"), bp::arg("matcher"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 

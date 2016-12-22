@@ -64,6 +64,12 @@ if [ -e "${INSTALL_DIR}/bin/python" ]; then
     echo "** ${INSTALL_DIR}/bin/python build/build_sire.py **"
     ${INSTALL_DIR}/bin/python build/build_sire.py
     exit 0
+elif [ -e "${INSTALL_DIR}/python.exe" ]; then
+    # the windows miniconda distribution already exists.
+    # We can jump straight to the python install script
+    echo "** Running the python install script... **"
+    ${INSTALL_DIR}/python build/build_sire.py
+    exit 0
 fi
 
 # Now work out if we are 32bit or 64bit...
@@ -102,40 +108,81 @@ fi
 if [ "$(uname)" == "Darwin" ]; then
     # This is running on a Mac
     PLATFORM="OSX"
-    MINICONDA="http://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-MacOSX-${BIT_TYPE}.sh"
+    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-MacOSX-${BIT_TYPE}.sh"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # This is running on Linux
     PLATFORM="Linux"
-    MINICONDA="http://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-${BIT_TYPE}.sh"
+    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-${BIT_TYPE}.sh"
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # This is running on Windows NT
     echo "Compilation on windows is not supported."
     exit -1
+elif [ "$(expr substr $(uname -s) 1 9)" == "CYGWIN_NT" ]; then
+    # This is running on windows under cygwin
+    echo "Running an install under cygwin on windows"
+    PLATFORM="Windows"
+    SUBPLATFORM="Cygwin"
+    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Windows-${BIT_TYPE}.exe"
+elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
+    # This is running on windows under cygwin
+    echo "Running an install under MSYS2 on windows"
+    PLATFORM="Windows"
+    SUBPLATFORM="MSYS2"
+    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Windows-${BIT_TYPE}.exe"
 else
     # Cannot identify the platform. Tell the user to download
     # miniconda directly
     echo "Cannot identify your operating system / platform."
     echo "Please download and install miniconda manually, and then "
     echo "use the Python from that miniconda to run the build/build_sire.py script."
+    PLATFORM="$(uname -s)"
+    echo $PLATFORM
+    exit -1
 fi
 
-# Download miniconda if it is not already in build/downloads
-if [ ! -e "build/miniconda.sh" ]; then
-    echo "** Downloading miniconda from ${MINICONDA}... **"
-    echo "** wget ${MINICONDA} -O build/miniconda.sh 2>/dev/null || curl ${MINICONDA} -o build/miniconda.sh  **"
-    wget ${MINICONDA} -O build/miniconda.sh 2>/dev/null || curl ${MINICONDA} -o build/miniconda.sh
-fi
+if [ -e ${INSTALL_DIR} ]; then
+    echo "Install directory already exists. Assuming that miniconda is already installed here."
+else
+    if [ ${PLATFORM} == "Windows" ]; then
+        # Download miniconda.exe if it is not already in build/downloads
+        if [ ! -e "build/miniconda.exe" ]; then
+            echo "** Downloading miniconda from ${MINICONDA}... **"
+            echo "curl ${MINICONDA} -o build/miniconda.exe"
+            curl ${MINICONDA} -o build/miniconda.exe
+            chmod a+x build/miniconda.exe
+        fi
 
-# Now unpack miniconda and install it into the requested directory
-echo "** Unpacking miniconda into ${INSTALL_DIR}... **"
-echo "** bash build/miniconda.sh -b -p ${INSTALL_DIR} **"
-bash build/miniconda.sh -b -p ${INSTALL_DIR}
+        # Now unpack miniconda and install it into the requested directory
+        echo "Running the miniconda installation. Make sure you install miniconda just for yourself."
+        echo "Also, ensure that you install miniconda into the directory 'C:\msys2\${INSTALL_DIR}'"
+        echo "Also note that you should't select the option to 'add anaconda to the PATH' or to"
+        echo "register anaconda as the default python"
+        ./build/miniconda.exe
+    else
+        # Download miniconda if it is not already in build/downloads
+        if [ ! -e "build/miniconda.sh" ]; then
+            echo "** Downloading miniconda from ${MINICONDA}... **"
+            echo "** wget ${MINICONDA} -O build/miniconda.sh 2>/dev/null || curl ${MINICONDA} -o build/miniconda.sh  **"
+            wget ${MINICONDA} -O build/miniconda.sh 2>/dev/null || curl ${MINICONDA} -o build/miniconda.sh
+        fi
+
+        # Now unpack miniconda and install it into the requested directory
+        echo "** Unpacking miniconda into ${INSTALL_DIR}... **"
+        echo "** bash build/miniconda.sh -b -p ${INSTALL_DIR} **"
+        bash build/miniconda.sh -b -p ${INSTALL_DIR}
+    fi
+fi
 
 # Now run the python install script
 if [ -e "${INSTALL_DIR}/bin/python" ]; then
     echo "** Running the Python install script... **"
     echo "** ${INSTALL_DIR}/bin/python build/build_sire.py **"
     ${INSTALL_DIR}/bin/python build/build_sire.py
+    exit $?
+elif [ -e "${INSTALL_DIR}/python" ]; then
+    echo "** Running the Python install script... **"
+    echo "** ${INSTALL_DIR}/python build/build_sire.py **"
+    ${INSTALL_DIR}/python build/build_sire.py
     exit $?
 else
     echo "** FATAL **"
@@ -144,3 +191,4 @@ else
     echo "** Remove ${INSTALL_DIR}, then run compile_sire.sh --clean, then try again **"
     exit -1
 fi
+

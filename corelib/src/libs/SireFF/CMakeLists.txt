@@ -7,6 +7,9 @@
 # Other Sire libraries
 include_directories(${CMAKE_SOURCE_DIR}/src/libs)
 
+# Threaded building blocks
+include_directories(${TBB_INCLUDE_DIR})
+
 # Define the headers in SireFF
 set ( SIREFF_HEADERS
       atomicffparameters.hpp
@@ -98,6 +101,8 @@ target_link_libraries (SireFF
                        SireMaths
                        SireBase
                        SireStream
+                       ${TBB_LIBRARY}
+                       ${TBB_MALLOC_LIBRARY}
                        )
 
 # installation

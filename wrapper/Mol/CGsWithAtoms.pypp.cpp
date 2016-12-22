@@ -26,10 +26,10 @@ void register_CGsWithAtoms_class(){
 
     { //::SireMol::CGsWithAtoms
         typedef bp::class_< SireMol::CGsWithAtoms, bp::bases< SireMol::CGID, SireID::ID > > CGsWithAtoms_exposer_t;
-        CGsWithAtoms_exposer_t CGsWithAtoms_exposer = CGsWithAtoms_exposer_t( "CGsWithAtoms", bp::init< >() );
+        CGsWithAtoms_exposer_t CGsWithAtoms_exposer = CGsWithAtoms_exposer_t( "CGsWithAtoms", "This ID class identifies CutGroups that contain atoms that\nmatch the passed AtomID\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope CGsWithAtoms_scope( CGsWithAtoms_exposer );
-        CGsWithAtoms_exposer.def( bp::init< SireMol::AtomID const & >(( bp::arg("atomid") )) );
-        CGsWithAtoms_exposer.def( bp::init< SireMol::CGsWithAtoms const & >(( bp::arg("other") )) );
+        CGsWithAtoms_exposer.def( bp::init< SireMol::AtomID const & >(( bp::arg("atomid") ), "Construct from the passed AtomID") );
+        CGsWithAtoms_exposer.def( bp::init< SireMol::CGsWithAtoms const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::CGsWithAtoms::atomID
         
             typedef ::SireMol::AtomID const & ( ::SireMol::CGsWithAtoms::*atomID_function_type)(  ) const;
@@ -38,7 +38,8 @@ void register_CGsWithAtoms_class(){
             CGsWithAtoms_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the atom ID" );
         
         }
         { //::SireMol::CGsWithAtoms::hash
@@ -48,7 +49,8 @@ void register_CGsWithAtoms_class(){
             
             CGsWithAtoms_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this identifier" );
         
         }
         { //::SireMol::CGsWithAtoms::isNull
@@ -58,7 +60,8 @@ void register_CGsWithAtoms_class(){
             
             CGsWithAtoms_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Is this selection null?" );
         
         }
         { //::SireMol::CGsWithAtoms::map
@@ -69,7 +72,8 @@ void register_CGsWithAtoms_class(){
             CGsWithAtoms_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Map this ID to the list of indicies of CutGroups that match this ID\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         CGsWithAtoms_exposer.def( bp::self != bp::self );
@@ -82,7 +86,8 @@ void register_CGsWithAtoms_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CGsWithAtoms_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -94,7 +99,8 @@ void register_CGsWithAtoms_class(){
             
             CGsWithAtoms_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representatio of this ID" );
         
         }
         { //::SireMol::CGsWithAtoms::typeName
@@ -104,7 +110,8 @@ void register_CGsWithAtoms_class(){
             
             CGsWithAtoms_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::CGsWithAtoms::what
@@ -114,7 +121,8 @@ void register_CGsWithAtoms_class(){
             
             CGsWithAtoms_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CGsWithAtoms_exposer.staticmethod( "typeName" );
@@ -127,6 +135,7 @@ void register_CGsWithAtoms_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CGsWithAtoms_exposer.def( "__str__", &__str__< ::SireMol::CGsWithAtoms > );
         CGsWithAtoms_exposer.def( "__repr__", &__str__< ::SireMol::CGsWithAtoms > );
+        CGsWithAtoms_exposer.def( "__hash__", &::SireMol::CGsWithAtoms::hash );
     }
 
 }

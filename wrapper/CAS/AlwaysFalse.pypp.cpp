@@ -43,9 +43,9 @@ void register_AlwaysFalse_class(){
 
     { //::SireCAS::AlwaysFalse
         typedef bp::class_< SireCAS::AlwaysFalse, bp::bases< SireCAS::Condition, SireCAS::ExBase > > AlwaysFalse_exposer_t;
-        AlwaysFalse_exposer_t AlwaysFalse_exposer = AlwaysFalse_exposer_t( "AlwaysFalse", bp::init< >() );
+        AlwaysFalse_exposer_t AlwaysFalse_exposer = AlwaysFalse_exposer_t( "AlwaysFalse", "This is an overloaded conditional that is always false", bp::init< >("Constructor") );
         bp::scope AlwaysFalse_scope( AlwaysFalse_exposer );
-        AlwaysFalse_exposer.def( bp::init< SireCAS::AlwaysFalse const & >(( bp::arg("other") )) );
+        AlwaysFalse_exposer.def( bp::init< SireCAS::AlwaysFalse const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::AlwaysFalse::alwaysFalse
         
             typedef bool ( ::SireCAS::AlwaysFalse::*alwaysFalse_function_type)(  ) const;
@@ -53,7 +53,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "alwaysFalse"
-                , alwaysFalse_function_value );
+                , alwaysFalse_function_value
+                , "AlwaysFalse is always false" );
         
         }
         { //::SireCAS::AlwaysFalse::alwaysTrue
@@ -63,7 +64,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "alwaysTrue"
-                , alwaysTrue_function_value );
+                , alwaysTrue_function_value
+                , "AlwaysFalse is never true" );
         
         }
         { //::SireCAS::AlwaysFalse::children
@@ -73,7 +75,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "False has no children" );
         
         }
         { //::SireCAS::AlwaysFalse::evaluate
@@ -84,7 +87,8 @@ void register_AlwaysFalse_class(){
             AlwaysFalse_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "False is never true" );
         
         }
         { //::SireCAS::AlwaysFalse::evaluate
@@ -95,7 +99,8 @@ void register_AlwaysFalse_class(){
             AlwaysFalse_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "False is never true" );
         
         }
         { //::SireCAS::AlwaysFalse::evaluateCondition
@@ -106,7 +111,8 @@ void register_AlwaysFalse_class(){
             AlwaysFalse_exposer.def( 
                 "evaluateCondition"
                 , evaluateCondition_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "False is never true" );
         
         }
         { //::SireCAS::AlwaysFalse::evaluateCondition
@@ -117,7 +123,8 @@ void register_AlwaysFalse_class(){
             AlwaysFalse_exposer.def( 
                 "evaluateCondition"
                 , evaluateCondition_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "False is never true" );
         
         }
         { //::SireCAS::AlwaysFalse::expand
@@ -128,7 +135,8 @@ void register_AlwaysFalse_class(){
             AlwaysFalse_exposer.def( 
                 "expand"
                 , expand_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "False cannot be expanded" );
         
         }
         { //::SireCAS::AlwaysFalse::functions
@@ -138,7 +146,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "functions"
-                , functions_function_value );
+                , functions_function_value
+                , "There are no functions in false" );
         
         }
         { //::SireCAS::AlwaysFalse::hash
@@ -148,7 +157,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Hash false" );
         
         }
         { //::SireCAS::AlwaysFalse::isComplex
@@ -158,7 +168,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "isComplex"
-                , isComplex_function_value );
+                , isComplex_function_value
+                , "False is never complex" );
         
         }
         { //::SireCAS::AlwaysFalse::isCompound
@@ -168,7 +179,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "isCompound"
-                , isCompound_function_value );
+                , isCompound_function_value
+                , "False is always simple" );
         
         }
         { //::SireCAS::AlwaysFalse::isConstant
@@ -178,7 +190,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "isConstant"
-                , isConstant_function_value );
+                , isConstant_function_value
+                , "Truth is always constant" );
         
         }
         { //::SireCAS::AlwaysFalse::isFunction
@@ -189,7 +202,8 @@ void register_AlwaysFalse_class(){
             AlwaysFalse_exposer.def( 
                 "isFunction"
                 , isFunction_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "This is not a function of anything" );
         
         }
         { //::SireCAS::AlwaysFalse::isNull
@@ -199,7 +213,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "False is never empty" );
         
         }
         { //::SireCAS::AlwaysFalse::operator=
@@ -211,7 +226,8 @@ void register_AlwaysFalse_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AlwaysFalse_exposer.def( bp::self == bp::self );
@@ -224,7 +240,8 @@ void register_AlwaysFalse_class(){
             AlwaysFalse_exposer.def( 
                 "simplify"
                 , simplify_function_value
-                , ( bp::arg("options") ) );
+                , ( bp::arg("options") )
+                , "This cannot be further simplified" );
         
         }
         { //::SireCAS::AlwaysFalse::substitute
@@ -235,7 +252,8 @@ void register_AlwaysFalse_class(){
             AlwaysFalse_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "There is no substituting false" );
         
         }
         { //::SireCAS::AlwaysFalse::symbols
@@ -245,7 +263,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "There are no symbols in false" );
         
         }
         { //::SireCAS::AlwaysFalse::toString
@@ -255,7 +274,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of truth" );
         
         }
         { //::SireCAS::AlwaysFalse::typeName
@@ -265,7 +285,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::AlwaysFalse::what
@@ -275,7 +296,8 @@ void register_AlwaysFalse_class(){
             
             AlwaysFalse_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AlwaysFalse_exposer.staticmethod( "typeName" );
@@ -288,6 +310,7 @@ void register_AlwaysFalse_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AlwaysFalse_exposer.def( "__str__", &__str__< ::SireCAS::AlwaysFalse > );
         AlwaysFalse_exposer.def( "__repr__", &__str__< ::SireCAS::AlwaysFalse > );
+        AlwaysFalse_exposer.def( "__hash__", &::SireCAS::AlwaysFalse::hash );
     }
 
 }

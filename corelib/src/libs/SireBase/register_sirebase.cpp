@@ -27,7 +27,7 @@
 \*********************************************/
 
 #include "SireStream/streamdata.hpp"
+
 using namespace SireStream;
 
 static const RegisterLibrary *registry = new RegisterLibrary( QString("SireBase"), 1, 1 );
-

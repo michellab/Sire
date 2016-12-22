@@ -33,7 +33,7 @@ void register_IOBase_class(){
 
     { //::SireIO::IOBase
         typedef bp::class_< SireIO::IOBase, bp::bases< SireBase::Property >, boost::noncopyable > IOBase_exposer_t;
-        IOBase_exposer_t IOBase_exposer = IOBase_exposer_t( "IOBase", bp::no_init );
+        IOBase_exposer_t IOBase_exposer = IOBase_exposer_t( "IOBase", "This is the virtual base class of all molecule readers and writers.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope IOBase_scope( IOBase_exposer );
         { //::SireIO::IOBase::null
         
@@ -42,7 +42,8 @@ void register_IOBase_class(){
             
             IOBase_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "Return the global null IOBase object (a PDB writer)" );
         
         }
         { //::SireIO::IOBase::read
@@ -53,7 +54,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "read"
                 , read_function_value
-                , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Read all of the molecules contained in the file filename, using\nthe (optional) passed properties in map, and returning a molecule\ngroup containing the molecules in the same order as they appear\nin the file, and with the molecule group name being filename" );
         
         }
         { //::SireIO::IOBase::read
@@ -64,7 +66,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "read"
                 , read_function_value
-                , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Simple overload of IOBase::read(QString)" );
         
         }
         { //::SireIO::IOBase::read
@@ -75,7 +78,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "read"
                 , read_function_value
-                , ( bp::arg("dev"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("dev"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Read all of the molecules contained in the IO device dev, using\nthe (optional) passed properties in map, and returning a molecule\ngroup containing the molecules in the same order as they appear\non the device, and with the molecule group name being taken\nfrom the device" );
         
         }
         { //::SireIO::IOBase::read
@@ -86,7 +90,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "read"
                 , read_function_value
-                , ( bp::arg("data"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("data"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Read all of the molecules contained in the data data, using\nthe (optional) passed properties in map, and returning a\nmolecule group containing the molecules in the same order as\nthey appear in the file" );
         
         }
         { //::SireIO::IOBase::readMolecule
@@ -97,7 +102,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "readMolecule"
                 , readMolecule_function_value
-                , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Read a single molecule from the passed file - this returns only\nthe first molecule from the file" );
         
         }
         { //::SireIO::IOBase::readMolecule
@@ -108,7 +114,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "readMolecule"
                 , readMolecule_function_value
-                , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Simple overload designed to prevent confusion with QByteArray function" );
         
         }
         { //::SireIO::IOBase::readMolecule
@@ -119,7 +126,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "readMolecule"
                 , readMolecule_function_value
-                , ( bp::arg("dev"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("dev"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Read a single molecule from the passed IO device - this returns\nonly the first molecule from the device" );
         
         }
         { //::SireIO::IOBase::readMolecule
@@ -130,7 +138,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "readMolecule"
                 , readMolecule_function_value
-                , ( bp::arg("data"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("data"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Read a single molecule from the passed data - this returns only\nthe first molecule from the data" );
         
         }
         { //::SireIO::IOBase::typeName
@@ -140,7 +149,8 @@ void register_IOBase_class(){
             
             IOBase_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireIO::IOBase::write
@@ -151,7 +161,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("molecules"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Write the molecules in the passed group to the file called filename." );
         
         }
         { //::SireIO::IOBase::write
@@ -162,7 +173,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("molecules"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Write the molecules in the passed group to the file called filename." );
         
         }
         { //::SireIO::IOBase::write
@@ -173,7 +185,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("molecule"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Write the passed molecule to the file called filename" );
         
         }
         { //::SireIO::IOBase::write
@@ -184,7 +197,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("molecules"), bp::arg("dev"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("dev"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Write the molecules in the passed group to the IO device dev." );
         
         }
         { //::SireIO::IOBase::write
@@ -195,7 +209,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("molecules"), bp::arg("dev"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("dev"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Write the molecules in the passed group to the IO device dev." );
         
         }
         { //::SireIO::IOBase::write
@@ -206,7 +221,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("molecule"), bp::arg("dev"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("dev"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Write the passed molecule to the IO device dev" );
         
         }
         { //::SireIO::IOBase::write
@@ -217,7 +233,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Write the molecules to memory, which is returned" );
         
         }
         { //::SireIO::IOBase::write
@@ -228,7 +245,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Write the molecules to memory, which is returned" );
         
         }
         { //::SireIO::IOBase::write
@@ -239,7 +257,8 @@ void register_IOBase_class(){
             IOBase_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Write the passed molecule to memory, which is returned" );
         
         }
         IOBase_exposer.staticmethod( "null" );

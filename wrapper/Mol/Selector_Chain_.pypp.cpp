@@ -47,14 +47,14 @@ void register_Selector_Chain__class(){
 
     { //::SireMol::Selector< SireMol::Chain >
         typedef bp::class_< SireMol::Selector< SireMol::Chain >, bp::bases< SireMol::MoleculeView, SireBase::Property > > Selector_Chain__exposer_t;
-        Selector_Chain__exposer_t Selector_Chain__exposer = Selector_Chain__exposer_t( "Selector_Chain_", bp::init< >() );
+        Selector_Chain__exposer_t Selector_Chain__exposer = Selector_Chain__exposer_t( "Selector_Chain_", "", bp::init< >("") );
         bp::scope Selector_Chain__scope( Selector_Chain__exposer );
-        Selector_Chain__exposer.def( bp::init< SireMol::Chain const & >(( bp::arg("view") )) );
-        Selector_Chain__exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") )) );
-        Selector_Chain__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("selected_atoms") )) );
-        Selector_Chain__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::ChainID const & >(( bp::arg("moldata"), bp::arg("viewid") )) );
-        Selector_Chain__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::ChainIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") )) );
-        Selector_Chain__exposer.def( bp::init< SireMol::Selector< SireMol::Chain > const & >(( bp::arg("other") )) );
+        Selector_Chain__exposer.def( bp::init< SireMol::Chain const & >(( bp::arg("view") ), "") );
+        Selector_Chain__exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "") );
+        Selector_Chain__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("selected_atoms") ), "") );
+        Selector_Chain__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::Chain::ID const & >(( bp::arg("moldata"), bp::arg("viewid") ), "") );
+        Selector_Chain__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::ChainIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") ), "") );
+        Selector_Chain__exposer.def( bp::init< SireMol::Selector< SireMol::Chain > const & >(( bp::arg("other") ), "") );
         { //::SireMol::Selector< SireMol::Chain >::add
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
@@ -64,7 +64,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::add
@@ -76,19 +77,21 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::add
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*add_function_type)( ::SireMol::ChainID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*add_function_type)( ::SireMol::Chain::ID const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::Chain >::add );
             
             Selector_Chain__exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::at
@@ -100,7 +103,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::at
@@ -112,7 +116,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::contains
@@ -124,7 +129,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::contains
@@ -136,19 +142,21 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::contains
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*contains_function_type)( ::SireMol::ChainID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*contains_function_type)( ::SireMol::Chain::ID const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::Chain >::contains );
             
             Selector_Chain__exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::count
@@ -159,7 +167,8 @@ void register_Selector_Chain__class(){
             
             Selector_Chain__exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::evaluate
@@ -170,7 +179,8 @@ void register_Selector_Chain__class(){
             
             Selector_Chain__exposer.def( 
                 "evaluate"
-                , evaluate_function_value );
+                , evaluate_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::evaluate
@@ -182,7 +192,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::evaluate
@@ -194,7 +205,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::hasMetadata
@@ -206,7 +218,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::hasMetadata
@@ -218,7 +231,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::hasProperty
@@ -230,19 +244,21 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "hasProperty"
                 , hasProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::index
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::ChainIdx ( ::SireMol::Selector< SireMol::Chain >::*index_function_type)( int ) const;
+            typedef ::SireMol::Chain::Index ( ::SireMol::Selector< SireMol::Chain >::*index_function_type)( int ) const;
             index_function_type index_function_value( &::SireMol::Selector< SireMol::Chain >::index );
             
             Selector_Chain__exposer.def( 
                 "index"
                 , index_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::intersection
@@ -254,7 +270,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "intersection"
                 , intersection_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::intersection
@@ -266,19 +283,21 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "intersection"
                 , intersection_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::intersection
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*intersection_function_type)( ::SireMol::ChainID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*intersection_function_type)( ::SireMol::Chain::ID const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::Chain >::intersection );
             
             Selector_Chain__exposer.def( 
                 "intersection"
                 , intersection_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::intersects
@@ -290,7 +309,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::intersects
@@ -302,19 +322,21 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::intersects
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*intersects_function_type)( ::SireMol::ChainID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*intersects_function_type)( ::SireMol::Chain::ID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::Chain >::intersects );
             
             Selector_Chain__exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::invert
@@ -325,7 +347,8 @@ void register_Selector_Chain__class(){
             
             Selector_Chain__exposer.def( 
                 "invert"
-                , invert_function_value );
+                , invert_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::isEmpty
@@ -336,7 +359,8 @@ void register_Selector_Chain__class(){
             
             Selector_Chain__exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::metadataKeys
@@ -347,7 +371,8 @@ void register_Selector_Chain__class(){
             
             Selector_Chain__exposer.def( 
                 "metadataKeys"
-                , metadataKeys_function_value );
+                , metadataKeys_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::metadataKeys
@@ -359,7 +384,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::move
@@ -370,7 +396,8 @@ void register_Selector_Chain__class(){
             
             Selector_Chain__exposer.def( 
                 "move"
-                , move_function_value );
+                , move_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::move
@@ -382,7 +409,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::move
@@ -394,7 +422,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         Selector_Chain__exposer.def( bp::self != bp::self );
@@ -407,7 +436,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::operator()
@@ -419,7 +449,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         Selector_Chain__exposer.def( bp::self + bp::self );
@@ -438,7 +469,8 @@ void register_Selector_Chain__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::operator=
@@ -451,7 +483,8 @@ void register_Selector_Chain__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("view") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Selector_Chain__exposer.def( bp::self == bp::self );
@@ -464,7 +497,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::propertyKeys
@@ -475,7 +509,8 @@ void register_Selector_Chain__class(){
             
             Selector_Chain__exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::selectedAll
@@ -486,7 +521,8 @@ void register_Selector_Chain__class(){
             
             Selector_Chain__exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::selection
@@ -497,7 +533,8 @@ void register_Selector_Chain__class(){
             
             Selector_Chain__exposer.def( 
                 "selection"
-                , selection_function_value );
+                , selection_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::selection
@@ -509,7 +546,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "selection"
                 , selection_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::selection
@@ -521,7 +559,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "selection"
                 , selection_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::selector
@@ -532,7 +571,8 @@ void register_Selector_Chain__class(){
             
             Selector_Chain__exposer.def( 
                 "selector"
-                , selector_function_value );
+                , selector_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::selector
@@ -544,7 +584,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "selector"
                 , selector_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::selector
@@ -556,7 +597,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "selector"
                 , selector_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::subtract
@@ -568,7 +610,8 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::subtract
@@ -580,19 +623,21 @@ void register_Selector_Chain__class(){
             Selector_Chain__exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::subtract
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*subtract_function_type)( ::SireMol::ChainID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*subtract_function_type)( ::SireMol::Chain::ID const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::Chain >::subtract );
             
             Selector_Chain__exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::toString
@@ -603,7 +648,8 @@ void register_Selector_Chain__class(){
             
             Selector_Chain__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Chain >::typeName
@@ -614,7 +660,8 @@ void register_Selector_Chain__class(){
             
             Selector_Chain__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Selector_Chain__exposer.staticmethod( "typeName" );

@@ -25,12 +25,12 @@ void register_CoulombProbe_class(){
 
     { //::SireMM::CoulombProbe
         typedef bp::class_< SireMM::CoulombProbe, bp::bases< SireFF::Probe, SireBase::Property > > CoulombProbe_exposer_t;
-        CoulombProbe_exposer_t CoulombProbe_exposer = CoulombProbe_exposer_t( "CoulombProbe", bp::init< >() );
+        CoulombProbe_exposer_t CoulombProbe_exposer = CoulombProbe_exposer_t( "CoulombProbe", "This is a probe charge that can be used to probe the\ncoulomb electric field or potential in a forcefield", bp::init< >("Construct a default probe (+1 unit charge)") );
         bp::scope CoulombProbe_scope( CoulombProbe_exposer );
-        CoulombProbe_exposer.def( bp::init< SireUnits::Dimension::Charge >(( bp::arg("charge") )) );
-        CoulombProbe_exposer.def( bp::init< SireMM::CLJProbe const & >(( bp::arg("cljprobe") )) );
-        CoulombProbe_exposer.def( bp::init< SireFF::Probe const & >(( bp::arg("probe") )) );
-        CoulombProbe_exposer.def( bp::init< SireMM::CoulombProbe const & >(( bp::arg("other") )) );
+        CoulombProbe_exposer.def( bp::init< SireUnits::Dimension::Charge >(( bp::arg("charge") ), "Construct a probe with charge charge") );
+        CoulombProbe_exposer.def( bp::init< SireMM::CLJProbe const & >(( bp::arg("cljprobe") ), "Construct a probe with charge taken from cljprobe") );
+        CoulombProbe_exposer.def( bp::init< SireFF::Probe const & >(( bp::arg("probe") ), "Construct from the passed probe") );
+        CoulombProbe_exposer.def( bp::init< SireMM::CoulombProbe const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CoulombProbe::charge
         
             typedef ::SireUnits::Dimension::Charge ( ::SireMM::CoulombProbe::*charge_function_type)(  ) const;
@@ -38,7 +38,8 @@ void register_CoulombProbe_class(){
             
             CoulombProbe_exposer.def( 
                 "charge"
-                , charge_function_value );
+                , charge_function_value
+                , "" );
         
         }
         CoulombProbe_exposer.def( bp::self != bp::self );
@@ -51,7 +52,8 @@ void register_CoulombProbe_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CoulombProbe_exposer.def( bp::self == bp::self );
@@ -62,7 +64,8 @@ void register_CoulombProbe_class(){
             
             CoulombProbe_exposer.def( 
                 "reducedCharge"
-                , reducedCharge_function_value );
+                , reducedCharge_function_value
+                , "" );
         
         }
         { //::SireMM::CoulombProbe::typeName
@@ -72,7 +75,8 @@ void register_CoulombProbe_class(){
             
             CoulombProbe_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CoulombProbe_exposer.staticmethod( "typeName" );

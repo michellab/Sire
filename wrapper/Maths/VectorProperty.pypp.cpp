@@ -29,10 +29,10 @@ void register_VectorProperty_class(){
 
     { //::SireMaths::VectorProperty
         typedef bp::class_< SireMaths::VectorProperty, bp::bases< SireMaths::Vector, SireBase::Property > > VectorProperty_exposer_t;
-        VectorProperty_exposer_t VectorProperty_exposer = VectorProperty_exposer_t( "VectorProperty", bp::init< >() );
+        VectorProperty_exposer_t VectorProperty_exposer = VectorProperty_exposer_t( "VectorProperty", "This class provides a simple Property wrapper around a Vector, thereby\nallowing the vector to be stored as a Property, e.g. for the center\nof a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope VectorProperty_scope( VectorProperty_exposer );
-        VectorProperty_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("value") )) );
-        VectorProperty_exposer.def( bp::init< SireMaths::VectorProperty const & >(( bp::arg("value") )) );
+        VectorProperty_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("value") ), "Construct a copy of the passed vector") );
+        VectorProperty_exposer.def( bp::init< SireMaths::VectorProperty const & >(( bp::arg("value") ), "Copy constructor") );
         VectorProperty_exposer.def( bp::self != bp::self );
         { //::SireMaths::VectorProperty::operator=
         
@@ -43,7 +43,8 @@ void register_VectorProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMaths::VectorProperty::operator=
@@ -55,7 +56,8 @@ void register_VectorProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         VectorProperty_exposer.def( bp::self == bp::self );
@@ -66,7 +68,8 @@ void register_VectorProperty_class(){
             
             VectorProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMaths::VectorProperty::typeName
@@ -76,7 +79,8 @@ void register_VectorProperty_class(){
             
             VectorProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::VectorProperty::what
@@ -86,7 +90,8 @@ void register_VectorProperty_class(){
             
             VectorProperty_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         VectorProperty_exposer.staticmethod( "typeName" );

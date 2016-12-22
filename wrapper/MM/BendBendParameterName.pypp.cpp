@@ -53,7 +53,7 @@ void register_BendBendParameterName_class(){
 
     { //::SireMM::BendBendParameterName
         typedef bp::class_< SireMM::BendBendParameterName > BendBendParameterName_exposer_t;
-        BendBendParameterName_exposer_t BendBendParameterName_exposer = BendBendParameterName_exposer_t( "BendBendParameterName", bp::init< >() );
+        BendBendParameterName_exposer_t BendBendParameterName_exposer = BendBendParameterName_exposer_t( "BendBendParameterName", "This class provides the default name of the\nproperty that contains the bend-bend parameters", bp::init< >("") );
         bp::scope BendBendParameterName_scope( BendBendParameterName_exposer );
         { //::SireMM::BendBendParameterName::bendBend
         
@@ -63,7 +63,8 @@ void register_BendBendParameterName_class(){
             BendBendParameterName_exposer.def( 
                 "bendBend"
                 , bendBend_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         BendBendParameterName_exposer.def( "__copy__", &__copy__);

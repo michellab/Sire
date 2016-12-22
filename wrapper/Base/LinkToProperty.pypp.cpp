@@ -26,11 +26,11 @@ void register_LinkToProperty_class(){
 
     { //::SireBase::LinkToProperty
         typedef bp::class_< SireBase::LinkToProperty, bp::bases< SireBase::Property > > LinkToProperty_exposer_t;
-        LinkToProperty_exposer_t LinkToProperty_exposer = LinkToProperty_exposer_t( "LinkToProperty", bp::init< >() );
+        LinkToProperty_exposer_t LinkToProperty_exposer = LinkToProperty_exposer_t( "LinkToProperty", "This property is actually an alias for another property.\n\nIt allows a single property to be referenced by multiple\ndifferent names. Also, optional identifiers can be used\nso that this link only applies to properties in specifically\nidentified objects.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope LinkToProperty_scope( LinkToProperty_exposer );
-        LinkToProperty_exposer.def( bp::init< SireBase::PropertyName const & >(( bp::arg("source") )) );
-        LinkToProperty_exposer.def( bp::init< SireBase::PropertyName const &, SireID::ID const & >(( bp::arg("source"), bp::arg("filter") )) );
-        LinkToProperty_exposer.def( bp::init< SireBase::LinkToProperty const & >(( bp::arg("other") )) );
+        LinkToProperty_exposer.def( bp::init< SireBase::PropertyName const & >(( bp::arg("source") ), "Construct to link to the property source") );
+        LinkToProperty_exposer.def( bp::init< SireBase::PropertyName const &, SireID::ID const & >(( bp::arg("source"), bp::arg("filter") ), "Construct to link to the property source in the objects\nidentified by filter") );
+        LinkToProperty_exposer.def( bp::init< SireBase::LinkToProperty const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::LinkToProperty::filter
         
             typedef ::SireID::ID const & ( ::SireBase::LinkToProperty::*filter_function_type)(  ) const;
@@ -39,7 +39,8 @@ void register_LinkToProperty_class(){
             LinkToProperty_exposer.def( 
                 "filter"
                 , filter_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return any filter for this link (this is null if there is no filter)" );
         
         }
         { //::SireBase::LinkToProperty::isFiltered
@@ -49,7 +50,8 @@ void register_LinkToProperty_class(){
             
             LinkToProperty_exposer.def( 
                 "isFiltered"
-                , isFiltered_function_value );
+                , isFiltered_function_value
+                , "Return whether or not this link is filtered" );
         
         }
         LinkToProperty_exposer.def( bp::self != bp::self );
@@ -62,7 +64,8 @@ void register_LinkToProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         LinkToProperty_exposer.def( bp::self == bp::self );
@@ -74,7 +77,8 @@ void register_LinkToProperty_class(){
             LinkToProperty_exposer.def( 
                 "target"
                 , target_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the target of this link" );
         
         }
         { //::SireBase::LinkToProperty::toString
@@ -84,7 +88,8 @@ void register_LinkToProperty_class(){
             
             LinkToProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this link" );
         
         }
         { //::SireBase::LinkToProperty::typeName
@@ -94,7 +99,8 @@ void register_LinkToProperty_class(){
             
             LinkToProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         LinkToProperty_exposer.staticmethod( "typeName" );

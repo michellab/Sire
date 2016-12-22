@@ -29,9 +29,9 @@ void register_NullMonitor_class(){
 
     { //::SireSystem::NullMonitor
         typedef bp::class_< SireSystem::NullMonitor, bp::bases< SireSystem::SystemMonitor, SireBase::Property > > NullMonitor_exposer_t;
-        NullMonitor_exposer_t NullMonitor_exposer = NullMonitor_exposer_t( "NullMonitor", bp::init< >() );
+        NullMonitor_exposer_t NullMonitor_exposer = NullMonitor_exposer_t( "NullMonitor", "This is a null monitor that doesnt monitor anything", bp::init< >("Constructor") );
         bp::scope NullMonitor_scope( NullMonitor_exposer );
-        NullMonitor_exposer.def( bp::init< SireSystem::NullMonitor const & >(( bp::arg("other") )) );
+        NullMonitor_exposer.def( bp::init< SireSystem::NullMonitor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::NullMonitor::clearStatistics
         
             typedef void ( ::SireSystem::NullMonitor::*clearStatistics_function_type)(  ) ;
@@ -39,7 +39,8 @@ void register_NullMonitor_class(){
             
             NullMonitor_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "There are no statistics to clear" );
         
         }
         { //::SireSystem::NullMonitor::monitor
@@ -50,7 +51,8 @@ void register_NullMonitor_class(){
             NullMonitor_exposer.def( 
                 "monitor"
                 , monitor_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "A null monitor doesnt monitor anything" );
         
         }
         NullMonitor_exposer.def( bp::self != bp::self );
@@ -63,7 +65,8 @@ void register_NullMonitor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullMonitor_exposer.def( bp::self == bp::self );
@@ -74,7 +77,8 @@ void register_NullMonitor_class(){
             
             NullMonitor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullMonitor_exposer.staticmethod( "typeName" );

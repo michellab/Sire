@@ -38,13 +38,13 @@ void register_AnglePerturbation_class(){
 
     { //::SireMol::AnglePerturbation
         typedef bp::class_< SireMol::AnglePerturbation, bp::bases< SireMol::GeometryPerturbation, SireMol::Perturbation, SireBase::Property > > AnglePerturbation_exposer_t;
-        AnglePerturbation_exposer_t AnglePerturbation_exposer = AnglePerturbation_exposer_t( "AnglePerturbation", bp::init< >() );
+        AnglePerturbation_exposer_t AnglePerturbation_exposer = AnglePerturbation_exposer_t( "AnglePerturbation", "This perturbation moves an angle between two sizes.\n\nThis uses the anchors property to anchor parts\nof the molecule, the weight function property\nto weight the motion of the parts of the molecule,\nand the coordinates property to get the coordinates\nto move\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AnglePerturbation_scope( AnglePerturbation_exposer );
-        AnglePerturbation_exposer.def( bp::init< SireMol::AngleID const &, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("angle"), bp::arg("start"), bp::arg("end"), bp::arg("map")=SireBase::PropertyMap() )) );
-        AnglePerturbation_exposer.def( bp::init< SireMol::AngleID const &, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("angle"), bp::arg("start"), bp::arg("end"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() )) );
-        AnglePerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("start"), bp::arg("end"), bp::arg("map")=SireBase::PropertyMap() )) );
-        AnglePerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("start"), bp::arg("end"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() )) );
-        AnglePerturbation_exposer.def( bp::init< SireMol::AnglePerturbation const & >(( bp::arg("other") )) );
+        AnglePerturbation_exposer.def( bp::init< SireMol::AngleID const &, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("angle"), bp::arg("start"), bp::arg("end"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the angle angle from start to end") );
+        AnglePerturbation_exposer.def( bp::init< SireMol::AngleID const &, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("angle"), bp::arg("start"), bp::arg("end"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the angle angle from start to end\nusing the passed mapping function") );
+        AnglePerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("start"), bp::arg("end"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the angle between atoms atom0, atom1 and atom2\nfrom start to end") );
+        AnglePerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("start"), bp::arg("end"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the angle between atoms atom0, atom1 and atom2\nfrom start to end using the passed mapping function") );
+        AnglePerturbation_exposer.def( bp::init< SireMol::AnglePerturbation const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AnglePerturbation::angle
         
             typedef ::SireMol::AngleID const & ( ::SireMol::AnglePerturbation::*angle_function_type)(  ) const;
@@ -53,7 +53,8 @@ void register_AnglePerturbation_class(){
             AnglePerturbation_exposer.def( 
                 "angle"
                 , angle_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ID that identifies that angle that will be perturbed" );
         
         }
         { //::SireMol::AnglePerturbation::end
@@ -64,7 +65,8 @@ void register_AnglePerturbation_class(){
             AnglePerturbation_exposer.def( 
                 "end"
                 , end_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the end length of the angle" );
         
         }
         AnglePerturbation_exposer.def( bp::self != bp::self );
@@ -77,7 +79,8 @@ void register_AnglePerturbation_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AnglePerturbation_exposer.def( bp::self == bp::self );
@@ -89,7 +92,8 @@ void register_AnglePerturbation_class(){
             AnglePerturbation_exposer.def( 
                 "start"
                 , start_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the start length of the angle" );
         
         }
         { //::SireMol::AnglePerturbation::toString
@@ -99,7 +103,8 @@ void register_AnglePerturbation_class(){
             
             AnglePerturbation_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AnglePerturbation::typeName
@@ -109,7 +114,8 @@ void register_AnglePerturbation_class(){
             
             AnglePerturbation_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AnglePerturbation::wouldChange
@@ -120,7 +126,8 @@ void register_AnglePerturbation_class(){
             AnglePerturbation_exposer.def( 
                 "wouldChange"
                 , wouldChange_function_value
-                , ( bp::arg("molecule"), bp::arg("values") ) );
+                , ( bp::arg("molecule"), bp::arg("values") )
+                , "Return whether or not this perturbation with the passed values would\nchange the molecule molecule" );
         
         }
         AnglePerturbation_exposer.staticmethod( "typeName" );

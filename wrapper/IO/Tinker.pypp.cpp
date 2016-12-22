@@ -47,9 +47,9 @@ void register_Tinker_class(){
 
     { //::SireIO::Tinker
         typedef bp::class_< SireIO::Tinker, bp::bases< SireIO::IOBase, SireBase::Property > > Tinker_exposer_t;
-        Tinker_exposer_t Tinker_exposer = Tinker_exposer_t( "Tinker", bp::init< >() );
+        Tinker_exposer_t Tinker_exposer = Tinker_exposer_t( "Tinker", "This class is used to read and write files in Tinker format\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope Tinker_scope( Tinker_exposer );
-        Tinker_exposer.def( bp::init< SireIO::Tinker const & >(( bp::arg("other") )) );
+        Tinker_exposer.def( bp::init< SireIO::Tinker const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireIO::Tinker::loadParameters
         
             typedef void ( ::SireIO::Tinker::*loadParameters_function_type)( ::QString const & ) ;
@@ -58,7 +58,8 @@ void register_Tinker_class(){
             Tinker_exposer.def( 
                 "loadParameters"
                 , loadParameters_function_value
-                , ( bp::arg("prmfile") ) );
+                , ( bp::arg("prmfile") )
+                , "Load the parameter file prmfile into this reader. This will allow\nthe reader to parameterise the molecules as they are being read" );
         
         }
         Tinker_exposer.def( bp::self != bp::self );
@@ -71,7 +72,8 @@ void register_Tinker_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Tinker_exposer.def( bp::self == bp::self );
@@ -83,7 +85,8 @@ void register_Tinker_class(){
             Tinker_exposer.def( 
                 "parameters"
                 , parameters_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the default parameters used by this IO object" );
         
         }
         { //::SireIO::Tinker::typeName
@@ -93,7 +96,8 @@ void register_Tinker_class(){
             
             Tinker_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Tinker_exposer.staticmethod( "parameters" );

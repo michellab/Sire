@@ -198,8 +198,8 @@ QString CLJDelta::toString() const
                     .arg(changedAtoms().count());
 }
 
-/** Return difference between the old and new atoms. This returns the change
-    as only the atoms that have changed, with the parameters of the old atoms
+/** Return difference between the old and new atoms. This returns the change,
+    returning only non-dummy atoms, with the parameters of the old atoms
     negated so that a delta energy can be calculated easily */
 CLJAtoms CLJDelta::changedAtoms() const
 {
@@ -211,14 +211,11 @@ CLJAtoms CLJDelta::changedAtoms() const
         CLJAtom old_atom = old_atoms.at(i);
         CLJAtom new_atom = new_atoms.at(i);
         
-        if (old_atom != new_atom)
-        {
-            if (not old_atom.isDummy())
-                changed_atoms.append( old_atom.negate() );
+        if (not old_atom.isDummy())
+            changed_atoms.append( old_atom.negate() );
             
-            if (not new_atom.isDummy())
-                changed_atoms.append( new_atom );
-        }
+        if (not new_atom.isDummy())
+            changed_atoms.append( new_atom );
     }
     
     if (old_atoms.count() > new_atoms.count())
@@ -272,14 +269,11 @@ CLJAtoms CLJDelta::mergeChanged(const CLJDelta *deltas, int n)
                 CLJAtom old_atom = old_atoms.at(i);
                 CLJAtom new_atom = new_atoms.at(i);
                 
-                if (old_atom != new_atom)
-                {
-                    if (not old_atom.isDummy())
-                        changed_atoms.append( old_atom.negate() );
+                if (not old_atom.isDummy())
+                    changed_atoms.append( old_atom.negate() );
                     
-                    if (not new_atom.isDummy())
-                        changed_atoms.append( new_atom );
-                }
+                if (not new_atom.isDummy())
+                    changed_atoms.append( new_atom );
             }
             
             if (old_atoms.count() > new_atoms.count())
@@ -327,35 +321,18 @@ CLJAtoms CLJDelta::mergeNew(const CLJDelta *deltas, int n)
         return CLJAtoms();
     else
     {
-        //work out which atoms have changed and which ones haven't...
         QVarLengthArray<CLJAtom> changed_atoms;
 
         for (int l=0; l<n; ++l)
         {
-            CLJAtoms old_atoms = deltas[l].oldAtoms();
             CLJAtoms new_atoms = deltas[l].newAtoms();
         
-            for (int i=0; i<qMin(old_atoms.count(),new_atoms.count()); ++i)
+            for (int i=0; i<new_atoms.count(); ++i)
             {
-                CLJAtom old_atom = old_atoms.at(i);
                 CLJAtom new_atom = new_atoms.at(i);
                 
-                if (old_atom != new_atom)
-                {
-                    if (not new_atom.isDummy())
-                        changed_atoms.append( new_atom );
-                }
-            }
-            
-            if (new_atoms.count() > old_atoms.count())
-            {
-                for (int i=old_atoms.count(); i<new_atoms.count(); ++i)
-                {
-                    CLJAtom new_atom = new_atoms.at(i);
-                    
-                    if (not new_atom.isDummy())
-                        changed_atoms.append( new_atom );
-                }
+                if (not new_atom.isDummy())
+                    changed_atoms.append( new_atom );
             }
         }
         
@@ -389,29 +366,13 @@ CLJAtoms CLJDelta::mergeOld(const CLJDelta *deltas, int n)
         for (int l=0; l<n; ++l)
         {
             CLJAtoms old_atoms = deltas[l].oldAtoms();
-            CLJAtoms new_atoms = deltas[l].newAtoms();
         
-            for (int i=0; i<qMin(old_atoms.count(),new_atoms.count()); ++i)
+            for (int i=0; i<old_atoms.count(); ++i)
             {
                 CLJAtom old_atom = old_atoms.at(i);
-                CLJAtom new_atom = new_atoms.at(i);
-                
-                if (old_atom != new_atom)
-                {
-                    if (not old_atom.isDummy())
-                        changed_atoms.append( old_atom );
-                }
-            }
-            
-            if (old_atoms.count() > new_atoms.count())
-            {
-                for (int i=new_atoms.count(); i<old_atoms.count(); ++i)
-                {
-                    CLJAtom old_atom = old_atoms.at(i);
-                    
-                    if (not old_atom.isDummy())
-                        changed_atoms.append( old_atom );
-                }
+
+                if (not old_atom.isDummy())
+                    changed_atoms.append( old_atom );
             }
         }
         
@@ -453,19 +414,16 @@ tuple<CLJAtoms,CLJAtoms,CLJAtoms> CLJDelta::merge(const CLJDelta *deltas, int n)
                 CLJAtom old_atom = old_atoms.at(i);
                 CLJAtom new_atom = new_atoms.at(i);
                 
-                if (old_atom != new_atom)
+                if (not old_atom.isDummy())
                 {
-                    if (not old_atom.isDummy())
-                    {
-                        changed_atoms.append( old_atom.negate() );
-                        all_old_atoms.append( old_atom );
-                    }
+                    changed_atoms.append( old_atom.negate() );
+                    all_old_atoms.append( old_atom );
+                }
                     
-                    if (not new_atom.isDummy())
-                    {
-                        changed_atoms.append( new_atom );
-                        all_new_atoms.append( new_atom );
-                    }
+                if (not new_atom.isDummy())
+                {
+                    changed_atoms.append( new_atom );
+                    all_new_atoms.append( new_atom );
                 }
             }
             
