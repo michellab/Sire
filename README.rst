@@ -25,8 +25,8 @@ built with Sire, please `visit the Sire website <http://siremol.org>`__.
 Installation 
 ============
 
-There are many `pre-built binary packages <http://siremol.org/Sire/Binaries.html>`__,
-which are available for Linux and OS X, which are quick and easy to install.
+There are many `pre-built binary packages <http://siremol.org/pages/binaries.html>`__,
+which are available for Linux, Mac OS X and Windows, which are quick and easy to install.
 
 However, as you are here, it is likely you want to download the latest,
 greatest version of the code, which you will need to compile. To compile Sire,
