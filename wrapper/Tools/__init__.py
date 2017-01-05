@@ -125,7 +125,7 @@ def resolveParameters(func):
         keys.sort()
         print("===============")
         for key in keys:
-            value = params[key].lstrip().rstrip()
+            value = str(params[key]).lstrip().rstrip()
 
             # execute the parameter, so that it is parsed
             try:
@@ -145,7 +145,7 @@ def resolveParameters(func):
                 else:
                     # maybe this is a string?
                     try:
-                        exec("_pvt_val = \"%s\"" % value, globals())
+                        exec("_pvt_val = \"%s\"" % value.replace("\\","\\\\"), globals())
                         _pvt_ok = True
                     except:
                         pass
