@@ -164,6 +164,9 @@ if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
   message( FATAL_ERROR "You must run CMake in a different directory to the source!" ) 
 endif()
 
+# Set the minimum targetted distribution on OS X to Mountain Lion (released 2012)
+set ( CMAKE_OSX_DEPLOYMENT_TARGET "10.8" )
+
 # name the project
 project (SIRE CXX C)
 
