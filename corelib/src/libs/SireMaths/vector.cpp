@@ -30,6 +30,7 @@
 #include "quaternion.h"
 #include "matrix.h"
 #include "nvector.h"
+#include "sincos.h"
 
 #include "SireBase/quickcopy.hpp"
 #include "SireID/index.h"
@@ -494,10 +495,14 @@ Vector Vector::generate(double dst, const Vector &v1, const Angle &ang, const Ve
 //    ybs = lgth * sin(ang) * sin(dih)
 //    zbs = -lgth * cos(ang)
 
-      double sinval = std::sin(ang);
-      double xbs = dst * sinval * std::cos(dih);
-      double ybs = dst * sinval * std::sin(dih);
-      double zbs = -dst * std::cos(ang);
+      double sinang, cosang;
+      SireMaths::sincos(ang, &sinang, &cosang);
+      double sindih, cosdih;
+      SireMaths::sincos(dih, &sindih, &cosdih);
+
+      double xbs = dst * sinang * cosdih;
+      double ybs = dst * sinang * sindih;
+      double zbs = -dst * cosang;
 
 //    Then we map the coordinates in this basis set to our cartesian coordinates
 //    via...

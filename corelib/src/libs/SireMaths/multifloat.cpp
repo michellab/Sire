@@ -195,6 +195,8 @@ using namespace SireMaths;
     }
 
 #else
+    #include "sincos.h"
+
     static inline bool isAligned32(const void *pointer)
     {
         return (quintptr)pointer % size_t(32) == 0;
@@ -262,8 +264,7 @@ using namespace SireMaths;
         {
             for (int i=0; i<MultiFloat::count(); ++i)
             {
-                sval.v.a[i] = std::sin(val.v.a[i]);
-                cval.v.a[i] = std::cos(val.v.a[i]);
+                SireMaths::sincos(val.v.a[i], &(sval.v.a[i]), &(cval.v.a[i]));
             }
         }
     }
