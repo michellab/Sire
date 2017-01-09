@@ -173,6 +173,10 @@ else
     fi
 fi
 
+# Now set the MACOSX_DEPLOYMENT_TARGET to make sure
+# that we can work with Mountain Lion or above
+export MACOSX_DEPLOYMENT_TARGET="10.8"
+
 # Now run the python install script
 if [ -e "${INSTALL_DIR}/bin/python" ]; then
     echo "** Running the Python install script... **"

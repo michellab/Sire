@@ -89,20 +89,22 @@ else()
     find_library( TBB_MALLOC_LIBRARY "tbbmalloc" PATHS ${TBB_INSTALL_DIR} NO_DEFAULT_PATH )
 
     if ( TBB_MALLOC_LIBRARY )
-      if (EXISTS "${TBB_MALLOC_LIBRARY}.2" )
-        # On Linux, the library is libtbb_malloc.so.2, not libtbb_malloc.so
-        set( TBB_MALLOC_LIBRARY "${TBB_MALLOC_LIBRARY}.2" )
-      endif()
+      message( STATUS "Built tbbmalloc library ${TBB_MALLOC_LIBRARY}" )
+    else()
+      message( FATAL_ERROR "Strange? The tbbmalloc library has not been built!" )
     endif()
 
     if ( TBB_LIBRARY )
-      if (EXISTS "${TBB_LIBRARY}.2")
-        # On Linux, the library is libtbb.so.2, not libtbb.so
-        set( TBB_LIBRARY "${TBB_LIBRARY}.2" )
-      endif()
-
       execute_process( COMMAND ${CMAKE_COMMAND} -E copy ${TBB_LIBRARY} ${BUNDLE_STAGEDIR}/lib )
       execute_process( COMMAND ${CMAKE_COMMAND} -E copy ${TBB_MALLOC_LIBRARY} ${BUNDLE_STAGEDIR}/lib )
+
+      if (EXISTS "${TBB_LIBRARY}.2")
+        execute_process( COMMAND ${CMAKE_COMMAND} -E copy ${TBB_LIBRARY}.2 ${BUNDLE_STAGEDIR}/lib )
+      endif()
+
+      if (EXISTS "${TBB_MALLOC_LIBRARY}.2" )
+        execute_process( COMMAND ${CMAKE_COMMAND} -E copy ${TBB_MALLOC_LIBRARY}.2 ${BUNDLE_STAGEDIR}/lib )
+      endif()
 
       execute_process( COMMAND ${CMAKE_COMMAND} -E copy_directory ${TBB_BUILD_DIR}/include ${BUNDLE_STAGEDIR}/include )
 
@@ -121,7 +123,7 @@ else()
         execute_process( COMMAND ${CMAKE_INSTALL_NAME_TOOL} -id "@rpath/libtbbmalloc.dylib" ${TBB_MALLOC_LIBRARY} )
       endif()
     else()
-      message( STATUS "WARNING: TBB library was not built in the expected directory.")
+      message( FATAL_ERROR "WARNING: TBB library was not built in the expected directory.")
     endif()
   endif()
 endif()
@@ -131,5 +133,5 @@ if ( TBB_LIBRARY AND TBB_MALLOC_LIBRARY )
   message( STATUS "Libraries ${TBB_LIBRARY} | ${TBB_MALLOC_LIBRARY}" )
   set( SIRE_FOUND_TBB TRUE )
 else()
-  message( STATUS "Strange? Cannot find the compiled TBB library. We cannot compile it, so will need to rely on the system version..." )
+  message( FATAL_ERROR "Strange? Cannot find the compiled TBB library. We cannot compile it, so will need to rely on the system version..." )
 endif()

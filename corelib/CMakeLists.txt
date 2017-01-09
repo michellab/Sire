@@ -8,7 +8,7 @@
 
 set (S_VERSION_MAJOR "2016")
 set (S_VERSION_MINOR "3")
-set (S_VERSION_PATCH "0")             
+set (S_VERSION_PATCH "1")             
 
 set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 
@@ -402,7 +402,7 @@ CHECK_CXX_COMPILER_FLAG( "-stdlib=libc++" SIRE_HAS_CPP_LIB )
 include(CheckCXXSourceRuns)
 
 if (SIRE_HAS_CPP_LIB)
-  message(STATUS "Checking that we can link to libc++")
+  message(STATUS "Checking that we can LINK to libc++")
   set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
   set(CMAKE_REQUIRED_FLAGS "-stdlib=libc++")
   check_cxx_source_runs("
@@ -410,7 +410,7 @@ if (SIRE_HAS_CPP_LIB)
            #include <iostream>
            int main()
            {
-              std::cout << std::atof('3.0') << std::endl;
+              std::cout << std::abs(-5) << std::endl;
               return 0;
            }" CAN_USE_LIBCPP)
   set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})

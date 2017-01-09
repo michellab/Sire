@@ -34,6 +34,7 @@ else()
     list( APPEND CPUID_OPTIONS "--enable-static=no" )
     list( APPEND CPUID_OPTIONS "--enable-shared=yes" )
     list( APPEND CPUID_OPTIONS "--prefix=${BUNDLE_STAGEDIR}" )
+    list( APPEND CPUID_OPTIONS "--libdir=${BUNDLE_STAGEDIR}/lib" )
     list( APPEND CPUID_OPTIONS "CC=${CMAKE_C_COMPILER}" )
 
     if (HAVE_STDINT_H)
