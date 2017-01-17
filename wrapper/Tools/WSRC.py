@@ -2447,7 +2447,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
         freewater_assigner.update(system)
 
         boundwater_nrgmon = FreeEnergyMonitor(boundwater_assigner, ligand_group, mobile_swap)
-        freewater_nrgmon = FreeEnergyMonitor(freewater_assigner, ligand_group, mobile_swap)
+        freewater_nrgmon = FreeEnergyMonitor(freewater_assigner, mobile_swap, ligand_group)
 
         nrgmons["boundwater_nrgmon"] = boundwater_nrgmon
         nrgmons["freewater_nrgmon"] = freewater_nrgmon
@@ -2550,7 +2550,7 @@ def loadWSRC():
         print("Loading from Amber files %s / %s..." % (protein_topfile.val, protein_crdfile.val))
         # Add the name of the ligand to the list of solute molecules
         proteinsys_scheme = NamingScheme()
-        proteinsys_scheme.addSoluteResidueName(ligand_name.val)
+        proteinsys_scheme.addSoluteResidueName( ligand_name.val )
 
         # Load up the system. This will automatically find the protein, solute, water, solvent
         # and ion molecules and assign them to different groups

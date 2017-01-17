@@ -1612,7 +1612,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         freewater_assigner.update(system)
 
         boundwater_nrgmon = FreeEnergyMonitor(boundwater_assigner, ligand_group0, ligand_group1)
-        freewater_nrgmon = FreeEnergyMonitor(freewater_assigner, ligand_group0, ligand_group1)
+        freewater_nrgmon = FreeEnergyMonitor(freewater_assigner, ligand_group1, ligand_group0)
 
         nrgmons["boundwater_nrgmon"] = boundwater_nrgmon
         nrgmons["freewater_nrgmon"] = freewater_nrgmon
