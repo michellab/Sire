@@ -9,6 +9,8 @@
 
 #include "Amber2.pypp.hpp"
 
+#include "AmberParm7.pypp.hpp"
+
 #include "Cube.pypp.hpp"
 
 #include "FlexibilityLibrary.pypp.hpp"
@@ -53,6 +55,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_Amber_class();
 
     register_Amber2_class();
+
+    register_AmberParm7_class();
 
     register_Cube_class();
 

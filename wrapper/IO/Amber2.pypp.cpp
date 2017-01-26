@@ -7,6 +7,12 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/parallel.h"
+
+#include "SireBase/unittest.h"
+
+#include "SireError/errors.h"
+
 #include "SireSystem/system.h"
 
 #include "amber2.h"

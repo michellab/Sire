@@ -38,11 +38,15 @@ SIRE_BEGIN_HEADER
 
 namespace SireIO
 {
+class AmberParm7;
 class Amber2;
 }
 
 QDataStream& operator<<(QDataStream&, const SireIO::Amber2&);
 QDataStream& operator>>(QDataStream&, SireIO::Amber2&);
+
+QDataStream& operator<<(QDataStream&, const SireIO::AmberParm7&);
+QDataStream& operator>>(QDataStream&, SireIO::AmberParm7&);
 
 namespace SireSystem
 {
@@ -51,6 +55,77 @@ class System;
 
 namespace SireIO
 {
+
+/** This class represents an Amber7-format parameter file, currently
+    supporting top files produced from Amber7 until Amber16
+    
+    @author Christopher Woods
+*/
+class SIREIO_EXPORT AmberParm7
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const AmberParm7&);
+friend QDataStream& ::operator>>(QDataStream&, AmberParm7&);
+
+public:
+    enum FLAG_TYPE { UNKNOWN = 0,
+                     INT = 1,
+                     FLOAT = 2,
+                     STRING = 3 };
+
+    AmberParm7();
+    AmberParm7(const QString &filename);
+    AmberParm7(const SireSystem::System &system,
+               const SireBase::PropertyMap &map = SireBase::PropertyMap());
+    
+    AmberParm7(const AmberParm7 &other);
+    
+    ~AmberParm7();
+    
+    AmberParm7& operator=(const AmberParm7 &other);
+    
+    bool operator==(const AmberParm7 &other) const;
+    bool operator!=(const AmberParm7 &other) const;
+  
+    static const char* typeName();
+  
+    const char* what() const;
+    
+    static AmberParm7 read(const QString &filename);
+    static AmberParm7 write(const SireSystem::System &system,
+                            const SireBase::PropertyMap &map = SireBase::PropertyMap());
+    
+    QStringList lines() const;
+    QStringList lines(const QString &flag) const;
+    
+    QStringList flags() const;
+
+    FLAG_TYPE flagType(const QString &flag) const;
+    
+    QList<qint64> intData(const QString &flag) const;
+    QList<double> floatData(const QString &flag) const;
+    QStringList stringData(const QString &flag) const;
+
+private:
+    /** Function to process all flags */
+    void processAllFlags();
+
+    /** All of the lines contained in the parm file */
+    QStringList lnes;
+    
+    /** A map showing the line number of all flags. This holds
+        the start index and number of lines for each flag */
+    QHash< QString,QPair<qint64,qint64> > flag_to_line;
+    
+    /** The raw int data for the integer flags */
+    QHash< QString, QList<qint64> > int_data;
+    
+    /** The raw float data for the float flags */
+    QHash< QString, QList<double> > float_data;
+    
+    /** The raw string data for the string flags */
+    QHash< QString, QStringList > string_data;
+};
 
 /** This class is used to read and write AMBER molecule files.
     The class will aim to support the range of file formats
@@ -83,13 +158,6 @@ public:
     
     double coulomb14Factor() const;
     double lj14Factor() const;
-
-    SireSystem::System readRst7Parm7(const QStringList &rstlines,
-                                     const QStringList &prmlines,
-                                     const SireMol::CuttingFunction &cutting_function
-                                             = SireMol::ResidueCutting(),
-                                     const SireBase::PropertyMap &map
-                                             = SireBase::PropertyMap()) const;
   
     SireSystem::System readRst7Parm7(const QString &rstfile,
                                      const QString &prmfile,
@@ -100,12 +168,6 @@ public:
   
     SireSystem::System readRst7Parm7(const QString &rstfile,
                                      const QString &prmfile,
-                                     const SireBase::PropertyMap &map,
-                                     const SireMol::CuttingFunction &cutting_function
-                                             = SireMol::ResidueCutting()) const;
-  
-    SireSystem::System readRst7Parm7(const QStringList &rstlines,
-                                     const QStringList &prmlines,
                                      const SireBase::PropertyMap &map,
                                      const SireMol::CuttingFunction &cutting_function
                                              = SireMol::ResidueCutting()) const;
@@ -122,8 +184,10 @@ private:
 }
 
 Q_DECLARE_METATYPE( SireIO::Amber2 )
+Q_DECLARE_METATYPE( SireIO::AmberParm7 )
 
 SIRE_EXPOSE_CLASS( SireIO::Amber2 )
+SIRE_EXPOSE_CLASS( SireIO::AmberParm7 )
 
 SIRE_END_HEADER
 
