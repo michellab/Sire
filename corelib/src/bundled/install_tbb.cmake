@@ -35,6 +35,10 @@ else()
       )
     endif()
 
+    # switch on C++0x support so that we have exact exception
+    # propagation
+    set( TBB_OPTIONS "${TBB_OPTIONS};stdver=c++14" )
+
     if ( SIRE_HAS_CPP_LIB )
       set( TBB_OPTIONS "${TBB_OPTIONS};stdlib=libc++" )
     endif()

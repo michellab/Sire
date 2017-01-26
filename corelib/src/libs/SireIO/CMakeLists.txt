@@ -7,9 +7,13 @@
 # Other Sire libraries
 include_directories(${CMAKE_SOURCE_DIR}/src/libs)
 
+# This library uses Intel Threaded Building blocks
+include_directories(${TBB_INCLUDE_DIR})
+
 # Define the headers in SireIO
 set ( SIREIO_HEADERS
       amber.h
+      amber2.h
       cube.h
       errors.h
       flexibilitylibrary.h
@@ -28,6 +32,7 @@ set ( SIREIO_SOURCES
       register_sireio.cpp
 
       amber.cpp
+      amber2.cpp
       cube.cpp
       errors.cpp
       flexibilitylibrary.cpp

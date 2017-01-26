@@ -4,6 +4,7 @@
 #ifdef GCCXML_PARSE
 
 #include "amber.h"
+#include "amber2.h"
 #include "cube.h"
 #include "flexibilitylibrary.h"
 #include "iobase.h"

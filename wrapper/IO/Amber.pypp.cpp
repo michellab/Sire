@@ -37,6 +37,8 @@ namespace bp = boost::python;
 
 #include "SireMol/atomelements.h"
 
+#include "SireMol/atomidx.h"
+
 #include "SireMol/atommasses.h"
 
 #include "SireMol/cgatomidx.h"
@@ -48,6 +50,8 @@ namespace bp = boost::python;
 #include "SireMol/molecule.h"
 
 #include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
 
 #include "SireMol/reseditor.h"
 
