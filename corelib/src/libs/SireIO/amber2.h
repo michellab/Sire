@@ -69,7 +69,7 @@ friend QDataStream& ::operator>>(QDataStream&, AmberParm7&);
 
 public:
     enum FLAG_TYPE { UNKNOWN = 0,
-                     INT = 1,
+                     INTEGER = 1,
                      FLOAT = 2,
                      STRING = 3 };
 

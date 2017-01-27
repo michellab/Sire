@@ -30,6 +30,7 @@
 #include <QTextStream>
 #include <QHash>
 #include <QElapsedTimer>
+#include <QRegularExpression>
 
 #include "amber2.h"
 
@@ -90,17 +91,96 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberParm7 &amberparm7)
 AmberParm7::AmberParm7()
 {}
 
+/** Internal class used by AmberParm7 to hold format description */
+class AmberFormat
+{
+public:
+    AmberParm7::FLAG_TYPE flag_type;
+    int num_values;
+    int field_width;
+    int point_width;
+
+    AmberFormat() : flag_type(AmberParm7::UNKNOWN),
+                    num_values(0), field_width(0), point_width(0)
+    {}
+    
+    AmberFormat(const QString &line)
+    {
+        QRegularExpression re("%FORMAT\\((\\d+)(\\w)(\\d+)\\.?(\\d+)?\\)");
+        
+        auto m = re.match(line);
+        
+        if (not m.hasMatch())
+        {
+            throw SireError::io_error( QObject::tr(
+                    "Could not extract the format from the line '%1'. "
+                    "Expected to read a line similar to '%FORMAT(5E16.8)'.")
+                        .arg(line), CODELOC );
+        }
+        
+        num_values = m.captured(1).toInt();
+        field_width = m.captured(3).toInt();
+        
+        QString typ = m.captured(2).toLower();
+        
+        if (typ == "a")
+            flag_type = AmberParm7::STRING;
+        else if (typ == "i")
+            flag_type = AmberParm7::INTEGER;
+        else if (typ == "e")
+            flag_type = AmberParm7::FLOAT;
+        else
+            flag_type = AmberParm7::UNKNOWN;
+        
+        if (not m.captured(4).isNull())
+        {
+            point_width = m.captured(4).toInt();
+        }
+        
+        qDebug() << this->toString();
+    }
+    
+    ~AmberFormat()
+    {}
+    
+    QString toString() const
+    {
+        switch(flag_type)
+        {
+            case AmberParm7::STRING:
+                return QString("AmberFormat( %1 x string[width = %2] )")
+                            .arg(num_values).arg(field_width);
+            case AmberParm7::INTEGER:
+                return QString("AmberFormat( %1 x integer[width = %2] )")
+                            .arg(num_values).arg(field_width);
+            case AmberParm7::FLOAT:
+                return QString("AmberFormat( %1 x float[width = %2, precision = %3] )")
+                            .arg(num_values).arg(field_width).arg(point_width);
+            default:
+                return QString("AmberFormat( UNKNOWN )");
+        }
+    }
+};
+
 AmberParm7::FLAG_TYPE flagType(const QStringList &lines, const QPair<qint64,qint64> &index)
 {
-    //TODO TOMORROW
-    #WARNING TODO TOMORROW
+    AmberFormat f(lines[index.first+1]);
+    return f.flag_type;
 }
 
 /** Return the flag type for the data associated with the passed flag.
     This returns UNKNOWN if this is not known */
 AmberParm7::FLAG_TYPE AmberParm7::flagType(const QString &flag) const
 {
-    return ::flagType(lines, flag_to_line.value(flag));
+    if (flag_to_line.contains(flag))
+    {
+        auto index = flag_to_line.value(flag);
+    
+        if (index.first > 0)
+            return AmberFormat(lnes[index.first-1]).flag_type;
+    }
+
+    return AmberParm7::UNKNOWN;
 }
 
 /** Return the integer data for the passed flag. This returns an empty
@@ -196,17 +276,20 @@ QStringList AmberParm7::stringData(const QString &flag) const
     return QStringList();
 }
 
-QList<qint64> readIntData(const QStringList &lines, const QPair<qint64,qint64> &index)
+QList<qint64> readIntData(const QStringList &lines, AmberFormat format,
+                          const QPair<qint64,qint64> &index)
 {
     return QList<qint64>();
 }
 
-QList<double> readFloatData(const QStringList &lines, const QPair<qint64,qint64> &index)
+QList<double> readFloatData(const QStringList &lines, AmberFormat format,
+                            const QPair<qint64,qint64> &index)
 {
     return QList<double>();
 }
 
-QStringList readStringData(const QStringList &lines, const QPair<qint64,qint64> &index)
+QStringList readStringData(const QStringList &lines, AmberFormat format,
+                           const QPair<qint64,qint64> &index)
 {
     return QStringList();
 }
@@ -225,27 +308,29 @@ void AmberParm7::processAllFlags()
         {
             const QString &flag = flags[i];
             const QPair<qint64,qint64> index = flag_to_line.value(flag);
-            FLAG_TYPE flag_type = ::flagType(lines, index);
             
-            switch(flag_type)
+            //the format for the data is on the preceeding line
+            const AmberFormat format(lnes[index.first-1]);
+            
+            switch(format.flag_type)
             {
-                case INT:
+                case INTEGER:
                 {
-                    QList<qint64> data = readIntData(lines, index);
+                    QList<qint64> data = readIntData(lnes, format, index);
                     QMutexLocker lkr(&int_mutex);
                     int_data.insert(flag, data);
                     break;
                 }
                 case FLOAT:
                 {
-                    QList<double> data = readFloatData(lines, index);
+                    QList<double> data = readFloatData(lnes, format, index);
                     QMutexLocker lkr(&float_mutex);
                     float_data.insert(flag, data);
                     break;
                 }
                 case STRING:
                 {
-                    QStringList data = readStringData(lines, index);
+                    QStringList data = readStringData(lnes, format, index);
                     QMutexLocker lkr(&string_mutex);
                     string_data.insert(flag, data);
                     break;
@@ -309,7 +394,8 @@ AmberParm7::AmberParm7(const QString &filename)
                             .arg(flag_to_line[flag].first)
                             .arg(i), CODELOC );
                 
-                flag_to_line.insert( flag, QPair<qint64,qint64>(i,-1) );
+                //skip the FLAG line, and the FORMAT line that must come immediately after
+                flag_to_line.insert( flag, QPair<qint64,qint64>(i+2,-1) );
                 last_flag = flag;
             }
         }
