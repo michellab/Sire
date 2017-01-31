@@ -95,6 +95,10 @@ public:
     static AmberParm7 write(const SireSystem::System &system,
                             const SireBase::PropertyMap &map = SireBase::PropertyMap());
     
+    SireSystem::System toSystem() const;
+
+    SireMol::Molecule getMolecule(int i) const;
+    
     QStringList lines() const;
     QStringList lines(const QString &flag) const;
     
@@ -106,7 +110,38 @@ public:
     QList<double> floatData(const QString &flag) const;
     QStringList stringData(const QString &flag) const;
 
+    QString title() const;
+
+    int nAtoms() const;
+    
+    int nTypes() const;
+    
+    int nBonds() const;
+    int nBondsWithHydrogen() const;
+    int nBondsNoHydrogen() const;
+    
+    int nAngles() const;
+    int nAnglesWithHydrogen() const;
+    int nAnglesNoHydrogen() const;
+    
+    int nDihedrals() const;
+    int nDihedralsWithHydrogen() const;
+    int nDihedralsNoHydrogen() const;
+    
+    int nExcluded() const;
+    int nResidues() const;
+    
+    int nMolecules() const;
+    
+    int nAtoms(int molidx) const;
+    
+    void assertSane() const;
+
 private:
+    SireMol::Molecule getMolecule(int start_idx, int natoms) const;
+
+    QList< QPair<int,int> > moleculeIndicies() const;
+
     /** Function to process all flags */
     void processAllFlags();
 
@@ -125,6 +160,9 @@ private:
     
     /** The raw string data for the string flags */
     QHash< QString, QStringList > string_data;
+    
+    /** A copy of the POINTER data to prevent over-lookup */
+    QList<qint64> pointers;
 };
 
 /** This class is used to read and write AMBER molecule files.

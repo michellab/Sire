@@ -3,35 +3,35 @@
 
 #include "SireIO_registrars.h"
 
-#include "flexibilitylibrary.h"
-#include "zmatrixmaker.h"
 #include "trajectorymonitor.h"
-#include "iobase.h"
-#include "tinker.h"
 #include "pdb.h"
-#include "amber.h"
+#include "iobase.h"
 #include "protoms.h"
+#include "flexibilitylibrary.h"
 #include "perturbationslibrary.h"
+#include "tinker.h"
+#include "zmatrixmaker.h"
 #include "amber2.h"
+#include "amber.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_SireIO_objects()
 {
 
+    ObjectRegistry::registerConverterFor< SireIO::TrajectoryMonitor >();
+    ObjectRegistry::registerConverterFor< SireIO::PDB >();
+    ObjectRegistry::registerConverterFor< SireIO::NullIO >();
+    ObjectRegistry::registerConverterFor< SireIO::ProtoMS >();
     ObjectRegistry::registerConverterFor< SireIO::FlexibilityLibrary >();
     ObjectRegistry::registerConverterFor< SireIO::FlexibilityTemplate >();
-    ObjectRegistry::registerConverterFor< SireIO::ZmatrixMaker >();
-    ObjectRegistry::registerConverterFor< SireIO::TrajectoryMonitor >();
-    ObjectRegistry::registerConverterFor< SireIO::NullIO >();
-    ObjectRegistry::registerConverterFor< SireIO::Tinker >();
-    ObjectRegistry::registerConverterFor< SireIO::PDB >();
-    ObjectRegistry::registerConverterFor< SireIO::Amber >();
-    ObjectRegistry::registerConverterFor< SireIO::ProtoMS >();
     ObjectRegistry::registerConverterFor< SireIO::PerturbationsLibrary >();
     ObjectRegistry::registerConverterFor< SireIO::PerturbationsTemplate >();
+    ObjectRegistry::registerConverterFor< SireIO::Tinker >();
+    ObjectRegistry::registerConverterFor< SireIO::ZmatrixMaker >();
     ObjectRegistry::registerConverterFor< SireIO::Amber2 >();
     ObjectRegistry::registerConverterFor< SireIO::AmberParm7 >();
+    ObjectRegistry::registerConverterFor< SireIO::Amber >();
 
 }
 

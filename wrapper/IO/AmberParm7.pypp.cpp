@@ -37,9 +37,28 @@ void register_AmberParm7_class(){
         typedef bp::class_< SireIO::AmberParm7 > AmberParm7_exposer_t;
         AmberParm7_exposer_t AmberParm7_exposer = AmberParm7_exposer_t( "AmberParm7", "This class represents an Amber7-format parameter file, currently\nsupporting top files produced from Amber7 until Amber16\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AmberParm7_scope( AmberParm7_exposer );
+        bp::enum_< SireIO::AmberParm7::FLAG_TYPE>("FLAG_TYPE")
+            .value("UNKNOWN", SireIO::AmberParm7::UNKNOWN)
+            .value("INTEGER", SireIO::AmberParm7::INTEGER)
+            .value("FLOAT", SireIO::AmberParm7::FLOAT)
+            .value("STRING", SireIO::AmberParm7::STRING)
+            .export_values()
+            ;
         AmberParm7_exposer.def( bp::init< QString const & >(( bp::arg("filename") ), "Construct by reading from the file called filename") );
         AmberParm7_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by converting from the passed system, using the passed property\nmap to find the right properties") );
         AmberParm7_exposer.def( bp::init< SireIO::AmberParm7 const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireIO::AmberParm7::flagType
+        
+            typedef ::SireIO::AmberParm7::FLAG_TYPE ( ::SireIO::AmberParm7::*flagType_function_type)( ::QString const & ) const;
+            flagType_function_type flagType_function_value( &::SireIO::AmberParm7::flagType );
+            
+            AmberParm7_exposer.def( 
+                "flagType"
+                , flagType_function_value
+                , ( bp::arg("flag") )
+                , "" );
+        
+        }
         { //::SireIO::AmberParm7::flags
         
             typedef ::QStringList ( ::SireIO::AmberParm7::*flags_function_type)(  ) const;
@@ -49,6 +68,30 @@ void register_AmberParm7_class(){
                 "flags"
                 , flags_function_value
                 , "Return all of the flags that are held in this file" );
+        
+        }
+        { //::SireIO::AmberParm7::floatData
+        
+            typedef ::QList< double > ( ::SireIO::AmberParm7::*floatData_function_type)( ::QString const & ) const;
+            floatData_function_type floatData_function_value( &::SireIO::AmberParm7::floatData );
+            
+            AmberParm7_exposer.def( 
+                "floatData"
+                , floatData_function_value
+                , ( bp::arg("flag") )
+                , "" );
+        
+        }
+        { //::SireIO::AmberParm7::intData
+        
+            typedef ::QList< long long > ( ::SireIO::AmberParm7::*intData_function_type)( ::QString const & ) const;
+            intData_function_type intData_function_value( &::SireIO::AmberParm7::intData );
+            
+            AmberParm7_exposer.def( 
+                "intData"
+                , intData_function_value
+                , ( bp::arg("flag") )
+                , "" );
         
         }
         { //::SireIO::AmberParm7::lines
@@ -101,6 +144,40 @@ void register_AmberParm7_class(){
                 , "Return an AmberParm7 object read from the passed file" );
         
         }
+        { //::SireIO::AmberParm7::stringData
+        
+            typedef ::QStringList ( ::SireIO::AmberParm7::*stringData_function_type)( ::QString const & ) const;
+            stringData_function_type stringData_function_value( &::SireIO::AmberParm7::stringData );
+            
+            AmberParm7_exposer.def( 
+                "stringData"
+                , stringData_function_value
+                , ( bp::arg("flag") )
+                , "" );
+        
+        }
+        { //::SireIO::AmberParm7::typeName
+        
+            typedef char const * ( *typeName_function_type )(  );
+            typeName_function_type typeName_function_value( &::SireIO::AmberParm7::typeName );
+            
+            AmberParm7_exposer.def( 
+                "typeName"
+                , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireIO::AmberParm7::what
+        
+            typedef char const * ( ::SireIO::AmberParm7::*what_function_type)(  ) const;
+            what_function_type what_function_value( &::SireIO::AmberParm7::what );
+            
+            AmberParm7_exposer.def( 
+                "what"
+                , what_function_value
+                , "" );
+        
+        }
         { //::SireIO::AmberParm7::write
         
             typedef ::SireIO::AmberParm7 ( *write_function_type )( ::SireSystem::System const &,::SireBase::PropertyMap const & );
@@ -114,6 +191,7 @@ void register_AmberParm7_class(){
         
         }
         AmberParm7_exposer.staticmethod( "read" );
+        AmberParm7_exposer.staticmethod( "typeName" );
         AmberParm7_exposer.staticmethod( "write" );
         AmberParm7_exposer.def( "__copy__", &__copy__);
         AmberParm7_exposer.def( "__deepcopy__", &__copy__);
