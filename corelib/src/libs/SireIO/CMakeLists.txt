@@ -18,6 +18,7 @@ set ( SIREIO_HEADERS
       errors.h
       flexibilitylibrary.h
       iobase.h
+      moleculeparser.h
       pdb.h
       perturbationslibrary.h
       protoms.h
@@ -37,6 +38,7 @@ set ( SIREIO_SOURCES
       errors.cpp
       flexibilitylibrary.cpp
       iobase.cpp
+      moleculeparser.cpp
       pdb.cpp
       perturbationslibrary.cpp
       protoms.cpp

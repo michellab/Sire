@@ -29,26 +29,17 @@
 #ifndef SIREIO_AMBER2_H
 #define SIREIO_AMBER2_H
 
-#include "SireBase/propertymap.h"
-#include "SireBase/shareddatapointer.hpp"
+#include "moleculeparser.h"
 
-#include "SireMol/residuecutting.h"
+#include "SireMaths/vector.h"
 
 SIRE_BEGIN_HEADER
 
 namespace SireIO
 {
-class MoleculeParser;
 class AmberParm;
 class AmberRst;
-class Amber2;
 }
-
-QDataStream& operator<<(QDataStream&, const SireIO::MoleculeParser&);
-QDataStream& operator>>(QDataStream&, SireIO::MoleculeParser&);
-
-QDataStream& operator<<(QDataStream&, const SireIO::Amber2&);
-QDataStream& operator>>(QDataStream&, SireIO::Amber2&);
 
 QDataStream& operator<<(QDataStream&, const SireIO::AmberParm&);
 QDataStream& operator>>(QDataStream&, SireIO::AmberParm&);
@@ -56,34 +47,8 @@ QDataStream& operator>>(QDataStream&, SireIO::AmberParm&);
 QDataStream& operator<<(QDataStream&, const SireIO::AmberRst&);
 QDataStream& operator>>(QDataStream&, SireIO::AmberRst&);
 
-namespace SireSystem
-{
-class System;
-}
-
 namespace SireIO
 {
-
-/** The base class of all molecule parsers */
-class SIREIO_EXPORT MoleculeParser : public SireBase::Property
-{
-
-friend QDataStream& ::operator<<(QDataStream&, const MoleculeParser&);
-friend QDataStream& ::operator>>(QDataStream&, MoleculeParser&);
-
-public:
-    MoleculeParser();
-    MoleculeParser(const MoleculeParser &other);
-    ~MoleculeParser();
-    
-    static const char* typeName();
-    
-protected:
-    MoleculeParser& operator=(const MoleculeParser &other);
-    
-    bool operator==(const MoleculeParser &other) const;
-    bool operator!=(const MoleculeParser &other) const;
-};
 
 /** This class represents an Amber-format restart/coordinate file (ascii),
     currently supporting these files from Amber7 to Amber16.
@@ -104,6 +69,11 @@ friend QDataStream& ::operator>>(QDataStream&, AmberRst&);
 
 public:
     AmberRst();
+    AmberRst(const QString &filename,
+             const PropertyMap &map = PropertyMap());
+    AmberRst(const SireSystem::System &system,
+             const PropertyMap &map = PropertyMap());
+    
     AmberRst(const AmberRst &other);
     
     ~AmberRst();
@@ -116,8 +86,37 @@ public:
     static const char* typeName();
     
     const char* what() const;
-    
+
     QString toString() const;
+
+    static AmberRst parse(const QString &filename);
+
+    QString title() const;
+
+    QVector<SireMaths::Vector> coordinates() const;
+    QVector<SireMaths::Vector> velocities() const;
+
+    SireMaths::Vector boxDimensions() const;
+    SireMaths::Vector boxAngles() const;
+
+protected:
+    void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
+
+private:
+    /** The title of the file */
+    QString ttle;
+    
+    /** The coordinate data */
+    QVector<SireMaths::Vector> coords;
+    
+    /** The velocity data in amber units */
+    QVector<SireMaths::Vector> vels;
+    
+    /** The box dimensions */
+    SireMaths::Vector box_dims;
+    
+    /** The box angles */
+    SireMaths::Vector box_angs;
 };
 
 /** This class represents an Amber-format parameter file, currently
@@ -144,9 +143,12 @@ public:
                      STRING = 3 };
 
     AmberParm();
-    AmberParm(const QString &filename);
+
+    AmberParm(const QString &filename,
+              const PropertyMap &map = PropertyMap());
+
     AmberParm(const SireSystem::System &system,
-               const SireBase::PropertyMap &map = SireBase::PropertyMap());
+              const SireBase::PropertyMap &map = SireBase::PropertyMap());
     
     AmberParm(const AmberParm &other);
     
@@ -163,11 +165,10 @@ public:
     
     QString toString() const;
     
-    static AmberParm read(const QString &filename);
-    static AmberParm write(const SireSystem::System &system,
-                            const SireBase::PropertyMap &map = SireBase::PropertyMap());
+    bool isLead() const;
     
-    SireSystem::System toSystem() const;
+    static AmberParm parse(const QString &filename,
+                           const PropertyMap &map = PropertyMap());
 
     SireMol::Molecule getMolecule(int i) const;
     
@@ -209,6 +210,9 @@ public:
     
     void assertSane() const;
 
+protected:
+    SireSystem::System startSystem(map) const;
+
 private:
     void rebuildAfterReload();
 
@@ -218,9 +222,6 @@ private:
 
     /** Function to process all flags */
     void processAllFlags();
-
-    /** All of the lines contained in the parm file */
-    QStringList lnes;
     
     /** A map showing the line number of all flags. This holds
         the start index and number of lines for each flag */
@@ -239,70 +240,27 @@ private:
     QList<qint64> pointers;
 };
 
-/** This class is used to read and write AMBER molecule files.
-    The class will aim to support the range of file formats
-    used by Amber. This class is based on the original Amber
-    class written by Julien Michel
-    
-    @author Christopher Woods
-*/
-class SIREIO_EXPORT Amber2 : public SireBase::ConcreteProperty<Amber2,MoleculeParser>
+#ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+/** The AmberParm parser is a lead parser - it is capable alone
+    of creating the System */
+inline bool AmberParm::isLead() const
 {
+    return true;
+}
 
-friend QDataStream& ::operator<<(QDataStream&, const SireIO::Amber2&);
-friend QDataStream& ::operator>>(QDataStream&, SireIO::Amber2&);
-  
-public:
-    Amber2();
-    Amber2(const Amber2 &other);
-    ~Amber2();
-  
-    Amber2& operator=(const Amber2 &other);
-    
-    bool operator==(const Amber2 &other) const;
-    bool operator!=(const Amber2 &other) const;
-  
-    static const char* typeName();
-  
-    const char* what() const;
-    
-    QString toString() const;
-    
-    void set14Factors(double coul_14, double lj_14);
-    
-    double coulomb14Factor() const;
-    double lj14Factor() const;
-  
-    SireSystem::System readRstParm(const QString &rstfile,
-                                   const QString &prmfile,
-                                   const SireMol::CuttingFunction &cutting_function
-                                            = SireMol::ResidueCutting(),
-                                   const SireBase::PropertyMap &map
-                                            = SireBase::PropertyMap()) const;
-  
-    SireSystem::System readRstParm(const QString &rstfile,
-                                   const QString &prmfile,
-                                   const SireBase::PropertyMap &map,
-                                   const SireMol::CuttingFunction &cutting_function
-                                           = SireMol::ResidueCutting()) const;
+inline QStringList AmberParm::lines() const
+{
+    return MoleculeParser::lines();
+}
 
-    void writeRstParm(const SireSystem::System &system,
-                      const QString &rstfile, const QString &prmfile,
-                      const SireBase::PropertyMap &map = SireBase::PropertyMap()) const;
-
-private:
-    double coul_14scl;
-    double lj_14scl;
-};
+#endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }
 
-Q_DECLARE_METATYPE( SireIO::Amber2 )
 Q_DECLARE_METATYPE( SireIO::AmberParm )
 Q_DECLARE_METATYPE( SireIO::AmberRst )
 
-SIRE_EXPOSE_CLASS( SireIO::MoleculeParser )
-SIRE_EXPOSE_CLASS( SireIO::Amber2 )
 SIRE_EXPOSE_CLASS( SireIO::AmberParm )
 SIRE_EXPOSE_CLASS( SireIO::AmberRst )
 
