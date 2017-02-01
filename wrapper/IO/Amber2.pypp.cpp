@@ -13,13 +13,23 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireMol/molecule.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
 #include "SireSystem/system.h"
 
 #include "amber2.h"
 
+#include <QElapsedTimer>
+
 #include <QFile>
 
 #include <QHash>
+
+#include <QRegularExpression>
 
 #include <QTextStream>
 
@@ -29,12 +39,12 @@ SireIO::Amber2 __copy__(const SireIO::Amber2 &other){ return SireIO::Amber2(othe
 
 #include "Qt/qdatastream.hpp"
 
-const char* pvt_get_name(const SireIO::Amber2&){ return "SireIO::Amber2";}
+#include "Helpers/str.hpp"
 
 void register_Amber2_class(){
 
     { //::SireIO::Amber2
-        typedef bp::class_< SireIO::Amber2 > Amber2_exposer_t;
+        typedef bp::class_< SireIO::Amber2, bp::bases< SireIO::MoleculeParser, SireBase::Property > > Amber2_exposer_t;
         Amber2_exposer_t Amber2_exposer = Amber2_exposer_t( "Amber2", "This class is used to read and write AMBER molecule files.\nThe class will aim to support the range of file formats\nused by Amber. This class is based on the original Amber\nclass written by Julien Michel\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope Amber2_scope( Amber2_exposer );
         Amber2_exposer.def( bp::init< SireIO::Amber2 const & >(( bp::arg("other") ), "Copy constructor") );
@@ -75,26 +85,26 @@ void register_Amber2_class(){
         
         }
         Amber2_exposer.def( bp::self == bp::self );
-        { //::SireIO::Amber2::readRst7Parm7
+        { //::SireIO::Amber2::readRstParm
         
-            typedef ::SireSystem::System ( ::SireIO::Amber2::*readRst7Parm7_function_type)( ::QString const &,::QString const &,::SireMol::CuttingFunction const &,::SireBase::PropertyMap const & ) const;
-            readRst7Parm7_function_type readRst7Parm7_function_value( &::SireIO::Amber2::readRst7Parm7 );
+            typedef ::SireSystem::System ( ::SireIO::Amber2::*readRstParm_function_type)( ::QString const &,::QString const &,::SireMol::CuttingFunction const &,::SireBase::PropertyMap const & ) const;
+            readRstParm_function_type readRstParm_function_value( &::SireIO::Amber2::readRstParm );
             
             Amber2_exposer.def( 
-                "readRst7Parm7"
-                , readRst7Parm7_function_value
+                "readRstParm"
+                , readRstParm_function_value
                 , ( bp::arg("rstfile"), bp::arg("prmfile"), bp::arg("cutting_function")=SireMol::ResidueCutting(), bp::arg("map")=SireBase::PropertyMap() )
                 , "Read in the molecules from the passed Amber 7 format restart and\ntopologyparameter files, using the passed CuttingFunction to break\nmolecules into parts, and the passed PropertyMap to assign data to\nmolecular properties. The molecules and associated data are retruned\nin the passed SireSystem::System.\n" );
         
         }
-        { //::SireIO::Amber2::readRst7Parm7
+        { //::SireIO::Amber2::readRstParm
         
-            typedef ::SireSystem::System ( ::SireIO::Amber2::*readRst7Parm7_function_type)( ::QString const &,::QString const &,::SireBase::PropertyMap const &,::SireMol::CuttingFunction const & ) const;
-            readRst7Parm7_function_type readRst7Parm7_function_value( &::SireIO::Amber2::readRst7Parm7 );
+            typedef ::SireSystem::System ( ::SireIO::Amber2::*readRstParm_function_type)( ::QString const &,::QString const &,::SireBase::PropertyMap const &,::SireMol::CuttingFunction const & ) const;
+            readRstParm_function_type readRstParm_function_value( &::SireIO::Amber2::readRstParm );
             
             Amber2_exposer.def( 
-                "readRst7Parm7"
-                , readRst7Parm7_function_value
+                "readRstParm"
+                , readRstParm_function_value
                 , ( bp::arg("rstfile"), bp::arg("prmfile"), bp::arg("map"), bp::arg("cutting_function")=SireMol::ResidueCutting() )
                 , "Read in the molecules from the passed Amber 7 format restart and\ntopologyparameter files, using the passed CuttingFunction to break\nmolecules into parts, and the passed PropertyMap to assign data to\nmolecular properties. The molecules and associated data are retruned\nin the passed SireSystem::System.\n" );
         
@@ -109,6 +119,17 @@ void register_Amber2_class(){
                 , set14Factors_function_value
                 , ( bp::arg("coul_14"), bp::arg("lj_14") )
                 , "" );
+        
+        }
+        { //::SireIO::Amber2::toString
+        
+            typedef ::QString ( ::SireIO::Amber2::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireIO::Amber2::toString );
+            
+            Amber2_exposer.def( 
+                "toString"
+                , toString_function_value
+                , "Return a string representation of this object" );
         
         }
         { //::SireIO::Amber2::typeName
@@ -133,14 +154,14 @@ void register_Amber2_class(){
                 , "" );
         
         }
-        { //::SireIO::Amber2::writeRst7Parm7
+        { //::SireIO::Amber2::writeRstParm
         
-            typedef void ( ::SireIO::Amber2::*writeRst7Parm7_function_type)( ::SireSystem::System const &,::QString const &,::QString const &,::SireBase::PropertyMap const & ) const;
-            writeRst7Parm7_function_type writeRst7Parm7_function_value( &::SireIO::Amber2::writeRst7Parm7 );
+            typedef void ( ::SireIO::Amber2::*writeRstParm_function_type)( ::SireSystem::System const &,::QString const &,::QString const &,::SireBase::PropertyMap const & ) const;
+            writeRstParm_function_type writeRstParm_function_value( &::SireIO::Amber2::writeRstParm );
             
             Amber2_exposer.def( 
-                "writeRst7Parm7"
-                , writeRst7Parm7_function_value
+                "writeRstParm"
+                , writeRstParm_function_value
                 , ( bp::arg("system"), bp::arg("rstfile"), bp::arg("prmfile"), bp::arg("map")=SireBase::PropertyMap() )
                 , "Write the molecules in the passed system to the Amber 7 format\nrestart and topologyparameter files called rstfile and prmfile,\nusing the passed PropertyMap to specify which molecular properties\nshould be used" );
         
@@ -153,8 +174,8 @@ void register_Amber2_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Amber2_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireIO::Amber2 >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        Amber2_exposer.def( "__str__", &pvt_get_name);
-        Amber2_exposer.def( "__repr__", &pvt_get_name);
+        Amber2_exposer.def( "__str__", &__str__< ::SireIO::Amber2 > );
+        Amber2_exposer.def( "__repr__", &__str__< ::SireIO::Amber2 > );
     }
 
 }

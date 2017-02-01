@@ -2,12 +2,14 @@
 set ( PYPP_SOURCES
        Amber.pypp.cpp
        Amber2.pypp.cpp
-       AmberParm7.pypp.cpp
+       AmberParm.pypp.cpp
+       AmberRst.pypp.cpp
        Cube.pypp.cpp
        FlexibilityLibrary.pypp.cpp
        FlexibilityTemplate.pypp.cpp
        IOBase.pypp.cpp
        IOParametersBase.pypp.cpp
+       MoleculeParser.pypp.cpp
        NullIO.pypp.cpp
        PDB.pypp.cpp
        PDBParameters.pypp.cpp
