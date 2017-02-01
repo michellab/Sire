@@ -1,10 +1,11 @@
-#Script to calculate the Standard state correction
-#It works also for different values of Req and D
-
+#Script to calculate the free energy change
+# upon removing a set of host-guest distance
+# restraints and applying standard state conditions
+# @authors: Stefano Bosisio and Julien Michel
 
 import os,sys, random
 import math
-import numpy
+from math import pi, cos, sin
 from Sire.Tools.OpenMMMD import *
 from Sire.Tools import Parameter, resolveParameters
 # Python dependencies
@@ -26,6 +27,15 @@ try:
 except ImportError:
     print ("StandarState.py depends on a working install of the python module shutil. Please install shutil in your sire python.")
     sys.exit(-1)
+
+try:
+    import numpy
+except ImportError:
+    print ("StandarState.py depends on a working install of the numpy module. Please install mdtraj in your sire python.")
+    sys.exit(-1)
+
+# Constant for conversion
+NM_TO_ANG = 10.0
 
 
 trajfile = Parameter("trajfile", "traj000000001.dcd",
@@ -56,31 +66,30 @@ def averageCoordinates(restr_dict):
     """
     #restr_dict[idx]=([req,K,D],[coords])
     #Calculation of the mean coordinate for every atoms
-    counter = 0
-    x_avg = 0.0
-    y_avg = 0.0
-    z_avg = 0.0
     for pairs in restr_dict:
-        coords = restr_dict[pairs][1:] #here the list of all the coords
-        for val in coords:
-            if counter == 0 :
-                x_avg = val[0]
-                y_avg = val[1]
-                z_avg = val[2]
-                counter+=1
-
-            else:
-                x_avg = x_avg + (val[0] - x_avg)/counter
-                y_avg = y_avg + (val[1] - y_avg)/counter
-                z_avg = z_avg + (val[2] - z_avg)/counter
-                counter+=1
+        coords1 = restr_dict[pairs][1] #here the list of all the coords
+        coords2 = restr_dict[pairs][2]
+        coord1_avg = [ 0.0, 0.0, 0.0 ]
+        coord2_avg = [ 0.0, 0.0, 0.0 ]
+        for x in range(0,len(coords1)):
+            val1 = coords1[x]
+            val2 = coords2[x]
+            coord1_avg[0] += (val1[0] - coord1_avg[0])/(x+1)
+            coord1_avg[1] += (val1[1] - coord1_avg[1])/(x+1)
+            coord1_avg[2] += (val1[2] - coord1_avg[2])/(x+1)
+            coord2_avg[0] += (val2[0] - coord2_avg[0])/(x+1)
+            coord2_avg[1] += (val2[1] - coord2_avg[1])/(x+1)
+            coord2_avg[2] += (val2[2] - coord2_avg[2])/(x+1)
 
         #Substitution of values and reset each avg coords
-        restr_dict[pairs][1:]=[[x_avg*10,y_avg*10,z_avg*10]]
-        counter=0
-        x_avg = 0.0
-        y_avg = 0.0
-        z_avg = 0.0
+        # Note that mdtraj coordinates are in nm, but potential parameters
+        # in angstrom
+        restr_dict[pairs][1] = [ coord1_avg[0] * NM_TO_ANG,
+                                 coord1_avg[1] * NM_TO_ANG,
+                                 coord1_avg[2] * NM_TO_ANG ]
+        restr_dict[pairs][2] = [ coord2_avg[0] * NM_TO_ANG,
+                                 coord2_avg[1] * NM_TO_ANG,
+                                 coord2_avg[2] * NM_TO_ANG ]
 
     return restr_dict
 
@@ -89,51 +98,100 @@ def defineIntegrationDomain(restr_dict):
     Parameters
     ----------
     restr_dict : dictionary
-                 restr_dict[lig_idx,host_idx] = ([req,D,K],[avgx,avgy,avgz])
-                 where avgx,avgy and avgz are the average coordinates
+                 restr_dict[lig_idx,host_idx] = ([req,D,K],[avg_lig_x, avg_lig_y, avg_lig_z], [avg_hostx,avg_hosty,avg_hostz])
+                 where avgx,avgy and avgz are the average coordinates of the ligand and host atoms defined by lig_idx and host_idx
     Returns
     ----------
     space : 3D array
             space = [(-x,-y,-z)(x,y,z)]
-            where -x,-y and -z are the min values of the space and x,y and z the
-            max values of the space
-    """
-    counter = 0
-    for pairs in restr_dict:
-        coords = restr_dict[pairs][1:]
-        for val in coords:
-            if counter==0:
-                max_x = val[0]
-                min_x = val[0]
-                max_y = val[1]
-                min_y = val[1]
-                max_z = val[2]
-                min_z = val[2]
-                counter+=1
-            else:
-                if val[0]> max_x:
-                    max_x = val[0]
-                if val[0]<min_x:
-                    min_x = val[0]
-                if val[1]> max_y:
-                    max_y = val[1]
-                if val[1]< min_y :
-                    min_y = val[1]
-                if val[2]>max_z:
-                    max_z = val[2]
-                if val[2]<min_z :
-                    min_z = val[2]
+            where the coordinates define the minimum and maximum coordinates
+            of the integration domain
 
+    """
+    max_x = -999999
+    max_y = -999999
+    max_z = -999999
+    min_x = +999999
+    min_y = +999999
+    min_z = +999999
+
+    for pairs in restr_dict:
+        coord = restr_dict[pairs][2]
+        for val in coords:
+            if val[0] > max_x:
+                max_x = val[0]
+            if val[0] < min_x:
+                min_x = val[0]
+            if val[1] > max_y:
+                max_y = val[1]
+            if val[1] < min_y :
+                min_y = val[1]
+            if val[2] > max_z:
+                max_z = val[2]
+            if val[2] < min_z :
+                min_z = val[2]
     #print(max_x,max_y,max_z,min_x,min_y,min_z)
+    # Adding a buffer region
     max_x += buff.val
     max_y += buff.val
     max_z += buff.val
     min_x -= buff.val
     min_y -= buff.val
     min_z -= buff.val
-    #Adding a buffer region
     space = [(min_x,min_y, min_z), (max_x,max_y,max_z)]
     return space
+
+def genOrientations(restr_dict, norientations=5):
+    r"""Generates a set of orientations for guest atoms
+    The coordinates are in a frame of reference centered on the COG
+    of the guest atoms.
+    Norient orientations are generated by multiplying the input coordinates
+    by a series of rotation matrices, each corresponding to a rotation along
+    Euler angles theta, phi and psi.
+
+    Parameters
+    ----------
+    restr_dict : dictionary
+                 restr_dict[lig_idx,host_idx] = ([req,D,K],[avg_lig_x, avg_lig_y, avg_lig_z], [avg_hostx,avg_hosty,avg_hostz])
+                 where avgx,avgy and avgz are the average coordinates of the ligand and host atoms defined by lig_idx and host_idx
+    Returns
+    ----------
+    orientations : array of norient**3 * n_guest atom 3D coordinates
+    """
+    # if only one guest atom then return [ [0.0, 0.0, 0.0] ]
+
+    # First pass: work out COG of guest atoms
+    guest_cog = [0.0, 0.0, 0.0]
+    for pairs in restr_dict:
+        guest_cog[0] += restr_dict[pairs][1][0]*(1/len(restr_dict))
+        guest_cog[1] += restr_dict[pairs][1][1]*(1/len(restr_dict))
+        guest_cog[2] += restr_dict[pairs][1][2]*(1/len(restr_dict))
+    # Second pass: Subtract COG to get COG centered coordinates
+    body = []
+    for pairs in restr_dict:
+        new_x = restr_dict[pairs][1][0] - guest_cog[0]
+        new_y = restr_dict[pairs][1][1] - guest_cog[1]
+        new_z = restr_dict[pairs][1][2] - guest_cog[2]
+        body.append( [new_x, new_y, new_z] )
+
+    import pdb; pdb.set_trace()
+    # Now work out set of rotations along Euler Angles
+    TWOPI = 2*math.pi
+    for x in range(0,norientations):
+        theta = (x*TWOPI)/norientations
+        for y in range(0,norientations):
+            phi = (y*TWOPI)/norientations
+            for z in range(0,norientations):
+                psi = (z*TWOPI)/norientations
+                rot00 = cos(phi)*cos(psi)-cos(theta)*sin(phi)*sin(psi)
+                rot10 = sin(phi)*cos(psi)+cos(theta)*cos(phi)*sin(psi)
+                rot20 = sin(theta)*sin(psi)
+                rot10 = -cos(phi)*sin(psi)-cos(theta)*sin(phi)*cos(psi)
+                rot11 = -sin(phi)*sin(psi)+cos(theta)*cos(phi)*cos(psi)
+                rot12 = sin(theta)*cos(phi)
+                rot20 = sin(theta)*sin(phi)
+                rot21 = -sin(theta)*cos(phi)
+                rot22 = cos(theta)
 
 
 @resolveParameters
@@ -153,30 +211,16 @@ def run():
     delta = 0.10
     delta_over_two = delta/2.0
     deltavol = delta*delta*delta
-    kb = 0.001987
-    T = 298
-    kbT = kb*T
-    beta = 1/kbT
     ROT = 8 * pi**2
+    NORIENT = 5
+    deltarot = ROT/NORIENT
+    kb = 0.001987# GET FROM SIRE
+    T = 298 # SHOULD READ THIS FROM CFG FILE
+    kbT = kb*T # GET FROM SIRE
+    beta = 1/kbT # GET FROM SIRE
+
     Ztrans = 0.0
     Uavg = 0
-    #import pdb; pdb.set_trace()
-    #open the simfile and extract the reestraint dictionary
-    #sim = open(simfile.val,"r")
-    #for line in sim.readlines():
-    #    if "dictionary" in line:
-    #        sim_dictionary = line
-    #        print("Found restraint dictionary: %s" % sim_dictionary)
-    #    else:
-    #        continue
-    #
-    #Sanity Check
-    #if the dictionary was not found in the simfile exit from the script
-    #if line==None:
-    #    print("Error! Impossible to find dictionary restraint in sim.cfg")
-    #    sys.exit(-1)
-    #ast automatically transform a string into a dictionary
-    #sim_dictionary=ast.literal_eval(sim_dictionary.strip("distance restraint dictionary="))
 
     sim_dictionary = distance_restraints_dict.val
     if sim_dictionary == {}:
@@ -191,9 +235,13 @@ def run():
         req = sim_dictionary[pairs][0]
         K   = sim_dictionary[pairs][1]
         D   = sim_dictionary[pairs][2]
-        restr_dict[pairs]=[[req,K,D]]
-        idx = max(pairs)
-        hosts.append(idx)
+        # First entry are parameters, second and third entries for coordinates of first and second atom
+        restr_dict[pairs]=[[req,K,D],[],[]]
+        #idx = max(pairs)
+        #hosts.append(idx)
+    #FIXME: code assumes guest atoms have lower indices than host atoms
+    # a more reliable algorithm could work out whether the atoms belong
+    # to a guest residue?
 
     #load the trajectory
     start_frame = 1
@@ -216,24 +264,46 @@ def run():
     current_frame = start_frame
 
     #Aligning everything along the first frame
+    # FIXME: Code fails if too few host restrained atoms.
+    # Use all heavy atoms for alignment?
+    selection = "not water and not resname 'Na+' and not resname 'Cl-' and mass > 1"
+    align_indices = mdtraj_trajfile.topology.select(selection)
+
+
     print("Aligning frames along first frame of trajectory")
-    aligned_traj = mdtraj_trajfile.superpose(mdtraj_trajfile,0, atom_indices=hosts)
+    #aligned_traj = mdtraj_trajfile.superpose(mdtraj_trajfile,0, atom_indices=hosts)
+    aligned_traj = mdtraj_trajfile.superpose(mdtraj_trajfile,0, atom_indices=align_indices)
 
     print("Processing frames")
     while (current_frame <= end_frame):
+        # FIXME: Save restrained guest atoms as well
         #now for each lig:host pairs append the host coordinates
         for pairs in restr_dict:
-            host_idx = max(pairs)
-            restr_dict[pairs].append(aligned_traj.xyz[current_frame,host_idx,:].tolist())
+            #host_idx = max(pairs)
+            idx1 = pairs[0]
+            idx2 = pairs[1]
+            coord1 = aligned_traj.xyz[current_frame,idx1,:].tolist()
+            coord2 = aligned_traj.xyz[current_frame,idx2,:].tolist()
+            restr_dict[pairs][1].append(coord1)
+            restr_dict[pairs][2].append(coord2)
 
         current_frame += step_frame
 
     #now restr_dict has:
-    #restr_dict[lig,host]=[ [req,K,D], [coords],[coords],...]
+    #restr_dict[lig,host]=[ [req,K,D], [ [coords]...] ,[ [coords],...] ]
     print("Calculating average coordinates for restrained atoms")
     restr_dict = averageCoordinates(restr_dict)
     #now the restr_dict is:
     #restr_dict[pairs]=[[req,K,D],[avgx,avgy,avgz]]
+
+    guest_orientations = genOrientations(restr_dict, norientations=NORIENT)
+    import pdb;pdb.set_trace()
+    # FIXME: Create N orientations of restrained guest atoms by
+    # rigib body rotations around COM
+    # See Sire::Maths::rotate, Sire::Maths::matrix
+
+    # FIXME: Only consider coordinates of host atoms to define the
+    # integration domain
     space = defineIntegrationDomain(restr_dict)
     if verbose.val:
         print("Integration space")
@@ -252,8 +322,9 @@ def run():
                 x = space[0][0] + delta*i + delta_over_two
                 y = space[0][1] + delta*j + delta_over_two
                 z = space[0][2] + delta*k + delta_over_two
-
+                # FIXME: Update all orientations centering COM on grid point
                 counter= 0
+                # FIXME: Compute restraint energy
                 for pairs in restr_dict:
                     #restr_dict[pairs]=[[req,K,D],[coords]]
                     x_dict = float(restr_dict[pairs][1][0])
@@ -285,10 +356,12 @@ def run():
                         U =(K*(dist-D)**2)
                         break
 
+                #FIXME: Add rotational volume element
                 Boltz = math.exp(-beta*U)*deltavol
                 Ztrans += (Boltz)
                 Uavg += U*Boltz*ROT
     #Calculation of Ztot, Uavg, S, Frestraint:
+    #FIXME: Remove ROT
     Ztot = Ztrans*ROT
     Uavg /= (Ztot)
 
