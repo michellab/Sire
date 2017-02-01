@@ -8,6 +8,7 @@ import math
 from math import pi, cos, sin
 from Sire.Tools.OpenMMMD import *
 from Sire.Tools import Parameter, resolveParameters
+from Sire.Maths import *
 # Python dependencies
 
 try:
@@ -116,20 +117,19 @@ def defineIntegrationDomain(restr_dict):
     min_z = +999999
 
     for pairs in restr_dict:
-        coord = restr_dict[pairs][2]
-        for val in coords:
-            if val[0] > max_x:
-                max_x = val[0]
-            if val[0] < min_x:
-                min_x = val[0]
-            if val[1] > max_y:
-                max_y = val[1]
-            if val[1] < min_y :
-                min_y = val[1]
-            if val[2] > max_z:
-                max_z = val[2]
-            if val[2] < min_z :
-                min_z = val[2]
+        val = restr_dict[pairs][2]
+        if val[0] > max_x:
+            max_x = val[0]
+        if val[0] < min_x:
+            min_x = val[0]
+        if val[1] > max_y:
+            max_y = val[1]
+        if val[1] < min_y :
+            min_y = val[1]
+        if val[2] > max_z:
+            max_z = val[2]
+        if val[2] < min_z :
+            min_z = val[2]
     #print(max_x,max_y,max_z,min_x,min_y,min_z)
     # Adding a buffer region
     max_x += buff.val
@@ -172,27 +172,37 @@ def genOrientations(restr_dict, norientations=5):
         new_x = restr_dict[pairs][1][0] - guest_cog[0]
         new_y = restr_dict[pairs][1][1] - guest_cog[1]
         new_z = restr_dict[pairs][1][2] - guest_cog[2]
-        body.append( [new_x, new_y, new_z] )
+        body.append( Vector(new_x, new_y, new_z) )
 
-    import pdb; pdb.set_trace()
     # Now work out set of rotations along Euler Angles
-    TWOPI = 2*math.pi
+    PI = math.pi
+    TWOPI = 2*PI
+    orientations = []
     for x in range(0,norientations):
-        theta = (x*TWOPI)/norientations
-        for y in range(0,norientations):
-            phi = (y*TWOPI)/norientations
+        phi = (x*TWOPI)/norientations
+        for y in range(0,int(norientations/2)):
+            theta = (y*PI)/(norientations/2)
             for z in range(0,norientations):
                 psi = (z*TWOPI)/norientations
                 rot00 = cos(phi)*cos(psi)-cos(theta)*sin(phi)*sin(psi)
                 rot10 = sin(phi)*cos(psi)+cos(theta)*cos(phi)*sin(psi)
                 rot20 = sin(theta)*sin(psi)
-                rot10 = -cos(phi)*sin(psi)-cos(theta)*sin(phi)*cos(psi)
+                rot01 = -cos(phi)*sin(psi)-cos(theta)*sin(phi)*cos(psi)
                 rot11 = -sin(phi)*sin(psi)+cos(theta)*cos(phi)*cos(psi)
-                rot12 = sin(theta)*cos(phi)
-                rot20 = sin(theta)*sin(phi)
-                rot21 = -sin(theta)*cos(phi)
+                rot21 = sin(theta)*cos(phi)
+                rot02 = sin(theta)*sin(phi)
+                rot12 = -sin(theta)*cos(phi)
                 rot22 = cos(theta)
-
+                rotmat = Matrix(rot00,rot01,rot02,\
+                                rot10,rot11,rot12,\
+                                rot20,rot21,rot22)
+                rotvecs = []
+                #import pdb; pdb.set_trace()
+                for vec in body:
+                    rotvec = rotmat*vec
+                    rotvecs.append(rotvec)
+                orientations.append(rotvecs)
+    return orientations
 
 @resolveParameters
 def run():
@@ -208,18 +218,18 @@ def run():
         print ("###===========================================================###\n")
 
     #Constants
-    delta = 0.10
+    delta = 0.25
     delta_over_two = delta/2.0
     deltavol = delta*delta*delta
     ROT = 8 * pi**2
-    NORIENT = 5
-    deltarot = ROT/NORIENT
+    NORIENT = 6 # Will get 6 * 3 * 6 = 108 orientations
+    deltarot = ROT/(NORIENT*(NORIENT/2)*NORIENT)
     kb = 0.001987# GET FROM SIRE
     T = 298 # SHOULD READ THIS FROM CFG FILE
     kbT = kb*T # GET FROM SIRE
     beta = 1/kbT # GET FROM SIRE
 
-    Ztrans = 0.0
+    Ztot = 0.0
     Uavg = 0
 
     sim_dictionary = distance_restraints_dict.val
@@ -296,11 +306,10 @@ def run():
     #now the restr_dict is:
     #restr_dict[pairs]=[[req,K,D],[avgx,avgy,avgz]]
 
-    guest_orientations = genOrientations(restr_dict, norientations=NORIENT)
-    import pdb;pdb.set_trace()
     # FIXME: Create N orientations of restrained guest atoms by
     # rigib body rotations around COM
     # See Sire::Maths::rotate, Sire::Maths::matrix
+    guest_orientations = genOrientations(restr_dict, norientations=NORIENT)
 
     # FIXME: Only consider coordinates of host atoms to define the
     # integration domain
@@ -313,64 +322,52 @@ def run():
     Nx = int ( round ( ( space[1][0] - space[0][0] ) / delta ) )
     Ny = int ( round ( ( space[1][0] - space[0][0] ) / delta ) )
     Nz = int ( round ( ( space[1][0] - space[0][0] ) / delta ) )
-    #Constants
     print("Number of elements to be evaluated %d" %(Nx*Ny*Nz))
     print("Evaluation...")
+    count = 0
     for i in range(0,Nx):
         for j in range(0,Ny):
             for k in range(0,Nz):
-                x = space[0][0] + delta*i + delta_over_two
-                y = space[0][1] + delta*j + delta_over_two
-                z = space[0][2] + delta*k + delta_over_two
+                count += 1
+                if ( (count % 10000) == 0):
+                    print ("Done %s grid points..." % (count))
+                xgrid = space[0][0] + delta*i + delta_over_two
+                ygrid = space[0][1] + delta*j + delta_over_two
+                zgrid = space[0][2] + delta*k + delta_over_two
                 # FIXME: Update all orientations centering COM on grid point
-                counter= 0
                 # FIXME: Compute restraint energy
-                for pairs in restr_dict:
-                    #restr_dict[pairs]=[[req,K,D],[coords]]
-                    x_dict = float(restr_dict[pairs][1][0])
-                    y_dict = float(restr_dict[pairs][1][1])
-                    z_dict = float(restr_dict[pairs][1][2])
-
-                    distance = ((x-x_dict)**2 + (y-y_dict)**2 + (z-z_dict)**2)
-
-                    upper_bound = (restr_dict[pairs][0][0]+ restr_dict[pairs][0][2])**2
-                    intmd_bound = (restr_dict[pairs][0][0])**2
-                    lower_bound = max(0,(restr_dict[pairs][0][0]- restr_dict[pairs][0][2])**2 )
-
-                    if distance <= upper_bound and distance >= intmd_bound:
-                        if counter == len(restr_dict)-1:
-                            U = 0.0
+                for orientation in guest_orientations:
+                    pos = 0
+                    U = 0.0
+                    for pairs in restr_dict:
+                        req = restr_dict[pairs][0][0]
+                        k = restr_dict[pairs][0][1]
+                        dtol = restr_dict[pairs][0][2]
+                        host_coord = restr_dict[pairs][2]
+                        guest_coord = orientation[pos]
+                        # Accumulate energy
+                        d2 = ((guest_coord[0]+xgrid) - host_coord[0])**2+\
+                             ((guest_coord[1]+ygrid) - host_coord[1])**2+\
+                             ((guest_coord[2]+zgrid) - host_coord[2])**2
+                        d = math.sqrt(d2)
+                        if ( (d > (req+dtol)) or (d < (req-dtol)) ):
+                            U += (k*(d-req-dtol)**2)
                         else:
-                            counter+=1
-
-                    elif distance <= intmd_bound and distance >= lower_bound:
-                        if counter== len(restr_dict)-1:
-                            U = 0.0
-                        else:
-                            counter+=1
-                    else:
-
-                        dist = (math.sqrt(x**2 + y**2 + z**2))
-                        K = (restr_dict[pairs][0][1])
-                        D = (restr_dict[pairs][0][2])
-                        U =(K*(dist-D)**2)
-                        break
-
-                #FIXME: Add rotational volume element
-                Boltz = math.exp(-beta*U)*deltavol
-                Ztrans += (Boltz)
-                Uavg += U*Boltz*ROT
+                            U += 0.0
+                        pos += 1
+                    Boltz = math.exp(-beta*U)*deltavol*deltarot
+                    Uavg += U*Boltz
+                    Ztot += Boltz
+                    #import pdb;pdb.set_trace()
     #Calculation of Ztot, Uavg, S, Frestraint:
     #FIXME: Remove ROT
-    Ztot = Ztrans*ROT
     Uavg /= (Ztot)
 
     Zideal = 1661.*ROT
     Delta_F = -kbT*math.log(Ztot/Zideal)
     minTDelta_S = -T*(kb*math.log(Ztot/Zideal)+Uavg/T)
 
-
-    print ("Ztrans  = %8.5f Angstrom^3" % Ztrans)
+    print ("Ztot  = %8.5f Angstrom^3" % Ztot)
     print ("Free energy Cost of removing the restraint = %8.5f kcal/mol" % -Delta_F)
 
     #tidy up the folder by removing prmtop
