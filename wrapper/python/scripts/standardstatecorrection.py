@@ -41,17 +41,26 @@ parser.add_argument('-r', '--traj_file', nargs="?",
 parser.add_argument('-s', '--step', nargs="?",
                     help="The number of frames to skip between two snapshot evaluations.")
 
+parser.add_argument('-b','--buffer',nargs="?",
+                    help="The amount by which the bounding rectangle of the restrained host atoms coordinates is extended in each dimension. Default is 5.0 Angstrom")
+
+parser.add_argument('-d','--dtrans', nargs="?",
+                    help="The edge length of a translational volume element in Angstrom")
+
+parser.add_argument('-o','--norient', nargs="?",
+                   help="The number of orientations per [0,2pi] Euler Angles interval.")
+
 sys.stdout.write("\n")
 args = parser.parse_args()
 
 must_exit = False
 
 if args.author:
-    print("\nsomd-standardstatecorrection was written by Julien Michel (C) 2015")
+    print("\nstandardstatecorrection was written by Julien Michel and Stefano Bosisio (C) 2017")
     must_exit = True
 
 if args.version:
-    print("somd-standardstatecorrection -- from Sire release version <%s>" %Sire.__version__)
+    print("standardstatecorrection -- from Sire release version <%s>" %Sire.__version__)
     print("This particular release can be downloaded here: "
           "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
     must_exit = True
@@ -92,6 +101,18 @@ if args.step:
     step_frame = int(args.step)
     params["step_frame"] = step_frame
 
+if args.buffer:
+    buffer = float(args.buffer)
+    params["buffer"] = buffer
+
+if args.dtrans:
+    dtrans = float(args.dtrans)
+    params["dtrans"] = dtrans
+
+if args.norient:
+    norient = int(args.norient)
+    params["norient"] = norient
+
 if not (os.path.exists(top_file) \
         and os.path.exists(traj_file)):
     parser.print_help()
@@ -102,9 +123,8 @@ if not (os.path.exists(top_file) \
         print("(cannot find traj file %s)" % traj_file)
     sys.exit(-1)
 
-print("\nRunning a somd-standardstatcorrection calculation using files %s and %s." % (top_file, traj_file))
+print("\nRunning a standard state correction calculation using files %s and %s." % (top_file, traj_file))
 
 print (args)
 
-# Now lets run the OpenMMMD free energy calculation
 StandardState.run(params)

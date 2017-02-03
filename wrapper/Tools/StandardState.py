@@ -46,8 +46,10 @@ stepframe = Parameter("step_frame",1,"""The number of frames to step to between 
 simfile  = Parameter("simfile", "sim.cfg", """ Configuration file with distance restraints dictionary""")
 topfile = Parameter("topfile", "SYSTEM.top",
                     """File name of the topology file containing the system to be simulated.""")
-
-buff = Parameter("buff", 5.0, """Buffer to be added to coordinates to create domain of integration""")
+buffer = Parameter("buffer", 5.0, """Buffer to be added to coordinates to create domain of integration""")
+delta_trans = Parameter("dtrans", 0.20, """Step size for translational volume elements, in Angstrom""")
+norient = Parameter("norient", 4, """Number of orientations per [0,2pi] Euler Angles interval""")
+temperature = Parameter("temperature",298 * kelvin,"""The temperature of the system""")
 
 verbose = Parameter("verbose", False, """Print debug output""")
 
@@ -132,12 +134,12 @@ def defineIntegrationDomain(restr_dict):
             min_z = val[2]
     #print(max_x,max_y,max_z,min_x,min_y,min_z)
     # Adding a buffer region
-    max_x += buff.val
-    max_y += buff.val
-    max_z += buff.val
-    min_x -= buff.val
-    min_y -= buff.val
-    min_z -= buff.val
+    max_x += buffer.val
+    max_y += buffer.val
+    max_z += buffer.val
+    min_x -= buffer.val
+    min_y -= buffer.val
+    min_z -= buffer.val
     space = [(min_x,min_y, min_z), (max_x,max_y,max_z)]
     return space
 
@@ -158,14 +160,25 @@ def genOrientations(restr_dict, norientations=5):
     ----------
     orientations : array of norient**3 * n_guest atom 3D coordinates
     """
-    # if only one guest atom then return [ [0.0, 0.0, 0.0] ]
 
     # First pass: work out COG of guest atoms
     guest_cog = [0.0, 0.0, 0.0]
+    guest_indices = []
     for pairs in restr_dict:
+        if not (pairs[0] in guest_indices):
+            guest_indices.append(pairs[0])
         guest_cog[0] += restr_dict[pairs][1][0]*(1/len(restr_dict))
         guest_cog[1] += restr_dict[pairs][1][1]*(1/len(restr_dict))
         guest_cog[2] += restr_dict[pairs][1][2]*(1/len(restr_dict))
+    # if only one guest atom then return null coordinates
+    body = []
+    if len(guest_indices) < 2:
+        print ("Restraints apply to a single guest atom, isotropic case, collapsing orientations.")
+        coords = []
+        for pairs in restr_dict:
+            coords.append( [0.0, 0.0, 0.0] )
+        body.append(coords)
+        return body
     # Second pass: Subtract COG to get COG centered coordinates
     body = []
     for pairs in restr_dict:
@@ -218,16 +231,14 @@ def run():
         print ("###===========================================================###\n")
 
     #Constants
-    delta = 0.25
-    delta_over_two = delta/2.0
-    deltavol = delta*delta*delta
+    delta_over_two = delta_trans.val/2.0
+    deltavol = delta_trans.val*delta_trans.val*delta_trans.val
     ROT = 8 * pi**2
-    NORIENT = 6 # Will get 6 * 3 * 6 = 108 orientations
-    deltarot = ROT/(NORIENT*(NORIENT/2)*NORIENT)
-    kb = 0.001987# GET FROM SIRE
-    T = 298 # SHOULD READ THIS FROM CFG FILE
-    kbT = kb*T # GET FROM SIRE
-    beta = 1/kbT # GET FROM SIRE
+    deltarot = ROT# To adjsut after number of orientations has been determined
+    kb = Sire.Units.k_boltz
+    T = temperature.val.value()
+    kbT = kb*T
+    beta = 1/kbT
 
     Ztot = 0.0
     Uavg = 0
@@ -253,8 +264,11 @@ def run():
     # a more reliable algorithm could work out whether the atoms belong
     # to a guest residue?
 
+    # FIXME:
+    # Support loading a crd file only to define restraint parameters
+
     #load the trajectory
-    start_frame = 1
+    start_frame = 0
     end_frame = 1000000000
     step_frame = stepframe.val
     #Check the extension of the topology file
@@ -264,10 +278,18 @@ def run():
         top_file = "SYSTEM.prmtop"
     else:
         top_file = topfile.val
+    #Check the extension of the traj file
+    if ".crd" in trajfile.val:
+        shutil.copy(trajfile.val,"SYSTEM.rst7")
+        #crd doesn't work with mdtraj
+        traj_file = "SYSTEM.rst7"
+    else:
+        traj_file = trajfile.val
+
 
     print("Loading trajectory and topology files")
     #
-    mdtraj_trajfile = mdtraj.load(trajfile.val,top=top_file)
+    mdtraj_trajfile = mdtraj.load(traj_file,top=top_file)
     nframes = len(mdtraj_trajfile)
     if end_frame > (nframes - 1):
         end_frame = nframes - 1
@@ -302,40 +324,40 @@ def run():
     #now restr_dict has:
     #restr_dict[lig,host]=[ [req,K,D], [ [coords]...] ,[ [coords],...] ]
     print("Calculating average coordinates for restrained atoms")
+    #import pdb; pdb.set_trace()
     restr_dict = averageCoordinates(restr_dict)
     #now the restr_dict is:
     #restr_dict[pairs]=[[req,K,D],[avgx,avgy,avgz]]
 
-    # FIXME: Create N orientations of restrained guest atoms by
+    # Create N orientations of restrained guest atoms by
     # rigib body rotations around COM
-    # See Sire::Maths::rotate, Sire::Maths::matrix
-    guest_orientations = genOrientations(restr_dict, norientations=NORIENT)
-
-    # FIXME: Only consider coordinates of host atoms to define the
-    # integration domain
+    guest_orientations = genOrientations(restr_dict, norientations=norient.val)
+    deltarot /= len(guest_orientations)
+    # FIXME: make sure space extends well into regions where restraint energy
+    # is high
     space = defineIntegrationDomain(restr_dict)
     if verbose.val:
         print("Integration space")
         print(space)
 
     #Grid creation
-    Nx = int ( round ( ( space[1][0] - space[0][0] ) / delta ) )
-    Ny = int ( round ( ( space[1][0] - space[0][0] ) / delta ) )
-    Nz = int ( round ( ( space[1][0] - space[0][0] ) / delta ) )
+    Nx = int ( round ( ( space[1][0] - space[0][0] ) / delta_trans.val ) )
+    Ny = int ( round ( ( space[1][0] - space[0][0] ) / delta_trans.val ) )
+    Nz = int ( round ( ( space[1][0] - space[0][0] ) / delta_trans.val ) )
     print("Number of elements to be evaluated %d" %(Nx*Ny*Nz))
     print("Evaluation...")
     count = 0
+    free = 0
+    loweight = 0
     for i in range(0,Nx):
         for j in range(0,Ny):
             for k in range(0,Nz):
                 count += 1
-                if ( (count % 10000) == 0):
+                if ( (count % 100000) == 0):
                     print ("Done %s grid points..." % (count))
-                xgrid = space[0][0] + delta*i + delta_over_two
-                ygrid = space[0][1] + delta*j + delta_over_two
-                zgrid = space[0][2] + delta*k + delta_over_two
-                # FIXME: Update all orientations centering COM on grid point
-                # FIXME: Compute restraint energy
+                xgrid = space[0][0] + delta_trans.val*i + delta_over_two
+                ygrid = space[0][1] + delta_trans.val*j + delta_over_two
+                zgrid = space[0][2] + delta_trans.val*k + delta_over_two
                 for orientation in guest_orientations:
                     pos = 0
                     U = 0.0
@@ -350,26 +372,42 @@ def run():
                              ((guest_coord[1]+ygrid) - host_coord[1])**2+\
                              ((guest_coord[2]+zgrid) - host_coord[2])**2
                         d = math.sqrt(d2)
-                        if ( (d > (req+dtol)) or (d < (req-dtol)) ):
-                            U += (k*(d-req-dtol)**2)
+                        if (d > (req+dtol)):
+                            U += k*(d-req-dtol)**2
+                        elif (d < (req-dtol)):
+                            U += k*(d-req+dtol)**2
                         else:
                             U += 0.0
                         pos += 1
+                        #print ("d %s U %s " % (d,U))
                     Boltz = math.exp(-beta*U)*deltavol*deltarot
                     Uavg += U*Boltz
                     Ztot += Boltz
-                    #import pdb;pdb.set_trace()
+                    if (U < 0.000001):
+                        free += 1/(norient.val*(norient.val/2)*norient.val)
+                    if ( U*beta < 10):
+                        loweight += 1/(norient.val*(norient.val/2)*norient.val)
+                #import pdb;pdb.set_trace()
     #Calculation of Ztot, Uavg, S, Frestraint:
-    #FIXME: Remove ROT
+    free_vol = free*deltavol
+    loweight_frac = loweight/float(count)
+    print ("Volume where restraint is null %8.2f Angstrom^3" % (free_vol))
+    print ("Fraction of points considered were restraint is under 10kbT %8.2f" % loweight_frac)
+    if (loweight_frac > 0.25):
+        print ("WARNING !!! The integration domain does not contain a significant number of datapoints with high restraint energy. It is possible that the domain does not cover all low restraint energy regions. Please check and if necessary increase the buffer keyword.")
+        #sys.exit(-1)
+
     Uavg /= (Ztot)
 
     Zideal = 1661.*ROT
-    Delta_F = -kbT*math.log(Ztot/Zideal)
-    minTDelta_S = -T*(kb*math.log(Ztot/Zideal)+Uavg/T)
-
-    print ("Ztot  = %8.5f Angstrom^3" % Ztot)
-    print ("Free energy Cost of removing the restraint = %8.5f kcal/mol" % -Delta_F)
+    Delta_F = -kbT*math.log(Zideal/Ztot)
+    minTDelta_S = -T*(kb*math.log(Zideal/Ztot)-Uavg/T)
+    print ("Ztot  = %8.2f Angstrom^3" % Ztot)
+    print ("WARNING !!! Have you checked that Ztot does not increase significantly when the value of the command line argument -b/--buffer size is increased?")
+    print ("WARNING !!! This calculation was done with the argument -b %s Angstrom" % buffer.val)
+    print ("Free energy change upon removing the restraint and applying standard state conditions = %8.2f kcal/mol" % Delta_F)
 
     #tidy up the folder by removing prmtop
-    cmd = "rm SYSTEM.prmtop"
+    cmd = "rm -f SYSTEM.prmtop SYSTEM.rst7"
     os.system(cmd)
+    import pdb; pdb.set_trace()
