@@ -1,5 +1,5 @@
 description="""
-somd-standardstatecorrection is a trajectory post-processing app that computes a the free energy 
+standardstatecorrection is a trajectory post-processing app that computes a the free energy 
 cost for removing a set of distance restraints."""
 
 from Sire.Tools import StandardState
@@ -13,10 +13,10 @@ import os
 import sys
 
 parser = argparse.ArgumentParser(description="Evaluates the free energy cost for removing a restraint and setting standard state concentration",
-                                epilog="somd-standardstatecorrection is built using Sire and is distributed "
+                                epilog="standardstatecorrection is built using Sire and is distributed "
                                         "under the GPL. For more information please visit "
                                         "http://siremol.org",
-                                 prog="somd-standardstatecorrection")
+                                 prog="standardstatecorrection")
 
 parser.add_argument('-C', '--config', nargs="?",
                     help='Supply an optional CONFIG file to control the calculation.')
