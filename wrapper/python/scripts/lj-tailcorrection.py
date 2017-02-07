@@ -18,9 +18,9 @@ parser = argparse.ArgumentParser(description="Evaluates contribution of missing 
                                  epilog="lj-tailcorrection is built using Sire and is distributed "
                                         "under the GPL. For more information please visit "
                                         "http://siremol.org",
-                                 prog="somd-lj-tailcorrection")
+                                 prog="lj-tailcorrection")
 
-parser.add_argument('-C', '--config', nargs="?", 
+parser.add_argument('-C', '--config', nargs="?",
                     help='Supply an optional CONFIG file to control the calculation.')
 
 parser.add_argument('-H', '--help-config', action="store_true",
@@ -44,7 +44,7 @@ parser.add_argument('-c', '--coordinate_file', nargs="?",
 parser.add_argument('-m', '--morph_file', nargs="?",
                     help="The morph file describing the single topology "
                          "calculation to be performed.")
-parser.add_argument('-l', '--lambda_val', nargs="?", 
+parser.add_argument('-l', '--lambda_val', nargs="?",
                     help="The lambda value at which you want to run the simulation.")
 
 parser.add_argument('-b', '--bulk_rho', nargs="?",
@@ -152,5 +152,5 @@ print("\nRunning a lj-tailcorrection calculation using files %s, %s, %s and %s."
 
 print (args)
 
-# Now lets run the OpenMMMD free energy calculation
+#Now lets run the LJCutoff correction code
 LJcutoff.runLambda(params)

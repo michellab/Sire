@@ -1,6 +1,6 @@
 #
 # Evaluates free energy difference between two potential energy functions by
-# use of the Zwanzig equation 
+# use of the Zwanzig equation
 #
 # Based on Shirts et al. Accurate and Efficient Corrections for Missing Dispersion Interactions in Molecular Simulations
 # J. Phys. Chem. B, 2007, 111 (45), pp 13052–13063
@@ -227,7 +227,7 @@ def addAnalyticalLRC(system, cutoff, bulk_density):
             sig_ij6 = sig_ij6 #* angstrom
             sig_ij12 = sig_ij12 #* angstrom
             # units !!
-            # density must be converted in molecule per cubic Angstrom 
+            # density must be converted in molecule per cubic Angstrom
             rho = (bulk_density/solv_mol_mass).value()
             cutval = cutoff.value()
             #cutval = 3.15075
