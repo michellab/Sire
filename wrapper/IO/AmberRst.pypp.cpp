@@ -47,7 +47,64 @@ void register_AmberRst_class(){
         typedef bp::class_< SireIO::AmberRst, bp::bases< SireIO::MoleculeParser, SireBase::Property > > AmberRst_exposer_t;
         AmberRst_exposer_t AmberRst_exposer = AmberRst_exposer_t( "AmberRst", "This class represents an Amber-format restartcoordinate file (ascii),\ncurrently supporting these files from Amber7 to Amber16.\n\nThe format of this file is described here;\n\nhttp:ambermd.orgformats.html\n\n(specifically the AMBER coordinaterestart file specification\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AmberRst_scope( AmberRst_exposer );
+        AmberRst_exposer.def( bp::init< QString const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by parsing the passed file") );
+        AmberRst_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by extracting the necessary data from the passed System") );
         AmberRst_exposer.def( bp::init< SireIO::AmberRst const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireIO::AmberRst::boxAngles
+        
+            typedef ::SireMaths::Vector ( ::SireIO::AmberRst::*boxAngles_function_type)(  ) const;
+            boxAngles_function_type boxAngles_function_value( &::SireIO::AmberRst::boxAngles );
+            
+            AmberRst_exposer.def( 
+                "boxAngles"
+                , boxAngles_function_value
+                , "Return the parsed box angles" );
+        
+        }
+        { //::SireIO::AmberRst::boxDimensions
+        
+            typedef ::SireMaths::Vector ( ::SireIO::AmberRst::*boxDimensions_function_type)(  ) const;
+            boxDimensions_function_type boxDimensions_function_value( &::SireIO::AmberRst::boxDimensions );
+            
+            AmberRst_exposer.def( 
+                "boxDimensions"
+                , boxDimensions_function_value
+                , "Return the parsed box dimensions" );
+        
+        }
+        { //::SireIO::AmberRst::coordinates
+        
+            typedef ::QVector< SireMaths::Vector > ( ::SireIO::AmberRst::*coordinates_function_type)(  ) const;
+            coordinates_function_type coordinates_function_value( &::SireIO::AmberRst::coordinates );
+            
+            AmberRst_exposer.def( 
+                "coordinates"
+                , coordinates_function_value
+                , "Return the parsed coordinate data" );
+        
+        }
+        { //::SireIO::AmberRst::hasVelocities
+        
+            typedef bool ( ::SireIO::AmberRst::*hasVelocities_function_type)(  ) const;
+            hasVelocities_function_type hasVelocities_function_value( &::SireIO::AmberRst::hasVelocities );
+            
+            AmberRst_exposer.def( 
+                "hasVelocities"
+                , hasVelocities_function_value
+                , "" );
+        
+        }
+        { //::SireIO::AmberRst::nAtoms
+        
+            typedef int ( ::SireIO::AmberRst::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::AmberRst::nAtoms );
+            
+            AmberRst_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , "" );
+        
+        }
         AmberRst_exposer.def( bp::self != bp::self );
         { //::SireIO::AmberRst::operator=
         
@@ -63,6 +120,40 @@ void register_AmberRst_class(){
         
         }
         AmberRst_exposer.def( bp::self == bp::self );
+        { //::SireIO::AmberRst::parse
+        
+            typedef ::SireIO::AmberRst ( *parse_function_type )( ::QString const & );
+            parse_function_type parse_function_value( &::SireIO::AmberRst::parse );
+            
+            AmberRst_exposer.def( 
+                "parse"
+                , parse_function_value
+                , ( bp::arg("filename") )
+                , "Parse from the passed file" );
+        
+        }
+        { //::SireIO::AmberRst::time
+        
+            typedef double ( ::SireIO::AmberRst::*time_function_type)(  ) const;
+            time_function_type time_function_value( &::SireIO::AmberRst::time );
+            
+            AmberRst_exposer.def( 
+                "time"
+                , time_function_value
+                , "" );
+        
+        }
+        { //::SireIO::AmberRst::title
+        
+            typedef ::QString ( ::SireIO::AmberRst::*title_function_type)(  ) const;
+            title_function_type title_function_value( &::SireIO::AmberRst::title );
+            
+            AmberRst_exposer.def( 
+                "title"
+                , title_function_value
+                , "Return the title of the file" );
+        
+        }
         { //::SireIO::AmberRst::toString
         
             typedef ::QString ( ::SireIO::AmberRst::*toString_function_type)(  ) const;
@@ -85,6 +176,17 @@ void register_AmberRst_class(){
                 , "" );
         
         }
+        { //::SireIO::AmberRst::velocities
+        
+            typedef ::QVector< SireMaths::Vector > ( ::SireIO::AmberRst::*velocities_function_type)(  ) const;
+            velocities_function_type velocities_function_value( &::SireIO::AmberRst::velocities );
+            
+            AmberRst_exposer.def( 
+                "velocities"
+                , velocities_function_value
+                , "Return the parsed coordinate data" );
+        
+        }
         { //::SireIO::AmberRst::what
         
             typedef char const * ( ::SireIO::AmberRst::*what_function_type)(  ) const;
@@ -96,6 +198,7 @@ void register_AmberRst_class(){
                 , "" );
         
         }
+        AmberRst_exposer.staticmethod( "parse" );
         AmberRst_exposer.staticmethod( "typeName" );
         AmberRst_exposer.def( "__copy__", &__copy__);
         AmberRst_exposer.def( "__deepcopy__", &__copy__);

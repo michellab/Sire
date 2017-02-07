@@ -54,7 +54,7 @@ void register_AmberParm_class(){
             .value("STRING", SireIO::AmberParm::STRING)
             .export_values()
             ;
-        AmberParm_exposer.def( bp::init< QString const & >(( bp::arg("filename") ), "Construct by reading from the file called filename") );
+        AmberParm_exposer.def( bp::init< QString const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by reading from the file called filename") );
         AmberParm_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by converting from the passed system, using the passed property\nmap to find the right properties") );
         AmberParm_exposer.def( bp::init< SireIO::AmberParm const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireIO::AmberParm::assertSane
@@ -127,27 +127,27 @@ void register_AmberParm_class(){
                 , "Return the integer data for the passed flag. This returns an empty\nlist if there is no data associated with this flag. This raises\nan invalid_cast error if data exists, but it is the wrong type" );
         
         }
-        { //::SireIO::AmberParm::lines
+        { //::SireIO::AmberParm::isLead
         
-            typedef ::QStringList ( ::SireIO::AmberParm::*lines_function_type)(  ) const;
-            lines_function_type lines_function_value( &::SireIO::AmberParm::lines );
+            typedef bool ( ::SireIO::AmberParm::*isLead_function_type)(  ) const;
+            isLead_function_type isLead_function_value( &::SireIO::AmberParm::isLead );
             
             AmberParm_exposer.def( 
-                "lines"
-                , lines_function_value
-                , "Return the raw lines of the Parm7 file" );
+                "isLead"
+                , isLead_function_value
+                , "" );
         
         }
-        { //::SireIO::AmberParm::lines
+        { //::SireIO::AmberParm::linesForFlag
         
-            typedef ::QStringList ( ::SireIO::AmberParm::*lines_function_type)( ::QString const & ) const;
-            lines_function_type lines_function_value( &::SireIO::AmberParm::lines );
+            typedef ::QVector< QString > ( ::SireIO::AmberParm::*linesForFlag_function_type)( ::QString const & ) const;
+            linesForFlag_function_type linesForFlag_function_value( &::SireIO::AmberParm::linesForFlag );
             
             AmberParm_exposer.def( 
-                "lines"
-                , lines_function_value
+                "linesForFlag"
+                , linesForFlag_function_value
                 , ( bp::arg("flag") )
-                , "Return the lines that correspond to the passed flag. This returns an\nempty list of there are no lines associated with the passed flag" );
+                , "" );
         
         }
         { //::SireIO::AmberParm::nAngles
@@ -331,16 +331,16 @@ void register_AmberParm_class(){
         
         }
         AmberParm_exposer.def( bp::self == bp::self );
-        { //::SireIO::AmberParm::read
+        { //::SireIO::AmberParm::parse
         
-            typedef ::SireIO::AmberParm ( *read_function_type )( ::QString const & );
-            read_function_type read_function_value( &::SireIO::AmberParm::read );
+            typedef ::SireIO::AmberParm ( *parse_function_type )( ::QString const &,::SireBase::PropertyMap const & );
+            parse_function_type parse_function_value( &::SireIO::AmberParm::parse );
             
             AmberParm_exposer.def( 
-                "read"
-                , read_function_value
-                , ( bp::arg("filename") )
-                , "Return an AmberParm object read from the passed file" );
+                "parse"
+                , parse_function_value
+                , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return an AmberParm object parsed from the passed file" );
         
         }
         { //::SireIO::AmberParm::stringData
@@ -377,17 +377,6 @@ void register_AmberParm_class(){
                 , "Return a string representation of this object" );
         
         }
-        { //::SireIO::AmberParm::toSystem
-        
-            typedef ::SireSystem::System ( ::SireIO::AmberParm::*toSystem_function_type)(  ) const;
-            toSystem_function_type toSystem_function_value( &::SireIO::AmberParm::toSystem );
-            
-            AmberParm_exposer.def( 
-                "toSystem"
-                , toSystem_function_value
-                , "Return the System that is described by this AmberParm file. Note that\nthe molecules in this system dont have any coordinates (as these arent\nprovided by the file" );
-        
-        }
         { //::SireIO::AmberParm::typeName
         
             typedef char const * ( *typeName_function_type )(  );
@@ -410,21 +399,8 @@ void register_AmberParm_class(){
                 , "" );
         
         }
-        { //::SireIO::AmberParm::write
-        
-            typedef ::SireIO::AmberParm ( *write_function_type )( ::SireSystem::System const &,::SireBase::PropertyMap const & );
-            write_function_type write_function_value( &::SireIO::AmberParm::write );
-            
-            AmberParm_exposer.def( 
-                "write"
-                , write_function_value
-                , ( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() )
-                , "Return an AmberParm object created from the passed System" );
-        
-        }
-        AmberParm_exposer.staticmethod( "read" );
+        AmberParm_exposer.staticmethod( "parse" );
         AmberParm_exposer.staticmethod( "typeName" );
-        AmberParm_exposer.staticmethod( "write" );
         AmberParm_exposer.def( "__copy__", &__copy__);
         AmberParm_exposer.def( "__deepcopy__", &__copy__);
         AmberParm_exposer.def( "clone", &__copy__);

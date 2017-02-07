@@ -8,6 +8,7 @@
 #include "cube.h"
 #include "flexibilitylibrary.h"
 #include "iobase.h"
+#include "moleculeparser.h"
 #include "pdb.h"
 #include "perturbationslibrary.h"
 #include "protoms.h"

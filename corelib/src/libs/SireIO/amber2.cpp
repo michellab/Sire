@@ -45,6 +45,8 @@
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
+#include <QDebug>
+
 using namespace SireIO;
 using namespace SireMol;
 using namespace SireMaths;
@@ -69,6 +71,11 @@ public:
 
     AmberFormat() : flag_type(AmberParm::UNKNOWN),
                     num_values(0), field_width(0), point_width(0)
+    {}
+    
+    AmberFormat(AmberParm::FLAG_TYPE flag, int num,
+                int field, int point=0)
+            : flag_type(flag), num_values(num), field_width(field), point_width(point)
     {}
     
     AmberFormat(const QString &line)
@@ -151,7 +158,7 @@ public:
     }
 };
 
-QList<qint64> readIntData(const QStringList &lines, AmberFormat format,
+QList<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
                           const QPair<qint64,qint64> &index,
                           QStringList *errors=0)
 {
@@ -161,9 +168,11 @@ QList<qint64> readIntData(const QStringList &lines, AmberFormat format,
     const int strt = index.first;
     const int end = index.first + index.second;
     
+    const QString *l = lines.constData();
+    
     for (int i=strt; i<end; ++i)
     {
-        const QString &line = lines[i];
+        const QString &line = l[i];
         
         int nvalues = format.numValues(line);
         
@@ -203,7 +212,7 @@ QList<qint64> readIntData(const QStringList &lines, AmberFormat format,
     return data;
 }
 
-QList<double> readFloatData(const QStringList &lines, AmberFormat format,
+QList<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
                             const QPair<qint64,qint64> &index,
                             QStringList *errors)
 {
@@ -213,9 +222,11 @@ QList<double> readFloatData(const QStringList &lines, AmberFormat format,
     const int strt = index.first;
     const int end = index.first + index.second;
     
+    const QString *l = lines.constData();
+    
     for (int i=strt; i<end; ++i)
     {
-        const QString &line = lines[i];
+        const QString &line = l[i];
         
         int nvalues = format.numValues(line);
         
@@ -255,7 +266,7 @@ QList<double> readFloatData(const QStringList &lines, AmberFormat format,
     return data;
 }
 
-QStringList readStringData(const QStringList &lines, AmberFormat format,
+QStringList readStringData(const QVector<QString> &lines, AmberFormat format,
                            const QPair<qint64,qint64> &index,
                            QStringList *errors)
 {
@@ -265,9 +276,11 @@ QStringList readStringData(const QStringList &lines, AmberFormat format,
     const int strt = index.first;
     const int end = index.first + index.second;
     
+    const QString *l = lines.constData();
+    
     for (int i=strt; i<end; ++i)
     {
-        const QString &line = lines[i];
+        const QString &line = l[i];
         
         int nvalues = format.numValues(line);
         
@@ -311,7 +324,8 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberRst &rst)
     
     SharedDataStream sds(ds);
     
-    sds << rst.ttle << rst.coords << rst.vels
+    sds << rst.ttle << rst.current_time
+        << rst.coords << rst.vels
         << rst.box_dims << rst.box_angs
         << static_cast<const MoleculeParser&>(rst);
     
@@ -326,7 +340,8 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberRst &rst)
     {
         SharedDataStream sds(ds);
         
-        sds >> rst.ttle >> rst.coords >> rst.vels
+        sds >> rst.ttle >> rst.current_time
+            >> rst.coords >> rst.vels
             >> rst.box_dims >> rst.box_angs
             >> static_cast<MoleculeParser&>(rst);
     }
@@ -341,21 +356,283 @@ Vector cubic_angs(90,90,90);
 /** Constructor */
 AmberRst::AmberRst()
          : ConcreteProperty<AmberRst,MoleculeParser>(),
-           box_angs(cubic_angs)
+           current_time(0), box_angs(cubic_angs)
 {}
+
+/** Private function used to read in the box data from the line with passed index */
+void AmberRst::readBoxInfo(int boxidx)
+{
+    if (boxidx < 0 or boxidx >= lines().count())
+        return;
+    
+    const QString &line = lines().constData()[boxidx];
+    
+    QStringList local_errors;
+    
+    if (line.length() >= 36)
+    {
+        //we can get the box dimensions
+        bool x_ok = true;
+        bool y_ok = true;
+        bool z_ok = true;
+        
+        const double x = line.midRef(0,12).toDouble(&x_ok);
+        const double y = line.midRef(12,12).toDouble(&y_ok);
+        const double z = line.midRef(24,12).toDouble(&z_ok);
+        
+        if (not (x_ok and y_ok and z_ok))
+        {
+            local_errors.append( QObject::tr(
+                "Cannot read the box dimensions "
+                "there was a formatting issue with line number %1. (%2,%3,%4)")
+                    .arg(boxidx+1).arg(x_ok).arg(y_ok).arg(z_ok) );
+        }
+        else
+            box_dims = Vector(x,y,z);
+    }
+
+    if (line.length() >= 72)
+    {
+        //we can get the box dimensions
+        bool x_ok = true;
+        bool y_ok = true;
+        bool z_ok = true;
+        
+        const double x = line.midRef(36,12).toDouble(&x_ok);
+        const double y = line.midRef(48,12).toDouble(&y_ok);
+        const double z = line.midRef(60,12).toDouble(&z_ok);
+        
+        if (not (x_ok and y_ok and z_ok))
+        {
+            local_errors.append( QObject::tr(
+                "Cannot read the box angles "
+                "there was a formatting issue with line number %1. (%2,%3,%4)")
+                    .arg(boxidx+1).arg(x_ok).arg(y_ok).arg(z_ok) );
+        }
+        else
+            box_angs = Vector(x,y,z);
+    }
+}
 
 /** Construct by parsing the passed file */
 AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(filename),
-           box_angs(cubic_angs)
+           current_time(0), box_angs(cubic_angs)
 {
-    //DO SOMETHING
+    if (lines().count() < 2)
+        //there is nothing in the file
+        return;
+    
+    // read in the title FORMAT(20A4)
+    ttle = lines()[0].simplified();
+    
+    // read in the number of atoms and time FORMAT(I5,5E15.7)
+    bool ok = true;
+    
+    int natoms = lines()[1].midRef(0,5).toInt(&ok);
+    
+    if (not ok)
+        throw SireError::io_error( QObject::tr(
+                "Could not read the number of atoms from the first five columns of "
+                "the restart file '%1'. Please check that the file is ok.")
+                    .arg(filename), CODELOC );
+    
+    if (lines()[1].length() > 5)
+    {
+        current_time = lines()[1].midRef(6,15).toDouble(&ok);
+        
+        if (not ok)
+        {
+            //we can't read the current time - this is annoying, but some
+            //crd files don't contain this information
+            current_time = 0;
+        }
+    }
+    
+    //now make sure that that the file is large enough!
+    if (lines().count() < (2 + (natoms/2)))
+    {
+        throw SireError::io_error( QObject::tr(
+                "There is a problem with this restart file. The number of atoms is "
+                "%1, but the number of lines in the file is too small (%2). The number "
+                "of lines needs to be at least %3 to give all of the information.")
+                    .arg(natoms)
+                    .arg(lines().count())
+                    .arg(2 + (natoms/2)), CODELOC );
+    }
+    
+    //now read in all of the coordinates
+    QMutex mutex;
+    QVector<Vector> global_data(natoms, Vector(0));
+    QStringList global_errors;
+    
+    //get a pointer to the array of lines
+    const QString *l = lines().constData();
+    
+    tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
+                       [&](tbb::blocked_range<int> r)
+    {
+        QVector<Vector> local_data(r.end()-r.begin());
+        QStringList local_errors;
+        
+        for (int i=r.begin(); i<r.end(); ++i)
+        {
+            //coordinates written as 6F12.7, two atoms per line
+            const int linenum = 2 + (i / 2);
+            const int column = (i % 2) * 36;
+
+            //we have already validated that there are enough lines
+            const QString &line = l[linenum];
+            
+            if (line.length() < column+36)
+            {
+                local_errors.append( QObject::tr(
+                        "Cannot read the coordinates for the atom at index %1 as "
+                        "the line at line number %2 is too short.")
+                            .arg(i+1).arg(linenum+1) );
+                
+                continue;
+            }
+            
+            bool x_ok = true;
+            bool y_ok = true;
+            bool z_ok = true;
+            
+            const double x = line.midRef(column,12).toDouble(&x_ok);
+            const double y = line.midRef(column+12,12).toDouble(&y_ok);
+            const double z = line.midRef(column+24,12).toDouble(&z_ok);
+            
+            if (not (x_ok and y_ok and z_ok))
+            {
+                local_errors.append( QObject::tr(
+                    "Cannot read the coordinates for the atom at index %1 as "
+                    "there was a formatting issue with line number %2. (%3,%4,%5)")
+                        .arg(i+1).arg(linenum+1).arg(x_ok).arg(y_ok).arg(z_ok) );
+                continue;
+            }
+            
+            local_data[i-r.begin()] = Vector(x,y,z);
+        }
+        
+        QMutexLocker lkr(&mutex);
+        for (int i=r.begin(); i<r.end(); ++i)
+        {
+            global_data[i] = local_data[i-r.begin()];
+        }
+        
+        if (not local_errors.isEmpty())
+        {
+            global_errors += local_errors;
+        }
+    });
+    
+    if (not global_errors.isEmpty())
+    {
+        throw SireError::io_error( QObject::tr(
+                "There were some problems reading in the coordinate data "
+                "from the restart file %1.\n%2")
+                    .arg(filename).arg(global_errors.join("\n")), CODELOC );
+    }
+    
+    coords = global_data;
+    
+    //now read in all of the velocities
+    if (lines().count() < (2 + (natoms/2) + (natoms/2)))
+    {
+        //there are no velocities - see if there is periodic box information
+        int boxidx = 2 + (natoms/2);
+        
+        if (boxidx < lines().count())
+        {
+            //there is - read in the box information
+            this->readBoxInfo(boxidx);
+            return;
+        }
+    }
+    
+    tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
+                       [&](tbb::blocked_range<int> r)
+    {
+        QVector<Vector> local_data(r.end()-r.begin());
+        QStringList local_errors;
+        
+        for (int i=r.begin(); i<r.end(); ++i)
+        {
+            //coordinates written as 6F12.7, two atoms per line
+            const int linenum = 2 + (i / 2) + (natoms / 2);
+            const int column = (i % 2) * 36;
+
+            //we have already validated that there are enough lines
+            const QString &line = l[linenum];
+            
+            if (line.length() < column+36)
+            {
+                local_errors.append( QObject::tr(
+                        "Cannot read the coordinates for the atom at index %1 as "
+                        "the line at line number %2 is too short.")
+                            .arg(i+1).arg(linenum+1) );
+                
+                continue;
+            }
+            
+            bool x_ok = true;
+            bool y_ok = true;
+            bool z_ok = true;
+            
+            const double x = line.midRef(column,12).toDouble(&x_ok);
+            const double y = line.midRef(column+12,12).toDouble(&y_ok);
+            const double z = line.midRef(column+24,12).toDouble(&z_ok);
+            
+            if (not (x_ok and y_ok and z_ok))
+            {
+                local_errors.append( QObject::tr(
+                    "Cannot read the velocities for the atom at index %1 as "
+                    "there was a formatting issue with line number %2. (%3,%4,%5)")
+                        .arg(i+1).arg(linenum+1).arg(x_ok).arg(y_ok).arg(z_ok) );
+                continue;
+            }
+            
+            // format is (units: Angstroms per 1/20.455 ps)
+            local_data[i-r.begin()] = Vector(x,y,z);
+        }
+        
+        QMutexLocker lkr(&mutex);
+        for (int i=r.begin(); i<r.end(); ++i)
+        {
+            global_data[i] = local_data[i-r.begin()];
+        }
+        
+        if (not local_errors.isEmpty())
+        {
+            global_errors += local_errors;
+        }
+    });
+    
+    if (not global_errors.isEmpty())
+    {
+        throw SireError::io_error( QObject::tr(
+                "There were some problems reading in the velocity data "
+                "from the restart file %1.\n%2")
+                    .arg(filename).arg(global_errors.join("\n")), CODELOC );
+    }
+    
+    vels = global_data;
+
+    //see if there is periodic box information
+    int boxidx = 2 + (natoms/2) + (natoms/2);
+    
+    if (boxidx < lines().count())
+    {
+        //there is - read in the box information
+        this->readBoxInfo(boxidx);
+        return;
+    }
 }
 
 /** Construct by extracting the necessary data from the passed System */
 AmberRst::AmberRst(const System &system, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(),
-           box_angs(cubic_angs)
+           current_time(0), box_angs(cubic_angs)
 {
     //DO SOMETHING
 }
@@ -363,7 +640,8 @@ AmberRst::AmberRst(const System &system, const PropertyMap &map)
 /** Copy constructor */
 AmberRst::AmberRst(const AmberRst &other)
          : ConcreteProperty<AmberRst,MoleculeParser>(other),
-           ttle(other.ttle), coords(other.coords), vels(other.vels),
+           ttle(other.ttle), current_time(other.current_time),
+           coords(other.coords), vels(other.vels),
            box_dims(other.box_dims), box_angs(other.box_angs)
 {}
 
@@ -376,6 +654,7 @@ AmberRst& AmberRst::operator=(const AmberRst &other)
     if (this != &other)
     {
         ttle = other.ttle;
+        current_time = other.current_time;
         coords = other.coords;
         vels = other.vels;
         box_dims = other.box_dims;
@@ -409,7 +688,20 @@ const char* AmberRst::what() const
 
 QString AmberRst::toString() const
 {
-    return QObject::tr("AmberRst::null");
+    if (coords.isEmpty())
+    {
+        return QObject::tr("AmberRst::null");
+    }
+    else if (vels.isEmpty())
+    {
+        return QObject::tr("AmberRst( title() = %1, nAtoms() = %2, hasVelocities() = false )")
+                .arg(title()).arg(nAtoms());
+    }
+    else
+    {
+        return QObject::tr("AmberRst( title() = %1, nAtoms() = %2, hasVelocities() = true )")
+                .arg(title()).arg(nAtoms());
+    }
 }
 
 /** Parse from the passed file */
@@ -430,26 +722,45 @@ QString AmberRst::title() const
     return ttle;
 }
 
+/** Return the current time of the simulation from which this restart
+    file was written */
+double AmberRst::time() const
+{
+    return current_time;
+}
+
+/** Return the number of atoms whose coordinates are contained in this restart file */
+int AmberRst::nAtoms() const
+{
+    return coords.count();
+}
+
+/** Return whether or not this restart file also provides velocities */
+bool AmberRst::hasVelocities() const
+{
+    return not vels.isEmpty();
+}
+
 /** Return the parsed coordinate data */
-QVector<SireMaths::Vector> coordinates() const
+QVector<SireMaths::Vector> AmberRst::coordinates() const
 {
     return coords;
 }
 
 /** Return the parsed coordinate data */
-QVector<SireMaths::Vector> velocities() const
+QVector<SireMaths::Vector> AmberRst::velocities() const
 {
     return vels;
 }
 
 /** Return the parsed box dimensions */
-SireMaths::Vector boxDimensions() const
+SireMaths::Vector AmberRst::boxDimensions() const
 {
     return box_dims;
 }
 
 /** Return the parsed box angles */
-SireMaths::Vector boxAngles() const
+SireMaths::Vector AmberRst::boxAngles() const
 {
     return box_angs;
 }
@@ -999,7 +1310,7 @@ AmberParm AmberParm::parse(const QString &filename, const PropertyMap &map)
 
 /** Return the lines that correspond to the passed flag. This returns an
     empty list of there are no lines associated with the passed flag */
-QStringList AmberParm::lines(const QString &flag) const
+QVector<QString> AmberParm::linesForFlag(const QString &flag) const
 {
     auto it = flag_to_line.constFind(flag);
     
@@ -1014,7 +1325,7 @@ QStringList AmberParm::lines(const QString &flag) const
         return lines().mid(start,count);
     }
     else
-        return QStringList();
+        return QVector<QString>();
 }
 
 /** Return all of the flags that are held in this file */

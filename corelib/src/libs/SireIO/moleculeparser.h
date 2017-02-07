@@ -68,6 +68,7 @@ friend QDataStream& ::operator>>(QDataStream&, MoleculeParser&);
 
 public:
     MoleculeParser();
+    MoleculeParser(const QString &filename);
     MoleculeParser(const MoleculeParser &other);
 
     virtual ~MoleculeParser();
@@ -76,7 +77,9 @@ public:
 
     static const NullParser& null();
 
-    QStringList lines() const;
+    virtual MoleculeParser* clone() const=0;
+
+    const QVector<QString>& lines() const;
 
     static MoleculeParserPtr parse(const QString &filename,
                                    const PropertyMap &map = PropertyMap());
@@ -115,13 +118,15 @@ protected:
     bool operator!=(const MoleculeParser &other) const;
 
     void setLines(const QStringList &lines);
+    void setLines(const QVector<QString> &lines);
 
-    virtual System startSystem(const PropertyMap &map) const;
-    virtual void addToSystem(System &system, const PropertyMap &map) const;
+    virtual SireSystem::System startSystem(const PropertyMap &map) const;
+    virtual void addToSystem(SireSystem::System &system,
+                             const PropertyMap &map) const;
 
 private:
     /** All of the lines in the file */
-    QStringList lnes;
+    QVector<QString> lnes;
 };
 
 /** This is a null parser, returned when the file cannot be parsed */
@@ -155,12 +160,18 @@ public:
 /** Set the lines that should be written to the file. */
 inline void MoleculeParser::setLines(const QStringList &lines)
 {
+    lnes = lines.toVector();
+}
+
+/** Set the lines that should be written to the file. */
+inline void MoleculeParser::setLines(const QVector<QString> &lines)
+{
     lnes = lines;
 }
 
 /** Return the lines of the file. Note that this
     only returns something for text-based files */
-inline QStringList MoleculeParser::lines() const
+inline const QVector<QString>& MoleculeParser::lines() const
 {
     return lnes;
 }

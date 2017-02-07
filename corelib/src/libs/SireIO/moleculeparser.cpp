@@ -34,6 +34,8 @@
 
 #include "SireSystem/system.h"
 
+#include "SireError/errors.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
@@ -81,6 +83,32 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, MoleculeParser &parser)
 /** Constructor */
 MoleculeParser::MoleculeParser() : Property()
 {}
+
+/** Construct the parser, parsing in all of the lines in the file
+    with passed filename */
+MoleculeParser::MoleculeParser(const QString &filename)
+               : Property()
+{
+    QFile file(filename);
+    
+    if (not file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
+    {
+        throw SireError::file_error(file, CODELOC);
+    }
+    
+    QTextStream ts(&file);
+    
+    QStringList l;
+    
+    while (not ts.atEnd())
+    {
+        l.append( ts.readLine() );
+    }
+    
+    file.close();
+    
+    lnes = l.toVector();
+}
 
 /** Copy constructor */
 MoleculeParser::MoleculeParser(const MoleculeParser &other)
@@ -286,7 +314,7 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
         
         for (auto other : others)
         {
-            other.read().addtoSystem(system, map);
+            other.read().addToSystem(system, map);
         }
         
         return system;
@@ -330,7 +358,28 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
                     .arg(p.join(", ")), CODELOC );
             
             return System();
+        }
     }
+}
+
+/** Start creating a new System using the information contained in this parser,
+    using the (optional) property map to name the properties */
+System MoleculeParser::startSystem(const PropertyMap &map) const
+{
+    throw SireError::io_error( QObject::tr(
+            "There is not enough information in this parser (%1) to start "
+            "the creation of a new System. You need to use a more detailed input file.")
+                .arg(this->toString()), CODELOC );
+}
+
+/** Continue adding data to the passed System using the information contained in 
+    this parser, using the (optional) property map to name the properties */
+void MoleculeParser::addToSystem(System &system, const PropertyMap &map) const
+{
+    throw SireError::io_error( QObject::tr(
+            "This parser (%1) cannot be used to add additional information to a "
+            "System. It can only be used to create a new System from scratch.")
+                .arg(this->toString()), CODELOC );
 }
 
 Q_GLOBAL_STATIC( NullParser, nullParser )
@@ -345,6 +394,27 @@ const NullParser& MoleculeParser::null()
 //////////////
 
 static const RegisterMetaType<NullParser> r_null;
+
+QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const NullParser &parser)
+{
+    writeHeader(ds, r_null, 1);
+    ds << static_cast<const MoleculeParser&>(parser);
+    return ds;
+}
+
+QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, NullParser &parser)
+{
+    VersionID v = readHeader(ds, r_null);
+    
+    if (v == 1)
+    {
+        ds >> static_cast<MoleculeParser&>(parser);
+    }
+    else
+        throw version_error(v, "1", r_parser, CODELOC);
+    
+    return ds;
+}
 
 NullParser::NullParser() : ConcreteProperty<NullParser,MoleculeParser>()
 {}

@@ -92,6 +92,11 @@ public:
     static AmberRst parse(const QString &filename);
 
     QString title() const;
+    double time() const;
+
+    int nAtoms() const;
+    
+    bool hasVelocities() const;
 
     QVector<SireMaths::Vector> coordinates() const;
     QVector<SireMaths::Vector> velocities() const;
@@ -103,8 +108,13 @@ protected:
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
 private:
+    void readBoxInfo(int boxidx);
+
     /** The title of the file */
     QString ttle;
+    
+    /** The current time of the simulation */
+    double current_time;
     
     /** The coordinate data */
     QVector<SireMaths::Vector> coords;
@@ -172,8 +182,7 @@ public:
 
     SireMol::Molecule getMolecule(int i) const;
     
-    QStringList lines() const;
-    QStringList lines(const QString &flag) const;
+    QVector<QString> linesForFlag(const QString &flag) const;
     
     QStringList flags() const;
 
@@ -211,7 +220,7 @@ public:
     void assertSane() const;
 
 protected:
-    SireSystem::System startSystem(map) const;
+    SireSystem::System startSystem(const PropertyMap &map) const;
 
 private:
     void rebuildAfterReload();
@@ -247,11 +256,6 @@ private:
 inline bool AmberParm::isLead() const
 {
     return true;
-}
-
-inline QStringList AmberParm::lines() const
-{
-    return MoleculeParser::lines();
 }
 
 #endif // SIRE_SKIP_INLINE_FUNCTIONS

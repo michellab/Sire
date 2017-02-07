@@ -7,8 +7,6 @@
 
 #include "Amber.pypp.hpp"
 
-#include "Amber2.pypp.hpp"
-
 #include "AmberParm.pypp.hpp"
 
 #include "AmberRst.pypp.hpp"
@@ -26,6 +24,8 @@
 #include "MoleculeParser.pypp.hpp"
 
 #include "NullIO.pypp.hpp"
+
+#include "NullParser.pypp.hpp"
 
 #include "PDB.pypp.hpp"
 
@@ -60,8 +60,6 @@ BOOST_PYTHON_MODULE(_IO){
 
     register_MoleculeParser_class();
 
-    register_Amber2_class();
-
     register_AmberParm_class();
 
     register_AmberRst_class();
@@ -77,6 +75,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_IOParametersBase_class();
 
     register_NullIO_class();
+
+    register_NullParser_class();
 
     register_PDB_class();
 
