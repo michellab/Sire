@@ -250,14 +250,19 @@ def run():
     #now create a dictionary in this way:
     #dict[pairs] = {[Req,D,K] [coords] [coords]...}
     restr_dict = {}
-    #create a list of host indexes to be used with mdtraj for alignment
-    hosts = []
+    #create a list of host/guest indexes to be used with mdtraj for alignment
+    host_indices = []
+    guest_indices = []
     for pairs in sim_dictionary:
         req = sim_dictionary[pairs][0]
         K   = sim_dictionary[pairs][1]
         D   = sim_dictionary[pairs][2]
         # First entry are parameters, second and third entries for coordinates of first and second atom
         restr_dict[pairs]=[[req,K,D],[],[]]
+        if not pairs[1] in host_indices:
+            host_indices.append(pairs[1])
+        if not pairs[0] in guest_indices:
+            guest_indices.append(pairs[0])
         #idx = max(pairs)
         #hosts.append(idx)
     #FIXME: code assumes guest atoms have lower indices than host atoms
@@ -296,29 +301,57 @@ def run():
     current_frame = start_frame
 
     #Aligning everything along the first frame
-    # FIXME: Code fails if too few host restrained atoms.
-    # Use all heavy atoms for alignment?
-    selection = "not water and not resname 'Na+' and not resname 'Cl-' and mass > 1"
+    # Either use restrained host atoms, or a default selection if less than 3 unique atoms
+    selection_default = "not water and not resname 'Na+' and not resname 'Cl-' and mass > 1"
+    if len(host_indices) >2:
+        selection = "index %s " % host_indices[0]
+        for idx in host_indices[1:]:
+            selection += " or index %s" % idx
+    else:
+        selection = selection_default
+
+    print (selection)
     align_indices = mdtraj_trajfile.topology.select(selection)
+    #print (align_indices)
 
-
-    print("Aligning frames along first frame of trajectory")
-    #aligned_traj = mdtraj_trajfile.superpose(mdtraj_trajfile,0, atom_indices=hosts)
+    # FIXME: check whether alignment tolerates PBC artefacts
+    print("Host: Aligning frames along first frame of trajectory")
     aligned_traj = mdtraj_trajfile.superpose(mdtraj_trajfile,0, atom_indices=align_indices)
 
-    print("Processing frames")
+    # First pass, collect aligned host coordinates
     while (current_frame <= end_frame):
-        # FIXME: Save restrained guest atoms as well
-        #now for each lig:host pairs append the host coordinates
         for pairs in restr_dict:
-            #host_idx = max(pairs)
+            idx1 = pairs[0]
+            idx2 = pairs[1]
+            #coord1 = aligned_traj.xyz[current_frame,idx1,:].tolist()
+            coord2 = aligned_traj.xyz[current_frame,idx2,:].tolist()
+            #restr_dict[pairs][1].append(coord1)
+            restr_dict[pairs][2].append(coord2)
+        current_frame += step_frame
+
+    # Second pass, align against guest coordinates
+    # and collect aligned guest coordinates
+    if len(guest_indices) >2:
+        selection = "index %s" % (guest_indices[0])
+        for idx in guest_indices[1:]:
+            selection += " or index %s" % idx
+    else:
+        selection = selection_default
+
+    print (selection)
+    align_indices = mdtraj_trajfile.topology.select(selection)
+    #print (align_indices)
+    # FIXME: check whether alignment tolerates PBC artefacts
+    print("Guest: Aligning frames along first frame of trajectory")
+    aligned_traj = mdtraj_trajfile.superpose(mdtraj_trajfile,0, atom_indices=align_indices)
+
+    current_frame = start_frame
+    while (current_frame <= end_frame):
+        for pairs in restr_dict:
             idx1 = pairs[0]
             idx2 = pairs[1]
             coord1 = aligned_traj.xyz[current_frame,idx1,:].tolist()
-            coord2 = aligned_traj.xyz[current_frame,idx2,:].tolist()
             restr_dict[pairs][1].append(coord1)
-            restr_dict[pairs][2].append(coord2)
-
         current_frame += step_frame
 
     #now restr_dict has:
@@ -344,12 +377,13 @@ def run():
     Nx = int ( round ( ( space[1][0] - space[0][0] ) / delta_trans.val ) )
     Ny = int ( round ( ( space[1][0] - space[0][0] ) / delta_trans.val ) )
     Nz = int ( round ( ( space[1][0] - space[0][0] ) / delta_trans.val ) )
-    print("Number of elements to be evaluated %d" %(Nx*Ny*Nz))
+    print("Number of grid points to be evaluated %d (%d orientations per point)" %(Nx*Ny*Nz,norient.val*(norient.val/2)*norient.val))
     print("Evaluation...")
     count = 0
     free = 0
     loweight = 0
     for i in range(0,Nx):
+        # FIXME: OpenMP ?
         for j in range(0,Ny):
             for k in range(0,Nz):
                 count += 1
