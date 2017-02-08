@@ -180,7 +180,10 @@ public:
     static AmberParm parse(const QString &filename,
                            const PropertyMap &map = PropertyMap());
 
-    SireMol::Molecule getMolecule(int i) const;
+    SireMol::Molecule getMolecule(int i, const PropertyMap &map = PropertyMap()) const;
+    
+    SireMol::Molecule getMolecule(int i, const AmberRst &rst,
+                                  const PropertyMap &map = PropertyMap()) const;
     
     QVector<QString> linesForFlag(const QString &flag) const;
     
@@ -188,9 +191,9 @@ public:
 
     FLAG_TYPE flagType(const QString &flag) const;
     
-    QList<qint64> intData(const QString &flag) const;
-    QList<double> floatData(const QString &flag) const;
-    QStringList stringData(const QString &flag) const;
+    QVector<qint64> intData(const QString &flag) const;
+    QVector<double> floatData(const QString &flag) const;
+    QVector<QString> stringData(const QString &flag) const;
 
     QString title() const;
 
@@ -225,9 +228,13 @@ protected:
 private:
     void rebuildAfterReload();
 
-    SireMol::Molecule getMolecule(int start_idx, int natoms) const;
+    SireMol::MolStructureEditor getMolStructure(int start_idx, int natoms,
+                                                const SireBase::PropertyName &cutting) const;
 
-    QList< QPair<int,int> > moleculeIndicies() const;
+    SireMol::Molecule getMolecule(int start_idx, int natoms,
+                                  const PropertyMap &map) const;
+
+    QVector< QPair<int,int> > moleculeIndicies() const;
 
     /** Function to process all flags */
     void processAllFlags();
@@ -237,16 +244,16 @@ private:
     QHash< QString,QPair<qint64,qint64> > flag_to_line;
     
     /** The raw int data for the integer flags */
-    QHash< QString, QList<qint64> > int_data;
+    QHash< QString, QVector<qint64> > int_data;
     
     /** The raw float data for the float flags */
-    QHash< QString, QList<double> > float_data;
+    QHash< QString, QVector<double> > float_data;
     
     /** The raw string data for the string flags */
-    QHash< QString, QStringList > string_data;
+    QHash< QString, QVector<QString> > string_data;
     
     /** A copy of the POINTER data to prevent over-lookup */
-    QList<qint64> pointers;
+    QVector<qint64> pointers;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS

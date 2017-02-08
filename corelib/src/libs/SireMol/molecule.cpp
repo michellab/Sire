@@ -123,11 +123,11 @@ bool Molecule::operator!=(const Molecule &other) const
 /** Return a string representation of this molecule */
 QString Molecule::toString() const
 {
-    return QObject::tr( "Molecule( %1 : %2 : %3 : UID == %4 )" )
-                .arg(this->name())
+    return QObject::tr( "Molecule( %1 version %2 : nAtoms() = %3, nResidues() = %4 )" )
                 .arg(this->number())
                 .arg(this->version())
-                .arg(this->data().info().UID().toString());
+                .arg(this->nAtoms())
+                .arg(this->nResidues());
 }
 
 /** Return whether or not this is empty */

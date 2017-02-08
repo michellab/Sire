@@ -34,7 +34,48 @@
 
 #include "amber2.h"
 
+#include "SireMol/element.h"
+
+#include "SireMol/atomcharges.h"
+#include "SireMol/atommasses.h"
+#include "SireMol/atomelements.h"
+#include "SireMol/atomcoords.h"
+#include "SireMol/atomvelocities.h"
+#include "SireMol/connectivity.h"
+#include "SireMol/selector.hpp"
+
 #include "SireMol/molecule.h"
+#include "SireMol/moleditor.h"
+#include "SireMol/reseditor.h"
+#include "SireMol/atomeditor.h"
+#include "SireMol/cgatomidx.h"
+#include "SireMol/residuecutting.h"
+#include "SireMol/atomcutting.h"
+#include "SireMol/molidx.h"
+#include "SireMol/atomidx.h"
+
+#include "SireMol/amberparameters.h"
+
+#include "SireCAS/trigfuncs.h"
+
+#include "SireMM/ljparameter.h"
+#include "SireMM/atomljs.h"
+#include "SireMM/internalff.h"
+#include "SireMM/cljnbpairs.h"
+
+#include "SireVol/cartesian.h"
+#include "SireVol/periodicbox.h"
+
+#include "SireMaths/maths.h"
+#include "SireUnits/units.h"
+
+#include "SireBase/tempdir.h"
+#include "SireBase/findexe.h"
+
+#include "SireIO/errors.h"
+
+#include "SireMove/internalmove.h"
+#include "SireMove/flexibility.h"
 
 #include "SireBase/parallel.h"
 #include "SireBase/unittest.h"
@@ -48,9 +89,11 @@
 #include <QDebug>
 
 using namespace SireIO;
+using namespace SireMM;
 using namespace SireMol;
 using namespace SireMaths;
 using namespace SireSystem;
+using namespace SireUnits;
 using namespace SireStream;
 using namespace SireBase;
 
@@ -86,7 +129,7 @@ public:
         
         if (not m.hasMatch())
         {
-            throw SireError::io_error( QObject::tr(
+            throw SireIO::parse_error( QObject::tr(
                     "Could not extract the format from the line '%1'. "
                     "Expected to read a line similar to '%FORMAT(5E16.8)'.")
                         .arg(line), CODELOC );
@@ -158,17 +201,19 @@ public:
     }
 };
 
-QList<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
-                          const QPair<qint64,qint64> &index,
-                          QStringList *errors=0)
+QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
+                            const QPair<qint64,qint64> &index,
+                            QStringList *errors=0)
 {
-    QList<qint64> data;
+    QVector<qint64> data;
 
     //read in all of the lines...
     const int strt = index.first;
     const int end = index.first + index.second;
     
     const QString *l = lines.constData();
+    
+    data.reserve( (end-strt) * format.numValues() );
     
     for (int i=strt; i<end; ++i)
     {
@@ -212,15 +257,17 @@ QList<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
     return data;
 }
 
-QList<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
-                            const QPair<qint64,qint64> &index,
-                            QStringList *errors)
+QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
+                              const QPair<qint64,qint64> &index,
+                              QStringList *errors)
 {
-    QList<double> data;
+    QVector<double> data;
 
     //read in all of the lines...
     const int strt = index.first;
     const int end = index.first + index.second;
+    
+    data.reserve( (end-strt) * format.numValues() );
     
     const QString *l = lines.constData();
     
@@ -266,15 +313,17 @@ QList<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
     return data;
 }
 
-QStringList readStringData(const QVector<QString> &lines, AmberFormat format,
-                           const QPair<qint64,qint64> &index,
-                           QStringList *errors)
+QVector<QString> readStringData(const QVector<QString> &lines, AmberFormat format,
+                                const QPair<qint64,qint64> &index,
+                                QStringList *errors)
 {
-    QStringList data;
+    QVector<QString> data;
 
     //read in all of the lines...
     const int strt = index.first;
     const int end = index.first + index.second;
+    
+    data.reserve( (end-strt) * format.numValues() );
     
     const QString *l = lines.constData();
     
@@ -432,7 +481,7 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     int natoms = lines()[1].midRef(0,5).toInt(&ok);
     
     if (not ok)
-        throw SireError::io_error( QObject::tr(
+        throw SireIO::parse_error( QObject::tr(
                 "Could not read the number of atoms from the first five columns of "
                 "the restart file '%1'. Please check that the file is ok.")
                     .arg(filename), CODELOC );
@@ -444,15 +493,26 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
         if (not ok)
         {
             //we can't read the current time - this is annoying, but some
-            //crd files don't contain this information
+            //crd files don't contain this information - in this case,
+            //the natoms information may also be misformed
             current_time = 0;
+            
+            QStringList words = lines()[1].split(" ", QString::SkipEmptyParts);
+            
+            natoms = words[0].toInt(&ok);
+            
+            if (not ok)
+                throw SireIO::parse_error( QObject::tr(
+                    "Could not read the number of atoms from the first word of "
+                    "the restart file '%1' (%2). Please check that the file is ok.")
+                        .arg(filename).arg(words[0]), CODELOC );
         }
     }
     
     //now make sure that that the file is large enough!
     if (lines().count() < (2 + (natoms/2)))
     {
-        throw SireError::io_error( QObject::tr(
+        throw SireIO::parse_error( QObject::tr(
                 "There is a problem with this restart file. The number of atoms is "
                 "%1, but the number of lines in the file is too small (%2). The number "
                 "of lines needs to be at least %3 to give all of the information.")
@@ -528,7 +588,7 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     
     if (not global_errors.isEmpty())
     {
-        throw SireError::io_error( QObject::tr(
+        throw SireIO::parse_error( QObject::tr(
                 "There were some problems reading in the coordinate data "
                 "from the restart file %1.\n%2")
                     .arg(filename).arg(global_errors.join("\n")), CODELOC );
@@ -610,7 +670,7 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     
     if (not global_errors.isEmpty())
     {
-        throw SireError::io_error( QObject::tr(
+        throw SireIO::parse_error( QObject::tr(
                 "There were some problems reading in the velocity data "
                 "from the restart file %1.\n%2")
                     .arg(filename).arg(global_errors.join("\n")), CODELOC );
@@ -853,7 +913,7 @@ AmberParm::FLAG_TYPE AmberParm::flagType(const QString &flag) const
 /** Return the integer data for the passed flag. This returns an empty
     list if there is no data associated with this flag. This raises
     an invalid_cast error if data exists, but it is the wrong type */
-QList<qint64> AmberParm::intData(const QString &flag) const
+QVector<qint64> AmberParm::intData(const QString &flag) const
 {
     auto it = int_data.constFind(flag);
     
@@ -878,13 +938,13 @@ QList<qint64> AmberParm::intData(const QString &flag) const
                     .arg(flag), CODELOC );
     }
 
-    return QList<qint64>();
+    return QVector<qint64>();
 }
 
 /** Return the float data for the passed flag. This returns an empty
     list if there is no data associated with this flag. This raises
     an invalid_cast error if data exists, but it is the wrong type */
-QList<double> AmberParm::floatData(const QString &flag) const
+QVector<double> AmberParm::floatData(const QString &flag) const
 {
     auto it = float_data.constFind(flag);
     
@@ -909,13 +969,13 @@ QList<double> AmberParm::floatData(const QString &flag) const
                     .arg(flag), CODELOC );
     }
 
-    return QList<double>();
+    return QVector<double>();
 }
 
 /** Return the string data for the passed flag. This returns an empty
     list if there is no data associated with this flag. This raises
     an invalid_cast error if data exists, but it is the wrong type */
-QStringList AmberParm::stringData(const QString &flag) const
+QVector<QString> AmberParm::stringData(const QString &flag) const
 {
     auto it = string_data.constFind(flag);
     
@@ -940,7 +1000,93 @@ QStringList AmberParm::stringData(const QString &flag) const
                     .arg(flag), CODELOC );
     }
 
-    return QStringList();
+    return QVector<QString>();
+}
+
+/** This function finds all atoms that are bonded to the atom at index 'atom_idx'
+    (which is in molecule with index 'mol_idx', populating the hashe
+    'atom_to_mol' (the molecule containing the passed atom). This uses the bonding information
+    in 'bonded_atoms', which is the list of all atoms that are bonded to each atom */
+static void findBondedAtoms(int atom_idx, int mol_idx,
+                            const QHash<int, int> &bonded_atoms,
+                            QHash<int, int> &atom_to_mol,
+                            QSet<int> &atoms_in_mol)
+{
+    for ( auto bonded_atom : bonded_atoms.values(atom_idx) )
+    {
+        if (not atoms_in_mol.contains(bonded_atom))
+        {
+            //we have not walked along this atom before
+            atom_to_mol[bonded_atom] = mol_idx;
+            atoms_in_mol.insert(bonded_atom);
+            findBondedAtoms( bonded_atom, mol_idx, bonded_atoms, atom_to_mol, atoms_in_mol );
+        }
+    }
+}
+
+/** This function uses the bond information in 'bonds_inc_h' and 'bonds_exc_h'
+    to divide the passed atoms into molecules. This returns an array of
+    the number of atoms in each molecule (same format as ATOMS_PER_MOLECULE) */
+static QVector<qint64> discoverMolecules(const QVector<qint64> &bonds_inc_h,
+                                         const QVector<qint64> &bonds_exc_h,
+                                         int natoms)
+{
+    //first, create a hash showing which atoms are bonded to each other
+    
+    //NOTE: the atom numbers in the following arrays that describe bonds
+    //are coordinate array indexes for runtime speed. The true atom number
+    //equals the absolute value of the number divided by three, plus one.
+    //
+    //%FORMAT(10I8)  (IBH(i),JBH(i),ICBH(i), i=1,NBONH)
+    //  IBH    : atom involved in bond "i", bond contains hydrogen
+    //  JBH    : atom involved in bond "i", bond contains hydrogen
+    //  ICBH   : index into parameter arrays RK and REQ
+    QHash<int, int> bonded_atoms;
+
+    for ( int j = 0 ; j < bonds_exc_h.count() ; j = j + 3 )
+    {
+        int atom0 = bonds_exc_h[ j ] / 3 + 1;
+        int atom1 = bonds_exc_h[ j + 1 ] / 3 + 1;
+        bonded_atoms.insertMulti(atom0, atom1);
+        bonded_atoms.insertMulti(atom1, atom0);
+    }
+
+    for ( int j = 0 ; j < bonds_inc_h.count() ; j = j + 3 )
+    {
+        int atom0 = bonds_inc_h[ j ] / 3 + 1 ;
+        int atom1 = bonds_inc_h[ j + 1 ] / 3 + 1 ;
+        bonded_atoms.insertMulti(atom0, atom1);
+        bonded_atoms.insertMulti(atom1, atom0);
+    }
+
+    // Then recursively walk along each atom to find all the atoms that
+    // are in the same molecule
+    int nmols = 0;
+    
+    QHash<int, int> atom_to_mol;
+
+    QList<qint64> atoms_per_mol;
+
+    for ( int i = 1 ; i <= natoms ; i++ )
+    {
+        if (not atom_to_mol.contains(i))
+        {
+            QSet<int> atoms_in_mol;
+        
+            nmols += 1;
+            atom_to_mol[ i ] = nmols;
+            atoms_in_mol.insert(i);
+
+            // Recursive walk
+            findBondedAtoms(i, nmols, bonded_atoms, atom_to_mol, atoms_in_mol);
+            
+            //this has now found all of the atoms in this molecule. Add the
+            //number of atoms in the molecule to atoms_per_mol
+            atoms_per_mol.append( atoms_in_mol.count() );
+        }
+    }
+    
+    return atoms_per_mol.toVector();
 }
 
 /** Process all of the flags */
@@ -969,21 +1115,21 @@ void AmberParm::processAllFlags()
             {
                 case INTEGER:
                 {
-                    QList<qint64> data = readIntData(lines(), format, index, &local_errors);
+                    QVector<qint64> data = readIntData(lines(), format, index, &local_errors);
                     QMutexLocker lkr(&int_mutex);
                     int_data.insert(flag, data);
                     break;
                 }
                 case FLOAT:
                 {
-                    QList<double> data = readFloatData(lines(), format, index, &local_errors);
+                    QVector<double> data = readFloatData(lines(), format, index, &local_errors);
                     QMutexLocker lkr(&float_mutex);
                     float_data.insert(flag, data);
                     break;
                 }
                 case STRING:
                 {
-                    QStringList data = readStringData(lines(), format, index, &local_errors);
+                    QVector<QString> data = readStringData(lines(), format, index, &local_errors);
                     QMutexLocker lkr(&string_mutex);
                     string_data.insert(flag, data);
                     break;
@@ -1002,7 +1148,7 @@ void AmberParm::processAllFlags()
     
     if (not global_errors.isEmpty())
     {
-        throw SireError::io_error( QObject::tr(
+        throw SireIO::parse_error( QObject::tr(
             "There were errors parsing the file:%1")
                 .arg(global_errors.join("\n")), CODELOC );
     }
@@ -1011,9 +1157,17 @@ void AmberParm::processAllFlags()
     
     if (pointers.count() < 31)
     {
-        throw SireError::io_error( QObject::tr(
+        throw SireIO::parse_error( QObject::tr(
             "There was no, or an insufficient 'POINTERS' section in the file! (%1)")
                 .arg(pointers.count()), CODELOC );
+    }
+    
+    //now we have to work out how the atoms divide into molecules
+    if (not int_data.contains("ATOMS_PER_MOLECULE"))
+    {
+        auto atoms_per_mol = discoverMolecules(int_data.value("BONDS_INC_HYDROGEN"),
+                                               int_data.value("BONDS_WITHOUT_HYDROGEN"),
+                                               nAtoms());
     }
 }
 
@@ -1170,7 +1324,7 @@ QString AmberParm::toString() const
 /** Return the title of the parameter file */
 QString AmberParm::title() const
 {
-    return string_data.value("TITLE").join("");
+    return QStringList( string_data.value("TITLE").toList() ).join("").simplified();
 }
 
 /** Return the total number of atoms in the file */
@@ -1260,7 +1414,7 @@ int AmberParm::nResidues() const
 /** Return the number of molecules in the file */
 int AmberParm::nMolecules() const
 {
-    QList<qint64> atoms_per_mol = int_data.value("ATOMS_PER_MOLECULE");
+    QVector<qint64> atoms_per_mol = int_data.value("ATOMS_PER_MOLECULE");
     
     if (atoms_per_mol.isEmpty())
     {
@@ -1275,11 +1429,13 @@ int AmberParm::nMolecules() const
 
 /** Return the first index of the atom in each molecule, together with
     the number of atoms in that molecule */
-QList< QPair<int,int> > AmberParm::moleculeIndicies() const
+QVector< QPair<int,int> > AmberParm::moleculeIndicies() const
 {
-    QList< QPair<int,int> > idxs;
+    QVector< QPair<int,int> > idxs;
     
-    QList<qint64> atoms_per_mol = int_data.value("ATOMS_PER_MOLECULE");
+    QVector<qint64> atoms_per_mol = int_data.value("ATOMS_PER_MOLECULE");
+    
+    idxs.reserve(atoms_per_mol.count());
     
     if (atoms_per_mol.isEmpty())
     {
@@ -1378,26 +1534,247 @@ void AmberParm::assertSane() const
             qDebug() << error->toString();
         }
     
-        throw SireError::io_error( QObject::tr(
+        throw SireIO::parse_error( QObject::tr(
             "Sanity tests failed for the loaded Amber prm7 format file"), CODELOC );
     }
 }
 
-/** Internal function used to get the molecule that starts at index 'start_idx'
+/** Internal function used to get the molecule structure that starts at index 'start_idx'
     in the file, and that has 'natoms' atoms */
-Molecule AmberParm::getMolecule(int start_idx, int natoms) const
+MolStructureEditor AmberParm::getMolStructure(int start_idx, int natoms,
+                                              const PropertyName &cutting) const
 {
-    return Molecule();
+    //first step is to build the structure of the molecule - i.e.
+    //the layout of cutgroups, residues and atoms
+    MolStructureEditor mol;
+
+    const auto atom_names = this->stringData("ATOM_NAME");
+
+    //locate the residue pointers for this molecule - note that the
+    //residue pointers are 1-indexed (i.e. from atom 1 to atom N)
+    const auto res_pointers = this->intData("RESIDUE_POINTER");
+    const auto res_names = this->stringData("RESIDUE_LABEL");
+
+    int res_start_idx = -1;
+    int res_end_idx = -1;
+
+    for (int i=0; i<res_pointers.count(); ++i)
+    {
+        if (res_pointers[i] == start_idx+1)
+        {
+            res_start_idx = i;
+        }
+        else if (res_pointers[i] == (start_idx+natoms+1))
+        {
+            res_end_idx = i;
+            break;
+        }
+    }
+
+    if (res_start_idx == -1)
+    {
+        throw SireIO::parse_error( QObject::tr(
+                "Could not find the residues that belong to the molecule with "
+                "atom indicies %1 to %2 (%3).")
+                    .arg(start_idx+1).arg(start_idx+natoms)
+                    .arg(res_start_idx), CODELOC );
+    }
+
+    if (res_end_idx == -1)
+    {
+        res_end_idx = res_pointers.count();
+    }
+
+    const int nres = res_end_idx - res_start_idx;
+
+    for (int i=1; i<=nres; ++i)
+    {
+        int res_idx = res_start_idx + i - 1;  // 1-index versus 0-index
+        int res_num = res_idx + 1;
+    
+        auto res = mol.add( ResNum(res_num) );
+        res.rename( ResName( res_names[res_idx] ) );
+        
+        int res_start_atom = res_pointers[res_idx];
+        int res_end_atom;
+        
+        if (res_idx+1 == res_pointers.count())
+        {
+            res_end_atom = res_start_atom + natoms - 1;
+        }
+        else
+        {
+            res_end_atom = res_pointers[res_idx+1] - 1; // 1 lower than first index
+                                                        // of atom in next residue
+        }
+        
+        //by default we will use one CutGroup per molecule - this
+        //may be changed later by the cutting system.
+        auto cutgroup = mol.add( CGName(QString::number(i)) );
+        
+        for (int j=res_start_atom; j<=res_end_atom; ++j)
+        {
+            auto atom = cutgroup.add( AtomNum(j) );
+            atom.rename( AtomName(atom_names[j-1]) );  // 0-index versus 1-index
+            atom.reparent( ResNum(res_num) );
+        }
+    }
+    
+    if (cutting.hasValue())
+    {
+        const CuttingFunction &cutfunc = cutting.value().asA<CuttingFunction>();
+        
+        if (not cutfunc.isA<ResidueCutting>())
+        {
+            mol = cutfunc(mol);
+        }
+    }
+    
+    return mol;
+}
+
+/** Internal function used to get the molecule structure that starts at index 'start_idx'
+    in the file, and that has 'natoms' atoms */
+Molecule AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &map) const
+{
+    //first, construct the layout of the molecule (sorting of atoms into residues and cutgroups)
+    auto mol = this->getMolStructure(start_idx, natoms, map["cutting"]).commit();
+    
+    //now, assign all of the atom and molecule properties
+    const PropertyName charge_property = map["charge"];
+    const PropertyName element_property = map["element"];
+    const PropertyName mass_property = map["mass"];
+    const PropertyName lj_property = map["LJ"];
+    const PropertyName ambertype_property = map["ambertype"];
+
+    const PropertyName connectivity_property = map["connectivity"];
+    const PropertyName bond_property = map["bond"];
+    const PropertyName angle_property = map["angle"];
+    const PropertyName dihedral_property = map["dihedral"];
+    const PropertyName improper_property = map["improper"];
+    const PropertyName nb_property = map["intrascale"];
+
+    const PropertyName amberparameters_property = map["amberparameters"];
+
+    //assign all of the atom properties
+    const auto charge_array = this->floatData("CHARGE");
+    const auto mass_array = this->floatData("MASS");
+    const auto atomic_num_array = this->intData("ATOMIC_NUMBER");
+    
+    const auto molinfo = mol.data().info();
+    
+    AtomCharges charges(molinfo);
+    AtomMasses masses(molinfo);
+    AtomElements elements(molinfo);
+    
+    for (int i=0; i<natoms; ++i)
+    {
+        const int atom_num = molinfo.number(AtomIdx(i)).value();
+        auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
+        
+        const int atom_idx = atom_num - 1;  // 1-index versus 0-index
+        
+        charges.set(cgatomidx, (charge_array[atom_idx] / AMBERCHARGECONV) * mod_electron);
+        masses.set(cgatomidx, mass_array[atom_idx] * g_per_mol );
+        elements.set(cgatomidx, Element(int(atomic_num_array[atom_idx])) );
+    }
+
+    auto moleditor = mol.edit();
+
+    moleditor.setProperty(charge_property, charges);
+    moleditor.setProperty(mass_property, masses);
+    moleditor.setProperty(element_property, elements);
+    
+    return moleditor.commit();
 }
 
 /** Return the ith molecule that is described by this AmberParm file. Note
     that this molecule won't have any coordinate data, as this is not
     provided in this file */
-Molecule AmberParm::getMolecule(int idx) const
+Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
 {
-    const QList< QPair<int,int> > mol_idxs = this->moleculeIndicies();
+    const QVector< QPair<int,int> > mol_idxs = this->moleculeIndicies();
     idx = Index(idx).map(mol_idxs.count());
-    return this->getMolecule( mol_idxs[idx].first, mol_idxs[idx].second );
+    return this->getMolecule( mol_idxs[idx].first, mol_idxs[idx].second, map );
+}
+
+/** Return the ith molecule that is described by this AmberParm file, getting
+    the coordinate (and possibly velocity) data from the passed AmberRst file */
+Molecule AmberParm::getMolecule(int idx, const AmberRst &rst,
+                                const PropertyMap &map) const
+{
+    if (rst.nAtoms() != this->nAtoms())
+    {
+        //these two files are likely to be incompatible!
+        throw SireIO::parse_error( QObject::tr(
+                "The passed Amber Parm and Restart files are incompatible as they "
+                "contain data for different numbers of atoms "
+                "(%1 in the Parm file and %2 in the Restart)")
+                    .arg(this->nAtoms()).arg(rst.nAtoms()), CODELOC );
+    }
+
+    auto mol = this->getMolecule(idx, map);
+    
+    const PropertyName coords_property = map["coordinates"];
+    
+    const auto molinfo = mol.data().info();
+
+    //create space for the coordinates
+    auto coords = QVector< QVector<Vector> >(molinfo.nCutGroups());
+    
+    for (int i=0; i<molinfo.nCutGroups(); ++i)
+    {
+        coords[i] = QVector<Vector>(molinfo.nAtoms(CGIdx(i)));
+    }
+    
+    const Vector *coords_array = rst.coordinates().constData();
+
+    if (rst.hasVelocities())
+    {
+        const PropertyName vels_property = map["velocity"];
+    
+        auto vels = AtomVelocities(molinfo);
+        const Vector *vels_array = rst.velocities().constData();
+        
+        for (int i=0; i<mol.nAtoms(); ++i)
+        {
+            const int atom_num = molinfo.number(AtomIdx(i)).value();
+            auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
+            
+            const int atom_idx = atom_num - 1;  // 1-index versus 0-index
+            
+            coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[atom_idx];
+
+            //velocity is Angstroms per 1/20.455 ps
+            const auto vel_unit = (1.0 / 20.455) * angstrom / picosecond;
+            
+            const Vector &vel = vels_array[atom_idx];
+            vels.set(cgatomidx, Velocity3D(vel.x() * vel_unit,
+                                           vel.y() * vel_unit,
+                                           vel.z() * vel_unit));
+        }
+        
+        return mol.edit()
+                  .setProperty(vels_property, vels)
+                  .setProperty(coords_property, AtomCoords(CoordGroupArray(coords)))
+                  .commit();
+    }
+    else
+    {
+        for (int i=0; i<mol.nAtoms(); ++i)
+        {
+            const int atom_num = molinfo.number(AtomIdx(i)).value();
+            auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
+            
+            const int atom_idx = atom_num - 1;  // 1-index versus 0-index
+            
+            coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[atom_idx];
+        }
+        
+        return mol.edit()
+                  .setProperty(coords_property, AtomCoords(CoordGroupArray(coords)))
+                  .commit();
+    }
 }
 
 /** Return the System that is described by this AmberParm file. Note that
@@ -1405,7 +1782,7 @@ Molecule AmberParm::getMolecule(int idx) const
     provided by the file */
 System AmberParm::startSystem(const PropertyMap &map) const
 {
-    const QList< QPair<int,int> > mol_idxs = this->moleculeIndicies();
+    const QVector< QPair<int,int> > mol_idxs = this->moleculeIndicies();
 
     const int nmols = mol_idxs.count();
     
@@ -1424,7 +1801,8 @@ System AmberParm::startSystem(const PropertyMap &map) const
         for (int i=r.begin(); i<r.end(); ++i)
         {
             local_mols[i-r.begin()] = this->getMolecule( mol_idxs[i].first,
-                                                         mol_idxs[i].second );
+                                                         mol_idxs[i].second,
+                                                         map );
         }
         
         //copy them over to global memory
@@ -1436,6 +1814,11 @@ System AmberParm::startSystem(const PropertyMap &map) const
     });
     
     MoleculeGroup mols("all");
+    
+    for (auto molecule : global_mols)
+    {
+        mols.add(molecule);
+    }
     
     System system( this->title() );
     system.add(mols);

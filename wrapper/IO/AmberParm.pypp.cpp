@@ -93,7 +93,7 @@ void register_AmberParm_class(){
         }
         { //::SireIO::AmberParm::floatData
         
-            typedef ::QList< double > ( ::SireIO::AmberParm::*floatData_function_type)( ::QString const & ) const;
+            typedef ::QVector< double > ( ::SireIO::AmberParm::*floatData_function_type)( ::QString const & ) const;
             floatData_function_type floatData_function_value( &::SireIO::AmberParm::floatData );
             
             AmberParm_exposer.def( 
@@ -105,19 +105,31 @@ void register_AmberParm_class(){
         }
         { //::SireIO::AmberParm::getMolecule
         
-            typedef ::SireMol::Molecule ( ::SireIO::AmberParm::*getMolecule_function_type)( int ) const;
+            typedef ::SireMol::Molecule ( ::SireIO::AmberParm::*getMolecule_function_type)( int,::SireBase::PropertyMap const & ) const;
             getMolecule_function_type getMolecule_function_value( &::SireIO::AmberParm::getMolecule );
             
             AmberParm_exposer.def( 
                 "getMolecule"
                 , getMolecule_function_value
-                , ( bp::arg("i") )
-                , "Return the ith molecule that is described by this AmberParm file. Note\nthat this molecule wont have any coordinate data, as this is not\nprovided in this file" );
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Internal function used to get the molecule that starts at index start_idx\nin the file, and that has natoms atoms" );
+        
+        }
+        { //::SireIO::AmberParm::getMolecule
+        
+            typedef ::SireMol::Molecule ( ::SireIO::AmberParm::*getMolecule_function_type)( int,::SireIO::AmberRst const &,::SireBase::PropertyMap const & ) const;
+            getMolecule_function_type getMolecule_function_value( &::SireIO::AmberParm::getMolecule );
+            
+            AmberParm_exposer.def( 
+                "getMolecule"
+                , getMolecule_function_value
+                , ( bp::arg("i"), bp::arg("rst"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireIO::AmberParm::intData
         
-            typedef ::QList< long long > ( ::SireIO::AmberParm::*intData_function_type)( ::QString const & ) const;
+            typedef ::QVector< long long > ( ::SireIO::AmberParm::*intData_function_type)( ::QString const & ) const;
             intData_function_type intData_function_value( &::SireIO::AmberParm::intData );
             
             AmberParm_exposer.def( 
@@ -345,7 +357,7 @@ void register_AmberParm_class(){
         }
         { //::SireIO::AmberParm::stringData
         
-            typedef ::QStringList ( ::SireIO::AmberParm::*stringData_function_type)( ::QString const & ) const;
+            typedef ::QVector< QString > ( ::SireIO::AmberParm::*stringData_function_type)( ::QString const & ) const;
             stringData_function_type stringData_function_value( &::SireIO::AmberParm::stringData );
             
             AmberParm_exposer.def( 
