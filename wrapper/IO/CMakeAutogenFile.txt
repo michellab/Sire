@@ -21,6 +21,7 @@ set ( PYPP_SOURCES
        TinkerParameters.pypp.cpp
        TrajectoryMonitor.pypp.cpp
        ZmatrixMaker.pypp.cpp
+       SireIO_containers.cpp
        SireIO_properties.cpp
        SireIO_registrars.cpp
     )

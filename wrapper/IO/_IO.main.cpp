@@ -49,12 +49,16 @@
 
 namespace bp = boost::python;
 
+#include "SireIO_containers.h"
+
 #include "SireIO_registrars.h"
 
 #include "SireIO_properties.h"
 
 BOOST_PYTHON_MODULE(_IO){
     register_SireIO_objects();
+
+    register_SireIO_containers();
 
     register_Amber_class();
 

@@ -29,6 +29,7 @@
 #include "moleculeparser.h"
 
 #include "SireError/errors.h"
+#include "SireIO/errors.h"
 
 #include "SireBase/parallel.h"
 
@@ -42,6 +43,8 @@
 #include <QFile>
 #include <QTextStream>
 #include <QElapsedTimer>
+#include <QFileInfo>
+#include <QMutex>
 #include <QDebug>
 
 using namespace SireIO;
@@ -80,34 +83,86 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, MoleculeParser &parser)
     return ds;
 }
 
+typedef QMultiHash<QString,SireIO::detail::ParserFactory> ParserFactories;
+Q_GLOBAL_STATIC( ParserFactories, getParserFactories );
+
 /** Constructor */
 MoleculeParser::MoleculeParser() : Property()
 {}
+
+/** Internal function that provides a file cache */
+class FileContentsCache
+{
+public:
+    static QVector<QString> read(QString filename)
+    {
+        QMutexLocker lkr(&cache_mutex);
+        auto it = cache.constFind(filename);
+        
+        if (it != cache.constEnd())
+        {
+            return it.value();
+        }
+        else
+        {
+            return QVector<QString>();
+        }
+    }
+    
+    static void save(QString filename, QVector<QString> filecontents)
+    {
+        QMutexLocker lkr(&cache_mutex);
+        cache[filename] = filecontents;
+    }
+    
+    static void clear()
+    {
+        QMutexLocker lkr(&cache_mutex);
+        cache.clear();
+    }
+
+private:
+    static QMutex cache_mutex;
+    static QHash< QString, QVector<QString> > cache;
+};
+
+QMutex FileContentsCache::cache_mutex;
+QHash< QString, QVector<QString> > FileContentsCache::cache;
 
 /** Construct the parser, parsing in all of the lines in the file
     with passed filename */
 MoleculeParser::MoleculeParser(const QString &filename)
                : Property()
 {
-    QFile file(filename);
+    //we will be continually reloading the same file when testing parsers,
+    //so check whether this file exists in the cache
+    lnes = FileContentsCache::read(filename);
     
-    if (not file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
+    if (lnes.isEmpty())
     {
-        throw SireError::file_error(file, CODELOC);
+        QFile file(filename);
+    
+        if (not file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
+        {
+            throw SireError::file_error(file, CODELOC);
+        }
+        
+        QTextStream ts(&file);
+        
+        QStringList l;
+        
+        while (not ts.atEnd())
+        {
+            l.append( ts.readLine() );
+        }
+        
+        file.close();
+        
+        lnes = l.toVector();
+        
+        if (not lnes.isEmpty())
+            FileContentsCache::save(filename, lnes);
     }
-    
-    QTextStream ts(&file);
-    
-    QStringList l;
-    
-    while (not ts.atEnd())
-    {
-        l.append( ts.readLine() );
-    }
-    
-    file.close();
-    
-    lnes = l.toVector();
 }
 
 /** Copy constructor */
@@ -183,6 +238,95 @@ void MoleculeParser::write(const QString &filename) const
     qDebug() << "File write took" << (0.000001*ns) << "ms";
 }
 
+/** Internal function that actually tries to parse the supplied file with name
+    'filename'. This will try to find a parser based on suffix, but if that fails,
+    it will try all parsers. It will choose the parser that doesn't raise an error
+    that scores highest. */
+MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
+                                             const PropertyMap &map)
+{
+    QFileInfo info(filename);
+    
+    if (not (info.isFile() and info.isReadable()))
+    {
+        throw SireError::file_error( QObject::tr(
+                "There is no file readable called '%1'.")
+                    .arg(filename), CODELOC );
+    }
+
+    //try to find the right parser based on the suffix
+    QString suffix = info.suffix();
+
+    QStringList errors;
+    QMap<float,MoleculeParserPtr> parsers;
+
+    const auto parser_factories = getParserFactories();
+
+    if (not suffix.isEmpty())
+    {
+        for (auto factory : parser_factories->values(suffix))
+        {
+            try
+            {
+                auto parser = factory(filename, map);
+                parsers.insert(parser.read().score(), parser);
+            }
+            catch(const SireError::exception &e)
+            {
+                errors.append( e.toString() );
+            }
+        }
+
+        if (not parsers.isEmpty())
+        {
+            //return the parser with the highest score
+            return parsers.last();
+        }
+    }
+
+    //none of the tested parsers worked, so let's now try all of the parsers
+    for (auto s : parser_factories->keys())
+    {
+        if (s != suffix)
+        {
+            for (auto factory : parser_factories->values(s))
+            {
+                try
+                {
+                    auto parser = factory(filename, map);
+                    parsers.insert(parser.read().score(), parser);
+                }
+                catch(...)
+                {}
+            }
+        }
+    }
+
+    if (not parsers.isEmpty())
+    {
+        return parsers.last();
+    }
+    else
+    {
+        if (suffix.isEmpty())
+        {
+            throw SireIO::parse_error( QObject::tr(
+                    "There are no parsers available that can parse the file '%1'")
+                        .arg(filename), CODELOC );
+        }
+        else
+        {
+            throw SireIO::parse_error( QObject::tr(
+                    "There are no parsers available that can parser the file '%1'. "
+                    "All parsers were tried, including those that were associated with "
+                    "the extension of this file. The associated parsers had errors:\n%2")
+                        .arg(filename).arg(errors.join("\n\n")), CODELOC );
+        }
+        
+        return MoleculeParserPtr();
+    }
+}
+
 /** Parse the passed file, returning the resulting Parser. This employs a lot
     of magic to automatically work out the format of the file and whether or
     not this is parseable by Sire... This raises an exception if the file
@@ -190,7 +334,9 @@ void MoleculeParser::write(const QString &filename) const
 MoleculeParserPtr MoleculeParser::parse(const QString &filename,
                                         const PropertyMap &map)
 {
-    return MoleculeParserPtr();
+    MoleculeParserPtr parser = MoleculeParser::_pvt_parse(filename, map);
+    FileContentsCache::clear();
+    return parser;
 }
 
 /** Parse the passed set of files, returning the resulting Parsers */
@@ -201,7 +347,7 @@ QList<MoleculeParserPtr> MoleculeParser::parse(const QStringList &filenames,
 
     if (filenames.count() == 1)
     {
-        result.append( MoleculeParser::parse(filenames[0]) );
+        result.append( MoleculeParser::_pvt_parse(filenames[0], map) );
     }
     else
     {
@@ -214,12 +360,14 @@ QList<MoleculeParserPtr> MoleculeParser::parse(const QStringList &filenames,
         {
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                parsers[i] = MoleculeParser::parse(filenames[i], map);
+                parsers[i] = MoleculeParser::_pvt_parse(filenames[i], map);
             }
         }, tbb::simple_partitioner());
         
         result = parsers.toList();
     }
+    
+    FileContentsCache::clear();
     
     return result;
 }
@@ -381,6 +529,24 @@ void MoleculeParser::addToSystem(System &system, const PropertyMap &map) const
             "System. It can only be used to create a new System from scratch.")
                 .arg(this->toString()), CODELOC );
 }
+
+/** Internal function used to register the passed parser as a valid parser for the
+    passed extension */
+void MoleculeParser::registerParser(const QString &extension,
+                                    SireIO::detail::ParserFactory factory)
+{
+    getParserFactories()->insertMulti( extension, factory );
+}
+
+SireIO::detail::RegisterParser::RegisterParser(const QString &extension,
+                                               const SireIO::detail::ParserFactory factory)
+{
+    qDebug() << "REGISTER PARSER FOR" << extension;
+    MoleculeParser::registerParser(extension, factory);
+}
+
+SireIO::detail::RegisterParser::~RegisterParser()
+{}
 
 Q_GLOBAL_STATIC( NullParser, nullParser )
 

@@ -167,6 +167,17 @@ void register_MoleculeParser_class(){
                 , "Read the files with passed filenames, returning the System contained therein.\nNote that all of the files must be connected to the same system\n(i.e. it could be the Amber Parm and Rst file)" );
         
         }
+        { //::SireIO::MoleculeParser::score
+        
+            typedef double ( ::SireIO::MoleculeParser::*score_function_type)(  ) const;
+            score_function_type score_function_value( &::SireIO::MoleculeParser::score );
+            
+            MoleculeParser_exposer.def( 
+                "score"
+                , score_function_value
+                , "" );
+        
+        }
         { //::SireIO::MoleculeParser::toSystem
         
             typedef ::SireSystem::System ( ::SireIO::MoleculeParser::*toSystem_function_type)( ::SireBase::PropertyMap const & ) const;

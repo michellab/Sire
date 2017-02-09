@@ -33,6 +33,8 @@
 
 #include "SireMol/residuecutting.h"
 
+#include <functional>
+
 SIRE_BEGIN_HEADER
 
 namespace SireIO
@@ -58,6 +60,20 @@ namespace SireIO
 using SireBase::PropertyMap;
 
 typedef SireBase::PropPtr<MoleculeParser> MoleculeParserPtr;
+
+namespace detail
+{
+    typedef std::function<MoleculeParserPtr (QString filename, const PropertyMap &map)>
+            ParserFactory;
+
+    /** Internal class used to help register parsers against extensions */
+    class SIREIO_EXPORT RegisterParser
+    {
+    public:
+        RegisterParser(const QString &extension, ParserFactory factory);
+        ~RegisterParser();
+    };
+}
 
 /** The base class of all molecule parsers */
 class SIREIO_EXPORT MoleculeParser : public SireBase::Property
@@ -96,6 +112,8 @@ public:
 
     virtual bool isLead() const;
 
+    double score() const;
+
     SireSystem::System toSystem(const PropertyMap &map = PropertyMap()) const;
     
     SireSystem::System toSystem(const MoleculeParser &other,
@@ -117,16 +135,24 @@ protected:
     bool operator==(const MoleculeParser &other) const;
     bool operator!=(const MoleculeParser &other) const;
 
-    void setLines(const QStringList &lines);
-    void setLines(const QVector<QString> &lines);
+    void setScore(double score);
 
     virtual SireSystem::System startSystem(const PropertyMap &map) const;
     virtual void addToSystem(SireSystem::System &system,
                              const PropertyMap &map) const;
 
 private:
+    static MoleculeParserPtr _pvt_parse(const QString &filename, const PropertyMap &map);
+
+    friend class detail::RegisterParser;
+    static void registerParser(const QString &extension, detail::ParserFactory factory);
+
     /** All of the lines in the file */
     QVector<QString> lnes;
+    
+    /** The score associated with the parser. The higher the score,
+        the better the file was parsed */
+    double scr;
 };
 
 /** This is a null parser, returned when the file cannot be parsed */
@@ -157,16 +183,21 @@ public:
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-/** Set the lines that should be written to the file. */
-inline void MoleculeParser::setLines(const QStringList &lines)
+/** Set the score from parsing */
+inline void MoleculeParser::setScore(double score)
 {
-    lnes = lines.toVector();
+    scr = score;
 }
 
-/** Set the lines that should be written to the file. */
-inline void MoleculeParser::setLines(const QVector<QString> &lines)
+/** Return the score from parsing. The higher the score, the better the
+    parsing. You can use this to decide which parser thought it was better
+    at parsing the file. The score should be a value of between
+    nlines * [0 (failed to parse line) -> 1 (parsed line perfectly)], 
+    where the maximum score of nlines means that every line of the 
+    file was parsed perfectly. */
+inline double MoleculeParser::score() const
 {
-    lnes = lines;
+    return scr;
 }
 
 /** Return the lines of the file. Note that this
@@ -197,6 +228,10 @@ inline bool MoleculeParser::isEmpty() const
 #endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }
+
+#define SIRE_REGISTER_PARSER( X, Y ) static SireIO::detail::RegisterParser \
+_SireIO_detail_RegisterParser_##X( #X, [](QString filename, const PropertyMap &map) \
+                  { return SireIO::MoleculeParserPtr(Y(filename,map));} );
 
 Q_DECLARE_METATYPE( SireIO::NullParser )
 

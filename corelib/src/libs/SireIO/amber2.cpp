@@ -402,6 +402,10 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberRst &rst)
 
 Vector cubic_angs(90,90,90);
 
+SIRE_REGISTER_PARSER( rst, AmberRst );
+SIRE_REGISTER_PARSER( rst7, AmberRst );
+SIRE_REGISTER_PARSER( crd, AmberRst );
+
 /** Constructor */
 AmberRst::AmberRst()
          : ConcreteProperty<AmberRst,MoleculeParser>(),
@@ -831,6 +835,10 @@ SireMaths::Vector AmberRst::boxAngles() const
 
 static const RegisterMetaType<AmberParm> r_parm;
 
+SIRE_REGISTER_PARSER( prm, AmberParm );
+SIRE_REGISTER_PARSER( prm7, AmberParm );
+SIRE_REGISTER_PARSER( top, AmberParm );
+
 /** Serialise to a binary datastream */
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberParm &parm)
 {
@@ -1173,29 +1181,18 @@ void AmberParm::processAllFlags()
 
 /** Construct by reading from the file called 'filename' */
 AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
-          : ConcreteProperty<AmberParm,MoleculeParser>()
+          : ConcreteProperty<AmberParm,MoleculeParser>(filename)
 {
-    //first, open the file and read the lines
-    QFile f(filename);
-    
-    if (not f.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        throw SireError::file_error(f, CODELOC);
-    }
-    
     // as we are reading, look out for any FLAGs, so that we
     // can record their locations
-    QTextStream ts(&f);
-    int i = 0;
     QString last_flag = QString::null;
-    
-    QStringList lnes;
-    
-    while (not ts.atEnd())
+
+    const int nlines = lines().count();
+    const QString *lines_array = lines().constData();
+
+    for (int i=0; i<nlines; ++i)
     {
-        QString line = ts.readLine();
-    
-        lnes.append(line);
+        const QString &line = lines_array[i];
         
         if (line[0] == '%')
         {
@@ -1214,7 +1211,7 @@ AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
                 }
                 
                 //find the new flag
-                QStringList words = line.split(" ");
+                QStringList words = line.split(" ", QString::SkipEmptyParts);
                 
                 QString flag = words[1];
                 
@@ -1231,18 +1228,13 @@ AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
                 last_flag = flag;
             }
         }
-        
-        ++i;
     }
     
     if (not last_flag.isNull())
     {
-        flag_to_line[last_flag].second = i - flag_to_line[last_flag].first;
+        flag_to_line[last_flag].second = nlines - flag_to_line[last_flag].first;
         last_flag = QString::null;
     }
-
-    //save the lines into this object
-    this->setLines(lnes);
 
     //now process all of the flag data
     this->processAllFlags();
