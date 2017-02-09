@@ -43,6 +43,7 @@
 #include "SireMol/atomvelocities.h"
 #include "SireMol/connectivity.h"
 #include "SireMol/selector.hpp"
+#include "SireMol/mgname.h"
 
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
@@ -203,9 +204,11 @@ public:
 
 QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
                             const QPair<qint64,qint64> &index,
-                            QStringList *errors=0)
+                            double *total_score, QStringList *errors=0)
 {
     QVector<qint64> data;
+
+    double score = 0;
 
     //read in all of the lines...
     const int strt = index.first;
@@ -228,6 +231,8 @@ QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
                 "Expected %2 values but only saw %3.")
                     .arg(i+1).arg(format.numValues()).arg(nvalues) );
         }
+        
+        double read_score = 0;
         
         for (int j=0; j<nvalues; ++j)
         {
@@ -239,7 +244,10 @@ QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
                 qint64 value = ref.toLong(&ok);
                 
                 if (ok)
+                {
                     data.append(value);
+                    read_score += 1.0;
+                }
                 else if (errors)
                     errors->append( QObject::tr("Failed to convert the data "
                        "on line %1, column %2 (%3) into an integer!")
@@ -252,16 +260,23 @@ QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
                             .arg(i+1).arg(j+1) );
             }
         }
+
+        score += read_score / nvalues;
     }
+
+    if (total_score)
+        *total_score += score;
 
     return data;
 }
 
 QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
                               const QPair<qint64,qint64> &index,
-                              QStringList *errors)
+                              double *total_score, QStringList *errors)
 {
     QVector<double> data;
+
+    double score = 0;
 
     //read in all of the lines...
     const int strt = index.first;
@@ -284,6 +299,8 @@ QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
                 "Expected %2 values but only saw %3.")
                     .arg(i+1).arg(format.numValues()).arg(nvalues) );
         }
+        
+        double read_score = 0;
         
         for (int j=0; j<nvalues; ++j)
         {
@@ -295,7 +312,10 @@ QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
                 double value = ref.toDouble(&ok);
                 
                 if (ok)
+                {
                     data.append(value);
+                    read_score += 1;
+                }
                 else if (errors)
                     errors->append( QObject::tr("Failed to convert the data "
                        "on line %1, column %2 (%3) into an integer!")
@@ -308,16 +328,23 @@ QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
                             .arg(i+1).arg(j+1) );
             }
         }
+        
+        score += read_score / nvalues;
     }
+
+    if (total_score)
+        *total_score += score;
 
     return data;
 }
 
 QVector<QString> readStringData(const QVector<QString> &lines, AmberFormat format,
                                 const QPair<qint64,qint64> &index,
-                                QStringList *errors)
+                                double *total_score, QStringList *errors)
 {
     QVector<QString> data;
+
+    double score = 0;
 
     //read in all of the lines...
     const int strt = index.first;
@@ -341,6 +368,8 @@ QVector<QString> readStringData(const QVector<QString> &lines, AmberFormat forma
                     .arg(i+1).arg(format.numValues()).arg(nvalues) );
         }
         
+        double read_score = 0;
+        
         for (int j=0; j<nvalues; ++j)
         {
             auto ref = line.midRef( j*format.width(), format.width() );
@@ -348,6 +377,7 @@ QVector<QString> readStringData(const QVector<QString> &lines, AmberFormat forma
             if (not ref.isNull())
             {
                 data.append( ref.toString() );
+                read_score += 1;
             }
             else if (errors)
             {
@@ -356,7 +386,12 @@ QVector<QString> readStringData(const QVector<QString> &lines, AmberFormat forma
                             .arg(i+1).arg(j+1) );
             }
         }
+        
+        score += read_score / nvalues;
     }
+
+    if (total_score)
+        *total_score += score;
 
     return data;
 }
@@ -409,7 +444,7 @@ SIRE_REGISTER_PARSER( crd, AmberRst );
 /** Constructor */
 AmberRst::AmberRst()
          : ConcreteProperty<AmberRst,MoleculeParser>(),
-           current_time(0), box_angs(cubic_angs)
+           current_time(0), box_dims(0), box_angs(cubic_angs)
 {}
 
 /** Private function used to read in the box data from the line with passed index */
@@ -470,14 +505,17 @@ void AmberRst::readBoxInfo(int boxidx)
 /** Construct by parsing the passed file */
 AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(filename),
-           current_time(0), box_angs(cubic_angs)
+           current_time(0), box_dims(0), box_angs(cubic_angs)
 {
     if (lines().count() < 2)
         //there is nothing in the file
         return;
     
+    double score = 0;
+    
     // read in the title FORMAT(20A4)
     ttle = lines()[0].simplified();
+    score += 1;
     
     // read in the number of atoms and time FORMAT(I5,5E15.7)
     bool ok = true;
@@ -512,6 +550,7 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
                         .arg(filename).arg(words[0]), CODELOC );
         }
     }
+    score += 1;
     
     //now make sure that that the file is large enough!
     if (lines().count() < (2 + (natoms/2)))
@@ -599,6 +638,7 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     }
     
     coords = global_data;
+    score += natoms/2;
     
     //now read in all of the velocities
     if (lines().count() < (2 + (natoms/2) + (natoms/2)))
@@ -610,6 +650,8 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
         {
             //there is - read in the box information
             this->readBoxInfo(boxidx);
+            score += 1;
+            this->setScore(score);
             return;
         }
     }
@@ -682,6 +724,8 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     
     vels = global_data;
 
+    score += (natoms/2);
+
     //see if there is periodic box information
     int boxidx = 2 + (natoms/2) + (natoms/2);
     
@@ -689,14 +733,16 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     {
         //there is - read in the box information
         this->readBoxInfo(boxidx);
-        return;
+        score += 1;
     }
+    
+    this->setScore(score);
 }
 
 /** Construct by extracting the necessary data from the passed System */
 AmberRst::AmberRst(const System &system, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(),
-           current_time(0), box_angs(cubic_angs)
+           current_time(0), box_dims(0), box_angs(cubic_angs)
 {
     //DO SOMETHING
 }
@@ -777,7 +823,167 @@ AmberRst AmberRst::parse(const QString &filename)
 /** Internal function used to add the data from this parser into the passed System */
 void AmberRst::addToSystem(System &system, const PropertyMap &map) const
 {
-    //DO SOMETHING
+    //first, we are going to work with the group of all molecules, which should
+    //be called "all". We have to assume that the molecules are ordered in "all"
+    //in the same order as they are in this restart file, with the data
+    //in MolIdx/AtomIdx order (this should be the default for all parsers!)
+    MoleculeGroup allmols = system[MGName("all")];
+
+    const int nmols = allmols.nMolecules();
+    
+    QElapsedTimer t;
+    t.start();
+    QVector<int> atom_pointers(nmols+1, -1);
+    
+    int natoms = 0;
+    
+    for (int i=0; i<nmols; ++i)
+    {
+        atom_pointers[i] = natoms;
+        const int nats = allmols[MolIdx(i)].data().info().nAtoms();
+        natoms += nats;
+    }
+    
+    atom_pointers[nmols] = natoms;
+    qint64 ns = t.nsecsElapsed();
+    
+    qDebug() << "BUILD TOOK" << (0.000001*ns) << "ms";
+    
+    if (natoms != this->nAtoms())
+        throw SireIO::parse_error( QObject::tr(
+                "Incompatibility between the files, as this restart file contains data "
+                "for %1 atom(s), while the other file(s) have created a system with "
+                "%2 atom(s)").arg(this->nAtoms()).arg(natoms), CODELOC );
+    
+    //next, copy the coordinates and optionally the velocities into the molecules
+    t.start();
+    QVector<Molecule> mols(nmols);
+    Molecule *mols_array = mols.data();
+    const Vector *coords_array = this->coordinates().constData();
+    
+    const PropertyName coords_property = map["coordinates"];
+    
+    if (this->hasVelocities())
+    {
+        const PropertyName vels_property = map["velocity"];
+        const Vector *vels_array = this->velocities().constData();
+    
+        tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
+                           [&](tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                const int atom_start_idx = atom_pointers.constData()[i];
+                auto mol = allmols[MolIdx(i)].molecule();
+                const auto molinfo = mol.data().info();
+                
+                //create space for the coordinates and velocities
+                auto coords = QVector< QVector<Vector> >(molinfo.nCutGroups());
+                auto vels = AtomVelocities(molinfo);
+
+                for (int j=0; j<molinfo.nCutGroups(); ++j)
+                {
+                    coords[j] = QVector<Vector>(molinfo.nAtoms(CGIdx(j)));
+                }
+                
+                for (int j=0; j<mol.nAtoms(); ++j)
+                {
+                    auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
+                    
+                    const int atom_idx = atom_start_idx + j;
+                    
+                    coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[atom_idx];
+
+                    //velocity is Angstroms per 1/20.455 ps
+                    const auto vel_unit = (1.0 / 20.455) * angstrom / picosecond;
+                    
+                    const Vector &vel = vels_array[atom_idx];
+                    vels.set(cgatomidx, Velocity3D(vel.x() * vel_unit,
+                                                   vel.y() * vel_unit,
+                                                   vel.z() * vel_unit));
+                }
+                
+                mols_array[i] = mol.edit()
+                                .setProperty(vels_property, vels)
+                                .setProperty(coords_property,
+                                             AtomCoords(CoordGroupArray(coords)))
+                                .commit();
+            }
+        });
+    }
+    else
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
+                           [&](tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                const int atom_start_idx = atom_pointers.constData()[i];
+                auto mol = system[MolIdx(i)].molecule();
+                const auto molinfo = mol.data().info();
+                
+                //create space for the coordinates
+                auto coords = QVector< QVector<Vector> >(molinfo.nCutGroups());
+
+                for (int j=0; j<molinfo.nCutGroups(); ++j)
+                {
+                    coords[j] = QVector<Vector>(molinfo.nAtoms(CGIdx(j)));
+                }
+                
+                for (int j=0; j<mol.nAtoms(); ++j)
+                {
+                    auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
+                    
+                    const int atom_idx = atom_start_idx + j;
+                    
+                    coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[atom_idx];
+                }
+                
+                mols_array[i] = mol.edit()
+                                .setProperty(coords_property,
+                                             AtomCoords(CoordGroupArray(coords)))
+                                .commit();
+            }
+        });
+    }
+    
+    ns = t.nsecsElapsed();
+    
+    qDebug() << "Building coordinate and velocity properties took"
+             << (0.000001*ns) << "ms";
+    
+    t.start();
+    
+    Molecules changed_mols(mols);
+    
+    ns = t.nsecsElapsed();
+    
+    qDebug() << "Convert to Molecules took" << (0.000001*ns) << "ms";
+    
+    t.start();
+    system.update(changed_mols);
+    
+    ns = t.nsecsElapsed();
+    
+    qDebug() << "Update took" << (0.000001*ns) << "ms";
+
+    PropertyName space_property = map["space"];
+    if (space_property.hasValue())
+    {
+        system.setProperty("space", space_property.value());
+    }
+    else if (box_dims != Vector(0) and space_property.hasSource())
+    {
+        if (box_angs != cubic_angs)
+        {
+            throw SireIO::parse_error( QObject::tr(
+                    "Sire cannot currently support a non-cubic periodic box! %1")
+                        .arg(box_angs.toString()), CODELOC );
+        }
+        
+        
+        system.setProperty( space_property.source(), SireVol::PeriodicBox(box_dims) );
+    }
 }
 
 /** Return the title of the file */
@@ -1098,9 +1304,11 @@ static QVector<qint64> discoverMolecules(const QVector<qint64> &bonds_inc_h,
 }
 
 /** Process all of the flags */
-void AmberParm::processAllFlags()
+double AmberParm::processAllFlags()
 {
     QMutex int_mutex, float_mutex, string_mutex;
+    
+    double score = 0;
     
     const QStringList flags = flag_to_line.keys();
     
@@ -1110,6 +1318,7 @@ void AmberParm::processAllFlags()
                        [&](tbb::blocked_range<int> r)
     {
         QStringList local_errors;
+        double local_score = 0;
     
         for (int i=r.begin(); i<r.end(); ++i)
         {
@@ -1123,21 +1332,24 @@ void AmberParm::processAllFlags()
             {
                 case INTEGER:
                 {
-                    QVector<qint64> data = readIntData(lines(), format, index, &local_errors);
+                    QVector<qint64> data = readIntData(lines(), format, index,
+                                                       &local_score, &local_errors);
                     QMutexLocker lkr(&int_mutex);
                     int_data.insert(flag, data);
                     break;
                 }
                 case FLOAT:
                 {
-                    QVector<double> data = readFloatData(lines(), format, index, &local_errors);
+                    QVector<double> data = readFloatData(lines(), format, index,
+                                                         &local_score, &local_errors);
                     QMutexLocker lkr(&float_mutex);
                     float_data.insert(flag, data);
                     break;
                 }
                 case STRING:
                 {
-                    QVector<QString> data = readStringData(lines(), format, index, &local_errors);
+                    QVector<QString> data = readStringData(lines(), format, index,
+                                                           &local_score, &local_errors);
                     QMutexLocker lkr(&string_mutex);
                     string_data.insert(flag, data);
                     break;
@@ -1146,10 +1358,12 @@ void AmberParm::processAllFlags()
                     break;
             }
         }
+
+        QMutexLocker lkr(&int_mutex);
+        score += local_score;
         
         if (not local_errors.isEmpty())
         {
-            QMutexLocker lkr(&int_mutex);
             global_errors += local_errors;
         }
     });
@@ -1177,12 +1391,16 @@ void AmberParm::processAllFlags()
                                                int_data.value("BONDS_WITHOUT_HYDROGEN"),
                                                nAtoms());
     }
+    
+    return score;
 }
 
 /** Construct by reading from the file called 'filename' */
 AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
           : ConcreteProperty<AmberParm,MoleculeParser>(filename)
 {
+    double score = 0;
+
     // as we are reading, look out for any FLAGs, so that we
     // can record their locations
     QString last_flag = QString::null;
@@ -1226,6 +1444,7 @@ AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
                 //skip the FLAG line, and the FORMAT line that must come immediately after
                 flag_to_line.insert( flag, QPair<qint64,qint64>(i+2,-1) );
                 last_flag = flag;
+                score += 1;
             }
         }
     }
@@ -1237,10 +1456,12 @@ AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
     }
 
     //now process all of the flag data
-    this->processAllFlags();
+    score += this->processAllFlags();
     
     //finally, make sure that we have been constructed sane
     this->assertSane();
+    
+    this->setScore(score);
 }
 
 /** Construct by converting from the passed system, using the passed property
@@ -1781,39 +2002,30 @@ System AmberParm::startSystem(const PropertyMap &map) const
     if (nmols == 0)
         return System();
     
-    QVector<Molecule> global_mols(nmols);
-    QMutex global_mutex;
+    QVector<Molecule> mols(nmols);
+    Molecule *mols_array = mols.data();
     
     tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
                        [&](tbb::blocked_range<int> r)
     {
-        QVector<Molecule> local_mols( r.end()-r.begin() );
-        
         //create and populate all of the molecules
         for (int i=r.begin(); i<r.end(); ++i)
         {
-            local_mols[i-r.begin()] = this->getMolecule( mol_idxs[i].first,
-                                                         mol_idxs[i].second,
-                                                         map );
-        }
-        
-        //copy them over to global memory
-        QMutexLocker lkr(&global_mutex);
-        for (int i=r.begin(); i<r.end(); ++i)
-        {
-            global_mols[i] = local_mols[i-r.begin()];
+            mols_array[i] = this->getMolecule( mol_idxs[i].first,
+                                               mol_idxs[i].second,
+                                               map );
         }
     });
     
-    MoleculeGroup mols("all");
+    MoleculeGroup molgroup("all");
     
-    for (auto molecule : global_mols)
+    for (auto mol : mols)
     {
-        mols.add(molecule);
+        molgroup.add(mol);
     }
     
     System system( this->title() );
-    system.add(mols);
+    system.add(molgroup);
     
     return system;
 }

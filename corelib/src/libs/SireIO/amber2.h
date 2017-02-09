@@ -236,8 +236,8 @@ private:
 
     QVector< QPair<int,int> > moleculeIndicies() const;
 
-    /** Function to process all flags */
-    void processAllFlags();
+    /** Function to process all flags, returning the parsing score */
+    double processAllFlags();
     
     /** A map showing the line number of all flags. This holds
         the start index and number of lines for each flag */

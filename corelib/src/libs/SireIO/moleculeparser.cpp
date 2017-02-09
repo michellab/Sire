@@ -63,7 +63,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const MoleculeParser &par
     writeHeader(ds, r_parser, 1);
     
     SharedDataStream sds(ds);
-    sds << parser.lnes << static_cast<const Property&>(parser);
+    sds << parser.lnes << parser.scr << static_cast<const Property&>(parser);
 
     return ds;
 }
@@ -75,7 +75,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, MoleculeParser &parser)
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        sds >> parser.lnes >> static_cast<Property&>(parser);
+        sds >> parser.lnes >> parser.scr >> static_cast<Property&>(parser);
     }
     else
         throw version_error(v,"1", r_parser, CODELOC);
@@ -87,7 +87,7 @@ typedef QMultiHash<QString,SireIO::detail::ParserFactory> ParserFactories;
 Q_GLOBAL_STATIC( ParserFactories, getParserFactories );
 
 /** Constructor */
-MoleculeParser::MoleculeParser() : Property()
+MoleculeParser::MoleculeParser() : Property(), scr(0)
 {}
 
 /** Internal function that provides a file cache */
@@ -132,7 +132,7 @@ QHash< QString, QVector<QString> > FileContentsCache::cache;
 /** Construct the parser, parsing in all of the lines in the file
     with passed filename */
 MoleculeParser::MoleculeParser(const QString &filename)
-               : Property()
+               : Property(), scr(0)
 {
     //we will be continually reloading the same file when testing parsers,
     //so check whether this file exists in the cache
@@ -167,7 +167,7 @@ MoleculeParser::MoleculeParser(const QString &filename)
 
 /** Copy constructor */
 MoleculeParser::MoleculeParser(const MoleculeParser &other)
-               : Property(other), lnes(other.lnes)
+               : Property(other), lnes(other.lnes), scr(other.scr)
 {}
 
 /** Destructor */
@@ -182,13 +182,14 @@ const char* MoleculeParser::typeName()
 MoleculeParser& MoleculeParser::operator=(const MoleculeParser &other)
 {
     lnes = other.lnes;
+    scr = other.scr;
     Property::operator=(other);
     return *this;
 }
 
 bool MoleculeParser::operator==(const MoleculeParser &other) const
 {
-    return lnes == other.lnes and Property::operator==(other);
+    return lnes == other.lnes and scr == other.scr and Property::operator==(other);
 }
 
 bool MoleculeParser::operator!=(const MoleculeParser &other) const
@@ -208,14 +209,14 @@ bool MoleculeParser::isLead() const
     overwrite the file if it exists already, so be careful! */
 void MoleculeParser::write(const QString &filename) const
 {
+    if (lnes.isEmpty())
+        return;
+
     if (not this->isTextFile())
         throw SireError::program_bug( QObject::tr(
             "Dear programmer - please override the MoleculeParser::save function "
             "to work with your binary file format. Text writing is not supported "
             "for the parser %1.").arg(this->what()), CODELOC );
-
-    QElapsedTimer t;
-    t.start();
 
     QFile f(filename);
     
@@ -232,10 +233,6 @@ void MoleculeParser::write(const QString &filename) const
     }
     
     f.close();
-    
-    qint64 ns = t.nsecsElapsed();
-    
-    qDebug() << "File write took" << (0.000001*ns) << "ms";
 }
 
 /** Internal function that actually tries to parse the supplied file with name
@@ -541,7 +538,6 @@ void MoleculeParser::registerParser(const QString &extension,
 SireIO::detail::RegisterParser::RegisterParser(const QString &extension,
                                                const SireIO::detail::ParserFactory factory)
 {
-    qDebug() << "REGISTER PARSER FOR" << extension;
     MoleculeParser::registerParser(extension, factory);
 }
 
