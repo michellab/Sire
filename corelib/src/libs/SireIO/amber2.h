@@ -32,6 +32,7 @@
 #include "moleculeparser.h"
 
 #include "SireMaths/vector.h"
+#include "SireMM/ljparameter.h"
 
 SIRE_BEGIN_HEADER
 
@@ -227,6 +228,7 @@ protected:
 
 private:
     void rebuildAfterReload();
+    void rebuildLJParameters();
 
     SireMol::MolStructureEditor getMolStructure(int start_idx, int natoms,
                                                 const SireBase::PropertyName &cutting) const;
@@ -251,6 +253,9 @@ private:
     
     /** The raw string data for the string flags */
     QHash< QString, QVector<QString> > string_data;
+    
+    /** All of the LJ parameters, indexed by atom type */
+    QVector<SireMM::LJParameter> lj_data;
     
     /** A copy of the POINTER data to prevent over-lookup */
     QVector<qint64> pointers;

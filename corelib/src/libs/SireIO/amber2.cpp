@@ -830,9 +830,7 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
     MoleculeGroup allmols = system[MGName("all")];
 
     const int nmols = allmols.nMolecules();
-    
-    QElapsedTimer t;
-    t.start();
+
     QVector<int> atom_pointers(nmols+1, -1);
     
     int natoms = 0;
@@ -845,9 +843,6 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
     }
     
     atom_pointers[nmols] = natoms;
-    qint64 ns = t.nsecsElapsed();
-    
-    qDebug() << "BUILD TOOK" << (0.000001*ns) << "ms";
     
     if (natoms != this->nAtoms())
         throw SireIO::parse_error( QObject::tr(
@@ -856,7 +851,6 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
                 "%2 atom(s)").arg(this->nAtoms()).arg(natoms), CODELOC );
     
     //next, copy the coordinates and optionally the velocities into the molecules
-    t.start();
     QVector<Molecule> mols(nmols);
     Molecule *mols_array = mols.data();
     const Vector *coords_array = this->coordinates().constData();
@@ -947,25 +941,7 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
         });
     }
     
-    ns = t.nsecsElapsed();
-    
-    qDebug() << "Building coordinate and velocity properties took"
-             << (0.000001*ns) << "ms";
-    
-    t.start();
-    
-    Molecules changed_mols(mols);
-    
-    ns = t.nsecsElapsed();
-    
-    qDebug() << "Convert to Molecules took" << (0.000001*ns) << "ms";
-    
-    t.start();
-    system.update(changed_mols);
-    
-    ns = t.nsecsElapsed();
-    
-    qDebug() << "Update took" << (0.000001*ns) << "ms";
+    system.update( Molecules(mols) );
 
     PropertyName space_property = map["space"];
     if (space_property.hasValue())
@@ -1059,6 +1035,113 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberParm &parm)
     return ds;
 }
 
+/** Function called to rebuild all of the LJ parameters */
+void AmberParm::rebuildLJParameters()
+{
+    lj_data.clear();
+
+    if (pointers.count() < 20)
+        return;
+
+    const int ntypes = pointers[1];  //number of distinct atom types
+    
+    if (ntypes <= 0)
+        return;
+
+    const int nphb = pointers[19];   //number of distinct 10-12 hydrogen bond pair types
+
+    lj_data = QVector<LJParameter>(ntypes);
+    auto lj_data_array = lj_data.data();
+    
+    auto acoeffs = float_data.value("LENNARD_JONES_ACOEF");
+    auto bcoeffs = float_data.value("LENNARD_JONES_BCOEF");
+    
+    auto hbond_acoeffs = float_data.value("HBOND_ACOEF");
+    auto hbond_bcoeffs = float_data.value("HBOND_BCOEF");
+    
+    auto nb_parm_index = int_data.value("NONBONDED_PARM_INDEX");
+    
+    if (acoeffs.count() != bcoeffs.count() or
+        acoeffs.count() != (ntypes*(ntypes+1))/2)
+    {
+        throw SireIO::parse_error( QObject::tr(
+                "Incorrect number of LJ coefficients for the number of specified "
+                "atom types! Should be %1 for %2 types, but actually have "
+                "%3 LJ A-coefficients, and %4 LJ B-coefficients")
+                    .arg((ntypes*(ntypes+1))/2)
+                    .arg(ntypes)
+                    .arg(acoeffs.count())
+                    .arg(bcoeffs.count()), CODELOC );
+    }
+    
+    if (nb_parm_index.count() != ntypes*ntypes)
+    {
+        throw SireIO::parse_error( QObject::tr(
+                "Incorrect number of non-bonded parameter indicies. There should "
+                "be %1 indicies for %2 types, but actually have %3.")
+                    .arg(ntypes*ntypes)
+                    .arg(ntypes)
+                    .arg(nb_parm_index.count()), CODELOC );
+    }
+
+    if (hbond_acoeffs.count() != nphb or
+        hbond_bcoeffs.count() != nphb)
+    {
+        throw SireIO::parse_error( QObject::tr(
+                "Incorrect number of HBond parameters. There should be "
+                "%1 such parameters, but the number of HBond A coefficients is "
+                "%2, and the number of B coefficients is %3.")
+                    .arg(nphb)
+                    .arg(hbond_acoeffs.count())
+                    .arg(hbond_bcoeffs.count()), CODELOC );
+    }
+
+    auto acoeffs_array = acoeffs.constData();
+    auto bcoeffs_array = bcoeffs.constData();
+    
+    tbb::parallel_for( tbb::blocked_range<int>(0,ntypes),
+                       [&](tbb::blocked_range<int> r)
+    {
+        for (int i=r.begin(); i<r.end(); ++i)
+        {
+            //amber stores the A and B coefficients as the product of all
+            //possible combinations. We need to find the values from the
+            // LJ_i * LJ_i values
+            int idx = nb_parm_index[ ntypes * i + i  ];
+
+            qDebug() << "parameter" << i << idx << nphb << ntypes << ((ntypes*(ntypes-1))/2);
+            
+            if (idx < 0)
+            {
+                //this is a 10-12 parameter
+                throw SireError::unsupported( QObject::tr(
+                        "Sire does not yet support Amber Parm files that "
+                        "use 10-12 HBond parameters."), CODELOC );
+            }
+            else
+            {
+                double acoeff = acoeffs_array[ idx - 1 ];
+                double bcoeff = bcoeffs_array[ idx - 1 ];
+
+                double sigma = 0;
+                double epsilon = 0;
+                double rstar = 0;
+
+                // is there a SMALL?
+                if (acoeff > 1e-10)
+                {
+                    // convert a_coeff & b_coeff into angstroms and kcal/mol-1
+                    sigma = std::pow( acoeff / bcoeff ,  1/6. );
+                    epsilon = pow_2( bcoeff ) / (4*acoeff);
+                    rstar = (sigma/2.)* std::pow(2.0, 1/6. );
+                }
+                
+                lj_data_array[i] = LJParameter(sigma * angstrom, epsilon * kcal_per_mol);
+            }
+        }
+    });
+}
+
 /** Function called after loading the AmberParm from a binary stream
     to populate all of the calculated member data */
 void AmberParm::rebuildAfterReload()
@@ -1069,6 +1152,15 @@ void AmberParm::rebuildAfterReload()
     {
         this->operator=( AmberParm() );
     }
+    else if (pointers.count() < 31)
+    {
+        throw SireIO::parse_error( QObject::tr(
+            "There was no, or an insufficient 'POINTERS' section in the file! (%1)")
+                .arg(pointers.count()), CODELOC );
+    }
+    
+    //now we have to build the LJ parameters (Amber stores them weirdly!)
+    this->rebuildLJParameters();
 }
 
 /** Read from a binary datastream */
@@ -1375,22 +1467,18 @@ double AmberParm::processAllFlags()
                 .arg(global_errors.join("\n")), CODELOC );
     }
     
-    pointers = int_data.value("POINTERS");
-    
-    if (pointers.count() < 31)
-    {
-        throw SireIO::parse_error( QObject::tr(
-            "There was no, or an insufficient 'POINTERS' section in the file! (%1)")
-                .arg(pointers.count()), CODELOC );
-    }
-    
     //now we have to work out how the atoms divide into molecules
     if (not int_data.contains("ATOMS_PER_MOLECULE"))
     {
         auto atoms_per_mol = discoverMolecules(int_data.value("BONDS_INC_HYDROGEN"),
                                                int_data.value("BONDS_WITHOUT_HYDROGEN"),
                                                nAtoms());
+ 
+        int_data.insert("ATOMS_PER_MOLECULE", atoms_per_mol);
     }
+
+    //build everything that can be derived from this information
+    this->rebuildAfterReload();
     
     return score;
 }
@@ -1476,7 +1564,8 @@ AmberParm::AmberParm(const AmberParm &other)
            : ConcreteProperty<AmberParm,MoleculeParser>(other),
              flag_to_line(other.flag_to_line),
              int_data(other.int_data), float_data(other.float_data),
-             string_data(other.string_data), pointers(other.pointers)
+             string_data(other.string_data), lj_data(other.lj_data),
+             pointers(other.pointers)
 {}
 
 /** Destructor */
@@ -1492,6 +1581,7 @@ AmberParm& AmberParm::operator=(const AmberParm &other)
         int_data = other.int_data;
         float_data = other.float_data;
         string_data = other.string_data;
+        lj_data = other.lj_data;
         pointers = other.pointers;
         MoleculeParser::operator=(other);
     }
@@ -1547,9 +1637,11 @@ int AmberParm::nAtoms() const
 }
 
 /** Return the total number of atoms in the ith molecule in the file */
-int AmberParm::nAtoms(int i) const
+int AmberParm::nAtoms(int idx) const
 {
-    return 0;
+    const QVector< QPair<int,int> > mol_idxs = this->moleculeIndicies();
+    idx = Index(idx).map(mol_idxs.count());
+    return mol_idxs[idx].second;
 }
 
 /** Return the number of distinct atom types */
@@ -1873,12 +1965,16 @@ Molecule AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &ma
     const auto charge_array = this->floatData("CHARGE");
     const auto mass_array = this->floatData("MASS");
     const auto atomic_num_array = this->intData("ATOMIC_NUMBER");
+    const auto amber_type_array = this->intData("ATOM_TYPE_INDEX");
+    const auto lj_acoeff_array = this->floatData("LENNARD_JONES_ACOEF");
+    const auto lj_bcoeff_array = this->floatData("LENNARD_JONES_BCOEF");
     
     const auto molinfo = mol.data().info();
     
     AtomCharges charges(molinfo);
     AtomMasses masses(molinfo);
     AtomElements elements(molinfo);
+    AtomLJs ljparams(molinfo);
     
     for (int i=0; i<natoms; ++i)
     {
@@ -1890,6 +1986,7 @@ Molecule AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &ma
         charges.set(cgatomidx, (charge_array[atom_idx] / AMBERCHARGECONV) * mod_electron);
         masses.set(cgatomidx, mass_array[atom_idx] * g_per_mol );
         elements.set(cgatomidx, Element(int(atomic_num_array[atom_idx])) );
+        ljparams.set(cgatomidx, lj_data[ amber_type_array[atom_idx] - 1 ]);
     }
 
     auto moleditor = mol.edit();
@@ -1897,6 +1994,7 @@ Molecule AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &ma
     moleditor.setProperty(charge_property, charges);
     moleditor.setProperty(mass_property, masses);
     moleditor.setProperty(element_property, elements);
+    moleditor.setProperty(lj_property, ljparams);
     
     return moleditor.commit();
 }
