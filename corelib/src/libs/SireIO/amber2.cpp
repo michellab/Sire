@@ -527,7 +527,7 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
                 "Could not read the number of atoms from the first five columns of "
                 "the restart file '%1'. Please check that the file is ok.")
                     .arg(filename), CODELOC );
-    
+
     if (lines()[1].length() > 5)
     {
         current_time = lines()[1].midRef(6,15).toDouble(&ok);
@@ -551,7 +551,7 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
         }
     }
     score += 1;
-    
+
     //now make sure that that the file is large enough!
     if (lines().count() < (2 + (natoms/2)))
     {
@@ -563,10 +563,11 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
                     .arg(lines().count())
                     .arg(2 + (natoms/2)), CODELOC );
     }
-    
+ 
     //now read in all of the coordinates
     QMutex mutex;
-    QVector<Vector> global_data(natoms, Vector(0));
+    coords = QVector<Vector>(natoms, Vector(0));
+    Vector *coords_array = coords.data();
     QStringList global_errors;
     
     //get a pointer to the array of lines
@@ -575,7 +576,6 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
                        [&](tbb::blocked_range<int> r)
     {
-        QVector<Vector> local_data(r.end()-r.begin());
         QStringList local_errors;
         
         for (int i=r.begin(); i<r.end(); ++i)
@@ -614,17 +614,12 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
                 continue;
             }
             
-            local_data[i-r.begin()] = Vector(x,y,z);
-        }
-        
-        QMutexLocker lkr(&mutex);
-        for (int i=r.begin(); i<r.end(); ++i)
-        {
-            global_data[i] = local_data[i-r.begin()];
+            coords_array[i] = Vector(x,y,z);
         }
         
         if (not local_errors.isEmpty())
         {
+            QMutexLocker lkr(&mutex);
             global_errors += local_errors;
         }
     });
@@ -636,10 +631,9 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
                 "from the restart file %1.\n%2")
                     .arg(filename).arg(global_errors.join("\n")), CODELOC );
     }
-    
-    coords = global_data;
+
     score += natoms/2;
-    
+
     //now read in all of the velocities
     if (lines().count() < (2 + (natoms/2) + (natoms/2)))
     {
@@ -651,15 +645,18 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
             //there is - read in the box information
             this->readBoxInfo(boxidx);
             score += 1;
-            this->setScore(score);
-            return;
         }
+
+        this->setScore(score);
+        return;
     }
-    
+
+    vels = QVector<Vector>(natoms, Vector(0));
+    Vector *vels_array = vels.data();
+
     tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
                        [&](tbb::blocked_range<int> r)
     {
-        QVector<Vector> local_data(r.end()-r.begin());
         QStringList local_errors;
         
         for (int i=r.begin(); i<r.end(); ++i)
@@ -699,21 +696,16 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
             }
             
             // format is (units: Angstroms per 1/20.455 ps)
-            local_data[i-r.begin()] = Vector(x,y,z);
-        }
-        
-        QMutexLocker lkr(&mutex);
-        for (int i=r.begin(); i<r.end(); ++i)
-        {
-            global_data[i] = local_data[i-r.begin()];
+            vels_array[i] = Vector(x,y,z);
         }
         
         if (not local_errors.isEmpty())
         {
+            QMutexLocker lkr(&mutex);
             global_errors += local_errors;
         }
     });
-    
+
     if (not global_errors.isEmpty())
     {
         throw SireIO::parse_error( QObject::tr(
@@ -721,21 +713,19 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
                 "from the restart file %1.\n%2")
                     .arg(filename).arg(global_errors.join("\n")), CODELOC );
     }
-    
-    vels = global_data;
 
     score += (natoms/2);
 
     //see if there is periodic box information
     int boxidx = 2 + (natoms/2) + (natoms/2);
-    
+
     if (boxidx < lines().count())
     {
         //there is - read in the box information
         this->readBoxInfo(boxidx);
         score += 1;
     }
-    
+
     this->setScore(score);
 }
 
@@ -1035,6 +1025,162 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberParm &parm)
     return ds;
 }
 
+/** Internal function used to return the start index for the bonds of each
+    molecule, and the number of bonds in each molecule */
+QVector< QPair<int,int> > indexBonds(const QVector<qint64> &bonds,
+                                     const QVector<int> &atom_to_mol,
+                                     const int nmols)
+{
+    QVector< QPair<int,int> > molbonds(nmols, QPair<int,int>(0,0));
+
+    int last_mol = 0;
+    int last_start = 0;
+    
+    for (int i=0; i<bonds.count(); i+=3)
+    {
+        //format is atom0-atom1-parameter
+        int mol0 = atom_to_mol[bonds[i]/3];   //divide by three as index is
+        int mol1 = atom_to_mol[bonds[i+1]/3]; //into the coordinate array
+        
+        if (mol0 != mol1)
+            throw SireIO::parse_error( QObject::tr(
+                    "Something went wrong as there is a bond between two different "
+                    "molecules!"), CODELOC );
+        
+        if (mol0 != last_mol)
+        {
+            molbonds[last_mol] = QPair<int,int>(last_start, (i-last_start)/3);
+            last_mol = mol0;
+            last_start = i;
+        }
+    }
+    
+    //finish the last molecule
+    molbonds[last_mol] = QPair<int,int>(last_start, (bonds.count()-last_start)/3);
+    
+    return molbonds;
+}
+
+/** Internal function used to return the start index for the angles of each
+    molecule, and the number of angles in each molecule */
+QVector< QPair<int,int> > indexAngles(const QVector<qint64> &angs,
+                                      const QVector<int> &atom_to_mol,
+                                      const int nmols)
+{
+    QVector< QPair<int,int> > molangs(nmols, QPair<int,int>(0,0));
+
+    int last_mol = 0;
+    int last_start = 0;
+    
+    for (int i=0; i<angs.count(); i+=4)
+    {
+        //format is atom0-atom1-atom2-parameter
+        int mol0 = atom_to_mol[angs[i]/3];   //divide by three as index is
+        int mol1 = atom_to_mol[angs[i+1]/3]; //into the coordinate array
+        int mol2 = atom_to_mol[angs[i+2]/3];
+        
+        if (mol0 != mol1 or mol0 != mol2)
+            throw SireIO::parse_error( QObject::tr(
+                    "Something went wrong as there is a angle between more than one different "
+                    "molecule!"), CODELOC );
+        
+        if (mol0 != last_mol)
+        {
+            molangs[last_mol] = QPair<int,int>(last_start, (i-last_start)/4);
+            last_mol = mol0;
+            last_start = i;
+        }
+    }
+    
+    //finish the last molecule
+    molangs[last_mol] = QPair<int,int>(last_start, (angs.count()-last_start)/4);
+
+    return molangs;
+}
+
+/** Internal function used to return the start index for the dihedrals of each
+    molecule, and the number of dihedrals in each molecule */
+QVector< QPair<int,int> > indexDihedrals(const QVector<qint64> &dihs,
+                                         const QVector<int> &atom_to_mol,
+                                         const int nmols)
+{
+    QVector< QPair<int,int> > moldihs(nmols, QPair<int,int>(0,0));
+
+    int last_mol = 0;
+    int last_start = 0;
+    
+    for (int i=0; i<dihs.count(); i+=5)
+    {
+        //format is atom0-atom1-atom2-atom3-parameter
+        int mol0 = atom_to_mol[dihs[i]/3];   //divide by three as index is
+        int mol1 = atom_to_mol[dihs[i+1]/3]; //into the coordinate array
+        int mol2 = atom_to_mol[ std::abs(dihs[i+2]/3) ];
+        int mol3 = atom_to_mol[ std::abs(dihs[i+3]/3) ];
+        
+        if (mol0 != mol1 or mol0 != mol2 or mol0 != mol3)
+            throw SireIO::parse_error( QObject::tr(
+                    "Something went wrong as there is a dihedral between more than one different "
+                    "molecule!"), CODELOC );
+        
+        if (mol0 != last_mol)
+        {
+            moldihs[last_mol] = QPair<int,int>(last_start, (i-last_start)/5);
+            last_mol = mol0;
+            last_start = i;
+        }
+    }
+    
+    //finish the last molecule
+    moldihs[last_mol] = QPair<int,int>(last_start, (dihs.count()-last_start)/5);
+
+    return moldihs;
+}
+
+/** Function called to rebuild the Bond Angle and Dihedral indicies */
+void AmberParm::rebuildBADIndicies()
+{
+    const int nmols = this->nMolecules();
+    const int natoms = this->nAtoms();
+    
+    if (nmols <= 0 or natoms <= 0)
+        return;
+
+    //get the lookup table to go from atom index to molecule index
+    const auto atom_to_mol = this->getAtomIndexToMolIndex();
+    
+    //now index the connectivity - find the start index and number of bonds/angles/dihedrals
+    //for each molecule
+    tbb::parallel_invoke
+    (
+        [&]()
+        {
+            bonds_inc_h = indexBonds(this->intData("BONDS_INC_HYDROGEN"), atom_to_mol, nmols);
+        },
+        [&]()
+        {
+            bonds_exc_h = indexBonds(this->intData("BONDS_WITHOUT_HYDROGEN"), atom_to_mol, nmols);
+        },
+        [&]()
+        {
+            angs_inc_h = indexAngles(this->intData("ANGLES_INC_HYDROGEN"), atom_to_mol, nmols);
+        },
+        [&]()
+        {
+            angs_exc_h = indexAngles(this->intData("ANGLES_WITHOUT_HYDROGEN"), atom_to_mol, nmols);
+        },
+        [&]()
+        {
+            dihs_inc_h = indexDihedrals(this->intData("DIHEDRALS_INC_HYDROGEN"),
+                                        atom_to_mol, nmols);
+        },
+        [&]()
+        {
+            dihs_exc_h = indexDihedrals(this->intData("DIHEDRALS_WITHOUT_HYDROGEN"),
+                                        atom_to_mol, nmols);
+        }
+    );
+}
+
 /** Function called to rebuild all of the LJ parameters */
 void AmberParm::rebuildLJParameters()
 {
@@ -1108,8 +1254,6 @@ void AmberParm::rebuildLJParameters()
             //possible combinations. We need to find the values from the
             // LJ_i * LJ_i values
             int idx = nb_parm_index[ ntypes * i + i  ];
-
-            qDebug() << "parameter" << i << idx << nphb << ntypes << ((ntypes*(ntypes-1))/2);
             
             if (idx < 0)
             {
@@ -1125,15 +1269,14 @@ void AmberParm::rebuildLJParameters()
 
                 double sigma = 0;
                 double epsilon = 0;
-                double rstar = 0;
 
-                // is there a SMALL?
+                // numeric imprecision means that any parameter with acoeff less
+                // than 1e-10 is really equal to 0
                 if (acoeff > 1e-10)
                 {
                     // convert a_coeff & b_coeff into angstroms and kcal/mol-1
                     sigma = std::pow( acoeff / bcoeff ,  1/6. );
                     epsilon = pow_2( bcoeff ) / (4*acoeff);
-                    rstar = (sigma/2.)* std::pow(2.0, 1/6. );
                 }
                 
                 lj_data_array[i] = LJParameter(sigma * angstrom, epsilon * kcal_per_mol);
@@ -1158,9 +1301,14 @@ void AmberParm::rebuildAfterReload()
             "There was no, or an insufficient 'POINTERS' section in the file! (%1)")
                 .arg(pointers.count()), CODELOC );
     }
-    
-    //now we have to build the LJ parameters (Amber stores them weirdly!)
-    this->rebuildLJParameters();
+
+    tbb::parallel_invoke
+    (
+        //now we have to build the LJ parameters (Amber stores them weirdly!)
+        [&](){ this->rebuildLJParameters(); },
+        //now we have to build the lookup indicies for the bonds, angles and dihedrals
+        [&](){ this->rebuildBADIndicies(); }
+    );
 }
 
 /** Read from a binary datastream */
@@ -1565,6 +1713,9 @@ AmberParm::AmberParm(const AmberParm &other)
              flag_to_line(other.flag_to_line),
              int_data(other.int_data), float_data(other.float_data),
              string_data(other.string_data), lj_data(other.lj_data),
+             bonds_inc_h(other.bonds_inc_h), bonds_exc_h(other.bonds_exc_h),
+             angs_inc_h(other.angs_inc_h), angs_exc_h(other.angs_exc_h),
+             dihs_inc_h(other.dihs_inc_h), dihs_exc_h(other.dihs_exc_h),
              pointers(other.pointers)
 {}
 
@@ -1582,6 +1733,12 @@ AmberParm& AmberParm::operator=(const AmberParm &other)
         float_data = other.float_data;
         string_data = other.string_data;
         lj_data = other.lj_data;
+        bonds_inc_h = other.bonds_inc_h;
+        bonds_exc_h = other.bonds_exc_h;
+        angs_inc_h = other.angs_inc_h;
+        angs_exc_h = other.angs_exc_h;
+        dihs_inc_h = other.dihs_inc_h;
+        dihs_exc_h = other.dihs_exc_h;
         pointers = other.pointers;
         MoleculeParser::operator=(other);
     }
@@ -1730,6 +1887,44 @@ int AmberParm::nMolecules() const
     }
     else
         return atoms_per_mol.count();
+}
+
+/** Return an array that maps from the index of each atom to the index
+    of each molecule */
+QVector<int> AmberParm::getAtomIndexToMolIndex() const
+{
+    const int natoms = this->nAtoms();
+
+    if (natoms <= 0)
+        return QVector<int>();
+
+    QVector< QPair<int,int> > molidxs = this->moleculeIndicies();
+
+    if (molidxs.isEmpty())
+        return QVector<int>();
+
+    const int nmols = molidxs.count();
+
+    QVector<int> atom_to_mol(natoms);
+    int *atom_to_mol_array = atom_to_mol.data();
+    auto molidxs_array = molidxs.constData();
+
+    tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
+                       [&](tbb::blocked_range<int> r)
+    {
+        for (int i=r.begin(); i<r.end(); ++i)
+        {
+            const int start_idx = molidxs_array[i].first;
+            const int end_idx = start_idx + molidxs_array[i].second;
+            
+            for (int j=start_idx; j<end_idx; ++j)
+            {
+                atom_to_mol_array[j] = i;
+            }
+        }
+    });
+    
+    return atom_to_mol;
 }
 
 /** Return the first index of the atom in each molecule, together with
@@ -1940,34 +2135,19 @@ MolStructureEditor AmberParm::getMolStructure(int start_idx, int natoms,
 
 /** Internal function used to get the molecule structure that starts at index 'start_idx'
     in the file, and that has 'natoms' atoms */
-Molecule AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &map) const
+MolEditor AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &map) const
 {
     //first, construct the layout of the molecule (sorting of atoms into residues and cutgroups)
     auto mol = this->getMolStructure(start_idx, natoms, map["cutting"]).commit();
     
-    //now, assign all of the atom and molecule properties
-    const PropertyName charge_property = map["charge"];
-    const PropertyName element_property = map["element"];
-    const PropertyName mass_property = map["mass"];
-    const PropertyName lj_property = map["LJ"];
-    const PropertyName ambertype_property = map["ambertype"];
-
-    const PropertyName connectivity_property = map["connectivity"];
-    const PropertyName bond_property = map["bond"];
-    const PropertyName angle_property = map["angle"];
-    const PropertyName dihedral_property = map["dihedral"];
-    const PropertyName improper_property = map["improper"];
-    const PropertyName nb_property = map["intrascale"];
-
-    const PropertyName amberparameters_property = map["amberparameters"];
-
-    //assign all of the atom properties
+    //assign all of the atomic properties
     const auto charge_array = this->floatData("CHARGE");
     const auto mass_array = this->floatData("MASS");
     const auto atomic_num_array = this->intData("ATOMIC_NUMBER");
     const auto amber_type_array = this->intData("ATOM_TYPE_INDEX");
     const auto lj_acoeff_array = this->floatData("LENNARD_JONES_ACOEF");
     const auto lj_bcoeff_array = this->floatData("LENNARD_JONES_BCOEF");
+    const auto ambertype_array = this->stringData("AMBER_ATOM_TYPE");
     
     const auto molinfo = mol.data().info();
     
@@ -1975,6 +2155,7 @@ Molecule AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &ma
     AtomMasses masses(molinfo);
     AtomElements elements(molinfo);
     AtomLJs ljparams(molinfo);
+    AtomStringProperty ambertype(molinfo);
     
     for (int i=0; i<natoms; ++i)
     {
@@ -1987,16 +2168,18 @@ Molecule AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &ma
         masses.set(cgatomidx, mass_array[atom_idx] * g_per_mol );
         elements.set(cgatomidx, Element(int(atomic_num_array[atom_idx])) );
         ljparams.set(cgatomidx, lj_data[ amber_type_array[atom_idx] - 1 ]);
+        ambertype.set(cgatomidx, ambertype_array[atom_idx]);
     }
 
     auto moleditor = mol.edit();
 
-    moleditor.setProperty(charge_property, charges);
-    moleditor.setProperty(mass_property, masses);
-    moleditor.setProperty(element_property, elements);
-    moleditor.setProperty(lj_property, ljparams);
+    moleditor.setProperty(map["charge"], charges);
+    moleditor.setProperty(map["mass"], masses);
+    moleditor.setProperty(map["element"], elements);
+    moleditor.setProperty(map["LJ"], ljparams);
+    moleditor.setProperty(map["ambertype"], ambertype);
     
-    return moleditor.commit();
+    return moleditor;
 }
 
 /** Return the ith molecule that is described by this AmberParm file. Note
@@ -2006,7 +2189,53 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
 {
     const QVector< QPair<int,int> > mol_idxs = this->moleculeIndicies();
     idx = Index(idx).map(mol_idxs.count());
-    return this->getMolecule( mol_idxs[idx].first, mol_idxs[idx].second, map );
+
+    //create the molecule and assign all of the atomic properties
+    auto moleditor = this->getMolecule( mol_idxs[idx].first, mol_idxs[idx].second, map );
+    
+    //get the info object that can map between AtomNum to AtomIdx etc.
+    const auto molinfo = moleditor.data().info();
+    
+    //first, work out the connectivity of the molecule
+    auto connectivity = Connectivity(moleditor.data()).edit();
+    {
+        const auto b_inc_h = bonds_inc_h[idx];
+
+        const int start_idx = b_inc_h.first;
+        const int nbonds = b_inc_h.second;
+    
+        const auto bonds = this->intData("BONDS_INC_HYDROGEN");
+    
+        for (int i=0; i<nbonds; i+=3)
+        {
+            const int index0 = bonds[ (start_idx+i) ] / 3 + 1;
+            const int index1 = bonds[ (start_idx+i) + 1 ] / 3 + 1;
+
+            connectivity.connect( molinfo.atomIdx( AtomNum(index0) ),
+                                  molinfo.atomIdx( AtomNum(index1) ) );
+        }
+    }
+    {
+        const auto b_exc_h = bonds_exc_h[idx];
+
+        const int start_idx = b_exc_h.first;
+        const int nbonds = b_exc_h.second;
+    
+        const auto bonds = this->intData("BONDS_WITHOUT_HYDROGEN");
+    
+        for (int i=0; i<nbonds; i+=3)
+        {
+            const int index0 = bonds[ (start_idx+i) ] / 3 + 1;
+            const int index1 = bonds[ (start_idx+i) + 1 ] / 3 + 1;
+
+            connectivity.connect( molinfo.atomIdx( AtomNum(index0) ),
+                                  molinfo.atomIdx( AtomNum(index1) ) );
+        }
+    }
+    
+    moleditor.setProperty(map["connectivity"], connectivity.commit());
+    
+    return moleditor.commit();
 }
 
 /** Return the ith molecule that is described by this AmberParm file, getting
@@ -2026,8 +2255,6 @@ Molecule AmberParm::getMolecule(int idx, const AmberRst &rst,
 
     auto mol = this->getMolecule(idx, map);
     
-    const PropertyName coords_property = map["coordinates"];
-    
     const auto molinfo = mol.data().info();
 
     //create space for the coordinates
@@ -2042,8 +2269,6 @@ Molecule AmberParm::getMolecule(int idx, const AmberRst &rst,
 
     if (rst.hasVelocities())
     {
-        const PropertyName vels_property = map["velocity"];
-    
         auto vels = AtomVelocities(molinfo);
         const Vector *vels_array = rst.velocities().constData();
         
@@ -2066,8 +2291,8 @@ Molecule AmberParm::getMolecule(int idx, const AmberRst &rst,
         }
         
         return mol.edit()
-                  .setProperty(vels_property, vels)
-                  .setProperty(coords_property, AtomCoords(CoordGroupArray(coords)))
+                  .setProperty(map["velocity"], vels)
+                  .setProperty(map["coordinates"], AtomCoords(CoordGroupArray(coords)))
                   .commit();
     }
     else
@@ -2083,7 +2308,7 @@ Molecule AmberParm::getMolecule(int idx, const AmberRst &rst,
         }
         
         return mol.edit()
-                  .setProperty(coords_property, AtomCoords(CoordGroupArray(coords)))
+                  .setProperty(map["coordinates"], AtomCoords(CoordGroupArray(coords)))
                   .commit();
     }
 }
@@ -2109,9 +2334,7 @@ System AmberParm::startSystem(const PropertyMap &map) const
         //create and populate all of the molecules
         for (int i=r.begin(); i<r.end(); ++i)
         {
-            mols_array[i] = this->getMolecule( mol_idxs[i].first,
-                                               mol_idxs[i].second,
-                                               map );
+            mols_array[i] = this->getMolecule(i,map);
         }
     });
     

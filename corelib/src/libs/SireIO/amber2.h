@@ -48,6 +48,11 @@ QDataStream& operator>>(QDataStream&, SireIO::AmberParm&);
 QDataStream& operator<<(QDataStream&, const SireIO::AmberRst&);
 QDataStream& operator>>(QDataStream&, SireIO::AmberRst&);
 
+namespace SireMol
+{
+class MolEditor;
+}
+
 namespace SireIO
 {
 
@@ -229,14 +234,17 @@ protected:
 private:
     void rebuildAfterReload();
     void rebuildLJParameters();
+    void rebuildBADIndicies();
 
     SireMol::MolStructureEditor getMolStructure(int start_idx, int natoms,
                                                 const SireBase::PropertyName &cutting) const;
 
-    SireMol::Molecule getMolecule(int start_idx, int natoms,
-                                  const PropertyMap &map) const;
+    SireMol::MolEditor getMolecule(int start_idx, int natoms,
+                                   const PropertyMap &map) const;
 
     QVector< QPair<int,int> > moleculeIndicies() const;
+
+    QVector<int> getAtomIndexToMolIndex() const;
 
     /** Function to process all flags, returning the parsing score */
     double processAllFlags();
@@ -256,6 +264,15 @@ private:
     
     /** All of the LJ parameters, indexed by atom type */
     QVector<SireMM::LJParameter> lj_data;
+
+    /** The start index of, and number of bonds for each molecule */
+    QVector< QPair<int,int> > bonds_inc_h, bonds_exc_h;
+    
+    /** The start index of, and number of angles for each molecule */
+    QVector< QPair<int,int> > angs_inc_h, angs_exc_h;
+    
+    /** The start index of, and number of dihedrals for each molecule */
+    QVector< QPair<int,int> > dihs_inc_h, dihs_exc_h;
     
     /** A copy of the POINTER data to prevent over-lookup */
     QVector<qint64> pointers;

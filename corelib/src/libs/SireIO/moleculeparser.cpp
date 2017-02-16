@@ -94,7 +94,13 @@ MoleculeParser::MoleculeParser() : Property(), scr(0)
 class FileContentsCache
 {
 public:
-    static QVector<QString> read(QString filename)
+    FileContentsCache()
+    {}
+    
+    ~FileContentsCache()
+    {}
+
+    QVector<QString> read(QString filename)
     {
         QMutexLocker lkr(&cache_mutex);
         auto it = cache.constFind(filename);
@@ -109,25 +115,24 @@ public:
         }
     }
     
-    static void save(QString filename, QVector<QString> filecontents)
+    void save(QString filename, QVector<QString> filecontents)
     {
         QMutexLocker lkr(&cache_mutex);
         cache[filename] = filecontents;
     }
     
-    static void clear()
+    void clear()
     {
         QMutexLocker lkr(&cache_mutex);
         cache.clear();
     }
 
 private:
-    static QMutex cache_mutex;
-    static QHash< QString, QVector<QString> > cache;
+    QMutex cache_mutex;
+    QHash< QString, QVector<QString> > cache;
 };
 
-QMutex FileContentsCache::cache_mutex;
-QHash< QString, QVector<QString> > FileContentsCache::cache;
+Q_GLOBAL_STATIC( FileContentsCache, getFileCache );
 
 /** Construct the parser, parsing in all of the lines in the file
     with passed filename */
@@ -136,7 +141,7 @@ MoleculeParser::MoleculeParser(const QString &filename)
 {
     //we will be continually reloading the same file when testing parsers,
     //so check whether this file exists in the cache
-    lnes = FileContentsCache::read(filename);
+    lnes = getFileCache()->read(filename);
     
     if (lnes.isEmpty())
     {
@@ -161,7 +166,7 @@ MoleculeParser::MoleculeParser(const QString &filename)
         lnes = l.toVector();
         
         if (not lnes.isEmpty())
-            FileContentsCache::save(filename, lnes);
+            getFileCache()->save(filename, lnes);
     }
 }
 
@@ -332,7 +337,7 @@ MoleculeParserPtr MoleculeParser::parse(const QString &filename,
                                         const PropertyMap &map)
 {
     MoleculeParserPtr parser = MoleculeParser::_pvt_parse(filename, map);
-    FileContentsCache::clear();
+    getFileCache()->clear();
     return parser;
 }
 
@@ -364,7 +369,7 @@ QList<MoleculeParserPtr> MoleculeParser::parse(const QStringList &filenames,
         result = parsers.toList();
     }
     
-    FileContentsCache::clear();
+    getFileCache()->clear();
     
     return result;
 }
