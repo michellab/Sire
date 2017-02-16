@@ -2195,45 +2195,98 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
     
     //get the info object that can map between AtomNum to AtomIdx etc.
     const auto molinfo = moleditor.data().info();
+
+    //this holds all of the amber parameters
+    AmberParameters amberparams(moleditor);
     
-    //first, work out the connectivity of the molecule
-    auto connectivity = Connectivity(moleditor.data()).edit();
+    //first - sort out all of the bonding information (with connectivity)
     {
-        const auto b_inc_h = bonds_inc_h[idx];
-
-        const int start_idx = b_inc_h.first;
-        const int nbonds = b_inc_h.second;
+        const auto R = InternalPotential::symbols().bond().r();
     
-        const auto bonds = this->intData("BONDS_INC_HYDROGEN");
+        //this holds all of the bond functions
+        TwoAtomFunctions bondfuncs(moleditor);
     
-        for (int i=0; i<nbonds; i+=3)
+        const auto k_array = this->floatData("BOND_FORCE_CONSTANT").constData();
+        const auto r0_array = this->floatData("BOND_EQUIL_VALUE").constData();
+    
+        auto connectivity = Connectivity(moleditor.data()).edit();
+        
+        auto func = [&](const int start_idx, const int nbonds, const QVector<qint64> &bonds)
         {
-            const int index0 = bonds[ (start_idx+i) ] / 3 + 1;
-            const int index1 = bonds[ (start_idx+i) + 1 ] / 3 + 1;
+            for (int i=0; i<nbonds; i+=3)
+            {
+                const int index0 = bonds[ (start_idx+i) ] / 3 + 1;
+                const int index1 = bonds[ (start_idx+i) + 1 ] / 3 + 1;
 
-            connectivity.connect( molinfo.atomIdx( AtomNum(index0) ),
-                                  molinfo.atomIdx( AtomNum(index1) ) );
-        }
+                const AtomIdx atom0 = molinfo.atomIdx( AtomNum(index0) );
+                const AtomIdx atom1 = molinfo.atomIdx( AtomNum(index1) );
+
+                connectivity.connect(atom0,atom1);
+                
+                const int param_idx = bonds[ (start_idx+i) + 2 ];
+                
+                const double k = k_array[param_idx];
+                const double r0 = r0_array[param_idx];
+                
+                Expression bondfunc = k * SireMaths::pow_2(R - r0);
+                
+                amberparams.add( BondID(atom0,atom1), k, r0 );
+                bondfuncs.set( atom0, atom1, bondfunc );
+            }
+        };
+
+        func( bonds_inc_h[idx].first, bonds_inc_h[idx].second,
+              this->intData("BONDS_INC_HYDROGEN") );
+        func( bonds_exc_h[idx].first, bonds_exc_h[idx].second,
+              this->intData("BONDS_WITHOUT_HYDROGEN") );
+        
+        moleditor.setProperty(map["bond"], bondfuncs);
+        moleditor.setProperty(map["connectivity"], connectivity.commit());
     }
+    
+    //now lets sort out the angle information
     {
-        const auto b_exc_h = bonds_exc_h[idx];
+        const auto THETA = InternalPotential::symbols().angle().theta();
 
-        const int start_idx = b_exc_h.first;
-        const int nbonds = b_exc_h.second;
-    
-        const auto bonds = this->intData("BONDS_WITHOUT_HYDROGEN");
-    
-        for (int i=0; i<nbonds; i+=3)
+        //this holds all of the angle functions
+        ThreeAtomFunctions angfuncs(moleditor);
+
+        const auto k_array = this->floatData("ANGLE_FORCE_CONSTANT").constData();
+        const auto t0_array = this->floatData("ANGLE_EQUIL_VALUE").constData();
+        
+        auto func = [&](const int start_idx, const int nangs, const QVector<qint64> &angles)
         {
-            const int index0 = bonds[ (start_idx+i) ] / 3 + 1;
-            const int index1 = bonds[ (start_idx+i) + 1 ] / 3 + 1;
+            for (int i=0; i<nangs; i+=4)
+            {
+                const int index0 = angles[ (start_idx+i) ] / 3 + 1;
+                const int index1 = angles[ (start_idx+i) + 1 ] / 3 + 1;
+                const int index2 = angles[ (start_idx+i) + 2 ] / 3 + 1;
 
-            connectivity.connect( molinfo.atomIdx( AtomNum(index0) ),
-                                  molinfo.atomIdx( AtomNum(index1) ) );
-        }
+                const AtomIdx atom0 = molinfo.atomIdx( AtomNum(index0) );
+                const AtomIdx atom1 = molinfo.atomIdx( AtomNum(index1) );
+                const AtomIdx atom2 = molinfo.atomIdx( AtomNum(index2) );
+                
+                const int param_idx = angles[ (start_idx+i) + 3 ];
+                
+                const double k = k_array[param_idx];
+                const double t0 = t0_array[param_idx];
+                
+                Expression angfunc = k * SireMaths::pow_2(THETA - t0);
+                
+                amberparams.add( AngleID(atom0,atom1,atom2), k, t0 );
+                angfuncs.set( atom0, atom1, atom2, angfunc );
+            }
+        };
+
+        func( angs_inc_h[idx].first, angs_inc_h[idx].second,
+              this->intData("ANGLES_INC_HYDROGEN") );
+        func( angs_exc_h[idx].first, angs_exc_h[idx].second,
+              this->intData("ANGLES_WITHOUT_HYDROGEN") );
+        
+        moleditor.setProperty(map["angle"], angfuncs);
     }
     
-    moleditor.setProperty(map["connectivity"], connectivity.commit());
+    moleditor.setProperty("amberparameters", amberparams);
     
     return moleditor.commit();
 }
