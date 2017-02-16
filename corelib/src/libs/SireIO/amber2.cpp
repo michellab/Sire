@@ -92,7 +92,9 @@
 using namespace SireIO;
 using namespace SireMM;
 using namespace SireMol;
+using namespace SireMove;
 using namespace SireMaths;
+using namespace SireCAS;
 using namespace SireSystem;
 using namespace SireUnits;
 using namespace SireStream;
@@ -2223,7 +2225,7 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
 
                 connectivity.connect(atom0,atom1);
                 
-                const int param_idx = bonds[ (start_idx+i) + 2 ];
+                const int param_idx = bonds[ (start_idx+i) + 2 ] - 1; // 1 indexed to 0 indexed
                 
                 const double k = k_array[param_idx];
                 const double r0 = r0_array[param_idx];
@@ -2266,7 +2268,7 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
                 const AtomIdx atom1 = molinfo.atomIdx( AtomNum(index1) );
                 const AtomIdx atom2 = molinfo.atomIdx( AtomNum(index2) );
                 
-                const int param_idx = angles[ (start_idx+i) + 3 ];
+                const int param_idx = angles[ (start_idx+i) + 3 ] - 1;  //1 indexed to 0 indexed
                 
                 const double k = k_array[param_idx];
                 const double t0 = t0_array[param_idx];
@@ -2284,6 +2286,166 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
               this->intData("ANGLES_WITHOUT_HYDROGEN") );
         
         moleditor.setProperty(map["angle"], angfuncs);
+    }
+
+    //now lets sort out the dihedral information
+    {
+        const auto PHI = InternalPotential::symbols().dihedral().phi();
+
+        //this holds all of the dihedral functions
+        FourAtomFunctions dihfuncs(moleditor);
+        FourAtomFunctions impfuncs(moleditor);
+
+        const auto k_array = this->floatData("DIHEDRAL_FORCE_CONSTANT").constData();
+        const auto per_array = this->floatData("DIHEDRAL_PERIODICITY").constData();
+        const auto pha_array = this->floatData("DIHEDRAL_PHASE").constData();
+
+        const auto sceefactor = this->floatData("SCEE_SCALE_FACTOR");
+        const auto scnbfactor = this->floatData("SCNB_SCALE_FACTOR");
+
+        QHash<DofID,Expression> improper_hash;
+        QHash<DofID,Expression> dihedral_hash;
+        
+        auto func = [&](const int start_idx, const int ndihs, const QVector<qint64> &dihedrals)
+        {
+            for (int i=0; i<ndihs; i+=5)
+            {
+                const int index0 = dihedrals[ (start_idx+i) ] / 3 + 1;
+                const int index1 = dihedrals[ (start_idx+i) + 1 ] / 3 + 1;
+                const int index2 = std::abs(dihedrals[ (start_idx+i) + 2 ] / 3) + 1;
+                const int index3 = std::abs(dihedrals[ (start_idx+i) + 3 ] / 3) + 1;
+
+                const AtomNum atomnum0(index0);
+                const AtomNum atomnum1(index1);
+                const AtomNum atomnum2(index2);
+                const AtomNum atomnum3(index3);
+
+                const AtomIdx atom0 = molinfo.atomIdx(atomnum0);
+                const AtomIdx atom1 = molinfo.atomIdx(atomnum1);
+                const AtomIdx atom2 = molinfo.atomIdx(atomnum2);
+                const AtomIdx atom3 = molinfo.atomIdx(atomnum3);
+                
+                bool ignored = dihedrals[ (start_idx+i) + 2 ] < 0;  // negative implies ignored
+                bool improper = dihedrals[ (start_idx+i) + 3 ] < 0; // negative implies improper
+                
+                const int param_index = dihedrals[ (start_idx+i) + 4 ] - 1; // 1 indexed to 0
+                
+                double k = k_array[param_index]; // kcal_per_mol
+                double per = per_array[param_index]; // radians
+                double phase = pha_array[param_index];
+
+                // Assume default values for 14 scaling factors
+                // Note that these are NOT inversed after reading from input
+                double sclee14 = 1.0/AMBER14COUL;
+                double sclnb14 = 1.0/AMBER14LJ;
+                
+                if (not sceefactor.isEmpty())
+                    sclee14 = sceefactor[param_index];
+                
+                if (not scnbfactor.isEmpty())
+                    sclnb14 = scnbfactor[param_index];
+
+                Expression dihedral_func = k * ( 1 + Cos( per * ( PHI - 0 ) - phase ) );
+
+                if (improper)
+                {
+                    ImproperID dih = ImproperID(atom0,atom1,atom2,atom3);
+
+                    amberparams.add( dih, k, periodicity, phase);
+
+                    if ( improper_hash.contains(improperid) )
+                        improper_hash[improperid] += dihedral_func;
+                    else
+                        improper_hash.insert(improperid, dihedral_func);
+                }
+                else
+                {
+                    DihedralID dih = DihedralID(atom0,atom1,atom2,atom3);
+                    
+                    amberparams.add( dih, k, periodicity, phase);
+
+                    if ( dihedral_hash.contains(dihid) )
+                        dihedral_hash[dihid] += dihedral_func;
+                    else
+                        dihedral_hash.insert( dihid, dihedral_func);
+                }
+
+                if (not ignored and not improper)
+                {
+                    if (sclee14 < 0.00001)
+                    {
+                        throw SireError::program_bug( QObject::tr(
+                            "A 1,4 pair has a coulombic scaling factor of 0.0 in the top file "
+                            "which would mean an infinite energy!"),
+                                CODELOC );
+                    }
+                    if (sclnb14 < 0.00001)
+                    {
+                        throw SireError::program_bug( QObject::tr(
+                            "A 1,4 pair has a LJ scaling factor of 0.0 in the top file "
+                            "which would mean an infinite energy!"),
+                                CODELOC );
+                    }
+
+                    if (not atoms14.contains(atomnum0))
+                    {
+                        QList<AtomNum> list;
+                        atoms14.insert( atomnum0, list);
+                    }
+
+                    /** Not sure this can happens but to be safe.. */
+                    if ( not atoms14[atomnum0].contains(atomnum3) )
+                    {
+                        atoms14[atomnum0].append(atomnum3);
+                        /* JM 07/14 Save scale factor for this pair*/
+                        atoms14sclee[atomnum0][atomnum3] = 1/sclee14;
+                        atoms14sclnb[atomnum0][atomnum3] = 1/sclnb14;
+                        // Add pair (atom0,atom3) = (1/sclee14, 1/sclnb14) to
+                        // amber parameters object
+                        BondID pair = BondID(atom0, atom3 );
+                        amberparams.add14Pair( pair, 1/sclee14, 1/sclnb14 );
+                    }
+
+                    if (not atoms14.contains(atomnum3))
+                    {
+                        QList<AtomNum> list;
+                        atoms14.insert( atomnum3, list);
+                    }
+
+                    if ( not atoms14[atomnum3].contains(atomnum0) )
+                    {
+                        atoms14[atomnum3].append(atomnum0);
+                        atoms14sclee[atomnum3][atomnum0] = 1/sclee14;
+                        atoms14sclnb[atomnum3][atomnum0] = 1/sclnb14;
+                    }
+                }
+            }
+
+            /** We can now create the appropriate dihedrals*/
+            for (QHash<DofID,Expression>::const_iterator it = dihedral_hash.constBegin();
+                    it != dihedral_hash.constEnd();
+                    ++it)
+            {
+                dihfuncs.set( it.key().atom0(), it.key().atom1(), it.key().atom2(),
+                              it.key().atom3(), it.value() );
+            }
+
+            for (QHash<DofID,Expression>::const_iterator it = improper_hash.constBegin();
+                    it != improper_hash.constEnd();
+                    ++it)
+            {
+                impfuncs.set( it.key().atom0(), it.key().atom1(), it.key().atom2(),
+                              it.key().atom3(), it.value() );
+            }
+        };
+
+        func( angs_inc_h[idx].first, angs_inc_h[idx].second,
+              this->intData("ANGLES_INC_HYDROGEN") );
+        func( angs_exc_h[idx].first, angs_exc_h[idx].second,
+              this->intData("ANGLES_WITHOUT_HYDROGEN") );
+        
+        moleditor.setProperty(map["dihedral"], dihfuncs);
+        moleditor.setProperty(map["improper"], impfuncs);
     }
     
     moleditor.setProperty("amberparameters", amberparams);
