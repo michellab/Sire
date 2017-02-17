@@ -2095,7 +2095,7 @@ MolStructureEditor AmberParm::getMolStructure(int start_idx, int natoms,
         int res_num = res_idx + 1;
     
         auto res = mol.add( ResNum(res_num) );
-        res.rename( ResName( res_names[res_idx] ) );
+        res.rename( ResName( res_names[res_idx].trimmed() ) );
         
         int res_start_atom = res_pointers[res_idx];
         int res_end_atom;
@@ -2117,7 +2117,7 @@ MolStructureEditor AmberParm::getMolStructure(int start_idx, int natoms,
         for (int j=res_start_atom; j<=res_end_atom; ++j)
         {
             auto atom = cutgroup.add( AtomNum(j) );
-            atom.rename( AtomName(atom_names[j-1]) );  // 0-index versus 1-index
+            atom.rename( AtomName(atom_names[j-1].trimmed()) );  // 0-index versus 1-index
             atom.reparent( ResNum(res_num) );
         }
     }
@@ -2170,7 +2170,7 @@ MolEditor AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &m
         masses.set(cgatomidx, mass_array[atom_idx] * g_per_mol );
         elements.set(cgatomidx, Element(int(atomic_num_array[atom_idx])) );
         ljparams.set(cgatomidx, lj_data[ amber_type_array[atom_idx] - 1 ]);
-        ambertype.set(cgatomidx, ambertype_array[atom_idx]);
+        ambertype.set(cgatomidx, ambertype_array[atom_idx].trimmed());
     }
 
     auto moleditor = mol.edit();
@@ -2215,17 +2215,19 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
         
         auto func = [&](const int start_idx, const int nbonds, const QVector<qint64> &bonds)
         {
-            for (int i=0; i<nbonds; i+=3)
+            for (int i=0; i<nbonds; ++i)
             {
-                const int index0 = bonds[ (start_idx+i) ] / 3 + 1;
-                const int index1 = bonds[ (start_idx+i) + 1 ] / 3 + 1;
+                const int idx = start_idx + 3*i;
+            
+                const int index0 = bonds[ idx ] / 3 + 1;
+                const int index1 = bonds[ idx + 1 ] / 3 + 1;
 
                 const AtomIdx atom0 = molinfo.atomIdx( AtomNum(index0) );
                 const AtomIdx atom1 = molinfo.atomIdx( AtomNum(index1) );
 
                 connectivity.connect(atom0,atom1);
                 
-                const int param_idx = bonds[ (start_idx+i) + 2 ] - 1; // 1 indexed to 0 indexed
+                const int param_idx = bonds[ idx + 2 ] - 1; // 1 indexed to 0 indexed
                 
                 const double k = k_array[param_idx];
                 const double r0 = r0_array[param_idx];
@@ -2258,17 +2260,19 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
         
         auto func = [&](const int start_idx, const int nangs, const QVector<qint64> &angles)
         {
-            for (int i=0; i<nangs; i+=4)
+            for (int i=0; i<nangs; ++i)
             {
-                const int index0 = angles[ (start_idx+i) ] / 3 + 1;
-                const int index1 = angles[ (start_idx+i) + 1 ] / 3 + 1;
-                const int index2 = angles[ (start_idx+i) + 2 ] / 3 + 1;
+                const int idx = start_idx + 4*i;
+            
+                const int index0 = angles[ idx ] / 3 + 1;
+                const int index1 = angles[ idx + 1 ] / 3 + 1;
+                const int index2 = angles[ idx + 2 ] / 3 + 1;
 
                 const AtomIdx atom0 = molinfo.atomIdx( AtomNum(index0) );
                 const AtomIdx atom1 = molinfo.atomIdx( AtomNum(index1) );
                 const AtomIdx atom2 = molinfo.atomIdx( AtomNum(index2) );
                 
-                const int param_idx = angles[ (start_idx+i) + 3 ] - 1;  //1 indexed to 0 indexed
+                const int param_idx = angles[ idx + 3 ] - 1;  //1 indexed to 0 indexed
                 
                 const double k = k_array[param_idx];
                 const double t0 = t0_array[param_idx];
@@ -2308,12 +2312,14 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
         
         auto func = [&](const int start_idx, const int ndihs, const QVector<qint64> &dihedrals)
         {
-            for (int i=0; i<ndihs; i+=5)
+            for (int i=0; i<ndihs; ++i)
             {
-                const int index0 = dihedrals[ (start_idx+i) ] / 3 + 1;
-                const int index1 = dihedrals[ (start_idx+i) + 1 ] / 3 + 1;
-                const int index2 = std::abs(dihedrals[ (start_idx+i) + 2 ] / 3) + 1;
-                const int index3 = std::abs(dihedrals[ (start_idx+i) + 3 ] / 3) + 1;
+                const int idx = start_idx + 5*i;
+            
+                const int index0 = dihedrals[ idx ] / 3 + 1;
+                const int index1 = dihedrals[ idx + 1 ] / 3 + 1;
+                const int index2 = std::abs(dihedrals[ idx + 2 ] / 3) + 1;
+                const int index3 = std::abs(dihedrals[ idx + 3 ] / 3) + 1;
 
                 const AtomNum atomnum0(index0);
                 const AtomNum atomnum1(index1);
@@ -2325,10 +2331,10 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
                 const AtomIdx atom2 = molinfo.atomIdx(atomnum2);
                 const AtomIdx atom3 = molinfo.atomIdx(atomnum3);
                 
-                bool ignored = dihedrals[ (start_idx+i) + 2 ] < 0;  // negative implies ignored
-                bool improper = dihedrals[ (start_idx+i) + 3 ] < 0; // negative implies improper
+                bool ignored = dihedrals[ idx + 2 ] < 0;  // negative implies ignored
+                bool improper = dihedrals[ idx + 3 ] < 0; // negative implies improper
                 
-                const int param_index = dihedrals[ (start_idx+i) + 4 ] - 1; // 1 indexed to 0
+                const int param_index = dihedrals[ idx + 4 ] - 1; // 1 indexed to 0
                 
                 double k = k_array[param_index]; // kcal_per_mol
                 double per = per_array[param_index]; // radians
@@ -2345,29 +2351,31 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
                 if (not scnbfactor.isEmpty())
                     sclnb14 = scnbfactor[param_index];
 
-                Expression dihedral_func = k * ( 1 + Cos( per * ( PHI - 0 ) - phase ) );
+                Expression func = k * ( 1 + Cos( per * ( PHI - 0 ) - phase ) );
+
+                DofID dof = DofID( atom0, atom1, atom2, atom3 );
 
                 if (improper)
                 {
-                    ImproperID dih = ImproperID(atom0,atom1,atom2,atom3);
+                    ImproperID imp = ImproperID(atom0,atom1,atom2,atom3);
 
-                    amberparams.add( dih, k, periodicity, phase);
+                    amberparams.add(imp, k, per, phase);
 
-                    if ( improper_hash.contains(improperid) )
-                        improper_hash[improperid] += dihedral_func;
+                    if (improper_hash.contains(dof))
+                        improper_hash[dof] += func;
                     else
-                        improper_hash.insert(improperid, dihedral_func);
+                        improper_hash.insert(dof, func);
                 }
                 else
                 {
                     DihedralID dih = DihedralID(atom0,atom1,atom2,atom3);
                     
-                    amberparams.add( dih, k, periodicity, phase);
+                    amberparams.add(dih, k, per, phase);
 
-                    if ( dihedral_hash.contains(dihid) )
-                        dihedral_hash[dihid] += dihedral_func;
+                    if (dihedral_hash.contains(dof))
+                        dihedral_hash[dof] += func;
                     else
-                        dihedral_hash.insert( dihid, dihedral_func);
+                        dihedral_hash.insert(dof, func);
                 }
 
                 if (not ignored and not improper)
@@ -2387,37 +2395,7 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
                                 CODELOC );
                     }
 
-                    if (not atoms14.contains(atomnum0))
-                    {
-                        QList<AtomNum> list;
-                        atoms14.insert( atomnum0, list);
-                    }
-
-                    /** Not sure this can happens but to be safe.. */
-                    if ( not atoms14[atomnum0].contains(atomnum3) )
-                    {
-                        atoms14[atomnum0].append(atomnum3);
-                        /* JM 07/14 Save scale factor for this pair*/
-                        atoms14sclee[atomnum0][atomnum3] = 1/sclee14;
-                        atoms14sclnb[atomnum0][atomnum3] = 1/sclnb14;
-                        // Add pair (atom0,atom3) = (1/sclee14, 1/sclnb14) to
-                        // amber parameters object
-                        BondID pair = BondID(atom0, atom3 );
-                        amberparams.add14Pair( pair, 1/sclee14, 1/sclnb14 );
-                    }
-
-                    if (not atoms14.contains(atomnum3))
-                    {
-                        QList<AtomNum> list;
-                        atoms14.insert( atomnum3, list);
-                    }
-
-                    if ( not atoms14[atomnum3].contains(atomnum0) )
-                    {
-                        atoms14[atomnum3].append(atomnum0);
-                        atoms14sclee[atomnum3][atomnum0] = 1/sclee14;
-                        atoms14sclnb[atomnum3][atomnum0] = 1/sclnb14;
-                    }
+                    amberparams.add14Pair( BondID(atom0,atom3), 1.0/sclee14, 1.0/sclnb14 );
                 }
             }
 
@@ -2439,10 +2417,10 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
             }
         };
 
-        func( angs_inc_h[idx].first, angs_inc_h[idx].second,
-              this->intData("ANGLES_INC_HYDROGEN") );
-        func( angs_exc_h[idx].first, angs_exc_h[idx].second,
-              this->intData("ANGLES_WITHOUT_HYDROGEN") );
+        func( dihs_inc_h[idx].first, dihs_inc_h[idx].second,
+              this->intData("DIHEDRALS_INC_HYDROGEN") );
+        func( dihs_exc_h[idx].first, dihs_exc_h[idx].second,
+              this->intData("DIHEDRALS_WITHOUT_HYDROGEN") );
         
         moleditor.setProperty(map["dihedral"], dihfuncs);
         moleditor.setProperty(map["improper"], impfuncs);
