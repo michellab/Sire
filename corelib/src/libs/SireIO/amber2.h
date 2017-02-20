@@ -265,14 +265,14 @@ private:
     /** All of the LJ parameters, indexed by atom type */
     QVector<SireMM::LJParameter> lj_data;
 
-    /** The start index of, and number of bonds for each molecule */
-    QVector< QPair<int,int> > bonds_inc_h, bonds_exc_h;
+    /** The indicies of the bonds for each molecule */
+    QVector< QVector<int> > bonds_inc_h, bonds_exc_h;
     
-    /** The start index of, and number of angles for each molecule */
-    QVector< QPair<int,int> > angs_inc_h, angs_exc_h;
+    /** The indicies of the angles for each molecule */
+    QVector< QVector<int> > angs_inc_h, angs_exc_h;
     
-    /** The start index of, and number of dihedrals for each molecule */
-    QVector< QPair<int,int> > dihs_inc_h, dihs_exc_h;
+    /** The indicies of the dihedrals for each molecule */
+    QVector< QVector<int> > dihs_inc_h, dihs_exc_h;
     
     /** A copy of the POINTER data to prevent over-lookup */
     QVector<qint64> pointers;

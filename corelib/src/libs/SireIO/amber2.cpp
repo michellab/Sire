@@ -519,10 +519,17 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     ttle = lines()[0].simplified();
     score += 1;
     
-    // read in the number of atoms and time FORMAT(I5,5E15.7)
-    bool ok = true;
+    // read in the number of atoms and time (two space-separated words)
+    QStringList words = lines()[1].split(" ", QString::SkipEmptyParts);
     
-    int natoms = lines()[1].midRef(0,5).toInt(&ok);
+    if (words.isEmpty())
+        throw SireIO::parse_error( QObject::tr(
+                "Could not read the number of atoms from the first word of the "
+                "restart file '%1'. Please check that the file i ok.")
+                    .arg(filename), CODELOC );
+    
+    bool ok = true;
+    int natoms = words[0].toInt(&ok);
     
     if (not ok)
         throw SireIO::parse_error( QObject::tr(
@@ -530,9 +537,9 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
                 "the restart file '%1'. Please check that the file is ok.")
                     .arg(filename), CODELOC );
 
-    if (lines()[1].length() > 5)
+    if (words.count() >= 2)
     {
-        current_time = lines()[1].midRef(6,15).toDouble(&ok);
+        current_time = words[1].toDouble(&ok);
         
         if (not ok)
         {
@@ -540,16 +547,6 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
             //crd files don't contain this information - in this case,
             //the natoms information may also be misformed
             current_time = 0;
-            
-            QStringList words = lines()[1].split(" ", QString::SkipEmptyParts);
-            
-            natoms = words[0].toInt(&ok);
-            
-            if (not ok)
-                throw SireIO::parse_error( QObject::tr(
-                    "Could not read the number of atoms from the first word of "
-                    "the restart file '%1' (%2). Please check that the file is ok.")
-                        .arg(filename).arg(words[0]), CODELOC );
         }
     }
     score += 1;
@@ -1029,15 +1026,12 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberParm &parm)
 
 /** Internal function used to return the start index for the bonds of each
     molecule, and the number of bonds in each molecule */
-QVector< QPair<int,int> > indexBonds(const QVector<qint64> &bonds,
-                                     const QVector<int> &atom_to_mol,
-                                     const int nmols)
+QVector< QVector<int> > indexBonds(const QVector<qint64> &bonds,
+                                   const QVector<int> &atom_to_mol,
+                                   const int nmols)
 {
-    QVector< QPair<int,int> > molbonds(nmols, QPair<int,int>(0,0));
+    QVector< QVector<int> > molbonds(nmols);
 
-    int last_mol = 0;
-    int last_start = 0;
-    
     for (int i=0; i<bonds.count(); i+=3)
     {
         //format is atom0-atom1-parameter
@@ -1049,30 +1043,19 @@ QVector< QPair<int,int> > indexBonds(const QVector<qint64> &bonds,
                     "Something went wrong as there is a bond between two different "
                     "molecules!"), CODELOC );
         
-        if (mol0 != last_mol)
-        {
-            molbonds[last_mol] = QPair<int,int>(last_start, (i-last_start)/3);
-            last_mol = mol0;
-            last_start = i;
-        }
+        molbonds[mol0].append(i);
     }
-    
-    //finish the last molecule
-    molbonds[last_mol] = QPair<int,int>(last_start, (bonds.count()-last_start)/3);
     
     return molbonds;
 }
 
 /** Internal function used to return the start index for the angles of each
     molecule, and the number of angles in each molecule */
-QVector< QPair<int,int> > indexAngles(const QVector<qint64> &angs,
-                                      const QVector<int> &atom_to_mol,
-                                      const int nmols)
+QVector< QVector<int> > indexAngles(const QVector<qint64> &angs,
+                                    const QVector<int> &atom_to_mol,
+                                    const int nmols)
 {
-    QVector< QPair<int,int> > molangs(nmols, QPair<int,int>(0,0));
-
-    int last_mol = 0;
-    int last_start = 0;
+    QVector< QVector<int> > molangs(nmols);
     
     for (int i=0; i<angs.count(); i+=4)
     {
@@ -1086,31 +1069,20 @@ QVector< QPair<int,int> > indexAngles(const QVector<qint64> &angs,
                     "Something went wrong as there is a angle between more than one different "
                     "molecule!"), CODELOC );
         
-        if (mol0 != last_mol)
-        {
-            molangs[last_mol] = QPair<int,int>(last_start, (i-last_start)/4);
-            last_mol = mol0;
-            last_start = i;
-        }
+        molangs[mol0].append(i);
     }
-    
-    //finish the last molecule
-    molangs[last_mol] = QPair<int,int>(last_start, (angs.count()-last_start)/4);
 
     return molangs;
 }
 
 /** Internal function used to return the start index for the dihedrals of each
     molecule, and the number of dihedrals in each molecule */
-QVector< QPair<int,int> > indexDihedrals(const QVector<qint64> &dihs,
-                                         const QVector<int> &atom_to_mol,
-                                         const int nmols)
+QVector< QVector<int> > indexDihedrals(const QVector<qint64> &dihs,
+                                       const QVector<int> &atom_to_mol,
+                                       const int nmols)
 {
-    QVector< QPair<int,int> > moldihs(nmols, QPair<int,int>(0,0));
+    QVector< QVector<int> > moldihs(nmols);
 
-    int last_mol = 0;
-    int last_start = 0;
-    
     for (int i=0; i<dihs.count(); i+=5)
     {
         //format is atom0-atom1-atom2-atom3-parameter
@@ -1123,18 +1095,10 @@ QVector< QPair<int,int> > indexDihedrals(const QVector<qint64> &dihs,
             throw SireIO::parse_error( QObject::tr(
                     "Something went wrong as there is a dihedral between more than one different "
                     "molecule!"), CODELOC );
-        
-        if (mol0 != last_mol)
-        {
-            moldihs[last_mol] = QPair<int,int>(last_start, (i-last_start)/5);
-            last_mol = mol0;
-            last_start = i;
-        }
+
+        moldihs[mol0].append(i);
     }
     
-    //finish the last molecule
-    moldihs[last_mol] = QPair<int,int>(last_start, (dihs.count()-last_start)/5);
-
     return moldihs;
 }
 
@@ -2187,13 +2151,13 @@ MolEditor AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &m
 /** Return the ith molecule that is described by this AmberParm file. Note
     that this molecule won't have any coordinate data, as this is not
     provided in this file */
-Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
+Molecule AmberParm::getMolecule(int molidx, const PropertyMap &map) const
 {
     const QVector< QPair<int,int> > mol_idxs = this->moleculeIndicies();
-    idx = Index(idx).map(mol_idxs.count());
+    molidx = Index(molidx).map(mol_idxs.count());
 
     //create the molecule and assign all of the atomic properties
-    auto moleditor = this->getMolecule( mol_idxs[idx].first, mol_idxs[idx].second, map );
+    auto moleditor = this->getMolecule( mol_idxs[molidx].first, mol_idxs[molidx].second, map );
     
     //get the info object that can map between AtomNum to AtomIdx etc.
     const auto molinfo = moleditor.data().info();
@@ -2213,12 +2177,10 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
     
         auto connectivity = Connectivity(moleditor.data()).edit();
         
-        auto func = [&](const int start_idx, const int nbonds, const QVector<qint64> &bonds)
+        auto func = [&](const QVector<int> &idxs, const QVector<qint64> &bonds)
         {
-            for (int i=0; i<nbonds; ++i)
+            for (int idx : idxs)
             {
-                const int idx = start_idx + 3*i;
-            
                 const int index0 = bonds[ idx ] / 3 + 1;
                 const int index1 = bonds[ idx + 1 ] / 3 + 1;
 
@@ -2239,10 +2201,8 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
             }
         };
 
-        func( bonds_inc_h[idx].first, bonds_inc_h[idx].second,
-              this->intData("BONDS_INC_HYDROGEN") );
-        func( bonds_exc_h[idx].first, bonds_exc_h[idx].second,
-              this->intData("BONDS_WITHOUT_HYDROGEN") );
+        func( bonds_inc_h[molidx], this->intData("BONDS_INC_HYDROGEN") );
+        func( bonds_exc_h[molidx], this->intData("BONDS_WITHOUT_HYDROGEN") );
         
         moleditor.setProperty(map["bond"], bondfuncs);
         moleditor.setProperty(map["connectivity"], connectivity.commit());
@@ -2258,12 +2218,10 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
         const auto k_array = this->floatData("ANGLE_FORCE_CONSTANT").constData();
         const auto t0_array = this->floatData("ANGLE_EQUIL_VALUE").constData();
         
-        auto func = [&](const int start_idx, const int nangs, const QVector<qint64> &angles)
+        auto func = [&](const QVector<int> &idxs, const QVector<qint64> &angles)
         {
-            for (int i=0; i<nangs; ++i)
+            for (int idx : idxs)
             {
-                const int idx = start_idx + 4*i;
-            
                 const int index0 = angles[ idx ] / 3 + 1;
                 const int index1 = angles[ idx + 1 ] / 3 + 1;
                 const int index2 = angles[ idx + 2 ] / 3 + 1;
@@ -2284,10 +2242,8 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
             }
         };
 
-        func( angs_inc_h[idx].first, angs_inc_h[idx].second,
-              this->intData("ANGLES_INC_HYDROGEN") );
-        func( angs_exc_h[idx].first, angs_exc_h[idx].second,
-              this->intData("ANGLES_WITHOUT_HYDROGEN") );
+        func( angs_inc_h[molidx], this->intData("ANGLES_INC_HYDROGEN") );
+        func( angs_exc_h[molidx], this->intData("ANGLES_WITHOUT_HYDROGEN") );
         
         moleditor.setProperty(map["angle"], angfuncs);
     }
@@ -2310,12 +2266,13 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
         QHash<DofID,Expression> improper_hash;
         QHash<DofID,Expression> dihedral_hash;
         
-        auto func = [&](const int start_idx, const int ndihs, const QVector<qint64> &dihedrals)
+        improper_hash.reserve(dihs_inc_h[molidx].count() + dihs_exc_h[molidx].count());
+        dihedral_hash.reserve(dihs_inc_h[molidx].count() + dihs_exc_h[molidx].count());
+        
+        auto func = [&](const QVector<int> &idxs, const QVector<qint64> &dihedrals)
         {
-            for (int i=0; i<ndihs; ++i)
+            for (int idx : idxs)
             {
-                const int idx = start_idx + 5*i;
-            
                 const int index0 = dihedrals[ idx ] / 3 + 1;
                 const int index1 = dihedrals[ idx + 1 ] / 3 + 1;
                 const int index2 = std::abs(dihedrals[ idx + 2 ] / 3) + 1;
@@ -2331,8 +2288,8 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
                 const AtomIdx atom2 = molinfo.atomIdx(atomnum2);
                 const AtomIdx atom3 = molinfo.atomIdx(atomnum3);
                 
-                bool ignored = dihedrals[ idx + 2 ] < 0;  // negative implies ignored
-                bool improper = dihedrals[ idx + 3 ] < 0; // negative implies improper
+                const bool ignored = dihedrals[ idx + 2 ] < 0;  // negative implies ignored
+                const bool improper = dihedrals[ idx + 3 ] < 0; // negative implies improper
                 
                 const int param_index = dihedrals[ idx + 4 ] - 1; // 1 indexed to 0
                 
@@ -2417,10 +2374,8 @@ Molecule AmberParm::getMolecule(int idx, const PropertyMap &map) const
             }
         };
 
-        func( dihs_inc_h[idx].first, dihs_inc_h[idx].second,
-              this->intData("DIHEDRALS_INC_HYDROGEN") );
-        func( dihs_exc_h[idx].first, dihs_exc_h[idx].second,
-              this->intData("DIHEDRALS_WITHOUT_HYDROGEN") );
+        func( dihs_inc_h[molidx], this->intData("DIHEDRALS_INC_HYDROGEN") );
+        func( dihs_exc_h[molidx], this->intData("DIHEDRALS_WITHOUT_HYDROGEN") );
         
         moleditor.setProperty(map["dihedral"], dihfuncs);
         moleditor.setProperty(map["improper"], impfuncs);
