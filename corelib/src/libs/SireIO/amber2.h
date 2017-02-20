@@ -235,6 +235,7 @@ private:
     void rebuildAfterReload();
     void rebuildLJParameters();
     void rebuildBADIndicies();
+    void rebuildExcludedAtoms();
 
     SireMol::MolStructureEditor getMolStructure(int start_idx, int natoms,
                                                 const SireBase::PropertyName &cutting) const;
@@ -273,6 +274,9 @@ private:
     
     /** The indicies of the dihedrals for each molecule */
     QVector< QVector<int> > dihs_inc_h, dihs_exc_h;
+    
+    /** The excluded atoms for each atom of each molecule */
+    QVector< QVector< QVector<int> > > excl_atoms;
     
     /** A copy of the POINTER data to prevent over-lookup */
     QVector<qint64> pointers;

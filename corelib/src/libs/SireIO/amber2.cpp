@@ -851,10 +851,10 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
         const PropertyName vels_property = map["velocity"];
         const Vector *vels_array = this->velocities().constData();
     
-        tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
-                           [&](tbb::blocked_range<int> r)
-        {
-            for (int i=r.begin(); i<r.end(); ++i)
+        //tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
+        //                   [&](tbb::blocked_range<int> r)
+        //{
+            for (int i=0; i<nmols; ++i) //r.begin(); i<r.end(); ++i)
             {
                 const int atom_start_idx = atom_pointers.constData()[i];
                 auto mol = allmols[MolIdx(i)].molecule();
@@ -892,7 +892,7 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
                                              AtomCoords(CoordGroupArray(coords)))
                                 .commit();
             }
-        });
+        //});
     }
     else
     {
@@ -1022,6 +1022,63 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberParm &parm)
         << static_cast<const MoleculeParser&>(parm);
     
     return ds;
+}
+
+/** Function called to rebuild the excluded atom lists */
+void AmberParm::rebuildExcludedAtoms()
+{
+    const int nmols = this->nMolecules();
+    const int natoms = this->nAtoms();
+    
+    if (nmols <= 0 or natoms <= 0)
+        return;
+    
+    //number of excluded atoms per atom
+    const auto nnb_per_atom = this->intData("NUMBER_EXCLUDED_ATOMS");
+    //list of all excluded atoms
+    const auto inb = this->intData("EXCLUDED_ATOMS_LIST");
+    
+    if (nnb_per_atom.count() != natoms)
+    {
+        throw SireIO::parse_error( QObject::tr(
+            "The number of excluded atoms per atom array is not equal to the "
+            "number of atoms! Should be %1, but is %2!")
+                .arg(natoms).arg(nnb_per_atom.count()), CODELOC );
+    }
+
+    //get the number of atoms in each molecule
+    const auto nats_per_mol = this->intData("ATOMS_PER_MOLECULE");
+    SireBase::assert_equal( nats_per_mol.count(), nmols, CODELOC );
+    
+    excl_atoms = QVector< QVector< QVector<int> > >(nmols);
+    int atomidx = 0;
+    int nnbidx = 0;
+    
+    for (int i=0; i<nmols; ++i)
+    {
+        const int nats = nats_per_mol[i];
+    
+        QVector< QVector<int> > excl(nats);
+        
+        for (int j=0; j<nats; ++j)
+        {
+            const int nnb = nnb_per_atom[atomidx];
+        
+            QVector<int> ex(nnb);
+            
+            for (int k=0; k<nnb; ++k)
+            {
+                ex[k] = inb[nnbidx];
+                nnbidx += 1;
+            }
+            
+            atomidx += 1;
+            
+            excl[j] = ex;
+        }
+        
+        excl_atoms[i] = excl;
+    }
 }
 
 /** Internal function used to return the start index for the bonds of each
@@ -1273,7 +1330,9 @@ void AmberParm::rebuildAfterReload()
         //now we have to build the LJ parameters (Amber stores them weirdly!)
         [&](){ this->rebuildLJParameters(); },
         //now we have to build the lookup indicies for the bonds, angles and dihedrals
-        [&](){ this->rebuildBADIndicies(); }
+        [&](){ this->rebuildBADIndicies(); },
+        //now we have to build the excluded atom lists
+        [&](){ this->rebuildExcludedAtoms(); }
     );
 }
 
@@ -1582,11 +1641,18 @@ double AmberParm::processAllFlags()
     }
     
     //now we have to work out how the atoms divide into molecules
-    if (not int_data.contains("ATOMS_PER_MOLECULE"))
+    const auto atoms_per_mol = this->intData("ATOMS_PER_MOLECULE");
+    
+    if (atoms_per_mol.count() == 0)
     {
         auto atoms_per_mol = discoverMolecules(int_data.value("BONDS_INC_HYDROGEN"),
                                                int_data.value("BONDS_WITHOUT_HYDROGEN"),
                                                nAtoms());
+ 
+        if (atoms_per_mol.count() == 0)
+        {
+            atoms_per_mol = QVector<qint64>(1, nAtoms());
+        }
  
         int_data.insert("ATOMS_PER_MOLECULE", atoms_per_mol);
     }
@@ -1682,7 +1748,7 @@ AmberParm::AmberParm(const AmberParm &other)
              bonds_inc_h(other.bonds_inc_h), bonds_exc_h(other.bonds_exc_h),
              angs_inc_h(other.angs_inc_h), angs_exc_h(other.angs_exc_h),
              dihs_inc_h(other.dihs_inc_h), dihs_exc_h(other.dihs_exc_h),
-             pointers(other.pointers)
+             excl_atoms(other.excl_atoms), pointers(other.pointers)
 {}
 
 /** Destructor */
@@ -1705,6 +1771,7 @@ AmberParm& AmberParm::operator=(const AmberParm &other)
         angs_exc_h = other.angs_exc_h;
         dihs_inc_h = other.dihs_inc_h;
         dihs_exc_h = other.dihs_exc_h;
+        excl_atoms = other.excl_atoms;
         pointers = other.pointers;
         MoleculeParser::operator=(other);
     }
@@ -1856,7 +1923,8 @@ int AmberParm::nMolecules() const
 }
 
 /** Return an array that maps from the index of each atom to the index
-    of each molecule */
+    of each molecule. Note that both the atom index and molecule index
+    are 0-indexed */
 QVector<int> AmberParm::getAtomIndexToMolIndex() const
 {
     const int natoms = this->nAtoms();
@@ -2162,10 +2230,15 @@ Molecule AmberParm::getMolecule(int molidx, const PropertyMap &map) const
     //get the info object that can map between AtomNum to AtomIdx etc.
     const auto molinfo = moleditor.data().info();
 
-    //this holds all of the amber parameters
+    //this holds all of the amber parameters - working on separate parts
+    //of this object is thread safe
     AmberParameters amberparams(moleditor);
+
+    //mutex to serialise access to the molecule
+    QMutex molmutex;
     
     //first - sort out all of the bonding information (with connectivity)
+    auto assign_bonds = [&]()
     {
         const auto R = InternalPotential::symbols().bond().r();
     
@@ -2204,11 +2277,16 @@ Molecule AmberParm::getMolecule(int molidx, const PropertyMap &map) const
         func( bonds_inc_h[molidx], this->intData("BONDS_INC_HYDROGEN") );
         func( bonds_exc_h[molidx], this->intData("BONDS_WITHOUT_HYDROGEN") );
         
-        moleditor.setProperty(map["bond"], bondfuncs);
-        moleditor.setProperty(map["connectivity"], connectivity.commit());
-    }
+        //save the properties into the molecule
+        {
+            QMutexLocker lkr(&molmutex);
+            moleditor.setProperty(map["bond"], bondfuncs);
+            moleditor.setProperty(map["connectivity"], connectivity.commit());
+        }
+    };
     
     //now lets sort out the angle information
+    auto assign_angles = [&]()
     {
         const auto THETA = InternalPotential::symbols().angle().theta();
 
@@ -2245,11 +2323,60 @@ Molecule AmberParm::getMolecule(int molidx, const PropertyMap &map) const
         func( angs_inc_h[molidx], this->intData("ANGLES_INC_HYDROGEN") );
         func( angs_exc_h[molidx], this->intData("ANGLES_WITHOUT_HYDROGEN") );
         
-        moleditor.setProperty(map["angle"], angfuncs);
-    }
+        //save the property into the molecule
+        {
+            QMutexLocker lkr(&molmutex);
+            moleditor.setProperty(map["angle"], angfuncs);
+        }
+    };
 
-    //now lets sort out the dihedral information
+    //now lets sort out the dihedral information and nbpairs information
+    auto assign_dihedrals = [&]()
     {
+        //first sort out the nonbonded pairs list - do this before the dihedrals
+        //as these will augment the nonbonded pairs with extra information regarding
+        //the 1-4 scale factors
+        CLJNBPairs nbpairs;
+        
+        if (moleditor.nAtoms() <= 3)
+        {
+            //everything is bonded, so scale factor is 0
+            nbpairs = CLJNBPairs(molinfo, CLJScaleFactor(0,0));
+        }
+        else
+        {
+            //default is that atoms are not bonded (so scale factor is 1)
+            nbpairs = CLJNBPairs(molinfo, CLJScaleFactor(1.0,1.0));
+            
+            const int natoms = moleditor.nAtoms();
+
+            //get the set of excluded atoms for each atom of this molecule
+            const auto excluded_atoms = excl_atoms[molidx];
+            SireBase::assert_equal( excluded_atoms.count(), natoms, CODELOC );
+
+            for (int i=0; i<natoms; ++i)
+            {
+                const AtomIdx atom0(i);
+                const CGAtomIdx cgatom0 = molinfo.cgAtomIdx(atom0);
+                const AtomNum atomnum0 = molinfo.number(atom0);
+            
+                // an atom is bonded to itself
+                nbpairs.set(cgatom0, cgatom0, CLJScaleFactor(0,0));
+
+                // Are there any excluded atoms of atom0?
+                for (const auto excluded_atom : excluded_atoms[i])
+                {
+                    if (excluded_atom > 0)
+                    {
+                        const AtomNum atomnum1(excluded_atom);
+                        const CGAtomIdx cgatom1 = molinfo.cgAtomIdx(atomnum1);
+                        nbpairs.set( cgatom0, cgatom1, CLJScaleFactor(0,0) );
+                    }
+                }
+            }
+        }
+
+        //now obtain all of the dihedral information
         const auto PHI = InternalPotential::symbols().dihedral().phi();
 
         //this holds all of the dihedral functions
@@ -2297,17 +2424,6 @@ Molecule AmberParm::getMolecule(int molidx, const PropertyMap &map) const
                 double per = per_array[param_index]; // radians
                 double phase = pha_array[param_index];
 
-                // Assume default values for 14 scaling factors
-                // Note that these are NOT inversed after reading from input
-                double sclee14 = 1.0/AMBER14COUL;
-                double sclnb14 = 1.0/AMBER14LJ;
-                
-                if (not sceefactor.isEmpty())
-                    sclee14 = sceefactor[param_index];
-                
-                if (not scnbfactor.isEmpty())
-                    sclnb14 = scnbfactor[param_index];
-
                 Expression func = k * ( 1 + Cos( per * ( PHI - 0 ) - phase ) );
 
                 DofID dof = DofID( atom0, atom1, atom2, atom3 );
@@ -2337,6 +2453,19 @@ Molecule AmberParm::getMolecule(int molidx, const PropertyMap &map) const
 
                 if (not ignored and not improper)
                 {
+                    // this is a 1-4 pair that has a scale factor
+                
+                    // Assume default values for 14 scaling factors
+                    // Note that these are NOT inversed after reading from input
+                    double sclee14 = 1.0/AMBER14COUL;
+                    double sclnb14 = 1.0/AMBER14LJ;
+                    
+                    if (not sceefactor.isEmpty())
+                        sclee14 = sceefactor[param_index];
+                    
+                    if (not scnbfactor.isEmpty())
+                        sclnb14 = scnbfactor[param_index];
+                
                     if (sclee14 < 0.00001)
                     {
                         throw SireError::program_bug( QObject::tr(
@@ -2352,7 +2481,14 @@ Molecule AmberParm::getMolecule(int molidx, const PropertyMap &map) const
                                 CODELOC );
                     }
 
-                    amberparams.add14Pair( BondID(atom0,atom3), 1.0/sclee14, 1.0/sclnb14 );
+                    //invert the scale factors
+                    sclee14 = 1.0/sclee14;
+                    sclnb14 = 1.0/sclnb14;
+
+                    //save them into the parameter space
+                    amberparams.add14Pair( BondID(atom0,atom3), sclee14, sclnb14 );
+                    nbpairs.set(molinfo.cgAtomIdx(atom0), molinfo.cgAtomIdx(atom3),
+                                CLJScaleFactor(sclee14,sclnb14));
                 }
             }
 
@@ -2376,12 +2512,22 @@ Molecule AmberParm::getMolecule(int molidx, const PropertyMap &map) const
 
         func( dihs_inc_h[molidx], this->intData("DIHEDRALS_INC_HYDROGEN") );
         func( dihs_exc_h[molidx], this->intData("DIHEDRALS_WITHOUT_HYDROGEN") );
-        
-        moleditor.setProperty(map["dihedral"], dihfuncs);
-        moleditor.setProperty(map["improper"], impfuncs);
-    }
+
+        //save the properties into the molecule
+        {
+            QMutexLocker lkr(&molmutex);
+            moleditor.setProperty(map["dihedral"], dihfuncs);
+            moleditor.setProperty(map["improper"], impfuncs);
+            moleditor.setProperty(map["intrascale"], nbpairs);
+        }
+    };
     
-    moleditor.setProperty("amberparameters", amberparams);
+    //assign all of the parameters
+    //tbb::parallel_invoke( assign_bonds, assign_angles, assign_dihedrals );
+    
+    assign_bonds(); assign_angles(); assign_dihedrals();
+    
+    moleditor.setProperty(map["amberparameters"], amberparams);
     
     return moleditor.commit();
 }
@@ -2473,18 +2619,33 @@ System AmberParm::startSystem(const PropertyMap &map) const
     if (nmols == 0)
         return System();
     
+    QMutex mols_mutex;
     QVector<Molecule> mols(nmols);
     Molecule *mols_array = mols.data();
     
-    tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
+    /*tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
                        [&](tbb::blocked_range<int> r)
     {
+        QVector<Molecule> local_mols(r.end()-r.begin());
+    
         //create and populate all of the molecules
         for (int i=r.begin(); i<r.end(); ++i)
         {
-            mols_array[i] = this->getMolecule(i,map);
+            local_mols[i-r.begin()] = this->getMolecule(i,map);
         }
-    });
+        
+        //copy them into the global list
+        QMutexLocker lkr(&mols_mutex);
+        for (int i=r.begin(); i<r.end(); ++i)
+        {
+            mols_array[i] = local_mols[i-r.begin()];
+        }
+    });*/
+    
+    for (int i=0; i<nmols; ++i)
+    {
+        mols_array[i] = this->getMolecule(i,map);
+    }
     
     MoleculeGroup molgroup("all");
     
