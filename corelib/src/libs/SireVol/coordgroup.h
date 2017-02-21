@@ -102,6 +102,11 @@ public:
             ptr->incref();
     }
     
+    CGSharedPtr(CGSharedPtr &&other) : ptr(other.ptr)
+    {
+        other.ptr = 0;
+    }
+    
     ~CGSharedPtr()
     {
         if (ptr)
@@ -125,6 +130,19 @@ public:
             //set the new pointer
             ptr = new_ptr;
         }
+        
+        return *this;
+    }
+    
+    CGSharedPtr<T>& operator=(CGSharedPtr &&other)
+    {
+        T *new_ptr = other.ptr;
+        other.ptr = 0;
+        
+        if (ptr)
+            ptr->decref();
+        
+        ptr = new_ptr;
         
         return *this;
     }

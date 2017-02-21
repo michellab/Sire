@@ -84,7 +84,7 @@ friend QDataStream& ::operator>>(QDataStream&, MoleculeParser&);
 
 public:
     MoleculeParser();
-    MoleculeParser(const QString &filename);
+    MoleculeParser(const QString &filename, const PropertyMap &map);
     MoleculeParser(const MoleculeParser &other);
 
     virtual ~MoleculeParser();
@@ -113,6 +113,11 @@ public:
     virtual bool isLead() const;
 
     double score() const;
+
+    void enableParallel();
+    void disableParallel();
+    void setUseParallel(bool on);
+    bool usesParallel() const;
 
     SireSystem::System toSystem(const PropertyMap &map = PropertyMap()) const;
     
@@ -153,6 +158,9 @@ private:
     /** The score associated with the parser. The higher the score,
         the better the file was parsed */
     double scr;
+    
+    /** Whether or not to run in parallel */
+    bool run_parallel;
 };
 
 /** This is a null parser, returned when the file cannot be parsed */
@@ -223,6 +231,12 @@ inline bool MoleculeParser::isBinaryFile() const
 inline bool MoleculeParser::isEmpty() const
 {
     return this->isTextFile() and lnes.isEmpty();
+}
+
+/** Return whether or not this parser runs in parallel */
+inline bool MoleculeParser::usesParallel() const
+{
+    return run_parallel;
 }
 
 #endif // SIRE_SKIP_INLINE_FUNCTIONS

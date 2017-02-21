@@ -32,6 +32,7 @@
 #include "SireIO/errors.h"
 
 #include "SireBase/parallel.h"
+#include "SireBase/booleanproperty.h"
 
 #include "SireSystem/system.h"
 
@@ -63,7 +64,8 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const MoleculeParser &par
     writeHeader(ds, r_parser, 1);
     
     SharedDataStream sds(ds);
-    sds << parser.lnes << parser.scr << static_cast<const Property&>(parser);
+    sds << parser.lnes << parser.scr << parser.run_parallel
+        << static_cast<const Property&>(parser);
 
     return ds;
 }
@@ -75,7 +77,8 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, MoleculeParser &parser)
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        sds >> parser.lnes >> parser.scr >> static_cast<Property&>(parser);
+        sds >> parser.lnes >> parser.scr >> parser.run_parallel
+            >> static_cast<Property&>(parser);
     }
     else
         throw version_error(v,"1", r_parser, CODELOC);
@@ -87,7 +90,7 @@ typedef QMultiHash<QString,SireIO::detail::ParserFactory> ParserFactories;
 Q_GLOBAL_STATIC( ParserFactories, getParserFactories );
 
 /** Constructor */
-MoleculeParser::MoleculeParser() : Property(), scr(0)
+MoleculeParser::MoleculeParser() : Property(), scr(0), run_parallel(true)
 {}
 
 /** Internal function that provides a file cache */
@@ -136,9 +139,15 @@ Q_GLOBAL_STATIC( FileContentsCache, getFileCache );
 
 /** Construct the parser, parsing in all of the lines in the file
     with passed filename */
-MoleculeParser::MoleculeParser(const QString &filename)
-               : Property(), scr(0)
+MoleculeParser::MoleculeParser(const QString &filename,
+                               const PropertyMap &map)
+               : Property(), scr(0), run_parallel(true)
 {
+    if (map["parallel"].hasValue())
+    {
+        run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+
     //we will be continually reloading the same file when testing parsers,
     //so check whether this file exists in the cache
     lnes = getFileCache()->read(filename);
@@ -172,7 +181,8 @@ MoleculeParser::MoleculeParser(const QString &filename)
 
 /** Copy constructor */
 MoleculeParser::MoleculeParser(const MoleculeParser &other)
-               : Property(other), lnes(other.lnes), scr(other.scr)
+               : Property(other), lnes(other.lnes), scr(other.scr),
+                 run_parallel(other.run_parallel)
 {}
 
 /** Destructor */
@@ -188,18 +198,38 @@ MoleculeParser& MoleculeParser::operator=(const MoleculeParser &other)
 {
     lnes = other.lnes;
     scr = other.scr;
+    run_parallel = other.run_parallel;
     Property::operator=(other);
     return *this;
 }
 
 bool MoleculeParser::operator==(const MoleculeParser &other) const
 {
-    return lnes == other.lnes and scr == other.scr and Property::operator==(other);
+    return lnes == other.lnes and scr == other.scr and
+           run_parallel == other.run_parallel and Property::operator==(other);
 }
 
 bool MoleculeParser::operator!=(const MoleculeParser &other) const
 {
     return not MoleculeParser::operator==(other);
+}
+
+/** Enable code to parse files in parallel */
+void MoleculeParser::enableParallel()
+{
+    run_parallel = true;
+}
+
+/** Disable code to parse files in parallel - parsing will happen in serial */
+void MoleculeParser::disableParallel()
+{
+    run_parallel = false;
+}
+
+/** Set whether or not to parse files in parallel or serial */
+void MoleculeParser::setUseParallel(bool on)
+{
+    run_parallel = on;
 }
 
 /** Return whether or not this is a lead parser. The lead parser is responsible
@@ -355,16 +385,33 @@ QList<MoleculeParserPtr> MoleculeParser::parse(const QStringList &filenames,
     {
         QVector<MoleculeParserPtr> parsers(filenames.count());
     
-        //parse the files in parallel - we use a grain size of 1
-        //as each file can be pretty big, and there won't be many of them
-        tbb::parallel_for( tbb::blocked_range<int>(0,filenames.count(),1),
-                           [&](tbb::blocked_range<int> r)
+        bool run_parallel = true;
+    
+        if (map["parallel"].hasValue())
         {
-            for (int i=r.begin(); i<r.end(); ++i)
+            run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+        }
+        
+        if (run_parallel)
+        {
+            //parse the files in parallel - we use a grain size of 1
+            //as each file can be pretty big, and there won't be many of them
+            tbb::parallel_for( tbb::blocked_range<int>(0,filenames.count(),1),
+                               [&](tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    parsers[i] = MoleculeParser::_pvt_parse(filenames[i], map);
+                }
+            }, tbb::simple_partitioner());
+        }
+        else
+        {
+            for (int i=0; i<filenames.count(); ++i)
             {
                 parsers[i] = MoleculeParser::_pvt_parse(filenames[i], map);
             }
-        }, tbb::simple_partitioner());
+        }
         
         result = parsers.toList();
     }
@@ -388,8 +435,23 @@ System MoleculeParser::read(const QString &file1, const QString &file2,
 {
     MoleculeParserPtr parser1, parser2;
     
-    tbb::parallel_invoke( [&](){ parser1 = MoleculeParser::parse(file1,map); },
-                          [&](){ parser2 = MoleculeParser::parse(file2,map); } );
+    bool run_parallel = true;
+
+    if (map["parallel"].hasValue())
+    {
+        run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+
+    if (run_parallel)
+    {
+        tbb::parallel_invoke( [&](){ parser1 = MoleculeParser::parse(file1,map); },
+                              [&](){ parser2 = MoleculeParser::parse(file2,map); } );
+    }
+    else
+    {
+        parser1 = MoleculeParser::parse(file1,map);
+        parser2 = MoleculeParser::parse(file2,map);
+    }
     
     return parser1.read().toSystem(parser2.read(),map);
 }

@@ -39,6 +39,28 @@ void register_MoleculeParser_class(){
         typedef bp::class_< SireIO::MoleculeParser, bp::bases< SireBase::Property >, boost::noncopyable > MoleculeParser_exposer_t;
         MoleculeParser_exposer_t MoleculeParser_exposer = MoleculeParser_exposer_t( "MoleculeParser", "The base class of all molecule parsers", bp::no_init );
         bp::scope MoleculeParser_scope( MoleculeParser_exposer );
+        { //::SireIO::MoleculeParser::disableParallel
+        
+            typedef void ( ::SireIO::MoleculeParser::*disableParallel_function_type)(  ) ;
+            disableParallel_function_type disableParallel_function_value( &::SireIO::MoleculeParser::disableParallel );
+            
+            MoleculeParser_exposer.def( 
+                "disableParallel"
+                , disableParallel_function_value
+                , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::enableParallel
+        
+            typedef void ( ::SireIO::MoleculeParser::*enableParallel_function_type)(  ) ;
+            enableParallel_function_type enableParallel_function_value( &::SireIO::MoleculeParser::enableParallel );
+            
+            MoleculeParser_exposer.def( 
+                "enableParallel"
+                , enableParallel_function_value
+                , "" );
+        
+        }
         { //::SireIO::MoleculeParser::isBinaryFile
         
             typedef bool ( ::SireIO::MoleculeParser::*isBinaryFile_function_type)(  ) const;
@@ -178,6 +200,18 @@ void register_MoleculeParser_class(){
                 , "" );
         
         }
+        { //::SireIO::MoleculeParser::setUseParallel
+        
+            typedef void ( ::SireIO::MoleculeParser::*setUseParallel_function_type)( bool ) ;
+            setUseParallel_function_type setUseParallel_function_value( &::SireIO::MoleculeParser::setUseParallel );
+            
+            MoleculeParser_exposer.def( 
+                "setUseParallel"
+                , setUseParallel_function_value
+                , ( bp::arg("on") )
+                , "" );
+        
+        }
         { //::SireIO::MoleculeParser::toSystem
         
             typedef ::SireSystem::System ( ::SireIO::MoleculeParser::*toSystem_function_type)( ::SireBase::PropertyMap const & ) const;
@@ -222,6 +256,17 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::usesParallel
+        
+            typedef bool ( ::SireIO::MoleculeParser::*usesParallel_function_type)(  ) const;
+            usesParallel_function_type usesParallel_function_value( &::SireIO::MoleculeParser::usesParallel );
+            
+            MoleculeParser_exposer.def( 
+                "usesParallel"
+                , usesParallel_function_value
                 , "" );
         
         }

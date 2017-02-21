@@ -137,6 +137,11 @@ public:
             ptr->incref();
     }
     
+    SharedArray2DPtr(SharedArray2DPtr &&other) : ptr(other.ptr)
+    {
+        other.ptr = 0;
+    }
+    
     ~SharedArray2DPtr()
     {
         if (ptr)
@@ -160,6 +165,19 @@ public:
             //set the new pointer
             ptr = new_ptr;
         }
+        
+        return *this;
+    }
+    
+    SharedArray2DPtr<T>& operator=(SharedArray2DPtr<T> &&other)
+    {
+        T *new_ptr = other.ptr;
+        other.ptr = 0;
+        
+        if (ptr)
+            ptr->decref();
+        
+        ptr = new_ptr;
         
         return *this;
     }
