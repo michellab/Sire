@@ -26,7 +26,7 @@
   *
 \*********************************************/
 
-#include "AmberParams.h"
+#include "amberparams.h"
 
 #include "SireMol/molecule.h"
 #include "SireMol/partialmolecule.h"

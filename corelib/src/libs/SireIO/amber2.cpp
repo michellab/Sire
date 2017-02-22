@@ -1800,8 +1800,8 @@ AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
     for (int i=0; i<nlines; ++i)
     {
         const QString &line = lines_array[i];
-        
-        if (line[0] == '%')
+
+        if (line.length() > 0 and line[0] == '%')
         {
             //this is a control line
             if (line.startsWith("%FLAG"))
@@ -1816,7 +1816,7 @@ AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
                     
                     last_flag = QString::null;
                 }
-                
+
                 //find the new flag
                 QStringList words = line.split(" ", QString::SkipEmptyParts);
                 
@@ -1846,7 +1846,7 @@ AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
 
     //now process all of the flag data
     score += this->processAllFlags();
-    
+
     //finally, make sure that we have been constructed sane
     this->assertSane();
     
@@ -1944,7 +1944,10 @@ QString AmberParm::title() const
 /** Return the total number of atoms in the file */
 int AmberParm::nAtoms() const
 {
-    return pointers[0];
+    if (pointers.count() > 0)
+        return pointers[0];
+    else
+        return 0;
 }
 
 /** Return the total number of atoms in the ith molecule in the file */
@@ -1958,7 +1961,10 @@ int AmberParm::nAtoms(int idx) const
 /** Return the number of distinct atom types */
 int AmberParm::nTypes() const
 {
-    return pointers[1];
+    if (pointers.count() > 1)
+        return pointers[1];
+    else
+        return 0;
 }
 
 /** Return the total number of bonds */
@@ -1970,13 +1976,19 @@ int AmberParm::nBonds() const
 /** Return the number of bonds including hydrogen */
 int AmberParm::nBondsWithHydrogen() const
 {
-    return pointers[2];
+    if (pointers.count() > 2)
+        return pointers[2];
+    else
+        return 0;
 }
 
 /** Return the number of bonds no containing hydrogen */
 int AmberParm::nBondsNoHydrogen() const
 {
-    return pointers[3];
+    if (pointers.count() > 3)
+        return pointers[3];
+    else
+        return 0;
 }
 
 /** Return the number of angles */
@@ -1988,13 +2000,19 @@ int AmberParm::nAngles() const
 /** Return the number of angles containing hydrogen */
 int AmberParm::nAnglesWithHydrogen() const
 {
-    return pointers[4];
+    if (pointers.count() > 4)
+        return pointers[4];
+    else
+        return 0;
 }
 
 /** Return the number of angles without hydrogen */
 int AmberParm::nAnglesNoHydrogen() const
 {
-    return pointers[5];
+    if (pointers.count() > 5)
+        return pointers[5];
+    else
+        return 0;
 }
 
 /** Return the number of dihedrals */
@@ -2006,25 +2024,37 @@ int AmberParm::nDihedrals() const
 /** Return the number of dihedrals containing hydrogen */
 int AmberParm::nDihedralsWithHydrogen() const
 {
-    return pointers[6];
+    if (pointers.count() > 6)
+        return pointers[6];
+    else
+        return 0;
 }
 
 /** Return the number of dihedrals without hydrogen */
 int AmberParm::nDihedralsNoHydrogen() const
 {
-    return pointers[7];
+    if (pointers.count() > 7)
+        return pointers[7];
+    else
+        return 0;
 }
 
 /** Return the number of excluded atoms */
 int AmberParm::nExcluded() const
 {
-    return pointers[9];
+    if (pointers.count() > 9)
+        return pointers[9];
+    else
+        return 0;
 }
 
 /** Return the number of residues */
 int AmberParm::nResidues() const
 {
-    return pointers[10];
+    if (pointers.count() > 10)
+        return pointers[10];
+    else
+        return 0;
 }
 
 /** Return the number of molecules in the file */
@@ -2309,7 +2339,7 @@ MolStructureEditor AmberParm::getMolStructure(int start_idx, int natoms,
 MolEditor AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &map) const
 {
     //first, construct the layout of the molecule (sorting of atoms into residues and cutgroups)
-    auto mol = this->getMolStructure(start_idx, natoms, map["cutting"]).commit();
+    auto mol = this->getMolStructure(start_idx, natoms, map["cutting"]).commit().edit();
     
     //assign all of the atomic properties
     const auto charge_array = this->floatData("CHARGE");
@@ -2342,15 +2372,13 @@ MolEditor AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &m
         ambertype.set(cgatomidx, ambertype_array[atom_idx].trimmed());
     }
 
-    auto moleditor = mol.edit();
-
-    moleditor.setProperty(map["charge"], charges);
-    moleditor.setProperty(map["mass"], masses);
-    moleditor.setProperty(map["element"], elements);
-    moleditor.setProperty(map["LJ"], ljparams);
-    moleditor.setProperty(map["ambertype"], ambertype);
+    mol.setProperty(map["charge"], charges);
+    mol.setProperty(map["mass"], masses);
+    mol.setProperty(map["element"], elements);
+    mol.setProperty(map["LJ"], ljparams);
+    mol.setProperty(map["ambertype"], ambertype);
     
-    return moleditor;
+    return mol;
 }
 
 /** Return the ith molecule that is described by this AmberParm file. Note
