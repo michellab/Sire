@@ -104,6 +104,8 @@ set ( SIREBASE_SOURCES
       trigarray2d.cpp 
       unittest.cpp
 
+      test_sharedptr.cpp
+
       ${SIREBASE_HEADERS}
     )
 

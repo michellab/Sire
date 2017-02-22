@@ -45,6 +45,7 @@
 #include "SireMM/threeatomfunctions.h"
 #include "SireMM/fouratomfunctions.h"
 #include "SireMM/cljatoms.h"
+#include "SireMM/amberparams.h"
 
 #include "SireMM/cljboxes.h"
 
@@ -69,4 +70,9 @@ void register_SireMM_containers()
     register_list< QVector<CLJBox> >();
     register_list< QVector<CLJBoxIndex> >();
 
+    register_dict< QHash<BondID,AmberBond> >();
+    register_dict< QHash<AngleID,AmberAngle> >();
+    register_dict< QHash<DihedralID,AmberDihedral> >();
+    register_dict< QHash<ImproperID,AmberDihedral> >();
+    register_dict< QHash<BondID,AmberNB14> >();
 }

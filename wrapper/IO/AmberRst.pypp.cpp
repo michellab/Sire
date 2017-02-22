@@ -7,13 +7,73 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/findexe.h"
+
 #include "SireBase/parallel.h"
+
+#include "SireBase/tempdir.h"
 
 #include "SireBase/unittest.h"
 
+#include "SireCAS/trigfuncs.h"
+
 #include "SireError/errors.h"
 
+#include "SireIO/errors.h"
+
+#include "SireMM/amberparams.h"
+
+#include "SireMM/atomljs.h"
+
+#include "SireMM/cljnbpairs.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/ljparameter.h"
+
+#include "SireMaths/maths.h"
+
+#include "SireMol/amberparameters.h"
+
+#include "SireMol/atomcharges.h"
+
+#include "SireMol/atomcoords.h"
+
+#include "SireMol/atomcutting.h"
+
+#include "SireMol/atomeditor.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atomidx.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/atomvelocities.h"
+
+#include "SireMol/cgatomidx.h"
+
+#include "SireMol/connectivity.h"
+
+#include "SireMol/element.h"
+
+#include "SireMol/mgname.h"
+
 #include "SireMol/molecule.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
+
+#include "SireMol/reseditor.h"
+
+#include "SireMol/residuecutting.h"
+
+#include "SireMol/selector.hpp"
+
+#include "SireMove/flexibility.h"
+
+#include "SireMove/internalmove.h"
 
 #include "SireStream/datastream.h"
 
@@ -21,7 +81,15 @@ namespace bp = boost::python;
 
 #include "SireSystem/system.h"
 
+#include "SireUnits/units.h"
+
+#include "SireVol/cartesian.h"
+
+#include "SireVol/periodicbox.h"
+
 #include "amber2.h"
+
+#include <QDebug>
 
 #include <QElapsedTimer>
 
@@ -32,6 +100,8 @@ namespace bp = boost::python;
 #include <QRegularExpression>
 
 #include <QTextStream>
+
+#include <tuple>
 
 #include "amber2.h"
 
@@ -91,7 +161,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "hasVelocities"
                 , hasVelocities_function_value
-                , "" );
+                , "Return whether or not this restart file also provides velocities" );
         
         }
         { //::SireIO::AmberRst::nAtoms
@@ -102,7 +172,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
-                , "" );
+                , "Return the number of atoms whose coordinates are contained in this restart file" );
         
         }
         AmberRst_exposer.def( bp::self != bp::self );
@@ -140,7 +210,7 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "time"
                 , time_function_value
-                , "" );
+                , "Return the current time of the simulation from which this restart\nfile was written" );
         
         }
         { //::SireIO::AmberRst::title

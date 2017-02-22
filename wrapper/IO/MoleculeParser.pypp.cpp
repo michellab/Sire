@@ -7,9 +7,13 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/booleanproperty.h"
+
 #include "SireBase/parallel.h"
 
 #include "SireError/errors.h"
+
+#include "SireIO/errors.h"
 
 #include "SireStream/datastream.h"
 
@@ -24,6 +28,10 @@ namespace bp = boost::python;
 #include <QElapsedTimer>
 
 #include <QFile>
+
+#include <QFileInfo>
+
+#include <QMutex>
 
 #include <QTextStream>
 
@@ -47,7 +55,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "disableParallel"
                 , disableParallel_function_value
-                , "" );
+                , "Disable code to parse files in parallel - parsing will happen in serial" );
         
         }
         { //::SireIO::MoleculeParser::enableParallel
@@ -58,7 +66,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "enableParallel"
                 , enableParallel_function_value
-                , "" );
+                , "Enable code to parse files in parallel" );
         
         }
         { //::SireIO::MoleculeParser::isBinaryFile
@@ -209,7 +217,7 @@ void register_MoleculeParser_class(){
                 "setUseParallel"
                 , setUseParallel_function_value
                 , ( bp::arg("on") )
-                , "" );
+                , "Set whether or not to parse files in parallel or serial" );
         
         }
         { //::SireIO::MoleculeParser::toSystem

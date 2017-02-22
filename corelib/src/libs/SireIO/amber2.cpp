@@ -32,6 +32,8 @@
 #include <QElapsedTimer>
 #include <QRegularExpression>
 
+#include <tuple>
+
 #include "amber2.h"
 
 #include "SireMol/element.h"
@@ -63,6 +65,7 @@
 #include "SireMM/atomljs.h"
 #include "SireMM/internalff.h"
 #include "SireMM/cljnbpairs.h"
+#include "SireMM/amberparams.h"
 
 #include "SireVol/cartesian.h"
 #include "SireVol/periodicbox.h"
@@ -2381,6 +2384,183 @@ MolEditor AmberParm::getMolecule(int start_idx, int natoms, const PropertyMap &m
     return mol;
 }
 
+/** Return the AmberParams for the ith molecule */
+AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinfo) const
+{
+    //first - read all of the bonding information
+    auto assign_bonds = [&]()
+    {
+        AmberParams params(molinfo);
+        
+        const auto k_array = this->floatData("BOND_FORCE_CONSTANT").constData();
+        const auto r0_array = this->floatData("BOND_EQUIL_VALUE").constData();
+    
+        auto func = [&](const QVector<int> &idxs, const QVector<qint64> &bonds)
+        {
+            for (int idx : idxs)
+            {
+                const AtomNum atom0( bonds[ idx ] / 3 + 1 );
+                const AtomNum atom1( bonds[ idx + 1 ] / 3 + 1 );
+
+                const int param_idx = bonds[ idx + 2 ] - 1; // 1 indexed to 0 indexed
+                
+                const double k = k_array[param_idx];
+                const double r0 = r0_array[param_idx];
+                
+                params.add( BondID(atom0,atom1), k, r0 );
+            }
+        };
+
+        func( bonds_inc_h[molidx], this->intData("BONDS_INC_HYDROGEN") );
+        func( bonds_exc_h[molidx], this->intData("BONDS_WITHOUT_HYDROGEN") );
+        
+        return params;
+    };
+    
+    //now lets read the angle information
+    auto assign_angles = [&]()
+    {
+        AmberParams params(molinfo);
+
+        const auto k_array = this->floatData("ANGLE_FORCE_CONSTANT").constData();
+        const auto t0_array = this->floatData("ANGLE_EQUIL_VALUE").constData();
+        
+        auto func = [&](const QVector<int> &idxs, const QVector<qint64> &angles)
+        {
+            for (int idx : idxs)
+            {
+                const AtomNum atom0( angles[ idx ] / 3 + 1 );
+                const AtomNum atom1( angles[ idx + 1 ] / 3 + 1 );
+                const AtomNum atom2( angles[ idx + 2 ] / 3 + 1 );
+
+                const int param_idx = angles[ idx + 3 ] - 1;  //1 indexed to 0 indexed
+                
+                const double k = k_array[param_idx];
+                const double t0 = t0_array[param_idx];
+                
+                params.add( AngleID(atom0,atom1,atom2), k, t0 );
+            }
+        };
+
+        func( angs_inc_h[molidx], this->intData("ANGLES_INC_HYDROGEN") );
+        func( angs_exc_h[molidx], this->intData("ANGLES_WITHOUT_HYDROGEN") );
+
+        return params;
+    };
+
+    //now lets read the dihedral+improper information and nbpairs information
+    auto assign_dihedrals = [&]()
+    {
+        const auto k_array = this->floatData("DIHEDRAL_FORCE_CONSTANT").constData();
+        const auto per_array = this->floatData("DIHEDRAL_PERIODICITY").constData();
+        const auto pha_array = this->floatData("DIHEDRAL_PHASE").constData();
+
+        const auto sceefactor = this->floatData("SCEE_SCALE_FACTOR");
+        const auto scnbfactor = this->floatData("SCNB_SCALE_FACTOR");
+
+        AmberParams params(molinfo);
+
+        auto func = [&](const QVector<int> &idxs, const QVector<qint64> &dihedrals)
+        {
+            for (int idx : idxs)
+            {
+                const AtomNum atom0( dihedrals[ idx ] / 3 + 1 );
+                const AtomNum atom1( dihedrals[ idx + 1 ] / 3 + 1 );
+                const AtomNum atom2( std::abs(dihedrals[ idx + 2 ] / 3) + 1 );
+                const AtomNum atom3( std::abs(dihedrals[ idx + 3 ] / 3) + 1 );
+
+                const bool ignored = dihedrals[ idx + 2 ] < 0;  // negative implies ignored
+                const bool improper = dihedrals[ idx + 3 ] < 0; // negative implies improper
+                
+                const int param_index = dihedrals[ idx + 4 ] - 1; // 1 indexed to 0
+                
+                double k = k_array[param_index]; // kcal_per_mol
+                double per = per_array[param_index]; // radians
+                double phase = pha_array[param_index];
+
+                if (improper)
+                {
+                    params.add(ImproperID(atom0,atom1,atom2,atom3), k, per, phase);
+                }
+                else
+                {
+                    params.add(DihedralID(atom0,atom1,atom2,atom3), k, per, phase);
+
+                    if (not ignored)
+                    {
+                        // this is a 1-4 pair that has a scale factor
+                    
+                        // Assume default values for 14 scaling factors
+                        // Note that these are NOT inversed after reading from input
+                        double sclee14 = 1.0/AMBER14COUL;
+                        double sclnb14 = 1.0/AMBER14LJ;
+                        
+                        if (not sceefactor.isEmpty())
+                            sclee14 = sceefactor[param_index];
+                        
+                        if (not scnbfactor.isEmpty())
+                            sclnb14 = scnbfactor[param_index];
+                    
+                        if (sclee14 < 0.00001)
+                        {
+                            throw SireError::program_bug( QObject::tr(
+                                "A 1,4 pair has a coulombic scaling factor of 0.0 in the top file "
+                                "which would mean an infinite energy!"),
+                                    CODELOC );
+                        }
+                        if (sclnb14 < 0.00001)
+                        {
+                            throw SireError::program_bug( QObject::tr(
+                                "A 1,4 pair has a LJ scaling factor of 0.0 in the top file "
+                                "which would mean an infinite energy!"),
+                                    CODELOC );
+                        }
+
+                        //invert the scale factors
+                        sclee14 = 1.0/sclee14;
+                        sclnb14 = 1.0/sclnb14;
+
+                        //save them into the parameter space
+                        params.addNB14( BondID(atom0,atom3), sclee14, sclnb14 );
+                    }
+                }
+            }
+        };
+
+        func( dihs_inc_h[molidx], this->intData("DIHEDRALS_INC_HYDROGEN") );
+        func( dihs_exc_h[molidx], this->intData("DIHEDRALS_WITHOUT_HYDROGEN") );
+
+        return params;
+    };
+    
+    AmberParams params(molinfo);
+    
+    //assign all of the parameters
+    if (usesParallel())
+    {
+        AmberParams bonds, angles, dihedrals;
+    
+        tbb::parallel_invoke
+        (
+            [&](){ bonds = assign_bonds(); },
+            [&](){ angles = assign_angles(); },
+            [&](){ dihedrals = assign_dihedrals(); }
+        );
+        
+        params += bonds;
+        params += angles;
+        params += dihedrals;
+    }
+    else
+    {
+        params += assign_bonds();
+        params += assign_angles();
+        params += assign_dihedrals();
+    }
+    
+    return params;
+}
+
 /** Return the ith molecule that is described by this AmberParm file. Note
     that this molecule won't have any coordinate data, as this is not
     provided in this file */
@@ -2394,6 +2574,12 @@ Molecule AmberParm::getMolecule(int molidx, const PropertyMap &map) const
     
     //get the info object that can map between AtomNum to AtomIdx etc.
     const auto molinfo = moleditor.data().info();
+
+    const auto amber_params = this->getAmberParams(molidx, molinfo);
+
+    moleditor.setProperty(map["amberparameters"], amber_params);
+    
+    return moleditor.commit();
 
     //this holds all of the amber parameters - working on separate parts
     //of this object is thread safe
