@@ -51,6 +51,12 @@ QDataStream& operator>>(QDataStream&, SireIO::AmberRst&);
 namespace SireMol
 {
 class MolEditor;
+class MoleculeInfoData;
+}
+
+namespace SireMM
+{
+class AmberParams;
 }
 
 namespace SireIO
@@ -236,6 +242,8 @@ private:
     void rebuildLJParameters();
     void rebuildBADIndicies();
     void rebuildExcludedAtoms();
+
+    SireMM::AmberParams getAmberParams(int imol, const SireMol::MoleculeInfoData &molinfo) const;
 
     SireMol::MolStructureEditor getMolStructure(int start_idx, int natoms,
                                                 const SireBase::PropertyName &cutting) const;

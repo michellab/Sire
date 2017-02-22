@@ -7,9 +7,13 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/booleanproperty.h"
+
 #include "SireBase/parallel.h"
 
 #include "SireError/errors.h"
+
+#include "SireIO/errors.h"
 
 #include "SireStream/datastream.h"
 
@@ -24,6 +28,10 @@ namespace bp = boost::python;
 #include <QElapsedTimer>
 
 #include <QFile>
+
+#include <QFileInfo>
+
+#include <QMutex>
 
 #include <QTextStream>
 

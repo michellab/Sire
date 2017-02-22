@@ -64,7 +64,7 @@ void register_CLJDelta_class(){
             CLJDelta_exposer.def( 
                 "changedAtoms"
                 , changedAtoms_function_value
-                , "Return difference between the old and new atoms. This returns the change\nas only the atoms that have changed, with the parameters of the old atoms\nnegated so that a delta energy can be calculated easily" );
+                , "Return difference between the old and new atoms. This returns the change,\nreturning only non-dummy atoms, with the parameters of the old atoms\nnegated so that a delta energy can be calculated easily" );
         
         }
         { //::SireMM::CLJDelta::isEmpty

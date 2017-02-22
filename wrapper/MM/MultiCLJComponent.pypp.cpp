@@ -14,6 +14,8 @@ namespace bp = boost::python;
 
 #include "multicljcomponent.h"
 
+#include <QRegExp>
+
 #include "multicljcomponent.h"
 
 SireMM::MultiCLJComponent __copy__(const SireMM::MultiCLJComponent &other){ return SireMM::MultiCLJComponent(other); }
@@ -100,7 +102,7 @@ void register_MultiCLJComponent_class(){
                 "hasKey"
                 , hasKey_function_value
                 , ( bp::arg("key") )
-                , "" );
+                , "Return whether or not there is a function with the associated key" );
         
         }
         { //::SireMM::MultiCLJComponent::indexOf
