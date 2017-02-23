@@ -155,19 +155,19 @@ char* PackedArray2DMemoryBase::create(quint32 narrays, quint32 nvalues,
 
 /** Null constructor */
 PackedArray2DDataBase::PackedArray2DDataBase()
-                      : QSharedData(), array0(0), arraydata0(0),
+                      : RefCountData(), array0(0), arraydata0(0),
                         narrays(0), value0(0), nvalues(0)
 {}
 
 /** Construct to hold the specified number of arrays and values */
 PackedArray2DDataBase::PackedArray2DDataBase(quint32 na, quint32 nv)
-                      : QSharedData(), array0(0), arraydata0(0),
+                      : RefCountData(), array0(0), arraydata0(0),
                         narrays(na), value0(0), nvalues(nv)
 {}
 
 /** Copy constructor */
 PackedArray2DDataBase::PackedArray2DDataBase(const PackedArray2DDataBase &other)
-                      : QSharedData(), array0(other.array0),
+                      : RefCountData(), array0(other.array0),
                         arraydata0(other.arraydata0), narrays(other.narrays),
                       value0(other.value0), nvalues(other.nvalues)
 {}

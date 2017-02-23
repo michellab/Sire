@@ -60,11 +60,11 @@ QMutex SIREBASE_EXPORT *globalLock()
 ///////////////
 
 /** Constructor */
-Property::Property() : QSharedData()
+Property::Property() : RefCountData()
 {}
 
 /** Copy constructor */
-Property::Property(const Property&) : QSharedData()
+Property::Property(const Property&) : RefCountData()
 {}
 
 /** Destructor */

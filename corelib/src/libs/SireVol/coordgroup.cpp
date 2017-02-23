@@ -61,7 +61,7 @@ class CGArrayArrayData;
 
 /** This class provides the main metadata that describes the array
     of array of CoordGroups */
-class CGArrayArrayData : public QSharedData
+class CGArrayArrayData : public RefCountData
 {
 friend class CGMemory;
 
@@ -629,7 +629,7 @@ char* CGMemory::detach(char *this_ptr, quint32 this_idx)
     //The CGArrayArrayData object is at the beginning of this storage array
     CGArrayArrayData *cgarrayarray = (CGArrayArrayData*) storage;
     
-    if (cgarrayarray->ref.testAndSetRelaxed(1,1))
+    if (cgarrayarray->ref.hasSingleReference())
     {
         //only one reference, so no need to clone
         return this_ptr;
@@ -653,7 +653,7 @@ char* CGMemory::detach(char *this_ptr, quint32 this_idx)
         CGArrayArrayData *new_cgarrayarray = (CGArrayArrayData*) new_storage;
         
         //set the reference count of this copy to 1
-        new_cgarrayarray->ref = 1;
+        new_cgarrayarray->ref.ref();
 
         //now loose a reference to the original
         CGMemory::decref(this_ptr, this_idx);
@@ -727,7 +727,7 @@ void CGMemory::decref(char *this_ptr, quint32 this_idx)
 
 /** Null constructor */
 CGArrayArrayData::CGArrayArrayData() 
-                 : QSharedData(), 
+                 : RefCountData(),
                    cgarray0(0), cgarraydata0(0), ncgarrays(0),
                    cgroup0(0), cgdata0(0), aabox0(0), ncgroups(0),
                    coords0(0), ncoords(0)
@@ -736,7 +736,7 @@ CGArrayArrayData::CGArrayArrayData()
 /** Construct metadata for the specified number of subgroups */
 CGArrayArrayData::CGArrayArrayData(quint32 narray, quint32 ngroup, 
                                    quint32 ncoord)
-                 : QSharedData(),
+                 : RefCountData(),
                    cgarray0(0), cgarraydata0(0), ncgarrays(narray),
                    cgroup0(0), cgdata0(0), aabox0(0), ncgroups(ngroup),
                    coords0(0), ncoords(ncoord)
@@ -744,7 +744,7 @@ CGArrayArrayData::CGArrayArrayData(quint32 narray, quint32 ngroup,
   
 /** Copy constructor */               
 CGArrayArrayData::CGArrayArrayData(const CGArrayArrayData &other)
-                 : QSharedData(),
+                 : RefCountData(),
                    cgarray0(other.cgarray0), cgarraydata0(other.cgarraydata0),
                    ncgarrays(other.ncgarrays),
                    cgroup0(other.cgroup0), cgdata0(other.cgdata0),

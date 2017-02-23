@@ -134,7 +134,7 @@ SharedDataPointer<T>::SharedDataPointer(const T &obj)
 {
     T *obj_ptr = const_cast<T*>(&obj);
     
-    if ( obj_ptr->ref.testAndSetOrdered(0,0) )
+    if ( obj_ptr->ref.isNotReferenced() )
     {
         //the reference count was zero - this implies that
         //this object is not held by another SharedDataPointer,
@@ -177,6 +177,7 @@ Q_INLINE_TEMPLATE
 SharedDataPointer<T>::~SharedDataPointer()
 { 
     if (d && !d->ref.deref()) delete d;
+    d = 0;
 }
 
 /** Null assignment operator - allows you to write ptr = 0 to 
@@ -225,7 +226,7 @@ SharedDataPointer<T>& SharedDataPointer<T>::operator=(const T &obj)
     {
         T *obj_ptr = const_cast<T*>(&obj);
     
-        if ( obj_ptr->ref.testAndSetOrdered(0,0) )
+        if ( obj_ptr->ref.isNotReferenced() )
         {
             //the reference count was zero - this implies that
             //this object is not held by another SharedDataPointer,
@@ -247,7 +248,7 @@ SharedDataPointer<T>& SharedDataPointer<T>::operator=(const T &obj)
             //this is held by another SharedDataPointer
             if (&obj != d)
             {
-                obj.ref.ref();
+                const_cast<T*>(&obj)->ref.ref();
                 
                 T *old = d;
                 d = const_cast<T*>(&obj);
@@ -307,7 +308,7 @@ template <class T>
 Q_INLINE_TEMPLATE
 void SharedDataPointer<T>::detach() 
 {
-    if (d && d->ref.load() != 1) detach_helper();
+    if (d && d->ref.hasMultipleReferences()) detach_helper();
 }
 
 /** Dereference this pointer */

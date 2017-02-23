@@ -29,7 +29,6 @@
 #ifndef SIREMOL_MOLECULEDATA_H
 #define SIREMOL_MOLECULEDATA_H
 
-#include <QSharedData>
 #include <QMutex>
 
 #include <boost/shared_ptr.hpp>
@@ -37,6 +36,7 @@
 
 #include "SireBase/properties.h"
 #include "SireBase/propertymap.h"
+#include "SireBase/refcountdata.h"
 
 #include "SireBase/shareddatapointer.hpp"
 
@@ -98,7 +98,7 @@ be used in your own code.
 
 @author Christopher Woods
 */
-class SIREMOL_EXPORT MoleculeData : public QSharedData
+class SIREMOL_EXPORT MoleculeData : public SireBase::RefCountData
 {
 
 friend QDataStream& ::operator<<(QDataStream&, const MoleculeData&);

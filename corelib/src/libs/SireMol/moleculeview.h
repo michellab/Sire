@@ -29,8 +29,6 @@
 #ifndef SIREMOL_MOLECULEVIEW_H
 #define SIREMOL_MOLECULEVIEW_H
 
-#include <QSharedData>
-
 #include "SireBase/shareddatapointer.hpp"
 #include "SireBase/property.h"
 

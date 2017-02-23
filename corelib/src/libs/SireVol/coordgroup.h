@@ -29,10 +29,12 @@
 #ifndef SIREVOL_COORDGROUP_H
 #define SIREVOL_COORDGROUP_H
 
-#include <QSharedData>
 #include <QVarLengthArray>
 
 #include "SireMaths/vector.h"
+
+#include "SireBase/shareddatapointer.hpp"
+#include "SireBase/refcountdata.h"
 
 #include "aabox.h"
 

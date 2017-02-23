@@ -33,6 +33,7 @@
 
 #include "SireBase/booleanproperty.h"
 #include "SireBase/lengthproperty.h"
+#include "SireBase/refcountdata.h"
 
 #include "SireError/errors.h"
 #include "SireBase/errors.h"
@@ -61,14 +62,14 @@ using namespace SireStream;
 using namespace SireUnits;
 
 QDataStream& operator<<(QDataStream &ds,
-                        const QSharedDataPointer<SireMM::detail::IntraFFMolData> &ptr)
+                        const SharedDataPointer<SireMM::detail::IntraFFMolData> &ptr)
 {
     SharedDataStream sds(ds);
     sds << ptr;
     return ds;
 }
 
-QDataStream& operator>>(QDataStream &ds, QSharedDataPointer<SireMM::detail::IntraFFMolData> &ptr)
+QDataStream& operator>>(QDataStream &ds, SharedDataPointer<SireMM::detail::IntraFFMolData> &ptr)
 {
     SharedDataStream sds(ds);
     sds >> ptr;
@@ -80,15 +81,15 @@ namespace SireMM
     namespace detail
     {
         /** This class holds (mostly) const data about the forcefield */
-        class IntraFFData : public QSharedData
+        class IntraFFData : public RefCountData
         {
         public:
-            IntraFFData() : QSharedData(),
+            IntraFFData() : RefCountData(),
                             parallel_calc(true), repro_sum(false)
             {}
             
             IntraFFData(const IntraFFData &other)
-                 : QSharedData(),
+                 : RefCountData(),
                    cljfuncs(other.cljfuncs),
                    cljcomps(other.cljcomps),
                    props(other.props),
@@ -117,7 +118,7 @@ namespace SireMM
         
         /** This class holds all of the information about a particular 
             molecule in the forcefield */
-        class IntraFFMolData : public QSharedData
+        class IntraFFMolData : public RefCountData
         {
         public:
             /** The CLJGroup for this molecule */
@@ -145,14 +146,14 @@ namespace SireMM
             /** Whether or not this group needs accepting */
             bool needs_accepting;
 
-            IntraFFMolData() : QSharedData(), connectivity_version(0),
+            IntraFFMolData() : RefCountData(), connectivity_version(0),
                                needs_energy_calc(false), needs_accepting(false)
             {}
             
             IntraFFMolData(const MoleculeView &molview,
                            const PropertyMap &map,
                            const QVector<CLJFunctionPtr> &funcs)
-                    : QSharedData(), needs_energy_calc(true), needs_accepting(false)
+                    : RefCountData(), needs_energy_calc(true), needs_accepting(false)
             {
                 cljgroup = CLJGroup(CLJAtoms::USE_ATOMIDX, CLJExtractor::EXTRACT_BY_CUTGROUP);
                 cljgroup.setBoxLength( 7.5*angstrom );
@@ -165,7 +166,7 @@ namespace SireMM
             }
             
             IntraFFMolData(const IntraFFMolData &other)
-                : QSharedData(), cljgroup(other.cljgroup), cljfuncs(other.cljfuncs),
+                : RefCountData(), cljgroup(other.cljgroup), cljfuncs(other.cljfuncs),
                   cty(other.cty), nrg(other.nrg),
                   connectivity_property(other.connectivity_property),
                   connectivity_version(other.connectivity_version),
@@ -1129,7 +1130,7 @@ void IntraFF::_pvt_added(const SireMol::PartialMolecule &mol, const SireBase::Pr
     if (it == moldata.end())
     {
         //need to add this as a new molecule
-        moldata.insert( mol.number(), QSharedDataPointer<detail::IntraFFMolData>(
+        moldata.insert( mol.number(), SharedDataPointer<detail::IntraFFMolData>(
                                 new detail::IntraFFMolData(mol, map, d.constData()->cljfuncs) ) );
     }
     else

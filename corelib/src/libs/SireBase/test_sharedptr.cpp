@@ -31,16 +31,16 @@
 
 #include "SireBase/shareddatapointer.hpp"
 #include "SireBase/sharedpolypointer.hpp"
+#include "SireBase/refcountdata.h"
 
 #include <cmath>
-#include <QSharedData>
 
 using namespace SireBase;
 
-class Foo : public QSharedData
+class Foo : public RefCountData
 {
 public:
-    Foo() : QSharedData()
+    Foo() : RefCountData()
     {
         for (int i=0; i<size(); ++i)
         {
@@ -48,7 +48,7 @@ public:
         }
     }
     
-    Foo(const Foo &other) : QSharedData()
+    Foo(const Foo &other) : RefCountData()
     {
         for (int i=0; i<size(); ++i)
         {

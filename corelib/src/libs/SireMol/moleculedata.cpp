@@ -27,7 +27,6 @@
 \*********************************************/
 
 #include <QDataStream>
-#include <QSharedData>
 
 #include "moleculedata.h"
 #include "moleculeinfodata.h"
@@ -232,7 +231,7 @@ MolNum MolNum::getUniqueNumber()
 
 /** Null constructor */
 MoleculeData::MoleculeData()
-             : QSharedData(),
+             : RefCountData(),
                molinfo( MoleculeInfoData::null() ),
                vrsn(0), 
                molnum(0),
@@ -241,7 +240,7 @@ MoleculeData::MoleculeData()
 
 /** Get the underlying data viewed by the passed molecule view */
 MoleculeData::MoleculeData(const MoleculeView &molview)
-             : QSharedData()
+             : RefCountData()
 {
     this->operator=( molview.data() );
 }
@@ -277,7 +276,7 @@ void MoleculeData::renumber(MolNum newnum)
 
 /** Construct from the passed StructureEditor */
 MoleculeData::MoleculeData(const StructureEditor &editor)
-             : QSharedData(), vrsn(0), molnum(0)
+             : RefCountData(), vrsn(0), molnum(0)
 {
     //create the info object from this editor
     molinfo = SharedDataPointer<MoleculeInfoData>( new MoleculeInfoData(editor) );
@@ -299,7 +298,7 @@ MoleculeData::MoleculeData(const StructureEditor &editor)
 
 /** Copy constructor */
 MoleculeData::MoleculeData(const MoleculeData &other)
-                : QSharedData(),
+                : RefCountData(),
                   molinfo(other.molinfo),
                   props(other.props),
                   vrsn(other.vrsn),

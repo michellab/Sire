@@ -29,6 +29,7 @@
 #include <QHash>
 
 #include "properties.h"
+#include "refcountdata.h"
 
 #include "SireBase/errors.h"
 #include "SireError/errors.h"
@@ -48,7 +49,7 @@ namespace detail
 {
 
 /** This is the data for a Properties object */
-class PropertiesData : public QSharedData
+class PropertiesData : public RefCountData
 {
 public:
     PropertiesData();
@@ -70,7 +71,7 @@ public:
     /** The metadata for each property, indexed by name */
     QHash<QString, Properties> props_metadata;
 
-    static const QSharedDataPointer<PropertiesData>& getNullData();
+    static const SharedDataPointer<PropertiesData>& getNullData();
 
 private:
     /** Constructor used only once to create the global-null PropertiesData */
@@ -84,11 +85,11 @@ private:
 
 using namespace SireBase::detail;
 
-static QSharedDataPointer<PropertiesData> nulldata_ptr;
+static SharedDataPointer<PropertiesData> nulldata_ptr;
 
 /** Return a shared pointer to the null object - this is not
     as trivial as it sounds, as there is a circular reference! */
-const QSharedDataPointer<PropertiesData>& PropertiesData::getNullData()
+const SharedDataPointer<PropertiesData>& PropertiesData::getNullData()
 {
     if (nulldata_ptr.constData() == 0)
     {

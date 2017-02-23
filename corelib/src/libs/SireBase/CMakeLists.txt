@@ -46,6 +46,7 @@ set ( SIREBASE_HEADERS
       packedarray2d.hpp
       packedarrays.h
       pairmatrix.hpp
+      refcountdata.h
       sire_process.h
       parallel.h
       properties.h
@@ -96,6 +97,7 @@ set ( SIREBASE_SOURCES
       property.cpp
       propertylist.cpp
       propertymap.cpp
+      refcountdata.cpp
       savestate.cpp
       sharedpolypointer.cpp
       stringmangler.cpp 

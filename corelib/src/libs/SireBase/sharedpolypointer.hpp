@@ -188,9 +188,6 @@ public:
     template<class S>
     SharedPolyPointer<T>& operator=(const SharedPolyPointer<S> &o);
 
-    template<class S>
-    SharedPolyPointer<T>& operator=(SharedPolyPointer<S> &&o);
-
     SharedPolyPointer<T>& operator=(int);
 
     template<class S>
@@ -300,7 +297,7 @@ SharedPolyPointer<T>::SharedPolyPointer(const T &obj)
 {
     T *obj_ptr = const_cast<T*>(&obj);
     
-    if ( obj_ptr->ref.testAndSetOrdered(0,0) )
+    if ( obj_ptr->ref.isNotReferenced() )
     {
         //the reference count was zero - this implies that
         //this object is not held by another SharedPolyPointer,
@@ -427,7 +424,7 @@ SharedPolyPointer<T>::SharedPolyPointer(const S &obj)
         throwInvalidCast( SharedPolyPointerHelper<S>::what(obj),
                           SharedPolyPointerHelper<T>::typeName() );
     
-    if ( obj_ptr->ref.testAndSetOrdered(0,0) )
+    if ( obj_ptr->ref.isNotReferenced() )
     {
         //the reference count was zero - this implies that
         //this object is not held by another SharedPolyPointer,
@@ -451,6 +448,7 @@ Q_INLINE_TEMPLATE
 SharedPolyPointer<T>::~SharedPolyPointer()
 {
     if (d && !d->ref.deref()) delete d;
+    d = 0;
 }
 
 /** Null assignment operator - allows you to write ptr = 0 to 
@@ -499,9 +497,9 @@ SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(const T &obj)
     {
         T *obj_ptr = const_cast<T*>(&obj);
     
-        if ( obj_ptr->ref.testAndSetOrdered(0,0) )
+        if ( obj_ptr->ref.isNotReferenced() )
         {
-            //the reference count was zero - this implies that
+            //the object is not referenced - this implies that
             //this object is not held by another SharedDataPointer,
             //(it is probably on the stack) so it is not
             //safe to use this object directly - point to a clone
@@ -637,7 +635,7 @@ SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(const S &obj)
             throwInvalidCast( SharedPolyPointerHelper<S>::what(obj),
                               SharedPolyPointerHelper<T>::typeName() );
         
-        if (obj_ptr->ref.testAndSetOrdered(0,0) )
+        if (obj_ptr->ref.isNotReferenced())
         {
             //the reference count was zero - this implies that
             //this object is not held by another SharedPolyPointer,
@@ -682,17 +680,6 @@ SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(SharedPolyPointer<T> &&oth
     return *this;
 }
 
-/** Move assignment operator */
-template<class T>
-template<class S>
-Q_INLINE_TEMPLATE
-SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(SharedPolyPointer<S> &&other)
-{
-    this->operator=(other.d);
-
-    return *this;
-}
-
 /** Helper for the detach function */
 template<class T>
 Q_OUTOFLINE_TEMPLATE
@@ -710,7 +697,7 @@ template <class T>
 Q_INLINE_TEMPLATE
 void SharedPolyPointer<T>::detach() 
 {
-    if (d && d->ref.load() != 1) detach_helper();
+    if (d && d->ref.hasMultipleReferences()) detach_helper();
 }
 
 /** Return whether or not this pointer is unique (there are no copies) */
@@ -719,7 +706,7 @@ SIRE_INLINE_TEMPLATE
 bool SharedPolyPointer<T>::unique() const
 {
     //test that we have a value and that the reference count is 1
-    return (d && d->ref.load() == 1);
+    return (d && d->ref.hasSingleReference());
 }
 
 /** Dereference this pointer */
