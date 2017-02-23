@@ -519,7 +519,7 @@ SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(const T &obj)
             //this is held by another SharedDataPointer
             if (&obj != d)
             {
-                obj.ref.ref();
+                const_cast<T*>(&obj)->ref.ref();
                 
                 T *old = d;
                 d = const_cast<T*>(&obj);
