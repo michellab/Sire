@@ -36,6 +36,8 @@ namespace bp = boost::python;
 
 #include <QDebug>
 
+#include <QElapsedTimer>
+
 #include <QMutex>
 
 #include "moves.h"
@@ -75,7 +77,7 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "clearTiming"
                 , clearTiming_function_value
-                , "" );
+                , "Clear all of the timing statistics" );
         
         }
         { //::SireMove::SameMoves::energyComponent
@@ -184,7 +186,7 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "timing"
                 , timing_function_value
-                , "" );
+                , "Return the list of average times for the move" );
         
         }
         { //::SireMove::SameMoves::toString

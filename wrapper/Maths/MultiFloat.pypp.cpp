@@ -17,6 +17,8 @@ namespace bp = boost::python;
 
 #include "multiuint.h"
 
+#include "sincos.h"
+
 #include <QDebug>
 
 #include <QStringList>

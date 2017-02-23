@@ -45,8 +45,6 @@ namespace bp = boost::python;
 
 #include <memory>
 
-#include <unistd.h>
-
 #include "streamdata.hpp"
 
 #include "SireError/errors.h"

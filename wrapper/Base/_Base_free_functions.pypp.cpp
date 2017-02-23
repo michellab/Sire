@@ -35,21 +35,7 @@ namespace bp = boost::python;
 
 #include <QFileInfo>
 
-#include "getinstalldir.h"
-
-#include "SireError/errors.h"
-
-#include "getinstalldir.h"
-
-#include "sire_config.h"
-
-#include "sire_version.h"
-
-#include <QDebug>
-
-#include <QDir>
-
-#include <QFileInfo>
+#include <Windows.h>
 
 #include "getinstalldir.h"
 
@@ -67,21 +53,7 @@ namespace bp = boost::python;
 
 #include <QFileInfo>
 
-#include "getinstalldir.h"
-
-#include "SireError/errors.h"
-
-#include "getinstalldir.h"
-
-#include "sire_config.h"
-
-#include "sire_version.h"
-
-#include <QDebug>
-
-#include <QDir>
-
-#include <QFileInfo>
+#include <Windows.h>
 
 #include "getinstalldir.h"
 
@@ -99,21 +71,7 @@ namespace bp = boost::python;
 
 #include <QFileInfo>
 
-#include "getinstalldir.h"
-
-#include "SireError/errors.h"
-
-#include "getinstalldir.h"
-
-#include "sire_config.h"
-
-#include "sire_version.h"
-
-#include <QDebug>
-
-#include <QDir>
-
-#include <QFileInfo>
+#include <Windows.h>
 
 #include "getinstalldir.h"
 
@@ -131,21 +89,7 @@ namespace bp = boost::python;
 
 #include <QFileInfo>
 
-#include "getinstalldir.h"
-
-#include "SireError/errors.h"
-
-#include "getinstalldir.h"
-
-#include "sire_config.h"
-
-#include "sire_version.h"
-
-#include <QDebug>
-
-#include <QDir>
-
-#include <QFileInfo>
+#include <Windows.h>
 
 #include "getinstalldir.h"
 
@@ -163,21 +107,7 @@ namespace bp = boost::python;
 
 #include <QFileInfo>
 
-#include "getinstalldir.h"
-
-#include "SireError/errors.h"
-
-#include "getinstalldir.h"
-
-#include "sire_config.h"
-
-#include "sire_version.h"
-
-#include <QDebug>
-
-#include <QDir>
-
-#include <QFileInfo>
+#include <Windows.h>
 
 #include "getinstalldir.h"
 
@@ -194,6 +124,98 @@ namespace bp = boost::python;
 #include <QDir>
 
 #include <QFileInfo>
+
+#include <Windows.h>
+
+#include "getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "getinstalldir.h"
+
+#include "sire_config.h"
+
+#include "sire_version.h"
+
+#include <QDebug>
+
+#include <QDir>
+
+#include <QFileInfo>
+
+#include <Windows.h>
+
+#include "getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "getinstalldir.h"
+
+#include "sire_config.h"
+
+#include "sire_version.h"
+
+#include <QDebug>
+
+#include <QDir>
+
+#include <QFileInfo>
+
+#include <Windows.h>
+
+#include "getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "getinstalldir.h"
+
+#include "sire_config.h"
+
+#include "sire_version.h"
+
+#include <QDebug>
+
+#include <QDir>
+
+#include <QFileInfo>
+
+#include <Windows.h>
+
+#include "getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "getinstalldir.h"
+
+#include "sire_config.h"
+
+#include "sire_version.h"
+
+#include <QDebug>
+
+#include <QDir>
+
+#include <QFileInfo>
+
+#include <Windows.h>
+
+#include "getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "getinstalldir.h"
+
+#include "sire_config.h"
+
+#include "sire_version.h"
+
+#include <QDebug>
+
+#include <QDir>
+
+#include <QFileInfo>
+
+#include <Windows.h>
 
 #include "getinstalldir.h"
 
@@ -214,6 +236,8 @@ namespace bp = boost::python;
 #include <QDir>
 
 #include <QFileInfo>
+
+#include <Windows.h>
 
 #include "getinstalldir.h"
 

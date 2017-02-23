@@ -4,6 +4,40 @@
 #include "Base/convertproperty.hpp"
 #include "SireMol_properties.h"
 
+#include "SireError/errors.h"
+#include "SireStream/datastream.h"
+#include "SireUnits/units.h"
+#include "atomidentifier.h"
+#include "atomidx.h"
+#include "atommatcher.h"
+#include "atommatchers.h"
+#include "atomname.h"
+#include "atomselection.h"
+#include "evaluator.h"
+#include "moleculeinfodata.h"
+#include "moleculeview.h"
+#include "tostring.h"
+#include "atommatcher.h"
+#include "SireStream/datastream.h"
+#include "SireStream/shareddatastream.h"
+#include "cuttingfunction.h"
+#include "molecule.h"
+#include "moleditor.h"
+#include "mover.hpp"
+#include "residuecutting.h"
+#include <QMutex>
+#include "cuttingfunction.h"
+#include "SireStream/datastream.h"
+#include "SireStream/shareddatastream.h"
+#include "atomselection.h"
+#include "editor.hpp"
+#include "evaluator.h"
+#include "moleculedata.h"
+#include "moleculeview.h"
+#include "mover.hpp"
+#include "partialmolecule.h"
+#include "weightfunction.h"
+#include "weightfunction.h"
 #include "SireCAS/identities.h"
 #include "SireCAS/values.h"
 #include "SireStream/datastream.h"
@@ -14,19 +48,6 @@
 #include "mover.hpp"
 #include "perturbation.h"
 #include "perturbation.h"
-#include "SireBase/errors.h"
-#include "SireError/errors.h"
-#include "SireStream/datastream.h"
-#include "SireStream/shareddatastream.h"
-#include "atombeads.h"
-#include "atomidx.h"
-#include "atomselection.h"
-#include "beadidx.h"
-#include "beading.h"
-#include "moleculedata.h"
-#include "moleculeinfodata.h"
-#include <boost/noncopyable.hpp>
-#include "beading.h"
 #include "SireBase/incremint.h"
 #include "SireBase/majorminorversion.h"
 #include "SireError/errors.h"
@@ -51,35 +72,6 @@
 #include <QVector>
 #include <boost/tuple/tuple.hpp>
 #include "moleculegroup.h"
-#include "SireStream/datastream.h"
-#include "SireStream/shareddatastream.h"
-#include "atomselection.h"
-#include "editor.hpp"
-#include "evaluator.h"
-#include "moleculedata.h"
-#include "moleculeview.h"
-#include "mover.hpp"
-#include "partialmolecule.h"
-#include "weightfunction.h"
-#include "weightfunction.h"
-#include "SireStream/datastream.h"
-#include "SireStream/shareddatastream.h"
-#include "SireVol/coordgroup.h"
-#include "atom.h"
-#include "atomcoords.h"
-#include "atomelements.h"
-#include "atomselection.h"
-#include "bondhunter.h"
-#include "connectivity.h"
-#include "molecule.h"
-#include "moleculedata.h"
-#include "moleculeinfodata.h"
-#include "moleculeview.h"
-#include "mover.hpp"
-#include "selector.hpp"
-#include <QDebug>
-#include <QMutex>
-#include "bondhunter.h"
 #include "SireError/errors.h"
 #include "SireMol/errors.h"
 #include "SireStream/datastream.h"
@@ -114,35 +106,43 @@
 #include "moleculegroups.h"
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
-#include "cuttingfunction.h"
-#include "molecule.h"
-#include "moleditor.h"
-#include "mover.hpp"
-#include "residuecutting.h"
-#include <QMutex>
-#include "cuttingfunction.h"
-#include "SireError/errors.h"
-#include "SireStream/datastream.h"
-#include "SireUnits/units.h"
-#include "atomidentifier.h"
-#include "atomidx.h"
-#include "atommatcher.h"
-#include "atommatchers.h"
-#include "atomname.h"
+#include "SireVol/coordgroup.h"
+#include "atom.h"
+#include "atomcoords.h"
+#include "atomelements.h"
 #include "atomselection.h"
-#include "evaluator.h"
+#include "bondhunter.h"
+#include "connectivity.h"
+#include "molecule.h"
+#include "moleculedata.h"
 #include "moleculeinfodata.h"
 #include "moleculeview.h"
-#include "tostring.h"
-#include "atommatcher.h"
+#include "mover.hpp"
+#include "selector.hpp"
+#include <QDebug>
+#include <QMutex>
+#include "bondhunter.h"
+#include "SireBase/errors.h"
+#include "SireError/errors.h"
+#include "SireStream/datastream.h"
+#include "SireStream/shareddatastream.h"
+#include "atombeads.h"
+#include "atomidx.h"
+#include "atomselection.h"
+#include "beadidx.h"
+#include "beading.h"
+#include "moleculedata.h"
+#include "moleculeinfodata.h"
+#include <boost/noncopyable.hpp>
+#include "beading.h"
 void register_SireMol_properties()
 {
-    register_property_container< SireMol::PerturbationPtr, SireMol::Perturbation >();
-    register_property_container< SireMol::BeadingPtr, SireMol::Beading >();
-    register_property_container< SireMol::MolGroupPtr, SireMol::MoleculeGroup >();
-    register_property_container< SireMol::WeightFuncPtr, SireMol::WeightFunction >();
-    register_property_container< SireMol::BondHunterPtr, SireMol::BondHunter >();
-    register_property_container< SireMol::MolGroupsPtr, SireMol::MoleculeGroups >();
-    register_property_container< SireMol::CutFuncPtr, SireMol::CuttingFunction >();
     register_property_container< SireMol::AtomMatcherPtr, SireMol::AtomMatcher >();
+    register_property_container< SireMol::CutFuncPtr, SireMol::CuttingFunction >();
+    register_property_container< SireMol::WeightFuncPtr, SireMol::WeightFunction >();
+    register_property_container< SireMol::PerturbationPtr, SireMol::Perturbation >();
+    register_property_container< SireMol::MolGroupPtr, SireMol::MoleculeGroup >();
+    register_property_container< SireMol::MolGroupsPtr, SireMol::MoleculeGroups >();
+    register_property_container< SireMol::BondHunterPtr, SireMol::BondHunter >();
+    register_property_container< SireMol::BeadingPtr, SireMol::Beading >();
 }
