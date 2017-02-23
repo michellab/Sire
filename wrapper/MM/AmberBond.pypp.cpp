@@ -7,9 +7,13 @@
 
 namespace bp = boost::python;
 
-#include "AmberParams.h"
-
 #include "SireCAS/expression.h"
+
+#include "SireCAS/symbol.h"
+
+#include "SireCAS/trigfuncs.h"
+
+#include "SireError/errors.h"
 
 #include "SireMol/angleid.h"
 
@@ -43,9 +47,9 @@ void register_AmberBond_class(){
 
     { //::SireMM::AmberBond
         typedef bp::class_< SireMM::AmberBond > AmberBond_exposer_t;
-        AmberBond_exposer_t AmberBond_exposer = AmberBond_exposer_t( "AmberBond", "This simple class holds Amber parameters for a bond", bp::init< bp::optional< double, double > >(( bp::arg("k")=0, bp::arg("r0")=0 ), "") );
+        AmberBond_exposer_t AmberBond_exposer = AmberBond_exposer_t( "AmberBond", "This simple class holds Amber parameters for a bond", bp::init< bp::optional< double, double > >(( bp::arg("k")=0, bp::arg("r0")=0 ), "Construct with the passed bond constant and equilibrium bond length") );
         bp::scope AmberBond_scope( AmberBond_exposer );
-        AmberBond_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("eqn"), bp::arg("R") ), "") );
+        AmberBond_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("eqn"), bp::arg("R") ), "Construct from the passed expression") );
         AmberBond_exposer.def( bp::init< SireMM::AmberBond const & >(( bp::arg("other") ), "") );
         { //::SireMM::AmberBond::energy
         
@@ -56,7 +60,7 @@ void register_AmberBond_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("r") )
-                , "" );
+                , "Return the energy evaluated from this bond for the passed bond length" );
         
         }
         { //::SireMM::AmberBond::k
@@ -117,7 +121,7 @@ void register_AmberBond_class(){
                 "toExpression"
                 , toExpression_function_value
                 , ( bp::arg("R") )
-                , "" );
+                , "Return an expression to evaluate the energy of this bond, using the passed\nsymbol to represent the bond length" );
         
         }
         { //::SireMM::AmberBond::toString

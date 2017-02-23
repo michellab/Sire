@@ -7,9 +7,13 @@
 
 namespace bp = boost::python;
 
-#include "AmberParams.h"
-
 #include "SireCAS/expression.h"
+
+#include "SireCAS/symbol.h"
+
+#include "SireCAS/trigfuncs.h"
+
+#include "SireError/errors.h"
 
 #include "SireMol/angleid.h"
 

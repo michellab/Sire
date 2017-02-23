@@ -18,6 +18,8 @@ namespace bp = boost::python;
 
 #include "properties.h"
 
+#include "refcountdata.h"
+
 #include <QDebug>
 
 #include <QHash>
