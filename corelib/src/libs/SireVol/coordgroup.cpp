@@ -1414,8 +1414,16 @@ static const CGSharedPtr<CGArrayArrayData>& getSharedNull()
 {
     if (shared_null.constData() == 0)
     {
-        shared_null = (CGArrayArrayData*)( CGMemory::create(0,0,0) );
-        shared_null->close();
+        auto mutex = SireBase::detail::get_shared_null_mutex();
+        
+        tbb::spin_mutex::scoped_lock lock(*mutex);
+        
+        CGSharedPtr<CGArrayArrayData> my_null = (CGArrayArrayData*)( CGMemory::create(0,0,0) );
+    
+        if (shared_null.constData() == 0)
+        {
+            shared_null = my_null;
+        }
     }
     
     return shared_null;

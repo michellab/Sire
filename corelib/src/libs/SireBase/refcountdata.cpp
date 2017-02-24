@@ -32,6 +32,19 @@
 
 using namespace SireBase;
 
+Q_GLOBAL_STATIC( tbb::spin_mutex, get_spin_mutex );
+
+namespace SireBase
+{
+    namespace detail
+    {
+        tbb::spin_mutex SIREBASE_EXPORT *get_shared_null_mutex()
+        {
+            return get_spin_mutex();
+        }
+    }
+}
+
 /** Constructor */
 RefCountData::RefCountData()
 {}

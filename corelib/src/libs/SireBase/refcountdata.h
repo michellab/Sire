@@ -34,6 +34,8 @@
 
 #include "sireglobal.h"
 
+SIRE_BEGIN_HEADER
+
 #define SIRE_USE_REFCOUNT_MUTEX 1
 
 namespace SireBase
@@ -91,6 +93,42 @@ private:
     RefCountData& operator=(RefCountData &other);
 };
 
+namespace detail
+{
+    tbb::spin_mutex* get_shared_null_mutex();
 }
+
+/** This function creates a single shared null-constructed instance
+    of T(), which can be used as the global null for shared pointers
+    of type T */
+template<class T>
+SIRE_INLINE_TEMPLATE
+T* create_shared_null()
+{
+    static T *shared_null = 0;
+    
+    if (not shared_null)
+    {
+        auto mutex = detail::get_shared_null_mutex();
+        
+        tbb::spin_mutex::scoped_lock lock(*mutex);
+        
+        T *my_null = new T();
+        
+        if (not shared_null)
+        {
+            shared_null = my_null;
+            shared_null->ref.ref();
+        }
+        else
+            delete my_null;
+    }
+    
+    return shared_null;
+}
+
+}
+
+SIRE_END_HEADER
 
 #endif

@@ -1109,10 +1109,17 @@ static const SharedArray2DPtr< PackedArray2DData<T> >& getSharedNull()
 {
     if (detail::PackedArray2DMemory<T>::shared_null.constData() == 0)
     {
-        detail::PackedArray2DMemory<T>::shared_null 
-                = (PackedArray2DData<T>*)( PackedArray2DMemory<T>::create(0,0) );
-
-        detail::PackedArray2DMemory<T>::shared_null->close();
+        auto mutex = detail::get_shared_null_mutex();
+        
+        tbb::spin_mutex::scoped_lock lock(*mutex);
+        
+        auto new_ptr = (PackedArray2DData<T>*)( PackedArray2DMemory<T>::create(0,0) );
+        new_ptr->close();
+        
+        if (detail::PackedArray2DMemory<T>::shared_null.constData() == 0)
+        {
+            detail::PackedArray2DMemory<T>::shared_null = new_ptr;
+        }
     }
 
     return detail::PackedArray2DMemory<T>::shared_null;
