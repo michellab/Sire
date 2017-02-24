@@ -180,17 +180,32 @@ WeightedMoves& WeightedMoves::operator=(const WeightedMoves &other)
     return *this;
 }
 
-static bool operator==(const tuple<MovePtr,double> &t0, 
-                       const tuple<MovePtr,double> &t1)
+inline bool compare( const QVector< boost::tuple<MovePtr,double> > &o1,
+                     const QVector< boost::tuple<MovePtr,double> > &o2 )
 {
-    return t0.get<0>() == t1.get<0>() and
-           t0.get<1>() == t1.get<1>();
+    if (o1.constData() == o2.constData())
+        return true;
+    
+    else if (o1.count() != o2.count())
+        return false;
+    
+    else
+    {
+        for (int i=0; i<o1.count(); ++i)
+        {
+            if (o1.constData()[i].get<0>() != o2.constData()[i].get<0>() or
+                o1.constData()[i].get<1>() != o2.constData()[i].get<1>())
+                return false;
+        }
+        
+        return true;
+    }
 }
 
 /** Comparison operator */
 bool WeightedMoves::operator==(const WeightedMoves &other) const
 {
-    return mvs == other.mvs and avgtimes == other.avgtimes and
+    return compare(mvs,other.mvs) and avgtimes == other.avgtimes and
            combined_space == other.combined_space and
            Moves::operator==(other);
 }
@@ -198,7 +213,7 @@ bool WeightedMoves::operator==(const WeightedMoves &other) const
 /** Comparison operator */
 bool WeightedMoves::operator!=(const WeightedMoves &other) const
 {
-    return mvs != other.mvs or combined_space != other.combined_space;
+    return not this->operator==(other);
 }
 
 /** Return a string representation */

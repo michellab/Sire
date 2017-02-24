@@ -151,86 +151,357 @@ const ResName& MoleculeInfo::name(ResIdx residx) const
     return d->name(residx);
 }
 
-const CGName& MoleculeInfo::name(const CGID &cgid) const;
-const CGName& MoleculeInfo::name(CGIdx cgidx) const;
+/** Return the name of the identified CutGroup */
+const CGName& MoleculeInfo::name(const CGID &cgid) const
+{
+    return d->name(cgid);
+}
 
-const AtomName& MoleculeInfo::name(const AtomID &atomid) const;
-const AtomName& MoleculeInfo::name(AtomIdx atomidx) const;
+/** Return the name of the identified CutGroup */
+const CGName& MoleculeInfo::name(CGIdx cgidx) const
+{
+    return d->name(cgidx);
+}
 
-ResNum MoleculeInfo::number(const ResID &resid) const;
-ResNum MoleculeInfo::number(ResIdx residx) const;
+/** Return the name of the identified atom */
+const AtomName& MoleculeInfo::name(const AtomID &atomid) const
+{
+    return d->name(atomid);
+}
 
-AtomNum MoleculeInfo::number(const AtomID &atomid) const;
-AtomNum MoleculeInfo::number(AtomIdx atomidx) const;
+/** Return the name of the identified atom */
+const AtomName& MoleculeInfo::name(AtomIdx atomidx) const
+{
+    return d->name(atomidx);
+}
 
-MoleculeInfo MoleculeInfo::rename(AtomIdx atomidx, const AtomName &newname) const;
-MoleculeInfo MoleculeInfo::renumber(AtomIdx atomidx, const AtomNum &newnum) const;
+/** Return the number of the identified residue */
+ResNum MoleculeInfo::number(const ResID &resid) const
+{
+    return d->number(resid);
+}
 
-MoleculeInfo MoleculeInfo::rename(ResIdx residx, const ResName &newname) const;
-MoleculeInfo MoleculeInfo::renumber(ResIdx residx, const ResNum &newnum) const;
+/** Return the number of the identified residue */
+ResNum MoleculeInfo::number(ResIdx residx) const
+{
+    return d->number(residx);
+}
 
-MoleculeInfo MoleculeInfo::rename(CGIdx cgidx, const CGName &newname) const;
-MoleculeInfo MoleculeInfo::rename(ChainIdx chainidx, const ChainName &newname) const;
-MoleculeInfo MoleculeInfo::rename(SegIdx segidx, const SegName &newname) const;
+/** Return the number of the identified atom */
+AtomNum MoleculeInfo::number(const AtomID &atomid) const
+{
+    return d->number(atomid);
+}
 
-const CGAtomIdx& MoleculeInfo::cgAtomIdx(AtomIdx atomidx) const;
-const CGAtomIdx& MoleculeInfo::cgAtomIdx(const AtomID &atomid) const;
+/** Return the number of the identified atom */
+AtomNum MoleculeInfo::number(AtomIdx atomidx) const
+{
+    return d->number(atomidx);
+}
 
-QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(AtomIdx atomidx) const;
-QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(CGIdx cgidx) const;
-QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(ResIdx residx) const;
-QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(ChainIdx chainidx) const;
-QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(SegIdx segidx) const;
+/** Return a copy of this MoleculeInfo where the identified atom has been
+    renamed to 'newname' */
+MoleculeInfo MoleculeInfo::rename(AtomIdx atomidx, const AtomName &newname) const
+{
+    return MoleculeInfo( d->rename(atomidx,newname) );
+}
 
-QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(const AtomID &atomid) const;
-QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(const CGID &cgid) const;
-QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(const ResID &resid) const;
-QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(const ChainID &chainid) const;
-QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(const SegID &segid) const;
+/** Return a copy of this MoleculeInfo where the identified atom has been
+    renumbered to 'newnum' */
+MoleculeInfo MoleculeInfo::renumber(AtomIdx atomidx, const AtomNum &newnum) const
+{
+    return MoleculeInfo( d->renumber(atomidx,newnum) );
+}
 
-AtomIdx MoleculeInfo::atomIdx(const AtomID &atomid) const;
-AtomIdx MoleculeInfo::atomIdx(const CGAtomIdx &cgatomidx) const;
+/** Return a copy of this MoleculeInfo where the identified residue has been
+    renamed to 'newname' */
+MoleculeInfo MoleculeInfo::rename(ResIdx residx, const ResName &newname) const
+{
+    return MoleculeInfo( d->rename(residx,newname) );
+}
 
-ResIdx MoleculeInfo::resIdx(const ResID &resid) const;
-ChainIdx MoleculeInfo::chainIdx(const ChainID &chainid) const;
-SegIdx MoleculeInfo::segIdx(const SegID &segid) const;
-CGIdx MoleculeInfo::cgIdx(const CGID &cgid) const;
+/** Return a copy of this MoleculeInfo where the identified residue has been
+    renumbered to 'newnum' */
+MoleculeInfo MoleculeInfo::renumber(ResIdx residx, const ResNum &newnum) const
+{
+    return MoleculeInfo( d->renumber(residx,newnum) );
+}
 
-QList<SegIdx> MoleculeInfo::getSegments() const;
-QList<CGIdx> MoleculeInfo::getCutGroups() const;
-QList<ChainIdx> MoleculeInfo::getChains() const;
-QList<ResIdx> MoleculeInfo::getResidues() const;
+/** Return a copy of this MoleculeInfo where the identified CutGroup has been
+    renamed to 'newname' */
+MoleculeInfo MoleculeInfo::rename(CGIdx cgidx, const CGName &newname) const
+{
+    return MoleculeInfo( d->rename(cgidx,newname) );
+}
 
-const QList<ResIdx>& MoleculeInfo::getResiduesIn(ChainIdx chainidx) const;
-QList<ResIdx> MoleculeInfo::getResiduesIn(const ChainID &chainid) const;
+/** Return a copy of this MoleculeInfo where the identified chain has been
+    renamed to 'newname' */
+MoleculeInfo MoleculeInfo::rename(ChainIdx chainidx, const ChainName &newname) const
+{
+    return MoleculeInfo( d->rename(chainidx,newname) );
+}
 
-QList<AtomIdx> MoleculeInfo::getAtoms() const;
+/** Return a copy of this MoleculeInfo where the identified segment has been
+    renamed to 'newname' */
+MoleculeInfo MoleculeInfo::rename(SegIdx segidx, const SegName &newname) const
+{
+    return MoleculeInfo( d->rename(segidx,newname) );
+}
 
-AtomIdx MoleculeInfo::getAtom(CGIdx cgidx, int i) const;
-AtomIdx MoleculeInfo::getAtom(ResIdx residx, int i) const;
-AtomIdx MoleculeInfo::getAtom(ChainIdx chainidx, int i) const;
-AtomIdx MoleculeInfo::getAtom(SegIdx segidx, int i) const;
+/** Return the combined CutGroup / AtomIndex of the identified atom */
+const CGAtomIdx& MoleculeInfo::cgAtomIdx(AtomIdx atomidx) const
+{
+    return d->cgAtomIdx(atomidx);
+}
 
-ResIdx MoleculeInfo::getResidue(ChainIdx chainidx, int i) const;
+/** Return the combined CutGroup / AtomIndex of the identified atom */
+const CGAtomIdx& MoleculeInfo::cgAtomIdx(const AtomID &atomid) const
+{
+    return d->cgAtomIdx(atomid);
+}
 
-const QList<AtomIdx>& MoleculeInfo::getAtomsIn(ResIdx residx) const;
-QList<AtomIdx> MoleculeInfo::getAtomsIn(const ResID &resid) const;
-QList<AtomIdx> MoleculeInfo::getAtomsIn(ResIdx residx, const AtomName &name) const;
+/** Return the CGAtomIdxs of all of the identified atoms */
+QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(AtomIdx atomidx) const
+{
+    return d->cgAtomIdxs(atomidx);
+}
+
+/** Return the CGAtomIdxs of the atoms in all of the identified CutGroups */
+QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(CGIdx cgidx) const
+{
+    return d->cgAtomIdxs(cgidx);
+}
+
+/** Return the CGAtomIdxs of the atoms in all of the identified residues */
+QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(ResIdx residx) const
+{
+    return d->cgAtomIdxs(residx);
+}
+
+/** Return the CGAtomIdxs of the atoms in all of the identified chains */
+QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(ChainIdx chainidx) const
+{
+    return d->cgAtomIdxs(chainidx);
+}
+
+/** Return the CGAtomIdxs of the atoms in all of the identified segments */
+QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(SegIdx segidx) const
+{
+    return d->cgAtomIdxs(segidx);
+}
+
+/** Return the CGAtomIdxs of all of the identified atoms */
+QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(const AtomID &atomid) const
+{
+    return d->cgAtomIdxs(atomid);
+}
+
+/** Return the CGAtomIdxs of the atoms in all of the identified CutGroups */
+QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(const CGID &cgid) const
+{
+    return d->cgAtomIdxs(cgid);
+}
+
+/** Return the CGAtomIdxs of the atoms in all of the identified residues */
+QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(const ResID &resid) const
+{
+    return d->cgAtomIdxs(resid);
+}
+
+/** Return the CGAtomIdxs of the atoms in all of the identified chains */
+QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(const ChainID &chainid) const
+{
+    return d->cgAtomIdxs(chainid);
+}
+
+/** Return the CGAtomIdxs of the atoms in all of the identified segments */
+QVector<CGAtomIdx> MoleculeInfo::cgAtomIdxs(const SegID &segid) const
+{
+    return d->cgAtomIdxs(segid);
+}
+
+/** Return the index of the identified atom */
+AtomIdx MoleculeInfo::atomIdx(const AtomID &atomid) const
+{
+    return d->atomIdx(atomid);
+}
+
+/** Return the index of the identified atom */
+AtomIdx MoleculeInfo::atomIdx(const CGAtomIdx &cgatomidx) const
+{
+    return d->atomIdx(cgatomidx);
+}
+
+/** Return the index of the identified residue */
+ResIdx MoleculeInfo::resIdx(const ResID &resid) const
+{
+    return d->resIdx(resid);
+}
+
+/** Return the index of the identified chain */
+ChainIdx MoleculeInfo::chainIdx(const ChainID &chainid) const
+{
+    return d->chainIdx(chainid);
+}
+
+/** Return the index of the identified segment */
+SegIdx MoleculeInfo::segIdx(const SegID &segid) const
+{
+    return d->segIdx(segid);
+}
+
+/** Return the index of the identified CutGroup */
+CGIdx MoleculeInfo::cgIdx(const CGID &cgid) const
+{
+    return d->cgIdx(cgid);
+}
+
+/** Return a list of the indicies of all segments */
+QList<SegIdx> MoleculeInfo::getSegments() const
+{
+    return d->getSegments();
+}
+
+/** Return a list of the indicies of all CutGroups */
+QList<CGIdx> MoleculeInfo::getCutGroups() const
+{
+    return d->getCutGroups();
+}
+
+/** Return a list of the indicies of all chains */
+QList<ChainIdx> MoleculeInfo::getChains() const
+{
+    return d->getChains();
+}
+
+/** Return a list of the indicies of all residues */
+QList<ResIdx> MoleculeInfo::getResidues() const
+{
+    return d->getResidues();
+}
+
+/** Return the indicies of residues in the identified chain(s) */
+const QList<ResIdx>& MoleculeInfo::getResiduesIn(ChainIdx chainidx) const
+{
+    return d->getResiduesIn(chainidx);
+}
+
+/** Return the indicies of residues in the identified chain(s) */
+QList<ResIdx> MoleculeInfo::getResiduesIn(const ChainID &chainid) const
+{
+    return d->getResiduesIn(chainid);
+}
+
+/** Return the indicies of atoms */
+QList<AtomIdx> MoleculeInfo::getAtoms() const
+{
+    return d->getAtoms();
+}
+
+/** Return the index of the ith atom in the specified CutGroup */
+AtomIdx MoleculeInfo::getAtom(CGIdx cgidx, int i) const
+{
+    return d->getAtom(cgidx,i);
+}
+
+/** Return the index of the ith atom in the specified residue */
+AtomIdx MoleculeInfo::getAtom(ResIdx residx, int i) const
+{
+    return d->getAtom(residx,i);
+}
+
+/** Return the index of the ith atom in the specified chain */
+AtomIdx MoleculeInfo::getAtom(ChainIdx chainidx, int i) const
+{
+    return d->getAtom(chainidx,i);
+}
+
+/** Return the index of the ith atom in the specified segment */
+AtomIdx MoleculeInfo::getAtom(SegIdx segidx, int i) const
+{
+    return d->getAtom(segidx,i);
+}
+
+/** Return the index of the ith residue in the specified chain */
+ResIdx MoleculeInfo::getResidue(ChainIdx chainidx, int i) const
+{
+    return d->getResidue(chainidx,i);
+}
+
+/** Return the indicies of all atoms in the specified residue(s) */
+const QList<AtomIdx>& MoleculeInfo::getAtomsIn(ResIdx residx) const
+{
+    return d->getAtomsIn(residx);
+}
+
+/** Return the indicies of all atoms in the specified residue(s) */
+QList<AtomIdx> MoleculeInfo::getAtomsIn(const ResID &resid) const
+{
+    return d->getAtomsIn(resid);
+}
+
+/** Return the indicies of all atoms called 'name' in the specified residue(s) */
+QList<AtomIdx> MoleculeInfo::getAtomsIn(ResIdx residx, const AtomName &name) const
+{
+    return d->getAtomsIn(residx,name);
+}
+
+/** Return the indicies of all atoms called 'name' in the specified residue(s) */
 QList<AtomIdx> MoleculeInfo::getAtomsIn(const ResID &resid,
-                          const AtomName &atomname) const;
+                                        const AtomName &name) const
+{
+    return d->getAtomsIn(resid,name);
+}
 
-QList<AtomIdx> MoleculeInfo::getAtomsIn(ChainIdx chainidx) const;
-QList<AtomIdx> MoleculeInfo::getAtomsIn(const ChainID &chainid) const;
+/** Return the indicies of all atoms in the specified chain(s) */
+QList<AtomIdx> MoleculeInfo::getAtomsIn(ChainIdx chainidx) const
+{
+    return d->getAtomsIn(chainidx);
+}
+
+/** Return the indicies of all atoms in the specified chain(s) */
+QList<AtomIdx> MoleculeInfo::getAtomsIn(const ChainID &chainid) const
+{
+    return d->getAtomsIn(chainid);
+}
+
+/** Return the indicies of all atoms called 'name' in the specified residue(s) */
 QList<AtomIdx> MoleculeInfo::getAtomsIn(ChainIdx chainidx,
-                          const AtomName &atomname) const;
-QList<AtomIdx> MoleculeInfo::getAtomsIn(const ChainID &chainid,
-                          const AtomName &atomname) const;
-                          
-const QList<AtomIdx>& MoleculeInfo::getAtomsIn(CGIdx cgidx) const;
-QList<AtomIdx> MoleculeInfo::getAtomsIn(const CGID &cgid) const;
+                                        const AtomName &name) const
+{
+    return d->getAtomsIn(chainidx,name);
+}
 
-const QList<AtomIdx>& MoleculeInfo::getAtomsIn(SegIdx segidx) const;
-QList<AtomIdx> MoleculeInfo::getAtomsIn(const SegID &segid) const;
+/** Return the indicies of all atoms called 'name' in the specified residue(s) */
+QList<AtomIdx> MoleculeInfo::getAtomsIn(const ChainID &chainid,
+                                        const AtomName &name) const
+{
+    return d->getAtomsIn(chainid,name);
+}
+                          
+/** Return the indicies of all atoms in the specified chain(s) */
+const QList<AtomIdx>& MoleculeInfo::getAtomsIn(CGIdx cgidx) const
+{
+    return d->getAtomsIn(cgidx);
+}
+
+/** Return the indicies of all atoms in the specified CutGroup(s) */
+QList<AtomIdx> MoleculeInfo::getAtomsIn(const CGID &cgid) const
+{
+    return d->getAtomsIn(cgid);
+}
+
+/** Return the indicies of all atoms in the specified segment(s) */
+const QList<AtomIdx>& MoleculeInfo::getAtomsIn(SegIdx segidx) const
+{
+    return d->getAtomsIn(segidx);
+}
+
+/** Return the indicies of all atoms in the specified segment(s) */
+QList<AtomIdx> MoleculeInfo::getAtomsIn(const SegID &segid) const
+{
+    return d->getAtomsIn(segid);
+}
 
 bool MoleculeInfo::isWithinResidue(AtomIdx atomidx) const;
 bool MoleculeInfo::isWithinResidue(const AtomID &atomid) const;
