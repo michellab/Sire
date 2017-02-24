@@ -71,6 +71,8 @@ public:
         bool isNotReferenced() const;
         
     private:
+        void doubleDereferenced() const;
+
         /** The atomic holding the reference count */
         tbb::atomic<int> refcount;
 
@@ -92,6 +94,87 @@ private:
     RefCountData(const RefCountData &other);
     RefCountData& operator=(RefCountData &other);
 };
+
+#ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+/** Return the current value of the refcount - note this may change! */
+inline int RefCountData::Counter::load() const
+{
+    #ifdef SIRE_USE_REFCOUNT_MUTEX
+        const_cast<Counter*>(this)->mutex.lock();
+    #endif
+    
+    int value = refcount;
+    
+    #ifdef SIRE_USE_REFCOUNT_MUTEX
+        const_cast<Counter*>(this)->mutex.unlock();
+    #endif
+    
+    return value;
+}
+
+/** Return the current reference count for the object */
+inline int RefCountData::Counter::refCount() const
+{
+    return load();
+}
+
+/** Return whether or not there are multiple references to the object */
+inline bool RefCountData::Counter::hasMultipleReferences() const
+{
+    return load() > 1;
+}
+
+/** Return whether or not the object has only a single reference */
+inline bool RefCountData::Counter::hasSingleReference() const
+{
+    return load() == 1;
+}
+
+/** Return whether or not the object is current unreferenced
+    (has a reference count of zero) */
+inline bool RefCountData::Counter::isNotReferenced() const
+{
+    return load() <= 0;
+}
+
+/** Increase the reference count by one */
+inline bool RefCountData::Counter::ref()
+{
+    #ifdef SIRE_USE_REFCOUNT_MUTEX
+        mutex.lock();
+    #endif
+    
+    int oldval = refcount.fetch_and_increment();
+    
+    #ifdef SIRE_USE_REFCOUNT_MUTEX
+        mutex.unlock();
+    #endif
+    
+    return (oldval >= 0);
+}
+
+/** Decrease the reference count by one - this will raise
+    an error if the reference count drops below 0 */
+inline bool RefCountData::Counter::deref()
+{
+    #ifdef SIRE_USE_REFCOUNT_MUTEX
+        mutex.lock();
+    #endif
+    
+    int oldval = refcount.fetch_and_decrement();
+    
+    #ifdef SIRE_USE_REFCOUNT_MUTEX
+        mutex.unlock();
+    #endif
+    
+    if (oldval <= 0)
+    {
+        this->doubleDereferenced();
+    }
+    
+    return (oldval > 0);
+}
 
 namespace detail
 {
@@ -126,6 +209,8 @@ T* create_shared_null()
     
     return shared_null;
 }
+
+#endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }
 

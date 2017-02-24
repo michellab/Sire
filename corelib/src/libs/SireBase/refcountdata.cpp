@@ -28,6 +28,8 @@
 
 #include "refcountdata.h"
 
+#include "SireError/getbacktrace.h"
+
 #include <QDebug>
 
 using namespace SireBase;
@@ -75,22 +77,6 @@ bool RefCountData::operator!=(const RefCountData &other) const
     return not operator==(other);
 }
 
-/** Return the current value of the refcount - note this may change! */
-int RefCountData::Counter::load() const
-{
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        const_cast<Counter*>(this)->mutex.lock();
-    #endif
-    
-    int value = refcount;
-    
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        const_cast<Counter*>(this)->mutex.unlock();
-    #endif
-    
-    return value;
-}
-
 /** Constructor */
 RefCountData::Counter::Counter()
 {
@@ -101,66 +87,10 @@ RefCountData::Counter::Counter()
 RefCountData::Counter::~Counter()
 {}
 
-/** Return the current reference count for the object */
-int RefCountData::Counter::refCount() const
+/** Error function called when a counter is dereferenced below 0 */
+void RefCountData::Counter::doubleDereferenced() const
 {
-    return load();
-}
-
-/** Return whether or not there are multiple references to the object */
-bool RefCountData::Counter::hasMultipleReferences() const
-{
-    return load() > 1;
-}
-
-/** Return whether or not the object has only a single reference */
-bool RefCountData::Counter::hasSingleReference() const
-{
-    return load() == 1;
-}
-
-/** Return whether or not the object is current unreferenced
-    (has a reference count of zero) */
-bool RefCountData::Counter::isNotReferenced() const
-{
-    return load() <= 0;
-}
-
-/** Increase the reference count by one */
-bool RefCountData::Counter::ref()
-{
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        mutex.lock();
-    #endif
-    
-    int oldval = refcount.fetch_and_increment();
-    
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        mutex.unlock();
-    #endif
-    
-    return (oldval >= 0);
-}
-
-/** Decrease the reference count by one - this will raise
-    an error if the reference count drops below 0 */
-bool RefCountData::Counter::deref()
-{
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        mutex.lock();
-    #endif
-    
-    int oldval = refcount.fetch_and_decrement();
-    
-    #ifdef SIRE_USE_REFCOUNT_MUTEX
-        mutex.unlock();
-    #endif
-    
-    if (oldval <= 0)
-    {
-        //we just reduced the count to zero a second time!
-        qDebug() << "WARNING - PROGRAM BUG - REDUCED REFCOUNT TO 0 TWICE!";
-    }
-    
-    return (oldval > 0);
+    qDebug() << "WARNING - MEMORY CORRUPTION: PROGRAM BUG: REFCOUNT" << qintptr(this)
+             << "HAS BEEN DEREFERENCED BELOW ZERO - DOUBLE FREE'D. BACKTRACE\n"
+             << SireError::getBackTrace().join("\n");
 }
