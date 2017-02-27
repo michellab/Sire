@@ -772,6 +772,7 @@ char* PackedArray2DMemory<T>::detach(char *this_ptr, quint32 this_idx)
         //}
         
         //set the reference count of this copy to 1
+        new_arraydata->ref.reset();
         new_arraydata->ref.ref();
 
         //now loose a reference to the original

@@ -66,6 +66,8 @@ public:
         
         bool ref();
         bool deref();
+
+        void reset();
         
         bool hasSingleReference() const;
         bool hasMultipleReferences() const;
@@ -98,6 +100,20 @@ private:
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+/** Reset the counter so that it is set back equal to zero */
+inline void RefCountData::Counter::reset()
+{
+    #ifdef SIRE_USE_REFCOUNT_MUTEX
+        const_cast<Counter*>(this)->mutex.lock();
+    #endif
+
+    refcount.fetch_and_store(0);
+
+    #ifdef SIRE_USE_REFCOUNT_MUTEX
+        const_cast<Counter*>(this)->mutex.unlock();
+    #endif
+}
 
 /** Return the current value of the refcount - note this may change! */
 inline int RefCountData::Counter::load() const
