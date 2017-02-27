@@ -30,6 +30,7 @@
 #define SIREMOL_MOLECULEINFO_H
 
 #include "moleculeinfodata.h"
+#include "atomselection.h"
 
 #include "SireBase/shareddatapointer.hpp"
 
