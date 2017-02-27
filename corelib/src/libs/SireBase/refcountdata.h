@@ -34,9 +34,11 @@
 
 #include "sireglobal.h"
 
+#include <QDebug>
+
 SIRE_BEGIN_HEADER
 
-#define SIRE_USE_REFCOUNT_MUTEX 1
+// #define SIRE_USE_REFCOUNT_MUTEX 1
 
 namespace SireBase
 {
@@ -109,7 +111,7 @@ inline int RefCountData::Counter::load() const
     #ifdef SIRE_USE_REFCOUNT_MUTEX
         const_cast<Counter*>(this)->mutex.unlock();
     #endif
-    
+
     return value;
 }
 
@@ -150,7 +152,7 @@ inline bool RefCountData::Counter::ref()
     #ifdef SIRE_USE_REFCOUNT_MUTEX
         mutex.unlock();
     #endif
-    
+
     return (oldval >= 0);
 }
 
@@ -172,8 +174,8 @@ inline bool RefCountData::Counter::deref()
     {
         this->doubleDereferenced();
     }
-    
-    return (oldval > 0);
+
+    return (oldval > 1);
 }
 
 namespace detail
@@ -204,7 +206,9 @@ T* create_shared_null()
             shared_null->ref.ref();
         }
         else
+        {
             delete my_null;
+        }
     }
     
     return shared_null;
