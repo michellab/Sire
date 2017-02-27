@@ -2148,19 +2148,9 @@ MoleculeGroups::MoleculeGroups()
           : ConcreteProperty<MoleculeGroups,MolGroupsBase>()
 {}
 
-static SharedPolyPointer<MoleculeGroups> shared_null;
-
 const MoleculeGroups& MolGroupsBase::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new MoleculeGroups();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<MoleculeGroups>());
 }
 
 /** Construct a set of groups that contains only the single group

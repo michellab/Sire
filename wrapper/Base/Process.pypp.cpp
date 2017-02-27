@@ -13,9 +13,6 @@ namespace bp = boost::python;
 
 SireBase::Process __copy__(const SireBase::Process &other){ return SireBase::Process(other); }
 
-#include <QString>
-#include <QStringList>
-
 const char* pvt_get_name(const SireBase::Process&){ return "SireBase::Process";}
 
 void register_Process_class(){

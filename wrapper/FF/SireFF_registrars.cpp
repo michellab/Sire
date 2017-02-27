@@ -3,36 +3,37 @@
 
 #include "SireFF_registrars.h"
 
-#include "patches.h"
-#include "energytable.h"
 #include "ffname.h"
-#include "probe.h"
+#include "patch.h"
 #include "forcefield.h"
+#include "ffidx.h"
+#include "point.h"
 #include "ffidentifier.h"
 #include "potentialtable.h"
-#include "ffcomponent.h"
 #include "ffmolgroup.h"
 #include "forcefields.h"
-#include "point.h"
-#include "patch.h"
-#include "forcetable.h"
-#include "fieldtable.h"
+#include "ffcomponent.h"
+#include "probe.h"
+#include "energytable.h"
 #include "ffparameters.h"
-#include "ffidx.h"
+#include "fieldtable.h"
+#include "forcetable.h"
+#include "patches.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_SireFF_objects()
 {
 
-    ObjectRegistry::registerConverterFor< SireFF::FFBead >();
-    ObjectRegistry::registerConverterFor< SireFF::FFBeadChange >();
-    ObjectRegistry::registerConverterFor< SireFF::Patches >();
-    ObjectRegistry::registerConverterFor< SireFF::EnergyTable >();
-    ObjectRegistry::registerConverterFor< SireFF::MolEnergyTable >();
     ObjectRegistry::registerConverterFor< SireFF::FFName >();
-    ObjectRegistry::registerConverterFor< SireFF::NullProbe >();
+    ObjectRegistry::registerConverterFor< SireFF::Patch >();
     ObjectRegistry::registerConverterFor< SireFF::NullFF >();
+    ObjectRegistry::registerConverterFor< SireFF::FFIdx >();
+    ObjectRegistry::registerConverterFor< SireFF::AtomPoint >();
+    ObjectRegistry::registerConverterFor< SireFF::VectorPoint >();
+    ObjectRegistry::registerConverterFor< SireFF::Center >();
+    ObjectRegistry::registerConverterFor< SireFF::CenterOfGeometry >();
+    ObjectRegistry::registerConverterFor< SireFF::CenterOfMass >();
     ObjectRegistry::registerConverterFor< SireID::Specify<SireFF::FFID> >();
     ObjectRegistry::registerConverterFor< SireID::IDAndSet<SireFF::FFID> >();
     ObjectRegistry::registerConverterFor< SireID::IDOrSet<SireFF::FFID> >();
@@ -40,23 +41,22 @@ void register_SireFF_objects()
     ObjectRegistry::registerConverterFor< SireFF::PotentialTable >();
     ObjectRegistry::registerConverterFor< SireFF::GridPotentialTable >();
     ObjectRegistry::registerConverterFor< SireFF::MolPotentialTable >();
-    ObjectRegistry::registerConverterFor< SireFF::SingleComponent >();
     ObjectRegistry::registerConverterFor< SireFF::FFMolGroup >();
     ObjectRegistry::registerConverterFor< SireFF::ForceFields >();
-    ObjectRegistry::registerConverterFor< SireFF::AtomPoint >();
-    ObjectRegistry::registerConverterFor< SireFF::VectorPoint >();
-    ObjectRegistry::registerConverterFor< SireFF::Center >();
-    ObjectRegistry::registerConverterFor< SireFF::CenterOfGeometry >();
-    ObjectRegistry::registerConverterFor< SireFF::CenterOfMass >();
-    ObjectRegistry::registerConverterFor< SireFF::Patch >();
-    ObjectRegistry::registerConverterFor< SireFF::ForceTable >();
-    ObjectRegistry::registerConverterFor< SireFF::MolForceTable >();
+    ObjectRegistry::registerConverterFor< SireFF::SingleComponent >();
+    ObjectRegistry::registerConverterFor< SireFF::NullProbe >();
+    ObjectRegistry::registerConverterFor< SireFF::EnergyTable >();
+    ObjectRegistry::registerConverterFor< SireFF::MolEnergyTable >();
+    ObjectRegistry::registerConverterFor< SireFF::NullFFParameters >();
+    ObjectRegistry::registerConverterFor< SireFF::NullFFParametersArray >();
     ObjectRegistry::registerConverterFor< SireFF::FieldTable >();
     ObjectRegistry::registerConverterFor< SireFF::GridFieldTable >();
     ObjectRegistry::registerConverterFor< SireFF::MolFieldTable >();
-    ObjectRegistry::registerConverterFor< SireFF::NullFFParameters >();
-    ObjectRegistry::registerConverterFor< SireFF::NullFFParametersArray >();
-    ObjectRegistry::registerConverterFor< SireFF::FFIdx >();
+    ObjectRegistry::registerConverterFor< SireFF::ForceTable >();
+    ObjectRegistry::registerConverterFor< SireFF::MolForceTable >();
+    ObjectRegistry::registerConverterFor< SireFF::FFBead >();
+    ObjectRegistry::registerConverterFor< SireFF::FFBeadChange >();
+    ObjectRegistry::registerConverterFor< SireFF::Patches >();
 
 }
 

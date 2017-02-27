@@ -113,20 +113,10 @@ const char* MolDeleter::typeName()
     return "SireMove::MolDeleter";
 }
 
-static SharedPolyPointer<NullDeleter> shared_null;
-
 /** Return the global null MolDeleter */
 const NullDeleter& MolDeleter::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new NullDeleter();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<NullDeleter>());
 }
 
 /////////////

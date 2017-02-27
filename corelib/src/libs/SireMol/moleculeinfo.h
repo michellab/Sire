@@ -283,10 +283,32 @@ public:
     void assertContains(SegIdx segidx) const;
 
     void assertEqualTo(const MoleculeInfo &other) const;
+    void assertEqualTo(const MoleculeInfoData &other) const;
+
+    operator const MoleculeInfoData&() const;
+
+    const MoleculeInfoData& data() const;
 
 private:
     SireBase::SharedDataPointer<MoleculeInfoData> d;
 };
+
+#ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+/** Allow automatic casting to a MoleculeInfoData object */
+inline MoleculeInfo::operator const MoleculeInfoData&() const
+{
+    return *d;
+}
+
+/** Retrieve a reference to the underlying data object - this is used for 
+    compaibility with old code. It should not be used in new code */
+inline const MoleculeInfoData& MoleculeInfo::data() const
+{
+    return *d;
+}
+
+#endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }
 

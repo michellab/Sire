@@ -158,19 +158,9 @@ void NullMonitor::monitor(System &system)
 void NullMonitor::clearStatistics()
 {}
 
-static SharedPolyPointer<NullMonitor> shared_null;
-
 const NullMonitor& SystemMonitor::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new NullMonitor();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<NullMonitor>());
 }
 
 const char* NullMonitor::typeName()

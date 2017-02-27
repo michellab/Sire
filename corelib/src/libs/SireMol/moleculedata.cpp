@@ -245,11 +245,9 @@ MoleculeData::MoleculeData(const MoleculeView &molview)
     this->operator=( molview.data() );
 }
 
-static SharedDataPointer<MoleculeData> shared_null( new MoleculeData() );
-
 SharedDataPointer<MoleculeData> MoleculeData::null()
 {
-    return shared_null;
+    return SharedDataPointer<MoleculeData>( create_shared_null<MoleculeData>() );
 }
 
 /** Give this molecule a brand new unique ID number! */

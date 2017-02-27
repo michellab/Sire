@@ -33,6 +33,7 @@
 #include "cutgroup.h"
 #include "atom.h"
 
+#include "moleculeinfo.h"
 #include "molviewproperty.h"
 #include "moleditor.h"
 
@@ -140,6 +141,13 @@ bool Molecule::isEmpty() const
 bool Molecule::selectedAll() const
 {
     return not Molecule::isEmpty();
+}
+
+/** Return the MoleculeInfo object that holds information about the layout
+    of the atoms, residues, chains and segments in the molecule */
+MoleculeInfo Molecule::info() const
+{
+    return MoleculeInfo(d->info());
 }
 
 /** Return which atoms are selected in this view */

@@ -29,6 +29,8 @@
 #include <QDataStream>
 #include "majorminorversion.h"
 
+#include "SireBase/refcountdata.h"
+
 #include "SireStream/datastream.h"
 
 using namespace SireBase;
@@ -83,12 +85,9 @@ QString Version::toString() const
     return QString("%1.%2").arg(maj).arg(min);
 }
 
-boost::shared_ptr<MajorMinorVersionData> 
-MajorMinorVersion::shared_null( new MajorMinorVersionData() );
-
 /** Null constructor */
 MajorMinorVersion::MajorMinorVersion() 
-                  : d(shared_null), v(0,0)
+                  : d( create_not_refcounted_shared_null<MajorMinorVersionData>() ), v(0,0)
 {}
 
 /** Construct from a raw data object - this should only be called by 

@@ -212,21 +212,6 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
     return ds;
 }
 
-static SharedDataPointer<MolGroupPvt> shared_null;
-
-static const SharedDataPointer<MolGroupPvt>& getSharedNull()
-{
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new MolGroupPvt();
-    }
-     
-    return shared_null;
-}
-
 /** Construct an empty, unnamed MolGroupPvt */
 MolGroupPvt::MolGroupPvt() 
             : RefCountData(),
@@ -356,29 +341,18 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
 /** Default constructor */
 MoleculeGroup::MoleculeGroup() 
               : ConcreteProperty<MoleculeGroup,Property>(),
-                d( getSharedNull() )
+                d( create_shared_null<MolGroupPvt>() )
 {}
-
-
-static SharedPolyPointer<MoleculeGroup> shared_null_molgroup;
 
 const MoleculeGroup& MoleculeGroup::null()
 {
-    if (shared_null_molgroup.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null_molgroup.constData() == 0)
-            shared_null_molgroup = new MoleculeGroup();
-    }
-
-    return *(shared_null_molgroup.constData());
+    return *(create_shared_null<MoleculeGroup>());
 }
 
 /** Construct a group that holds the passed molecules */
 MoleculeGroup::MoleculeGroup(const Molecules &molecules)
               : ConcreteProperty<MoleculeGroup,Property>(),
-                d( getSharedNull() )
+                d( create_shared_null<MolGroupPvt>() )
 {
     this->add(molecules);
 }

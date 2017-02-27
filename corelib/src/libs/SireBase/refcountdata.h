@@ -214,6 +214,34 @@ T* create_shared_null()
     return shared_null;
 }
 
+template<class T>
+SIRE_INLINE_TEMPLATE
+T* create_not_refcounted_shared_null()
+{
+    static T *shared_null = 0;
+    
+    if (not shared_null)
+    {
+        auto mutex = detail::get_shared_null_mutex();
+        
+        tbb::spin_mutex::scoped_lock lock(*mutex);
+        
+        T *my_null = new T();
+        
+        if (not shared_null)
+        {
+            shared_null = my_null;
+        }
+        else
+        {
+            delete my_null;
+        }
+    }
+    
+    return shared_null;
+}
+
+
 #endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }

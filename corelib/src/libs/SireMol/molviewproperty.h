@@ -31,6 +31,8 @@
 
 #include "SireBase/property.h"
 
+#include "moleculeinfo.h"
+
 SIRE_BEGIN_HEADER
 
 namespace SireMol
@@ -68,6 +70,7 @@ public:
     }
 
     virtual bool isCompatibleWith(const MoleculeInfoData &molinfo) const=0;
+    virtual bool isCompatibleWith(const MoleculeInfo &molinfo) const;
 
     SireBase::PropertyPtr makeCompatibleWith(const MoleculeInfoData &molinfo,
                                              const AtomMatcher &atommatcher) const;
@@ -79,6 +82,7 @@ public:
                                              const AtomMatcher &atommatcher) const;
 
     void assertCompatibleWith(const MoleculeInfoData &molinfo) const;
+    void assertCompatibleWith(const MoleculeInfo &molinfo) const;
 
 protected:
     virtual SireBase::PropertyPtr 

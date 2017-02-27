@@ -46,41 +46,48 @@ namespace bp = boost::python;
 
 #include "atom.h"
 
-#include "atommasses.h"
+#include "atompolarisabilities.h"
 
-#include "atombeads.h"
-
-#include "atomvelocities.h"
-
-#include "SireVol/space.h"
-
-#include "atomljs.h"
+#include "atomelements.h"
 
 #include "SireMaths/vector.h"
 
-#include "SireError/errors.h"
-
-#include "atomcoords.h"
-
-#include "atompolarisabilities.h"
-
-#include "SireMaths/align.h"
-
-#include "atomproperty.hpp"
-
-#include "atomforces.h"
+#include "SireBase/quickcopy.hpp"
 
 #include "atomenergies.h"
 
 #include "atomcharges.h"
 
-#include "SireStream/datastream.h"
+#include "atomcoords.h"
+
+#include "atomproperty.hpp"
 
 #include "SireStream/shareddatastream.h"
 
-#include "atomelements.h"
+#include "SireError/errors.h"
 
-#include "SireBase/quickcopy.hpp"
+#include "atomforces.h"
+
+#include "SireStream/datastream.h"
+
+#include "atomljs.h"
+
+#include "atommasses.h"
+
+#include "SireMaths/align.h"
+
+#include "SireVol/space.h"
+
+#include "atombeads.h"
+
+#include "atomvelocities.h"
+
+const SireMM::LJParameter& get_Metadata_SireMM_AtomLJs_function1(const SireMol::Atom &atom,
+                                   const QString &metakey){ return atom.metadata< SireMM::LJParameter >(metakey); }
+
+const SireMM::LJParameter& get_Metadata_SireMM_AtomLJs_function2(const SireMol::Atom &atom,
+                                   const QString &key, const QString &metakey){
+                                        return atom.metadata< SireMM::LJParameter >(key, metakey); }
 
 const SireMol::BeadNum& get_Metadata_SireMol_AtomBeads_function1(const SireMol::Atom &atom,
                                    const QString &metakey){ return atom.metadata< SireMol::BeadNum >(metakey); }
@@ -172,13 +179,6 @@ const QVariant& get_Metadata_SireMol_AtomVariantProperty_function1(const SireMol
 const QVariant& get_Metadata_SireMol_AtomVariantProperty_function2(const SireMol::Atom &atom,
                                    const QString &key, const QString &metakey){
                                         return atom.metadata< QVariant >(key, metakey); }
-
-const SireMM::LJParameter& get_Metadata_SireMM_AtomLJs_function1(const SireMol::Atom &atom,
-                                   const QString &metakey){ return atom.metadata< SireMM::LJParameter >(metakey); }
-
-const SireMM::LJParameter& get_Metadata_SireMM_AtomLJs_function2(const SireMol::Atom &atom,
-                                   const QString &key, const QString &metakey){
-                                        return atom.metadata< SireMM::LJParameter >(key, metakey); }
 
 SireMol::Atom __copy__(const SireMol::Atom &other){ return SireMol::Atom(other); }
 
@@ -573,6 +573,9 @@ void register_Atom_class(){
         
         }
         Atom_exposer.staticmethod( "typeName" );
+        Atom_exposer.def( "_get_property_SireMM_AtomLJs", &SireMol::Atom::property< SireMM::LJParameter >, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_metadata_SireMM_AtomLJs", get_Metadata_SireMM_AtomLJs_function1, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_metadata_SireMM_AtomLJs", &get_Metadata_SireMM_AtomLJs_function2, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_property_SireMol_AtomBeads", &SireMol::Atom::property< SireMol::BeadNum >, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomBeads", get_Metadata_SireMol_AtomBeads_function1, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomBeads", &get_Metadata_SireMol_AtomBeads_function2, bp::return_value_policy<bp::copy_const_reference>());
@@ -612,9 +615,6 @@ void register_Atom_class(){
         Atom_exposer.def( "_get_property_SireMol_AtomVariantProperty", &SireMol::Atom::property< QVariant >, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomVariantProperty", get_Metadata_SireMol_AtomVariantProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomVariantProperty", &get_Metadata_SireMol_AtomVariantProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
-        Atom_exposer.def( "_get_property_SireMM_AtomLJs", &SireMol::Atom::property< SireMM::LJParameter >, bp::return_value_policy<bp::copy_const_reference>());
-        Atom_exposer.def( "_get_metadata_SireMM_AtomLJs", get_Metadata_SireMM_AtomLJs_function1, bp::return_value_policy<bp::copy_const_reference>());
-        Atom_exposer.def( "_get_metadata_SireMM_AtomLJs", &get_Metadata_SireMM_AtomLJs_function2, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "__copy__", &__copy__);
         Atom_exposer.def( "__deepcopy__", &__copy__);
         Atom_exposer.def( "clone", &__copy__);

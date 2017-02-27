@@ -1,8 +1,6 @@
 #include <Python.h>
 #include <boost/python.hpp>
 
-#include "SireBase/sharedpolypointer.hpp"
-
 #include "Base/convertproperty.hpp"
 #include "SireBase_properties.h"
 
@@ -19,8 +17,6 @@
 #include <QDebug>
 #include <QMutex>
 #include "property.h"
-
-
 void register_SireBase_properties()
 {
     register_property_container< SireBase::StringManglerPtr, SireBase::StringMangler >();

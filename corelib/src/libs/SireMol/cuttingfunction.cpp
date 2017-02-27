@@ -98,17 +98,7 @@ Molecule CuttingFunction::operator()(const Molecule &molecule) const
     return moleditor.commit();
 }
 
-static SharedPolyPointer<ResidueCutting> shared_null;
-
 const ResidueCutting& CuttingFunction::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new ResidueCutting();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<ResidueCutting>());
 }

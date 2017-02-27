@@ -231,6 +231,19 @@ void register_AtomVelocities_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::isCompatibleWith
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > > exported_class_t;
+            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfo const & ) const;
+            isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::isCompatibleWith );
+            
+            AtomVelocities_exposer.def( 
+                "isCompatibleWith"
+                , isCompatibleWith_function_value
+                , ( bp::arg("molinfo") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::isEmpty
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > > exported_class_t;

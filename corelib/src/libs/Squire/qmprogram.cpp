@@ -313,15 +313,7 @@ static SharedPolyPointer<NullQM> shared_null;
 
 const NullQM& QMProgram::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new NullQM();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<NullQM>());
 }
 
 /** Copy constructor */

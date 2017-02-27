@@ -565,16 +565,9 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
 MoleculeInfoData::MoleculeInfoData() : RefCountData()
 {}
     
-static SharedDataPointer<MoleculeInfoData> shared_null;
-
 const MoleculeInfoData& MoleculeInfoData::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        shared_null = SharedDataPointer<MoleculeInfoData>(new MoleculeInfoData());
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<MoleculeInfoData>());
 }
     
 /** Construct from the passed StructureEditor */

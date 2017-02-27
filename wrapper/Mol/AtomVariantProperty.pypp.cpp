@@ -250,6 +250,19 @@ void register_AtomVariantProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< QVariant >::isCompatibleWith
+        
+            typedef SireMol::AtomProperty< QVariant > exported_class_t;
+            typedef bool ( ::SireMol::AtomProperty< QVariant >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfo const & ) const;
+            isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< QVariant >::isCompatibleWith );
+            
+            AtomVariantProperty_exposer.def( 
+                "isCompatibleWith"
+                , isCompatibleWith_function_value
+                , ( bp::arg("molinfo") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< QVariant >::isEmpty
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;

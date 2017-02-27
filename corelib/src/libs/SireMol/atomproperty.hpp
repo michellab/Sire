@@ -34,6 +34,7 @@
 #include "SireBase/qvariant_metatype.h"
 
 #include "molviewproperty.h"
+#include "moleculeinfo.h"
 #include "moleculeinfodata.h"
 #include "atomselection.h"
 
@@ -191,6 +192,7 @@ public:
     int nAtoms(CGIdx cgidx) const;
 
     bool isCompatibleWith(const MoleculeInfoData &molinfo) const;
+    bool isCompatibleWith(const MoleculeInfo &molinfo) const;
 
     AtomProperty<T> matchToSelection(const AtomSelection &selection) const;
 
@@ -623,6 +625,32 @@ int AtomProperty<T>::nAtoms(CGIdx cgidx) const
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 bool AtomProperty<T>::isCompatibleWith(const MoleculeInfoData &molinfo) const
+{
+    if (props.nValues() != molinfo.nAtoms())
+        return false;
+
+    int ncg = molinfo.nCutGroups();
+
+    if (ncg != props.count())
+        return false;
+        
+    const typename PackedArray2D<T>::Array *props_array = props.constData();
+    
+    for (CGIdx i(0); i<ncg; ++i)
+    {
+        if (molinfo.nAtoms(i) != props_array[i].count())
+            return false;
+    }
+    
+    return true;
+}
+
+/** Return whether or not this property is compatible with the
+    Molecule whose layout is described in 'molinfo'
+*/
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool AtomProperty<T>::isCompatibleWith(const MoleculeInfo &molinfo) const
 {
     if (props.nValues() != molinfo.nAtoms())
         return false;

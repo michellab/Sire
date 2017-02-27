@@ -27,6 +27,7 @@
 \*********************************************/
 
 #include "moleculeinfo.h"
+#include "moleculeview.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -48,7 +49,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MoleculeInfo &moli
 
 QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MoleculeInfo &molinfo)
 {
-    VerisonID v = readHeader(ds, r_molinfo);
+    VersionID v = readHeader(ds, r_molinfo);
     
     if (v == 1)
     {
@@ -66,7 +67,7 @@ MoleculeInfo::MoleculeInfo()
 {}
 
 /** Construct to get the MoleculeInfo for the passed molecule */
-MoleculeInfo::MoleculeInfo(const MoleculeView &molecule) : d(molecule.data().info())
+MoleculeInfo::MoleculeInfo(const MoleculeView &molecule) : d( molecule.data().info() )
 {}
 
 /** Construct from the passed shared pointer */
@@ -503,107 +504,456 @@ QList<AtomIdx> MoleculeInfo::getAtomsIn(const SegID &segid) const
     return d->getAtomsIn(segid);
 }
 
-bool MoleculeInfo::isWithinResidue(AtomIdx atomidx) const;
-bool MoleculeInfo::isWithinResidue(const AtomID &atomid) const;
+/** Return whether or not the identified atom is held in a residue */
+bool MoleculeInfo::isWithinResidue(AtomIdx atomidx) const
+{
+    return d->isWithinResidue(atomidx);
+}
 
-bool MoleculeInfo::isWithinChain(AtomIdx atomidx) const;
-bool MoleculeInfo::isWithinChain(const AtomID &atomid) const;
+/** Return whether or not the identified atom is held in a residue */
+bool MoleculeInfo::isWithinResidue(const AtomID &atomid) const
+{
+    return d->isWithinResidue(atomid);
+}
 
-bool MoleculeInfo::isWithinSegment(AtomIdx atomidx) const;
-bool MoleculeInfo::isWithinSegment(const AtomID &atomid) const;
+/** Return whether or not the identified atom is held in a chain */
+bool MoleculeInfo::isWithinChain(AtomIdx atomidx) const
+{
+    return d->isWithinChain(atomidx);
+}
 
-bool MoleculeInfo::isWithinChain(ResIdx residx) const;
-bool MoleculeInfo::isWithinChain(const ResID &resid) const;
+/** Return whether or not the identified atom is held in a chain */
+bool MoleculeInfo::isWithinChain(const AtomID &atomid) const
+{
+    return d->isWithinChain(atomid);
+}
 
-ChainIdx MoleculeInfo::parentChain(ResIdx residx) const;
-ChainIdx MoleculeInfo::parentChain(const ResID &resid) const;
+/** Return whether or not the identified atom is held in a segment */
+bool MoleculeInfo::isWithinSegment(AtomIdx atomidx) const
+{
+    return d->isWithinSegment(atomidx);
+}
 
-ChainIdx MoleculeInfo::parentChain(AtomIdx atomidx) const;
-ChainIdx MoleculeInfo::parentChain(const AtomID &atomid) const;
+/** Return whether or not the identified atom is held in a segment */
+bool MoleculeInfo::isWithinSegment(const AtomID &atomid) const
+{
+    return d->isWithinSegment(atomid);
+}
 
-ResIdx MoleculeInfo::parentResidue(AtomIdx atomidx) const;
-ResIdx MoleculeInfo::parentResidue(const AtomID &atomid) const;
+/** Return whether or not the identified residue is held in a chain */
+bool MoleculeInfo::isWithinChain(ResIdx residx) const
+{
+    return d->isWithinChain(residx);
+}
 
-SegIdx MoleculeInfo::parentSegment(AtomIdx atomidx) const;
-SegIdx MoleculeInfo::parentSegment(const AtomID &atomid) const;
+/** Return whether or not the identified residue is held in a chain */
+bool MoleculeInfo::isWithinChain(const ResID &resid) const
+{
+    return d->isWithinChain(resid);
+}
 
-CGIdx MoleculeInfo::parentCutGroup(AtomIdx atomidx) const;
-CGIdx MoleculeInfo::parentCutGroup(const AtomID &atomid) const;
+/** Return the index of the parent chain of the identified residue */
+ChainIdx MoleculeInfo::parentChain(ResIdx residx) const
+{
+    return d->parentChain(residx);
+}
 
-bool MoleculeInfo::contains(ResIdx residx, AtomIdx atomidx) const;
-bool MoleculeInfo::contains(ChainIdx chainidx, AtomIdx atomidx) const;
-bool MoleculeInfo::contains(SegIdx segidx, AtomIdx atomidx) const;
-bool MoleculeInfo::contains(CGIdx cgidx, AtomIdx atomidx) const;
-bool MoleculeInfo::contains(ChainIdx chainidx, ResIdx residx) const;
+/** Return the index of the parent chain of the identified residue */
+ChainIdx MoleculeInfo::parentChain(const ResID &resid) const
+{
+    return d->parentChain(resid);
+}
 
-bool MoleculeInfo::contains(ResIdx residx, const AtomID &atomid) const;
-bool MoleculeInfo::contains(ChainIdx chainidx, const AtomID &atomid) const;
-bool MoleculeInfo::contains(SegIdx segidx, const AtomID &atomid) const;
-bool MoleculeInfo::contains(CGIdx cgidx, const AtomID &atomid) const;
-bool MoleculeInfo::contains(ChainIdx chainidx, const ResID &resid) const;
+/** Return the index of the parent chain of the identified atom */
+ChainIdx MoleculeInfo::parentChain(AtomIdx atomidx) const
+{
+    return d->parentChain(atomidx);
+}
 
-bool MoleculeInfo::intersects(ResIdx residx, const AtomID &atomid) const;
-bool MoleculeInfo::intersects(ChainIdx chainidx, const AtomID &atomid) const;
-bool MoleculeInfo::intersects(SegIdx segidx, const AtomID &atomid) const;
-bool MoleculeInfo::intersects(CGIdx cgidx, const AtomID &atomid) const;
-bool MoleculeInfo::intersects(ChainIdx chainidx, const ResID &resid) const;
+/** Return the index of the parent chain of the identified atom */
+ChainIdx MoleculeInfo::parentChain(const AtomID &atomid) const
+{
+    return d->parentChain(atomid);
+}
 
-int MoleculeInfo::nAtoms() const;
+/** Return the index of the parent residue of the identified atom */
+ResIdx MoleculeInfo::parentResidue(AtomIdx atomidx) const
+{
+    return d->parentResidue(atomidx);
+}
 
-int MoleculeInfo::nAtoms(const ChainID &chainid) const;
-int MoleculeInfo::nAtoms(ChainIdx chainidx) const;
+/** Return the index of the parent residue of the identified atom */
+ResIdx MoleculeInfo::parentResidue(const AtomID &atomid) const
+{
+    return d->parentResidue(atomid);
+}
 
-int MoleculeInfo::nAtoms(const ResID &resid) const;
-int MoleculeInfo::nAtoms(ResIdx residx) const;
+/** Return the index of the parent segment of the identified atom */
+SegIdx MoleculeInfo::parentSegment(AtomIdx atomidx) const
+{
+    return d->parentSegment(atomidx);
+}
 
-int MoleculeInfo::nAtoms(const SegID &segid) const;
-int MoleculeInfo::nAtoms(SegIdx segidx) const;
+/** Return the index of the parent segment of the identified atom */
+SegIdx MoleculeInfo::parentSegment(const AtomID &atomid) const
+{
+    return d->parentSegment(atomid);
+}
 
-int MoleculeInfo::nAtoms(const CGID &cgid) const;
-int MoleculeInfo::nAtoms(CGIdx cgidx) const;
+/** Return the index of the parent CutGroup of the identified atom */
+CGIdx MoleculeInfo::parentCutGroup(AtomIdx atomidx) const
+{
+    return d->parentCutGroup(atomidx);
+}
 
-int MoleculeInfo::nResidues() const;
-int MoleculeInfo::nResidues(const ChainID &chainid) const;
-int MoleculeInfo::nResidues(ChainIdx chainidx) const;
+/** Return the index of the parent CutGroup of the identified atom */
+CGIdx MoleculeInfo::parentCutGroup(const AtomID &atomid) const
+{
+    return d->parentCutGroup(atomid);
+}
 
-int MoleculeInfo::nChains() const;
-int MoleculeInfo::nCutGroups() const;
-int MoleculeInfo::nSegments() const;
+/** Return whether or not the specified residue contains the specified atom */
+bool MoleculeInfo::contains(ResIdx residx, AtomIdx atomidx) const
+{
+    return d->contains(residx,atomidx);
+}
 
-QList<ResIdx> MoleculeInfo::map(const ResName &name) const;
-QList<ResIdx> MoleculeInfo::map(ResNum num) const;
-QList<ResIdx> MoleculeInfo::map(ResIdx idx) const;
-QList<ResIdx> MoleculeInfo::map(const ResID &resid) const;
+/** Return whether or not the specified chain contains the specified atom */
+bool MoleculeInfo::contains(ChainIdx chainidx, AtomIdx atomidx) const
+{
+    return d->contains(chainidx,atomidx);
+}
 
-QList<ChainIdx> MoleculeInfo::map(const ChainName &name) const;
-QList<ChainIdx> MoleculeInfo::map(ChainIdx idx) const;
-QList<ChainIdx> MoleculeInfo::map(const ChainID &chainid) const;
+/** Return whether or not the specified segment contains the specified atom */
+bool MoleculeInfo::contains(SegIdx segidx, AtomIdx atomidx) const
+{
+    return d->contains(segidx,atomidx);
+}
 
-QList<SegIdx> MoleculeInfo::map(const SegName &name) const;
-QList<SegIdx> MoleculeInfo::map(SegIdx idx) const;
-QList<SegIdx> MoleculeInfo::map(const SegID &segid) const;
+/** Return whether or not the specified CutGroup contains the specified atom */
+bool MoleculeInfo::contains(CGIdx cgidx, AtomIdx atomidx) const
+{
+    return d->contains(cgidx,atomidx);
+}
 
-QList<CGIdx> MoleculeInfo::map(const CGName &name) const;
-QList<CGIdx> MoleculeInfo::map(CGIdx idx) const;
-QList<CGIdx> MoleculeInfo::map(const CGID &cgid) const;
+/** Return whether or not the specified chain contains the specified residue */
+bool MoleculeInfo::contains(ChainIdx chainidx, ResIdx residx) const
+{
+    return d->contains(chainidx,residx);
+}
 
-QList<AtomIdx> MoleculeInfo::map(const AtomName &name) const;
-QList<AtomIdx> MoleculeInfo::map(AtomNum num) const;
-QList<AtomIdx> MoleculeInfo::map(AtomIdx idx) const;
-QList<AtomIdx> MoleculeInfo::map(const AtomID &atomid) const;
+/** Return whether or not the specified residue contains the specified atom */
+bool MoleculeInfo::contains(ResIdx residx, const AtomID &atomid) const
+{
+    return d->contains(residx,atomid);
+}
 
-void MoleculeInfo::squeeze(const MoleculeInfo &other) const;
+/** Return whether or not the specified chain contains the specified atom */
+bool MoleculeInfo::contains(ChainIdx chainidx, const AtomID &atomid) const
+{
+    return d->contains(chainidx,atomid);
+}
 
-void MoleculeInfo::assertCompatibleWith(const AtomSelection &selected_atoms) const;
-void MoleculeInfo::assertCompatibleWith(const MoleculeView &molecule) const;
+/** Return whether or not the specified segment contains the specified atom */
+bool MoleculeInfo::contains(SegIdx segidx, const AtomID &atomid) const
+{
+    return d->contains(segidx,atomid);
+}
 
-void MoleculeInfo::assertContains(AtomIdx atomidx) const;
-void MoleculeInfo::assertContains(CGIdx cgidx) const;
-void MoleculeInfo::assertContains(ResIdx residx) const;
-void MoleculeInfo::assertContains(ChainIdx chainidx) const;
-void MoleculeInfo::assertContains(SegIdx segidx) const;
+/** Return whether or not the specified CutGroup contains the specified atom */
+bool MoleculeInfo::contains(CGIdx cgidx, const AtomID &atomid) const
+{
+    return d->contains(cgidx,atomid);
+}
 
-void MoleculeInfo::assertEqualTo(const MoleculeInfo &other) const;
+/** Return whether or not the specified chain contains the specified residue */
+bool MoleculeInfo::contains(ChainIdx chainidx, const ResID &resid) const
+{
+    return d->contains(chainidx,resid);
+}
 
+/** Return whether or not the specified residue contains the specified atom */
+bool MoleculeInfo::intersects(ResIdx residx, const AtomID &atomid) const
+{
+    return d->intersects(residx,atomid);
+}
 
+/** Return whether or not the specified chain contains the specified atom */
+bool MoleculeInfo::intersects(ChainIdx chainidx, const AtomID &atomid) const
+{
+    return d->intersects(chainidx,atomid);
+}
 
+/** Return whether or not the specified segment contains the specified atom */
+bool MoleculeInfo::intersects(SegIdx segidx, const AtomID &atomid) const
+{
+    return d->intersects(segidx,atomid);
+}
+
+/** Return whether or not the specified CutGroup contains the specified atom */
+bool MoleculeInfo::intersects(CGIdx cgidx, const AtomID &atomid) const
+{
+    return d->intersects(cgidx,atomid);
+}
+
+/** Return whether or not the specified chain contains the specified residue */
+bool MoleculeInfo::intersects(ChainIdx chainidx, const ResID &resid) const
+{
+    return d->intersects(chainidx,resid);
+}
+
+/** Return the number of atoms in the molecule */
+int MoleculeInfo::nAtoms() const
+{
+    return d->nAtoms();
+}
+
+/** Return the number of atoms in the identified chain(s) */
+int MoleculeInfo::nAtoms(const ChainID &chainid) const
+{
+    return d->nAtoms(chainid);
+}
+
+/** Return the number of atoms in the identified chain(s) */
+int MoleculeInfo::nAtoms(ChainIdx chainidx) const
+{
+    return d->nAtoms(chainidx);
+}
+
+/** Return the number of atoms in the identified residue(s) */
+int MoleculeInfo::nAtoms(const ResID &resid) const
+{
+    return d->nAtoms(resid);
+}
+
+/** Return the number of atoms in the identified residue(s) */
+int MoleculeInfo::nAtoms(ResIdx residx) const
+{
+    return d->nAtoms(residx);
+}
+
+/** Return the number of atoms in the identified segment(s) */
+int MoleculeInfo::nAtoms(const SegID &segid) const
+{
+    return d->nAtoms(segid);
+}
+
+/** Return the number of atoms in the identified segment(s) */
+int MoleculeInfo::nAtoms(SegIdx segidx) const
+{
+    return d->nAtoms(segidx);
+}
+
+/** Return the number of atoms in the identified CutGroup(s) */
+int MoleculeInfo::nAtoms(const CGID &cgid) const
+{
+    return d->nAtoms(cgid);
+}
+
+/** Return the number of atoms in the identified CutGroup(s) */
+int MoleculeInfo::nAtoms(CGIdx cgidx) const
+{
+    return d->nAtoms(cgidx);
+}
+
+/** Return the number of residues in the molecule */
+int MoleculeInfo::nResidues() const
+{
+    return d->nResidues();
+}
+
+/** Return the number of residues in the identified chain(s) */
+int MoleculeInfo::nResidues(const ChainID &chainid) const
+{
+    return d->nResidues(chainid);
+}
+
+/** Return the number of residues in the identified chain(s) */
+int MoleculeInfo::nResidues(ChainIdx chainidx) const
+{
+    return d->nResidues(chainidx);
+}
+
+/** Return the number of chains in the molecule */
+int MoleculeInfo::nChains() const
+{
+    return d->nChains();
+}
+
+/** Return the number of CutGroups in the molecule */
+int MoleculeInfo::nCutGroups() const
+{
+    return d->nCutGroups();
+}
+
+/** Return the number of segments in the molecule */
+int MoleculeInfo::nSegments() const
+{
+    return d->nSegments();
+}
+
+/** Return the indicies of the matching residue(s) */
+QList<ResIdx> MoleculeInfo::map(const ResName &name) const
+{
+    return d->map(name);
+}
+
+/** Return the indicies of the matching residue(s) */
+QList<ResIdx> MoleculeInfo::map(ResNum num) const
+{
+    return d->map(num);
+}
+
+/** Return the indicies of the matching residue(s) */
+QList<ResIdx> MoleculeInfo::map(ResIdx idx) const
+{
+    return d->map(idx);
+}
+
+/** Return the indicies of the matching residue(s) */
+QList<ResIdx> MoleculeInfo::map(const ResID &resid) const
+{
+    return d->map(resid);
+}
+
+/** Return the indicies of the matching chain(s) */
+QList<ChainIdx> MoleculeInfo::map(const ChainName &name) const
+{
+    return d->map(name);
+}
+
+/** Return the indicies of the matching chain(s) */
+QList<ChainIdx> MoleculeInfo::map(ChainIdx idx) const
+{
+    return d->map(idx);
+}
+
+/** Return the indicies of the matching chain(s) */
+QList<ChainIdx> MoleculeInfo::map(const ChainID &chainid) const
+{
+    return d->map(chainid);
+}
+
+/** Return the indicies of the matching segment(s) */
+QList<SegIdx> MoleculeInfo::map(const SegName &name) const
+{
+    return d->map(name);
+}
+
+/** Return the indicies of the matching segment(s) */
+QList<SegIdx> MoleculeInfo::map(SegIdx idx) const
+{
+    return d->map(idx);
+}
+
+/** Return the indicies of the matching segment(s) */
+QList<SegIdx> MoleculeInfo::map(const SegID &segid) const
+{
+    return d->map(segid);
+}
+
+/** Return the indicies of the matching CutGroup(s) */
+QList<CGIdx> MoleculeInfo::map(const CGName &name) const
+{
+    return d->map(name);
+}
+
+/** Return the indicies of the matching CutGroup(s) */
+QList<CGIdx> MoleculeInfo::map(CGIdx idx) const
+{
+    return d->map(idx);
+}
+
+/** Return the indicies of the matching CutGroup(s) */
+QList<CGIdx> MoleculeInfo::map(const CGID &cgid) const
+{
+    return d->map(cgid);
+}
+
+/** Return the indicies of the matching atom(s) */
+QList<AtomIdx> MoleculeInfo::map(const AtomName &name) const
+{
+    return d->map(name);
+}
+
+/** Return the indicies of the matching atom(s) */
+QList<AtomIdx> MoleculeInfo::map(AtomNum num) const
+{
+    return d->map(num);
+}
+
+/** Return the indicies of the matching atom(s) */
+QList<AtomIdx> MoleculeInfo::map(AtomIdx idx) const
+{
+    return d->map(idx);
+}
+
+/** Return the indicies of the matching atom(s) */
+QList<AtomIdx> MoleculeInfo::map(const AtomID &atomid) const
+{
+    return d->map(atomid);
+}
+
+/** Use this function to minimise memory usage - this function
+    compares the shared data in this info with 'other', and where
+    they are equal it copies the data from 'other', thereby reducing
+    wastage caused by duplicated storage
+*/
+void MoleculeInfo::squeeze(const MoleculeInfo &other) const
+{
+    d->squeeze(other.d.read());
+}
+
+/** Assert that this MoleculeInfo is compatible with the passed atom selection */
+void MoleculeInfo::assertCompatibleWith(const AtomSelection &selected_atoms) const
+{
+    d->assertCompatibleWith(selected_atoms);
+}
+
+/** Assert that this MoleculeInfo is compatible with the passed molecule */
+void MoleculeInfo::assertCompatibleWith(const MoleculeView &molecule) const
+{
+    this->assertEqualTo( molecule.data().info() );
+}
+
+/** Assert that this MoleculeInfo contains an atom at the passed index */
+void MoleculeInfo::assertContains(AtomIdx atomidx) const
+{
+    d->assertContains(atomidx);
+}
+
+/** Assert that this MoleculeInfo contains an atom at the passed index */
+void MoleculeInfo::assertContains(CGIdx cgidx) const
+{
+    d->assertContains(cgidx);
+}
+
+/** Assert that this MoleculeInfo contains an atom at the passed index */
+void MoleculeInfo::assertContains(ResIdx residx) const
+{
+    d->assertContains(residx);
+}
+
+/** Assert that this MoleculeInfo contains an atom at the passed index */
+void MoleculeInfo::assertContains(ChainIdx chainidx) const
+{
+    d->assertContains(chainidx);
+}
+
+/** Assert that this MoleculeInfo contains an atom at the passed index */
+void MoleculeInfo::assertContains(SegIdx segidx) const
+{
+    d->assertContains(segidx);
+}
+
+/** Assert that this MoleculeInfo is equal to 'other' */
+void MoleculeInfo::assertEqualTo(const MoleculeInfo &other) const
+{
+    d->assertEqualTo(*(other.d));
+}
+
+/** Assert that this MoleculeInfo is equal to 'other' */
+void MoleculeInfo::assertEqualTo(const MoleculeInfoData &other) const
+{
+    d->assertEqualTo(other);
+}
