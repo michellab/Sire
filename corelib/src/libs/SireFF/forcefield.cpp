@@ -83,7 +83,7 @@ const NullFF& FF::null()
 }
 
 /** Constructor */
-NullFF::NullFF() : ConcreteProperty<NullFF,FF>( FF::null() )
+NullFF::NullFF() : ConcreteProperty<NullFF,FF>()
 {}
 
 /** Copy constructor */

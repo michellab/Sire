@@ -63,7 +63,7 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MoleculeInfo &molinfo)
 }
 
 /** Null constructor */
-MoleculeInfo::MoleculeInfo()
+MoleculeInfo::MoleculeInfo() : d( MoleculeInfoData::null() )
 {}
 
 /** Construct to get the MoleculeInfo for the passed molecule */

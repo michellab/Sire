@@ -107,8 +107,11 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
 
 /** Null constructor */
 ConnectivityBase::ConnectivityBase()
-                 : MolViewProperty(), d( MoleculeInfo().data() )
-{}
+                 : MolViewProperty()
+{
+    MoleculeInfo null_info;
+    d = null_info.data();
+}
 
 const MoleculeInfoData& ConnectivityBase::info() const
 {

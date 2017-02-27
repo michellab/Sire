@@ -194,11 +194,13 @@ T* create_shared_null()
     
     if (not shared_null)
     {
-        auto mutex = detail::get_shared_null_mutex();
-        
-        tbb::spin_mutex::scoped_lock lock(*mutex);
-        
+        //speculatively create the new shared_null. This is not behind
+        //the mutex, as the constructed object may creata another object
+        //that calls create_not_refcounted_shared_null
         T *my_null = new T();
+
+        auto mutex = detail::get_shared_null_mutex();
+        tbb::spin_mutex::scoped_lock lock(*mutex);
         
         if (not shared_null)
         {
@@ -207,6 +209,7 @@ T* create_shared_null()
         }
         else
         {
+            lock.release();
             delete my_null;
         }
     }
@@ -222,11 +225,13 @@ T* create_not_refcounted_shared_null()
     
     if (not shared_null)
     {
-        auto mutex = detail::get_shared_null_mutex();
-        
-        tbb::spin_mutex::scoped_lock lock(*mutex);
-        
+        //speculatively create the new shared_null. This is not behind
+        //the mutex, as the constructed object may creata another object
+        //that calls create_not_refcounted_shared_null        
         T *my_null = new T();
+
+        auto mutex = detail::get_shared_null_mutex();
+        tbb::spin_mutex::scoped_lock lock(*mutex);
         
         if (not shared_null)
         {
@@ -234,6 +239,7 @@ T* create_not_refcounted_shared_null()
         }
         else
         {
+            lock.release();
             delete my_null;
         }
     }

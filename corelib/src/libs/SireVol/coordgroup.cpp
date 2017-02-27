@@ -342,6 +342,8 @@ quint32 CGMemory::getSize(quint32 narrays, quint32 ngroups, quint32 ncoords)
 */
 char* CGMemory::create(quint32 narrays, quint32 ncgroups, quint32 ncoords)
 {
+    qDebug() << "CGMemory::create(" << narrays << ncgroups << ncoords << ")";
+
     //calculate how big the memory requirements are
     quint32 sz = getSize(narrays, ncgroups, ncoords);
     
@@ -545,6 +547,8 @@ const char* CGMemory::getRoot(const char *this_ptr, quint32 this_idx)
 /** Destroy the object 'array' */
 void CGMemory::destroy(CGArrayArrayData *array)
 {
+    qDebug() << "CGMemory::destroy(" << qintptr(array) << ")";
+
     //we need to delete it in the opposite order to creation - first
     //lets delete all of the vectors
     quint32 ncoords = array->nCoords();
@@ -623,6 +627,8 @@ void CGMemory::destroy(CGArrayArrayData *array)
 /** Detach this object from shared storage and return a new pointer to it. */
 char* CGMemory::detach(char *this_ptr, quint32 this_idx)
 {
+    qDebug() << "CGMemory::detach(" << qintptr(this_ptr) << this_idx << ")";
+
     //get a pointer to the start of the storage for this container
     char *storage = getRoot(this_ptr, this_idx);
     
@@ -653,7 +659,7 @@ char* CGMemory::detach(char *this_ptr, quint32 this_idx)
         CGArrayArrayData *new_cgarrayarray = (CGArrayArrayData*) new_storage;
         
         //set the reference count of this copy to 1
-        new_cgarrayarray->ref.ref();
+        //new_cgarrayarray->ref.ref();
 
         //now loose a reference to the original
         CGMemory::decref(this_ptr, this_idx);
@@ -800,14 +806,20 @@ CGArrayArrayData* CGArrayArrayData::detach()
 void CGArrayArrayData::incref()
 {
     this->ref.ref();
+    qDebug() << "INCREF" << qintptr(this) << this->ref.load();
 }
     
 /** Decrease the reference count for this object - this will
     delete this object if the reference count drops to zero! */
 void CGArrayArrayData::decref()
 {
+    qDebug() << "DECREF" << qintptr(this) << this->ref.load();
+
     if (not this->ref.deref())
+    {
+        qDebug() << "DELETE" << qintptr(this);
         CGMemory::destroy(this);
+    }
 }
 
 /** Return a pointer to the first CGArrayData in this container. This
@@ -1414,16 +1426,17 @@ static const CGSharedPtr<CGArrayArrayData>& getSharedNull()
 {
     if (shared_null.constData() == 0)
     {
-        auto mutex = SireBase::detail::get_shared_null_mutex();
-        
-        tbb::spin_mutex::scoped_lock lock(*mutex);
-        
         CGSharedPtr<CGArrayArrayData> my_null = (CGArrayArrayData*)( CGMemory::create(0,0,0) );
+
+        auto mutex = SireBase::detail::get_shared_null_mutex();
+        tbb::spin_mutex::scoped_lock lock(*mutex);
     
         if (shared_null.constData() == 0)
         {
             shared_null = my_null;
         }
+        else
+            lock.release();
     }
     
     return shared_null;
