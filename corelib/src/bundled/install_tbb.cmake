@@ -22,6 +22,7 @@ else()
   message( STATUS "Compiling and installing a bundled version of Intel's Threaded Building Blocks (TBB)" )
 
   set( TBB_ZIPFILE "${CMAKE_SOURCE_DIR}/src/bundled/tbb.tar.gz" )
+  set( TBB_PATCH_ZIPFILE "${CMAKE_SOURCE_DIR}/src/bundled/tbb_patch.tar.gz")
 
   if (EXISTS "${TBB_ZIPFILE}")
     set( TBB_BUILD_DIR "${BUNDLE_BUILDDIR}/tbb" )
@@ -33,6 +34,15 @@ else()
           WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
           OUTPUT_QUIET ERROR_QUIET
       )
+    endif()
+
+    if (EXISTS "${TBB_PATCH_ZIPFILE}")
+      message( STATUS "Unzipping ${TBB_PATCH_ZIPFILE} to ${TBB_BUILD_DIR}" )
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -E tar xzf ${TBB_PATCH_ZIPFILE}
+            WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
+            OUTPUT_QUIET ERROR_QUIET
+        )
     endif()
 
     # switch on C++0x support so that we have exact exception
@@ -70,6 +80,7 @@ else()
     endif()
 
     string(STRIP ${CMAKE_MATCH_1} TBB_BUILD_PREFIX)
+
     set(TBB_INSTALL_DIR "${TBB_BUILD_DIR}/build/${TBB_BUILD_PREFIX}_release")
     message( STATUS "TBB will be built in the directory ${TBB_INSTALL_DIR}" )
 
