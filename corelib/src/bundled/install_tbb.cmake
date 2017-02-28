@@ -87,14 +87,14 @@ else()
     message( STATUS "Patience... Compiling TBB from source...")
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -j ${NCORES} ${TBB_OPTIONS} tbb
                      WORKING_DIRECTORY ${TBB_BUILD_DIR}
-                     OUTPUT_QUIET ERROR_QUIET
+#                     OUTPUT_QUIET ERROR_QUIET
                    )
     message( STATUS "...complete" )
 
     message( STATUS "Patience... Compiling TBB malloc from source...")
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -j ${NCORES} ${TBB_OPTIONS} tbbmalloc
                      WORKING_DIRECTORY ${TBB_BUILD_DIR}
-                     OUTPUT_QUIET ERROR_QUIET
+#                     OUTPUT_QUIET ERROR_QUIET
                     )
     message( STATUS "...complete" )
 
