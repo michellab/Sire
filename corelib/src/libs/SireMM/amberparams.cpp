@@ -828,7 +828,7 @@ TwoAtomFunctions AmberParams::bondFunctions(const Symbol &R) const
 /** Return all of the bond parameters converted to a set of TwoAtomFunctions */
 TwoAtomFunctions AmberParams::bondFunctions() const
 {
-    return bondFunctions( Symbol("R") );
+    return bondFunctions( Symbol("r") );
 }
 
 void AmberParams::add(const AngleID &angle, double k, double theta0)
@@ -864,7 +864,7 @@ ThreeAtomFunctions AmberParams::angleFunctions(const Symbol &THETA) const
 /** Return all of the angle parameters converted to a set of ThreeAtomFunctions */
 ThreeAtomFunctions AmberParams::angleFunctions() const
 {
-    return angleFunctions( Symbol("THETA") );
+    return angleFunctions( Symbol("theta") );
 }
 
 void AmberParams::add(const DihedralID &dihedral, double k,
@@ -912,7 +912,7 @@ FourAtomFunctions AmberParams::dihedralFunctions(const Symbol &PHI) const
 /** Return all of the dihedral parameters converted to a set of FourAtomFunctions */
 FourAtomFunctions AmberParams::dihedralFunctions() const
 {
-    return dihedralFunctions( Symbol("PHI") );
+    return dihedralFunctions( Symbol("phi") );
 }
 
 void AmberParams::add(const ImproperID &improper, double k,
@@ -958,7 +958,7 @@ FourAtomFunctions AmberParams::improperFunctions(const Symbol &PHI) const
 /** Return all of the improper parameters converted to a set of FourAtomFunctions */
 FourAtomFunctions AmberParams::improperFunctions() const
 {
-    return improperFunctions( Symbol("PHI") );
+    return improperFunctions( Symbol("phi") );
 }
 
 void AmberParams::addNB14(const BondID &pair, double cscl, double ljscl)

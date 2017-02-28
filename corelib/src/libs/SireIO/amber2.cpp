@@ -2651,10 +2651,14 @@ MolEditor AmberParm::getMolecule(int molidx, int start_idx, int natoms,
     mol.setProperty(map["element"], amber_params.elements());
     mol.setProperty(map["ambertype"], amber_params.amberTypes());
     mol.setProperty(map["connectivity"], amber_params.connectivity());
-    mol.setProperty(map["bond"], amber_params.bondFunctions());
-    mol.setProperty(map["angle"], amber_params.angleFunctions());
-    mol.setProperty(map["dihedral"], amber_params.dihedralFunctions());
-    mol.setProperty(map["improper"], amber_params.improperFunctions());
+    mol.setProperty(map["bond"],
+                    amber_params.bondFunctions(InternalPotential::symbols().bond().r()));
+    mol.setProperty(map["angle"],
+                    amber_params.angleFunctions(InternalPotential::symbols().angle().theta()));
+    mol.setProperty(map["dihedral"],
+                    amber_params.dihedralFunctions(InternalPotential::symbols().dihedral().phi()));
+    mol.setProperty(map["improper"],
+                    amber_params.improperFunctions(InternalPotential::symbols().dihedral().phi()));
     mol.setProperty(map["intrascale"], amber_params.cljScaleFactors());
 
     mol.setProperty(map["amberparameters"], amber_params);
