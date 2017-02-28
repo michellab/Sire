@@ -35,6 +35,12 @@
 #include "SireMol/dihedralid.h"
 #include "SireMol/improperid.h"
 #include "SireMol/atomidx.h"
+#include "SireMol/connectivity.h"
+
+#include "SireMM/twoatomfunctions.h"
+#include "SireMM/threeatomfunctions.h"
+#include "SireMM/fouratomfunctions.h"
+#include "SireMM/cljnbpairs.h"
 
 #include "SireCAS/expression.h"
 #include "SireCAS/symbol.h"
@@ -430,6 +436,12 @@ QString AmberNB14::toString() const
     return QObject::tr("AmberNB14( cscl = %1, ljscl = %2 )").arg(_cscl).arg(_ljscl);
 }
 
+/** Return the value converted to a CLJScaleFactor */
+CLJScaleFactor AmberNB14::toScaleFactor() const
+{
+    return CLJScaleFactor(_cscl, _ljscl);
+}
+
 ///////////
 /////////// Implementation of AmberParams
 ///////////
@@ -443,7 +455,11 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberParams &amberp
 
     SharedDataStream sds(ds);
 
-    sds << amberparam.molinfo << amberparam.amber_bonds
+    sds << amberparam.molinfo
+        << amberparam.amber_charges << amberparam.amber_ljs
+        << amberparam.amber_masses << amberparam.amber_elements
+        << amberparam.amber_types << amberparam.exc_atoms
+        << amberparam.amber_bonds
         << amberparam.amber_angles << amberparam.amber_dihedrals
         << amberparam.amber_impropers << amberparam.amber_nb14s
         << static_cast<const MoleculeProperty&>(amberparam);
@@ -460,7 +476,11 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberParams &amberparam)
     {
         SharedDataStream sds(ds);
 
-        sds >> amberparam.molinfo >> amberparam.amber_bonds
+        sds >> amberparam.molinfo
+            >> amberparam.amber_charges >> amberparam.amber_ljs
+            >> amberparam.amber_masses >> amberparam.amber_elements
+            >> amberparam.amber_types >> amberparam.exc_atoms
+            >> amberparam.amber_bonds
             >> amberparam.amber_angles >> amberparam.amber_dihedrals
             >> amberparam.amber_impropers >> amberparam.amber_nb14s
             >> static_cast<MoleculeProperty&>(amberparam);
@@ -482,6 +502,12 @@ AmberParams::AmberParams(const MoleculeView &mol)
 {}
 
 /** Constructor for the passed molecule*/
+AmberParams::AmberParams(const MoleculeInfo &info)
+            : ConcreteProperty<AmberParams,MoleculeProperty>(),
+              molinfo(info)
+{}
+
+/** Constructor for the passed molecule*/
 AmberParams::AmberParams(const MoleculeInfoData &info)
             : ConcreteProperty<AmberParams,MoleculeProperty>(),
               molinfo(info)
@@ -491,6 +517,9 @@ AmberParams::AmberParams(const MoleculeInfoData &info)
 AmberParams::AmberParams(const AmberParams &other)
             : ConcreteProperty<AmberParams,MoleculeProperty>(),
               molinfo(other.molinfo),
+              amber_charges(other.amber_charges),amber_ljs(other.amber_ljs),
+              amber_masses(other.amber_masses),amber_elements(other.amber_elements),
+              amber_types(other.amber_types), exc_atoms(other.exc_atoms),
               amber_bonds(other.amber_bonds),amber_angles(other.amber_angles),
               amber_dihedrals(other.amber_dihedrals),
               amber_impropers(other.amber_impropers),
@@ -504,6 +533,12 @@ AmberParams& AmberParams::operator=(const AmberParams &other)
     {
         MoleculeProperty::operator=(other);
         molinfo = other.molinfo;
+        amber_charges = other.amber_charges;
+        amber_ljs = other.amber_ljs;
+        amber_masses = other.amber_masses;
+        amber_elements = other.amber_elements;
+        amber_types = other.amber_types;
+        exc_atoms = other.exc_atoms;
         amber_bonds = other.amber_bonds;
         amber_angles = other.amber_angles;
         amber_dihedrals = other.amber_dihedrals;
@@ -521,8 +556,15 @@ AmberParams::~AmberParams()
 /** Comparison operator */
 bool AmberParams::operator==(const AmberParams &other) const
 {
-  return (molinfo == other.molinfo and amber_bonds == other.amber_bonds and
-          amber_angles == other.amber_angles
+  return (molinfo == other.molinfo
+          and amber_charges == other.amber_charges
+          and amber_ljs == other.amber_ljs
+          and amber_masses == other.amber_masses
+          and amber_elements == other.amber_elements
+          and amber_types == other.amber_types
+          and exc_atoms == other.exc_atoms
+          and amber_bonds == other.amber_bonds
+          and amber_angles == other.amber_angles
           and amber_dihedrals == other.amber_dihedrals
           and amber_impropers == other.amber_impropers
           and amber_nb14s == other.amber_nb14s);
@@ -536,26 +578,24 @@ bool AmberParams::operator!=(const AmberParams &other) const
 
 /** Return the layout of the molecule whose flexibility is contained
     in this object */
-const MoleculeInfoData& AmberParams::info() const
+MoleculeInfo AmberParams::info() const
 {
-    if (molinfo.constData() == 0)
-        return MoleculeInfoData::null();
-    else
-        return *molinfo;
+    return molinfo;
 }
 
 QString AmberParams::toString() const
 {
-    if (info().nAtoms() == 0)
+    if (molinfo.nAtoms() == 0)
         return QObject::tr("AmberParams::null");
 
-    return QObject::tr("AmberParams( nBonds=%1, nAngles=%2, nDihedrals=%3 "
+    return QObject::tr("AmberParams( nAtoms()=%6 nBonds=%1, nAngles=%2, nDihedrals=%3 "
                        "nImpropers=%4 n14s=%5 )")
                             .arg(amber_bonds.count())
                             .arg(amber_angles.count())
                             .arg(amber_dihedrals.count())
                             .arg(amber_impropers.count())
-                            .arg(amber_nb14s.count());
+                            .arg(amber_nb14s.count())
+                            .arg(molinfo.nAtoms());
 }
 
 /** Convert the passed BondID into AtomIdx IDs, sorted in index order */
@@ -631,6 +671,130 @@ const char* AmberParams::typeName()
     return QMetaType::typeName(qMetaTypeId<AmberParams>());
 }
 
+/** Return the charges on the atoms */
+AtomCharges AmberParams::charges() const
+{
+    return amber_charges;
+}
+
+/** Return the atom masses */
+AtomMasses AmberParams::masses() const
+{
+    return amber_masses;
+}
+
+/** Return the atom elements */
+AtomElements AmberParams::elements() const
+{
+    return amber_elements;
+}
+
+/** Return the atom LJ parameters */
+AtomLJs AmberParams::ljs() const
+{
+    return amber_ljs;
+}
+
+/** Return all of the amber atom types */
+AtomStringProperty AmberParams::amberTypes() const
+{
+    return amber_types;
+}
+
+/** Set the atom parameters for the specified atom to the provided values */
+void AmberParams::add(const AtomID &atom,
+                      SireUnits::Dimension::Charge charge,
+                      SireUnits::Dimension::MolarMass mass,
+                      const SireMol::Element &element,
+                      const SireMM::LJParameter &ljparam,
+                      const QString &amber_type)
+{
+    CGAtomIdx idx = molinfo.cgAtomIdx(atom);
+    
+    if (amber_charges.isEmpty())
+    {
+        //set up the objects to hold these parameters
+        amber_charges = AtomCharges(molinfo);
+        amber_ljs = AtomLJs(molinfo);
+        amber_masses = AtomMasses(molinfo);
+        amber_elements = AtomElements(molinfo);
+        amber_types = AtomStringProperty(molinfo);
+    }
+    
+    amber_charges.set(idx, charge);
+    amber_ljs.set(idx, ljparam);
+    amber_masses.set(idx, mass);
+    amber_elements.set(idx, element);
+    amber_types.set(idx, amber_type);
+}
+
+/** Return the connectivity of the molecule implied by the
+    the bonds */
+Connectivity AmberParams::connectivity() const
+{
+    auto connectivity = Connectivity(molinfo).edit();
+    
+    for (auto it = amber_bonds.constBegin();
+         it != amber_bonds.constEnd();
+         ++it)
+    {
+        connectivity.connect( it.key().atom0(), it.key().atom1() );
+    }
+    
+    return connectivity.commit();
+}
+
+/** Set the excluded atoms of the molecule. This should be a 
+    CLJNBPairs with the value equal to 0 for atom0-atom1 pairs
+    that are excluded, and 1 for atom0-atom1 pairs that are
+    to be included in the non-bonded calculation */
+void AmberParams::setExcludedAtoms(const CLJNBPairs &excluded_atoms)
+{
+    molinfo.assertCompatibleWith( excluded_atoms.info() );
+    exc_atoms = excluded_atoms;
+}
+
+/** Return the excluded atoms of the molecule. The returned
+    object has a matrix of all atom pairs, where the value
+    is 0 for atom0-atom1 pairs that are to be excluded,
+    and 1 for atom0-atom1 pairs that are to be included
+    in the nonbonded calculation */
+CLJNBPairs AmberParams::excludedAtoms() const
+{
+    if (exc_atoms.isEmpty())
+    {
+        if (molinfo.nAtoms() <= 3)
+        {
+            //everything is bonded, so scale factor is 0
+            return CLJNBPairs(molinfo, CLJScaleFactor(0,0));
+        }
+        else
+        {
+            //nothing is explicitly excluded
+            return CLJNBPairs(molinfo, CLJScaleFactor(1,1));
+        }
+    }
+    else
+        return exc_atoms;
+}
+
+/** Return the CLJ nonbonded 1-4 scale factors for the molecule */
+CLJNBPairs AmberParams::cljScaleFactors() const
+{
+    //start from the set of excluded atoms
+    CLJNBPairs nbpairs = this->excludedAtoms();
+    
+    //now add in all of the 1-4 nonbonded scale factors
+    for (auto it = amber_nb14s.constBegin();
+         it != amber_nb14s.constEnd();
+         ++it)
+    {
+        nbpairs.set( it.key().atom0(), it.key().atom1(), it.value().toScaleFactor() );
+    }
+    
+    return nbpairs;
+}
+
 void AmberParams::add(const BondID &bond, double k, double r0)
 {
     amber_bonds.insert( this->convert(bond), AmberBond(k,r0) );
@@ -646,6 +810,27 @@ AmberBond AmberParams::getParameter(const BondID &bond) const
     return amber_bonds.value(this->convert(bond));
 }
 
+/** Return all of the bond parameters converted to a set of TwoAtomFunctions */
+TwoAtomFunctions AmberParams::bondFunctions(const Symbol &R) const
+{
+    TwoAtomFunctions funcs(molinfo);
+    
+    for (auto it = amber_bonds.constBegin();
+         it != amber_bonds.constEnd();
+         ++it)
+    {
+        funcs.set( it.key(), it.value().toExpression(R) );
+    }
+    
+    return funcs;
+}
+
+/** Return all of the bond parameters converted to a set of TwoAtomFunctions */
+TwoAtomFunctions AmberParams::bondFunctions() const
+{
+    return bondFunctions( Symbol("R") );
+}
+
 void AmberParams::add(const AngleID &angle, double k, double theta0)
 {
     amber_angles.insert( this->convert(angle), AmberAngle(k,theta0) );
@@ -659,6 +844,27 @@ void AmberParams::remove(const AngleID &angle)
 AmberAngle AmberParams::getParameter(const AngleID &angle) const
 {
     return amber_angles.value( this->convert(angle) );
+}
+
+/** Return all of the angle parameters converted to a set of ThreeAtomFunctions */
+ThreeAtomFunctions AmberParams::angleFunctions(const Symbol &THETA) const
+{
+    ThreeAtomFunctions funcs(molinfo);
+    
+    for (auto it = amber_angles.constBegin();
+         it != amber_angles.constEnd();
+         ++it)
+    {
+        funcs.set( it.key(), it.value().toExpression(THETA) );
+    }
+    
+    return funcs;
+}
+
+/** Return all of the angle parameters converted to a set of ThreeAtomFunctions */
+ThreeAtomFunctions AmberParams::angleFunctions() const
+{
+    return angleFunctions( Symbol("THETA") );
 }
 
 void AmberParams::add(const DihedralID &dihedral, double k,
@@ -688,6 +894,27 @@ AmberDihedral AmberParams::getParameter(const DihedralID &dihedral) const
     return amber_dihedrals.value( this->convert(dihedral) );
 }
 
+/** Return all of the dihedral parameters converted to a set of FourAtomFunctions */
+FourAtomFunctions AmberParams::dihedralFunctions(const Symbol &PHI) const
+{
+    FourAtomFunctions funcs(molinfo);
+    
+    for (auto it = amber_dihedrals.constBegin();
+         it != amber_dihedrals.constEnd();
+         ++it)
+    {
+        funcs.set( it.key(), it.value().toExpression(PHI) );
+    }
+    
+    return funcs;
+}
+
+/** Return all of the dihedral parameters converted to a set of FourAtomFunctions */
+FourAtomFunctions AmberParams::dihedralFunctions() const
+{
+    return dihedralFunctions( Symbol("PHI") );
+}
+
 void AmberParams::add(const ImproperID &improper, double k,
                       double periodicity, double phase)
 {
@@ -713,6 +940,27 @@ AmberDihedral AmberParams::getParameter(const ImproperID &improper) const
     return amber_impropers.value( this->convert(improper) );
 }
 
+/** Return all of the improper parameters converted to a set of FourAtomFunctions */
+FourAtomFunctions AmberParams::improperFunctions(const Symbol &PHI) const
+{
+    FourAtomFunctions funcs(molinfo);
+    
+    for (auto it = amber_impropers.constBegin();
+         it != amber_impropers.constEnd();
+         ++it)
+    {
+        funcs.set( it.key(), it.value().toExpression(PHI) );
+    }
+    
+    return funcs;
+}
+
+/** Return all of the improper parameters converted to a set of FourAtomFunctions */
+FourAtomFunctions AmberParams::improperFunctions() const
+{
+    return improperFunctions( Symbol("PHI") );
+}
+
 void AmberParams::addNB14(const BondID &pair, double cscl, double ljscl)
 {
     amber_nb14s.insert( this->convert(pair), AmberNB14(cscl,ljscl) );
@@ -736,6 +984,42 @@ AmberParams& AmberParams::operator+=(const AmberParams &other)
         throw SireError::incompatible_error( QObject::tr(
                 "Cannot combine Amber parameters, as the two sets are incompatible!"),
                     CODELOC );
+    }
+
+    if (not other.amber_charges.isEmpty())
+    {
+        //we overwrite these charges with 'other'
+        amber_charges = other.amber_charges;
+    }
+    
+    if (not other.exc_atoms.isEmpty())
+    {
+        //we overwrite our excluded atoms with 'other'
+        exc_atoms = other.exc_atoms;
+    }
+
+    if (not other.amber_ljs.isEmpty())
+    {
+        //we overwrite these LJs with 'other'
+        amber_ljs = other.amber_ljs;
+    }
+
+    if (not other.amber_masses.isEmpty())
+    {
+        //we overwrite these masses with 'other'
+        amber_masses = other.amber_masses;
+    }
+
+    if (not other.amber_elements.isEmpty())
+    {
+        //we overwrite these elements with 'other'
+        amber_elements = other.amber_elements;
+    }
+
+    if (not other.amber_types.isEmpty())
+    {
+        //we overwrite these types with 'other'
+        amber_types = other.amber_types;
     }
 
     if (amber_bonds.isEmpty())

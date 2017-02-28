@@ -15,11 +15,21 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireMM/cljnbpairs.h"
+
+#include "SireMM/fouratomfunctions.h"
+
+#include "SireMM/threeatomfunctions.h"
+
+#include "SireMM/twoatomfunctions.h"
+
 #include "SireMol/angleid.h"
 
 #include "SireMol/atomidx.h"
 
 #include "SireMol/bondid.h"
+
+#include "SireMol/connectivity.h"
 
 #include "SireMol/dihedralid.h"
 
@@ -97,6 +107,17 @@ void register_AmberNB14_class(){
                 , __getitem___function_value
                 , ( bp::arg("i") )
                 , "" );
+        
+        }
+        { //::SireMM::AmberNB14::toScaleFactor
+        
+            typedef ::SireMM::CLJScaleFactor ( ::SireMM::AmberNB14::*toScaleFactor_function_type)(  ) const;
+            toScaleFactor_function_type toScaleFactor_function_value( &::SireMM::AmberNB14::toScaleFactor );
+            
+            AmberNB14_exposer.def( 
+                "toScaleFactor"
+                , toScaleFactor_function_value
+                , "Return the value converted to a CLJScaleFactor" );
         
         }
         { //::SireMM::AmberNB14::toString

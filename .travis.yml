@@ -2,9 +2,6 @@ sudo: false
 
 language: cpp
 
-compiler:
- - gcc
-
 # Travis CI is powered with Ubuntu 12.04, whose toolchain is outdated.
 addons:
   apt:
@@ -30,9 +27,8 @@ before_install:
 script:
   - cmake --version
   - $CXX --version
-  - if [ "$CC" = "gcc" ]; then alias gcc=gcc-5; fi
-  - if [ "$CC" = "gcc" ]; then alias g++=g++-5; fi
-  - if [ "$CC" = "gcc" ]; then gcc --version; fi
+  - which $CXX
+  - which g++
   - bash compile_sire.sh
   - $HOME/sire.app/bin/sire_test
 

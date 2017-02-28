@@ -15,11 +15,21 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireMM/cljnbpairs.h"
+
+#include "SireMM/fouratomfunctions.h"
+
+#include "SireMM/threeatomfunctions.h"
+
+#include "SireMM/twoatomfunctions.h"
+
 #include "SireMol/angleid.h"
 
 #include "SireMol/atomidx.h"
 
 #include "SireMol/bondid.h"
+
+#include "SireMol/connectivity.h"
 
 #include "SireMol/dihedralid.h"
 

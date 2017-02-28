@@ -248,7 +248,7 @@ private:
     SireMol::MolStructureEditor getMolStructure(int start_idx, int natoms,
                                                 const SireBase::PropertyName &cutting) const;
 
-    SireMol::MolEditor getMolecule(int start_idx, int natoms,
+    SireMol::MolEditor getMolecule(int molidx, int start_idx, int natoms,
                                    const PropertyMap &map) const;
 
     QVector< QPair<int,int> > moleculeIndicies() const;

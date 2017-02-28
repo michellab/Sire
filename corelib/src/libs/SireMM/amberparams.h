@@ -35,6 +35,7 @@
 #include "SireID/index.h"
 
 #include "SireMol/molecule.h"
+#include "SireMol/moleculeinfo.h"
 #include "SireMol/partialmolecule.h"
 #include "SireMol/bondid.h"
 #include "SireMol/angleid.h"
@@ -42,6 +43,13 @@
 #include "SireMol/atomidx.h"
 #include "SireMol/mover.hpp"
 #include "SireMol/molviewproperty.h"
+#include "SireMol/atomcharges.h"
+#include "SireMol/atommasses.h"
+#include "SireMol/atomelements.h"
+#include "SireMol/moleculeinfo.h"
+
+#include "SireMM/cljnbpairs.h"
+#include "SireMM/atomljs.h"
 
 #include "SireCAS/symbol.h"
 
@@ -55,6 +63,11 @@ class AmberAngle;
 class AmberDihPart;
 class AmberDihedral;
 class AmberNB14;
+class TwoAtomFunctions;
+class ThreeAtomFunctions;
+class FourAtomFunctions;
+class CLJNBPairs;
+class CLJScaleFactor;
 }
 
 QDataStream& operator<<(QDataStream&, const SireMM::AmberParams&);
@@ -83,7 +96,7 @@ namespace SireMol
     class ImproperID;
     class Molecule;
     class MoleculeData;
-    class MoleculeInfoData;
+    class Connectivity;
 }
 
 namespace SireCAS
@@ -269,6 +282,8 @@ public:
     bool operator!=(const AmberNB14 &other) const;
     
     QString toString() const;
+    
+    SireMM::CLJScaleFactor toScaleFactor() const;
 
 private:
     double _cscl, _ljscl;
@@ -290,6 +305,7 @@ friend QDataStream& ::operator>>(QDataStream&, SireMM::AmberParams&);
 public:
     AmberParams();
     AmberParams(const SireMol::MoleculeView &molecule);
+    AmberParams(const SireMol::MoleculeInfo &molinfo);
     AmberParams(const SireMol::MoleculeInfoData &molinfo);
     
     AmberParams(const AmberParams &other);
@@ -307,41 +323,68 @@ public:
     
     AmberParams operator+(const AmberParams &other) const;
 
-    const SireMol::MoleculeInfoData& info() const;
+    SireMol::MoleculeInfo info() const;
 
     bool isCompatibleWith(const SireMol::MoleculeInfoData &molinfo) const;
 
     QString toString() const;
+
+    void add(const SireMol::AtomID &atom,
+             SireUnits::Dimension::Charge charge,
+             SireUnits::Dimension::MolarMass mass,
+             const SireMol::Element &element,
+             const SireMM::LJParameter &ljparam,
+             const QString &amber_type);
+
+    SireMol::AtomCharges charges() const;
+    SireMol::AtomMasses masses() const;
+    SireMol::AtomElements elements() const;
+    SireMM::AtomLJs ljs() const;
+    SireMol::AtomStringProperty amberTypes() const;
+
+    void setExcludedAtoms(const CLJNBPairs &excluded_atoms);
+    CLJNBPairs excludedAtoms() const;
+
+    SireMol::Connectivity connectivity() const;
 
     void add(const BondID &bond, double k, double r0);
     void remove(const BondID &bond);
     
     AmberBond getParameter(const BondID &bond) const;
     QHash<BondID,AmberBond> bonds() const;
+    TwoAtomFunctions bondFunctions() const;
+    TwoAtomFunctions bondFunctions(const SireCAS::Symbol &R) const;
 
     void add(const AngleID &angle, double k, double theta0);
     void remove(const AngleID &angle);
 
     AmberAngle getParameter(const AngleID &angle) const;
     QHash<AngleID,AmberAngle> angles() const;
+    ThreeAtomFunctions angleFunctions() const;
+    ThreeAtomFunctions angleFunctions(const SireCAS::Symbol &THETA) const;
 
     void add(const DihedralID &dihedral, double k, double periodicity, double phase);
     void remove(const DihedralID &dihedral);
 
     AmberDihedral getParameter(const DihedralID &dihedral) const;
     QHash<DihedralID,AmberDihedral> dihedrals() const;
+    FourAtomFunctions dihedralFunctions() const;
+    FourAtomFunctions dihedralFunctions(const SireCAS::Symbol &PHI) const;
 
     void add(const ImproperID &improper, double v, double periodicity, double phase);
     void remove(const ImproperID &improper);
 
     AmberDihedral getParameter(const ImproperID &improper) const;
     QHash<ImproperID,AmberDihedral> impropers() const;
+    FourAtomFunctions improperFunctions() const;
+    FourAtomFunctions improperFunctions(const SireCAS::Symbol &PHI) const;
 
     void addNB14(const BondID &pair, double cscl, double ljscl);
     void removeNB14(const BondID &pair);
 
     AmberNB14 getNB14(const BondID &pair) const;
     QHash<BondID,AmberNB14> nb14s() const;
+    CLJNBPairs cljScaleFactors() const;
   
  private:
     BondID convert(const BondID &bond) const;
@@ -350,21 +393,40 @@ public:
     ImproperID convert(const ImproperID &improper) const;
  
     /** The molecule that this flexibility operates on */
-    SireBase::SharedDataPointer<SireMol::MoleculeInfoData> molinfo;
+    SireMol::MoleculeInfo molinfo;
 
-    /**A Hash of force constants and equilibrium bond lengths for bonds **/
+    /** All of the atom charges */
+    SireMol::AtomCharges amber_charges;
+    
+    /** All of the atom LJs */
+    SireMM::AtomLJs amber_ljs;
+    
+    /** All of the atom masses */
+    SireMol::AtomMasses amber_masses;
+    
+    /** All of the atom elements */
+    SireMol::AtomElements amber_elements;
+    
+    /** All of the amber atom types */
+    SireMol::AtomStringProperty amber_types;
+
+    /** The excluded atoms in the molecule (atom pairs between
+        which a nonbonded calculation is not evaluated) */
+    SireMM::CLJNBPairs exc_atoms;
+
+    /** A hash of force constants and equilibrium bond lengths for bonds **/
     QHash<BondID,AmberBond> amber_bonds;
 
-    /**A Hash of force constants and equilibrium bond angles for angles **/
+    /** A hash of force constants and equilibrium bond angles for angles **/
     QHash<AngleID,AmberAngle> amber_angles;
 
-    /**A Hash of torsional parameters for dihedrals **/
+    /** A hash of torsional parameters for dihedrals **/
     QHash<DihedralID,AmberDihedral> amber_dihedrals;
 
-    /**A Hash of torsional parameters for impropers **/
+    /** A hash of torsional parameters for impropers **/
     QHash<ImproperID,AmberDihedral> amber_impropers;
 
-    /**A Hash of coulombic and lennard jones scale factors for 1,4 pairs**/
+    /** A hash of coulombic and lennard jones scale factors for 1,4 pairs**/
     QHash<BondID,AmberNB14> amber_nb14s;
 };
 

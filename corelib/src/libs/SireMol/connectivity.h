@@ -48,6 +48,7 @@ namespace SireMol
 class ConnectivityBase;
 class Connectivity;
 class ConnectivityEditor;
+class MoleculeInfo;
 }
 
 QDataStream& operator<<(QDataStream&, const SireMol::ConnectivityBase&);
@@ -233,6 +234,7 @@ public:
 
 protected:
     ConnectivityBase();
+    ConnectivityBase(const MoleculeInfo &molinfo);
     ConnectivityBase(const MoleculeData &moldata);
 
     ConnectivityBase(const ConnectivityBase &other);
@@ -301,6 +303,7 @@ friend QDataStream& ::operator>>(QDataStream&, SireMol::Connectivity&);
 public:
     Connectivity();
 
+    Connectivity(const MoleculeInfo &molinfo);
     Connectivity(const MoleculeData &moldata);
 
     Connectivity(const MoleculeView &molview,
