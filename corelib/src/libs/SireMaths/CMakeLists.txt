@@ -196,6 +196,7 @@ set ( SIREMATHS_HEADERS
       rangenerator.h
       rational.h
       rotate.h
+      sincos.h
       sphere.h
       torsion.h
       triangle.h
@@ -243,6 +244,7 @@ set ( SIREMATHS_SOURCES
       quaternion.cpp
       rangenerator.cpp
       rational.cpp
+      sincos.cpp
       sphere.cpp
       torsion.cpp
       triangle.cpp

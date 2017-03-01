@@ -8,7 +8,7 @@
 
 set (S_VERSION_MAJOR "2016")
 set (S_VERSION_MINOR "3")
-set (S_VERSION_PATCH "0")             
+set (S_VERSION_PATCH "1")             
 
 set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 
@@ -402,7 +402,7 @@ CHECK_CXX_COMPILER_FLAG( "-stdlib=libc++" SIRE_HAS_CPP_LIB )
 include(CheckCXXSourceRuns)
 
 if (SIRE_HAS_CPP_LIB)
-  message(STATUS "Checking that we can link to libc++")
+  message(STATUS "Checking that we can LINK to libc++")
   set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
   set(CMAKE_REQUIRED_FLAGS "-stdlib=libc++")
   check_cxx_source_runs("
@@ -410,7 +410,7 @@ if (SIRE_HAS_CPP_LIB)
            #include <iostream>
            int main()
            {
-              std::cout << std::atof('3.0') << std::endl;
+              std::cout << std::abs(-5) << std::endl;
               return 0;
            }" CAN_USE_LIBCPP)
   set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
@@ -443,6 +443,7 @@ else()
   if (SIRE_HAS_CPP_LIB)
     message(STATUS "Using libc++ in place of libstdc++")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+    set(SIRE_CXX_NG_FLAGS "-stdlib=libc++")
   endif()
 endif()
 
@@ -450,7 +451,7 @@ set(NEED_UNDEF_STRICT_ANSI FALSE)
 
 if (SIRE_HAS_CPP_14)
   message(STATUS "Compiler supports C++ 2014")
-  set(SIRE_CXX_NG_FLAGS "-std=c++14 -DSIRE_HAS_CPP_14 -DSIRE_HAS_CPP_1Y -DSIRE_HAS_CPP_11")
+  set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} -std=c++14 -DSIRE_HAS_CPP_14 -DSIRE_HAS_CPP_1Y -DSIRE_HAS_CPP_11")
 
   if (NEED_UNDEF_STRICT_ANSI)
     message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")
@@ -458,7 +459,7 @@ if (SIRE_HAS_CPP_14)
   endif()
 elseif (SIRE_HAS_CPP_1Y)
   message(STATUS "Compiler supports C++ 201Y (pre-2014)")
-  set(SIRE_CXX_NG_FLAGS "-std=c++1y -DSIRE_HAS_CPP_1Y -DSIRE_HAS_CPP_11")
+  set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} -std=c++1y -DSIRE_HAS_CPP_1Y -DSIRE_HAS_CPP_11")
 
   if (NEED_UNDEF_STRICT_ANSI)
     message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")
@@ -466,7 +467,7 @@ elseif (SIRE_HAS_CPP_1Y)
   endif()
 elseif (SIRE_HAS_CPP_11)
   message(STATUS "Compiler supports C++ 2011")
-  set(SIRE_CXX_NG_FLAGS "-std=c++11 -DSIRE_HAS_CPP_11")
+  set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} -std=c++11 -DSIRE_HAS_CPP_11")
 
   if (NEED_UNDEF_STRICT_ANSI)
     message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")

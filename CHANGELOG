@@ -3,6 +3,18 @@ SIRE changelog
 
 devel branch:
 
+    [2016.3.1] January 9 2017 - Minor patch release that fixes bugs:
+        (1) Correctly sets MACOSX_DEPLOYMENT_TARGET to 10.8 so executable works 
+            on OS X 10.8 (Mountain Lion) and above
+        (2) Fixed a parsing bug in Parameter that prevented integer or float
+            parameters from being passed to ligandswap, waterswap etc.
+        (3) Fixed a small bug in MultiDouble that meant it lost precision when
+            swapping individual values
+        (4) Fixed a parsing bug in Parameter that meant that windows path names
+            were not interpreted correctly
+        (5) Fixed the build scripts so that they placed bundled libraries into
+            bundled/lib rather than bundled/lib64 (affected SUSE-based distributions)
+
     [2016.3.0] December 22 2016 - Public release containing full LigandSwap. Uses
      new optimised forcefields for energy calculations, built on top of Intel Threaded
      Building Blocks for parallelisation. New code is significantly faster with better

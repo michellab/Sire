@@ -36,7 +36,7 @@ else()
       )
     endif()
 
-    set( GSL_OPTIONS "--enable-static=no;--enable-shared=yes;--prefix=${BUNDLE_STAGEDIR};CC=${CMAKE_C_COMPILER}" )
+    set( GSL_OPTIONS "--enable-static=no;--enable-shared=yes;--prefix=${BUNDLE_STAGEDIR};--libdir=${BUNDLE_STAGEDIR}/lib;CC=${CMAKE_C_COMPILER}" )
     message( STATUS "${GSL_OPTIONS}" )
 
     message( STATUS "Patience... Configuring GSL..." )

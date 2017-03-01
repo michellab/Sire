@@ -29,6 +29,7 @@
 #include "quaternion.h"
 #include "vector.h"
 #include "matrix.h"
+#include "sincos.h"
 
 #include <QString>
 #include <QRegExp>
@@ -112,8 +113,8 @@ Quaternion::Quaternion(SireUnits::Dimension::Angle angle, const Vector &axis)
     // vector u
 
     double ang = double(angle) * 0.5;
-    double costheta = cos(ang);
-    double sintheta = sin(ang);
+    double sintheta, costheta;
+    SireMaths::sincos(ang, &sintheta, &costheta);
 
     sc[3] = costheta;
 
@@ -438,8 +439,8 @@ Quaternion Quaternion::pow(double n) const
     // q^n = cos(n*theta) + u*sin(n*theta)
 
     double ntheta = n*sc[3];
-    double costheta = cos(ntheta);
-    double sintheta = sin(ntheta);
+    double sintheta, costheta;
+    SireMaths::sincos(ntheta, &sintheta, &costheta);
     return Quaternion(sc[0]*sintheta,sc[1]*sintheta,sc[2]*sintheta,costheta);
 }
 
