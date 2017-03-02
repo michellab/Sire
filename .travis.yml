@@ -22,6 +22,7 @@ addons:
       - ubuntu-toolchain-r-test # for gcc 5.2 and gcc 6
     packages:
       - g++-6
+      - g++-5
 
 matrix:
   exclude:
@@ -38,8 +39,13 @@ matrix:
       compiler: gcc
 
     - os: linux
-      env: LLVM_VERSION=3.9.0
-      compiler: clang
+      env: CXX_COMPILER=g++-5 C_COMPILER=gcc-5
+      compiler: gcc
+
+    # dependencies of Sire fail to compile on linux with clang
+    #- os: linux
+    #  env: LLVM_VERSION=3.9.0
+    #  compiler: clang
 
 install:
   ############################################################################

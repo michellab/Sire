@@ -50,20 +50,20 @@ else()
     else()
       execute_process( COMMAND ${CPUID_BUILD_DIR}/configure ${CPUID_OPTIONS}
                        WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-#                       OUTPUT_QUIET ERROR_QUIET 
+                       OUTPUT_QUIET ERROR_QUIET 
                      )
     endif()
 
     message( STATUS "Patience... Compiling libcpuid..." )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -k -j ${NCORES}
                      WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-#                     OUTPUT_QUIET ERROR_QUIET 
+                     OUTPUT_QUIET ERROR_QUIET 
                    )
 
     message( STATUS "Patience... Installing libcpuid..." )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} install
                      WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-#                     OUTPUT_QUIET ERROR_QUIET 
+                     OUTPUT_QUIET ERROR_QUIET 
                    )
 
     if (APPLE)
