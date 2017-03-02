@@ -1,36 +1,50 @@
+language: c++
 sudo: false
 
-language: cpp
+env:
+  global:
+    # variables used to control build of Sire - limit to 4 core build,
+    # don't have Sire phone home (as would create false stats) and 
+    # install into the home directory, sire.app
+    - NCORES=4
+    - SIRE_DONT_PHONEHOME=1
+    - INSTALL_SIRE_DIR=$HOME/sire.app
 
-# Travis CI is powered with Ubuntu 12.04, whose toolchain is outdated.
+  # Workaround for https://github.com/travis-ci/travis-ci/issues/4681
+  matrix:
+    - TRAVIS_EMPTY_JOB_WORKAROUND=true
+
 addons:
   apt:
-    # Travis white list of ppa.
-    # https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
-    sources:
-      - ubuntu-toolchain-r-test     # For gcc 5.2
-      - george-edison55-precise-backports # cmake 3.2.3 / doxygen 1.8.3
-    # Travis whitelist of packages.
-    # https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
     packages:
+      - g++-6
       - cmake
       - cmake-data
-      - g++-5
+    sources: &sources
+      - ubuntu-toolchain-r-test
 
-before_install:
-  - export NCORES=4
-  - export SIRE_DONT_PHONEHOME=1
-  - export INSTALL_SIRE_DIR=$HOME/sire.app
-  - if [ "$CC" = "gcc"   ]; then export CC=gcc-5 CXX=g++-5; fi
-  - if [ "$CC" = "clang" ]; then export CC=clang-3.6 CXX=clang++-3.6; fi
+matrix:
+  exclude:
+    - env: TRAVIS_EMPTY_JOB_WORKAROUND=true
+
+  include:
+    - os: osx
+      osx_image: xcode8
+
+   - os: linux
+      env: COMPILER=g++-6 CC=gcc-6 CXX=g++-6
+      compiler: gcc
+
+  - os: linux
+      env: LLVM_VERSION=default CC=clang CXX=clang++
+      compiler: clang
 
 script:
   - cmake --version
   - $CXX --version
   - which $CXX
-  - which g++
   - bash compile_sire.sh
   - $HOME/sire.app/bin/sire_test
 
 after_success:
-  - echo "Time to go home and have a cup of tea! :)"
+  - echo "Congratulations - everything worked :-)"
