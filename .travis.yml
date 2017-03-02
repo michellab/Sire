@@ -31,11 +31,11 @@ matrix:
     - os: osx
       osx_image: xcode8
 
-   - os: linux
+    - os: linux
       env: COMPILER=g++-6 CC=gcc-6 CXX=g++-6
       compiler: gcc
 
-  - os: linux
+    - os: linux
       env: LLVM_VERSION=default CC=clang CXX=clang++
       compiler: clang
 
