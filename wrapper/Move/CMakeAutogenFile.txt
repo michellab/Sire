@@ -32,9 +32,6 @@ set ( PYPP_SOURCES
        NullSupraSubMove.pypp.cpp
        NullVelocityGenerator.pypp.cpp
        NullVolumeChanger.pypp.cpp
-       OpenMMFrEnergyDT.pypp.cpp
-       OpenMMFrEnergyST.pypp.cpp
-       OpenMMMDIntegrator.pypp.cpp
        PrefSampler.pypp.cpp
        RBWorkspaceJM.pypp.cpp
        RepExMove.pypp.cpp
