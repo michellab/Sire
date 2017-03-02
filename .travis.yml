@@ -1,6 +1,8 @@
 language: c++
 sudo: false
 
+dummy: true
+
 env:
   global:
     # variables used to control build of Sire - limit to 4 core build,
@@ -22,8 +24,13 @@ addons:
       - g++-6
 
 matrix:
+  exclude:
+    # exclude the default dummy build
+    - dummy: true
+
   include:
     - os: osx
+      env: CXX_COMPILER=clang++ C_COMPILER=clang
       osx_image: xcode8
 
     - os: linux
