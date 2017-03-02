@@ -30,16 +30,24 @@ matrix:
     - dummy: true
 
   include:
+    # OS X, clang 3.7.2 (Apple LLVM 8.0.0)
     - os: osx
       env: CXX_COMPILER=clang++ C_COMPILER=clang
       osx_image: xcode8
 
+    # Linux, GCC 6.2.0
     - os: linux
       env: CXX_COMPILER=g++-6 C_COMPILER=gcc-6
       compiler: gcc
 
+    # Linux, GCC 5.4.1
     - os: linux
       env: CXX_COMPILER=g++-5 C_COMPILER=gcc-5
+      compiler: gcc
+
+    # Linux, GCC 4.6.3
+    - os: linux
+      env: CXX_COMPILER=g++ C_COMPILER=gcc
       compiler: gcc
 
     # dependencies of Sire fail to compile on linux with clang
