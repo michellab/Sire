@@ -23,6 +23,7 @@ addons:
     packages:
       - g++-6
       - g++-5
+      - g++-4.8
 
 matrix:
   exclude:
@@ -30,10 +31,11 @@ matrix:
     - dummy: true
 
   include:
-    # OS X, clang 3.7.2 (Apple LLVM 8.0.0)
-    - os: osx
-      env: CXX_COMPILER=clang++ C_COMPILER=clang
-      osx_image: xcode8
+    # OS X, clang 3.7.2 (Apple LLVM 8.0.0) - disabling for now as takes
+    # more than our allocation to compile and install
+    #- os: osx
+    #  env: CXX_COMPILER=clang++ C_COMPILER=clang
+    #  osx_image: xcode8
 
     # Linux, GCC 6.2.0
     - os: linux
@@ -45,9 +47,9 @@ matrix:
       env: CXX_COMPILER=g++-5 C_COMPILER=gcc-5
       compiler: gcc
 
-    # Linux, GCC 4.6.3
+    # Linux, GCC 4.8 (any earlier doens't have C++ 11)
     - os: linux
-      env: CXX_COMPILER=g++ C_COMPILER=gcc
+      env: CXX_COMPILER=g++-4.8 C_COMPILER=gcc-4.8
       compiler: gcc
 
     # dependencies of Sire fail to compile on linux with clang
