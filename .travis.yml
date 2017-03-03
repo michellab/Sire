@@ -47,9 +47,10 @@ matrix:
       env: CXX_COMPILER=g++-5 C_COMPILER=gcc-5
       compiler: gcc
 
-    # Linux, GCC 4.9 (any earlier doens't have C++ 11, and 4.8 is broken - ice fault)
+    # Linux, GCC 4.9 (any earlier doesn't have C++ 11, and 4.8 is broken - ice fault)
+    # (possibly because ran out of memory when compiling wrappers - now use 2 cores for this)
     - os: linux
-      env: CXX_COMPILER=g++-4.9 C_COMPILER=gcc-4.9
+      env: CXX_COMPILER=g++-4.9 C_COMPILER=gcc-4.9 NPYCORES=2
       compiler: gcc
 
     # dependencies of Sire fail to compile on linux with clang
