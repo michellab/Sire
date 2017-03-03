@@ -155,7 +155,17 @@ QDataStream& operator>>(QDataStream &ds, IDQuad &idquad)
 
 IDQuad::IDQuad(quint32 atm0, quint32 atm1, quint32 atm2, quint32 atm3) 
        : atom0(atm0), atom1(atm1), atom2(atm2), atom3(atm3)
-{}
+{
+    if (atm0 > atm3)
+    {
+        qSwap(atom0,atom3);
+        qSwap(atom1,atom2);
+    }
+    else if (atm0 == atm3 and atm1 > atm2)
+    {
+        qSwap(atom1,atom2);
+    }
+}
 
 IDQuad::IDQuad(const IDQuad &other)
        : atom0(other.atom0), atom1(other.atom1), 

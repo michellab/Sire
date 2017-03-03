@@ -153,7 +153,12 @@ QDataStream& operator>>(QDataStream &ds, IDTriple &idtriple)
 
 IDTriple::IDTriple(quint32 atm0, quint32 atm1, quint32 atm2) 
        : atom0(atm0), atom1(atm1), atom2(atm2)
-{}
+{
+    if (atm0 > atm2)
+    {
+        qSwap(atom0,atom2);
+    }
+}
 
 IDTriple::IDTriple(const IDTriple &other)
        : atom0(other.atom0), atom1(other.atom1), atom2(other.atom2)

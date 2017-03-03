@@ -23,7 +23,7 @@ addons:
     packages:
       - g++-6
       - g++-5
-      - g++-4.8
+      - g++-4.9
 
 matrix:
   exclude:
@@ -47,9 +47,9 @@ matrix:
       env: CXX_COMPILER=g++-5 C_COMPILER=gcc-5
       compiler: gcc
 
-    # Linux, GCC 4.8 (any earlier doens't have C++ 11)
+    # Linux, GCC 4.9 (any earlier doens't have C++ 11, and 4.8 is broken - ice fault)
     - os: linux
-      env: CXX_COMPILER=g++-4.8 C_COMPILER=gcc-4.8
+      env: CXX_COMPILER=g++-4.9 C_COMPILER=gcc-4.9
       compiler: gcc
 
     # dependencies of Sire fail to compile on linux with clang
@@ -128,7 +128,7 @@ script:
   - $CXX --version
   - which $CXX
   - bash compile_sire.sh
-  - $HOME/sire.app/bin/sire_test
+  - $HOME/sire.app/bin/sire_test -OpenMM
 
 after_success:
   - echo "Congratulations - everything worked :-)"
