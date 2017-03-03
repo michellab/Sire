@@ -45,6 +45,9 @@
 #include "SireMol/moleditor.h"
 #include "SireMol/viewsofmol.h"
 
+#include "SireBase/refcountdata.h"
+#include "SireBase/shareddatapointer.hpp"
+
 #include "SireVol/space.h"
 
 #include "SireStream/datastream.h"
@@ -72,7 +75,7 @@ class NullIdentityConstraintHelper;
     classes - these allow the IdentityConstraint to use different
     strategies to solve the constraint depending on the ratio
     of the number of points to the number of molecules */
-class IdentityConstraintPvt : public QSharedData
+class IdentityConstraintPvt : public RefCountData
 {
 public:
     IdentityConstraintPvt();
@@ -434,14 +437,14 @@ void IdentityConstraintPvt::validateGroup(const MoleculeGroup &new_group) const
 }
 
 /** Constructor */
-IdentityConstraintPvt::IdentityConstraintPvt() : QSharedData()
+IdentityConstraintPvt::IdentityConstraintPvt() : RefCountData()
 {}
 
 /** Constructor */
 IdentityConstraintPvt::IdentityConstraintPvt(const MoleculeGroup &group,
                                              const QVector<PointPtr> &points,
                                              const PropertyMap &property_map)
-                      : QSharedData(),
+                      : RefCountData(),
                         molgroup(group), identity_points(points), map(property_map)
 {
     this->validateGroup(group);
@@ -453,7 +456,7 @@ IdentityConstraintPvt::IdentityConstraintPvt(const MoleculeGroup &group,
 IdentityConstraintPvt::IdentityConstraintPvt(const MoleculeGroup &group,
                                              const PointRef &point,
                                              const PropertyMap &property_map)
-                      : QSharedData(),
+                      : RefCountData(),
                         molgroup(group), map(property_map)
 {
     this->validateGroup(group);
@@ -464,7 +467,7 @@ IdentityConstraintPvt::IdentityConstraintPvt(const MoleculeGroup &group,
 
 /** Copy constructor */
 IdentityConstraintPvt::IdentityConstraintPvt(const IdentityConstraintPvt &other)
-                      : QSharedData(),
+                      : RefCountData(),
                         molgroup(other.molgroup), 
                         identity_points(other.identity_points), 
                         spce(other.spce), map(other.map)

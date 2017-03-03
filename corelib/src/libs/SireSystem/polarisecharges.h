@@ -35,6 +35,8 @@
 
 #include "SireFF/g1ff.h"
 
+#include "SireBase/shareddatapointer.hpp"
+
 #include "SireCAS/symbol.h"
 
 SIRE_BEGIN_HEADER
@@ -142,7 +144,7 @@ private:
     /** The information about each molecule that is needed
         to calculate the polarisability */
     QHash<SireMol::MolNum,
-            QSharedDataPointer<detail::PolariseChargesData> > moldata;
+            SireBase::SharedDataPointer<detail::PolariseChargesData> > moldata;
 
     /** The collection of molecules that have been changed by this constraint */
     Molecules changed_mols;

@@ -231,6 +231,19 @@ void register_AtomForces_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::isCompatibleWith
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > > exported_class_t;
+            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfo const & ) const;
+            isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::isCompatibleWith );
+            
+            AtomForces_exposer.def( 
+                "isCompatibleWith"
+                , isCompatibleWith_function_value
+                , ( bp::arg("molinfo") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::isEmpty
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > > exported_class_t;

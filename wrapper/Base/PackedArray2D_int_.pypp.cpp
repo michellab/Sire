@@ -136,6 +136,18 @@ void register_PackedArray2D_int__class(){
                 , "" );
         
         }
+        { //::SireBase::PackedArray2D< int >::detach
+        
+            typedef SireBase::PackedArray2D< int > exported_class_t;
+            typedef void ( ::SireBase::PackedArray2D< int >::*detach_function_type)(  ) ;
+            detach_function_type detach_function_value( &::SireBase::PackedArray2D< int >::detach );
+            
+            PackedArray2D_int__exposer.def( 
+                "detach"
+                , detach_function_value
+                , "" );
+        
+        }
         { //::SireBase::PackedArray2D< int >::fromVariant
         
             typedef SireBase::PackedArray2D< int > exported_class_t;

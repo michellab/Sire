@@ -18,6 +18,8 @@ namespace bp = boost::python;
 
 #include "properties.h"
 
+#include "refcountdata.h"
+
 #include <QDebug>
 
 #include <QHash>
@@ -36,9 +38,8 @@ void register_Properties_class(){
 
     { //::SireBase::Properties
         typedef bp::class_< SireBase::Properties, bp::bases< SireBase::Property > > Properties_exposer_t;
-        Properties_exposer_t Properties_exposer = Properties_exposer_t( "Properties", "This class holds a collection of properties, indexed by name.\nEach property comes complete with a set of metadata.\nThe metadata is actually another Properties object,\nand indeed Properties can itself be a Property,\nso allowing Properties to be nested indefinitely.\n\nAuthor: Christopher Woods\n", bp::no_init );
+        Properties_exposer_t Properties_exposer = Properties_exposer_t( "Properties", "This class holds a collection of properties, indexed by name.\nEach property comes complete with a set of metadata.\nThe metadata is actually another Properties object,\nand indeed Properties can itself be a Property,\nso allowing Properties to be nested indefinitely.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor - construct an empty set of properties") );
         bp::scope Properties_scope( Properties_exposer );
-        Properties_exposer.def( bp::init< >("Null constructor - construct an empty set of properties") );
         Properties_exposer.def( bp::init< SireBase::Properties const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::Properties::allMetadata
         

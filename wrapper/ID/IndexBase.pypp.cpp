@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "index.h"
 
+#include <QDataStream>
+
 #include "index.h"
 
 #include "Qt/qdatastream.hpp"

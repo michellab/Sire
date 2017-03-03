@@ -42,6 +42,8 @@
 
 #include "ThirdParty/MersenneTwister.h"       // CONDITIONAL_INCLUDE
 
+#include "SireBase/refcountdata.h"
+
 #include "SireError/errors.h"
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -272,6 +274,10 @@ QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, RanGenerator &rangen)
 
 static RanGeneratorPvt* createSharedNull()
 {
+    auto mutex = SireBase::detail::get_shared_null_mutex();
+    
+    tbb::spin_mutex::scoped_lock lock(*mutex);
+
     RanGeneratorPvt *gen = new RanGeneratorPvt();
     
     int seed = gen->mersenne_generator.randInt();

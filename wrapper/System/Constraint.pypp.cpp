@@ -8,6 +8,8 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/numberproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireMaths/maths.h"

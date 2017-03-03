@@ -139,19 +139,9 @@ void QMChargeCalculator::setScaleFactor(double scl)
     sclfac = scl;
 }
 
-static SharedPolyPointer<NullQMChargeCalculator> shared_null;
-
 const NullQMChargeCalculator& QMChargeCalculator::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new NullQMChargeCalculator();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<NullQMChargeCalculator>());
 }
 
 //////////////

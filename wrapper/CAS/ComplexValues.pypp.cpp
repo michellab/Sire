@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "symbol.h"
 
+#include <QDataStream>
+
 #include "complexvalues.h"
 
 SireCAS::ComplexValues __copy__(const SireCAS::ComplexValues &other){ return SireCAS::ComplexValues(other); }

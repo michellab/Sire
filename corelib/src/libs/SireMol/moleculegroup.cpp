@@ -63,6 +63,7 @@ static bool operator==(const boost::tuple<SireMol::MolNum,SireID::Index> &i0,
 
 #include "SireBase/incremint.h"
 #include "SireBase/majorminorversion.h"
+#include "SireBase/refcountdata.h"
 
 #include "SireMol/errors.h"
 #include "SireError/errors.h"
@@ -137,7 +138,7 @@ namespace SireMol
 namespace detail
 {
 
-class MolGroupPvt : public QSharedData
+class MolGroupPvt : public RefCountData
 {
 public:
     MolGroupPvt();
@@ -211,24 +212,9 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
     return ds;
 }
 
-static QSharedDataPointer<MolGroupPvt> shared_null;
-
-static const QSharedDataPointer<MolGroupPvt>& getSharedNull()
-{
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new MolGroupPvt();
-    }
-     
-    return shared_null;
-}
-
 /** Construct an empty, unnamed MolGroupPvt */
 MolGroupPvt::MolGroupPvt() 
-            : QSharedData(),
+            : RefCountData(),
               name("unnamed"),
               number( MGNum::getUniqueNumber() ),
               version(1,0)
@@ -236,7 +222,7 @@ MolGroupPvt::MolGroupPvt()
 
 /** Construct an empty, named MolGroupPvt */
 MolGroupPvt::MolGroupPvt(const QString &nme)
-            : QSharedData(),
+            : RefCountData(),
               name(nme),
               number( MGNum::getUniqueNumber() ),
               version(1,0)
@@ -245,7 +231,7 @@ MolGroupPvt::MolGroupPvt(const QString &nme)
 /** Construct a named group that contains the same molecules as 'other' */
 MolGroupPvt::MolGroupPvt(const QString &nme, 
                          const MolGroupPvt &other)
-            : QSharedData(),
+            : RefCountData(),
               molecules(other.molecules),
               molidx_to_num(other.molidx_to_num),
               molviewidx_to_num(other.molviewidx_to_num),
@@ -256,7 +242,7 @@ MolGroupPvt::MolGroupPvt(const QString &nme,
 
 /** Copy constructor */
 MolGroupPvt::MolGroupPvt(const MolGroupPvt &other)
-            : QSharedData(),
+            : RefCountData(),
               molecules(other.molecules),
               molidx_to_num(other.molidx_to_num),
               molviewidx_to_num(other.molviewidx_to_num),
@@ -355,29 +341,18 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
 /** Default constructor */
 MoleculeGroup::MoleculeGroup() 
               : ConcreteProperty<MoleculeGroup,Property>(),
-                d( getSharedNull() )
+                d( create_shared_null<MolGroupPvt>() )
 {}
-
-
-static SharedPolyPointer<MoleculeGroup> shared_null_molgroup;
 
 const MoleculeGroup& MoleculeGroup::null()
 {
-    if (shared_null_molgroup.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null_molgroup.constData() == 0)
-            shared_null_molgroup = new MoleculeGroup();
-    }
-
-    return *(shared_null_molgroup.constData());
+    return *(create_shared_null<MoleculeGroup>());
 }
 
 /** Construct a group that holds the passed molecules */
 MoleculeGroup::MoleculeGroup(const Molecules &molecules)
               : ConcreteProperty<MoleculeGroup,Property>(),
-                d( getSharedNull() )
+                d( create_shared_null<MolGroupPvt>() )
 {
     this->add(molecules);
 }
@@ -1521,7 +1496,7 @@ void MoleculeGroup::add(const MoleculeGroup &molgroup)
     
     accept();
     
-    QSharedDataPointer<MolGroupPvt> old_state = d;
+    SharedDataPointer<MolGroupPvt> old_state = d;
     
     try
     {

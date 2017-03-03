@@ -33,6 +33,7 @@
 #include "cutgroup.h"
 #include "atom.h"
 
+#include "moleculeinfo.h"
 #include "molviewproperty.h"
 #include "moleditor.h"
 
@@ -123,11 +124,11 @@ bool Molecule::operator!=(const Molecule &other) const
 /** Return a string representation of this molecule */
 QString Molecule::toString() const
 {
-    return QObject::tr( "Molecule( %1 : %2 : %3 : UID == %4 )" )
-                .arg(this->name())
+    return QObject::tr( "Molecule( %1 version %2 : nAtoms() = %3, nResidues() = %4 )" )
                 .arg(this->number())
                 .arg(this->version())
-                .arg(this->data().info().UID().toString());
+                .arg(this->nAtoms())
+                .arg(this->nResidues());
 }
 
 /** Return whether or not this is empty */
@@ -140,6 +141,13 @@ bool Molecule::isEmpty() const
 bool Molecule::selectedAll() const
 {
     return not Molecule::isEmpty();
+}
+
+/** Return the MoleculeInfo object that holds information about the layout
+    of the atoms, residues, chains and segments in the molecule */
+MoleculeInfo Molecule::info() const
+{
+    return MoleculeInfo(d->info());
 }
 
 /** Return which atoms are selected in this view */

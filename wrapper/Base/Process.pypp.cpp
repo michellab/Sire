@@ -7,21 +7,7 @@
 
 namespace bp = boost::python;
 
-#include "SireError/errors.h"
-
 #include "sire_process.h"
-
-#include <QDebug>
-
-#include <QList>
-
-#include <QMutex>
-
-#include <QThread>
-
-#include <QTime>
-
-#include <boost/weak_ptr.hpp>
 
 #include "sire_process.h"
 

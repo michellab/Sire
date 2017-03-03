@@ -36,7 +36,7 @@
 #include <QDebug>
 
 #ifdef Q_OS_WIN
-  #include <Windows.h>
+  #include <Windows.h>  // CONDITIONAL_INCLUDE
 #endif
 
 #ifdef Q_OS_MAC

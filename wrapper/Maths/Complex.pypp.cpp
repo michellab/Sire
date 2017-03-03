@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "rational.h"
 
+#include <QDataStream>
+
 #include <gsl/gsl_complex_math.h>
 
 #include "complex.h"

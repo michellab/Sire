@@ -33,6 +33,7 @@
 #include "cljfunction.h"
 #include "multicljcomponent.h"
 
+#include "SireBase/shareddatapointer.hpp"
 #include "SireBase/chunkedhash.hpp"
 
 #include "SireFF/g1ff.h"
@@ -153,13 +154,14 @@ private:
 
     void _pvt_updateName();
 
-    typedef SireBase::ChunkedHash< MolNum,QSharedDataPointer<detail::IntraFFMolData> > MolData;
+    typedef SireBase::ChunkedHash< MolNum,
+                                   SireBase::SharedDataPointer<detail::IntraFFMolData> > MolData;
 
     /** The CLJGroups for each of the molecules added to this forcefield */
     MolData moldata;
 
     /** Implicitly shared pointer to the (mostly) const data for this forcefield */
-    QSharedDataPointer<detail::IntraFFData> d;
+    SireBase::SharedDataPointer<detail::IntraFFData> d;
 
     /** Whether or not we need to 'accept' this move */
     bool needs_accepting;

@@ -416,32 +416,109 @@ MolNum MolGroupsBase::getMoleculeNumber(MolNum molnum) const
 */
 MolNum MolGroupsBase::getMoleculeNumber(MolIdx molidx) const
 {
+    //map this to a valid index
     int n = molidx.map( molnum_to_mgnum.count() );
+
+    const auto molgroups = this->groups();
     
-    //find the nth molnum in the hash - this is potentially very slow!
-    QHash< MolNum,QList<MGNum> >::const_iterator it = molnum_to_mgnum.begin();
-    
-    for (int i=0; i<n; ++i)
+    if (molgroups.count() == 1 or n < molgroups[0].read().nMolecules())
     {
-        ++it;
+        return molgroups[0].read().at(molidx).data().number();
     }
+    else
+    {
+        //we now run through each molecule of each group, discounting
+        //any that have been seen previously
+        n -= molgroups[0].read().nMolecules();
+        
+        QSet<MGNum> seen_groups;
+        seen_groups.insert(molgroups[0].read().number());
+        
+        for (int i=1; i<molgroups.count(); ++i)
+        {
+            const auto molgroup = molgroups[i].read();
+            
+            for (int j=0; j<molgroup.nMolecules(); ++j)
+            {
+                MolNum molnum = molgroup[MolIdx(j)].data().number();
+                
+                bool seen_before = false;
+                for (auto mgnum : molnum_to_mgnum.value(molnum))
+                {
+                    if (seen_groups.contains(mgnum))
+                    {
+                        seen_before = true;
+                        break;
+                    }
+                }
+                
+                if (not seen_before)
+                {
+                    n -= 1;
+                    
+                    if (n == 0)
+                    {
+                        //we have found the molecule
+                        return molnum;
+                    }
+                }
+            }
+            
+            seen_groups.insert(molgroup.number());
+        }
+    }
+
+    throw SireError::program_bug( QObject::tr(
+            "Could not find the molecule at index %1 despite there being "
+            "%2 molecules in the set of molecule groups???")
+                .arg(molidx.value()).arg(molnum_to_mgnum.count()), CODELOC );
     
-    return it.key();
+    return MolNum();
 }
 
 /** Return the list of molecule numbers in molidx order */
 QList<MolNum> MolGroupsBase::getMoleculeNumbers() const
 {
     QList<MolNum> molnums;
+
+    const auto molgroups = this->groups();
     
-    for (QHash< MolNum,QList<MGNum> >::const_iterator 
-                                        it = molnum_to_mgnum.constBegin();
-         it != molnum_to_mgnum.constEnd();
-         ++it)
+    if (molgroups.isEmpty())
+        return molnums;
+
+    //first add the molecule numbers from the first group
+    molnums = molgroups[0].read().molNums().toList();
+
+    //we now run through each molecule of each group, discounting
+    //any that have been seen previously
+    QSet<MGNum> seen_groups;
+    seen_groups.insert(molgroups[0].read().number());
+    
+    for (int i=1; i<molgroups.count(); ++i)
     {
-        molnums.append(it.key());
+        const auto molgroup = molgroups[i].read();
+        
+        for (int j=0; j<molgroup.nMolecules(); ++j)
+        {
+            MolNum molnum = molgroup[MolIdx(j)].data().number();
+            
+            bool seen_before = false;
+            for (auto mgnum : molnum_to_mgnum.value(molnum))
+            {
+                if (seen_groups.contains(mgnum))
+                {
+                    seen_before = true;
+                    break;
+                }
+            }
+            
+            if (not seen_before)
+                molnums.append(molnum);
+        }
+        
+        seen_groups.insert(molgroup.number());
     }
-    
+
     return molnums;
 }
 
@@ -2071,19 +2148,9 @@ MoleculeGroups::MoleculeGroups()
           : ConcreteProperty<MoleculeGroups,MolGroupsBase>()
 {}
 
-static SharedPolyPointer<MoleculeGroups> shared_null;
-
 const MoleculeGroups& MolGroupsBase::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new MoleculeGroups();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<MoleculeGroups>());
 }
 
 /** Construct a set of groups that contains only the single group

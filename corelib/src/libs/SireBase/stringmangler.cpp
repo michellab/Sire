@@ -161,19 +161,9 @@ QString NoMangling::mangle(const QString &input) const
     return input;
 }
 
-static SharedPolyPointer<NoMangling> shared_null;
-
 const NoMangling& StringMangler::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new NoMangling();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<NoMangling>());
 }
 
 ////////

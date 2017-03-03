@@ -46,6 +46,7 @@
 #endif
 
 using namespace SireCluster;
+using namespace SireBase;
 using namespace SireStream;
 
 ///////////
@@ -87,12 +88,12 @@ QDataStream SIRECLUSTER_EXPORT &operator>>(QDataStream &ds, WorkPacketBase &work
 
 /** Constructor */
 WorkPacketBase::WorkPacketBase() 
-               : QSharedData(), current_progress(0)
+               : RefCountData(), current_progress(0)
 {}
 
 /** Copy constructor */
 WorkPacketBase::WorkPacketBase(const WorkPacketBase &other)
-               : QSharedData(),
+               : RefCountData(),
                  current_progress(other.current_progress)
 {}
 

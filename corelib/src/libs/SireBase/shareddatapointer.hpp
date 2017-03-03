@@ -64,11 +64,13 @@ public:
     SharedDataPointer(const T &obj);
 
     SharedDataPointer(const SharedDataPointer<T> &o);
+    SharedDataPointer(SharedDataPointer &&o);
 
     SharedDataPointer<T>& operator=(T *o);
     SharedDataPointer<T>& operator=(const T &obj);
 
     SharedDataPointer<T>& operator=(const SharedDataPointer<T> &o);
+    SharedDataPointer<T> &operator=(SharedDataPointer<T> &&other);
 
     SharedDataPointer<T>& operator=(int);
     
@@ -98,6 +100,8 @@ public:
     bool operator!=(const T *other_ptr) const;
 
 private:
+    void detach_helper();
+
     T *d;
 };
 
@@ -130,7 +134,7 @@ SharedDataPointer<T>::SharedDataPointer(const T &obj)
 {
     T *obj_ptr = const_cast<T*>(&obj);
     
-    if ( obj_ptr->ref.testAndSetOrdered(0,0) )
+    if ( obj_ptr->ref.isNotReferenced() )
     {
         //the reference count was zero - this implies that
         //this object is not held by another SharedDataPointer,
@@ -143,8 +147,8 @@ SharedDataPointer<T>::SharedDataPointer(const T &obj)
     else
     {
         //this is held by another SharedDataPointer
+        obj_ptr->ref.ref();
         d = obj_ptr;
-        d->ref.ref();
     }
 }
 
@@ -158,13 +162,22 @@ SharedDataPointer<T>::SharedDataPointer(const SharedDataPointer<T> &other)
         d->ref.ref();
 }
 
+/** Move constructor */
+template<class T>
+Q_INLINE_TEMPLATE
+SharedDataPointer<T>::SharedDataPointer(SharedDataPointer<T> &&other)
+                     : d(other.d)
+{
+    other.d = 0;
+}
+
 /** Destructor */
 template<class T>
 Q_INLINE_TEMPLATE
 SharedDataPointer<T>::~SharedDataPointer()
 { 
-    if (d and not d->ref.deref())
-        delete d; 
+    if (d && !d->ref.deref()) delete d;
+    d = 0;
 }
 
 /** Null assignment operator - allows you to write ptr = 0 to 
@@ -187,17 +200,17 @@ template<class T>
 Q_INLINE_TEMPLATE
 SharedDataPointer<T>& SharedDataPointer<T>::operator=(T *ptr)
 {
-    if (d != ptr)
+    if (ptr != d)
     {
-        if (d)
-            qAtomicAssign(d, ptr);
-        else
-        {
-            d = ptr;
-            d->ref.ref();
-        }
+        if (ptr)
+            ptr->ref.ref();
+        
+        T *old = d;
+        d = ptr;
+        
+        if (old && !old->ref.deref())
+            delete old;
     }
-    
     return *this;
 }
 
@@ -213,7 +226,7 @@ SharedDataPointer<T>& SharedDataPointer<T>::operator=(const T &obj)
     {
         T *obj_ptr = const_cast<T*>(&obj);
     
-        if ( obj_ptr->ref.testAndSetOrdered(0,0) )
+        if ( obj_ptr->ref.isNotReferenced() )
         {
             //the reference count was zero - this implies that
             //this object is not held by another SharedDataPointer,
@@ -221,24 +234,27 @@ SharedDataPointer<T>& SharedDataPointer<T>::operator=(const T &obj)
             //safe to use this object directly - point to a clone
             //of this object.
             obj_ptr = new T(obj);
+
+            obj_ptr->ref.ref();
             
-            if (d)
-                qAtomicAssign(d, obj_ptr);
-            else
-            {
-                d = obj_ptr;
-                d->ref.ref();
-            }
+            T *old = d;
+            d = obj_ptr;
+            
+            if (old && !old->ref.deref())
+                delete old;
         }
         else
         {
             //this is held by another SharedDataPointer
-            if (d)
-                qAtomicAssign(d, obj_ptr);
-            else
+            if (&obj != d)
             {
-                d = obj_ptr;
-                d->ref.ref();
+                const_cast<T*>(&obj)->ref.ref();
+                
+                T *old = d;
+                d = const_cast<T*>(&obj);
+                
+                if (old && !old->ref.deref())
+                    delete old;
             }
         }
     }
@@ -253,16 +269,38 @@ SharedDataPointer<T>& SharedDataPointer<T>::operator=(const SharedDataPointer<T>
 {
     if (other.d != d)
     {
-        if (d)
-            qAtomicAssign(d, other.d);
-        else
-        {
-            d = other.d;
-            d->ref.ref();
-        }
+        if (other.d)
+            other.d->ref.ref();
+        
+        T *old = d;
+        d = other.d;
+        
+        if (old && !old->ref.deref())
+            delete old;
     }
-
+    
     return *this;
+}
+
+/** Move assignment operator */
+template<class T>
+Q_INLINE_TEMPLATE
+SharedDataPointer<T>& SharedDataPointer<T>::operator=(SharedDataPointer<T> &&other)
+{
+    qSwap(d, other.d);
+    return *this;
+}
+
+/** Helper for the detach function */
+template<class T>
+Q_OUTOFLINE_TEMPLATE
+void SharedDataPointer<T>::detach_helper()
+{
+    T *x = new T(*d);
+    x->ref.ref();
+    if (!d->ref.deref())
+        delete d;
+    d = x;
 }
 
 /** Detach the object pointed to by this pointer from shared storage */
@@ -270,11 +308,7 @@ template <class T>
 Q_INLINE_TEMPLATE
 void SharedDataPointer<T>::detach() 
 {
-    if (d and not d->ref.testAndSetOrdered(1,1))
-    {
-        T *x = new T(*d);
-        qAtomicAssign(d, x);
-    }
+    if (d && d->ref.hasMultipleReferences()) detach_helper();
 }
 
 /** Dereference this pointer */

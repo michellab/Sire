@@ -41,7 +41,7 @@ void register_CLJShiftFunction_class(){
 
     { //::SireMM::CLJShiftFunction
         typedef bp::class_< SireMM::CLJShiftFunction, bp::bases< SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property > > CLJShiftFunction_exposer_t;
-        CLJShiftFunction_exposer_t CLJShiftFunction_exposer = CLJShiftFunction_exposer_t( "CLJShiftFunction", "This CLJFunction calculates the intermolecular coulomb and LJ energy of the passed\nCLJAtoms using a force shifted electrostatics cutoff\n\nAuthor: Christopher Woods\n", bp::init< >("") );
+        CLJShiftFunction_exposer_t CLJShiftFunction_exposer = CLJShiftFunction_exposer_t( "CLJShiftFunction", "This CLJFunction calculates the intermolecular coulomb and LJ energy of the passed\nCLJAtoms using a force shifted electrostatics cutoff\n\nwe use the force shifted coulomb energy described\nin Fennell and Gezelter, J. Chem. Phys., 124, 234104, 2006\nWe use alpha=0, as I have seen that a 25 A cutoff gives stable results\nwith alpha=0, and this way we avoid changing the hamiltonian significantly\nby having an erfc function\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope CLJShiftFunction_scope( CLJShiftFunction_exposer );
         CLJShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") ), "Copy constructor") );
         CLJShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );

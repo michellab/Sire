@@ -443,7 +443,7 @@ QString PDBAtom::writeToLine() const
     if (charge > 0)
         chg = QString("%1+").arg(charge);
     else if (charge < 0)
-        chg = QString("%1-").arg(charge);
+        chg = QString("%1-").arg(-charge);
 
     char line[83];
     line[82] = '\0';
@@ -1404,6 +1404,205 @@ MoleculeGroup PDB::readMols(const QByteArray &data,
     return molgroup;
 }
 
+/** Function to guess the right number of bonds for the passed atom type */
+int getValence(const Element &element)
+{
+    switch (element.nProtons())
+    {
+        case 1:
+            return 1;
+        case 2:
+            return 0;
+        case 3:
+            return 1;
+        case 4:
+            return 2;
+        case 5:
+            return 3;
+        case 6:
+            return 4;
+        case 7:
+            return 3;
+        case 8:
+            return 2;
+        case 9:
+            return 1;
+        case 10:
+            return 0;
+        case 11:
+            return 1;
+        case 12:
+            return 2;
+        case 13:
+            return 3;
+        case 14:
+            return 4;
+        case 15:
+            return 3;
+        case 16:
+            return 2;
+        case 17:
+            return 1;
+        case 18:
+            return 0;
+        case 19:
+            return 1;
+        case 20:
+            return 20;
+        case 35:
+            return 1;
+        case 53:
+            return 1;
+        default:
+            return -1;
+    }
+}
+
+/** Function that applies simple heuristics to guess the formal charge
+    on each atom in 'molecule' */
+AtomCharges guessFormalCharges(const MoleculeView &molview, const PropertyMap &map)
+{
+    // we will only do this if the whole molecule is selected...
+    if (not molview.selection().selectedAll())
+    {
+        return AtomCharges();
+    }
+    
+    Molecule molecule = molview.molecule();
+    
+    const PropertyName connectivity_property = map["connectivity"];
+    const PropertyName element_property = map["element"];
+    const PropertyName chg_property = map["charge"];
+    
+    if (not (molecule.hasProperty(chg_property) and
+             molecule.hasProperty(connectivity_property) and
+             molecule.hasProperty(element_property)))
+    {
+        //we cannot work this out
+        return AtomCharges();
+    }
+    
+    const Connectivity &connectivity = molecule.property(connectivity_property)
+                                               .asA<Connectivity>();
+    
+    //create space to hold the formal charges - these default to 0
+    AtomCharges formal_charges( molecule.data().info() );
+    
+    for (int i=0; i<molecule.nResidues(); ++i)
+    {
+        Residue res = molecule.residue( ResIdx(i) );
+        
+        //get the formal charge on the residue as a whole
+        const int res_chg = float( 0.5 + res.evaluate().charge(map) );
+        
+        //total valency charge for the residue
+        int valence_chg = 0;
+        
+        //now go through each atom and work out its formal charge
+        auto atoms = res.atoms();
+        
+        QVector<int> atom_chgs(atoms.count(), 0);
+        
+        for (int j=0; j<atoms.count(); ++j)
+        {
+            Atom atom = atoms[j];
+        
+            Element e = atom.property<Element>(element_property);
+            int nbonds = connectivity.nConnections(atom.index());
+            
+            int atom_chg = 0;
+
+            if (nbonds == 0)
+            {
+                //there are no bonds to this atom - it must have the charge
+                //it has from atomic partial charges
+                atom_chg = int(atom.property<SireUnits::Dimension::Charge>(chg_property).value()
+                                            + 0.5);
+            }
+            else
+            {
+                if (e.nProtons() == 7  /*nitrogen*/)
+                {
+                    int nvalence = getValence(e);
+                    atom_chg = nbonds - nvalence;
+                }
+                else if (e.nProtons() == 8 /*oxygen*/)
+                {
+                    int nvalence = getValence(e);
+                    atom_chg = nbonds - nvalence;
+                    
+                    if (atom_chg < 0)
+                    {
+                        //we need to check for CO2-, and decide which O should have the charge
+                        if (nbonds == 1)
+                        {
+                            Atom bonded_atom = molecule.atom(
+                                        *(connectivity.connectionsTo(atom.index()).begin()));
+                            
+                            Element bonded_element = bonded_atom
+                                                        .property<Element>(element_property);
+                            
+                            if (bonded_element.nProtons() == 6 /*carbon*/)
+                            {
+                                //is this bonded to another oxygen with one bond?
+                                QSet<AtomIdx> bonded = connectivity
+                                                            .connectionsTo(bonded_atom.index());
+                                
+                                if (bonded.count() == 3)
+                                {
+                                    //this is a C=O double bond
+                                    atom_chg = 0;
+
+                                    for (AtomIdx c_idx : bonded)
+                                    {
+                                        if (c_idx != atom.index())
+                                        {
+                                            if (connectivity.nConnections(c_idx) == 1)
+                                            {
+                                                Atom c = molecule.atom(c_idx);
+                                                if (c.property<Element>(element_property)
+                                                     .nProtons() == 8)
+                                                {
+                                                    //this is another single-bonded oxygen
+                                                    if (c.index() < atom.index())
+                                                    {
+                                                        //this highest index oxygen gets the charge
+                                                        atom_chg = -1;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            valence_chg += atom_chg;
+            
+            atom_chgs[j] = atom_chg;
+        }
+
+        if (valence_chg == res_chg)
+        {
+            //we have got the formal charge on the residue to match the
+            //atomic partial charges, so it should be safe to use these values
+            for (int j=0; j<atom_chgs.count(); ++j)
+            {
+                if (atom_chgs[j] != 0)
+                {
+                    formal_charges.set( atoms[j].cgAtomIdx(),
+                                        SireUnits::Dimension::Charge(atom_chgs[j]) );
+                }
+            }
+        }
+    }
+    
+    return formal_charges;
+}
+
 int PDB::writeMolecule(QTextStream &ts, const MoleculeView &molview,
                        int atomnum, const PropertyMap &map) const
 {
@@ -1461,6 +1660,10 @@ int PDB::writeMolecule(QTextStream &ts, const MoleculeView &molview,
     {
         charges = mol.property(map[PDB::parameters().formalCharge()])
                      .asA<AtomCharges>();
+    }
+    else
+    {
+        charges = guessFormalCharges(mol, map);
     }
     
     AtomStringProperty pdbatomname;

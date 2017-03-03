@@ -29,10 +29,7 @@
 #ifndef SIRECLUSTER_WORKPACKET_H
 #define SIRECLUSTER_WORKPACKET_H
 
-#include "sireglobal.h"
-
-#include <QSharedData>
-
+#include "SireBase/refcountdata.h"
 #include "SireBase/sharedpolypointer.hpp"
 
 SIRE_BEGIN_HEADER
@@ -71,7 +68,7 @@ namespace SireCluster
     
     @author Christopher Woods
 */
-class SIRECLUSTER_EXPORT WorkPacketBase : public QSharedData
+class SIRECLUSTER_EXPORT WorkPacketBase : public SireBase::RefCountData
 {
 
 friend QDataStream& ::operator<<(QDataStream&, const WorkPacketBase&);

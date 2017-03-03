@@ -77,23 +77,13 @@ QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, NullFF &nullff)
 NullFF::NullFF(bool) : ConcreteProperty<NullFF,FF>()
 {}
 
-static SharedPolyPointer<NullFF> shared_null;
-
 const NullFF& FF::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new NullFF(true);
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<NullFF>());
 }
 
 /** Constructor */
-NullFF::NullFF() : ConcreteProperty<NullFF,FF>( FF::null() )
+NullFF::NullFF() : ConcreteProperty<NullFF,FF>()
 {}
 
 /** Copy constructor */

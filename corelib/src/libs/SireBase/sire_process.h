@@ -31,6 +31,8 @@
 
 #include "sireglobal.h"
 
+#include <QStringList>
+
 #include <boost/shared_ptr.hpp>
 
 SIRE_BEGIN_HEADER

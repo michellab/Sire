@@ -230,6 +230,19 @@ void register_AtomElements_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireMol::Element >::isCompatibleWith
+        
+            typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
+            typedef bool ( ::SireMol::AtomProperty< SireMol::Element >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfo const & ) const;
+            isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< SireMol::Element >::isCompatibleWith );
+            
+            AtomElements_exposer.def( 
+                "isCompatibleWith"
+                , isCompatibleWith_function_value
+                , ( bp::arg("molinfo") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireMol::Element >::isEmpty
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;

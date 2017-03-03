@@ -197,20 +197,10 @@ const MGIDsAndMaps& MolInserter::groups() const
     return mgids;
 }
 
-static SharedPolyPointer<NullInserter> shared_null;
-
 /** Return the global null MolInserter */
 const NullInserter& MolInserter::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new NullInserter();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<NullInserter>());
 }
 
 //////////

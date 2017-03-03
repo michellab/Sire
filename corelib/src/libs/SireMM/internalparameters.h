@@ -35,6 +35,9 @@
 #include "threeatomfunctions.h"
 #include "fouratomfunctions.h"
 
+#include "SireBase/refcountdata.h"
+#include "SireBase/shareddatapointer.hpp"
+
 #include "SireMol/cgidx.h"
 
 #include "SireFF/detail/atomiccoords3d.h"
@@ -128,7 +131,7 @@ inline uint qHash(const CGIDQuad &idquad)
 
 /** Internal class used to hold the non-physical parameters
     (impropers and Urey-Bradley) */
-class GroupInternalNonPhysParameters : public QSharedData
+class GroupInternalNonPhysParameters : public SireBase::RefCountData
 {
 public:
     GroupInternalNonPhysParameters();
@@ -154,7 +157,7 @@ public:
 
 /** Internal class used to hold the cross-term parameters
     (stretch-stretch, stretch-bend etc.) */
-class GroupInternalCrossParameters : public QSharedData
+class GroupInternalCrossParameters : public SireBase::RefCountData
 {
 public:
     GroupInternalCrossParameters();
@@ -216,7 +219,7 @@ public:
 };
 
 /** Internal class used to hold the private data of GroupInternalParameters */
-class GroupInternalParametersData : public QSharedData
+class GroupInternalParametersData : public SireBase::RefCountData
 {
 public:
     GroupInternalParametersData();
@@ -250,12 +253,12 @@ public:
     /** Shared pointer to the non-physical terms (impropers
         and Urey-Bradley) - no all groups will have these
         terms, so it is best to hide them to save space */
-    QSharedDataPointer<GroupInternalNonPhysParameters> nonphys_terms;
+    SireBase::SharedDataPointer<GroupInternalNonPhysParameters> nonphys_terms;
     
     /** Shared pointer to the cross-term internal parameters
         (double-pointer so as to save memory, as cross-terms
         tend not to be used with very large molecules) */
-    QSharedDataPointer<GroupInternalCrossParameters> cross_terms;
+    SireBase::SharedDataPointer<GroupInternalCrossParameters> cross_terms;
 };
 
 }
@@ -421,7 +424,7 @@ protected:
 
 private:
     /** Implicitly shared pointer to the data of this class */
-    QSharedDataPointer<detail::GroupInternalParametersData> d;
+    SireBase::SharedDataPointer<detail::GroupInternalParametersData> d;
 };
 
 /** This is the base of all of the classes used to hold the symbols

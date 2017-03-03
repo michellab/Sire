@@ -34,6 +34,8 @@
 #include "cljgroup.h"
 #include "multicljcomponent.h"
 
+#include "SireBase/shareddatapointer.hpp"
+
 #include "SireFF/g1ff.h"
 
 SIRE_BEGIN_HEADER
@@ -177,7 +179,7 @@ private:
     CLJGroup cljgroup;
 
     /** Implicitly shared pointer to the (mostly) const data for this forcefield */
-    QSharedDataPointer<detail::InterFFData> d;
+    SireBase::SharedDataPointer<detail::InterFFData> d;
     
     /** Whether or not we need to 'accept' this move */
     bool needs_accepting;

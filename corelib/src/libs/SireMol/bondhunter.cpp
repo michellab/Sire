@@ -163,19 +163,9 @@ Connectivity NullBondHunter::operator()(const MoleculeView &molview,
     return Connectivity(molview.data());
 }
 
-static SharedPolyPointer<NullBondHunter> shared_null;
-
 const NullBondHunter& BondHunter::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new NullBondHunter();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<NullBondHunter>());
 }
 
 /////////

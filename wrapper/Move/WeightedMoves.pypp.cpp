@@ -24,6 +24,8 @@ namespace bp = boost::python;
 
 #include "weightedmoves.h"
 
+#include <QElapsedTimer>
+
 #include "weightedmoves.h"
 
 SireMove::WeightedMoves __copy__(const SireMove::WeightedMoves &other){ return SireMove::WeightedMoves(other); }
@@ -72,7 +74,7 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "clearTiming"
                 , clearTiming_function_value
-                , "" );
+                , "Clear all of the timing information" );
         
         }
         { //::SireMove::WeightedMoves::energyComponent
@@ -216,7 +218,7 @@ void register_WeightedMoves_class(){
             WeightedMoves_exposer.def( 
                 "timing"
                 , timing_function_value
-                , "" );
+                , "Return the average time to perform each move" );
         
         }
         { //::SireMove::WeightedMoves::toString
