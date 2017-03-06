@@ -66,6 +66,10 @@ if ( NEED_BUILD_QT )
       endif()
     endif()
 
+    if ( ${SIRE_COMPILER} MATCHES "INTEL" )
+      list( APPEND QT_OPTIONS "-platform;linux-icc-64" )
+    endif()
+
     list( APPEND QT_OPTIONS "-no-javascript-jit")
     list( APPEND QT_OPTIONS "-no-glib")
     list( APPEND QT_OPTIONS "-no-kms")
@@ -112,6 +116,9 @@ if ( NEED_BUILD_QT )
     endif()
 
     message( STATUS "${QT_OPTIONS}" )
+
+    SET(ENV{CC} "${SIRE_C_COMPILER}")
+    SET(ENV{CXX} "${SIRE_CXX_COMPILER}")
 
     message( STATUS "Patience... Configuring QtCore..." )
     execute_process( COMMAND ${QT_BUILD_DIR}/configure ${QT_OPTIONS}
