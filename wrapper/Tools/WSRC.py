@@ -95,7 +95,7 @@ reflect_volume_buffer = Parameter("reflect volume buffer", 0*angstrom,
                                      that are within 'reflect volume radius + reflect volume buffer' of any of 
                                      the heavy atoms of the swapped ligand.""")
 
-n_equil_swap = Parameter("swap water nequilmoves", 100000,
+n_equil_swap = Parameter("swap water nequilmoves", 5000,
                          """The number of moves to equilibrate the swap water cluster before applying
                             the identity or reflection volume constraint.""")
 
@@ -366,15 +366,24 @@ def setCLJProperties(forcefield):
         print("Cannot interpret the cutoff method from \"%s\"" % cutoff_method.val, file=sys.stderr)
 
     forcefield.setSpace(Cartesian())
-    forcefield.setSwitchingFunction( HarmonicSwitchingFunction(coul_cutoff.val,coul_cutoff.val,
-                                                               lj_cutoff.val,lj_cutoff.val) )
+
+    if fast_sim.val:
+        forcefield.setSwitchingFunction( HarmonicSwitchingFunction(7.5 * angstrom, 7.5 * angstrom,
+                                                                   7.5 * angstrom, 7.5 * angstrom) )
+    else:
+        forcefield.setSwitchingFunction( HarmonicSwitchingFunction(coul_cutoff.val,coul_cutoff.val,
+                                                                   lj_cutoff.val,lj_cutoff.val) )
 
     return forcefield
 
 
 def setFakeGridProperties(forcefield):
-    forcefield.setSwitchingFunction( HarmonicSwitchingFunction(coul_cutoff.val,coul_cutoff.val,
-                                                               lj_cutoff.val,lj_cutoff.val) )
+    if fast_sim.val:
+        forcefield.setSwitchingFunction( HarmonicSwitchingFunction(7.5*angstrom, 7.5*angstrom,
+                                                                   7.5*angstrom, 7.5*angstrom) )
+    else:
+        forcefield.setSwitchingFunction( HarmonicSwitchingFunction(coul_cutoff.val,coul_cutoff.val,
+                                                                   lj_cutoff.val,lj_cutoff.val) )
     forcefield.setSpace(Cartesian())
 
     return forcefield
@@ -383,8 +392,13 @@ def setFakeGridProperties(forcefield):
 def setGridProperties(forcefield, extra_buffer=0*angstrom):
     forcefield.setGridSpacing(grid_spacing.val)
     forcefield.setBuffer(grid_buffer.val + extra_buffer)
-    forcefield.setLJCutoff(lj_cutoff.val)
-    forcefield.setCoulombCutoff(coul_cutoff.val)
+
+    if fast_sim.val:
+        forcefield.setLJCutoff(7.5*angstrom)
+        forcefield.setCoulombCutoff(7.5*angstrom)
+    else:
+        forcefield.setLJCutoff(lj_cutoff.val)
+        forcefield.setCoulombCutoff(coul_cutoff.val)
 
     return forcefield
 
@@ -398,8 +412,14 @@ def setSoftCoreProperties(forcefield):
 
 def setCLJFuncProperties(cljfunc):
     cljfunc.setSpace(Cartesian())
-    cljfunc.setCoulombCutoff(coul_cutoff.val)
-    cljfunc.setLJCutoff(lj_cutoff.val)
+
+    if fast_sim.val:
+        cljfunc.setCoulombCutoff(7.5*angstrom)
+        cljfunc.setLJCutoff(7.5*angstrom)
+    else:
+        cljfunc.setCoulombCutoff(coul_cutoff.val)
+        cljfunc.setLJCutoff(lj_cutoff.val)
+
     cljfunc.setArithmeticCombiningRules( True )
 
     return cljfunc
@@ -668,6 +688,16 @@ def renumberMolecules(molgroup):
 
     return newgroup
 
+def pruneLambda(lamvals):
+    """Half the passed number of lambda values"""
+
+    n = len(lamvals)
+
+    if n % 2 == 0:
+        mid = int(n/2)
+        return lamvals[0:mid:2] + lamvals[mid+1::2]
+    else:
+        return lamvals[0::2]
 
 def getLambdaValues():
     """Return the lambda values to use for the simulation. Lambda scale from 0 to 1
@@ -700,7 +730,7 @@ def getLambdaValues():
                 lamvals.append( 0.75 + (0.25*(1.0-lam)) )
 
         if fast_sim.val:
-            lamvals = prune_lambda(lamvals)
+            lamvals = pruneLambda(lamvals)
 
         return lamvals
 
@@ -715,7 +745,7 @@ def getLambdaValues():
                 lamvals.append(lam)
 
         if fast_sim.val:
-            lamvals = prune_lambda(lamvals)
+            lamvals = pruneLambda(lamvals)
 
         return lamvals
 
