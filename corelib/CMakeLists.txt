@@ -321,17 +321,8 @@ option ( SIRE_DISABLE_SSE "Prevent use of SSE when compiling" OFF )
 # Add option to disable use of AVX
 option ( SIRE_DISABLE_AVX "Prevent use of AVX when compiling" OFF )
 
-# Add option to enable use of SSE4 (only works if SSE is not disabled)
-# This is on by default as most processors now support SSE4
-option ( SIRE_ENABLE_SSE4 "Enable use of SSE4 when compiling" ON )
-
-# Add option to enable use of AVX2 (only works if AVX is not disabled)
-# This is off by default as AVX2 is not widespread
-option ( SIRE_ENABLE_AVX2 "Enable use of AVX2 when compiling" OFF )
-
-# Add option to enable use of AVX512 (only works if AVX is not disabled)
-# This is off by default as AVX512 is not widespread
-option ( SIRE_ENABLE_AVX512 "Enabled use of AVX512 when compiling" OFF )
+# Add option to disable use of AVX512F)
+option ( SIRE_DISABLE_AVX512F "Prevent use of AVX512F when compiling" OFF )
 
 # Add an option to force off Fortran compilation and linking
 option ( SIRE_DISABLE_FORTRAN "Turn off Fortran compilation and linking" ON )
@@ -493,8 +484,6 @@ string( TOUPPER ${CMAKE_CXX_COMPILER_ID} SIRE_CXX_COMPILER_ID )
 # TEMP - TESTING VECTOR DETECTOR
 include (FindVector)
 
-GET_SIRE_VECTOR_FLAGS( "-msse2" "-msse4.1" "-mavx" "-xCOMMON-AVX512" )
-
 # Add compiler specific flags
 if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
 
@@ -539,74 +528,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     set ( SIRE_PLATFORM_FLAGS "-pipe" )
     set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
-    CHECK_CXX_COMPILER_FLAG( "-msse2" HAVE_SSE_FLAG )
-    CHECK_CXX_COMPILER_FLAG( "-mavx" HAVE_AVX_FLAG )
-
-    # flag that will be set to 0 if AVX is available
-    set( SIRE_SKIP_AVX 1 )
-
-    if ( NOT SIRE_DISABLE_AVX)
-
-      if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
-
-        # we have immintrin.h so we can compile AVX - check if we can run it
-        INCLUDE(CheckCSourceRuns)
-        set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
-        set(CMAKE_REQUIRED_FLAGS "-mavx")
-        check_c_source_runs("
-           #include <immintrin.h>
-           int main()
-           {
-              __m256i a = _mm256_setzero_si256();
-              return 0;
-           }"
-           CAN_RUN_AVX_PROGRAM)
-        set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
-
-        if (CAN_RUN_AVX_PROGRAM)
-          message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
-        
-          set( SIRE_SKIP_AVX 0 )
-
-          CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
-
-          if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
-            message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs" )
-            set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
-          else()
-            set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
-          endif()
-        endif()
-      endif()
-
-      if ( SIRE_SKIP_AVX )
-        if ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
-          # we have emmintrin.h so we have SSE
-          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
-
-          CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
-
-          if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-            message( STATUS "Compiling with SSE4 enabled. Resulting binary will only work on newer Intel CPUs" )
-            set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-          else()
-            set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
-          endif()
-        elseif (NOT SIRE_DISABLE_SSE)   
-          # we have emmintrin.h so we have SSE
-          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
-
-          CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
-
-          if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-            message( STATUS "Compiling with SSE4 enabled. Resulting binary will only work on newer Intel CPUs" )
-            set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-          else()
-            set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
-          endif()  
-        endif()
-      endif()
-    endif()
+    GET_SIRE_VECTOR_FLAGS( "-fopenmp-simd" "-msse2" "-mavx" "-mavx512f" )
 
     # Now gcc 5 specific options
     if ( GCC_MAJOR_VERSION GREATER 4 )
@@ -673,71 +595,8 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
     set ( SIRE_PLATFORM_FLAGS "-pipe" )
     set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
-    CHECK_CXX_COMPILER_FLAG( "-msse2" HAVE_SSE_FLAG )
-    CHECK_CXX_COMPILER_FLAG( "-mavx" HAVE_AVX_FLAG )
+    GET_SIRE_VECTOR_FLAGS( "-openmp-simd" "-msse2" "-mavx" "-mavx512f" )
 
-    # flag that will be set to 0 if AVX is available
-    set( SIRE_SKIP_AVX 1 )
-
-    if ( NOT SIRE_DISABLE_AVX )
-      if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
-        # we have immintrin.h so we can compile AVX - check if we can run it
-        INCLUDE(CheckCSourceRuns)
-        set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
-        set(CMAKE_REQUIRED_FLAGS "-mavx")
-        CHECK_C_SOURCE_RUNS("
-           #include <immintrin.h>
-           int main()
-           {
-              __m256i a = _mm256_setzero_si256();
-              return 0;
-           }"
-           CAN_RUN_AVX_PROGRAM)
-        set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
-
-        if (CAN_RUN_AVX_PROGRAM)        
-          message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_SKIP_AVX 0 )
-          CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
-
-          if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
-            message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs")
-            set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
-          else()
-            set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
-          endif()
-        endif()
-      endif()
-    endif()
-
-    if ( SIRE_SKIP_AVX )
-      if ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
-        # we have emmintrin.h so we have SSE
-        message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
-
-        CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
-        
-        if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-          message( STATUS "Compiling with SSE4.1 enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
-        endif() 
-      elseif( NOT SIRE_DISABLE_SSE )
-        # we have emmintrin.h so we have SSE
-        message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
-
-        CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
-
-        if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-          message( STATUS "Compiling with SSE4.1 enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
-        endif()    
-      endif()
-    endif()
-       
     set ( SIRE_VISIBILITY_FLAGS "-DSIRE_VISIBILITY_AVAILABLE -fvisibility=hidden -fvisibility-inlines-hidden" )
 
     if (APPLE)
@@ -771,68 +630,8 @@ elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
     CHECK_CXX_COMPILER_FLAG( "-msse2" HAVE_SSE_FLAG )
     CHECK_CXX_COMPILER_FLAG( "-mavx" HAVE_AVX_FLAG )
 
-    # flag that will be set to 0 if AVX is available
-    set( SIRE_SKIP_AVX 1 )
+    GET_SIRE_VECTOR_FLAGS( "-qopenmp-simd" "-msse2" "-mavx" "-xCOMMON-AVX512" )
 
-    if ( NOT SIRE_DISABLE_AVX )
-      if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
-        # we have immintrin.h so we can compile AVX - check if we can run it
-        INCLUDE(CheckCSourceRuns)
-        set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
-        set(CMAKE_REQUIRED_FLAGS "-mavx")
-        CHECK_C_SOURCE_RUNS("
-           #include <immintrin.h>
-           int main()
-           {
-              __m256i a = _mm256_setzero_si256();
-              return 0;
-           }"
-           CAN_RUN_AVX_PROGRAM)
-        set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
-
-        if (CAN_RUN_AVX_PROGRAM)        
-          message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_SKIP_AVX 0 )
-          CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
-
-          if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
-            message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs")
-            set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
-          else()
-            set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
-          endif()
-        endif()
-      endif()
-    endif()
-
-    if ( SIRE_SKIP_AVX )
-      if ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
-        # we have emmintrin.h so we have SSE
-        message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
-
-        CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
-        
-        if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-          message( STATUS "Compiling with SSE4.1 enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
-        endif() 
-      elseif( NOT SIRE_DISABLE_SSE )
-        # we have emmintrin.h so we have SSE
-        message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
-
-        CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
-
-        if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-          message( STATUS "Compiling with SSE4.1 enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
-        endif()    
-      endif()
-    endif()
-       
     set ( SIRE_VISIBILITY_FLAGS "-DSIRE_VISIBILITY_AVAILABLE -fvisibility=hidden -fvisibility-inlines-hidden" )
 
     if (APPLE)
