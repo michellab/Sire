@@ -490,6 +490,11 @@ endif()
 
 string( TOUPPER ${CMAKE_CXX_COMPILER_ID} SIRE_CXX_COMPILER_ID )
 
+# TEMP - TESTING VECTOR DETECTOR
+include (FindVector)
+
+GET_SIRE_VECTOR_FLAGS( "-msse2" "-msse4.1" "-mavx" "-xCOMMON-AVX512" )
+
 # Add compiler specific flags
 if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
 
