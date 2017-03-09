@@ -196,6 +196,38 @@ private:
             void assertAligned(){}
         #endif
 
+        #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+            _ALIGNED(64) union
+            {
+                __m512d x[2];
+                __m256d t[4];
+                double a[16];
+            } v;
+
+            MultiDouble(__m512d avx_val0, __m512d avx_val1)
+            {
+                v.x[0] = avx_val0;
+                v.x[1] = avx_val1;
+            }
+
+            MultiDouble(__mmask8 mask0, __mmask8 mask1)
+            {
+                __m512d src = _mm512_set1_pd(0.0);
+                __m512d a = _mm512_set1_pd(1.0);
+                __m512d b = _mm512_set1_pd(0.0);
+
+                v.x[0] = _mm512_mask_add_pd( src, mask0, a, b );
+                v.x[1] = _mm512_mask_add_pd( src, mask1, a, b );
+            }
+
+            #ifdef MULTIFLOAT_CHECK_ALIGNMENT
+                void assertAligned()
+                {
+                    if ((quintptr)this % 64 != 0)
+                        assertAligned(this, 64);
+                }
+            #endif
+        #else
         #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
             _ALIGNED(32) union
             {
@@ -259,6 +291,7 @@ private:
             #endif
         #endif
         #endif
+        #endif
     #endif // #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 };
 
@@ -279,6 +312,10 @@ MultiDouble::MultiDouble(double val)
 {
     assertAligned();
 
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x[0] = _mm512_set1_pd(val);
+        v.x[1] = _mm512_set1_pd(val);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x[0] = _mm256_set1_pd(val);
         v.x[1] = _mm256_set1_pd(val);
@@ -293,6 +330,7 @@ MultiDouble::MultiDouble(double val)
         }
     #endif
     #endif
+    #endif
 }
 
 /** Construct using the passed function to generate doubles */
@@ -302,6 +340,12 @@ MultiDouble::MultiDouble(double val)
     {
         assertAligned();
 
+        #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+            v.x[0] = _mm512_set_pd(generator(), generator(), generator(), generator(),
+                                   generator(), generator(), generator(), generator());
+            v.x[1] = _mm512_set_pd(generator(), generator(), generator(), generator(),
+                                   generator(), generator(), generator(), generator());
+        #else
         #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
             v.x[0] = _mm256_set_pd(generator(), generator(), generator(), generator());
             v.x[1] = _mm256_set_pd(generator(), generator(), generator(), generator());
@@ -316,6 +360,7 @@ MultiDouble::MultiDouble(double val)
             }
         #endif
         #endif
+        #endif
     }
 #endif
 
@@ -325,6 +370,12 @@ MultiDouble::MultiDouble(const MultiFloat &other)
 {
     assertAligned();
 
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        const __m256 *o = (const __m256*)&(other.v.x);
+        
+        v.x[0] = _mm512_cvtps_pd( o[0] );
+        v.x[1] = _mm512_cvtps_pd( o[1] );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         const __m128 *o = (const __m128*)&(other.v.x);
     
@@ -341,6 +392,7 @@ MultiDouble::MultiDouble(const MultiFloat &other)
         }
     #endif
     #endif
+    #endif
 }
 
 /** Copy construct from a MultiDouble */
@@ -349,6 +401,12 @@ MultiFloat::MultiFloat(const MultiDouble &other)
 {
     assertAligned();
 
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        __m256 *o = (__m256*)&(v.x);
+
+        o[0] = _mm512_cvtpd_ps(other.v.x[0]);
+        o[1] = _mm512_cvtpd_ps(other.v.x[1]);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         __m128 *o = (__m128*)&(v.x);
     
@@ -365,6 +423,7 @@ MultiFloat::MultiFloat(const MultiDouble &other)
         }
     #endif
     #endif
+    #endif
 }
 
 /** Copy constructor */
@@ -373,6 +432,10 @@ MultiDouble::MultiDouble(const MultiDouble &other)
 {
     assertAligned();
 
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x[0] = other.v.x[0];
+        v.x[1] = other.v.x[1];
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x[0] = other.v.x[0];
         v.x[1] = other.v.x[1];
@@ -385,6 +448,7 @@ MultiDouble::MultiDouble(const MultiDouble &other)
         {
             v.a[i] = other.v.a[i];
         }
+    #endif
     #endif
     #endif
 }
@@ -407,6 +471,10 @@ MultiDouble& MultiDouble::operator=(const MultiDouble &other)
 {
     if (this != &other)
     {
+        #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+            v.x[0] = other.v.x[0];
+            v.x[1] = other.v.x[1];
+        #else
         #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
             v.x[0] = other.v.x[0];
             v.x[1] = other.v.x[1];
@@ -421,6 +489,7 @@ MultiDouble& MultiDouble::operator=(const MultiDouble &other)
             }
         #endif
         #endif
+        #endif
     }
     
     return *this;
@@ -430,6 +499,12 @@ MultiDouble& MultiDouble::operator=(const MultiDouble &other)
 inline
 MultiFloat& MultiFloat::operator=(const MultiDouble &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        __m256 *o = (__m256*)&(v.x);
+
+        o[0] = _mm512_cvtpd_ps(other.v.x[0]);
+        o[1] = _mm512_cvtpd_ps(other.v.x[1]);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         __m128 *o = (__m128*)&(v.x);
     
@@ -446,6 +521,7 @@ MultiFloat& MultiFloat::operator=(const MultiDouble &other)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -454,6 +530,10 @@ MultiFloat& MultiFloat::operator=(const MultiDouble &other)
 inline
 MultiDouble& MultiDouble::operator=(double value)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x[0] = _mm512_set1_pd(value);
+        v.x[1] = _mm512_set1_pd(value);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x[0] = _mm256_set1_pd(value);
         v.x[1] = _mm256_set1_pd(value);
@@ -468,6 +548,7 @@ MultiDouble& MultiDouble::operator=(double value)
         }
     #endif
     #endif
+    #endif
     
     return *this;
 }
@@ -476,6 +557,12 @@ MultiDouble& MultiDouble::operator=(double value)
 inline
 MultiDouble& MultiDouble::operator=(const MultiFloat &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        const __m256 *o = (const __m256*)&(other.v.x);
+
+        v.x[0] = _mm512_cvtps_pd( o[0] );
+        v.x[1] = _mm512_cvtps_pd( o[1] );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         const __m128 *o = (const __m128*)&(other.v.x);
     
@@ -492,6 +579,7 @@ MultiDouble& MultiDouble::operator=(const MultiFloat &other)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -501,6 +589,10 @@ MultiDouble& MultiDouble::operator=(const MultiFloat &other)
 inline
 MultiDouble MultiDouble::compareEqual(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_cmp_pd_mask(v.x[0], other.v.x[0], _CMP_EQ_OQ),
+                            _mm512_cmp_pd_mask(v.x[1], other.v.x[1], _CMP_EQ_OQ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_cmp_pd(v.x[0], other.v.x[0], _CMP_EQ_OQ),
                             _mm256_cmp_pd(v.x[1], other.v.x[1], _CMP_EQ_OQ) );
@@ -519,12 +611,17 @@ MultiDouble MultiDouble::compareEqual(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Not equals comparison operator */
 inline
 MultiDouble MultiDouble::compareNotEqual(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_cmp_pd_mask(v.x[0], other.v.x[0], _CMP_NEQ_OQ),
+                            _mm512_cmp_pd_mask(v.x[1], other.v.x[1], _CMP_NEQ_OQ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_cmp_pd(v.x[0], other.v.x[0], _CMP_NEQ_OQ),
                             _mm256_cmp_pd(v.x[1], other.v.x[1], _CMP_NEQ_OQ) );
@@ -543,15 +640,20 @@ MultiDouble MultiDouble::compareNotEqual(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Less than comparison operator */
 inline
 MultiDouble MultiDouble::compareLess(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_cmp_pd_mask(v.x[0], other.v.x[0], _CMP_LT_OQ),
+                            _mm512_cmp_pd_mask(v.x[1], other.v.x[1], _CMP_LT_OQ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
-        return MultiDouble( _mm256_cmp_pd(v.x[0], other.v.x[0], _CMP_LT_OQ),
-                            _mm256_cmp_pd(v.x[1], other.v.x[1], _CMP_LT_OQ) );
+        return MultiDouble( _mm256_cmp_pd_mask(v.x[0], other.v.x[0], _CMP_LT_OQ),
+                            _mm256_cmp_pd_mask(v.x[1], other.v.x[1], _CMP_LT_OQ) );
     #else
     #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
         return MultiDouble( _mm_cmplt_pd(v.x[0], other.v.x[0]),
@@ -567,12 +669,17 @@ MultiDouble MultiDouble::compareLess(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Greater than comparison operator */
 inline
 MultiDouble MultiDouble::compareGreater(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_cmp_pd_mask(v.x[0], other.v.x[0], _CMP_GT_OQ),
+                            _mm512_cmp_pd_mask(v.x[1], other.v.x[1], _CMP_GT_OQ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_cmp_pd(v.x[0], other.v.x[0], _CMP_GT_OQ),
                             _mm256_cmp_pd(v.x[1], other.v.x[1], _CMP_GT_OQ) );
@@ -591,12 +698,17 @@ MultiDouble MultiDouble::compareGreater(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Less than or equal comparison */
 inline
 MultiDouble MultiDouble::compareLessEqual(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_cmp_pd_mask(v.x[0], other.v.x[0], _CMP_LE_OQ),
+                            _mm512_cmp_pd_mask(v.x[1], other.v.x[1], _CMP_LE_OQ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_cmp_pd(v.x[0], other.v.x[0], _CMP_LE_OQ),
                             _mm256_cmp_pd(v.x[1], other.v.x[1], _CMP_LE_OQ) );
@@ -615,12 +727,17 @@ MultiDouble MultiDouble::compareLessEqual(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Greater than or equal comparison */
 inline
 MultiDouble MultiDouble::compareGreaterEqual(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_cmp_pd_mask(v.x[0], other.v.x[0], _CMP_GE_OQ),
+                            _mm512_cmp_pd_mask(v.x[1], other.v.x[1], _CMP_GE_OQ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_cmp_pd(v.x[0], other.v.x[0], _CMP_GE_OQ),
                             _mm256_cmp_pd(v.x[1], other.v.x[1], _CMP_GE_OQ) );
@@ -637,6 +754,7 @@ MultiDouble MultiDouble::compareGreaterEqual(const MultiDouble &other) const
         }
     
         return ret;
+    #endif
     #endif
     #endif
 }
@@ -659,6 +777,10 @@ int MultiDouble::count()
 inline
 MultiDouble MultiDouble::operator+(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_add_pd(v.x[0], other.v.x[0]),
+                            _mm512_add_pd(v.x[1], other.v.x[1]) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_add_pd(v.x[0], other.v.x[0]),
                             _mm256_add_pd(v.x[1], other.v.x[1]) );
@@ -675,12 +797,17 @@ MultiDouble MultiDouble::operator+(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Subtraction operator */
 inline
 MultiDouble MultiDouble::operator-(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_sub_pd(v.x[0], other.v.x[0]),
+                            _mm512_sub_pd(v.x[1], other.v.x[1]) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_sub_pd(v.x[0], other.v.x[0]),
                             _mm256_sub_pd(v.x[1], other.v.x[1]) );
@@ -697,12 +824,17 @@ MultiDouble MultiDouble::operator-(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Multiplication operator */
 inline
 MultiDouble MultiDouble::operator*(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_mul_pd(v.x[0], other.v.x[0]),
+                            _mm512_mul_pd(v.x[1], other.v.x[1]) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_mul_pd(v.x[0], other.v.x[0]),
                             _mm256_mul_pd(v.x[1], other.v.x[1]) );
@@ -719,12 +851,17 @@ MultiDouble MultiDouble::operator*(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Division operator */
 inline
 MultiDouble MultiDouble::operator/(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_div_pd(v.x[0], other.v.x[0]),
+                            _mm512_div_pd(v.x[1], other.v.x[1]) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_div_pd(v.x[0], other.v.x[0]),
                             _mm256_div_pd(v.x[1], other.v.x[1]) );
@@ -741,12 +878,17 @@ MultiDouble MultiDouble::operator/(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** In-place addition operator */
 inline
 MultiDouble& MultiDouble::operator+=(const MultiDouble &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x[0] = _mm512_add_pd(v.x[0], other.v.x[0]);
+        v.x[1] = _mm512_add_pd(v.x[1], other.v.x[1]);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x[0] = _mm256_add_pd(v.x[0], other.v.x[0]);
         v.x[1] = _mm256_add_pd(v.x[1], other.v.x[1]);
@@ -761,6 +903,7 @@ MultiDouble& MultiDouble::operator+=(const MultiDouble &other)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -769,6 +912,10 @@ MultiDouble& MultiDouble::operator+=(const MultiDouble &other)
 inline
 MultiDouble& MultiDouble::operator-=(const MultiDouble &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x[0] = _mm512_sub_pd(v.x[0], other.v.x[0]);
+        v.x[1] = _mm512_sub_pd(v.x[1], other.v.x[1]);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x[0] = _mm256_sub_pd(v.x[0], other.v.x[0]);
         v.x[1] = _mm256_sub_pd(v.x[1], other.v.x[1]);
@@ -783,6 +930,7 @@ MultiDouble& MultiDouble::operator-=(const MultiDouble &other)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -791,6 +939,10 @@ MultiDouble& MultiDouble::operator-=(const MultiDouble &other)
 inline
 MultiDouble& MultiDouble::operator*=(const MultiDouble &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x[0] = _mm512_mul_pd(v.x[0], other.v.x[0]);
+        v.x[1] = _mm512_mul_pd(v.x[1], other.v.x[1]);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x[0] = _mm256_mul_pd(v.x[0], other.v.x[0]);
         v.x[1] = _mm256_mul_pd(v.x[1], other.v.x[1]);
@@ -805,6 +957,7 @@ MultiDouble& MultiDouble::operator*=(const MultiDouble &other)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -813,6 +966,10 @@ MultiDouble& MultiDouble::operator*=(const MultiDouble &other)
 inline
 MultiDouble& MultiDouble::operator/=(const MultiDouble &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x[0] = _mm512_div_pd(v.x[0], other.v.x[0]);
+        v.x[1] = _mm512_div_pd(v.x[1], other.v.x[1]);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x[0] = _mm256_div_pd(v.x[0], other.v.x[0]);
         v.x[1] = _mm256_div_pd(v.x[1], other.v.x[1]);
@@ -827,6 +984,7 @@ MultiDouble& MultiDouble::operator/=(const MultiDouble &other)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -835,6 +993,14 @@ MultiDouble& MultiDouble::operator/=(const MultiDouble &other)
 inline
 MultiDouble MultiDouble::logicalAnd(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        MultiDouble ret;
+        ret.v.t[0] = _mm256_and_pd(v.t[0], other.v.t[0]);
+        ret.v.t[1] = _mm256_and_pd(v.t[1], other.v.t[1]);
+        ret.v.t[2] = _mm256_and_pd(v.t[2], other.v.t[2]);
+        ret.v.t[3] = _mm256_and_pd(v.t[3], other.v.t[3]);
+        return ret;
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_and_pd(v.x[0], other.v.x[0]),
                             _mm256_and_pd(v.x[1], other.v.x[1]) );
@@ -861,12 +1027,21 @@ MultiDouble MultiDouble::logicalAnd(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Bitwise logical "and not" */
 inline
 MultiDouble MultiDouble::logicalAndNot(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        MultiDouble ret;
+        ret.v.t[0] = _mm256_andnot_pd(v.t[0], other.v.t[0]);
+        ret.v.t[1] = _mm256_andnot_pd(v.t[1], other.v.t[1]);
+        ret.v.t[2] = _mm256_andnot_pd(v.t[2], other.v.t[2]);
+        ret.v.t[3] = _mm256_andnot_pd(v.t[3], other.v.t[3]);
+        return ret;
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_andnot_pd(v.x[0], other.v.x[0]),
                             _mm256_andnot_pd(v.x[1], other.v.x[1]) );
@@ -893,12 +1068,17 @@ MultiDouble MultiDouble::logicalAndNot(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Bitwise logical or operator */
 inline
 MultiDouble MultiDouble::logicalOr(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_or_pd(v.x[0], other.v.x[0]),
+                            _mm512_or_pd(v.x[1], other.v.x[1]) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_or_pd(v.x[0], other.v.x[0]),
                             _mm256_or_pd(v.x[1], other.v.x[1]) );
@@ -925,12 +1105,17 @@ MultiDouble MultiDouble::logicalOr(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Bitwise logical xor */
 inline
 MultiDouble MultiDouble::logicalXor(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_xor_pd(v.x[0], other.v.x[0]),
+                            _mm512_xor_pd(v.x[1], other.v.x[1]) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_xor_pd(v.x[0], other.v.x[0]),
                             _mm256_xor_pd(v.x[1], other.v.x[1]) );
@@ -955,6 +1140,7 @@ MultiDouble MultiDouble::logicalXor(const MultiDouble &other) const
         }
     
         return ret;
+    #endif
     #endif
     #endif
 }
@@ -1011,6 +1197,12 @@ MultiDouble MultiDouble::operator^(const MultiDouble &other) const
 inline
 MultiDouble& MultiDouble::operator&=(const MultiDouble &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.t[0] = _mm256_and_pd(v.t[0], other.v.t[0]);
+        v.t[1] = _mm256_and_pd(v.t[1], other.v.t[1]);
+       	v.t[2] = _mm256_and_pd(v.t[2], other.v.t[2]);
+       	v.t[3] = _mm256_and_pd(v.t[3], other.v.t[3]);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x[0] = _mm256_and_pd(v.x[0], other.v.x[0]);
         v.x[1] = _mm256_and_pd(v.x[1], other.v.x[1]);
@@ -1032,6 +1224,7 @@ MultiDouble& MultiDouble::operator&=(const MultiDouble &other)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -1040,6 +1233,10 @@ MultiDouble& MultiDouble::operator&=(const MultiDouble &other)
 inline
 MultiDouble& MultiDouble::operator|=(const MultiDouble &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x[0] = _mm512_or_pd(v.x[0], other.v.x[0]);
+        v.x[1] = _mm512_or_pd(v.x[1], other.v.x[1]);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x[0] = _mm256_or_pd(v.x[0], other.v.x[0]);
         v.x[1] = _mm256_or_pd(v.x[1], other.v.x[1]);
@@ -1061,6 +1258,7 @@ MultiDouble& MultiDouble::operator|=(const MultiDouble &other)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -1069,6 +1267,10 @@ MultiDouble& MultiDouble::operator|=(const MultiDouble &other)
 inline
 MultiDouble& MultiDouble::operator^=(const MultiDouble &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x[0] = _mm512_xor_pd(v.x[0], other.v.x[0]);
+        v.x[1] = _mm512_xor_pd(v.x[1], other.v.x[1]);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x[0] = _mm256_xor_pd(v.x[0], other.v.x[0]);
         v.x[1] = _mm256_xor_pd(v.x[1], other.v.x[1]);
@@ -1090,6 +1292,7 @@ MultiDouble& MultiDouble::operator^=(const MultiDouble &other)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -1098,6 +1301,10 @@ MultiDouble& MultiDouble::operator^=(const MultiDouble &other)
 inline
 MultiDouble& MultiDouble::multiplyAdd(const MultiDouble &v0, const MultiDouble &v1)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x[0] = _mm512_add_pd(v.x[0], _mm512_mul_pd(v0.v.x[0], v1.v.x[0]));
+        v.x[1] = _mm512_add_pd(v.x[1], _mm512_mul_pd(v0.v.x[1], v1.v.x[1]));
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x[0] = _mm256_add_pd(v.x[0], _mm256_mul_pd(v0.v.x[0], v1.v.x[0]));
         v.x[1] = _mm256_add_pd(v.x[1], _mm256_mul_pd(v0.v.x[1], v1.v.x[1]));
@@ -1112,6 +1319,7 @@ MultiDouble& MultiDouble::multiplyAdd(const MultiDouble &v0, const MultiDouble &
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -1120,6 +1328,10 @@ MultiDouble& MultiDouble::multiplyAdd(const MultiDouble &v0, const MultiDouble &
 inline
 MultiDouble MultiDouble::max(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_max_pd(v.x[0], other.v.x[0]),
+                            _mm512_max_pd(v.x[1], other.v.x[1]) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_max_pd(v.x[0], other.v.x[0]),
                             _mm256_max_pd(v.x[1], other.v.x[1]) );
@@ -1136,12 +1348,17 @@ MultiDouble MultiDouble::max(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Return the minimum vector between this and other */
 inline
 MultiDouble MultiDouble::min(const MultiDouble &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_min_pd(v.x[0], other.v.x[0]),
+                            _mm512_min_pd(v.x[1], other.v.x[1]) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_min_pd(v.x[0], other.v.x[0]),
                             _mm256_min_pd(v.x[1], other.v.x[1]) );
@@ -1158,6 +1375,7 @@ MultiDouble MultiDouble::min(const MultiDouble &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Return the reciprocal of this vector */
@@ -1171,6 +1389,10 @@ MultiDouble MultiDouble::reciprocal() const
 inline
 MultiDouble MultiDouble::sqrt() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_sqrt_pd(v.x[0]),
+                            _mm512_sqrt_pd(v.x[1]) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiDouble( _mm256_sqrt_pd(v.x[0]),
                             _mm256_sqrt_pd(v.x[1]) );
@@ -1187,6 +1409,7 @@ MultiDouble MultiDouble::sqrt() const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Return the recipical square root of this vector */
@@ -1201,22 +1424,45 @@ MultiDouble MultiDouble::rsqrt() const
 inline
 MultiDouble MultiDouble::rotate() const
 {
-    MultiDouble ret;
-    
-    for (int i=1; i<MULTIFLOAT_SIZE; ++i)
-    {
-        ret.v.a[i-1] = v.a[i];
-    }
-    
-    ret.v.a[MULTIFLOAT_SIZE-1] = v.a[0];
+/*    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        MultiDouble ret;
 
-    return ret;
+        ret.v.x[0] = _mm512_permutexvar_pd(
+           _mm512_set_epi32(0, 0, 0, 7, 0, 6, 0, 5, 0, 4, 0, 3, 0, 2, 0, 1),
+               v.x[0] );
+
+        ret.v.x[1] = _mm512_permutexvar_pd(
+           _mm512_set_epi32(0, 0, 0, 7, 0, 6, 0, 5, 0, 4, 0, 3, 0, 2, 0, 1),
+               v.x[1] );
+
+        ret.v.a[15] = v.a[0];
+        ret.v.a[7] = v.a[8];
+
+        return ret;
+    #else*/
+        MultiDouble ret;
+    
+        for (int i=1; i<MULTIFLOAT_SIZE; ++i)
+        {
+            ret.v.a[i-1] = v.a[i];
+        }
+    
+        ret.v.a[MULTIFLOAT_SIZE-1] = v.a[0];
+ 
+        return ret;
+ //   #endif
 }
 
 /** Return the sum of all elements of this vector */
 inline
 double MultiDouble::sum() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return v.a[0] + v.a[1] + v.a[2] + v.a[3] +
+               v.a[4] + v.a[5] + v.a[6] + v.a[7] +
+               v.a[8] + v.a[9] + v.a[10] + v.a[11] +
+               v.a[12] + v.a[13] + v.a[14] + v.a[15];
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return v.a[0] + v.a[1] + v.a[2] + v.a[3] +
                v.a[4] + v.a[5] + v.a[6] + v.a[7];
@@ -1230,6 +1476,7 @@ double MultiDouble::sum() const
             sum += v.a[i];
         }
         return sum;
+    #endif
     #endif
     #endif
 }
@@ -1276,5 +1523,3 @@ inline void sincos(const MultiDouble &val, MultiDouble &sinval, MultiDouble &cos
 SIRE_EXPOSE_CLASS( SireMaths::MultiDouble )
 
 SIRE_END_HEADER
-
-#endif

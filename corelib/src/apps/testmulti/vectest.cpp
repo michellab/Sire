@@ -47,19 +47,20 @@ using namespace SireError;
 static RanGenerator rangen;
 
 template<class T>
-void assert_equal( const T &a, const T &b )
+void assert_equal( const T &a, const T &b, const QString &codeloc )
 {
     if (a != b)
     {
         qDebug() << "\n\nASSERT EQUAL FAILED!" << Sire::toString(a)
                  << Sire::toString(b);
         throw assertation_failed( QObject::tr("NOT EQUAL! %1 != %2")
-			.arg(Sire::toString(a)).arg(Sire::toString(b)), CODELOC );
+			.arg(Sire::toString(a)).arg(Sire::toString(b)), codeloc );
     }
 }
 
 template<class T>
-void assert_nearly_equal( const T &a, const T &b, const T &range )
+void assert_nearly_equal( const T &a, const T &b, const T &range,
+                          const QString &codeloc )
 {
     if ((a - b < -range) or (a - b > range))
     {                                    
@@ -67,7 +68,7 @@ void assert_nearly_equal( const T &a, const T &b, const T &range )
                  << Sire::toString(b);
         throw assertation_failed( QObject::tr("NOT NEARLY EQUAL %1 != %2 TO WITHIN %3")
                         .arg(Sire::toString(a)).arg(Sire::toString(b))
-                        .arg(Sire::toString(range)), CODELOC );
+                        .arg(Sire::toString(range)), codeloc );
     }
 }
 
@@ -84,12 +85,11 @@ void test_vecarray()
     //convert to a MultiVector
     QVector<MultiVector> mvecs = MultiVector::fromArray(vecs);
 
-    assert_equal( mvecs.count(), (vecs.count() / MultiVector::count() ) );
-
     for (int i=0; i<1000; ++i)
     {
         assert_equal( vecs.at(i), mvecs.at(i / MultiVector::count())
-                                       .at(i % MultiVector::count()) );
+                                       .at(i % MultiVector::count()),
+                    CODELOC );
     }
 }
 
@@ -108,7 +108,7 @@ void test_length()
 
     for (int i=0; i<MultiVector::count(); ++i)
     {
-        assert_equal( l.at(i), v[i].length() );
+        assert_equal( l.at(i), v[i].length(), CODELOC );
     }
 
     mv = mv.normalise();
@@ -116,7 +116,7 @@ void test_length()
 
     for (int i=0; i<MultiVector::count(); ++i)
     {
-        assert_nearly_equal( l.at(i), double(1.0), 0.0001 );
+        assert_nearly_equal( l.at(i), double(1.0), 0.0001, CODELOC );
     }
 }
 
@@ -132,13 +132,20 @@ void test_cross()
         cross[i] = Vector::cross(v0[i], v1[i]);
     }
 
+    qDebug() << Sire::toString(v0) << Sire::toString(v1) << Sire::toString(cross);
+
     MultiVector mv0(v0);
     MultiVector mv1(v1);
+
+    qDebug() << mv0.toString() << mv1.toString();
+
     MultiVector mcross = MultiVector::cross(mv0, mv1);
+
+    qDebug() << mcross.toString();
 
     for (int i=0; i<MultiVector::count(); ++i)
     {
-        assert_equal( mcross.at(i), cross.at(i) );
+        assert_equal( mcross.at(i), cross.at(i), CODELOC );
     }
 }
 
@@ -157,10 +164,10 @@ void test_getset()
     for (int i=0; i<MultiVector::count(); ++i)
     {
         mv.set(i, v[i]);
-        assert_equal( mv.getitem(i), v[i] );
+        assert_equal( mv.getitem(i), v[i], CODELOC );
     }
 
-    assert_equal( MultiVector(v), mv );
+    assert_equal( MultiVector(v), mv, CODELOC );
 }
 
 void test_rotate()
@@ -187,7 +194,7 @@ void test_rotate()
     {
         for (int j=0; j<3; ++j)
         {
-            assert_nearly_equal( mresult.at(i)[j], result[i][j], 1e-5 );
+            assert_nearly_equal( mresult.at(i)[j], result[i][j], 1e-5, CODELOC );
         }
     }
 }

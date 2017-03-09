@@ -8,7 +8,7 @@
 
 #include <QDebug>
 
-static const qint64 NTEST = 25000;
+static const qint64 NTEST = 16 * 150;
 
 using namespace SireMaths;
 
@@ -42,15 +42,15 @@ int main(int argc, const char **argv)
         float *q0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
         float *q1a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
     #else
-        float *x0a = (float*)malloc( NTEST*sizeof(float) );
-        float *y0a = (float*)malloc( NTEST*sizeof(float) );
-        float *z0a = (float*)malloc( NTEST*sizeof(float) );
-        float *x1a = (float*)malloc( NTEST*sizeof(float) );
-        float *y1a = (float*)malloc( NTEST*sizeof(float) );
-        float *z1a = (float*)malloc( NTEST*sizeof(float) );
+        float *x0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
+        float *y0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
+        float *z0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
+        float *x1a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
+        float *y1a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
+        float *z1a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
 
-        float *q0a = (float*)malloc( NTEST*sizeof(float) );
-        float *q1a = (float*)malloc( NTEST*sizeof(float) );
+        float *q0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
+        float *q1a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
     #endif
     #endif
 
@@ -143,14 +143,14 @@ int main(int argc, const char **argv)
 
                 for (int k=0; k<MultiFloat::count(); ++k)
                 {
-                    delta = x - ox;
-                    dist2 = delta*delta;
-                    delta = y - oy;
-                    dist2.multiplyAdd(delta, delta);
-                    delta = z - oz;
-                    dist2.multiplyAdd(delta, delta);
+                    //delta = x - ox;
+                    //dist2 = delta*delta;
+                    //delta = y - oy;
+                    //dist2.multiplyAdd(delta, delta);
+                    //delta = z - oz;
+                    //dist2.multiplyAdd(delta, delta);
 
-                    cnrg = q * oq * dist2.rsqrt();                
+                    cnrg = q * oq; // * dist2.rsqrt();                
                     coul_nrg += cnrg;
 
                     //rotate the multifloat to process the other distances
@@ -234,13 +234,15 @@ int main(int argc, const char **argv)
         qDebug() << "Speed is" << gflops << "GFLOPS";
     }
 
-    free(x0a);
-    free(x1a);
-    free(y0a);
-    free(y1a);
-    free(z0a);
-    free(z1a);
-
+    _mm_free(x0a);
+    _mm_free(x1a);
+    _mm_free(y0a);
+    _mm_free(y1a);
+    _mm_free(z0a);
+    _mm_free(z1a);
+    _mm_free(q0a);
+    _mm_free(q1a);
+ 
     return 0;
 }
 
