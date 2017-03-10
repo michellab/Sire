@@ -469,28 +469,25 @@ inline double MultiDouble::operator[](int i) const
 inline
 MultiDouble& MultiDouble::operator=(const MultiDouble &other)
 {
-    if (this != &other)
-    {
-        #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
-            v.x[0] = other.v.x[0];
-            v.x[1] = other.v.x[1];
-        #else
-        #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
-            v.x[0] = other.v.x[0];
-            v.x[1] = other.v.x[1];
-        #else
-        #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
-            v.x[0] = other.v.x[0];
-            v.x[1] = other.v.x[1];
-        #else
-            for (int i=0; i<MULTIFLOAT_SIZE; ++i)
-            {
-                v.a[i] = other.v.a[i];
-            }
-        #endif
-        #endif
-        #endif
-    }
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x[0] = other.v.x[0];
+        v.x[1] = other.v.x[1];
+    #else
+    #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
+        v.x[0] = other.v.x[0];
+        v.x[1] = other.v.x[1];
+    #else
+    #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
+        v.x[0] = other.v.x[0];
+        v.x[1] = other.v.x[1];
+    #else
+        for (int i=0; i<MULTIFLOAT_SIZE; ++i)
+        {
+            v.a[i] = other.v.a[i];
+        }
+    #endif
+    #endif
+    #endif
     
     return *this;
 }
@@ -652,8 +649,8 @@ MultiDouble MultiDouble::compareLess(const MultiDouble &other) const
                             _mm512_cmp_pd_mask(v.x[1], other.v.x[1], _CMP_LT_OQ) );
     #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
-        return MultiDouble( _mm256_cmp_pd_mask(v.x[0], other.v.x[0], _CMP_LT_OQ),
-                            _mm256_cmp_pd_mask(v.x[1], other.v.x[1], _CMP_LT_OQ) );
+        return MultiDouble( _mm256_cmp_pd(v.x[0], other.v.x[0], _CMP_LT_OQ),
+                            _mm256_cmp_pd(v.x[1], other.v.x[1], _CMP_LT_OQ) );
     #else
     #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
         return MultiDouble( _mm_cmplt_pd(v.x[0], other.v.x[0]),
@@ -1424,7 +1421,7 @@ MultiDouble MultiDouble::rsqrt() const
 inline
 MultiDouble MultiDouble::rotate() const
 {
-/*    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
         MultiDouble ret;
 
         ret.v.x[0] = _mm512_permutexvar_pd(
@@ -1439,7 +1436,7 @@ MultiDouble MultiDouble::rotate() const
         ret.v.a[7] = v.a[8];
 
         return ret;
-    #else*/
+    #else
         MultiDouble ret;
     
         for (int i=1; i<MULTIFLOAT_SIZE; ++i)
@@ -1450,7 +1447,7 @@ MultiDouble MultiDouble::rotate() const
         ret.v.a[MULTIFLOAT_SIZE-1] = v.a[0];
  
         return ret;
- //   #endif
+    #endif
 }
 
 /** Return the sum of all elements of this vector */
@@ -1523,3 +1520,6 @@ inline void sincos(const MultiDouble &val, MultiDouble &sinval, MultiDouble &cos
 SIRE_EXPOSE_CLASS( SireMaths::MultiDouble )
 
 SIRE_END_HEADER
+
+#endif
+

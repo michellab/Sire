@@ -611,7 +611,7 @@ elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
 
     set ( SIRE_SMALL_FLAGS  "-Os" )
     set ( SIRE_WARNALL_FLAGS  "-w1" )
-    set ( SIRE_RELEASE_FLAGS  "-O3" )
+    set ( SIRE_RELEASE_FLAGS  "-O3 -finline -finline-functions -ansi-alias -fargument-noalias-global -ip" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
     set ( SIRE_VISIBILITY_FLAGS "-DSIRE_NO_VISIBILITY_AVAILABLE" )    
     set ( SIRE_SHARE_LINK_FLAGS "-shared" )

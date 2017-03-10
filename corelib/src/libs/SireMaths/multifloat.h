@@ -52,12 +52,12 @@
 #endif
 #endif
 
-//#undef SIRE_USE_AVX
-//#define SIRE_USE_SSE 1
-//#undef SIRE_USE_SSE
-
 //#define MULTIFLOAT_CHECK_ALIGNMENT 1
-//#undef MULTIFLOAT_CHECK_ALIGNMENT
+#undef MULTIFLOAT_CHECK_ALIGNMENT
+
+//#undef SIRE_USE_AVX512F
+//#undef SIRE_USE_AVX 
+//#undef SIRE_USE_SSE
 
 #ifdef SIRE_USE_AVX512F
     #include <immintrin.h>  // CONDITIONAL_INCLUDE
@@ -559,25 +559,22 @@ MultiFloat::MultiFloat(const MultiFloat &other)
 inline
 MultiFloat& MultiFloat::operator=(const MultiFloat &other)
 {
-    if (this != &other)
-    {
-        #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
-            v.x = other.v.x;
-        #else
-        #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
-            v.x = other.v.x;
-        #else
-        #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
-            v.x = other.v.x;
-        #else
-            for (int i=0; i<MULTIFLOAT_SIZE; ++i)
-            {
-                v.a[i] = other.v.a[i];
-            }
-        #endif
-        #endif
-        #endif
-    }
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = other.v.x;
+    #else
+    #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
+        v.x = other.v.x;
+    #else
+    #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
+        v.x = other.v.x;
+    #else
+        for (int i=0; i<MULTIFLOAT_SIZE; ++i)
+        {
+            v.a[i] = other.v.a[i];
+        }
+    #endif
+    #endif
+    #endif
     
     return *this;
 }
@@ -708,7 +705,7 @@ MultiFloat MultiFloat::compareGreater(const MultiFloat &other) const
         return MultiFloat( _mm256_cmp_ps(v.x, other.v.x, _CMP_GT_OQ) );
     #else
     #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
-        return MultiFloat( _mm_cmpgt_ps_mask(v.x, other.v.x) );
+        return MultiFloat( _mm_cmpgt_ps(v.x, other.v.x) );
     #else
         MultiFloat ret;
     
@@ -1617,15 +1614,20 @@ MultiFloat MultiFloat::rsqrt_approx_nr() const
     #endif
 }
 
+#ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+namespace detail
+{
+static const __m512i MULTIFLOAT_ROTATE_MASK = _mm512_set_epi32(0, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
+}
+#endif
+
 /** Rotate this vector. This moves each element one space to the left, moving the
     first element to the last element */
 inline
 MultiFloat MultiFloat::rotate() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
-        return MultiFloat( _mm512_permutexvar_ps(
-           _mm512_set_epi32(0, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1), 
-               v.x ) );
+        return MultiFloat( _mm512_permutexvar_ps(detail::MULTIFLOAT_ROTATE_MASK, v.x) );
     #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         __m256 tmp =  _mm256_permute_ps(v.x, _MM_SHUFFLE ( 0,3,2,1 ));

@@ -3,12 +3,14 @@
 #include "SireMaths/multidouble.h"
 #include "SireMaths/rangenerator.h"
 
+#include "SireBase/parallel.h"
+
 #include <QTime>
 #include <QVector>
 
 #include <QDebug>
 
-static const qint64 NTEST = 16 * 150;
+static const qint64 NTEST = 16 * 1500;
 
 using namespace SireMaths;
 
@@ -117,50 +119,53 @@ int main(int argc, const char **argv)
         const MultiFloat *z1 = z1f.constData();
         const MultiFloat *q1 = q1f.constData();
 
-        MultiDouble coul_nrg(0);
-
-        // it is very important that there are no constructors
-        // or destructors called in the inner loop!
-        MultiFloat delta;
-        MultiFloat dist2;
-
-        MultiFloat x, y, z, q, ox, oy, oz, oq;
-        MultiDouble cnrg;
-
-        for (int i=0; i<x0f.count(); ++i)
+        MultiDouble coul_nrg = tbb::parallel_reduce( tbb::blocked_range<int>(0,x0f.count()), 
+                               MultiDouble(0),
+                               [&](tbb::blocked_range<int> r, MultiDouble my_coul_nrg )
         {
-            x = x0[i];
-            y = y0[i];
-            z = z0[i];
-            q = q0[i];
+            MultiFloat delta;
+            MultiFloat dist2;
+            MultiDouble cnrg;
+            MultiFloat ox, oy, oz, oq;
 
-            for (int j=0; j<x1f.count(); ++j)
+            for (int i=r.begin(); i<r.end(); ++i)
             {
-                ox = x1[j];
-                oy = y1[j];
-                oz = z1[j];
-                oq = q1[j];
+                const MultiFloat &x = x0[i];
+                const MultiFloat &y = y0[i];
+                const MultiFloat &z = z0[i];
+                const MultiFloat &q = q0[i];
 
-                for (int k=0; k<MultiFloat::count(); ++k)
+                for (int j=0; j<x1f.count(); ++j)
                 {
-                    //delta = x - ox;
-                    //dist2 = delta*delta;
-                    //delta = y - oy;
-                    //dist2.multiplyAdd(delta, delta);
-                    //delta = z - oz;
-                    //dist2.multiplyAdd(delta, delta);
+                    ox = x1[j];
+                    oy = y1[j];
+                    oz = z1[j];
+                    oq = q1[j];
 
-                    cnrg = q * oq; // * dist2.rsqrt();                
-                    coul_nrg += cnrg;
+                    for (int k=0; k<MultiFloat::count(); ++k)
+                    {
+                        delta = x - ox;
+                        dist2 = delta*delta;
+                        delta = y - oy;
+                        dist2.multiplyAdd(delta, delta);
+                        delta = z - oz;
+                        dist2.multiplyAdd(delta, delta);
 
-                    //rotate the multifloat to process the other distances
-                    ox = ox.rotate();
-                    oy = oy.rotate();
-                    oz = oz.rotate();
-                    oq = oq.rotate();
+                        cnrg = q * oq * dist2.rsqrt();
+                        my_coul_nrg += cnrg;
+
+                        //rotate the multifloat to process the other distances
+                        ox = ox.rotate();
+                        oy = oy.rotate();
+                        oz = oz.rotate();
+                        oq = oq.rotate();
+                    }
                 }
             }
-        }
+
+            return my_coul_nrg;
+
+        }, std::plus<MultiFloat>() );
 
         int ms = t.elapsed();
         qDebug() << "Energies" << coul_nrg.toString() << "TOTAL" << coul_nrg.doubleSum();
@@ -182,50 +187,53 @@ int main(int argc, const char **argv)
         const MultiDouble *z1 = z1d.constData();
         const MultiDouble *q1 = q1d.constData();
 
-        MultiDouble coul_nrg(0);
-
-        // it is very important that there are no constructors
-        // or destructors called in the inner loop!
-        MultiDouble delta;
-        MultiDouble dist2;
-
-        MultiDouble x, y, z, q, ox, oy, oz, oq;
-
-        for (int i=0; i<x0d.count(); ++i)
+        MultiDouble coul_nrg = tbb::parallel_reduce( tbb::blocked_range<int>(0,x0d.count()),
+                                                     MultiDouble(0),
+                                                     [&](tbb::blocked_range<int> r, MultiDouble my_coul_nrg)
         {
-            x = x0[i];
-            y = y0[i];
-            z = z0[i];
-            q = q0[i];
+            MultiDouble delta;
+            MultiDouble dist2;
+            MultiDouble cnrg;
+            MultiDouble ox, oy, oz, oq;
 
-            for (int j=0; j<x1d.count(); ++j)
+            for (int i=r.begin(); i<r.end(); ++i)
             {
-                ox = x1[j];
-                oy = y1[j];
-                oz = z1[j];
-                oq = q1[j];
+                const MultiDouble &x = x0[i];
+                const MultiDouble &y = y0[i];
+                const MultiDouble &z = z0[i];
+                const MultiDouble &q = q0[i];
 
-                for (int k=0; k<MultiDouble::count(); ++k)
+                for (int j=0; j<x1d.count(); ++j)
                 {
-                    delta = x - ox;
-                    dist2 = delta*delta;
-                    delta = y - oy;
-                    dist2.multiplyAdd(delta, delta);
-                    delta = z - oz;
-                    dist2.multiplyAdd(delta, delta);
+                    ox = x1[j];
+                    oy = y1[j];
+                    oz = z1[j];
+                    oq = q1[j];
 
-                    coul_nrg += q * oq * dist2.rsqrt();                
+                    for (int k=0; k<MultiDouble::count(); ++k)
+                    {
+                        delta = x - ox;
+                        dist2 = delta*delta;
+                        delta = y - oy;
+                        dist2.multiplyAdd(delta, delta);
+                        delta = z - oz;
+                        dist2.multiplyAdd(delta, delta);
 
-                    //rotate the multidouble to process the other distances
-                    //(these rotates kill my performance as I haven't worked out yet
-                    // how to use SSE/AVX to speed them up...!)
-                    ox = ox.rotate();
-                    oy = oy.rotate();
-                    oz = oz.rotate();
-                    oq = oq.rotate();
+                        my_coul_nrg += q * oq * dist2.rsqrt();                
+    
+                        //rotate the multidouble to process the other distances
+                        //(these rotates kill my performance as I haven't worked out yet
+                        // how to use SSE/AVX to speed them up...!)
+                        ox = ox.rotate();
+                        oy = oy.rotate();
+                        oz = oz.rotate();
+                        oq = oq.rotate();
+                    }
                 }
             }
-        }
+
+            return my_coul_nrg;
+        }, std::plus<MultiDouble>() );
 
         int ms = t.elapsed();
         qDebug() << "Energies" << coul_nrg.toString() << "TOTAL" << coul_nrg.sum();
