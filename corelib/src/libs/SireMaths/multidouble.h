@@ -176,7 +176,9 @@ public:
     
     MultiDouble sqrt() const;
     MultiDouble rsqrt() const;
-    
+    MultiDouble rsqrt_approx() const;
+    MultiDouble rsqrt_approx_nr() const;    
+
     MultiDouble rotate() const;
     
     double sum() const;
@@ -1414,6 +1416,52 @@ inline
 MultiDouble MultiDouble::rsqrt() const
 {
     return MULTIDOUBLE_ONE.operator/(this->sqrt());
+}
+
+/** Return an approximation of the reciprical square root of this vector (only good
+    for about 12 bit of the mantissa) */
+inline
+MultiDouble MultiDouble::rsqrt_approx() const
+{
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiDouble( _mm512_rsqrt14_pd(v.x[0]), _mm512_rsqrt14_pd(v.x[1]) );
+    #else
+        return MULTIFLOAT_ONE.operator/(this->sqrt());
+    #endif
+}
+
+/** Return a good approximation of the reciprical square root (this poor approximation
+    refined using a single Newton Raphson step) */
+inline
+MultiDouble MultiDouble::rsqrt_approx_nr() const
+{
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        //get the approximation
+        __m512d a0 = _mm512_rsqrt14_pd(v.x[0]);
+
+        //now use one step of NR to refine the result
+        // 1/x = 0.5 a[ 3 - x a^2 ] where a is the approximation
+
+        __m512d tmp = _mm512_mul_pd(a0, v.x[0]);
+        tmp = _mm512_mul_pd(a0, tmp);
+        const __m512d three = _mm512_set1_pd(3.0);
+        tmp = _mm512_sub_pd(three, tmp);
+        a0 = _mm512_mul_pd(a0, tmp);
+        const __m512d half = _mm512_set1_pd(0.5);
+        a0 = _mm512_mul_pd(a0, half);
+
+        //repeat for the other double
+        __m512d a1 = _mm512_rsqrt14_pd(v.x[1]);
+        tmp = _mm512_mul_pd(a1, v.x[1]);
+        tmp = _mm512_mul_pd(a1, tmp); 
+        tmp = _mm512_sub_pd(three, tmp);
+        a1 = _mm512_mul_pd(a1, tmp);
+        a1 = _mm512_mul_pd(a1, half);
+
+        return MultiDouble(a0, a1);
+    #else
+        return this->rsqrt();
+    #endif
 }
 
 /** Rotate this vector. This moves each element one space to the left, moving the

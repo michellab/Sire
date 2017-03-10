@@ -5,18 +5,18 @@
 
 #include "SireBase/parallel.h"
 
-#include <QTime>
+#include <QElapsedTimer>
 #include <QVector>
 
 #include <QDebug>
 
-static const qint64 NTEST = 16 * 1500;
+static const qint64 NTEST = 16 * 2000;
 
 using namespace SireMaths;
 
 int main(int argc, const char **argv)
 {
-    QTime t;
+    QElapsedTimer t;
 
     qDebug() << "Calculating the coulomb energy between two groups of"
              << NTEST << "particles. This involves calculating and summing "
@@ -76,8 +76,8 @@ int main(int argc, const char **argv)
             q1a[i] = rand.rand(1,1);
         }
 
-        int ms = t.elapsed();
-        qDebug() << "Generating the random numbers took" << ms << "ms";
+        qint64 ns = t.nsecsElapsed();
+        qDebug() << "Generating the random numbers took" << (ns*1e-6) << "ms";
     }
 
     qDebug() << "Converting to MultiFloat...";
@@ -91,7 +91,7 @@ int main(int argc, const char **argv)
     QVector<MultiFloat> y1f = MultiFloat::fromArray(y1a, NTEST);
     QVector<MultiFloat> z1f = MultiFloat::fromArray(z1a, NTEST);
     QVector<MultiFloat> q1f = MultiFloat::fromArray(q1a, NTEST);
-    qDebug() << "Took" << t.elapsed() << "ms";
+    qDebug() << "Took" << (t.nsecsElapsed()*1e-6) << "ms";
 
     qDebug() << "Converting to MultiDouble...";
     t.start();
@@ -104,9 +104,10 @@ int main(int argc, const char **argv)
     QVector<MultiDouble> y1d = MultiDouble::fromArray(y1a, NTEST);
     QVector<MultiDouble> z1d = MultiDouble::fromArray(z1a, NTEST);
     QVector<MultiDouble> q1d = MultiDouble::fromArray(q1a, NTEST);
-    qDebug() << "Took" << t.elapsed() << "ms";
+    qDebug() << "Took" << (t.nsecsElapsed()*1e-6) << "ms";
 
     qDebug() << "Calculating the coulomb energy using floats...";
+    for (int i=0; i<5; ++i)
     {
         t.start();
         const MultiFloat *x0 = x0f.constData();
@@ -125,7 +126,6 @@ int main(int argc, const char **argv)
         {
             MultiFloat delta;
             MultiFloat dist2;
-            MultiDouble cnrg;
             MultiFloat ox, oy, oz, oq;
 
             for (int i=r.begin(); i<r.end(); ++i)
@@ -151,8 +151,7 @@ int main(int argc, const char **argv)
                         delta = z - oz;
                         dist2.multiplyAdd(delta, delta);
 
-                        cnrg = q * oq * dist2.rsqrt();
-                        my_coul_nrg += cnrg;
+                        my_coul_nrg += q * oq * dist2.rsqrt_approx_nr();
 
                         //rotate the multifloat to process the other distances
                         ox = ox.rotate();
@@ -167,14 +166,15 @@ int main(int argc, const char **argv)
 
         }, std::plus<MultiFloat>() );
 
-        int ms = t.elapsed();
+        qint64 ns = t.nsecsElapsed();
         qDebug() << "Energies" << coul_nrg.toString() << "TOTAL" << coul_nrg.doubleSum();
-        qDebug() << "took" << ms << "ms";
-        float gflops = (NTEST * NTEST * 12) / (1000000000 * 0.001 * ms);
+        qDebug() << "took" << (ns*1e-6) << "ms";
+        float gflops = (NTEST * NTEST * 17) / (1.f * ns);   // approx_nr has 6 ops
         qDebug() << "Speed is" << gflops << "GFLOPS";
     }
 
     qDebug() << "Calculating the coulomb energy using doubles...";
+    for (int i=0; i<5; ++i)
     {
         t.start();
         const MultiDouble *x0 = x0d.constData();
@@ -219,11 +219,8 @@ int main(int argc, const char **argv)
                         delta = z - oz;
                         dist2.multiplyAdd(delta, delta);
 
-                        my_coul_nrg += q * oq * dist2.rsqrt();                
+                        my_coul_nrg += q * oq * dist2.rsqrt_approx_nr();
     
-                        //rotate the multidouble to process the other distances
-                        //(these rotates kill my performance as I haven't worked out yet
-                        // how to use SSE/AVX to speed them up...!)
                         ox = ox.rotate();
                         oy = oy.rotate();
                         oz = oz.rotate();
@@ -235,10 +232,10 @@ int main(int argc, const char **argv)
             return my_coul_nrg;
         }, std::plus<MultiDouble>() );
 
-        int ms = t.elapsed();
+        qint64 ns = t.nsecsElapsed();
         qDebug() << "Energies" << coul_nrg.toString() << "TOTAL" << coul_nrg.sum();
-        qDebug() << "took" << ms << "ms";
-        float gflops = (NTEST * NTEST * 12) / (1000000000 * 0.001 * ms);
+        qDebug() << "took" << (1e-6*ns) << "ms";
+        float gflops = (NTEST * NTEST * 17) / (1.f*ns);  // approx_nr has 7 ops
         qDebug() << "Speed is" << gflops << "GFLOPS";
     }
 
