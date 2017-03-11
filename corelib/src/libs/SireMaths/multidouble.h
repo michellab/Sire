@@ -214,12 +214,13 @@ private:
 
             MultiDouble(__mmask8 mask0, __mmask8 mask1)
             {
-                __m512d src = _mm512_set1_pd(0.0);
-                __m512d a = _mm512_set1_pd(1.0);
-                __m512d b = _mm512_set1_pd(0.0);
+       	       	const __m512d zero = _mm512_set1_pd(0.0);
+                const quint64 x = 0xFFFFFFFFFFFFFFFF;
+       	       	const __m512d one = _mm512_set1_pd( 
+                                *(reinterpret_cast<const double*>(&x)) );
 
-                v.x[0] = _mm512_mask_add_pd( src, mask0, a, b );
-                v.x[1] = _mm512_mask_add_pd( src, mask1, a, b );
+                v.x[0] = _mm512_mask_blend_pd( mask0, zero, one );
+                v.x[1] = _mm512_mask_blend_pd( mask1, zero, one );
             }
 
             #ifdef MULTIFLOAT_CHECK_ALIGNMENT

@@ -90,7 +90,7 @@ public:
         return new SoftCLJComponent(*this);
     }
 
-    static const int nAlphaValues()
+    static int nAlphaValues()
     {
         return detail::MAX_ALPHA_VALUES;
     }

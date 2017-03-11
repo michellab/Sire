@@ -340,11 +340,12 @@ private:
                 this back to integer 0 or 1 */
             MultiFloat(__mmask16 mask)
             {
-                __m512 src = _mm512_set1_ps(0.0);
-                __m512 a = _mm512_set1_ps(1.0);
-                __m512 b = _mm512_set1_ps(0.0);
+                const __m512 zero = _mm512_set1_ps(0.0);
+                const quint32 x = 0xFFFFFFFF;
+                const __m512 one = _mm512_set1_ps( 
+                                *(reinterpret_cast<const float*>(&x)) );
 
-                v.x = _mm512_mask_add_ps( src, mask, a, b );
+                v.x = _mm512_mask_blend_ps( mask, zero, one );
             }
 
             #ifdef MULTIFLOAT_CHECK_ALIGNMENT
