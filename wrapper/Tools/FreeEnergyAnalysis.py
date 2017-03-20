@@ -173,13 +173,13 @@ class SubSample(object):
             self._subsampled_N_k_gradients = numpy.zeros(shape=(self._gradients_kn.shape[0]))
             for i in range(g_k.shape[0]):
                 g_k[i] = timeseries.statisticalInefficiency(self._gradients_kn[i,:])
-            g = numpy.max(g_k)
+            g = int(numpy.max(g_k))
             #now we need to figure out what the indices in the data are for subsampling
             indices_k = []
             for i in range(g_k.shape[0]):
                 indices_k.append(timeseries.subsampleCorrelatedData(self._gradients_kn[i,:], g=g))
                 self._subsampled_N_k_gradients[i]=len(indices_k[i])
-            N_max = numpy.max(self._subsampled_N_k_gradients)
+            N_max = int(numpy.max(self._subsampled_N_k_gradients))
             if N_max <=100:
                 RuntimeWarning("You have reduced your data to less than 100 samples, the results from these might not "
                                "be trustworthy. ")
