@@ -227,7 +227,6 @@ if __name__ == '__main__':
         for k in range(0, lamvals.shape[0]):
             N_k[k] = data[k].shape[0]
 
-        print (N_k)
 
         max_sample = int(max(N_k))
         grad_kn = numpy.zeros(shape=(lamvals.shape[0],max_sample))
@@ -252,7 +251,35 @@ if __name__ == '__main__':
         free_energy_obj.run_mbar()
         free_energy_obj.run_ti()
 
+        pmf_mbar = free_energy_obj.pmf_mbar
+        if T != None:
+            k_boltz_J = 0.0083144621
+            pmf_mbar[:,1] = pmf_mbar[:,1]*T*k_boltz
+        FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
+        numpy.savetxt(FILE, pmf_mbar, fmt=['%f.2', '%f'])
 
+
+        pmf_ti = free_energy_obj.pmf_ti
+        if T != None:
+            pmf_ti[:,1] = pmf_ti[:,1]*T*k_boltz
+
+        FILE.write(bytes('#PMF from TI in kcal/mol\n', "UTF-8"))
+        numpy.savetxt(FILE, pmf_ti, fmt=['%f.2', '%f'])
+
+
+        df_mbar_kcal = free_energy_obj.deltaF_mbar
+        df_mbar_kJ = free_energy_obj.deltaF_mbar
+        df_ti_kcal = free_energy_obj.deltaF_ti*T*k_boltz
+        dDf_mbar_kcal = free_energy_obj.errorF_mbar
+        dDf_mbar_kJ = free_energy_obj.errorF_mbar
+        if T != None:
+            df_mbar_kcal = df_mbar_kcal*T*k_boltz
+            dDf_mbar_kcal = dDf_mbar_kcal*T*k_boltz
+
+        FILE.write(bytes("# MBAR free energy difference in kcal/mol: \n%f, %f \n" %(df_mbar_kcal,dDf_mbar_kcal),  "UTF-8"))
+        FILE.write(bytes("# TI free energy difference in kcal/mol: \n%f \n" %df_ti_kcal,  "UTF-8"))
+
+        FILE.close()
 ##########################################
 #         Free energy with s3 files      #
 ##########################################
@@ -372,7 +399,7 @@ if __name__ == '__main__':
 
         if output_file:
             print("# Writing all output to file %s" % output_file)
-            FILE = open(output_file, "w")
+            FILE = open(output_file, "wb")
         else:
             print("# Writing all output to stdout")
             FILE = sys.stdout
