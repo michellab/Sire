@@ -21,19 +21,22 @@ Options:
     -g GRADIENTS..., --gradients GRADIENTS...   Supply the name of the Sire Streamed gradients (.s3) files containing the 
                                                 gradients to be analysed.
     -r RANGE RANGE, --range RANGE               Supply the range of iterations over which to average. By default, this will be over the last 60 percent of iterations.
-    -l INPUT..., --sim_input INPUT...           Supply the name of the Sire simulation.dat files
+    -l INPUT..., --sim_input INPUT...           MBAR option: Supply the name of the Sire simulation.dat files
                                                 containing gradients and perturbed energies to be
-                                                analysed. If only INPUT is supplied lambda values will be inferred. 
-    --subsampling SUBSAMPLING                   Subsample according to either [timeseries] or [percentage] [default: timeseries]
-    --lam NUMBERS...                            Lambda values at which the PMFs should be evaluated
-    --temperature TEMPERATURE                   Temperature in [Kelvin] at which the simulation was generated [default: 300]
+                                                analysed. Valid options are: 'simfile1.dat, simfile2.dat', or 'simfile1.dat simfile2.dat', or wildcard arguments 'lambda*/simfile.dat'
+    --subsampling SUBSAMPLING                   MBAR option: Subsample according to either [timeseries] or [percentage] [default: timeseries]
+    --lam NUMBERS...                            MBAR option: Lambda values at which the PMFs should be evaluated
+    --temperature TEMPERATURE                   MBAR option; Temperature in [Kelvin] at which the simulation was generated [default: 300]
 """
 from Sire.Analysis import *
+import glob
+import re
 import Sire.Stream
 import sys
 import os
 from docopt import docopt
 import argparse
+import bz2
 from Sire.Tools.FreeEnergyAnalysis import SubSample
 from Sire.Tools.FreeEnergyAnalysis import FreeEnergies
 from Sire.Units import *
@@ -138,7 +141,6 @@ if __name__ == '__main__':
         sys.exit(0)
     if sys.argv[1] == 'mbar':
         arguments = docopt(__doc__)
-        print (arguments)
         must_exit = False
         #MBAR is true and we run and MBAR analysis
         print('Simulation data is analysed using mbar')
@@ -157,7 +159,103 @@ if __name__ == '__main__':
         if must_exit:
             sys.exit(0)
 
-    #Let's use argparse to do everything. 
+
+        input_files = arguments['--sim_input']
+        output_file = arguments['--output']
+
+        subsampling = arguments['--subsampling']
+        if subsampling not in ['timeseries', 'percentage']:
+            print('Unrecognised subsampling option. Options are [timesries] or [percentage]')
+            print(__doc__)
+            sys.exit(0)
+        percentage = float(arguments['--percentage'])
+        T = float(arguments['--temperature'])
+        print (T)
+        print (percentage)
+
+        if not input_files:
+            print(__doc__)
+            print("\nPlease supply the name of the simulation file/s containing the reduced perturbed energies/gradients to be "
+            "analysed.")
+            sys.exit(-1)
+        else:
+            if ',' in arguments['--sim_input'][0]:
+                pattern = re.compile("^\s+|\s*,\s*|\s+$")
+                input_files =[x for x in pattern.split(arguments['--sim_input'][0]) if x]
+            elif ' ' in arguments['--sim_input'][0]:
+                input_files = arguments['--sim_input'][0].split(' ')
+            elif '*' in arguments['--sim_input'][0]:
+                input_files = glob.glob(arguments['--sim_input'][0])
+
+        if output_file:
+            print("# Writing all output to file %s" % output_file)
+            FILE = open(output_file, "wb")
+        else:
+            print("# Writing all output to stdout")
+            FILE = sys.stdout.buffer
+
+        FILE.write(bytes("# Analysing data contained in file(s) %s\n" % input_files,  "UTF-8"))
+
+        #sanity checking of other input parameters:
+        #processing lambda values
+        lamvals = []
+        if not arguments['--lam']:
+            print ("Lambda array was not given, trying to infer lambda values from simulation files, this however is not yet "
+           "implemented")
+            #sys.exit(-1)
+        else:
+            if ',' in arguments['--lam'][0]:
+                pattern = re.compile("^\s+|\s*,\s*|\s+$")
+                lamvals =[x for x in pattern.split(arguments['--lam'][0]) if x]
+            elif ' ' in arguments['--lam'][0]:
+                lamvals = float(arguments['--lam'][0].split(' '))
+            lamvals = numpy.array([float(i) for i in lamvals])
+            print (lamvals)
+
+            num_inputfiles = len(input_files)
+            if len(lamvals) != num_inputfiles:
+                print ("The lambda array you have provided does not match the number of simulation files provided please revise!")
+                sys.exit(-1)
+
+        #We will load all the data now
+        data = []
+        for f in input_files:
+            data.append(numpy.loadtxt(f))
+
+        #N_k is the number of samples at generating thermodynamic state (lambda) k
+        N_k = numpy.zeros(shape=lamvals.shape[0], dtype='int32')
+        for k in range(0, lamvals.shape[0]):
+            N_k[k] = data[k].shape[0]
+
+        print (N_k)
+
+        max_sample = int(max(N_k))
+        grad_kn = numpy.zeros(shape=(lamvals.shape[0],max_sample))
+        energies_kn = numpy.zeros(shape=(lamvals.shape[0],max_sample))
+
+        for k in range(0,N_k.shape[0]):
+            grad_kn[k, 0:N_k[k]] = data[k][:,2] # get the gradient information
+            energies_kn[k, 0:N_k[k]] = data[k][:,1] #get the potential energies from the file.
+
+        #Are the reduced perturbed potential energies generated at thermodynamic state k evaluated at state l, over all n
+        # samples. This information is contained as is in the simulation file.
+        u_kln = numpy.zeros(shape=(lamvals.shape[0], lamvals.shape[0], max_sample))
+        for k in range(0, lamvals.shape[0]):
+            u_kln[k,:,0:N_k[k]] = data[k][:,5:].transpose()
+
+        #now we use the subsampling information to subsample the data.
+        subsample_obj = SubSample(grad_kn, energies_kn, u_kln, N_k, percentage=percentage, subsample=subsampling)
+        subsample_obj.subsample_energies()
+        subsample_obj.subsample_gradients()
+
+        free_energy_obj = FreeEnergies(subsample_obj.u_kln, subsample_obj.N_k_energies, lamvals, subsample_obj.gradients_kn)
+        free_energy_obj.run_mbar()
+        free_energy_obj.run_ti()
+
+
+##########################################
+#         Free energy with s3 files      #
+##########################################
     else:
         parser = argparse.ArgumentParser(description="Analyse free energy files to calculate "
                                              "free energies, PMFs and to view convergence.",
