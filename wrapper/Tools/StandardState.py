@@ -75,7 +75,7 @@ def averageCoordinates(restr_dict):
                 z_avg = z_avg + (val[2] - z_avg)/counter
 
         #Substitution of values
-        restr_dict[pairs][1:]=[[x_avg,y_avg,z_avg]]
+        restr_dict[pairs][1:]=[[x_avg*10,y_avg*10,z_avg*10]]
 
     return restr_dict
 
@@ -227,6 +227,7 @@ def run():
     #restr_dict[lig,host]=[ [req,K,D], [coords],[coords],...]
     print("Calculating average coordinates for restrained atoms")
     restr_dict = averageCoordinates(restr_dict)
+    print(restr_dict)
     #now the restr_dict is:
     #restr_dict[pairs]=[[req,K,D],[avgx,avgy,avgz]]
     space = defineIntegrationDomain(restr_dict)
@@ -257,9 +258,9 @@ def run():
 
                     distance = ((x-x_dict)**2 + (y-y_dict)**2 + (z-z_dict)**2)
 
-                    upper_bound = restr_dict[pairs][0][1]+ restr_dict[pairs][0][2]
-                    intmd_bound = restr_dict[pairs][0][1]
-                    lower_bound = restr_dict[pairs][0][1]- restr_dict[pairs][0][2]
+                    upper_bound = (restr_dict[pairs][0][0]+ restr_dict[pairs][0][2])**2
+                    intmd_bound = (restr_dict[pairs][0][0])**2
+                    lower_bound = (restr_dict[pairs][0][0]- restr_dict[pairs][0][2])**2
 
                     if distance < upper_bound and distance > intmd_bound:
                         if counter == len(restr_dict)-1:
