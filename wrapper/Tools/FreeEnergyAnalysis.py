@@ -222,7 +222,7 @@ class SubSample(object):
                 indices_k.append(timeseries.subsampleCorrelatedData(self._energies_kn[i,:], g=g))
                 self._subsampled_N_k_energies[i]=len(indices_k[i])
             #self._subsampled_N_k_energies = (numpy.ceil(self._N_k / g)).astype(int)
-            N_max = numpy.max(self._subsampled_N_k_energies)
+            N_max = int(numpy.max(self._subsampled_N_k_energies))
             if N_max <=100:
                 RuntimeWarning("You have reduced your data to less than 100 samples, the results from these might not "
                                "be trustworthy. ")
