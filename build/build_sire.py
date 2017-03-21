@@ -106,10 +106,21 @@ if __name__ == "__main__":
     # is to use cmake to build the corelib and wrapper in the build/corelib
     # and build/wrapper directories
 
+    # first, get the value of the CXX environment variable
+    cxx = os.getenv("CXX")
+    compiler_ext = None
+
+    if cxx:
+        if cxx.find("icpc") != -1:
+            compiler_ext = "intel"
+
     # change into the build/corelib directory
     OLDPWD = os.path.abspath(os.curdir)
 
-    coredir = "%s/corelib" % build_dir
+    if compiler_ext:
+        coredir = "%s/corelib_%s" % (build_dir,compiler_ext)
+    else:
+        coredir = "%s/corelib" % build_dir
 
     if not os.path.exists(coredir):
         os.makedirs(coredir)
@@ -156,7 +167,10 @@ if __name__ == "__main__":
     # python wrappers
     os.chdir(OLDPWD)
 
-    wrapperdir = "%s/wrapper" % build_dir
+    if compiler_ext:
+        wrapperdir = "%s/wrapper_%s" % (build_dir,compiler_ext)
+    else:
+        wrapperdir = "%s/wrapper" % build_dir
     
     if not os.path.exists(wrapperdir):
         os.makedirs(wrapperdir)
