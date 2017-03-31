@@ -56,6 +56,7 @@ class FreeEnergies(object):
         self._dDeltaF_mbar = None
         self._f_k = None
         self._pmf_ti = None
+        self._overlap_matrix = None
 
     def run_ti(self, cubic_spline=False):
         r"""Runs Thermodynamic integration free energy estimate
@@ -77,9 +78,9 @@ class FreeEnergies(object):
             self._deltaF_ti = numpy.trapz(means, self._lambda_array)
 
 
-    def run_mbar(self):
+    def run_mbar(self, test_overlap = True):
         r"""Runs MBAR free energy estimate """
-        MBAR_obj = MBAR(self._u_kln, self._N_k, verbose=True)
+        MBAR_obj = MBAR(self._u_kln, self._N_k, verbose=False)
         self._f_k = MBAR_obj.f_k
         (deltaF_ij, dDeltaF_ij, theta_ij) = MBAR_obj.getFreeEnergyDifferences()
         self._deltaF_mbar = deltaF_ij[0, self._lambda_array.shape[0]-1]
@@ -87,6 +88,12 @@ class FreeEnergies(object):
         self._pmf_mbar = numpy.zeros(shape=(self._lambda_array.shape[0], 2))
         self._pmf_mbar[:, 0] = self._lambda_array
         self._pmf_mbar[:, 1] = self._f_k
+
+        ##testing data overlap:
+        if test_overlap:
+            overlap_matrix = MBAR_obj.computeOverlap()
+            self._overlap_matrix = overlap_matrix[2]
+
 
     @property
     def pmf_ti(self):
@@ -107,6 +114,10 @@ class FreeEnergies(object):
     @property
     def errorF_mbar(self):
         return self._dDeltaF_mbar
+
+    @property
+    def overlap_matrix(self):
+        return self._overlap_matrix
 
 class SubSample(object):
     r"""This class subsamples data based on the timeseries analysis or percentage of data ready for pmf use
@@ -143,10 +154,7 @@ class SubSample(object):
                          "u_kln has size %d and N_k has size %d" %(u_kln.shape[0], N_k.shape[0]))
         self.subsample_method = subsample
         self.percentage = percentage
-        if percentage <0.0:
-            RuntimeError("You must provide a percentage between 0 and 100")
-        elif percentage>100.0:
-            RuntimeError("You must provide a percentage between 0 and 100")
+        assert(percentage > 0.0 and percentage <=100.0), "You must provide a percentage between 0 and 100" 
 
 
     def subsample_gradients(self):
@@ -164,9 +172,9 @@ class SubSample(object):
                 start = percentage_removal[p]
                 finish = percentage_removal[p]+N_max
                 self._subsampled_grad_kn[p,:] = self._gradients_kn[p,start:finish]
-            if N_max <=100:
-                warnings.warn("You have reduced your data to less than 100 samples, the results from these might not "
-                               "be trustworthy. ")
+            if N_max <=50:
+                warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
+                               "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
         else:
             print("#Running timeseries analysis using the timeseries analysis module in pymbar and will subsample according to that.")
             #first we compute statistical inefficiency
@@ -175,15 +183,16 @@ class SubSample(object):
             for i in range(g_k.shape[0]):
                 g_k[i] = timeseries.statisticalInefficiency(self._gradients_kn[i,:])
             g = int(numpy.max(g_k))
+            print (g)
             #now we need to figure out what the indices in the data are for subsampling
             indices_k = []
             for i in range(g_k.shape[0]):
                 indices_k.append(timeseries.subsampleCorrelatedData(self._gradients_kn[i,:], g=g))
                 self._subsampled_N_k_gradients[i]=len(indices_k[i])
             N_max = int(numpy.max(self._subsampled_N_k_gradients))
-            if N_max <=20:
-                warnings.warn("You have reduced your data to less than 100 samples, the results from these might not "
-                               "be trustworthy. If you don't want to add more samples consider the percentage option for subsampling.")
+            if N_max <=50:
+                warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
+                               "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
             self._subsampled_grad_kn = numpy.zeros([self._gradients_kn.shape[0], N_max], numpy.float64)
             for k in range(self._gradients_kn.shape[0]):
                 self._subsampled_grad_kn[k, :] = self._gradients_kn[k, indices_k[k]]
@@ -203,9 +212,9 @@ class SubSample(object):
             self._subsampled_u_kln = numpy.zeros(shape=(self._N_k.shape[0], self._N_k.shape[0], N_max))
             for k in range(0, self._N_k.shape[0]):
                 self._subsampled_u_kln[k] = self._u_kln[k,:,percentage_removal[k]:percentage_removal[k]+N_max]
-            if N_max <=100:
-                warnings.warn("You have reduced your data to less than 100 samples, the results from these might not "
-                               "be trustworthy. ")
+            if N_max <=50:
+                warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
+                               "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
         else:
             print("#We are doing a timeseries analysis using the timeseries analysis module in pymbar and will subsample"
                   " according to that.")
@@ -223,9 +232,9 @@ class SubSample(object):
                 self._subsampled_N_k_energies[i]=len(indices_k[i])
             #self._subsampled_N_k_energies = (numpy.ceil(self._N_k / g)).astype(int)
             N_max = int(numpy.max(self._subsampled_N_k_energies))
-            if N_max <=100:
-                warnings.warn("You have reduced your data to less than 100 samples, the results from these might not "
-                               "be trustworthy. ")
+            if N_max <=50:
+                warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
+                               "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
             self._subsampled_u_kln = numpy.zeros([self._gradients_kn.shape[0],self._gradients_kn.shape[0], N_max], numpy.float64)
             for k in range(self._gradients_kn.shape[0]):
                 self._subsampled_u_kln[k,:,:] = self._u_kln[k,:,indices_k[k]].transpose()

@@ -6,7 +6,7 @@ usage:
     analyse_freenrg [-i INPUT] [-o FILE] [-g NAME...] [-p PERCENT] [-r RANGE RANGE] 
     analyse_freenrg mbar [--description --author --version] 
     analyse_freenrg mbar -h, --help
-    analyse_freenrg mbar (-l INPUT...) [-o OUTPUT] [--subsampling TIMESERIES] [--percentage PERCENT] [--lam NUMBERS...] [--temperature TMPERATURE]
+    analyse_freenrg mbar (-l INPUT...) [-o OUTPUT] [--subsampling TIMESERIES] [--percentage PERCENT] [--lam NUMBERS...] [--temperature TMPERATURE] [--overlap]
 
 analyse_freenrg is built using Sire and is distributed under the GPL. For more information please visit http://siremol.org/analyse_freenrg
 
@@ -27,6 +27,7 @@ Options:
     --subsampling SUBSAMPLING                   MBAR option: Subsample according to either [timeseries] or [percentage] [default: timeseries]
     --lam NUMBERS...                            MBAR option: Lambda values at which the PMFs should be evaluated
     --temperature TEMPERATURE                   MBAR option; Temperature in [Kelvin] at which the simulation was generated [default: 300]
+    --overlap                                   MBAR option; Tests whether the overlap between neighbouring lambdas is sufficent for analysis
 """
 from Sire.Analysis import *
 import glob
@@ -40,6 +41,7 @@ import bz2
 from Sire.Tools.FreeEnergyAnalysis import SubSample
 from Sire.Tools.FreeEnergyAnalysis import FreeEnergies
 from Sire.Units import *
+import warnings
 # Import the asciiplot (ap) plotting library - this needs numpy
 try:
     numpy = Sire.try_import("numpy")
@@ -161,6 +163,7 @@ if __name__ == '__main__':
 
         input_files = arguments['--sim_input']
         output_file = arguments['--output']
+        test_overlap = arguments['--overlap']
 
         subsampling = arguments['--subsampling']
         if subsampling not in ['timeseries', 'percentage']:
@@ -270,8 +273,15 @@ if __name__ == '__main__':
         subsample_obj.subsample_gradients()
 
         free_energy_obj = FreeEnergies(subsample_obj.u_kln, subsample_obj.N_k_energies, lamvals, subsample_obj.gradients_kn)
-        free_energy_obj.run_mbar()
+        free_energy_obj.run_mbar(test_overlap)
         free_energy_obj.run_ti()
+
+        if test_overlap:
+            M = free_energy_obj.overlap_matrix
+            diag_elements = numpy.array([numpy.diag(M,k=1), numpy.diag(M, k=-1)])
+            if numpy.min(diag_elements)<0.03:
+                warnings.warn('Off diagonal elements of the overlap matrix are smaller than 0.03! Your free energy estiamte is not reliable!')
+
 
         pmf_mbar = free_energy_obj.pmf_mbar
         if T != None:
