@@ -159,7 +159,6 @@ if __name__ == '__main__':
         if must_exit:
             sys.exit(0)
 
-
         input_files = arguments['--sim_input']
         output_file = arguments['--output']
 
@@ -170,8 +169,6 @@ if __name__ == '__main__':
             sys.exit(0)
         percentage = float(arguments['--percentage'])
         T = float(arguments['--temperature'])
-        print (T)
-        print (percentage)
 
         if not input_files:
             print(__doc__)
@@ -198,11 +195,9 @@ if __name__ == '__main__':
 
         #sanity checking of other input parameters:
         #processing lambda values
-        lamvals = []
+        lamvals = None
         if not arguments['--lam']:
-            print ("Lambda array was not given, trying to infer lambda values from simulation files, this however is not yet "
-           "implemented")
-            #sys.exit(-1)
+            print ("#Lambda array was not given, trying to infer lambda values from simulation files...")
         else:
             if ',' in arguments['--lam'][0]:
                 pattern = re.compile("^\s+|\s*,\s*|\s+$")
@@ -210,11 +205,38 @@ if __name__ == '__main__':
             elif ' ' in arguments['--lam'][0]:
                 lamvals = float(arguments['--lam'][0].split(' '))
             lamvals = numpy.array([float(i) for i in lamvals])
-            print (lamvals)
+        lam = None
+        for f in input_files:
+## Compressed file
+            if f.endswith('.bz2'):
+                bz_file = bz2.BZ2File(f)
+                for line in bz_file:
+                    if line.startswith(b'#Alchemical'):
+                        if lamvals is None:
+                            lamvals= (line.split(b'(')[-1].split(b')')[0].split(b','))
+                            lamvals = numpy.array([float(i) for i in lamvals])
+                            lam = lamvals
 
-            num_inputfiles = len(input_files)
-            if len(lamvals) != num_inputfiles:
-                print ("The lambda array you have provided does not match the number of simulation files provided please revise!")
+                        else:
+                            lam = (line.split(b'(')[-1].split(b')')[0].split(b','))
+                            lam = numpy.array([float(i) for i in lam])
+                        break
+## Normal file
+            else:
+                for line in open(f):
+                    if line.startswith('#Alchemical'):
+                        if lamvals is None:
+                            lamvals= (line.split('(')[-1].split(')')[0].split(','))
+                            lamvals = numpy.array([float(i) for i in lamvals])
+
+                        else:
+                            lam = (line.split('(')[-1].split(')')[0].split(','))
+                            lam = numpy.array([float(i) for i in lam])
+                    break
+            if not numpy.array_equal(lam,lamvals):
+                print ("Lambda arrays do not match! Make sure your input data is consistent")
+                print (lam)
+                print (lamvals)
                 sys.exit(-1)
 
         #We will load all the data now
