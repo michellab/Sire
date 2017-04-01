@@ -80,7 +80,7 @@ class FreeEnergies(object):
 
     def run_mbar(self, test_overlap = True):
         r"""Runs MBAR free energy estimate """
-        MBAR_obj = MBAR(self._u_kln, self._N_k, verbose=False)
+        MBAR_obj = MBAR(self._u_kln, self._N_k, verbose=True)
         self._f_k = MBAR_obj.f_k
         (deltaF_ij, dDeltaF_ij, theta_ij) = MBAR_obj.getFreeEnergyDifferences()
         self._deltaF_mbar = deltaF_ij[0, self._lambda_array.shape[0]-1]
@@ -148,6 +148,7 @@ class SubSample(object):
         self._subsampled_N_k_energies = None
         self._subsampled_N_k_gradients = None
         self._subsampled_grad_kn = None
+        self._subsampled_energies_kn = None
 
         if N_k.shape[0]!=u_kln.shape[0]:
             RuntimeError("The number of thermodynamic states must be the same in u_kln and N_k!"
@@ -158,80 +159,96 @@ class SubSample(object):
 
 
     def subsample_gradients(self):
-        if self.subsample_method != 'timeseries':
-            print("#We are only eliminating samples from the beginning of the data and are still working with highly"
-                  " correlated data!")
-            if self.percentage == 100:
-                warnings.warn("You are not subsampling your data according to the statistical inefficiency nor are"
-                               "you discarding initial data. Please set percentage to another value than 100!")
-            percentage_removal = (self._N_k*(1-self.percentage/100.0)).astype('int32')
-            self._subsampled_N_k_gradients = self._N_k-percentage_removal
-            N_max = int(numpy.max(self._subsampled_N_k_gradients))
-            self._subsampled_grad_kn = numpy.zeros(shape=(self._N_k.shape[0], N_max))
-            for p in range(percentage_removal.shape[0]):
-                start = percentage_removal[p]
-                finish = percentage_removal[p]+N_max
-                self._subsampled_grad_kn[p,:] = self._gradients_kn[p,start:finish]
-            if N_max <=50:
-                warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
-                               "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
-        else:
-            print("#Running timeseries analysis using the timeseries analysis module in pymbar and will subsample according to that.")
-            #first we compute statistical inefficiency
-            g_k = numpy.zeros(shape=(self._gradients_kn.shape[0]))
-            self._subsampled_N_k_gradients = numpy.zeros(shape=(self._gradients_kn.shape[0]))
-            for i in range(g_k.shape[0]):
-                g_k[i] = timeseries.statisticalInefficiency(self._gradients_kn[i,:])
-            g = int(numpy.max(g_k))
-            print (g)
-            #now we need to figure out what the indices in the data are for subsampling
-            indices_k = []
-            for i in range(g_k.shape[0]):
-                indices_k.append(timeseries.subsampleCorrelatedData(self._gradients_kn[i,:], g=g))
-                self._subsampled_N_k_gradients[i]=len(indices_k[i])
-            N_max = int(numpy.max(self._subsampled_N_k_gradients))
-            if N_max <=50:
-                warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
-                               "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
-            self._subsampled_grad_kn = numpy.zeros([self._gradients_kn.shape[0], N_max], numpy.float64)
-            for k in range(self._gradients_kn.shape[0]):
-                self._subsampled_grad_kn[k, :] = self._gradients_kn[k, indices_k[k]]
+        r''' public method to subsample gradients and get a better estiamte.
+        '''
+        print('lengths gradients is: %f' %self._gradients_kn.shape[1])
+        if self.percentage == 100:
+            warnings.warn("You are not subsampling your data according to the statistical inefficiency nor are"
+                           "you discarding initial data. Please set percentage to another value than 100!")
+        percentage_removal = (self._N_k*(1-self.percentage/100.0)).astype('int32')
+        self._subsampled_N_k_gradients = self._N_k-percentage_removal
+        N_max = int(numpy.max(self._subsampled_N_k_gradients))
+        self._subsampled_grad_kn = numpy.zeros(shape=(self._N_k.shape[0], N_max))
+        for p in range(percentage_removal.shape[0]):
+            start = percentage_removal[p]
+            finish = percentage_removal[p]+N_max
+            self._subsampled_grad_kn[p,:] = self._gradients_kn[p,start:finish]
+        if N_max <=50:
+            warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
+                           "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
+        #if subsampling is percentage, then we are done here, otherwise we will now subsample according to timeseries
+
+        # if self.subsample_method == 'timeseries':
+        #     print("#Running timeseries analysis using the timeseries analysis module in pymbar and will subsample according to that.")
+        #     #first we compute statistical inefficiency
+        #     self._gradients_kn = self._subsampled_grad_kn.copy()
+        #     self._N_k = self._subsampled_N_k_gradients.copy()
+
+        #     print('lengths gradients in timesereis is: %f' %self._gradients_kn.shape[1])
+        #     g_k = numpy.zeros(shape=(self._gradients_kn.shape[0]))
+        #     self._subsampled_N_k_gradients = numpy.zeros(shape=(self._gradients_kn.shape[0]))
+        #     for i in range(g_k.shape[0]):
+        #         g_k[i] = timeseries.statisticalInefficiency(self._gradients_kn[i,:])
+        #     g = int(numpy.max(g_k))
+        #     print ('gradients %f' %g)
+        #     #now we need to figure out what the indices in the data are for subsampling
+        #     indices_k = []
+        #     for i in range(g_k.shape[0]):
+        #         indices_k.append(timeseries.subsampleCorrelatedData(self._gradients_kn[i,:], g=g))
+        #         self._subsampled_N_k_gradients[i]=len(indices_k[i])
+        #     N_max = int(numpy.max(self._subsampled_N_k_gradients))
+        #     print ('N_max is %d' %N_max)
+        #     if N_max <=50:
+        #         warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
+        #                        "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
+        #     self._subsampled_grad_kn = numpy.zeros([self._gradients_kn.shape[0], N_max], numpy.float64)
+        #     for k in range(self._gradients_kn.shape[0]):
+        #         self._subsampled_grad_kn[k, :] = self._gradients_kn[k, indices_k[k]]
 
     def subsample_energies(self):
-        if self.subsample_method!='timeseries':
-            print("#We are only eliminating samples from the beginning of the data and are still working with highly"
-                  " correlated data!")
+        r''' This subsamples u_kln according to percentage, i.e. remove initial equilibration data and then can additionally subsample according to timeseries
 
-            if self.percentage == 100:
-                warn.warnings("You are not subsampling your data according to the statistical inefficiency nor are"
-                               "you discarding initial data. Please set percentage to another value than 100!")
+        '''
+        #removing percent
+        if self.percentage == 100:
+            warnings.warn("You are not subsampling your data according to the statistical inefficiency nor are"
+                           "you discarding initial data. Please set percentage to another value than 100!")
 
-            percentage_removal = (self._N_k*(1-self.percentage/100.0)).astype('int32')
-            self._subsampled_N_k_energies = self._N_k-percentage_removal
-            N_max = int(numpy.max(self._subsampled_N_k_energies))
-            self._subsampled_u_kln = numpy.zeros(shape=(self._N_k.shape[0], self._N_k.shape[0], N_max))
-            for k in range(0, self._N_k.shape[0]):
-                self._subsampled_u_kln[k] = self._u_kln[k,:,percentage_removal[k]:percentage_removal[k]+N_max]
-            if N_max <=50:
-                warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
-                               "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
-        else:
+        percentage_removal = (self._N_k*(1-self.percentage/100.0)).astype('int32')
+        self._subsampled_N_k_energies = self._N_k-percentage_removal
+        N_max = int(numpy.max(self._subsampled_N_k_energies))
+        self._subsampled_u_kln = numpy.zeros(shape=(self._N_k.shape[0], self._N_k.shape[0], N_max))
+        self._subsampled_energies_kn = numpy.zeros(shape=(self._N_k.shape[0], N_max))
+        for k in range(0, self._N_k.shape[0]):
+            self._subsampled_u_kln[k] = self._u_kln[k,:,percentage_removal[k]:percentage_removal[k]+N_max]
+            self._subsampled_energies_kn[k] = self._energies_kn[k,percentage_removal[k]:percentage_removal[k]+N_max]
+        if N_max <=50:
+            warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
+                           "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
+
+        #Now we are doing some additional subsampling according to timeseries analysis
+        if self.subsample_method == 'timeseries':
             print("#We are doing a timeseries analysis using the timeseries analysis module in pymbar and will subsample"
                   " according to that.")
 
+            self._u_kln = self._subsampled_u_kln.copy()
+            self._N_k = self._subsampled_N_k_energies.copy()
+            self._energies_kn = self._subsampled_energies_kn.copy()
             #first we compute statistical inefficiency
             g_k = numpy.zeros(shape=(self._energies_kn.shape[0]))
             for i in range(g_k.shape[0]):
-                g_k[i] = timeseries.statisticalInefficiency(self._energies_kn[i,:])
+                g_k[i] = timeseries.statisticalInefficiency(self._energies_kn[i,percentage_removal[i]:])
             g = numpy.max(g_k)
+            print ('energies %f' %g)
             #now we need to figure out what the indices in the data are for subsampling
             indices_k = []
-            self._subsampled_N_k_energies = numpy.zeros(shape=(self._gradients_kn.shape[0]))
+            self._subsampled_N_k_energies = numpy.zeros(shape=(self._energies_kn.shape[0]))
             for i in range(g_k.shape[0]):
                 indices_k.append(timeseries.subsampleCorrelatedData(self._energies_kn[i,:], g=g))
                 self._subsampled_N_k_energies[i]=len(indices_k[i])
             #self._subsampled_N_k_energies = (numpy.ceil(self._N_k / g)).astype(int)
             N_max = int(numpy.max(self._subsampled_N_k_energies))
+            print ('N_max is %d' %N_max)
             if N_max <=50:
                 warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
                                "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
@@ -241,14 +258,12 @@ class SubSample(object):
 
     @property
     def u_kln(self):
-        if self._subsampled_u_kln is None:
-            self.subsample_energies()
         return self._subsampled_u_kln
+
     @property
     def gradients_kn(self):
-        if self._subsampled_grad_kn is None:
-            self.subsample_gradients()
         return  self._subsampled_grad_kn
+
     @property
     def N_k_energies(self):
         return self._subsampled_N_k_energies

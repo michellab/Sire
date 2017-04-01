@@ -268,12 +268,16 @@ if __name__ == '__main__':
             u_kln[k,:,0:N_k[k]] = data[k][:,5:].transpose()
 
         #now we use the subsampling information to subsample the data.
+        print (N_k)
         subsample_obj = SubSample(grad_kn, energies_kn, u_kln, N_k, percentage=percentage, subsample=subsampling)
         subsample_obj.subsample_energies()
         subsample_obj.subsample_gradients()
 
+        print (subsample_obj.N_k_energies)
         free_energy_obj = FreeEnergies(subsample_obj.u_kln, subsample_obj.N_k_energies, lamvals, subsample_obj.gradients_kn)
+        print ('# running mbar ====================================================')
         free_energy_obj.run_mbar(test_overlap)
+        print ('# running mbar done ===============================================')
         free_energy_obj.run_ti()
 
         if test_overlap:
@@ -288,7 +292,7 @@ if __name__ == '__main__':
             k_boltz_J = 0.0083144621
             pmf_mbar[:,1] = pmf_mbar[:,1]*T*k_boltz
         FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
-        numpy.savetxt(FILE, pmf_mbar, fmt=['%f.2', '%f'])
+        numpy.savetxt(FILE, pmf_mbar, fmt=['%.2f', '%.2f'])
 
 
         pmf_ti = free_energy_obj.pmf_ti
@@ -296,7 +300,7 @@ if __name__ == '__main__':
             pmf_ti[:,1] = pmf_ti[:,1]*T*k_boltz
 
         FILE.write(bytes('#PMF from TI in kcal/mol\n', "UTF-8"))
-        numpy.savetxt(FILE, pmf_ti, fmt=['%f.2', '%f'])
+        numpy.savetxt(FILE, pmf_ti, fmt=['%.2f', '%.2f'])
 
 
         df_mbar_kcal = free_energy_obj.deltaF_mbar
