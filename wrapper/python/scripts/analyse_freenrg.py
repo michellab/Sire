@@ -268,12 +268,10 @@ if __name__ == '__main__':
             u_kln[k,:,0:N_k[k]] = data[k][:,5:].transpose()
 
         #now we use the subsampling information to subsample the data.
-        print (N_k)
         subsample_obj = SubSample(grad_kn, energies_kn, u_kln, N_k, percentage=percentage, subsample=subsampling)
         subsample_obj.subsample_energies()
         subsample_obj.subsample_gradients()
 
-        print (subsample_obj.N_k_energies)
         free_energy_obj = FreeEnergies(subsample_obj.u_kln, subsample_obj.N_k_energies, lamvals, subsample_obj.gradients_kn)
         print ('# running mbar ====================================================')
         free_energy_obj.run_mbar(test_overlap)
@@ -285,7 +283,8 @@ if __name__ == '__main__':
             diag_elements = numpy.array([numpy.diag(M,k=1), numpy.diag(M, k=-1)])
             if numpy.min(diag_elements)<0.03:
                 warnings.warn('Off diagonal elements of the overlap matrix are smaller than 0.03! Your free energy estiamte is not reliable!')
-
+            FILE.write(bytes('#Overlap matrix\n', "UTF-8"))
+            numpy.savetxt(FILE, M, fmt='%.4f')
 
         pmf_mbar = free_energy_obj.pmf_mbar
         if T != None:
