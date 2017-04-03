@@ -159,9 +159,8 @@ class SubSample(object):
 
 
     def subsample_gradients(self):
-        r''' public method to subsample gradients and get a better estiamte.
+        r''' method to subsample gradients and get a better estiamte.
         '''
-        print('lengths gradients is: %f' %self._gradients_kn.shape[1])
         if self.percentage == 100:
             warnings.warn("You are not subsampling your data according to the statistical inefficiency nor are"
                            "you discarding initial data. Please set percentage to another value than 100!")
@@ -178,32 +177,29 @@ class SubSample(object):
                            "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
         #if subsampling is percentage, then we are done here, otherwise we will now subsample according to timeseries
 
-        # if self.subsample_method == 'timeseries':
-        #     print("#Running timeseries analysis using the timeseries analysis module in pymbar and will subsample according to that.")
-        #     #first we compute statistical inefficiency
-        #     self._gradients_kn = self._subsampled_grad_kn.copy()
-        #     self._N_k = self._subsampled_N_k_gradients.copy()
+        if self.subsample_method == 'timeseries':
+            print("#Subsampling gradients according to statistical inefficiency")
+            #first we compute statistical inefficiency
+            self._gradients_kn = self._subsampled_grad_kn.copy()
+            self._N_k = self._subsampled_N_k_gradients.copy()
 
-        #     print('lengths gradients in timesereis is: %f' %self._gradients_kn.shape[1])
-        #     g_k = numpy.zeros(shape=(self._gradients_kn.shape[0]))
-        #     self._subsampled_N_k_gradients = numpy.zeros(shape=(self._gradients_kn.shape[0]))
-        #     for i in range(g_k.shape[0]):
-        #         g_k[i] = timeseries.statisticalInefficiency(self._gradients_kn[i,:])
-        #     g = int(numpy.max(g_k))
-        #     print ('gradients %f' %g)
-        #     #now we need to figure out what the indices in the data are for subsampling
-        #     indices_k = []
-        #     for i in range(g_k.shape[0]):
-        #         indices_k.append(timeseries.subsampleCorrelatedData(self._gradients_kn[i,:], g=g))
-        #         self._subsampled_N_k_gradients[i]=len(indices_k[i])
-        #     N_max = int(numpy.max(self._subsampled_N_k_gradients))
-        #     print ('N_max is %d' %N_max)
-        #     if N_max <=50:
-        #         warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
-        #                        "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
-        #     self._subsampled_grad_kn = numpy.zeros([self._gradients_kn.shape[0], N_max], numpy.float64)
-        #     for k in range(self._gradients_kn.shape[0]):
-        #         self._subsampled_grad_kn[k, :] = self._gradients_kn[k, indices_k[k]]
+            g_k = numpy.zeros(shape=(self._gradients_kn.shape[0]))
+            self._subsampled_N_k_gradients = numpy.zeros(shape=(self._gradients_kn.shape[0]))
+            for i in range(g_k.shape[0]):
+                g_k[i] = timeseries.statisticalInefficiency(self._gradients_kn[i,:])
+            g = int(numpy.max(g_k))
+            #now we need to figure out what the indices in the data are for subsampling
+            indices_k = []
+            for i in range(g_k.shape[0]):
+                indices_k.append(timeseries.subsampleCorrelatedData(self._gradients_kn[i,:], g=g))
+                self._subsampled_N_k_gradients[i]=len(indices_k[i])
+            N_max = int(numpy.max(self._subsampled_N_k_gradients))
+            if N_max <=50:
+                warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
+                               "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
+            self._subsampled_grad_kn = numpy.zeros([self._gradients_kn.shape[0], N_max], numpy.float64)
+            for k in range(self._gradients_kn.shape[0]):
+                self._subsampled_grad_kn[k, :] = self._gradients_kn[k, indices_k[k]]
 
     def subsample_energies(self):
         r''' This subsamples u_kln according to percentage, i.e. remove initial equilibration data and then can additionally subsample according to timeseries
@@ -228,8 +224,7 @@ class SubSample(object):
 
         #Now we are doing some additional subsampling according to timeseries analysis
         if self.subsample_method == 'timeseries':
-            print("#We are doing a timeseries analysis using the timeseries analysis module in pymbar and will subsample"
-                  " according to that.")
+            print("#Subsampling energies according to statistical inefficiency for pymbar")
 
             self._u_kln = self._subsampled_u_kln.copy()
             self._N_k = self._subsampled_N_k_energies.copy()
@@ -239,7 +234,6 @@ class SubSample(object):
             for i in range(g_k.shape[0]):
                 g_k[i] = timeseries.statisticalInefficiency(self._energies_kn[i,percentage_removal[i]:])
             g = numpy.max(g_k)
-            print ('energies %f' %g)
             #now we need to figure out what the indices in the data are for subsampling
             indices_k = []
             self._subsampled_N_k_energies = numpy.zeros(shape=(self._energies_kn.shape[0]))
@@ -248,7 +242,6 @@ class SubSample(object):
                 self._subsampled_N_k_energies[i]=len(indices_k[i])
             #self._subsampled_N_k_energies = (numpy.ceil(self._N_k / g)).astype(int)
             N_max = int(numpy.max(self._subsampled_N_k_energies))
-            print ('N_max is %d' %N_max)
             if N_max <=50:
                 warnings.warn("You have reduced your data to less than 50 samples, the results from these might not "
                                "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
