@@ -139,7 +139,7 @@ class SubSample(object):
         string idenfier for subsampling method, default='timeseries' from timeseries module in MBAR
     """
 
-    def __init__(self, gradients_kn, energies, u_kln, N_k, percentage=100, subsample='timeseries'):
+    def __init__(self, gradients_kn, energies, u_kln, N_k, percentage=100, subsample=True):
         self._gradients_kn = gradients_kn
         self._N_k = N_k
         self._energies_kn = energies
@@ -153,7 +153,7 @@ class SubSample(object):
         if N_k.shape[0]!=u_kln.shape[0]:
             RuntimeError("The number of thermodynamic states must be the same in u_kln and N_k!"
                          "u_kln has size %d and N_k has size %d" %(u_kln.shape[0], N_k.shape[0]))
-        self.subsample_method = subsample
+        self.subsample = subsample
         self.percentage = percentage
         assert(percentage > 0.0 and percentage <=100.0), "You must provide a percentage between 0 and 100" 
 
@@ -177,7 +177,7 @@ class SubSample(object):
                            "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
         #if subsampling is percentage, then we are done here, otherwise we will now subsample according to timeseries
 
-        if self.subsample_method == 'timeseries':
+        if self.subsample:
             print("#Subsampling gradients according to statistical inefficiency")
             #first we compute statistical inefficiency
             self._gradients_kn = self._subsampled_grad_kn.copy()
@@ -223,7 +223,7 @@ class SubSample(object):
                            "be trustworthy. If you don't want to add more samples consider rerunning the analysis using the percentage option.")
 
         #Now we are doing some additional subsampling according to timeseries analysis
-        if self.subsample_method == 'timeseries':
+        if self.subsample:
             print("#Subsampling energies according to statistical inefficiency for pymbar")
 
             self._u_kln = self._subsampled_u_kln.copy()

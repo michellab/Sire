@@ -6,7 +6,7 @@ usage:
     analyse_freenrg [-i INPUT] [-o FILE] [-g NAME...] [-p PERCENT] [-r RANGE RANGE] 
     analyse_freenrg mbar [--description --author --version] 
     analyse_freenrg mbar -h, --help
-    analyse_freenrg mbar (-l INPUT...) [-o OUTPUT] [--subsampling TIMESERIES] [--percentage PERCENT] [--lam NUMBERS...] [--temperature TMPERATURE] [--overlap]
+    analyse_freenrg mbar (-l INPUT...) [-o OUTPUT] [--subsampling ] [--percentage PERCENT] [--lam NUMBERS...] [--temperature TMPERATURE] [--overlap]
 
 analyse_freenrg is built using Sire and is distributed under the GPL. For more information please visit http://siremol.org/analyse_freenrg
 
@@ -24,7 +24,7 @@ Options:
     -l INPUT..., --sim_input INPUT...           MBAR option: Supply the name of the Sire simulation.dat files
                                                 containing gradients and perturbed energies to be
                                                 analysed. Valid options are: 'simfile1.dat, simfile2.dat', or 'simfile1.dat simfile2.dat', or wildcard arguments 'lambda*/simfile.dat'
-    --subsampling SUBSAMPLING                   MBAR option: Subsample according to either [timeseries] or [percentage] [default: timeseries]
+    --subsampling                               MBAR option: Subsampling data true or false
     --lam NUMBERS...                            MBAR option: Lambda values at which the PMFs should be evaluated
     --temperature TEMPERATURE                   MBAR option; Temperature in [Kelvin] at which the simulation was generated [default: 300]
     --overlap                                   MBAR option; Tests whether the overlap between neighbouring lambdas is sufficent for analysis
@@ -166,10 +166,6 @@ if __name__ == '__main__':
         test_overlap = arguments['--overlap']
 
         subsampling = arguments['--subsampling']
-        if subsampling not in ['timeseries', 'percentage']:
-            print('Unrecognised subsampling option. Options are [timesries] or [percentage]')
-            print(__doc__)
-            sys.exit(0)
         percentage = float(arguments['--percentage'])
         T = float(arguments['--temperature'])
 
