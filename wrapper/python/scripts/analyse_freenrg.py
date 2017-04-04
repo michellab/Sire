@@ -6,7 +6,7 @@ usage:
     analyse_freenrg [-i INPUT] [-o FILE] [-g NAME...] [-p PERCENT] [-r RANGE RANGE] 
     analyse_freenrg mbar [--description --author --version] 
     analyse_freenrg mbar -h, --help
-    analyse_freenrg mbar (-l INPUT...) [-o OUTPUT] [--subsampling ] [--percentage PERCENT] [--lam NUMBERS...] [--temperature TMPERATURE] [--overlap]
+    analyse_freenrg mbar (-i INPUT...) [-o OUTPUT] [--subsampling ] [--percentage PERCENT] [--lam NUMBERS...] [--temperature TMPERATURE] [--overlap]
 
 analyse_freenrg is built using Sire and is distributed under the GPL. For more information please visit http://siremol.org/analyse_freenrg
 
@@ -15,15 +15,15 @@ Options:
     --description                               Print a complete description of this program.
     --author                                    Get information about the authors of this script.
     --version                                   Get version information about this script.
-    -i INPUT, --input INPUT                     Supply the name of the Sire Streamed Save (.s3) file containing the free energies to be analysed.
+    -i INPUT..., --input INPUT                  Supply the name of the Sire Streamed Save (.s3) file containing the free energies to be analysed.
+                                                MBAR option: Supply the name of the Sire simulation.dat files
+                                                containing gradients and perturbed energies to be
+                                                analysed. Valid options are: 'simfile1.dat, simfile2.dat', or 'simfile1.dat simfile2.dat', or wildcard arguments 'lambda*/simfile.dat'
     -o OUTPUT, --output OUTPUT                  Supply the name of the file in which to write the output.
     -p PERCENT, --percentage PERCENT            Percentage of the data to be used for analysis the rest will be discareded towards equilibration [default: 60]
     -g GRADIENTS..., --gradients GRADIENTS...   Supply the name of the Sire Streamed gradients (.s3) files containing the 
                                                 gradients to be analysed.
     -r RANGE RANGE, --range RANGE               Supply the range of iterations over which to average. By default, this will be over the last 60 percent of iterations.
-    -l INPUT..., --sim_input INPUT...           MBAR option: Supply the name of the Sire simulation.dat files
-                                                containing gradients and perturbed energies to be
-                                                analysed. Valid options are: 'simfile1.dat, simfile2.dat', or 'simfile1.dat simfile2.dat', or wildcard arguments 'lambda*/simfile.dat'
     --subsampling                               MBAR option: Subsampling data true or false
     --lam NUMBERS...                            MBAR option: Lambda values at which the PMFs should be evaluated
     --temperature TEMPERATURE                   MBAR option; Temperature in [Kelvin] at which the simulation was generated [default: 300]
@@ -161,7 +161,7 @@ if __name__ == '__main__':
         if must_exit:
             sys.exit(0)
 
-        input_files = arguments['--sim_input']
+        input_files = arguments['--input']
         output_file = arguments['--output']
         test_overlap = arguments['--overlap']
 
@@ -175,13 +175,13 @@ if __name__ == '__main__':
             "analysed.")
             sys.exit(-1)
         else:
-            if ',' in arguments['--sim_input'][0]:
+            if ',' in arguments['--input'][0]:
                 pattern = re.compile("^\s+|\s*,\s*|\s+$")
-                input_files =[x for x in pattern.split(arguments['--sim_input'][0]) if x]
-            elif ' ' in arguments['--sim_input'][0]:
-                input_files = arguments['--sim_input'][0].split(' ')
-            elif '*' in arguments['--sim_input'][0]:
-                input_files = glob.glob(arguments['--sim_input'][0])
+                input_files =[x for x in pattern.split(arguments['--input'][0]) if x]
+            elif ' ' in arguments['--input'][0]:
+                input_files = arguments['--input'][0].split(' ')
+            elif '*' in arguments['--input'][0]:
+                input_files = glob.glob(arguments['--input'][0])
 
         if output_file:
             print("# Writing all output to file %s" % output_file)
