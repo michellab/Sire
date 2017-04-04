@@ -21,7 +21,7 @@ case $key in
     --install)
     INSTALL_SIRE_DIR="$2"
     echo "Installing Sire into ${INSTALL_SIRE_DIR}"
-    exit 0
+#    exit 0
     ;;
     --clean)
     echo "Completely cleaning the build directories..."

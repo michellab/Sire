@@ -90,7 +90,7 @@ if __name__ == "__main__":
     except:
         print("Installing openmm from the omnia repository...")
         os.system("%s config --add channels http://conda.binstar.org/omnia" % conda_exe)
-        os.system("%s install --yes openmm" % conda_exe)
+        os.system("%s install --yes openmm=7.0" % conda_exe)
 
     # Now that the miniconda distribution is ok, the next step
     # is to use cmake to build the corelib and wrapper in the build/corelib
