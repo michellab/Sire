@@ -206,6 +206,7 @@ if __name__ == '__main__':
             lamvals = numpy.array([float(i) for i in lamvals])
         lam = None
         for f in input_files:
+            print ('working on input file %s' %f)
 ## Compressed file
             if f.endswith('.bz2'):
                 bz_file = bz2.BZ2File(f)
@@ -227,11 +228,12 @@ if __name__ == '__main__':
                         if lamvals is None:
                             lamvals= (line.split('(')[-1].split(')')[0].split(','))
                             lamvals = numpy.array([float(i) for i in lamvals])
+                            lam = lamvals
 
                         else:
                             lam = (line.split('(')[-1].split(')')[0].split(','))
                             lam = numpy.array([float(i) for i in lam])
-                    break
+                        break
             if not numpy.array_equal(lam,lamvals):
                 print ("Lambda arrays do not match! Make sure your input data is consistent")
                 print (lam)
@@ -352,7 +354,6 @@ if __name__ == '__main__':
 
         parser.add_argument('-h', '--help', action='store_true', dest='hi')
 
-        parser.add_argument('--subsampling')
         parser.add_argument('--temperature')
         parser.add_argument('--lam', nargs='*')
         sys.stdout.write("\n")
