@@ -185,7 +185,7 @@ if __name__ == '__main__':
             elif ' ' in arguments['--input'][0]:
                 input_files = arguments['--input'][0].split(' ')
             elif '*' in arguments['--input'][0]:
-                input_files = glob.glob(arguments['--input'][0])
+                input_files = glob.glob(arguments['--input'][0]).sort()
 
         if output_file:
             print("# Writing all output to file %s" % output_file)
