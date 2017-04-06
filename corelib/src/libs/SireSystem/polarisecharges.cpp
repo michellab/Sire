@@ -53,6 +53,8 @@
 #include "SireUnits/units.h"
 #include "SireUnits/convert.h"
 
+#include "SireBase/refcountdata.h"
+
 #include "SireBase/errors.h"
 #include "SireError/errors.h"
 
@@ -77,10 +79,10 @@ namespace SireSystem
 {
     namespace detail
     {
-        class PolariseChargesData : public QSharedData
+        class PolariseChargesData : public RefCountData
         {
         public:
-            PolariseChargesData() : QSharedData()
+            PolariseChargesData() : RefCountData()
             {}
             
             PolariseChargesData(const MoleculeView &molview,
@@ -89,7 +91,7 @@ namespace SireSystem
                                 const PropertyName &polarise_property);
             
             PolariseChargesData(const PolariseChargesData &other)
-                  : QSharedData(),
+                  : RefCountData(),
                     xx_matricies(other.xx_matricies),
                     inv_xx_matricies(other.inv_xx_matricies),
                     connectivity(other.connectivity),
@@ -211,7 +213,7 @@ PolariseChargesData::PolariseChargesData(const MoleculeView &molview,
                                          const PropertyName &coords_property,
                                          const PropertyName &connectivity_property,
                                          const PropertyName &polarise_property)
-                    : QSharedData()
+                    : RefCountData()
 {
     const AtomCoords &coords = molview.data().property(coords_property)
                                              .asA<AtomCoords>();
@@ -768,12 +770,12 @@ void PolariseCharges::setSystem(const System &system)
          it != molecules.constEnd();
          ++it)
     {
-        QHash< MolNum,QSharedDataPointer<PolariseChargesData> >::const_iterator
+        QHash< MolNum,SharedDataPointer<PolariseChargesData> >::const_iterator
                                         it2 = moldata.constFind(it.key());
                                         
         if (it2 == moldata.constEnd())
         {
-            moldata.insert( it.key(), QSharedDataPointer<PolariseChargesData>(
+            moldata.insert( it.key(), SharedDataPointer<PolariseChargesData>(
                                             new PolariseChargesData(
                                                     it.value(),
                                                     coords_property, 

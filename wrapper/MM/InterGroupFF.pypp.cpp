@@ -14,6 +14,8 @@ namespace bp = boost::python;
 
 #include "SireBase/lengthproperty.h"
 
+#include "SireBase/refcountdata.h"
+
 #include "SireError/errors.h"
 
 #include "SireMol/atomselection.h"

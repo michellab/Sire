@@ -11,6 +11,10 @@ namespace bp = boost::python;
 
 #include "SireMM/atomljs.h"
 
+#include "SireMM/cljatoms.h"
+
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireMM/ljpair.h"
 
 #include "SireMol/atomcharges.h"

@@ -30,11 +30,10 @@
 #define SIRECAS_EXBASE_H
 
 #include <QString>
-#include <QSharedData>
 
 #include "SireMaths/rational.h"
 
-#include "sireglobal.h"
+#include "SireBase/refcountdata.h"
 
 SIRE_BEGIN_HEADER
 
@@ -83,7 +82,7 @@ ExpressionBase is just a proxy for SharedPolyPointer<ExBase>).
 
 @author Christopher Woods
 */
-class SIRECAS_EXPORT ExBase : public QSharedData
+class SIRECAS_EXPORT ExBase : public SireBase::RefCountData
 {
 
 friend QDataStream& ::operator<<(QDataStream&, const ExBase&);

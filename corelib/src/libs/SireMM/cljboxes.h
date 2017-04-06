@@ -31,9 +31,10 @@
 
 #include "SireMM/cljatoms.h"
 
+#include "SireBase/refcountdata.h"
+#include "SireBase/shareddatapointer.hpp"
+
 #include <QHash>
-#include <QSharedDataPointer>
-#include <QSharedData>
 #include <QStack>
 
 SIRE_BEGIN_HEADER
@@ -159,7 +160,7 @@ private:
     
     @author Christopher Woods
 */
-class SIREMM_EXPORT CLJBox : public QSharedData
+class SIREMM_EXPORT CLJBox : public SireBase::RefCountData
 {
 
 friend QDataStream& ::operator<<(QDataStream&, const CLJBox&);
@@ -258,7 +259,7 @@ public:
     
 private:
     /** Implicitly shared pointer to the box */
-    QSharedDataPointer<CLJBox> d;
+    SireBase::SharedDataPointer<CLJBox> d;
 };
 
 /** This simple class holds the minimum distance between the two

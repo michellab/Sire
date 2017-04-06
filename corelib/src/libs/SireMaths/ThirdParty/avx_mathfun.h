@@ -31,6 +31,9 @@
 
 #include <immintrin.h>
 
+// WE DON"T WANT AVX2
+#undef __AVX2__
+
 /* yes I know, the top of this file is quite ugly */
 # define ALIGN32_BEG
 # define ALIGN32_END __attribute__((aligned(32)))

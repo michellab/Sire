@@ -153,7 +153,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "charges"
                 , charges_function_value
-                , "Return the charges on all of the atoms" );
+                , "Return the charges of all of the atoms" );
         
         }
         { //::SireMM::CLJAtoms::coordinates
@@ -278,7 +278,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "ljParameters"
                 , ljParameters_function_value
-                , "Return the LJ parameters on all of the atoms" );
+                , "Return the charges of all of the atoms" );
         
         }
         { //::SireMM::CLJAtoms::makeDummy

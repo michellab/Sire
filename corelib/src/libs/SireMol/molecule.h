@@ -139,6 +139,8 @@ public:
     int nChains() const;
     int nSegments() const;
     
+    MoleculeInfo info() const;
+    
     Mover<Molecule> move() const;
     Evaluator evaluate() const;
     MolEditor edit() const;

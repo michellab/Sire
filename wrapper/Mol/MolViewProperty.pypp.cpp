@@ -41,9 +41,33 @@ void register_MolViewProperty_class(){
                 , "Assert that this property is compatible with the MoleculeInfoData info\nThrow: SireError::incompatible_error\n" );
         
         }
+        { //::SireMol::MolViewProperty::assertCompatibleWith
+        
+            typedef void ( ::SireMol::MolViewProperty::*assertCompatibleWith_function_type)( ::SireMol::MoleculeInfo const & ) const;
+            assertCompatibleWith_function_type assertCompatibleWith_function_value( &::SireMol::MolViewProperty::assertCompatibleWith );
+            
+            MolViewProperty_exposer.def( 
+                "assertCompatibleWith"
+                , assertCompatibleWith_function_value
+                , ( bp::arg("molinfo") )
+                , "Assert that this property is compatible with the MoleculeInfoData info\nThrow: SireError::incompatible_error\n" );
+        
+        }
         { //::SireMol::MolViewProperty::isCompatibleWith
         
             typedef bool ( ::SireMol::MolViewProperty::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::MolViewProperty::isCompatibleWith );
+            
+            MolViewProperty_exposer.def( 
+                "isCompatibleWith"
+                , isCompatibleWith_function_value
+                , ( bp::arg("molinfo") )
+                , "" );
+        
+        }
+        { //::SireMol::MolViewProperty::isCompatibleWith
+        
+            typedef bool ( ::SireMol::MolViewProperty::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfo const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::MolViewProperty::isCompatibleWith );
             
             MolViewProperty_exposer.def( 

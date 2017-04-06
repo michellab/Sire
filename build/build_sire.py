@@ -36,7 +36,17 @@ if __name__ == "__main__":
         import multiprocessing
         NCORES = multiprocessing.cpu_count()
 
+    # Get the number of cores to use for compiling the python wrappers - this 
+    # defaults to NCORES
+    if "NPYCORES" in os.environ:
+        NPYCORES = int(os.environ["NPYCORES"])
+    else:
+        NPYCORES = NCORES
+
     print("Number of cores used for compilation = %d" % NCORES)
+
+    if NPYCORES != NCORES:
+        print("Number of cores used for wrapper compilation = %d" % NPYCORES)
 
     python_exe = None
     conda_exe = None
@@ -96,10 +106,21 @@ if __name__ == "__main__":
     # is to use cmake to build the corelib and wrapper in the build/corelib
     # and build/wrapper directories
 
+    # first, get the value of the CXX environment variable
+    cxx = os.getenv("CXX")
+    compiler_ext = None
+
+    if cxx:
+        if cxx.find("icpc") != -1:
+            compiler_ext = "intel"
+
     # change into the build/corelib directory
     OLDPWD = os.path.abspath(os.curdir)
 
-    coredir = "%s/corelib" % build_dir
+    if compiler_ext:
+        coredir = "%s/corelib_%s" % (build_dir,compiler_ext)
+    else:
+        coredir = "%s/corelib" % build_dir
 
     if not os.path.exists(coredir):
         os.makedirs(coredir)
@@ -146,7 +167,10 @@ if __name__ == "__main__":
     # python wrappers
     os.chdir(OLDPWD)
 
-    wrapperdir = "%s/wrapper" % build_dir
+    if compiler_ext:
+        wrapperdir = "%s/wrapper_%s" % (build_dir,compiler_ext)
+    else:
+        wrapperdir = "%s/wrapper" % build_dir
     
     if not os.path.exists(wrapperdir):
         os.makedirs(wrapperdir)
@@ -176,14 +200,14 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     # Now that cmake has run, we can compile wrapper
-    status = os.system("make -j %s" % NCORES)
+    status = os.system("make -j %s" % NPYCORES)
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING WRAPPER!")
         sys.exit(-1)
 
     # Now the compilation has finished, install wrapper
-    status = os.system("make -j %s install" % NCORES)
+    status = os.system("make -j %s install" % NPYCORES)
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN INSTALLING WRAPPER!")

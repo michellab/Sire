@@ -226,19 +226,9 @@ const char* NullAccumulator::typeName()
     return QMetaType::typeName( qMetaTypeId<NullAccumulator>() );
 }
 
-static SharedPolyPointer<NullAccumulator> shared_null;
-
 const NullAccumulator& Accumulator::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new NullAccumulator();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<NullAccumulator>());
 }
 
 /////////

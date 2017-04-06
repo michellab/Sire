@@ -1,37 +1,135 @@
+language: c++
 sudo: false
 
-language: cpp
+dummy: true
 
-compiler:
- - gcc
+env:
+  global:
+    # variables used to control build of Sire - limit to 4 core build,
+    # don't have Sire phone home (as would create false stats) and 
+    # install into the home directory, sire.app
+    - NCORES=4
+    - SIRE_DONT_PHONEHOME=1
+    - INSTALL_SIRE_DIR=$HOME/sire.app
 
-# Travis CI is powered with Ubuntu 12.04, whose toolchain is outdated.
+cache:
+  directories:
+    - ${TRAVIS_BUILD_DIR}/deps/llvm-3.9.0
+
 addons:
   apt:
-    # Travis white list of ppa.
-    # https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
-    sources:
-      - ubuntu-toolchain-r-test     # For gcc 5.2
-      - george-edison55-precise-backports # cmake 3.2.3 / doxygen 1.8.3
-    # Travis whitelist of packages.
-    # https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
+    sources: &sources
+      - ubuntu-toolchain-r-test # for gcc 5.2 and gcc 6
     packages:
-      - cmake
-      - cmake-data
+      - g++-6
       - g++-5
+      - g++-4.9
 
-before_install:
-  - export NCORES=4
-  - export SIRE_DONT_PHONEHOME=1
-  - export INSTALL_SIRE_DIR=$HOME/sire.app
-  - if [ "$CC" = "gcc"   ]; then export CC=gcc-5 CXX=g++-5; fi
-  - if [ "$CC" = "clang" ]; then export CC=clang-3.6 CXX=clang++-3.6; fi
+matrix:
+  exclude:
+    # exclude the default dummy build
+    - dummy: true
+
+  include:
+    # OS X, clang 3.7.2 (Apple LLVM 8.0.0) - disabling for now as takes
+    # more than our allocation to compile and install
+    #- os: osx
+    #  env: CXX_COMPILER=clang++ C_COMPILER=clang
+    #  osx_image: xcode8
+
+    # Linux, GCC 6.2.0
+    - os: linux
+      env: CXX_COMPILER=g++-6 C_COMPILER=gcc-6
+      compiler: gcc
+
+    # Linux, GCC 5.4.1
+    - os: linux
+      env: CXX_COMPILER=g++-5 C_COMPILER=gcc-5
+      compiler: gcc
+
+    # Linux, GCC 4.9 (any earlier doesn't have C++ 11, and 4.8 is broken - ice fault)
+    # (possibly because ran out of memory when compiling wrappers - now use 2 cores for this)
+    - os: linux
+      env: CXX_COMPILER=g++-4.9 C_COMPILER=gcc-4.9 NPYCORES=2
+      compiler: gcc
+
+    # dependencies of Sire fail to compile on linux with clang
+    #- os: linux
+    #  env: LLVM_VERSION=3.9.0
+    #  compiler: clang
+
+install:
+  ############################################################################
+  # All the dependencies are installed in ${TRAVIS_BUILD_DIR}/deps/
+  ############################################################################
+  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
+
+  ############################################################################
+  # Setup default versions and override compiler if needed
+  ############################################################################
+  - if [[ "${LLVM_VERSION}" == "default" ]]; then LLVM_VERSION=3.9.0; fi
+
+  - |
+    if [[ "${CXX_COMPILER}" != "" ]]; then 
+      echo "Using compiler ${CXX_COMPILER} | ${C_COMPILER}"
+      export CXX=${CXX_COMPILER}
+      export CC=${C_COMPILER}
+    fi
+
+  ############################################################################
+  # Install a recent CMake
+  ############################################################################
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      CMAKE_URL="https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz"
+      mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+    else
+      brew install cmake
+      brew upgrade cmake
+    fi
+  - cmake --version
+
+  ############################################################################
+  # Install Clang, libc++ and libc++abi
+  ############################################################################
+  - |
+    if [[ "${LLVM_VERSION}" != "" ]]; then
+      LLVM_DIR=${DEPS_DIR}/llvm-${LLVM_VERSION}
+      if [[ -z "$(ls -A ${LLVM_DIR})" ]]; then
+        LLVM_URL="http://llvm.org/releases/${LLVM_VERSION}/llvm-${LLVM_VERSION}.src.tar.xz"
+        LIBCXX_URL="http://llvm.org/releases/${LLVM_VERSION}/libcxx-${LLVM_VERSION}.src.tar.xz"
+        LIBCXXABI_URL="http://llvm.org/releases/${LLVM_VERSION}/libcxxabi-${LLVM_VERSION}.src.tar.xz"
+        CLANG_URL="http://llvm.org/releases/${LLVM_VERSION}/clang+llvm-${LLVM_VERSION}-x86_64-linux-gnu-ubuntu-14.04.tar.xz"
+        mkdir -p ${LLVM_DIR} ${LLVM_DIR}/build ${LLVM_DIR}/projects/libcxx ${LLVM_DIR}/projects/libcxxabi ${LLVM_DIR}/clang
+        travis_retry wget --quiet -O - ${LLVM_URL}      | tar --strip-components=1 -xJ -C ${LLVM_DIR}
+        travis_retry wget --quiet -O - ${LIBCXX_URL}    | tar --strip-components=1 -xJ -C ${LLVM_DIR}/projects/libcxx
+        travis_retry wget --quiet -O - ${LIBCXXABI_URL} | tar --strip-components=1 -xJ -C ${LLVM_DIR}/projects/libcxxabi
+        travis_retry wget --quiet -O - ${CLANG_URL}     | tar --strip-components=1 -xJ -C ${LLVM_DIR}/clang
+        (cd ${LLVM_DIR}/build && cmake .. -DCMAKE_INSTALL_PREFIX=${LLVM_DIR}/install -DCMAKE_CXX_COMPILER=clang++)
+        (cd ${LLVM_DIR}/build/projects/libcxx && make install -j2)
+        (cd ${LLVM_DIR}/build/projects/libcxxabi && make install -j2)
+      fi
+      export CXXFLAGS="-nostdinc++ -isystem ${LLVM_DIR}/install/include/c++/v1"
+      export LDFLAGS="-L ${LLVM_DIR}/install/lib -l c++ -l c++abi"
+      export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${LLVM_DIR}/install/lib"
+      export PATH="${LLVM_DIR}/clang/bin:${PATH}"
+    fi
+  - ${CXX} --version
+
+before_script:
+  ############################################################################
+  # Go back to the root of the project and setup the build directory
+  ############################################################################
+  - cd ${TRAVIS_BUILD_DIR}
 
 script:
   - cmake --version
   - $CXX --version
+  - which $CXX
   - bash compile_sire.sh
-  - $HOME/sire.app/bin/sire_test
+  - $HOME/sire.app/bin/sire_test -OpenMM
 
 after_success:
-  - echo "Time to go home and have a cup of tea! :)"
+  - echo "Congratulations - everything worked :-)"

@@ -36,6 +36,8 @@ namespace bp = boost::python;
 
 #include <QDebug>
 
+#include <QElapsedTimer>
+
 #include <QMutex>
 
 #include "moves.h"
@@ -60,7 +62,7 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "acceptableDelta"
                 , acceptableDelta_function_value
-                , "" );
+                , "Return the acceptable level of drift in the running total from the recalculated total energy" );
         
         }
         { //::SireMove::Moves::checkingRunningTotal
@@ -71,7 +73,7 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "checkingRunningTotal"
                 , checkingRunningTotal_function_value
-                , "" );
+                , "Return whether or not we are checking of the running total energy" );
         
         }
         { //::SireMove::Moves::chemicalPotential
@@ -332,7 +334,7 @@ void register_Moves_class(){
                 "setAcceptableDelta"
                 , setAcceptableDelta_function_value
                 , ( bp::arg("delta") )
-                , "" );
+                , "Set the acceptable level of drift in the running total from the recalculated total energy" );
         
         }
         { //::SireMove::Moves::setCheckRunningTotal
@@ -344,7 +346,7 @@ void register_Moves_class(){
                 "setCheckRunningTotal"
                 , setCheckRunningTotal_function_value
                 , ( bp::arg("on") )
-                , "" );
+                , "Switch on or off the checking of the running total energy" );
         
         }
         { //::SireMove::Moves::setChemicalPotential
@@ -474,7 +476,7 @@ void register_Moves_class(){
                 "timing"
                 , timing_function_value
                 , ( bp::arg("i") )
-                , "" );
+                , "Return the average time per move for the ith Move object in this set\nof Moves. This returns 0 if no timing data is available" );
         
         }
         { //::SireMove::Moves::timing

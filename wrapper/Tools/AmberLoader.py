@@ -391,16 +391,14 @@ def createSystem(top_file, crd_file, naming_scheme = NamingScheme()):
        topology and coordinate files. This sorts the molecules into different
        molecule groups based on the passed naming scheme"""
     
-    system = System(top_file)
+    system = MoleculeParser.read(top_file,crd_file)
 
     # Load all of the molecules and their parameters from
     # the topology and coordinate files
-    amber = Amber()
-    print("Loading the molecules from the Amber files \"%s\" and \"%s\"..." % \
+    print("Loading the molecules from the files \"%s\" and \"%s\"..." % \
                   (crd_file, top_file))
-    (molecules, space) = amber.readCrdTop(crd_file, top_file)
 
-    return createSystemFrom(molecules, space, top_file, naming_scheme)
+    return createSystemFrom(system[MGIdx(0)], system.property("space"), top_file, naming_scheme)
 
 
 def centerSystem(system, molecule):

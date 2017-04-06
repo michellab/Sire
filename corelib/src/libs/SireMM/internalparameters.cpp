@@ -283,12 +283,12 @@ QDataStream& operator>>(QDataStream &ds,
 
 /** Constructor */
 GroupInternalNonPhysParameters::GroupInternalNonPhysParameters()
-                               : QSharedData()
+                               : RefCountData()
 {}
 
 GroupInternalNonPhysParameters::GroupInternalNonPhysParameters(
                                     const GroupInternalNonPhysParameters &other)
-        : QSharedData(),
+        : RefCountData(),
           improper_params(other.improper_params),
           improper_theta_forces(other.improper_theta_forces),
           improper_phi_forces(other.improper_phi_forces),
@@ -391,13 +391,13 @@ QDataStream& operator>>(QDataStream &ds,
 
 /** Constructor */
 GroupInternalCrossParameters::GroupInternalCrossParameters()
-                             : QSharedData()
+                             : RefCountData()
 {}
 
 /** Copy constructor */
 GroupInternalCrossParameters::GroupInternalCrossParameters(
                                     const GroupInternalCrossParameters &other)
-    : QSharedData(),
+    : RefCountData(),
       stretch_stretch_params(other.stretch_stretch_params),
       stretch_stretch_r01_forces(other.stretch_stretch_r01_forces),
       stretch_stretch_r21_forces(other.stretch_stretch_r21_forces),
@@ -497,22 +497,22 @@ QDataStream& operator>>(QDataStream &ds,
     return ds;
 }
 
-static QSharedDataPointer<GroupInternalNonPhysParameters> 
+static SharedDataPointer<GroupInternalNonPhysParameters>
                     null_nonphys( new GroupInternalNonPhysParameters() );
 
-static QSharedDataPointer<GroupInternalCrossParameters>
+static SharedDataPointer<GroupInternalCrossParameters>
                     null_cross( new GroupInternalCrossParameters() );
 
 /** Constructor */
 GroupInternalParametersData::GroupInternalParametersData()
-                            : QSharedData(),
+                            : RefCountData(),
                               nonphys_terms( null_nonphys ),
                               cross_terms( null_cross )
 {}
 
 /** Construct for the specified combination of CutGroups */
 GroupInternalParametersData::GroupInternalParametersData(const CGIDQuad &cgids)
-                            : QSharedData(),
+                            : RefCountData(),
                               idquad(cgids),
                               nonphys_terms( null_nonphys ),
                               cross_terms( null_cross )
@@ -521,7 +521,7 @@ GroupInternalParametersData::GroupInternalParametersData(const CGIDQuad &cgids)
 /** Copy constructor */
 GroupInternalParametersData::GroupInternalParametersData(
                                        const GroupInternalParametersData &other)
-      : QSharedData(),
+      : RefCountData(),
         idquad(other.idquad),
         bond_params(other.bond_params), bond_forces(other.bond_forces),
         angle_params(other.angle_params), angle_forces(other.angle_forces),
@@ -613,7 +613,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
     return ds;
 }
 
-static QSharedDataPointer<GroupInternalParametersData>
+static SharedDataPointer<GroupInternalParametersData>
                             null_data( new GroupInternalParametersData() );
 
 /** Constructor */

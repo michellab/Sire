@@ -143,7 +143,12 @@ inline QDataStream& operator>>(QDataStream &ds, IDPair &idpair)
 
 IDPair::IDPair(quint32 atm0, quint32 atm1) 
        : atom0(atm0), atom1(atm1)
-{}
+{
+    if (atm0 > atm1)
+    {
+        qSwap(atom0,atom1);
+    }
+}
 
 IDPair::IDPair(const IDPair &other)
        : atom0(other.atom0), atom1(other.atom1)

@@ -55,6 +55,12 @@ MolViewProperty::MolViewProperty(const MolViewProperty &other)
 MolViewProperty::~MolViewProperty()
 {}
 
+/** Return whether or not this is compatible with the passed molinfo */
+bool MolViewProperty::isCompatibleWith(const MoleculeInfo &molinfo) const
+{
+    return this->isCompatibleWith(molinfo.data());
+}
+
 /** Assert that this property is compatible with the MoleculeInfoData 'info'
 
     \throw SireError::incompatible_error
@@ -66,6 +72,15 @@ void MolViewProperty::assertCompatibleWith(const MoleculeInfoData &molinfo) cons
                 "The property of type %1 is incompatible with the layout "
                 "with UID %2")
                     .arg(this->what()).arg(molinfo.UID().toString()), CODELOC );
+}
+
+/** Assert that this property is compatible with the MoleculeInfo 'info'
+
+    \throw SireError::incompatible_error
+*/
+void MolViewProperty::assertCompatibleWith(const MoleculeInfo &molinfo) const
+{
+    this->assertCompatibleWith(molinfo.data());
 }
 
 PropertyPtr MolViewProperty::_pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,

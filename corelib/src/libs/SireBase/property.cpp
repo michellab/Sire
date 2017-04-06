@@ -60,11 +60,11 @@ QMutex SIREBASE_EXPORT *globalLock()
 ///////////////
 
 /** Constructor */
-Property::Property() : QSharedData()
+Property::Property() : RefCountData()
 {}
 
 /** Copy constructor */
-Property::Property(const Property&) : QSharedData()
+Property::Property(const Property&) : RefCountData()
 {}
 
 /** Destructor */
@@ -304,20 +304,10 @@ const char* NullProperty::typeName()
     return QMetaType::typeName( qMetaTypeId<NullProperty>() );
 }
 
-static SharedPolyPointer<NullProperty> global_null;
-
 /** Return the global null property */
 const NullProperty& Property::null()
 {
-    if (global_null.constData() == 0)
-    {
-        QMutexLocker lkr( globalLock() );
-        
-        if (global_null.constData() == 0)
-            global_null = new NullProperty();
-    }
-    
-    return *(global_null.constData());
+    return *create_shared_null<NullProperty>();
 }
 
 QString NullProperty::toString() const

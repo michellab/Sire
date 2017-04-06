@@ -12,6 +12,8 @@ namespace bp = boost::python;
 
 #include "SireBase/majorminorversion.h"
 
+#include "SireBase/refcountdata.h"
+
 #include "SireError/errors.h"
 
 #include "SireID/index.h"

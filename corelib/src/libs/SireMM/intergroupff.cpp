@@ -32,6 +32,7 @@
 
 #include "SireBase/booleanproperty.h"
 #include "SireBase/lengthproperty.h"
+#include "SireBase/refcountdata.h"
 
 #include "SireError/errors.h"
 #include "SireBase/errors.h"
@@ -60,15 +61,15 @@ namespace SireMM
 {
     namespace detail
     {
-        class InterGroupFFData : public QSharedData
+        class InterGroupFFData : public RefCountData
         {
         public:
-            InterGroupFFData() : QSharedData(), fixed_only(false),
+            InterGroupFFData() : RefCountData(), fixed_only(false),
                                  parallel_calc(true), repro_sum(false)
             {}
             
             InterGroupFFData(const InterGroupFFData &other)
-                 : QSharedData(),
+                 : RefCountData(),
                    cljfuncs(other.cljfuncs),
                    fixed_atoms(other.fixed_atoms),
                    cljcomps(other.cljcomps),

@@ -425,6 +425,7 @@ special_code = { "SireMol::Atom" : fix_Atom,
                  "SireMol::MolName" : fix_MolName,
                  "SireMol::MolIdx" : fix_MolIdx,
                  "SireMol::MolInfo" : fix_MolInfo, 
+                 "SireMol::MoleculeInfo" : fix_MolInfo,
 
                  "SireMol::PerturbationSymbols" : fix_PerturbationSymbols,
 

@@ -170,19 +170,9 @@ double AbsFromNumber::operator()(const MoleculeView &view0,
                   view1.selection().nSelected());
 }
 
-static SharedPolyPointer<AbsFromNumber> shared_null;
-
 const AbsFromNumber& WeightFunction::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new AbsFromNumber();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<AbsFromNumber>());
 }
 
 const char* AbsFromNumber::typeName()

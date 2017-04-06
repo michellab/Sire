@@ -35,9 +35,10 @@
 
 using namespace SireBase;
 
-static QMutex global_mutex;
+typedef QList< boost::shared_ptr<UnitTest> > TestRegistry;
 
-QList< boost::shared_ptr<UnitTest> > UnitTest::all_tests;
+Q_GLOBAL_STATIC( TestRegistry, getTestRegistry );
+Q_GLOBAL_STATIC( QMutex, getTestMutex );
 
 /** Null constructor */
 UnitTest::UnitTest() : test_function(0), run_time(0)
@@ -59,8 +60,8 @@ UnitTest::UnitTest(const QString &name, void (*test_func)(bool))
     //register this test with the global list
     if (test_func != 0)
     {
-        QMutexLocker lkr(&global_mutex);
-        all_tests.append( boost::shared_ptr<UnitTest>(new UnitTest(*this)) );
+        QMutexLocker lkr( getTestMutex() );
+        getTestRegistry()->append( boost::shared_ptr<UnitTest>(new UnitTest(*this)) );
     }
 }
 
@@ -153,24 +154,24 @@ quint64 UnitTest::runTime()
 /** Return all of the tests that have been registered */
 QList< boost::shared_ptr<UnitTest> > UnitTest::tests()
 {
-    QMutexLocker lkr(&global_mutex);
-    return all_tests;
+    QMutexLocker lkr( getTestMutex() );
+    return *(getTestRegistry());
 }
 
 /** Run all of the tests one after another, printing out the results to the
     screen and returning the number of tests that failed */
 int UnitTest::runAll(bool verbose)
 {
-    QMutexLocker lkr(&global_mutex);
+    QMutexLocker lkr( getTestMutex() );
     
     cerr << QObject::tr("\n== Running Unit Tests ==\n\n");
     cerr.flush();
     
     int i = 1;
-    const int n = all_tests.count();
+    const int n = getTestRegistry()->count();
     int nfailed = 0;
     
-    foreach( boost::shared_ptr<UnitTest> test, all_tests )
+    foreach( boost::shared_ptr<UnitTest> test, *(getTestRegistry()) )
     {
         cerr << QObject::tr("(%1/%2) %3 ").arg(i).arg(n).arg(test->name());
         cerr.flush();
@@ -204,7 +205,7 @@ int UnitTest::runAll(bool verbose)
     {
         cerr << QObject::tr("\n\nA number of tests (%1) failed!!!\n").arg(nfailed);
         
-        foreach( boost::shared_ptr<UnitTest> test, all_tests )
+        foreach( boost::shared_ptr<UnitTest> test, *(getTestRegistry()) )
         {
             if (test->wasError())
             {

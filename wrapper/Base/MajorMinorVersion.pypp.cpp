@@ -12,6 +12,8 @@ namespace bp = boost::python;
 
 #include "majorminorversion.h"
 
+#include <QDataStream>
+
 #include "majorminorversion.h"
 
 SireBase::MajorMinorVersion __copy__(const SireBase::MajorMinorVersion &other){ return SireBase::MajorMinorVersion(other); }

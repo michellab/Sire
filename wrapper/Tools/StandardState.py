@@ -359,6 +359,7 @@ def run():
     print("Calculating average coordinates for restrained atoms")
     #import pdb; pdb.set_trace()
     restr_dict = averageCoordinates(restr_dict)
+    print(restr_dict)
     #now the restr_dict is:
     #restr_dict[pairs]=[[req,K,D],[avgx,avgy,avgz]]
 

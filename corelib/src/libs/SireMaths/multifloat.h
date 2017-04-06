@@ -52,13 +52,22 @@
 #endif
 #endif
 
-//#undef SIRE_USE_AVX
-//#define SIRE_USE_SSE 1
+//#define MULTIFLOAT_CHECK_ALIGNMENT 1
+#undef MULTIFLOAT_CHECK_ALIGNMENT
+
+//#undef SIRE_USE_AVX512F
+//#undef SIRE_USE_AVX 
 //#undef SIRE_USE_SSE
 
-//#define MULTIFLOAT_CHECK_ALIGNMENT 1
-//#undef MULTIFLOAT_CHECK_ALIGNMENT
+#ifdef SIRE_USE_AVX512F
+    #include <immintrin.h>  // CONDITIONAL_INCLUDE
 
+    #define MULTIFLOAT_AVX512F_IS_AVAILABLE 1
+    #undef MULTIFLOAT_SSE_IS_AVAILABLE
+    #undef MULTIFLOAT_AVX_IS_AVAILABLE
+    #undef MULTIFLOAT_AVX2_IS_AVAILABLE
+
+#else
 #ifdef SIRE_USE_AVX
     #ifdef __AVX__
         #include <immintrin.h>   // CONDITIONAL_INCLUDE
@@ -109,8 +118,9 @@
 #else
     #undef MULTIFLOAT_SSE_IS_AVAILABLE
     #undef MULTIFLOAT_AVX_IS_AVAILABLE
-#endif
-#endif
+#endif // SIRE_USE_SSE
+#endif // SIRE_USE_AVX
+#endif // SIRE_USE_AVX512F
 
 SIRE_BEGIN_HEADER
 
@@ -150,6 +160,8 @@ public:
     MultiFloat();
     
     MultiFloat(float value);
+    MultiFloat(double value);
+    MultiFloat(int value);
     
     MultiFloat(const float *array, int size);
     MultiFloat(const float *array, const MultiInt &indicies);
@@ -310,6 +322,40 @@ private:
             void assertAligned(){}
         #endif
 
+        #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+            _ALIGNED(64) union
+            {
+                __m512 x;
+                __m256 t[2];  
+                float a[16];
+            } v;
+            #define MULTIFLOAT_SIZE 16
+
+            MultiFloat(__m512 avx_val)
+            {
+                v.x = avx_val;
+            }
+
+            /** AVX512 uses masks for comparisons - need to convert
+                this back to integer 0 or 1 */
+            MultiFloat(__mmask16 mask)
+            {
+                const __m512 zero = _mm512_set1_ps(0.0);
+                const quint32 x = 0xFFFFFFFF;
+                const __m512 one = _mm512_set1_ps( 
+                                *(reinterpret_cast<const float*>(&x)) );
+
+                v.x = _mm512_mask_blend_ps( mask, zero, one );
+            }
+
+            #ifdef MULTIFLOAT_CHECK_ALIGNMENT
+                void assertAligned()
+                {
+                    if (quintptr(this) % 64 != 0)
+                        assertAligned(this, 64);
+                }
+            #endif
+        #else
         #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
             _ALIGNED(32) union
             {
@@ -378,8 +424,9 @@ private:
                         assertAligned(this, 32);
                 }
             #endif
-        #endif
-        #endif
+        #endif // MULTIFLOAT_SSE_IS_AVAILABLE
+        #endif // MULTIFLOAT_AVX_IS_AVAILABLE
+        #endif // MULTIFLOAT_AVX512F_IS_AVAILABLE
     #else
         #define MULTIFLOAT_SIZE 16
     #endif //#ifndef SIRE_SKIP_INLINE_FUNCTIONS
@@ -388,8 +435,8 @@ private:
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-static const MultiFloat MULTIFLOAT_ONE(1);
-static const MultiFloat MULTIFLOAT_NEGATIVE_ONE(-1);
+static const MultiFloat MULTIFLOAT_ONE(1.0f);
+static const MultiFloat MULTIFLOAT_NEGATIVE_ONE(-1.0f);
 
 static quint32 MULTIFLOAT_POS_MASK_INT = 0x7FFFFFFF;
 static const MultiFloat MULTIFLOAT_POS_MASK(
@@ -401,6 +448,9 @@ MultiFloat::MultiFloat()
 {
     assertAligned();
 
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = _mm512_set1_ps(0);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x = _mm256_set1_ps(0);
     #else
@@ -413,6 +463,23 @@ MultiFloat::MultiFloat()
         }
     #endif
     #endif
+    #endif
+}
+
+/** Construct downcasting the passed double to a float */
+inline
+MultiFloat::MultiFloat(double val)
+{
+    assertAligned();
+    this->operator=( MultiFloat( float(val) ) );
+}
+
+/** Construct casting from an int */
+inline
+MultiFloat::MultiFloat(int val)
+{
+    assertAligned();
+    this->operator=( MultiFloat( float(val) ) );
 }
 
 /** Construct a MultiFloat with all values equal to 'val' */
@@ -421,6 +488,9 @@ MultiFloat::MultiFloat(float val)
 {
     assertAligned();
 
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = _mm512_set1_ps(val);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x = _mm256_set1_ps(val);
     #else
@@ -433,6 +503,7 @@ MultiFloat::MultiFloat(float val)
         }
     #endif
     #endif
+    #endif
 }
 
 #ifdef SIRE_HAS_CPP_11
@@ -440,6 +511,12 @@ MultiFloat::MultiFloat(float val)
     inline MultiFloat::MultiFloat(const std::function<float ()> &generator)
     {
         assertAligned();
+        #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+            v.x = _mm512_set_ps(generator(), generator(), generator(), generator(),
+                                generator(), generator(), generator(), generator(),
+                                generator(), generator(), generator(), generator(),
+                                generator(), generator(), generator(), generator());
+        #else
         #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
             v.x = _mm256_set_ps(generator(), generator(), generator(), generator(),
                                 generator(), generator(), generator(), generator());
@@ -453,6 +530,7 @@ MultiFloat::MultiFloat(float val)
             }
         #endif
         #endif
+        #endif
     }
 #endif
 
@@ -460,6 +538,9 @@ MultiFloat::MultiFloat(float val)
 inline
 MultiFloat::MultiFloat(const MultiFloat &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = other.v.x;
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x = other.v.x;
     #else
@@ -472,27 +553,29 @@ MultiFloat::MultiFloat(const MultiFloat &other)
        }
     #endif
     #endif
+    #endif
 }
 
 /** Assignment operator */
 inline
 MultiFloat& MultiFloat::operator=(const MultiFloat &other)
 {
-    if (this != &other)
-    {
-        #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
-            v.x = other.v.x;
-        #else
-        #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
-            v.x = other.v.x;
-        #else
-            for (int i=0; i<MULTIFLOAT_SIZE; ++i)
-            {
-                v.a[i] = other.v.a[i];
-            }
-        #endif
-        #endif
-    }
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = other.v.x;
+    #else
+    #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
+        v.x = other.v.x;
+    #else
+    #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
+        v.x = other.v.x;
+    #else
+        for (int i=0; i<MULTIFLOAT_SIZE; ++i)
+        {
+            v.a[i] = other.v.a[i];
+        }
+    #endif
+    #endif
+    #endif
     
     return *this;
 }
@@ -501,6 +584,9 @@ MultiFloat& MultiFloat::operator=(const MultiFloat &other)
 inline
 MultiFloat& MultiFloat::operator=(float value)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = _mm512_set1_ps(value);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x = _mm256_set1_ps(value);
     #else
@@ -511,6 +597,7 @@ MultiFloat& MultiFloat::operator=(float value)
         {
             v.a[i] = value;
         }
+    #endif
     #endif
     #endif
     
@@ -534,6 +621,9 @@ inline float MultiFloat::operator[](int i) const
 inline
 MultiFloat MultiFloat::compareEqual(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_cmp_ps_mask(v.x, other.v.x, _CMP_EQ_OQ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_cmp_ps(v.x, other.v.x, _CMP_EQ_OQ) );
     #else
@@ -550,12 +640,16 @@ MultiFloat MultiFloat::compareEqual(const MultiFloat &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Not equals comparison operator */
 inline
 MultiFloat MultiFloat::compareNotEqual(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_cmp_ps_mask(v.x, other.v.x, _CMP_NEQ_OQ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_cmp_ps(v.x, other.v.x, _CMP_NEQ_OQ) );
     #else
@@ -572,12 +666,16 @@ MultiFloat MultiFloat::compareNotEqual(const MultiFloat &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Less than comparison operator */
 inline
 MultiFloat MultiFloat::compareLess(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_cmp_ps_mask(v.x, other.v.x, _CMP_LT_OQ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_cmp_ps(v.x, other.v.x, _CMP_LT_OQ) );
     #else
@@ -594,12 +692,16 @@ MultiFloat MultiFloat::compareLess(const MultiFloat &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Greater than comparison operator */
 inline
 MultiFloat MultiFloat::compareGreater(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_cmp_ps_mask(v.x, other.v.x, _CMP_GT_OQ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_cmp_ps(v.x, other.v.x, _CMP_GT_OQ) );
     #else
@@ -616,12 +718,16 @@ MultiFloat MultiFloat::compareGreater(const MultiFloat &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Less than or equal comparison */
 inline
 MultiFloat MultiFloat::compareLessEqual(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_cmp_ps_mask(v.x, other.v.x, _CMP_LE_OQ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_cmp_ps(v.x, other.v.x, _CMP_LE_OQ) );
     #else
@@ -638,12 +744,16 @@ MultiFloat MultiFloat::compareLessEqual(const MultiFloat &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Greater than or equal comparison */
 inline
 MultiFloat MultiFloat::compareGreaterEqual(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_cmp_ps_mask(v.x, other.v.x, _CMP_GE_OQ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_cmp_ps(v.x, other.v.x, _CMP_GE_OQ) );
     #else
@@ -658,6 +768,7 @@ MultiFloat MultiFloat::compareGreaterEqual(const MultiFloat &other) const
         }
     
         return ret;
+    #endif
     #endif
     #endif
 }
@@ -680,6 +791,9 @@ int MultiFloat::count()
 inline
 MultiFloat MultiFloat::operator+(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_add_ps(v.x, other.v.x) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_add_ps(v.x, other.v.x) );
     #else
@@ -687,11 +801,13 @@ MultiFloat MultiFloat::operator+(const MultiFloat &other) const
         return MultiFloat( _mm_add_ps(v.x, other.v.x) );
     #else
         MultiFloat ret;
+        #pragma omp simd
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
             ret.v.a[i] = v.a[i] + other.v.a[i];
         }
         return ret;
+    #endif
     #endif
     #endif
 }
@@ -700,6 +816,9 @@ MultiFloat MultiFloat::operator+(const MultiFloat &other) const
 inline
 MultiFloat MultiFloat::operator-(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_sub_ps(v.x, other.v.x) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_sub_ps(v.x, other.v.x) );
     #else
@@ -707,11 +826,13 @@ MultiFloat MultiFloat::operator-(const MultiFloat &other) const
         return MultiFloat( _mm_sub_ps(v.x, other.v.x) );
     #else
         MultiFloat ret;
+        #pragma omp simd
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
             ret.v.a[i] = v.a[i] - other.v.a[i];
         }
         return ret;
+    #endif
     #endif
     #endif
 }
@@ -720,6 +841,9 @@ MultiFloat MultiFloat::operator-(const MultiFloat &other) const
 inline
 MultiFloat MultiFloat::operator*(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_mul_ps(v.x, other.v.x) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_mul_ps(v.x, other.v.x) );
     #else
@@ -727,11 +851,13 @@ MultiFloat MultiFloat::operator*(const MultiFloat &other) const
         return MultiFloat( _mm_mul_ps(v.x, other.v.x) );
     #else
         MultiFloat ret;
+        #pragma omp simd
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
             ret.v.a[i] = v.a[i] * other.v.a[i];
         }
         return ret;
+    #endif
     #endif
     #endif
 }
@@ -740,6 +866,9 @@ MultiFloat MultiFloat::operator*(const MultiFloat &other) const
 inline
 MultiFloat MultiFloat::operator/(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_div_ps(v.x, other.v.x) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_div_ps(v.x, other.v.x) );
     #else
@@ -747,11 +876,13 @@ MultiFloat MultiFloat::operator/(const MultiFloat &other) const
         return MultiFloat( _mm_div_ps(v.x, other.v.x) );
     #else
         MultiFloat ret;
+        #pragma omp simd
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
             ret.v.a[i] = v.a[i] / other.v.a[i];
         }
         return ret;
+    #endif
     #endif
     #endif
 }
@@ -760,16 +891,21 @@ MultiFloat MultiFloat::operator/(const MultiFloat &other) const
 inline
 MultiFloat& MultiFloat::operator+=(const MultiFloat &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = _mm512_add_ps(v.x, other.v.x);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x = _mm256_add_ps(v.x, other.v.x);
     #else
     #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
         v.x = _mm_add_ps(v.x, other.v.x);
     #else
+        #pragma omp simd
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
             v.a[i] += other.v.a[i];
         }
+    #endif
     #endif
     #endif
 
@@ -780,16 +916,21 @@ MultiFloat& MultiFloat::operator+=(const MultiFloat &other)
 inline
 MultiFloat& MultiFloat::operator-=(const MultiFloat &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = _mm512_sub_ps(v.x, other.v.x);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x = _mm256_sub_ps(v.x, other.v.x);
     #else
     #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
         v.x = _mm_sub_ps(v.x, other.v.x);
     #else
+        #pragma omp simd
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
             v.a[i] -= other.v.a[i];
         }
+    #endif
     #endif
     #endif
 
@@ -800,16 +941,21 @@ MultiFloat& MultiFloat::operator-=(const MultiFloat &other)
 inline
 MultiFloat& MultiFloat::operator*=(const MultiFloat &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = _mm512_mul_ps(v.x, other.v.x);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x = _mm256_mul_ps(v.x, other.v.x);
     #else
     #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
         v.x = _mm_mul_ps(v.x, other.v.x);
     #else
+        #pragma omp simd
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
             v.a[i] *= other.v.a[i];
         }
+    #endif
     #endif
     #endif
 
@@ -820,16 +966,21 @@ MultiFloat& MultiFloat::operator*=(const MultiFloat &other)
 inline
 MultiFloat& MultiFloat::operator/=(const MultiFloat &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = _mm512_div_ps(v.x, other.v.x);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x = _mm256_div_ps(v.x, other.v.x);
     #else
     #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
         v.x = _mm_div_ps(v.x, other.v.x);
     #else
+        #pragma omp simd
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
             v.a[i] /= other.v.a[i];
         }
+    #endif
     #endif
     #endif
 
@@ -846,6 +997,12 @@ inline MultiFloat MultiFloat::operator-() const
 inline
 MultiFloat MultiFloat::logicalAnd(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        MultiFloat ret;
+        ret.v.t[0] = _mm256_and_ps( v.t[0], other.v.t[0] );
+        ret.v.t[1] = _mm256_and_ps( v.t[1], other.v.t[1] );
+        return ret;
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_and_ps(v.x, other.v.x) );
     #else
@@ -870,12 +1027,19 @@ MultiFloat MultiFloat::logicalAnd(const MultiFloat &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Bitwise logical "and not" (this is *this and (not other)) */
 inline
 MultiFloat MultiFloat::logicalAndNot(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        MultiFloat ret;
+        ret.v.t[0] = _mm256_andnot_ps(other.v.t[0], v.t[0]);
+        ret.v.t[1] = _mm256_andnot_ps(other.v.t[1], v.t[1]);
+        return ret;
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_andnot_ps(other.v.x, v.x) );
     #else
@@ -900,12 +1064,16 @@ MultiFloat MultiFloat::logicalAndNot(const MultiFloat &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Bitwise logical or operator */
 inline
 MultiFloat MultiFloat::logicalOr(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_or_ps(v.x, other.v.x) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_or_ps(v.x, other.v.x) );
     #else
@@ -930,12 +1098,16 @@ MultiFloat MultiFloat::logicalOr(const MultiFloat &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Bitwise logical xor */
 inline
 MultiFloat MultiFloat::logicalXor(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_xor_ps(v.x, other.v.x) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_xor_ps(v.x, other.v.x) );
     #else
@@ -958,6 +1130,7 @@ MultiFloat MultiFloat::logicalXor(const MultiFloat &other) const
         }
     
         return ret;
+    #endif
     #endif
     #endif
 }
@@ -1014,6 +1187,10 @@ MultiFloat MultiFloat::operator^(const MultiFloat &other) const
 inline
 MultiFloat& MultiFloat::operator&=(const MultiFloat &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.t[0] = _mm256_and_ps(v.t[0], other.v.t[0]);
+        v.t[1] = _mm256_and_ps(v.t[1], other.v.t[1]);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x = _mm256_and_ps(v.x, other.v.x);
     #else
@@ -1033,6 +1210,7 @@ MultiFloat& MultiFloat::operator&=(const MultiFloat &other)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -1041,6 +1219,9 @@ MultiFloat& MultiFloat::operator&=(const MultiFloat &other)
 inline
 MultiFloat& MultiFloat::operator|=(const MultiFloat &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = _mm512_or_ps(v.x, other.v.x);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x = _mm256_or_ps(v.x, other.v.x);
     #else
@@ -1060,6 +1241,7 @@ MultiFloat& MultiFloat::operator|=(const MultiFloat &other)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -1068,6 +1250,9 @@ MultiFloat& MultiFloat::operator|=(const MultiFloat &other)
 inline
 MultiFloat& MultiFloat::operator^=(const MultiFloat &other)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = _mm512_xor_ps(v.x, other.v.x);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x = _mm256_xor_ps(v.x, other.v.x);
     #else
@@ -1087,6 +1272,7 @@ MultiFloat& MultiFloat::operator^=(const MultiFloat &other)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -1095,6 +1281,9 @@ MultiFloat& MultiFloat::operator^=(const MultiFloat &other)
 inline
 MultiFloat& MultiFloat::multiplyAdd(const MultiFloat &v0, const MultiFloat &v1)
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        v.x = _mm512_add_ps(v.x, _mm512_mul_ps(v0.v.x, v1.v.x));
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         v.x = _mm256_add_ps(v.x, _mm256_mul_ps(v0.v.x, v1.v.x));
     #else
@@ -1107,6 +1296,7 @@ MultiFloat& MultiFloat::multiplyAdd(const MultiFloat &v0, const MultiFloat &v1)
         }
     #endif
     #endif
+    #endif
 
     return *this;
 }
@@ -1115,6 +1305,9 @@ MultiFloat& MultiFloat::multiplyAdd(const MultiFloat &v0, const MultiFloat &v1)
 inline
 MultiFloat MultiFloat::max(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_max_ps(v.x, other.v.x) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_max_ps(v.x, other.v.x) );
     #else
@@ -1129,12 +1322,16 @@ MultiFloat MultiFloat::max(const MultiFloat &other) const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Return the minimum vector between this and other */
 inline
 MultiFloat MultiFloat::min(const MultiFloat &other) const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_min_ps(v.x, other.v.x) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_min_ps(v.x, other.v.x) );
     #else
@@ -1147,6 +1344,7 @@ MultiFloat MultiFloat::min(const MultiFloat &other) const
             ret.v.a[i] = std::min(v.a[i], other.v.a[i]);
         }
         return ret;
+    #endif
     #endif
     #endif
 }
@@ -1162,6 +1360,9 @@ MultiFloat MultiFloat::reciprocal() const
 inline
 MultiFloat MultiFloat::reciprocal_approx() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_rcp14_ps(v.x) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_rcp_ps(v.x) );
     #else
@@ -1171,6 +1372,7 @@ MultiFloat MultiFloat::reciprocal_approx() const
         return this->reciprocal();
     #endif
     #endif
+    #endif
 }
 
 /** Return a good approximation of the reciprocal of the vector (the poor approximation
@@ -1178,6 +1380,19 @@ MultiFloat MultiFloat::reciprocal_approx() const
 inline
 MultiFloat MultiFloat::reciprocal_approx_nr() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        //get the approximation
+        __m512 a = _mm512_rcp14_ps(v.x);
+
+        //now use one step of NR to refine the result
+        // 1/x = a[ 2 - a x ] where a is the approximation
+        __m512 tmp = _mm512_mul_ps(a, v.x);
+        __m512 two = _mm512_set1_ps(2.0);
+        tmp = _mm512_sub_ps(two, tmp);
+        a = _mm512_mul_ps(a, tmp);
+
+        return MultiFloat(a);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         //get the approximation
         __m256 a = _mm256_rcp_ps(v.x);
@@ -1207,12 +1422,16 @@ MultiFloat MultiFloat::reciprocal_approx_nr() const
         return this->reciprocal();
     #endif
     #endif
+    #endif
 }
 
 /** Return the square root of this vector */
 inline
 MultiFloat MultiFloat::sqrt() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_sqrt_ps(v.x) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_sqrt_ps(v.x) );
     #else
@@ -1220,11 +1439,13 @@ MultiFloat MultiFloat::sqrt() const
         return MultiFloat( _mm_sqrt_ps(v.x) );
     #else
         MultiFloat ret;
+        #pragma omp simd
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
             ret.v.a[i] = std::sqrt(v.a[i]);
         }
         return ret;
+    #endif
     #endif
     #endif
 }
@@ -1234,6 +1455,10 @@ MultiFloat MultiFloat::sqrt() const
 inline
 MultiFloat MultiFloat::sqrt_approx() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        __m512 r_sqrt = _mm512_rsqrt14_ps(v.x);
+        return MultiFloat( _mm512_mul_ps( v.x, r_sqrt ) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         __m256 r_sqrt = _mm256_rsqrt_ps(v.x);
         return MultiFloat( _mm256_mul_ps( v.x, r_sqrt ) );
@@ -1245,6 +1470,7 @@ MultiFloat MultiFloat::sqrt_approx() const
         return this->sqrt();
     #endif
     #endif
+    #endif
 }
 
 /** Return a good approximation of the square root (this is the poor approximation
@@ -1252,6 +1478,21 @@ MultiFloat MultiFloat::sqrt_approx() const
 inline
 MultiFloat MultiFloat::sqrt_approx_nr() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        //calculate sqrt(x) as x * 1 / sqrt(x)
+        __m512 a = _mm512_rsqrt14_ps(v.x);
+        a = _mm512_mul_ps(v.x, a);
+
+        //now use one step of NR to refine the result
+        // sqrt(x) = a - [ (a^2 - x) / 2a ] where a is the approximation
+        __m512 tmp = _mm512_mul_ps(a, a);
+        tmp = _mm512_sub_ps(tmp, v.x);
+        __m512 two_a = _mm512_add_ps(a, a);
+        tmp = _mm512_div_ps(tmp, two_a);
+        a = _mm512_sub_ps(a, tmp);
+
+        return MultiFloat(a);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         //calculate sqrt(x) as x * 1 / sqrt(x)
         __m256 a = _mm256_rsqrt_ps(v.x);
@@ -1285,6 +1526,7 @@ MultiFloat MultiFloat::sqrt_approx_nr() const
         return this->sqrt();
     #endif
     #endif
+    #endif
 }
 
 /** Return the recipical square root of this vector */
@@ -1299,6 +1541,9 @@ MultiFloat MultiFloat::rsqrt() const
 inline
 MultiFloat MultiFloat::rsqrt_approx() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_rsqrt14_ps(v.x) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return MultiFloat( _mm256_rsqrt_ps(v.x) );
     #else
@@ -1308,6 +1553,7 @@ MultiFloat MultiFloat::rsqrt_approx() const
         return MULTIFLOAT_ONE.operator/(this->sqrt());
     #endif
     #endif
+    #endif
 }
 
 /** Return a good approximation of the reciprical square root (this poor approximation
@@ -1315,6 +1561,22 @@ MultiFloat MultiFloat::rsqrt_approx() const
 inline
 MultiFloat MultiFloat::rsqrt_approx_nr() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        //get the approximation
+        __m512 a = _mm512_rsqrt14_ps(v.x);
+
+        //now use one step of NR to refine the result
+        // 1/x = 0.5 a[ 3 - x a^2 ] where a is the approximation
+        __m512 tmp = _mm512_mul_ps(a, v.x);
+        tmp = _mm512_mul_ps(a, tmp);
+        __m512 three = _mm512_set1_ps(3.0);
+        tmp = _mm512_sub_ps(three, tmp);
+        a = _mm512_mul_ps(a, tmp);
+        __m512 half = _mm512_set1_ps(0.5);
+        a = _mm512_mul_ps(a, half);
+
+        return MultiFloat(a);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         //get the approximation
         __m256 a = _mm256_rsqrt_ps(v.x);
@@ -1350,6 +1612,7 @@ MultiFloat MultiFloat::rsqrt_approx_nr() const
         return this->rsqrt();
     #endif
     #endif
+    #endif
 }
 
 /** Rotate this vector. This moves each element one space to the left, moving the
@@ -1357,6 +1620,10 @@ MultiFloat MultiFloat::rsqrt_approx_nr() const
 inline
 MultiFloat MultiFloat::rotate() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return MultiFloat( _mm512_permutexvar_ps(
+              _mm512_set_epi32(0, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1), v.x) );
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         __m256 tmp =  _mm256_permute_ps(v.x, _MM_SHUFFLE ( 0,3,2,1 ));
         return MultiFloat( _mm256_blend_ps(tmp, _mm256_permute2f128_ps ( tmp,tmp,1 ), 136) );
@@ -1377,12 +1644,19 @@ MultiFloat MultiFloat::rotate() const
         return ret;
     #endif
     #endif
+    #endif
 }
 
 /** Return the sum of all elements of this vector */
 inline
 float MultiFloat::sum() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return v.a[0] + v.a[1] + v.a[2] + v.a[3] +
+               v.a[4] + v.a[5] + v.a[6] + v.a[7] +
+               v.a[8] + v.a[9] + v.a[10] + v.a[11] +
+               v.a[12] + v.a[13] + v.a[14] + v.a[15];
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return v.a[0] + v.a[1] + v.a[2] + v.a[3] +
                v.a[4] + v.a[5] + v.a[6] + v.a[7];
@@ -1398,12 +1672,19 @@ float MultiFloat::sum() const
         return sum;
     #endif
     #endif
+    #endif
 }
 
 /** Return the sum of all elements of this vector, using doubles for the sum */
 inline
 double MultiFloat::doubleSum() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        return double(v.a[0]) + double(v.a[1]) + double(v.a[2]) + double(v.a[3]) +
+               double(v.a[4]) + double(v.a[5]) + double(v.a[6]) + double(v.a[7]) +
+               double(v.a[8]) + double(v.a[9]) + double(v.a[10]) + double(v.a[11]) +
+               double(v.a[12]) + double(v.a[3]) + double(v.a[14]) + double(v.a[15]);
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         return double(v.a[0]) + double(v.a[1]) + double(v.a[2]) + double(v.a[3]) +
                double(v.a[4]) + double(v.a[5]) + double(v.a[6]) + double(v.a[7]);
@@ -1419,11 +1700,18 @@ double MultiFloat::doubleSum() const
         return sum;
     #endif
     #endif
+    #endif
 }
 
 /** Return the absolute (positive) value of the floats */
 inline MultiFloat MultiFloat::abs() const
 {
+    #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
+        MultiFloat ret;
+        ret.v.t[0] = _mm256_and_ps( v.t[0], MULTIFLOAT_POS_MASK.v.t[0] );
+        ret.v.t[1] = _mm256_and_ps( v.t[1], MULTIFLOAT_POS_MASK.v.t[1] );
+        return ret;
+    #else
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
         MultiFloat ret;
         ret.v.x = _mm256_and_ps(v.x, MULTIFLOAT_POS_MASK.v.x);
@@ -1442,6 +1730,7 @@ inline MultiFloat MultiFloat::abs() const
         }
     
         return ret;
+    #endif
     #endif
     #endif
 }

@@ -8,6 +8,10 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/refcountdata.h"
+
+#include "SireBase/shareddatapointer.hpp"
+
 #include "SireMaths/linearap.h"
 
 #include "SireMaths/nmatrix.h"

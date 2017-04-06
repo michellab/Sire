@@ -7,6 +7,18 @@
 
 #include "Helpers/clone_const_reference.hpp"
 
+#include "AmberAngle.pypp.hpp"
+
+#include "AmberBond.pypp.hpp"
+
+#include "AmberDihPart.pypp.hpp"
+
+#include "AmberDihedral.pypp.hpp"
+
+#include "AmberNB14.pypp.hpp"
+
+#include "AmberParams.pypp.hpp"
+
 #include "AngleComponent.pypp.hpp"
 
 #include "AngleParameterName.pypp.hpp"
@@ -441,6 +453,18 @@ BOOST_PYTHON_MODULE(_MM){
     register_IntraSoftCLJFFBase_class();
 
     register_IntraSoftCLJFF_class();
+
+    register_AmberAngle_class();
+
+    register_AmberBond_class();
+
+    register_AmberDihPart_class();
+
+    register_AmberDihedral_class();
+
+    register_AmberNB14_class();
+
+    register_AmberParams_class();
 
     register_AngleComponent_class();
 

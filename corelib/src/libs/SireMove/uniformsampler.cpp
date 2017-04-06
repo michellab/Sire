@@ -76,19 +76,9 @@ UniformSampler::UniformSampler()
                : ConcreteProperty<UniformSampler,Sampler>()
 {}
 
-static SharedPolyPointer<UniformSampler> shared_null;
-
 const UniformSampler& Sampler::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new UniformSampler();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<UniformSampler>());
 }
 
 /** Constructor a sampler that chooses views at random from the 

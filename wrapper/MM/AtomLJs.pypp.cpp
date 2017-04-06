@@ -228,6 +228,19 @@ void register_AtomLJs_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireMM::LJParameter >::isCompatibleWith
+        
+            typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
+            typedef bool ( ::SireMol::AtomProperty< SireMM::LJParameter >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfo const & ) const;
+            isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::isCompatibleWith );
+            
+            AtomLJs_exposer.def( 
+                "isCompatibleWith"
+                , isCompatibleWith_function_value
+                , ( bp::arg("molinfo") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::isEmpty
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;

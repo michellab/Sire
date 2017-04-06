@@ -136,6 +136,18 @@ void register_PackedArray2D_QString__class(){
                 , "" );
         
         }
+        { //::SireBase::PackedArray2D< QString >::detach
+        
+            typedef SireBase::PackedArray2D< QString > exported_class_t;
+            typedef void ( ::SireBase::PackedArray2D< QString >::*detach_function_type)(  ) ;
+            detach_function_type detach_function_value( &::SireBase::PackedArray2D< QString >::detach );
+            
+            PackedArray2D_QString__exposer.def( 
+                "detach"
+                , detach_function_value
+                , "" );
+        
+        }
         { //::SireBase::PackedArray2D< QString >::fromVariant
         
             typedef SireBase::PackedArray2D< QString > exported_class_t;

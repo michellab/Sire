@@ -39,6 +39,7 @@
 #include "SireStream/datastream.h"
 
 using namespace SireCAS;
+using namespace SireBase;
 using namespace SireStream;
 
 static const RegisterMetaType<ExBase> r_exbase(MAGIC_ONLY, "SireCAS::ExBase");
@@ -62,11 +63,11 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ExBase&)
 }
 
 /** Constructor */
-ExBase::ExBase() : QSharedData()
+ExBase::ExBase() : RefCountData()
 {}
 
 /** Copy constructor */
-ExBase::ExBase(const ExBase &) : QSharedData()
+ExBase::ExBase(const ExBase &) : RefCountData()
 {}
 
 /** Destructor */

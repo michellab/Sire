@@ -48,6 +48,8 @@
 #include "SireMol/cgatomidx.h"
 #include "SireMol/residuecutting.h"
 #include "SireMol/atomcutting.h"
+#include "SireMol/molidx.h"
+#include "SireMol/atomidx.h"
 
 #include "SireMol/amberparameters.h"
 
@@ -1939,6 +1941,7 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
     }
 
     //qDebug() << " THE COORDS ARE " << crd_coords;
+    
     // And now the box dimensions. Skip to the last line of the file, because
     // the crd file could have contained velocities, which are not used for the moment
 
@@ -2237,6 +2240,108 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
     }
 
     return tuple<MoleculeGroup, SpacePtr>(molecules, spce);
+}
+
+/** Write the coordinates of the molecules in the passed MoleculeGroup in the 
+    passed Space to an Amber7,
+    format coordinate/restart file. The passed property map is used to find
+    the required properties */
+void Amber::writeCrd(const MoleculeGroup &mols, const Space &space, const QString &filename,
+                     const PropertyMap &map) const
+{
+    QFile file(filename);
+    
+    if (not file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        throw SireError::file_error(file, CODELOC);
+    }
+    
+    QTextStream fout(&file);
+    
+    fout << "Sire generated restart\n";
+    
+    //count up the number of atoms in the molecules
+    int total_nats = 0;
+    
+    for (auto mol : mols)
+    {
+        total_nats += mol.molecule().nAtoms();
+    }
+    
+    //write out the number of atoms
+    fout << total_nats <<  "  0.0000000E+00\n";
+    
+    //now write out the coordinates as six columns of F12.7
+    int nmols = mols.nMolecules();
+    
+    const PropertyName coords_property = map["coordinates"];
+    
+    int nwritten = 0;
+    int nwritten_atoms = total_nats;
+    
+    fout.setFieldWidth(12);
+    fout.setRealNumberPrecision(7);
+    fout.setRealNumberNotation(QTextStream::FixedNotation);
+    
+    for (int i=0; i<nmols; ++i)
+    {
+        Molecule mol = mols[MolIdx(i)].molecule();
+        
+        int nats = mol.nAtoms();
+        
+        for (int j=0; j<nats; ++j)
+        {
+            Atom atom = mol.atom(AtomIdx(j));
+            Vector coords = atom.property<Vector>(coords_property);
+            
+            fout << coords.x() << coords.y() << coords.z();
+            
+            nwritten += 3;
+            nwritten_atoms -= 1;
+            
+            if (nwritten >= 6)
+            {
+                fout.setFieldWidth(0);
+                fout << "\n";
+                fout.setFieldWidth(12);
+                nwritten = 0;
+            }
+        }
+    }
+    
+    if (nwritten < 6)
+    {
+        fout.setFieldWidth(0);
+        fout << "\n";
+        fout.setFieldWidth(12);
+    }
+    
+    //now write out the space
+    if (space.isA<PeriodicBox>())
+    {
+        Vector boxsize = space.asA<PeriodicBox>().dimensions();
+        
+        fout << boxsize.x() << boxsize.y() << boxsize.z()
+             << 90.0 << 90.0 << 90.0;
+        
+        fout.setFieldWidth(0);
+        fout << "\n";
+        fout.setFieldWidth(12);
+    }
+    
+    //ok, all done
+    file.close();
+    
+    if (nwritten_atoms > 0)
+    {
+        qDebug() << "WARNING: Number of written atoms is" << nwritten_atoms
+                 << "less than the number in the Molecules (" << total_nats << ")";
+    }
+    else if (total_nats < 0)
+    {
+        qDebug() << "WARNING: Number of written atoms is" << (-nwritten_atoms)
+                 << "more than the number in the Molecules (" << total_nats << ")";
+    }
 }
 
 const char* Amber::typeName()

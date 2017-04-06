@@ -439,9 +439,13 @@ MultiVector MultiVector::generate(
 /** Return the cross product of v0 and v1 */
 MultiVector MultiVector::cross(const MultiVector &v0, const MultiVector &v1)
 {
+    qDebug() << CODELOC;
+
     MultiDouble nx = v0.sc[1]*v1.sc[2] - v0.sc[2]*v1.sc[1];
     MultiDouble ny = v0.sc[2]*v1.sc[0] - v0.sc[0]*v1.sc[2];
     MultiDouble nz = v0.sc[0]*v1.sc[1] - v0.sc[1]*v1.sc[0];
+
+    qDebug() << CODELOC;
 
     MultiDouble length(nx);
     length *= nx;
@@ -450,6 +454,8 @@ MultiVector MultiVector::cross(const MultiVector &v0, const MultiVector &v1)
     length = length.sqrt();
     
     MultiDouble near_parallel = length.compareLess( MultiDouble(0.01) );
+
+    qDebug() << CODELOC;
 
     if (near_parallel.sum() > 0)
     {
@@ -480,10 +486,23 @@ MultiVector MultiVector::cross(const MultiVector &v0, const MultiVector &v1)
         }
     }
 
+    qDebug() << CODELOC;
+
     //return the normalised vector
     MultiDouble mask = length.compareEqual( MultiDouble(0) );
-    MultiDouble inv_length = mask.logicalAnd(length.reciprocal());
+
+    qDebug() << CODELOC;
+    qDebug() << length.toString();
+    qDebug() << mask.toString();
+
+    MultiDouble rec = length.reciprocal();
+
+    qDebug() << rec.toString();
+
+    MultiDouble inv_length = mask.logicalAnd(rec); //length.reciprocal());
     
+    qDebug() << CODELOC;
+
     return MultiVector( nx*inv_length, ny*inv_length, nz*inv_length );
 }
 

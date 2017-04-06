@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "dimensions.h"
 
+#include "temperature.h"
+
 #include "dimensions.h"
 
 #include "Qt/qdatastream.hpp"

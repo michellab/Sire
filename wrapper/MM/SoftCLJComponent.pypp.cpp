@@ -111,7 +111,7 @@ void register_SoftCLJComponent_class(){
         }
         { //::SireMM::SoftCLJComponent::nAlphaValues
         
-            typedef int const ( *nAlphaValues_function_type )(  );
+            typedef int ( *nAlphaValues_function_type )(  );
             nAlphaValues_function_type nAlphaValues_function_value( &::SireMM::SoftCLJComponent::nAlphaValues );
             
             SoftCLJComponent_exposer.def( 

@@ -32,8 +32,9 @@
 #include "sharedpolypointer.hpp"
 #include "globalsharedpointer.hpp"
 
+#include "refcountdata.h"
+
 #include <QVariant>
-#include <QSharedData>
 #include <QDebug>
 
 SIRE_BEGIN_HEADER
@@ -99,7 +100,7 @@ QMutex* globalLock();
 
     @author Christopher Woods
 */
-class SIREBASE_EXPORT Property : public QSharedData
+class SIREBASE_EXPORT Property : public RefCountData
 {
 
 friend QDataStream& ::operator<<(QDataStream&, const Property&);

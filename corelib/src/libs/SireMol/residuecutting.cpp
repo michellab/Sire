@@ -112,6 +112,12 @@ bool ResidueCutting::operator!=(const ResidueCutting&) const
 /** Apply this function - this creates one CutGroup per residue */
 MolStructureEditor ResidueCutting::operator()(MolStructureEditor &moleditor) const
 {
+    if (moleditor.nCutGroups() == 1 and moleditor.nResidues() == 1)
+    {
+        //there is nothing to do
+        return moleditor;
+    }
+
     //remove the existing CutGroups
     moleditor.removeAllCutGroups();
     

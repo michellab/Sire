@@ -10,6 +10,7 @@
 #include "systemmonitor.h"
 #include <QMutex>
 #include "systemmonitor.h"
+#include "SireBase/numberproperty.h"
 #include "SireError/errors.h"
 #include "SireMaths/maths.h"
 #include "SireStream/datastream.h"

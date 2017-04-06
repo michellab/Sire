@@ -29,9 +29,10 @@
 #ifndef SIRESYSTEM_PERTURBATIONCONSTRAINT_H
 #define SIRESYSTEM_PERTURBATIONCONSTRAINT_H
 
-#include <QSharedDataPointer>
-
 #include "moleculeconstraint.h"
+
+#include "SireBase/shareddatapointer.hpp"
+#include "SireBase/refcountdata.h"
 
 #include "SireMol/perturbation.h"
 #include "SireMol/moleculegroup.h"
@@ -63,7 +64,7 @@ using SireBase::PropertyMap;
 namespace detail
 {
 
-class PerturbationData : public QSharedData
+class PerturbationData : public SireBase::RefCountData
 {
 public:
     PerturbationData();
@@ -142,7 +143,7 @@ private:
         to be applied to each molecule in the group */
     SireBase::PropertyName perts_property;
 
-    typedef QList< QSharedDataPointer<detail::PerturbationData> > PertDataList;
+    typedef QList< SireBase::SharedDataPointer<detail::PerturbationData> > PertDataList;
     typedef QHash<MolNum,PertDataList> PertDataHash;
 
     /** Information about all of the perturbations about each molecule */

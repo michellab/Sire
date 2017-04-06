@@ -321,17 +321,8 @@ option ( SIRE_DISABLE_SSE "Prevent use of SSE when compiling" OFF )
 # Add option to disable use of AVX
 option ( SIRE_DISABLE_AVX "Prevent use of AVX when compiling" OFF )
 
-# Add option to enable use of SSE4 (only works if SSE is not disabled)
-# This is on by default as most processors now support SSE4
-option ( SIRE_ENABLE_SSE4 "Enable use of SSE4 when compiling" ON )
-
-# Add option to enable use of AVX2 (only works if AVX is not disabled)
-# This is off by default as AVX2 is not widespread
-option ( SIRE_ENABLE_AVX2 "Enable use of AVX2 when compiling" OFF )
-
-# Add option to enable use of AVX512 (only works if AVX is not disabled)
-# This is off by default as AVX512 is not widespread
-option ( SIRE_ENABLE_AVX512 "Enabled use of AVX512 when compiling" OFF )
+# Add option to disable use of AVX512F)
+option ( SIRE_DISABLE_AVX512F "Prevent use of AVX512F when compiling" OFF )
 
 # Add an option to force off Fortran compilation and linking
 option ( SIRE_DISABLE_FORTRAN "Turn off Fortran compilation and linking" ON )
@@ -340,11 +331,6 @@ save_sire_variable( "SIRE_DISABLE_FORTRAN" "${SIRE_DISABLE_FORTRAN}" )
 if (SIRE_DISABLE_FORTRAN)
   message( STATUS "Disabling any code that requires compilation or linking to Fortran" )
 endif()
-
-# Add an option to force the compilation to ignore any MPI libraries
-# (this is useful on clusters where the MPI-enabled build cannot run
-#  on the head node, and yet you still want to run tests!)
-option( SIRE_DISABLE_MPI "Turn off MPI compilation and linking" ON )
 
 # Add an option to say whether or not to use OpenMM
 option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM" ON )
@@ -383,7 +369,6 @@ set( SIRE_SMALL_FLAGS "" CACHE INTERNAL "Compiler flags to produce small code" )
 set( SIRE_WARNALL_FLAGS "" CACHE INTERNAL "Compiler flags to turn on all warnings" )
 set( SIRE_DEBUG_FLAGS "" CACHE INTERNAL "Compiler flags to produce debugging code" )
 set( SIRE_RELEASE_FLAGS "" CACHE INTERNAL "Compiler flags to produce optimised release code" )
-set( SIRE_OPENMP_FLAGS "" CACHE INTERNAL "Compiler flags to activate OpenMP" )
 set( SIRE_VECTOR_FLAGS "" CACHE INTERNAL "Compiler flags to vectorise code (e.g. SSE)" )
 set( SIRE_VISIBILITY_FLAGS "" CACHE INTERNAL "Compiler flags to activate symbol visibility" )
 set( SIRE_PLATFORM_FLAGS "" CACHE INTERNAL "Additional flags needed by the compiler" )
@@ -443,6 +428,7 @@ else()
   if (SIRE_HAS_CPP_LIB)
     message(STATUS "Using libc++ in place of libstdc++")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+    set(SIRE_CXX_NG_FLAGS "-stdlib=libc++")
   endif()
 endif()
 
@@ -450,7 +436,7 @@ set(NEED_UNDEF_STRICT_ANSI FALSE)
 
 if (SIRE_HAS_CPP_14)
   message(STATUS "Compiler supports C++ 2014")
-  set(SIRE_CXX_NG_FLAGS "-std=c++14 -DSIRE_HAS_CPP_14 -DSIRE_HAS_CPP_1Y -DSIRE_HAS_CPP_11")
+  set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} -std=c++14 -DSIRE_HAS_CPP_14 -DSIRE_HAS_CPP_1Y -DSIRE_HAS_CPP_11")
 
   if (NEED_UNDEF_STRICT_ANSI)
     message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")
@@ -458,7 +444,7 @@ if (SIRE_HAS_CPP_14)
   endif()
 elseif (SIRE_HAS_CPP_1Y)
   message(STATUS "Compiler supports C++ 201Y (pre-2014)")
-  set(SIRE_CXX_NG_FLAGS "-std=c++1y -DSIRE_HAS_CPP_1Y -DSIRE_HAS_CPP_11")
+  set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} -std=c++1y -DSIRE_HAS_CPP_1Y -DSIRE_HAS_CPP_11")
 
   if (NEED_UNDEF_STRICT_ANSI)
     message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")
@@ -466,7 +452,7 @@ elseif (SIRE_HAS_CPP_1Y)
   endif()
 elseif (SIRE_HAS_CPP_11)
   message(STATUS "Compiler supports C++ 2011")
-  set(SIRE_CXX_NG_FLAGS "-std=c++11 -DSIRE_HAS_CPP_11")
+  set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} -std=c++11 -DSIRE_HAS_CPP_11")
 
   if (NEED_UNDEF_STRICT_ANSI)
     message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")
@@ -495,6 +481,9 @@ endif()
 
 string( TOUPPER ${CMAKE_CXX_COMPILER_ID} SIRE_CXX_COMPILER_ID )
 
+# TEMP - TESTING VECTOR DETECTOR
+include (FindVector)
+
 # Add compiler specific flags
 if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
 
@@ -519,97 +508,27 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     message( STATUS "Using GCC version "
                     "${GCC_MAJOR_VERSION}.${GCC_MINOR_VERSION}" )
 
-    # First, we need at least GCC 4.0, as we need C++ 11 support
-    if ( GCC_MAJOR_VERSION LESS 4 )
-       message( FATAL_ERROR "Sire requires GCC >= 4.0. Please upgrade "
-                      "your version of GCC." )
+    # First, we need at least GCC 4.8, as we need C++ 11 support
+    if ( GCC_MAJOR_VERSION LESS 5 )
+       if ( GCC_MINOR_VERSION LESS 8 )
+         message( FATAL_ERROR "Sire requires GCC >= 4.8. Please upgrade "
+                        "your version of GCC." )
+       endif()
     endif()
 
     set ( SIRE_SMALL_FLAGS  "-Os" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
-    # GCC >= 5 crashes when using -O3
-    if ( GCC_MAJOR_VERSION LESS 5 )
-      set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
-    else()
-      set ( SIRE_RELEASE_FLAGS "-O2 -ffast-math" )
-    endif()
+    set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
 
     # -fomit-frame-pointer breaks backtrace on an apple
     set ( SIRE_RELEASE_FLAGS "${SIRE_RELEASE_FLAGS} -fomit-frame-pointer" )
 
-    set ( SIRE_OPENMP_FLAGS "-fopenmp" )
     set ( SIRE_PLATFORM_FLAGS "-pipe" )
     set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
-    CHECK_CXX_COMPILER_FLAG( "-msse2" HAVE_SSE_FLAG )
-    CHECK_CXX_COMPILER_FLAG( "-mavx" HAVE_AVX_FLAG )
-
-    set( SIRE_SKIP_AVX 1 )
-
-    if ( NOT SIRE_DISABLE_AVX)
-
-      if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
-
-        # we have immintrin.h so we can compile AVX - check if we can run it
-        INCLUDE(CheckCSourceRuns)
-        set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
-        set(CMAKE_REQUIRED_FLAGS "-mavx")
-        check_c_source_runs("
-           #include <immintrin.h>
-           int main()
-           {
-              __m256i a = _mm256_setzero_si256();
-              return 0;
-           }"
-           CAN_RUN_AVX_PROGRAM)
-        set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
-
-        if (CAN_RUN_AVX_PROGRAM)
-          message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
-        
-          set( SIRE_SKIP_AVX 0 )
-
-          CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
-
-          if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
-            message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs" )
-            set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
-          else()
-            set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
-          endif()
-        endif()
-      endif()
-
-      if ( SIRE_SKIP_AVX )
-        if ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
-          # we have emmintrin.h so we have SSE
-          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
-
-          CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
-
-          if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-            message( STATUS "Compiling with SSE4 enabled. Resulting binary will only work on newer Intel CPUs" )
-            set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-          else()
-            set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
-          endif()
-        elseif (NOT SIRE_DISABLE_SSE)   
-          # we have emmintrin.h so we have SSE
-          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
-
-          CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
-
-          if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-            message( STATUS "Compiling with SSE4 enabled. Resulting binary will only work on newer Intel CPUs" )
-            set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-          else()
-            set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
-          endif()  
-        endif()
-      endif()
-    endif()
+    GET_SIRE_VECTOR_FLAGS( "-fopenmp-simd" "-msse2" "-mavx" "-mavx512f" )
 
     # Now gcc 5 specific options
     if ( GCC_MAJOR_VERSION GREATER 4 )
@@ -622,27 +541,9 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
       endif()
     endif()
 
-    # Now gcc 4 specific options
-    if ( GCC_MAJOR_VERSION GREATER 3 )
-      # remove warnings about strict aliasing
-      set( SIRE_PLATFORM_FLAGS "${SIRE_PLATFORM_FLAGS} -Wno-strict-aliasing" )
-
-      # gcc-4.2 and above has openMP - turn it on (except for Mac as libgomp is broken!)
-      if (GCC_MINOR_VERSION GREATER 1)
-          if (SIRE_OPENMP)
-              if (APPLE)
-                message( STATUS "OpenMP support is unavailable as OpenMP + pthreads "
-                                "is broken in Apple gcc4" )
-                set( SIRE_OPENMP_FLAGS "-fno-openmp" )
-              endif()
-          endif()
-      endif()
-
-      set ( SIRE_VISIBILITY_FLAGS "-DSIRE_VISIBILITY_AVAILABLE -fvisibility=hidden -fvisibility-inlines-hidden" )
-  
-    else()
-      set ( SIRE_VISIBILITY_FLAGS "-DSIRE_NO_VISIBILITY_AVAILABLE" ) 
-    endif()
+    # remove warnings about strict aliasing
+    set( SIRE_PLATFORM_FLAGS "${SIRE_PLATFORM_FLAGS} -Wno-strict-aliasing" )
+    set ( SIRE_VISIBILITY_FLAGS "-DSIRE_VISIBILITY_AVAILABLE -fvisibility=hidden -fvisibility-inlines-hidden" )
 
     # Ensure that the libraries don't contain any undefined symbols
     if(APPLE)
@@ -691,74 +592,11 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
     # -fomit-frame-pointer breaks backtrace on an apple
     set ( SIRE_RELEASE_FLAGS "${SIRE_RELEASE_FLAGS} -fomit-frame-pointer" )
 
-    set ( SIRE_OPENMP_FLAGS "-fopenmp" )
     set ( SIRE_PLATFORM_FLAGS "-pipe" )
     set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
-    CHECK_CXX_COMPILER_FLAG( "-msse2" HAVE_SSE_FLAG )
-    CHECK_CXX_COMPILER_FLAG( "-mavx" HAVE_AVX_FLAG )
+    GET_SIRE_VECTOR_FLAGS( "-openmp-simd" "-msse2" "-mavx" "-mavx512f" )
 
-    set( SIRE_SKIP_AVX 1 )
-
-    if ( NOT SIRE_DISABLE_AVX )
-      if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
-        # we have immintrin.h so we can compile AVX - check if we can run it
-        INCLUDE(CheckCSourceRuns)
-        set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
-        set(CMAKE_REQUIRED_FLAGS "-mavx")
-        CHECK_C_SOURCE_RUNS("
-           #include <immintrin.h>
-           int main()
-           {
-              __m256i a = _mm256_setzero_si256();
-              return 0;
-           }"
-           CAN_RUN_AVX_PROGRAM)
-        set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
-
-        if (CAN_RUN_AVX_PROGRAM)        
-          message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_SKIP_AVX 0 )
-          CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
-
-          if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
-            message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs")
-            set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
-          else()
-            set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
-          endif()
-        endif()
-      endif()
-    endif()
-
-    if ( SIRE_SKIP_AVX )
-      if ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
-        # we have emmintrin.h so we have SSE
-        message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
-
-        CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
-        
-        if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-          message( STATUS "Compiling with SSE4.1 enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
-        endif() 
-      elseif( NOT SIRE_DISABLE_SSE )
-        # we have emmintrin.h so we have SSE
-        message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
-
-        CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
-
-        if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-          message( STATUS "Compiling with SSE4.1 enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
-        endif()    
-      endif()
-    endif()
-       
     set ( SIRE_VISIBILITY_FLAGS "-DSIRE_VISIBILITY_AVAILABLE -fvisibility=hidden -fvisibility-inlines-hidden" )
 
     if (APPLE)
@@ -768,104 +606,38 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
 
 elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
 
-    message( STATUS "Detected the Intel C++ and C compilers" )
-    message( FATAL_ERROR "Intel compiler is not supported yet..." )
-    set( SIRE_COMPILER ICPC )
+    message( STATUS "Compiling with the Intel compiler" )
+    set( SIRE_COMPILER "INTEL" )
 
     set ( SIRE_SMALL_FLAGS  "-Os" )
     set ( SIRE_WARNALL_FLAGS  "-w1" )
-    set ( SIRE_RELEASE_FLAGS  "-O3 -fomit-frame-pointer -inline-level=2" )
-    set ( SIRE_VECTOR_FLAGS  "-DSIRE_USE_SSE -msse3" )
+    set ( SIRE_RELEASE_FLAGS  "-O3 -finline -finline-functions -ansi-alias -fargument-noalias-global -ip -g -simd" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
     set ( SIRE_VISIBILITY_FLAGS "-DSIRE_NO_VISIBILITY_AVAILABLE" )    
-    set ( SIRE_OPENMP_FLAGS "-openmp" )
     set ( SIRE_SHARE_LINK_FLAGS "-shared" )
     set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
-elseif( SIRE_CXX_COMPILER_ID MATCHES "MSVC" )
-    message( STATUS "Detected and using Microsoft Visual Studio C and C++ compilers" )
-    set( SIRE_COMPILER "CL" )
-    message( FATAL_ERROR "Visual Studio compilers are not supported yet..." )
+    set ( SIRE_SMALL_FLAGS  "-Os" )
+    set ( SIRE_WARNALL_FLAGS  "-Wall" )
+    set ( SIRE_DEBUG_FLAGS   "-g" )
 
-    # get the compiler version (via gcc -dumpversion)
-    # (I'll assume that we are using the same version
-    # of compiler for C and C++...)
-    message( STATUS "Version ${CMAKE_CXX_COMPILER_VERSION}")
+    # -fomit-frame-pointer breaks backtrace on an apple
+    set ( SIRE_RELEASE_FLAGS "${SIRE_RELEASE_FLAGS} -fomit-frame-pointer" )
 
-    # These two regexps are copied from the Chicken CMake
-    # files (which provide a very useful cmake tutorial - thanks :-)
-    SET( VERSION_BUILD_REGEX "^([0-9]+)[.]([0-9]+).*$" )
-    STRING( REGEX REPLACE ${VERSION_BUILD_REGEX} "\\1"
-            MSVC_MAJOR_VERSION ${CMAKE_CXX_COMPILER_VERSION} )
-    STRING( REGEX REPLACE ${VERSION_BUILD_REGEX} "\\2"
-            MSVC_MINOR_VERSION ${CMAKE_CXX_COMPILER_VERSION} )
+    set ( SIRE_PLATFORM_FLAGS "-pipe" )
+    set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
-    message( STATUS "Using Visual C++ version "
-                    "${MSVC_MAJOR_VERSION}.${MSVC_MINOR_VERSION}" )
+    CHECK_CXX_COMPILER_FLAG( "-msse2" HAVE_SSE_FLAG )
+    CHECK_CXX_COMPILER_FLAG( "-mavx" HAVE_AVX_FLAG )
 
-    set ( SIRE_SMALL_FLAGS  "/Os" )
-    set ( SIRE_WARNALL_FLAGS  "/Wall" )
-    set ( SIRE_DEBUG_FLAGS   "/Zi" )
+    GET_SIRE_VECTOR_FLAGS( "-qopenmp-simd" "-msse2" "-mavx" "-xCOMMON-AVX512" )
 
-    set ( SIRE_RELEASE_FLAGS "/Ox /Oy" )
+    set ( SIRE_VISIBILITY_FLAGS "-DSIRE_VISIBILITY_AVAILABLE -fvisibility=hidden -fvisibility-inlines-hidden" )
 
-    set ( SIRE_OPENMP_FLAGS "" )
-    set ( SIRE_PLATFORM_FLAGS "" )
-    set ( SIRE_STATIC_LINK_FLAGS "" )
-
-    CHECK_CXX_COMPILER_FLAG( "/arch:SSE2" HAVE_SSE_FLAG )
-    CHECK_CXX_COMPILER_FLAG( "/arch:AVX" HAVE_AVX_FLAG )
-
-    set( SIRE_SKIP_AVX 1 )
-
-    if ( NOT SIRE_DISABLE_AVX)
-
-      if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
-
-        # we have immintrin.h so we can compile AVX - check if we can run it
-        INCLUDE(CheckCSourceRuns)
-        set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
-        set(CMAKE_REQUIRED_FLAGS "/arch:AVX")
-        check_c_source_runs("
-           #include <immintrin.h>
-           int main()
-           {
-              __m256i a = _mm256_setzero_si256();
-              return 0;
-           }"
-           CAN_RUN_AVX_PROGRAM)
-        set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
-
-        if (CAN_RUN_AVX_PROGRAM)
-          message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
-
-          set( SIRE_SKIP_AVX 0 )
-
-          CHECK_CXX_COMPILER_FLAG( "/arch:AVX2" HAVE_AVX2_FLAG )
-
-          if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
-            message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs" )
-            set( SIRE_VECTOR_FLAGS "/arch:AVX2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
-          else()
-            set ( SIRE_VECTOR_FLAGS "/arch:AVX2 -DSIRE_USE_AVX" )
-          endif()
-        endif()
-      endif()
-
-      if ( SIRE_SKIP_AVX )
-        if ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
-          # we have emmintrin.h so we have SSE
-          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
-
-        elseif (NOT SIRE_DISABLE_SSE)
-          # we have emmintrin.h so we have SSE
-          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
-          set ( SIRE_VECTOR_FLAGS "/arch:SSE2 -DSIRE_USE_SSE" )
-        endif()
-      endif()
+    if (APPLE)
+    elseif(UNIX)
+        set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -rdynamic -Wl,--no-undefined" )
     endif()
-
-    set ( SIRE_VISIBILITY_FLAGS "-DSIRE_VISIBILITY_AVAILABLE" )
 
 else()
     message( STATUS "CMAKE_SYSTEM_NAME == ${CMAKE_SYSTEM_NAME}" )
@@ -1122,7 +894,6 @@ message ( STATUS "SIRE_SMALL_FLAGS       == ${SIRE_SMALL_FLAGS}" )
 message ( STATUS "SIRE_WARNALL_FLAGS     == ${SIRE_WARNALL_FLAGS}" )
 message ( STATUS "SIRE_DEBUG_FLAGS       == ${SIRE_DEBUG_FLAGS}" )
 message ( STATUS "SIRE_RELEASE_FLAGS     == ${SIRE_RELEASE_FLAGS}" )
-message ( STATUS "SIRE_OPENMP_FLAGS      == ${SIRE_OPENMP_FLAGS}" )
 message ( STATUS "SIRE_VECTOR_FLAGS      == ${SIRE_VECTOR_FLAGS}" )
 message ( STATUS "SIRE_VISIBILITY_FLAGS  == ${SIRE_VISIBILITY_FLAGS}" )
 message ( STATUS "SIRE_PLATFORM_FLAGS    == ${SIRE_PLATFORM_FLAGS}" )
@@ -1194,7 +965,6 @@ save_sire_variable( "SIRE_SMALL_FLAGS" "${SIRE_SMALL_FLAGS}" )
 save_sire_variable( "SIRE_WARNALL_FLAGS" "${SIRE_WARNALL_FLAGS}" )
 save_sire_variable( "SIRE_DEBUG_FLAGS" "${SIRE_DEBUG_FLAGS}" )
 save_sire_variable( "SIRE_RELEASE_FLAGS" "${SIRE_RELEASE_FLAGS}" )
-save_sire_variable( "SIRE_OPENMP_FLAGS" "${SIRE_OPENMP_FLAGS}" )
 save_sire_variable( "SIRE_VECTOR_FLAGS" "${SIRE_VECTOR_FLAGS}" )
 save_sire_variable( "SIRE_VISIBILITY_FLAGS" "${SIRE_VISIBILITY_FLAGS}" )
 save_sire_variable( "SIRE_PLATFORM_FLAGS" "${SIRE_PLATFORM_FLAGS}" )
