@@ -444,4 +444,4 @@ def run():
     #tidy up the folder by removing prmtop
     cmd = "rm -f SYSTEM.prmtop SYSTEM.rst7"
     os.system(cmd)
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
