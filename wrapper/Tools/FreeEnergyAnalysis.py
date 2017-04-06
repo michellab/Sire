@@ -67,6 +67,7 @@ class FreeEnergies(object):
             Use cubic spline estimation instead of trapezium rule.
         """
         means = numpy.mean(self._gradients_kn, axis=1)
+        print (means)
         if cubic_spline:
             NotImplementedError("Cubic Spline TI has not been implemented yet")
         else:

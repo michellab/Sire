@@ -35,6 +35,10 @@ import re
 import Sire.Stream
 import sys
 import os
+try:
+    docopt = Sire.try_import_from("docopt")
+except:
+    pass
 from docopt import docopt
 import argparse
 import bz2
