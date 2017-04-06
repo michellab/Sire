@@ -1662,10 +1662,13 @@ def runFreeNrg():
             #grads[lambda_val.val].accumulate(gradients[i-1])
             grads[lambda_val.val].accumulate(gradient)
     s2 = timer.elapsed() / 1000.
+    outgradients.flush()
+    outfile.flush()
+    outgradients.close()
     outfile.close()
     print("Simulation took %d s " % ( s2 - s1))
     print("###===========================================================###\n")
-
+  
 
     if os.path.exists("gradients.s3"):
         siregrads = Sire.Stream.load("gradients.s3")
