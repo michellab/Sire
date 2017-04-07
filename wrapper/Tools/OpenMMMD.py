@@ -609,9 +609,10 @@ def setupDistanceRestraints(system, restraints=None):
     prop_list = []
 
     molecules = system[MGName("all")].molecules()
-
+    
     if restraints is None:
-        dic_items = list(distance_restraints_dict.val.items())
+        #dic_items = list(distance_restraints_dict.val.items())
+        dic_items = list(dict(distance_restraints_dict.val).items())
     else:
         dic_items = list(restraints.items())
 

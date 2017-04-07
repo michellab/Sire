@@ -14,16 +14,27 @@ from Sire.Tools import Parameter, resolveParameters
 # Python dependencies
 #
 try:
-    import mdtraj
-except ImportError:
-    print ("LJcutoff.py depends on a working install of the python module mdtraj. Please install mdtraj in your sire python.")
-    sys.exit(-1)
+    mdtraj = Sire.try_import("mdtraj")
+except:
+    pass
 
 try:
-    import numpy as np
-except ImportError:
-    print ("LJcutoff.py depends on a working install of the python module mdtraj. Please install mdtraj in your sire python.")
-    sys.exit(-1)
+    numpy = Sire.try_import("numpy")
+except:
+    pass
+
+import numpy as np
+#try:
+#    import mdtraj
+#except ImportError:
+#    print ("LJcutoff.py depends on a working install of the python module mdtraj. Please install mdtraj in your sire python.")
+#    sys.exit(-1)
+#
+#try:
+#    import numpy as np
+#except ImportError:
+#    print ("LJcutoff.py depends on a working install of the python module mdtraj. Please install mdtraj in your sire python.")
+#    sys.exit(-1)
 
 
 bulk_rho = Parameter("bulk_rho", 1.0 * gram/(centimeter*centimeter*centimeter)\

@@ -12,28 +12,19 @@ from Sire.Maths import *
 # Python dependencies
 
 try:
-    import mdtraj
-except ImportError:
-    print ("StandarState.py depends on a working install of the python module mdtraj. Please install mdtraj in your sire python.")
-    sys.exit(-1)
+    mdtraj = Sire.try_import("mdtraj")
+except:
+    pass
 
 try:
-    import ast
-except ImportError:
-    print ("StandarState.py depends on a working install of the python module ast. Please install ast in your sire python.")
-    sys.exit(-1)
+    shutil = Sire.try_import("shutil")
+except:
+    pass
 
 try:
-    import shutil
-except ImportError:
-    print ("StandarState.py depends on a working install of the python module shutil. Please install shutil in your sire python.")
-    sys.exit(-1)
-
-try:
-    import numpy
-except ImportError:
-    print ("StandarState.py depends on a working install of the numpy module. Please install mdtraj in your sire python.")
-    sys.exit(-1)
+    numpy = Sire.try_import("numpy")
+except:
+    pass
 
 # Constant for conversion
 NM_TO_ANG = 10.0
