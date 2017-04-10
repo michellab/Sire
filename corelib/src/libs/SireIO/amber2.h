@@ -83,6 +83,8 @@ public:
     AmberRst();
     AmberRst(const QString &filename,
              const PropertyMap &map = PropertyMap());
+    AmberRst(const QStringList &lines,
+             const PropertyMap &map = PropertyMap());
     AmberRst(const SireSystem::System &system,
              const PropertyMap &map = PropertyMap());
     
@@ -120,6 +122,8 @@ protected:
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
 private:
+    void parse(const PropertyMap &map);
+
     void readBoxInfo(int boxidx);
 
     /** The title of the file */
@@ -168,9 +172,11 @@ public:
 
     AmberParm(const QString &filename,
               const PropertyMap &map = PropertyMap());
+    AmberParm(const QStringList &lines,
+              const PropertyMap &map = PropertyMap());
 
     AmberParm(const SireSystem::System &system,
-              const SireBase::PropertyMap &map = SireBase::PropertyMap());
+              const PropertyMap &map = PropertyMap());
     
     AmberParm(const AmberParm &other);
     
@@ -238,6 +244,8 @@ protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
 
 private:
+    void parse(const PropertyMap &map);
+
     void rebuildAfterReload();
     void rebuildLJParameters();
     void rebuildBADIndicies();

@@ -207,6 +207,52 @@ public:
     }
 };
 
+QStringList writeIntData(const QVector<qint64> &data, AmberFormat format,
+                         QStringList *errors=0)
+{
+    QStringList lines;
+    
+    int n = 0;
+    
+    QString line;
+    
+    for (int i=0; i<data.count(); ++i)
+    {
+        const qint64 value = data.constData()[i];
+    
+        QString sval = QString("%1").arg(value, format.width());
+        
+        if (sval.length() > format.width())
+        {
+            //we couldn't fit this number into the specified width!
+            if (errors)
+                errors->append( QObject::tr(
+                    "Could not write the integer at index %1, value '%2' into "
+                    "the specified format %3.")
+                        .arg(i).arg(value).arg(format.toString()) );
+
+            sval = QString("%1").arg(0, format.width());
+        }
+        
+        line += sval;
+        n += 1;
+        
+        if (n == format.numValues())
+        {
+            lines.append(line);
+            line = QString();
+            n = 0;
+        }
+    }
+    
+    if (n > 0)
+    {
+        lines.append(line);
+    }
+    
+    return lines;
+}
+
 QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
                             const QPair<qint64,qint64> &index,
                             double *total_score, QStringList *errors=0)
@@ -275,6 +321,52 @@ QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
     return data;
 }
 
+QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
+                           QStringList *errors=0)
+{
+    QStringList lines;
+    
+    int n = 0;
+    
+    QString line;
+    
+    for (int i=0; i<data.count(); ++i)
+    {
+        const double value = data.constData()[i];
+    
+        QString sval = QString("%1").arg(value, format.width(), 'f', format.pointWidth());
+        
+        if (sval.length() > format.width())
+        {
+            //we couldn't fit this number into the specified width!
+            if (errors)
+                errors->append( QObject::tr(
+                    "Could not write the float at index %1, value '%2' into "
+                    "the specified format %3.")
+                        .arg(i).arg(value).arg(format.toString()) );
+
+            sval = QString("%1").arg(0.0, format.width(), 'f', format.pointWidth());
+        }
+        
+        line += sval;
+        n += 1;
+        
+        if (n == format.numValues())
+        {
+            lines.append(line);
+            line = QString();
+            n = 0;
+        }
+    }
+    
+    if (n > 0)
+    {
+        lines.append(line);
+    }
+    
+    return lines;
+}
+
 QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
                               const QPair<qint64,qint64> &index,
                               double *total_score, QStringList *errors)
@@ -341,6 +433,82 @@ QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
         *total_score += score;
 
     return data;
+}
+
+template<class T>
+QVector<T> collapse(const QVector< QVector<T> > &arrays)
+{
+    int nvals = 0;
+    
+    for (const auto array : arrays)
+    {
+        nvals += array.count();
+    }
+    
+    if (nvals == 0)
+    {
+        return QVector<T>();
+    }
+    
+    QVector<T> values;
+    values.reserve(nvals);
+    
+    for (const auto array : arrays)
+    {
+        values += array;
+    }
+    
+    return values;
+}
+
+QStringList writeStringData(const QVector<QString> &data, AmberFormat format,
+                            QStringList *errors=0)
+{
+    QStringList lines;
+    
+    int n = 0;
+    
+    QString line;
+    
+    for (int i=0; i<data.count(); ++i)
+    {
+        const QString value = data.constData()[i];
+    
+        if (value.length() < format.width())
+        {
+            line += QString("%1").arg(value, format.width());
+        }
+        else if (value.length() == format.width())
+        {
+            line += value;
+        }
+        else
+        {
+            if (errors)
+                errors->append( QObject::tr(
+                    "Could not fully write the string data at index %1, value '%2', "
+                    "as it can't fit into the format %3.")
+                        .arg(i).arg(value).arg(format.toString()) );
+        
+            line += value.mid(0,format.width());
+        }
+        
+        n += 1;
+        
+        if (n == format.numValues())
+        {
+            lines.append(line);
+            line = QString();
+            n = 0;
+        }
+    }
+    
+    if (n > 0)
+    {
+        lines.append(line);
+    }
+    
+    return lines;
 }
 
 QVector<QString> readStringData(const QVector<QString> &lines, AmberFormat format,
@@ -507,10 +675,9 @@ void AmberRst::readBoxInfo(int boxidx)
     }
 }
 
-/** Construct by parsing the passed file */
-AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
-         : ConcreteProperty<AmberRst,MoleculeParser>(filename, map),
-           current_time(0), box_dims(0), box_angs(cubic_angs)
+/** Parse the data contained in the lines - this clears any pre-existing
+    data in this object */
+void AmberRst::parse(const PropertyMap &map)
 {
     if (lines().count() < 2)
         //there is nothing in the file
@@ -528,8 +695,7 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     if (words.isEmpty())
         throw SireIO::parse_error( QObject::tr(
                 "Could not read the number of atoms from the first word of the "
-                "restart file '%1'. Please check that the file i ok.")
-                    .arg(filename), CODELOC );
+                "restart file. Please check that the file is ok."), CODELOC );
     
     bool ok = true;
     int natoms = words[0].toInt(&ok);
@@ -537,8 +703,7 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     if (not ok)
         throw SireIO::parse_error( QObject::tr(
                 "Could not read the number of atoms from the first five columns of "
-                "the restart file '%1'. Please check that the file is ok.")
-                    .arg(filename), CODELOC );
+                "the restart file. Please check that the file is ok."), CODELOC );
 
     if (words.count() >= 2)
     {
@@ -645,8 +810,8 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     {
         throw SireIO::parse_error( QObject::tr(
                 "There were some problems reading in the coordinate data "
-                "from the restart file %1.\n%2")
-                    .arg(filename).arg(global_errors.join("\n")), CODELOC );
+                "from the restart file.\n%1")
+                    .arg(global_errors.join("\n")), CODELOC );
     }
 
     score += natoms/2;
@@ -742,8 +907,8 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     {
         throw SireIO::parse_error( QObject::tr(
                 "There were some problems reading in the velocity data "
-                "from the restart file %1.\n%2")
-                    .arg(filename).arg(global_errors.join("\n")), CODELOC );
+                "from the restart file.\n%1")
+                    .arg(global_errors.join("\n")), CODELOC );
     }
 
     score += (natoms/2);
@@ -759,6 +924,22 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
     }
 
     this->setScore(score);
+}
+
+/** Construct by parsing the passed file */
+AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
+         : ConcreteProperty<AmberRst,MoleculeParser>(filename, map),
+           current_time(0), box_dims(0), box_angs(cubic_angs)
+{
+    this->parse(map);
+}
+
+/** Construct by parsing the data in the passed text lines */
+AmberRst::AmberRst(const QStringList &lines, const PropertyMap &map)
+         : ConcreteProperty<AmberRst,MoleculeParser>(lines, map),
+           current_time(0), box_dims(0), box_angs(cubic_angs)
+{
+    this->parse(map);
 }
 
 /** Construct by extracting the necessary data from the passed System */
@@ -1802,9 +1983,9 @@ double AmberParm::processAllFlags()
     return score;
 }
 
-/** Construct by reading from the file called 'filename' */
-AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
-          : ConcreteProperty<AmberParm,MoleculeParser>(filename, map)
+/** Parse the text data from this file to create this object. This
+    clears any pre-existing data */
+void AmberParm::parse(const PropertyMap &map)
 {
     double score = 0;
 
@@ -1842,9 +2023,9 @@ AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
                 
                 if (flag_to_line.contains(flag))
                     throw SireError::file_error( QObject::tr(
-                        "The file '%1' does not look like a valid Amber Parm7 file, "
-                        "as the FLAG '%2' is duplicated! (on lines %3 and %4)")
-                            .arg(filename).arg(flag)
+                        "The file does not look like a valid Amber Parm7 file, "
+                        "as the FLAG '%1' is duplicated! (on lines %2 and %3)")
+                            .arg(flag)
                             .arg(flag_to_line[flag].first)
                             .arg(i), CODELOC );
                 
@@ -1871,11 +2052,386 @@ AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
     this->setScore(score);
 }
 
+/** Construct by reading from the file called 'filename' */
+AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
+          : ConcreteProperty<AmberParm,MoleculeParser>(filename, map)
+{
+    this->parse(map);
+}
+
+/** Construct by reading from the contained in the passed
+    set of lines */
+AmberParm::AmberParm(const QStringList &lines, const PropertyMap &map)
+          : ConcreteProperty<AmberParm,MoleculeParser>(lines, map)
+{
+    this->parse(map);
+}
+
+/** Internal function used to get the atom names in AtomIdx order from the
+    passed AmberParams object */
+QVector<QString> getAtomNames(const AmberParams &params)
+{
+    const int natoms = params.info().nAtoms();
+
+    QVector<QString> atoms(natoms);
+
+    for (int i=0; i<natoms; ++i)
+    {
+        atoms[i] = params.info().name( AtomIdx(i) ).value().simplified();
+    }
+
+    return atoms;
+}
+
+/** Internal function used to get the atom charges in AtomIdx order from
+    the passed AmberParams object */
+QVector<double> getAtomCharges(const AmberParams &params)
+{
+    const auto info = params.info();
+    
+    QVector<double> charges(info.nAtoms());
+    
+    const auto c = params.charges();
+    
+    for (int i=0; i<info.nAtoms(); ++i)
+    {
+        charges[i] = c[ info.cgAtomIdx(AtomIdx(i)) ].to(mod_electron) * AMBERCHARGECONV;
+    }
+    
+    return charges;
+}
+
+/** Internal function used to get the atom masses in AtomIdx order from 
+    the passed AmberParams object */
+QVector<double> getAtomMasses(const AmberParams &params)
+{
+    const auto info = params.info();
+    
+    QVector<double> masses(info.nAtoms());
+    
+    const auto m = params.masses();
+    
+    for (int i=0; i<info.nAtoms(); ++i)
+    {
+        masses[i] = m[ info.cgAtomIdx(AtomIdx(i)) ].to(g_per_mol);
+    }
+    
+    return masses;
+}
+
+/** Internal function used to get the atom numbers */
+QVector<qint64> getAtomNumbers(const AmberParams &params)
+{
+    const auto info = params.info();
+    
+    QVector<qint64> elements(info.nAtoms());
+    
+    const auto e = params.elements();
+    
+    for (int i=0; i<info.nAtoms(); ++i)
+    {
+        elements[i] = e[ info.cgAtomIdx(AtomIdx(i)) ].nProtons();
+    }
+    
+    return elements;
+}
+
+/** Internal function that converts the passed list of parameters into a list
+    of text lines */
+QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
+                    QStringList *all_errors=0)
+{
+    if (params.isEmpty())
+        return QStringList();
+
+    tbb::spin_mutex error_mutex;
+
+    //function used to generate the text for the atom names
+    auto getAllAtomNames = [&]()
+    {
+        QVector< QVector<QString> > atom_names(params.count());
+    
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    atom_names[i] = getAtomNames(params[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                atom_names[i] = getAtomNames(params[i]);
+            }
+        }
+        
+        if (all_errors)
+        {
+            QStringList errors;
+        
+            QStringList lines = writeStringData( collapse(atom_names),
+                                                 AmberFormat( AmberParm::STRING, 20, 4 ),
+                                                 &errors );
+        
+            if (not errors.isEmpty())
+            {
+                tbb::spin_mutex::scoped_lock locker(error_mutex);
+                all_errors->append( QObject::tr("== Errors writing atom name data! ==") );
+                *all_errors += errors;
+            }
+            
+            return lines;
+        }
+        else
+            return writeStringData( collapse(atom_names),
+                                    AmberFormat( AmberParm::STRING, 20, 4 ) );
+    };
+    
+    //function used to generate the text for all atom charges
+    auto getAllAtomCharges = [&]()
+    {
+        QVector< QVector<double> > atom_charges(params.count());
+        
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    atom_charges[i] = getAtomCharges(params[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                atom_charges[i] = getAtomCharges(params[i]);
+            }
+        }
+        
+        if (all_errors)
+        {
+            QStringList errors;
+        
+            QStringList lines = writeFloatData( collapse(atom_charges),
+                                                AmberFormat( AmberParm::FLOAT, 5, 16, 8 ),
+                                                &errors );
+        
+            if (not errors.isEmpty())
+            {
+                tbb::spin_mutex::scoped_lock locker(error_mutex);
+                all_errors->append( QObject::tr("== Errors writing atom charge data! ==") );
+                *all_errors += errors;
+            }
+            
+            return lines;
+        }
+        else
+            return writeFloatData( collapse(atom_charges),
+                                   AmberFormat( AmberParm::FLOAT, 5, 16, 8) );
+    };
+    
+    //function used to generate the text for all atom numbers
+    auto getAllAtomNumbers = [&]()
+    {
+        QVector< QVector<qint64> > atom_numbers(params.count());
+        
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    atom_numbers[i] = getAtomNumbers(params[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                atom_numbers[i] = getAtomNumbers(params[i]);
+            }
+        }
+        
+        if (all_errors)
+        {
+            QStringList errors;
+        
+            QStringList lines = writeIntData( collapse(atom_numbers),
+                                              AmberFormat( AmberParm::INTEGER, 10, 8 ),
+                                              &errors );
+        
+            if (not errors.isEmpty())
+            {
+                tbb::spin_mutex::scoped_lock locker(error_mutex);
+                all_errors->append( QObject::tr("== Errors writing atom number data! ==") );
+                *all_errors += errors;
+            }
+            
+            return lines;
+        }
+        else
+            return writeIntData( collapse(atom_numbers),
+                                 AmberFormat( AmberParm::INTEGER, 10, 8) );
+    };
+    
+    //function used to generate the text for all atom masses
+    auto getAllAtomMasses = [&]()
+    {
+        QVector< QVector<double> > atom_masses(params.count());
+        
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    atom_masses[i] = getAtomMasses(params[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                atom_masses[i] = getAtomMasses(params[i]);
+            }
+        }
+        
+        if (all_errors)
+        {
+            QStringList errors;
+        
+            QStringList lines = writeFloatData( collapse(atom_masses),
+                                                AmberFormat( AmberParm::FLOAT, 5, 16, 8 ),
+                                                &errors );
+        
+            if (not errors.isEmpty())
+            {
+                tbb::spin_mutex::scoped_lock locker(error_mutex);
+                all_errors->append( QObject::tr("== Errors writing atom mass data! ==") );
+                *all_errors += errors;
+            }
+            
+            return lines;
+        }
+        else
+            return writeFloatData( collapse(atom_masses),
+                                   AmberFormat( AmberParm::FLOAT, 5, 16, 8) );
+    };
+
+    QStringList lines;
+    
+    if (use_parallel)
+    {
+        QStringList name_lines, charge_lines, number_lines, mass_lines;
+    
+        tbb::parallel_invoke(
+            [&](){ name_lines = getAllAtomNames(); },
+            [&](){ charge_lines = getAllAtomCharges(); },
+            [&](){ number_lines = getAllAtomNumbers(); },
+            [&](){ mass_lines = getAllAtomMasses(); }
+        );
+        
+        lines.append("%FLAG ATOM_NAME");
+        lines += name_lines;
+        
+        lines.append("%FLAG CHARGE");
+        lines += charge_lines;
+        
+        lines.append("%FLAG ATOMIC_NUMBER");
+        lines += number_lines;
+        
+        lines.append("%FLAG MASS");
+        lines += mass_lines;
+    }
+    else
+    {
+        lines.append("%FLAG ATOM_NAME");
+        lines += getAllAtomNames();
+        
+        lines.append("%FLAG CHARGE");
+        lines += getAllAtomCharges();
+        
+        lines.append("%FLAG ATOMIC_NUMBER");
+        lines += getAllAtomNumbers();
+        
+        lines.append("%FLAG MASS");
+        lines += getAllAtomMasses();
+    }
+    
+    return lines;
+}
+
 /** Construct by converting from the passed system, using the passed property
     map to find the right properties */
 AmberParm::AmberParm(const System &system, const PropertyMap &map)
+          : ConcreteProperty<AmberParm,MoleculeParser>(map)
 {
-    this->operator=(AmberParm());
+    //get the MolNums of each molecule in the System - this returns the
+    //numbers in MolIdx order
+    const QVector<MolNum> molnums = system.getMoleculeNumbers().toVector();
+
+    if (molnums.isEmpty())
+    {
+        //no molecules in the system
+        this->operator=(AmberParm());
+        return;
+    }
+
+    //generate the AmberParams object for each molecule in the system
+    QVector<AmberParams> params(molnums.count());
+
+    if (usesParallel())
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0,molnums.count()),
+                           [&](const tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                //params[i] = AmberParams(system[molnums[i]],map);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<molnums.count(); ++i)
+        {
+            //params[i] = AmberParams(system[molnums[i]],map);
+        }
+    }
+
+    QStringList errors;
+
+    //now convert these into text lines that can be written as the file
+    QStringList lines = ::toLines(params, this->usesParallel(), &errors);
+
+    if (not errors.isEmpty())
+    {
+        throw SireIO::parse_error( QObject::tr(
+            "Errors converting the system to a Amber Parm format...\n%1")
+                .arg(lines.join("\n")), CODELOC );
+    }
+
+    //we don't need params any more, so free the memory
+    params.clear();
+
+    //add the title to the top of the lines
+    lines.prepend("%FLAG TITLE");
+    lines.prepend(system.name().value());
+
+    //now generate this object by re-reading these lines
+    this->operator=(AmberParm(lines));
 }
 
 /** Copy constructor */

@@ -83,8 +83,10 @@ friend QDataStream& ::operator<<(QDataStream&, const MoleculeParser&);
 friend QDataStream& ::operator>>(QDataStream&, MoleculeParser&);
 
 public:
-    MoleculeParser();
+    MoleculeParser(const PropertyMap &map = PropertyMap());
     MoleculeParser(const QString &filename, const PropertyMap &map);
+    MoleculeParser(const QStringList &lines, const PropertyMap &map);
+    
     MoleculeParser(const MoleculeParser &other);
 
     virtual ~MoleculeParser();

@@ -90,8 +90,13 @@ typedef QMultiHash<QString,SireIO::detail::ParserFactory> ParserFactories;
 Q_GLOBAL_STATIC( ParserFactories, getParserFactories );
 
 /** Constructor */
-MoleculeParser::MoleculeParser() : Property(), scr(0), run_parallel(true)
-{}
+MoleculeParser::MoleculeParser(const PropertyMap &map) : Property(), scr(0), run_parallel(true)
+{
+    if (map["parallel"].hasValue())
+    {
+        run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+}
 
 /** Internal function that provides a file cache */
 class FileContentsCache
@@ -176,6 +181,22 @@ MoleculeParser::MoleculeParser(const QString &filename,
         
         if (not lnes.isEmpty())
             getFileCache()->save(filename, lnes);
+    }
+}
+
+/** Construct the parser, parsing in all of the passed text lines */
+MoleculeParser::MoleculeParser(const QStringList &lines,
+                               const PropertyMap &map)
+               : Property(), scr(0), run_parallel(true)
+{
+    if (map["parallel"].hasValue())
+    {
+        run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+    
+    if (not lnes.isEmpty())
+    {
+        lnes = lines.toVector();
     }
 }
 
