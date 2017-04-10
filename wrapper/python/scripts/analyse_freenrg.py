@@ -178,6 +178,11 @@ if __name__ == '__main__':
             print("\nPlease supply the name of the simulation file/s containing the reduced perturbed energies/gradients to be "
             "analysed.")
             sys.exit(-1)
+        if input_files[0].endswith('.s3'):
+            print(__doc__)
+            print("\nInvalid file format for MBAR analysis. Please supply the names of the simulation.dat file/s containing the reduced perturbed energies/gradients to be "
+            "analysed.")
+            sys.exit(-1)
         else:
             if ',' in arguments['--input'][0]:
                 pattern = re.compile("^\s+|\s*,\s*|\s+$")
@@ -292,7 +297,6 @@ if __name__ == '__main__':
         #mbar DG for neighbourting lambda
         pairwise_F = free_energy_obj.pairwise_F
         if T != None:
-            k_boltz_J = 0.0083144621
             pairwise_F[:,2] = pairwise_F[:,2]*T*k_boltz
             pairwise_F[:,3] = pairwise_F[:,3]*T*k_boltz
         FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
@@ -301,7 +305,6 @@ if __name__ == '__main__':
         #mbar pmf
         pmf_mbar = free_energy_obj.pmf_mbar
         if T != None:
-            k_boltz_J = 0.0083144621
             pmf_mbar[:,1] = pmf_mbar[:,1]*T*k_boltz
             pmf_mbar[:,2] = pmf_mbar[:,2]*T*k_boltz
         FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
@@ -380,10 +383,20 @@ if __name__ == '__main__':
 
         parser.add_argument('-h', '--help', action='store_true', dest='hi')
 
-        parser.add_argument('--temperature')
-        parser.add_argument('--lam', nargs='*')
         sys.stdout.write("\n")
-        args = parser.parse_args()
+        args , unknown = parser.parse_known_args()
+        
+        for u in unknown:
+            mbar_list = ['--temperature', '--subsampling', '--lam', '--overlap']
+            if u in mbar_list:
+                print (__doc__)
+                print ('analyse_freenrg: error: mbar command argument: %s ' %u)
+                print ('Try adding the mabr command option')
+                sys.exit(1)
+            else:
+                print(__doc__)
+                print ('analyse_freenrg: error: unrecognized arguments: %s ' %u)
+                sys.exit(1)
 
         must_exit = False
 
@@ -447,6 +460,9 @@ if __name__ == '__main__':
         if not input_file:
             print (__doc__)
             print("\nPlease supply the name of the .s3 file(s) containing the free energies/gradients to be analysed.")
+            sys.exit(-1)
+        if not input_file[0].endswith('.s3'):
+            print("\nInvalid file format. Please supply the name of the .s3 file(s) containing the free energies/gradients to be analysed.")
             sys.exit(-1)
 
         # elif not os.path.exists(input_file):
