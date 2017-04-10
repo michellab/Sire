@@ -38,7 +38,7 @@ import os
 try:
     docopt = Sire.try_import_from("docopt", "docopt")
 except:
-    print ('blub')
+    print ("Can't import docopt module")
     pass
 #from docopt import docopt
 import argparse
