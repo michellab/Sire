@@ -57,6 +57,7 @@ class FreeEnergies(object):
         self._f_k = None
         self._pmf_ti = None
         self._overlap_matrix = None
+        self._pairwise_F = None
 
     def run_ti(self, cubic_spline=False):
         r"""Runs Thermodynamic integration free energy estimate
@@ -67,7 +68,6 @@ class FreeEnergies(object):
             Use cubic spline estimation instead of trapezium rule.
         """
         means = numpy.mean(self._gradients_kn, axis=1)
-        print (means)
         if cubic_spline:
             NotImplementedError("Cubic Spline TI has not been implemented yet")
         else:
@@ -89,6 +89,12 @@ class FreeEnergies(object):
         self._pmf_mbar = numpy.zeros(shape=(self._lambda_array.shape[0], 2))
         self._pmf_mbar[:, 0] = self._lambda_array
         self._pmf_mbar[:, 1] = self._f_k
+        self._pairwise_F = numpy.zeros(shape=(self._lambda_array.shape[0]-1,4))
+        self._pairwise_F[:,0] = self._lambda_array[:-1]
+        self._pairwise_F[:,1] = self._lambda_array[1:]
+        self._pairwise_F[:,2] = numpy.diag(deltaF_ij,1)
+        self._pairwise_F[:,3] = numpy.diag(dDeltaF_ij,1)        
+
 
         ##testing data overlap:
         if test_overlap:
@@ -119,6 +125,10 @@ class FreeEnergies(object):
     @property
     def overlap_matrix(self):
         return self._overlap_matrix
+
+    @property
+    def pairwise_F(self):
+        return self._pairwise_F
 
 class SubSample(object):
     r"""This class subsamples data based on the timeseries analysis or percentage of data ready for pmf use

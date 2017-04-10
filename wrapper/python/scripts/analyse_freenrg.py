@@ -276,9 +276,9 @@ if __name__ == '__main__':
         subsample_obj.subsample_gradients()
 
         free_energy_obj = FreeEnergies(subsample_obj.u_kln, subsample_obj.N_k_energies, lamvals, subsample_obj.gradients_kn)
-        print ('# running mbar ====================================================')
+        print ('#running mbar ====================================================')
         free_energy_obj.run_mbar(test_overlap)
-        print ('# running mbar done ===============================================')
+        print ('#running mbar done ===============================================')
         free_energy_obj.run_ti()
 
         if test_overlap:
@@ -289,20 +289,40 @@ if __name__ == '__main__':
             FILE.write(bytes('#Overlap matrix\n', "UTF-8"))
             numpy.savetxt(FILE, M, fmt='%.4f')
 
+        #mbar DG for neighbourting lambda
+        pairwise_F = free_energy_obj.pairwise_F
+        if T != None:
+            k_boltz_J = 0.0083144621
+            pairwise_F[:,2] = pairwise_F[:,2]*T*k_boltz
+            pairwise_F[:,3] = pairwise_F[:,3]*T*k_boltz
+        FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
+        numpy.savetxt(FILE, pairwise_F, fmt=['%.4f', '%.4f', '%.4f', '%.4f'])
+
+        #mbar pmf
         pmf_mbar = free_energy_obj.pmf_mbar
         if T != None:
             k_boltz_J = 0.0083144621
             pmf_mbar[:,1] = pmf_mbar[:,1]*T*k_boltz
         FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
-        numpy.savetxt(FILE, pmf_mbar, fmt=['%.2f', '%.2f'])
+        numpy.savetxt(FILE, pmf_mbar, fmt=['%.4f', '%.4f'])
 
+        #ti mean gradients and std. 
+        grad_mean = numpy.mean(subsample_obj.gradients_kn, axis=1)
+        grad_std = numpy.std(subsample_obj.gradients_kn, axis=1)
+        if T != None:
+            grad_mean = grad_mean*T*k_boltz
+            grad_std = grad_std*T*k_boltz
+        grad_data = numpy.column_stack((grad_mean,grad_std))
+        FILE.write(bytes('#TI average gradients and standard deviation in kcal/mol\n', "UTF-8"))
+        numpy.savetxt(FILE, grad_data, fmt=['%.4f', '%.4f'])
 
+        #TI pmf
         pmf_ti = free_energy_obj.pmf_ti
         if T != None:
             pmf_ti[:,1] = pmf_ti[:,1]*T*k_boltz
 
         FILE.write(bytes('#PMF from TI in kcal/mol\n', "UTF-8"))
-        numpy.savetxt(FILE, pmf_ti, fmt=['%.2f', '%.2f'])
+        numpy.savetxt(FILE, pmf_ti, fmt=['%.4f', '%.4f'])
 
 
         df_mbar_kcal = free_energy_obj.deltaF_mbar
@@ -314,8 +334,8 @@ if __name__ == '__main__':
             df_mbar_kcal = df_mbar_kcal*T*k_boltz
             dDf_mbar_kcal = dDf_mbar_kcal*T*k_boltz
 
-        FILE.write(bytes("# MBAR free energy difference in kcal/mol: \n%f, %f \n" %(df_mbar_kcal,dDf_mbar_kcal),  "UTF-8"))
-        FILE.write(bytes("# TI free energy difference in kcal/mol: \n%f \n" %df_ti_kcal,  "UTF-8"))
+        FILE.write(bytes("#MBAR free energy difference in kcal/mol: \n%f, %f \n" %(df_mbar_kcal,dDf_mbar_kcal),  "UTF-8"))
+        FILE.write(bytes("#TI free energy difference in kcal/mol: \n%f \n" %df_ti_kcal,  "UTF-8"))
 
         FILE.close()
 ##########################################
