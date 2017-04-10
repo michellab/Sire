@@ -36,10 +36,11 @@ import Sire.Stream
 import sys
 import os
 try:
-    docopt = Sire.try_import_from("docopt")
+    docopt = Sire.try_import_from("docopt", "docopt")
 except:
+    print ('blub')
     pass
-from docopt import docopt
+#from docopt import docopt
 import argparse
 import bz2
 from Sire.Tools.FreeEnergyAnalysis import SubSample
