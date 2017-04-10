@@ -86,9 +86,10 @@ class FreeEnergies(object):
         (deltaF_ij, dDeltaF_ij, theta_ij) = MBAR_obj.getFreeEnergyDifferences()
         self._deltaF_mbar = deltaF_ij[0, self._lambda_array.shape[0]-1]
         self._dDeltaF_mbar = dDeltaF_ij[0, self._lambda_array.shape[0]-1]
-        self._pmf_mbar = numpy.zeros(shape=(self._lambda_array.shape[0], 2))
+        self._pmf_mbar = numpy.zeros(shape=(self._lambda_array.shape[0], 3))
         self._pmf_mbar[:, 0] = self._lambda_array
         self._pmf_mbar[:, 1] = self._f_k
+        self._pmf_mbar[:,2] = dDeltaF_ij[0]
         self._pairwise_F = numpy.zeros(shape=(self._lambda_array.shape[0]-1,4))
         self._pairwise_F[:,0] = self._lambda_array[:-1]
         self._pairwise_F[:,1] = self._lambda_array[1:]

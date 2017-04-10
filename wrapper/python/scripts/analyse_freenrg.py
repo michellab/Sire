@@ -303,8 +303,9 @@ if __name__ == '__main__':
         if T != None:
             k_boltz_J = 0.0083144621
             pmf_mbar[:,1] = pmf_mbar[:,1]*T*k_boltz
+            pmf_mbar[:,2] = pmf_mbar[:,2]*T*k_boltz
         FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
-        numpy.savetxt(FILE, pmf_mbar, fmt=['%.4f', '%.4f'])
+        numpy.savetxt(FILE, pmf_mbar, fmt=['%.4f', '%.4f', '%.4f'])
 
         #ti mean gradients and std. 
         grad_mean = numpy.mean(subsample_obj.gradients_kn, axis=1)
@@ -312,9 +313,9 @@ if __name__ == '__main__':
         if T != None:
             grad_mean = grad_mean*T*k_boltz
             grad_std = grad_std*T*k_boltz
-        grad_data = numpy.column_stack((grad_mean,grad_std))
+        grad_data = numpy.column_stack((lamvals, grad_mean,grad_std))
         FILE.write(bytes('#TI average gradients and standard deviation in kcal/mol\n', "UTF-8"))
-        numpy.savetxt(FILE, grad_data, fmt=['%.4f', '%.4f'])
+        numpy.savetxt(FILE, grad_data, fmt=['%.4f', '%.4f', '%.4f'])
 
         #TI pmf
         pmf_ti = free_energy_obj.pmf_ti
