@@ -1,34 +1,3 @@
-"""analyse_freenrg Analyse free energy files to calculate free energies, PMFs and to view convergence.
-
-usage:
-    analyse_freenrg -h, --help
-    analyse_freenrg  [--description] [--author] [--version]
-    analyse_freenrg [-i INPUT] [-o FILE] [-g NAME...] [-p PERCENT] [-r RANGE RANGE] 
-    analyse_freenrg mbar [--description --author --version] 
-    analyse_freenrg mbar -h, --help
-    analyse_freenrg mbar (-i INPUT...) [-o OUTPUT] [--subsampling ] [--percentage PERCENT] [--lam NUMBERS...] [--temperature TMPERATURE] [--overlap]
-
-analyse_freenrg is built using Sire and is distributed under the GPL. For more information please visit http://siremol.org/analyse_freenrg
-
-Options:
-    -h, --help                                  Show this help message and exit
-    --description                               Print a complete description of this program.
-    --author                                    Get information about the authors of this script.
-    --version                                   Get version information about this script.
-    -i INPUT..., --input INPUT                  Supply the name of the Sire Streamed Save (.s3) file containing the free energies to be analysed.
-                                                MBAR option: Supply the name of the Sire simulation.dat files
-                                                containing gradients and perturbed energies to be
-                                                analysed. Valid options are: 'simfile1.dat, simfile2.dat', or 'simfile1.dat simfile2.dat', or wildcard arguments 'lambda*/simfile.dat'
-    -o OUTPUT, --output OUTPUT                  Supply the name of the file in which to write the output.
-    -p PERCENT, --percentage PERCENT            Percentage of the data to be used for analysis the rest will be discareded towards equilibration [default: 60]
-    -g GRADIENTS..., --gradients GRADIENTS...   Supply the name of the Sire Streamed gradients (.s3) files containing the 
-                                                gradients to be analysed.
-    -r RANGE RANGE, --range RANGE               Supply the range of iterations over which to average. By default, this will be over the last 60 percent of iterations.
-    --subsampling                               MBAR option: Subsampling data true or false
-    --lam NUMBERS...                            MBAR option: Lambda values at which the PMFs should be evaluated
-    --temperature TEMPERATURE                   MBAR option; Temperature in [Kelvin] at which the simulation was generated [default: 300]
-    --overlap                                   MBAR option; Tests whether the overlap between neighbouring lambdas is sufficent for analysis
-"""
 from Sire.Analysis import *
 import glob
 import re
@@ -146,247 +115,90 @@ if __name__ == '__main__':
     if len(sys.argv)<2:
         print(__doc__)
         sys.exit(0)
-    if sys.argv[1] == 'mbar':
-        arguments = docopt(__doc__)
-        must_exit = False
-        #MBAR is true and we run and MBAR analysis
-        print('Simulation data is analysed using mbar')
-        if arguments['--author']:
-            print("\nanalyse_freenrg mbar was written by Antonia Mey (C) 2015-2017")
-            print("It is based on the pymbar analysis scripts (https://github.com/choderalab/pymbar)")
-            must_exit = True
-        if arguments['--version']:
-            print("analyse_freenrg mbar -- from Sire release version <%s>" % Sire.__version__)
-            print("This particular release can be downloaded here: "
-            "https://github.com/michellab/Sire/releases/tag/v%s" % Sire.__version__)
-            must_exit = True
-        if arguments['--description']:
-            print("%s\n" % description_mbar)
-            must_exit = True
-        if must_exit:
-            sys.exit(0)
 
-        input_files = arguments['--input']
-        output_file = arguments['--output']
-        test_overlap = arguments['--overlap']
+    parser = argparse.ArgumentParser(description="Analyse free energy files to calculate "
+                                     "free energies, PMFs and to view convergence.",
+                         epilog="analyse_freenrg is built using Sire and is distributed "
+                                "under the GPL. For more information please visit "
+                                "http://siremol.org/analyse_freenrg",
+                         prog="analyse_freenrg")
+    parser.add_argument('--description', action="store_true",
+                        help="Print a complete description of this program.")
 
-        subsampling = arguments['--subsampling']
-        percentage = float(arguments['--percentage'])
-        T = float(arguments['--temperature'])
+    parser.add_argument('--author', action="store_true",
+                        help="Get information about the authors of this script.")
 
-        if not input_files:
-            print(__doc__)
-            print("\nPlease supply the name of the simulation file/s containing the reduced perturbed energies/gradients to be "
-            "analysed.")
-            sys.exit(-1)
-        if input_files[0].endswith('.s3'):
-            print(__doc__)
-            print("\nInvalid file format for MBAR analysis. Please supply the names of the simulation.dat file/s containing the reduced perturbed energies/gradients to be "
-            "analysed.")
-            sys.exit(-1)
-        else:
-            if ',' in arguments['--input'][0]:
-                pattern = re.compile("^\s+|\s*,\s*|\s+$")
-                input_files =[x for x in pattern.split(arguments['--input'][0]) if x]
-            elif ' ' in arguments['--input'][0]:
-                input_files = arguments['--input'][0].split(' ')
-            elif '*' in arguments['--input'][0]:
-                input_files = glob.glob(arguments['--input'][0])
-                input_files.sort()
+    parser.add_argument('--version', action="store_true",
+                        help="Get version information about this script.")
 
-        if output_file:
-            print("# Writing all output to file %s" % output_file)
-            FILE = open(output_file, "wb")
-        else:
-            print("# Writing all output to stdout")
-            FILE = sys.stdout.buffer
+    parser.add_argument('-i', '--input', nargs=1,
+                        help="Supply the name of the Sire Streamed Save (.s3) file containing the "
+                             "free energies to be analysed.")
 
-        FILE.write(bytes("# Analysing data contained in file(s) %s\n" % input_files,  "UTF-8"))
+    parser.add_argument('-g', '--gradients', nargs='*',
+                        help="Supply the name of the Sire Streamed gradients (.s3) files containing the "
+                             "gradients to be analysed.")
 
-        #sanity checking of other input parameters:
-        #processing lambda values
-        lamvals = None
-        if not arguments['--lam']:
-            print ("#Lambda array was not given, trying to infer lambda values from simulation files...")
-        else:
-            if ',' in arguments['--lam'][0]:
-                pattern = re.compile("^\s+|\s*,\s*|\s+$")
-                lamvals =[x for x in pattern.split(arguments['--lam'][0]) if x]
-            elif ' ' in arguments['--lam'][0]:
-                lamvals = float(arguments['--lam'][0].split(' '))
-            lamvals = numpy.array([float(i) for i in lamvals])
-        lam = None
-        for f in input_files:
-            print ('working on input file %s' %f)
-## Compressed file
-            if f.endswith('.bz2'):
-                bz_file = bz2.BZ2File(f)
-                for line in bz_file:
-                    if line.startswith(b'#Alchemical'):
-                        if lamvals is None:
-                            lamvals= (line.split(b'(')[-1].split(b')')[0].split(b','))
-                            lamvals = numpy.array([float(i) for i in lamvals])
-                            lam = lamvals
+    parser.add_argument('-o', '--output', nargs=1,
+                        help="""Supply the name of the file in which to write the output.""")
 
-                        else:
-                            lam = (line.split(b'(')[-1].split(b')')[0].split(b','))
-                            lam = numpy.array([float(i) for i in lam])
-                        break
-## Normal file
-            else:
-                for line in open(f):
-                    if line.startswith('#Alchemical'):
-                        if lamvals is None:
-                            lamvals= (line.split('(')[-1].split(')')[0].split(','))
-                            lamvals = numpy.array([float(i) for i in lamvals])
-                            lam = lamvals
+    parser.add_argument('-r', '--range', nargs=2,
+                        help="Supply the range of iterations over which to average. "
+                             "By default, this will be over the last 60 percent of iterations.")
 
-                        else:
-                            lam = (line.split('(')[-1].split(')')[0].split(','))
-                            lam = numpy.array([float(i) for i in lam])
-                        break
-            if not numpy.array_equal(lam,lamvals):
-                print ("Lambda arrays do not match! Make sure your input data is consistent")
-                print (lam)
-                print (lamvals)
-                sys.exit(-1)
+    parser.add_argument('-p', '--percent', nargs=1,
+                        help="Supply the percentage of iterations over which to average. By default "
+                             "the average will be over the last 60 percent of iterations.")
 
-        #We will load all the data now
-        data = []
-        for f in input_files:
-            data.append(numpy.loadtxt(f))
+    #parser.add_argument('-h', '--help', action='store_true')#, dest='hi')
 
-        #N_k is the number of samples at generating thermodynamic state (lambda) k
-        N_k = numpy.zeros(shape=lamvals.shape[0], dtype='int32')
-        for k in range(0, lamvals.shape[0]):
-            N_k[k] = data[k].shape[0]
+    sys.stdout.write("\n")
+
+    subparser = parser.add_subparsers(description="Analyse free energy files to calculate "
+                                     "free energies, PMFs and to view convergence.",
+                         prog="analyse_freenrg")
+    parser_mbar = subparser.add_parser('mbar')
+
+    parser_mbar.add_argument('--description', action="store_true",
+                        help="Print a complete description of this program.")
+
+    parser_mbar.add_argument('--author', action="store_true",
+                        help="Get information about the authors of this script.")
+
+    parser_mbar.add_argument('--version', action="store_true",
+                        help="Get version information about this script.")
+
+    parser_mbar.add_argument('-i', '--input', nargs='*',
+                    help="Supply the name of the Sire simulation.dat files containing "
+                    "gradients and perturbed energies to be analysed. Valid options are: "
+                    "'simfile1.dat, simfile2.dat', or 'simfile1.dat simfile2.dat', or "
+                    "wildcard arguments 'lambda*/simfile.dat'")
+
+    parser_mbar.add_argument('-o', '--output', 
+                        help="""Supply the name of the file in which to write the output.""")
+
+    parser_mbar.add_argument('-p', '--percent', type=float, 
+                        help="Supply the percentage of iterations over which to average. By default "
+                             "the average will be over the last 60 percent of iterations.")
+    parser_mbar.add_argument('--lam', type=float, nargs='*',
+                        help="lambda array")
+
+    parser_mbar.add_argument('--temperature', type=float, 
+                        help="lambda array")
+
+    parser_mbar.add_argument('--subsampling', action="store_true",
+                        help="Subsampling of data according to statistical inefficiency should be done.")
+
+    parser_mbar.add_argument('--overlap', action="store_true",
+                        help="Compute the overlap matrix")
 
 
-        max_sample = int(max(N_k))
-        grad_kn = numpy.zeros(shape=(lamvals.shape[0],max_sample))
-        energies_kn = numpy.zeros(shape=(lamvals.shape[0],max_sample))
+    args , unknown = parser.parse_known_args()
 
-        for k in range(0,N_k.shape[0]):
-            grad_kn[k, 0:N_k[k]] = data[k][:,2] # get the gradient information
-            energies_kn[k, 0:N_k[k]] = data[k][:,1] #get the potential energies from the file.
-
-        #Are the reduced perturbed potential energies generated at thermodynamic state k evaluated at state l, over all n
-        # samples. This information is contained as is in the simulation file.
-        u_kln = numpy.zeros(shape=(lamvals.shape[0], lamvals.shape[0], max_sample))
-        for k in range(0, lamvals.shape[0]):
-            u_kln[k,:,0:N_k[k]] = data[k][:,5:].transpose()
-
-        #now we use the subsampling information to subsample the data.
-        subsample_obj = SubSample(grad_kn, energies_kn, u_kln, N_k, percentage=percentage, subsample=subsampling)
-        subsample_obj.subsample_energies()
-        subsample_obj.subsample_gradients()
-
-        free_energy_obj = FreeEnergies(subsample_obj.u_kln, subsample_obj.N_k_energies, lamvals, subsample_obj.gradients_kn)
-        print ('#running mbar ====================================================')
-        free_energy_obj.run_mbar(test_overlap)
-        print ('#running mbar done ===============================================')
-        free_energy_obj.run_ti()
-
-        if test_overlap:
-            M = free_energy_obj.overlap_matrix
-            diag_elements = numpy.array([numpy.diag(M,k=1), numpy.diag(M, k=-1)])
-            if numpy.min(diag_elements)<0.03:
-                warnings.warn('Off diagonal elements of the overlap matrix are smaller than 0.03! Your free energy estiamte is not reliable!')
-            FILE.write(bytes('#Overlap matrix\n', "UTF-8"))
-            numpy.savetxt(FILE, M, fmt='%.4f')
-
-        #mbar DG for neighbourting lambda
-        pairwise_F = free_energy_obj.pairwise_F
-        if T != None:
-            pairwise_F[:,2] = pairwise_F[:,2]*T*k_boltz
-            pairwise_F[:,3] = pairwise_F[:,3]*T*k_boltz
-        FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
-        numpy.savetxt(FILE, pairwise_F, fmt=['%.4f', '%.4f', '%.4f', '%.4f'])
-
-        #mbar pmf
-        pmf_mbar = free_energy_obj.pmf_mbar
-        if T != None:
-            pmf_mbar[:,1] = pmf_mbar[:,1]*T*k_boltz
-            pmf_mbar[:,2] = pmf_mbar[:,2]*T*k_boltz
-        FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
-        numpy.savetxt(FILE, pmf_mbar, fmt=['%.4f', '%.4f', '%.4f'])
-
-        #ti mean gradients and std. 
-        grad_mean = numpy.mean(subsample_obj.gradients_kn, axis=1)
-        grad_std = numpy.std(subsample_obj.gradients_kn, axis=1)
-        if T != None:
-            grad_mean = grad_mean*T*k_boltz
-            grad_std = grad_std*T*k_boltz
-        grad_data = numpy.column_stack((lamvals, grad_mean,grad_std))
-        FILE.write(bytes('#TI average gradients and standard deviation in kcal/mol\n', "UTF-8"))
-        numpy.savetxt(FILE, grad_data, fmt=['%.4f', '%.4f', '%.4f'])
-
-        #TI pmf
-        pmf_ti = free_energy_obj.pmf_ti
-        if T != None:
-            pmf_ti[:,1] = pmf_ti[:,1]*T*k_boltz
-
-        FILE.write(bytes('#PMF from TI in kcal/mol\n', "UTF-8"))
-        numpy.savetxt(FILE, pmf_ti, fmt=['%.4f', '%.4f'])
-
-
-        df_mbar_kcal = free_energy_obj.deltaF_mbar
-        df_mbar_kJ = free_energy_obj.deltaF_mbar
-        df_ti_kcal = free_energy_obj.deltaF_ti*T*k_boltz
-        dDf_mbar_kcal = free_energy_obj.errorF_mbar
-        dDf_mbar_kJ = free_energy_obj.errorF_mbar
-        if T != None:
-            df_mbar_kcal = df_mbar_kcal*T*k_boltz
-            dDf_mbar_kcal = dDf_mbar_kcal*T*k_boltz
-
-        FILE.write(bytes("#MBAR free energy difference in kcal/mol: \n%f, %f \n" %(df_mbar_kcal,dDf_mbar_kcal),  "UTF-8"))
-        FILE.write(bytes("#TI free energy difference in kcal/mol: \n%f \n" %df_ti_kcal,  "UTF-8"))
-
-        FILE.close()
 ##########################################
 #         Free energy with s3 files      #
 ##########################################
-    else:
-        parser = argparse.ArgumentParser(description="Analyse free energy files to calculate "
-                                             "free energies, PMFs and to view convergence.",
-                                 epilog="analyse_freenrg is built using Sire and is distributed "
-                                        "under the GPL. For more information please visit "
-                                        "http://siremol.org/analyse_freenrg",
-                                 prog="analyse_freenrg", add_help=False)
-
-        parser.add_argument('--description', action="store_true",
-                            help="Print a complete description of this program.")
-
-        parser.add_argument('--author', action="store_true",
-                            help="Get information about the authors of this script.")
-
-        parser.add_argument('--version', action="store_true",
-                            help="Get version information about this script.")
-
-        parser.add_argument('-i', '--input', nargs=1,
-                            help="Supply the name of the Sire Streamed Save (.s3) file containing the "
-                                 "free energies to be analysed.")
-
-        parser.add_argument('-g', '--gradients', nargs='*',
-                            help="Supply the name of the Sire Streamed gradients (.s3) files containing the "
-                                 "gradients to be analysed.")
-
-        parser.add_argument('-o', '--output', nargs=1,
-                            help="""Supply the name of the file in which to write the output.""")
-
-        parser.add_argument('-r', '--range', nargs=2,
-                            help="Supply the range of iterations over which to average. "
-                                 "By default, this will be over the last 60 percent of iterations.")
-
-        parser.add_argument('-p', '--percent', nargs=1,
-                            help="Supply the percentage of iterations over which to average. By default "
-                                 "the average will be over the last 60 percent of iterations.")
-
-        parser.add_argument('-h', '--help', action='store_true', dest='hi')
-
-        sys.stdout.write("\n")
-        args , unknown = parser.parse_known_args()
-        
+    if sys.argv[1] != 'mbar':
         for u in unknown:
             mbar_list = ['--temperature', '--subsampling', '--lam', '--overlap']
             if u in mbar_list:
@@ -619,3 +431,206 @@ if __name__ == '__main__':
         if gradient_files:
             cmd = "rm freenrgs.s3"
             os.system(cmd)
+
+
+    else:
+
+        #arguments = docopt(__doc__)
+        must_exit = False
+        #MBAR is true and we run and MBAR analysis
+        print('Simulation data is analysed using mbar')
+        if args.author:
+            print("\nanalyse_freenrg mbar was written by Antonia Mey (C) 2015-2017")
+            print("It is based on the pymbar analysis scripts (https://github.com/choderalab/pymbar)")
+            must_exit = True
+        if args.version:
+            print("analyse_freenrg mbar -- from Sire release version <%s>" % Sire.__version__)
+            print("This particular release can be downloaded here: "
+            "https://github.com/michellab/Sire/releases/tag/v%s" % Sire.__version__)
+            must_exit = True
+        if args.description:
+            print("%s\n" % description_mbar)
+            must_exit = True
+        if must_exit:
+            sys.exit(0)
+
+        input_files = args.input
+        output_file = args.output
+        percentage = args.percent
+        T = args.temperature
+
+        #boolean arguemtns
+        test_overlap = args.overlap
+        subsampling = args.subsampling
+
+
+        if not input_files:
+            print(__doc__)
+            print("\nPlease supply the name of the simulation file/s containing the reduced perturbed energies/gradients to be "
+            "analysed.")
+            sys.exit(-1)
+        if input_files[0].endswith('.s3'):
+            print(__doc__)
+            print("\nInvalid file format for MBAR analysis. Please supply the names of the simulation.dat file/s containing the reduced perturbed energies/gradients to be "
+            "analysed.")
+            sys.exit(-1)
+        elif '*' in input_files[0]:
+            input_files = glob.glob(input_files[0])
+            input_files.sort()
+
+        if output_file:
+            print("# Writing all output to file %s" % output_file)
+            FILE = open(output_file, "wb")
+        else:
+            print("# Writing all output to stdout")
+            FILE = sys.stdout.buffer
+
+        FILE.write(bytes("# Analysing data contained in file(s) %s\n" % input_files,  "UTF-8"))
+
+        #sanity checking of other input parameters:
+        #processing lambda values
+        lamvals = None
+        if not args.lam:
+            print ("#Lambda array was not given, trying to infer lambda values from simulation files...")
+        else:
+            lamvals = args.lam
+        lam = None
+        for f in input_files:
+            print ('working on input file %s' %f)
+## Compressed file
+            if f.endswith('.bz2'):
+                bz_file = bz2.BZ2File(f)
+                for line in bz_file:
+                    if line.startswith(b'#Alchemical'):
+                        if lamvals is None:
+                            lamvals= (line.split(b'(')[-1].split(b')')[0].split(b','))
+                            lamvals = numpy.array([float(i) for i in lamvals])
+                            lam = lamvals
+
+                        else:
+                            lam = (line.split(b'(')[-1].split(b')')[0].split(b','))
+                            lam = numpy.array([float(i) for i in lam])
+                        break
+## Normal file
+            else:
+                for line in open(f):
+                    if line.startswith('#Alchemical'):
+                        if lamvals is None:
+                            lamvals= (line.split('(')[-1].split(')')[0].split(','))
+                            lamvals = numpy.array([float(i) for i in lamvals])
+                            lam = lamvals
+
+                        else:
+                            lam = (line.split('(')[-1].split(')')[0].split(','))
+                            lam = numpy.array([float(i) for i in lam])
+                        break
+            if not numpy.array_equal(lam,lamvals):
+                print ("Lambda arrays do not match! Make sure your input data is consistent")
+                print (lam)
+                print (lamvals)
+                sys.exit(-1)
+
+        #We will load all the data now
+        data = []
+        for f in input_files:
+            data.append(numpy.loadtxt(f))
+
+        #N_k is the number of samples at generating thermodynamic state (lambda) k
+        N_k = numpy.zeros(shape=lamvals.shape[0], dtype='int32')
+        for k in range(0, lamvals.shape[0]):
+            N_k[k] = data[k].shape[0]
+
+
+        max_sample = int(max(N_k))
+        grad_kn = numpy.zeros(shape=(lamvals.shape[0],max_sample))
+        energies_kn = numpy.zeros(shape=(lamvals.shape[0],max_sample))
+
+        for k in range(0,N_k.shape[0]):
+            grad_kn[k, 0:N_k[k]] = data[k][:,2] # get the gradient information
+            energies_kn[k, 0:N_k[k]] = data[k][:,1] #get the potential energies from the file.
+
+        #Are the reduced perturbed potential energies generated at thermodynamic state k evaluated at state l, over all n
+        # samples. This information is contained as is in the simulation file.
+        u_kln = numpy.zeros(shape=(lamvals.shape[0], lamvals.shape[0], max_sample))
+        for k in range(0, lamvals.shape[0]):
+            u_kln[k,:,0:N_k[k]] = data[k][:,5:].transpose()
+
+        #now we use the subsampling information to subsample the data.
+        subsample_obj = SubSample(grad_kn, energies_kn, u_kln, N_k, percentage=percentage, subsample=subsampling)
+        subsample_obj.subsample_energies()
+        subsample_obj.subsample_gradients()
+
+        free_energy_obj = FreeEnergies(subsample_obj.u_kln, subsample_obj.N_k_energies, lamvals, subsample_obj.gradients_kn)
+        print ('#running mbar ====================================================')
+        free_energy_obj.run_mbar(test_overlap)
+        print ('#running mbar done ===============================================')
+        free_energy_obj.run_ti()
+
+        if test_overlap:
+            M = free_energy_obj.overlap_matrix
+            diag_elements = numpy.array([numpy.diag(M,k=1), numpy.diag(M, k=-1)])
+            if numpy.min(diag_elements)<0.03:
+                warnings.warn('Off diagonal elements of the overlap matrix are smaller than 0.03! Your free energy estiamte is not reliable!')
+            FILE.write(bytes('#Overlap matrix\n', "UTF-8"))
+            numpy.savetxt(FILE, M, fmt='%.4f')
+
+        #mbar DG for neighbourting lambda
+        pairwise_F = free_energy_obj.pairwise_F
+        if T != None:
+            pairwise_F[:,2] = pairwise_F[:,2]*T*k_boltz
+            pairwise_F[:,3] = pairwise_F[:,3]*T*k_boltz
+            FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
+        else:
+            FILE.write(bytes('#PMF from MBAR in reduced units\n', "UTF-8"))
+        numpy.savetxt(FILE, pairwise_F, fmt=['%.4f', '%.4f', '%.4f', '%.4f'])
+
+        #mbar pmf
+        pmf_mbar = free_energy_obj.pmf_mbar
+        if T != None:
+            pmf_mbar[:,1] = pmf_mbar[:,1]*T*k_boltz
+            pmf_mbar[:,2] = pmf_mbar[:,2]*T*k_boltz
+            FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
+        else:
+            FILE.write(bytes('#PMF from MBAR in reduced units\n', "UTF-8"))
+        numpy.savetxt(FILE, pmf_mbar, fmt=['%.4f', '%.4f', '%.4f'])
+
+        #ti mean gradients and std. 
+        grad_mean = numpy.mean(subsample_obj.gradients_kn, axis=1)
+        grad_std = numpy.std(subsample_obj.gradients_kn, axis=1)
+        if T != None:
+            grad_mean = grad_mean*T*k_boltz
+            grad_std = grad_std*T*k_boltz
+            FILE.write(bytes('#TI average gradients and standard deviation in kcal/mol\n', "UTF-8"))
+        else:
+            FILE.write(bytes('#TI average gradients and standard deviation in reduced units\n', "UTF-8"))
+        grad_data = numpy.column_stack((lamvals, grad_mean,grad_std))
+        numpy.savetxt(FILE, grad_data, fmt=['%.4f', '%.4f', '%.4f'])
+
+        #TI pmf
+        pmf_ti = free_energy_obj.pmf_ti
+        if T != None:
+            pmf_ti[:,1] = pmf_ti[:,1]*T*k_boltz
+            FILE.write(bytes('#PMF from TI in kcal/mol\n', "UTF-8"))
+        else:
+            FILE.write(bytes('#PMF from TI in reduced units\n', "UTF-8"))
+        numpy.savetxt(FILE, pmf_ti, fmt=['%.4f', '%.4f'])
+
+
+        df_mbar_kcal = free_energy_obj.deltaF_mbar
+        df_mbar_kJ = free_energy_obj.deltaF_mbar
+        df_ti_kcal = free_energy_obj.deltaF_ti
+        dDf_mbar_kcal = free_energy_obj.errorF_mbar
+        dDf_mbar_kJ = free_energy_obj.errorF_mbar
+        if T != None:
+            df_mbar_kcal = df_mbar_kcal*T*k_boltz
+            dDf_mbar_kcal = dDf_mbar_kcal*T*k_boltz
+            df_ti_kcal = free_energy_obj.deltaF_ti*T*k_boltz
+            FILE.write(bytes("#MBAR free energy difference in kcal/mol: \n%f, %f \n" %(df_mbar_kcal,dDf_mbar_kcal),  "UTF-8"))
+            FILE.write(bytes("#TI free energy difference in kcal/mol: \n%f \n" %df_ti_kcal,  "UTF-8"))
+
+        else:
+            FILE.write(bytes("#MBAR free energy difference in reduced units: \n%f, %f \n" %(df_mbar_kcal,dDf_mbar_kcal),  "UTF-8"))
+            FILE.write(bytes("#TI free energy difference in reduced units: \n%f \n" %df_ti_kcal,  "UTF-8"))
+
+
+        FILE.close()
