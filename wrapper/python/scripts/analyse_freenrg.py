@@ -576,6 +576,10 @@ if __name__ == '__main__':
         if subsample_obj.u_kln.shape[2]<50:
             mbar_warn_msg = ' #WARNING SUBSAMLING ENERGIES RESULTED IN LESS THAN 50 SAMPLES, CONSIDER RERUN WITHOUT SUBSAMPLE OPTION'
 
+        if not subsampling:
+            ti_warn_msg = " #WARNING SUBSAMPLING DISABLED, CONSIDER RERUN WITH SUBSAMPLING OPTION"
+            mbar_warn_msg = " #WARNING SUBSAMPLING DISABLED, CONSIDER RERUN WITH SUBSAMPLING OPTION"
+
         if test_overlap:
             M = free_energy_obj.overlap_matrix
             diag_elements = numpy.array([numpy.diag(M, k=1), numpy.diag(M, k=-1)])
