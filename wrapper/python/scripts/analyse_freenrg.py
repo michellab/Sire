@@ -112,9 +112,6 @@ def processFreeEnergies(nrgs, FILE):
     return (name, convergence, pmf)
 
 if __name__ == '__main__':
-    if len(sys.argv)<2:
-        print(__doc__)
-        sys.exit(0)
 
     parser = argparse.ArgumentParser(description="Analyse free energy files to calculate "
                                      "free energies, PMFs and to view convergence.",
@@ -194,6 +191,10 @@ if __name__ == '__main__':
 
 
     args , unknown = parser.parse_known_args()
+    if len(sys.argv)<2:
+        parser.print_help()
+        print("\nPlease supply the name of the .s3 file(s) containing the free energies/gradients to be analysed.")
+        sys.exit(1)
 
 ##########################################
 #         Free energy with s3 files      #
@@ -202,12 +203,12 @@ if __name__ == '__main__':
         for u in unknown:
             mbar_list = ['--temperature', '--subsampling', '--lam', '--overlap']
             if u in mbar_list:
-                print (__doc__)
+                parser_mbar.print_help()
                 print ('analyse_freenrg: error: mbar command argument: %s ' %u)
                 print ('Try adding the mabr command option')
                 sys.exit(1)
             else:
-                print(__doc__)
+                parser_mbar.print_help()
                 print ('analyse_freenrg: error: unrecognized arguments: %s ' %u)
                 sys.exit(1)
 
@@ -269,12 +270,14 @@ if __name__ == '__main__':
         if not input_file:
             if gradient_files:
                 input_file = gradient_files
+                print (input_file)
 
         if not input_file:
-            print (__doc__)
+            parser.print_help()
             print("\nPlease supply the name of the .s3 file(s) containing the free energies/gradients to be analysed.")
             sys.exit(-1)
         if not input_file[0].endswith('.s3'):
+            parser.print_help()
             print("\nInvalid file format. Please supply the name of the .s3 file(s) containing the free energies/gradients to be analysed.")
             sys.exit(-1)
 
@@ -438,7 +441,9 @@ if __name__ == '__main__':
         #arguments = docopt(__doc__)
         must_exit = False
         #MBAR is true and we run and MBAR analysis
-        print('Simulation data is analysed using mbar')
+        print('Simulation data is analysed using the python module pymbar')
+        print('----------------------------------------------------------')
+
         if args.author:
             print("\nanalyse_freenrg mbar was written by Antonia Mey (C) 2015-2017")
             print("It is based on the pymbar analysis scripts (https://github.com/choderalab/pymbar)")
@@ -465,12 +470,12 @@ if __name__ == '__main__':
 
 
         if not input_files:
-            print(__doc__)
+            parser_mbar.print_help()
             print("\nPlease supply the name of the simulation file/s containing the reduced perturbed energies/gradients to be "
             "analysed.")
             sys.exit(-1)
         if input_files[0].endswith('.s3'):
-            print(__doc__)
+            parser_mbar.print_help()
             print("\nInvalid file format for MBAR analysis. Please supply the names of the simulation.dat file/s containing the reduced perturbed energies/gradients to be "
             "analysed.")
             sys.exit(-1)
