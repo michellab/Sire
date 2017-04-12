@@ -568,6 +568,14 @@ if __name__ == '__main__':
         print ('#running mbar done ===============================================')
         free_energy_obj.run_ti()
 
+        ti_warn_msg = ''
+        mbar_warn_msg = ''
+        if subsample_obj.gradients_kn.shape[1]<50:
+            ti_warn_msg = ' #WARNING SUBSAMLING GRADIENTS RESULTED IN LESS THAN 50 SAMPLES, CONSIDER RERUN WITHOUT SUBSAMPLE OPTION'
+
+        if subsample_obj.u_kln.shape[2]<50:
+            mbar_warn_msg = ' #WARNING SUBSAMLING ENERGIES RESULTED IN LESS THAN 50 SAMPLES, CONSIDER RERUN WITHOUT SUBSAMPLE OPTION'
+
         if test_overlap:
             M = free_energy_obj.overlap_matrix
             diag_elements = numpy.array([numpy.diag(M, k=1), numpy.diag(M, k=-1)])
@@ -629,13 +637,13 @@ if __name__ == '__main__':
             dDf_mbar_kcal = dDf_mbar_kcal * T * k_boltz
             df_ti_kcal = free_energy_obj.deltaF_ti * T * k_boltz
             FILE.write(
-                bytes("#MBAR free energy difference in kcal/mol: \n%f, %f \n" % (df_mbar_kcal, dDf_mbar_kcal), "UTF-8"))
-            FILE.write(bytes("#TI free energy difference in kcal/mol: \n%f \n" % df_ti_kcal, "UTF-8"))
+                bytes("#MBAR free energy difference in kcal/mol: \n%f, %f %s\n" % (df_mbar_kcal, dDf_mbar_kcal, mbar_warn_msg), "UTF-8"))
+            FILE.write(bytes("#TI free energy difference in kcal/mol: \n%f %s \n" % (df_ti_kcal, ti_warn_msg), "UTF-8"))
 
         else:
             FILE.write(
-                bytes("#MBAR free energy difference in reduced units: \n%f, %f \n" % (df_mbar_kcal, dDf_mbar_kcal),
+                bytes("#MBAR free energy difference in reduced units: \n%f, %f %s\n" % (df_mbar_kcal, dDf_mbar_kcal, mbar_warn_msg),
                       "UTF-8"))
-            FILE.write(bytes("#TI free energy difference in reduced units: \n%f \n" % df_ti_kcal, "UTF-8"))
+            FILE.write(bytes("#TI free energy difference in reduced units: \n%f %s\n" % (df_ti_kcal, ti_warn_msg), "UTF-8"))
 
         FILE.close()
