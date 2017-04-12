@@ -2146,6 +2146,20 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
 
     tbb::spin_mutex error_mutex;
 
+    QVector<qint64> flags(32,0);
+    
+    //first, count up the number of atoms
+    {
+        int natoms = 0;
+        
+        for (int i=0; i<params.count(); ++i)
+        {
+            natoms += params.constData()[i].info().nAtoms();
+        }
+        
+        flags[0] = natoms;
+    }
+
     //function used to generate the text for the atom names
     auto getAllAtomNames = [&]()
     {
@@ -2330,45 +2344,186 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
                                    AmberFormat( AmberParm::FLOAT, 5, 16, 8) );
     };
 
+    //function used to get all of the LJ parameters and atom types
+    auto getAllAtomTypes = [&]()
+    {
+        //we need to go through each atom and work out if the atom type
+        //is unique
+        QVector<LJParameter> ljparams;
+        QVector<qint64> atom_type;
+
+        int atomidx = 0;
+
+        for (int i=0; i<params.count(); ++i)
+        {
+            const auto info = params.info();
+            const auto ljs = params.constData()[i].ljs();
+            
+            for (int j=0; j<info.nAtoms(); ++j)
+            {
+                const LJParameter lj = ljs[ info.cgAtomIdx(AtomIdx(j)) ];
+
+                int idx = ljparams.indexOf(lj);
+                
+                if (idx == -1)
+                {
+                    ljparams.append(lj);
+                    atom_type[atomidx] = ljparams.count();
+                }
+                else
+                {
+                    atom_type[atomidx] = idx + 1;
+                }
+                
+                atomidx += 1;
+            }
+        }
+        
+        //we now have all of the atom types - create the acoeff and bcoeff arrays
+        const int ntypes = ljparams.count();
+        pointers[1] = ntypes;
+
+        QVector<qint64> ico(ntypes*ntypes);
+        QVector<double> cn1(ntypes*(ntypes-1)/2);
+        QVector<double> cn2(ntypes*(ntypes-1)/2);
+        
+        for (int i=0; i<ntypes; ++i)
+        {
+            const auto lj0 = ljparams.constData()[i];
+            const double a0 = lj0.A();
+            const double b0 = lj0.B();
+        
+            for (int j=i; j<ntypes; ++j)
+            {
+                const auto lj1 = ljparams.constData()[j];
+                
+                int idx = i*ntypes + j;
+                
+                cn1[idx] = a0 * lj1.A();
+                cn2[idx] = b0 * lj1.B();
+                
+                //now save the index for i,j and j,i into the ico array
+                ico[idx] = idx + 1;
+                ico[j*ntypes + i] = idx + 1;
+            }
+        }
+        
+        //now return all of the arrays
+        return std::make_tuple( writeIntData(atom_type, AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                writeIntData(ico, AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                writeFloatData(cn1, AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                writeFloatData(cn2, AmberFormat( AmberParm::FLOAT, 5, 16, 8 )) );
+    };
+
     QStringList lines;
+    
+    QStringList name_lines, charge_lines, number_lines, mass_lines;
+    std::tuple<QStringList,QStringList,QStringList,QStringList> lj_lines;
     
     if (use_parallel)
     {
-        QStringList name_lines, charge_lines, number_lines, mass_lines;
-    
         tbb::parallel_invoke(
             [&](){ name_lines = getAllAtomNames(); },
             [&](){ charge_lines = getAllAtomCharges(); },
             [&](){ number_lines = getAllAtomNumbers(); },
-            [&](){ mass_lines = getAllAtomMasses(); }
+            [&](){ mass_lines = getAllAtomMasses(); },
+            [&](){ lj_lines = getAllAtomTypes(); }
         );
-        
-        lines.append("%FLAG ATOM_NAME");
-        lines += name_lines;
-        
-        lines.append("%FLAG CHARGE");
-        lines += charge_lines;
-        
-        lines.append("%FLAG ATOMIC_NUMBER");
-        lines += number_lines;
-        
-        lines.append("%FLAG MASS");
-        lines += mass_lines;
     }
     else
     {
-        lines.append("%FLAG ATOM_NAME");
-        lines += getAllAtomNames();
-        
-        lines.append("%FLAG CHARGE");
-        lines += getAllAtomCharges();
-        
-        lines.append("%FLAG ATOMIC_NUMBER");
-        lines += getAllAtomNumbers();
-        
-        lines.append("%FLAG MASS");
-        lines += getAllAtomMasses();
+        name_lines = getAllAtomNames();
+        charge_lines = getAllAtomCharges();
+        number_lines = getAllAtomNumbers();
+        mass_lines = getAllAtomMasses();
+        lj_lines = getAllAtomTypes();
     }
+
+    lines.append("%FLAG POINTERS");
+    lines += writeIntData(pointers, AmberFormat( AmberParm::INTEGER, 10, 8 ) );
+
+    lines.append("%FLAG ATOM_NAME");
+    lines += name_lines;
+    
+    lines.append("%FLAG CHARGE");
+    lines += charge_lines;
+    
+    lines.append("%FLAG ATOMIC_NUMBER");
+    lines += number_lines;
+    
+    lines.append("%FLAG MASS");
+    lines += mass_lines;
+
+    lines.append("%FLAG ATOM_TYPE_INDEX");
+    lines += lj_lines.get<0>();
+
+    //%FLAG NUMBER_EXCLUDED_ATOMS
+
+    //%FLAG NONBONDED_PARM_INDEX
+    lines.append("%FLAG NONBONDED_PARM_INDEX");
+    lines += lj_lines.get<1>();
+
+    //%FLAG RESIDUE_LABEL
+
+    //%FLAG RESIDUE_POINTER
+
+    //%FLAG BOND_FORCE_CONSTANT
+
+    //%FLAG BOND_EQUIL_VALUE
+
+    //%FLAG ANGLE_FORCE_CONSTANT
+
+    //%FLAG ANGLE_EQUIL_VALUE
+
+    //%FLAG DIHEDRAL_FORCE_CONSTANT
+
+    //%FLAG DIHEDRAL_PERIODICITY
+
+    //%FLAG DIHEDRAL_PHASE
+
+    //%FLAG SCEE_SCALE_FACTOR
+
+    //%FLAG SCNB_SCALE_FACTOR
+
+    lines.append("%FLAG LENNARD_JONES_ACOEF");
+    lines += lj_lines.get<2>();
+
+    lines.append("%FLAG LENNARD_JONES_BCOEF");
+    lines += lj_lines.get<3>();
+
+    //%FLAG BONDS_INC_HYDROGEN
+
+    //%FLAG BONDS_WITHOUT_HYDROGEN
+
+    //%FLAG ANGLES_INC_HYDROGEN
+
+    //%FLAG ANGLES_WITHOUT_HYDROGEN
+
+    //%FLAG DIHEDRALS_INC_HYDROGEN
+
+    //%FLAG DIHEDRALS_WITHOUT_HYDROGEN
+
+    //%FLAG EXCLUDED_ATOMS_LIST
+
+    //%FLAG HBOND_ACOEF
+
+    //%FLAG HBOND_BCOEF
+
+    //%FLAG HBCUT
+
+    //%FLAG AMBER_ATOM_TYPE
+
+    //%FLAG RADIUS_SET
+
+    //%FLAG RADII
+
+    //%FLAG SCREEN
+
+    //%FLAG SOLVENT_POINTERS
+
+    //%FLAG ATOMS_PER_MOLECULE
+
+    //%FLAG BOX_DIMENSIONS
     
     return lines;
 }

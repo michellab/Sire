@@ -125,6 +125,7 @@ void register_AmberParm_class(){
             .export_values()
             ;
         AmberParm_exposer.def( bp::init< QString const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by reading from the file called filename") );
+        AmberParm_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by reading from the file called filename") );
         AmberParm_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by converting from the passed system, using the passed property\nmap to find the right properties") );
         AmberParm_exposer.def( bp::init< SireIO::AmberParm const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireIO::AmberParm::assertSane
