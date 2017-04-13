@@ -2606,8 +2606,8 @@ def traj2cell():
         tb = time.time()
         system, polarH_coords, acceptor_coords, alternate_acceptor_coords = _updateSystemfromDCDgrid(system, frames_xyz, cell_lengths, cell_angles, atomsDAtype, grid)
         # Dump a PDB of the system if this is the first frame, to facilitate visualisation of cell/grid/sites
-        #if current_frame == 0:
-        #    PDB().write(system[MGName("all")], "frame-0.pdb" )
+        if current_frame == 0:
+            PDB().write(system[MGName("all")], "frame-0.pdb" )
         ta = time.time()
         if BENCHMARK:
             print ("time to update coords %5.3f seconds" % (ta - tb) )
