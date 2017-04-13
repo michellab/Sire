@@ -6,9 +6,9 @@
 #
 ################################
 
-set (S_VERSION_MAJOR "2016")
-set (S_VERSION_MINOR "3")
-set (S_VERSION_PATCH "1")             
+set (S_VERSION_MAJOR "2017")
+set (S_VERSION_MINOR "1")
+set (S_VERSION_PATCH "0")             
 
 set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 
@@ -520,7 +520,14 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
-    set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
+    if ( GCC_MAJOR_VERSION GREATER 4 )
+        # GCC >= 5 still show weird crashes when using O3 which don't
+        # show up with other compilers. It is probably my fault, but
+        # until I find out why, we have to limit compilation to -O2
+        set ( SIRE_RELEASE_FLAGS "-O2 -ffast-math" )
+    else()
+        set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
+    endif()
 
     # -fomit-frame-pointer breaks backtrace on an apple
     set ( SIRE_RELEASE_FLAGS "${SIRE_RELEASE_FLAGS} -fomit-frame-pointer" )

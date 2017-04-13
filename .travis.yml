@@ -23,7 +23,7 @@ addons:
     packages:
       - g++-6
       - g++-5
-      - g++-4.9
+      #- g++-4.9 # commented out as this takes more than 90 minutes to compile!
 
 matrix:
   exclude:
