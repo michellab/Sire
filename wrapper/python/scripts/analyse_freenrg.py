@@ -8,8 +8,6 @@ import warnings
 import Sire.Stream
 import argparse
 from Sire.Analysis import *
-from Sire.Tools.FreeEnergyAnalysis import FreeEnergies
-from Sire.Tools.FreeEnergyAnalysis import SubSample
 from Sire.Units import *
 
 # Import the asciiplot (ap) plotting library - this needs numpy
@@ -186,6 +184,7 @@ if __name__ == '__main__':
                              help="Compute the overlap matrix")
 
     args, unknown = parser.parse_known_args()
+
     if len(sys.argv) < 2:
         parser.print_help()
         print("\nPlease supply the name of the .s3 file(s) containing the free energies/gradients to be analysed.")
@@ -271,22 +270,10 @@ if __name__ == '__main__':
             parser.print_help()
             print("\nPlease supply the name of the .s3 file(s) containing the free energies/gradients to be analysed.")
             sys.exit(-1)
-        if not input_file[0].endswith('.s3'):
-            parser.print_help()
-            print(
-                "\nInvalid file format. Please supply the name of the .s3 file(s) containing the free energies/gradients "
-                "to be analysed.")
-            sys.exit(-1)
-
-        # elif not os.path.exists(input_file):
-        #    parser.print_help()
-        #    print("\nPlease supply the name of the .s3 file containing the free energies to be analysed.")
-        #    print("(cannot find file %s)" % input_file)
-        #    sys.exit(-1)
 
         if output_file:
             print("# Writing all output to file %s" % output_file)
-            FILE = open(output_file, "wb")
+            FILE = open(output_file, "w")
         else:
             print("# Writing all output to stdout")
             FILE = sys.stdout
@@ -388,10 +375,10 @@ if __name__ == '__main__':
             p = ap.AFigure()
             strt = int(len(x) / 10)
             conv_plot = p.plot(numpy.array(x[strt:]), numpy.array(y[strt:]), ".")
-            print("\nPlot of free energy versus iteration")
-            print(conv_plot + "\n")
+            FILE.write("\nPlot of free energy versus iteration\n")
+            FILE.write(conv_plot + "\n\n")
         except Exception as e:
-            print("Error plotting graph: %s" % e)
+            FILE.write("Error plotting graph: %s" % e)
 
         FILE.write("# PMFs\n")
 
@@ -411,8 +398,8 @@ if __name__ == '__main__':
             try:
                 p = ap.AFigure()
                 pmf_plot = p.plot(numpy.array(x), numpy.array(y), '_o')
-                print("\nPMF Plot of free energy versus lambda")
-                print(pmf_plot + "\n")
+                FILE.write("\nPMF Plot of free energy versus lambda\n")
+                FILE.write(pmf_plot + "\n\n")
             except:
                 pass
 
@@ -435,6 +422,9 @@ if __name__ == '__main__':
 
 
     else:
+        from Sire.Tools.FreeEnergyAnalysis import FreeEnergies
+        from Sire.Tools.FreeEnergyAnalysis import SubSample
+
         must_exit = False
         # MBAR is true and we run and MBAR analysis
         print('Simulation data is analysed using the python module pymbar')
