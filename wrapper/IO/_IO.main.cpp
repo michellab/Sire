@@ -7,6 +7,10 @@
 
 #include "Amber.pypp.hpp"
 
+#include "AmberParm.pypp.hpp"
+
+#include "AmberRst.pypp.hpp"
+
 #include "Cube.pypp.hpp"
 
 #include "FlexibilityLibrary.pypp.hpp"
@@ -17,7 +21,11 @@
 
 #include "IOParametersBase.pypp.hpp"
 
+#include "MoleculeParser.pypp.hpp"
+
 #include "NullIO.pypp.hpp"
+
+#include "NullParser.pypp.hpp"
 
 #include "PDB.pypp.hpp"
 
@@ -41,6 +49,8 @@
 
 namespace bp = boost::python;
 
+#include "SireIO_containers.h"
+
 #include "SireIO_registrars.h"
 
 #include "SireIO_properties.h"
@@ -48,7 +58,15 @@ namespace bp = boost::python;
 BOOST_PYTHON_MODULE(_IO){
     register_SireIO_objects();
 
+    register_SireIO_containers();
+
     register_Amber_class();
+
+    register_MoleculeParser_class();
+
+    register_AmberParm_class();
+
+    register_AmberRst_class();
 
     register_Cube_class();
 
@@ -61,6 +79,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_IOParametersBase_class();
 
     register_NullIO_class();
+
+    register_NullParser_class();
 
     register_PDB_class();
 

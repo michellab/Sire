@@ -29,9 +29,7 @@
 #ifndef SIREBASE_PACKEDARRAY2D_H
 #define SIREBASE_PACKEDARRAY2D_H
 
-#include <QSharedData>
-
-#include "sireglobal.h"
+#include "refcountdata.h"
 
 SIRE_BEGIN_HEADER
 
@@ -106,7 +104,7 @@ inline const char* PackedArray2DMemoryBase::getRoot(const char *this_ptr,
 #endif //SIRE_SKIP_INLINE_FUNCTIONS
 
 /** The template independent parts of the PackedArray2D metadata */
-class SIREBASE_EXPORT PackedArray2DDataBase : public QSharedData
+class SIREBASE_EXPORT PackedArray2DDataBase : public RefCountData
 {
 
 friend class PackedArray2DMemoryBase;

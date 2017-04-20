@@ -132,6 +132,7 @@ set ( PYPP_SOURCES
        MoleculeBeading.pypp.cpp
        MoleculeGroup.pypp.cpp
        MoleculeGroups.pypp.cpp
+       MoleculeInfo.pypp.cpp
        MoleculeProperty.pypp.cpp
        Molecules.pypp.cpp
        MoleculeView.pypp.cpp

@@ -246,19 +246,16 @@ void RestraintFF::recalculateEnergy()
         
         RestraintEnergy nrg(0);
         
-        #pragma omp parallel
         {
             const Restraint3DPtr *my_restraints_array = restraints_array;
             
             RestraintEnergy my_nrg(0);
             
-            #pragma omp for schedule(dynamic)
             for (int i=0; i<nrestraints; ++i)
             {
                 my_nrg += RestraintEnergy( my_restraints_array[i].read().energy() );
             }
             
-            #pragma omp critical
             {
                 nrg += my_nrg;
             }

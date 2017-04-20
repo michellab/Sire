@@ -288,19 +288,9 @@ double NoCutoff::dVDWScaleFactor(Length) const
     return 0;
 }
 
-static SharedPolyPointer<NoCutoff> shared_null;
-
 const NoCutoff& SwitchingFunction::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new NoCutoff();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<NoCutoff>());
 }
 
 const char* NoCutoff::typeName()

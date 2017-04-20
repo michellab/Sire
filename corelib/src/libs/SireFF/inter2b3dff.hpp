@@ -238,7 +238,6 @@ void Inter2B3DFF<Potential>::recalculateEnergy()
     {
         Energy total_nrg;
 
-        #pragma omp parallel
         {
             //we are not recording changes, so we have to assume that
             //everything has changed. Recalculate the total energy from scratch
@@ -254,7 +253,6 @@ void Inter2B3DFF<Potential>::recalculateEnergy()
             const double cutoff = this->switchingFunction().cutoffDistance();
 
             //loop over all pairs of molecules
-            #pragma omp for schedule(dynamic)
             for (int i=0; i<my_nmols-1; ++i)
             {
                 const typename Potential::Molecule &mol0 = my_mols_array.at(i);
@@ -270,7 +268,6 @@ void Inter2B3DFF<Potential>::recalculateEnergy()
                 }
             }
               
-            #pragma omp critical
             {
                 total_nrg += my_total_nrg;
             }
@@ -285,7 +282,6 @@ void Inter2B3DFF<Potential>::recalculateEnergy()
         Energy old_nrg;
         Energy new_nrg;
 
-        #pragma omp parallel
         {
             EnergyWorkspace old_workspace;
             EnergyWorkspace new_workspace;
@@ -312,7 +308,6 @@ void Inter2B3DFF<Potential>::recalculateEnergy()
                 const SireVol::AABox &new_box = changed_mol.newMolecule().aaBox();
                 const SireVol::AABox &old_box = changed_mol.oldMolecule().aaBox();
 
-                #pragma omp for schedule(static)
                 for (int i=0; i<my_nmols; ++i)
                 {
                     if (idx != i)
@@ -336,7 +331,6 @@ void Inter2B3DFF<Potential>::recalculateEnergy()
             }
             else
             {
-                #pragma omp for schedule(static)
                 for (int i=0; i<my_nmols; ++i)
                 {
                     const typename Potential::Molecule &mol0 = my_mols_array.at(i);
@@ -455,7 +449,6 @@ void Inter2B3DFF<Potential>::recalculateEnergy()
                 }
             }
 
-            #pragma omp critical
             {
                 old_nrg += my_old_nrg;
                 new_nrg += my_new_nrg;

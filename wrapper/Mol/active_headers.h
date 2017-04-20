@@ -73,6 +73,7 @@
 #include "moleculedata.h"
 #include "moleculegroup.h"
 #include "moleculegroups.h"
+#include "moleculeinfo.h"
 #include "moleculeinfodata.h"
 #include "molecules.h"
 #include "moleculeview.h"

@@ -355,7 +355,7 @@ void PerturbationConstraint::setSystem(const System &system)
              it2 != perts.constEnd();
              ++it2)
         {
-            QSharedDataPointer<PerturbationData> d( new PerturbationData(*it2) );
+            SharedDataPointer<PerturbationData> d( new PerturbationData(*it2) );
             pertlist.append(d);
         }
         

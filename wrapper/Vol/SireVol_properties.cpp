@@ -12,13 +12,6 @@
 #include "patching.h"
 #include "patching.h"
 #include "SireError/errors.h"
-#include "SireMaths/rotate.h"
-#include "SireStream/datastream.h"
-#include "SireStream/shareddatastream.h"
-#include "SireUnits/units.h"
-#include "grid.h"
-#include "grid.h"
-#include "SireError/errors.h"
 #include "SireMaths/rangenerator.h"
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -26,9 +19,16 @@
 #include "space.h"
 #include <QMutex>
 #include "space.h"
+#include "SireError/errors.h"
+#include "SireMaths/rotate.h"
+#include "SireStream/datastream.h"
+#include "SireStream/shareddatastream.h"
+#include "SireUnits/units.h"
+#include "grid.h"
+#include "grid.h"
 void register_SireVol_properties()
 {
     register_property_container< SireVol::PatchingPtr, SireVol::Patching >();
-    register_property_container< SireVol::GridPtr, SireVol::Grid >();
     register_property_container< SireVol::SpacePtr, SireVol::Space >();
+    register_property_container< SireVol::GridPtr, SireVol::Grid >();
 }

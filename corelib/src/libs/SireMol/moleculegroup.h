@@ -29,12 +29,12 @@
 #ifndef SIREMOL_MOLECULEGROUP_H
 #define SIREMOL_MOLECULEGROUP_H
 
-#include <QSharedDataPointer>
 #include <QList>
 
 #include <boost/tuple/tuple.hpp>
 
 #include "SireBase/property.h"
+#include "SireBase/shareddatapointer.hpp"
 
 #include "molecules.h"
 #include "molgroupworkspace.h"
@@ -315,7 +315,7 @@ private:
 
     /** Implicitly shared pointer to the contents and index
         of this group */
-    QSharedDataPointer<detail::MolGroupPvt> d;
+    SireBase::SharedDataPointer<detail::MolGroupPvt> d;
     
     /** The workspace used to cache updates, thus preventing
         excessive re-allocation of memory during, e.g. MC moves */

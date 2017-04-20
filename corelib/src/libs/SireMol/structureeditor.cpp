@@ -80,6 +80,7 @@
 #include "tostring.h"
 
 #include <QDebug>
+#include <QReadWriteLock>
 
 #include "SireMol/errors.h"
 #include "SireBase/errors.h"
@@ -98,8 +99,9 @@ using boost::tuple;
 ///////// Implementation of name_cache
 /////////
 
-static QHash<QString,QString> name_cache;
-static QMutex name_cache_mutex;
+typedef QHash<QString,QString> NameCacheType;
+Q_GLOBAL_STATIC( NameCacheType, getNameCache )
+Q_GLOBAL_STATIC( QReadWriteLock, getNameCacheLock )
 
 /** This function is used to cache all name strings of molecules.
     This is useful, as most names used in molecules are repeated many
@@ -111,16 +113,23 @@ QString SIREMOL_EXPORT SireMol::cacheName(const QString &name)
     if (name.isEmpty())
         return name;
 
-    else if (name_cache.contains(name))
-        return name_cache.value(name);
+    NameCacheType *name_cache = getNameCache();
+    QReadWriteLock *lock = getNameCacheLock();
+
+    QReadLocker r_lkr(lock);
+
+    if (name_cache->contains(name))
+        return name_cache->value(name);
  
-    QMutexLocker lkr(&name_cache_mutex);
+    r_lkr.unlock();
     
-    if (name_cache.contains(name))
-        return name_cache.value(name);
+    QWriteLocker w_lkr(lock);
+    
+    if (name_cache->contains(name))
+        return name_cache->value(name);
     else
     {
-        name_cache.insert(name, name);
+        name_cache->insert(name, name);
         return name;
     }
 }

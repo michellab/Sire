@@ -295,6 +295,8 @@
 
 #include "MoleculeGroups.pypp.hpp"
 
+#include "MoleculeInfo.pypp.hpp"
+
 #include "MoleculeProperty.pypp.hpp"
 
 #include "MoleculeView.pypp.hpp"
@@ -815,6 +817,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_MoleculeGroup_class();
 
     register_MoleculeGroups_class();
+
+    register_MoleculeInfo_class();
 
     register_Molecules_class();
 

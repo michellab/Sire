@@ -543,7 +543,6 @@ void Inter2BFF<Potential>::recalculateEnergy()
     {
         Energy total_nrg;
 
-        #pragma omp parallel
         {
             //we are not recording changes, so we have to assume that
             //everything has changed. Recalculate the total energy from scratch
@@ -554,7 +553,6 @@ void Inter2BFF<Potential>::recalculateEnergy()
             const int my_nmols = nmols;
 
             //loop over all pairs of molecules
-            #pragma omp for schedule(dynamic)
             for (int i=0; i<my_nmols-1; ++i)
             {
                 const typename Potential::Molecule &mol0 = my_mols_array[i];
@@ -566,7 +564,6 @@ void Inter2BFF<Potential>::recalculateEnergy()
                 }
             }
         
-            #pragma omp critical
             {
                 total_nrg += my_total_nrg;
             }

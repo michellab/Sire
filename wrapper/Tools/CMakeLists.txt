@@ -13,6 +13,7 @@ set ( SCRIPTS
         DCDFile.py
         FDTISingleBound.py
         FDTISingleFree.py
+        LJcutoff.py
         LSRC.py
         Nautilus.py 
         QuantumToMM.py

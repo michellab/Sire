@@ -74,6 +74,7 @@ using boost::tuple;
 
 using SireMol::Molecules;
 using SireVol::SpacePtr;
+using SireVol::Space;
 
 /** This class is used to read in an AMBER top file and crd file 
     
@@ -107,6 +108,9 @@ public:
     tuple<MoleculeGroup,SpacePtr> readCrdTop(const QString &crdfile,
                                              const QString &topfile,
                                              QString flag_cutting="perresidue") const;
+
+    void writeCrd(const MoleculeGroup &mols, const Space &space, const QString &crdfile,
+                  const PropertyMap &map = PropertyMap()) const;
 
 private:
     double coul_14scl;

@@ -59,6 +59,12 @@ namespace SireMM
 /** This CLJFunction calculates the intermolecular coulomb and LJ energy of the passed
     CLJAtoms using a force shifted electrostatics cutoff
     
+        //we use the force shifted coulomb energy described
+        //in Fennell and Gezelter, J. Chem. Phys., 124, 234104, 2006
+        //We use alpha=0, as I have seen that a 25 A cutoff gives stable results
+        //with alpha=0, and this way we avoid changing the hamiltonian significantly
+        //by having an erfc function
+ 
     @author Christopher Woods
 */
 class SIREMM_EXPORT CLJShiftFunction

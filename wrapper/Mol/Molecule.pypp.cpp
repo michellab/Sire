@@ -22,6 +22,8 @@ namespace bp = boost::python;
 
 #include "molecule.h"
 
+#include "moleculeinfo.h"
+
 #include "moleditor.h"
 
 #include "molviewproperty.h"
@@ -145,6 +147,17 @@ void register_Molecule_class(){
                 , hasProperty_function_value
                 , ( bp::arg("key") )
                 , "Return whether or not this molecule posseses a property at key key" );
+        
+        }
+        { //::SireMol::Molecule::info
+        
+            typedef ::SireMol::MoleculeInfo ( ::SireMol::Molecule::*info_function_type)(  ) const;
+            info_function_type info_function_value( &::SireMol::Molecule::info );
+            
+            Molecule_exposer.def( 
+                "info"
+                , info_function_value
+                , "Return the MoleculeInfo object that holds information about the layout\nof the atoms, residues, chains and segments in the molecule" );
         
         }
         { //::SireMol::Molecule::isEmpty

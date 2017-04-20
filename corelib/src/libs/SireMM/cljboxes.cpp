@@ -45,6 +45,7 @@
 
 using namespace SireMM;
 using namespace SireMaths;
+using namespace SireBase;
 using namespace SireVol;
 using namespace SireStream;
 
@@ -81,24 +82,24 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJBox &box)
 }
 
 /** Null constructor */
-CLJBox::CLJBox() : box_length(0)
+CLJBox::CLJBox() : RefCountData(), box_length(0)
 {}
 
 /** Construct an empty box at a specific location */
 CLJBox::CLJBox(const CLJBoxIndex &index, Length length)
-       : box_index(index), box_length(length.value())
+       : RefCountData(), box_index(index), box_length(length.value())
 {}
 
 /** Construct a box that holds the passed atoms */
 CLJBox::CLJBox(const CLJBoxIndex &index, Length length, const CLJAtoms &atoms)
-       : atms(atoms), box_index(index), box_length(length.value())
+       : RefCountData(), atms(atoms), box_index(index), box_length(length.value())
 {
     findGaps();
 }
 
 /** Copy constructor */
 CLJBox::CLJBox(const CLJBox &other)
-       : atms(other.atms), gaps(other.gaps),
+       : RefCountData(), atms(other.atms), gaps(other.gaps),
          box_index(other.box_index), box_length(other.box_length)
 {}
 

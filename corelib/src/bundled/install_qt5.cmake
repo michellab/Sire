@@ -66,6 +66,15 @@ if ( NEED_BUILD_QT )
       endif()
     endif()
 
+    if ( ${SIRE_COMPILER} MATCHES "INTEL" )
+      if (APPLE)
+        #list( APPEND QT_OPTIONS "-platform;macx-icc" )
+        message( STATUS "Using clang instead of icc for Qt5" )
+      else()
+        list( APPEND QT_OPTIONS "-platform;linux-icc-64" )
+      endif()
+    endif()
+
     list( APPEND QT_OPTIONS "-no-javascript-jit")
     list( APPEND QT_OPTIONS "-no-glib")
     list( APPEND QT_OPTIONS "-no-kms")
@@ -113,11 +122,15 @@ if ( NEED_BUILD_QT )
 
     message( STATUS "${QT_OPTIONS}" )
 
+    SET(ENV{CC} "${SIRE_C_COMPILER}")
+    SET(ENV{CXX} "${SIRE_CXX_COMPILER}")
+
     message( STATUS "Patience... Configuring QtCore..." )
     execute_process( COMMAND ${QT_BUILD_DIR}/configure ${QT_OPTIONS}
                      WORKING_DIRECTORY ${QT_BUILD_DIR}
                      RESULT_VARIABLE QT_CONFIGURE_FAILED
-                     OUTPUT_QUIET ERROR_QUIET )
+                     OUTPUT_QUIET ERROR_QUIET 
+                   )
 
     if (QT_CONFIGURE_FAILED)
       message( FATAL_ERROR "Cannot configure Qt5. Please go to the mailing list for help.")
@@ -127,7 +140,8 @@ if ( NEED_BUILD_QT )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -k -j ${NCORES}
                      WORKING_DIRECTORY ${QT_BUILD_DIR}
                      RESULT_VARIABLE QT_BUILD_FAILED
-                     OUTPUT_QUIET ERROR_QUIET )
+                     OUTPUT_QUIET ERROR_QUIET 
+                   )
 
     if (QT_BUILD_FAILED)
       message( FATAL_ERROR "Cannot build Qt5. Please go to the mailing list for help.")
@@ -137,7 +151,8 @@ if ( NEED_BUILD_QT )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} install
                      WORKING_DIRECTORY ${QT_BUILD_DIR}
                      RESULT_VARIABLE QT_INSTALL_FAILED
-                     OUTPUT_QUIET ERROR_QUIET )
+                     OUTPUT_QUIET ERROR_QUIET
+                   )
 
     if (QT_INSTALL_FAILED)
       message( FATAL_ERROR "Cannot install Qt5. Please go to the mailing list for help.")

@@ -249,19 +249,9 @@ System::System()
     molgroups[1] = MoleculeGroups();
 }
 
-SharedPolyPointer<System> shared_null;
-
 const System& System::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new System();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<System>());
 }
 
 /** Construct a named System */

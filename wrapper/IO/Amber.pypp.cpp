@@ -9,8 +9,6 @@ namespace bp = boost::python;
 
 #include "SireBase/findexe.h"
 
-#include "SireBase/sire_process.h"
-
 #include "SireBase/tempdir.h"
 
 #include "SireCAS/trigfuncs.h"
@@ -39,6 +37,8 @@ namespace bp = boost::python;
 
 #include "SireMol/atomelements.h"
 
+#include "SireMol/atomidx.h"
+
 #include "SireMol/atommasses.h"
 
 #include "SireMol/cgatomidx.h"
@@ -50,6 +50,8 @@ namespace bp = boost::python;
 #include "SireMol/molecule.h"
 
 #include "SireMol/moleditor.h"
+
+#include "SireMol/molidx.h"
 
 #include "SireMol/reseditor.h"
 
@@ -174,6 +176,18 @@ void register_Amber_class(){
             Amber_exposer.def( 
                 "what"
                 , what_function_value
+                , "" );
+        
+        }
+        { //::SireIO::Amber::writeCrd
+        
+            typedef void ( ::SireIO::Amber::*writeCrd_function_type)( ::SireMol::MoleculeGroup const &,::SireVol::Space const &,::QString const &,::SireBase::PropertyMap const & ) const;
+            writeCrd_function_type writeCrd_function_value( &::SireIO::Amber::writeCrd );
+            
+            Amber_exposer.def( 
+                "writeCrd"
+                , writeCrd_function_value
+                , ( bp::arg("mols"), bp::arg("space"), bp::arg("crdfile"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }

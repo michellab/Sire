@@ -486,19 +486,9 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, NullMove &nullmove)
 NullMove::NullMove() : ConcreteProperty<NullMove,Move>()
 {}
 
-static SharedPolyPointer<NullMove> shared_null;
-
 const NullMove& Move::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new NullMove();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<NullMove>());
 }
 
 /** Copy constructor */

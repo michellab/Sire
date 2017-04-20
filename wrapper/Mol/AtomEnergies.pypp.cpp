@@ -230,6 +230,19 @@ void register_AtomEnergies_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > >::isCompatibleWith
+        
+            typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > exported_class_t;
+            typedef bool ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfo const & ) const;
+            isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > >::isCompatibleWith );
+            
+            AtomEnergies_exposer.def( 
+                "isCompatibleWith"
+                , isCompatibleWith_function_value
+                , ( bp::arg("molinfo") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > >::isEmpty
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > exported_class_t;

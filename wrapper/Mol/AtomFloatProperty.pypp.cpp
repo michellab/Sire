@@ -250,6 +250,19 @@ void register_AtomFloatProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< double >::isCompatibleWith
+        
+            typedef SireMol::AtomProperty< double > exported_class_t;
+            typedef bool ( ::SireMol::AtomProperty< double >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfo const & ) const;
+            isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< double >::isCompatibleWith );
+            
+            AtomFloatProperty_exposer.def( 
+                "isCompatibleWith"
+                , isCompatibleWith_function_value
+                , ( bp::arg("molinfo") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< double >::isEmpty
         
             typedef SireMol::AtomProperty< double > exported_class_t;

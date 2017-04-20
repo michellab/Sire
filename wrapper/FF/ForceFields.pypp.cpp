@@ -14,6 +14,8 @@ namespace bp = boost::python;
 
 #include "SireBase/linktoproperty.h"
 
+#include "SireCAS/identities.h"
+
 #include "SireError/errors.h"
 
 #include "SireFF/errors.h"
@@ -67,6 +69,8 @@ namespace bp = boost::python;
 #include <QTime>
 
 #include <boost/shared_ptr.hpp>
+
+#include <tbb/tbb.h>
 
 #include "forcefields.h"
 

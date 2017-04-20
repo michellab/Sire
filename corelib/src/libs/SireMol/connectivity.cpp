@@ -34,6 +34,7 @@
 #include "atomselection.h"
 #include "connectivity.h"
 #include "moleculedata.h"
+#include "moleculeinfo.h"
 #include "moleculeinfodata.h"
 #include "moleculeview.h"
 #include "atommatcher.h"
@@ -105,24 +106,35 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
     return ds;
 }
 
-static SharedDataPointer<MoleculeInfoData> shared_null;
-
-static SharedDataPointer<MoleculeInfoData> getNull()
-{
-    if (shared_null.constData() == 0)
-        shared_null = new MoleculeInfoData();
-        
-    return shared_null;
-}
-
 /** Null constructor */
 ConnectivityBase::ConnectivityBase()
-                 : MolViewProperty(), d( ::getNull() )
-{}
+                 : MolViewProperty()
+{
+    MoleculeInfo null_info;
+    d = null_info.data();
+}
 
 const MoleculeInfoData& ConnectivityBase::info() const
 {
     return *d;
+}
+
+/** Construct the connectivity for molecule described by 
+    the passed info object */
+ConnectivityBase::ConnectivityBase(const MoleculeInfo &molinfo)
+                 : MolViewProperty(), d(molinfo.data())
+{
+    if (info().nAtoms() > 0)
+    {
+        connected_atoms.resize(info().nAtoms());
+        connected_atoms.squeeze();
+    }
+    
+    if (info().nResidues() > 0)
+    {
+        connected_res.resize(info().nResidues());
+        connected_res.squeeze();
+    }
 }
 
 /** Construct the connectivity for molecule described by 
@@ -2440,7 +2452,11 @@ Connectivity::Connectivity(const MoleculeData &moldata)
              : ConcreteProperty<Connectivity,ConnectivityBase>(moldata)
 {}
 
-    
+/** Construct the connectivity for the passed molecule info */
+Connectivity::Connectivity(const MoleculeInfo &molinfo)
+             : ConcreteProperty<Connectivity,ConnectivityBase>(molinfo)
+{}
+
 /** Construct the connectivity for the molecule viewed in the 
     passed view. This automatically uses the bond hunting 
     function to add all of the bonds for the atoms in this view */

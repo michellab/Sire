@@ -3,6 +3,7 @@
 
 #ifdef GCCXML_PARSE
 
+#include "amberparams.h"
 #include "anglerestraint.h"
 #include "atomfunctions.h"
 #include "atomljs.h"

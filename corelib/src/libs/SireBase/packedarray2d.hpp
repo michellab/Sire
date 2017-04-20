@@ -137,6 +137,11 @@ public:
             ptr->incref();
     }
     
+    SharedArray2DPtr(SharedArray2DPtr &&other) : ptr(other.ptr)
+    {
+        other.ptr = 0;
+    }
+    
     ~SharedArray2DPtr()
     {
         if (ptr)
@@ -160,6 +165,19 @@ public:
             //set the new pointer
             ptr = new_ptr;
         }
+        
+        return *this;
+    }
+    
+    SharedArray2DPtr<T>& operator=(SharedArray2DPtr<T> &&other)
+    {
+        T *new_ptr = other.ptr;
+        other.ptr = 0;
+        
+        if (ptr)
+            ptr->decref();
+        
+        ptr = new_ptr;
         
         return *this;
     }
@@ -609,8 +627,8 @@ char* PackedArray2DMemory<T>::create(quint32 narrays, quint32 nvalues)
         PackedArray2DMemoryBase::setValue0(arraydata, idx);
         
         //only call constructors if this is a complex type
-        if (QTypeInfo<T>::isComplex)
-        {
+        //if (QTypeInfo<T>::isComplex)
+        //{
             //loop over each object and create it in place
             for (quint32 i=0; i<nvalues; ++i)
             {
@@ -620,9 +638,9 @@ char* PackedArray2DMemory<T>::create(quint32 narrays, quint32 nvalues)
                     
                 idx += sizeof(T);
             }
-        }
-        else
-            idx += nvalues * sizeof(T);
+        //}
+        //else
+        //    idx += nvalues * sizeof(T);
         
         //we should now be at the end of the storage
         BOOST_ASSERT( idx == sz );
@@ -666,7 +684,7 @@ void PackedArray2DMemory<T>::destroy(PackedArray2DData<T> *array)
     char *storage = (char*)array;
         
     //only call destructors if this is a complex type
-    if (nvalues > 0 and QTypeInfo<T>::isComplex)
+    if (nvalues > 0) // and QTypeInfo<T>::isComplex)
     {
         T *values = array->valueData();
         
@@ -717,7 +735,7 @@ char* PackedArray2DMemory<T>::detach(char *this_ptr, quint32 this_idx)
     //The PackedArray2DData object is at the beginning of this storage array
     PackedArray2DData<T> *arraydata = (PackedArray2DData<T>*) storage;
     
-    if (not arraydata->ref.testAndSetRelaxed(1,1))
+    if (not arraydata->ref.hasSingleReference())
     {
         //there is more than one reference to this data - it will have to 
         //be cloned - get the size of memory to be cloned
@@ -737,8 +755,8 @@ char* PackedArray2DMemory<T>::detach(char *this_ptr, quint32 this_idx)
         PackedArray2DData<T> *new_arraydata = (PackedArray2DData<T>*) new_storage;
 
         //call the copy constructor if this is a complex type
-        if (QTypeInfo<T>::isComplex)
-        {
+        //if (QTypeInfo<T>::isComplex)
+        //{
             T *new_array = new_arraydata->valueData();
             const T *old_array = arraydata->valueData();
             
@@ -751,10 +769,11 @@ char* PackedArray2DMemory<T>::detach(char *this_ptr, quint32 this_idx)
                 ++new_array;
                 ++old_array;
             }
-        }
+        //}
         
         //set the reference count of this copy to 1
-        new_arraydata->ref = QAtomicInt(1);
+        new_arraydata->ref.reset();
+        new_arraydata->ref.ref();
 
         //now loose a reference to the original
         PackedArray2DMemory<T>::decref(this_ptr, this_idx);
@@ -1024,19 +1043,17 @@ PackedArray2DData<T>* PackedArray2D_ArrayData<T>::extract() const
     
     try
     {
-                
-    //ok, we need to extract!
-    PackedArray2DData<T> *new_array = (PackedArray2DData<T>*)(new_storage);
+        //ok, we need to extract!
+        PackedArray2DData<T> *new_array = (PackedArray2DData<T>*)(new_storage);
 
-    new_array->setNValuesInArray(0, this->nValues());
-    new_array->close();
-    
-    //copy the objects
-    quickCopy<T>(new_array->valueData(),
-                 this->valueData(), this->nValues());
+        new_array->setNValuesInArray(0, this->nValues());
+        new_array->close();
+        
+        //copy the objects
+        quickCopy<T>(new_array->valueData(),
+                     this->valueData(), this->nValues());
 
-    return new_array;
-
+        return new_array;
     }
     catch(...)
     {
@@ -1093,10 +1110,17 @@ static const SharedArray2DPtr< PackedArray2DData<T> >& getSharedNull()
 {
     if (detail::PackedArray2DMemory<T>::shared_null.constData() == 0)
     {
-        detail::PackedArray2DMemory<T>::shared_null 
-                = (PackedArray2DData<T>*)( PackedArray2DMemory<T>::create(0,0) );
-
-        detail::PackedArray2DMemory<T>::shared_null->close();
+        auto mutex = detail::get_shared_null_mutex();
+        
+        tbb::spin_mutex::scoped_lock lock(*mutex);
+        
+        auto new_ptr = (PackedArray2DData<T>*)( PackedArray2DMemory<T>::create(0,0) );
+        new_ptr->close();
+        
+        if (detail::PackedArray2DMemory<T>::shared_null.constData() == 0)
+        {
+            detail::PackedArray2DMemory<T>::shared_null = new_ptr;
+        }
     }
 
     return detail::PackedArray2DMemory<T>::shared_null;

@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "quaternion.h"
 
+#include "sincos.h"
+
 #include "vector.h"
 
 #include <QDebug>

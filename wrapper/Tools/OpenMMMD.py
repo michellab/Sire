@@ -194,7 +194,10 @@ coulomb_power = Parameter("coulomb power", 0,
 
 energy_frequency = Parameter("energy frequency", 1,
                              """The number of time steps between evaluation of free energy gradients.""")
+
 simfile = Parameter("outdata_file", "simfile.dat", """Filename that records all output needed for the free energy analysis""")
+
+perturbed_resnum = Parameter("perturbed residue number",1,"""The residue number of the molecule to morph.""")
 
 verbose = Parameter("verbose", False, """Print debug output""")
 
@@ -609,9 +612,10 @@ def setupDistanceRestraints(system, restraints=None):
     prop_list = []
 
     molecules = system[MGName("all")].molecules()
-
+    
     if restraints is None:
-        dic_items = list(distance_restraints_dict.val.items())
+        #dic_items = list(distance_restraints_dict.val.items())
+        dic_items = list(dict(distance_restraints_dict.val).items())
     else:
         dic_items = list(restraints.items())
 
@@ -816,14 +820,24 @@ def createSystemFreeEnergy(molecules):
         molecule = molecules.molecule(moleculeNumber).molecule()
         moleculeList.append(molecule)
 
-    #
-    # The code below assumes that the solute to be perturbed is
-    # the first molecule in the top file.
+    # Scan input to find a molecule with passed residue number 
     # The residue name of the first residue in this molecule is
     # used to name the solute. This is used later to match
     # templates in the flex/pert files.
 
-    solute = moleculeList[0]
+    solute = None
+    for molecule in moleculeList:
+        if ( molecule.residue(ResIdx(0)).number() == ResNum(perturbed_resnum.val) ):
+            solute = molecule
+            moleculeList.remove(molecule)
+            break
+
+    if solute is None:
+        print ("FATAL ! Could not find a solute to perturb with residue number %s in the input ! Check the value of your cfg keyword 'perturbed residue number'" % perturbed_resnum.val)
+        sys.exit(-1)
+
+    #solute = moleculeList[0]
+
     lig_name = solute.residue(ResIdx(0)).name().value()
 
     solute = solute.edit().rename(lig_name).commit()
@@ -889,7 +903,8 @@ def createSystemFreeEnergy(molecules):
 
     solvent = MoleculeGroup("solvent")
 
-    for molecule in moleculeList[1:]:
+    #for molecule in moleculeList[1:]:
+    for molecule in moleculeList:
         molecules.add(molecule)
         solvent.add(molecule)
 
@@ -1662,10 +1677,13 @@ def runFreeNrg():
             #grads[lambda_val.val].accumulate(gradients[i-1])
             grads[lambda_val.val].accumulate(gradient)
     s2 = timer.elapsed() / 1000.
+    outgradients.flush()
+    outfile.flush()
+    outgradients.close()
     outfile.close()
     print("Simulation took %d s " % ( s2 - s1))
     print("###===========================================================###\n")
-
+  
 
     if os.path.exists("gradients.s3"):
         siregrads = Sire.Stream.load("gradients.s3")

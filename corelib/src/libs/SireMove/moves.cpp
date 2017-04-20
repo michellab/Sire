@@ -631,19 +631,9 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, SameMoves &samemoves)
 SameMoves::SameMoves() : ConcreteProperty<SameMoves,Moves>()
 {}
 
-static SharedPolyPointer<SameMoves> shared_null;
-
 const SameMoves& Moves::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new SameMoves();
-    }
-
-    return *(shared_null.constData());
+    return *(create_shared_null<SameMoves>());
 }
 
 /** Construct to run the move 'move' multiple times */

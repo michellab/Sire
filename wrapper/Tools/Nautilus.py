@@ -60,16 +60,27 @@ import csv
 # Python dependencies
 #
 try:
-    import mdtraj
-except ImportError:
-    raise "Nautilus depends on a working install of the python module mdtraj. Please install mdtraj in your sire python."
-    sys.exit(-1)
+    numpy = Sire.try_import("numpy")
+except:
+    pass
 
 try:
-    import numpy as np
-except ImportError:
-    raise "Nautilus depends on a working install of the python module numpy. Please install numpy in your sire python"
-    sys.exit(-1)
+    mdtraj = Sire.try_import("mdtraj")
+except:
+    pass
+
+import numpy as np
+#try:
+#    import mdtraj
+#except ImportError:
+#    raise "Nautilus depends on a working install of the python module mdtraj. Please install mdtraj in your sire python."
+#    sys.exit(-1)
+#
+#try:
+#    import numpy as np
+#except ImportError:
+#    raise "Nautilus depends on a working install of the python module numpy. Please install numpy in your sire python"
+#    sys.exit(-1)
 #
 # #### VARIABLES #######
 #
@@ -126,13 +137,16 @@ avgdx = Parameter("avgdx", "avg.dx", """Average grid dx file """)
 avggridfiles = Parameter("avggridfiles", [], """List of grid dx files to be averaged""")
 
 
+extraacceptors = Parameter("extra_acceptors",[],"""List of extra atom types to consider as hydrogen bond acceptors.""")
+extrapolarH = Parameter("extra_polar_hydrogens",[],"""List of extra atom types to consider as polar hydrogens.""")
+
 ##### CONSTANTS #########
 combining_rules = "arithmetic"
 # Name of water residues in input
 Water_residue_names = ["T4P", "T3P", "Wat", "HOH", "WAT"]
 # Amber/GAFF atom types classified as donors or acceptors
-polarH = ["HW", "H", "HO", "C3", "C5"]
-acceptors = ["OW", "O", "OH", "Cl", "N", "N3", "N2", "Na", "C2", "C6"]
+polarH = ["HW", "H", "HO"]
+acceptors = ["OW", "O", "OH", "Cl", "N", "N3", "N2", "Na"]
 bulk = {"TIP4PEW-SireOpenMM": 4.88,
         "TIP4PEW-RH": 4.67,
 	"TIP3P-SireOpenMM": 5.02}
@@ -242,6 +256,15 @@ def _initGrid( grid_center_x, grid_center_y, grid_center_z, grid_plus_x, grid_mi
 
 def _assignDonorsAcceptors( system ):
 
+    # Update list of default polarH, acceptors with user passed data (if any)
+    for atype in extrapolarH.val:
+        polarH.append(atype)
+    for atype in extraacceptors.val:
+        acceptors.append(atype)
+
+    print ("List of polarH types: %s " % polarH)
+    print ("list of acceptor types: %s " % acceptors)
+
     atomsDAtype = {}
 
     # map molecule number with atomic numbers
@@ -331,7 +354,6 @@ def _updateSystemfromDCDgrid(system, frame_xyz, cell_lengths, cell_angles, atoms
     acceptor_coords = {}
     # alternate coords
     alternate_acceptor_coords = {}
-
     tb = time.time()
     for molnum in molnums:
         mol = system.molecule(molnum).molecule()
@@ -353,6 +375,7 @@ def _updateSystemfromDCDgrid(system, frame_xyz, cell_lengths, cell_angles, atoms
     if dcd_natoms != dcd_index:
         print ("The number of atoms in the system is not equal to the number of atoms in the DCD file ! Aborting.")
         sys.exit(-1)
+
 
     grid_box_min = Vector(grid['min'][0], grid['min'][1], grid['min'][2] )
     grid_box_max = Vector(grid['max'][0], grid['max'][1], grid['max'][2] )
@@ -450,7 +473,6 @@ def _updateSystemfromDCDgrid(system, frame_xyz, cell_lengths, cell_angles, atoms
                 alternate_acceptor_coords[ at_num - 3 ] = (at_num, atom_coord )
         mol_index +=1
         #sys.exit(-1)
-
     # Update everything
     system.update(changedmols)
     system.removeAllMoleculeGroups()
@@ -468,7 +490,6 @@ def _updateSystemfromDCDgrid(system, frame_xyz, cell_lengths, cell_angles, atoms
         space = Cartesian()
 
     system = _setupForcefields(system, space)
-
     return system, polarH_coords, acceptor_coords, alternate_acceptor_coords
 
 def _setupForcefields(system, space):
@@ -2559,8 +2580,8 @@ def traj2cell():
     # Init the grid boundaries
 
     grid = _initGrid( grid_center_x.val, grid_center_y.val, grid_center_z.val, grid_plus_x.val, grid_min_x.val, grid_plus_y.val, grid_min_y.val, grid_plus_z.val, grid_min_z.val )
-
-    #print (grid)
+    print (BENCHMARK)
+    print (grid)
     #sys.exit(-1)
 
     e_gridwater = Symbol("E_{gridwater}")
@@ -2587,12 +2608,10 @@ def traj2cell():
         # Dump a PDB of the system if this is the first frame, to facilitate visualisation of cell/grid/sites
         if current_frame == 0:
             PDB().write(system[MGName("all")], "frame-0.pdb" )
-
         ta = time.time()
         if BENCHMARK:
             print ("time to update coords %5.3f seconds" % (ta - tb) )
         tb = ta
-
         # Initialise energies, this appears necessary to initialise properly
         # LJPair database for force calculations
         system.energy()

@@ -32,7 +32,7 @@
 #include "property.h"
 #include "propertymap.h"
 
-#include <QSharedDataPointer>
+#include "shareddatapointer.hpp"
 
 SIRE_BEGIN_HEADER
 
@@ -198,7 +198,7 @@ private:
     Properties(bool);
 
     /** Implicitly shared pointer to the data of this object */
-    QSharedDataPointer<detail::PropertiesData> d;
+    SharedDataPointer<detail::PropertiesData> d;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS

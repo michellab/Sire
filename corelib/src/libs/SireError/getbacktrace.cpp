@@ -33,6 +33,12 @@
 #include <QRegExp>
 #include <QDebug>
 
+#ifdef __INTEL_COMPILER
+  // This causes a segfault when using intel's compiler. Probably
+  // just an incompatibility or my bug
+  #undef _HAVE_EXECINFO_H_
+#endif
+
 #ifdef _HAVE_EXECINFO_H_
   #include <execinfo.h>
   #include <cxxabi.h>

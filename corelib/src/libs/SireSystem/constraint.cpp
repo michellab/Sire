@@ -418,19 +418,9 @@ bool NullConstraint::deltaApply(Delta&, quint32)
     return false;
 }
 
-static SharedPolyPointer<NullConstraint> shared_null;
-
 const NullConstraint& Constraint::null()
 {
-    if (shared_null.constData() == 0)
-    {
-        QMutexLocker lkr( SireBase::globalLock() );
-        
-        if (shared_null.constData() == 0)
-            shared_null = new NullConstraint();
-    }
-    
-    return *(shared_null.constData());
+    return *(create_shared_null<NullConstraint>());
 }
 
 const char* NullConstraint::typeName()

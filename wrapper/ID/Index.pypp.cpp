@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "index.h"
 
+#include <QDataStream>
+
 #include "index.h"
 
 SireID::Index __copy__(const SireID::Index &other){ return SireID::Index(other); }

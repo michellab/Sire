@@ -164,8 +164,13 @@ public:
 
     SharedPolyPointer(const SharedPolyPointer<T> &o);
 
+    SharedPolyPointer(SharedPolyPointer<T> &&other);
+
     template<class S>
     SharedPolyPointer(const SharedPolyPointer<S> &o);
+
+    template<class S>
+    SharedPolyPointer(SharedPolyPointer<S> &&o);
 
     template<class S>
     explicit SharedPolyPointer(S *data);
@@ -177,6 +182,8 @@ public:
     SharedPolyPointer<T>& operator=(const T &obj);
 
     SharedPolyPointer<T>& operator=(const SharedPolyPointer<T> &o);
+
+    SharedPolyPointer<T>& operator=(SharedPolyPointer<T> &&o);
 
     template<class S>
     SharedPolyPointer<T>& operator=(const SharedPolyPointer<S> &o);
@@ -251,6 +258,8 @@ public:
     }
 
 private:
+    void detach_helper();
+
     T *d;
 };
 
@@ -288,7 +297,7 @@ SharedPolyPointer<T>::SharedPolyPointer(const T &obj)
 {
     T *obj_ptr = const_cast<T*>(&obj);
     
-    if ( obj_ptr->ref.testAndSetOrdered(0,0) )
+    if ( obj_ptr->ref.isNotReferenced() )
     {
         //the reference count was zero - this implies that
         //this object is not held by another SharedPolyPointer,
@@ -316,6 +325,15 @@ SharedPolyPointer<T>::SharedPolyPointer(const SharedPolyPointer<T> &other)
         d->ref.ref();
 }
 
+/** Move constructor */
+template<class T>
+Q_INLINE_TEMPLATE
+SharedPolyPointer<T>::SharedPolyPointer(SharedPolyPointer<T> &&other)
+                     : SharedPolyPointerBase(), d(other.d)
+{
+    other.d = 0;
+}
+
 /** Copy constructor from a pointer to type 'S'
 
     \throw SireError::invalid_cast
@@ -334,6 +352,30 @@ SharedPolyPointer<T>::SharedPolyPointer(const SharedPolyPointer<S> &other)
     
         if (d)
             d->ref.ref();
+        else
+            throwInvalidCast( SharedPolyPointerHelper<S>::what(*other),
+                              SharedPolyPointerHelper<T>::typeName() );
+    }
+}
+
+/** Move constructor from a pointer to type 'S'
+
+    \throw SireError::invalid_cast
+*/
+template<class T>
+template<class S>
+Q_INLINE_TEMPLATE
+SharedPolyPointer<T>::SharedPolyPointer(SharedPolyPointer<S> &&other)
+                     : d(0)
+{
+    S *other_ptr = const_cast<S*>(other.constData());
+
+    if (other_ptr)
+    {
+        d = dynamic_cast<T*>(other_ptr);
+    
+        if (d)
+            other.d = 0;
         else
             throwInvalidCast( SharedPolyPointerHelper<S>::what(*other),
                               SharedPolyPointerHelper<T>::typeName() );
@@ -382,7 +424,7 @@ SharedPolyPointer<T>::SharedPolyPointer(const S &obj)
         throwInvalidCast( SharedPolyPointerHelper<S>::what(obj),
                           SharedPolyPointerHelper<T>::typeName() );
     
-    if ( obj_ptr->ref.testAndSetOrdered(0,0) )
+    if ( obj_ptr->ref.isNotReferenced() )
     {
         //the reference count was zero - this implies that
         //this object is not held by another SharedPolyPointer,
@@ -395,8 +437,8 @@ SharedPolyPointer<T>::SharedPolyPointer(const S &obj)
     else
     {
         //this is held by another SharedPolyPointer
+        obj_ptr->ref.ref();
         d = obj_ptr;
-        d->ref.ref();
     }
 }
 
@@ -405,10 +447,8 @@ template<class T>
 Q_INLINE_TEMPLATE
 SharedPolyPointer<T>::~SharedPolyPointer()
 {
-    if (d and not d->ref.deref())
-    {
-        delete d;
-    }
+    if (d && !d->ref.deref()) delete d;
+    d = 0;
 }
 
 /** Null assignment operator - allows you to write ptr = 0 to 
@@ -431,17 +471,17 @@ template<class T>
 Q_INLINE_TEMPLATE
 SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(T *ptr)
 {
-    if (d != ptr)
+    if (ptr != d)
     {
-        if (d)
-            qAtomicAssign(d, ptr);
-        else
-        {
-            d = ptr;
-            d->ref.ref();
-        }
+        if (ptr)
+            ptr->ref.ref();
+        
+        T *old = d;
+        d = ptr;
+        
+        if (old && !old->ref.deref())
+            delete old;
     }
-    
     return *this;
 }
 
@@ -457,32 +497,35 @@ SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(const T &obj)
     {
         T *obj_ptr = const_cast<T*>(&obj);
     
-        if ( obj_ptr->ref.testAndSetOrdered(0,0) )
+        if ( obj_ptr->ref.isNotReferenced() )
         {
-            //the reference count was zero - this implies that
-            //this object is not held by another SharedPolyPointer,
+            //the object is not referenced - this implies that
+            //this object is not held by another SharedDataPointer,
             //(it is probably on the stack) so it is not
             //safe to use this object directly - point to a clone
             //of this object.
-            obj_ptr = SharedPolyPointerHelper<T>::clone(obj);
+            obj_ptr = obj.clone();
+
+            obj_ptr->ref.ref();
             
-            if (d)
-                qAtomicAssign(d, obj_ptr);
-            else
-            {
-                d = obj_ptr;
-                d->ref.ref();
-            }
+            T *old = d;
+            d = obj_ptr;
+            
+            if (old && !old->ref.deref())
+                delete old;
         }
         else
         {
-            //this is held by another SharedPolyPointer
-            if (d)
-                qAtomicAssign(d, obj_ptr);
-            else
+            //this is held by another SharedDataPointer
+            if (&obj != d)
             {
-                d = obj_ptr;
-                d->ref.ref();
+                const_cast<T*>(&obj)->ref.ref();
+                
+                T *old = d;
+                d = const_cast<T*>(&obj);
+                
+                if (old && !old->ref.deref())
+                    delete old;
             }
         }
     }
@@ -497,15 +540,16 @@ SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(const SharedPolyPointer<T>
 {
     if (other.d != d)
     {
-        if (d)
-            qAtomicAssign(d, other.d);
-        else
-        {
-            d = other.d;
-            d->ref.ref();
-        }
+        if (other.d)
+            other.d->ref.ref();
+        
+        T *old = d;
+        d = other.d;
+        
+        if (old && !old->ref.deref())
+            delete old;
     }
-
+    
     return *this;
 }
 
@@ -524,20 +568,17 @@ SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(const SharedPolyPointer<S>
     {
         T *obj_ptr = dynamic_cast<T*>(other_ptr);
     
-        if (obj_ptr)
-        {
-            if (d)
-                qAtomicAssign(d, obj_ptr);
-            else
-            {
-                d = obj_ptr;
-                d->ref.ref();
-            }
-        }
-        else
-            throwInvalidCast( SharedPolyPointerHelper<S>::what(*other),
+        if (!obj_ptr)
+            throwInvalidCast( SharedPolyPointerHelper<S>::what(*obj_ptr),
                               SharedPolyPointerHelper<T>::typeName() );
         
+        obj_ptr->ref.ref();
+        
+        T *old = d;
+        d = obj_ptr;
+        
+        if (old && !old->ref.deref())
+            delete old;
     }
         
     return *this;
@@ -561,13 +602,13 @@ SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(S *ptr)
             throwInvalidCast( SharedPolyPointerHelper<S>::what(*ptr),
                               SharedPolyPointerHelper<T>::typeName() );
         
-        if (d)
-            qAtomicAssign(d, obj_ptr);
-        else
-        {
-            d = obj_ptr;
-            d->ref.ref();
-        }
+        obj_ptr->ref.ref();
+        
+        T *old = d;
+        d = obj_ptr;
+        
+        if (old && !old->ref.deref())
+            delete old;
     }
     
     return *this;
@@ -594,7 +635,7 @@ SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(const S &obj)
             throwInvalidCast( SharedPolyPointerHelper<S>::what(obj),
                               SharedPolyPointerHelper<T>::typeName() );
         
-        if (obj_ptr->ref.testAndSetOrdered(0,0) )
+        if (obj_ptr->ref.isNotReferenced())
         {
             //the reference count was zero - this implies that
             //this object is not held by another SharedPolyPointer,
@@ -603,23 +644,26 @@ SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(const S &obj)
             //of this object.
             obj_ptr = SharedPolyPointerHelper<T>::clone(*obj_ptr);
             
-            if (d)
-                qAtomicAssign(d, obj_ptr);
-            else
-            {
-                d = obj_ptr;
-                d->ref.ref();
-            }
+            obj_ptr->ref.ref();
+            
+            T *old = d;
+            d = obj_ptr;
+            
+            if (old && !old->ref.deref())
+                delete old;
         }
         else
         {
-            //this is held by another SharedPolyPointer
-            if (d)
-                qAtomicAssign(d, obj_ptr);
-            else
+            if (obj_ptr != d)
             {
+                if (obj_ptr)
+                    obj_ptr->ref.ref();
+                
+                T *old = d;
                 d = obj_ptr;
-                d->ref.ref();
+                
+                if (old && !old->ref.deref())
+                    delete old;
             }
         }
     }
@@ -627,16 +671,33 @@ SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(const S &obj)
     return *this;
 }
 
+/** Move assignment operator */
+template<class T>
+Q_INLINE_TEMPLATE
+SharedPolyPointer<T>& SharedPolyPointer<T>::operator=(SharedPolyPointer<T> &&other)
+{
+    qSwap(d, other.d);
+    return *this;
+}
+
+/** Helper for the detach function */
+template<class T>
+Q_OUTOFLINE_TEMPLATE
+void SharedPolyPointer<T>::detach_helper()
+{
+    T *x = d->clone();
+    x->ref.ref();
+    if (!d->ref.deref())
+        delete d;
+    d = x;
+}
+
 /** Detach the object pointed to by this pointer from shared storage */
 template <class T>
 Q_INLINE_TEMPLATE
 void SharedPolyPointer<T>::detach() 
 {
-    if (not this->unique())
-    {
-        T *x = SharedPolyPointerHelper<T>::clone(*d);
-        qAtomicAssign(d, x);
-    }
+    if (d && d->ref.hasMultipleReferences()) detach_helper();
 }
 
 /** Return whether or not this pointer is unique (there are no copies) */
@@ -645,7 +706,7 @@ SIRE_INLINE_TEMPLATE
 bool SharedPolyPointer<T>::unique() const
 {
     //test that we have a value and that the reference count is 1
-    return (d and d->ref.testAndSetOrdered(1,1));
+    return (d && d->ref.hasSingleReference());
 }
 
 /** Dereference this pointer */

@@ -525,8 +525,9 @@ void Histogram::accumulate(double value)
 /** Accumulate 'value' with the passed 'weight' onto the histogram */
 void Histogram::accumulate(double value, double weight)
 {
-    //we cannot add negative weight to the histogram
-    if (weight <= 0)
+    //we cannot add negative weight to the histogram, and if the
+    //binwidth is zero then the histogram is disabled
+    if (weight <= 0 or binwidth <= 0)
         return;
     
     //first, calculate the average of the

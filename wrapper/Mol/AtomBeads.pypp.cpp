@@ -231,6 +231,19 @@ void register_AtomBeads_class(){
                 , "" );
         
         }
+        { //::SireMol::AtomProperty< SireMol::BeadNum >::isCompatibleWith
+        
+            typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
+            typedef bool ( ::SireMol::AtomProperty< SireMol::BeadNum >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfo const & ) const;
+            isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::isCompatibleWith );
+            
+            AtomBeads_exposer.def( 
+                "isCompatibleWith"
+                , isCompatibleWith_function_value
+                , ( bp::arg("molinfo") )
+                , "" );
+        
+        }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::isEmpty
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;

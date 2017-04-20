@@ -14,6 +14,8 @@ namespace bp = boost::python;
 
 #include "SireBase/lengthproperty.h"
 
+#include "SireBase/refcountdata.h"
+
 #include "SireError/errors.h"
 
 #include "SireMol/atomselection.h"
@@ -43,6 +45,8 @@ namespace bp = boost::python;
 #include <QDebug>
 
 #include <QElapsedTimer>
+
+#include <QRegExp>
 
 #include "interff.h"
 
@@ -491,7 +495,7 @@ void register_InterFF_class(){
                 "setProperty"
                 , setProperty_function_value
                 , ( bp::arg("name"), bp::arg("property") )
-                , "Set the forcefield property called name to the value property. Note that\nthis only affects the default CLJFunction. Additional functions must\nbe configured before adding them to the forcefield" );
+                , "Set the forcefield property called name to the value property. Note that\nthis only affects the default CLJFunction. Additional functions must\nbe configured before adding them to the forcefield, or by using the\nsyntax property_name[cljfunction], e.g. ff.setProperty(space[fwds], Cartesian())\nwould set the space property of the CLJFunction at key fwds to Cartesian()" );
         
         }
         { //::SireMM::InterFF::setUseGrid
