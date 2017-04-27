@@ -817,7 +817,7 @@ void AmberRst::parse(const PropertyMap &map)
     score += natoms/2;
 
     //now read in all of the velocities
-    if (lines().count() < (2 + (natoms/2) + (natoms/2)))
+    if (lines().count() < (2 + ((natoms+1)/2) + ((natoms+1)/2)))
     {
         //there are no velocities - see if there is periodic box information
         int boxidx = 2 + (natoms/2);
@@ -839,7 +839,7 @@ void AmberRst::parse(const PropertyMap &map)
     auto parse_vels = [&](int i, QStringList &errors)
     {
         //coordinates written as 6F12.7, two atoms per line
-        const int linenum = 2 + (i / 2) + (natoms / 2);
+        const int linenum = 2 + (i / 2) + ((natoms+1) / 2);
         const int column = (i % 2) * 36;
 
         //we have already validated that there are enough lines
@@ -848,7 +848,7 @@ void AmberRst::parse(const PropertyMap &map)
         if (line.length() < column+36)
         {
             errors.append( QObject::tr(
-                    "Cannot read the coordinates for the atom at index %1 as "
+                    "Cannot read the velocities for the atom at index %1 as "
                     "the line at line number %2 is too short.")
                         .arg(i+1).arg(linenum+1) );
             
@@ -914,7 +914,7 @@ void AmberRst::parse(const PropertyMap &map)
     score += (natoms/2);
 
     //see if there is periodic box information
-    int boxidx = 2 + (natoms/2) + (natoms/2);
+    int boxidx = 2 + ((natoms+1)/2) + ((natoms+1)/2);
 
     if (boxidx < lines().count())
     {

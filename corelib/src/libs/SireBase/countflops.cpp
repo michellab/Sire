@@ -244,12 +244,10 @@ double FlopsMark::benchmarkSum()
     
     double sum = 0;
     
-    #pragma omp parallel
     {
         const double *my_values = values;
         double my_sum = 0;
 
-        #pragma omp for schedule(static)
         for (int j=0; j<nloops; ++j)
         {
             #ifdef SIRE_USE_SSE
@@ -280,7 +278,6 @@ double FlopsMark::benchmarkSum()
             #endif
         }
     
-        #pragma omp critical
         {
             sum += my_sum;
         }
@@ -331,12 +328,10 @@ double FlopsMark::benchmarkProduct()
     
     double sum = 0;
     
-    #pragma omp parallel
     {
         const double *my_values = values;
         double my_sum = 0;
 
-        #pragma omp for schedule(static)
         for (int j=0; j<nloops; ++j)
         {
             #ifdef SIRE_USE_SSE
@@ -367,7 +362,6 @@ double FlopsMark::benchmarkProduct()
             #endif
         }
     
-        #pragma omp critical
         {
             sum += my_sum;
         }
@@ -418,12 +412,10 @@ double FlopsMark::benchmarkQuotient()
     
     double sum = 0;
     
-    #pragma omp parallel
     {
         const double *my_values = values;
         double my_sum = 0;
 
-        #pragma omp for schedule(static)
         for (int j=0; j<nloops; ++j)
         {
             #ifdef SIRE_USE_SSE
@@ -454,7 +446,6 @@ double FlopsMark::benchmarkQuotient()
             #endif
         }
     
-        #pragma omp critical
         {
             sum += my_sum;
         }
@@ -505,12 +496,10 @@ double FlopsMark::benchmark()
     
     double sum = 0;
     
-    #pragma omp parallel
     {
         const double *my_values = values;
         double my_sum = 0;
 
-        #pragma omp for schedule(static)
         for (int j=0; j<nloops; ++j)
         {
             #ifdef SIRE_USE_SSE
@@ -540,7 +529,6 @@ double FlopsMark::benchmark()
             #endif
         }
     
-        #pragma omp critical
         {
             sum += my_sum;
         }

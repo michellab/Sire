@@ -49,6 +49,11 @@ grid_buffer = Parameter("grid buffer", 2*angstrom,
 
 disable_grid = Parameter("disable grid", False, """Whether or not to disable use of the grid""")
 
+fast_sim = Parameter("fast simulation", False,
+                     """Switch on options that simplify the calculation so that it is significantly
+                        sped up. The calculation has much lower accuracy, but could be useful
+                        as a way to quickly get residue values, or to equilibrate a longer calculation""")
+
 use_oldff = Parameter("use old forcefields", False, """For debugging, use the old forcefields rather than the 
                                                        new forcefields""")
 
@@ -64,6 +69,11 @@ identity_atoms = Parameter("identity atoms", None,
 use_fixed_points = Parameter("fixed points", False,
                              """Whether or not to use fixed identity points based on looking at
                                 the overlap with the atoms""")
+
+use_water_points = Parameter("water points", False,
+                             """Whether or not to move the identity points to the oxygens of
+                                the swap water molecules, and so keep them fixed in space during
+                                the simulation""")
 
 use_fixed_ligand = Parameter("fixed ligand", False,
                              """Whether or not to completely fix the ligand during the simulation.""")
@@ -85,10 +95,9 @@ reflect_volume_buffer = Parameter("reflect volume buffer", 0*angstrom,
                                      that are within 'reflect volume radius + reflect volume buffer' of any of 
                                      the heavy atoms of the swapped ligand.""")
 
-n_equil_reflect = Parameter("reflect volume nequilmoves", 100000,
-                            """The number of moves to equilibrate the swap water cluster before applying
-                               the reflection volume constraint. Note that this option is only used if 
-                               'reflect volume' is True""")
+n_equil_swap = Parameter("swap water nequilmoves", 5000,
+                         """The number of moves to equilibrate the swap water cluster before applying
+                            the identity or reflection volume constraint.""")
 
 alpha_scale = Parameter("alpha_scale", 1.0,
                         """Amount by which to scale the alpha parameter. The lower the value,
@@ -108,6 +117,10 @@ waterbox_only = Parameter("waterbox only", False,
 
 nrgmon_frequency = Parameter("energy monitor frequency", 1000, 
                              """The number of steps between each evaluation of the energy monitors.""")
+
+save_all_nrgmons = Parameter("save energy monitors", False,
+                             """When debugging, you may want to switch on the saving of energy
+                                monitors. Normally you shouldn't need to save these.""")
 
 lambda_values = Parameter("lambda values", [ 0.005, 0.071, 0.137, 0.203, 0.269, 0.335, 0.401, 0.467, 0.533, 0.599, 0.665, 0.731, 0.797, 0.863, 0.929, 0.995 ],
                           """The values of lambda to use in the RETI free energy simulation. Note that it is not a good idea
@@ -353,15 +366,24 @@ def setCLJProperties(forcefield):
         print("Cannot interpret the cutoff method from \"%s\"" % cutoff_method.val, file=sys.stderr)
 
     forcefield.setSpace(Cartesian())
-    forcefield.setSwitchingFunction( HarmonicSwitchingFunction(coul_cutoff.val,coul_cutoff.val,
-                                                               lj_cutoff.val,lj_cutoff.val) )
+
+    if fast_sim.val:
+        forcefield.setSwitchingFunction( HarmonicSwitchingFunction(7.5 * angstrom, 7.5 * angstrom,
+                                                                   7.5 * angstrom, 7.5 * angstrom) )
+    else:
+        forcefield.setSwitchingFunction( HarmonicSwitchingFunction(coul_cutoff.val,coul_cutoff.val,
+                                                                   lj_cutoff.val,lj_cutoff.val) )
 
     return forcefield
 
 
 def setFakeGridProperties(forcefield):
-    forcefield.setSwitchingFunction( HarmonicSwitchingFunction(coul_cutoff.val,coul_cutoff.val,
-                                                               lj_cutoff.val,lj_cutoff.val) )
+    if fast_sim.val:
+        forcefield.setSwitchingFunction( HarmonicSwitchingFunction(7.5*angstrom, 7.5*angstrom,
+                                                                   7.5*angstrom, 7.5*angstrom) )
+    else:
+        forcefield.setSwitchingFunction( HarmonicSwitchingFunction(coul_cutoff.val,coul_cutoff.val,
+                                                                   lj_cutoff.val,lj_cutoff.val) )
     forcefield.setSpace(Cartesian())
 
     return forcefield
@@ -370,8 +392,13 @@ def setFakeGridProperties(forcefield):
 def setGridProperties(forcefield, extra_buffer=0*angstrom):
     forcefield.setGridSpacing(grid_spacing.val)
     forcefield.setBuffer(grid_buffer.val + extra_buffer)
-    forcefield.setLJCutoff(lj_cutoff.val)
-    forcefield.setCoulombCutoff(coul_cutoff.val)
+
+    if fast_sim.val:
+        forcefield.setLJCutoff(7.5*angstrom)
+        forcefield.setCoulombCutoff(7.5*angstrom)
+    else:
+        forcefield.setLJCutoff(lj_cutoff.val)
+        forcefield.setCoulombCutoff(coul_cutoff.val)
 
     return forcefield
 
@@ -385,8 +412,14 @@ def setSoftCoreProperties(forcefield):
 
 def setCLJFuncProperties(cljfunc):
     cljfunc.setSpace(Cartesian())
-    cljfunc.setCoulombCutoff(coul_cutoff.val)
-    cljfunc.setLJCutoff(lj_cutoff.val)
+
+    if fast_sim.val:
+        cljfunc.setCoulombCutoff(7.5*angstrom)
+        cljfunc.setLJCutoff(7.5*angstrom)
+    else:
+        cljfunc.setCoulombCutoff(coul_cutoff.val)
+        cljfunc.setLJCutoff(lj_cutoff.val)
+
     cljfunc.setArithmeticCombiningRules( True )
 
     return cljfunc
@@ -494,6 +527,50 @@ def createWSRCMoves(system):
     # the system
     moves = WeightedMoves()
 
+    if fast_sim.val:
+        # we will only move the water
+        max_water_translation = 0.15 * angstroms
+        max_water_rotation = 15 * degrees
+
+        if mobile_swap.nViews() > 0:
+            rb_moves = RigidBodyMC(mobile_swap)
+            rb_moves.setMaximumTranslation(max_water_translation)
+            rb_moves.setMaximumRotation(max_water_rotation)
+
+            if use_reflect_volume.val:
+                rb_moves.setReflectionVolume( mobile_ligand[MolIdx(0)], reflect_volume_radius.val )
+
+            moves.add(rb_moves, 4 * mobile_swap.nViews())
+
+
+        if mobile_solvent.nViews() > 0:
+            rb_moves = RigidBodyMC(mobile_solvent)
+            rb_moves.setMaximumTranslation(max_water_translation)
+            rb_moves.setMaximumRotation(max_water_rotation)
+
+            if system.containsProperty("reflection sphere radius"):
+                reflection_radius = float(str(system.property("reflection sphere radius"))) * angstroms
+                reflection_center = system.property("reflection center").toVector()[0]
+                rb_moves.setReflectionSphere(reflection_center, reflection_radius)
+
+            moves.add(rb_moves, 4 * mobile_solvent.nViews())
+
+        moves.setTemperature(temperature.val)
+
+        seed = random_seed.val
+
+        if seed is None:
+            seed = RanGenerator().randInt(100000,1000000)
+            print("Using generated random number seed %d" % seed)
+        else:
+            print("Using supplied random number seed %d" % seed)
+
+        moves.setGenerator( RanGenerator(seed) )
+
+        return moves
+    
+    # we are performing a normal simulation, moving everything
+  
     # create zmatrix moves to move the protein sidechains
     if mobile_sidechains.nViews() > 0:
         sc_moves = ZMatMove(mobile_sidechains)
@@ -611,6 +688,16 @@ def renumberMolecules(molgroup):
 
     return newgroup
 
+def pruneLambda(lamvals):
+    """Half the passed number of lambda values"""
+
+    n = len(lamvals)
+
+    if n % 2 == 0:
+        mid = int(n/2)
+        return lamvals[0:mid:2] + lamvals[mid+1::2]
+    else:
+        return lamvals[0::2]
 
 def getLambdaValues():
     """Return the lambda values to use for the simulation. Lambda scale from 0 to 1
@@ -642,6 +729,9 @@ def getLambdaValues():
             if lam >= 0.0 and lam <= 1.0:
                 lamvals.append( 0.75 + (0.25*(1.0-lam)) )
 
+        if fast_sim.val:
+            lamvals = pruneLambda(lamvals)
+
         return lamvals
 
     else:
@@ -653,6 +743,9 @@ def getLambdaValues():
         for lam in swap_lams:
             if lam >= 0.0 and lam <= 1.0:
                 lamvals.append(lam)
+
+        if fast_sim.val:
+            lamvals = pruneLambda(lamvals)
 
         return lamvals
 
@@ -937,6 +1030,65 @@ def mergeSystems(protein_system, water_system, ligand_mol):
                                                .commit().molecule()
 
             swap_water_group.add(swap_water_mol)
+
+        print("found %d molecules that are now part of the swap water cluster" % swap_water_group.nMolecules())
+        PDB().write(swap_water_group.molecules(), "swapcluster00.pdb")
+
+        # now equilibrate the swap water cluster, if requested
+        if n_equil_swap.val:
+            move = RigidBodyMC(swap_water_group)
+            move.setMaximumTranslation(0.15*angstrom)
+            move.setMaximumRotation(15*degrees)
+
+            # use the same random number seed so that the swap water cluster is reproducible
+            move.setGenerator( RanGenerator(4039251) )
+
+            equil_system = System()
+
+            ff = InterFF("interff")
+            ff.setCLJFunction( getInterCLJFunction() )
+            ff = setNewGridProperties(ff)
+
+            ff.add(swap_water_group)
+
+            fixed_mols = bound_leg.molecules()
+            fixed_mols.remove(ligand_mol.number())
+
+            ff.addFixedAtoms(fixed_mols)
+
+            equil_system.add(swap_water_group)
+            equil_system.add(ff)
+
+            n = n_equil_swap.val
+            print("Equilibrating the swap water cluster (moves = %d)" % n)
+
+            if n > 10:
+                for i in range(1,11):
+                    move.move(equil_system, int(n / 10), False)
+            else:
+                move.move(equil_system, n, False)
+
+            swap_water_group = equil_system[ swap_water_group.name() ]
+
+            PDB().write(swap_water_group, "swapcluster01.pdb")
+
+            print("Complete. Equilibrated water molecules in file 'swapcluster01.pdb'")
+
+        if use_water_points.val:
+            # use identity points that are fixed in space based on the current position
+            # of the center of each molecule of the swap water cluster. This prevents the swap cluster
+            # from changing shape too much during the calculation
+            print("\nUsing identity points based on fixed positions in space from the swap water cluster...")
+            
+            fixed_points = []
+
+            for i in range(0,swap_water_group.nMolecules()):
+                sw = swap_water_group.molecule(MolIdx(i)).molecule()
+                fixed_points.append( VectorPoint(sw.evaluate().centerOfMass()) )
+
+            print("Using fixed identity points %s" % fixed_points)
+            identity_points = fixed_points
+
     else:
         # we will be using the reflection volume to get the swap water cluster
         swap_water_group = MoleculeGroup("swap water")

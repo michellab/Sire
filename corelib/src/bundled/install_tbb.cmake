@@ -53,7 +53,7 @@ else()
       set( TBB_OPTIONS "${TBB_OPTIONS};stdlib=libc++" )
     endif()
 
-    if ( ${SIRE_COMPILER} MATCHES "ICPC" )
+    if ( ${SIRE_COMPILER} MATCHES "INTEL" )
       if (WINDOWS)
         set( TBB_OPTIONS "${TBB_OPTIONS};compiler=icl" )
       else()

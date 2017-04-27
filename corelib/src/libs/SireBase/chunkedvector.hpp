@@ -980,8 +980,8 @@ struct GetChunkedVectorPointer
 /** Stream a ChunkedVector to a binary datastream */
 template<class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
-                                        const SireBase::ChunkedVector<T,N> &vec)
+QDataStream &operator<<(QDataStream &ds,
+                        const SireBase::ChunkedVector<T,N> &vec)
 {
     //write out the data in a format that is compatible with QVector
     quint32 count = vec.count();
@@ -1008,8 +1008,8 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
 /** Extract a ChunkedVector to a binary datastream */
 template<class T, int N>
 SIRE_OUTOFLINE_TEMPLATE
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds,
-                                        SireBase::ChunkedVector<T,N> &vec)
+QDataStream  &operator>>(QDataStream &ds,
+                         SireBase::ChunkedVector<T,N> &vec)
 {
     //read the data in a format that is compatible with QVector
     quint32 count;

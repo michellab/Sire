@@ -82,7 +82,7 @@ MultiQuaternion::MultiQuaternion(const MultiFloat &angle, const MultiVector &axi
     MultiFloat sintheta;
     {
         MultiFloat half_angle(angle);
-        half_angle *= 0.5;
+        half_angle *= 0.5f;
         MultiFloat costheta;
         sincos(half_angle, sintheta, costheta);
         sc[3] = costheta;

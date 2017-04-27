@@ -91,6 +91,10 @@ parser.add_argument('--lambda_values', type=float, nargs='+',
 parser.add_argument('-n', '--num_iterations', type=int, nargs="?",
                     help='The number of waterswap iterations to perform (default 1000)')
 
+parser.add_argument('-f', '--fast', action="store_true",
+                    help="Activate the 'fast' version of waterswap used for fast, yet "
+                         "potentially inaccurate calculations that are useful for equilibration.")
+
 sys.stdout.write("\n")
 args = parser.parse_args()
 
@@ -177,6 +181,14 @@ if lambda_values:
     params["lambda values"] = lambda_values
 
 nits = args.num_iterations
+
+if args.fast:
+    print("Activating 'fast' mode. Results will be less accurate.")
+    params["fast simulation"] = True
+    if nits:
+        nits = min(nits, 100)
+    else:
+        nits = 100
 
 if nits:
     nits = int(nits)
