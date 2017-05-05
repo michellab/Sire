@@ -2146,7 +2146,9 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
 
     tbb::spin_mutex error_mutex;
 
-    QVector<qint64> flags(32,0);
+    QVector<qint64> pointers(32,0);
+    
+    qDebug() << CODELOC;
     
     //first, count up the number of atoms
     {
@@ -2157,8 +2159,10 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
             natoms += params.constData()[i].info().nAtoms();
         }
         
-        flags[0] = natoms;
+        pointers[0] = natoms;
     }
+
+    qDebug() << CODELOC;
 
     //function used to generate the text for the atom names
     auto getAllAtomNames = [&]()
@@ -2350,14 +2354,14 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
         //we need to go through each atom and work out if the atom type
         //is unique
         QVector<LJParameter> ljparams;
-        QVector<qint64> atom_type;
-
-        int atomidx = 0;
+        QVector< QVector<qint64> > atom_types(params.count());
 
         for (int i=0; i<params.count(); ++i)
         {
-            const auto info = params.info();
+            const auto info = params.constData()[i].info();
             const auto ljs = params.constData()[i].ljs();
+            
+            QVector<qint64> mol_atom_types(info.nAtoms());
             
             for (int j=0; j<info.nAtoms(); ++j)
             {
@@ -2368,24 +2372,25 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
                 if (idx == -1)
                 {
                     ljparams.append(lj);
-                    atom_type[atomidx] = ljparams.count();
+                    mol_atom_types[j] = ljparams.count();
                 }
                 else
                 {
-                    atom_type[atomidx] = idx + 1;
+                    mol_atom_types[j] = idx + 1;
                 }
-                
-                atomidx += 1;
             }
         }
         
         //we now have all of the atom types - create the acoeff and bcoeff arrays
         const int ntypes = ljparams.count();
+
         pointers[1] = ntypes;
 
         QVector<qint64> ico(ntypes*ntypes);
-        QVector<double> cn1(ntypes*(ntypes-1)/2);
-        QVector<double> cn2(ntypes*(ntypes-1)/2);
+        QVector<double> cn1( (ntypes*(ntypes+1))/2 );
+        QVector<double> cn2( (ntypes*(ntypes+1))/2 );
+        
+        int lj_idx = 0;
         
         for (int i=0; i<ntypes; ++i)
         {
@@ -2397,19 +2402,20 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
             {
                 const auto lj1 = ljparams.constData()[j];
                 
-                int idx = i*ntypes + j;
+                cn1[lj_idx] = a0 * lj1.A();
+                cn2[lj_idx] = b0 * lj1.B();
                 
-                cn1[idx] = a0 * lj1.A();
-                cn2[idx] = b0 * lj1.B();
+                lj_idx += 1;
                 
                 //now save the index for i,j and j,i into the ico array
-                ico[idx] = idx + 1;
-                ico[j*ntypes + i] = idx + 1;
+                ico[i*ntypes + j] = lj_idx;
+                ico[j*ntypes + i] = lj_idx;
             }
         }
-        
+
         //now return all of the arrays
-        return std::make_tuple( writeIntData(atom_type, AmberFormat( AmberParm::INTEGER, 10, 8 )),
+        return std::make_tuple( writeIntData(collapse(atom_types),
+                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
                                 writeIntData(ico, AmberFormat( AmberParm::INTEGER, 10, 8 )),
                                 writeFloatData(cn1, AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
                                 writeFloatData(cn2, AmberFormat( AmberParm::FLOAT, 5, 16, 8 )) );
@@ -2455,13 +2461,13 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
     lines += mass_lines;
 
     lines.append("%FLAG ATOM_TYPE_INDEX");
-    lines += lj_lines.get<0>();
+    lines += std::get<0>(lj_lines);
 
     //%FLAG NUMBER_EXCLUDED_ATOMS
 
     //%FLAG NONBONDED_PARM_INDEX
     lines.append("%FLAG NONBONDED_PARM_INDEX");
-    lines += lj_lines.get<1>();
+    lines += std::get<1>(lj_lines);
 
     //%FLAG RESIDUE_LABEL
 
@@ -2486,10 +2492,10 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
     //%FLAG SCNB_SCALE_FACTOR
 
     lines.append("%FLAG LENNARD_JONES_ACOEF");
-    lines += lj_lines.get<2>();
+    lines += std::get<2>(lj_lines);
 
     lines.append("%FLAG LENNARD_JONES_BCOEF");
-    lines += lj_lines.get<3>();
+    lines += std::get<3>(lj_lines);
 
     //%FLAG BONDS_INC_HYDROGEN
 
@@ -2524,7 +2530,12 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
     //%FLAG ATOMS_PER_MOLECULE
 
     //%FLAG BOX_DIMENSIONS
-    
+
+    for (auto line : lines)
+    {
+        qDebug() << line;
+    }
+
     return lines;
 }
 
@@ -2554,6 +2565,8 @@ AmberParm::AmberParm(const System &system, const PropertyMap &map)
         {
             for (int i=r.begin(); i<r.end(); ++i)
             {
+                params[i] = system[molnums[i]].molecule().property("amberparameters")
+                                    .asA<AmberParams>();
                 //params[i] = AmberParams(system[molnums[i]],map);
             }
         });
@@ -2562,6 +2575,8 @@ AmberParm::AmberParm(const System &system, const PropertyMap &map)
     {
         for (int i=0; i<molnums.count(); ++i)
         {
+            params[i] = system[molnums[i]].molecule().property("amberparameters")
+                                .asA<AmberParams>();
             //params[i] = AmberParams(system[molnums[i]],map);
         }
     }
