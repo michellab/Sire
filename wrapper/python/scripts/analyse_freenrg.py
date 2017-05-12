@@ -425,6 +425,11 @@ if __name__ == '__main__':
         from Sire.Tools.FreeEnergyAnalysis import FreeEnergies
         from Sire.Tools.FreeEnergyAnalysis import SubSample
 
+        if len(unknown)>0:
+            parser_mbar.print_help()
+            print ('analyse_freenrg: error: unrecognized arguments: %s ' % unknown[0])
+            sys.exit(1)
+
         must_exit = False
         # MBAR is true and we run and MBAR analysis
         print('Simulation data is analysed using the python module pymbar')
