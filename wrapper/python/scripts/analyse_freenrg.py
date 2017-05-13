@@ -171,11 +171,14 @@ if __name__ == '__main__':
     parser_mbar.add_argument('-p', '--percent', type=float,
                              help="Supply the percentage of iterations over which to average. By default "
                                   "the average will be over the last 60 percent of iterations.")
+    parser_mbar.add_argument('--discard', type=int,
+                             help="Number of saved simualtion snapshots that should be discarded at the beginning of a trajectory")
+
     parser_mbar.add_argument('--lam', type=float, nargs='*',
                              help="lambda array")
 
     parser_mbar.add_argument('--temperature', type=float,
-                             help="lambda array")
+                             help="Temperature at which the simulation was run in Kelvin")
 
     parser_mbar.add_argument('--subsampling', action="store_true",
                              help="Subsampling of data according to statistical inefficiency should be done.")
@@ -452,7 +455,18 @@ if __name__ == '__main__':
 
         input_files = args.input
         output_file = args.output
-        percentage = args.percent
+        if args.percent and args.discard:
+            print ("Please choose either to discard a number of frames with the discard option or a certain percentage of all trajectories with "
+                   "the percent option.")
+            sys.exit(-1)
+        if args.percent:
+            percentage = args.percent
+        else:
+            percentage = 95.0
+
+        if args.discard:
+            discard = args.discard
+
         T = args.temperature
 
         # boolean arguemtns
@@ -492,6 +506,10 @@ if __name__ == '__main__':
         else:
             lamvals = args.lam
         lam = None
+        if not args.temperature:
+            T_previous = None
+        else:
+            T_previous = T
         for f in input_files:
             print ('working on input file %s' % f)
             # Compressed file
@@ -507,6 +525,10 @@ if __name__ == '__main__':
                         else:
                             lam = (line.split(b'(')[-1].split(b')')[0].split(b','))
                             lam = numpy.array([float(i) for i in lam])
+                    if T is not None:
+                            break
+                    elif line.startswith(b'#Generating temperature'):
+                        print(line)
                         break
                         # Normal file
             else:
@@ -520,6 +542,23 @@ if __name__ == '__main__':
                         else:
                             lam = (line.split('(')[-1].split(')')[0].split(','))
                             lam = numpy.array([float(i) for i in lam])
+                    elif line.startswith('#Generating temperature'):
+                        temp = line.split()[3]
+                        unit = line.split()[4]
+                        if unit == 'C':
+                            T = float(temp)+273
+                        else:
+                            T = float(temp)
+                        if T_previous is None:
+                            T_previous = T
+                            continue
+                        else:
+                            if T_previous !=T:
+                                print ('Generating temperature is %.2f and does not match with other temperature given %.2f, '
+                                       'please make sure all simulations are run at the same temperature' %(T, T_previous))
+                                sys.exit(-1)
+                            else:
+                                T_previous = T
                         break
             if not numpy.array_equal(lam, lamvals):
                 print ("Lambda arrays do not match! Make sure your input data is consistent")
