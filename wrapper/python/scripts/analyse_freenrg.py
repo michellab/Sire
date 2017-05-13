@@ -466,6 +466,8 @@ if __name__ == '__main__':
 
         if args.discard:
             discard = args.discard
+        else:
+            discard = None
 
         T = args.temperature
 
@@ -568,8 +570,13 @@ if __name__ == '__main__':
 
         # We will load all the data now
         data = []
-        for f in input_files:
-            data.append(numpy.loadtxt(f))
+        if discard is None:
+            for f in input_files:
+                data.append(numpy.loadtxt(f))
+        else:
+            print ('Loading data and discarding %d frames' %discard)
+            for f in input_files:
+                data.append(numpy.loadtxt(f, skiprows=discard))
 
         # N_k is the number of samples at generating thermodynamic state (lambda) k
         N_k = numpy.zeros(shape=lamvals.shape[0], dtype='int32')
