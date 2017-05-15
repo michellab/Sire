@@ -527,12 +527,25 @@ if __name__ == '__main__':
                         else:
                             lam = (line.split(b'(')[-1].split(b')')[0].split(b','))
                             lam = numpy.array([float(i) for i in lam])
-                    if T is not None:
-                            break
                     elif line.startswith(b'#Generating temperature'):
-                        print(line)
+                        temp = line.split()[3]
+                        unit = line.split()[4]
+                        if unit == b'C':
+                            T = float(temp)+273
+                        else:
+                            T = float(temp)
+                        if T_previous is None:
+                            T_previous = T
+                            continue
+                        else:
+                            if T_previous !=T:
+                                print ('Generating temperature is %.2f and does not match with other temperature given %.2f, '
+                                       'please make sure all simulations are run at the same temperature' %(T, T_previous))
+                                sys.exit(-1)
+                            else:
+                                T_previous = T
                         break
-                        # Normal file
+            # Normal file
             else:
                 for line in open(f):
                     if line.startswith('#Alchemical'):
@@ -633,43 +646,31 @@ if __name__ == '__main__':
 
         # mbar DG for neighbourting lambda
         pairwise_F = free_energy_obj.pairwise_F
-        if T is not None:
-            pairwise_F[:, 2] = pairwise_F[:, 2] * T * k_boltz
-            pairwise_F[:, 3] = pairwise_F[:, 3] * T * k_boltz
-            FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
-        else:
-            FILE.write(bytes('#PMF from MBAR in reduced units\n', "UTF-8"))
+        pairwise_F[:, 2] = pairwise_F[:, 2] * T * k_boltz
+        pairwise_F[:, 3] = pairwise_F[:, 3] * T * k_boltz
+        FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
         numpy.savetxt(FILE, pairwise_F, fmt=['%.4f', '%.4f', '%.4f', '%.4f'])
 
         # mbar pmf
         pmf_mbar = free_energy_obj.pmf_mbar
-        if T is not None:
-            pmf_mbar[:, 1] = pmf_mbar[:, 1] * T * k_boltz
-            pmf_mbar[:, 2] = pmf_mbar[:, 2] * T * k_boltz
-            FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
-        else:
-            FILE.write(bytes('#PMF from MBAR in reduced units\n', "UTF-8"))
+        pmf_mbar[:, 1] = pmf_mbar[:, 1] * T * k_boltz
+        pmf_mbar[:, 2] = pmf_mbar[:, 2] * T * k_boltz
+        FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
         numpy.savetxt(FILE, pmf_mbar, fmt=['%.4f', '%.4f', '%.4f'])
 
         # ti mean gradients and std.
         grad_mean = numpy.mean(subsample_obj.gradients_kn, axis=1)
         grad_std = numpy.std(subsample_obj.gradients_kn, axis=1)
-        if T is not None:
-            grad_mean = grad_mean * T * k_boltz
-            grad_std = grad_std * T * k_boltz
-            FILE.write(bytes('#TI average gradients and standard deviation in kcal/mol\n', "UTF-8"))
-        else:
-            FILE.write(bytes('#TI average gradients and standard deviation in reduced units\n', "UTF-8"))
+        grad_mean = grad_mean * T * k_boltz
+        grad_std = grad_std * T * k_boltz
+        FILE.write(bytes('#TI average gradients and standard deviation in kcal/mol\n', "UTF-8"))
         grad_data = numpy.column_stack((lamvals, grad_mean, grad_std))
         numpy.savetxt(FILE, grad_data, fmt=['%.4f', '%.4f', '%.4f'])
 
         # TI pmf
         pmf_ti = free_energy_obj.pmf_ti
-        if T is not None:
-            pmf_ti[:, 1] = pmf_ti[:, 1] * T * k_boltz
-            FILE.write(bytes('#PMF from TI in kcal/mol\n', "UTF-8"))
-        else:
-            FILE.write(bytes('#PMF from TI in reduced units\n', "UTF-8"))
+        pmf_ti[:, 1] = pmf_ti[:, 1] * T * k_boltz
+        FILE.write(bytes('#PMF from TI in kcal/mol\n', "UTF-8"))
         numpy.savetxt(FILE, pmf_ti, fmt=['%.4f', '%.4f'])
 
         df_mbar_kcal = free_energy_obj.deltaF_mbar
@@ -677,18 +678,12 @@ if __name__ == '__main__':
         df_ti_kcal = free_energy_obj.deltaF_ti
         dDf_mbar_kcal = free_energy_obj.errorF_mbar
         dDf_mbar_kJ = free_energy_obj.errorF_mbar
-        if T is not None:
-            df_mbar_kcal = df_mbar_kcal * T * k_boltz
-            dDf_mbar_kcal = dDf_mbar_kcal * T * k_boltz
-            df_ti_kcal = free_energy_obj.deltaF_ti * T * k_boltz
-            FILE.write(
-                bytes("#MBAR free energy difference in kcal/mol: \n%f, %f %s\n" % (df_mbar_kcal, dDf_mbar_kcal, mbar_warn_msg), "UTF-8"))
-            FILE.write(bytes("#TI free energy difference in kcal/mol: \n%f %s \n" % (df_ti_kcal, ti_warn_msg), "UTF-8"))
+        df_mbar_kcal = df_mbar_kcal * T * k_boltz
+        dDf_mbar_kcal = dDf_mbar_kcal * T * k_boltz
+        df_ti_kcal = free_energy_obj.deltaF_ti * T * k_boltz
+        FILE.write(
+            bytes("#MBAR free energy difference in kcal/mol: \n%f, %f %s\n" % (df_mbar_kcal, dDf_mbar_kcal, mbar_warn_msg), "UTF-8"))
+        FILE.write(bytes("#TI free energy difference in kcal/mol: \n%f %s \n" % (df_ti_kcal, ti_warn_msg), "UTF-8"))
 
-        else:
-            FILE.write(
-                bytes("#MBAR free energy difference in reduced units: \n%f, %f %s\n" % (df_mbar_kcal, dDf_mbar_kcal, mbar_warn_msg),
-                      "UTF-8"))
-            FILE.write(bytes("#TI free energy difference in reduced units: \n%f %s\n" % (df_ti_kcal, ti_warn_msg), "UTF-8"))
 
         FILE.close()
