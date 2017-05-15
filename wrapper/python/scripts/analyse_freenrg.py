@@ -172,13 +172,13 @@ if __name__ == '__main__':
                              help="Supply the percentage of iterations over which to average. By default "
                                   "the average will be over the last 60 percent of iterations.")
     parser_mbar.add_argument('--discard', type=int,
-                             help="Number of saved simualtion snapshots that should be discarded at the beginning of a trajectory")
+                             help="Number of saved simulation snapshots that should be discarded at the beginning of a trajectory.")
 
     parser_mbar.add_argument('--lam', type=float, nargs='*',
                              help="lambda array")
 
     parser_mbar.add_argument('--temperature', type=float,
-                             help="Temperature at which the simulation was run in Kelvin")
+                             help="Temperature at which the simulation was run in Kelvin.")
 
     parser_mbar.add_argument('--subsampling', action="store_true",
                              help="Subsampling of data according to statistical inefficiency should be done.")
@@ -625,10 +625,10 @@ if __name__ == '__main__':
         ti_warn_msg = ''
         mbar_warn_msg = ''
         if subsample_obj.gradients_kn.shape[1]<50:
-            ti_warn_msg = ' #WARNING SUBSAMLING GRADIENTS RESULTED IN LESS THAN 50 SAMPLES, CONSIDER RERUN WITHOUT SUBSAMPLE OPTION'
+            ti_warn_msg = ' #WARNING SUBSAMPLING GRADIENTS RESULTED IN LESS THAN 50 SAMPLES, CONSIDER RERUN WITHOUT SUBSAMPLE OPTION'
 
         if subsample_obj.u_kln.shape[2]<50:
-            mbar_warn_msg = ' #WARNING SUBSAMLING ENERGIES RESULTED IN LESS THAN 50 SAMPLES, CONSIDER RERUN WITHOUT SUBSAMPLE OPTION'
+            mbar_warn_msg = ' #WARNING SUBSAMPLING ENERGIES RESULTED IN LESS THAN 50 SAMPLES, CONSIDER RERUN WITHOUT SUBSAMPLE OPTION'
 
         if not subsampling:
             ti_warn_msg = " #WARNING SUBSAMPLING DISABLED, CONSIDER RERUN WITH SUBSAMPLING OPTION"
@@ -639,7 +639,7 @@ if __name__ == '__main__':
             diag_elements = numpy.array([numpy.diag(M, k=1), numpy.diag(M, k=-1)])
             if numpy.min(diag_elements) < 0.03:
                 warnings.warn(
-                    'Off diagonal elements of the overlap matrix are smaller than 0.03! Your free energy estiamte is '
+                    'Off diagonal elements of the overlap matrix are smaller than 0.03! Your free energy estimate is '
                     'not reliable!')
             FILE.write(bytes('#Overlap matrix\n', "UTF-8"))
             numpy.savetxt(FILE, M, fmt='%.4f')
