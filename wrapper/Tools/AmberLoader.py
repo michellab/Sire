@@ -675,19 +675,33 @@ def addFlexibility(system, reflection_center=None, reflection_radius=None, \
                         # now add the atoms needed from the residue to the mobile backbones group
                         atoms = protein_mol.select(ResIdx(i)).selection()
     
-                        if i < (protein_mol.nResidues()-1):
-                            try:
-                                atoms.deselect( hn_atoms + ResIdx(i) )
-                            except:
-                                pass
+                        # for the backbone move to work, the residue must contain
+                        #  AtomName("CA", CaseInsensitive) and AtomName("N", CaseInsensitive) )
+                        has_backbone = False
 
-                        if i > 0:
-                            try:
-                                atoms.select( hn_atoms + ResIdx(i+1) )
-                            except:
-                                pass
+                        try:
+                            if atoms.selected( AtomName("CA", CaseInsensitive) ) and \
+                               atoms.selected( AtomName("N", CaseInsensitive) ):
+                                has_backbone = True
+                        except:
+                            pass
 
-                        mobile_bb_group.add( PartialMolecule(protein_mol, atoms) )
+                        if has_backbone:
+                            if i < (protein_mol.nResidues()-1):
+                                try:
+                                    atoms.deselect( hn_atoms + ResIdx(i) )
+                                except:
+                                    pass
+
+                            if i > 0:
+                                try:
+                                    atoms.select( hn_atoms + ResIdx(i+1) )
+                                except:
+                                    pass
+
+                            mobile_bb_group.add( PartialMolecule(protein_mol, atoms) )
+                        else:
+                            print("Not moving backbone of %s as it doesn't contain atoms N or CA" % protein_mol.residue(ResIdx(i)))
 
                 # now loop over all of the residues and work out which ones are fixed, and which ones
                 # are bonded to fixed residues
