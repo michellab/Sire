@@ -182,6 +182,22 @@ public:
         }
     }
     
+    QString toAmberString() const
+    {
+        switch(flag_type)
+        {
+            case AmberParm::STRING:
+                return QString("%FORMAT(%1a%2)").arg(num_values).arg(field_width);
+            case AmberParm::INTEGER:
+                return QString("%FORMAT(%1I%2)").arg(num_values).arg(field_width);
+            case AmberParm::FLOAT:
+                return QString("%FORMAT(%1E%2.%3)").arg(num_values).arg(field_width)
+                                                   .arg(point_width);
+            default:
+                return QString("%FORMAT(%1U%2)").arg(num_values).arg(field_width);
+        }
+    }
+    
     /** The width of each field (number of columns) */
     int width() const
     {
@@ -208,10 +224,15 @@ public:
 };
 
 QStringList writeIntData(const QVector<qint64> &data, AmberFormat format,
-                         QStringList *errors=0)
+                         QStringList *errors=0, bool include_header=true)
 {
     QStringList lines;
     
+    if (include_header)
+    {
+        lines.append( format.toAmberString() );
+    }
+
     int n = 0;
     
     QString line;
@@ -322,10 +343,15 @@ QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
 }
 
 QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
-                           QStringList *errors=0)
+                           QStringList *errors=0, bool include_header=true)
 {
     QStringList lines;
     
+    if (include_header)
+    {
+        lines.append( format.toAmberString() );
+    }
+
     int n = 0;
     
     QString line;
@@ -334,7 +360,7 @@ QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
     {
         const double value = data.constData()[i];
     
-        QString sval = QString("%1").arg(value, format.width(), 'f', format.pointWidth());
+        QString sval = QString("%1").arg(value, format.width(), 'E', format.pointWidth());
         
         if (sval.length() > format.width())
         {
@@ -462,9 +488,14 @@ QVector<T> collapse(const QVector< QVector<T> > &arrays)
 }
 
 QStringList writeStringData(const QVector<QString> &data, AmberFormat format,
-                            QStringList *errors=0)
+                            QStringList *errors=0, bool include_header=true)
 {
     QStringList lines;
+    
+    if (include_header)
+    {
+        lines.append( format.toAmberString() );
+    }
     
     int n = 0;
     
@@ -476,7 +507,7 @@ QStringList writeStringData(const QVector<QString> &data, AmberFormat format,
     
         if (value.length() < format.width())
         {
-            line += QString("%1").arg(value, format.width());
+            line += QString("%1").arg(value, -format.width());
         }
         else if (value.length() == format.width())
         {
@@ -2148,8 +2179,6 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
 
     QVector<qint64> pointers(32,0);
     
-    qDebug() << CODELOC;
-    
     //first, count up the number of atoms
     {
         int natoms = 0;
@@ -2161,8 +2190,6 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
         
         pointers[0] = natoms;
     }
-
-    qDebug() << CODELOC;
 
     //function used to generate the text for the atom names
     auto getAllAtomNames = [&]()
@@ -2395,15 +2422,15 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
         for (int i=0; i<ntypes; ++i)
         {
             const auto lj0 = ljparams.constData()[i];
-            const double a0 = lj0.A();
-            const double b0 = lj0.B();
-        
-            for (int j=i; j<ntypes; ++j)
+            
+            //now we need to (wastefully) save the A/B parameters for
+            //all mixed LJ parameters i+j
+            for (int j=0; j<i; ++j)
             {
-                const auto lj1 = ljparams.constData()[j];
+                LJParameter lj01 = lj0.combineArithmetic(ljparams.constData()[j]);
                 
-                cn1[lj_idx] = a0 * lj1.A();
-                cn2[lj_idx] = b0 * lj1.B();
+                cn1[lj_idx] = lj01.A();
+                cn2[lj_idx] = lj01.B();
                 
                 lj_idx += 1;
                 
@@ -2411,6 +2438,13 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
                 ico[i*ntypes + j] = lj_idx;
                 ico[j*ntypes + i] = lj_idx;
             }
+
+            //now save the A/B parameters for the ith parameter type
+            cn1[lj_idx] = lj0.A();
+            cn2[lj_idx] = lj0.B();
+            
+            lj_idx += 1;
+            ico[i*ntypes + i] = lj_idx;
         }
 
         //now return all of the arrays
@@ -2531,11 +2565,6 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
 
     //%FLAG BOX_DIMENSIONS
 
-    for (auto line : lines)
-    {
-        qDebug() << line;
-    }
-
     return lines;
 }
 
@@ -2599,6 +2628,23 @@ AmberParm::AmberParm(const System &system, const PropertyMap &map)
     //add the title to the top of the lines
     lines.prepend("%FLAG TITLE");
     lines.prepend(system.name().value());
+
+    //temporarily, for debugging, write out these lines to a file
+    QFile outfile("sire_test.prm7");
+    
+    if (not outfile.open(QIODevice::WriteOnly))
+    {
+        throw SireError::file_error(outfile, CODELOC);
+    }
+    
+    QTextStream ts(&outfile);
+    
+    for (auto line : lines)
+    {
+        ts << line << "\n";
+    }
+    
+    outfile.close();
 
     //now generate this object by re-reading these lines
     this->operator=(AmberParm(lines));

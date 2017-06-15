@@ -29,6 +29,11 @@ void register_LJParameter_class(){
         typedef bp::class_< SireMM::LJParameter > LJParameter_exposer_t;
         LJParameter_exposer_t LJParameter_exposer = LJParameter_exposer_t( "LJParameter", "\nAn LJParameter holds Lennard Jones parameters (sigma and epsilon)\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a dummy LJ parameter") );
         bp::scope LJParameter_scope( LJParameter_exposer );
+        bp::enum_< SireMM::LJParameter::CombiningRules>("CombiningRules")
+            .value("ARITHMETIC", SireMM::LJParameter::ARITHMETIC)
+            .value("GEOMETRIC", SireMM::LJParameter::GEOMETRIC)
+            .export_values()
+            ;
         LJParameter_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::MolarEnergy >(( bp::arg("sigma"), bp::arg("epsilon") ), "Construct a LJParameter that has the specified sigma and epsilon") );
         LJParameter_exposer.def( bp::init< SireMM::LJPair const & >(( bp::arg("ljpair") ), "Construct from an LJPair") );
         LJParameter_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("param") ), "Copy constructor") );
@@ -52,6 +57,42 @@ void register_LJParameter_class(){
                 "B"
                 , B_function_value
                 , "Return the LJ B parameter" );
+        
+        }
+        { //::SireMM::LJParameter::combine
+        
+            typedef ::SireMM::LJParameter ( ::SireMM::LJParameter::*combine_function_type)( ::SireMM::LJParameter const &,::SireMM::LJParameter::CombiningRules ) const;
+            combine_function_type combine_function_value( &::SireMM::LJParameter::combine );
+            
+            LJParameter_exposer.def( 
+                "combine"
+                , combine_function_value
+                , ( bp::arg("other"), bp::arg("rules") )
+                , "" );
+        
+        }
+        { //::SireMM::LJParameter::combineArithmetic
+        
+            typedef ::SireMM::LJParameter ( ::SireMM::LJParameter::*combineArithmetic_function_type)( ::SireMM::LJParameter const & ) const;
+            combineArithmetic_function_type combineArithmetic_function_value( &::SireMM::LJParameter::combineArithmetic );
+            
+            LJParameter_exposer.def( 
+                "combineArithmetic"
+                , combineArithmetic_function_value
+                , ( bp::arg("other") )
+                , "" );
+        
+        }
+        { //::SireMM::LJParameter::combineGeometric
+        
+            typedef ::SireMM::LJParameter ( ::SireMM::LJParameter::*combineGeometric_function_type)( ::SireMM::LJParameter const & ) const;
+            combineGeometric_function_type combineGeometric_function_value( &::SireMM::LJParameter::combineGeometric );
+            
+            LJParameter_exposer.def( 
+                "combineGeometric"
+                , combineGeometric_function_value
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMM::LJParameter::dummy
