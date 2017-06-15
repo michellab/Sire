@@ -31,6 +31,7 @@
 #include <QHash>
 #include <QElapsedTimer>
 #include <QRegularExpression>
+#include <QDateTime>
 
 #include <tuple>
 
@@ -2167,6 +2168,34 @@ QVector<qint64> getAtomNumbers(const AmberParams &params)
     return elements;
 }
 
+/** Internal function used to get the excluded atoms from the 
+    non-bonded pairs */
+QVector< QVector<qint64> > getExcludedAtoms(const AmberParams &params)
+{
+    const auto info = params.info();
+    
+    QVector< QVector<qint64> > excl(info.nAtoms());
+    
+    const auto nbpairs = params.excludedAtoms();
+    
+    for (int i=0; i<info.nAtoms(); ++i)
+    {
+        const QVector<AtomIdx> excluded_atoms = nbpairs.excludedAtoms(AtomIdx(i));
+    
+        QVector<qint64> excl_atoms( excluded_atoms.count() );
+        
+        for (int j=0; j<excluded_atoms.count(); ++j)
+        {
+            //have to add 1 as Amber is 1-indexed
+            excl_atoms[j] = excluded_atoms[j].value() + 1;
+        }
+    
+        excl[i] = excl_atoms;
+    }
+    
+    return excl;
+}
+
 /** Internal function that converts the passed list of parameters into a list
     of text lines */
 QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
@@ -2455,10 +2484,83 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
                                 writeFloatData(cn2, AmberFormat( AmberParm::FLOAT, 5, 16, 8 )) );
     };
 
+    //function used to generate the text for the excluded atoms
+    auto getAllExcludedAtoms = [&]()
+    {
+        QVector< QVector< QVector<qint64> > > excluded_atoms(params.count());
+        
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    excluded_atoms[i] = getExcludedAtoms(params[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                excluded_atoms[i] = getExcludedAtoms(params[i]);
+            }
+        }
+        
+        QVector<qint64> all_excluded_atoms;
+        QVector<qint64> num_excluded_atoms;
+        
+        for (int i=0; i<excluded_atoms.count(); ++i)
+        {
+            const auto mol_excluded_atoms = excluded_atoms[i];
+        
+            for (int j=0; j<mol_excluded_atoms.count(); ++j)
+            {
+                const auto my_excluded_atoms = mol_excluded_atoms[j];
+            
+                num_excluded_atoms.append(my_excluded_atoms.count());
+                all_excluded_atoms += my_excluded_atoms;
+            }
+        }
+        
+        QStringList excluded_atoms_lines, num_excluded_lines;
+        
+        if (all_errors)
+        {
+            QStringList errors;
+        
+            excluded_atoms_lines = writeIntData( all_excluded_atoms,
+                                                 AmberFormat( AmberParm::INTEGER, 10, 8 ),
+                                                 &errors );
+
+            num_excluded_lines = writeIntData( num_excluded_atoms,
+                                               AmberFormat( AmberParm::INTEGER, 10, 8 ),
+                                               &errors );
+        
+            if (not errors.isEmpty())
+            {
+                tbb::spin_mutex::scoped_lock locker(error_mutex);
+                all_errors->append( QObject::tr("== Errors writing excluded atom data! ==") );
+                *all_errors += errors;
+            }
+        }
+        else
+        {
+            excluded_atoms_lines =  writeIntData( all_excluded_atoms,
+                                                  AmberFormat( AmberParm::INTEGER, 10, 8) );
+            num_excluded_lines = writeIntData( num_excluded_atoms,
+                                               AmberFormat( AmberParm::INTEGER, 10, 8) );
+        }
+        
+        return std::make_tuple(num_excluded_lines, excluded_atoms_lines);
+    };
+
     QStringList lines;
     
     QStringList name_lines, charge_lines, number_lines, mass_lines;
     std::tuple<QStringList,QStringList,QStringList,QStringList> lj_lines;
+    std::tuple<QStringList,QStringList> excl_lines;
     
     if (use_parallel)
     {
@@ -2467,7 +2569,8 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
             [&](){ charge_lines = getAllAtomCharges(); },
             [&](){ number_lines = getAllAtomNumbers(); },
             [&](){ mass_lines = getAllAtomMasses(); },
-            [&](){ lj_lines = getAllAtomTypes(); }
+            [&](){ lj_lines = getAllAtomTypes(); },
+            [&](){ excl_lines = getAllExcludedAtoms(); }
         );
     }
     else
@@ -2477,6 +2580,7 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
         number_lines = getAllAtomNumbers();
         mass_lines = getAllAtomMasses();
         lj_lines = getAllAtomTypes();
+        excl_lines = getAllExcludedAtoms();
     }
 
     lines.append("%FLAG POINTERS");
@@ -2497,9 +2601,9 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
     lines.append("%FLAG ATOM_TYPE_INDEX");
     lines += std::get<0>(lj_lines);
 
-    //%FLAG NUMBER_EXCLUDED_ATOMS
+    lines.append("%FLAG NUMBER_EXCLUDED_ATOMS");
+    lines += std::get<0>(excl_lines);
 
-    //%FLAG NONBONDED_PARM_INDEX
     lines.append("%FLAG NONBONDED_PARM_INDEX");
     lines += std::get<1>(lj_lines);
 
@@ -2543,7 +2647,8 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
 
     //%FLAG DIHEDRALS_WITHOUT_HYDROGEN
 
-    //%FLAG EXCLUDED_ATOMS_LIST
+    lines.append("%FLAG EXCLUDED_ATOMS_LIST");
+    lines += std::get<1>(excl_lines);
 
     //%FLAG HBOND_ACOEF
 
@@ -2625,9 +2730,12 @@ AmberParm::AmberParm(const System &system, const PropertyMap &map)
     //we don't need params any more, so free the memory
     params.clear();
 
-    //add the title to the top of the lines
-    lines.prepend("%FLAG TITLE");
+    //add the title and the date to the top of the lines
     lines.prepend(system.name().value());
+    lines.prepend("%FORMAT(20a4)");
+    lines.prepend("%FLAG TITLE");
+    lines.prepend( QString("%VERSION  VERSION_STAMP = V0001.000  DATE = %1")
+                        .arg( QDateTime::currentDateTime().toString("MM/dd/yy  hh:mm:ss") ) );
 
     //temporarily, for debugging, write out these lines to a file
     QFile outfile("sire_test.prm7");

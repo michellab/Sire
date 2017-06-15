@@ -291,6 +291,10 @@ public:
     
     bool operator==(const CLJNBPairs &other) const;
     bool operator!=(const CLJNBPairs &other) const;
+    
+    int nExcludedAtoms(const AtomID &atomid) const;
+    QVector<AtomIdx> excludedAtoms(const AtomID &atomid) const;
+    
 };
 
 }
