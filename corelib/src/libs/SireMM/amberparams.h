@@ -386,6 +386,8 @@ public:
     QHash<BondID,AmberNB14> nb14s() const;
     CLJNBPairs cljScaleFactors() const;
   
+    QStringList validate() const;
+  
  private:
     BondID convert(const BondID &bond) const;
     AngleID convert(const AngleID &angle) const;

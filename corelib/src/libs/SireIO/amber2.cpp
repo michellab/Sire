@@ -463,6 +463,37 @@ QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
     return data;
 }
 
+template<class T, class U>
+std::tuple< QVector<T>, QVector<U> > collapseTuples(
+                   const QVector< std::tuple< QVector<T>,QVector<U> > > &arrays )
+{
+    int nvals = 0;
+    
+    for (const auto array : arrays)
+    {
+        nvals += std::get<0>(array).count();
+    }
+    
+    if (nvals == 0)
+    {
+        return std::make_tuple( QVector<T>(), QVector<U>() );
+    }
+    
+    QVector<T> tvals;
+    QVector<U> uvals;
+    
+    tvals.reserve(nvals);
+    uvals.reserve(nvals);
+    
+    for (const auto array : arrays)
+    {
+        tvals += std::get<0>(array);
+        uvals += std::get<1>(array);
+    }
+    
+    return std::make_tuple(tvals, uvals);
+}
+
 template<class T>
 QVector<T> collapse(const QVector< QVector<T> > &arrays)
 {
@@ -2186,6 +2217,36 @@ QVector<qint64> getAtomNumbers(const AmberParams &params)
     return elements;
 }
 
+/** Internal function used to get all of the residue data */
+std::tuple< QVector<QString>, QVector<qint64> > getResidueData(const AmberParams &params,
+                                                               int start_idx)
+{
+    const auto info = params.info();
+    
+    const int nres = info.nResidues();
+    
+    if (nres == 0)
+        return std::tuple< QVector<QString>, QVector<qint64> >();
+    
+    QVector<QString> res_names(nres);
+    QVector<qint64> res_atoms(nres);
+    
+    for (int i=0; i<nres; ++i)
+    {
+        res_names[i] = info.name( ResIdx(i) ).value();
+        
+        //get the index of the first atom in this residue. As atoms are
+        //contiguous (validated before here) we know that this is the
+        //right pointer value for this atom
+        AtomIdx atomidx = info.getAtom( ResIdx(i), 0 );
+        
+        //amber uses 1-indexing
+        res_atoms[i] = atomidx.value() + start_idx + 1;
+    }
+    
+    return std::make_tuple(res_names, res_atoms);
+}
+
 /** Internal function used to get the excluded atoms from the 
     non-bonded pairs */
 QVector< QVector<qint64> > getExcludedAtoms(const AmberParams &params, int start_idx,
@@ -2277,6 +2338,64 @@ QStringList toLines(const QVector<AmberParams> &params,
 
     tbb::spin_mutex error_mutex;
 
+    //before we start, validate that all of the parameters are ok
+    bool ok = true;
+    
+    /*
+    if (use_parallel)
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                QStringList errors = params[i].validate();
+                
+                if (not errors.isEmpty())
+                {
+                    tbb::spin_mutex::scoped_lock locker(error_mutex);
+                    ok = false;
+                    
+                    if (all_errors)
+                    {
+                        all_errors->append( QObject::tr(
+                            " == Errors validating parameters for molecule %1 of %2 == ")
+                                .arg(i+1).arg(params.count()) );
+                        (*all_errors) += errors;
+                    }
+                }
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<params.count(); ++i)
+        {
+            QStringList errors = params[i].validate();
+            
+            if (not errors.isEmpty())
+            {
+                ok = false;
+                
+                if (all_errors)
+                {
+                    all_errors->append( QObject::tr(
+                        " == Errors validating parameters for molecule %1 of %2 == ")
+                            .arg(i+1).arg(params.count()) );
+                    (*all_errors) += errors;
+                }
+            }
+        }
+    }
+    */
+    
+    if (not ok)
+    {
+        return QStringList();
+    }
+
+    //now set up the 'pointers' array, which forms the header of the output
+    //file and gives information about the number of atoms etc.
     QVector<qint64> pointers(32,0);
     
     //first, count up the number of atoms
@@ -2685,27 +2804,66 @@ QStringList toLines(const QVector<AmberParams> &params,
         }
         else
         {
-            excluded_atoms_lines =  writeIntData( all_excluded_atoms,
-                                                  AmberFormat( AmberParm::INTEGER, 10, 8) );
+            excluded_atoms_lines = writeIntData( all_excluded_atoms,
+                                                 AmberFormat( AmberParm::INTEGER, 10, 8) );
             num_excluded_lines = writeIntData( num_excluded_atoms,
                                                AmberFormat( AmberParm::INTEGER, 10, 8) );
         }
         
-        return std::make_tuple(num_excluded_lines, excluded_atoms_lines);
+        int nexcl = all_excluded_atoms.count();
+        
+        return std::make_tuple(num_excluded_lines, excluded_atoms_lines,
+                               nexcl);
     };
 
     //function used to get all of the info for all of the residues
     auto getAllResidueInfo = [&]()
     {
-        return std::make_tuple( QStringList(), QStringList() );
+        QVector< std::tuple< QVector<QString>, QVector<qint64> > > all_res_data;
+        
+        //generate the start idx for each molecule in the file
+        QVector<qint64> start_idx( params.count(), 0 );
+        
+        for (int i=1; i<params.count(); ++i)
+        {
+            start_idx[i] = start_idx[i-1] + natoms_per_molecule.constData()[i-1];
+        }
+        
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    all_res_data[i] = getResidueData(params[i], start_idx.constData()[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                all_res_data[i] = getResidueData(params[i], start_idx.constData()[i]);
+            }
+        }
+    
+        auto res_data = collapseTuples( all_res_data );
+    
+        int nres = std::get<0>(res_data).count();
+    
+        return std::make_tuple( writeStringData(std::get<0>(res_data),
+                                                AmberFormat( AmberParm::STRING, 20, 4 )),
+                                writeIntData(std::get<1>(res_data),
+                                             AmberFormat( AmberParm::INTEGER, 10, 8 )), nres );
     };
 
     QStringList lines;
     
     QStringList name_lines, charge_lines, number_lines, mass_lines, ambtyp_lines;
     std::tuple<QStringList,QStringList,QStringList,QStringList> lj_lines;
-    std::tuple<QStringList,QStringList> excl_lines;
-    std::tuple<QStringList,QStringList> res_lines;
+    std::tuple<QStringList,QStringList,int> excl_lines;
+    std::tuple<QStringList,QStringList,int> res_lines;
     
     const QVector< std::function<void()> > info_functions =
                           {
@@ -2715,8 +2873,8 @@ QStringList toLines(const QVector<AmberParams> &params,
                             [&](){ number_lines = getAllAtomNumbers(); },
                             [&](){ mass_lines = getAllAtomMasses(); },
                             [&](){ lj_lines = getAllAtomTypes(); },
-                            [&](){ ambtyp_lines = getAllAmberTypes(); },
-                            [&](){ res_lines = getAllResidueInfo(); }
+                            [&](){ ambtyp_lines = getAllAmberTypes(); }//,
+                            //[&](){ res_lines = getAllResidueInfo(); }
                           };
     
     if (use_parallel)
@@ -2737,6 +2895,12 @@ QStringList toLines(const QVector<AmberParams> &params,
             info_function();
         }
     }
+    
+    // save the number of excluded atoms to 'pointers'
+    pointers[10] = std::get<2>(excl_lines);
+    
+    // save the number of residues to 'pointers'
+    pointers[11] = std::get<2>(res_lines);
     
     lines.append("%FLAG POINTERS");
     lines += writeIntData(pointers, AmberFormat( AmberParm::INTEGER, 10, 8 ) );

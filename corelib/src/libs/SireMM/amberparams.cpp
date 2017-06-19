@@ -583,6 +583,16 @@ MoleculeInfo AmberParams::info() const
     return molinfo;
 }
 
+/** Validate this set of parameters. This checks that all of the requirements
+    for an Amber set of parameters are met, e.g. that all Atom indicies are 
+    contiguous and in-order, and that all atoms contiguously fill all residues
+    etc. This returns any errors as strings. An empty set of strings indicates
+    that there are no errors */
+QStringList AmberParams::validate() const
+{
+    return QStringList();
+}
+
 QString AmberParams::toString() const
 {
     if (molinfo.nAtoms() == 0)
