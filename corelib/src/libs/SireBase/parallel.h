@@ -35,6 +35,7 @@
 #include <QMutex>
 
 #include <tbb/parallel_for.h>
+#include <tbb/parallel_for_each.h>
 #include <tbb/parallel_reduce.h>
 #include <tbb/parallel_invoke.h>
 #include <tbb/tbb_exception.h>

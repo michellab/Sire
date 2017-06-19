@@ -100,6 +100,7 @@ using namespace SireMove;
 using namespace SireMaths;
 using namespace SireCAS;
 using namespace SireSystem;
+using namespace SireVol;
 using namespace SireUnits;
 using namespace SireStream;
 using namespace SireBase;
@@ -2170,7 +2171,7 @@ QVector<qint64> getAtomNumbers(const AmberParams &params)
 
 /** Internal function used to get the excluded atoms from the 
     non-bonded pairs */
-QVector< QVector<qint64> > getExcludedAtoms(const AmberParams &params)
+QVector< QVector<qint64> > getExcludedAtoms(const AmberParams &params, int start_idx)
 {
     const auto info = params.info();
     
@@ -2182,12 +2183,25 @@ QVector< QVector<qint64> > getExcludedAtoms(const AmberParams &params)
     {
         const QVector<AtomIdx> excluded_atoms = nbpairs.excludedAtoms(AtomIdx(i));
     
-        QVector<qint64> excl_atoms( excluded_atoms.count() );
+        QVector<qint64> excl_atoms;
+        excl_atoms.reserve(excluded_atoms.count());
         
         for (int j=0; j<excluded_atoms.count(); ++j)
         {
-            //have to add 1 as Amber is 1-indexed
-            excl_atoms[j] = excluded_atoms[j].value() + 1;
+            //only include i,j pairs where i < j
+            if (i < excluded_atoms[j].value())
+            {
+                //have to add 1 as Amber is 1-indexed, and add start_idx as
+                //each molecule is listed in sequence with increasing atom number
+                excl_atoms.append( excluded_atoms[j].value() + start_idx + 1 );
+            }
+        }
+    
+        if (excl_atoms.isEmpty())
+        {
+            //amber cannot have an empty excluded atoms list. In these cases
+            //it has a single atom with index 0 (0 is a null atom in amber)
+            excl_atoms.append(0);
         }
     
         excl[i] = excl_atoms;
@@ -2198,7 +2212,9 @@ QVector< QVector<qint64> > getExcludedAtoms(const AmberParams &params)
 
 /** Internal function that converts the passed list of parameters into a list
     of text lines */
-QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
+QStringList toLines(const QVector<AmberParams> &params,
+                    const Space &space,
+                    bool use_parallel=true,
                     QStringList *all_errors=0)
 {
     if (params.isEmpty())
@@ -2209,15 +2225,27 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
     QVector<qint64> pointers(32,0);
     
     //first, count up the number of atoms
+    QVector<qint64> natoms_per_molecule( params.count() );
     {
         int natoms = 0;
         
         for (int i=0; i<params.count(); ++i)
         {
-            natoms += params.constData()[i].info().nAtoms();
+            const int nats = params.constData()[i].info().nAtoms();
+            natoms_per_molecule[i] = nats;
+            
+            natoms += nats;
         }
         
         pointers[0] = natoms;
+    }
+
+    //now see if there is a periodic box
+    const bool has_periodic_box = space.isA<PeriodicBox>();
+
+    if (has_periodic_box)
+    {
+        pointers[27] = 1;
     }
 
     //function used to generate the text for the atom names
@@ -2489,6 +2517,14 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
     {
         QVector< QVector< QVector<qint64> > > excluded_atoms(params.count());
         
+        //generate the start idx for each molecule in the file
+        QVector<qint64> start_idx( params.count(), 0 );
+        
+        for (int i=1; i<params.count(); ++i)
+        {
+            start_idx[i] = start_idx[i-1] + natoms_per_molecule.constData()[i-1];
+        }
+        
         if (use_parallel)
         {
             tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
@@ -2496,7 +2532,7 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
             {
                 for (int i=r.begin(); i<r.end(); ++i)
                 {
-                    excluded_atoms[i] = getExcludedAtoms(params[i]);
+                    excluded_atoms[i] = getExcludedAtoms(params[i], start_idx.constData()[i]);
                 }
             });
         }
@@ -2504,7 +2540,7 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
         {
             for (int i=0; i<params.count(); ++i)
             {
-                excluded_atoms[i] = getExcludedAtoms(params[i]);
+                excluded_atoms[i] = getExcludedAtoms(params[i], start_idx.constData()[i]);
             }
         }
         
@@ -2556,33 +2592,65 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
         return std::make_tuple(num_excluded_lines, excluded_atoms_lines);
     };
 
+    //function used to get all of the info for all of the residues
+    auto getAllResidueInfo = [&]()
+    {
+        return std::make_tuple( QStringList(), QStringList() );
+    };
+
     QStringList lines;
     
     QStringList name_lines, charge_lines, number_lines, mass_lines;
     std::tuple<QStringList,QStringList,QStringList,QStringList> lj_lines;
     std::tuple<QStringList,QStringList> excl_lines;
+    std::tuple<QStringList,QStringList> res_lines;
+    
+    const QVector< std::function<void()> > info_functions =
+                          { [&](){ name_lines = getAllAtomNames(); },
+                            [&](){ charge_lines = getAllAtomCharges(); },
+                            [&](){ number_lines = getAllAtomNumbers(); },
+                            [&](){ mass_lines = getAllAtomMasses(); },
+                            [&](){ lj_lines = getAllAtomTypes(); },
+                            [&](){ excl_lines = getAllExcludedAtoms(); },
+                            [&](){ res_lines = getAllResidueInfo(); } };
     
     if (use_parallel)
     {
-        tbb::parallel_invoke(
+        tbb::parallel_for( tbb::blocked_range<int>(0,info_functions.count()),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                info_functions[i]();
+            }
+        });
+
+        /*tbb::parallel_invoke(
             [&](){ name_lines = getAllAtomNames(); },
             [&](){ charge_lines = getAllAtomCharges(); },
             [&](){ number_lines = getAllAtomNumbers(); },
             [&](){ mass_lines = getAllAtomMasses(); },
             [&](){ lj_lines = getAllAtomTypes(); },
-            [&](){ excl_lines = getAllExcludedAtoms(); }
-        );
+            [&](){ excl_lines = getAllExcludedAtoms(); },
+            [&](){ res_lines = getAllResidueInfo(); }
+        );*/
     }
     else
     {
-        name_lines = getAllAtomNames();
+        for (auto info_function : info_functions)
+        {
+            info_function();
+        }
+    
+        /*name_lines = getAllAtomNames();
         charge_lines = getAllAtomCharges();
         number_lines = getAllAtomNumbers();
         mass_lines = getAllAtomMasses();
         lj_lines = getAllAtomTypes();
         excl_lines = getAllExcludedAtoms();
+        res_lines = getAllResidueInfo();*/
     }
-
+    
     lines.append("%FLAG POINTERS");
     lines += writeIntData(pointers, AmberFormat( AmberParm::INTEGER, 10, 8 ) );
 
@@ -2607,9 +2675,11 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
     lines.append("%FLAG NONBONDED_PARM_INDEX");
     lines += std::get<1>(lj_lines);
 
-    //%FLAG RESIDUE_LABEL
+    lines.append("%FLAG RESIDUE_LABEL");
+    lines += std::get<0>(res_lines);
 
-    //%FLAG RESIDUE_POINTER
+    lines.append("%FLAG RESIDUE_POINTER");
+    lines += std::get<1>(res_lines);
 
     //%FLAG BOND_FORCE_CONSTANT
 
@@ -2664,11 +2734,30 @@ QStringList toLines(const QVector<AmberParams> &params, bool use_parallel=true,
 
     //%FLAG SCREEN
 
-    //%FLAG SOLVENT_POINTERS
+    if (has_periodic_box)
+    {
+        //write out the "SOLVENT_POINTERS". Amber has a concept of solute(s) and solvent.
+        //with all solutes written first, and then all solvents. We need to work what is
+        //a solvent, and then when the first solvent exists. As a test, we will say that
+        //the solvent is the molecule that
 
-    //%FLAG ATOMS_PER_MOLECULE
+        //%FLAG SOLVENT_POINTERS
 
-    //%FLAG BOX_DIMENSIONS
+        lines.append("%FLAG ATOMS_PER_MOLECULE");
+        lines += writeIntData(natoms_per_molecule, AmberFormat( AmberParm::INTEGER, 10, 8 ));
+
+        //write out the box dimensions
+        const auto dims = space.asA<PeriodicBox>().dimensions();
+        QVector<double> box_dims(4);
+        
+        box_dims[0] = 90.0;
+        box_dims[1] = dims.x();
+        box_dims[2] = dims.y();
+        box_dims[3] = dims.z();
+        
+        lines.append("%FLAG BOX_DIMENSIONS");
+        lines += writeFloatData(box_dims, AmberFormat( AmberParm::FLOAT, 5, 16, 8 ));
+    }
 
     return lines;
 }
@@ -2717,8 +2806,18 @@ AmberParm::AmberParm(const System &system, const PropertyMap &map)
 
     QStringList errors;
 
+    //extract the space of the system
+    SpacePtr space;
+    
+    try
+    {
+        space = system.property( map["space"] ).asA<Space>();
+    }
+    catch(...)
+    {}
+
     //now convert these into text lines that can be written as the file
-    QStringList lines = ::toLines(params, this->usesParallel(), &errors);
+    QStringList lines = ::toLines(params, space, this->usesParallel(), &errors);
 
     if (not errors.isEmpty())
     {
