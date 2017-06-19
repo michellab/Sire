@@ -2152,6 +2152,23 @@ QVector<double> getAtomMasses(const AmberParams &params)
     return masses;
 }
 
+/** Internal function used to get the amber atom types of each atom */
+QVector<QString> getAmberTypes(const AmberParams &params)
+{
+    const auto info = params.info();
+    
+    QVector<QString> ambtyps(info.nAtoms());
+    
+    const auto t = params.amberTypes();
+    
+    for (int i=0; i<info.nAtoms(); ++i)
+    {
+        ambtyps[i] = t[ info.cgAtomIdx(AtomIdx(i)) ];
+    }
+    
+    return ambtyps;
+}
+
 /** Internal function used to get the atom numbers */
 QVector<qint64> getAtomNumbers(const AmberParams &params)
 {
@@ -2171,7 +2188,8 @@ QVector<qint64> getAtomNumbers(const AmberParams &params)
 
 /** Internal function used to get the excluded atoms from the 
     non-bonded pairs */
-QVector< QVector<qint64> > getExcludedAtoms(const AmberParams &params, int start_idx)
+QVector< QVector<qint64> > getExcludedAtoms(const AmberParams &params, int start_idx,
+                                            bool use_parallel=false)
 {
     const auto info = params.info();
     
@@ -2179,32 +2197,69 @@ QVector< QVector<qint64> > getExcludedAtoms(const AmberParams &params, int start
     
     const auto nbpairs = params.excludedAtoms();
     
-    for (int i=0; i<info.nAtoms(); ++i)
+    if (use_parallel and info.nAtoms() > 50)
     {
-        const QVector<AtomIdx> excluded_atoms = nbpairs.excludedAtoms(AtomIdx(i));
-    
-        QVector<qint64> excl_atoms;
-        excl_atoms.reserve(excluded_atoms.count());
-        
-        for (int j=0; j<excluded_atoms.count(); ++j)
+        tbb::parallel_for( tbb::blocked_range<int>(0,info.nAtoms()),
+                           [&](const tbb::blocked_range<int> &r)
         {
-            //only include i,j pairs where i < j
-            if (i < excluded_atoms[j].value())
+            for (int i=r.begin(); i<r.end(); ++i)
             {
-                //have to add 1 as Amber is 1-indexed, and add start_idx as
-                //each molecule is listed in sequence with increasing atom number
-                excl_atoms.append( excluded_atoms[j].value() + start_idx + 1 );
+                const QVector<AtomIdx> excluded_atoms = nbpairs.excludedAtoms(AtomIdx(i));
+            
+                QVector<qint64> excl_atoms;
+                excl_atoms.reserve(excluded_atoms.count());
+                
+                for (int j=0; j<excluded_atoms.count(); ++j)
+                {
+                    //only include i,j pairs where i < j
+                    if (i < excluded_atoms[j].value())
+                    {
+                        //have to add 1 as Amber is 1-indexed, and add start_idx as
+                        //each molecule is listed in sequence with increasing atom number
+                        excl_atoms.append( excluded_atoms[j].value() + start_idx + 1 );
+                    }
+                }
+            
+                if (excl_atoms.isEmpty())
+                {
+                    //amber cannot have an empty excluded atoms list. In these cases
+                    //it has a single atom with index 0 (0 is a null atom in amber)
+                    excl_atoms.append(0);
+                }
+            
+                excl[i] = excl_atoms;
             }
-        }
-    
-        if (excl_atoms.isEmpty())
+        });
+    }
+    else
+    {
+        for (int i=0; i<info.nAtoms(); ++i)
         {
-            //amber cannot have an empty excluded atoms list. In these cases
-            //it has a single atom with index 0 (0 is a null atom in amber)
-            excl_atoms.append(0);
+            const QVector<AtomIdx> excluded_atoms = nbpairs.excludedAtoms(AtomIdx(i));
+        
+            QVector<qint64> excl_atoms;
+            excl_atoms.reserve(excluded_atoms.count());
+            
+            for (int j=0; j<excluded_atoms.count(); ++j)
+            {
+                //only include i,j pairs where i < j
+                if (i < excluded_atoms[j].value())
+                {
+                    //have to add 1 as Amber is 1-indexed, and add start_idx as
+                    //each molecule is listed in sequence with increasing atom number
+                    excl_atoms.append( excluded_atoms[j].value() + start_idx + 1 );
+                }
+            }
+        
+            if (excl_atoms.isEmpty())
+            {
+                //amber cannot have an empty excluded atoms list. In these cases
+                //it has a single atom with index 0 (0 is a null atom in amber)
+                excl_atoms.append(0);
+            }
+        
+            excl[i] = excl_atoms;
         }
-    
-        excl[i] = excl_atoms;
     }
     
     return excl;
@@ -2432,6 +2487,52 @@ QStringList toLines(const QVector<AmberParams> &params,
                                    AmberFormat( AmberParm::FLOAT, 5, 16, 8) );
     };
 
+    //function used to get all of the Amber atom types
+    auto getAllAmberTypes = [&]()
+    {
+        QVector< QVector<QString> > amber_types(params.count());
+        
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    amber_types[i] = getAmberTypes(params[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                amber_types[i] = getAmberTypes(params[i]);
+            }
+        }
+        
+        if (all_errors)
+        {
+            QStringList errors;
+        
+            QStringList lines = writeStringData( collapse(amber_types),
+                                                 AmberFormat( AmberParm::STRING, 20, 4 ),
+                                                 &errors );
+        
+            if (not errors.isEmpty())
+            {
+                tbb::spin_mutex::scoped_lock locker(error_mutex);
+                all_errors->append( QObject::tr("== Errors writing amber type data! ==") );
+                *all_errors += errors;
+            }
+            
+            return lines;
+        }
+        else
+            return writeStringData( collapse(amber_types),
+                                    AmberFormat( AmberParm::STRING, 20, 4 ) );
+    };
+
     //function used to get all of the LJ parameters and atom types
     auto getAllAtomTypes = [&]()
     {
@@ -2532,7 +2633,8 @@ QStringList toLines(const QVector<AmberParams> &params,
             {
                 for (int i=r.begin(); i<r.end(); ++i)
                 {
-                    excluded_atoms[i] = getExcludedAtoms(params[i], start_idx.constData()[i]);
+                    excluded_atoms[i] = getExcludedAtoms(params[i], start_idx.constData()[i],
+                                                         true);
                 }
             });
         }
@@ -2600,19 +2702,22 @@ QStringList toLines(const QVector<AmberParams> &params,
 
     QStringList lines;
     
-    QStringList name_lines, charge_lines, number_lines, mass_lines;
+    QStringList name_lines, charge_lines, number_lines, mass_lines, ambtyp_lines;
     std::tuple<QStringList,QStringList,QStringList,QStringList> lj_lines;
     std::tuple<QStringList,QStringList> excl_lines;
     std::tuple<QStringList,QStringList> res_lines;
     
     const QVector< std::function<void()> > info_functions =
-                          { [&](){ name_lines = getAllAtomNames(); },
+                          {
+                            [&](){ excl_lines = getAllExcludedAtoms(); },
+                            [&](){ name_lines = getAllAtomNames(); },
                             [&](){ charge_lines = getAllAtomCharges(); },
                             [&](){ number_lines = getAllAtomNumbers(); },
                             [&](){ mass_lines = getAllAtomMasses(); },
                             [&](){ lj_lines = getAllAtomTypes(); },
-                            [&](){ excl_lines = getAllExcludedAtoms(); },
-                            [&](){ res_lines = getAllResidueInfo(); } };
+                            [&](){ ambtyp_lines = getAllAmberTypes(); },
+                            [&](){ res_lines = getAllResidueInfo(); }
+                          };
     
     if (use_parallel)
     {
@@ -2624,16 +2729,6 @@ QStringList toLines(const QVector<AmberParams> &params,
                 info_functions[i]();
             }
         });
-
-        /*tbb::parallel_invoke(
-            [&](){ name_lines = getAllAtomNames(); },
-            [&](){ charge_lines = getAllAtomCharges(); },
-            [&](){ number_lines = getAllAtomNumbers(); },
-            [&](){ mass_lines = getAllAtomMasses(); },
-            [&](){ lj_lines = getAllAtomTypes(); },
-            [&](){ excl_lines = getAllExcludedAtoms(); },
-            [&](){ res_lines = getAllResidueInfo(); }
-        );*/
     }
     else
     {
@@ -2641,14 +2736,6 @@ QStringList toLines(const QVector<AmberParams> &params,
         {
             info_function();
         }
-    
-        /*name_lines = getAllAtomNames();
-        charge_lines = getAllAtomCharges();
-        number_lines = getAllAtomNumbers();
-        mass_lines = getAllAtomMasses();
-        lj_lines = getAllAtomTypes();
-        excl_lines = getAllExcludedAtoms();
-        res_lines = getAllResidueInfo();*/
     }
     
     lines.append("%FLAG POINTERS");
@@ -2720,13 +2807,21 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG EXCLUDED_ATOMS_LIST");
     lines += std::get<1>(excl_lines);
 
-    //%FLAG HBOND_ACOEF
+    // HBOND parameters are not currently supported
+    lines.append("%FLAG HBOND_ACOEF");
+    lines.append("%FORMAT(5E16.8)");
+    lines.append("  0.00000000E+00");
 
-    //%FLAG HBOND_BCOEF
+    lines.append("%FLAG HBOND_BCOEF");
+    lines.append("%FORMAT(5E16.8)");
+    lines.append("  0.00000000E+00");
 
-    //%FLAG HBCUT
+    lines.append("%FLAG HBCUT");
+    lines.append("%FORMAT(5E16.8)");
+    lines.append("  0.00000000E+00");
 
-    //%FLAG AMBER_ATOM_TYPE
+    lines.append("%FLAG AMBER_ATOM_TYPE");
+    lines += ambtyp_lines;
 
     //%FLAG RADIUS_SET
 
