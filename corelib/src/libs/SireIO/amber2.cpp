@@ -2819,7 +2819,7 @@ QStringList toLines(const QVector<AmberParams> &params,
     //function used to get all of the info for all of the residues
     auto getAllResidueInfo = [&]()
     {
-        QVector< std::tuple< QVector<QString>, QVector<qint64> > > all_res_data;
+        QVector< std::tuple< QVector<QString>, QVector<qint64> > > all_res_data( params.count() );
         
         //generate the start idx for each molecule in the file
         QVector<qint64> start_idx( params.count(), 0 );
@@ -2873,8 +2873,8 @@ QStringList toLines(const QVector<AmberParams> &params,
                             [&](){ number_lines = getAllAtomNumbers(); },
                             [&](){ mass_lines = getAllAtomMasses(); },
                             [&](){ lj_lines = getAllAtomTypes(); },
-                            [&](){ ambtyp_lines = getAllAmberTypes(); }//,
-                            //[&](){ res_lines = getAllResidueInfo(); }
+                            [&](){ ambtyp_lines = getAllAmberTypes(); },
+                            [&](){ res_lines = getAllResidueInfo(); }
                           };
     
     if (use_parallel)
