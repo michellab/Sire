@@ -451,7 +451,7 @@ static const RegisterMetaType<AmberParams> r_amberparam;
 /** Serialise to a binary datastream */
 QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberParams &amberparam)
 {
-    writeHeader(ds, r_amberparam, 1);
+    writeHeader(ds, r_amberparam, 2);
 
     SharedDataStream sds(ds);
 
@@ -472,7 +472,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberParams &amberparam)
 {
     VersionID v = readHeader(ds, r_amberparam);
     
-    if (v == 1)
+    if (v == 2)
     {
         SharedDataStream sds(ds);
 
@@ -486,7 +486,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberParams &amberparam)
             >> static_cast<MoleculeProperty&>(amberparam);
     }
     else
-        throw version_error(v, "1", r_amberparam, CODELOC);
+        throw version_error(v, "2", r_amberparam, CODELOC);
         
     return ds;
 }
@@ -520,7 +520,8 @@ AmberParams::AmberParams(const AmberParams &other)
               amber_charges(other.amber_charges),amber_ljs(other.amber_ljs),
               amber_masses(other.amber_masses),amber_elements(other.amber_elements),
               amber_types(other.amber_types), exc_atoms(other.exc_atoms),
-              amber_bonds(other.amber_bonds),amber_angles(other.amber_angles),
+              amber_bonds(other.amber_bonds),
+              amber_angles(other.amber_angles),
               amber_dihedrals(other.amber_dihedrals),
               amber_impropers(other.amber_impropers),
               amber_nb14s(other.amber_nb14s)
@@ -805,9 +806,10 @@ CLJNBPairs AmberParams::cljScaleFactors() const
     return nbpairs;
 }
 
-void AmberParams::add(const BondID &bond, double k, double r0)
+void AmberParams::add(const BondID &bond, double k, double r0, bool includes_h)
 {
-    amber_bonds.insert( this->convert(bond), AmberBond(k,r0) );
+    BondID b = convert(bond);
+    amber_bonds.insert( this->convert(bond), qMakePair(AmberBond(k,r0),includes_h) );
 }
 
 void AmberParams::remove(const BondID &bond)
@@ -817,7 +819,7 @@ void AmberParams::remove(const BondID &bond)
 
 AmberBond AmberParams::getParameter(const BondID &bond) const
 {
-    return amber_bonds.value(this->convert(bond));
+    return amber_bonds.value(this->convert(bond)).first;
 }
 
 /** Return all of the bond parameters converted to a set of TwoAtomFunctions */
@@ -829,7 +831,7 @@ TwoAtomFunctions AmberParams::bondFunctions(const Symbol &R) const
          it != amber_bonds.constEnd();
          ++it)
     {
-        funcs.set( it.key(), it.value().toExpression(R) );
+        funcs.set( it.key(), it.value().first.toExpression(R) );
     }
     
     return funcs;
@@ -841,9 +843,9 @@ TwoAtomFunctions AmberParams::bondFunctions() const
     return bondFunctions( Symbol("r") );
 }
 
-void AmberParams::add(const AngleID &angle, double k, double theta0)
+void AmberParams::add(const AngleID &angle, double k, double theta0, bool includes_h)
 {
-    amber_angles.insert( this->convert(angle), AmberAngle(k,theta0) );
+    amber_angles.insert( this->convert(angle), qMakePair(AmberAngle(k,theta0),includes_h) );
 }
 
 void AmberParams::remove(const AngleID &angle)
@@ -853,7 +855,7 @@ void AmberParams::remove(const AngleID &angle)
 
 AmberAngle AmberParams::getParameter(const AngleID &angle) const
 {
-    return amber_angles.value( this->convert(angle) );
+    return amber_angles.value( this->convert(angle) ).first;
 }
 
 /** Return all of the angle parameters converted to a set of ThreeAtomFunctions */
@@ -865,7 +867,7 @@ ThreeAtomFunctions AmberParams::angleFunctions(const Symbol &THETA) const
          it != amber_angles.constEnd();
          ++it)
     {
-        funcs.set( it.key(), it.value().toExpression(THETA) );
+        funcs.set( it.key(), it.value().first.toExpression(THETA) );
     }
     
     return funcs;
@@ -878,7 +880,7 @@ ThreeAtomFunctions AmberParams::angleFunctions() const
 }
 
 void AmberParams::add(const DihedralID &dihedral, double k,
-                      double periodicity, double phase)
+                      double periodicity, double phase, bool includes_h)
 {
     //convert the dihedral into AtomIdx indicies
     DihedralID d = this->convert(dihedral);
@@ -886,11 +888,12 @@ void AmberParams::add(const DihedralID &dihedral, double k,
     // If dihedral already exists, we will append parameters
     if (amber_dihedrals.contains(d))
     {
-        amber_dihedrals[d] += AmberDihPart(k, periodicity, phase);
+        amber_dihedrals[d].first += AmberDihPart(k, periodicity, phase);
     }
     else
     {
-        amber_dihedrals.insert(d, AmberDihPart(k, periodicity, phase));
+        amber_dihedrals.insert(d, qMakePair(AmberDihedral(AmberDihPart(k, periodicity, phase)),
+                                            includes_h));
     }
 }
 
@@ -901,7 +904,7 @@ void AmberParams::remove(const DihedralID &dihedral)
 
 AmberDihedral AmberParams::getParameter(const DihedralID &dihedral) const
 {
-    return amber_dihedrals.value( this->convert(dihedral) );
+    return amber_dihedrals.value( this->convert(dihedral) ).first;
 }
 
 /** Return all of the dihedral parameters converted to a set of FourAtomFunctions */
@@ -913,7 +916,7 @@ FourAtomFunctions AmberParams::dihedralFunctions(const Symbol &PHI) const
          it != amber_dihedrals.constEnd();
          ++it)
     {
-        funcs.set( it.key(), it.value().toExpression(PHI) );
+        funcs.set( it.key(), it.value().first.toExpression(PHI) );
     }
     
     return funcs;
@@ -926,17 +929,18 @@ FourAtomFunctions AmberParams::dihedralFunctions() const
 }
 
 void AmberParams::add(const ImproperID &improper, double k,
-                      double periodicity, double phase)
+                      double periodicity, double phase, bool includes_h)
 {
     ImproperID imp = this->convert(improper);
 
     if (amber_impropers.contains(imp))
     {
-        amber_impropers[imp] += AmberDihPart(k, periodicity, phase);
+        amber_impropers[imp].first += AmberDihPart(k, periodicity, phase);
     }
     else
     {
-        amber_impropers.insert(imp, AmberDihPart(k, periodicity, phase));
+        amber_impropers.insert(imp, qMakePair(AmberDihedral(AmberDihPart(k, periodicity, phase)),
+                                              includes_h));
     }
 }
 
@@ -947,7 +951,7 @@ void AmberParams::remove(const ImproperID &improper)
 
 AmberDihedral AmberParams::getParameter(const ImproperID &improper) const
 {
-    return amber_impropers.value( this->convert(improper) );
+    return amber_impropers.value( this->convert(improper) ).first;
 }
 
 /** Return all of the improper parameters converted to a set of FourAtomFunctions */
@@ -959,7 +963,7 @@ FourAtomFunctions AmberParams::improperFunctions(const Symbol &PHI) const
          it != amber_impropers.constEnd();
          ++it)
     {
-        funcs.set( it.key(), it.value().toExpression(PHI) );
+        funcs.set( it.key(), it.value().first.toExpression(PHI) );
     }
     
     return funcs;

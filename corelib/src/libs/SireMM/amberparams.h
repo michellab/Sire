@@ -53,6 +53,9 @@
 
 #include "SireCAS/symbol.h"
 
+#include <QHash>
+#include <QPair>
+
 SIRE_BEGIN_HEADER
 
 namespace SireMM
@@ -146,6 +149,8 @@ public:
     QString toString() const;
     SireCAS::Expression toExpression(const SireCAS::Symbol &R) const;
 
+    uint hash() const;
+
 private:
     double _k, _r0;
 };
@@ -182,6 +187,8 @@ public:
     
     QString toString() const;
 
+    uint hash() const;
+
 private:
     double _k, _theta0;
 };
@@ -215,6 +222,8 @@ public:
     double energy(double phi) const;
     
     QString toString() const;
+
+    uint hash() const;
 
 private:
     double _k, _periodicity, _phase;
@@ -252,6 +261,8 @@ public:
     SireCAS::Expression toExpression(const SireCAS::Symbol &PHI) const;
     
     QString toString() const;
+
+    uint hash() const;
 
 private:
     QVector<AmberDihPart> _parts;
@@ -347,35 +358,37 @@ public:
 
     SireMol::Connectivity connectivity() const;
 
-    void add(const BondID &bond, double k, double r0);
+    void add(const BondID &bond, double k, double r0, bool includes_hydrogen);
     void remove(const BondID &bond);
     
     AmberBond getParameter(const BondID &bond) const;
-    QHash<BondID,AmberBond> bonds() const;
+    QHash< BondID,QPair<AmberBond,bool> > bonds() const;
     TwoAtomFunctions bondFunctions() const;
     TwoAtomFunctions bondFunctions(const SireCAS::Symbol &R) const;
 
-    void add(const AngleID &angle, double k, double theta0);
+    void add(const AngleID &angle, double k, double theta0, bool includes_hydrogen);
     void remove(const AngleID &angle);
 
     AmberAngle getParameter(const AngleID &angle) const;
-    QHash<AngleID,AmberAngle> angles() const;
+    QHash< AngleID,QPair<AmberAngle,bool> > angles() const;
     ThreeAtomFunctions angleFunctions() const;
     ThreeAtomFunctions angleFunctions(const SireCAS::Symbol &THETA) const;
 
-    void add(const DihedralID &dihedral, double k, double periodicity, double phase);
+    void add(const DihedralID &dihedral, double k, double periodicity, double phase,
+             bool includes_hydrogen);
     void remove(const DihedralID &dihedral);
 
     AmberDihedral getParameter(const DihedralID &dihedral) const;
-    QHash<DihedralID,AmberDihedral> dihedrals() const;
+    QHash< DihedralID,QPair<AmberDihedral,bool> > dihedrals() const;
     FourAtomFunctions dihedralFunctions() const;
     FourAtomFunctions dihedralFunctions(const SireCAS::Symbol &PHI) const;
 
-    void add(const ImproperID &improper, double v, double periodicity, double phase);
+    void add(const ImproperID &improper, double v, double periodicity, double phase,
+             bool includes_hydrogen);
     void remove(const ImproperID &improper);
 
     AmberDihedral getParameter(const ImproperID &improper) const;
-    QHash<ImproperID,AmberDihedral> impropers() const;
+    QHash< ImproperID,QPair<AmberDihedral,bool> > impropers() const;
     FourAtomFunctions improperFunctions() const;
     FourAtomFunctions improperFunctions(const SireCAS::Symbol &PHI) const;
 
@@ -388,7 +401,7 @@ public:
   
     QStringList validate() const;
   
- private:
+private:
     BondID convert(const BondID &bond) const;
     AngleID convert(const AngleID &angle) const;
     DihedralID convert(const DihedralID &dihedral) const;
@@ -417,16 +430,16 @@ public:
     SireMM::CLJNBPairs exc_atoms;
 
     /** A hash of force constants and equilibrium bond lengths for bonds **/
-    QHash<BondID,AmberBond> amber_bonds;
+    QHash< BondID,QPair<AmberBond,bool> > amber_bonds;
 
     /** A hash of force constants and equilibrium bond angles for angles **/
-    QHash<AngleID,AmberAngle> amber_angles;
+    QHash< AngleID,QPair<AmberAngle,bool> > amber_angles;
 
     /** A hash of torsional parameters for dihedrals **/
-    QHash<DihedralID,AmberDihedral> amber_dihedrals;
+    QHash< DihedralID,QPair<AmberDihedral,bool> > amber_dihedrals;
 
     /** A hash of torsional parameters for impropers **/
-    QHash<ImproperID,AmberDihedral> amber_impropers;
+    QHash< ImproperID,QPair<AmberDihedral,bool> > amber_impropers;
 
     /** A hash of coulombic and lennard jones scale factors for 1,4 pairs**/
     QHash<BondID,AmberNB14> amber_nb14s;
@@ -446,6 +459,23 @@ inline double AmberBond::r0() const
     return _r0;
 }
 
+inline uint my_qHash(double key)
+{
+    return ::qHash( *(reinterpret_cast<const ulong*>(&key)) );
+}
+
+/** Return a hash for the bond */
+inline uint AmberBond::hash() const
+{
+    return my_qHash(_k) | my_qHash(_r0);
+}
+
+/** Return a hash of this bond */
+inline uint qHash(const AmberBond &param)
+{
+    return param.hash();
+}
+
 /** Return the force constant in kcal mol-1 radian-2 */
 inline double AmberAngle::k() const
 {
@@ -456,6 +486,18 @@ inline double AmberAngle::k() const
 inline double AmberAngle::theta0() const
 {
     return _theta0;
+}
+
+/** Return a hash for the angle */
+inline uint AmberAngle::hash() const
+{
+    return my_qHash(_k) | my_qHash(_theta0);
+}
+
+/** Return a hash of this angle */
+inline uint qHash(const AmberAngle &param)
+{
+    return param.hash();
 }
 
 /** Return the force constant, in kcal mol-1 */
@@ -476,6 +518,37 @@ inline double AmberDihPart::phase() const
     return _phase;
 }
 
+/** Return a hash for the dihedral part */
+inline uint AmberDihPart::hash() const
+{
+    return my_qHash(_k) | my_qHash(_periodicity) | my_qHash(_phase);
+}
+
+/** Return a hash of this dihedral */
+inline uint qHash(const AmberDihPart &param)
+{
+    return param.hash();
+}
+
+/** Return a hash for the dihedral */
+inline uint AmberDihedral::hash() const
+{
+    uint h = 0;
+    
+    for (int i=0; i<_parts.count(); ++i)
+    {
+        h |= _parts[i].hash();
+    }
+
+    return h;
+}
+
+/** Return a hash of this bond */
+inline uint qHash(const AmberDihedral &param)
+{
+    return param.hash();
+}
+
 /** Return the 14 electrostatic scaling factor */
 inline double AmberNB14::cscl() const
 {
@@ -489,25 +562,25 @@ inline double AmberNB14::ljscl() const
 }
 
 /** Return a hash of all of the bond parameters */
-inline QHash<BondID,AmberBond> AmberParams::bonds() const
+inline QHash< BondID,QPair<AmberBond,bool> > AmberParams::bonds() const
 {
     return amber_bonds;
 }
 
 /** Return a hash of all of the angle parameters */
-inline QHash<AngleID,AmberAngle> AmberParams::angles() const
+inline QHash< AngleID,QPair<AmberAngle,bool> > AmberParams::angles() const
 {
     return amber_angles;
 }
 
 /** Return a hash of all of the dihedral parameters */
-inline QHash<DihedralID,AmberDihedral> AmberParams::dihedrals() const
+inline QHash< DihedralID,QPair<AmberDihedral,bool> > AmberParams::dihedrals() const
 {
     return amber_dihedrals;
 }
 
 /** Return a hash of all of the improper parameters */
-inline QHash<ImproperID,AmberDihedral> AmberParams::impropers() const
+inline QHash< ImproperID,QPair<AmberDihedral,bool> > AmberParams::impropers() const
 {
     return amber_impropers;
 }

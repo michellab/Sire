@@ -494,6 +494,44 @@ std::tuple< QVector<T>, QVector<U> > collapseTuples(
     return std::make_tuple(tvals, uvals);
 }
 
+template<class T, class U, class V, class W>
+std::tuple< QVector<T>, QVector<U>, QVector<V>, QVector<W> > collapseTuples(
+                   const QVector< std::tuple< QVector<T>,QVector<U>,
+                                              QVector<V>,QVector<W> > > &arrays )
+{
+    int nvals = 0;
+    
+    for (const auto array : arrays)
+    {
+        nvals += std::get<0>(array).count();
+    }
+    
+    if (nvals == 0)
+    {
+        return std::make_tuple( QVector<T>(), QVector<U>(), QVector<V>(), QVector<W>() );
+    }
+    
+    QVector<T> tvals;
+    QVector<U> uvals;
+    QVector<V> vvals;
+    QVector<W> wvals;
+    
+    tvals.reserve(nvals);
+    uvals.reserve(nvals);
+    vvals.reserve(nvals);
+    wvals.reserve(nvals);
+    
+    for (const auto array : arrays)
+    {
+        tvals += std::get<0>(array);
+        uvals += std::get<1>(array);
+        vvals += std::get<2>(array);
+        wvals += std::get<3>(array);
+    }
+    
+    return std::make_tuple(tvals, uvals, vvals, wvals);
+}
+
 template<class T>
 QVector<T> collapse(const QVector< QVector<T> > &arrays)
 {
@@ -2326,6 +2364,46 @@ QVector< QVector<qint64> > getExcludedAtoms(const AmberParams &params, int start
     return excl;
 }
 
+/** Internal function used to get the bond information from the passed molecule */
+std::tuple< QVector<qint64>, QVector<qint64>, QHash<AmberBond,qint64> >
+getBondData(const AmberParams &params, int start_idx)
+{
+    QHash<AmberBond,qint64> param_to_idx;
+    QVector<qint64> bonds_inc_h, bonds_exc_h;
+
+    const auto info = params.info();
+    const auto bonds = params.bonds();
+
+    for (auto it=bonds.constBegin(); it != bonds.constEnd(); ++it)
+    {
+        //have we seen this bond parameter before?
+        qint64 idx = param_to_idx.value(it.value().first, -1);
+        
+        //if not, save this to the database and increase the number of parameters
+        if (idx == -1)
+        {
+            param_to_idx.insert(it.value().first, param_to_idx.count()+1);
+            idx = param_to_idx.count();
+        }
+        
+        //is the bond marked as including hydrogen?
+        if (it.value().second)
+        {
+            bonds_inc_h.append( info.atomIdx(it.key().atom0()).value() + start_idx + 1 );
+            bonds_inc_h.append( info.atomIdx(it.key().atom1()).value() + start_idx + 1 );
+            bonds_inc_h.append( idx );
+        }
+        else
+        {
+            bonds_exc_h.append( info.atomIdx(it.key().atom0()).value() + start_idx + 1 );
+            bonds_exc_h.append( info.atomIdx(it.key().atom1()).value() + start_idx + 1 );
+            bonds_exc_h.append( idx );
+        }
+    }
+    
+    return std::make_tuple(bonds_inc_h, bonds_exc_h, param_to_idx);
+}
+
 /** Internal function that converts the passed list of parameters into a list
     of text lines */
 QStringList toLines(const QVector<AmberParams> &params,
@@ -2341,7 +2419,6 @@ QStringList toLines(const QVector<AmberParams> &params,
     //before we start, validate that all of the parameters are ok
     bool ok = true;
     
-    /*
     if (use_parallel)
     {
         tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
@@ -2387,7 +2464,6 @@ QStringList toLines(const QVector<AmberParams> &params,
             }
         }
     }
-    */
     
     if (not ok)
     {
@@ -2396,23 +2472,37 @@ QStringList toLines(const QVector<AmberParams> &params,
 
     //now set up the 'pointers' array, which forms the header of the output
     //file and gives information about the number of atoms etc.
-    QVector<qint64> pointers(32,0);
+    QVector<qint64> pointers(33,0);
     
-    //first, count up the number of atoms
-    QVector<qint64> natoms_per_molecule( params.count() );
+    //first, count up the number of atoms, and get the start index of each
+    //atom (the atoms count sequentially upwards)
+    QVector<qint64> _tmp_natoms_per_molecule( params.count(), 0 );
+    QVector<qint64> _tmp_atom_start_index( params.count(), 0 );
     {
         int natoms = 0;
         
-        for (int i=0; i<params.count(); ++i)
+        _tmp_natoms_per_molecule[0] = params.constData()[0].info().nAtoms();
+        natoms = _tmp_natoms_per_molecule[0];
+        
+        for (int i=1; i<params.count(); ++i)
         {
             const int nats = params.constData()[i].info().nAtoms();
-            natoms_per_molecule[i] = nats;
+            _tmp_natoms_per_molecule[i] = nats;
+            _tmp_atom_start_index[i] = natoms;
             
             natoms += nats;
         }
         
         pointers[0] = natoms;
     }
+
+    //save this data as const vectors, so that we always use the thread-safe
+    //const functions to access the data
+    const QVector<qint64> natoms_per_molecule = _tmp_natoms_per_molecule;
+    const QVector<qint64> atom_start_index = _tmp_atom_start_index;
+
+    //save the number of atoms to be written to the file
+    const int total_natoms = pointers[0];
 
     //now see if there is a periodic box
     const bool has_periodic_box = space.isA<PeriodicBox>();
@@ -2683,6 +2773,8 @@ QStringList toLines(const QVector<AmberParams> &params,
                     mol_atom_types[j] = idx + 1;
                 }
             }
+            
+            atom_types[i] = mol_atom_types;
         }
         
         //we now have all of the atom types - create the acoeff and bcoeff arrays
@@ -2737,14 +2829,6 @@ QStringList toLines(const QVector<AmberParams> &params,
     {
         QVector< QVector< QVector<qint64> > > excluded_atoms(params.count());
         
-        //generate the start idx for each molecule in the file
-        QVector<qint64> start_idx( params.count(), 0 );
-        
-        for (int i=1; i<params.count(); ++i)
-        {
-            start_idx[i] = start_idx[i-1] + natoms_per_molecule.constData()[i-1];
-        }
-        
         if (use_parallel)
         {
             tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
@@ -2752,7 +2836,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             {
                 for (int i=r.begin(); i<r.end(); ++i)
                 {
-                    excluded_atoms[i] = getExcludedAtoms(params[i], start_idx.constData()[i],
+                    excluded_atoms[i] = getExcludedAtoms(params[i], atom_start_index[i],
                                                          true);
                 }
             });
@@ -2761,7 +2845,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         {
             for (int i=0; i<params.count(); ++i)
             {
-                excluded_atoms[i] = getExcludedAtoms(params[i], start_idx.constData()[i]);
+                excluded_atoms[i] = getExcludedAtoms(params[i], atom_start_index[i]);
             }
         }
         
@@ -2821,14 +2905,7 @@ QStringList toLines(const QVector<AmberParams> &params,
     {
         QVector< std::tuple< QVector<QString>, QVector<qint64> > > all_res_data( params.count() );
         
-        //generate the start idx for each molecule in the file
-        QVector<qint64> start_idx( params.count(), 0 );
-        
-        for (int i=1; i<params.count(); ++i)
-        {
-            start_idx[i] = start_idx[i-1] + natoms_per_molecule.constData()[i-1];
-        }
-        
+        //get all of the residue info - this is the name and the atom range
         if (use_parallel)
         {
             tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
@@ -2836,7 +2913,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             {
                 for (int i=r.begin(); i<r.end(); ++i)
                 {
-                    all_res_data[i] = getResidueData(params[i], start_idx.constData()[i]);
+                    all_res_data[i] = getResidueData(params[i], atom_start_index[i]);
                 }
             });
         }
@@ -2844,18 +2921,163 @@ QStringList toLines(const QVector<AmberParams> &params,
         {
             for (int i=0; i<params.count(); ++i)
             {
-                all_res_data[i] = getResidueData(params[i], start_idx.constData()[i]);
+                all_res_data[i] = getResidueData(params[i], atom_start_index[i]);
             }
         }
     
         auto res_data = collapseTuples( all_res_data );
-    
+
+        //get the number of residues
         int nres = std::get<0>(res_data).count();
+    
+        //now find out the maximum number of atoms in a residue
+        int maxres = 0;
+        
+        for (int i=1; i<nres; ++i)
+        {
+            int nats = std::get<1>(res_data)[i] - std::get<1>(res_data)[i-1];
+            
+            if (nats > maxres)
+                maxres = nats;
+        }
+        
+        int nats = total_natoms - std::get<1>(res_data)[nres-1] + 1;
+        
+        if (nats > maxres)
+            maxres = nats;
     
         return std::make_tuple( writeStringData(std::get<0>(res_data),
                                                 AmberFormat( AmberParm::STRING, 20, 4 )),
                                 writeIntData(std::get<1>(res_data),
-                                             AmberFormat( AmberParm::INTEGER, 10, 8 )), nres );
+                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                nres, maxres );
+    };
+
+    //function used to get all of the bond information
+    auto getAllBonds = [&]()
+    {
+        QVector< std::tuple< QVector<qint64>, QVector<qint64>,
+                             QHash<AmberBond,qint64> > > all_bond_data(params.count());
+        
+        //get all of the bond information from each molecule
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    all_bond_data[i] = getBondData(params[i], atom_start_index[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                all_bond_data[i] = getBondData(params[i], atom_start_index[i]);
+            }
+        }
+        
+        //count up the number of bond parameters to help reserve memory space
+        int nbonds_inc_h = 0;
+        int nbonds_exc_h = 0;
+        int nparams = 0;
+        for (int i=0; i<params.count(); ++i)
+        {
+            nbonds_inc_h += std::get<0>(all_bond_data[i]).count();
+            nbonds_exc_h += std::get<1>(all_bond_data[i]).count();
+            nparams += std::get<2>(all_bond_data[i]).count();
+        }
+
+        QVector<qint64> all_bonds_inc_h, all_bonds_exc_h;
+        all_bonds_inc_h.reserve(nbonds_inc_h);
+        all_bonds_exc_h.reserve(nbonds_exc_h);
+        
+        //we now need to go through the bonds and remove duplicated bond parameters
+        QVector<double> k_data, r0_data;
+        QHash<AmberBond,int> all_bond_to_idx;
+
+        k_data.reserve(nparams);
+        r0_data.reserve(nparams);
+        all_bond_to_idx.reserve(nparams);
+        
+        for (int i=0; i<params.count(); ++i)
+        {
+            //create a hash to map local parameter indicies to global parameter indicies
+            QHash<qint64,qint64> idx_to_idx;
+
+            //get all of the bond parameters
+            const auto bond_to_idx = std::get<2>(all_bond_data[i]);
+        
+            //for each one, get the global parameter index, save the parameters to
+            //the k and r0 arrays, and update the mapping from local to global indicies
+            for (auto it = bond_to_idx.constBegin();
+                 it != bond_to_idx.constEnd();
+                 ++it)
+            {
+                qint64 idx = all_bond_to_idx.value(it.key(),-1);
+                
+                if (idx == -1)
+                {
+                    all_bond_to_idx.insert(it.key(), all_bond_to_idx.count()+1);
+                    idx = all_bond_to_idx.count();
+                    
+                    k_data.append( it.key().k() );
+                    r0_data.append( it.key().r0() );
+                }
+
+                idx_to_idx.insert(it.value(),all_bond_to_idx.count());
+            }
+            
+            //now run through the bonds updating their local indicies to
+            //global indicies
+            const auto bonds_inc_h = std::get<0>(all_bond_data[i]);
+            const auto bonds_exc_h = std::get<1>(all_bond_data[i]);
+            
+            for (int j=0; j<bonds_inc_h.count(); ++i)
+            {
+                if (i % 3 == 0)
+                {
+                    //map the parameter index from local to global
+                    all_bonds_inc_h.append(idx_to_idx.value(bonds_inc_h[j]));
+                }
+                else
+                {
+                    //these are the indicies of the atoms
+                    all_bonds_inc_h.append(bonds_inc_h[j]);
+                }
+            }
+
+            for (int j=0; j<bonds_exc_h.count(); ++i)
+            {
+                if (i % 3 == 0)
+                {
+                    //map the parameter index from local to global
+                    all_bonds_exc_h.append(idx_to_idx.value(bonds_exc_h[j]));
+                }
+                else
+                {
+                    //these are the indicies of the atoms
+                    all_bonds_exc_h.append(bonds_exc_h[j]);
+                }
+            }
+        }
+        
+        int nbonh = all_bonds_inc_h.count() / 3; // number of bonds containing hydrogen
+        int mbona = all_bonds_exc_h.count() / 3; // number of bonds not containing hydrogen
+        int nbona = mbona; // mbona + number of constraint bonds
+        int numbnd = k_data.count(); // number of unique bond types
+        
+        return std::make_tuple( writeFloatData(k_data,
+                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                writeFloatData(r0_data,
+                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                writeIntData(all_bonds_inc_h,
+                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                writeIntData(all_bonds_exc_h,
+                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                nbonh, mbona, nbona, numbnd );
     };
 
     QStringList lines;
@@ -2863,11 +3085,13 @@ QStringList toLines(const QVector<AmberParams> &params,
     QStringList name_lines, charge_lines, number_lines, mass_lines, ambtyp_lines;
     std::tuple<QStringList,QStringList,QStringList,QStringList> lj_lines;
     std::tuple<QStringList,QStringList,int> excl_lines;
-    std::tuple<QStringList,QStringList,int> res_lines;
+    std::tuple<QStringList,QStringList,int,int> res_lines;
+    std::tuple<QStringList,QStringList,QStringList,QStringList,int,int,int,int> bond_lines;
     
     const QVector< std::function<void()> > info_functions =
                           {
                             [&](){ excl_lines = getAllExcludedAtoms(); },
+                            [&](){ bond_lines = getAllBonds(); },
                             [&](){ name_lines = getAllAtomNames(); },
                             [&](){ charge_lines = getAllAtomCharges(); },
                             [&](){ number_lines = getAllAtomNumbers(); },
@@ -2897,10 +3121,17 @@ QStringList toLines(const QVector<AmberParams> &params,
     }
     
     // save the number of excluded atoms to 'pointers'
-    pointers[10] = std::get<2>(excl_lines);
+    pointers[10] = std::get<2>(excl_lines);     // NNB
     
     // save the number of residues to 'pointers'
-    pointers[11] = std::get<2>(res_lines);
+    pointers[11] = std::get<2>(res_lines);      // NRES
+    pointers[28] = std::get<3>(res_lines);      // NMXRS
+    
+    // save the number of bonds to 'pointers'
+    pointers[2] = std::get<4>(bond_lines);      // NBONH
+    pointers[3] = std::get<5>(bond_lines);      // MBONA
+    pointers[12] = std::get<6>(bond_lines);     // NBONA
+    pointers[15] = std::get<7>(bond_lines);     // NUMBND
     
     lines.append("%FLAG POINTERS");
     lines += writeIntData(pointers, AmberFormat( AmberParm::INTEGER, 10, 8 ) );
@@ -2932,9 +3163,11 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG RESIDUE_POINTER");
     lines += std::get<1>(res_lines);
 
-    //%FLAG BOND_FORCE_CONSTANT
+    lines.append("%FLAG BOND_FORCE_CONSTANT");
+    lines += std::get<0>(bond_lines);
 
-    //%FLAG BOND_EQUIL_VALUE
+    lines.append("%FLAG BOND_EQUIL_VALUE");
+    lines += std::get<1>(bond_lines);
 
     //%FLAG ANGLE_FORCE_CONSTANT
 
@@ -2956,9 +3189,11 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG LENNARD_JONES_BCOEF");
     lines += std::get<3>(lj_lines);
 
-    //%FLAG BONDS_INC_HYDROGEN
+    lines.append("%FLAG BONDS_INC_HYDROGEN");
+    lines += std::get<2>(bond_lines);
 
-    //%FLAG BONDS_WITHOUT_HYDROGEN
+    lines.append("%FLAG BONDS_WITHOUT_HYDROGEN");
+    lines += std::get<3>(bond_lines);
 
     //%FLAG ANGLES_INC_HYDROGEN
 
@@ -3643,7 +3878,8 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
         const auto k_array = this->floatData("BOND_FORCE_CONSTANT").constData();
         const auto r0_array = this->floatData("BOND_EQUIL_VALUE").constData();
     
-        auto func = [&](const QVector<int> &idxs, const QVector<qint64> &bonds)
+        auto func = [&](const QVector<int> &idxs, const QVector<qint64> &bonds,
+                        bool includes_hydrogen)
         {
             for (int idx : idxs)
             {
@@ -3655,12 +3891,12 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
                 const double k = k_array[param_idx];
                 const double r0 = r0_array[param_idx];
                 
-                params.add( BondID(atom0,atom1), k, r0 );
+                params.add( BondID(atom0,atom1), k, r0, includes_hydrogen );
             }
         };
 
-        func( bonds_inc_h[molidx], this->intData("BONDS_INC_HYDROGEN") );
-        func( bonds_exc_h[molidx], this->intData("BONDS_WITHOUT_HYDROGEN") );
+        func( bonds_inc_h[molidx], this->intData("BONDS_INC_HYDROGEN"), true );
+        func( bonds_exc_h[molidx], this->intData("BONDS_WITHOUT_HYDROGEN"), false );
         
         return params;
     };
@@ -3673,7 +3909,8 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
         const auto k_array = this->floatData("ANGLE_FORCE_CONSTANT").constData();
         const auto t0_array = this->floatData("ANGLE_EQUIL_VALUE").constData();
         
-        auto func = [&](const QVector<int> &idxs, const QVector<qint64> &angles)
+        auto func = [&](const QVector<int> &idxs, const QVector<qint64> &angles,
+                        bool includes_hydrogen)
         {
             for (int idx : idxs)
             {
@@ -3686,12 +3923,12 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
                 const double k = k_array[param_idx];
                 const double t0 = t0_array[param_idx];
                 
-                params.add( AngleID(atom0,atom1,atom2), k, t0 );
+                params.add( AngleID(atom0,atom1,atom2), k, t0, includes_hydrogen );
             }
         };
 
-        func( angs_inc_h[molidx], this->intData("ANGLES_INC_HYDROGEN") );
-        func( angs_exc_h[molidx], this->intData("ANGLES_WITHOUT_HYDROGEN") );
+        func( angs_inc_h[molidx], this->intData("ANGLES_INC_HYDROGEN"), true );
+        func( angs_exc_h[molidx], this->intData("ANGLES_WITHOUT_HYDROGEN"), false );
 
         return params;
     };
@@ -3708,7 +3945,8 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
 
         AmberParams params(molinfo);
 
-        auto func = [&](const QVector<int> &idxs, const QVector<qint64> &dihedrals)
+        auto func = [&](const QVector<int> &idxs, const QVector<qint64> &dihedrals,
+                        bool includes_hydrogen)
         {
             for (int idx : idxs)
             {
@@ -3728,11 +3966,13 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
 
                 if (improper)
                 {
-                    params.add(ImproperID(atom0,atom1,atom2,atom3), k, per, phase);
+                    params.add(ImproperID(atom0,atom1,atom2,atom3), k, per, phase,
+                               includes_hydrogen);
                 }
                 else
                 {
-                    params.add(DihedralID(atom0,atom1,atom2,atom3), k, per, phase);
+                    params.add(DihedralID(atom0,atom1,atom2,atom3), k, per, phase,
+                               includes_hydrogen);
 
                     if (not ignored)
                     {
@@ -3775,8 +4015,8 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
             }
         };
 
-        func( dihs_inc_h[molidx], this->intData("DIHEDRALS_INC_HYDROGEN") );
-        func( dihs_exc_h[molidx], this->intData("DIHEDRALS_WITHOUT_HYDROGEN") );
+        func( dihs_inc_h[molidx], this->intData("DIHEDRALS_INC_HYDROGEN"), true );
+        func( dihs_exc_h[molidx], this->intData("DIHEDRALS_WITHOUT_HYDROGEN"), false );
 
         return params;
     };
