@@ -2364,6 +2364,37 @@ QVector< QVector<qint64> > getExcludedAtoms(const AmberParams &params, int start
     return excl;
 }
 
+namespace detail
+{
+    /** Internal class that is used to help sort the bond arrays */
+    struct Idx3
+    {
+    public:
+        qint64 a, b, c;
+        
+        bool operator<(const Idx3 &other) const
+        {
+            if (a < other.a)
+            {
+                return true;
+            }
+            else if (a == other.a)
+            {
+                if (b < other.b)
+                {
+                    return true;
+                }
+                else
+                {
+                    return c < other.c;
+                }
+            }
+            else
+                return false;
+        }
+    };
+}
+
 /** Internal function used to get the bond information from the passed molecule */
 std::tuple< QVector<qint64>, QVector<qint64>, QHash<AmberBond,qint64> >
 getBondData(const AmberParams &params, int start_idx)
@@ -2389,9 +2420,6 @@ getBondData(const AmberParams &params, int start_idx)
             idx = param_to_idx.count();
         }
         
-        //get the idxs of this bond
-        //
-        
         //is the bond marked as including hydrogen?
         if (it.value().second)
         {
@@ -2408,6 +2436,16 @@ getBondData(const AmberParams &params, int start_idx)
             bonds_exc_h.append( idx );
         }
     }
+    
+    //now sort the arrays so that the order is the same every time this
+    //molecule is written to a file
+    ::detail::Idx3 *start_it = reinterpret_cast<::detail::Idx3*>(bonds_inc_h.data());
+    ::detail::Idx3 *end_it = start_it + (bonds_inc_h.count()/3);
+    qSort(start_it, end_it);
+
+    start_it = reinterpret_cast<::detail::Idx3*>(bonds_exc_h.data());
+    end_it = start_it + (bonds_exc_h.count()/3);
+    qSort(start_it, end_it);
     
     return std::make_tuple(bonds_inc_h, bonds_exc_h, param_to_idx);
 }
