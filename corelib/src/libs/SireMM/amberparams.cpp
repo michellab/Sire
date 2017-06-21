@@ -116,6 +116,24 @@ bool AmberBond::operator!=(const AmberBond &other) const
     return not operator==(other);
 }
 
+/** Comparison operator */
+bool AmberBond::operator<=(const AmberBond &other) const
+{
+    return (*this == other) or (*this < other);
+}
+
+/** Comparison operator */
+bool AmberBond::operator>(const AmberBond &other) const
+{
+    return not (*this <= other);
+}
+
+/** Comparison operator */
+bool AmberBond::operator>=(const AmberBond &other) const
+{
+    return not (*this < other);
+}
+
 /** Return the energy evaluated from this bond for the passed bond length */
 double AmberBond::energy(double r) const
 {
@@ -190,6 +208,24 @@ bool AmberAngle::operator!=(const AmberAngle &other) const
     return not operator==(other);
 }
 
+/** Comparison operator */
+bool AmberAngle::operator<=(const AmberAngle &other) const
+{
+    return (*this == other) or (*this < other);
+}
+
+/** Comparison operator */
+bool AmberAngle::operator>(const AmberAngle &other) const
+{
+    return not (*this <= other);
+}
+
+/** Comparison operator */
+bool AmberAngle::operator>=(const AmberAngle &other) const
+{
+    return not (*this < other);
+}
+
 double AmberAngle::energy(double theta) const
 {
     return _k * SireMaths::pow_2(theta - _theta0);
@@ -261,6 +297,24 @@ bool AmberDihPart::operator==(const AmberDihPart &other) const
 bool AmberDihPart::operator!=(const AmberDihPart &other) const
 {
     return not operator==(other);
+}
+
+/** Comparison operator */
+bool AmberDihPart::operator<=(const AmberDihPart &other) const
+{
+    return (*this == other) or (*this < other);
+}
+
+/** Comparison operator */
+bool AmberDihPart::operator>(const AmberDihPart &other) const
+{
+    return not (*this <= other);
+}
+
+/** Comparison operator */
+bool AmberDihPart::operator>=(const AmberDihPart &other) const
+{
+    return not (*this < other);
 }
 
 double AmberDihPart::energy(double phi) const

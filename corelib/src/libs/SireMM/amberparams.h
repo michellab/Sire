@@ -144,6 +144,12 @@ public:
     bool operator==(const AmberBond &other) const;
     bool operator!=(const AmberBond &other) const;
     
+    bool operator<(const AmberBond &other) const;
+    bool operator<=(const AmberBond &other) const;
+    
+    bool operator>(const AmberBond &other) const;
+    bool operator>=(const AmberBond &other) const;
+    
     double energy(double r) const;
     
     QString toString() const;
@@ -180,6 +186,12 @@ public:
     
     bool operator==(const AmberAngle &other) const;
     bool operator!=(const AmberAngle &other) const;
+    
+    bool operator<(const AmberAngle &other) const;
+    bool operator<=(const AmberAngle &other) const;
+    
+    bool operator>(const AmberAngle &other) const;
+    bool operator>=(const AmberAngle &other) const;
     
     double energy(double theta) const;
     
@@ -218,6 +230,12 @@ public:
     
     bool operator==(const AmberDihPart &other) const;
     bool operator!=(const AmberDihPart &other) const;
+    
+    bool operator<(const AmberDihPart &other) const;
+    bool operator<=(const AmberDihPart &other) const;
+    
+    bool operator>(const AmberDihPart &other) const;
+    bool operator>=(const AmberDihPart &other) const;
     
     double energy(double phi) const;
     
@@ -476,6 +494,21 @@ inline uint qHash(const AmberBond &param)
     return param.hash();
 }
 
+/** Comparison operator */
+inline bool AmberBond::operator<(const AmberBond &other) const
+{
+    if (_k < other._k)
+    {
+        return true;
+    }
+    else if (_k == other._k)
+    {
+        return _r0 < other._r0;
+    }
+    else
+        return false;
+}
+
 /** Return the force constant in kcal mol-1 radian-2 */
 inline double AmberAngle::k() const
 {
@@ -498,6 +531,21 @@ inline uint AmberAngle::hash() const
 inline uint qHash(const AmberAngle &param)
 {
     return param.hash();
+}
+
+/** Comparison operator */
+inline bool AmberAngle::operator<(const AmberAngle &other) const
+{
+    if (_k < other._k)
+    {
+        return true;
+    }
+    else if (_k == other._k)
+    {
+        return _theta0 < other._theta0;
+    }
+    else
+        return false;
 }
 
 /** Return the force constant, in kcal mol-1 */
@@ -541,6 +589,30 @@ inline uint AmberDihedral::hash() const
     }
 
     return h;
+}
+
+/** Comparison operator */
+inline bool AmberDihPart::operator<(const AmberDihPart &other) const
+{
+    if (_k < other._k)
+    {
+        return true;
+    }
+    else if (_k == other._k)
+    {
+        if (_periodicity < other._periodicity)
+        {
+            return true;
+        }
+        else if (_periodicity == other._periodicity)
+        {
+            return _phase < other._phase;
+        }
+        else
+            return false;
+    }
+    else
+        return false;
 }
 
 /** Return a hash of this bond */

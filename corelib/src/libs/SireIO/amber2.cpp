@@ -2374,6 +2374,9 @@ getBondData(const AmberParams &params, int start_idx)
     const auto info = params.info();
     const auto bonds = params.bonds();
 
+    bonds_inc_h.reserve( 3 * bonds.count() );
+    bonds_exc_h.reserve( 3 * bonds.count() );
+
     for (auto it=bonds.constBegin(); it != bonds.constEnd(); ++it)
     {
         //have we seen this bond parameter before?
@@ -2386,17 +2389,22 @@ getBondData(const AmberParams &params, int start_idx)
             idx = param_to_idx.count();
         }
         
+        //get the idxs of this bond
+        //
+        
         //is the bond marked as including hydrogen?
         if (it.value().second)
         {
-            bonds_inc_h.append( info.atomIdx(it.key().atom0()).value() + start_idx + 1 );
-            bonds_inc_h.append( info.atomIdx(it.key().atom1()).value() + start_idx + 1 );
+            //The true atom number equals the absolute value of the number
+            //divided by three, plus one (plus one as amber is 1-indexed).
+            bonds_inc_h.append( 3 * (info.atomIdx(it.key().atom0()).value() + start_idx) );
+            bonds_inc_h.append( 3 * (info.atomIdx(it.key().atom1()).value() + start_idx) );
             bonds_inc_h.append( idx );
         }
         else
         {
-            bonds_exc_h.append( info.atomIdx(it.key().atom0()).value() + start_idx + 1 );
-            bonds_exc_h.append( info.atomIdx(it.key().atom1()).value() + start_idx + 1 );
+            bonds_exc_h.append( 3 * (info.atomIdx(it.key().atom0()).value() + start_idx) );
+            bonds_exc_h.append( 3 * (info.atomIdx(it.key().atom1()).value() + start_idx) );
             bonds_exc_h.append( idx );
         }
     }
@@ -2997,10 +3005,44 @@ QStringList toLines(const QVector<AmberParams> &params,
         //we now need to go through the bonds and remove duplicated bond parameters
         QVector<double> k_data, r0_data;
         QHash<AmberBond,int> all_bond_to_idx;
-
-        k_data.reserve(nparams);
-        r0_data.reserve(nparams);
         all_bond_to_idx.reserve(nparams);
+        
+        //combine all parameters into a single set, with a unique index
+        for (int i=0; i<params.count(); ++i)
+        {
+            const auto bond_to_idx = std::get<2>(all_bond_data[i]);
+            
+            //first, find all unique bonds
+            for (auto it = bond_to_idx.constBegin();
+                 it != bond_to_idx.constEnd();
+                 ++it)
+            {
+                if (not all_bond_to_idx.contains(it.key()))
+                {
+                    all_bond_to_idx.insert(it.key(), -1);
+                }
+            }
+        }
+        
+        //now, sort the list so that there is a consistent order of
+        //parameters every time this output file is written
+        {
+            auto all_bonds = all_bond_to_idx.keys();
+            qSort(all_bonds);
+            
+            k_data = QVector<double>(all_bonds.count());
+            r0_data = QVector<double>(all_bonds.count());
+            
+            int i=0;
+            for (auto bond : all_bonds)
+            {
+                k_data[i] = bond.k();
+                r0_data[i] = bond.r0();
+            
+                all_bond_to_idx[bond] = i+1;
+                i += 1;
+            }
+        }
         
         for (int i=0; i<params.count(); ++i)
         {
@@ -3016,18 +3058,7 @@ QStringList toLines(const QVector<AmberParams> &params,
                  it != bond_to_idx.constEnd();
                  ++it)
             {
-                qint64 idx = all_bond_to_idx.value(it.key(),-1);
-                
-                if (idx == -1)
-                {
-                    all_bond_to_idx.insert(it.key(), all_bond_to_idx.count()+1);
-                    idx = all_bond_to_idx.count();
-                    
-                    k_data.append( it.key().k() );
-                    r0_data.append( it.key().r0() );
-                }
-
-                idx_to_idx.insert(it.value(),all_bond_to_idx.count());
+                idx_to_idx.insert(it.value(), all_bond_to_idx.value(it.key(),-1));
             }
             
             //now run through the bonds updating their local indicies to
@@ -3035,32 +3066,18 @@ QStringList toLines(const QVector<AmberParams> &params,
             const auto bonds_inc_h = std::get<0>(all_bond_data[i]);
             const auto bonds_exc_h = std::get<1>(all_bond_data[i]);
             
-            for (int j=0; j<bonds_inc_h.count(); ++i)
+            for (int j=0; j<bonds_inc_h.count(); j+=3)
             {
-                if (i % 3 == 0)
-                {
-                    //map the parameter index from local to global
-                    all_bonds_inc_h.append(idx_to_idx.value(bonds_inc_h[j]));
-                }
-                else
-                {
-                    //these are the indicies of the atoms
-                    all_bonds_inc_h.append(bonds_inc_h[j]);
-                }
+                all_bonds_inc_h.append(bonds_inc_h[j]);
+                all_bonds_inc_h.append(bonds_inc_h[j+1]);
+                all_bonds_inc_h.append(idx_to_idx.value(bonds_inc_h[j+2]));
             }
 
-            for (int j=0; j<bonds_exc_h.count(); ++i)
+            for (int j=0; j<bonds_exc_h.count(); j+=3)
             {
-                if (i % 3 == 0)
-                {
-                    //map the parameter index from local to global
-                    all_bonds_exc_h.append(idx_to_idx.value(bonds_exc_h[j]));
-                }
-                else
-                {
-                    //these are the indicies of the atoms
-                    all_bonds_exc_h.append(bonds_exc_h[j]);
-                }
+                all_bonds_exc_h.append(bonds_exc_h[j]);
+                all_bonds_exc_h.append(bonds_exc_h[j+1]);
+                all_bonds_exc_h.append(idx_to_idx.value(bonds_exc_h[j+2]));
             }
         }
         
