@@ -74,6 +74,17 @@ void register_AmberDihedral_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberDihedral::hash
+        
+            typedef ::uint ( ::SireMM::AmberDihedral::*hash_function_type)(  ) const;
+            hash_function_type hash_function_value( &::SireMM::AmberDihedral::hash );
+            
+            AmberDihedral_exposer.def( 
+                "hash"
+                , hash_function_value
+                , "" );
+        
+        }
         AmberDihedral_exposer.def( bp::self != bp::self );
         AmberDihedral_exposer.def( bp::self + bp::other< SireMM::AmberDihPart >() );
         { //::SireMM::AmberDihedral::operator=
@@ -135,6 +146,7 @@ void register_AmberDihedral_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AmberDihedral_exposer.def( "__str__", &__str__< ::SireMM::AmberDihedral > );
         AmberDihedral_exposer.def( "__repr__", &__str__< ::SireMM::AmberDihedral > );
+        AmberDihedral_exposer.def( "__hash__", &::SireMM::AmberDihedral::hash );
     }
 
 }

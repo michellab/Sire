@@ -72,6 +72,17 @@ void register_AmberDihPart_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberDihPart::hash
+        
+            typedef ::uint ( ::SireMM::AmberDihPart::*hash_function_type)(  ) const;
+            hash_function_type hash_function_value( &::SireMM::AmberDihPart::hash );
+            
+            AmberDihPart_exposer.def( 
+                "hash"
+                , hash_function_value
+                , "" );
+        
+        }
         { //::SireMM::AmberDihPart::k
         
             typedef double ( ::SireMM::AmberDihPart::*k_function_type)(  ) const;
@@ -84,6 +95,8 @@ void register_AmberDihPart_class(){
         
         }
         AmberDihPart_exposer.def( bp::self != bp::self );
+        AmberDihPart_exposer.def( bp::self < bp::self );
+        AmberDihPart_exposer.def( bp::self <= bp::self );
         { //::SireMM::AmberDihPart::operator=
         
             typedef ::SireMM::AmberDihPart & ( ::SireMM::AmberDihPart::*assign_function_type)( ::SireMM::AmberDihPart const & ) ;
@@ -98,6 +111,8 @@ void register_AmberDihPart_class(){
         
         }
         AmberDihPart_exposer.def( bp::self == bp::self );
+        AmberDihPart_exposer.def( bp::self > bp::self );
+        AmberDihPart_exposer.def( bp::self >= bp::self );
         { //::SireMM::AmberDihPart::operator[]
         
             typedef double ( ::SireMM::AmberDihPart::*__getitem___function_type)( int ) const;
@@ -152,6 +167,7 @@ void register_AmberDihPart_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AmberDihPart_exposer.def( "__str__", &__str__< ::SireMM::AmberDihPart > );
         AmberDihPart_exposer.def( "__repr__", &__str__< ::SireMM::AmberDihPart > );
+        AmberDihPart_exposer.def( "__hash__", &::SireMM::AmberDihPart::hash );
     }
 
 }

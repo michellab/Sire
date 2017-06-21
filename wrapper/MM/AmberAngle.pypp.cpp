@@ -73,6 +73,17 @@ void register_AmberAngle_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberAngle::hash
+        
+            typedef ::uint ( ::SireMM::AmberAngle::*hash_function_type)(  ) const;
+            hash_function_type hash_function_value( &::SireMM::AmberAngle::hash );
+            
+            AmberAngle_exposer.def( 
+                "hash"
+                , hash_function_value
+                , "" );
+        
+        }
         { //::SireMM::AmberAngle::k
         
             typedef double ( ::SireMM::AmberAngle::*k_function_type)(  ) const;
@@ -85,6 +96,8 @@ void register_AmberAngle_class(){
         
         }
         AmberAngle_exposer.def( bp::self != bp::self );
+        AmberAngle_exposer.def( bp::self < bp::self );
+        AmberAngle_exposer.def( bp::self <= bp::self );
         { //::SireMM::AmberAngle::operator=
         
             typedef ::SireMM::AmberAngle & ( ::SireMM::AmberAngle::*assign_function_type)( ::SireMM::AmberAngle const & ) ;
@@ -99,6 +112,8 @@ void register_AmberAngle_class(){
         
         }
         AmberAngle_exposer.def( bp::self == bp::self );
+        AmberAngle_exposer.def( bp::self > bp::self );
+        AmberAngle_exposer.def( bp::self >= bp::self );
         { //::SireMM::AmberAngle::operator[]
         
             typedef double ( ::SireMM::AmberAngle::*__getitem___function_type)( int ) const;
@@ -154,6 +169,7 @@ void register_AmberAngle_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AmberAngle_exposer.def( "__str__", &__str__< ::SireMM::AmberAngle > );
         AmberAngle_exposer.def( "__repr__", &__str__< ::SireMM::AmberAngle > );
+        AmberAngle_exposer.def( "__hash__", &::SireMM::AmberAngle::hash );
     }
 
 }

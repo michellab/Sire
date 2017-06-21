@@ -77,49 +77,49 @@ void register_AmberParams_class(){
         }
         { //::SireMM::AmberParams::add
         
-            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::BondID const &,double,double ) ;
+            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::BondID const &,double,double,bool ) ;
             add_function_type add_function_value( &::SireMM::AmberParams::add );
             
             AmberParams_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("bond"), bp::arg("k"), bp::arg("r0") )
+                , ( bp::arg("bond"), bp::arg("k"), bp::arg("r0"), bp::arg("includes_hydrogen") )
                 , "" );
         
         }
         { //::SireMM::AmberParams::add
         
-            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::AngleID const &,double,double ) ;
+            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::AngleID const &,double,double,bool ) ;
             add_function_type add_function_value( &::SireMM::AmberParams::add );
             
             AmberParams_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("angle"), bp::arg("k"), bp::arg("theta0") )
+                , ( bp::arg("angle"), bp::arg("k"), bp::arg("theta0"), bp::arg("includes_hydrogen") )
                 , "" );
         
         }
         { //::SireMM::AmberParams::add
         
-            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::DihedralID const &,double,double,double ) ;
+            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::DihedralID const &,double,double,double,bool ) ;
             add_function_type add_function_value( &::SireMM::AmberParams::add );
             
             AmberParams_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("dihedral"), bp::arg("k"), bp::arg("periodicity"), bp::arg("phase") )
+                , ( bp::arg("dihedral"), bp::arg("k"), bp::arg("periodicity"), bp::arg("phase"), bp::arg("includes_hydrogen") )
                 , "" );
         
         }
         { //::SireMM::AmberParams::add
         
-            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::ImproperID const &,double,double,double ) ;
+            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::ImproperID const &,double,double,double,bool ) ;
             add_function_type add_function_value( &::SireMM::AmberParams::add );
             
             AmberParams_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("improper"), bp::arg("v"), bp::arg("periodicity"), bp::arg("phase") )
+                , ( bp::arg("improper"), bp::arg("v"), bp::arg("periodicity"), bp::arg("phase"), bp::arg("includes_hydrogen") )
                 , "" );
         
         }
@@ -171,7 +171,7 @@ void register_AmberParams_class(){
         }
         { //::SireMM::AmberParams::angles
         
-            typedef ::QHash< SireMol::AngleID, SireMM::AmberAngle > ( ::SireMM::AmberParams::*angles_function_type)(  ) const;
+            typedef ::QHash< SireMol::AngleID, QPair< SireMM::AmberAngle, bool > > ( ::SireMM::AmberParams::*angles_function_type)(  ) const;
             angles_function_type angles_function_value( &::SireMM::AmberParams::angles );
             
             AmberParams_exposer.def( 
@@ -205,7 +205,7 @@ void register_AmberParams_class(){
         }
         { //::SireMM::AmberParams::bonds
         
-            typedef ::QHash< SireMol::BondID, SireMM::AmberBond > ( ::SireMM::AmberParams::*bonds_function_type)(  ) const;
+            typedef ::QHash< SireMol::BondID, QPair< SireMM::AmberBond, bool > > ( ::SireMM::AmberParams::*bonds_function_type)(  ) const;
             bonds_function_type bonds_function_value( &::SireMM::AmberParams::bonds );
             
             AmberParams_exposer.def( 
@@ -272,7 +272,7 @@ void register_AmberParams_class(){
         }
         { //::SireMM::AmberParams::dihedrals
         
-            typedef ::QHash< SireMol::DihedralID, SireMM::AmberDihedral > ( ::SireMM::AmberParams::*dihedrals_function_type)(  ) const;
+            typedef ::QHash< SireMol::DihedralID, QPair< SireMM::AmberDihedral, bool > > ( ::SireMM::AmberParams::*dihedrals_function_type)(  ) const;
             dihedrals_function_type dihedrals_function_value( &::SireMM::AmberParams::dihedrals );
             
             AmberParams_exposer.def( 
@@ -388,7 +388,7 @@ void register_AmberParams_class(){
         }
         { //::SireMM::AmberParams::impropers
         
-            typedef ::QHash< SireMol::ImproperID, SireMM::AmberDihedral > ( ::SireMM::AmberParams::*impropers_function_type)(  ) const;
+            typedef ::QHash< SireMol::ImproperID, QPair< SireMM::AmberDihedral, bool > > ( ::SireMM::AmberParams::*impropers_function_type)(  ) const;
             impropers_function_type impropers_function_value( &::SireMM::AmberParams::impropers );
             
             AmberParams_exposer.def( 
@@ -560,6 +560,17 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberParams::validate
+        
+            typedef ::QStringList ( ::SireMM::AmberParams::*validate_function_type)(  ) const;
+            validate_function_type validate_function_value( &::SireMM::AmberParams::validate );
+            
+            AmberParams_exposer.def( 
+                "validate"
+                , validate_function_value
                 , "" );
         
         }

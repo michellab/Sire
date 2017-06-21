@@ -73,6 +73,17 @@ void register_AmberBond_class(){
                 , "Return the energy evaluated from this bond for the passed bond length" );
         
         }
+        { //::SireMM::AmberBond::hash
+        
+            typedef ::uint ( ::SireMM::AmberBond::*hash_function_type)(  ) const;
+            hash_function_type hash_function_value( &::SireMM::AmberBond::hash );
+            
+            AmberBond_exposer.def( 
+                "hash"
+                , hash_function_value
+                , "" );
+        
+        }
         { //::SireMM::AmberBond::k
         
             typedef double ( ::SireMM::AmberBond::*k_function_type)(  ) const;
@@ -85,6 +96,8 @@ void register_AmberBond_class(){
         
         }
         AmberBond_exposer.def( bp::self != bp::self );
+        AmberBond_exposer.def( bp::self < bp::self );
+        AmberBond_exposer.def( bp::self <= bp::self );
         { //::SireMM::AmberBond::operator=
         
             typedef ::SireMM::AmberBond & ( ::SireMM::AmberBond::*assign_function_type)( ::SireMM::AmberBond const & ) ;
@@ -99,6 +112,8 @@ void register_AmberBond_class(){
         
         }
         AmberBond_exposer.def( bp::self == bp::self );
+        AmberBond_exposer.def( bp::self > bp::self );
+        AmberBond_exposer.def( bp::self >= bp::self );
         { //::SireMM::AmberBond::operator[]
         
             typedef double ( ::SireMM::AmberBond::*__getitem___function_type)( int ) const;
@@ -154,6 +169,7 @@ void register_AmberBond_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AmberBond_exposer.def( "__str__", &__str__< ::SireMM::AmberBond > );
         AmberBond_exposer.def( "__repr__", &__str__< ::SireMM::AmberBond > );
+        AmberBond_exposer.def( "__hash__", &::SireMM::AmberBond::hash );
     }
 
 }

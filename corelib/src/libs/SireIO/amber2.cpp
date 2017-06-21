@@ -2384,10 +2384,12 @@ namespace detail
                 {
                     return true;
                 }
-                else
+                else if (b == other.b)
                 {
                     return c < other.c;
                 }
+                else
+                    return false;
             }
             else
                 return false;
@@ -2448,6 +2450,109 @@ getBondData(const AmberParams &params, int start_idx)
     qSort(start_it, end_it);
     
     return std::make_tuple(bonds_inc_h, bonds_exc_h, param_to_idx);
+}
+
+namespace detail
+{
+    /** Internal class that is used to help sort the angle arrays */
+    struct Idx4
+    {
+    public:
+        qint64 a, b, c, d;
+        
+        bool operator<(const Idx4 &other) const
+        {
+            if (a < other.a)
+            {
+                return true;
+            }
+            else if (a == other.a)
+            {
+                if (b < other.b)
+                {
+                    return true;
+                }
+                else if (b == other.b)
+                {
+                    if (c < other.c)
+                    {
+                        return true;
+                    }
+                    else if (c == other.c)
+                    {
+                        return d < other.d;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+                return false;
+        }
+    };
+}
+
+/** Internal function used to get the angle information from the passed molecule */
+std::tuple< QVector<qint64>, QVector<qint64>, QHash<AmberAngle,qint64> >
+getAngleData(const AmberParams &params, int start_idx)
+{
+    QHash<AmberAngle,qint64> param_to_idx;
+    QVector<qint64> angs_inc_h, angs_exc_h;
+
+    const auto info = params.info();
+    const auto angles = params.angles();
+
+    angs_inc_h.reserve( 4 * angles.count() );
+    angs_exc_h.reserve( 4 * angles.count() );
+
+    for (auto it=angles.constBegin(); it != angles.constEnd(); ++it)
+    {
+        //have we seen this angle parameter before?
+        qint64 idx = param_to_idx.value(it.value().first, -1);
+        
+        //if not, save this to the database and increase the number of parameters
+        if (idx == -1)
+        {
+            param_to_idx.insert(it.value().first, param_to_idx.count()+1);
+            idx = param_to_idx.count();
+        }
+        
+        //is the angle marked as including hydrogen?
+        if (it.value().second)
+        {
+            //The true atom number equals the absolute value of the number
+            //divided by three, plus one (plus one as amber is 1-indexed).
+            angs_inc_h.append( 3 * (info.atomIdx(it.key().atom0()).value() + start_idx) );
+            angs_inc_h.append( 3 * (info.atomIdx(it.key().atom1()).value() + start_idx) );
+            angs_inc_h.append( 3 * (info.atomIdx(it.key().atom2()).value() + start_idx) );
+            angs_inc_h.append( idx );
+        }
+        else
+        {
+            angs_exc_h.append( 3 * (info.atomIdx(it.key().atom0()).value() + start_idx) );
+            angs_exc_h.append( 3 * (info.atomIdx(it.key().atom1()).value() + start_idx) );
+            angs_exc_h.append( 3 * (info.atomIdx(it.key().atom2()).value() + start_idx) );
+            angs_exc_h.append( idx );
+        }
+    }
+    
+    //now sort the arrays so that the order is the same every time this
+    //molecule is written to a file
+    ::detail::Idx4 *start_it = reinterpret_cast<::detail::Idx4*>(angs_inc_h.data());
+    ::detail::Idx4 *end_it = start_it + (angs_inc_h.count()/4);
+    qSort(start_it, end_it);
+
+    start_it = reinterpret_cast<::detail::Idx4*>(angs_exc_h.data());
+    end_it = start_it + (angs_exc_h.count()/4);
+    qSort(start_it, end_it);
+    
+    return std::make_tuple(angs_inc_h, angs_exc_h, param_to_idx);
 }
 
 /** Internal function that converts the passed list of parameters into a list
@@ -3135,6 +3240,144 @@ QStringList toLines(const QVector<AmberParams> &params,
                                 nbonh, mbona, nbona, numbnd );
     };
 
+    //function used to get all of the angle information
+    auto getAllAngles = [&]()
+    {
+        QVector< std::tuple< QVector<qint64>, QVector<qint64>,
+                             QHash<AmberAngle,qint64> > > all_ang_data(params.count());
+        
+        //get all of the angle information from each molecule
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    all_ang_data[i] = getAngleData(params[i], atom_start_index[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                all_ang_data[i] = getAngleData(params[i], atom_start_index[i]);
+            }
+        }
+        
+        //count up the number of angle parameters to help reserve memory space
+        int nangs_inc_h = 0;
+        int nangs_exc_h = 0;
+        int nparams = 0;
+        for (int i=0; i<params.count(); ++i)
+        {
+            nangs_inc_h += std::get<0>(all_ang_data[i]).count();
+            nangs_exc_h += std::get<1>(all_ang_data[i]).count();
+            nparams += std::get<2>(all_ang_data[i]).count();
+        }
+
+        QVector<qint64> all_angs_inc_h, all_angs_exc_h;
+        all_angs_inc_h.reserve(nangs_inc_h);
+        all_angs_exc_h.reserve(nangs_exc_h);
+        
+        //we now need to go through the angles and remove duplicated angle parameters
+        QVector<double> k_data, t0_data;
+        QHash<AmberAngle,int> all_ang_to_idx;
+        all_ang_to_idx.reserve(nparams);
+        
+        //combine all parameters into a single set, with a unique index
+        for (int i=0; i<params.count(); ++i)
+        {
+            const auto ang_to_idx = std::get<2>(all_ang_data[i]);
+            
+            //first, find all unique angles
+            for (auto it = ang_to_idx.constBegin();
+                 it != ang_to_idx.constEnd();
+                 ++it)
+            {
+                if (not all_ang_to_idx.contains(it.key()))
+                {
+                    all_ang_to_idx.insert(it.key(), -1);
+                }
+            }
+        }
+        
+        //now, sort the list so that there is a consistent order of
+        //parameters every time this output file is written
+        {
+            auto all_angs = all_ang_to_idx.keys();
+            qSort(all_angs);
+            
+            k_data = QVector<double>(all_angs.count());
+            t0_data = QVector<double>(all_angs.count());
+            
+            int i=0;
+            for (auto ang : all_angs)
+            {
+                k_data[i] = ang.k();
+                t0_data[i] = ang.theta0();
+            
+                all_ang_to_idx[ang] = i+1;
+                i += 1;
+            }
+        }
+        
+        for (int i=0; i<params.count(); ++i)
+        {
+            //create a hash to map local parameter indicies to global parameter indicies
+            QHash<qint64,qint64> idx_to_idx;
+
+            //get all of the angle parameters
+            const auto ang_to_idx = std::get<2>(all_ang_data[i]);
+        
+            //for each one, get the global parameter index, save the parameters to
+            //the k and t0 arrays, and update the mapping from local to global indicies
+            for (auto it = ang_to_idx.constBegin();
+                 it != ang_to_idx.constEnd();
+                 ++it)
+            {
+                idx_to_idx.insert(it.value(), all_ang_to_idx.value(it.key(),-1));
+            }
+            
+            //now run through the angles updating their local indicies to
+            //global indicies
+            const auto angs_inc_h = std::get<0>(all_ang_data[i]);
+            const auto angs_exc_h = std::get<1>(all_ang_data[i]);
+            
+            for (int j=0; j<angs_inc_h.count(); j+=4)
+            {
+                all_angs_inc_h.append(angs_inc_h[j]);
+                all_angs_inc_h.append(angs_inc_h[j+1]);
+                all_angs_inc_h.append(angs_inc_h[j+2]);
+                all_angs_inc_h.append(idx_to_idx.value(angs_inc_h[j+3]));
+            }
+
+            for (int j=0; j<angs_exc_h.count(); j+=4)
+            {
+                all_angs_exc_h.append(angs_exc_h[j]);
+                all_angs_exc_h.append(angs_exc_h[j+1]);
+                all_angs_exc_h.append(angs_exc_h[j+2]);
+                all_angs_exc_h.append(idx_to_idx.value(angs_exc_h[j+3]));
+            }
+        }
+        
+        int nangh = all_angs_inc_h.count() / 4; // number of angles containing hydrogen
+        int manga = all_angs_exc_h.count() / 4; // number of angles not containing hydrogen
+        int nanga = manga; // manga + number of constraint angles
+        int numang = k_data.count(); // number of unique angle types
+        
+        return std::make_tuple( writeFloatData(k_data,
+                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                writeFloatData(t0_data,
+                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                writeIntData(all_angs_inc_h,
+                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                writeIntData(all_angs_exc_h,
+                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                nangh, manga, nanga, numang );
+    };
+
     QStringList lines;
     
     QStringList name_lines, charge_lines, number_lines, mass_lines, ambtyp_lines;
@@ -3142,11 +3385,13 @@ QStringList toLines(const QVector<AmberParams> &params,
     std::tuple<QStringList,QStringList,int> excl_lines;
     std::tuple<QStringList,QStringList,int,int> res_lines;
     std::tuple<QStringList,QStringList,QStringList,QStringList,int,int,int,int> bond_lines;
+    std::tuple<QStringList,QStringList,QStringList,QStringList,int,int,int,int> ang_lines;
     
     const QVector< std::function<void()> > info_functions =
                           {
                             [&](){ excl_lines = getAllExcludedAtoms(); },
                             [&](){ bond_lines = getAllBonds(); },
+                            [&](){ ang_lines = getAllAngles(); },
                             [&](){ name_lines = getAllAtomNames(); },
                             [&](){ charge_lines = getAllAtomCharges(); },
                             [&](){ number_lines = getAllAtomNumbers(); },
@@ -3188,6 +3433,12 @@ QStringList toLines(const QVector<AmberParams> &params,
     pointers[12] = std::get<6>(bond_lines);     // NBONA
     pointers[15] = std::get<7>(bond_lines);     // NUMBND
     
+    //save the number of angles to 'pointers'
+    pointers[4] = std::get<4>(ang_lines);       // NTHETH
+    pointers[5] = std::get<5>(ang_lines);       // MTHETA
+    pointers[13] = std::get<6>(ang_lines);      // NTHETA
+    pointers[16] = std::get<7>(ang_lines);      // NUMANG
+    
     lines.append("%FLAG POINTERS");
     lines += writeIntData(pointers, AmberFormat( AmberParm::INTEGER, 10, 8 ) );
 
@@ -3224,9 +3475,11 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG BOND_EQUIL_VALUE");
     lines += std::get<1>(bond_lines);
 
-    //%FLAG ANGLE_FORCE_CONSTANT
+    lines.append("%FLAG ANGLE_FORCE_CONSTANT");
+    lines += std::get<0>(ang_lines);
 
-    //%FLAG ANGLE_EQUIL_VALUE
+    lines.append("%FLAG ANGLE_EQUIL_VALUE");
+    lines += std::get<1>(ang_lines);
 
     //%FLAG DIHEDRAL_FORCE_CONSTANT
 
@@ -3250,9 +3503,11 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG BONDS_WITHOUT_HYDROGEN");
     lines += std::get<3>(bond_lines);
 
-    //%FLAG ANGLES_INC_HYDROGEN
+    lines.append("%FLAG ANGLES_INC_HYDROGEN");
+    lines += std::get<2>(ang_lines);
 
-    //%FLAG ANGLES_WITHOUT_HYDROGEN
+    lines.append("%FLAG ANGLES_WITHOUT_HYDROGEN");
+    lines += std::get<3>(ang_lines);
 
     //%FLAG DIHEDRALS_INC_HYDROGEN
 
