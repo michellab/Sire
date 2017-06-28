@@ -66,6 +66,7 @@ class AmberAngle;
 class AmberDihPart;
 class AmberDihedral;
 class AmberNB14;
+class AmberNBDihPart;
 class TwoAtomFunctions;
 class ThreeAtomFunctions;
 class FourAtomFunctions;
@@ -90,6 +91,9 @@ QDataStream& operator>>(QDataStream&, SireMM::AmberDihedral&);
 
 QDataStream& operator<<(QDataStream&, const SireMM::AmberNB14&);
 QDataStream& operator>>(QDataStream&, SireMM::AmberNB14&);
+
+QDataStream& operator<<(QDataStream&, const SireMM::AmberNBDihPart&);
+QDataStream& operator>>(QDataStream&, SireMM::AmberNBDihPart&);
 
 namespace SireMol
 {
@@ -134,6 +138,9 @@ public:
     
     ~AmberBond();
     
+    static const char* typeName();
+    const char* what() const;
+    
     double k() const;
     double r0() const;
     
@@ -176,6 +183,9 @@ public:
     
     ~AmberAngle();
     
+    static const char* typeName();
+    const char* what() const;
+    
     double k() const;
     
     double theta0() const;
@@ -217,6 +227,9 @@ public:
     AmberDihPart(const AmberDihPart &other);
     
     ~AmberDihPart();
+    
+    static const char* typeName();
+    const char* what() const;
     
     double k() const;
     
@@ -264,6 +277,9 @@ public:
     
     ~AmberDihedral();
     
+    static const char* typeName();
+    const char* what() const;
+    
     AmberDihedral& operator+=(const AmberDihPart &part);
     AmberDihedral operator+(const AmberDihPart &part) const;
     
@@ -273,6 +289,8 @@ public:
     bool operator!=(const AmberDihedral &other) const;
     
     const AmberDihPart& operator[](int i) const;
+    
+    QVector<AmberDihPart> terms() const;
     
     double energy(double phi) const;
     
@@ -299,6 +317,9 @@ public:
     
     ~AmberNB14();
     
+    static const char* typeName();
+    const char* what() const;
+    
     double cscl() const;
     
     double ljscl() const;
@@ -310,12 +331,62 @@ public:
     bool operator==(const AmberNB14 &other) const;
     bool operator!=(const AmberNB14 &other) const;
     
+    bool operator<(const AmberNB14 &other) const;
+    bool operator<=(const AmberNB14 &other) const;
+    
+    bool operator>(const AmberNB14 &other) const;
+    bool operator>=(const AmberNB14 &other) const;
+    
     QString toString() const;
     
     SireMM::CLJScaleFactor toScaleFactor() const;
 
 private:
     double _cscl, _ljscl;
+};
+
+/** This simple class holds a combination of the AmberDihPart with AmberNB14,
+    as these are combined together in some amber file types */
+class SIREMM_EXPORT AmberNBDihPart
+{
+public:
+    friend QDataStream& ::operator<<(QDataStream&, const AmberNBDihPart&);
+    friend QDataStream& ::operator>>(QDataStream&, AmberNBDihPart&);
+
+    AmberNBDihPart();
+    AmberNBDihPart(const AmberDihPart &dih, const AmberNB14 &nb14);
+    
+    AmberNBDihPart(const AmberNBDihPart &other);
+    
+    ~AmberNBDihPart();
+    
+    static const char* typeName();
+    const char* what() const;
+
+    const AmberDihPart& parameter() const;
+    const AmberNB14& scl() const;
+    
+    AmberNBDihPart& operator=(const AmberNBDihPart &other);
+    
+    bool operator==(const AmberNBDihPart &other) const;
+    bool operator!=(const AmberNBDihPart &other) const;
+    
+    bool operator<(const AmberNBDihPart &other) const;
+    bool operator<=(const AmberNBDihPart &other) const;
+    
+    bool operator>(const AmberNBDihPart &other) const;
+    bool operator>=(const AmberNBDihPart &other) const;
+    
+    QString toString() const;
+
+    uint hash() const;
+
+private:
+    /** The dihedral parameters */
+    AmberDihPart dih;
+    
+    /** The 14 scale factor */
+    AmberNB14 nbscl;
 };
 
 /** This class stores AMBER bonded force field parameters for 
@@ -615,6 +686,23 @@ inline bool AmberDihPart::operator<(const AmberDihPart &other) const
         return false;
 }
 
+/** Return a hash of the AmberNBDihPart */
+inline uint AmberNBDihPart::hash() const
+{
+    return dih.hash();
+}
+
+inline uint qHash(const AmberNBDihPart &param)
+{
+    return param.hash();
+}
+
+/** Return an array of all of the terms in the dihedral */
+inline QVector<AmberDihPart> AmberDihedral::terms() const
+{
+    return _parts;
+}
+
 /** Return a hash of this bond */
 inline uint qHash(const AmberDihedral &param)
 {
@@ -663,11 +751,29 @@ inline QHash<BondID,AmberNB14> AmberParams::nb14s() const
     return amber_nb14s;
 }
 
+/** Return the parameter part of the class */
+inline const AmberDihPart& AmberNBDihPart::parameter() const
+{
+    return dih;
+}
+
+/** Return the NB14 scale factor */
+inline const AmberNB14& AmberNBDihPart::scl() const
+{
+    return nbscl;
+}
+
 #endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }
 
 Q_DECLARE_METATYPE( SireMM::AmberParams )
+Q_DECLARE_METATYPE( SireMM::AmberBond )
+Q_DECLARE_METATYPE( SireMM::AmberAngle )
+Q_DECLARE_METATYPE( SireMM::AmberDihPart )
+Q_DECLARE_METATYPE( SireMM::AmberDihedral )
+Q_DECLARE_METATYPE( SireMM::AmberNB14 )
+Q_DECLARE_METATYPE( SireMM::AmberNBDihPart )
 
 SIRE_EXPOSE_CLASS( SireMM::AmberParams )
 SIRE_EXPOSE_CLASS( SireMM::AmberBond )

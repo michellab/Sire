@@ -2555,6 +2555,240 @@ getAngleData(const AmberParams &params, int start_idx)
     return std::make_tuple(angs_inc_h, angs_exc_h, param_to_idx);
 }
 
+namespace detail
+{
+    /** Internal class that is used to help sort the angle arrays */
+    struct Idx5
+    {
+    public:
+        qint64 a, b, c, d, e;
+        
+        bool operator<(const Idx5 &other) const
+        {
+            if (a < other.a)
+            {
+                return true;
+            }
+            else if (a == other.a)
+            {
+                if (b < other.b)
+                {
+                    return true;
+                }
+                else if (b == other.b)
+                {
+                    if (c < other.c)
+                    {
+                        return true;
+                    }
+                    else if (c == other.c)
+                    {
+                        if (d < other.d)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return e < other.e;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+                return false;
+        }
+    };
+}
+
+/** Internal function used to get the dihedral information from the passed molecule */
+std::tuple< QVector<qint64>, QVector<qint64>, QHash<AmberNBDihPart,qint64> >
+getDihedralData(const AmberParams &params, int start_idx)
+{
+    QHash<AmberNBDihPart,qint64> param_to_idx;
+    QVector<qint64> dihs_inc_h, dihs_exc_h;
+
+    const auto info = params.info();
+    const auto dihedrals = params.dihedrals();
+    const auto impropers = params.impropers();
+
+    dihs_inc_h.reserve( 10 * (dihedrals.count()+impropers.count()) );
+    dihs_exc_h.reserve( 10 * (dihedrals.count()+impropers.count()) );
+
+    QSet<BondID> seen_dihedrals;
+    seen_dihedrals.reserve(dihedrals.count());
+
+    for (auto it=dihedrals.constBegin(); it != dihedrals.constEnd(); ++it)
+    {
+        //get the NB14 scaling factor for this dihedral. This should be set
+        //for only the first dihedral found that has this pair, otherwise
+        //we would risk Amber double-counting this parameter
+        const BondID nb14pair( info.atomIdx(it.key().atom0()), info.atomIdx(it.key().atom3()) );
+        const AmberNB14 nb14 = params.getNB14( BondID(it.key().atom0(),it.key().atom3()) );
+        
+        bool new_dihedral = false;
+        
+        if (not seen_dihedrals.contains(nb14pair))
+        {
+            new_dihedral = true;
+            seen_dihedrals.insert(nb14pair);
+        }
+    
+        //extract the individual dihedral terms from the dihedral,
+        //combine them with the NB14 scaling factors, and then
+        //create a database of them and get their ID
+        QList<qint64> idxs;
+        QList<qint64> ignored;
+        
+        bool is_first = true;
+        
+        for (const auto term : it.value().first.terms())
+        {
+            AmberNBDihPart nbterm(term, nb14);
+            
+            //only the first dihedral in the set gets to set the 14 scale factors
+            if (new_dihedral and is_first)
+            {
+                is_first = false;
+
+                if (nb14.cscl() == 0 and nb14.ljscl() == 0)
+                {
+                    ignored.append(-1);
+                }
+                else
+                {
+                    //this is a new, non-zero coulomb and LJ scale,
+                    //so this interaction should not be ignored
+                    ignored.append(1);
+                }
+            }
+            else
+            {
+                ignored.append(-1);
+            }
+            
+            qint64 idx = param_to_idx.value(nbterm, -1);
+            
+            if (idx == -1)
+            {
+                param_to_idx.insert(nbterm, param_to_idx.count()+1);
+                idx = param_to_idx.count();
+            }
+            
+            idxs.append(idx);
+        }
+        
+        //The true atom number equals the absolute value of the number
+        //divided by three, plus one (plus one as amber is 1-indexed).
+        qint64 atom0 = 3 * (info.atomIdx(it.key().atom0()).value() + start_idx);
+        qint64 atom1 = 3 * (info.atomIdx(it.key().atom1()).value() + start_idx);
+        qint64 atom2 = 3 * (info.atomIdx(it.key().atom2()).value() + start_idx);
+        qint64 atom3 = 3 * (info.atomIdx(it.key().atom3()).value() + start_idx);
+        
+        //is the dihedral marked as including hydrogen?
+        if (it.value().second)
+        {
+            for (int i=0; i<idxs.count(); ++i)
+            {
+                dihs_inc_h.append( atom0 );
+                dihs_inc_h.append( atom1 );
+                dihs_inc_h.append( ignored[i] * atom2 );
+                dihs_inc_h.append( atom3 );
+                dihs_inc_h.append( idxs[i] );
+            }
+        }
+        else
+        {
+            for (int i=0; i<idxs.count(); ++i)
+            {
+                dihs_exc_h.append( atom0 );
+                dihs_exc_h.append( atom1 );
+                dihs_exc_h.append( ignored[i] * atom2 );
+                dihs_exc_h.append( atom3 );
+                dihs_exc_h.append( idxs[i] );
+            }
+        }
+    }
+    
+    for (auto it=impropers.constBegin(); it != impropers.constEnd(); ++it)
+    {
+        //get the NB14 scaling factor for this improper. These interactions
+        //seem always to be ignored, but are parsed...
+        const BondID nb14pair( info.atomIdx(it.key().atom0()), info.atomIdx(it.key().atom3()) );
+        const AmberNB14 nb14 = params.getNB14( BondID(it.key().atom0(),it.key().atom3()) );
+
+        //extract the individual dihedral terms from the dihedral parameters,
+        //combine them with the 0,0 scaling factor, and then
+        //create a database of them and get their ID
+        QList<qint64> idxs;
+        
+        for (const auto term : it.value().first.terms())
+        {
+            AmberNBDihPart nbterm(term, AmberNB14(0,0));
+            
+            qint64 idx = param_to_idx.value(nbterm, -1);
+            
+            if (idx == -1)
+            {
+                param_to_idx.insert(nbterm, param_to_idx.count()+1);
+                idx = param_to_idx.count();
+            }
+            
+            idxs.append(idx);
+        }
+        
+        //The true atom number equals the absolute value of the number
+        //divided by three, plus one (plus one as amber is 1-indexed).
+        qint64 atom0 = 3 * (info.atomIdx(it.key().atom0()).value() + start_idx);
+        qint64 atom1 = 3 * (info.atomIdx(it.key().atom1()).value() + start_idx);
+        qint64 atom2 = 3 * (info.atomIdx(it.key().atom2()).value() + start_idx);
+        qint64 atom3 = 3 * (info.atomIdx(it.key().atom3()).value() + start_idx);
+        
+        //is the improper marked as including hydrogen?
+        if (it.value().second)
+        {
+            for (const auto idx : idxs)
+            {
+                dihs_inc_h.append( atom0 );
+                dihs_inc_h.append( atom1 );
+                dihs_inc_h.append( -atom2 ); //1-4 interactions of impropers are ignored
+                dihs_inc_h.append( -atom3 ); //negative to indicate this is an improper
+                dihs_inc_h.append( idx );
+            }
+        }
+        else
+        {
+            for (const auto idx : idxs)
+            {
+                dihs_exc_h.append( atom0 );
+                dihs_exc_h.append( atom1 );
+                dihs_exc_h.append( -atom2 ); //1-4 interactions of impropers are ignored
+                dihs_exc_h.append( -atom3 ); //negative to indicate this is an improper
+                dihs_exc_h.append( idx );
+            }
+        }
+    }
+    
+    //now sort the arrays so that the order is the same every time this
+    //molecule is written to a file
+    ::detail::Idx5 *start_it = reinterpret_cast<::detail::Idx5*>(dihs_inc_h.data());
+    ::detail::Idx5 *end_it = start_it + (dihs_inc_h.count()/5);
+    qSort(start_it, end_it);
+
+    start_it = reinterpret_cast<::detail::Idx5*>(dihs_exc_h.data());
+    end_it = start_it + (dihs_exc_h.count()/5);
+    qSort(start_it, end_it);
+    
+    return std::make_tuple(dihs_inc_h, dihs_exc_h, param_to_idx);
+}
+
 /** Internal function that converts the passed list of parameters into a list
     of text lines */
 QStringList toLines(const QVector<AmberParams> &params,
@@ -3378,6 +3612,175 @@ QStringList toLines(const QVector<AmberParams> &params,
                                 nangh, manga, nanga, numang );
     };
 
+
+    //function used to get all of the dihedral information
+    auto getAllDihedrals = [&]()
+    {
+        QVector< std::tuple< QVector<qint64>, QVector<qint64>,
+                             QHash<AmberNBDihPart,qint64> > > all_dih_data(params.count());
+        
+        //get all of the angle information from each molecule
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    all_dih_data[i] = getDihedralData(params[i], atom_start_index[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                all_dih_data[i] = getDihedralData(params[i], atom_start_index[i]);
+            }
+        }
+        
+        //count up the number of dihedral parameters to help reserve memory space
+        int ndihs_inc_h = 0;
+        int ndihs_exc_h = 0;
+        int nparams = 0;
+        for (int i=0; i<params.count(); ++i)
+        {
+            ndihs_inc_h += std::get<0>(all_dih_data[i]).count();
+            ndihs_exc_h += std::get<1>(all_dih_data[i]).count();
+            nparams += std::get<2>(all_dih_data[i]).count();
+        }
+
+        QVector<qint64> all_dihs_inc_h, all_dihs_exc_h;
+        all_dihs_inc_h.reserve(ndihs_inc_h);
+        all_dihs_exc_h.reserve(ndihs_exc_h);
+        
+        //we now need to go through the dihedrals and remove duplicated parameters
+        QVector<double> force_data, per_data, phase_data, scee_data, scnb_data;
+        QHash<AmberNBDihPart,int> all_dih_to_idx;
+        all_dih_to_idx.reserve(nparams);
+        
+        //combine all parameters into a single set, with a unique index
+        for (int i=0; i<params.count(); ++i)
+        {
+            const auto dih_to_idx = std::get<2>(all_dih_data[i]);
+            
+            //first, find all unique dihedrals
+            for (auto it = dih_to_idx.constBegin();
+                 it != dih_to_idx.constEnd();
+                 ++it)
+            {
+                if (not all_dih_to_idx.contains(it.key()))
+                {
+                    all_dih_to_idx.insert(it.key(), -1);
+                }
+            }
+        }
+        
+        //now, sort the list so that there is a consistent order of
+        //parameters every time this output file is written
+        {
+            auto all_dihs = all_dih_to_idx.keys();
+            qSort(all_dihs);
+            
+            force_data = QVector<double>(all_dihs.count());
+            per_data = QVector<double>(all_dihs.count());
+            phase_data = QVector<double>(all_dihs.count());
+            scee_data = QVector<double>(all_dihs.count());
+            scnb_data = QVector<double>(all_dihs.count());
+            
+            int i=0;
+            for (auto dih : all_dihs)
+            {
+                force_data[i] = dih.parameter().k();
+                per_data[i] = dih.parameter().periodicity();
+                phase_data[i] = dih.parameter().phase();
+                
+                if (dih.scl().cscl() != 0)
+                {
+                    scee_data[i] = 1.0 / dih.scl().cscl();
+                }
+                else
+                {
+                    scee_data[i] = 0.0;
+                }
+                
+                if (dih.scl().ljscl() != 0)
+                {
+                    scnb_data[i] = 1.0 / dih.scl().ljscl();
+                }
+                else
+                {
+                    scnb_data[i] = 0.0;
+                }
+            
+                all_dih_to_idx[dih] = i+1;
+                i += 1;
+            }
+        }
+        
+        for (int i=0; i<params.count(); ++i)
+        {
+            //create a hash to map local parameter indicies to global parameter indicies
+            QHash<qint64,qint64> idx_to_idx;
+
+            //get all of the dihedral parameters
+            const auto dih_to_idx = std::get<2>(all_dih_data[i]);
+        
+            //for each one, get the global parameter index, save the parameters to
+            //the parameter arrays, and update the mapping from local to global indicies
+            for (auto it = dih_to_idx.constBegin();
+                 it != dih_to_idx.constEnd();
+                 ++it)
+            {
+                idx_to_idx.insert(it.value(), all_dih_to_idx.value(it.key(),-1));
+            }
+            
+            //now run through the dihedrals updating their local indicies to
+            //global indicies
+            const auto dihs_inc_h = std::get<0>(all_dih_data[i]);
+            const auto dihs_exc_h = std::get<1>(all_dih_data[i]);
+            
+            for (int j=0; j<dihs_inc_h.count(); j+=5)
+            {
+                all_dihs_inc_h.append(dihs_inc_h[j]);
+                all_dihs_inc_h.append(dihs_inc_h[j+1]);
+                all_dihs_inc_h.append(dihs_inc_h[j+2]);
+                all_dihs_inc_h.append(dihs_inc_h[j+3]);
+                all_dihs_inc_h.append(idx_to_idx.value(dihs_inc_h[j+4]));
+            }
+
+            for (int j=0; j<dihs_exc_h.count(); j+=5)
+            {
+                all_dihs_exc_h.append(dihs_exc_h[j]);
+                all_dihs_exc_h.append(dihs_exc_h[j+1]);
+                all_dihs_exc_h.append(dihs_exc_h[j+2]);
+                all_dihs_exc_h.append(dihs_exc_h[j+3]);
+                all_dihs_exc_h.append(idx_to_idx.value(dihs_exc_h[j+4]));
+            }
+        }
+        
+        int ndihh = all_dihs_inc_h.count() / 5; // number of dihedrals containing hydrogen
+        int mdiha = all_dihs_exc_h.count() / 5; // number of dihedrals not containing hydrogen
+        int ndiha = mdiha; // mdiha + number of constraint dihedrals
+        int numdih = force_data.count(); // number of unique dihedral types
+        
+        return std::make_tuple( writeFloatData(force_data,
+                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                writeFloatData(per_data,
+                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                writeFloatData(phase_data,
+                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                writeFloatData(scee_data,
+                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                writeFloatData(scnb_data,
+                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                writeIntData(all_dihs_inc_h,
+                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                writeIntData(all_dihs_exc_h,
+                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                ndihh, mdiha, ndiha, numdih );
+    };
+
     QStringList lines;
     
     QStringList name_lines, charge_lines, number_lines, mass_lines, ambtyp_lines;
@@ -3386,12 +3789,15 @@ QStringList toLines(const QVector<AmberParams> &params,
     std::tuple<QStringList,QStringList,int,int> res_lines;
     std::tuple<QStringList,QStringList,QStringList,QStringList,int,int,int,int> bond_lines;
     std::tuple<QStringList,QStringList,QStringList,QStringList,int,int,int,int> ang_lines;
+    std::tuple<QStringList,QStringList,QStringList,QStringList,
+               QStringList,QStringList,QStringList,int,int,int,int> dih_lines;
     
     const QVector< std::function<void()> > info_functions =
                           {
                             [&](){ excl_lines = getAllExcludedAtoms(); },
                             [&](){ bond_lines = getAllBonds(); },
                             [&](){ ang_lines = getAllAngles(); },
+                            [&](){ dih_lines = getAllDihedrals(); },
                             [&](){ name_lines = getAllAtomNames(); },
                             [&](){ charge_lines = getAllAtomCharges(); },
                             [&](){ number_lines = getAllAtomNumbers(); },
@@ -3439,6 +3845,12 @@ QStringList toLines(const QVector<AmberParams> &params,
     pointers[13] = std::get<6>(ang_lines);      // NTHETA
     pointers[16] = std::get<7>(ang_lines);      // NUMANG
     
+    //save the number of dihedrals to 'pointers'
+    pointers[6] = std::get<7>(dih_lines);       // NPHIH
+    pointers[7] = std::get<8>(dih_lines);       // MPHIA
+    pointers[14] = std::get<9>(dih_lines);      // NPHIA
+    pointers[17] = std::get<10>(dih_lines);      // NPTRA
+    
     lines.append("%FLAG POINTERS");
     lines += writeIntData(pointers, AmberFormat( AmberParm::INTEGER, 10, 8 ) );
 
@@ -3481,15 +3893,20 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG ANGLE_EQUIL_VALUE");
     lines += std::get<1>(ang_lines);
 
-    //%FLAG DIHEDRAL_FORCE_CONSTANT
+    lines.append("%FLAG DIHEDRAL_FORCE_CONSTANT");
+    lines += std::get<0>(dih_lines);
 
-    //%FLAG DIHEDRAL_PERIODICITY
+    lines.append("%FLAG DIHEDRAL_PERIODICITY");
+    lines += std::get<1>(dih_lines);
 
-    //%FLAG DIHEDRAL_PHASE
+    lines.append("%FLAG DIHEDRAL_PHASE");
+    lines += std::get<2>(dih_lines);
 
-    //%FLAG SCEE_SCALE_FACTOR
+    lines.append("%FLAG SCEE_SCALE_FACTOR");
+    lines += std::get<3>(dih_lines);
 
-    //%FLAG SCNB_SCALE_FACTOR
+    lines.append("%FLAG SCNB_SCALE_FACTOR");
+    lines += std::get<4>(dih_lines);
 
     lines.append("%FLAG LENNARD_JONES_ACOEF");
     lines += std::get<2>(lj_lines);
@@ -3509,9 +3926,11 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG ANGLES_WITHOUT_HYDROGEN");
     lines += std::get<3>(ang_lines);
 
-    //%FLAG DIHEDRALS_INC_HYDROGEN
+    lines.append("%FLAG DIHEDRALS_INC_HYDROGEN");
+    lines += std::get<5>(dih_lines);
 
-    //%FLAG DIHEDRALS_WITHOUT_HYDROGEN
+    lines.append("%FLAG DIHEDRALS_WITHOUT_HYDROGEN");
+    lines += std::get<6>(dih_lines);
 
     lines.append("%FLAG EXCLUDED_ATOMS_LIST");
     lines += std::get<1>(excl_lines);

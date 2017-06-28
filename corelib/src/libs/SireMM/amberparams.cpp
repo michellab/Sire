@@ -60,15 +60,27 @@ using namespace SireStream;
 /////////// Implementation of AmberBond
 ///////////
 
+static const RegisterMetaType<AmberBond> r_bond(NO_ROOT);
+
 QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberBond &bond)
 {
+    writeHeader(ds, r_bond, 1);
+
     ds << bond._k << bond._r0;
     return ds;
 }
 
 QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberBond &bond)
 {
-    ds >> bond._k >> bond._r0;
+    VersionID v = readHeader(ds, r_bond);
+    
+    if (v == 1)
+    {
+        ds >> bond._k >> bond._r0;
+    }
+    else
+        throw version_error(v, "1", r_bond, CODELOC);
+
     return ds;
 }
 
@@ -156,15 +168,26 @@ QString AmberBond::toString() const
 /////////// Implementation of AmberAngle
 ///////////
 
+static const RegisterMetaType<AmberAngle> r_angle(NO_ROOT);
+
 QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberAngle &angle)
 {
+    writeHeader(ds, r_angle, 1);
     ds << angle._k << angle._theta0;
     return ds;
 }
 
 QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberAngle &angle)
 {
-    ds >> angle._k >> angle._theta0;
+    VersionID v = readHeader(ds, r_angle);
+    
+    if (v == 1)
+    {
+        ds >> angle._k >> angle._theta0;
+    }
+    else
+        throw version_error(v, "1", r_angle, CODELOC);
+    
     return ds;
 }
 
@@ -245,15 +268,26 @@ QString AmberAngle::toString() const
 /////////// Implementation of AmberDihPart
 ///////////
 
+static const RegisterMetaType<AmberDihPart> r_dihpart(NO_ROOT);
+
 QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberDihPart &dih)
 {
+    writeHeader(ds, r_dihpart, 1);
     ds << dih._k << dih._periodicity << dih._phase;
     return ds;
 }
 
 QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberDihPart &dih)
 {
-    ds >> dih._k >> dih._periodicity >> dih._phase;
+    VersionID v = readHeader(ds, r_dihpart);
+    
+    if (v == 1)
+    {
+        ds >> dih._k >> dih._periodicity >> dih._phase;
+    }
+    else
+        throw version_error(v, "1", r_dihpart, CODELOC);
+    
     return ds;
 }
 
@@ -332,15 +366,26 @@ QString AmberDihPart::toString() const
 /////////// Implementation of AmberDihedral
 ///////////
 
+static const RegisterMetaType<AmberDihedral> r_dihedral(NO_ROOT);
+
 QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberDihedral &dih)
 {
+    writeHeader(ds, r_dihedral, 1);
     ds << dih._parts;
     return ds;
 }
 
 QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberDihedral &dih)
 {
-    ds >> dih._parts;
+    VersionID v = readHeader(ds, r_dihedral);
+    
+    if (v == 1)
+    {
+        ds >> dih._parts;
+    }
+    else
+        throw version_error(v, "1", r_dihedral, CODELOC);
+    
     return ds;
 }
 
@@ -436,15 +481,26 @@ QString AmberDihedral::toString() const
 /////////// Implementation of AmberNB14
 ///////////
 
+static const RegisterMetaType<AmberNB14> r_nb14(NO_ROOT);
+
 QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberNB14 &nb)
 {
+    writeHeader(ds, r_nb14, 1);
     ds << nb._cscl << nb._ljscl;
     return ds;
 }
 
 QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberNB14 &nb)
 {
-    ds >> nb._cscl >> nb._ljscl;
+    VersionID v = readHeader(ds, r_nb14);
+    
+    if (v == 1)
+    {
+        ds >> nb._cscl >> nb._ljscl;
+    }
+    else
+        throw version_error(v, "1", r_nb14, CODELOC);
+    
     return ds;
 }
 
@@ -475,14 +531,51 @@ AmberNB14& AmberNB14::operator=(const AmberNB14 &other)
     return *this;
 }
 
+/** Comparison operator */
 bool AmberNB14::operator==(const AmberNB14 &other) const
 {
     return _cscl == other._cscl and _ljscl == other._ljscl;
 }
 
+/** Comparison operator */
 bool AmberNB14::operator!=(const AmberNB14 &other) const
 {
     return not operator==(other);
+}
+
+/** Comparison operator */
+bool AmberNB14::operator<(const AmberNB14 &other) const
+{
+    if (_cscl < other._cscl)
+    {
+        return true;
+    }
+    else if (_cscl == other._cscl)
+    {
+        return _ljscl < other._ljscl;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/** Comparison operator */
+bool AmberNB14::operator<=(const AmberNB14 &other) const
+{
+    return operator==(other) or operator<(other);
+}
+
+/** Comparison operator */
+bool AmberNB14::operator>(const AmberNB14 &other) const
+{
+    return not operator<=(other);
+}
+
+/** Comparison operator */
+bool AmberNB14::operator>=(const AmberNB14 &other) const
+{
+    return not operator<(other);
 }
 
 QString AmberNB14::toString() const
@@ -494,6 +587,112 @@ QString AmberNB14::toString() const
 CLJScaleFactor AmberNB14::toScaleFactor() const
 {
     return CLJScaleFactor(_cscl, _ljscl);
+}
+
+///////////
+/////////// Implementation of AmberNBDihPart
+///////////
+
+static const RegisterMetaType<AmberNBDihPart> r_nbdihpart(NO_ROOT);
+
+QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberNBDihPart &param)
+{
+    writeHeader(ds, r_nbdihpart, 1);
+    ds << param.dih << param.nbscl;
+    return ds;
+}
+
+QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberNBDihPart &param)
+{
+    VersionID v = readHeader(ds, r_nbdihpart);
+    
+    if (v == 1)
+    {
+        ds >> param.dih >> param.nbscl;
+    }
+    else
+        throw version_error(v, "1", r_nbdihpart, CODELOC);
+    
+    return ds;
+}
+
+/** Constructor */
+AmberNBDihPart::AmberNBDihPart()
+{}
+
+/** Construct from the passed parameters */
+AmberNBDihPart::AmberNBDihPart(const AmberDihPart &dihedral, const AmberNB14 &nb14)
+               : dih(dihedral), nbscl(nb14)
+{}
+
+/** Copy constructor */
+AmberNBDihPart::AmberNBDihPart(const AmberNBDihPart &other)
+               : dih(other.dih), nbscl(other.nbscl)
+{}
+
+/** Destructor */
+AmberNBDihPart::~AmberNBDihPart()
+{}
+
+/** Copy assignment operator */
+AmberNBDihPart& AmberNBDihPart::operator=(const AmberNBDihPart &other)
+{
+    dih = other.dih;
+    nbscl = other.nbscl;
+    return *this;
+}
+
+/** Comparison operator */
+bool AmberNBDihPart::operator==(const AmberNBDihPart &other) const
+{
+    return dih == other.dih and nbscl == other.nbscl;
+}
+
+/** Comparison operator */
+bool AmberNBDihPart::operator!=(const AmberNBDihPart &other) const
+{
+    return not operator==(other);
+}
+
+/** Comparison operator */
+bool AmberNBDihPart::operator<(const AmberNBDihPart &other) const
+{
+    if (nbscl < other.nbscl)
+    {
+        return true;
+    }
+    else if (nbscl == other.nbscl)
+    {
+        return dih < other.dih;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/** Comparison operator */
+bool AmberNBDihPart::operator<=(const AmberNBDihPart &other) const
+{
+    return this->operator==(other) or this->operator<(other);
+}
+
+/** Comparison operator */
+bool AmberNBDihPart::operator>(const AmberNBDihPart &other) const
+{
+    return not this->operator<=(other);
+}
+
+/** Comparison operator */
+bool AmberNBDihPart::operator>=(const AmberNBDihPart &other) const
+{
+    return not this->operator<(other);
+}
+
+QString AmberNBDihPart::toString() const
+{
+    return QObject::tr("AmberNBDihPart( param == %1, scl == %2 )")
+                .arg(dih.toString()).arg(nbscl.toString());
 }
 
 ///////////
