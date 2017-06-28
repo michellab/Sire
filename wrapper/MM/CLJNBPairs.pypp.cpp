@@ -37,7 +37,7 @@ void register_CLJNBPairs_class(){
                 "excludedAtoms"
                 , excludedAtoms_function_value
                 , ( bp::arg("atomid") )
-                , "" );
+                , "Return the excluded atoms for the atom matching ID atomid. This\nreturns all of the atoms for which the interaction with atomid is\nequal to zero" );
         
         }
         { //::SireMM::CLJNBPairs::nExcludedAtoms
@@ -49,7 +49,7 @@ void register_CLJNBPairs_class(){
                 "nExcludedAtoms"
                 , nExcludedAtoms_function_value
                 , ( bp::arg("atomid") )
-                , "" );
+                , "Return the number of excluded atoms for the atom matching ID atomid.\nThis returns the number of atoms that do not interact with this atom\nusing a non-bonded potential" );
         
         }
         CLJNBPairs_exposer.def( bp::self != bp::self );

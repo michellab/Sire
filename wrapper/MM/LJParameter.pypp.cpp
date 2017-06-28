@@ -68,7 +68,7 @@ void register_LJParameter_class(){
                 "combine"
                 , combine_function_value
                 , ( bp::arg("other"), bp::arg("rules") )
-                , "" );
+                , "Return the LJParameter that is this parameter combined with other according\nto the passed combining rules" );
         
         }
         { //::SireMM::LJParameter::combineArithmetic
@@ -80,7 +80,7 @@ void register_LJParameter_class(){
                 "combineArithmetic"
                 , combineArithmetic_function_value
                 , ( bp::arg("other") )
-                , "" );
+                , "Return the LJParameter that is this parameter combined with other\nusing arithmetic combining rules" );
         
         }
         { //::SireMM::LJParameter::combineGeometric
@@ -92,7 +92,7 @@ void register_LJParameter_class(){
                 "combineGeometric"
                 , combineGeometric_function_value
                 , ( bp::arg("other") )
-                , "" );
+                , "Return the LJParameter that is this parameter combined with other\nusing geometric combining rules" );
         
         }
         { //::SireMM::LJParameter::dummy

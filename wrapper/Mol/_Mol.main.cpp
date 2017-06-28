@@ -69,6 +69,8 @@
 
 #include "AtomProp.pypp.hpp"
 
+#include "AtomRadii.pypp.hpp"
+
 #include "AtomResultMatcher.pypp.hpp"
 
 #include "AtomSelection.pypp.hpp"
@@ -613,6 +615,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_AtomElements_class();
 
     register_AtomCharges_class();
+
+    register_AtomRadii_class();
 
     register_AtomPolarisabilities_class();
 

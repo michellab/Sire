@@ -29,6 +29,8 @@ namespace bp = boost::python;
 
 #include "moleculedata.h"
 
+#include "moleculeinfo.h"
+
 #include "moleculeinfodata.h"
 
 #include "moleculeview.h"

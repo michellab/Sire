@@ -83,6 +83,8 @@ void register_AmberNB14_class(){
         
         }
         AmberNB14_exposer.def( bp::self != bp::self );
+        AmberNB14_exposer.def( bp::self < bp::self );
+        AmberNB14_exposer.def( bp::self <= bp::self );
         { //::SireMM::AmberNB14::operator=
         
             typedef ::SireMM::AmberNB14 & ( ::SireMM::AmberNB14::*assign_function_type)( ::SireMM::AmberNB14 const & ) ;
@@ -97,6 +99,8 @@ void register_AmberNB14_class(){
         
         }
         AmberNB14_exposer.def( bp::self == bp::self );
+        AmberNB14_exposer.def( bp::self > bp::self );
+        AmberNB14_exposer.def( bp::self >= bp::self );
         { //::SireMM::AmberNB14::operator[]
         
             typedef double ( ::SireMM::AmberNB14::*__getitem___function_type)( int ) const;
@@ -131,6 +135,29 @@ void register_AmberNB14_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberNB14::typeName
+        
+            typedef char const * ( *typeName_function_type )(  );
+            typeName_function_type typeName_function_value( &::SireMM::AmberNB14::typeName );
+            
+            AmberNB14_exposer.def( 
+                "typeName"
+                , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberNB14::what
+        
+            typedef char const * ( ::SireMM::AmberNB14::*what_function_type)(  ) const;
+            what_function_type what_function_value( &::SireMM::AmberNB14::what );
+            
+            AmberNB14_exposer.def( 
+                "what"
+                , what_function_value
+                , "" );
+        
+        }
+        AmberNB14_exposer.staticmethod( "typeName" );
         AmberNB14_exposer.def( "__copy__", &__copy__);
         AmberNB14_exposer.def( "__deepcopy__", &__copy__);
         AmberNB14_exposer.def( "clone", &__copy__);

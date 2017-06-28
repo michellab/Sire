@@ -32,6 +32,7 @@ set ( PYPP_SOURCES
        AtomNum.pypp.cpp
        AtomPolarisabilities.pypp.cpp
        AtomProp.pypp.cpp
+       AtomRadii.pypp.cpp
        AtomResultMatcher.pypp.cpp
        AtomSelection.pypp.cpp
        AtomsIn_CGID_.pypp.cpp

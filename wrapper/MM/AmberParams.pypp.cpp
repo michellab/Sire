@@ -65,14 +65,14 @@ void register_AmberParams_class(){
         AmberParams_exposer.def( bp::init< SireMM::AmberParams const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::AmberParams::add
         
-            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::AtomID const &,::SireUnits::Dimension::Charge,::SireUnits::Dimension::MolarMass,::SireMol::Element const &,::SireMM::LJParameter const &,::QString const & ) ;
+            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::AtomID const &,::SireUnits::Dimension::Charge,::SireUnits::Dimension::MolarMass,::SireMol::Element const &,::SireMM::LJParameter const &,::QString const &,::SireUnits::Dimension::Length ) ;
             add_function_type add_function_value( &::SireMM::AmberParams::add );
             
             AmberParams_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atom"), bp::arg("charge"), bp::arg("mass"), bp::arg("element"), bp::arg("ljparam"), bp::arg("amber_type") )
-                , "Set the atom parameters for the specified atom to the provided values" );
+                , ( bp::arg("atom"), bp::arg("charge"), bp::arg("mass"), bp::arg("element"), bp::arg("ljparam"), bp::arg("amber_type"), bp::arg("born_radius") )
+                , "" );
         
         }
         { //::SireMM::AmberParams::add
@@ -211,6 +211,17 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "bonds"
                 , bonds_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberParams::bornRadii
+        
+            typedef ::SireMol::AtomRadii ( ::SireMM::AmberParams::*bornRadii_function_type)(  ) const;
+            bornRadii_function_type bornRadii_function_value( &::SireMM::AmberParams::bornRadii );
+            
+            AmberParams_exposer.def( 
+                "bornRadii"
+                , bornRadii_function_value
                 , "" );
         
         }
@@ -571,7 +582,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "validate"
                 , validate_function_value
-                , "" );
+                , "Validate this set of parameters. This checks that all of the requirements\nfor an Amber set of parameters are met, e.g. that all Atom indicies are\ncontiguous and in-order, and that all atoms contiguously fill all residues\netc. This returns any errors as strings. An empty set of strings indicates\nthat there are no errors" );
         
         }
         AmberParams_exposer.staticmethod( "typeName" );

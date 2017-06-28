@@ -146,6 +146,16 @@ bool AmberBond::operator>=(const AmberBond &other) const
     return not (*this < other);
 }
 
+const char* AmberBond::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<AmberBond>() );
+}
+
+const char* AmberBond::what() const
+{
+    return AmberBond::typeName();
+}
+
 /** Return the energy evaluated from this bond for the passed bond length */
 double AmberBond::energy(double r) const
 {
@@ -247,6 +257,16 @@ bool AmberAngle::operator>(const AmberAngle &other) const
 bool AmberAngle::operator>=(const AmberAngle &other) const
 {
     return not (*this < other);
+}
+
+const char* AmberAngle::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<AmberAngle>() );
+}
+
+const char* AmberAngle::what() const
+{
+    return AmberAngle::typeName();
 }
 
 double AmberAngle::energy(double theta) const
@@ -351,6 +371,16 @@ bool AmberDihPart::operator>=(const AmberDihPart &other) const
     return not (*this < other);
 }
 
+const char* AmberDihPart::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<AmberDihPart>() );
+}
+
+const char* AmberDihPart::what() const
+{
+    return AmberDihPart::typeName();
+}
+
 double AmberDihPart::energy(double phi) const
 {
     return _k * ( 1 + cos( (_periodicity * phi ) - _phase ) );
@@ -434,6 +464,16 @@ bool AmberDihedral::operator==(const AmberDihedral &other) const
 bool AmberDihedral::operator!=(const AmberDihedral &other) const
 {
     return not operator==(other);
+}
+
+const char* AmberDihedral::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<AmberDihedral>() );
+}
+
+const char* AmberDihedral::what() const
+{
+    return AmberDihedral::typeName();
 }
 
 const AmberDihPart& AmberDihedral::operator[](int i) const
@@ -578,6 +618,16 @@ bool AmberNB14::operator>=(const AmberNB14 &other) const
     return not operator<(other);
 }
 
+const char* AmberNB14::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<AmberNB14>() );
+}
+
+const char* AmberNB14::what() const
+{
+    return AmberNB14::typeName();
+}
+
 QString AmberNB14::toString() const
 {
     return QObject::tr("AmberNB14( cscl = %1, ljscl = %2 )").arg(_cscl).arg(_ljscl);
@@ -689,6 +739,16 @@ bool AmberNBDihPart::operator>=(const AmberNBDihPart &other) const
     return not this->operator<(other);
 }
 
+const char* AmberNBDihPart::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<AmberNBDihPart>() );
+}
+
+const char* AmberNBDihPart::what() const
+{
+    return AmberNBDihPart::typeName();
+}
+
 QString AmberNBDihPart::toString() const
 {
     return QObject::tr("AmberNBDihPart( param == %1, scl == %2 )")
@@ -711,10 +771,12 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberParams &amberp
     sds << amberparam.molinfo
         << amberparam.amber_charges << amberparam.amber_ljs
         << amberparam.amber_masses << amberparam.amber_elements
-        << amberparam.amber_types << amberparam.exc_atoms
+        << amberparam.amber_types << amberparam.born_radii
+        << amberparam.exc_atoms
         << amberparam.amber_bonds
         << amberparam.amber_angles << amberparam.amber_dihedrals
         << amberparam.amber_impropers << amberparam.amber_nb14s
+        << amberparam.radius_set
         << static_cast<const MoleculeProperty&>(amberparam);
 
     return ds;
@@ -732,10 +794,12 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberParams &amberparam)
         sds >> amberparam.molinfo
             >> amberparam.amber_charges >> amberparam.amber_ljs
             >> amberparam.amber_masses >> amberparam.amber_elements
-            >> amberparam.amber_types >> amberparam.exc_atoms
+            >> amberparam.amber_types >> amberparam.born_radii
+            >> amberparam.exc_atoms
             >> amberparam.amber_bonds
             >> amberparam.amber_angles >> amberparam.amber_dihedrals
             >> amberparam.amber_impropers >> amberparam.amber_nb14s
+            >> amberparam.radius_set
             >> static_cast<MoleculeProperty&>(amberparam);
     }
     else
@@ -772,12 +836,14 @@ AmberParams::AmberParams(const AmberParams &other)
               molinfo(other.molinfo),
               amber_charges(other.amber_charges),amber_ljs(other.amber_ljs),
               amber_masses(other.amber_masses),amber_elements(other.amber_elements),
-              amber_types(other.amber_types), exc_atoms(other.exc_atoms),
+              amber_types(other.amber_types), born_radii(other.born_radii),
+              exc_atoms(other.exc_atoms),
               amber_bonds(other.amber_bonds),
               amber_angles(other.amber_angles),
               amber_dihedrals(other.amber_dihedrals),
               amber_impropers(other.amber_impropers),
-              amber_nb14s(other.amber_nb14s)
+              amber_nb14s(other.amber_nb14s),
+              radius_set(other.radius_set)
 {}
 
 /** Copy assignment operator */
@@ -792,12 +858,14 @@ AmberParams& AmberParams::operator=(const AmberParams &other)
         amber_masses = other.amber_masses;
         amber_elements = other.amber_elements;
         amber_types = other.amber_types;
+        born_radii = other.born_radii;
         exc_atoms = other.exc_atoms;
         amber_bonds = other.amber_bonds;
         amber_angles = other.amber_angles;
         amber_dihedrals = other.amber_dihedrals;
         amber_impropers = other.amber_impropers;
         amber_nb14s = other.amber_nb14s;
+        radius_set = other.radius_set;
     }
   
     return *this;
@@ -816,12 +884,14 @@ bool AmberParams::operator==(const AmberParams &other) const
           and amber_masses == other.amber_masses
           and amber_elements == other.amber_elements
           and amber_types == other.amber_types
+          and born_radii == other.born_radii
           and exc_atoms == other.exc_atoms
           and amber_bonds == other.amber_bonds
           and amber_angles == other.amber_angles
           and amber_dihedrals == other.amber_dihedrals
           and amber_impropers == other.amber_impropers
-          and amber_nb14s == other.amber_nb14s);
+          and amber_nb14s == other.amber_nb14s
+          and radius_set == other.radius_set);
 }
 
 /** Comparison operator */
@@ -965,13 +1035,20 @@ AtomStringProperty AmberParams::amberTypes() const
     return amber_types;
 }
 
+/** Return all of the Born radii of the atoms */
+AtomRadii AmberParams::bornRadii() const
+{
+    return born_radii;
+}
+
 /** Set the atom parameters for the specified atom to the provided values */
 void AmberParams::add(const AtomID &atom,
                       SireUnits::Dimension::Charge charge,
                       SireUnits::Dimension::MolarMass mass,
                       const SireMol::Element &element,
                       const SireMM::LJParameter &ljparam,
-                      const QString &amber_type)
+                      const QString &amber_type,
+                      SireUnits::Dimension::Length born_radius)
 {
     CGAtomIdx idx = molinfo.cgAtomIdx(atom);
     
@@ -983,6 +1060,7 @@ void AmberParams::add(const AtomID &atom,
         amber_masses = AtomMasses(molinfo);
         amber_elements = AtomElements(molinfo);
         amber_types = AtomStringProperty(molinfo);
+        born_radii = AtomRadii(molinfo);
     }
     
     amber_charges.set(idx, charge);
@@ -990,6 +1068,7 @@ void AmberParams::add(const AtomID &atom,
     amber_masses.set(idx, mass);
     amber_elements.set(idx, element);
     amber_types.set(idx, amber_type);
+    born_radii.set(idx, born_radius);
 }
 
 /** Return the connectivity of the molecule implied by the
@@ -1006,6 +1085,20 @@ Connectivity AmberParams::connectivity() const
     }
     
     return connectivity.commit();
+}
+
+/** Set the radius set used by LEAP to assign the Born radii 
+    of the atoms. This is just a string that is used to label
+    the radius set in the PRM file */
+void AmberParams::setRadiusSet(const QString &rset)
+{
+    radius_set = rset;
+}
+
+/** Return the radius set used by LEAP to assign the Born radii */
+QString AmberParams::radiusSet() const
+{
+    return radius_set;
 }
 
 /** Set the excluded atoms of the molecule. This should be a 
@@ -1289,6 +1382,12 @@ AmberParams& AmberParams::operator+=(const AmberParams &other)
         amber_types = other.amber_types;
     }
 
+    if (not other.born_radii.isEmpty())
+    {
+        //we overwrite these radii with 'other'
+        born_radii = other.born_radii;
+    }
+
     if (amber_bonds.isEmpty())
     {
         amber_bonds = other.amber_bonds;
@@ -1349,6 +1448,12 @@ AmberParams& AmberParams::operator+=(const AmberParams &other)
         {
             amber_nb14s.insert(it.key(), it.value());
         }
+    }
+    
+    if (not other.radius_set.isEmpty())
+    {
+        //overwrite the radius set with other
+        radius_set = other.radius_set;
     }
 
     return *this;

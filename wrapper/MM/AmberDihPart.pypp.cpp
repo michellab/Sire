@@ -158,6 +158,29 @@ void register_AmberDihPart_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberDihPart::typeName
+        
+            typedef char const * ( *typeName_function_type )(  );
+            typeName_function_type typeName_function_value( &::SireMM::AmberDihPart::typeName );
+            
+            AmberDihPart_exposer.def( 
+                "typeName"
+                , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberDihPart::what
+        
+            typedef char const * ( ::SireMM::AmberDihPart::*what_function_type)(  ) const;
+            what_function_type what_function_value( &::SireMM::AmberDihPart::what );
+            
+            AmberDihPart_exposer.def( 
+                "what"
+                , what_function_value
+                , "" );
+        
+        }
+        AmberDihPart_exposer.staticmethod( "typeName" );
         AmberDihPart_exposer.def( "__copy__", &__copy__);
         AmberDihPart_exposer.def( "__deepcopy__", &__copy__);
         AmberDihPart_exposer.def( "clone", &__copy__);

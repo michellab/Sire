@@ -14,11 +14,13 @@ namespace bp = boost::python;
 
 #include "moleculeinfo.h"
 
-#include "atomselection.h"
-
 #include "moleculeview.h"
 
 #include "moleculeinfo.h"
+
+#include "moleculeinfodata.h"
+
+#include "atomselection.h"
 
 SireMol::MoleculeInfo __copy__(const SireMol::MoleculeInfo &other){ return SireMol::MoleculeInfo(other); }
 

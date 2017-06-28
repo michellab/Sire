@@ -160,6 +160,29 @@ void register_AmberBond_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberBond::typeName
+        
+            typedef char const * ( *typeName_function_type )(  );
+            typeName_function_type typeName_function_value( &::SireMM::AmberBond::typeName );
+            
+            AmberBond_exposer.def( 
+                "typeName"
+                , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberBond::what
+        
+            typedef char const * ( ::SireMM::AmberBond::*what_function_type)(  ) const;
+            what_function_type what_function_value( &::SireMM::AmberBond::what );
+            
+            AmberBond_exposer.def( 
+                "what"
+                , what_function_value
+                , "" );
+        
+        }
+        AmberBond_exposer.staticmethod( "typeName" );
         AmberBond_exposer.def( "__copy__", &__copy__);
         AmberBond_exposer.def( "__deepcopy__", &__copy__);
         AmberBond_exposer.def( "clone", &__copy__);

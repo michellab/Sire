@@ -46,6 +46,7 @@
 #include "SireMol/atomcharges.h"
 #include "SireMol/atommasses.h"
 #include "SireMol/atomelements.h"
+#include "SireMol/atomradii.h"
 #include "SireMol/moleculeinfo.h"
 
 #include "SireMM/cljnbpairs.h"
@@ -434,13 +435,18 @@ public:
              SireUnits::Dimension::MolarMass mass,
              const SireMol::Element &element,
              const SireMM::LJParameter &ljparam,
-             const QString &amber_type);
+             const QString &amber_type,
+             SireUnits::Dimension::Length born_radius);
 
     SireMol::AtomCharges charges() const;
     SireMol::AtomMasses masses() const;
     SireMol::AtomElements elements() const;
     SireMM::AtomLJs ljs() const;
     SireMol::AtomStringProperty amberTypes() const;
+    SireMol::AtomRadii bornRadii() const;
+
+    void setRadiusSet(const QString &radius_set);
+    QString radiusSet() const;
 
     void setExcludedAtoms(const CLJNBPairs &excluded_atoms);
     CLJNBPairs excludedAtoms() const;
@@ -514,6 +520,9 @@ private:
     /** All of the amber atom types */
     SireMol::AtomStringProperty amber_types;
 
+    /** All of the amber atom Born radii */
+    SireMol::AtomRadii born_radii;
+
     /** The excluded atoms in the molecule (atom pairs between
         which a nonbonded calculation is not evaluated) */
     SireMM::CLJNBPairs exc_atoms;
@@ -532,6 +541,9 @@ private:
 
     /** A hash of coulombic and lennard jones scale factors for 1,4 pairs**/
     QHash<BondID,AmberNB14> amber_nb14s;
+    
+    /** The radius set chosen by LEAP when assigning the Born radii */
+    QString radius_set;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS

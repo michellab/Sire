@@ -2221,6 +2221,27 @@ QVector<double> getAtomMasses(const AmberParams &params)
     return masses;
 }
 
+/** Internal function used to get the atom radii in AtomIdx order from
+    the passed AmberParams object */
+QVector<double> getAtomRadii(const AmberParams &params)
+{
+    const auto info = params.info();
+    
+    QVector<double> radii(info.nAtoms(), 0.0);
+    
+    const auto r = params.bornRadii();
+
+    if (not r.isEmpty())
+    {
+        for (int i=0; i<info.nAtoms(); ++i)
+        {
+            radii[i] = r[ info.cgAtomIdx(AtomIdx(i)) ].to(angstrom);
+        }
+    }
+    
+    return radii;
+}
+
 /** Internal function used to get the amber atom types of each atom */
 QVector<QString> getAmberTypes(const AmberParams &params)
 {
@@ -3081,6 +3102,52 @@ QStringList toLines(const QVector<AmberParams> &params,
                                    AmberFormat( AmberParm::FLOAT, 5, 16, 8) );
     };
 
+    //function used to generate the text for all atom Born radii
+    auto getAllRadii = [&]()
+    {
+        QVector< QVector<double> > atom_radii(params.count());
+        
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    atom_radii[i] = getAtomRadii(params[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                atom_radii[i] = getAtomRadii(params[i]);
+            }
+        }
+        
+        if (all_errors)
+        {
+            QStringList errors;
+        
+            QStringList lines = writeFloatData( collapse(atom_radii),
+                                                AmberFormat( AmberParm::FLOAT, 5, 16, 8 ),
+                                                &errors );
+        
+            if (not errors.isEmpty())
+            {
+                tbb::spin_mutex::scoped_lock locker(error_mutex);
+                all_errors->append( QObject::tr("== Errors writing atom radii data! ==") );
+                *all_errors += errors;
+            }
+            
+            return lines;
+        }
+        else
+            return writeFloatData( collapse(atom_radii),
+                                   AmberFormat( AmberParm::FLOAT, 5, 16, 8) );
+    };
+
     //function used to get all of the Amber atom types
     auto getAllAmberTypes = [&]()
     {
@@ -3783,7 +3850,7 @@ QStringList toLines(const QVector<AmberParams> &params,
 
     QStringList lines;
     
-    QStringList name_lines, charge_lines, number_lines, mass_lines, ambtyp_lines;
+    QStringList name_lines, charge_lines, number_lines, mass_lines, radius_lines, ambtyp_lines;
     std::tuple<QStringList,QStringList,QStringList,QStringList> lj_lines;
     std::tuple<QStringList,QStringList,int> excl_lines;
     std::tuple<QStringList,QStringList,int,int> res_lines;
@@ -3804,6 +3871,7 @@ QStringList toLines(const QVector<AmberParams> &params,
                             [&](){ mass_lines = getAllAtomMasses(); },
                             [&](){ lj_lines = getAllAtomTypes(); },
                             [&](){ ambtyp_lines = getAllAmberTypes(); },
+                            [&](){ radius_lines = getAllRadii(); },
                             [&](){ res_lines = getAllResidueInfo(); }
                           };
     
@@ -3951,9 +4019,14 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG AMBER_ATOM_TYPE");
     lines += ambtyp_lines;
 
-    //%FLAG RADIUS_SET
+    lines.append("%FLAG RADIUS_SET");
+    lines.append("%FORMAT(1a80)");
+    //have to take the first molecule's radius set as the PRM file assumes that
+    //they are all the same...
+    lines.append(params[0].radiusSet());
 
-    //%FLAG RADII
+    lines.append("%FLAG RADII");
+    lines += radius_lines;
 
     //%FLAG SCREEN
 
@@ -4451,6 +4524,9 @@ void AmberParm::assertSane() const
     live_test( [&](){ SireBase::assert_equal(this->intData("ATOM_TYPE_INDEX").count(),
                                              natoms, CODELOC);}, errors );
     
+    live_test( [&](){ SireBase::assert_equal(this->floatData("RADII").count(),
+                                             natoms, CODELOC);}, errors );
+    
     if (not errors.isEmpty())
     {
         for (auto error : errors)
@@ -4576,6 +4652,7 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
         const auto atomic_num_array = this->intData("ATOMIC_NUMBER").constData();
         const auto amber_type_array = this->intData("ATOM_TYPE_INDEX").constData();
         const auto ambertype_array = this->stringData("AMBER_ATOM_TYPE").constData();
+        const auto born_radii_array = this->floatData("RADII").constData();
         
         const int natoms = molinfo.nAtoms();
         
@@ -4593,7 +4670,8 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
                         mass_array[atom_idx] * g_per_mol,
                         Element(int(atomic_num_array[atom_idx])),
                         lj_data[ amber_type_array[atom_idx] - 1 ],
-                        ambertype_array[atom_idx].trimmed() );
+                        ambertype_array[atom_idx].trimmed(),
+                        born_radii_array[atom_idx] * angstrom );
         }
         
         return params;
@@ -4827,6 +4905,13 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
         params += assign_angles();
         params += assign_dihedrals();
         params += assign_excluded();
+    }
+    
+    const auto radius_set = this->stringData("RADIUS_SET");
+    
+    if (radius_set.count() > 0)
+    {
+        params.setRadiusSet(radius_set[0]);
     }
     
     return params;

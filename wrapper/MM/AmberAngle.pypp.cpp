@@ -160,6 +160,29 @@ void register_AmberAngle_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberAngle::typeName
+        
+            typedef char const * ( *typeName_function_type )(  );
+            typeName_function_type typeName_function_value( &::SireMM::AmberAngle::typeName );
+            
+            AmberAngle_exposer.def( 
+                "typeName"
+                , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberAngle::what
+        
+            typedef char const * ( ::SireMM::AmberAngle::*what_function_type)(  ) const;
+            what_function_type what_function_value( &::SireMM::AmberAngle::what );
+            
+            AmberAngle_exposer.def( 
+                "what"
+                , what_function_value
+                , "" );
+        
+        }
+        AmberAngle_exposer.staticmethod( "typeName" );
         AmberAngle_exposer.def( "__copy__", &__copy__);
         AmberAngle_exposer.def( "__deepcopy__", &__copy__);
         AmberAngle_exposer.def( "clone", &__copy__);

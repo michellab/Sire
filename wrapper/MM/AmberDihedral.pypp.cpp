@@ -114,6 +114,17 @@ void register_AmberDihedral_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberDihedral::terms
+        
+            typedef ::QVector< SireMM::AmberDihPart > ( ::SireMM::AmberDihedral::*terms_function_type)(  ) const;
+            terms_function_type terms_function_value( &::SireMM::AmberDihedral::terms );
+            
+            AmberDihedral_exposer.def( 
+                "terms"
+                , terms_function_value
+                , "" );
+        
+        }
         { //::SireMM::AmberDihedral::toExpression
         
             typedef ::SireCAS::Expression ( ::SireMM::AmberDihedral::*toExpression_function_type)( ::SireCAS::Symbol const & ) const;
@@ -137,6 +148,29 @@ void register_AmberDihedral_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberDihedral::typeName
+        
+            typedef char const * ( *typeName_function_type )(  );
+            typeName_function_type typeName_function_value( &::SireMM::AmberDihedral::typeName );
+            
+            AmberDihedral_exposer.def( 
+                "typeName"
+                , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberDihedral::what
+        
+            typedef char const * ( ::SireMM::AmberDihedral::*what_function_type)(  ) const;
+            what_function_type what_function_value( &::SireMM::AmberDihedral::what );
+            
+            AmberDihedral_exposer.def( 
+                "what"
+                , what_function_value
+                , "" );
+        
+        }
+        AmberDihedral_exposer.staticmethod( "typeName" );
         AmberDihedral_exposer.def( "__copy__", &__copy__);
         AmberDihedral_exposer.def( "__deepcopy__", &__copy__);
         AmberDihedral_exposer.def( "clone", &__copy__);
