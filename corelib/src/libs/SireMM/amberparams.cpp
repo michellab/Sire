@@ -772,6 +772,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberParams &amberp
         << amberparam.amber_charges << amberparam.amber_ljs
         << amberparam.amber_masses << amberparam.amber_elements
         << amberparam.amber_types << amberparam.born_radii
+        << amberparam.amber_screens << amberparam.amber_treechains
         << amberparam.exc_atoms
         << amberparam.amber_bonds
         << amberparam.amber_angles << amberparam.amber_dihedrals
@@ -795,6 +796,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberParams &amberparam)
             >> amberparam.amber_charges >> amberparam.amber_ljs
             >> amberparam.amber_masses >> amberparam.amber_elements
             >> amberparam.amber_types >> amberparam.born_radii
+            >> amberparam.amber_screens >> amberparam.amber_treechains
             >> amberparam.exc_atoms
             >> amberparam.amber_bonds
             >> amberparam.amber_angles >> amberparam.amber_dihedrals
@@ -837,6 +839,8 @@ AmberParams::AmberParams(const AmberParams &other)
               amber_charges(other.amber_charges),amber_ljs(other.amber_ljs),
               amber_masses(other.amber_masses),amber_elements(other.amber_elements),
               amber_types(other.amber_types), born_radii(other.born_radii),
+              amber_screens(other.amber_screens),
+              amber_treechains(other.amber_treechains),
               exc_atoms(other.exc_atoms),
               amber_bonds(other.amber_bonds),
               amber_angles(other.amber_angles),
@@ -859,6 +863,8 @@ AmberParams& AmberParams::operator=(const AmberParams &other)
         amber_elements = other.amber_elements;
         amber_types = other.amber_types;
         born_radii = other.born_radii;
+        amber_screens = other.amber_screens;
+        amber_treechains = other.amber_treechains;
         exc_atoms = other.exc_atoms;
         amber_bonds = other.amber_bonds;
         amber_angles = other.amber_angles;
@@ -885,6 +891,8 @@ bool AmberParams::operator==(const AmberParams &other) const
           and amber_elements == other.amber_elements
           and amber_types == other.amber_types
           and born_radii == other.born_radii
+          and amber_screens == other.amber_screens
+          and amber_treechains == other.amber_treechains
           and exc_atoms == other.exc_atoms
           and amber_bonds == other.amber_bonds
           and amber_angles == other.amber_angles
@@ -1036,9 +1044,21 @@ AtomStringProperty AmberParams::amberTypes() const
 }
 
 /** Return all of the Born radii of the atoms */
-AtomRadii AmberParams::bornRadii() const
+AtomRadii AmberParams::gbRadii() const
 {
     return born_radii;
+}
+
+/** Return all of the Born screening parameters for the atoms */
+AtomFloatProperty AmberParams::gbScreening() const
+{
+    return amber_screens;
+}
+
+/** Return all of the Amber treechain classification for all of the atoms */
+AtomStringProperty AmberParams::treeChains() const
+{
+    return amber_treechains;
 }
 
 /** Set the atom parameters for the specified atom to the provided values */
@@ -1048,7 +1068,9 @@ void AmberParams::add(const AtomID &atom,
                       const SireMol::Element &element,
                       const SireMM::LJParameter &ljparam,
                       const QString &amber_type,
-                      SireUnits::Dimension::Length born_radius)
+                      SireUnits::Dimension::Length born_radius,
+                      double screening_parameter,
+                      const QString &treechain)
 {
     CGAtomIdx idx = molinfo.cgAtomIdx(atom);
     
@@ -1061,6 +1083,8 @@ void AmberParams::add(const AtomID &atom,
         amber_elements = AtomElements(molinfo);
         amber_types = AtomStringProperty(molinfo);
         born_radii = AtomRadii(molinfo);
+        amber_screens = AtomFloatProperty(molinfo);
+        amber_treechains = AtomStringProperty(molinfo);
     }
     
     amber_charges.set(idx, charge);
@@ -1069,6 +1093,8 @@ void AmberParams::add(const AtomID &atom,
     amber_elements.set(idx, element);
     amber_types.set(idx, amber_type);
     born_radii.set(idx, born_radius);
+    amber_screens.set(idx, screening_parameter);
+    amber_treechains.set(idx, treechain);
 }
 
 /** Return the connectivity of the molecule implied by the
@@ -1386,6 +1412,18 @@ AmberParams& AmberParams::operator+=(const AmberParams &other)
     {
         //we overwrite these radii with 'other'
         born_radii = other.born_radii;
+    }
+
+    if (not other.amber_screens.isEmpty())
+    {
+        //we overwrite these screening parameters with 'other'
+        amber_screens = other.amber_screens;
+    }
+    
+    if (not other.amber_treechains.isEmpty())
+    {
+        //we overwrite these treechain classification with 'other'
+        amber_treechains = other.amber_treechains;
     }
 
     if (amber_bonds.isEmpty())

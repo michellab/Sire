@@ -103,6 +103,8 @@ public:
 
     QString toString() const;
 
+    QString formatName() const;
+
     static AmberRst parse(const QString &filename);
 
     QString title() const;
@@ -192,6 +194,8 @@ public:
     const char* what() const;
     
     QString toString() const;
+    
+    QString formatName() const;
     
     bool isLead() const;
     

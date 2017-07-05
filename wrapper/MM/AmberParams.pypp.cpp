@@ -65,13 +65,13 @@ void register_AmberParams_class(){
         AmberParams_exposer.def( bp::init< SireMM::AmberParams const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::AmberParams::add
         
-            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::AtomID const &,::SireUnits::Dimension::Charge,::SireUnits::Dimension::MolarMass,::SireMol::Element const &,::SireMM::LJParameter const &,::QString const &,::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::AtomID const &,::SireUnits::Dimension::Charge,::SireUnits::Dimension::MolarMass,::SireMol::Element const &,::SireMM::LJParameter const &,::QString const &,::SireUnits::Dimension::Length,double,::QString const & ) ;
             add_function_type add_function_value( &::SireMM::AmberParams::add );
             
             AmberParams_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atom"), bp::arg("charge"), bp::arg("mass"), bp::arg("element"), bp::arg("ljparam"), bp::arg("amber_type"), bp::arg("born_radius") )
+                , ( bp::arg("atom"), bp::arg("charge"), bp::arg("mass"), bp::arg("element"), bp::arg("ljparam"), bp::arg("amber_type"), bp::arg("born_radius"), bp::arg("screening_parameter"), bp::arg("treechain") )
                 , "" );
         
         }
@@ -214,17 +214,6 @@ void register_AmberParams_class(){
                 , "" );
         
         }
-        { //::SireMM::AmberParams::bornRadii
-        
-            typedef ::SireMol::AtomRadii ( ::SireMM::AmberParams::*bornRadii_function_type)(  ) const;
-            bornRadii_function_type bornRadii_function_value( &::SireMM::AmberParams::bornRadii );
-            
-            AmberParams_exposer.def( 
-                "bornRadii"
-                , bornRadii_function_value
-                , "" );
-        
-        }
         { //::SireMM::AmberParams::charges
         
             typedef ::SireMol::AtomCharges ( ::SireMM::AmberParams::*charges_function_type)(  ) const;
@@ -312,6 +301,28 @@ void register_AmberParams_class(){
                 "excludedAtoms"
                 , excludedAtoms_function_value
                 , "Return the excluded atoms of the molecule. The returned\nobject has a matrix of all atom pairs, where the value\nis 0 for atom0-atom1 pairs that are to be excluded,\nand 1 for atom0-atom1 pairs that are to be included\nin the nonbonded calculation" );
+        
+        }
+        { //::SireMM::AmberParams::gbRadii
+        
+            typedef ::SireMol::AtomRadii ( ::SireMM::AmberParams::*gbRadii_function_type)(  ) const;
+            gbRadii_function_type gbRadii_function_value( &::SireMM::AmberParams::gbRadii );
+            
+            AmberParams_exposer.def( 
+                "gbRadii"
+                , gbRadii_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberParams::gbScreening
+        
+            typedef ::SireMol::AtomFloatProperty ( ::SireMM::AmberParams::*gbScreening_function_type)(  ) const;
+            gbScreening_function_type gbScreening_function_value( &::SireMM::AmberParams::gbScreening );
+            
+            AmberParams_exposer.def( 
+                "gbScreening"
+                , gbScreening_function_value
+                , "" );
         
         }
         { //::SireMM::AmberParams::getNB14
@@ -480,6 +491,17 @@ void register_AmberParams_class(){
         
         }
         AmberParams_exposer.def( bp::self == bp::self );
+        { //::SireMM::AmberParams::radiusSet
+        
+            typedef ::QString ( ::SireMM::AmberParams::*radiusSet_function_type)(  ) const;
+            radiusSet_function_type radiusSet_function_value( &::SireMM::AmberParams::radiusSet );
+            
+            AmberParams_exposer.def( 
+                "radiusSet"
+                , radiusSet_function_value
+                , "" );
+        
+        }
         { //::SireMM::AmberParams::remove
         
             typedef void ( ::SireMM::AmberParams::*remove_function_type)( ::SireMol::BondID const & ) ;
@@ -552,6 +574,18 @@ void register_AmberParams_class(){
                 , "Set the excluded atoms of the molecule. This should be a\nCLJNBPairs with the value equal to 0 for atom0-atom1 pairs\nthat are excluded, and 1 for atom0-atom1 pairs that are\nto be included in the non-bonded calculation" );
         
         }
+        { //::SireMM::AmberParams::setRadiusSet
+        
+            typedef void ( ::SireMM::AmberParams::*setRadiusSet_function_type)( ::QString const & ) ;
+            setRadiusSet_function_type setRadiusSet_function_value( &::SireMM::AmberParams::setRadiusSet );
+            
+            AmberParams_exposer.def( 
+                "setRadiusSet"
+                , setRadiusSet_function_value
+                , ( bp::arg("radius_set") )
+                , "" );
+        
+        }
         { //::SireMM::AmberParams::toString
         
             typedef ::QString ( ::SireMM::AmberParams::*toString_function_type)(  ) const;
@@ -560,6 +594,17 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "toString"
                 , toString_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberParams::treeChains
+        
+            typedef ::SireMol::AtomStringProperty ( ::SireMM::AmberParams::*treeChains_function_type)(  ) const;
+            treeChains_function_type treeChains_function_value( &::SireMM::AmberParams::treeChains );
+            
+            AmberParams_exposer.def( 
+                "treeChains"
+                , treeChains_function_value
                 , "" );
         
         }

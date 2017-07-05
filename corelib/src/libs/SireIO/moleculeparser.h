@@ -114,6 +114,8 @@ public:
 
     virtual bool isLead() const;
 
+    virtual QString formatName() const=0;
+
     double score() const;
 
     void enableParallel();
@@ -183,6 +185,8 @@ public:
     bool operator!=(const NullParser&) const;
     
     static const char* typeName();
+
+    QString formatName() const;
 
     SireSystem::System toSystem(const PropertyMap &map = PropertyMap()) const;
     SireSystem::System toSystem(const MoleculeParser &other,

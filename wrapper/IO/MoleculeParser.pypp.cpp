@@ -69,6 +69,17 @@ void register_MoleculeParser_class(){
                 , "Enable code to parse files in parallel" );
         
         }
+        { //::SireIO::MoleculeParser::formatName
+        
+            typedef ::QString ( ::SireIO::MoleculeParser::*formatName_function_type)(  ) const;
+            formatName_function_type formatName_function_value( &::SireIO::MoleculeParser::formatName );
+            
+            MoleculeParser_exposer.def( 
+                "formatName"
+                , formatName_function_value
+                , "" );
+        
+        }
         { //::SireIO::MoleculeParser::isBinaryFile
         
             typedef bool ( ::SireIO::MoleculeParser::*isBinaryFile_function_type)(  ) const;

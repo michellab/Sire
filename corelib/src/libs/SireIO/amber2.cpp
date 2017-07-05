@@ -84,6 +84,7 @@
 
 #include "SireBase/parallel.h"
 #include "SireBase/unittest.h"
+#include "SireBase/stringproperty.h"
 
 #include "SireSystem/system.h"
 #include "SireError/errors.h"
@@ -777,6 +778,12 @@ void AmberRst::readBoxInfo(int boxidx)
     }
 }
 
+/** Return the format name that is used to identify this file format within Sire */
+QString AmberRst::formatName() const
+{
+    return "RST7";
+}
+
 /** Parse the data contained in the lines - this clears any pre-existing
     data in this object */
 void AmberRst::parse(const PropertyMap &map)
@@ -1295,6 +1302,20 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
         
         system.setProperty( space_property.source(), SireVol::PeriodicBox(box_dims) );
     }
+    
+    //update the System fileformat property to record that it includes
+    //data from this file format
+    QString fileformat = this->formatName();
+    
+    try
+    {
+        QString last_format = system.property("fileformat").asA<StringProperty>();
+        fileformat = QString("%1,%2").arg(last_format,fileformat);
+    }
+    catch(...)
+    {}
+    
+    system.setProperty( "fileformat", StringProperty(fileformat) );
 }
 
 /** Return the title of the file */
@@ -2229,7 +2250,7 @@ QVector<double> getAtomRadii(const AmberParams &params)
     
     QVector<double> radii(info.nAtoms(), 0.0);
     
-    const auto r = params.bornRadii();
+    const auto r = params.gbRadii();
 
     if (not r.isEmpty())
     {
@@ -2240,6 +2261,48 @@ QVector<double> getAtomRadii(const AmberParams &params)
     }
     
     return radii;
+}
+
+/** Internal function used to get the atom GB screening data in AtomIdx order from
+    the passed AmberParams object */
+QVector<double> getAtomScreening(const AmberParams &params)
+{
+    const auto info = params.info();
+    
+    QVector<double> screening(info.nAtoms(), 0.0);
+    
+    const auto s = params.gbScreening();
+
+    if (not s.isEmpty())
+    {
+        for (int i=0; i<info.nAtoms(); ++i)
+        {
+            screening[i] = s[ info.cgAtomIdx(AtomIdx(i)) ];
+        }
+    }
+    
+    return screening;
+}
+
+/** Internal function used to get the tree chain information for each atom
+    in AtomIdx order from the passed AmberParams object */
+QVector<QString> getAtomTreeChains(const AmberParams &params)
+{
+    const auto info = params.info();
+    
+    QVector<QString> treechains(info.nAtoms(), "E");
+    
+    const auto t = params.treeChains();
+
+    if (not t.isEmpty())
+    {
+        for (int i=0; i<info.nAtoms(); ++i)
+        {
+            treechains[i] = t[ info.cgAtomIdx(AtomIdx(i)) ];
+        }
+    }
+    
+    return treechains;
 }
 
 /** Internal function used to get the amber atom types of each atom */
@@ -3148,6 +3211,98 @@ QStringList toLines(const QVector<AmberParams> &params,
                                    AmberFormat( AmberParm::FLOAT, 5, 16, 8) );
     };
 
+    //function used to generate the text for all atom Generalised Born screening parameters
+    auto getAllScreening = [&]()
+    {
+        QVector< QVector<double> > atom_screening(params.count());
+        
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    atom_screening[i] = getAtomScreening(params[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                atom_screening[i] = getAtomScreening(params[i]);
+            }
+        }
+        
+        if (all_errors)
+        {
+            QStringList errors;
+        
+            QStringList lines = writeFloatData( collapse(atom_screening),
+                                                AmberFormat( AmberParm::FLOAT, 5, 16, 8 ),
+                                                &errors );
+        
+            if (not errors.isEmpty())
+            {
+                tbb::spin_mutex::scoped_lock locker(error_mutex);
+                all_errors->append( QObject::tr("== Errors writing atom screening data! ==") );
+                *all_errors += errors;
+            }
+            
+            return lines;
+        }
+        else
+            return writeFloatData( collapse(atom_screening),
+                                   AmberFormat( AmberParm::FLOAT, 5, 16, 8) );
+    };
+
+    //function used to generate the text for all atom tree chain information
+    auto getAllTreeChains = [&]()
+    {
+        QVector< QVector<QString> > atom_treechains(params.count());
+        
+        if (use_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
+                               [&](const tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    atom_treechains[i] = getAtomTreeChains(params[i]);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<params.count(); ++i)
+            {
+                atom_treechains[i] = getAtomTreeChains(params[i]);
+            }
+        }
+        
+        if (all_errors)
+        {
+            QStringList errors;
+        
+            QStringList lines = writeStringData( collapse(atom_treechains),
+                                                 AmberFormat( AmberParm::STRING, 20, 4 ),
+                                                 &errors );
+        
+            if (not errors.isEmpty())
+            {
+                tbb::spin_mutex::scoped_lock locker(error_mutex);
+                all_errors->append( QObject::tr("== Errors writing atom treechain data! ==") );
+                *all_errors += errors;
+            }
+            
+            return lines;
+        }
+        else
+            return writeStringData( collapse(atom_treechains),
+                                    AmberFormat( AmberParm::STRING, 20, 4 ) );
+    };
+
     //function used to get all of the Amber atom types
     auto getAllAmberTypes = [&]()
     {
@@ -3850,7 +4005,8 @@ QStringList toLines(const QVector<AmberParams> &params,
 
     QStringList lines;
     
-    QStringList name_lines, charge_lines, number_lines, mass_lines, radius_lines, ambtyp_lines;
+    QStringList name_lines, charge_lines, number_lines, mass_lines, radius_lines, ambtyp_lines,
+                screening_lines, treechain_lines;
     std::tuple<QStringList,QStringList,QStringList,QStringList> lj_lines;
     std::tuple<QStringList,QStringList,int> excl_lines;
     std::tuple<QStringList,QStringList,int,int> res_lines;
@@ -3872,6 +4028,8 @@ QStringList toLines(const QVector<AmberParams> &params,
                             [&](){ lj_lines = getAllAtomTypes(); },
                             [&](){ ambtyp_lines = getAllAmberTypes(); },
                             [&](){ radius_lines = getAllRadii(); },
+                            [&](){ screening_lines = getAllScreening(); },
+                            [&](){ treechain_lines = getAllTreeChains(); },
                             [&](){ res_lines = getAllResidueInfo(); }
                           };
     
@@ -3976,6 +4134,13 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG SCNB_SCALE_FACTOR");
     lines += std::get<4>(dih_lines);
 
+    lines.append("%FLAG SOLTY");
+    //this is currently unused in Amber and should be equal to 0.0 for all atoms
+    {
+        QVector<double> solty(total_natoms, 0.0);
+        lines += writeFloatData(solty, AmberFormat( AmberParm::FLOAT, 5, 16, 8 ));
+    }
+
     lines.append("%FLAG LENNARD_JONES_ACOEF");
     lines += std::get<2>(lj_lines);
 
@@ -4003,21 +4168,38 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG EXCLUDED_ATOMS_LIST");
     lines += std::get<1>(excl_lines);
 
-    // HBOND parameters are not currently supported
+    // HBOND_ACOEF parameters are not currently supported
     lines.append("%FLAG HBOND_ACOEF");
     lines.append("%FORMAT(5E16.8)");
-    lines.append("  0.00000000E+00");
+    lines.append(" ");
 
+    // HBOND_BCOEF parameters are not currently supported
     lines.append("%FLAG HBOND_BCOEF");
     lines.append("%FORMAT(5E16.8)");
-    lines.append("  0.00000000E+00");
+    lines.append(" ");
 
+    // HBCUT parameters not supported, but now not used in Amber
     lines.append("%FLAG HBCUT");
     lines.append("%FORMAT(5E16.8)");
-    lines.append("  0.00000000E+00");
+    lines.append(" ");
 
     lines.append("%FLAG AMBER_ATOM_TYPE");
     lines += ambtyp_lines;
+
+    lines.append("%FLAG TREE_CHAIN_CLASSIFICATION");
+    lines += treechain_lines;
+    
+    lines.append("%FLAG JOIN_ARRAY");
+    {
+        //no longer used in Amber, and should be an array of zeroes
+        QVector<qint64> join_array(total_natoms, 0);
+        auto zeroes = writeIntData(join_array, AmberFormat( AmberParm::INTEGER, 10, 8 ));
+        lines += zeroes;
+
+        //IROTAT is also no longer used, and is also an array of zeroes
+        lines.append("%FLAG IROTAT");
+        lines += zeroes;
+    }
 
     lines.append("%FLAG RADIUS_SET");
     lines.append("%FORMAT(1a80)");
@@ -4028,7 +4210,8 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG RADII");
     lines += radius_lines;
 
-    //%FLAG SCREEN
+    lines.append("%FLAG SCREEN");
+    lines += screening_lines;
 
     if (has_periodic_box)
     {
@@ -4036,8 +4219,9 @@ QStringList toLines(const QVector<AmberParams> &params,
         //with all solutes written first, and then all solvents. We need to work what is
         //a solvent, and then when the first solvent exists. As a test, we will say that
         //the solvent is the molecule that
-
-        //%FLAG SOLVENT_POINTERS
+        lines.append("%FLAG SOLVENT_POINTERS");
+        QVector<qint64> solvent_pointers(3,0);
+        lines += writeIntData(solvent_pointers, AmberFormat( AmberParm::INTEGER, 10, 8 ));
 
         lines.append("%FLAG ATOMS_PER_MOLECULE");
         lines += writeIntData(natoms_per_molecule, AmberFormat( AmberParm::INTEGER, 10, 8 ));
@@ -4054,6 +4238,8 @@ QStringList toLines(const QVector<AmberParams> &params,
         lines.append("%FLAG BOX_DIMENSIONS");
         lines += writeFloatData(box_dims, AmberFormat( AmberParm::FLOAT, 5, 16, 8 ));
     }
+
+    //we don't currently support IFCAP > 0, IFPERT > 0 or IFPOL > 0
 
     return lines;
 }
@@ -4084,7 +4270,7 @@ AmberParm::AmberParm(const System &system, const PropertyMap &map)
         {
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                params[i] = system[molnums[i]].molecule().property("amberparameters")
+                params[i] = system[molnums[i]].molecule().property("parameters")
                                     .asA<AmberParams>();
                 //params[i] = AmberParams(system[molnums[i]],map);
             }
@@ -4094,7 +4280,7 @@ AmberParm::AmberParm(const System &system, const PropertyMap &map)
     {
         for (int i=0; i<molnums.count(); ++i)
         {
-            params[i] = system[molnums[i]].molecule().property("amberparameters")
+            params[i] = system[molnums[i]].molecule().property("parameters")
                                 .asA<AmberParams>();
             //params[i] = AmberParams(system[molnums[i]],map);
         }
@@ -4527,6 +4713,12 @@ void AmberParm::assertSane() const
     live_test( [&](){ SireBase::assert_equal(this->floatData("RADII").count(),
                                              natoms, CODELOC);}, errors );
     
+    live_test( [&](){ SireBase::assert_equal(this->floatData("SCREEN").count(),
+                                             natoms, CODELOC);}, errors );
+    
+    live_test( [&](){ SireBase::assert_equal(this->stringData("TREE_CHAIN_CLASSIFICATION").count(),
+                                             natoms, CODELOC);}, errors );
+    
     if (not errors.isEmpty())
     {
         for (auto error : errors)
@@ -4653,6 +4845,8 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
         const auto amber_type_array = this->intData("ATOM_TYPE_INDEX").constData();
         const auto ambertype_array = this->stringData("AMBER_ATOM_TYPE").constData();
         const auto born_radii_array = this->floatData("RADII").constData();
+        const auto born_screening_array = this->floatData("SCREEN").constData();
+        const auto treechains_array = this->stringData("TREE_CHAIN_CLASSIFICATION").constData();
         
         const int natoms = molinfo.nAtoms();
         
@@ -4671,7 +4865,9 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
                         Element(int(atomic_num_array[atom_idx])),
                         lj_data[ amber_type_array[atom_idx] - 1 ],
                         ambertype_array[atom_idx].trimmed(),
-                        born_radii_array[atom_idx] * angstrom );
+                        born_radii_array[atom_idx] * angstrom,
+                        born_screening_array[atom_idx],
+                        treechains_array[atom_idx] );
         }
         
         return params;
@@ -4952,8 +5148,12 @@ MolEditor AmberParm::getMolecule(int molidx, int start_idx, int natoms,
     mol.setProperty(map["improper"],
                     amber_params.improperFunctions(InternalPotential::symbols().dihedral().phi()));
     mol.setProperty(map["intrascale"], amber_params.cljScaleFactors());
-
-    mol.setProperty(map["amberparameters"], amber_params);
+    mol.setProperty(map["gb_radii"], amber_params.gbRadii());
+    mol.setProperty(map["gb_screening"], amber_params.gbScreening());
+    mol.setProperty(map["gb_radius_set"], StringProperty(amber_params.radiusSet()));
+    mol.setProperty(map["treechain"], amber_params.treeChains());
+    mol.setProperty(map["parameters"], amber_params);
+    mol.setProperty(map["forcefield"], StringProperty("amber_FFXX"));
 
     return mol;
 }
@@ -5047,6 +5247,12 @@ Molecule AmberParm::getMolecule(int molidx, const AmberRst &rst,
     }
 }
 
+/** Return the format name that is used to identify this file format within Sire */
+QString AmberParm::formatName() const
+{
+    return "PRM7";
+}
+
 /** Return the System that is described by this AmberParm file. Note that
     the molecules in this system don't have any coordinates (as these aren't
     provided by the file */
@@ -5091,6 +5297,7 @@ System AmberParm::startSystem(const PropertyMap &map) const
     
     System system( this->title() );
     system.add(molgroup);
+    system.setProperty("fileformat", StringProperty(this->formatName()));
     
     return system;
 }

@@ -436,14 +436,18 @@ public:
              const SireMol::Element &element,
              const SireMM::LJParameter &ljparam,
              const QString &amber_type,
-             SireUnits::Dimension::Length born_radius);
+             SireUnits::Dimension::Length born_radius,
+             double screening_parameter,
+             const QString &treechain);
 
     SireMol::AtomCharges charges() const;
     SireMol::AtomMasses masses() const;
     SireMol::AtomElements elements() const;
     SireMM::AtomLJs ljs() const;
     SireMol::AtomStringProperty amberTypes() const;
-    SireMol::AtomRadii bornRadii() const;
+    SireMol::AtomRadii gbRadii() const;
+    SireMol::AtomFloatProperty gbScreening() const;
+    SireMol::AtomStringProperty treeChains() const;
 
     void setRadiusSet(const QString &radius_set);
     QString radiusSet() const;
@@ -522,6 +526,12 @@ private:
 
     /** All of the amber atom Born radii */
     SireMol::AtomRadii born_radii;
+    
+    /** All of the amber GB screening parameters */
+    SireMol::AtomFloatProperty amber_screens;
+
+    /** All of the amber treechain classifications for all atoms */
+    SireMol::AtomStringProperty amber_treechains;
 
     /** The excluded atoms in the molecule (atom pairs between
         which a nonbonded calculation is not evaluated) */

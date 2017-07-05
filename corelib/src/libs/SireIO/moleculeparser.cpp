@@ -697,6 +697,11 @@ const char* NullParser::typeName()
     return QMetaType::typeName( qMetaTypeId<NullParser>() );
 }
 
+QString NullParser::formatName() const
+{
+    return "NULL";
+}
+
 System NullParser::toSystem(const PropertyMap&) const
 {
     return System();

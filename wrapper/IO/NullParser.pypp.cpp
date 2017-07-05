@@ -50,6 +50,17 @@ void register_NullParser_class(){
         NullParser_exposer_t NullParser_exposer = NullParser_exposer_t( "NullParser", "This is a null parser, returned when the file cannot be parsed", bp::init< >("") );
         bp::scope NullParser_scope( NullParser_exposer );
         NullParser_exposer.def( bp::init< SireIO::NullParser const & >(( bp::arg("arg0") ), "") );
+        { //::SireIO::NullParser::formatName
+        
+            typedef ::QString ( ::SireIO::NullParser::*formatName_function_type)(  ) const;
+            formatName_function_type formatName_function_value( &::SireIO::NullParser::formatName );
+            
+            NullParser_exposer.def( 
+                "formatName"
+                , formatName_function_value
+                , "" );
+        
+        }
         NullParser_exposer.def( bp::self != bp::self );
         { //::SireIO::NullParser::operator=
         

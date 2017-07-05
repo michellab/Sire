@@ -89,6 +89,8 @@ namespace bp = boost::python;
 
 #include "amber2.h"
 
+#include <QDateTime>
+
 #include <QDebug>
 
 #include <QElapsedTimer>
@@ -125,7 +127,7 @@ void register_AmberParm_class(){
             .export_values()
             ;
         AmberParm_exposer.def( bp::init< QString const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by reading from the file called filename") );
-        AmberParm_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by reading from the file called filename") );
+        AmberParm_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by reading from the contained in the passed\nset of lines") );
         AmberParm_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by converting from the passed system, using the passed property\nmap to find the right properties") );
         AmberParm_exposer.def( bp::init< SireIO::AmberParm const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireIO::AmberParm::assertSane
@@ -172,6 +174,17 @@ void register_AmberParm_class(){
                 , floatData_function_value
                 , ( bp::arg("flag") )
                 , "Return the float data for the passed flag. This returns an empty\nlist if there is no data associated with this flag. This raises\nan invalid_cast error if data exists, but it is the wrong type" );
+        
+        }
+        { //::SireIO::AmberParm::formatName
+        
+            typedef ::QString ( ::SireIO::AmberParm::*formatName_function_type)(  ) const;
+            formatName_function_type formatName_function_value( &::SireIO::AmberParm::formatName );
+            
+            AmberParm_exposer.def( 
+                "formatName"
+                , formatName_function_value
+                , "" );
         
         }
         { //::SireIO::AmberParm::getMolecule

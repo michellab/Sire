@@ -89,6 +89,8 @@ namespace bp = boost::python;
 
 #include "amber2.h"
 
+#include <QDateTime>
+
 #include <QDebug>
 
 #include <QElapsedTimer>
@@ -118,7 +120,7 @@ void register_AmberRst_class(){
         AmberRst_exposer_t AmberRst_exposer = AmberRst_exposer_t( "AmberRst", "This class represents an Amber-format restartcoordinate file (ascii),\ncurrently supporting these files from Amber7 to Amber16.\n\nThe format of this file is described here;\n\nhttp:ambermd.orgformats.html\n\n(specifically the AMBER coordinaterestart file specification\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AmberRst_scope( AmberRst_exposer );
         AmberRst_exposer.def( bp::init< QString const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by parsing the passed file") );
-        AmberRst_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by parsing the passed file") );
+        AmberRst_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by parsing the data in the passed text lines") );
         AmberRst_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct by extracting the necessary data from the passed System") );
         AmberRst_exposer.def( bp::init< SireIO::AmberRst const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireIO::AmberRst::boxAngles
@@ -152,6 +154,17 @@ void register_AmberRst_class(){
                 "coordinates"
                 , coordinates_function_value
                 , "Return the parsed coordinate data" );
+        
+        }
+        { //::SireIO::AmberRst::formatName
+        
+            typedef ::QString ( ::SireIO::AmberRst::*formatName_function_type)(  ) const;
+            formatName_function_type formatName_function_value( &::SireIO::AmberRst::formatName );
+            
+            AmberRst_exposer.def( 
+                "formatName"
+                , formatName_function_value
+                , "" );
         
         }
         { //::SireIO::AmberRst::hasVelocities
