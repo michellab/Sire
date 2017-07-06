@@ -13,7 +13,9 @@ include_directories(${TBB_INCLUDE_DIR})
 # Define the headers in SireIO
 set ( SIREIO_HEADERS
       amber.h
-      amber2.h
+      amberformat.h
+      amberprm.h
+      amberrst7.h
       cube.h
       errors.h
       flexibilitylibrary.h
@@ -33,7 +35,9 @@ set ( SIREIO_SOURCES
       register_sireio.cpp
 
       amber.cpp
-      amber2.cpp
+      amberformat.cpp
+      amberprm.cpp
+      amberrst7.cpp
       cube.cpp
       errors.cpp
       flexibilitylibrary.cpp

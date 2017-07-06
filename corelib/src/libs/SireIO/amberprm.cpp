@@ -35,7 +35,9 @@
 
 #include <tuple>
 
-#include "amber2.h"
+#include "SireIO/amberprm.h"
+#include "SireIO/amberrst7.h"
+#include "SireIO/amberformat.h"
 
 #include "SireMol/element.h"
 
@@ -95,6 +97,7 @@
 #include <QDebug>
 
 using namespace SireIO;
+using namespace SireIO::detail;
 using namespace SireMM;
 using namespace SireMol;
 using namespace SireMove;
@@ -106,1279 +109,15 @@ using namespace SireUnits;
 using namespace SireStream;
 using namespace SireBase;
 
-// The partial charges in the top file are not in electrons
-static const double AMBERCHARGECONV = 18.2223;
-
-static const double AMBER14COUL = 1.0 / 1.2 ;
-static const double AMBER14LJ = 0.50 ;
-
-/** Internal class used by AmberParm to hold format description */
-class AmberFormat
-{
-public:
-    AmberParm::FLAG_TYPE flag_type;
-    int num_values;
-    int field_width;
-    int point_width;
-
-    AmberFormat() : flag_type(AmberParm::UNKNOWN),
-                    num_values(0), field_width(0), point_width(0)
-    {}
-    
-    AmberFormat(AmberParm::FLAG_TYPE flag, int num,
-                int field, int point=0)
-            : flag_type(flag), num_values(num), field_width(field), point_width(point)
-    {}
-    
-    AmberFormat(const QString &line)
-    {
-        QRegularExpression re("%FORMAT\\((\\d+)(\\w)(\\d+)\\.?(\\d+)?\\)");
-        
-        auto m = re.match(line);
-        
-        if (not m.hasMatch())
-        {
-            throw SireIO::parse_error( QObject::tr(
-                    "Could not extract the format from the line '%1'. "
-                    "Expected to read a line similar to '%FORMAT(5E16.8)'.")
-                        .arg(line), CODELOC );
-        }
-        
-        num_values = m.captured(1).toInt();
-        field_width = m.captured(3).toInt();
-        
-        QString typ = m.captured(2).toLower();
-        
-        if (typ == "a")
-            flag_type = AmberParm::STRING;
-        else if (typ == "i")
-            flag_type = AmberParm::INTEGER;
-        else if (typ == "e")
-            flag_type = AmberParm::FLOAT;
-        else
-            flag_type = AmberParm::UNKNOWN;
-        
-        if (not m.captured(4).isNull())
-        {
-            point_width = m.captured(4).toInt();
-        }
-    }
-    
-    ~AmberFormat()
-    {}
-    
-    QString toString() const
-    {
-        switch(flag_type)
-        {
-            case AmberParm::STRING:
-                return QString("AmberFormat( %1 x string[width = %2] )")
-                            .arg(num_values).arg(field_width);
-            case AmberParm::INTEGER:
-                return QString("AmberFormat( %1 x integer[width = %2] )")
-                            .arg(num_values).arg(field_width);
-            case AmberParm::FLOAT:
-                return QString("AmberFormat( %1 x float[width = %2, precision = %3] )")
-                            .arg(num_values).arg(field_width).arg(point_width);
-            default:
-                return QString("AmberFormat( UNKNOWN )");
-        }
-    }
-    
-    QString toAmberString() const
-    {
-        switch(flag_type)
-        {
-            case AmberParm::STRING:
-                return QString("%FORMAT(%1a%2)").arg(num_values).arg(field_width);
-            case AmberParm::INTEGER:
-                return QString("%FORMAT(%1I%2)").arg(num_values).arg(field_width);
-            case AmberParm::FLOAT:
-                return QString("%FORMAT(%1E%2.%3)").arg(num_values).arg(field_width)
-                                                   .arg(point_width);
-            default:
-                return QString("%FORMAT(%1U%2)").arg(num_values).arg(field_width);
-        }
-    }
-    
-    /** The width of each field (number of columns) */
-    int width() const
-    {
-        return field_width;
-    }
-    
-    /** The maximum number of items per line */
-    int numValues() const
-    {
-        return num_values;
-    }
-    
-    /** The number of values after the decimal point for float values */
-    int pointWidth() const
-    {
-        return point_width;
-    }
-    
-    /** Return the number of values to read from the passed line */
-    int numValues( const QString &line ) const
-    {
-        return qMin( num_values, line.length() / field_width );
-    }
-};
-
-QStringList writeIntData(const QVector<qint64> &data, AmberFormat format,
-                         QStringList *errors=0, bool include_header=true)
-{
-    QStringList lines;
-    
-    if (include_header)
-    {
-        lines.append( format.toAmberString() );
-    }
-
-    int n = 0;
-    
-    QString line;
-    
-    for (int i=0; i<data.count(); ++i)
-    {
-        const qint64 value = data.constData()[i];
-    
-        QString sval = QString("%1").arg(value, format.width());
-        
-        if (sval.length() > format.width())
-        {
-            //we couldn't fit this number into the specified width!
-            if (errors)
-                errors->append( QObject::tr(
-                    "Could not write the integer at index %1, value '%2' into "
-                    "the specified format %3.")
-                        .arg(i).arg(value).arg(format.toString()) );
-
-            sval = QString("%1").arg(0, format.width());
-        }
-        
-        line += sval;
-        n += 1;
-        
-        if (n == format.numValues())
-        {
-            lines.append(line);
-            line = QString();
-            n = 0;
-        }
-    }
-    
-    if (n > 0)
-    {
-        lines.append(line);
-    }
-    
-    return lines;
-}
-
-QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
-                            const QPair<qint64,qint64> &index,
-                            double *total_score, QStringList *errors=0)
-{
-    QVector<qint64> data;
-
-    double score = 0;
-
-    //read in all of the lines...
-    const int strt = index.first;
-    const int end = index.first + index.second;
-    
-    const QString *l = lines.constData();
-    
-    data.reserve( (end-strt) * format.numValues() );
-    
-    for (int i=strt; i<end; ++i)
-    {
-        const QString &line = l[i];
-        
-        int nvalues = format.numValues(line);
-        
-        if (errors and nvalues < format.numValues() and i != end-1)
-        {
-            //one of the data lines has too little data
-            errors->append( QObject::tr("Too few data values on line %1: "
-                "Expected %2 values but only saw %3.")
-                    .arg(i+1).arg(format.numValues()).arg(nvalues) );
-        }
-        
-        double read_score = 0;
-        
-        for (int j=0; j<nvalues; ++j)
-        {
-            auto ref = line.midRef( j*format.width(), format.width() );
-            
-            if (not ref.isNull())
-            {
-                bool ok = true;
-                qint64 value = ref.toLong(&ok);
-                
-                if (ok)
-                {
-                    data.append(value);
-                    read_score += 1.0;
-                }
-                else if (errors)
-                    errors->append( QObject::tr("Failed to convert the data "
-                       "on line %1, column %2 (%3) into an integer!")
-                            .arg(i+1).arg(j+1).arg(ref.toString()) );
-            }
-            else if (errors)
-            {
-                errors->append( QObject::tr("Failed to convert the data "
-                       "on line %1, column %2 as the string is null!")
-                            .arg(i+1).arg(j+1) );
-            }
-        }
-
-        score += read_score / nvalues;
-    }
-
-    if (total_score)
-        *total_score += score;
-
-    return data;
-}
-
-QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
-                           QStringList *errors=0, bool include_header=true)
-{
-    QStringList lines;
-    
-    if (include_header)
-    {
-        lines.append( format.toAmberString() );
-    }
-
-    int n = 0;
-    
-    QString line;
-    
-    for (int i=0; i<data.count(); ++i)
-    {
-        const double value = data.constData()[i];
-    
-        QString sval = QString("%1").arg(value, format.width(), 'E', format.pointWidth());
-        
-        if (sval.length() > format.width())
-        {
-            //we couldn't fit this number into the specified width!
-            if (errors)
-                errors->append( QObject::tr(
-                    "Could not write the float at index %1, value '%2' into "
-                    "the specified format %3.")
-                        .arg(i).arg(value).arg(format.toString()) );
-
-            sval = QString("%1").arg(0.0, format.width(), 'f', format.pointWidth());
-        }
-        
-        line += sval;
-        n += 1;
-        
-        if (n == format.numValues())
-        {
-            lines.append(line);
-            line = QString();
-            n = 0;
-        }
-    }
-    
-    if (n > 0)
-    {
-        lines.append(line);
-    }
-    
-    return lines;
-}
-
-QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
-                              const QPair<qint64,qint64> &index,
-                              double *total_score, QStringList *errors)
-{
-    QVector<double> data;
-
-    double score = 0;
-
-    //read in all of the lines...
-    const int strt = index.first;
-    const int end = index.first + index.second;
-    
-    data.reserve( (end-strt) * format.numValues() );
-    
-    const QString *l = lines.constData();
-    
-    for (int i=strt; i<end; ++i)
-    {
-        const QString &line = l[i];
-        
-        int nvalues = format.numValues(line);
-        
-        if (errors and nvalues < format.numValues() and i != end-1)
-        {
-            //one of the data lines has too little data
-            errors->append( QObject::tr("Too few data values on line %1: "
-                "Expected %2 values but only saw %3.")
-                    .arg(i+1).arg(format.numValues()).arg(nvalues) );
-        }
-        
-        double read_score = 0;
-        
-        for (int j=0; j<nvalues; ++j)
-        {
-            auto ref = line.midRef( j*format.width(), format.width() );
-            
-            if (not ref.isNull())
-            {
-                bool ok = true;
-                double value = ref.toDouble(&ok);
-                
-                if (ok)
-                {
-                    data.append(value);
-                    read_score += 1;
-                }
-                else if (errors)
-                    errors->append( QObject::tr("Failed to convert the data "
-                       "on line %1, column %2 (%3) into an integer!")
-                            .arg(i+1).arg(j+1).arg(ref.toString()) );
-            }
-            else if (errors)
-            {
-                errors->append( QObject::tr("Failed to convert the data "
-                       "on line %1, column %2 as the string is null!")
-                            .arg(i+1).arg(j+1) );
-            }
-        }
-        
-        score += read_score / nvalues;
-    }
-
-    if (total_score)
-        *total_score += score;
-
-    return data;
-}
-
-template<class T, class U>
-std::tuple< QVector<T>, QVector<U> > collapseTuples(
-                   const QVector< std::tuple< QVector<T>,QVector<U> > > &arrays )
-{
-    int nvals = 0;
-    
-    for (const auto array : arrays)
-    {
-        nvals += std::get<0>(array).count();
-    }
-    
-    if (nvals == 0)
-    {
-        return std::make_tuple( QVector<T>(), QVector<U>() );
-    }
-    
-    QVector<T> tvals;
-    QVector<U> uvals;
-    
-    tvals.reserve(nvals);
-    uvals.reserve(nvals);
-    
-    for (const auto array : arrays)
-    {
-        tvals += std::get<0>(array);
-        uvals += std::get<1>(array);
-    }
-    
-    return std::make_tuple(tvals, uvals);
-}
-
-template<class T, class U, class V, class W>
-std::tuple< QVector<T>, QVector<U>, QVector<V>, QVector<W> > collapseTuples(
-                   const QVector< std::tuple< QVector<T>,QVector<U>,
-                                              QVector<V>,QVector<W> > > &arrays )
-{
-    int nvals = 0;
-    
-    for (const auto array : arrays)
-    {
-        nvals += std::get<0>(array).count();
-    }
-    
-    if (nvals == 0)
-    {
-        return std::make_tuple( QVector<T>(), QVector<U>(), QVector<V>(), QVector<W>() );
-    }
-    
-    QVector<T> tvals;
-    QVector<U> uvals;
-    QVector<V> vvals;
-    QVector<W> wvals;
-    
-    tvals.reserve(nvals);
-    uvals.reserve(nvals);
-    vvals.reserve(nvals);
-    wvals.reserve(nvals);
-    
-    for (const auto array : arrays)
-    {
-        tvals += std::get<0>(array);
-        uvals += std::get<1>(array);
-        vvals += std::get<2>(array);
-        wvals += std::get<3>(array);
-    }
-    
-    return std::make_tuple(tvals, uvals, vvals, wvals);
-}
-
-template<class T>
-QVector<T> collapse(const QVector< QVector<T> > &arrays)
-{
-    int nvals = 0;
-    
-    for (const auto array : arrays)
-    {
-        nvals += array.count();
-    }
-    
-    if (nvals == 0)
-    {
-        return QVector<T>();
-    }
-    
-    QVector<T> values;
-    values.reserve(nvals);
-    
-    for (const auto array : arrays)
-    {
-        values += array;
-    }
-    
-    return values;
-}
-
-QStringList writeStringData(const QVector<QString> &data, AmberFormat format,
-                            QStringList *errors=0, bool include_header=true)
-{
-    QStringList lines;
-    
-    if (include_header)
-    {
-        lines.append( format.toAmberString() );
-    }
-    
-    int n = 0;
-    
-    QString line;
-    
-    for (int i=0; i<data.count(); ++i)
-    {
-        const QString value = data.constData()[i];
-    
-        if (value.length() < format.width())
-        {
-            line += QString("%1").arg(value, -format.width());
-        }
-        else if (value.length() == format.width())
-        {
-            line += value;
-        }
-        else
-        {
-            if (errors)
-                errors->append( QObject::tr(
-                    "Could not fully write the string data at index %1, value '%2', "
-                    "as it can't fit into the format %3.")
-                        .arg(i).arg(value).arg(format.toString()) );
-        
-            line += value.mid(0,format.width());
-        }
-        
-        n += 1;
-        
-        if (n == format.numValues())
-        {
-            lines.append(line);
-            line = QString();
-            n = 0;
-        }
-    }
-    
-    if (n > 0)
-    {
-        lines.append(line);
-    }
-    
-    return lines;
-}
-
-QVector<QString> readStringData(const QVector<QString> &lines, AmberFormat format,
-                                const QPair<qint64,qint64> &index,
-                                double *total_score, QStringList *errors)
-{
-    QVector<QString> data;
-
-    double score = 0;
-
-    //read in all of the lines...
-    const int strt = index.first;
-    const int end = index.first + index.second;
-    
-    data.reserve( (end-strt) * format.numValues() );
-    
-    const QString *l = lines.constData();
-    
-    for (int i=strt; i<end; ++i)
-    {
-        const QString &line = l[i];
-        
-        int nvalues = format.numValues(line);
-        
-        if (errors and nvalues < format.numValues() and i != end-1)
-        {
-            //one of the data lines has too little data
-            errors->append( QObject::tr("Too few data values on line %1: "
-                "Expected %2 values but only saw %3.")
-                    .arg(i+1).arg(format.numValues()).arg(nvalues) );
-        }
-        
-        double read_score = 0;
-        
-        for (int j=0; j<nvalues; ++j)
-        {
-            auto ref = line.midRef( j*format.width(), format.width() );
-            
-            if (not ref.isNull())
-            {
-                data.append( ref.toString() );
-                read_score += 1;
-            }
-            else if (errors)
-            {
-                errors->append( QObject::tr("Failed to convert the data "
-                       "on line %1, column %2 as the string is null!")
-                            .arg(i+1).arg(j+1) );
-            }
-        }
-        
-        score += read_score / nvalues;
-    }
-
-    if (total_score)
-        *total_score += score;
-
-    return data;
-}
-
-//////////////
-////////////// Implementation of AmberRst
-//////////////
-
-static const RegisterMetaType<AmberRst> r_rst;
-
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberRst &rst)
-{
-    writeHeader(ds, r_rst, 1);
-    
-    SharedDataStream sds(ds);
-    
-    sds << rst.ttle << rst.current_time
-        << rst.coords << rst.vels
-        << rst.box_dims << rst.box_angs
-        << static_cast<const MoleculeParser&>(rst);
-    
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberRst &rst)
-{
-    VersionID v = readHeader(ds, r_rst);
-    
-    if (v == 1)
-    {
-        SharedDataStream sds(ds);
-        
-        sds >> rst.ttle >> rst.current_time
-            >> rst.coords >> rst.vels
-            >> rst.box_dims >> rst.box_angs
-            >> static_cast<MoleculeParser&>(rst);
-    }
-    else
-        throw version_error(v, "1", r_rst, CODELOC);
-    
-    return ds;
-}
-
-Vector cubic_angs(90,90,90);
-
-SIRE_REGISTER_PARSER( rst, AmberRst );
-SIRE_REGISTER_PARSER( rst7, AmberRst );
-SIRE_REGISTER_PARSER( crd, AmberRst );
-
-/** Constructor */
-AmberRst::AmberRst()
-         : ConcreteProperty<AmberRst,MoleculeParser>(),
-           current_time(0), box_dims(0), box_angs(cubic_angs)
-{}
-
-/** Private function used to read in the box data from the line with passed index */
-void AmberRst::readBoxInfo(int boxidx)
-{
-    if (boxidx < 0 or boxidx >= lines().count())
-        return;
-    
-    const QString &line = lines().constData()[boxidx];
-    
-    QStringList local_errors;
-    
-    if (line.length() >= 36)
-    {
-        //we can get the box dimensions
-        bool x_ok = true;
-        bool y_ok = true;
-        bool z_ok = true;
-        
-        const double x = line.midRef(0,12).toDouble(&x_ok);
-        const double y = line.midRef(12,12).toDouble(&y_ok);
-        const double z = line.midRef(24,12).toDouble(&z_ok);
-        
-        if (not (x_ok and y_ok and z_ok))
-        {
-            local_errors.append( QObject::tr(
-                "Cannot read the box dimensions "
-                "there was a formatting issue with line number %1. (%2,%3,%4)")
-                    .arg(boxidx+1).arg(x_ok).arg(y_ok).arg(z_ok) );
-        }
-        else
-            box_dims = Vector(x,y,z);
-    }
-
-    if (line.length() >= 72)
-    {
-        //we can get the box dimensions
-        bool x_ok = true;
-        bool y_ok = true;
-        bool z_ok = true;
-        
-        const double x = line.midRef(36,12).toDouble(&x_ok);
-        const double y = line.midRef(48,12).toDouble(&y_ok);
-        const double z = line.midRef(60,12).toDouble(&z_ok);
-        
-        if (not (x_ok and y_ok and z_ok))
-        {
-            local_errors.append( QObject::tr(
-                "Cannot read the box angles "
-                "there was a formatting issue with line number %1. (%2,%3,%4)")
-                    .arg(boxidx+1).arg(x_ok).arg(y_ok).arg(z_ok) );
-        }
-        else
-            box_angs = Vector(x,y,z);
-    }
-}
-
-/** Return the format name that is used to identify this file format within Sire */
-QString AmberRst::formatName() const
-{
-    return "RST7";
-}
-
-/** Parse the data contained in the lines - this clears any pre-existing
-    data in this object */
-void AmberRst::parse(const PropertyMap &map)
-{
-    if (lines().count() < 2)
-        //there is nothing in the file
-        return;
-    
-    double score = 0;
-    
-    // read in the title FORMAT(20A4)
-    ttle = lines()[0].simplified();
-    score += 1;
-    
-    // read in the number of atoms and time (two space-separated words)
-    QStringList words = lines()[1].split(" ", QString::SkipEmptyParts);
-    
-    if (words.isEmpty())
-        throw SireIO::parse_error( QObject::tr(
-                "Could not read the number of atoms from the first word of the "
-                "restart file. Please check that the file is ok."), CODELOC );
-    
-    bool ok = true;
-    int natoms = words[0].toInt(&ok);
-    
-    if (not ok)
-        throw SireIO::parse_error( QObject::tr(
-                "Could not read the number of atoms from the first five columns of "
-                "the restart file. Please check that the file is ok."), CODELOC );
-
-    if (words.count() >= 2)
-    {
-        current_time = words[1].toDouble(&ok);
-        
-        if (not ok)
-        {
-            //we can't read the current time - this is annoying, but some
-            //crd files don't contain this information - in this case,
-            //the natoms information may also be misformed
-            current_time = 0;
-        }
-    }
-    score += 1;
-
-    //now make sure that that the file is large enough!
-    if (lines().count() < (2 + (natoms/2)))
-    {
-        throw SireIO::parse_error( QObject::tr(
-                "There is a problem with this restart file. The number of atoms is "
-                "%1, but the number of lines in the file is too small (%2). The number "
-                "of lines needs to be at least %3 to give all of the information.")
-                    .arg(natoms)
-                    .arg(lines().count())
-                    .arg(2 + (natoms/2)), CODELOC );
-    }
- 
-    //now read in all of the coordinates
-    QMutex mutex;
-    coords = QVector<Vector>(natoms, Vector(0));
-    Vector *coords_array = coords.data();
-    QStringList global_errors;
-    
-    //get a pointer to the array of lines
-    const QString *l = lines().constData();
-
-    auto parse_coords = [&](int i, QStringList &errors)
-    {
-        //coordinates written as 6F12.7, two atoms per line
-        const int linenum = 2 + (i / 2);
-        const int column = (i % 2) * 36;
-
-        //we have already validated that there are enough lines
-        const QString &line = l[linenum];
-        
-        if (line.length() < column+36)
-        {
-            errors.append( QObject::tr(
-                    "Cannot read the coordinates for the atom at index %1 as "
-                    "the line at line number %2 is too short.")
-                        .arg(i+1).arg(linenum+1) );
-            
-            return;
-        }
-        
-        bool x_ok = true;
-        bool y_ok = true;
-        bool z_ok = true;
-        
-        const double x = line.midRef(column,12).toDouble(&x_ok);
-        const double y = line.midRef(column+12,12).toDouble(&y_ok);
-        const double z = line.midRef(column+24,12).toDouble(&z_ok);
-        
-        if (not (x_ok and y_ok and z_ok))
-        {
-            errors.append( QObject::tr(
-                "Cannot read the coordinates for the atom at index %1 as "
-                "there was a formatting issue with line number %2. (%3,%4,%5)")
-                    .arg(i+1).arg(linenum+1).arg(x_ok).arg(y_ok).arg(z_ok) );
-            return;
-        }
-        
-        coords_array[i] = Vector(x,y,z);
-    };
-    
-    if (usesParallel())
-    {
-        tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
-                           [&](tbb::blocked_range<int> r)
-        {
-            QStringList local_errors;
-            
-            for (int i=r.begin(); i<r.end(); ++i)
-            {
-                parse_coords(i, local_errors);
-            }
-            
-            if (not local_errors.isEmpty())
-            {
-                QMutexLocker lkr(&mutex);
-                global_errors += local_errors;
-            }
-        });
-    }
-    else
-    {
-        for (int i=0; i<natoms; ++i)
-        {
-            parse_coords(i, global_errors);
-        }
-    }
-    
-    if (not global_errors.isEmpty())
-    {
-        throw SireIO::parse_error( QObject::tr(
-                "There were some problems reading in the coordinate data "
-                "from the restart file.\n%1")
-                    .arg(global_errors.join("\n")), CODELOC );
-    }
-
-    score += natoms/2;
-
-    //now read in all of the velocities
-    if (lines().count() < (2 + ((natoms+1)/2) + ((natoms+1)/2)))
-    {
-        //there are no velocities - see if there is periodic box information
-        int boxidx = 2 + (natoms/2);
-        
-        if (boxidx < lines().count())
-        {
-            //there is - read in the box information
-            this->readBoxInfo(boxidx);
-            score += 1;
-        }
-
-        this->setScore(score);
-        return;
-    }
-
-    vels = QVector<Vector>(natoms, Vector(0));
-    Vector *vels_array = vels.data();
-
-    auto parse_vels = [&](int i, QStringList &errors)
-    {
-        //coordinates written as 6F12.7, two atoms per line
-        const int linenum = 2 + (i / 2) + ((natoms+1) / 2);
-        const int column = (i % 2) * 36;
-
-        //we have already validated that there are enough lines
-        const QString &line = l[linenum];
-        
-        if (line.length() < column+36)
-        {
-            errors.append( QObject::tr(
-                    "Cannot read the velocities for the atom at index %1 as "
-                    "the line at line number %2 is too short.")
-                        .arg(i+1).arg(linenum+1) );
-            
-            return;
-        }
-        
-        bool x_ok = true;
-        bool y_ok = true;
-        bool z_ok = true;
-        
-        const double x = line.midRef(column,12).toDouble(&x_ok);
-        const double y = line.midRef(column+12,12).toDouble(&y_ok);
-        const double z = line.midRef(column+24,12).toDouble(&z_ok);
-        
-        if (not (x_ok and y_ok and z_ok))
-        {
-            errors.append( QObject::tr(
-                "Cannot read the velocities for the atom at index %1 as "
-                "there was a formatting issue with line number %2. (%3,%4,%5)")
-                    .arg(i+1).arg(linenum+1).arg(x_ok).arg(y_ok).arg(z_ok) );
-            return;
-        }
-        
-        // format is (units: Angstroms per 1/20.455 ps)
-        vels_array[i] = Vector(x,y,z);
-    };
-
-    if (usesParallel())
-    {
-        tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
-                           [&](tbb::blocked_range<int> r)
-        {
-            QStringList local_errors;
-            
-            for (int i=r.begin(); i<r.end(); ++i)
-            {
-                parse_vels(i, local_errors);
-            }
-            
-            if (not local_errors.isEmpty())
-            {
-                QMutexLocker lkr(&mutex);
-                global_errors += local_errors;
-            }
-        });
-    }
-    else
-    {
-        for (int i=0; i<natoms; ++i)
-        {
-            parse_vels(i, global_errors);
-        }
-    }
-
-    if (not global_errors.isEmpty())
-    {
-        throw SireIO::parse_error( QObject::tr(
-                "There were some problems reading in the velocity data "
-                "from the restart file.\n%1")
-                    .arg(global_errors.join("\n")), CODELOC );
-    }
-
-    score += (natoms/2);
-
-    //see if there is periodic box information
-    int boxidx = 2 + ((natoms+1)/2) + ((natoms+1)/2);
-
-    if (boxidx < lines().count())
-    {
-        //there is - read in the box information
-        this->readBoxInfo(boxidx);
-        score += 1;
-    }
-
-    this->setScore(score);
-}
-
-/** Construct by parsing the passed file */
-AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
-         : ConcreteProperty<AmberRst,MoleculeParser>(filename, map),
-           current_time(0), box_dims(0), box_angs(cubic_angs)
-{
-    this->parse(map);
-}
-
-/** Construct by parsing the data in the passed text lines */
-AmberRst::AmberRst(const QStringList &lines, const PropertyMap &map)
-         : ConcreteProperty<AmberRst,MoleculeParser>(lines, map),
-           current_time(0), box_dims(0), box_angs(cubic_angs)
-{
-    this->parse(map);
-}
-
-/** Construct by extracting the necessary data from the passed System */
-AmberRst::AmberRst(const System &system, const PropertyMap &map)
-         : ConcreteProperty<AmberRst,MoleculeParser>(),
-           current_time(0), box_dims(0), box_angs(cubic_angs)
-{
-    //DO SOMETHING
-}
-
-/** Copy constructor */
-AmberRst::AmberRst(const AmberRst &other)
-         : ConcreteProperty<AmberRst,MoleculeParser>(other),
-           ttle(other.ttle), current_time(other.current_time),
-           coords(other.coords), vels(other.vels),
-           box_dims(other.box_dims), box_angs(other.box_angs)
-{}
-
-/** Destructor */
-AmberRst::~AmberRst()
-{}
-
-AmberRst& AmberRst::operator=(const AmberRst &other)
-{
-    if (this != &other)
-    {
-        ttle = other.ttle;
-        current_time = other.current_time;
-        coords = other.coords;
-        vels = other.vels;
-        box_dims = other.box_dims;
-        box_angs = other.box_angs;
-    
-        MoleculeParser::operator=(other);
-    }
-
-    return *this;
-}
-
-bool AmberRst::operator==(const AmberRst &other) const
-{
-    return MoleculeParser::operator==(other);
-}
-
-bool AmberRst::operator!=(const AmberRst &other) const
-{
-    return MoleculeParser::operator!=(other);
-}
-
-const char* AmberRst::typeName()
-{
-    return QMetaType::typeName( qMetaTypeId<AmberRst>() );
-}
-
-const char* AmberRst::what() const
-{
-    return AmberRst::typeName();
-}
-
-QString AmberRst::toString() const
-{
-    if (coords.isEmpty())
-    {
-        return QObject::tr("AmberRst::null");
-    }
-    else if (vels.isEmpty())
-    {
-        return QObject::tr("AmberRst( title() = %1, nAtoms() = %2, hasVelocities() = false )")
-                .arg(title()).arg(nAtoms());
-    }
-    else
-    {
-        return QObject::tr("AmberRst( title() = %1, nAtoms() = %2, hasVelocities() = true )")
-                .arg(title()).arg(nAtoms());
-    }
-}
-
-/** Parse from the passed file */
-AmberRst AmberRst::parse(const QString &filename)
-{
-    return AmberRst(filename);
-}
-
-/** Internal function used to add the data from this parser into the passed System */
-void AmberRst::addToSystem(System &system, const PropertyMap &map) const
-{
-    //first, we are going to work with the group of all molecules, which should
-    //be called "all". We have to assume that the molecules are ordered in "all"
-    //in the same order as they are in this restart file, with the data
-    //in MolIdx/AtomIdx order (this should be the default for all parsers!)
-    MoleculeGroup allmols = system[MGName("all")];
-
-    const int nmols = allmols.nMolecules();
-
-    QVector<int> atom_pointers(nmols+1, -1);
-    
-    int natoms = 0;
-    
-    for (int i=0; i<nmols; ++i)
-    {
-        atom_pointers[i] = natoms;
-        const int nats = allmols[MolIdx(i)].data().info().nAtoms();
-        natoms += nats;
-    }
-    
-    atom_pointers[nmols] = natoms;
-    
-    if (natoms != this->nAtoms())
-        throw SireIO::parse_error( QObject::tr(
-                "Incompatibility between the files, as this restart file contains data "
-                "for %1 atom(s), while the other file(s) have created a system with "
-                "%2 atom(s)").arg(this->nAtoms()).arg(natoms), CODELOC );
-    
-    //next, copy the coordinates and optionally the velocities into the molecules
-    QVector<Molecule> mols(nmols);
-    Molecule *mols_array = mols.data();
-    const Vector *coords_array = this->coordinates().constData();
-    
-    const PropertyName coords_property = map["coordinates"];
-    
-    if (this->hasVelocities())
-    {
-        const PropertyName vels_property = map["velocity"];
-        const Vector *vels_array = this->velocities().constData();
-    
-        auto add_coords_and_vels = [&](int i)
-        {
-            const int atom_start_idx = atom_pointers.constData()[i];
-            auto mol = allmols[MolIdx(i)].molecule();
-            const auto molinfo = mol.data().info();
-            
-            //create space for the coordinates and velocities
-            auto coords = QVector< QVector<Vector> >(molinfo.nCutGroups());
-            auto vels = AtomVelocities(molinfo);
-
-            for (int j=0; j<molinfo.nCutGroups(); ++j)
-            {
-                coords[j] = QVector<Vector>(molinfo.nAtoms(CGIdx(j)));
-            }
-            
-            for (int j=0; j<mol.nAtoms(); ++j)
-            {
-                auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
-                
-                const int atom_idx = atom_start_idx + j;
-                
-                coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[atom_idx];
-
-                //velocity is Angstroms per 1/20.455 ps
-                const auto vel_unit = (1.0 / 20.455) * angstrom / picosecond;
-                
-                const Vector &vel = vels_array[atom_idx];
-                vels.set(cgatomidx, Velocity3D(vel.x() * vel_unit,
-                                               vel.y() * vel_unit,
-                                               vel.z() * vel_unit));
-            }
-            
-            mols_array[i] = mol.edit()
-                            .setProperty(vels_property, vels)
-                            .setProperty(coords_property,
-                                         AtomCoords(CoordGroupArray(coords)))
-                            .commit();
-        };
-    
-        if (usesParallel())
-        {
-            tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
-                               [&](tbb::blocked_range<int> r)
-            {
-                for (int i=r.begin(); i<r.end(); ++i)
-                {
-                    add_coords_and_vels(i);
-                }
-            });
-        }
-        else
-        {
-            for (int i=0; i<nmols; ++i)
-            {
-                add_coords_and_vels(i);
-            }
-        }
-    }
-    else
-    {
-        auto add_coords = [&](int i)
-        {
-            const int atom_start_idx = atom_pointers.constData()[i];
-            auto mol = system[MolIdx(i)].molecule();
-            const auto molinfo = mol.data().info();
-            
-            //create space for the coordinates
-            auto coords = QVector< QVector<Vector> >(molinfo.nCutGroups());
-
-            for (int j=0; j<molinfo.nCutGroups(); ++j)
-            {
-                coords[j] = QVector<Vector>(molinfo.nAtoms(CGIdx(j)));
-            }
-            
-            for (int j=0; j<mol.nAtoms(); ++j)
-            {
-                auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
-                
-                const int atom_idx = atom_start_idx + j;
-                
-                coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[atom_idx];
-            }
-            
-            mols_array[i] = mol.edit()
-                            .setProperty(coords_property,
-                                         AtomCoords(CoordGroupArray(coords)))
-                            .commit();
-        };
-    
-        if (usesParallel())
-        {
-            tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
-                               [&](tbb::blocked_range<int> r)
-            {
-                for (int i=r.begin(); i<r.end(); ++i)
-                {
-                    add_coords(i);
-                }
-            });
-        }
-        else
-        {
-            for (int i=0; i<nmols; ++i)
-            {
-                add_coords(i);
-            }
-        }
-    }
-    
-    system.update( Molecules(mols) );
-
-    PropertyName space_property = map["space"];
-    if (space_property.hasValue())
-    {
-        system.setProperty("space", space_property.value());
-    }
-    else if (box_dims != Vector(0) and space_property.hasSource())
-    {
-        if (box_angs != cubic_angs)
-        {
-            throw SireIO::parse_error( QObject::tr(
-                    "Sire cannot currently support a non-cubic periodic box! %1")
-                        .arg(box_angs.toString()), CODELOC );
-        }
-        
-        
-        system.setProperty( space_property.source(), SireVol::PeriodicBox(box_dims) );
-    }
-    
-    //update the System fileformat property to record that it includes
-    //data from this file format
-    QString fileformat = this->formatName();
-    
-    try
-    {
-        QString last_format = system.property("fileformat").asA<StringProperty>();
-        fileformat = QString("%1,%2").arg(last_format,fileformat);
-    }
-    catch(...)
-    {}
-    
-    system.setProperty( "fileformat", StringProperty(fileformat) );
-}
-
-/** Return the title of the file */
-QString AmberRst::title() const
-{
-    return ttle;
-}
-
-/** Return the current time of the simulation from which this restart
-    file was written */
-double AmberRst::time() const
-{
-    return current_time;
-}
-
-/** Return the number of atoms whose coordinates are contained in this restart file */
-int AmberRst::nAtoms() const
-{
-    return coords.count();
-}
-
-/** Return whether or not this restart file also provides velocities */
-bool AmberRst::hasVelocities() const
-{
-    return not vels.isEmpty();
-}
-
-/** Return the parsed coordinate data */
-QVector<SireMaths::Vector> AmberRst::coordinates() const
-{
-    return coords;
-}
-
-/** Return the parsed coordinate data */
-QVector<SireMaths::Vector> AmberRst::velocities() const
-{
-    return vels;
-}
-
-/** Return the parsed box dimensions */
-SireMaths::Vector AmberRst::boxDimensions() const
-{
-    return box_dims;
-}
-
-/** Return the parsed box angles */
-SireMaths::Vector AmberRst::boxAngles() const
-{
-    return box_angs;
-}
-
-//////////////
-////////////// Implementation of AmberParm
-//////////////
-
-static const RegisterMetaType<AmberParm> r_parm;
-
-SIRE_REGISTER_PARSER( prm, AmberParm );
-SIRE_REGISTER_PARSER( prm7, AmberParm );
-SIRE_REGISTER_PARSER( top, AmberParm );
+static const RegisterMetaType<AmberPrm> r_parm;
+
+SIRE_REGISTER_PARSER( prm7, AmberPrm );
+SIRE_REGISTER_PARSER( prm, AmberPrm );
+SIRE_REGISTER_PARSER( top, AmberPrm );
+SIRE_REGISTER_PARSER( prmtop, AmberPrm );
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberParm &parm)
+QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberPrm &parm)
 {
     writeHeader(ds, r_parm, 1);
     
@@ -1392,7 +131,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberParm &parm)
 }
 
 /** Function called to rebuild the excluded atom lists */
-void AmberParm::rebuildExcludedAtoms()
+void AmberPrm::rebuildExcludedAtoms()
 {
     const int nmols = this->nMolecules();
     const int natoms = this->nAtoms();
@@ -1527,7 +266,7 @@ QVector< QVector<int> > indexDihedrals(const QVector<qint64> &dihs,
 }
 
 /** Function called to rebuild the Bond Angle and Dihedral indicies */
-void AmberParm::rebuildBADIndicies()
+void AmberPrm::rebuildBADIndicies()
 {
     const int nmols = this->nMolecules();
     const int natoms = this->nAtoms();
@@ -1594,7 +333,7 @@ void AmberParm::rebuildBADIndicies()
 }
 
 /** Function called to rebuild all of the LJ parameters */
-void AmberParm::rebuildLJParameters()
+void AmberPrm::rebuildLJParameters()
 {
     lj_data.clear();
 
@@ -1712,15 +451,15 @@ void AmberParm::rebuildLJParameters()
     }
 }
 
-/** Function called after loading the AmberParm from a binary stream
+/** Function called after loading the AmberPrm from a binary stream
     to populate all of the calculated member data */
-void AmberParm::rebuildAfterReload()
+void AmberPrm::rebuildAfterReload()
 {
     pointers = this->intData("POINTERS");
     
     if (pointers.isEmpty())
     {
-        this->operator=( AmberParm() );
+        this->operator=( AmberPrm() );
     }
     else if (pointers.count() < 31)
     {
@@ -1750,7 +489,7 @@ void AmberParm::rebuildAfterReload()
 }
 
 /** Read from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberParm &parm)
+QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberPrm &parm)
 {
     VersionID v = readHeader(ds, r_parm);
     
@@ -1758,7 +497,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberParm &parm)
     {
         SharedDataStream sds(ds);
         
-        parm = AmberParm();
+        parm = AmberPrm();
         
         sds >> parm.flag_to_line
             >> parm.int_data >> parm.float_data >> parm.string_data
@@ -1773,7 +512,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberParm &parm)
 }
 
 /** Constructor */
-AmberParm::AmberParm() : ConcreteProperty<AmberParm,MoleculeParser>()
+AmberPrm::AmberPrm() : ConcreteProperty<AmberPrm,MoleculeParser>()
 {
     for (int i=0; i<32; ++i)
     {
@@ -1781,31 +520,31 @@ AmberParm::AmberParm() : ConcreteProperty<AmberParm,MoleculeParser>()
     }
 }
 
-AmberParm::FLAG_TYPE flagType(const QStringList &lines, const QPair<qint64,qint64> &index)
+AmberPrm::FLAG_TYPE flagType(const QStringList &lines, const QPair<qint64,qint64> &index)
 {
     AmberFormat f(lines[index.first+1]);
-    return f.flag_type;
+    return f.flagType();
 }
 
 /** Return the flag type for the data associated with the passed flag.
     This returns UNKNOWN if this is not known */
-AmberParm::FLAG_TYPE AmberParm::flagType(const QString &flag) const
+AmberPrm::FLAG_TYPE AmberPrm::flagType(const QString &flag) const
 {
     if (flag_to_line.contains(flag))
     {
         auto index = flag_to_line.value(flag);
     
         if (index.first > 0)
-            return AmberFormat(lines()[index.first-1]).flag_type;
+            return AmberFormat(lines()[index.first-1]).flagType();
     }
 
-    return AmberParm::UNKNOWN;
+    return AmberPrm::UNKNOWN;
 }
 
 /** Return the integer data for the passed flag. This returns an empty
     list if there is no data associated with this flag. This raises
     an invalid_cast error if data exists, but it is the wrong type */
-QVector<qint64> AmberParm::intData(const QString &flag) const
+QVector<qint64> AmberPrm::intData(const QString &flag) const
 {
     auto it = int_data.constFind(flag);
     
@@ -1836,7 +575,7 @@ QVector<qint64> AmberParm::intData(const QString &flag) const
 /** Return the float data for the passed flag. This returns an empty
     list if there is no data associated with this flag. This raises
     an invalid_cast error if data exists, but it is the wrong type */
-QVector<double> AmberParm::floatData(const QString &flag) const
+QVector<double> AmberPrm::floatData(const QString &flag) const
 {
     auto it = float_data.constFind(flag);
     
@@ -1867,7 +606,7 @@ QVector<double> AmberParm::floatData(const QString &flag) const
 /** Return the string data for the passed flag. This returns an empty
     list if there is no data associated with this flag. This raises
     an invalid_cast error if data exists, but it is the wrong type */
-QVector<QString> AmberParm::stringData(const QString &flag) const
+QVector<QString> AmberPrm::stringData(const QString &flag) const
 {
     auto it = string_data.constFind(flag);
     
@@ -1982,7 +721,7 @@ static QVector<qint64> discoverMolecules(const QVector<qint64> &bonds_inc_h,
 }
 
 /** Process all of the flags */
-double AmberParm::processAllFlags()
+double AmberPrm::processAllFlags()
 {
     QMutex int_mutex, float_mutex, string_mutex;
     
@@ -2000,7 +739,7 @@ double AmberParm::processAllFlags()
         //the format for the data is on the preceeding line
         const AmberFormat format(lines()[index.first-1]);
         
-        switch(format.flag_type)
+        switch(format.flagType())
         {
             case INTEGER:
             {
@@ -2073,7 +812,7 @@ double AmberParm::processAllFlags()
     
     if (pointers.isEmpty())
     {
-        this->operator=( AmberParm() );
+        this->operator=( AmberPrm() );
         return 0;
     }
     else if (pointers.count() < 31)
@@ -2108,7 +847,7 @@ double AmberParm::processAllFlags()
 
 /** Parse the text data from this file to create this object. This
     clears any pre-existing data */
-void AmberParm::parse(const PropertyMap &map)
+void AmberPrm::parse(const PropertyMap &map)
 {
     double score = 0;
 
@@ -2176,16 +915,16 @@ void AmberParm::parse(const PropertyMap &map)
 }
 
 /** Construct by reading from the file called 'filename' */
-AmberParm::AmberParm(const QString &filename, const PropertyMap &map)
-          : ConcreteProperty<AmberParm,MoleculeParser>(filename, map)
+AmberPrm::AmberPrm(const QString &filename, const PropertyMap &map)
+          : ConcreteProperty<AmberPrm,MoleculeParser>(filename, map)
 {
     this->parse(map);
 }
 
 /** Construct by reading from the contained in the passed
     set of lines */
-AmberParm::AmberParm(const QStringList &lines, const PropertyMap &map)
-          : ConcreteProperty<AmberParm,MoleculeParser>(lines, map)
+AmberPrm::AmberPrm(const QStringList &lines, const PropertyMap &map)
+          : ConcreteProperty<AmberPrm,MoleculeParser>(lines, map)
 {
     this->parse(map);
 }
@@ -3010,7 +1749,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             QStringList errors;
         
             QStringList lines = writeStringData( collapse(atom_names),
-                                                 AmberFormat( AmberParm::STRING, 20, 4 ),
+                                                 AmberFormat( AmberPrm::STRING, 20, 4 ),
                                                  &errors );
         
             if (not errors.isEmpty())
@@ -3024,7 +1763,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         }
         else
             return writeStringData( collapse(atom_names),
-                                    AmberFormat( AmberParm::STRING, 20, 4 ) );
+                                    AmberFormat( AmberPrm::STRING, 20, 4 ) );
     };
     
     //function used to generate the text for all atom charges
@@ -3056,7 +1795,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             QStringList errors;
         
             QStringList lines = writeFloatData( collapse(atom_charges),
-                                                AmberFormat( AmberParm::FLOAT, 5, 16, 8 ),
+                                                AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ),
                                                 &errors );
         
             if (not errors.isEmpty())
@@ -3070,7 +1809,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         }
         else
             return writeFloatData( collapse(atom_charges),
-                                   AmberFormat( AmberParm::FLOAT, 5, 16, 8) );
+                                   AmberFormat( AmberPrm::FLOAT, 5, 16, 8) );
     };
     
     //function used to generate the text for all atom numbers
@@ -3102,7 +1841,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             QStringList errors;
         
             QStringList lines = writeIntData( collapse(atom_numbers),
-                                              AmberFormat( AmberParm::INTEGER, 10, 8 ),
+                                              AmberFormat( AmberPrm::INTEGER, 10, 8 ),
                                               &errors );
         
             if (not errors.isEmpty())
@@ -3116,7 +1855,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         }
         else
             return writeIntData( collapse(atom_numbers),
-                                 AmberFormat( AmberParm::INTEGER, 10, 8) );
+                                 AmberFormat( AmberPrm::INTEGER, 10, 8) );
     };
     
     //function used to generate the text for all atom masses
@@ -3148,7 +1887,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             QStringList errors;
         
             QStringList lines = writeFloatData( collapse(atom_masses),
-                                                AmberFormat( AmberParm::FLOAT, 5, 16, 8 ),
+                                                AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ),
                                                 &errors );
         
             if (not errors.isEmpty())
@@ -3162,7 +1901,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         }
         else
             return writeFloatData( collapse(atom_masses),
-                                   AmberFormat( AmberParm::FLOAT, 5, 16, 8) );
+                                   AmberFormat( AmberPrm::FLOAT, 5, 16, 8) );
     };
 
     //function used to generate the text for all atom Born radii
@@ -3194,7 +1933,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             QStringList errors;
         
             QStringList lines = writeFloatData( collapse(atom_radii),
-                                                AmberFormat( AmberParm::FLOAT, 5, 16, 8 ),
+                                                AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ),
                                                 &errors );
         
             if (not errors.isEmpty())
@@ -3208,7 +1947,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         }
         else
             return writeFloatData( collapse(atom_radii),
-                                   AmberFormat( AmberParm::FLOAT, 5, 16, 8) );
+                                   AmberFormat( AmberPrm::FLOAT, 5, 16, 8) );
     };
 
     //function used to generate the text for all atom Generalised Born screening parameters
@@ -3240,7 +1979,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             QStringList errors;
         
             QStringList lines = writeFloatData( collapse(atom_screening),
-                                                AmberFormat( AmberParm::FLOAT, 5, 16, 8 ),
+                                                AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ),
                                                 &errors );
         
             if (not errors.isEmpty())
@@ -3254,7 +1993,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         }
         else
             return writeFloatData( collapse(atom_screening),
-                                   AmberFormat( AmberParm::FLOAT, 5, 16, 8) );
+                                   AmberFormat( AmberPrm::FLOAT, 5, 16, 8) );
     };
 
     //function used to generate the text for all atom tree chain information
@@ -3286,7 +2025,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             QStringList errors;
         
             QStringList lines = writeStringData( collapse(atom_treechains),
-                                                 AmberFormat( AmberParm::STRING, 20, 4 ),
+                                                 AmberFormat( AmberPrm::STRING, 20, 4 ),
                                                  &errors );
         
             if (not errors.isEmpty())
@@ -3300,7 +2039,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         }
         else
             return writeStringData( collapse(atom_treechains),
-                                    AmberFormat( AmberParm::STRING, 20, 4 ) );
+                                    AmberFormat( AmberPrm::STRING, 20, 4 ) );
     };
 
     //function used to get all of the Amber atom types
@@ -3332,7 +2071,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             QStringList errors;
         
             QStringList lines = writeStringData( collapse(amber_types),
-                                                 AmberFormat( AmberParm::STRING, 20, 4 ),
+                                                 AmberFormat( AmberPrm::STRING, 20, 4 ),
                                                  &errors );
         
             if (not errors.isEmpty())
@@ -3346,7 +2085,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         }
         else
             return writeStringData( collapse(amber_types),
-                                    AmberFormat( AmberParm::STRING, 20, 4 ) );
+                                    AmberFormat( AmberPrm::STRING, 20, 4 ) );
     };
 
     //function used to get all of the LJ parameters and atom types
@@ -3425,10 +2164,10 @@ QStringList toLines(const QVector<AmberParams> &params,
 
         //now return all of the arrays
         return std::make_tuple( writeIntData(collapse(atom_types),
-                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
-                                writeIntData(ico, AmberFormat( AmberParm::INTEGER, 10, 8 )),
-                                writeFloatData(cn1, AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
-                                writeFloatData(cn2, AmberFormat( AmberParm::FLOAT, 5, 16, 8 )) );
+                                             AmberFormat( AmberPrm::INTEGER, 10, 8 )),
+                                writeIntData(ico, AmberFormat( AmberPrm::INTEGER, 10, 8 )),
+                                writeFloatData(cn1, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 )),
+                                writeFloatData(cn2, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 )) );
     };
 
     //function used to generate the text for the excluded atoms
@@ -3479,11 +2218,11 @@ QStringList toLines(const QVector<AmberParams> &params,
             QStringList errors;
         
             excluded_atoms_lines = writeIntData( all_excluded_atoms,
-                                                 AmberFormat( AmberParm::INTEGER, 10, 8 ),
+                                                 AmberFormat( AmberPrm::INTEGER, 10, 8 ),
                                                  &errors );
 
             num_excluded_lines = writeIntData( num_excluded_atoms,
-                                               AmberFormat( AmberParm::INTEGER, 10, 8 ),
+                                               AmberFormat( AmberPrm::INTEGER, 10, 8 ),
                                                &errors );
         
             if (not errors.isEmpty())
@@ -3496,9 +2235,9 @@ QStringList toLines(const QVector<AmberParams> &params,
         else
         {
             excluded_atoms_lines = writeIntData( all_excluded_atoms,
-                                                 AmberFormat( AmberParm::INTEGER, 10, 8) );
+                                                 AmberFormat( AmberPrm::INTEGER, 10, 8) );
             num_excluded_lines = writeIntData( num_excluded_atoms,
-                                               AmberFormat( AmberParm::INTEGER, 10, 8) );
+                                               AmberFormat( AmberPrm::INTEGER, 10, 8) );
         }
         
         int nexcl = all_excluded_atoms.count();
@@ -3554,9 +2293,9 @@ QStringList toLines(const QVector<AmberParams> &params,
             maxres = nats;
     
         return std::make_tuple( writeStringData(std::get<0>(res_data),
-                                                AmberFormat( AmberParm::STRING, 20, 4 )),
+                                                AmberFormat( AmberPrm::STRING, 20, 4 )),
                                 writeIntData(std::get<1>(res_data),
-                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                             AmberFormat( AmberPrm::INTEGER, 10, 8 )),
                                 nres, maxres );
     };
 
@@ -3686,13 +2425,13 @@ QStringList toLines(const QVector<AmberParams> &params,
         int numbnd = k_data.count(); // number of unique bond types
         
         return std::make_tuple( writeFloatData(k_data,
-                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                               AmberFormat( AmberPrm::FLOAT, 5, 16, 8 )),
                                 writeFloatData(r0_data,
-                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                               AmberFormat( AmberPrm::FLOAT, 5, 16, 8 )),
                                 writeIntData(all_bonds_inc_h,
-                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                             AmberFormat( AmberPrm::INTEGER, 10, 8 )),
                                 writeIntData(all_bonds_exc_h,
-                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                             AmberFormat( AmberPrm::INTEGER, 10, 8 )),
                                 nbonh, mbona, nbona, numbnd );
     };
 
@@ -3824,13 +2563,13 @@ QStringList toLines(const QVector<AmberParams> &params,
         int numang = k_data.count(); // number of unique angle types
         
         return std::make_tuple( writeFloatData(k_data,
-                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                               AmberFormat( AmberPrm::FLOAT, 5, 16, 8 )),
                                 writeFloatData(t0_data,
-                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                               AmberFormat( AmberPrm::FLOAT, 5, 16, 8 )),
                                 writeIntData(all_angs_inc_h,
-                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                             AmberFormat( AmberPrm::INTEGER, 10, 8 )),
                                 writeIntData(all_angs_exc_h,
-                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                             AmberFormat( AmberPrm::INTEGER, 10, 8 )),
                                 nangh, manga, nanga, numang );
     };
 
@@ -3987,19 +2726,19 @@ QStringList toLines(const QVector<AmberParams> &params,
         int numdih = force_data.count(); // number of unique dihedral types
         
         return std::make_tuple( writeFloatData(force_data,
-                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                               AmberFormat( AmberPrm::FLOAT, 5, 16, 8 )),
                                 writeFloatData(per_data,
-                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                               AmberFormat( AmberPrm::FLOAT, 5, 16, 8 )),
                                 writeFloatData(phase_data,
-                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                               AmberFormat( AmberPrm::FLOAT, 5, 16, 8 )),
                                 writeFloatData(scee_data,
-                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                               AmberFormat( AmberPrm::FLOAT, 5, 16, 8 )),
                                 writeFloatData(scnb_data,
-                                               AmberFormat( AmberParm::FLOAT, 5, 16, 8 )),
+                                               AmberFormat( AmberPrm::FLOAT, 5, 16, 8 )),
                                 writeIntData(all_dihs_inc_h,
-                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                             AmberFormat( AmberPrm::INTEGER, 10, 8 )),
                                 writeIntData(all_dihs_exc_h,
-                                             AmberFormat( AmberParm::INTEGER, 10, 8 )),
+                                             AmberFormat( AmberPrm::INTEGER, 10, 8 )),
                                 ndihh, mdiha, ndiha, numdih );
     };
 
@@ -4078,7 +2817,7 @@ QStringList toLines(const QVector<AmberParams> &params,
     pointers[17] = std::get<10>(dih_lines);      // NPTRA
     
     lines.append("%FLAG POINTERS");
-    lines += writeIntData(pointers, AmberFormat( AmberParm::INTEGER, 10, 8 ) );
+    lines += writeIntData(pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ) );
 
     lines.append("%FLAG ATOM_NAME");
     lines += name_lines;
@@ -4138,7 +2877,7 @@ QStringList toLines(const QVector<AmberParams> &params,
     //this is currently unused in Amber and should be equal to 0.0 for all atoms
     {
         QVector<double> solty(total_natoms, 0.0);
-        lines += writeFloatData(solty, AmberFormat( AmberParm::FLOAT, 5, 16, 8 ));
+        lines += writeFloatData(solty, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ));
     }
 
     lines.append("%FLAG LENNARD_JONES_ACOEF");
@@ -4193,7 +2932,7 @@ QStringList toLines(const QVector<AmberParams> &params,
     {
         //no longer used in Amber, and should be an array of zeroes
         QVector<qint64> join_array(total_natoms, 0);
-        auto zeroes = writeIntData(join_array, AmberFormat( AmberParm::INTEGER, 10, 8 ));
+        auto zeroes = writeIntData(join_array, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
         lines += zeroes;
 
         //IROTAT is also no longer used, and is also an array of zeroes
@@ -4221,10 +2960,10 @@ QStringList toLines(const QVector<AmberParams> &params,
         //the solvent is the molecule that
         lines.append("%FLAG SOLVENT_POINTERS");
         QVector<qint64> solvent_pointers(3,0);
-        lines += writeIntData(solvent_pointers, AmberFormat( AmberParm::INTEGER, 10, 8 ));
+        lines += writeIntData(solvent_pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
 
         lines.append("%FLAG ATOMS_PER_MOLECULE");
-        lines += writeIntData(natoms_per_molecule, AmberFormat( AmberParm::INTEGER, 10, 8 ));
+        lines += writeIntData(natoms_per_molecule, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
 
         //write out the box dimensions
         const auto dims = space.asA<PeriodicBox>().dimensions();
@@ -4236,7 +2975,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         box_dims[3] = dims.z();
         
         lines.append("%FLAG BOX_DIMENSIONS");
-        lines += writeFloatData(box_dims, AmberFormat( AmberParm::FLOAT, 5, 16, 8 ));
+        lines += writeFloatData(box_dims, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ));
     }
 
     //we don't currently support IFCAP > 0, IFPERT > 0 or IFPOL > 0
@@ -4246,8 +2985,8 @@ QStringList toLines(const QVector<AmberParams> &params,
 
 /** Construct by converting from the passed system, using the passed property
     map to find the right properties */
-AmberParm::AmberParm(const System &system, const PropertyMap &map)
-          : ConcreteProperty<AmberParm,MoleculeParser>(map)
+AmberPrm::AmberPrm(const System &system, const PropertyMap &map)
+          : ConcreteProperty<AmberPrm,MoleculeParser>(map)
 {
     //get the MolNums of each molecule in the System - this returns the
     //numbers in MolIdx order
@@ -4256,7 +2995,7 @@ AmberParm::AmberParm(const System &system, const PropertyMap &map)
     if (molnums.isEmpty())
     {
         //no molecules in the system
-        this->operator=(AmberParm());
+        this->operator=(AmberPrm());
         return;
     }
 
@@ -4336,12 +3075,12 @@ AmberParm::AmberParm(const System &system, const PropertyMap &map)
     outfile.close();
 
     //now generate this object by re-reading these lines
-    this->operator=(AmberParm(lines));
+    this->operator=(AmberPrm(lines));
 }
 
 /** Copy constructor */
-AmberParm::AmberParm(const AmberParm &other)
-           : ConcreteProperty<AmberParm,MoleculeParser>(other),
+AmberPrm::AmberPrm(const AmberPrm &other)
+           : ConcreteProperty<AmberPrm,MoleculeParser>(other),
              flag_to_line(other.flag_to_line),
              int_data(other.int_data), float_data(other.float_data),
              string_data(other.string_data), lj_data(other.lj_data),
@@ -4352,11 +3091,11 @@ AmberParm::AmberParm(const AmberParm &other)
 {}
 
 /** Destructor */
-AmberParm::~AmberParm()
+AmberPrm::~AmberPrm()
 {}
 
 /** Copy assignment operator */
-AmberParm& AmberParm::operator=(const AmberParm &other)
+AmberPrm& AmberPrm::operator=(const AmberPrm &other)
 {
     if (this != &other)
     {
@@ -4380,48 +3119,48 @@ AmberParm& AmberParm::operator=(const AmberParm &other)
 }
 
 /** Comparison operator */
-bool AmberParm::operator==(const AmberParm &other) const
+bool AmberPrm::operator==(const AmberPrm &other) const
 {
     return MoleculeParser::operator==(other);
 }
 
 /** Comparison operator */
-bool AmberParm::operator!=(const AmberParm &other) const
+bool AmberPrm::operator!=(const AmberPrm &other) const
 {
     return not operator==(other);
 }
 
-const char* AmberParm::typeName()
+const char* AmberPrm::typeName()
 {
-    return QMetaType::typeName( qMetaTypeId<AmberParm>() );
+    return QMetaType::typeName( qMetaTypeId<AmberPrm>() );
 }
 
-const char* AmberParm::what() const
+const char* AmberPrm::what() const
 {
-    return AmberParm::typeName();
+    return AmberPrm::typeName();
 }
 
 /** Return a string representation of this object */
-QString AmberParm::toString() const
+QString AmberPrm::toString() const
 {
     if (lines().isEmpty())
-        return QObject::tr("AmberParm::null");
+        return QObject::tr("AmberPrm::null");
     else
     {
-        return QObject::tr("AmberParm( title() = '%1', nMolecules() = %2, "
+        return QObject::tr("AmberPrm( title() = '%1', nMolecules() = %2, "
                            "nResidues() = %3, nAtoms() = %4 )")
                     .arg(title()).arg(nMolecules()).arg(nResidues()).arg(nAtoms());
     }
 }
 
 /** Return the title of the parameter file */
-QString AmberParm::title() const
+QString AmberPrm::title() const
 {
     return QStringList( string_data.value("TITLE").toList() ).join("").simplified();
 }
 
 /** Return the total number of atoms in the file */
-int AmberParm::nAtoms() const
+int AmberPrm::nAtoms() const
 {
     if (pointers.count() > 0)
         return pointers[0];
@@ -4430,7 +3169,7 @@ int AmberParm::nAtoms() const
 }
 
 /** Return the total number of atoms in the ith molecule in the file */
-int AmberParm::nAtoms(int idx) const
+int AmberPrm::nAtoms(int idx) const
 {
     const QVector< QPair<int,int> > mol_idxs = this->moleculeIndicies();
     idx = Index(idx).map(mol_idxs.count());
@@ -4438,7 +3177,7 @@ int AmberParm::nAtoms(int idx) const
 }
 
 /** Return the number of distinct atom types */
-int AmberParm::nTypes() const
+int AmberPrm::nTypes() const
 {
     if (pointers.count() > 1)
         return pointers[1];
@@ -4447,13 +3186,13 @@ int AmberParm::nTypes() const
 }
 
 /** Return the total number of bonds */
-int AmberParm::nBonds() const
+int AmberPrm::nBonds() const
 {
     return nBondsWithHydrogen() + nBondsNoHydrogen();
 }
 
 /** Return the number of bonds including hydrogen */
-int AmberParm::nBondsWithHydrogen() const
+int AmberPrm::nBondsWithHydrogen() const
 {
     if (pointers.count() > 2)
         return pointers[2];
@@ -4462,7 +3201,7 @@ int AmberParm::nBondsWithHydrogen() const
 }
 
 /** Return the number of bonds no containing hydrogen */
-int AmberParm::nBondsNoHydrogen() const
+int AmberPrm::nBondsNoHydrogen() const
 {
     if (pointers.count() > 3)
         return pointers[3];
@@ -4471,13 +3210,13 @@ int AmberParm::nBondsNoHydrogen() const
 }
 
 /** Return the number of angles */
-int AmberParm::nAngles() const
+int AmberPrm::nAngles() const
 {
     return nAnglesWithHydrogen() + nAnglesNoHydrogen();
 }
 
 /** Return the number of angles containing hydrogen */
-int AmberParm::nAnglesWithHydrogen() const
+int AmberPrm::nAnglesWithHydrogen() const
 {
     if (pointers.count() > 4)
         return pointers[4];
@@ -4486,7 +3225,7 @@ int AmberParm::nAnglesWithHydrogen() const
 }
 
 /** Return the number of angles without hydrogen */
-int AmberParm::nAnglesNoHydrogen() const
+int AmberPrm::nAnglesNoHydrogen() const
 {
     if (pointers.count() > 5)
         return pointers[5];
@@ -4495,13 +3234,13 @@ int AmberParm::nAnglesNoHydrogen() const
 }
 
 /** Return the number of dihedrals */
-int AmberParm::nDihedrals() const
+int AmberPrm::nDihedrals() const
 {
     return nDihedralsWithHydrogen() + nDihedralsNoHydrogen();
 }
 
 /** Return the number of dihedrals containing hydrogen */
-int AmberParm::nDihedralsWithHydrogen() const
+int AmberPrm::nDihedralsWithHydrogen() const
 {
     if (pointers.count() > 6)
         return pointers[6];
@@ -4510,7 +3249,7 @@ int AmberParm::nDihedralsWithHydrogen() const
 }
 
 /** Return the number of dihedrals without hydrogen */
-int AmberParm::nDihedralsNoHydrogen() const
+int AmberPrm::nDihedralsNoHydrogen() const
 {
     if (pointers.count() > 7)
         return pointers[7];
@@ -4519,7 +3258,7 @@ int AmberParm::nDihedralsNoHydrogen() const
 }
 
 /** Return the number of excluded atoms */
-int AmberParm::nExcluded() const
+int AmberPrm::nExcluded() const
 {
     if (pointers.count() > 9)
         return pointers[9];
@@ -4528,7 +3267,7 @@ int AmberParm::nExcluded() const
 }
 
 /** Return the number of residues */
-int AmberParm::nResidues() const
+int AmberPrm::nResidues() const
 {
     if (pointers.count() > 10)
         return pointers[10];
@@ -4537,7 +3276,7 @@ int AmberParm::nResidues() const
 }
 
 /** Return the number of molecules in the file */
-int AmberParm::nMolecules() const
+int AmberPrm::nMolecules() const
 {
     QVector<qint64> atoms_per_mol = int_data.value("ATOMS_PER_MOLECULE");
     
@@ -4555,7 +3294,7 @@ int AmberParm::nMolecules() const
 /** Return an array that maps from the index of each atom to the index
     of each molecule. Note that both the atom index and molecule index
     are 0-indexed */
-QVector<int> AmberParm::getAtomIndexToMolIndex() const
+QVector<int> AmberPrm::getAtomIndexToMolIndex() const
 {
     const int natoms = this->nAtoms();
 
@@ -4609,7 +3348,7 @@ QVector<int> AmberParm::getAtomIndexToMolIndex() const
 
 /** Return the first index of the atom in each molecule, together with
     the number of atoms in that molecule */
-QVector< QPair<int,int> > AmberParm::moleculeIndicies() const
+QVector< QPair<int,int> > AmberPrm::moleculeIndicies() const
 {
     QVector< QPair<int,int> > idxs;
     
@@ -4641,15 +3380,15 @@ QVector< QPair<int,int> > AmberParm::moleculeIndicies() const
     return idxs;
 }
 
-/** Return an AmberParm object parsed from the passed file */
-AmberParm AmberParm::parse(const QString &filename, const PropertyMap &map)
+/** Return an AmberPrm object parsed from the passed file */
+AmberPrm AmberPrm::parse(const QString &filename, const PropertyMap &map)
 {
-    return AmberParm(filename);
+    return AmberPrm(filename);
 }
 
 /** Return the lines that correspond to the passed flag. This returns an
     empty list of there are no lines associated with the passed flag */
-QVector<QString> AmberParm::linesForFlag(const QString &flag) const
+QVector<QString> AmberPrm::linesForFlag(const QString &flag) const
 {
     auto it = flag_to_line.constFind(flag);
     
@@ -4668,7 +3407,7 @@ QVector<QString> AmberParm::linesForFlag(const QString &flag) const
 }
 
 /** Return all of the flags that are held in this file */
-QStringList AmberParm::flags() const
+QStringList AmberPrm::flags() const
 {
     return flag_to_line.keys();
 }
@@ -4689,7 +3428,7 @@ void live_test(FUNC function, QList<boost::shared_ptr<Exception>> &errors)
 /** Run through all of the data that has been read and perform a series
     of tests that will see if the prm7 data is sane. If any test fails,
     then an exception will be thrown */
-void AmberParm::assertSane() const
+void AmberPrm::assertSane() const
 {
     QList<boost::shared_ptr<SireError::exception>> errors;
     
@@ -4733,7 +3472,7 @@ void AmberParm::assertSane() const
 
 /** Internal function used to get the molecule structure that starts at index 'start_idx'
     in the file, and that has 'natoms' atoms */
-MolStructureEditor AmberParm::getMolStructure(int start_idx, int natoms,
+MolStructureEditor AmberPrm::getMolStructure(int start_idx, int natoms,
                                               const PropertyName &cutting) const
 {
     if (natoms == 0)
@@ -4833,7 +3572,7 @@ MolStructureEditor AmberParm::getMolStructure(int start_idx, int natoms,
 }
 
 /** Return the AmberParams for the ith molecule */
-AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinfo) const
+AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo) const
 {
     //function to assign all of the atom parameters
     auto assign_atoms = [&]()
@@ -5115,7 +3854,7 @@ AmberParams AmberParm::getAmberParams(int molidx, const MoleculeInfoData &molinf
 
 /** Internal function used to get the molecule structure that starts at index 'start_idx'
     in the file, and that has 'natoms' atoms */
-MolEditor AmberParm::getMolecule(int molidx, int start_idx, int natoms,
+MolEditor AmberPrm::getMolecule(int molidx, int start_idx, int natoms,
                                  const PropertyMap &map) const
 {
     if (natoms == 0)
@@ -5158,10 +3897,10 @@ MolEditor AmberParm::getMolecule(int molidx, int start_idx, int natoms,
     return mol;
 }
 
-/** Return the ith molecule that is described by this AmberParm file. Note
+/** Return the ith molecule that is described by this AmberPrm file. Note
     that this molecule won't have any coordinate data, as this is not
     provided in this file */
-Molecule AmberParm::getMolecule(int molidx, const PropertyMap &map) const
+Molecule AmberPrm::getMolecule(int molidx, const PropertyMap &map) const
 {
     const QVector< QPair<int,int> > mol_idxs = this->moleculeIndicies();
     molidx = Index(molidx).map(mol_idxs.count());
@@ -5170,10 +3909,10 @@ Molecule AmberParm::getMolecule(int molidx, const PropertyMap &map) const
                                       mol_idxs[molidx].second, map ).commit();
 }
 
-/** Return the ith molecule that is described by this AmberParm file, getting
+/** Return the ith molecule that is described by this AmberPrm file, getting
     the coordinate (and possibly velocity) data from the passed AmberRst file */
-Molecule AmberParm::getMolecule(int molidx, const AmberRst &rst,
-                                const PropertyMap &map) const
+Molecule AmberPrm::getMolecule(int molidx, const AmberRst7 &rst,
+                               const PropertyMap &map) const
 {
     if (rst.nAtoms() != this->nAtoms())
     {
@@ -5248,15 +3987,15 @@ Molecule AmberParm::getMolecule(int molidx, const AmberRst &rst,
 }
 
 /** Return the format name that is used to identify this file format within Sire */
-QString AmberParm::formatName() const
+QString AmberPrm::formatName() const
 {
     return "PRM7";
 }
 
-/** Return the System that is described by this AmberParm file. Note that
+/** Return the System that is described by this AmberPrm file. Note that
     the molecules in this system don't have any coordinates (as these aren't
     provided by the file */
-System AmberParm::startSystem(const PropertyMap &map) const
+System AmberPrm::startSystem(const PropertyMap &map) const
 {
     const QVector< QPair<int,int> > mol_idxs = this->moleculeIndicies();
 
@@ -5301,3 +4040,5 @@ System AmberParm::startSystem(const PropertyMap &map) const
     
     return system;
 }
+
+
