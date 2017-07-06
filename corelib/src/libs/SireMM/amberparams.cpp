@@ -46,7 +46,10 @@
 #include "SireCAS/symbol.h"
 #include "SireCAS/trigfuncs.h"
 
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
+#include "SireBase/errors.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -54,6 +57,7 @@
 using namespace SireMol;
 using namespace SireCAS;
 using namespace SireMM;
+using namespace SireBase;
 using namespace SireStream;
 
 ///////////
@@ -778,6 +782,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberParams &amberp
         << amberparam.amber_angles << amberparam.amber_dihedrals
         << amberparam.amber_impropers << amberparam.amber_nb14s
         << amberparam.radius_set
+        << amberparam.propmap
         << static_cast<const MoleculeProperty&>(amberparam);
 
     return ds;
@@ -802,6 +807,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberParams &amberparam)
             >> amberparam.amber_angles >> amberparam.amber_dihedrals
             >> amberparam.amber_impropers >> amberparam.amber_nb14s
             >> amberparam.radius_set
+            >> amberparam.propmap
             >> static_cast<MoleculeProperty&>(amberparam);
     }
     else
@@ -815,10 +821,37 @@ AmberParams::AmberParams() : ConcreteProperty<AmberParams,MoleculeProperty>()
 {}
 
 /** Constructor for the passed molecule*/
-AmberParams::AmberParams(const MoleculeView &mol)
-            : ConcreteProperty<AmberParams,MoleculeProperty>(),
-              molinfo(mol.data().info())
-{}
+AmberParams::AmberParams(const MoleculeView &mol, const PropertyMap &map)
+            : ConcreteProperty<AmberParams,MoleculeProperty>()
+{
+    const auto moldata = mol.data();
+    
+    const auto param_name = map["parameters"];
+    
+    //if possible, start from the existing parameters and update from there
+    if (moldata.hasProperty(param_name))
+    {
+        const Property &param_prop = moldata.property(param_name);
+        
+        if (param_prop.isA<AmberParams>())
+        {
+            this->operator=(param_prop.asA<AmberParams>());
+            
+            if (propmap == map and this->isCompatibleWith(moldata.info()))
+            {
+                this->_pvt_updateFrom(moldata);
+                return;
+            }
+        }
+    }
+    
+    //otherwise construct this parameter from scratch
+    this->operator=(AmberParams());
+    
+    molinfo = MoleculeInfo(moldata.info());
+    propmap = map;
+    this->_pvt_createFrom(moldata);
+}
 
 /** Constructor for the passed molecule*/
 AmberParams::AmberParams(const MoleculeInfo &info)
@@ -847,7 +880,8 @@ AmberParams::AmberParams(const AmberParams &other)
               amber_dihedrals(other.amber_dihedrals),
               amber_impropers(other.amber_impropers),
               amber_nb14s(other.amber_nb14s),
-              radius_set(other.radius_set)
+              radius_set(other.radius_set),
+              propmap(other.propmap)
 {}
 
 /** Copy assignment operator */
@@ -872,6 +906,7 @@ AmberParams& AmberParams::operator=(const AmberParams &other)
         amber_impropers = other.amber_impropers;
         amber_nb14s = other.amber_nb14s;
         radius_set = other.radius_set;
+        propmap = other.propmap;
     }
   
     return *this;
@@ -899,7 +934,8 @@ bool AmberParams::operator==(const AmberParams &other) const
           and amber_dihedrals == other.amber_dihedrals
           and amber_impropers == other.amber_impropers
           and amber_nb14s == other.amber_nb14s
-          and radius_set == other.radius_set);
+          and radius_set == other.radius_set
+          and propmap == other.propmap);
 }
 
 /** Comparison operator */
@@ -913,6 +949,20 @@ bool AmberParams::operator!=(const AmberParams &other) const
 MoleculeInfo AmberParams::info() const
 {
     return molinfo;
+}
+
+/** Set the property map that should be used to find and update properties
+    of the molecule */
+void AmberParams::setPropertyMap(const PropertyMap &map)
+{
+    propmap = map;
+}
+
+/** Return the property map that is used to find and update properties
+    of the molecule */
+const PropertyMap& AmberParams::propertyMap() const
+{
+    return propmap;
 }
 
 /** Validate this set of parameters. This checks that all of the requirements
@@ -1365,7 +1415,7 @@ AmberNB14 AmberParams::getNB14(const BondID &pair) const
 /** Add the parameters from 'other' to this set */
 AmberParams& AmberParams::operator+=(const AmberParams &other)
 {
-    if (not this->isCompatibleWith(other.info()))
+    if (not this->isCompatibleWith(other.info()) or propmap != other.propmap)
     {
         throw SireError::incompatible_error( QObject::tr(
                 "Cannot combine Amber parameters, as the two sets are incompatible!"),
@@ -1505,4 +1555,223 @@ AmberParams AmberParams::operator+(const AmberParams &other) const
     ret += other;
     
     return ret;
+}
+
+/** Update these parameters from the contents of the passed molecule. This
+    will only work if these parameters are compatible with this molecule */
+void AmberParams::updateFrom(const MoleculeView &molview)
+{
+    this->assertCompatibleWith(molview);
+    this->_pvt_updateFrom(molview.data());
+}
+
+/** Internal function used to grab the property, catching errors and signalling if
+    the correct property has been found */
+template<class T>
+T getProperty(const PropertyName &prop, const MoleculeData &moldata, bool *found)
+{
+    if (moldata.hasProperty(prop))
+    {
+        const Property &p = moldata.property(prop);
+        
+        if (p.isA<T>())
+        {
+            *found = true;
+            return p.asA<T>();
+        }
+    }
+    
+    *found = false;
+    return T();
+}
+
+/** Internal function used to guess the masses of atoms based on their element */
+void guessMasses(AtomMasses &masses, const AtomElements &elements, bool *has_masses)
+{
+    for (int i=0; i<elements.nCutGroups(); ++i)
+    {
+        const CGIdx cg(i);
+    
+        for (int j=0; i<elements.nAtoms(cg); ++j)
+        {
+            const CGAtomIdx idx( cg, Index(j) );
+        
+            masses.set(idx, elements[idx].mass());
+        }
+    }
+    
+    *has_masses = true;
+}
+
+/** Internal function used to guess the element of atoms based on their name */
+AtomElements guessElements(const MoleculeInfoData &molinfo, bool *has_elements)
+{
+    AtomElements elements(molinfo);
+    
+    for (int i=0; i<elements.nCutGroups(); ++i)
+    {
+        const CGIdx cg(i);
+    
+        for (int j=0; j<elements.nAtoms(cg); ++j)
+        {
+            const CGAtomIdx idx( cg, Index(j) );
+            
+            elements.set(idx, Element::biologicalElement(molinfo.name(idx).value()));
+        }
+    }
+    
+    *has_elements = true;
+    return elements;
+}
+
+/** Construct the hash of bonds */
+void AmberParams::getAmberBondsFrom(const TwoAtomFunctions &funcs)
+{
+    //
+}
+
+/** Construct the hash of angles */
+void AmberParams::getAmberAnglesFrom(const ThreeAtomFunctions &funcs)
+{
+}
+
+/** Construct the hash of dihedrals */
+void AmberParams::getAmberDihedralsFrom(const FourAtomFunctions &funcs)
+{
+}
+
+/** Construct the hash of impropers */
+void AmberParams::getAmberImpropersFrom(const FourAtomFunctions &funcs)
+{
+}
+
+/** Construct the excluded atom set and 14 NB parameters */
+void AmberParams::getAmberNBsFrom(const CLJNBPairs &nbpairs)
+{
+}
+
+/** Create this set of parameters from the passed object */
+void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
+{
+    //pull out all of the molecular properties
+    const PropertyMap &map = propmap;
+    
+    //first, all of the atom-based properties
+    bool has_charges, has_ljs, has_masses, has_elements, has_ambertypes;
+    
+    amber_charges = getProperty<AtomCharges>( map["charge"], moldata, &has_charges );
+    amber_ljs = getProperty<AtomLJs>( map["LJ"], moldata, &has_ljs );
+    amber_masses = getProperty<AtomMasses>( map["mass"], moldata, &has_masses );
+    amber_elements = getProperty<AtomElements>( map["element"], moldata, &has_elements );
+    amber_types = getProperty<AtomStringProperty>( map["ambertype"], moldata, &has_ambertypes );
+    
+    if (not has_elements)
+    {
+        //try to guess the elements from the names and/or masses
+        amber_elements = guessElements(moldata.info(), &has_elements);
+    }
+    
+    if (not has_masses)
+    {
+        //try to guess the masses from the elements
+        if (has_elements)
+        {
+            amber_masses = AtomMasses(moldata.info());
+            guessMasses(amber_masses, amber_elements, &has_masses);
+        }
+    }
+    
+    if (not (has_charges and has_ljs and has_masses and has_elements and has_ambertypes))
+    {
+        //it is not possible to create the parameter object if we don't have
+        //these atom-based parameters
+        throw SireBase::missing_property( QObject::tr(
+                "Cannot create an AmberParams object for molecule %1 as it is missing "
+                "necessary atom based properties: has_charges = %2, has_ljs = %3, "
+                "has_masses = %4, has_elements = %5, has_ambertypes = %6.")
+                    .arg( Molecule(moldata).toString() )
+                    .arg(has_charges).arg(has_ljs).arg(has_masses)
+                    .arg(has_elements).arg(has_ambertypes),
+                        CODELOC );
+    }
+    
+    // now see about the optional born radii and screening parameters
+    bool has_radii, has_screening, has_treechains;
+    
+    born_radii = getProperty<AtomRadii>( map["gb_radii"], moldata, &has_radii );
+    amber_screens = getProperty<AtomFloatProperty>( map["gb_screening"], moldata, &has_screening );
+    amber_treechains = getProperty<AtomStringProperty>( map["treechain"],
+                                                        moldata, &has_treechains );
+    
+    if (has_radii)
+    {
+        //see if there is a label for the source of the GB parameters
+        bool has_source;
+        
+        radius_set = getProperty<StringProperty>( map["gb_radius_set"], moldata,
+                                                  &has_source );
+        
+        if (not has_source)
+        {
+            radius_set = "unknown";
+        }
+    }
+    else
+    {
+        radius_set = "unavailable";
+    }
+
+    // now lets get the bonded parameters (if they exist...)
+    bool has_bonds, has_angles, has_dihedrals, has_impropers, has_nbpairs;
+    
+    const auto bonds = getProperty<TwoAtomFunctions>( map["bond"], moldata, &has_bonds );
+    const auto angles = getProperty<ThreeAtomFunctions>( map["angle"], moldata, &has_angles );
+    const auto dihedrals = getProperty<FourAtomFunctions>( map["dihedral"],
+                                                           moldata, &has_dihedrals );
+    const auto impropers = getProperty<FourAtomFunctions>( map["improper"],
+                                                           moldata, &has_impropers );
+    const auto nbpairs = getProperty<CLJNBPairs>( map["intrascale"],
+                                                  moldata, &has_nbpairs );
+    
+    if (has_bonds)
+    {
+        getAmberBondsFrom(bonds);
+    }
+    
+    if (has_angles)
+    {
+        getAmberAnglesFrom(angles);
+    }
+    
+    if (has_dihedrals)
+    {
+        getAmberDihedralsFrom(dihedrals);
+    }
+    
+    if (has_impropers)
+    {
+        getAmberImpropersFrom(impropers);
+    }
+    
+    if (has_nbpairs)
+    {
+        getAmberNBsFrom(nbpairs);
+    }
+}
+
+/** Update this set of parameters from the passed object */
+void AmberParams::_pvt_updateFrom(const MoleculeData &moldata)
+{
+    //for the moment we will just create everything from scratch.
+    //However, one day we will optimise this and take existing
+    //data that doesn't need to be regenerated.
+    PropertyMap oldmap = propmap;
+    const auto info = molinfo;
+    
+    this->operator=(AmberParams());
+
+    propmap = oldmap;
+    molinfo = info;
+
+    this->_pvt_createFrom(moldata);
 }

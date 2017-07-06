@@ -3009,9 +3009,7 @@ AmberPrm::AmberPrm(const System &system, const PropertyMap &map)
         {
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                params[i] = system[molnums[i]].molecule().property("parameters")
-                                    .asA<AmberParams>();
-                //params[i] = AmberParams(system[molnums[i]],map);
+                params[i] = AmberParams(system[molnums[i]],map);
             }
         });
     }
@@ -3019,9 +3017,7 @@ AmberPrm::AmberPrm(const System &system, const PropertyMap &map)
     {
         for (int i=0; i<molnums.count(); ++i)
         {
-            params[i] = system[molnums[i]].molecule().property("parameters")
-                                .asA<AmberParams>();
-            //params[i] = AmberParams(system[molnums[i]],map);
+            params[i] = AmberParams(system[molnums[i]],map);
         }
     }
 
@@ -3855,7 +3851,7 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
 /** Internal function used to get the molecule structure that starts at index 'start_idx'
     in the file, and that has 'natoms' atoms */
 MolEditor AmberPrm::getMolecule(int molidx, int start_idx, int natoms,
-                                 const PropertyMap &map) const
+                                const PropertyMap &map) const
 {
     if (natoms == 0)
     {
@@ -3871,6 +3867,8 @@ MolEditor AmberPrm::getMolecule(int molidx, int start_idx, int natoms,
     const auto molinfo = mol.info();
 
     auto amber_params = this->getAmberParams(molidx, molinfo);
+
+    amber_params.setPropertyMap(map);
 
     mol.setProperty(map["charge"], amber_params.charges());
     mol.setProperty(map["LJ"], amber_params.ljs());

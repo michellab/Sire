@@ -177,6 +177,11 @@ QStringList writeIntData(const QVector<qint64> &data, AmberFormat format,
     {
         lines.append(line);
     }
+
+    if (data.count() == 0)
+    {
+        lines.append(" ");
+    }
     
     return lines;
 }
@@ -304,6 +309,11 @@ QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
     if (n > 0)
     {
         lines.append(line);
+    }
+
+    if (data.count() == 0)
+    {
+        lines.append(" ");
     }
     
     return lines;
@@ -436,6 +446,11 @@ QStringList writeStringData(const QVector<QString> &data, AmberFormat format,
     if (n > 0)
     {
         lines.append(line);
+    }
+
+    if (data.count() == 0)
+    {
+        lines.append(" ");
     }
     
     return lines;

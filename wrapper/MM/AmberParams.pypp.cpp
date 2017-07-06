@@ -59,7 +59,7 @@ void register_AmberParams_class(){
         typedef bp::class_< SireMM::AmberParams, bp::bases< SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > AmberParams_exposer_t;
         AmberParams_exposer_t AmberParams_exposer = AmberParams_exposer_t( "AmberParams", "This class stores AMBER bonded force field parameters for\na collection of bonds, angles, dihedrals, impropers\nand 1-4 scaling factors.\n\nAuthor: Julien Michel  Christopher Woods\n", bp::init< >("Null Constructor") );
         bp::scope AmberParams_scope( AmberParams_exposer );
-        AmberParams_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molecule") ), "Constructor for the passed molecule") );
+        AmberParams_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         AmberParams_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "Constructor for the passed molecule") );
         AmberParams_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "Constructor for the passed molecule") );
         AmberParams_exposer.def( bp::init< SireMM::AmberParams const & >(( bp::arg("other") ), "Copy constructor") );
@@ -72,7 +72,7 @@ void register_AmberParams_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atom"), bp::arg("charge"), bp::arg("mass"), bp::arg("element"), bp::arg("ljparam"), bp::arg("amber_type"), bp::arg("born_radius"), bp::arg("screening_parameter"), bp::arg("treechain") )
-                , "" );
+                , "Set the atom parameters for the specified atom to the provided values" );
         
         }
         { //::SireMM::AmberParams::add
@@ -311,7 +311,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "gbRadii"
                 , gbRadii_function_value
-                , "" );
+                , "Return all of the Born radii of the atoms" );
         
         }
         { //::SireMM::AmberParams::gbScreening
@@ -322,7 +322,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "gbScreening"
                 , gbScreening_function_value
-                , "" );
+                , "Return all of the Born screening parameters for the atoms" );
         
         }
         { //::SireMM::AmberParams::getNB14
@@ -491,6 +491,18 @@ void register_AmberParams_class(){
         
         }
         AmberParams_exposer.def( bp::self == bp::self );
+        { //::SireMM::AmberParams::propertyMap
+        
+            typedef ::SireBase::PropertyMap const & ( ::SireMM::AmberParams::*propertyMap_function_type)(  ) const;
+            propertyMap_function_type propertyMap_function_value( &::SireMM::AmberParams::propertyMap );
+            
+            AmberParams_exposer.def( 
+                "propertyMap"
+                , propertyMap_function_value
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
         { //::SireMM::AmberParams::radiusSet
         
             typedef ::QString ( ::SireMM::AmberParams::*radiusSet_function_type)(  ) const;
@@ -499,7 +511,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "radiusSet"
                 , radiusSet_function_value
-                , "" );
+                , "Return the radius set used by LEAP to assign the Born radii" );
         
         }
         { //::SireMM::AmberParams::remove
@@ -574,6 +586,18 @@ void register_AmberParams_class(){
                 , "Set the excluded atoms of the molecule. This should be a\nCLJNBPairs with the value equal to 0 for atom0-atom1 pairs\nthat are excluded, and 1 for atom0-atom1 pairs that are\nto be included in the non-bonded calculation" );
         
         }
+        { //::SireMM::AmberParams::setPropertyMap
+        
+            typedef void ( ::SireMM::AmberParams::*setPropertyMap_function_type)( ::SireBase::PropertyMap const & ) ;
+            setPropertyMap_function_type setPropertyMap_function_value( &::SireMM::AmberParams::setPropertyMap );
+            
+            AmberParams_exposer.def( 
+                "setPropertyMap"
+                , setPropertyMap_function_value
+                , ( bp::arg("map") )
+                , "" );
+        
+        }
         { //::SireMM::AmberParams::setRadiusSet
         
             typedef void ( ::SireMM::AmberParams::*setRadiusSet_function_type)( ::QString const & ) ;
@@ -583,7 +607,7 @@ void register_AmberParams_class(){
                 "setRadiusSet"
                 , setRadiusSet_function_value
                 , ( bp::arg("radius_set") )
-                , "" );
+                , "Set the radius set used by LEAP to assign the Born radii\nof the atoms. This is just a string that is used to label\nthe radius set in the PRM file" );
         
         }
         { //::SireMM::AmberParams::toString
@@ -605,7 +629,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "treeChains"
                 , treeChains_function_value
-                , "" );
+                , "Return all of the Amber treechain classification for all of the atoms" );
         
         }
         { //::SireMM::AmberParams::typeName
@@ -616,6 +640,18 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberParams::updateFrom
+        
+            typedef void ( ::SireMM::AmberParams::*updateFrom_function_type)( ::SireMol::MoleculeView const & ) ;
+            updateFrom_function_type updateFrom_function_value( &::SireMM::AmberParams::updateFrom );
+            
+            AmberParams_exposer.def( 
+                "updateFrom"
+                , updateFrom_function_value
+                , ( bp::arg("molview") )
                 , "" );
         
         }

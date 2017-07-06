@@ -405,7 +405,9 @@ friend QDataStream& ::operator>>(QDataStream&, SireMM::AmberParams&);
 
 public:
     AmberParams();
-    AmberParams(const SireMol::MoleculeView &molecule);
+    AmberParams(const SireMol::MoleculeView &molecule,
+                const SireBase::PropertyMap &map = SireBase::PropertyMap());
+                
     AmberParams(const SireMol::MoleculeInfo &molinfo);
     AmberParams(const SireMol::MoleculeInfoData &molinfo);
     
@@ -500,11 +502,26 @@ public:
   
     QStringList validate() const;
   
+    void setPropertyMap(const PropertyMap &map);
+    const PropertyMap& propertyMap() const;
+  
+    void updateFrom(const MoleculeView &molview);
+  
 private:
     BondID convert(const BondID &bond) const;
     AngleID convert(const AngleID &angle) const;
     DihedralID convert(const DihedralID &dihedral) const;
     ImproperID convert(const ImproperID &improper) const;
+ 
+    void _pvt_createFrom(const MoleculeData &moldata);
+    void _pvt_updateFrom(const MoleculeData &moldata);
+
+    void getAmberBondsFrom(const TwoAtomFunctions &funcs);
+    void getAmberAnglesFrom(const ThreeAtomFunctions &funcs);
+    void getAmberDihedralsFrom(const FourAtomFunctions &funcs);
+    void getAmberImpropersFrom(const FourAtomFunctions &funcs);
+    
+    void getAmberNBsFrom(const CLJNBPairs &nbpairs);
  
     /** The molecule that this flexibility operates on */
     SireMol::MoleculeInfo molinfo;
@@ -554,6 +571,10 @@ private:
     
     /** The radius set chosen by LEAP when assigning the Born radii */
     QString radius_set;
+    
+    /** The property map used (if any) to identify the properties that
+        hold the amber parameters */
+    SireBase::PropertyMap propmap;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
