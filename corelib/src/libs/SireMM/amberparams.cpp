@@ -45,8 +45,12 @@
 #include "SireCAS/expression.h"
 #include "SireCAS/symbol.h"
 #include "SireCAS/trigfuncs.h"
+#include "SireCAS/values.h"
+#include "SireCAS/sum.h"
+#include "SireCAS/trigfuncs.h"
 
 #include "SireBase/stringproperty.h"
+#include "SireBase/parallel.h"
 
 #include "SireError/errors.h"
 #include "SireBase/errors.h"
@@ -94,7 +98,100 @@ AmberBond::AmberBond(double k, double r0) : _k(k), _r0(r0)
 
 /** Construct from the passed expression */
 AmberBond::AmberBond(const Expression &f, const Symbol &R) : _k(0), _r0(0)
-{}
+{
+    //expression should be of the form "k(r - r0)^2". We need to get the
+    //factors of R
+    const auto factors = f.expand(R);
+    
+    bool has_k = false;
+    
+    QStringList errors;
+    
+    double k = 0.0;
+    double kr0_2 = 0.0;
+    double kr0 = 0.0;
+    
+    for (const auto factor : factors)
+    {
+        if (factor.symbol() == R)
+        {
+            if (not factor.power().isConstant())
+            {
+                errors.append( QObject::tr("Power of R must be constant, not %1")
+                                .arg(factor.power().toString()) );
+                continue;
+            }
+        
+            if (not factor.factor().isConstant())
+            {
+                errors.append( QObject::tr("The value of K in K (R - R0)^2 must be constant. "
+                                "Here it is %1").arg(factor.factor().toString()) );
+                continue;
+            }
+
+            double power = factor.power().evaluate(Values());
+            
+            if (power == 0.0)
+            {
+                //this is the constant
+                kr0_2 += factor.factor().evaluate(Values());
+            }
+            else if (power == 1.0)
+            {
+                //this is the -kR0 term
+                kr0 = factor.factor().evaluate(Values());
+            }
+            else if (power == 2.0)
+            {
+                //this is the R^2 term
+                if (has_k)
+                {
+                    //we cannot have two R2 factors?
+                    errors.append( QObject::tr("Cannot have two R^2 factors!") );
+                    continue;
+                }
+
+                k = factor.factor().evaluate(Values());
+                has_k = true;
+            }
+            else
+            {
+                errors.append( QObject::tr("Power of R^2 must equal 2.0, 1.0 or 0.0, not %1")
+                                    .arg(power) );
+                continue;
+            }
+        }
+        else
+        {
+            errors.append( QObject::tr("Cannot have a factor that does not include R. %1")
+                        .arg(factor.symbol().toString()) );
+        }
+    }
+    
+    if (kr0_2 < 0)
+    {
+        errors.append( QObject::tr("How can K R0^2 be negative? %1").arg(kr0_2) );
+    }
+
+    _k = k;
+    _r0 = std::sqrt( kr0_2 / k );
+
+    //kr0 should be equal to -2 k r0
+    if ( std::abs(_k*_r0 + 0.5 * kr0) > 0.001 )
+    {
+        errors.append( QObject::tr("How can the power of R be %1. It should be 2 x %2 x %3 = %4.")
+                        .arg(kr0).arg(_k).arg(_r0).arg(2*_k*_r0) );
+    }
+    
+    
+    if (not errors.isEmpty())
+    {
+        throw SireError::incompatible_error( QObject::tr(
+                "Cannot extract an AmberBond with function K ( %1 - R0 )^2 from the "
+                "expression %2, because\n%3")
+                    .arg(R.toString()).arg(f.toString()).arg(errors.join("\n")), CODELOC );
+    }
+}
 
 AmberBond::AmberBond(const AmberBond &other)
           : _k(other._k), _r0(other._r0)
@@ -209,7 +306,100 @@ AmberAngle::AmberAngle(double k, double theta0) : _k(k), _theta0(theta0)
 {}
 
 AmberAngle::AmberAngle(const Expression &f, const Symbol &theta) : _k(0), _theta0(0)
-{}
+{
+    //expression should be of the form "k(theta - theta0)^2". We need to get the
+    //factors of theta
+    const auto factors = f.expand(theta);
+    
+    bool has_k = false;
+    
+    QStringList errors;
+    
+    double k = 0.0;
+    double ktheta0_2 = 0.0;
+    double ktheta0 = 0.0;
+    
+    for (const auto factor : factors)
+    {
+        if (factor.symbol() == theta)
+        {
+            if (not factor.power().isConstant())
+            {
+                errors.append( QObject::tr("Power of theta must be constant, not %1")
+                                .arg(factor.power().toString()) );
+                continue;
+            }
+        
+            if (not factor.factor().isConstant())
+            {
+                errors.append( QObject::tr("The value of K in K (theta - theta0)^2 must be "
+                                "constant. Here it is %1").arg(factor.factor().toString()) );
+                continue;
+            }
+
+            double power = factor.power().evaluate(Values());
+            
+            if (power == 0.0)
+            {
+                //this is the constant
+                ktheta0_2 += factor.factor().evaluate(Values());
+            }
+            else if (power == 1.0)
+            {
+                //this is the -ktheta0 term
+                ktheta0 = factor.factor().evaluate(Values());
+            }
+            else if (power == 2.0)
+            {
+                //this is the theta^2 term
+                if (has_k)
+                {
+                    //we cannot have two R2 factors?
+                    errors.append( QObject::tr("Cannot have two theta^2 factors!") );
+                    continue;
+                }
+
+                k = factor.factor().evaluate(Values());
+                has_k = true;
+            }
+            else
+            {
+                errors.append( QObject::tr("Power of theta^2 must equal 2.0, 1.0 or 0.0, not %1")
+                                    .arg(power) );
+                continue;
+            }
+        }
+        else
+        {
+            errors.append( QObject::tr("Cannot have a factor that does not include theta. %1")
+                        .arg(factor.symbol().toString()) );
+        }
+    }
+    
+    if (ktheta0_2 < 0)
+    {
+        errors.append( QObject::tr("How can K theta0^2 be negative? %1").arg(ktheta0_2) );
+    }
+
+    _k = k;
+    _theta0 = std::sqrt( ktheta0_2 / k );
+
+    //ktheta0 should be equal to -k theta0
+    if ( std::abs(_k*_theta0 + 0.5*ktheta0) > 0.001 )
+    {
+        errors.append( QObject::tr(
+                    "How can the power of theta be %1. It should be 2 x %2 x %3 = %4.")
+                        .arg(ktheta0).arg(_k).arg(_theta0).arg(2*_k*_theta0) );
+    }
+    
+    if (not errors.isEmpty())
+    {
+        throw SireError::incompatible_error( QObject::tr(
+                "Cannot extract an AmberAngle with function K ( %1 - theta0 )^2 from the "
+                "expression %2, because\n%3")
+                    .arg(theta.toString()).arg(f.toString()).arg(errors.join("\n")), CODELOC );
+    }
+}
 
 AmberAngle::AmberAngle(const AmberAngle &other)
            : _k(other._k), _theta0(other._theta0)
@@ -432,7 +622,149 @@ AmberDihedral::AmberDihedral(AmberDihPart part)
 }
 
 AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
-{}
+{
+    //this expression should be a sum of cos terms, plus constant terms
+    QList<Expression> cos_terms;
+    double constant = 0.0;
+    
+    QStringList errors;
+    
+    if (f.base().isA<Sum>())
+    {
+        for (const auto child : f.base().asA<Sum>().children())
+        {
+            if (child.isConstant())
+            {
+                constant += f.factor() * child.evaluate(Values());
+            }
+            else if (child.base().isA<Cos>())
+            {
+                if (f.factor() == 1)
+                {
+                    cos_terms.append(child);
+                }
+                else
+                {
+                    cos_terms.append( f.factor() * child );
+                }
+            }
+            else
+            {
+                errors.append( QObject::tr( "Cannot interpret the dihedral expression "
+                   "from '%1' as it should be a series of cosine terms involving %2.")
+                        .arg(f.toString()).arg(phi.toString()) );
+            }
+        }
+    }
+    else
+    {
+        if (f.isConstant())
+        {
+            constant += f.evaluate(Values());
+        }
+        else if (f.base().isA<Cos>())
+        {
+            cos_terms.append(f);
+        }
+        else
+        {
+            errors.append( QObject::tr( "Cannot interpret the dihedral expression "
+               "from '%1' as it should be a series of cosine terms involving %2.")
+                    .arg(f.toString()).arg(phi.toString()) );
+        }
+    }
+
+    //next extract all of the data from the cos terms
+    QList< std::tuple<double,double,double> > terms;
+    
+    double check_constant = 0;
+    
+    for (const auto cos_term : cos_terms)
+    {
+        //term should be of the form 'k cos( periodicity * phi - phase )'
+        double k = cos_term.factor();
+        check_constant += k;
+        
+        double periodicity = 0.0;
+        double phase = 0.0;
+        
+        const auto factors = cos_term.base().asA<Cos>().argument().expand(phi);
+        
+        bool ok = true;
+        
+        for (const auto factor : factors)
+        {
+            if (not factor.power().isConstant())
+            {
+                errors.append( QObject::tr("Power of phi must be constant, not %1")
+                                .arg(factor.power().toString()) );
+                ok = false;
+                continue;
+            }
+        
+            if (not factor.factor().isConstant())
+            {
+                errors.append( QObject::tr("The value of periodicity must be "
+                                "constant. Here it is %1").arg(factor.factor().toString()) );
+                ok = false;
+                continue;
+            }
+
+            double power = factor.power().evaluate(Values());
+            
+            if (power == 0.0)
+            {
+                //this is the constant phase
+                phase += factor.factor().evaluate(Values());
+            }
+            else if (power == 1.0)
+            {
+                //this is the periodicity * phi term
+                periodicity = factor.factor().evaluate(Values());
+            }
+            else
+            {
+                errors.append( QObject::tr("Power of phi must equal 1.0 or 0.0, not %1")
+                                    .arg(power) );
+                ok = false;
+                continue;
+            }
+        }
+        
+        if (ok)
+        {
+            terms.append( std::make_tuple(k, periodicity, phase) );
+        }
+    }
+    
+    //now sum up the individual values of 'k'. These should equal the constant, which
+    //is the aggregate of the "k [ 1 + cos ]" terms
+    if ( std::abs(constant - check_constant) > 0.001 )
+    {
+        errors.append( QObject::tr( "The set of constants should sum up to the same total, "
+            "i.e. should equal %1. Instead they equal %2. This is weird.")
+                .arg(constant).arg(check_constant) );
+    }
+    
+    if (not errors.isEmpty())
+    {
+        throw SireError::incompatible_error( QObject::tr(
+            "Cannot extract an Amber-format dihedral expression from '%1' as "
+            "the expression must be a series of terms of type "
+            "'k{ 1 + cos[ per %2 - phase ] }'. Errors include\n%3")
+                .arg(f.toString()).arg(phi.toString()).arg(errors.join("\n")),
+                    CODELOC );
+    }
+
+    //otherwise, add in all of the terms
+    _parts.reserve(terms.count());
+    
+    for (const auto term : terms)
+    {
+        //remember that the expression uses the negative of the phase ;-)
+        _parts.append( AmberDihPart(std::get<0>(term), std::get<1>(term), -std::get<2>(term)) );
+    }
+}
 
 AmberDihedral::AmberDihedral(const AmberDihedral &other)
               : _parts(other._parts)
@@ -1627,22 +1959,205 @@ AtomElements guessElements(const MoleculeInfoData &molinfo, bool *has_elements)
 /** Construct the hash of bonds */
 void AmberParams::getAmberBondsFrom(const TwoAtomFunctions &funcs)
 {
-    //
+    // get the set of all bond functions
+    const auto potentials = funcs.potentials();
+    
+    // create temporary space to hold the converted bonds
+    QVector< std::tuple<BondID,AmberBond,bool> > bonds( potentials.count() );
+    auto bonds_data = bonds.data();
+    
+    // convert each of these into an AmberBond
+    tbb::parallel_for( tbb::blocked_range<int>(0,potentials.count()),
+                       [&](const tbb::blocked_range<int> &r)
+    {
+        for (int i=r.begin(); i<r.end(); ++i)
+        {
+            const auto potential = potentials.constData()[i];
+            
+            //convert the atom IDs into a canonical form
+            BondID bond = this->convert( BondID(potential.atom0(),potential.atom1()) );
+            
+            //does this bond involve hydrogen? - this relies on "AtomElements" being full
+            bool contains_hydrogen = false;
+            
+            if (not amber_elements.isEmpty())
+            {
+                contains_hydrogen = (amber_elements.at(potential.atom0()).nProtons() < 2) or
+                                    (amber_elements.at(potential.atom1()).nProtons() < 2);
+            }
+            
+            bonds_data[i] = std::make_tuple(bond, AmberBond(potential.function(), Symbol("r")),
+                                            contains_hydrogen);
+        }
+    });
+    
+    //finally add all of these into the amber_bonds hash
+    amber_bonds.clear();
+    amber_bonds.reserve(bonds.count());
+    
+    for (int i=0; i<bonds.count(); ++i)
+    {
+        amber_bonds.insert( std::get<0>(bonds_data[i]),
+                            qMakePair(std::get<1>(bonds_data[i]),
+                                      std::get<2>(bonds_data[i]) ) );
+    }
 }
 
 /** Construct the hash of angles */
 void AmberParams::getAmberAnglesFrom(const ThreeAtomFunctions &funcs)
 {
+    // get the set of all angle functions
+    const auto potentials = funcs.potentials();
+    
+    // create temporary space to hold the converted angles
+    QVector< std::tuple<AngleID,AmberAngle,bool> > angles( potentials.count() );
+    auto angles_data = angles.data();
+    
+    // convert each of these into an AmberAngle
+    tbb::parallel_for( tbb::blocked_range<int>(0,potentials.count()),
+                       [&](const tbb::blocked_range<int> &r)
+    {
+        for (int i=r.begin(); i<r.end(); ++i)
+        {
+            const auto potential = potentials.constData()[i];
+            
+            //convert the atom IDs into a canonical form
+            AngleID angle = this->convert( AngleID(potential.atom0(),
+                                                   potential.atom1(),
+                                                   potential.atom2()) );
+            
+            //does this angle involve hydrogen? - this relies on "AtomElements" being full
+            bool contains_hydrogen = false;
+            
+            if (not amber_elements.isEmpty())
+            {
+                contains_hydrogen = (amber_elements.at(potential.atom0()).nProtons() < 2) or
+                                    (amber_elements.at(potential.atom1()).nProtons() < 2) or
+                                    (amber_elements.at(potential.atom2()).nProtons() < 2);
+            }
+            
+            angles_data[i] = std::make_tuple(angle,
+                                             AmberAngle(potential.function(), Symbol("theta")),
+                                             contains_hydrogen);
+        }
+    });
+    
+    //finally add all of these into the amber_angles hash
+    amber_angles.clear();
+    amber_angles.reserve(angles.count());
+    
+    for (int i=0; i<angles.count(); ++i)
+    {
+        amber_angles.insert( std::get<0>(angles_data[i]),
+                             qMakePair(std::get<1>(angles_data[i]),
+                                       std::get<2>(angles_data[i]) ) );
+    }
 }
 
 /** Construct the hash of dihedrals */
 void AmberParams::getAmberDihedralsFrom(const FourAtomFunctions &funcs)
 {
+    // get the set of all dihedral functions
+    const auto potentials = funcs.potentials();
+    
+    // create temporary space to hold the converted dihedrals
+    QVector< std::tuple<DihedralID,AmberDihedral,bool> > dihedrals( potentials.count() );
+    auto dihedrals_data = dihedrals.data();
+    
+    // convert each of these into an AmberDihedral
+    tbb::parallel_for( tbb::blocked_range<int>(0,potentials.count()),
+                       [&](const tbb::blocked_range<int> &r)
+    {
+        for (int i=r.begin(); i<r.end(); ++i)
+        {
+            const auto potential = potentials.constData()[i];
+            
+            //convert the atom IDs into a canonical form
+            DihedralID dihedral = this->convert( DihedralID(potential.atom0(),
+                                                            potential.atom1(),
+                                                            potential.atom2(),
+                                                            potential.atom3()) );
+            
+            //does this bond involve hydrogen? - this relies on "AtomElements" being full
+            bool contains_hydrogen = false;
+            
+            if (not amber_elements.isEmpty())
+            {
+                contains_hydrogen = (amber_elements.at(potential.atom0()).nProtons() < 2) or
+                                    (amber_elements.at(potential.atom1()).nProtons() < 2) or
+                                    (amber_elements.at(potential.atom2()).nProtons() < 2) or
+                                    (amber_elements.at(potential.atom3()).nProtons() < 2);
+            }
+            
+            dihedrals_data[i] = std::make_tuple(dihedral,
+                                                AmberDihedral(potential.function(), Symbol("phi")),
+                                                contains_hydrogen);
+        }
+    });
+    
+    //finally add all of these into the amber_dihedrals hash
+    amber_dihedrals.clear();
+    amber_dihedrals.reserve(dihedrals.count());
+    
+    for (int i=0; i<dihedrals.count(); ++i)
+    {
+        amber_dihedrals.insert( std::get<0>(dihedrals_data[i]),
+                                   qMakePair(std::get<1>(dihedrals_data[i]),
+                                      std::get<2>(dihedrals_data[i]) ) );
+    }
 }
 
 /** Construct the hash of impropers */
 void AmberParams::getAmberImpropersFrom(const FourAtomFunctions &funcs)
 {
+    // get the set of all improper functions
+    const auto potentials = funcs.potentials();
+    
+    // create temporary space to hold the converted dihedrals
+    QVector< std::tuple<ImproperID,AmberDihedral,bool> > impropers( potentials.count() );
+    auto impropers_data = impropers.data();
+    
+    // convert each of these into an AmberDihedral
+    tbb::parallel_for( tbb::blocked_range<int>(0,potentials.count()),
+                       [&](const tbb::blocked_range<int> &r)
+    {
+        for (int i=r.begin(); i<r.end(); ++i)
+        {
+            const auto potential = potentials.constData()[i];
+            
+            //convert the atom IDs into a canonical form
+            ImproperID improper = this->convert( ImproperID(potential.atom0(),
+                                                            potential.atom1(),
+                                                            potential.atom2(),
+                                                            potential.atom3()) );
+            
+            //does this bond involve hydrogen? - this relies on "AtomElements" being full
+            bool contains_hydrogen = false;
+            
+            if (not amber_elements.isEmpty())
+            {
+                contains_hydrogen = (amber_elements.at(potential.atom0()).nProtons() < 2) or
+                                    (amber_elements.at(potential.atom1()).nProtons() < 2) or
+                                    (amber_elements.at(potential.atom2()).nProtons() < 2) or
+                                    (amber_elements.at(potential.atom3()).nProtons() < 2);
+            }
+            
+            impropers_data[i] = std::make_tuple(improper,
+                                                AmberDihedral(potential.function(), Symbol("phi")),
+                                                contains_hydrogen);
+        }
+    });
+    
+    //finally add all of these into the amber_dihedrals hash
+    amber_impropers.clear();
+    amber_impropers.reserve(impropers.count());
+    
+    for (int i=0; i<impropers.count(); ++i)
+    {
+        amber_impropers.insert( std::get<0>(impropers_data[i]),
+                                   qMakePair(std::get<1>(impropers_data[i]),
+                                      std::get<2>(impropers_data[i]) ) );
+    }
 }
 
 /** Construct the excluded atom set and 14 NB parameters */
@@ -1732,31 +2247,35 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
                                                            moldata, &has_impropers );
     const auto nbpairs = getProperty<CLJNBPairs>( map["intrascale"],
                                                   moldata, &has_nbpairs );
-    
+
+    QVector< std::function<void()> > nb_functions;
+
     if (has_bonds)
     {
-        getAmberBondsFrom(bonds);
+        nb_functions.append( [&](){ getAmberBondsFrom(bonds);} );
     }
     
     if (has_angles)
     {
-        getAmberAnglesFrom(angles);
+        nb_functions.append( [&](){ getAmberAnglesFrom(angles);} );
     }
     
     if (has_dihedrals)
     {
-        getAmberDihedralsFrom(dihedrals);
+        nb_functions.append( [&](){ getAmberDihedralsFrom(dihedrals);} );
     }
     
     if (has_impropers)
     {
-        getAmberImpropersFrom(impropers);
+        nb_functions.append( [&](){ getAmberImpropersFrom(impropers);} );
     }
     
     if (has_nbpairs)
     {
-        getAmberNBsFrom(nbpairs);
+        nb_functions.append( [&](){ getAmberNBsFrom(nbpairs);} );
     }
+    
+    SireBase::parallel_invoke(nb_functions);
 }
 
 /** Update this set of parameters from the passed object */
