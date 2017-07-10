@@ -521,7 +521,7 @@ private:
     void getAmberDihedralsFrom(const FourAtomFunctions &funcs);
     void getAmberImpropersFrom(const FourAtomFunctions &funcs);
     
-    void getAmberNBsFrom(const CLJNBPairs &nbpairs);
+    void getAmberNBsFrom(const CLJNBPairs &nbpairs, const FourAtomFunctions &funcs);
  
     /** The molecule that this flexibility operates on */
     SireMol::MoleculeInfo molinfo;

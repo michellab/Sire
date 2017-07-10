@@ -908,6 +908,8 @@ void AmberPrm::parse(const PropertyMap &map)
     //now process all of the flag data
     score += this->processAllFlags();
 
+    qDebug() << "PARSED: SCORE =" << score;
+
     //finally, make sure that we have been constructed sane
     this->assertSane();
     
@@ -3052,23 +3054,6 @@ AmberPrm::AmberPrm(const System &system, const PropertyMap &map)
     lines.prepend("%FLAG TITLE");
     lines.prepend( QString("%VERSION  VERSION_STAMP = V0001.000  DATE = %1")
                         .arg( QDateTime::currentDateTime().toString("MM/dd/yy  hh:mm:ss") ) );
-
-    //temporarily, for debugging, write out these lines to a file
-    QFile outfile("sire_test.prm7");
-    
-    if (not outfile.open(QIODevice::WriteOnly))
-    {
-        throw SireError::file_error(outfile, CODELOC);
-    }
-    
-    QTextStream ts(&outfile);
-    
-    for (auto line : lines)
-    {
-        ts << line << "\n";
-    }
-    
-    outfile.close();
 
     //now generate this object by re-reading these lines
     this->operator=(AmberPrm(lines));

@@ -2161,8 +2161,39 @@ void AmberParams::getAmberImpropersFrom(const FourAtomFunctions &funcs)
 }
 
 /** Construct the excluded atom set and 14 NB parameters */
-void AmberParams::getAmberNBsFrom(const CLJNBPairs &nbpairs)
+void AmberParams::getAmberNBsFrom(const CLJNBPairs &nbpairs,
+                                  const FourAtomFunctions &dihedrals)
 {
+    //first, copy in the CLJNBPairs from the molecule
+    exc_atoms = nbpairs;
+    
+    //now go through all dihedrals and get the 1-4 scale factors and
+    //remove them from exc_atoms
+    const auto potentials = dihedrals.potentials();
+    
+    for (int i=0; i<potentials.count(); ++i)
+    {
+        const auto potential = potentials.constData()[i];
+        
+        //convert the atom IDs into a canonical form
+        BondID nb14pair = this->convert( BondID(potential.atom0(),
+                                                potential.atom3()) );
+
+        if (not amber_nb14s.contains(nb14pair))
+        {
+            //extract the nb14 term from exc_atoms
+            auto nbscl = nbpairs.get(nb14pair.atom0(),nb14pair.atom1());
+            
+            if (nbscl.coulomb() != 1.0 or nbscl.lj() != 1.0)
+            {
+                //add them to the list of 14 scale factors
+                amber_nb14s.insert(nb14pair, AmberNB14(nbscl.coulomb(),nbscl.lj()));
+                
+                //and remove them from the excluded atoms list
+                exc_atoms.set(nb14pair.atom0(),nb14pair.atom1(), CLJScaleFactor(0));
+            }
+        }
+    }
 }
 
 /** Create this set of parameters from the passed object */
@@ -2272,7 +2303,7 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
     
     if (has_nbpairs)
     {
-        nb_functions.append( [&](){ getAmberNBsFrom(nbpairs);} );
+        nb_functions.append( [&](){ getAmberNBsFrom(nbpairs,dihedrals);} );
     }
     
     SireBase::parallel_invoke(nb_functions);
