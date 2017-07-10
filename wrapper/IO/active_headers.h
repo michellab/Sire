@@ -5,6 +5,7 @@
 
 #include "amber.h"
 #include "amberprm.h"
+#include "amberrst.h"
 #include "amberrst7.h"
 #include "cube.h"
 #include "flexibilitylibrary.h"

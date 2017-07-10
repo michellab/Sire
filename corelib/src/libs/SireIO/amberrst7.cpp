@@ -94,7 +94,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberRst7 &rst)
     return ds;
 }
 
-Vector cubic_angs(90,90,90);
+static Vector cubic_angs(90,90,90);
 
 SIRE_REGISTER_PARSER( rst, AmberRst7 );
 SIRE_REGISTER_PARSER( rst7, AmberRst7 );

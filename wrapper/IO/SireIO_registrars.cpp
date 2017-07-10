@@ -3,17 +3,18 @@
 
 #include "SireIO_registrars.h"
 
-#include "tinker.h"
-#include "amberrst7.h"
-#include "flexibilitylibrary.h"
 #include "protoms.h"
-#include "amber.h"
-#include "moleculeparser.h"
-#include "pdb.h"
-#include "amberprm.h"
-#include "perturbationslibrary.h"
-#include "iobase.h"
 #include "zmatrixmaker.h"
+#include "pdb.h"
+#include "amberrst7.h"
+#include "moleculeparser.h"
+#include "iobase.h"
+#include "tinker.h"
+#include "amberrst.h"
+#include "amberprm.h"
+#include "flexibilitylibrary.h"
+#include "perturbationslibrary.h"
+#include "amber.h"
 #include "trajectorymonitor.h"
 
 #include "Helpers/objectregistry.hpp"
@@ -21,19 +22,20 @@
 void register_SireIO_objects()
 {
 
-    ObjectRegistry::registerConverterFor< SireIO::Tinker >();
+    ObjectRegistry::registerConverterFor< SireIO::ProtoMS >();
+    ObjectRegistry::registerConverterFor< SireIO::ZmatrixMaker >();
+    ObjectRegistry::registerConverterFor< SireIO::PDB >();
     ObjectRegistry::registerConverterFor< SireIO::AmberRst7 >();
+    ObjectRegistry::registerConverterFor< SireIO::NullParser >();
+    ObjectRegistry::registerConverterFor< SireIO::NullIO >();
+    ObjectRegistry::registerConverterFor< SireIO::Tinker >();
+    ObjectRegistry::registerConverterFor< SireIO::AmberRst >();
+    ObjectRegistry::registerConverterFor< SireIO::AmberPrm >();
     ObjectRegistry::registerConverterFor< SireIO::FlexibilityLibrary >();
     ObjectRegistry::registerConverterFor< SireIO::FlexibilityTemplate >();
-    ObjectRegistry::registerConverterFor< SireIO::ProtoMS >();
-    ObjectRegistry::registerConverterFor< SireIO::Amber >();
-    ObjectRegistry::registerConverterFor< SireIO::NullParser >();
-    ObjectRegistry::registerConverterFor< SireIO::PDB >();
-    ObjectRegistry::registerConverterFor< SireIO::AmberPrm >();
     ObjectRegistry::registerConverterFor< SireIO::PerturbationsLibrary >();
     ObjectRegistry::registerConverterFor< SireIO::PerturbationsTemplate >();
-    ObjectRegistry::registerConverterFor< SireIO::NullIO >();
-    ObjectRegistry::registerConverterFor< SireIO::ZmatrixMaker >();
+    ObjectRegistry::registerConverterFor< SireIO::Amber >();
     ObjectRegistry::registerConverterFor< SireIO::TrajectoryMonitor >();
 
 }

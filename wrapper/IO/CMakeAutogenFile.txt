@@ -2,6 +2,7 @@
 set ( PYPP_SOURCES
        Amber.pypp.cpp
        AmberPrm.pypp.cpp
+       AmberRst.pypp.cpp
        AmberRst7.pypp.cpp
        Cube.pypp.cpp
        FlexibilityLibrary.pypp.cpp
