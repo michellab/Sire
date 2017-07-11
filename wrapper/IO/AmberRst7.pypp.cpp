@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireBase/stringproperty.h"
 
+#include "SireBase/timeproperty.h"
+
 #include "SireIO/amberformat.h"
 
 #include "SireIO/amberrst7.h"
@@ -160,7 +162,7 @@ void register_AmberRst7_class(){
             AmberRst7_exposer.def( 
                 "time"
                 , time_function_value
-                , "Return the current time of the simulation from which this restart\nfile was written" );
+                , "Return the current time of the simulation from which this restart\nfile was written in picoseconds.\nThis is a negative number if the time has not been set" );
         
         }
         { //::SireIO::AmberRst7::title

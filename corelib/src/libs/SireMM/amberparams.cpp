@@ -757,12 +757,15 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
     }
 
     //otherwise, add in all of the terms
-    _parts.reserve(terms.count());
-    
-    for (const auto term : terms)
+    if (not terms.isEmpty())
     {
-        //remember that the expression uses the negative of the phase ;-)
-        _parts.append( AmberDihPart(std::get<0>(term), std::get<1>(term), -std::get<2>(term)) );
+        _parts.reserve(terms.count());
+        
+        for (const auto term : terms)
+        {
+            //remember that the expression uses the negative of the phase ;-)
+            _parts.append( AmberDihPart(std::get<0>(term), std::get<1>(term), -std::get<2>(term)) );
+        }
     }
 }
 
@@ -812,10 +815,19 @@ const char* AmberDihedral::what() const
     return AmberDihedral::typeName();
 }
 
-const AmberDihPart& AmberDihedral::operator[](int i) const
+AmberDihPart AmberDihedral::operator[](int i) const
 {
-    i = SireID::Index(i).map(_parts.count());
-    return _parts[i];
+    if (_parts.isEmpty())
+    {
+        //this is a zero dihedral
+        i = SireID::Index(i).map(_parts.count());
+        return AmberDihPart();
+    }
+    else
+    {
+        i = SireID::Index(i).map(_parts.count());
+        return _parts[i];
+    }
 }
 
 double AmberDihedral::energy(double phi) const
@@ -842,6 +854,11 @@ Expression AmberDihedral::toExpression(const Symbol &phi) const
 
 QString AmberDihedral::toString() const
 {
+    if (_parts.isEmpty())
+    {
+        return QObject::tr("AmberDihedral( 0 )");
+    }
+
     QStringList s;
     for (int i=0; i<_parts.count(); ++i)
     {
@@ -1869,7 +1886,7 @@ AmberParams& AmberParams::operator+=(const AmberParams &other)
             amber_nb14s.insert(it.key(), it.value());
         }
     }
-    
+
     if (not other.radius_set.isEmpty())
     {
         //overwrite the radius set with other
@@ -2171,6 +2188,10 @@ void AmberParams::getAmberNBsFrom(const CLJNBPairs &nbpairs,
     //remove them from exc_atoms
     const auto potentials = dihedrals.potentials();
     
+    //create new space to hold the 14 scale factors
+    QHash<BondID,AmberNB14> new_nb14s;
+    new_nb14s.reserve(potentials.count());
+    
     for (int i=0; i<potentials.count(); ++i)
     {
         const auto potential = potentials.constData()[i];
@@ -2179,7 +2200,9 @@ void AmberParams::getAmberNBsFrom(const CLJNBPairs &nbpairs,
         BondID nb14pair = this->convert( BondID(potential.atom0(),
                                                 potential.atom3()) );
 
-        if (not amber_nb14s.contains(nb14pair))
+        const auto molinfo = info();
+
+        if (not new_nb14s.contains(nb14pair))
         {
             //extract the nb14 term from exc_atoms
             auto nbscl = nbpairs.get(nb14pair.atom0(),nb14pair.atom1());
@@ -2189,39 +2212,24 @@ void AmberParams::getAmberNBsFrom(const CLJNBPairs &nbpairs,
                 if (nbscl.coulomb() != 0.0 or nbscl.lj() != 0.0)
                 {
                     //add them to the list of 14 scale factors
-                    amber_nb14s.insert(nb14pair, AmberNB14(nbscl.coulomb(),nbscl.lj()));
+                    new_nb14s.insert(nb14pair, AmberNB14(nbscl.coulomb(),nbscl.lj()));
                 
                     //and remove them from the excluded atoms list
                     exc_atoms.set(nb14pair.atom0(),nb14pair.atom1(), CLJScaleFactor(0));
-
-                    qDebug() << "INCL" << potential.atom0().toString()
-                                       << potential.atom3().toString()
-                                       << nbscl.coulomb() << nbscl.lj();
                 }
                 else
                 {
                     const auto tscl = nbpairs.get(nb14pair.atom0(),nb14pair.atom1());
-                    qDebug() << "ZERO" << potential.atom0().toString()
-                                       << potential.atom3().toString()
-                                       << tscl.coulomb() << tscl.lj();
                 }
             }
             else
             {
                 const auto tscl = nbpairs.get(nb14pair.atom0(),nb14pair.atom1());
-                qDebug() << "EVEN" << potential.atom0().toString()
-                                   << potential.atom3().toString()
-                                   << tscl.coulomb() << tscl.lj();
             }
         }
-        else
-        {
-            const auto tscl = nbpairs.get(nb14pair.atom0(),nb14pair.atom1());
-            qDebug() << "SKIP" << potential.atom0().toString()
-                               << potential.atom3().toString()
-                               << tscl.coulomb() << tscl.lj();
-        }
     }
+    
+    amber_nb14s = new_nb14s;
 }
 
 /** Create this set of parameters from the passed object */

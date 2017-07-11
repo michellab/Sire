@@ -267,7 +267,7 @@ QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
     is true, and will append any errors encountered during writing to 'errors' 
     if this is non-zero. This returns the text lines as a QStringList */
 QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
-                           QStringList *errors, bool include_header)
+                           QStringList *errors, bool include_header, char float_format)
 {
     QStringList lines;
     
@@ -284,7 +284,7 @@ QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
     {
         const double value = data.constData()[i];
     
-        QString sval = QString("%1").arg(value, format.width(), 'E', format.pointWidth());
+        QString sval = QString("%1").arg(value, format.width(), float_format, format.pointWidth());
         
         if (sval.length() > format.width())
         {
@@ -295,7 +295,7 @@ QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
                     "the specified format %3.")
                         .arg(i).arg(value).arg(format.toString()) );
 
-            sval = QString("%1").arg(0.0, format.width(), 'f', format.pointWidth());
+            sval = QString("%1").arg(0.0, format.width(), float_format, format.pointWidth());
         }
         
         line += sval;

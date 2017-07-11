@@ -7,11 +7,21 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/errors.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireBase/stringproperty.h"
+
 #include "SireCAS/expression.h"
+
+#include "SireCAS/sum.h"
 
 #include "SireCAS/symbol.h"
 
 #include "SireCAS/trigfuncs.h"
+
+#include "SireCAS/values.h"
 
 #include "SireError/errors.h"
 

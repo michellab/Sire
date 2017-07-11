@@ -1453,8 +1453,8 @@ getDihedralData(const AmberParams &params, int start_idx)
         //get the NB14 scaling factor for this dihedral. This should be set
         //for only the first dihedral found that has this pair, otherwise
         //we would risk Amber double-counting this parameter
-        const BondID nb14pair( info.atomIdx(it.key().atom0()), info.atomIdx(it.key().atom3()) );
-        const AmberNB14 nb14 = params.getNB14( BondID(it.key().atom0(),it.key().atom3()) );
+        const BondID nb14pair = params.convert( BondID(it.key().atom0(), it.key().atom3()) );
+        const AmberNB14 nb14 = params.nb14s().value(nb14pair);
         
         bool new_dihedral = false;
         
@@ -1463,7 +1463,7 @@ getDihedralData(const AmberParams &params, int start_idx)
             new_dihedral = true;
             seen_dihedrals.insert(nb14pair);
         }
-    
+
         //extract the individual dihedral terms from the dihedral,
         //combine them with the NB14 scaling factors, and then
         //create a database of them and get their ID
@@ -1471,6 +1471,15 @@ getDihedralData(const AmberParams &params, int start_idx)
         QList<qint64> ignored;
         
         bool is_first = true;
+        
+        if (it.value().first.terms().isEmpty())
+        {
+            //all dihedrals must have some terms, or we risk losing
+            // NB14 scale factors
+            throw SireError::program_bug( QObject::tr(
+                    "How can a dihedral have no terms? %1").arg(it.key().toString()),
+                        CODELOC );
+        }
         
         for (const auto term : it.value().first.terms())
         {
@@ -1542,11 +1551,6 @@ getDihedralData(const AmberParams &params, int start_idx)
     
     for (auto it=impropers.constBegin(); it != impropers.constEnd(); ++it)
     {
-        //get the NB14 scaling factor for this improper. These interactions
-        //seem always to be ignored, but are parsed...
-        const BondID nb14pair( info.atomIdx(it.key().atom0()), info.atomIdx(it.key().atom3()) );
-        const AmberNB14 nb14 = params.getNB14( BondID(it.key().atom0(),it.key().atom3()) );
-
         //extract the individual dihedral terms from the dihedral parameters,
         //combine them with the 0,0 scaling factor, and then
         //create a database of them and get their ID

@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "stringproperty.h"
 
+#include <QDebug>
+
 #include "stringproperty.h"
 
 SireBase::StringProperty __copy__(const SireBase::StringProperty &other){ return SireBase::StringProperty(other); }

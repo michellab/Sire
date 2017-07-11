@@ -66,11 +66,11 @@ friend QDataStream& ::operator>>(QDataStream&, AmberRst7&);
 public:
     AmberRst7();
     AmberRst7(const QString &filename,
-             const PropertyMap &map = PropertyMap());
+              const PropertyMap &map = PropertyMap());
     AmberRst7(const QStringList &lines,
-             const PropertyMap &map = PropertyMap());
+              const PropertyMap &map = PropertyMap());
     AmberRst7(const SireSystem::System &system,
-             const PropertyMap &map = PropertyMap());
+              const PropertyMap &map = PropertyMap());
     
     AmberRst7(const AmberRst7 &other);
     

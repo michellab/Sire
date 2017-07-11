@@ -821,17 +821,6 @@ void CLJ14Group::reextract()
         throw SireError::incomplete_code( QObject::tr(
                 "NEED TO WRITE THE CODE FOR NON_STRICT SELECTION OF 1-4 PAIRS"), CODELOC );
     }
-    
-    qDebug() << "\nBEGIN NB14DATA";
-    for (const auto cgpairs : data_for_pair)
-    {
-        for (const auto data : cgpairs)
-        {
-            qDebug() << data.atom0.toString() << data.atom1.toString()
-                     << data.chg0 << data.chg1 << data.coul14scl << data.lj14scl;
-        }
-    }
-    qDebug() << "END NB14DATA";
 }
 
 /** Internal function used to calculate the energy of the 1-4 interactions for the

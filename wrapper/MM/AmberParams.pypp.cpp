@@ -7,11 +7,21 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/errors.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireBase/stringproperty.h"
+
 #include "SireCAS/expression.h"
+
+#include "SireCAS/sum.h"
 
 #include "SireCAS/symbol.h"
 
 #include "SireCAS/trigfuncs.h"
+
+#include "SireCAS/values.h"
 
 #include "SireError/errors.h"
 
@@ -59,7 +69,7 @@ void register_AmberParams_class(){
         typedef bp::class_< SireMM::AmberParams, bp::bases< SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > AmberParams_exposer_t;
         AmberParams_exposer_t AmberParams_exposer = AmberParams_exposer_t( "AmberParams", "This class stores AMBER bonded force field parameters for\na collection of bonds, angles, dihedrals, impropers\nand 1-4 scaling factors.\n\nAuthor: Julien Michel  Christopher Woods\n", bp::init< >("Null Constructor") );
         bp::scope AmberParams_scope( AmberParams_exposer );
-        AmberParams_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        AmberParams_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "Constructor for the passed molecule") );
         AmberParams_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "Constructor for the passed molecule") );
         AmberParams_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "Constructor for the passed molecule") );
         AmberParams_exposer.def( bp::init< SireMM::AmberParams const & >(( bp::arg("other") ), "Copy constructor") );
@@ -245,6 +255,54 @@ void register_AmberParams_class(){
                 "connectivity"
                 , connectivity_function_value
                 , "Return the connectivity of the molecule implied by the\nthe bonds" );
+        
+        }
+        { //::SireMM::AmberParams::convert
+        
+            typedef ::SireMol::BondID ( ::SireMM::AmberParams::*convert_function_type)( ::SireMol::BondID const & ) const;
+            convert_function_type convert_function_value( &::SireMM::AmberParams::convert );
+            
+            AmberParams_exposer.def( 
+                "convert"
+                , convert_function_value
+                , ( bp::arg("bond") )
+                , "Convert the passed BondID into AtomIdx IDs, sorted in index order" );
+        
+        }
+        { //::SireMM::AmberParams::convert
+        
+            typedef ::SireMol::AngleID ( ::SireMM::AmberParams::*convert_function_type)( ::SireMol::AngleID const & ) const;
+            convert_function_type convert_function_value( &::SireMM::AmberParams::convert );
+            
+            AmberParams_exposer.def( 
+                "convert"
+                , convert_function_value
+                , ( bp::arg("angle") )
+                , "Convert the passed AngleID into AtomIdx IDs, sorted in index order" );
+        
+        }
+        { //::SireMM::AmberParams::convert
+        
+            typedef ::SireMol::DihedralID ( ::SireMM::AmberParams::*convert_function_type)( ::SireMol::DihedralID const & ) const;
+            convert_function_type convert_function_value( &::SireMM::AmberParams::convert );
+            
+            AmberParams_exposer.def( 
+                "convert"
+                , convert_function_value
+                , ( bp::arg("dihedral") )
+                , "Convert the passed DihedralID into AtomIdx IDs, sorted in index order" );
+        
+        }
+        { //::SireMM::AmberParams::convert
+        
+            typedef ::SireMol::ImproperID ( ::SireMM::AmberParams::*convert_function_type)( ::SireMol::ImproperID const & ) const;
+            convert_function_type convert_function_value( &::SireMM::AmberParams::convert );
+            
+            AmberParams_exposer.def( 
+                "convert"
+                , convert_function_value
+                , ( bp::arg("improper") )
+                , "Convert the passed ImproperID into AtomIdx IDs, sorted in index order" );
         
         }
         { //::SireMM::AmberParams::dihedralFunctions
@@ -500,7 +558,7 @@ void register_AmberParams_class(){
                 "propertyMap"
                 , propertyMap_function_value
                 , bp::return_value_policy< bp::copy_const_reference >()
-                , "" );
+                , "Return the property map that is used to find and update properties\nof the molecule" );
         
         }
         { //::SireMM::AmberParams::radiusSet
@@ -595,7 +653,7 @@ void register_AmberParams_class(){
                 "setPropertyMap"
                 , setPropertyMap_function_value
                 , ( bp::arg("map") )
-                , "" );
+                , "Set the property map that should be used to find and update properties\nof the molecule" );
         
         }
         { //::SireMM::AmberParams::setRadiusSet
@@ -652,7 +710,7 @@ void register_AmberParams_class(){
                 "updateFrom"
                 , updateFrom_function_value
                 , ( bp::arg("molview") )
-                , "" );
+                , "Update these parameters from the contents of the passed molecule. This\nwill only work if these parameters are compatible with this molecule" );
         
         }
         { //::SireMM::AmberParams::validate

@@ -90,7 +90,8 @@ QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
                             double *total_score, QStringList *errors=0);
 
 QStringList writeFloatData(const QVector<double> &data, AmberFormat format,
-                           QStringList *errors=0, bool include_header=true);
+                           QStringList *errors=0, bool include_header=true,
+                           char float_format='E');
 
 QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
                               const QPair<qint64,qint64> &index,

@@ -289,7 +289,7 @@ public:
     bool operator==(const AmberDihedral &other) const;
     bool operator!=(const AmberDihedral &other) const;
     
-    const AmberDihPart& operator[](int i) const;
+    AmberDihPart operator[](int i) const;
     
     QVector<AmberDihPart> terms() const;
     
@@ -506,13 +506,13 @@ public:
     const PropertyMap& propertyMap() const;
   
     void updateFrom(const MoleculeView &molview);
-  
-private:
+
     BondID convert(const BondID &bond) const;
     AngleID convert(const AngleID &angle) const;
     DihedralID convert(const DihedralID &dihedral) const;
     ImproperID convert(const ImproperID &improper) const;
- 
+  
+private: 
     void _pvt_createFrom(const MoleculeData &moldata);
     void _pvt_updateFrom(const MoleculeData &moldata);
 
@@ -743,7 +743,14 @@ inline uint qHash(const AmberNBDihPart &param)
 /** Return an array of all of the terms in the dihedral */
 inline QVector<AmberDihPart> AmberDihedral::terms() const
 {
-    return _parts;
+    if (_parts.isEmpty())
+    {
+        return QVector<AmberDihPart>( 1, AmberDihPart() );
+    }
+    else
+    {
+        return _parts;
+    }
 }
 
 /** Return a hash of this bond */

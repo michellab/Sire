@@ -7,11 +7,21 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/errors.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireBase/stringproperty.h"
+
 #include "SireCAS/expression.h"
+
+#include "SireCAS/sum.h"
 
 #include "SireCAS/symbol.h"
 
 #include "SireCAS/trigfuncs.h"
+
+#include "SireCAS/values.h"
 
 #include "SireError/errors.h"
 
@@ -103,14 +113,13 @@ void register_AmberDihedral_class(){
         AmberDihedral_exposer.def( bp::self == bp::self );
         { //::SireMM::AmberDihedral::operator[]
         
-            typedef ::SireMM::AmberDihPart const & ( ::SireMM::AmberDihedral::*__getitem___function_type)( int ) const;
+            typedef ::SireMM::AmberDihPart ( ::SireMM::AmberDihedral::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMM::AmberDihedral::operator[] );
             
             AmberDihedral_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
         }
