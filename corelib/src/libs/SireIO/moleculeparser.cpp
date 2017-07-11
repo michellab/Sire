@@ -33,6 +33,7 @@
 
 #include "SireBase/parallel.h"
 #include "SireBase/booleanproperty.h"
+#include "SireBase/stringproperty.h"
 
 #include "SireSystem/system.h"
 
@@ -263,14 +264,14 @@ bool MoleculeParser::isLead() const
 
 /** Write the parsed data back to the file called 'filename'. This will
     overwrite the file if it exists already, so be careful! */
-void MoleculeParser::write(const QString &filename) const
+void MoleculeParser::writeToFile(const QString &filename) const
 {
     if (lnes.isEmpty())
         return;
 
     if (not this->isTextFile())
         throw SireError::program_bug( QObject::tr(
-            "Dear programmer - please override the MoleculeParser::save function "
+            "Dear programmer - please override the MoleculeParser::writeToFile function "
             "to work with your binary file format. Text writing is not supported "
             "for the parser %1.").arg(this->what()), CODELOC );
 
@@ -490,6 +491,314 @@ System MoleculeParser::read(const QStringList &filenames, const PropertyMap &map
     MoleculeParserPtr parser = parsers.takeFirst();
     
     return parser.read().toSystem(parsers, map);
+}
+
+/** Synonym for MoleculeParser::read */
+System MoleculeParser::load(const QString &filename, const PropertyMap &map)
+{
+    return MoleculeParser::read(filename, map);
+}
+
+/** Synonym for MoleculeParser::read */
+System MoleculeParser::load(const QString &file1, const QString &file2, const PropertyMap &map)
+{
+    return MoleculeParser::read(file1, file2, map);
+}
+
+/** Synonym for MoleculeParser::read */
+System MoleculeParser::load(const QStringList &filenames, const PropertyMap &map)
+{
+    return MoleculeParser::read(filenames, map);
+}
+
+/** This returns a human readable set of lines describing the formats supported
+    by MoleculeParser. Each line is formatted as "extension : description" where
+    extension is the unique extension of the file used by MoleculeParser, and
+    description is a description of the file format */
+QStringList MoleculeParser::supportedFormats()
+{
+    return QStringList();
+}
+
+QStringList pvt_write(const System &system,
+                      const QStringList &filenames,
+                      const QStringList &fileformats,
+                      const PropertyMap &map)
+{
+    if (filenames.count() != fileformats.count())
+    {
+        throw SireError::program_bug( QObject::tr(
+            "Disagreement of the number of files... %1 vs %2")
+                .arg(filenames.count()).arg(fileformats.count()), CODELOC );
+    }
+
+    qDebug() << "WRITING FILES" << filenames << "USING FORMATS" << fileformats;
+
+    QVector<QFileInfo> fileinfos(filenames.count());
+
+    QStringList errors;
+    
+    for (int i=0; i<filenames.count(); ++i)
+    {
+        fileinfos[i] = QFileInfo(filenames[i]);
+        
+        if (fileinfos[i].exists())
+        {
+            if (fileinfos[i].isDir())
+            {
+                errors.append( QObject::tr("The file %1 is actually a directory, and not writable!")
+                                    .arg(fileinfos[i].absoluteFilePath()) );
+            }
+            else if (not fileinfos[i].isWritable())
+            {
+                errors.append( QObject::tr("The file %1 exists and is not writable!")
+                                    .arg(fileinfos[i].absoluteFilePath()) );
+            }
+        }
+    }
+
+    //now get all of the parsers
+    QVector<MoleculeParserPtr> parsers;
+    parsers.reserve(filenames.count());
+    
+    QVector<QString> written_files(filenames.count());
+
+    //should we write the files in parallel?
+    bool run_parallel = true;
+
+    if (map["parallel"].hasValue())
+    {
+        run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+
+    for (int i=0; i<filenames.count(); ++i)
+    {
+        written_files[i] = fileinfos[i].absoluteFilePath();
+    }
+
+    return written_files.toList();
+}
+
+/** Save the passed System to the file called 'filename'. First, the 'fileformat'
+    property is looked at in 'map'. This is used to set the format(s) of
+    the files that are written (comma-separated list). 
+    
+    If this does not exist, then the extension of the
+    file is used to work out which format to use. If no extension is given,
+    then the System will be queried to find out its preferred format (normally
+    the format it was loaded with), via its 'fileformat' property
+    (again, comma separated list).
+    
+    If their preferred format results in multiple files, then 
+    multiple files will be written. This returns the full pathnames to
+    all of the files that are written 
+*/
+QStringList MoleculeParser::write(const System &system, const QString &filename,
+                                  const PropertyMap &map)
+{
+    if (filename.isEmpty() or QFileInfo(filename).baseName().isEmpty())
+    {
+        throw SireError::io_error( QObject::tr(
+                "You must supply a valid filename. This '%1' is not sufficient.")
+                    .arg(filename), CODELOC );
+    }
+
+    //build a list of filenames with their associated fileformats
+    QStringList filenames;
+    QStringList fileformats;
+
+    const auto format_property = map["fileformat"];
+    
+    if (format_property.hasValue())
+    {
+        fileformats = format_property.value().asA<StringProperty>().toString().split(",");
+        
+        QString basename = QFileInfo(filename).completeBaseName();
+        
+        for (const auto format : fileformats)
+        {
+            filenames.append( QString("%1.%2").arg(basename,format.toLower()) );
+        }
+    }
+    else
+    {
+        QString extension = QFileInfo(filename).completeSuffix();
+        
+        if (extension.isEmpty())
+        {
+            //we need to find the format from the system
+            try
+            {
+                fileformats = system.property(format_property).asA<StringProperty>()
+                                                              .toString().split(",");
+            }
+            catch(...)
+            {
+                throw SireError::io_error( QObject::tr(
+                        "Cannot work out the fileformat to use to write the System to "
+                        "file '%1'. You need to either supply the format using the "
+                        "'fileformat' property in the passed map, add this to the System "
+                        "as its 'fileformat' property, or pass a filename with an extension "
+                        "whose fileformat can be determined. Supported fileformats are;\n%2")
+                            .arg(filename).arg(MoleculeParser::supportedFormats().join("\n")),
+                                CODELOC );
+            }
+            
+            for (const auto format : fileformats)
+            {
+                filenames.append( QString("%1.%2").arg(filename).arg(format.toLower()) );
+            }
+        }
+        else
+        {
+            filenames.append(filename);
+            fileformats.append(extension.toUpper());
+        }
+    }
+    
+    //now we have a list of filenames and associated formats, actually
+    //write the files
+    return ::pvt_write(system, filenames, fileformats, map);
+}
+
+/** Extension of MoleculeParser::write which allows many filenames.
+    The same rules to locate the fileformats are now used, except that now only
+    the number of files written must match the number of filenames */
+QStringList MoleculeParser::write(const System &system,
+                                  const QStringList &files,
+                                  const PropertyMap &map)
+{
+    if (files.isEmpty())
+    {
+        throw SireError::io_error( QObject::tr(
+                "You must supply a valid filename. An empty list is not sufficient!"),
+                    CODELOC );
+    }
+    else if (files.count() == 1)
+    {
+        return MoleculeParser::write(system, files[0], map);
+    }
+    
+    //build a list of filenames with their associated fileformats
+    QStringList filenames;
+    QStringList fileformats;
+
+    const auto format_property = map["fileformat"];
+    
+    if (format_property.hasValue())
+    {
+        fileformats = format_property.value().asA<StringProperty>().toString().split(",");
+        
+        if (files.count() != fileformats.count())
+        {
+            throw SireError::io_error( QObject::tr(
+                    "You must match up the number of filenames to fileformats when "
+                    "specifying both the filenames [%1] and fileformats [%2].")
+                        .arg(filenames.join(",")).arg(fileformats.join(",")), CODELOC );
+        }
+        
+        for (int i=0; i<fileformats.count(); ++i)
+        {
+            const QString filename = files[i];
+        
+            if (filename.isEmpty() or QFileInfo(filename).baseName().isEmpty())
+            {
+                throw SireError::io_error( QObject::tr(
+                        "You must supply a valid filename. This '%1' is not sufficient.")
+                            .arg(filename), CODELOC );
+            }
+
+            QString basename = QFileInfo(filename).completeBaseName();
+            filenames.append( QString("%1.%2").arg(basename,fileformats[i].toLower()) );
+        }
+    }
+    else
+    {
+        //we may need to find the format from the system
+        try
+        {
+            fileformats = system.property(format_property).asA<StringProperty>()
+                                                          .toString().split(",");
+        }
+        catch(...)
+        {}
+
+        for (int i=0; i<files.count(); ++i)
+        {
+            const auto filename = files[i];
+        
+            QString extension = QFileInfo(filename).completeSuffix();
+            
+            if (extension.isEmpty())
+            {
+                if (i >= fileformats.count())
+                {
+                    throw SireError::io_error( QObject::tr(
+                            "Cannot work out the fileformat to use to write the System to "
+                            "file '%1'. You need to either supply the format using the "
+                            "'fileformat' property in the passed map, add this to the System "
+                            "as its 'fileformat' property, or pass a filename with an extension "
+                            "whose fileformat can be determined. Supported fileformats are;\n%2")
+                                .arg(filename).arg(MoleculeParser::supportedFormats().join("\n")),
+                                    CODELOC );
+                }
+                else
+                {
+                    filenames.append( QString("%1.%2").arg(filename)
+                                                      .arg(fileformats[i].toLower()) );
+                }
+            }
+            else if (i >= fileformats.count())
+            {
+                filenames.append(filename);
+                fileformats.append(extension.toUpper());
+            }
+            else
+            {
+                filenames.append(filename);
+                fileformats[i] = extension.toUpper();
+            }
+        }
+    }
+    
+    //now we have a list of filenames and associated formats, actually
+    //write the files
+    return ::pvt_write(system, filenames, fileformats, map);
+}
+
+/** Extension of MoleculeParser::write which allows you to specify two filenames.
+    The same rules to locate the fileformats are now used, except now only two
+    files are permitted to be written */
+QStringList MoleculeParser::write(const System &system, const QString &file1,
+                                  const QString &file2, const PropertyMap &map)
+{
+    QStringList filenames;
+    filenames.append(file1);
+    filenames.append(file2);
+    return MoleculeParser::write(system, filenames, map);
+}
+
+/** Synonym of MoleculeParser::write */
+QStringList MoleculeParser::save(const System &system, const QString &filename,
+                                 const PropertyMap &map)
+{
+    return MoleculeParser::write(system, filename, map);
+}
+
+/** Synonym of MoleculeParser::write */
+QStringList MoleculeParser::save(const System &system,
+                                 const QString &file1, const QString &file2,
+                                 const PropertyMap &map)
+{
+    return MoleculeParser::write(system, file1, file2, map);
+}
+
+/** Synonym of MoleculeParser::write */
+QStringList MoleculeParser::save(const System &system,
+                                 const QStringList &filenames,
+                                 const PropertyMap &map)
+{
+    return MoleculeParser::write(system, filenames, map);
 }
 
 /** Return the System that is constructed from the data in this parser */

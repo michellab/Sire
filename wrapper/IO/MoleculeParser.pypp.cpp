@@ -136,6 +136,42 @@ void register_MoleculeParser_class(){
                 , "" );
         
         }
+        { //::SireIO::MoleculeParser::load
+        
+            typedef ::SireSystem::System ( *load_function_type )( ::QString const &,::SireBase::PropertyMap const & );
+            load_function_type load_function_value( &::SireIO::MoleculeParser::load );
+            
+            MoleculeParser_exposer.def( 
+                "load"
+                , load_function_value
+                , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::load
+        
+            typedef ::SireSystem::System ( *load_function_type )( ::QString const &,::QString const &,::SireBase::PropertyMap const & );
+            load_function_type load_function_value( &::SireIO::MoleculeParser::load );
+            
+            MoleculeParser_exposer.def( 
+                "load"
+                , load_function_value
+                , ( bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::load
+        
+            typedef ::SireSystem::System ( *load_function_type )( ::QStringList const &,::SireBase::PropertyMap const & );
+            load_function_type load_function_value( &::SireIO::MoleculeParser::load );
+            
+            MoleculeParser_exposer.def( 
+                "load"
+                , load_function_value
+                , ( bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
         { //::SireIO::MoleculeParser::null
         
             typedef ::SireIO::NullParser const & ( *null_function_type )(  );
@@ -208,6 +244,42 @@ void register_MoleculeParser_class(){
                 , "Read the files with passed filenames, returning the System contained therein.\nNote that all of the files must be connected to the same system\n(i.e. it could be the Amber Parm and Rst file)" );
         
         }
+        { //::SireIO::MoleculeParser::save
+        
+            typedef ::QStringList ( *save_function_type )( ::SireSystem::System const &,::QString const &,::SireBase::PropertyMap const & );
+            save_function_type save_function_value( &::SireIO::MoleculeParser::save );
+            
+            MoleculeParser_exposer.def( 
+                "save"
+                , save_function_value
+                , ( bp::arg("system"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::save
+        
+            typedef ::QStringList ( *save_function_type )( ::SireSystem::System const &,::QString const &,::QString const &,::SireBase::PropertyMap const & );
+            save_function_type save_function_value( &::SireIO::MoleculeParser::save );
+            
+            MoleculeParser_exposer.def( 
+                "save"
+                , save_function_value
+                , ( bp::arg("system"), bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::save
+        
+            typedef ::QStringList ( *save_function_type )( ::SireSystem::System const &,::QStringList const &,::SireBase::PropertyMap const & );
+            save_function_type save_function_value( &::SireIO::MoleculeParser::save );
+            
+            MoleculeParser_exposer.def( 
+                "save"
+                , save_function_value
+                , ( bp::arg("system"), bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
         { //::SireIO::MoleculeParser::score
         
             typedef double ( ::SireIO::MoleculeParser::*score_function_type)(  ) const;
@@ -229,6 +301,17 @@ void register_MoleculeParser_class(){
                 , setUseParallel_function_value
                 , ( bp::arg("on") )
                 , "Set whether or not to parse files in parallel or serial" );
+        
+        }
+        { //::SireIO::MoleculeParser::supportedFormats
+        
+            typedef ::QStringList ( *supportedFormats_function_type )(  );
+            supportedFormats_function_type supportedFormats_function_value( &::SireIO::MoleculeParser::supportedFormats );
+            
+            MoleculeParser_exposer.def( 
+                "supportedFormats"
+                , supportedFormats_function_value
+                , "" );
         
         }
         { //::SireIO::MoleculeParser::toSystem
@@ -291,20 +374,60 @@ void register_MoleculeParser_class(){
         }
         { //::SireIO::MoleculeParser::write
         
-            typedef void ( ::SireIO::MoleculeParser::*write_function_type)( ::QString const & ) const;
+            typedef ::QStringList ( *write_function_type )( ::SireSystem::System const &,::QString const &,::SireBase::PropertyMap const & );
             write_function_type write_function_value( &::SireIO::MoleculeParser::write );
             
             MoleculeParser_exposer.def( 
                 "write"
                 , write_function_value
-                , ( bp::arg("filename") )
-                , "Write the parsed data back to the file called filename. This will\noverwrite the file if it exists already, so be careful" );
+                , ( bp::arg("system"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
+        { //::SireIO::MoleculeParser::write
+        
+            typedef ::QStringList ( *write_function_type )( ::SireSystem::System const &,::QString const &,::QString const &,::SireBase::PropertyMap const & );
+            write_function_type write_function_value( &::SireIO::MoleculeParser::write );
+            
+            MoleculeParser_exposer.def( 
+                "write"
+                , write_function_value
+                , ( bp::arg("system"), bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::write
+        
+            typedef ::QStringList ( *write_function_type )( ::SireSystem::System const &,::QStringList const &,::SireBase::PropertyMap const & );
+            write_function_type write_function_value( &::SireIO::MoleculeParser::write );
+            
+            MoleculeParser_exposer.def( 
+                "write"
+                , write_function_value
+                , ( bp::arg("system"), bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::writeToFile
+        
+            typedef void ( ::SireIO::MoleculeParser::*writeToFile_function_type)( ::QString const & ) const;
+            writeToFile_function_type writeToFile_function_value( &::SireIO::MoleculeParser::writeToFile );
+            
+            MoleculeParser_exposer.def( 
+                "writeToFile"
+                , writeToFile_function_value
+                , ( bp::arg("filename") )
+                , "" );
+        
+        }
+        MoleculeParser_exposer.staticmethod( "load" );
         MoleculeParser_exposer.staticmethod( "null" );
         MoleculeParser_exposer.staticmethod( "parse" );
         MoleculeParser_exposer.staticmethod( "read" );
+        MoleculeParser_exposer.staticmethod( "save" );
+        MoleculeParser_exposer.staticmethod( "supportedFormats" );
         MoleculeParser_exposer.staticmethod( "typeName" );
+        MoleculeParser_exposer.staticmethod( "write" );
         MoleculeParser_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireIO::MoleculeParser >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MoleculeParser_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireIO::MoleculeParser >,

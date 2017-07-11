@@ -99,6 +99,8 @@ public:
 
     const QVector<QString>& lines() const;
 
+    static QStringList supportedFormats();
+
     static MoleculeParserPtr parse(const QString &filename,
                                    const PropertyMap &map = PropertyMap());
     
@@ -111,6 +113,37 @@ public:
                                    const PropertyMap &map = PropertyMap());
     static SireSystem::System read(const QStringList &filenames,
                                    const PropertyMap &map = PropertyMap());
+
+    static SireSystem::System load(const QString &filename,
+                                   const PropertyMap &map = PropertyMap());
+    static SireSystem::System load(const QString &file1, const QString &file2,
+                                   const PropertyMap &map = PropertyMap());
+    static SireSystem::System load(const QStringList &filenames,
+                                   const PropertyMap &map = PropertyMap());
+
+    static QStringList write(const SireSystem::System &system,
+                             const QString &filename,
+                             const PropertyMap &map = PropertyMap());
+    
+    static QStringList write(const SireSystem::System &system,
+                             const QString &file1, const QString &file2,
+                             const PropertyMap &map = PropertyMap());
+    
+    static QStringList write(const SireSystem::System &system,
+                             const QStringList &filenames,
+                             const PropertyMap &map = PropertyMap());
+
+    static QStringList save(const SireSystem::System &system,
+                            const QString &filename,
+                            const PropertyMap &map = PropertyMap());
+    
+    static QStringList save(const SireSystem::System &system,
+                            const QString &file1, const QString &file2,
+                            const PropertyMap &map = PropertyMap());
+    
+    static QStringList save(const SireSystem::System &system,
+                            const QStringList &filenames,
+                            const PropertyMap &map = PropertyMap());
 
     virtual bool isLead() const;
 
@@ -131,7 +164,7 @@ public:
     SireSystem::System toSystem(const QList<MoleculeParserPtr> &others,
                                 const PropertyMap &map = PropertyMap()) const;
     
-    virtual void write(const QString &filename) const;
+    virtual void writeToFile(const QString &filename) const;
     
     virtual bool isTextFile() const;
     virtual bool isBinaryFile() const;
