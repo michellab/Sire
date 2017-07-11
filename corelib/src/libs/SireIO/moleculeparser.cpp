@@ -194,7 +194,7 @@ MoleculeParser::MoleculeParser(const QStringList &lines,
         run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
     
-    if (not lnes.isEmpty())
+    if (not lines.isEmpty())
     {
         lnes = lines.toVector();
     }

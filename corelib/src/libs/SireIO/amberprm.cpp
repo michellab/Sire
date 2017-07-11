@@ -908,8 +908,6 @@ void AmberPrm::parse(const PropertyMap &map)
     //now process all of the flag data
     score += this->processAllFlags();
 
-    qDebug() << "PARSED: SCORE =" << score;
-
     //finally, make sure that we have been constructed sane
     this->assertSane();
     
@@ -3056,7 +3054,9 @@ AmberPrm::AmberPrm(const System &system, const PropertyMap &map)
                         .arg( QDateTime::currentDateTime().toString("MM/dd/yy  hh:mm:ss") ) );
 
     //now generate this object by re-reading these lines
-    this->operator=(AmberPrm(lines));
+    AmberPrm parsed(lines);
+
+    this->operator=(parsed);
 }
 
 /** Copy constructor */

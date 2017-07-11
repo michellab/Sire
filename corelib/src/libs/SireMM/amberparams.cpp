@@ -2186,12 +2186,40 @@ void AmberParams::getAmberNBsFrom(const CLJNBPairs &nbpairs,
             
             if (nbscl.coulomb() != 1.0 or nbscl.lj() != 1.0)
             {
-                //add them to the list of 14 scale factors
-                amber_nb14s.insert(nb14pair, AmberNB14(nbscl.coulomb(),nbscl.lj()));
+                if (nbscl.coulomb() != 0.0 or nbscl.lj() != 0.0)
+                {
+                    //add them to the list of 14 scale factors
+                    amber_nb14s.insert(nb14pair, AmberNB14(nbscl.coulomb(),nbscl.lj()));
                 
-                //and remove them from the excluded atoms list
-                exc_atoms.set(nb14pair.atom0(),nb14pair.atom1(), CLJScaleFactor(0));
+                    //and remove them from the excluded atoms list
+                    exc_atoms.set(nb14pair.atom0(),nb14pair.atom1(), CLJScaleFactor(0));
+
+                    qDebug() << "INCL" << potential.atom0().toString()
+                                       << potential.atom3().toString()
+                                       << nbscl.coulomb() << nbscl.lj();
+                }
+                else
+                {
+                    const auto tscl = nbpairs.get(nb14pair.atom0(),nb14pair.atom1());
+                    qDebug() << "ZERO" << potential.atom0().toString()
+                                       << potential.atom3().toString()
+                                       << tscl.coulomb() << tscl.lj();
+                }
             }
+            else
+            {
+                const auto tscl = nbpairs.get(nb14pair.atom0(),nb14pair.atom1());
+                qDebug() << "EVEN" << potential.atom0().toString()
+                                   << potential.atom3().toString()
+                                   << tscl.coulomb() << tscl.lj();
+            }
+        }
+        else
+        {
+            const auto tscl = nbpairs.get(nb14pair.atom0(),nb14pair.atom1());
+            qDebug() << "SKIP" << potential.atom0().toString()
+                               << potential.atom3().toString()
+                               << tscl.coulomb() << tscl.lj();
         }
     }
 }
@@ -2307,6 +2335,18 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
     }
     
     SireBase::parallel_invoke(nb_functions);
+    
+    //ensure that the resulting object is valid
+    QStringList errors = this->validate();
+    
+    if (not errors.isEmpty())
+    {
+        throw SireError::io_error( QObject::tr(
+                "Problem creating the AmberParams object for molecule %1 : %2. "
+                "Errors include:\n%3")
+                    .arg(moldata.name().value()).arg(moldata.number().value())
+                    .arg(errors.join("\n")), CODELOC );
+    }
 }
 
 /** Update this set of parameters from the passed object */

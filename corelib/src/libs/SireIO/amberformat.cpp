@@ -250,7 +250,10 @@ QVector<qint64> readIntData(const QVector<QString> &lines, AmberFormat format,
             }
         }
 
-        score += read_score / nvalues;
+        if (nvalues > 0)
+        {
+            score += read_score / nvalues;
+        }
     }
 
     if (total_score)
@@ -383,7 +386,10 @@ QVector<double> readFloatData(const QVector<QString> &lines, AmberFormat format,
             }
         }
         
-        score += read_score / nvalues;
+        if (nvalues > 0)
+        {
+            score += read_score / nvalues;
+        }
     }
 
     if (total_score)
@@ -510,7 +516,10 @@ QVector<QString> readStringData(const QVector<QString> &lines, AmberFormat forma
             }
         }
         
-        score += read_score / nvalues;
+        if (nvalues > 0)
+        {
+            score += read_score / nvalues;
+        }
     }
 
     if (total_score)
