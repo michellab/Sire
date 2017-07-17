@@ -287,7 +287,7 @@ namespace detail
                         "Cannot find parsers that support the following formats: %1.\n"
                         "Supported parsers are:\n%2")
                             .arg(missing.join(", "))
-                            .arg(this->supportedFormats().join("\n")), CODELOC );
+                            .arg(this->supportedFormats()), CODELOC );
             }
             
             return helpers;
@@ -332,7 +332,7 @@ namespace detail
             return helpers_by_id.value(name);
         }
     
-        QStringList supportedFormats()
+        QString supportedFormats()
         {
             QMutexLocker lkr(&mutex);
             
@@ -345,14 +345,14 @@ namespace detail
             {
                 const auto parser = helpers_by_id.value(key);
             
-                lines.append( QObject::tr("## Parser %1 ##").arg(key) );
+                lines.append( QObject::tr("## Parser %1 ##").arg(key) );
                 lines.append( QObject::tr("Supports files: %1")
                                     .arg(parser.suffixes().join(", ")) );
                 lines.append( parser.formatDescription() );
                 lines += QString("#").repeated(13 + key.length()) + "\n";
             }
             
-            return lines;
+            return lines.join("\n");
         }
     
     private:
@@ -644,7 +644,17 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
             try
             {
                 const auto parser = factory.construct(filename, map);
-                parsers.insert(parser.read().score(), parser);
+                
+                if (parser.read().score() <= 0)
+                {
+                    errors.append( QObject::tr("Failed to parse '%1' with parser '%2' "
+                       "as this file is not recognised as being of the required format.")
+                                    .arg(filename).arg(factory.formatName()) );
+                }
+                else
+                {
+                    parsers.insert(parser.read().score(), parser);
+                }
             }
             catch(const SireError::exception &e)
             {
@@ -667,7 +677,17 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
         try
         {
             const auto parser = factory.construct(filename, map);
-            parsers.insert(parser.read().score(), parser);
+            
+            if (parser.read().score() <= 0)
+            {
+                errors.append( QObject::tr("Failed to parse '%1' with parser '%2' "
+                       "as this file is not recognised as being of the required format.")
+                                    .arg(filename).arg(factory.formatName()) );
+            }
+            else
+            {
+                parsers.insert(parser.read().score(), parser);
+            }
         }
         catch(const SireError::exception &e)
         {
@@ -687,7 +707,7 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
         {
             throw SireIO::parse_error( QObject::tr(
                     "There are no parsers available that can parse the file '%1'\n"
-                    "Errors reported by individual parsers are:\n%2")
+                    "Errors reported by individual parsers are:\n\n%2\n")
                         .arg(filename).arg(errors.join("\n\n")), CODELOC );
         }
         else
@@ -695,7 +715,8 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
             throw SireIO::parse_error( QObject::tr(
                     "There are no parsers available that can parser the file '%1'. "
                     "All parsers were tried, including those that were associated with "
-                    "the extension of this file. Errors reported by individual parsers are:\n%2")
+                    "the extension of this file. Errors reported "
+                    "by individual parsers are:\n\n%2\n")
                         .arg(filename).arg(errors.join("\n\n")), CODELOC );
         }
         
@@ -845,9 +866,9 @@ QStringList MoleculeParser::formatSuffix() const
     by MoleculeParser. Each line is formatted as "extension : description" where
     extension is the unique extension of the file used by MoleculeParser, and
     description is a description of the file format */
-QStringList MoleculeParser::supportedFormats()
+QString MoleculeParser::supportedFormats()
 {
-    return QStringList();
+    return getParserFactory()->supportedFormats();
 }
 
 QStringList pvt_write(const System &system,
@@ -1025,7 +1046,7 @@ QStringList MoleculeParser::write(const System &system, const QString &filename,
                         "'fileformat' property in the passed map, add this to the System "
                         "as its 'fileformat' property, or pass a filename with an extension "
                         "whose fileformat can be determined. Supported fileformats are;\n%2")
-                            .arg(filename).arg(MoleculeParser::supportedFormats().join("\n")),
+                            .arg(filename).arg(MoleculeParser::supportedFormats()),
                                 CODELOC );
             }
             
@@ -1124,7 +1145,7 @@ QStringList MoleculeParser::write(const System &system,
                             "'fileformat' property in the passed map, add this to the System "
                             "as its 'fileformat' property, or pass a filename with an extension "
                             "whose fileformat can be determined. Supported fileformats are;\n%2")
-                                .arg(filename).arg(MoleculeParser::supportedFormats().join("\n")),
+                                .arg(filename).arg(MoleculeParser::supportedFormats()),
                                     CODELOC );
                 }
                 else

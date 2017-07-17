@@ -154,7 +154,7 @@ public:
     virtual MoleculeParserPtr construct(const SireSystem::System &system,
                                         const PropertyMap &map) const=0;
 
-    static QStringList supportedFormats();
+    static QString supportedFormats();
 
     static MoleculeParserPtr parse(const QString &filename,
                                    const PropertyMap &map = PropertyMap());

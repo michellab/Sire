@@ -152,7 +152,7 @@ void AmberRst::parse(const PropertyMap &map)
                                     CODELOC );
             default:
                 throw SireError::io_error( QObject::tr(
-                            "NetCDF experienced an unknown error!"), CODELOC );
+                            "NetCDF experienced an unknown error! %1").arg(errnum), CODELOC );
         }
     }
 #endif
@@ -168,9 +168,19 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
         QByteArray c_filename = filename.toUtf8();
         int file_id;
         errnum = nc_open(c_filename.constData(), NC_NOWRITE, &file_id);
-        assert_no_netcdf_error(errnum);
 
-        nc_close(file_id);
+        if (errnum != NC_NOERR)
+        {
+            //this is not a netcdf file or does not exist
+            this->operator=( AmberRst() );
+            this->setScore(0);
+            return;
+        }
+
+    #else
+        throw SireError::unsupported( QObject::tr(
+                "Software is missing NetCDF support, so cannot read Amber Rst files!"),
+                    CODELOC );
     #endif
 }
 

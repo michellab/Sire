@@ -363,7 +363,7 @@ void register_MoleculeParser_class(){
         }
         { //::SireIO::MoleculeParser::supportedFormats
         
-            typedef ::QStringList ( *supportedFormats_function_type )(  );
+            typedef ::QString ( *supportedFormats_function_type )(  );
             supportedFormats_function_type supportedFormats_function_value( &::SireIO::MoleculeParser::supportedFormats );
             
             MoleculeParser_exposer.def( 
