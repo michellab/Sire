@@ -111,10 +111,7 @@ using namespace SireBase;
 
 static const RegisterMetaType<AmberPrm> r_parm;
 
-SIRE_REGISTER_PARSER( prm7, AmberPrm );
-SIRE_REGISTER_PARSER( prm, AmberPrm );
-SIRE_REGISTER_PARSER( top, AmberPrm );
-SIRE_REGISTER_PARSER( prmtop, AmberPrm );
+const RegisterParser<AmberPrm> register_amberparm;
 
 /** Serialise to a binary datastream */
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberPrm &parm)
@@ -3979,6 +3976,19 @@ QString AmberPrm::formatName() const
     return "PRM7";
 }
 
+/** Return the suffixes that AmberPrm files are normally associated with */
+QStringList AmberPrm::formatSuffix() const
+{
+    static const QStringList suffixes = { "prm7", "prm", "top7", "top", "prmtop7", "prmtop" };
+    return suffixes;
+}
+
+/** Return a description of the file format */
+QString AmberPrm::formatDescription() const
+{
+    return QObject::tr("Amber topology/parameter format files supported from Amber 7 upwards.");
+}
+
 /** Return the System that is described by this AmberPrm file. Note that
     the molecules in this system don't have any coordinates (as these aren't
     provided by the file */
@@ -4028,4 +4038,26 @@ System AmberPrm::startSystem(const PropertyMap &map) const
     return system;
 }
 
+/** Return this parser constructed from the passed filename */
+MoleculeParserPtr AmberPrm::construct(const QString &filename,
+                                      const PropertyMap &map) const
+{
+    //don't construct from a pointer as it could leak
+    return MoleculeParserPtr( AmberPrm(filename,map) );
+}
 
+/** Return this parser constructed from the passed set of lines */
+MoleculeParserPtr AmberPrm::construct(const QStringList &lines,
+                                      const PropertyMap &map) const
+{
+    //don't construct from a pointer as it could leak
+    return MoleculeParserPtr( AmberPrm(lines,map) );
+}
+
+/** Return this parser constructed from the passed SireSystem::System */
+MoleculeParserPtr AmberPrm::construct(const SireSystem::System &system,
+                                      const PropertyMap &map) const
+{
+    //don't construct from a pointer as it could leak
+    return MoleculeParserPtr( AmberPrm(system,map) );
+}

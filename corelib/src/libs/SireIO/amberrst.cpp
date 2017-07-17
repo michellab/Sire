@@ -64,6 +64,7 @@ using namespace SireUnits;
 using namespace SireStream;
 
 static const RegisterMetaType<AmberRst> r_rst;
+const RegisterParser<AmberRst> register_amberrst;
 
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberRst &rst)
 {
@@ -100,9 +101,6 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberRst &rst)
 
 static Vector cubic_angs(90,90,90);
 
-SIRE_REGISTER_PARSER( rst, AmberRst );
-SIRE_REGISTER_PARSER( crd, AmberRst );
-
 /** Constructor */
 AmberRst::AmberRst()
          : ConcreteProperty<AmberRst,MoleculeParser>(),
@@ -113,6 +111,20 @@ AmberRst::AmberRst()
 QString AmberRst::formatName() const
 {
     return "RST";
+}
+
+/** Return the suffixes that AmberRst files will typically use */
+QStringList AmberRst::formatSuffix() const
+{
+    static const QStringList suffixes = { "rst", "crd" };
+    return suffixes;
+}
+
+/** Return a description of the file format */
+QString AmberRst::formatDescription() const
+{
+    return QObject::tr("Amber coordinate/velocity text (binary, netcdf) restart files "
+                       "now default since Amber16.");
 }
 
 /** Parse the data contained in the lines - this clears any pre-existing
@@ -486,3 +498,26 @@ SireMaths::Vector AmberRst::boxAngles() const
     return box_angs;
 }
 
+/** Return this parser constructed from the passed filename */
+MoleculeParserPtr AmberRst::construct(const QString &filename,
+                                      const PropertyMap &map) const
+{
+    //don't construct from a pointer as it could leak
+    return MoleculeParserPtr( AmberRst(filename,map) );
+}
+
+/** Return this parser constructed from the passed set of lines */
+MoleculeParserPtr AmberRst::construct(const QStringList &lines,
+                                      const PropertyMap &map) const
+{
+    //don't construct from a pointer as it could leak
+    return MoleculeParserPtr( AmberRst(lines,map) );
+}
+
+/** Return this parser constructed from the passed SireSystem::System */
+MoleculeParserPtr AmberRst::construct(const SireSystem::System &system,
+                                      const PropertyMap &map) const
+{
+    //don't construct from a pointer as it could leak
+    return MoleculeParserPtr( AmberRst(system,map) );
+}

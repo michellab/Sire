@@ -81,6 +81,42 @@ void register_AmberRst_class(){
                 , "Return the parsed box dimensions" );
         
         }
+        { //::SireIO::AmberRst::construct
+        
+            typedef ::SireIO::MoleculeParserPtr ( ::SireIO::AmberRst::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
+            construct_function_type construct_function_value( &::SireIO::AmberRst::construct );
+            
+            AmberRst_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("filename"), bp::arg("map") )
+                , "" );
+        
+        }
+        { //::SireIO::AmberRst::construct
+        
+            typedef ::SireIO::MoleculeParserPtr ( ::SireIO::AmberRst::*construct_function_type)( ::QStringList const &,::SireBase::PropertyMap const & ) const;
+            construct_function_type construct_function_value( &::SireIO::AmberRst::construct );
+            
+            AmberRst_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("lines"), bp::arg("map") )
+                , "" );
+        
+        }
+        { //::SireIO::AmberRst::construct
+        
+            typedef ::SireIO::MoleculeParserPtr ( ::SireIO::AmberRst::*construct_function_type)( ::SireSystem::System const &,::SireBase::PropertyMap const & ) const;
+            construct_function_type construct_function_value( &::SireIO::AmberRst::construct );
+            
+            AmberRst_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("system"), bp::arg("map") )
+                , "" );
+        
+        }
         { //::SireIO::AmberRst::coordinates
         
             typedef ::QVector< SireMaths::Vector > ( ::SireIO::AmberRst::*coordinates_function_type)(  ) const;
@@ -92,6 +128,17 @@ void register_AmberRst_class(){
                 , "Return the parsed coordinate data" );
         
         }
+        { //::SireIO::AmberRst::formatDescription
+        
+            typedef ::QString ( ::SireIO::AmberRst::*formatDescription_function_type)(  ) const;
+            formatDescription_function_type formatDescription_function_value( &::SireIO::AmberRst::formatDescription );
+            
+            AmberRst_exposer.def( 
+                "formatDescription"
+                , formatDescription_function_value
+                , "" );
+        
+        }
         { //::SireIO::AmberRst::formatName
         
             typedef ::QString ( ::SireIO::AmberRst::*formatName_function_type)(  ) const;
@@ -101,6 +148,17 @@ void register_AmberRst_class(){
                 "formatName"
                 , formatName_function_value
                 , "Return the format name that is used to identify this file format within Sire" );
+        
+        }
+        { //::SireIO::AmberRst::formatSuffix
+        
+            typedef ::QStringList ( ::SireIO::AmberRst::*formatSuffix_function_type)(  ) const;
+            formatSuffix_function_type formatSuffix_function_value( &::SireIO::AmberRst::formatSuffix );
+            
+            AmberRst_exposer.def( 
+                "formatSuffix"
+                , formatSuffix_function_value
+                , "" );
         
         }
         { //::SireIO::AmberRst::hasVelocities

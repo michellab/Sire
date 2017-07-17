@@ -47,6 +47,42 @@ void register_MoleculeParser_class(){
         typedef bp::class_< SireIO::MoleculeParser, bp::bases< SireBase::Property >, boost::noncopyable > MoleculeParser_exposer_t;
         MoleculeParser_exposer_t MoleculeParser_exposer = MoleculeParser_exposer_t( "MoleculeParser", "The base class of all molecule parsers", bp::no_init );
         bp::scope MoleculeParser_scope( MoleculeParser_exposer );
+        { //::SireIO::MoleculeParser::construct
+        
+            typedef ::SireIO::MoleculeParserPtr ( ::SireIO::MoleculeParser::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
+            construct_function_type construct_function_value( &::SireIO::MoleculeParser::construct );
+            
+            MoleculeParser_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("filename"), bp::arg("map") )
+                , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::construct
+        
+            typedef ::SireIO::MoleculeParserPtr ( ::SireIO::MoleculeParser::*construct_function_type)( ::QStringList const &,::SireBase::PropertyMap const & ) const;
+            construct_function_type construct_function_value( &::SireIO::MoleculeParser::construct );
+            
+            MoleculeParser_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("lines"), bp::arg("map") )
+                , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::construct
+        
+            typedef ::SireIO::MoleculeParserPtr ( ::SireIO::MoleculeParser::*construct_function_type)( ::SireSystem::System const &,::SireBase::PropertyMap const & ) const;
+            construct_function_type construct_function_value( &::SireIO::MoleculeParser::construct );
+            
+            MoleculeParser_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("system"), bp::arg("map") )
+                , "" );
+        
+        }
         { //::SireIO::MoleculeParser::disableParallel
         
             typedef void ( ::SireIO::MoleculeParser::*disableParallel_function_type)(  ) ;
@@ -69,6 +105,17 @@ void register_MoleculeParser_class(){
                 , "Enable code to parse files in parallel" );
         
         }
+        { //::SireIO::MoleculeParser::formatDescription
+        
+            typedef ::QString ( ::SireIO::MoleculeParser::*formatDescription_function_type)(  ) const;
+            formatDescription_function_type formatDescription_function_value( &::SireIO::MoleculeParser::formatDescription );
+            
+            MoleculeParser_exposer.def( 
+                "formatDescription"
+                , formatDescription_function_value
+                , "" );
+        
+        }
         { //::SireIO::MoleculeParser::formatName
         
             typedef ::QString ( ::SireIO::MoleculeParser::*formatName_function_type)(  ) const;
@@ -77,6 +124,17 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , "Return the unique name of this format. This should be a short\nstring in capital letters that will identify the format within\nthe program, e.g. PRM7, RST7, PDB3 etc." );
+        
+        }
+        { //::SireIO::MoleculeParser::formatSuffix
+        
+            typedef ::QStringList ( ::SireIO::MoleculeParser::*formatSuffix_function_type)(  ) const;
+            formatSuffix_function_type formatSuffix_function_value( &::SireIO::MoleculeParser::formatSuffix );
+            
+            MoleculeParser_exposer.def( 
+                "formatSuffix"
+                , formatSuffix_function_value
                 , "" );
         
         }

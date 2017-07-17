@@ -84,10 +84,21 @@ public:
     static const char* typeName();
     
     const char* what() const;
+    
+    MoleculeParserPtr construct(const QString &filename,
+                                const PropertyMap &map) const;
+
+    MoleculeParserPtr construct(const QStringList &lines,
+                                const PropertyMap &map) const;
+    
+    MoleculeParserPtr construct(const SireSystem::System &system,
+                                const PropertyMap &map) const;
 
     QString toString() const;
 
     QString formatName() const;
+    QString formatDescription() const;
+    QStringList formatSuffix() const;
 
     static AmberRst7 parse(const QString &filename);
 

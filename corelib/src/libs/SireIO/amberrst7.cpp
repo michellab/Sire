@@ -63,6 +63,7 @@ using namespace SireUnits::Dimension;
 using namespace SireStream;
 
 static const RegisterMetaType<AmberRst7> r_rst;
+const RegisterParser<AmberRst7> register_rst7;
 
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberRst7 &rst)
 {
@@ -98,10 +99,6 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberRst7 &rst)
 }
 
 static Vector cubic_angs(90,90,90);
-
-SIRE_REGISTER_PARSER( rst, AmberRst7 );
-SIRE_REGISTER_PARSER( rst7, AmberRst7 );
-SIRE_REGISTER_PARSER( crd, AmberRst7 );
 
 /** Constructor */
 AmberRst7::AmberRst7()
@@ -168,6 +165,20 @@ void AmberRst7::readBoxInfo(int boxidx)
 QString AmberRst7::formatName() const
 {
     return "RST7";
+}
+
+/** Return the suffixes that RST7 files will typically have */
+QStringList AmberRst7::formatSuffix() const
+{
+    static const QStringList suffixes = { "rst7", "rst", "crd7", "crd" };
+    return suffixes;
+}
+
+/** Return a description of the file format */
+QString AmberRst7::formatDescription() const
+{
+    return QObject::tr("Amber coordinate/velocity text (ascii) restart files "
+                       "supported from Amber 7 upwards.");
 }
 
 /** Parse the data contained in the lines - this clears any pre-existing
@@ -1086,5 +1097,29 @@ SireMaths::Vector AmberRst7::boxDimensions() const
 SireMaths::Vector AmberRst7::boxAngles() const
 {
     return box_angs;
+}
+
+/** Return this parser constructed from the passed filename */
+MoleculeParserPtr AmberRst7::construct(const QString &filename,
+                                       const PropertyMap &map) const
+{
+    //don't construct from a pointer as it could leak
+    return MoleculeParserPtr( AmberRst7(filename,map) );
+}
+
+/** Return this parser constructed from the passed set of lines */
+MoleculeParserPtr AmberRst7::construct(const QStringList &lines,
+                                       const PropertyMap &map) const
+{
+    //don't construct from a pointer as it could leak
+    return MoleculeParserPtr( AmberRst7(lines,map) );
+}
+
+/** Return this parser constructed from the passed SireSystem::System */
+MoleculeParserPtr AmberRst7::construct(const SireSystem::System &system,
+                                       const PropertyMap &map) const
+{
+    //don't construct from a pointer as it could leak
+    return MoleculeParserPtr( AmberRst7(system,map) );
 }
 

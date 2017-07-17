@@ -149,6 +149,42 @@ void register_AmberPrm_class(){
                 , "Run through all of the data that has been read and perform a series\nof tests that will see if the prm7 data is sane. If any test fails,\nthen an exception will be thrown" );
         
         }
+        { //::SireIO::AmberPrm::construct
+        
+            typedef ::SireIO::MoleculeParserPtr ( ::SireIO::AmberPrm::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
+            construct_function_type construct_function_value( &::SireIO::AmberPrm::construct );
+            
+            AmberPrm_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("filename"), bp::arg("map") )
+                , "" );
+        
+        }
+        { //::SireIO::AmberPrm::construct
+        
+            typedef ::SireIO::MoleculeParserPtr ( ::SireIO::AmberPrm::*construct_function_type)( ::QStringList const &,::SireBase::PropertyMap const & ) const;
+            construct_function_type construct_function_value( &::SireIO::AmberPrm::construct );
+            
+            AmberPrm_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("lines"), bp::arg("map") )
+                , "" );
+        
+        }
+        { //::SireIO::AmberPrm::construct
+        
+            typedef ::SireIO::MoleculeParserPtr ( ::SireIO::AmberPrm::*construct_function_type)( ::SireSystem::System const &,::SireBase::PropertyMap const & ) const;
+            construct_function_type construct_function_value( &::SireIO::AmberPrm::construct );
+            
+            AmberPrm_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("system"), bp::arg("map") )
+                , "" );
+        
+        }
         { //::SireIO::AmberPrm::flagType
         
             typedef ::SireIO::AmberPrm::FLAG_TYPE ( ::SireIO::AmberPrm::*flagType_function_type)( ::QString const & ) const;
@@ -184,6 +220,17 @@ void register_AmberPrm_class(){
                 , "Return the float data for the passed flag. This returns an empty\nlist if there is no data associated with this flag. This raises\nan invalid_cast error if data exists, but it is the wrong type" );
         
         }
+        { //::SireIO::AmberPrm::formatDescription
+        
+            typedef ::QString ( ::SireIO::AmberPrm::*formatDescription_function_type)(  ) const;
+            formatDescription_function_type formatDescription_function_value( &::SireIO::AmberPrm::formatDescription );
+            
+            AmberPrm_exposer.def( 
+                "formatDescription"
+                , formatDescription_function_value
+                , "" );
+        
+        }
         { //::SireIO::AmberPrm::formatName
         
             typedef ::QString ( ::SireIO::AmberPrm::*formatName_function_type)(  ) const;
@@ -193,6 +240,17 @@ void register_AmberPrm_class(){
                 "formatName"
                 , formatName_function_value
                 , "Return the format name that is used to identify this file format within Sire" );
+        
+        }
+        { //::SireIO::AmberPrm::formatSuffix
+        
+            typedef ::QStringList ( ::SireIO::AmberPrm::*formatSuffix_function_type)(  ) const;
+            formatSuffix_function_type formatSuffix_function_value( &::SireIO::AmberPrm::formatSuffix );
+            
+            AmberPrm_exposer.def( 
+                "formatSuffix"
+                , formatSuffix_function_value
+                , "" );
         
         }
         { //::SireIO::AmberPrm::getMolecule

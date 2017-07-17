@@ -85,12 +85,12 @@ public:
     AmberPrm();
 
     AmberPrm(const QString &filename,
-              const PropertyMap &map = PropertyMap());
+             const PropertyMap &map = PropertyMap());
     AmberPrm(const QStringList &lines,
-              const PropertyMap &map = PropertyMap());
+             const PropertyMap &map = PropertyMap());
 
     AmberPrm(const SireSystem::System &system,
-              const PropertyMap &map = PropertyMap());
+             const PropertyMap &map = PropertyMap());
     
     AmberPrm(const AmberPrm &other);
     
@@ -104,10 +104,22 @@ public:
     static const char* typeName();
   
     const char* what() const;
+
+    MoleculeParserPtr construct(const QString &filename,
+                                const PropertyMap &map) const;
+
+    MoleculeParserPtr construct(const QStringList &lines,
+                                const PropertyMap &map) const;
     
+    MoleculeParserPtr construct(const SireSystem::System &system,
+                                const PropertyMap &map) const;
+
     QString toString() const;
     
     QString formatName() const;
+    QStringList formatSuffix() const;
+    
+    QString formatDescription() const;
     
     bool isLead() const;
     
