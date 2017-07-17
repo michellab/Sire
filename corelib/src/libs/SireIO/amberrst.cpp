@@ -28,6 +28,7 @@
 
 #include "SireIO/amberrst.h"
 #include "SireIO/amberformat.h"
+#include "SireIO/netcdffile.h"
 
 #include "SireSystem/system.h"
 
@@ -49,10 +50,6 @@
 #include "SireIO/errors.h"
 
 #include "SireStream/shareddatastream.h"
-
-#ifdef SIRE_USE_NETCDF
-    #include "netcdf.h"  // CONDITIONAL_INCLUDE
-#endif
 
 using namespace SireIO;
 using namespace SireIO::detail;
@@ -124,64 +121,49 @@ QStringList AmberRst::formatSuffix() const
 QString AmberRst::formatDescription() const
 {
     return QObject::tr("Amber coordinate/velocity text (binary, netcdf) restart files "
-                       "now default since Amber16.");
+                       "supported since Amber 9, now default since Amber 16.");
 }
 
 /** Parse the data contained in the lines - this clears any pre-existing
     data in this object */
-void AmberRst::parse(const PropertyMap &map)
+void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 {
-}
+    QString conventions = netcdf.getStringAttribute("Conventions");
+    QString conventions_version = netcdf.getStringAttribute("ConventionVersion");
 
-#ifdef SIRE_USE_NETCDF
-    void assert_no_netcdf_error(int errnum)
+    QString application;
+
+    try
     {
-        switch(errnum)
-        {
-            case NC_NOERR:
-                return;
-            case NC_ENOMEM:
-                throw SireError::io_error( QObject::tr(
-                            "NetCDF reported it ran out of memory!"), CODELOC );
-            case NC_EHDFERR:
-                throw SireError::io_error( QObject::tr(
-                            "NetCDF experienced an HDF5 error!"), CODELOC );
-            case NC_EDIMMETA:
-                throw SireError::io_error( QObject::tr(
-                            "NetCDF experienced an error in netCDF-4 dimension metadata!"),
-                                    CODELOC );
-            default:
-                throw SireError::io_error( QObject::tr(
-                            "NetCDF experienced an unknown error! %1").arg(errnum), CODELOC );
-        }
+        application = netcdf.getStringAttribute("application");
     }
-#endif
+    catch(...)
+    {}
+    
+    QString program = netcdf.getStringAttribute("program");
+    QString program_version = netcdf.getStringAttribute("programVersion");
+    
+    QString title;
+    
+    try
+    {
+        title = netcdf.getStringAttribute("title");
+    }
+    catch(...)
+    {}
+    
+    qDebug() << conventions << conventions_version << application
+             << program << program_version << title;
+}
 
 /** Construct by parsing the passed file */
 AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
-         : ConcreteProperty<AmberRst,MoleculeParser>(filename, map),
+         : ConcreteProperty<AmberRst,MoleculeParser>(map),
            current_time(0), box_dims(0), box_angs(cubic_angs)
 {
-    #ifdef SIRE_USE_NETCDF
-        int errnum;
-    
-        QByteArray c_filename = filename.toUtf8();
-        int file_id;
-        errnum = nc_open(c_filename.constData(), NC_NOWRITE, &file_id);
-
-        if (errnum != NC_NOERR)
-        {
-            //this is not a netcdf file or does not exist
-            this->operator=( AmberRst() );
-            this->setScore(0);
-            return;
-        }
-
-    #else
-        throw SireError::unsupported( QObject::tr(
-                "Software is missing NetCDF support, so cannot read Amber Rst files!"),
-                    CODELOC );
-    #endif
+    //open the NetCDF file and extract all of the data
+    NetCDFFile netcdf(filename);
+    this->parse(netcdf, map);
 }
 
 /** Construct by parsing the data in the passed text lines */
@@ -189,7 +171,9 @@ AmberRst::AmberRst(const QStringList &lines, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(lines, map),
            current_time(0), box_dims(0), box_angs(cubic_angs)
 {
-    this->parse(map);
+    throw SireError::io_error( QObject::tr(
+            "You cannot create a binary Amber RST file from a set of text lines!"),
+                CODELOC );
 }
 
 /** Construct by extracting the necessary data from the passed System */

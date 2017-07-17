@@ -46,6 +46,8 @@ QDataStream& operator>>(QDataStream&, SireIO::AmberRst&);
 namespace SireIO
 {
 
+class NetCDFFile;
+
 /** This class represents an Amber-format restart/coordinate file (binary),
     currently supporting these files from Amber7 to Amber16.
     
@@ -117,7 +119,7 @@ protected:
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
 private:
-    void parse(const PropertyMap &map);
+    void parse(const NetCDFFile &netcdf, const PropertyMap &map);
 
     /** The title of the file */
     QString ttle;
