@@ -154,6 +154,28 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
     
     qDebug() << conventions << conventions_version << application
              << program << program_version << title;
+    
+    //get all of the dimensions and their sizes
+    const auto dims = netcdf.getDimensions();
+    
+    qDebug() << Sire::toString(dims);
+    
+    bool is_amber_restart = false;
+    
+    if (conventions.contains("AMBERRESTART"))
+    {
+        is_amber_restart = true;
+    }
+    
+    qDebug() << "RESTART FILE?" << is_amber_restart;
+
+    //get information about all of the variables
+    const auto varinfos = netcdf.getVariablesInfo();
+    
+    qDebug() << Sire::toString(varinfos);
+    
+    auto data = netcdf.read( varinfos["time"] );
+    data = netcdf.read( varinfos["cell_angles"] );
 }
 
 /** Construct by parsing the passed file */

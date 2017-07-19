@@ -32,12 +32,79 @@
 #include "sireglobal.h"
 
 #include <QString>
+#include <QStringList>
+
 #include <boost/noncopyable.hpp>
 
 SIRE_BEGIN_HEADER
 
 namespace SireIO
 {
+
+/** This class provides information about a data variable in 
+    a NetCDF file
+    
+    @author Christopher Woods
+*/
+class SIREIO_EXPORT NetCDFDataInfo
+{
+public:
+    NetCDFDataInfo();
+    NetCDFDataInfo(int idnum, QString name, int xtyp,
+                   QStringList dim_names, QList<int> dim_sizes, int natts);
+    NetCDFDataInfo(const NetCDFDataInfo &other);
+    
+    ~NetCDFDataInfo();
+    
+    int ID() const;
+    QString name() const;
+    QString type() const;
+    
+    int typeSize() const;
+    int dataSize() const;
+    
+    QStringList dimensions() const;
+    QList<int> dimensionSizes() const;
+    
+    int nAttributes() const;
+    
+    QString toString() const;
+
+    bool isNull() const;
+    
+private:
+    QString nme;
+    QStringList dim_names;
+    QList<int> dim_sizes;
+    int idnum;
+    int natts;
+    int xtyp;
+};
+
+/** This class holds the actual data read from a NetCDF file
+
+    @author Christopher Woods
+*/
+class SIREIO_EXPORT NetCDFData : public NetCDFDataInfo
+{
+
+friend class NetCDFFile;
+
+public:
+    NetCDFData();
+    NetCDFData(const NetCDFData &other);
+    
+    ~NetCDFData();
+
+protected:
+    NetCDFData(const NetCDFDataInfo &info);
+    
+    void setData(const QByteArray &data);
+    
+private:
+    /** Raw memory containing the data */
+    QByteArray memdata;
+};
 
 /** This class provides an internal interface to NetCDF files 
 
@@ -53,6 +120,12 @@ public:
     
     QString getStringAttribute(const QString &name) const;
     
+    QHash<QString,int> getDimensions() const;
+    
+    QHash<QString,NetCDFDataInfo> getVariablesInfo() const;
+    
+    NetCDFData read(const NetCDFDataInfo &variable) const;
+    
 private:
     /** The name of the file */
     QString fname;
@@ -60,6 +133,40 @@ private:
     /** Handle to the NetCDF file */
     int hndl;
 };
+
+#ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+/** Return the ID number of this piece of data */
+inline int NetCDFDataInfo::ID() const
+{
+    return idnum;
+}
+
+/** Return the name of this piece of data */
+inline QString NetCDFDataInfo::name() const
+{
+    return nme;
+}
+
+/** Return the names of the dimensions of this data */
+inline QStringList NetCDFDataInfo::dimensions() const
+{
+    return dim_names;
+}
+
+/** Return the number of values for each of the dimensions of this data */
+inline QList<int> NetCDFDataInfo::dimensionSizes() const
+{
+    return dim_sizes;
+}
+
+/** Return the number of attributes of this data in the file */
+inline int NetCDFDataInfo::nAttributes() const
+{
+    return natts;
+}
+
+#endif
 
 }
 

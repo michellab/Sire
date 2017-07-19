@@ -39,6 +39,231 @@
 
 using namespace SireIO;
 
+/////////////
+///////////// Implemenetation of NetCDFDataInfo
+/////////////
+
+
+#ifdef SIRE_USE_NETCDF
+    QString nc_type_to_string(nc_type typ)
+    {
+        switch(typ)
+        {
+        case NC_BYTE:
+            return QString("NC_BYTE");
+        case NC_UBYTE:
+            return QString("NC_UBYTE");
+        case NC_CHAR:
+            return QString("NC_CHAR");
+        case NC_SHORT:
+            return QString("NC_SHORT");
+        case NC_USHORT:
+            return QString("NC_USHORT");
+        case NC_INT:
+            return QString("NC_INT");
+        case NC_UINT:
+            return QString("NC_UINT");
+        case NC_INT64:
+            return QString("NC_INT64");
+        case NC_UINT64:
+            return QString("NC_UINT64");
+        case NC_FLOAT:
+            return QString("NC_FLOAT");
+        case NC_DOUBLE:
+            return QString("NC_DOUBLE");
+        case NC_STRING:
+            return QString("NC_STRING");
+        default:
+            return QString("NC_UNKNOWN");
+        }
+    }
+
+    int nc_type_to_size(nc_type typ)
+    {
+        switch(typ)
+        {
+        case NC_BYTE:
+            return 1;
+        case NC_UBYTE:
+            return 1;
+        case NC_CHAR:
+            return 1;
+        case NC_SHORT:
+            return sizeof(short);
+        case NC_USHORT:
+            return sizeof(short);
+        case NC_INT:
+            return 4;
+        case NC_UINT:
+            return 4;
+        case NC_INT64:
+            return 8;
+        case NC_UINT64:
+            return 8;
+        case NC_FLOAT:
+            return 4;
+        case NC_DOUBLE:
+            return 8;
+        case NC_STRING:
+            return 1;
+        default:
+            return 0;
+        }
+    }
+
+    nc_type string_to_nc_type(const QString &typ)
+    {
+        if (typ == "NC_BYTE") return NC_BYTE;
+        else if (typ == "NC_UBYTE") return NC_UBYTE;
+        else if (typ == "NC_CHAR") return NC_CHAR;
+        else if (typ == "NC_SHORT") return NC_SHORT;
+        else if (typ == "NC_USHORT") return NC_USHORT;
+        else if (typ == "NC_INT") return NC_INT;
+        else if (typ == "NC_UINT") return NC_UINT;
+        else if (typ == "NC_INT64") return NC_INT64;
+        else if (typ == "NC_UINT64") return NC_UINT64;
+        else if (typ == "NC_FLOAT") return NC_FLOAT;
+        else if (typ == "NC_DOUBLE") return NC_DOUBLE;
+        else if (typ == "NC_STRING") return NC_STRING;
+        else
+        {
+            throw SireError::io_error( QObject::tr(
+                "Unrecognised NetCDF type - %1").arg(typ), CODELOC );
+            
+            return 0;
+        }
+    }
+#endif
+
+/** Constructor - completely null data type */
+NetCDFDataInfo::NetCDFDataInfo()
+               : idnum(-1), natts(0)
+{}
+
+/** Construct from the passed data */
+NetCDFDataInfo::NetCDFDataInfo(int idn, QString name, int tp,
+                               QStringList dim_ns,
+                               QList<int> dim_sz, int ns)
+{
+    idnum = idn;
+    nme = name;
+    xtyp = tp;
+    dim_names = dim_ns;
+    dim_sizes = dim_sz;
+    natts = ns;
+    
+    if (idnum < 0 or natts < 0 or xtyp < 0)
+    {
+        throw SireError::invalid_arg( QObject::tr(
+                "You cannot construct a NetCDFDataInfo with a negative ID number (%1) "
+                "or a negative number of attributes (%2) or negative xtype.")
+                    .arg(idnum).arg(natts).arg(xtyp), CODELOC );
+    }
+    
+    if (dim_names.count() != dim_sizes.count())
+    {
+        throw SireError::invalid_arg( QObject::tr(
+                "The number of dimension names (%1) must equal the number of "
+                "dimension sizes (%2)").arg(dim_names.count())
+                                       .arg(dim_sizes.count()), CODELOC );
+    }
+}
+
+/** Copy constructor */
+NetCDFDataInfo::NetCDFDataInfo(const NetCDFDataInfo &other)
+               : nme(other.nme), dim_names(other.dim_names), dim_sizes(other.dim_sizes),
+                 idnum(other.idnum), natts(other.natts), xtyp(other.xtyp)
+{}
+
+/** Destructor */
+NetCDFDataInfo::~NetCDFDataInfo()
+{}
+
+/** Return whether or not this data type info is null */
+bool NetCDFDataInfo::isNull() const
+{
+    return idnum == -1;
+}
+
+/** Return a string representation of this data info */
+QString NetCDFDataInfo::toString() const
+{
+    if (isNull())
+        return QObject::tr("NetCDFDataInfo::null");
+    else if (dim_names.isEmpty())
+        return QObject::tr("NetCDFDataInfo( %1 = %2[%3]() x %4 )")
+                    .arg(idnum).arg(nme).arg(this->type()).arg(natts);
+    else
+    {
+        QStringList dims;
+        for (int i=0; i<dim_names.count(); ++i)
+        {
+            dims.append( QString("%1:%2").arg(dim_names[i]).arg(dim_sizes[i]) );
+        }
+
+        return QObject::tr("NetCDFDataInfo( %1 = %2[%3](%4) x %5 )")
+                    .arg(idnum).arg(nme).arg(this->type()).arg(dims.join(",")).arg(natts);
+    }
+}
+
+/** Return the data type of this piece of data. This is a string
+    version of the NC_TYPE, e.g. NC_FLOAT, NC_STRING etc. */
+QString NetCDFDataInfo::type() const
+{
+    return nc_type_to_string(xtyp);
+}
+
+/** Return the size in bytes of a variable of this type */
+int NetCDFDataInfo::typeSize() const
+{
+    return nc_type_to_size(xtyp);
+}
+
+/** Return the total size of the data to be loaded, in bytes */
+int NetCDFDataInfo::dataSize() const
+{
+    int base = typeSize() * nAttributes();
+    
+    for (const auto sz : dim_sizes)
+    {
+        base *= sz;
+    }
+    
+    return base;
+}
+
+/////////////
+///////////// Implemenetation of NetCDFData
+/////////////
+
+/** Constructor */
+NetCDFData::NetCDFData() : NetCDFDataInfo()
+{}
+
+/** Copy constructor */
+NetCDFData::NetCDFData(const NetCDFData &other)
+           : NetCDFDataInfo(other), memdata(other.memdata)
+{}
+
+/** Destructor */
+NetCDFData::~NetCDFData()
+{}
+
+/** Internal constructor used by NetCDFFile */
+NetCDFData::NetCDFData(const NetCDFDataInfo &info)
+           : NetCDFDataInfo(info)
+{}
+
+/** Internal function used by NetCDFFile to set the data */
+void NetCDFData::setData(const QByteArray &data)
+{
+    memdata = data;
+}
+
+/////////////
+///////////// Implemenetation of NetCDFFile
+/////////////
+
 static void assert_no_netcdf_error(int errnum)
 {
     #ifdef SIRE_USE_NETCDF
@@ -200,6 +425,114 @@ NetCDFFile::~NetCDFFile()
     #endif
 }
 
+/** Return the full set of names and data types for all of the variables
+    in the file */
+QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
+{
+    QHash<QString,NetCDFDataInfo> vars;
+    
+    #ifdef SIRE_USE_NETCDF
+    if (hndl != -1)
+    {
+        char *tmp_name = new char[NC_MAX_NAME+1];
+        int *dim_ids = new int[NC_MAX_VAR_DIMS];
+    
+        try
+        {
+            int i=0;
+            
+            while (true)
+            {
+                nc_type var_type;
+                int ndims;
+                int natts;
+            
+                int err = nc_inq_var(hndl, i, tmp_name, &var_type, &ndims, dim_ids, &natts);
+                
+                if (err == NC_ENOTVAR)
+                {
+                    break;
+                }
+                
+                assert_no_netcdf_error(err);
+
+                QString var_name = QString::fromUtf8(tmp_name);
+
+                QStringList dim_names;
+                QList<int> dim_sizes;
+
+                for (int j=0; j<ndims; ++j)
+                {
+                    size_t dim_len;
+                    err = nc_inq_dim(hndl, j, tmp_name, &dim_len);
+                    
+                    dim_names.append( QString::fromUtf8(tmp_name) );
+                    dim_sizes.append(dim_len);
+                }
+
+                vars.insert( var_name, NetCDFDataInfo(i,var_name,var_type,
+                                                      dim_names,dim_sizes,natts) );
+                
+                i += 1;
+            }
+        }
+        catch(...)
+        {
+            delete[] tmp_name;
+            delete[] dim_ids;
+            throw;
+        }
+
+        delete[] tmp_name;
+        delete[] dim_ids;
+    }
+    #endif
+    
+    return vars;
+}
+
+/** Return the names and sizes of all of the dimensions in the file */
+QHash<QString,int> NetCDFFile::getDimensions() const
+{
+    QHash<QString,int> dims;
+    
+    #ifdef SIRE_USE_NETCDF
+    if (hndl != -1)
+    {
+        int ndims;
+        int err = nc_inq_ndims(hndl, &ndims);
+        assert_no_netcdf_error(err);
+        
+        if (ndims <= 0)
+            return dims;
+        
+        char *dim_name = new char[NC_MAX_NAME+1];
+        
+        try
+        {
+            for (int i=0; i<ndims; ++i)
+            {
+                size_t dim_len;
+                err = nc_inq_dim(hndl, i, dim_name, &dim_len);
+                assert_no_netcdf_error(err);
+                
+                dims.insert( QString::fromUtf8(dim_name), dim_len );
+            }
+        }
+        catch(...)
+        {
+            delete[] dim_name;
+            throw;
+        }
+        
+        delete[] dim_name;
+    
+    }
+    #endif
+    
+    return dims;
+}
+
 /** Return the value of the string attribute 'name'.*/
 QString NetCDFFile::getStringAttribute(const QString &name) const
 {
@@ -218,15 +551,23 @@ QString NetCDFFile::getStringAttribute(const QString &name) const
         //get the attribute
         char *c_value = new char[vsize+1];
         
-        err = nc_get_att_text(hndl, NC_GLOBAL, c_name.constData(), c_value);
-        assert_no_netcdf_error(err);
-        c_value[vsize] = '\0';
+        try
+        {
+            err = nc_get_att_text(hndl, NC_GLOBAL, c_name.constData(), c_value);
+            assert_no_netcdf_error(err);
+            c_value[vsize] = '\0';
         
-        QString value = QString::fromUtf8(c_value);
+            QString value = QString::fromUtf8(c_value);
+
+            delete[] c_value;
         
-        delete[] c_value;
-        
-        return value;
+            return value;
+        }
+        catch(...)
+        {
+            delete[] c_value;
+            throw;
+        }
     #endif
     }
     
@@ -235,4 +576,37 @@ QString NetCDFFile::getStringAttribute(const QString &name) const
                 .arg(name).arg(fname), CODELOC );
     
     return QString();
+}
+
+/** Read in and return the NetCDFData associated with the passed NetCDFDataInfo */
+NetCDFData NetCDFFile::read(const NetCDFDataInfo &variable) const
+{
+    NetCDFData data(variable);
+    
+    int data_size = data.dataSize();
+    
+    if (hndl != -1 and data_size > 0)
+    {
+    #ifdef SIRE_USE_NETCDF
+    
+        qDebug() << "READING IN DATA OF SIZE" << data_size;
+        QByteArray memdata('\0', data_size);
+        int err = nc_get_var(hndl, variable.ID(), memdata.data());
+        assert_no_netcdf_error(err);
+        data.setData(memdata);
+        
+        if (variable.type() == "NC_DOUBLE")
+        {
+            double *array = reinterpret_cast<double*>(memdata.data());
+            
+            for (int i=0; i<data_size/8; ++i)
+            {
+                qDebug() << array[i];
+            }
+        }
+        
+    #endif
+    }
+    
+    return data;
 }
