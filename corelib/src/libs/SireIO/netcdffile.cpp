@@ -45,7 +45,7 @@ using namespace SireIO;
 
 
 #ifdef SIRE_USE_NETCDF
-    QString nc_type_to_string(nc_type typ)
+    static QString nc_type_to_string(nc_type typ)
     {
         switch(typ)
         {
@@ -78,7 +78,7 @@ using namespace SireIO;
         }
     }
 
-    int nc_type_to_size(nc_type typ)
+    static int nc_type_to_size(nc_type typ)
     {
         switch(typ)
         {
@@ -111,7 +111,7 @@ using namespace SireIO;
         }
     }
 
-    nc_type string_to_nc_type(const QString &typ)
+    /*static nc_type string_to_nc_type(const QString &typ)
     {
         if (typ == "NC_BYTE") return NC_BYTE;
         else if (typ == "NC_UBYTE") return NC_UBYTE;
@@ -132,380 +132,106 @@ using namespace SireIO;
             
             return 0;
         }
-    }
+    }*/
 #endif
 
-/** Constructor - completely null data type */
-NetCDFDataInfo::NetCDFDataInfo() : idnum(-1), xtyp(-1)
-{}
-
-/** Internal constructor used by NetCDFFile to construct from the passed data */
-NetCDFDataInfo::NetCDFDataInfo(int idn, QString name, int tp,
-                               QStringList dim_ns, QList<int> dim_sz,
-                               QStringList att_ns, QList<int> att_ts,
-                               QList<QVariant> att_vs)
+static QVector<QVariant> extract_values(const QByteArray &memdata, int nc_type, int nvals)
 {
-    idnum = idn;
-    nme = name;
-    xtyp = tp;
-    dim_names = dim_ns;
-    dim_sizes = dim_sz;
-    att_names = att_ns;
-    att_types = att_ts;
-    att_values = att_vs;
-    
-    if (idnum < 0 or xtyp < 0)
+    //ensure there is enough space in the data
+    if (nvals > (memdata.count() / nc_type_to_size(nc_type)))
     {
         throw SireError::invalid_arg( QObject::tr(
-                "You cannot construct a NetCDFDataInfo with a negative ID number (%1) "
-                "or negative xtype (%2).")
-                    .arg(idnum).arg(xtyp), CODELOC );
+                "You cannot read %1 values, as the array has only allocated space (%2) "
+                "for %3 values of type %4.")
+                    .arg(nvals).arg(memdata.count())
+                    .arg(memdata.count() / nc_type_to_size(nc_type))
+                    .arg(nc_type_to_string(nc_type)), CODELOC );
     }
     
-    if (dim_names.count() != dim_sizes.count())
-    {
-        throw SireError::invalid_arg( QObject::tr(
-                "The number of dimension names (%1) must equal the number of "
-                "dimension sizes (%2)").arg(dim_names.count())
-                                       .arg(dim_sizes.count()), CODELOC );
-    }
+    QVector<QVariant> vals;
     
-    if (att_names.count() != att_types.count() or att_names.count() != att_values.count())
+    if (nvals > 0)
     {
-        throw SireError::invalid_arg( QObject::tr(
-                "The number of attribute names (%1), types (%2) and values (%3) must "
-                "all be equal!").arg(att_names.count())
-                                .arg(att_types.count())
-                                .arg(att_values.count()), CODELOC );
-    }
-}
-
-/** Copy constructor */
-NetCDFDataInfo::NetCDFDataInfo(const NetCDFDataInfo &other)
-               : nme(other.nme), dim_names(other.dim_names), dim_sizes(other.dim_sizes),
-                 att_names(other.att_names), att_types(other.att_types),
-                 att_values(other.att_values),
-                 idnum(other.idnum), xtyp(other.xtyp)
-{}
-
-/** Destructor */
-NetCDFDataInfo::~NetCDFDataInfo()
-{}
-
-/** Return whether or not this data type info is null */
-bool NetCDFDataInfo::isNull() const
-{
-    return idnum == -1;
-}
-
-/** Return a string representation of this data info */
-QString NetCDFDataInfo::toString() const
-{
-    if (isNull())
-        return QObject::tr("NetCDFDataInfo::null");
-    else if (dim_names.isEmpty())
-    {
-        if (att_names.isEmpty())
-        {
-            return QObject::tr("NetCDFDataInfo( %1 = %2[%3]() )")
-                    .arg(idnum).arg(nme).arg(this->type());
-        }
-        else
-        {
-            QStringList atts;
-            for (int i=0; i<att_names.count(); ++i)
-            {
-                atts.append( QString("%1=[%2 - %3]").arg(att_names[i])
-                                                    .arg(nc_type_to_string(att_types[i]))
-                                                    .arg(att_values[i].toString()) );
-            }
-            
-            return QObject::tr("NetCDFDataInfo( %1 = %2[%3](), attributes:{ %4 } )")
-                    .arg(idnum).arg(nme).arg(this->type()).arg(atts.join(", "));
-        }
-    }
-    else
-    {
-        QStringList dims;
-        for (int i=0; i<dim_names.count(); ++i)
-        {
-            dims.append( QString("%1:%2").arg(dim_names[i]).arg(dim_sizes[i]) );
-        }
-
-        if (att_names.isEmpty())
-        {
-            return QObject::tr("NetCDFDataInfo( %1 = %2[%3](%4) )")
-                    .arg(idnum).arg(nme).arg(this->type()).arg(dims.join(","));
-        }
-        else
-        {
-            QStringList atts;
-            for (int i=0; i<att_names.count(); ++i)
-            {
-                atts.append( QString("%1=[%2 - %3]").arg(att_names[i])
-                                                    .arg(nc_type_to_string(att_types[i]))
-                                                    .arg(att_values[i].toString()) );
-            }
-
-            return QObject::tr("NetCDFDataInfo( %1 = %2[%3](%4), attributes:{ %5 } )")
-                    .arg(idnum).arg(nme).arg(this->type()).arg(dims.join(","))
-                    .arg(atts.join(", "));
-        }
-    }
-}
-
-/** Return the data type of this piece of data. This is a string
-    version of the NC_TYPE, e.g. NC_FLOAT, NC_STRING etc. */
-QString NetCDFDataInfo::type() const
-{
-    return nc_type_to_string(xtyp);
-}
-
-/** Return the size in bytes of a variable of this type */
-int NetCDFDataInfo::typeSize() const
-{
-    return nc_type_to_size(xtyp);
-}
-
-/** Return the total size of the data to be loaded, in bytes */
-int NetCDFDataInfo::dataSize() const
-{
-    int base = typeSize();
-    
-    for (const auto sz : dim_sizes)
-    {
-        base *= sz;
-    }
-    
-    return base;
-}
-
-/** Return all of the names of the attributes */
-QStringList NetCDFDataInfo::attributeNames() const
-{
-    return att_names;
-}
-
-/** Return the value of the attribute called 'name'. This returns QVariant::null
-    if this attribute doesn't exist */
-QVariant NetCDFDataInfo::attribute(const QString &name) const
-{
-    for (int i=0; i<att_names.count(); ++i)
-    {
-        if (name == att_names[i])
-        {
-            return att_values[i];
-        }
-    }
-
-    return QVariant();
-}
-
-/** Return the type of the attribute called 'name'. This returns a string version
-    of the NC_TYPE of the attribute, i.e. NC_DOUBLE or NC_CHAR. This returns
-    an empty string if there is not attribute with this name */
-QString NetCDFDataInfo::attributeType(const QString &name) const
-{
-    for (int i=0; i<att_names.count(); ++i)
-    {
-        if (name == att_names[i])
-        {
-            return nc_type_to_string(att_types[i]);
-        }
-    }
-
-    return QString();
-}
-
-/** Return a hash of all of the values of all attributes */
-QHash<QString,QVariant> NetCDFDataInfo::attributes() const
-{
-    QHash<QString,QVariant> atts;
-    
-    if (not att_names.isEmpty())
-    {
-        atts.reserve(att_names.count());
-        
-        for (int i=0; i<att_names.count(); ++i)
-        {
-            atts.insert(att_names[i], att_values[i]);
-        }
-    }
-    
-    return atts;
-}
-
-/** Return a hash of all of the attribute types of the attributes */
-QHash<QString,QString> NetCDFDataInfo::attributeTypes() const
-{
-    QHash<QString,QString> atts;
-    
-    if (not att_names.isEmpty())
-    {
-        atts.reserve(att_names.count());
-        
-        for (int i=0; i<att_names.count(); ++i)
-        {
-            atts.insert(att_names[i], nc_type_to_string(att_types[i]));
-        }
-    }
-    
-    return atts;
-}
-
-/////////////
-///////////// Implemenetation of NetCDFData
-/////////////
-
-/** Constructor */
-NetCDFData::NetCDFData() : NetCDFDataInfo()
-{}
-
-/** Copy constructor */
-NetCDFData::NetCDFData(const NetCDFData &other)
-           : NetCDFDataInfo(other), memdata(other.memdata)
-{}
-
-/** Destructor */
-NetCDFData::~NetCDFData()
-{}
-
-/** Internal constructor used by NetCDFFile */
-NetCDFData::NetCDFData(const NetCDFDataInfo &info)
-           : NetCDFDataInfo(info)
-{}
-
-/** Internal function used by NetCDFFile to set the data */
-void NetCDFData::setData(const QByteArray &data)
-{
-    memdata = data;
-}
-
-/////////////
-///////////// Implemenetation of NetCDFFile
-/////////////
-
-static void assert_no_netcdf_error(int errnum)
-{
     #ifdef SIRE_USE_NETCDF
-        QString err;
-    
-        switch(errnum)
+        vals = QVector<QVariant>(nvals);
+        
+        const char *data = memdata.constData();
+
+        switch(nc_type)
         {
-            case NC_NOERR:
-                return;
-            case NC_EHDFERR:
-                err = QObject::tr("HDF5 error!");
+            case NC_BYTE:
+            case NC_UBYTE:
+                for (int i=0; i<nvals; ++i)
+                {
+                    vals.append( memdata[i] );
+                }
                 break;
-            case NC_EDIMMETA:
-                err = QObject::tr("NetCDF-4 dimension metadata error!");
+            case NC_CHAR:
+                for (int i=0; i<nvals; ++i)
+                {
+                    vals.append( memdata[i] );
+                }
                 break;
-            case NC_EBADID:
-                err = QObject::tr("Not a netcdf id");
+            case NC_SHORT:
+                for (int i=0; i<nvals; ++i)
+                {
+                    vals.append( qint32( *(reinterpret_cast<const short*>(data) + i) ) );
+                }
                 break;
-            case NC_ENFILE:
-                err = QObject::tr("Too many netcdfs open");
+            case NC_USHORT:
+                for (int i=0; i<nvals; ++i)
+                {
+                    vals.append( quint32( *(reinterpret_cast<const unsigned short*>(data) + i) ) );
+                }
                 break;
-            case NC_EEXIST:
-                err = QObject::tr("netcdf file exists");
+            case NC_INT:
+                for (int i=0; i<nvals; ++i)
+                {
+                    vals.append( qint32( *(reinterpret_cast<const qint32*>(data) + i) ) );
+                }
                 break;
-            case NC_EINVAL:
-                err = QObject::tr("Invalid Argument");
+            case NC_UINT:
+                for (int i=0; i<nvals; ++i)
+                {
+                    vals.append( quint32( *(reinterpret_cast<const quint32*>(data) + i) ) );
+                }
                 break;
-            case NC_EPERM:
-                err = QObject::tr("Write to read only");
+            case NC_INT64:
+                for (int i=0; i<nvals; ++i)
+                {
+                    vals.append( qint64( *(reinterpret_cast<const qint64*>(data) + i) ) );
+                }
                 break;
-            case NC_ENOTINDEFINE:
-                err = QObject::tr("Operation not allowed in data mode");
+            case NC_UINT64:
+                for (int i=0; i<nvals; ++i)
+                {
+                    vals.append( quint32( *(reinterpret_cast<const quint64*>(data) + i) ) );
+                }
                 break;
-            case NC_EINDEFINE:
-                err = QObject::tr("Operation not allowed in define mode");
+            case NC_FLOAT:
+                for (int i=0; i<nvals; ++i)
+                {
+                    vals.append( float( *(reinterpret_cast<const float*>(data) + i) ) );
+                }
                 break;
-            case NC_EINVALCOORDS:
-                err = QObject::tr("Index exceeds dimension bound");
+            case NC_DOUBLE:
+                for (int i=0; i<nvals; ++i)
+                {
+                    vals.append( double( *(reinterpret_cast<const double*>(data) + i) ) );
+                }
                 break;
-            case NC_EMAXDIMS:
-                err = QObject::tr("NC_MAX_DIMS exceeded");
-                break;
-            case NC_ENAMEINUSE:
-                err = QObject::tr("String match to name in use");
-                break;
-            case NC_ENOTATT:
-                err = QObject::tr("Attribute not found");
-                break;
-            case NC_EMAXATTS:
-                err = QObject::tr("NC_MAX_ATTRS exceeded");
-                break;
-            case NC_EBADTYPE:
-                err = QObject::tr("Not a netcdf data type");
-                break;
-            case NC_EBADDIM:
-                err = QObject::tr("Invalid dimension id or name");
-                break;
-            case NC_EUNLIMPOS:
-                err = QObject::tr("NC_UNLIMITED in the wrong index");
-                break;
-            case NC_EMAXVARS:
-                err = QObject::tr("NC_MAX_VARS exceeded");
-                break;
-            case NC_ENOTVAR:
-                err = QObject::tr("Variable not found");
-                break;
-            case NC_EGLOBAL:
-                err = QObject::tr("Action prohibited on NC_GLOBAL varid");
-                break;
-            case NC_ENOTNC:
-                err = QObject::tr("Not a netcdf file");
-                break;
-            case NC_ESTS:
-                err = QObject::tr("In Fortran, string too short");
-                break;
-            case NC_EMAXNAME:
-                err = QObject::tr("NC_MAX_NAME exceeded");
-                break;
-            case NC_EUNLIMIT:
-                err = QObject::tr("NC_UNLIMITED size already in use");
-                break;
-            case NC_ENORECVARS:
-                err = QObject::tr("nc_rec op when there are no record vars");
-                break;
-            case NC_ECHAR:
-                err = QObject::tr("Attempt to convert between text & numbers");
-                break;
-            case NC_EEDGE:
-                err = QObject::tr("Edge+start exceeds dimension bound");
-                break;
-            case NC_ESTRIDE:
-                err = QObject::tr("Illegal stride");
-                break;
-            case NC_EBADNAME:
-                err = QObject::tr("Attribute or variable name contains illegal characters");
-                break;
-            case NC_ERANGE:
-                err = QObject::tr("Math result not representable");
-                break;
-            case NC_ENOMEM:
-                err = QObject::tr("Memory allocation (malloc) failure");
-                break;
-            case NC_EVARSIZE:
-                err = QObject::tr("One or more variable sizes violate format constraints");
-                break;
-            case NC_EDIMSIZE:
-                err = QObject::tr("Invalid dimension size");
-                break;
-            case NC_ETRUNC:
-                err = QObject::tr("File likely truncated or possibly corrupted");
-                break;
+            case NC_STRING:
             default:
-                err = QObject::tr("NetCDF experienced an unknown error! %1").arg(errnum);
+                break;
         }
-    
-        throw SireError::io_error( QObject::tr(
-            "NetCDF experienced an error: %1 (%2)").arg(err).arg(errnum), CODELOC );
+
     #endif
+    }
+    
+    return vals;
 }
 
-QVariant extract_value(const QByteArray &memdata, int nc_type)
+static QVariant extract_value(const QByteArray &memdata, int nc_type)
 {
     //see if this is a single value or an array
     int nvals = memdata.count() / nc_type_to_size(nc_type);
@@ -653,6 +379,464 @@ QVariant extract_value(const QByteArray &memdata, int nc_type)
     }
     
     return QVariant();
+}
+
+/** Constructor - completely null data type */
+NetCDFDataInfo::NetCDFDataInfo() : idnum(-1), xtyp(-1)
+{}
+
+/** Internal constructor used by NetCDFFile to construct from the passed data */
+NetCDFDataInfo::NetCDFDataInfo(int idn, QString name, int tp,
+                               QStringList dim_ns, QList<int> dim_sz,
+                               QStringList att_ns, QList<int> att_ts,
+                               QList<QVariant> att_vs)
+{
+    idnum = idn;
+    nme = name;
+    xtyp = tp;
+    dim_names = dim_ns;
+    dim_sizes = dim_sz;
+    att_names = att_ns;
+    att_types = att_ts;
+    att_values = att_vs;
+    
+    if (idnum < 0 or xtyp < 0)
+    {
+        throw SireError::invalid_arg( QObject::tr(
+                "You cannot construct a NetCDFDataInfo with a negative ID number (%1) "
+                "or negative xtype (%2).")
+                    .arg(idnum).arg(xtyp), CODELOC );
+    }
+    
+    if (dim_names.count() != dim_sizes.count())
+    {
+        throw SireError::invalid_arg( QObject::tr(
+                "The number of dimension names (%1) must equal the number of "
+                "dimension sizes (%2)").arg(dim_names.count())
+                                       .arg(dim_sizes.count()), CODELOC );
+    }
+    
+    if (att_names.count() != att_types.count() or att_names.count() != att_values.count())
+    {
+        throw SireError::invalid_arg( QObject::tr(
+                "The number of attribute names (%1), types (%2) and values (%3) must "
+                "all be equal!").arg(att_names.count())
+                                .arg(att_types.count())
+                                .arg(att_values.count()), CODELOC );
+    }
+}
+
+/** Copy constructor */
+NetCDFDataInfo::NetCDFDataInfo(const NetCDFDataInfo &other)
+               : nme(other.nme), dim_names(other.dim_names), dim_sizes(other.dim_sizes),
+                 att_names(other.att_names), att_types(other.att_types),
+                 att_values(other.att_values),
+                 idnum(other.idnum), xtyp(other.xtyp)
+{}
+
+/** Destructor */
+NetCDFDataInfo::~NetCDFDataInfo()
+{}
+
+/** Return whether or not this data type info is null */
+bool NetCDFDataInfo::isNull() const
+{
+    return idnum == -1;
+}
+
+/** Return a string representation of this data info */
+QString NetCDFDataInfo::toString() const
+{
+    if (isNull())
+        return QObject::tr("NetCDFDataInfo::null");
+    else if (dim_names.isEmpty())
+    {
+        if (att_names.isEmpty())
+        {
+            return QObject::tr("NetCDFDataInfo( %1 = %2[%3]() )")
+                    .arg(idnum).arg(nme).arg(this->type());
+        }
+        else
+        {
+            QStringList atts;
+            for (int i=0; i<att_names.count(); ++i)
+            {
+                atts.append( QString("%1=[%2 - %3]").arg(att_names[i])
+                                                    .arg(nc_type_to_string(att_types[i]))
+                                                    .arg(att_values[i].toString()) );
+            }
+            
+            return QObject::tr("NetCDFDataInfo( %1 = %2[%3](), attributes:{ %4 } )")
+                    .arg(idnum).arg(nme).arg(this->type()).arg(atts.join(", "));
+        }
+    }
+    else
+    {
+        QStringList dims;
+        for (int i=0; i<dim_names.count(); ++i)
+        {
+            dims.append( QString("%1:%2").arg(dim_names[i]).arg(dim_sizes[i]) );
+        }
+
+        if (att_names.isEmpty())
+        {
+            return QObject::tr("NetCDFDataInfo( %1 = %2[%3](%4) )")
+                    .arg(idnum).arg(nme).arg(this->type()).arg(dims.join(","));
+        }
+        else
+        {
+            QStringList atts;
+            for (int i=0; i<att_names.count(); ++i)
+            {
+                atts.append( QString("%1=[%2 - %3]").arg(att_names[i])
+                                                    .arg(nc_type_to_string(att_types[i]))
+                                                    .arg(att_values[i].toString()) );
+            }
+
+            return QObject::tr("NetCDFDataInfo( %1 = %2[%3](%4), attributes:{ %5 } )")
+                    .arg(idnum).arg(nme).arg(this->type()).arg(dims.join(","))
+                    .arg(atts.join(", "));
+        }
+    }
+}
+
+/** Return the data type of this piece of data. This is a string
+    version of the NC_TYPE, e.g. NC_FLOAT, NC_STRING etc. */
+QString NetCDFDataInfo::type() const
+{
+    return nc_type_to_string(xtyp);
+}
+
+/** Return the size in bytes of a variable of this type */
+int NetCDFDataInfo::typeSize() const
+{
+    return nc_type_to_size(xtyp);
+}
+
+/** Return the number of values that should be held by this data */
+int NetCDFDataInfo::nValues() const
+{
+    int base = 1;
+    
+    for (const auto sz : dim_sizes)
+    {
+        base *= sz;
+    }
+    
+    return base;
+}
+
+/** Return the total size of the data to be loaded, in bytes */
+int NetCDFDataInfo::dataSize() const
+{
+    return typeSize() * nValues();
+}
+
+/** Return all of the names of the attributes */
+QStringList NetCDFDataInfo::attributeNames() const
+{
+    return att_names;
+}
+
+/** Return the value of the attribute called 'name'. This returns QVariant::null
+    if this attribute doesn't exist */
+QVariant NetCDFDataInfo::attribute(const QString &name) const
+{
+    for (int i=0; i<att_names.count(); ++i)
+    {
+        if (name == att_names[i])
+        {
+            return att_values[i];
+        }
+    }
+
+    return QVariant();
+}
+
+/** Return the type of the attribute called 'name'. This returns a string version
+    of the NC_TYPE of the attribute, i.e. NC_DOUBLE or NC_CHAR. This returns
+    an empty string if there is not attribute with this name */
+QString NetCDFDataInfo::attributeType(const QString &name) const
+{
+    for (int i=0; i<att_names.count(); ++i)
+    {
+        if (name == att_names[i])
+        {
+            return nc_type_to_string(att_types[i]);
+        }
+    }
+
+    return QString();
+}
+
+/** Return a hash of all of the values of all attributes */
+QHash<QString,QVariant> NetCDFDataInfo::attributes() const
+{
+    QHash<QString,QVariant> atts;
+    
+    if (not att_names.isEmpty())
+    {
+        atts.reserve(att_names.count());
+        
+        for (int i=0; i<att_names.count(); ++i)
+        {
+            atts.insert(att_names[i], att_values[i]);
+        }
+    }
+    
+    return atts;
+}
+
+/** Return a hash of all of the attribute types of the attributes */
+QHash<QString,QString> NetCDFDataInfo::attributeTypes() const
+{
+    QHash<QString,QString> atts;
+    
+    if (not att_names.isEmpty())
+    {
+        atts.reserve(att_names.count());
+        
+        for (int i=0; i<att_names.count(); ++i)
+        {
+            atts.insert(att_names[i], nc_type_to_string(att_types[i]));
+        }
+    }
+    
+    return atts;
+}
+
+/////////////
+///////////// Implemenetation of NetCDFData
+/////////////
+
+/** Constructor */
+NetCDFData::NetCDFData() : NetCDFDataInfo()
+{}
+
+/** Copy constructor */
+NetCDFData::NetCDFData(const NetCDFData &other)
+           : NetCDFDataInfo(other), memdata(other.memdata)
+{}
+
+/** Destructor */
+NetCDFData::~NetCDFData()
+{}
+
+/** Internal constructor used by NetCDFFile */
+NetCDFData::NetCDFData(const NetCDFDataInfo &info)
+           : NetCDFDataInfo(info)
+{}
+
+/** Internal function used by NetCDFFile to set the data */
+void NetCDFData::setData(const QByteArray &data)
+{
+    memdata = data;
+}
+
+/** Return the data as an array of QVariants */
+QVector<QVariant> NetCDFData::toArray() const
+{
+    return extract_values(memdata, xtyp, this->nValues());
+}
+
+/** Return the data cast as an array of floats */
+QVector<float> NetCDFData::toFloatArray() const
+{
+    const int nvals = this->nValues();
+    QVector<float> values( nvals );
+    
+    if (xtyp == NC_FLOAT)
+    {
+        const char *data = memdata.constData();
+    
+        for (int i=0; i<nvals; ++i)
+        {
+            values[i] = *(reinterpret_cast<const float*>(data) + i);
+        }
+    }
+    else if (xtyp == NC_DOUBLE)
+    {
+        const char *data = memdata.constData();
+    
+        for (int i=0; i<nvals; ++i)
+        {
+            values[i] = *(reinterpret_cast<const double*>(data) + i);
+        }
+    }
+    else
+    {
+        //need to go via the QVariant list
+        const auto vars = this->toArray();
+        
+        for (int i=0; i<this->nValues(); ++i)
+        {
+            values[i] = vars[i].toFloat();
+        }
+    }
+    
+    return values;
+}
+
+/** Return the data cast as an array of doubles */
+QVector<double> NetCDFData::toDoubleArray() const
+{
+    const int nvals = this->nValues();
+    QVector<double> values( nvals );
+    
+    if (xtyp == NC_FLOAT)
+    {
+        const char *data = memdata.constData();
+    
+        for (int i=0; i<nvals; ++i)
+        {
+            values[i] = *(reinterpret_cast<const float*>(data) + i);
+        }
+    }
+    else if (xtyp == NC_DOUBLE)
+    {
+        const char *data = memdata.constData();
+    
+        for (int i=0; i<nvals; ++i)
+        {
+            values[i] = *(reinterpret_cast<const double*>(data) + i);
+        }
+    }
+    else
+    {
+        //need to go via the QVariant list
+        const auto vars = this->toArray();
+        
+        for (int i=0; i<this->nValues(); ++i)
+        {
+            values[i] = vars[i].toDouble();
+        }
+    }
+    
+    return values;
+}
+
+/////////////
+///////////// Implemenetation of NetCDFFile
+/////////////
+
+static void assert_no_netcdf_error(int errnum)
+{
+    #ifdef SIRE_USE_NETCDF
+        QString err;
+    
+        switch(errnum)
+        {
+            case NC_NOERR:
+                return;
+            case NC_EHDFERR:
+                err = QObject::tr("HDF5 error!");
+                break;
+            case NC_EDIMMETA:
+                err = QObject::tr("NetCDF-4 dimension metadata error!");
+                break;
+            case NC_EBADID:
+                err = QObject::tr("Not a netcdf id");
+                break;
+            case NC_ENFILE:
+                err = QObject::tr("Too many netcdfs open");
+                break;
+            case NC_EEXIST:
+                err = QObject::tr("netcdf file exists");
+                break;
+            case NC_EINVAL:
+                err = QObject::tr("Invalid Argument");
+                break;
+            case NC_EPERM:
+                err = QObject::tr("Write to read only");
+                break;
+            case NC_ENOTINDEFINE:
+                err = QObject::tr("Operation not allowed in data mode");
+                break;
+            case NC_EINDEFINE:
+                err = QObject::tr("Operation not allowed in define mode");
+                break;
+            case NC_EINVALCOORDS:
+                err = QObject::tr("Index exceeds dimension bound");
+                break;
+            case NC_EMAXDIMS:
+                err = QObject::tr("NC_MAX_DIMS exceeded");
+                break;
+            case NC_ENAMEINUSE:
+                err = QObject::tr("String match to name in use");
+                break;
+            case NC_ENOTATT:
+                err = QObject::tr("Attribute not found");
+                break;
+            case NC_EMAXATTS:
+                err = QObject::tr("NC_MAX_ATTRS exceeded");
+                break;
+            case NC_EBADTYPE:
+                err = QObject::tr("Not a netcdf data type");
+                break;
+            case NC_EBADDIM:
+                err = QObject::tr("Invalid dimension id or name");
+                break;
+            case NC_EUNLIMPOS:
+                err = QObject::tr("NC_UNLIMITED in the wrong index");
+                break;
+            case NC_EMAXVARS:
+                err = QObject::tr("NC_MAX_VARS exceeded");
+                break;
+            case NC_ENOTVAR:
+                err = QObject::tr("Variable not found");
+                break;
+            case NC_EGLOBAL:
+                err = QObject::tr("Action prohibited on NC_GLOBAL varid");
+                break;
+            case NC_ENOTNC:
+                err = QObject::tr("Not a netcdf file");
+                break;
+            case NC_ESTS:
+                err = QObject::tr("In Fortran, string too short");
+                break;
+            case NC_EMAXNAME:
+                err = QObject::tr("NC_MAX_NAME exceeded");
+                break;
+            case NC_EUNLIMIT:
+                err = QObject::tr("NC_UNLIMITED size already in use");
+                break;
+            case NC_ENORECVARS:
+                err = QObject::tr("nc_rec op when there are no record vars");
+                break;
+            case NC_ECHAR:
+                err = QObject::tr("Attempt to convert between text & numbers");
+                break;
+            case NC_EEDGE:
+                err = QObject::tr("Edge+start exceeds dimension bound");
+                break;
+            case NC_ESTRIDE:
+                err = QObject::tr("Illegal stride");
+                break;
+            case NC_EBADNAME:
+                err = QObject::tr("Attribute or variable name contains illegal characters");
+                break;
+            case NC_ERANGE:
+                err = QObject::tr("Math result not representable");
+                break;
+            case NC_ENOMEM:
+                err = QObject::tr("Memory allocation (malloc) failure");
+                break;
+            case NC_EVARSIZE:
+                err = QObject::tr("One or more variable sizes violate format constraints");
+                break;
+            case NC_EDIMSIZE:
+                err = QObject::tr("Invalid dimension size");
+                break;
+            case NC_ETRUNC:
+                err = QObject::tr("File likely truncated or possibly corrupted");
+                break;
+            default:
+                err = QObject::tr("NetCDF experienced an unknown error! %1").arg(errnum);
+        }
+    
+        throw SireError::io_error( QObject::tr(
+            "NetCDF experienced an error: %1 (%2)").arg(err).arg(errnum), CODELOC );
+    #endif
 }
 
 /** Constructor */

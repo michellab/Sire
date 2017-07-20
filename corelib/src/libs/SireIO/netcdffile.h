@@ -68,6 +68,8 @@ public:
     QStringList dimensions() const;
     QList<int> dimensionSizes() const;
     
+    int nValues() const;
+    
     int nAttributes() const;
     
     QStringList attributeNames() const;
@@ -88,7 +90,6 @@ protected:
                    QStringList att_names, QList<int> att_types,
                    QList<QVariant> att_values);
 
-private:
     /** The name of the variable */
     QString nme;
     
@@ -126,6 +127,14 @@ public:
     NetCDFData(const NetCDFData &other);
     
     ~NetCDFData();
+
+    QVector<QVariant> toArray() const;
+
+    QVector<float> toFloatArray() const;
+    QVector<double> toDoubleArray() const;
+    
+    QVector<qint32> toInt32Array() const;
+    QVector<qint64> toInt64Array() const;
 
 protected:
     NetCDFData(const NetCDFDataInfo &info);

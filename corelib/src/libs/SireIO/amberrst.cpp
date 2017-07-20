@@ -175,7 +175,18 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
     qDebug() << Sire::toString(varinfos);
     
     auto data = netcdf.read( varinfos["time"] );
+    
+    qDebug() << "time" << Sire::toString( data.toDoubleArray() );
+    
     data = netcdf.read( varinfos["cell_angles"] );
+    
+    qDebug() << "cell_angles" << Sire::toString( data.toDoubleArray() );
+    
+    data = netcdf.read( varinfos["coordinates"] );
+    const auto coords = data.toDoubleArray();
+    
+    qDebug() << "coordinates" << coords.count() << coords[0] << coords[1] << coords[2]
+              << coords[coords.count()-1];
 }
 
 /** Construct by parsing the passed file */
