@@ -34,6 +34,7 @@
 #include <QString>
 #include <QStringList>
 #include <QVariant>
+#include <QMutex>
 
 #include <boost/noncopyable.hpp>
 
@@ -167,11 +168,17 @@ public:
     NetCDFData read(const NetCDFDataInfo &variable) const;
     
 private:
+    int call_netcdf_function( std::function<int()> func,
+                              int ignored_error = 0) const;
+
     /** The name of the file */
     QString fname;
 
     /** Handle to the NetCDF file */
     int hndl;
+    
+    /** Mutex to serialise all file IO operations */
+    QMutex mutex;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS

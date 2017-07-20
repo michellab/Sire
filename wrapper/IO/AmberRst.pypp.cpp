@@ -161,6 +161,17 @@ void register_AmberRst_class(){
                 , "" );
         
         }
+        { //::SireIO::AmberRst::forces
+        
+            typedef ::QVector< SireMaths::Vector > ( ::SireIO::AmberRst::*forces_function_type)(  ) const;
+            forces_function_type forces_function_value( &::SireIO::AmberRst::forces );
+            
+            AmberRst_exposer.def( 
+                "forces"
+                , forces_function_value
+                , "" );
+        
+        }
         { //::SireIO::AmberRst::formatDescription
         
             typedef ::QString ( ::SireIO::AmberRst::*formatDescription_function_type)(  ) const;
@@ -205,6 +216,28 @@ void register_AmberRst_class(){
                 , "" );
         
         }
+        { //::SireIO::AmberRst::hasCoordinates
+        
+            typedef bool ( ::SireIO::AmberRst::*hasCoordinates_function_type)(  ) const;
+            hasCoordinates_function_type hasCoordinates_function_value( &::SireIO::AmberRst::hasCoordinates );
+            
+            AmberRst_exposer.def( 
+                "hasCoordinates"
+                , hasCoordinates_function_value
+                , "" );
+        
+        }
+        { //::SireIO::AmberRst::hasForces
+        
+            typedef bool ( ::SireIO::AmberRst::*hasForces_function_type)(  ) const;
+            hasForces_function_type hasForces_function_value( &::SireIO::AmberRst::hasForces );
+            
+            AmberRst_exposer.def( 
+                "hasForces"
+                , hasForces_function_value
+                , "" );
+        
+        }
         { //::SireIO::AmberRst::hasVelocities
         
             typedef bool ( ::SireIO::AmberRst::*hasVelocities_function_type)(  ) const;
@@ -214,6 +247,17 @@ void register_AmberRst_class(){
                 "hasVelocities"
                 , hasVelocities_function_value
                 , "Return whether or not this restart file also provides velocities" );
+        
+        }
+        { //::SireIO::AmberRst::isTextFile
+        
+            typedef bool ( ::SireIO::AmberRst::*isTextFile_function_type)(  ) const;
+            isTextFile_function_type isTextFile_function_value( &::SireIO::AmberRst::isTextFile );
+            
+            AmberRst_exposer.def( 
+                "isTextFile"
+                , isTextFile_function_value
+                , "" );
         
         }
         { //::SireIO::AmberRst::nAtoms

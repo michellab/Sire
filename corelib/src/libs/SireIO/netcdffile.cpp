@@ -843,6 +843,20 @@ static void assert_no_netcdf_error(int errnum)
 NetCDFFile::NetCDFFile() : hndl(-1)
 {}
 
+/** Function used to call and check the output of netcdf operations */
+int NetCDFFile::call_netcdf_function(std::function<int()> func, int ignored_error) const
+{
+    QMutexLocker lkr( const_cast<QMutex*>(&mutex) );
+    int err = func();
+    
+    if (err != ignored_error)
+    {
+        assert_no_netcdf_error(err);
+    }
+    
+    return err;
+}
+
 /** Construct to open the file 'filename' */
 NetCDFFile::NetCDFFile(const QString &filename) : fname(filename)
 {
@@ -856,10 +870,10 @@ NetCDFFile::NetCDFFile(const QString &filename) : fname(filename)
                         .arg(filename), CODELOC );
         }
     
-        int errnum;
         QByteArray c_filename = file.absoluteFilePath().toUtf8();
-        errnum = nc_open(c_filename.constData(), NC_NOWRITE, &hndl);
-        assert_no_netcdf_error(errnum);
+        call_netcdf_function(
+            [&](){ return nc_open(c_filename.constData(), NC_NOWRITE, &hndl); }
+                            );
 
     #else
         throw SireError::unsupported( QObject::tr(
@@ -901,15 +915,13 @@ QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
                 nc_type var_type;
                 int ndims;
                 int natts;
-            
-                int err = nc_inq_var(hndl, i, tmp_name, &var_type, &ndims, dim_ids, &natts);
-                
-                if (err == NC_ENOTVAR)
+
+                if (call_netcdf_function([&](){
+                    return nc_inq_var(hndl, i, tmp_name, &var_type, &ndims, dim_ids, &natts); },
+                    NC_ENOTVAR) == NC_ENOTVAR)
                 {
                     break;
                 }
-                
-                assert_no_netcdf_error(err);
 
                 QString var_name = QString::fromUtf8(tmp_name);
 
@@ -919,7 +931,8 @@ QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
                 for (int j=0; j<ndims; ++j)
                 {
                     size_t dim_len;
-                    err = nc_inq_dim(hndl, dim_ids[j], tmp_name, &dim_len);
+                    call_netcdf_function([&](){
+                        return nc_inq_dim(hndl, dim_ids[j], tmp_name, &dim_len);});
                     
                     dim_names.append( QString::fromUtf8(tmp_name) );
                     dim_sizes.append(dim_len);
@@ -934,16 +947,16 @@ QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
                     for (int j=0; j<natts; ++j)
                     {
                         //first read in the name of the attribute
-                        err = nc_inq_attname(hndl, i, j, tmp_name);
-                        assert_no_netcdf_error(err);
+                        call_netcdf_function( [&]()
+                                { return nc_inq_attname(hndl, i, j, tmp_name); } );
                         
                         QString attname = QString::fromUtf8(tmp_name);
 
                         //now read in metadata about the attribute
                         nc_type xtype;
                         size_t len;
-                        err = nc_inq_att(hndl, i, tmp_name, &xtype, &len);
-                        assert_no_netcdf_error(err);
+                        call_netcdf_function( [&]()
+                            { return nc_inq_att(hndl, i, tmp_name, &xtype, &len); } );
                         
                         //now read in the value of the attribute
                         QByteArray memdata;
@@ -957,8 +970,8 @@ QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
                             memdata.resize( nc_type_to_size(xtype) * len );
                         }
                         
-                        err = nc_get_att(hndl, i, tmp_name, memdata.data());
-                        assert_no_netcdf_error(err);
+                        call_netcdf_function( [&]()
+                            {return nc_get_att(hndl, i, tmp_name, memdata.data()); } );
                         
                         QVariant val = extract_value(memdata, xtype);
                         
@@ -999,8 +1012,7 @@ QHash<QString,int> NetCDFFile::getDimensions() const
     if (hndl != -1)
     {
         int ndims;
-        int err = nc_inq_ndims(hndl, &ndims);
-        assert_no_netcdf_error(err);
+        call_netcdf_function( [&](){ return nc_inq_ndims(hndl, &ndims); } );
         
         if (ndims <= 0)
             return dims;
@@ -1012,9 +1024,7 @@ QHash<QString,int> NetCDFFile::getDimensions() const
             for (int i=0; i<ndims; ++i)
             {
                 size_t dim_len;
-                err = nc_inq_dim(hndl, i, dim_name, &dim_len);
-                assert_no_netcdf_error(err);
-                
+                call_netcdf_function( [&](){ return nc_inq_dim(hndl, i, dim_name, &dim_len); } );
                 dims.insert( QString::fromUtf8(dim_name), dim_len );
             }
         }
@@ -1044,16 +1054,17 @@ QString NetCDFFile::getStringAttribute(const QString &name) const
         //get the size of the attribute
         size_t vsize;
         
-        int err = nc_inq_attlen(hndl, NC_GLOBAL, c_name.constData(), &vsize);
-        assert_no_netcdf_error(err);
+        call_netcdf_function( [&]()
+            { return nc_inq_attlen(hndl, NC_GLOBAL, c_name.constData(), &vsize); } );
         
         //get the attribute
         char *c_value = new char[vsize+1];
         
         try
         {
-            err = nc_get_att_text(hndl, NC_GLOBAL, c_name.constData(), c_value);
-            assert_no_netcdf_error(err);
+            call_netcdf_function( [&]()
+                { return nc_get_att_text(hndl, NC_GLOBAL, c_name.constData(), c_value); } );
+
             c_value[vsize] = '\0';
         
             QString value = QString::fromUtf8(c_value);
@@ -1089,9 +1100,7 @@ NetCDFData NetCDFFile::read(const NetCDFDataInfo &variable) const
     #ifdef SIRE_USE_NETCDF
         QByteArray memdata;
         memdata.fill('\0', data_size);
-        
-        int err = nc_get_var(hndl, variable.ID(), memdata.data());
-        assert_no_netcdf_error(err);
+        call_netcdf_function( [&](){ return nc_get_var(hndl, variable.ID(), memdata.data()); } );
         data.setData(memdata);
     #endif
     }

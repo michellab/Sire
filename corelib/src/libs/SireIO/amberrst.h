@@ -107,10 +107,13 @@ public:
 
     int nAtoms() const;
     
+    bool hasCoordinates() const;
     bool hasVelocities() const;
+    bool hasForces() const;
 
     QVector<SireMaths::Vector> coordinates() const;
     QVector<SireMaths::Vector> velocities() const;
+    QVector<SireMaths::Vector> forces() const;
 
     SireMaths::Vector boxDimensions() const;
     SireMaths::Vector boxAngles() const;
@@ -123,6 +126,8 @@ public:
     
     bool createdFromRestart() const;
     bool createdFromTrajectory() const;
+
+    bool isTextFile() const;
 
 protected:
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
@@ -139,8 +144,11 @@ private:
     /** The coordinate data */
     QVector<SireMaths::Vector> coords;
     
-    /** The velocity data in amber units */
+    /** The velocity data in amber units (angstrom / 1/20.455 picosecond) */
     QVector<SireMaths::Vector> vels;
+    
+    /** The force data in amber units (amu*angstrom/picosecond^2) */
+    QVector<SireMaths::Vector> frcs;
     
     /** The box dimensions */
     SireMaths::Vector box_dims;

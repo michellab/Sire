@@ -132,7 +132,7 @@ private:
     /** The coordinate data */
     QVector<SireMaths::Vector> coords;
     
-    /** The velocity data in amber units */
+    /** The velocity data in amber units (angstroms / 1/20.455 ps) */
     QVector<SireMaths::Vector> vels;
     
     /** The box dimensions */
