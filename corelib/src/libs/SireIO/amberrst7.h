@@ -126,7 +126,7 @@ private:
     /** The title of the file */
     QString ttle;
     
-    /** The current time of the simulation */
+    /** The current time of the simulation in picoseconds */
     double current_time;
     
     /** The coordinate data */

@@ -115,6 +115,15 @@ public:
     SireMaths::Vector boxDimensions() const;
     SireMaths::Vector boxAngles() const;
 
+    QStringList warnings() const;
+    
+    QString creatorApplication() const;
+    
+    double formatVersion() const;
+    
+    bool createdFromRestart() const;
+    bool createdFromTrajectory() const;
+
 protected:
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
@@ -124,7 +133,7 @@ private:
     /** The title of the file */
     QString ttle;
     
-    /** The current time of the simulation */
+    /** The current time of the simulation in picoseconds */
     double current_time;
     
     /** The coordinate data */
@@ -138,6 +147,18 @@ private:
     
     /** The box angles */
     SireMaths::Vector box_angs;
+    
+    /** The version of the file format */
+    double convention_version;
+    
+    /** The name and version of the application that wrote this file */
+    QString creator_app;
+    
+    /** Any warnings that were raised when reading the file */
+    QStringList parse_warnings;
+    
+    /** Whether or not this was read as a restart file */
+    bool created_from_restart;
 };
 
 }

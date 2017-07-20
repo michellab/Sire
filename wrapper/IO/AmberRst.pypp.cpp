@@ -128,6 +128,39 @@ void register_AmberRst_class(){
                 , "Return the parsed coordinate data" );
         
         }
+        { //::SireIO::AmberRst::createdFromRestart
+        
+            typedef bool ( ::SireIO::AmberRst::*createdFromRestart_function_type)(  ) const;
+            createdFromRestart_function_type createdFromRestart_function_value( &::SireIO::AmberRst::createdFromRestart );
+            
+            AmberRst_exposer.def( 
+                "createdFromRestart"
+                , createdFromRestart_function_value
+                , "" );
+        
+        }
+        { //::SireIO::AmberRst::createdFromTrajectory
+        
+            typedef bool ( ::SireIO::AmberRst::*createdFromTrajectory_function_type)(  ) const;
+            createdFromTrajectory_function_type createdFromTrajectory_function_value( &::SireIO::AmberRst::createdFromTrajectory );
+            
+            AmberRst_exposer.def( 
+                "createdFromTrajectory"
+                , createdFromTrajectory_function_value
+                , "" );
+        
+        }
+        { //::SireIO::AmberRst::creatorApplication
+        
+            typedef ::QString ( ::SireIO::AmberRst::*creatorApplication_function_type)(  ) const;
+            creatorApplication_function_type creatorApplication_function_value( &::SireIO::AmberRst::creatorApplication );
+            
+            AmberRst_exposer.def( 
+                "creatorApplication"
+                , creatorApplication_function_value
+                , "" );
+        
+        }
         { //::SireIO::AmberRst::formatDescription
         
             typedef ::QString ( ::SireIO::AmberRst::*formatDescription_function_type)(  ) const;
@@ -158,6 +191,17 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
+                , "" );
+        
+        }
+        { //::SireIO::AmberRst::formatVersion
+        
+            typedef double ( ::SireIO::AmberRst::*formatVersion_function_type)(  ) const;
+            formatVersion_function_type formatVersion_function_value( &::SireIO::AmberRst::formatVersion );
+            
+            AmberRst_exposer.def( 
+                "formatVersion"
+                , formatVersion_function_value
                 , "" );
         
         }
@@ -263,6 +307,17 @@ void register_AmberRst_class(){
                 "velocities"
                 , velocities_function_value
                 , "Return the parsed coordinate data" );
+        
+        }
+        { //::SireIO::AmberRst::warnings
+        
+            typedef ::QStringList ( ::SireIO::AmberRst::*warnings_function_type)(  ) const;
+            warnings_function_type warnings_function_value( &::SireIO::AmberRst::warnings );
+            
+            AmberRst_exposer.def( 
+                "warnings"
+                , warnings_function_value
+                , "" );
         
         }
         { //::SireIO::AmberRst::what

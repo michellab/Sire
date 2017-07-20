@@ -72,6 +72,8 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberRst &rst)
     sds << rst.ttle << rst.current_time
         << rst.coords << rst.vels
         << rst.box_dims << rst.box_angs
+        << rst.convention_version << rst.creator_app
+        << rst.parse_warnings << rst.created_from_restart
         << static_cast<const MoleculeParser&>(rst);
     
     return ds;
@@ -88,6 +90,8 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberRst &rst)
         sds >> rst.ttle >> rst.current_time
             >> rst.coords >> rst.vels
             >> rst.box_dims >> rst.box_angs
+            >> rst.convention_version >> rst.creator_app
+            >> rst.parse_warnings >> rst.created_from_restart
             >> static_cast<MoleculeParser&>(rst);
     }
     else
@@ -128,71 +132,265 @@ QString AmberRst::formatDescription() const
     data in this object */
 void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
 {
+    //the netcdf conventions for Amber restart/trajectory files are
+    //given here - http://ambermd.org/netcdf/nctraj.xhtml
+
+    //collect all of the conventions
     QString conventions = netcdf.getStringAttribute("Conventions");
-    QString conventions_version = netcdf.getStringAttribute("ConventionVersion");
-
-    QString application;
-
-    try
+    
+    //these must contain "AMBER" or "AMBERRESTART", else this may not be a valid file
+    created_from_restart = false;
+    
+    if (conventions.contains("AMBERRESTART"))
     {
-        application = netcdf.getStringAttribute("application");
+        created_from_restart = true;
     }
-    catch(...)
-    {}
+    else if (not conventions.contains("AMBER"))
+    {
+        //this is not an amber file
+        throw SireError::io_error( QObject::tr(
+                "This does not look like a valid NetCDF Amber restart/trajectory file. "
+                "Such files have a 'Conventions' attribute that contains either "
+                "'AMBER' or 'AMBERRESTART'. The 'Conventions' in this file equals '%1'")
+                    .arg(conventions), CODELOC );
+    }
+
+    bool ok;
+    convention_version = netcdf.getStringAttribute("ConventionVersion").toDouble(&ok);
+
+    if (not ok)
+    {
+        throw SireError::io_error( QObject::tr(
+                "This does not look like a valid NetCDF Amber restart/trajectory file. "
+                "Such files have a 'ConventionVersion' attribute that gives the version "
+                "number of the file format. The value in this file is '%1'")
+                    .arg(netcdf.getStringAttribute("ConventionVersion")), CODELOC );
+    }
+    
+    if (convention_version != 1.0)
+    {
+        parse_warnings.append( QObject::tr(
+                "Reading in an Amber NetCDF CRD/TRJ file with an unsupported version: %1")
+                    .arg(convention_version) );
+    }
     
     QString program = netcdf.getStringAttribute("program");
     QString program_version = netcdf.getStringAttribute("programVersion");
     
-    QString title;
+    try
+    {
+        QString application = netcdf.getStringAttribute("application");
+        
+        creator_app = QString("%1 %2 version %3").arg(application)
+                            .arg(program).arg(program_version);
+    }
+    catch(...)
+    {
+        creator_app = QString("%1 version %2").arg(program).arg(program_version);
+    }
     
     try
     {
-        title = netcdf.getStringAttribute("title");
+        ttle = netcdf.getStringAttribute("title");
     }
     catch(...)
-    {}
-    
-    qDebug() << conventions << conventions_version << application
-             << program << program_version << title;
-    
-    //get all of the dimensions and their sizes
-    const auto dims = netcdf.getDimensions();
-    
-    qDebug() << Sire::toString(dims);
-    
-    bool is_amber_restart = false;
-    
-    if (conventions.contains("AMBERRESTART"))
     {
-        is_amber_restart = true;
+        ttle = "default";
     }
     
-    qDebug() << "RESTART FILE?" << is_amber_restart;
-
     //get information about all of the variables
     const auto varinfos = netcdf.getVariablesInfo();
+
+    //extract the current time of the simulation
+    current_time = 0;
     
-    qDebug() << Sire::toString(varinfos);
+    if (varinfos.contains("time"))
+    {
+        const auto data = netcdf.read( varinfos["time"] );
+        
+        const auto atts = data.attributes();
+        
+        double scale_factor = 1.0;
+        
+        if (atts.contains("scale_factor"))
+        {
+            scale_factor = atts["scale_factor"].toDouble();
+        }
+        
+        if (atts.contains("units"))
+        {
+            QString units = atts["units"].toString();
+            
+            if (units != "picosecond")
+            {
+                parse_warnings.append( QObject::tr("Units are not the default of picoseconds. "
+                    "They are actually %1!").arg(units) );
+            }
+            
+            //we need to interpret different units and set the scale_factor accordingly.
+            //We want to store the time here in picoseconds
+        }
+
+        if (data.nValues() < 1)
+        {
+            parse_warnings.append( QObject::tr("Could not interpret the time "
+                                               "as there is no value?") );
+        }
+        else
+        {
+            current_time = scale_factor * data.toDoubleArray()[0];
+        }
+    }
     
-    auto data = netcdf.read( varinfos["time"] );
+    //now lets read in the coordinates
+    coords = QVector<Vector>();
     
-    qDebug() << "time" << Sire::toString( data.toDoubleArray() );
+    if (varinfos.contains("coordinates"))
+    {
+        const auto data = netcdf.read( varinfos["coordinates"] );
+        
+        const auto atts = data.attributes();
+        
+        double scale_factor = 1.0;
+        
+        if (atts.contains("scale_factor"))
+        {
+            scale_factor = atts["scale_factor"].toDouble();
+        }
+        
+        if (atts.contains("units"))
+        {
+            QString units = atts["units"].toString();
+            
+            if (units != "angstrom")
+            {
+                parse_warnings.append( QObject::tr("Units are not the default of angstroms. "
+                    "They are actually %1!").arg(units) );
+            }
+            
+            //we need to interpret different units and set the scale_factor accordingly.
+            //We want to store the lengths here in angstroms
+        }
+
+        if (data.nValues() % 3 != 0)
+        {
+            parse_warnings.append( QObject::tr("Could not interpret the coordinates "
+                                               "as they are not divisible by three (%1)?")
+                                                    .arg(data.nValues()) );
+        }
+        else
+        {
+            const auto vals = data.toDoubleArray();
+            
+            int nats = vals.count() / 3;
+            
+            coords = QVector<Vector>(nats);
+            
+            for (int i=0; i<nats; ++i)
+            {
+                int idx = 3 * i;
+            
+                coords[i] = scale_factor * Vector( vals[idx], vals[idx+1], vals[idx+2] );
+            }
+        }
+    }
+
+    //now lets get any periodic box information
+    box_dims = Vector(0);
     
-    data = netcdf.read( varinfos["cell_angles"] );
+    if (varinfos.contains("cell_lengths"))
+    {
+        const auto data = netcdf.read( varinfos["cell_lengths"] );
+        
+        const auto atts = data.attributes();
+        
+        double scale_factor = 1.0;
+        
+        if (atts.contains("scale_factor"))
+        {
+            scale_factor = atts["scale_factor"].toDouble();
+        }
+        
+        if (atts.contains("units"))
+        {
+            QString units = atts["units"].toString();
+            
+            if (units != "angstrom")
+            {
+                parse_warnings.append( QObject::tr("Units are not the default of angstroms. "
+                    "They are actually %1!").arg(units) );
+            }
+            
+            //we need to interpret different units and set the scale_factor accordingly.
+            //We want to store the lengths here in angstroms
+        }
+
+        if (data.nValues() < 3)
+        {
+            parse_warnings.append( QObject::tr("Could not interpret the box lengths "
+                                               "as there are less than 3 values (%1)?")
+                                                    .arg(data.nValues()) );
+        }
+        else
+        {
+            const auto vals = data.toDoubleArray();
+            box_dims = scale_factor * Vector( vals[0], vals[1], vals[2] );
+        }
+    }
+
+    //now lets get any periodic box angle information
+    box_angs = Vector(0);
     
-    qDebug() << "cell_angles" << Sire::toString( data.toDoubleArray() );
-    
-    data = netcdf.read( varinfos["coordinates"] );
-    const auto coords = data.toDoubleArray();
-    
-    qDebug() << "coordinates" << coords.count() << coords[0] << coords[1] << coords[2]
-              << coords[coords.count()-1];
+    if (varinfos.contains("cell_angles"))
+    {
+        const auto data = netcdf.read( varinfos["cell_angles"] );
+        
+        const auto atts = data.attributes();
+        
+        double scale_factor = 1.0;
+        
+        if (atts.contains("scale_factor"))
+        {
+            scale_factor = atts["scale_factor"].toDouble();
+        }
+        
+        if (atts.contains("units"))
+        {
+            QString units = atts["units"].toString();
+            
+            if (units != "degree")
+            {
+                parse_warnings.append( QObject::tr("Units are not the default of degrees. "
+                    "They are actually %1!").arg(units) );
+            }
+            
+            //we need to interpret different units and set the scale_factor accordingly.
+            //We want to store the angles here in degrees
+        }
+
+        if (data.nValues() < 3)
+        {
+            parse_warnings.append( QObject::tr("Could not interpret the box angles "
+                                               "as there are less than 3 values (%1)?")
+                                                    .arg(data.nValues()) );
+        }
+        else
+        {
+            const auto vals = data.toDoubleArray();
+            box_angs = scale_factor * Vector( vals[0], vals[1], vals[2] );
+        }
+    }
+
+    //set the score, and save the warnings
+    double score = 100.0 / (parse_warnings.count()+1);
+    this->setScore(score);
 }
 
 /** Construct by parsing the passed file */
 AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(map),
-           current_time(0), box_dims(0), box_angs(cubic_angs)
+           current_time(0), box_dims(0), box_angs(cubic_angs),
+           convention_version(0), created_from_restart(false)
 {
     //open the NetCDF file and extract all of the data
     NetCDFFile netcdf(filename);
@@ -202,7 +400,8 @@ AmberRst::AmberRst(const QString &filename, const PropertyMap &map)
 /** Construct by parsing the data in the passed text lines */
 AmberRst::AmberRst(const QStringList &lines, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(lines, map),
-           current_time(0), box_dims(0), box_angs(cubic_angs)
+           current_time(0), box_dims(0), box_angs(cubic_angs),
+           convention_version(0), created_from_restart(false)
 {
     throw SireError::io_error( QObject::tr(
             "You cannot create a binary Amber RST file from a set of text lines!"),
@@ -212,7 +411,8 @@ AmberRst::AmberRst(const QStringList &lines, const PropertyMap &map)
 /** Construct by extracting the necessary data from the passed System */
 AmberRst::AmberRst(const System &system, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(),
-           current_time(0), box_dims(0), box_angs(cubic_angs)
+           current_time(0), box_dims(0), box_angs(cubic_angs),
+           convention_version(0), created_from_restart(false)
 {
     //DO SOMETHING
 }
@@ -222,7 +422,11 @@ AmberRst::AmberRst(const AmberRst &other)
          : ConcreteProperty<AmberRst,MoleculeParser>(other),
            ttle(other.ttle), current_time(other.current_time),
            coords(other.coords), vels(other.vels),
-           box_dims(other.box_dims), box_angs(other.box_angs)
+           box_dims(other.box_dims), box_angs(other.box_angs),
+           convention_version(other.convention_version),
+           creator_app(other.creator_app),
+           parse_warnings(other.parse_warnings),
+           created_from_restart(other.created_from_restart)
 {}
 
 /** Destructor */
@@ -239,6 +443,10 @@ AmberRst& AmberRst::operator=(const AmberRst &other)
         vels = other.vels;
         box_dims = other.box_dims;
         box_angs = other.box_angs;
+        convention_version = other.convention_version;
+        creator_app = other.creator_app;
+        parse_warnings = other.parse_warnings;
+        created_from_restart = other.created_from_restart;
     
         MoleculeParser::operator=(other);
     }
@@ -253,7 +461,7 @@ bool AmberRst::operator==(const AmberRst &other) const
 
 bool AmberRst::operator!=(const AmberRst &other) const
 {
-    return MoleculeParser::operator!=(other);
+    return not AmberRst::operator==(other);
 }
 
 const char* AmberRst::typeName()
@@ -523,6 +731,36 @@ SireMaths::Vector AmberRst::boxDimensions() const
 SireMaths::Vector AmberRst::boxAngles() const
 {
     return box_angs;
+}
+
+/** Return any warnings that were triggered during parsing */
+QStringList AmberRst::warnings() const
+{
+    return parse_warnings;
+}
+
+/** Return the application that created the file that has been parsed */
+QString AmberRst::creatorApplication() const
+{
+    return creator_app;
+}
+
+/** Return the version of the file format that was parsed */
+double AmberRst::formatVersion() const
+{
+    return convention_version;
+}
+
+/** Return whether or not this was created from a restart (.rst) file */
+bool AmberRst::createdFromRestart() const
+{
+    return created_from_restart;
+}
+
+/** Return whether or not this was created from a trajectory (.trj) file */
+bool AmberRst::createdFromTrajectory() const
+{
+    return not createdFromRestart();
 }
 
 /** Return this parser constructed from the passed filename */
