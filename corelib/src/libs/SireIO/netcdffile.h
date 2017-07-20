@@ -33,6 +33,7 @@
 
 #include <QString>
 #include <QStringList>
+#include <QVariant>
 
 #include <boost/noncopyable.hpp>
 
@@ -48,10 +49,11 @@ namespace SireIO
 */
 class SIREIO_EXPORT NetCDFDataInfo
 {
+
+friend class NetCDFFile;
+
 public:
     NetCDFDataInfo();
-    NetCDFDataInfo(int idnum, QString name, int xtyp,
-                   QStringList dim_names, QList<int> dim_sizes, int natts);
     NetCDFDataInfo(const NetCDFDataInfo &other);
     
     ~NetCDFDataInfo();
@@ -68,16 +70,45 @@ public:
     
     int nAttributes() const;
     
+    QStringList attributeNames() const;
+
+    QVariant attribute(const QString &name) const;
+    QString attributeType(const QString &name) const;
+
+    QHash<QString,QVariant> attributes() const;
+    QHash<QString,QString> attributeTypes() const;
+    
     QString toString() const;
 
     bool isNull() const;
     
+protected:
+    NetCDFDataInfo(int idnum, QString name, int xtyp,
+                   QStringList dim_names, QList<int> dim_sizes,
+                   QStringList att_names, QList<int> att_types,
+                   QList<QVariant> att_values);
+
 private:
+    /** The name of the variable */
     QString nme;
+    
+    /** The names of each of the dimensions of the variable */
     QStringList dim_names;
+    
+    /** The size of each of the dimensions */
     QList<int> dim_sizes;
+    
+    /** The names of all attributes associated with the variable */
+    QStringList att_names;
+    /** The types of all of the attributes */
+    QList<int> att_types;
+    /** The values of all of the attributes */
+    QList<QVariant> att_values;
+    
+    /** The ID number of the variable in the data file */
     int idnum;
-    int natts;
+
+    /** The type of the data in the data file */
     int xtyp;
 };
 
@@ -163,7 +194,7 @@ inline QList<int> NetCDFDataInfo::dimensionSizes() const
 /** Return the number of attributes of this data in the file */
 inline int NetCDFDataInfo::nAttributes() const
 {
-    return natts;
+    return att_names.count();
 }
 
 #endif
