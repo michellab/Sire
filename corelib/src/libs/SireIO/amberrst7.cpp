@@ -450,9 +450,9 @@ AmberRst7::AmberRst7(const QStringList &lines, const PropertyMap &map)
     this->parse(map);
 }
 
-QStringList toLines(const QVector< QVector<Vector> > &all_coords,
-                    const QVector< QVector<Vector> > &all_vels,
-                    bool uses_parallel, qint64 *natoms, QStringList *errors)
+static QStringList toLines(const QVector< QVector<Vector> > &all_coords,
+                           const QVector< QVector<Vector> > &all_vels,
+                           bool uses_parallel, qint64 *natoms, QStringList *errors)
 {
     //do any of the molecules have velocities?
     bool has_velocities = false;
@@ -603,8 +603,13 @@ QStringList toLines(const QVector< QVector<Vector> > &all_coords,
     return lines;
 }
 
-QVector<Vector> getCoordinates(const Molecule &mol, const PropertyName &coords_property)
+static QVector<Vector> getCoordinates(const Molecule &mol, const PropertyName &coords_property)
 {
+    if (not mol.hasProperty(coords_property))
+    {
+        return QVector<Vector>();
+    }
+
     QVector<Vector> coords( mol.nAtoms() );
     
     const auto molcoords = mol.property(coords_property).asA<AtomCoords>();
@@ -620,8 +625,13 @@ QVector<Vector> getCoordinates(const Molecule &mol, const PropertyName &coords_p
     return coords;
 }
 
-QVector<Vector> getVelocities(const Molecule &mol, const PropertyName &vels_property)
+static QVector<Vector> getVelocities(const Molecule &mol, const PropertyName &vels_property)
 {
+    if (not mol.hasProperty(vels_property))
+    {
+        return QVector<Vector>();
+    }
+
     try
     {
         const auto molvels = mol.property(vels_property).asA<AtomVelocities>();
@@ -1037,15 +1047,24 @@ void AmberRst7::addToSystem(System &system, const PropertyMap &map) const
     //data from this file format
     QString fileformat = this->formatName();
     
+    PropertyName fileformat_property = map["fileformat"];
+    
     try
     {
-        QString last_format = system.property("fileformat").asA<StringProperty>();
+        QString last_format = system.property(fileformat_property).asA<StringProperty>();
         fileformat = QString("%1,%2").arg(last_format,fileformat);
     }
     catch(...)
     {}
     
-    system.setProperty( "fileformat", StringProperty(fileformat) );
+    if (fileformat_property.hasSource())
+    {
+        system.setProperty(fileformat_property.source(), StringProperty(fileformat));
+    }
+    else
+    {
+        system.setProperty("fileformat", StringProperty(fileformat));
+    }
 }
 
 /** Return the title of the file */

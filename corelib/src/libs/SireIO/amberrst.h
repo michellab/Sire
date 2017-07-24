@@ -129,6 +129,8 @@ public:
 
     bool isTextFile() const;
 
+    void writeToFile(const QString &filename) const
+
 protected:
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 

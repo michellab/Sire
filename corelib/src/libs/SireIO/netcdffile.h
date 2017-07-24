@@ -155,6 +155,10 @@ class SIREIO_EXPORT NetCDFFile : public boost::noncopyable
 {
 public:
     NetCDFFile();
+
+    NetCDFFile(const QString &filename, bool overwrite_file,
+               bool use_64bit_offset=true, bool use_netcdf4=false);
+
     NetCDFFile(const QString &filename);
     
     ~NetCDFFile();
@@ -166,7 +170,9 @@ public:
     QHash<QString,NetCDFDataInfo> getVariablesInfo() const;
     
     NetCDFData read(const NetCDFDataInfo &variable) const;
-    
+
+    void writeData(const QHash<QString,NetCDFData> &data);
+
 private:
     int call_netcdf_function( std::function<int()> func,
                               int ignored_error = 0) const;

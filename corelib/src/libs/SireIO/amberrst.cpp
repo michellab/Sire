@@ -48,6 +48,8 @@
 #include "SireBase/parallel.h"
 #include "SireBase/stringproperty.h"
 #include "SireBase/timeproperty.h"
+#include "SireBase/booleanproperty.h"
+#include "SireBase/getinstalldir.h"
 
 #include "SireIO/errors.h"
 
@@ -59,6 +61,7 @@ using namespace SireMaths;
 using namespace SireMol;
 using namespace SireBase;
 using namespace SireSystem;
+using namespace SireVol;
 using namespace SireUnits;
 using namespace SireStream;
 
@@ -626,13 +629,191 @@ AmberRst::AmberRst(const QStringList &lines, const PropertyMap &map)
                 CODELOC );
 }
 
+static QVector<Vector> getCoordinates(const Molecule &mol, const PropertyName &coords_property)
+{
+    if (not mol.hasProperty(coords_property))
+    {
+        return QVector<Vector>();
+    }
+
+    QVector<Vector> coords( mol.nAtoms() );
+    
+    const auto molcoords = mol.property(coords_property).asA<AtomCoords>();
+    
+    const auto molinfo = mol.info();
+    
+    for (int i=0; i<mol.nAtoms(); ++i)
+    {
+        //coords are already in angstroms :-)
+        coords[i] = molcoords.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
+    }
+    
+    return coords;
+}
+
+static QVector<Vector> getVelocities(const Molecule &mol, const PropertyName &vels_property)
+{
+    if (not mol.hasProperty(vels_property))
+    {
+        return QVector<Vector>();
+    }
+
+    try
+    {
+        const auto molvels = mol.property(vels_property).asA<AtomVelocities>();
+        const auto molinfo = mol.info();
+        
+        QVector<Vector> vels( mol.nAtoms() );
+        
+        const double units = 1.0 / (angstrom / (20.455*picosecond)).value();
+        
+        for (int i=0; i<mol.nAtoms(); ++i)
+        {
+            const auto atomvels = molvels.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
+            
+            //need to convert the velocities into units of Angstroms / 20.455 picoseconds
+            vels[i] = Vector( atomvels.x().value() * units,
+                              atomvels.y().value() * units,
+                              atomvels.z().value() * units );
+        }
+        
+        return vels;
+    }
+    catch(...)
+    {
+        return QVector<Vector>();
+    }
+}
+
+static QVector<Vector> getForces(const Molecule &mol, const PropertyName &forces_property)
+{
+    if (not mol.hasProperty(forces_property))
+    {
+        return QVector<Vector>();
+    }
+
+    try
+    {
+        const auto molforces = mol.property(forces_property).asA<AtomForces>();
+        const auto molinfo = mol.info();
+        
+        QVector<Vector> forces( mol.nAtoms() );
+        
+        const double units = 1.0 / ( atomic_mass_constant * angstrom /
+                                     (picosecond*picosecond) ).value();
+        
+        for (int i=0; i<mol.nAtoms(); ++i)
+        {
+            const auto atomforces = molforces.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
+            
+            //need to convert the velocities into units of amu Angstroms / picosecond^2
+            forces[i] = Vector( atomforces.x().value() * units,
+                                atomforces.y().value() * units,
+                                atomforces.z().value() * units );
+        }
+        
+        return forces;
+    }
+    catch(...)
+    {
+        return QVector<Vector>();
+    }
+}
+
 /** Construct by extracting the necessary data from the passed System */
 AmberRst::AmberRst(const System &system, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(),
            current_time(0), box_dims(0), box_angs(cubic_angs),
            convention_version(0), created_from_restart(false)
 {
-    //DO SOMETHING
+    //get the MolNums of each molecule in the System - this returns the
+    //numbers in MolIdx order
+    const QVector<MolNum> molnums = system.getMoleculeNumbers().toVector();
+
+    if (molnums.isEmpty())
+    {
+        //no molecules in the system
+        this->operator=(AmberRst());
+        return;
+    }
+
+    //get the coordinates (and velocities if available) for each molecule in the system
+    {
+        QVector< QVector<Vector> > all_coords(molnums.count());
+        QVector< QVector<Vector> > all_vels(molnums.count());
+        QVector< QVector<Vector> > all_forces(molnums.count());
+
+        const auto coords_property = map["coordinates"];
+        const auto vels_property = map["velocity"];
+        const auto forces_property = map["force"];
+
+        if (usesParallel())
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,molnums.count()),
+                               [&](const tbb::blocked_range<int> r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    const auto mol = system[molnums[i]].molecule();
+                
+                    tbb::parallel_invoke(
+                       [&](){ all_coords[i] = ::getCoordinates(mol, coords_property); },
+                       [&](){ all_vels[i] = ::getVelocities(mol, vels_property); },
+                       [&](){ all_forces[i] = ::getForces(mol, forces_property); }
+                                        );
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<molnums.count(); ++i)
+            {
+                const auto mol = system[molnums[i]].molecule();
+
+                all_coords[i] = ::getCoordinates(mol, coords_property);
+                all_vels[i] = ::getVelocities(mol, vels_property);
+                all_forces[i] = ::getForces(mol, forces_property);
+            }
+        }
+    
+        coords = collapse(all_coords);
+        vels = collapse(all_vels);
+        frcs = collapse(all_forces);
+    }
+    
+    //extract the space of the system
+    try
+    {
+        const auto space = system.property( map["space"] ).asA<PeriodicBox>();
+        box_dims = space.dimensions();
+        box_angs = Vector(90,90,90);
+    }
+    catch(...)
+    {}
+
+    //extract the current time for the system
+    try
+    {
+        const auto time = system.property( map["time"] ).asA<TimeProperty>().value();
+        current_time = time.to(picosecond);
+    }
+    catch(...)
+    {}
+
+    //extract whether or not this System was created from an Amber restart
+    try
+    {
+        created_from_restart = system.property( map["created_from_restart"] )
+                                     .asA<BooleanProperty>().value();
+    }
+    catch(...)
+    {}
+
+    //extract the title for the system
+    ttle = system.name().value();
+    
+    //this is created by Sire
+    creator_app = QString("Sire AmberRst %1").arg(SireBase::getReleaseVersion());
 }
 
 /** Copy constructor */
@@ -882,23 +1063,51 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
         system.setProperty( space_property.source(), SireVol::PeriodicBox(box_dims) );
     }
     
+    PropertyName restart_property = map["created_from_restart"];
+    if (restart_property.hasSource())
+    {
+        system.setProperty( restart_property.source(), BooleanProperty(created_from_restart) );
+    }
+    else
+    {
+        system.setProperty("created_from_restart", BooleanProperty(created_from_restart));
+    }
+    
     //update the System fileformat property to record that it includes
     //data from this file format
     QString fileformat = this->formatName();
     
+    PropertyName fileformat_property = map["fileformat"];
+    
     try
     {
-        QString last_format = system.property("fileformat").asA<StringProperty>();
+        QString last_format = system.property(fileformat_property).asA<StringProperty>();
         fileformat = QString("%1,%2").arg(last_format,fileformat);
     }
     catch(...)
     {}
     
-    system.setProperty( "fileformat", StringProperty(fileformat) );
+    if (fileformat_property.hasSource())
+    {
+        system.setProperty(fileformat_property.source(), StringProperty(fileformat));
+    }
+    else
+    {
+        system.setProperty("fileformat", StringProperty(fileformat));
+    }
     
     if (current_time >= 0)
     {
-        system.setProperty( map["time"].source(), TimeProperty(current_time*picosecond) );
+        PropertyName time_property = map["time"];
+        
+        if (time_property.hasSource())
+        {
+            system.setProperty(time_property.source(), TimeProperty(current_time*picosecond));
+        }
+        else
+        {
+            system.setProperty("time", TimeProperty(current_time*picosecond));
+        }
     }
 }
 
@@ -1021,4 +1230,11 @@ MoleculeParserPtr AmberRst::construct(const SireSystem::System &system,
 {
     //don't construct from a pointer as it could leak
     return MoleculeParserPtr( AmberRst(system,map) );
+}
+
+/** Write this AmberRst to a file called 'filename'. This will write out
+    the data in this object to the Amber NetCDF format */
+void AmberRst::writeToFile(const QString &filename) const
+{
+    
 }

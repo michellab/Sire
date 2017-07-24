@@ -4033,7 +4033,7 @@ System AmberPrm::startSystem(const PropertyMap &map) const
     
     System system( this->title() );
     system.add(molgroup);
-    system.setProperty("fileformat", StringProperty(this->formatName()));
+    system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
     
     return system;
 }
