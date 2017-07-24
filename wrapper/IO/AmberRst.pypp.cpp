@@ -375,6 +375,18 @@ void register_AmberRst_class(){
                 , "" );
         
         }
+        { //::SireIO::AmberRst::writeToFile
+        
+            typedef void ( ::SireIO::AmberRst::*writeToFile_function_type)( ::QString const & ) const;
+            writeToFile_function_type writeToFile_function_value( &::SireIO::AmberRst::writeToFile );
+            
+            AmberRst_exposer.def( 
+                "writeToFile"
+                , writeToFile_function_value
+                , ( bp::arg("filename") )
+                , "" );
+        
+        }
         AmberRst_exposer.staticmethod( "parse" );
         AmberRst_exposer.staticmethod( "typeName" );
         AmberRst_exposer.def( "__copy__", &__copy__);

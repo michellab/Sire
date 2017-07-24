@@ -1236,5 +1236,79 @@ MoleculeParserPtr AmberRst::construct(const SireSystem::System &system,
     the data in this object to the Amber NetCDF format */
 void AmberRst::writeToFile(const QString &filename) const
 {
+    //create the hash of all global data
+    QHash<QString,QString> globals;
     
+    if (created_from_restart)
+    {
+        globals.insert( "Conventions", "AMBERRESTART" );
+    }
+    else
+    {
+        globals.insert( "Conventions", "AMBER" );
+    }
+    
+    globals.insert( "ConventionVersion", "1.0" );
+
+    globals.insert( "application", "Sire" );
+    
+    globals.insert( "program", "AmberRst" );
+    
+    globals.insert( "programVersion", SireBase::getReleaseVersion() );
+    
+    if (ttle.count() > 80)
+    {
+        globals.insert( "title", ttle.mid(0,80) );
+    }
+    else if (not ttle.isEmpty())
+    {
+        globals.insert( "title", ttle );
+    }
+
+    //convert all of the data into NetCDFData objects
+    QHash<QString,NetCDFData> data;
+    
+    //start off with the label variables
+    {
+        QStringList dimensions = { "spatial" };
+        QList<int> dimension_sizes = { 3 };
+        QVector<char> values = { 'x', 'y', 'z' };
+        data.insert( "spatial", NetCDFData("spatial", values, dimensions, dimension_sizes) );
+
+        dimensions = { "cell_spatial" };
+        dimension_sizes = { 3 };
+        values = { 'a', 'b', 'c' };
+        data.insert( "cell_spatial", NetCDFData("cell_spatial", values,
+                                                dimensions, dimension_sizes) );
+        
+        dimensions = { "cell_angular", "label" };
+        dimension_sizes = { 3, 5 };
+        values = { 'a', 'l', 'p', 'h', 'a',
+                   'b', 'e', 't', 'a', ' ',
+                   'g', 'a', 'm', 'm', 'a' };
+        data.insert( "cell_angular", NetCDFData("cell_angular", values,
+                                                dimensions, dimension_sizes) );
+    }
+    
+    //now the time
+    {
+        QHash<QString,QVariant> attributes;
+        
+        attributes.insert( "units", QString("picosecond") );
+    
+        if (created_from_restart)
+        {
+            QVector<double> values = { current_time };
+            data.insert( "time", NetCDFData("time", values, QStringList(),
+                                            QList<int>(), attributes ) );
+        }
+        else
+        {
+            QVector<float> values = { float(current_time) };
+            data.insert( "time", NetCDFData("time", values, QStringList(),
+                                            QList<int>(), attributes ) );
+        }
+    }
+
+    NetCDFFile::write(filename, globals, data);
 }

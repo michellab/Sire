@@ -135,6 +135,24 @@ using namespace SireIO;
             return 0;
         }
     }
+
+    static nc_type qvariant_to_nc_type(const QVariant &typ)
+    {
+        const QString name = typ.typeName();
+
+        if (name == "QString")
+        {
+            return NC_CHAR;
+        }
+        else
+        {
+            throw SireError::io_error( QObject::tr(
+                    "Unable to convert the QVariant type %1 to an NC_TYPE")
+                        .arg(name), CODELOC );
+        }
+        
+        return 0;
+    }
 #endif
 
 static QVector<QVariant> extract_values(const QByteArray &memdata, int nc_type, int nvals)
@@ -428,6 +446,15 @@ NetCDFDataInfo::NetCDFDataInfo(int idn, QString name, int tp,
     }
 }
 
+NetCDFDataInfo::NetCDFDataInfo(int idnum, QString name, const QString &xtyp,
+                               QStringList dim_names, QList<int> dim_sizes,
+                               QStringList att_names, QList<int> att_types,
+                               QList<QVariant> att_values)
+               : NetCDFDataInfo(idnum, name, string_to_nc_type(xtyp),
+                                dim_names, dim_sizes, att_names, att_types,
+                                att_values)
+{}
+
 /** Copy constructor */
 NetCDFDataInfo::NetCDFDataInfo(const NetCDFDataInfo &other)
                : nme(other.nme), dim_names(other.dim_names), dim_sizes(other.dim_sizes),
@@ -526,6 +553,18 @@ int NetCDFDataInfo::nValues() const
     }
     
     return base;
+}
+
+/** Assert that the number of values that can be held by this data is 'n' */
+void NetCDFDataInfo::assertNValuesEquals(int n) const
+{
+    if (n != this->nValues())
+    {
+        throw SireError::incompatible_error( QObject::tr(
+                "Cannot store %1 items in this piece of NetCDF data, as it is dimensioned "
+                "to store %2 values. %3")
+                    .arg(n).arg(this->nValues()).arg(this->toString()), CODELOC );
+    }
 }
 
 /** Return the total size of the data to be loaded, in bytes */
@@ -633,6 +672,49 @@ NetCDFData::NetCDFData(const NetCDFDataInfo &info)
 void NetCDFData::setData(const QByteArray &data)
 {
     memdata = data;
+}
+
+/** Internal function to extract attribute information */
+QStringList NetCDFData::get_attribute_names(const QHash<QString,QVariant> &attributes)
+{
+    if (attributes.isEmpty())
+        return QStringList();
+    
+    QStringList names = attributes.keys();
+    qSort(names);
+    return names;
+}
+
+/** Internal function to extract attribute information */
+QList<int> NetCDFData::get_attribute_types(const QHash<QString,QVariant> &attributes)
+{
+    if (attributes.isEmpty())
+        return QList<int>();
+    
+    QList<int> typs;
+    
+    for (const auto name : get_attribute_names(attributes))
+    {
+        typs.append( qvariant_to_nc_type( attributes.value(name) ) );
+    }
+    
+    return typs;
+}
+
+/** Internal function to extract attribute information */
+QList<QVariant> NetCDFData::get_attribute_values(const QHash<QString,QVariant> &attributes)
+{
+    if (attributes.isEmpty())
+        return QList<QVariant>();
+    
+    QList<QVariant> vals;
+    
+    for (const auto name : get_attribute_names(attributes))
+    {
+        vals.append( attributes.value(name) );
+    }
+    
+    return vals;
 }
 
 /** Return the data as an array of QVariants */
@@ -863,20 +945,10 @@ int NetCDFFile::call_netcdf_function(std::function<int()> func, int ignored_erro
 NetCDFFile::NetCDFFile(const QString &filename) : fname(filename)
 {
     #ifdef SIRE_USE_NETCDF
-        QFileInfo file(filename);
-    
-        if (not file.exists())
-        {
-            throw SireError::io_error( QObject::tr(
-                    "Cannot open '%1' as it does not appear to exist.")
-                        .arg(filename), CODELOC );
-        }
-    
-        QByteArray c_filename = file.absoluteFilePath().toUtf8();
+        QByteArray c_filename = filename.toUtf8();
         call_netcdf_function(
             [&](){ return nc_open(c_filename.constData(), NC_NOWRITE, &hndl); }
                             );
-
     #else
         throw SireError::unsupported( QObject::tr(
                 "Software is missing NetCDF support, so cannot read the NetCDF file '%1'")
@@ -1072,7 +1144,8 @@ QHash<QString,NetCDFDataInfo> NetCDFFile::getVariablesInfo() const
 }
 
 /** Write all of the passed data to the file */
-void NetCDFFile::writeData(const QHash<QString,NetCDFData> &variable_data)
+void NetCDFFile::writeData(const QHash<QString,QString> &globals,
+                           const QHash<QString,NetCDFData> &variable_data)
 {
     if (hndl != -1)
     {
@@ -1185,6 +1258,21 @@ void NetCDFFile::writeData(const QHash<QString,NetCDFData> &variable_data)
             var_ids.insert(variable, idp);
         }
         
+        //now write all of the global attributes
+        QStringList global_attributes = globals.keys();
+        qSort(global_attributes);
+        
+        for (const auto global_attribute : global_attributes)
+        {
+            QByteArray c_name = global_attribute.toUtf8();
+            QByteArray c_att = globals.value(global_attribute).toUtf8();
+            
+            //save the attribute to the file
+            call_netcdf_function( [&]()
+                { return nc_put_att_text(hndl, NC_GLOBAL, c_name.constData(),
+                                         c_att.count(), c_att.constData()); } );
+        }
+        
         //now write all of the attributes
         for (const auto variable : variables)
         {
@@ -1219,6 +1307,7 @@ void NetCDFFile::writeData(const QHash<QString,NetCDFData> &variable_data)
                         call_netcdf_function( [&](){
                             return nc_put_att(hndl, id, c_attname.constData(),
                                               xtyp, len, c_att.constData()); } );
+                        break;
                     }
                     case NC_DOUBLE:
                     {
@@ -1228,12 +1317,13 @@ void NetCDFFile::writeData(const QHash<QString,NetCDFData> &variable_data)
                         call_netcdf_function( [&](){
                             return nc_put_att(hndl, id, c_attname.constData(),
                                               xtyp, len, &val); } );
+                        break;
                     }
                     default:
                         throw SireError::unsupported( QObject::tr(
                                 "Not yet able to write a NetCDF attribute of type '%1' "
-                                "for variable %2.")
-                                    .arg(att_type).arg(variable), CODELOC );
+                                "for variable %2. (%3)")
+                                    .arg(att_type).arg(variable).arg(xtyp), CODELOC );
                 }
             }
         }
@@ -1297,6 +1387,59 @@ QHash<QString,int> NetCDFFile::getDimensions() const
     #endif
     
     return dims;
+}
+
+/** Write the passed NetCDFData to the file 'filename'. This will overwrite
+    the file if 'overwrite_file' is true, will write the file using a 64bit offset
+    if 'use_64bit_offset' is true, and will write using NetCDF 4 if 'use_netcdf4'
+    is true (otherwise it will write using NetCDF 3) */
+QString NetCDFFile::write(const QString &filename,
+                          const QHash<QString,QString> &globals,
+                          const QHash<QString,NetCDFData> &data,
+                          bool overwrite_file, bool use_64bit_offset,
+                          bool use_netcdf4)
+{
+    #ifdef SIRE_USE_NETCDF
+        QFileInfo file(filename);
+    
+        if (file.exists())
+        {
+            if (not overwrite_file)
+            {
+                throw SireError::io_error( QObject::tr(
+                        "Cannot create the NetCDF file '%1' as it already exists, and "
+                        "the software is not allowed to overwrite an existing file!")
+                            .arg(filename), CODELOC );
+            }
+            
+            if (file.isDir())
+            {
+                throw SireError::io_error( QObject::tr(
+                        "Cannot create the NetCDF file '%1' as it already exists and "
+                        "is a directory!")
+                            .arg(filename), CODELOC );
+            }
+            
+            if (not file.isWritable())
+            {
+                throw SireError::io_error( QObject::tr(
+                        "Cannot create the NetCDF file '%1' as it already exists and "
+                        "is read-only")
+                            .arg(filename), CODELOC );
+            }
+        }
+
+        QString absfile = file.absoluteFilePath();
+
+        NetCDFFile netcdf(absfile, overwrite_file, use_64bit_offset, use_netcdf4);
+        netcdf.writeData(globals, data);
+    
+        return absfile;
+    #else
+        throw SireError::unsupported( QObject::tr(
+            "This version of Sire does not have support for writing NetCDF files!"),
+                CODELOC );
+    #endif
 }
 
 /** Return the value of the string attribute 'name'.*/

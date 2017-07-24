@@ -55,6 +55,7 @@ friend class NetCDFFile;
 
 public:
     NetCDFDataInfo();
+    
     NetCDFDataInfo(const NetCDFDataInfo &other);
     
     ~NetCDFDataInfo();
@@ -85,8 +86,15 @@ public:
 
     bool isNull() const;
     
+    void assertNValuesEquals(int nvalues) const;
+    
 protected:
     NetCDFDataInfo(int idnum, QString name, int xtyp,
+                   QStringList dim_names, QList<int> dim_sizes,
+                   QStringList att_names, QList<int> att_types,
+                   QList<QVariant> att_values);
+
+    NetCDFDataInfo(int idnum, QString name, const QString &xtyp,
                    QStringList dim_names, QList<int> dim_sizes,
                    QStringList att_names, QList<int> att_types,
                    QList<QVariant> att_values);
@@ -123,8 +131,76 @@ class SIREIO_EXPORT NetCDFData : public NetCDFDataInfo
 
 friend class NetCDFFile;
 
+protected:
+    template<class T>
+    static QString get_nc_type()
+    {
+        if (std::is_same<T,float>::value)
+        {
+            return "NC_FLOAT";
+        }
+        else if (std::is_same<T,double>::value)
+        {
+            return "NC_DOUBLE";
+        }
+        else if (std::is_same<T,char>::value)
+        {
+            return "NC_CHAR";
+        }
+        else if (std::is_same<T,qint32>::value)
+        {
+            return "NC_INT";
+        }
+        else if (std::is_same<T,qint64>::value)
+        {
+            return "NC_INT64";
+        }
+        else
+        {
+            return "unknown";
+        }
+    }
+
+    static QStringList get_attribute_names(const QHash<QString,QVariant> &attributes);
+    static QList<int> get_attribute_types(const QHash<QString,QVariant> &attributes);
+    static QList<QVariant> get_attribute_values(const QHash<QString,QVariant> &attributes);
+
 public:
     NetCDFData();
+    
+    #ifndef SIRE_SKIP_INLINE_FUNCTIONS
+    /** Construct a piece of NetCDF data called 'name', with the passed 'values',
+        using the specified dimensions and dimension sizes, and optionally
+        with the associated attributes */
+    template<class T>
+    NetCDFData(const QString &name, const QVector<T> &values,
+               const QStringList &dimensions, const QList<int> &dimension_sizes,
+               const QHash<QString,QVariant> &attributes = QHash<QString,QVariant>())
+        : NetCDFDataInfo(0, name, get_nc_type<T>(),
+                         dimensions, dimension_sizes,
+                         get_attribute_names(attributes),
+                         get_attribute_types(attributes),
+                         get_attribute_values(attributes))
+    {
+        //ensure that there is sufficient data in 'values' for the dimensions
+        if (values.count() != this->nValues())
+        {
+            this->assertNValuesEquals(values.count());
+        }
+    
+        memdata = QByteArray();
+        memdata.resize( values.count() * sizeof(T) );
+        
+        char *data = memdata.data();
+        const char *orig = reinterpret_cast<const char*>(values.data());
+        
+        for (int i=0; i<memdata.count(); ++i)
+        {
+            data[i] = orig[i];
+        }
+    }
+    #endif
+
     NetCDFData(const NetCDFData &other);
     
     ~NetCDFData();
@@ -156,12 +232,16 @@ class SIREIO_EXPORT NetCDFFile : public boost::noncopyable
 public:
     NetCDFFile();
 
-    NetCDFFile(const QString &filename, bool overwrite_file,
-               bool use_64bit_offset=true, bool use_netcdf4=false);
-
     NetCDFFile(const QString &filename);
     
     ~NetCDFFile();
+    
+    static QString write(const QString &filename,
+                         const QHash<QString,QString> &globals,
+                         const QHash<QString,NetCDFData> &data,
+                         bool overwrite_file=true,
+                         bool use_64bit_offset=true,
+                         bool use_netcdf4=false);
     
     QString getStringAttribute(const QString &name) const;
     
@@ -171,9 +251,12 @@ public:
     
     NetCDFData read(const NetCDFDataInfo &variable) const;
 
-    void writeData(const QHash<QString,NetCDFData> &data);
-
 private:
+    NetCDFFile(const QString &filename, bool overwrite_file,
+               bool use_64bit_offset=true, bool use_netcdf4=false);
+
+    void writeData(const QHash<QString,QString> &globals, const QHash<QString,NetCDFData> &data);
+
     int call_netcdf_function( std::function<int()> func,
                               int ignored_error = 0) const;
 
