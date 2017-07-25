@@ -467,7 +467,15 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
             
             if (atts.contains("scale_factor"))
             {
-                scale_factor = atts["scale_factor"].toDouble();
+                bool ok;
+                scale_factor = atts["scale_factor"].toDouble(&ok);
+
+                if (not ok)
+                {
+                    QMutexLocker lkr(&warnings_mutex);
+                    parse_warnings.append( QObject::tr("Could not extract the scale factor "
+                       "for the coordinates from the string '%1'").arg(atts["scale_factor"]) );
+                }
             }
             
             if (atts.contains("units"))
@@ -571,9 +579,17 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
             
             if (atts.contains("scale_factor"))
             {
-                scale_factor = atts["scale_factor"].toDouble();
+                bool ok;
+                scale_factor = atts["scale_factor"].toDouble(&ok);
+                
+                if (not ok)
+                {
+                    QMutexLocker lkr(&warnings_mutex);
+                    parse_warnings.append( QObject::tr("Could not extract the scale factor "
+                       "for the velocities from the string '%1'").arg(atts["scale_factor"]) );
+                }
             }
-            
+
             if (atts.contains("units"))
             {
                 QString units = atts["units"].toString();
@@ -678,7 +694,15 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
             
             if (atts.contains("scale_factor"))
             {
-                scale_factor = atts["scale_factor"].toDouble();
+                bool ok;
+                scale_factor = atts["scale_factor"].toDouble(&ok);
+
+                if (not ok)
+                {
+                    QMutexLocker lkr(&warnings_mutex);
+                    parse_warnings.append( QObject::tr("Could not extract the scale factor "
+                       "for the forces from the string '%1'").arg(atts["scale_factor"]) );
+                }
             }
             
             if (atts.contains("units"))
@@ -909,6 +933,17 @@ static QVector<Vector> getForces(const Molecule &mol, const PropertyName &forces
     }
 }
 
+static bool hasData(const QVector< QVector<Vector> > &array)
+{
+    for (int i=0; i<array.count(); ++i)
+    {
+        if (not array[i].isEmpty())
+            return true;
+    }
+    
+    return false;
+}
+
 /** Construct by extracting the necessary data from the passed System */
 AmberRst::AmberRst(const System &system, const PropertyMap &map)
          : ConcreteProperty<AmberRst,MoleculeParser>(),
@@ -968,17 +1003,17 @@ AmberRst::AmberRst(const System &system, const PropertyMap &map)
         vels.clear();
         frcs.clear();
     
-        if (not all_coords.isEmpty())
+        if (::hasData(all_coords))
         {
             coords.append( collapse(all_coords) );
         }
         
-        if (not all_vels.isEmpty())
+        if (::hasData(all_vels))
         {
             vels.append( collapse(all_vels) );
         }
     
-        if (not all_forces.isEmpty())
+        if (::hasData(all_forces))
         {
             frcs.append( collapse(all_forces) );
         }
@@ -1791,11 +1826,11 @@ void AmberRst::writeToFile(const QString &filename) const
             
             for (int i=0; i<vels[0].count(); ++i)
             {
-                const Vector &c = vels[0].constData()[i];
+                const Vector &v = vels[0].constData()[i];
                 
-                values[3*i + 0] = c.x();
-                values[3*i + 1] = c.y();
-                values[3*i + 2] = c.z();
+                values[3*i + 0] = v.x();
+                values[3*i + 1] = v.y();
+                values[3*i + 2] = v.z();
             }
 
             data.insert("velocities", NetCDFData("velocities", values,
@@ -1813,12 +1848,12 @@ void AmberRst::writeToFile(const QString &filename) const
             {
                 for (int j=0; j<vels[0].count(); ++j)
                 {
-                    const Vector &c = vels[i].constData()[j];
+                    const Vector &v = vels[i].constData()[j];
                     
                     const int idx = 3*i*vels[0].count() + 3*j;
-                    values[idx + 0] = c.x();
-                    values[idx + 1] = c.y();
-                    values[idx + 2] = c.z();
+                    values[idx + 0] = v.x();
+                    values[idx + 1] = v.y();
+                    values[idx + 2] = v.z();
                 }
             }
 

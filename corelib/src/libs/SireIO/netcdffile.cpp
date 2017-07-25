@@ -144,6 +144,14 @@ using namespace SireIO;
         {
             return NC_CHAR;
         }
+        else if (name == "double")
+        {
+            return NC_DOUBLE;
+        }
+        else if (name == "float")
+        {
+            return NC_FLOAT;
+        }
         else
         {
             throw SireError::io_error( QObject::tr(
@@ -1312,7 +1320,17 @@ void NetCDFFile::writeData(const QHash<QString,QString> &globals,
                     case NC_DOUBLE:
                     {
                         double val = att_value.toDouble();
-                        size_t len = sizeof(double);
+                        size_t len = 1;
+                        
+                        call_netcdf_function( [&](){
+                            return nc_put_att(hndl, id, c_attname.constData(),
+                                              xtyp, len, &val); } );
+                        break;
+                    }
+                    case NC_FLOAT:
+                    {
+                        float val = att_value.toFloat();
+                        size_t len = 1;
                         
                         call_netcdf_function( [&](){
                             return nc_put_att(hndl, id, c_attname.constData(),
