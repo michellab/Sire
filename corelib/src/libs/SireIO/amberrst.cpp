@@ -474,7 +474,8 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                 {
                     QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Could not extract the scale factor "
-                       "for the coordinates from the string '%1'").arg(atts["scale_factor"]) );
+                       "for the coordinates from the string '%1'")
+                            .arg(atts["scale_factor"].toString()) );
                 }
             }
             
@@ -586,7 +587,8 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                 {
                     QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Could not extract the scale factor "
-                       "for the velocities from the string '%1'").arg(atts["scale_factor"]) );
+                       "for the velocities from the string '%1'")
+                            .arg(atts["scale_factor"].toString()) );
                 }
             }
 
@@ -701,7 +703,8 @@ void AmberRst::parse(const NetCDFFile &netcdf, const PropertyMap &map)
                 {
                     QMutexLocker lkr(&warnings_mutex);
                     parse_warnings.append( QObject::tr("Could not extract the scale factor "
-                       "for the forces from the string '%1'").arg(atts["scale_factor"]) );
+                       "for the forces from the string '%1'")
+                            .arg(atts["scale_factor"].toString()) );
                 }
             }
             
