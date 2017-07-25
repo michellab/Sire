@@ -49,6 +49,8 @@ SireIO::AmberRst __copy__(const SireIO::AmberRst &other){ return SireIO::AmberRs
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_AmberRst_class(){
 
     { //::SireIO::AmberRst
@@ -70,6 +72,18 @@ void register_AmberRst_class(){
                 , "Return the parsed box angles" );
         
         }
+        { //::SireIO::AmberRst::boxAngles
+        
+            typedef ::SireMaths::Vector ( ::SireIO::AmberRst::*boxAngles_function_type)( int ) const;
+            boxAngles_function_type boxAngles_function_value( &::SireIO::AmberRst::boxAngles );
+            
+            AmberRst_exposer.def( 
+                "boxAngles"
+                , boxAngles_function_value
+                , ( bp::arg("frame") )
+                , "" );
+        
+        }
         { //::SireIO::AmberRst::boxDimensions
         
             typedef ::SireMaths::Vector ( ::SireIO::AmberRst::*boxDimensions_function_type)(  ) const;
@@ -79,6 +93,18 @@ void register_AmberRst_class(){
                 "boxDimensions"
                 , boxDimensions_function_value
                 , "Return the parsed box dimensions" );
+        
+        }
+        { //::SireIO::AmberRst::boxDimensions
+        
+            typedef ::SireMaths::Vector ( ::SireIO::AmberRst::*boxDimensions_function_type)( int ) const;
+            boxDimensions_function_type boxDimensions_function_value( &::SireIO::AmberRst::boxDimensions );
+            
+            AmberRst_exposer.def( 
+                "boxDimensions"
+                , boxDimensions_function_value
+                , ( bp::arg("frame") )
+                , "" );
         
         }
         { //::SireIO::AmberRst::construct
@@ -128,6 +154,29 @@ void register_AmberRst_class(){
                 , "Return the parsed coordinate data" );
         
         }
+        { //::SireIO::AmberRst::coordinates
+        
+            typedef ::QVector< SireMaths::Vector > ( ::SireIO::AmberRst::*coordinates_function_type)( int ) const;
+            coordinates_function_type coordinates_function_value( &::SireIO::AmberRst::coordinates );
+            
+            AmberRst_exposer.def( 
+                "coordinates"
+                , coordinates_function_value
+                , ( bp::arg("frame") )
+                , "" );
+        
+        }
+        { //::SireIO::AmberRst::count
+        
+            typedef int ( ::SireIO::AmberRst::*count_function_type)(  ) const;
+            count_function_type count_function_value( &::SireIO::AmberRst::count );
+            
+            AmberRst_exposer.def( 
+                "count"
+                , count_function_value
+                , "" );
+        
+        }
         { //::SireIO::AmberRst::createdFromRestart
         
             typedef bool ( ::SireIO::AmberRst::*createdFromRestart_function_type)(  ) const;
@@ -169,6 +218,18 @@ void register_AmberRst_class(){
             AmberRst_exposer.def( 
                 "forces"
                 , forces_function_value
+                , "" );
+        
+        }
+        { //::SireIO::AmberRst::forces
+        
+            typedef ::QVector< SireMaths::Vector > ( ::SireIO::AmberRst::*forces_function_type)( int ) const;
+            forces_function_type forces_function_value( &::SireIO::AmberRst::forces );
+            
+            AmberRst_exposer.def( 
+                "forces"
+                , forces_function_value
+                , ( bp::arg("frame") )
                 , "" );
         
         }
@@ -271,6 +332,17 @@ void register_AmberRst_class(){
                 , "Return the number of atoms whose coordinates are contained in this restart file" );
         
         }
+        { //::SireIO::AmberRst::nFrames
+        
+            typedef int ( ::SireIO::AmberRst::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireIO::AmberRst::nFrames );
+            
+            AmberRst_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , "" );
+        
+        }
         AmberRst_exposer.def( bp::self != bp::self );
         { //::SireIO::AmberRst::operator=
         
@@ -286,6 +358,18 @@ void register_AmberRst_class(){
         
         }
         AmberRst_exposer.def( bp::self == bp::self );
+        { //::SireIO::AmberRst::operator[]
+        
+            typedef ::SireIO::AmberRst ( ::SireIO::AmberRst::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireIO::AmberRst::operator[] );
+            
+            AmberRst_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
         { //::SireIO::AmberRst::parse
         
             typedef ::SireIO::AmberRst ( *parse_function_type )( ::QString const & );
@@ -298,6 +382,17 @@ void register_AmberRst_class(){
                 , "Parse from the passed file" );
         
         }
+        { //::SireIO::AmberRst::size
+        
+            typedef int ( ::SireIO::AmberRst::*size_function_type)(  ) const;
+            size_function_type size_function_value( &::SireIO::AmberRst::size );
+            
+            AmberRst_exposer.def( 
+                "size"
+                , size_function_value
+                , "" );
+        
+        }
         { //::SireIO::AmberRst::time
         
             typedef double ( ::SireIO::AmberRst::*time_function_type)(  ) const;
@@ -307,6 +402,18 @@ void register_AmberRst_class(){
                 "time"
                 , time_function_value
                 , "Return the current time of the simulation from which this restart\nfile was written" );
+        
+        }
+        { //::SireIO::AmberRst::time
+        
+            typedef double ( ::SireIO::AmberRst::*time_function_type)( int ) const;
+            time_function_type time_function_value( &::SireIO::AmberRst::time );
+            
+            AmberRst_exposer.def( 
+                "time"
+                , time_function_value
+                , ( bp::arg("frame") )
+                , "" );
         
         }
         { //::SireIO::AmberRst::title
@@ -351,6 +458,18 @@ void register_AmberRst_class(){
                 "velocities"
                 , velocities_function_value
                 , "Return the parsed coordinate data" );
+        
+        }
+        { //::SireIO::AmberRst::velocities
+        
+            typedef ::QVector< SireMaths::Vector > ( ::SireIO::AmberRst::*velocities_function_type)( int ) const;
+            velocities_function_type velocities_function_value( &::SireIO::AmberRst::velocities );
+            
+            AmberRst_exposer.def( 
+                "velocities"
+                , velocities_function_value
+                , ( bp::arg("frame") )
+                , "" );
         
         }
         { //::SireIO::AmberRst::warnings
@@ -398,6 +517,7 @@ void register_AmberRst_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AmberRst_exposer.def( "__str__", &__str__< ::SireIO::AmberRst > );
         AmberRst_exposer.def( "__repr__", &__str__< ::SireIO::AmberRst > );
+        AmberRst_exposer.def( "__len__", &__len_size< ::SireIO::AmberRst > );
     }
 
 }

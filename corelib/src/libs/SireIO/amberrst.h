@@ -85,6 +85,11 @@ public:
     
     const char* what() const;
 
+    int count() const;
+    int size() const;
+    
+    AmberRst operator[](int i) const;
+
     MoleculeParserPtr construct(const QString &filename,
                                 const PropertyMap &map) const;
 
@@ -103,7 +108,9 @@ public:
     static AmberRst parse(const QString &filename);
 
     QString title() const;
+
     double time() const;
+    double time(int frame) const;
 
     int nAtoms() const;
     
@@ -115,8 +122,17 @@ public:
     QVector<SireMaths::Vector> velocities() const;
     QVector<SireMaths::Vector> forces() const;
 
+    int nFrames() const;
+    
+    QVector<SireMaths::Vector> coordinates(int frame) const;
+    QVector<SireMaths::Vector> velocities(int frame) const;
+    QVector<SireMaths::Vector> forces(int frame) const;
+
     SireMaths::Vector boxDimensions() const;
     SireMaths::Vector boxAngles() const;
+
+    SireMaths::Vector boxDimensions(int frame) const;
+    SireMaths::Vector boxAngles(int frame) const;
 
     QStringList warnings() const;
     
@@ -135,28 +151,29 @@ protected:
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
 private:
+    void assertSane() const;
     void parse(const NetCDFFile &netcdf, const PropertyMap &map);
 
     /** The title of the file */
     QString ttle;
     
     /** The current time of the simulation in picoseconds */
-    double current_time;
+    QVector<double> current_time;
     
     /** The coordinate data */
-    QVector<SireMaths::Vector> coords;
+    QVector< QVector<SireMaths::Vector> > coords;
     
     /** The velocity data in amber units (angstrom / 1/20.455 picosecond) */
-    QVector<SireMaths::Vector> vels;
+    QVector< QVector<SireMaths::Vector> > vels;
     
     /** The force data in amber units (amu*angstrom/picosecond^2) */
-    QVector<SireMaths::Vector> frcs;
+    QVector< QVector<SireMaths::Vector> > frcs;
     
     /** The box dimensions */
-    SireMaths::Vector box_dims;
+    QVector<SireMaths::Vector> box_dims;
     
     /** The box angles */
-    SireMaths::Vector box_angs;
+    QVector<SireMaths::Vector> box_angs;
     
     /** The version of the file format */
     double convention_version;
