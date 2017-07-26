@@ -38,6 +38,8 @@
 
 #include <boost/noncopyable.hpp>
 
+#include <functional>
+
 SIRE_BEGIN_HEADER
 
 namespace SireIO
