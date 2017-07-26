@@ -102,6 +102,14 @@ if __name__ == "__main__":
         os.system("%s config --add channels http://conda.binstar.org/omnia" % conda_exe)
         os.system("%s install --yes openmm=7.0" % conda_exe)
 
+    # libnetcdf
+    try:
+        import netCDF4
+        print("netCDF4 is already installed...")
+    except:
+        print("Installing netCDF4 using '%s install netcdf4'" % conda_exe)
+        os.system("%s install --yes netcdf4" % conda_exe)
+
     # Now that the miniconda distribution is ok, the next step
     # is to use cmake to build the corelib and wrapper in the build/corelib
     # and build/wrapper directories

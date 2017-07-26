@@ -81,6 +81,8 @@
 
 #include "TempDir.pypp.hpp"
 
+#include "TimeProperty.pypp.hpp"
+
 #include "TrigArray2DBase.pypp.hpp"
 
 #include "TrigArray2D_double_.pypp.hpp"
@@ -187,6 +189,8 @@ BOOST_PYTHON_MODULE(_Base){
     register_StringProperty_class();
 
     register_TempDir_class();
+
+    register_TimeProperty_class();
 
     register_TrigArray2DBase_class();
 

@@ -34,6 +34,7 @@
 #include "SireMol/residuecutting.h"
 
 #include <functional>
+#include <memory>
 
 SIRE_BEGIN_HEADER
 
@@ -63,17 +64,62 @@ typedef SireBase::PropPtr<MoleculeParser> MoleculeParserPtr;
 
 namespace detail
 {
-    typedef std::function<MoleculeParserPtr (QString filename, const PropertyMap &map)>
-            ParserFactory;
-
-    /** Internal class used to help register parsers against extensions */
-    class SIREIO_EXPORT RegisterParser
+    /** Base class of the parser registers */
+    class SIREIO_EXPORT ParserFactoryHelper
     {
     public:
-        RegisterParser(const QString &extension, ParserFactory factory);
-        ~RegisterParser();
+        ParserFactoryHelper();
+        ParserFactoryHelper(MoleculeParser *parser);
+        ParserFactoryHelper(const ParserFactoryHelper &other);
+        
+        ~ParserFactoryHelper();
+        
+        bool isValid() const;
+        
+        QString formatName() const;
+        QString formatDescription() const;
+        QString preferredSuffix() const;
+        
+        QStringList suffixes() const;
+        
+        MoleculeParserPtr construct(const QString &filename,
+                                    const PropertyMap &map) const;
+        
+        MoleculeParserPtr construct(const QStringList &lines,
+                                    const PropertyMap &map) const;
+        
+        MoleculeParserPtr construct(const SireSystem::System &system,
+                                    const PropertyMap &map) const;
+        
+        ParserFactoryHelper& operator=(const ParserFactoryHelper &other);
+        
+        bool operator<(const ParserFactoryHelper &other) const;
+        bool operator>(const ParserFactoryHelper &other) const;
+
+        bool operator==(const ParserFactoryHelper &other) const;
+        bool operator!=(const ParserFactoryHelper &other) const;
+
+        bool operator<=(const ParserFactoryHelper &other) const;
+        bool operator>=(const ParserFactoryHelper &other) const;
+        
+    private:
+        std::shared_ptr<MoleculeParser> parser;
     };
 }
+
+/** Class used as part of the parser registration system */
+template<class T>
+class SIREIO_EXPORT RegisterParser
+{
+public:
+    RegisterParser()
+    {
+        detail::ParserFactoryHelper helper( new T() );
+    }
+    
+    ~RegisterParser()
+    {}
+};
 
 /** The base class of all molecule parsers */
 class SIREIO_EXPORT MoleculeParser : public SireBase::Property
@@ -83,8 +129,10 @@ friend QDataStream& ::operator<<(QDataStream&, const MoleculeParser&);
 friend QDataStream& ::operator>>(QDataStream&, MoleculeParser&);
 
 public:
-    MoleculeParser();
+    MoleculeParser(const PropertyMap &map = PropertyMap());
     MoleculeParser(const QString &filename, const PropertyMap &map);
+    MoleculeParser(const QStringList &lines, const PropertyMap &map);
+    
     MoleculeParser(const MoleculeParser &other);
 
     virtual ~MoleculeParser();
@@ -96,6 +144,17 @@ public:
     virtual MoleculeParser* clone() const=0;
 
     const QVector<QString>& lines() const;
+
+    virtual MoleculeParserPtr construct(const QString &filename,
+                                        const PropertyMap &map) const=0;
+
+    virtual MoleculeParserPtr construct(const QStringList &lines,
+                                        const PropertyMap &map) const=0;
+    
+    virtual MoleculeParserPtr construct(const SireSystem::System &system,
+                                        const PropertyMap &map) const=0;
+
+    static QString supportedFormats();
 
     static MoleculeParserPtr parse(const QString &filename,
                                    const PropertyMap &map = PropertyMap());
@@ -110,7 +169,46 @@ public:
     static SireSystem::System read(const QStringList &filenames,
                                    const PropertyMap &map = PropertyMap());
 
+    static SireSystem::System load(const QString &filename,
+                                   const PropertyMap &map = PropertyMap());
+    static SireSystem::System load(const QString &file1, const QString &file2,
+                                   const PropertyMap &map = PropertyMap());
+    static SireSystem::System load(const QStringList &filenames,
+                                   const PropertyMap &map = PropertyMap());
+
+    static QStringList write(const SireSystem::System &system,
+                             const QString &filename,
+                             const PropertyMap &map = PropertyMap());
+    
+    static QStringList write(const SireSystem::System &system,
+                             const QString &file1, const QString &file2,
+                             const PropertyMap &map = PropertyMap());
+    
+    static QStringList write(const SireSystem::System &system,
+                             const QStringList &filenames,
+                             const PropertyMap &map = PropertyMap());
+
+    static QStringList save(const SireSystem::System &system,
+                            const QString &filename,
+                            const PropertyMap &map = PropertyMap());
+    
+    static QStringList save(const SireSystem::System &system,
+                            const QString &file1, const QString &file2,
+                            const PropertyMap &map = PropertyMap());
+    
+    static QStringList save(const SireSystem::System &system,
+                            const QStringList &filenames,
+                            const PropertyMap &map = PropertyMap());
+
     virtual bool isLead() const;
+
+    /** Return the unique name of this format. This should be a short
+        string in capital letters that will identify the format within
+        the program, e.g. "PRM7", "RST7", "PDB3" etc. */
+    virtual QString formatName() const=0;
+    virtual QString formatDescription() const=0;
+    
+    virtual QStringList formatSuffix() const;
 
     double score() const;
 
@@ -127,7 +225,7 @@ public:
     SireSystem::System toSystem(const QList<MoleculeParserPtr> &others,
                                 const PropertyMap &map = PropertyMap()) const;
     
-    virtual void write(const QString &filename) const;
+    virtual void writeToFile(const QString &filename) const;
     
     virtual bool isTextFile() const;
     virtual bool isBinaryFile() const;
@@ -148,9 +246,6 @@ protected:
 
 private:
     static MoleculeParserPtr _pvt_parse(const QString &filename, const PropertyMap &map);
-
-    friend class detail::RegisterParser;
-    static void registerParser(const QString &extension, detail::ParserFactory factory);
 
     /** All of the lines in the file */
     QVector<QString> lnes;
@@ -181,6 +276,18 @@ public:
     bool operator!=(const NullParser&) const;
     
     static const char* typeName();
+
+    QString formatName() const;
+    QString formatDescription() const;
+    
+    MoleculeParserPtr construct(const QString &filename,
+                                const PropertyMap &map) const;
+
+    MoleculeParserPtr construct(const QStringList &lines,
+                                const PropertyMap &map) const;
+    
+    MoleculeParserPtr construct(const SireSystem::System &system,
+                                const PropertyMap &map) const;
 
     SireSystem::System toSystem(const PropertyMap &map = PropertyMap()) const;
     SireSystem::System toSystem(const MoleculeParser &other,
@@ -242,10 +349,6 @@ inline bool MoleculeParser::usesParallel() const
 #endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }
-
-#define SIRE_REGISTER_PARSER( X, Y ) static SireIO::detail::RegisterParser \
-_SireIO_detail_RegisterParser_##X( #X, [](QString filename, const PropertyMap &map) \
-                  { return SireIO::MoleculeParserPtr(Y(filename,map));} );
 
 Q_DECLARE_METATYPE( SireIO::NullParser )
 

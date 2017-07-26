@@ -53,7 +53,11 @@ If it works, then you should see some nice help text :-)
 pygccxml is available from pip. Install it using;
 
 $HOME/sire.app/bin/conda install pip
-$HOME/sire.app/bin/pip install pygccxml
+
+Version 1.9.0 broke compatibility with Py++, so you need to install
+version 1.8.5. Do this by typing
+
+$HOME/sire.app/bin/pip install -Iv pygccxml==1.8.5
 
 == Step 4. Install Py++ ==
 

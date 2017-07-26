@@ -29,6 +29,7 @@
 #include "stringmangler.h"
 #include "stringproperty.h"
 #include "tempdir.h"
+#include "timeproperty.h"
 #include "trigarray2d.h"
 #include "trigarray2d.hpp"
 #include "unittest.h"

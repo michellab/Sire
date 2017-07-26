@@ -7,11 +7,21 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/errors.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireBase/stringproperty.h"
+
 #include "SireCAS/expression.h"
+
+#include "SireCAS/sum.h"
 
 #include "SireCAS/symbol.h"
 
 #include "SireCAS/trigfuncs.h"
+
+#include "SireCAS/values.h"
 
 #include "SireError/errors.h"
 
@@ -73,6 +83,17 @@ void register_AmberBond_class(){
                 , "Return the energy evaluated from this bond for the passed bond length" );
         
         }
+        { //::SireMM::AmberBond::hash
+        
+            typedef ::uint ( ::SireMM::AmberBond::*hash_function_type)(  ) const;
+            hash_function_type hash_function_value( &::SireMM::AmberBond::hash );
+            
+            AmberBond_exposer.def( 
+                "hash"
+                , hash_function_value
+                , "" );
+        
+        }
         { //::SireMM::AmberBond::k
         
             typedef double ( ::SireMM::AmberBond::*k_function_type)(  ) const;
@@ -85,6 +106,8 @@ void register_AmberBond_class(){
         
         }
         AmberBond_exposer.def( bp::self != bp::self );
+        AmberBond_exposer.def( bp::self < bp::self );
+        AmberBond_exposer.def( bp::self <= bp::self );
         { //::SireMM::AmberBond::operator=
         
             typedef ::SireMM::AmberBond & ( ::SireMM::AmberBond::*assign_function_type)( ::SireMM::AmberBond const & ) ;
@@ -99,6 +122,8 @@ void register_AmberBond_class(){
         
         }
         AmberBond_exposer.def( bp::self == bp::self );
+        AmberBond_exposer.def( bp::self > bp::self );
+        AmberBond_exposer.def( bp::self >= bp::self );
         { //::SireMM::AmberBond::operator[]
         
             typedef double ( ::SireMM::AmberBond::*__getitem___function_type)( int ) const;
@@ -145,6 +170,29 @@ void register_AmberBond_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberBond::typeName
+        
+            typedef char const * ( *typeName_function_type )(  );
+            typeName_function_type typeName_function_value( &::SireMM::AmberBond::typeName );
+            
+            AmberBond_exposer.def( 
+                "typeName"
+                , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberBond::what
+        
+            typedef char const * ( ::SireMM::AmberBond::*what_function_type)(  ) const;
+            what_function_type what_function_value( &::SireMM::AmberBond::what );
+            
+            AmberBond_exposer.def( 
+                "what"
+                , what_function_value
+                , "" );
+        
+        }
+        AmberBond_exposer.staticmethod( "typeName" );
         AmberBond_exposer.def( "__copy__", &__copy__);
         AmberBond_exposer.def( "__deepcopy__", &__copy__);
         AmberBond_exposer.def( "clone", &__copy__);
@@ -154,6 +202,7 @@ void register_AmberBond_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AmberBond_exposer.def( "__str__", &__str__< ::SireMM::AmberBond > );
         AmberBond_exposer.def( "__repr__", &__str__< ::SireMM::AmberBond > );
+        AmberBond_exposer.def( "__hash__", &::SireMM::AmberBond::hash );
     }
 
 }

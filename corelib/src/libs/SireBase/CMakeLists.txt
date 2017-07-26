@@ -63,6 +63,7 @@ set ( SIREBASE_HEADERS
       stringmangler.h
       stringproperty.h
       tempdir.h
+      timeproperty.h
       trigarray2d.h
       trigarray2d.hpp
       unittest.h
@@ -103,6 +104,7 @@ set ( SIREBASE_SOURCES
       stringmangler.cpp 
       stringproperty.cpp    
       tempdir.cpp
+      timeproperty.cpp
       trigarray2d.cpp 
       unittest.cpp
 

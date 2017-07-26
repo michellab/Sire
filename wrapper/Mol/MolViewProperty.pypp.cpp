@@ -50,7 +50,7 @@ void register_MolViewProperty_class(){
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
-                , "Assert that this property is compatible with the MoleculeInfoData info\nThrow: SireError::incompatible_error\n" );
+                , "Assert that this property is compatible with the MoleculeInfo info\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::MolViewProperty::isCompatibleWith
@@ -62,7 +62,7 @@ void register_MolViewProperty_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
-                , "" );
+                , "Return whether or not this is compatible with the passed molinfo" );
         
         }
         { //::SireMol::MolViewProperty::isCompatibleWith
@@ -74,7 +74,7 @@ void register_MolViewProperty_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
-                , "" );
+                , "Return whether or not this is compatible with the passed molinfo" );
         
         }
         { //::SireMol::MolViewProperty::makeCompatibleWith

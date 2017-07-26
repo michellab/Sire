@@ -7,11 +7,21 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/errors.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireBase/stringproperty.h"
+
 #include "SireCAS/expression.h"
+
+#include "SireCAS/sum.h"
 
 #include "SireCAS/symbol.h"
 
 #include "SireCAS/trigfuncs.h"
+
+#include "SireCAS/values.h"
 
 #include "SireError/errors.h"
 
@@ -73,6 +83,17 @@ void register_AmberAngle_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberAngle::hash
+        
+            typedef ::uint ( ::SireMM::AmberAngle::*hash_function_type)(  ) const;
+            hash_function_type hash_function_value( &::SireMM::AmberAngle::hash );
+            
+            AmberAngle_exposer.def( 
+                "hash"
+                , hash_function_value
+                , "" );
+        
+        }
         { //::SireMM::AmberAngle::k
         
             typedef double ( ::SireMM::AmberAngle::*k_function_type)(  ) const;
@@ -85,6 +106,8 @@ void register_AmberAngle_class(){
         
         }
         AmberAngle_exposer.def( bp::self != bp::self );
+        AmberAngle_exposer.def( bp::self < bp::self );
+        AmberAngle_exposer.def( bp::self <= bp::self );
         { //::SireMM::AmberAngle::operator=
         
             typedef ::SireMM::AmberAngle & ( ::SireMM::AmberAngle::*assign_function_type)( ::SireMM::AmberAngle const & ) ;
@@ -99,6 +122,8 @@ void register_AmberAngle_class(){
         
         }
         AmberAngle_exposer.def( bp::self == bp::self );
+        AmberAngle_exposer.def( bp::self > bp::self );
+        AmberAngle_exposer.def( bp::self >= bp::self );
         { //::SireMM::AmberAngle::operator[]
         
             typedef double ( ::SireMM::AmberAngle::*__getitem___function_type)( int ) const;
@@ -145,6 +170,29 @@ void register_AmberAngle_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberAngle::typeName
+        
+            typedef char const * ( *typeName_function_type )(  );
+            typeName_function_type typeName_function_value( &::SireMM::AmberAngle::typeName );
+            
+            AmberAngle_exposer.def( 
+                "typeName"
+                , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberAngle::what
+        
+            typedef char const * ( ::SireMM::AmberAngle::*what_function_type)(  ) const;
+            what_function_type what_function_value( &::SireMM::AmberAngle::what );
+            
+            AmberAngle_exposer.def( 
+                "what"
+                , what_function_value
+                , "" );
+        
+        }
+        AmberAngle_exposer.staticmethod( "typeName" );
         AmberAngle_exposer.def( "__copy__", &__copy__);
         AmberAngle_exposer.def( "__deepcopy__", &__copy__);
         AmberAngle_exposer.def( "clone", &__copy__);
@@ -154,6 +202,7 @@ void register_AmberAngle_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AmberAngle_exposer.def( "__str__", &__str__< ::SireMM::AmberAngle > );
         AmberAngle_exposer.def( "__repr__", &__str__< ::SireMM::AmberAngle > );
+        AmberAngle_exposer.def( "__hash__", &::SireMM::AmberAngle::hash );
     }
 
 }

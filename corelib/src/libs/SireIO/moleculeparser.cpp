@@ -33,6 +33,7 @@
 
 #include "SireBase/parallel.h"
 #include "SireBase/booleanproperty.h"
+#include "SireBase/stringproperty.h"
 
 #include "SireSystem/system.h"
 
@@ -52,6 +53,332 @@ using namespace SireIO;
 using namespace SireSystem;
 using namespace SireBase;
 using namespace SireStream;
+
+//////////////
+////////////// Implementation of ParserFactory and ParserFactoryHelper
+//////////////
+
+namespace SireIO
+{
+namespace detail
+{
+    /** Null constructor */
+    ParserFactoryHelper::ParserFactoryHelper()
+    {}
+
+    /** Copy constructor */
+    ParserFactoryHelper::ParserFactoryHelper(const ParserFactoryHelper &other)
+                        : parser(other.parser)
+    {}
+
+    /** Destructor */
+    ParserFactoryHelper::~ParserFactoryHelper()
+    {}
+
+
+    ParserFactoryHelper& ParserFactoryHelper::operator=(const ParserFactoryHelper &other)
+    {
+        parser = other.parser;
+        return *this;
+    }
+
+    bool ParserFactoryHelper::operator<(const ParserFactoryHelper &other) const
+    {
+        if (isValid())
+        {
+            if (other.isValid())
+            {
+                return parser->formatName() < other.parser->formatName();
+            }
+            else
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return not other.isValid();
+        }
+    }
+
+    bool ParserFactoryHelper::operator==(const ParserFactoryHelper &other) const
+    {
+        if (isValid())
+        {
+            if (other.isValid())
+            {
+                return parser->formatName() == other.parser->formatName();
+            }
+            else
+                return false;
+        }
+        else
+        {
+            return not other.isValid();
+        }
+    }
+    
+    bool ParserFactoryHelper::operator>(const ParserFactoryHelper &other) const
+    {
+        return not (operator==(other) or operator<(other));
+    }
+
+    bool ParserFactoryHelper::operator!=(const ParserFactoryHelper &other) const
+    {
+        return not operator==(other);
+    }
+
+    bool ParserFactoryHelper::operator<=(const ParserFactoryHelper &other) const
+    {
+        return operator==(other) or operator<(other);
+    }
+    
+    bool ParserFactoryHelper::operator>=(const ParserFactoryHelper &other) const
+    {
+        return not operator<(other);
+    }
+    
+    /** Return whether or not this helper is valid */
+    bool ParserFactoryHelper::isValid() const
+    {
+        return parser.get() != 0;
+    }
+
+    /** Return the unique ID name of the parser in the program */
+    QString ParserFactoryHelper::formatName() const
+    {
+        if (isValid())
+        {
+            return parser->formatName();
+        }
+        else
+        {
+            return QString();
+        }
+    }
+
+    /** Return the description of the parser */
+    QString ParserFactoryHelper::formatDescription() const
+    {
+        if (isValid())
+        {
+            return parser->formatDescription();
+        }
+        else
+        {
+            return QString();
+        }
+    }
+
+    /** Return all of the suffixes recognised by this parser, in their order
+        of preference */
+    QStringList ParserFactoryHelper::suffixes() const
+    {
+        if (isValid())
+        {
+            return parser->formatSuffix();
+        }
+        else
+        {
+            return QStringList();
+        }
+    }
+
+    /** Return the preferred suffix for the parser */
+    QString ParserFactoryHelper::preferredSuffix() const
+    {
+        const auto s = this->suffixes();
+        
+        if (not s.isEmpty())
+        {
+            return s[0];
+        }
+        else
+        {
+            return QString();
+        }
+    }
+
+    /** Use this factory helper to construct a new parser that parses
+        the file called 'filename' */
+    MoleculeParserPtr ParserFactoryHelper::construct(const QString &filename,
+                                                     const PropertyMap &map) const
+    {
+        if (isValid())
+        {
+            return parser->construct(filename, map);
+        }
+        else
+            return MoleculeParserPtr();
+    }
+
+    /** Use this factory helper to construct a new parser that parses
+        the data in the passed lines of text */
+    MoleculeParserPtr ParserFactoryHelper::construct(const QStringList &lines,
+                                                     const PropertyMap &map) const
+    {
+        if (isValid())
+        {
+            return parser->construct(lines, map);
+        }
+        else
+            return MoleculeParserPtr();
+    }
+
+    /** Use this factory helper to construct a new parser from the information
+        contained in the passed system */
+    MoleculeParserPtr ParserFactoryHelper::construct(const SireSystem::System &system,
+                                                     const PropertyMap &map) const
+    {
+        if (isValid())
+        {
+            return parser->construct(system, map);
+        }
+        else
+            return MoleculeParserPtr();
+    }
+
+    /** The parser factory */
+    class ParserFactory
+    {
+    public:
+        ParserFactory()
+        {}
+        
+        ~ParserFactory()
+        {}
+        
+        void registerParser(const ParserFactoryHelper &helper)
+        {
+            if (not helper.isValid())
+            {
+                return;
+            }
+        
+            QMutexLocker lkr(&mutex);
+            
+            helpers_by_id.insert( helper.formatName(), helper );
+            
+            for (const auto suffix : helper.suffixes())
+            {
+                helpers_by_suffix.insertMulti(suffix, helper);
+            }
+        }
+
+        QList<ParserFactoryHelper> getFactories(const QStringList &parser_names)
+        {
+            QMutexLocker lkr(&mutex);
+            QList<ParserFactoryHelper> helpers;
+            QStringList missing;
+            
+            for (const auto name : parser_names)
+            {
+                helpers.append( helpers_by_id.value(name) );
+                
+                if (not helpers.last().isValid())
+                {
+                    missing.append(name);
+                }
+            }
+            
+            if (not missing.isEmpty())
+            {
+                throw SireError::io_error( QObject::tr(
+                        "Cannot find parsers that support the following formats: %1.\n"
+                        "Supported parsers are:\n%2")
+                            .arg(missing.join(", "))
+                            .arg(this->supportedFormats()), CODELOC );
+            }
+            
+            return helpers;
+        }
+    
+        QList<ParserFactoryHelper> factoriesForSuffix(const QString &suffix)
+        {
+            QMutexLocker lkr(&mutex);
+            auto helpers = helpers_by_suffix.values(suffix);
+            qSort(helpers);
+            return helpers;
+        }
+    
+        QList<ParserFactoryHelper> factoriesExcludingSuffix(const QString &suffix)
+        {
+            QMutexLocker lkr(&mutex);
+            
+            if (suffix.isEmpty())
+            {
+                auto helpers = helpers_by_id.values();
+                qSort(helpers);
+                return helpers;
+            }
+            
+            QList<ParserFactoryHelper> helpers;
+            
+            for (const auto helper : helpers_by_id)
+            {
+                if (not helper.suffixes().contains(suffix))
+                {
+                    helpers.append(helper);
+                }
+            }
+
+            qSort(helpers);
+            return helpers;
+        }
+    
+        ParserFactoryHelper factory(const QString &name)
+        {
+            QMutexLocker lkr(&mutex);
+            return helpers_by_id.value(name);
+        }
+    
+        QString supportedFormats()
+        {
+            QMutexLocker lkr(&mutex);
+            
+            auto keys = helpers_by_id.keys();
+            qSort(keys);
+            
+            QStringList lines;
+            
+            for (const auto key : keys)
+            {
+                const auto parser = helpers_by_id.value(key);
+            
+                lines.append( QObject::tr("## Parser %1 ##").arg(key) );
+                lines.append( QObject::tr("Supports files: %1")
+                                    .arg(parser.suffixes().join(", ")) );
+                lines.append( parser.formatDescription() );
+                lines += QString("#").repeated(13 + key.length()) + "\n";
+            }
+            
+            return lines.join("\n");
+        }
+    
+    private:
+        /** Mutex to serialise access to the factory */
+        QMutex mutex;
+        
+        /** All of the factory helpers arranged by the suffix of
+            file that they support */
+        QMultiHash<QString,ParserFactoryHelper> helpers_by_suffix;
+        
+        /** All of the factor helpers arranged by their unique ID */
+        QHash<QString,ParserFactoryHelper> helpers_by_id;
+    };
+
+} // end of namespace detail
+} // end of namespace SireIO
+
+Q_GLOBAL_STATIC( SireIO::detail::ParserFactory, getParserFactory );
+
+/** This registers a ParserFactoryHelper with the ParserFactory for the 
+    specified parser */
+SireIO::detail::ParserFactoryHelper::ParserFactoryHelper(MoleculeParser *p)
+{
+    parser.reset( p );
+    getParserFactory()->registerParser(*this);
+}
 
 //////////////
 ////////////// Implementation of MoleculeParser
@@ -86,12 +413,14 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, MoleculeParser &parser)
     return ds;
 }
 
-typedef QMultiHash<QString,SireIO::detail::ParserFactory> ParserFactories;
-Q_GLOBAL_STATIC( ParserFactories, getParserFactories );
-
 /** Constructor */
-MoleculeParser::MoleculeParser() : Property(), scr(0), run_parallel(true)
-{}
+MoleculeParser::MoleculeParser(const PropertyMap &map) : Property(), scr(0), run_parallel(true)
+{
+    if (map["parallel"].hasValue())
+    {
+        run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+}
 
 /** Internal function that provides a file cache */
 class FileContentsCache
@@ -179,6 +508,22 @@ MoleculeParser::MoleculeParser(const QString &filename,
     }
 }
 
+/** Construct the parser, parsing in all of the passed text lines */
+MoleculeParser::MoleculeParser(const QStringList &lines,
+                               const PropertyMap &map)
+               : Property(), scr(0), run_parallel(true)
+{
+    if (map["parallel"].hasValue())
+    {
+        run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+    
+    if (not lines.isEmpty())
+    {
+        lnes = lines.toVector();
+    }
+}
+
 /** Copy constructor */
 MoleculeParser::MoleculeParser(const MoleculeParser &other)
                : Property(other), lnes(other.lnes), scr(other.scr),
@@ -242,14 +587,14 @@ bool MoleculeParser::isLead() const
 
 /** Write the parsed data back to the file called 'filename'. This will
     overwrite the file if it exists already, so be careful! */
-void MoleculeParser::write(const QString &filename) const
+void MoleculeParser::writeToFile(const QString &filename) const
 {
     if (lnes.isEmpty())
         return;
 
     if (not this->isTextFile())
         throw SireError::program_bug( QObject::tr(
-            "Dear programmer - please override the MoleculeParser::save function "
+            "Dear programmer - please override the MoleculeParser::writeToFile function "
             "to work with your binary file format. Text writing is not supported "
             "for the parser %1.").arg(this->what()), CODELOC );
 
@@ -292,20 +637,30 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
     QStringList errors;
     QMap<float,MoleculeParserPtr> parsers;
 
-    const auto parser_factories = getParserFactories();
-
     if (not suffix.isEmpty())
     {
-        for (auto factory : parser_factories->values(suffix))
+        for (auto factory : getParserFactory()->factoriesForSuffix(suffix))
         {
             try
             {
-                auto parser = factory(filename, map);
-                parsers.insert(parser.read().score(), parser);
+                const auto parser = factory.construct(filename, map);
+                
+                if (parser.read().score() <= 0)
+                {
+                    errors.append( QObject::tr("Failed to parse '%1' with parser '%2' "
+                       "as this file is not recognised as being of the required format.")
+                                    .arg(filename).arg(factory.formatName()) );
+                }
+                else
+                {
+                    parsers.insert(parser.read().score(), parser);
+                }
             }
             catch(const SireError::exception &e)
             {
-                errors.append( e.toString() );
+                errors.append( QObject::tr("Failed to parse '%1' with parser '%2'")
+                                .arg(filename).arg(factory.formatName()) );
+                errors.append( e.error() );
             }
         }
 
@@ -317,20 +672,28 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
     }
 
     //none of the tested parsers worked, so let's now try all of the parsers
-    for (auto s : parser_factories->keys())
+    for (auto factory : getParserFactory()->factoriesExcludingSuffix(suffix))
     {
-        if (s != suffix)
+        try
         {
-            for (auto factory : parser_factories->values(s))
+            const auto parser = factory.construct(filename, map);
+            
+            if (parser.read().score() <= 0)
             {
-                try
-                {
-                    auto parser = factory(filename, map);
-                    parsers.insert(parser.read().score(), parser);
-                }
-                catch(...)
-                {}
+                errors.append( QObject::tr("Failed to parse '%1' with parser '%2' "
+                       "as this file is not recognised as being of the required format.")
+                                    .arg(filename).arg(factory.formatName()) );
             }
+            else
+            {
+                parsers.insert(parser.read().score(), parser);
+            }
+        }
+        catch(const SireError::exception &e)
+        {
+            errors.append( QObject::tr("Failed to parse '%1' with parser '%2'")
+                            .arg(filename).arg(factory.formatName()) );
+            errors.append( e.error() );
         }
     }
 
@@ -343,15 +706,17 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
         if (suffix.isEmpty())
         {
             throw SireIO::parse_error( QObject::tr(
-                    "There are no parsers available that can parse the file '%1'")
-                        .arg(filename), CODELOC );
+                    "There are no parsers available that can parse the file '%1'\n"
+                    "Errors reported by individual parsers are:\n\n%2\n")
+                        .arg(filename).arg(errors.join("\n\n")), CODELOC );
         }
         else
         {
             throw SireIO::parse_error( QObject::tr(
                     "There are no parsers available that can parser the file '%1'. "
                     "All parsers were tried, including those that were associated with "
-                    "the extension of this file. The associated parsers had errors:\n%2")
+                    "the extension of this file. Errors reported "
+                    "by individual parsers are:\n\n%2\n")
                         .arg(filename).arg(errors.join("\n\n")), CODELOC );
         }
         
@@ -469,6 +834,377 @@ System MoleculeParser::read(const QStringList &filenames, const PropertyMap &map
     MoleculeParserPtr parser = parsers.takeFirst();
     
     return parser.read().toSystem(parsers, map);
+}
+
+/** Synonym for MoleculeParser::read */
+System MoleculeParser::load(const QString &filename, const PropertyMap &map)
+{
+    return MoleculeParser::read(filename, map);
+}
+
+/** Synonym for MoleculeParser::read */
+System MoleculeParser::load(const QString &file1, const QString &file2, const PropertyMap &map)
+{
+    return MoleculeParser::read(file1, file2, map);
+}
+
+/** Synonym for MoleculeParser::read */
+System MoleculeParser::load(const QStringList &filenames, const PropertyMap &map)
+{
+    return MoleculeParser::read(filenames, map);
+}
+
+/** Return the suffix (or suffixes) given to files that support this format.
+    The first suffix is the preferred on to use */
+QStringList MoleculeParser::formatSuffix() const
+{
+    //just use a lower-case version of the format name
+    return QStringList( this->formatName().toLower() );
+}
+
+/** This returns a human readable set of lines describing the formats supported
+    by MoleculeParser. Each line is formatted as "extension : description" where
+    extension is the unique extension of the file used by MoleculeParser, and
+    description is a description of the file format */
+QString MoleculeParser::supportedFormats()
+{
+    return getParserFactory()->supportedFormats();
+}
+
+QStringList pvt_write(const System &system,
+                      const QStringList &filenames,
+                      const QStringList &fileformats,
+                      const PropertyMap &map)
+{
+    if (filenames.count() != fileformats.count())
+    {
+        throw SireError::program_bug( QObject::tr(
+            "Disagreement of the number of files... %1 vs %2")
+                .arg(filenames.count()).arg(fileformats.count()), CODELOC );
+    }
+
+    QVector<QFileInfo> fileinfos(filenames.count());
+
+    QStringList errors;
+    
+    for (int i=0; i<filenames.count(); ++i)
+    {
+        fileinfos[i] = QFileInfo(filenames[i]);
+        
+        if (fileinfos[i].exists())
+        {
+            if (fileinfos[i].isDir())
+            {
+                errors.append( QObject::tr("The file %1 is actually a directory, and not writable!")
+                                    .arg(fileinfos[i].absoluteFilePath()) );
+            }
+            else if (not fileinfos[i].isWritable())
+            {
+                errors.append( QObject::tr("The file %1 exists and is not writable!")
+                                    .arg(fileinfos[i].absoluteFilePath()) );
+            }
+        }
+    }
+
+    if (not errors.isEmpty())
+    {
+        throw SireError::io_error( QObject::tr(
+                "Cannot write the files as the following errors occurred:\n%1")
+                    .arg(errors.join("\n\n")), CODELOC );
+    }
+
+    //now get all of the parsers
+    const auto factories = getParserFactory()->getFactories(fileformats);
+
+    QVector<QString> written_files(filenames.count());
+
+    //should we write the files in parallel?
+    bool run_parallel = true;
+
+    if (map["parallel"].hasValue())
+    {
+        run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+
+    if (run_parallel)
+    {
+        tbb::spin_mutex error_mutex;
+    
+        tbb::parallel_for( tbb::blocked_range<int>(0,filenames.count(),1),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                const auto filename = fileinfos[i].absoluteFilePath();
+            
+                try
+                {
+                    written_files[i] = filename;
+                    factories[i].construct(system, map).read().writeToFile(filename);
+                }
+                catch(const SireError::exception &e)
+                {
+                    tbb::spin_mutex::scoped_lock locker(error_mutex);
+                    errors.append( QObject::tr("Failed to write the file '%1' using the parser "
+                       "for fileformat '%2'. Errors reported by the parser are:\n%3")
+                            .arg(filename).arg(factories[i].formatName())
+                            .arg(e.error()) );
+                }
+            }
+        }, tbb::simple_partitioner());
+    }
+    else
+    {
+        for (int i=0; i<filenames.count(); ++i)
+        {
+            const auto filename = fileinfos[i].absoluteFilePath();
+        
+            try
+            {
+                written_files[i] = filename;
+                factories[i].construct(system, map).read().writeToFile(filename);
+            }
+            catch(const SireError::exception &e)
+            {
+                errors.append( QObject::tr("Failed to write the file '%1' using the parser "
+                   "for fileformat '%2'. Errors reported by the parser are:\n%3")
+                        .arg(filename).arg(factories[i].formatName())
+                        .arg(e.error()) );
+            }
+        }
+    }
+    
+    if (not errors.isEmpty())
+    {
+        throw SireError::io_error( QObject::tr(
+                "Cannot write the (perhaps some of the ) files "
+                "as the following errors occurred:\n%1")
+                    .arg(errors.join("\n\n")), CODELOC );
+    }
+
+    return written_files.toList();
+}
+
+/** Save the passed System to the file called 'filename'. First, the 'fileformat'
+    property is looked at in 'map'. This is used to set the format(s) of
+    the files that are written (comma-separated list). 
+    
+    If this does not exist, then the extension of the
+    file is used to work out which format to use. If no extension is given,
+    then the System will be queried to find out its preferred format (normally
+    the format it was loaded with), via its 'fileformat' property
+    (again, comma separated list).
+    
+    If their preferred format results in multiple files, then 
+    multiple files will be written. This returns the full pathnames to
+    all of the files that are written 
+*/
+QStringList MoleculeParser::write(const System &system, const QString &filename,
+                                  const PropertyMap &map)
+{
+    if (filename.isEmpty() or QFileInfo(filename).baseName().isEmpty())
+    {
+        throw SireError::io_error( QObject::tr(
+                "You must supply a valid filename. This '%1' is not sufficient.")
+                    .arg(filename), CODELOC );
+    }
+
+    //build a list of filenames with their associated fileformats
+    QStringList filenames;
+    QStringList fileformats;
+
+    const auto format_property = map["fileformat"];
+    
+    if (format_property.hasValue())
+    {
+        fileformats = format_property.value().asA<StringProperty>().toString().split(",");
+        
+        QString basename = QFileInfo(filename).completeBaseName();
+        
+        for (const auto format : fileformats)
+        {
+            filenames.append( QString("%1.%2").arg(basename,format.toLower()) );
+        }
+    }
+    else
+    {
+        QString extension = QFileInfo(filename).completeSuffix();
+        
+        if (extension.isEmpty())
+        {
+            //we need to find the format from the system
+            try
+            {
+                fileformats = system.property(format_property).asA<StringProperty>()
+                                                              .toString().split(",");
+            }
+            catch(...)
+            {
+                throw SireError::io_error( QObject::tr(
+                        "Cannot work out the fileformat to use to write the System to "
+                        "file '%1'. You need to either supply the format using the "
+                        "'fileformat' property in the passed map, add this to the System "
+                        "as its 'fileformat' property, or pass a filename with an extension "
+                        "whose fileformat can be determined. Supported fileformats are;\n%2")
+                            .arg(filename).arg(MoleculeParser::supportedFormats()),
+                                CODELOC );
+            }
+            
+            for (const auto format : fileformats)
+            {
+                filenames.append( QString("%1.%2").arg(filename).arg(format.toLower()) );
+            }
+        }
+        else
+        {
+            filenames.append(filename);
+            fileformats.append(extension.toUpper());
+        }
+    }
+    
+    //now we have a list of filenames and associated formats, actually
+    //write the files
+    return ::pvt_write(system, filenames, fileformats, map);
+}
+
+/** Extension of MoleculeParser::write which allows many filenames.
+    The same rules to locate the fileformats are now used, except that now only
+    the number of files written must match the number of filenames */
+QStringList MoleculeParser::write(const System &system,
+                                  const QStringList &files,
+                                  const PropertyMap &map)
+{
+    if (files.isEmpty())
+    {
+        throw SireError::io_error( QObject::tr(
+                "You must supply a valid filename. An empty list is not sufficient!"),
+                    CODELOC );
+    }
+    else if (files.count() == 1)
+    {
+        return MoleculeParser::write(system, files[0], map);
+    }
+    
+    //build a list of filenames with their associated fileformats
+    QStringList filenames;
+    QStringList fileformats;
+
+    const auto format_property = map["fileformat"];
+    
+    if (format_property.hasValue())
+    {
+        fileformats = format_property.value().asA<StringProperty>().toString().split(",");
+        
+        if (files.count() != fileformats.count())
+        {
+            throw SireError::io_error( QObject::tr(
+                    "You must match up the number of filenames to fileformats when "
+                    "specifying both the filenames [%1] and fileformats [%2].")
+                        .arg(filenames.join(",")).arg(fileformats.join(",")), CODELOC );
+        }
+        
+        for (int i=0; i<fileformats.count(); ++i)
+        {
+            const QString filename = files[i];
+        
+            if (filename.isEmpty() or QFileInfo(filename).baseName().isEmpty())
+            {
+                throw SireError::io_error( QObject::tr(
+                        "You must supply a valid filename. This '%1' is not sufficient.")
+                            .arg(filename), CODELOC );
+            }
+
+            QString basename = QFileInfo(filename).completeBaseName();
+            filenames.append( QString("%1.%2").arg(basename,fileformats[i].toLower()) );
+        }
+    }
+    else
+    {
+        //we may need to find the format from the system
+        try
+        {
+            fileformats = system.property(format_property).asA<StringProperty>()
+                                                          .toString().split(",");
+        }
+        catch(...)
+        {}
+
+        for (int i=0; i<files.count(); ++i)
+        {
+            const auto filename = files[i];
+        
+            QString extension = QFileInfo(filename).completeSuffix();
+            
+            if (extension.isEmpty())
+            {
+                if (i >= fileformats.count())
+                {
+                    throw SireError::io_error( QObject::tr(
+                            "Cannot work out the fileformat to use to write the System to "
+                            "file '%1'. You need to either supply the format using the "
+                            "'fileformat' property in the passed map, add this to the System "
+                            "as its 'fileformat' property, or pass a filename with an extension "
+                            "whose fileformat can be determined. Supported fileformats are;\n%2")
+                                .arg(filename).arg(MoleculeParser::supportedFormats()),
+                                    CODELOC );
+                }
+                else
+                {
+                    filenames.append( QString("%1.%2").arg(filename)
+                                                      .arg(fileformats[i].toLower()) );
+                }
+            }
+            else if (i >= fileformats.count())
+            {
+                filenames.append(filename);
+                fileformats.append(extension.toUpper());
+            }
+            else
+            {
+                filenames.append(filename);
+                fileformats[i] = extension.toUpper();
+            }
+        }
+    }
+    
+    //now we have a list of filenames and associated formats, actually
+    //write the files
+    return ::pvt_write(system, filenames, fileformats, map);
+}
+
+/** Extension of MoleculeParser::write which allows you to specify two filenames.
+    The same rules to locate the fileformats are now used, except now only two
+    files are permitted to be written */
+QStringList MoleculeParser::write(const System &system, const QString &file1,
+                                  const QString &file2, const PropertyMap &map)
+{
+    QStringList filenames;
+    filenames.append(file1);
+    filenames.append(file2);
+    return MoleculeParser::write(system, filenames, map);
+}
+
+/** Synonym of MoleculeParser::write */
+QStringList MoleculeParser::save(const System &system, const QString &filename,
+                                 const PropertyMap &map)
+{
+    return MoleculeParser::write(system, filename, map);
+}
+
+/** Synonym of MoleculeParser::write */
+QStringList MoleculeParser::save(const System &system,
+                                 const QString &file1, const QString &file2,
+                                 const PropertyMap &map)
+{
+    return MoleculeParser::write(system, file1, file2, map);
+}
+
+/** Synonym of MoleculeParser::write */
+QStringList MoleculeParser::save(const System &system,
+                                 const QStringList &filenames,
+                                 const PropertyMap &map)
+{
+    return MoleculeParser::write(system, filenames, map);
 }
 
 /** Return the System that is constructed from the data in this parser */
@@ -594,23 +1330,6 @@ void MoleculeParser::addToSystem(System &system, const PropertyMap &map) const
                 .arg(this->toString()), CODELOC );
 }
 
-/** Internal function used to register the passed parser as a valid parser for the
-    passed extension */
-void MoleculeParser::registerParser(const QString &extension,
-                                    SireIO::detail::ParserFactory factory)
-{
-    getParserFactories()->insertMulti( extension, factory );
-}
-
-SireIO::detail::RegisterParser::RegisterParser(const QString &extension,
-                                               const SireIO::detail::ParserFactory factory)
-{
-    MoleculeParser::registerParser(extension, factory);
-}
-
-SireIO::detail::RegisterParser::~RegisterParser()
-{}
-
 Q_GLOBAL_STATIC( NullParser, nullParser )
 
 const NullParser& MoleculeParser::null()
@@ -676,6 +1395,17 @@ const char* NullParser::typeName()
     return QMetaType::typeName( qMetaTypeId<NullParser>() );
 }
 
+QString NullParser::formatName() const
+{
+    return "NULL";
+}
+
+/** Return a description of the file format */
+QString NullParser::formatDescription() const
+{
+    return QObject::tr("Null parser that should not be used for any real parsing.");
+}
+
 System NullParser::toSystem(const PropertyMap&) const
 {
     return System();
@@ -706,4 +1436,34 @@ System NullParser::toSystem(const QList<MoleculeParserPtr> &others,
     }
     
     return System();
+}
+
+/** Return this parser constructed from the passed filename */
+MoleculeParserPtr NullParser::construct(const QString &filename,
+                                        const PropertyMap &map) const
+{
+    throw SireError::program_bug( QObject::tr(
+            "The NullParser should not be used for an real file IO!"), CODELOC );
+
+    return MoleculeParserPtr();
+}
+
+/** Return this parser constructed from the passed set of lines */
+MoleculeParserPtr NullParser::construct(const QStringList &lines,
+                                        const PropertyMap &map) const
+{
+    throw SireError::program_bug( QObject::tr(
+            "The NullParser should not be used for an real file IO!"), CODELOC );
+
+    return MoleculeParserPtr();
+}
+
+/** Return this parser constructed from the passed SireSystem::System */
+MoleculeParserPtr NullParser::construct(const SireSystem::System &system,
+                                        const PropertyMap &map) const
+{
+    throw SireError::program_bug( QObject::tr(
+            "The NullParser should not be used for an real file IO!"), CODELOC );
+
+    return MoleculeParserPtr();
 }

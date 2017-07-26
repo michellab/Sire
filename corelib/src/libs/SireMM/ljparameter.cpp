@@ -92,6 +92,48 @@ LJParameter::LJParameter(Length s, MolarEnergy e)
 LJParameter::~LJParameter()
 {}
 
+/** Return the LJParameter that is this parameter combined with 'other'
+    using arithmetic combining rules */
+LJParameter LJParameter::combineArithmetic(const LJParameter &other) const
+{
+    LJPair pair(*this, other, LJParameterDB::ARITHMETIC);
+    
+    LJParameter ret;
+    ret.sqrtsig = std::sqrt(pair.sigma());
+    ret.sqrteps = std::sqrt(pair.epsilon());
+    
+    return ret;
+}
+
+/** Return the LJParameter that is this parameter combined with 'other'
+    using geometric combining rules */
+LJParameter LJParameter::combineGeometric(const LJParameter &other) const
+{
+    LJPair pair(*this, other, LJParameterDB::GEOMETRIC);
+    
+    LJParameter ret;
+    ret.sqrtsig = std::sqrt(pair.sigma());
+    ret.sqrteps = std::sqrt(pair.epsilon());
+    
+    return ret;
+}
+
+/** Return the LJParameter that is this parameter combined with 'other' according
+    to the passed combining rules */
+LJParameter LJParameter::combine(const LJParameter &other,
+                                 LJParameter::CombiningRules rules) const
+{
+    switch(rules)
+    {
+        case LJParameter::ARITHMETIC:
+            return this->combineArithmetic(other);
+        case LJParameter::GEOMETRIC:
+            return this->combineGeometric(other);
+        default:
+            return this->combineGeometric(other);
+    }
+}
+
 /** Return a dummy CLJParameter */
 LJParameter LJParameter::dummy()
 {

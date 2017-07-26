@@ -37,6 +37,7 @@ set ( PYPP_SOURCES
        StringMangler.pypp.cpp
        StringProperty.pypp.cpp
        TempDir.pypp.cpp
+       TimeProperty.pypp.cpp
        TrigArray2D_double_.pypp.cpp
        TrigArray2DBase.pypp.cpp
        TrimString.pypp.cpp

@@ -7,11 +7,21 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/errors.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireBase/stringproperty.h"
+
 #include "SireCAS/expression.h"
+
+#include "SireCAS/sum.h"
 
 #include "SireCAS/symbol.h"
 
 #include "SireCAS/trigfuncs.h"
+
+#include "SireCAS/values.h"
 
 #include "SireError/errors.h"
 
@@ -74,6 +84,17 @@ void register_AmberDihedral_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberDihedral::hash
+        
+            typedef ::uint ( ::SireMM::AmberDihedral::*hash_function_type)(  ) const;
+            hash_function_type hash_function_value( &::SireMM::AmberDihedral::hash );
+            
+            AmberDihedral_exposer.def( 
+                "hash"
+                , hash_function_value
+                , "" );
+        
+        }
         AmberDihedral_exposer.def( bp::self != bp::self );
         AmberDihedral_exposer.def( bp::self + bp::other< SireMM::AmberDihPart >() );
         { //::SireMM::AmberDihedral::operator=
@@ -92,14 +113,24 @@ void register_AmberDihedral_class(){
         AmberDihedral_exposer.def( bp::self == bp::self );
         { //::SireMM::AmberDihedral::operator[]
         
-            typedef ::SireMM::AmberDihPart const & ( ::SireMM::AmberDihedral::*__getitem___function_type)( int ) const;
+            typedef ::SireMM::AmberDihPart ( ::SireMM::AmberDihedral::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMM::AmberDihedral::operator[] );
             
             AmberDihedral_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMM::AmberDihedral::terms
+        
+            typedef ::QVector< SireMM::AmberDihPart > ( ::SireMM::AmberDihedral::*terms_function_type)(  ) const;
+            terms_function_type terms_function_value( &::SireMM::AmberDihedral::terms );
+            
+            AmberDihedral_exposer.def( 
+                "terms"
+                , terms_function_value
                 , "" );
         
         }
@@ -126,6 +157,29 @@ void register_AmberDihedral_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberDihedral::typeName
+        
+            typedef char const * ( *typeName_function_type )(  );
+            typeName_function_type typeName_function_value( &::SireMM::AmberDihedral::typeName );
+            
+            AmberDihedral_exposer.def( 
+                "typeName"
+                , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberDihedral::what
+        
+            typedef char const * ( ::SireMM::AmberDihedral::*what_function_type)(  ) const;
+            what_function_type what_function_value( &::SireMM::AmberDihedral::what );
+            
+            AmberDihedral_exposer.def( 
+                "what"
+                , what_function_value
+                , "" );
+        
+        }
+        AmberDihedral_exposer.staticmethod( "typeName" );
         AmberDihedral_exposer.def( "__copy__", &__copy__);
         AmberDihedral_exposer.def( "__deepcopy__", &__copy__);
         AmberDihedral_exposer.def( "clone", &__copy__);
@@ -135,6 +189,7 @@ void register_AmberDihedral_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AmberDihedral_exposer.def( "__str__", &__str__< ::SireMM::AmberDihedral > );
         AmberDihedral_exposer.def( "__repr__", &__str__< ::SireMM::AmberDihedral > );
+        AmberDihedral_exposer.def( "__hash__", &::SireMM::AmberDihedral::hash );
     }
 
 }

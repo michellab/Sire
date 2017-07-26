@@ -31,15 +31,50 @@
 
 #include "sireglobal.h"
 
+SIRE_BEGIN_HEADER
+
 #include <QVector>
 #include <QMutex>
 
 #include <tbb/parallel_for.h>
+#include <tbb/parallel_for_each.h>
 #include <tbb/parallel_reduce.h>
 #include <tbb/parallel_invoke.h>
 #include <tbb/tbb_exception.h>
 
 #include <memory>
+
+namespace SireBase
+{
+    /** This function runs the passed array T of functions in parallel, if
+        the optional 'run_parallel' is true. Otherwise, it runs the functions
+        serially, one after another */
+    template<class T>
+    void parallel_invoke( const T &functions, bool run_parallel=true )
+    {
+        if (run_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0, functions.count()),
+                               [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    functions[i]();
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<functions.count(); ++i)
+            {
+                functions[i]();
+            }
+        }
+    }
+
+} // end of namespace SireBase
+
+SIRE_END_HEADER
 
 #endif
 

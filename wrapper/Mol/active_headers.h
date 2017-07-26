@@ -24,6 +24,7 @@
 #include "atomnum.h"
 #include "atompolarisabilities.h"
 #include "atomproperty.hpp"
+#include "atomradii.h"
 #include "atomselection.h"
 #include "atomvelocities.h"
 #include "bead.h"

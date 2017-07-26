@@ -7,11 +7,21 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/errors.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireBase/stringproperty.h"
+
 #include "SireCAS/expression.h"
+
+#include "SireCAS/sum.h"
 
 #include "SireCAS/symbol.h"
 
 #include "SireCAS/trigfuncs.h"
+
+#include "SireCAS/values.h"
 
 #include "SireError/errors.h"
 
@@ -59,67 +69,67 @@ void register_AmberParams_class(){
         typedef bp::class_< SireMM::AmberParams, bp::bases< SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > AmberParams_exposer_t;
         AmberParams_exposer_t AmberParams_exposer = AmberParams_exposer_t( "AmberParams", "This class stores AMBER bonded force field parameters for\na collection of bonds, angles, dihedrals, impropers\nand 1-4 scaling factors.\n\nAuthor: Julien Michel  Christopher Woods\n", bp::init< >("Null Constructor") );
         bp::scope AmberParams_scope( AmberParams_exposer );
-        AmberParams_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molecule") ), "Constructor for the passed molecule") );
+        AmberParams_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "Constructor for the passed molecule") );
         AmberParams_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "Constructor for the passed molecule") );
         AmberParams_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "Constructor for the passed molecule") );
         AmberParams_exposer.def( bp::init< SireMM::AmberParams const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::AmberParams::add
         
-            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::AtomID const &,::SireUnits::Dimension::Charge,::SireUnits::Dimension::MolarMass,::SireMol::Element const &,::SireMM::LJParameter const &,::QString const & ) ;
+            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::AtomID const &,::SireUnits::Dimension::Charge,::SireUnits::Dimension::MolarMass,::SireMol::Element const &,::SireMM::LJParameter const &,::QString const &,::SireUnits::Dimension::Length,double,::QString const & ) ;
             add_function_type add_function_value( &::SireMM::AmberParams::add );
             
             AmberParams_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atom"), bp::arg("charge"), bp::arg("mass"), bp::arg("element"), bp::arg("ljparam"), bp::arg("amber_type") )
+                , ( bp::arg("atom"), bp::arg("charge"), bp::arg("mass"), bp::arg("element"), bp::arg("ljparam"), bp::arg("amber_type"), bp::arg("born_radius"), bp::arg("screening_parameter"), bp::arg("treechain") )
                 , "Set the atom parameters for the specified atom to the provided values" );
         
         }
         { //::SireMM::AmberParams::add
         
-            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::BondID const &,double,double ) ;
+            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::BondID const &,double,double,bool ) ;
             add_function_type add_function_value( &::SireMM::AmberParams::add );
             
             AmberParams_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("bond"), bp::arg("k"), bp::arg("r0") )
+                , ( bp::arg("bond"), bp::arg("k"), bp::arg("r0"), bp::arg("includes_hydrogen") )
                 , "" );
         
         }
         { //::SireMM::AmberParams::add
         
-            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::AngleID const &,double,double ) ;
+            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::AngleID const &,double,double,bool ) ;
             add_function_type add_function_value( &::SireMM::AmberParams::add );
             
             AmberParams_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("angle"), bp::arg("k"), bp::arg("theta0") )
+                , ( bp::arg("angle"), bp::arg("k"), bp::arg("theta0"), bp::arg("includes_hydrogen") )
                 , "" );
         
         }
         { //::SireMM::AmberParams::add
         
-            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::DihedralID const &,double,double,double ) ;
+            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::DihedralID const &,double,double,double,bool ) ;
             add_function_type add_function_value( &::SireMM::AmberParams::add );
             
             AmberParams_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("dihedral"), bp::arg("k"), bp::arg("periodicity"), bp::arg("phase") )
+                , ( bp::arg("dihedral"), bp::arg("k"), bp::arg("periodicity"), bp::arg("phase"), bp::arg("includes_hydrogen") )
                 , "" );
         
         }
         { //::SireMM::AmberParams::add
         
-            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::ImproperID const &,double,double,double ) ;
+            typedef void ( ::SireMM::AmberParams::*add_function_type)( ::SireMol::ImproperID const &,double,double,double,bool ) ;
             add_function_type add_function_value( &::SireMM::AmberParams::add );
             
             AmberParams_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("improper"), bp::arg("v"), bp::arg("periodicity"), bp::arg("phase") )
+                , ( bp::arg("improper"), bp::arg("v"), bp::arg("periodicity"), bp::arg("phase"), bp::arg("includes_hydrogen") )
                 , "" );
         
         }
@@ -171,7 +181,7 @@ void register_AmberParams_class(){
         }
         { //::SireMM::AmberParams::angles
         
-            typedef ::QHash< SireMol::AngleID, SireMM::AmberAngle > ( ::SireMM::AmberParams::*angles_function_type)(  ) const;
+            typedef ::QHash< SireMol::AngleID, QPair< SireMM::AmberAngle, bool > > ( ::SireMM::AmberParams::*angles_function_type)(  ) const;
             angles_function_type angles_function_value( &::SireMM::AmberParams::angles );
             
             AmberParams_exposer.def( 
@@ -205,7 +215,7 @@ void register_AmberParams_class(){
         }
         { //::SireMM::AmberParams::bonds
         
-            typedef ::QHash< SireMol::BondID, SireMM::AmberBond > ( ::SireMM::AmberParams::*bonds_function_type)(  ) const;
+            typedef ::QHash< SireMol::BondID, QPair< SireMM::AmberBond, bool > > ( ::SireMM::AmberParams::*bonds_function_type)(  ) const;
             bonds_function_type bonds_function_value( &::SireMM::AmberParams::bonds );
             
             AmberParams_exposer.def( 
@@ -247,6 +257,54 @@ void register_AmberParams_class(){
                 , "Return the connectivity of the molecule implied by the\nthe bonds" );
         
         }
+        { //::SireMM::AmberParams::convert
+        
+            typedef ::SireMol::BondID ( ::SireMM::AmberParams::*convert_function_type)( ::SireMol::BondID const & ) const;
+            convert_function_type convert_function_value( &::SireMM::AmberParams::convert );
+            
+            AmberParams_exposer.def( 
+                "convert"
+                , convert_function_value
+                , ( bp::arg("bond") )
+                , "Convert the passed BondID into AtomIdx IDs, sorted in index order" );
+        
+        }
+        { //::SireMM::AmberParams::convert
+        
+            typedef ::SireMol::AngleID ( ::SireMM::AmberParams::*convert_function_type)( ::SireMol::AngleID const & ) const;
+            convert_function_type convert_function_value( &::SireMM::AmberParams::convert );
+            
+            AmberParams_exposer.def( 
+                "convert"
+                , convert_function_value
+                , ( bp::arg("angle") )
+                , "Convert the passed AngleID into AtomIdx IDs, sorted in index order" );
+        
+        }
+        { //::SireMM::AmberParams::convert
+        
+            typedef ::SireMol::DihedralID ( ::SireMM::AmberParams::*convert_function_type)( ::SireMol::DihedralID const & ) const;
+            convert_function_type convert_function_value( &::SireMM::AmberParams::convert );
+            
+            AmberParams_exposer.def( 
+                "convert"
+                , convert_function_value
+                , ( bp::arg("dihedral") )
+                , "Convert the passed DihedralID into AtomIdx IDs, sorted in index order" );
+        
+        }
+        { //::SireMM::AmberParams::convert
+        
+            typedef ::SireMol::ImproperID ( ::SireMM::AmberParams::*convert_function_type)( ::SireMol::ImproperID const & ) const;
+            convert_function_type convert_function_value( &::SireMM::AmberParams::convert );
+            
+            AmberParams_exposer.def( 
+                "convert"
+                , convert_function_value
+                , ( bp::arg("improper") )
+                , "Convert the passed ImproperID into AtomIdx IDs, sorted in index order" );
+        
+        }
         { //::SireMM::AmberParams::dihedralFunctions
         
             typedef ::SireMM::FourAtomFunctions ( ::SireMM::AmberParams::*dihedralFunctions_function_type)(  ) const;
@@ -272,7 +330,7 @@ void register_AmberParams_class(){
         }
         { //::SireMM::AmberParams::dihedrals
         
-            typedef ::QHash< SireMol::DihedralID, SireMM::AmberDihedral > ( ::SireMM::AmberParams::*dihedrals_function_type)(  ) const;
+            typedef ::QHash< SireMol::DihedralID, QPair< SireMM::AmberDihedral, bool > > ( ::SireMM::AmberParams::*dihedrals_function_type)(  ) const;
             dihedrals_function_type dihedrals_function_value( &::SireMM::AmberParams::dihedrals );
             
             AmberParams_exposer.def( 
@@ -301,6 +359,28 @@ void register_AmberParams_class(){
                 "excludedAtoms"
                 , excludedAtoms_function_value
                 , "Return the excluded atoms of the molecule. The returned\nobject has a matrix of all atom pairs, where the value\nis 0 for atom0-atom1 pairs that are to be excluded,\nand 1 for atom0-atom1 pairs that are to be included\nin the nonbonded calculation" );
+        
+        }
+        { //::SireMM::AmberParams::gbRadii
+        
+            typedef ::SireMol::AtomRadii ( ::SireMM::AmberParams::*gbRadii_function_type)(  ) const;
+            gbRadii_function_type gbRadii_function_value( &::SireMM::AmberParams::gbRadii );
+            
+            AmberParams_exposer.def( 
+                "gbRadii"
+                , gbRadii_function_value
+                , "Return all of the Born radii of the atoms" );
+        
+        }
+        { //::SireMM::AmberParams::gbScreening
+        
+            typedef ::SireMol::AtomFloatProperty ( ::SireMM::AmberParams::*gbScreening_function_type)(  ) const;
+            gbScreening_function_type gbScreening_function_value( &::SireMM::AmberParams::gbScreening );
+            
+            AmberParams_exposer.def( 
+                "gbScreening"
+                , gbScreening_function_value
+                , "Return all of the Born screening parameters for the atoms" );
         
         }
         { //::SireMM::AmberParams::getNB14
@@ -388,7 +468,7 @@ void register_AmberParams_class(){
         }
         { //::SireMM::AmberParams::impropers
         
-            typedef ::QHash< SireMol::ImproperID, SireMM::AmberDihedral > ( ::SireMM::AmberParams::*impropers_function_type)(  ) const;
+            typedef ::QHash< SireMol::ImproperID, QPair< SireMM::AmberDihedral, bool > > ( ::SireMM::AmberParams::*impropers_function_type)(  ) const;
             impropers_function_type impropers_function_value( &::SireMM::AmberParams::impropers );
             
             AmberParams_exposer.def( 
@@ -469,6 +549,29 @@ void register_AmberParams_class(){
         
         }
         AmberParams_exposer.def( bp::self == bp::self );
+        { //::SireMM::AmberParams::propertyMap
+        
+            typedef ::SireBase::PropertyMap const & ( ::SireMM::AmberParams::*propertyMap_function_type)(  ) const;
+            propertyMap_function_type propertyMap_function_value( &::SireMM::AmberParams::propertyMap );
+            
+            AmberParams_exposer.def( 
+                "propertyMap"
+                , propertyMap_function_value
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the property map that is used to find and update properties\nof the molecule" );
+        
+        }
+        { //::SireMM::AmberParams::radiusSet
+        
+            typedef ::QString ( ::SireMM::AmberParams::*radiusSet_function_type)(  ) const;
+            radiusSet_function_type radiusSet_function_value( &::SireMM::AmberParams::radiusSet );
+            
+            AmberParams_exposer.def( 
+                "radiusSet"
+                , radiusSet_function_value
+                , "Return the radius set used by LEAP to assign the Born radii" );
+        
+        }
         { //::SireMM::AmberParams::remove
         
             typedef void ( ::SireMM::AmberParams::*remove_function_type)( ::SireMol::BondID const & ) ;
@@ -541,6 +644,30 @@ void register_AmberParams_class(){
                 , "Set the excluded atoms of the molecule. This should be a\nCLJNBPairs with the value equal to 0 for atom0-atom1 pairs\nthat are excluded, and 1 for atom0-atom1 pairs that are\nto be included in the non-bonded calculation" );
         
         }
+        { //::SireMM::AmberParams::setPropertyMap
+        
+            typedef void ( ::SireMM::AmberParams::*setPropertyMap_function_type)( ::SireBase::PropertyMap const & ) ;
+            setPropertyMap_function_type setPropertyMap_function_value( &::SireMM::AmberParams::setPropertyMap );
+            
+            AmberParams_exposer.def( 
+                "setPropertyMap"
+                , setPropertyMap_function_value
+                , ( bp::arg("map") )
+                , "Set the property map that should be used to find and update properties\nof the molecule" );
+        
+        }
+        { //::SireMM::AmberParams::setRadiusSet
+        
+            typedef void ( ::SireMM::AmberParams::*setRadiusSet_function_type)( ::QString const & ) ;
+            setRadiusSet_function_type setRadiusSet_function_value( &::SireMM::AmberParams::setRadiusSet );
+            
+            AmberParams_exposer.def( 
+                "setRadiusSet"
+                , setRadiusSet_function_value
+                , ( bp::arg("radius_set") )
+                , "Set the radius set used by LEAP to assign the Born radii\nof the atoms. This is just a string that is used to label\nthe radius set in the PRM file" );
+        
+        }
         { //::SireMM::AmberParams::toString
         
             typedef ::QString ( ::SireMM::AmberParams::*toString_function_type)(  ) const;
@@ -552,6 +679,17 @@ void register_AmberParams_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberParams::treeChains
+        
+            typedef ::SireMol::AtomStringProperty ( ::SireMM::AmberParams::*treeChains_function_type)(  ) const;
+            treeChains_function_type treeChains_function_value( &::SireMM::AmberParams::treeChains );
+            
+            AmberParams_exposer.def( 
+                "treeChains"
+                , treeChains_function_value
+                , "Return all of the Amber treechain classification for all of the atoms" );
+        
+        }
         { //::SireMM::AmberParams::typeName
         
             typedef char const * ( *typeName_function_type )(  );
@@ -561,6 +699,29 @@ void register_AmberParams_class(){
                 "typeName"
                 , typeName_function_value
                 , "" );
+        
+        }
+        { //::SireMM::AmberParams::updateFrom
+        
+            typedef void ( ::SireMM::AmberParams::*updateFrom_function_type)( ::SireMol::MoleculeView const & ) ;
+            updateFrom_function_type updateFrom_function_value( &::SireMM::AmberParams::updateFrom );
+            
+            AmberParams_exposer.def( 
+                "updateFrom"
+                , updateFrom_function_value
+                , ( bp::arg("molview") )
+                , "Update these parameters from the contents of the passed molecule. This\nwill only work if these parameters are compatible with this molecule" );
+        
+        }
+        { //::SireMM::AmberParams::validate
+        
+            typedef ::QStringList ( ::SireMM::AmberParams::*validate_function_type)(  ) const;
+            validate_function_type validate_function_value( &::SireMM::AmberParams::validate );
+            
+            AmberParams_exposer.def( 
+                "validate"
+                , validate_function_value
+                , "Validate this set of parameters. This checks that all of the requirements\nfor an Amber set of parameters are met, e.g. that all Atom indicies are\ncontiguous and in-order, and that all atoms contiguously fill all residues\netc. This returns any errors as strings. An empty set of strings indicates\nthat there are no errors" );
         
         }
         AmberParams_exposer.staticmethod( "typeName" );

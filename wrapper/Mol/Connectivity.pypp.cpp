@@ -29,6 +29,8 @@ namespace bp = boost::python;
 
 #include "moleculedata.h"
 
+#include "moleculeinfo.h"
+
 #include "moleculeinfodata.h"
 
 #include "moleculeview.h"
@@ -57,6 +59,7 @@ void register_Connectivity_class(){
         typedef bp::class_< SireMol::Connectivity, bp::bases< SireMol::ConnectivityBase, SireMol::MolViewProperty, SireBase::Property > > Connectivity_exposer_t;
         Connectivity_exposer_t Connectivity_exposer = Connectivity_exposer_t( "Connectivity", "This class contains the connectivity of the molecule, namely which\natoms are connected to which other atoms. The connectivity is used\nto move parts of the molecule (e.g. moving an atom also moves all\nof the atoms that it is connected to), and to automatically generate\nthe internal geometry of the molecule (e.g. to auto-generate\nall of the bonds, angles and dihedrals). Note that the connectivity\nis not the same as the bonding - the connectivity is used to move\nparts of the molecule (e.g. moving an atom should move all of the\natoms it is connected to) and also to auto-generate internal angles\n(e.g. auto-generation of bonds, angles and dihedrals)\n\nAuthor: Christopher Woods\n\n", bp::init< >("Null constructor") );
         bp::scope Connectivity_scope( Connectivity_exposer );
+        Connectivity_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "Construct the connectivity for the passed molecule info") );
         Connectivity_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "Construct the connectivity for the molecule whose data\nis in moldata") );
         Connectivity_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireMol::BondHunter const &, SireBase::PropertyMap const & > >(( bp::arg("molview"), bp::arg("bondhunter")=SireMol::CovalentBondHunter(), bp::arg("map")=SireBase::PropertyMap() ), "Construct the connectivity for the molecule viewed in the\npassed view. This automatically uses the bond hunting\nfunction to add all of the bonds for the atoms in this view") );
         Connectivity_exposer.def( bp::init< SireMol::ConnectivityEditor const & >(( bp::arg("editor") ), "Construct the connectivity from the passed editor") );

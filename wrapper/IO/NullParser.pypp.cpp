@@ -50,6 +50,64 @@ void register_NullParser_class(){
         NullParser_exposer_t NullParser_exposer = NullParser_exposer_t( "NullParser", "This is a null parser, returned when the file cannot be parsed", bp::init< >("") );
         bp::scope NullParser_scope( NullParser_exposer );
         NullParser_exposer.def( bp::init< SireIO::NullParser const & >(( bp::arg("arg0") ), "") );
+        { //::SireIO::NullParser::construct
+        
+            typedef ::SireIO::MoleculeParserPtr ( ::SireIO::NullParser::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
+            construct_function_type construct_function_value( &::SireIO::NullParser::construct );
+            
+            NullParser_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("filename"), bp::arg("map") )
+                , "" );
+        
+        }
+        { //::SireIO::NullParser::construct
+        
+            typedef ::SireIO::MoleculeParserPtr ( ::SireIO::NullParser::*construct_function_type)( ::QStringList const &,::SireBase::PropertyMap const & ) const;
+            construct_function_type construct_function_value( &::SireIO::NullParser::construct );
+            
+            NullParser_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("lines"), bp::arg("map") )
+                , "" );
+        
+        }
+        { //::SireIO::NullParser::construct
+        
+            typedef ::SireIO::MoleculeParserPtr ( ::SireIO::NullParser::*construct_function_type)( ::SireSystem::System const &,::SireBase::PropertyMap const & ) const;
+            construct_function_type construct_function_value( &::SireIO::NullParser::construct );
+            
+            NullParser_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("system"), bp::arg("map") )
+                , "" );
+        
+        }
+        { //::SireIO::NullParser::formatDescription
+        
+            typedef ::QString ( ::SireIO::NullParser::*formatDescription_function_type)(  ) const;
+            formatDescription_function_type formatDescription_function_value( &::SireIO::NullParser::formatDescription );
+            
+            NullParser_exposer.def( 
+                "formatDescription"
+                , formatDescription_function_value
+                , "" );
+        
+        }
+        { //::SireIO::NullParser::formatName
+        
+            typedef ::QString ( ::SireIO::NullParser::*formatName_function_type)(  ) const;
+            formatName_function_type formatName_function_value( &::SireIO::NullParser::formatName );
+            
+            NullParser_exposer.def( 
+                "formatName"
+                , formatName_function_value
+                , "" );
+        
+        }
         NullParser_exposer.def( bp::self != bp::self );
         { //::SireIO::NullParser::operator=
         

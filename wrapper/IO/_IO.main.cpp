@@ -7,9 +7,11 @@
 
 #include "Amber.pypp.hpp"
 
-#include "AmberParm.pypp.hpp"
+#include "AmberPrm.pypp.hpp"
 
 #include "AmberRst.pypp.hpp"
+
+#include "AmberRst7.pypp.hpp"
 
 #include "Cube.pypp.hpp"
 
@@ -64,9 +66,11 @@ BOOST_PYTHON_MODULE(_IO){
 
     register_MoleculeParser_class();
 
-    register_AmberParm_class();
+    register_AmberPrm_class();
 
     register_AmberRst_class();
+
+    register_AmberRst7_class();
 
     register_Cube_class();
 
