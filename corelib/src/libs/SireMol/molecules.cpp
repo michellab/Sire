@@ -665,7 +665,7 @@ const ViewsOfMol& Molecules::operator[](MolNum molnum) const
 */
 PartialMolecule Molecules::operator[](const tuple<MolNum,Index> &molviewidx) const
 {
-    return this->operator[](molviewidx.get<0>()).at(molviewidx.get<1>());
+    return this->operator[](molviewidx.get<0>()).valueAt(molviewidx.get<1>());
 }
 
 /** Return the view(s) of the molecule that has number 'molnum'
@@ -695,7 +695,7 @@ PartialMolecule Molecules::at(const tuple<MolNum,Index> &molviewidx) const
 */
 PartialMolecule Molecules::at(MolNum molnum, int viewidx) const
 {
-    return this->at(molnum).at(viewidx);
+    return this->at(molnum).valueAt(viewidx);
 }
 
 /** Return the Molecules that has had 'other' added to it. Note

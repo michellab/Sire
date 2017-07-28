@@ -1689,7 +1689,7 @@ QList<ViewsOfMol> MoleculeGroup::addIfUnique(const MoleculeGroup &molgroup)
         MolNum molnum = it->get<0>();
         Index i = it->get<1>();
     
-        PartialMolecule molview = molgroup[molnum][i];
+        PartialMolecule molview = molgroup[molnum].valueAt(i);
         
         if (dref.molecules.addIfUnique(molview))
             added_mols.append(molview);
@@ -1849,7 +1849,7 @@ ViewsOfMol MoleculeGroup::_pvt_remove(const ViewsOfMol &molviews)
     
     for (int i=0; i<nviews; ++i)
     {
-        PartialMolecule view = molviews.at(i);
+        PartialMolecule view = molviews.valueAt(i);
     
         if (this->_pvt_remove(view))
         {
@@ -1956,7 +1956,7 @@ ViewsOfMol MoleculeGroup::_pvt_removeAll(const ViewsOfMol &molviews)
     
     for (int i=0; i<nviews; ++i)
     {
-        PartialMolecule view = molviews.at(i);
+        PartialMolecule view = molviews.valueAt(i);
         
         if (this->_pvt_removeAll(view))
             removed_views.append(view.selection());

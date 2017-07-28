@@ -95,13 +95,10 @@ public:
 
     Bead* clone() const;
 
-    Atom operator[](int i) const;
+    MolViewPtr operator[](int i) const;
+    int nViews() const;
     
     Atom atom(int i) const;
-    Atom at(int i) const;
-
-    int count() const;
-    int size() const;
 
     QString toString() const;
     

@@ -91,6 +91,8 @@ SireMol::Mover<SireMol::PartialMolecule> __copy__(const SireMol::Mover<SireMol::
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_Mover_PartialMolecule__class(){
 
     { //::SireMol::Mover< SireMol::PartialMolecule >
@@ -506,6 +508,7 @@ void register_Mover_PartialMolecule__class(){
         Mover_PartialMolecule__exposer.def( "clone", &__copy__);
         Mover_PartialMolecule__exposer.def( "__str__", &__str__< ::SireMol::Mover<SireMol::PartialMolecule> > );
         Mover_PartialMolecule__exposer.def( "__repr__", &__str__< ::SireMol::Mover<SireMol::PartialMolecule> > );
+        Mover_PartialMolecule__exposer.def( "__len__", &__len_size< ::SireMol::Mover<SireMol::PartialMolecule> > );
     }
 
 }

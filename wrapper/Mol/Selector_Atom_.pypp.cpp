@@ -105,19 +105,6 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::at
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Atom ( ::SireMol::Selector< SireMol::Atom >::*at_function_type)( int ) const;
-            at_function_type at_function_value( &::SireMol::Selector< SireMol::Atom >::at );
-            
-            Selector_Atom__exposer.def( 
-                "at"
-                , at_function_value
-                , ( bp::arg("i") )
-                , "" );
-        
-        }
-        { //::SireMol::Selector< SireMol::Atom >::at
-        
-            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
             typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*at_function_type)( int,int ) const;
             at_function_type at_function_value( &::SireMol::Selector< SireMol::Atom >::at );
             
@@ -164,18 +151,6 @@ void register_Selector_Atom__class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("id") )
-                , "" );
-        
-        }
-        { //::SireMol::Selector< SireMol::Atom >::count
-        
-            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef int ( ::SireMol::Selector< SireMol::Atom >::*count_function_type)(  ) const;
-            count_function_type count_function_value( &::SireMol::Selector< SireMol::Atom >::count );
-            
-            Selector_Atom__exposer.def( 
-                "count"
-                , count_function_value
                 , "" );
         
         }
@@ -434,6 +409,18 @@ void register_Selector_Atom__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::Atom >::nViews
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef int ( ::SireMol::Selector< SireMol::Atom >::*nViews_function_type)(  ) const;
+            nViews_function_type nViews_function_value( &::SireMol::Selector< SireMol::Atom >::nViews );
+            
+            Selector_Atom__exposer.def( 
+                "nViews"
+                , nViews_function_value
+                , "" );
+        
+        }
         Selector_Atom__exposer.def( bp::self != bp::self );
         { //::SireMol::Selector< SireMol::Atom >::operator()
         
@@ -499,7 +486,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::operator[]
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Atom ( ::SireMol::Selector< SireMol::Atom >::*__getitem___function_type)( int ) const;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Atom >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Atom >::operator[] );
             
             Selector_Atom__exposer.def( 
@@ -678,7 +665,7 @@ void register_Selector_Atom__class(){
         Selector_Atom__exposer.def( "clone", &__copy__);
         Selector_Atom__exposer.def( "__str__", &__str__< ::SireMol::Selector<SireMol::Atom> > );
         Selector_Atom__exposer.def( "__repr__", &__str__< ::SireMol::Selector<SireMol::Atom> > );
-        Selector_Atom__exposer.def( "__len__", &__len_count< ::SireMol::Selector<SireMol::Atom> > );
+        Selector_Atom__exposer.def( "__len__", &__len_size< ::SireMol::Selector<SireMol::Atom> > );
     }
 
 }

@@ -50,6 +50,8 @@ SireMol::PartialMolecule __copy__(const SireMol::PartialMolecule &other){ return
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_PartialMolecule_class(){
 
     { //::SireMol::PartialMolecule
@@ -351,6 +353,17 @@ void register_PartialMolecule_class(){
                 , "Return a string representation of this molecule" );
         
         }
+        { //::SireMol::PartialMolecule::toUnit
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::PartialMolecule::*toUnit_function_type)(  ) const;
+            toUnit_function_type toUnit_function_value( &::SireMol::PartialMolecule::toUnit );
+            
+            PartialMolecule_exposer.def( 
+                "toUnit"
+                , toUnit_function_value
+                , "" );
+        
+        }
         { //::SireMol::PartialMolecule::typeName
         
             typedef char const * ( *typeName_function_type )(  );
@@ -395,6 +408,7 @@ void register_PartialMolecule_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         PartialMolecule_exposer.def( "__str__", &__str__< ::SireMol::PartialMolecule > );
         PartialMolecule_exposer.def( "__repr__", &__str__< ::SireMol::PartialMolecule > );
+        PartialMolecule_exposer.def( "__len__", &__len_size< ::SireMol::PartialMolecule > );
     }
 
 }

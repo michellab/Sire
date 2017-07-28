@@ -363,7 +363,7 @@ Residue ResID::selectFrom(const Molecules &molecules, const PropertyMap &map) co
                 .arg(atoms.data().number()).arg(this->toString()),
                     CODELOC );
                     
-    return atoms[0];
+    return atoms(0);
 }
 
 /** Return the atom from the molecule group 'molgroup' that matches

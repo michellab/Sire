@@ -122,14 +122,15 @@ public:
     bool operator==(const ViewsOfMol &other) const;
     bool operator!=(const ViewsOfMol &other) const;
 
-    PartialMolecule operator[](int i) const;
+    MolViewPtr operator[](int i) const;
+    int nViews() const;
 
     QString toString() const;
     
     bool isEmpty() const;
     bool selectedAll() const;
     
-    PartialMolecule at(int i) const;
+    PartialMolecule valueAt(int i) const;
     const AtomSelection& viewAt(int i) const;
     
     MolNum number() const;
@@ -138,9 +139,6 @@ public:
     quint64 version() const;
     quint64 version(const PropertyName &key) const;
     
-    int nViews() const;
-    int count() const;
-   
     PartialMolecule join() const;
     PartialMolecule all() const;
     
@@ -238,9 +236,8 @@ private:
 Q_DECLARE_METATYPE( SireMol::ViewsOfMol );
 Q_DECLARE_METATYPE( SireMol::Mover<SireMol::ViewsOfMol> );
 
-SIRE_EXPOSE_CLASS( SireMol::ViewsOfMol )
-
-SIRE_EXPOSE_ALIAS( SireMol::Mover<SireMol::ViewsOfMol>, SireMol::Mover_ViewsOfMol_ )
+// WE DO NOT EXPOSE THIS CLASS TO PYTHON AS THIS IS AUTOMATICALLY TURNED INTO
+// A LIST OF MOLECULE VIEWS IF NEEDED
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 

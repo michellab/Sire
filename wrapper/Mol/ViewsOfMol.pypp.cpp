@@ -138,18 +138,6 @@ void register_ViewsOfMol_class(){
                 , "Assert that none of the views contain the same atoms\n(i.e. there is no overlap between each view)\nThrow: SireMol::duplicate_atom\n" );
         
         }
-        { //::SireMol::ViewsOfMol::at
-        
-            typedef ::SireMol::PartialMolecule ( ::SireMol::ViewsOfMol::*at_function_type)( int ) const;
-            at_function_type at_function_value( &::SireMol::ViewsOfMol::at );
-            
-            ViewsOfMol_exposer.def( 
-                "at"
-                , at_function_value
-                , ( bp::arg("i") )
-                , "Return the ith view in this set\nThrow: SireError::invalid_index\n" );
-        
-        }
         { //::SireMol::ViewsOfMol::contains
         
             typedef bool ( ::SireMol::ViewsOfMol::*contains_function_type)( ::SireMol::AtomIdx ) const;
@@ -196,17 +184,6 @@ void register_ViewsOfMol_class(){
                 , contains_function_value
                 , ( bp::arg("selections") )
                 , "Return whether or not the views between them contain\nall of the atoms in all of the selections in selections\nThrow: SireError::incompatible_error\n" );
-        
-        }
-        { //::SireMol::ViewsOfMol::count
-        
-            typedef int ( ::SireMol::ViewsOfMol::*count_function_type)(  ) const;
-            count_function_type count_function_value( &::SireMol::ViewsOfMol::count );
-            
-            ViewsOfMol_exposer.def( 
-                "count"
-                , count_function_value
-                , "Return the number of views in this set" );
         
         }
         { //::SireMol::ViewsOfMol::evaluate
@@ -514,7 +491,7 @@ void register_ViewsOfMol_class(){
         ViewsOfMol_exposer.def( bp::self == bp::self );
         { //::SireMol::ViewsOfMol::operator[]
         
-            typedef ::SireMol::PartialMolecule ( ::SireMol::ViewsOfMol::*__getitem___function_type)( int ) const;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::ViewsOfMol::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::ViewsOfMol::operator[] );
             
             ViewsOfMol_exposer.def( 
@@ -709,6 +686,18 @@ void register_ViewsOfMol_class(){
                 , "Synonym for ViewsOfMol:addIfUnique(views)\nThrow: SireError::incompatible_error\n" );
         
         }
+        { //::SireMol::ViewsOfMol::valueAt
+        
+            typedef ::SireMol::PartialMolecule ( ::SireMol::ViewsOfMol::*valueAt_function_type)( int ) const;
+            valueAt_function_type valueAt_function_value( &::SireMol::ViewsOfMol::valueAt );
+            
+            ViewsOfMol_exposer.def( 
+                "valueAt"
+                , valueAt_function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
         { //::SireMol::ViewsOfMol::version
         
             typedef ::quint64 ( ::SireMol::ViewsOfMol::*version_function_type)(  ) const;
@@ -755,7 +744,7 @@ void register_ViewsOfMol_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ViewsOfMol_exposer.def( "__str__", &__str__< ::SireMol::ViewsOfMol > );
         ViewsOfMol_exposer.def( "__repr__", &__str__< ::SireMol::ViewsOfMol > );
-        ViewsOfMol_exposer.def( "__len__", &__len_count< ::SireMol::ViewsOfMol > );
+        ViewsOfMol_exposer.def( "__len__", &__len_size< ::SireMol::ViewsOfMol > );
     }
 
 }

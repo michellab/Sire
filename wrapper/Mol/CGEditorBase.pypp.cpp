@@ -87,6 +87,8 @@ SireMol::CGEditorBase& set_Metadata_SireMol_CGVariantProperty_function2(
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_CGEditorBase_class(){
 
     { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >
@@ -383,6 +385,7 @@ void register_CGEditorBase_class(){
         CGEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_CGVariantProperty_function2, bp::return_self< >());
         CGEditorBase_exposer.def( "__str__", &__str__< ::SireMol::Editor<SireMol::CGEditor, SireMol::CutGroup> > );
         CGEditorBase_exposer.def( "__repr__", &__str__< ::SireMol::Editor<SireMol::CGEditor, SireMol::CutGroup> > );
+        CGEditorBase_exposer.def( "__len__", &__len_size< ::SireMol::Editor<SireMol::CGEditor, SireMol::CutGroup> > );
     }
 
 }

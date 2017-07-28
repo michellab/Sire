@@ -1098,7 +1098,7 @@ void OpenMMFrEnergyST::initialise()
             /*JM 10/16 make sure that perturbed atoms have mass of heaviest end-state */
             system_openmm->addParticle(m[j]);
 
-            Atom at = molatoms.at(j);
+            Atom at = molatoms(j);
             AtomNum atnum = at.number();
 
             if (Debug)
@@ -1334,7 +1334,7 @@ void OpenMMFrEnergyST::initialise()
 
             nonbond_openmm->addParticle(charge, sigma * OpenMM::NmPerAngstrom, epsilon * OpenMM::KJPerKcal);
 
-            Atom atom = molecule.molecule().atoms()[j];
+            Atom atom = molecule.molecule().atoms()(j);
 
             if (molecule.hasProperty("perturbations"))
             {
@@ -1352,7 +1352,7 @@ void OpenMMFrEnergyST::initialise()
                     for (int m = 0; m < view_atoms.count(); m++)
                     {
 
-                        Atom view_atom = view_atoms.at(m);
+                        Atom view_atom = view_atoms(m);
 
                         if (atom == view_atom)
                         {
@@ -1377,7 +1377,7 @@ void OpenMMFrEnergyST::initialise()
                         for (int m = 0; m < view_atoms.count(); m++)
                         {
 
-                            Atom view_atom = view_atoms.at(m);
+                            Atom view_atom = view_atoms(m);
 
                             if (atom == view_atom)
                             {
@@ -1402,7 +1402,7 @@ void OpenMMFrEnergyST::initialise()
                         for (int m = 0; m < view_atoms.count(); m++)
                         {
 
-                            Atom view_atom = view_atoms.at(m);
+                            Atom view_atom = view_atoms(m);
 
                             if (atom == view_atom)
                             {
@@ -2126,7 +2126,7 @@ void OpenMMFrEnergyST::initialise()
         AmberParameters amber_params = molecule.property("amberparameters").asA<AmberParameters>();
         QList<BondID> bonds_ff = amber_params.getAllBonds();
         QVector<BondID> bonds = bonds_ff.toVector();
-        ResName molfirstresname = molecule.residues()[0].name();
+        ResName molfirstresname = molecule.residues()(0).name();
         //BOND
 
         for (int j = 0; j < bonds_ff.length(); j++)

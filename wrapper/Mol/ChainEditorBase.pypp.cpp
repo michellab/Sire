@@ -85,6 +85,8 @@ SireMol::ChainEditorBase& set_Metadata_SireMol_ChainVariantProperty_function2(
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_ChainEditorBase_class(){
 
     { //::SireMol::Editor< SireMol::ChainEditor, SireMol::Chain >
@@ -381,6 +383,7 @@ void register_ChainEditorBase_class(){
         ChainEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_ChainVariantProperty_function2, bp::return_self< >());
         ChainEditorBase_exposer.def( "__str__", &__str__< ::SireMol::Editor<SireMol::ChainEditor, SireMol::Chain> > );
         ChainEditorBase_exposer.def( "__repr__", &__str__< ::SireMol::Editor<SireMol::ChainEditor, SireMol::Chain> > );
+        ChainEditorBase_exposer.def( "__len__", &__len_size< ::SireMol::Editor<SireMol::ChainEditor, SireMol::Chain> > );
     }
 
 }

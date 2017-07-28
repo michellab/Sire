@@ -69,12 +69,17 @@
 
 #include "SireVol/space.h"
 
+// we wrap ViewsOfMol very differently
+#include "convertviewsofmol.hpp"
+
 using namespace SireMol;
 
 using boost::python::register_tuple;
 
 void register_SireMol_containers()
 {
+    register_viewsofmol_list();
+
     register_list< QList<AtomIdx> >();
     register_list< QList< QList<AtomIdx> > >();
     register_list< QList<AtomNum> >();

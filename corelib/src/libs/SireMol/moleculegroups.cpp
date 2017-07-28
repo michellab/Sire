@@ -1408,7 +1408,7 @@ bool MolGroupsBase::contains(const ViewsOfMol &molviews) const
 
     for (int i=0; i<molviews.nViews(); ++i)
     {
-        PartialMolecule view = molviews.at(i);
+        PartialMolecule view = molviews.valueAt(i);
         
         bool found_view = false;
         

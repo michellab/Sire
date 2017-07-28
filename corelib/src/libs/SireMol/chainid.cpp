@@ -370,7 +370,7 @@ Chain ChainID::selectFrom(const Molecules &molecules, const PropertyMap &map) co
                 .arg(chains.data().number()).arg(this->toString()),
                     CODELOC );
                     
-    return chains[0];
+    return chains(0);
 }
 
 /** Return the chain from the molecule group 'molgroup' that matches

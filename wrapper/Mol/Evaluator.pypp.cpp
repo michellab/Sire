@@ -73,6 +73,8 @@ SireMol::Evaluator __copy__(const SireMol::Evaluator &other){ return SireMol::Ev
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_Evaluator_class(){
 
     { //::SireMol::Evaluator
@@ -701,6 +703,7 @@ void register_Evaluator_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Evaluator_exposer.def( "__str__", &__str__< ::SireMol::Evaluator > );
         Evaluator_exposer.def( "__repr__", &__str__< ::SireMol::Evaluator > );
+        Evaluator_exposer.def( "__len__", &__len_size< ::SireMol::Evaluator > );
     }
 
 }

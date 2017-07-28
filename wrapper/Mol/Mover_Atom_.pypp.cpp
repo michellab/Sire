@@ -93,6 +93,8 @@ SireMol::Mover<SireMol::Atom> __copy__(const SireMol::Mover<SireMol::Atom> &othe
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_Mover_Atom__class(){
 
     { //::SireMol::Mover< SireMol::Atom >
@@ -508,6 +510,7 @@ void register_Mover_Atom__class(){
         Mover_Atom__exposer.def( "clone", &__copy__);
         Mover_Atom__exposer.def( "__str__", &__str__< ::SireMol::Mover<SireMol::Atom> > );
         Mover_Atom__exposer.def( "__repr__", &__str__< ::SireMol::Mover<SireMol::Atom> > );
+        Mover_Atom__exposer.def( "__len__", &__len_size< ::SireMol::Mover<SireMol::Atom> > );
     }
 
 }

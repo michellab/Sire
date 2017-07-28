@@ -52,6 +52,8 @@ SireMol::MolEditorBase& set_Metadata_function2(
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_MolEditorBase_class(){
 
     { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >
@@ -336,6 +338,7 @@ void register_MolEditorBase_class(){
         MolEditorBase_exposer.def( "setMetadata", &set_Metadata_function2, bp::return_self< >());
         MolEditorBase_exposer.def( "__str__", &__str__< ::SireMol::Editor<SireMol::MolEditor, SireMol::Molecule> > );
         MolEditorBase_exposer.def( "__repr__", &__str__< ::SireMol::Editor<SireMol::MolEditor, SireMol::Molecule> > );
+        MolEditorBase_exposer.def( "__len__", &__len_size< ::SireMol::Editor<SireMol::MolEditor, SireMol::Molecule> > );
     }
 
 }

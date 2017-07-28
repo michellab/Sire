@@ -45,6 +45,8 @@ SireMol::SegEditor __copy__(const SireMol::SegEditor &other){ return SireMol::Se
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_SegEditor_class(){
 
     { //::SireMol::SegEditor
@@ -242,6 +244,7 @@ void register_SegEditor_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         SegEditor_exposer.def( "__str__", &__str__< ::SireMol::SegEditor > );
         SegEditor_exposer.def( "__repr__", &__str__< ::SireMol::SegEditor > );
+        SegEditor_exposer.def( "__len__", &__len_size< ::SireMol::SegEditor > );
     }
 
 }

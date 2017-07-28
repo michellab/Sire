@@ -602,7 +602,7 @@ void OpenMMFrEnergyDT::initialise()  {
 
 			system_openmm->addParticle(m[j]) ;
 
-			Atom at = molatoms.at(j);
+			Atom at = molatoms(j);
 			AtomNum atnum = at.number();
 
 			if (Debug)
@@ -739,7 +739,7 @@ void OpenMMFrEnergyDT::initialise()  {
 
 			nonbond_openmm->addParticle(charge, sigma * OpenMM::NmPerAngstrom, epsilon * OpenMM::KJPerKcal);
 		
-			Atom atom = molecule.molecule().atoms()[j];
+			Atom atom = molecule.molecule().atoms()(j);
 
 			std::vector<double> params(4);
 			

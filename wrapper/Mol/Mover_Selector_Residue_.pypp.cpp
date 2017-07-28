@@ -476,7 +476,7 @@ void register_Mover_Selector_Residue__class(){
         Mover_Selector_Residue__exposer.def( "clone", &__copy__);
         Mover_Selector_Residue__exposer.def( "__str__", &__str__< ::SireMol::Mover<SireMol::Selector<SireMol::Residue> > > );
         Mover_Selector_Residue__exposer.def( "__repr__", &__str__< ::SireMol::Mover<SireMol::Selector<SireMol::Residue> > > );
-        Mover_Selector_Residue__exposer.def( "__len__", &__len_count< ::SireMol::Mover<SireMol::Selector<SireMol::Residue> > > );
+        Mover_Selector_Residue__exposer.def( "__len__", &__len_size< ::SireMol::Mover<SireMol::Selector<SireMol::Residue> > > );
     }
 
 }

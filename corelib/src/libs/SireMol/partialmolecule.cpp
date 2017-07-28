@@ -360,6 +360,63 @@ const char* PartialMolecule::typeName()
     return QMetaType::typeName( qMetaTypeId<PartialMolecule>() );
 }
 
+/** Return a copy of this PartialMolecule that has been reduced to its unit
+    type, i.e. if this is a single Atom, this returns the Atom, if this is a single
+    residue, this returns the Residue etc. */
+MolViewPtr PartialMolecule::toUnit() const
+{
+    if (this->selectedAll())
+    {
+        return this->molecule();
+    }
+    else if (this->nAtoms() == 1)
+    {
+        return this->atom();
+    }
+
+    if (this->nResidues() == 1)
+    {
+        const auto res = this->residue();
+
+        if (this->selection().selectedAll(res.number()))
+        {
+            return res;
+        }
+    }
+
+    if (this->nCutGroups() == 1)
+    {
+        const auto cg = this->cutGroup();
+
+        if (this->selection().selectedAll(cg.name()))
+        {
+            return cg;
+        }
+    }
+
+    if (this->nChains() == 1)
+    {
+        const auto chain = this->chain();
+        
+        if (this->selection().selectedAll(chain.name()))
+        {
+            return chain;
+        }
+    }
+
+    if (this->nSegments() == 1)
+    {
+        const auto segment = this->segment();
+        
+        if (this->selection().selectedAll(segment.name()))
+        {
+            return segment;
+        }
+    }
+
+    return *this;
+}
+
 namespace SireMol
 {
     /////////

@@ -97,19 +97,6 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::at
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::CutGroup ( ::SireMol::Selector< SireMol::CutGroup >::*at_function_type)( int ) const;
-            at_function_type at_function_value( &::SireMol::Selector< SireMol::CutGroup >::at );
-            
-            Selector_CutGroup__exposer.def( 
-                "at"
-                , at_function_value
-                , ( bp::arg("i") )
-                , "" );
-        
-        }
-        { //::SireMol::Selector< SireMol::CutGroup >::at
-        
-            typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
             typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*at_function_type)( int,int ) const;
             at_function_type at_function_value( &::SireMol::Selector< SireMol::CutGroup >::at );
             
@@ -156,18 +143,6 @@ void register_Selector_CutGroup__class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("id") )
-                , "" );
-        
-        }
-        { //::SireMol::Selector< SireMol::CutGroup >::count
-        
-            typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef int ( ::SireMol::Selector< SireMol::CutGroup >::*count_function_type)(  ) const;
-            count_function_type count_function_value( &::SireMol::Selector< SireMol::CutGroup >::count );
-            
-            Selector_CutGroup__exposer.def( 
-                "count"
-                , count_function_value
                 , "" );
         
         }
@@ -426,6 +401,18 @@ void register_Selector_CutGroup__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::CutGroup >::nViews
+        
+            typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
+            typedef int ( ::SireMol::Selector< SireMol::CutGroup >::*nViews_function_type)(  ) const;
+            nViews_function_type nViews_function_value( &::SireMol::Selector< SireMol::CutGroup >::nViews );
+            
+            Selector_CutGroup__exposer.def( 
+                "nViews"
+                , nViews_function_value
+                , "" );
+        
+        }
         Selector_CutGroup__exposer.def( bp::self != bp::self );
         { //::SireMol::Selector< SireMol::CutGroup >::operator()
         
@@ -491,7 +478,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::operator[]
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::CutGroup ( ::SireMol::Selector< SireMol::CutGroup >::*__getitem___function_type)( int ) const;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::CutGroup >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::CutGroup >::operator[] );
             
             Selector_CutGroup__exposer.def( 
@@ -670,7 +657,7 @@ void register_Selector_CutGroup__class(){
         Selector_CutGroup__exposer.def( "clone", &__copy__);
         Selector_CutGroup__exposer.def( "__str__", &__str__< ::SireMol::Selector<SireMol::CutGroup> > );
         Selector_CutGroup__exposer.def( "__repr__", &__str__< ::SireMol::Selector<SireMol::CutGroup> > );
-        Selector_CutGroup__exposer.def( "__len__", &__len_count< ::SireMol::Selector<SireMol::CutGroup> > );
+        Selector_CutGroup__exposer.def( "__len__", &__len_size< ::SireMol::Selector<SireMol::CutGroup> > );
     }
 
 }

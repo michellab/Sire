@@ -1505,7 +1505,7 @@ AtomCharges guessFormalCharges(const MoleculeView &molview, const PropertyMap &m
         
         for (int j=0; j<atoms.count(); ++j)
         {
-            Atom atom = atoms[j];
+            Atom atom = atoms(j);
         
             Element e = atom.property<Element>(element_property);
             int nbonds = connectivity.nConnections(atom.index());
@@ -1593,7 +1593,7 @@ AtomCharges guessFormalCharges(const MoleculeView &molview, const PropertyMap &m
             {
                 if (atom_chgs[j] != 0)
                 {
-                    formal_charges.set( atoms[j].cgAtomIdx(),
+                    formal_charges.set( atoms(j).cgAtomIdx(),
                                         SireUnits::Dimension::Charge(atom_chgs[j]) );
                 }
             }

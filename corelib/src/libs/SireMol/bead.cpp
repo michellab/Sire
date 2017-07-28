@@ -370,39 +370,23 @@ int Bead::nAtoms() const
 
     \throw SireError::invalid_index
 */
-Atom Bead::operator[](int i) const
+MolViewPtr Bead::operator[](int i) const
 {
     return Atom(data(), bdng.read().atomIdx(data().info(), beadidx, i));
 }
-    
+
+int Bead::nViews() const
+{
+    return this->nAtoms();
+}
+
 /** Return the ith atom in this bead
 
     \throw SireError::invalid_index
 */
 Atom Bead::atom(int i) const
 {
-    return Bead::operator[](i);
-}
-
-/** Return the ith atom in this bead
-
-    \throw SireError::invalid_index
-*/
-Atom Bead::at(int i) const
-{
-    return Bead::operator[](i);
-}
-
-/** Return the number of atoms in this bead */
-int Bead::count() const
-{
-    return Bead::nAtoms();
-}
-
-/** Return the number of atoms in this bead */
-int Bead::size() const
-{
-    return Bead::nAtoms();
+    return Atom(data(), bdng.read().atomIdx(data().info(), beadidx, i));
 }
 
 /** Return the beading function used to bead up the molecule */

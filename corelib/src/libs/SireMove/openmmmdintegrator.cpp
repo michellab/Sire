@@ -645,7 +645,7 @@ void OpenMMMDIntegrator::initialise()
 
             system_openmm->addParticle(m[j]);
 
-            Atom at = molatoms.at(j);
+            Atom at = molatoms(j);
             AtomNum atnum = at.number();
 
             //if (Debug)

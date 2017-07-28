@@ -189,6 +189,12 @@ void MoleculeView::update(const MoleculeData &moldata)
     d = moldata;
 }
 
+/** Synonym for MoleculeView::propertyKeys */
+QStringList MoleculeView::keys() const
+{
+    return this->propertyKeys();
+}
+
 /** Return the type of the property at key 'key'
 
     \throw SireBase::missing_property 
@@ -769,4 +775,165 @@ Selector<Segment> MoleculeView::selectAll(const SegID &segid,
 Selector<Segment> MoleculeView::selectAllSegments() const
 {
     return this->segments();
+}
+
+/** Return a completely null molecule */
+const Molecule& MoleculeView::null()
+{
+    return *(create_shared_null<Molecule>());
+}
+
+/** Return the number of sub-views in this view. Most MoleculeViews are
+    just a single view, but some (e.g. ViewsOfMol or Selector<T>) have
+    multiple views */
+int MoleculeView::nViews() const
+{
+    return 1;
+}
+
+/** Return the number of sub-views in this view. Most MoleculeViews are
+    just a single view, but some (e.g. ViewsOfMol or Selector<T>) have
+    multiple views */
+int MoleculeView::size() const
+{
+    return this->nViews();
+}
+
+/** Return the number of sub-views in this view. Most MoleculeViews are
+    just a single view, but some (e.g. ViewsOfMol or Selector<T>) have
+    multiple views */
+int MoleculeView::count() const
+{
+    return this->nViews();
+}
+
+/** Return the ith view in this MoleculeView. */
+MolViewPtr MoleculeView::operator[](int i) const
+{
+    if (i > 0 or i < -1)
+    {
+        throw SireError::invalid_index( QObject::tr(
+                "The %1 only has a single view. Index %2 is not supported!")
+                    .arg(this->what()).arg(i), CODELOC );
+    }
+    
+    return this->clone();
+}
+
+/** Return the atom(s) that match 'atomid' in this view of the molecule */
+MolViewPtr MoleculeView::operator[](const AtomID &atomid) const
+{
+    auto atoms = this->selectAll(atomid);
+    
+    if (atoms.count() == 1)
+    {
+        return atoms[0];
+    }
+    else
+    {
+        return atoms;
+    }
+}
+
+/** Return the residue(s) that match 'resid' in this view of the molecule */
+MolViewPtr MoleculeView::operator[](const ResID &resid) const
+{
+    auto residues = this->selectAll(resid);
+    
+    if (residues.count() == 1)
+    {
+        return residues[0];
+    }
+    else
+    {
+        return residues;
+    }
+}
+
+/** Return the CutGroups(s) that match 'resid' in this view of the molecule */
+MolViewPtr MoleculeView::operator[](const CGID &cgid) const
+{
+    auto cutgroups = this->selectAll(cgid);
+    
+    if (cutgroups.count() == 1)
+    {
+        return cutgroups[0];
+    }
+    else
+    {
+        return cutgroups;
+    }
+}
+
+/** Return the residue(s) that match 'resid' in this view of the molecule */
+MolViewPtr MoleculeView::operator[](const ChainID &chainid) const
+{
+    auto chains = this->selectAll(chainid);
+    
+    if (chains.count() == 1)
+    {
+        return chains[0];
+    }
+    else
+    {
+        return chains;
+    }
+}
+
+/** Return the residue(s) that match 'resid' in this view of the molecule */
+MolViewPtr MoleculeView::operator[](const SegID &segid) const
+{
+    auto segments = this->selectAll(segid);
+    
+    if (segments.count() == 1)
+    {
+        return segments[0];
+    }
+    else
+    {
+        return segments;
+    }
+}
+
+/** This is an overload of operator[](int), allowing a SireID::Index to be used
+    as the int */
+MolViewPtr MoleculeView::operator[](const SireID::Index &idx) const
+{
+    int i = idx.map(this->nViews());
+    return this->operator[](i);
+}
+
+MolViewPtr MoleculeView::at(int i) const
+{
+    return this->operator[](i);
+}
+
+MolViewPtr MoleculeView::at(const AtomID &atomid) const
+{
+    return this->operator[](atomid);
+}
+
+MolViewPtr MoleculeView::at(const ResID &resid) const
+{
+    return this->operator[](resid);
+}
+
+MolViewPtr MoleculeView::at(const CGID &cgid) const
+{
+    return this->operator[](cgid);
+}
+
+MolViewPtr MoleculeView::at(const ChainID &chainid) const
+{
+    return this->operator[](chainid);
+}
+
+MolViewPtr MoleculeView::at(const SegID &segid) const
+{
+    return this->operator[](segid);
+}
+
+MolViewPtr MoleculeView::at(const SireID::Index &idx) const
+{
+    return this->operator[](idx);
 }

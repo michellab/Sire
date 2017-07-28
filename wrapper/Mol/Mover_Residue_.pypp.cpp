@@ -87,6 +87,8 @@ SireMol::Mover<SireMol::Residue> __copy__(const SireMol::Mover<SireMol::Residue>
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_Mover_Residue__class(){
 
     { //::SireMol::Mover< SireMol::Residue >
@@ -502,6 +504,7 @@ void register_Mover_Residue__class(){
         Mover_Residue__exposer.def( "clone", &__copy__);
         Mover_Residue__exposer.def( "__str__", &__str__< ::SireMol::Mover<SireMol::Residue> > );
         Mover_Residue__exposer.def( "__repr__", &__str__< ::SireMol::Mover<SireMol::Residue> > );
+        Mover_Residue__exposer.def( "__len__", &__len_size< ::SireMol::Mover<SireMol::Residue> > );
     }
 
 }

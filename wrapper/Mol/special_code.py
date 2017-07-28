@@ -380,7 +380,6 @@ special_code = { "SireMol::Atom" : fix_Atom,
                  "SireMol::MolStructureEditor" : fix_MolStructureEditor,
                  "SireMol::Mover<SireMol::Molecule>" : fix_Mover,
                  "SireMol::Mover<SireMol::PartialMolecule>" : fix_Mover,
-                 "SireMol::Mover<SireMol::ViewsOfMol>" : fix_Mover,
 
                  "AtomStringProperty" : fix_MolViewProperty,
                  "AtomIntProperty" : fix_MolViewProperty,

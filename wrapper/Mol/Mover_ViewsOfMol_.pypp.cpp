@@ -43,50 +43,6 @@ namespace bp = boost::python;
 
 #include "viewsofmol.h"
 
-#include "SireMaths/align.h"
-
-#include "SireMaths/axisset.h"
-
-#include "SireMaths/matrix.h"
-
-#include "SireMaths/quaternion.h"
-
-#include "SireMaths/rotate.h"
-
-#include "SireMaths/vectorproperty.h"
-
-#include "SireMol/errors.h"
-
-#include "SireUnits/units.h"
-
-#include "SireVol/coordgroup.h"
-
-#include "SireVol/space.h"
-
-#include "angleid.h"
-
-#include "atomcoords.h"
-
-#include "atommatcher.h"
-
-#include "atommatchers.h"
-
-#include "bondid.h"
-
-#include "connectivity.h"
-
-#include "dihedralid.h"
-
-#include "improperid.h"
-
-#include "mover.h"
-
-#include "tostring.h"
-
-#include "weightfunction.h"
-
-#include "mover.h"
-
 SireMol::Mover<SireMol::ViewsOfMol> __copy__(const SireMol::Mover<SireMol::ViewsOfMol> &other){ return SireMol::Mover<SireMol::ViewsOfMol>(other); }
 
 #include "Helpers/str.hpp"
@@ -112,7 +68,7 @@ void register_Mover_ViewsOfMol__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -126,7 +82,7 @@ void register_Mover_ViewsOfMol__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -140,7 +96,7 @@ void register_Mover_ViewsOfMol__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -154,7 +110,7 @@ void register_Mover_ViewsOfMol__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -168,7 +124,7 @@ void register_Mover_ViewsOfMol__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -182,7 +138,7 @@ void register_Mover_ViewsOfMol__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -196,7 +152,7 @@ void register_Mover_ViewsOfMol__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -210,7 +166,7 @@ void register_Mover_ViewsOfMol__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -224,7 +180,7 @@ void register_Mover_ViewsOfMol__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("bond"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -238,7 +194,7 @@ void register_Mover_ViewsOfMol__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("angle"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -252,7 +208,7 @@ void register_Mover_ViewsOfMol__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("dihedral"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -266,7 +222,7 @@ void register_Mover_ViewsOfMol__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("bond"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -280,7 +236,7 @@ void register_Mover_ViewsOfMol__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("improper"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -294,7 +250,7 @@ void register_Mover_ViewsOfMol__class(){
                 "changeFrame"
                 , changeFrame_function_value
                 , ( bp::arg("from_frame"), bp::arg("to_frame"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -320,7 +276,7 @@ void register_Mover_ViewsOfMol__class(){
                 "mapInto"
                 , mapInto_function_value
                 , ( bp::arg("axes"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -362,7 +318,7 @@ void register_Mover_ViewsOfMol__class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("quat"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -376,7 +332,7 @@ void register_Mover_ViewsOfMol__class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("rotmat"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -390,7 +346,7 @@ void register_Mover_ViewsOfMol__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("bond"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -404,7 +360,7 @@ void register_Mover_ViewsOfMol__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("angle"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -418,7 +374,7 @@ void register_Mover_ViewsOfMol__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("dihedral"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -432,7 +388,7 @@ void register_Mover_ViewsOfMol__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("improper"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -446,7 +402,7 @@ void register_Mover_ViewsOfMol__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("dihedral"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -472,7 +428,7 @@ void register_Mover_ViewsOfMol__class(){
                 "transform"
                 , transform_function_value
                 , ( bp::arg("transform"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -486,7 +442,7 @@ void register_Mover_ViewsOfMol__class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
+                    /* undefined call policies */
                 , "" );
         
         }
@@ -508,7 +464,7 @@ void register_Mover_ViewsOfMol__class(){
         Mover_ViewsOfMol__exposer.def( "clone", &__copy__);
         Mover_ViewsOfMol__exposer.def( "__str__", &__str__< ::SireMol::Mover<SireMol::ViewsOfMol> > );
         Mover_ViewsOfMol__exposer.def( "__repr__", &__str__< ::SireMol::Mover<SireMol::ViewsOfMol> > );
-        Mover_ViewsOfMol__exposer.def( "__len__", &__len_count< ::SireMol::Mover<SireMol::ViewsOfMol> > );
+        Mover_ViewsOfMol__exposer.def( "__len__", &__len_size< ::SireMol::Mover<SireMol::ViewsOfMol> > );
     }
 
 }

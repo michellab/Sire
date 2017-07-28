@@ -1315,14 +1315,14 @@ Molecule ProtoMS::runProtoMS(const Molecule &molecule, int type,
             
             for (int j=0; j<nats; ++j)
             {
-                Atom atom0 = atoms[j];
+                Atom atom0 = atoms(j);
                 
                 nbpairs.set( atom0.cgAtomIdx(), atom0.cgAtomIdx(), 
                              CLJScaleFactor(0,0) );
                 
                 for (int k=j+1; k<nats; ++k)
                 {
-                    Atom atom1 = atoms[k];
+                    Atom atom1 = atoms(k);
                 
                     nbpairs.set( atom0.cgAtomIdx(), atom1.cgAtomIdx(), 
                                  CLJScaleFactor(0,0) );

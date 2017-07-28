@@ -525,7 +525,7 @@ void RestraintFF::_pvt_removed(const ViewsOfMol &mol)
 {
     for (int i=0; i<mol.nViews(); ++i)
     {
-        this->_pvt_removed(mol[i]);
+        this->_pvt_removed(mol.valueAt(i));
     }
 }
 
@@ -566,7 +566,7 @@ void RestraintFF::_pvt_removedAll(const ViewsOfMol &mol)
 {
     for (int i=0; i<mol.nViews(); ++i)
     {
-        this->_pvt_removedAll( mol[i] );
+        this->_pvt_removedAll( mol.valueAt(i) );
     }
 }
 
