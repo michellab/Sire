@@ -278,7 +278,7 @@ struct viewsofmol_to_py_list
         else if (views.nViews() == 1)
         {
             //return the view itself
-            bp::object obj = get_molview(views[0]);
+            bp::object obj = get_molview(views.valueAt(0));
             return bp::incref( obj.ptr() );
         }
         else
@@ -288,7 +288,7 @@ struct viewsofmol_to_py_list
             //add all items to the python list
             for (int i=0; i<views.nViews(); ++i)
             {
-                python_list.append( get_molview(views[i]) );
+                python_list.append( get_molview(views.valueAt(i)) );
             }
 
             return bp::incref( python_list.ptr() );
