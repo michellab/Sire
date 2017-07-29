@@ -164,7 +164,6 @@ set ( PYPP_SOURCES
        Mover_Selector_CutGroup_.pypp.cpp
        Mover_Selector_Residue_.pypp.cpp
        Mover_Selector_Segment_.pypp.cpp
-       Mover_ViewsOfMol_.pypp.cpp
        MoverBase.pypp.cpp
        NullBeading.pypp.cpp
        NullBondHunter.pypp.cpp
@@ -225,7 +224,6 @@ set ( PYPP_SOURCES
        SpecifyMol.pypp.cpp
        UserBeading.pypp.cpp
        Velocity3D.pypp.cpp
-       ViewsOfMol.pypp.cpp
        VolumeMap.pypp.cpp
        WeightFunction.pypp.cpp
        Within.pypp.cpp

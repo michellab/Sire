@@ -335,8 +335,6 @@
 
 #include "Mover_Selector_Segment_.pypp.hpp"
 
-#include "Mover_ViewsOfMol_.pypp.hpp"
-
 #include "NullBeading.pypp.hpp"
 
 #include "NullBondHunter.pypp.hpp"
@@ -454,8 +452,6 @@
 #include "UserBeading.pypp.hpp"
 
 #include "Velocity3D.pypp.hpp"
-
-#include "ViewsOfMol.pypp.hpp"
 
 #include "VolumeMap.pypp.hpp"
 
@@ -867,10 +863,6 @@ BOOST_PYTHON_MODULE(_Mol){
     register_Selector_Segment__class();
 
     register_Mover_Selector_Segment__class();
-
-    register_ViewsOfMol_class();
-
-    register_Mover_ViewsOfMol__class();
 
     register_NullBeading_class();
 
