@@ -201,6 +201,72 @@ IDOrSet<ResID> ResID::operator|(const ResID &other) const
     return this->operator*(other);
 }
 
+/** Return the match for this ID or 'other' */
+IDOrSet<AtomID> ResID::operator*(const AtomID &other) const
+{
+    return other * *this;
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> ResID::operator||(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> ResID::operator|(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the match for this ID or 'other' */
+IDOrSet<ResID> ResID::operator*(const ChainID &other) const
+{
+    return IDOrSet<ResID>(*this, other+ResID::any());
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<ResID> ResID::operator||(const ChainID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<ResID> ResID::operator|(const ChainID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Invert this match */
+InvertMatch<ResID> ResID::invert() const
+{
+    return InvertMatch<ResID>(*this);
+}
+
+/** Invert this match */
+InvertMatch<ResID> ResID::inverse() const
+{
+    return this->invert();
+}
+
+/** Invert this match */
+InvertMatch<ResID> ResID::operator!() const
+{
+    return this->invert();
+}
+
+/** Return a match for all residues */
+MatchAll<ResID> ResID::any()
+{
+    return MatchAll<ResID>();
+}
+
+/** Match everything */
+QList<ResIdx> ResID::matchAll(const MolInfo &molinfo)
+{
+    return molinfo.getResidues();
+}
+
 /** Return the atoms in the matching residues */
 AtomsIn<ResID> ResID::atoms() const
 {

@@ -199,6 +199,54 @@ IDOrSet<CGID> CGID::operator|(const CGID &other) const
     return this->operator*(other);
 }
 
+/** Return the combination of this ID or 'other' */
+IDOrSet<AtomID> CGID::operator*(const AtomID &other) const
+{
+    return other * *this;
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> CGID::operator||(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> CGID::operator|(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return a match for any cutgroup */
+MatchAll<CGID> CGID::any()
+{
+    return MatchAll<CGID>();
+}
+
+/** Return the inverse of this match */
+InvertMatch<CGID> CGID::invert() const
+{
+    return InvertMatch<CGID>(*this);
+}
+
+/** Return the inverse of this match */
+InvertMatch<CGID> CGID::inverse() const
+{
+    return this->invert();
+}
+
+/** Return the inverse of this match */
+InvertMatch<CGID> CGID::operator!() const
+{
+    return this->invert();
+}
+
+/** Return all of the matching objects */
+QList<CGIdx> CGID::matchAll(const MolInfo &molinfo)
+{
+    return molinfo.getCutGroups();
+}
+
 /** Return the atoms in the matching residues */
 AtomsIn<CGID> CGID::atoms() const
 {

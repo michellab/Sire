@@ -96,19 +96,6 @@ void register_Selector_Residue__class(){
                 , "" );
         
         }
-        { //::SireMol::Selector< SireMol::Residue >::at
-        
-            typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*at_function_type)( int,int ) const;
-            at_function_type at_function_value( &::SireMol::Selector< SireMol::Residue >::at );
-            
-            Selector_Residue__exposer.def( 
-                "at"
-                , at_function_value
-                , ( bp::arg("i"), bp::arg("j") )
-                , "" );
-        
-        }
         { //::SireMol::Selector< SireMol::Residue >::contains
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
@@ -487,6 +474,84 @@ void register_Selector_Residue__class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Residue >::operator[]
+        
+            typedef SireMol::Selector< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Residue >::*__getitem___function_type)( ::SireMol::AtomID const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Residue >::operator[] );
+            
+            Selector_Residue__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("atomid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Residue >::operator[]
+        
+            typedef SireMol::Selector< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Residue >::*__getitem___function_type)( ::SireMol::ResID const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Residue >::operator[] );
+            
+            Selector_Residue__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("resid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Residue >::operator[]
+        
+            typedef SireMol::Selector< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Residue >::*__getitem___function_type)( ::SireMol::CGID const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Residue >::operator[] );
+            
+            Selector_Residue__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("cgid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Residue >::operator[]
+        
+            typedef SireMol::Selector< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Residue >::*__getitem___function_type)( ::SireMol::ChainID const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Residue >::operator[] );
+            
+            Selector_Residue__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("chainid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Residue >::operator[]
+        
+            typedef SireMol::Selector< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Residue >::*__getitem___function_type)( ::SireMol::SegID const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Residue >::operator[] );
+            
+            Selector_Residue__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("segid") )
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Residue >::operator[]
+        
+            typedef SireMol::Selector< SireMol::Residue > exported_class_t;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Selector< SireMol::Residue >::*__getitem___function_type)( ::SireID::Index const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Residue >::operator[] );
+            
+            Selector_Residue__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idx") )
                 , "" );
         
         }

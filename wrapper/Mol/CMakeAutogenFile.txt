@@ -123,6 +123,16 @@ set ( PYPP_SOURCES
        IDOrSet_ResID_.pypp.cpp
        IDOrSet_SegID_.pypp.cpp
        ImproperID.pypp.cpp
+       InvertMatch_AtomID_.pypp.cpp
+       InvertMatch_CGID_.pypp.cpp
+       InvertMatch_ChainID_.pypp.cpp
+       InvertMatch_ResID_.pypp.cpp
+       InvertMatch_SegID_.pypp.cpp
+       MatchAll_AtomID_.pypp.cpp
+       MatchAll_CGID_.pypp.cpp
+       MatchAll_ChainID_.pypp.cpp
+       MatchAll_ResID_.pypp.cpp
+       MatchAll_SegID_.pypp.cpp
        MGID.pypp.cpp
        MGIDsAndMaps.pypp.cpp
        MGIdx.pypp.cpp

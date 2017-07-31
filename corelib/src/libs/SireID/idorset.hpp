@@ -262,7 +262,7 @@ QString IDOrSet<ID>::toString() const
             idstrings.append( it->toString() );
         }
     
-        return idstrings.join( QObject::tr(" or ") );
+        return QString("[ %1 ]").arg(idstrings.join( QObject::tr(" or ") ));
     }
 }
 

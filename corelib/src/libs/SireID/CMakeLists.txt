@@ -16,6 +16,8 @@ set ( SIREID_HEADERS
       identifier.h
       idorset.hpp
       index.h
+      invertmatch.hpp
+      matchall.hpp
       name.h
       number.h
       specify.hpp

@@ -46,7 +46,19 @@ namespace bp = boost::python;
 
 #include "atom.h"
 
-#include "SireBase/quickcopy.hpp"
+#include "SireMaths/align.h"
+
+#include "atomelements.h"
+
+#include "atomcharges.h"
+
+#include "atomproperty.hpp"
+
+#include "atomljs.h"
+
+#include "atomforces.h"
+
+#include "SireStream/datastream.h"
 
 #include "atommasses.h"
 
@@ -54,35 +66,23 @@ namespace bp = boost::python;
 
 #include "atomvelocities.h"
 
-#include "atomelements.h"
-
-#include "atomcharges.h"
-
-#include "atomljs.h"
-
-#include "atomforces.h"
-
-#include "SireVol/space.h"
-
 #include "atomcoords.h"
-
-#include "SireStream/datastream.h"
-
-#include "atompolarisabilities.h"
-
-#include "atomradii.h"
-
-#include "atomproperty.hpp"
 
 #include "atomenergies.h"
 
-#include "SireMaths/align.h"
+#include "SireBase/quickcopy.hpp"
 
 #include "SireError/errors.h"
 
-#include "SireStream/shareddatastream.h"
+#include "atompolarisabilities.h"
 
 #include "atombeads.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "SireVol/space.h"
+
+#include "atomradii.h"
 
 const SireMM::LJParameter& get_Metadata_SireMM_AtomLJs_function1(const SireMol::Atom &atom,
                                    const QString &metakey){ return atom.metadata< SireMM::LJParameter >(metakey); }

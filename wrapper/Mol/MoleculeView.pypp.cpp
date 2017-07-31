@@ -320,7 +320,7 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "count"
                 , count_function_value
-                , "" );
+                , "Return the number of sub-views in this view. Most MoleculeViews are\njust a single view, but some (e.g. ViewsOfMol or Selector<T>) have\nmultiple views" );
         
         }
         { //::SireMol::MoleculeView::cutGroup
@@ -471,7 +471,7 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "keys"
                 , keys_function_value
-                , "" );
+                , "Synonym for MoleculeView::propertyKeys" );
         
         }
         { //::SireMol::MoleculeView::metadataKeys
@@ -540,7 +540,7 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "nViews"
                 , nViews_function_value
-                , "" );
+                , "Return the number of sub-views in this view. Most MoleculeViews are\njust a single view, but some (e.g. ViewsOfMol or Selector<T>) have\nmultiple views" );
         
         }
         { //::SireMol::MoleculeView::null
@@ -552,7 +552,7 @@ void register_MoleculeView_class(){
                 "null"
                 , null_function_value
                 , bp::return_value_policy<bp::clone_const_reference>()
-                , "" );
+                , "Return a completely null molecule" );
         
         }
         { //::SireMol::MoleculeView::operator[]
@@ -970,7 +970,7 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "size"
                 , size_function_value
-                , "" );
+                , "Return the number of sub-views in this view. Most MoleculeViews are\njust a single view, but some (e.g. ViewsOfMol or Selector<T>) have\nmultiple views" );
         
         }
         { //::SireMol::MoleculeView::toString

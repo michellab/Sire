@@ -198,6 +198,54 @@ IDOrSet<SegID> SegID::operator|(const SegID &other) const
     return this->operator*(other);
 }
 
+/** Return the object to search for the match of this or 'other' */
+IDOrSet<AtomID> SegID::operator*(const AtomID &other) const
+{
+    return other * *this;
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> SegID::operator||(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> SegID::operator|(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the inverse of this match */
+InvertMatch<SegID> SegID::invert() const
+{
+    return InvertMatch<SegID>(*this);
+}
+
+/** Return the inverse of this match */
+InvertMatch<SegID> SegID::inverse() const
+{
+    return this->invert();
+}
+
+/** Return the inverse of this match */
+InvertMatch<SegID> SegID::operator!() const
+{
+    return this->invert();
+}
+
+/** Return a match for anything */
+MatchAll<SegID> SegID::any()
+{
+    return MatchAll<SegID>();
+}
+
+/** Match everything */
+QList<SegIdx> SegID::matchAll(const MolInfo &molinfo)
+{
+    return molinfo.getSegments();
+}
+
 /** Return the atoms in the matching residues */
 AtomsIn<SegID> SegID::atoms() const
 {

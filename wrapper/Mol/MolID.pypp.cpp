@@ -116,6 +116,7 @@ void register_MolID_class(){
         
         }
         MolID_exposer.def( bp::self * bp::self );
+        MolID_exposer.def( bp::self * bp::other< SireMol::AtomID >() );
         MolID_exposer.def( bp::self + bp::self );
         MolID_exposer.def( bp::self + bp::other< SireMol::AtomID >() );
         { //::SireMol::MolID::operator[]
@@ -131,6 +132,7 @@ void register_MolID_class(){
         
         }
         MolID_exposer.def( bp::self | bp::self );
+        MolID_exposer.def( bp::self | bp::other< SireMol::AtomID >() );
         { //::SireMol::MolID::typeName
         
             typedef char const * ( *typeName_function_type )(  );

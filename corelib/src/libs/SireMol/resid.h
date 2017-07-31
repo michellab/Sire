@@ -36,6 +36,8 @@
 #include "SireID/idandset.hpp"
 #include "SireID/idorset.hpp"
 #include "SireID/specify.hpp"
+#include "SireID/matchall.hpp"
+#include "SireID/invertmatch.hpp"
 
 SIRE_BEGIN_HEADER
 
@@ -116,6 +118,21 @@ public:
     IDOrSet<ResID> operator||(const ResID &other) const;
     IDOrSet<ResID> operator|(const ResID &other) const;
 
+    IDOrSet<AtomID> operator*(const AtomID &other) const;
+    IDOrSet<AtomID> operator||(const AtomID &other) const;
+    IDOrSet<AtomID> operator|(const AtomID &other) const;
+
+    IDOrSet<ResID> operator*(const ChainID &other) const;
+    IDOrSet<ResID> operator||(const ChainID &other) const;
+    IDOrSet<ResID> operator|(const ChainID &other) const;
+
+    SireID::InvertMatch<ResID> operator!() const;
+    
+    SireID::InvertMatch<ResID> invert() const;
+    SireID::InvertMatch<ResID> inverse() const;
+
+    static SireID::MatchAll<ResID> any();
+
     AtomsIn<ResID> atoms() const;
     AtomsIn<ResID> atom(int i) const;
     AtomsIn<ResID> atoms(int i, int j) const;
@@ -163,6 +180,8 @@ public:
                               const PropertyMap &map = PropertyMap()) const;
 
 protected:
+    static QList<ResIdx> matchAll(const MolInfo &molinfo);
+
     void processMatches(QList<ResIdx> &matches, const MolInfo &molinfo) const;
 };
 
@@ -175,12 +194,16 @@ SIRE_EXPOSE_ALIAS( SireID::Specify<SireMol::ResID>, SireMol::Specify_ResID_ )
 SIRE_EXPOSE_ALIAS( SireMol::AtomsIn<SireMol::ResID>, SireMol::AtomsIn_ResID_ )
 SIRE_EXPOSE_ALIAS( SireID::IDAndSet<SireMol::ResID>, SireMol::IDAndSet_ResID_ )
 SIRE_EXPOSE_ALIAS( SireID::IDOrSet<SireMol::ResID>, SireMol::IDOrSet_ResID_ )
+SIRE_EXPOSE_ALIAS( SireID::MatchAll<SireMol::ResID>, SireMol::MatchAll_ResID_ )
+SIRE_EXPOSE_ALIAS( SireID::InvertMatch<SireMol::ResID>, SireMol::InvertMatch_ResID_ )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireID::Specify<SireMol::ResID>;
 template class SireMol::AtomsIn<SireMol::ResID>;
 template class SireID::IDAndSet<SireMol::ResID>;
 template class SireID::IDOrSet<SireMol::ResID>;
+template class SireID::MatchAll<SireMol::ResID>;
+template class SireID::InvertMatch<SireMol::ResID>;
 #endif
 
 SIRE_END_HEADER

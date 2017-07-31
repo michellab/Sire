@@ -110,7 +110,8 @@ Q_DECLARE_METATYPE( SireID::Specify<SireMol::SegID> );
 Q_DECLARE_METATYPE( SireMol::AtomsIn<SireMol::SegID> );
 Q_DECLARE_METATYPE( SireID::IDAndSet<SireMol::SegID> );
 Q_DECLARE_METATYPE( SireID::IDOrSet<SireMol::SegID> );
-
+Q_DECLARE_METATYPE( SireID::MatchAll<SireMol::SegID> );
+Q_DECLARE_METATYPE( SireID::InvertMatch<SireMol::SegID> );
 
 Q_DECLARE_METATYPE(SireMol::SegIdentifier);
 

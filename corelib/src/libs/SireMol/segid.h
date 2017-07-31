@@ -36,6 +36,8 @@
 #include "SireID/specify.hpp"
 #include "SireID/idandset.hpp"
 #include "SireID/idorset.hpp"
+#include "SireID/matchall.hpp"
+#include "SireID/invertmatch.hpp"
 
 SIRE_BEGIN_HEADER
 
@@ -112,6 +114,16 @@ public:
     IDOrSet<SegID> operator||(const SegID &other) const;
     IDOrSet<SegID> operator|(const SegID &other) const;
 
+    IDOrSet<AtomID> operator*(const AtomID &other) const;
+    IDOrSet<AtomID> operator||(const AtomID &other) const;
+    IDOrSet<AtomID> operator|(const AtomID &other) const;
+
+    SireID::InvertMatch<SegID> operator!() const;
+    SireID::InvertMatch<SegID> invert() const;
+    SireID::InvertMatch<SegID> inverse() const;
+    
+    static SireID::MatchAll<SegID> any();
+
     AtomsIn<SegID> atoms() const;
     AtomsIn<SegID> atom(int i) const;
     AtomsIn<SegID> atoms(int i, int j) const;
@@ -157,6 +169,8 @@ public:
                               const PropertyMap &map = PropertyMap()) const;
 
 protected:
+    static QList<SegIdx> matchAll(const MolInfo &molinfo);
+
     void processMatches(QList<SegIdx> &matches, const MolInfo &molinfo) const;
 };
 
@@ -169,12 +183,16 @@ SIRE_EXPOSE_ALIAS( SireID::Specify<SireMol::SegID>, SireMol::Specify_SegID_ )
 SIRE_EXPOSE_ALIAS( SireMol::AtomsIn<SireMol::SegID>, SireMol::AtomsIn_SegID_ )
 SIRE_EXPOSE_ALIAS( SireID::IDAndSet<SireMol::SegID>, SireMol::IDAndSet_SegID_ )
 SIRE_EXPOSE_ALIAS( SireID::IDOrSet<SireMol::SegID>, SireMol::IDOrSet_SegID_ )
+SIRE_EXPOSE_ALIAS( SireID::MatchAll<SireMol::SegID>, SireMol::MatchAll_SegID_ )
+SIRE_EXPOSE_ALIAS( SireID::InvertMatch<SireMol::SegID>, SireMol::InvertMatch_SegID_ )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireID::Specify<SireMol::SegID>;
 template class SireMol::AtomsIn<SireMol::SegID>;
 template class SireID::IDAndSet<SireMol::SegID>;
 template class SireID::IDOrSet<SireMol::SegID>;
+template class SireID::MatchAll<SireMol::SegID>;
+template class SireID::InvertMatch<SireMol::SegID>;
 #endif
 
 SIRE_END_HEADER

@@ -224,6 +224,120 @@ IDOrSet<AtomID> AtomID::operator|(const AtomID &other) const
     return this->operator*(other);
 }
 
+/** Return the selection that matches this atom or all atoms in 'other' */
+IDOrSet<AtomID> AtomID::operator*(const CGID &other) const
+{
+    return IDOrSet<AtomID>(*this, other+AtomID::any());
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator||(const CGID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator|(const CGID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the selection that matches this atom or all atoms in 'other' */
+IDOrSet<AtomID> AtomID::operator*(const ResID &other) const
+{
+    return IDOrSet<AtomID>(*this, other+AtomID::any());
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator||(const ResID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator|(const ResID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the selection that matches this atom or all atoms in 'other' */
+IDOrSet<AtomID> AtomID::operator*(const ChainID &other) const
+{
+    return IDOrSet<AtomID>(*this, other+AtomID::any());
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator||(const ChainID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator|(const ChainID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the selection that matches this atom or all atoms in 'other' */
+IDOrSet<AtomID> AtomID::operator*(const SegID &other) const
+{
+    return IDOrSet<AtomID>(*this, other+AtomID::any());
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator||(const SegID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator|(const SegID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the selection that matches this atom or all atoms in 'other' */
+IDOrSet<AtomID> AtomID::operator*(const MolID &other) const
+{
+    return IDOrSet<AtomID>(*this, other+AtomID::any());
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator||(const MolID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator|(const MolID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the invert (not) of this match */
+InvertMatch<AtomID> AtomID::operator!() const
+{
+    return InvertMatch<AtomID>(*this);
+}
+
+/** Return the invert (not) of this match */
+InvertMatch<AtomID> AtomID::invert() const
+{
+    return InvertMatch<AtomID>(*this);
+}
+
+/** Syntactic sugar for AtomID::invert() */
+InvertMatch<AtomID> AtomID::inverse() const
+{
+    return this->invert();
+}
+
+/** Return an AtomID that matches everything */
+MatchAll<AtomID> AtomID::any()
+{
+    return MatchAll<AtomID>();
+}
+
 void AtomID::processMatches(QList<AtomIdx> &matches, const MolInfo&) const
 {
     if (matches.isEmpty())
@@ -232,6 +346,13 @@ void AtomID::processMatches(QList<AtomIdx> &matches, const MolInfo&) const
                 .arg(this->toString()), CODELOC );
 
     qSort(matches);
+}
+
+/** Function used by MatchAll<AtomID> to return everything */
+QList<AtomIdx> AtomID::matchAll(const MolInfo &molinfo)
+{
+    QList<AtomIdx> idxs = molinfo.getAtoms();
+    return idxs;
 }
 
 /** Map this AtomID to the atoms in the passed molecule view
@@ -694,7 +815,10 @@ uint AtomName::hash() const
 
 QString AtomName::toString() const
 {
-    return QString("AtomName('%1')").arg(_name);
+    if (case_sensitive)
+        return QString("AtomName('%1')").arg(_name);
+    else
+        return QString("AtomName('%1', isCaseSensitive=False)").arg(_name);
 }
 
 AtomName& AtomName::operator=(const AtomName &other)

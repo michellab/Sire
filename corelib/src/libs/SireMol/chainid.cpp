@@ -179,6 +179,72 @@ IDOrSet<ChainID> ChainID::operator|(const ChainID &other) const
     return this->operator*(other);
 }
 
+/** Return the combination of this ID or other */
+IDOrSet<ResID> ChainID::operator*(const ResID &other) const
+{
+    return other * *this;
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<ResID> ChainID::operator||(const ResID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<ResID> ChainID::operator|(const ResID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the combination of this ID or other */
+IDOrSet<AtomID> ChainID::operator*(const AtomID &other) const
+{
+    return other * *this;
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> ChainID::operator||(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> ChainID::operator|(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Inverse this match */
+InvertMatch<ChainID> ChainID::invert() const
+{
+    return InvertMatch<ChainID>(*this);
+}
+
+/** Inverse this match */
+InvertMatch<ChainID> ChainID::inverse() const
+{
+    return this->invert();
+}
+
+/** Inverse this match */
+InvertMatch<ChainID> ChainID::operator!() const
+{
+    return this->invert();
+}
+
+/** Return a match for any chains */
+MatchAll<ChainID> ChainID::any()
+{
+    return MatchAll<ChainID>();
+}
+
+/** Match everything */
+QList<ChainIdx> ChainID::matchAll(const MolInfo &molinfo)
+{
+    return molinfo.getChains();
+}
+
 /** Return the atoms in the matching residues */
 AtomsIn<ChainID> ChainID::atoms() const
 {

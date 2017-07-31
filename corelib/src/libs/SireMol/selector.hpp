@@ -135,12 +135,18 @@ public:
     Selector<T> operator+(const T &view) const;
     Selector<T> operator-(const T &view) const;
     
-    MolViewPtr operator[](int i) const;
     int nViews() const;
+
+    MolViewPtr operator[](int i) const;
+    MolViewPtr operator[](const AtomID &atomid) const;
+    MolViewPtr operator[](const ResID &resid) const;
+    MolViewPtr operator[](const CGID &cgid) const;
+    MolViewPtr operator[](const ChainID &chainid) const;
+    MolViewPtr operator[](const SegID &segid) const;
+    MolViewPtr operator[](const SireID::Index &idx) const;
 
     T operator()(int i) const;
     Selector<T> operator()(int i, int j) const;
-    Selector<T> at(int i, int j) const;
 
     typename T::Index index(int i) const;
 
@@ -625,6 +631,54 @@ MolViewPtr Selector<T>::operator[](int i) const
     return T( this->data(), idxs.at( SireID::Index(i).map(idxs.count()) ) );
 }
 
+/** Exposing MoleculeView::operator[] */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+MolViewPtr Selector<T>::operator[](const AtomID &atom) const
+{
+    return MoleculeView::operator[](atom);
+}
+
+/** Exposing MoleculeView::operator[] */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+MolViewPtr Selector<T>::operator[](const ResID &res) const
+{
+    return MoleculeView::operator[](res);
+}
+
+/** Exposing MoleculeView::operator[] */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+MolViewPtr Selector<T>::operator[](const CGID &cg) const
+{
+    return MoleculeView::operator[](cg);
+}
+
+/** Exposing MoleculeView::operator[] */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+MolViewPtr Selector<T>::operator[](const ChainID &chain) const
+{
+    return MoleculeView::operator[](chain);
+}
+
+/** Exposing MoleculeView::operator[] */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+MolViewPtr Selector<T>::operator[](const SegID &seg) const
+{
+    return MoleculeView::operator[](seg);
+}
+
+/** Exposing MoleculeView::operator[] */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+MolViewPtr Selector<T>::operator[](const SireID::Index &idx) const
+{
+    return MoleculeView::operator[](idx);
+}
+
 /** Return the index of the ith view in this set (this supports negative indexing)
 
     \throw SireError::invalid_index
@@ -680,14 +734,6 @@ Selector<T> Selector<T>::operator()(int i, int j) const
     }
     
     return ret;
-}
-
-/** Return the views in this set from i to j */
-template<class T>
-SIRE_OUTOFLINE_TEMPLATE
-Selector<T> Selector<T>::at(int i, int j) const
-{
-    return this->operator()(i,j);
 }
 
 /** Return the number of views in this set */

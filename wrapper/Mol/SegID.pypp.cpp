@@ -57,6 +57,17 @@ void register_SegID_class(){
         typedef bp::class_< SireMol::SegID, bp::bases< SireID::ID >, boost::noncopyable > SegID_exposer_t;
         SegID_exposer_t SegID_exposer = SegID_exposer_t( "SegID", "This is the base class of all identifiers that are used\nto identify a Segment within a Molecule\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope SegID_scope( SegID_exposer );
+        { //::SireMol::SegID::any
+        
+            typedef ::SireID::MatchAll< SireMol::SegID > ( *any_function_type )(  );
+            any_function_type any_function_value( &::SireMol::SegID::any );
+            
+            SegID_exposer.def( 
+                "any"
+                , any_function_value
+                , "Return a match for anything" );
+        
+        }
         { //::SireMol::SegID::atom
         
             typedef ::SireMol::AtomsIn< SireMol::SegID > ( ::SireMol::SegID::*atom_function_type)( int ) const;
@@ -92,6 +103,28 @@ void register_SegID_class(){
                 , "Return a range of atoms in the matching residues" );
         
         }
+        { //::SireMol::SegID::inverse
+        
+            typedef ::SireID::InvertMatch< SireMol::SegID > ( ::SireMol::SegID::*inverse_function_type)(  ) const;
+            inverse_function_type inverse_function_value( &::SireMol::SegID::inverse );
+            
+            SegID_exposer.def( 
+                "inverse"
+                , inverse_function_value
+                , "Return the inverse of this match" );
+        
+        }
+        { //::SireMol::SegID::invert
+        
+            typedef ::SireID::InvertMatch< SireMol::SegID > ( ::SireMol::SegID::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::SegID::invert );
+            
+            SegID_exposer.def( 
+                "invert"
+                , invert_function_value
+                , "Return the inverse of this match" );
+        
+        }
         { //::SireMol::SegID::map
         
             typedef ::QList< SireMol::SegIdx > ( ::SireMol::SegID::*map_function_type)( ::SireMol::MolInfo const & ) const;
@@ -116,6 +149,7 @@ void register_SegID_class(){
                 , "Map this SegID to the atoms in the passed molecule view\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
+        SegID_exposer.def( !bp::self );
         SegID_exposer.def( bp::self & bp::self );
         SegID_exposer.def( bp::self & bp::other< SireMol::AtomID >() );
         SegID_exposer.def( bp::self & bp::other< SireMol::CGID >() );
@@ -146,6 +180,7 @@ void register_SegID_class(){
         
         }
         SegID_exposer.def( bp::self * bp::self );
+        SegID_exposer.def( bp::self * bp::other< SireMol::AtomID >() );
         SegID_exposer.def( bp::self + bp::self );
         SegID_exposer.def( bp::self + bp::other< SireMol::AtomID >() );
         SegID_exposer.def( bp::self + bp::other< SireMol::CGID >() );
@@ -164,6 +199,7 @@ void register_SegID_class(){
         
         }
         SegID_exposer.def( bp::self | bp::self );
+        SegID_exposer.def( bp::self | bp::other< SireMol::AtomID >() );
         { //::SireMol::SegID::selectAllFrom
         
             typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::SegID::*selectAllFrom_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
@@ -271,6 +307,7 @@ void register_SegID_class(){
                 , "" );
         
         }
+        SegID_exposer.staticmethod( "any" );
         SegID_exposer.staticmethod( "typeName" );
         SegID_exposer.def( "__str__", &__str__< ::SireMol::SegID > );
         SegID_exposer.def( "__repr__", &__str__< ::SireMol::SegID > );

@@ -355,7 +355,10 @@ uint SegName::hash() const
 
 QString SegName::toString() const
 {
-    return QString("SegName('%1')").arg(_name);
+    if (case_sensitive)
+        return QString("SegName('%1')").arg(_name);
+    else
+        return QString("SegName('%1', isCaseSensitive=False)").arg(_name);
 }
 
 SegName& SegName::operator=(const SegName &other)

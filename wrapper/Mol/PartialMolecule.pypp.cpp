@@ -361,7 +361,7 @@ void register_PartialMolecule_class(){
             PartialMolecule_exposer.def( 
                 "toUnit"
                 , toUnit_function_value
-                , "" );
+                , "Return a copy of this PartialMolecule that has been reduced to its unit\ntype, i.e. if this is a single Atom, this returns the Atom, if this is a single\nresidue, this returns the Residue etc." );
         
         }
         { //::SireMol::PartialMolecule::typeName

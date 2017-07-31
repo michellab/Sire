@@ -251,6 +251,16 @@
 
 #include "ImproperID.pypp.hpp"
 
+#include "InvertMatch_AtomID_.pypp.hpp"
+
+#include "InvertMatch_CGID_.pypp.hpp"
+
+#include "InvertMatch_ChainID_.pypp.hpp"
+
+#include "InvertMatch_ResID_.pypp.hpp"
+
+#include "InvertMatch_SegID_.pypp.hpp"
+
 #include "MGID.pypp.hpp"
 
 #include "MGIDsAndMaps.pypp.hpp"
@@ -260,6 +270,16 @@
 #include "MGName.pypp.hpp"
 
 #include "MGNum.pypp.hpp"
+
+#include "MatchAll_AtomID_.pypp.hpp"
+
+#include "MatchAll_CGID_.pypp.hpp"
+
+#include "MatchAll_ChainID_.pypp.hpp"
+
+#include "MatchAll_ResID_.pypp.hpp"
+
+#include "MatchAll_SegID_.pypp.hpp"
 
 #include "MolAtomID.pypp.hpp"
 
@@ -525,6 +545,26 @@ BOOST_PYTHON_MODULE(_Mol){
     register_IDOrSet_ResID__class();
 
     register_IDOrSet_SegID__class();
+
+    register_InvertMatch_AtomID__class();
+
+    register_InvertMatch_CGID__class();
+
+    register_InvertMatch_ChainID__class();
+
+    register_InvertMatch_ResID__class();
+
+    register_InvertMatch_SegID__class();
+
+    register_MatchAll_AtomID__class();
+
+    register_MatchAll_CGID__class();
+
+    register_MatchAll_ChainID__class();
+
+    register_MatchAll_ResID__class();
+
+    register_MatchAll_SegID__class();
 
     register_Specify_AtomID__class();
 

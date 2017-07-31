@@ -57,6 +57,17 @@ void register_CGID_class(){
         typedef bp::class_< SireMol::CGID, bp::bases< SireID::ID >, boost::noncopyable > CGID_exposer_t;
         CGID_exposer_t CGID_exposer = CGID_exposer_t( "CGID", "This is the base class of all identifiers that are used\nto identify a CutGroup\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope CGID_scope( CGID_exposer );
+        { //::SireMol::CGID::any
+        
+            typedef ::SireID::MatchAll< SireMol::CGID > ( *any_function_type )(  );
+            any_function_type any_function_value( &::SireMol::CGID::any );
+            
+            CGID_exposer.def( 
+                "any"
+                , any_function_value
+                , "Return a match for any cutgroup" );
+        
+        }
         { //::SireMol::CGID::atom
         
             typedef ::SireMol::AtomsIn< SireMol::CGID > ( ::SireMol::CGID::*atom_function_type)( int ) const;
@@ -92,6 +103,28 @@ void register_CGID_class(){
                 , "Return a range of atoms in the matching residues" );
         
         }
+        { //::SireMol::CGID::inverse
+        
+            typedef ::SireID::InvertMatch< SireMol::CGID > ( ::SireMol::CGID::*inverse_function_type)(  ) const;
+            inverse_function_type inverse_function_value( &::SireMol::CGID::inverse );
+            
+            CGID_exposer.def( 
+                "inverse"
+                , inverse_function_value
+                , "Return the inverse of this match" );
+        
+        }
+        { //::SireMol::CGID::invert
+        
+            typedef ::SireID::InvertMatch< SireMol::CGID > ( ::SireMol::CGID::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::CGID::invert );
+            
+            CGID_exposer.def( 
+                "invert"
+                , invert_function_value
+                , "Return the inverse of this match" );
+        
+        }
         { //::SireMol::CGID::map
         
             typedef ::QList< SireMol::CGIdx > ( ::SireMol::CGID::*map_function_type)( ::SireMol::MolInfo const & ) const;
@@ -116,6 +149,7 @@ void register_CGID_class(){
                 , "Map this CGICutGroupD to the CutGroups in the passed molecule view\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
+        CGID_exposer.def( !bp::self );
         CGID_exposer.def( bp::self & bp::self );
         CGID_exposer.def( bp::self & bp::other< SireMol::AtomID >() );
         CGID_exposer.def( bp::self & bp::other< SireMol::SegID >() );
@@ -146,6 +180,7 @@ void register_CGID_class(){
         
         }
         CGID_exposer.def( bp::self * bp::self );
+        CGID_exposer.def( bp::self * bp::other< SireMol::AtomID >() );
         CGID_exposer.def( bp::self + bp::self );
         CGID_exposer.def( bp::self + bp::other< SireMol::AtomID >() );
         CGID_exposer.def( bp::self + bp::other< SireMol::SegID >() );
@@ -164,6 +199,7 @@ void register_CGID_class(){
         
         }
         CGID_exposer.def( bp::self | bp::self );
+        CGID_exposer.def( bp::self | bp::other< SireMol::AtomID >() );
         { //::SireMol::CGID::selectAllFrom
         
             typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::CGID::*selectAllFrom_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
@@ -271,6 +307,7 @@ void register_CGID_class(){
                 , "" );
         
         }
+        CGID_exposer.staticmethod( "any" );
         CGID_exposer.staticmethod( "typeName" );
         CGID_exposer.def( "__str__", &__str__< ::SireMol::CGID > );
         CGID_exposer.def( "__repr__", &__str__< ::SireMol::CGID > );

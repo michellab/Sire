@@ -112,6 +112,8 @@ Q_DECLARE_METATYPE( SireMol::AtomsIn<SireMol::ChainID> );
 Q_DECLARE_METATYPE( SireMol::ResIn<SireMol::ChainID> );
 Q_DECLARE_METATYPE( SireID::IDAndSet<SireMol::ChainID> );
 Q_DECLARE_METATYPE( SireID::IDOrSet<SireMol::ChainID> );
+Q_DECLARE_METATYPE( SireID::MatchAll<SireMol::ChainID> );
+Q_DECLARE_METATYPE( SireID::InvertMatch<SireMol::ChainID> );
 
 Q_DECLARE_METATYPE(SireMol::ChainIdentifier);
 
