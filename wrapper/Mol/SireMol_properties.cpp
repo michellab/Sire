@@ -161,6 +161,6 @@ void register_SireMol_properties()
     register_property_container< SireMol::BondHunterPtr, SireMol::BondHunter >();
     register_property_container< SireMol::PerturbationPtr, SireMol::Perturbation >();
     register_property_container< SireMol::MolViewPtr, SireMol::MoleculeView >();
-    register_property_container< SireMol::MolGroupsPtr, SireMol::MoleculeGroups >();
+    register_property_container< SireMol::MolGroupsPtr, SireMol::MolGroupsBase >();
     register_property_container< SireMol::BeadingPtr, SireMol::Beading >();
 }
