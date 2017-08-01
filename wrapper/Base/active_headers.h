@@ -25,6 +25,8 @@
 #include "propertylist.h"
 #include "propertymap.h"
 #include "qvariant_metatype.h"
+#include "range.h"
+#include "ranges.h"
 #include "sire_process.h"
 #include "stringmangler.h"
 #include "stringproperty.h"

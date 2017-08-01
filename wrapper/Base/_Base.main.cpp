@@ -73,6 +73,10 @@
 
 #include "PropertyName.pypp.hpp"
 
+#include "Range.pypp.hpp"
+
+#include "SimpleRange.pypp.hpp"
+
 #include "StringArrayProperty.pypp.hpp"
 
 #include "StringMangler.pypp.hpp"
@@ -183,6 +187,10 @@ BOOST_PYTHON_MODULE(_Base){
     register_PropertyMap_class();
 
     register_PropertyName_class();
+
+    register_Range_class();
+
+    register_SimpleRange_class();
 
     register_StringArrayProperty_class();
 

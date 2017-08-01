@@ -33,6 +33,8 @@ set ( PYPP_SOURCES
        PropertyList.pypp.cpp
        PropertyMap.pypp.cpp
        PropertyName.pypp.cpp
+       Range.pypp.cpp
+       SimpleRange.pypp.cpp
        StringArrayProperty.pypp.cpp
        StringMangler.pypp.cpp
        StringProperty.pypp.cpp
