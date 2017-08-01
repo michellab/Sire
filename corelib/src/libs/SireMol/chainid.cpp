@@ -233,6 +233,42 @@ InvertMatch<ChainID> ChainID::operator!() const
     return this->invert();
 }
 
+/** Return this and not other */
+IDAndSet<ChainID> ChainID::operator-(const ChainID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return this and not other */
+ChainResID ChainID::operator-(const ResID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return this and not other */
+GroupAtomID<ChainID,AtomID> ChainID::operator-(const AtomID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return this and not other */
+GroupGroupID<SegID,ChainID> ChainID::operator-(const SegID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return this and not other */
+GroupGroupID<CGID,ChainID> ChainID::operator-(const CGID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return not this */
+SireID::InvertMatch<ChainID> ChainID::operator-() const
+{
+    return InvertMatch<ChainID>(*this);
+}
+
 /** Return a match for any chains */
 MatchAll<ChainID> ChainID::any()
 {

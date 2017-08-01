@@ -217,6 +217,42 @@ IDOrSet<AtomID> CGID::operator|(const AtomID &other) const
     return this->operator*(other);
 }
 
+/** Return the combination of this with not other */
+IDAndSet<CGID> CGID::operator-(const CGID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the combination of this with not other */
+GroupAtomID<CGID,AtomID> CGID::operator-(const AtomID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the combination of this with not other */
+GroupGroupID<SegID,CGID> CGID::operator-(const SegID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the combination of this with not other */
+GroupGroupID<CGID,ChainID> CGID::operator-(const ChainID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the combination of this with not other */
+GroupGroupID<CGID,ResID> CGID::operator-(const ResID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return not this */
+SireID::InvertMatch<CGID> CGID::operator-() const
+{
+    return InvertMatch<CGID>(*this);
+}
+
 /** Return a match for any cutgroup */
 MatchAll<CGID> CGID::any()
 {

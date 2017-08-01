@@ -186,6 +186,12 @@ void register_CGID_class(){
         CGID_exposer.def( bp::self + bp::other< SireMol::SegID >() );
         CGID_exposer.def( bp::self + bp::other< SireMol::ChainID >() );
         CGID_exposer.def( bp::self + bp::other< SireMol::ResID >() );
+        CGID_exposer.def( bp::self - bp::self );
+        CGID_exposer.def( bp::self - bp::other< SireMol::AtomID >() );
+        CGID_exposer.def( bp::self - bp::other< SireMol::SegID >() );
+        CGID_exposer.def( bp::self - bp::other< SireMol::ChainID >() );
+        CGID_exposer.def( bp::self - bp::other< SireMol::ResID >() );
+        CGID_exposer.def( -bp::self );
         { //::SireMol::CGID::operator[]
         
             typedef ::SireID::Specify< SireMol::CGID > ( ::SireMol::CGID::*__getitem___function_type)( int ) const;

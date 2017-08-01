@@ -202,6 +202,12 @@ void register_ResID_class(){
         ResID_exposer.def( bp::self + bp::other< SireMol::AtomID >() );
         ResID_exposer.def( bp::self + bp::other< SireMol::SegID >() );
         ResID_exposer.def( bp::self + bp::other< SireMol::CGID >() );
+        ResID_exposer.def( bp::self - bp::self );
+        ResID_exposer.def( bp::self - bp::other< SireMol::ChainID >() );
+        ResID_exposer.def( bp::self - bp::other< SireMol::AtomID >() );
+        ResID_exposer.def( bp::self - bp::other< SireMol::SegID >() );
+        ResID_exposer.def( bp::self - bp::other< SireMol::CGID >() );
+        ResID_exposer.def( -bp::self );
         { //::SireMol::ResID::operator[]
         
             typedef ::SireID::Specify< SireMol::ResID > ( ::SireMol::ResID::*__getitem___function_type)( int ) const;

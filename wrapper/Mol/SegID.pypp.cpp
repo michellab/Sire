@@ -186,6 +186,12 @@ void register_SegID_class(){
         SegID_exposer.def( bp::self + bp::other< SireMol::CGID >() );
         SegID_exposer.def( bp::self + bp::other< SireMol::ResID >() );
         SegID_exposer.def( bp::self + bp::other< SireMol::ChainID >() );
+        SegID_exposer.def( bp::self - bp::self );
+        SegID_exposer.def( bp::self - bp::other< SireMol::AtomID >() );
+        SegID_exposer.def( bp::self - bp::other< SireMol::CGID >() );
+        SegID_exposer.def( bp::self - bp::other< SireMol::ResID >() );
+        SegID_exposer.def( bp::self - bp::other< SireMol::ChainID >() );
+        SegID_exposer.def( -bp::self );
         { //::SireMol::SegID::operator[]
         
             typedef ::SireID::Specify< SireMol::SegID > ( ::SireMol::SegID::*__getitem___function_type)( int ) const;

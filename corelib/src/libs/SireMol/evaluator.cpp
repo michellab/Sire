@@ -618,14 +618,14 @@ static MolarMass getMass(const AtomProperty<T> &masses,
                 
                 for (int j=0; j<nats; ++j)
                 {
-                    mass += ::getMass(masses_array[i]);
+                    mass += ::getMass(masses_array[j]);
                 }
             }
             else
             {
                 foreach (Index j, selected_atoms.selectedAtoms(i))
                 {
-                    mass += ::getMass(masses_array[i]);
+                    mass += ::getMass(masses_array[j]);
                 }
             }
         }
@@ -642,14 +642,14 @@ static MolarMass getMass(const AtomProperty<T> &masses,
                 
                 for (int j=0; j<nats; ++j)
                 {
-                    mass += ::getMass(masses_array[i]);
+                    mass += ::getMass(masses_array[j]);
                 }
             }
             else
             {
                 foreach (Index j, selected_atoms.selectedAtoms(i))
                 {
-                    mass += ::getMass(masses_array[i]);
+                    mass += ::getMass(masses_array[j]);
                 }
             }
         }

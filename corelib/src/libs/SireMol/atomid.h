@@ -112,6 +112,15 @@ public:
     GroupAtomID<SegID,AtomID> operator+(const SegID &other) const;
     MolAtomID operator+(const MolID &other) const;
 
+    SireID::InvertMatch<AtomID> operator-() const;
+
+    IDAndSet<AtomID> operator-(const AtomID &other) const;
+
+    GroupAtomID<CGID,AtomID> operator-(const CGID &other) const;
+    GroupAtomID<ResID,AtomID> operator-(const ResID &other) const;
+    GroupAtomID<ChainID,AtomID> operator-(const ChainID &other) const;
+    GroupAtomID<SegID,AtomID> operator-(const SegID &other) const;
+
     IDOrSet<AtomID> operator*(const AtomID &other) const;
 
     IDOrSet<AtomID> operator*(const CGID &other) const;

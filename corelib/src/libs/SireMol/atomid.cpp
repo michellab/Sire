@@ -206,6 +206,42 @@ MolAtomID AtomID::operator&(const MolID &other) const
     return this->operator+(other);
 }
 
+/** Return the inverse (negative) of this match */
+SireID::InvertMatch<AtomID> AtomID::operator-() const
+{
+    return InvertMatch<AtomID>(*this);
+}
+
+/** Return the match of this atom name and not other */
+IDAndSet<AtomID> AtomID::operator-(const AtomID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the match of this atom name and not other */
+GroupAtomID<CGID,AtomID> AtomID::operator-(const CGID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the match of this atom name and not other */
+GroupAtomID<ResID,AtomID> AtomID::operator-(const ResID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the match of this atom name and not other */
+GroupAtomID<ChainID,AtomID> AtomID::operator-(const ChainID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the match of this atom name and not other */
+GroupAtomID<SegID,AtomID> AtomID::operator-(const SegID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
 /** Return the selection that matches this atom or 'other' */
 IDOrSet<AtomID> AtomID::operator*(const AtomID &other) const
 {

@@ -393,6 +393,10 @@ friend QDataStream& ::operator<<<>(QDataStream&, const PropPtr<T>&);
 friend QDataStream& ::operator>><>(QDataStream&, PropPtr<T>&);
 
 public:
+    typedef T element_type;
+    typedef T value_type;
+    typedef T* pointer;
+
     PropPtr();
 
     PropPtr(const T &obj);

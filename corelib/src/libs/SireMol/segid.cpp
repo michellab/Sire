@@ -234,6 +234,42 @@ InvertMatch<SegID> SegID::operator!() const
     return this->invert();
 }
 
+/** Return this and not other */
+IDAndSet<SegID> SegID::operator-(const SegID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupAtomID<SegID,AtomID> SegID::operator-(const AtomID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupGroupID<SegID,CGID> SegID::operator-(const CGID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupGroupID<SegID,ResID> SegID::operator-(const ResID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupGroupID<SegID,ChainID> SegID::operator-(const ChainID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return not this */
+SireID::InvertMatch<SegID> SegID::operator-() const
+{
+    return InvertMatch<SegID>(*this);
+}
+
 /** Return a match for anything */
 MatchAll<SegID> SegID::any()
 {

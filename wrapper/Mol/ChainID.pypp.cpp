@@ -187,6 +187,12 @@ void register_ChainID_class(){
         ChainID_exposer.def( bp::self + bp::other< SireMol::AtomID >() );
         ChainID_exposer.def( bp::self + bp::other< SireMol::SegID >() );
         ChainID_exposer.def( bp::self + bp::other< SireMol::CGID >() );
+        ChainID_exposer.def( bp::self - bp::self );
+        ChainID_exposer.def( bp::self - bp::other< SireMol::ResID >() );
+        ChainID_exposer.def( bp::self - bp::other< SireMol::AtomID >() );
+        ChainID_exposer.def( bp::self - bp::other< SireMol::SegID >() );
+        ChainID_exposer.def( bp::self - bp::other< SireMol::CGID >() );
+        ChainID_exposer.def( -bp::self );
         { //::SireMol::ChainID::operator[]
         
             typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__getitem___function_type)( int ) const;

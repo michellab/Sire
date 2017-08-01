@@ -102,6 +102,14 @@ public:
     GroupGroupID<SegID,ResID> operator+(const SegID &other) const;
     GroupGroupID<CGID,ResID> operator+(const CGID &other) const;
 
+    IDAndSet<ResID> operator-(const ResID &other) const;
+    ChainResID operator-(const ChainID &other) const;
+    GroupAtomID<ResID,AtomID> operator-(const AtomID &other) const;
+    GroupGroupID<SegID,ResID> operator-(const SegID &other) const;
+    GroupGroupID<CGID,ResID> operator-(const CGID &other) const;
+
+    SireID::InvertMatch<ResID> operator-() const;
+
     IDAndSet<ResID> operator&&(const ResID &other) const;
     ChainResID operator&&(const ChainID &other) const;
     GroupAtomID<ResID,AtomID> operator&&(const AtomID &other) const;

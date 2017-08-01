@@ -937,3 +937,8 @@ MolViewPtr MoleculeView::at(const SireID::Index &idx) const
 {
     return this->operator[](idx);
 }
+
+namespace SireBase
+{
+    template class SireBase::PropPtr<SireMol::MoleculeView>;
+}

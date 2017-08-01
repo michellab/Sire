@@ -183,6 +183,12 @@ void register_AtomID_class(){
         AtomID_exposer.def( bp::self + bp::other< SireMol::ChainID >() );
         AtomID_exposer.def( bp::self + bp::other< SireMol::SegID >() );
         AtomID_exposer.def( bp::self + bp::other< SireMol::MolID >() );
+        AtomID_exposer.def( -bp::self );
+        AtomID_exposer.def( bp::self - bp::self );
+        AtomID_exposer.def( bp::self - bp::other< SireMol::CGID >() );
+        AtomID_exposer.def( bp::self - bp::other< SireMol::ResID >() );
+        AtomID_exposer.def( bp::self - bp::other< SireMol::ChainID >() );
+        AtomID_exposer.def( bp::self - bp::other< SireMol::SegID >() );
         { //::SireMol::AtomID::operator[]
         
             typedef ::SireID::Specify< SireMol::AtomID > ( ::SireMol::AtomID::*__getitem___function_type)( int ) const;

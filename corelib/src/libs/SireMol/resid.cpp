@@ -255,6 +255,42 @@ InvertMatch<ResID> ResID::operator!() const
     return this->invert();
 }
 
+/** Return this and not other */
+IDAndSet<ResID> ResID::operator-(const ResID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+ChainResID ResID::operator-(const ChainID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupAtomID<ResID,AtomID> ResID::operator-(const AtomID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupGroupID<SegID,ResID> ResID::operator-(const SegID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupGroupID<CGID,ResID> ResID::operator-(const CGID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return not this */
+SireID::InvertMatch<ResID> ResID::operator-() const
+{
+    return InvertMatch<ResID>(*this);
+}
+
 /** Return a match for all residues */
 MatchAll<ResID> ResID::any()
 {

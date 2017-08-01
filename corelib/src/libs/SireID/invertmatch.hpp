@@ -162,7 +162,7 @@ template<class ID>
 SIRE_OUTOFLINE_TEMPLATE
 QString InvertMatch<ID>::toString() const
 {
-    return QObject::tr("not %1").arg(id.toString());
+    return QObject::tr("not { %1 }").arg(id.toString());
 }
 
 /** Map this ID to the indicies of the matching objects in 'obj' */

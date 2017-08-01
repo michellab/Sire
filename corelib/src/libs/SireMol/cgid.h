@@ -97,6 +97,14 @@ public:
     GroupGroupID<CGID,ChainID> operator+(const ChainID &other) const;
     GroupGroupID<CGID,ResID> operator+(const ResID &other) const;
 
+    IDAndSet<CGID> operator-(const CGID &other) const;
+    GroupAtomID<CGID,AtomID> operator-(const AtomID &other) const;
+    GroupGroupID<SegID,CGID> operator-(const SegID &other) const;
+    GroupGroupID<CGID,ChainID> operator-(const ChainID &other) const;
+    GroupGroupID<CGID,ResID> operator-(const ResID &other) const;
+
+    SireID::InvertMatch<CGID> operator-() const;
+
     IDAndSet<CGID> operator&&(const CGID &other) const;
     GroupAtomID<CGID,AtomID> operator&&(const AtomID &other) const;
     GroupGroupID<SegID,CGID> operator&&(const SegID &other) const;
