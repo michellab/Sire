@@ -79,7 +79,25 @@ Range& Range::operator=(const Range &other)
 }
 
 /** Return a null simple range for null */
-SimpleRange Range::null()
+const Range& Range::null()
 {
-    return SimpleRange();
+    return *(create_shared_null<SimpleRange>());;
+}
+
+/** Return the range that represents the single value 'i' */
+RangePtr Range::create(qint64 i)
+{
+    return SimpleRange(i);
+}
+
+/** Return the range that represents the range from [start,end) */
+RangePtr Range::create(qint64 start, qint64 end)
+{
+    return SimpleRange(start,end);
+}
+
+/** Return the range that represents the range from [start,end,increment) */
+RangePtr Range::create(qint64 start, qint64 end, qint64 increment)
+{
+    return SimpleRange(start,end,increment);
 }

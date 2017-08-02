@@ -316,23 +316,41 @@ ResIn<ChainID> ChainID::residues(int i, int j) const
 {
     return ResIn<ChainID>(*this, i, j);
 }
-  
-/** Return a specific atom that matches this ID */
-Specify<ChainID> ChainID::operator[](int i) const
+
+/** Return a specific object that matches this ID */
+Specify<ChainID> ChainID::operator[](qint64 i) const
 {
     return Specify<ChainID>(*this, i);
 }
 
-/** Return a specific atom that matches this ID */
-Specify<ChainID> ChainID::operator()(int i) const
+/** Return a range of objects that match this ID */
+Specify<ChainID> ChainID::operator[](const SireBase::Range &range) const
+{
+    return Specify<ChainID>(*this, range);
+}
+
+/** Return a range of objects that match this ID */
+Specify<ChainID> ChainID::operator()(const SireBase::Range &range) const
+{
+    return Specify<ChainID>(*this, range);
+}
+
+/** Return a specific object that matches this ID */
+Specify<ChainID> ChainID::operator()(qint64 i) const
 {
     return this->operator[](i);
 }
 
-/** Return a range of atoms that match this ID */
-Specify<ChainID> ChainID::operator()(int i, int j) const
+/** Return a range of objects that match this ID */
+Specify<ChainID> ChainID::operator()(qint64 start, qint64 end) const
 {
-    return Specify<ChainID>(*this, i, j);
+    return Specify<ChainID>(*this, start, end);
+}
+
+/** Return a range of objects that match this ID */
+Specify<ChainID> ChainID::operator()(qint64 start, qint64 end, qint64 increment) const
+{
+    return Specify<ChainID>(*this, start, end, increment);
 }
 
 void ChainID::processMatches(QList<ChainIdx> &matches, const MolInfo&) const

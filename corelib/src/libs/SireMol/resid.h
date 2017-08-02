@@ -92,9 +92,12 @@ public:
 
     virtual ~ResID();
     
-    Specify<ResID> operator[](int i) const;
-    Specify<ResID> operator()(int i) const;
-    Specify<ResID> operator()(int i, int j) const;
+    Specify<ResID> operator[](qint64 i) const;
+    Specify<ResID> operator[](const SireBase::Range &range) const;
+    Specify<ResID> operator()(const SireBase::Range &range) const;
+    Specify<ResID> operator()(qint64 i) const;
+    Specify<ResID> operator()(qint64 start, qint64 end) const;
+    Specify<ResID> operator()(qint64 start, qint64 end, qint64 increment) const;
 
     IDAndSet<ResID> operator+(const ResID &other) const;
     ChainResID operator+(const ChainID &other) const;

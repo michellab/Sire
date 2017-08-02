@@ -74,23 +74,41 @@ ResID::ResID(const ResID &other) : ID(other)
 /** Destructor */
 ResID::~ResID()
 {}
-  
-/** Return a specific residue that matches this ID */
-Specify<ResID> ResID::operator[](int i) const
+
+/** Return a specific object that matches this ID */
+Specify<ResID> ResID::operator[](qint64 i) const
 {
     return Specify<ResID>(*this, i);
 }
 
-/** Return a specific residue that matches this ID */
-Specify<ResID> ResID::operator()(int i) const
+/** Return a range of objects that match this ID */
+Specify<ResID> ResID::operator[](const SireBase::Range &range) const
+{
+    return Specify<ResID>(*this, range);
+}
+
+/** Return a range of objects that match this ID */
+Specify<ResID> ResID::operator()(const SireBase::Range &range) const
+{
+    return Specify<ResID>(*this, range);
+}
+
+/** Return a specific object that matches this ID */
+Specify<ResID> ResID::operator()(qint64 i) const
 {
     return this->operator[](i);
 }
 
-/** Return a range of residues that match this ID */
-Specify<ResID> ResID::operator()(int i, int j) const
+/** Return a range of objects that match this ID */
+Specify<ResID> ResID::operator()(qint64 start, qint64 end) const
 {
-    return Specify<ResID>(*this, i, j);
+    return Specify<ResID>(*this, start, end);
+}
+
+/** Return a range of objects that match this ID */
+Specify<ResID> ResID::operator()(qint64 start, qint64 end, qint64 increment) const
+{
+    return Specify<ResID>(*this, start, end, increment);
 }
 
 /** Combine with another ID type */

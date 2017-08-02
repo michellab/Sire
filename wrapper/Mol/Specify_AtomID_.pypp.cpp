@@ -65,8 +65,10 @@ void register_Specify_AtomID__class(){
         typedef bp::class_< SireID::Specify< SireMol::AtomID >, bp::bases< SireMol::AtomID, SireID::ID > > Specify_AtomID__exposer_t;
         Specify_AtomID__exposer_t Specify_AtomID__exposer = Specify_AtomID__exposer_t( "Specify_AtomID_", "", bp::init< >("") );
         bp::scope Specify_AtomID__scope( Specify_AtomID__exposer );
-        Specify_AtomID__exposer.def( bp::init< SireMol::AtomID const &, qint32 >(( bp::arg("id"), bp::arg("i") ), "") );
-        Specify_AtomID__exposer.def( bp::init< SireMol::AtomID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") ), "") );
+        Specify_AtomID__exposer.def( bp::init< SireMol::AtomID const &, qint64 >(( bp::arg("id"), bp::arg("index") ), "") );
+        Specify_AtomID__exposer.def( bp::init< SireMol::AtomID const &, qint64, qint64 >(( bp::arg("id"), bp::arg("start"), bp::arg("end") ), "") );
+        Specify_AtomID__exposer.def( bp::init< SireMol::AtomID const &, qint64, qint64, qint64 >(( bp::arg("id"), bp::arg("start"), bp::arg("end"), bp::arg("increment") ), "") );
+        Specify_AtomID__exposer.def( bp::init< SireMol::AtomID const &, SireBase::Range const & >(( bp::arg("id"), bp::arg("range") ), "") );
         Specify_AtomID__exposer.def( bp::init< SireID::Specify< SireMol::AtomID > const & >(( bp::arg("other") ), "") );
         { //::SireID::Specify< SireMol::AtomID >::hash
         
@@ -110,7 +112,7 @@ void register_Specify_AtomID__class(){
         { //::SireID::Specify< SireMol::AtomID >::operator()
         
             typedef SireID::Specify< SireMol::AtomID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireID::Specify< SireMol::AtomID >::*__call___function_type)( int ) const;
+            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireID::Specify< SireMol::AtomID >::*__call___function_type)( ::qint64 ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireMol::AtomID >::operator() );
             
             Specify_AtomID__exposer.def( 
@@ -123,13 +125,39 @@ void register_Specify_AtomID__class(){
         { //::SireID::Specify< SireMol::AtomID >::operator()
         
             typedef SireID::Specify< SireMol::AtomID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireID::Specify< SireMol::AtomID >::*__call___function_type)( int,int ) const;
+            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireID::Specify< SireMol::AtomID >::*__call___function_type)( ::qint64,::qint64 ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireMol::AtomID >::operator() );
             
             Specify_AtomID__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") )
+                , ( bp::arg("start"), bp::arg("end") )
+                , "" );
+        
+        }
+        { //::SireID::Specify< SireMol::AtomID >::operator()
+        
+            typedef SireID::Specify< SireMol::AtomID > exported_class_t;
+            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireID::Specify< SireMol::AtomID >::*__call___function_type)( ::qint64,::qint64,::qint64 ) const;
+            __call___function_type __call___function_value( &::SireID::Specify< SireMol::AtomID >::operator() );
+            
+            Specify_AtomID__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("start"), bp::arg("end"), bp::arg("increment") )
+                , "" );
+        
+        }
+        { //::SireID::Specify< SireMol::AtomID >::operator()
+        
+            typedef SireID::Specify< SireMol::AtomID > exported_class_t;
+            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireID::Specify< SireMol::AtomID >::*__call___function_type)( ::SireBase::Range const & ) const;
+            __call___function_type __call___function_value( &::SireID::Specify< SireMol::AtomID >::operator() );
+            
+            Specify_AtomID__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("range") )
                 , "" );
         
         }
@@ -152,13 +180,26 @@ void register_Specify_AtomID__class(){
         { //::SireID::Specify< SireMol::AtomID >::operator[]
         
             typedef SireID::Specify< SireMol::AtomID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireID::Specify< SireMol::AtomID >::*__getitem___function_type)( int ) const;
+            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireID::Specify< SireMol::AtomID >::*__getitem___function_type)( ::qint64 ) const;
             __getitem___function_type __getitem___function_value( &::SireID::Specify< SireMol::AtomID >::operator[] );
             
             Specify_AtomID__exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireID::Specify< SireMol::AtomID >::operator[]
+        
+            typedef SireID::Specify< SireMol::AtomID > exported_class_t;
+            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireID::Specify< SireMol::AtomID >::*__getitem___function_type)( ::SireBase::Range const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireID::Specify< SireMol::AtomID >::operator[] );
+            
+            Specify_AtomID__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("range") )
                 , "" );
         
         }

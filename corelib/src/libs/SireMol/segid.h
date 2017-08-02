@@ -88,9 +88,12 @@ public:
 
     virtual ~SegID();
 
-    Specify<SegID> operator[](int i) const;
-    Specify<SegID> operator()(int i) const;
-    Specify<SegID> operator()(int i, int j) const;
+    Specify<SegID> operator[](qint64 i) const;
+    Specify<SegID> operator[](const SireBase::Range &range) const;
+    Specify<SegID> operator()(const SireBase::Range &range) const;
+    Specify<SegID> operator()(qint64 i) const;
+    Specify<SegID> operator()(qint64 start, qint64 end) const;
+    Specify<SegID> operator()(qint64 start, qint64 end, qint64 increment) const;
 
     IDAndSet<SegID> operator+(const SegID &other) const;
     GroupAtomID<SegID,AtomID> operator+(const AtomID &other) const;

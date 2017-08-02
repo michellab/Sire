@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "Range.pypp.hpp"
 
 namespace bp = boost::python;
@@ -36,6 +37,53 @@ void register_Range_class(){
                 , "" );
         
         }
+        { //::SireBase::Range::create
+        
+            typedef ::SireBase::RangePtr ( *create_function_type )( ::qint64 );
+            create_function_type create_function_value( &::SireBase::Range::create );
+            
+            Range_exposer.def( 
+                "create"
+                , create_function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireBase::Range::create
+        
+            typedef ::SireBase::RangePtr ( *create_function_type )( ::qint64,::qint64 );
+            create_function_type create_function_value( &::SireBase::Range::create );
+            
+            Range_exposer.def( 
+                "create"
+                , create_function_value
+                , ( bp::arg("start"), bp::arg("end") )
+                , "" );
+        
+        }
+        { //::SireBase::Range::create
+        
+            typedef ::SireBase::RangePtr ( *create_function_type )( ::qint64,::qint64,::qint64 );
+            create_function_type create_function_value( &::SireBase::Range::create );
+            
+            Range_exposer.def( 
+                "create"
+                , create_function_value
+                , ( bp::arg("start"), bp::arg("end"), bp::arg("increment") )
+                , "" );
+        
+        }
+        { //::SireBase::Range::hasNext
+        
+            typedef bool ( ::SireBase::Range::*hasNext_function_type)(  ) const;
+            hasNext_function_type hasNext_function_value( &::SireBase::Range::hasNext );
+            
+            Range_exposer.def( 
+                "hasNext"
+                , hasNext_function_value
+                , "" );
+        
+        }
         { //::SireBase::Range::next
         
             typedef ::qint64 ( ::SireBase::Range::*next_function_type)(  ) ;
@@ -49,12 +97,13 @@ void register_Range_class(){
         }
         { //::SireBase::Range::null
         
-            typedef ::SireBase::SimpleRange ( *null_function_type )(  );
+            typedef ::SireBase::Range const & ( *null_function_type )(  );
             null_function_type null_function_value( &::SireBase::Range::null );
             
             Range_exposer.def( 
                 "null"
                 , null_function_value
+                , bp::return_value_policy<bp::clone_const_reference>()
                 , "Return a null simple range for null" );
         
         }
@@ -70,6 +119,7 @@ void register_Range_class(){
                 , "" );
         
         }
+        Range_exposer.staticmethod( "create" );
         Range_exposer.staticmethod( "null" );
         Range_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireBase::Range >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );

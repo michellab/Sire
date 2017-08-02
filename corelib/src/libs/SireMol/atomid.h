@@ -100,9 +100,12 @@ public:
     
     virtual ~AtomID();
     
-    Specify<AtomID> operator[](int i) const;
-    Specify<AtomID> operator()(int i) const;
-    Specify<AtomID> operator()(int i, int j) const;
+    Specify<AtomID> operator[](qint64 i) const;
+    Specify<AtomID> operator[](const SireBase::Range &range) const;
+    Specify<AtomID> operator()(const SireBase::Range &range) const;
+    Specify<AtomID> operator()(qint64 i) const;
+    Specify<AtomID> operator()(qint64 start, qint64 end) const;
+    Specify<AtomID> operator()(qint64 start, qint64 end, qint64 increment) const;
 
     IDAndSet<AtomID> operator+(const AtomID &other) const;
 

@@ -269,7 +269,7 @@ public:
 
     virtual void assertContains(AtomIdx atomidx) const;
 
-    static const Molecule& null();
+    static const MoleculeView& null();
 
 protected:
     MoleculeView();

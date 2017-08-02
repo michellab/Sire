@@ -76,6 +76,12 @@ SimpleRange::SimpleRange()
               strtval(-1), endval(-1), incr(0)
 {}
 
+/** Construct a range that represents a single value, i */
+SimpleRange::SimpleRange(qint64 i)
+            : ConcreteProperty<SimpleRange,Range>(),
+              strtval(i), endval(i+1), incr(1)
+{}
+
 /** Construct a range from [start,end) in units of increment */
 SimpleRange::SimpleRange(qint64 start, qint64 end, qint64 increment)
             : ConcreteProperty<SimpleRange,Range>(),
@@ -132,8 +138,18 @@ QString SimpleRange::toString() const
 {
     if (incr != 0)
     {
-        return QObject::tr("Range( start == %1, end == %2, increment == %3 )")
-                .arg(strtval).arg(endval).arg(incr);
+        if (strtval + incr == endval)
+        {
+            return QObject::tr("%1").arg(strtval);
+        }
+        else if (incr != 1)
+        {
+            return QObject::tr("[%1,%2,%3)").arg(strtval).arg(endval).arg(incr);
+        }
+        else
+        {
+            return QObject::tr("[%1,%2)").arg(strtval).arg(endval);
+        }
     }
     else
         return QObject::tr("Range::null");

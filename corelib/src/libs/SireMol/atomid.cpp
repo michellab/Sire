@@ -81,21 +81,39 @@ AtomID::~AtomID()
 {}
   
 /** Return a specific atom that matches this ID */
-Specify<AtomID> AtomID::operator[](int i) const
+Specify<AtomID> AtomID::operator[](qint64 i) const
 {
     return Specify<AtomID>(*this, i);
 }
 
+/** Return a range of atoms that match this ID */
+Specify<AtomID> AtomID::operator[](const SireBase::Range &range) const
+{
+    return Specify<AtomID>(*this, range);
+}
+
+/** Return a range of atoms that match this ID */
+Specify<AtomID> AtomID::operator()(const SireBase::Range &range) const
+{
+    return Specify<AtomID>(*this, range);
+}
+
 /** Return a specific atom that matches this ID */
-Specify<AtomID> AtomID::operator()(int i) const
+Specify<AtomID> AtomID::operator()(qint64 i) const
 {
     return this->operator[](i);
 }
 
 /** Return a range of atoms that match this ID */
-Specify<AtomID> AtomID::operator()(int i, int j) const
+Specify<AtomID> AtomID::operator()(qint64 start, qint64 end) const
 {
-    return Specify<AtomID>(*this, i, j);
+    return Specify<AtomID>(*this, start, end);
+}
+
+/** Return a range of atoms that match this ID */
+Specify<AtomID> AtomID::operator()(qint64 start, qint64 end, qint64 increment) const
+{
+    return Specify<AtomID>(*this, start, end, increment);
 }
 
 /** Combine with other ID types */

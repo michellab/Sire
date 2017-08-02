@@ -545,7 +545,7 @@ void register_MoleculeView_class(){
         }
         { //::SireMol::MoleculeView::null
         
-            typedef ::SireMol::Molecule const & ( *null_function_type )(  );
+            typedef ::SireMol::MoleculeView const & ( *null_function_type )(  );
             null_function_type null_function_value( &::SireMol::MoleculeView::null );
             
             MoleculeView_exposer.def( 

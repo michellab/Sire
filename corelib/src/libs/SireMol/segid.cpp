@@ -71,23 +71,59 @@ SegID::SegID(const SegID &other) : ID(other)
 /** Destructor */
 SegID::~SegID()
 {}
-  
-/** Return a specific atom that matches this ID */
-Specify<SegID> SegID::operator[](int i) const
+
+/** Return a specific object that matches this ID */
+Specify<SegID> SegID::operator[](qint64 i) const
 {
     return Specify<SegID>(*this, i);
 }
 
-/** Return a specific atom that matches this ID */
-Specify<SegID> SegID::operator()(int i) const
+/** Return a range of objects that match this ID */
+Specify<SegID> SegID::operator[](const SireBase::Range &range) const
+{
+    return Specify<SegID>(*this, range);
+}
+
+/** Return a range of objects that match this ID */
+Specify<SegID> SegID::operator()(const SireBase::Range &range) const
+{
+    return Specify<SegID>(*this, range);
+}
+
+/** Return a specific object that matches this ID */
+Specify<SegID> SegID::operator()(qint64 i) const
 {
     return this->operator[](i);
 }
 
-/** Return a range of atoms that match this ID */
-Specify<SegID> SegID::operator()(int i, int j) const
+/** Return a range of objects that match this ID */
+Specify<SegID> SegID::operator()(qint64 start, qint64 end) const
 {
-    return Specify<SegID>(*this, i, j);
+    return Specify<SegID>(*this, start, end);
+}
+
+/** Return a range of objects that match this ID */
+Specify<SegID> SegID::operator()(qint64 start, qint64 end, qint64 increment) const
+{
+    return Specify<SegID>(*this, start, end, increment);
+}
+
+/** Return a specific object that matches this ID */
+Specify<CGID> CGID::operator()(qint64 i) const
+{
+    return this->operator[](i);
+}
+
+/** Return a range of objects that match this ID */
+Specify<CGID> CGID::operator()(qint64 start, qint64 end) const
+{
+    return Specify<CGID>(*this, start, end);
+}
+
+/** Return a range of objects that match this ID */
+Specify<CGID> CGID::operator()(qint64 start, qint64 end, qint64 increment) const
+{
+    return Specify<CGID>(*this, start, end, increment);
 }
 
 /** Combine two ID types */

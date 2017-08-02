@@ -157,7 +157,19 @@ void register_ChainID_class(){
         ChainID_exposer.def( bp::self & bp::other< SireMol::CGID >() );
         { //::SireMol::ChainID::operator()
         
-            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( int ) const;
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( ::SireBase::Range const & ) const;
+            __call___function_type __call___function_value( &::SireMol::ChainID::operator() );
+            
+            ChainID_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("range") )
+                , "" );
+        
+        }
+        { //::SireMol::ChainID::operator()
+        
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( ::qint64 ) const;
             __call___function_type __call___function_value( &::SireMol::ChainID::operator() );
             
             ChainID_exposer.def( 
@@ -169,13 +181,25 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::operator()
         
-            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( int,int ) const;
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( ::qint64,::qint64 ) const;
             __call___function_type __call___function_value( &::SireMol::ChainID::operator() );
             
             ChainID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") )
+                , ( bp::arg("start"), bp::arg("end") )
+                , "" );
+        
+        }
+        { //::SireMol::ChainID::operator()
+        
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( ::qint64,::qint64,::qint64 ) const;
+            __call___function_type __call___function_value( &::SireMol::ChainID::operator() );
+            
+            ChainID_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("start"), bp::arg("end"), bp::arg("increment") )
                 , "" );
         
         }
@@ -195,13 +219,25 @@ void register_ChainID_class(){
         ChainID_exposer.def( -bp::self );
         { //::SireMol::ChainID::operator[]
         
-            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__getitem___function_type)( int ) const;
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__getitem___function_type)( ::qint64 ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::ChainID::operator[] );
             
             ChainID_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::ChainID::operator[]
+        
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__getitem___function_type)( ::SireBase::Range const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ChainID::operator[] );
+            
+            ChainID_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("range") )
                 , "" );
         
         }

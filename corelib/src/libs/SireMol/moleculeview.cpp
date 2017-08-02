@@ -778,7 +778,7 @@ Selector<Segment> MoleculeView::selectAllSegments() const
 }
 
 /** Return a completely null molecule */
-const Molecule& MoleculeView::null()
+const MoleculeView& MoleculeView::null()
 {
     return *(create_shared_null<Molecule>());
 }

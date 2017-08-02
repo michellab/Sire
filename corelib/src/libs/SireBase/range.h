@@ -62,20 +62,36 @@ public:
     Range(const Range &other);
 
     virtual ~Range();
-    
+
+    static RangePtr create(qint64 i);
+    static RangePtr create(qint64 start, qint64 end);
+    static RangePtr create(qint64 start, qint64 end, qint64 increment);
+
     virtual Range* clone() const=0;
     
     virtual qint64 next()=0;
 
     virtual bool atEnd() const=0;
 
+    bool hasNext() const;
+
     virtual RangePtr populate(int nitems) const=0;
 
-    static SimpleRange null();
+    static const Range& null();
 
 protected:
     Range& operator=(const Range &other);
 };
+
+#ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+/** Return whether there is another number available in this range */
+inline bool Range::hasNext() const
+{
+    return not this->atEnd();
+}
+
+#endif
 
 }
 

@@ -87,9 +87,12 @@ public:
 
     virtual ~CGID();
 
-    Specify<CGID> operator[](int i) const;
-    Specify<CGID> operator()(int i) const;
-    Specify<CGID> operator()(int i, int j) const;
+    Specify<CGID> operator[](qint64 i) const;
+    Specify<CGID> operator[](const SireBase::Range &range) const;
+    Specify<CGID> operator()(const SireBase::Range &range) const;
+    Specify<CGID> operator()(qint64 i) const;
+    Specify<CGID> operator()(qint64 start, qint64 end) const;
+    Specify<CGID> operator()(qint64 start, qint64 end, qint64 increment) const;
     
     IDAndSet<CGID> operator+(const CGID &other) const;
     GroupAtomID<CGID,AtomID> operator+(const AtomID &other) const;

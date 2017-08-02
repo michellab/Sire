@@ -45,8 +45,10 @@ void register_Specify_MGID__class(){
         typedef bp::class_< SireID::Specify< SireMol::MGID >, bp::bases< SireMol::MGID, SireID::ID > > Specify_MGID__exposer_t;
         Specify_MGID__exposer_t Specify_MGID__exposer = Specify_MGID__exposer_t( "Specify_MGID_", "", bp::init< >("") );
         bp::scope Specify_MGID__scope( Specify_MGID__exposer );
-        Specify_MGID__exposer.def( bp::init< SireMol::MGID const &, qint32 >(( bp::arg("id"), bp::arg("i") ), "") );
-        Specify_MGID__exposer.def( bp::init< SireMol::MGID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") ), "") );
+        Specify_MGID__exposer.def( bp::init< SireMol::MGID const &, qint64 >(( bp::arg("id"), bp::arg("index") ), "") );
+        Specify_MGID__exposer.def( bp::init< SireMol::MGID const &, qint64, qint64 >(( bp::arg("id"), bp::arg("start"), bp::arg("end") ), "") );
+        Specify_MGID__exposer.def( bp::init< SireMol::MGID const &, qint64, qint64, qint64 >(( bp::arg("id"), bp::arg("start"), bp::arg("end"), bp::arg("increment") ), "") );
+        Specify_MGID__exposer.def( bp::init< SireMol::MGID const &, SireBase::Range const & >(( bp::arg("id"), bp::arg("range") ), "") );
         Specify_MGID__exposer.def( bp::init< SireID::Specify< SireMol::MGID > const & >(( bp::arg("other") ), "") );
         { //::SireID::Specify< SireMol::MGID >::hash
         
@@ -90,7 +92,7 @@ void register_Specify_MGID__class(){
         { //::SireID::Specify< SireMol::MGID >::operator()
         
             typedef SireID::Specify< SireMol::MGID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::MGID > ( ::SireID::Specify< SireMol::MGID >::*__call___function_type)( int ) const;
+            typedef ::SireID::Specify< SireMol::MGID > ( ::SireID::Specify< SireMol::MGID >::*__call___function_type)( ::qint64 ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireMol::MGID >::operator() );
             
             Specify_MGID__exposer.def( 
@@ -103,13 +105,39 @@ void register_Specify_MGID__class(){
         { //::SireID::Specify< SireMol::MGID >::operator()
         
             typedef SireID::Specify< SireMol::MGID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::MGID > ( ::SireID::Specify< SireMol::MGID >::*__call___function_type)( int,int ) const;
+            typedef ::SireID::Specify< SireMol::MGID > ( ::SireID::Specify< SireMol::MGID >::*__call___function_type)( ::qint64,::qint64 ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireMol::MGID >::operator() );
             
             Specify_MGID__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") )
+                , ( bp::arg("start"), bp::arg("end") )
+                , "" );
+        
+        }
+        { //::SireID::Specify< SireMol::MGID >::operator()
+        
+            typedef SireID::Specify< SireMol::MGID > exported_class_t;
+            typedef ::SireID::Specify< SireMol::MGID > ( ::SireID::Specify< SireMol::MGID >::*__call___function_type)( ::qint64,::qint64,::qint64 ) const;
+            __call___function_type __call___function_value( &::SireID::Specify< SireMol::MGID >::operator() );
+            
+            Specify_MGID__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("start"), bp::arg("end"), bp::arg("increment") )
+                , "" );
+        
+        }
+        { //::SireID::Specify< SireMol::MGID >::operator()
+        
+            typedef SireID::Specify< SireMol::MGID > exported_class_t;
+            typedef ::SireID::Specify< SireMol::MGID > ( ::SireID::Specify< SireMol::MGID >::*__call___function_type)( ::SireBase::Range const & ) const;
+            __call___function_type __call___function_value( &::SireID::Specify< SireMol::MGID >::operator() );
+            
+            Specify_MGID__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("range") )
                 , "" );
         
         }
@@ -132,13 +160,26 @@ void register_Specify_MGID__class(){
         { //::SireID::Specify< SireMol::MGID >::operator[]
         
             typedef SireID::Specify< SireMol::MGID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::MGID > ( ::SireID::Specify< SireMol::MGID >::*__getitem___function_type)( int ) const;
+            typedef ::SireID::Specify< SireMol::MGID > ( ::SireID::Specify< SireMol::MGID >::*__getitem___function_type)( ::qint64 ) const;
             __getitem___function_type __getitem___function_value( &::SireID::Specify< SireMol::MGID >::operator[] );
             
             Specify_MGID__exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireID::Specify< SireMol::MGID >::operator[]
+        
+            typedef SireID::Specify< SireMol::MGID > exported_class_t;
+            typedef ::SireID::Specify< SireMol::MGID > ( ::SireID::Specify< SireMol::MGID >::*__getitem___function_type)( ::SireBase::Range const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireID::Specify< SireMol::MGID >::operator[] );
+            
+            Specify_MGID__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("range") )
                 , "" );
         
         }

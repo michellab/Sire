@@ -65,8 +65,10 @@ void register_Specify_ResID__class(){
         typedef bp::class_< SireID::Specify< SireMol::ResID >, bp::bases< SireMol::ResID, SireID::ID > > Specify_ResID__exposer_t;
         Specify_ResID__exposer_t Specify_ResID__exposer = Specify_ResID__exposer_t( "Specify_ResID_", "", bp::init< >("") );
         bp::scope Specify_ResID__scope( Specify_ResID__exposer );
-        Specify_ResID__exposer.def( bp::init< SireMol::ResID const &, qint32 >(( bp::arg("id"), bp::arg("i") ), "") );
-        Specify_ResID__exposer.def( bp::init< SireMol::ResID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") ), "") );
+        Specify_ResID__exposer.def( bp::init< SireMol::ResID const &, qint64 >(( bp::arg("id"), bp::arg("index") ), "") );
+        Specify_ResID__exposer.def( bp::init< SireMol::ResID const &, qint64, qint64 >(( bp::arg("id"), bp::arg("start"), bp::arg("end") ), "") );
+        Specify_ResID__exposer.def( bp::init< SireMol::ResID const &, qint64, qint64, qint64 >(( bp::arg("id"), bp::arg("start"), bp::arg("end"), bp::arg("increment") ), "") );
+        Specify_ResID__exposer.def( bp::init< SireMol::ResID const &, SireBase::Range const & >(( bp::arg("id"), bp::arg("range") ), "") );
         Specify_ResID__exposer.def( bp::init< SireID::Specify< SireMol::ResID > const & >(( bp::arg("other") ), "") );
         { //::SireID::Specify< SireMol::ResID >::hash
         
@@ -110,7 +112,7 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::operator()
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__call___function_type)( int ) const;
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__call___function_type)( ::qint64 ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireMol::ResID >::operator() );
             
             Specify_ResID__exposer.def( 
@@ -123,13 +125,39 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::operator()
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__call___function_type)( int,int ) const;
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__call___function_type)( ::qint64,::qint64 ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireMol::ResID >::operator() );
             
             Specify_ResID__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") )
+                , ( bp::arg("start"), bp::arg("end") )
+                , "" );
+        
+        }
+        { //::SireID::Specify< SireMol::ResID >::operator()
+        
+            typedef SireID::Specify< SireMol::ResID > exported_class_t;
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__call___function_type)( ::qint64,::qint64,::qint64 ) const;
+            __call___function_type __call___function_value( &::SireID::Specify< SireMol::ResID >::operator() );
+            
+            Specify_ResID__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("start"), bp::arg("end"), bp::arg("increment") )
+                , "" );
+        
+        }
+        { //::SireID::Specify< SireMol::ResID >::operator()
+        
+            typedef SireID::Specify< SireMol::ResID > exported_class_t;
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__call___function_type)( ::SireBase::Range const & ) const;
+            __call___function_type __call___function_value( &::SireID::Specify< SireMol::ResID >::operator() );
+            
+            Specify_ResID__exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("range") )
                 , "" );
         
         }
@@ -152,13 +180,26 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::operator[]
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__getitem___function_type)( int ) const;
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__getitem___function_type)( ::qint64 ) const;
             __getitem___function_type __getitem___function_value( &::SireID::Specify< SireMol::ResID >::operator[] );
             
             Specify_ResID__exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireID::Specify< SireMol::ResID >::operator[]
+        
+            typedef SireID::Specify< SireMol::ResID > exported_class_t;
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__getitem___function_type)( ::SireBase::Range const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireID::Specify< SireMol::ResID >::operator[] );
+            
+            Specify_ResID__exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("range") )
                 , "" );
         
         }

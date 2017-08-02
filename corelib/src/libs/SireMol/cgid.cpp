@@ -72,23 +72,41 @@ CGID::CGID(const CGID &other) : ID(other)
 /** Destructor */
 CGID::~CGID()
 {}
-  
-/** Return a specific atom that matches this ID */
-Specify<CGID> CGID::operator[](int i) const
+
+/** Return a specific object that matches this ID */
+Specify<CGID> CGID::operator[](qint64 i) const
 {
     return Specify<CGID>(*this, i);
 }
 
-/** Return a specific atom that matches this ID */
-Specify<CGID> CGID::operator()(int i) const
+/** Return a range of objects that match this ID */
+Specify<CGID> CGID::operator[](const SireBase::Range &range) const
+{
+    return Specify<CGID>(*this, range);
+}
+
+/** Return a range of objects that match this ID */
+Specify<CGID> CGID::operator()(const SireBase::Range &range) const
+{
+    return Specify<CGID>(*this, range);
+}
+
+/** Return a specific object that matches this ID */
+Specify<CGID> CGID::operator()(qint64 i) const
 {
     return this->operator[](i);
 }
 
-/** Return a range of atoms that match this ID */
-Specify<CGID> CGID::operator()(int i, int j) const
+/** Return a range of objects that match this ID */
+Specify<CGID> CGID::operator()(qint64 start, qint64 end) const
 {
-    return Specify<CGID>(*this, i, j);
+    return Specify<CGID>(*this, start, end);
+}
+
+/** Return a range of objects that match this ID */
+Specify<CGID> CGID::operator()(qint64 start, qint64 end, qint64 increment) const
+{
+    return Specify<CGID>(*this, start, end, increment);
 }
 
 /** Combine with another ID */

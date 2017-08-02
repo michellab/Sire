@@ -59,6 +59,7 @@ friend QDataStream& ::operator>>(QDataStream&, SireBase::SimpleRange&);
 
 public:
     SimpleRange();
+    SimpleRange(qint64 i);
     SimpleRange(qint64 start, qint64 end, qint64 increment=1);
     
     SimpleRange(const SimpleRange &other);

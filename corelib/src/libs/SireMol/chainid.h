@@ -90,9 +90,12 @@ public:
 
     virtual ~ChainID();
     
-    Specify<ChainID> operator[](int i) const;
-    Specify<ChainID> operator()(int i) const;
-    Specify<ChainID> operator()(int i, int j) const;
+    Specify<ChainID> operator[](qint64 i) const;
+    Specify<ChainID> operator[](const SireBase::Range &range) const;
+    Specify<ChainID> operator()(const SireBase::Range &range) const;
+    Specify<ChainID> operator()(qint64 i) const;
+    Specify<ChainID> operator()(qint64 start, qint64 end) const;
+    Specify<ChainID> operator()(qint64 start, qint64 end, qint64 increment) const;
     
     IDAndSet<ChainID> operator+(const ChainID &other) const;
     ChainResID operator+(const ResID &other) const;
