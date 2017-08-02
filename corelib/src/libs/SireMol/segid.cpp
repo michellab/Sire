@@ -108,24 +108,6 @@ Specify<SegID> SegID::operator()(qint64 start, qint64 end, qint64 increment) con
     return Specify<SegID>(*this, start, end, increment);
 }
 
-/** Return a specific object that matches this ID */
-Specify<CGID> CGID::operator()(qint64 i) const
-{
-    return this->operator[](i);
-}
-
-/** Return a range of objects that match this ID */
-Specify<CGID> CGID::operator()(qint64 start, qint64 end) const
-{
-    return Specify<CGID>(*this, start, end);
-}
-
-/** Return a range of objects that match this ID */
-Specify<CGID> CGID::operator()(qint64 start, qint64 end, qint64 increment) const
-{
-    return Specify<CGID>(*this, start, end, increment);
-}
-
 /** Combine two ID types */
 IDAndSet<SegID> SegID::operator+(const SegID &other) const
 {
