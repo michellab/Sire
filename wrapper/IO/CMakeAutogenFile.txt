@@ -9,10 +9,12 @@ set ( PYPP_SOURCES
        FlexibilityTemplate.pypp.cpp
        IOBase.pypp.cpp
        IOParametersBase.pypp.cpp
+       Mol2.pypp.cpp
        MoleculeParser.pypp.cpp
        NullIO.pypp.cpp
        NullParser.pypp.cpp
        PDB.pypp.cpp
+       PDB2.pypp.cpp
        PDBParameters.pypp.cpp
        PerturbationsLibrary.pypp.cpp
        PerturbationsTemplate.pypp.cpp

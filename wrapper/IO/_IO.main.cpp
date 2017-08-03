@@ -23,6 +23,8 @@
 
 #include "IOParametersBase.pypp.hpp"
 
+#include "Mol2.pypp.hpp"
+
 #include "MoleculeParser.pypp.hpp"
 
 #include "NullIO.pypp.hpp"
@@ -30,6 +32,8 @@
 #include "NullParser.pypp.hpp"
 
 #include "PDB.pypp.hpp"
+
+#include "PDB2.pypp.hpp"
 
 #include "PDBParameters.pypp.hpp"
 
@@ -82,11 +86,15 @@ BOOST_PYTHON_MODULE(_IO){
 
     register_IOParametersBase_class();
 
+    register_Mol2_class();
+
     register_NullIO_class();
 
     register_NullParser_class();
 
     register_PDB_class();
+
+    register_PDB2_class();
 
     register_PDBParameters_class();
 

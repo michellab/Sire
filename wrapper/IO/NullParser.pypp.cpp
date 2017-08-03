@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireBase/parallel.h"
 
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireIO/errors.h"
@@ -59,7 +61,7 @@ void register_NullParser_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
-                , "" );
+                , "Return this parser constructed from the passed filename" );
         
         }
         { //::SireIO::NullParser::construct
@@ -71,7 +73,7 @@ void register_NullParser_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
-                , "" );
+                , "Return this parser constructed from the passed set of lines" );
         
         }
         { //::SireIO::NullParser::construct
@@ -83,7 +85,7 @@ void register_NullParser_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
-                , "" );
+                , "Return this parser constructed from the passed SireSystem::System" );
         
         }
         { //::SireIO::NullParser::formatDescription
@@ -94,7 +96,7 @@ void register_NullParser_class(){
             NullParser_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
-                , "" );
+                , "Return a description of the file format" );
         
         }
         { //::SireIO::NullParser::formatName

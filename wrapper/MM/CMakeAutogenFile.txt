@@ -141,10 +141,12 @@ set ( PYPP_SOURCES
        LJPotentialInterface_IntraLJPotential_.pypp.cpp
        LJProbe.pypp.cpp
        LJScaleFactor.pypp.cpp
+       Mol2Params.pypp.cpp
        MultiCLJComponent.pypp.cpp
        NoCutoff.pypp.cpp
        NullCLJFunction.pypp.cpp
        NullRestraint.pypp.cpp
+       PDBParams.pypp.cpp
        Restraint.pypp.cpp
        Restraint3D.pypp.cpp
        RestraintComponent.pypp.cpp

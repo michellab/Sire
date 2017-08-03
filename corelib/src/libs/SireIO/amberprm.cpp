@@ -3055,7 +3055,7 @@ AmberPrm::AmberPrm(const System &system, const PropertyMap &map)
                         .arg( QDateTime::currentDateTime().toString("MM/dd/yy  hh:mm:ss") ) );
 
     //now generate this object by re-reading these lines
-    AmberPrm parsed(lines);
+    AmberPrm parsed(lines, map);
 
     this->operator=(parsed);
 }

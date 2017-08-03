@@ -16,6 +16,7 @@
 #include "iobase.h"
 #include "SireBase/booleanproperty.h"
 #include "SireBase/parallel.h"
+#include "SireBase/stringproperty.h"
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
 #include "SireStream/datastream.h"

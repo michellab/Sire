@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireBase/parallel.h"
 
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireIO/errors.h"
@@ -135,7 +137,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
-                , "" );
+                , "Return the suffix (or suffixes) given to files that support this format.\nThe first suffix is the preferred on to use" );
         
         }
         { //::SireIO::MoleculeParser::isBinaryFile
@@ -203,7 +205,7 @@ void register_MoleculeParser_class(){
                 "load"
                 , load_function_value
                 , ( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
-                , "" );
+                , "Synonym for MoleculeParser::read" );
         
         }
         { //::SireIO::MoleculeParser::load
@@ -215,7 +217,7 @@ void register_MoleculeParser_class(){
                 "load"
                 , load_function_value
                 , ( bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
-                , "" );
+                , "Synonym for MoleculeParser::read" );
         
         }
         { //::SireIO::MoleculeParser::load
@@ -227,7 +229,7 @@ void register_MoleculeParser_class(){
                 "load"
                 , load_function_value
                 , ( bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
-                , "" );
+                , "Synonym for MoleculeParser::read" );
         
         }
         { //::SireIO::MoleculeParser::null
@@ -311,7 +313,7 @@ void register_MoleculeParser_class(){
                 "save"
                 , save_function_value
                 , ( bp::arg("system"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
-                , "" );
+                , "Synonym of MoleculeParser::write" );
         
         }
         { //::SireIO::MoleculeParser::save
@@ -323,7 +325,7 @@ void register_MoleculeParser_class(){
                 "save"
                 , save_function_value
                 , ( bp::arg("system"), bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
-                , "" );
+                , "Synonym of MoleculeParser::write" );
         
         }
         { //::SireIO::MoleculeParser::save
@@ -335,7 +337,7 @@ void register_MoleculeParser_class(){
                 "save"
                 , save_function_value
                 , ( bp::arg("system"), bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
-                , "" );
+                , "Synonym of MoleculeParser::write" );
         
         }
         { //::SireIO::MoleculeParser::score
@@ -369,7 +371,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "supportedFormats"
                 , supportedFormats_function_value
-                , "" );
+                , "This returns a human readable set of lines describing the formats supported\nby MoleculeParser. Each line is formatted as extension : description where\nextension is the unique extension of the file used by MoleculeParser, and\ndescription is a description of the file format" );
         
         }
         { //::SireIO::MoleculeParser::toSystem
@@ -439,7 +441,7 @@ void register_MoleculeParser_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("system"), bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() )
-                , "" );
+                , "Save the passed System to the file called filename. First, the fileformat\nproperty is looked at in map. This is used to set the format(s) of\nthe files that are written (comma-separated list).\nIf this does not exist, then the extension of the\nfile is used to work out which format to use. If no extension is given,\nthen the System will be queried to find out its preferred format (normally\nthe format it was loaded with), via its fileformat property\n(again, comma separated list).\nIf their preferred format results in multiple files, then\nmultiple files will be written. This returns the full pathnames to\nall of the files that are written\n" );
         
         }
         { //::SireIO::MoleculeParser::write
@@ -451,7 +453,7 @@ void register_MoleculeParser_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("system"), bp::arg("file1"), bp::arg("file2"), bp::arg("map")=SireBase::PropertyMap() )
-                , "" );
+                , "Extension of MoleculeParser::write which allows you to specify two filenames.\nThe same rules to locate the fileformats are now used, except now only two\nfiles are permitted to be written" );
         
         }
         { //::SireIO::MoleculeParser::write
@@ -463,7 +465,7 @@ void register_MoleculeParser_class(){
                 "write"
                 , write_function_value
                 , ( bp::arg("system"), bp::arg("filenames"), bp::arg("map")=SireBase::PropertyMap() )
-                , "" );
+                , "Extension of MoleculeParser::write which allows many filenames.\nThe same rules to locate the fileformats are now used, except that now only\nthe number of files written must match the number of filenames" );
         
         }
         { //::SireIO::MoleculeParser::writeToFile
@@ -475,7 +477,7 @@ void register_MoleculeParser_class(){
                 "writeToFile"
                 , writeToFile_function_value
                 , ( bp::arg("filename") )
-                , "" );
+                , "Write the parsed data back to the file called filename. This will\noverwrite the file if it exists already, so be careful" );
         
         }
         MoleculeParser_exposer.staticmethod( "load" );

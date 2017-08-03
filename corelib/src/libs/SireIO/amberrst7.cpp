@@ -784,7 +784,7 @@ AmberRst7::AmberRst7(const System &system, const PropertyMap &map)
     }
 
     //now generate this object by re-reading these lines
-    AmberRst7 parsed(lines);
+    AmberRst7 parsed(lines,map);
 
     this->operator=(parsed);
 }

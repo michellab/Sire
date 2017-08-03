@@ -289,6 +289,8 @@
 
 #include "LJScaleFactor.pypp.hpp"
 
+#include "Mol2Params.pypp.hpp"
+
 #include "MultiCLJComponent.pypp.hpp"
 
 #include "NoCutoff.pypp.hpp"
@@ -296,6 +298,8 @@
 #include "NullCLJFunction.pypp.hpp"
 
 #include "NullRestraint.pypp.hpp"
+
+#include "PDBParams.pypp.hpp"
 
 #include "Restraint.pypp.hpp"
 
@@ -668,6 +672,8 @@ BOOST_PYTHON_MODULE(_MM){
 
     register_LJProbe_class();
 
+    register_Mol2Params_class();
+
     register_MultiCLJComponent_class();
 
     register_NoCutoff_class();
@@ -675,6 +681,8 @@ BOOST_PYTHON_MODULE(_MM){
     register_NullCLJFunction_class();
 
     register_NullRestraint_class();
+
+    register_PDBParams_class();
 
     register_RestraintComponent_class();
 

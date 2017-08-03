@@ -30,9 +30,11 @@ set ( SIREIO_HEADERS
       errors.h
       flexibilitylibrary.h
       iobase.h
+      mol2.h
       moleculeparser.h
       netcdffile.h
       pdb.h
+      pdb2.h
       perturbationslibrary.h
       protoms.h
       tinker.h
@@ -54,9 +56,11 @@ set ( SIREIO_SOURCES
       errors.cpp
       flexibilitylibrary.cpp
       iobase.cpp
+      mol2.cpp
       moleculeparser.cpp
       netcdffile.cpp
       pdb.cpp
+      pdb2.cpp
       perturbationslibrary.cpp
       protoms.cpp
       tinker.cpp
