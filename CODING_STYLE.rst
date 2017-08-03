@@ -13,12 +13,12 @@ developers. This coding style has evolved over many years and many
 developers, and is needed to ensure that the Sire source code looks
 like a single homogenous set, which anyone can edit at any point.
 
-
-(1) All indentation should be multiples of 4 spaces. All tabs should be replaced by 4 spaces. 
+All indentation should be multiples of 4 spaces. All tabs should be replaced by 4 spaces. 
 --------------------------
 
 For example
 
+```c++
 void foo()
 {
     if (true)
@@ -29,6 +29,43 @@ void foo()
         }
     }
 }
+```
+
+not
+
+```
+void foo()
+{
+ if (true)
+ {
+	for (int i=0; i<10; ++i){ /* do something */ }
+ }
+}
+```
+
+Curly brackets should be used for all blocks, with '{' on a new line
+-------------------
+
+For example
+
+```c++
+for (int i=0; i<10; ++i)
+{
+    if (condition)
+    {
+        //do something
+    }
+}
+```
+
+not
+
+```c++
+for (int i=0; i<10; ++i){
+    if (condition) /* do something */;
+}
+```
+
 
 (2) Classes should be named using capital letters, using only
     the letters A-Za-z and numbers 0-9. Please do not use underscores.
