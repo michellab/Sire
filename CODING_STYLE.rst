@@ -1,9 +1,23 @@
+****
+`Sire <http://siremol.org>`__
+****
+
+Coding Style
+============
+
 To keep the code consistent, there a strict coding style is used in Sire.
 Please follow these rules to maintain this style. Also, if you see code
-that doesn't follow these rules (we are all not perfect!)
+that doesn't follow these rules (we are all not perfect!) then please
+feel free to either correct that code, or to notify one of the lead
+developers. This coding style has evolved over many years and many
+developers, and is needed to ensure that the Sire source code looks
+like a single homogenous set, which anyone can edit at any point.
 
-(1) All indentation should be multiples of 4 spaces. All tabs should 
-    be replaced by 4 spaces. For example
+
+(1) All indentation should be multiples of 4 spaces. All tabs should be replaced by 4 spaces. 
+--------------------------
+
+For example
 
 void foo()
 {
