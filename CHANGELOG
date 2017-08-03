@@ -3,6 +3,13 @@ SIRE changelog
 
 devel branch:
 
+    [2017.1.0] April 20 2017 - First 2017 release. Included new
+            parallel MoleculeParser code for reading molecules,
+            and moved fully over to C++-14 style coding for new code.
+            Included AVX-512 vectorisation for Intel KNL and can
+            now successfully compile and run using GCC 5 and GCC 6,
+            as well as Intel 2017 compilers and Clang.
+
     [2016.3.1] January 9 2017 - Minor patch release that fixes bugs:
         (1) Correctly sets MACOSX_DEPLOYMENT_TARGET to 10.8 so executable works 
             on OS X 10.8 (Mountain Lion) and above
