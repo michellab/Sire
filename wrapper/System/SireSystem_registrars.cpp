@@ -4,33 +4,33 @@
 #include "SireSystem_registrars.h"
 
 #include "systemmonitor.h"
-#include "monitoridx.h"
-#include "freeenergymonitor.h"
-#include "distancecomponent.h"
-#include "spacewrapper.h"
-#include "polarisecharges.h"
-#include "sysidx.h"
-#include "monitorproperty.h"
-#include "monitorcomponent.h"
-#include "monitorcomponents.h"
-#include "perturbationconstraint.h"
-#include "constraints.h"
-#include "anglecomponent.h"
-#include "system.h"
-#include "monitorname.h"
-#include "sysname.h"
-#include "sysidentifier.h"
-#include "monitoridentifier.h"
-#include "idassigner.h"
 #include "closemols.h"
-#include "systemmonitors.h"
+#include "sysidx.h"
+#include "freeenergymonitor.h"
 #include "checkpoint.h"
-#include "monitormonitor.h"
-#include "identityconstraint.h"
-#include "constraint.h"
+#include "distancecomponent.h"
+#include "perturbationconstraint.h"
+#include "sysidentifier.h"
+#include "system.h"
+#include "anglecomponent.h"
+#include "monitorproperty.h"
+#include "monitoridentifier.h"
+#include "polarisecharges.h"
 #include "volmapmonitor.h"
-#include "energymonitor.h"
+#include "constraint.h"
+#include "monitormonitor.h"
+#include "monitorname.h"
+#include "monitoridx.h"
+#include "systemmonitors.h"
 #include "dihedralcomponent.h"
+#include "sysname.h"
+#include "monitorcomponents.h"
+#include "energymonitor.h"
+#include "identityconstraint.h"
+#include "idassigner.h"
+#include "monitorcomponent.h"
+#include "constraints.h"
+#include "spacewrapper.h"
 
 #include "Helpers/objectregistry.hpp"
 
@@ -38,46 +38,46 @@ void register_SireSystem_objects()
 {
 
     ObjectRegistry::registerConverterFor< SireSystem::NullMonitor >();
-    ObjectRegistry::registerConverterFor< SireSystem::MonitorIdx >();
+    ObjectRegistry::registerConverterFor< SireSystem::CloseMols >();
+    ObjectRegistry::registerConverterFor< SireSystem::SysIdx >();
     ObjectRegistry::registerConverterFor< SireSystem::FreeEnergyMonitor >();
     ObjectRegistry::registerConverterFor< SireSystem::AssignerGroup >();
+    ObjectRegistry::registerConverterFor< SireSystem::CheckPoint >();
     ObjectRegistry::registerConverterFor< SireSystem::DistanceComponent >();
     ObjectRegistry::registerConverterFor< SireSystem::DoubleDistanceComponent >();
     ObjectRegistry::registerConverterFor< SireSystem::TripleDistanceComponent >();
-    ObjectRegistry::registerConverterFor< SireSystem::SpaceWrapper >();
-    ObjectRegistry::registerConverterFor< SireSystem::PolariseCharges >();
-    ObjectRegistry::registerConverterFor< SireSystem::PolariseChargesFF >();
-    ObjectRegistry::registerConverterFor< SireSystem::SysIdx >();
-    ObjectRegistry::registerConverterFor< SireSystem::MonitorProperty >();
-    ObjectRegistry::registerConverterFor< SireSystem::MonitorComponent >();
-    ObjectRegistry::registerConverterFor< SireSystem::MonitorComponents >();
     ObjectRegistry::registerConverterFor< SireSystem::PerturbationConstraint >();
-    ObjectRegistry::registerConverterFor< SireSystem::Constraints >();
-    ObjectRegistry::registerConverterFor< SireSystem::AngleComponent >();
-    ObjectRegistry::registerConverterFor< SireSystem::System >();
-    ObjectRegistry::registerConverterFor< SireSystem::MonitorName >();
-    ObjectRegistry::registerConverterFor< SireSystem::SysName >();
     ObjectRegistry::registerConverterFor< SireID::Specify<SireSystem::SysID> >();
     ObjectRegistry::registerConverterFor< SireID::IDAndSet<SireSystem::SysID> >();
     ObjectRegistry::registerConverterFor< SireID::IDOrSet<SireSystem::SysID> >();
     ObjectRegistry::registerConverterFor< SireSystem::SysIdentifier >();
+    ObjectRegistry::registerConverterFor< SireSystem::System >();
+    ObjectRegistry::registerConverterFor< SireSystem::AngleComponent >();
+    ObjectRegistry::registerConverterFor< SireSystem::MonitorProperty >();
     ObjectRegistry::registerConverterFor< SireID::Specify<SireSystem::MonitorID> >();
     ObjectRegistry::registerConverterFor< SireID::IDAndSet<SireSystem::MonitorID> >();
     ObjectRegistry::registerConverterFor< SireID::IDOrSet<SireSystem::MonitorID> >();
     ObjectRegistry::registerConverterFor< SireSystem::MonitorIdentifier >();
-    ObjectRegistry::registerConverterFor< SireSystem::IDAssigner >();
-    ObjectRegistry::registerConverterFor< SireSystem::CloseMols >();
-    ObjectRegistry::registerConverterFor< SireSystem::SystemMonitors >();
-    ObjectRegistry::registerConverterFor< SireSystem::CheckPoint >();
-    ObjectRegistry::registerConverterFor< SireSystem::MonitorMonitor >();
-    ObjectRegistry::registerConverterFor< SireSystem::IdentityConstraint >();
+    ObjectRegistry::registerConverterFor< SireSystem::PolariseCharges >();
+    ObjectRegistry::registerConverterFor< SireSystem::PolariseChargesFF >();
+    ObjectRegistry::registerConverterFor< SireSystem::VolMapMonitor >();
     ObjectRegistry::registerConverterFor< SireSystem::NullConstraint >();
     ObjectRegistry::registerConverterFor< SireSystem::PropertyConstraint >();
     ObjectRegistry::registerConverterFor< SireSystem::ComponentConstraint >();
     ObjectRegistry::registerConverterFor< SireSystem::WindowedComponent >();
-    ObjectRegistry::registerConverterFor< SireSystem::VolMapMonitor >();
-    ObjectRegistry::registerConverterFor< SireSystem::EnergyMonitor >();
+    ObjectRegistry::registerConverterFor< SireSystem::MonitorMonitor >();
+    ObjectRegistry::registerConverterFor< SireSystem::MonitorName >();
+    ObjectRegistry::registerConverterFor< SireSystem::MonitorIdx >();
+    ObjectRegistry::registerConverterFor< SireSystem::SystemMonitors >();
     ObjectRegistry::registerConverterFor< SireSystem::DihedralComponent >();
+    ObjectRegistry::registerConverterFor< SireSystem::SysName >();
+    ObjectRegistry::registerConverterFor< SireSystem::MonitorComponents >();
+    ObjectRegistry::registerConverterFor< SireSystem::EnergyMonitor >();
+    ObjectRegistry::registerConverterFor< SireSystem::IdentityConstraint >();
+    ObjectRegistry::registerConverterFor< SireSystem::IDAssigner >();
+    ObjectRegistry::registerConverterFor< SireSystem::MonitorComponent >();
+    ObjectRegistry::registerConverterFor< SireSystem::Constraints >();
+    ObjectRegistry::registerConverterFor< SireSystem::SpaceWrapper >();
 
 }
 
