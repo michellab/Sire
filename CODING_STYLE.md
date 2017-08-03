@@ -1,9 +1,7 @@
-****
-`Sire <http://siremol.org>`__
-****
 
-Coding Style
-============
+# [Sire](http://siremol.org>)
+
+## Coding Style
 
 To keep the code consistent, there a strict coding style is used in Sire.
 Please follow these rules to maintain this style. Also, if you see code
@@ -13,8 +11,7 @@ developers. This coding style has evolved over many years and many
 developers, and is needed to ensure that the Sire source code looks
 like a single homogenous set, which anyone can edit at any point.
 
-All indentation should be multiples of 4 spaces. All tabs should be replaced by 4 spaces. 
---------------------------
+### All indentation should be multiples of 4 spaces. All tabs should be replaced by 4 spaces. 
 
 For example
 
@@ -43,8 +40,7 @@ void foo()
 }
 ```
 
-Curly brackets should be used for all blocks, with '{' on a new line
--------------------
+### Curly brackets should be used for all blocks, with '{' on a new line
 
 For example
 
