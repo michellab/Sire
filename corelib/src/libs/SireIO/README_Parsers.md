@@ -90,7 +90,7 @@ filenames = MoleculeParser.save( system, "output.pdb" )
 or
 
 ```python
-filenames = MoleculeParser.save( system, {"fileformat",["PRM7","RST"]} )
+filenames = MoleculeParser.save( system, {"fileformat":AmberPrm} )
 ```
 
 ## Three step process for reading

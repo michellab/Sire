@@ -1017,7 +1017,15 @@ QStringList MoleculeParser::write(const System &system, const QString &filename,
     
     if (format_property.hasValue())
     {
-        fileformats = format_property.value().asA<StringProperty>().toString().split(",");
+        try
+        {
+            fileformats = format_property.value().asA<StringProperty>().toString().split(",");
+        }
+        catch(...)
+        {
+            fileformats.append( format_property.value().asA<MoleculeParser>()
+                                               .formatName() );
+        }
         
         QString basename = QFileInfo(filename).completeBaseName();
         
@@ -1093,7 +1101,15 @@ QStringList MoleculeParser::write(const System &system,
     
     if (format_property.hasValue())
     {
-        fileformats = format_property.value().asA<StringProperty>().toString().split(",");
+        try
+        {
+            fileformats = format_property.value().asA<StringProperty>().toString().split(",");
+        }
+        catch(...)
+        {
+            fileformats.append( format_property.value().asA<MoleculeParser>()
+                                               .formatName() );
+        }
         
         if (files.count() != fileformats.count())
         {
