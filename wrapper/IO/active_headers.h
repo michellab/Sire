@@ -9,6 +9,7 @@
 #include "amberrst7.h"
 #include "cube.h"
 #include "flexibilitylibrary.h"
+#include "gro87.h"
 #include "iobase.h"
 #include "moleculeparser.h"
 #include "pdb.h"

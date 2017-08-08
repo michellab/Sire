@@ -29,6 +29,7 @@ set ( SIREIO_HEADERS
       cube.h
       errors.h
       flexibilitylibrary.h
+      gro87.h
       iobase.h
       moleculeparser.h
       netcdffile.h
@@ -53,6 +54,7 @@ set ( SIREIO_SOURCES
       cube.cpp
       errors.cpp
       flexibilitylibrary.cpp
+      gro87.cpp
       iobase.cpp
       moleculeparser.cpp
       netcdffile.cpp

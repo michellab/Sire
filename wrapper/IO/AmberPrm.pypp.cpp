@@ -158,7 +158,7 @@ void register_AmberPrm_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("filename"), bp::arg("map") )
-                , "" );
+                , "Return this parser constructed from the passed filename" );
         
         }
         { //::SireIO::AmberPrm::construct
@@ -170,7 +170,7 @@ void register_AmberPrm_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("lines"), bp::arg("map") )
-                , "" );
+                , "Return this parser constructed from the passed set of lines" );
         
         }
         { //::SireIO::AmberPrm::construct
@@ -182,7 +182,7 @@ void register_AmberPrm_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
-                , "" );
+                , "Return this parser constructed from the passed SireSystem::System" );
         
         }
         { //::SireIO::AmberPrm::flagType
@@ -228,7 +228,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "formatDescription"
                 , formatDescription_function_value
-                , "" );
+                , "Return a description of the file format" );
         
         }
         { //::SireIO::AmberPrm::formatName
@@ -250,7 +250,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "formatSuffix"
                 , formatSuffix_function_value
-                , "" );
+                , "Return the suffixes that AmberPrm files are normally associated with" );
         
         }
         { //::SireIO::AmberPrm::getMolecule

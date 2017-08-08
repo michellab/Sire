@@ -19,6 +19,8 @@
 
 #include "FlexibilityTemplate.pypp.hpp"
 
+#include "Gro87.pypp.hpp"
+
 #include "IOBase.pypp.hpp"
 
 #include "IOParametersBase.pypp.hpp"
@@ -77,6 +79,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_FlexibilityLibrary_class();
 
     register_FlexibilityTemplate_class();
+
+    register_Gro87_class();
 
     register_IOBase_class();
 
