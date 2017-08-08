@@ -61,50 +61,73 @@ void register_Gro87_class(){
                 , "Return the numbers of all of the atoms. These are in the same order\nas the coordinates" );
         
         }
-        { //::SireIO::Gro87::boxAngles
+        { //::SireIO::Gro87::boxV1
         
-            typedef ::SireMaths::Vector ( ::SireIO::Gro87::*boxAngles_function_type)(  ) const;
-            boxAngles_function_type boxAngles_function_value( &::SireIO::Gro87::boxAngles );
+            typedef ::SireMaths::Vector ( ::SireIO::Gro87::*boxV1_function_type)(  ) const;
+            boxV1_function_type boxV1_function_value( &::SireIO::Gro87::boxV1 );
             
             Gro87_exposer.def( 
-                "boxAngles"
-                , boxAngles_function_value
-                , "Return the angles of the box for the first frame of the trajectory" );
+                "boxV1"
+                , boxV1_function_value
+                , "" );
         
         }
-        { //::SireIO::Gro87::boxAngles
+        { //::SireIO::Gro87::boxV1
         
-            typedef ::SireMaths::Vector ( ::SireIO::Gro87::*boxAngles_function_type)( int ) const;
-            boxAngles_function_type boxAngles_function_value( &::SireIO::Gro87::boxAngles );
+            typedef ::SireMaths::Vector ( ::SireIO::Gro87::*boxV1_function_type)( int ) const;
+            boxV1_function_type boxV1_function_value( &::SireIO::Gro87::boxV1 );
             
             Gro87_exposer.def( 
-                "boxAngles"
-                , boxAngles_function_value
+                "boxV1"
+                , boxV1_function_value
                 , ( bp::arg("frame") )
-                , "Return the angles of the box for the frame frame" );
+                , "" );
         
         }
-        { //::SireIO::Gro87::boxDimensions
+        { //::SireIO::Gro87::boxV2
         
-            typedef ::SireMaths::Vector ( ::SireIO::Gro87::*boxDimensions_function_type)(  ) const;
-            boxDimensions_function_type boxDimensions_function_value( &::SireIO::Gro87::boxDimensions );
+            typedef ::SireMaths::Vector ( ::SireIO::Gro87::*boxV2_function_type)(  ) const;
+            boxV2_function_type boxV2_function_value( &::SireIO::Gro87::boxV2 );
             
             Gro87_exposer.def( 
-                "boxDimensions"
-                , boxDimensions_function_value
-                , "Return the dimensions of the box for the first frame of the trajectory" );
+                "boxV2"
+                , boxV2_function_value
+                , "" );
         
         }
-        { //::SireIO::Gro87::boxDimensions
+        { //::SireIO::Gro87::boxV2
         
-            typedef ::SireMaths::Vector ( ::SireIO::Gro87::*boxDimensions_function_type)( int ) const;
-            boxDimensions_function_type boxDimensions_function_value( &::SireIO::Gro87::boxDimensions );
+            typedef ::SireMaths::Vector ( ::SireIO::Gro87::*boxV2_function_type)( int ) const;
+            boxV2_function_type boxV2_function_value( &::SireIO::Gro87::boxV2 );
             
             Gro87_exposer.def( 
-                "boxDimensions"
-                , boxDimensions_function_value
+                "boxV2"
+                , boxV2_function_value
                 , ( bp::arg("frame") )
-                , "Return the dimensions of the box for the frame frame" );
+                , "" );
+        
+        }
+        { //::SireIO::Gro87::boxV3
+        
+            typedef ::SireMaths::Vector ( ::SireIO::Gro87::*boxV3_function_type)(  ) const;
+            boxV3_function_type boxV3_function_value( &::SireIO::Gro87::boxV3 );
+            
+            Gro87_exposer.def( 
+                "boxV3"
+                , boxV3_function_value
+                , "" );
+        
+        }
+        { //::SireIO::Gro87::boxV3
+        
+            typedef ::SireMaths::Vector ( ::SireIO::Gro87::*boxV3_function_type)( int ) const;
+            boxV3_function_type boxV3_function_value( &::SireIO::Gro87::boxV3 );
+            
+            Gro87_exposer.def( 
+                "boxV3"
+                , boxV3_function_value
+                , ( bp::arg("frame") )
+                , "" );
         
         }
         { //::SireIO::Gro87::construct

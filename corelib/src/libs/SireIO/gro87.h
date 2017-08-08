@@ -119,11 +119,13 @@ public:
     QVector<SireMaths::Vector> coordinates(int frame) const;
     QVector<SireMaths::Vector> velocities(int frame) const;
 
-    SireMaths::Vector boxDimensions() const;
-    SireMaths::Vector boxAngles() const;
+    SireMaths::Vector boxV1() const;
+    SireMaths::Vector boxV2() const;
+    SireMaths::Vector boxV3() const;
 
-    SireMaths::Vector boxDimensions(int frame) const;
-    SireMaths::Vector boxAngles(int frame) const;
+    SireMaths::Vector boxV1(int frame) const;
+    SireMaths::Vector boxV2(int frame) const;
+    SireMaths::Vector boxV3(int frame) const;
 
     QStringList warnings() const;
 
@@ -140,17 +142,14 @@ private:
     /** The current time of the simulation in picoseconds */
     QVector<double> current_time;
     
-    /** The coordinate data */
+    /** The coordinate data in internal units (angstroms) */
     QVector< QVector<SireMaths::Vector> > coords;
     
-    /** The velocity data in amber units (angstrom / 1/20.455 picosecond) */
+    /** The velocity data in internal units (angstrom/picosecond) */
     QVector< QVector<SireMaths::Vector> > vels;
     
-    /** The box dimensions */
-    QVector<SireMaths::Vector> box_dims;
-    
-    /** The box angles */
-    QVector<SireMaths::Vector> box_angs;
+    /** The box dimensions - each of the three vectors */
+    QVector<SireMaths::Vector> box_v1, box_v2, box_v3;
     
     /** The residue numbers */
     QVector<qint64> resnums;
