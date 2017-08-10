@@ -27,10 +27,22 @@
 \*********************************************/
 
 #include "SireIO/gro87.h"
+#include "SireIO/amberformat.h"
 
 #include "SireSystem/system.h"
 
+#include "SireMol/molecule.h"
+#include "SireMol/moleculeinfo.h"
+#include "SireMol/atomcoords.h"
+#include "SireMol/atomvelocities.h"
+
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
 #include "SireBase/parallel.h"
+#include "SireBase/timeproperty.h"
+#include "SireBase/numberproperty.h"
 
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
@@ -45,6 +57,9 @@ using namespace SireIO;
 using namespace SireMol;
 using namespace SireBase;
 using namespace SireSystem;
+using namespace SireVol;
+using namespace SireUnits;
+using namespace SireUnits::Dimension;
 using namespace SireStream;
 
 const RegisterParser<Gro87> register_gro87;
@@ -115,25 +130,356 @@ Gro87::Gro87(const QStringList &lines, const PropertyMap &map)
     this->assertSane();
 }
 
+static QVector<QString> toLines(const QVector<QString> &atmnams,
+                                const QVector<QString> &resnams,
+                                const QVector<qint64> &resnums,
+                                const QVector<Vector> &coords,
+                                const QVector<Vector> &vels,
+                                int precision,
+                                bool uses_parallel, QStringList *errors)
+{
+    //do any of the molecules have velocities?
+    const bool has_velocities = not vels.isEmpty();
+
+    //calculate the total number of atoms
+    const int nats = coords.count();
+    
+    if (nats == 0)
+    {
+        //there are no atoms!
+        return QVector<QString>();
+    }
+
+    //reserve space for all of the lines
+    QVector<QString> lines( nats );
+    auto lines_data = lines.data();
+
+    auto write_line = [&](int iatm)
+    {
+        //the atom number is iatm+1
+        int atmnum = iatm+1;
+        
+        //however, it cannot be larger than 99999, so it should be capped at this value
+        if (atmnum > 99999)
+            atmnum = 99999;
+    
+        int resnum = resnums.constData()[iatm];
+        
+        //similarly, the residue number cannot be greater than 99999
+        if (resnum > 99999)
+            resnum = 99999;
+    
+        const auto resnam = resnams.constData()[iatm];
+        const auto atmnam = atmnams.constData()[iatm];
+        Vector coord = 0.1 * coords.constData()[iatm];  // convert to nanometers
+    
+        if (has_velocities)
+        {
+            Vector vel = 0.1 * vels.constData()[iatm]; // convert to nanometers per picosecond
+            
+            lines_data[iatm] = QString("%1%2%3%4%5%6%7%8%9%10")
+                                    .arg(resnum, 5)
+                                    .arg(resnam.left(5), -5)
+                                    .arg(atmnam.left(5), 5)
+                                    .arg(atmnum, 5)
+                                    .arg(coord.x(), precision+5, 'f', precision)
+                                    .arg(coord.y(), precision+5, 'f', precision)
+                                    .arg(coord.z(), precision+5, 'f', precision)
+                                    .arg(vel.x(), precision+5, 'f', precision+1)
+                                    .arg(vel.y(), precision+5, 'f', precision+1)
+                                    .arg(vel.z(), precision+5, 'f', precision+1);
+        }
+        else
+        {
+            lines_data[iatm] = QString("%1%2%3%4%5%6%7")
+                                    .arg(resnum, 5)
+                                    .arg(resnam.left(5), -5)
+                                    .arg(atmnam.left(5), 5)
+                                    .arg(atmnum, 5)
+                                    .arg(coord.x(), precision+5, 'f', precision)
+                                    .arg(coord.y(), precision+5, 'f', precision)
+                                    .arg(coord.z(), precision+5, 'f', precision);
+        }
+    };
+
+    if (uses_parallel)
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0, nats),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                write_line(i);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<nats; ++i)
+        {
+            write_line(i);
+        }
+    }
+    
+    return lines;
+}
+
+static std::tuple< QVector<QString>, QVector<qint64>, QVector<QString> >
+getIDs(const MoleculeInfo &mol)
+{
+    const int nats = mol.nAtoms();
+
+    //get the atoms out in AtomIdx order
+    if (nats == 0)
+    {
+        return std::tuple< QVector<QString>, QVector<qint64>, QVector<QString> >();
+    }
+    
+    QVector<QString> resnams(nats);
+    QVector<qint64> resnums(nats);
+    QVector<QString> atmnams(nats);
+    
+    for (int i=0; i<nats; ++i)
+    {
+        const AtomIdx idx(i);
+    
+        const auto residx = mol.parentResidue(idx);
+    
+        atmnams[i] = mol.name(idx).value();
+        resnams[i] = mol.name(residx).value();
+        resnums[i] = mol.number(residx).value();
+    }
+    
+    return std::make_tuple(resnams, resnums, atmnams);
+}
+
+static QVector<Vector> getCoordinates(const Molecule &mol, const PropertyName &coords_property)
+{
+    if (not mol.hasProperty(coords_property))
+    {
+        return QVector<Vector>();
+    }
+
+    QVector<Vector> coords( mol.nAtoms() );
+    
+    const auto molcoords = mol.property(coords_property).asA<AtomCoords>();
+    
+    const auto molinfo = mol.info();
+    
+    for (int i=0; i<mol.nAtoms(); ++i)
+    {
+        //coords are already in angstroms :-)
+        coords[i] = molcoords.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
+    }
+    
+    return coords;
+}
+
+static QVector<Vector> getVelocities(const Molecule &mol, const PropertyName &vels_property)
+{
+    if (not mol.hasProperty(vels_property))
+    {
+        return QVector<Vector>();
+    }
+
+    try
+    {
+        const auto molvels = mol.property(vels_property).asA<AtomVelocities>();
+        const auto molinfo = mol.info();
+        
+        QVector<Vector> vels( mol.nAtoms() );
+        
+        const double units = 1.0 / (angstrom/picosecond).value();
+        
+        for (int i=0; i<mol.nAtoms(); ++i)
+        {
+            const auto atomvels = molvels.at( molinfo.cgAtomIdx( AtomIdx(i) ) );
+            
+            //need to convert the velocities into units of Angstroms / picoseconds
+            vels[i] = Vector( atomvels.x().value() * units,
+                              atomvels.y().value() * units,
+                              atomvels.z().value() * units );
+        }
+        
+        return vels;
+    }
+    catch(...)
+    {
+        return QVector<Vector>();
+    }
+}
+
 /** Construct this parser by extracting all necessary information from the
     passed SireSystem::System, looking for the properties that are specified
     in the passed property map */
 Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
       : ConcreteProperty<Gro87,MoleculeParser>(map)
 {
-    //look through the system and extract out the information
-    //that is needed to go into the file, based on the properties
-    //found in 'map'. Do this to create the set of text lines that
-    //will make up the file
+    //get the MolNums of each molecule in the System - this returns the
+    //numbers in MolIdx order
+    const QVector<MolNum> molnums = system.getMoleculeNumbers().toVector();
+
+    if (molnums.isEmpty())
+    {
+        //no molecules in the system
+        this->operator=(Gro87());
+        return;
+    }
+
+    //get the names, numbers coordinates (and velocities if available)
+    // for each molecule in the system
+    QVector< QVector<Vector> > all_coords(molnums.count());
+    QVector< QVector<Vector> > all_vels(molnums.count());
+    QVector< QVector<QString> > all_resnams(molnums.count());
+    QVector< QVector<qint64> > all_resnums(molnums.count());
+    QVector< QVector<QString> > all_atmnams(molnums.count());
+
+    const auto coords_property = map["coordinates"];
+    const auto vels_property = map["velocity"];
+
+    if (usesParallel())
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0,molnums.count()),
+                           [&](const tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                const auto mol = system[molnums[i]].molecule();
+            
+                tbb::parallel_invoke(
+                    [&]()
+                    {
+                        const auto ids = ::getIDs(mol.info());
+                        all_resnams[i] = std::get<0>(ids);
+                        all_resnums[i] = std::get<1>(ids);
+                        all_atmnams[i] = std::get<2>(ids);
+                    },
+                    [&](){ all_coords[i] = ::getCoordinates(mol, coords_property); },
+                    [&](){ all_vels[i] = ::getVelocities(mol, vels_property); }
+                                    );
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<molnums.count(); ++i)
+        {
+            const auto mol = system[molnums[i]].molecule();
+
+            const auto ids = ::getIDs(mol.info());
+            
+            all_resnams[i] = std::get<0>(ids);
+            all_resnums[i] = std::get<1>(ids);
+            all_atmnams[i] = std::get<2>(ids);
+
+            all_coords[i] = ::getCoordinates(mol, coords_property);
+            all_vels[i] = ::getVelocities(mol, vels_property);
+        }
+    }
+
+    QStringList errors;
+
+    //extract the space of the system
+    SpacePtr space;
     
-    QStringList lines;  // = code used to generate the lines
+    try
+    {
+        space = system.property( map["space"] ).asA<Space>();
+    }
+    catch(...)
+    {}
+
+    //extract the current time for the system
+    Time time(-1);
     
-    //now that you have the lines, reparse them back into a Gro87 object,
-    //so that the information is consistent, and you have validated that
-    //the lines you have written are able to be correctly read in by
-    //this parser. This will also implicitly call 'assertSane()'
-    Gro87 parsed( lines, map );
+    try
+    {
+        time = system.property( map["time"] ).asA<TimeProperty>().value();
+    }
+    catch(...)
+    {}
+
+    //what precision should be used - this can be set by the user
+    int precision = 3;
+    try
+    {
+        precision = map["precision"].value().asA<NumberProperty>().value();
+        
+        if (precision < 1)
+        {
+            precision = 1;
+        }
+        else if (precision > 16)
+        {
+            precision = 16;
+        }
+    }
+    catch(...)
+    {}
+
+    //now convert these into text lines that can be written as the file
+    QVector<QString> lines = ::toLines(SireIO::detail::collapse(all_atmnams),
+                                       SireIO::detail::collapse(all_resnams),
+                                       SireIO::detail::collapse(all_resnums),
+                                       SireIO::detail::collapse(all_coords),
+                                       SireIO::detail::collapse(all_vels),
+                                       precision, this->usesParallel(),
+                                       &errors);
+
+    if (not errors.isEmpty())
+    {
+        throw SireIO::parse_error( QObject::tr(
+            "Errors converting the system to a Gromacs Gro87 format...\n%1")
+                .arg(errors.join("\n")), CODELOC );
+    }
+
+    //we don't need the coords and vels data any more, so free the memory
+    all_coords.clear();
+    all_vels.clear();
+    all_resnams.clear();
+    all_resnums.clear();
+    all_atmnams.clear();
+
+    //add the title, number of atoms and time to the top of the lines
+    //(the number of atoms is the current number of lines)
+    const int natoms = lines.count();
+    lines.prepend( QString("%1").arg(natoms, 5) );
     
+    if (time.value() >= 0)
+    {
+        lines.prepend( QString("%1, t= %2").arg(system.name().value())
+                                           .arg(time.to(picosecond), 8, 'f', 7) );
+    }
+    else
+    {
+        lines.prepend(system.name().value());
+    }
+
+    //finally add on the box dimensions if we have a periodic box
+    if (space.read().isA<PeriodicBox>())
+    {
+        Vector dims = space.read().asA<PeriodicBox>().dimensions();
+        
+        lines += QString(" %1 %2 %3").arg(0.1 * dims.x(), 9, 'f', 5)
+                                     .arg(0.1 * dims.y(), 9, 'f', 5)
+                                     .arg(0.1 * dims.z(), 9, 'f', 5);
+    }
+    else
+    {
+        //we have to provide some space for Gro87. Supply a null vector
+        lines += QString("   0.00000   0.00000   0.00000");
+    }
+
+    if (not errors.isEmpty())
+    {
+        throw SireIO::parse_error( QObject::tr(
+            "Errors converting the system to a Gromacs Gro87 format...\n%1")
+                .arg(errors.join("\n")), CODELOC );
+    }
+
+    //now generate this object by re-reading these lines
+    Gro87 parsed(lines.toList());
+
     this->operator=(parsed);
 }
 
@@ -913,6 +1259,7 @@ void Gro87::parseLines(const PropertyMap &map)
                 errors.append( QObject::tr("There was a problem reading the coordinate "
                   "values of x, y, and z for atom %1 from the data '%2' in line '%3'")
                     .arg(iatm).arg(vals.mid(0,3*n)).arg(line) );
+                return;
             }
             
             //coordinates in file in nanometers - convert to angstroms
@@ -943,6 +1290,7 @@ void Gro87::parseLines(const PropertyMap &map)
                 errors.append( QObject::tr("There was a problem reading the velocity "
                   "values of x, y, and z for atom %1 from the data '%2' in line '%3'")
                     .arg(iatm).arg(vals.mid(3*n,3*n)).arg(line) );
+                return;
             }
             
             *has_vels = true;
@@ -1017,8 +1365,6 @@ void Gro87::parseLines(const PropertyMap &map)
             const auto boxline = lines()[iline + 2 + nats];
             const auto words = boxline.split(" ", QString::SkipEmptyParts);
 
-            qDebug() << words.count() << words;
-
             bool all_ok = false;
             Vector v1(0), v2(0), v3(0);
             
@@ -1071,9 +1417,10 @@ void Gro87::parseLines(const PropertyMap &map)
                     box_v3.append( Vector(0) );
                 }
 
-                box_v1.append( v1 );
-                box_v2.append( v2 );
-                box_v3.append( v3 );
+                //remember to convert nanometers to angstroms
+                box_v1.append( 10.0 * v1 );
+                box_v2.append( 10.0 * v2 );
+                box_v3.append( 10.0 * v3 );
             }
             else
             {
@@ -1141,12 +1488,7 @@ void Gro87::parseLines(const PropertyMap &map)
         }
     }
 
-    if (not parse_warnings.isEmpty())
-    {
-        qDebug() << parse_warnings.join("\n");
-    }
-
-    this->setScore(0);
+    this->setScore(nats);
 }
 
 /** Use the data contained in this parser to add information from the file to
