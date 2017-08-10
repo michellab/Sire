@@ -29,6 +29,8 @@ SireIO::Gro87 __copy__(const SireIO::Gro87 &other){ return SireIO::Gro87(other);
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_Gro87_class(){
 
     { //::SireIO::Gro87
@@ -189,6 +191,17 @@ void register_Gro87_class(){
                 , "Return the coordinates of the atoms at frame frame" );
         
         }
+        { //::SireIO::Gro87::count
+        
+            typedef int ( ::SireIO::Gro87::*count_function_type)(  ) const;
+            count_function_type count_function_value( &::SireIO::Gro87::count );
+            
+            Gro87_exposer.def( 
+                "count"
+                , count_function_value
+                , "" );
+        
+        }
         { //::SireIO::Gro87::formatDescription
         
             typedef ::QString ( ::SireIO::Gro87::*formatDescription_function_type)(  ) const;
@@ -292,6 +305,18 @@ void register_Gro87_class(){
         
         }
         Gro87_exposer.def( bp::self == bp::self );
+        { //::SireIO::Gro87::operator[]
+        
+            typedef ::SireIO::Gro87 ( ::SireIO::Gro87::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireIO::Gro87::operator[] );
+            
+            Gro87_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
         { //::SireIO::Gro87::residueNames
         
             typedef ::QVector< QString > ( ::SireIO::Gro87::*residueNames_function_type)(  ) const;
@@ -312,6 +337,17 @@ void register_Gro87_class(){
                 "residueNumbers"
                 , residueNumbers_function_value
                 , "Return the residue number for each atom (one per atom), in the same\norder as the coordinates" );
+        
+        }
+        { //::SireIO::Gro87::size
+        
+            typedef int ( ::SireIO::Gro87::*size_function_type)(  ) const;
+            size_function_type size_function_value( &::SireIO::Gro87::size );
+            
+            Gro87_exposer.def( 
+                "size"
+                , size_function_value
+                , "" );
         
         }
         { //::SireIO::Gro87::time
@@ -425,6 +461,7 @@ void register_Gro87_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Gro87_exposer.def( "__str__", &__str__< ::SireIO::Gro87 > );
         Gro87_exposer.def( "__repr__", &__str__< ::SireIO::Gro87 > );
+        Gro87_exposer.def( "__len__", &__len_size< ::SireIO::Gro87 > );
     }
 
 }

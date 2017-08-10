@@ -3,42 +3,42 @@
 
 #include "SireIO_registrars.h"
 
-#include "zmatrixmaker.h"
-#include "protoms.h"
-#include "amberrst7.h"
-#include "amber.h"
-#include "flexibilitylibrary.h"
-#include "amberprm.h"
-#include "tinker.h"
-#include "perturbationslibrary.h"
-#include "iobase.h"
-#include "pdb.h"
 #include "amberrst.h"
-#include "moleculeparser.h"
-#include "gro87.h"
 #include "trajectorymonitor.h"
+#include "zmatrixmaker.h"
+#include "amber.h"
+#include "iobase.h"
+#include "flexibilitylibrary.h"
+#include "perturbationslibrary.h"
+#include "gro87.h"
+#include "protoms.h"
+#include "tinker.h"
+#include "amberprm.h"
+#include "amberrst7.h"
+#include "moleculeparser.h"
+#include "pdb.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_SireIO_objects()
 {
 
+    ObjectRegistry::registerConverterFor< SireIO::AmberRst >();
+    ObjectRegistry::registerConverterFor< SireIO::TrajectoryMonitor >();
     ObjectRegistry::registerConverterFor< SireIO::ZmatrixMaker >();
-    ObjectRegistry::registerConverterFor< SireIO::ProtoMS >();
-    ObjectRegistry::registerConverterFor< SireIO::AmberRst7 >();
     ObjectRegistry::registerConverterFor< SireIO::Amber >();
+    ObjectRegistry::registerConverterFor< SireIO::NullIO >();
     ObjectRegistry::registerConverterFor< SireIO::FlexibilityLibrary >();
     ObjectRegistry::registerConverterFor< SireIO::FlexibilityTemplate >();
-    ObjectRegistry::registerConverterFor< SireIO::AmberPrm >();
-    ObjectRegistry::registerConverterFor< SireIO::Tinker >();
     ObjectRegistry::registerConverterFor< SireIO::PerturbationsLibrary >();
     ObjectRegistry::registerConverterFor< SireIO::PerturbationsTemplate >();
-    ObjectRegistry::registerConverterFor< SireIO::NullIO >();
-    ObjectRegistry::registerConverterFor< SireIO::PDB >();
-    ObjectRegistry::registerConverterFor< SireIO::AmberRst >();
-    ObjectRegistry::registerConverterFor< SireIO::NullParser >();
     ObjectRegistry::registerConverterFor< SireIO::Gro87 >();
-    ObjectRegistry::registerConverterFor< SireIO::TrajectoryMonitor >();
+    ObjectRegistry::registerConverterFor< SireIO::ProtoMS >();
+    ObjectRegistry::registerConverterFor< SireIO::Tinker >();
+    ObjectRegistry::registerConverterFor< SireIO::AmberPrm >();
+    ObjectRegistry::registerConverterFor< SireIO::AmberRst7 >();
+    ObjectRegistry::registerConverterFor< SireIO::NullParser >();
+    ObjectRegistry::registerConverterFor< SireIO::PDB >();
 
 }
 

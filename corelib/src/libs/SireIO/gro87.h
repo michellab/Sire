@@ -79,6 +79,11 @@ public:
     
     const char* what() const;
 
+    int count() const;
+    int size() const;
+    
+    Gro87 operator[](int i) const;
+
     MoleculeParserPtr construct(const QString &filename,
                                 const PropertyMap &map) const;
 

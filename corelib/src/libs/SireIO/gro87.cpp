@@ -205,10 +205,70 @@ const char* Gro87::what() const
     return Gro87::typeName();
 }
 
+
+/** Return the number of frames in the file */
+int Gro87::count() const
+{
+    return this->nFrames();
+}
+
+/** Return the number of frames in the file */
+int Gro87::size() const
+{
+    return this->nFrames();
+}
+
+/** Return the Gro87 object that contains only the information for the ith
+    frame. This allows you to extract and create a system for the ith frame
+    from a trajectory */
+Gro87 Gro87::operator[](int i) const
+{
+    i = Index(i).map( this->nFrames() );
+    
+    if (nFrames() == 1)
+        return *this;
+    
+    Gro87 ret(*this);
+    
+    if (not coords.isEmpty())
+    {
+        ret.coords = { coords[i] };
+    }
+    
+    if (not vels.isEmpty())
+    {
+        ret.vels = { vels[i] };
+    }
+    
+    if (not current_time.isEmpty())
+    {
+        ret.current_time = { current_time[i] };
+    }
+    
+    if (not box_v1.isEmpty())
+    {
+        ret.box_v1 = { box_v1[i] };
+    }
+    
+    if (not box_v2.isEmpty())
+    {
+        ret.box_v2 = { box_v2[i] };
+    }
+    
+    if (not box_v3.isEmpty())
+    {
+        ret.box_v3 = { box_v3[i] };
+    }
+    
+    ret.assertSane();
+    
+    return ret;
+}
+
 /** Return the parser that has been constructed by reading in the passed
     file using the passed properties */
 MoleculeParserPtr Gro87::construct(const QString &filename,
-                                  const PropertyMap &map) const
+                                   const PropertyMap &map) const
 {
     return Gro87(filename,map);
 }
@@ -216,7 +276,7 @@ MoleculeParserPtr Gro87::construct(const QString &filename,
 /** Return the parser that has been constructed by reading in the passed  
     text lines using the passed properties */
 MoleculeParserPtr Gro87::construct(const QStringList &lines,
-                                  const PropertyMap &map) const
+                                   const PropertyMap &map) const
 {
     return Gro87(lines,map);
 }
@@ -864,7 +924,7 @@ void Gro87::parseLines(const PropertyMap &map)
             }
             
             //now read in the velocities
-            int vlen = (3*n)+(3*(n+1));
+            int vlen = 6*n;
             
             if (vals.length() < vlen)
             {
@@ -874,15 +934,15 @@ void Gro87::parseLines(const PropertyMap &map)
                 return;
             }
             
-            x = vals.midRef(3*n, n+1).toDouble(&ok_x);
-            y = vals.midRef(3*n + n + 1, n+1).toDouble(&ok_y);
-            z = vals.midRef(3*n + 2*(n+1), n+1).toDouble(&ok_z);
+            x = vals.midRef(3*n, n).toDouble(&ok_x);
+            y = vals.midRef(4*n, n).toDouble(&ok_y);
+            z = vals.midRef(5*n, n).toDouble(&ok_z);
             
             if (not (ok_x and ok_y and ok_z))
             {
                 errors.append( QObject::tr("There was a problem reading the velocity "
                   "values of x, y, and z for atom %1 from the data '%2' in line '%3'")
-                    .arg(iatm).arg(vals.mid(3*n,3*(n+1))).arg(line) );
+                    .arg(iatm).arg(vals.mid(3*n,3*n)).arg(line) );
             }
             
             *has_vels = true;
@@ -950,9 +1010,135 @@ void Gro87::parseLines(const PropertyMap &map)
             vels.append( frame_vels );
         }
         
+        //next, read in the periodic box information. This is a single line
+        //of 3 or 9 space separated real numbers containing
+        //v1(x) v2(y) v3(z) v1(y) v1(z) v2(x) v2(z) v3(x) v3(y) (the last six values can be omitted)
+        {
+            const auto boxline = lines()[iline + 2 + nats];
+            const auto words = boxline.split(" ", QString::SkipEmptyParts);
+
+            qDebug() << words.count() << words;
+
+            bool all_ok = false;
+            Vector v1(0), v2(0), v3(0);
+            
+            if ( words.count() == 3 )
+            {
+                bool ok_x, ok_y, ok_z;
+                double x = words[0].toDouble(&ok_x);
+                double y = words[1].toDouble(&ok_y);
+                double z = words[2].toDouble(&ok_z);
+                
+                if (ok_x and ok_y and ok_z)
+                {
+                    v1 = Vector(x, 0, 0);
+                    v2 = Vector(0, y, 0);
+                    v3 = Vector(0, 0, z);
+                    all_ok = true;
+                }
+            }
+            else if (words.count() == 9)
+            {
+                all_ok = true;
+                double v[9];
+                
+                for (int k=0; k<9; ++k)
+                {
+                    bool this_ok;
+                    v[k] = words[k].toDouble( &this_ok );
+                    
+                    if (not this_ok)
+                    {
+                        all_ok = false;
+                        break;
+                    }
+                }
+                
+                if (all_ok)
+                {
+                    v1 = Vector(v[0], v[3], v[4]);
+                    v2 = Vector(v[5], v[1], v[6]);
+                    v3 = Vector(v[7], v[8], v[2]);
+                }
+            }
+            
+            if (all_ok)
+            {
+                while (box_v1.count() < iframe)
+                {
+                    box_v1.append( Vector(0) );
+                    box_v2.append( Vector(0) );
+                    box_v3.append( Vector(0) );
+                }
+
+                box_v1.append( v1 );
+                box_v2.append( v2 );
+                box_v3.append( v3 );
+            }
+            else
+            {
+                parse_warnings.append( QObject::tr( "Cannot read the periodic box information "
+                  "for frame %1 from the line '%2'. This should be a space-separated list "
+                  "of three or nine numbers...")
+                    .arg(iframe).arg(boxline) );
+                
+                //no need to break here as we can still make progress with this frame
+            }
+        }
+        
+        //finally, the coords and velocities were read, so see if there was a time value
+        //for this frame (the t= X.X in the title line, which is lines()[iline])
+        if (iframe != 0)
+        {
+            auto match = re.match( lines()[iline] );
+            
+            if (match.hasMatch())
+            {
+                const auto captured = match.captured(1);
+
+                bool ok;
+                double time = captured.toDouble(&ok);
+                
+                if (ok)
+                {
+                    while (current_time.count() < iframe)
+                    {
+                        current_time.append(0);
+                    }
+                    
+                    //convert the time to picoseconds
+                    current_time.append( time );
+                }
+            }
+        }
+        
         //increment the number of read frames and the start of the next line
         iframe += 1;
         iline += 2 + nats + 1;
+
+        //there must be enough extra lines to contain another frame of trajectory...
+        while (true)
+        {
+            if (iline + 2 + nats + 1 > lines().count())
+            {
+                //there is no more file to read
+                break;
+            }
+
+            //the next line should be the number of atoms. If not then there may be an
+            //extra (incorrect) blank line, and we need to keep advancing through the file
+            //until we find that extra line
+            bool ok;
+            int new_nats = lines()[iline+1].toInt(&ok);
+            
+            if ( ok and (new_nats == nats) )
+            {
+                //the number of atoms has been found and matches the expected value
+                break;
+            }
+
+            iline += 1;
+        }
     }
 
     if (not parse_warnings.isEmpty())
