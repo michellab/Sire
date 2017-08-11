@@ -1501,4 +1501,5 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
     //which ones are described in the file, and then add data from the file
     //to these molecules
     
+    
 }
