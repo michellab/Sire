@@ -10,6 +10,7 @@
 #include "cube.h"
 #include "flexibilitylibrary.h"
 #include "gro87.h"
+#include "grotop.h"
 #include "iobase.h"
 #include "moleculeparser.h"
 #include "pdb.h"

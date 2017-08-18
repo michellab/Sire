@@ -21,6 +21,8 @@
 
 #include "Gro87.pypp.hpp"
 
+#include "GroTop.pypp.hpp"
+
 #include "IOBase.pypp.hpp"
 
 #include "IOParametersBase.pypp.hpp"
@@ -81,6 +83,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_FlexibilityTemplate_class();
 
     register_Gro87_class();
+
+    register_GroTop_class();
 
     register_IOBase_class();
 

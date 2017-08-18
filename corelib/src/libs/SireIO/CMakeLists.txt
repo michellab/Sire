@@ -30,6 +30,7 @@ set ( SIREIO_HEADERS
       errors.h
       flexibilitylibrary.h
       gro87.h
+      grotop.h
       iobase.h
       moleculeparser.h
       netcdffile.h
@@ -55,6 +56,7 @@ set ( SIREIO_SOURCES
       errors.cpp
       flexibilitylibrary.cpp
       gro87.cpp
+      grotop.cpp
       iobase.cpp
       moleculeparser.cpp
       netcdffile.cpp

@@ -7,11 +7,27 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/numberproperty.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireBase/timeproperty.h"
+
 #include "SireError/errors.h"
+
+#include "SireIO/amberformat.h"
 
 #include "SireIO/errors.h"
 
 #include "SireIO/gro87.h"
+
+#include "SireMol/atomcoords.h"
+
+#include "SireMol/atomvelocities.h"
+
+#include "SireMol/molecule.h"
+
+#include "SireMol/moleculeinfo.h"
 
 #include "SireStream/datastream.h"
 
@@ -19,7 +35,15 @@ namespace bp = boost::python;
 
 #include "SireSystem/system.h"
 
+#include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
+
 #include "gro87.h"
+
+#include <QDebug>
+
+#include <QRegularExpression>
 
 #include "gro87.h"
 
@@ -71,7 +95,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "boxV1"
                 , boxV1_function_value
-                , "" );
+                , "Return the box V1 vector for the first frame" );
         
         }
         { //::SireIO::Gro87::boxV1
@@ -83,7 +107,7 @@ void register_Gro87_class(){
                 "boxV1"
                 , boxV1_function_value
                 , ( bp::arg("frame") )
-                , "" );
+                , "Return the box V1 vector for the frame frame" );
         
         }
         { //::SireIO::Gro87::boxV2
@@ -94,7 +118,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "boxV2"
                 , boxV2_function_value
-                , "" );
+                , "Return the box V2 vector for the first frame" );
         
         }
         { //::SireIO::Gro87::boxV2
@@ -106,7 +130,7 @@ void register_Gro87_class(){
                 "boxV2"
                 , boxV2_function_value
                 , ( bp::arg("frame") )
-                , "" );
+                , "Return the box V2 vector for the frame frame" );
         
         }
         { //::SireIO::Gro87::boxV3
@@ -117,7 +141,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "boxV3"
                 , boxV3_function_value
-                , "" );
+                , "Return the box V3 vector for the first frame" );
         
         }
         { //::SireIO::Gro87::boxV3
@@ -129,7 +153,7 @@ void register_Gro87_class(){
                 "boxV3"
                 , boxV3_function_value
                 , ( bp::arg("frame") )
-                , "" );
+                , "Return the box V3 vector for the frame frame" );
         
         }
         { //::SireIO::Gro87::construct
@@ -199,7 +223,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "count"
                 , count_function_value
-                , "" );
+                , "Return the number of frames in the file" );
         
         }
         { //::SireIO::Gro87::formatDescription
@@ -287,7 +311,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "nResidues"
                 , nResidues_function_value
-                , "" );
+                , "Return the number of unique residues in this file" );
         
         }
         Gro87_exposer.def( bp::self != bp::self );
@@ -347,7 +371,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "size"
                 , size_function_value
-                , "" );
+                , "Return the number of frames in the file" );
         
         }
         { //::SireIO::Gro87::time
