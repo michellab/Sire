@@ -37,6 +37,8 @@
 #include "SireBase/stringproperty.h"
 #include "SireBase/booleanproperty.h"
 
+#include "SireUnits/units.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
@@ -45,7 +47,9 @@
 #include <QDir>
 
 using namespace SireIO;
+using namespace SireUnits;
 using namespace SireMol;
+using namespace SireMM;
 using namespace SireBase;
 using namespace SireSystem;
 using namespace SireStream;
@@ -60,7 +64,9 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroTop &grotop)
     SharedDataStream sds(ds);
     
     sds << grotop.include_path << grotop.included_files
-        << grotop.expanded_lines << grotop.nb_func_type
+        << grotop.expanded_lines
+        << grotop.atom_types
+        << grotop.nb_func_type
         << grotop.combining_rule << grotop.fudge_lj
         << grotop.fudge_qq << grotop.generate_pairs
         << static_cast<const MoleculeParser&>(grotop);
@@ -77,7 +83,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroTop &grotop)
         SharedDataStream sds(ds);
     
         sds >> grotop.include_path >> grotop.included_files
-            >> grotop.expanded_lines >> grotop.nb_func_type
+            >> grotop.expanded_lines
+            >> grotop.atom_types
+            >> grotop.nb_func_type
             >> grotop.combining_rule >> grotop.fudge_lj
             >> grotop.fudge_qq >> grotop.generate_pairs
             >> static_cast<MoleculeParser&>(grotop);
@@ -204,6 +212,7 @@ GroTop::GroTop(const GroTop &other)
        : ConcreteProperty<GroTop,MoleculeParser>(other),
          include_path(other.include_path), included_files(other.included_files),
          expanded_lines(other.expanded_lines),
+         atom_types(other.atom_types),
          nb_func_type(other.nb_func_type), combining_rule(other.combining_rule),
          fudge_lj(other.fudge_lj), fudge_qq(other.fudge_qq),
          generate_pairs(other.generate_pairs)
@@ -221,6 +230,7 @@ GroTop& GroTop::operator=(const GroTop &other)
         include_path = other.include_path;
         included_files = other.included_files;
         expanded_lines = other.expanded_lines;
+        atom_types = other.atom_types;
         nb_func_type = other.nb_func_type;
         combining_rule = other.combining_rule;
         fudge_lj = other.fudge_lj;
@@ -848,6 +858,19 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         return lines;
     };
 
+    //return all of the lines associated with all copies of the passed directive
+    auto getAllLines = [&](const QString &directive) -> QStringList
+    {
+        QStringList lines;
+        
+        for (int i=0; i<ntags.value(directive,0); ++i)
+        {
+            lines += getLines(directive, i);
+        }
+        
+        return lines;
+    };
+
     //interpret a bool from the passed string
     auto gromacs_toBool = [&](const QString &word, bool *ok)
     {
@@ -876,7 +899,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         QStringList warnings;
     
         //there should only be one defaults line
-        const QStringList lines = getLines("defaults", 0);
+        const auto lines = getLines("defaults", 0);
         
         if (lines.isEmpty())
             throw SireIO::parse_error( QObject::tr(
@@ -973,7 +996,71 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     //internal function to process the atomtypes lines
     auto processAtomTypes = [&]()
     {
-        return QStringList();
+        QStringList warnings;
+        
+        //get all 'atomtypes' lines
+        const auto lines = getAllLines("atomtypes");
+    
+        //the database of all atom types
+        QHash<QString,GromacsAtomType> typs;
+    
+        bool ok_rule;
+        auto rule = GromacsAtomType::toCombiningRule(QString::number(combining_rule), &ok_rule);
+        
+        if (not ok_rule)
+        {
+            warnings.append( QObject::tr("Could not understand the combining rule '%1'. "
+              "This means that we can't load any atom types!").arg(combining_rule) );
+            return warnings;
+        }
+    
+        //now parse each atom
+        for (const auto line : lines)
+        {
+            const auto words = line.split(" ", QString::SkipEmptyParts);
+            
+            //should have 6 words; atom type, mass, charge, type, V, W
+            if (words.count() < 6)
+            {
+                warnings.append( QObject::tr( "There is not enough data for the "
+                  "atomtype data '%1'. Skipping this line." ).arg(line) );
+                continue;
+            }
+            
+            QString atomtype = words[0];
+
+            bool ok_mass, ok_charge, ok_ptyp, ok_v, ok_w;
+            double mass = words[1].toDouble(&ok_mass);
+            double chg = words[2].toDouble(&ok_charge);
+            auto ptyp = GromacsAtomType::toParticleType(words[3], &ok_ptyp);
+            double v = words[4].toDouble(&ok_v);
+            double w = words[5].toDouble(&ok_w);
+            
+            if (not (ok_mass and ok_charge and ok_ptyp and ok_v and ok_w))
+            {
+                warnings.append( QObject::tr( "Could not interpret the atom type data "
+                  "from line '%1'. Skipping this line.").arg(line) );
+                continue;
+            }
+            
+            if (typs.contains(atomtype))
+            {
+                warnings.append( QObject::tr( "The data for atom type '%1' exists already! "
+                 "This will now be replaced with new data from line '%2'")
+                    .arg(atomtype).arg(line) );
+            }
+            
+            typs.insert( atomtype,
+                         GromacsAtomType(atomtype,
+                                         mass*g_per_mol,
+                                         chg*mod_electron,
+                                         ptyp, v, w, rule) );
+        }
+    
+        //save the database of types
+        atom_types = typs;
+    
+        return warnings;
     };
 
     //internal function to process the bondtypes lines

@@ -31,6 +31,8 @@
 
 #include "moleculeparser.h"
 
+#include "SireMM/gromacsparams.h"
+
 SIRE_BEGIN_HEADER
 
 namespace SireIO
@@ -137,6 +139,9 @@ private:
     
     /** The post-processed lines */
     QVector<QString> expanded_lines;
+    
+    /** The database of atom types */
+    QHash<QString,SireMM::GromacsAtomType> atom_types;
     
     /** The non-bonded function type to use for all molecules */
     qint32 nb_func_type;
