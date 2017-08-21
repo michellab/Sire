@@ -49,6 +49,17 @@ void register_GroTop_class(){
         GroTop_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to read in the data from the passed text lines. The\npassed property map can be used to pass extra parameters to control\nthe parsing") );
         GroTop_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct this parser by extracting all necessary information from the\npassed SireSystem::System, looking for the properties that are specified\nin the passed property map") );
         GroTop_exposer.def( bp::init< SireIO::GroTop const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireIO::GroTop::combiningRules
+        
+            typedef int ( ::SireIO::GroTop::*combiningRules_function_type)(  ) const;
+            combiningRules_function_type combiningRules_function_value( &::SireIO::GroTop::combiningRules );
+            
+            GroTop_exposer.def( 
+                "combiningRules"
+                , combiningRules_function_value
+                , "" );
+        
+        }
         { //::SireIO::GroTop::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::GroTop::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -118,6 +129,39 @@ void register_GroTop_class(){
                 , "Return the suffixes that these files are normally associated with" );
         
         }
+        { //::SireIO::GroTop::fudgeLJ
+        
+            typedef double ( ::SireIO::GroTop::*fudgeLJ_function_type)(  ) const;
+            fudgeLJ_function_type fudgeLJ_function_value( &::SireIO::GroTop::fudgeLJ );
+            
+            GroTop_exposer.def( 
+                "fudgeLJ"
+                , fudgeLJ_function_value
+                , "" );
+        
+        }
+        { //::SireIO::GroTop::fudgeQQ
+        
+            typedef double ( ::SireIO::GroTop::*fudgeQQ_function_type)(  ) const;
+            fudgeQQ_function_type fudgeQQ_function_value( &::SireIO::GroTop::fudgeQQ );
+            
+            GroTop_exposer.def( 
+                "fudgeQQ"
+                , fudgeQQ_function_value
+                , "" );
+        
+        }
+        { //::SireIO::GroTop::generateNonBondedPairs
+        
+            typedef bool ( ::SireIO::GroTop::*generateNonBondedPairs_function_type)(  ) const;
+            generateNonBondedPairs_function_type generateNonBondedPairs_function_value( &::SireIO::GroTop::generateNonBondedPairs );
+            
+            GroTop_exposer.def( 
+                "generateNonBondedPairs"
+                , generateNonBondedPairs_function_value
+                , "" );
+        
+        }
         { //::SireIO::GroTop::includePath
         
             typedef ::QStringList ( ::SireIO::GroTop::*includePath_function_type)( bool ) const;
@@ -140,6 +184,17 @@ void register_GroTop_class(){
                 , includedFiles_function_value
                 , ( bp::arg("absolute_paths")=(bool)(false) )
                 , "Return the list of names of files that were included when reading or\nwriting this file. The files are relative. If absolute_paths\nis true then the full absolute paths for the files will be\nused" );
+        
+        }
+        { //::SireIO::GroTop::nonBondedFunctionType
+        
+            typedef int ( ::SireIO::GroTop::*nonBondedFunctionType_function_type)(  ) const;
+            nonBondedFunctionType_function_type nonBondedFunctionType_function_value( &::SireIO::GroTop::nonBondedFunctionType );
+            
+            GroTop_exposer.def( 
+                "nonBondedFunctionType"
+                , nonBondedFunctionType_function_value
+                , "" );
         
         }
         GroTop_exposer.def( bp::self != bp::self );

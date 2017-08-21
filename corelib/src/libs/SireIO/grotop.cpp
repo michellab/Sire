@@ -42,6 +42,7 @@
 
 #include <QRegularExpression>
 #include <QFileInfo>
+#include <QDir>
 
 using namespace SireIO;
 using namespace SireMol;
@@ -59,6 +60,9 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroTop &grotop)
     SharedDataStream sds(ds);
     
     sds << grotop.include_path << grotop.included_files
+        << grotop.expanded_lines << grotop.nb_func_type
+        << grotop.combining_rule << grotop.fudge_lj
+        << grotop.fudge_qq << grotop.generate_pairs
         << static_cast<const MoleculeParser&>(grotop);
     
     return ds;
@@ -73,6 +77,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroTop &grotop)
         SharedDataStream sds(ds);
     
         sds >> grotop.include_path >> grotop.included_files
+            >> grotop.expanded_lines >> grotop.nb_func_type
+            >> grotop.combining_rule >> grotop.fudge_lj
+            >> grotop.fudge_qq >> grotop.generate_pairs
             >> static_cast<MoleculeParser&>(grotop);
     }
     else
@@ -85,7 +92,10 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroTop &grotop)
 //so we need to pull all of them together into a single set of lines
 
 /** Constructor */
-GroTop::GroTop() : ConcreteProperty<GroTop,MoleculeParser>()
+GroTop::GroTop()
+       : ConcreteProperty<GroTop,MoleculeParser>(),
+         nb_func_type(0), combining_rule(0), fudge_lj(0), fudge_qq(0),
+         generate_pairs(false)
 {}
 
 /** This function gets the gromacs include path from the passed property map,
@@ -119,26 +129,27 @@ void GroTop::getIncludePath(const PropertyMap &map)
         path += val.split(":", QString::SkipEmptyParts);
     }
     
-    include_path = path;
+    //now go through each path and convert it into an absolute path based on the
+    //current directory
+    for (const auto p : path)
+    {
+        include_path.append( QFileInfo(p).canonicalFilePath() );
+    }
 }
 
 /** Construct to read in the data from the file called 'filename'. The 
     passed property map can be used to pass extra parameters to control
     the parsing */
 GroTop::GroTop(const QString &filename, const PropertyMap &map)
-       : ConcreteProperty<GroTop,MoleculeParser>(filename,map)
+       : ConcreteProperty<GroTop,MoleculeParser>(filename,map),
+         nb_func_type(0), combining_rule(0), fudge_lj(0), fudge_qq(0),
+         generate_pairs(false)
 {
     this->getIncludePath(map);
 
-    //the file has been read into memory and is available via
-    //the MoleculeParser::lines() function.
-    
-    //a parameter has also been read in MoleculeParser to say whether
-    //we are allowed to use multiple cores to parse the file, e.g.
-    //MoleculeParser::usesParallel() will be true
-
-    //parse the data in the parse function
-    this->parseLines(map);
+    //parse the data in the parse function, passing in the absolute path
+    //to the directory that contains this file
+    this->parseLines( QFileInfo(filename).absolutePath(), map);
     
     //now make sure that everything is correct with this object
     this->assertSane();
@@ -148,19 +159,15 @@ GroTop::GroTop(const QString &filename, const PropertyMap &map)
     passed property map can be used to pass extra parameters to control
     the parsing */
 GroTop::GroTop(const QStringList &lines, const PropertyMap &map)
-       : ConcreteProperty<GroTop,MoleculeParser>(lines,map)
+       : ConcreteProperty<GroTop,MoleculeParser>(lines,map),
+         nb_func_type(0), combining_rule(0), fudge_lj(0), fudge_qq(0),
+         generate_pairs(false)
 {
     this->getIncludePath(map);
 
-    //the file has been read into memory and is available via
-    //the MoleculeParser::lines() function.
-    
-    //a parameter has also been read in MoleculeParser to say whether
-    //we are allowed to use multiple cores to parse the file, e.g.
-    //MoleculeParser::usesParallel() will be true
-
-    //parse the data in the parse function
-    this->parseLines(map);
+    //parse the data in the parse function, assuming the file has
+    //come from the current directory
+    this->parseLines(QDir::current().absolutePath(), map);
     
     //now make sure that everything is correct with this object
     this->assertSane();
@@ -170,7 +177,9 @@ GroTop::GroTop(const QStringList &lines, const PropertyMap &map)
     passed SireSystem::System, looking for the properties that are specified
     in the passed property map */
 GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
-       : ConcreteProperty<GroTop,MoleculeParser>(map)
+       : ConcreteProperty<GroTop,MoleculeParser>(map),
+         nb_func_type(0), combining_rule(0), fudge_lj(0), fudge_qq(0),
+         generate_pairs(false)
 {
     this->getIncludePath(map);
 
@@ -193,7 +202,11 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
 /** Copy constructor */
 GroTop::GroTop(const GroTop &other)
        : ConcreteProperty<GroTop,MoleculeParser>(other),
-         include_path(other.include_path), included_files(other.included_files)
+         include_path(other.include_path), included_files(other.included_files),
+         expanded_lines(other.expanded_lines),
+         nb_func_type(other.nb_func_type), combining_rule(other.combining_rule),
+         fudge_lj(other.fudge_lj), fudge_qq(other.fudge_qq),
+         generate_pairs(other.generate_pairs)
 {}
 
 /** Destructor */
@@ -207,6 +220,12 @@ GroTop& GroTop::operator=(const GroTop &other)
     {
         include_path = other.include_path;
         included_files = other.included_files;
+        expanded_lines = other.expanded_lines;
+        nb_func_type = other.nb_func_type;
+        combining_rule = other.combining_rule;
+        fudge_lj = other.fudge_lj;
+        fudge_qq = other.fudge_qq;
+        generate_pairs = other.generate_pairs;
         MoleculeParser::operator=(other);
     }
     
@@ -218,6 +237,7 @@ bool GroTop::operator==(const GroTop &other) const
 {
     return include_path == other.include_path and
            included_files == other.included_files and
+           expanded_lines == other.expanded_lines and
            MoleculeParser::operator==(other);
 }
 
@@ -270,10 +290,44 @@ QStringList GroTop::includePath(bool absolute_paths) const
     used */
 QStringList GroTop::includedFiles(bool absolute_paths) const
 {
+    //first, go through the list of included files
+    QStringList files;
+    
+    for (auto it = included_files.constBegin(); it != included_files.constEnd(); ++it)
+    {
+        files += it.value();
+    }
+
     if (absolute_paths)
-        return included_files.values();
+    {
+        //these are already absolute filenames
+        return files;
+    }
     else
-        return included_files.keys();
+    {
+        //subtract any paths that relate to the current directory or GROMACS_PATH
+        QString curpath = QDir::current().absolutePath();
+        
+        for (auto it = files.begin(); it != files.end(); ++it)
+        {
+            if ( it->startsWith(curpath) )
+            {
+                *it = it->mid(curpath.length()+1);
+            }
+            else
+            {
+                for (const auto path : include_path)
+                {
+                    if (it->startsWith(path))
+                    {
+                        *it = it->mid(path.length()+1);
+                    }
+                }
+            }
+        }
+        
+        return files;
+    }
 }
 
 /** Return the parser that has been constructed by reading in the passed
@@ -373,6 +427,12 @@ static bool gromacs_preprocess_would_change(const QVector<QString> &lines,
                     return true;
             }
             
+            if (line.trimmed().endsWith("\\"))
+            {
+                //this is a continuation line
+                return true;
+            }
+            
             return false;
         }
     };
@@ -420,59 +480,51 @@ static bool gromacs_preprocess_would_change(const QVector<QString> &lines,
     Gromacs file path. This throws an exception if the file is not found */
 QString GroTop::findIncludeFile(QString filename, QString current_dir)
 {
-    QString dirfile = filename;
-    
-    if (current_dir != ".")
-    {
-        dirfile = QString("%1/%2").arg(current_dir).arg(filename);
-    }
-
-    //have we seen this file before?
-    if (included_files.contains(dirfile))
-    {
-        return included_files.value(dirfile);
-    }
-
     //new file, so first see if this filename is absolute
-    QFileInfo file(dirfile);
+    QFileInfo file(filename);
+
+    //is the filename absolute?
+    if (file.isAbsolute())
+    {
+        if (not (file.exists() and file.isReadable()))
+        {
+            throw SireError::io_error( QObject::tr(
+                "Cannot find the file '%1'. Please make sure that this file exists "
+                "and is readable").arg(filename), CODELOC );
+        }
+        
+        return filename;
+    }
     
     //does this exist from the current directory?
-    if (not (file.exists() and file.isReadable()))
+    file = QFileInfo( QString("%1/%2").arg(current_dir).arg(filename) );
+    
+    if (file.exists() and file.isReadable())
+        return file.absoluteFilePath();
+    
+    //otherwise search the GROMACS_PATH
+    for (const auto path : include_path)
     {
-        //otherwise search the GROMACS_PATH
-        for (const auto path : include_path)
-        {
-            file = QFileInfo( QString("%1/%2").arg(path).arg(dirfile) );
+        file = QFileInfo( QString("%1/%2").arg(path).arg(filename) );
             
-            if (file.exists() and file.isReadable())
-            {
-                file = QFileInfo(file.absoluteFilePath());
-                break;
-            }
+        if (file.exists() and file.isReadable())
+        {
+            return file.absoluteFilePath();
         }
     }
-    
-    if (not (file.exists() and file.isReadable()))
-    {
-        //nothing was found!
-        throw SireError::io_error( QObject::tr(
-                "Cannot find the file '%1' using GROMACS_PATH = [ %2 ], current directory '%3'. "
-                "Please make "
-                "sure the file exists and is readable within your GROMACS_PATH from the "
-                "current directory '%3' (e.g. "
-                "set the GROMACS_PATH environment variable to include the directory "
-                "that contains '%1', or copy this file into one of the existing "
-                "directories [ %2 ])")
-                    .arg(dirfile).arg(include_path.join(", ")).arg(current_dir), CODELOC );
-    }
 
-    //the file has been found - get the absolute file path
-    QString fullpath = file.absoluteFilePath();
-    
-    //the file has been found. Cache the full path
-    included_files.insert(dirfile,fullpath);
-    
-    return fullpath;
+    //nothing was found!
+    throw SireError::io_error( QObject::tr(
+            "Cannot find the file '%1' using GROMACS_PATH = [ %2 ], current directory '%3'. "
+            "Please make "
+            "sure the file exists and is readable within your GROMACS_PATH from the "
+            "current directory '%3' (e.g. "
+            "set the GROMACS_PATH environment variable to include the directory "
+            "that contains '%1', or copy this file into one of the existing "
+            "directories [ %2 ])")
+                .arg(filename).arg(include_path.join(", ")).arg(current_dir), CODELOC );
+
+    return QString();
 }
 
 /** This function will use the Gromacs search path to find and load the
@@ -492,7 +544,8 @@ QVector<QString> GroTop::loadInclude(QString filename, QString current_dir)
     macros, removes all comments and includes all #included files */
 QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
                                     QHash<QString,QString> defines,
-                                    const QString &current_directory)
+                                    const QString &current_directory,
+                                    const QString &parent_file)
 {
     //first, scan through to see if anything needs changing
     if (not gromacs_preprocess_would_change(lines, usesParallel(), defines))
@@ -536,6 +589,20 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
         else
         {
             //simplify the line to remove weirdness
+            line = line.simplified();
+        }
+        
+        //now look to see if the line should be joined to the next line
+        while (line.endsWith("\\"))
+        {
+            if (not lines_it.hasNext())
+            {
+                throw SireIO::parse_error( QObject::tr(
+                    "Continuation line on the last line of the Gromacs file! '%1'")
+                        .arg(line), CODELOC );
+            }
+            
+            line += lines_it.next();
             line = line.simplified();
         }
         
@@ -660,11 +727,15 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
             
             //fully preprocess these lines using the current set of defines
             included_lines = preprocess(included_lines, defines,
-                                        QFileInfo(filename).path());
+                                        parts.join("/"), absfile);
             
             //add these included lines to the set
             new_lines.reserve( new_lines.count() + included_lines.count() );
             new_lines += included_lines;
+
+            //finally, record that this file depends on the included file
+            included_files[parent_file].append(absfile);
+
             continue;
         }
         
@@ -692,31 +763,442 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
     return new_lines;
 }
 
-/** Internal function that is used to actually parse the data contained
-    in the lines of the file */
-void GroTop::parseLines(const PropertyMap &map)
+/** Return the non-bonded function type for the molecules in this file */
+int GroTop::nonBondedFunctionType() const
 {
-    //first, go through an expand any macros and include the contents of any
-    //included files
+    return nb_func_type;
+}
+
+/** Return the combining rules to use for the molecules in this file */
+int GroTop::combiningRules() const
+{
+    return combining_rule;
+}
+
+/** Return the Lennard Jones fudge factor for the molecules in this file */
+double GroTop::fudgeLJ() const
+{
+    return fudge_lj;
+}
+
+/** Return the electrostatic fudge factor for the molecules in this file */
+double GroTop::fudgeQQ() const
+{
+    return fudge_qq;
+}
+
+/** Return whether or not the non-bonded pairs should be automatically generated
+    for the molecules in this file */
+bool GroTop::generateNonBondedPairs() const
+{
+    return generate_pairs;
+}
+
+/** Return the expanded set of lines (after preprocessing) */
+const QVector<QString>& GroTop::expandedLines() const
+{
+    return expanded_lines;
+}
+
+/** Internal function, called by ::interpret() that processes all of the data
+    from all of the directives, returning a set of warnings */
+QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
+                                      const QHash<QString,int> &ntags)
+{
+    //internal function that returns the lines associated with the
+    //specified directive
+    auto getLines = [&](const QString &directive, int n) -> QStringList
     {
-        QVector<QString> preprocessed_lines = preprocess(lines());
-        
-        if (preprocessed_lines != lines())
+        if (n >= ntags.value(directive,0))
         {
-            //the lines have changed
-            setLines(preprocessed_lines);
+            return QStringList();
+        }
+        
+        int start = 0;
+        int end = expandedLines().count();
+        
+        //find the tag
+        for (auto it = taglocs.constBegin(); it != taglocs.constEnd(); ++it)
+        {
+            if (it.value() == directive)
+            {
+                if (n == 0)
+                {
+                    start = it.key()+1;
+                    
+                    ++it;
+                    
+                    if (it != taglocs.constEnd())
+                    {
+                        end = it.key();
+                    }
+                    
+                    break;
+                }
+            }
+        }
+        
+        QStringList lines;
+        
+        for (int i=start; i<end; ++i)
+        {
+            lines.append( expandedLines().constData()[i] );
+        }
+        
+        return lines;
+    };
+
+    //interpret a bool from the passed string
+    auto gromacs_toBool = [&](const QString &word, bool *ok)
+    {
+        QString w = word.toLower();
+
+        if (ok) *ok = true;
+        
+        if (w == "yes" or w == "y" or w == "true" or w == "1")
+        {
+            return true;
+        }
+        else if (w == "no" or w == "n" or w == "false" or w == "0")
+        {
+            return false;
+        }
+        else
+        {
+            if (ok) *ok = false;
+            return false;
+        }
+    };
+
+    //internal function to process the defaults lines
+    auto processDefaults = [&]()
+    {
+        QStringList warnings;
+    
+        //there should only be one defaults line
+        const QStringList lines = getLines("defaults", 0);
+        
+        if (lines.isEmpty())
+            throw SireIO::parse_error( QObject::tr(
+                "The required data for the '[defaults]' directive in Gromacs is "
+                "not supplied. This is not a valid Gromacs topology file!"), CODELOC );
+        
+        auto words = lines[0].split(" ", QString::SkipEmptyParts);
+        
+        //there should be five words; non-bonded function type, combinination rule,
+        //                            generate pairs, fudge LJ and fudge QQ
+        if (words.count() < 5)
+        {
+            throw SireIO::parse_error( QObject::tr(
+                "There is insufficient data for the '[defaults]' line '%1'. This is "
+                "not a valid Gromacs topology file!").arg(lines[0]), CODELOC );
+        }
+
+        bool ok;
+        int nbtyp = words[0].toInt(&ok);
+        
+        if (not ok)
+            throw SireIO::parse_error( QObject::tr(
+                "The first value for the '[defaults]' line '%1' is not an integer. "
+                "This is not a valid Gromacs topology file!").arg(lines[0]), CODELOC );
+        
+        int combrule = words[1].toInt(&ok);
+        
+        if (not ok)
+            throw SireIO::parse_error( QObject::tr(
+                "The second value for the '[defaults]' line '%1' is not an integer. "
+                "This is not a valid Gromacs topology file!").arg(lines[0]), CODELOC );
+        
+        bool gen_pairs = gromacs_toBool(words[2], &ok);
+        
+        if (not ok)
+            throw SireIO::parse_error( QObject::tr(
+                "The third value for the '[defaults]' line '%1' is not a yes/no. "
+                "This is not a valid Gromacs topology file!").arg(lines[0]), CODELOC );
+        
+        double lj = words[3].toDouble(&ok);
+        
+        if (not ok)
+            throw SireIO::parse_error( QObject::tr(
+                "The fourth value for the '[defaults]' line '%1' is not a double. "
+                "This is not a valid Gromacs topology file!").arg(lines[0]), CODELOC );
+        
+        double qq = words[4].toDouble(&ok);
+        
+        if (not ok)
+            throw SireIO::parse_error( QObject::tr(
+                "The fifth value for the '[defaults]' line '%1' is not a double. "
+                "This is not a valid Gromacs topology file!").arg(lines[0]), CODELOC );
+
+        //validate and then save these values
+        if (nbtyp <= 0 or nbtyp > 2)
+        {
+            warnings.append( QObject::tr("A non-supported non-bonded function type (%1) "
+              "is requested.").arg(nbtyp) );
+        }
+        
+        if (combrule <= 0 or combrule > 2)
+        {
+            warnings.append( QObject::tr("A non-supported combinig rule (%1) is requested!")
+                .arg(combrule) );
+        }
+        
+        if (lj < 0 or lj > 1)
+        {
+            warnings.append( QObject::tr("An invalid value of fudge_lj (%1) is requested!")
+                .arg(lj) );
+            
+            if (lj < 0) lj = 0;
+            else if (lj > 1) lj = 1;
+        }
+        
+        if (qq < 0 or qq > 1)
+        {
+            warnings.append( QObject::tr("An invalid value of fudge_qq (%1) is requested1")
+                .arg(qq) );
+            
+            if (qq < 0) qq = 0;
+            else if (qq > 1) qq = 1;
+        }
+        
+        nb_func_type = nbtyp;
+        combining_rule = combrule;
+        fudge_lj = lj;
+        fudge_qq = qq;
+        generate_pairs = gen_pairs;
+        
+        return warnings;
+    };
+
+    //internal function to process the atomtypes lines
+    auto processAtomTypes = [&]()
+    {
+        return QStringList();
+    };
+
+    //internal function to process the bondtypes lines
+    auto processBondTypes = [&]()
+    {
+        return QStringList();
+    };
+
+    //internal function to process the pairtypes lines
+    auto processPairTypes = [&]()
+    {
+        return QStringList();
+    };
+
+    //internal function to process the angletypes lines
+    auto processAngleTypes = [&]()
+    {
+        return QStringList();
+    };
+
+    //internal function to process the dihedraltypes lines
+    auto processDihedralTypes = [&]()
+    {
+        return QStringList();
+    };
+
+    //internal function to process the constrainttypes lines
+    auto processConstraintTypes = [&]()
+    {
+        return QStringList();
+    };
+
+    //internal function to process the nonbond_params lines
+    auto processNonBondParams = [&]()
+    {
+        return QStringList();
+    };
+    
+    //process the defaults data first, as this affects the rest of the parsing
+    auto warnings = processDefaults();
+
+    //now we can process the other tags
+    const QVector< std::function<QStringList()> > funcs =
+                 { processAtomTypes, processBondTypes, processPairTypes,
+                   processAngleTypes, processDihedralTypes, processConstraintTypes,
+                   processNonBondParams
+                 };
+
+    if (usesParallel())
+    {
+        QMutex mutex;
+        
+        tbb::parallel_for( tbb::blocked_range<int>(0, funcs.count()),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            QStringList local_warnings;
+            
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                local_warnings += funcs[i]();
+            }
+            
+            if (not local_warnings.isEmpty())
+            {
+                QMutexLocker lkr(&mutex);
+                warnings += local_warnings;
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<funcs.count(); ++i)
+        {
+            warnings += funcs[i]();
+        }
+    }
+    
+    return warnings;
+}
+
+/** Interpret the fully expanded set of lines to extract all of the necessary data */
+void GroTop::interpret()
+{
+    //first, go through and find the line numbers of all tags
+    const QRegularExpression re("\\[\\s*([\\w\\d]+)\\s*\\]");
+
+    //map giving the type and line number of each directive tag
+    QMap<int,QString> taglocs;
+
+    const int nlines = expandedLines().count();
+    const auto lines = expandedLines().constData();
+
+    //run through this file to find all of the directives
+    if (usesParallel())
+    {
+        QMutex mutex;
+    
+        tbb::parallel_for( tbb::blocked_range<int>(0,nlines),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            QMap<int,QString> mylocs;
+        
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                auto m = re.match(lines[i]);
+                
+                if (m.hasMatch())
+                {
+                    auto tag = m.captured(1);
+                    mylocs.insert(i,tag);
+                }
+            }
+            
+            if (not mylocs.isEmpty())
+            {
+                QMutexLocker lkr(&mutex);
+                
+                for (auto it=mylocs.constBegin(); it!=mylocs.constEnd(); ++it)
+                {
+                    taglocs.insert(it.key(), it.value());
+                }
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<nlines; ++i)
+        {
+            auto m = re.match(lines[i]);
+            
+            if (m.hasMatch())
+            {
+                auto tag = m.captured(1);
+                taglocs.insert(i,tag);
+            }
         }
     }
 
-    for (const auto line : lines())
+    //now, validate that this looks like a gromacs top file. Rules are taken
+    //from page 138 of the Gromacs 5.1 PDF reference manual
+    
+    //first, count up the number of each tag
+    QHash<QString,int> ntags;
+    
+    for (auto it = taglocs.constBegin(); it != taglocs.constEnd(); ++it)
     {
-        qDebug() << line;
+        if (not ntags.contains(it.value()))
+        {
+            ntags.insert(it.value(), 1);
+        }
+        else
+        {
+            ntags[it.value()] += 1;
+        }
+    }
+
+    //there should be only one 'defaults' tag
+    if (ntags.value("defaults", 0) != 1)
+    {
+        throw SireIO::parse_error( QObject::tr(
+            "This is not a valid GROMACS topology file. Such files contain one, and one "
+            "only 'defaults' directive. The number of such directives in this file is %1.")
+                .arg(ntags.value("defaults",0)), CODELOC );
+    }
+
+    //now process all of the directives
+    auto warnings = this->processDirectives(taglocs, ntags);
+
+    if (not warnings.isEmpty())
+    {
+        qDebug() << warnings.join("\n");
+    }
+
+    this->setScore(100);
+}
+
+/** Internal function that is used to actually parse the data contained
+    in the lines of the file */
+void GroTop::parseLines(const QString &path, const PropertyMap &map)
+{
+    //first, see if there are any GROMACS defines in the passed map
+    //and then preprocess the lines to create the fully expanded file to parse
+    {
+        QHash<QString,QString> defines;
+
+        try
+        {
+            const auto p = map["GROMACS_DEFINE"];
+            
+            QStringList d;
+            
+            if (p.hasValue())
+            {
+                d = p.value().asA<StringProperty>().toString().split(":", QString::SkipEmptyParts);
+            }
+            else if (p.source() != "GROMACS_DEFINE")
+            {
+                d = p.source().split(":", QString::SkipEmptyParts);
+            }
+            
+            for (const auto define : d)
+            {
+                auto words = define.split("=");
+                
+                if (words.count() == 1)
+                {
+                    defines.insert( words[0].simplified(), "1" );
+                }
+                else
+                {
+                    defines.insert( words[0].simplified(), words[1].simplified() );
+                }
+            }
+        }
+        catch(...)
+        {}
+
+        //now go through an expand any macros and include the contents of any
+        //included files
+        expanded_lines = preprocess(lines(), defines, path, ".");
     }
 
     //now we know that there are no macros to expand, no other files to
     //include, and everything should be ok... ;-)
-
-    this->setScore(0);
+    this->interpret();
 }
 
 /** Use the data contained in this parser to create a new System of molecules,

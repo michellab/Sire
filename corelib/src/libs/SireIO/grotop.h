@@ -95,9 +95,19 @@ public:
     QString formatDescription() const;
     QStringList formatSuffix() const;
 
+    int nonBondedFunctionType() const;
+    int combiningRules() const;
+    double fudgeLJ() const;
+    double fudgeQQ() const;
+    bool generateNonBondedPairs() const;
+
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
+
+private:
+    void assertSane() const;
+    void parseLines(const QString &path, const PropertyMap &map);
 
     void getIncludePath(const PropertyMap &map);
 
@@ -106,20 +116,42 @@ protected:
     QVector<QString> loadInclude(QString filename, QString current_directory);
 
     QVector<QString> preprocess(const QVector<QString> &lines,
-                                QHash<QString,QString> defines = QHash<QString,QString>(),
-                                const QString &current_directory = ".");
+                                QHash<QString,QString> defines,
+                                const QString &current_directory,
+                                const QString &parent_file);
 
-private:
-    void assertSane() const;
-    void parseLines(const PropertyMap &map);
+    void interpret();
+
+    QStringList processDirectives(const QMap<int,QString> &taglocs,
+                                  const QHash<QString,int> &ntags);
+
+    const QVector<QString>& expandedLines() const;
     
     /** This is the full search path of all directories that should
         be searched for Gromacs include files */
     QStringList include_path;
     
     /** This is the set of files that had to be included as part of parsing
-        this file, together with the full path in which they were found */
-    QHash<QString,QString> included_files;
+        this file, arranged as dependencies of the files */
+    QHash<QString,QStringList> included_files;
+    
+    /** The post-processed lines */
+    QVector<QString> expanded_lines;
+    
+    /** The non-bonded function type to use for all molecules */
+    qint32 nb_func_type;
+    
+    /** The combining rule used for all molecules */
+    qint32 combining_rule;
+    
+    /** The fudge LJ value for all molecules */
+    double fudge_lj;
+    
+    /** The fudge QQ value for all molecules */
+    double fudge_qq;
+    
+    /** Whether or not to generate pairs for all molecules */
+    bool generate_pairs;
 };
 
 }
