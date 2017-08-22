@@ -398,10 +398,46 @@ void GroTop::assertSane() const
     //check state, raise SireError::program_bug if we are in an invalid state
 }
 
+/** Return the atom type data for the passed atom type. This returns
+    null data if it is not present */
+GromacsAtomType GroTop::atomType(const QString &atm) const
+{
+    return atom_types.value(atm, GromacsAtomType());
+}
+
+/** Return the ID string for the bond atom types 'atm0' 'atm1'. This
+    creates the string 'atm0;atm1' or 'atm1;atm0' depending on which
+    of the atoms is lower. The ';' character is used as a separator
+    as it cannot be in the atom names, as it is used as a comment 
+    character in the Gromacs Top file */
+static QString get_bond_id(const QString &atm0, const QString &atm1)
+{
+    if (atm0 < atm1)
+    {
+        return QString("%1;%2").arg(atm0,atm1);
+    }
+    else
+    {
+        return QString("%1;%2").arg(atm1,atm0);
+    }
+}
+
+/** Return the bond potential data for the passed pair of atoms */
+GromacsBond GroTop::bond(const QString &atm0, const QString &atm1) const
+{
+    return bond_potentials.value( get_bond_id(atm0,atm1), GromacsBond() );
+}
+
 /** Return the atom types loaded from this file */
 QHash<QString,GromacsAtomType> GroTop::atomTypes() const
 {
     return atom_types;
+}
+
+/** Return the bond potentials loaded from this file */
+QHash<QString,SireMM::GromacsBond> GroTop::bonds() const
+{
+    return bond_potentials;
 }
 
 /** Return whether or not the gromacs preprocessor would change these lines */
@@ -1145,7 +1181,81 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     //internal function to process the bondtypes lines
     auto processBondTypes = [&]()
     {
-        return QStringList();
+        QStringList warnings;
+        
+        //get all 'bondtypes' lines
+        const auto lines = getAllLines("bondtypes");
+
+        //save into a database of bonds
+        QHash<QString,GromacsBond> bnds;
+
+        for (const auto line : lines)
+        {
+            //each line should contain the atom types of the two atoms, then
+            //the function type, then the parameters for the function
+            const auto words = line.split(" ", QString::SkipEmptyParts);
+            
+            if (words.count() < 3)
+            {
+                warnings.append( QObject::tr("There is not enough data on the "
+                  "line '%1' to extract a Gromacs bond parameter. Skipping line.")
+                    .arg(line) );
+                continue;
+            }
+            
+            const auto atm0 = words[0];
+            const auto atm1 = words[1];
+            
+            bool ok;
+            int func_type = words[2].toInt(&ok);
+            
+            if (not ok)
+            {
+                warnings.append( QObject::tr("Unable to determine the function type "
+                  "for the bond on line '%1'. Skipping line.")
+                    .arg(line) );
+                continue;
+            }
+            
+            //now read in all of the remaining values as numbers...
+            QList<double> params;
+            
+            for (int i=3; i<words.count(); ++i)
+            {
+                double param = words[i].toDouble(&ok);
+                
+                if (ok) params.append(param);
+            }
+            
+            GromacsBond bond;
+            
+            try
+            {
+                bond = GromacsBond(func_type, params);
+            }
+            catch(const SireError::exception &e)
+            {
+                warnings.append( QObject::tr("Unable to extract the correct information "
+                  "to form a bond from line '%1'. Error is '%2'")
+                    .arg(line).arg(e.error()) );
+                continue;
+            }
+            
+            QString key = get_bond_id(atm0,atm1);
+            
+            if (bnds.contains(key))
+            {
+                warnings.append( QObject::tr("Duplicate bond entry for %1 : %2 on line "
+                   "'%3'. Replacing the original entry.")
+                        .arg(atm0).arg(atm1).arg(line) );
+            }
+            
+            bnds.insert(key, bond);
+        }
+
+        bond_potentials = bnds;
+
+        return warnings;
     };
 
     //internal function to process the pairtypes lines

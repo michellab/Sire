@@ -38,8 +38,8 @@ void register_GromacsAtomType_class(){
             .value("VIRTUAL", SireMM::GromacsAtomType::VIRTUAL)
             .export_values()
             ;
-        GromacsAtomType_exposer.def( bp::init< QString, SireUnits::Dimension::MolarMass >(( bp::arg("atom_type"), bp::arg("mass") ), "") );
-        GromacsAtomType_exposer.def( bp::init< QString, SireUnits::Dimension::MolarMass, SireUnits::Dimension::Charge, SireMM::GromacsAtomType::PARTICLE_TYPE, SireMM::LJParameter const &, bp::optional< SireMol::Element const & > >(( bp::arg("atom_type"), bp::arg("mass"), bp::arg("charge"), bp::arg("particle_type"), bp::arg("ljparam"), bp::arg("element")=SireMol::Element(0) ), "") );
+        GromacsAtomType_exposer.def( bp::init< QString, SireUnits::Dimension::MolarMass >(( bp::arg("atom_type"), bp::arg("mass") ), "Construct, specifying only the mass") );
+        GromacsAtomType_exposer.def( bp::init< QString, SireUnits::Dimension::MolarMass, SireUnits::Dimension::Charge, SireMM::GromacsAtomType::PARTICLE_TYPE, SireMM::LJParameter const &, bp::optional< SireMol::Element const & > >(( bp::arg("atom_type"), bp::arg("mass"), bp::arg("charge"), bp::arg("particle_type"), bp::arg("ljparam"), bp::arg("element")=SireMol::Element(0) ), "Construct passing in all parameters") );
         GromacsAtomType_exposer.def( bp::init< SireMM::GromacsAtomType const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::GromacsAtomType::atomType
         

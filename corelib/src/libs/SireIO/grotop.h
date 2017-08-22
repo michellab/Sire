@@ -103,7 +103,11 @@ public:
     double fudgeQQ() const;
     bool generateNonBondedPairs() const;
 
+    SireMM::GromacsAtomType atomType(const QString &atm) const;
+    SireMM::GromacsBond bond(const QString &atm0, const QString &atm1) const;
+
     QHash<QString,SireMM::GromacsAtomType> atomTypes() const;
+    QHash<QString,SireMM::GromacsBond> bonds() const;
 
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
@@ -144,6 +148,9 @@ private:
     
     /** The database of atom types */
     QHash<QString,SireMM::GromacsAtomType> atom_types;
+    
+    /** The database of bond potentials */
+    QHash<QString,SireMM::GromacsBond> bond_potentials;
     
     /** The non-bonded function type to use for all molecules */
     qint32 nb_func_type;

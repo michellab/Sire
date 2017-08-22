@@ -79,6 +79,7 @@ set ( PYPP_SOURCES
        GridFF.pypp.cpp
        GridFF2.pypp.cpp
        GromacsAtomType.pypp.cpp
+       GromacsBond.pypp.cpp
        GroupInternalParameters.pypp.cpp
        HarmonicSwitchingFunction.pypp.cpp
        ImproperComponent.pypp.cpp

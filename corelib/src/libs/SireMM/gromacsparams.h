@@ -36,15 +36,22 @@
 
 #include "SireUnits/dimensions.h"
 
+#include "SireCAS/symbol.h"
+#include "SireCAS/expression.h"
+
 SIRE_BEGIN_HEADER
 
 namespace SireMM
 {
 class GromacsAtomType;
+class GromacsBond;
 }
 
 QDataStream& operator<<(QDataStream&, const SireMM::GromacsAtomType&);
 QDataStream& operator>>(QDataStream&, SireMM::GromacsAtomType&);
+
+QDataStream& operator<<(QDataStream&, const SireMM::GromacsBond&);
+QDataStream& operator>>(QDataStream&, SireMM::GromacsBond&);
 
 namespace SireMM
 {
@@ -123,6 +130,67 @@ private:
     SireMol::Element _elem;
 };
 
+/** This class holds all of the information about a Gromacs Bond
+
+    @author Christopher Woods
+*/
+class SIREMM_EXPORT GromacsBond
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const GromacsBond&);
+friend QDataStream& ::operator>>(QDataStream&, GromacsBond&);
+
+public:
+    GromacsBond();
+    GromacsBond(int function_type,
+                double k0, double k1=0, double k2=0, double k3=0);
+    GromacsBond(int function_type, const QList<double> &params);
+    
+    GromacsBond(const SireCAS::Expression &bond, const SireCAS::Symbol &R);
+    
+    GromacsBond(const GromacsBond &other);
+    
+    ~GromacsBond();
+    
+    GromacsBond& operator=(const GromacsBond &other);
+    
+    bool operator==(const GromacsBond &other) const;
+    bool operator!=(const GromacsBond &other) const;
+    
+    bool operator<(const GromacsBond &other) const;
+    bool operator<=(const GromacsBond &other) const;
+    
+    bool operator>(const GromacsBond &other) const;
+    bool operator>=(const GromacsBond &other) const;
+    
+    static const char* typeName();
+    const char* what() const;
+    
+    double operator[](int i) const;
+    
+    double at(int i) const;
+    
+    int count() const;
+    int size() const;
+    
+    int functionType() const;
+    QString functionTypeString() const;
+    
+    QList<double> parameters() const;
+    
+    QString toString() const;
+    SireCAS::Expression toExpression(const SireCAS::Symbol &R) const;
+    
+    uint hash() const;
+
+private:
+    /** Space to hold up to 4 parameters */
+    double k[4];
+
+    /** The function type */
+    qint32 func_type;
+};
+
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the atom type name */
@@ -172,8 +240,10 @@ inline SireMol::Element GromacsAtomType::element() const
 }
 
 Q_DECLARE_METATYPE( SireMM::GromacsAtomType )
+Q_DECLARE_METATYPE( SireMM::GromacsBond )
 
 SIRE_EXPOSE_CLASS( SireMM::GromacsAtomType )
+SIRE_EXPOSE_CLASS( SireMM::GromacsBond )
 
 SIRE_END_HEADER
 

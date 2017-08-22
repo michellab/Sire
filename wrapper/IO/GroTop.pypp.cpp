@@ -53,6 +53,18 @@ void register_GroTop_class(){
         GroTop_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to read in the data from the passed text lines. The\npassed property map can be used to pass extra parameters to control\nthe parsing") );
         GroTop_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct this parser by extracting all necessary information from the\npassed SireSystem::System, looking for the properties that are specified\nin the passed property map") );
         GroTop_exposer.def( bp::init< SireIO::GroTop const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireIO::GroTop::atomType
+        
+            typedef ::SireMM::GromacsAtomType ( ::SireIO::GroTop::*atomType_function_type)( ::QString const & ) const;
+            atomType_function_type atomType_function_value( &::SireIO::GroTop::atomType );
+            
+            GroTop_exposer.def( 
+                "atomType"
+                , atomType_function_value
+                , ( bp::arg("atm") )
+                , "" );
+        
+        }
         { //::SireIO::GroTop::atomTypes
         
             typedef ::QHash< QString, SireMM::GromacsAtomType > ( ::SireIO::GroTop::*atomTypes_function_type)(  ) const;
@@ -61,6 +73,29 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "atomTypes"
                 , atomTypes_function_value
+                , "Return the atom types loaded from this file" );
+        
+        }
+        { //::SireIO::GroTop::bond
+        
+            typedef ::SireMM::GromacsBond ( ::SireIO::GroTop::*bond_function_type)( ::QString const &,::QString const & ) const;
+            bond_function_type bond_function_value( &::SireIO::GroTop::bond );
+            
+            GroTop_exposer.def( 
+                "bond"
+                , bond_function_value
+                , ( bp::arg("atm0"), bp::arg("atm1") )
+                , "" );
+        
+        }
+        { //::SireIO::GroTop::bonds
+        
+            typedef ::QHash< QString, SireMM::GromacsBond > ( ::SireIO::GroTop::*bonds_function_type)(  ) const;
+            bonds_function_type bonds_function_value( &::SireIO::GroTop::bonds );
+            
+            GroTop_exposer.def( 
+                "bonds"
+                , bonds_function_value
                 , "" );
         
         }

@@ -165,6 +165,8 @@
 
 #include "GromacsAtomType.pypp.hpp"
 
+#include "GromacsBond.pypp.hpp"
+
 #include "GroupInternalParameters.pypp.hpp"
 
 #include "HarmonicSwitchingFunction.pypp.hpp"
@@ -613,6 +615,8 @@ BOOST_PYTHON_MODULE(_MM){
     register_GridFF2_class();
 
     register_GromacsAtomType_class();
+
+    register_GromacsBond_class();
 
     register_GroupInternalParameters_class();
 
