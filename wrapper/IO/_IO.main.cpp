@@ -35,7 +35,15 @@
 
 #include "PDB2.pypp.hpp"
 
+#include "PDBAtom.pypp.hpp"
+
+#include "PDBHelix.pypp.hpp"
+
 #include "PDBParameters.pypp.hpp"
+
+#include "PDBSheet.pypp.hpp"
+
+#include "PDBTitle.pypp.hpp"
 
 #include "PerturbationsLibrary.pypp.hpp"
 
@@ -96,7 +104,15 @@ BOOST_PYTHON_MODULE(_IO){
 
     register_PDB2_class();
 
+    register_PDBAtom_class();
+
+    register_PDBHelix_class();
+
     register_PDBParameters_class();
+
+    register_PDBSheet_class();
+
+    register_PDBTitle_class();
 
     register_PerturbationsLibrary_class();
 

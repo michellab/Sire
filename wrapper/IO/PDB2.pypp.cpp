@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/parallel.h"
+
 #include "SireError/errors.h"
 
 #include "SireIO/errors.h"
@@ -22,6 +24,8 @@ namespace bp = boost::python;
 #include "SireSystem/system.h"
 
 #include "pdb2.h"
+
+#include <iostream>
 
 #include "pdb2.h"
 
@@ -158,6 +162,9 @@ void register_PDB2_class(){
                 , "Return the C++ name for this class" );
         
         }
+        PDB2_exposer.def_readwrite( "num_atom", &SireIO::PDB2::num_atom, "" );
+        PDB2_exposer.def_readwrite( "num_helix", &SireIO::PDB2::num_helix, "" );
+        PDB2_exposer.def_readwrite( "num_sheet", &SireIO::PDB2::num_sheet, "" );
         PDB2_exposer.staticmethod( "typeName" );
         PDB2_exposer.def( "__copy__", &__copy__);
         PDB2_exposer.def( "__deepcopy__", &__copy__);
