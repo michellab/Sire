@@ -30,6 +30,9 @@
 #define SIREMM_GROMACSPARAMS_H
 
 #include "SireMol/molviewproperty.h"
+#include "SireMol/element.h"
+
+#include "SireMM/ljparameter.h"
 
 #include "SireUnits/dimensions.h"
 
@@ -67,26 +70,21 @@ public:
         VIRTUAL = 3
     };
 
-    enum COMBINING_RULE
-    {
-        UNKNOWN_RULE = 0,
-        ARITHMETIC = 1,
-        GEOMETRIC = 2
-    };
-
     GromacsAtomType();
+    
+    GromacsAtomType(QString atom_type,
+                    SireUnits::Dimension::MolarMass mass);
     
     GromacsAtomType(QString atom_type,
                     SireUnits::Dimension::MolarMass mass,
                     SireUnits::Dimension::Charge charge,
                     PARTICLE_TYPE particle_type,
-                    double v, double w, COMBINING_RULE combining_rule);
+                    const LJParameter &ljparam,
+                    const SireMol::Element &element = SireMol::Element(0));
     
     GromacsAtomType(const GromacsAtomType &other);
     
     ~GromacsAtomType();
-
-    static GromacsAtomType fromGromacsTopLine(const QString &line);
     
     GromacsAtomType& operator=(const GromacsAtomType &other);
     
@@ -96,28 +94,23 @@ public:
     static const char* typeName();
     const char* what() const;
     
-    QString toString() const;
+    bool hasMassOnly() const;
     
-    QString toGromacsTopLine() const;
+    QString toString() const;
     
     QString atomType() const;
     SireUnits::Dimension::MolarMass mass() const;
     SireUnits::Dimension::Charge charge() const;
+    SireMM::LJParameter ljParameter() const;
+    
+    SireMol::Element element() const;
     
     PARTICLE_TYPE particleType() const;
     
     QString particleTypeString() const;
     QString particleTypeLetter() const;
-
-    QString combiningRuleString() const;
     
     static PARTICLE_TYPE toParticleType(const QString &word, bool *ok=0);
-    static COMBINING_RULE toCombiningRule(const QString &word, bool *ok=0);
-    
-    double V() const;
-    double W() const;
-    
-    COMBINING_RULE combiningRule() const;
 
 private:
     void assertSane() const;
@@ -125,9 +118,9 @@ private:
     QString _typ;
     SireUnits::Dimension::MolarMass _mass;
     SireUnits::Dimension::Charge _chg;
+    SireMM::LJParameter _lj;
     PARTICLE_TYPE _ptyp;
-    double _v, _w;
-    COMBINING_RULE _rule;
+    SireMol::Element _elem;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
@@ -156,22 +149,22 @@ inline GromacsAtomType::PARTICLE_TYPE GromacsAtomType::particleType() const
     return _ptyp;
 }
 
-/** Return the Lennard Jones V value (meaning depends on the combining rules) */
-inline double GromacsAtomType::V() const
+/** Return the Lennard Jones parameter */
+inline SireMM::LJParameter GromacsAtomType::ljParameter() const
 {
-    return _v;
+    return _lj;
 }
 
-/** Return the Lennard Jones W value (meaning depends on the combining rules) */
-inline double GromacsAtomType::W() const
+/** Return whether or not this atom type has only the mass specified */
+inline bool GromacsAtomType::hasMassOnly() const
 {
-    return _w;
+    return _ptyp == UNKNOWN_TYPE and _chg.value() == 0 and _lj.isDummy();
 }
 
-/** Return the combining rule to use with this parameter */
-inline GromacsAtomType::COMBINING_RULE GromacsAtomType::combiningRule() const
+/** Return the element type of this type */
+inline SireMol::Element GromacsAtomType::element() const
 {
-    return _rule;
+    return _elem;
 }
 
 #endif

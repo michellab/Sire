@@ -46,6 +46,7 @@
 #include "SireMM/fouratomfunctions.h"
 #include "SireMM/cljatoms.h"
 #include "SireMM/amberparams.h"
+#include "SireMM/gromacsparams.h"
 
 #include "SireMM/cljboxes.h"
 
@@ -75,4 +76,6 @@ void register_SireMM_containers()
     register_dict< QHash<DihedralID,AmberDihedral> >();
     register_dict< QHash<ImproperID,AmberDihedral> >();
     register_dict< QHash<BondID,AmberNB14> >();
+
+    register_dict< QHash<QString,GromacsAtomType> >();
 }

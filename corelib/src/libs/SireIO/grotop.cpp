@@ -398,6 +398,12 @@ void GroTop::assertSane() const
     //check state, raise SireError::program_bug if we are in an invalid state
 }
 
+/** Return the atom types loaded from this file */
+QHash<QString,GromacsAtomType> GroTop::atomTypes() const
+{
+    return atom_types;
+}
+
 /** Return whether or not the gromacs preprocessor would change these lines */
 static bool gromacs_preprocess_would_change(const QVector<QString> &lines,
                                             bool use_parallel,
@@ -810,6 +816,45 @@ const QVector<QString>& GroTop::expandedLines() const
     return expanded_lines;
 }
 
+/** Internal function to return a LJParameter from the passed W and V values
+    for the passed Gromacs combining rule */
+static LJParameter toLJParameter(double v, double w, int rule)
+{
+    if (rule == 2 or rule == 3)
+    {
+        // v = sigma in nm, and w = epsilon in kJ mol-1
+        return LJParameter::fromSigmaAndEpsilon( v * nanometer, w * kJ_per_mol );
+    }
+    else
+    {
+        // v = 4 epsilon sigma^6 in kJ mol-1 nm^6, w = 4 epsilon sigma^12 in kJ mol-1 nm^12
+        // so sigma = (w/v)^1/6 and epsilon = v^2 / 4w
+        return LJParameter::fromSigmaAndEpsilon( std::pow(w/v, 1.0/6.0) * nanometer,
+                                                 (v*v / (4.0*w)) * kJ_per_mol );
+    }
+}
+
+/** Internal function to convert a LJParameter to V and W based on the passed gromacs 
+    combining rule */
+static std::tuple<double,double> fromLJParameter(const LJParameter &lj, int rule)
+{
+    const double sigma = lj.sigma().to(nanometer);
+    const double epsilon = lj.epsilon().to(kJ_per_mol);
+
+    if (rule == 2 or rule == 3)
+    {
+        return std::make_tuple(sigma, epsilon);
+    }
+    else
+    {
+        double sig6 = SireMaths::pow(sigma, 6);
+        double v = 4.0 * epsilon * sig6;
+        double w = v * sig6;
+        
+        return std::make_tuple(v, w);
+    }
+}
+
 /** Internal function, called by ::interpret() that processes all of the data
     from all of the directives, returning a set of warnings */
 QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
@@ -960,7 +1005,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
               "is requested.").arg(nbtyp) );
         }
         
-        if (combrule <= 0 or combrule > 2)
+        if (combrule <= 0 or combrule > 3)
         {
             warnings.append( QObject::tr("A non-supported combinig rule (%1) is requested!")
                 .arg(combrule) );
@@ -1004,57 +1049,91 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         //the database of all atom types
         QHash<QString,GromacsAtomType> typs;
     
-        bool ok_rule;
-        auto rule = GromacsAtomType::toCombiningRule(QString::number(combining_rule), &ok_rule);
-        
-        if (not ok_rule)
-        {
-            warnings.append( QObject::tr("Could not understand the combining rule '%1'. "
-              "This means that we can't load any atom types!").arg(combining_rule) );
-            return warnings;
-        }
-    
         //now parse each atom
         for (const auto line : lines)
         {
             const auto words = line.split(" ", QString::SkipEmptyParts);
             
-            //should have 6 words; atom type, mass, charge, type, V, W
-            if (words.count() < 6)
+            //should either have 2 words (atom type, mass) or
+            //have 6 words; atom type, mass, charge, type, V, W or
+            //have 7 words; atom type, atom number, mass, charge, type, V, W
+            if (words.count() < 2)
             {
                 warnings.append( QObject::tr( "There is not enough data for the "
                   "atomtype data '%1'. Skipping this line." ).arg(line) );
                 continue;
             }
             
-            QString atomtype = words[0];
+            GromacsAtomType typ;
 
-            bool ok_mass, ok_charge, ok_ptyp, ok_v, ok_w;
-            double mass = words[1].toDouble(&ok_mass);
-            double chg = words[2].toDouble(&ok_charge);
-            auto ptyp = GromacsAtomType::toParticleType(words[3], &ok_ptyp);
-            double v = words[4].toDouble(&ok_v);
-            double w = words[5].toDouble(&ok_w);
-            
-            if (not (ok_mass and ok_charge and ok_ptyp and ok_v and ok_w))
+            if (words.count() < 6)
             {
-                warnings.append( QObject::tr( "Could not interpret the atom type data "
-                  "from line '%1'. Skipping this line.").arg(line) );
-                continue;
+                //only getting the atom type and mass
+                bool ok_mass;
+                double mass = words[1].toDouble( &ok_mass );
+                
+                if (not ok_mass)
+                {
+                    warnings.append( QObject::tr( "Could not interpret the atom type data "
+                       "from line '%1'. Skipping this line.").arg(line) );
+                    continue;
+                }
+                
+                typ = GromacsAtomType(words[0], mass*g_per_mol);
+            }
+            else if (words.count() < 7)
+            {
+                bool ok_mass, ok_charge, ok_ptyp, ok_v, ok_w;
+                double mass = words[1].toDouble(&ok_mass);
+                double chg = words[2].toDouble(&ok_charge);
+                auto ptyp = GromacsAtomType::toParticleType(words[3], &ok_ptyp);
+                double v = words[4].toDouble(&ok_v);
+                double w = words[5].toDouble(&ok_w);
+                
+                if (not (ok_mass and ok_charge and ok_ptyp and ok_v and ok_w))
+                {
+                    warnings.append( QObject::tr( "Could not interpret the atom type data "
+                      "from line '%1'. Skipping this line.").arg(line) );
+                    continue;
+                }
+                
+                typ = GromacsAtomType(words[0], mass*g_per_mol, chg*mod_electron,
+                                      ptyp, ::toLJParameter(v,w,combining_rule));
+            }
+            else if (words.count() < 8)
+            {
+                bool ok_mass, ok_elem, ok_charge, ok_ptyp, ok_v, ok_w;
+                int nprotons = words[1].toInt(&ok_elem);
+                double mass = words[2].toDouble(&ok_mass);
+                double chg = words[3].toDouble(&ok_charge);
+                auto ptyp = GromacsAtomType::toParticleType(words[4], &ok_ptyp);
+                double v = words[5].toDouble(&ok_v);
+                double w = words[6].toDouble(&ok_w);
+                
+                if (not (ok_elem and ok_mass and ok_charge and ok_ptyp and ok_v and ok_w))
+                {
+                    warnings.append( QObject::tr( "Could not interpret the atom type data "
+                      "from line '%1'. Skipping this line.").arg(line) );
+                    continue;
+                }
+                
+                typ = GromacsAtomType(words[0], mass*g_per_mol, chg*mod_electron,
+                                      ptyp, ::toLJParameter(v,w,combining_rule),
+                                      Element(nprotons));
             }
             
-            if (typs.contains(atomtype))
+            if (typs.contains(typ.atomType()))
             {
+                //only replace if the new type is fully specified
+                if (typ.hasMassOnly())
+                    continue;
+            
                 warnings.append( QObject::tr( "The data for atom type '%1' exists already! "
                  "This will now be replaced with new data from line '%2'")
-                    .arg(atomtype).arg(line) );
+                    .arg(typ.atomType()).arg(line) );
             }
             
-            typs.insert( atomtype,
-                         GromacsAtomType(atomtype,
-                                         mass*g_per_mol,
-                                         chg*mod_electron,
-                                         ptyp, v, w, rule) );
+            typs.insert( typ.atomType(), typ );
         }
     
         //save the database of types

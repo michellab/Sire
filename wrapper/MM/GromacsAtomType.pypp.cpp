@@ -31,12 +31,6 @@ void register_GromacsAtomType_class(){
         typedef bp::class_< SireMM::GromacsAtomType > GromacsAtomType_exposer_t;
         GromacsAtomType_exposer_t GromacsAtomType_exposer = GromacsAtomType_exposer_t( "GromacsAtomType", "This class represents a Gromacs format atom type. This\ncombines particle type information with charge, mass,\nand LJ parameter info\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope GromacsAtomType_scope( GromacsAtomType_exposer );
-        bp::enum_< SireMM::GromacsAtomType::COMBINING_RULE>("COMBINING_RULE")
-            .value("UNKNOWN_RULE", SireMM::GromacsAtomType::UNKNOWN_RULE)
-            .value("ARITHMETIC", SireMM::GromacsAtomType::ARITHMETIC)
-            .value("GEOMETRIC", SireMM::GromacsAtomType::GEOMETRIC)
-            .export_values()
-            ;
         bp::enum_< SireMM::GromacsAtomType::PARTICLE_TYPE>("PARTICLE_TYPE")
             .value("UNKNOWN_TYPE", SireMM::GromacsAtomType::UNKNOWN_TYPE)
             .value("ATOM", SireMM::GromacsAtomType::ATOM)
@@ -44,30 +38,9 @@ void register_GromacsAtomType_class(){
             .value("VIRTUAL", SireMM::GromacsAtomType::VIRTUAL)
             .export_values()
             ;
-        GromacsAtomType_exposer.def( bp::init< QString, SireUnits::Dimension::MolarMass, SireUnits::Dimension::Charge, SireMM::GromacsAtomType::PARTICLE_TYPE, double, double, SireMM::GromacsAtomType::COMBINING_RULE >(( bp::arg("atom_type"), bp::arg("mass"), bp::arg("charge"), bp::arg("particle_type"), bp::arg("v"), bp::arg("w"), bp::arg("combining_rule") ), "Construct passing in all parameters") );
+        GromacsAtomType_exposer.def( bp::init< QString, SireUnits::Dimension::MolarMass >(( bp::arg("atom_type"), bp::arg("mass") ), "") );
+        GromacsAtomType_exposer.def( bp::init< QString, SireUnits::Dimension::MolarMass, SireUnits::Dimension::Charge, SireMM::GromacsAtomType::PARTICLE_TYPE, SireMM::LJParameter const &, bp::optional< SireMol::Element const & > >(( bp::arg("atom_type"), bp::arg("mass"), bp::arg("charge"), bp::arg("particle_type"), bp::arg("ljparam"), bp::arg("element")=SireMol::Element(0) ), "") );
         GromacsAtomType_exposer.def( bp::init< SireMM::GromacsAtomType const & >(( bp::arg("other") ), "Copy constructor") );
-        { //::SireMM::GromacsAtomType::V
-        
-            typedef double ( ::SireMM::GromacsAtomType::*V_function_type)(  ) const;
-            V_function_type V_function_value( &::SireMM::GromacsAtomType::V );
-            
-            GromacsAtomType_exposer.def( 
-                "V"
-                , V_function_value
-                , "" );
-        
-        }
-        { //::SireMM::GromacsAtomType::W
-        
-            typedef double ( ::SireMM::GromacsAtomType::*W_function_type)(  ) const;
-            W_function_type W_function_value( &::SireMM::GromacsAtomType::W );
-            
-            GromacsAtomType_exposer.def( 
-                "W"
-                , W_function_value
-                , "" );
-        
-        }
         { //::SireMM::GromacsAtomType::atomType
         
             typedef ::QString ( ::SireMM::GromacsAtomType::*atomType_function_type)(  ) const;
@@ -90,38 +63,37 @@ void register_GromacsAtomType_class(){
                 , "" );
         
         }
-        { //::SireMM::GromacsAtomType::combiningRule
+        { //::SireMM::GromacsAtomType::element
         
-            typedef ::SireMM::GromacsAtomType::COMBINING_RULE ( ::SireMM::GromacsAtomType::*combiningRule_function_type)(  ) const;
-            combiningRule_function_type combiningRule_function_value( &::SireMM::GromacsAtomType::combiningRule );
+            typedef ::SireMol::Element ( ::SireMM::GromacsAtomType::*element_function_type)(  ) const;
+            element_function_type element_function_value( &::SireMM::GromacsAtomType::element );
             
             GromacsAtomType_exposer.def( 
-                "combiningRule"
-                , combiningRule_function_value
+                "element"
+                , element_function_value
                 , "" );
         
         }
-        { //::SireMM::GromacsAtomType::combiningRuleString
+        { //::SireMM::GromacsAtomType::hasMassOnly
         
-            typedef ::QString ( ::SireMM::GromacsAtomType::*combiningRuleString_function_type)(  ) const;
-            combiningRuleString_function_type combiningRuleString_function_value( &::SireMM::GromacsAtomType::combiningRuleString );
+            typedef bool ( ::SireMM::GromacsAtomType::*hasMassOnly_function_type)(  ) const;
+            hasMassOnly_function_type hasMassOnly_function_value( &::SireMM::GromacsAtomType::hasMassOnly );
             
             GromacsAtomType_exposer.def( 
-                "combiningRuleString"
-                , combiningRuleString_function_value
-                , "Return a string version of the combining rule" );
+                "hasMassOnly"
+                , hasMassOnly_function_value
+                , "" );
         
         }
-        { //::SireMM::GromacsAtomType::fromGromacsTopLine
+        { //::SireMM::GromacsAtomType::ljParameter
         
-            typedef ::SireMM::GromacsAtomType ( *fromGromacsTopLine_function_type )( ::QString const & );
-            fromGromacsTopLine_function_type fromGromacsTopLine_function_value( &::SireMM::GromacsAtomType::fromGromacsTopLine );
+            typedef ::SireMM::LJParameter ( ::SireMM::GromacsAtomType::*ljParameter_function_type)(  ) const;
+            ljParameter_function_type ljParameter_function_value( &::SireMM::GromacsAtomType::ljParameter );
             
             GromacsAtomType_exposer.def( 
-                "fromGromacsTopLine"
-                , fromGromacsTopLine_function_value
-                , ( bp::arg("line") )
-                , "Create this object from the passed line from a Gromacs topology file" );
+                "ljParameter"
+                , ljParameter_function_value
+                , "" );
         
         }
         { //::SireMM::GromacsAtomType::mass
@@ -183,29 +155,6 @@ void register_GromacsAtomType_class(){
                 , "Return a string version of the particle type" );
         
         }
-        { //::SireMM::GromacsAtomType::toCombiningRule
-        
-            typedef ::SireMM::GromacsAtomType::COMBINING_RULE ( *toCombiningRule_function_type )( ::QString const &,bool * );
-            toCombiningRule_function_type toCombiningRule_function_value( &::SireMM::GromacsAtomType::toCombiningRule );
-            
-            GromacsAtomType_exposer.def( 
-                "toCombiningRule"
-                , toCombiningRule_function_value
-                , ( bp::arg("word"), bp::arg("ok")=bp::object() )
-                , "Convert the passed string to a Gromacs combining rule type. Use ok to see if this\nworked correctly" );
-        
-        }
-        { //::SireMM::GromacsAtomType::toGromacsTopLine
-        
-            typedef ::QString ( ::SireMM::GromacsAtomType::*toGromacsTopLine_function_type)(  ) const;
-            toGromacsTopLine_function_type toGromacsTopLine_function_value( &::SireMM::GromacsAtomType::toGromacsTopLine );
-            
-            GromacsAtomType_exposer.def( 
-                "toGromacsTopLine"
-                , toGromacsTopLine_function_value
-                , "Return this parameter as a line that is in the right format to go into\na Gromacs topology file" );
-        
-        }
         { //::SireMM::GromacsAtomType::toParticleType
         
             typedef ::SireMM::GromacsAtomType::PARTICLE_TYPE ( *toParticleType_function_type )( ::QString const &,bool * );
@@ -251,8 +200,6 @@ void register_GromacsAtomType_class(){
                 , "" );
         
         }
-        GromacsAtomType_exposer.staticmethod( "fromGromacsTopLine" );
-        GromacsAtomType_exposer.staticmethod( "toCombiningRule" );
         GromacsAtomType_exposer.staticmethod( "toParticleType" );
         GromacsAtomType_exposer.staticmethod( "typeName" );
         GromacsAtomType_exposer.def( "__copy__", &__copy__);
