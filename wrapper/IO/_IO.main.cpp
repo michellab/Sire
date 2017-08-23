@@ -37,6 +37,8 @@
 
 #include "PDBAtom.pypp.hpp"
 
+#include "PDBCrystal.pypp.hpp"
+
 #include "PDBHelix.pypp.hpp"
 
 #include "PDBParameters.pypp.hpp"
@@ -44,6 +46,8 @@
 #include "PDBSheet.pypp.hpp"
 
 #include "PDBTitle.pypp.hpp"
+
+#include "PDBTransform.pypp.hpp"
 
 #include "PerturbationsLibrary.pypp.hpp"
 
@@ -106,6 +110,8 @@ BOOST_PYTHON_MODULE(_IO){
 
     register_PDBAtom_class();
 
+    register_PDBCrystal_class();
+
     register_PDBHelix_class();
 
     register_PDBParameters_class();
@@ -113,6 +119,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_PDBSheet_class();
 
     register_PDBTitle_class();
+
+    register_PDBTransform_class();
 
     register_PerturbationsLibrary_class();
 

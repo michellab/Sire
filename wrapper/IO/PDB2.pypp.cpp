@@ -114,6 +114,138 @@ void register_PDB2_class(){
                 , "Return the suffixes that these files are normally associated with" );
         
         }
+        { //::SireIO::PDB2::getAtoms
+        
+            typedef ::QVector< QVector< SireIO::PDBAtom > > ( ::SireIO::PDB2::*getAtoms_function_type)(  ) const;
+            getAtoms_function_type getAtoms_function_value( &::SireIO::PDB2::getAtoms );
+            
+            PDB2_exposer.def( 
+                "getAtoms"
+                , getAtoms_function_value
+                , "Return the atoms." );
+        
+        }
+        { //::SireIO::PDB2::getHelices
+        
+            typedef ::QVector< SireIO::PDBHelix > ( ::SireIO::PDB2::*getHelices_function_type)(  ) const;
+            getHelices_function_type getHelices_function_value( &::SireIO::PDB2::getHelices );
+            
+            PDB2_exposer.def( 
+                "getHelices"
+                , getHelices_function_value
+                , "Return the helices." );
+        
+        }
+        { //::SireIO::PDB2::getSheets
+        
+            typedef ::QVector< SireIO::PDBSheet > ( ::SireIO::PDB2::*getSheets_function_type)(  ) const;
+            getSheets_function_type getSheets_function_value( &::SireIO::PDB2::getSheets );
+            
+            PDB2_exposer.def( 
+                "getSheets"
+                , getSheets_function_value
+                , "Return the sheets." );
+        
+        }
+        { //::SireIO::PDB2::getTitle
+        
+            typedef ::SireIO::PDBTitle ( ::SireIO::PDB2::*getTitle_function_type)(  ) const;
+            getTitle_function_type getTitle_function_value( &::SireIO::PDB2::getTitle );
+            
+            PDB2_exposer.def( 
+                "getTitle"
+                , getTitle_function_value
+                , "Return the title object." );
+        
+        }
+        { //::SireIO::PDB2::hasCrystal
+        
+            typedef bool ( ::SireIO::PDB2::*hasCrystal_function_type)(  ) const;
+            hasCrystal_function_type hasCrystal_function_value( &::SireIO::PDB2::hasCrystal );
+            
+            PDB2_exposer.def( 
+                "hasCrystal"
+                , hasCrystal_function_value
+                , "Whether the object contains crystallographic record data." );
+        
+        }
+        { //::SireIO::PDB2::hasTransMatrix
+        
+            typedef bool ( ::SireIO::PDB2::*hasTransMatrix_function_type)(  ) const;
+            hasTransMatrix_function_type hasTransMatrix_function_value( &::SireIO::PDB2::hasTransMatrix );
+            
+            PDB2_exposer.def( 
+                "hasTransMatrix"
+                , hasTransMatrix_function_value
+                , "Whether the object contains an MTRIX transformation record." );
+        
+        }
+        { //::SireIO::PDB2::hasTransOrig
+        
+            typedef bool ( ::SireIO::PDB2::*hasTransOrig_function_type)(  ) const;
+            hasTransOrig_function_type hasTransOrig_function_value( &::SireIO::PDB2::hasTransOrig );
+            
+            PDB2_exposer.def( 
+                "hasTransOrig"
+                , hasTransOrig_function_value
+                , "Whether the object contains an ORIGX transformation record." );
+        
+        }
+        { //::SireIO::PDB2::hasTransScale
+        
+            typedef bool ( ::SireIO::PDB2::*hasTransScale_function_type)(  ) const;
+            hasTransScale_function_type hasTransScale_function_value( &::SireIO::PDB2::hasTransScale );
+            
+            PDB2_exposer.def( 
+                "hasTransScale"
+                , hasTransScale_function_value
+                , "Whether the object contains an SCALE transformation record." );
+        
+        }
+        { //::SireIO::PDB2::nAtoms
+        
+            typedef int ( ::SireIO::PDB2::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::PDB2::nAtoms );
+            
+            PDB2_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , "Return the number of atoms." );
+        
+        }
+        { //::SireIO::PDB2::nHelices
+        
+            typedef int ( ::SireIO::PDB2::*nHelices_function_type)(  ) const;
+            nHelices_function_type nHelices_function_value( &::SireIO::PDB2::nHelices );
+            
+            PDB2_exposer.def( 
+                "nHelices"
+                , nHelices_function_value
+                , "Return the number of helices." );
+        
+        }
+        { //::SireIO::PDB2::nSheets
+        
+            typedef int ( ::SireIO::PDB2::*nSheets_function_type)(  ) const;
+            nSheets_function_type nSheets_function_value( &::SireIO::PDB2::nSheets );
+            
+            PDB2_exposer.def( 
+                "nSheets"
+                , nSheets_function_value
+                , "Return the number of sheets." );
+        
+        }
+        { //::SireIO::PDB2::nTitles
+        
+            typedef int ( ::SireIO::PDB2::*nTitles_function_type)(  ) const;
+            nTitles_function_type nTitles_function_value( &::SireIO::PDB2::nTitles );
+            
+            PDB2_exposer.def( 
+                "nTitles"
+                , nTitles_function_value
+                , "Return the number of title section records." );
+        
+        }
         PDB2_exposer.def( bp::self != bp::self );
         { //::SireIO::PDB2::operator=
         
@@ -162,9 +294,6 @@ void register_PDB2_class(){
                 , "Return the C++ name for this class" );
         
         }
-        PDB2_exposer.def_readwrite( "num_atom", &SireIO::PDB2::num_atom, "" );
-        PDB2_exposer.def_readwrite( "num_helix", &SireIO::PDB2::num_helix, "" );
-        PDB2_exposer.def_readwrite( "num_sheet", &SireIO::PDB2::num_sheet, "" );
         PDB2_exposer.staticmethod( "typeName" );
         PDB2_exposer.def( "__copy__", &__copy__);
         PDB2_exposer.def( "__deepcopy__", &__copy__);

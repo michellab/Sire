@@ -52,9 +52,11 @@ using namespace SireStream;
 const RegisterParser<PDB2> register_pdb;
 static const RegisterMetaType<PDB2> r_pdb2;
 static const RegisterMetaType<PDBAtom> r_pdbatom(NO_ROOT);
+static const RegisterMetaType<PDBCrystal> r_pdbcrystal(NO_ROOT);
 static const RegisterMetaType<PDBHelix> r_pdbhelix(NO_ROOT);
 static const RegisterMetaType<PDBSheet> r_pdbsheet(NO_ROOT);
 static const RegisterMetaType<PDBTitle> r_pdbtitle(NO_ROOT);
+static const RegisterMetaType<PDBTransform> r_pdbtransform(NO_ROOT);
 
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBAtom &pdbatom)
 {
@@ -89,6 +91,35 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBAtom &pdbatom)
     }
     else
         throw version_error(v, "1", r_pdbatom, CODELOC);
+
+    return ds;
+}
+
+QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBCrystal &pdbcrystal)
+{
+    writeHeader(ds, r_pdbcrystal, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << pdbcrystal.record << pdbcrystal.base_lengths
+        << pdbcrystal.angles << pdbcrystal.z;
+
+    return ds;
+}
+
+QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBCrystal &pdbcrystal)
+{
+    VersionID v = readHeader(ds, r_pdbcrystal);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+
+        sds >> pdbcrystal.record >> pdbcrystal.base_lengths
+            >> pdbcrystal.angles >> pdbcrystal.z;
+    }
+    else
+        throw version_error(v, "1", r_pdbcrystal, CODELOC);
 
     return ds;
 }
@@ -200,14 +231,44 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBTitle &pdbtitle)
     return ds;
 }
 
+QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBTransform &pdbtransform)
+{
+    writeHeader(ds, r_pdbtransform, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << pdbtransform.records << pdbtransform.serial << pdbtransform.isGiven
+        << pdbtransform.transforms << pdbtransform.offsets;
+
+    return ds;
+}
+
+QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBTransform &pdbtransform)
+{
+    VersionID v = readHeader(ds, r_pdbtransform);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+
+        sds >> pdbtransform.records >> pdbtransform.serial >> pdbtransform.isGiven
+            >> pdbtransform.transforms >> pdbtransform.offsets;
+    }
+    else
+        throw version_error(v, "1", r_pdbcrystal, CODELOC);
+
+    return ds;
+}
+
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDB2 &pdb2)
 {
     writeHeader(ds, r_pdb2, 1);
 
     SharedDataStream sds(ds);
 
-    sds << pdb2.title << pdb2.atoms << pdb2.helices << pdb2.sheets << pdb2.invalid_records
-        << pdb2.parse_warnings;
+    sds << pdb2.title << pdb2.atoms << pdb2.helices << pdb2.sheets
+        << pdb2.trans_orig << pdb2.trans_scale << pdb2.trans_matrix
+        << pdb2.invalid_records << pdb2.parse_warnings;
 
     return ds;
 }
@@ -220,8 +281,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB2 &pdb2)
     {
         SharedDataStream sds(ds);
 
-        sds >> pdb2.title >> pdb2.atoms >> pdb2.helices >> pdb2.sheets >> pdb2.invalid_records
-            >> pdb2.parse_warnings;
+        sds >> pdb2.title >> pdb2.atoms >> pdb2.helices >> pdb2.sheets
+            >> pdb2.trans_orig << pdb2.trans_scale << pdb2.trans_matrix
+            >> pdb2.invalid_records >> pdb2.parse_warnings;
     }
     else
         throw version_error(v, "1", r_pdb2, CODELOC);
@@ -239,7 +301,13 @@ PDBAtom::PDBAtom() : occupancy(1.0),
 {
 }
 
-/** Constructor. */
+/** Constructor.
+    @param line
+        An ATOM record line from a PDB file.
+
+    @param errors
+        An array of error messages.
+ */
 PDBAtom::PDBAtom(const QString &line, QStringList &errors)
                     : record(line),
                       occupancy(1.0),
@@ -365,13 +433,25 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors)
     charge = line.mid(78,2);
 }
 
-/** Set the terminal atom flag. */
+/** Set the terminal atom flag.
+    @param isTer
+        Whether this is a terminal atom.
+ */
 void PDBAtom::setTerminal(bool _isTer)
 {
     isTer = _isTer;
 }
 
-/** Set anisotropic temperature factor data. */
+/** Set anisotropic temperature record data.
+    @param line1
+        An ATOM record line from a PDB file.
+
+    @param line2
+        The ANISOU record line for the atom.
+
+    @param errors
+        An array of error messages.
+ */
 void PDBAtom::setAnisTemp(const QString &line1, const QString &line2, QStringList &errors)
 {
     isAnis = true;
@@ -413,14 +493,12 @@ void PDBAtom::setAnisTemp(const QString &line1, const QString &line2, QStringLis
 QString PDBAtom::getName() const
 {
     return name;
-
 }
 
 /** Get the residue name. */
 QString PDBAtom::getResName() const
 {
     return res_name;
-
 }
 
 /** Get the chain id. */
@@ -447,12 +525,113 @@ QString PDBAtom::toPDBLine() const
     return record;
 }
 
+/** Return a string representation of this object */
+QString PDBAtom::toString() const
+{
+    return QObject::tr("PDBAtom::null");
+}
+
+/** Default constructor. */
+PDBCrystal::PDBCrystal() : record("NULL")
+{
+}
+
+/** Constructor.
+    @param line
+        An CRYST1 record line from a PDB file.
+
+    @param errors
+        An array of error messages.
+ */
+PDBCrystal::PDBCrystal(const QString &line,
+                       QStringList &errors) : record(line)
+{
+    // Read unit cell base length records.
+
+    bool ok_x, ok_y, ok_z;
+    double x = line.midRef(6,9).toDouble(&ok_x);
+    double y = line.midRef(15,9).toDouble(&ok_y);
+    double z = line.midRef(24,9).toDouble(&ok_z);
+
+    if (not (ok_x and ok_y and ok_z))
+    {
+        errors.append(QObject::tr("There was a problem reading the crystallographic "
+            "values of a, c, and c from the data '%1' in line '%2'")
+            .arg(line.mid(6,27)).arg(line));
+
+        return;
+    }
+    base_lengths = Vector(x, y, z);
+
+    // Read unit cell angle records.
+
+    x = line.midRef(33,7).toDouble(&ok_x);
+    y = line.midRef(40,7).toDouble(&ok_y);
+    z = line.midRef(47,7).toDouble(&ok_z);
+
+    if (not (ok_x and ok_y and ok_z))
+    {
+        errors.append(QObject::tr("There was a problem reading the crystallographic "
+            "values of alpha, beta, and gamma from the data '%1' in line '%2'")
+            .arg(line.mid(33,21)).arg(line));
+
+        return;
+    }
+    angles = Vector(x, y, z);
+
+    // Extract the crystallographic space group.
+    space_group = line.mid(55,11).simplified();
+
+    // Extract the Z value.
+    int tmp_int = line.midRef(66,4).toInt(&ok_x);
+
+    if (not ok_x)
+    {
+        errors.append(QObject::tr("There was a problem reading the crystallographic "
+            "Z value from the data '%1' in line '%2'")
+            .arg(line.mid(66,4)).arg(line));
+
+        return;
+    }
+    z = tmp_int;
+}
+
+/** Return the C++ name for this class */
+const char* PDBCrystal::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<PDBCrystal>() );
+}
+
+/** Return a PDB record line for this crystallographic object. */
+QString PDBCrystal::toPDBLine() const
+{
+    return record;
+}
+
+/** Return a string representation of this object */
+QString PDBCrystal::toString() const
+{
+    return QObject::tr("PDBCrystal::null");
+}
+
+/** Whether the object contains a record. */
+bool PDBCrystal::hasRecord() const
+{
+    return (record != "NULL");
+}
+
 /** Default constructor. */
 PDBHelix::PDBHelix()
 {
 }
 
-/** Constructor. */
+/** Constructor.
+    @param line
+        A HELIX record line from a PDB file.
+
+    @param errors
+        An array of error messages.
+ */
 PDBHelix::PDBHelix(const QString &line,
                    QStringList &errors) : record(line)
 {
@@ -559,12 +738,24 @@ QString PDBHelix::toPDBLine() const
     return record;
 }
 
+/** Return a string representation of this object */
+QString PDBHelix::toString() const
+{
+    return QObject::tr("PDBHelix::null");
+}
+
 /** Default constructor. */
 PDBSheet::PDBSheet()
 {
 }
 
-/** Constructor. */
+/** Constructor.
+    @param line
+        A SHEET record line from a PDB file.
+
+    @param errors
+        An array of error messages.
+ */
 PDBSheet::PDBSheet(const QString &line,
                    QStringList &errors) : record(line)
 {
@@ -726,43 +917,61 @@ QString PDBSheet::toPDBLine() const
     return record;
 }
 
+/** Return a string representation of this object */
+QString PDBSheet::toString() const
+{
+    return QObject::tr("PDBSheet::null");
+}
+
 /** Default constructor. */
 PDBTitle::PDBTitle()
 {
 }
 
-/** Append a record to the title object. */
-void PDBTitle::appendRecord(const QString &record,
+/** Append a PDB record.
+    @param line
+        The PDB record.
+
+    @param record_type
+        The title record type.
+
+    @param errors
+        An array of error messages.
+ */
+void PDBTitle::appendRecord(const QString &line,
                             RECORD_TYPE record_type,
                             QStringList &errors)
 {
+    // Store the orginal record string.
+    records.append(line);
+
     switch(record_type)
     {
-        case RECORD_TYPE::HEADER: header = record;
-        case RECORD_TYPE::OBSLTE: obsoletes.append(record);
-        case RECORD_TYPE::TITLE : titles.append(record);
-        case RECORD_TYPE::SPLIT : splits.append(record);
-        case RECORD_TYPE::CAVEAT: caveats.append(record);
-        case RECORD_TYPE::COMPND: compounds.append(record);
-        case RECORD_TYPE::SOURCE: sources.append(record);
-        case RECORD_TYPE::KEYWDS: keywords.append(record);
-        case RECORD_TYPE::EXPDTA: experiments.append(record);
-        case RECORD_TYPE::MDLTYP: model_types.append(record);
-        case RECORD_TYPE::AUTHOR: authors.append(record);
-        case RECORD_TYPE::REVDAT: revisions.append(record);
-        case RECORD_TYPE::SPRSDE: supersedes.append(record);
-        case RECORD_TYPE::JRNL  : journals.append(record);
-        case RECORD_TYPE::REMARK: remarks.append(record);
+        case RECORD_TYPE::HEADER: header = line;
+        case RECORD_TYPE::OBSLTE: obsoletes.append(line);
+        case RECORD_TYPE::TITLE : titles.append(line);
+        case RECORD_TYPE::SPLIT : splits.append(line);
+        case RECORD_TYPE::CAVEAT: caveats.append(line);
+        case RECORD_TYPE::COMPND: compounds.append(line);
+        case RECORD_TYPE::SOURCE: sources.append(line);
+        case RECORD_TYPE::KEYWDS: keywords.append(line);
+        case RECORD_TYPE::EXPDTA: experiments.append(line);
+        case RECORD_TYPE::MDLTYP: model_types.append(line);
+        case RECORD_TYPE::AUTHOR: authors.append(line);
+        case RECORD_TYPE::REVDAT: revisions.append(line);
+        case RECORD_TYPE::SPRSDE: supersedes.append(line);
+        case RECORD_TYPE::JRNL  : journals.append(line);
+        case RECORD_TYPE::REMARK: remarks.append(line);
         case RECORD_TYPE::NUMMDL:
         {
             bool ok;
-            int tmp_int = record.midRef(10,4).toInt(&ok);
+            int tmp_int = line.midRef(10,4).toInt(&ok);
 
             if (not ok)
             {
                 errors.append(QObject::tr("Cannot extract the number of models "
                     "from part (%1) from line '%2'")
-                    .arg(record.mid(10,4)).arg(record));
+                    .arg(line.mid(10,4)).arg(line));
 
                 return;
             }
@@ -771,17 +980,162 @@ void PDBTitle::appendRecord(const QString &record,
         default:
         {
             errors.append(QObject::tr("Title section record not recognised! "
-                "'%2'").arg(record));
+                "'%2'").arg(line));
 
             return;
         }
     }
 }
 
+/** Return PDB records for the title section. */
+QStringList PDBTitle::toPDBLines() const
+{
+    return records;
+}
+
+/** Return a string representation of this object */
+QString PDBTitle::toString() const
+{
+    return QObject::tr("PDBTitle::null");
+}
+
+/** Return the number of title section records */
+int PDBTitle::nRecords() const
+{
+    return records.count();
+}
+
+/** Whether the object contains any records. */
+bool PDBTitle::hasRecords() const
+{
+    return (records.count() > 0);
+}
+
 /** Return the C++ name for this class */
 const char* PDBTitle::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<PDBTitle>() );
+}
+
+/** Default constructor. */
+PDBTransform::PDBTransform() : serial(-1),
+                               isGiven(false),
+                               transforms(QVector<SireMaths::Vector>(3)),
+                               isDimension{false, false, false}
+{
+}
+
+/** Append a record to the transformation object.
+    @param line
+        An transformation record line from a PDB file.
+
+    @param dimension
+        Whether this corresponds to an x, y, or z record.
+
+    @param isNonCryst
+        Whether this is a non-crystallographic transformation.
+
+    @param errors
+        An array of error messages.
+ */
+void PDBTransform::appendRecord(const QString &line,
+                                int dimension,
+                                bool isNonCryst,
+                                QStringList &errors)
+{
+    // Store the orginal record string.
+    records.append(line);
+
+    // Flag that we've seen a record for this dimension.
+    isDimension[dimension] = true;
+
+    // Extract transformation matrix entry for dimension.
+
+    bool ok_x, ok_y, ok_z;
+    double x = line.midRef(10,10).toDouble(&ok_x);
+    double y = line.midRef(20,10).toDouble(&ok_y);
+    double z = line.midRef(30,10).toDouble(&ok_z);
+
+    if (not (ok_x and ok_y and ok_z))
+    {
+        errors.append(QObject::tr("There was a problem reading the transformation "
+            "values of x, y, and z from the data '%1' in line '%2'")
+            .arg(line.mid(10,30)).arg(line));
+
+        return;
+    }
+    transforms[dimension] = Vector(x, y, z);
+
+    // Extract offset.
+
+    bool ok;
+    double offset = line.midRef(45,10).toDouble(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("There was a problem reading the transformation "
+            "offset value from the data '%1' in line '%2'")
+            .arg(line.mid(45,10)).arg(line));
+
+        return;
+    }
+    if      (dimension == 0) offsets.setX(offset);
+    else if (dimension == 1) offsets.setY(offset);
+    else if (dimension == 2) offsets.setZ(offset);
+
+    // Read additional MTRIX record data.
+
+    if (isNonCryst)
+    {
+        // Extract serial number.
+
+        bool ok;
+        int tmp_int = line.midRef(7,3).toInt(&ok);
+
+        if (not ok)
+        {
+            errors.append(QObject::tr("There was a problem reading the transformation "
+                "serial number from the data '%1' in line '%2'")
+                .arg(line.mid(7,3)).arg(line));
+
+            return;
+        }
+        serial = tmp_int;
+
+        // Check whether the coordinates for this entry are approximated
+        // by this transformation.
+
+        tmp_int = line[60].toLatin1();
+
+        if (tmp_int) isNonCryst = true;
+        else         isNonCryst = false;
+    }
+}
+
+/** Return PDB records for the transformation record. */
+QStringList PDBTransform::toPDBLines() const
+{
+    return records;
+}
+
+/** Return a string representation of this object */
+QString PDBTransform::toString() const
+{
+    return QObject::tr("PDBTransform::null");
+}
+
+/** Whether there is a complete transformation record. */
+bool PDBTransform::hasRecord() const
+{
+    return (isDimension[0] and
+            isDimension[1] and
+            isDimension[2]);
+}
+
+/** Return the C++ name for this class */
+const char* PDBTransform::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<PDBTransform>() );
 }
 
 /** Constructor */
@@ -944,6 +1298,78 @@ QStringList PDB2::formatSuffix() const
     return suffixes;
 }
 
+/** Return the number of title section records. */
+int PDB2::nTitles() const
+{
+    return title.nRecords();
+}
+
+/** Return the number of atoms. */
+int PDB2::nAtoms() const
+{
+    return atoms[0].count();
+}
+
+/** Return the number of helices. */
+int PDB2::nHelices() const
+{
+    return helices.count();
+}
+
+/** Return the number of sheets. */
+int PDB2::nSheets() const
+{
+    return sheets.count();
+}
+
+/** Whether the object contains crystallographic record data. */
+bool PDB2::hasCrystal() const
+{
+    return crystal.hasRecord();
+}
+
+/** Whether the object contains an ORIGX transformation record. */
+bool PDB2::hasTransOrig() const
+{
+    return trans_orig.hasRecord();
+}
+
+/** Whether the object contains an SCALE transformation record. */
+bool PDB2::hasTransScale() const
+{
+    return trans_scale.hasRecord();
+}
+
+/** Whether the object contains an MTRIX transformation record. */
+bool PDB2::hasTransMatrix() const
+{
+    return trans_matrix.hasRecord();
+}
+
+/** Return the title object. */
+PDBTitle PDB2::getTitle() const
+{
+    return title;
+}
+
+/** Return the atoms. */
+QVector<QVector<PDBAtom> > PDB2::getAtoms() const
+{
+    return atoms;
+}
+
+/** Return the helices. */
+QVector<PDBHelix> PDB2::getHelices() const
+{
+    return helices;
+}
+
+/** Return the sheets. */
+QVector<PDBSheet> PDB2::getSheets() const
+{
+    return sheets;
+}
+
 /** Function that is called to assert that this object is sane. This
     should raise an exception if the parser is in an invalid state */
 void PDB2::assertSane() const
@@ -1016,7 +1442,7 @@ void PDB2::parseLines(const PropertyMap &map)
         {
             if (not validateAtom(frame_atom, atoms[iframe-1][iatm]))
             {
-                errors.append( QObject::tr( "Invalid record for atom %1 "
+                errors.append(QObject::tr("Invalid record for atom %1 "
                     "in frame %2 on line %3. Record doesn't match does not "
                     " match previous frame! '%4'")
                     .arg(iatm).arg(iframe).arg(iline).arg(line));
@@ -1037,6 +1463,7 @@ void PDB2::parseLines(const PropertyMap &map)
         bool isModel = false;
 
         // Extract the record type.
+        // Could simplify this, i.e. remove whitespace.
         QString record = lines()[iline].left(6);
 
         // Parse TITLE section records.
@@ -1046,6 +1473,7 @@ void PDB2::parseLines(const PropertyMap &map)
         else if (record == "SPLIT ") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::SPLIT,  parse_warnings);
         else if (record == "CAVEAT") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::CAVEAT, parse_warnings);
         else if (record == "COMPND") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::COMPND, parse_warnings);
+        else if (record == "SOURCE") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::SOURCE, parse_warnings);
         else if (record == "KEYWDS") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::KEYWDS, parse_warnings);
         else if (record == "EXPDTA") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::EXPDTA, parse_warnings);
         else if (record == "MDLTYP") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::MDLTYP, parse_warnings);
@@ -1071,9 +1499,9 @@ void PDB2::parseLines(const PropertyMap &map)
             // These must be in ascending order, starting at 1.
             if (imdl != nmod)
             {
-                parse_warnings.append( QObject::tr( "Cannot parse the data "
+                parse_warnings.append(QObject::tr("Cannot parse the data "
                     "for MODEL %1 has incorrect MODEL entry number '%2'!")
-                    .arg(imdl).arg(nmod) );
+                    .arg(imdl).arg(nmod));
 
                 return;
             }
@@ -1087,9 +1515,9 @@ void PDB2::parseLines(const PropertyMap &map)
                 // Check that the atom number is consisent.
                 if (nats != prev_nats)
                 {
-                    parse_warnings.append( QObject::tr( "Cannot parse the data "
+                    parse_warnings.append(QObject::tr("Cannot parse the data "
                     "for MODEL %1 is not the same size as MODEL %2!")
-                    .arg(imdl).arg(imdl-1) );
+                    .arg(imdl).arg(imdl-1));
 
                     return;
                 }
@@ -1131,10 +1559,32 @@ void PDB2::parseLines(const PropertyMap &map)
             sheets.append(sheet);
         }
 
+        // A CRYST1 record (crystallographic data).
+        else if (record == "CRYST1")
+        {
+            // Create the crystallographic data object.
+            crystal = PDBCrystal(lines().constData()[iline], parse_warnings);
+        }
+
+        // ORIGXn transformation records.
+        else if (record == "ORIGX1") trans_orig.appendRecord(lines()[iline], 0, false, parse_warnings);
+        else if (record == "ORIGX2") trans_orig.appendRecord(lines()[iline], 1, false, parse_warnings);
+        else if (record == "ORIGX3") trans_orig.appendRecord(lines()[iline], 2, false, parse_warnings);
+
+        // SCALEn transformation records.
+        else if (record == "SCALE1") trans_scale.appendRecord(lines()[iline], 0, false, parse_warnings);
+        else if (record == "SCALE2") trans_scale.appendRecord(lines()[iline], 1, false, parse_warnings);
+        else if (record == "SCALE3") trans_scale.appendRecord(lines()[iline], 2, false, parse_warnings);
+
+        // MTRIXn transformation records.
+        else if (record == "MTRIX1") trans_matrix.appendRecord(lines()[iline], 0, true, parse_warnings);
+        else if (record == "MTRIX2") trans_matrix.appendRecord(lines()[iline], 1, true, parse_warnings);
+        else if (record == "MTRIX3") trans_matrix.appendRecord(lines()[iline], 2, true, parse_warnings);
+
         // Invalid record
         else
         {
-            parse_warnings.append( QObject::tr( "Invalid PDB record found on "
+            parse_warnings.append(QObject::tr("Invalid PDB record found on "
                 "line %1: '%2'").arg(iline).arg(lines()[iline]));
 
             invalid_records[iline] = lines()[iline];
@@ -1149,7 +1599,7 @@ void PDB2::parseLines(const PropertyMap &map)
         {
             if (nats > 99999)
             {
-                parse_warnings.append( QObject::tr( "Number of atoms exceeds the PDB file limit "
+                parse_warnings.append(QObject::tr("Number of atoms exceeds the PDB file limit "
                     "of 99999. Please split large entries into multiple files"));
 
                 return;
@@ -1200,79 +1650,6 @@ void PDB2::parseLines(const PropertyMap &map)
         }
     }
 
-    //for (int i=0; i<title.titles.size(); ++i)
-        //std::cout << title.titles[i].toStdString() << '\n';
-
-    /*for (int i=0; i<atoms[0].size(); ++i)
-    {
-        std::cout << atoms[0][i].serial << ' '
-                  << atoms[0][i].name.toStdString() << ' '
-                  << atoms[0][i].alt_loc.toLatin1() << ' '
-                  << atoms[0][i].res_name.toStdString() << ' '
-                  << atoms[0][i].chain_id.toLatin1() << ' '
-                  << atoms[0][i].res_num << ' '
-                  << atoms[0][i].insert_code.toLatin1() << ' '
-                  << atoms[0][i].coord[0] << ' '
-                  << atoms[0][i].coord[1] << ' '
-                  << atoms[0][i].coord[2] << ' '
-                  << atoms[0][i].occupancy << ' '
-                  << atoms[0][i].temperature << ' '
-                  << atoms[0][i].element.toStdString() << ' '
-                  << atoms[0][i].charge.toStdString() << '\n';
-        std::cin.get();
-    }*/
-
-    /*for (int i=0; i<helices.size(); ++i)
-    {
-        std::cout << helices[i].serial << ' '
-                  << helices[i].id.toStdString() << ' '
-                  << helices[i].init_res_name.toStdString() << ' '
-                  << helices[i].init_chain_id.toLatin1() << ' '
-                  << helices[i].init_res_num << ' '
-                  << helices[i].init_insert_code.toLatin1() << ' '
-                  << helices[i].end_res_name.toStdString() << ' '
-                  << helices[i].end_chain_id.toLatin1() << ' '
-                  << helices[i].end_res_num << ' '
-                  << helices[i].end_insert_code.toLatin1() << ' '
-                  << helices[i].helix_class << ' '
-                  << helices[i].comment.toStdString() << ' '
-                  << helices[i].length << '\n';
-        std::cin.get();
-    }*/
-
-    /*for (int i=0; i<sheets.size(); ++i)
-    {
-        std::cout << sheets[i].strand << ' '
-                  << sheets[i].id.toStdString() << ' '
-                  << sheets[i].init_res_name.toStdString() << ' '
-                  << sheets[i].init_chain_id.toLatin1() << ' '
-                  << sheets[i].init_res_num << ' '
-                  << sheets[i].init_insert_code.toLatin1() << ' '
-                  << sheets[i].end_res_name.toStdString() << ' '
-                  << sheets[i].end_chain_id.toLatin1() << ' '
-                  << sheets[i].end_res_num << ' '
-                  << sheets[i].end_insert_code.toLatin1() << ' '
-                  << sheets[i].sense << ' ';
-        if (i > 0)
-        {
-            std::cout << sheets[i].curr_atm_name.toStdString() << ' '
-                      << sheets[i].curr_res_name.toStdString() << ' '
-                      << sheets[i].curr_chain_id.toLatin1() << ' '
-                      << sheets[i].curr_res_num << ' '
-                      << sheets[i].curr_insert_code.toLatin1() << ' '
-                      << sheets[i].prev_atm_name.toStdString() << ' '
-                      << sheets[i].prev_res_name.toStdString() << ' '
-                      << sheets[i].prev_chain_id.toLatin1() << ' '
-                      << sheets[i].prev_res_num << ' '
-                      << sheets[i].prev_insert_code.toLatin1() << ' ';
-        }
-        std::cout << '\n';
-        std::cin.get();
-    }*/
-
-    num_atom = atoms[0].count();
-    num_helix = helices.count();
-    num_sheet = sheets.count();
     this->setScore(nats);
 }
 
@@ -1287,10 +1664,7 @@ bool PDB2::validateAtom(const PDBAtom &atom1, const PDBAtom &atom2)
     if (atom1.getName()    != atom2.getName()    or
         atom1.getResName() != atom2.getResName() or
         atom1.getChainId() != atom2.getChainId() or
-        atom1.getResNum()  != atom2.getResNum())
-    {
-        return false;
-    }
+        atom1.getResNum()  != atom2.getResNum()) return false;
     else return true;
 }
 

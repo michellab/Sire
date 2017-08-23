@@ -33,7 +33,7 @@ SireIO::PDBAtom __copy__(const SireIO::PDBAtom &other){ return SireIO::PDBAtom(o
 
 #include "Qt/qdatastream.hpp"
 
-const char* pvt_get_name(const SireIO::PDBAtom&){ return "SireIO::PDBAtom";}
+#include "Helpers/str.hpp"
 
 void register_PDBAtom_class(){
 
@@ -41,7 +41,7 @@ void register_PDBAtom_class(){
         typedef bp::class_< SireIO::PDBAtom > PDBAtom_exposer_t;
         PDBAtom_exposer_t PDBAtom_exposer = PDBAtom_exposer_t( "PDBAtom", "This class provides functionality for readingwriting\nProtein Data Bank (PDB) ATOM records.\n\nAuthor: Lester Hedges\n", bp::init< >("Default constructor.") );
         bp::scope PDBAtom_scope( PDBAtom_exposer );
-        PDBAtom_exposer.def( bp::init< QString const &, QStringList & >(( bp::arg("line"), bp::arg("errors") ), "Constructor.\nPar:am line\nAn ATOM record line from a PDB file.\n\nPar:am errors\nAn array of error messages.\n") );
+        PDBAtom_exposer.def( bp::init< QString const &, QStringList & >(( bp::arg("line"), bp::arg("errors") ), "Constructor.") );
         { //::SireIO::PDBAtom::getChainId
         
             typedef ::QString ( ::SireIO::PDBAtom::*getChainId_function_type)(  ) const;
@@ -95,7 +95,7 @@ void register_PDBAtom_class(){
                 "setAnisTemp"
                 , setAnisTemp_function_value
                 , ( bp::arg("line1"), bp::arg("line2"), bp::arg("errors") )
-                , "Set anisotropic temperature record data.\nPar:am line1\nAn ATOM record line from a PDB file.\n\nPar:am line2\nThe ANISOU record line for the atom.\n\nPar:am errors\nAn array of error messages.\n" );
+                , "Set anisotropic temperature record data." );
         
         }
         { //::SireIO::PDBAtom::setTerminal
@@ -107,7 +107,7 @@ void register_PDBAtom_class(){
                 "setTerminal"
                 , setTerminal_function_value
                 , ( bp::arg("_isTer") )
-                , "Set the terminal atom flag.\nPar:am isTer\nWhether this is a terminal atom.\n" );
+                , "Set the terminal atom flag." );
         
         }
         { //::SireIO::PDBAtom::toPDBLine
@@ -119,6 +119,17 @@ void register_PDBAtom_class(){
                 "toPDBLine"
                 , toPDBLine_function_value
                 , "Generate a PDB record from the atom data." );
+        
+        }
+        { //::SireIO::PDBAtom::toString
+        
+            typedef ::QString ( ::SireIO::PDBAtom::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireIO::PDBAtom::toString );
+            
+            PDBAtom_exposer.def( 
+                "toString"
+                , toString_function_value
+                , "Generate a string representation of the object." );
         
         }
         { //::SireIO::PDBAtom::typeName
@@ -140,8 +151,8 @@ void register_PDBAtom_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         PDBAtom_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireIO::PDBAtom >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        PDBAtom_exposer.def( "__str__", &pvt_get_name);
-        PDBAtom_exposer.def( "__repr__", &pvt_get_name);
+        PDBAtom_exposer.def( "__str__", &__str__< ::SireIO::PDBAtom > );
+        PDBAtom_exposer.def( "__repr__", &__str__< ::SireIO::PDBAtom > );
     }
 
 }

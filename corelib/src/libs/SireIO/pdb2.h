@@ -38,14 +38,19 @@ SIRE_BEGIN_HEADER
 namespace SireIO
 {
 class PDBAtom;
+class PDBCrystal;
 class PDBHelix;
 class PDBSheet;
 class PDBTitle;
+class PDBTransform;
 class PDB2;
 }
 
 QDataStream& operator<<(QDataStream&, const SireIO::PDBAtom&);
 QDataStream& operator>>(QDataStream&, SireIO::PDBAtom&);
+
+QDataStream& operator<<(QDataStream&, const SireIO::PDBCrystal&);
+QDataStream& operator>>(QDataStream&, SireIO::PDBCrystal&);
 
 QDataStream& operator<<(QDataStream&, const SireIO::PDBHelix&);
 QDataStream& operator>>(QDataStream&, SireIO::PDBHelix&);
@@ -55,6 +60,9 @@ QDataStream& operator>>(QDataStream&, SireIO::PDBSheet&);
 
 QDataStream& operator<<(QDataStream&, const SireIO::PDBTitle&);
 QDataStream& operator>>(QDataStream&, SireIO::PDBTitle&);
+
+QDataStream& operator<<(QDataStream&, const SireIO::PDBTransform&);
+QDataStream& operator>>(QDataStream&, SireIO::PDBTransform&);
 
 QDataStream& operator<<(QDataStream&, const SireIO::PDB2&);
 QDataStream& operator>>(QDataStream&, SireIO::PDB2&);
@@ -68,7 +76,6 @@ namespace SireIO
     @author Lester Hedges
 */
 class SIREIO_EXPORT PDBAtom
-
 {
 
 friend QDataStream& ::operator<<(QDataStream&, const PDBAtom&);
@@ -78,24 +85,18 @@ public:
     /** Default constructor. */
     PDBAtom();
 
-    /** Constructor.
-        \param line
-            An ATOM record line from a PDB file.
-
-        \param errors
-            An array of error messages.
-     */
+    /** Constructor. */
     PDBAtom(const QString &line, QStringList &errors);
 
     /** Generate a PDB record from the atom data. */
     QString toPDBLine() const;
 
+    /** Generate a string representation of the object. */
+    QString toString() const;
+
     static const char* typeName();
 
-    /** Set the terminal atom flag.
-        \param isTer
-            Whether this is a terminal atom.
-     */
+    /** Set the terminal atom flag. */
     void setTerminal(bool _isTer);
 
     /** Get the atom name. */
@@ -110,16 +111,7 @@ public:
     /** Get the residue sequence number. */
     qint64 getResNum() const;
 
-    /** Set anisotropic temperature record data.
-        \param line1
-            An ATOM record line from a PDB file.
-
-        \param line2
-            The ANISOU record line for the atom.
-
-        \param errors
-            An array of error messages.
-     */
+    /** Set anisotropic temperature record data. */
     void setAnisTemp(const QString &line1, const QString &line2, QStringList& errors);
 
 private:
@@ -176,6 +168,52 @@ private:
 };
 
 /** This class provides functionality for reading/writing
+    Protein Data Bank (PDB) CRYST1 records.
+
+    @author Lester Hedges
+*/
+class SIREIO_EXPORT PDBCrystal
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const PDBCrystal&);
+friend QDataStream& ::operator>>(QDataStream&, PDBCrystal&);
+
+public:
+    /** Default constructor. */
+    PDBCrystal();
+
+    /** Constructor. */
+    PDBCrystal(const QString &line, QStringList &errors);
+
+    /** Generate a PDB record from the crystallographic data. */
+    QString toPDBLine() const;
+
+    /** Generate a string representation of the object. */
+    QString toString() const;
+
+    /** Whether the object contains a record. */
+    bool hasRecord() const;
+
+    static const char* typeName();
+
+private:
+    /** The original PDB record used to instantiate the crsytal object. */
+    QString record;
+
+    /** Unit cell a, b, c base lengths. */
+    SireMaths::Vector base_lengths;
+
+    /** Unit cell alpha, beta, gamma angles. */
+    SireMaths::Vector angles;
+
+    /** Space group. */
+    QString space_group;
+
+    /** Z value. */
+    qint64 z;
+};
+
+/** This class provides functionality for reading/writing
     Protein Data Bank (PDB) HELIX records.
 
     @author Lester Hedges
@@ -190,17 +228,14 @@ public:
     /** Default constructor. */
     PDBHelix();
 
-    /** Constructor.
-        \param line
-            A HELIX record line from a PDB file.
-
-        \param errors
-            An array of error messages.
-     */
+    /** Constructor. */
     PDBHelix(const QString &line, QStringList &errors);
 
     /** Generate a PDB record from the helix data. */
     QString toPDBLine() const;
+
+    /** Generate a string representation of the object. */
+    QString toString() const;
 
     static const char* typeName();
 
@@ -263,17 +298,14 @@ public:
     /** Default constructor. */
     PDBSheet();
 
-    /** Constructor.
-        \param line
-            A SHEET record line from a PDB file.
-
-        \param errors
-            An array of error messages.
-     */
+    /** Constructor. */
     PDBSheet(const QString &line, QStringList &errors);
 
     /** Generate a PDB record from the sheet data. */
     QString toPDBLine() const;
+
+    /** Generate a string representation of the object. */
+    QString toString() const;
 
     static const char* typeName();
 
@@ -384,17 +416,20 @@ public:
     /** Default constructor. */
     PDBTitle();
 
-    /** Append a PDB record.
-        \param line
-            The PDB record.
-
-        \param record_type
-            The title record type.
-
-        \param errors
-            An array of error messages.
-     */
+    /** Append a PDB record. */
     void appendRecord(const QString &line, RECORD_TYPE record_type, QStringList &errors);
+
+    /** Generate PDB records from the atom data. */
+    QStringList toPDBLines() const;
+
+    /** Generate a string representation of the object. */
+    QString toString() const;
+
+    /** Return the number of title section records. */
+    int nRecords() const;
+
+    /** Whether the object contains any records. */
+    bool hasRecords() const;
 
     static const char* typeName();
 
@@ -451,6 +486,60 @@ private:
     QStringList remarks;
 };
 
+/** This class provides functionality for reading/writing
+    Protein Data Bank (PDB) ORIGXn transformation records.
+
+    These records present the transformation from the orthogonal
+    coordinates contained in the entry to the submitted coordinates.
+
+    @author Lester Hedges
+*/
+class SIREIO_EXPORT PDBTransform
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const PDBTransform&);
+friend QDataStream& ::operator>>(QDataStream&, PDBTransform&);
+
+public:
+    /** Default constructor. */
+    PDBTransform();
+
+    /** Append a record to the transformation object. */
+    void appendRecord(const QString &line, int dimension,
+        bool isNonCryst, QStringList &errors);
+
+    /** Generate a PDB record from the ORIGXn transformation data. */
+    QStringList toPDBLines() const;
+
+    /** Generate a string representation of the object. */
+    QString toString() const;
+
+    /** Whether this object contains a complete transformation record. */
+    bool hasRecord() const;
+
+    static const char* typeName();
+
+private:
+    /** The original PDB record used to instantiate the ORIGXn object. */
+    QStringList records;
+
+    /** Serial number (if present). */
+    qint64 serial;
+
+    /** Whether the coordinates in the PDB file are approximated
+        by this transformation. */
+    bool isGiven;
+
+    /** Transformation vectors. */
+    QVector<SireMaths::Vector> transforms;
+
+    /** Offset vector. */
+    SireMaths::Vector offsets;
+
+    /** Whether there is a record for each dimension. */
+    bool isDimension[3];
+};
+
 /** This class holds a parser for reading and writing
     Protein Data Bank (PDB) files
 
@@ -500,6 +589,21 @@ public:
     QString formatDescription() const;
     QStringList formatSuffix() const;
 
+    int nTitles() const;
+    int nAtoms() const;
+    int nHelices() const;
+    int nSheets() const;
+
+    bool hasCrystal() const;
+    bool hasTransOrig() const;
+    bool hasTransScale() const;
+    bool hasTransMatrix() const;
+
+    PDBTitle getTitle() const;
+    QVector<QVector<PDBAtom> > getAtoms() const;
+    QVector<PDBHelix> getHelices() const;
+    QVector<PDBSheet> getSheets() const;
+
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
@@ -515,7 +619,7 @@ private:
     PDBTitle title;
 
     //* Atom record data (possibly multiple frames) */
-    QVector< QVector<PDBAtom> > atoms;
+    QVector<QVector<PDBAtom> > atoms;
 
     //* Helix record data. */
     QVector<PDBHelix> helices;
@@ -523,31 +627,41 @@ private:
     //* Sheet record data. */
     QVector<PDBSheet> sheets;
 
+    //* Crystallographic record data. */
+    PDBCrystal crystal;
+
+    //* Transformation record: orthogonal to submitted coordinates. */
+    PDBTransform trans_orig;
+
+    //* Transformation record: orthogonal to fractional crystallographic. */
+    PDBTransform trans_scale;
+
+    //* Transformation record: non-crystallographic. */
+    PDBTransform trans_matrix;
+
     /** Invalid records */
     QMap<int, QString> invalid_records;
 
     /** Any warnings that were raised when reading the file */
     QStringList parse_warnings;
-
-    // Quickly expose some public data to allow some sanity checks.
-public:
-    int num_atom;
-    int num_sheet;
-    int num_helix;
 };
 
 }
 
 Q_DECLARE_METATYPE( SireIO::PDBAtom )
+Q_DECLARE_METATYPE( SireIO::PDBCrystal )
 Q_DECLARE_METATYPE( SireIO::PDBHelix )
 Q_DECLARE_METATYPE( SireIO::PDBSheet )
 Q_DECLARE_METATYPE( SireIO::PDBTitle )
+Q_DECLARE_METATYPE( SireIO::PDBTransform )
 Q_DECLARE_METATYPE( SireIO::PDB2 )
 
 SIRE_EXPOSE_CLASS( SireIO::PDBAtom )
+SIRE_EXPOSE_CLASS( SireIO::PDBCrystal )
 SIRE_EXPOSE_CLASS( SireIO::PDBHelix )
 SIRE_EXPOSE_CLASS( SireIO::PDBSheet )
 SIRE_EXPOSE_CLASS( SireIO::PDBTitle )
+SIRE_EXPOSE_CLASS( SireIO::PDBTransform )
 SIRE_EXPOSE_CLASS( SireIO::PDB2 )
 
 SIRE_END_HEADER

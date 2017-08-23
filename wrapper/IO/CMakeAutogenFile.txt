@@ -13,6 +13,7 @@ set ( PYPP_SOURCES
        ProtoMSParameters.pypp.cpp
        AmberRst.pypp.cpp
        MoleculeParser.pypp.cpp
+       PDBCrystal.pypp.cpp
        Amber.pypp.cpp
        Mol2.pypp.cpp
        PerturbationsTemplate.pypp.cpp
@@ -28,6 +29,7 @@ set ( PYPP_SOURCES
        AmberPrm.pypp.cpp
        NullIO.pypp.cpp
        FlexibilityTemplate.pypp.cpp
+       PDBTransform.pypp.cpp
        SireIO_containers.cpp
        SireIO_properties.cpp
        SireIO_registrars.cpp

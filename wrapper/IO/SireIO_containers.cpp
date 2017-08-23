@@ -41,6 +41,7 @@
 #include "Base/convertpackedarray.hpp"
 
 #include "SireIO/moleculeparser.h"
+#include "SireIO/pdb2.h"
 
 using namespace SireIO;
 
@@ -49,4 +50,8 @@ using boost::python::register_tuple;
 void register_SireIO_containers()
 {
     register_list< QList<MoleculeParserPtr> >();
+    register_list< QVector<PDBAtom> >();
+    register_list< QVector<PDBHelix> >();
+    register_list< QVector<PDBSheet> >();
+    register_list< QVector<QVector<PDBAtom> >>();
 }

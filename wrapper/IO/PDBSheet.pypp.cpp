@@ -33,7 +33,7 @@ SireIO::PDBSheet __copy__(const SireIO::PDBSheet &other){ return SireIO::PDBShee
 
 #include "Qt/qdatastream.hpp"
 
-const char* pvt_get_name(const SireIO::PDBSheet&){ return "SireIO::PDBSheet";}
+#include "Helpers/str.hpp"
 
 void register_PDBSheet_class(){
 
@@ -41,7 +41,7 @@ void register_PDBSheet_class(){
         typedef bp::class_< SireIO::PDBSheet > PDBSheet_exposer_t;
         PDBSheet_exposer_t PDBSheet_exposer = PDBSheet_exposer_t( "PDBSheet", "This class provides functionality for readingwriting\nProtein Data Bank (PDB) SHEET records.\n\nAuthor: Lester Hedges\n", bp::init< >("Default constructor.") );
         bp::scope PDBSheet_scope( PDBSheet_exposer );
-        PDBSheet_exposer.def( bp::init< QString const &, QStringList & >(( bp::arg("line"), bp::arg("errors") ), "Constructor.\nPar:am line\nA SHEET record line from a PDB file.\n\nPar:am errors\nAn array of error messages.\n") );
+        PDBSheet_exposer.def( bp::init< QString const &, QStringList & >(( bp::arg("line"), bp::arg("errors") ), "Constructor.") );
         { //::SireIO::PDBSheet::toPDBLine
         
             typedef ::QString ( ::SireIO::PDBSheet::*toPDBLine_function_type)(  ) const;
@@ -51,6 +51,17 @@ void register_PDBSheet_class(){
                 "toPDBLine"
                 , toPDBLine_function_value
                 , "Generate a PDB record from the sheet data." );
+        
+        }
+        { //::SireIO::PDBSheet::toString
+        
+            typedef ::QString ( ::SireIO::PDBSheet::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireIO::PDBSheet::toString );
+            
+            PDBSheet_exposer.def( 
+                "toString"
+                , toString_function_value
+                , "Generate a string representation of the object." );
         
         }
         { //::SireIO::PDBSheet::typeName
@@ -72,8 +83,8 @@ void register_PDBSheet_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         PDBSheet_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireIO::PDBSheet >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        PDBSheet_exposer.def( "__str__", &pvt_get_name);
-        PDBSheet_exposer.def( "__repr__", &pvt_get_name);
+        PDBSheet_exposer.def( "__str__", &__str__< ::SireIO::PDBSheet > );
+        PDBSheet_exposer.def( "__repr__", &__str__< ::SireIO::PDBSheet > );
     }
 
 }

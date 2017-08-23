@@ -33,7 +33,7 @@ SireIO::PDBHelix __copy__(const SireIO::PDBHelix &other){ return SireIO::PDBHeli
 
 #include "Qt/qdatastream.hpp"
 
-const char* pvt_get_name(const SireIO::PDBHelix&){ return "SireIO::PDBHelix";}
+#include "Helpers/str.hpp"
 
 void register_PDBHelix_class(){
 
@@ -41,7 +41,7 @@ void register_PDBHelix_class(){
         typedef bp::class_< SireIO::PDBHelix > PDBHelix_exposer_t;
         PDBHelix_exposer_t PDBHelix_exposer = PDBHelix_exposer_t( "PDBHelix", "This class provides functionality for readingwriting\nProtein Data Bank (PDB) HELIX records.\n\nAuthor: Lester Hedges\n", bp::init< >("Default constructor.") );
         bp::scope PDBHelix_scope( PDBHelix_exposer );
-        PDBHelix_exposer.def( bp::init< QString const &, QStringList & >(( bp::arg("line"), bp::arg("errors") ), "Constructor.\nPar:am line\nA HELIX record line from a PDB file.\n\nPar:am errors\nAn array of error messages.\n") );
+        PDBHelix_exposer.def( bp::init< QString const &, QStringList & >(( bp::arg("line"), bp::arg("errors") ), "Constructor.") );
         { //::SireIO::PDBHelix::toPDBLine
         
             typedef ::QString ( ::SireIO::PDBHelix::*toPDBLine_function_type)(  ) const;
@@ -51,6 +51,17 @@ void register_PDBHelix_class(){
                 "toPDBLine"
                 , toPDBLine_function_value
                 , "Generate a PDB record from the helix data." );
+        
+        }
+        { //::SireIO::PDBHelix::toString
+        
+            typedef ::QString ( ::SireIO::PDBHelix::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireIO::PDBHelix::toString );
+            
+            PDBHelix_exposer.def( 
+                "toString"
+                , toString_function_value
+                , "Generate a string representation of the object." );
         
         }
         { //::SireIO::PDBHelix::typeName
@@ -72,8 +83,8 @@ void register_PDBHelix_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         PDBHelix_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireIO::PDBHelix >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        PDBHelix_exposer.def( "__str__", &pvt_get_name);
-        PDBHelix_exposer.def( "__repr__", &pvt_get_name);
+        PDBHelix_exposer.def( "__str__", &__str__< ::SireIO::PDBHelix > );
+        PDBHelix_exposer.def( "__repr__", &__str__< ::SireIO::PDBHelix > );
     }
 
 }
