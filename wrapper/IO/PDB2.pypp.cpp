@@ -136,6 +136,17 @@ void register_PDB2_class(){
                 , "Return the helices." );
         
         }
+        { //::SireIO::PDB2::getInvalidRecords
+        
+            typedef ::QMap< long long, QString > ( ::SireIO::PDB2::*getInvalidRecords_function_type)(  ) const;
+            getInvalidRecords_function_type getInvalidRecords_function_value( &::SireIO::PDB2::getInvalidRecords );
+            
+            PDB2_exposer.def( 
+                "getInvalidRecords"
+                , getInvalidRecords_function_value
+                , "Return the map of invalid records." );
+        
+        }
         { //::SireIO::PDB2::getSheets
         
             typedef ::QVector< SireIO::PDBSheet > ( ::SireIO::PDB2::*getSheets_function_type)(  ) const;

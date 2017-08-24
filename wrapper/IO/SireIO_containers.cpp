@@ -54,4 +54,5 @@ void register_SireIO_containers()
     register_list< QVector<PDBHelix> >();
     register_list< QVector<PDBSheet> >();
     register_list< QVector<QVector<PDBAtom> >>();
+    register_dict< QMap<qint64, QString> >();
 }

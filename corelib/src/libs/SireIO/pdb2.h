@@ -603,6 +603,7 @@ public:
     QVector<QVector<PDBAtom> > getAtoms() const;
     QVector<PDBHelix> getHelices() const;
     QVector<PDBSheet> getSheets() const;
+    QMap<qint64, QString> getInvalidRecords() const;
 
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
@@ -640,7 +641,7 @@ private:
     PDBTransform trans_matrix;
 
     /** Invalid records */
-    QMap<int, QString> invalid_records;
+    QMap<qint64, QString> invalid_records;
 
     /** Any warnings that were raised when reading the file */
     QStringList parse_warnings;

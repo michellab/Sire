@@ -1370,6 +1370,12 @@ QVector<PDBSheet> PDB2::getSheets() const
     return sheets;
 }
 
+/** Return the map of invalid records. */
+QMap<qint64, QString> PDB2::getInvalidRecords() const
+{
+    return invalid_records;
+}
+
 /** Function that is called to assert that this object is sane. This
     should raise an exception if the parser is in an invalid state */
 void PDB2::assertSane() const
@@ -1488,7 +1494,7 @@ void PDB2::parseLines(const PropertyMap &map)
         // These are used to define an atom configuratation, so can be used as
         // frames in a trajectory file. Each model entry must be consistent, i.e.
         // it must contain the same number and type of atoms.
-        if (record == "MODEL ")
+        else if (record == "MODEL ")
         {
             imdl++;
 
@@ -1548,6 +1554,10 @@ void PDB2::parseLines(const PropertyMap &map)
             // Append the helix.
             helices.append(helix);
         }
+
+        // A chain terminus record.
+        // These are processed by the atom parsing section so we just skip ahead.
+        else if (record == "TER   ");
 
         // A SHEET record.
         else if (record == "SHEET ")
