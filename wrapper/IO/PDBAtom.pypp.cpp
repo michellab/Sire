@@ -86,6 +86,17 @@ void register_PDBAtom_class(){
                 , "Get the residue sequence number." );
         
         }
+        { //::SireIO::PDBAtom::isTer
+        
+            typedef bool ( ::SireIO::PDBAtom::*isTer_function_type)(  ) const;
+            isTer_function_type isTer_function_value( &::SireIO::PDBAtom::isTer );
+            
+            PDBAtom_exposer.def( 
+                "isTer"
+                , isTer_function_value
+                , "Whether this is a terminal atom." );
+        
+        }
         { //::SireIO::PDBAtom::setAnisTemp
         
             typedef void ( ::SireIO::PDBAtom::*setAnisTemp_function_type)( ::QString const &,::QString const &,::QStringList & ) ;

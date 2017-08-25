@@ -54,6 +54,7 @@ static const RegisterMetaType<PDB2> r_pdb2;
 static const RegisterMetaType<PDBAtom> r_pdbatom(NO_ROOT);
 static const RegisterMetaType<PDBCrystal> r_pdbcrystal(NO_ROOT);
 static const RegisterMetaType<PDBHelix> r_pdbhelix(NO_ROOT);
+static const RegisterMetaType<PDBMaster> r_pdbmaster(NO_ROOT);
 static const RegisterMetaType<PDBSheet> r_pdbsheet(NO_ROOT);
 static const RegisterMetaType<PDBTitle> r_pdbtitle(NO_ROOT);
 static const RegisterMetaType<PDBTransform> r_pdbtransform(NO_ROOT);
@@ -67,7 +68,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBAtom &pdbatom)
     sds << pdbatom.record << pdbatom.serial << pdbatom.name << pdbatom.alt_loc
         << pdbatom.res_name << pdbatom.chain_id << pdbatom.res_num << pdbatom.insert_code
         << pdbatom.coord << pdbatom.occupancy << pdbatom.temperature << pdbatom.element
-        << pdbatom.charge << pdbatom.isHet << pdbatom.isTer << pdbatom.isAnis
+        << pdbatom.charge << pdbatom.is_het << pdbatom.is_ter << pdbatom.is_anis
         << pdbatom.anis_facts[0] << pdbatom.anis_facts[1] << pdbatom.anis_facts[2]
         << pdbatom.anis_facts[3] << pdbatom.anis_facts[4] << pdbatom.anis_facts[5];
 
@@ -85,7 +86,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBAtom &pdbatom)
         sds >> pdbatom.record >> pdbatom.serial >> pdbatom.name >> pdbatom.alt_loc
             >> pdbatom.res_name >> pdbatom.chain_id >> pdbatom.res_num >> pdbatom.insert_code
             >> pdbatom.coord >> pdbatom.occupancy >> pdbatom.temperature >> pdbatom.element
-            >> pdbatom.charge >> pdbatom.isHet >> pdbatom.isTer >> pdbatom.isAnis
+            >> pdbatom.charge >> pdbatom.is_het >> pdbatom.is_ter >> pdbatom.is_anis
             >> pdbatom.anis_facts[0] >> pdbatom.anis_facts[1] >> pdbatom.anis_facts[2]
             >> pdbatom.anis_facts[3] >> pdbatom.anis_facts[4] >> pdbatom.anis_facts[5];
     }
@@ -153,6 +154,39 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBHelix &pdbhelix)
     }
     else
         throw version_error(v, "1", r_pdbhelix, CODELOC);
+
+    return ds;
+}
+
+QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBMaster &pdbmaster)
+{
+    writeHeader(ds, r_pdbmaster, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << pdbmaster.record << pdbmaster.num_remarks << pdbmaster.num_hets
+        << pdbmaster.num_helices << pdbmaster.num_sheets << pdbmaster.num_sites
+        << pdbmaster.num_transforms << pdbmaster.num_atoms << pdbmaster.num_ters
+        << pdbmaster.num_connects << pdbmaster.num_sequences;
+
+    return ds;
+}
+
+QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBMaster &pdbmaster)
+{
+    VersionID v = readHeader(ds, r_pdbmaster);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+
+        sds >> pdbmaster.record >> pdbmaster.num_remarks >> pdbmaster.num_hets
+            >> pdbmaster.num_helices >> pdbmaster.num_sheets >> pdbmaster.num_sites
+            >> pdbmaster.num_transforms >> pdbmaster.num_atoms >> pdbmaster.num_ters
+            >> pdbmaster.num_connects >> pdbmaster.num_sequences;
+    }
+    else
+        throw version_error(v, "1", r_pdbmaster, CODELOC);
 
     return ds;
 }
@@ -268,7 +302,8 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDB2 &pdb2)
 
     sds << pdb2.title << pdb2.atoms << pdb2.helices << pdb2.sheets
         << pdb2.trans_orig << pdb2.trans_scale << pdb2.trans_matrix
-        << pdb2.invalid_records << pdb2.parse_warnings;
+        << pdb2.master << pdb2.num_ters << pdb2.invalid_records
+        << pdb2.parse_warnings;
 
     return ds;
 }
@@ -283,7 +318,8 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB2 &pdb2)
 
         sds >> pdb2.title >> pdb2.atoms >> pdb2.helices >> pdb2.sheets
             >> pdb2.trans_orig << pdb2.trans_scale << pdb2.trans_matrix
-            >> pdb2.invalid_records >> pdb2.parse_warnings;
+            >> pdb2.master << pdb2.num_ters >> pdb2.invalid_records
+            >> pdb2.parse_warnings;
     }
     else
         throw version_error(v, "1", r_pdb2, CODELOC);
@@ -295,9 +331,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB2 &pdb2)
 PDBAtom::PDBAtom() : occupancy(1.0),
                      element("X"),
                      charge("0"),
-                     isHet(false),
-                     isTer(false),
-                     isAnis(false)
+                     is_het(false),
+                     is_ter(false),
+                     is_anis(false)
 {
 }
 
@@ -313,9 +349,9 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors)
                       occupancy(1.0),
                       element("X"),
                       charge("0"),
-                      isHet(false),
-                      isTer(false),
-                      isAnis(false)
+                      is_het(false),
+                      is_ter(false),
+                      is_anis(false)
 {
     if (line.length() < 54)
     {
@@ -327,7 +363,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors)
 
     // Flag that this is a HETATM record.
     if (line.leftRef(6) == "HETATM")
-        isHet = true;
+        is_het = true;
 
     // Extract the atom serial number.
     bool ok;
@@ -434,12 +470,18 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors)
 }
 
 /** Set the terminal atom flag.
-    @param isTer
+    @param is_ter
         Whether this is a terminal atom.
  */
-void PDBAtom::setTerminal(bool _isTer)
+void PDBAtom::setTerminal(bool _is_ter)
 {
-    isTer = _isTer;
+    is_ter = _is_ter;
+}
+
+/** Whether this is a terminal atom. */
+bool PDBAtom::isTer() const
+{
+    return is_ter;
 }
 
 /** Set anisotropic temperature record data.
@@ -454,7 +496,7 @@ void PDBAtom::setTerminal(bool _isTer)
  */
 void PDBAtom::setAnisTemp(const QString &line1, const QString &line2, QStringList &errors)
 {
-    isAnis = true;
+    is_anis = true;
 
     // Check that data from this record matches that of the atom.
     // Columns 6-26 and 72-80 should be identical.
@@ -745,6 +787,250 @@ QString PDBHelix::toString() const
 }
 
 /** Default constructor. */
+PDBMaster::PDBMaster() : num_remarks(0),
+                         num_hets(0),
+                         num_helices(0),
+                         num_sheets(0),
+                         num_sites(0),
+                         num_transforms(0),
+                         num_atoms(0),
+                         num_ters(0),
+                         num_connects(0),
+                         num_sequences(0)
+{
+}
+
+/** Constructor.
+    @param line
+        A MASTER record line from a PDB file.
+
+    @param errors
+        An array of error messages.
+ */
+PDBMaster::PDBMaster(const QString &line,
+                     QStringList &errors) : record(line),
+                                            num_remarks(0),
+                                            num_hets(0),
+                                            num_helices(0),
+                                            num_sheets(0),
+                                            num_sites(0),
+                                            num_transforms(0),
+                                            num_atoms(0),
+                                            num_ters(0),
+                                            num_connects(0),
+                                            num_sequences(0)
+{
+    // Extract the number of remark records.
+    bool ok;
+    int tmp_int = line.midRef(10,5).toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the number of REMARK records "
+            "from part (%1) from line '%2'")
+            .arg(line.mid(10,5)).arg(line));
+
+        return;
+    }
+    num_remarks = tmp_int;
+
+    // Extract the number of HET records.
+    tmp_int = line.midRef(20,5).toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the number of HET records "
+            "from part (%1) from line '%2'")
+            .arg(line.mid(20,5)).arg(line));
+
+        return;
+    }
+    num_hets = tmp_int;
+
+    // Extract the number of HELIX records.
+    tmp_int = line.midRef(25,5).toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the number of HELIX records "
+            "from part (%1) from line '%2'")
+            .arg(line.mid(25,5)).arg(line));
+
+        return;
+    }
+    num_helices = tmp_int;
+
+    // Extract the number of SHEET records.
+    tmp_int = line.midRef(30,5).toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the number of SHEET records "
+            "from part (%1) from line '%2'")
+            .arg(line.mid(30,5)).arg(line));
+
+        return;
+    }
+    num_sheets = tmp_int;
+
+    // Extract the number of SITE records.
+    tmp_int = line.midRef(40,5).toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the number of SITE records "
+            "from part (%1) from line '%2'")
+            .arg(line.mid(40,5)).arg(line));
+
+        return;
+    }
+    num_sites = tmp_int;
+
+    // Extract the number of transformation records.
+    tmp_int = line.midRef(45,5).toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the number of coordinate "
+            "transformation records from part (%1) from line '%2'")
+            .arg(line.mid(45,5)).arg(line));
+
+        return;
+    }
+    num_transforms = tmp_int;
+
+    // Extract the number of ATOM and HETATM records.
+    tmp_int = line.midRef(50,5).toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the number of ATOM and HETATM records "
+            "from part (%1) from line '%2'")
+            .arg(line.mid(50,5)).arg(line));
+
+        return;
+    }
+    num_atoms = tmp_int;
+
+    // Extract the number of TER records.
+    tmp_int = line.midRef(55,5).toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the number of TER records "
+            "from part (%1) from line '%2'")
+            .arg(line.mid(55,5)).arg(line));
+
+        return;
+    }
+    num_ters = tmp_int;
+
+    // Extract the number of CONECT records.
+    tmp_int = line.midRef(60,5).toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the number of CONECT records "
+            "from part (%1) from line '%2'")
+            .arg(line.mid(60,5)).arg(line));
+
+        return;
+    }
+    num_connects = tmp_int;
+
+    // Extract the number of SEQRES records.
+    tmp_int = line.midRef(65,5).toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the number of SEQRES records "
+            "from part (%1) from line '%2'")
+            .arg(line.mid(65,5)).arg(line));
+
+        return;
+    }
+    num_sequences = tmp_int;
+}
+
+/** Return the C++ name for this class */
+const char* PDBMaster::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<PDBMaster>() );
+}
+
+/** Return a PDB record line for this master object. */
+QString PDBMaster::toPDBLine() const
+{
+    return record;
+}
+
+/** Return a string representation of this object */
+QString PDBMaster::toString() const
+{
+    return QObject::tr("PDBMaster::null");
+}
+
+/** Return the number of REMARK records. */
+int PDBMaster::nRemarks() const
+{
+    return num_remarks;
+}
+
+/** Return the number of HET records. */
+int PDBMaster::nHets() const
+{
+    return num_hets;
+}
+
+/** Return the number of HELIX records. */
+int PDBMaster::nHelices() const
+{
+    return num_helices;
+}
+
+/** Return the number of SHEET records. */
+int PDBMaster::nSheets() const
+{
+    return num_sheets;
+}
+
+/** Return the number of SITE records. */
+int PDBMaster::nSites() const
+{
+    return num_sites;
+}
+
+/** Return the number of coordinate transformation records. */
+int PDBMaster::nTransforms() const
+{
+    return num_transforms;
+}
+
+/** Return the number of ATOM and HETATM records. */
+int PDBMaster::nAtoms() const
+{
+    return num_atoms;
+}
+
+/** Return the number of TER records. */
+int PDBMaster::nTers() const
+{
+    return num_ters;
+}
+
+/** Return the number of CONECT records. */
+int PDBMaster::nConnects() const
+{
+    return num_connects;
+}
+
+/** Return the number of SEQRES records. */
+int PDBMaster::nSequences() const
+{
+    return num_sequences;
+}
+
+/** Default constructor. */
 PDBSheet::PDBSheet()
 {
 }
@@ -948,20 +1234,50 @@ void PDBTitle::appendRecord(const QString &line,
     switch(record_type)
     {
         case RECORD_TYPE::HEADER: header = line;
+                                  break;
+
         case RECORD_TYPE::OBSLTE: obsoletes.append(line);
+                                  break;
+
         case RECORD_TYPE::TITLE : titles.append(line);
+                                  break;
+
         case RECORD_TYPE::SPLIT : splits.append(line);
+                                  break;
+
         case RECORD_TYPE::CAVEAT: caveats.append(line);
+                                  break;
+
         case RECORD_TYPE::COMPND: compounds.append(line);
+                                  break;
+
         case RECORD_TYPE::SOURCE: sources.append(line);
+                                  break;
+
         case RECORD_TYPE::KEYWDS: keywords.append(line);
+                                  break;
+
         case RECORD_TYPE::EXPDTA: experiments.append(line);
+                                  break;
+
         case RECORD_TYPE::MDLTYP: model_types.append(line);
+                                  break;
+
         case RECORD_TYPE::AUTHOR: authors.append(line);
+                                  break;
+
         case RECORD_TYPE::REVDAT: revisions.append(line);
+                                  break;
+
         case RECORD_TYPE::SPRSDE: supersedes.append(line);
+                                  break;
+
         case RECORD_TYPE::JRNL  : journals.append(line);
+                                  break;
+
         case RECORD_TYPE::REMARK: remarks.append(line);
+                                  break;
+
         case RECORD_TYPE::NUMMDL:
         {
             bool ok;
@@ -976,7 +1292,10 @@ void PDBTitle::appendRecord(const QString &line,
                 return;
             }
             num_models = tmp_int;
+
+            break;
         }
+
         default:
         {
             errors.append(QObject::tr("Title section record not recognised! "
@@ -999,10 +1318,22 @@ QString PDBTitle::toString() const
     return QObject::tr("PDBTitle::null");
 }
 
-/** Return the number of title section records */
+/** Return the number of title section records. */
 int PDBTitle::nRecords() const
 {
     return records.count();
+}
+
+/** Return the number of REMARK records. */
+int PDBTitle::nRemarks() const
+{
+    return remarks.count();
+}
+
+/** Return the number of models that should be in the PDB file. */
+int PDBTitle::nModels() const
+{
+    return num_models;
 }
 
 /** Whether the object contains any records. */
@@ -1139,7 +1470,9 @@ const char* PDBTransform::typeName()
 }
 
 /** Constructor */
-PDB2::PDB2() : ConcreteProperty<PDB2,MoleculeParser>()
+PDB2::PDB2() : ConcreteProperty<PDB2,MoleculeParser>(),
+               num_ters(0),
+               has_master(false)
 {
 }
 
@@ -1147,7 +1480,9 @@ PDB2::PDB2() : ConcreteProperty<PDB2,MoleculeParser>()
     passed property map can be used to pass extra parameters to control
     the parsing */
 PDB2::PDB2(const QString &filename, const PropertyMap &map)
-     : ConcreteProperty<PDB2,MoleculeParser>(filename,map)
+     : ConcreteProperty<PDB2,MoleculeParser>(filename,map),
+       num_ters(0),
+       has_master(false)
 {
     //the file has been read into memory and is available via
     //the MoleculeParser::lines() function.
@@ -1167,7 +1502,9 @@ PDB2::PDB2(const QString &filename, const PropertyMap &map)
     passed property map can be used to pass extra parameters to control
     the parsing */
 PDB2::PDB2(const QStringList &lines, const PropertyMap &map)
-     : ConcreteProperty<PDB2,MoleculeParser>(lines,map)
+     : ConcreteProperty<PDB2,MoleculeParser>(lines,map),
+       num_ters(0),
+       has_master(false)
 {
     //the file has been read into memory and is available via
     //the MoleculeParser::lines() function.
@@ -1187,7 +1524,9 @@ PDB2::PDB2(const QStringList &lines, const PropertyMap &map)
     passed SireSystem::System, looking for the properties that are specified
     in the passed property map */
 PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map)
-     : ConcreteProperty<PDB2,MoleculeParser>(map)
+     : ConcreteProperty<PDB2,MoleculeParser>(map),
+       num_ters(0),
+       has_master(false)
 {
     //look through the system and extract out the information
     //that is needed to go into the file, based on the properties
@@ -1328,6 +1667,12 @@ bool PDB2::hasCrystal() const
     return crystal.hasRecord();
 }
 
+/** Whether the object contains a MASTER record. */
+bool PDB2::hasMaster() const
+{
+    return has_master;
+}
+
 /** Whether the object contains an ORIGX transformation record. */
 bool PDB2::hasTransOrig() const
 {
@@ -1368,6 +1713,12 @@ QVector<PDBHelix> PDB2::getHelices() const
 QVector<PDBSheet> PDB2::getSheets() const
 {
     return sheets;
+}
+
+/** Return the master record object. */
+PDBMaster PDB2::getMaster() const
+{
+    return master;
 }
 
 /** Return the map of invalid records. */
@@ -1455,6 +1806,8 @@ void PDB2::parseLines(const PropertyMap &map)
             }
 
         }
+
+        return frame_atom.isTer();
     };
 
     // Loop through all lines in the file.
@@ -1591,6 +1944,13 @@ void PDB2::parseLines(const PropertyMap &map)
         else if (record == "MTRIX2") trans_matrix.appendRecord(lines()[iline], 1, true, parse_warnings);
         else if (record == "MTRIX3") trans_matrix.appendRecord(lines()[iline], 2, true, parse_warnings);
 
+        // MASTER record.
+        else if (record == "MASTER")
+        {
+            master = PDBMaster(lines()[iline], parse_warnings);
+            has_master = true;
+        }
+
         // Invalid record
         else
         {
@@ -1629,8 +1989,10 @@ void PDB2::parseLines(const PropertyMap &map)
 
                     for (int i=r.begin(); i<r.end(); ++i)
                     {
-                        parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                            atom_lines[i], lines().count(), frame_atoms[i], local_errors );
+                        // Parse the atom record and determine whether it is a terminal record.
+                        if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
+                            atom_lines[i], lines().count(), frame_atoms[i], local_errors ))
+                                num_ters++;
                     }
 
                     if (not local_errors.isEmpty())
@@ -1644,8 +2006,10 @@ void PDB2::parseLines(const PropertyMap &map)
             {
                 for (int i=0; i<nats; ++i)
                 {
-                    parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                        atom_lines[i], lines().count(), frame_atoms[i], parse_warnings );
+                    // Parse the atom record and determine whether it is a terminal record.
+                    if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
+                        atom_lines[i], lines().count(), frame_atoms[i], parse_warnings ))
+                            num_ters++;
                 }
             }
 
@@ -1658,6 +2022,12 @@ void PDB2::parseLines(const PropertyMap &map)
             iframe++;
             nats = 0;
         }
+    }
+
+    // Validate the parsed data against the MASTER record.
+    if (has_master)
+    {
+
     }
 
     this->setScore(nats);

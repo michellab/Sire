@@ -8,6 +8,7 @@ set ( PYPP_SOURCES
        AmberRst7.pypp.cpp
        TinkerParameters.pypp.cpp
        ZmatrixMaker.pypp.cpp
+       PDBMaster.pypp.cpp
        PDB2.pypp.cpp
        IOBase.pypp.cpp
        ProtoMSParameters.pypp.cpp

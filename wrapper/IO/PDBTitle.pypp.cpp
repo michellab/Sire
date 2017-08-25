@@ -83,6 +83,17 @@ void register_PDBTitle_class(){
                 , "Whether the object contains any records." );
         
         }
+        { //::SireIO::PDBTitle::nModels
+        
+            typedef int ( ::SireIO::PDBTitle::*nModels_function_type)(  ) const;
+            nModels_function_type nModels_function_value( &::SireIO::PDBTitle::nModels );
+            
+            PDBTitle_exposer.def( 
+                "nModels"
+                , nModels_function_value
+                , "Return the number of MODEL that should be in the PDB file." );
+        
+        }
         { //::SireIO::PDBTitle::nRecords
         
             typedef int ( ::SireIO::PDBTitle::*nRecords_function_type)(  ) const;
@@ -92,6 +103,17 @@ void register_PDBTitle_class(){
                 "nRecords"
                 , nRecords_function_value
                 , "Return the number of title section records." );
+        
+        }
+        { //::SireIO::PDBTitle::nRemarks
+        
+            typedef int ( ::SireIO::PDBTitle::*nRemarks_function_type)(  ) const;
+            nRemarks_function_type nRemarks_function_value( &::SireIO::PDBTitle::nRemarks );
+            
+            PDBTitle_exposer.def( 
+                "nRemarks"
+                , nRemarks_function_value
+                , "Return the number of REMARK records." );
         
         }
         { //::SireIO::PDBTitle::toPDBLines

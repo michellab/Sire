@@ -41,6 +41,8 @@
 
 #include "PDBHelix.pypp.hpp"
 
+#include "PDBMaster.pypp.hpp"
+
 #include "PDBParameters.pypp.hpp"
 
 #include "PDBSheet.pypp.hpp"
@@ -113,6 +115,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_PDBCrystal_class();
 
     register_PDBHelix_class();
+
+    register_PDBMaster_class();
 
     register_PDBParameters_class();
 

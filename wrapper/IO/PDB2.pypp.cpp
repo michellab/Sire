@@ -147,6 +147,17 @@ void register_PDB2_class(){
                 , "Return the map of invalid records." );
         
         }
+        { //::SireIO::PDB2::getMaster
+        
+            typedef ::SireIO::PDBMaster ( ::SireIO::PDB2::*getMaster_function_type)(  ) const;
+            getMaster_function_type getMaster_function_value( &::SireIO::PDB2::getMaster );
+            
+            PDB2_exposer.def( 
+                "getMaster"
+                , getMaster_function_value
+                , "Return the master record object." );
+        
+        }
         { //::SireIO::PDB2::getSheets
         
             typedef ::QVector< SireIO::PDBSheet > ( ::SireIO::PDB2::*getSheets_function_type)(  ) const;
@@ -178,6 +189,17 @@ void register_PDB2_class(){
                 "hasCrystal"
                 , hasCrystal_function_value
                 , "Whether the object contains crystallographic record data." );
+        
+        }
+        { //::SireIO::PDB2::hasMaster
+        
+            typedef bool ( ::SireIO::PDB2::*hasMaster_function_type)(  ) const;
+            hasMaster_function_type hasMaster_function_value( &::SireIO::PDB2::hasMaster );
+            
+            PDB2_exposer.def( 
+                "hasMaster"
+                , hasMaster_function_value
+                , "Whether the object contains a MASTER record." );
         
         }
         { //::SireIO::PDB2::hasTransMatrix

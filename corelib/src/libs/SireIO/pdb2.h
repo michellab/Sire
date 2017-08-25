@@ -40,6 +40,7 @@ namespace SireIO
 class PDBAtom;
 class PDBCrystal;
 class PDBHelix;
+class PDBMaster;
 class PDBSheet;
 class PDBTitle;
 class PDBTransform;
@@ -54,6 +55,9 @@ QDataStream& operator>>(QDataStream&, SireIO::PDBCrystal&);
 
 QDataStream& operator<<(QDataStream&, const SireIO::PDBHelix&);
 QDataStream& operator>>(QDataStream&, SireIO::PDBHelix&);
+
+QDataStream& operator<<(QDataStream&, const SireIO::PDBMaster&);
+QDataStream& operator>>(QDataStream&, SireIO::PDBMaster&);
 
 QDataStream& operator<<(QDataStream&, const SireIO::PDBSheet&);
 QDataStream& operator>>(QDataStream&, SireIO::PDBSheet&);
@@ -111,6 +115,9 @@ public:
     /** Get the residue sequence number. */
     qint64 getResNum() const;
 
+    /** Whether this is a terminal atom. */
+    bool isTer() const;
+
     /** Set anisotropic temperature record data. */
     void setAnisTemp(const QString &line1, const QString &line2, QStringList& errors);
 
@@ -155,13 +162,13 @@ private:
     QString charge;
 
     /** Whether the atom is recorded as a HETAM entry. */
-    bool isHet;
+    bool is_het;
 
     /** Whether this is the last atom in a chain. */
-    bool isTer;
+    bool is_ter;
 
     /** Whether there is an anisotropic temperature (ANISOU) record for the atom. */
-    bool isAnis;
+    bool is_anis;
 
     /** Anisotropic temperature factors. */
     qint64 anis_facts[6];
@@ -281,6 +288,80 @@ private:
 
     /** Length of the helix. */
     qint64 length;
+};
+
+/** This class provides functionality for reading/writing
+    Protein Data Bank (PDB) MASTER records.
+
+    If present, this record provides data for validating the parser.
+
+    @author Lester Hedges
+*/
+class SIREIO_EXPORT PDBMaster
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const PDBMaster&);
+friend QDataStream& ::operator>>(QDataStream&, PDBMaster&);
+
+public:
+    /** Default constructor. */
+    PDBMaster();
+
+    /** Constructor. */
+    PDBMaster(const QString &line, QStringList &errors);
+
+    /** Generate a PDB record from the master data. */
+    QString toPDBLine() const;
+
+    /** Generate a string representation of the object. */
+    QString toString() const;
+
+    static const char* typeName();
+
+    int nRemarks() const;
+    int nHets() const;
+    int nHelices() const;
+    int nSheets() const;
+    int nSites() const;
+    int nTransforms() const;
+    int nAtoms() const;
+    int nTers() const;
+    int nConnects() const;
+    int nSequences() const;
+
+private:
+    /** The original PDB record used to instantiate the master object. */
+    QString record;
+
+    /** Number of REMARK records. */
+    qint64 num_remarks;
+
+    /** Number of HET records. */
+    qint64 num_hets;
+
+    /** Number of HELIX records. */
+    qint64 num_helices;
+
+    /** Number of SHEET records. */
+    qint64 num_sheets;
+
+    /** Number of SITE records. */
+    qint64 num_sites;
+
+    /** Number of tranformation records (ORIGX, SCALE, MTRIX). */
+    qint64 num_transforms;
+
+    /** Number of ATOM or HETATM records. */
+    qint64 num_atoms;
+
+    /** Number of TER records. */
+    qint64 num_ters;
+
+    /** Number of CONECT records. */
+    qint64 num_connects;
+
+    /** Number of SEQRES records. */
+    qint64 num_sequences;
 };
 
 /** This class provides functionality for reading/writing
@@ -427,6 +508,12 @@ public:
 
     /** Return the number of title section records. */
     int nRecords() const;
+
+    /** Return the number of REMARK records. */
+    int nRemarks() const;
+
+    /** Return the number of MODEL that should be in the PDB file. */
+    int nModels() const;
 
     /** Whether the object contains any records. */
     bool hasRecords() const;
@@ -595,6 +682,7 @@ public:
     int nSheets() const;
 
     bool hasCrystal() const;
+    bool hasMaster() const;
     bool hasTransOrig() const;
     bool hasTransScale() const;
     bool hasTransMatrix() const;
@@ -603,6 +691,7 @@ public:
     QVector<QVector<PDBAtom> > getAtoms() const;
     QVector<PDBHelix> getHelices() const;
     QVector<PDBSheet> getSheets() const;
+    PDBMaster getMaster() const;
     QMap<qint64, QString> getInvalidRecords() const;
 
 protected:
@@ -640,6 +729,15 @@ private:
     //* Transformation record: non-crystallographic. */
     PDBTransform trans_matrix;
 
+    //* Master record data. */
+    PDBMaster master;
+
+    /** Number of TER records. */
+    qint64 num_ters;
+
+    /** Whether a MASTER record was found (can be used for validation). */
+    bool has_master;
+
     /** Invalid records */
     QMap<qint64, QString> invalid_records;
 
@@ -652,6 +750,7 @@ private:
 Q_DECLARE_METATYPE( SireIO::PDBAtom )
 Q_DECLARE_METATYPE( SireIO::PDBCrystal )
 Q_DECLARE_METATYPE( SireIO::PDBHelix )
+Q_DECLARE_METATYPE( SireIO::PDBMaster )
 Q_DECLARE_METATYPE( SireIO::PDBSheet )
 Q_DECLARE_METATYPE( SireIO::PDBTitle )
 Q_DECLARE_METATYPE( SireIO::PDBTransform )
@@ -660,6 +759,7 @@ Q_DECLARE_METATYPE( SireIO::PDB2 )
 SIRE_EXPOSE_CLASS( SireIO::PDBAtom )
 SIRE_EXPOSE_CLASS( SireIO::PDBCrystal )
 SIRE_EXPOSE_CLASS( SireIO::PDBHelix )
+SIRE_EXPOSE_CLASS( SireIO::PDBMaster )
 SIRE_EXPOSE_CLASS( SireIO::PDBSheet )
 SIRE_EXPOSE_CLASS( SireIO::PDBTitle )
 SIRE_EXPOSE_CLASS( SireIO::PDBTransform )
