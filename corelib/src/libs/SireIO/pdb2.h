@@ -712,6 +712,9 @@ private:
     //* Atom record data (possibly multiple frames) */
     QVector<QVector<PDBAtom> > atoms;
 
+    //* Residue data */
+    QMultiMap<qint64, qint64> residues;
+
     //* Helix record data. */
     QVector<PDBHelix> helices;
 

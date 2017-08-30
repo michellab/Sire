@@ -300,7 +300,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDB2 &pdb2)
 
     SharedDataStream sds(ds);
 
-    sds << pdb2.title << pdb2.atoms << pdb2.helices << pdb2.sheets
+    sds << pdb2.title << pdb2.atoms << pdb2.residues << pdb2.helices << pdb2.sheets
         << pdb2.trans_orig << pdb2.trans_scale << pdb2.trans_matrix
         << pdb2.master << pdb2.num_ters << pdb2.invalid_records
         << pdb2.parse_warnings;
@@ -316,7 +316,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB2 &pdb2)
     {
         SharedDataStream sds(ds);
 
-        sds >> pdb2.title >> pdb2.atoms >> pdb2.helices >> pdb2.sheets
+        sds >> pdb2.title >> pdb2.atoms >> pdb2.residues >> pdb2.helices >> pdb2.sheets
             >> pdb2.trans_orig << pdb2.trans_scale << pdb2.trans_matrix
             >> pdb2.master << pdb2.num_ters >> pdb2.invalid_records
             >> pdb2.parse_warnings;
@@ -1831,8 +1831,8 @@ void PDB2::parseLines(const PropertyMap &map)
     QVector<int> atom_lines;
 
     // Internal function used to parse a single atom line in the file.
-    auto parse_atoms = [&](const QString &line, int iatm, int iframe,
-        int iline, int num_lines, PDBAtom &frame_atom, QStringList &errors)
+    auto parse_atoms = [&](const QString &line, int iatm, int iframe, int iline,
+        int num_lines, PDBAtom &frame_atom, QMultiMap<qint64, qint64> &local_residues, QStringList &errors)
     {
         // Populate atom data.
         frame_atom = PDBAtom(line, errors);
@@ -1874,6 +1874,9 @@ void PDB2::parseLines(const PropertyMap &map)
             }
 
         }
+
+        // Update the residue multi-map (residue number --> atom index).
+        local_residues.insert(frame_atom.getResNum(), iatm);
 
         return frame_atom.isTer();
     };
@@ -2035,14 +2038,6 @@ void PDB2::parseLines(const PropertyMap &map)
         // Parse the atom data.
         if (isParse or isModel)
         {
-            if (nats > 99999)
-            {
-                parse_warnings.append(QObject::tr("Number of atoms exceeds the PDB file limit "
-                    "of 99999. Please split large entries into multiple files"));
-
-                return;
-            }
-
             // Initialise atom vector for the frame.
             QVector<PDBAtom> frame_atoms(nats);
 
@@ -2054,12 +2049,13 @@ void PDB2::parseLines(const PropertyMap &map)
                                 [&](const tbb::blocked_range<int> &r)
                 {
                     QStringList local_errors;
+                    QMultiMap<qint64, qint64> local_residues;
 
                     for (int i=r.begin(); i<r.end(); ++i)
                     {
                         // Parse the atom record and determine whether it is a terminal record.
                         if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                            atom_lines[i], lines().count(), frame_atoms[i], local_errors ))
+                            atom_lines[i], lines().count(), frame_atoms[i], local_residues, local_errors ))
                                 num_ters++;
                     }
 
@@ -2068,6 +2064,9 @@ void PDB2::parseLines(const PropertyMap &map)
                         QMutexLocker lkr(&mutex);
                         parse_warnings += local_errors;
                     }
+
+                    QMutexLocker lkr(&mutex);
+                    residues += local_residues;
                 });
             }
             else
@@ -2076,7 +2075,7 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     // Parse the atom record and determine whether it is a terminal record.
                     if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                        atom_lines[i], lines().count(), frame_atoms[i], parse_warnings ))
+                        atom_lines[i], lines().count(), frame_atoms[i], residues, parse_warnings ))
                             num_ters++;
                 }
             }
@@ -2116,6 +2115,55 @@ System PDB2::startSystem(const PropertyMap &map) const
 {
     // For now we will assume that the PDB file contains a single molecule.
     // The system should contain a set of atoms, each belonging to a residue.
+    // There is currently no data structure (within the PDB object) representing
+    // a molecule.
+
+    // At the moment I'm not sure how multiple molecules are represented into a
+    // PDB file. A few forums seems to suggest that MODEL entries are used to
+    // define different molecules, although I thought that these were used for
+    // different representations of the same molecule, i.e. same number of atoms,
+    // etc., but different coordinates, such as two time entries from a trajectory.
+
+    /*const int nmols = 1;
+    //const int nmols = mol_idxs.count();
+
+    if (nmols == 0)
+        return System();
+
+    QVector<Molecule> mols(nmols);
+    Molecule *mols_array = mols.data();
+
+    if (usesParallel())
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
+                           [&](tbb::blocked_range<int> r)
+        {
+            // Create and populate all of the molecules.
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                mols_array[i] = this->getMolecule(i, mol_idxs[i].first, mol_idxs[i].second, map);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<nmols; ++i)
+        {
+            mols_array[i] = this->getMolecule(i, mol_idxs[i].first, mol_idxs[i].second, map);
+        }
+    }
+
+    MoleculeGroup molgroup("all");
+
+    for (auto mol : mols)
+    {
+        molgroup.add(mol);
+    }
+
+    System system( this->title() );
+    system.add(molgroup);
+    system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));*/
+
     System system;
 
     return system;
