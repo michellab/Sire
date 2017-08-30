@@ -1661,6 +1661,12 @@ int PDB2::nSheets() const
     return sheets.count();
 }
 
+/** Return the number of TER records. */
+int PDB2::nTers() const
+{
+    return num_ters;
+}
+
 /** Whether the object contains crystallographic record data. */
 bool PDB2::hasCrystal() const
 {
@@ -1731,7 +1737,69 @@ QMap<qint64, QString> PDB2::getInvalidRecords() const
     should raise an exception if the parser is in an invalid state */
 void PDB2::assertSane() const
 {
-    //check state, raise SireError::program_bug if we are in an invalid state
+    QStringList errors;
+
+    // Validate the parsed data against the MASTER record.
+    if (has_master)
+    {
+        if (not (master.nRemarks() == title.nRemarks()))
+        {
+            errors.append(QObject::tr("Error in PDB file as the number of "
+               "REMARK records (%1) read does not equal the number in "
+               "the MASTER record (%2)!")
+                .arg(title.nRemarks()).arg(master.nRemarks()));
+        }
+
+        if (not (master.nAtoms() == nAtoms()))
+        {
+            errors.append(QObject::tr("Error in PDB file as the number of "
+               "ATOM and HETATM records (%1) read does not equal the number in "
+               "the MASTER record (%2)!")
+                .arg(nAtoms()).arg(master.nAtoms()));
+        }
+
+        if (not (master.nHelices() == nHelices()))
+        {
+            errors.append(QObject::tr("Error in PDB file as the number of "
+               "HELIX records (%1) read does not equal the number in "
+               "the MASTER record (%2)!")
+                .arg(nHelices()).arg(master.nHelices()));
+        }
+
+        if (not (master.nSheets() == nSheets()))
+        {
+            errors.append(QObject::tr("Error in PDB file as the number of "
+               "SHEET records (%1) read does not equal the number in "
+               "the MASTER record (%2)!")
+                .arg(nSheets()).arg(master.nSheets()));
+        }
+
+        if (not (master.nTers() == nTers()))
+        {
+            errors.append(QObject::tr("Error in PDB file as the number of "
+               "TER records (%1) read does not equal the number in "
+               "the MASTER record (%2)!")
+                .arg(nTers()).arg(master.nTers()));
+        }
+
+        // Work out the number of coordinate transformation records.
+        // Each object should contain three records, one for each dimension.
+        int num_transforms = 3 * ( hasTransOrig() + hasTransScale() + hasTransMatrix() );
+
+        if (not (master.nTransforms() == num_transforms ))
+        {
+            errors.append(QObject::tr("Error in PDB file as the number of coordinate "
+               "transformation records (%1) read does not equal the number in "
+               "the MASTER record (%2)!")
+                .arg(num_transforms).arg(master.nTransforms()));
+        }
+    }
+
+    if (not errors.isEmpty())
+    {
+        throw SireIO::parse_error(QObject::tr("There were errors reading the PDB format "
+          "file:\n%1").arg(errors.join("\n\n")), CODELOC);
+    }
 }
 
 /** Internal function that is used to actually parse the data contained
@@ -2024,12 +2092,6 @@ void PDB2::parseLines(const PropertyMap &map)
         }
     }
 
-    // Validate the parsed data against the MASTER record.
-    if (has_master)
-    {
-
-    }
-
     this->setScore(nats);
 }
 
@@ -2052,12 +2114,9 @@ bool PDB2::validateAtom(const PDBAtom &atom1, const PDBAtom &atom2)
     assigning properties based on the mapping in 'map' */
 System PDB2::startSystem(const PropertyMap &map) const
 {
-    //you should now take the data that you have parsed into the intermediate
-    //format and use it to start a new System and create all molecules,
-    //which are added to this System
-
+    // For now we will assume that the PDB file contains a single molecule.
+    // The system should contain a set of atoms, each belonging to a residue.
     System system;
-
 
     return system;
 }

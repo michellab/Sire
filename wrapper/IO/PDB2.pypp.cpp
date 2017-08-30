@@ -268,6 +268,17 @@ void register_PDB2_class(){
                 , "Return the number of sheets." );
         
         }
+        { //::SireIO::PDB2::nTers
+        
+            typedef int ( ::SireIO::PDB2::*nTers_function_type)(  ) const;
+            nTers_function_type nTers_function_value( &::SireIO::PDB2::nTers );
+            
+            PDB2_exposer.def( 
+                "nTers"
+                , nTers_function_value
+                , "Return the number of TER records." );
+        
+        }
         { //::SireIO::PDB2::nTitles
         
             typedef int ( ::SireIO::PDB2::*nTitles_function_type)(  ) const;

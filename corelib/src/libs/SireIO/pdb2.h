@@ -680,6 +680,7 @@ public:
     int nAtoms() const;
     int nHelices() const;
     int nSheets() const;
+    int nTers() const;
 
     bool hasCrystal() const;
     bool hasMaster() const;
