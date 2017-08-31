@@ -17,6 +17,16 @@ namespace bp = boost::python;
 
 #include "SireMM/pdbparams.h"
 
+#include "SireMol/atomcharges.h"
+
+#include "SireMol/atomcoords.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/molecule.h"
+
+#include "SireMol/moleditor.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -84,6 +94,17 @@ void register_PDBAtom_class(){
                 "getResNum"
                 , getResNum_function_value
                 , "Get the residue sequence number." );
+        
+        }
+        { //::SireIO::PDBAtom::getSerial
+        
+            typedef ::qint64 ( ::SireIO::PDBAtom::*getSerial_function_type)(  ) const;
+            getSerial_function_type getSerial_function_value( &::SireIO::PDBAtom::getSerial );
+            
+            PDBAtom_exposer.def( 
+                "getSerial"
+                , getSerial_function_value
+                , "Get the atom serial number." );
         
         }
         { //::SireIO::PDBAtom::isTer

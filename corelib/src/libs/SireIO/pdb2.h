@@ -47,6 +47,12 @@ class PDBTransform;
 class PDB2;
 }
 
+namespace SireMol
+{
+class MolEditor;
+class MoleculeInfoData;
+}
+
 QDataStream& operator<<(QDataStream&, const SireIO::PDBAtom&);
 QDataStream& operator>>(QDataStream&, SireIO::PDBAtom&);
 
@@ -102,6 +108,9 @@ public:
 
     /** Set the terminal atom flag. */
     void setTerminal(bool _isTer);
+
+    /** Get the atom serial number. */
+    qint64 getSerial() const;
 
     /** Get the atom name. */
     QString getName() const;
@@ -696,6 +705,7 @@ public:
     QMap<qint64, QString> getInvalidRecords() const;
 
 protected:
+    SireSystem::System startSystem(int iframe, const PropertyMap &map) const;
     SireSystem::System startSystem(const PropertyMap &map) const;
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
@@ -703,7 +713,13 @@ private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
 
-    /** Validate that the two atoms are the same (other than position) */
+    SireMol::MolStructureEditor getMolStructure(int imol, int iframe,
+        const SireBase::PropertyName &cutting) const;
+
+    SireMol::MolEditor getMolecule(int imol, int iframe,
+        const PropertyMap &map = PropertyMap()) const;
+
+    /** Validate that the two atoms are the same (other than position). */
     bool validateAtom(const PDBAtom &atom1, const PDBAtom &atom2);
 
     //* Title record data. */
@@ -713,7 +729,7 @@ private:
     QVector<QVector<PDBAtom> > atoms;
 
     //* Residue mapping. */
-    QMultiMap<qint64, qint64> residues;
+    QVector<QMultiMap<qint64, qint64> > residues;
 
     //* Connectivity data. */
     QVector<QMultiMap<qint64, qint64> > connections;

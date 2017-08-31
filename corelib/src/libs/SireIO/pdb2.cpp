@@ -42,6 +42,13 @@
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
+#include "SireMol/molecule.h"
+#include "SireMol/moleditor.h"
+
+#include "SireMol/atomcharges.h"
+#include "SireMol/atomelements.h"
+#include "SireMol/atomcoords.h"
+
 using namespace SireIO;
 using namespace SireMM;
 using namespace SireMol;
@@ -523,6 +530,12 @@ void PDBAtom::setAnisTemp(const QString &line1, const QString &line2, QStringLis
         errors.append(QObject::tr("ANISOU record does not match the format! '%2' '%3'")
             .arg(line1).arg(line2));
     }
+}
+
+/** Get the atom serial number. */
+qint64 PDBAtom::getSerial() const
+{
+    return serial;
 }
 
 /** Get the atom name. */
@@ -1824,6 +1837,9 @@ void PDB2::parseLines(const PropertyMap &map)
     // For each frame we identify the lines containing atom data, then parse them.
     QVector<int> atom_lines;
 
+    // The residue map for the frame.
+    QMultiMap<qint64, qint64> frame_residues;
+
     // The connectivity map for the frame.
     QMultiMap<qint64, qint64> frame_connections;
 
@@ -1873,7 +1889,7 @@ void PDB2::parseLines(const PropertyMap &map)
         }
 
         // Update the residue multi-map (residue number --> atom index).
-        local_residues.insert(frame_atom.getResNum(), iatm);
+        local_residues.insert(frame_atom.getResNum(), frame_atom.getSerial());
 
         return frame_atom.isTer();
     };
@@ -2098,7 +2114,7 @@ void PDB2::parseLines(const PropertyMap &map)
 
                     QMutexLocker lkr(&mutex);
                     num_ters += local_num_ters;
-                    residues += local_residues;
+                    frame_residues += local_residues;
                     parse_warnings += local_errors;
                 });
             }
@@ -2108,7 +2124,7 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     // Parse the atom record and determine whether it is a terminal record.
                     if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                        atom_lines[i], lines().count(), frame_atoms[i], residues, parse_warnings ))
+                        atom_lines[i], lines().count(), frame_atoms[i], residues[iframe], parse_warnings ))
                             num_ters++;
                 }
             }
@@ -2118,6 +2134,12 @@ void PDB2::parseLines(const PropertyMap &map)
 
             // Clear the atom line index vector.
             atom_lines.clear();
+
+            // Append the residue map.
+            residues.append(frame_residues);
+
+            // Clear the frame residue map.
+            frame_residues.clear();
 
             // Append the connectivity map.
             connections.append(frame_connections);
@@ -2159,22 +2181,20 @@ bool PDB2::validateAtom(const PDBAtom &atom1, const PDBAtom &atom2)
 }
 
 /** Use the data contained in this parser to create a new System of molecules,
-    assigning properties based on the mapping in 'map' */
-System PDB2::startSystem(const PropertyMap &map) const
+    assigning properties based on the mapping in 'map', for the configuration
+    'iframe' (a trajectory index). */
+System PDB2::startSystem(int iframe, const PropertyMap &map) const
 {
     // For now we will assume that the PDB file contains a single molecule.
     // The system should contain a set of atoms, each belonging to a residue.
-    // There is currently no data structure (within the PDB object) representing
-    // a molecule.
 
-    // At the moment I'm not sure how multiple molecules are represented in a
-    // PDB file. A few forums seems to suggest that MODEL entries are used to
-    // define different molecules, although I thought that these were used for
-    // different representations of the same molecule, i.e. same number of atoms,
-    // etc., but different coordinates, such as two time entries from a trajectory.
+    // Once the molecule is constructed we can use connectivity information to
+    // break it into sub-molecules.
 
-    /*const int nmols = 1;
-    //const int nmols = mol_idxs.count();
+    // Potentially, we have multiple frames (models) each containing multiple molecules.
+    // Here 'iframe' indexes the trajectory.
+
+    const int nmols = 1;
 
     if (nmols == 0)
         return System();
@@ -2190,7 +2210,7 @@ System PDB2::startSystem(const PropertyMap &map) const
             // Create and populate all of the molecules.
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                mols_array[i] = this->getMolecule(i, mol_idxs[i].first, mol_idxs[i].second, map);
+                mols_array[i] = this->getMolecule(i, iframe, map);
             }
         });
     }
@@ -2198,7 +2218,7 @@ System PDB2::startSystem(const PropertyMap &map) const
     {
         for (int i=0; i<nmols; ++i)
         {
-            mols_array[i] = this->getMolecule(i, mol_idxs[i].first, mol_idxs[i].second, map);
+            mols_array[i] = this->getMolecule(i, iframe, map);
         }
     }
 
@@ -2209,13 +2229,20 @@ System PDB2::startSystem(const PropertyMap &map) const
         molgroup.add(mol);
     }
 
-    System system( this->title() );
-    system.add(molgroup);
-    system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));*/
-
+    //System system( this->title() );
     System system;
+    system.add(molgroup);
+    //system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
 
     return system;
+}
+
+/** Use the data contained in this parser to create a new System of molecules,
+    assigning properties based on the mapping in 'map'. */
+System PDB2::startSystem(const PropertyMap &map) const
+{
+    // Generate system for single model PDF files.
+    return startSystem(0, map);
 }
 
 /** Use the data contained in this parser to add information from the file to
@@ -2227,4 +2254,104 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
     //you should loop through each molecule in the system and work out
     //which ones are described in the file, and then add data from the file
     //to thise molecules.
+}
+
+/** Internal function used to get the molecule structure for molecule 'imol'
+    in the frame (model) 'iframe'. */
+MolStructureEditor PDB2::getMolStructure(int imol, int iframe, const PropertyName &cutting) const
+{
+    // Make sure the frame index is within range.
+    if ((iframe < 0) or (iframe > atoms.count()))
+    {
+        throw SireError::program_bug(QObject::tr("The frame index %1 is out of "
+            "range, 0 - %2").arg(iframe).arg(atoms.count()), CODELOC);
+    }
+
+    // Make sure that there are atoms in the molecule.
+    if (atoms[iframe].count() == 0)
+    {
+        throw SireError::program_bug(QObject::tr(
+            "Strange - there are no atoms in molecule %1 in frame %2?")
+                .arg(imol).arg(iframe), CODELOC);
+    }
+
+    // First step is to build the structure of the molecule, i.e.
+    // the layout of cutgroups, residues and atoms.
+    MolStructureEditor mol;
+
+    // To do this we'll walk through all of the residues in the frame,
+    // adding each atom contained within the residue.
+
+    // Residue index.
+    int ires = 0;
+
+    // Loop over all unique residues in the frame.
+    for (auto residue : residues[iframe].uniqueKeys())
+    {
+        // By default we will use one CutGroup per molecule - this
+        // may be changed later by the cutting system..
+        auto cutgroup = mol.add(CGName(QString::number(ires)));
+
+        // Get a list of the atoms that are part of the residue.
+        QList<qint64> res_atoms = residues[iframe].values(residue);
+
+        // Add each atom in the residue to the molecule.
+        for (auto res_atom : res_atoms)
+        {
+            auto atom = cutgroup.add( AtomNum(res_atom) );
+            atom.rename( AtomName(atoms[iframe][res_atom].getName().trimmed()) );
+            atom.reparent( ResNum(residue) );
+        }
+
+        ires++;
+    }
+
+    if (cutting.hasValue())
+    {
+        const CuttingFunction &cutfunc = cutting.value().asA<CuttingFunction>();
+
+        if (not cutfunc.isA<ResidueCutting>())
+        {
+            mol = cutfunc(mol);
+        }
+    }
+
+    return mol;
+}
+
+/** Internal function used to get the molecule structure for molecule 'imol'
+    in the frame (model) 'iframe'. */
+MolEditor PDB2::getMolecule(int imol, int iframe, const PropertyMap &map) const
+{
+    // At the moment we'll assume that there is a single molecule. Once the molecule
+    // is constructed we can use connectivity information to break it into sub-molecules.
+
+    // Make sure the frame index is within range.
+    if ((iframe < 0) or (iframe > atoms.count()))
+    {
+        throw SireError::program_bug(QObject::tr("The frame index %1 is out of "
+            "range, 0 - %2").arg(iframe).arg(atoms.count()), CODELOC);
+    }
+
+    // Make sure that there are atoms in the molecule.
+    if (atoms[iframe].count() == 0)
+    {
+        throw SireError::program_bug(QObject::tr(
+            "Strange - there are no atoms in molecule %1 in frame %2?")
+                .arg(imol).arg(iframe), CODELOC);
+    }
+
+    // First, construct the layout of the molecule (sorting of atoms into residues and cutgroups).
+    auto mol = this->getMolStructure(imol, iframe, map["cutting"]).commit().edit();
+
+    // Get the info object that can map between AtomNum to AtomIdx etc.
+    const auto molinfo = mol.info();
+
+    AtomCoords        coords(molinfo);
+    AtomCharges       charges(molinfo);
+    AtomElements      elements(molinfo);
+    AtomFloatProperty occupancies(molinfo);
+    AtomFloatProperty temperatures(molinfo);
+
+    return mol;
 }
