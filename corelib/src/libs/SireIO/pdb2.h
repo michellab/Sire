@@ -709,11 +709,14 @@ private:
     //* Title record data. */
     PDBTitle title;
 
-    //* Atom record data (possibly multiple frames) */
+    //* Atom record data (possibly multiple frames). */
     QVector<QVector<PDBAtom> > atoms;
 
-    //* Residue data */
+    //* Residue mapping. */
     QMultiMap<qint64, qint64> residues;
+
+    //* Connectivity data. */
+    QVector<QMultiMap<qint64, qint64> > connections;
 
     //* Helix record data. */
     QVector<PDBHelix> helices;

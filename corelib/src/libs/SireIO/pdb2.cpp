@@ -300,9 +300,9 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDB2 &pdb2)
 
     SharedDataStream sds(ds);
 
-    sds << pdb2.title << pdb2.atoms << pdb2.residues << pdb2.helices << pdb2.sheets
-        << pdb2.trans_orig << pdb2.trans_scale << pdb2.trans_matrix
-        << pdb2.master << pdb2.num_ters << pdb2.invalid_records
+    sds << pdb2.title << pdb2.atoms << pdb2.residues << pdb2.connections
+        << pdb2.helices << pdb2.sheets << pdb2.trans_orig << pdb2.trans_scale
+        << pdb2.trans_matrix << pdb2.master << pdb2.num_ters << pdb2.invalid_records
         << pdb2.parse_warnings;
 
     return ds;
@@ -316,9 +316,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB2 &pdb2)
     {
         SharedDataStream sds(ds);
 
-        sds >> pdb2.title >> pdb2.atoms >> pdb2.residues >> pdb2.helices >> pdb2.sheets
-            >> pdb2.trans_orig << pdb2.trans_scale << pdb2.trans_matrix
-            >> pdb2.master << pdb2.num_ters >> pdb2.invalid_records
+        sds >> pdb2.title >> pdb2.atoms >> pdb2.residues >> pdb2.connections
+            >> pdb2.helices >> pdb2.sheets >> pdb2.trans_orig << pdb2.trans_scale
+            >> pdb2.trans_matrix >> pdb2.master >> pdb2.num_ters >> pdb2.invalid_records
             >> pdb2.parse_warnings;
     }
     else
@@ -369,17 +369,14 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors)
     bool ok;
     int tmp_int = line.midRef(6,5).toInt(&ok);
 
-    if (ok)
-    {
-        serial = tmp_int;
-    }
-    else
+    if (not ok)
     {
         errors.append(QObject::tr("Cannot extract the atom serial number "
             "from part (%1) from line '%2'").arg(line.mid(6,5)).arg(line));
 
         return;
     }
+    serial = tmp_int;
 
     // Extract the atom name.
     // Somewhere we'll test this against a list of valid names.
@@ -397,17 +394,14 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors)
     // Extract the residue sequence number.
     tmp_int = line.midRef(22,4).toInt(&ok);
 
-    if (ok)
-    {
-        res_num = tmp_int;
-    }
-    else
+    if (not ok)
     {
         errors.append(QObject::tr("Cannot extract the residue sequence number "
             "from part (%1) from line '%2'").arg(line.mid(22,4)).arg(line));
 
         return;
     }
+    res_num = tmp_int;
 
     // Extract the residue insertion code.
     insert_code = line[26];
@@ -1830,6 +1824,9 @@ void PDB2::parseLines(const PropertyMap &map)
     // For each frame we identify the lines containing atom data, then parse them.
     QVector<int> atom_lines;
 
+    // The connectivity map for the frame.
+    QMultiMap<qint64, qint64> frame_connections;
+
     // Internal function used to parse a single atom line in the file.
     auto parse_atoms = [&](const QString &line, int iatm, int iframe, int iline,
         int num_lines, PDBAtom &frame_atom, QMultiMap<qint64, qint64> &local_residues, QStringList &errors)
@@ -2022,6 +2019,45 @@ void PDB2::parseLines(const PropertyMap &map)
             has_master = true;
         }
 
+        // CONECT record.
+        else if (record == "CONECT")
+        {
+            // There are a maximum of four bonds per line. If there are more
+            // than four bonds per atom then a second CONECT entry can be used.
+
+            // It could be hard to check for errors, since we don't know how many
+            // bonds each atom should have. However, the connectivity information
+            // is redundant, i.e. each bond entry appears twice, so we can validate
+            // by constructing an adjacency matrix afterwards and ensuring that it
+            // is symmetric.
+
+            // First extract the atom serial number.
+            bool ok;
+            int atom = lines()[iline].midRef(6,5).toInt(&ok);
+
+            if (not ok)
+            {
+                parse_warnings.append(QObject::tr("Cannot extract the atom serial number "
+                    "from part (%1) from line '%2'")
+                    .arg(lines()[iline].mid(6,5)).arg(lines()[iline]));
+
+                return;
+            }
+
+            // Loop over all possible bond records.
+            for (int i=0; i<4; ++i)
+            {
+                bool ok;
+                int bond = lines()[iline].midRef(11 + 5*i, 5).toInt(&ok);
+
+                // Add the bond to the connectivity map.
+                if (ok)
+                {
+                    frame_connections.insert(atom, bond);
+                }
+            }
+        }
+
         // Invalid record
         else
         {
@@ -2048,6 +2084,7 @@ void PDB2::parseLines(const PropertyMap &map)
                 tbb::parallel_for( tbb::blocked_range<int>(0,nats),
                                 [&](const tbb::blocked_range<int> &r)
                 {
+                    qint64 local_num_ters = 0;
                     QStringList local_errors;
                     QMultiMap<qint64, qint64> local_residues;
 
@@ -2056,17 +2093,13 @@ void PDB2::parseLines(const PropertyMap &map)
                         // Parse the atom record and determine whether it is a terminal record.
                         if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
                             atom_lines[i], lines().count(), frame_atoms[i], local_residues, local_errors ))
-                                num_ters++;
-                    }
-
-                    if (not local_errors.isEmpty())
-                    {
-                        QMutexLocker lkr(&mutex);
-                        parse_warnings += local_errors;
+                                local_num_ters++;
                     }
 
                     QMutexLocker lkr(&mutex);
+                    num_ters += local_num_ters;
                     residues += local_residues;
+                    parse_warnings += local_errors;
                 });
             }
             else
@@ -2086,10 +2119,26 @@ void PDB2::parseLines(const PropertyMap &map)
             // Clear the atom line index vector.
             atom_lines.clear();
 
+            // Append the connectivity map.
+            connections.append(frame_connections);
+
+            // Clear the frame connectivity map.
+            frame_connections.clear();
+
             iframe++;
             nats = 0;
         }
     }
+
+    /*for (auto atom : connections[0].uniqueKeys())
+    {
+        std::cout << atom << ": ";
+        QList<qint64> bonds = connections[0].values(atom);
+        for (int i = 0; i < bonds.size(); ++i)
+                std::cout << ' ' << bonds.at(i);
+        std::cout << '\n';
+        std::cin.get();
+    }*/
 
     this->setScore(nats);
 }
@@ -2118,7 +2167,7 @@ System PDB2::startSystem(const PropertyMap &map) const
     // There is currently no data structure (within the PDB object) representing
     // a molecule.
 
-    // At the moment I'm not sure how multiple molecules are represented into a
+    // At the moment I'm not sure how multiple molecules are represented in a
     // PDB file. A few forums seems to suggest that MODEL entries are used to
     // define different molecules, although I thought that these were used for
     // different representations of the same molecule, i.e. same number of atoms,
