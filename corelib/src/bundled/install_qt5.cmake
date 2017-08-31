@@ -12,7 +12,19 @@ else()
   # First, try to find the QtCore library in the "bundled" directory. If it exists,
   # then we don't need to do anything
   set( Qt5Core_DIR "${BUNDLE_STAGEDIR}/lib/cmake/Qt5Core" )
+  set( Qt5_DIR "${BUNDLE_STAGEDIR}/lib/cmake/Qt5Core" )
+  set( Test_Qt5Core_DIR "${BUNDLE_STAGEDIR}/lib/cmake/Qt5Core" )
   find_package( Qt5Core QUIET )
+  if ( ${Qt5Core_DIR} STREQUAL ${Test_Qt5Core_DIR} )
+      message( STATUS "Definitely using bundled Qt5" )
+  else()
+      message( STATUS "Qt5Core_DIR = ${Qt5Core_DIR}" )
+      message( STATUS "Test_Qt5Core_DIR = ${Test_Qt5Core_DIR}" )
+      message( STATUS "CMake has changed the value of Qt5Core_DIR behind our back!" )
+      message( STATUS "We're going to go ahead and build it anyway!" )
+      set( Qt5Core_DIR "${Test_Qt5Core_DIR}" )
+      set( Qt5Core_FOUND 0 )
+  endif()
 
   set ( NEED_BUILD_QT TRUE )
 

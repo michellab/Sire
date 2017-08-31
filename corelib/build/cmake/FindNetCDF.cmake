@@ -17,10 +17,15 @@ endif()
 
 file(TO_CMAKE_PATH "$ENV{NetCDF_ROOT_DIR}" _env_NEFCDF_ROOT_DIR)
 
+message( STATUS "Looking for NetCDF in ${NetCDF_ROOT_DIR}" )
+
 find_library(NetCDF_LIBRARIES
     NAMES netcdf
     PATHS "${NetCDF_ROOT_DIR}/lib"
-    CACHE STRING "NetCDF libraries")
+    CACHE STRING "NetCDF libraries"
+    NO_CMAKE_SYSTEM_PATH)
+
+message( STATUS "Found it in ${NetCDF_LIBRARIES}" )
 
 get_filename_component(NetCDF_LIBRARY_DIR 
     ${NetCDF_LIBRARIES} 
@@ -30,7 +35,8 @@ get_filename_component(NetCDF_LIBRARY_DIR
 find_path(NetCDF_INCLUDE_DIR 
     NAMES netcdf.h 
     PATHS "${NetCDF_ROOT_DIR}/include" "${NetCDF_LIBRARY_DIR}/../include"
-    CACHE STRING "NetCDF include directory")    
+    CACHE STRING "NetCDF include directory"
+    NO_CMAKE_SYSTEM_PATH)    
 
 # if we did not manage to set the root dir at the beginning but found the 
 # libs then set the ${NetCDF_LIBRARY_DIR}/.. as root

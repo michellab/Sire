@@ -3,6 +3,19 @@ SIRE changelog
 
 devel branch:
 
+    [2017.2.0] September 2017 - The MoleculeParser framework has 
+               been created to support reading and writing of molecules 
+               in lots of different formats. The first set of formats 
+               that have been completed are Amber Prmtop, Amber Rst7 
+               and Amber Rst/Trj. The parsers work in parallel, with 
+               file formats automatically detected by the parser, 
+               e.g. system = MoleculeParser.read( "file.prm", "file.rst" ) 
+               will automatically do the right thing.
+
+               Improved automatic compilation on Arch linux. 
+
+               Fixed temperature checking and general bugfixing for mbar code.
+
     [2017.1.0] April 20 2017 - First 2017 release. Included new
             parallel MoleculeParser code for reading molecules,
             and moved fully over to C++-14 style coding for new code.
