@@ -384,7 +384,6 @@ QString OpenMMMDIntegrator::toString() const
 
 void OpenMMMDIntegrator::initialise()
 {
-    qDebug()<<CODELOC;
     bool Debug = false;
 
     if (Debug)
