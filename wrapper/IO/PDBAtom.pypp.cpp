@@ -63,6 +63,50 @@ void register_PDBAtom_class(){
                 , "Get the chain id." );
         
         }
+        { //::SireIO::PDBAtom::getCharge
+        
+            typedef ::qint64 ( ::SireIO::PDBAtom::*getCharge_function_type)(  ) const;
+            getCharge_function_type getCharge_function_value( &::SireIO::PDBAtom::getCharge );
+            
+            PDBAtom_exposer.def( 
+                "getCharge"
+                , getCharge_function_value
+                , "Get the charge on the atom." );
+        
+        }
+        { //::SireIO::PDBAtom::getCoord
+        
+            typedef ::SireMaths::Vector ( ::SireIO::PDBAtom::*getCoord_function_type)(  ) const;
+            getCoord_function_type getCoord_function_value( &::SireIO::PDBAtom::getCoord );
+            
+            PDBAtom_exposer.def( 
+                "getCoord"
+                , getCoord_function_value
+                , "Get the atom coordinates." );
+        
+        }
+        { //::SireIO::PDBAtom::getElement
+        
+            typedef ::QString ( ::SireIO::PDBAtom::*getElement_function_type)(  ) const;
+            getElement_function_type getElement_function_value( &::SireIO::PDBAtom::getElement );
+            
+            PDBAtom_exposer.def( 
+                "getElement"
+                , getElement_function_value
+                , "Get the element symbol." );
+        
+        }
+        { //::SireIO::PDBAtom::getMolIndex
+        
+            typedef ::SireMol::AtomIdx ( ::SireIO::PDBAtom::*getMolIndex_function_type)(  ) const;
+            getMolIndex_function_type getMolIndex_function_value( &::SireIO::PDBAtom::getMolIndex );
+            
+            PDBAtom_exposer.def( 
+                "getMolIndex"
+                , getMolIndex_function_value
+                , "Get the index of the atom within the molecule." );
+        
+        }
         { //::SireIO::PDBAtom::getName
         
             typedef ::QString ( ::SireIO::PDBAtom::*getName_function_type)(  ) const;
@@ -72,6 +116,17 @@ void register_PDBAtom_class(){
                 "getName"
                 , getName_function_value
                 , "Get the atom name." );
+        
+        }
+        { //::SireIO::PDBAtom::getOccupancy
+        
+            typedef double ( ::SireIO::PDBAtom::*getOccupancy_function_type)(  ) const;
+            getOccupancy_function_type getOccupancy_function_value( &::SireIO::PDBAtom::getOccupancy );
+            
+            PDBAtom_exposer.def( 
+                "getOccupancy"
+                , getOccupancy_function_value
+                , "Get the occupancy." );
         
         }
         { //::SireIO::PDBAtom::getResName
@@ -107,6 +162,17 @@ void register_PDBAtom_class(){
                 , "Get the atom serial number." );
         
         }
+        { //::SireIO::PDBAtom::getTemperature
+        
+            typedef double ( ::SireIO::PDBAtom::*getTemperature_function_type)(  ) const;
+            getTemperature_function_type getTemperature_function_value( &::SireIO::PDBAtom::getTemperature );
+            
+            PDBAtom_exposer.def( 
+                "getTemperature"
+                , getTemperature_function_value
+                , "Get the atom temperature factor." );
+        
+        }
         { //::SireIO::PDBAtom::isTer
         
             typedef bool ( ::SireIO::PDBAtom::*isTer_function_type)(  ) const;
@@ -128,6 +194,18 @@ void register_PDBAtom_class(){
                 , setAnisTemp_function_value
                 , ( bp::arg("line1"), bp::arg("line2"), bp::arg("errors") )
                 , "Set anisotropic temperature record data." );
+        
+        }
+        { //::SireIO::PDBAtom::setMolIndex
+        
+            typedef void ( ::SireIO::PDBAtom::*setMolIndex_function_type)( ::SireMol::AtomIdx ) ;
+            setMolIndex_function_type setMolIndex_function_value( &::SireIO::PDBAtom::setMolIndex );
+            
+            PDBAtom_exposer.def( 
+                "setMolIndex"
+                , setMolIndex_function_value
+                , ( bp::arg("index") )
+                , "Set the index of the atom within the molecule." );
         
         }
         { //::SireIO::PDBAtom::setTerminal

@@ -49,12 +49,15 @@
 #include "SireMol/atomelements.h"
 #include "SireMol/atomcoords.h"
 
+#include "SireUnits/units.h"
+
 using namespace SireIO;
 using namespace SireMM;
 using namespace SireMol;
 using namespace SireBase;
 using namespace SireSystem;
 using namespace SireStream;
+using namespace SireUnits;
 
 const RegisterParser<PDB2> register_pdb;
 static const RegisterMetaType<PDB2> r_pdb2;
@@ -77,7 +80,8 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBAtom &pdbatom)
         << pdbatom.coord << pdbatom.occupancy << pdbatom.temperature << pdbatom.element
         << pdbatom.charge << pdbatom.is_het << pdbatom.is_ter << pdbatom.is_anis
         << pdbatom.anis_facts[0] << pdbatom.anis_facts[1] << pdbatom.anis_facts[2]
-        << pdbatom.anis_facts[3] << pdbatom.anis_facts[4] << pdbatom.anis_facts[5];
+        << pdbatom.anis_facts[3] << pdbatom.anis_facts[4] << pdbatom.anis_facts[5]
+        << pdbatom.mol_index;
 
     return ds;
 }
@@ -95,7 +99,8 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBAtom &pdbatom)
             >> pdbatom.coord >> pdbatom.occupancy >> pdbatom.temperature >> pdbatom.element
             >> pdbatom.charge >> pdbatom.is_het >> pdbatom.is_ter >> pdbatom.is_anis
             >> pdbatom.anis_facts[0] >> pdbatom.anis_facts[1] >> pdbatom.anis_facts[2]
-            >> pdbatom.anis_facts[3] >> pdbatom.anis_facts[4] >> pdbatom.anis_facts[5];
+            >> pdbatom.anis_facts[3] >> pdbatom.anis_facts[4] >> pdbatom.anis_facts[5]
+            >> pdbatom.mol_index;
     }
     else
         throw version_error(v, "1", r_pdbatom, CODELOC);
@@ -337,7 +342,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB2 &pdb2)
 /** Default constructor. */
 PDBAtom::PDBAtom() : occupancy(1.0),
                      element("X"),
-                     charge("0"),
+                     charge(0),
                      is_het(false),
                      is_ter(false),
                      is_anis(false)
@@ -355,7 +360,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors)
                     : record(line),
                       occupancy(1.0),
                       element("X"),
-                      charge("0"),
+                      charge(0),
                       is_het(false),
                       is_ter(false),
                       is_anis(false)
@@ -467,7 +472,20 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors)
     element = line.mid(76,2);
 
     // Extract the charge on the atom.
-    charge = line.mid(78,2);
+    QString chargeString = line.mid(78,2);
+
+    // Format should be 2+ or 1- or something like that.
+    int factor = 1;
+
+    if (chargeString.contains("-"))
+        factor = -1;
+
+    chargeString.remove("-").remove("+");
+    charge = factor * chargeString.toInt(&ok);
+
+    // Something went wrong - ignore the charge.
+    if (not ok)
+        charge = 0;
 }
 
 /** Set the terminal atom flag.
@@ -560,6 +578,48 @@ QString PDBAtom::getChainId() const
 qint64 PDBAtom::getResNum() const
 {
     return res_num;
+}
+
+/** Get the residue sequence number. */
+SireMaths::Vector PDBAtom::getCoord() const
+{
+    return coord;
+}
+
+/** Get the occupancy. */
+double PDBAtom::getOccupancy() const
+{
+    return occupancy;
+}
+
+/** Get the temperature factor. */
+double PDBAtom::getTemperature() const
+{
+    return temperature;
+}
+
+/** Get the element symbol. */
+QString PDBAtom::getElement() const
+{
+    return element;
+}
+
+/** Get the charge on the atom. */
+qint64 PDBAtom::getCharge() const
+{
+    return charge;
+}
+
+/** Get the index of the atom within the molecule. */
+SireMol::AtomIdx PDBAtom::getMolIndex() const
+{
+    return mol_index;
+}
+
+/** Set the index of the atom within the molecule. */
+void PDBAtom::setMolIndex(SireMol::AtomIdx index)
+{
+    mol_index = index;
 }
 
 /** Return the C++ name for this class */
@@ -1838,14 +1898,14 @@ void PDB2::parseLines(const PropertyMap &map)
     QVector<int> atom_lines;
 
     // The residue map for the frame.
-    QMultiMap<qint64, qint64> frame_residues;
+    QMultiMap<QPair<qint64, QString>, qint64> frame_residues;
 
     // The connectivity map for the frame.
     QMultiMap<qint64, qint64> frame_connections;
 
     // Internal function used to parse a single atom line in the file.
-    auto parse_atoms = [&](const QString &line, int iatm, int iframe, int iline,
-        int num_lines, PDBAtom &frame_atom, QMultiMap<qint64, qint64> &local_residues, QStringList &errors)
+    auto parse_atoms = [&](const QString &line, int iatm, int iframe, int iline, int num_lines,
+        PDBAtom &frame_atom, QMultiMap<QPair<qint64, QString>, qint64> &local_residues, QStringList &errors)
     {
         // Populate atom data.
         frame_atom = PDBAtom(line, errors);
@@ -1888,8 +1948,11 @@ void PDB2::parseLines(const PropertyMap &map)
 
         }
 
-        // Update the residue multi-map (residue number --> atom index).
-        local_residues.insert(frame_atom.getResNum(), frame_atom.getSerial());
+        // Create residue number / name pair.
+        QPair<qint64, QString> res(frame_atom.getResNum(), frame_atom.getResName());
+
+        // Update the residue multi-map (residue number / name --> atom index).
+        local_residues.insert(res, frame_atom.getSerial());
 
         return frame_atom.isTer();
     };
@@ -1897,6 +1960,9 @@ void PDB2::parseLines(const PropertyMap &map)
     // Loop through all lines in the file.
     for (int iline=0; iline<lines().count(); ++iline)
     {
+        // Store a reference to the line.
+        const QString &line = lines()[iline];
+
         // Whether to parse atom data at the end of the current loop.
         bool isParse = false;
 
@@ -1910,22 +1976,22 @@ void PDB2::parseLines(const PropertyMap &map)
         QString record = lines()[iline].left(6);
 
         // Parse TITLE section records.
-        if      (record == "HEADER") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::HEADER, parse_warnings);
-        else if (record == "OBSLTE") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::OBSLTE, parse_warnings);
-        else if (record == "TITLE ") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::TITLE,  parse_warnings);
-        else if (record == "SPLIT ") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::SPLIT,  parse_warnings);
-        else if (record == "CAVEAT") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::CAVEAT, parse_warnings);
-        else if (record == "COMPND") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::COMPND, parse_warnings);
-        else if (record == "SOURCE") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::SOURCE, parse_warnings);
-        else if (record == "KEYWDS") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::KEYWDS, parse_warnings);
-        else if (record == "EXPDTA") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::EXPDTA, parse_warnings);
-        else if (record == "MDLTYP") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::MDLTYP, parse_warnings);
-        else if (record == "AUTHOR") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::AUTHOR, parse_warnings);
-        else if (record == "REVDAT") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::REVDAT, parse_warnings);
-        else if (record == "SPRSDE") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::SPRSDE, parse_warnings);
-        else if (record == "JRNL  ") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::JRNL,   parse_warnings);
-        else if (record == "REMARK") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::REMARK, parse_warnings);
-        else if (record == "NUMMDL") title.appendRecord(lines()[iline], PDBTitle::RECORD_TYPE::NUMMDL, parse_warnings);
+        if      (record == "HEADER") title.appendRecord(line, PDBTitle::RECORD_TYPE::HEADER, parse_warnings);
+        else if (record == "OBSLTE") title.appendRecord(line, PDBTitle::RECORD_TYPE::OBSLTE, parse_warnings);
+        else if (record == "TITLE ") title.appendRecord(line, PDBTitle::RECORD_TYPE::TITLE,  parse_warnings);
+        else if (record == "SPLIT ") title.appendRecord(line, PDBTitle::RECORD_TYPE::SPLIT,  parse_warnings);
+        else if (record == "CAVEAT") title.appendRecord(line, PDBTitle::RECORD_TYPE::CAVEAT, parse_warnings);
+        else if (record == "COMPND") title.appendRecord(line, PDBTitle::RECORD_TYPE::COMPND, parse_warnings);
+        else if (record == "SOURCE") title.appendRecord(line, PDBTitle::RECORD_TYPE::SOURCE, parse_warnings);
+        else if (record == "KEYWDS") title.appendRecord(line, PDBTitle::RECORD_TYPE::KEYWDS, parse_warnings);
+        else if (record == "EXPDTA") title.appendRecord(line, PDBTitle::RECORD_TYPE::EXPDTA, parse_warnings);
+        else if (record == "MDLTYP") title.appendRecord(line, PDBTitle::RECORD_TYPE::MDLTYP, parse_warnings);
+        else if (record == "AUTHOR") title.appendRecord(line, PDBTitle::RECORD_TYPE::AUTHOR, parse_warnings);
+        else if (record == "REVDAT") title.appendRecord(line, PDBTitle::RECORD_TYPE::REVDAT, parse_warnings);
+        else if (record == "SPRSDE") title.appendRecord(line, PDBTitle::RECORD_TYPE::SPRSDE, parse_warnings);
+        else if (record == "JRNL  ") title.appendRecord(line, PDBTitle::RECORD_TYPE::JRNL,   parse_warnings);
+        else if (record == "REMARK") title.appendRecord(line, PDBTitle::RECORD_TYPE::REMARK, parse_warnings);
+        else if (record == "NUMMDL") title.appendRecord(line, PDBTitle::RECORD_TYPE::NUMMDL, parse_warnings);
 
         // Start of a MODEL record.
         // These are used to define an atom configuratation, so can be used as
@@ -1936,7 +2002,7 @@ void PDB2::parseLines(const PropertyMap &map)
             imdl++;
 
             // Extract the model entry number.
-            int nmod = lines()[iline].midRef(10,4).toInt();
+            int nmod = line.midRef(10,4).toInt();
 
             // Check that the model entry number is correct.
             // These must be in ascending order, starting at 1.
@@ -1986,7 +2052,7 @@ void PDB2::parseLines(const PropertyMap &map)
         else if (record == "HELIX ")
         {
             // Create a helix object.
-            PDBHelix helix(lines().constData()[iline], parse_warnings);
+            PDBHelix helix(line, parse_warnings);
 
             // Append the helix.
             helices.append(helix);
@@ -2000,7 +2066,7 @@ void PDB2::parseLines(const PropertyMap &map)
         else if (record == "SHEET ")
         {
             // Create a sheet object.
-            PDBSheet sheet(lines().constData()[iline], parse_warnings);
+            PDBSheet sheet(line, parse_warnings);
 
             // Append the sheet.
             sheets.append(sheet);
@@ -2010,28 +2076,28 @@ void PDB2::parseLines(const PropertyMap &map)
         else if (record == "CRYST1")
         {
             // Create the crystallographic data object.
-            crystal = PDBCrystal(lines().constData()[iline], parse_warnings);
+            crystal = PDBCrystal(line, parse_warnings);
         }
 
         // ORIGXn transformation records.
-        else if (record == "ORIGX1") trans_orig.appendRecord(lines()[iline], 0, false, parse_warnings);
-        else if (record == "ORIGX2") trans_orig.appendRecord(lines()[iline], 1, false, parse_warnings);
-        else if (record == "ORIGX3") trans_orig.appendRecord(lines()[iline], 2, false, parse_warnings);
+        else if (record == "ORIGX1") trans_orig.appendRecord(line, 0, false, parse_warnings);
+        else if (record == "ORIGX2") trans_orig.appendRecord(line, 1, false, parse_warnings);
+        else if (record == "ORIGX3") trans_orig.appendRecord(line, 2, false, parse_warnings);
 
         // SCALEn transformation records.
-        else if (record == "SCALE1") trans_scale.appendRecord(lines()[iline], 0, false, parse_warnings);
-        else if (record == "SCALE2") trans_scale.appendRecord(lines()[iline], 1, false, parse_warnings);
-        else if (record == "SCALE3") trans_scale.appendRecord(lines()[iline], 2, false, parse_warnings);
+        else if (record == "SCALE1") trans_scale.appendRecord(line, 0, false, parse_warnings);
+        else if (record == "SCALE2") trans_scale.appendRecord(line, 1, false, parse_warnings);
+        else if (record == "SCALE3") trans_scale.appendRecord(line, 2, false, parse_warnings);
 
         // MTRIXn transformation records.
-        else if (record == "MTRIX1") trans_matrix.appendRecord(lines()[iline], 0, true, parse_warnings);
-        else if (record == "MTRIX2") trans_matrix.appendRecord(lines()[iline], 1, true, parse_warnings);
-        else if (record == "MTRIX3") trans_matrix.appendRecord(lines()[iline], 2, true, parse_warnings);
+        else if (record == "MTRIX1") trans_matrix.appendRecord(line, 0, true, parse_warnings);
+        else if (record == "MTRIX2") trans_matrix.appendRecord(line, 1, true, parse_warnings);
+        else if (record == "MTRIX3") trans_matrix.appendRecord(line, 2, true, parse_warnings);
 
         // MASTER record.
         else if (record == "MASTER")
         {
-            master = PDBMaster(lines()[iline], parse_warnings);
+            master = PDBMaster(line, parse_warnings);
             has_master = true;
         }
 
@@ -2049,13 +2115,13 @@ void PDB2::parseLines(const PropertyMap &map)
 
             // First extract the atom serial number.
             bool ok;
-            int atom = lines()[iline].midRef(6,5).toInt(&ok);
+            int atom = line.midRef(6,5).toInt(&ok);
 
             if (not ok)
             {
                 parse_warnings.append(QObject::tr("Cannot extract the atom serial number "
                     "from part (%1) from line '%2'")
-                    .arg(lines()[iline].mid(6,5)).arg(lines()[iline]));
+                    .arg(line.mid(6,5)).arg(line));
 
                 return;
             }
@@ -2064,7 +2130,7 @@ void PDB2::parseLines(const PropertyMap &map)
             for (int i=0; i<4; ++i)
             {
                 bool ok;
-                int bond = lines()[iline].midRef(11 + 5*i, 5).toInt(&ok);
+                int bond = line.midRef(11 + 5*i, 5).toInt(&ok);
 
                 // Add the bond to the connectivity map.
                 if (ok)
@@ -2078,9 +2144,9 @@ void PDB2::parseLines(const PropertyMap &map)
         else
         {
             parse_warnings.append(QObject::tr("Invalid PDB record found on "
-                "line %1: '%2'").arg(iline).arg(lines()[iline]));
+                "line %1: '%2'").arg(iline).arg(line));
 
-            invalid_records[iline] = lines()[iline];
+            invalid_records[iline] = line;
         }
 
         // End of the file.
@@ -2102,7 +2168,7 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     qint64 local_num_ters = 0;
                     QStringList local_errors;
-                    QMultiMap<qint64, qint64> local_residues;
+                    QMultiMap<QPair<qint64, QString>, qint64> local_residues;
 
                     for (int i=r.begin(); i<r.end(); ++i)
                     {
@@ -2166,7 +2232,7 @@ void PDB2::parseLines(const PropertyMap &map)
 }
 
 /** Helper function used to validate atom data from different model records */
-bool PDB2::validateAtom(const PDBAtom &atom1, const PDBAtom &atom2)
+bool PDB2::validateAtom(const PDBAtom &atom1, const PDBAtom &atom2) const
 {
     // Different models are typically indexed by atom number, e.g.
     // 1 - nats, nats+1 - 2*nats, ..., or by using the alternate location
@@ -2183,7 +2249,7 @@ bool PDB2::validateAtom(const PDBAtom &atom1, const PDBAtom &atom2)
 /** Use the data contained in this parser to create a new System of molecules,
     assigning properties based on the mapping in 'map', for the configuration
     'iframe' (a trajectory index). */
-System PDB2::startSystem(int iframe, const PropertyMap &map) const
+System PDB2::startSystem(int iframe, const PropertyMap &map)
 {
     // For now we will assume that the PDB file contains a single molecule.
     // The system should contain a set of atoms, each belonging to a residue.
@@ -2239,7 +2305,7 @@ System PDB2::startSystem(int iframe, const PropertyMap &map) const
 
 /** Use the data contained in this parser to create a new System of molecules,
     assigning properties based on the mapping in 'map'. */
-System PDB2::startSystem(const PropertyMap &map) const
+System PDB2::startSystem(const PropertyMap &map)
 {
     // Generate system for single model PDF files.
     return startSystem(0, map);
@@ -2258,7 +2324,8 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
 
 /** Internal function used to get the molecule structure for molecule 'imol'
     in the frame (model) 'iframe'. */
-MolStructureEditor PDB2::getMolStructure(int imol, int iframe, const PropertyName &cutting) const
+MolStructureEditor PDB2::getMolStructure(int imol,
+    int iframe, const PropertyName &cutting)
 {
     // Make sure the frame index is within range.
     if ((iframe < 0) or (iframe > atoms.count()))
@@ -2288,19 +2355,31 @@ MolStructureEditor PDB2::getMolStructure(int imol, int iframe, const PropertyNam
     // Loop over all unique residues in the frame.
     for (auto residue : residues[iframe].uniqueKeys())
     {
-        // By default we will use one CutGroup per molecule - this
-        // may be changed later by the cutting system..
+        // Extract the residue number and name.
+        auto res_num  = residue.first;
+        auto res_name = residue.second;
+
+        // By default we will use one CutGroup per molecule.
+        // This may be changed later by the cutting system.
         auto cutgroup = mol.add(CGName(QString::number(ires)));
 
         // Get a list of the atoms that are part of the residue.
         QList<qint64> res_atoms = residues[iframe].values(residue);
 
+        // Add the residue to the molecule.
+        auto res = mol.add(ResNum(res_num));
+        res.rename(ResName(res_name.trimmed()));
+
         // Add each atom in the residue to the molecule.
         for (auto res_atom : res_atoms)
         {
-            auto atom = cutgroup.add( AtomNum(res_atom) );
-            atom.rename( AtomName(atoms[iframe][res_atom].getName().trimmed()) );
-            atom.reparent( ResNum(residue) );
+            auto atom = cutgroup.add(AtomNum(res_atom));
+            atom.rename(AtomName(atoms[iframe][res_atom].getName().trimmed()));
+            atom.reparent(ResNum(res_num));
+
+            // Set the molecule index. This allows us to cross-reference
+            // atoms in the vector with those in the molecule.
+            atoms[iframe][res_atom].setMolIndex(atom.index());
         }
 
         ires++;
@@ -2321,7 +2400,7 @@ MolStructureEditor PDB2::getMolStructure(int imol, int iframe, const PropertyNam
 
 /** Internal function used to get the molecule structure for molecule 'imol'
     in the frame (model) 'iframe'. */
-MolEditor PDB2::getMolecule(int imol, int iframe, const PropertyMap &map) const
+MolEditor PDB2::getMolecule(int imol, int iframe, const PropertyMap &map)
 {
     // At the moment we'll assume that there is a single molecule. Once the molecule
     // is constructed we can use connectivity information to break it into sub-molecules.
@@ -2333,7 +2412,7 @@ MolEditor PDB2::getMolecule(int imol, int iframe, const PropertyMap &map) const
             "range, 0 - %2").arg(iframe).arg(atoms.count()), CODELOC);
     }
 
-    // Make sure that there are atoms in the molecule.
+    // Make sure that there are atoms in the frame.
     if (atoms[iframe].count() == 0)
     {
         throw SireError::program_bug(QObject::tr(
@@ -2347,11 +2426,34 @@ MolEditor PDB2::getMolecule(int imol, int iframe, const PropertyMap &map) const
     // Get the info object that can map between AtomNum to AtomIdx etc.
     const auto molinfo = mol.info();
 
+    // Instantiate the atom property objects that we need.
     AtomCoords        coords(molinfo);
     AtomCharges       charges(molinfo);
     AtomElements      elements(molinfo);
     AtomFloatProperty occupancies(molinfo);
     AtomFloatProperty temperatures(molinfo);
 
-    return mol;
+    // Now loop through the atoms in the molecule and set each property.
+    for (int i=0; i<nAtoms(); ++i)
+    {
+        // Store a reference to the current atom.
+        const PDBAtom &atom = atoms[iframe][i];
+
+        // Determine the CGAtomIdx for this atom.
+        auto cgatomidx = molinfo.cgAtomIdx(atom.getMolIndex());
+
+        // Set the properties.
+        coords.set(cgatomidx, atom.getCoord());
+        charges.set(cgatomidx, int(atom.getCharge()) * SireUnits::mod_electron);
+        elements.set(cgatomidx, atom.getElement());
+        occupancies.set(cgatomidx, atom.getOccupancy());
+        temperatures.set(cgatomidx, atom.getTemperature());
+    }
+
+    return mol.setProperty(map["coordinates"], coords)
+              .setProperty(map["charges"], charges)
+              .setProperty(map["elements"], elements)
+              .setProperty(map["occupancies"], occupancies)
+              .setProperty(map["temperatures"], temperatures)
+              .commit();
 }

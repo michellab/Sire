@@ -33,6 +33,8 @@
 
 #include "SireMaths/vector.h"
 
+#include "SireMol/atomidx.h"
+
 SIRE_BEGIN_HEADER
 
 namespace SireIO
@@ -124,11 +126,32 @@ public:
     /** Get the residue sequence number. */
     qint64 getResNum() const;
 
+    /** Get the atom coordinates. */
+    SireMaths::Vector getCoord() const;
+
+    /** Get the occupancy. */
+    double getOccupancy() const;
+
+    /** Get the atom temperature factor. */
+    double getTemperature() const;
+
+    /** Get the element symbol. */
+    QString getElement() const;
+
+    /** Get the charge on the atom. */
+    qint64 getCharge() const;
+
     /** Whether this is a terminal atom. */
     bool isTer() const;
 
     /** Set anisotropic temperature record data. */
     void setAnisTemp(const QString &line1, const QString &line2, QStringList& errors);
+
+    /** Get the index of the atom within the molecule. */
+    SireMol::AtomIdx getMolIndex() const;
+
+    /** Set the index of the atom within the molecule. */
+    void setMolIndex(SireMol::AtomIdx index);
 
 private:
     /** The original PDB record used to instantiate the atom. */
@@ -168,7 +191,7 @@ private:
     QString element;
 
     /** Charge on the atom. */
-    QString charge;
+    qint64 charge;
 
     /** Whether the atom is recorded as a HETAM entry. */
     bool is_het;
@@ -181,6 +204,9 @@ private:
 
     /** Anisotropic temperature factors. */
     qint64 anis_facts[6];
+
+    /** The index of the atom within the molecule. */
+    SireMol::AtomIdx mol_index;
 };
 
 /** This class provides functionality for reading/writing
@@ -705,22 +731,22 @@ public:
     QMap<qint64, QString> getInvalidRecords() const;
 
 protected:
-    SireSystem::System startSystem(int iframe, const PropertyMap &map) const;
-    SireSystem::System startSystem(const PropertyMap &map) const;
+    SireSystem::System startSystem(int iframe, const PropertyMap &map);
+    SireSystem::System startSystem(const PropertyMap &map);
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
 private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
 
-    SireMol::MolStructureEditor getMolStructure(int imol, int iframe,
-        const SireBase::PropertyName &cutting) const;
+    SireMol::MolStructureEditor getMolStructure(int imol,
+        int iframe, const SireBase::PropertyName &cutting);
 
     SireMol::MolEditor getMolecule(int imol, int iframe,
-        const PropertyMap &map = PropertyMap()) const;
+        const PropertyMap &map = PropertyMap());
 
     /** Validate that the two atoms are the same (other than position). */
-    bool validateAtom(const PDBAtom &atom1, const PDBAtom &atom2);
+    bool validateAtom(const PDBAtom &atom1, const PDBAtom &atom2) const;
 
     //* Title record data. */
     PDBTitle title;
@@ -729,7 +755,7 @@ private:
     QVector<QVector<PDBAtom> > atoms;
 
     //* Residue mapping. */
-    QVector<QMultiMap<qint64, qint64> > residues;
+    QVector<QMultiMap<QPair<qint64, QString>, qint64> > residues;
 
     //* Connectivity data. */
     QVector<QMultiMap<qint64, qint64> > connections;
