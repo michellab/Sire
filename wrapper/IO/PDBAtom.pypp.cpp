@@ -96,17 +96,6 @@ void register_PDBAtom_class(){
                 , "Get the element symbol." );
         
         }
-        { //::SireIO::PDBAtom::getMolIndex
-        
-            typedef ::SireMol::AtomIdx ( ::SireIO::PDBAtom::*getMolIndex_function_type)(  ) const;
-            getMolIndex_function_type getMolIndex_function_value( &::SireIO::PDBAtom::getMolIndex );
-            
-            PDBAtom_exposer.def( 
-                "getMolIndex"
-                , getMolIndex_function_value
-                , "Get the index of the atom within the molecule." );
-        
-        }
         { //::SireIO::PDBAtom::getName
         
             typedef ::QString ( ::SireIO::PDBAtom::*getName_function_type)(  ) const;
@@ -194,18 +183,6 @@ void register_PDBAtom_class(){
                 , setAnisTemp_function_value
                 , ( bp::arg("line1"), bp::arg("line2"), bp::arg("errors") )
                 , "Set anisotropic temperature record data." );
-        
-        }
-        { //::SireIO::PDBAtom::setMolIndex
-        
-            typedef void ( ::SireIO::PDBAtom::*setMolIndex_function_type)( ::SireMol::AtomIdx ) ;
-            setMolIndex_function_type setMolIndex_function_value( &::SireIO::PDBAtom::setMolIndex );
-            
-            PDBAtom_exposer.def( 
-                "setMolIndex"
-                , setMolIndex_function_value
-                , ( bp::arg("index") )
-                , "Set the index of the atom within the molecule." );
         
         }
         { //::SireIO::PDBAtom::setTerminal

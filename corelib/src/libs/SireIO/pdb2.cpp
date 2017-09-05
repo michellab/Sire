@@ -80,8 +80,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBAtom &pdbatom)
         << pdbatom.coord << pdbatom.occupancy << pdbatom.temperature << pdbatom.element
         << pdbatom.charge << pdbatom.is_het << pdbatom.is_ter << pdbatom.is_anis
         << pdbatom.anis_facts[0] << pdbatom.anis_facts[1] << pdbatom.anis_facts[2]
-        << pdbatom.anis_facts[3] << pdbatom.anis_facts[4] << pdbatom.anis_facts[5]
-        << pdbatom.mol_index;
+        << pdbatom.anis_facts[3] << pdbatom.anis_facts[4] << pdbatom.anis_facts[5];
 
     return ds;
 }
@@ -99,8 +98,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBAtom &pdbatom)
             >> pdbatom.coord >> pdbatom.occupancy >> pdbatom.temperature >> pdbatom.element
             >> pdbatom.charge >> pdbatom.is_het >> pdbatom.is_ter >> pdbatom.is_anis
             >> pdbatom.anis_facts[0] >> pdbatom.anis_facts[1] >> pdbatom.anis_facts[2]
-            >> pdbatom.anis_facts[3] >> pdbatom.anis_facts[4] >> pdbatom.anis_facts[5]
-            >> pdbatom.mol_index;
+            >> pdbatom.anis_facts[3] >> pdbatom.anis_facts[4] >> pdbatom.anis_facts[5];
     }
     else
         throw version_error(v, "1", r_pdbatom, CODELOC);
@@ -608,18 +606,6 @@ QString PDBAtom::getElement() const
 qint64 PDBAtom::getCharge() const
 {
     return charge;
-}
-
-/** Get the index of the atom within the molecule. */
-SireMol::AtomIdx PDBAtom::getMolIndex() const
-{
-    return mol_index;
-}
-
-/** Set the index of the atom within the molecule. */
-void PDBAtom::setMolIndex(SireMol::AtomIdx index)
-{
-    mol_index = index;
 }
 
 /** Return the C++ name for this class */
@@ -2249,7 +2235,7 @@ bool PDB2::validateAtom(const PDBAtom &atom1, const PDBAtom &atom2) const
 /** Use the data contained in this parser to create a new System of molecules,
     assigning properties based on the mapping in 'map', for the configuration
     'iframe' (a trajectory index). */
-System PDB2::startSystem(int iframe, const PropertyMap &map)
+System PDB2::startSystem(int iframe, const PropertyMap &map) const
 {
     // For now we will assume that the PDB file contains a single molecule.
     // The system should contain a set of atoms, each belonging to a residue.
@@ -2305,7 +2291,7 @@ System PDB2::startSystem(int iframe, const PropertyMap &map)
 
 /** Use the data contained in this parser to create a new System of molecules,
     assigning properties based on the mapping in 'map'. */
-System PDB2::startSystem(const PropertyMap &map)
+System PDB2::startSystem(const PropertyMap &map) const
 {
     // Generate system for single model PDF files.
     return startSystem(0, map);
@@ -2325,7 +2311,7 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
 /** Internal function used to get the molecule structure for molecule 'imol'
     in the frame (model) 'iframe'. */
 MolStructureEditor PDB2::getMolStructure(int imol,
-    int iframe, const PropertyName &cutting)
+    int iframe, const PropertyName &cutting) const
 {
     // Make sure the frame index is within range.
     if ((iframe < 0) or (iframe > atoms.count()))
@@ -2376,10 +2362,6 @@ MolStructureEditor PDB2::getMolStructure(int imol,
             auto atom = cutgroup.add(AtomNum(res_atom));
             atom.rename(AtomName(atoms[iframe][res_atom].getName().trimmed()));
             atom.reparent(ResNum(res_num));
-
-            // Set the molecule index. This allows us to cross-reference
-            // atoms in the vector with those in the molecule.
-            atoms[iframe][res_atom].setMolIndex(atom.index());
         }
 
         ires++;
@@ -2400,7 +2382,7 @@ MolStructureEditor PDB2::getMolStructure(int imol,
 
 /** Internal function used to get the molecule structure for molecule 'imol'
     in the frame (model) 'iframe'. */
-MolEditor PDB2::getMolecule(int imol, int iframe, const PropertyMap &map)
+MolEditor PDB2::getMolecule(int imol, int iframe, const PropertyMap &map) const
 {
     // At the moment we'll assume that there is a single molecule. Once the molecule
     // is constructed we can use connectivity information to break it into sub-molecules.
@@ -2440,7 +2422,7 @@ MolEditor PDB2::getMolecule(int imol, int iframe, const PropertyMap &map)
         const PDBAtom &atom = atoms[iframe][i];
 
         // Determine the CGAtomIdx for this atom.
-        auto cgatomidx = molinfo.cgAtomIdx(atom.getMolIndex());
+        auto cgatomidx = molinfo.cgAtomIdx(AtomNum(atom.getResNum()));
 
         // Set the properties.
         coords.set(cgatomidx, atom.getCoord());
@@ -2451,9 +2433,9 @@ MolEditor PDB2::getMolecule(int imol, int iframe, const PropertyMap &map)
     }
 
     return mol.setProperty(map["coordinates"], coords)
-              .setProperty(map["charges"], charges)
-              .setProperty(map["elements"], elements)
-              .setProperty(map["occupancies"], occupancies)
-              .setProperty(map["temperatures"], temperatures)
+              .setProperty(map["charge"], charges)
+              .setProperty(map["element"], elements)
+              .setProperty(map["occupancy"], occupancies)
+              .setProperty(map["beta-factor"], temperatures)
               .commit();
 }

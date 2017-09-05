@@ -33,8 +33,6 @@
 
 #include "SireMaths/vector.h"
 
-#include "SireMol/atomidx.h"
-
 SIRE_BEGIN_HEADER
 
 namespace SireIO
@@ -147,12 +145,6 @@ public:
     /** Set anisotropic temperature record data. */
     void setAnisTemp(const QString &line1, const QString &line2, QStringList& errors);
 
-    /** Get the index of the atom within the molecule. */
-    SireMol::AtomIdx getMolIndex() const;
-
-    /** Set the index of the atom within the molecule. */
-    void setMolIndex(SireMol::AtomIdx index);
-
 private:
     /** The original PDB record used to instantiate the atom. */
     QString record;
@@ -204,9 +196,6 @@ private:
 
     /** Anisotropic temperature factors. */
     qint64 anis_facts[6];
-
-    /** The index of the atom within the molecule. */
-    SireMol::AtomIdx mol_index;
 };
 
 /** This class provides functionality for reading/writing
@@ -731,8 +720,8 @@ public:
     QMap<qint64, QString> getInvalidRecords() const;
 
 protected:
-    SireSystem::System startSystem(int iframe, const PropertyMap &map);
-    SireSystem::System startSystem(const PropertyMap &map);
+    SireSystem::System startSystem(int iframe, const PropertyMap &map) const;
+    SireSystem::System startSystem(const PropertyMap &map) const;
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
 private:
@@ -740,10 +729,10 @@ private:
     void parseLines(const PropertyMap &map);
 
     SireMol::MolStructureEditor getMolStructure(int imol,
-        int iframe, const SireBase::PropertyName &cutting);
+        int iframe, const SireBase::PropertyName &cutting) const;
 
     SireMol::MolEditor getMolecule(int imol, int iframe,
-        const PropertyMap &map = PropertyMap());
+        const PropertyMap &map = PropertyMap()) const;
 
     /** Validate that the two atoms are the same (other than position). */
     bool validateAtom(const PDBAtom &atom1, const PDBAtom &atom2) const;
