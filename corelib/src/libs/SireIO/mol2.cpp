@@ -354,8 +354,10 @@ Mol2Molecule::Mol2Molecule()
 }
 
 /** Constructor. */
-Mol2Molecule::Mol2Molecule(const QStringList &lines, QStringList &errors)
+Mol2Molecule::Mol2Molecule(const QVector<QString> &lines, QStringList &errors)
 {
+    //for (auto line : lines)
+        //std::cout << line.toStdString() << '\n';
 }
 
 /** Generate a Mol2 record from the molecule data. */
@@ -625,7 +627,29 @@ void Mol2::parseLines(const PropertyMap &map)
             // characters, such as ^M carriage returns.
             QString record_type = line.section('>', 1).simplified();
 
-            std::cout << record_type.toStdString() << '\n';
+            // Parse a MOLECULE record.
+            if (record_type == "MOLECULE")
+            {
+                ++iline;
+
+                // Append a new molecule.
+                molecules.append(Mol2Molecule(lines().mid(iline, iline+5), parse_warnings));
+
+                // Fast-forward the line index.
+                iline += 5;
+            }
+
+            // Parse a ATOM record.
+            else if (record_type == "ATOM")
+            {
+
+            }
+
+            // Parse a BOND record.
+            else if (record_type == "ATOM")
+            {
+
+            }
         }
     }
 

@@ -776,10 +776,10 @@ private:
     /** Whether a MASTER record was found (can be used for validation). */
     bool has_master;
 
-    /** Invalid records */
+    /** Invalid records. */
     QMap<qint64, QString> invalid_records;
 
-    /** Any warnings that were raised when reading the file */
+    /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;
 };
 

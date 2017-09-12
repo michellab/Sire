@@ -219,7 +219,7 @@ public:
     Mol2Molecule();
 
     /** Constructor. */
-    Mol2Molecule(const QStringList &lines, QStringList &errors);
+    Mol2Molecule(const QVector<QString> &lines, QStringList &errors);
 
     /** Generate a Mol2 record from the molecule data. */
     QStringList toMol2Record() const;
@@ -457,6 +457,9 @@ private:
 
     /** The molecular data object. */
     QVector<Mol2Molecule> molecules;
+
+    /** Any warnings that were raised when reading the file. */
+    QStringList parse_warnings;
 };
 
 }
