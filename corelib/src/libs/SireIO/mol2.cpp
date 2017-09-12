@@ -26,6 +26,8 @@
   *
 \*********************************************/
 
+#include <iostream>
+
 #include "SireIO/mol2.h"
 
 #include "SireMM/mol2params.h"
@@ -246,7 +248,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2 &mol2)
 {
     writeHeader(ds, r_mol2, 1);
 
-    ds << static_cast<const MoleculeParser&>(mol2);
+    ds << mol2.molecules << static_cast<const MoleculeParser&>(mol2);
 
     return ds;
 }
@@ -257,7 +259,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2 &mol2)
 
     if (v == 1)
     {
-        ds >> static_cast<MoleculeParser&>(mol2);
+        ds >> mol2.molecules >> static_cast<MoleculeParser&>(mol2);
     }
     else
         throw version_error(v, "1", r_mol2, CODELOC);
@@ -600,20 +602,31 @@ void Mol2::parseLines(const PropertyMap &map)
     /* File format is described here:
          http://chemyang.ccnu.edu.cn/ccb/server/AIMMS/mol2.pdf
 
-       Mol2 is a "free" file format, so records could potentially appear in any order.
+       Mol2 is a "free" file format, so records can potentially appear in any order.
        Typically there will be a MOLECULE record, which is followed by ATOM and, e.g.
        BOND records. For simplicity, we'll assume that there is a sensible ordering of
        data, then deal with any inconsistencies afterwards.
      */
 
-    // The Mol2 record indicator. All record types start with this string.
+    // The Mol2 record indicator. All record types start with this prefix.
     const QString record_indicator("@<TRIPOS>");
 
     // Loop through all lines in the file.
     for (int iline=0; iline<lines().count(); ++iline)
     {
-        // Store a reference to the line.
+        // Store a reference to the current line.
         const QString &line = lines()[iline];
+
+        // See if this the start of a Mol2 record.
+        if (line.left(9) == record_indicator)
+        {
+            // Extract the record type.
+            // Use "simplfied" method to clip trailing whitespace and formatting
+            // characters, such as ^M carriage returns.
+            QString record_type = line.section('>', 1).simplified();
+
+            std::cout << record_type.toStdString() << '\n';
+        }
     }
 
     this->setScore(0);
