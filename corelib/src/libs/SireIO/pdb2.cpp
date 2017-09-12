@@ -313,7 +313,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDB2 &pdb2)
     sds << pdb2.title << pdb2.atoms << pdb2.residues << pdb2.connections
         << pdb2.helices << pdb2.sheets << pdb2.trans_orig << pdb2.trans_scale
         << pdb2.trans_matrix << pdb2.master << pdb2.num_ters << pdb2.invalid_records
-        << pdb2.parse_warnings;
+        << pdb2.parse_warnings << static_cast<const MoleculeParser&>(pdb2);
 
     return ds;
 }
@@ -329,7 +329,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB2 &pdb2)
         sds >> pdb2.title >> pdb2.atoms >> pdb2.residues >> pdb2.connections
             >> pdb2.helices >> pdb2.sheets >> pdb2.trans_orig << pdb2.trans_scale
             >> pdb2.trans_matrix >> pdb2.master >> pdb2.num_ters >> pdb2.invalid_records
-            >> pdb2.parse_warnings;
+            >> pdb2.parse_warnings >> static_cast<MoleculeParser&>(pdb2);
     }
     else
         throw version_error(v, "1", r_pdb2, CODELOC);
