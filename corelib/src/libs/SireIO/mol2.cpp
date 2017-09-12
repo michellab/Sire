@@ -646,7 +646,7 @@ void Mol2::parseLines(const PropertyMap &map)
             }
 
             // Parse a BOND record.
-            else if (record_type == "ATOM")
+            else if (record_type == "BOND")
             {
 
             }
