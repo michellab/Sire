@@ -1493,7 +1493,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             //now read in all of the remaining values as numbers...
             QList<double> params;
             
-            for (int i=4; i<words.count(); ++i)
+            for (int i=5; i<words.count(); ++i)
             {
                 double param = words[i].toDouble(&ok);
                 
