@@ -53,6 +53,41 @@ void register_GroTop_class(){
         GroTop_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to read in the data from the passed text lines. The\npassed property map can be used to pass extra parameters to control\nthe parsing") );
         GroTop_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct this parser by extracting all necessary information from the\npassed SireSystem::System, looking for the properties that are specified\nin the passed property map") );
         GroTop_exposer.def( bp::init< SireIO::GroTop const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireIO::GroTop::angle
+        
+            typedef ::SireMM::GromacsAngle ( ::SireIO::GroTop::*angle_function_type)( ::QString const &,::QString const &,::QString const & ) const;
+            angle_function_type angle_function_value( &::SireIO::GroTop::angle );
+            
+            GroTop_exposer.def( 
+                "angle"
+                , angle_function_value
+                , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2") )
+                , "Return the angle potential data for the passed triple of atoms. This only returns\nthe most recently inserted parameter for these atoms. Use angles if you want\nto allow for multiple return values" );
+        
+        }
+        { //::SireIO::GroTop::anglePotentials
+        
+            typedef ::QMultiHash< QString, SireMM::GromacsAngle > ( ::SireIO::GroTop::*anglePotentials_function_type)(  ) const;
+            anglePotentials_function_type anglePotentials_function_value( &::SireIO::GroTop::anglePotentials );
+            
+            GroTop_exposer.def( 
+                "anglePotentials"
+                , anglePotentials_function_value
+                , "Return the angle potentials loaded from this file" );
+        
+        }
+        { //::SireIO::GroTop::angles
+        
+            typedef ::QList< SireMM::GromacsAngle > ( ::SireIO::GroTop::*angles_function_type)( ::QString const &,::QString const &,::QString const & ) const;
+            angles_function_type angles_function_value( &::SireIO::GroTop::angles );
+            
+            GroTop_exposer.def( 
+                "angles"
+                , angles_function_value
+                , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2") )
+                , "Return the angle potential data for the passed triple of atoms. This returns\na list of all associated parameters" );
+        
+        }
         { //::SireIO::GroTop::atomType
         
             typedef ::SireMM::GromacsAtomType ( ::SireIO::GroTop::*atomType_function_type)( ::QString const & ) const;
@@ -62,7 +97,7 @@ void register_GroTop_class(){
                 "atomType"
                 , atomType_function_value
                 , ( bp::arg("atm") )
-                , "" );
+                , "Return the atom type data for the passed atom type. This returns\nnull data if it is not present" );
         
         }
         { //::SireIO::GroTop::atomTypes
@@ -85,18 +120,30 @@ void register_GroTop_class(){
                 "bond"
                 , bond_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1") )
-                , "" );
+                , "Return the bond potential data for the passed pair of atoms. This only returns\nthe most recently inserted parameter for this pair. Use bonds if you want\nto allow for multiple return values" );
+        
+        }
+        { //::SireIO::GroTop::bondPotentials
+        
+            typedef ::QMultiHash< QString, SireMM::GromacsBond > ( ::SireIO::GroTop::*bondPotentials_function_type)(  ) const;
+            bondPotentials_function_type bondPotentials_function_value( &::SireIO::GroTop::bondPotentials );
+            
+            GroTop_exposer.def( 
+                "bondPotentials"
+                , bondPotentials_function_value
+                , "Return the bond potentials loaded from this file" );
         
         }
         { //::SireIO::GroTop::bonds
         
-            typedef ::QHash< QString, SireMM::GromacsBond > ( ::SireIO::GroTop::*bonds_function_type)(  ) const;
+            typedef ::QList< SireMM::GromacsBond > ( ::SireIO::GroTop::*bonds_function_type)( ::QString const &,::QString const & ) const;
             bonds_function_type bonds_function_value( &::SireIO::GroTop::bonds );
             
             GroTop_exposer.def( 
                 "bonds"
                 , bonds_function_value
-                , "" );
+                , ( bp::arg("atm0"), bp::arg("atm1") )
+                , "Return the bond potential data for the passed pair of atoms. This returns\na list of all associated parameters" );
         
         }
         { //::SireIO::GroTop::combiningRules
@@ -144,6 +191,41 @@ void register_GroTop_class(){
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
                 , "Return the parser that has been constructed by extract all necessary\ndata from the passed SireSystem::System using the specified properties" );
+        
+        }
+        { //::SireIO::GroTop::dihedral
+        
+            typedef ::SireMM::GromacsDihedral ( ::SireIO::GroTop::*dihedral_function_type)( ::QString const &,::QString const &,::QString const &,::QString const & ) const;
+            dihedral_function_type dihedral_function_value( &::SireIO::GroTop::dihedral );
+            
+            GroTop_exposer.def( 
+                "dihedral"
+                , dihedral_function_value
+                , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2"), bp::arg("atm3") )
+                , "" );
+        
+        }
+        { //::SireIO::GroTop::dihedralPotentials
+        
+            typedef ::QMultiHash< QString, SireMM::GromacsDihedral > ( ::SireIO::GroTop::*dihedralPotentials_function_type)(  ) const;
+            dihedralPotentials_function_type dihedralPotentials_function_value( &::SireIO::GroTop::dihedralPotentials );
+            
+            GroTop_exposer.def( 
+                "dihedralPotentials"
+                , dihedralPotentials_function_value
+                , "" );
+        
+        }
+        { //::SireIO::GroTop::dihedrals
+        
+            typedef ::QList< SireMM::GromacsDihedral > ( ::SireIO::GroTop::*dihedrals_function_type)( ::QString const &,::QString const &,::QString const &,::QString const & ) const;
+            dihedrals_function_type dihedrals_function_value( &::SireIO::GroTop::dihedrals );
+            
+            GroTop_exposer.def( 
+                "dihedrals"
+                , dihedrals_function_value
+                , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2"), bp::arg("atm3") )
+                , "" );
         
         }
         { //::SireIO::GroTop::formatDescription

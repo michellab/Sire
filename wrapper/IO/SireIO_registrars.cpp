@@ -3,44 +3,44 @@
 
 #include "SireIO_registrars.h"
 
-#include "amberrst7.h"
-#include "protoms.h"
-#include "amberprm.h"
-#include "moleculeparser.h"
-#include "perturbationslibrary.h"
-#include "pdb.h"
-#include "gro87.h"
 #include "amber.h"
-#include "zmatrixmaker.h"
 #include "tinker.h"
-#include "amberrst.h"
-#include "iobase.h"
-#include "grotop.h"
+#include "amberrst7.h"
 #include "trajectorymonitor.h"
+#include "amberrst.h"
+#include "moleculeparser.h"
+#include "protoms.h"
+#include "gro87.h"
+#include "pdb.h"
+#include "amberprm.h"
+#include "grotop.h"
 #include "flexibilitylibrary.h"
+#include "perturbationslibrary.h"
+#include "iobase.h"
+#include "zmatrixmaker.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_SireIO_objects()
 {
 
-    ObjectRegistry::registerConverterFor< SireIO::AmberRst7 >();
-    ObjectRegistry::registerConverterFor< SireIO::ProtoMS >();
-    ObjectRegistry::registerConverterFor< SireIO::AmberPrm >();
-    ObjectRegistry::registerConverterFor< SireIO::NullParser >();
-    ObjectRegistry::registerConverterFor< SireIO::PerturbationsLibrary >();
-    ObjectRegistry::registerConverterFor< SireIO::PerturbationsTemplate >();
-    ObjectRegistry::registerConverterFor< SireIO::PDB >();
-    ObjectRegistry::registerConverterFor< SireIO::Gro87 >();
     ObjectRegistry::registerConverterFor< SireIO::Amber >();
-    ObjectRegistry::registerConverterFor< SireIO::ZmatrixMaker >();
     ObjectRegistry::registerConverterFor< SireIO::Tinker >();
-    ObjectRegistry::registerConverterFor< SireIO::AmberRst >();
-    ObjectRegistry::registerConverterFor< SireIO::NullIO >();
-    ObjectRegistry::registerConverterFor< SireIO::GroTop >();
+    ObjectRegistry::registerConverterFor< SireIO::AmberRst7 >();
     ObjectRegistry::registerConverterFor< SireIO::TrajectoryMonitor >();
+    ObjectRegistry::registerConverterFor< SireIO::AmberRst >();
+    ObjectRegistry::registerConverterFor< SireIO::NullParser >();
+    ObjectRegistry::registerConverterFor< SireIO::ProtoMS >();
+    ObjectRegistry::registerConverterFor< SireIO::Gro87 >();
+    ObjectRegistry::registerConverterFor< SireIO::PDB >();
+    ObjectRegistry::registerConverterFor< SireIO::AmberPrm >();
+    ObjectRegistry::registerConverterFor< SireIO::GroTop >();
     ObjectRegistry::registerConverterFor< SireIO::FlexibilityLibrary >();
     ObjectRegistry::registerConverterFor< SireIO::FlexibilityTemplate >();
+    ObjectRegistry::registerConverterFor< SireIO::PerturbationsLibrary >();
+    ObjectRegistry::registerConverterFor< SireIO::PerturbationsTemplate >();
+    ObjectRegistry::registerConverterFor< SireIO::NullIO >();
+    ObjectRegistry::registerConverterFor< SireIO::ZmatrixMaker >();
 
 }
 

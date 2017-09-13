@@ -7,7 +7,15 @@
 
 namespace bp = boost::python;
 
+#include "SireCAS/conditional.h"
+
+#include "SireCAS/exp.h"
+
+#include "SireCAS/trigfuncs.h"
+
 #include "SireError/errors.h"
+
+#include "SireID/index.h"
 
 #include "SireStream/datastream.h"
 
@@ -31,12 +39,12 @@ void register_GromacsBond_class(){
 
     { //::SireMM::GromacsBond
         typedef bp::class_< SireMM::GromacsBond > GromacsBond_exposer_t;
-        GromacsBond_exposer_t GromacsBond_exposer = GromacsBond_exposer_t( "GromacsBond", "This class holds all of the information about a Gromacs Bond\n\nAuthor: Christopher Woods\n", bp::init< >("") );
+        GromacsBond_exposer_t GromacsBond_exposer = GromacsBond_exposer_t( "GromacsBond", "This class holds all of the information about a Gromacs Bond\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope GromacsBond_scope( GromacsBond_exposer );
-        GromacsBond_exposer.def( bp::init< int, double, bp::optional< double, double, double > >(( bp::arg("function_type"), bp::arg("k0"), bp::arg("k1")=0, bp::arg("k2")=0, bp::arg("k3")=0 ), "") );
-        GromacsBond_exposer.def( bp::init< int, QList< double > const & >(( bp::arg("function_type"), bp::arg("params") ), "") );
-        GromacsBond_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("bond"), bp::arg("R") ), "") );
-        GromacsBond_exposer.def( bp::init< SireMM::GromacsBond const & >(( bp::arg("other") ), "") );
+        GromacsBond_exposer.def( bp::init< int, double, bp::optional< double, double, double > >(( bp::arg("function_type"), bp::arg("k0"), bp::arg("k1")=0, bp::arg("k2")=0, bp::arg("k3")=0 ), "Construct a bond of the specified function type with specified parameters\n(the order should be the same as in the Gromacs Manual, table 5.5)") );
+        GromacsBond_exposer.def( bp::init< int, QList< double > const & >(( bp::arg("function_type"), bp::arg("params") ), "Construct a bond of the specified function type by interpreting the parameter\ndata from the passed list of parameter values. These should be in the\nsame order as in the Gromacs Manual, table 5.5") );
+        GromacsBond_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("bond"), bp::arg("R") ), "Construct from the passed bond, using R as the symbol for the R value") );
+        GromacsBond_exposer.def( bp::init< SireMM::GromacsBond const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::GromacsBond::at
         
             typedef double ( ::SireMM::GromacsBond::*at_function_type)( int ) const;
@@ -46,7 +54,7 @@ void register_GromacsBond_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , "" );
+                , "Return the ith parameter for this bond" );
         
         }
         { //::SireMM::GromacsBond::count
@@ -57,7 +65,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "count"
                 , count_function_value
-                , "" );
+                , "Return the number of parameters associated with this bond type" );
         
         }
         { //::SireMM::GromacsBond::functionType
@@ -68,7 +76,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "functionType"
                 , functionType_function_value
-                , "" );
+                , "Return the Gromacs ID number for the function type for this bond. See table\n5.5 in the Gromacs manual for information" );
         
         }
         { //::SireMM::GromacsBond::functionTypeString
@@ -79,7 +87,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "functionTypeString"
                 , functionTypeString_function_value
-                , "" );
+                , "Return the string description of the function type for this bond" );
         
         }
         { //::SireMM::GromacsBond::hash
@@ -90,7 +98,18 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "hash"
                 , hash_function_value
-                , "" );
+                , "Return a hash for this bond" );
+        
+        }
+        { //::SireMM::GromacsBond::isSimple
+        
+            typedef bool ( ::SireMM::GromacsBond::*isSimple_function_type)(  ) const;
+            isSimple_function_type isSimple_function_value( &::SireMM::GromacsBond::isSimple );
+            
+            GromacsBond_exposer.def( 
+                "isSimple"
+                , isSimple_function_value
+                , "All Gromacs bonds are simple (just a function of the bond length)" );
         
         }
         GromacsBond_exposer.def( bp::self != bp::self );
@@ -132,7 +151,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "parameters"
                 , parameters_function_value
-                , "" );
+                , "Return all of the parameters for this bond" );
         
         }
         { //::SireMM::GromacsBond::size
@@ -143,7 +162,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "size"
                 , size_function_value
-                , "" );
+                , "Return the number of parameters associated with this bond type" );
         
         }
         { //::SireMM::GromacsBond::toExpression
@@ -155,7 +174,7 @@ void register_GromacsBond_class(){
                 "toExpression"
                 , toExpression_function_value
                 , ( bp::arg("R") )
-                , "" );
+                , "Return this function converted to a SireCAS::Expression using the passed symbol\nto represent the bond length" );
         
         }
         { //::SireMM::GromacsBond::toString
@@ -166,7 +185,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "toString"
                 , toString_function_value
-                , "" );
+                , "Return a string representation of this bond" );
         
         }
         { //::SireMM::GromacsBond::typeName

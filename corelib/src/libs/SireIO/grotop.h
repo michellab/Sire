@@ -104,10 +104,27 @@ public:
     bool generateNonBondedPairs() const;
 
     SireMM::GromacsAtomType atomType(const QString &atm) const;
+
     SireMM::GromacsBond bond(const QString &atm0, const QString &atm1) const;
+    QList<SireMM::GromacsBond> bonds(const QString &atm0, const QString &atm1) const;
+    
+    SireMM::GromacsAngle angle(const QString &atm0, const QString &atm1,
+                               const QString &atm2) const;
+
+    QList<SireMM::GromacsAngle> angles(const QString &atm0, const QString &atm1,
+                                       const QString &atm2) const;
+
+    SireMM::GromacsDihedral dihedral(const QString &atm0, const QString &atm1,
+                                     const QString &atm2, const QString &atm3) const;
+
+    QList<SireMM::GromacsDihedral> dihedrals(const QString &atm0, const QString &atm1,
+                                             const QString &atm2, const QString &atm3) const;
 
     QHash<QString,SireMM::GromacsAtomType> atomTypes() const;
-    QHash<QString,SireMM::GromacsBond> bonds() const;
+    
+    QMultiHash<QString,SireMM::GromacsBond> bondPotentials() const;
+    QMultiHash<QString,SireMM::GromacsAngle> anglePotentials() const;
+    QMultiHash<QString,SireMM::GromacsDihedral> dihedralPotentials() const;
 
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
@@ -150,7 +167,13 @@ private:
     QHash<QString,SireMM::GromacsAtomType> atom_types;
     
     /** The database of bond potentials */
-    QHash<QString,SireMM::GromacsBond> bond_potentials;
+    QMultiHash<QString,SireMM::GromacsBond> bond_potentials;
+    
+    /** The database of angle potentials */
+    QMultiHash<QString,SireMM::GromacsAngle> ang_potentials;
+    
+    /** The database of dihedral potentials */
+    QMultiHash<QString,SireMM::GromacsDihedral> dih_potentials;
     
     /** The non-bonded function type to use for all molecules */
     qint32 nb_func_type;

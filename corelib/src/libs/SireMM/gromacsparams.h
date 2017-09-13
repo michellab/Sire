@@ -45,6 +45,8 @@ namespace SireMM
 {
 class GromacsAtomType;
 class GromacsBond;
+class GromacsAngle;
+class GromacsDihedral;
 }
 
 QDataStream& operator<<(QDataStream&, const SireMM::GromacsAtomType&);
@@ -52,6 +54,12 @@ QDataStream& operator>>(QDataStream&, SireMM::GromacsAtomType&);
 
 QDataStream& operator<<(QDataStream&, const SireMM::GromacsBond&);
 QDataStream& operator>>(QDataStream&, SireMM::GromacsBond&);
+
+QDataStream& operator<<(QDataStream&, const SireMM::GromacsAngle&);
+QDataStream& operator>>(QDataStream&, SireMM::GromacsAngle&);
+
+QDataStream& operator<<(QDataStream&, const SireMM::GromacsDihedral&);
+QDataStream& operator>>(QDataStream&, SireMM::GromacsDihedral&);
 
 namespace SireMM
 {
@@ -176,6 +184,8 @@ public:
     int functionType() const;
     QString functionTypeString() const;
     
+    bool isSimple() const;
+    
     QList<double> parameters() const;
     
     QString toString() const;
@@ -186,6 +196,157 @@ public:
 private:
     /** Space to hold up to 4 parameters */
     double k[4];
+
+    /** The function type */
+    qint32 func_type;
+};
+
+/** This class holds all of the information about a Gromacs Angle
+
+    @author Christopher Woods
+*/
+class SIREMM_EXPORT GromacsAngle
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const GromacsAngle&);
+friend QDataStream& ::operator>>(QDataStream&, GromacsAngle&);
+
+public:
+    GromacsAngle();
+    GromacsAngle(int function_type,
+                 double k0, double k1=0, double k2=0, double k3=0, double k4=0, double k5=0);
+    GromacsAngle(int function_type, const QList<double> &params);
+    
+    GromacsAngle(const SireCAS::Expression &angle, const SireCAS::Symbol &theta);
+    
+    GromacsAngle(const GromacsAngle &other);
+    
+    ~GromacsAngle();
+    
+    GromacsAngle& operator=(const GromacsAngle &other);
+    
+    bool operator==(const GromacsAngle &other) const;
+    bool operator!=(const GromacsAngle &other) const;
+    
+    bool operator<(const GromacsAngle &other) const;
+    bool operator<=(const GromacsAngle &other) const;
+    
+    bool operator>(const GromacsAngle &other) const;
+    bool operator>=(const GromacsAngle &other) const;
+    
+    static const char* typeName();
+    const char* what() const;
+    
+    double operator[](int i) const;
+    
+    double at(int i) const;
+    
+    int count() const;
+    int size() const;
+    
+    int functionType() const;
+    QString functionTypeString() const;
+    
+    QList<double> parameters() const;
+    
+    bool isSimple() const;
+    
+    bool isBondBondCrossTerm() const;
+    bool isBondAngleCrossTerm() const;
+    
+    GromacsBond toBondTerm() const;
+    GromacsAngle toAngleTerm() const;
+    
+    QString toString() const;
+    
+    SireCAS::Expression toExpression(const SireCAS::Symbol &theta) const;
+    
+    SireCAS::Expression toBondAngleExpression(const SireCAS::Symbol &r,
+                                              const SireCAS::Symbol &theta) const;
+    
+    SireCAS::Expression toBondBondExpression(const SireCAS::Symbol &r01,
+                                             const SireCAS::Symbol &r12,
+                                             const SireCAS::Symbol &r02) const;
+    
+    uint hash() const;
+
+private:
+    /** Space to hold up to 6 parameters */
+    double k[6];
+
+    /** The function type */
+    qint32 func_type;
+};
+
+
+/** This class holds all of the information about a Gromacs Dihedral
+
+    @author Christopher Woods
+*/
+class SIREMM_EXPORT GromacsDihedral
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const GromacsDihedral&);
+friend QDataStream& ::operator>>(QDataStream&, GromacsDihedral&);
+
+public:
+    GromacsDihedral();
+    GromacsDihedral(int function_type,
+                    double k0, double k1=0, double k2=0, double k3=0, double k4=0, double k5=0);
+    GromacsDihedral(int function_type, const QList<double> &params);
+    
+    GromacsDihedral(const SireCAS::Expression &angle, const SireCAS::Symbol &theta);
+    
+    GromacsDihedral(const GromacsDihedral &other);
+    
+    ~GromacsDihedral();
+    
+    GromacsDihedral& operator=(const GromacsDihedral &other);
+    
+    bool operator==(const GromacsDihedral &other) const;
+    bool operator!=(const GromacsDihedral &other) const;
+    
+    bool operator<(const GromacsDihedral &other) const;
+    bool operator<=(const GromacsDihedral &other) const;
+    
+    bool operator>(const GromacsDihedral &other) const;
+    bool operator>=(const GromacsDihedral &other) const;
+    
+    static const char* typeName();
+    const char* what() const;
+    
+    double operator[](int i) const;
+    
+    double at(int i) const;
+    
+    int count() const;
+    int size() const;
+    
+    int functionType() const;
+    QString functionTypeString() const;
+    
+    QList<double> parameters() const;
+    
+    bool isSimple() const;
+    
+    bool isImproperAngleTerm() const;
+    bool isAngleTorsionCrossTerm() const;
+
+    QString toString() const;
+    
+    SireCAS::Expression toExpression(const SireCAS::Symbol &phi) const;
+    
+    SireCAS::Expression toImproperExpression(const SireCAS::Symbol &eta) const;
+    
+    SireCAS::Expression toAngleTorsionExpression(const SireCAS::Symbol &theta0,
+                                                 const SireCAS::Symbol &theta1,
+                                                 const SireCAS::Symbol &phi) const;
+    
+    uint hash() const;
+
+private:
+    /** Space to hold up to 6 parameters */
+    double k[6];
 
     /** The function type */
     qint32 func_type;
@@ -241,9 +402,13 @@ inline SireMol::Element GromacsAtomType::element() const
 
 Q_DECLARE_METATYPE( SireMM::GromacsAtomType )
 Q_DECLARE_METATYPE( SireMM::GromacsBond )
+Q_DECLARE_METATYPE( SireMM::GromacsAngle )
+Q_DECLARE_METATYPE( SireMM::GromacsDihedral )
 
 SIRE_EXPOSE_CLASS( SireMM::GromacsAtomType )
 SIRE_EXPOSE_CLASS( SireMM::GromacsBond )
+SIRE_EXPOSE_CLASS( SireMM::GromacsAngle )
+SIRE_EXPOSE_CLASS( SireMM::GromacsDihedral )
 
 SIRE_END_HEADER
 

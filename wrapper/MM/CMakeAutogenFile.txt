@@ -78,8 +78,10 @@ set ( PYPP_SOURCES
        FourAtomPerturbation.pypp.cpp
        GridFF.pypp.cpp
        GridFF2.pypp.cpp
+       GromacsAngle.pypp.cpp
        GromacsAtomType.pypp.cpp
        GromacsBond.pypp.cpp
+       GromacsDihedral.pypp.cpp
        GroupInternalParameters.pypp.cpp
        HarmonicSwitchingFunction.pypp.cpp
        ImproperComponent.pypp.cpp

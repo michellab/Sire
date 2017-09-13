@@ -66,6 +66,9 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroTop &grotop)
     sds << grotop.include_path << grotop.included_files
         << grotop.expanded_lines
         << grotop.atom_types
+        << grotop.bond_potentials
+        << grotop.ang_potentials
+        << grotop.dih_potentials
         << grotop.nb_func_type
         << grotop.combining_rule << grotop.fudge_lj
         << grotop.fudge_qq << grotop.generate_pairs
@@ -85,6 +88,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroTop &grotop)
         sds >> grotop.include_path >> grotop.included_files
             >> grotop.expanded_lines
             >> grotop.atom_types
+            >> grotop.bond_potentials
+            >> grotop.ang_potentials
+            >> grotop.dih_potentials
             >> grotop.nb_func_type
             >> grotop.combining_rule >> grotop.fudge_lj
             >> grotop.fudge_qq >> grotop.generate_pairs
@@ -213,6 +219,9 @@ GroTop::GroTop(const GroTop &other)
          include_path(other.include_path), included_files(other.included_files),
          expanded_lines(other.expanded_lines),
          atom_types(other.atom_types),
+         bond_potentials(other.bond_potentials),
+         ang_potentials(other.ang_potentials),
+         dih_potentials(other.dih_potentials),
          nb_func_type(other.nb_func_type), combining_rule(other.combining_rule),
          fudge_lj(other.fudge_lj), fudge_qq(other.fudge_qq),
          generate_pairs(other.generate_pairs)
@@ -231,6 +240,9 @@ GroTop& GroTop::operator=(const GroTop &other)
         included_files = other.included_files;
         expanded_lines = other.expanded_lines;
         atom_types = other.atom_types;
+        bond_potentials = other.bond_potentials;
+        ang_potentials = other.ang_potentials;
+        dih_potentials = other.dih_potentials;
         nb_func_type = other.nb_func_type;
         combining_rule = other.combining_rule;
         fudge_lj = other.fudge_lj;
@@ -422,10 +434,87 @@ static QString get_bond_id(const QString &atm0, const QString &atm1)
     }
 }
 
-/** Return the bond potential data for the passed pair of atoms */
+/** Return the ID string for the angle atom types 'atm0' 'atm1' 'atm2'. This
+    creates the string 'atm0;atm1;atm2' or 'atm2;atm1;atm0' depending on which
+    of the atoms is lower. The ';' character is used as a separator
+    as it cannot be in the atom names, as it is used as a comment 
+    character in the Gromacs Top file */
+static QString get_angle_id(const QString &atm0, const QString &atm1, const QString &atm2)
+{
+    if (atm0 < atm2)
+    {
+        return QString("%1;%2;%3").arg(atm0,atm1,atm2);
+    }
+    else
+    {
+        return QString("%1;%2;%3").arg(atm2,atm1,atm0);
+    }
+}
+
+/** Return the ID string for the dihedral atom types 'atm0' 'atm1' 'atm2' 'atm3'. This
+    creates the string 'atm0;atm1;atm2;atm3' or 'atm3;atm2;atm1;atm0' depending on which
+    of the atoms is lower. The ';' character is used as a separator
+    as it cannot be in the atom names, as it is used as a comment 
+    character in the Gromacs Top file */
+static QString get_dihedral_id(const QString &atm0, const QString &atm1,
+                               const QString &atm2, const QString &atm3)
+{
+    if (atm0 < atm3)
+    {
+        return QString("%1;%2;%3;%4").arg(atm0,atm1,atm2,atm3);
+    }
+    else
+    {
+        return QString("%1;%2;%3;%4").arg(atm3,atm2,atm1,atm0);
+    }
+}
+
+/** Return the bond potential data for the passed pair of atoms. This only returns
+    the most recently inserted parameter for this pair. Use 'bonds' if you want
+    to allow for multiple return values */
 GromacsBond GroTop::bond(const QString &atm0, const QString &atm1) const
 {
     return bond_potentials.value( get_bond_id(atm0,atm1), GromacsBond() );
+}
+
+/** Return the bond potential data for the passed pair of atoms. This returns
+    a list of all associated parameters */
+QList<GromacsBond> GroTop::bonds(const QString &atm0, const QString &atm1) const
+{
+    return bond_potentials.values( get_bond_id(atm0,atm1) );
+}
+
+/** Return the angle potential data for the passed triple of atoms. This only returns
+    the most recently inserted parameter for these atoms. Use 'angles' if you want
+    to allow for multiple return values */
+GromacsAngle GroTop::angle(const QString &atm0, const QString &atm1, const QString &atm2) const
+{
+    return ang_potentials.value( get_angle_id(atm0,atm1,atm2), GromacsAngle() );
+}
+
+/** Return the angle potential data for the passed triple of atoms. This returns
+    a list of all associated parameters */
+QList<GromacsAngle> GroTop::angles(const QString &atm0, const QString &atm1,
+                                   const QString &atm2) const
+{
+    return ang_potentials.values( get_angle_id(atm0,atm1,atm2) );
+}
+
+/** Return the dihedral potential data for the passed quad of atoms. This only returns
+    the most recently inserted parameter for these atoms. Use 'dihedrals' if you want
+    to allow for multiple return values */
+GromacsDihedral GroTop::dihedral(const QString &atm0, const QString &atm1,
+                                 const QString &atm2, const QString &atm3) const
+{
+    return dih_potentials.value( get_dihedral_id(atm0,atm1,atm2,atm3), GromacsDihedral() );
+}
+
+/** Return the dihedral potential data for the passed quad of atoms. This returns
+    a list of all associated parameters */
+QList<GromacsDihedral> GroTop::dihedrals(const QString &atm0, const QString &atm1,
+                                         const QString &atm2, const QString &atm3) const
+{
+    return dih_potentials.values( get_dihedral_id(atm0,atm1,atm2,atm3) );
 }
 
 /** Return the atom types loaded from this file */
@@ -435,9 +524,21 @@ QHash<QString,GromacsAtomType> GroTop::atomTypes() const
 }
 
 /** Return the bond potentials loaded from this file */
-QHash<QString,SireMM::GromacsBond> GroTop::bonds() const
+QMultiHash<QString,SireMM::GromacsBond> GroTop::bondPotentials() const
 {
     return bond_potentials;
+}
+
+/** Return the angle potentials loaded from this file */
+QMultiHash<QString,SireMM::GromacsAngle> GroTop::anglePotentials() const
+{
+    return ang_potentials;
+}
+
+/** Return the dihedral potentials loaded from this file */
+QMultiHash<QString,SireMM::GromacsDihedral> GroTop::dihedralPotentials() const
+{
+    return dih_potentials;
 }
 
 /** Return whether or not the gromacs preprocessor would change these lines */
@@ -905,6 +1006,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             return QStringList();
         }
         
+        bool found = false;
         int start = 0;
         int end = expandedLines().count();
         
@@ -915,6 +1017,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             {
                 if (n == 0)
                 {
+                    found = true;
                     start = it.key()+1;
                     
                     ++it;
@@ -926,8 +1029,15 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     
                     break;
                 }
+                else
+                    n -= 1;
             }
         }
+        
+        if (not found)
+            throw SireError::program_bug( QObject::tr(
+                "Cannot find tag '%1' at index '%2'. This should not happen!")
+                    .arg(directive).arg(n), CODELOC );
         
         QStringList lines;
         
@@ -1187,7 +1297,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         const auto lines = getAllLines("bondtypes");
 
         //save into a database of bonds
-        QHash<QString,GromacsBond> bnds;
+        QMultiHash<QString,GromacsBond> bnds;
 
         for (const auto line : lines)
         {
@@ -1242,15 +1352,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             }
             
             QString key = get_bond_id(atm0,atm1);
-            
-            if (bnds.contains(key))
-            {
-                warnings.append( QObject::tr("Duplicate bond entry for %1 : %2 on line "
-                   "'%3'. Replacing the original entry.")
-                        .arg(atm0).arg(atm1).arg(line) );
-            }
-            
-            bnds.insert(key, bond);
+            bnds.insertMulti(key, bond);
         }
 
         bond_potentials = bnds;
@@ -1261,31 +1363,196 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     //internal function to process the pairtypes lines
     auto processPairTypes = [&]()
     {
-        return QStringList();
+        QStringList warnings;
+        
+        //get all 'bondtypes' lines
+        const auto lines = getAllLines("pairtypes");
+
+        for (const auto line : lines)
+        {
+            warnings.append( QString("Ignoring 'pairtypes' %1").arg(line) );
+        }
+
+        return warnings;
     };
 
     //internal function to process the angletypes lines
     auto processAngleTypes = [&]()
     {
-        return QStringList();
+        QStringList warnings;
+        
+        //get all 'bondtypes' lines
+        const auto lines = getAllLines("angletypes");
+
+        //save into a database of angles
+        QMultiHash<QString,GromacsAngle> angs;
+
+        for (const auto line : lines)
+        {
+            //each line should contain the atom types of the three atoms, then
+            //the function type, then the parameters for the function
+            const auto words = line.split(" ", QString::SkipEmptyParts);
+            
+            if (words.count() < 4)
+            {
+                warnings.append( QObject::tr("There is not enough data on the "
+                  "line '%1' to extract a Gromacs angle parameter. Skipping line.")
+                    .arg(line) );
+                continue;
+            }
+            
+            const auto atm0 = words[0];
+            const auto atm1 = words[1];
+            const auto atm2 = words[2];
+            
+            bool ok;
+            int func_type = words[3].toInt(&ok);
+            
+            if (not ok)
+            {
+                warnings.append( QObject::tr("Unable to determine the function type "
+                  "for the angle on line '%1'. Skipping line.")
+                    .arg(line) );
+                continue;
+            }
+            
+            //now read in all of the remaining values as numbers...
+            QList<double> params;
+            
+            for (int i=4; i<words.count(); ++i)
+            {
+                double param = words[i].toDouble(&ok);
+                
+                if (ok) params.append(param);
+            }
+            
+            GromacsAngle angle;
+            
+            try
+            {
+                angle = GromacsAngle(func_type, params);
+            }
+            catch(const SireError::exception &e)
+            {
+                warnings.append( QObject::tr("Unable to extract the correct information "
+                  "to form an angle from line '%1'. Error is '%2'")
+                    .arg(line).arg(e.error()) );
+                continue;
+            }
+            
+            QString key = get_angle_id(atm0,atm1,atm2);
+            angs.insertMulti(key, angle);
+        }
+
+        ang_potentials = angs;
+
+        return warnings;
     };
 
     //internal function to process the dihedraltypes lines
     auto processDihedralTypes = [&]()
     {
-        return QStringList();
+        QStringList warnings;
+        
+        //get all 'bondtypes' lines
+        const auto lines = getAllLines("dihedraltypes");
+
+        //save into a database of dihedrals
+        QMultiHash<QString,GromacsDihedral> dihs;
+
+        for (const auto line : lines)
+        {
+            //each line should contain the atom types of the four atoms, then
+            //the function type, then the parameters for the function
+            const auto words = line.split(" ", QString::SkipEmptyParts);
+            
+            if (words.count() < 5)
+            {
+                warnings.append( QObject::tr("There is not enough data on the "
+                  "line '%1' to extract a Gromacs dihedral parameter. Skipping line.")
+                    .arg(line) );
+                continue;
+            }
+            
+            const auto atm0 = words[0];
+            const auto atm1 = words[1];
+            const auto atm2 = words[2];
+            const auto atm3 = words[3];
+            
+            bool ok;
+            int func_type = words[4].toInt(&ok);
+            
+            if (not ok)
+            {
+                warnings.append( QObject::tr("Unable to determine the function type "
+                  "for the dihedral on line '%1'. Skipping line.")
+                    .arg(line) );
+                continue;
+            }
+            
+            //now read in all of the remaining values as numbers...
+            QList<double> params;
+            
+            for (int i=4; i<words.count(); ++i)
+            {
+                double param = words[i].toDouble(&ok);
+                
+                if (ok) params.append(param);
+            }
+            
+            GromacsDihedral dihedral;
+            
+            try
+            {
+                dihedral = GromacsDihedral(func_type, params);
+            }
+            catch(const SireError::exception &e)
+            {
+                warnings.append( QObject::tr("Unable to extract the correct information "
+                  "to form a dihedral from line '%1'. Error is '%2'")
+                    .arg(line).arg(e.error()) );
+                continue;
+            }
+            
+            QString key = get_dihedral_id(atm0,atm1,atm2,atm3);
+            dihs.insertMulti(key, dihedral);
+        }
+
+        dih_potentials = dihs;
+
+        return warnings;
     };
 
     //internal function to process the constrainttypes lines
     auto processConstraintTypes = [&]()
     {
-        return QStringList();
+        QStringList warnings;
+        
+        //get all 'bondtypes' lines
+        const auto lines = getAllLines("constrainttypes");
+
+        for (const auto line : lines)
+        {
+            warnings.append( QString("Ignoring 'constrainttypes' %1").arg(line) );
+        }
+
+        return warnings;
     };
 
     //internal function to process the nonbond_params lines
     auto processNonBondParams = [&]()
     {
-        return QStringList();
+        QStringList warnings;
+        
+        //get all 'bondtypes' lines
+        const auto lines = getAllLines("nonbond_params");
+
+        for (const auto line : lines)
+        {
+            warnings.append( QString("Ignoring 'nonbond_params' %1").arg(line) );
+        }
+
+        return warnings;
     };
     
     //process the defaults data first, as this affects the rest of the parsing

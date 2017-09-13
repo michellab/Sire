@@ -7,7 +7,15 @@
 
 namespace bp = boost::python;
 
+#include "SireCAS/conditional.h"
+
+#include "SireCAS/exp.h"
+
+#include "SireCAS/trigfuncs.h"
+
 #include "SireError/errors.h"
+
+#include "SireID/index.h"
 
 #include "SireStream/datastream.h"
 
