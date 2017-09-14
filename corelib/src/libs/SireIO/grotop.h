@@ -38,13 +38,65 @@ SIRE_BEGIN_HEADER
 namespace SireIO
 {
 class GroTop;
+class GroMolType;
 }
 
 QDataStream& operator<<(QDataStream&, const SireIO::GroTop&);
 QDataStream& operator>>(QDataStream&, SireIO::GroTop&);
 
+QDataStream& operator<<(QDataStream&, const SireIO::GroMolType&);
+QDataStream& operator>>(QDataStream&, SireIO::GroMolType&);
+
 namespace SireIO
 {
+
+/** This class is used by GroTop to hold an intermediate representation of a 
+    Gromacs moleculetype. This provides metadata about the molecule that is
+    needed to construct the whole molecule.
+    
+    @author Christopher Woods
+*/
+class SIREIO_EXPORT GroMolType
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const GroMolType&);
+friend QDataStream& ::operator>>(QDataStream&, GroMolType&);
+
+public:
+    GroMolType();
+    
+    GroMolType(const GroMolType &other);
+    
+    ~GroMolType();
+    
+    GroMolType& operator=(const GroMolType &other);
+    
+    bool operator==(const GroMolType &other) const;
+    bool operator!=(const GroMolType &other) const;
+    
+    static const char* typeName();
+    const char* what() const;
+    
+    QString toString() const;
+    
+    QString name() const;
+    
+    void addAtom(const QString &atomtype, int resnum, const QString &resname,
+                 const QString &atomname, int chggroup, double chg, double mass);
+    
+    void checkSanity();
+ 
+    void addWarning(const QString &warning);
+    
+    QStringList warnings() const;
+    
+private:
+    /** The name of this moleculetype */
+    QString nme;
+
+    /** A set of warnings that are generated about this type */
+    QStringList warns;
+};
 
 /** This class holds a parser for reading and writing Gromacs "top" topology files.
 
@@ -126,6 +178,9 @@ public:
     QMultiHash<QString,SireMM::GromacsAngle> anglePotentials() const;
     QMultiHash<QString,SireMM::GromacsDihedral> dihedralPotentials() const;
 
+    GroMolType moleculeType(const QString &name) const;
+    QVector<GroMolType> moleculeTypes() const;
+
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
@@ -175,6 +230,9 @@ private:
     /** The database of dihedral potentials */
     QMultiHash<QString,SireMM::GromacsDihedral> dih_potentials;
     
+    /** The list of all moleculetypes loaded from this file */
+    QVector<GroMolType> moltypes;
+    
     /** The non-bonded function type to use for all molecules */
     qint32 nb_func_type;
     
@@ -194,8 +252,10 @@ private:
 }
 
 Q_DECLARE_METATYPE( SireIO::GroTop )
+Q_DECLARE_METATYPE( SireIO::GroMolType )
 
 SIRE_EXPOSE_CLASS( SireIO::GroTop )
+SIRE_EXPOSE_CLASS( SireIO::GroMolType )
 
 SIRE_END_HEADER
 

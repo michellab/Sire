@@ -54,6 +54,129 @@ using namespace SireBase;
 using namespace SireSystem;
 using namespace SireStream;
 
+////////////////
+//////////////// Implementation of GroMolType
+////////////////
+
+static const RegisterMetaType<GroMolType> r_gromoltyp(NO_ROOT);
+
+QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroMolType &moltyp)
+{
+    writeHeader(ds, r_gromoltyp, 1);
+    
+    SharedDataStream sds(ds);
+    
+    sds << moltyp.nme << moltyp.warns;
+    
+    return ds;
+}
+
+QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroMolType &moltyp)
+{
+    VersionID v = readHeader(ds, r_gromoltyp);
+    
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        
+        sds >> moltyp.nme >> moltyp.warns;
+    }
+    else
+        throw version_error(v, "1", r_gromoltyp, CODELOC);
+    
+    return ds;
+}
+
+/** Constructor */
+GroMolType::GroMolType()
+{}
+
+/** Copy constructor */
+GroMolType::GroMolType(const GroMolType &other)
+           : nme(other.nme), warns(other.warns)
+{}
+
+/** Destructor */
+GroMolType::~GroMolType()
+{}
+
+/** Copy assignment operator */
+GroMolType& GroMolType::operator=(const GroMolType &other)
+{
+    if (this != &other)
+    {
+        nme = other.nme;
+        warns = other.warns;
+    }
+    
+    return *this;
+}
+
+/** Comparison operator */
+bool GroMolType::operator==(const GroMolType &other) const
+{
+    return nme == other.nme and
+           warns == other.warns;
+}
+
+/** Comparison operator */
+bool GroMolType::operator!=(const GroMolType &other) const
+{
+    return not operator==(other);
+}
+
+const char* GroMolType::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<GroMolType>() );
+}
+
+const char* GroMolType::what() const
+{
+    return GroMolType::typeName();
+}
+
+/** Return a string form for this object */
+QString GroMolType::toString() const
+{
+    return QObject::tr("GroMolType()");
+}
+
+/** Return the name of this moleculetype */
+QString GroMolType::name() const
+{
+    return nme;
+}
+
+/** Add an atom to this moleculetype, with specified atom type, residue number,
+    residue name, atom name, charge group, charge and mass */
+void GroMolType::addAtom(const QString &atomtype, int resnum, const QString &resname,
+                         const QString &atomname, int chggroup, double chg, double mass)
+{
+}
+
+/** Check the sanity of this moleculetype. This assumes that the moleculetype has
+    been fully specified, so it collects everything together and checks that the
+    molecule makes sense. Any warnings generated can be retrieved using the 
+    'warnings' function */
+void GroMolType::checkSanity()
+{}
+
+/** Add a warning that has been generated while parsing or creatig this object */
+void GroMolType::addWarning(const QString &warning)
+{
+    warns.append(warning);
+}
+
+/** Return any warnings associated with this moleculetype */
+QStringList GroMolType::warnings() const
+{
+    return warns;
+}
+
+////////////////
+//////////////// Implementation of GroTop
+////////////////
+
 const RegisterParser<GroTop> register_grotop;
 static const RegisterMetaType<GroTop> r_grotop;
 
@@ -69,6 +192,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroTop &grotop)
         << grotop.bond_potentials
         << grotop.ang_potentials
         << grotop.dih_potentials
+        << grotop.moltypes
         << grotop.nb_func_type
         << grotop.combining_rule << grotop.fudge_lj
         << grotop.fudge_qq << grotop.generate_pairs
@@ -91,6 +215,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroTop &grotop)
             >> grotop.bond_potentials
             >> grotop.ang_potentials
             >> grotop.dih_potentials
+            >> grotop.moltypes
             >> grotop.nb_func_type
             >> grotop.combining_rule >> grotop.fudge_lj
             >> grotop.fudge_qq >> grotop.generate_pairs
@@ -222,6 +347,7 @@ GroTop::GroTop(const GroTop &other)
          bond_potentials(other.bond_potentials),
          ang_potentials(other.ang_potentials),
          dih_potentials(other.dih_potentials),
+         moltypes(other.moltypes),
          nb_func_type(other.nb_func_type), combining_rule(other.combining_rule),
          fudge_lj(other.fudge_lj), fudge_qq(other.fudge_qq),
          generate_pairs(other.generate_pairs)
@@ -243,6 +369,7 @@ GroTop& GroTop::operator=(const GroTop &other)
         bond_potentials = other.bond_potentials;
         ang_potentials = other.ang_potentials;
         dih_potentials = other.dih_potentials;
+        moltypes = other.moltypes;
         nb_func_type = other.nb_func_type;
         combining_rule = other.combining_rule;
         fudge_lj = other.fudge_lj;
@@ -539,6 +666,25 @@ QMultiHash<QString,SireMM::GromacsAngle> GroTop::anglePotentials() const
 QMultiHash<QString,SireMM::GromacsDihedral> GroTop::dihedralPotentials() const
 {
     return dih_potentials;
+}
+
+/** Return the moleculetype with name 'name'. This returns an invalid (empty)
+    GroMolType if one with this name does not exist */
+GroMolType GroTop::moleculeType(const QString &name) const
+{
+    for (const auto moltype : moltypes)
+    {
+        if (moltype.name() == name)
+            return moltype;
+    }
+    
+    return GroMolType();
+}
+
+/** Return all of the moleculetypes that have been loaded from this file */
+QVector<GroMolType> GroTop::moleculeTypes() const
+{
+    return moltypes;
 }
 
 /** Return whether or not the gromacs preprocessor would change these lines */
@@ -1038,6 +1184,34 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             throw SireError::program_bug( QObject::tr(
                 "Cannot find tag '%1' at index '%2'. This should not happen!")
                     .arg(directive).arg(n), CODELOC );
+        
+        QStringList lines;
+        
+        for (int i=start; i<end; ++i)
+        {
+            lines.append( expandedLines().constData()[i] );
+        }
+        
+        return lines;
+    };
+
+    //return the lines associated with the directive at line 'linenum'
+    auto getDirectiveLines = [&](int linenum) -> QStringList
+    {
+        auto it = taglocs.constFind(linenum);
+        
+        if (it == taglocs.constEnd())
+            throw SireError::program_bug( QObject::tr(
+                "Cannot find a tag associated with line '%1'. This should not happen!")
+                    .arg(linenum), CODELOC );
+        
+        int start = it.key() + 1;
+        int end = expandedLines().count();
+        
+        ++it;
+        
+        if (it != taglocs.constEnd())
+            end = it.key();
         
         QStringList lines;
         
@@ -1555,6 +1729,145 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         return warnings;
     };
     
+    //internal function to process moleculetype lines
+    auto processMoleculeTypes = [&]()
+    {
+        QStringList warnings;
+        
+        //how many moleculetypes are there? Divide them up and get
+        //the child tags for each moleculetype
+        QList< QHash<QString,int> > moltags;
+        {
+            //list of tags that are valid within a moleculetype
+            const QStringList valid_tags = { "atoms", "bonds", "pairs", "pairs_nb",
+                                             "angles", "dihedrals", "exclusions",
+                                             "contraints", "settles", "virtual_sites2",
+                                             "virtual_sitesn", "position_restraints",
+                                             "distance_restraints", "orientation_restraints",
+                                             "angle_restraints", "angle_restraints_z" };
+        
+            auto it = taglocs.constBegin();
+            
+            while (it != taglocs.constEnd())
+            {
+                if (it.value() == "moleculetype")
+                {
+                    //we have found another molecule - save the location
+                    //of all of its child tags
+                    QHash<QString,int> tags;
+                    tags.insert(it.value(), it.key());
+                    ++it;
+                    
+                    while (it != taglocs.constEnd())
+                    {
+                        //save all child tags until we reach the end
+                        //of definition of this moleculetype
+                        if (valid_tags.contains(it.value()))
+                        {
+                            //this is a valid child tag - save its location
+                            tags.insert(it.value(), it.key());
+                            ++it;
+                        }
+                        else
+                        {
+                            //this is the end of the 'moleculetype'
+                            ++it;
+                            break;
+                        }
+                    }
+                    
+                    moltags.append(tags);
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+        }
+        
+        //now we define a set of functions that are needed to parse the
+        //various child tags
+        
+        //function that extract the metadata about the moleculetype
+        //and returns it as a 'GroMolType' object
+        auto getMolType = [&]( int linenum )
+        {
+            GroMolType moltype;
+        
+            QStringList lines = getDirectiveLines(linenum);
+            
+            for (const auto line : lines)
+            {
+                moltype.addWarning( QString("moleculetype line: %1").arg(line) );
+            }
+        
+            return moltype;
+        };
+        
+        //function that extracts all of the information from the 'atoms' lines
+        //and adds it to the passed GroMolType
+        auto addAtomsTo = [&](GroMolType &moltype, int linenum)
+        {
+            QStringList lines = getDirectiveLines(linenum);
+            
+            for (const auto line : lines)
+            {
+                moltype.addWarning( QString("atoms line: %1").arg(line) );
+            }
+        };
+        
+        //function that extracts all of the information from the 'bonds' lines
+        
+        //ok, now we know the location of all child tags of each moleculetype
+        auto processMolType = [&](const QHash<QString,int> &moltag)
+        {
+            auto moltype = getMolType( moltag.value("moleculetype", -1) );
+            addAtomsTo( moltype, moltag.value("atoms", -1) );
+            //addBondsTo( moltype, moltype.value("bonds", -1) );
+            
+            //should be finished, run some checks that this looks sane
+            moltype.checkSanity();
+            
+            return moltype;
+        };
+        
+        //set the size of the array of moltypes
+        moltypes = QVector<GroMolType>(moltags.count());
+        auto moltypes_array = moltypes.data();
+        
+        if (usesParallel())
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,moltags.count()),
+                               [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    auto moltype = processMolType( moltags.at(i) );
+                    moltypes_array[i] = moltype;
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<moltags.count(); ++i)
+            {
+                auto moltype = processMolType( moltags.at(i) );
+                moltypes_array[i] = moltype;
+            }
+        }
+        
+        //now collect any warnings from the types
+        for (const auto moltype : moltypes)
+        {
+            if (not moltype.warnings().isEmpty())
+            {
+                warnings.append(moltype.warnings());
+            }
+        }
+        
+        return warnings;
+    };
+    
     //process the defaults data first, as this affects the rest of the parsing
     auto warnings = processDefaults();
 
@@ -1562,7 +1875,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     const QVector< std::function<QStringList()> > funcs =
                  { processAtomTypes, processBondTypes, processPairTypes,
                    processAngleTypes, processDihedralTypes, processConstraintTypes,
-                   processNonBondParams
+                   processNonBondParams, processMoleculeTypes
                  };
 
     if (usesParallel())
