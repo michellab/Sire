@@ -119,7 +119,7 @@ public:
     QString getResName() const;
 
     /** Get the chain id. */
-    QString getChainId() const;
+    QChar getChainId() const;
 
     /** Get the residue sequence number. */
     qint64 getResNum() const;
@@ -745,6 +745,12 @@ private:
 
     //* Residue mapping. */
     QVector<QMultiMap<QPair<qint64, QString>, qint64> > residues;
+
+    //* Chain identifier mappings for each frame. */
+    QVector<QMultiMap<QChar, QString> > chains;
+
+    //* Residue sequence (segment) numbers for each frame. */
+    QVector<QSet<qint64>> segments;
 
     //* Connectivity data. */
     QVector<QMultiMap<qint64, qint64> > connections;

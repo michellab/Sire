@@ -310,10 +310,11 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDB2 &pdb2)
 
     SharedDataStream sds(ds);
 
-    sds << pdb2.title << pdb2.atoms << pdb2.residues << pdb2.connections
-        << pdb2.helices << pdb2.sheets << pdb2.trans_orig << pdb2.trans_scale
-        << pdb2.trans_matrix << pdb2.master << pdb2.num_ters << pdb2.invalid_records
-        << pdb2.parse_warnings << static_cast<const MoleculeParser&>(pdb2);
+    sds << pdb2.title << pdb2.atoms << pdb2.residues << pdb2.chains << pdb2.segments
+        << pdb2.connections << pdb2.helices << pdb2.sheets << pdb2.trans_orig
+        << pdb2.trans_scale << pdb2.trans_matrix << pdb2.master << pdb2.num_ters
+        << pdb2.invalid_records << pdb2.parse_warnings
+        << static_cast<const MoleculeParser&>(pdb2);
 
     return ds;
 }
@@ -326,10 +327,11 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB2 &pdb2)
     {
         SharedDataStream sds(ds);
 
-        sds >> pdb2.title >> pdb2.atoms >> pdb2.residues >> pdb2.connections
-            >> pdb2.helices >> pdb2.sheets >> pdb2.trans_orig << pdb2.trans_scale
-            >> pdb2.trans_matrix >> pdb2.master >> pdb2.num_ters >> pdb2.invalid_records
-            >> pdb2.parse_warnings >> static_cast<MoleculeParser&>(pdb2);
+        sds >> pdb2.title >> pdb2.atoms >> pdb2.residues >> pdb2.chains >> pdb2.segments
+            >> pdb2.connections >> pdb2.helices >> pdb2.sheets >> pdb2.trans_orig
+            >> pdb2.trans_scale >> pdb2.trans_matrix >> pdb2.master >> pdb2.num_ters
+            >> pdb2.invalid_records >> pdb2.parse_warnings
+            >> static_cast<MoleculeParser&>(pdb2);
     }
     else
         throw version_error(v, "1", r_pdb2, CODELOC);
@@ -567,7 +569,7 @@ QString PDBAtom::getResName() const
 }
 
 /** Get the chain id. */
-QString PDBAtom::getChainId() const
+QChar PDBAtom::getChainId() const
 {
     return chain_id;
 }
@@ -1886,12 +1888,19 @@ void PDB2::parseLines(const PropertyMap &map)
     // The residue map for the frame.
     QMultiMap<QPair<qint64, QString>, qint64> frame_residues;
 
+    // The chain identifier map for the frame.
+    QMultiMap<QChar, QString> frame_chains;
+
+    // The residue sequence (segment) numbers for the frame.
+    QSet<qint64> frame_segments;
+
     // The connectivity map for the frame.
     QMultiMap<qint64, qint64> frame_connections;
 
     // Internal function used to parse a single atom line in the file.
     auto parse_atoms = [&](const QString &line, int iatm, int iframe, int iline, int num_lines,
-        PDBAtom &frame_atom, QMultiMap<QPair<qint64, QString>, qint64> &local_residues, QStringList &errors)
+        PDBAtom &frame_atom, QMultiMap<QPair<qint64, QString>, qint64> &local_residues,
+        QMultiMap<QChar, QString> &local_chains, QSet<qint64> &local_segments, QStringList &errors)
     {
         // Populate atom data.
         frame_atom = PDBAtom(line, errors);
@@ -1931,14 +1940,19 @@ void PDB2::parseLines(const PropertyMap &map)
                     " match previous frame! '%4'")
                     .arg(iatm).arg(iframe).arg(iline).arg(line));
             }
-
         }
 
         // Create residue number / name pair.
         QPair<qint64, QString> res(frame_atom.getResNum(), frame_atom.getResName());
 
         // Update the residue multi-map (residue number / name --> atom index).
-        local_residues.insert(res, frame_atom.getSerial());
+        local_residues.insert(res, iatm);
+
+        // Insert the chain identifier.
+        local_chains.insert(frame_atom.getChainId(), frame_atom.getResName());
+
+        // Insert the residue sequence number.
+        local_segments.insert(frame_atom.getResNum());
 
         return frame_atom.isTer();
     };
@@ -2155,18 +2169,23 @@ void PDB2::parseLines(const PropertyMap &map)
                     qint64 local_num_ters = 0;
                     QStringList local_errors;
                     QMultiMap<QPair<qint64, QString>, qint64> local_residues;
+                    QMultiMap<QChar, QString> local_chains;
+                    QSet<qint64> local_segments;
 
                     for (int i=r.begin(); i<r.end(); ++i)
                     {
                         // Parse the atom record and determine whether it is a terminal record.
                         if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                            atom_lines[i], lines().count(), frame_atoms[i], local_residues, local_errors ))
+                            atom_lines[i], lines().count(), frame_atoms[i], local_residues,
+                            local_chains, local_segments, local_errors ))
                                 local_num_ters++;
                     }
 
                     QMutexLocker lkr(&mutex);
                     num_ters += local_num_ters;
                     frame_residues += local_residues;
+                    frame_chains += local_chains;
+                    frame_segments += local_segments;
                     parse_warnings += local_errors;
                 });
             }
@@ -2176,43 +2195,33 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     // Parse the atom record and determine whether it is a terminal record.
                     if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                        atom_lines[i], lines().count(), frame_atoms[i], residues[iframe], parse_warnings ))
+                        atom_lines[i], lines().count(), frame_atoms[i], frame_residues,
+                        frame_chains, frame_segments, parse_warnings ))
                             num_ters++;
                 }
             }
 
-            // Append the atom data.
-            atoms.append(frame_atoms);
+            // Append frame data and clear the vectors.
 
-            // Clear the atom line index vector.
+            atoms.append(frame_atoms);
             atom_lines.clear();
 
-            // Append the residue map.
             residues.append(frame_residues);
-
-            // Clear the frame residue map.
             frame_residues.clear();
 
-            // Append the connectivity map.
-            connections.append(frame_connections);
+            chains.append(frame_chains);
+            frame_chains.clear();
 
-            // Clear the frame connectivity map.
+            segments.append(frame_segments);
+            frame_segments.clear();
+
+            connections.append(frame_connections);
             frame_connections.clear();
 
             iframe++;
             nats = 0;
         }
     }
-
-    /*for (auto atom : connections[0].uniqueKeys())
-    {
-        std::cout << atom << ": ";
-        QList<qint64> bonds = connections[0].values(atom);
-        for (int i = 0; i < bonds.size(); ++i)
-                std::cout << ' ' << bonds.at(i);
-        std::cout << '\n';
-        std::cin.get();
-    }*/
 
     this->setScore(nats);
 }
@@ -2338,6 +2347,26 @@ MolStructureEditor PDB2::getMolStructure(int imol,
     // Residue index.
     int ires = 0;
 
+    // Create a reverse mapping between residues and chains.
+    QMap<QString, QChar> res_to_chain;
+
+    // Add any chains to the molecule.
+    for (auto chain : chains[iframe].uniqueKeys())
+    {
+        mol.add(ChainName(chain));
+
+        // Get a list of the residues that are part of this chain.
+        QList<QString> chain_residues = chains[iframe].values(chain);
+
+        // Create the reverse mapping.
+        for (auto residue : chain_residues)
+            res_to_chain.insert(residue, chain);
+    }
+
+    // Add any segments to the molecule.
+    for (auto segment : segments[iframe])
+        mol.add(SegName(QString::number(segment)));
+
     // Loop over all unique residues in the frame.
     for (auto residue : residues[iframe].uniqueKeys())
     {
@@ -2351,17 +2380,25 @@ MolStructureEditor PDB2::getMolStructure(int imol,
 
         // Get a list of the atoms that are part of the residue.
         QList<qint64> res_atoms = residues[iframe].values(residue);
+        qSort(res_atoms);
 
         // Add the residue to the molecule.
         auto res = mol.add(ResNum(res_num));
         res.rename(ResName(res_name.trimmed()));
 
+        // Reparent the residue to its chain.
+        if (res_to_chain.contains(res_name))
+            res.reparent(ChainName(res_to_chain[res_name]));
+
         // Add each atom in the residue to the molecule.
         for (auto res_atom : res_atoms)
         {
-            auto atom = cutgroup.add(AtomNum(res_atom));
+            auto atom = cutgroup.add(AtomNum(atoms[iframe][res_atom].getSerial()));
             atom.rename(AtomName(atoms[iframe][res_atom].getName().trimmed()));
+
+            // Reparent the atom to its residue and segment.
             atom.reparent(ResNum(res_num));
+            atom.reparent(SegName(QString::number(atoms[iframe][res_atom].getResNum())));
         }
 
         ires++;
@@ -2422,7 +2459,7 @@ MolEditor PDB2::getMolecule(int imol, int iframe, const PropertyMap &map) const
         const PDBAtom &atom = atoms[iframe][i];
 
         // Determine the CGAtomIdx for this atom.
-        auto cgatomidx = molinfo.cgAtomIdx(AtomNum(atom.getResNum()));
+        auto cgatomidx = molinfo.cgAtomIdx(AtomNum(atom.getSerial()));
 
         // Set the properties.
         coords.set(cgatomidx, atom.getCoord());
@@ -2433,7 +2470,7 @@ MolEditor PDB2::getMolecule(int imol, int iframe, const PropertyMap &map) const
     }
 
     return mol.setProperty(map["coordinates"], coords)
-              .setProperty(map["charge"], charges)
+              .setProperty(map["formal-charge"], charges)
               .setProperty(map["element"], elements)
               .setProperty(map["occupancy"], occupancies)
               .setProperty(map["beta-factor"], temperatures)

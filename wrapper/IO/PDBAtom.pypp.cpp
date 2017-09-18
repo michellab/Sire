@@ -54,7 +54,7 @@ void register_PDBAtom_class(){
         PDBAtom_exposer.def( bp::init< QString const &, QStringList & >(( bp::arg("line"), bp::arg("errors") ), "Constructor.") );
         { //::SireIO::PDBAtom::getChainId
         
-            typedef ::QString ( ::SireIO::PDBAtom::*getChainId_function_type)(  ) const;
+            typedef ::QChar ( ::SireIO::PDBAtom::*getChainId_function_type)(  ) const;
             getChainId_function_type getChainId_function_value( &::SireIO::PDBAtom::getChainId );
             
             PDBAtom_exposer.def( 
