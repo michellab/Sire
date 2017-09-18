@@ -26,8 +26,6 @@
   *
 \*********************************************/
 
-#include <iostream>
-
 #include "SireIO/pdb2.h"
 
 #include "SireMM/pdbparams.h"
