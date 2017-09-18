@@ -31,6 +31,9 @@
 
 #include "moleculeparser.h"
 
+#include "SireMol/atomname.h"
+#include "SireMol/resname.h"
+
 #include "SireMM/gromacsparams.h"
 
 SIRE_BEGIN_HEADER
@@ -84,11 +87,11 @@ public:
     
     bool isNull() const;
     
-    AtomName name() const;
-    AtomNum number() const;
+    SireMol::AtomName name() const;
+    SireMol::AtomNum number() const;
     
-    ResName residueName() const;
-    ResNum residueNumber() const;
+    SireMol::ResName residueName() const;
+    SireMol::ResNum residueNumber() const;
     
     qint64 chargeGroup() const;
     
@@ -182,17 +185,17 @@ public:
     int nAtoms() const;
     int nResidues() const;
     
-    GroAtom atom(const AtomIdx &atomidx) const;
-    GroAtom atom(const AtomNum &atomnum) const;
-    GroAtom atom(const AtomName &atomnam) const;
+    GroAtom atom(const SireMol::AtomIdx &atomidx) const;
+    GroAtom atom(const SireMol::AtomNum &atomnum) const;
+    GroAtom atom(const SireMol::AtomName &atomnam) const;
     
     QVector<GroAtom> atoms() const;
 
-    QVector<GroAtom> atoms(const AtomName &atomnam) const;
+    QVector<GroAtom> atoms(const SireMol::AtomName &atomnam) const;
     
-    QVector<GroAtom> atoms(const ResIdx &residx) const;
-    QVector<GroAtom> atoms(const ResNum &resnum) const;
-    QVector<GroAtom> atoms(const ResName &resnam) const;
+    QVector<GroAtom> atoms(const SireMol::ResIdx &residx) const;
+    QVector<GroAtom> atoms(const SireMol::ResNum &resnum) const;
+    QVector<GroAtom> atoms(const SireMol::ResName &resnam) const;
     
     QStringList warnings() const;
     

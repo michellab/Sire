@@ -8,6 +8,8 @@ set ( PYPP_SOURCES
        FlexibilityLibrary.pypp.cpp
        FlexibilityTemplate.pypp.cpp
        Gro87.pypp.cpp
+       GroAtom.pypp.cpp
+       GroMolType.pypp.cpp
        GroTop.pypp.cpp
        IOBase.pypp.cpp
        IOParametersBase.pypp.cpp

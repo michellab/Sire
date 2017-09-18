@@ -19,6 +19,8 @@ namespace bp = boost::python;
 
 #include "SireIO/grotop.h"
 
+#include "SireMol/errors.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -202,7 +204,7 @@ void register_GroTop_class(){
                 "dihedral"
                 , dihedral_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2"), bp::arg("atm3") )
-                , "" );
+                , "Return the dihedral potential data for the passed quad of atoms. This only returns\nthe most recently inserted parameter for these atoms. Use dihedrals if you want\nto allow for multiple return values" );
         
         }
         { //::SireIO::GroTop::dihedralPotentials
@@ -213,7 +215,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "dihedralPotentials"
                 , dihedralPotentials_function_value
-                , "" );
+                , "Return the dihedral potentials loaded from this file" );
         
         }
         { //::SireIO::GroTop::dihedrals
@@ -225,7 +227,7 @@ void register_GroTop_class(){
                 "dihedrals"
                 , dihedrals_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2"), bp::arg("atm3") )
-                , "" );
+                , "Return the dihedral potential data for the passed quad of atoms. This returns\na list of all associated parameters" );
         
         }
         { //::SireIO::GroTop::formatDescription
@@ -316,6 +318,29 @@ void register_GroTop_class(){
                 , includedFiles_function_value
                 , ( bp::arg("absolute_paths")=(bool)(false) )
                 , "Return the list of names of files that were included when reading or\nwriting this file. The files are relative. If absolute_paths\nis true then the full absolute paths for the files will be\nused" );
+        
+        }
+        { //::SireIO::GroTop::moleculeType
+        
+            typedef ::SireIO::GroMolType ( ::SireIO::GroTop::*moleculeType_function_type)( ::QString const & ) const;
+            moleculeType_function_type moleculeType_function_value( &::SireIO::GroTop::moleculeType );
+            
+            GroTop_exposer.def( 
+                "moleculeType"
+                , moleculeType_function_value
+                , ( bp::arg("name") )
+                , "Return the moleculetype with name name. This returns an invalid (empty)\nGroMolType if one with this name does not exist" );
+        
+        }
+        { //::SireIO::GroTop::moleculeTypes
+        
+            typedef ::QVector< SireIO::GroMolType > ( ::SireIO::GroTop::*moleculeTypes_function_type)(  ) const;
+            moleculeTypes_function_type moleculeTypes_function_value( &::SireIO::GroTop::moleculeTypes );
+            
+            GroTop_exposer.def( 
+                "moleculeTypes"
+                , moleculeTypes_function_value
+                , "Return all of the moleculetypes that have been loaded from this file" );
         
         }
         { //::SireIO::GroTop::nonBondedFunctionType

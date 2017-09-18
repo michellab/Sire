@@ -21,6 +21,10 @@
 
 #include "Gro87.pypp.hpp"
 
+#include "GroAtom.pypp.hpp"
+
+#include "GroMolType.pypp.hpp"
+
 #include "GroTop.pypp.hpp"
 
 #include "IOBase.pypp.hpp"
@@ -83,6 +87,10 @@ BOOST_PYTHON_MODULE(_IO){
     register_FlexibilityTemplate_class();
 
     register_Gro87_class();
+
+    register_GroAtom_class();
+
+    register_GroMolType_class();
 
     register_GroTop_class();
 

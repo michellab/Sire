@@ -33,6 +33,8 @@
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
 
+#include "SireMol/errors.h"
+
 #include "SireBase/parallel.h"
 #include "SireBase/stringproperty.h"
 #include "SireBase/booleanproperty.h"
@@ -66,7 +68,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroAtom &atom)
     
     SharedDataStream sds(ds);
     
-    sds << atom.atmname << atom.resname << atom.atmtype
+    sds << atom.atmname << atom.resname << atom.atmtyp
         << atom.atmnum << atom.resnum << atom.chggrp
         << atom.chg.to(mod_electron) << atom.mss.to(g_per_mol);
     
@@ -83,7 +85,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroAtom &atom)
         
         double chg, mass;
         
-        sds >> atom.atmname >> atom.resname >> atom.atmtype
+        sds >> atom.atmname >> atom.resname >> atom.atmtyp
             >> atom.atmnum >> atom.resnum >> atom.chggrp
             >> chg >> mass;
         
@@ -94,6 +96,183 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroAtom &atom)
         throw version_error(v, "1", r_groatom, CODELOC);
     
     return ds;
+}
+
+/** Constructor */
+GroAtom::GroAtom() : atmnum(-1), resnum(-1), chggrp(-1), chg(0), mss(0)
+{}
+
+/** Copy constructor */
+GroAtom::GroAtom(const GroAtom &other)
+        : atmname(other.atmname), resname(other.resname),
+          atmtyp(other.atmtyp), atmnum(other.atmnum),
+          resnum(other.resnum), chggrp(other.chggrp),
+          chg(other.chg), mss(other.mss)
+{}
+
+/** Destructor */
+GroAtom::~GroAtom()
+{}
+
+/** Copy assignment operator */
+GroAtom& GroAtom::operator=(const GroAtom &other)
+{
+    if (this != &other)
+    {
+        atmname = other.atmname;
+        resname = other.resname;
+        atmtyp = other.atmtyp;
+        atmnum = other.atmnum;
+        resnum = other.resnum;
+        chggrp = other.chggrp;
+        chg = other.chg;
+        mss = other.mss;
+    }
+    
+    return *this;
+}
+
+/** Comparison operator */
+bool GroAtom::operator==(const GroAtom &other) const
+{
+    return atmname == other.atmname and
+           resname == other.resname and
+           atmtyp == other.atmtyp and
+           atmnum == other.atmnum and
+           resnum == other.resnum and
+           chggrp == other.chggrp and
+           chg == other.chg and
+           mss == other.mss;
+}
+
+/** Comparison operator */
+bool GroAtom::operator!=(const GroAtom &other) const
+{
+    return not operator==(other);
+}
+
+const char* GroAtom::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<GroAtom>() );
+}
+
+const char* GroAtom::what() const
+{
+    return GroAtom::typeName();
+}
+
+QString GroAtom::toString() const
+{
+    if (isNull())
+        return QObject::tr( "GroAtom::null");
+    else
+        return QObject::tr("GroAtom( name() = %1, number() = %2 )")
+                    .arg(atmname).arg(atmnum);
+}
+
+/** Return whether or not this atom is null */
+bool GroAtom::isNull() const
+{
+    return operator==( GroAtom() );
+}
+
+/** Return the name of the atom */
+AtomName GroAtom::name() const
+{
+    return AtomName(atmname);
+}
+
+/** Return the number of the atom */
+AtomNum GroAtom::number() const
+{
+    return AtomNum(atmnum);
+}
+
+/** Return the name of the residue that contains this atom */
+ResName GroAtom::residueName() const
+{
+    return ResName(resname);
+}
+
+/** Return the number of the residue that contains this atom */
+ResNum GroAtom::residueNumber() const
+{
+    return ResNum(resnum);
+}
+
+/** Return the charge group of this atom */
+qint64 GroAtom::chargeGroup() const
+{
+    return chggrp;
+}
+
+/** Return the atom type of this atom */
+QString GroAtom::atomType() const
+{
+    return atmtyp;
+}
+
+/** Return the charge on this atom */
+SireUnits::Dimension::Charge GroAtom::charge() const
+{
+    return chg;
+}
+
+/** Return the mass of this atom */
+SireUnits::Dimension::MolarMass GroAtom::mass() const
+{
+    return mss;
+}
+
+/** Set the name of this atom */
+void GroAtom::setName(const QString &name)
+{
+    atmname = name;
+}
+
+/** Set the number of this atom */
+void GroAtom::setNumber(qint64 number)
+{
+    if (number >= 0)
+        atmnum = number;
+}
+
+/** Set the name of the residue containing this atom */
+void GroAtom::setResidueName(const QString &name)
+{
+    resname = name;
+}
+
+/** Set the number of the residue containing this atom */
+void GroAtom::setResidueNumber(qint64 number)
+{
+    resnum = number;
+}
+
+/** Set the charge group of this atom */
+void GroAtom::setChargeGroup(qint64 grp)
+{
+    if (grp >= 0)
+        chggrp = grp;
+}
+
+/** Set the atom type of this atom */
+void GroAtom::setAtomType(const QString &atomtype)
+{
+    atmtyp = atomtype;
+}
+
+/** Set the charge on this atom */
+void GroAtom::setCharge(SireUnits::Dimension::Charge charge)
+{
+    chg = charge;
+}
+
+/** Set the mass of this atom */
+void GroAtom::setMass(SireUnits::Dimension::MolarMass mass)
+{
+    if (mass.value() > 0)
+        mss = mass;
 }
 
 ////////////////
@@ -239,7 +418,7 @@ void GroMolType::addAtom(const GroAtom &atom)
 /** Return whether or not this molecule needs sanitising */
 bool GroMolType::needsSanitising() const
 {
-    return (not atms.isEmpty() and (first_atoms.isEmpty());
+    return (not atms.isEmpty()) and first_atoms.isEmpty();
 }
 
 /** Return the number of atoms in this molecule */
@@ -360,7 +539,7 @@ QVector<GroAtom> GroMolType::atoms() const
     {
         GroMolType other(*this);
         other.sanitise();
-        return other.atoms;
+        return other.atoms();
     }
 
     return atms;
@@ -402,7 +581,7 @@ QVector<GroAtom> GroMolType::atoms(const ResNum &resnum) const
     //find the indicies all all matching residues
     QList<ResIdx> idxs;
     
-    for (int idx=0; i<first_atoms.count(); ++i)
+    for (int idx=0; idx<first_atoms.count(); ++idx)
     {
         if (atms[first_atoms.at(idx)].residueNumber() == resnum)
         {
@@ -433,7 +612,7 @@ QVector<GroAtom> GroMolType::atoms(const ResName &resnam) const
     //find the indicies all all matching residues
     QList<ResIdx> idxs;
     
-    for (int idx=0; i<first_atoms.count(); ++i)
+    for (int idx=0; idx<first_atoms.count(); ++idx)
     {
         if (atms[first_atoms.at(idx)].residueName() == resnam)
         {
@@ -462,6 +641,8 @@ void GroMolType::sanitise()
 
     //sort the atoms so that they are in residue number / atom number order, and
     //we check and remove duplicate atom numbers
+
+    first_atoms.append(0);
 }
 
 /** Add a warning that has been generated while parsing or creatig this object */
@@ -2196,8 +2377,17 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     continue;
                 }
                 
-                moltype.addAtom( atomnum, atomtyp, resnum, resnam, atmnam,
-                                 chggrp, chg*mod_electron, mass*g_per_mol );
+                GroAtom atom;
+                atom.setNumber(atomnum);
+                atom.setAtomType(atomtyp);
+                atom.setResidueNumber(resnum);
+                atom.setResidueName(resnam);
+                atom.setName(atmnam);
+                atom.setChargeGroup(chggrp);
+                atom.setCharge(chg*mod_electron);
+                atom.setMass(mass*g_per_mol);
+                
+                moltype.addAtom(atom);
             }
         };
         
@@ -2211,7 +2401,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             //addBondsTo( moltype, moltype.value("bonds", -1) );
             
             //should be finished, run some checks that this looks sane
-            moltype.checkSanity();
+            moltype.sanitise();
         
             qDebug() << moltype.toString();
             
