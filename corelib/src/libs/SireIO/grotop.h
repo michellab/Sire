@@ -39,6 +39,7 @@ namespace SireIO
 {
 class GroTop;
 class GroMolType;
+class GroAtom;
 }
 
 QDataStream& operator<<(QDataStream&, const SireIO::GroTop&);
@@ -47,8 +48,93 @@ QDataStream& operator>>(QDataStream&, SireIO::GroTop&);
 QDataStream& operator<<(QDataStream&, const SireIO::GroMolType&);
 QDataStream& operator>>(QDataStream&, SireIO::GroMolType&);
 
+QDataStream& operator<<(QDataStream&, const SireIO::GroAtom&);
+QDataStream& operator>>(QDataStream&, SireIO::GroAtom&);
+
 namespace SireIO
 {
+
+/** This class is used by GroTop to hold the intermediate representation of
+    a Gromacs atom in a moleculetype
+    
+    @author Christopher Woods
+*/
+class SIREIO_EXPORT GroAtom
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const GroAtom&);
+friend QDataStream& ::operator>>(QDataStream&, GroAtom&);
+
+public:
+    GroAtom();
+    
+    GroAtom(const GroAtom &other);
+    
+    ~GroAtom();
+    
+    GroAtom& operator=(const GroAtom &other);
+    
+    bool operator==(const GroAtom &other) const;
+    bool operator!=(const GroAtom &other) const;
+    
+    static const char* typeName();
+    const char* what() const;
+    
+    QString toString() const;
+    
+    bool isNull() const;
+    
+    AtomName name() const;
+    AtomNum number() const;
+    
+    ResName residueName() const;
+    ResNum residueNumber() const;
+    
+    qint64 chargeGroup() const;
+    
+    QString atomType() const;
+    
+    SireUnits::Dimension::Charge charge() const;
+    SireUnits::Dimension::MolarMass mass() const;
+    
+    void setName(const QString &name);
+    void setNumber(qint64 number);
+    
+    void setResidueName(const QString &name);
+    void setResidueNumber(qint64 number);
+    
+    void setChargeGroup(qint64 grp);
+    
+    void setAtomType(const QString &atomtype);
+    
+    void setCharge(SireUnits::Dimension::Charge charge);
+    void setMass(SireUnits::Dimension::MolarMass mass);
+    
+private:
+    /** Name of the atom */
+    QString atmname;
+    
+    /** Name of the residue */
+    QString resname;
+    
+    /** Atom type */
+    QString atmtyp;
+    
+    /** Atom number */
+    qint64 atmnum;
+    
+    /** Residue number */
+    qint64 resnum;
+    
+    /** Charge group */
+    qint64 chggrp;
+    
+    /** Charge */
+    SireUnits::Dimension::Charge chg;
+    
+    /** Mass */
+    SireUnits::Dimension::MolarMass mss;
+};
 
 /** This class is used by GroTop to hold an intermediate representation of a 
     Gromacs moleculetype. This provides metadata about the molecule that is
@@ -79,16 +165,38 @@ public:
     
     QString toString() const;
     
+    bool isNull() const;
+    
     QString name() const;
+    void setName(const QString &name);
     
-    void addAtom(const QString &atomtype, int resnum, const QString &resname,
-                 const QString &atomname, int chggroup, double chg, double mass);
+    qint64 nExcludedAtoms() const;
+    void setNExcludedAtoms(qint64 nexcl);
     
-    void checkSanity();
- 
+    void addAtom(const GroAtom &atom);
+    
+    void sanitise();
+     
     void addWarning(const QString &warning);
     
+    int nAtoms() const;
+    int nResidues() const;
+    
+    GroAtom atom(const AtomIdx &atomidx) const;
+    GroAtom atom(const AtomNum &atomnum) const;
+    GroAtom atom(const AtomName &atomnam) const;
+    
+    QVector<GroAtom> atoms() const;
+
+    QVector<GroAtom> atoms(const AtomName &atomnam) const;
+    
+    QVector<GroAtom> atoms(const ResIdx &residx) const;
+    QVector<GroAtom> atoms(const ResNum &resnum) const;
+    QVector<GroAtom> atoms(const ResName &resnam) const;
+    
     QStringList warnings() const;
+    
+    bool needsSanitising() const;
     
 private:
     /** The name of this moleculetype */
@@ -96,6 +204,15 @@ private:
 
     /** A set of warnings that are generated about this type */
     QStringList warns;
+
+    /** Array of all of the atoms in this molecule */
+    QVector<GroAtom> atms;
+    
+    /** Array giving the index of the first atom in each residue */
+    QVector<qint64> first_atoms;
+
+    /** The number of excluded atoms */
+    qint64 nexcl;
 };
 
 /** This class holds a parser for reading and writing Gromacs "top" topology files.
@@ -253,9 +370,11 @@ private:
 
 Q_DECLARE_METATYPE( SireIO::GroTop )
 Q_DECLARE_METATYPE( SireIO::GroMolType )
+Q_DECLARE_METATYPE( SireIO::GroAtom )
 
 SIRE_EXPOSE_CLASS( SireIO::GroTop )
 SIRE_EXPOSE_CLASS( SireIO::GroMolType )
+SIRE_EXPOSE_CLASS( SireIO::GroAtom )
 
 SIRE_END_HEADER
 

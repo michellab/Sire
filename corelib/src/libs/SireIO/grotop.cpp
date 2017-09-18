@@ -55,6 +55,48 @@ using namespace SireSystem;
 using namespace SireStream;
 
 ////////////////
+//////////////// Implementation of GroAtom
+////////////////
+
+static const RegisterMetaType<GroAtom> r_groatom(NO_ROOT);
+
+QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroAtom &atom)
+{
+    writeHeader(ds, r_groatom, 1);
+    
+    SharedDataStream sds(ds);
+    
+    sds << atom.atmname << atom.resname << atom.atmtype
+        << atom.atmnum << atom.resnum << atom.chggrp
+        << atom.chg.to(mod_electron) << atom.mss.to(g_per_mol);
+    
+    return ds;
+}
+
+QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroAtom &atom)
+{
+    VersionID v = readHeader(ds, r_groatom);
+    
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        
+        double chg, mass;
+        
+        sds >> atom.atmname >> atom.resname >> atom.atmtype
+            >> atom.atmnum >> atom.resnum >> atom.chggrp
+            >> chg >> mass;
+        
+        atom.chg = chg*mod_electron;
+        atom.mss = mass*g_per_mol;
+    }
+    else
+        throw version_error(v, "1", r_groatom, CODELOC);
+    
+    return ds;
+}
+
+////////////////
 //////////////// Implementation of GroMolType
 ////////////////
 
@@ -66,7 +108,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroMolType &moltyp)
     
     SharedDataStream sds(ds);
     
-    sds << moltyp.nme << moltyp.warns;
+    sds << moltyp.nme << moltyp.warns << moltyp.atms << moltyp.first_atoms << moltyp.nexcl;
     
     return ds;
 }
@@ -79,7 +121,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroMolType &moltyp)
     {
         SharedDataStream sds(ds);
         
-        sds >> moltyp.nme >> moltyp.warns;
+        sds >> moltyp.nme >> moltyp.warns >> moltyp.atms >> moltyp.first_atoms >> moltyp.nexcl;
     }
     else
         throw version_error(v, "1", r_gromoltyp, CODELOC);
@@ -88,12 +130,14 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroMolType &moltyp)
 }
 
 /** Constructor */
-GroMolType::GroMolType()
+GroMolType::GroMolType() : nexcl(0)
 {}
 
 /** Copy constructor */
 GroMolType::GroMolType(const GroMolType &other)
-           : nme(other.nme), warns(other.warns)
+           : nme(other.nme), warns(other.warns),
+             atms(other.atms), first_atoms(other.first_atoms),
+             nexcl(other.nexcl)
 {}
 
 /** Destructor */
@@ -107,6 +151,9 @@ GroMolType& GroMolType::operator=(const GroMolType &other)
     {
         nme = other.nme;
         warns = other.warns;
+        atms = other.atms;
+        first_atoms = other.first_atoms;
+        nexcl = other.nexcl;
     }
     
     return *this;
@@ -116,7 +163,10 @@ GroMolType& GroMolType::operator=(const GroMolType &other)
 bool GroMolType::operator==(const GroMolType &other) const
 {
     return nme == other.nme and
-           warns == other.warns;
+           warns == other.warns and
+           atms == other.atms and
+           first_atoms == other.first_atoms and
+           nexcl == other.nexcl;
 }
 
 /** Comparison operator */
@@ -135,10 +185,26 @@ const char* GroMolType::what() const
     return GroMolType::typeName();
 }
 
+/** Return whether or not this object is null */
+bool GroMolType::isNull() const
+{
+    return this->operator==( GroMolType() );
+}
+
 /** Return a string form for this object */
 QString GroMolType::toString() const
 {
-    return QObject::tr("GroMolType()");
+    if (this->isNull())
+        return QObject::tr("GroMolType::null");
+
+    return QObject::tr("GroMolType( name() = '%1', nExcludedAtoms() = %2 )")
+                    .arg(name()).arg(nExcludedAtoms());
+}
+
+/** Set the name of this moleculetype */
+void GroMolType::setName(const QString &name)
+{
+    nme = name;
 }
 
 /** Return the name of this moleculetype */
@@ -147,19 +213,256 @@ QString GroMolType::name() const
     return nme;
 }
 
-/** Add an atom to this moleculetype, with specified atom type, residue number,
-    residue name, atom name, charge group, charge and mass */
-void GroMolType::addAtom(const QString &atomtype, int resnum, const QString &resname,
-                         const QString &atomname, int chggroup, double chg, double mass)
+/** Set the number of excluded atoms */
+void GroMolType::setNExcludedAtoms(qint64 n)
 {
+    if (n >= 0)
+        nexcl = n;
+    else
+        nexcl = 0;
 }
 
-/** Check the sanity of this moleculetype. This assumes that the moleculetype has
+/** Return the number of excluded atoms */
+qint64 GroMolType::nExcludedAtoms() const
+{
+    return nexcl;
+}
+
+/** Add an atom to this moleculetype, with specified atom type, residue number,
+    residue name, atom name, charge group, charge and mass */
+void GroMolType::addAtom(const GroAtom &atom)
+{
+    if (not atom.isNull())
+        atms.append( atom );
+}
+
+/** Return whether or not this molecule needs sanitising */
+bool GroMolType::needsSanitising() const
+{
+    return (not atms.isEmpty() and (first_atoms.isEmpty());
+}
+
+/** Return the number of atoms in this molecule */
+int GroMolType::nAtoms() const
+{
+    if (needsSanitising())
+    {
+        GroMolType other(*this);
+        other.sanitise();
+        return other.nAtoms();
+    }
+    else
+        return atms.count();
+}
+
+/** Return the number of residues in this molecule */
+int GroMolType::nResidues() const
+{
+    if (needsSanitising())
+    {
+        GroMolType other(*this);
+        other.sanitise();
+        return other.nResidues();
+    }
+    
+    return first_atoms.count();
+}
+
+/** Return the atom at index 'atomidx' */
+GroAtom GroMolType::atom(const AtomIdx &atomidx) const
+{
+    if (needsSanitising())
+    {
+        GroMolType other(*this);
+        other.sanitise();
+        return other.atom(atomidx);
+    }
+    
+    int i = atomidx.map(atms.count());
+    return atms.constData()[i];
+}
+
+/** Return the atom with number 'atomnum' */
+GroAtom GroMolType::atom(const AtomNum &atomnum) const
+{
+    if (needsSanitising())
+    {
+        GroMolType other(*this);
+        other.sanitise();
+        return other.atom(atomnum);
+    }
+    
+    for (int i=0; i<atms.count(); ++i)
+    {
+        if (atms.constData()[i].number() == atomnum)
+        {
+            return atms.constData()[i];
+        }
+    }
+    
+    throw SireMol::missing_atom( QObject::tr(
+        "There is no atom with number '%1' in this molecule '%2'")
+            .arg(atomnum.toString()).arg(this->toString()), CODELOC );
+}
+
+/** Return the first atom with name 'atomnam'. If you want all atoms
+    with this name then call 'atoms(AtomName atomname)' */
+GroAtom GroMolType::atom(const AtomName &atomnam) const
+{
+    if (needsSanitising())
+    {
+        GroMolType other(*this);
+        other.sanitise();
+        return other.atom(atomnam);
+    }
+
+    for (int i=0; i<atms.count(); ++i)
+    {
+        if (atms.constData()[i].name() == atomnam)
+        {
+            return atms.constData()[i];
+        }
+    }
+
+    throw SireMol::missing_atom( QObject::tr(
+        "There is no atom with name '%1' in this molecule '%2'")
+            .arg(atomnam.toString()).arg(this->toString()), CODELOC );
+}
+
+/** Return all atoms that have the passed name. Returns an empty
+    list if there are no atoms with this name */
+QVector<GroAtom> GroMolType::atoms(const AtomName &atomnam) const
+{
+    if (needsSanitising())
+    {
+        GroMolType other(*this);
+        other.sanitise();
+        return other.atoms(atomnam);
+    }
+    
+    QVector<GroAtom> ret;
+    
+    for (int i=0; i<atms.count(); ++i)
+    {
+        if (atms.constData()[i].name() == atomnam)
+        {
+            ret.append( atms.constData()[i] );
+        }
+    }
+    
+    return ret;
+}
+
+/** Return all of the atoms in this molecule */
+QVector<GroAtom> GroMolType::atoms() const
+{
+    if (needsSanitising())
+    {
+        GroMolType other(*this);
+        other.sanitise();
+        return other.atoms;
+    }
+
+    return atms;
+}
+
+/** Return all of the atoms in the specified residue */
+QVector<GroAtom> GroMolType::atoms(const ResIdx &residx) const
+{
+    if (needsSanitising())
+    {
+        GroMolType other(*this);
+        other.sanitise();
+        return other.atoms(residx);
+    }
+    
+    int ires = residx.map( first_atoms.count() );
+    
+    int start = first_atoms.constData()[ires];
+    int end = atms.count();
+    
+    if (ires+1 < first_atoms.count())
+    {
+        end = first_atoms.constData()[ires+1];
+    }
+    
+    return atms.mid(start, end);
+}
+
+/** Return all of the atoms in the specified residue(s) */
+QVector<GroAtom> GroMolType::atoms(const ResNum &resnum) const
+{
+    if (needsSanitising())
+    {
+        GroMolType other(*this);
+        other.sanitise();
+        return other.atoms(resnum);
+    }
+    
+    //find the indicies all all matching residues
+    QList<ResIdx> idxs;
+    
+    for (int idx=0; i<first_atoms.count(); ++i)
+    {
+        if (atms[first_atoms.at(idx)].residueNumber() == resnum)
+        {
+            idxs.append( ResIdx(idx) );
+        }
+    }
+    
+    QVector<GroAtom> ret;
+    
+    for (const auto idx : idxs)
+    {
+        ret += this->atoms(idx);
+    }
+    
+    return ret;
+}
+
+/** Return all of the atoms in the specified residue(s) */
+QVector<GroAtom> GroMolType::atoms(const ResName &resnam) const
+{
+    if (needsSanitising())
+    {
+        GroMolType other(*this);
+        other.sanitise();
+        return other.atoms(resnam);
+    }
+
+    //find the indicies all all matching residues
+    QList<ResIdx> idxs;
+    
+    for (int idx=0; i<first_atoms.count(); ++i)
+    {
+        if (atms[first_atoms.at(idx)].residueName() == resnam)
+        {
+            idxs.append( ResIdx(idx) );
+        }
+    }
+    
+    QVector<GroAtom> ret;
+    
+    for (const auto idx : idxs)
+    {
+        ret += this->atoms(idx);
+    }
+    
+    return ret;
+}
+
+/** Sanitise this moleculetype. This assumes that the moleculetype has
     been fully specified, so it collects everything together and checks that the
     molecule makes sense. Any warnings generated can be retrieved using the 
     'warnings' function */
-void GroMolType::checkSanity()
-{}
+void GroMolType::sanitise()
+{
+    if (not needsSanitising())
+        return;
+
+    //sort the atoms so that they are in residue number / atom number order, and
+    //we check and remove duplicate atom numbers
+}
 
 /** Add a warning that has been generated while parsing or creatig this object */
 void GroMolType::addWarning(const QString &warning)
@@ -1793,12 +2096,52 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         auto getMolType = [&]( int linenum )
         {
             GroMolType moltype;
-        
-            QStringList lines = getDirectiveLines(linenum);
+
+            //get the directives for this molecule - there should be
+            //one line that contains the name and number of excluded atoms
+            const auto lines = getDirectiveLines(linenum);
             
-            for (const auto line : lines)
+            if (lines.count() != 1)
             {
-                moltype.addWarning( QString("moleculetype line: %1").arg(line) );
+                moltype.addWarning( QObject::tr("Expecting only one line that "
+                  "provides the name and number of excluded atoms for this moleculetype. "
+                  "Instead, the number of lines is %1 : [\n%2\n]")
+                    .arg(lines.count()).arg(lines.join("\n")) );
+            }
+            
+            if (lines.count() > 0)
+            {
+                //try to read the infromation from the first line only
+                const auto words = lines[0].split(" ");
+                
+                if (words.count() != 2)
+                {
+                    moltype.addWarning( QObject::tr("Expecting two words for the "
+                      "moleculetype line, containing the name and number of excluded "
+                      "atoms. Instead we get '%1'").arg(lines[0]) );
+                }
+                
+                if (words.count() > 0)
+                {
+                    moltype.setName( words[0] );
+                }
+                
+                if (words.count() > 1)
+                {
+                    bool ok;
+                    qint64 nexcl = words[1].toInt(&ok);
+                    
+                    if (not ok)
+                    {
+                        moltype.addWarning( QObject::tr("Expecting the second word in "
+                          "the moleculetype line '%1' to be the number of excluded "
+                          "atoms. It isn't!").arg(lines[0]) );
+                    }
+                    else
+                    {
+                        moltype.setNExcludedAtoms(nexcl);
+                    }
+                }
             }
         
             return moltype;
@@ -1812,7 +2155,49 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             
             for (const auto line : lines)
             {
-                moltype.addWarning( QString("atoms line: %1").arg(line) );
+                //each line should contain index number, atom type,
+                //residue number, residue name, atom name, charge group number,
+                //charge (mod_electron) and mass (atomic mass)
+                
+                const auto words = line.split(" ");
+                
+                if (words.count() < 8)
+                {
+                    moltype.addWarning( QObject::tr("Cannot extract atom information "
+                      "from the line '%1' as it should contain at least eight words "
+                      "(pieces of information)").arg(line) );
+                
+                    continue;
+                }
+                else if (words.count() > 8)
+                {
+                    moltype.addWarning( QObject::tr("The line containing atom information "
+                       "'%1' contains more information than can be parsed. It should only "
+                       "contain eight words (pieces of information)").arg(line) );
+                }
+                
+                bool ok_idx, ok_resnum, ok_chggrp, ok_chg, ok_mass;
+                
+                const qint64 atomnum = words[0].toInt(&ok_idx);
+                const auto atomtyp = words[1];
+                const auto resnum = words[2].toInt(&ok_resnum);
+                const auto resnam = words[3];
+                const auto atmnam = words[4];
+                const qint64 chggrp = words[5].toInt(&ok_chggrp);
+                const double chg = words[6].toDouble(&ok_chg);
+                const double mass = words[7].toDouble(&ok_mass);
+                
+                if (not (ok_idx and ok_resnum and ok_chggrp and ok_chg and ok_mass))
+                {
+                    moltype.addWarning( QObject::tr("Could not interpret the necessary "
+                      "atom information from the line '%1' | %2 %3 %4 %5 %6")
+                        .arg(line).arg(ok_idx).arg(ok_resnum).arg(ok_chggrp)
+                        .arg(ok_chg).arg(ok_mass) );
+                    continue;
+                }
+                
+                moltype.addAtom( atomnum, atomtyp, resnum, resnam, atmnam,
+                                 chggrp, chg*mod_electron, mass*g_per_mol );
             }
         };
         
@@ -1827,6 +2212,8 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             
             //should be finished, run some checks that this looks sane
             moltype.checkSanity();
+        
+            qDebug() << moltype.toString();
             
             return moltype;
         };
