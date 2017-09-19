@@ -42,7 +42,7 @@ class Mol2Bond;
 class Mol2Feature;
 class Mol2Molecule;
 class Mol2Set;
-class Mol2SubStructure;
+class Mol2Substructure;
 class Mol2;
 }
 
@@ -61,8 +61,8 @@ QDataStream& operator>>(QDataStream&, SireIO::Mol2Molecule&);
 QDataStream& operator<<(QDataStream&, const SireIO::Mol2Set&);
 QDataStream& operator>>(QDataStream&, SireIO::Mol2Set&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2SubStructure&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2SubStructure&);
+QDataStream& operator<<(QDataStream&, const SireIO::Mol2Substructure&);
+QDataStream& operator>>(QDataStream&, SireIO::Mol2Substructure&);
 
 QDataStream& operator<<(QDataStream&, const SireIO::Mol2&);
 QDataStream& operator>>(QDataStream&, SireIO::Mol2&);
@@ -240,7 +240,7 @@ public:
     Mol2Molecule(const QVector<QString> &lines, QStringList &errors, int &num_records);
 
     /** Generate a Mol2 record from the molecule data. */
-    QStringList toMol2Record() const;
+    QVector<QString> toMol2Record() const;
 
     /** Generate a string representation of the object. */
     QString toString() const;
@@ -253,17 +253,23 @@ public:
     /** Get the number of bonds in the molecule. */
     int nBonds() const;
 
+    /** Get the number of substructures in the molecule. */
+    int nSubstructures() const;
+
     /** Append an atom to the molecule. */
-    void appendAtom(const Mol2Atom& atom);
+    void appendAtom(const Mol2Atom &atom);
 
     /** Append a bond to the molecule. */
-    void appendBond(const Mol2Bond& bond);
+    void appendBond(const Mol2Bond &bond);
+
+    /** Append a substructure to the molecule. */
+    void appendSubstructure(const Mol2Substructure &substructure);
 
 private:
     // Record data.
 
     /** The original Mol2 record used to instantiate the molecule. */
-    QStringList record;
+    QVector<QString> record;
 
     /** The name of the molecule. */
     QString name;
@@ -310,7 +316,7 @@ private:
     QVector<Mol2Set> sets;
 
     /** substructure data. */
-    QVector<Mol2SubStructure> substructures;
+    QVector<Mol2Substructure> substructures;
 };
 
 /** This class provides functionality for reading/writing
@@ -373,18 +379,18 @@ private:
 
     @author Lester Hedges
 */
-class SIREIO_EXPORT Mol2SubStructure
+class SIREIO_EXPORT Mol2Substructure
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Mol2SubStructure&);
-friend QDataStream& ::operator>>(QDataStream&, Mol2SubStructure&);
+friend QDataStream& ::operator<<(QDataStream&, const Mol2Substructure&);
+friend QDataStream& ::operator>>(QDataStream&, Mol2Substructure&);
 
 public:
     /** Default constructor. */
-    Mol2SubStructure();
+    Mol2Substructure();
 
     /** Constructor. */
-    Mol2SubStructure(const QString &line, QStringList &errors);
+    Mol2Substructure(const QString &line, QStringList &errors);
 
     /** Generate a Mol2 record from the feature data. */
     QString toMol2Record() const;
@@ -416,7 +422,7 @@ private:
     /** The chain to which the substructure belongs. */
     QString chain;
 
-    /** The sub type of the substructure. */
+    /** The sub type of the chain. */
     QString sub_type;
 
     /** The number of inter substructure bonds. */
@@ -425,7 +431,7 @@ private:
     /** The internal SYBYL status bits. */
     QString status_bit;
 
-    /** Comments about the set. */
+    /** Comments about the substructure. */
     QString comment;
 };
 
@@ -508,7 +514,7 @@ Q_DECLARE_METATYPE( SireIO::Mol2Bond )
 Q_DECLARE_METATYPE( SireIO::Mol2Feature )
 Q_DECLARE_METATYPE( SireIO::Mol2Molecule )
 Q_DECLARE_METATYPE( SireIO::Mol2Set )
-Q_DECLARE_METATYPE( SireIO::Mol2SubStructure )
+Q_DECLARE_METATYPE( SireIO::Mol2Substructure )
 Q_DECLARE_METATYPE( SireIO::Mol2 )
 
 SIRE_EXPOSE_CLASS( SireIO::Mol2Atom )
@@ -516,7 +522,7 @@ SIRE_EXPOSE_CLASS( SireIO::Mol2Bond )
 SIRE_EXPOSE_CLASS( SireIO::Mol2Feature )
 SIRE_EXPOSE_CLASS( SireIO::Mol2Molecule )
 SIRE_EXPOSE_CLASS( SireIO::Mol2Set )
-SIRE_EXPOSE_CLASS( SireIO::Mol2SubStructure )
+SIRE_EXPOSE_CLASS( SireIO::Mol2Substructure )
 SIRE_EXPOSE_CLASS( SireIO::Mol2 )
 
 SIRE_END_HEADER

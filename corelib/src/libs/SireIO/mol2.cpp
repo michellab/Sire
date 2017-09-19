@@ -54,7 +54,7 @@ static const RegisterMetaType<Mol2Bond> r_mol2bond(NO_ROOT);
 static const RegisterMetaType<Mol2Feature> r_mol2feature(NO_ROOT);
 static const RegisterMetaType<Mol2Molecule> r_mol2molecule(NO_ROOT);
 static const RegisterMetaType<Mol2Set> r_mol2set(NO_ROOT);
-static const RegisterMetaType<Mol2SubStructure> r_mol2subst(NO_ROOT);
+static const RegisterMetaType<Mol2Substructure> r_mol2subst(NO_ROOT);
 
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Atom &mol2atom)
 {
@@ -213,7 +213,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Set &mol2set)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2SubStructure &mol2subst)
+QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Substructure &mol2subst)
 {
     writeHeader(ds, r_mol2subst, 1);
 
@@ -226,7 +226,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2SubStructure &m
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2SubStructure &mol2subst)
+QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Substructure &mol2subst)
 {
     VersionID v = readHeader(ds, r_mol2subst);
 
@@ -275,6 +275,7 @@ Mol2Atom::Mol2Atom() : name("X"),
 
 /** Constructor. */
 Mol2Atom::Mol2Atom(const QString &line, QStringList &errors) :
+    record(line),
     name("X"),
     charge(0)
 {
@@ -416,7 +417,8 @@ Mol2Bond::Mol2Bond()
 }
 
 /** Constructor. */
-Mol2Bond::Mol2Bond(const QString &line, QStringList &errors)
+Mol2Bond::Mol2Bond(const QString &line, QStringList &errors) :
+    record(line)
 {
     // Tokenize the string, splitting using a single whitespace characters.
     QStringList data = line.simplified().split(QRegExp("\\s"));
@@ -611,6 +613,7 @@ Mol2Molecule::Mol2Molecule() :
  */
 Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     QStringList &errors, int &num_records) :
+    record(lines),
     num_atoms(0),
     num_bonds(0),
     num_subst(0),
@@ -806,7 +809,7 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
 }
 
 /** Generate a Mol2 record from the molecule data. */
-QStringList Mol2Molecule::toMol2Record() const
+QVector<QString> Mol2Molecule::toMol2Record() const
 {
     return record;
 }
@@ -822,24 +825,40 @@ const char* Mol2Molecule::typeName()
     return QMetaType::typeName( qMetaTypeId<Mol2Molecule>() );
 }
 
+/** Get the number of atoms in the molecule. */
 int Mol2Molecule::nAtoms() const
 {
     return num_atoms;
 }
 
+/** Get the number bonds in the molecule. */
 int Mol2Molecule::nBonds() const
 {
     return num_bonds;
 }
 
+/** Get the number of substructures in the molecule. */
+int Mol2Molecule::nSubstructures() const
+{
+    return num_subst;
+}
+
+/** Append an atom to the molecule. */
 void Mol2Molecule::appendAtom(const Mol2Atom& atom)
 {
     atoms.append(atom);
 }
 
+/** Append a bond to the molecule. */
 void Mol2Molecule::appendBond(const Mol2Bond& bond)
 {
     bonds.append(bond);
+}
+
+/** Append a substructure to the molecule. */
+void Mol2Molecule::appendSubstructure(const Mol2Substructure& substructure)
+{
+    substructures.append(substructure);
 }
 
 /** Default constructor. */
@@ -870,30 +889,180 @@ const char* Mol2Set::typeName()
 }
 
 /** Default constructor. */
-Mol2SubStructure::Mol2SubStructure()
+Mol2Substructure::Mol2Substructure() :
+    num_inter_bonds(0)
 {
 }
 
 /** Constructor. */
-Mol2SubStructure::Mol2SubStructure(const QString &line, QStringList &errors)
+Mol2Substructure::Mol2Substructure(const QString &line, QStringList &errors) :
+    record(line),
+    num_inter_bonds(0)
 {
+    // Tokenize the string, splitting using a single whitespace characters.
+    QStringList data = line.simplified().split(QRegExp("\\s"));
+
+    // There must be at least three records.
+    if (data.count() < 3)
+    {
+        errors.append(QObject::tr("The @<TRIPOS>SUBSTRUCTURE record "
+            "is incorrectly formatted. Should have a minimum of 3 entries, has %1!")
+            .arg(data.count()));
+    }
+
+    // Extract the substructure ID number.
+    bool ok;
+    number = data[0].toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the substructure ID number "
+            "from part (%1) from line '%2'").arg(data[0]).arg(line));
+
+        return;
+    }
+
+    // Extract the name of the substructure.
+    name = data[1];
+
+    // Extract the ID number of the root atom.
+    root_atom = data[2].toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the root atom ID number "
+            "from part (%1) from line '%2'").arg(data[2]).arg(line));
+
+        return;
+    }
+
+    // Parse optional records.
+    if (data.count() > 3)
+    {
+        // List of valid substructure types.
+        QStringList valid_types;
+
+        // Populate the list.
+        valid_types << "TEMP"
+                    << "PERM"
+                    << "RESIDUE"
+                    << "GROUP"
+                    << "DOMAIN"
+                    << "****";
+
+        // Extract the substructure type.
+        type = data[3];
+
+        // Check that the substructure type is valid.
+        if (not valid_types.contains(type))
+        {
+            errors.append(QObject::tr("Invalid substructure type "
+                "in part (%1) on line '%2'").arg(type).arg(line));
+
+            return;
+        }
+
+        if (data.count() > 4)
+        {
+            // Extract the dictionary type.
+            dict_type = data[4].toInt(&ok);
+
+            if (not ok)
+            {
+                errors.append(QObject::tr("Cannot extract the dictionary type "
+                    "from part (%1) from line '%2'").arg(data[4]).arg(line));
+
+                return;
+            }
+
+            if (data.count() > 5)
+            {
+                // Extract the name of the chain to which the substructure belongs.
+                chain = data[5];
+
+                // If this is just a dummy entry, set the chain name to a NULL QString.
+                if (chain == "****") chain = QString();
+
+                if (data.count() > 6)
+                {
+                    // Extract the sub-type of the chain.
+                    sub_type = data[6];
+
+                    // If this is just a dummy entry, set the chain name to a NULL QString.
+                    if (sub_type == "****") sub_type = QString();
+
+                    if (data.count() > 7)
+                    {
+                        // Extract the number of inter substructure bonds.
+                        num_inter_bonds = data[7].toInt(&ok);
+
+                        if (not ok)
+                        {
+                            errors.append(QObject::tr("Cannot extract the number of inter "
+                                "substructure bonds from part (%1) from line '%2'")
+                                .arg(data[7]).arg(line));
+
+                            return;
+                        }
+
+                        if (data.count() > 8)
+                        {
+                            // List of valid SYBYL status bits.
+                            QStringList valid_bits;
+
+                            // Populate the list.
+                            valid_bits << "LEAF"
+                                       << "ROOT"
+                                       << "TYPECOL"
+                                       << "DICT"
+                                       << "BACKWARD"
+                                       << "BLOCK"
+                                       << "****";
+
+                            // Extract the status bit.
+                            status_bit = data[8];
+
+                            // Check that the status bit is valid.
+                            if (not valid_bits.contains(status_bit))
+                            {
+                                errors.append(QObject::tr("Invalid SYBYL status bit "
+                                    "in part (%1) on line '%2'").arg(status_bit).arg(line));
+
+                                return;
+                            }
+
+                            if (data.count() > 9)
+                            {
+                                // All other data records form a comment string.
+                                // Let's concatenate them.
+                                comment = data[9];
+
+                                for (int i=10; i<data.count(); ++i)
+                                    comment += (" " + data[i]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 /** Generate a Mol2 record from the substructure data. */
-QString Mol2SubStructure::toMol2Record() const
+QString Mol2Substructure::toMol2Record() const
 {
     return record;
 }
 
 /** Generate a string representation of the object. */
-QString Mol2SubStructure::toString() const
+QString Mol2Substructure::toString() const
 {
-    return QObject::tr("Mol2SubStructure::null");
+    return QObject::tr("Mol2Substructure::null");
 }
 
-const char* Mol2SubStructure::typeName()
+const char* Mol2Substructure::typeName()
 {
-    return QMetaType::typeName( qMetaTypeId<Mol2SubStructure>() );
+    return QMetaType::typeName( qMetaTypeId<Mol2Substructure>() );
 }
 
 /** Constructor */
@@ -1172,6 +1341,21 @@ void Mol2::parseLines(const PropertyMap &map)
                     molecules[imol-1].appendBond(bond);
                 }
             }
+
+            // Parse a SUBSTRUCTURE record.
+            else if (record_type == "SUBSTRUCTURE")
+            {
+                // For correctly formatted files, the number of substructures should
+                // be equal to "num_subst" from the previous MOLECULE record.
+                for (int i=0; i<molecules[imol-1].nSubstructures(); ++i)
+                {
+                    // Create a new substructure object.
+                    Mol2Substructure substructure(lines()[++iline], parse_warnings);
+
+                    // Insert the substructure into the current molecule.
+                    molecules[imol-1].appendSubstructure(substructure);
+                }
+            }
         }
     }
 
@@ -1187,7 +1371,6 @@ System Mol2::startSystem(const PropertyMap &map) const
     //which are added to this System
 
     System system;
-
 
     return system;
 }
