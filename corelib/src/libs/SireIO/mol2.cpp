@@ -481,7 +481,7 @@ Mol2Bond::Mol2Bond(const QString &line, QStringList &errors)
                 << "nc";
 
     // Extract the bond type.
-    type = data[3];
+    type = data[3].toLower();
 
     if (not valid_bonds.contains(type))
     {
@@ -1161,7 +1161,6 @@ void Mol2::parseLines(const PropertyMap &map)
             // Parse a BOND record section.
             else if (record_type == "BOND")
             {
-
                 // For correctly formatted files, the number of bonds should
                 // be equal to "num_bonds" from the previous MOLECULE record.
                 for (int i=0; i<molecules[imol-1].nBonds(); ++i)
