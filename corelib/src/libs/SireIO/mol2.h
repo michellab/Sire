@@ -96,6 +96,12 @@ public:
 
     static const char* typeName();
 
+    /** Get the atom coordinates. */
+    SireMaths::Vector getCoord() const;
+
+    /** Get the atom charge. */
+    double getCharge() const;
+
 private:
     /** The original Mol2 record used to instantiate the atom. */
     QString record;
@@ -109,7 +115,7 @@ private:
     /** Coordinates. */
     SireMaths::Vector coord;
 
-    /** The SYBL atom type. */
+    /** The SYBYL atom type. */
     QString type;
 
     /** The ID number of the substructure containing the atom. */
@@ -121,7 +127,7 @@ private:
     /** The charge on the atom. */
     double charge;
 
-    /** The internal SYBL status bits. */
+    /** The internal SYBYL status bits. */
     QString status_bit;
 };
 
@@ -151,6 +157,18 @@ public:
 
     static const char* typeName();
 
+    /** Get the bond ID. */
+    qint64 getID() const;
+
+    /** Get the ID of the origin atom. */
+    qint64 getOrigin() const;
+
+    /** Get the ID of the target atom. */
+    qint64 getTarget() const;
+
+    /** Get the bond type. */
+    QString getType() const;
+
 private:
     /** The original Mol2 record used to instantiate the bond. */
     QString record;
@@ -159,18 +177,18 @@ private:
     qint64 number;
 
     /** The ID number of the atom at one end of the bond. */
-    qint64 origin_atom;
+    qint64 origin;
 
     /** The ID number of the atom at the other end of the bond. */
-    qint64 target_atom;
+    qint64 target;
 
-    /** The SYBL bond type. */
+    /** The SYBYL bond type. */
     QString type;
 
     /** The ID number of the substructure containing the atom. */
     qint64 subst_id;
 
-    /** The internal SYBL status bits. */
+    /** The internal SYBYL status bits. */
     QString status_bit;
 };
 
@@ -219,7 +237,7 @@ public:
     Mol2Molecule();
 
     /** Constructor. */
-    Mol2Molecule(const QVector<QString> &lines, QStringList &errors);
+    Mol2Molecule(const QVector<QString> &lines, QStringList &errors, int &num_records);
 
     /** Generate a Mol2 record from the molecule data. */
     QStringList toMol2Record() const;
@@ -228,6 +246,18 @@ public:
     QString toString() const;
 
     static const char* typeName();
+
+    /** Get the number of atoms in the molecule. */
+    int nAtoms() const;
+
+    /** Get the number of bonds in the molecule. */
+    int nBonds() const;
+
+    /** Append an atom to the molecule. */
+    void appendAtom(const Mol2Atom& atom);
+
+    /** Append a bond to the molecule. */
+    void appendBond(const Mol2Bond& bond);
 
 private:
     // Record data.
@@ -244,7 +274,7 @@ private:
     /** The number of bonds in the molecule. */
     qint64 num_bonds;
 
-    /** The number of sub-structures in the molecule. */
+    /** The number of substructures in the molecule. */
     qint64 num_subst;
 
     /** The number of features in the molecule. */
@@ -259,7 +289,7 @@ private:
     /** The charge type. */
     QString charge_type;
 
-    /** The internal SYBL status bits. */
+    /** The internal SYBYL status bits. */
     QString status_bit;
 
     /** Comments about the molecule. */
@@ -279,7 +309,7 @@ private:
     /** Set data. */
     QVector<Mol2Set> sets;
 
-    /** Sub-structure data. */
+    /** substructure data. */
     QVector<Mol2SubStructure> substructures;
 };
 
@@ -322,7 +352,7 @@ private:
     /** The sub type of the set. */
     QString sub_type;
 
-    /** The internal SYBL status bits. */
+    /** The internal SYBYL status bits. */
     QString status_bit;
 
     /** Comments about the set. */
@@ -365,34 +395,34 @@ public:
     static const char* typeName();
 
 private:
-    /** The original Mol2 record used to instantiate the sub-structure. */
+    /** The original Mol2 record used to instantiate the substructure. */
     QString record;
 
-    /** The ID number of the sub-structure. */
+    /** The ID number of the substructure. */
     qint64 number;
 
-    /** The name of the sub-structure. */
+    /** The name of the substructure. */
     QString name;
 
     /** The ID number of the root atom. */
     qint64 root_atom;
 
-    /** The type of the sub-structure. */
+    /** The type of the substructure. */
     QString type;
 
-    /** The dictionary type associated with the sub-structure. */
+    /** The dictionary type associated with the substructure. */
     qint64 dict_type;
 
-    /** The chain to which the sub-structure belongs. */
+    /** The chain to which the substructure belongs. */
     QString chain;
 
-    /** The sub type of the sub-structure. */
+    /** The sub type of the substructure. */
     QString sub_type;
 
-    /** The number of inter sub-structure bonds. */
+    /** The number of inter substructure bonds. */
     qint64 num_inter_bonds;
 
-    /** The internal SYBL status bits. */
+    /** The internal SYBYL status bits. */
     QString status_bit;
 
     /** Comments about the set. */
@@ -446,6 +476,15 @@ public:
     QString formatName() const;
     QString formatDescription() const;
     QStringList formatSuffix() const;
+
+    /** Return the number of molecules in the system. */
+    int nMols() const;
+
+    /** Return the number of atoms in each molecule. */
+    QVector<int> nMolAtoms() const;
+
+    /** Return the total number of atoms in all molecules. */
+    int nAtoms() const;
 
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;

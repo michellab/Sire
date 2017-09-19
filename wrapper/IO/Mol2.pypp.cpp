@@ -110,6 +110,39 @@ void register_Mol2_class(){
                 , "Return the suffixes that these files are normally associated with" );
         
         }
+        { //::SireIO::Mol2::nAtoms
+        
+            typedef int ( ::SireIO::Mol2::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::Mol2::nAtoms );
+            
+            Mol2_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , "Return the total number of atoms in all molecules." );
+        
+        }
+        { //::SireIO::Mol2::nMolAtoms
+        
+            typedef ::QVector< int > ( ::SireIO::Mol2::*nMolAtoms_function_type)(  ) const;
+            nMolAtoms_function_type nMolAtoms_function_value( &::SireIO::Mol2::nMolAtoms );
+            
+            Mol2_exposer.def( 
+                "nMolAtoms"
+                , nMolAtoms_function_value
+                , "Return the number of atoms in each molecule." );
+        
+        }
+        { //::SireIO::Mol2::nMols
+        
+            typedef int ( ::SireIO::Mol2::*nMols_function_type)(  ) const;
+            nMols_function_type nMols_function_value( &::SireIO::Mol2::nMols );
+            
+            Mol2_exposer.def( 
+                "nMols"
+                , nMols_function_value
+                , "Return the number of molecules in the system." );
+        
+        }
         Mol2_exposer.def( bp::self != bp::self );
         { //::SireIO::Mol2::operator=
         

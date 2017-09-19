@@ -93,8 +93,8 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Bond &mol2bond)
 
     SharedDataStream sds(ds);
 
-    sds << mol2bond.record << mol2bond.number << mol2bond.origin_atom
-        << mol2bond.target_atom << mol2bond.type << mol2bond.subst_id
+    sds << mol2bond.record << mol2bond.number << mol2bond.origin
+        << mol2bond.target << mol2bond.type << mol2bond.subst_id
         << mol2bond.status_bit;
 
     return ds;
@@ -108,8 +108,8 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Bond &mol2bond)
     {
         SharedDataStream sds(ds);
 
-        sds >> mol2bond.record >> mol2bond.number >> mol2bond.origin_atom
-            >> mol2bond.target_atom >> mol2bond.type >> mol2bond.subst_id
+        sds >> mol2bond.record >> mol2bond.number >> mol2bond.origin
+            >> mol2bond.target >> mol2bond.type >> mol2bond.subst_id
             >> mol2bond.status_bit;
     }
     else
@@ -268,13 +268,119 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2 &mol2)
 }
 
 /** Default constructor. */
-Mol2Atom::Mol2Atom()
+Mol2Atom::Mol2Atom() : name("X"),
+                       charge(0)
 {
 }
 
 /** Constructor. */
-Mol2Atom::Mol2Atom(const QString &line, QStringList &errors)
+Mol2Atom::Mol2Atom(const QString &line, QStringList &errors) :
+    name("X"),
+    charge(0)
 {
+    // Tokenize the string, splitting using a single whitespace characters.
+    QStringList data = line.simplified().split(QRegExp("\\s"));
+
+    // The Mol2 record indicator. All record types start with this prefix.
+    const QString record_indicator("@<TRIPOS>");
+
+    // Check that we've not hit another TRIPOS record indicator.
+    // This can happen with poorly formatted files, e.g. the number of atoms is incorrect.
+    if (data[0].left(9) == record_indicator)
+    {
+        errors.append(QObject::tr("The @<TRIPOS>ATOM record is incorrectly formatted!"));
+
+        return;
+    }
+
+    // Extract the atom ID.
+    bool ok;
+    number = data[0].toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the atom ID number "
+            "from part (%1) from line '%2'").arg(data[0]).arg(line));
+
+        return;
+    }
+
+    // Extract the atom name.
+    name = data[1].simplified();
+
+    bool ok_x, ok_y, ok_z;
+    double x = data[2].toDouble(&ok_x);
+    double y = data[3].toDouble(&ok_y);
+    double z = data[4].toDouble(&ok_z);
+
+    if (not (ok_x and ok_y and ok_z))
+    {
+        errors.append(QObject::tr("There was a problem reading the coordinate "
+            "values of x, y, and z from the data '%1' in line '%2'")
+            .arg(data[2] + ' ' + data[3] + ' ' + data[4]).arg(line));
+
+        return;
+    }
+    coord = Vector(x, y, z);
+
+    // Extract the SYBYL atom type.
+    type = data[5].simplified();
+
+    // Extract the substructure ID.
+    subst_id = data[6].toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the substructure ID number "
+            "from part (%1) from line '%2'").arg(data[6]).arg(line));
+
+        return;
+    }
+
+    // Extract the substructure name.
+    subst_name = data[7].simplified();
+
+    // Extract the charge on the atom.
+    charge = data[8].toDouble(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the atom charge "
+            "from part (%1) from line '%2'").arg(data[8]).arg(line));
+
+        return;
+    }
+
+    // There is a SYBYL status bit entry for this atom.
+    if (data.count() == 10)
+    {
+        // List of valid SYBYL atom status bits.
+        QStringList valid_bits;
+
+        // Populate the list.
+        valid_bits << "DSPMOD"
+                   << "TPECOL"
+                   << "CAP"
+                   << "BACKBONE"
+                   << "DICT"
+                   << "ESSENTIAL"
+                   << "WATER"
+                   << "DIRECT";
+
+        // Extract the SYBYL status bit.
+        status_bit = data[9].simplified().toUpper();
+
+        // Check that the status bit isn't empty.
+        if (not status_bit.isEmpty())
+        {
+            // Check that the status bit is valid.
+            if (not valid_bits.contains(status_bit))
+            {
+                errors.append(QObject::tr("Invalid SYBYL atom status bit "
+                    "in part (%1) on line '%2'").arg(status_bit).arg(line));
+            }
+        }
+    }
 }
 
 /** Generate a Mol2 record from the atom data. */
@@ -294,6 +400,16 @@ const char* Mol2Atom::typeName()
     return QMetaType::typeName( qMetaTypeId<Mol2Atom>() );
 }
 
+SireMaths::Vector Mol2Atom::getCoord() const
+{
+    return coord;
+}
+
+double Mol2Atom::getCharge() const
+{
+    return charge;
+}
+
 /** Default constructor. */
 Mol2Bond::Mol2Bond()
 {
@@ -302,6 +418,107 @@ Mol2Bond::Mol2Bond()
 /** Constructor. */
 Mol2Bond::Mol2Bond(const QString &line, QStringList &errors)
 {
+    // Tokenize the string, splitting using a single whitespace characters.
+    QStringList data = line.simplified().split(QRegExp("\\s"));
+
+    // There must be at least four records.
+    if (data.count() < 4)
+    {
+        errors.append(QObject::tr("The @<TRIPOS>BOND record "
+            "is incorrectly formatted. Should have a minimum of 4 entries, has %1!")
+            .arg(data.count()));
+    }
+
+    bool ok;
+
+    // Extract the ID bond.
+    number = data[0].toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the bond ID "
+            "from part (%1) from line '%2'")
+            .arg(data[0]).arg(line));
+
+        return;
+    }
+
+    // Extract the ID of the origin atom.
+    origin = data[1].toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the origin atom ID "
+            "from part (%1) from line '%2'")
+            .arg(data[1]).arg(line));
+
+        return;
+    }
+
+    // Extract the ID of the target atom.
+    target = data[2].toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the target atom ID "
+            "from part (%1) from line '%2'")
+            .arg(data[2]).arg(line));
+
+        return;
+    }
+
+    // List of valid SYBYL bond types.
+    QStringList valid_bonds;
+
+    // Populate the list.
+    valid_bonds << "1"
+                << "2"
+                << "3"
+                << "am"
+                << "ar"
+                << "du"
+                << "un"
+                << "nc";
+
+    // Extract the bond type.
+    type = data[3];
+
+    if (not valid_bonds.contains(type))
+    {
+        errors.append(QObject::tr("Invalid SYBYL bond type "
+            "in part (%1) on line '%2'").arg(type).arg(line));
+
+        return;
+    }
+
+    // The record contains SYBYL status bit information.
+    if (data.count() == 5)
+    {
+        // List of valid SYBYL molecule status bits.
+        QStringList valid_bits;
+
+        // Populate the list.
+        valid_bits << "TYPECOL"
+                   << "GROUP"
+                   << "CAP"
+                   << "BACKBONE"
+                   << "DICT"
+                   << "INTERRES";
+
+        // Extract the SYBYL status bit.
+        status_bit = data[4].simplified().toUpper();
+
+        // Check that the status bit isn't empty.
+        if (not status_bit.isEmpty())
+        {
+            // Check that the status bit is valid.
+            if (not valid_bits.contains(status_bit))
+            {
+                errors.append(QObject::tr("Invalid SYBYL atom status bit "
+                    "in part (%1) on line '%2'").arg(status_bit).arg(line));
+            }
+        }
+    }
 }
 
 /** Generate a Mol2 record from the bond data. */
@@ -319,6 +536,30 @@ QString Mol2Bond::toString() const
 const char* Mol2Bond::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<Mol2Bond>() );
+}
+
+/** Get the bond ID. */
+qint64 Mol2Bond::getID() const
+{
+    return number;
+}
+
+/** Get the ID of the origin atom. */
+qint64 Mol2Bond::getOrigin() const
+{
+    return origin;
+}
+
+/** Get the ID of the target atom. */
+qint64 Mol2Bond::getTarget() const
+{
+    return target;
+}
+
+/** Get the bond type. */
+QString Mol2Bond::getType() const
+{
+    return type;
 }
 
 /** Default constructor. */
@@ -349,15 +590,219 @@ const char* Mol2Feature::typeName()
 }
 
 /** Default constructor. */
-Mol2Molecule::Mol2Molecule()
+Mol2Molecule::Mol2Molecule() :
+    num_atoms(0),
+    num_bonds(0),
+    num_subst(0),
+    num_feats(0),
+    num_sets(0)
 {
 }
 
-/** Constructor. */
-Mol2Molecule::Mol2Molecule(const QVector<QString> &lines, QStringList &errors)
+/** Constructor.
+    @param lines
+        A vector of strings containing the molecule record.
+
+    @param errors
+        An array of error messages.
+
+    @param
+        The number of records found.
+ */
+Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
+    QStringList &errors, int &num_records) :
+    num_atoms(0),
+    num_bonds(0),
+    num_subst(0),
+    num_feats(0),
+    num_sets(0)
 {
-    //for (auto line : lines)
-        //std::cout << line.toStdString() << '\n';
+    // Extract the molecule name.
+    name = lines[0].simplified();
+
+    // Tokenize the string, splitting using a single whitespace characters.
+    QStringList data = lines[1].simplified().split(QRegExp("\\s"));
+
+    // List of "number" data strings.
+    QStringList strings;
+    strings << "atoms" << "bonds" << "substructures" << "features" << "sets";
+
+    // Loop over all entries in the data list.
+    for (int i=0; i<data.count(); ++i)
+    {
+        bool ok;
+
+        // Extract the appropriate data record.
+        if      (i == 0) num_atoms = data[0].toInt(&ok);
+        else if (i == 1) num_bonds = data[1].toInt(&ok);
+        else if (i == 2) num_subst = data[2].toInt(&ok);
+        else if (i == 3) num_feats = data[3].toInt(&ok);
+        else if (i == 4) num_sets  = data[4].toInt(&ok);
+
+        if (not ok)
+        {
+            errors.append(QObject::tr("Cannot extract the number of %1 "
+                "from part (%2) from line '%3'")
+                .arg(strings[i]).arg(data[0]).arg(lines[1]));
+
+            return;
+        }
+    }
+
+    // The Mol2 record indicator. All record types start with this prefix.
+    const QString record_indicator("@<TRIPOS>");
+
+    // List of valid molecule types.
+    QStringList valid_mols;
+
+    // Populate the list.
+    valid_mols << "SMALL"
+               << "BIOPOLYMER"
+               << "PROTEIN"
+               << "NUCLEIC_ACID"
+               << "SACCHARIDE";
+
+    // Extract the molecule type.
+    mol_type = lines[2].simplified().toUpper();
+
+    // Check that we've not hit another TRIPOS record indicator.
+    // This can happen with poorly formatted files.
+    if (mol_type.left(9) == record_indicator)
+    {
+        errors.append(QObject::tr("The @<TRIPOS>MOLECULE record "
+            "is incorrectly formatted. Should have 6 lines, has %1!")
+            .arg(2));
+
+        num_records = 2;
+
+        return;
+    }
+
+    // Check that the molecule type isn't empty.
+    if (not mol_type.isEmpty())
+    {
+        // Check that the status bit is valid.
+        if (not valid_mols.contains(mol_type))
+        {
+            errors.append(QObject::tr("Invalid molecule type "
+                "in part (%1) on line '%2'").arg(mol_type).arg(lines[2]));
+        }
+    }
+
+    // List of valid charge types.
+    QStringList valid_chgs;
+
+    // Populate the list.
+    valid_chgs << "NO_CHARGES"
+               << "DEL_RE"
+               << "GASTEIGER"
+               << "GAST_HUCK"
+               << "HUCKEL"
+               << "PULLMAN"
+               << "GAUSS80_CHARGES"
+               << "AMPAC_CHARGES"
+               << "MULLIKEN_CHARGES"
+               << "DICT_CHARGES"
+               << "MMFF94_CHARGES"
+               << "USER_CHARGES";
+
+    // Extract the charge type.
+    charge_type = lines[3].simplified().toUpper();
+
+    // Check that we've not hit another TRIPOS record indicator.
+    if (charge_type.left(9) == record_indicator)
+    {
+        errors.append(QObject::tr("The @<TRIPOS>MOLECULE record "
+            "is incorrectly formatted. Should have 6 lines, has %1!")
+            .arg(3));
+
+        num_records = 3;
+
+        return;
+    }
+
+    // Check that the charge type isn't empty.
+    if (not charge_type.isEmpty())
+    {
+        // Check that the status bit is valid.
+        if (not valid_chgs.contains(charge_type))
+        {
+            errors.append(QObject::tr("Invalid charge type "
+                "in part (%1) on line '%2'").arg(charge_type).arg(lines[3]));
+        }
+    }
+
+    // List of valid SYBYL molecule status bits.
+    QStringList valid_bits;
+
+    // Populate the list.
+    valid_bits << "SYSTEM"
+               << "INVALID_CHARGES"
+               << "ANALYZED"
+               << "SUBSTITUTED"
+               << "ALTERED"
+               << "REF_ANGLE"
+               << "****";
+
+    // Extract the SYBYL status bit.
+    status_bit = lines[4].simplified().toUpper();
+    bool has_status = true;
+
+    // Check that we've not hit another TRIPOS record indicator.
+    if (status_bit.left(9) == record_indicator)
+    {
+        errors.append(QObject::tr("The @<TRIPOS>MOLECULE record "
+            "is incorrectly formatted. Should have 6 lines, has %1!")
+            .arg(4));
+
+        num_records = 4;
+
+        return;
+    }
+
+    // Check that the status bit isn't empty.
+    if (not status_bit.isEmpty())
+    {
+        // Check that the status bit is valid.
+        if (not valid_bits.contains(status_bit))
+        {
+            errors.append(QObject::tr("Invalid SYBYL atom status bit "
+                "in part (%1) on line '%2'").arg(status_bit).arg(lines[4]));
+
+            has_status = false;
+        }
+    }
+
+    // Extract the comment string.
+    comment = lines[5];
+
+    // Check that we've not hit another TRIPOS record indicator.
+    if (comment.left(9) == record_indicator)
+    {
+        errors.append(QObject::tr("The @<TRIPOS>MOLECULE record "
+            "is incorrectly formatted. Should have 6 lines, has %1!")
+            .arg(5));
+
+        num_records = 5;
+
+        return;
+    }
+
+    // Check that the comment isn't empty.
+    if (not comment.isEmpty())
+    {
+        // If we don't have a status bit, assume that the status bit
+        // was the comment. This seems to be a common way of formatting
+        // molecule records.
+
+        if (not has_status)
+        {
+            comment = status_bit;
+            status_bit = "";
+        }
+    }
+
+    num_records = 6;
 }
 
 /** Generate a Mol2 record from the molecule data. */
@@ -375,6 +820,26 @@ QString Mol2Molecule::toString() const
 const char* Mol2Molecule::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<Mol2Molecule>() );
+}
+
+int Mol2Molecule::nAtoms() const
+{
+    return num_atoms;
+}
+
+int Mol2Molecule::nBonds() const
+{
+    return num_bonds;
+}
+
+void Mol2Molecule::appendAtom(const Mol2Atom& atom)
+{
+    atoms.append(atom);
+}
+
+void Mol2Molecule::appendBond(const Mol2Bond& bond)
+{
+    bonds.append(bond);
 }
 
 /** Default constructor. */
@@ -414,7 +879,7 @@ Mol2SubStructure::Mol2SubStructure(const QString &line, QStringList &errors)
 {
 }
 
-/** Generate a Mol2 record from the sub-structure data. */
+/** Generate a Mol2 record from the substructure data. */
 QString Mol2SubStructure::toMol2Record() const
 {
     return record;
@@ -590,6 +1055,34 @@ QStringList Mol2::formatSuffix() const
     return suffixes;
 }
 
+/** Return the number of molecules in the system. */
+int Mol2::nMols() const
+{
+    return molecules.count();
+}
+
+/** Return the number of atoms in each molecule. */
+QVector<int> Mol2::nMolAtoms() const
+{
+    QVector<int> num_atoms(molecules.count());
+
+    for (int i=0; i<molecules.count(); ++i)
+        num_atoms[i] = molecules[i].nAtoms();
+
+    return num_atoms;
+}
+
+/** Return the total number of atoms in all molecules. */
+int Mol2::nAtoms() const
+{
+    int num_atoms = 0;
+
+    for (int i=0; i<molecules.count(); ++i)
+        num_atoms += molecules[i].nAtoms();
+
+    return num_atoms;
+}
+
 /** Function that is called to assert that this object is sane. This
     should raise an exception if the parser is in an invalid state */
 void Mol2::assertSane() const
@@ -613,6 +1106,9 @@ void Mol2::parseLines(const PropertyMap &map)
     // The Mol2 record indicator. All record types start with this prefix.
     const QString record_indicator("@<TRIPOS>");
 
+    // Molecule index.
+    int imol = 0;
+
     // Loop through all lines in the file.
     for (int iline=0; iline<lines().count(); ++iline)
     {
@@ -632,28 +1128,55 @@ void Mol2::parseLines(const PropertyMap &map)
             {
                 ++iline;
 
-                // Append a new molecule.
-                molecules.append(Mol2Molecule(lines().mid(iline, iline+5), parse_warnings));
+                int num_records = 0;
 
-                // Fast-forward the line index.
-                iline += 5;
+                // Create a molecule.
+                Mol2Molecule mol(lines().mid(iline, iline+5), parse_warnings, num_records);
+
+                // Append a new molecule.
+                molecules.append(mol);
+
+                // Fast-forward the line index, accounting for incorrectly formatted entries.
+                iline += (num_records - 1);
+
+                // Update the molecule index.
+                ++imol;
             }
 
-            // Parse a ATOM record.
+            // Parse an ATOM record section.
             else if (record_type == "ATOM")
             {
+                // For correctly formatted files, the number of atoms should
+                // be equal to "num_atoms" from the previous MOLECULE record.
+                for (int i=0; i<molecules[imol-1].nAtoms(); ++i)
+                {
+                    // Create a new atom object.
+                    Mol2Atom atom(lines()[++iline], parse_warnings);
 
+                    // Insert the atom into the current molecule.
+                    molecules[imol-1].appendAtom(atom);
+                }
             }
 
-            // Parse a BOND record.
+            // Parse a BOND record section.
             else if (record_type == "BOND")
             {
 
+                // For correctly formatted files, the number of bonds should
+                // be equal to "num_bonds" from the previous MOLECULE record.
+                for (int i=0; i<molecules[imol-1].nBonds(); ++i)
+                {
+                    // Create a new bond object.
+                    Mol2Bond bond(lines()[++iline], parse_warnings);
+
+                    // Insert the bond into the current molecule.
+                    molecules[imol-1].appendBond(bond);
+                }
             }
         }
     }
 
-    this->setScore(0);
+    this->setScore(nAtoms());
 }
 
 /** Use the data contained in this parser to create a new System of molecules,
