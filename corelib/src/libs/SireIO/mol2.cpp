@@ -1034,9 +1034,11 @@ Mol2Substructure::Mol2Substructure(const QString &line, QStringList &errors) :
                             if (data.count() > 9)
                             {
                                 // All other data records form a comment string.
-                                // Let's concatenate them.
+
+                                // Extract the first string.
                                 comment = data[9];
 
+                                // Now concatenate with all other strings.
                                 for (int i=10; i<data.count(); ++i)
                                     comment += (" " + data[i]);
                             }
