@@ -338,12 +338,13 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB2 &pdb2)
 }
 
 /** Default constructor. */
-PDBAtom::PDBAtom() : occupancy(1.0),
-                     element("X"),
-                     charge(0),
-                     is_het(false),
-                     is_ter(false),
-                     is_anis(false)
+PDBAtom::PDBAtom() :
+    occupancy(1.0),
+    element("X"),
+    charge(0),
+    is_het(false),
+    is_ter(false),
+    is_anis(false)
 {
 }
 
@@ -354,14 +355,14 @@ PDBAtom::PDBAtom() : occupancy(1.0),
     @param errors
         An array of error messages.
  */
-PDBAtom::PDBAtom(const QString &line, QStringList &errors)
-                    : record(line),
-                      occupancy(1.0),
-                      element("X"),
-                      charge(0),
-                      is_het(false),
-                      is_ter(false),
-                      is_anis(false)
+PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
+    record(line),
+    occupancy(1.0),
+    element("X"),
+    charge(0),
+    is_het(false),
+    is_ter(false),
+    is_anis(false)
 {
     if (line.length() < 54)
     {
@@ -840,16 +841,17 @@ QString PDBHelix::toString() const
 }
 
 /** Default constructor. */
-PDBMaster::PDBMaster() : num_remarks(0),
-                         num_hets(0),
-                         num_helices(0),
-                         num_sheets(0),
-                         num_sites(0),
-                         num_transforms(0),
-                         num_atoms(0),
-                         num_ters(0),
-                         num_connects(0),
-                         num_sequences(0)
+PDBMaster::PDBMaster() :
+    num_remarks(0),
+    num_hets(0),
+    num_helices(0),
+    num_sheets(0),
+    num_sites(0),
+    num_transforms(0),
+    num_atoms(0),
+    num_ters(0),
+    num_connects(0),
+    num_sequences(0)
 {
 }
 
@@ -861,17 +863,18 @@ PDBMaster::PDBMaster() : num_remarks(0),
         An array of error messages.
  */
 PDBMaster::PDBMaster(const QString &line,
-                     QStringList &errors) : record(line),
-                                            num_remarks(0),
-                                            num_hets(0),
-                                            num_helices(0),
-                                            num_sheets(0),
-                                            num_sites(0),
-                                            num_transforms(0),
-                                            num_atoms(0),
-                                            num_ters(0),
-                                            num_connects(0),
-                                            num_sequences(0)
+                     QStringList &errors) :
+    record(line),
+    num_remarks(0),
+    num_hets(0),
+    num_helices(0),
+    num_sheets(0),
+    num_sites(0),
+    num_transforms(0),
+    num_atoms(0),
+    num_ters(0),
+    num_connects(0),
+    num_sequences(0)
 {
     // Extract the number of remark records.
     bool ok;
@@ -1402,10 +1405,11 @@ const char* PDBTitle::typeName()
 }
 
 /** Default constructor. */
-PDBTransform::PDBTransform() : serial(-1),
-                               isGiven(false),
-                               transforms(QVector<SireMaths::Vector>(3)),
-                               isDimension{false, false, false}
+PDBTransform::PDBTransform() :
+    serial(-1),
+    isGiven(false),
+    transforms(QVector<SireMaths::Vector>(3)),
+    isDimension{false, false, false}
 {
 }
 
@@ -1532,10 +1536,10 @@ PDB2::PDB2() : ConcreteProperty<PDB2,MoleculeParser>(),
 /** Construct to read in the data from the file called 'filename'. The
     passed property map can be used to pass extra parameters to control
     the parsing */
-PDB2::PDB2(const QString &filename, const PropertyMap &map)
-     : ConcreteProperty<PDB2,MoleculeParser>(filename,map),
-       num_ters(0),
-       has_master(false)
+PDB2::PDB2(const QString &filename, const PropertyMap &map) :
+    ConcreteProperty<PDB2,MoleculeParser>(filename,map),
+    num_ters(0),
+    has_master(false)
 {
     //the file has been read into memory and is available via
     //the MoleculeParser::lines() function.
@@ -1554,10 +1558,10 @@ PDB2::PDB2(const QString &filename, const PropertyMap &map)
 /** Construct to read in the data from the passed text lines. The
     passed property map can be used to pass extra parameters to control
     the parsing */
-PDB2::PDB2(const QStringList &lines, const PropertyMap &map)
-     : ConcreteProperty<PDB2,MoleculeParser>(lines,map),
-       num_ters(0),
-       has_master(false)
+PDB2::PDB2(const QStringList &lines, const PropertyMap &map) :
+    ConcreteProperty<PDB2,MoleculeParser>(lines,map),
+    num_ters(0),
+    has_master(false)
 {
     //the file has been read into memory and is available via
     //the MoleculeParser::lines() function.
@@ -1576,10 +1580,10 @@ PDB2::PDB2(const QStringList &lines, const PropertyMap &map)
 /** Construct this parser by extracting all necessary information from the
     passed SireSystem::System, looking for the properties that are specified
     in the passed property map */
-PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map)
-     : ConcreteProperty<PDB2,MoleculeParser>(map),
-       num_ters(0),
-       has_master(false)
+PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
+    ConcreteProperty<PDB2,MoleculeParser>(map),
+    num_ters(0),
+    has_master(false)
 {
     //look through the system and extract out the information
     //that is needed to go into the file, based on the properties
@@ -1598,8 +1602,8 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map)
 }
 
 /** Copy constructor */
-PDB2::PDB2(const PDB2 &other)
-     : ConcreteProperty<PDB2,MoleculeParser>(other)
+PDB2::PDB2(const PDB2 &other) :
+    ConcreteProperty<PDB2,MoleculeParser>(other)
 {}
 
 /** Destructor */
@@ -2180,11 +2184,12 @@ void PDB2::parseLines(const PropertyMap &map)
                     }
 
                     QMutexLocker lkr(&mutex);
-                    num_ters += local_num_ters;
-                    frame_residues += local_residues;
-                    frame_chains += local_chains;
-                    frame_segments += local_segments;
-                    parse_warnings += local_errors;
+
+                    num_ters        += local_num_ters;
+                    frame_residues  += local_residues;
+                    frame_chains    += local_chains;
+                    frame_segments  += local_segments;
+                    parse_warnings  += local_errors;
                 });
             }
             else
