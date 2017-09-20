@@ -126,7 +126,7 @@ private:
     double charge;
 
     /** The internal SYBYL status bits. */
-    QString status_bit;
+    QString status_bits;
 };
 
 /** This class provides functionality for reading/writing
@@ -187,7 +187,7 @@ private:
     qint64 subst_id;
 
     /** The internal SYBYL status bits. */
-    QString status_bit;
+    QString status_bits;
 };
 
 /** This class provides functionality for reading/writing
@@ -276,7 +276,7 @@ private:
     QString charge_type;
 
     /** The internal SYBYL status bits. */
-    QString status_bit;
+    QString status_bits;
 
     /** Comments about the molecule. */
     QString comment;
@@ -348,7 +348,7 @@ private:
     qint64 num_inter_bonds;
 
     /** The internal SYBYL status bits. */
-    QString status_bit;
+    QString status_bits;
 
     /** Comments about the substructure. */
     QString comment;

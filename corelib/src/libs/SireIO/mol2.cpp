@@ -62,7 +62,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Atom &mol2atom)
 
     sds << mol2atom.record << mol2atom.number << mol2atom.name << mol2atom.coord
         << mol2atom.type << mol2atom.subst_id << mol2atom.subst_name
-        << mol2atom.charge << mol2atom.status_bit;
+        << mol2atom.charge << mol2atom.status_bits;
 
     return ds;
 }
@@ -77,7 +77,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Atom &mol2atom)
 
         sds >> mol2atom.record >> mol2atom.number >> mol2atom.name >> mol2atom.coord
             >> mol2atom.type >> mol2atom.subst_id >> mol2atom.subst_name
-            >> mol2atom.charge >> mol2atom.status_bit;
+            >> mol2atom.charge >> mol2atom.status_bits;
     }
     else
         throw version_error(v, "1", r_mol2atom, CODELOC);
@@ -93,7 +93,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Bond &mol2bond)
 
     sds << mol2bond.record << mol2bond.number << mol2bond.origin
         << mol2bond.target << mol2bond.type << mol2bond.subst_id
-        << mol2bond.status_bit;
+        << mol2bond.status_bits;
 
     return ds;
 }
@@ -108,7 +108,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Bond &mol2bond)
 
         sds >> mol2bond.record >> mol2bond.number >> mol2bond.origin
             >> mol2bond.target >> mol2bond.type >> mol2bond.subst_id
-            >> mol2bond.status_bit;
+            >> mol2bond.status_bits;
     }
     else
         throw version_error(v, "1", r_mol2bond, CODELOC);
@@ -125,7 +125,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Molecule &mol2m
     sds << mol2molecule.record << mol2molecule.name << mol2molecule.num_atoms
         << mol2molecule.num_bonds << mol2molecule.num_subst << mol2molecule.num_feats
         << mol2molecule.num_sets << mol2molecule.mol_type << mol2molecule.charge_type
-        << mol2molecule.status_bit << mol2molecule.comment << mol2molecule.atoms
+        << mol2molecule.status_bits << mol2molecule.comment << mol2molecule.atoms
         << mol2molecule.bonds << mol2molecule.substructures;
 
     return ds;
@@ -142,7 +142,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Molecule &mol2molecul
         sds >> mol2molecule.record >> mol2molecule.name >> mol2molecule.num_atoms
             >> mol2molecule.num_bonds >> mol2molecule.num_subst >> mol2molecule.num_feats
             >> mol2molecule.num_sets >> mol2molecule.mol_type >> mol2molecule.charge_type
-            >> mol2molecule.status_bit >> mol2molecule.comment >> mol2molecule.atoms
+            >> mol2molecule.status_bits >> mol2molecule.comment >> mol2molecule.atoms
             >> mol2molecule.bonds >> mol2molecule.substructures;
     }
     else
@@ -159,7 +159,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Substructure &m
 
     sds << mol2subst.record << mol2subst.number << mol2subst.name << mol2subst.root_atom
         << mol2subst.type << mol2subst.dict_type << mol2subst.chain << mol2subst.sub_type
-        << mol2subst.num_inter_bonds << mol2subst.status_bit << mol2subst.comment;
+        << mol2subst.num_inter_bonds << mol2subst.status_bits << mol2subst.comment;
 
     return ds;
 }
@@ -174,7 +174,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Substructure &mol2sub
 
         sds >> mol2subst.record >> mol2subst.number >> mol2subst.name >> mol2subst.root_atom
             >> mol2subst.type >> mol2subst.dict_type >> mol2subst.chain >> mol2subst.sub_type
-            >> mol2subst.num_inter_bonds >> mol2subst.status_bit >> mol2subst.comment;
+            >> mol2subst.num_inter_bonds >> mol2subst.status_bits >> mol2subst.comment;
     }
     else
         throw version_error(v, "1", r_mol2subst, CODELOC);
@@ -305,25 +305,33 @@ Mol2Atom::Mol2Atom(const QString &line, QStringList &errors) :
 
                     // Populate the list.
                     valid_bits << "DSPMOD"
-                            << "TPECOL"
-                            << "CAP"
-                            << "BACKBONE"
-                            << "DICT"
-                            << "ESSENTIAL"
-                            << "WATER"
-                            << "DIRECT";
+                               << "TPECOL"
+                               << "CAP"
+                               << "BACKBONE"
+                               << "DICT"
+                               << "ESSENTIAL"
+                               << "WATER"
+                               << "DIRECT"
+                               << "****";
 
                     // Extract the SYBYL status bit.
-                    status_bit = data[9].simplified().toUpper();
+                    status_bits = data[9].simplified().toUpper();
 
                     // Check that the status bit isn't empty.
-                    if (not status_bit.isEmpty())
+                    if (not status_bits.isEmpty())
                     {
+                        // Tokenize the bits.
+                        QStringList split_bits = status_bits.split('|');
+
                         // Check that the status bit is valid.
-                        if (not valid_bits.contains(status_bit))
+                        for (auto bit : split_bits)
                         {
-                            errors.append(QObject::tr("Invalid SYBYL atom status bit "
-                                "in part (%1) on line '%2'").arg(status_bit).arg(line));
+                            // Check that the status bit is valid.
+                            if (not valid_bits.contains(bit))
+                            {
+                                errors.append(QObject::tr("Invalid SYBYL substructure status bit "
+                                    "in part (%1) on line '%2'").arg(bit).arg(line));
+                            }
                         }
                     }
                 }
@@ -469,19 +477,27 @@ Mol2Bond::Mol2Bond(const QString &line, QStringList &errors) :
                    << "CAP"
                    << "BACKBONE"
                    << "DICT"
-                   << "INTERRES";
+                   << "INTERRES"
+                   << "****";
 
         // Extract the SYBYL status bit.
-        status_bit = data[4].simplified().toUpper();
+        status_bits = data[4].simplified().toUpper();
 
         // Check that the status bit isn't empty.
-        if (not status_bit.isEmpty())
+        if (not status_bits.isEmpty())
         {
+            // Tokenize the bits.
+            QStringList split_bits = status_bits.split('|');
+
             // Check that the status bit is valid.
-            if (not valid_bits.contains(status_bit))
+            for (auto bit : split_bits)
             {
-                errors.append(QObject::tr("Invalid SYBYL atom status bit "
-                    "in part (%1) on line '%2'").arg(status_bit).arg(line));
+                // Check that the status bit is valid.
+                if (not valid_bits.contains(bit))
+                {
+                    errors.append(QObject::tr("Invalid SYBYL bond status bit "
+                        "in part (%1) on line '%2'").arg(bit).arg(line));
+                }
             }
         }
     }
@@ -690,11 +706,11 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
                << "****";
 
     // Extract the SYBYL status bit.
-    status_bit = lines[4].simplified().toUpper();
+    status_bits = lines[4].simplified().toUpper();
     bool has_status = true;
 
     // Check that we've not hit another TRIPOS record indicator.
-    if (status_bit.left(9) == record_indicator)
+    if (status_bits.left(9) == record_indicator)
     {
         errors.append(QObject::tr("The @<TRIPOS>MOLECULE record "
             "is incorrectly formatted. Should have 6 lines, has %1!")
@@ -706,15 +722,22 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     }
 
     // Check that the status bit isn't empty.
-    if (not status_bit.isEmpty())
+    if (not status_bits.isEmpty())
     {
-        // Check that the status bit is valid.
-        if (not valid_bits.contains(status_bit))
-        {
-            errors.append(QObject::tr("Invalid SYBYL atom status bit "
-                "in part (%1) on line '%2'").arg(status_bit).arg(lines[4]));
+        // Tokenize the bits.
+        QStringList split_bits = status_bits.split('|');
 
-            has_status = false;
+        // Check that the status bit is valid.
+        for (auto bit : split_bits)
+        {
+            // Check that the status bit is valid.
+            if (not valid_bits.contains(bit))
+            {
+                errors.append(QObject::tr("Invalid SYBYL molecule status bit "
+                    "in part (%1) on line '%2'").arg(bit).arg(lines[4]));
+
+                has_status = false;
+            }
         }
     }
 
@@ -742,8 +765,8 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
 
         if (not has_status)
         {
-            comment = status_bit;
-            status_bit = "";
+            comment = status_bits;
+            status_bits = "";
         }
     }
 
@@ -955,15 +978,21 @@ Mol2Substructure::Mol2Substructure(const QString &line, QStringList &errors) :
                                        << "****";
 
                             // Extract the status bit.
-                            status_bit = data[8];
+                            status_bits = data[8];
+
+                            // Tokenize the bits.
+                            QStringList split_bits = status_bits.split('|');
 
                             // Check that the status bit is valid.
-                            if (not valid_bits.contains(status_bit))
+                            for (auto bit : split_bits)
                             {
-                                errors.append(QObject::tr("Invalid SYBYL status bit "
-                                    "in part (%1) on line '%2'").arg(status_bit).arg(line));
+                                if (not valid_bits.contains(bit))
+                                {
+                                    errors.append(QObject::tr("Invalid SYBYL status bit "
+                                        "in part (%1) on line '%2'").arg(bit).arg(line));
 
-                                return;
+                                    return;
+                                }
                             }
 
                             if (data.count() > 9)
@@ -1310,13 +1339,17 @@ void Mol2::parseLines(const PropertyMap &map)
                     {
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
+                            // Create local data objects.
                             Mol2Atom local_atom;
                             QStringList local_errors;
 
+                            // Parse the data from the atom record.
                             parse_atom(local_atom, lines()[iline+i], local_errors);
 
+                            // Acquire a lock.
                             QMutexLocker lkr(&mutex);
 
+                            // Update the member data.
                             molecules[imol-1].appendAtom(local_atom);
                             parse_warnings += local_errors;
                         }
@@ -1366,13 +1399,17 @@ void Mol2::parseLines(const PropertyMap &map)
                     {
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
+                            // Create local data objects.
                             QStringList local_errors;
                             Mol2Bond local_bond;
 
+                            // Parse the data from the bond record.
                             parse_bond(local_bond, lines()[iline+i], local_errors);
 
+                            // Acquire a lock.
                             QMutexLocker lkr(&mutex);
 
+                            // Update the member data.
                             molecules[imol-1].appendBond(local_bond);
                             parse_warnings += local_errors;
                         }
@@ -1422,13 +1459,17 @@ void Mol2::parseLines(const PropertyMap &map)
                     {
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
+                            // Create local data objects.
                             QStringList local_errors;
                             Mol2Substructure local_subst;
 
+                            // Parse the data from the substructure record.
                             parse_subst(local_subst, lines()[iline+i], local_errors);
 
+                            // Acquire a lock.
                             QMutexLocker lkr(&mutex);
 
+                            // Update the member data.
                             molecules[imol-1].appendSubstructure(local_subst);
                             parse_warnings += local_errors;
                         }
