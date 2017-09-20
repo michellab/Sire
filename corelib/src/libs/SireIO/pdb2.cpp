@@ -2185,11 +2185,11 @@ void PDB2::parseLines(const PropertyMap &map)
 
                     QMutexLocker lkr(&mutex);
 
-                    num_ters        += local_num_ters;
-                    frame_residues  += local_residues;
-                    frame_chains    += local_chains;
-                    frame_segments  += local_segments;
-                    parse_warnings  += local_errors;
+                    num_ters       += local_num_ters;
+                    frame_residues += local_residues;
+                    frame_chains   += local_chains;
+                    frame_segments += local_segments;
+                    parse_warnings += local_errors;
                 });
             }
             else
