@@ -26,8 +26,6 @@
   *
 \*********************************************/
 
-#include <iostream>
-
 #include "SireIO/mol2.h"
 
 #include "SireMM/mol2params.h"
