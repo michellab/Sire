@@ -1454,18 +1454,6 @@ void Mol2::parseLines(const PropertyMap &map)
         }
     }
 
-    qDebug() << molecules[imol-1].nAtoms()
-             << molecules[imol-1].nBonds()
-             << molecules[imol-1].nSubstructures();
-
-    auto atoms = molecules[imol-1].getAtoms();
-    auto bonds = molecules[imol-1].getBonds();
-    auto subst = molecules[imol-1].getSubstructures();
-
-    qDebug() << atoms.count()
-             << bonds.count()
-             << subst.count();
-
     this->setScore(nAtoms());
 }
 
