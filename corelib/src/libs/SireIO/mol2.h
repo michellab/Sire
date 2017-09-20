@@ -88,6 +88,12 @@ public:
 
     static const char* typeName();
 
+    /** Get the atom number. */
+    int getNumber() const;
+
+    /** Get the atom name. */
+    QString getName() const;
+
     /** Get the atom coordinates. */
     SireMaths::Vector getCoord() const;
 
@@ -227,6 +233,15 @@ public:
 
     /** Append a substructure to the molecule. */
     void appendSubstructure(const Mol2Substructure &substructure);
+
+    /** Get the atoms. */
+    QVector<Mol2Atom> getAtoms() const;
+
+    /** Get the bonds. */
+    QVector<Mol2Bond> getBonds() const;
+
+    /** Get the substructures. */
+    QVector<Mol2Substructure> getSubstructures() const;
 
 private:
     // Record data.

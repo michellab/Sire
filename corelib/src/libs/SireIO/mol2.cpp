@@ -268,58 +268,67 @@ Mol2Atom::Mol2Atom(const QString &line, QStringList &errors) :
     // Extract the SYBYL atom type.
     type = data[5].simplified();
 
-    // Extract the substructure ID.
-    subst_id = data[6].toInt(&ok);
-
-    if (not ok)
+    // Parse optional data records.
+    if (data.count() > 6)
     {
-        errors.append(QObject::tr("Cannot extract the substructure ID number "
-            "from part (%1) from line '%2'").arg(data[6]).arg(line));
+        // Extract the substructure ID.
+        subst_id = data[6].toInt(&ok);
 
-        return;
-    }
-
-    // Extract the substructure name.
-    subst_name = data[7].simplified();
-
-    // Extract the charge on the atom.
-    charge = data[8].toDouble(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the atom charge "
-            "from part (%1) from line '%2'").arg(data[8]).arg(line));
-
-        return;
-    }
-
-    // There is a SYBYL status bit entry for this atom.
-    if (data.count() == 10)
-    {
-        // List of valid SYBYL atom status bits.
-        QStringList valid_bits;
-
-        // Populate the list.
-        valid_bits << "DSPMOD"
-                   << "TPECOL"
-                   << "CAP"
-                   << "BACKBONE"
-                   << "DICT"
-                   << "ESSENTIAL"
-                   << "WATER"
-                   << "DIRECT";
-
-        // Extract the SYBYL status bit.
-        status_bit = data[9].simplified().toUpper();
-
-        // Check that the status bit isn't empty.
-        if (not status_bit.isEmpty())
+        if (not ok)
         {
-            // Check that the status bit is valid.
-            if (not valid_bits.contains(status_bit))
+            errors.append(QObject::tr("Cannot extract the substructure ID number "
+                "from part (%1) from line '%2'").arg(data[6]).arg(line));
+
+            return;
+        }
+
+        if (data.count() > 7)
+        {
+            // Extract the substructure name.
+            subst_name = data[7].simplified();
+
+            if (data.count() > 8)
             {
-                errors.append(QObject::tr("Invalid SYBYL atom status bit "
-                    "in part (%1) on line '%2'").arg(status_bit).arg(line));
+                // Extract the charge on the atom.
+                charge = data[8].toDouble(&ok);
+
+                if (not ok)
+                {
+                    errors.append(QObject::tr("Cannot extract the atom charge "
+                        "from part (%1) from line '%2'").arg(data[8]).arg(line));
+
+                    return;
+                }
+
+                if (data.count() > 9)
+                {
+                    // List of valid SYBYL atom status bits.
+                    QStringList valid_bits;
+
+                    // Populate the list.
+                    valid_bits << "DSPMOD"
+                            << "TPECOL"
+                            << "CAP"
+                            << "BACKBONE"
+                            << "DICT"
+                            << "ESSENTIAL"
+                            << "WATER"
+                            << "DIRECT";
+
+                    // Extract the SYBYL status bit.
+                    status_bit = data[9].simplified().toUpper();
+
+                    // Check that the status bit isn't empty.
+                    if (not status_bit.isEmpty())
+                    {
+                        // Check that the status bit is valid.
+                        if (not valid_bits.contains(status_bit))
+                        {
+                            errors.append(QObject::tr("Invalid SYBYL atom status bit "
+                                "in part (%1) on line '%2'").arg(status_bit).arg(line));
+                        }
+                    }
+                }
             }
         }
     }
@@ -342,11 +351,25 @@ const char* Mol2Atom::typeName()
     return QMetaType::typeName( qMetaTypeId<Mol2Atom>() );
 }
 
+/** Get the atom number. */
+int Mol2Atom::getNumber() const
+{
+    return number;
+}
+
+/** Get the atom name. */
+QString Mol2Atom::getName() const
+{
+    return name;
+}
+
+/** Get the atom coordinates. */
 SireMaths::Vector Mol2Atom::getCoord() const
 {
     return coord;
 }
 
+/** Get the atom charge. */
 double Mol2Atom::getCharge() const
 {
     return charge;
@@ -370,6 +393,8 @@ Mol2Bond::Mol2Bond(const QString &line, QStringList &errors) :
         errors.append(QObject::tr("The @<TRIPOS>BOND record "
             "is incorrectly formatted. Should have a minimum of 4 entries, has %1!")
             .arg(data.count()));
+
+        return;
     }
 
     bool ok;
@@ -763,21 +788,39 @@ int Mol2Molecule::nSubstructures() const
 }
 
 /** Append an atom to the molecule. */
-void Mol2Molecule::appendAtom(const Mol2Atom& atom)
+void Mol2Molecule::appendAtom(const Mol2Atom &atom)
 {
     atoms.append(atom);
 }
 
 /** Append a bond to the molecule. */
-void Mol2Molecule::appendBond(const Mol2Bond& bond)
+void Mol2Molecule::appendBond(const Mol2Bond &bond)
 {
     bonds.append(bond);
 }
 
 /** Append a substructure to the molecule. */
-void Mol2Molecule::appendSubstructure(const Mol2Substructure& substructure)
+void Mol2Molecule::appendSubstructure(const Mol2Substructure &substructure)
 {
     substructures.append(substructure);
+}
+
+/** Get the atoms from the molecule. */
+QVector<Mol2Atom> Mol2Molecule::getAtoms() const
+{
+    return atoms;
+}
+
+/** Get the bonds from the molecule. */
+QVector<Mol2Bond> Mol2Molecule::getBonds() const
+{
+    return bonds;
+}
+
+/** Get the substructures from the molecule. */
+QVector<Mol2Substructure> Mol2Molecule::getSubstructures() const
+{
+    return substructures;
 }
 
 /** Default constructor. */
@@ -800,6 +843,8 @@ Mol2Substructure::Mol2Substructure(const QString &line, QStringList &errors) :
         errors.append(QObject::tr("The @<TRIPOS>SUBSTRUCTURE record "
             "is incorrectly formatted. Should have a minimum of 3 entries, has %1!")
             .arg(data.count()));
+
+        return;
     }
 
     // Extract the substructure ID number.
@@ -1172,6 +1217,9 @@ void Mol2::parseLines(const PropertyMap &map)
     // Molecule index.
     int imol = 0;
 
+    // Number of lines in the file.
+    int num_lines = lines().count();
+
     // Internal function used to parse a single ATOM record.
     auto parse_atom = [&](Mol2Atom &local_atom,
         const QString &line, QStringList &local_errors)
@@ -1212,6 +1260,15 @@ void Mol2::parseLines(const PropertyMap &map)
             {
                 ++iline;
 
+                // Check that the file contains enough lines for the record.
+                if ((iline == num_lines) or ((iline + 4) >= num_lines))
+                {
+                    parse_warnings.append(QObject::tr("We've unexpectedly hit the end "
+                        "of the file parsing a MOLECULE record!"));
+
+                    return;
+                }
+
                 int num_records = 0;
 
                 // Create a molecule.
@@ -1232,6 +1289,17 @@ void Mol2::parseLines(const PropertyMap &map)
             {
                 // For correctly formatted files, the number of atoms should
                 // be equal to "num_atoms" from the previous MOLECULE record.
+                int num_atoms = molecules[imol-1].nAtoms();
+
+                // Check that the file contains enough lines for the record.
+                if (((iline + 1) == num_lines) or
+                   ((iline + num_atoms) >= num_lines))
+                {
+                    parse_warnings.append(QObject::tr("We've unexpectedly hit the end "
+                        "of the file parsing an ATOM record!"));
+
+                    return;
+                }
 
                 if (usesParallel())
                 {
@@ -1239,26 +1307,29 @@ void Mol2::parseLines(const PropertyMap &map)
 
                     QMutex mutex;
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0,molecules[imol-1].nAtoms()),
+                    tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
                                     [&](const tbb::blocked_range<int> &r)
                     {
-                        QStringList local_errors;
-                        Mol2Atom local_atom;
-
                         for (int i=r.begin(); i<r.end(); ++i)
+                        {
+                            Mol2Atom local_atom;
+                            QStringList local_errors;
+
                             parse_atom(local_atom, lines()[iline+i], local_errors);
 
-                        QMutexLocker lkr(&mutex);
+                            QMutexLocker lkr(&mutex);
 
-                        molecules[imol-1].appendAtom(local_atom);
-                        parse_warnings  += local_errors;
+                            molecules[imol-1].appendAtom(local_atom);
+                            parse_warnings += local_errors;
+                        }
                     });
 
-                    iline += (molecules[imol-1].nAtoms() - 1);
+                    // Fast-forward the line index.
+                    iline += (num_atoms - 1);
                 }
                 else
                 {
-                    for (int i=0; i<molecules[imol-1].nAtoms(); ++i)
+                    for (int i=0; i<num_atoms; ++i)
                     {
                         // Create a new atom object.
                         Mol2Atom atom(lines()[++iline], parse_warnings);
@@ -1274,6 +1345,17 @@ void Mol2::parseLines(const PropertyMap &map)
             {
                 // For correctly formatted files, the number of bonds should
                 // be equal to "num_bonds" from the previous MOLECULE record.
+                int num_bonds = molecules[imol-1].nBonds();
+
+                // Check that the file contains enough lines for the record.
+                if (((iline + 1) == num_lines) or
+                   ((iline + num_bonds) >= num_lines))
+                {
+                    parse_warnings.append(QObject::tr("We've unexpectedly hit the end "
+                        "of the file parsing a BOND record!"));
+
+                    return;
+                }
 
                 if (usesParallel())
                 {
@@ -1281,26 +1363,29 @@ void Mol2::parseLines(const PropertyMap &map)
 
                     QMutex mutex;
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0,molecules[imol-1].nBonds()),
+                    tbb::parallel_for( tbb::blocked_range<int>(0, num_bonds),
                                     [&](const tbb::blocked_range<int> &r)
                     {
-                        QStringList local_errors;
-                        Mol2Bond local_bond;
-
                         for (int i=r.begin(); i<r.end(); ++i)
+                        {
+                            QStringList local_errors;
+                            Mol2Bond local_bond;
+
                             parse_bond(local_bond, lines()[iline+i], local_errors);
 
-                        QMutexLocker lkr(&mutex);
+                            QMutexLocker lkr(&mutex);
 
-                        molecules[imol-1].appendBond(local_bond);
-                        parse_warnings  += local_errors;
+                            molecules[imol-1].appendBond(local_bond);
+                            parse_warnings += local_errors;
+                        }
                     });
 
-                    iline += (molecules[imol-1].nBonds() - 1);
+                    // Fast-forward the line index.
+                    iline += (num_bonds - 1);
                 }
                 else
                 {
-                    for (int i=0; i<molecules[imol-1].nBonds(); ++i)
+                    for (int i=0; i<num_bonds; ++i)
                     {
                         // Create a new bond object.
                         Mol2Bond bond(lines()[++iline], parse_warnings);
@@ -1316,6 +1401,17 @@ void Mol2::parseLines(const PropertyMap &map)
             {
                 // For correctly formatted files, the number of substructures should
                 // be equal to "num_subst" from the previous MOLECULE record.
+                int num_subst = molecules[imol-1].nSubstructures();
+
+                // Check that the file contains enough lines for the record.
+                if (((iline + 1) == num_lines) or
+                   ((iline + num_subst) >= num_lines))
+                {
+                    parse_warnings.append(QObject::tr("We've unexpectedly hit the end "
+                        "of the file parsing a SUBSTRUCTURE record!"));
+
+                    return;
+                }
 
                 if (usesParallel())
                 {
@@ -1323,26 +1419,29 @@ void Mol2::parseLines(const PropertyMap &map)
 
                     QMutex mutex;
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0,molecules[imol-1].nSubstructures()),
+                    tbb::parallel_for( tbb::blocked_range<int>(0, num_subst),
                                     [&](const tbb::blocked_range<int> &r)
                     {
-                        QStringList local_errors;
-                        Mol2Substructure local_subst;
-
                         for (int i=r.begin(); i<r.end(); ++i)
+                        {
+                            QStringList local_errors;
+                            Mol2Substructure local_subst;
+
                             parse_subst(local_subst, lines()[iline+i], local_errors);
 
-                        QMutexLocker lkr(&mutex);
+                            QMutexLocker lkr(&mutex);
 
-                        molecules[imol-1].appendSubstructure(local_subst);
-                        parse_warnings  += local_errors;
+                            molecules[imol-1].appendSubstructure(local_subst);
+                            parse_warnings += local_errors;
+                        }
                     });
 
-                    iline += (molecules[imol-1].nSubstructures() - 1);
+                    // Fast-forward the line index.
+                    iline += (num_subst - 1);
                 }
                 else
                 {
-                    for (int i=0; i<molecules[imol-1].nSubstructures(); ++i)
+                    for (int i=0; i<num_subst; ++i)
                     {
                         // Create a new substructure object.
                         Mol2Substructure substructure(lines()[++iline], parse_warnings);
@@ -1354,6 +1453,18 @@ void Mol2::parseLines(const PropertyMap &map)
             }
         }
     }
+
+    qDebug() << molecules[imol-1].nAtoms()
+             << molecules[imol-1].nBonds()
+             << molecules[imol-1].nSubstructures();
+
+    auto atoms = molecules[imol-1].getAtoms();
+    auto bonds = molecules[imol-1].getBonds();
+    auto subst = molecules[imol-1].getSubstructures();
+
+    qDebug() << atoms.count()
+             << bonds.count()
+             << subst.count();
 
     this->setScore(nAtoms());
 }
