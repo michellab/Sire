@@ -324,7 +324,7 @@ Mol2Atom::Mol2Atom(const QString &line, QStringList &errors) :
                         QStringList split_bits = status_bits.split('|');
 
                         // Check that the status bit is valid.
-                        for (auto bit : split_bits)
+                        for (auto const &bit : split_bits)
                         {
                             // Check that the status bit is valid.
                             if (not valid_bits.contains(bit))
@@ -490,7 +490,7 @@ Mol2Bond::Mol2Bond(const QString &line, QStringList &errors) :
             QStringList split_bits = status_bits.split('|');
 
             // Check that the status bit is valid.
-            for (auto bit : split_bits)
+            for (auto const &bit : split_bits)
             {
                 // Check that the status bit is valid.
                 if (not valid_bits.contains(bit))
@@ -728,7 +728,7 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
         QStringList split_bits = status_bits.split('|');
 
         // Check that the status bit is valid.
-        for (auto bit : split_bits)
+        for (auto const &bit : split_bits)
         {
             // Check that the status bit is valid.
             if (not valid_bits.contains(bit))
@@ -984,7 +984,7 @@ Mol2Substructure::Mol2Substructure(const QString &line, QStringList &errors) :
                             QStringList split_bits = status_bits.split('|');
 
                             // Check that the status bit is valid.
-                            for (auto bit : split_bits)
+                            for (auto const &bit : split_bits)
                             {
                                 if (not valid_bits.contains(bit))
                                 {
