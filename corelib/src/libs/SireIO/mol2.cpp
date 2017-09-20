@@ -208,8 +208,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2 &mol2)
 }
 
 /** Default constructor. */
-Mol2Atom::Mol2Atom() : name("X"),
-                       charge(0)
+Mol2Atom::Mol2Atom() :
+    name("X"),
+    charge(0)
 {
 }
 
