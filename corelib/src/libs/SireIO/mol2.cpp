@@ -51,9 +51,7 @@ const RegisterParser<Mol2> register_mol2;
 static const RegisterMetaType<Mol2> r_mol2;
 static const RegisterMetaType<Mol2Atom> r_mol2atom(NO_ROOT);
 static const RegisterMetaType<Mol2Bond> r_mol2bond(NO_ROOT);
-static const RegisterMetaType<Mol2Feature> r_mol2feature(NO_ROOT);
 static const RegisterMetaType<Mol2Molecule> r_mol2molecule(NO_ROOT);
-static const RegisterMetaType<Mol2Set> r_mol2set(NO_ROOT);
 static const RegisterMetaType<Mol2Substructure> r_mol2subst(NO_ROOT);
 
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Atom &mol2atom)
@@ -118,33 +116,6 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Bond &mol2bond)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Feature &mol2feature)
-{
-    writeHeader(ds, r_mol2feature, 1);
-
-    SharedDataStream sds(ds);
-
-    //sds << ;
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Feature &mol2feature)
-{
-    VersionID v = readHeader(ds, r_mol2feature);
-
-    if (v == 1)
-    {
-        SharedDataStream sds(ds);
-
-        //sds >> ;
-    }
-    else
-        throw version_error(v, "1", r_mol2feature, CODELOC);
-
-    return ds;
-}
-
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Molecule &mol2molecule)
 {
     writeHeader(ds, r_mol2molecule, 1);
@@ -155,8 +126,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Molecule &mol2m
         << mol2molecule.num_bonds << mol2molecule.num_subst << mol2molecule.num_feats
         << mol2molecule.num_sets << mol2molecule.mol_type << mol2molecule.charge_type
         << mol2molecule.status_bit << mol2molecule.comment << mol2molecule.atoms
-        << mol2molecule.bonds << mol2molecule.features << mol2molecule.sets
-        << mol2molecule.substructures;
+        << mol2molecule.bonds << mol2molecule.substructures;
 
     return ds;
 }
@@ -173,42 +143,10 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Molecule &mol2molecul
             >> mol2molecule.num_bonds >> mol2molecule.num_subst >> mol2molecule.num_feats
             >> mol2molecule.num_sets >> mol2molecule.mol_type >> mol2molecule.charge_type
             >> mol2molecule.status_bit >> mol2molecule.comment >> mol2molecule.atoms
-            >> mol2molecule.bonds >> mol2molecule.features >> mol2molecule.sets
-            >> mol2molecule.substructures;
+            >> mol2molecule.bonds >> mol2molecule.substructures;
     }
     else
         throw version_error(v, "1", r_mol2molecule, CODELOC);
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Set &mol2set)
-{
-    writeHeader(ds, r_mol2set, 1);
-
-    SharedDataStream sds(ds);
-
-    sds << mol2set.record << mol2set.name << mol2set.type << mol2set.sub_type
-        << mol2set.status_bit << mol2set.comment << mol2set.num_members
-        << mol2set.member_id << mol2set.rule;
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Set &mol2set)
-{
-    VersionID v = readHeader(ds, r_mol2set);
-
-    if (v == 1)
-    {
-        SharedDataStream sds(ds);
-
-        sds >> mol2set.record >> mol2set.name >> mol2set.type >> mol2set.sub_type
-            >> mol2set.status_bit >> mol2set.comment >> mol2set.num_members
-            >> mol2set.member_id >> mol2set.rule;
-    }
-    else
-        throw version_error(v, "1", r_mol2set, CODELOC);
 
     return ds;
 }
@@ -565,33 +503,6 @@ QString Mol2Bond::getType() const
 }
 
 /** Default constructor. */
-Mol2Feature::Mol2Feature()
-{
-}
-
-/** Constructor. */
-Mol2Feature::Mol2Feature(const QStringList &lines, QStringList &errors)
-{
-}
-
-/** Generate a Mol2 record from the feature data. */
-QStringList Mol2Feature::toMol2Record() const
-{
-    //return record;
-}
-
-/** Generate a string representation of the object. */
-QString Mol2Feature::toString() const
-{
-    return QObject::tr("Mol2Feature::null");
-}
-
-const char* Mol2Feature::typeName()
-{
-    return QMetaType::typeName( qMetaTypeId<Mol2Feature>() );
-}
-
-/** Default constructor. */
 Mol2Molecule::Mol2Molecule() :
     num_atoms(0),
     num_bonds(0),
@@ -641,6 +552,11 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
         else if (i == 2) num_subst = data[2].toInt(&ok);
         else if (i == 3) num_feats = data[3].toInt(&ok);
         else if (i == 4) num_sets  = data[4].toInt(&ok);
+
+        // We currently store the number of SET and FEATURE records, even though
+        // these are redundant for the purposes of constructing a molecule.
+        // Any file written by the parser will have zero of these record types.
+        // TODO: Maybe delete these data members.
 
         if (not ok)
         {
@@ -859,33 +775,6 @@ void Mol2Molecule::appendBond(const Mol2Bond& bond)
 void Mol2Molecule::appendSubstructure(const Mol2Substructure& substructure)
 {
     substructures.append(substructure);
-}
-
-/** Default constructor. */
-Mol2Set::Mol2Set()
-{
-}
-
-/** Constructor. */
-Mol2Set::Mol2Set(const QStringList &lines, QStringList &errors)
-{
-}
-
-/** Generate a Mol2 record from the set data. */
-QStringList Mol2Set::toMol2Record() const
-{
-    return record;
-}
-
-/** Generate a string representation of the object. */
-QString Mol2Set::toString() const
-{
-    return QObject::tr("Mol2Set::null");
-}
-
-const char* Mol2Set::typeName()
-{
-    return QMetaType::typeName( qMetaTypeId<Mol2Set>() );
 }
 
 /** Default constructor. */

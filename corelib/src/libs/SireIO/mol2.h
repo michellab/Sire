@@ -39,9 +39,7 @@ namespace SireIO
 {
 class Mol2Atom;
 class Mol2Bond;
-class Mol2Feature;
 class Mol2Molecule;
-class Mol2Set;
 class Mol2Substructure;
 class Mol2;
 }
@@ -52,14 +50,8 @@ QDataStream& operator>>(QDataStream&, SireIO::Mol2Atom&);
 QDataStream& operator<<(QDataStream&, const SireIO::Mol2Bond&);
 QDataStream& operator>>(QDataStream&, SireIO::Mol2Bond&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2Feature&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2Feature&);
-
 QDataStream& operator<<(QDataStream&, const SireIO::Mol2Molecule&);
 QDataStream& operator>>(QDataStream&, SireIO::Mol2Molecule&);
-
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2Set&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2Set&);
 
 QDataStream& operator<<(QDataStream&, const SireIO::Mol2Substructure&);
 QDataStream& operator>>(QDataStream&, SireIO::Mol2Substructure&);
@@ -193,35 +185,6 @@ private:
 };
 
 /** This class provides functionality for reading/writing
-    Mol2 FEATURE records.
-
-    @author Lester Hedges
-*/
-class SIREIO_EXPORT Mol2Feature
-{
-
-friend QDataStream& ::operator<<(QDataStream&, const Mol2Feature&);
-friend QDataStream& ::operator>>(QDataStream&, Mol2Feature&);
-
-public:
-    /** Default constructor. */
-    Mol2Feature();
-
-    /** Constructor. */
-    Mol2Feature(const QStringList &lines, QStringList &errors);
-
-    /** Generate a Mol2 record from the feature data. */
-    QStringList toMol2Record() const;
-
-    /** Generate a string representation of the object. */
-    QString toString() const;
-
-    static const char* typeName();
-
-private:
-};
-
-/** This class provides functionality for reading/writing
     Mol2 MOLECULE records.
 
     @author Lester Hedges
@@ -283,9 +246,11 @@ private:
     /** The number of substructures in the molecule. */
     qint64 num_subst;
 
+    // TODO: Maybe delete this data member.
     /** The number of features in the molecule. */
     qint64 num_feats;
 
+    // TODO: Maybe delete this data member.
     /** The number of sets in the molecule. */
     qint64 num_sets;
 
@@ -309,69 +274,8 @@ private:
     /** Bond data. */
     QVector<Mol2Bond> bonds;
 
-    /** Feature data. */
-    QVector<Mol2Feature> features;
-
-    /** Set data. */
-    QVector<Mol2Set> sets;
-
     /** substructure data. */
     QVector<Mol2Substructure> substructures;
-};
-
-/** This class provides functionality for reading/writing
-    Mol2 SET records.
-
-    @author Lester Hedges
-*/
-class SIREIO_EXPORT Mol2Set
-{
-
-friend QDataStream& ::operator<<(QDataStream&, const Mol2Set&);
-friend QDataStream& ::operator>>(QDataStream&, Mol2Set&);
-
-public:
-    /** Default constructor. */
-    Mol2Set();
-
-    /** Constructor. */
-    Mol2Set(const QStringList &lines, QStringList &errors);
-
-    /** Generate a Mol2 record from the feature data. */
-    QStringList toMol2Record() const;
-
-    /** Generate a string representation of the object. */
-    QString toString() const;
-
-    static const char* typeName();
-
-private:
-    /** The original Mol2 record used to instantiate the set. */
-    QStringList record;
-
-    /** The name of the set. */
-    QString name;
-
-    /** The set type (STATIC, or DYNAMIC). */
-    QString type;
-
-    /** The sub type of the set. */
-    QString sub_type;
-
-    /** The internal SYBYL status bits. */
-    QString status_bit;
-
-    /** Comments about the set. */
-    QString comment;
-
-    /** The number of members of the set (STATIC only). */
-    qint64 num_members;
-
-    /** The ID of a member of the set (STATIC only). */
-    qint64 member_id;
-
-    /** The rule defining the DYNAMIC set. */
-    QString rule;
 };
 
 /** This class provides functionality for reading/writing
@@ -511,17 +415,13 @@ private:
 
 Q_DECLARE_METATYPE( SireIO::Mol2Atom )
 Q_DECLARE_METATYPE( SireIO::Mol2Bond )
-Q_DECLARE_METATYPE( SireIO::Mol2Feature )
 Q_DECLARE_METATYPE( SireIO::Mol2Molecule )
-Q_DECLARE_METATYPE( SireIO::Mol2Set )
 Q_DECLARE_METATYPE( SireIO::Mol2Substructure )
 Q_DECLARE_METATYPE( SireIO::Mol2 )
 
 SIRE_EXPOSE_CLASS( SireIO::Mol2Atom )
 SIRE_EXPOSE_CLASS( SireIO::Mol2Bond )
-SIRE_EXPOSE_CLASS( SireIO::Mol2Feature )
 SIRE_EXPOSE_CLASS( SireIO::Mol2Molecule )
-SIRE_EXPOSE_CLASS( SireIO::Mol2Set )
 SIRE_EXPOSE_CLASS( SireIO::Mol2Substructure )
 SIRE_EXPOSE_CLASS( SireIO::Mol2 )
 
