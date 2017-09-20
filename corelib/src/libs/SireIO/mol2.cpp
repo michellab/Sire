@@ -34,6 +34,8 @@
 
 #include "SireSystem/system.h"
 
+#include "SireBase/parallel.h"
+
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
 
@@ -1169,6 +1171,27 @@ void Mol2::parseLines(const PropertyMap &map)
     // Molecule index.
     int imol = 0;
 
+    // Internal function used to parse a single ATOM record.
+    auto parse_atom = [&](Mol2Atom &local_atom,
+        const QString &line, QStringList &local_errors)
+    {
+        local_atom = Mol2Atom(line, local_errors);
+    };
+
+    // Internal function used to parse a single BOND record.
+    auto parse_bond = [&](Mol2Bond &local_bond,
+        const QString &line, QStringList &local_errors)
+    {
+        local_bond = Mol2Bond(line, local_errors);
+    };
+
+    // Internal function used to parse a single SUBSTRUCTURE record.
+    auto parse_subst= [&](Mol2Substructure &local_subst,
+        const QString &line, QStringList &local_errors)
+    {
+        local_subst = Mol2Substructure(line, local_errors);
+    };
+
     // Loop through all lines in the file.
     for (int iline=0; iline<lines().count(); ++iline)
     {
@@ -1208,13 +1231,40 @@ void Mol2::parseLines(const PropertyMap &map)
             {
                 // For correctly formatted files, the number of atoms should
                 // be equal to "num_atoms" from the previous MOLECULE record.
-                for (int i=0; i<molecules[imol-1].nAtoms(); ++i)
-                {
-                    // Create a new atom object.
-                    Mol2Atom atom(lines()[++iline], parse_warnings);
 
-                    // Insert the atom into the current molecule.
-                    molecules[imol-1].appendAtom(atom);
+                if (usesParallel())
+                {
+                    ++iline;
+
+                    QMutex mutex;
+
+                    tbb::parallel_for( tbb::blocked_range<int>(0,molecules[imol-1].nAtoms()),
+                                    [&](const tbb::blocked_range<int> &r)
+                    {
+                        QStringList local_errors;
+                        Mol2Atom local_atom;
+
+                        for (int i=r.begin(); i<r.end(); ++i)
+                            parse_atom(local_atom, lines()[iline+i], local_errors);
+
+                        QMutexLocker lkr(&mutex);
+
+                        molecules[imol-1].appendAtom(local_atom);
+                        parse_warnings  += local_errors;
+                    });
+
+                    iline += (molecules[imol-1].nAtoms() - 1);
+                }
+                else
+                {
+                    for (int i=0; i<molecules[imol-1].nAtoms(); ++i)
+                    {
+                        // Create a new atom object.
+                        Mol2Atom atom(lines()[++iline], parse_warnings);
+
+                        // Insert the atom into the current molecule.
+                        molecules[imol-1].appendAtom(atom);
+                    }
                 }
             }
 
@@ -1223,13 +1273,40 @@ void Mol2::parseLines(const PropertyMap &map)
             {
                 // For correctly formatted files, the number of bonds should
                 // be equal to "num_bonds" from the previous MOLECULE record.
-                for (int i=0; i<molecules[imol-1].nBonds(); ++i)
-                {
-                    // Create a new bond object.
-                    Mol2Bond bond(lines()[++iline], parse_warnings);
 
-                    // Insert the bond into the current molecule.
-                    molecules[imol-1].appendBond(bond);
+                if (usesParallel())
+                {
+                    ++iline;
+
+                    QMutex mutex;
+
+                    tbb::parallel_for( tbb::blocked_range<int>(0,molecules[imol-1].nBonds()),
+                                    [&](const tbb::blocked_range<int> &r)
+                    {
+                        QStringList local_errors;
+                        Mol2Bond local_bond;
+
+                        for (int i=r.begin(); i<r.end(); ++i)
+                            parse_bond(local_bond, lines()[iline+i], local_errors);
+
+                        QMutexLocker lkr(&mutex);
+
+                        molecules[imol-1].appendBond(local_bond);
+                        parse_warnings  += local_errors;
+                    });
+
+                    iline += (molecules[imol-1].nBonds() - 1);
+                }
+                else
+                {
+                    for (int i=0; i<molecules[imol-1].nBonds(); ++i)
+                    {
+                        // Create a new bond object.
+                        Mol2Bond bond(lines()[++iline], parse_warnings);
+
+                        // Insert the bond into the current molecule.
+                        molecules[imol-1].appendBond(bond);
+                    }
                 }
             }
 
@@ -1238,13 +1315,40 @@ void Mol2::parseLines(const PropertyMap &map)
             {
                 // For correctly formatted files, the number of substructures should
                 // be equal to "num_subst" from the previous MOLECULE record.
-                for (int i=0; i<molecules[imol-1].nSubstructures(); ++i)
-                {
-                    // Create a new substructure object.
-                    Mol2Substructure substructure(lines()[++iline], parse_warnings);
 
-                    // Insert the substructure into the current molecule.
-                    molecules[imol-1].appendSubstructure(substructure);
+                if (usesParallel())
+                {
+                    ++iline;
+
+                    QMutex mutex;
+
+                    tbb::parallel_for( tbb::blocked_range<int>(0,molecules[imol-1].nSubstructures()),
+                                    [&](const tbb::blocked_range<int> &r)
+                    {
+                        QStringList local_errors;
+                        Mol2Substructure local_subst;
+
+                        for (int i=r.begin(); i<r.end(); ++i)
+                            parse_subst(local_subst, lines()[iline+i], local_errors);
+
+                        QMutexLocker lkr(&mutex);
+
+                        molecules[imol-1].appendSubstructure(local_subst);
+                        parse_warnings  += local_errors;
+                    });
+
+                    iline += (molecules[imol-1].nSubstructures() - 1);
+                }
+                else
+                {
+                    for (int i=0; i<molecules[imol-1].nSubstructures(); ++i)
+                    {
+                        // Create a new substructure object.
+                        Mol2Substructure substructure(lines()[++iline], parse_warnings);
+
+                        // Insert the substructure into the current molecule.
+                        molecules[imol-1].appendSubstructure(substructure);
+                    }
                 }
             }
         }
