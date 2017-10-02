@@ -25,14 +25,16 @@ except:
 
 import numpy as np
 
-bulk_rho = Parameter("bulk_rho", 1.0 * gram/(centimeter*centimeter*centimeter)\
-                     ,"""The density of buk solvent.""")
+cutoff_type = Parameter("cutoff type", "cutoffperiodic", """The cutoff method to use during the simulation.""")
+
+disable_crf = Parameter("disable crf", False,"""Whether to disable the reaction field crf term.""")
+
+use_solute_inter_nrg = Parameter("use solute intermolecular energy",False,"""Whether to use the solute intermolecular energy imstead of the total electrostatic potential energy.""")
 
 trajfile = Parameter("trajfile", "traj000000001.dcd",
                     """File name of the trajectory to process.""")
 stepframe = Parameter("step_frame",1,"""The number of frames to step to between two succcessive evaluations.""")
 
-# Need to pass rf dielectric, need to pass whether to disable force shifted term
 def setupRFFF(system, space, cutoff=10* angstrom):
 
     print ("Creating force fields... ")
@@ -51,10 +53,10 @@ def setupRFFF(system, space, cutoff=10* angstrom):
     if (cutoff_type.val != "nocutoff"):
         solvent_intraclj.setUseReactionField(True)
         solvent_intraclj.setReactionFieldDielectric(rf_dielectric.val)
-        #TODO) correctly expose this to the python API
-        solvent_intraclj.setDisableReactionFieldShift(True)
+    #    #TODO) correctly expose this to the python API
+    #    #solvent_intraclj.setDisableReactionFieldShift(disable_crf.val)
 
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
 
     # Solvent-solvent LJ energy
     solventff = InterCLJFF("solvent:solvent")
@@ -70,53 +72,69 @@ def setupRFFF(system, space, cutoff=10* angstrom):
         solute_hard_intraclj.setReactionFieldDielectric(rf_dielectric.val)
 
     solute_todummy_intraclj = IntraSoftCLJFF("solute_todummy_intralj")
-    solute_todummy_intraclj.setShiftDelta(shift_delta.val)
-    solute_todummy_intraclj.setCoulombPower(coulomb_power.val)
+    #solute_todummy_intraclj.setShiftDelta(shift_delta.val)
+    #solute_todummy_intraclj.setCoulombPower(coulomb_power.val)
     solute_todummy_intraclj.add(solute_todummy)
-    # SET RF HERE
+    if (cutoff_type.val != "nocutoff"):
+        solute_todummy_intraclj.setUseReactionField(True)
+        solute_todummy_intraclj.setReactionFieldDielectric(rf_dielectric.val)
 
     solute_fromdummy_intraclj = IntraSoftCLJFF("solute_fromdummy_intralj")
-    solute_fromdummy_intraclj.setShiftDelta(shift_delta.val)
-    solute_fromdummy_intraclj.setCoulombPower(coulomb_power.val)
+    #solute_fromdummy_intraclj.setShiftDelta(shift_delta.val)
+    #solute_fromdummy_intraclj.setCoulombPower(coulomb_power.val)
     solute_fromdummy_intraclj.add(solute_fromdummy)
-    # SET RF HERE
+    if (cutoff_type.val != "nocutoff"):
+        solute_fromdummy_intraclj.setUseReactionField(True)
+        solute_fromdummy_intraclj.setReactionFieldDielectric(rf_dielectric.val)
 
     solute_hard_todummy_intraclj = IntraGroupSoftCLJFF("solute_hard:todummy_intralj")
-    solute_hard_todummy_intraclj.setShiftDelta(shift_delta.val)
-    solute_hard_todummy_intraclj.setCoulombPower(coulomb_power.val)
+    #solute_hard_todummy_intraclj.setShiftDelta(shift_delta.val)
+    #solute_hard_todummy_intraclj.setCoulombPower(coulomb_power.val)
     solute_hard_todummy_intraclj.add(solute_hard, MGIdx(0))
     solute_hard_todummy_intraclj.add(solute_todummy, MGIdx(1))
-    # SET RF HERE
+    if (cutoff_type.val != "nocutoff"):
+        solute_hard_todummy_intraclj.setUseReactionField(True)
+        solute_hard_todummy_intraclj.setReactionFieldDielectric(rf_dielectric.val)
 
     solute_hard_fromdummy_intraclj = IntraGroupSoftCLJFF("solute_hard:fromdummy_intralj")
-    solute_hard_fromdummy_intraclj.setShiftDelta(shift_delta.val)
-    solute_hard_fromdummy_intraclj.setCoulombPower(coulomb_power.val)
+    #solute_hard_fromdummy_intraclj.setShiftDelta(shift_delta.val)
+    #solute_hard_fromdummy_intraclj.setCoulombPower(coulomb_power.val)
     solute_hard_fromdummy_intraclj.add(solute_hard, MGIdx(0))
     solute_hard_fromdummy_intraclj.add(solute_fromdummy, MGIdx(1))
-    # SET RF HERE
+    if (cutoff_type.val != "nocutoff"):
+        solute_hard_fromdummy_intraclj.setUseReactionField(True)
+        solute_hard_fromdummy_intraclj.setReactionFieldDielectric(rf_dielectric.val)
 
     solute_todummy_fromdummy_intraclj = IntraGroupSoftCLJFF("solute_todummy:fromdummy_intralj")
-    solute_todummy_fromdummy_intraclj.setShiftDelta(shift_delta.val)
-    solute_todummy_fromdummy_intraclj.setCoulombPower(coulomb_power.val)
+    #solute_todummy_fromdummy_intraclj.setShiftDelta(shift_delta.val)
+    #solute_todummy_fromdummy_intraclj.setCoulombPower(coulomb_power.val)
     solute_todummy_fromdummy_intraclj.add(solute_todummy, MGIdx(0))
     solute_todummy_fromdummy_intraclj.add(solute_fromdummy, MGIdx(1))
-    # SET RF HERE
+    if (cutoff_type.val != "nocutoff"):
+        solute_todummy_fromdummy_intraclj.setUseReactionField(True)
+        solute_todummy_fromdummy_intraclj.setReactionFieldDielectric(rf_dielectric.val)
 
     # Solute-solvent LJ energy
     solute_hard_solventff = InterGroupCLJFF("solute_hard:solvent")
     solute_hard_solventff.add(solute_hard, MGIdx(0))
     solute_hard_solventff.add(solvent, MGIdx(1))
-    # SET RF HERE
+    if (cutoff_type.val != "nocutoff"):
+        solute_hard_solventff.setUseReactionField(True)
+        solute_hard_solventff.setReactionFieldDielectric(rf_dielectric.val)
 
     solute_todummy_solventff = InterGroupSoftCLJFF("solute_todummy:solvent")
     solute_todummy_solventff.add(solute_todummy, MGIdx(0))
     solute_todummy_solventff.add(solvent, MGIdx(1))
-    # SET RF HERE
+    if (cutoff_type.val != "nocutoff"):
+        solute_todummy_solventff.setUseReactionField(True)
+        solute_todummy_solventff.setReactionFieldDielectric(rf_dielectric.val)
 
     solute_fromdummy_solventff = InterGroupSoftCLJFF("solute_fromdummy:solvent")
     solute_fromdummy_solventff.add(solute_fromdummy, MGIdx(0))
     solute_fromdummy_solventff.add(solvent, MGIdx(1))
-    # SET RF HERE
+    if (cutoff_type.val != "nocutoff"):
+        solute_fromdummy_solventff.setUseReactionField(True)
+        solute_fromdummy_solventff.setReactionFieldDielectric(rf_dielectric.val)
 
     # TOTAL
     forcefields = [solute_hard_intraclj, solute_todummy_intraclj, solute_fromdummy_intraclj,
@@ -145,22 +163,28 @@ def setupRFFF(system, space, cutoff=10* angstrom):
     #            solute_todummy_solventff.components().total(0) + \
     #            solute_fromdummy_solventff.components().total(0)
 
-    # Change from .lj() to .coulomb() (or .coul? )
-    total_nrg = solute_hard_intralj.components().lj() + \
-                solute_todummy_intralj.components().lj(0) + solute_fromdummy_intralj.components().lj(0) + \
-                solute_hard_todummy_intralj.components().lj(0) + solute_hard_fromdummy_intralj.components().lj(0) + \
-                solute_todummy_fromdummy_intralj.components().lj(0) + \
-                solventff.components().lj() + \
-                solvent_intralj.components().lj() + \
-                solute_hard_solventff.components().lj() + \
-                solute_todummy_solventff.components().lj(0) + \
-                solute_fromdummy_solventff.components().lj(0)
+    total_nrg = solute_hard_intraclj.components().coulomb() + \
+                solute_todummy_intraclj.components().coulomb(0) + solute_fromdummy_intraclj.components().coulomb(0) + \
+                solute_hard_todummy_intraclj.components().coulomb(0) + solute_hard_fromdummy_intraclj.components().coulomb(0) + \
+                solute_todummy_fromdummy_intraclj.components().coulomb(0) + \
+                solventff.components().coulomb() + \
+                solvent_intraclj.components().coulomb() + \
+                solute_hard_solventff.components().coulomb() + \
+                solute_todummy_solventff.components().coulomb(0) + \
+                solute_fromdummy_solventff.components().coulomb(0)
+
+    solinter_nrg = solute_hard_solventff.components().coulomb() + \
+                solute_todummy_solventff.components().coulomb(0) + \
+                solute_fromdummy_solventff.components().coulomb(0)
 
     e_total = system.totalComponent()
 
     lam = Symbol("lambda")
 
-    system.setComponent(e_total, total_nrg)
+    if (use_solute_inter_nrg.val):
+        system.setComponent(e_total, solinter_nrg)
+    else:
+        system.setComponent(e_total, total_nrg)
 
     system.setConstant(lam, 0.0)
 
@@ -179,89 +203,6 @@ def setupRFFF(system, space, cutoff=10* angstrom):
 
     return system
 
-
-def addAnalyticalLRC(system, cutoff, bulk_density):
-
-    # 1) Collect all solvent particles
-    # 2) Average all solvent sigma/epsilon parameters
-    solvent = system[MGName("solvent")]
-    solvent_mols = solvent.molecules()
-    solvent_molnums = solvent_mols.molNums()
-    #
-    # What if solvent contains more than one type of molecule?
-    #
-    #for molnum in solvent_molnums:
-    avg_sigma = 0.0 * angstrom
-    avg_epsilon = 0.0 * kcal_per_mol
-    LJsites = 0
-    # Is this always the right molecule?
-    mol = solvent_mols.first().molecule()
-    if (mol.nAtoms() == 1):
-        print ("This does not seem to be a solvent molecule. Picking up another one...")
-        mol = solvent_mols.last().molecule()
-        if (mol.nAtoms() == 1):
-            print ("This also does not seem to be a solvent molecule ! Abort!")
-            sys.exit(-1)
-    #molecule(molnum).molecule()
-    atoms = mol.atoms()
-    natoms = mol.nAtoms()
-    solv_mol_mass = 0 * g_per_mol
-    for x in range(0,natoms):
-        atom = atoms[x]
-        at_mass = atom.property("mass")
-        solv_mol_mass += at_mass
-    LJparams = mol.property("LJ").toVector()
-    for LJparam in LJparams:
-        sigma = LJparam.sigma()
-        epsilon = LJparam.epsilon()
-        print (sigma, epsilon)
-        # Are we supposed to skip null LJ sites?
-        if epsilon.value() > 0:
-            avg_epsilon += epsilon
-            avg_sigma += sigma
-            LJsites += 1
-    avg_sigma /= LJsites
-    avg_epsilon /= LJsites
-    print (avg_sigma, avg_epsilon, LJsites)
-    solv_sigma = avg_sigma
-    solv_epsilon = avg_epsilon
-    # Now for each LJsite in every molecule in the system, compute LRC term
-    molecules_group = system[MGName("molecules")]
-    # IS THE FORMULA CORRECT FOR SOFT-CORE POTENTIALS ? IN PRINCIPLE NO ERROR
-    # AT THE END STATES
-    molecules = molecules_group.molecules()
-    molnums = molecules.molNums()
-    E_lrc_full = 0.0 * kcal_per_mol
-    for molnum in molnums:
-        mol = molecules.molecule(molnum).molecule()
-        LJparams = mol.property("LJ").toVector()
-        for LJparam in LJparams:
-            sigma = LJparam.sigma()
-            epsilon = LJparam.epsilon()
-            #import pdb; pdb.set_trace()
-            eps_ij = math.sqrt(epsilon.value()*solv_epsilon.value()) \
-                     * kcal_per_mol
-            if combining_rules.val == 'arithmetic':
-                sig_ij = (0.5*(sigma+solv_sigma)).value()
-            else:
-                sig_lj = math.sqrt(sigma.value()*solv_sigma.value())
-            sig_ij6 = sig_ij**6
-            sig_ij12 = sig_ij6**2
-            sig_ij6 = sig_ij6 #* angstrom
-            sig_ij12 = sig_ij12 #* angstrom
-            # units !!
-            # density must be converted in molecule per cubic Angstrom
-            rho = (bulk_density/solv_mol_mass).value()
-            cutval = cutoff.value()
-            #cutval = 3.15075
-            E_lrc_pairwise = 8*pi*rho*\
-                             ( (1/(9.*(cutval)**9))*(eps_ij*sig_ij12) -
-                               (1/(3.*(cutval)**3))*(eps_ij*sig_ij6) )
-            #print (E_lrc_pairwise)
-            #import pdb; pdb.set_trace()
-            #sys.exit(-1)
-            E_lrc_full += E_lrc_pairwise
-    return E_lrc_full
 
 def updateSystemfromTraj(system, frame_xyz, cell_lengths, cell_angles):
     traj_coordinates = frame_xyz[0]
@@ -282,7 +223,8 @@ def updateSystemfromTraj(system, frame_xyz, cell_lengths, cell_angles):
     molnums.sort()
 
     for molnum in molnums:
-        mol = system.molecule(molnum).molecule()
+        #mol = system.molecule(molnum).molecule()
+        mol = system.molecule(molnum)[-1]
         molatoms = mol.atoms()
         molnatoms = mol.nAtoms()
         # Create an empty coord group using molecule so we get the correct layout
@@ -304,7 +246,8 @@ def updateSystemfromTraj(system, frame_xyz, cell_lengths, cell_angles):
     changedmols = MoleculeGroup("changedmols")
     mol_index = 0
     for molnum in molnums:
-        mol = system.molecule(molnum).molecule()
+        #mol = system.molecule(molnum).molecule()
+        mol = system.molecule(molnum)[-1]
         newmol_coords = newmols_coords[molnum]
         mol = mol.edit().setProperty("coordinates", newmol_coords).commit()
         changedmols.add(mol)
@@ -359,7 +302,7 @@ def runLambda():
     # Construct a forcefield to compute electrostatic energies
     system_shortc = setupRFFF(system_shortc, space, \
                               cutoff=cutoff_dist.val)
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
 
     # TODO) Replace this section of code with code to compute cutoff for a sphere
     # that encompasses the box
@@ -372,23 +315,22 @@ def runLambda():
     if mindim > dims.z():
         mindim = dims.z()
     long_cutoff = (mindim/2.0 * 0.95) * angstrom
+
+    long_cutoff = 50 * angstrom
     print (long_cutoff)
     system_longc = System()
     system_longc.copy(system)
     # Update this to setupRFFF
-    system_longc = setupLJFF(system_longc, space, \
+    system_longc = setupRFFF(system_longc, space, \
                              cutoff=long_cutoff)
-    # TODO) This is not relevant to the current theory, will be replaced by 
-    # a potential Langevin Dipole term 
-    #E_lrc_full = addAnalyticalLRC(system_longc, long_cutoff, bulk_rho.val)
 
-    #import pdb; pdb.set_trace()
+    # TODO) Add code to compute Langevin Dipole term
+
     # Now loop over snapshots in dcd and accumulate energies
     start_frame = 1
     end_frame = 1000000000
     step_frame = stepframe.val
 
-    #mdtraj_top = mdtraj.load_prmtop(topfile.val)
     mdtraj_trajfile = mdtraj.open(trajfile.val,'r')
     nframes = len(mdtraj_trajfile)
     if end_frame > (nframes - 1):
@@ -406,14 +348,15 @@ def runLambda():
         #print (system_longc.energy())
         system_shortc = updateSystemfromTraj(system_shortc, frames_xyz, cell_lengths, cell_angles)
         system_longcc = updateSystemfromTraj(system_longc, frames_xyz, cell_lengths, cell_angles)
-        #print (system_shortc.energy())
-        #print (system_longc.energy())
+        print (system_shortc.energy())
+        print (system_longc.energy())
         #delta_nrg = (system_longc.energy()+E_lrc_full - system_shortc.energy())
         # TODO) add LD term to longc system
         delta_nrg = (system_longc.energy() - system_shortc.energy())
         delta_nrgs.append(delta_nrg)
         current_frame += step_frame
         mdtraj_trajfile.seek(current_frame)
+        import pdb; pdb.set_trace()
     #print (delta_nrgs)
     # Now compute free energy change
     deltaG = getFreeEnergy(delta_nrgs)
@@ -425,4 +368,4 @@ def runLambda():
         dG = getFreeEnergy(resampled_nrgs)
         deltaG_bootstrap[x] = dG.value()
     dev = deltaG_bootstrap.std()
-    print ("DG_LJ = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (deltaG.value(), dev))
+    print ("DG_ELEC = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (deltaG.value(), dev))

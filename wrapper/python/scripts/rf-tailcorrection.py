@@ -47,9 +47,6 @@ parser.add_argument('-m', '--morph_file', nargs="?",
 parser.add_argument('-l', '--lambda_val', nargs="?",
                     help="The lambda value at which you want to run the simulation.")
 
-parser.add_argument('-b', '--bulk_rho', nargs="?",
-                    help="The density of the bulk solvent for LJ tail corrections.")
-
 parser.add_argument('-r', '--traj_file', nargs="?",
                     help="The trajectory file to process.")
 
@@ -116,10 +113,6 @@ else:
 if args.lambda_val:
     lambda_val = float(args.lambda_val)
     params["lambda_val"] = lambda_val
-
-if args.bulk_rho:
-    exec("bulk_rho = %s" % args.bulk_rho, globals())
-    params["bulk_rho"] = bulk_rho
 
 if args.traj_file:
     traj_file = args.traj_file
