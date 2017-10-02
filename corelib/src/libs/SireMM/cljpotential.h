@@ -1189,6 +1189,11 @@ public:
         return CLJPot::setDisableReactionFieldShift(c_rf_on);
     }
  
+    bool DisableReactionFieldShift() const
+    {
+        return CLJPot::disableReactionFieldShift();
+    }
+
     double reactionFieldDielectric() const
     {
         return CLJPot::reactionFieldDielectric();
