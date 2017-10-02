@@ -276,7 +276,7 @@ static const RegisterMetaType<CLJPotential> r_cljpot( MAGIC_ONLY, NO_ROOT,
 QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
                                       const CLJPotential &cljpot)
 {
-    writeHeader(ds, r_cljpot, 1);
+    writeHeader(ds, r_cljpot, 2);
     
     ds << cljpot.props;
 
@@ -289,7 +289,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
 {
     VersionID v = readHeader(ds, r_cljpot);
     
-    if (v == 1)
+    if (v == 1 or v ==2)
     {
         ds >> cljpot.props;
     
@@ -318,7 +318,12 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
     }
     else 
         throw version_error(v, "1", r_cljpot, CODELOC);
-    
+    if (v ==2 )    
+    {
+       cljpot.disable_reaction_field_shift = cljpot.props.property("disableReactionFieldShift")
+                                         .asA<VariantProperty>().convertTo<bool>();
+    }
+
     return ds;
 }
 
@@ -327,6 +332,7 @@ CLJPotential::CLJPotential()
              : spce( Space::null() ), switchfunc( SwitchingFunction::null() ),
                combining_rules( LJParameterDB::interpret("arithmetic") ),
                rf_dielectric_constant(1), use_reaction_field(false),
+               disable_reaction_field_shift(false),
                need_update_ljpairs(true), use_electrostatic_shifting(false),
                use_atomistic_cutoff(false)
 {
@@ -341,6 +347,7 @@ CLJPotential::CLJPotential()
     props.setProperty("reactionFieldDielectric", VariantProperty(rf_dielectric_constant));
     props.setProperty("useAtomisticCutoff", VariantProperty(use_atomistic_cutoff));
     props.setProperty("useGroupCutoff", VariantProperty(true));
+    props.setProperty("disableReactionFieldShift",VariantProperty(disable_reaction_field_shift));
 }
 
 /** Copy constructor */
@@ -350,6 +357,7 @@ CLJPotential::CLJPotential(const CLJPotential &other)
                combining_rules(other.combining_rules),
                rf_dielectric_constant(other.rf_dielectric_constant),
                use_reaction_field(other.use_reaction_field),
+               disable_reaction_field_shift(other.disable_reaction_field_shift),
                need_update_ljpairs(other.need_update_ljpairs),
                use_electrostatic_shifting(other.use_electrostatic_shifting),
                use_atomistic_cutoff(other.use_atomistic_cutoff)
@@ -374,6 +382,7 @@ CLJPotential& CLJPotential::operator=(const CLJPotential &other)
         need_update_ljpairs = other.need_update_ljpairs;
         use_electrostatic_shifting = other.use_electrostatic_shifting;
         use_atomistic_cutoff = other.use_atomistic_cutoff;
+        disable_reaction_field_shift = other.disable_reaction_field_shift;
     }
     
     return *this;
@@ -615,6 +624,11 @@ bool CLJPotential::setProperty(const QString &name, const Property &value)
         return this->setCombiningRules( value.asA<VariantProperty>()
                                                      .convertTo<QString>() );
     }
+    else if (name == QLatin1String("disableReactionFieldShift"))
+    {
+       return this->setDisableReactionFieldShift( value.asA<VariantProperty>()
+                                                      .convertTo<bool>() );
+    }
     else
         throw SireBase::missing_property( QObject::tr(
             "The CLJ potentials do not have a property called \"%1\" that "
@@ -713,6 +727,22 @@ double CLJPotential::reactionFieldDielectric() const
 {
     return rf_dielectric_constant;
 }
+
+/** Set whether the reacton field force shift c_rf term is disabled */ 
+bool CLJPotential::setDisableReactionFieldShift(bool c_rf_on)
+{
+    props.setProperty("DisableReactionFieldShift", VariantProperty(c_rf_on) );
+    if (use_reaction_field)
+        this->changedPotential();
+    return true;
+}
+
+/** Return whether the c_rf term of the reaction field is on or off */
+bool CLJPotential::disableReactionFieldShift() const
+{
+    return disable_reaction_field_shift;
+}
+
 
 /////////////
 ///////////// Implementation of InterCLJPotential
@@ -1454,7 +1484,9 @@ void InterCLJPotential::_pvt_calculateEnergy(const InterCLJPotential::Molecule &
         // c = (1/r_c) * (3 eps)/(2 eps + 1)
         const double k_rf = (1.0 / pow_3(Rcoul)) * ( (rf_dielectric_constant-1) /
                                                      (2*rf_dielectric_constant + 1) );
-        const double c_rf = (1.0 / Rcoul) * ( (3*rf_dielectric_constant) /
+        double c_rf = 0.0;
+        if (not disable_reaction_field_shift)
+            c_rf = (1.0 / Rcoul) * ( (3*rf_dielectric_constant) /
                                               (2*rf_dielectric_constant + 1) );
         
         for (quint32 igroup=0; igroup<ngroups0; ++igroup)
@@ -1975,7 +2007,9 @@ void InterCLJPotential::_pvt_calculateEnergy(const InterCLJPotential::Molecule &
 
 	    const double k_rf = (1.0 / pow_3(Rc)) * ( (rf_dielectric_constant-1) /
 						(2*rf_dielectric_constant + 1) );
-	    const double c_rf = (1.0 / Rc) * ( (3*rf_dielectric_constant) /
+            double c_rf = 0.0;
+            if (not disable_reaction_field_shift)
+	        c_rf = (1.0 / Rc) * ( (3*rf_dielectric_constant) /
 					       (2*rf_dielectric_constant + 1) );
 	    
             const quint32 nats1 = group1.count();
@@ -5517,7 +5551,9 @@ void IntraCLJPotential::calculateEnergy(const CLJNBPairs::CGPairs &group_pairs,
         {
             const double k_rf = (1.0 / pow_3(Rcoul)) * ( (rf_dielectric_constant-1) /
                                                          (2*rf_dielectric_constant + 1) );
-            const double c_rf = (1.0 / Rcoul) * ( (3*rf_dielectric_constant) /
+            double c_rf = 0.0;
+            if (not disable_reaction_field_shift)
+                c_rf = (1.0 / Rcoul) * ( (3*rf_dielectric_constant) /
                                                   (2*rf_dielectric_constant + 1) );
         
             for (quint32 i=0; i<nats0; ++i)
@@ -5800,7 +5836,9 @@ void IntraCLJPotential::calculateEnergy(const CLJNBPairs::CGPairs &group_pairs,
         {
             const double k_rf = (1.0 / pow_3(Rcoul)) * ( (rf_dielectric_constant-1) /
                                                          (2*rf_dielectric_constant + 1) );
-            const double c_rf = (1.0 / Rcoul) * ( (3*rf_dielectric_constant) /
+            double c_rf = 0.0;
+            if (not disable_reaction_field_shift)
+                c_rf = (1.0 / Rcoul) * ( (3*rf_dielectric_constant) /
                                                   (2*rf_dielectric_constant + 1) );
         
             for (quint32 i=0; i<nats0; ++i)
@@ -6123,7 +6161,9 @@ void IntraCLJPotential::calculateEnergy(const CLJNBPairs::CGPairs &group_pairs,
         {
             const double k_rf = (1.0 / pow_3(Rcoul)) * ( (rf_dielectric_constant-1) /
                                                          (2*rf_dielectric_constant + 1) );
-            const double c_rf = (1.0 / Rcoul) * ( (3*rf_dielectric_constant) /
+            double c_rf = 0.0;
+            if (not disable_reaction_field_shift)
+                c_rf = (1.0 / Rcoul) * ( (3*rf_dielectric_constant) /
                                                   (2*rf_dielectric_constant + 1) );
         
             foreach (Index i, atoms0)
@@ -6403,7 +6443,9 @@ void IntraCLJPotential::calculateEnergy(const CLJNBPairs::CGPairs &group_pairs,
         {
             const double k_rf = (1.0 / pow_3(Rcoul)) * ( (rf_dielectric_constant-1) /
                                                          (2*rf_dielectric_constant + 1) );
-            const double c_rf = (1.0 / Rcoul) * ( (3*rf_dielectric_constant) /
+            double c_rf = 0.0;
+            if (not disable_reaction_field_shift)
+                c_rf = (1.0 / Rcoul) * ( (3*rf_dielectric_constant) /
                                                   (2*rf_dielectric_constant + 1) );
 
             foreach (Index i, atoms0)

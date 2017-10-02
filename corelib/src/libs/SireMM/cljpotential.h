@@ -207,6 +207,7 @@ public:
     bool setUseReactionField(bool switchrf);
     bool setUseAtomisticCutoff(bool switchatomistic);
     bool setUseGroupCutoff(bool switchgroup);
+    bool setDisableReactionFieldShift(bool c_rf_on);
     
     bool useAtomisticCutoff() const;
     bool useGroupCutoff() const;
@@ -215,6 +216,7 @@ public:
     const SwitchingFunction& switchingFunction() const;
     bool shiftElectrostatics() const;
     bool useReactionField() const;
+    bool disableReactionFieldShift() const;
     const QString& combiningRules() const;
 
     bool setReactionFieldDielectric(double dielectric);
@@ -259,6 +261,9 @@ protected:
         the cutoff */
     bool use_reaction_field;
     
+   /** Whether ot not to disable the c_rf term in the reaction field implementation */
+    bool disable_reaction_field_shift;
+
     /** Whether or not the LJ pair matrix needs to be rebuilt */
     bool need_update_ljpairs;
     
@@ -1178,7 +1183,12 @@ public:
     {
         return CLJPot::setReactionFieldDielectric(dielectric);
     }
-    
+   
+    bool setDisableReactionFieldShift(bool c_rf_on)
+    {
+        return CLJPot::setDisableReactionFieldShift(c_rf_on);
+    }
+ 
     double reactionFieldDielectric() const
     {
         return CLJPot::reactionFieldDielectric();
