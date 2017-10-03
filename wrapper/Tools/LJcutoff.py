@@ -183,7 +183,7 @@ def addAnalyticalLRC(system, cutoff, bulk_density):
     avg_epsilon = 0.0 * kcal_per_mol
     LJsites = 0
     # Is this always the right molecule?
-    mol = solvent_mols.first().molecule()
+    mol = solvent_mols.first()[-1]
     if (mol.nAtoms() == 1):
         print ("This does not seem to be a solvent molecule. Picking up another one...")
         mol = solvent_mols.last().molecule()
@@ -221,7 +221,7 @@ def addAnalyticalLRC(system, cutoff, bulk_density):
     molnums = molecules.molNums()
     E_lrc_full = 0.0 * kcal_per_mol
     for molnum in molnums:
-        mol = molecules.molecule(molnum).molecule()
+        mol = molecules.molecule(molnum)[-1]
         LJparams = mol.property("LJ").toVector()
         for LJparam in LJparams:
             sigma = LJparam.sigma()
@@ -257,7 +257,7 @@ def zeroCharges(system):
     molnums = molecules.molNums()
     #updated = []
     for molnum in molnums:
-        mol = molecules.molecule(molnum).molecule()
+        mol = molecules.molecule(molnum)[-1] #-1 to select Molecule
         editmol = mol.edit()
         for x in range(0,mol.nAtoms()):
             editatom = editmol.atom(AtomIdx(x))
@@ -286,7 +286,7 @@ def updateSystemfromTraj(system, frame_xyz, cell_lengths, cell_angles):
     molnums.sort()
 
     for molnum in molnums:
-        mol = system.molecule(molnum).molecule()
+        mol = system.molecule(molnum)[-1]
         molatoms = mol.atoms()
         molnatoms = mol.nAtoms()
         # Create an empty coord group using molecule so we get the correct layout
@@ -308,7 +308,7 @@ def updateSystemfromTraj(system, frame_xyz, cell_lengths, cell_angles):
     changedmols = MoleculeGroup("changedmols")
     mol_index = 0
     for molnum in molnums:
-        mol = system.molecule(molnum).molecule()
+        mol = system.molecule(molnum)[-1]
         newmol_coords = newmols_coords[molnum]
         mol = mol.edit().setProperty("coordinates", newmol_coords).commit()
         changedmols.add(mol)
