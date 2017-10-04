@@ -44,7 +44,7 @@ void register_Restraint3D_class(){
 
     { //::SireMM::Restraint3D
         typedef bp::class_< SireMM::Restraint3D, bp::bases< SireMM::Restraint, SireBase::Property >, boost::noncopyable > Restraint3D_exposer_t;
-        Restraint3D_exposer_t Restraint3D_exposer = Restraint3D_exposer_t( "Restraint3D", "This is the base class of all restraints that operate in 3 dimensions,\nand so can thus return the force on the molecule caused by the restraint\n\nAuthor: Christopher Woods\n", bp::no_init );
+        Restraint3D_exposer_t Restraint3D_exposer = Restraint3D_exposer_t( "Restraint3D", "", bp::no_init );
         bp::scope Restraint3D_scope( Restraint3D_exposer );
         { //::SireMM::Restraint3D::force
         

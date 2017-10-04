@@ -67,7 +67,7 @@ void register_AmberParams_class(){
 
     { //::SireMM::AmberParams
         typedef bp::class_< SireMM::AmberParams, bp::bases< SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > AmberParams_exposer_t;
-        AmberParams_exposer_t AmberParams_exposer = AmberParams_exposer_t( "AmberParams", "This class stores AMBER bonded force field parameters for\na collection of bonds, angles, dihedrals, impropers\nand 1-4 scaling factors.\n\nAuthor: Julien Michel  Christopher Woods\n", bp::init< >("Null Constructor") );
+        AmberParams_exposer_t AmberParams_exposer = AmberParams_exposer_t( "AmberParams", "", bp::init< >("Null Constructor") );
         bp::scope AmberParams_scope( AmberParams_exposer );
         AmberParams_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "Constructor for the passed molecule") );
         AmberParams_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "Constructor for the passed molecule") );

@@ -40,7 +40,7 @@ void register_StretchBendTorsionSymbols_class(){
 
     { //::SireMM::StretchBendTorsionSymbols
         typedef bp::class_< SireMM::StretchBendTorsionSymbols, bp::bases< SireMM::InternalSymbolsBase > > StretchBendTorsionSymbols_exposer_t;
-        StretchBendTorsionSymbols_exposer_t StretchBendTorsionSymbols_exposer = StretchBendTorsionSymbols_exposer_t( "StretchBendTorsionSymbols", "This class holds the symbols required for the stretch-bend-torsion parameters\nThese are functions over four atoms, 0, 1, 2, 3 and 4, of the dihedral\nformed over the four atoms 0-1-2-3 (phi), the angles 0-1-2 (theta012)\nand 3-2-1 (theta321) and the distances between atoms, 0-1 (r01),\n1-2 (r12), 3-2 (r32) and 0-3 (r03)\n", bp::init< >("") );
+        StretchBendTorsionSymbols_exposer_t StretchBendTorsionSymbols_exposer = StretchBendTorsionSymbols_exposer_t( "StretchBendTorsionSymbols", "", bp::init< >("") );
         bp::scope StretchBendTorsionSymbols_scope( StretchBendTorsionSymbols_exposer );
         { //::SireMM::StretchBendTorsionSymbols::phi
         

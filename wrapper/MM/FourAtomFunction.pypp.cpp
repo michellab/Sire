@@ -38,7 +38,7 @@ void register_FourAtomFunction_class(){
 
     { //::SireMM::FourAtomFunction
         typedef bp::class_< SireMM::FourAtomFunction, bp::bases< SireMM::AtomFunction > > FourAtomFunction_exposer_t;
-        FourAtomFunction_exposer_t FourAtomFunction_exposer = FourAtomFunction_exposer_t( "FourAtomFunction", "This class holds a function that acts using the\ncoordinate information of just four atoms", bp::init< >("Constructor") );
+        FourAtomFunction_exposer_t FourAtomFunction_exposer = FourAtomFunction_exposer_t( "FourAtomFunction", "", bp::init< >("Constructor") );
         bp::scope FourAtomFunction_scope( FourAtomFunction_exposer );
         FourAtomFunction_exposer.def( bp::init< SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireCAS::Expression const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("function") ), "Construct for the specified pair of atoms with the specified function") );
         FourAtomFunction_exposer.def( bp::init< SireMM::FourAtomFunction const & >(( bp::arg("other") ), "Copy constructor") );

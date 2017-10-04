@@ -26,7 +26,7 @@ void register_BondComponent_class(){
 
     { //::SireMM::BondComponent
         typedef bp::class_< SireMM::BondComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > BondComponent_exposer_t;
-        BondComponent_exposer_t BondComponent_exposer = BondComponent_exposer_t( "BondComponent", "This class represents a Bond component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
+        BondComponent_exposer_t BondComponent_exposer = BondComponent_exposer_t( "BondComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope BondComponent_scope( BondComponent_exposer );
         BondComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
         BondComponent_exposer.def( bp::init< SireMM::BondComponent const & >(( bp::arg("other") ), "Copy constructor") );

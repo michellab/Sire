@@ -45,7 +45,7 @@ void register_CLJBox_class(){
 
     { //::SireMM::CLJBox
         typedef bp::class_< SireMM::CLJBox > CLJBox_exposer_t;
-        CLJBox_exposer_t CLJBox_exposer = CLJBox_exposer_t( "CLJBox", "This class represents a single box of CLJ atoms. The CLJ calculation\nworks by dividing space into a series of boxes and working out which\nboxes are close enough to be within cutoff distance\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
+        CLJBox_exposer_t CLJBox_exposer = CLJBox_exposer_t( "CLJBox", "", bp::init< >("Null constructor") );
         bp::scope CLJBox_scope( CLJBox_exposer );
         CLJBox_exposer.def( bp::init< SireMM::CLJBoxIndex const &, SireUnits::Dimension::Length >(( bp::arg("index"), bp::arg("box_length") ), "Construct an empty box at a specific location") );
         CLJBox_exposer.def( bp::init< SireMM::CLJBoxIndex const &, SireUnits::Dimension::Length, SireMM::CLJAtoms const & >(( bp::arg("index"), bp::arg("box_length"), bp::arg("atoms") ), "Construct a box that holds the passed atoms") );

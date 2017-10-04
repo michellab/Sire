@@ -55,7 +55,7 @@ void register_CLJSoftIntraFunction_class(){
 
     { //::SireMM::CLJSoftIntraFunction
         typedef bp::class_< SireMM::CLJSoftIntraFunction, bp::bases< SireMM::CLJIntraFunction, SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property >, boost::noncopyable > CLJSoftIntraFunction_exposer_t;
-        CLJSoftIntraFunction_exposer_t CLJSoftIntraFunction_exposer = CLJSoftIntraFunction_exposer_t( "CLJSoftIntraFunction", "This is the base class of all intramolecular soft-core CLJ functions that have a cutoff\n\nAuthor: Christopher Woods\n", bp::no_init );
+        CLJSoftIntraFunction_exposer_t CLJSoftIntraFunction_exposer = CLJSoftIntraFunction_exposer_t( "CLJSoftIntraFunction", "", bp::no_init );
         bp::scope CLJSoftIntraFunction_scope( CLJSoftIntraFunction_exposer );
         { //::SireMM::CLJSoftIntraFunction::alpha
         

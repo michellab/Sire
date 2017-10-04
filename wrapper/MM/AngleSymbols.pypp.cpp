@@ -40,7 +40,7 @@ void register_AngleSymbols_class(){
 
     { //::SireMM::AngleSymbols
         typedef bp::class_< SireMM::AngleSymbols, bp::bases< SireMM::InternalSymbolsBase > > AngleSymbols_exposer_t;
-        AngleSymbols_exposer_t AngleSymbols_exposer = AngleSymbols_exposer_t( "AngleSymbols", "This class holds the symbols required for the angle parameters.\nThese are functions of the angle 0-1-2 (theta) of three\natoms (where atom 1 is the central atom of the angle)", bp::init< >("") );
+        AngleSymbols_exposer_t AngleSymbols_exposer = AngleSymbols_exposer_t( "AngleSymbols", "", bp::init< >("") );
         bp::scope AngleSymbols_scope( AngleSymbols_exposer );
         { //::SireMM::AngleSymbols::theta
         

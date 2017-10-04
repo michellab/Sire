@@ -43,7 +43,7 @@ void register_CLJSoftIntraRFFunction_class(){
 
     { //::SireMM::CLJSoftIntraRFFunction
         typedef bp::class_< SireMM::CLJSoftIntraRFFunction, bp::bases< SireMM::CLJSoftIntraFunction, SireMM::CLJIntraFunction, SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property > > CLJSoftIntraRFFunction_exposer_t;
-        CLJSoftIntraRFFunction_exposer_t CLJSoftIntraRFFunction_exposer = CLJSoftIntraRFFunction_exposer_t( "CLJSoftIntraRFFunction", "This CLJFunction calculates the intramolecular coulomb and LJ energy of the passed\nCLJAtoms using a reaction field cutoff, and provides a soft-core\npotential that can soften molecules that are involved in free energy calculations\n\nAuthor: Christopher Woods\n", bp::init< >("") );
+        CLJSoftIntraRFFunction_exposer_t CLJSoftIntraRFFunction_exposer = CLJSoftIntraRFFunction_exposer_t( "CLJSoftIntraRFFunction", "", bp::init< >("") );
         bp::scope CLJSoftIntraRFFunction_scope( CLJSoftIntraRFFunction_exposer );
         CLJSoftIntraRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") ), "Copy constructor") );
         CLJSoftIntraRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );

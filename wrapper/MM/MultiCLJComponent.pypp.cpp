@@ -30,7 +30,7 @@ void register_MultiCLJComponent_class(){
 
     { //::SireMM::MultiCLJComponent
         typedef bp::class_< SireMM::MultiCLJComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > MultiCLJComponent_exposer_t;
-        MultiCLJComponent_exposer_t MultiCLJComponent_exposer = MultiCLJComponent_exposer_t( "MultiCLJComponent", "This class is used to hold the symbols for CLJ forcefields\nthat allow multiple CLJ functions to be indexed by key\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() ), "Construct with just a single, default, CLJComponent for the\nforcefield with the passed name") );
+        MultiCLJComponent_exposer_t MultiCLJComponent_exposer = MultiCLJComponent_exposer_t( "MultiCLJComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() ), "Construct with just a single, default, CLJComponent for the\nforcefield with the passed name") );
         bp::scope MultiCLJComponent_scope( MultiCLJComponent_exposer );
         MultiCLJComponent_exposer.def( bp::init< SireMM::MultiCLJComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::MultiCLJComponent::add

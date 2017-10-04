@@ -26,7 +26,7 @@ void register_StretchBendComponent_class(){
 
     { //::SireMM::StretchBendComponent
         typedef bp::class_< SireMM::StretchBendComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > StretchBendComponent_exposer_t;
-        StretchBendComponent_exposer_t StretchBendComponent_exposer = StretchBendComponent_exposer_t( "StretchBendComponent", "This class represents a StretchBend component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
+        StretchBendComponent_exposer_t StretchBendComponent_exposer = StretchBendComponent_exposer_t( "StretchBendComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope StretchBendComponent_scope( StretchBendComponent_exposer );
         StretchBendComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
         StretchBendComponent_exposer.def( bp::init< SireMM::StretchBendComponent const & >(( bp::arg("other") ), "Copy constructor") );

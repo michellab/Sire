@@ -55,7 +55,7 @@ void register_CLJCutoffFunction_class(){
 
     { //::SireMM::CLJCutoffFunction
         typedef bp::class_< SireMM::CLJCutoffFunction, bp::bases< SireMM::CLJFunction, SireBase::Property >, boost::noncopyable > CLJCutoffFunction_exposer_t;
-        CLJCutoffFunction_exposer_t CLJCutoffFunction_exposer = CLJCutoffFunction_exposer_t( "CLJCutoffFunction", "This is the base class of all CLJ functions that have a cutoff\n\nAuthor: Christopher Woods\n", bp::no_init );
+        CLJCutoffFunction_exposer_t CLJCutoffFunction_exposer = CLJCutoffFunction_exposer_t( "CLJCutoffFunction", "", bp::no_init );
         bp::scope CLJCutoffFunction_scope( CLJCutoffFunction_exposer );
         { //::SireMM::CLJCutoffFunction::containsProperty
         

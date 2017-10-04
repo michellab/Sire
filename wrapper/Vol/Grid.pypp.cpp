@@ -31,7 +31,7 @@ void register_Grid_class(){
 
     { //::SireVol::Grid
         typedef bp::class_< SireVol::Grid, bp::bases< SireBase::Property >, boost::noncopyable > Grid_exposer_t;
-        Grid_exposer_t Grid_exposer = Grid_exposer_t( "Grid", "This is the base class of all grids. A grid is a set of points\nin space which are laid out in some manner (e.g. regularly spaced,\nor randomly distributed).\n\nAuthor: Christopher Woods\n", bp::no_init );
+        Grid_exposer_t Grid_exposer = Grid_exposer_t( "Grid", "", bp::no_init );
         bp::scope Grid_scope( Grid_exposer );
         { //::SireVol::Grid::aaBox
         
@@ -166,7 +166,7 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) )
+                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0.0) )
                 , "" );
         
         }
@@ -178,7 +178,7 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) )
+                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0.0) )
                 , "" );
         
         }

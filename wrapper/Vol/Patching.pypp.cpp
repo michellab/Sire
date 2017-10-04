@@ -30,7 +30,7 @@ void register_Patching_class(){
 
     { //::SireVol::Patching
         typedef bp::class_< SireVol::Patching, bp::bases< SireBase::Property >, boost::noncopyable > Patching_exposer_t;
-        Patching_exposer_t Patching_exposer = Patching_exposer_t( "Patching", "This is the base class of all Patching classes. Patching\nrepresents a scheme for decomposing a space into a set\nof regions (domain decomposition) that contain neighbouring\nCoordGroups - this allows inter-CoordGroup calculations to\nbe accelerated as cutoff tests can be applied to the patches\nto eliminate tests of the contained CoordGroups.\n\nAuthor: Christopher Woods\n", bp::no_init );
+        Patching_exposer_t Patching_exposer = Patching_exposer_t( "Patching", "", bp::no_init );
         bp::scope Patching_scope( Patching_exposer );
         { //::SireVol::Patching::nPatches
         

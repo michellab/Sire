@@ -43,7 +43,7 @@ void register_Restraint_class(){
 
     { //::SireMM::Restraint
         typedef bp::class_< SireMM::Restraint, bp::bases< SireBase::Property >, boost::noncopyable > Restraint_exposer_t;
-        Restraint_exposer_t Restraint_exposer = Restraint_exposer_t( "Restraint", "This is the base class of all restraints. A restraint is a\nfunction that calculates the energy or force acting on\na molecule caused by external potential, e.g. a harmonic\nrestraining potential, or a solvent cap potential, or\na dihedral restraint potential\n\nAuthor: Christopher Woods\n", bp::no_init );
+        Restraint_exposer_t Restraint_exposer = Restraint_exposer_t( "Restraint", "", bp::no_init );
         bp::scope Restraint_scope( Restraint_exposer );
         { //::SireMM::Restraint::builtinSymbols
         

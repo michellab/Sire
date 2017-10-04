@@ -43,7 +43,7 @@ void register_CoordGroup_class(){
 
     { //::SireVol::CoordGroup
         typedef bp::class_< SireVol::CoordGroup, bp::bases< SireVol::CoordGroupBase > > CoordGroup_exposer_t;
-        CoordGroup_exposer_t CoordGroup_exposer = CoordGroup_exposer_t( "CoordGroup", "This class holds a group of coordinates. This group forms the basis of the\nMolecular CutGroup, as defined in SireMol. A CoordGroup contains a list of\ncoordinates, together with an AABox which provides information as to the\ncenter and extents of this group. SireVol is designed to calculate distances\nbetween points in different CoordGroups, or to calculate distances between\npoints within a CoordGroup. A CoordGroup is implicitly shared and is\ndesigned to be fast to use, and fast to copy.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
+        CoordGroup_exposer_t CoordGroup_exposer = CoordGroup_exposer_t( "CoordGroup", "", bp::init< >("Null constructor") );
         bp::scope CoordGroup_scope( CoordGroup_exposer );
         CoordGroup_exposer.def( bp::init< quint32 >(( bp::arg("size") ), "Construct a CoordGroup that holds size coordinates") );
         CoordGroup_exposer.def( bp::init< quint32, SireMaths::Vector const & >(( bp::arg("size"), bp::arg("value") ), "Construct a CoordGroup that holds size coordinates,\nall of which have the value value") );

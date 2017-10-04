@@ -26,7 +26,7 @@ void register_BendBendComponent_class(){
 
     { //::SireMM::BendBendComponent
         typedef bp::class_< SireMM::BendBendComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > BendBendComponent_exposer_t;
-        BendBendComponent_exposer_t BendBendComponent_exposer = BendBendComponent_exposer_t( "BendBendComponent", "This class represents a BendBend component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
+        BendBendComponent_exposer_t BendBendComponent_exposer = BendBendComponent_exposer_t( "BendBendComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope BendBendComponent_scope( BendBendComponent_exposer );
         BendBendComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
         BendBendComponent_exposer.def( bp::init< SireMM::BendBendComponent const & >(( bp::arg("other") ), "Copy constructor") );

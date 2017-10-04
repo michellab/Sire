@@ -33,7 +33,7 @@ void register_RegularGrid_class(){
 
     { //::SireVol::RegularGrid
         typedef bp::class_< SireVol::RegularGrid, bp::bases< SireVol::Grid, SireBase::Property > > RegularGrid_exposer_t;
-        RegularGrid_exposer_t RegularGrid_exposer = RegularGrid_exposer_t( "RegularGrid", "This is a regular grid, containing points which are equally spaced\nalong the three orthoganol coordinates\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
+        RegularGrid_exposer_t RegularGrid_exposer = RegularGrid_exposer_t( "RegularGrid", "", bp::init< >("Null constructor") );
         bp::scope RegularGrid_scope( RegularGrid_exposer );
         RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireUnits::Dimension::Length >(( bp::arg("min"), bp::arg("max"), bp::arg("gridsize") ), "Construct a regular grid that spans from min to max, with a grid\nspacing of spacing") );
         RegularGrid_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Matrix const &, SireUnits::Dimension::Length >(( bp::arg("min"), bp::arg("max"), bp::arg("basis"), bp::arg("gridsize") ), "Construct a regular grid that spans from min to max using the\npassed three orthoganol basis vectors, using a grid spacing of spacing") );
@@ -133,7 +133,7 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) )
+                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0.0) )
                 , "Return a copy of this grid that has been rotated using the passed rotation\nmatrix about center" );
         
         }
@@ -145,7 +145,7 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) )
+                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0.0) )
                 , "Return a copy of this grid that has been rotated using the passed rotation\nquaternion about center" );
         
         }

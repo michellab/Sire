@@ -33,7 +33,7 @@ void register_GridIndex_class(){
 
     { //::SireVol::GridIndex
         typedef bp::class_< SireVol::GridIndex > GridIndex_exposer_t;
-        GridIndex_exposer_t GridIndex_exposer = GridIndex_exposer_t( "GridIndex", "Very simple class providing a grid index", bp::init< bp::optional< int, int, int > >(( bp::arg("i")=(int)(0), bp::arg("j")=(int)(0), bp::arg("k")=(int)(0) ), "") );
+        GridIndex_exposer_t GridIndex_exposer = GridIndex_exposer_t( "GridIndex", "", bp::init< bp::optional< int, int, int > >(( bp::arg("i")=(int)(0), bp::arg("j")=(int)(0), bp::arg("k")=(int)(0) ), "") );
         bp::scope GridIndex_scope( GridIndex_exposer );
         GridIndex_exposer.def( bp::init< SireVol::GridIndex const & >(( bp::arg("other") ), "") );
         { //::SireVol::GridIndex::i

@@ -23,7 +23,7 @@ void register_LJScaleFactor_class(){
 
     { //::SireMM::LJScaleFactor
         typedef bp::class_< SireMM::LJScaleFactor > LJScaleFactor_exposer_t;
-        LJScaleFactor_exposer_t LJScaleFactor_exposer = LJScaleFactor_exposer_t( "LJScaleFactor", "This is the interatomic scale factor for the LJ\nparameters for the intramolecular energy", bp::init< bp::optional< double > >(( bp::arg("scl")=0 ), "Construct with the LJ scale factor equal to scl") );
+        LJScaleFactor_exposer_t LJScaleFactor_exposer = LJScaleFactor_exposer_t( "LJScaleFactor", "", bp::init< bp::optional< double > >(( bp::arg("scl")=0 ), "Construct with the LJ scale factor equal to scl") );
         bp::scope LJScaleFactor_scope( LJScaleFactor_exposer );
         LJScaleFactor_exposer.def( bp::init< SireMM::LJScaleFactor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::LJScaleFactor::lj

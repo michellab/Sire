@@ -26,7 +26,7 @@ void register_InternalComponent_class(){
 
     { //::SireMM::InternalComponent
         typedef bp::class_< SireMM::InternalComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > InternalComponent_exposer_t;
-        InternalComponent_exposer_t InternalComponent_exposer = InternalComponent_exposer_t( "InternalComponent", "This class represents the sum of the internal MM energy\ncomponents (bond, angle, dihedral, Urey-Bradley)", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() ), "Constructor") );
+        InternalComponent_exposer_t InternalComponent_exposer = InternalComponent_exposer_t( "InternalComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() ), "Constructor") );
         bp::scope InternalComponent_scope( InternalComponent_exposer );
         InternalComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
         InternalComponent_exposer.def( bp::init< SireMM::InternalComponent const & >(( bp::arg("other") ), "Copy constructor") );

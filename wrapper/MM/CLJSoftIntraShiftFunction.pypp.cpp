@@ -41,7 +41,7 @@ void register_CLJSoftIntraShiftFunction_class(){
 
     { //::SireMM::CLJSoftIntraShiftFunction
         typedef bp::class_< SireMM::CLJSoftIntraShiftFunction, bp::bases< SireMM::CLJSoftIntraFunction, SireMM::CLJIntraFunction, SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property > > CLJSoftIntraShiftFunction_exposer_t;
-        CLJSoftIntraShiftFunction_exposer_t CLJSoftIntraShiftFunction_exposer = CLJSoftIntraShiftFunction_exposer_t( "CLJSoftIntraShiftFunction", "This CLJFunction calculates the intramolecular coulomb and LJ energy of the passed\nCLJAtoms using a force shifted electrostatics cutoff, and provides a soft-core\npotential that can soften molecules that are involved in free energy calculations\n\nAuthor: Christopher Woods\n", bp::init< >("") );
+        CLJSoftIntraShiftFunction_exposer_t CLJSoftIntraShiftFunction_exposer = CLJSoftIntraShiftFunction_exposer_t( "CLJSoftIntraShiftFunction", "", bp::init< >("") );
         bp::scope CLJSoftIntraShiftFunction_scope( CLJSoftIntraShiftFunction_exposer );
         CLJSoftIntraShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") ), "Copy constructor") );
         CLJSoftIntraShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );

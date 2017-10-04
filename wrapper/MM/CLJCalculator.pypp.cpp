@@ -35,7 +35,7 @@ void register_CLJCalculator_class(){
 
     { //::SireMM::CLJCalculator
         typedef bp::class_< SireMM::CLJCalculator > CLJCalculator_exposer_t;
-        CLJCalculator_exposer_t CLJCalculator_exposer = CLJCalculator_exposer_t( "CLJCalculator", "This class is used to organise the calculation of CLJ energies\nbetween atoms in CLJ boxes. This is the class that contains\nall of the parallel, Intel Threaded Building Blocks magic ;-)\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< bool > >(( bp::arg("reproducible_sum")=(bool)(false) ), "Constructor") );
+        CLJCalculator_exposer_t CLJCalculator_exposer = CLJCalculator_exposer_t( "CLJCalculator", "", bp::init< bp::optional< bool > >(( bp::arg("reproducible_sum")=(bool)(false) ), "Constructor") );
         bp::scope CLJCalculator_scope( CLJCalculator_exposer );
         CLJCalculator_exposer.def( bp::init< SireMM::CLJCalculator const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJCalculator::calculate

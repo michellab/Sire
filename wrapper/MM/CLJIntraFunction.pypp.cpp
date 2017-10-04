@@ -55,7 +55,7 @@ void register_CLJIntraFunction_class(){
 
     { //::SireMM::CLJIntraFunction
         typedef bp::class_< SireMM::CLJIntraFunction, bp::bases< SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property >, boost::noncopyable > CLJIntraFunction_exposer_t;
-        CLJIntraFunction_exposer_t CLJIntraFunction_exposer = CLJIntraFunction_exposer_t( "CLJIntraFunction", "This is the base class of all intramolecular CLJ functions\n\nAuthor: Christopher Woods\n", bp::no_init );
+        CLJIntraFunction_exposer_t CLJIntraFunction_exposer = CLJIntraFunction_exposer_t( "CLJIntraFunction", "", bp::no_init );
         bp::scope CLJIntraFunction_scope( CLJIntraFunction_exposer );
         { //::SireMM::CLJIntraFunction::connectivity
         

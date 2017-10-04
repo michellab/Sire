@@ -40,7 +40,7 @@ void register_DihedralSymbols_class(){
 
     { //::SireMM::DihedralSymbols
         typedef bp::class_< SireMM::DihedralSymbols, bp::bases< SireMM::InternalSymbolsBase > > DihedralSymbols_exposer_t;
-        DihedralSymbols_exposer_t DihedralSymbols_exposer = DihedralSymbols_exposer_t( "DihedralSymbols", "This class holds the symbols required for the dihedral parameters.\nThese are functions of the dihedral (0-1-2-3) (phi) made\nby four atoms, of atoms 0 and 3 about the bond between\natoms 1 and 2 (measured clockwise)", bp::init< >("") );
+        DihedralSymbols_exposer_t DihedralSymbols_exposer = DihedralSymbols_exposer_t( "DihedralSymbols", "", bp::init< >("") );
         bp::scope DihedralSymbols_scope( DihedralSymbols_exposer );
         { //::SireMM::DihedralSymbols::phi
         

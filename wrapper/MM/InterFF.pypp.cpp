@@ -62,7 +62,7 @@ void register_InterFF_class(){
 
     { //::SireMM::InterFF
         typedef bp::class_< SireMM::InterFF, bp::bases< SireFF::G1FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > InterFF_exposer_t;
-        InterFF_exposer_t InterFF_exposer = InterFF_exposer_t( "InterFF", "This is a forcefield that calculates the intermolecular coulomb\nand Lennard Jones (LJ) energy of all contained molecule views.\nIt also calculates the interactions with any fixed atoms added\nto this forcefield\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        InterFF_exposer_t InterFF_exposer = InterFF_exposer_t( "InterFF", "", bp::init< >("Constructor") );
         bp::scope InterFF_scope( InterFF_exposer );
         InterFF_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "Construct, specifying the name of the forcefield") );
         InterFF_exposer.def( bp::init< SireMM::InterFF const & >(( bp::arg("other") ), "Copy constructor") );

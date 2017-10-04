@@ -37,7 +37,7 @@ void register_NoCutoff_class(){
 
     { //::SireMM::NoCutoff
         typedef bp::class_< SireMM::NoCutoff, bp::bases< SireMM::SwitchingFunction, SireBase::Property > > NoCutoff_exposer_t;
-        NoCutoff_exposer_t NoCutoff_exposer = NoCutoff_exposer_t( "NoCutoff", "This class implements no cutoffs (e.g. there is no cutoff,\nand no switching function).\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        NoCutoff_exposer_t NoCutoff_exposer = NoCutoff_exposer_t( "NoCutoff", "", bp::init< >("Constructor") );
         bp::scope NoCutoff_scope( NoCutoff_exposer );
         NoCutoff_exposer.def( bp::init< SireMM::NoCutoff const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::NoCutoff::dElectrostaticScaleFactor

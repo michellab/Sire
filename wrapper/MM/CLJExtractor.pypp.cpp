@@ -43,7 +43,7 @@ void register_CLJExtractor_class(){
 
     { //::SireMM::CLJExtractor
         typedef bp::class_< SireMM::CLJExtractor > CLJExtractor_exposer_t;
-        CLJExtractor_exposer_t CLJExtractor_exposer = CLJExtractor_exposer_t( "CLJExtractor", "This class is used to convert from a MoleculeView into a set of CLJAtoms\nobjects. This class manages the extraction of data, recording of molecular\nproperties and holding of all metadata needed to minimise the work of\nextracting data, e.g. as the molecule is updated or changed during\na Monte Carlo simulation\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
+        CLJExtractor_exposer_t CLJExtractor_exposer = CLJExtractor_exposer_t( "CLJExtractor", "", bp::init< >("Null constructor") );
         bp::scope CLJExtractor_scope( CLJExtractor_exposer );
         bp::enum_< SireMM::CLJExtractor::EXTRACT_SOURCE>("EXTRACT_SOURCE")
             .value("EXTRACT_BY_CUTGROUP", SireMM::CLJExtractor::EXTRACT_BY_CUTGROUP)

@@ -33,7 +33,7 @@ void register_CLJWorkspace_class(){
 
     { //::SireMM::CLJWorkspace
         typedef bp::class_< SireMM::CLJWorkspace > CLJWorkspace_exposer_t;
-        CLJWorkspace_exposer_t CLJWorkspace_exposer = CLJWorkspace_exposer_t( "CLJWorkspace", "This class provides a workspace in which to hold the details of the changes\nthat occur in a CLJ forcefield during a Monte Carlo move. The class is optimised\nto avoid copying or duplicating data during Sires copy-on-write copying\n(e.g. the memory allocated in a workspace will always be available for the\nnew copy of a forcefield rather than the old, which, if things work correctly,\nwill mean that there should be no memory allocation during simple MC moves...)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        CLJWorkspace_exposer_t CLJWorkspace_exposer = CLJWorkspace_exposer_t( "CLJWorkspace", "", bp::init< >("Constructor") );
         bp::scope CLJWorkspace_scope( CLJWorkspace_exposer );
         CLJWorkspace_exposer.def( bp::init< SireMM::CLJWorkspace const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJWorkspace::accept

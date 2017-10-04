@@ -37,7 +37,7 @@ void register_HarmonicSwitchingFunction_class(){
 
     { //::SireMM::HarmonicSwitchingFunction
         typedef bp::class_< SireMM::HarmonicSwitchingFunction, bp::bases< SireMM::SwitchingFunction, SireBase::Property > > HarmonicSwitchingFunction_exposer_t;
-        HarmonicSwitchingFunction_exposer_t HarmonicSwitchingFunction_exposer = HarmonicSwitchingFunction_exposer_t( "HarmonicSwitchingFunction", "This class implements harmonic switching functions - these scale the energy\nharmonically down to zero.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a null harmonic switching function (no cutoff)") );
+        HarmonicSwitchingFunction_exposer_t HarmonicSwitchingFunction_exposer = HarmonicSwitchingFunction_exposer_t( "HarmonicSwitchingFunction", "", bp::init< >("Construct a null harmonic switching function (no cutoff)") );
         bp::scope HarmonicSwitchingFunction_scope( HarmonicSwitchingFunction_exposer );
         HarmonicSwitchingFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoffdist") ), "Construct an harmonic switching function which represents a hard\ncutoff of both the electrostatic and vdw interactions at a distance\nof cutoffdist") );
         HarmonicSwitchingFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("cutoffdist"), bp::arg("featherdist") ), "Construct an harmonic switching function which represents the smoothed\ncutoff, with the cutoff at cutoffdist, but smoothed down using an\nharmonic function from featherdist. If featherdist >= cutoffdist\nthen this represents a hard cutoff") );

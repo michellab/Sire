@@ -29,7 +29,7 @@ void register_CLJDelta_class(){
 
     { //::SireMM::CLJDelta
         typedef bp::class_< SireMM::CLJDelta > CLJDelta_exposer_t;
-        CLJDelta_exposer_t CLJDelta_exposer = CLJDelta_exposer_t( "CLJDelta", "This class is used to hold the change in coordinates etc. of a set of atoms caused\nby e.g. a Monte Carlo move\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
+        CLJDelta_exposer_t CLJDelta_exposer = CLJDelta_exposer_t( "CLJDelta", "", bp::init< >("Null constructor") );
         bp::scope CLJDelta_scope( CLJDelta_exposer );
         CLJDelta_exposer.def( bp::init< qint32, SireMM::CLJAtoms const &, SireMM::CLJAtoms const & >(( bp::arg("idnum"), bp::arg("oldatoms"), bp::arg("newatoms") ), "Construct the delta that changes from oldatoms to newatoms") );
         CLJDelta_exposer.def( bp::init< SireMM::CLJDelta const & >(( bp::arg("other") ), "Copy constructor") );

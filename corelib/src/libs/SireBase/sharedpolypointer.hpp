@@ -164,13 +164,13 @@ public:
 
     SharedPolyPointer(const SharedPolyPointer<T> &o);
 
-    SharedPolyPointer(SharedPolyPointer<T> &&other);
+    SharedPolyPointer(SharedPolyPointer<T> &other);
 
     template<class S>
     SharedPolyPointer(const SharedPolyPointer<S> &o);
 
     template<class S>
-    SharedPolyPointer(SharedPolyPointer<S> &&o);
+    SharedPolyPointer(SharedPolyPointer<S> &o);
 
     template<class S>
     explicit SharedPolyPointer(S *data);
@@ -183,7 +183,7 @@ public:
 
     SharedPolyPointer<T>& operator=(const SharedPolyPointer<T> &o);
 
-    SharedPolyPointer<T>& operator=(SharedPolyPointer<T> &&o);
+    SharedPolyPointer<T>& operator=(SharedPolyPointer<T> &o);
 
     template<class S>
     SharedPolyPointer<T>& operator=(const SharedPolyPointer<S> &o);

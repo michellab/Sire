@@ -30,7 +30,7 @@ void register_SoftCLJComponent_class(){
 
     { //::SireMM::SoftCLJComponent
         typedef bp::class_< SireMM::SoftCLJComponent, bp::bases< SireMM::CLJComponent, SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > SoftCLJComponent_exposer_t;
-        SoftCLJComponent_exposer_t SoftCLJComponent_exposer = SoftCLJComponent_exposer_t( "SoftCLJComponent", "This represents the sum of the coulomb and LJ components\nfor a soft-core forcefield, in which multiple soft-core\nalpha values are used (and so multiple coulomb and LJ\ncomponents are available). This combined component gives\naccess to each of the individual components, and also\nto the sum of them all\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a null set of SoftCLJComponents") );
+        SoftCLJComponent_exposer_t SoftCLJComponent_exposer = SoftCLJComponent_exposer_t( "SoftCLJComponent", "", bp::init< >("Construct a null set of SoftCLJComponents") );
         bp::scope SoftCLJComponent_scope( SoftCLJComponent_exposer );
         SoftCLJComponent_exposer.def( bp::init< SireFF::FFName const & >(( bp::arg("name") ), "Construct the SoftCLJComponents for the passed name") );
         SoftCLJComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct the SoftCLJComponents from the passed symbol") );

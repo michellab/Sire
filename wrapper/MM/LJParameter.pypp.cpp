@@ -27,7 +27,7 @@ void register_LJParameter_class(){
 
     { //::SireMM::LJParameter
         typedef bp::class_< SireMM::LJParameter > LJParameter_exposer_t;
-        LJParameter_exposer_t LJParameter_exposer = LJParameter_exposer_t( "LJParameter", "\nAn LJParameter holds Lennard Jones parameters (sigma and epsilon)\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a dummy LJ parameter") );
+        LJParameter_exposer_t LJParameter_exposer = LJParameter_exposer_t( "LJParameter", "", bp::init< >("Construct a dummy LJ parameter") );
         bp::scope LJParameter_scope( LJParameter_exposer );
         bp::enum_< SireMM::LJParameter::CombiningRules>("CombiningRules")
             .value("ARITHMETIC", SireMM::LJParameter::ARITHMETIC)

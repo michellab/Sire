@@ -26,7 +26,7 @@ void register_ImproperComponent_class(){
 
     { //::SireMM::ImproperComponent
         typedef bp::class_< SireMM::ImproperComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > ImproperComponent_exposer_t;
-        ImproperComponent_exposer_t ImproperComponent_exposer = ImproperComponent_exposer_t( "ImproperComponent", "This class represents a Improper component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
+        ImproperComponent_exposer_t ImproperComponent_exposer = ImproperComponent_exposer_t( "ImproperComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope ImproperComponent_scope( ImproperComponent_exposer );
         ImproperComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
         ImproperComponent_exposer.def( bp::init< SireMM::ImproperComponent const & >(( bp::arg("other") ), "Copy constructor") );

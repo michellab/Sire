@@ -39,7 +39,7 @@ void register_ThreeAtomFunctions_class(){
 
     { //::SireMM::ThreeAtomFunctions
         typedef bp::class_< SireMM::ThreeAtomFunctions, bp::bases< SireMM::AtomFunctions, SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > ThreeAtomFunctions_exposer_t;
-        ThreeAtomFunctions_exposer_t ThreeAtomFunctions_exposer = ThreeAtomFunctions_exposer_t( "ThreeAtomFunctions", "This class holds the set of ThreeAtomFunction potentials that\nact between the atoms in a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        ThreeAtomFunctions_exposer_t ThreeAtomFunctions_exposer = ThreeAtomFunctions_exposer_t( "ThreeAtomFunctions", "", bp::init< >("Constructor") );
         bp::scope ThreeAtomFunctions_scope( ThreeAtomFunctions_exposer );
         ThreeAtomFunctions_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "Construct the container to hold the set of three-atom functions\nfor the molecule whose data is in moldata") );
         ThreeAtomFunctions_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "Construct the container to hold the set of three-atom functions\nfor the molecule whose layout information is in molinfo") );

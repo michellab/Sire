@@ -43,7 +43,7 @@ void register_CoordGroupArray_class(){
 
     { //::SireVol::CoordGroupArray
         typedef bp::class_< SireVol::CoordGroupArray > CoordGroupArray_exposer_t;
-        CoordGroupArray_exposer_t CoordGroupArray_exposer = CoordGroupArray_exposer_t( "CoordGroupArray", "This class holds an array of CoordGroups. While you could\nof course just use a QVector<CoordGroup>, this array\noptimises the memory layout of all of the CoordGroups\nso that they all lie contiguously along the same piece\nof memory (and indeed, all of the AABoxes are grouped\ntogether, while all of the coordinates are grouped together).\n\nThe memory packing means that this array is much more\nlimited than a QVector<CoordGroup>, i.e. you cant\nadd or remove CoordGroups from the array, and you cant\ndo anything to the contained CoordGroups except for\nchange their coordinates.\n\nThis class is really meant to be used as a fast container\nthat allow rapid iteration over all of the contained\nCoordGroups  coordinates\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
+        CoordGroupArray_exposer_t CoordGroupArray_exposer = CoordGroupArray_exposer_t( "CoordGroupArray", "", bp::init< >("Null constructor") );
         bp::scope CoordGroupArray_scope( CoordGroupArray_exposer );
         CoordGroupArray_exposer.def( bp::init< SireVol::CoordGroup const & >(( bp::arg("cgroup") ), "Construct an array that holds just the passed CoordGroup") );
         CoordGroupArray_exposer.def( bp::init< QVector< QVector< SireMaths::Vector > > const & >(( bp::arg("points") ), "Construct from a double-vector") );

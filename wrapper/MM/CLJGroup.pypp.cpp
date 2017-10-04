@@ -29,7 +29,7 @@ void register_CLJGroup_class(){
 
     { //::SireMM::CLJGroup
         typedef bp::class_< SireMM::CLJGroup > CLJGroup_exposer_t;
-        CLJGroup_exposer_t CLJGroup_exposer = CLJGroup_exposer_t( "CLJGroup", "This class holds and manages a group of molecules that have been\nadded to a CLJBoxes object.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
+        CLJGroup_exposer_t CLJGroup_exposer = CLJGroup_exposer_t( "CLJGroup", "", bp::init< >("Null constructor") );
         bp::scope CLJGroup_scope( CLJGroup_exposer );
         CLJGroup_exposer.def( bp::init< SireMM::CLJAtoms::ID_SOURCE >(( bp::arg("id_source") ), "Construct, suppling the name of the molecule group and the source of the\nCLJAtoms ID_SOURCE property (e.g. USE_MOLNUM for intermolecular forcefields or\nUSE_ATOMNUM for intramolecular forcefields)") );
         CLJGroup_exposer.def( bp::init< SireMM::CLJExtractor::EXTRACT_SOURCE >(( bp::arg("extract_source") ), "Construct specifying how the atoms will be extracted from the molecule") );

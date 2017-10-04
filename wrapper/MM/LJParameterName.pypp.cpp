@@ -49,7 +49,7 @@ void register_LJParameterName_class(){
 
     { //::SireMM::LJParameterName
         typedef bp::class_< SireMM::LJParameterName > LJParameterName_exposer_t;
-        LJParameterName_exposer_t LJParameterName_exposer = LJParameterName_exposer_t( "LJParameterName", "This class provides the default name of the\nproperty that contains the LJ parameters", bp::init< >("") );
+        LJParameterName_exposer_t LJParameterName_exposer = LJParameterName_exposer_t( "LJParameterName", "", bp::init< >("") );
         bp::scope LJParameterName_scope( LJParameterName_exposer );
         { //::SireMM::LJParameterName::lj
         

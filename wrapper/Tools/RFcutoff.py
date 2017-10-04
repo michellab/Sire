@@ -53,10 +53,10 @@ def setupRFFF(system, space, cutoff=10* angstrom):
     if (cutoff_type.val != "nocutoff"):
         solvent_intraclj.setUseReactionField(True)
         solvent_intraclj.setReactionFieldDielectric(rf_dielectric.val)
-    #    #TODO) correctly expose this to the python API
-    #    #solvent_intraclj.setDisableReactionFieldShift(disable_crf.val)
+        #TODO) correctly expose this to the python API
+        solvent_intraclj.setDisableReactionFieldShift(disable_crf.val)
 
-    #import pdb; pdb.set_trace()
+    import pdb; pdb.set_trace()
 
     # Solvent-solvent LJ energy
     solventff = InterCLJFF("solvent:solvent")
