@@ -814,16 +814,37 @@ void Mol2Molecule::appendAtom(const Mol2Atom &atom)
     atoms.append(atom);
 }
 
+/** Append a vector of atoms to the molecule. */
+void Mol2Molecule::appendAtoms(const QVector<Mol2Atom> &atoms)
+{
+    for (int i=0; i<atoms.count(); ++i)
+        this->atoms.append(atoms[i]);
+}
+
 /** Append a bond to the molecule. */
 void Mol2Molecule::appendBond(const Mol2Bond &bond)
 {
     bonds.append(bond);
 }
 
+/** Append a vector of bonds to the molecule. */
+void Mol2Molecule::appendBonds(const QVector<Mol2Bond> &bonds)
+{
+    for (int i=0; i<bonds.count(); ++i)
+        this->bonds.append(bonds[i]);
+}
+
 /** Append a substructure to the molecule. */
 void Mol2Molecule::appendSubstructure(const Mol2Substructure &substructure)
 {
     substructures.append(substructure);
+}
+
+/** Append a vector of substructures to the molecule. */
+void Mol2Molecule::appendSubstructures(const QVector<Mol2Substructure> &substructures)
+{
+    for (int i=0; i<substructures.count(); ++i)
+        this->substructures.append(substructures[i]);
 }
 
 /** Get the atoms from the molecule. */
@@ -1334,26 +1355,30 @@ void Mol2::parseLines(const PropertyMap &map)
 
                     QMutex mutex;
 
+                    // Local data storage for atom objects.
+                    QVector<Mol2Atom> local_atoms(num_atoms);
+
                     tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
                                     [&](const tbb::blocked_range<int> &r)
                     {
+                        // Create local data objects.
+                        QStringList local_errors;
+
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
-                            // Create local data objects.
-                            Mol2Atom local_atom;
-                            QStringList local_errors;
-
                             // Parse the data from the atom record.
-                            parse_atom(local_atom, lines()[iline+i], local_errors);
-
-                            // Acquire a lock.
-                            QMutexLocker lkr(&mutex);
-
-                            // Update the member data.
-                            molecules[imol-1].appendAtom(local_atom);
-                            parse_warnings += local_errors;
+                            parse_atom(local_atoms[i], lines()[iline+i], local_errors);
                         }
+
+                        // Acquire a lock.
+                        QMutexLocker lkr(&mutex);
+
+                        // Update the warning messages.
+                        parse_warnings += local_errors;
                     });
+
+                    // Append the atoms to the molecule.
+                    molecules[imol-1].appendAtoms(local_atoms);
 
                     // Fast-forward the line index.
                     iline += (num_atoms - 1);
@@ -1394,26 +1419,30 @@ void Mol2::parseLines(const PropertyMap &map)
 
                     QMutex mutex;
 
+                    // Local data storage for bond objects.
+                    QVector<Mol2Bond> local_bonds(num_bonds);
+
                     tbb::parallel_for( tbb::blocked_range<int>(0, num_bonds),
                                     [&](const tbb::blocked_range<int> &r)
                     {
+                        // Create local data objects.
+                        QStringList local_errors;
+
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
-                            // Create local data objects.
-                            QStringList local_errors;
-                            Mol2Bond local_bond;
-
                             // Parse the data from the bond record.
-                            parse_bond(local_bond, lines()[iline+i], local_errors);
-
-                            // Acquire a lock.
-                            QMutexLocker lkr(&mutex);
-
-                            // Update the member data.
-                            molecules[imol-1].appendBond(local_bond);
-                            parse_warnings += local_errors;
+                            parse_bond(local_bonds[i], lines()[iline+i], local_errors);
                         }
+
+                        // Acquire a lock.
+                        QMutexLocker lkr(&mutex);
+
+                        // Update the warning messages.
+                        parse_warnings += local_errors;
                     });
+
+                    // Append the bonds to the molecule.
+                    molecules[imol-1].appendBonds(local_bonds);
 
                     // Fast-forward the line index.
                     iline += (num_bonds - 1);
@@ -1454,26 +1483,30 @@ void Mol2::parseLines(const PropertyMap &map)
 
                     QMutex mutex;
 
+                    // Local data storage for substructure objects.
+                    QVector<Mol2Substructure> local_subst(num_subst);
+
                     tbb::parallel_for( tbb::blocked_range<int>(0, num_subst),
                                     [&](const tbb::blocked_range<int> &r)
                     {
+                        // Create local data objects.
+                        QStringList local_errors;
+
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
-                            // Create local data objects.
-                            QStringList local_errors;
-                            Mol2Substructure local_subst;
-
                             // Parse the data from the substructure record.
-                            parse_subst(local_subst, lines()[iline+i], local_errors);
-
-                            // Acquire a lock.
-                            QMutexLocker lkr(&mutex);
-
-                            // Update the member data.
-                            molecules[imol-1].appendSubstructure(local_subst);
-                            parse_warnings += local_errors;
+                            parse_subst(local_subst[i], lines()[iline+i], local_errors);
                         }
+
+                        // Acquire a lock.
+                        QMutexLocker lkr(&mutex);
+
+                        // Update the warning messages.
+                        parse_warnings += local_errors;
                     });
+
+                    // Append the substructures to the molecule.
+                    molecules[imol-1].appendSubstructures(local_subst);
 
                     // Fast-forward the line index.
                     iline += (num_subst - 1);

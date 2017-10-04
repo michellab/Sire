@@ -228,11 +228,20 @@ public:
     /** Append an atom to the molecule. */
     void appendAtom(const Mol2Atom &atom);
 
+    /** Append a vector of atoms to the molecule. */
+    void appendAtoms(const QVector<Mol2Atom> &atoms);
+
     /** Append a bond to the molecule. */
     void appendBond(const Mol2Bond &bond);
 
+    /** Append a vector of bonds to the molecule. */
+    void appendBonds(const QVector<Mol2Bond> &bonds);
+
     /** Append a substructure to the molecule. */
     void appendSubstructure(const Mol2Substructure &substructure);
+
+    /** Append a vector of substructures to the molecule. */
+    void appendSubstructures(const QVector<Mol2Substructure> &substructures);
 
     /** Get the atoms. */
     QVector<Mol2Atom> getAtoms() const;
