@@ -37,6 +37,9 @@
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
 
+#include "SireMol/molecule.h"
+#include "SireMol/moleditor.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
@@ -373,6 +376,18 @@ QString Mol2Atom::getName() const
 SireMaths::Vector Mol2Atom::getCoord() const
 {
     return coord;
+}
+
+/** Get the number of the substructure containing the atom. */
+qint64 Mol2Atom::getSubstructureNumber() const
+{
+    return subst_id;
+}
+
+/** Get the name of the substructure containing the atom. */
+QString Mol2Atom::getSubstructureName() const
+{
+    return subst_name;
 }
 
 /** Get the atom charge. */
@@ -853,16 +868,34 @@ QVector<Mol2Atom> Mol2Molecule::getAtoms() const
     return atoms;
 }
 
+/** Get a specific atom from the molecule. */
+Mol2Atom Mol2Molecule::getAtom(int i) const
+{
+    return atoms[i];
+}
+
 /** Get the bonds from the molecule. */
 QVector<Mol2Bond> Mol2Molecule::getBonds() const
 {
     return bonds;
 }
 
+/** Get a specific bond from the molecule. */
+Mol2Bond Mol2Molecule::getBond(int i) const
+{
+    return bonds[i];
+}
+
 /** Get the substructures from the molecule. */
 QVector<Mol2Substructure> Mol2Molecule::getSubstructures() const
 {
     return substructures;
+}
+
+/** Get a specific substructure from the molecule. */
+Mol2Substructure Mol2Molecule::getSubstructure(int i) const
+{
+    return substructures[i];
 }
 
 /** Default constructor. */
@@ -1052,6 +1085,24 @@ const char* Mol2Substructure::typeName()
     return QMetaType::typeName( qMetaTypeId<Mol2Substructure>() );
 }
 
+/** Get the substructure number. */
+qint64 Mol2Substructure::getNumber() const
+{
+    return number;
+}
+
+/** Get the substructure name. */
+QString Mol2Substructure::getName() const
+{
+    return name;
+}
+
+/** Get the substructure chain. */
+QString Mol2Substructure::getChain() const
+{
+    return chain;
+}
+
 /** Constructor */
 Mol2::Mol2() : ConcreteProperty<Mol2,MoleculeParser>()
 {}
@@ -1228,6 +1279,12 @@ QVector<int> Mol2::nMolAtoms() const
     return num_atoms;
 }
 
+/** Return the number of atoms in a specific molecule. */
+int Mol2::nAtoms(int i) const
+{
+    return molecules[i].nAtoms();
+}
+
 /** Return the total number of atoms in all molecules. */
 int Mol2::nAtoms() const
 {
@@ -1237,6 +1294,62 @@ int Mol2::nAtoms() const
         num_atoms += molecules[i].nAtoms();
 
     return num_atoms;
+}
+
+/** Return the number of bonds in each molecule. */
+QVector<int> Mol2::nMolBonds() const
+{
+    QVector<int> num_bonds(molecules.count());
+
+    for (int i=0; i<molecules.count(); ++i)
+        num_bonds[i] = molecules[i].nBonds();
+
+    return num_bonds;
+}
+
+/** Return the number of bonds in a specific molecule. */
+int Mol2::nBonds(int i) const
+{
+    return molecules[i].nBonds();
+}
+
+/** Return the total number of bonds in all molecules. */
+int Mol2::nBonds() const
+{
+    int num_bonds = 0;
+
+    for (int i=0; i<molecules.count(); ++i)
+        num_bonds += molecules[i].nBonds();
+
+    return num_bonds;
+}
+
+/** Return the number of substructures in each molecule. */
+QVector<int> Mol2::nMolSubstructures() const
+{
+    QVector<int> num_subst(molecules.count());
+
+    for (int i=0; i<molecules.count(); ++i)
+        num_subst[i] = molecules[i].nSubstructures();
+
+    return num_subst;
+}
+
+/** Return the number of substructures in a specific molecule. */
+int Mol2::nSubstructures(int i) const
+{
+    return molecules[i].nSubstructures();
+}
+
+/** Return the total number of substructures in all molecules. */
+int Mol2::nSubstructures() const
+{
+    int num_subst = 0;
+
+    for (int i=0; i<molecules.count(); ++i)
+        num_subst += molecules[i].nSubstructures();
+
+    return num_subst;
 }
 
 /** Function that is called to assert that this object is sane. This
@@ -1533,11 +1646,45 @@ void Mol2::parseLines(const PropertyMap &map)
     assigning properties based on the mapping in 'map' */
 System Mol2::startSystem(const PropertyMap &map) const
 {
-    //you should now take the data that you have parsed into the intermediate
-    //format and use it to start a new System and create all molecules,
-    //which are added to this System
+    const int nmols = nMols();
 
+    if (nmols == 0)
+        return System();
+
+    QVector<Molecule> mols(nmols);
+    Molecule *mols_array = mols.data();
+
+    if (usesParallel())
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
+                           [&](tbb::blocked_range<int> r)
+        {
+            // Create and populate all of the molecules.
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                mols_array[i] = this->getMolecule(i, map);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<nmols; ++i)
+        {
+            mols_array[i] = this->getMolecule(i, map);
+        }
+    }
+
+    MoleculeGroup molgroup("all");
+
+    for (auto mol : mols)
+    {
+        molgroup.add(mol);
+    }
+
+    //System system( this->title() );
     System system;
+    system.add(molgroup);
+    //system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
 
     return system;
 }
@@ -1551,4 +1698,194 @@ void Mol2::addToSystem(System &system, const PropertyMap &map) const
     //you should loop through each molecule in the system and work out
     //which ones are described in the file, and then add data from the file
     //to thise molecules.
+}
+
+/** Internal function used to get the molecule structure for molecule 'imol'. */
+MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) const
+{
+    // Get the number of atoms in the molecule.
+    int nats = nAtoms(imol);
+
+    // Make sure that there are atoms in the molecule.
+    if (nats == 0)
+    {
+        throw SireError::program_bug(QObject::tr(
+            "Strange - there are no atoms in molecule %1?")
+                .arg(imol), CODELOC);
+    }
+
+    /* First step is to build the structure of the molecule, i.e.
+       the layout of cutgroups, residues and atoms.
+
+       To do this we'll walk through all of the atoms in the molecule
+       and work out which substructure they belong to. This is more
+       robust than using the substructure record information, which
+       is often incomplete, or missing entirely.
+
+       Note that we are assuming that all substructure types can
+       be represented as a residue in SIRE.
+
+       If substructure records are present, then we can use them
+       to assign the residues into chains.
+     */
+
+    MolStructureEditor mol;
+
+    // Create a multimap between a residue (number) and the atoms that it contains.
+    QMultiMap<int, int> residues;
+
+    // Create a map between residue number and name.
+    QMap<int, QString> res_names;
+
+    // Loop through the atoms in the molecule and store the residues.
+    for (int i=0; i<nats; ++i)
+    {
+        // Get the atom.
+        auto atom = molecules[imol].getAtom(i);
+
+        // Insert the atom into the residue map.
+        residues.insert(atom.getSubstructureNumber(), i);
+
+        // Insert the residue into the residue name map.
+        res_names.insert(atom.getSubstructureNumber(), atom.getSubstructureName());
+    }
+
+    // Create a multimap between residues and chains.
+    // This information is contained in substructure records and
+    // may be missing, or incomplete.
+    QMultiMap<QString, int> chains;
+
+    // Create a reverse mapping between residues and chains.
+    QMap<int, QString> res_to_chain;
+
+    // Residue index.
+    int ires = 0;
+
+    for (int i=0; i<nSubstructures(imol); ++i)
+    {
+        // Get the substructure.
+        auto substructure = molecules[imol].getSubstructure(i);
+
+        // Get the substructure's number.
+        auto res_num = substructure.getNumber();
+
+        // Get the name of the chain to which the substructure belongs.
+        auto chain = substructure.getChain();
+
+        // Make sure that this is a valid chain.
+        if (not chain.isEmpty())
+        {
+            // Make sure that this substructure exists.
+            if (residues.contains(res_num))
+            {
+                // Insert the substructure into the chain map.
+                // Here we use the substructure name from the atom record,
+                // so as to avoid any naming inconsistencies.
+                chains.insert(chain, res_num);
+            }
+        }
+    }
+
+    // Add any chains to the molecule.
+    for (auto chain : chains.uniqueKeys())
+    {
+        mol.add(ChainName(chain));
+
+        // Get a list of the residues that are part of this chain.
+        QList<int> chain_residues = chains.values(chain);
+
+        // Create the reverse mapping.
+        for (auto residue : chain_residues)
+            res_to_chain.insert(residue, chain);
+    }
+
+    // Loop over all unique residues in the frame (by number).
+    for (auto res_num : residues.uniqueKeys())
+    {
+        // Extract the residue name.
+        auto res_name = res_names[res_num];
+
+        // By default we will use one CutGroup per residue.
+        // This may be changed later by the cutting system.
+        auto cutgroup = mol.add(CGName(QString::number(ires)));
+
+        // Get a list of the atoms that are part of the residue.
+        QList<int> res_atoms = residues.values(res_num);
+        qSort(res_atoms);
+
+        // Add the residue to the molecule.
+        auto res = mol.add(ResNum(res_num));
+        res.rename(ResName(res_name.trimmed()));
+
+        // Reparent the residue to its chain.
+        if (res_to_chain.contains(res_num))
+            res.reparent(ChainName(res_to_chain[res_num]));
+
+        // Add each atom in the residue to the molecule.
+        for (auto res_atom : res_atoms)
+        {
+            auto atom = cutgroup.add(AtomNum(molecules[imol].getAtom(res_atom).getNumber()));
+            atom.rename(AtomName(molecules[imol].getAtom(res_atom).getName().trimmed()));
+
+            // Reparent the atom to its residue.
+            atom.reparent(ResNum(res_num));
+        }
+
+        ires++;
+    }
+
+    if (cutting.hasValue())
+    {
+        const CuttingFunction &cutfunc = cutting.value().asA<CuttingFunction>();
+
+        if (not cutfunc.isA<ResidueCutting>())
+        {
+            mol = cutfunc(mol);
+        }
+    }
+
+    return mol;
+}
+
+/** Internal function used to get the molecule structure for molecule 'imol'. */
+MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
+{
+    // Get the number of atoms in the molecule.
+    int nats = nAtoms(imol);
+
+    // Make sure that there are atoms in the frame.
+    if (nats == 0)
+    {
+        throw SireError::program_bug(QObject::tr(
+            "Strange - there are no atoms in molecule %1?")
+                .arg(imol), CODELOC);
+    }
+
+    // First, construct the layout of the molecule (sorting of atoms into residues and cutgroups).
+    auto mol = this->getMolStructure(imol, map["cutting"]).commit().edit();
+
+    // Get the info object that can map between AtomNum to AtomIdx etc.
+    const auto molinfo = mol.info();
+
+    // Instantiate the atom property objects that we need.
+    AtomCoords        coords(molinfo);
+    //AtomCharges       charges(molinfo);
+
+    // Now loop through the atoms in the molecule and set each property.
+    for (int i=0; i<nats; ++i)
+    {
+        // Get the current atom.
+        auto atom = molecules[imol].getAtom(i);
+
+        // Determine the CGAtomIdx for this atom.
+        auto cgatomidx = molinfo.cgAtomIdx(AtomNum(atom.getNumber()));
+
+        // Set the properties.
+        coords.set(cgatomidx, atom.getCoord());
+        //charges.set(cgatomidx, int(atom.getCharge()) * SireUnits::mod_electron);
+    }
+
+    return mol.setProperty(map["coordinates"], coords)
+              //.setProperty(map["formal-charge"], charges)
+              .commit();
 }

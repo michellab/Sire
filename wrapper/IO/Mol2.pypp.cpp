@@ -112,6 +112,18 @@ void register_Mol2_class(){
         }
         { //::SireIO::Mol2::nAtoms
         
+            typedef int ( ::SireIO::Mol2::*nAtoms_function_type)( int ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::Mol2::nAtoms );
+            
+            Mol2_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , ( bp::arg("i") )
+                , "Return the number of atoms in a specific molecule." );
+        
+        }
+        { //::SireIO::Mol2::nAtoms
+        
             typedef int ( ::SireIO::Mol2::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireIO::Mol2::nAtoms );
             
@@ -119,6 +131,29 @@ void register_Mol2_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , "Return the total number of atoms in all molecules." );
+        
+        }
+        { //::SireIO::Mol2::nBonds
+        
+            typedef int ( ::SireIO::Mol2::*nBonds_function_type)( int ) const;
+            nBonds_function_type nBonds_function_value( &::SireIO::Mol2::nBonds );
+            
+            Mol2_exposer.def( 
+                "nBonds"
+                , nBonds_function_value
+                , ( bp::arg("i") )
+                , "Return the number of bonds in a specific molecule." );
+        
+        }
+        { //::SireIO::Mol2::nBonds
+        
+            typedef int ( ::SireIO::Mol2::*nBonds_function_type)(  ) const;
+            nBonds_function_type nBonds_function_value( &::SireIO::Mol2::nBonds );
+            
+            Mol2_exposer.def( 
+                "nBonds"
+                , nBonds_function_value
+                , "Return the total number of bonds in all molecules." );
         
         }
         { //::SireIO::Mol2::nMolAtoms
@@ -132,6 +167,28 @@ void register_Mol2_class(){
                 , "Return the number of atoms in each molecule." );
         
         }
+        { //::SireIO::Mol2::nMolBonds
+        
+            typedef ::QVector< int > ( ::SireIO::Mol2::*nMolBonds_function_type)(  ) const;
+            nMolBonds_function_type nMolBonds_function_value( &::SireIO::Mol2::nMolBonds );
+            
+            Mol2_exposer.def( 
+                "nMolBonds"
+                , nMolBonds_function_value
+                , "Return the number of bonds in each molecule." );
+        
+        }
+        { //::SireIO::Mol2::nMolSubstructures
+        
+            typedef ::QVector< int > ( ::SireIO::Mol2::*nMolSubstructures_function_type)(  ) const;
+            nMolSubstructures_function_type nMolSubstructures_function_value( &::SireIO::Mol2::nMolSubstructures );
+            
+            Mol2_exposer.def( 
+                "nMolSubstructures"
+                , nMolSubstructures_function_value
+                , "Return the number of substructures in each molecule." );
+        
+        }
         { //::SireIO::Mol2::nMols
         
             typedef int ( ::SireIO::Mol2::*nMols_function_type)(  ) const;
@@ -141,6 +198,29 @@ void register_Mol2_class(){
                 "nMols"
                 , nMols_function_value
                 , "Return the number of molecules in the system." );
+        
+        }
+        { //::SireIO::Mol2::nSubstructures
+        
+            typedef int ( ::SireIO::Mol2::*nSubstructures_function_type)( int ) const;
+            nSubstructures_function_type nSubstructures_function_value( &::SireIO::Mol2::nSubstructures );
+            
+            Mol2_exposer.def( 
+                "nSubstructures"
+                , nSubstructures_function_value
+                , ( bp::arg("i") )
+                , "Return the number of substructures in a specific molecule." );
+        
+        }
+        { //::SireIO::Mol2::nSubstructures
+        
+            typedef int ( ::SireIO::Mol2::*nSubstructures_function_type)(  ) const;
+            nSubstructures_function_type nSubstructures_function_value( &::SireIO::Mol2::nSubstructures );
+            
+            Mol2_exposer.def( 
+                "nSubstructures"
+                , nSubstructures_function_value
+                , "Return the total number of substructures in all molecules." );
         
         }
         Mol2_exposer.def( bp::self != bp::self );

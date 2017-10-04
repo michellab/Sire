@@ -44,6 +44,12 @@ class Mol2Substructure;
 class Mol2;
 }
 
+namespace SireMol
+{
+class MolEditor;
+class MoleculeInfoData;
+}
+
 QDataStream& operator<<(QDataStream&, const SireIO::Mol2Atom&);
 QDataStream& operator>>(QDataStream&, SireIO::Mol2Atom&);
 
@@ -96,6 +102,12 @@ public:
 
     /** Get the atom coordinates. */
     SireMaths::Vector getCoord() const;
+
+    /** Get the number of the substructure containing the atom. */
+    qint64 getSubstructureNumber() const;
+
+    /** Get the name of the substructure containing the atom. */
+    QString getSubstructureName() const;
 
     /** Get the atom charge. */
     double getCharge() const;
@@ -246,11 +258,20 @@ public:
     /** Get the atoms. */
     QVector<Mol2Atom> getAtoms() const;
 
+    /** Get a specific atom. */
+    Mol2Atom getAtom(int i) const;
+
     /** Get the bonds. */
     QVector<Mol2Bond> getBonds() const;
 
+    /** Get a specific bond. */
+    Mol2Bond getBond(int i) const;
+
     /** Get the substructures. */
     QVector<Mol2Substructure> getSubstructures() const;
+
+    /** Get a specific substructure. */
+    Mol2Substructure getSubstructure(int i) const;
 
 private:
     // Record data.
@@ -327,6 +348,15 @@ public:
     QString toString() const;
 
     static const char* typeName();
+
+    /** Get the substructure number. */
+    qint64 getNumber() const;
+
+    /** Get the substructure name. */
+    QString getName() const;
+
+    /** Get the substructure chain. */
+    QString getChain() const;
 
 private:
     /** The original Mol2 record used to instantiate the substructure. */
@@ -417,8 +447,29 @@ public:
     /** Return the number of atoms in each molecule. */
     QVector<int> nMolAtoms() const;
 
+    /** Return the number of atoms in a specific molecule. */
+    int nAtoms(int i) const;
+
     /** Return the total number of atoms in all molecules. */
     int nAtoms() const;
+
+    /** Return the number of bonds in each molecule. */
+    QVector<int> nMolBonds() const;
+
+    /** Return the number of bonds in a specific molecule. */
+    int nBonds(int i) const;
+
+    /** Return the total number of bonds in all molecules. */
+    int nBonds() const;
+
+    /** Return the number of substructures in each molecule. */
+    QVector<int> nMolSubstructures() const;
+
+    /** Return the number of substructures in a specific molecule. */
+    int nSubstructures(int i) const;
+
+    /** Return the total number of substructures in all molecules. */
+    int nSubstructures() const;
 
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
@@ -427,6 +478,12 @@ protected:
 private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
+
+    SireMol::MolStructureEditor getMolStructure(int imol,
+        const SireBase::PropertyName &cutting) const;
+
+    SireMol::MolEditor getMolecule(int imol,
+        const PropertyMap &map = PropertyMap()) const;
 
     /** The molecular data object. */
     QVector<Mol2Molecule> molecules;
