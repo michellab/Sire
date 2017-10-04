@@ -1944,10 +1944,10 @@ void PDB2::parseLines(const PropertyMap &map)
             }
         }
 
-        // Create residue number / name pair.
+        // Create residue <number, name> pair.
         QPair<qint64, QString> res(frame_atom.getResNum(), frame_atom.getResName());
 
-        // Update the residue multi-map (residue number / name --> atom index).
+        // Update the residue multi-map (residue <number, name> --> atom index).
         local_residues.insert(res, iatm);
 
         // Insert the chain identifier.
@@ -2165,7 +2165,7 @@ void PDB2::parseLines(const PropertyMap &map)
             {
                 QMutex mutex;
 
-                tbb::parallel_for( tbb::blocked_range<int>(0,nats),
+                tbb::parallel_for( tbb::blocked_range<int>(0, nats),
                                 [&](const tbb::blocked_range<int> &r)
                 {
                     qint64 local_num_ters = 0;
@@ -2268,7 +2268,7 @@ System PDB2::startSystem(int iframe, const PropertyMap &map) const
 
     if (usesParallel())
     {
-        tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
+        tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
                            [&](tbb::blocked_range<int> r)
         {
             // Create and populate all of the molecules.
@@ -2377,11 +2377,11 @@ MolStructureEditor PDB2::getMolStructure(int imol,
         auto res_num  = residue.first;
         auto res_name = residue.second;
 
-        // By default we will use one CutGroup per molecule.
+        // By default we will use one CutGroup per residue.
         // This may be changed later by the cutting system.
         auto cutgroup = mol.add(CGName(QString::number(ires)));
 
-        // Get a list of the atoms that are part of the residue.
+        // Get a sorted list of the atoms that are part of the residue.
         QList<qint64> res_atoms = residues[iframe].values(residue);
         qSort(res_atoms);
 
