@@ -2168,28 +2168,28 @@ void PDB2::parseLines(const PropertyMap &map)
                 tbb::parallel_for( tbb::blocked_range<int>(0,nats),
                                 [&](const tbb::blocked_range<int> &r)
                 {
+                    qint64 local_num_ters = 0;
+                    QStringList local_errors;
+                    QMultiMap<QPair<qint64, QString>, qint64> local_residues;
+                    QMultiMap<QChar, QString> local_chains;
+                    QSet<qint64> local_segments;
+
                     for (int i=r.begin(); i<r.end(); ++i)
                     {
-                        qint64 local_num_ters = 0;
-                        QStringList local_errors;
-                        QMultiMap<QPair<qint64, QString>, qint64> local_residues;
-                        QMultiMap<QChar, QString> local_chains;
-                        QSet<qint64> local_segments;
-
                         // Parse the atom record and determine whether it is a terminal record.
                         if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
                             atom_lines[i], lines().count(), frame_atoms[i], local_residues,
                             local_chains, local_segments, local_errors ))
                                 local_num_ters++;
-
-                        QMutexLocker lkr(&mutex);
-
-                        num_ters       += local_num_ters;
-                        frame_residues += local_residues;
-                        frame_chains   += local_chains;
-                        frame_segments += local_segments;
-                        parse_warnings += local_errors;
                     }
+
+                    QMutexLocker lkr(&mutex);
+
+                    num_ters       += local_num_ters;
+                    frame_residues += local_residues;
+                    frame_chains   += local_chains;
+                    frame_segments += local_segments;
+                    parse_warnings += local_errors;
                 });
             }
             else
