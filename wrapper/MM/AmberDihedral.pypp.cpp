@@ -67,7 +67,7 @@ void register_AmberDihedral_class(){
 
     { //::SireMM::AmberDihedral
         typedef bp::class_< SireMM::AmberDihedral > AmberDihedral_exposer_t;
-        AmberDihedral_exposer_t AmberDihedral_exposer = AmberDihedral_exposer_t( "AmberDihedral", "This simple class holds Amber dihedral or improper parameter", bp::init< >("") );
+        AmberDihedral_exposer_t AmberDihedral_exposer = AmberDihedral_exposer_t( "AmberDihedral", "", bp::init< >("") );
         bp::scope AmberDihedral_scope( AmberDihedral_exposer );
         AmberDihedral_exposer.def( bp::init< SireMM::AmberDihPart >(( bp::arg("part") ), "") );
         AmberDihedral_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("f"), bp::arg("PHI") ), "") );

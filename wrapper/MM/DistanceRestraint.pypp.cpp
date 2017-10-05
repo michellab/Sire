@@ -40,7 +40,7 @@ void register_DistanceRestraint_class(){
 
     { //::SireMM::DistanceRestraint
         typedef bp::class_< SireMM::DistanceRestraint, bp::bases< SireMM::Restraint3D, SireMM::Restraint, SireBase::Property > > DistanceRestraint_exposer_t;
-        DistanceRestraint_exposer_t DistanceRestraint_exposer = DistanceRestraint_exposer_t( "DistanceRestraint", "This is a restraint that operates on the distance between\ntwo SireMM::Point objects (e.g. two atoms in a molecule,\na point in space and the center of a molecule, the\ncenter of geometry of one molecule with the center of\nmass of the solvent)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        DistanceRestraint_exposer_t DistanceRestraint_exposer = DistanceRestraint_exposer_t( "DistanceRestraint", "", bp::init< >("Constructor") );
         bp::scope DistanceRestraint_scope( DistanceRestraint_exposer );
         DistanceRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("restraint") ), "Construct a restraint that acts between the two points point0 and point1,\nrestraining the distance between these points using the expression\nrestraint") );
         DistanceRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, SireCAS::Values const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("restraint"), bp::arg("values") ), "Construct a restraint that acts between the two points point0 and point1,\nrestraining the distance between these points using the expression\nrestraint, with supplied values for this expression in values.\nNote that any extra values in values that arent in the expression\nrestraint are ignored") );

@@ -31,7 +31,7 @@ void register_CombineSpaces_class(){
 
     { //::SireVol::CombineSpaces
         typedef bp::class_< SireVol::CombineSpaces, bp::bases< SireBase::CombineProperties, SireBase::Property > > CombineSpaces_exposer_t;
-        CombineSpaces_exposer_t CombineSpaces_exposer = CombineSpaces_exposer_t( "CombineSpaces", "This is a property which creates a SireVol::CombinedSpace object\nof the specified properties (which must all be space objects\nthemselves)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        CombineSpaces_exposer_t CombineSpaces_exposer = CombineSpaces_exposer_t( "CombineSpaces", "", bp::init< >("Constructor") );
         bp::scope CombineSpaces_scope( CombineSpaces_exposer );
         CombineSpaces_exposer.def( bp::init< SireBase::PropertyName const & >(( bp::arg("source") ), "Construct to use just as single space, from the supplied source") );
         CombineSpaces_exposer.def( bp::init< SireBase::PropertyName const &, SireBase::PropertyName const & >(( bp::arg("source0"), bp::arg("source1") ), "Construct to combine together the two spaces specified by the\ntwo supplied sources") );

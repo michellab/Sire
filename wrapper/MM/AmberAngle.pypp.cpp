@@ -67,7 +67,7 @@ void register_AmberAngle_class(){
 
     { //::SireMM::AmberAngle
         typedef bp::class_< SireMM::AmberAngle > AmberAngle_exposer_t;
-        AmberAngle_exposer_t AmberAngle_exposer = AmberAngle_exposer_t( "AmberAngle", "This simple class holds Amber parameters for an angle", bp::init< bp::optional< double, double > >(( bp::arg("k")=0, bp::arg("theta0")=0 ), "") );
+        AmberAngle_exposer_t AmberAngle_exposer = AmberAngle_exposer_t( "AmberAngle", "", bp::init< bp::optional< double, double > >(( bp::arg("k")=0, bp::arg("theta0")=0 ), "") );
         bp::scope AmberAngle_scope( AmberAngle_exposer );
         AmberAngle_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("eqn"), bp::arg("THETA") ), "") );
         AmberAngle_exposer.def( bp::init< SireMM::AmberAngle const & >(( bp::arg("other") ), "") );

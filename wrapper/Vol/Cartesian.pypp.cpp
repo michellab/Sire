@@ -39,7 +39,7 @@ void register_Cartesian_class(){
 
     { //::SireVol::Cartesian
         typedef bp::class_< SireVol::Cartesian, bp::bases< SireVol::Space, SireBase::Property > > Cartesian_exposer_t;
-        Cartesian_exposer_t Cartesian_exposer = Cartesian_exposer_t( "Cartesian", "\nThis class overloads SimVolume to provide an infinite Cartesian\n(3-dimensional, orthoganol dimensions) volume. This corresponds to\na traditional gas-phase or no-boundary system.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a default Cartesian volume") );
+        Cartesian_exposer_t Cartesian_exposer = Cartesian_exposer_t( "Cartesian", "", bp::init< >("Construct a default Cartesian volume") );
         bp::scope Cartesian_scope( Cartesian_exposer );
         Cartesian_exposer.def( bp::init< SireVol::Cartesian const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireVol::Cartesian::beyond

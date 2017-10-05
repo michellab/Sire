@@ -31,7 +31,7 @@ void register_NullPatching_class(){
 
     { //::SireVol::NullPatching
         typedef bp::class_< SireVol::NullPatching, bp::bases< SireVol::Patching, SireBase::Property > > NullPatching_exposer_t;
-        NullPatching_exposer_t NullPatching_exposer = NullPatching_exposer_t( "NullPatching", "Null patching", bp::init< >("Constructor") );
+        NullPatching_exposer_t NullPatching_exposer = NullPatching_exposer_t( "NullPatching", "", bp::init< >("Constructor") );
         bp::scope NullPatching_scope( NullPatching_exposer );
         NullPatching_exposer.def( bp::init< SireVol::Space const & >(( bp::arg("space") ), "Construct with the passed space") );
         NullPatching_exposer.def( bp::init< SireVol::NullPatching const & >(( bp::arg("other") ), "Copy constructor") );

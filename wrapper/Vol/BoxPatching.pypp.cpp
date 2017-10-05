@@ -31,7 +31,7 @@ void register_BoxPatching_class(){
 
     { //::SireVol::BoxPatching
         typedef bp::class_< SireVol::BoxPatching, bp::bases< SireVol::Patching, SireBase::Property > > BoxPatching_exposer_t;
-        BoxPatching_exposer_t BoxPatching_exposer = BoxPatching_exposer_t( "BoxPatching", "This is a simple patching scheme that divides space up into a\nseries of cuboidal boxes (3D grid)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        BoxPatching_exposer_t BoxPatching_exposer = BoxPatching_exposer_t( "BoxPatching", "", bp::init< >("Constructor") );
         bp::scope BoxPatching_scope( BoxPatching_exposer );
         BoxPatching_exposer.def( bp::init< SireVol::Space const & >(( bp::arg("space") ), "Construct for the passed space - this tries to divide the space\nusing a patch size of 8 A, placing the center of the grid at (0,0,0)") );
         BoxPatching_exposer.def( bp::init< SireVol::Space const &, SireMaths::Vector const & >(( bp::arg("space"), bp::arg("center") ), "Construct for the passed space, placing the center of the grid at center.\nThis tries to divide space using a patch size of 8 A") );

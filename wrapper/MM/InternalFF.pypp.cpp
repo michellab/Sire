@@ -58,7 +58,7 @@ void register_InternalFF_class(){
 
     { //::SireMM::InternalFF
         typedef bp::class_< SireMM::InternalFF, bp::bases< SireFF::FF3D, SireFF::G1FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > InternalFF_exposer_t;
-        InternalFF_exposer_t InternalFF_exposer = InternalFF_exposer_t( "InternalFF", "This is a forcefield that calculates the energies and forces\ncaused by molecular mechanics style internal intramolecular\npotentials, e.g. bond, angle, dihedral, urey bradley terms\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        InternalFF_exposer_t InternalFF_exposer = InternalFF_exposer_t( "InternalFF", "", bp::init< >("Constructor") );
         bp::scope InternalFF_scope( InternalFF_exposer );
         InternalFF_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "Construct a named internal forcefield") );
         InternalFF_exposer.def( bp::init< SireMM::InternalFF const & >(( bp::arg("other") ), "Copy constructor") );
@@ -75,7 +75,7 @@ void register_InternalFF_class(){
         }
         { //::SireMM::InternalFF::components
         
-            typedef ::SireMM::InternalFF::Components const & ( ::SireMM::InternalFF::*components_function_type)(  ) const;
+            typedef ::SireMM::InternalComponent const & ( ::SireMM::InternalFF::*components_function_type)(  ) const;
             components_function_type components_function_value( &::SireMM::InternalFF::components );
             
             InternalFF_exposer.def( 
@@ -277,7 +277,7 @@ void register_InternalFF_class(){
         InternalFF_exposer.def( bp::self == bp::self );
         { //::SireMM::InternalFF::parameters
         
-            typedef ::SireMM::InternalFF::ParameterNames const & ( ::SireMM::InternalFF::*parameters_function_type)(  ) const;
+            typedef ::SireMM::InternalParameterNames3D const & ( ::SireMM::InternalFF::*parameters_function_type)(  ) const;
             parameters_function_type parameters_function_value( &::SireMM::InternalFF::parameters );
             
             InternalFF_exposer.def( 

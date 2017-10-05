@@ -40,7 +40,7 @@ void register_ImproperSymbols_class(){
 
     { //::SireMM::ImproperSymbols
         typedef bp::class_< SireMM::ImproperSymbols, bp::bases< SireMM::InternalSymbolsBase > > ImproperSymbols_exposer_t;
-        ImproperSymbols_exposer_t ImproperSymbols_exposer = ImproperSymbols_exposer_t( "ImproperSymbols", "This class holds the symbols required for the improper parameters.\nThese are functions of the dihedral (0-1-2-3) (phi) and also\nof the improper angle made between the bond 0-1 and the plane\nformed by atoms 1-2-3 (theta)", bp::init< >("") );
+        ImproperSymbols_exposer_t ImproperSymbols_exposer = ImproperSymbols_exposer_t( "ImproperSymbols", "", bp::init< >("") );
         bp::scope ImproperSymbols_scope( ImproperSymbols_exposer );
         { //::SireMM::ImproperSymbols::phi
         

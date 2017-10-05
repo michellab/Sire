@@ -40,7 +40,7 @@ void register_CombinedSpace_class(){
 
     { //::SireVol::CombinedSpace
         typedef bp::class_< SireVol::CombinedSpace, bp::bases< SireVol::Space, SireBase::Property > > CombinedSpace_exposer_t;
-        CombinedSpace_exposer_t CombinedSpace_exposer = CombinedSpace_exposer_t( "CombinedSpace", "This is a space which is built from the combination of a set\nof sub-spaces. This is useful for systems that are comprised\nof multiple sub-spaces, e.g. Gibbs ensemble simulations,\nor simulations using a combined bound and free binding leg\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a default CombinedSpace volume") );
+        CombinedSpace_exposer_t CombinedSpace_exposer = CombinedSpace_exposer_t( "CombinedSpace", "", bp::init< >("Construct a default CombinedSpace volume") );
         bp::scope CombinedSpace_scope( CombinedSpace_exposer );
         CombinedSpace_exposer.def( bp::init< SireVol::Space const & >(( bp::arg("space") ), "Construct a combined space from just a single space") );
         CombinedSpace_exposer.def( bp::init< SireVol::Space const &, SireVol::Space const & >(( bp::arg("space0"), bp::arg("space1") ), "Construct a combined space from the passed two spaces") );

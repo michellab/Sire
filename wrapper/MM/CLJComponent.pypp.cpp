@@ -24,7 +24,7 @@ void register_CLJComponent_class(){
 
     { //::SireMM::CLJComponent
         typedef bp::class_< SireMM::CLJComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > CLJComponent_exposer_t;
-        CLJComponent_exposer_t CLJComponent_exposer = CLJComponent_exposer_t( "CLJComponent", "This class represents the sum of the coulomb and LJ components\nof the forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() ), "Constructor") );
+        CLJComponent_exposer_t CLJComponent_exposer = CLJComponent_exposer_t( "CLJComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() ), "Constructor") );
         bp::scope CLJComponent_scope( CLJComponent_exposer );
         CLJComponent_exposer.def( bp::init< SireFF::FFName const &, QString const & >(( bp::arg("name"), bp::arg("suffix") ), "Construct from the passed forcefield name and suffix") );
         CLJComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );

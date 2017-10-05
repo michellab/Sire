@@ -104,7 +104,7 @@ public:
             ptr->incref();
     }
     
-    CGSharedPtr(CGSharedPtr &&other) : ptr(other.ptr)
+    CGSharedPtr(CGSharedPtr &other) : ptr(other.ptr)
     {
         other.ptr = 0;
     }
@@ -136,7 +136,7 @@ public:
         return *this;
     }
     
-    CGSharedPtr<T>& operator=(CGSharedPtr &&other)
+    CGSharedPtr<T>& operator=(CGSharedPtr &other)
     {
         T *new_ptr = other.ptr;
         other.ptr = 0;

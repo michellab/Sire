@@ -43,7 +43,7 @@ void register_CLJIntraRFFunction_class(){
 
     { //::SireMM::CLJIntraRFFunction
         typedef bp::class_< SireMM::CLJIntraRFFunction, bp::bases< SireMM::CLJIntraFunction, SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property > > CLJIntraRFFunction_exposer_t;
-        CLJIntraRFFunction_exposer_t CLJIntraRFFunction_exposer = CLJIntraRFFunction_exposer_t( "CLJIntraRFFunction", "This CLJFunction calculates the intramolecular coulomb and LJ energy of the passed\nCLJAtoms using a reaction field cutoff\n\nAuthor: Christopher Woods\n", bp::init< >("") );
+        CLJIntraRFFunction_exposer_t CLJIntraRFFunction_exposer = CLJIntraRFFunction_exposer_t( "CLJIntraRFFunction", "", bp::init< >("") );
         bp::scope CLJIntraRFFunction_scope( CLJIntraRFFunction_exposer );
         CLJIntraRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") ), "Copy constructor") );
         CLJIntraRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );

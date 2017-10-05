@@ -26,7 +26,7 @@ void register_DihedralComponent_class(){
 
     { //::SireMM::DihedralComponent
         typedef bp::class_< SireMM::DihedralComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > DihedralComponent_exposer_t;
-        DihedralComponent_exposer_t DihedralComponent_exposer = DihedralComponent_exposer_t( "DihedralComponent", "This class represents a Dihedral component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
+        DihedralComponent_exposer_t DihedralComponent_exposer = DihedralComponent_exposer_t( "DihedralComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope DihedralComponent_scope( DihedralComponent_exposer );
         DihedralComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
         DihedralComponent_exposer.def( bp::init< SireMM::DihedralComponent const & >(( bp::arg("other") ), "Copy constructor") );

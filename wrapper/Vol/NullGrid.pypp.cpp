@@ -33,7 +33,7 @@ void register_NullGrid_class(){
 
     { //::SireVol::NullGrid
         typedef bp::class_< SireVol::NullGrid, bp::bases< SireVol::Grid, SireBase::Property > > NullGrid_exposer_t;
-        NullGrid_exposer_t NullGrid_exposer = NullGrid_exposer_t( "NullGrid", "This is the null (empty) grid", bp::init< >("Constructor") );
+        NullGrid_exposer_t NullGrid_exposer = NullGrid_exposer_t( "NullGrid", "", bp::init< >("Constructor") );
         bp::scope NullGrid_scope( NullGrid_exposer );
         NullGrid_exposer.def( bp::init< SireVol::NullGrid const & >(( bp::arg("other") ), "Copy constructor") );
         NullGrid_exposer.def( bp::self != bp::self );
@@ -71,7 +71,7 @@ void register_NullGrid_class(){
             NullGrid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) )
+                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0.0) )
                 , "Return a copy of this grid that has been rotated using the passed rotation\nmatrix about center" );
         
         }
@@ -83,7 +83,7 @@ void register_NullGrid_class(){
             NullGrid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) )
+                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0.0) )
                 , "Return a copy of this grid that has been rotated using the passed rotation\nquaternion about center" );
         
         }

@@ -35,7 +35,7 @@ void register_GridInfo_class(){
 
     { //::SireVol::GridInfo
         typedef bp::class_< SireVol::GridInfo > GridInfo_exposer_t;
-        GridInfo_exposer_t GridInfo_exposer = GridInfo_exposer_t( "GridInfo", "This is a simple class that describes a 3D regular grid\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        GridInfo_exposer_t GridInfo_exposer = GridInfo_exposer_t( "GridInfo", "", bp::init< >("Constructor") );
         bp::scope GridInfo_scope( GridInfo_exposer );
         GridInfo_exposer.def( bp::init< SireVol::AABox const &, SireUnits::Dimension::Length >(( bp::arg("dimensions"), bp::arg("spacing") ), "Construct a grid of specified dimensions and spacing") );
         GridInfo_exposer.def( bp::init< SireVol::GridInfo const & >(( bp::arg("other") ), "Copy constructor") );

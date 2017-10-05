@@ -35,7 +35,7 @@ void register_SwitchingFunction_class(){
 
     { //::SireMM::SwitchingFunction
         typedef bp::class_< SireMM::SwitchingFunction, bp::bases< SireBase::Property >, boost::noncopyable > SwitchingFunction_exposer_t;
-        SwitchingFunction_exposer_t SwitchingFunction_exposer = SwitchingFunction_exposer_t( "SwitchingFunction", "This is the virtual base class of all switching functions. These\nreturn scale factors based on the supplied distance\n\nAuthor: Christopher Woods\n", bp::no_init );
+        SwitchingFunction_exposer_t SwitchingFunction_exposer = SwitchingFunction_exposer_t( "SwitchingFunction", "", bp::no_init );
         bp::scope SwitchingFunction_scope( SwitchingFunction_exposer );
         { //::SireMM::SwitchingFunction::cutoffDistance
         

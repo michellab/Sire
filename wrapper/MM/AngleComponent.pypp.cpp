@@ -26,7 +26,7 @@ void register_AngleComponent_class(){
 
     { //::SireMM::AngleComponent
         typedef bp::class_< SireMM::AngleComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > AngleComponent_exposer_t;
-        AngleComponent_exposer_t AngleComponent_exposer = AngleComponent_exposer_t( "AngleComponent", "This class represents a Angle component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
+        AngleComponent_exposer_t AngleComponent_exposer = AngleComponent_exposer_t( "AngleComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope AngleComponent_scope( AngleComponent_exposer );
         AngleComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
         AngleComponent_exposer.def( bp::init< SireMM::AngleComponent const & >(( bp::arg("other") ), "Copy constructor") );

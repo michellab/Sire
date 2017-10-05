@@ -38,7 +38,7 @@ void register_ThreeAtomFunction_class(){
 
     { //::SireMM::ThreeAtomFunction
         typedef bp::class_< SireMM::ThreeAtomFunction, bp::bases< SireMM::AtomFunction > > ThreeAtomFunction_exposer_t;
-        ThreeAtomFunction_exposer_t ThreeAtomFunction_exposer = ThreeAtomFunction_exposer_t( "ThreeAtomFunction", "This class holds a function that acts using the\ncoordinate information of just three atoms", bp::init< >("Constructor") );
+        ThreeAtomFunction_exposer_t ThreeAtomFunction_exposer = ThreeAtomFunction_exposer_t( "ThreeAtomFunction", "", bp::init< >("Constructor") );
         bp::scope ThreeAtomFunction_scope( ThreeAtomFunction_exposer );
         ThreeAtomFunction_exposer.def( bp::init< SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireCAS::Expression const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("function") ), "Construct for the specified pair of atoms with the specified function") );
         ThreeAtomFunction_exposer.def( bp::init< SireMM::ThreeAtomFunction const & >(( bp::arg("other") ), "Copy constructor") );

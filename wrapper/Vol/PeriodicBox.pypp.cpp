@@ -39,7 +39,7 @@ void register_PeriodicBox_class(){
 
     { //::SireVol::PeriodicBox
         typedef bp::class_< SireVol::PeriodicBox, bp::bases< SireVol::Cartesian, SireVol::Space, SireBase::Property > > PeriodicBox_exposer_t;
-        PeriodicBox_exposer_t PeriodicBox_exposer = PeriodicBox_exposer_t( "PeriodicBox", "\nA PeriodicBox is a volume  that represents standard periodic boundary conditions\n(a 3D box replicated to infinity along all three dimensions).\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a default PeriodicBox volume (maximum volume)") );
+        PeriodicBox_exposer_t PeriodicBox_exposer = PeriodicBox_exposer_t( "PeriodicBox", "", bp::init< >("Construct a default PeriodicBox volume (maximum volume)") );
         bp::scope PeriodicBox_scope( PeriodicBox_exposer );
         PeriodicBox_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("extents") ), "Construct a PeriodicBox with the specified dimensions") );
         PeriodicBox_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("min"), bp::arg("max") ), "Construct a PeriodicBox volume that goes from min to max") );
@@ -374,7 +374,7 @@ void register_PeriodicBox_class(){
             PeriodicBox_exposer.def( 
                 "maxCoords"
                 , maxCoords_function_value
-                , ( bp::arg("center")=SireMaths::Vector(0) )
+                , ( bp::arg("center")=SireMaths::Vector(0.0) )
                 , "Return the maximum coordinates of the box that has its center at center" );
         
         }
@@ -386,7 +386,7 @@ void register_PeriodicBox_class(){
             PeriodicBox_exposer.def( 
                 "minCoords"
                 , minCoords_function_value
-                , ( bp::arg("center")=SireMaths::Vector(0) )
+                , ( bp::arg("center")=SireMaths::Vector(0.0) )
                 , "Return the minimum coordinates of the box that has its center at center" );
         
         }

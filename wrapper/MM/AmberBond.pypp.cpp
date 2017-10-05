@@ -67,7 +67,7 @@ void register_AmberBond_class(){
 
     { //::SireMM::AmberBond
         typedef bp::class_< SireMM::AmberBond > AmberBond_exposer_t;
-        AmberBond_exposer_t AmberBond_exposer = AmberBond_exposer_t( "AmberBond", "This simple class holds Amber parameters for a bond", bp::init< bp::optional< double, double > >(( bp::arg("k")=0, bp::arg("r0")=0 ), "Construct with the passed bond constant and equilibrium bond length") );
+        AmberBond_exposer_t AmberBond_exposer = AmberBond_exposer_t( "AmberBond", "", bp::init< bp::optional< double, double > >(( bp::arg("k")=0, bp::arg("r0")=0 ), "Construct with the passed bond constant and equilibrium bond length") );
         bp::scope AmberBond_scope( AmberBond_exposer );
         AmberBond_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("eqn"), bp::arg("R") ), "Construct from the passed expression") );
         AmberBond_exposer.def( bp::init< SireMM::AmberBond const & >(( bp::arg("other") ), "") );

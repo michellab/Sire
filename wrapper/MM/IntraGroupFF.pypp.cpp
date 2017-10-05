@@ -62,7 +62,7 @@ void register_IntraGroupFF_class(){
 
     { //::SireMM::IntraGroupFF
         typedef bp::class_< SireMM::IntraGroupFF, bp::bases< SireFF::G2FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > IntraGroupFF_exposer_t;
-        IntraGroupFF_exposer_t IntraGroupFF_exposer = IntraGroupFF_exposer_t( "IntraGroupFF", "This forcefield is used to calculate the intramolecular\ncoulomb and LJ energy of the contained molecules. Note\nthat this is the coulomb and LJ energy of the non-bonded\natoms only, i.e. it does not contain the scaled\n1-4 coulomb and LJ energies. These should be calculated\nseparately, e.g. via additional terms added to InternalFF\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        IntraGroupFF_exposer_t IntraGroupFF_exposer = IntraGroupFF_exposer_t( "IntraGroupFF", "", bp::init< >("Constructor") );
         bp::scope IntraGroupFF_scope( IntraGroupFF_exposer );
         IntraGroupFF_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "Construct, specifying the name of the forcefield") );
         IntraGroupFF_exposer.def( bp::init< SireMM::IntraGroupFF const & >(( bp::arg("other") ), "Copy constructor") );

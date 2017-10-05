@@ -26,7 +26,7 @@ void register_Intra14LJComponent_class(){
 
     { //::SireMM::Intra14LJComponent
         typedef bp::class_< SireMM::Intra14LJComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > Intra14LJComponent_exposer_t;
-        Intra14LJComponent_exposer_t Intra14LJComponent_exposer = Intra14LJComponent_exposer_t( "Intra14LJComponent", "This class represents a intramolecular 1-4 nonbonded LJ energy of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
+        Intra14LJComponent_exposer_t Intra14LJComponent_exposer = Intra14LJComponent_exposer_t( "Intra14LJComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope Intra14LJComponent_scope( Intra14LJComponent_exposer );
         Intra14LJComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
         Intra14LJComponent_exposer.def( bp::init< SireMM::Intra14LJComponent const & >(( bp::arg("other") ), "Copy constructor") );

@@ -40,7 +40,7 @@ void register_StretchStretchSymbols_class(){
 
     { //::SireMM::StretchStretchSymbols
         typedef bp::class_< SireMM::StretchStretchSymbols, bp::bases< SireMM::InternalSymbolsBase > > StretchStretchSymbols_exposer_t;
-        StretchStretchSymbols_exposer_t StretchStretchSymbols_exposer = StretchStretchSymbols_exposer_t( "StretchStretchSymbols", "This class holds the symbols required for the stretch-stretch parameters.\nThese are functions of the bond distances among three atoms, 0 1 and 2,\nso distances between atoms 0-1 (r01), 2-1 (r21) and 1-2 (r12)", bp::init< >("") );
+        StretchStretchSymbols_exposer_t StretchStretchSymbols_exposer = StretchStretchSymbols_exposer_t( "StretchStretchSymbols", "", bp::init< >("") );
         bp::scope StretchStretchSymbols_scope( StretchStretchSymbols_exposer );
         { //::SireMM::StretchStretchSymbols::r01
         

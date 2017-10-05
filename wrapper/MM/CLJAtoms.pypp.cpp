@@ -55,7 +55,7 @@ void register_CLJAtoms_class(){
 
     { //::SireMM::CLJAtoms
         typedef bp::class_< SireMM::CLJAtoms > CLJAtoms_exposer_t;
-        CLJAtoms_exposer_t CLJAtoms_exposer = CLJAtoms_exposer_t( "CLJAtoms", "This class holds vectorised arrays of the coordinates,\nreduced charges and reduced Lennard Jones parameters of\na set of atoms. This class is intended only to be used\nin the fast functions used to calculated coulomb and LJ\nenergies, and is not intended for general use.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
+        CLJAtoms_exposer_t CLJAtoms_exposer = CLJAtoms_exposer_t( "CLJAtoms", "", bp::init< >("Null constructor") );
         bp::scope CLJAtoms_scope( CLJAtoms_exposer );
         bp::enum_< SireMM::CLJAtoms::ID_SOURCE>("ID_SOURCE")
             .value("USE_MOLNUM", SireMM::CLJAtoms::USE_MOLNUM)
@@ -118,7 +118,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "append"
                 , append_function_value
-                , ( bp::arg("atoms"), bp::arg("n")=(int)(-1) )
+                , ( bp::arg("atoms"), bp::arg("n")=(int)(-0x00000000000000001) )
                 , "Append the passed set of atoms onto the end of this set. If n is greater than or\nequal to zero, then only n of the passed atoms will be added onto this set" );
         
         }

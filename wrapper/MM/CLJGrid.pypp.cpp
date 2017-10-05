@@ -42,7 +42,7 @@ void register_CLJGrid_class(){
 
     { //::SireMM::CLJGrid
         typedef bp::class_< SireMM::CLJGrid > CLJGrid_exposer_t;
-        CLJGrid_exposer_t CLJGrid_exposer = CLJGrid_exposer_t( "CLJGrid", "This class holds a 3D grid of the coulomb potential\nat points in space created by a set of atoms, and calculates\nthe coulomb and LJ energies of atoms with that grid\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        CLJGrid_exposer_t CLJGrid_exposer = CLJGrid_exposer_t( "CLJGrid", "", bp::init< >("Constructor") );
         bp::scope CLJGrid_scope( CLJGrid_exposer );
         CLJGrid_exposer.def( bp::init< SireVol::AABox const & >(( bp::arg("grid_dimensions") ), "Construct, specifying the dimensions of the grid") );
         CLJGrid_exposer.def( bp::init< SireVol::AABox const &, SireUnits::Dimension::Length >(( bp::arg("grid_dimensions"), bp::arg("grid_spacing") ), "Construct, specifying the dimensions and spacing for the grid") );

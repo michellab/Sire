@@ -45,7 +45,7 @@ void register_ChargeParameterName_class(){
 
     { //::SireMM::ChargeParameterName
         typedef bp::class_< SireMM::ChargeParameterName > ChargeParameterName_exposer_t;
-        ChargeParameterName_exposer_t ChargeParameterName_exposer = ChargeParameterName_exposer_t( "ChargeParameterName", "This class provides the default name of the\nproperty that contains the charge parameters", bp::init< >("") );
+        ChargeParameterName_exposer_t ChargeParameterName_exposer = ChargeParameterName_exposer_t( "ChargeParameterName", "", bp::init< >("") );
         bp::scope ChargeParameterName_scope( ChargeParameterName_exposer );
         { //::SireMM::ChargeParameterName::charge
         

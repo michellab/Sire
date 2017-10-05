@@ -58,7 +58,7 @@ void register_CLJFunction_class(){
 
     { //::SireMM::CLJFunction
         typedef bp::class_< SireMM::CLJFunction, bp::bases< SireBase::Property >, boost::noncopyable > CLJFunction_exposer_t;
-        CLJFunction_exposer_t CLJFunction_exposer = CLJFunction_exposer_t( "CLJFunction", "Base class of all CLJFunctions. These are function classes that\ncalculate the coulomb and LJ energy of the passed CLJAtoms groups\n\nAuthor: Christopher Woods\n", bp::no_init );
+        CLJFunction_exposer_t CLJFunction_exposer = CLJFunction_exposer_t( "CLJFunction", "", bp::no_init );
         bp::scope CLJFunction_scope( CLJFunction_exposer );
         bp::enum_< SireMM::CLJFunction::COMBINING_RULES>("COMBINING_RULES")
             .value("ARITHMETIC", SireMM::CLJFunction::ARITHMETIC)

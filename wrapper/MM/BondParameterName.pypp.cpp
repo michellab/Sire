@@ -53,7 +53,7 @@ void register_BondParameterName_class(){
 
     { //::SireMM::BondParameterName
         typedef bp::class_< SireMM::BondParameterName > BondParameterName_exposer_t;
-        BondParameterName_exposer_t BondParameterName_exposer = BondParameterName_exposer_t( "BondParameterName", "This class provides the default name of the\nproperty that contains the bond parameters", bp::init< >("") );
+        BondParameterName_exposer_t BondParameterName_exposer = BondParameterName_exposer_t( "BondParameterName", "", bp::init< >("") );
         bp::scope BondParameterName_scope( BondParameterName_exposer );
         { //::SireMM::BondParameterName::bond
         

@@ -137,7 +137,7 @@ public:
             ptr->incref();
     }
     
-    SharedArray2DPtr(SharedArray2DPtr &&other) : ptr(other.ptr)
+    SharedArray2DPtr(SharedArray2DPtr &other) : ptr(other.ptr)
     {
         other.ptr = 0;
     }
@@ -169,7 +169,7 @@ public:
         return *this;
     }
     
-    SharedArray2DPtr<T>& operator=(SharedArray2DPtr<T> &&other)
+    SharedArray2DPtr<T>& operator=(SharedArray2DPtr<T> &other)
     {
         T *new_ptr = other.ptr;
         other.ptr = 0;
