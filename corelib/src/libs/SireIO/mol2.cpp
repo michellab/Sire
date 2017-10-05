@@ -1450,7 +1450,7 @@ void Mol2::parseLines(const PropertyMap &map)
             {
                 // For correctly formatted files, the number of atoms should
                 // be equal to "num_atoms" from the previous MOLECULE record.
-                int num_atoms = molecules[imol-1].nAtoms();
+                const int num_atoms = molecules[imol-1].nAtoms();
 
                 // Check that the file contains enough lines for the record.
                 if (((iline + 1) == num_lines) or
@@ -1514,7 +1514,7 @@ void Mol2::parseLines(const PropertyMap &map)
             {
                 // For correctly formatted files, the number of bonds should
                 // be equal to "num_bonds" from the previous MOLECULE record.
-                int num_bonds = molecules[imol-1].nBonds();
+                const int num_bonds = molecules[imol-1].nBonds();
 
                 // Check that the file contains enough lines for the record.
                 if (((iline + 1) == num_lines) or
@@ -1578,7 +1578,7 @@ void Mol2::parseLines(const PropertyMap &map)
             {
                 // For correctly formatted files, the number of substructures should
                 // be equal to "num_subst" from the previous MOLECULE record.
-                int num_subst = molecules[imol-1].nSubstructures();
+                const int num_subst = molecules[imol-1].nSubstructures();
 
                 // Check that the file contains enough lines for the record.
                 if (((iline + 1) == num_lines) or
@@ -1704,7 +1704,7 @@ void Mol2::addToSystem(System &system, const PropertyMap &map) const
 MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) const
 {
     // Get the number of atoms in the molecule.
-    int nats = nAtoms(imol);
+    const int nats = nAtoms(imol);
 
     // Make sure that there are atoms in the molecule.
     if (nats == 0)
@@ -1851,7 +1851,7 @@ MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) 
 MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
 {
     // Get the number of atoms in the molecule.
-    int nats = nAtoms(imol);
+    const int nats = nAtoms(imol);
 
     // Make sure that there are atoms in the frame.
     if (nats == 0)
