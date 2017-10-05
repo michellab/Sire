@@ -49,7 +49,7 @@ namespace SireBase
 
 */
 template <class T>
-class SIREBASE_EXPORT SharedDataPointer
+class SharedDataPointer
 {
 public:
 
@@ -64,13 +64,13 @@ public:
     SharedDataPointer(const T &obj);
 
     SharedDataPointer(const SharedDataPointer<T> &o);
-    SharedDataPointer(SharedDataPointer &o);
+    SharedDataPointer(SharedDataPointer &&o);
 
     SharedDataPointer<T>& operator=(T *o);
     SharedDataPointer<T>& operator=(const T &obj);
 
     SharedDataPointer<T>& operator=(const SharedDataPointer<T> &o);
-    SharedDataPointer<T> &operator=(SharedDataPointer<T> &other);
+    SharedDataPointer<T> &operator=(SharedDataPointer<T> &&other);
 
     SharedDataPointer<T>& operator=(int);
     

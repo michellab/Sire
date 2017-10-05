@@ -53,6 +53,12 @@ parser.add_argument('-r', '--traj_file', nargs="?",
 parser.add_argument('-s', '--step', nargs="?",
                     help="The number of frames to skip between two snapshot evaluations.")
 
+parser.add_argument('-d','--disable_crf',action="store_true",
+                    help="Whether to disable the reaction field crf term.")
+
+parser.add_argument('-i','--use_solute_inter_nrg',action="store_true",
+                    help="Whether to use the solute intermolecular energy instead of the total electrostatic potential energy.")
+
 sys.stdout.write("\n")
 args = parser.parse_args()
 
@@ -126,6 +132,17 @@ else:
 if args.step:
     step_frame = int(args.step)
     params["step_frame"] = step_frame
+
+if args.disable_crf:
+    params["disable_crf"]=True
+elif "disable_crf" in params:
+    disable_crf = params["disable_crf"]
+
+
+if args.use_solute_inter_nrg:
+    params["use_solute_inter_nrg"]=True
+elif "use_solute_inter_nrg" in params:
+    use_solute_inter_nrg = params["use_solute_inter_nrg"]
 
 if not (os.path.exists(coord_file) and os.path.exists(top_file) \
         and os.path.exists(morph_file) and os.path.exists(traj_file)):
