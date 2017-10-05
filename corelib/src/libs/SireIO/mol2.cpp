@@ -1779,8 +1779,6 @@ MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) 
             if (residues.contains(res_num))
             {
                 // Insert the substructure into the chain map.
-                // Here we use the substructure name from the atom record,
-                // so as to avoid any naming inconsistencies.
                 chains.insert(chain, res_num);
             }
         }
@@ -1818,6 +1816,8 @@ MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) 
         res.rename(ResName(res_name.trimmed()));
 
         // Reparent the residue to its chain.
+        // Here we use the substructure name from the atom record,
+        // so as to avoid any naming inconsistencies.
         if (res_to_chain.contains(res_num))
             res.reparent(ChainName(res_to_chain[res_num]));
 
