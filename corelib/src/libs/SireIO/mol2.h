@@ -103,6 +103,9 @@ public:
     /** Get the atom coordinates. */
     SireMaths::Vector getCoord() const;
 
+    /** Get the SYBYL atom type. */
+    QString getType() const;
+
     /** Get the number of the substructure containing the atom. */
     qint64 getSubstructureNumber() const;
 
@@ -111,6 +114,9 @@ public:
 
     /** Get the atom charge. */
     double getCharge() const;
+
+    /** Get the status bits. */
+    QString getStatusBits() const;
 
 private:
     /** The original Mol2 record used to instantiate the atom. */

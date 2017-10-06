@@ -37,11 +37,15 @@
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
 
+#include "SireMol/atomcharges.h"
+#include "SireMol/atomcoords.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
+
+#include "SireUnits/units.h"
 
 using namespace SireIO;
 using namespace SireMM;
@@ -378,6 +382,12 @@ SireMaths::Vector Mol2Atom::getCoord() const
     return coord;
 }
 
+/** Get the SYBYL atom type. */
+QString Mol2Atom::getType() const
+{
+    return type;
+}
+
 /** Get the number of the substructure containing the atom. */
 qint64 Mol2Atom::getSubstructureNumber() const
 {
@@ -394,6 +404,12 @@ QString Mol2Atom::getSubstructureName() const
 double Mol2Atom::getCharge() const
 {
     return charge;
+}
+
+/** Get the SYBYL status bit. */
+QString Mol2Atom::getStatusBits() const
+{
+    return status_bits;
 }
 
 /** Default constructor. */
@@ -1877,8 +1893,10 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
     const auto molinfo = mol.info();
 
     // Instantiate the atom property objects that we need.
-    AtomCoords        coords(molinfo);
-    //AtomCharges       charges(molinfo);
+    AtomCoords         coords(molinfo);
+    AtomCharges        charges(molinfo);
+    AtomStringProperty types(molinfo);
+    AtomStringProperty status_bits(molinfo);
 
     // Now loop through the atoms in the molecule and set each property.
     for (int i=0; i<nats; ++i)
@@ -1891,10 +1909,14 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
 
         // Set the properties.
         coords.set(cgatomidx, atom.getCoord());
-        //charges.set(cgatomidx, int(atom.getCharge()) * SireUnits::mod_electron);
+        charges.set(cgatomidx, double(atom.getCharge()) * SireUnits::mod_electron);
+        types.set(cgatomidx, atom.getType());
+        status_bits.set(cgatomidx, atom.getStatusBits());
     }
 
     return mol.setProperty(map["coordinates"], coords)
-              //.setProperty(map["formal-charge"], charges)
+              .setProperty(map["charge"], charges)
+              .setProperty(map["type"], types)
+              .setProperty(map["status-bit"], status_bits)
               .commit();
 }
