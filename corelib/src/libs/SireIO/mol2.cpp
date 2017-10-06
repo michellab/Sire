@@ -1806,9 +1806,6 @@ MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) 
             res_to_chain.insert(residue, chain);
     }
 
-    // TODO:
-    // Make sure residues are in numerical order.
-
     // Loop over all unique residues in the frame (by number).
     for (auto res_num : residues.uniqueKeys())
     {
