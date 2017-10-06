@@ -1483,11 +1483,14 @@ void Mol2::parseLines(const PropertyMap &map)
                             parse_atom(local_atoms[i], lines()[iline+i], local_errors);
                         }
 
-                        // Acquire a lock.
-                        QMutexLocker lkr(&mutex);
+                        if (not local_errors.isEmpty())
+                        {
+                            // Acquire a lock.
+                            QMutexLocker lkr(&mutex);
 
-                        // Update the warning messages.
-                        parse_warnings += local_errors;
+                            // Update the warning messages.
+                            parse_warnings += local_errors;
+                        }
                     });
 
                     // Append the atoms to the molecule.
@@ -1547,11 +1550,14 @@ void Mol2::parseLines(const PropertyMap &map)
                             parse_bond(local_bonds[i], lines()[iline+i], local_errors);
                         }
 
-                        // Acquire a lock.
-                        QMutexLocker lkr(&mutex);
+                        if (not local_errors.isEmpty())
+                        {
+                            // Acquire a lock.
+                            QMutexLocker lkr(&mutex);
 
-                        // Update the warning messages.
-                        parse_warnings += local_errors;
+                            // Update the warning messages.
+                            parse_warnings += local_errors;
+                        }
                     });
 
                     // Append the bonds to the molecule.
@@ -1611,11 +1617,14 @@ void Mol2::parseLines(const PropertyMap &map)
                             parse_subst(local_subst[i], lines()[iline+i], local_errors);
                         }
 
-                        // Acquire a lock.
-                        QMutexLocker lkr(&mutex);
+                        if (not local_errors.isEmpty())
+                        {
+                            // Acquire a lock.
+                            QMutexLocker lkr(&mutex);
 
-                        // Update the warning messages.
-                        parse_warnings += local_errors;
+                            // Update the warning messages.
+                            parse_warnings += local_errors;
+                        }
                     });
 
                     // Append the substructures to the molecule.
@@ -1796,6 +1805,9 @@ MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) 
         for (auto residue : chain_residues)
             res_to_chain.insert(residue, chain);
     }
+
+    // TODO:
+    // Make sure residues are in numerical order.
 
     // Loop over all unique residues in the frame (by number).
     for (auto res_num : residues.uniqueKeys())
