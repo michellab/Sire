@@ -40,12 +40,11 @@
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
-#include "SireMol/molecule.h"
-#include "SireMol/moleditor.h"
-
 #include "SireMol/atomcharges.h"
 #include "SireMol/atomelements.h"
 #include "SireMol/atomcoords.h"
+#include "SireMol/molecule.h"
+#include "SireMol/moleditor.h"
 
 #include "SireUnits/units.h"
 
