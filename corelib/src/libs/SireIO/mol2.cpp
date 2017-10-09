@@ -227,7 +227,7 @@ Mol2Atom::Mol2Atom(const QString &line, QStringList &errors) :
     type("Du"),
     charge(0)
 {
-    // Tokenize the string, splitting using a single whitespace characters.
+    // Tokenize the string, splitting using a single whitespace character.
     QStringList data = line.simplified().split(QRegExp("\\s"));
 
     // The Mol2 record indicator. All record types start with this prefix.
@@ -423,7 +423,7 @@ Mol2Bond::Mol2Bond()
 Mol2Bond::Mol2Bond(const QString &line, QStringList &errors) :
     record(line)
 {
-    // Tokenize the string, splitting using a single whitespace characters.
+    // Tokenize the string, splitting using a single whitespace character.
     QStringList data = line.simplified().split(QRegExp("\\s"));
 
     // There must be at least four records.
@@ -609,7 +609,7 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     // Extract the molecule name.
     name = lines[0].simplified();
 
-    // Tokenize the string, splitting using a single whitespace characters.
+    // Tokenize the string, splitting using a single whitespace character.
     QStringList data = lines[1].simplified().split(QRegExp("\\s"));
 
     // List of "number" data strings.
@@ -927,7 +927,7 @@ Mol2Substructure::Mol2Substructure(const QString &line, QStringList &errors) :
     record(line),
     num_inter_bonds(0)
 {
-    // Tokenize the string, splitting using a single whitespace characters.
+    // Tokenize the string, splitting using a single whitespace character.
     QStringList data = line.simplified().split(QRegExp("\\s"));
 
     // There must be at least three records.
