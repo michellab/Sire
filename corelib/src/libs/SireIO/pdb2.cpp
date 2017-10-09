@@ -1832,11 +1832,6 @@ void PDB2::parseLines(const PropertyMap &map)
     // For each MODEL record there should be a corresponding ENDMDL.
     int prev_nats = 0;
 
-    // Whether a model section has just been parsed.
-    // This stops atom data being parsed twice if we've just recorded a model
-    // then hit the end of the file.
-    bool isModel = false;
-
     // The indices for lines containing atom data.
     // For each frame we identify the lines containing atom data, then parse them.
     QVector<int> atom_lines;
@@ -1886,15 +1881,30 @@ void PDB2::parseLines(const PropertyMap &map)
             }
         }
 
-        // Validate the atom data.
+        // Validate the atom data against the first frame.
         if (iframe > 1)
         {
-            if (not validateAtom(frame_atom, atoms[iframe-1][iatm]))
+            // Make sure that the first frame has at least 'iatm' entries.
+            if (iatm < atoms[0].count())
             {
-                errors.append(QObject::tr("Invalid record for atom %1 "
-                    "in frame %2 on line %3. Record doesn't match does not "
-                    " match previous frame! '%4'")
-                    .arg(iatm).arg(iframe).arg(iline).arg(line));
+                // Make sure the atom is consistent between frames.
+                if (not validateAtom(frame_atom, atoms[0][iatm]))
+                {
+                    errors.append(QObject::tr("Invalid record for atom %1 "
+                        "in model %2 on line %3. Record doesn't match does not "
+                        " match previous model! '%4'")
+                        .arg(iatm).arg(iframe).arg(iline).arg(line));
+                }
+            }
+            else
+            {
+                // Only record this error once per frame.
+                if ((iatm + 1) == atoms[0].count())
+                {
+                    errors.append(QObject::tr("The number of atoms in model "
+                        "%1 is larger than the first model!")
+                        .arg(iatm));
+                }
             }
         }
 
@@ -1921,6 +1931,11 @@ void PDB2::parseLines(const PropertyMap &map)
 
         // Whether to parse atom data at the end of the current loop.
         bool isParse = false;
+
+        // Whether a model section has just been parsed.
+        // This stops atom data being parsed twice if we've just recorded a model
+        // then hit the end of the file.
+        bool isModel = false;
 
         // Extract the record type.
         // Could simplify this, i.e. remove whitespace.
@@ -1951,7 +1966,6 @@ void PDB2::parseLines(const PropertyMap &map)
         else if (record == "MODEL ")
         {
             imdl++;
-            isModel = false;
 
             // Extract the model entry number.
             // This should be 4 characters starting at column 11, but we'll assume
@@ -2122,71 +2136,75 @@ void PDB2::parseLines(const PropertyMap &map)
         // Parse the atom data.
         if (isParse ^ isModel)
         {
-            // Initialise atom vector for the frame.
-            QVector<PDBAtom> frame_atoms(nats);
-
-            if (usesParallel())
+            // Don't proceed if there are no more ATOM records to parse.
+            if (atom_lines.count() > 0)
             {
-                QMutex mutex;
+                // Initialise atom vector for the frame.
+                QVector<PDBAtom> frame_atoms(nats);
 
-                tbb::parallel_for( tbb::blocked_range<int>(0, nats),
-                                [&](const tbb::blocked_range<int> &r)
+                if (usesParallel())
                 {
-                    qint64 local_num_ters = 0;
-                    QStringList local_errors;
-                    QMultiMap<QPair<qint64, QString>, qint64> local_residues;
-                    QMultiMap<QChar, QString> local_chains;
-                    QSet<qint64> local_segments;
+                    QMutex mutex;
 
-                    for (int i=r.begin(); i<r.end(); ++i)
+                    tbb::parallel_for( tbb::blocked_range<int>(0, nats),
+                                    [&](const tbb::blocked_range<int> &r)
+                    {
+                        qint64 local_num_ters = 0;
+                        QStringList local_errors;
+                        QMultiMap<QPair<qint64, QString>, qint64> local_residues;
+                        QMultiMap<QChar, QString> local_chains;
+                        QSet<qint64> local_segments;
+
+                        for (int i=r.begin(); i<r.end(); ++i)
+                        {
+                            // Parse the atom record and determine whether it is a terminal record.
+                            if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
+                                atom_lines[i], lines().count(), frame_atoms[i], local_residues,
+                                local_chains, local_segments, local_errors ))
+                                    local_num_ters++;
+                        }
+
+                        QMutexLocker lkr(&mutex);
+
+                        num_ters       += local_num_ters;
+                        frame_residues += local_residues;
+                        frame_chains   += local_chains;
+                        frame_segments += local_segments;
+                        parse_warnings += local_errors;
+                    });
+                }
+                else
+                {
+                    for (int i=0; i<nats; ++i)
                     {
                         // Parse the atom record and determine whether it is a terminal record.
                         if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                            atom_lines[i], lines().count(), frame_atoms[i], local_residues,
-                            local_chains, local_segments, local_errors ))
-                                local_num_ters++;
+                            atom_lines[i], lines().count(), frame_atoms[i], frame_residues,
+                            frame_chains, frame_segments, parse_warnings ))
+                                num_ters++;
                     }
-
-                    QMutexLocker lkr(&mutex);
-
-                    num_ters       += local_num_ters;
-                    frame_residues += local_residues;
-                    frame_chains   += local_chains;
-                    frame_segments += local_segments;
-                    parse_warnings += local_errors;
-                });
-            }
-            else
-            {
-                for (int i=0; i<nats; ++i)
-                {
-                    // Parse the atom record and determine whether it is a terminal record.
-                    if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                        atom_lines[i], lines().count(), frame_atoms[i], frame_residues,
-                        frame_chains, frame_segments, parse_warnings ))
-                            num_ters++;
                 }
+
+                // Append frame data and clear the vectors.
+
+                atoms.append(frame_atoms);
+                atom_lines.clear();
+
+                residues.append(frame_residues);
+                frame_residues.clear();
+
+                chains.append(frame_chains);
+                frame_chains.clear();
+
+                segments.append(frame_segments);
+                frame_segments.clear();
+
+                connections.append(frame_connections);
+                frame_connections.clear();
+
+                iframe++;
+                nats = 0;
             }
-
-            // Append frame data and clear the vectors.
-
-            atoms.append(frame_atoms);
-            atom_lines.clear();
-
-            residues.append(frame_residues);
-            frame_residues.clear();
-
-            chains.append(frame_chains);
-            frame_chains.clear();
-
-            segments.append(frame_segments);
-            frame_segments.clear();
-
-            connections.append(frame_connections);
-            frame_connections.clear();
-
-            iframe++;
-            nats = 0;
         }
     }
 
