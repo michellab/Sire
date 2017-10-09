@@ -1686,7 +1686,6 @@ System Mol2::startSystem(const PropertyMap &map) const
         tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
                            [&](tbb::blocked_range<int> r)
         {
-            // Create and populate all of the molecules.
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 mols_array[i] = this->getMolecule(i, map);
