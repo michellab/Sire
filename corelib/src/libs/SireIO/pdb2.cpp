@@ -2098,6 +2098,15 @@ void PDB2::parseLines(const PropertyMap &map)
         // MASTER record.
         else if (record == "MASTER")
         {
+            // There should only be a single MASTER record and it should only refer to
+            // the first MODEL entry.
+            if (has_master)
+            {
+                parse_warnings.append(QObject::tr("Ignoring invalid MASTER record "
+                    "on line %1: '%2'")
+                    .arg(iline).arg(line));
+            }
+
             master = PDBMaster(line, parse_warnings);
             has_master = true;
         }
