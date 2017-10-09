@@ -215,6 +215,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2 &mol2)
 /** Default constructor. */
 Mol2Atom::Mol2Atom() :
     name("X"),
+    type("Du"),
     charge(0)
 {
 }
@@ -223,6 +224,7 @@ Mol2Atom::Mol2Atom() :
 Mol2Atom::Mol2Atom(const QString &line, QStringList &errors) :
     record(line),
     name("X"),
+    type("Du"),
     charge(0)
 {
     // Tokenize the string, splitting using a single whitespace characters.
