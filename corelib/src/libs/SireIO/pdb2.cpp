@@ -1699,6 +1699,12 @@ int PDB2::nTitles() const
     return title.nRecords();
 }
 
+/** Return the number of models (molecules). */
+int PDB2::nModels() const
+{
+    return atoms.count();
+}
+
 /** Return the number of atoms. */
 int PDB2::nAtoms() const
 {
@@ -1795,62 +1801,6 @@ void PDB2::assertSane() const
 {
     QStringList errors;
 
-    // Validate the parsed data against the MASTER record.
-    if (has_master)
-    {
-        if (not (master.nRemarks() == title.nRemarks()))
-        {
-            errors.append(QObject::tr("Error in PDB file as the number of "
-               "REMARK records (%1) read does not equal the number in "
-               "the MASTER record (%2)!")
-                .arg(title.nRemarks()).arg(master.nRemarks()));
-        }
-
-        if (not (master.nAtoms() == nAtoms()))
-        {
-            errors.append(QObject::tr("Error in PDB file as the number of "
-               "ATOM and HETATM records (%1) read does not equal the number in "
-               "the MASTER record (%2)!")
-                .arg(nAtoms()).arg(master.nAtoms()));
-        }
-
-        if (not (master.nHelices() == nHelices()))
-        {
-            errors.append(QObject::tr("Error in PDB file as the number of "
-               "HELIX records (%1) read does not equal the number in "
-               "the MASTER record (%2)!")
-                .arg(nHelices()).arg(master.nHelices()));
-        }
-
-        if (not (master.nSheets() == nSheets()))
-        {
-            errors.append(QObject::tr("Error in PDB file as the number of "
-               "SHEET records (%1) read does not equal the number in "
-               "the MASTER record (%2)!")
-                .arg(nSheets()).arg(master.nSheets()));
-        }
-
-        if (not (master.nTers() == nTers()))
-        {
-            errors.append(QObject::tr("Error in PDB file as the number of "
-               "TER records (%1) read does not equal the number in "
-               "the MASTER record (%2)!")
-                .arg(nTers()).arg(master.nTers()));
-        }
-
-        // Work out the number of coordinate transformation records.
-        // Each object should contain three records, one for each dimension.
-        int num_transforms = 3 * ( hasTransOrig() + hasTransScale() + hasTransMatrix() );
-
-        if (not (master.nTransforms() == num_transforms ))
-        {
-            errors.append(QObject::tr("Error in PDB file as the number of coordinate "
-               "transformation records (%1) read does not equal the number in "
-               "the MASTER record (%2)!")
-                .arg(num_transforms).arg(master.nTransforms()));
-        }
-    }
-
     if (not errors.isEmpty())
     {
         throw SireIO::parse_error(QObject::tr("There were errors reading the PDB format "
@@ -1881,6 +1831,11 @@ void PDB2::parseLines(const PropertyMap &map)
     // Each MODEL section should contain the same number of atoms.
     // For each MODEL record there should be a corresponding ENDMDL.
     int prev_nats = 0;
+
+    // Whether a model section has just been parsed.
+    // This stops atom data being parsed twice if we've just recorded a model
+    // then hit the end of the file.
+    bool isModel = false;
 
     // The indices for lines containing atom data.
     // For each frame we identify the lines containing atom data, then parse them.
@@ -1967,11 +1922,6 @@ void PDB2::parseLines(const PropertyMap &map)
         // Whether to parse atom data at the end of the current loop.
         bool isParse = false;
 
-        // Whether a model section has just been parsed.
-        // This stops atom data being parsed twice if we've just recorded a model
-        // then hit the end of the file.
-        bool isModel = false;
-
         // Extract the record type.
         // Could simplify this, i.e. remove whitespace.
         QString record = lines()[iline].left(6);
@@ -2001,13 +1951,21 @@ void PDB2::parseLines(const PropertyMap &map)
         else if (record == "MODEL ")
         {
             imdl++;
+            isModel = false;
 
             // Extract the model entry number.
-            int nmod = line.midRef(10,4).toInt();
+            // This should be 4 characters starting at column 11, but we'll assume
+            // that it could be the entirety of the rest of the line.
+            bool ok;
+            int nmod = line.rightRef(line.count() - 6).toInt(&ok);
+
+            // If this failed, try just extracting columns 11-14, as in the PDB standard.
+            if (not ok)
+                nmod = line.midRef(10,4).toInt(&ok);
 
             // Check that the model entry number is correct.
             // These must be in ascending order, starting at 1.
-            if (imdl != nmod)
+            if ((not ok) or (imdl != nmod))
             {
                 parse_warnings.append(QObject::tr("Cannot parse the data "
                     "for MODEL %1 has incorrect MODEL entry number '%2'!")
@@ -2018,7 +1976,7 @@ void PDB2::parseLines(const PropertyMap &map)
         }
 
         // End of a MODEL record.
-        else if (record == "ENDMDL ")
+        else if (record == "ENDMDL")
         {
             if (imdl > 1)
             {
@@ -2028,13 +1986,11 @@ void PDB2::parseLines(const PropertyMap &map)
                     parse_warnings.append(QObject::tr("Cannot parse the data "
                     "for MODEL %1 is not the same size as MODEL %2!")
                     .arg(imdl).arg(imdl-1));
-
-                    return;
                 }
             }
 
-            // Record the number of atoms in last model entry.
-            prev_nats = nats;
+            // Record the number of atoms in the first model entry.
+			if (imdl == 1) prev_nats = nats;
 
             // Flag that a model has been recorded.
             isModel = true;
@@ -2164,7 +2120,7 @@ void PDB2::parseLines(const PropertyMap &map)
             isParse = true;
 
         // Parse the atom data.
-        if (isParse or isModel)
+        if (isParse ^ isModel)
         {
             // Initialise atom vector for the frame.
             QVector<PDBAtom> frame_atoms(nats);
@@ -2234,6 +2190,62 @@ void PDB2::parseLines(const PropertyMap &map)
         }
     }
 
+    // Validate the parsed data against the MASTER record.
+    if (has_master)
+    {
+        if (not (master.nRemarks() == title.nRemarks()))
+        {
+            parse_warnings.append(QObject::tr("Error in PDB file as the number of "
+               "REMARK records (%1) read does not equal the number in "
+               "the MASTER record (%2)!")
+                .arg(title.nRemarks()).arg(master.nRemarks()));
+        }
+
+        if (not (master.nAtoms() == nAtoms()))
+        {
+            parse_warnings.append(QObject::tr("Error in PDB file as the number of "
+               "ATOM and HETATM records (%1) read does not equal the number in "
+               "the MASTER record (%2)!")
+                .arg(nAtoms()).arg(master.nAtoms()));
+        }
+
+        if (not (master.nHelices() == nHelices()))
+        {
+            parse_warnings.append(QObject::tr("Error in PDB file as the number of "
+               "HELIX records (%1) read does not equal the number in "
+               "the MASTER record (%2)!")
+                .arg(nHelices()).arg(master.nHelices()));
+        }
+
+        if (not (master.nSheets() == nSheets()))
+        {
+            parse_warnings.append(QObject::tr("Error in PDB file as the number of "
+               "SHEET records (%1) read does not equal the number in "
+               "the MASTER record (%2)!")
+                .arg(nSheets()).arg(master.nSheets()));
+        }
+
+        if (not (master.nTers() == nTers()))
+        {
+            parse_warnings.append(QObject::tr("Error in PDB file as the number of "
+               "TER records (%1) read does not equal the number in "
+               "the MASTER record (%2)!")
+                .arg(nTers()).arg(master.nTers()));
+        }
+
+        // Work out the number of coordinate transformation records.
+        // Each object should contain three records, one for each dimension.
+        int num_transforms = 3 * ( hasTransOrig() + hasTransScale() + hasTransMatrix() );
+
+        if (not (master.nTransforms() == num_transforms ))
+        {
+            parse_warnings.append(QObject::tr("Error in PDB file as the number of coordinate "
+               "transformation records (%1) read does not equal the number in "
+               "the MASTER record (%2)!")
+                .arg(num_transforms).arg(master.nTransforms()));
+        }
+    }
+
     this->setScore(nats);
 }
 
@@ -2257,16 +2269,7 @@ bool PDB2::validateAtom(const PDBAtom &atom1, const PDBAtom &atom2) const
     'iframe' (a trajectory index). */
 System PDB2::startSystem(int iframe, const PropertyMap &map) const
 {
-    // For now we will assume that the PDB file contains a single molecule.
-    // The system should contain a set of atoms, each belonging to a residue.
-
-    // Once the molecule is constructed we can use connectivity information to
-    // break it into sub-molecules.
-
-    // Potentially, we have multiple frames (models) each containing multiple molecules.
-    // Here 'iframe' indexes the trajectory.
-
-    const int nmols = 1;
+    const int nmols = nModels();
 
     if (nmols == 0)
         return System();
@@ -2279,7 +2282,6 @@ System PDB2::startSystem(int iframe, const PropertyMap &map) const
         tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
                            [&](tbb::blocked_range<int> r)
         {
-            // Create and populate all of the molecules.
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 mols_array[i] = this->getMolecule(i, iframe, map);

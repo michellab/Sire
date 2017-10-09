@@ -701,6 +701,7 @@ public:
     QStringList formatSuffix() const;
 
     int nTitles() const;
+    int nModels() const;
     int nAtoms() const;
     int nHelices() const;
     int nSheets() const;

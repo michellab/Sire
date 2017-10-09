@@ -267,6 +267,17 @@ void register_PDB2_class(){
                 , "Return the number of helices." );
         
         }
+        { //::SireIO::PDB2::nModels
+        
+            typedef int ( ::SireIO::PDB2::*nModels_function_type)(  ) const;
+            nModels_function_type nModels_function_value( &::SireIO::PDB2::nModels );
+            
+            PDB2_exposer.def( 
+                "nModels"
+                , nModels_function_value
+                , "" );
+        
+        }
         { //::SireIO::PDB2::nSheets
         
             typedef int ( ::SireIO::PDB2::*nSheets_function_type)(  ) const;
