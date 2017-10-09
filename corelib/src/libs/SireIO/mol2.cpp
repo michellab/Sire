@@ -1918,7 +1918,7 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
 
     return mol.setProperty(map["coordinates"], coords)
               .setProperty(map["charge"], charges)
-              .setProperty(map["type"], types)
+              .setProperty(map["sybyl-atom-type"], types)
               .setProperty(map["status-bit"], status_bits)
               .commit();
 }
