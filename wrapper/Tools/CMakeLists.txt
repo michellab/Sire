@@ -19,6 +19,7 @@ set ( SCRIPTS
         QuantumToMM.py
         OpenMMMD.py
         Plot.py
+        RFcutoff.py
         StandardState.py
         WaterChanger.py
         WaterView.py
