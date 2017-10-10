@@ -53,7 +53,7 @@ void register_AngleParameterName_class(){
 
     { //::SireMM::AngleParameterName
         typedef bp::class_< SireMM::AngleParameterName > AngleParameterName_exposer_t;
-        AngleParameterName_exposer_t AngleParameterName_exposer = AngleParameterName_exposer_t( "AngleParameterName", "This class provides the default name of the\nproperty that contains the angle parameters", bp::init< >("") );
+        AngleParameterName_exposer_t AngleParameterName_exposer = AngleParameterName_exposer_t( "AngleParameterName", "", bp::init< >("") );
         bp::scope AngleParameterName_scope( AngleParameterName_exposer );
         { //::SireMM::AngleParameterName::angle
         

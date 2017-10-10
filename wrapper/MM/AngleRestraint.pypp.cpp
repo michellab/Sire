@@ -44,7 +44,7 @@ void register_AngleRestraint_class(){
 
     { //::SireMM::AngleRestraint
         typedef bp::class_< SireMM::AngleRestraint, bp::bases< SireMM::Restraint3D, SireMM::Restraint, SireBase::Property > > AngleRestraint_exposer_t;
-        AngleRestraint_exposer_t AngleRestraint_exposer = AngleRestraint_exposer_t( "AngleRestraint", "This is a restraint that operates on the angle between\nthree SireMM::Point objects (e.g. three atoms in a molecule)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        AngleRestraint_exposer_t AngleRestraint_exposer = AngleRestraint_exposer_t( "AngleRestraint", "", bp::init< >("Constructor") );
         bp::scope AngleRestraint_scope( AngleRestraint_exposer );
         AngleRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("restraint") ), "Construct a restraint that acts on the angle within the\nthree points point0, point1 and point2 (theta == a(012)),\nrestraining the angle within these points using the expression\nrestraint") );
         AngleRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, SireCAS::Values const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("restraint"), bp::arg("values") ), "Construct a restraint that acts on the angle within the\nthree points point0, point1 and point2 (theta == a(012)),\nrestraining the angle within these points using the expression\nrestraint") );

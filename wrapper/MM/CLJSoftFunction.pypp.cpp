@@ -55,7 +55,7 @@ void register_CLJSoftFunction_class(){
 
     { //::SireMM::CLJSoftFunction
         typedef bp::class_< SireMM::CLJSoftFunction, bp::bases< SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property >, boost::noncopyable > CLJSoftFunction_exposer_t;
-        CLJSoftFunction_exposer_t CLJSoftFunction_exposer = CLJSoftFunction_exposer_t( "CLJSoftFunction", "This is the base class of all soft-core CLJ functions that have a cutoff\n\nAuthor: Christopher Woods\n", bp::no_init );
+        CLJSoftFunction_exposer_t CLJSoftFunction_exposer = CLJSoftFunction_exposer_t( "CLJSoftFunction", "", bp::no_init );
         bp::scope CLJSoftFunction_scope( CLJSoftFunction_exposer );
         { //::SireMM::CLJSoftFunction::alpha
         

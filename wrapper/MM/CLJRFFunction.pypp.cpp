@@ -43,7 +43,7 @@ void register_CLJRFFunction_class(){
 
     { //::SireMM::CLJRFFunction
         typedef bp::class_< SireMM::CLJRFFunction, bp::bases< SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property > > CLJRFFunction_exposer_t;
-        CLJRFFunction_exposer_t CLJRFFunction_exposer = CLJRFFunction_exposer_t( "CLJRFFunction", "This CLJFunction calculates the intermolecular coulomb and LJ energy of the passed\nCLJAtoms using a reaction field cutoff\n\nAuthor: Christopher Woods\n", bp::init< >("") );
+        CLJRFFunction_exposer_t CLJRFFunction_exposer = CLJRFFunction_exposer_t( "CLJRFFunction", "", bp::init< >("") );
         bp::scope CLJRFFunction_scope( CLJRFFunction_exposer );
         CLJRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") ), "Copy constructor") );
         CLJRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );

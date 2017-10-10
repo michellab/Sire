@@ -67,7 +67,7 @@ void register_AmberDihPart_class(){
 
     { //::SireMM::AmberDihPart
         typedef bp::class_< SireMM::AmberDihPart > AmberDihPart_exposer_t;
-        AmberDihPart_exposer_t AmberDihPart_exposer = AmberDihPart_exposer_t( "AmberDihPart", "This simple class holds Amber dihedral or improper parameter parts", bp::init< bp::optional< double, double, double > >(( bp::arg("k")=0, bp::arg("periodicity")=0, bp::arg("phase")=0 ), "") );
+        AmberDihPart_exposer_t AmberDihPart_exposer = AmberDihPart_exposer_t( "AmberDihPart", "", bp::init< bp::optional< double, double, double > >(( bp::arg("k")=0, bp::arg("periodicity")=0, bp::arg("phase")=0 ), "") );
         bp::scope AmberDihPart_scope( AmberDihPart_exposer );
         AmberDihPart_exposer.def( bp::init< SireMM::AmberDihPart const & >(( bp::arg("other") ), "") );
         { //::SireMM::AmberDihPart::energy

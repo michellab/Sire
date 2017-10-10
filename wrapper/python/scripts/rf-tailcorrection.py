@@ -143,7 +143,6 @@ if args.disable_crf:
 elif "disable_crf" in params:
     disable_crf = params["disable_crf"]
 
-
 if not (os.path.exists(coord_file) and os.path.exists(top_file) \
         and os.path.exists(morph_file) and os.path.exists(traj_file)):
     parser.print_help()

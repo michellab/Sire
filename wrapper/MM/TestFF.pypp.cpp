@@ -39,7 +39,7 @@ void register_TestFF_class(){
 
     { //::SireMM::TestFF
         typedef bp::class_< SireMM::TestFF > TestFF_exposer_t;
-        TestFF_exposer_t TestFF_exposer = TestFF_exposer_t( "TestFF", "This is a simple forcefield that is designed to let me test new\nways of calculating energies before rolling out the new design\nto the rest of Sire\n\nAuthor: Christopher Woods\n", bp::init< >("") );
+        TestFF_exposer_t TestFF_exposer = TestFF_exposer_t( "TestFF", "", bp::init< >("") );
         bp::scope TestFF_scope( TestFF_exposer );
         TestFF_exposer.def( bp::init< SireMM::TestFF const & >(( bp::arg("other") ), "") );
         { //::SireMM::TestFF::add

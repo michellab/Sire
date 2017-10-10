@@ -60,7 +60,7 @@ void register_InterGroupFF_class(){
 
     { //::SireMM::InterGroupFF
         typedef bp::class_< SireMM::InterGroupFF, bp::bases< SireFF::G2FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > InterGroupFF_exposer_t;
-        InterGroupFF_exposer_t InterGroupFF_exposer = InterGroupFF_exposer_t( "InterGroupFF", "This is a forcefield that calculates the intermolecular coulomb\nand Lennard Jones (LJ) energy between all molecules in group 0\nand all molecules in group 1.\n\nIt also calculates the interactions between all molecules in group 0\nwith any fixed atoms added to this forcefield\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        InterGroupFF_exposer_t InterGroupFF_exposer = InterGroupFF_exposer_t( "InterGroupFF", "", bp::init< >("Constructor") );
         bp::scope InterGroupFF_scope( InterGroupFF_exposer );
         InterGroupFF_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "Construct, specifying the name of the forcefield") );
         InterGroupFF_exposer.def( bp::init< SireMM::InterGroupFF const & >(( bp::arg("other") ), "Copy constructor") );

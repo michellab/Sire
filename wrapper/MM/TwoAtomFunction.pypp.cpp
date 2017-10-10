@@ -40,7 +40,7 @@ void register_TwoAtomFunction_class(){
 
     { //::SireMM::TwoAtomFunction
         typedef bp::class_< SireMM::TwoAtomFunction, bp::bases< SireMM::AtomFunction > > TwoAtomFunction_exposer_t;
-        TwoAtomFunction_exposer_t TwoAtomFunction_exposer = TwoAtomFunction_exposer_t( "TwoAtomFunction", "This class holds a function that acts using the\ncoordinate information of just two atoms", bp::init< >("Constructor") );
+        TwoAtomFunction_exposer_t TwoAtomFunction_exposer = TwoAtomFunction_exposer_t( "TwoAtomFunction", "", bp::init< >("Constructor") );
         bp::scope TwoAtomFunction_scope( TwoAtomFunction_exposer );
         TwoAtomFunction_exposer.def( bp::init< SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireCAS::Expression const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("function") ), "Construct for the specified pair of atoms with the specified function") );
         TwoAtomFunction_exposer.def( bp::init< SireMM::TwoAtomFunction const & >(( bp::arg("other") ), "Copy constructor") );

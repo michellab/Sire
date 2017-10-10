@@ -26,7 +26,7 @@ void register_UreyBradleyComponent_class(){
 
     { //::SireMM::UreyBradleyComponent
         typedef bp::class_< SireMM::UreyBradleyComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > UreyBradleyComponent_exposer_t;
-        UreyBradleyComponent_exposer_t UreyBradleyComponent_exposer = UreyBradleyComponent_exposer_t( "UreyBradleyComponent", "This class represents a UreyBradley component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
+        UreyBradleyComponent_exposer_t UreyBradleyComponent_exposer = UreyBradleyComponent_exposer_t( "UreyBradleyComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope UreyBradleyComponent_scope( UreyBradleyComponent_exposer );
         UreyBradleyComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
         UreyBradleyComponent_exposer.def( bp::init< SireMM::UreyBradleyComponent const & >(( bp::arg("other") ), "Copy constructor") );

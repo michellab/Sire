@@ -59,7 +59,6 @@
 
 void register_SireMM_objects()
 {
-
     ObjectRegistry::registerConverterFor< SireMM::CLJExtractor >();
     ObjectRegistry::registerConverterFor< SireMM::InterGroupFF >();
     ObjectRegistry::registerConverterFor< SireMM::LJPair >();
@@ -181,6 +180,5 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::Intra14LJComponent >();
     ObjectRegistry::registerConverterFor< SireMM::Intra14Component >();
     ObjectRegistry::registerConverterFor< SireMM::InternalComponent >();
-
 }
 

@@ -53,7 +53,7 @@ void register_StretchStretchParameterName_class(){
 
     { //::SireMM::StretchStretchParameterName
         typedef bp::class_< SireMM::StretchStretchParameterName > StretchStretchParameterName_exposer_t;
-        StretchStretchParameterName_exposer_t StretchStretchParameterName_exposer = StretchStretchParameterName_exposer_t( "StretchStretchParameterName", "This class provides the default name of the\nproperty that contains the stretch-stretch parameters", bp::init< >("") );
+        StretchStretchParameterName_exposer_t StretchStretchParameterName_exposer = StretchStretchParameterName_exposer_t( "StretchStretchParameterName", "", bp::init< >("") );
         bp::scope StretchStretchParameterName_scope( StretchStretchParameterName_exposer );
         { //::SireMM::StretchStretchParameterName::stretchStretch
         

@@ -23,10 +23,10 @@ void register_LJNBPairs_class(){
 
     { //::SireMM::LJNBPairs
         typedef bp::class_< SireMM::LJNBPairs, bp::bases< SireMM::AtomPairs<SireMM::LJScaleFactor>, SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > LJNBPairs_exposer_t;
-        LJNBPairs_exposer_t LJNBPairs_exposer = LJNBPairs_exposer_t( "LJNBPairs", "This class holds all of the non-bonded scale factors that are used\nto scale the intramolecular atom-atom Lennard-Jones\ninteractions between pairs of atoms, e.g. for most MM forcefields,\nthe scale factors for 1-1, 1-2 and 1-3 pairs are zero, the\n1-4 pairs are scaled by a LJ factor (e.g. 0.5 for OPLS)\nand the 1-5 and above pairs are not scaled (i.e. the factors equal 1)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
+        LJNBPairs_exposer_t LJNBPairs_exposer = LJNBPairs_exposer_t( "LJNBPairs", "", bp::init< >("Null constructor") );
         bp::scope LJNBPairs_scope( LJNBPairs_exposer );
-        LJNBPairs_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireMM::LJScaleFactor const & > >(( bp::arg("molview"), bp::arg("default_scale")=SireMM::LJScaleFactor(1) ), "Construct for the molecule viewed in molview") );
-        LJNBPairs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, bp::optional< SireMM::LJScaleFactor const & > >(( bp::arg("molinfo"), bp::arg("default_scale")=SireMM::LJScaleFactor(1) ), "Construct, using default_scale for all of the atom-atom\ninteractions in the molecule molinfo") );
+        LJNBPairs_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireMM::LJScaleFactor const & > >(( bp::arg("molview"), bp::arg("default_scale")=SireMM::LJScaleFactor(1.0e+0) ), "Construct for the molecule viewed in molview") );
+        LJNBPairs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, bp::optional< SireMM::LJScaleFactor const & > >(( bp::arg("molinfo"), bp::arg("default_scale")=SireMM::LJScaleFactor(1.0e+0) ), "Construct, using default_scale for all of the atom-atom\ninteractions in the molecule molinfo") );
         LJNBPairs_exposer.def( bp::init< SireMM::CLJNBPairs const & >(( bp::arg("cljpairs") ), "Construct from the LJ scaling factors in cljpairs") );
         LJNBPairs_exposer.def( bp::init< SireMM::LJNBPairs const & >(( bp::arg("other") ), "Copy constructor") );
         LJNBPairs_exposer.def( bp::self != bp::self );

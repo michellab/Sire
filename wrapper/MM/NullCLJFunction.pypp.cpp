@@ -57,7 +57,7 @@ void register_NullCLJFunction_class(){
 
     { //::SireMM::NullCLJFunction
         typedef bp::class_< SireMM::NullCLJFunction, bp::bases< SireMM::CLJFunction, SireBase::Property > > NullCLJFunction_exposer_t;
-        NullCLJFunction_exposer_t NullCLJFunction_exposer = NullCLJFunction_exposer_t( "NullCLJFunction", "This is a null (empty) CLJ function that calculates nothing", bp::init< >("Constructor") );
+        NullCLJFunction_exposer_t NullCLJFunction_exposer = NullCLJFunction_exposer_t( "NullCLJFunction", "", bp::init< >("Constructor") );
         bp::scope NullCLJFunction_scope( NullCLJFunction_exposer );
         NullCLJFunction_exposer.def( bp::init< SireMM::NullCLJFunction const & >(( bp::arg("other") ), "Copy constructor") );
         NullCLJFunction_exposer.def( bp::self != bp::self );

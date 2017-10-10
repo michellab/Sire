@@ -25,7 +25,7 @@ void register_LJProbe_class(){
 
     { //::SireMM::LJProbe
         typedef bp::class_< SireMM::LJProbe, bp::bases< SireFF::Probe, SireBase::Property > > LJProbe_exposer_t;
-        LJProbe_exposer_t LJProbe_exposer = LJProbe_exposer_t( "LJProbe", "This is a probe charge that can be used to probe the\nLJ field or potential in a forcefield", bp::init< >("Constructor - this makes a probe that is the equivalent\nof an OPLS united atom methane molecule") );
+        LJProbe_exposer_t LJProbe_exposer = LJProbe_exposer_t( "LJProbe", "", bp::init< >("Constructor - this makes a probe that is the equivalent\nof an OPLS united atom methane molecule") );
         bp::scope LJProbe_scope( LJProbe_exposer );
         LJProbe_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("ljparam") ), "Construct a probe with parameters in ljparam") );
         LJProbe_exposer.def( bp::init< SireMM::CLJProbe const & >(( bp::arg("cljprobe") ), "Construct to take the LJ probe from the passed CLJProbe") );

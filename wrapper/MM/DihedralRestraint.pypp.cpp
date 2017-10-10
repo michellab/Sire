@@ -44,7 +44,7 @@ void register_DihedralRestraint_class(){
 
     { //::SireMM::DihedralRestraint
         typedef bp::class_< SireMM::DihedralRestraint, bp::bases< SireMM::Restraint3D, SireMM::Restraint, SireBase::Property > > DihedralRestraint_exposer_t;
-        DihedralRestraint_exposer_t DihedralRestraint_exposer = DihedralRestraint_exposer_t( "DihedralRestraint", "This is a restraint that operates on the dihedral angle between\nfour SireMM::Point objects (e.g. four atoms in a molecule)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        DihedralRestraint_exposer_t DihedralRestraint_exposer = DihedralRestraint_exposer_t( "DihedralRestraint", "", bp::init< >("Constructor") );
         bp::scope DihedralRestraint_scope( DihedralRestraint_exposer );
         DihedralRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("restraint") ), "Construct a restraint that acts on the angle within the\nthree points point0, point1 and point2 (theta == a(012)),\nrestraining the angle within these points using the expression\nrestraint") );
         DihedralRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, SireCAS::Values const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("restraint"), bp::arg("values") ), "Construct a restraint that acts on the angle within the\nthree points point0, point1 and point2 (theta == a(012)),\nrestraining the angle within these points using the expression\nrestraint") );

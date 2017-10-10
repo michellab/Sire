@@ -24,7 +24,7 @@ void register_CoulombComponent_class(){
 
     { //::SireMM::CoulombComponent
         typedef bp::class_< SireMM::CoulombComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > CoulombComponent_exposer_t;
-        CoulombComponent_exposer_t CoulombComponent_exposer = CoulombComponent_exposer_t( "CoulombComponent", "This class represents a Coulomb component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
+        CoulombComponent_exposer_t CoulombComponent_exposer = CoulombComponent_exposer_t( "CoulombComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope CoulombComponent_scope( CoulombComponent_exposer );
         CoulombComponent_exposer.def( bp::init< SireFF::FFName const &, QString const & >(( bp::arg("ffname"), bp::arg("suffix") ), "Construct using the passed forcefield name and suffix") );
         CoulombComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );

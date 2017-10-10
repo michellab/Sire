@@ -43,9 +43,9 @@ void register_CLJBoxIndex_class(){
 
     { //::SireMM::CLJBoxIndex
         typedef bp::class_< SireMM::CLJBoxIndex > CLJBoxIndex_exposer_t;
-        CLJBoxIndex_exposer_t CLJBoxIndex_exposer = CLJBoxIndex_exposer_t( "CLJBoxIndex", "This class provides a simple i,j,k index of a box in the grid,\nwith, optionally, the index of a particular atom in the grid box", bp::init< >("Null constructor") );
+        CLJBoxIndex_exposer_t CLJBoxIndex_exposer = CLJBoxIndex_exposer_t( "CLJBoxIndex", "", bp::init< >("Null constructor") );
         bp::scope CLJBoxIndex_scope( CLJBoxIndex_exposer );
-        CLJBoxIndex_exposer.def( bp::init< qint16, qint16, qint16, bp::optional< qint16 > >(( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("atom_idx")=(::qint16)(-1) ), "Construct the index of the box at index i,j,k with (optionally supplied)\nindex of a particular atom in the box") );
+        CLJBoxIndex_exposer.def( bp::init< qint16, qint16, qint16, bp::optional< qint16 > >(( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("atom_idx")=(::qint16)(-0x00000000000000001) ), "Construct the index of the box at index i,j,k with (optionally supplied)\nindex of a particular atom in the box") );
         CLJBoxIndex_exposer.def( bp::init< SireMM::CLJBoxIndex const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJBoxIndex::box
         

@@ -43,7 +43,7 @@ void register_CoordGroupArrayArray_class(){
 
     { //::SireVol::CoordGroupArrayArray
         typedef bp::class_< SireVol::CoordGroupArrayArray > CoordGroupArrayArray_exposer_t;
-        CoordGroupArrayArray_exposer_t CoordGroupArrayArray_exposer = CoordGroupArrayArray_exposer_t( "CoordGroupArrayArray", "This class holds an array of CoordGroupArrays. This is\nused to pack all of the CoordGroupArrays (and thus\nall contained CoordGroups) into a single contiguous\nblock of memory. This should improve efficiency of\niterating over these groupscoordinates, but it does\nmake this array less flexible than a simple\nQVector<CoordGroupArray>, or QVector< QVector<CoordGroup> >.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty array") );
+        CoordGroupArrayArray_exposer_t CoordGroupArrayArray_exposer = CoordGroupArrayArray_exposer_t( "CoordGroupArrayArray", "", bp::init< >("Construct an empty array") );
         bp::scope CoordGroupArrayArray_scope( CoordGroupArrayArray_exposer );
         CoordGroupArrayArray_exposer.def( bp::init< SireVol::CoordGroup const & >(( bp::arg("cgroup") ), "Construct an array that contains just the CoordGroup cgroup\n(in a single array that contains this group)") );
         CoordGroupArrayArray_exposer.def( bp::init< SireVol::CoordGroupArray const & >(( bp::arg("cgarray") ), "Construct an array that contains just the CoordGroupArray cgarray") );

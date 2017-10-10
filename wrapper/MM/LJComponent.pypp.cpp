@@ -24,7 +24,7 @@ void register_LJComponent_class(){
 
     { //::SireMM::LJComponent
         typedef bp::class_< SireMM::LJComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > LJComponent_exposer_t;
-        LJComponent_exposer_t LJComponent_exposer = LJComponent_exposer_t( "LJComponent", "This class represents a LJ component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
+        LJComponent_exposer_t LJComponent_exposer = LJComponent_exposer_t( "LJComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope LJComponent_scope( LJComponent_exposer );
         LJComponent_exposer.def( bp::init< SireFF::FFName const &, QString const & >(( bp::arg("ffname"), bp::arg("suffix") ), "Construct using the name of the forcefield, and the passed suffix") );
         LJComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );

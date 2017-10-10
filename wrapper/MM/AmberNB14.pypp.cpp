@@ -67,7 +67,7 @@ void register_AmberNB14_class(){
 
     { //::SireMM::AmberNB14
         typedef bp::class_< SireMM::AmberNB14 > AmberNB14_exposer_t;
-        AmberNB14_exposer_t AmberNB14_exposer = AmberNB14_exposer_t( "AmberNB14", "This simple class holds Amber parameters for a 1-4 scale factor", bp::init< bp::optional< double, double > >(( bp::arg("cscl")=0, bp::arg("ljscl")=0 ), "") );
+        AmberNB14_exposer_t AmberNB14_exposer = AmberNB14_exposer_t( "AmberNB14", "", bp::init< bp::optional< double, double > >(( bp::arg("cscl")=0, bp::arg("ljscl")=0 ), "") );
         bp::scope AmberNB14_scope( AmberNB14_exposer );
         AmberNB14_exposer.def( bp::init< SireMM::AmberNB14 const & >(( bp::arg("other") ), "") );
         { //::SireMM::AmberNB14::cscl

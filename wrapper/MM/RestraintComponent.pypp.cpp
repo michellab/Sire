@@ -24,7 +24,7 @@ void register_RestraintComponent_class(){
 
     { //::SireMM::RestraintComponent
         typedef bp::class_< SireMM::RestraintComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > RestraintComponent_exposer_t;
-        RestraintComponent_exposer_t RestraintComponent_exposer = RestraintComponent_exposer_t( "RestraintComponent", "This class represents a restraint component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
+        RestraintComponent_exposer_t RestraintComponent_exposer = RestraintComponent_exposer_t( "RestraintComponent", "", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope RestraintComponent_scope( RestraintComponent_exposer );
         RestraintComponent_exposer.def( bp::init< SireFF::FFName const &, QString const & >(( bp::arg("ffname"), bp::arg("suffix") ), "Construct using the passed forcefield name and suffix") );
         RestraintComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );

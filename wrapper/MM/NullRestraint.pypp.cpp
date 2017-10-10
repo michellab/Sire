@@ -45,7 +45,7 @@ void register_NullRestraint_class(){
 
     { //::SireMM::NullRestraint
         typedef bp::class_< SireMM::NullRestraint, bp::bases< SireMM::Restraint3D, SireMM::Restraint, SireBase::Property > > NullRestraint_exposer_t;
-        NullRestraint_exposer_t NullRestraint_exposer = NullRestraint_exposer_t( "NullRestraint", "This is a null restraint, that does not affect the energy\nor force on any molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        NullRestraint_exposer_t NullRestraint_exposer = NullRestraint_exposer_t( "NullRestraint", "", bp::init< >("Constructor") );
         bp::scope NullRestraint_scope( NullRestraint_exposer );
         NullRestraint_exposer.def( bp::init< SireMM::NullRestraint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::NullRestraint::builtinSymbols

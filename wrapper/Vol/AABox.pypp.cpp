@@ -29,7 +29,7 @@ void register_AABox_class(){
 
     { //::SireVol::AABox
         typedef bp::class_< SireVol::AABox > AABox_exposer_t;
-        AABox_exposer_t AABox_exposer = AABox_exposer_t( "AABox", "\nAn AABox is an axis-aligned bounding box that is the smallest box that is aligned with the three cartesian axes that completely encases a CoordGroup. It is trivial to obtain the bounding sphere from the AABox. The AABox is used by the distance calculators to quickly determine whether two CoordGroups are within the cutoff radius, and to obtain all CoordGroups that are within particular regions of space.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty AABox") );
+        AABox_exposer_t AABox_exposer = AABox_exposer_t( "AABox", "", bp::init< >("Construct an empty AABox") );
         bp::scope AABox_scope( AABox_exposer );
         AABox_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("point") ), "Construct an AABox that completely encloses the point point") );
         AABox_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("cent"), bp::arg("extents") ), "Construct an AABox with center at cent, and half-extents extents") );

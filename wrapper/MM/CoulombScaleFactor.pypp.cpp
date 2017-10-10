@@ -23,7 +23,7 @@ void register_CoulombScaleFactor_class(){
 
     { //::SireMM::CoulombScaleFactor
         typedef bp::class_< SireMM::CoulombScaleFactor > CoulombScaleFactor_exposer_t;
-        CoulombScaleFactor_exposer_t CoulombScaleFactor_exposer = CoulombScaleFactor_exposer_t( "CoulombScaleFactor", "This is the interatomic scale factor for the coulomb\nparameters for the intramolecular energy", bp::init< bp::optional< double > >(( bp::arg("scl")=0 ), "Construct with the Coulomb scale factor equal to scl") );
+        CoulombScaleFactor_exposer_t CoulombScaleFactor_exposer = CoulombScaleFactor_exposer_t( "CoulombScaleFactor", "", bp::init< bp::optional< double > >(( bp::arg("scl")=0 ), "Construct with the Coulomb scale factor equal to scl") );
         bp::scope CoulombScaleFactor_scope( CoulombScaleFactor_exposer );
         CoulombScaleFactor_exposer.def( bp::init< SireMM::CoulombScaleFactor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CoulombScaleFactor::coulomb

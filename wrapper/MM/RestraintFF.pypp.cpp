@@ -48,7 +48,7 @@ void register_RestraintFF_class(){
 
     { //::SireMM::RestraintFF
         typedef bp::class_< SireMM::RestraintFF, bp::bases< SireFF::FF3D, SireFF::G1FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > RestraintFF_exposer_t;
-        RestraintFF_exposer_t RestraintFF_exposer = RestraintFF_exposer_t( "RestraintFF", "This is a forcefield that holds and evaluates a collection of\nRestraint3D restraints.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        RestraintFF_exposer_t RestraintFF_exposer = RestraintFF_exposer_t( "RestraintFF", "", bp::init< >("Constructor") );
         bp::scope RestraintFF_scope( RestraintFF_exposer );
         RestraintFF_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "Construct, giving the forcefield the specified name") );
         RestraintFF_exposer.def( bp::init< SireMM::RestraintFF const & >(( bp::arg("other") ), "Copy constructor") );

@@ -25,7 +25,7 @@ void register_CLJProbe_class(){
 
     { //::SireMM::CLJProbe
         typedef bp::class_< SireMM::CLJProbe, bp::bases< SireFF::Probe, SireBase::Property > > CLJProbe_exposer_t;
-        CLJProbe_exposer_t CLJProbe_exposer = CLJProbe_exposer_t( "CLJProbe", "This is a probe used to probe the coulomb+LJ field\nor potential at points in a forcefield", bp::init< >("Construct a default probe the represents a unit positive charge,\nand an OPLS united atom methane") );
+        CLJProbe_exposer_t CLJProbe_exposer = CLJProbe_exposer_t( "CLJProbe", "", bp::init< >("Construct a default probe the represents a unit positive charge,\nand an OPLS united atom methane") );
         bp::scope CLJProbe_scope( CLJProbe_exposer );
         CLJProbe_exposer.def( bp::init< SireUnits::Dimension::Charge >(( bp::arg("charge") ), "Construct a probe that is just the passed charge (with dummy LJ parameters)") );
         CLJProbe_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("ljparam") ), "Construct a probe that is just the passed LJ parameter (zero charge)") );

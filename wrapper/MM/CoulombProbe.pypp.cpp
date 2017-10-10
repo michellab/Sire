@@ -25,7 +25,7 @@ void register_CoulombProbe_class(){
 
     { //::SireMM::CoulombProbe
         typedef bp::class_< SireMM::CoulombProbe, bp::bases< SireFF::Probe, SireBase::Property > > CoulombProbe_exposer_t;
-        CoulombProbe_exposer_t CoulombProbe_exposer = CoulombProbe_exposer_t( "CoulombProbe", "This is a probe charge that can be used to probe the\ncoulomb electric field or potential in a forcefield", bp::init< >("Construct a default probe (+1 unit charge)") );
+        CoulombProbe_exposer_t CoulombProbe_exposer = CoulombProbe_exposer_t( "CoulombProbe", "", bp::init< >("Construct a default probe (+1 unit charge)") );
         bp::scope CoulombProbe_scope( CoulombProbe_exposer );
         CoulombProbe_exposer.def( bp::init< SireUnits::Dimension::Charge >(( bp::arg("charge") ), "Construct a probe with charge charge") );
         CoulombProbe_exposer.def( bp::init< SireMM::CLJProbe const & >(( bp::arg("cljprobe") ), "Construct a probe with charge taken from cljprobe") );

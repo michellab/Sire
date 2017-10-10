@@ -39,7 +39,7 @@ void register_CoordGroupBase_class(){
 
     { //::SireVol::CoordGroupBase
         typedef bp::class_< SireVol::CoordGroupBase, boost::noncopyable > CoordGroupBase_exposer_t;
-        CoordGroupBase_exposer_t CoordGroupBase_exposer = CoordGroupBase_exposer_t( "CoordGroupBase", "This is the base class of all CoordGroup-like classes\n(e.g. CoordGroup and CoordGroupEditor). CoordGroup classes\nhold a group of coordinates, together with an axis-aligned\nbox that completely encloses all of those points. The\nclass is implicitly shared, and, since it is used in the\nmost performance-sensitive parts of the code, has\na slightly more complex implicit-sharing design.\n\nAuthor: Christopher Woods\n", bp::no_init );
+        CoordGroupBase_exposer_t CoordGroupBase_exposer = CoordGroupBase_exposer_t( "CoordGroupBase", "", bp::no_init );
         bp::scope CoordGroupBase_scope( CoordGroupBase_exposer );
         { //::SireVol::CoordGroupBase::aaBox
         

@@ -42,7 +42,7 @@ void register_CLJ14Group_class(){
 
     { //::SireMM::CLJ14Group
         typedef bp::class_< SireMM::CLJ14Group > CLJ14Group_exposer_t;
-        CLJ14Group_exposer_t CLJ14Group_exposer = CLJ14Group_exposer_t( "CLJ14Group", "This class holds all of the information needed to calculate\nthe 14-nonbonded energy for a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        CLJ14Group_exposer_t CLJ14Group_exposer = CLJ14Group_exposer_t( "CLJ14Group", "", bp::init< >("Constructor") );
         bp::scope CLJ14Group_scope( CLJ14Group_exposer );
         CLJ14Group_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to calculate the 14-energy of the passed molecule") );
         CLJ14Group_exposer.def( bp::init< SireMol::MoleculeView const &, SireMM::CLJFunction::COMBINING_RULES, bool, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("combining_rules"), bp::arg("is_strict"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to calculate the 14-energy of the passed molecule using the\nsupplied combining rules and strict mode") );

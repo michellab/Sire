@@ -49,7 +49,7 @@ namespace SireBase
 
 */
 template <class T>
-class SIREBASE_EXPORT SharedDataPointer
+class SharedDataPointer
 {
 public:
 

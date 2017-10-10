@@ -53,7 +53,7 @@ void register_CLJAtom_class(){
 
     { //::SireMM::CLJAtom
         typedef bp::class_< SireMM::CLJAtom > CLJAtom_exposer_t;
-        CLJAtom_exposer_t CLJAtom_exposer = CLJAtom_exposer_t( "CLJAtom", "This class holds everything about a single CLJAtom", bp::init< >("Null constructor") );
+        CLJAtom_exposer_t CLJAtom_exposer = CLJAtom_exposer_t( "CLJAtom", "", bp::init< >("Null constructor") );
         bp::scope CLJAtom_scope( CLJAtom_exposer );
         CLJAtom_exposer.def( bp::init< SireMaths::Vector, SireUnits::Dimension::Charge, SireMM::LJParameter, bp::optional< qint32 > >(( bp::arg("coords"), bp::arg("charge"), bp::arg("ljparam"), bp::arg("idnum")=(::qint32)(1) ), "Construct from the passed coordinates, charge and LJ parameters") );
         CLJAtom_exposer.def( bp::init< SireMM::CLJAtom const & >(( bp::arg("other") ), "Copy constructor") );

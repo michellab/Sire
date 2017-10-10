@@ -53,7 +53,7 @@ void register_StretchBendParameterName_class(){
 
     { //::SireMM::StretchBendParameterName
         typedef bp::class_< SireMM::StretchBendParameterName > StretchBendParameterName_exposer_t;
-        StretchBendParameterName_exposer_t StretchBendParameterName_exposer = StretchBendParameterName_exposer_t( "StretchBendParameterName", "This class provides the default name of the\nproperty that contains the stretch-bend parameters", bp::init< >("") );
+        StretchBendParameterName_exposer_t StretchBendParameterName_exposer = StretchBendParameterName_exposer_t( "StretchBendParameterName", "", bp::init< >("") );
         bp::scope StretchBendParameterName_scope( StretchBendParameterName_exposer );
         { //::SireMM::StretchBendParameterName::stretchBend
         

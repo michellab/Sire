@@ -41,7 +41,7 @@ void register_CoordGroupEditor_class(){
 
     { //::SireVol::CoordGroupEditor
         typedef bp::class_< SireVol::CoordGroupEditor, bp::bases< SireVol::CoordGroupBase > > CoordGroupEditor_exposer_t;
-        CoordGroupEditor_exposer_t CoordGroupEditor_exposer = CoordGroupEditor_exposer_t( "CoordGroupEditor", "This class is used to edit a CoordGroup. This class is used when you want to\nmake several small changes to a CoordGroup, but do not want the CoordGroup to\nupdate its internal state after each change (e.g. you are moving each point in\nturn, and do not want the AABox to be updated for every step)\n\nYou use a CoordGroupEditor like this;\n\node\n\ncreate a CoordGroup with space for 100 coordinates\nCoordGroup coordgroup(100);\n\ncreate an editor for this group\nCoordGroupEditor editor = coordgroup.edit();\n\nmanipulate each coordinate in turn\nfor (int i=0; i<100; ++i)\neditor[i] = Vector(i,i+1,i+2);\n\ncommit the changes\ncoordgroup = editor.commit();\n\nE:ndcode\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
+        CoordGroupEditor_exposer_t CoordGroupEditor_exposer = CoordGroupEditor_exposer_t( "CoordGroupEditor", "", bp::init< >("Null constructor") );
         bp::scope CoordGroupEditor_scope( CoordGroupEditor_exposer );
         CoordGroupEditor_exposer.def( bp::init< SireVol::CoordGroup const & >(( bp::arg("other") ), "Construct from a CoordGroup") );
         CoordGroupEditor_exposer.def( bp::init< SireVol::CoordGroupEditor const & >(( bp::arg("other") ), "Copy constructor") );

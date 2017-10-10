@@ -41,7 +41,7 @@ void register_CLJIntraShiftFunction_class(){
 
     { //::SireMM::CLJIntraShiftFunction
         typedef bp::class_< SireMM::CLJIntraShiftFunction, bp::bases< SireMM::CLJIntraFunction, SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property > > CLJIntraShiftFunction_exposer_t;
-        CLJIntraShiftFunction_exposer_t CLJIntraShiftFunction_exposer = CLJIntraShiftFunction_exposer_t( "CLJIntraShiftFunction", "This CLJFunction calculates the intramolecular coulomb and LJ energy of the passed\nCLJAtoms using a force shifted electrostatics cutoff\n\nAuthor: Christopher Woods\n", bp::init< >("") );
+        CLJIntraShiftFunction_exposer_t CLJIntraShiftFunction_exposer = CLJIntraShiftFunction_exposer_t( "CLJIntraShiftFunction", "", bp::init< >("") );
         bp::scope CLJIntraShiftFunction_scope( CLJIntraShiftFunction_exposer );
         CLJIntraShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") ), "Copy constructor") );
         CLJIntraShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );

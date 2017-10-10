@@ -23,7 +23,7 @@ void register_CLJScaleFactor_class(){
 
     { //::SireMM::CLJScaleFactor
         typedef bp::class_< SireMM::CLJScaleFactor, bp::bases< SireMM::LJScaleFactor, SireMM::CoulombScaleFactor > > CLJScaleFactor_exposer_t;
-        CLJScaleFactor_exposer_t CLJScaleFactor_exposer = CLJScaleFactor_exposer_t( "CLJScaleFactor", "This is the interatomic scale factor for the coulomb and\nLJ parameters for the intramolecular energy.", bp::init< bp::optional< double > >(( bp::arg("scl")=0 ), "Construct with both the Coulomb and LJ scale factors equal to scl") );
+        CLJScaleFactor_exposer_t CLJScaleFactor_exposer = CLJScaleFactor_exposer_t( "CLJScaleFactor", "", bp::init< bp::optional< double > >(( bp::arg("scl")=0 ), "Construct with both the Coulomb and LJ scale factors equal to scl") );
         bp::scope CLJScaleFactor_scope( CLJScaleFactor_exposer );
         CLJScaleFactor_exposer.def( bp::init< double, double >(( bp::arg("scale_coul"), bp::arg("scale_lj") ), "Construct with scale_coul Coulomb scaling, and scale_lj\nLJ scaling.") );
         CLJScaleFactor_exposer.def( bp::init< SireMM::CLJScaleFactor const & >(( bp::arg("other") ), "Copy constructor") );

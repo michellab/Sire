@@ -40,7 +40,7 @@ void register_StretchBendSymbols_class(){
 
     { //::SireMM::StretchBendSymbols
         typedef bp::class_< SireMM::StretchBendSymbols, bp::bases< SireMM::InternalSymbolsBase > > StretchBendSymbols_exposer_t;
-        StretchBendSymbols_exposer_t StretchBendSymbols_exposer = StretchBendSymbols_exposer_t( "StretchBendSymbols", "This class holds the symbols required for the stretch-bend parameters.\nThese are a function of the angle of atoms 0-1-2 (theta) and\nthe distances between each pair of atoms (r01, r21 and r12)", bp::init< >("") );
+        StretchBendSymbols_exposer_t StretchBendSymbols_exposer = StretchBendSymbols_exposer_t( "StretchBendSymbols", "", bp::init< >("") );
         bp::scope StretchBendSymbols_scope( StretchBendSymbols_exposer );
         { //::SireMM::StretchBendSymbols::r01
         

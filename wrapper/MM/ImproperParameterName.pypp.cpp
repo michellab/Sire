@@ -53,7 +53,7 @@ void register_ImproperParameterName_class(){
 
     { //::SireMM::ImproperParameterName
         typedef bp::class_< SireMM::ImproperParameterName > ImproperParameterName_exposer_t;
-        ImproperParameterName_exposer_t ImproperParameterName_exposer = ImproperParameterName_exposer_t( "ImproperParameterName", "This class provides the default name of the\nproperty that contains the improper parameters", bp::init< >("") );
+        ImproperParameterName_exposer_t ImproperParameterName_exposer = ImproperParameterName_exposer_t( "ImproperParameterName", "", bp::init< >("") );
         bp::scope ImproperParameterName_scope( ImproperParameterName_exposer );
         { //::SireMM::ImproperParameterName::improper
         

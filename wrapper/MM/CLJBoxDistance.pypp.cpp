@@ -43,7 +43,7 @@ void register_CLJBoxDistance_class(){
 
     { //::SireMM::CLJBoxDistance
         typedef bp::class_< SireMM::CLJBoxDistance > CLJBoxDistance_exposer_t;
-        CLJBoxDistance_exposer_t CLJBoxDistance_exposer = CLJBoxDistance_exposer_t( "CLJBoxDistance", "This simple class holds the minimum distance between the two\nCLJBoxes at specified indicies\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        CLJBoxDistance_exposer_t CLJBoxDistance_exposer = CLJBoxDistance_exposer_t( "CLJBoxDistance", "", bp::init< >("Constructor") );
         bp::scope CLJBoxDistance_scope( CLJBoxDistance_exposer );
         CLJBoxDistance_exposer.def( bp::init< quint32, quint32, float >(( bp::arg("box0"), bp::arg("box1"), bp::arg("distance") ), "Construct saying that the minimum distance between the box with index box0\nand the box with index box1 is distance") );
         CLJBoxDistance_exposer.def( bp::init< SireMM::CLJBoxDistance const & >(( bp::arg("other") ), "Copy constructor") );

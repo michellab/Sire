@@ -37,7 +37,7 @@ void register_LJPerturbation_class(){
 
     { //::SireMM::LJPerturbation
         typedef bp::class_< SireMM::LJPerturbation, bp::bases< SireMol::Perturbation, SireBase::Property > > LJPerturbation_exposer_t;
-        LJPerturbation_exposer_t LJPerturbation_exposer = LJPerturbation_exposer_t( "LJPerturbation", "This is a perturbation that maps LJ parameters for a molecule\nfrom an initial to a final state\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() ), "Constructor - this creates a LJ perturbation that\nperturbs from LJs in initial_LJ to LJs in\nfinal_LJ, placing the current LJs in LJ,\nand using Perturbation::defaultEquation() to map the\nsigma and epsilon values of the LJ.") );
+        LJPerturbation_exposer_t LJPerturbation_exposer = LJPerturbation_exposer_t( "LJPerturbation", "", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() ), "Constructor - this creates a LJ perturbation that\nperturbs from LJs in initial_LJ to LJs in\nfinal_LJ, placing the current LJs in LJ,\nand using Perturbation::defaultEquation() to map the\nsigma and epsilon values of the LJ.") );
         bp::scope LJPerturbation_scope( LJPerturbation_exposer );
         bp::enum_< SireMM::LJPerturbation::MapType>("MapType")
             .value("MAP_SIGMA_AND_EPSILON", SireMM::LJPerturbation::MAP_SIGMA_AND_EPSILON)

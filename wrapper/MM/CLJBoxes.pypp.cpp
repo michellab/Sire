@@ -43,7 +43,7 @@ void register_CLJBoxes_class(){
 
     { //::SireMM::CLJBoxes
         typedef bp::class_< SireMM::CLJBoxes > CLJBoxes_exposer_t;
-        CLJBoxes_exposer_t CLJBoxes_exposer = CLJBoxes_exposer_t( "CLJBoxes", "The set of CLJBox boxes that contain all of the atoms in the system.\nSpace is divided into a series of cubic boxes, and atoms are divided\nbetween these so as to speed up the CLJ calculation (atoms in boxes\nthat are separated by more than the cutoff distance do not need to\nhave their interactions evaluated, and there is a natural parallelism\nbetween calculating interaction energies between pairs of boxes rather\nthan pairs of atoms)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
+        CLJBoxes_exposer_t CLJBoxes_exposer = CLJBoxes_exposer_t( "CLJBoxes", "", bp::init< >("Null constructor") );
         bp::scope CLJBoxes_scope( CLJBoxes_exposer );
         CLJBoxes_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("box_size") ), "Construct, specifying the box length") );
         CLJBoxes_exposer.def( bp::init< SireMM::CLJAtoms const & >(( bp::arg("atoms") ), "Box up the passed set of atoms into boxes of the default box size\n(5 angstroms)") );
@@ -381,7 +381,7 @@ void register_CLJBoxes_class(){
         }
         { //::SireMM::CLJBoxes::occupiedBoxes
         
-            typedef ::SireMM::CLJBoxes::Container const & ( ::SireMM::CLJBoxes::*occupiedBoxes_function_type)(  ) const;
+            typedef ::QVector< SireMM::CLJBoxPtr > const & ( ::SireMM::CLJBoxes::*occupiedBoxes_function_type)(  ) const;
             occupiedBoxes_function_type occupiedBoxes_function_value( &::SireMM::CLJBoxes::occupiedBoxes );
             
             CLJBoxes_exposer.def( 

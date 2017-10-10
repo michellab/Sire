@@ -37,7 +37,7 @@ void register_InternalPerturbation_class(){
 
     { //::SireMM::InternalPerturbation
         typedef bp::class_< SireMM::InternalPerturbation, bp::bases< SireMol::Perturbation, SireBase::Property >, boost::noncopyable > InternalPerturbation_exposer_t;
-        InternalPerturbation_exposer_t InternalPerturbation_exposer = InternalPerturbation_exposer_t( "InternalPerturbation", "This is the base class of all internal perturbations - these\nare perturbations that change the internal potential of a\nmolecule (e.g. the bond, angle and dihedral parameters)\n\nInternal perturbation work by applying the mapping function\nto the identities in initialForm() and finalForm() and then\nsubstituting these identities into baseExpression(), e.g.\n\ninitialForm() :=>  k = k_{initial},  r0 = r0_{initial}\nfinalForm()   :=>  k = k_{final},    r0 = r0_{final}\n\nbaseExpression() :=>  k  (r - r0)2\n\nmappingFunction() :=>  (1-lam)initial + lamfinal\n\nThis will result in the the perturbing function being\n\nperturbFunction() :=> [ (1-lam)k_{initial} + lamk_{final} ]\n(r - [(1-lam)r0_{initial} + lamr0_{final}])2\n\nequally, if\n\ninitialForm() :=> f = 3  cos(5 phi)\nfinalForm()   :=> f = 5  cos(8 phi)\n\nbaseExpression() :=>  f\n\nmappingFunction() :=> (1-lam)initial + lamfinal\n\nThis will result in\n\nperturbFunction() :=> (1-lam)(3  cos(5 phi)) + lam  (5  cos(8 phi))\n\nAuthor: Christopher Woods\n", bp::no_init );
+        InternalPerturbation_exposer_t InternalPerturbation_exposer = InternalPerturbation_exposer_t( "InternalPerturbation", "", bp::no_init );
         bp::scope InternalPerturbation_scope( InternalPerturbation_exposer );
         { //::SireMM::InternalPerturbation::baseExpression
         

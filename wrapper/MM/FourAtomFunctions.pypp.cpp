@@ -39,7 +39,7 @@ void register_FourAtomFunctions_class(){
 
     { //::SireMM::FourAtomFunctions
         typedef bp::class_< SireMM::FourAtomFunctions, bp::bases< SireMM::AtomFunctions, SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > FourAtomFunctions_exposer_t;
-        FourAtomFunctions_exposer_t FourAtomFunctions_exposer = FourAtomFunctions_exposer_t( "FourAtomFunctions", "This class holds the set of FourAtomFunction potentials that\nact between the atoms in a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
+        FourAtomFunctions_exposer_t FourAtomFunctions_exposer = FourAtomFunctions_exposer_t( "FourAtomFunctions", "", bp::init< >("Constructor") );
         bp::scope FourAtomFunctions_scope( FourAtomFunctions_exposer );
         FourAtomFunctions_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "Construct the container to hold the set of four-atom functions\nfor the molecule whose data is in moldata") );
         FourAtomFunctions_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "Construct the container to hold the set of four-atom functions\nfor the molecule whose layout information is in molinfo") );

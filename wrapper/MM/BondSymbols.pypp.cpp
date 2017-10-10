@@ -40,7 +40,7 @@ void register_BondSymbols_class(){
 
     { //::SireMM::BondSymbols
         typedef bp::class_< SireMM::BondSymbols, bp::bases< SireMM::InternalSymbolsBase > > BondSymbols_exposer_t;
-        BondSymbols_exposer_t BondSymbols_exposer = BondSymbols_exposer_t( "BondSymbols", "This class holds the symbols required for the bond\nand Urey-Bradley parameters. These are functions\nthat act between two atoms, using the distance\nbetween the atoms (r) as the input variable", bp::init< >("") );
+        BondSymbols_exposer_t BondSymbols_exposer = BondSymbols_exposer_t( "BondSymbols", "", bp::init< >("") );
         bp::scope BondSymbols_scope( BondSymbols_exposer );
         { //::SireMM::BondSymbols::r
         

@@ -40,7 +40,7 @@ void register_BendBendSymbols_class(){
 
     { //::SireMM::BendBendSymbols
         typedef bp::class_< SireMM::BendBendSymbols, bp::bases< SireMM::InternalSymbolsBase > > BendBendSymbols_exposer_t;
-        BendBendSymbols_exposer_t BendBendSymbols_exposer = BendBendSymbols_exposer_t( "BendBendSymbols", "This class holds the symbols required for the bend-bend parameters.\nThese are functions of the three angles within the four atoms\n0, 1, 2, 3, where atom 1 is in the middle. The angles are\ntherefore 0-1-2 (theta012), 2-1-3 (theta213) and 3-1-0 (theta310)", bp::init< >("") );
+        BendBendSymbols_exposer_t BendBendSymbols_exposer = BendBendSymbols_exposer_t( "BendBendSymbols", "", bp::init< >("") );
         bp::scope BendBendSymbols_scope( BendBendSymbols_exposer );
         { //::SireMM::BendBendSymbols::theta012
         
