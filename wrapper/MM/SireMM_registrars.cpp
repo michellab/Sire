@@ -3,146 +3,87 @@
 
 #include "SireMM_registrars.h"
 
+#include "restraint.h"
+#include "amberparams.h"
+#include "intragroupff.h"
+#include "intracoulombff.h"
 #include "dihedralrestraint.h"
+#include "atomljs.h"
+#include "intercljff.h"
+#include "intercoulombff.h"
+#include "intergroupff.h"
+#include "internalcomponent.h"
+#include "cljatoms.h"
+#include "cljworkspace.h"
+#include "interff.h"
+#include "internalparameters.h"
+#include "cljnbpairs.h"
+#include "restraintcomponent.h"
 #include "distancerestraint.h"
-#include "gridff2.h"
-#include "cljextractor.h"
+#include "cljdelta.h"
+#include "ljpair.h"
+#include "cljparam.h"
 #include "cljrffunction.h"
+#include "cljgroup.h"
 #include "cljfunction.h"
 #include "softcljcomponent.h"
-#include "cljboxes.h"
-#include "ljpair.h"
-#include "intergroupff.h"
-#include "restraint.h"
-#include "interljff.h"
-#include "threeatomfunctions.h"
-#include "cljshiftfunction.h"
-#include "interff.h"
-#include "ljperturbation.h"
-#include "cljnbpairs.h"
-#include "twoatomfunctions.h"
-#include "intercoulombff.h"
-#include "intraljff.h"
-#include "intrasoftcljff.h"
-#include "atomljs.h"
-#include "cljatoms.h"
-#include "multicljcomponent.h"
-#include "switchingfunction.h"
-#include "intracljff.h"
-#include "cljprobe.h"
-#include "clj14group.h"
-#include "cljgrid.h"
-#include "gridff.h"
-#include "intragroupff.h"
-#include "ljparameter.h"
-#include "fouratomfunctions.h"
-#include "cljdelta.h"
-#include "intraff.h"
-#include "anglerestraint.h"
-#include "restraintff.h"
-#include "cljworkspace.h"
-#include "intracoulombff.h"
-#include "intercljff.h"
-#include "internalcomponent.h"
-#include "internalperturbation.h"
-#include "cljcalculator.h"
-#include "restraintcomponent.h"
 #include "cljcomponent.h"
-#include "cljgroup.h"
+#include "cljextractor.h"
+#include "fouratomfunctions.h"
+#include "multicljcomponent.h"
+#include "cljshiftfunction.h"
+#include "gridff.h"
+#include "cljgrid.h"
 #include "intersoftcljff.h"
-#include "cljparam.h"
-#include "internalparameters.h"
+#include "interljff.h"
+#include "ljperturbation.h"
+#include "threeatomfunctions.h"
+#include "intraff.h"
+#include "restraintff.h"
+#include "intraljff.h"
+#include "cljcalculator.h"
+#include "twoatomfunctions.h"
+#include "intrasoftcljff.h"
+#include "switchingfunction.h"
 #include "internalff.h"
-#include "amberparams.h"
+#include "internalperturbation.h"
+#include "ljparameter.h"
+#include "cljboxes.h"
+#include "intracljff.h"
+#include "gridff2.h"
+#include "cljprobe.h"
+#include "anglerestraint.h"
+#include "clj14group.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_SireMM_objects()
 {
 
-    ObjectRegistry::registerConverterFor< SireMM::DihedralRestraint >();
-    ObjectRegistry::registerConverterFor< SireMM::DistanceRestraint >();
-    ObjectRegistry::registerConverterFor< SireMM::DoubleDistanceRestraint >();
-    ObjectRegistry::registerConverterFor< SireMM::TripleDistanceRestraint >();
-    ObjectRegistry::registerConverterFor< SireMM::HarmonicDistanceForceConstant >();
-    ObjectRegistry::registerConverterFor< SireMM::GridFF2 >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJExtractor >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJRFFunction >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJIntraRFFunction >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJSoftRFFunction >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJSoftIntraRFFunction >();
-    ObjectRegistry::registerConverterFor< SireMM::NullCLJFunction >();
-    ObjectRegistry::registerConverterFor< SireMM::SoftCLJComponent >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJBox >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJBoxIndex >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJBoxes >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJBoxDistance >();
-    ObjectRegistry::registerConverterFor< SireMM::LJPair >();
-    ObjectRegistry::registerConverterFor< SireMM::InterGroupFF >();
     ObjectRegistry::registerConverterFor< SireMM::NullRestraint >();
-    ObjectRegistry::registerConverterFor< SireMM::InterLJFFBase >();
-    ObjectRegistry::registerConverterFor< SireMM::InterLJFF >();
-    ObjectRegistry::registerConverterFor< SireMM::InterGroupLJFFBase >();
-    ObjectRegistry::registerConverterFor< SireMM::InterGroupLJFF >();
-    ObjectRegistry::registerConverterFor< SireMM::ThreeAtomFunctions >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJShiftFunction >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJIntraShiftFunction >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJSoftShiftFunction >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJSoftIntraShiftFunction >();
-    ObjectRegistry::registerConverterFor< SireMM::InterFF >();
-    ObjectRegistry::registerConverterFor< SireMM::LJPerturbation >();
-    ObjectRegistry::registerConverterFor< SireMM::CoulombScaleFactor >();
-    ObjectRegistry::registerConverterFor< SireMM::LJScaleFactor >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJScaleFactor >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJNBPairs >();
-    ObjectRegistry::registerConverterFor< SireMM::CoulombNBPairs >();
-    ObjectRegistry::registerConverterFor< SireMM::LJNBPairs >();
-    ObjectRegistry::registerConverterFor< SireMM::TwoAtomFunctions >();
-    ObjectRegistry::registerConverterFor< SireMM::InterCoulombFFBase >();
-    ObjectRegistry::registerConverterFor< SireMM::InterCoulombFF >();
-    ObjectRegistry::registerConverterFor< SireMM::InterGroupCoulombFFBase >();
-    ObjectRegistry::registerConverterFor< SireMM::InterGroupCoulombFF >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraLJFFBase >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraLJFF >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraGroupLJFFBase >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraGroupLJFF >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraSoftCLJFFBase >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraSoftCLJFF >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraGroupSoftCLJFFBase >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraGroupSoftCLJFF >();
-    ObjectRegistry::registerConverterFor< SireMM::AtomLJs >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJAtom >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJAtoms >();
-    ObjectRegistry::registerConverterFor< SireMM::MultiCLJComponent >();
-    ObjectRegistry::registerConverterFor< SireMM::NoCutoff >();
-    ObjectRegistry::registerConverterFor< SireMM::HarmonicSwitchingFunction >();
-    ObjectRegistry::registerConverterFor< SireMM::CHARMMSwitchingFunction >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraCLJFFBase >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraCLJFF >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraGroupCLJFFBase >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraGroupCLJFF >();
-    ObjectRegistry::registerConverterFor< SireMM::CoulombProbe >();
-    ObjectRegistry::registerConverterFor< SireMM::LJProbe >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJProbe >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJ14Group >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJGrid >();
-    ObjectRegistry::registerConverterFor< SireMM::GridFF >();
+    ObjectRegistry::registerConverterFor< SireMM::AmberParams >();
+    ObjectRegistry::registerConverterFor< SireMM::AmberBond >();
+    ObjectRegistry::registerConverterFor< SireMM::AmberAngle >();
+    ObjectRegistry::registerConverterFor< SireMM::AmberDihPart >();
+    ObjectRegistry::registerConverterFor< SireMM::AmberDihedral >();
+    ObjectRegistry::registerConverterFor< SireMM::AmberNB14 >();
+    ObjectRegistry::registerConverterFor< SireMM::AmberNBDihPart >();
     ObjectRegistry::registerConverterFor< SireMM::IntraGroupFF >();
-    ObjectRegistry::registerConverterFor< SireMM::LJParameter >();
-    ObjectRegistry::registerConverterFor< SireMM::FourAtomFunctions >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJDelta >();
-    ObjectRegistry::registerConverterFor< SireMM::IntraFF >();
-    ObjectRegistry::registerConverterFor< SireMM::AngleRestraint >();
-    ObjectRegistry::registerConverterFor< SireMM::RestraintFF >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJWorkspace >();
     ObjectRegistry::registerConverterFor< SireMM::IntraCoulombFFBase >();
     ObjectRegistry::registerConverterFor< SireMM::IntraCoulombFF >();
     ObjectRegistry::registerConverterFor< SireMM::IntraGroupCoulombFFBase >();
     ObjectRegistry::registerConverterFor< SireMM::IntraGroupCoulombFF >();
+    ObjectRegistry::registerConverterFor< SireMM::DihedralRestraint >();
+    ObjectRegistry::registerConverterFor< SireMM::AtomLJs >();
     ObjectRegistry::registerConverterFor< SireMM::InterCLJFFBase >();
     ObjectRegistry::registerConverterFor< SireMM::InterCLJFF >();
     ObjectRegistry::registerConverterFor< SireMM::InterGroupCLJFFBase >();
     ObjectRegistry::registerConverterFor< SireMM::InterGroupCLJFF >();
+    ObjectRegistry::registerConverterFor< SireMM::InterCoulombFFBase >();
+    ObjectRegistry::registerConverterFor< SireMM::InterCoulombFF >();
+    ObjectRegistry::registerConverterFor< SireMM::InterGroupCoulombFFBase >();
+    ObjectRegistry::registerConverterFor< SireMM::InterGroupCoulombFF >();
+    ObjectRegistry::registerConverterFor< SireMM::InterGroupFF >();
     ObjectRegistry::registerConverterFor< SireMM::BondComponent >();
     ObjectRegistry::registerConverterFor< SireMM::AngleComponent >();
     ObjectRegistry::registerConverterFor< SireMM::DihedralComponent >();
@@ -156,31 +97,90 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::Intra14LJComponent >();
     ObjectRegistry::registerConverterFor< SireMM::Intra14Component >();
     ObjectRegistry::registerConverterFor< SireMM::InternalComponent >();
-    ObjectRegistry::registerConverterFor< SireMM::TwoAtomPerturbation >();
-    ObjectRegistry::registerConverterFor< SireMM::ThreeAtomPerturbation >();
-    ObjectRegistry::registerConverterFor< SireMM::FourAtomPerturbation >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJCalculator >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJAtom >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJAtoms >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJWorkspace >();
+    ObjectRegistry::registerConverterFor< SireMM::InterFF >();
+    ObjectRegistry::registerConverterFor< SireMM::InternalParameters >();
+    ObjectRegistry::registerConverterFor< SireMM::InternalParameters3D >();
+    ObjectRegistry::registerConverterFor< SireMM::CoulombScaleFactor >();
+    ObjectRegistry::registerConverterFor< SireMM::LJScaleFactor >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJScaleFactor >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJNBPairs >();
+    ObjectRegistry::registerConverterFor< SireMM::CoulombNBPairs >();
+    ObjectRegistry::registerConverterFor< SireMM::LJNBPairs >();
     ObjectRegistry::registerConverterFor< SireMM::RestraintComponent >();
+    ObjectRegistry::registerConverterFor< SireMM::DistanceRestraint >();
+    ObjectRegistry::registerConverterFor< SireMM::DoubleDistanceRestraint >();
+    ObjectRegistry::registerConverterFor< SireMM::TripleDistanceRestraint >();
+    ObjectRegistry::registerConverterFor< SireMM::HarmonicDistanceForceConstant >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJDelta >();
+    ObjectRegistry::registerConverterFor< SireMM::LJPair >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJParams >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJParamsArray >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJRFFunction >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJIntraRFFunction >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJSoftRFFunction >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJSoftIntraRFFunction >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJGroup >();
+    ObjectRegistry::registerConverterFor< SireMM::NullCLJFunction >();
+    ObjectRegistry::registerConverterFor< SireMM::SoftCLJComponent >();
     ObjectRegistry::registerConverterFor< SireMM::CoulombComponent >();
     ObjectRegistry::registerConverterFor< SireMM::LJComponent >();
     ObjectRegistry::registerConverterFor< SireMM::CLJComponent >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJGroup >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJExtractor >();
+    ObjectRegistry::registerConverterFor< SireMM::FourAtomFunctions >();
+    ObjectRegistry::registerConverterFor< SireMM::MultiCLJComponent >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJShiftFunction >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJIntraShiftFunction >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJSoftShiftFunction >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJSoftIntraShiftFunction >();
+    ObjectRegistry::registerConverterFor< SireMM::GridFF >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJGrid >();
     ObjectRegistry::registerConverterFor< SireMM::InterSoftCLJFFBase >();
     ObjectRegistry::registerConverterFor< SireMM::InterSoftCLJFF >();
     ObjectRegistry::registerConverterFor< SireMM::InterGroupSoftCLJFFBase >();
     ObjectRegistry::registerConverterFor< SireMM::InterGroupSoftCLJFF >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJParams >();
-    ObjectRegistry::registerConverterFor< SireMM::CLJParamsArray >();
-    ObjectRegistry::registerConverterFor< SireMM::InternalParameters >();
-    ObjectRegistry::registerConverterFor< SireMM::InternalParameters3D >();
+    ObjectRegistry::registerConverterFor< SireMM::InterLJFFBase >();
+    ObjectRegistry::registerConverterFor< SireMM::InterLJFF >();
+    ObjectRegistry::registerConverterFor< SireMM::InterGroupLJFFBase >();
+    ObjectRegistry::registerConverterFor< SireMM::InterGroupLJFF >();
+    ObjectRegistry::registerConverterFor< SireMM::LJPerturbation >();
+    ObjectRegistry::registerConverterFor< SireMM::ThreeAtomFunctions >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraFF >();
+    ObjectRegistry::registerConverterFor< SireMM::RestraintFF >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraLJFFBase >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraLJFF >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraGroupLJFFBase >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraGroupLJFF >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJCalculator >();
+    ObjectRegistry::registerConverterFor< SireMM::TwoAtomFunctions >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraSoftCLJFFBase >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraSoftCLJFF >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraGroupSoftCLJFFBase >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraGroupSoftCLJFF >();
+    ObjectRegistry::registerConverterFor< SireMM::NoCutoff >();
+    ObjectRegistry::registerConverterFor< SireMM::HarmonicSwitchingFunction >();
+    ObjectRegistry::registerConverterFor< SireMM::CHARMMSwitchingFunction >();
     ObjectRegistry::registerConverterFor< SireMM::InternalFF >();
-    ObjectRegistry::registerConverterFor< SireMM::AmberParams >();
-    ObjectRegistry::registerConverterFor< SireMM::AmberBond >();
-    ObjectRegistry::registerConverterFor< SireMM::AmberAngle >();
-    ObjectRegistry::registerConverterFor< SireMM::AmberDihPart >();
-    ObjectRegistry::registerConverterFor< SireMM::AmberDihedral >();
-    ObjectRegistry::registerConverterFor< SireMM::AmberNB14 >();
-    ObjectRegistry::registerConverterFor< SireMM::AmberNBDihPart >();
+    ObjectRegistry::registerConverterFor< SireMM::TwoAtomPerturbation >();
+    ObjectRegistry::registerConverterFor< SireMM::ThreeAtomPerturbation >();
+    ObjectRegistry::registerConverterFor< SireMM::FourAtomPerturbation >();
+    ObjectRegistry::registerConverterFor< SireMM::LJParameter >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJBox >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJBoxIndex >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJBoxes >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJBoxDistance >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraCLJFFBase >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraCLJFF >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraGroupCLJFFBase >();
+    ObjectRegistry::registerConverterFor< SireMM::IntraGroupCLJFF >();
+    ObjectRegistry::registerConverterFor< SireMM::GridFF2 >();
+    ObjectRegistry::registerConverterFor< SireMM::CoulombProbe >();
+    ObjectRegistry::registerConverterFor< SireMM::LJProbe >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJProbe >();
+    ObjectRegistry::registerConverterFor< SireMM::AngleRestraint >();
+    ObjectRegistry::registerConverterFor< SireMM::CLJ14Group >();
 
 }
 

@@ -26,6 +26,18 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         typedef bp::class_< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >, boost::noncopyable > CLJPotentialInterface_InterCLJPotential__exposer_t;
         CLJPotentialInterface_InterCLJPotential__exposer_t CLJPotentialInterface_InterCLJPotential__exposer = CLJPotentialInterface_InterCLJPotential__exposer_t( "CLJPotentialInterface_InterCLJPotential_", "", bp::no_init );
         bp::scope CLJPotentialInterface_InterCLJPotential__scope( CLJPotentialInterface_InterCLJPotential__exposer );
+        { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::DisableReactionFieldShift
+        
+            typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*DisableReactionFieldShift_function_type)(  ) const;
+            DisableReactionFieldShift_function_type DisableReactionFieldShift_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::DisableReactionFieldShift );
+            
+            CLJPotentialInterface_InterCLJPotential__exposer.def( 
+                "DisableReactionFieldShift"
+                , DisableReactionFieldShift_function_value
+                , "" );
+        
+        }
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::combiningRules
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
@@ -113,6 +125,19 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
                 "setCombiningRules"
                 , setCombiningRules_function_value
                 , ( bp::arg("combiningrules") )
+                , "" );
+        
+        }
+        { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setDisableReactionFieldShift
+        
+            typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setDisableReactionFieldShift_function_type)( bool ) ;
+            setDisableReactionFieldShift_function_type setDisableReactionFieldShift_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setDisableReactionFieldShift );
+            
+            CLJPotentialInterface_InterCLJPotential__exposer.def( 
+                "setDisableReactionFieldShift"
+                , setDisableReactionFieldShift_function_value
+                , ( bp::arg("c_rf_on") )
                 , "" );
         
         }
