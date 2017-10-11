@@ -349,6 +349,63 @@ Mol2Atom::Mol2Atom(const QString &line, QStringList &errors) :
     }
 }
 
+Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors) :
+    name("X"),
+    type("Du"),
+    charge(0)
+{
+    // The atom must have atomic coordinates to be valid.
+    if (not atom.hasProperty("coordinates"))
+    {
+        errors.append(QObject::tr("The atom does not have coordinates!"));
+
+        return;
+    }
+
+    // Extract the atom ID.
+    number = atom.number().value();
+
+    // Extract the atom name.
+    name = atom.name();
+
+    // Extract the substructure ID.
+    subst_id = atom.residue().number().value();
+
+    // Extract the substructure name.
+    subst_name = atom.residue().name();
+
+    // Extract the atomic coordinates.
+    coord = atom.property<SireMaths::Vector>("coordinates");
+
+    // Extract the SYBYL atom type.
+    if (atom.hasProperty("sybyl-atom-type"))
+    {
+        type = atom.property<QString>("sybyl-atom-type");
+    }
+    else
+    {
+        // Some way of inferring the type...
+    }
+
+    // Extract the atomic charge.
+    if (atom.hasProperty("charge"))
+    {
+        //charge = atom.property<AtomCharges>("charge").value();
+        charge = atom.property<SireUnits::Dimension::Charge>("charge").value();
+    }
+    else if (atom.hasProperty("formal-charge"))
+    {
+        // Need some conversion here, I assume.
+        charge = atom.property<SireUnits::Dimension::Charge>("formal-charge").value();
+    }
+
+    // Extract the SYBYL status bits.
+    if (atom.hasProperty("status-bits"))
+    {
+        status_bits = atom.property<QString>("status-bits");
+    }
+}
+
 /** Generate a Mol2 record from the atom data. */
 QString Mol2Atom::toMol2Record() const
 {
@@ -1171,18 +1228,48 @@ Mol2::Mol2(const QStringList &lines, const PropertyMap &map)
 Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
      : ConcreteProperty<Mol2,MoleculeParser>(map)
 {
-    //look through the system and extract out the information
-    //that is needed to go into the file, based on the properties
-    //found in 'map'. Do this to create the set of text lines that
-    //will make up the file
+    // The list of lines.
+    QStringList lines;
 
-    QStringList lines;  // = code used to generate the lines
+    // Get the MolNums of each molecule in the System - this returns the
+    // numbers in MolIdx order.
+    const QVector<MolNum> molnums = system.getMoleculeNumbers().toVector();
 
-    //now that you have the lines, reparse them back into a Mol2 object,
-    //so that the information is consistent, and you have validated that
-    //the lines you have written are able to be correctly read in by
-    //this parser. This will also implicitly call 'assertSane()'
-    Mol2 parsed( lines, map );
+    // Store the number of molecules.
+    const int nmols = molnums.count();
+
+    // No molecules in the system.
+    if (nmols == 0)
+    {
+        this->operator=(Mol2());
+        return;
+    }
+
+    // Clear any existing molecules and resize.
+    molecules.clear();
+    molecules.resize(nmols);
+
+    if (usesParallel())
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
+                           [&](const tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                parseMolecule(molecules[i], system[molnums[i]], map);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<nmols; ++i)
+        {
+            parseMolecule(molecules[i], system[molnums[i]], map);
+        }
+    }
+
+    // Reparse the lines as a self-consistency check.
+    Mol2 parsed(lines, map);
 
     this->operator=(parsed);
 }
@@ -1918,6 +2005,73 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
     return mol.setProperty(map["coordinates"], coords)
               .setProperty(map["charge"], charges)
               .setProperty(map["sybyl-atom-type"], types)
-              .setProperty(map["status-bit"], status_bits)
+              .setProperty(map["status-bits"], status_bits)
               .commit();
+}
+
+/** Internal function used to parse a Sire molecule view into a Mol2 molecule using
+    the parameters in the property map. */
+void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::MoleculeView &sire_mol,
+    const SireBase::PropertyMap &map)
+{
+    // Convert the molecule view to an actual molecule object.
+    auto mol = sire_mol.molecule();
+
+    // Store the number of atoms in the molecule.
+    int num_atoms = mol.nAtoms();
+
+    // Early exit.
+    if (num_atoms == 0) return;
+
+    // Internal function used to convert a single Sire Atom into a Mol2Atom.
+    auto to_mol2_atom = [&](Mol2Atom &mol2_atom,
+        const SireMol::Atom &sire_atom, QStringList &local_errors)
+    {
+        mol2_atom = Mol2Atom(sire_atom, local_errors);
+    };
+
+    if (usesParallel())
+    {
+        QMutex mutex;
+
+        // Local data storage for atom objects.
+        QVector<Mol2Atom> local_atoms(num_atoms);
+
+        tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+                        [&](const tbb::blocked_range<int> &r)
+        {
+            // Create local data objects.
+            QStringList local_errors;
+
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                // Convert the atom.
+                to_mol2_atom(local_atoms[i], mol.atom(AtomIdx(i)), local_errors);
+            }
+
+            if (not local_errors.isEmpty())
+            {
+                // Acquire a lock.
+                QMutexLocker lkr(&mutex);
+
+                // Update the warning messages.
+                parse_warnings += local_errors;
+            }
+        });
+
+        // Append the atoms to the molecule.
+        mol2_mol.appendAtoms(local_atoms);
+    }
+    else
+    {
+        // Loop over all of the atoms.
+        for (int i=0; i<num_atoms; ++i)
+        {
+            // Initalise a Mol2Atom.
+            Mol2Atom atom(mol.atom(AtomIdx(i)), parse_warnings);
+
+            // Append the atom to the molecule.
+            mol2_mol.appendAtom(atom);
+        }
+    }
 }

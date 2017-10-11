@@ -46,8 +46,10 @@ class Mol2;
 
 namespace SireMol
 {
+class Atom;
 class MolEditor;
 class MoleculeInfoData;
+class MoleculeView;
 }
 
 QDataStream& operator<<(QDataStream&, const SireIO::Mol2Atom&);
@@ -85,6 +87,9 @@ public:
 
     /** Constructor. */
     Mol2Atom(const QString &line, QStringList &errors);
+
+    /** Constructor. */
+    Mol2Atom(const SireMol::Atom &atom, QStringList &errors);
 
     /** Generate a Mol2 record from the atom data. */
     QString toMol2Record() const;
@@ -484,6 +489,8 @@ protected:
 private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
+    void parseMolecule(Mol2Molecule &mol2_mol, const SireMol::MoleculeView &sire_mol,
+            const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SireMol::MolStructureEditor getMolStructure(int imol,
         const SireBase::PropertyName &cutting) const;
