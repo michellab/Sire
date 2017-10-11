@@ -409,7 +409,21 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors) :
 /** Generate a Mol2 record from the atom data. */
 QString Mol2Atom::toMol2Record() const
 {
-    return record;
+    QString line = QString("%1 %2 %3 %4 %5 %6 %7 %8 %9")
+        .arg(number, 7, 10)
+        .arg(name, -10)
+        .arg(coord[0], 9, 'f', 4)
+        .arg(coord[1], 9, 'f', 4)
+        .arg(coord[2], 9, 'f', 4)
+        .arg(type, -5)
+        .arg(subst_id, 4)
+        .arg(subst_name, -9)
+        .arg(charge, 7, 'f', 4);
+
+    if (not status_bits.isEmpty())
+        line.append(QString(" %1").arg(status_bits));
+
+    return line;
 }
 
 /** Generate a string representation of the object. */
