@@ -72,7 +72,7 @@ public:
     
     QString toString() const;
     
-    operator QString() const;
+    QString value() const;
 
 private:
     /** The actual string */

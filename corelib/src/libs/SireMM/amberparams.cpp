@@ -2291,7 +2291,7 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
         bool has_source;
         
         radius_set = getProperty<StringProperty>( map["gb_radius_set"], moldata,
-                                                  &has_source );
+                                                  &has_source ).value();
         
         if (not has_source)
         {

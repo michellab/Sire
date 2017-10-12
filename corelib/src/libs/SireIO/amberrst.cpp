@@ -1400,7 +1400,7 @@ void AmberRst::addToSystem(System &system, const PropertyMap &map) const
     
     try
     {
-        QString last_format = system.property(fileformat_property).asA<StringProperty>();
+        QString last_format = system.property(fileformat_property).asA<StringProperty>().value();
         fileformat = QString("%1,%2").arg(last_format,fileformat);
     }
     catch(...)

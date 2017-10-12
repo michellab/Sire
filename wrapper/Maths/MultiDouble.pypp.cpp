@@ -441,6 +441,28 @@ void register_MultiDouble_class(){
                 , "" );
         
         }
+        { //::SireMaths::MultiDouble::rsqrt_approx
+        
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*rsqrt_approx_function_type)(  ) const;
+            rsqrt_approx_function_type rsqrt_approx_function_value( &::SireMaths::MultiDouble::rsqrt_approx );
+            
+            MultiDouble_exposer.def( 
+                "rsqrt_approx"
+                , rsqrt_approx_function_value
+                , "" );
+        
+        }
+        { //::SireMaths::MultiDouble::rsqrt_approx_nr
+        
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*rsqrt_approx_nr_function_type)(  ) const;
+            rsqrt_approx_nr_function_type rsqrt_approx_nr_function_value( &::SireMaths::MultiDouble::rsqrt_approx_nr );
+            
+            MultiDouble_exposer.def( 
+                "rsqrt_approx_nr"
+                , rsqrt_approx_nr_function_value
+                , "" );
+        
+        }
         { //::SireMaths::MultiDouble::set
         
             typedef void ( ::SireMaths::MultiDouble::*set_function_type)( int,double ) ;
