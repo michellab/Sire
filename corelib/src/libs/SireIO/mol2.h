@@ -228,8 +228,11 @@ public:
     /** Default constructor. */
     Mol2Molecule();
 
-    /** Constructor. */
+    /** Constructor (from a Mol2 data record). */
     Mol2Molecule(const QVector<QString> &lines, QStringList &errors, int &num_records);
+
+    /** Constructor (from a Sire Molecule). */
+    Mol2Molecule(const SireMol::Molecule &mol, QStringList &errors);
 
     /** Generate a Mol2 record from the molecule data. */
     QVector<QString> toMol2Record() const;
@@ -265,6 +268,21 @@ public:
 
     /** Append a vector of substructures to the molecule. */
     void appendSubstructures(const QVector<Mol2Substructure> &substructures);
+
+    /** Get the name of the molecule. */
+    QString getName() const;
+
+    /** Get the molecule type. */
+    QString getMolType() const;
+
+    /** Get the charge type. */
+    QString getChargeType() const;
+
+    /** Get the status bits. */
+    QString getStatusBits() const;
+
+    /** Get the comment. */
+    QString getComment() const;
 
     /** Get the atoms. */
     QVector<Mol2Atom> getAtoms() const;
@@ -489,7 +507,7 @@ protected:
 private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
-    void parseMolecule(Mol2Molecule &mol2_mol, const SireMol::MoleculeView &sire_mol,
+    void parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_mol,
             const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SireMol::MolStructureEditor getMolStructure(int imol,

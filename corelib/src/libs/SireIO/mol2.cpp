@@ -33,6 +33,7 @@
 #include "SireSystem/system.h"
 
 #include "SireBase/parallel.h"
+#include "SireBase/stringproperty.h"
 
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
@@ -349,9 +350,19 @@ Mol2Atom::Mol2Atom(const QString &line, QStringList &errors) :
     }
 }
 
+/** Constructor.
+    @param atom
+        A reference to a Sire Atom object.
+
+    @param errors
+        An array of error messages.
+ */
 Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors) :
-    name("X"),
+    number(atom.number().value()),
+    name(atom.name().value()),
     type("Du"),
+    subst_id(atom.residue().number().value()),
+    subst_name(atom.residue().name().value()),
     charge(0)
 {
     // The atom must have atomic coordinates to be valid.
@@ -361,18 +372,6 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors) :
 
         return;
     }
-
-    // Extract the atom ID.
-    number = atom.number().value();
-
-    // Extract the atom name.
-    name = atom.name();
-
-    // Extract the substructure ID.
-    subst_id = atom.residue().number().value();
-
-    // Extract the substructure name.
-    subst_name = atom.residue().name();
 
     // Extract the atomic coordinates.
     coord = atom.property<SireMaths::Vector>("coordinates");
@@ -400,9 +399,9 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors) :
     }
 
     // Extract the SYBYL status bits.
-    if (atom.hasProperty("status-bits"))
+    if (atom.hasProperty("atom-status-bits"))
     {
-        status_bits = atom.property<QString>("status-bits");
+        status_bits = atom.property<QString>("atom-status-bits");
     }
 }
 
@@ -735,7 +734,7 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     if (mol_type.left(9) == record_indicator)
     {
         errors.append(QObject::tr("The @<TRIPOS>MOLECULE record "
-            "is incorrectly formatted. Should have 6 lines, has %1!")
+            "is incorrectly formatted. Should have at least 4 lines, has %1!")
             .arg(2));
 
         num_records = 2;
@@ -778,7 +777,7 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     if (charge_type.left(9) == record_indicator)
     {
         errors.append(QObject::tr("The @<TRIPOS>MOLECULE record "
-            "is incorrectly formatted. Should have 6 lines, has %1!")
+            "is incorrectly formatted. Should have at least 4 lines, has %1!")
             .arg(3));
 
         num_records = 3;
@@ -816,10 +815,7 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     // Check that we've not hit another TRIPOS record indicator.
     if (status_bits.left(9) == record_indicator)
     {
-        errors.append(QObject::tr("The @<TRIPOS>MOLECULE record "
-            "is incorrectly formatted. Should have 6 lines, has %1!")
-            .arg(4));
-
+        status_bits.clear();
         num_records = 4;
 
         return;
@@ -851,10 +847,7 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     // Check that we've not hit another TRIPOS record indicator.
     if (comment.left(9) == record_indicator)
     {
-        errors.append(QObject::tr("The @<TRIPOS>MOLECULE record "
-            "is incorrectly formatted. Should have 6 lines, has %1!")
-            .arg(5));
-
+        comment.clear();
         num_records = 5;
 
         return;
@@ -875,6 +868,23 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     }
 
     num_records = 6;
+}
+
+/** Constructor.
+    @param mol
+        A reference to a Sire Molecule object.
+
+    @param errors
+        An array of error messages.
+ */
+Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
+    QStringList &errors) :
+    name(mol.name().value()),
+    num_atoms(mol.nAtoms()),
+    num_subst(mol.nResidues()),
+    num_feats(0),
+    num_sets(0)
+{
 }
 
 /** Generate a Mol2 record from the molecule data. */
@@ -949,6 +959,36 @@ void Mol2Molecule::appendSubstructures(const QVector<Mol2Substructure> &substruc
 {
     for (int i=0; i<substructures.count(); ++i)
         this->substructures.append(substructures[i]);
+}
+
+/** Get the name of the molecule. */
+QString Mol2Molecule::getName() const
+{
+    return name;
+}
+
+/** Get the molecule type. */
+QString Mol2Molecule::getMolType() const
+{
+    return mol_type;
+}
+
+/** Get the charge type. */
+QString Mol2Molecule::getChargeType() const
+{
+    return charge_type;
+}
+
+/** Get the status bits. */
+QString Mol2Molecule::getStatusBits() const
+{
+    return status_bits;
+}
+
+/** Get the comments. */
+QString Mol2Molecule::getComment() const
+{
+    return comment;
 }
 
 /** Get the atoms from the molecule. */
@@ -1263,6 +1303,14 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
     molecules.clear();
     molecules.resize(nmols);
 
+    // Internal function used to initialise a Mol2 molecule using the data
+    // from the Sire MoleculeView object.
+    auto to_mol2_atom = [&](Mol2Molecule &mol2_mol,
+        const SireMol::Molecule &sire_mol, QStringList &local_errors)
+    {
+        mol2_mol = Mol2Molecule(sire_mol, local_errors);
+    };
+
     if (usesParallel())
     {
         tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
@@ -1270,7 +1318,7 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
         {
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                parseMolecule(molecules[i], system[molnums[i]], map);
+                parseMolecule(molecules[i], system[molnums[i]].molecule(), map);
             }
         });
     }
@@ -1278,7 +1326,7 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
     {
         for (int i=0; i<nmols; ++i)
         {
-            parseMolecule(molecules[i], system[molnums[i]], map);
+            parseMolecule(molecules[i], system[molnums[i]].molecule(), map);
         }
     }
 
@@ -1994,6 +2042,28 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
     // Get the info object that can map between AtomNum to AtomIdx etc.
     const auto molinfo = mol.info();
 
+    // Rename the molecule.
+    mol.rename(MolName(molecules[imol].getName()));
+
+    // Set properties for the molecule.
+    mol.setProperty(map["mol-type"], StringProperty(molecules[imol].getMolType()))
+       .setProperty(map["charge-type"], StringProperty(molecules[imol].getChargeType()))
+       .commit();
+
+    // Add status bits, if present.
+    if (not molecules[imol].getStatusBits().isEmpty())
+    {
+       mol.setProperty(map["mol-status-bits"], StringProperty(molecules[imol].getStatusBits()))
+           .commit();
+    }
+
+    // Add comments, if present.
+    if (not molecules[imol].getComment().isEmpty())
+    {
+       mol.setProperty(map["comment"], StringProperty(molecules[imol].getComment()))
+       .commit();
+    }
+
     // Instantiate the atom property objects that we need.
     AtomCoords         coords(molinfo);
     AtomCharges        charges(molinfo);
@@ -2019,20 +2089,20 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
     return mol.setProperty(map["coordinates"], coords)
               .setProperty(map["charge"], charges)
               .setProperty(map["sybyl-atom-type"], types)
-              .setProperty(map["status-bits"], status_bits)
+              .setProperty(map["atom-status-bits"], status_bits)
               .commit();
 }
 
 /** Internal function used to parse a Sire molecule view into a Mol2 molecule using
     the parameters in the property map. */
-void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::MoleculeView &sire_mol,
+void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_mol,
     const SireBase::PropertyMap &map)
 {
     // Convert the molecule view to an actual molecule object.
     auto mol = sire_mol.molecule();
 
     // Store the number of atoms in the molecule.
-    int num_atoms = mol.nAtoms();
+    int num_atoms = sire_mol.nAtoms();
 
     // Early exit.
     if (num_atoms == 0) return;
@@ -2060,7 +2130,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::MoleculeView &si
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 // Convert the atom.
-                to_mol2_atom(local_atoms[i], mol.atom(AtomIdx(i)), local_errors);
+                to_mol2_atom(local_atoms[i], sire_mol.atom(AtomIdx(i)), local_errors);
             }
 
             if (not local_errors.isEmpty())
@@ -2082,7 +2152,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::MoleculeView &si
         for (int i=0; i<num_atoms; ++i)
         {
             // Initalise a Mol2Atom.
-            Mol2Atom atom(mol.atom(AtomIdx(i)), parse_warnings);
+            Mol2Atom atom(sire_mol.atom(AtomIdx(i)), parse_warnings);
 
             // Append the atom to the molecule.
             mol2_mol.appendAtom(atom);
