@@ -1303,14 +1303,6 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
     molecules.clear();
     molecules.resize(nmols);
 
-    // Internal function used to initialise a Mol2 molecule using the data
-    // from the Sire MoleculeView object.
-    auto to_mol2_atom = [&](Mol2Molecule &mol2_mol,
-        const SireMol::Molecule &sire_mol, QStringList &local_errors)
-    {
-        mol2_mol = Mol2Molecule(sire_mol, local_errors);
-    };
-
     if (usesParallel())
     {
         tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
@@ -1548,27 +1540,6 @@ void Mol2::parseLines(const PropertyMap &map)
     // Number of lines in the file.
     int num_lines = lines().count();
 
-    // Internal function used to parse a single ATOM record.
-    auto parse_atom = [&](Mol2Atom &local_atom,
-        const QString &line, QStringList &local_errors)
-    {
-        local_atom = Mol2Atom(line, local_errors);
-    };
-
-    // Internal function used to parse a single BOND record.
-    auto parse_bond = [&](Mol2Bond &local_bond,
-        const QString &line, QStringList &local_errors)
-    {
-        local_bond = Mol2Bond(line, local_errors);
-    };
-
-    // Internal function used to parse a single SUBSTRUCTURE record.
-    auto parse_subst= [&](Mol2Substructure &local_subst,
-        const QString &line, QStringList &local_errors)
-    {
-        local_subst = Mol2Substructure(line, local_errors);
-    };
-
     // Loop through all lines in the file.
     for (int iline=0; iline<lines().count(); ++iline)
     {
@@ -1647,7 +1618,7 @@ void Mol2::parseLines(const PropertyMap &map)
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
                             // Parse the data from the atom record.
-                            parse_atom(local_atoms[i], lines()[iline+i], local_errors);
+                            local_atoms[i] = Mol2Atom(lines()[iline+i], local_errors);
                         }
 
                         if (not local_errors.isEmpty())
@@ -1714,7 +1685,7 @@ void Mol2::parseLines(const PropertyMap &map)
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
                             // Parse the data from the bond record.
-                            parse_bond(local_bonds[i], lines()[iline+i], local_errors);
+                            local_bonds[i] = Mol2Bond(lines()[iline+i], local_errors);
                         }
 
                         if (not local_errors.isEmpty())
@@ -1781,7 +1752,7 @@ void Mol2::parseLines(const PropertyMap &map)
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
                             // Parse the data from the substructure record.
-                            parse_subst(local_subst[i], lines()[iline+i], local_errors);
+                            local_subst[i] = Mol2Substructure(lines()[iline+i], local_errors);
                         }
 
                         if (not local_errors.isEmpty())
@@ -2107,13 +2078,6 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
     // Early exit.
     if (num_atoms == 0) return;
 
-    // Internal function used to convert a single Sire Atom into a Mol2Atom.
-    auto to_mol2_atom = [&](Mol2Atom &mol2_atom,
-        const SireMol::Atom &sire_atom, QStringList &local_errors)
-    {
-        mol2_atom = Mol2Atom(sire_atom, local_errors);
-    };
-
     if (usesParallel())
     {
         QMutex mutex;
@@ -2127,10 +2091,10 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
             // Create local data objects.
             QStringList local_errors;
 
+            // Convert each atom into a Mol2Atom object.
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                // Convert the atom.
-                to_mol2_atom(local_atoms[i], sire_mol.atom(AtomIdx(i)), local_errors);
+                local_atoms[i] = Mol2Atom(sire_mol.atom(AtomIdx(i)), local_errors);
             }
 
             if (not local_errors.isEmpty())
