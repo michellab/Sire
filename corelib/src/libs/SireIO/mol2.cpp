@@ -890,7 +890,21 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
 /** Generate a Mol2 record from the molecule data. */
 QVector<QString> Mol2Molecule::toMol2Record() const
 {
-    return record;
+    QVector<QString> lines;
+
+    lines.append(name);
+
+    QString line = QString("%1").arg(nAtoms(), 5, 10);
+    if (nBonds() > 0) line.append(QString(" %1").arg(nBonds(), 5, 10));
+    if (nSubstructures() > 0) line.append(QString(" %1").arg(nSubstructures(), 5, 10));
+
+    lines.append(line);
+    lines.append(mol_type);
+    lines.append(charge_type);
+    lines.append(status_bits);
+    lines.append(comment);
+
+    return lines;
 }
 
 /** Generate a string representation of the object. */
@@ -1305,12 +1319,27 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
 
     if (usesParallel())
     {
+        QMutex mutex;
+
         tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
                            [&](const tbb::blocked_range<int> r)
         {
+            // Create local data objects.
+            QStringList local_errors;
+
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                parseMolecule(molecules[i], system[molnums[i]].molecule(), map);
+                molecules[i] = Mol2Molecule(system[molnums[i]].molecule(), local_errors);
+                parseMolecule(molecules[i], system[molnums[i]].molecule(), local_errors, map);
+            }
+
+            if (not local_errors.isEmpty())
+            {
+                // Acquire a lock.
+                QMutexLocker lkr(&mutex);
+
+                // Update the warning messages.
+                parse_warnings += local_errors;
             }
         });
     }
@@ -1318,7 +1347,8 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
     {
         for (int i=0; i<nmols; ++i)
         {
-            parseMolecule(molecules[i], system[molnums[i]].molecule(), map);
+            molecules[i] = Mol2Molecule(system[molnums[i]].molecule(), parse_warnings);
+            parseMolecule(molecules[i], system[molnums[i]].molecule(), parse_warnings, map);
         }
     }
 
@@ -2067,7 +2097,7 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
 /** Internal function used to parse a Sire molecule view into a Mol2 molecule using
     the parameters in the property map. */
 void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_mol,
-    const SireBase::PropertyMap &map)
+    QStringList &errors, const SireBase::PropertyMap &map)
 {
     // Convert the molecule view to an actual molecule object.
     auto mol = sire_mol.molecule();
@@ -2103,7 +2133,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
                 QMutexLocker lkr(&mutex);
 
                 // Update the warning messages.
-                parse_warnings += local_errors;
+                errors += local_errors;
             }
         });
 
@@ -2116,7 +2146,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
         for (int i=0; i<num_atoms; ++i)
         {
             // Initalise a Mol2Atom.
-            Mol2Atom atom(sire_mol.atom(AtomIdx(i)), parse_warnings);
+            Mol2Atom atom(sire_mol.atom(AtomIdx(i)), errors);
 
             // Append the atom to the molecule.
             mol2_mol.appendAtom(atom);
