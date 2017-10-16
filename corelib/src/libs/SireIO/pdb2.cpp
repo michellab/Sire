@@ -1914,8 +1914,9 @@ void PDB2::parseLines(const PropertyMap &map)
         // Update the residue multi-map (residue <number, name> --> atom index).
         local_residues.insert(res, iatm);
 
-        // Insert the chain identifier.
-        local_chains.insert(frame_atom.getChainId(), frame_atom.getResName());
+        // Insert the chain identifier (ignore if it is blank).
+        if (not frame_atom.getChainId().isSpace())
+            local_chains.insert(frame_atom.getChainId(), frame_atom.getResName());
 
         // Insert the residue sequence number.
         local_segments.insert(frame_atom.getResNum());
