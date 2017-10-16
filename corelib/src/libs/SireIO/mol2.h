@@ -508,7 +508,8 @@ private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
     void parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_mol,
-        QStringList &errors, const SireBase::PropertyMap &map = SireBase::PropertyMap());
+        QVector<QString> &atom_lines, QVector<QString> &substructure_lines, QStringList &errors,
+        const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SireMol::MolStructureEditor getMolStructure(int imol,
         const SireBase::PropertyName &cutting) const;
