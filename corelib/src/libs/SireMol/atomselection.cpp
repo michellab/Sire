@@ -889,11 +889,9 @@ QList<ChainIdx> AtomSelection::selectedChains() const
         
         for (ChainIdx i(0); i<nchains; ++i)
         {
-            int nres = info().nResidues(i);
-            
             bool has_atom = false;
             
-            for (ResIdx j(0); j<nres; ++j)
+            for (ResIdx j : info().getResiduesIn(i))
             {
                 int nats = info().nAtoms(j);
             
