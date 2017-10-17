@@ -499,6 +499,8 @@ namespace bp = boost::python;
 
 #include "SireMol/mgidentifier.h"
 
+#include "SireMol/moleculeinfo.h"
+
 BOOST_PYTHON_MODULE(_Mol){
     register_SireMol_objects();
 
@@ -995,6 +997,8 @@ BOOST_PYTHON_MODULE(_Mol){
     bp::implicitly_convertible< SireMol::MoleculeView, SireMol::MoleculeData >();
 
     bp::implicitly_convertible< SireMol::MoleculeView, SireMol::PartialMolecule >();
+
+    bp::implicitly_convertible< SireMol::MoleculeInfoData, SireMol::MoleculeInfo >();
 
     register_free_functions();
 }
