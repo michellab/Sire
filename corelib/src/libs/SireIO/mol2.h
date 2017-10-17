@@ -50,6 +50,7 @@ class Atom;
 class MolEditor;
 class MoleculeInfoData;
 class MoleculeView;
+class Residue;
 }
 
 QDataStream& operator<<(QDataStream&, const SireIO::Mol2Atom&);
@@ -370,6 +371,9 @@ public:
     /** Constructor. */
     Mol2Substructure(const QString &line, QStringList &errors);
 
+    /** Constructor. */
+    Mol2Substructure(const SireMol::Residue &res, QStringList &errors);
+
     /** Generate a Mol2 record from the feature data. */
     QString toMol2Record() const;
 
@@ -384,8 +388,26 @@ public:
     /** Get the substructure name. */
     QString getName() const;
 
+    /** Get the substructure type. */
+    QString getType() const;
+
+    /** Get the dictionary type. */
+    qint64 getDictType() const;
+
     /** Get the substructure chain. */
     QString getChain() const;
+
+    /** Get the subtype of the chain. */
+    QString getChainSubType() const;
+
+    /** Get the number of inter substructure bonds. */
+    qint64 getInterBonds() const;
+
+    /** Get the status bits. */
+    QString getStatusBits() const;
+
+    /** Get the comment. */
+    QString getComment() const;
 
 private:
     /** The original Mol2 record used to instantiate the substructure. */

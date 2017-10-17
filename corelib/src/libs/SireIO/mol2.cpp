@@ -873,7 +873,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
     name(mol.name().value()),
     num_atoms(mol.nAtoms()),
     num_bonds(0),
-    num_subst(mol.nChains()),
+    num_subst(mol.nResidues()),
     num_feats(0),
     num_sets(0)
 {
@@ -983,9 +983,9 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
     }
 
     // Extract the comment.
-    if (mol.hasProperty("comment"))
+    if (mol.hasProperty("mol-comment"))
     {
-        comment = mol.property("comment").toString();
+        comment = mol.property("mol-comment").toString();
     }
 }
 
@@ -1148,13 +1148,26 @@ Mol2Substructure Mol2Molecule::getSubstructure(int i) const
 
 /** Default constructor. */
 Mol2Substructure::Mol2Substructure() :
+    root_atom(0),
+    dict_type(0),
     num_inter_bonds(0)
 {
 }
 
-/** Constructor. */
+/** Constructor.
+    @param lines
+        A vector of strings containing the molecule record.
+
+    @param errors
+        An array of error messages.
+
+    @param
+        The number of records found.
+ */
 Mol2Substructure::Mol2Substructure(const QString &line, QStringList &errors) :
     record(line),
+    root_atom(0),
+    dict_type(0),
     num_inter_bonds(0)
 {
     // Tokenize the string, splitting using a single whitespace character.
@@ -1316,10 +1329,154 @@ Mol2Substructure::Mol2Substructure(const QString &line, QStringList &errors) :
     }
 }
 
+/** Constructor.
+    @param res
+        A reference to a Sire Residue object.
+
+    @param errors
+        An array of error messages.
+ */
+Mol2Substructure::Mol2Substructure(const SireMol::Residue &res,
+    QStringList &errors) :
+    number(res.number().value()),
+    name(res.name().value()),
+    type("RESIDUE"),
+    dict_type(0),
+    num_inter_bonds(0)
+{
+    // Set the chain.
+    if (res.isWithinChain())
+        chain = res.chain().name().value();
+
+    // Extract the atoms from the residue.
+    auto atoms = res.atoms();
+
+    // Set the root atom of the residue.
+    root_atom = atoms[0].read().asA<SireMol::Atom>().number().value();
+
+    // Extract some optional data.
+
+    // Substructure type.
+    if (res.hasProperty("res-type"))
+        type = res.property<QString>("res-type");
+
+    // Dictionary type.
+    if (res.hasProperty("res-dict-type"))
+        type = res.property<qint64>("res-dict-type");
+
+    // Chain sub-type.
+    if (res.hasProperty("chain-sub-type"))
+        sub_type = res.property<QString>("chain-sub-type");
+
+    // Internal substructure bonds.
+    if (res.hasProperty("res-inter-bonds"))
+        num_inter_bonds = res.property<qint64>("res-inter-bonds");
+
+    // Status bits.
+    if (res.hasProperty("res-status-bits"))
+        status_bits = res.property<QString>("res-status-bits");
+
+    // Comments.
+    if (res.hasProperty("res-comment"))
+        comment = res.property<QString>("res-comment");
+}
+
 /** Generate a Mol2 record from the substructure data. */
 QString Mol2Substructure::toMol2Record() const
 {
-    return record;
+    // The first part of the record is mandatory.
+    QString line = QString("%1 %2 %3")
+        .arg(number, 6, 10)
+        .arg(name, -6)
+        .arg(root_atom, 6, 10);
+
+    // The optional part of the line.
+    QString optional;
+
+    // Work backwards through the records and add each one.
+    // If an entry down the line has been added, then we need to enter "****"
+    // if the current string record is empty, or zero for an unspecified integer record.
+
+    if (not comment.isEmpty())
+    {
+        optional.prepend(QString(" %1").arg(comment));
+    }
+
+    if (not status_bits.isEmpty())
+    {
+        optional.prepend(QString(" %1").arg(status_bits));
+    }
+    else
+    {
+        if (not optional.isEmpty())
+        {
+            optional.prepend(QString(" ****"));
+        }
+    }
+
+    if (num_inter_bonds != 0)
+    {
+        optional.prepend(QString(" %1").arg(num_inter_bonds, 6, 10));
+    }
+    else
+    {
+        if (not optional.isEmpty())
+        {
+            optional.prepend(QString("      0"));
+        }
+    }
+
+    if (not sub_type.isEmpty())
+    {
+        optional.prepend(QString(" %1").arg(sub_type, -6));
+    }
+    else
+    {
+        if (not optional.isEmpty())
+        {
+            optional.prepend(QString(" ****  "));
+        }
+    }
+
+    if (not chain.isEmpty())
+    {
+        optional.prepend(QString(" %1").arg(chain, -5));
+    }
+    else
+    {
+        if (not optional.isEmpty())
+        {
+            optional.prepend(QString(" **** "));
+        }
+    }
+
+    if (dict_type != 0)
+    {
+        optional.prepend(QString(" %1").arg(dict_type, 3, 10));
+    }
+    else
+    {
+        if (not optional.isEmpty())
+        {
+            optional.prepend(QString("   0"));
+        }
+    }
+
+    if (not type.isEmpty())
+    {
+        optional.prepend(QString(" %1").arg(type, -6));
+    }
+    else
+    {
+        if (not optional.isEmpty())
+        {
+            optional.prepend(QString(" ****  "));
+        }
+    }
+
+    line.append(QString(" %1").arg(optional));
+
+    return line;
 }
 
 /** Generate a string representation of the object. */
@@ -1345,10 +1502,46 @@ QString Mol2Substructure::getName() const
     return name;
 }
 
+/** Get the substructure type. */
+QString Mol2Substructure::getType() const
+{
+    return type;
+}
+
+/** Get the dictionary type. */
+qint64 Mol2Substructure::getDictType() const
+{
+    return dict_type;
+}
+
 /** Get the substructure chain. */
 QString Mol2Substructure::getChain() const
 {
     return chain;
+}
+
+/** Get the chain sub-type. */
+QString Mol2Substructure::getChainSubType() const
+{
+    return sub_type;
+}
+
+/** Get the number of inter-substructure bonds. */
+qint64 Mol2Substructure::getInterBonds() const
+{
+    return num_inter_bonds;
+}
+
+/** Get the status bits. */
+QString Mol2Substructure::getStatusBits() const
+{
+    return status_bits;
+}
+
+/** Get the comment. */
+QString Mol2Substructure::getComment() const
+{
+    return comment;
 }
 
 /** Constructor */
@@ -2131,12 +2324,12 @@ MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) 
         qSort(res_atoms);
 
         // Add the residue to the molecule.
+        // Here we use the substructure name from the atom record,
+        // so as to avoid any naming inconsistencies.
         auto res = mol.add(ResNum(res_num));
         res.rename(ResName(res_name.trimmed()));
 
         // Reparent the residue to its chain.
-        // Here we use the substructure name from the atom record,
-        // so as to avoid any naming inconsistencies.
         if (res_to_chain.contains(res_num))
             res.reparent(ChainName(res_to_chain[res_num]));
 
@@ -2204,7 +2397,7 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
     // Add comments, if present.
     if (not molecules[imol].getComment().isEmpty())
     {
-        mol.setProperty(map["comment"], StringProperty(molecules[imol].getComment()))
+        mol.setProperty(map["mol-comment"], StringProperty(molecules[imol].getComment()))
            .commit();
     }
 
@@ -2223,17 +2416,49 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
         // Determine the CGAtomIdx for this atom.
         auto cgatomidx = molinfo.cgAtomIdx(AtomNum(atom.getNumber()));
 
-        // Set the properties.
+        // Set the atom properties.
         coords.set(cgatomidx, atom.getCoord());
         charges.set(cgatomidx, double(atom.getCharge()) * SireUnits::mod_electron);
         types.set(cgatomidx, atom.getType());
         status_bits.set(cgatomidx, atom.getStatusBits());
     }
 
+    // Instantiate the residue property objects that we need.
+    ResStringProperty subst_types(molinfo);
+    ResStringProperty chain_sub_types(molinfo);
+    ResStringProperty subst_status_bits(molinfo);
+    ResStringProperty comments(molinfo);
+    ResIntProperty    dict_types(molinfo);
+    ResIntProperty    inter_bonds(molinfo);
+
+    // Now loop through the substructures in the molecule and set each property.
+    for (int i=0; i<nSubstructures(imol); ++i)
+    {
+        // Get the current substructure.
+        auto subst = molecules[imol].getSubstructure(i);
+
+        // Determine the ResIdx for this atom.
+        auto residx = molinfo.resIdx(ResNum(subst.getNumber()));
+
+        // Set the residue properties.
+        subst_types.set(residx, subst.getType());
+        dict_types.set(residx, subst.getDictType());
+        chain_sub_types.set(residx, subst.getChainSubType());
+        inter_bonds.set(residx, subst.getInterBonds());
+        subst_status_bits.set(residx, subst.getStatusBits());
+        comments.set(residx, subst.getComment());
+    }
+
     return mol.setProperty(map["coordinates"], coords)
               .setProperty(map["charge"], charges)
               .setProperty(map["sybyl-atom-type"], types)
               .setProperty(map["atom-status-bits"], status_bits)
+              .setProperty(map["res-type"], subst_types)
+              .setProperty(map["res-dict-type"], dict_types)
+              .setProperty(map["chain-sub-type"], chain_sub_types)
+              .setProperty(map["res-inter-bonds"], inter_bonds)
+              .setProperty(map["res-status-bits"], subst_status_bits)
+              .setProperty(map["res-comment"], comments)
               .commit();
 }
 
@@ -2252,9 +2477,11 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
     // Early exit.
     if (num_atoms == 0) return;
 
+    // Store the number of residues in the molecule.
+    int num_res = sire_mol.nResidues();
+
     // Resize the data record containers.
     atom_lines.resize(num_atoms);
-    substructure_lines.resize(num_atoms);
 
     if (usesParallel())
     {
