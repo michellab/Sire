@@ -33,6 +33,7 @@
 #include "SireSystem/system.h"
 
 #include "SireBase/parallel.h"
+#include "SireBase/stringproperty.h"
 
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
@@ -1547,6 +1548,9 @@ PDB2::PDB2(const QString &filename, const PropertyMap &map) :
     //we are allowed to use multiple cores to parse the file, e.g.
     //MoleculeParser::usesParallel() will be true
 
+    // Set the file name.
+    this->filename = filename;
+
     //parse the data in the parse function
     this->parseLines(map);
 
@@ -1568,6 +1572,9 @@ PDB2::PDB2(const QStringList &lines, const PropertyMap &map) :
     //a parameter has also been read in MoleculeParser to say whether
     //we are allowed to use multiple cores to parse the file, e.g.
     //MoleculeParser::usesParallel() will be true
+
+    // Set the file name.
+    this->filename = filename;
 
     //parse the data in the parse function
     this->parseLines(map);
@@ -2322,10 +2329,10 @@ System PDB2::startSystem(int iframe, const PropertyMap &map) const
         molgroup.add(mol);
     }
 
-    //System system( this->title() );
     System system;
     system.add(molgroup);
-    //system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
+    system.setProperty(map["filename"].source(), StringProperty(filename));
+    system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
 
     return system;
 }

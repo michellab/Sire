@@ -788,6 +788,9 @@ private:
 
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;
+
+    /** The name of the file from which data was parsed. */
+    QString filename;
 };
 
 }

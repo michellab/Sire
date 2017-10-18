@@ -665,9 +665,15 @@ Mol2Molecule::Mol2Molecule() :
 
     @param
         The number of records found.
+
+    @param
+        The name of the Mol2 file containing the data record (optional).
+
+    @param
+        The molecule index (optional).
  */
 Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
-    QStringList &errors, int &num_records) :
+    QStringList &errors, int &num_records, QString filename, int imol) :
     record(lines),
     num_atoms(0),
     num_bonds(0),
@@ -677,6 +683,23 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
 {
     // Extract the molecule name.
     name = lines[0].simplified();
+
+    // If the name is blank, then name the molecule after the file.
+    // If the filename is empty, then name the molecule "Molecule".
+    if (name.isEmpty())
+    {
+        if (not filename.isEmpty()) name = filename;
+        else                        name = QString("Molecule: ");
+
+        // Append a molecule index (for multiple molecule records).
+        if (imol != -1)
+        {
+            // Ensire indexing starts from one.
+            if (imol == 0) imol = 1;
+
+            name.append(QString(" %1").arg(imol));
+        }
+    }
 
     // Tokenize the string, splitting using a single whitespace character.
     QStringList data = lines[1].simplified().split(QRegExp("\\s"));
@@ -867,9 +890,15 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
 
     @param errors
         An array of error messages.
+
+    @param filename
+        The filename from which this molecular data originated (optional).
+
+    @param imol
+        The molecule index.
  */
 Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
-    QStringList &errors) :
+    QStringList &errors, QString filename, int imol) :
     name(mol.name().value()),
     num_atoms(mol.nAtoms()),
     num_bonds(0),
@@ -877,6 +906,23 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
     num_feats(0),
     num_sets(0)
 {
+    // If the name is blank, then name the molecule after the file.
+    // If the filename is empty, then name the molecule "Molecule".
+    if (name.isEmpty())
+    {
+        if (not filename.isEmpty()) name = filename;
+        else                        name = QString("Molecule");
+
+        // Append a molecule index (for multiple molecule records).
+        if (imol != -1)
+        {
+            // Ensire indexing starts from one.
+            if (imol == 0) imol = 1;
+
+            name.append(QString(": %1").arg(imol));
+        }
+    }
+
     // Extract the molecule type.
     if (mol.hasProperty("mol-type"))
     {
@@ -1561,6 +1607,9 @@ Mol2::Mol2(const QString &filename, const PropertyMap &map)
     //we are allowed to use multiple cores to parse the file, e.g.
     //MoleculeParser::usesParallel() will be true
 
+    // Store the name of the input file.
+    this->filename = filename;
+
     // Clear any existing molecular data.
     molecules.clear();
 
@@ -1583,6 +1632,9 @@ Mol2::Mol2(const QStringList &lines, const PropertyMap &map)
     //a parameter has also been read in MoleculeParser to say whether
     //we are allowed to use multiple cores to parse the file, e.g.
     //MoleculeParser::usesParallel() will be true
+
+    // Store the name of the input file.
+    this->filename = filename;
 
     // Clear any existing molecular data.
     molecules.clear();
@@ -1626,6 +1678,13 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
     molecules.clear();
     molecules.resize(nmols);
 
+    // Set the name of the file from which the SireSystem was constructed.
+    if (system.properties().hasProperty("filename"))
+    {
+        filename = system.property("filename").toString();
+    }
+    else filename.clear();
+
     if (usesParallel())
     {
         QMutex mutex;
@@ -1639,7 +1698,8 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 // Parse the SireMolecule data into a Mol2Molecule.
-                molecules[i] = Mol2Molecule(system[molnums[i]].molecule(), local_errors);
+                molecules[i] = Mol2Molecule(system[molnums[i]].molecule(),
+                    local_errors, filename, i);
 
                 // Now parse the rest of the molecular data, i.e. atoms, residues, etc.
                 parseMolecule(molecules[i], system[molnums[i]].molecule(),
@@ -1942,16 +2002,14 @@ void Mol2::parseLines(const PropertyMap &map)
                 int num_records = 0;
 
                 // Create a molecule.
-                Mol2Molecule mol(lines().mid(iline, iline+5), parse_warnings, num_records);
+                Mol2Molecule mol(lines().mid(iline, iline+5),
+                    parse_warnings, num_records, filename, ++imol);
 
                 // Append a new molecule.
                 molecules.append(mol);
 
                 // Fast-forward the line index, accounting for incorrectly formatted entries.
                 iline += (num_records - 1);
-
-                // Update the molecule index.
-                ++imol;
             }
 
             // Parse an ATOM record section.
@@ -2198,10 +2256,10 @@ System Mol2::startSystem(const PropertyMap &map) const
         molgroup.add(mol);
     }
 
-    //System system( this->title() );
     System system;
     system.add(molgroup);
-    //system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
+    system.setProperty(map["filename"].source(), StringProperty(filename));
+    system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
 
     return system;
 }
