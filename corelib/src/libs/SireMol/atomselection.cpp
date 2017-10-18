@@ -1572,29 +1572,90 @@ void AtomSelection::_pvt_deselect(const CGAtomIdx &cgatomidx)
         nselected = 0;
         return;
     }
-    
-    if ( this->selectedAll(cgatomidx.cutGroup()) )
+    else if ( this->selectedAll() )
+    {
+        //we need to create space for all CutGroups
+        selected_atoms.clear();
+        selected_atoms.reserve( info().nCutGroups() );
+        
+        for (CGIdx i(0); i<info().nCutGroups(); ++i)
+        {
+            if (i != cgatomidx.cutGroup())
+            {
+                selected_atoms.insert( i, QSet<Index>() );
+            }
+            else
+            {
+                int nats = info().nAtoms(i);
+            
+                QSet<Index> atoms;
+                atoms.reserve(nats-1);
+                
+                for (Index j(0); j<nats; ++j)
+                {
+                    if (j != cgatomidx.atom())
+                        atoms.insert(j);
+                }
+                
+                selected_atoms.insert(i, atoms);
+            }
+        }
+    }
+    else if ( this->selectedAll(cgatomidx.cutGroup()) )
     {
         //we need to recreate space for this CutGroup
         int nats = info().nAtoms(cgatomidx.cutGroup());
         
-        QSet<Index> atoms;
-        atoms.reserve(nats-1);
-        
-        for (Index i(0); i<nats; ++i)
+        if (nats > 1)
         {
-            if (i != cgatomidx.atom())
-                atoms.insert(i);
+            QSet<Index> atoms;
+            atoms.reserve(nats-1);
+            
+            for (Index i(0); i<nats; ++i)
+            {
+                if (i != cgatomidx.atom())
+                    atoms.insert(i);
+            }
+            
+            selected_atoms[cgatomidx.cutGroup()] = atoms;
         }
-        
-        selected_atoms[cgatomidx.cutGroup()] = atoms;
+        else
+        {
+            //removed the one and only atom from the CutGroup
+            selected_atoms.remove(cgatomidx.cutGroup());
+        }
     }
     else
     {
         selected_atoms[cgatomidx.cutGroup()].remove(cgatomidx.atom());
+
+        if (selected_atoms[cgatomidx.cutGroup()].isEmpty())
+        {
+            selected_atoms.remove(cgatomidx.cutGroup());
+            
+            if (selected_atoms.isEmpty() and nselected > 1)
+            {
+                throw SireError::program_bug( QObject::tr(
+                    "Invalid state: nselected not 1 when removing last atom? %1, %2")
+                        .arg(nselected).arg(cgatomidx.toString()), CODELOC );
+            }
+        }
     }
     
     --nselected;
+
+    if (selected_atoms.isEmpty() and nselected > 0)
+    {
+        throw SireError::program_bug( QObject::tr(
+            "Invalid state: nselected not zero when removed last atoms? %1, %2")
+                .arg(nselected).arg(cgatomidx.toString()), CODELOC );
+    }
+    else if (nselected < 0)
+    {
+        throw SireError::program_bug( QObject::tr(
+            "Invalid state: nselected has fallen below zero! %1, %2")
+                .arg(nselected).arg(cgatomidx.toString()), CODELOC );
+    }
 }
 
 void AtomSelection::_pvt_deselect(const QVector<CGAtomIdx> &cgatomidxs)
@@ -1675,18 +1736,58 @@ void AtomSelection::_pvt_select(CGIdx cgidx)
 
 void AtomSelection::_pvt_deselect(CGIdx cgidx)
 {
-    if (this->selectedNone(cgidx))
-        return;
-    
-    else if (this->selectedAll(cgidx))
+    //have we selected this CutGroup?
+    if (this->selectedAll())
     {
-        selected_atoms.remove(cgidx);
+        selected_atoms.clear();
         nselected -= info().nAtoms(cgidx);
+        
+        if (info().nCutGroups() > 1)
+        {
+            //we need to indicate that all other CutGroups are selected by adding
+            //in extra empty sets
+            selected_atoms.reserve( info().nCutGroups()-1 );
+            
+            for (CGIdx i(0); i<info().nCutGroups(); ++i)
+            {
+                if (i != cgidx)
+                {
+                    selected_atoms.insert( i, QSet<Index>() );
+                }
+            }
+        }
     }
     else
     {
-        QSet<Index> atoms = selected_atoms.take(cgidx);
-        nselected -= atoms.count();
+        //have we selected any of the atoms?
+        if (selected_atoms.contains(cgidx))
+        {
+            auto atoms = selected_atoms.take(cgidx);
+            
+            if (atoms.isEmpty())
+            {
+                //the whole cutgroup was selected
+                nselected -= info().nAtoms(cgidx);
+            }
+            else
+            {
+                //only part of the CutGroup was selected
+                nselected -= atoms.count();
+            }
+        }
+    }
+    
+    if (selected_atoms.isEmpty() and nselected > 0)
+    {
+        throw SireError::program_bug( QObject::tr(
+            "Invalid state: nselected not zero when removed last atoms? %1, %2")
+                .arg(nselected).arg(cgidx.toString()), CODELOC );
+    }
+    else if (nselected < 0)
+    {
+        throw SireError::program_bug( QObject::tr(
+            "Invalid state: nselected has fallen below zero! %1, %2")
+                .arg(nselected).arg(cgidx.toString()), CODELOC );
     }
 }
 
@@ -2453,7 +2554,7 @@ void AtomSelection::_pvt_select(const AtomSelection &selection)
         {
             if (selection.selectedAll(i))
                 this->_pvt_select(i);
-            else if (this->selectedAll(i))
+            else if (not this->selectedAll(i))
             {
                 foreach(Index idx, selection.selectedAtoms(i))
                 {
@@ -3635,6 +3736,13 @@ QVector<AtomIdx> AtomSelection::selectedAtoms() const
     
     if (this->selectedAll())
     {
+        if (nselected != info().nAtoms())
+        {
+            throw SireError::program_bug( QObject::tr(
+                "SERIOUS BUG: Disagreement of the number of atoms when selected all... "
+                "%1 versus %2").arg(nselected).arg(info().nAtoms()), CODELOC );
+        }
+    
         for (AtomIdx i(0); i<info().nAtoms(); ++i)
         {
             ret_array[i] = i;
