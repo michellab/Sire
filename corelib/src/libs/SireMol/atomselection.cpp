@@ -3742,7 +3742,7 @@ QVector<AtomIdx> AtomSelection::selectedAtoms() const
                 "SERIOUS BUG: Disagreement of the number of atoms when selected all... "
                 "%1 versus %2").arg(nselected).arg(info().nAtoms()), CODELOC );
         }
-    
+
         for (AtomIdx i(0); i<info().nAtoms(); ++i)
         {
             ret_array[i] = i;
@@ -3756,7 +3756,7 @@ QVector<AtomIdx> AtomSelection::selectedAtoms() const
         {
             if (this->selectedAll(i))
             {
-                for (Index j(0); j<info().nAtoms(i); ++i)
+                for (Index j(0); j<info().nAtoms(i); ++j)
                 {
                     ret_array[count] = info().atomIdx(CGAtomIdx(i,j));
                     ++count;
