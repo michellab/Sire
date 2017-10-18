@@ -1362,7 +1362,7 @@ Mol2Substructure::Mol2Substructure(const SireMol::Residue &res,
 
     // Dictionary type.
     if (res.hasProperty("res-dict-type"))
-        type = res.property<qint64>("res-dict-type");
+        dict_type = res.property<qint64>("res-dict-type");
 
     // Chain sub-type.
     if (res.hasProperty("chain-sub-type"))
@@ -1686,6 +1686,10 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
         // Atom records.
         lines.append("@<TRIPOS>ATOM");
         lines.append(atom_lines[i].toList());
+
+        // Substructure records.
+        lines.append("@<TRIPOS>SUBSTRUCTURE");
+        lines.append(substructure_lines[i].toList());
     }
 
     // Reparse the lines as a self-consistency check.
@@ -1696,7 +1700,7 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
 
 /** Copy constructor */
 Mol2::Mol2(const Mol2 &other)
-     : ConcreteProperty<Mol2,MoleculeParser>(other)
+     : ConcreteProperty<Mol2,MoleculeParser>(other), molecules(other.molecules)
 {}
 
 /** Destructor */
@@ -1708,6 +1712,7 @@ Mol2& Mol2::operator=(const Mol2 &other)
 {
     if (this != &other)
     {
+        molecules = other.molecules;
         MoleculeParser::operator=(other);
     }
 
@@ -2482,13 +2487,15 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
 
     // Resize the data record containers.
     atom_lines.resize(num_atoms);
+    substructure_lines.resize(num_res);
 
     if (usesParallel())
     {
         QMutex mutex;
 
-        // Local data storage for atom objects.
+        // Local data storage.
         QVector<Mol2Atom> local_atoms(num_atoms);
+        QVector<Mol2Substructure> local_subst(num_res);
 
         tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
                         [&](const tbb::blocked_range<int> &r)
@@ -2496,7 +2503,8 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
             // Create local data objects.
             QStringList local_errors;
 
-            // Convert each atom into a Mol2Atom object and generate a Mol2 data record.
+            // Convert each atom into a Mol2Atom object
+            // and generate a Mol2 data record.
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 local_atoms[i] = Mol2Atom(sire_mol.atom(AtomIdx(i)), local_errors);
@@ -2513,8 +2521,32 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
             }
         });
 
-        // Append the atoms to the molecule.
-        mol2_mol.appendAtoms(local_atoms);
+        tbb::parallel_for( tbb::blocked_range<int>(0, num_res),
+                        [&](const tbb::blocked_range<int> &r)
+        {
+            // Create local data objects.
+            QStringList local_errors;
+
+            // Convert each residue into a Mol2Substructure object
+            // and generate a Mol2 data record.
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                local_subst[i] = Mol2Substructure(sire_mol.residue(ResIdx(i)), local_errors);
+                substructure_lines[i] = local_subst[i].toMol2Record();
+            }
+
+            if (not local_errors.isEmpty())
+            {
+                // Acquire a lock.
+                QMutexLocker lkr(&mutex);
+
+                // Update the warning messages.
+                errors += local_errors;
+            }
+        });
+
+        // Append the substructures to the molecule.
+        mol2_mol.appendSubstructures(local_subst);
     }
     else
     {
@@ -2529,6 +2561,19 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
 
             // Generate a Mol2 atom data record.
             atom_lines[i] = atom.toMol2Record();
+        }
+
+        // Loop over all of the residues.
+        for (int i=0; i<num_res; ++i)
+        {
+            // Initalise a Mol2Substructure.
+            Mol2Substructure subst(sire_mol.residue(ResIdx(i)), errors);
+
+            // Append the substructure to the molecule.
+            mol2_mol.appendSubstructure(subst);
+
+            // Generate a Mol2 substructure data record.
+            substructure_lines[i] = subst.toMol2Record();
         }
     }
 }
