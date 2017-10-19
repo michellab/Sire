@@ -1610,9 +1610,6 @@ Mol2::Mol2(const QString &filename, const PropertyMap &map)
     // Store the name of the input file.
     this->filename = filename;
 
-    // Clear any existing molecular data.
-    molecules.clear();
-
     //parse the data in the parse function
     this->parseLines(map);
 
@@ -1635,9 +1632,6 @@ Mol2::Mol2(const QStringList &lines, const PropertyMap &map)
 
     // Store the name of the input file.
     this->filename = filename;
-
-    // Clear any existing molecular data.
-    molecules.clear();
 
     //parse the data in the parse function
     this->parseLines(map);
@@ -1674,8 +1668,7 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
     QVector<QVector<QString> > atom_lines(nmols);
     QVector<QVector<QString> > substructure_lines(nmols);
 
-    // Clear any existing molecules and resize.
-    molecules.clear();
+    // Resize the molecules vector.
     molecules.resize(nmols);
 
     // Set the name of the file from which the SireSystem was constructed.
