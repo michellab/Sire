@@ -1760,7 +1760,10 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
 
 /** Copy constructor */
 Mol2::Mol2(const Mol2 &other)
-     : ConcreteProperty<Mol2,MoleculeParser>(other), molecules(other.molecules)
+     : ConcreteProperty<Mol2,MoleculeParser>(other),
+       molecules(other.molecules),
+       filename(other.filename),
+       parse_warnings(other.parse_warnings)
 {}
 
 /** Destructor */
@@ -1773,6 +1776,8 @@ Mol2& Mol2::operator=(const Mol2 &other)
     if (this != &other)
     {
         molecules = other.molecules;
+        filename = other.filename;
+        parse_warnings = other.parse_warnings;
         MoleculeParser::operator=(other);
     }
 
