@@ -49,6 +49,7 @@ class PDB2;
 
 namespace SireMol
 {
+class Atom;
 class MolEditor;
 class MoleculeInfoData;
 }
@@ -98,13 +99,19 @@ public:
     /** Constructor. */
     PDBAtom(const QString &line, QStringList &errors);
 
+    /** Constructor. */
+    PDBAtom(const SireMol::Atom &atom, QStringList &errors);
+
     /** Generate a PDB record from the atom data. */
-    QString toPDBLine() const;
+    QString toPDBRecord() const;
 
     /** Generate a string representation of the object. */
     QString toString() const;
 
     static const char* typeName();
+
+    /** Convert the atom name to PDB format. */
+    QString toPDBName() const;
 
     /** Set the terminal atom flag. */
     void setTerminal(bool _isTer);
@@ -138,6 +145,9 @@ public:
 
     /** Get the charge on the atom. */
     qint64 getCharge() const;
+
+    /** Whether this is a HETATM. */
+    bool isHet() const;
 
     /** Whether this is a terminal atom. */
     bool isTer() const;
@@ -217,7 +227,7 @@ public:
     PDBCrystal(const QString &line, QStringList &errors);
 
     /** Generate a PDB record from the crystallographic data. */
-    QString toPDBLine() const;
+    QString toPDBRecord() const;
 
     /** Generate a string representation of the object. */
     QString toString() const;
@@ -263,7 +273,7 @@ public:
     PDBHelix(const QString &line, QStringList &errors);
 
     /** Generate a PDB record from the helix data. */
-    QString toPDBLine() const;
+    QString toPDBRecord() const;
 
     /** Generate a string representation of the object. */
     QString toString() const;
@@ -335,7 +345,7 @@ public:
     PDBMaster(const QString &line, QStringList &errors);
 
     /** Generate a PDB record from the master data. */
-    QString toPDBLine() const;
+    QString toPDBRecord() const;
 
     /** Generate a string representation of the object. */
     QString toString() const;
@@ -407,7 +417,7 @@ public:
     PDBSheet(const QString &line, QStringList &errors);
 
     /** Generate a PDB record from the sheet data. */
-    QString toPDBLine() const;
+    QString toPDBRecord() const;
 
     /** Generate a string representation of the object. */
     QString toString() const;
@@ -525,7 +535,7 @@ public:
     void appendRecord(const QString &line, RECORD_TYPE record_type, QStringList &errors);
 
     /** Generate PDB records from the atom data. */
-    QStringList toPDBLines() const;
+    QStringList toPDBRecord() const;
 
     /** Generate a string representation of the object. */
     QString toString() const;
@@ -620,7 +630,7 @@ public:
         bool isNonCryst, QStringList &errors);
 
     /** Generate a PDB record from the ORIGXn transformation data. */
-    QStringList toPDBLines() const;
+    QStringList toPDBRecord() const;
 
     /** Generate a string representation of the object. */
     QString toString() const;
@@ -728,6 +738,9 @@ protected:
 private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
+
+    void parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &atom_lines,
+        QStringList &errors, const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SireMol::MolStructureEditor getMolStructure(int imol,
         int iframe, const SireBase::PropertyName &cutting) const;

@@ -52,14 +52,14 @@ void register_PDBHelix_class(){
         PDBHelix_exposer_t PDBHelix_exposer = PDBHelix_exposer_t( "PDBHelix", "This class provides functionality for readingwriting\nProtein Data Bank (PDB) HELIX records.\n\nAuthor: Lester Hedges\n", bp::init< >("Default constructor.") );
         bp::scope PDBHelix_scope( PDBHelix_exposer );
         PDBHelix_exposer.def( bp::init< QString const &, QStringList & >(( bp::arg("line"), bp::arg("errors") ), "Constructor.") );
-        { //::SireIO::PDBHelix::toPDBLine
+        { //::SireIO::PDBHelix::toPDBRecord
         
-            typedef ::QString ( ::SireIO::PDBHelix::*toPDBLine_function_type)(  ) const;
-            toPDBLine_function_type toPDBLine_function_value( &::SireIO::PDBHelix::toPDBLine );
+            typedef ::QString ( ::SireIO::PDBHelix::*toPDBRecord_function_type)(  ) const;
+            toPDBRecord_function_type toPDBRecord_function_value( &::SireIO::PDBHelix::toPDBRecord );
             
             PDBHelix_exposer.def( 
-                "toPDBLine"
-                , toPDBLine_function_value
+                "toPDBRecord"
+                , toPDBRecord_function_value
                 , "Generate a PDB record from the helix data." );
         
         }

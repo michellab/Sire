@@ -74,14 +74,14 @@ void register_PDBTransform_class(){
                 , "Whether this object contains a complete transformation record." );
         
         }
-        { //::SireIO::PDBTransform::toPDBLines
+        { //::SireIO::PDBTransform::toPDBRecord
         
-            typedef ::QStringList ( ::SireIO::PDBTransform::*toPDBLines_function_type)(  ) const;
-            toPDBLines_function_type toPDBLines_function_value( &::SireIO::PDBTransform::toPDBLines );
+            typedef ::QStringList ( ::SireIO::PDBTransform::*toPDBRecord_function_type)(  ) const;
+            toPDBRecord_function_type toPDBRecord_function_value( &::SireIO::PDBTransform::toPDBRecord );
             
             PDBTransform_exposer.def( 
-                "toPDBLines"
-                , toPDBLines_function_value
+                "toPDBRecord"
+                , toPDBRecord_function_value
                 , "Generate a PDB record from the ORIGXn transformation data." );
         
         }

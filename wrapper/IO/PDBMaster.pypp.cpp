@@ -162,14 +162,14 @@ void register_PDBMaster_class(){
                 , "Return the number of coordinate transformation records." );
         
         }
-        { //::SireIO::PDBMaster::toPDBLine
+        { //::SireIO::PDBMaster::toPDBRecord
         
-            typedef ::QString ( ::SireIO::PDBMaster::*toPDBLine_function_type)(  ) const;
-            toPDBLine_function_type toPDBLine_function_value( &::SireIO::PDBMaster::toPDBLine );
+            typedef ::QString ( ::SireIO::PDBMaster::*toPDBRecord_function_type)(  ) const;
+            toPDBRecord_function_type toPDBRecord_function_value( &::SireIO::PDBMaster::toPDBRecord );
             
             PDBMaster_exposer.def( 
-                "toPDBLine"
-                , toPDBLine_function_value
+                "toPDBRecord"
+                , toPDBRecord_function_value
                 , "Generate a PDB record from the master data." );
         
         }

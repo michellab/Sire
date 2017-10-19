@@ -52,6 +52,7 @@ void register_PDBAtom_class(){
         PDBAtom_exposer_t PDBAtom_exposer = PDBAtom_exposer_t( "PDBAtom", "This class provides functionality for readingwriting\nProtein Data Bank (PDB) ATOM records.\n\nAuthor: Lester Hedges\n", bp::init< >("Default constructor.") );
         bp::scope PDBAtom_scope( PDBAtom_exposer );
         PDBAtom_exposer.def( bp::init< QString const &, QStringList & >(( bp::arg("line"), bp::arg("errors") ), "Constructor.") );
+        PDBAtom_exposer.def( bp::init< SireMol::Atom const &, QStringList & >(( bp::arg("atom"), bp::arg("errors") ), "Constructor.") );
         { //::SireIO::PDBAtom::getChainId
         
             typedef ::QChar ( ::SireIO::PDBAtom::*getChainId_function_type)(  ) const;
@@ -162,6 +163,17 @@ void register_PDBAtom_class(){
                 , "Get the atom temperature factor." );
         
         }
+        { //::SireIO::PDBAtom::isHet
+        
+            typedef bool ( ::SireIO::PDBAtom::*isHet_function_type)(  ) const;
+            isHet_function_type isHet_function_value( &::SireIO::PDBAtom::isHet );
+            
+            PDBAtom_exposer.def( 
+                "isHet"
+                , isHet_function_value
+                , "Whether this is a HETATM." );
+        
+        }
         { //::SireIO::PDBAtom::isTer
         
             typedef bool ( ::SireIO::PDBAtom::*isTer_function_type)(  ) const;
@@ -197,14 +209,25 @@ void register_PDBAtom_class(){
                 , "Set the terminal atom flag." );
         
         }
-        { //::SireIO::PDBAtom::toPDBLine
+        { //::SireIO::PDBAtom::toPDBName
         
-            typedef ::QString ( ::SireIO::PDBAtom::*toPDBLine_function_type)(  ) const;
-            toPDBLine_function_type toPDBLine_function_value( &::SireIO::PDBAtom::toPDBLine );
+            typedef ::QString ( ::SireIO::PDBAtom::*toPDBName_function_type)(  ) const;
+            toPDBName_function_type toPDBName_function_value( &::SireIO::PDBAtom::toPDBName );
             
             PDBAtom_exposer.def( 
-                "toPDBLine"
-                , toPDBLine_function_value
+                "toPDBName"
+                , toPDBName_function_value
+                , "Convert the atom name to PDB format." );
+        
+        }
+        { //::SireIO::PDBAtom::toPDBRecord
+        
+            typedef ::QString ( ::SireIO::PDBAtom::*toPDBRecord_function_type)(  ) const;
+            toPDBRecord_function_type toPDBRecord_function_value( &::SireIO::PDBAtom::toPDBRecord );
+            
+            PDBAtom_exposer.def( 
+                "toPDBRecord"
+                , toPDBRecord_function_value
                 , "Generate a PDB record from the atom data." );
         
         }

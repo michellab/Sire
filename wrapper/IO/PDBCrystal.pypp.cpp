@@ -63,14 +63,14 @@ void register_PDBCrystal_class(){
                 , "Whether the object contains a record." );
         
         }
-        { //::SireIO::PDBCrystal::toPDBLine
+        { //::SireIO::PDBCrystal::toPDBRecord
         
-            typedef ::QString ( ::SireIO::PDBCrystal::*toPDBLine_function_type)(  ) const;
-            toPDBLine_function_type toPDBLine_function_value( &::SireIO::PDBCrystal::toPDBLine );
+            typedef ::QString ( ::SireIO::PDBCrystal::*toPDBRecord_function_type)(  ) const;
+            toPDBRecord_function_type toPDBRecord_function_value( &::SireIO::PDBCrystal::toPDBRecord );
             
             PDBCrystal_exposer.def( 
-                "toPDBLine"
-                , toPDBLine_function_value
+                "toPDBRecord"
+                , toPDBRecord_function_value
                 , "Generate a PDB record from the crystallographic data." );
         
         }

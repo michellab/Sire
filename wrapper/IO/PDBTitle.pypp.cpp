@@ -126,14 +126,14 @@ void register_PDBTitle_class(){
                 , "Return the number of REMARK records." );
         
         }
-        { //::SireIO::PDBTitle::toPDBLines
+        { //::SireIO::PDBTitle::toPDBRecord
         
-            typedef ::QStringList ( ::SireIO::PDBTitle::*toPDBLines_function_type)(  ) const;
-            toPDBLines_function_type toPDBLines_function_value( &::SireIO::PDBTitle::toPDBLines );
+            typedef ::QStringList ( ::SireIO::PDBTitle::*toPDBRecord_function_type)(  ) const;
+            toPDBRecord_function_type toPDBRecord_function_value( &::SireIO::PDBTitle::toPDBRecord );
             
             PDBTitle_exposer.def( 
-                "toPDBLines"
-                , toPDBLines_function_value
+                "toPDBRecord"
+                , toPDBRecord_function_value
                 , "Generate PDB records from the atom data." );
         
         }

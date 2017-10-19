@@ -52,14 +52,14 @@ void register_PDBSheet_class(){
         PDBSheet_exposer_t PDBSheet_exposer = PDBSheet_exposer_t( "PDBSheet", "This class provides functionality for readingwriting\nProtein Data Bank (PDB) SHEET records.\n\nAuthor: Lester Hedges\n", bp::init< >("Default constructor.") );
         bp::scope PDBSheet_scope( PDBSheet_exposer );
         PDBSheet_exposer.def( bp::init< QString const &, QStringList & >(( bp::arg("line"), bp::arg("errors") ), "Constructor.") );
-        { //::SireIO::PDBSheet::toPDBLine
+        { //::SireIO::PDBSheet::toPDBRecord
         
-            typedef ::QString ( ::SireIO::PDBSheet::*toPDBLine_function_type)(  ) const;
-            toPDBLine_function_type toPDBLine_function_value( &::SireIO::PDBSheet::toPDBLine );
+            typedef ::QString ( ::SireIO::PDBSheet::*toPDBRecord_function_type)(  ) const;
+            toPDBRecord_function_type toPDBRecord_function_value( &::SireIO::PDBSheet::toPDBRecord );
             
             PDBSheet_exposer.def( 
-                "toPDBLine"
-                , toPDBLine_function_value
+                "toPDBRecord"
+                , toPDBRecord_function_value
                 , "Generate a PDB record from the sheet data." );
         
         }
