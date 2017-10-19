@@ -389,7 +389,7 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors) :
     }
     else
     {
-        // Some way of inferring the type...
+        // TODO: Some way of inferring the type...
     }
 
     // Extract the atomic charge.
@@ -399,7 +399,7 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors) :
     }
     else if (atom.hasProperty("formal-charge"))
     {
-        // Need some conversion here, I assume.
+        // TOD: Need some conversion here, I assume.
         charge = atom.property<SireUnits::Dimension::Charge>("formal-charge").value();
     }
 
@@ -956,7 +956,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
     }
     else
     {
-        // Some way of inferring the type...
+        // TODO: Some way of inferring the type...
     }
 
     // Extract the charge type.
@@ -993,7 +993,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
     }
     else
     {
-        // Some way of inferring the type...
+        // TODO: Some way of inferring the charge...
     }
 
     // Extract the status bits.
