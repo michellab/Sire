@@ -2505,7 +2505,7 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
         // Get the current substructure.
         auto subst = molecules[imol].getSubstructure(i);
 
-        // Determine the ResIdx for this atom.
+        // Determine the ResIdx for this residue.
         auto residx = molinfo.resIdx(ResNum(subst.getNumber()));
 
         // Set the residue properties.
