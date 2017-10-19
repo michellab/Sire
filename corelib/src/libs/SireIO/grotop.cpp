@@ -2220,7 +2220,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         
         //how many moleculetypes are there? Divide them up and get
         //the child tags for each moleculetype
-        QList< QHash<QString,int> > moltags;
+        QList< QMultiHash<QString,int> > moltags;
         {
             //list of tags that are valid within a moleculetype
             const QStringList valid_tags = { "atoms", "bonds", "pairs", "pairs_nb",
@@ -2238,7 +2238,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 {
                     //we have found another molecule - save the location
                     //of all of its child tags
-                    QHash<QString,int> tags;
+                    QMultiHash<QString,int> tags;
                     tags.insert(it.value(), it.key());
                     ++it;
                     
@@ -2249,7 +2249,8 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                         if (valid_tags.contains(it.value()))
                         {
                             //this is a valid child tag - save its location
-                            tags.insert(it.value(), it.key());
+                            //(note that a tag can exist multiple times!)
+                            tags.insertMulti(it.value(), it.key());
                             ++it;
                         }
                         else
@@ -2392,13 +2393,46 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         };
         
         //function that extracts all of the information from the 'bonds' lines
+        auto addBondsTo = [&](GroMolType &moltype, int linenum)
+        {
+            QStringList lines = getDirectiveLines(linenum);
+            
+            for (const auto line : lines)
+            {
+                qDebug() << "BOND:" << line;
+            }
+        };
+
+        //function that extracts all of the information from the 'dihedrals' lines
+        auto addDihedralsTo = [&](GroMolType &moltype, int linenum)
+        {
+            QStringList lines = getDirectiveLines(linenum);
+            
+            for (const auto line : lines)
+            {
+                qDebug() << "DIHEDRAL:" << line;
+            }
+        };
         
         //ok, now we know the location of all child tags of each moleculetype
         auto processMolType = [&](const QHash<QString,int> &moltag)
         {
             auto moltype = getMolType( moltag.value("moleculetype", -1) );
-            addAtomsTo( moltype, moltag.value("atoms", -1) );
-            //addBondsTo( moltype, moltype.value("bonds", -1) );
+            
+            for (auto linenum : moltag.values("atoms"))
+            {
+                addAtomsTo( moltype, linenum );
+            }
+            
+            for (auto linenum : moltag.values("bonds"))
+            {
+                addBondsTo( moltype, linenum );
+            }
+
+            for (auto linenum : moltag.values("dihedrals"))
+            {
+                addDihedralsTo( moltype, linenum );
+            }
             
             //should be finished, run some checks that this looks sane
             moltype.sanitise();
