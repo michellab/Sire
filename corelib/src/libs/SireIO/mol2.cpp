@@ -2600,9 +2600,6 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
                 errors += local_errors;
             }
         });
-
-        // Append the substructures to the molecule.
-        mol2_mol.appendSubstructures(local_subst);
     }
     else
     {
@@ -2611,9 +2608,6 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
         {
             // Initalise a Mol2Atom.
             Mol2Atom atom(sire_mol.atom(AtomIdx(i)), errors);
-
-            // Append the atom to the molecule.
-            mol2_mol.appendAtom(atom);
 
             // Generate a Mol2 atom data record.
             atom_lines[i] = atom.toMol2Record();
@@ -2624,9 +2618,6 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
         {
             // Initalise a Mol2Substructure.
             Mol2Substructure subst(sire_mol.residue(ResIdx(i)), errors);
-
-            // Append the substructure to the molecule.
-            mol2_mol.appendSubstructure(subst);
 
             // Generate a Mol2 substructure data record.
             substructure_lines[i] = subst.toMol2Record();
