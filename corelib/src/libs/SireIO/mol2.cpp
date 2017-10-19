@@ -361,8 +361,6 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors) :
     number(atom.number().value()),
     name(atom.name().value()),
     type("Du"),
-    subst_id(atom.residue().number().value()),
-    subst_name(atom.residue().name().value()),
     charge(0)
 {
     // The atom must have atomic coordinates to be valid.
@@ -375,6 +373,14 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors) :
 
     // Extract the atomic coordinates.
     coord = atom.property<SireMaths::Vector>("coordinates");
+
+    // The atom is within a residue.
+    if (atom.isWithinResidue())
+    {
+        // Extract the residue number and name.
+        subst_id = atom.residue().number().value();
+        subst_name = atom.residue().name().value();
+    }
 
     // Extract the SYBYL atom type.
     if (atom.hasProperty("sybyl-atom-type"))
