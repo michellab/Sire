@@ -7,6 +7,10 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/parallel.h"
+
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireIO/errors.h"
@@ -15,11 +19,21 @@ namespace bp = boost::python;
 
 #include "SireMM/mol2params.h"
 
+#include "SireMol/atomcharges.h"
+
+#include "SireMol/atomcoords.h"
+
+#include "SireMol/molecule.h"
+
+#include "SireMol/moleditor.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
 
 #include "SireSystem/system.h"
+
+#include "SireUnits/units.h"
 
 #include "mol2.h"
 

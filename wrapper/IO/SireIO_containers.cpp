@@ -55,8 +55,5 @@ void register_SireIO_containers()
     register_list< QVector<Mol2Bond> >();
     register_list< QVector<Mol2Substructure> >();
     register_list< QVector<PDBAtom> >();
-    register_list< QVector<PDBHelix> >();
-    register_list< QVector<PDBSheet> >();
     register_list< QVector<QVector<PDBAtom> >>();
-    register_dict< QMap<qint64, QString> >();
 }

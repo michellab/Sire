@@ -60,12 +60,6 @@ using namespace SireUnits;
 const RegisterParser<PDB2> register_pdb;
 static const RegisterMetaType<PDB2> r_pdb2;
 static const RegisterMetaType<PDBAtom> r_pdbatom(NO_ROOT);
-static const RegisterMetaType<PDBCrystal> r_pdbcrystal(NO_ROOT);
-static const RegisterMetaType<PDBHelix> r_pdbhelix(NO_ROOT);
-static const RegisterMetaType<PDBMaster> r_pdbmaster(NO_ROOT);
-static const RegisterMetaType<PDBSheet> r_pdbsheet(NO_ROOT);
-static const RegisterMetaType<PDBTitle> r_pdbtitle(NO_ROOT);
-static const RegisterMetaType<PDBTransform> r_pdbtransform(NO_ROOT);
 
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBAtom &pdbatom)
 {
@@ -76,9 +70,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBAtom &pdbatom)
     sds << pdbatom.record << pdbatom.serial << pdbatom.name << pdbatom.alt_loc
         << pdbatom.res_name << pdbatom.chain_id << pdbatom.res_num << pdbatom.insert_code
         << pdbatom.coord << pdbatom.occupancy << pdbatom.temperature << pdbatom.element
-        << pdbatom.charge << pdbatom.is_het << pdbatom.is_ter << pdbatom.is_anis
-        << pdbatom.anis_facts[0] << pdbatom.anis_facts[1] << pdbatom.anis_facts[2]
-        << pdbatom.anis_facts[3] << pdbatom.anis_facts[4] << pdbatom.anis_facts[5];
+        << pdbatom.charge << pdbatom.is_het << pdbatom.is_ter;
 
     return ds;
 }
@@ -94,210 +86,10 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBAtom &pdbatom)
         sds >> pdbatom.record >> pdbatom.serial >> pdbatom.name >> pdbatom.alt_loc
             >> pdbatom.res_name >> pdbatom.chain_id >> pdbatom.res_num >> pdbatom.insert_code
             >> pdbatom.coord >> pdbatom.occupancy >> pdbatom.temperature >> pdbatom.element
-            >> pdbatom.charge >> pdbatom.is_het >> pdbatom.is_ter >> pdbatom.is_anis
-            >> pdbatom.anis_facts[0] >> pdbatom.anis_facts[1] >> pdbatom.anis_facts[2]
-            >> pdbatom.anis_facts[3] >> pdbatom.anis_facts[4] >> pdbatom.anis_facts[5];
+            >> pdbatom.charge >> pdbatom.is_het >> pdbatom.is_ter;
     }
     else
         throw version_error(v, "1", r_pdbatom, CODELOC);
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBCrystal &pdbcrystal)
-{
-    writeHeader(ds, r_pdbcrystal, 1);
-
-    SharedDataStream sds(ds);
-
-    sds << pdbcrystal.record << pdbcrystal.base_lengths
-        << pdbcrystal.angles << pdbcrystal.z;
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBCrystal &pdbcrystal)
-{
-    VersionID v = readHeader(ds, r_pdbcrystal);
-
-    if (v == 1)
-    {
-        SharedDataStream sds(ds);
-
-        sds >> pdbcrystal.record >> pdbcrystal.base_lengths
-            >> pdbcrystal.angles >> pdbcrystal.z;
-    }
-    else
-        throw version_error(v, "1", r_pdbcrystal, CODELOC);
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBHelix &pdbhelix)
-{
-    writeHeader(ds, r_pdbhelix, 1);
-
-    SharedDataStream sds(ds);
-
-    sds << pdbhelix.record << pdbhelix.serial << pdbhelix.id << pdbhelix.init_res_name
-        << pdbhelix.init_chain_id << pdbhelix.init_res_num << pdbhelix.init_insert_code
-        << pdbhelix.end_res_name << pdbhelix.end_chain_id << pdbhelix.end_insert_code
-        << pdbhelix.helix_class << pdbhelix.comment << pdbhelix.length;
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBHelix &pdbhelix)
-{
-    VersionID v = readHeader(ds, r_pdbhelix);
-
-    if (v == 1)
-    {
-        SharedDataStream sds(ds);
-
-        sds >> pdbhelix.record >> pdbhelix.serial >> pdbhelix.id >> pdbhelix.init_res_name
-            >> pdbhelix.init_chain_id >> pdbhelix.init_res_num >> pdbhelix.init_insert_code
-            >> pdbhelix.end_res_name >> pdbhelix.end_chain_id >> pdbhelix.end_insert_code
-            >> pdbhelix.helix_class >> pdbhelix.comment << pdbhelix.length;
-    }
-    else
-        throw version_error(v, "1", r_pdbhelix, CODELOC);
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBMaster &pdbmaster)
-{
-    writeHeader(ds, r_pdbmaster, 1);
-
-    SharedDataStream sds(ds);
-
-    sds << pdbmaster.record << pdbmaster.num_remarks << pdbmaster.num_hets
-        << pdbmaster.num_helices << pdbmaster.num_sheets << pdbmaster.num_sites
-        << pdbmaster.num_transforms << pdbmaster.num_atoms << pdbmaster.num_ters
-        << pdbmaster.num_connects << pdbmaster.num_sequences;
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBMaster &pdbmaster)
-{
-    VersionID v = readHeader(ds, r_pdbmaster);
-
-    if (v == 1)
-    {
-        SharedDataStream sds(ds);
-
-        sds >> pdbmaster.record >> pdbmaster.num_remarks >> pdbmaster.num_hets
-            >> pdbmaster.num_helices >> pdbmaster.num_sheets >> pdbmaster.num_sites
-            >> pdbmaster.num_transforms >> pdbmaster.num_atoms >> pdbmaster.num_ters
-            >> pdbmaster.num_connects >> pdbmaster.num_sequences;
-    }
-    else
-        throw version_error(v, "1", r_pdbmaster, CODELOC);
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBSheet &pdbsheet)
-{
-    writeHeader(ds, r_pdbsheet, 1);
-
-    SharedDataStream sds(ds);
-
-    sds << pdbsheet.record << pdbsheet.id << pdbsheet.num_strands
-        << pdbsheet.init_res_name << pdbsheet.init_chain_id << pdbsheet.init_res_num
-        << pdbsheet.init_insert_code << pdbsheet.end_res_name << pdbsheet.end_chain_id
-        << pdbsheet.end_res_num << pdbsheet.end_insert_code << pdbsheet.sense
-        << pdbsheet.curr_atm_name << pdbsheet.curr_res_name << pdbsheet.curr_chain_id
-        << pdbsheet.curr_insert_code << pdbsheet.prev_atm_name << pdbsheet.prev_res_name
-        << pdbsheet.prev_chain_id << pdbsheet.prev_insert_code;
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBSheet &pdbsheet)
-{
-    VersionID v = readHeader(ds, r_pdbsheet);
-
-    if (v == 1)
-    {
-        SharedDataStream sds(ds);
-
-        sds >> pdbsheet.record >> pdbsheet.id >> pdbsheet.num_strands
-            >> pdbsheet.init_res_name >> pdbsheet.init_chain_id >> pdbsheet.init_res_num
-            >> pdbsheet.init_insert_code >> pdbsheet.end_res_name >> pdbsheet.end_chain_id
-            >> pdbsheet.end_res_num >> pdbsheet.end_insert_code >> pdbsheet.sense
-            >> pdbsheet.curr_atm_name >> pdbsheet.curr_res_name >> pdbsheet.curr_chain_id
-            >> pdbsheet.curr_insert_code >> pdbsheet.prev_atm_name >> pdbsheet.prev_res_name
-            >> pdbsheet.prev_chain_id >> pdbsheet.prev_insert_code;
-    }
-    else
-        throw version_error(v, "1", r_pdbsheet, CODELOC);
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBTitle &pdbtitle)
-{
-    writeHeader(ds, r_pdbtitle, 1);
-
-    SharedDataStream sds(ds);
-
-    sds << pdbtitle.records << pdbtitle.header << pdbtitle.obsoletes << pdbtitle.titles
-        << pdbtitle.splits << pdbtitle.caveats << pdbtitle.compounds << pdbtitle.sources
-        << pdbtitle.keywords << pdbtitle.experiments << pdbtitle.num_models
-        << pdbtitle.model_types << pdbtitle.authors << pdbtitle.revisions
-        << pdbtitle.supersedes << pdbtitle.journals << pdbtitle.remarks;
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBTitle &pdbtitle)
-{
-    VersionID v = readHeader(ds, r_pdbtitle);
-
-    if (v == 1)
-    {
-        SharedDataStream sds(ds);
-
-        sds >> pdbtitle.records >> pdbtitle.header >> pdbtitle.obsoletes >> pdbtitle.titles
-            >> pdbtitle.splits >> pdbtitle.caveats >> pdbtitle.compounds >> pdbtitle.sources
-            >> pdbtitle.keywords >> pdbtitle.experiments >> pdbtitle.num_models
-            >> pdbtitle.model_types >> pdbtitle.authors >> pdbtitle.revisions
-            >> pdbtitle.supersedes >> pdbtitle.journals >> pdbtitle.remarks;
-    }
-    else
-        throw version_error(v, "1", r_pdbtitle, CODELOC);
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBTransform &pdbtransform)
-{
-    writeHeader(ds, r_pdbtransform, 1);
-
-    SharedDataStream sds(ds);
-
-    sds << pdbtransform.records << pdbtransform.serial << pdbtransform.isGiven
-        << pdbtransform.transforms << pdbtransform.offsets;
-
-    return ds;
-}
-
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBTransform &pdbtransform)
-{
-    VersionID v = readHeader(ds, r_pdbtransform);
-
-    if (v == 1)
-    {
-        SharedDataStream sds(ds);
-
-        sds >> pdbtransform.records >> pdbtransform.serial >> pdbtransform.isGiven
-            >> pdbtransform.transforms >> pdbtransform.offsets;
-    }
-    else
-        throw version_error(v, "1", r_pdbcrystal, CODELOC);
 
     return ds;
 }
@@ -308,11 +100,8 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDB2 &pdb2)
 
     SharedDataStream sds(ds);
 
-    sds << pdb2.title << pdb2.atoms << pdb2.residues << pdb2.chains << pdb2.segments
-        << pdb2.connections << pdb2.helices << pdb2.sheets << pdb2.trans_orig
-        << pdb2.trans_scale << pdb2.trans_matrix << pdb2.master << pdb2.num_ters
-        << pdb2.invalid_records << pdb2.parse_warnings
-        << static_cast<const MoleculeParser&>(pdb2);
+    sds << pdb2.atoms << pdb2.residues << pdb2.chains << pdb2.num_ters
+        << pdb2.parse_warnings << static_cast<const MoleculeParser&>(pdb2);
 
     return ds;
 }
@@ -325,11 +114,8 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB2 &pdb2)
     {
         SharedDataStream sds(ds);
 
-        sds >> pdb2.title >> pdb2.atoms >> pdb2.residues >> pdb2.chains >> pdb2.segments
-            >> pdb2.connections >> pdb2.helices >> pdb2.sheets >> pdb2.trans_orig
-            >> pdb2.trans_scale >> pdb2.trans_matrix >> pdb2.master >> pdb2.num_ters
-            >> pdb2.invalid_records >> pdb2.parse_warnings
-            >> static_cast<MoleculeParser&>(pdb2);
+        sds >> pdb2.atoms >> pdb2.residues >> pdb2.chains >> pdb2.num_ters
+            >> pdb2.parse_warnings >> static_cast<MoleculeParser&>(pdb2);
     }
     else
         throw version_error(v, "1", r_pdb2, CODELOC);
@@ -343,8 +129,7 @@ PDBAtom::PDBAtom() :
     element("X"),
     charge(0),
     is_het(false),
-    is_ter(false),
-    is_anis(false)
+    is_ter(false)
 {
 }
 
@@ -361,8 +146,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
     element("X"),
     charge(0),
     is_het(false),
-    is_ter(false),
-    is_anis(false)
+    is_ter(false)
 {
     if (line.length() < 54)
     {
@@ -451,6 +235,18 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
     else
     {
         occupancy = tmp_dbl;
+
+        // Check occupancy is valid.
+        if ((occupancy < 1) or
+            (occupancy > 1))
+        {
+            errors.append(QObject::tr("The occupancy (%1) was out of range! "
+                "Setting to default value of 1.0.")
+                .arg(occupancy));
+
+            occupancy = 1;
+            return;
+        }
     }
 
     // Extract temperature data.
@@ -465,6 +261,17 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
     else
     {
         temperature = tmp_dbl;
+
+        // Check temperature is valid.
+        if (temperature < 0)
+        {
+            errors.append(QObject::tr("The temperature factor (%1) is negative! "
+                "Setting to the default value of 0.0.")
+                .arg(temperature));
+
+            temperature = 0;
+            return;
+        }
     }
 
     // Extract the element name.
@@ -505,8 +312,7 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     element("X"),
     charge(0),
     is_het(false),
-    is_ter(is_ter),
-    is_anis(false)
+    is_ter(is_ter)
 {
     // The atom must have atomic coordinates to be valid.
     if (not atom.hasProperty("coordinates"))
@@ -562,15 +368,6 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
         // TODO: This doesn't seem to be working in all cases.
         charge = atom.property<SireUnits::Dimension::Charge>("formal-charge").value();
         charge /= SireUnits::mod_electron;
-    }
-    else if (atom.hasProperty("charge"))
-    {
-        // TODO: Some kind of conversion needed?
-        //charge = atom.property<SireUnits::Dimension::Charge>("charge").value();
-    }
-    else
-    {
-        // TODO: Infer the charge...
     }
 
     // Determine whether this is a HETATM.
@@ -652,57 +449,16 @@ bool PDBAtom::isTer() const
     return is_ter;
 }
 
-/** Set anisotropic temperature record data.
-    @param line1
-        An ATOM record line from a PDB file.
-
-    @param line2
-        The ANISOU record line for the atom.
-
-    @param errors
-        An array of error messages.
- */
-void PDBAtom::setAnisTemp(const QString &line1, const QString &line2, QStringList &errors)
-{
-    is_anis = true;
-
-    // Check that data from this record matches that of the atom.
-    // Columns 6-26 and 72-80 should be identical.
-    if (line1.midRef(6,21) == line2.midRef(6,21) and
-        line1.midRef(72,8) == line2.midRef(72,8))
-    {
-        // Extract the six anisotropic temperature factors.
-        for (int i=0; i<6; ++i)
-        {
-            bool ok;
-            int tmp_int = line2.midRef(28 + i*7,7).toInt(&ok);
-
-            if (not ok)
-            {
-                errors.append(QObject::tr("There was a problem reading the "
-                    "anisotropic temperature factors from the data '%1' in "
-                    "line '%2'").arg(line2.mid(28,42)).arg(line2));
-
-                return;
-            }
-
-            // Store the temperature factor.
-            anis_facts[i] = tmp_int;
-        }
-    }
-    else
-    {
-        // Do we wan't to bail out here?
-        // Probably just catch the error and continue.
-        errors.append(QObject::tr("ANISOU record does not match the format! '%2' '%3'")
-            .arg(line1).arg(line2));
-    }
-}
-
 /** Get the atom serial number. */
 qint64 PDBAtom::getSerial() const
 {
     return serial;
+}
+
+/** Set the atom serial number. */
+void PDBAtom::setSerial(int serial)
+{
+    this->serial = serial;
 }
 
 /** Get the atom name. */
@@ -745,6 +501,12 @@ double PDBAtom::getOccupancy() const
 double PDBAtom::getTemperature() const
 {
     return temperature;
+}
+
+/** Set the temperature factor. */
+void PDBAtom::setTemperature(double temperature)
+{
+    this->temperature = temperature;
 }
 
 /** Get the element symbol. */
@@ -832,909 +594,9 @@ QString PDBAtom::toString() const
     return QObject::tr("PDBAtom::null");
 }
 
-/** Default constructor. */
-PDBCrystal::PDBCrystal() : record("NULL")
-{
-}
-
-/** Constructor.
-    @param line
-        An CRYST1 record line from a PDB file.
-
-    @param errors
-        An array of error messages.
- */
-PDBCrystal::PDBCrystal(const QString &line,
-                       QStringList &errors) : record(line)
-{
-    // Read unit cell base length records.
-
-    bool ok_x, ok_y, ok_z;
-    double x = line.midRef(6,9).toDouble(&ok_x);
-    double y = line.midRef(15,9).toDouble(&ok_y);
-    double z = line.midRef(24,9).toDouble(&ok_z);
-
-    if (not (ok_x and ok_y and ok_z))
-    {
-        errors.append(QObject::tr("There was a problem reading the crystallographic "
-            "values of a, c, and c from the data '%1' in line '%2'")
-            .arg(line.mid(6,27)).arg(line));
-
-        return;
-    }
-    base_lengths = Vector(x, y, z);
-
-    // Read unit cell angle records.
-
-    x = line.midRef(33,7).toDouble(&ok_x);
-    y = line.midRef(40,7).toDouble(&ok_y);
-    z = line.midRef(47,7).toDouble(&ok_z);
-
-    if (not (ok_x and ok_y and ok_z))
-    {
-        errors.append(QObject::tr("There was a problem reading the crystallographic "
-            "values of alpha, beta, and gamma from the data '%1' in line '%2'")
-            .arg(line.mid(33,21)).arg(line));
-
-        return;
-    }
-    angles = Vector(x, y, z);
-
-    // Extract the crystallographic space group.
-    space_group = line.mid(55,11).simplified();
-
-    // Extract the Z value.
-    int tmp_int = line.midRef(66,4).toInt(&ok_x);
-
-    if (not ok_x)
-    {
-        errors.append(QObject::tr("There was a problem reading the crystallographic "
-            "Z value from the data '%1' in line '%2'")
-            .arg(line.mid(66,4)).arg(line));
-
-        return;
-    }
-    z = tmp_int;
-}
-
-/** Return the C++ name for this class */
-const char* PDBCrystal::typeName()
-{
-    return QMetaType::typeName( qMetaTypeId<PDBCrystal>() );
-}
-
-/** Return a PDB record line for this crystallographic object. */
-QString PDBCrystal::toPDBRecord() const
-{
-    return record;
-}
-
-/** Return a string representation of this object */
-QString PDBCrystal::toString() const
-{
-    return QObject::tr("PDBCrystal::null");
-}
-
-/** Whether the object contains a record. */
-bool PDBCrystal::hasRecord() const
-{
-    return (record != "NULL");
-}
-
-/** Default constructor. */
-PDBHelix::PDBHelix()
-{
-}
-
-/** Constructor.
-    @param line
-        A HELIX record line from a PDB file.
-
-    @param errors
-        An array of error messages.
- */
-PDBHelix::PDBHelix(const QString &line,
-                   QStringList &errors) : record(line)
-{
-    // Extract the helix serial number.
-    bool ok;
-    int tmp_int = line.midRef(7,3).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the helix serial "
-            "number from part (%1) from line '%2'")
-            .arg(line.mid(7,3)).arg(line));
-
-        return;
-    }
-    serial = tmp_int;
-
-    // Extract the helix ID.
-    id = line.mid(11,3).simplified();
-
-    // Extract the name of the initial residue.
-    init_res_name = line.mid(15,3).simplified();
-
-    // Extract the ID of the initial chain.
-    init_chain_id = line[19];
-
-    // Extract the sequence number of the initial residue.
-    tmp_int = line.midRef(21,4).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the initial residue sequence "
-            "number from part (%1) from line '%2'")
-            .arg(line.mid(21,4)).arg(line));
-
-        return;
-    }
-    init_res_num = tmp_int;
-
-    // Extract the insertion code of the end residue.
-    end_insert_code = line[25];
-
-    // Extract the name of the end residue.
-    end_res_name = line.mid(27,3).simplified();
-
-    // Extract the ID of the end chain.
-    end_chain_id = line[31];
-
-    // Extract the sequence number of the end residue.
-    tmp_int = line.midRef(33,4).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the end residue sequence "
-            "number from part (%1) from line '%2'")
-            .arg(line.mid(33,4)).arg(line));
-
-        return;
-    }
-    end_res_num = tmp_int;
-
-    // Extract the insertion code of the end residue.
-    end_insert_code = line[37];
-
-    // Extract the helix class.
-    tmp_int = line.midRef(38,2).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the helix class "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(38,2)).arg(line));
-
-        return;
-    }
-    helix_class = tmp_int;
-
-    // Extract any comment about the helix.
-    comment = line.mid(40,30).simplified();
-
-    // Extract the helix length.
-    tmp_int = line.midRef(71,6).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the helix length "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(71,6)).arg(line));
-
-        return;
-    }
-    length = tmp_int;
-}
-
-/** Return the C++ name for this class */
-const char* PDBHelix::typeName()
-{
-    return QMetaType::typeName( qMetaTypeId<PDBHelix>() );
-}
-
-/** Return a PDB record line for this helix. */
-QString PDBHelix::toPDBRecord() const
-{
-    return record;
-}
-
-/** Return a string representation of this object */
-QString PDBHelix::toString() const
-{
-    return QObject::tr("PDBHelix::null");
-}
-
-/** Default constructor. */
-PDBMaster::PDBMaster() :
-    num_remarks(0),
-    num_hets(0),
-    num_helices(0),
-    num_sheets(0),
-    num_sites(0),
-    num_transforms(0),
-    num_atoms(0),
-    num_ters(0),
-    num_connects(0),
-    num_sequences(0)
-{
-}
-
-/** Constructor.
-    @param line
-        A MASTER record line from a PDB file.
-
-    @param errors
-        An array of error messages.
- */
-PDBMaster::PDBMaster(const QString &line,
-                     QStringList &errors) :
-    record(line),
-    num_remarks(0),
-    num_hets(0),
-    num_helices(0),
-    num_sheets(0),
-    num_sites(0),
-    num_transforms(0),
-    num_atoms(0),
-    num_ters(0),
-    num_connects(0),
-    num_sequences(0)
-{
-    // Extract the number of remark records.
-    bool ok;
-    int tmp_int = line.midRef(10,5).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the number of REMARK records "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(10,5)).arg(line));
-
-        return;
-    }
-    num_remarks = tmp_int;
-
-    // Extract the number of HET records.
-    tmp_int = line.midRef(20,5).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the number of HET records "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(20,5)).arg(line));
-
-        return;
-    }
-    num_hets = tmp_int;
-
-    // Extract the number of HELIX records.
-    tmp_int = line.midRef(25,5).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the number of HELIX records "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(25,5)).arg(line));
-
-        return;
-    }
-    num_helices = tmp_int;
-
-    // Extract the number of SHEET records.
-    tmp_int = line.midRef(30,5).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the number of SHEET records "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(30,5)).arg(line));
-
-        return;
-    }
-    num_sheets = tmp_int;
-
-    // Extract the number of SITE records.
-    tmp_int = line.midRef(40,5).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the number of SITE records "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(40,5)).arg(line));
-
-        return;
-    }
-    num_sites = tmp_int;
-
-    // Extract the number of transformation records.
-    tmp_int = line.midRef(45,5).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the number of coordinate "
-            "transformation records from part (%1) from line '%2'")
-            .arg(line.mid(45,5)).arg(line));
-
-        return;
-    }
-    num_transforms = tmp_int;
-
-    // Extract the number of ATOM and HETATM records.
-    tmp_int = line.midRef(50,5).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the number of ATOM and HETATM records "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(50,5)).arg(line));
-
-        return;
-    }
-    num_atoms = tmp_int;
-
-    // Extract the number of TER records.
-    tmp_int = line.midRef(55,5).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the number of TER records "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(55,5)).arg(line));
-
-        return;
-    }
-    num_ters = tmp_int;
-
-    // Extract the number of CONECT records.
-    tmp_int = line.midRef(60,5).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the number of CONECT records "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(60,5)).arg(line));
-
-        return;
-    }
-    num_connects = tmp_int;
-
-    // Extract the number of SEQRES records.
-    tmp_int = line.midRef(65,5).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the number of SEQRES records "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(65,5)).arg(line));
-
-        return;
-    }
-    num_sequences = tmp_int;
-}
-
-/** Return the C++ name for this class */
-const char* PDBMaster::typeName()
-{
-    return QMetaType::typeName( qMetaTypeId<PDBMaster>() );
-}
-
-/** Return a PDB record line for this master object. */
-QString PDBMaster::toPDBRecord() const
-{
-    return record;
-}
-
-/** Return a string representation of this object */
-QString PDBMaster::toString() const
-{
-    return QObject::tr("PDBMaster::null");
-}
-
-/** Return the number of REMARK records. */
-int PDBMaster::nRemarks() const
-{
-    return num_remarks;
-}
-
-/** Return the number of HET records. */
-int PDBMaster::nHets() const
-{
-    return num_hets;
-}
-
-/** Return the number of HELIX records. */
-int PDBMaster::nHelices() const
-{
-    return num_helices;
-}
-
-/** Return the number of SHEET records. */
-int PDBMaster::nSheets() const
-{
-    return num_sheets;
-}
-
-/** Return the number of SITE records. */
-int PDBMaster::nSites() const
-{
-    return num_sites;
-}
-
-/** Return the number of coordinate transformation records. */
-int PDBMaster::nTransforms() const
-{
-    return num_transforms;
-}
-
-/** Return the number of ATOM and HETATM records. */
-int PDBMaster::nAtoms() const
-{
-    return num_atoms;
-}
-
-/** Return the number of TER records. */
-int PDBMaster::nTers() const
-{
-    return num_ters;
-}
-
-/** Return the number of CONECT records. */
-int PDBMaster::nConnects() const
-{
-    return num_connects;
-}
-
-/** Return the number of SEQRES records. */
-int PDBMaster::nSequences() const
-{
-    return num_sequences;
-}
-
-/** Default constructor. */
-PDBSheet::PDBSheet()
-{
-}
-
-/** Constructor.
-    @param line
-        A SHEET record line from a PDB file.
-
-    @param errors
-        An array of error messages.
- */
-PDBSheet::PDBSheet(const QString &line,
-                   QStringList &errors) : record(line)
-{
-    // Extract the strand number.
-    bool ok;
-    int tmp_int = line.midRef(7,3).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the strand "
-            "number from part (%1) from line '%2'")
-            .arg(line.mid(7,3)).arg(line));
-
-        return;
-    }
-    strand = tmp_int;
-
-    // Extract the sheet ID.
-    id = line.mid(11,3).simplified();
-
-    // Extract the number of strands in the sheet.
-    tmp_int = line.midRef(14,2).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the number of strands "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(14,2)).arg(line));
-
-        return;
-    }
-    num_strands = tmp_int;
-
-    // Extract the name of the initial residue.
-    init_res_name = line.mid(17,3).simplified();
-
-    // Extract the ID of the initial chain.
-    init_chain_id = line[21];
-
-    // Extract the sequence number of the initial residue.
-    tmp_int = line.midRef(22,4).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the initial residue sequence "
-            "number from part (%1) from line '%2'")
-            .arg(line.mid(22,4)).arg(line));
-
-        return;
-    }
-    init_res_num = tmp_int;
-
-    // Extract the insertion code of the end residue.
-    end_insert_code = line[26];
-
-    // Extract the name of the end residue.
-    end_res_name = line.mid(28,3).simplified();
-
-    // Extract the ID of the end chain.
-    end_chain_id = line[32];
-
-    // Extract the sequence number of the end residue.
-    tmp_int = line.midRef(33,4).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the end residue sequence "
-            "number from part (%1) from line '%2'")
-            .arg(line.mid(33,4)).arg(line));
-
-        return;
-    }
-    end_res_num = tmp_int;
-
-    // Extract the insertion code of the end residue.
-    end_insert_code = line[37];
-
-    // Extract the sense of the strand with respect to previous strand.
-    tmp_int = line.midRef(38,2).toInt(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("Cannot extract the strand sense "
-            "from part (%1) from line '%2'")
-            .arg(line.mid(38,2)).arg(line));
-
-        return;
-    }
-    sense = tmp_int;
-
-    // Parse stand data.
-    if (strand > 1)
-    {
-        // DATA FOR CURRENT STRAND
-
-        // Extract the atom name in the current strand.
-        curr_atm_name = line.mid(41,4).simplified();
-
-        // Extract the residue name in the current strand.
-        curr_res_name = line.mid(45,3).simplified();
-
-        // Extract the chain ID in the current strand.
-        curr_chain_id = line[49];
-
-        // Extract the sequence number in the current strand.
-        tmp_int = line.midRef(50,4).toInt(&ok);
-
-        if (not ok)
-        {
-            errors.append(QObject::tr("Cannot extract the residue sequence "
-                "number from part (%1) from line '%2'")
-                .arg(line.mid(50,4)).arg(line));
-
-            return;
-        }
-        curr_res_num = tmp_int;
-
-        // Extract the insertion code in the current strand.
-        curr_insert_code = line[54];
-
-        // DATA FOR PREVIOUS STRAND
-
-        // Extract the atom name in the previous strand.
-        prev_atm_name = line.mid(56,4).simplified();
-
-        // Extract the residue name in the previous strand.
-        prev_res_name = line.mid(60,3).simplified();
-
-        // Extract the chain ID in the previous strand.
-        prev_chain_id = line[64];
-
-        // Extract the sequence number in the previous strand.
-        tmp_int = line.midRef(65,4).toInt(&ok);
-
-        if (not ok)
-        {
-            errors.append(QObject::tr("Cannot extract the residue sequence "
-                "number from part (%1) from line '%2'")
-                .arg(line.mid(65,4)).arg(line));
-
-            return;
-        }
-        prev_res_num = tmp_int;
-
-        // Extract the insertion code in the previous strand.
-        prev_insert_code = line[69];
-    }
-}
-
-/** Return the C++ name for this class */
-const char* PDBSheet::typeName()
-{
-    return QMetaType::typeName( qMetaTypeId<PDBSheet>() );
-}
-
-/** Return a PDB record line for this sheet. */
-QString PDBSheet::toPDBRecord() const
-{
-    return record;
-}
-
-/** Return a string representation of this object */
-QString PDBSheet::toString() const
-{
-    return QObject::tr("PDBSheet::null");
-}
-
-/** Default constructor. */
-PDBTitle::PDBTitle()
-{
-}
-
-/** Append a PDB record.
-    @param line
-        The PDB record.
-
-    @param record_type
-        The title record type.
-
-    @param errors
-        An array of error messages.
- */
-void PDBTitle::appendRecord(const QString &line,
-                            RECORD_TYPE record_type,
-                            QStringList &errors)
-{
-    // Store the orginal record string.
-    records.append(line);
-
-    switch(record_type)
-    {
-        case RECORD_TYPE::HEADER: header = line;
-                                  break;
-
-        case RECORD_TYPE::OBSLTE: obsoletes.append(line);
-                                  break;
-
-        case RECORD_TYPE::TITLE : titles.append(line);
-                                  break;
-
-        case RECORD_TYPE::SPLIT : splits.append(line);
-                                  break;
-
-        case RECORD_TYPE::CAVEAT: caveats.append(line);
-                                  break;
-
-        case RECORD_TYPE::COMPND: compounds.append(line);
-                                  break;
-
-        case RECORD_TYPE::SOURCE: sources.append(line);
-                                  break;
-
-        case RECORD_TYPE::KEYWDS: keywords.append(line);
-                                  break;
-
-        case RECORD_TYPE::EXPDTA: experiments.append(line);
-                                  break;
-
-        case RECORD_TYPE::MDLTYP: model_types.append(line);
-                                  break;
-
-        case RECORD_TYPE::AUTHOR: authors.append(line);
-                                  break;
-
-        case RECORD_TYPE::REVDAT: revisions.append(line);
-                                  break;
-
-        case RECORD_TYPE::SPRSDE: supersedes.append(line);
-                                  break;
-
-        case RECORD_TYPE::JRNL  : journals.append(line);
-                                  break;
-
-        case RECORD_TYPE::REMARK: remarks.append(line);
-                                  break;
-
-        case RECORD_TYPE::NUMMDL:
-        {
-            bool ok;
-            int tmp_int = line.midRef(10,4).toInt(&ok);
-
-            if (not ok)
-            {
-                errors.append(QObject::tr("Cannot extract the number of models "
-                    "from part (%1) from line '%2'")
-                    .arg(line.mid(10,4)).arg(line));
-
-                return;
-            }
-            num_models = tmp_int;
-
-            break;
-        }
-
-        default:
-        {
-            errors.append(QObject::tr("Title section record not recognised! "
-                "'%2'").arg(line));
-
-            return;
-        }
-    }
-}
-
-/** Return PDB records for the title section. */
-QStringList PDBTitle::toPDBRecord() const
-{
-    return records;
-}
-
-/** Return a string representation of this object */
-QString PDBTitle::toString() const
-{
-    return QObject::tr("PDBTitle::null");
-}
-
-/** Return the number of title section records. */
-int PDBTitle::nRecords() const
-{
-    return records.count();
-}
-
-/** Return the number of REMARK records. */
-int PDBTitle::nRemarks() const
-{
-    return remarks.count();
-}
-
-/** Return the number of models that should be in the PDB file. */
-int PDBTitle::nModels() const
-{
-    return num_models;
-}
-
-/** Whether the object contains any records. */
-bool PDBTitle::hasRecords() const
-{
-    return (records.count() > 0);
-}
-
-/** Return the C++ name for this class */
-const char* PDBTitle::typeName()
-{
-    return QMetaType::typeName( qMetaTypeId<PDBTitle>() );
-}
-
-/** Default constructor. */
-PDBTransform::PDBTransform() :
-    serial(-1),
-    isGiven(false),
-    transforms(QVector<SireMaths::Vector>(3)),
-    isDimension{false, false, false}
-{
-}
-
-/** Append a record to the transformation object.
-    @param line
-        An transformation record line from a PDB file.
-
-    @param dimension
-        Whether this corresponds to an x, y, or z record.
-
-    @param isNonCryst
-        Whether this is a non-crystallographic transformation.
-
-    @param errors
-        An array of error messages.
- */
-void PDBTransform::appendRecord(const QString &line,
-                                int dimension,
-                                bool isNonCryst,
-                                QStringList &errors)
-{
-    // Store the orginal record string.
-    records.append(line);
-
-    // Flag that we've seen a record for this dimension.
-    isDimension[dimension] = true;
-
-    // Extract transformation matrix entry for dimension.
-
-    bool ok_x, ok_y, ok_z;
-    double x = line.midRef(10,10).toDouble(&ok_x);
-    double y = line.midRef(20,10).toDouble(&ok_y);
-    double z = line.midRef(30,10).toDouble(&ok_z);
-
-    if (not (ok_x and ok_y and ok_z))
-    {
-        errors.append(QObject::tr("There was a problem reading the transformation "
-            "values of x, y, and z from the data '%1' in line '%2'")
-            .arg(line.mid(10,30)).arg(line));
-
-        return;
-    }
-    transforms[dimension] = Vector(x, y, z);
-
-    // Extract offset.
-
-    bool ok;
-    double offset = line.midRef(45,10).toDouble(&ok);
-
-    if (not ok)
-    {
-        errors.append(QObject::tr("There was a problem reading the transformation "
-            "offset value from the data '%1' in line '%2'")
-            .arg(line.mid(45,10)).arg(line));
-
-        return;
-    }
-    if      (dimension == 0) offsets.setX(offset);
-    else if (dimension == 1) offsets.setY(offset);
-    else if (dimension == 2) offsets.setZ(offset);
-
-    // Read additional MTRIX record data.
-
-    if (isNonCryst)
-    {
-        // Extract serial number.
-
-        bool ok;
-        int tmp_int = line.midRef(7,3).toInt(&ok);
-
-        if (not ok)
-        {
-            errors.append(QObject::tr("There was a problem reading the transformation "
-                "serial number from the data '%1' in line '%2'")
-                .arg(line.mid(7,3)).arg(line));
-
-            return;
-        }
-        serial = tmp_int;
-
-        // Check whether the coordinates for this entry are approximated
-        // by this transformation.
-
-        tmp_int = line[60].toLatin1();
-
-        if (tmp_int) isNonCryst = true;
-        else         isNonCryst = false;
-    }
-}
-
-/** Return PDB records for the transformation record. */
-QStringList PDBTransform::toPDBRecord() const
-{
-    return records;
-}
-
-/** Return a string representation of this object */
-QString PDBTransform::toString() const
-{
-    return QObject::tr("PDBTransform::null");
-}
-
-/** Whether there is a complete transformation record. */
-bool PDBTransform::hasRecord() const
-{
-    return (isDimension[0] and
-            isDimension[1] and
-            isDimension[2]);
-}
-
-/** Return the C++ name for this class */
-const char* PDBTransform::typeName()
-{
-    return QMetaType::typeName( qMetaTypeId<PDBTransform>() );
-}
-
 /** Constructor */
 PDB2::PDB2() : ConcreteProperty<PDB2,MoleculeParser>(),
-               num_ters(0),
-               has_master(false)
+               num_ters(0)
 {
 }
 
@@ -1743,8 +605,7 @@ PDB2::PDB2() : ConcreteProperty<PDB2,MoleculeParser>(),
     the parsing */
 PDB2::PDB2(const QString &filename, const PropertyMap &map) :
     ConcreteProperty<PDB2,MoleculeParser>(filename,map),
-    num_ters(0),
-    has_master(false)
+    num_ters(0)
 {
     //the file has been read into memory and is available via
     //the MoleculeParser::lines() function.
@@ -1768,8 +629,7 @@ PDB2::PDB2(const QString &filename, const PropertyMap &map) :
     the parsing */
 PDB2::PDB2(const QStringList &lines, const PropertyMap &map) :
     ConcreteProperty<PDB2,MoleculeParser>(lines,map),
-    num_ters(0),
-    has_master(false)
+    num_ters(0)
 {
     //the file has been read into memory and is available via
     //the MoleculeParser::lines() function.
@@ -1793,8 +653,7 @@ PDB2::PDB2(const QStringList &lines, const PropertyMap &map) :
     in the passed property map */
 PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
     ConcreteProperty<PDB2,MoleculeParser>(map),
-    num_ters(0),
-    has_master(false)
+    num_ters(0)
 {
     // Get the MolNums of each molecule in the System - this returns the
     // numbers in MolIdx order.
@@ -1885,7 +744,13 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
 
 /** Copy constructor */
 PDB2::PDB2(const PDB2 &other) :
-    ConcreteProperty<PDB2,MoleculeParser>(other)
+    ConcreteProperty<PDB2,MoleculeParser>(other),
+    atoms(other.atoms),
+    residues(other.residues),
+    chains(other.chains),
+    num_ters(other.num_ters),
+    filename(other.filename),
+    parse_warnings(other.parse_warnings)
 {}
 
 /** Destructor */
@@ -1897,6 +762,13 @@ PDB2& PDB2::operator=(const PDB2 &other)
 {
     if (this != &other)
     {
+        this->atoms = other.atoms;
+        this->residues = other.residues;
+        this->chains = other.chains;
+        this->num_ters = other.num_ters;
+        this->filename = other.filename;
+        this->parse_warnings = other.parse_warnings;
+
         MoleculeParser::operator=(other);
     }
 
@@ -1976,12 +848,6 @@ QStringList PDB2::formatSuffix() const
     return suffixes;
 }
 
-/** Return the number of title section records. */
-int PDB2::nTitles() const
-{
-    return title.nRecords();
-}
-
 /** Return the number of models (molecules). */
 int PDB2::nModels() const
 {
@@ -1994,88 +860,16 @@ int PDB2::nAtoms() const
     return atoms[0].count();
 }
 
-/** Return the number of helices. */
-int PDB2::nHelices() const
-{
-    return helices.count();
-}
-
-/** Return the number of sheets. */
-int PDB2::nSheets() const
-{
-    return sheets.count();
-}
-
 /** Return the number of TER records. */
 int PDB2::nTers() const
 {
     return num_ters;
 }
 
-/** Whether the object contains crystallographic record data. */
-bool PDB2::hasCrystal() const
-{
-    return crystal.hasRecord();
-}
-
-/** Whether the object contains a MASTER record. */
-bool PDB2::hasMaster() const
-{
-    return has_master;
-}
-
-/** Whether the object contains an ORIGX transformation record. */
-bool PDB2::hasTransOrig() const
-{
-    return trans_orig.hasRecord();
-}
-
-/** Whether the object contains an SCALE transformation record. */
-bool PDB2::hasTransScale() const
-{
-    return trans_scale.hasRecord();
-}
-
-/** Whether the object contains an MTRIX transformation record. */
-bool PDB2::hasTransMatrix() const
-{
-    return trans_matrix.hasRecord();
-}
-
-/** Return the title object. */
-PDBTitle PDB2::getTitle() const
-{
-    return title;
-}
-
 /** Return the atoms. */
 QVector<QVector<PDBAtom> > PDB2::getAtoms() const
 {
     return atoms;
-}
-
-/** Return the helices. */
-QVector<PDBHelix> PDB2::getHelices() const
-{
-    return helices;
-}
-
-/** Return the sheets. */
-QVector<PDBSheet> PDB2::getSheets() const
-{
-    return sheets;
-}
-
-/** Return the master record object. */
-PDBMaster PDB2::getMaster() const
-{
-    return master;
-}
-
-/** Return the map of invalid records. */
-QMap<qint64, QString> PDB2::getInvalidRecords() const
-{
-    return invalid_records;
 }
 
 /** Function that is called to assert that this object is sane. This
@@ -2125,16 +919,10 @@ void PDB2::parseLines(const PropertyMap &map)
     // The chain identifier map for the frame.
     QMultiMap<QChar, QString> frame_chains;
 
-    // The residue sequence (segment) numbers for the frame.
-    QSet<qint64> frame_segments;
-
-    // The connectivity map for the frame.
-    QMultiMap<qint64, qint64> frame_connections;
-
     // Internal function used to parse a single atom line in the file.
     auto parse_atoms = [&](const QString &line, int iatm, int iframe, int iline, int num_lines,
         PDBAtom &frame_atom, QMultiMap<QPair<qint64, QString>, qint64> &local_residues,
-        QMultiMap<QChar, QString> &local_chains, QSet<qint64> &local_segments, QStringList &errors)
+        QMultiMap<QChar, QString> &local_chains, QStringList &errors)
     {
         // Populate atom data.
         frame_atom = PDBAtom(line, errors);
@@ -2155,12 +943,6 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     // Perhaps some kind of warning.
                 }
-            }
-
-            // There are anisotropic temperature factors for this atom.
-            else if (lines()[iline + 1].leftRef(6) == "ANISOU")
-            {
-                frame_atom.setAnisTemp(line, lines().constData()[iline + 1], errors);
             }
         }
 
@@ -2201,9 +983,6 @@ void PDB2::parseLines(const PropertyMap &map)
         if (not frame_atom.getChainId().isSpace())
             local_chains.insert(frame_atom.getChainId(), frame_atom.getResName());
 
-        // Insert the residue sequence number.
-        local_segments.insert(frame_atom.getResNum());
-
         return frame_atom.isTer();
     };
 
@@ -2225,29 +1004,11 @@ void PDB2::parseLines(const PropertyMap &map)
         // Could simplify this, i.e. remove whitespace.
         QString record = lines()[iline].left(6);
 
-        // Parse TITLE section records.
-        if      (record == "HEADER") title.appendRecord(line, PDBTitle::RECORD_TYPE::HEADER, parse_warnings);
-        else if (record == "OBSLTE") title.appendRecord(line, PDBTitle::RECORD_TYPE::OBSLTE, parse_warnings);
-        else if (record == "TITLE ") title.appendRecord(line, PDBTitle::RECORD_TYPE::TITLE,  parse_warnings);
-        else if (record == "SPLIT ") title.appendRecord(line, PDBTitle::RECORD_TYPE::SPLIT,  parse_warnings);
-        else if (record == "CAVEAT") title.appendRecord(line, PDBTitle::RECORD_TYPE::CAVEAT, parse_warnings);
-        else if (record == "COMPND") title.appendRecord(line, PDBTitle::RECORD_TYPE::COMPND, parse_warnings);
-        else if (record == "SOURCE") title.appendRecord(line, PDBTitle::RECORD_TYPE::SOURCE, parse_warnings);
-        else if (record == "KEYWDS") title.appendRecord(line, PDBTitle::RECORD_TYPE::KEYWDS, parse_warnings);
-        else if (record == "EXPDTA") title.appendRecord(line, PDBTitle::RECORD_TYPE::EXPDTA, parse_warnings);
-        else if (record == "MDLTYP") title.appendRecord(line, PDBTitle::RECORD_TYPE::MDLTYP, parse_warnings);
-        else if (record == "AUTHOR") title.appendRecord(line, PDBTitle::RECORD_TYPE::AUTHOR, parse_warnings);
-        else if (record == "REVDAT") title.appendRecord(line, PDBTitle::RECORD_TYPE::REVDAT, parse_warnings);
-        else if (record == "SPRSDE") title.appendRecord(line, PDBTitle::RECORD_TYPE::SPRSDE, parse_warnings);
-        else if (record == "JRNL  ") title.appendRecord(line, PDBTitle::RECORD_TYPE::JRNL,   parse_warnings);
-        else if (record == "REMARK") title.appendRecord(line, PDBTitle::RECORD_TYPE::REMARK, parse_warnings);
-        else if (record == "NUMMDL") title.appendRecord(line, PDBTitle::RECORD_TYPE::NUMMDL, parse_warnings);
-
         // Start of a MODEL record.
         // These are used to define an atom configuratation, so can be used as
         // frames in a trajectory file. Each model entry must be consistent, i.e.
         // it must contain the same number and type of atoms.
-        else if (record == "MODEL ")
+        if (record == "MODEL ")
         {
             imdl++;
 
@@ -2303,115 +1064,9 @@ void PDB2::parseLines(const PropertyMap &map)
             nats++;
         }
 
-        // A HELIX record.
-        else if (record == "HELIX ")
-        {
-            // Create a helix object.
-            PDBHelix helix(line, parse_warnings);
-
-            // Append the helix.
-            helices.append(helix);
-        }
-
         // A chain terminus record.
         // These are processed by the atom parsing section so we just skip ahead.
         else if (record == "TER   ");
-
-        // A SHEET record.
-        else if (record == "SHEET ")
-        {
-            // Create a sheet object.
-            PDBSheet sheet(line, parse_warnings);
-
-            // Append the sheet.
-            sheets.append(sheet);
-        }
-
-        // A CRYST1 record (crystallographic data).
-        else if (record == "CRYST1")
-        {
-            // Create the crystallographic data object.
-            crystal = PDBCrystal(line, parse_warnings);
-        }
-
-        // ORIGXn transformation records.
-        else if (record == "ORIGX1") trans_orig.appendRecord(line, 0, false, parse_warnings);
-        else if (record == "ORIGX2") trans_orig.appendRecord(line, 1, false, parse_warnings);
-        else if (record == "ORIGX3") trans_orig.appendRecord(line, 2, false, parse_warnings);
-
-        // SCALEn transformation records.
-        else if (record == "SCALE1") trans_scale.appendRecord(line, 0, false, parse_warnings);
-        else if (record == "SCALE2") trans_scale.appendRecord(line, 1, false, parse_warnings);
-        else if (record == "SCALE3") trans_scale.appendRecord(line, 2, false, parse_warnings);
-
-        // MTRIXn transformation records.
-        else if (record == "MTRIX1") trans_matrix.appendRecord(line, 0, true, parse_warnings);
-        else if (record == "MTRIX2") trans_matrix.appendRecord(line, 1, true, parse_warnings);
-        else if (record == "MTRIX3") trans_matrix.appendRecord(line, 2, true, parse_warnings);
-
-        // MASTER record.
-        else if (record == "MASTER")
-        {
-            // There should only be a single MASTER record and it should only refer to
-            // the first MODEL entry.
-            if (has_master)
-            {
-                parse_warnings.append(QObject::tr("Ignoring invalid MASTER record "
-                    "on line %1: '%2'")
-                    .arg(iline).arg(line));
-            }
-
-            master = PDBMaster(line, parse_warnings);
-            has_master = true;
-        }
-
-        // CONECT record.
-        else if (record == "CONECT")
-        {
-            // There are a maximum of four bonds per line. If there are more
-            // than four bonds per atom then a second CONECT entry can be used.
-
-            // It could be hard to check for errors, since we don't know how many
-            // bonds each atom should have. However, the connectivity information
-            // is redundant, i.e. each bond entry appears twice, so we can validate
-            // by constructing an adjacency matrix afterwards and ensuring that it
-            // is symmetric.
-
-            // First extract the atom serial number.
-            bool ok;
-            int atom = line.midRef(6,5).toInt(&ok);
-
-            if (not ok)
-            {
-                parse_warnings.append(QObject::tr("Cannot extract the atom serial number "
-                    "from part (%1) from line '%2'")
-                    .arg(line.mid(6,5)).arg(line));
-
-                return;
-            }
-
-            // Loop over all possible bond records.
-            for (int i=0; i<4; ++i)
-            {
-                bool ok;
-                int bond = line.midRef(11 + 5*i, 5).toInt(&ok);
-
-                // Add the bond to the connectivity map.
-                if (ok)
-                {
-                    frame_connections.insert(atom, bond);
-                }
-            }
-        }
-
-        // Invalid record
-        else
-        {
-            parse_warnings.append(QObject::tr("Invalid PDB record found on "
-                "line %1: '%2'").arg(iline).arg(line));
-
-            invalid_records[iline] = line;
-        }
 
         // End of the file.
         if (iline + 1 == lines().count())
@@ -2437,14 +1092,13 @@ void PDB2::parseLines(const PropertyMap &map)
                         QStringList local_errors;
                         QMultiMap<QPair<qint64, QString>, qint64> local_residues;
                         QMultiMap<QChar, QString> local_chains;
-                        QSet<qint64> local_segments;
 
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
                             // Parse the atom record and determine whether it is a terminal record.
                             if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
                                 atom_lines[i], lines().count(), frame_atoms[i], local_residues,
-                                local_chains, local_segments, local_errors ))
+                                local_chains, local_errors ))
                                     local_num_ters++;
                         }
 
@@ -2453,7 +1107,6 @@ void PDB2::parseLines(const PropertyMap &map)
                         num_ters       += local_num_ters;
                         frame_residues += local_residues;
                         frame_chains   += local_chains;
-                        frame_segments += local_segments;
                         parse_warnings += local_errors;
                     });
                 }
@@ -2464,9 +1117,67 @@ void PDB2::parseLines(const PropertyMap &map)
                         // Parse the atom record and determine whether it is a terminal record.
                         if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
                             atom_lines[i], lines().count(), frame_atoms[i], frame_residues,
-                            frame_chains, frame_segments, parse_warnings ))
+                            frame_chains, parse_warnings ))
                                 num_ters++;
                     }
+                }
+
+                // A list of the recorded atom numbers.
+                // This is used to sort out issues where there are multiple PDB records
+                // with the same atom serial number, which is a common problem.
+                QVector<int> atom_numbers;
+
+                // Whether there are duplicate atom numbers.
+                bool has_duplicates = false;
+
+                // Check whether there are duplicate atom numbers.
+                // If there are, re-number them according to their indices.
+
+                for (int i=0; i<nats; ++i)
+                {
+                    int number = frame_atoms[i].getSerial();
+
+                    if (not atom_numbers.contains(number))
+                    {
+                        atom_numbers.append(number);
+                    }
+                    else
+                    {
+                        has_duplicates = true;
+                        break;
+                    }
+                }
+
+                // Re-number all of the atoms.
+                if (has_duplicates)
+                {
+                    parse_warnings
+                        .append(QObject::tr("Warning: There are duplicate atom "
+                        "numbers in the PDB file. Atom numbers have been replaced "
+                        "by their index."));
+
+                    for (int i=0; i<nats; ++i)
+                        frame_atoms[i].setSerial(i+1);
+                }
+
+                // Now check whether the temperature factors are sane.
+                // If any exceed 100, then set all to the default of zero.
+                bool is_valid = true;
+
+                for (int i=0; i<nats; ++i)
+                {
+                    if (qAbs(frame_atoms[i].getTemperature()) > 100)
+                    {
+                        is_valid = false;
+                        break;
+                    }
+                }
+
+                // Zero all of the temperature factors.
+                if (not is_valid)
+                {
+                    for (int i=0; i<nats; ++i)
+                        frame_atoms[i].setTemperature(0);
                 }
 
                 // Append frame data and clear the vectors.
@@ -2480,71 +1191,9 @@ void PDB2::parseLines(const PropertyMap &map)
                 chains.append(frame_chains);
                 frame_chains.clear();
 
-                segments.append(frame_segments);
-                frame_segments.clear();
-
-                connections.append(frame_connections);
-                frame_connections.clear();
-
                 iframe++;
                 nats = 0;
             }
-        }
-    }
-
-    // Validate the parsed data against the MASTER record.
-    if (has_master)
-    {
-        if (not (master.nRemarks() == title.nRemarks()))
-        {
-            parse_warnings.append(QObject::tr("Error in PDB file as the number of "
-               "REMARK records (%1) read does not equal the number in "
-               "the MASTER record (%2)!")
-                .arg(title.nRemarks()).arg(master.nRemarks()));
-        }
-
-        if (not (master.nAtoms() == nAtoms()))
-        {
-            parse_warnings.append(QObject::tr("Error in PDB file as the number of "
-               "ATOM and HETATM records (%1) read does not equal the number in "
-               "the MASTER record (%2)!")
-                .arg(nAtoms()).arg(master.nAtoms()));
-        }
-
-        if (not (master.nHelices() == nHelices()))
-        {
-            parse_warnings.append(QObject::tr("Error in PDB file as the number of "
-               "HELIX records (%1) read does not equal the number in "
-               "the MASTER record (%2)!")
-                .arg(nHelices()).arg(master.nHelices()));
-        }
-
-        if (not (master.nSheets() == nSheets()))
-        {
-            parse_warnings.append(QObject::tr("Error in PDB file as the number of "
-               "SHEET records (%1) read does not equal the number in "
-               "the MASTER record (%2)!")
-                .arg(nSheets()).arg(master.nSheets()));
-        }
-
-        if (not (master.nTers() == nTers()))
-        {
-            parse_warnings.append(QObject::tr("Error in PDB file as the number of "
-               "TER records (%1) read does not equal the number in "
-               "the MASTER record (%2)!")
-                .arg(nTers()).arg(master.nTers()));
-        }
-
-        // Work out the number of coordinate transformation records.
-        // Each object should contain three records, one for each dimension.
-        int num_transforms = 3 * ( hasTransOrig() + hasTransScale() + hasTransMatrix() );
-
-        if (not (master.nTransforms() == num_transforms ))
-        {
-            parse_warnings.append(QObject::tr("Error in PDB file as the number of coordinate "
-               "transformation records (%1) read does not equal the number in "
-               "the MASTER record (%2)!")
-                .arg(num_transforms).arg(master.nTransforms()));
         }
     }
 
@@ -2678,10 +1327,6 @@ MolStructureEditor PDB2::getMolStructure(int imol,
             res_to_chain.insert(residue, chain);
     }
 
-    // Add any segments to the molecule.
-    for (auto segment : segments[iframe])
-        mol.add(SegName(QString::number(segment)));
-
     // Loop over all unique residues in the frame.
     for (auto residue : residues[iframe].uniqueKeys())
     {
@@ -2711,9 +1356,8 @@ MolStructureEditor PDB2::getMolStructure(int imol,
             auto atom = cutgroup.add(AtomNum(atoms[iframe][res_atom].getSerial()));
             atom.rename(AtomName(atoms[iframe][res_atom].getName().trimmed()));
 
-            // Reparent the atom to its residue and segment.
+            // Reparent the atom to its residue.
             atom.reparent(ResNum(res_num));
-            atom.reparent(SegName(QString::number(atoms[iframe][res_atom].getResNum())));
         }
 
         ires++;

@@ -25,6 +25,14 @@
 
 #include "Mol2.pypp.hpp"
 
+#include "Mol2Atom.pypp.hpp"
+
+#include "Mol2Bond.pypp.hpp"
+
+#include "Mol2Molecule.pypp.hpp"
+
+#include "Mol2Substructure.pypp.hpp"
+
 #include "MoleculeParser.pypp.hpp"
 
 #include "NullIO.pypp.hpp"
@@ -37,19 +45,7 @@
 
 #include "PDBAtom.pypp.hpp"
 
-#include "PDBCrystal.pypp.hpp"
-
-#include "PDBHelix.pypp.hpp"
-
-#include "PDBMaster.pypp.hpp"
-
 #include "PDBParameters.pypp.hpp"
-
-#include "PDBSheet.pypp.hpp"
-
-#include "PDBTitle.pypp.hpp"
-
-#include "PDBTransform.pypp.hpp"
 
 #include "PerturbationsLibrary.pypp.hpp"
 
@@ -102,6 +98,14 @@ BOOST_PYTHON_MODULE(_IO){
 
     register_Mol2_class();
 
+    register_Mol2Atom_class();
+
+    register_Mol2Bond_class();
+
+    register_Mol2Molecule_class();
+
+    register_Mol2Substructure_class();
+
     register_NullIO_class();
 
     register_NullParser_class();
@@ -112,19 +116,7 @@ BOOST_PYTHON_MODULE(_IO){
 
     register_PDBAtom_class();
 
-    register_PDBCrystal_class();
-
-    register_PDBHelix_class();
-
-    register_PDBMaster_class();
-
     register_PDBParameters_class();
-
-    register_PDBSheet_class();
-
-    register_PDBTitle_class();
-
-    register_PDBTransform_class();
 
     register_PerturbationsLibrary_class();
 

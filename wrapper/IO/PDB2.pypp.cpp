@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/parallel.h"
 
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireIO/errors.h"
@@ -33,9 +35,9 @@ namespace bp = boost::python;
 
 #include "SireSystem/system.h"
 
-#include "pdb2.h"
+#include "SireUnits/units.h"
 
-#include <iostream>
+#include "pdb2.h"
 
 #include "pdb2.h"
 
@@ -135,116 +137,6 @@ void register_PDB2_class(){
                 , "Return the atoms." );
         
         }
-        { //::SireIO::PDB2::getHelices
-        
-            typedef ::QVector< SireIO::PDBHelix > ( ::SireIO::PDB2::*getHelices_function_type)(  ) const;
-            getHelices_function_type getHelices_function_value( &::SireIO::PDB2::getHelices );
-            
-            PDB2_exposer.def( 
-                "getHelices"
-                , getHelices_function_value
-                , "Return the helices." );
-        
-        }
-        { //::SireIO::PDB2::getInvalidRecords
-        
-            typedef ::QMap< long long, QString > ( ::SireIO::PDB2::*getInvalidRecords_function_type)(  ) const;
-            getInvalidRecords_function_type getInvalidRecords_function_value( &::SireIO::PDB2::getInvalidRecords );
-            
-            PDB2_exposer.def( 
-                "getInvalidRecords"
-                , getInvalidRecords_function_value
-                , "Return the map of invalid records." );
-        
-        }
-        { //::SireIO::PDB2::getMaster
-        
-            typedef ::SireIO::PDBMaster ( ::SireIO::PDB2::*getMaster_function_type)(  ) const;
-            getMaster_function_type getMaster_function_value( &::SireIO::PDB2::getMaster );
-            
-            PDB2_exposer.def( 
-                "getMaster"
-                , getMaster_function_value
-                , "Return the master record object." );
-        
-        }
-        { //::SireIO::PDB2::getSheets
-        
-            typedef ::QVector< SireIO::PDBSheet > ( ::SireIO::PDB2::*getSheets_function_type)(  ) const;
-            getSheets_function_type getSheets_function_value( &::SireIO::PDB2::getSheets );
-            
-            PDB2_exposer.def( 
-                "getSheets"
-                , getSheets_function_value
-                , "Return the sheets." );
-        
-        }
-        { //::SireIO::PDB2::getTitle
-        
-            typedef ::SireIO::PDBTitle ( ::SireIO::PDB2::*getTitle_function_type)(  ) const;
-            getTitle_function_type getTitle_function_value( &::SireIO::PDB2::getTitle );
-            
-            PDB2_exposer.def( 
-                "getTitle"
-                , getTitle_function_value
-                , "Return the title object." );
-        
-        }
-        { //::SireIO::PDB2::hasCrystal
-        
-            typedef bool ( ::SireIO::PDB2::*hasCrystal_function_type)(  ) const;
-            hasCrystal_function_type hasCrystal_function_value( &::SireIO::PDB2::hasCrystal );
-            
-            PDB2_exposer.def( 
-                "hasCrystal"
-                , hasCrystal_function_value
-                , "Whether the object contains crystallographic record data." );
-        
-        }
-        { //::SireIO::PDB2::hasMaster
-        
-            typedef bool ( ::SireIO::PDB2::*hasMaster_function_type)(  ) const;
-            hasMaster_function_type hasMaster_function_value( &::SireIO::PDB2::hasMaster );
-            
-            PDB2_exposer.def( 
-                "hasMaster"
-                , hasMaster_function_value
-                , "Whether the object contains a MASTER record." );
-        
-        }
-        { //::SireIO::PDB2::hasTransMatrix
-        
-            typedef bool ( ::SireIO::PDB2::*hasTransMatrix_function_type)(  ) const;
-            hasTransMatrix_function_type hasTransMatrix_function_value( &::SireIO::PDB2::hasTransMatrix );
-            
-            PDB2_exposer.def( 
-                "hasTransMatrix"
-                , hasTransMatrix_function_value
-                , "Whether the object contains an MTRIX transformation record." );
-        
-        }
-        { //::SireIO::PDB2::hasTransOrig
-        
-            typedef bool ( ::SireIO::PDB2::*hasTransOrig_function_type)(  ) const;
-            hasTransOrig_function_type hasTransOrig_function_value( &::SireIO::PDB2::hasTransOrig );
-            
-            PDB2_exposer.def( 
-                "hasTransOrig"
-                , hasTransOrig_function_value
-                , "Whether the object contains an ORIGX transformation record." );
-        
-        }
-        { //::SireIO::PDB2::hasTransScale
-        
-            typedef bool ( ::SireIO::PDB2::*hasTransScale_function_type)(  ) const;
-            hasTransScale_function_type hasTransScale_function_value( &::SireIO::PDB2::hasTransScale );
-            
-            PDB2_exposer.def( 
-                "hasTransScale"
-                , hasTransScale_function_value
-                , "Whether the object contains an SCALE transformation record." );
-        
-        }
         { //::SireIO::PDB2::nAtoms
         
             typedef int ( ::SireIO::PDB2::*nAtoms_function_type)(  ) const;
@@ -256,17 +148,6 @@ void register_PDB2_class(){
                 , "Return the number of atoms." );
         
         }
-        { //::SireIO::PDB2::nHelices
-        
-            typedef int ( ::SireIO::PDB2::*nHelices_function_type)(  ) const;
-            nHelices_function_type nHelices_function_value( &::SireIO::PDB2::nHelices );
-            
-            PDB2_exposer.def( 
-                "nHelices"
-                , nHelices_function_value
-                , "Return the number of helices." );
-        
-        }
         { //::SireIO::PDB2::nModels
         
             typedef int ( ::SireIO::PDB2::*nModels_function_type)(  ) const;
@@ -275,18 +156,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "nModels"
                 , nModels_function_value
-                , "" );
-        
-        }
-        { //::SireIO::PDB2::nSheets
-        
-            typedef int ( ::SireIO::PDB2::*nSheets_function_type)(  ) const;
-            nSheets_function_type nSheets_function_value( &::SireIO::PDB2::nSheets );
-            
-            PDB2_exposer.def( 
-                "nSheets"
-                , nSheets_function_value
-                , "Return the number of sheets." );
+                , "Return the number of models (molecules)." );
         
         }
         { //::SireIO::PDB2::nTers
@@ -298,17 +168,6 @@ void register_PDB2_class(){
                 "nTers"
                 , nTers_function_value
                 , "Return the number of TER records." );
-        
-        }
-        { //::SireIO::PDB2::nTitles
-        
-            typedef int ( ::SireIO::PDB2::*nTitles_function_type)(  ) const;
-            nTitles_function_type nTitles_function_value( &::SireIO::PDB2::nTitles );
-            
-            PDB2_exposer.def( 
-                "nTitles"
-                , nTitles_function_value
-                , "Return the number of title section records." );
         
         }
         PDB2_exposer.def( bp::self != bp::self );

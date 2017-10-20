@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/parallel.h"
 
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireIO/errors.h"
@@ -33,9 +35,9 @@ namespace bp = boost::python;
 
 #include "SireSystem/system.h"
 
-#include "pdb2.h"
+#include "SireUnits/units.h"
 
-#include <iostream>
+#include "pdb2.h"
 
 #include "pdb2.h"
 
@@ -185,16 +187,28 @@ void register_PDBAtom_class(){
                 , "Whether this is a terminal atom." );
         
         }
-        { //::SireIO::PDBAtom::setAnisTemp
+        { //::SireIO::PDBAtom::setSerial
         
-            typedef void ( ::SireIO::PDBAtom::*setAnisTemp_function_type)( ::QString const &,::QString const &,::QStringList & ) ;
-            setAnisTemp_function_type setAnisTemp_function_value( &::SireIO::PDBAtom::setAnisTemp );
+            typedef void ( ::SireIO::PDBAtom::*setSerial_function_type)( int ) ;
+            setSerial_function_type setSerial_function_value( &::SireIO::PDBAtom::setSerial );
             
             PDBAtom_exposer.def( 
-                "setAnisTemp"
-                , setAnisTemp_function_value
-                , ( bp::arg("line1"), bp::arg("line2"), bp::arg("errors") )
-                , "Set anisotropic temperature record data." );
+                "setSerial"
+                , setSerial_function_value
+                , ( bp::arg("serial") )
+                , "Set the atom serial number." );
+        
+        }
+        { //::SireIO::PDBAtom::setTemperature
+        
+            typedef void ( ::SireIO::PDBAtom::*setTemperature_function_type)( double ) ;
+            setTemperature_function_type setTemperature_function_value( &::SireIO::PDBAtom::setTemperature );
+            
+            PDBAtom_exposer.def( 
+                "setTemperature"
+                , setTemperature_function_value
+                , ( bp::arg("temperature") )
+                , "Set the atom temperature factor." );
         
         }
         { //::SireIO::PDBAtom::setTerminal
