@@ -150,6 +150,7 @@ friend QDataStream& ::operator>>(QDataStream&, GromacsBond&);
 
 public:
     GromacsBond();
+    GromacsBond(int function_type);
     GromacsBond(int function_type,
                 double k0, double k1=0, double k2=0, double k3=0);
     GromacsBond(int function_type, const QList<double> &params);
@@ -184,7 +185,12 @@ public:
     int functionType() const;
     QString functionTypeString() const;
     
+    bool needsResolving() const;
+    bool isResolved() const;
+    
     bool isSimple() const;
+    
+    void assertResolved() const;
     
     QList<double> parameters() const;
     
@@ -213,6 +219,7 @@ friend QDataStream& ::operator>>(QDataStream&, GromacsAngle&);
 
 public:
     GromacsAngle();
+    GromacsAngle(int function_type);
     GromacsAngle(int function_type,
                  double k0, double k1=0, double k2=0, double k3=0, double k4=0, double k5=0);
     GromacsAngle(int function_type, const QList<double> &params);
@@ -259,6 +266,11 @@ public:
     
     QString toString() const;
     
+    bool isResolved() const;
+    bool needsResolving() const;
+    
+    void assertResolved() const;
+    
     SireCAS::Expression toExpression(const SireCAS::Symbol &theta) const;
     
     SireCAS::Expression toBondAngleExpression(const SireCAS::Symbol &r,
@@ -291,6 +303,7 @@ friend QDataStream& ::operator>>(QDataStream&, GromacsDihedral&);
 
 public:
     GromacsDihedral();
+    GromacsDihedral(int function_type);
     GromacsDihedral(int function_type,
                     double k0, double k1=0, double k2=0, double k3=0, double k4=0, double k5=0);
     GromacsDihedral(int function_type, const QList<double> &params);
@@ -331,6 +344,11 @@ public:
     
     bool isImproperAngleTerm() const;
     bool isAngleTorsionCrossTerm() const;
+
+    bool isResolved() const;
+    bool needsResolving() const;
+    
+    void assertResolved() const;
 
     QString toString() const;
     

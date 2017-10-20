@@ -1198,7 +1198,8 @@ static bool gromacs_preprocess_would_change(const QVector<QString> &lines,
             line.indexOf(QLatin1String("#ifdef")) != -1 or
             line.indexOf(QLatin1String("#else")) != -1 or
             line.indexOf(QLatin1String("#endif")) != -1 or
-            line.indexOf(QLatin1String("#define")) != -1 )
+            line.indexOf(QLatin1String("#define")) != -1 or
+            line.indexOf(QLatin1String("#error")) != -1 )
         {
             return true;
         }
@@ -1387,6 +1388,17 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
             
             line += lines_it.next();
             line = line.simplified();
+        }
+        
+        //first, look to see if the line starts with #error, as this should
+        //terminate processing
+        if (line.startsWith("#error"))
+        {
+            //stop processing, and pass the error to the user
+            line = line.mid(6).simplified();
+            throw SireIO::parse_error( QObject::tr(
+                "Error in Gromacs file! '%1'")
+                    .arg(line), CODELOC );
         }
         
         //now look to see if there is an #ifdef
@@ -1842,6 +1854,9 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         return warnings;
     };
 
+    //wildcard atomtype
+    static const QString wildcard_atomtype = "*";
+
     //internal function to process the atomtypes lines
     auto processAtomTypes = [&]()
     {
@@ -2121,10 +2136,12 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         for (const auto line : lines)
         {
             //each line should contain the atom types of the four atoms, then
-            //the function type, then the parameters for the function
+            //the function type, then the parameters for the function.
+            //(however, some files have the atom types of just two atoms, which
+            // I assume are the two middle atoms of the dihedral...)
             const auto words = line.split(" ", QString::SkipEmptyParts);
             
-            if (words.count() < 5)
+            if (words.count() < 3)
             {
                 warnings.append( QObject::tr("There is not enough data on the "
                   "line '%1' to extract a Gromacs dihedral parameter. Skipping line.")
@@ -2132,44 +2149,89 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 continue;
             }
             
-            const auto atm0 = words[0];
-            const auto atm1 = words[1];
-            const auto atm2 = words[2];
-            const auto atm3 = words[3];
-            
-            bool ok;
-            int func_type = words[4].toInt(&ok);
-            
-            if (not ok)
-            {
-                warnings.append( QObject::tr("Unable to determine the function type "
-                  "for the dihedral on line '%1'. Skipping line.")
-                    .arg(line) );
-                continue;
-            }
-            
-            //now read in all of the remaining values as numbers...
-            QList<double> params;
-            
-            for (int i=5; i<words.count(); ++i)
-            {
-                double param = words[i].toDouble(&ok);
-                
-                if (ok) params.append(param);
-            }
+            //first, let's try to parse this assuming that it is a 2-atom dihedral line...
+            //(most cases this should fail)
+            auto atm0 = wildcard_atomtype;
+            auto atm1 = words[0];
+            auto atm2 = words[1];
+            auto atm3 = wildcard_atomtype;
             
             GromacsDihedral dihedral;
             
-            try
+            bool ok;
+            int func_type = words[2].toInt(&ok);
+            
+            if (ok)
             {
-                dihedral = GromacsDihedral(func_type, params);
+                //this may be a two-atom dihedral - read in the rest of the parameters
+                QList<double> params;
+                
+                for (int i=3; i<words.count(); ++i)
+                {
+                    double param = words[i].toDouble(&ok);
+                    if (ok) params.append(param);
+                }
+
+                try
+                {
+                    dihedral = GromacsDihedral(func_type, params);
+                    ok = true;
+                }
+                catch(...)
+                {
+                    ok = false;
+                }
             }
-            catch(const SireError::exception &e)
+            
+            if (not ok)
             {
-                warnings.append( QObject::tr("Unable to extract the correct information "
-                  "to form a dihedral from line '%1'. Error is '%2'")
-                    .arg(line).arg(e.error()) );
-                continue;
+                //we couldn't parse as a two-atom dihedral, so parse as a four-atom dihedral
+            
+                if (words.count() < 5)
+                {
+                    warnings.append( QObject::tr("There is not enough data on the "
+                      "line '%1' to extract a Gromacs dihedral parameter. Skipping line.")
+                        .arg(line) );
+                    continue;
+                }
+
+                auto atm0 = words[0];
+                auto atm1 = words[1];
+                auto atm2 = words[2];
+                auto atm3 = words[3];
+                
+                bool ok;
+                int func_type = words[4].toInt(&ok);
+            
+                if (not ok)
+                {
+                    warnings.append( QObject::tr("Unable to determine the function type "
+                      "for the dihedral on line '%1'. Skipping line.")
+                        .arg(line) );
+                    continue;
+                }
+                
+                //now read in all of the remaining values as numbers...
+                QList<double> params;
+                
+                for (int i=5; i<words.count(); ++i)
+                {
+                    double param = words[i].toDouble(&ok);
+                    
+                    if (ok) params.append(param);
+                }
+            
+                try
+                {
+                    dihedral = GromacsDihedral(func_type, params);
+                }
+                catch(const SireError::exception &e)
+                {
+                    warnings.append( QObject::tr("Unable to extract the correct information "
+                      "to form a dihedral from line '%1'. Error is '%2'")
+                        .arg(line).arg(e.error()) );
+                    continue;
+                }
             }
             
             QString key = get_dihedral_id(atm0,atm1,atm2,atm3);
@@ -2340,13 +2402,12 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 //each line should contain index number, atom type,
                 //residue number, residue name, atom name, charge group number,
                 //charge (mod_electron) and mass (atomic mass)
-                
                 const auto words = line.split(" ");
                 
-                if (words.count() < 8)
+                if (words.count() < 6)
                 {
                     moltype.addWarning( QObject::tr("Cannot extract atom information "
-                      "from the line '%1' as it should contain at least eight words "
+                      "from the line '%1' as it should contain at least six words "
                       "(pieces of information)").arg(line) );
                 
                     continue;
@@ -2355,7 +2416,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 {
                     moltype.addWarning( QObject::tr("The line containing atom information "
                        "'%1' contains more information than can be parsed. It should only "
-                       "contain eight words (pieces of information)").arg(line) );
+                       "contain six-eight words (pieces of information)").arg(line) );
                 }
                 
                 bool ok_idx, ok_resnum, ok_chggrp, ok_chg, ok_mass;
@@ -2366,8 +2427,14 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 const auto resnam = words[3];
                 const auto atmnam = words[4];
                 const qint64 chggrp = words[5].toInt(&ok_chggrp);
-                const double chg = words[6].toDouble(&ok_chg);
-                const double mass = words[7].toDouble(&ok_mass);
+                
+                double chg = 0; ok_chg = true;
+                if (words.count() > 6)
+                    chg = words[6].toDouble(&ok_chg);
+                
+                double mass = 0; ok_mass = true;
+                if (words.count() > 7)
+                    mass = words[7].toDouble(&ok_mass);
                 
                 if (not (ok_idx and ok_resnum and ok_chggrp and ok_chg and ok_mass))
                 {
@@ -2400,6 +2467,21 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             for (const auto line : lines)
             {
                 qDebug() << "BOND:" << line;
+                
+                const auto words = line.split(" ");
+                
+                if (words.count() < 3)
+                {
+                    moltype.addWarning( QObject::tr("Cannot extract bond information "
+                      "from the line '%1' as it should contain at least three words "
+                      "(pieces of information)").arg(line) );
+                    continue;
+                }
+                
+                const auto atm0 = words[0];
+                const auto atm1 = words[1];
+                
+                
             }
         };
 

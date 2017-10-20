@@ -330,6 +330,23 @@ static void assert_valid_bond_function(int func_type)
             "the numbers 1-10.").arg(func_type), CODELOC );
 }
 
+//the value used to indicate that the parameter needs to be resolved
+static double unresolved_parameter_value = std::numeric_limits<double>::infinity();
+
+/** Construct a bond that is of the specified type, but the parameters have yet
+    to be resolved. This is because Gromacs can indicate the required type of
+    function in the molecule specification, without providing the parameters */
+GromacsBond::GromacsBond(int function_type)
+            : func_type(function_type)
+{
+    assert_valid_bond_function(func_type);
+    
+    for (int i=0; i<MAX_BOND_PARAMS; ++i)
+    {
+        k[i] = unresolved_parameter_value;
+    }
+}
+
 /** Construct a bond of the specified function type with specified parameters
     (the order should be the same as in the Gromacs Manual, table 5.5) */
 GromacsBond::GromacsBond(int function_type,
@@ -485,9 +502,31 @@ const char* GromacsBond::what() const
     return GromacsBond::typeName();
 }
 
+/** Return whether or not this parameter needs resolving */
+bool GromacsBond::needsResolving() const
+{
+    return k[0] == unresolved_parameter_value;
+}
+
+/** Return whether or not the parameters for this bond are resolved */
+bool GromacsBond::isResolved() const
+{
+    return not needsResolving();
+}
+
+/** Assert that the parameters for this bond have been resolved */
+void GromacsBond::assertResolved() const
+{
+    if (needsResolving())
+        throw SireError::invalid_state( QObject::tr(
+            "The parameters for this GromacsBond have not been resolved! %1")
+                .arg(this->toString()), CODELOC );
+}
+
 /** Return the ith parameter for this bond */
 double GromacsBond::operator[](int i) const
 {
+    assertResolved();
     i = Index(i).map(count());
     return k[i];
 }
@@ -575,10 +614,13 @@ bool GromacsBond::isSimple() const
 QList<double> GromacsBond::parameters() const
 {
     QList<double> params;
-    
-    for (int i=0; i<count(); ++i)
+
+    if (isResolved())
     {
-        params.append( k[i] );
+        for (int i=0; i<count(); ++i)
+        {
+            params.append( k[i] );
+        }
     }
     
     return params;
@@ -589,6 +631,11 @@ QString GromacsBond::toString() const
 {
     if (func_type == 0)
         return QObject::tr("GromacsBond::null");
+    else if (needsResolving())
+    {
+        return QObject::tr("GromacsBond( functionType() = %1, needsResolving )")
+                    .arg(functionTypeString());
+    }
     else
     {
         QStringList params;
@@ -611,6 +658,8 @@ QString GromacsBond::toString() const
     to represent the bond length */
 SireCAS::Expression GromacsBond::toExpression(const SireCAS::Symbol &R) const
 {
+    assertResolved();
+
     const double kj_per_mol_per_nm2 = ((kJ_per_mol) / (nanometer*nanometer)).value();
     const double kj_per_mol_per_nm3 = ((kJ_per_mol) / (nanometer*nanometer*nanometer)).value();
     const double kj_per_mol_per_nm4 = ((kJ_per_mol) / (nanometer*nanometer*nanometer*nanometer))
