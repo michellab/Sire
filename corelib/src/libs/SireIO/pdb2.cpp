@@ -491,10 +491,13 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
     @param atom
         A reference to a SireMol::Atom object.
 
+    @param is_ter
+        Whether this is a terminal atom.
+
     @param errors
         An array of error messages.
  */
-PDBAtom::PDBAtom(const SireMol::Atom &atom, QStringList &errors) :
+PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     serial(atom.number().value()),
     name(atom.name().value()),
     occupancy(1.0),
@@ -502,7 +505,7 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, QStringList &errors) :
     element("X"),
     charge(0),
     is_het(false),
-    is_ter(false),
+    is_ter(is_ter),
     is_anis(false)
 {
     // The atom must have atomic coordinates to be valid.
@@ -529,19 +532,6 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, QStringList &errors) :
         // TODO: Make sure we can handle situations where the
         // chain ID is a string.
         chain_id = atom.chain().name().value().at(0);
-
-        // Now work out whether this is a terminal atom.
-
-        // Extract the number of the last atom in the chain
-        int terminal_atom = atom.chain()
-                           .atoms()[atom.chain().atoms().count()-1]
-                           .read()
-                           .asA<SireMol::Atom>()
-                           .number()
-                           .value();
-
-        // This is the last atom in the chain.
-        if (terminal_atom == serial) is_ter = true;
     }
 
     // Extract the occupancy.
@@ -576,7 +566,7 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, QStringList &errors) :
     else if (atom.hasProperty("charge"))
     {
         // TODO: Some kind of conversion needed?
-        charge = atom.property<SireUnits::Dimension::Charge>("charge").value();
+        //charge = atom.property<SireUnits::Dimension::Charge>("charge").value();
     }
     else
     {
@@ -2838,8 +2828,29 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
     // Resize the data record containers (one TER record for each chain).
     atom_lines.resize(num_atoms + num_chains);
 
+    // Whether each atom is a terminal atom, i.e. the end of a chain.
     QVector<bool> is_ter(num_atoms);
     is_ter.fill(false);
+
+    // Loop over the chains.
+    for (int i=0; i<num_chains; ++i)
+    {
+        // Extract the chain.
+        auto chain = sire_mol.chain(ChainIdx(i));
+
+        // Extract the atoms from the chain.
+        auto atoms = chain.atoms();
+
+        // Extract the number of the last atom in the chain
+        int terminal_atom = atoms[atoms.count()-1]
+                           .read()
+                           .asA<SireMol::Atom>()
+                           .index()
+                           .value();
+
+        // Set the terminal atom.
+        is_ter[terminal_atom] = true;
+    }
 
     if (usesParallel())
     {
@@ -2858,11 +2869,8 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
             // and generate a PDB data record.
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                local_atoms[i] = PDBAtom(sire_mol.atom(AtomIdx(i)), local_errors);
+                local_atoms[i] = PDBAtom(sire_mol.atom(AtomIdx(i)), is_ter[i], local_errors);
                 atom_lines[i] = local_atoms[i].toPDBRecord();
-
-                // Flag whether this is a terminal atom.
-                if (num_chains > 0) is_ter[i] = local_atoms[i].isTer();
             }
 
             if (not local_errors.isEmpty())
@@ -2916,14 +2924,14 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
         for (int i=0; i<num_atoms; ++i)
         {
             // Initalise a PDBAtom.
-            PDBAtom atom(sire_mol.atom(AtomIdx(i)), errors);
+            PDBAtom atom(sire_mol.atom(AtomIdx(i)), is_ter[i], errors);
 
             // Generate a PDB atom data record.
             atom_lines[iline] = atom.toPDBRecord();
             iline++;
 
             // Add a TER record for this atom.
-            if (atom.isTer())
+            if (is_ter[i])
             {
                 atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
                                         .arg(atom_lines[iline-1].mid(6, 5))

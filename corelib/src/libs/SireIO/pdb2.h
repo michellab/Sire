@@ -100,7 +100,7 @@ public:
     PDBAtom(const QString &line, QStringList &errors);
 
     /** Constructor. */
-    PDBAtom(const SireMol::Atom &atom, QStringList &errors);
+    PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors);
 
     /** Generate a PDB record from the atom data. */
     QString toPDBRecord() const;

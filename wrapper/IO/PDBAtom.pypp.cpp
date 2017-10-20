@@ -52,7 +52,7 @@ void register_PDBAtom_class(){
         PDBAtom_exposer_t PDBAtom_exposer = PDBAtom_exposer_t( "PDBAtom", "This class provides functionality for readingwriting\nProtein Data Bank (PDB) ATOM records.\n\nAuthor: Lester Hedges\n", bp::init< >("Default constructor.") );
         bp::scope PDBAtom_scope( PDBAtom_exposer );
         PDBAtom_exposer.def( bp::init< QString const &, QStringList & >(( bp::arg("line"), bp::arg("errors") ), "Constructor.") );
-        PDBAtom_exposer.def( bp::init< SireMol::Atom const &, QStringList & >(( bp::arg("atom"), bp::arg("errors") ), "Constructor.") );
+        PDBAtom_exposer.def( bp::init< SireMol::Atom const &, bool, QStringList & >(( bp::arg("atom"), bp::arg("is_ter"), bp::arg("errors") ), "Constructor.") );
         { //::SireIO::PDBAtom::getChainId
         
             typedef ::QChar ( ::SireIO::PDBAtom::*getChainId_function_type)(  ) const;
