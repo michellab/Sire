@@ -1079,13 +1079,7 @@ void PDB2::parseLines(const PropertyMap &map)
 
         // End of the file.
         if (iline + 1 == lines().count())
-        {
-            if (isParse)
-            {
-                // Don't parse single models twice.
-                if (imdl > 1) isParse = false;
-            }
-        }
+            isParse = true;
 
         // Parse the atom data.
         if (isParse)
