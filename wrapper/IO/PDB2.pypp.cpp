@@ -148,6 +148,18 @@ void register_PDB2_class(){
                 , "Return the number of atoms." );
         
         }
+        { //::SireIO::PDB2::nAtoms
+        
+            typedef int ( ::SireIO::PDB2::*nAtoms_function_type)( int ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::PDB2::nAtoms );
+            
+            PDB2_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
         { //::SireIO::PDB2::nModels
         
             typedef int ( ::SireIO::PDB2::*nModels_function_type)(  ) const;
@@ -168,6 +180,18 @@ void register_PDB2_class(){
                 "nTers"
                 , nTers_function_value
                 , "Return the number of TER records." );
+        
+        }
+        { //::SireIO::PDB2::nTers
+        
+            typedef int ( ::SireIO::PDB2::*nTers_function_type)( int ) const;
+            nTers_function_type nTers_function_value( &::SireIO::PDB2::nTers );
+            
+            PDB2_exposer.def( 
+                "nTers"
+                , nTers_function_value
+                , ( bp::arg("arg0") )
+                , "" );
         
         }
         PDB2_exposer.def( bp::self != bp::self );
