@@ -40,6 +40,7 @@
 
 #include "SireMol/atomcharges.h"
 #include "SireMol/atomcoords.h"
+#include "SireMol/atomelements.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
 
@@ -2479,6 +2480,8 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
     // Instantiate the atom property objects that we need.
     AtomCoords         coords(molinfo);
     AtomCharges        charges(molinfo);
+    AtomElements       elements(molinfo);
+    AtomFloatProperty  occupancies(molinfo);
     AtomStringProperty types(molinfo);
     AtomStringProperty status_bits(molinfo);
 
@@ -2496,6 +2499,12 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
         charges.set(cgatomidx, double(atom.getCharge()) * SireUnits::mod_electron);
         types.set(cgatomidx, atom.getType());
         status_bits.set(cgatomidx, atom.getStatusBits());
+
+        // The element is usuall the first character of the atom,
+        // unless the name starts with a digit, in which case it's the second.
+        auto name = atom.getName();
+        if (name[0].isDigit()) elements.set(cgatomidx, Element(name.mid(1,2)));
+        else                   elements.set(cgatomidx, Element(name.left(2)));
     }
 
     // Instantiate the residue property objects that we need.
@@ -2526,6 +2535,7 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
 
     return mol.setProperty(map["coordinates"], coords)
               .setProperty(map["charge"], charges)
+              .setProperty(map["element"], elements)
               .setProperty(map["sybyl-atom-type"], types)
               .setProperty(map["atom-status-bits"], status_bits)
               .setProperty(map["res-type"], subst_types)

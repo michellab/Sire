@@ -42,8 +42,8 @@
 #include "SireStream/shareddatastream.h"
 
 #include "SireMol/atomcharges.h"
-#include "SireMol/atomelements.h"
 #include "SireMol/atomcoords.h"
+#include "SireMol/atomelements.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
 
@@ -306,7 +306,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
  */
 PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     serial(atom.number().value()),
-    name(atom.name().value()),
+    name(atom.name().value().toUpper()),
     occupancy(1.0),
     temperature(0.0),
     element("X"),
@@ -359,7 +359,10 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     }
     else
     {
-        // TODO: Infer the element...
+        // The element is usually the first character of the atom name,
+        // unless it starts with a digit, in which case it's the second.
+        if (name[0].isDigit()) element = Element(name.mid(1,2)).toString();
+        else                   element = Element(name.left(2)).toString();
     }
 
     // Extract the atomic charge.
