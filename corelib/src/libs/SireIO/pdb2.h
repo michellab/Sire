@@ -232,6 +232,10 @@ public:
 
     int nModels() const;
     int nAtoms() const;
+    int nResidues() const;
+    int nResidues(int i) const;
+    int nChains() const;
+    int nChains(int i) const;
     int nAtoms(int i) const;
     int nTers() const;
     int nTers(int) const;

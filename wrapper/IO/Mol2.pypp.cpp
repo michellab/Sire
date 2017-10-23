@@ -203,14 +203,14 @@ void register_Mol2_class(){
                 , "Return the number of substructures in each molecule." );
         
         }
-        { //::SireIO::Mol2::nMols
+        { //::SireIO::Mol2::nMolecules
         
-            typedef int ( ::SireIO::Mol2::*nMols_function_type)(  ) const;
-            nMols_function_type nMols_function_value( &::SireIO::Mol2::nMols );
+            typedef int ( ::SireIO::Mol2::*nMolecules_function_type)(  ) const;
+            nMolecules_function_type nMolecules_function_value( &::SireIO::Mol2::nMolecules );
             
             Mol2_exposer.def( 
-                "nMols"
-                , nMols_function_value
+                "nMolecules"
+                , nMolecules_function_value
                 , "Return the number of molecules in the system." );
         
         }

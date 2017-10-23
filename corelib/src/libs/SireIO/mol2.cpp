@@ -1835,7 +1835,14 @@ MoleculeParserPtr Mol2::construct(const SireSystem::System &system,
 /** Return a string representation of this parser */
 QString Mol2::toString() const
 {
-    return QObject::tr("Mol2::null");
+    if (lines().isEmpty())
+        return QObject::tr("Mol2::null");
+    else
+    {
+        return QObject::tr("Mol2( nMolecules() = %1, "
+            "nResidues() = %2, nAtoms() = %3 )")
+            .arg(nMolecules()).arg(nSubstructures()).arg(nAtoms());
+    }
 }
 
 /** Return the format name that is used to identify this file format within Sire */
@@ -1858,7 +1865,7 @@ QStringList Mol2::formatSuffix() const
 }
 
 /** Return the number of molecules in the system. */
-int Mol2::nMols() const
+int Mol2::nMolecules() const
 {
     return molecules.count();
 }
@@ -2227,7 +2234,7 @@ void Mol2::parseLines(const PropertyMap &map)
     assigning properties based on the mapping in 'map' */
 System Mol2::startSystem(const PropertyMap &map) const
 {
-    const int nmols = nMols();
+    const int nmols = nMolecules();
 
     if (nmols == 0)
         return System();

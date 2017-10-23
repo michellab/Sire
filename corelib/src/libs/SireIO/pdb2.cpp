@@ -821,7 +821,14 @@ MoleculeParserPtr PDB2::construct(const SireSystem::System &system,
 /** Return a string representation of this parser */
 QString PDB2::toString() const
 {
-    return QObject::tr("PDB2::null");
+    if (lines().isEmpty())
+        return QObject::tr("PDB2::null");
+    else
+    {
+        return QObject::tr("PDB2( nMolecules() = %1, "
+            "nChains() = %2 nResidues() = %3, nAtoms() = %4 )")
+            .arg(nChains()).arg(nModels()).arg(nResidues()).arg(nAtoms());
+    }
 }
 
 /** Return the format name that is used to identify this file format within Sire */
@@ -847,6 +854,40 @@ QStringList PDB2::formatSuffix() const
 int PDB2::nModels() const
 {
     return atoms.count();
+}
+
+/** Return the total number of residues. */
+int PDB2::nResidues() const
+{
+    int num_residues = 0;
+
+    for (int i=0; i<residues.count(); ++i)
+        num_residues += residues[i].uniqueKeys().count();
+
+    return num_residues;
+}
+
+/** Return the number of residues in model 'i'. */
+int PDB2::nResidues(int i) const
+{
+    return residues[i].uniqueKeys().count();
+}
+
+/** Return the total number of chains. */
+int PDB2::nChains() const
+{
+    int num_chains = 0;
+
+    for (int i=0; i<chains.count(); ++i)
+        num_chains += chains[i].uniqueKeys().count();
+
+    return num_chains;
+}
+
+/** Return the number of chains in model 'i'. */
+int PDB2::nChains(int i) const
+{
+    return chains[i].uniqueKeys().count();
 }
 
 /** Return the total number of atoms. */

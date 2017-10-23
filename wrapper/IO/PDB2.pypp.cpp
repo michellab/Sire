@@ -160,6 +160,29 @@ void register_PDB2_class(){
                 , "" );
         
         }
+        { //::SireIO::PDB2::nChains
+        
+            typedef int ( ::SireIO::PDB2::*nChains_function_type)(  ) const;
+            nChains_function_type nChains_function_value( &::SireIO::PDB2::nChains );
+            
+            PDB2_exposer.def( 
+                "nChains"
+                , nChains_function_value
+                , "" );
+        
+        }
+        { //::SireIO::PDB2::nChains
+        
+            typedef int ( ::SireIO::PDB2::*nChains_function_type)( int ) const;
+            nChains_function_type nChains_function_value( &::SireIO::PDB2::nChains );
+            
+            PDB2_exposer.def( 
+                "nChains"
+                , nChains_function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
         { //::SireIO::PDB2::nModels
         
             typedef int ( ::SireIO::PDB2::*nModels_function_type)(  ) const;
@@ -169,6 +192,29 @@ void register_PDB2_class(){
                 "nModels"
                 , nModels_function_value
                 , "Return the number of models (molecules)." );
+        
+        }
+        { //::SireIO::PDB2::nResidues
+        
+            typedef int ( ::SireIO::PDB2::*nResidues_function_type)(  ) const;
+            nResidues_function_type nResidues_function_value( &::SireIO::PDB2::nResidues );
+            
+            PDB2_exposer.def( 
+                "nResidues"
+                , nResidues_function_value
+                , "" );
+        
+        }
+        { //::SireIO::PDB2::nResidues
+        
+            typedef int ( ::SireIO::PDB2::*nResidues_function_type)( int ) const;
+            nResidues_function_type nResidues_function_value( &::SireIO::PDB2::nResidues );
+            
+            PDB2_exposer.def( 
+                "nResidues"
+                , nResidues_function_value
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireIO::PDB2::nTers

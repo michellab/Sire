@@ -495,7 +495,7 @@ public:
     QStringList formatSuffix() const;
 
     /** Return the number of molecules in the system. */
-    int nMols() const;
+    int nMolecules() const;
 
     /** Return the number of atoms in each molecule. */
     QVector<int> nMolAtoms() const;
