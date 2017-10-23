@@ -2315,6 +2315,9 @@ MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) 
 
        If substructure records are present, then we can use them
        to assign the residues into chains.
+
+       TODO: Check which substructure record types can be interpreted
+       as a residue.
      */
 
     MolStructureEditor mol;
