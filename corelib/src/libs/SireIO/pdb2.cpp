@@ -934,12 +934,12 @@ void PDB2::parseLines(const PropertyMap &map)
     QMultiMap<QPair<qint64, QString>, qint64> frame_residues;
 
     // The chain identifier map for the frame.
-    QMultiMap<QChar, QString> frame_chains;
+    QMultiMap<QChar, qint64> frame_chains;
 
     // Internal function used to parse a single atom line in the file.
     auto parse_atoms = [&](const QString &line, int iatm, int iframe, int iline, int num_lines,
         PDBAtom &frame_atom, QMultiMap<QPair<qint64, QString>, qint64> &local_residues,
-        QMultiMap<QChar, QString> &local_chains, QStringList &errors)
+        QMultiMap<QChar, qint64> &local_chains, QStringList &errors)
     {
         // Populate atom data.
         frame_atom = PDBAtom(line, errors);
@@ -998,7 +998,13 @@ void PDB2::parseLines(const PropertyMap &map)
 
         // Insert the chain identifier (ignore if it is blank).
         if (not frame_atom.getChainId().isSpace())
-            local_chains.insert(frame_atom.getChainId(), frame_atom.getResName());
+        {
+            // Don't duplicate values, only keys.
+            if (not frame_chains.contains(frame_atom.getChainId(), frame_atom.getResNum()))
+            {
+                local_chains.insert(frame_atom.getChainId(), frame_atom.getResNum());
+            }
+        }
 
         return frame_atom.isTer();
     };
@@ -1097,13 +1103,18 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     QMutex mutex;
 
+                    // Chain-residue multimap for parallel processing.
+                    // There will likely be duplicate residue entries for each chain
+                    // which will need to be corrected afterwards.
+                    QMultiMap<QChar, qint64> temp_chains;
+
                     tbb::parallel_for( tbb::blocked_range<int>(0, nats),
                                     [&](const tbb::blocked_range<int> &r)
                     {
                         qint64 local_num_ters = 0;
                         QStringList local_errors;
                         QMultiMap<QPair<qint64, QString>, qint64> local_residues;
-                        QMultiMap<QChar, QString> local_chains;
+                        QMultiMap<QChar, qint64> local_chains;
 
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
@@ -1118,9 +1129,24 @@ void PDB2::parseLines(const PropertyMap &map)
 
                         num_ters_model += local_num_ters;
                         frame_residues += local_residues;
-                        frame_chains   += local_chains;
+                        temp_chains    += local_chains;
                         parse_warnings += local_errors;
                     });
+
+                    // Remove duplicate residue records from the chains.
+                    for (auto chain : temp_chains.uniqueKeys())
+                    {
+                        // Get a list of the residues that are part of this chain.
+                        QList<qint64> chain_residues = temp_chains.values(chain);
+
+                        // Loop over all of the residues.
+                        for (auto residue : chain_residues)
+                        {
+                            // Only insert the residue once.
+                            if (not frame_chains.contains(chain, residue))
+                                frame_chains.insert(chain, residue);
+                        }
+                    }
                 }
                 else
                 {
@@ -1315,7 +1341,7 @@ MolStructureEditor PDB2::getMolStructure(int imol, const PropertyName &cutting) 
     int ires = 0;
 
     // Create a reverse mapping between residues and chains.
-    QMap<QString, QChar> res_to_chain;
+    QMap<qint64, QChar> res_to_chain;
 
     // Add any chains to the molecule.
     for (auto chain : chains[imol].uniqueKeys())
@@ -1323,7 +1349,7 @@ MolStructureEditor PDB2::getMolStructure(int imol, const PropertyName &cutting) 
         mol.add(ChainName(chain));
 
         // Get a list of the residues that are part of this chain.
-        QList<QString> chain_residues = chains[imol].values(chain);
+        QList<qint64> chain_residues = chains[imol].values(chain);
 
         // Create the reverse mapping.
         for (auto residue : chain_residues)
@@ -1350,8 +1376,8 @@ MolStructureEditor PDB2::getMolStructure(int imol, const PropertyName &cutting) 
         res.rename(ResName(res_name.trimmed()));
 
         // Reparent the residue to its chain.
-        if (res_to_chain.contains(res_name))
-            res.reparent(ChainName(res_to_chain[res_name]));
+        if (res_to_chain.contains(res_num))
+            res.reparent(ChainName(res_to_chain[res_num]));
 
         // Add each atom in the residue to the molecule.
         for (auto res_atom : res_atoms)

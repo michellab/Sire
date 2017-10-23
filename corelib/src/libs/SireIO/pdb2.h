@@ -264,7 +264,7 @@ private:
     QVector<QMultiMap<QPair<qint64, QString>, qint64> > residues;
 
     //* Chain identifier mappings for each frame. */
-    QVector<QMultiMap<QChar, QString> > chains;
+    QVector<QMultiMap<QChar, qint64> > chains;
 
     /** Number of TER records. */
     QVector<qint64> num_ters;
