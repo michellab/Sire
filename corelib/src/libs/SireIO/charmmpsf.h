@@ -37,6 +37,8 @@ SIRE_BEGIN_HEADER
 
 namespace SireIO
 {
+class PSFAtom;
+class CharmmPSF;
 }
 
 namespace SireMol
@@ -48,10 +50,71 @@ class MoleculeView;
 class Residue;
 }
 
+QDataStream& operator<<(QDataStream&, const SireIO::PSFAtom&);
+QDataStream& operator>>(QDataStream&, SireIO::PSFAtom&);
+
+QDataStream& operator<<(QDataStream&, const SireIO::CharmmPSF&);
+QDataStream& operator>>(QDataStream&, SireIO::CharmmPSF&);
+
 namespace SireIO
 {
 
-/** This class holds a parser for reading and writing Charmm PSF files.
+/** This class provides functionality for reading/writing
+    CHARMM PSF atom records (!NATOM).
+
+    @author Lester Hedges
+*/
+class SIREIO_EXPORT PSFAtom
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const PSFAtom&);
+friend QDataStream& ::operator>>(QDataStream&, PSFAtom&);
+
+public:
+    /** Default constructor. */
+    PSFAtom();
+
+    /** Constructor. */
+    PSFAtom(const QString &line, QStringList &errors);
+
+    /** Constructor. */
+    PSFAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors);
+
+    /** Generate a PDB record from the atom data. */
+    QString toPSFRecord() const;
+
+    static const char* typeName();
+
+private:
+    /** The original PDB record used to instantiate the atom. */
+    QString record;
+
+    /** Serial number. */
+    qint64 number;
+
+    /** Segment name. */
+    QString segment;
+
+    /** Residue number. */
+    QString res_num;
+
+    /** Residue name. */
+    QString res_name;
+
+    /** Atom name. */
+    QString name;
+
+    /** Atom number. */
+    QString type;
+
+    /** Charge. */
+    double charge;
+
+    /** Mass. */
+    double mass;
+};
+
+/** This class holds a parser for reading and writing CHARMM PSF files.
 
     @author Lester Hedges
 */
@@ -113,6 +176,27 @@ private:
     SireMol::MolEditor getMolecule(int imol,
         const PropertyMap &map = PropertyMap()) const;
 
+    /** The atom record data (!NATOM). */
+    QVector<PSFAtom> atoms;
+
+    /** The bond record data (!NBOND). */
+    QVector<QVector<qint64> > bonds;
+
+    /** The angle record data (!NTHETA). */
+    QVector<QVector<qint64> > angles;
+
+    /** The dihedral record data (!NPHI). */
+    QVector<QVector<qint64> > dihedrals;
+
+    /** The improper record data (!NIMPHI). */
+    QVector<QVector<qint64> > impropers;
+
+    /** The cross term record data (!NCRTERM). */
+    QVector<QVector<qint64> > cross_terms;
+
+    /** The atomic coordinates. */
+    QVector<SireMaths::Vector> coords;
+
     /** The name of the parsed file (if from a file). */
     QString filename;
 
@@ -121,6 +205,11 @@ private:
 };
 
 }
+
+Q_DECLARE_METATYPE( SireIO::PSFAtom )
+Q_DECLARE_METATYPE( SireIO::CharmmPSF )
+
+SIRE_EXPOSE_CLASS( SireIO::CharmmPSF )
 
 SIRE_END_HEADER
 

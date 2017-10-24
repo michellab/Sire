@@ -13,6 +13,8 @@
 
 #include "AmberRst7.pypp.hpp"
 
+#include "CharmmPSF.pypp.hpp"
+
 #include "Cube.pypp.hpp"
 
 #include "FlexibilityLibrary.pypp.hpp"
@@ -75,6 +77,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_AmberRst_class();
 
     register_AmberRst7_class();
+
+    register_CharmmPSF_class();
 
     register_Cube_class();
 

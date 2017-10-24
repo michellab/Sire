@@ -7,6 +7,7 @@
 #include "amberprm.h"
 #include "amberrst.h"
 #include "amberrst7.h"
+#include "charmmpsf.h"
 #include "cube.h"
 #include "flexibilitylibrary.h"
 #include "iobase.h"

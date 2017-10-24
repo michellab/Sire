@@ -10,6 +10,7 @@ set ( PYPP_SOURCES
        PDB2.pypp.cpp
        IOBase.pypp.cpp
        ProtoMSParameters.pypp.cpp
+       CharmmPSF.pypp.cpp
        AmberRst.pypp.cpp
        MoleculeParser.pypp.cpp
        Amber.pypp.cpp

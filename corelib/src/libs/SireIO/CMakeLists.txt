@@ -26,6 +26,7 @@ set ( SIREIO_HEADERS
       amberprm.h
       amberrst.h
       amberrst7.h
+      charmmpsf.h
       cube.h
       errors.h
       flexibilitylibrary.h
@@ -52,6 +53,7 @@ set ( SIREIO_SOURCES
       amberprm.cpp
       amberrst.cpp
       amberrst7.cpp
+      charmmpsf.cpp
       cube.cpp
       errors.cpp
       flexibilitylibrary.cpp

@@ -48,19 +48,50 @@
 #include "SireUnits/units.h"
 
 using namespace SireIO;
-using namespace SireMM;
 using namespace SireMol;
 using namespace SireBase;
 using namespace SireSystem;
 using namespace SireStream;
 
 const RegisterParser<CharmmPSF> register_psf;
+static const RegisterMetaType<CharmmPSF> r_psf;
+static const RegisterMetaType<PSFAtom> r_psfatom(NO_ROOT);
+
+QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PSFAtom &psfatom)
+{
+    writeHeader(ds, r_psfatom, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << psfatom.number << psfatom.segment << psfatom.res_num << psfatom.res_name
+        << psfatom.name << psfatom.type << psfatom.charge << psfatom.mass;
+
+    return ds;
+}
+
+QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PSFAtom &psfatom)
+{
+    VersionID v = readHeader(ds, r_psfatom);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+
+        sds >> psfatom.number >> psfatom.segment >> psfatom.res_num >> psfatom.res_name
+            >> psfatom.name >> psfatom.type >> psfatom.charge >> psfatom.mass;
+    }
+    else
+        throw version_error(v, "1", r_psfatom, CODELOC);
+
+    return ds;
+}
 
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmPSF &psf)
 {
     writeHeader(ds, r_psf, 1);
 
-    //ds << psf.molecules << static_cast<const MoleculeParser&>(psf);
+    ds << psf.atoms << psf.bonds << psf.angles << psf.dihedrals << psf.impropers
+       << psf.cross_terms << psf.coords << static_cast<const MoleculeParser&>(psf);
 
     return ds;
 }
@@ -71,12 +102,42 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmPSF &psf)
 
     if (v == 1)
     {
-        //ds >> psf.molecules >> static_cast<MoleculeParser&>(psf);
+        ds >> psf.atoms >> psf.bonds << psf.angles >> psf.dihedrals << psf.impropers
+           >> psf.cross_terms >> psf.coords >> static_cast<MoleculeParser&>(psf);
     }
     else
         throw version_error(v, "1", r_psf, CODELOC);
 
     return ds;
+}
+
+/** Default constructor. */
+PSFAtom::PSFAtom()
+{
+
+}
+
+/** Constructor. */
+PSFAtom::PSFAtom(const QString &line, QStringList &errors)
+{
+
+}
+
+/** Constructor. */
+PSFAtom::PSFAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors)
+{
+
+}
+
+/** Generate a PDB record from the atom data. */
+QString PSFAtom::toPSFRecord() const
+{
+
+}
+
+const char* PSFAtom::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<PSFAtom>() );
 }
 
 /** Constructor */
@@ -135,7 +196,7 @@ CharmmPSF::CharmmPSF(const QStringList &lines, const PropertyMap &map)
 CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
      : ConcreteProperty<CharmmPSF,MoleculeParser>(map)
 {
-    this->operator=(parsed);
+    //this->operator=(parsed);
 }
 
 /** Copy constructor */
@@ -216,9 +277,9 @@ QString CharmmPSF::toString() const
         return QObject::tr("CharmmPSF::null");
     else
     {
-        return QObject::tr("CharmmPSF( nMolecules() = %1, "
+        /*return QObject::tr("CharmmPSF( nMolecules() = %1, "
             "nResidues() = %2, nAtoms() = %3 )")
-            .arg(nMolecules()).arg(nSubstructures()).arg(nAtoms());
+            .arg(nMolecules()).arg(nSubstructures()).arg(nAtoms());*/
     }
 }
 
@@ -298,7 +359,7 @@ System CharmmPSF::startSystem(const PropertyMap &map) const
     system.setProperty(map["filename"].source(), StringProperty(filename));
     system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));*/
 
-    return system;
+    //return system;
 }
 
 /** Use the data contained in this parser to add information from the file to
