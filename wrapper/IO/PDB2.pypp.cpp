@@ -17,8 +17,6 @@ namespace bp = boost::python;
 
 #include "SireIO/pdb2.h"
 
-#include "SireMM/pdbparams.h"
-
 #include "SireMol/atomcharges.h"
 
 #include "SireMol/atomcoords.h"
@@ -145,7 +143,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
-                , "Return the number of atoms." );
+                , "Return the total number of atoms." );
         
         }
         { //::SireIO::PDB2::nAtoms
@@ -157,7 +155,7 @@ void register_PDB2_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("i") )
-                , "" );
+                , "Return the number of atoms in model i." );
         
         }
         { //::SireIO::PDB2::nChains
@@ -168,7 +166,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "nChains"
                 , nChains_function_value
-                , "" );
+                , "Return the total number of chains." );
         
         }
         { //::SireIO::PDB2::nChains
@@ -180,7 +178,7 @@ void register_PDB2_class(){
                 "nChains"
                 , nChains_function_value
                 , ( bp::arg("i") )
-                , "" );
+                , "Return the number of chains in model i." );
         
         }
         { //::SireIO::PDB2::nModels
@@ -202,7 +200,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "nResidues"
                 , nResidues_function_value
-                , "" );
+                , "Return the total number of residues." );
         
         }
         { //::SireIO::PDB2::nResidues
@@ -214,7 +212,7 @@ void register_PDB2_class(){
                 "nResidues"
                 , nResidues_function_value
                 , ( bp::arg("i") )
-                , "" );
+                , "Return the number of residues in model i." );
         
         }
         { //::SireIO::PDB2::nTers
@@ -225,7 +223,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "nTers"
                 , nTers_function_value
-                , "Return the number of TER records." );
+                , "Return the total number of TER records." );
         
         }
         { //::SireIO::PDB2::nTers
@@ -237,7 +235,7 @@ void register_PDB2_class(){
                 "nTers"
                 , nTers_function_value
                 , ( bp::arg("arg0") )
-                , "" );
+                , "Return the total number of TER records in model i." );
         
         }
         PDB2_exposer.def( bp::self != bp::self );

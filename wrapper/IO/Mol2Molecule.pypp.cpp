@@ -17,11 +17,11 @@ namespace bp = boost::python;
 
 #include "SireIO/mol2.h"
 
-#include "SireMM/mol2params.h"
-
 #include "SireMol/atomcharges.h"
 
 #include "SireMol/atomcoords.h"
+
+#include "SireMol/atomelements.h"
 
 #include "SireMol/molecule.h"
 

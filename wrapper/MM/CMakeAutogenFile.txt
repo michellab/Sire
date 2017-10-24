@@ -164,13 +164,11 @@ set ( PYPP_SOURCES
        NoCutoff.pypp.cpp
        AngleRestraint.pypp.cpp
        UreyBradleyParameterName.pypp.cpp
-       PDBParams.pypp.cpp
        StretchStretchParameterName.pypp.cpp
        ThreeAtomPerturbation.pypp.cpp
        IntraGroupFF.pypp.cpp
        LJProbe.pypp.cpp
        InterFF.pypp.cpp
-       Mol2Params.pypp.cpp
        InternalFF.pypp.cpp
        ImproperParameterName.pypp.cpp
        CHARMMSwitchingFunction.pypp.cpp

@@ -17,8 +17,6 @@ namespace bp = boost::python;
 
 #include "SireIO/pdb2.h"
 
-#include "SireMM/pdbparams.h"
-
 #include "SireMol/atomcharges.h"
 
 #include "SireMol/atomcoords.h"

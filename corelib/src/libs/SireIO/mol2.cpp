@@ -28,8 +28,6 @@
 
 #include "SireIO/mol2.h"
 
-#include "SireMM/mol2params.h"
-
 #include "SireSystem/system.h"
 
 #include "SireBase/parallel.h"
@@ -50,7 +48,6 @@
 #include "SireUnits/units.h"
 
 using namespace SireIO;
-using namespace SireMM;
 using namespace SireMol;
 using namespace SireBase;
 using namespace SireSystem;
