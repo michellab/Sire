@@ -659,7 +659,9 @@ Mol2Molecule::Mol2Molecule() :
     num_bonds(0),
     num_subst(0),
     num_feats(0),
-    num_sets(0)
+    num_sets(0),
+    mol_type("SMALL"),
+    charge_type("GASTEIGER")
 {
 }
 
@@ -686,7 +688,9 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     num_bonds(0),
     num_subst(0),
     num_feats(0),
-    num_sets(0)
+    num_sets(0),
+    mol_type("SMALL"),
+    charge_type("GASTEIGER")
 {
     // Extract the molecule name.
     name = lines[0].simplified();
@@ -911,7 +915,9 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
     num_bonds(0),
     num_subst(mol.nResidues()),
     num_feats(0),
-    num_sets(0)
+    num_sets(0),
+    mol_type("SMALL"),
+    charge_type("GASTEIGER")
 {
     // If the name is blank, then name the molecule after the file.
     // If the filename is empty, then name the molecule "Molecule".
