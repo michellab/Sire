@@ -2512,8 +2512,8 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
         // The element is usuall the first character of the atom,
         // unless the name starts with a digit, in which case it's the second.
         auto name = atom.getName();
-        if (name[0].isDigit()) elements.set(cgatomidx, Element(name.mid(1,2)));
-        else                   elements.set(cgatomidx, Element(name.left(2)));
+        if (name[0].isDigit()) elements.set(cgatomidx, Element(QString(name[1])));
+        else                   elements.set(cgatomidx, Element(QString(name[0])));
     }
 
     // Instantiate the residue property objects that we need.
