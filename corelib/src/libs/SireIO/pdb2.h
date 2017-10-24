@@ -81,16 +81,13 @@ public:
     /** Generate a PDB record from the atom data. */
     QString toPDBRecord() const;
 
-    /** Generate a string representation of the object. */
-    QString toString() const;
-
     static const char* typeName();
 
     /** Convert the atom name to PDB format. */
     QString toPDBName() const;
 
     /** Set the terminal atom flag. */
-    void setTerminal(bool _isTer);
+    void setTerminal(bool is_ter);
 
     /** Get the atom serial number. */
     qint64 getSerial() const;
@@ -240,8 +237,6 @@ public:
     int nTers() const;
     int nTers(int) const;
 
-    QVector<QVector<PDBAtom> > getAtoms() const;
-
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
@@ -285,7 +280,6 @@ private:
 Q_DECLARE_METATYPE( SireIO::PDBAtom )
 Q_DECLARE_METATYPE( SireIO::PDB2 )
 
-SIRE_EXPOSE_CLASS( SireIO::PDBAtom )
 SIRE_EXPOSE_CLASS( SireIO::PDB2 )
 
 SIRE_END_HEADER

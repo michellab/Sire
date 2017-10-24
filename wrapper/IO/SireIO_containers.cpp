@@ -51,9 +51,4 @@ using boost::python::register_tuple;
 void register_SireIO_containers()
 {
     register_list< QList<MoleculeParserPtr> >();
-    register_list< QVector<Mol2Atom> >();
-    register_list< QVector<Mol2Bond> >();
-    register_list< QVector<Mol2Substructure> >();
-    register_list< QVector<PDBAtom> >();
-    register_list< QVector<QVector<PDBAtom> >>();
 }

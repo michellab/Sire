@@ -358,8 +358,8 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     {
         // The element is usually the first character of the atom name,
         // unless it starts with a digit, in which case it's the second.
-        if (name[0].isDigit()) element = Element(name.mid(1,2)).toString();
-        else                   element = Element(name.left(2)).toString();
+        if (name[0].isDigit()) element = name[1];
+        else                   element = name[0];
     }
 
     // Extract the atomic charge.
@@ -432,9 +432,9 @@ QString PDBAtom::toPDBName() const
     @param is_ter
         Whether this is a terminal atom.
  */
-void PDBAtom::setTerminal(bool _is_ter)
+void PDBAtom::setTerminal(bool is_ter)
 {
-    is_ter = _is_ter;
+    this->is_ter = is_ter;
 }
 
 /** Whether this is a HETATM. */
@@ -586,12 +586,6 @@ QString PDBAtom::toPDBRecord() const
     }
 
     return line;
-}
-
-/** Return a string representation of this object */
-QString PDBAtom::toString() const
-{
-    return QObject::tr("PDBAtom::null");
 }
 
 /** Constructor */
@@ -826,8 +820,8 @@ QString PDB2::toString() const
     else
     {
         return QObject::tr("PDB2( nMolecules() = %1, "
-            "nChains() = %2 nResidues() = %3, nAtoms() = %4 )")
-            .arg(nChains()).arg(nModels()).arg(nResidues()).arg(nAtoms());
+            "nChains() = %2, nResidues() = %3, nAtoms() = %4 )")
+            .arg(nModels()).arg(nChains()).arg(nResidues()).arg(nAtoms());
     }
 }
 
@@ -922,12 +916,6 @@ int PDB2::nTers() const
 int PDB2::nTers(int i) const
 {
     return num_ters[i];
-}
-
-/** Return the atoms. */
-QVector<QVector<PDBAtom> > PDB2::getAtoms() const
-{
-    return atoms;
 }
 
 /** Function that is called to assert that this object is sane. This

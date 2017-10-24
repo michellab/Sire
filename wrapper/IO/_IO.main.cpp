@@ -25,14 +25,6 @@
 
 #include "Mol2.pypp.hpp"
 
-#include "Mol2Atom.pypp.hpp"
-
-#include "Mol2Bond.pypp.hpp"
-
-#include "Mol2Molecule.pypp.hpp"
-
-#include "Mol2Substructure.pypp.hpp"
-
 #include "MoleculeParser.pypp.hpp"
 
 #include "NullIO.pypp.hpp"
@@ -42,8 +34,6 @@
 #include "PDB.pypp.hpp"
 
 #include "PDB2.pypp.hpp"
-
-#include "PDBAtom.pypp.hpp"
 
 #include "PDBParameters.pypp.hpp"
 
@@ -98,14 +88,6 @@ BOOST_PYTHON_MODULE(_IO){
 
     register_Mol2_class();
 
-    register_Mol2Atom_class();
-
-    register_Mol2Bond_class();
-
-    register_Mol2Molecule_class();
-
-    register_Mol2Substructure_class();
-
     register_NullIO_class();
 
     register_NullParser_class();
@@ -113,8 +95,6 @@ BOOST_PYTHON_MODULE(_IO){
     register_PDB_class();
 
     register_PDB2_class();
-
-    register_PDBAtom_class();
 
     register_PDBParameters_class();
 

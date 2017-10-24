@@ -124,17 +124,6 @@ void register_PDB2_class(){
                 , "Return the suffixes that these files are normally associated with" );
         
         }
-        { //::SireIO::PDB2::getAtoms
-        
-            typedef ::QVector< QVector< SireIO::PDBAtom > > ( ::SireIO::PDB2::*getAtoms_function_type)(  ) const;
-            getAtoms_function_type getAtoms_function_value( &::SireIO::PDB2::getAtoms );
-            
-            PDB2_exposer.def( 
-                "getAtoms"
-                , getAtoms_function_value
-                , "Return the atoms." );
-        
-        }
         { //::SireIO::PDB2::nAtoms
         
             typedef int ( ::SireIO::PDB2::*nAtoms_function_type)(  ) const;

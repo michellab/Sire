@@ -95,9 +95,6 @@ public:
     /** Generate a Mol2 record from the atom data. */
     QString toMol2Record() const;
 
-    /** Generate a string representation of the object. */
-    QString toString() const;
-
     static const char* typeName();
 
     /** Get the atom number. */
@@ -174,9 +171,6 @@ public:
     /** Generate a Mol2 record from the bond data. */
     QString toMol2Record() const;
 
-    /** Generate a string representation of the object. */
-    QString toString() const;
-
     static const char* typeName();
 
     /** Get the bond ID. */
@@ -239,9 +233,6 @@ public:
 
     /** Generate a Mol2 record from the molecule data. */
     QVector<QString> toMol2Record() const;
-
-    /** Generate a string representation of the object. */
-    QString toString() const;
 
     static const char* typeName();
 
@@ -378,9 +369,6 @@ public:
 
     /** Generate a Mol2 record from the feature data. */
     QString toMol2Record() const;
-
-    /** Generate a string representation of the object. */
-    QString toString() const;
 
     static const char* typeName();
 
@@ -559,10 +547,6 @@ Q_DECLARE_METATYPE( SireIO::Mol2Molecule )
 Q_DECLARE_METATYPE( SireIO::Mol2Substructure )
 Q_DECLARE_METATYPE( SireIO::Mol2 )
 
-SIRE_EXPOSE_CLASS( SireIO::Mol2Atom )
-SIRE_EXPOSE_CLASS( SireIO::Mol2Bond )
-SIRE_EXPOSE_CLASS( SireIO::Mol2Molecule )
-SIRE_EXPOSE_CLASS( SireIO::Mol2Substructure )
 SIRE_EXPOSE_CLASS( SireIO::Mol2 )
 
 SIRE_END_HEADER

@@ -428,12 +428,6 @@ QString Mol2Atom::toMol2Record() const
     return line;
 }
 
-/** Generate a string representation of the object. */
-QString Mol2Atom::toString() const
-{
-    return QObject::tr("Mol2Atom::null");
-}
-
 const char* Mol2Atom::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<Mol2Atom>() );
@@ -613,12 +607,6 @@ Mol2Bond::Mol2Bond(const QString &line, QStringList &errors) :
 QString Mol2Bond::toMol2Record() const
 {
     return record;
-}
-
-/** Generate a string representation of the object. */
-QString Mol2Bond::toString() const
-{
-    return QObject::tr("Mol2Bond::null");
 }
 
 const char* Mol2Bond::typeName()
@@ -1066,12 +1054,6 @@ QVector<QString> Mol2Molecule::toMol2Record() const
     lines.append(comment);
 
     return lines;
-}
-
-/** Generate a string representation of the object. */
-QString Mol2Molecule::toString() const
-{
-    return QObject::tr("Mol2Molecule::null");
 }
 
 const char* Mol2Molecule::typeName()
@@ -1533,12 +1515,6 @@ QString Mol2Substructure::toMol2Record() const
     line.append(QString(" %1").arg(optional));
 
     return line;
-}
-
-/** Generate a string representation of the object. */
-QString Mol2Substructure::toString() const
-{
-    return QObject::tr("Mol2Substructure::null");
 }
 
 const char* Mol2Substructure::typeName()
