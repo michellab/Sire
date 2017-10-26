@@ -80,10 +80,37 @@ public:
     /** Constructor. */
     PSFAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors);
 
-    /** Generate a PDB record from the atom data. */
+    /** Generate a PSD record from the atom data. */
     QString toPSFRecord() const;
 
+    /** Convert the atom name to PDB format. */
+    QString toPDBName() const;
+
     static const char* typeName();
+
+    /** Get the atom number. */
+    int getNumber() const;
+
+    /** Get the segment name. */
+    QString getSegment() const;
+
+    /** Get the residue number. */
+    qint64 getResNum() const;
+
+    /** Get the residue name. */
+    QString getResName() const;
+
+    /** Get the atom name. */
+    QString getName() const;
+
+    /** Get the atom type. */
+    QString getType() const;
+
+    /** Get the atom charge. */
+    double getCharge() const;
+
+    /** Get the atom mass. */
+    double getMass() const;
 
 private:
     /** The original PDB record used to instantiate the atom. */
@@ -96,7 +123,7 @@ private:
     QString segment;
 
     /** Residue number. */
-    QString res_num;
+    qint64 res_num;
 
     /** Residue name. */
     QString res_name;

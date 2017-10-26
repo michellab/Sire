@@ -112,27 +112,172 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmPSF &psf)
 }
 
 /** Default constructor. */
-PSFAtom::PSFAtom()
+PSFAtom::PSFAtom() :
+    number(0),
+    res_num(0),
+    type("X"),
+    charge(0),
+    mass(0)
 {
 
 }
 
 /** Constructor. */
-PSFAtom::PSFAtom(const QString &line, QStringList &errors)
+PSFAtom::PSFAtom(const QString &line, QStringList &errors) :
+    number(0),
+    res_num(0),
+    type("X"),
+    charge(0),
+    mass(0)
 {
+    // Tokenize the line, splitting using a single whitespace character.
+    QStringList data = line.simplified().split(QRegExp("\\s"));
 
+    // There must be at least 8 data records.
+    if (data.count() < 8)
+    {
+        errors.append(QObject::tr("This doesn't look like a PSF atom "
+            "record! There should be at least 8 records, found %1: %2")
+            .arg(data.count()).arg(line));
+
+        return;
+    }
+
+    // Extract the atom number.
+    bool ok;
+    number = data[0].toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the ID number for the atom "
+            "from part (%1) of line '%2'").arg(data[0]).arg(line));
+
+        return;
+    }
+
+    // Extract the segment name.
+    segment = data[1];
+
+    // Extract the residue number.
+    res_num = data[2].toInt(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the residue ID number for the atom "
+            "from part (%1) of line '%2'").arg(data[2]).arg(line));
+
+        return;
+    }
+
+    // Extract the residue name.
+    res_name = data[3];
+
+    // Extract the atom name.
+    name = data[4];
+
+    // Extract atom type.
+    type = data[5];
+
+    // Extract atom charge.
+    charge = data[6].toDouble(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the atom charge "
+            "from part (%1) of line '%2'").arg(data[6]).arg(line));
+
+        return;
+    }
+
+    // Extract atom mass.
+    mass = data[7].toDouble(&ok);
+
+    if (not ok)
+    {
+        errors.append(QObject::tr("Cannot extract the atom mass "
+            "from part (%1) of line '%2'").arg(data[7]).arg(line));
+
+        return;
+    }
 }
 
 /** Constructor. */
-PSFAtom::PSFAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors)
+PSFAtom::PSFAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
+    number(0),
+    res_num(0),
+    type("X"),
+    charge(0),
+    mass(0)
 {
 
 }
 
-/** Generate a PDB record from the atom data. */
+/** Generate a PSF record from the atom data. */
 QString PSFAtom::toPSFRecord() const
 {
+    QString line;
 
+    line.append(QString("%1").arg(number, 7, 10));
+    line.append(QString(" %1").arg(segment, -4));
+    line.append(QString(" %1").arg(res_num, -4));
+    line.append(QString(" %1").arg(res_name, -4));
+    line.append(QString(" %1").arg(toPDBName(), 4));
+    line.append(QString(" %1").arg(type, -4));
+    line.append(QString(" %1").arg(charge, 10, 'f', 6));
+    line.append(QString(" %1").arg(mass, 13, 'f', 4));
+    line.append(QString("%1").arg("0", 12));
+
+    return line;
+}
+
+/** Convert the name to PDB format. */
+QString PSFAtom::toPDBName() const
+{
+    QString pdb_name = name;
+
+    /* PDB atom names are a maximum of 4 characters wide and obey the
+       following rules:
+
+       All names start in the second position (i.e. start with a space)
+       unless the first character of the name is a digit.
+
+       3 character names:
+         - Name starts with a digit
+             --> append a space, e.g. "1HE "
+         - Else...
+             --> prepend a space, e.g. " NE1"
+
+       2 character names:
+         - Start in second position, e.g. " CA "
+
+       1 character names:
+         - Put in second position, e.g. " H  "
+     */
+
+    // Truncate the name to 4 characters.
+    if (pdb_name.count() > 4) pdb_name = pdb_name.left(4);
+
+    // Apply formatting rules.
+    else if (pdb_name.count() < 4)
+    {
+        if (pdb_name.count() == 3)
+        {
+            if (pdb_name[0].isDigit()) pdb_name.append(" ");
+            else                       pdb_name.prepend(" ");
+        }
+        else if (pdb_name.count() == 2)
+        {
+            pdb_name.prepend(" ");
+            pdb_name.append(" ");
+        }
+        else if (pdb_name.count() == 1)
+        {
+            pdb_name.prepend(" ");
+            pdb_name.append("  ");
+        }
+    }
+
+    return pdb_name;
 }
 
 const char* PSFAtom::typeName()
@@ -140,13 +285,61 @@ const char* PSFAtom::typeName()
     return QMetaType::typeName( qMetaTypeId<PSFAtom>() );
 }
 
+/** Get the atom number. */
+int PSFAtom::getNumber() const
+{
+    return number;
+}
+
+/** Get the segment name. */
+QString PSFAtom::getSegment() const
+{
+    return segment;
+}
+
+/** Get the residue number. */
+qint64 PSFAtom::getResNum() const
+{
+    return res_num;
+}
+
+/** Get the residue name. */
+QString PSFAtom::getResName() const
+{
+    return res_name;
+}
+
+/** Get the atom name. */
+QString PSFAtom::getName() const
+{
+    return name;
+}
+
+/** Get the atom type. */
+QString PSFAtom::getType() const
+{
+    return type;
+}
+
+/** Get the atom charge. */
+double PSFAtom::getCharge() const
+{
+    return charge;
+}
+
+/** Get the atom mass. */
+double PSFAtom::getMass() const
+{
+    return mass;
+}
+
 /** Constructor */
 CharmmPSF::CharmmPSF() : ConcreteProperty<CharmmPSF,MoleculeParser>()
 {}
 
 /** Construct to read in the data from the file called 'filename'. The
-    passed property map can be used to pass extra parameters to control
-    the parsing */
+passed property map can be used to pass extra parameters to control
+the parsing */
 CharmmPSF::CharmmPSF(const QString &filename, const PropertyMap &map)
      : ConcreteProperty<CharmmPSF,MoleculeParser>(filename,map)
 {
@@ -313,7 +506,83 @@ void CharmmPSF::assertSane() const
     in the lines of the file */
 void CharmmPSF::parseLines(const PropertyMap &map)
 {
-    //this->setScore(nAtoms());
+    int num_atoms = 0;
+
+    // Loop through all lines in the file.
+    for (int iline=0; iline<lines().count(); ++iline)
+    {
+        // Tokenize the line, splitting using a single whitespace character.
+        QStringList data = lines()[iline].simplified().split(QRegExp("\\s"));
+
+        // Atom records.
+        if (data.last() == "!NATOM")
+        {
+            // Extract the number of atoms (should be the first record).
+            bool ok;
+            num_atoms = data.first().toInt(&ok);
+
+            if (not ok)
+            {
+                parse_warnings.append(QObject::tr("Cannot extract number of atoms "
+                    "from part (%1) from line '%2'").arg(data.first()).arg(lines()[iline]));
+
+                return;
+            }
+
+            if (num_atoms == 0)
+            {
+                parse_warnings.append(QObject::tr("The molecule contains no atoms!: %1")
+                    .arg(lines()[iline]));
+
+                return;
+            }
+
+            // Resize the atoms vector.
+            atoms.resize(num_atoms);
+
+            if (usesParallel())
+            {
+                ++iline;
+
+                QMutex mutex;
+
+                tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+                                [&](const tbb::blocked_range<int> &r)
+                {
+                    // Create local data objects.
+                    QStringList local_errors;
+
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        // Parse the data from the atom record.
+                        atoms[i] = PSFAtom(lines()[iline+i], local_errors);
+                    }
+
+                    if (not local_errors.isEmpty())
+                    {
+                        // Acquire a lock.
+                        QMutexLocker lkr(&mutex);
+
+                        // Update the warning messages.
+                        parse_warnings += local_errors;
+                    }
+                });
+
+                // Fast-forward the line index.
+                iline += (num_atoms - 1);
+            }
+            else
+            {
+                for (int i=0; i<num_atoms; ++i)
+                {
+                    // Parse the data from the atom record.
+                    atoms[i] = PSFAtom(lines()[++iline], parse_warnings);
+                }
+            }
+        }
+    }
+
+    this->setScore(num_atoms);
 }
 
 /** Use the data contained in this parser to create a new System of molecules,
