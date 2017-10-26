@@ -47,6 +47,8 @@
 
 #include "SireUnits/units.h"
 
+#include <QtMath>
+
 using namespace SireIO;
 using namespace SireMol;
 using namespace SireBase;
@@ -508,6 +510,37 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 {
     int num_atoms = 0;
 
+    // Helper function to parse record lines.
+    auto parse_line = [](const QString& line, int iline,
+        int num_lines, int num_records, int width, QStringList &errors)
+    {
+        // Work out the number of records on this line.
+
+        // The default number.
+        int num_line = width;
+
+        // We're on the last record line.
+        if (iline == (num_lines -1))
+            num_line = width - (width*num_lines - num_records);
+
+        // Tokenize the line, splitting using a single whitespace character.
+        QStringList data = line.simplified().split(QRegExp("\\s"));
+
+        // Check that the line has the right number of records.
+        if (data.count() != num_line)
+        {
+            errors.append(QObject::tr("The number of records on the line is "
+                "incorrect. Expected %1, found %2: %3")
+                .arg(width).arg(data.count()).arg(line));
+
+            return;
+        }
+
+        // Work out the index of the first record.
+        int istart = 4 * iline;
+
+    };
+
     // Loop through all lines in the file.
     for (int iline=0; iline<lines().count(); ++iline)
     {
@@ -579,6 +612,131 @@ void CharmmPSF::parseLines(const PropertyMap &map)
                     atoms[i] = PSFAtom(lines()[++iline], parse_warnings);
                 }
             }
+        }
+
+        // Bond records.
+        else if (data.contains("!NBOND:"))
+        {
+            // Extract the number of bonds;
+            bool ok;
+            int num_bonds = data.first().toInt(&ok);
+
+            if (not ok)
+            {
+                parse_warnings.append(QObject::tr("Cannot extract number of bonds "
+                    "from part (%1) from line '%2'").arg(data.first()).arg(lines()[iline]));
+
+                return;
+            }
+
+            // Resize data structures.
+            bonds.resize(num_bonds);
+            for (int i=0; i<num_bonds; ++i)
+                bonds[i].resize(2);
+
+            // Work out the number of record lines.
+            // There are 4 bond records per line.
+            int num_record_lines = qCeil(num_bonds/4.0);
+        }
+
+        // Angle records.
+        else if (data.contains("!NTHETA:"))
+        {
+            // Extract the number of bonds;
+            bool ok;
+            int num_angles = data.first().toInt(&ok);
+
+            if (not ok)
+            {
+                parse_warnings.append(QObject::tr("Cannot extract number of angles "
+                    "from part (%1) from line '%2'").arg(data.first()).arg(lines()[iline]));
+
+                return;
+            }
+
+            // Resize data structures.
+            angles.resize(num_angles);
+            for (int i=0; i<num_angles; ++i)
+                angles[i].resize(3);
+
+            // Work out the number of record lines.
+            // There are 3 angle records per line.
+            int num_record_lines = qCeil(num_angles/3.0);
+        }
+
+        // Dihedral records.
+        else if (data.contains("!NPHI:"))
+        {
+            // Extract the number of dihedrals;
+            bool ok;
+            int num_dihedrals = data.first().toInt(&ok);
+
+            if (not ok)
+            {
+                parse_warnings.append(QObject::tr("Cannot extract number of dihedrals "
+                    "from part (%1) from line '%2'").arg(data.first()).arg(lines()[iline]));
+
+                return;
+            }
+
+            // Resize data structures.
+            dihedrals.resize(num_dihedrals);
+            for (int i=0; i<num_dihedrals; ++i)
+                dihedrals[i].resize(4);
+
+            // Work out the number of record lines.
+            // There are 2 dihedral records per line.
+            int num_record_lines = qCeil(num_dihedrals/2.0);
+        }
+
+        // Improper records.
+        else if (data.contains("!NIMPHI:"))
+        {
+            // Extract the number of impropers;
+            bool ok;
+            int num_impropers = data.first().toInt(&ok);
+
+            if (not ok)
+            {
+                parse_warnings.append(QObject::tr("Cannot extract number of impropers "
+                    "from part (%1) from line '%2'").arg(data.first()).arg(lines()[iline]));
+
+                return;
+            }
+
+            // Resize data structures.
+            impropers.resize(num_impropers);
+            for (int i=0; i<num_impropers; ++i)
+                impropers[i].resize(4);
+
+            // Work out the number of record lines.
+            // There are 2 improper records per line.
+            int num_record_lines = qCeil(num_impropers/2.0);
+        }
+
+        // Cross-term records.
+        else if (data.contains("!NCRTERM:"))
+        {
+            // Extract the number of cross terms;
+            bool ok;
+            int num_cross = data.first().toInt(&ok);
+
+            if (not ok)
+            {
+                parse_warnings.append(QObject::tr("Cannot extract number of cross terms "
+                    "from part (%1) from line '%2'").arg(data.first()).arg(lines()[iline]));
+
+                return;
+            }
+
+            // Resize data structures.
+            cross_terms.resize(num_cross);
+            for (int i=0; i<num_cross; ++i)
+                cross_terms[i].resize(4);
+
+            // Work out the number of record lines.
+            // There are 2 cross term records per line.
+            int num_record_lines = qCeil(num_cross/2.0);
         }
     }
 
