@@ -159,7 +159,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
 
     // Extract the atom serial number.
     bool ok;
-    int tmp_int = line.midRef(6,5).toInt(&ok);
+    serial = line.midRef(6,5).toInt(&ok);
 
     if (not ok)
     {
@@ -168,7 +168,6 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
 
         return;
     }
-    serial = tmp_int;
 
     // Extract the atom name.
     // Somewhere we'll test this against a list of valid names.
@@ -184,7 +183,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
     chain_id = line[21];
 
     // Extract the residue sequence number.
-    tmp_int = line.midRef(22,4).toInt(&ok);
+    res_num = line.midRef(22,4).toInt(&ok);
 
     if (not ok)
     {
@@ -193,7 +192,6 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
 
         return;
     }
-    res_num = tmp_int;
 
     // Extract the residue insertion code.
     insert_code = line[26];
