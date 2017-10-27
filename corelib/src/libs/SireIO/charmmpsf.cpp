@@ -511,34 +511,57 @@ void CharmmPSF::parseLines(const PropertyMap &map)
     int num_atoms = 0;
 
     // Helper function to parse record lines.
-    auto parse_line = [](const QString& line, int iline,
-        int num_lines, int num_records, int width, QStringList &errors)
+    auto parse_line = [](const QString& line, QVector<QVector<qint64> > &data, int iline,
+        int num_lines, int num_records, int record_width, QStringList &errors)
     {
-        // Work out the number of records on this line.
+        // The default number of columns per line.
+        int num_cols = 8;
 
-        // The default number.
-        int num_line = width;
+        // Triples have three entries per line, so 9 columns.
+        if (record_width == 3) num_cols = 9;
 
-        // We're on the last record line.
-        if (iline == (num_lines -1))
-            num_line = width - (width*num_lines - num_records);
+        // Work out the number of records per line.
+        int records_per_line = num_cols / record_width;
+
+        // Work out the row index in the data vector for the first record.
+        int start = records_per_line * iline;
+
+        // Adjust the records per line if we're on the last record line and
+        // the total number of records is not a multiple of the records per line.
+        if (iline == (num_lines - 1))
+            records_per_line = num_records - records_per_line*(num_lines - 1);
 
         // Tokenize the line, splitting using a single whitespace character.
-        QStringList data = line.simplified().split(QRegExp("\\s"));
+        QStringList records = line.simplified().split(QRegExp("\\s"));
 
-        // Check that the line has the right number of records.
-        if (data.count() != num_line)
+        // Check that the line has the right number of columns.
+        if (records.count() != (record_width*records_per_line))
         {
             errors.append(QObject::tr("The number of records on the line is "
                 "incorrect. Expected %1, found %2: %3")
-                .arg(width).arg(data.count()).arg(line));
+                .arg(num_cols * record_width).arg(records.count()).arg(line));
 
             return;
         }
 
-        // Work out the index of the first record.
-        int istart = 4 * iline;
+        bool ok;
 
+        // Validate and store each record.
+        for (int i=0; i<records_per_line; ++i)
+        {
+            for (int j=0; j<record_width; j++)
+            {
+                data[start+i][j] = records[i*record_width + j].toInt(&ok);
+
+                if (not ok)
+                {
+                    errors.append(QObject::tr("Could not extract data record %1 "
+                        "from line '%2'").arg(records[i]).arg(line));
+
+                    return;
+                }
+            }
+        }
     };
 
     // Loop through all lines in the file.
@@ -636,7 +659,49 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
             // Work out the number of record lines.
             // There are 4 bond records per line.
-            int num_record_lines = qCeil(num_bonds/4.0);
+            int num_lines = qCeil(num_bonds/4.0);
+
+            ++iline;
+
+            if (usesParallel())
+            {
+                QMutex mutex;
+
+                tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                                [&](const tbb::blocked_range<int> &r)
+                {
+                    // Create local data objects.
+                    QStringList local_errors;
+
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        // Parse a bond record line.
+                        parse_line(lines()[iline+i], bonds, i,
+                            num_lines, num_bonds, 2, local_errors);
+                    }
+
+                    if (not local_errors.isEmpty())
+                    {
+                        // Acquire a lock.
+                        QMutexLocker lkr(&mutex);
+
+                        // Update the warning messages.
+                        parse_warnings += local_errors;
+                    }
+                });
+
+                // Fast-forward the line index.
+                iline += (num_lines - 1);
+            }
+            else
+            {
+                for (int i=0; i<num_lines; ++i)
+                {
+                    // Parse a bond record line.
+                    parse_line(lines()[iline+i], bonds, i,
+                        num_lines, num_bonds, 2, parse_warnings);
+                }
+            }
         }
 
         // Angle records.
@@ -661,7 +726,49 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
             // Work out the number of record lines.
             // There are 3 angle records per line.
-            int num_record_lines = qCeil(num_angles/3.0);
+            int num_lines = qCeil(num_angles/3.0);
+
+            ++iline;
+
+            if (usesParallel())
+            {
+                QMutex mutex;
+
+                tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                                [&](const tbb::blocked_range<int> &r)
+                {
+                    // Create local data objects.
+                    QStringList local_errors;
+
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        // Parse an angle record line.
+                        parse_line(lines()[iline+i], angles, i,
+                            num_lines, num_angles, 3, local_errors);
+                    }
+
+                    if (not local_errors.isEmpty())
+                    {
+                        // Acquire a lock.
+                        QMutexLocker lkr(&mutex);
+
+                        // Update the warning messages.
+                        parse_warnings += local_errors;
+                    }
+                });
+
+                // Fast-forward the line index.
+                iline += (num_lines - 1);
+            }
+            else
+            {
+                for (int i=0; i<num_lines; ++i)
+                {
+                    // Parse an angle record line.
+                    parse_line(lines()[iline+i], angles, i,
+                        num_lines, num_angles, 3, parse_warnings);
+                }
+            }
         }
 
         // Dihedral records.
@@ -686,7 +793,49 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
             // Work out the number of record lines.
             // There are 2 dihedral records per line.
-            int num_record_lines = qCeil(num_dihedrals/2.0);
+            int num_lines = qCeil(num_dihedrals/2.0);
+
+            ++iline;
+
+            if (usesParallel())
+            {
+                QMutex mutex;
+
+                tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                                [&](const tbb::blocked_range<int> &r)
+                {
+                    // Create local data objects.
+                    QStringList local_errors;
+
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        // Parse a dihedral record line.
+                        parse_line(lines()[iline+i], dihedrals, i,
+                            num_lines, num_dihedrals, 4, local_errors);
+                    }
+
+                    if (not local_errors.isEmpty())
+                    {
+                        // Acquire a lock.
+                        QMutexLocker lkr(&mutex);
+
+                        // Update the warning messages.
+                        parse_warnings += local_errors;
+                    }
+                });
+
+                // Fast-forward the line index.
+                iline += (num_lines - 1);
+            }
+            else
+            {
+                for (int i=0; i<num_lines; ++i)
+                {
+                    // Parse a dihedral record line.
+                    parse_line(lines()[iline+i], dihedrals, i,
+                        num_lines, num_dihedrals, 4, parse_warnings);
+                }
+            }
         }
 
         // Improper records.
@@ -711,7 +860,49 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
             // Work out the number of record lines.
             // There are 2 improper records per line.
-            int num_record_lines = qCeil(num_impropers/2.0);
+            int num_lines = qCeil(num_impropers/2.0);
+
+            ++iline;
+
+            if (usesParallel())
+            {
+                QMutex mutex;
+
+                tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                                [&](const tbb::blocked_range<int> &r)
+                {
+                    // Create local data objects.
+                    QStringList local_errors;
+
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        // Parse an improper record line.
+                        parse_line(lines()[iline+i], impropers, i,
+                            num_lines, num_impropers, 4, local_errors);
+                    }
+
+                    if (not local_errors.isEmpty())
+                    {
+                        // Acquire a lock.
+                        QMutexLocker lkr(&mutex);
+
+                        // Update the warning messages.
+                        parse_warnings += local_errors;
+                    }
+                });
+
+                // Fast-forward the line index.
+                iline += (num_lines - 1);
+            }
+            else
+            {
+                for (int i=0; i<num_lines; ++i)
+                {
+                    // Parse an improper record line.
+                    parse_line(lines()[iline+i], impropers, i,
+                        num_lines, num_impropers, 4, parse_warnings);
+                }
+            }
         }
 
         // Cross-term records.
@@ -736,7 +927,49 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
             // Work out the number of record lines.
             // There are 2 cross term records per line.
-            int num_record_lines = qCeil(num_cross/2.0);
+            int num_lines = qCeil(num_cross/2.0);
+
+            ++iline;
+
+            if (usesParallel())
+            {
+                QMutex mutex;
+
+                tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                                [&](const tbb::blocked_range<int> &r)
+                {
+                    // Create local data objects.
+                    QStringList local_errors;
+
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        // Parse a cross-term record line.
+                        parse_line(lines()[iline+i], cross_terms, i,
+                            num_lines, num_cross, 4, local_errors);
+                    }
+
+                    if (not local_errors.isEmpty())
+                    {
+                        // Acquire a lock.
+                        QMutexLocker lkr(&mutex);
+
+                        // Update the warning messages.
+                        parse_warnings += local_errors;
+                    }
+                });
+
+                // Fast-forward the line index.
+                iline += (num_lines - 1);
+            }
+            else
+            {
+                for (int i=0; i<num_lines; ++i)
+                {
+                    // Parse a cross-term record line.
+                    parse_line(lines()[iline+i], cross_terms, i,
+                        num_lines, num_cross, 4, parse_warnings);
+                }
+            }
         }
     }
 
