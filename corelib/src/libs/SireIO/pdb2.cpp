@@ -1219,8 +1219,9 @@ void PDB2::parseLines(const PropertyMap &map)
                 // if so, we need to re-number all of the residues in
                 // ascending order.
 
-                // ID number for the previous residue;
-                int prev_num = -1000000;
+                // Name and number for the previous residue.
+                // Initialise the residue number to a large negative value.
+                qint64 prev_num = std::numeric_limits<qint64>::min();
                 QString prev_nam = frame_atoms[0].getResName();
 
                 ok = true;
@@ -1229,6 +1230,7 @@ void PDB2::parseLines(const PropertyMap &map)
                     QString nam = frame_atoms[i].getResName();
                     int     num = frame_atoms[i].getResNum();
 
+                    // Residue number not ascending.
                     if (num < prev_num)
                     {
                         ok = false;
@@ -1236,12 +1238,14 @@ void PDB2::parseLines(const PropertyMap &map)
                     }
                     else
                     {
+                        // Same number, different name.
                         if ((num == prev_num) and
                             (nam != prev_nam))
                         {
                             ok = false;
                             break;
                         }
+                        // All ok. Update records for previous residue.
                         else
                         {
                             prev_nam = nam;
