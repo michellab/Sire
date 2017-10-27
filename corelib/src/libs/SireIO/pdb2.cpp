@@ -985,7 +985,7 @@ void PDB2::parseLines(const PropertyMap &map)
                 // Do we actually care about this? Probably not.
                 if (lines()[iline + 1].length() < 27)
                 {
-                    // Perhaps some kind of warning.
+                    // TODO: Perhaps some kind of warning.
                 }
             }
         }
@@ -1027,7 +1027,7 @@ void PDB2::parseLines(const PropertyMap &map)
         if (not frame_atom.getChainId().isSpace())
         {
             // Don't duplicate values, only keys.
-            if (not frame_chains.contains(frame_atom.getChainId(), frame_atom.getResNum()))
+            if (not local_chains.contains(frame_atom.getChainId(), frame_atom.getResNum()))
             {
                 local_chains.insert(frame_atom.getChainId(), frame_atom.getResNum());
             }
