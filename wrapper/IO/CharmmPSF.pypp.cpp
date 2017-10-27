@@ -124,6 +124,72 @@ void register_CharmmPSF_class(){
                 , "Return the suffixes that these files are normally associated with" );
         
         }
+        { //::SireIO::CharmmPSF::nAngles
+        
+            typedef int ( ::SireIO::CharmmPSF::*nAngles_function_type)(  ) const;
+            nAngles_function_type nAngles_function_value( &::SireIO::CharmmPSF::nAngles );
+            
+            CharmmPSF_exposer.def( 
+                "nAngles"
+                , nAngles_function_value
+                , "" );
+        
+        }
+        { //::SireIO::CharmmPSF::nAtoms
+        
+            typedef int ( ::SireIO::CharmmPSF::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::CharmmPSF::nAtoms );
+            
+            CharmmPSF_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , "" );
+        
+        }
+        { //::SireIO::CharmmPSF::nBonds
+        
+            typedef int ( ::SireIO::CharmmPSF::*nBonds_function_type)(  ) const;
+            nBonds_function_type nBonds_function_value( &::SireIO::CharmmPSF::nBonds );
+            
+            CharmmPSF_exposer.def( 
+                "nBonds"
+                , nBonds_function_value
+                , "" );
+        
+        }
+        { //::SireIO::CharmmPSF::nCrossTerms
+        
+            typedef int ( ::SireIO::CharmmPSF::*nCrossTerms_function_type)(  ) const;
+            nCrossTerms_function_type nCrossTerms_function_value( &::SireIO::CharmmPSF::nCrossTerms );
+            
+            CharmmPSF_exposer.def( 
+                "nCrossTerms"
+                , nCrossTerms_function_value
+                , "" );
+        
+        }
+        { //::SireIO::CharmmPSF::nDihedrals
+        
+            typedef int ( ::SireIO::CharmmPSF::*nDihedrals_function_type)(  ) const;
+            nDihedrals_function_type nDihedrals_function_value( &::SireIO::CharmmPSF::nDihedrals );
+            
+            CharmmPSF_exposer.def( 
+                "nDihedrals"
+                , nDihedrals_function_value
+                , "" );
+        
+        }
+        { //::SireIO::CharmmPSF::nImpropers
+        
+            typedef int ( ::SireIO::CharmmPSF::*nImpropers_function_type)(  ) const;
+            nImpropers_function_type nImpropers_function_value( &::SireIO::CharmmPSF::nImpropers );
+            
+            CharmmPSF_exposer.def( 
+                "nImpropers"
+                , nImpropers_function_value
+                , "" );
+        
+        }
         CharmmPSF_exposer.def( bp::self != bp::self );
         { //::SireIO::CharmmPSF::operator=
         

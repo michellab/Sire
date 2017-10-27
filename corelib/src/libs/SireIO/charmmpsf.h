@@ -189,6 +189,13 @@ public:
     QString formatDescription() const;
     QStringList formatSuffix() const;
 
+    int nAtoms() const;
+    int nBonds() const;
+    int nAngles() const;
+    int nDihedrals() const;
+    int nImpropers() const;
+    int nCrossTerms() const;
+
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;

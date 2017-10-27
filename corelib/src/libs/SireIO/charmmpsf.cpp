@@ -472,9 +472,11 @@ QString CharmmPSF::toString() const
         return QObject::tr("CharmmPSF::null");
     else
     {
-        /*return QObject::tr("CharmmPSF( nMolecules() = %1, "
-            "nResidues() = %2, nAtoms() = %3 )")
-            .arg(nMolecules()).arg(nSubstructures()).arg(nAtoms());*/
+        return QObject::tr("CharmmPSF( nAtoms() = %1, "
+            "nBonds() = %2, nAngles() = %3, nDihedrals() = %4, "
+            "nImpropers() = %5, nCrossTerms() = %6 )")
+            .arg(nAtoms()).arg(nBonds()).arg(nAngles()).arg(nDihedrals())
+            .arg(nImpropers()).arg(nCrossTerms());
     }
 }
 
@@ -495,6 +497,42 @@ QStringList CharmmPSF::formatSuffix() const
 {
     static const QStringList suffixes = { "psf" };
     return suffixes;
+}
+
+/** Return the number of atom records. */
+int CharmmPSF::nAtoms() const
+{
+    return atoms.count();
+}
+
+/** Return the number of bond records. */
+int CharmmPSF::nBonds() const
+{
+    return bonds.count();
+}
+
+/** Return the number of angle records. */
+int CharmmPSF::nAngles() const
+{
+    return angles.count();
+}
+
+/** Return the number of dihedral records. */
+int CharmmPSF::nDihedrals() const
+{
+    return dihedrals.count();
+}
+
+/** Return the number of improper records. */
+int CharmmPSF::nImpropers() const
+{
+    return impropers.count();
+}
+
+/** Return the number of cross-term records. */
+int CharmmPSF::nCrossTerms() const
+{
+    return cross_terms.count();
 }
 
 /** Function that is called to assert that this object is sane. This
