@@ -483,6 +483,12 @@ qint64 PDBAtom::getResNum() const
     return res_num;
 }
 
+/** Set the residue sequence number. */
+void PDBAtom::setResNum(int num)
+{
+    res_num = num;
+}
+
 /** Get the residue sequence number. */
 SireMaths::Vector PDBAtom::getCoord() const
 {
@@ -964,12 +970,11 @@ void PDB2::parseLines(const PropertyMap &map)
     QMultiMap<QChar, qint64> frame_chains;
 
     // Internal function used to parse a single atom line in the file.
-    auto parse_atoms = [&](const QString &line, int iatm, int iframe, int iline, int num_lines,
-        PDBAtom &frame_atom, QMultiMap<QPair<qint64, QString>, qint64> &local_residues,
-        QMultiMap<QChar, qint64> &local_chains, QStringList &errors)
+    auto parse_atoms = [&](const QString &line, int iatm, int iframe,
+        int iline, int num_lines, PDBAtom &atom, QStringList &errors)
     {
         // Populate atom data.
-        frame_atom = PDBAtom(line, errors);
+        atom = PDBAtom(line, errors);
 
         // Check the next line for additional information.
         if (iline + 1 < num_lines)
@@ -977,7 +982,7 @@ void PDB2::parseLines(const PropertyMap &map)
             // This is a terminal atom.
             if (lines()[iline + 1].leftRef(6) == "TER   ")
             {
-                frame_atom.setTerminal(true);
+                atom.setTerminal(true);
 
                 // Check whether this is a "real" TER record.
                 // Many TER records are used to end group of atoms, e.g. a Tip4P molecule together,
@@ -997,7 +1002,7 @@ void PDB2::parseLines(const PropertyMap &map)
             if (iatm < atoms[0].count())
             {
                 // Make sure the atom is consistent between frames.
-                if (not validateAtom(frame_atom, atoms[0][iatm]))
+                if (not validateAtom(atom, atoms[0][iatm]))
                 {
                     errors.append(QObject::tr("Invalid record for atom %1 "
                         "in model %2 on line %3. Record doesn't match does not "
@@ -1017,23 +1022,29 @@ void PDB2::parseLines(const PropertyMap &map)
             }
         }
 
+        return atom.isTer();
+    };
+
+    // Internal function used to parse residue and chain data from a parsed atom record.
+    auto parse_residues = [](const PDBAtom &atom, int iatm,
+        QMultiMap<QPair<qint64, QString>, qint64> &local_residues,
+        QMultiMap<QChar, qint64> &local_chains, QStringList &errors)
+    {
         // Create residue <number, name> pair.
-        QPair<qint64, QString> res(frame_atom.getResNum(), frame_atom.getResName());
+        QPair<qint64, QString> res(atom.getResNum(), atom.getResName());
 
         // Update the residue multi-map (residue <number, name> --> atom index).
         local_residues.insert(res, iatm);
 
         // Insert the chain identifier (ignore if it is blank).
-        if (not frame_atom.getChainId().isSpace())
+        if (not atom.getChainId().isSpace())
         {
             // Don't duplicate values, only keys.
-            if (not local_chains.contains(frame_atom.getChainId(), frame_atom.getResNum()))
+            if (not local_chains.contains(atom.getChainId(), atom.getResNum()))
             {
-                local_chains.insert(frame_atom.getChainId(), frame_atom.getResNum());
+                local_chains.insert(atom.getChainId(), atom.getResNum());
             }
         }
-
-        return frame_atom.isTer();
     };
 
     // Loop through all lines in the file.
@@ -1130,6 +1141,176 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     QMutex mutex;
 
+                    tbb::parallel_for( tbb::blocked_range<int>(0, nats),
+                                    [&](const tbb::blocked_range<int> &r)
+                    {
+                        qint64 local_num_ters = 0;
+                        QStringList local_errors;
+
+                        for (int i=r.begin(); i<r.end(); ++i)
+                        {
+                            // Parse the atom record and determine whether it is a terminal record.
+                            if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
+                                atom_lines[i], lines().count(), frame_atoms[i], local_errors ))
+                                    local_num_ters++;
+                        }
+
+                        QMutexLocker lkr(&mutex);
+
+                        num_ters_model += local_num_ters;
+                        parse_warnings += local_errors;
+                    });
+                }
+                else
+                {
+                    for (int i=0; i<nats; ++i)
+                    {
+                        // Parse the atom record and determine whether it is a terminal record.
+                        if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
+                            atom_lines[i], lines().count(), frame_atoms[i], parse_warnings ))
+                                num_ters_model++;
+                    }
+                }
+
+                /* We now attempt to the following common PDB errors:
+
+                   1) Duplicate atom names.
+                   2) Duplicate residue numbers.
+                        This can occur in two ways:
+                          i) Two different named residues with the same number.
+                         ii) The same residue number and name appearing in multiple chains.
+                   3) Non-sensical temperature factors.
+                 */
+
+                // A list of the recorded atom numbers.
+                QVector<int> atom_numbers;
+
+                // Check whether there are duplicate atom numbers.
+                // If there are, re-number them according to their indices.
+
+                bool ok = true;
+                for (int i=0; i<nats; ++i)
+                {
+                    int num = frame_atoms[i].getSerial();
+
+                    if (not atom_numbers.contains(num))
+                    {
+                        atom_numbers.append(num);
+                    }
+                    else
+                    {
+                        ok = false;
+                        break;
+                    }
+                }
+
+                // Re-number all of the atoms.
+                if (not ok)
+                {
+                    parse_warnings.append(QObject::tr("Warning: There are duplicate atom "
+                        "numbers in the PDB file. Atom numbers have been replaced "
+                        "by their index."));
+
+                    for (int i=0; i<nats; ++i)
+                        frame_atoms[i].setSerial(i+1);
+                }
+
+                // Check whether there are duplicate residue numbers,
+                // if so, we need to re-number all of the residues in
+                // ascending order.
+
+                // ID number for the previous residue;
+                int prev_num = -1000000;
+                QString prev_nam = frame_atoms[0].getResName();
+
+                ok = true;
+                for (int i=0; i<nats; ++i)
+                {
+                    QString nam = frame_atoms[i].getResName();
+                    int     num = frame_atoms[i].getResNum();
+
+                    if (num < prev_num)
+                    {
+                        ok = false;
+                        break;
+                    }
+                    else
+                    {
+                        if ((num == prev_num) and
+                            (nam != prev_nam))
+                        {
+                            ok = false;
+                            break;
+                        }
+                        else
+                        {
+                            prev_nam = nam;
+                            prev_num = num;
+                        }
+                    }
+                }
+
+                // Re-number all of the residues.
+                if (not ok)
+                {
+                    parse_warnings.append(QObject::tr("Warning: There are duplicate residue "
+                        "numbers in the PDB file. Residue numbers have been replaced "
+                        "by their index."));
+
+                    // The residue counter.
+                    int num_res = 1;
+
+                    // The current residue name and number.
+                    QString curr_nam = frame_atoms[0].getResName();
+                    int     curr_num = frame_atoms[0].getResNum();
+
+                    for (int i=0; i<nats; ++i)
+                    {
+                        if ((frame_atoms[i].getResNum()  != curr_num) or
+                            (frame_atoms[i].getResName() != curr_nam))
+                        {
+                            // Increment the residue count and store
+                            // the new number.
+                            num_res++;
+                            curr_num = frame_atoms[i].getResNum();
+                            curr_nam = frame_atoms[i].getResName();
+                        }
+
+                        // Update the residue number.
+                        frame_atoms[i].setResNum(num_res);
+                    }
+                }
+
+                // Now check whether the temperature factors are sane.
+                // If any exceed 100, then set all to the default of zero.
+
+                ok = true;
+                for (int i=0; i<nats; ++i)
+                {
+                    if (qAbs(frame_atoms[i].getTemperature()) > 100)
+                    {
+                        ok = false;
+                        break;
+                    }
+                }
+
+                // Zero all of the temperature factors.
+                if (not ok)
+                {
+                    parse_warnings.append(QObject::tr("Warning: Invalid temperature "
+                        "factor found. All values have been zeroed."));
+
+                    for (int i=0; i<nats; ++i)
+                        frame_atoms[i].setTemperature(0);
+                }
+
+                // Now used the parsed data to construct the residue and chain
+                // information for the molecule.
+
+                if (usesParallel())
+                {
+                    QMutex mutex;
+
                     // Chain-residue multimap for parallel processing.
                     // There will likely be duplicate residue entries for each chain
                     // which will need to be corrected afterwards.
@@ -1138,23 +1319,19 @@ void PDB2::parseLines(const PropertyMap &map)
                     tbb::parallel_for( tbb::blocked_range<int>(0, nats),
                                     [&](const tbb::blocked_range<int> &r)
                     {
-                        qint64 local_num_ters = 0;
                         QStringList local_errors;
                         QMultiMap<QPair<qint64, QString>, qint64> local_residues;
                         QMultiMap<QChar, qint64> local_chains;
 
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
-                            // Parse the atom record and determine whether it is a terminal record.
-                            if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                                atom_lines[i], lines().count(), frame_atoms[i], local_residues,
-                                local_chains, local_errors ))
-                                    local_num_ters++;
+                            // Generate the residue and chain data from this atom record.
+                            parse_residues(frame_atoms[i], i,
+                                local_residues, local_chains, local_errors);
                         }
 
                         QMutexLocker lkr(&mutex);
 
-                        num_ters_model += local_num_ters;
                         frame_residues += local_residues;
                         temp_chains    += local_chains;
                         parse_warnings += local_errors;
@@ -1179,73 +1356,13 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     for (int i=0; i<nats; ++i)
                     {
-                        // Parse the atom record and determine whether it is a terminal record.
-                        if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                            atom_lines[i], lines().count(), frame_atoms[i], frame_residues,
-                            frame_chains, parse_warnings ))
-                                num_ters_model++;
+                        // Generate the residue and chain data from this atom record.
+                        parse_residues(frame_atoms[i], i,
+                            frame_residues, frame_chains, parse_warnings);
                     }
                 }
 
-                // A list of the recorded atom numbers.
-                // This is used to sort out issues where there are multiple PDB records
-                // with the same atom serial number, which is a common problem.
-                QVector<int> atom_numbers;
-
-                // Whether there are duplicate atom numbers.
-                bool has_duplicates = false;
-
-                // Check whether there are duplicate atom numbers.
-                // If there are, re-number them according to their indices.
-
-                for (int i=0; i<nats; ++i)
-                {
-                    int number = frame_atoms[i].getSerial();
-
-                    if (not atom_numbers.contains(number))
-                    {
-                        atom_numbers.append(number);
-                    }
-                    else
-                    {
-                        has_duplicates = true;
-                        break;
-                    }
-                }
-
-                // Re-number all of the atoms.
-                if (has_duplicates)
-                {
-                    parse_warnings
-                        .append(QObject::tr("Warning: There are duplicate atom "
-                        "numbers in the PDB file. Atom numbers have been replaced "
-                        "by their index."));
-
-                    for (int i=0; i<nats; ++i)
-                        frame_atoms[i].setSerial(i+1);
-                }
-
-                // Now check whether the temperature factors are sane.
-                // If any exceed 100, then set all to the default of zero.
-                bool is_valid = true;
-
-                for (int i=0; i<nats; ++i)
-                {
-                    if (qAbs(frame_atoms[i].getTemperature()) > 100)
-                    {
-                        is_valid = false;
-                        break;
-                    }
-                }
-
-                // Zero all of the temperature factors.
-                if (not is_valid)
-                {
-                    for (int i=0; i<nats; ++i)
-                        frame_atoms[i].setTemperature(0);
-                }
-
-                // Append frame data and clear the vectors.
+                // Finally, append frame data and clear the vectors.
 
                 atoms.append(frame_atoms);
                 atom_lines.clear();

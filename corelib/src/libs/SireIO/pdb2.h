@@ -107,6 +107,9 @@ public:
     /** Get the residue sequence number. */
     qint64 getResNum() const;
 
+    /** Set the residue sequence number. */
+    void setResNum(int num);
+
     /** Get the atom coordinates. */
     SireMaths::Vector getCoord() const;
 
