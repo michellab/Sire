@@ -543,7 +543,7 @@ QString PDBAtom::toPDBRecord() const
     // limit of 99999 atoms, we can assume that the serial is
     // 5 characters or less.
     // TODO: Handle non-standard serial numbers.
-    line.append(QString("%1").arg(serial, 5, 10));
+    line.append(QString("%1").arg(serial, 5));
 
     // Append the atom name, converting it to the correct PDB formatting.
     line.append(QString(" %1").arg(toPDBName(), 4));
@@ -560,7 +560,7 @@ QString PDBAtom::toPDBRecord() const
     else                       line.append("  ");
 
     // Append the residue sequence number.
-    line.append(QString("%1").arg(res_num, 4, 10));
+    line.append(QString("%1").arg(res_num, 4));
 
     // Append the residue insertion code
     if (not insert_code.isNull()) line.append(insert_code);

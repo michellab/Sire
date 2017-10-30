@@ -412,7 +412,7 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors) :
 QString Mol2Atom::toMol2Record() const
 {
     QString line = QString("%1 %2 %3 %4 %5 %6 %7 %8 %9")
-        .arg(number, 7, 10)
+        .arg(number, 7)
         .arg(name, -10)
         .arg(coord[0], 9, 'f', 4)
         .arg(coord[1], 9, 'f', 4)
@@ -1041,11 +1041,11 @@ QVector<QString> Mol2Molecule::toMol2Record() const
     lines.append(name);
 
     QString line = QString("%1 %2 %3 %4 %5")
-                   .arg(nAtoms(), 5, 10)
-                   .arg(nBonds(), 5, 10)
-                   .arg(nSubstructures(), 5, 10)
-                   .arg(0, 5, 10)
-                   .arg(0, 5, 10);
+                   .arg(nAtoms(), 5)
+                   .arg(nBonds(), 5)
+                   .arg(nSubstructures(), 5)
+                   .arg(0, 5)
+                   .arg(0, 5);
 
     lines.append(line);
     lines.append(mol_type);
@@ -1424,9 +1424,9 @@ QString Mol2Substructure::toMol2Record() const
 {
     // The first part of the record is mandatory.
     QString line = QString("%1 %2 %3")
-        .arg(number, 6, 10)
+        .arg(number, 6)
         .arg(name, -6)
-        .arg(root_atom, 6, 10);
+        .arg(root_atom, 6);
 
     // The optional part of the line.
     QString optional;
@@ -1454,7 +1454,7 @@ QString Mol2Substructure::toMol2Record() const
 
     if (num_inter_bonds != 0)
     {
-        optional.prepend(QString(" %1").arg(num_inter_bonds, 6, 10));
+        optional.prepend(QString(" %1").arg(num_inter_bonds, 6));
     }
     else
     {
@@ -1490,7 +1490,7 @@ QString Mol2Substructure::toMol2Record() const
 
     if (dict_type != 0)
     {
-        optional.prepend(QString(" %1").arg(dict_type, 3, 10));
+        optional.prepend(QString(" %1").arg(dict_type, 3));
     }
     else
     {

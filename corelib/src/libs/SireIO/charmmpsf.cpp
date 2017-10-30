@@ -47,6 +47,7 @@
 
 #include "SireUnits/units.h"
 
+#include <QDateTime>
 #include <QtMath>
 
 using namespace SireIO;
@@ -210,7 +211,6 @@ PSFAtom::PSFAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     charge(0),
     mass(0)
 {
-
 }
 
 /** Generate a PSF record from the atom data. */
@@ -218,7 +218,7 @@ QString PSFAtom::toPSFRecord() const
 {
     QString line;
 
-    line.append(QString("%1").arg(number, 7, 10));
+    line.append(QString("%1").arg(number, 8));
     line.append(QString(" %1").arg(segment, -4));
     line.append(QString(" %1").arg(res_num, -4));
     line.append(QString(" %1").arg(res_name, -4));
@@ -477,6 +477,269 @@ QString CharmmPSF::toString() const
             .arg(nAtoms()).arg(nBonds()).arg(nAngles()).arg(nDihedrals())
             .arg(nImpropers()).arg(nCrossTerms());
     }
+}
+
+/** Convert all the parsed data to a collection of PSF record lines. */
+QVector<QString> CharmmPSF::toLines() const
+{
+    // No records.
+    if ((nAtoms() + nBonds() + nAngles() + nDihedrals()
+        + nImpropers() + nCrossTerms()) == 0)
+    {
+        return QVector<QString>();
+    }
+
+    // Helper function to reconstruct record lines.
+    auto generate_line = [](const QVector<QVector<qint64> > &data, int iline,
+        int num_lines, int num_records, int record_width)
+    {
+        // The record line.
+        QString line;
+
+        // The default number of columns per line.
+        int num_cols = 8;
+
+        // Triples have three entries per line, so 9 columns.
+        if (record_width == 3) num_cols = 9;
+
+        // Work out the number of records per line.
+        int records_per_line = num_cols / record_width;
+
+        // Work out the row index in the data vector for the first record.
+        int start = records_per_line * iline;
+
+        // Adjust the records per line if we're on the last record line and
+        // the total number of records is not a multiple of the records per line.
+        if (iline == (num_lines - 1))
+            records_per_line = num_records - records_per_line*(num_lines - 1);
+
+        // Add each record to the line.
+        for (int i=0; i<records_per_line; ++i)
+        {
+            for (int j=0; j<record_width; j++)
+            {
+                line.append(QString("%1").arg(data[start+i][j], 8));
+            }
+        }
+
+        return line;
+    };
+
+    // The vector of record lines.
+    QVector<QString> lines;
+
+    // Add header information.
+    // TODO: Add BioSimSpace version info.
+    lines.append("PSF");
+    lines.append("");
+    lines.append("       2 !NTITLE");
+    lines.append(QString(" REMARKS FILENAME=\"%1\"").arg(filename));
+    lines.append(QString(" REMARKS DATE:%1\t\tcreated by BioSimSpace (v)")
+         .arg(QDateTime::currentDateTime().toString("dd-MMM-yy  hh:mm:ss")));
+    lines.append("");
+
+    // Add any atom records.
+    if (nAtoms() > 0)
+    {
+        int num_records = nAtoms();
+
+        QVector<QString> record_lines(num_records + 2);
+        record_lines[0] = QString("%1 !NATOM").arg(num_records, 8);
+
+        if (usesParallel())
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0, num_records),
+                            [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    record_lines[i+1] = atoms[i].toPSFRecord();
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<num_records; ++i)
+            {
+                record_lines[i+1] = atoms[i].toPSFRecord();
+            }
+        }
+
+        // Append the atom record lines.
+        lines += record_lines;
+    }
+
+    // Add any bond records.
+    if (nBonds() > 0)
+    {
+        int num_records = nBonds();
+
+        // There are 4 bond records per line.
+        int num_lines = qCeil(num_records/4.0);
+
+        QVector<QString> record_lines(num_lines + 2);
+        record_lines[0] = QString("%1 !NBONDS: bonds").arg(num_records, 8);
+
+        if (usesParallel())
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                            [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    record_lines[i+1] = generate_line(bonds, i, num_lines, num_records, 2);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<num_lines; ++i)
+            {
+                record_lines[i+1] = generate_line(bonds, i, num_lines, num_records, 2);
+            }
+        }
+
+        // Append the bond record lines.
+        lines += record_lines;
+    }
+
+    // Add any angle records.
+    if (nAngles() > 0)
+    {
+        int num_records = nAngles();
+
+        // There are 3 angle records per line.
+        int num_lines = qCeil(num_records/3.0);
+
+        QVector<QString> record_lines(num_lines + 2);
+        record_lines[0] = QString("%1 !NTHETA: angles").arg(num_records, 8);
+
+        if (usesParallel())
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                            [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    record_lines[i+1] = generate_line(angles, i, num_lines, num_records, 3);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<num_lines; ++i)
+            {
+                record_lines[i+1] = generate_line(angles, i, num_lines, num_records, 3);
+            }
+        }
+
+        // Append the angle record lines.
+        lines += record_lines;
+    }
+
+    // Add any dihedral records.
+    if (nDihedrals() > 0)
+    {
+        int num_records = nDihedrals();
+
+        // There are 2 dihedral records per line.
+        int num_lines = qCeil(num_records/2.0);
+
+        QVector<QString> record_lines(num_lines + 2);
+        record_lines[0] = QString("%1 !NPHI: dihedrals").arg(num_records, 8);
+
+        if (usesParallel())
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                            [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    record_lines[i+1] = generate_line(dihedrals, i, num_lines, num_records, 4);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<num_lines; ++i)
+            {
+                record_lines[i+1] = generate_line(dihedrals, i, num_lines, num_records, 4);
+            }
+        }
+
+        // Append the dihedral record lines.
+        lines += record_lines;
+    }
+
+    // Add any improper records.
+    if (nImpropers() > 0)
+    {
+        int num_records = nImpropers();
+
+        // There are 2 improper records per line.
+        int num_lines = qCeil(num_records/2.0);
+
+        QVector<QString> record_lines(num_lines + 2);
+        record_lines[0] = QString("%1 !NIMPHI: impropers").arg(num_records, 8);
+
+        if (usesParallel())
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                            [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    record_lines[i+1] = generate_line(impropers, i, num_lines, num_records, 4);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<num_lines; ++i)
+            {
+                record_lines[i+1] = generate_line(impropers, i, num_lines, num_records, 4);
+            }
+        }
+
+        // Append the improper record lines.
+        lines += record_lines;
+    }
+
+    // Add any cross-term records.
+    if (nCrossTerms() > 0)
+    {
+        int num_records = nCrossTerms();
+
+        // There are 2 improper records per line.
+        int num_lines = qCeil(num_records/2.0);
+
+        QVector<QString> record_lines(num_lines + 2);
+        record_lines[0] = QString("%1 !NCRTERM: cross-terms").arg(num_records, 8);
+
+        if (usesParallel())
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                            [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    record_lines[i+1] = generate_line(cross_terms, i, num_lines, num_records, 4);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<num_lines; ++i)
+            {
+                record_lines[i+1] = generate_line(cross_terms, i, num_lines, num_records, 4);
+            }
+        }
+
+        // Append the cross-term record lines.
+        lines += record_lines;
+    }
+
+    return lines;
 }
 
 /** Return the format name that is used to identify this file format within Sire */

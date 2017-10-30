@@ -205,6 +205,17 @@ void register_CharmmPSF_class(){
         
         }
         CharmmPSF_exposer.def( bp::self == bp::self );
+        { //::SireIO::CharmmPSF::toLines
+        
+            typedef ::QVector< QString > ( ::SireIO::CharmmPSF::*toLines_function_type)(  ) const;
+            toLines_function_type toLines_function_value( &::SireIO::CharmmPSF::toLines );
+            
+            CharmmPSF_exposer.def( 
+                "toLines"
+                , toLines_function_value
+                , "" );
+        
+        }
         { //::SireIO::CharmmPSF::toString
         
             typedef ::QString ( ::SireIO::CharmmPSF::*toString_function_type)(  ) const;
