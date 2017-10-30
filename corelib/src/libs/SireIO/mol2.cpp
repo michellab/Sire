@@ -1825,6 +1825,86 @@ QString Mol2::toString() const
     }
 }
 
+/** Convert the the parsed data to a collection of Mol2 record lines. */
+QVector<QString> Mol2::toLines() const
+{
+    // Store the number of molecules.
+    const int num_mols = nMolecules();
+
+    // No molecules in the system.
+    if (num_mols == 0)
+        return QVector<QString>();
+
+    // The vector of Mol2 record lines.
+    QVector<QString> lines;
+
+    // Loop over all molecules.
+    for (int i=0; i<num_mols; ++i)
+    {
+        const int num_atoms = nAtoms(i);
+        const int num_subst = nSubstructures(i);
+
+        // Generate the Mol2 moleucle data record lines.
+        QVector<QString> molecule_lines = molecules[i].toMol2Record();
+
+        // Data record lines for the molecule.
+        QVector<QString> atom_lines(num_atoms);
+        QVector<QString> substructure_lines(num_subst);
+
+        if (usesParallel())
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+                            [&](const tbb::blocked_range<int> r)
+            {
+                for (int j=r.begin(); j<r.end(); ++j)
+                {
+                    // Generate the Mol2 atom record lines.
+                    atom_lines[j] = molecules[i].getAtom(j).toMol2Record();
+                }
+            });
+
+            tbb::parallel_for( tbb::blocked_range<int>(0, num_subst),
+                            [&](const tbb::blocked_range<int> r)
+            {
+                for (int j=r.begin(); j<r.end(); ++j)
+                {
+                    // Generate the Mol2 substructure record lines.
+                    substructure_lines[j] = molecules[i].getSubstructure(j).toMol2Record();
+                }
+            });
+
+        }
+        else
+        {
+            for (int j=0; j<num_atoms; ++j)
+            {
+                // Generate the Mol2 atom record lines.
+                atom_lines[j] = molecules[i].getAtom(j).toMol2Record();
+            }
+
+            for (int j=0; j<num_subst; ++j)
+            {
+                // Generate the Mol2 substructure record lines.
+                substructure_lines[j] = molecules[i].getSubstructure(j).toMol2Record();
+            }
+        }
+
+        // Molecule records.
+        lines.append("@<TRIPOS>MOLECULE");
+        lines += molecule_lines;
+
+        // Atom records.
+        lines.append("@<TRIPOS>ATOM");
+        lines += atom_lines;
+
+        // Substructure records.
+        lines.append("@<TRIPOS>SUBSTRUCTURE");
+        lines += substructure_lines;
+    }
+
+    return lines;
+}
+
 /** Return the format name that is used to identify this file format within Sire */
 QString Mol2::formatName() const
 {

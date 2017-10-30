@@ -829,6 +829,63 @@ QString PDB2::toString() const
     }
 }
 
+/** Convert the parsed data to a collection of PDB record lines. */
+QVector<QString> PDB2::toLines() const
+{
+    // Store the number of molecules.
+    const int nmols = nModels();
+
+    // No molecules.
+    if (nmols == 0)
+        return QVector<QString>();
+
+    // The list of lines.
+    QVector<QString> lines;
+
+    // Now assemble the lines from the record data for each molecule.
+    // We do this in serial since the order matters.
+    for (int i=0; i<nmols; ++i)
+    {
+        // MODEL record.
+        lines.append(QString("MODEL     %1").arg(i+1));
+
+        // The number of atoms for this model.
+        const int num_atoms = nAtoms(i);
+
+        // The atoms lines for this model.
+        QVector<QString> atom_lines(num_atoms);
+
+        if (usesParallel())
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+                            [&](const tbb::blocked_range<int> r)
+            {
+                for (int j=r.begin(); j<r.end(); ++j)
+                {
+                    atom_lines[j] = atoms[i][j].toPDBRecord();
+                }
+            });
+        }
+        else
+        {
+            for (int j=0; j<num_atoms; ++j)
+            {
+                atom_lines[j] = atoms[i][j].toPDBRecord();
+            }
+        }
+
+        // ATOM records.
+        lines += atom_lines;
+
+        // ENDMDL record.
+        lines.append("ENDMDL");
+    }
+
+    lines.append("END");
+
+    return lines;
+}
+
 /** Return the format name that is used to identify this file format within Sire */
 QString PDB2::formatName() const
 {

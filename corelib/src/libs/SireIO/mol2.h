@@ -477,6 +477,7 @@ public:
                                 const PropertyMap &map) const;
 
     QString toString() const;
+    QVector<QString> toLines() const;
 
     QString formatName() const;
     QString formatDescription() const;

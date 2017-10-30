@@ -242,6 +242,17 @@ void register_PDB2_class(){
         
         }
         PDB2_exposer.def( bp::self == bp::self );
+        { //::SireIO::PDB2::toLines
+        
+            typedef ::QVector< QString > ( ::SireIO::PDB2::*toLines_function_type)(  ) const;
+            toLines_function_type toLines_function_value( &::SireIO::PDB2::toLines );
+            
+            PDB2_exposer.def( 
+                "toLines"
+                , toLines_function_value
+                , "" );
+        
+        }
         { //::SireIO::PDB2::toString
         
             typedef ::QString ( ::SireIO::PDB2::*toString_function_type)(  ) const;

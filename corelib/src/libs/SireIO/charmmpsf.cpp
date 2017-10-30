@@ -479,7 +479,7 @@ QString CharmmPSF::toString() const
     }
 }
 
-/** Convert all the parsed data to a collection of PSF record lines. */
+/** Convert the parsed data to a collection of PSF record lines. */
 QVector<QString> CharmmPSF::toLines() const
 {
     // No records.
@@ -541,7 +541,7 @@ QVector<QString> CharmmPSF::toLines() const
     // Add any atom records.
     if (nAtoms() > 0)
     {
-        int num_records = nAtoms();
+        const int num_records = nAtoms();
 
         QVector<QString> record_lines(num_records + 2);
         record_lines[0] = QString("%1 !NATOM").arg(num_records, 8);
@@ -572,10 +572,10 @@ QVector<QString> CharmmPSF::toLines() const
     // Add any bond records.
     if (nBonds() > 0)
     {
-        int num_records = nBonds();
+        const int num_records = nBonds();
 
         // There are 4 bond records per line.
-        int num_lines = qCeil(num_records/4.0);
+        const int num_lines = qCeil(num_records/4.0);
 
         QVector<QString> record_lines(num_lines + 2);
         record_lines[0] = QString("%1 !NBONDS: bonds").arg(num_records, 8);
@@ -606,10 +606,10 @@ QVector<QString> CharmmPSF::toLines() const
     // Add any angle records.
     if (nAngles() > 0)
     {
-        int num_records = nAngles();
+        const int num_records = nAngles();
 
         // There are 3 angle records per line.
-        int num_lines = qCeil(num_records/3.0);
+        const int num_lines = qCeil(num_records/3.0);
 
         QVector<QString> record_lines(num_lines + 2);
         record_lines[0] = QString("%1 !NTHETA: angles").arg(num_records, 8);
@@ -640,10 +640,10 @@ QVector<QString> CharmmPSF::toLines() const
     // Add any dihedral records.
     if (nDihedrals() > 0)
     {
-        int num_records = nDihedrals();
+        const int num_records = nDihedrals();
 
         // There are 2 dihedral records per line.
-        int num_lines = qCeil(num_records/2.0);
+        const int num_lines = qCeil(num_records/2.0);
 
         QVector<QString> record_lines(num_lines + 2);
         record_lines[0] = QString("%1 !NPHI: dihedrals").arg(num_records, 8);
@@ -674,10 +674,10 @@ QVector<QString> CharmmPSF::toLines() const
     // Add any improper records.
     if (nImpropers() > 0)
     {
-        int num_records = nImpropers();
+        const int num_records = nImpropers();
 
         // There are 2 improper records per line.
-        int num_lines = qCeil(num_records/2.0);
+        const int num_lines = qCeil(num_records/2.0);
 
         QVector<QString> record_lines(num_lines + 2);
         record_lines[0] = QString("%1 !NIMPHI: impropers").arg(num_records, 8);
@@ -708,10 +708,10 @@ QVector<QString> CharmmPSF::toLines() const
     // Add any cross-term records.
     if (nCrossTerms() > 0)
     {
-        int num_records = nCrossTerms();
+        const int num_records = nCrossTerms();
 
         // There are 2 improper records per line.
-        int num_lines = qCeil(num_records/2.0);
+        const int num_lines = qCeil(num_records/2.0);
 
         QVector<QString> record_lines(num_lines + 2);
         record_lines[0] = QString("%1 !NCRTERM: cross-terms").arg(num_records, 8);
@@ -959,7 +959,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
             // Work out the number of record lines.
             // There are 4 bond records per line.
-            int num_lines = qCeil(num_bonds/4.0);
+            const int num_lines = qCeil(num_bonds/4.0);
 
             ++iline;
 
@@ -1026,7 +1026,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
             // Work out the number of record lines.
             // There are 3 angle records per line.
-            int num_lines = qCeil(num_angles/3.0);
+            const int num_lines = qCeil(num_angles/3.0);
 
             ++iline;
 
@@ -1093,7 +1093,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
             // Work out the number of record lines.
             // There are 2 dihedral records per line.
-            int num_lines = qCeil(num_dihedrals/2.0);
+            const int num_lines = qCeil(num_dihedrals/2.0);
 
             ++iline;
 
@@ -1160,7 +1160,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
             // Work out the number of record lines.
             // There are 2 improper records per line.
-            int num_lines = qCeil(num_impropers/2.0);
+            const int num_lines = qCeil(num_impropers/2.0);
 
             ++iline;
 
@@ -1227,7 +1227,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
             // Work out the number of record lines.
             // There are 2 cross term records per line.
-            int num_lines = qCeil(num_cross/2.0);
+            const int num_lines = qCeil(num_cross/2.0);
 
             ++iline;
 

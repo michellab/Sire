@@ -252,6 +252,17 @@ void register_Mol2_class(){
         
         }
         Mol2_exposer.def( bp::self == bp::self );
+        { //::SireIO::Mol2::toLines
+        
+            typedef ::QVector< QString > ( ::SireIO::Mol2::*toLines_function_type)(  ) const;
+            toLines_function_type toLines_function_value( &::SireIO::Mol2::toLines );
+            
+            Mol2_exposer.def( 
+                "toLines"
+                , toLines_function_value
+                , "" );
+        
+        }
         { //::SireIO::Mol2::toString
         
             typedef ::QString ( ::SireIO::Mol2::*toString_function_type)(  ) const;
