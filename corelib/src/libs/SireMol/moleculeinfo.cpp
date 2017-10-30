@@ -357,6 +357,36 @@ CGIdx MoleculeInfo::cgIdx(const CGID &cgid) const
     return d->cgIdx(cgid);
 }
 
+/** Return the index of the CutGroup that contains the atoms for residue
+    with ID 'id', if this molecule uses residue cutting. If not, an
+    exception is thrown */
+CGIdx MoleculeInfo::cgIdx(const ResIdx &residx) const
+{
+    return d->cgIdx(residx);
+}
+
+/** Return the index of the CutGroup that contains the atoms for residue
+    with ID 'id', if this molecule uses residue cutting. If not, an
+    exception is thrown */
+CGIdx MoleculeInfo::cgIdx(const ResID &resid) const
+{
+    return d->cgIdx(resid);
+}
+
+/** Return whether or not residue-based cutting is used for the specifed
+    residue */
+bool MoleculeInfo::isResidueCutting(const ResIdx &residx) const
+{
+    return d->isResidueCutting(residx);
+}
+
+/** Return whether or not residue-based cutting is used for the specifed
+    residue */
+bool MoleculeInfo::isResidueCutting(const ResID &resid) const
+{
+    return d->isResidueCutting(resid);
+}
+
 /** Return a list of the indicies of all segments */
 QList<SegIdx> MoleculeInfo::getSegments() const
 {

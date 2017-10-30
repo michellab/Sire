@@ -339,6 +339,30 @@ void register_MoleculeInfo_class(){
                 , "Return the index of the identified CutGroup" );
         
         }
+        { //::SireMol::MoleculeInfo::cgIdx
+        
+            typedef ::SireMol::CGIdx ( ::SireMol::MoleculeInfo::*cgIdx_function_type)( ::SireMol::ResIdx const & ) const;
+            cgIdx_function_type cgIdx_function_value( &::SireMol::MoleculeInfo::cgIdx );
+            
+            MoleculeInfo_exposer.def( 
+                "cgIdx"
+                , cgIdx_function_value
+                , ( bp::arg("residx") )
+                , "Return the index of the identified CutGroup" );
+        
+        }
+        { //::SireMol::MoleculeInfo::cgIdx
+        
+            typedef ::SireMol::CGIdx ( ::SireMol::MoleculeInfo::*cgIdx_function_type)( ::SireMol::ResID const & ) const;
+            cgIdx_function_type cgIdx_function_value( &::SireMol::MoleculeInfo::cgIdx );
+            
+            MoleculeInfo_exposer.def( 
+                "cgIdx"
+                , cgIdx_function_value
+                , ( bp::arg("resid") )
+                , "Return the index of the identified CutGroup" );
+        
+        }
         { //::SireMol::MoleculeInfo::chainIdx
         
             typedef ::SireMol::ChainIdx ( ::SireMol::MoleculeInfo::*chainIdx_function_type)( ::SireMol::ChainID const & ) const;
@@ -828,6 +852,30 @@ void register_MoleculeInfo_class(){
                 , intersects_function_value
                 , ( bp::arg("chainidx"), bp::arg("resid") )
                 , "Return whether or not the specified chain contains the specified residue" );
+        
+        }
+        { //::SireMol::MoleculeInfo::isResidueCutting
+        
+            typedef bool ( ::SireMol::MoleculeInfo::*isResidueCutting_function_type)( ::SireMol::ResIdx const & ) const;
+            isResidueCutting_function_type isResidueCutting_function_value( &::SireMol::MoleculeInfo::isResidueCutting );
+            
+            MoleculeInfo_exposer.def( 
+                "isResidueCutting"
+                , isResidueCutting_function_value
+                , ( bp::arg("residx") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::isResidueCutting
+        
+            typedef bool ( ::SireMol::MoleculeInfo::*isResidueCutting_function_type)( ::SireMol::ResID const & ) const;
+            isResidueCutting_function_type isResidueCutting_function_value( &::SireMol::MoleculeInfo::isResidueCutting );
+            
+            MoleculeInfo_exposer.def( 
+                "isResidueCutting"
+                , isResidueCutting_function_value
+                , ( bp::arg("resid") )
+                , "" );
         
         }
         { //::SireMol::MoleculeInfo::isWithinChain

@@ -440,7 +440,8 @@ implicitly_convertible = [ ("SireMol::AtomID", "SireMol::AtomIdentifier"),
                            ("SireMol::MolID", "SireMol::MolIdentifier"),
                            ("SireMol::MGID", "SireMol::MGIdentifier"),
                            ("SireMol::MoleculeView", "SireMol::MoleculeData"),
-                           ("SireMol::MoleculeView", "SireMol::PartialMolecule") ]
+                           ("SireMol::MoleculeView", "SireMol::PartialMolecule"),
+                           ("SireMol::MoleculeInfoData", "SireMol::MoleculeInfo") ]
 
 def fixMB(mb):
     mb.add_declaration_code("#include \"SireMol/moleculedata.h\"")
@@ -448,3 +449,4 @@ def fixMB(mb):
     mb.add_declaration_code("#include \"SireMol/partialmolecule.h\"")
     mb.add_declaration_code("#include \"SireMol/mover.hpp\"")
     mb.add_declaration_code("#include \"SireMol/mgidentifier.h\"")
+    mb.add_declaration_code("#include \"SireMol/moleculeinfo.h\"")
