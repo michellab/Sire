@@ -272,6 +272,10 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
     // Extract the element name.
     element = line.mid(76,2);
 
+    // If the element is empty, try to guess from the atom name.
+    if (element.simplified().isEmpty())
+        element = Element(name).symbol()[0];
+
     // Extract the charge on the atom.
     QString chargeString = line.mid(78,2);
 
@@ -352,12 +356,10 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     {
         element = atom.property<Element>("element").symbol()[0];
     }
+    // Otherwise, try to guess from the atom name.
     else
     {
-        // The element is usually the first character of the atom name,
-        // unless it starts with a digit, in which case it's the second.
-        if (name[0].isDigit()) element = name[1];
-        else                   element = name[0];
+        element = Element(name).symbol()[0];
     }
 
     // Extract the atomic charge.
