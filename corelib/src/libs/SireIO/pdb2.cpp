@@ -852,8 +852,11 @@ QVector<QString> PDB2::toLines() const
         // The number of atoms for this model.
         const int num_atoms = nAtoms(i);
 
+        // The number of chains for this model.
+        const int num_chains = nChains(i);
+
         // The atoms lines for this model.
-        QVector<QString> atom_lines(num_atoms);
+        QVector<QString> atom_lines(num_atoms + num_chains);
 
         if (usesParallel())
         {
@@ -865,12 +868,61 @@ QVector<QString> PDB2::toLines() const
                     atom_lines[j] = atoms[i][j].toPDBRecord();
                 }
             });
+
+            // Create TER records if the system contains chains.
+            if (num_chains > 0)
+            {
+                // Make a copy of the atom lines.
+                auto lines = atom_lines;
+
+                // Line index.
+                int iline = 0;
+
+                // Now loop through the atoms and insert TER records as needed.
+                // This has to be done in serial.
+                for (int j=0; j<num_atoms; ++j)
+                {
+                    // Copy the atom record across.
+                    atom_lines[iline] = lines[j];
+                    iline++;
+
+                    // Add a TER record for this atom.
+                    if (atoms[i][j].isTer())
+                    {
+                        atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
+                                                .arg(lines[j].mid(6, 5))
+                                                .arg(lines[j].mid(17, 3))
+                                                .arg(lines[j].at(21))
+                                                .arg(lines[j].mid(22, 4))
+                                                .arg(lines[j].at(26));
+
+                        iline++;
+                    }
+                }
+            }
         }
         else
         {
+            // Line index.
+            int iline = 0;
+
             for (int j=0; j<num_atoms; ++j)
             {
-                atom_lines[j] = atoms[i][j].toPDBRecord();
+                atom_lines[iline] = atoms[i][j].toPDBRecord();
+                iline++;
+
+                // Add a TER record for this atom.
+                if (atoms[i][j].isTer())
+                {
+                    atom_lines[iline] = QString("TER   %1      %2 %3\%4\%5")
+                                            .arg(atom_lines[iline-1].mid(6, 5))
+                                            .arg(atom_lines[iline-1].mid(17, 3))
+                                            .arg(atom_lines[iline-1].at(21))
+                                            .arg(atom_lines[iline-1].mid(22, 4))
+                                            .arg(atom_lines[iline-1].at(26));
+
+                    iline++;
+                }
             }
         }
 
