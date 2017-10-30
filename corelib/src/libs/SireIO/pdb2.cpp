@@ -350,7 +350,7 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     // Extract the element name.
     if (atom.hasProperty("element"))
     {
-        element = atom.property<Element>("element").symbol();
+        element = atom.property<Element>("element").symbol()[0];
     }
     else
     {
