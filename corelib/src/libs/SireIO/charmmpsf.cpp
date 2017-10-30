@@ -534,7 +534,7 @@ QVector<QString> CharmmPSF::toLines() const
     lines.append("");
     lines.append("       2 !NTITLE");
     lines.append(QString(" REMARKS FILENAME=\"%1\"").arg(filename));
-    lines.append(QString(" REMARKS DATE:%1\t\tcreated by BioSimSpace (v)")
+    lines.append(QString(" REMARKS DATE:%1    created by BioSimSpace (v)")
          .arg(QDateTime::currentDateTime().toString("dd-MMM-yy  hh:mm:ss")));
     lines.append("");
 
