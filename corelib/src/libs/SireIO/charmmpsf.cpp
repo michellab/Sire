@@ -121,7 +121,6 @@ PSFAtom::PSFAtom() :
     charge(0),
     mass(0)
 {
-
 }
 
 /** Constructor. */

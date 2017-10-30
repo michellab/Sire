@@ -113,9 +113,6 @@ public:
     double getMass() const;
 
 private:
-    /** The original PDB record used to instantiate the atom. */
-    QString record;
-
     /** Serial number. */
     qint64 number;
 
