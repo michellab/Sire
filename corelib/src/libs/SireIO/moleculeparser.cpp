@@ -1470,16 +1470,17 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers) const
             "There are no lead parsers!"), CODELOC );
     }
 
-    // Whether each leader has been removed.
-    QVector<bool> is_removed(leaders.count());
-    is_removed.fill(false);
-
-    // The number of leaders.
-    int num_lead = leaders.count();
-
     // If there are multiple leaders, then check whether any can follow.
+    // If so, move them to the followers until only a single lead remains.
     if (leaders.count() > 1)
     {
+        // Whether each leader has been removed.
+        QVector<bool> is_removed(leaders.count());
+        is_removed.fill(false);
+
+        // The number of leaders.
+        int num_lead = leaders.count();
+
         for (int i=0; i<leaders.count(); ++i)
         {
             // Make sure we have one leader.
@@ -1494,21 +1495,21 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers) const
                 }
             }
         }
-    }
 
-    // Can only have one leader.
-    if (num_lead > 1)
-    {
-        throw SireError::program_bug( QObject::tr(
-            "Cannot construct a System from multiple lead parsers if "
-            "none can follow!"), CODELOC );
-    }
+        // Can only have one leader.
+        if (num_lead > 1)
+        {
+            throw SireError::program_bug( QObject::tr(
+                "Cannot construct a System from multiple lead parsers if "
+                "none can follow!"), CODELOC );
+        }
 
-    // Remove the all redundant leaders.
-    for (int i=0; i<leaders.count(); ++i)
-    {
-        if (is_removed[i])
-            leaders.removeAt(i);
+        // Remove the all redundant leaders.
+        for (int i=0; i<leaders.count(); ++i)
+        {
+            if (is_removed[i])
+                leaders.removeAt(i);
+        }
     }
 
     // Make the sorted list of parsers: leader, then followers.
