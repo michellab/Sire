@@ -97,7 +97,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDB2 &pdb2)
 
     SharedDataStream sds(ds);
 
-    sds << pdb2.atoms << pdb2.residues << pdb2.chains << pdb2.num_ters
+    sds << pdb2.atoms << pdb2.residues << pdb2.chains
         << pdb2.parse_warnings << static_cast<const MoleculeParser&>(pdb2);
 
     return ds;
@@ -111,7 +111,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB2 &pdb2)
     {
         SharedDataStream sds(ds);
 
-        sds >> pdb2.atoms >> pdb2.residues >> pdb2.chains >> pdb2.num_ters
+        sds >> pdb2.atoms >> pdb2.residues >> pdb2.chains
             >> pdb2.parse_warnings >> static_cast<MoleculeParser&>(pdb2);
     }
     else
@@ -715,18 +715,23 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
         }
     }
 
+    // Whether the object contains MODEL records (trajectory frames).
+    bool is_model = isModel(system);
+
     // Now assemble the lines from the record data for each molecule.
     // We do this in serial since the order matters.
     for (int i=0; i<nmols; ++i)
     {
         // MODEL record.
-        lines.append(QString("MODEL     %1").arg(i+1));
+        if (is_model)
+            lines.append(QString("MODEL     %1").arg(i+1));
 
         // ATOM records.
         lines.append(atom_lines[i].toList());
 
-        // ENDMDL record.
-        lines.append("ENDMDL");
+        // Record the end of the molecule.
+        if (is_model) lines.append("ENDMDL");
+        else          lines.append("TER");
     }
 
     lines.append("END");
@@ -743,7 +748,6 @@ PDB2::PDB2(const PDB2 &other) :
     atoms(other.atoms),
     residues(other.residues),
     chains(other.chains),
-    num_ters(other.num_ters),
     filename(other.filename),
     parse_warnings(other.parse_warnings)
 {}
@@ -760,7 +764,6 @@ PDB2& PDB2::operator=(const PDB2 &other)
         this->atoms = other.atoms;
         this->residues = other.residues;
         this->chains = other.chains;
-        this->num_ters = other.num_ters;
         this->filename = other.filename;
         this->parse_warnings = other.parse_warnings;
 
@@ -827,7 +830,7 @@ QString PDB2::toString() const
     {
         return QObject::tr("PDB2( nMolecules() = %1, "
             "nChains() = %2, nResidues() = %3, nAtoms() = %4 )")
-            .arg(nModels()).arg(nChains()).arg(nResidues()).arg(nAtoms());
+            .arg(nMolecules()).arg(nChains()).arg(nResidues()).arg(nAtoms());
     }
 }
 
@@ -835,7 +838,7 @@ QString PDB2::toString() const
 QVector<QString> PDB2::toLines() const
 {
     // Store the number of molecules.
-    const int nmols = nModels();
+    const int nmols = nMolecules();
 
     // No molecules.
     if (nmols == 0)
@@ -844,12 +847,16 @@ QVector<QString> PDB2::toLines() const
     // The list of lines.
     QVector<QString> lines;
 
+    // Whether the object contains MODEL records (trajectory frames).
+    bool is_model = isModel();
+
     // Now assemble the lines from the record data for each molecule.
     // We do this in serial since the order matters.
     for (int i=0; i<nmols; ++i)
     {
         // MODEL record.
-        lines.append(QString("MODEL     %1").arg(i+1));
+        if (is_model)
+            lines.append(QString("MODEL     %1").arg(i+1));
 
         // The number of atoms for this model.
         const int num_atoms = nAtoms(i);
@@ -931,8 +938,9 @@ QVector<QString> PDB2::toLines() const
         // ATOM records.
         lines += atom_lines;
 
-        // ENDMDL record.
-        lines.append("ENDMDL");
+        // Record the end of this molecule.
+        if (is_model) lines.append("ENDMDL");
+        else          lines.append("TER");
     }
 
     lines.append("END");
@@ -960,7 +968,7 @@ QStringList PDB2::formatSuffix() const
 }
 
 /** Return the number of models (molecules). */
-int PDB2::nModels() const
+int PDB2::nMolecules() const
 {
     return atoms.count();
 }
@@ -1016,23 +1024,6 @@ int PDB2::nAtoms(int i) const
     return atoms[i].count();
 }
 
-/** Return the total number of TER records. */
-int PDB2::nTers() const
-{
-    int n = 0;
-
-    for (int i=0; i<atoms.count(); ++i)
-        n += num_ters[i];
-
-    return n;
-}
-
-/** Return the total number of TER records in model 'i'. */
-int PDB2::nTers(int i) const
-{
-    return num_ters[i];
-}
-
 /** Function that is called to assert that this object is sane. This
     should raise an exception if the parser is in an invalid state */
 void PDB2::assertSane() const
@@ -1062,9 +1053,6 @@ void PDB2::parseLines(const PropertyMap &map)
     // Model index.
     int imdl = 0;
 
-    // Frame index;
-    int iframe = 0;
-
     // Number of atoms in the previous model.
     // Each MODEL section should contain the same number of atoms.
     // For each MODEL record there should be a corresponding ENDMDL.
@@ -1074,14 +1062,14 @@ void PDB2::parseLines(const PropertyMap &map)
     // For each frame we identify the lines containing atom data, then parse them.
     QVector<int> atom_lines;
 
-    // The residue map for the frame.
-    QMultiMap<QPair<qint64, QString>, qint64> frame_residues;
+    // The residue map for the molecule.
+    QMultiMap<QPair<qint64, QString>, qint64> mol_residues;
 
-    // The chain identifier map for the frame.
-    QMultiMap<QChar, qint64> frame_chains;
+    // The chain identifier map for the molecule.
+    QMultiMap<QChar, qint64> mol_chains;
 
     // Internal function used to parse a single atom line in the file.
-    auto parse_atoms = [&](const QString &line, int iatm, int iframe,
+    auto parse_atoms = [&](const QString &line, int iatm,
         int iline, int num_lines, PDBAtom &atom, QStringList &errors)
     {
         // Populate atom data.
@@ -1090,50 +1078,14 @@ void PDB2::parseLines(const PropertyMap &map)
         // Check the next line for additional information.
         if (iline + 1 < num_lines)
         {
-            // This is a terminal atom.
-            if (lines()[iline + 1].leftRef(6) == "TER   ")
+            // Check whether this is a "real" TER record.
+            // Standalone TER records are used to end molecules, e.g. a Tip4P molecule.
+            if ((lines()[iline + 1].leftRef(6) == "TER   ") and
+                (lines()[iline + 1].simplified() != "TER"))
             {
                 atom.setTerminal(true);
-
-                // Check whether this is a "real" TER record.
-                // Many TER records are used to end group of atoms, e.g. a Tip4P molecule together,
-                // rather than a chain.
-                // Do we actually care about this? Probably not.
-                if (lines()[iline + 1].length() < 27)
-                {
-                    // TODO: Perhaps some kind of warning.
-                }
             }
         }
-
-        // Validate the atom data against the first frame.
-        if (iframe > 1)
-        {
-            // Make sure that the first frame has at least 'iatm' entries.
-            if (iatm < atoms[0].count())
-            {
-                // Make sure the atom is consistent between frames.
-                if (not validateAtom(atom, atoms[0][iatm]))
-                {
-                    errors.append(QObject::tr("Invalid record for atom %1 "
-                        "in model %2 on line %3. Record doesn't match does not "
-                        " match previous model! '%4'")
-                        .arg(iatm).arg(iframe).arg(iline).arg(line));
-                }
-            }
-            else
-            {
-                // Only record this error once per frame.
-                if ((iatm + 1) == atoms[0].count())
-                {
-                    errors.append(QObject::tr("The number of atoms in model "
-                        "%1 is larger than the first model!")
-                        .arg(iatm));
-                }
-            }
-        }
-
-        return atom.isTer();
     };
 
     // Internal function used to parse residue and chain data from a parsed atom record.
@@ -1193,12 +1145,13 @@ void PDB2::parseLines(const PropertyMap &map)
             // These must be in ascending order, starting at 1.
             if ((not ok) or (imdl != nmod))
             {
-                parse_warnings.append(QObject::tr("Cannot parse the data "
-                    "for MODEL %1 has incorrect MODEL entry number '%2'!")
-                    .arg(imdl).arg(nmod));
+                parse_warnings.append(QObject::tr("Incorrect MODEL entry "
+                    "number. Found '%1', should be '%2'")
+                    .arg(nmod).arg(imdl));
 
-                return;
+                nmod = imdl;
             }
+
         }
 
         // End of a MODEL record.
@@ -1232,6 +1185,11 @@ void PDB2::parseLines(const PropertyMap &map)
             nats++;
         }
 
+        // A standalone TER record.
+        // This is used to flag the end of a molecule.
+        else if (lines()[iline] == "TER")
+            isParse = true;
+
         // End of the file.
         if (iline + 1 == lines().count())
             isParse = true;
@@ -1242,11 +1200,8 @@ void PDB2::parseLines(const PropertyMap &map)
             // Don't proceed if there are no more ATOM records to parse.
             if (atom_lines.count() > 0)
             {
-                // Initialise atom vector for the frame.
-                QVector<PDBAtom> frame_atoms(nats);
-
-                // The number of TER records in the current model.
-                int num_ters_model = 0;
+                // Initialise atom vector for the molecule.
+                QVector<PDBAtom> mol_atoms(nats);
 
                 if (usesParallel())
                 {
@@ -1255,20 +1210,17 @@ void PDB2::parseLines(const PropertyMap &map)
                     tbb::parallel_for( tbb::blocked_range<int>(0, nats),
                                     [&](const tbb::blocked_range<int> &r)
                     {
-                        qint64 local_num_ters = 0;
                         QStringList local_errors;
 
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
-                            // Parse the atom record and determine whether it is a terminal record.
-                            if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                                atom_lines[i], lines().count(), frame_atoms[i], local_errors ))
-                                    local_num_ters++;
+                            // Parse the atom record.
+                            parse_atoms(lines().constData()[atom_lines[i]], i, atom_lines[i],
+                                lines().count(), mol_atoms[i], local_errors);
                         }
 
                         QMutexLocker lkr(&mutex);
 
-                        num_ters_model += local_num_ters;
                         parse_warnings += local_errors;
                     });
                 }
@@ -1276,10 +1228,9 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     for (int i=0; i<nats; ++i)
                     {
-                        // Parse the atom record and determine whether it is a terminal record.
-                        if (parse_atoms( lines().constData()[atom_lines[i]], i, iframe,
-                            atom_lines[i], lines().count(), frame_atoms[i], parse_warnings ))
-                                num_ters_model++;
+                        // Parse the atom record.
+                        parse_atoms(lines().constData()[atom_lines[i]], i, atom_lines[i],
+                            lines().count(), mol_atoms[i], parse_warnings);
                     }
                 }
 
@@ -1302,7 +1253,7 @@ void PDB2::parseLines(const PropertyMap &map)
                 bool ok = true;
                 for (int i=0; i<nats; ++i)
                 {
-                    int num = frame_atoms[i].getSerial();
+                    int num = mol_atoms[i].getSerial();
 
                     if (not atom_numbers.contains(num))
                     {
@@ -1323,7 +1274,7 @@ void PDB2::parseLines(const PropertyMap &map)
                         "by their index."));
 
                     for (int i=0; i<nats; ++i)
-                        frame_atoms[i].setSerial(i+1);
+                        mol_atoms[i].setSerial(i+1);
                 }
 
                 // Check whether there are duplicate residue numbers,
@@ -1333,13 +1284,13 @@ void PDB2::parseLines(const PropertyMap &map)
                 // Name and number for the previous residue.
                 // Initialise the residue number to a large negative value.
                 qint64 prev_num = std::numeric_limits<qint64>::min();
-                QString prev_nam = frame_atoms[0].getResName();
+                QString prev_nam = mol_atoms[0].getResName();
 
                 ok = true;
                 for (int i=0; i<nats; ++i)
                 {
-                    QString nam = frame_atoms[i].getResName();
-                    int     num = frame_atoms[i].getResNum();
+                    QString nam = mol_atoms[i].getResName();
+                    int     num = mol_atoms[i].getResNum();
 
                     // Residue number not ascending.
                     if (num < prev_num)
@@ -1376,23 +1327,23 @@ void PDB2::parseLines(const PropertyMap &map)
                     int num_res = 1;
 
                     // The current residue name and number.
-                    QString curr_nam = frame_atoms[0].getResName();
-                    int     curr_num = frame_atoms[0].getResNum();
+                    QString curr_nam = mol_atoms[0].getResName();
+                    int     curr_num = mol_atoms[0].getResNum();
 
                     for (int i=0; i<nats; ++i)
                     {
-                        if ((frame_atoms[i].getResNum()  != curr_num) or
-                            (frame_atoms[i].getResName() != curr_nam))
+                        if ((mol_atoms[i].getResNum()  != curr_num) or
+                            (mol_atoms[i].getResName() != curr_nam))
                         {
                             // Increment the residue count and store
                             // the new number.
                             num_res++;
-                            curr_num = frame_atoms[i].getResNum();
-                            curr_nam = frame_atoms[i].getResName();
+                            curr_num = mol_atoms[i].getResNum();
+                            curr_nam = mol_atoms[i].getResName();
                         }
 
                         // Update the residue number.
-                        frame_atoms[i].setResNum(num_res);
+                        mol_atoms[i].setResNum(num_res);
                     }
                 }
 
@@ -1402,7 +1353,7 @@ void PDB2::parseLines(const PropertyMap &map)
                 ok = true;
                 for (int i=0; i<nats; ++i)
                 {
-                    if (qAbs(frame_atoms[i].getTemperature()) > 100)
+                    if (qAbs(mol_atoms[i].getTemperature()) > 100)
                     {
                         ok = false;
                         break;
@@ -1416,7 +1367,7 @@ void PDB2::parseLines(const PropertyMap &map)
                         "factor found. All values have been zeroed."));
 
                     for (int i=0; i<nats; ++i)
-                        frame_atoms[i].setTemperature(0);
+                        mol_atoms[i].setTemperature(0);
                 }
 
                 // Now used the parsed data to construct the residue and chain
@@ -1441,13 +1392,13 @@ void PDB2::parseLines(const PropertyMap &map)
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
                             // Generate the residue and chain data from this atom record.
-                            parse_residues(frame_atoms[i], i,
+                            parse_residues(mol_atoms[i], i,
                                 local_residues, local_chains, local_errors);
                         }
 
                         QMutexLocker lkr(&mutex);
 
-                        frame_residues += local_residues;
+                        mol_residues   += local_residues;
                         temp_chains    += local_chains;
                         parse_warnings += local_errors;
                     });
@@ -1462,8 +1413,8 @@ void PDB2::parseLines(const PropertyMap &map)
                         for (auto residue : chain_residues)
                         {
                             // Only insert the residue once.
-                            if (not frame_chains.contains(chain, residue))
-                                frame_chains.insert(chain, residue);
+                            if (not mol_chains.contains(chain, residue))
+                                mol_chains.insert(chain, residue);
                         }
                     }
                 }
@@ -1472,25 +1423,22 @@ void PDB2::parseLines(const PropertyMap &map)
                     for (int i=0; i<nats; ++i)
                     {
                         // Generate the residue and chain data from this atom record.
-                        parse_residues(frame_atoms[i], i,
-                            frame_residues, frame_chains, parse_warnings);
+                        parse_residues(mol_atoms[i], i,
+                            mol_residues, mol_chains, parse_warnings);
                     }
                 }
 
                 // Finally, append frame data and clear the vectors.
 
-                atoms.append(frame_atoms);
+                atoms.append(mol_atoms);
                 atom_lines.clear();
 
-                residues.append(frame_residues);
-                frame_residues.clear();
+                residues.append(mol_residues);
+                mol_residues.clear();
 
-                chains.append(frame_chains);
-                frame_chains.clear();
+                chains.append(mol_chains);
+                mol_chains.clear();
 
-                num_ters.append(num_ters_model);
-
-                iframe++;
                 nats = 0;
             }
         }
@@ -1499,26 +1447,88 @@ void PDB2::parseLines(const PropertyMap &map)
     this->setScore(nAtoms());
 }
 
-/** Helper function used to validate atom data from different model records */
-bool PDB2::validateAtom(const PDBAtom &atom1, const PDBAtom &atom2) const
+/** Helper function used to determine whether the object contains mutliple models. */
+bool PDB2::isModel() const
 {
-    // Different models are typically indexed by atom number, e.g.
-    // 1 - nats, nats+1 - 2*nats, ..., or by using the alternate location
-    // entry of the atom record, e.g. AALA in the first model, BALA in the second.
+    // Different MODEL records are typically used to index frames in
+    // a trajectory. In this case, the only difference between the records
+    // in different models is the atom coordinates.
 
-    // The following data must be the same for all models (I think...)
-    if (atom1.getName()    != atom2.getName()    or
-        atom1.getResName() != atom2.getResName() or
-        atom1.getChainId() != atom2.getChainId() or
-        atom1.getResNum()  != atom2.getResNum()) return false;
-    else return true;
+    // The number of atoms in the first molecule.
+    int nats = nAtoms(0);
+
+    // Extract the first atom from the first molecule.
+    PDBAtom atom1 = atoms[0].at(0);
+
+    for (int i=1; i<nMolecules(); ++i)
+    {
+        // Number of atoms don't match.
+        if (nAtoms(i) != nats) return false;
+        else
+        {
+            // Extract the first atom from the molecule.
+            PDBAtom atom2 = atoms[i].at(0);
+
+            // The following data must be the same for all models (I think...)
+            if (atom1.getName()    != atom2.getName()    or
+                atom1.getResName() != atom2.getResName() or
+                atom1.getChainId() != atom2.getChainId() or
+                atom1.getResNum()  != atom2.getResNum()) return false;
+        }
+    }
+
+    // If we get this far, then we have a file with MODELS.
+    return true;
+}
+
+/** Helper function used to determine whether the Sire system contains mutliple models. */
+bool PDB2::isModel(const SireSystem::System &system) const
+{
+    // Get the MolNums of each molecule in the System - this returns the
+    // numbers in MolIdx order.
+    const QVector<MolNum> molnums = system.getMoleculeNumbers().toVector();
+
+    // The number of molecules in the system.
+    int nmols = molnums.count();
+
+    // The number of atoms in the first molecule.
+    int nats = system[molnums[0]].molecule().nAtoms();
+
+    // Extract the first atom from the first molecule.
+    auto atom1 = system[molnums[0]]
+                .molecule()
+                .atoms()[0]
+                .read()
+                .asA<SireMol::Atom>();
+
+    for (int i=1; i<nmols; ++i)
+    {
+        // Number of atoms don't match.
+        if (system[molnums[i]].molecule().nAtoms() != nats) return false;
+        else
+        {
+            // Extract the first atom from the molecule.
+            auto atom2 = system[molnums[i]]
+                        .atoms()[0]
+                        .read()
+                        .asA<SireMol::Atom>();
+
+            // Check the atom name and number.
+            if (atom1.name()    != atom2.name()     or
+                atom1.number()  != atom2.number()   or
+                atom1.residue() != atom2.residue()) return false;
+        }
+    }
+
+    // If we get this far, then we have a system with MODELS.
+    return true;
 }
 
 /** Use the data contained in this parser to create a new System of molecules,
     assigning properties based on the mapping in 'map'. */
 System PDB2::startSystem(const PropertyMap &map) const
 {
-    const int nmols = nModels();
+    const int nmols = nMolecules();
 
     if (nmols == 0)
         return System();

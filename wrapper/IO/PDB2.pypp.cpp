@@ -170,15 +170,15 @@ void register_PDB2_class(){
                 , "Return the number of chains in model i." );
         
         }
-        { //::SireIO::PDB2::nModels
+        { //::SireIO::PDB2::nMolecules
         
-            typedef int ( ::SireIO::PDB2::*nModels_function_type)(  ) const;
-            nModels_function_type nModels_function_value( &::SireIO::PDB2::nModels );
+            typedef int ( ::SireIO::PDB2::*nMolecules_function_type)(  ) const;
+            nMolecules_function_type nMolecules_function_value( &::SireIO::PDB2::nMolecules );
             
             PDB2_exposer.def( 
-                "nModels"
-                , nModels_function_value
-                , "Return the number of models (molecules)." );
+                "nMolecules"
+                , nMolecules_function_value
+                , "" );
         
         }
         { //::SireIO::PDB2::nResidues
@@ -202,29 +202,6 @@ void register_PDB2_class(){
                 , nResidues_function_value
                 , ( bp::arg("i") )
                 , "Return the number of residues in model i." );
-        
-        }
-        { //::SireIO::PDB2::nTers
-        
-            typedef int ( ::SireIO::PDB2::*nTers_function_type)(  ) const;
-            nTers_function_type nTers_function_value( &::SireIO::PDB2::nTers );
-            
-            PDB2_exposer.def( 
-                "nTers"
-                , nTers_function_value
-                , "Return the total number of TER records." );
-        
-        }
-        { //::SireIO::PDB2::nTers
-        
-            typedef int ( ::SireIO::PDB2::*nTers_function_type)( int ) const;
-            nTers_function_type nTers_function_value( &::SireIO::PDB2::nTers );
-            
-            PDB2_exposer.def( 
-                "nTers"
-                , nTers_function_value
-                , ( bp::arg("arg0") )
-                , "Return the total number of TER records in model i." );
         
         }
         PDB2_exposer.def( bp::self != bp::self );

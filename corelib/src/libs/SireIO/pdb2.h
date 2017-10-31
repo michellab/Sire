@@ -231,15 +231,13 @@ public:
     QString formatDescription() const;
     QStringList formatSuffix() const;
 
-    int nModels() const;
+    int nMolecules() const;
     int nAtoms() const;
     int nResidues() const;
     int nResidues(int i) const;
     int nChains() const;
     int nChains(int i) const;
     int nAtoms(int i) const;
-    int nTers() const;
-    int nTers(int) const;
 
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
@@ -257,8 +255,8 @@ private:
 
     SireMol::MolEditor getMolecule(int imol, const PropertyMap &map = PropertyMap()) const;
 
-    /** Validate that the two atoms are the same (other than position). */
-    bool validateAtom(const PDBAtom &atom1, const PDBAtom &atom2) const;
+    bool isModel() const;
+    bool isModel(const SireSystem::System &system) const;
 
     //* Atom record data (possibly multiple frames). */
     QVector<QVector<PDBAtom> > atoms;
@@ -268,9 +266,6 @@ private:
 
     //* Chain identifier mappings for each frame. */
     QVector<QMultiMap<QChar, qint64> > chains;
-
-    /** Number of TER records. */
-    QVector<qint64> num_ters;
 
     /** The name of the file from which data was parsed. */
     QString filename;
