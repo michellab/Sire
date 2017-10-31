@@ -790,6 +790,7 @@ GroSystem& GroSystem::operator=(const GroSystem &other)
     nme = other.nme;
     moltypes = other.moltypes;
     nmols = other.nmols;
+    total_nmols = other.total_nmols;
     return *this;
 }
 
@@ -797,6 +798,7 @@ GroSystem& GroSystem::operator=(const GroSystem &other)
 bool GroSystem::operator==(const GroSystem &other) const
 {
     return nme == other.nme and
+           total_nmols == other.total_nmols and
            moltypes == other.moltypes and
            nmols == other.nmols;
 }
@@ -3193,8 +3195,6 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         //now process the [molecules]
         for (auto linenum : tags.values("molecules"))
         {
-            qDebug() << "molecules: " << linenum;
-        
             const auto lines = getDirectiveLines(linenum);
             
             for (const auto line : lines)
@@ -3226,7 +3226,6 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     continue;
                 }
                 
-                qDebug() << "ADDING" << words[0] << nmols;
                 mysys.add(words[0], nmols);
             }
         }
