@@ -296,6 +296,17 @@ void register_GroTop_class(){
                 , "Return whether or not the non-bonded pairs should be automatically generated\nfor the molecules in this file" );
         
         }
+        { //::SireIO::GroTop::groSystem
+        
+            typedef ::SireIO::GroSystem ( ::SireIO::GroTop::*groSystem_function_type)(  ) const;
+            groSystem_function_type groSystem_function_value( &::SireIO::GroTop::groSystem );
+            
+            GroTop_exposer.def( 
+                "groSystem"
+                , groSystem_function_value
+                , "Return the Gromacs System that describes the list of molecules that should\nbe contained" );
+        
+        }
         { //::SireIO::GroTop::includePath
         
             typedef ::QStringList ( ::SireIO::GroTop::*includePath_function_type)( bool ) const;
@@ -389,6 +400,17 @@ void register_GroTop_class(){
                 "typeName"
                 , typeName_function_value
                 , "Return the C++ name for this class" );
+        
+        }
+        { //::SireIO::GroTop::warnings
+        
+            typedef ::QStringList ( ::SireIO::GroTop::*warnings_function_type)(  ) const;
+            warnings_function_type warnings_function_value( &::SireIO::GroTop::warnings );
+            
+            GroTop_exposer.def( 
+                "warnings"
+                , warnings_function_value
+                , "" );
         
         }
         { //::SireIO::GroTop::what

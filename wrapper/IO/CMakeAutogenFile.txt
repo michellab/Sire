@@ -10,6 +10,7 @@ set ( PYPP_SOURCES
        Gro87.pypp.cpp
        GroAtom.pypp.cpp
        GroMolType.pypp.cpp
+       GroSystem.pypp.cpp
        GroTop.pypp.cpp
        IOBase.pypp.cpp
        IOParametersBase.pypp.cpp

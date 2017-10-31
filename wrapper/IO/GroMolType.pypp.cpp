@@ -61,7 +61,7 @@ void register_GroMolType_class(){
                 "addAngle"
                 , addAngle_function_value
                 , ( bp::arg("angle"), bp::arg("parm") )
-                , "" );
+                , "Add the passed angle to the molecule" );
         
         }
         { //::SireIO::GroMolType::addAngles
@@ -73,7 +73,7 @@ void register_GroMolType_class(){
                 "addAngles"
                 , addAngles_function_value
                 , ( bp::arg("angles") )
-                , "" );
+                , "Add the passed angles to the molecule" );
         
         }
         { //::SireIO::GroMolType::addAtom
@@ -97,7 +97,7 @@ void register_GroMolType_class(){
                 "addBond"
                 , addBond_function_value
                 , ( bp::arg("bond"), bp::arg("parm") )
-                , "" );
+                , "Add the passed bond to the molecule" );
         
         }
         { //::SireIO::GroMolType::addBonds
@@ -109,7 +109,7 @@ void register_GroMolType_class(){
                 "addBonds"
                 , addBonds_function_value
                 , ( bp::arg("bonds") )
-                , "" );
+                , "Add the passed bonds to the molecule" );
         
         }
         { //::SireIO::GroMolType::addDihedral
@@ -121,7 +121,7 @@ void register_GroMolType_class(){
                 "addDihedral"
                 , addDihedral_function_value
                 , ( bp::arg("dihedral"), bp::arg("parm") )
-                , "" );
+                , "Add the passed dihedral to the molecule" );
         
         }
         { //::SireIO::GroMolType::addDihedrals
@@ -133,7 +133,7 @@ void register_GroMolType_class(){
                 "addDihedrals"
                 , addDihedrals_function_value
                 , ( bp::arg("dihedrals") )
-                , "" );
+                , "Add the passed dihedrals to the molecule" );
         
         }
         { //::SireIO::GroMolType::addWarning
@@ -156,7 +156,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "angles"
                 , angles_function_value
-                , "" );
+                , "Return all of the angles" );
         
         }
         { //::SireIO::GroMolType::atom
@@ -262,7 +262,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "bonds"
                 , bonds_function_value
-                , "" );
+                , "Return all of the bonds" );
         
         }
         { //::SireIO::GroMolType::dihedrals
@@ -273,7 +273,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "dihedrals"
                 , dihedrals_function_value
-                , "" );
+                , "Return all of the dihedrals" );
         
         }
         { //::SireIO::GroMolType::isNull

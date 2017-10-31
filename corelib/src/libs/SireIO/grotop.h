@@ -48,6 +48,7 @@ namespace SireIO
 class GroTop;
 class GroMolType;
 class GroAtom;
+class GroSystem;
 }
 
 QDataStream& operator<<(QDataStream&, const SireIO::GroTop&);
@@ -58,6 +59,9 @@ QDataStream& operator>>(QDataStream&, SireIO::GroMolType&);
 
 QDataStream& operator<<(QDataStream&, const SireIO::GroAtom&);
 QDataStream& operator>>(QDataStream&, SireIO::GroAtom&);
+
+QDataStream& operator<<(QDataStream&, const SireIO::GroSystem&);
+QDataStream& operator>>(QDataStream&, SireIO::GroSystem&);
 
 namespace SireIO
 {
@@ -248,6 +252,63 @@ private:
     qint64 nexcl;
 };
 
+/** This class describes a Gromacs System */
+class SIREIO_EXPORT GroSystem
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const GroSystem&);
+friend QDataStream& ::operator>>(QDataStream&, GroSystem&);
+
+public:
+    GroSystem();
+    GroSystem(const QString &name);
+    
+    GroSystem(const GroSystem &other);
+    
+    ~GroSystem();
+    
+    GroSystem& operator=(const GroSystem &other);
+    
+    bool operator==(const GroSystem &other) const;
+    bool operator!=(const GroSystem &other) const;
+    
+    QString operator[](int i) const;
+    
+    QString at(int i) const;
+    
+    int size() const;
+    int count() const;
+    int nMolecules() const;
+    
+    QStringList uniqueTypes() const;
+    
+    static const char* typeName();
+    const char* what() const;
+    
+    QString name() const;
+    void setName(QString name);
+    
+    QString toString() const;
+    
+    bool isNull() const;
+    bool isEmpty() const;
+    
+    void add(QString moltype, int ncopies=1);
+    
+private:
+    /** Name of the system */
+    QString nme;
+    
+    /** The list of molecule types */
+    QStringList moltypes;
+    
+    /** The number of each type of molecule */
+    QList<qint64> nmols;
+    
+    /** The total number of molecules */
+    qint64 total_nmols;
+};
+
 /** This class holds a parser for reading and writing Gromacs "top" topology files.
 
     @author Christopher Woods
@@ -331,6 +392,10 @@ public:
     GroMolType moleculeType(const QString &name) const;
     QVector<GroMolType> moleculeTypes() const;
 
+    GroSystem groSystem() const;
+
+    QStringList warnings() const;
+
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
@@ -383,6 +448,9 @@ private:
     /** The list of all moleculetypes loaded from this file */
     QVector<GroMolType> moltypes;
     
+    /** The GroSystem that describes the system in full */
+    GroSystem grosys;
+    
     /** The non-bonded function type to use for all molecules */
     qint32 nb_func_type;
     
@@ -395,6 +463,9 @@ private:
     /** The fudge QQ value for all molecules */
     double fudge_qq;
     
+    /** All of the parse warnings */
+    QStringList parse_warnings;
+    
     /** Whether or not to generate pairs for all molecules */
     bool generate_pairs;
 };
@@ -404,10 +475,12 @@ private:
 Q_DECLARE_METATYPE( SireIO::GroTop )
 Q_DECLARE_METATYPE( SireIO::GroMolType )
 Q_DECLARE_METATYPE( SireIO::GroAtom )
+Q_DECLARE_METATYPE( SireIO::GroSystem )
 
 SIRE_EXPOSE_CLASS( SireIO::GroTop )
 SIRE_EXPOSE_CLASS( SireIO::GroMolType )
 SIRE_EXPOSE_CLASS( SireIO::GroAtom )
+SIRE_EXPOSE_CLASS( SireIO::GroSystem )
 
 SIRE_END_HEADER
 

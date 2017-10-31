@@ -85,6 +85,7 @@ void register_SireMM_containers()
     register_dict< QHash<ImproperID,AmberDihedral> >();
     register_dict< QHash<BondID,AmberNB14> >();
 
+    register_dict< QHash<QString,GromacsAtomType> >();
     register_dict< QMultiHash<QString,GromacsAtomType> >();
     register_dict< QMultiHash<QString,GromacsBond> >();
     register_dict< QMultiHash<QString,GromacsAngle> >();

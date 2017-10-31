@@ -25,6 +25,8 @@
 
 #include "GroMolType.pypp.hpp"
 
+#include "GroSystem.pypp.hpp"
+
 #include "GroTop.pypp.hpp"
 
 #include "IOBase.pypp.hpp"
@@ -91,6 +93,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_GroAtom_class();
 
     register_GroMolType_class();
+
+    register_GroSystem_class();
 
     register_GroTop_class();
 

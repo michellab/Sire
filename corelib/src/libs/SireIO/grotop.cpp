@@ -726,6 +726,229 @@ QMultiHash<DihedralID,GromacsDihedral> GroMolType::dihedrals() const
 }
 
 ////////////////
+//////////////// Implementation of GroSystem
+////////////////
+
+static const RegisterMetaType<GroSystem> r_grosys(NO_ROOT);
+
+QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroSystem &grosys)
+{
+    writeHeader(ds, r_grosys, 1);
+    
+    SharedDataStream sds(ds);
+    
+    sds << grosys.nme << grosys.moltypes << grosys.nmols;
+    
+    return ds;
+}
+
+QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroSystem &grosys)
+{
+    VersionID v = readHeader(ds, r_grosys);
+    
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        
+        sds >> grosys.nme >> grosys.moltypes >> grosys.nmols;
+        
+        grosys.total_nmols = 0;
+        
+        for (auto it = grosys.nmols.constBegin();
+             it != grosys.nmols.constEnd(); ++it)
+        {
+            grosys.total_nmols += *it;
+        }
+    }
+    else
+        throw version_error(v, "1", r_grosys, CODELOC);
+    
+    return ds;
+}
+
+/** Construct a null GroSystem */
+GroSystem::GroSystem() : total_nmols(0)
+{}
+
+/** Construct a GroSystem with the passed name */
+GroSystem::GroSystem(const QString &name) : nme(name), total_nmols(0)
+{}
+
+/** Copy constructor */
+GroSystem::GroSystem(const GroSystem &other)
+          : nme(other.nme), moltypes(other.moltypes), nmols(other.nmols),
+            total_nmols(other.total_nmols)
+{}
+
+/** Destructor */
+GroSystem::~GroSystem()
+{}
+
+/** Copy assignment operator */
+GroSystem& GroSystem::operator=(const GroSystem &other)
+{
+    nme = other.nme;
+    moltypes = other.moltypes;
+    nmols = other.nmols;
+    return *this;
+}
+
+/** Comparison operator */
+bool GroSystem::operator==(const GroSystem &other) const
+{
+    return nme == other.nme and
+           moltypes == other.moltypes and
+           nmols == other.nmols;
+}
+
+/** Comparison operator */
+bool GroSystem::operator!=(const GroSystem &other) const
+{
+    return not operator==(other);
+}
+
+/** Return the molecule type of the ith molecule */
+QString GroSystem::operator[](int i) const
+{
+    i = Index(i).map(total_nmols);
+    
+    auto it2 = moltypes.constBegin();
+    for (auto it = nmols.constBegin(); it != nmols.constEnd(); ++it)
+    {
+        if (i < *it)
+        {
+            return *it2;
+        }
+        else
+        {
+            i -= *it;
+            ++it2;
+        }
+    }
+    
+    //we should never get here...
+    throw SireError::program_bug( QObject::tr(
+        "How did we get here? %1 : %2 : %3")
+            .arg(i).arg( Sire::toString(moltypes) ).arg( Sire::toString(nmols) ), CODELOC );
+
+    return QString();
+}
+
+/** Return the molecule type of the ith molecule */
+QString GroSystem::at(int i) const
+{
+    return operator[](i);
+}
+
+/** Return the number of molecules in the system */
+int GroSystem::size() const
+{
+    return total_nmols;
+}
+
+/** Return the number of molecules in the system */
+int GroSystem::count() const
+{
+    return size();
+}
+
+/** Return the number of molecules in the system */
+int GroSystem::nMolecules() const
+{
+    return size();
+}
+
+const char* GroSystem::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<GroSystem>() );
+}
+
+const char* GroSystem::what() const
+{
+    return GroSystem::typeName();
+}
+
+/** Return the name of the system */
+QString GroSystem::name() const
+{
+    return nme;
+}
+
+/** Set the name of the system */
+void GroSystem::setName( QString name )
+{
+    nme = name;
+}
+
+/** Return a string representation of this system */
+QString GroSystem::toString() const
+{
+    if (this->isNull())
+    {
+        return QObject::tr( "GroSystem::null" );
+    }
+    else if (this->isEmpty())
+    {
+        return QObject::tr( "GroSystem( %1 : empty )" ).arg(this->name());
+    }
+    else
+    {
+        return QObject::tr( "GroSystem( %1 : nMolecules()=%2 )")
+                    .arg(this->name()).arg(this->nMolecules());
+    }
+}
+
+/** Return whether or not this is a null GroSystem */
+bool GroSystem::isNull() const
+{
+    return nme.isNull() and total_nmols == 0;
+}
+
+/** Return whether or not this is an empty system (no molecules) */
+bool GroSystem::isEmpty() const
+{
+    return total_nmols == 0;
+}
+
+/** Return the list of unique molecule types held in the system */
+QStringList GroSystem::uniqueTypes() const
+{
+    QStringList typs;
+    
+    for (const auto moltype : moltypes)
+    {
+        if (not typs.contains(moltype))
+        {
+            typs.append(moltype);
+        }
+    }
+    
+    return typs;
+}
+
+/** Add (optionally ncopies) copies of the molecule with type 'moltype'
+    to the system */
+void GroSystem::add(QString moltype, int ncopies)
+{
+    if (ncopies <= 0)
+        return;
+
+    if (total_nmols > 0)
+    {
+        if (moltypes.back() == moltype)
+        {
+            nmols.back() += ncopies;
+            total_nmols += ncopies;
+            return;
+        }
+    }
+
+    moltypes.append(moltype);
+    nmols.append(ncopies);
+    total_nmols += ncopies;
+}
+
+////////////////
 //////////////// Implementation of GroTop
 ////////////////
 
@@ -745,9 +968,10 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroTop &grotop)
         << grotop.ang_potentials
         << grotop.dih_potentials
         << grotop.moltypes
+        << grotop.grosys
         << grotop.nb_func_type
         << grotop.combining_rule << grotop.fudge_lj
-        << grotop.fudge_qq << grotop.generate_pairs
+        << grotop.fudge_qq << grotop.parse_warnings << grotop.generate_pairs
         << static_cast<const MoleculeParser&>(grotop);
     
     return ds;
@@ -768,9 +992,10 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroTop &grotop)
             >> grotop.ang_potentials
             >> grotop.dih_potentials
             >> grotop.moltypes
+            >> grotop.grosys
             >> grotop.nb_func_type
             >> grotop.combining_rule >> grotop.fudge_lj
-            >> grotop.fudge_qq >> grotop.generate_pairs
+            >> grotop.fudge_qq >> grotop.parse_warnings >> grotop.generate_pairs
             >> static_cast<MoleculeParser&>(grotop);
     }
     else
@@ -899,9 +1124,10 @@ GroTop::GroTop(const GroTop &other)
          bond_potentials(other.bond_potentials),
          ang_potentials(other.ang_potentials),
          dih_potentials(other.dih_potentials),
-         moltypes(other.moltypes),
+         moltypes(other.moltypes), grosys(other.grosys),
          nb_func_type(other.nb_func_type), combining_rule(other.combining_rule),
          fudge_lj(other.fudge_lj), fudge_qq(other.fudge_qq),
+         parse_warnings(other.parse_warnings),
          generate_pairs(other.generate_pairs)
 {}
 
@@ -922,10 +1148,12 @@ GroTop& GroTop::operator=(const GroTop &other)
         ang_potentials = other.ang_potentials;
         dih_potentials = other.dih_potentials;
         moltypes = other.moltypes;
+        grosys = other.grosys;
         nb_func_type = other.nb_func_type;
         combining_rule = other.combining_rule;
         fudge_lj = other.fudge_lj;
         fudge_qq = other.fudge_qq;
+        parse_warnings = other.parse_warnings;
         generate_pairs = other.generate_pairs;
         MoleculeParser::operator=(other);
     }
@@ -1146,6 +1374,13 @@ static QString get_dihedral_id(const QString &atm0, const QString &atm1,
     {
         return QString("%1;%2;%3;%4").arg(atm3,atm2,atm1,atm0);
     }
+}
+
+/** Return the Gromacs System that describes the list of molecules that should
+    be contained */
+GroSystem GroTop::groSystem() const
+{
+    return grosys;
 }
 
 /** Return the bond potential data for the passed pair of atoms. This only returns
@@ -2570,7 +2805,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     
                     if (not ok)
                     {
-                        warnings.append( QObject::tr("Unable to extract the correct "
+                        moltype.addWarning( QObject::tr("Unable to extract the correct "
                            "information to form a bond from line '%1' as the third word "
                            "is not an integer.").arg(line) );
                         continue;
@@ -2594,7 +2829,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                         }
                         catch(const SireError::exception &e)
                         {
-                            warnings.append( QObject::tr("Unable to extract the correct "
+                            moltype.addWarning( QObject::tr("Unable to extract the correct "
                               "information to form a bond from line '%1'. Error is '%2'")
                                 .arg(line).arg(e.error()) );
                             continue;
@@ -2658,7 +2893,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     
                     if (not ok)
                     {
-                        warnings.append( QObject::tr("Unable to extract the correct "
+                        moltype.addWarning( QObject::tr("Unable to extract the correct "
                            "information to form an angle from line '%1' as the fourth word "
                            "is not an integer.").arg(line) );
                         continue;
@@ -2682,7 +2917,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                         }
                         catch(const SireError::exception &e)
                         {
-                            warnings.append( QObject::tr("Unable to extract the correct "
+                            moltype.addWarning( QObject::tr("Unable to extract the correct "
                               "information to form an angle from line '%1'. Error is '%2'")
                                 .arg(line).arg(e.error()) );
                             continue;
@@ -2747,7 +2982,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     
                     if (not ok)
                     {
-                        warnings.append( QObject::tr("Unable to extract the correct "
+                        moltype.addWarning( QObject::tr("Unable to extract the correct "
                            "information to form a dihedral from line '%1' as the fifth word "
                            "is not an integer.").arg(line) );
                         continue;
@@ -2771,7 +3006,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                         }
                         catch(const SireError::exception &e)
                         {
-                            warnings.append( QObject::tr("Unable to extract the correct "
+                            moltype.addWarning( QObject::tr("Unable to extract the correct "
                               "information to form a dihedral from line '%1'. Error is '%2'")
                                 .arg(line).arg(e.error()) );
                             continue;
@@ -2796,7 +3031,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         auto processMolType = [&](const QHash<QString,int> &moltag)
         {
             auto moltype = getMolType( moltag.value("moleculetype", -1) );
-            
+
             for (auto linenum : moltag.values("atoms"))
             {
                 addAtomsTo( moltype, linenum );
@@ -2817,10 +3052,27 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 addDihedralsTo( moltype, linenum );
             }
             
+            //now print out warnings for any lines that are missed...
+            const QStringList missed_tags = { "pairs", "pairs_nb",
+                                              "exclusions",
+                                              "contraints", "settles", "virtual_sites2",
+                                              "virtual_sitesn", "position_restraints",
+                                              "distance_restraints", "orientation_restraints",
+                                              "angle_restraints", "angle_restraints_z" };
+
+            for (const auto tag : missed_tags)
+            {
+                //not parsed this tag type
+                for (auto linenum : moltag.values(tag))
+                {
+                    moltype.addWarning( QObject::tr("\nSkipping these lines which "
+                      "are part of the '%1' tag:\n%2")
+                        .arg(tag).arg( getDirectiveLines(linenum).join("\n") ) );
+                }
+            }
+            
             //should be finished, run some checks that this looks sane
             moltype.sanitise();
-        
-            qDebug() << moltype.toString();
             
             return moltype;
         };
@@ -2829,6 +3081,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         moltypes = QVector<GroMolType>(moltags.count());
         auto moltypes_array = moltypes.data();
         
+        //load all of the molecule types (in parallel if possible)
         if (usesParallel())
         {
             tbb::parallel_for( tbb::blocked_range<int>(0,moltags.count()),
@@ -2862,6 +3115,128 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         return warnings;
     };
     
+    //function used to parse the [system] part of the file
+    auto processSystem = [&]
+    {
+        QStringList warnings;
+        
+        //look for the locations of the child tags of [system]
+        QList< QMultiHash<QString,int> > systags;
+        {
+            //list of tags that are valid within a [system]
+            const QStringList valid_tags = { "molecules" };
+        
+            auto it = taglocs.constBegin();
+            
+            while (it != taglocs.constEnd())
+            {
+                if (it.value() == "system")
+                {
+                    //we have found another 'system' - save the location
+                    //of all of its child tags
+                    QMultiHash<QString,int> tags;
+                    tags.insert(it.value(), it.key());
+                    ++it;
+                    
+                    while (it != taglocs.constEnd())
+                    {
+                        //save all child tags until we reach the end
+                        //of definition of this system
+                        if (valid_tags.contains(it.value()))
+                        {
+                            //this is a valid child tag - save its location
+                            //(note that a tag can exist multiple times!)
+                            tags.insertMulti(it.value(), it.key());
+                            ++it;
+                        }
+                        else
+                        {
+                            //this is the end of the 'system'
+                            ++it;
+                            break;
+                        }
+                    }
+                    
+                    systags.append(tags);
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+        }
+        
+        //in theory, there should be one, and only one [system]
+        if (systags.count() != 1)
+        {
+            warnings.append( QObject::tr( "There should be one, and only one "
+              "[system] section in a Gromacs topology file. The number of "
+              "[system] sections equals %1.").arg(systags.count()) );
+            return warnings;
+        }
+        
+        //now parse the two parts of [system]
+        const auto tags = systags.at(0);
+        
+        if (not (tags.contains("system") and tags.contains("molecules")))
+        {
+            warnings.append( QObject::tr("The [system] section should contain "
+              "both [system] and [molecules]. It contains '%1'")
+                .arg( Sire::toString(tags) ) );
+            return warnings;
+        }
+        
+        //process [system] first..
+        //each of these lines is part of the title of the system
+        GroSystem mysys( getDirectiveLines(tags.value("system")).join(" ") );
+        
+        //now process the [molecules]
+        for (auto linenum : tags.values("molecules"))
+        {
+            qDebug() << "molecules: " << linenum;
+        
+            const auto lines = getDirectiveLines(linenum);
+            
+            for (const auto line : lines)
+            {
+                //each line should be the molecule type name, followed by the number
+                const auto words = line.split(" ");
+                
+                if (words.count() < 2)
+                {
+                    warnings.append( QObject::tr("Cannot understand the [molecules] line "
+                      "'%1' as it should have two words!").arg(line) );
+                    continue;
+                }
+                
+                if (words.count() > 2)
+                {
+                    warnings.append( QObject::tr("Ignoring the extraneous information at "
+                      "the end of the [molecules] line '%1'").arg(line) );
+                }
+                
+                bool ok;
+                int nmols = words[1].toInt(&ok);
+                
+                if (not ok)
+                {
+                    warnings.append( QObject::tr("Cannot interpret the number of molecules "
+                      "from the [molecules] line '%1'. The second word should be an integer "
+                      "that gives the number of molecules...").arg(line) );
+                    continue;
+                }
+                
+                qDebug() << "ADDING" << words[0] << nmols;
+                mysys.add(words[0], nmols);
+            }
+        }
+        
+        //save the system object to this GroTop
+        grosys = mysys;
+        
+        return warnings;
+    };
+    
     //process the defaults data first, as this affects the rest of the parsing
     auto warnings = processDefaults();
 
@@ -2869,7 +3244,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     const QVector< std::function<QStringList()> > funcs =
                  { processAtomTypes, processBondTypes, processPairTypes,
                    processAngleTypes, processDihedralTypes, processConstraintTypes,
-                   processNonBondParams, processMoleculeTypes
+                   processNonBondParams, processMoleculeTypes, processSystem
                  };
 
     if (usesParallel())
@@ -2994,10 +3369,29 @@ void GroTop::interpret()
 
     if (not warnings.isEmpty())
     {
-        qDebug() << warnings.join("\n");
+        parse_warnings = warnings;
     }
 
     this->setScore(100);
+}
+
+/** Return all of the warnings that were raised when parsing the file */
+QStringList GroTop::warnings() const
+{
+    QStringList w = parse_warnings;
+    
+    for (const auto moltype : moltypes)
+    {
+        auto molwarns = moltype.warnings();
+        
+        if (not molwarns.isEmpty())
+        {
+            w.append( QObject::tr("Warnings for molecule type %1").arg(moltype.toString()) );
+            w += molwarns;
+        }
+    }
+    
+    return w;
 }
 
 /** Internal function that is used to actually parse the data contained
