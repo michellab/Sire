@@ -49,6 +49,17 @@ void register_MoleculeParser_class(){
         typedef bp::class_< SireIO::MoleculeParser, bp::bases< SireBase::Property >, boost::noncopyable > MoleculeParser_exposer_t;
         MoleculeParser_exposer_t MoleculeParser_exposer = MoleculeParser_exposer_t( "MoleculeParser", "The base class of all molecule parsers", bp::no_init );
         bp::scope MoleculeParser_scope( MoleculeParser_exposer );
+        { //::SireIO::MoleculeParser::canFollow
+        
+            typedef bool ( ::SireIO::MoleculeParser::*canFollow_function_type)(  ) const;
+            canFollow_function_type canFollow_function_value( &::SireIO::MoleculeParser::canFollow );
+            
+            MoleculeParser_exposer.def( 
+                "canFollow"
+                , canFollow_function_value
+                , "" );
+        
+        }
         { //::SireIO::MoleculeParser::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::MoleculeParser::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;

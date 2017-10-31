@@ -124,6 +124,17 @@ void register_CharmmPSF_class(){
                 , "Return the suffixes that these files are normally associated with" );
         
         }
+        { //::SireIO::CharmmPSF::isLead
+        
+            typedef bool ( ::SireIO::CharmmPSF::*isLead_function_type)(  ) const;
+            isLead_function_type isLead_function_value( &::SireIO::CharmmPSF::isLead );
+            
+            CharmmPSF_exposer.def( 
+                "isLead"
+                , isLead_function_value
+                , "" );
+        
+        }
         { //::SireIO::CharmmPSF::nAngles
         
             typedef int ( ::SireIO::CharmmPSF::*nAngles_function_type)(  ) const;

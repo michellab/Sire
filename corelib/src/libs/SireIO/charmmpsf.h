@@ -187,6 +187,8 @@ public:
     QString formatDescription() const;
     QStringList formatSuffix() const;
 
+    bool isLead() const;
+
     int nAtoms() const;
     int nBonds() const;
     int nAngles() const;
@@ -235,6 +237,17 @@ private:
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;
 };
+
+#ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+/** The CharmmPSF parser is a lead parser - it is capable alone
+    of creating the System */
+inline bool CharmmPSF::isLead() const
+{
+    return true;
+}
+
+#endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }
 

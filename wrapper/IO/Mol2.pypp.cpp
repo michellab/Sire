@@ -55,6 +55,17 @@ void register_Mol2_class(){
         Mol2_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to read in the data from the passed text lines. The\npassed property map can be used to pass extra parameters to control\nthe parsing") );
         Mol2_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct this parser by extracting all necessary information from the\npassed SireSystem::System, looking for the properties that are specified\nin the passed property map") );
         Mol2_exposer.def( bp::init< SireIO::Mol2 const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireIO::Mol2::canFollow
+        
+            typedef bool ( ::SireIO::Mol2::*canFollow_function_type)(  ) const;
+            canFollow_function_type canFollow_function_value( &::SireIO::Mol2::canFollow );
+            
+            Mol2_exposer.def( 
+                "canFollow"
+                , canFollow_function_value
+                , "" );
+        
+        }
         { //::SireIO::Mol2::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::Mol2::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -122,6 +133,17 @@ void register_Mol2_class(){
                 "formatSuffix"
                 , formatSuffix_function_value
                 , "Return the suffixes that these files are normally associated with" );
+        
+        }
+        { //::SireIO::Mol2::isLead
+        
+            typedef bool ( ::SireIO::Mol2::*isLead_function_type)(  ) const;
+            isLead_function_type isLead_function_value( &::SireIO::Mol2::isLead );
+            
+            Mol2_exposer.def( 
+                "isLead"
+                , isLead_function_value
+                , "" );
         
         }
         { //::SireIO::Mol2::nAtoms

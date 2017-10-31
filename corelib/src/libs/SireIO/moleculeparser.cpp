@@ -117,7 +117,7 @@ namespace detail
             return not other.isValid();
         }
     }
-    
+
     bool ParserFactoryHelper::operator>(const ParserFactoryHelper &other) const
     {
         return not (operator==(other) or operator<(other));
@@ -132,12 +132,12 @@ namespace detail
     {
         return operator==(other) or operator<(other);
     }
-    
+
     bool ParserFactoryHelper::operator>=(const ParserFactoryHelper &other) const
     {
         return not operator<(other);
     }
-    
+
     /** Return whether or not this helper is valid */
     bool ParserFactoryHelper::isValid() const
     {
@@ -188,7 +188,7 @@ namespace detail
     QString ParserFactoryHelper::preferredSuffix() const
     {
         const auto s = this->suffixes();
-        
+
         if (not s.isEmpty())
         {
             return s[0];
@@ -244,21 +244,21 @@ namespace detail
     public:
         ParserFactory()
         {}
-        
+
         ~ParserFactory()
         {}
-        
+
         void registerParser(const ParserFactoryHelper &helper)
         {
             if (not helper.isValid())
             {
                 return;
             }
-        
+
             QMutexLocker lkr(&mutex);
-            
+
             helpers_by_id.insert( helper.formatName(), helper );
-            
+
             for (const auto suffix : helper.suffixes())
             {
                 helpers_by_suffix.insertMulti(suffix, helper);
@@ -270,17 +270,17 @@ namespace detail
             QMutexLocker lkr(&mutex);
             QList<ParserFactoryHelper> helpers;
             QStringList missing;
-            
+
             for (const auto name : parser_names)
             {
                 helpers.append( helpers_by_id.value(name) );
-                
+
                 if (not helpers.last().isValid())
                 {
                     missing.append(name);
                 }
             }
-            
+
             if (not missing.isEmpty())
             {
                 throw SireError::io_error( QObject::tr(
@@ -289,10 +289,10 @@ namespace detail
                             .arg(missing.join(", "))
                             .arg(this->supportedFormats()), CODELOC );
             }
-            
+
             return helpers;
         }
-    
+
         QList<ParserFactoryHelper> factoriesForSuffix(const QString &suffix)
         {
             QMutexLocker lkr(&mutex);
@@ -300,20 +300,20 @@ namespace detail
             qSort(helpers);
             return helpers;
         }
-    
+
         QList<ParserFactoryHelper> factoriesExcludingSuffix(const QString &suffix)
         {
             QMutexLocker lkr(&mutex);
-            
+
             if (suffix.isEmpty())
             {
                 auto helpers = helpers_by_id.values();
                 qSort(helpers);
                 return helpers;
             }
-            
+
             QList<ParserFactoryHelper> helpers;
-            
+
             for (const auto helper : helpers_by_id)
             {
                 if (not helper.suffixes().contains(suffix))
@@ -325,44 +325,44 @@ namespace detail
             qSort(helpers);
             return helpers;
         }
-    
+
         ParserFactoryHelper factory(const QString &name)
         {
             QMutexLocker lkr(&mutex);
             return helpers_by_id.value(name);
         }
-    
+
         QString supportedFormats()
         {
             QMutexLocker lkr(&mutex);
-            
+
             auto keys = helpers_by_id.keys();
             qSort(keys);
-            
+
             QStringList lines;
-            
+
             for (const auto key : keys)
             {
                 const auto parser = helpers_by_id.value(key);
-            
+
                 lines.append( QObject::tr("## Parser %1 ##").arg(key) );
                 lines.append( QObject::tr("Supports files: %1")
                                     .arg(parser.suffixes().join(", ")) );
                 lines.append( parser.formatDescription() );
                 lines += QString("#").repeated(13 + key.length()) + "\n";
             }
-            
+
             return lines.join("\n");
         }
-    
+
     private:
         /** Mutex to serialise access to the factory */
         QMutex mutex;
-        
+
         /** All of the factory helpers arranged by the suffix of
             file that they support */
         QMultiHash<QString,ParserFactoryHelper> helpers_by_suffix;
-        
+
         /** All of the factor helpers arranged by their unique ID */
         QHash<QString,ParserFactoryHelper> helpers_by_id;
     };
@@ -372,7 +372,7 @@ namespace detail
 
 Q_GLOBAL_STATIC( SireIO::detail::ParserFactory, getParserFactory );
 
-/** This registers a ParserFactoryHelper with the ParserFactory for the 
+/** This registers a ParserFactoryHelper with the ParserFactory for the
     specified parser */
 SireIO::detail::ParserFactoryHelper::ParserFactoryHelper(MoleculeParser *p)
 {
@@ -389,7 +389,7 @@ static const RegisterMetaType<MoleculeParser> r_parser( MAGIC_ONLY, MoleculePars
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const MoleculeParser &parser)
 {
     writeHeader(ds, r_parser, 1);
-    
+
     SharedDataStream sds(ds);
     sds << parser.lnes << parser.scr << parser.run_parallel
         << static_cast<const Property&>(parser);
@@ -400,7 +400,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const MoleculeParser &par
 QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, MoleculeParser &parser)
 {
     VersionID v = readHeader(ds, r_parser);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
@@ -409,7 +409,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, MoleculeParser &parser)
     }
     else
         throw version_error(v,"1", r_parser, CODELOC);
-    
+
     return ds;
 }
 
@@ -428,7 +428,7 @@ class FileContentsCache
 public:
     FileContentsCache()
     {}
-    
+
     ~FileContentsCache()
     {}
 
@@ -436,7 +436,7 @@ public:
     {
         QMutexLocker lkr(&cache_mutex);
         auto it = cache.constFind(filename);
-        
+
         if (it != cache.constEnd())
         {
             return it.value();
@@ -446,13 +446,13 @@ public:
             return QVector<QString>();
         }
     }
-    
+
     void save(QString filename, QVector<QString> filecontents)
     {
         QMutexLocker lkr(&cache_mutex);
         cache[filename] = filecontents;
     }
-    
+
     void clear()
     {
         QMutexLocker lkr(&cache_mutex);
@@ -480,29 +480,29 @@ MoleculeParser::MoleculeParser(const QString &filename,
     //we will be continually reloading the same file when testing parsers,
     //so check whether this file exists in the cache
     lnes = getFileCache()->read(filename);
-    
+
     if (lnes.isEmpty())
     {
         QFile file(filename);
-    
+
         if (not file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
         {
             throw SireError::file_error(file, CODELOC);
         }
-        
+
         QTextStream ts(&file);
-        
+
         QStringList l;
-        
+
         while (not ts.atEnd())
         {
             l.append( ts.readLine() );
         }
-        
+
         file.close();
-        
+
         lnes = l.toVector();
-        
+
         if (not lnes.isEmpty())
             getFileCache()->save(filename, lnes);
     }
@@ -517,7 +517,7 @@ MoleculeParser::MoleculeParser(const QStringList &lines,
     {
         run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
-    
+
     if (not lines.isEmpty())
     {
         lnes = lines.toVector();
@@ -585,6 +585,12 @@ bool MoleculeParser::isLead() const
     return false;
 }
 
+/** Return whether or not this parser can follow a lead parser. */
+bool MoleculeParser::canFollow() const
+{
+    return false;
+}
+
 /** Write the parsed data back to the file called 'filename'. This will
     overwrite the file if it exists already, so be careful! */
 void MoleculeParser::writeToFile(const QString &filename) const
@@ -599,19 +605,19 @@ void MoleculeParser::writeToFile(const QString &filename) const
             "for the parser %1.").arg(this->what()), CODELOC );
 
     QFile f(filename);
-    
+
     if (not f.open( QIODevice::WriteOnly | QIODevice::Text ))
     {
         throw SireError::file_error(f, CODELOC);
     }
-    
+
     QTextStream ts(&f);
-    
+
     for (const QString &line : lnes)
     {
         ts << line << '\n';
     }
-    
+
     f.close();
 }
 
@@ -623,7 +629,7 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
                                              const PropertyMap &map)
 {
     QFileInfo info(filename);
-    
+
     if (not (info.isFile() and info.isReadable()))
     {
         throw SireError::file_error( QObject::tr(
@@ -644,7 +650,7 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
             try
             {
                 const auto parser = factory.construct(filename, map);
-                
+
                 if (parser.read().score() <= 0)
                 {
                     errors.append( QObject::tr("Failed to parse '%1' with parser '%2' "
@@ -677,7 +683,7 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
         try
         {
             const auto parser = factory.construct(filename, map);
-            
+
             if (parser.read().score() <= 0)
             {
                 errors.append( QObject::tr("Failed to parse '%1' with parser '%2' "
@@ -719,7 +725,7 @@ MoleculeParserPtr MoleculeParser::_pvt_parse(const QString &filename,
                     "by individual parsers are:\n\n%2\n")
                         .arg(filename).arg(errors.join("\n\n")), CODELOC );
         }
-        
+
         return MoleculeParserPtr();
     }
 }
@@ -749,14 +755,14 @@ QList<MoleculeParserPtr> MoleculeParser::parse(const QStringList &filenames,
     else
     {
         QVector<MoleculeParserPtr> parsers(filenames.count());
-    
+
         bool run_parallel = true;
-    
+
         if (map["parallel"].hasValue())
         {
             run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
         }
-        
+
         if (run_parallel)
         {
             //parse the files in parallel - we use a grain size of 1
@@ -777,12 +783,12 @@ QList<MoleculeParserPtr> MoleculeParser::parse(const QStringList &filenames,
                 parsers[i] = MoleculeParser::_pvt_parse(filenames[i], map);
             }
         }
-        
+
         result = parsers.toList();
     }
-    
+
     getFileCache()->clear();
-    
+
     return result;
 }
 
@@ -799,7 +805,7 @@ System MoleculeParser::read(const QString &file1, const QString &file2,
                             const PropertyMap &map)
 {
     MoleculeParserPtr parser1, parser2;
-    
+
     bool run_parallel = true;
 
     if (map["parallel"].hasValue())
@@ -817,22 +823,22 @@ System MoleculeParser::read(const QString &file1, const QString &file2,
         parser1 = MoleculeParser::parse(file1,map);
         parser2 = MoleculeParser::parse(file2,map);
     }
-    
+
     return parser1.read().toSystem(parser2.read(),map);
 }
 
 /** Read the files with passed filenames, returning the System contained therein.
-    Note that all of the files must be connected to the same system 
+    Note that all of the files must be connected to the same system
     (i.e. it could be the Amber Parm and Rst file) */
 System MoleculeParser::read(const QStringList &filenames, const PropertyMap &map)
 {
     QList<MoleculeParserPtr> parsers = MoleculeParser::parse(filenames, map);
-    
+
     if (parsers.isEmpty())
         return System();
-    
+
     MoleculeParserPtr parser = parsers.takeFirst();
-    
+
     return parser.read().toSystem(parsers, map);
 }
 
@@ -886,11 +892,11 @@ QStringList pvt_write(const System &system,
     QVector<QFileInfo> fileinfos(filenames.count());
 
     QStringList errors;
-    
+
     for (int i=0; i<filenames.count(); ++i)
     {
         fileinfos[i] = QFileInfo(filenames[i]);
-        
+
         if (fileinfos[i].exists())
         {
             if (fileinfos[i].isDir())
@@ -929,14 +935,14 @@ QStringList pvt_write(const System &system,
     if (run_parallel)
     {
         tbb::spin_mutex error_mutex;
-    
+
         tbb::parallel_for( tbb::blocked_range<int>(0,filenames.count(),1),
                            [&](const tbb::blocked_range<int> &r)
         {
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 const auto filename = fileinfos[i].absoluteFilePath();
-            
+
                 try
                 {
                     written_files[i] = filename;
@@ -958,7 +964,7 @@ QStringList pvt_write(const System &system,
         for (int i=0; i<filenames.count(); ++i)
         {
             const auto filename = fileinfos[i].absoluteFilePath();
-        
+
             try
             {
                 written_files[i] = filename;
@@ -973,7 +979,7 @@ QStringList pvt_write(const System &system,
             }
         }
     }
-    
+
     if (not errors.isEmpty())
     {
         throw SireError::io_error( QObject::tr(
@@ -987,17 +993,17 @@ QStringList pvt_write(const System &system,
 
 /** Save the passed System to the file called 'filename'. First, the 'fileformat'
     property is looked at in 'map'. This is used to set the format(s) of
-    the files that are written (comma-separated list). 
-    
+    the files that are written (comma-separated list).
+
     If this does not exist, then the extension of the
     file is used to work out which format to use. If no extension is given,
     then the System will be queried to find out its preferred format (normally
     the format it was loaded with), via its 'fileformat' property
     (again, comma separated list).
-    
-    If their preferred format results in multiple files, then 
+
+    If their preferred format results in multiple files, then
     multiple files will be written. This returns the full pathnames to
-    all of the files that are written 
+    all of the files that are written
 */
 QStringList MoleculeParser::write(const System &system, const QString &filename,
                                   const PropertyMap &map)
@@ -1014,7 +1020,7 @@ QStringList MoleculeParser::write(const System &system, const QString &filename,
     QStringList fileformats;
 
     const auto format_property = map["fileformat"];
-    
+
     if (format_property.hasValue())
     {
         try
@@ -1026,9 +1032,9 @@ QStringList MoleculeParser::write(const System &system, const QString &filename,
             fileformats.append( format_property.value().asA<MoleculeParser>()
                                                .formatName() );
         }
-        
+
         QString basename = QFileInfo(filename).completeBaseName();
-        
+
         for (const auto format : fileformats)
         {
             filenames.append( QString("%1.%2").arg(basename,format.toLower()) );
@@ -1037,7 +1043,7 @@ QStringList MoleculeParser::write(const System &system, const QString &filename,
     else
     {
         QString extension = QFileInfo(filename).completeSuffix();
-        
+
         if (extension.isEmpty())
         {
             //we need to find the format from the system
@@ -1057,7 +1063,7 @@ QStringList MoleculeParser::write(const System &system, const QString &filename,
                             .arg(filename).arg(MoleculeParser::supportedFormats()),
                                 CODELOC );
             }
-            
+
             for (const auto format : fileformats)
             {
                 filenames.append( QString("%1.%2").arg(filename).arg(format.toLower()) );
@@ -1069,7 +1075,7 @@ QStringList MoleculeParser::write(const System &system, const QString &filename,
             fileformats.append(extension.toUpper());
         }
     }
-    
+
     //now we have a list of filenames and associated formats, actually
     //write the files
     return ::pvt_write(system, filenames, fileformats, map);
@@ -1092,13 +1098,13 @@ QStringList MoleculeParser::write(const System &system,
     {
         return MoleculeParser::write(system, files[0], map);
     }
-    
+
     //build a list of filenames with their associated fileformats
     QStringList filenames;
     QStringList fileformats;
 
     const auto format_property = map["fileformat"];
-    
+
     if (format_property.hasValue())
     {
         try
@@ -1110,7 +1116,7 @@ QStringList MoleculeParser::write(const System &system,
             fileformats.append( format_property.value().asA<MoleculeParser>()
                                                .formatName() );
         }
-        
+
         if (files.count() != fileformats.count())
         {
             throw SireError::io_error( QObject::tr(
@@ -1118,11 +1124,11 @@ QStringList MoleculeParser::write(const System &system,
                     "specifying both the filenames [%1] and fileformats [%2].")
                         .arg(filenames.join(",")).arg(fileformats.join(",")), CODELOC );
         }
-        
+
         for (int i=0; i<fileformats.count(); ++i)
         {
             const QString filename = files[i];
-        
+
             if (filename.isEmpty() or QFileInfo(filename).baseName().isEmpty())
             {
                 throw SireError::io_error( QObject::tr(
@@ -1148,9 +1154,9 @@ QStringList MoleculeParser::write(const System &system,
         for (int i=0; i<files.count(); ++i)
         {
             const auto filename = files[i];
-        
+
             QString extension = QFileInfo(filename).completeSuffix();
-            
+
             if (extension.isEmpty())
             {
                 if (i >= fileformats.count())
@@ -1182,7 +1188,7 @@ QStringList MoleculeParser::write(const System &system,
             }
         }
     }
-    
+
     //now we have a list of filenames and associated formats, actually
     //write the files
     return ::pvt_write(system, filenames, fileformats, map);
@@ -1233,28 +1239,17 @@ System MoleculeParser::toSystem(const PropertyMap &map) const
     passed parsers (i.e. representing a topology and a coordinate file) */
 System MoleculeParser::toSystem(const MoleculeParser &other, const PropertyMap &map) const
 {
-    if (this->isLead())
-    {
-        if (other.isLead())
-            throw SireError::io_error( QObject::tr(
-                    "Cannot construct a System from two lead parsers: %1 and %2")
-                        .arg(this->toString()).arg(other.toString()), CODELOC );
-    
-        System system = this->startSystem(map);
-        other.addToSystem(system, map);
-        return system;
-    }
-    else
-    {
-        if (not other.isLead())
-            throw SireError::io_error( QObject::tr(
-                    "Cannot construct a System when you have no lead parsers: %1 and %2")
-                        .arg(this->toString()).arg(other.toString()), CODELOC );
-        
-        System system = other.startSystem(map);
-        this->addToSystem(system,map);
-        return system;
-    }
+    // Construct a list of parsers.
+    QList<MoleculeParserPtr> parsers({*this, MoleculeParserPtr(other)});
+
+    // Sort the parsers: lead, then follower.
+    sortParsers(parsers);
+
+    // Construct the system: leader, then follower.
+    System system = parsers[0].read().startSystem(map);
+    parsers[1].read().addToSystem(system, map);
+
+    return system;
 }
 
 /** Return the System that is constructed from the information in the passed
@@ -1263,67 +1258,23 @@ System MoleculeParser::toSystem(const MoleculeParser &other, const PropertyMap &
 System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
                                 const PropertyMap &map) const
 {
-    if (this->isLead())
-    {
-        //make sure that there is not more than one lead parser
-        for (auto other : others)
-        {
-            if (other.read().isLead())
-                throw SireError::io_error( QObject::tr(
-                    "Cannot construct a System when you have more than one lead parser: %1 and %2")
-                        .arg(this->toString()).arg(other.read().toString()), CODELOC );
-        }
-        
-        System system = this->startSystem(map);
-        
-        for (auto other : others)
-        {
-            other.read().addToSystem(system, map);
-        }
-        
-        return system;
-    }
-    else
-    {
-        //find the first lead parser in the set
-        int lead_idx = -1;
-        
-        for (int i=0; i<others.count(); ++i)
-        {
-            if (others[i].read().isLead())
-            {
-                lead_idx = i;
-                break;
-            }
-        }
-        
-        if (lead_idx >= 0)
-        {
-            QList<MoleculeParserPtr> followers(others);
-        
-            MoleculeParserPtr lead = followers.takeAt(lead_idx);
-            followers.push_front(*this);
-            
-            return lead.read().toSystem(followers, map);
-        }
-        else
-        {
-            QStringList p;
-            
-            p.append(this->toString());
-            
-            for (auto other : others)
-            {
-                p.append( other.read().toString() );
-            }
-        
-            throw SireError::io_error( QObject::tr(
-                "Cannot construct a System when there are no lead parsers! [ %1 ]")
-                    .arg(p.join(", ")), CODELOC );
-            
-            return System();
-        }
-    }
+    // Make a copy of the list of parsers.
+    auto parsers = others;
+
+    // Add this parser to the list.
+    parsers.append(*this);
+
+    // Sort the parsers: leader, then followers.
+    sortParsers(parsers);
+
+    // Construct the initial system from the leader.
+    System system = parsers[0].read().startSystem(map);
+
+    // Add to the system, using properties parsed by the followers.
+    for (int i=1; i<parsers.count(); ++i)
+        parsers[i].read().addToSystem(system, map);
+
+    return system;
 }
 
 /** Start creating a new System using the information contained in this parser,
@@ -1336,7 +1287,7 @@ System MoleculeParser::startSystem(const PropertyMap &map) const
                 .arg(this->toString()), CODELOC );
 }
 
-/** Continue adding data to the passed System using the information contained in 
+/** Continue adding data to the passed System using the information contained in
     this parser, using the (optional) property map to name the properties */
 void MoleculeParser::addToSystem(System &system, const PropertyMap &map) const
 {
@@ -1369,14 +1320,14 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const NullParser &parser)
 QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, NullParser &parser)
 {
     VersionID v = readHeader(ds, r_null);
-    
+
     if (v == 1)
     {
         ds >> static_cast<MoleculeParser&>(parser);
     }
     else
         throw version_error(v, "1", r_parser, CODELOC);
-    
+
     return ds;
 }
 
@@ -1434,7 +1385,7 @@ System NullParser::toSystem(const MoleculeParser &other,
         throw SireError::incompatible_error( QObject::tr(
                 "Null parsers cannot be combined with other parsers (%1)")
                     .arg(other.toString()), CODELOC );
-    
+
     return System();
 }
 
@@ -1450,7 +1401,7 @@ System NullParser::toSystem(const QList<MoleculeParserPtr> &others,
                         .arg(other.read().toString()), CODELOC );
         }
     }
-    
+
     return System();
 }
 
@@ -1482,4 +1433,84 @@ MoleculeParserPtr NullParser::construct(const SireSystem::System &system,
             "The NullParser should not be used for an real file IO!"), CODELOC );
 
     return MoleculeParserPtr();
+}
+
+/** Sort the parsers: Lead first, then followers. */
+void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers) const
+{
+    /* Parsers can be leaders or followers. Leaders are capable of
+       constructing an entire molecular system on their own, whereas
+       followers cannot. However, certain lead parsers (PDB2, MOl2)
+       are also able to follow.
+
+       Here we sort the parsers into order, ready to construct a
+       system. If there is more than one lead, then we need to work
+       out which are capable of following.
+     */
+
+    // The leaders. We should end up with one.
+    QList<MoleculeParserPtr> leaders;
+
+    // The follower parsers.
+    QList<MoleculeParserPtr> followers;
+
+    // First pass: work out leaders and followers.
+    for (auto parser : parsers)
+    {
+        if (parser.read().isLead())
+            leaders.append(parser);
+        else
+            followers.append(parser);
+    }
+
+    // No leaders.
+    if (leaders.count() == 0)
+    {
+        throw SireError::program_bug( QObject::tr(
+            "There are no lead parsers!"), CODELOC );
+    }
+
+    // Whether each leader has been removed.
+    QVector<bool> is_removed(leaders.count());
+    is_removed.fill(false);
+
+    // The number of leaders.
+    int num_lead = leaders.count();
+
+    // If there are multiple leaders, then check whether any can follow.
+    if (leaders.count() > 1)
+    {
+        for (int i=0; i<leaders.count(); ++i)
+        {
+            // Make sure we have one leader.
+            if (num_lead > 1)
+            {
+                // Add the leader to followers and flag that it's been removed.
+                if (leaders[i].read().canFollow())
+                {
+                    followers.append(leaders[i]);
+                    is_removed[i] = true;
+                    num_lead--;
+                }
+            }
+        }
+    }
+
+    // Can only have one leader.
+    if (num_lead > 1)
+    {
+        throw SireError::program_bug( QObject::tr(
+            "Cannot construct a System from multiple lead parsers if "
+            "none can follow!"), CODELOC );
+    }
+
+    // Remove the all redundant leaders.
+    for (int i=0; i<leaders.count(); ++i)
+    {
+        if (is_removed[i])
+            leaders.removeAt(i);
+    }
+
+    // Make the sorted list of parsers: leader, then followers.
+    parsers = leaders + followers;
 }
