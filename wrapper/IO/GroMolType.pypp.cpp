@@ -52,6 +52,30 @@ void register_GroMolType_class(){
         GroMolType_exposer_t GroMolType_exposer = GroMolType_exposer_t( "GroMolType", "This class is used by GroTop to hold an intermediate representation of a\nGromacs moleculetype. This provides metadata about the molecule that is\nneeded to construct the whole molecule.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope GroMolType_scope( GroMolType_exposer );
         GroMolType_exposer.def( bp::init< SireIO::GroMolType const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireIO::GroMolType::addAngle
+        
+            typedef void ( ::SireIO::GroMolType::*addAngle_function_type)( ::SireMol::AngleID const &,::SireMM::GromacsAngle const & ) ;
+            addAngle_function_type addAngle_function_value( &::SireIO::GroMolType::addAngle );
+            
+            GroMolType_exposer.def( 
+                "addAngle"
+                , addAngle_function_value
+                , ( bp::arg("angle"), bp::arg("parm") )
+                , "" );
+        
+        }
+        { //::SireIO::GroMolType::addAngles
+        
+            typedef void ( ::SireIO::GroMolType::*addAngles_function_type)( ::QMultiHash< SireMol::AngleID, SireMM::GromacsAngle > const & ) ;
+            addAngles_function_type addAngles_function_value( &::SireIO::GroMolType::addAngles );
+            
+            GroMolType_exposer.def( 
+                "addAngles"
+                , addAngles_function_value
+                , ( bp::arg("angles") )
+                , "" );
+        
+        }
         { //::SireIO::GroMolType::addAtom
         
             typedef void ( ::SireIO::GroMolType::*addAtom_function_type)( ::SireIO::GroAtom const & ) ;
@@ -64,6 +88,54 @@ void register_GroMolType_class(){
                 , "Add an atom to this moleculetype, with specified atom type, residue number,\nresidue name, atom name, charge group, charge and mass" );
         
         }
+        { //::SireIO::GroMolType::addBond
+        
+            typedef void ( ::SireIO::GroMolType::*addBond_function_type)( ::SireMol::BondID const &,::SireMM::GromacsBond const & ) ;
+            addBond_function_type addBond_function_value( &::SireIO::GroMolType::addBond );
+            
+            GroMolType_exposer.def( 
+                "addBond"
+                , addBond_function_value
+                , ( bp::arg("bond"), bp::arg("parm") )
+                , "" );
+        
+        }
+        { //::SireIO::GroMolType::addBonds
+        
+            typedef void ( ::SireIO::GroMolType::*addBonds_function_type)( ::QMultiHash< SireMol::BondID, SireMM::GromacsBond > const & ) ;
+            addBonds_function_type addBonds_function_value( &::SireIO::GroMolType::addBonds );
+            
+            GroMolType_exposer.def( 
+                "addBonds"
+                , addBonds_function_value
+                , ( bp::arg("bonds") )
+                , "" );
+        
+        }
+        { //::SireIO::GroMolType::addDihedral
+        
+            typedef void ( ::SireIO::GroMolType::*addDihedral_function_type)( ::SireMol::DihedralID const &,::SireMM::GromacsDihedral const & ) ;
+            addDihedral_function_type addDihedral_function_value( &::SireIO::GroMolType::addDihedral );
+            
+            GroMolType_exposer.def( 
+                "addDihedral"
+                , addDihedral_function_value
+                , ( bp::arg("dihedral"), bp::arg("parm") )
+                , "" );
+        
+        }
+        { //::SireIO::GroMolType::addDihedrals
+        
+            typedef void ( ::SireIO::GroMolType::*addDihedrals_function_type)( ::QMultiHash< SireMol::DihedralID, SireMM::GromacsDihedral > const & ) ;
+            addDihedrals_function_type addDihedrals_function_value( &::SireIO::GroMolType::addDihedrals );
+            
+            GroMolType_exposer.def( 
+                "addDihedrals"
+                , addDihedrals_function_value
+                , ( bp::arg("dihedrals") )
+                , "" );
+        
+        }
         { //::SireIO::GroMolType::addWarning
         
             typedef void ( ::SireIO::GroMolType::*addWarning_function_type)( ::QString const & ) ;
@@ -74,6 +146,17 @@ void register_GroMolType_class(){
                 , addWarning_function_value
                 , ( bp::arg("warning") )
                 , "Add a warning that has been generated while parsing or creatig this object" );
+        
+        }
+        { //::SireIO::GroMolType::angles
+        
+            typedef ::QMultiHash< SireMol::AngleID, SireMM::GromacsAngle > ( ::SireIO::GroMolType::*angles_function_type)(  ) const;
+            angles_function_type angles_function_value( &::SireIO::GroMolType::angles );
+            
+            GroMolType_exposer.def( 
+                "angles"
+                , angles_function_value
+                , "" );
         
         }
         { //::SireIO::GroMolType::atom
@@ -169,6 +252,28 @@ void register_GroMolType_class(){
                 , atoms_function_value
                 , ( bp::arg("resnam") )
                 , "Return all of the atoms in the specified residue(s)" );
+        
+        }
+        { //::SireIO::GroMolType::bonds
+        
+            typedef ::QMultiHash< SireMol::BondID, SireMM::GromacsBond > ( ::SireIO::GroMolType::*bonds_function_type)(  ) const;
+            bonds_function_type bonds_function_value( &::SireIO::GroMolType::bonds );
+            
+            GroMolType_exposer.def( 
+                "bonds"
+                , bonds_function_value
+                , "" );
+        
+        }
+        { //::SireIO::GroMolType::dihedrals
+        
+            typedef ::QMultiHash< SireMol::DihedralID, SireMM::GromacsDihedral > ( ::SireIO::GroMolType::*dihedrals_function_type)(  ) const;
+            dihedrals_function_type dihedrals_function_value( &::SireIO::GroMolType::dihedrals );
+            
+            GroMolType_exposer.def( 
+                "dihedrals"
+                , dihedrals_function_value
+                , "" );
         
         }
         { //::SireIO::GroMolType::isNull

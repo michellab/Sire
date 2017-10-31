@@ -832,6 +832,20 @@ static void assert_valid_angle_function(int func_type)
             "the numbers 1-6,8,10.").arg(func_type), CODELOC );
 }
 
+/** Construct an angle that is of the specified type, but the parameters have yet
+    to be resolved. This is because Gromacs can indicate the required type of
+    function in the molecule specification, without providing the parameters */
+GromacsAngle::GromacsAngle(int function_type)
+             : func_type(function_type)
+{
+    assert_valid_angle_function(func_type);
+    
+    for (int i=0; i<MAX_ANGLE_PARAMS; ++i)
+    {
+        k[i] = unresolved_parameter_value;
+    }
+}
+
 /** Construct an angle of the specified function type with specified parameters
     (the order should be the same as in the Gromacs Manual, table 5.5) */
 GromacsAngle::GromacsAngle(int function_type,
@@ -1154,6 +1168,11 @@ QString GromacsAngle::toString() const
 {
     if (func_type == 0)
         return QObject::tr("GromacsAngle::null");
+    else if (this->needsResolving())
+    {
+        return QObject::tr("GromacsAngle( functionType() = %1, needsResolving )")
+                .arg(functionTypeString());
+    }
     else
     {
         QStringList params;
@@ -1330,6 +1349,27 @@ uint GromacsAngle::hash() const
             my_qHash(k[4]) | my_qHash(k[5]);
 }
 
+/** Return whether or not this parameter needs resolving */
+bool GromacsAngle::needsResolving() const
+{
+    return k[0] == unresolved_parameter_value;
+}
+
+/** Return whether or not the parameters for this angle are resolved */
+bool GromacsAngle::isResolved() const
+{
+    return not needsResolving();
+}
+
+/** Assert that the parameters for this angle have been resolved */
+void GromacsAngle::assertResolved() const
+{
+    if (needsResolving())
+        throw SireError::invalid_state( QObject::tr(
+            "The parameters for this GromacsAngle have not been resolved! %1")
+                .arg(this->toString()), CODELOC );
+}
+
 /////////
 ///////// Implementation of GromacsDihedral
 /////////
@@ -1404,6 +1444,20 @@ static void assert_valid_dihedral_function(int func_type)
         throw SireError::invalid_arg( QObject::tr(
             "There is no Gromacs dihedral function with ID '%1'. The only valid IDs are "
             "the numbers 1-5,8-11.").arg(func_type), CODELOC );
+}
+
+/** Construct a dihedral that is of the specified type, but the parameters have yet
+    to be resolved. This is because Gromacs can indicate the required type of
+    function in the molecule specification, without providing the parameters */
+GromacsDihedral::GromacsDihedral(int function_type)
+                : func_type(function_type)
+{
+    assert_valid_dihedral_function(func_type);
+    
+    for (int i=0; i<MAX_DIHEDRAL_PARAMS; ++i)
+    {
+        k[i] = unresolved_parameter_value;
+    }
 }
 
 /** Construct an dihedral of the specified function type with specified parameters
@@ -1703,6 +1757,11 @@ QString GromacsDihedral::toString() const
 {
     if (func_type == 0)
         return QObject::tr("GromacsDihedral::null");
+    else if (this->needsResolving())
+    {
+        return QObject::tr("GromacsDihedral( functionType() = %1, needsResolving )")
+                .arg(functionTypeString());
+    }
     else
     {
         QStringList params;
@@ -1863,4 +1922,25 @@ uint GromacsDihedral::hash() const
 {
     return  my_qHash(k[0]) | my_qHash(k[1]) | my_qHash(k[2]) | my_qHash(k[3]) |
             my_qHash(k[4]) | my_qHash(k[5]);
+}
+
+/** Return whether or not this parameter needs resolving */
+bool GromacsDihedral::needsResolving() const
+{
+    return k[0] == unresolved_parameter_value;
+}
+
+/** Return whether or not the parameters for this dihedral are resolved */
+bool GromacsDihedral::isResolved() const
+{
+    return not needsResolving();
+}
+
+/** Assert that the parameters for this dihedral have been resolved */
+void GromacsDihedral::assertResolved() const
+{
+    if (needsResolving())
+        throw SireError::invalid_state( QObject::tr(
+            "The parameters for this GromacsBond have not been resolved! %1")
+                .arg(this->toString()), CODELOC );
 }

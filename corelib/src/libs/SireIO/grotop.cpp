@@ -287,7 +287,9 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroMolType &moltyp)
     
     SharedDataStream sds(ds);
     
-    sds << moltyp.nme << moltyp.warns << moltyp.atms << moltyp.first_atoms << moltyp.nexcl;
+    sds << moltyp.nme << moltyp.warns << moltyp.atms
+        << moltyp.bnds << moltyp.angs << moltyp.dihs
+        << moltyp.first_atoms << moltyp.nexcl;
     
     return ds;
 }
@@ -300,7 +302,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroMolType &moltyp)
     {
         SharedDataStream sds(ds);
         
-        sds >> moltyp.nme >> moltyp.warns >> moltyp.atms >> moltyp.first_atoms >> moltyp.nexcl;
+        sds >> moltyp.nme >> moltyp.warns >> moltyp.atms
+            >> moltyp.bnds >> moltyp.angs >> moltyp.dihs
+            >> moltyp.first_atoms >> moltyp.nexcl;
     }
     else
         throw version_error(v, "1", r_gromoltyp, CODELOC);
@@ -316,6 +320,7 @@ GroMolType::GroMolType() : nexcl(0)
 GroMolType::GroMolType(const GroMolType &other)
            : nme(other.nme), warns(other.warns),
              atms(other.atms), first_atoms(other.first_atoms),
+             bnds(other.bnds), angs(other.angs), dihs(other.dihs),
              nexcl(other.nexcl)
 {}
 
@@ -332,6 +337,9 @@ GroMolType& GroMolType::operator=(const GroMolType &other)
         warns = other.warns;
         atms = other.atms;
         first_atoms = other.first_atoms;
+        bnds = other.bnds;
+        angs = other.angs;
+        dihs = other.dihs;
         nexcl = other.nexcl;
     }
     
@@ -345,6 +353,9 @@ bool GroMolType::operator==(const GroMolType &other) const
            warns == other.warns and
            atms == other.atms and
            first_atoms == other.first_atoms and
+           bnds == other.bnds and
+           angs == other.angs and
+           dihs == other.dihs and
            nexcl == other.nexcl;
 }
 
@@ -643,6 +654,9 @@ void GroMolType::sanitise()
     //we check and remove duplicate atom numbers
 
     first_atoms.append(0);
+    
+    //also check that the bonds/angles/dihedrals all refer to actual atoms...
+    
 }
 
 /** Add a warning that has been generated while parsing or creatig this object */
@@ -655,6 +669,60 @@ void GroMolType::addWarning(const QString &warning)
 QStringList GroMolType::warnings() const
 {
     return warns;
+}
+
+/** Add the passed bond to the molecule */
+void GroMolType::addBond(const BondID &bond, const GromacsBond &param)
+{
+    bnds.insertMulti(bond, param);
+}
+
+/** Add the passed angle to the molecule */
+void GroMolType::addAngle(const AngleID &angle, const GromacsAngle &param)
+{
+    angs.insertMulti(angle, param);
+}
+
+/** Add the passed dihedral to the molecule */
+void GroMolType::addDihedral(const DihedralID &dihedral, const GromacsDihedral &param)
+{
+    dihs.insertMulti(dihedral, param);
+}
+
+/** Add the passed bonds to the molecule */
+void GroMolType::addBonds(const QMultiHash<BondID,GromacsBond> &bonds)
+{
+    bnds += bonds;
+}
+
+/** Add the passed angles to the molecule */
+void GroMolType::addAngles(const QMultiHash<AngleID,GromacsAngle> &angles)
+{
+    angs += angles;
+}
+
+/** Add the passed dihedrals to the molecule */
+void GroMolType::addDihedrals(const QMultiHash<DihedralID,GromacsDihedral> &dihedrals)
+{
+    dihs += dihedrals;
+}
+
+/** Return all of the bonds */
+QMultiHash<BondID,GromacsBond> GroMolType::bonds() const
+{
+    return bnds;
+}
+
+/** Return all of the angles */
+QMultiHash<AngleID,GromacsAngle> GroMolType::angles() const
+{
+    return angs;
+}
+
+/** Return all of the dihedrals */
+QMultiHash<DihedralID,GromacsDihedral> GroMolType::dihedrals() const
+{
+    return dihs;
 }
 
 ////////////////
@@ -2464,25 +2532,174 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         {
             QStringList lines = getDirectiveLines(linenum);
             
+            QMultiHash<BondID,GromacsBond> bonds;
+            bonds.reserve(lines.count());
+            
             for (const auto line : lines)
             {
-                qDebug() << "BOND:" << line;
+                const auto words = line.split(" ");
                 
+                if (words.count() < 2)
+                {
+                    moltype.addWarning( QObject::tr("Cannot extract bond information "
+                      "from the line '%1' as it should contain at least two words "
+                      "(pieces of information)").arg(line) );
+                    continue;
+                }
+                
+                bool ok0, ok1;
+                
+                int atm0 = words[0].toInt(&ok0);
+                int atm1 = words[1].toInt(&ok1);
+                
+                if (not (ok0 and ok1))
+                {
+                    moltype.addWarning( QObject::tr("Cannot extract bond information "
+                      "from the line '%1' as the first two words need to be integers. ")
+                            .arg(line) );
+                    continue;
+                }
+
+                //now see if any information about the bond is provided...
+                GromacsBond bond;
+
+                if (words.count() > 2)
+                {
+                    bool ok;
+                    int func_type = words[2].toInt(&ok);
+                    
+                    if (not ok)
+                    {
+                        warnings.append( QObject::tr("Unable to extract the correct "
+                           "information to form a bond from line '%1' as the third word "
+                           "is not an integer.").arg(line) );
+                        continue;
+                    }
+                    
+                    if (words.count() > 3)
+                    {
+                        //now read in all of the remaining values as numbers...
+                        QList<double> params;
+                        
+                        for (int i=3; i<words.count(); ++i)
+                        {
+                            double param = words[i].toDouble(&ok);
+                            
+                            if (ok) params.append(param);
+                        }
+                        
+                        try
+                        {
+                            bond = GromacsBond(func_type, params);
+                        }
+                        catch(const SireError::exception &e)
+                        {
+                            warnings.append( QObject::tr("Unable to extract the correct "
+                              "information to form a bond from line '%1'. Error is '%2'")
+                                .arg(line).arg(e.error()) );
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        bond = GromacsBond(func_type);
+                    }
+                }
+                
+                bonds.insertMulti( BondID(AtomNum(atm0),AtomNum(atm1)),
+                                   bond );
+            }
+            
+            //save the bonds in the molecule
+            moltype.addBonds(bonds);
+        };
+
+        //function that extracts all of the information from the 'angles' lines
+        auto addAnglesTo = [&](GroMolType &moltype, int linenum)
+        {
+            QStringList lines = getDirectiveLines(linenum);
+            
+            QMultiHash<AngleID,GromacsAngle> angs;
+            angs.reserve(lines.count());
+            
+            for (const auto line : lines)
+            {
                 const auto words = line.split(" ");
                 
                 if (words.count() < 3)
                 {
-                    moltype.addWarning( QObject::tr("Cannot extract bond information "
+                    moltype.addWarning( QObject::tr("Cannot extract angle information "
                       "from the line '%1' as it should contain at least three words "
                       "(pieces of information)").arg(line) );
                     continue;
                 }
                 
-                const auto atm0 = words[0];
-                const auto atm1 = words[1];
+                bool ok0, ok1, ok2;
                 
+                int atm0 = words[0].toInt(&ok0);
+                int atm1 = words[1].toInt(&ok1);
+                int atm2 = words[2].toInt(&ok2);
                 
+                if (not (ok0 and ok1 and ok2))
+                {
+                    moltype.addWarning( QObject::tr("Cannot extract angle information "
+                      "from the line '%1' as the first three words need to be integers. ")
+                            .arg(line) );
+                    continue;
+                }
+
+                //now see if any information about the angle is provided...
+                GromacsAngle angle;
+
+                if (words.count() > 3)
+                {
+                    bool ok;
+                    int func_type = words[3].toInt(&ok);
+                    
+                    if (not ok)
+                    {
+                        warnings.append( QObject::tr("Unable to extract the correct "
+                           "information to form an angle from line '%1' as the fourth word "
+                           "is not an integer.").arg(line) );
+                        continue;
+                    }
+                    
+                    if (words.count() > 4)
+                    {
+                        //now read in all of the remaining values as numbers...
+                        QList<double> params;
+                        
+                        for (int i=4; i<words.count(); ++i)
+                        {
+                            double param = words[i].toDouble(&ok);
+                            
+                            if (ok) params.append(param);
+                        }
+                        
+                        try
+                        {
+                            angle = GromacsAngle(func_type, params);
+                        }
+                        catch(const SireError::exception &e)
+                        {
+                            warnings.append( QObject::tr("Unable to extract the correct "
+                              "information to form an angle from line '%1'. Error is '%2'")
+                                .arg(line).arg(e.error()) );
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        angle = GromacsAngle(func_type);
+                    }
+                }
+                
+                angs.insertMulti( AngleID(AtomNum(atm0),AtomNum(atm1),AtomNum(atm2)),
+                                  angle );
             }
+            
+            //save the angles in the molecule
+            moltype.addAngles(angs);
         };
 
         //function that extracts all of the information from the 'dihedrals' lines
@@ -2490,10 +2707,89 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         {
             QStringList lines = getDirectiveLines(linenum);
             
+            QMultiHash<DihedralID,GromacsDihedral> dihs;
+            dihs.reserve(lines.count());
+            
             for (const auto line : lines)
             {
-                qDebug() << "DIHEDRAL:" << line;
+                const auto words = line.split(" ");
+                
+                if (words.count() < 4)
+                {
+                    moltype.addWarning( QObject::tr("Cannot extract dihedral information "
+                      "from the line '%1' as it should contain at least four words "
+                      "(pieces of information)").arg(line) );
+                    continue;
+                }
+                
+                bool ok0, ok1, ok2, ok3;
+                
+                int atm0 = words[0].toInt(&ok0);
+                int atm1 = words[1].toInt(&ok1);
+                int atm2 = words[2].toInt(&ok2);
+                int atm3 = words[3].toInt(&ok3);
+                
+                if (not (ok0 and ok1 and ok2 and ok3))
+                {
+                    moltype.addWarning( QObject::tr("Cannot extract dihedral information "
+                      "from the line '%1' as the first four words need to be integers. ")
+                            .arg(line) );
+                    continue;
+                }
+
+                //now see if any information about the dihedral is provided...
+                GromacsDihedral dihedral;
+
+                if (words.count() > 4)
+                {
+                    bool ok;
+                    int func_type = words[4].toInt(&ok);
+                    
+                    if (not ok)
+                    {
+                        warnings.append( QObject::tr("Unable to extract the correct "
+                           "information to form a dihedral from line '%1' as the fifth word "
+                           "is not an integer.").arg(line) );
+                        continue;
+                    }
+                    
+                    if (words.count() > 5)
+                    {
+                        //now read in all of the remaining values as numbers...
+                        QList<double> params;
+                        
+                        for (int i=5; i<words.count(); ++i)
+                        {
+                            double param = words[i].toDouble(&ok);
+                            
+                            if (ok) params.append(param);
+                        }
+                        
+                        try
+                        {
+                            dihedral = GromacsDihedral(func_type, params);
+                        }
+                        catch(const SireError::exception &e)
+                        {
+                            warnings.append( QObject::tr("Unable to extract the correct "
+                              "information to form a dihedral from line '%1'. Error is '%2'")
+                                .arg(line).arg(e.error()) );
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        dihedral = GromacsDihedral(func_type);
+                    }
+                }
+                
+                dihs.insertMulti( DihedralID(AtomNum(atm0),AtomNum(atm1),
+                                             AtomNum(atm2),AtomNum(atm3)),
+                                  dihedral );
             }
+            
+            //save the dihedrals in the molecule
+            moltype.addDihedrals(dihs);
         };
         
         //ok, now we know the location of all child tags of each moleculetype
@@ -2509,6 +2805,11 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             for (auto linenum : moltag.values("bonds"))
             {
                 addBondsTo( moltype, linenum );
+            }
+
+            for (auto linenum : moltag.values("angles"))
+            {
+                addAnglesTo( moltype, linenum );
             }
 
             for (auto linenum : moltag.values("dihedrals"))

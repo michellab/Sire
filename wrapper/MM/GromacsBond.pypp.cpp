@@ -41,10 +41,22 @@ void register_GromacsBond_class(){
         typedef bp::class_< SireMM::GromacsBond > GromacsBond_exposer_t;
         GromacsBond_exposer_t GromacsBond_exposer = GromacsBond_exposer_t( "GromacsBond", "This class holds all of the information about a Gromacs Bond\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope GromacsBond_scope( GromacsBond_exposer );
+        GromacsBond_exposer.def( bp::init< int >(( bp::arg("function_type") ), "Copy constructor") );
         GromacsBond_exposer.def( bp::init< int, double, bp::optional< double, double, double > >(( bp::arg("function_type"), bp::arg("k0"), bp::arg("k1")=0, bp::arg("k2")=0, bp::arg("k3")=0 ), "Construct a bond of the specified function type with specified parameters\n(the order should be the same as in the Gromacs Manual, table 5.5)") );
         GromacsBond_exposer.def( bp::init< int, QList< double > const & >(( bp::arg("function_type"), bp::arg("params") ), "Construct a bond of the specified function type by interpreting the parameter\ndata from the passed list of parameter values. These should be in the\nsame order as in the Gromacs Manual, table 5.5") );
         GromacsBond_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("bond"), bp::arg("R") ), "Construct from the passed bond, using R as the symbol for the R value") );
         GromacsBond_exposer.def( bp::init< SireMM::GromacsBond const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireMM::GromacsBond::assertResolved
+        
+            typedef void ( ::SireMM::GromacsBond::*assertResolved_function_type)(  ) const;
+            assertResolved_function_type assertResolved_function_value( &::SireMM::GromacsBond::assertResolved );
+            
+            GromacsBond_exposer.def( 
+                "assertResolved"
+                , assertResolved_function_value
+                , "" );
+        
+        }
         { //::SireMM::GromacsBond::at
         
             typedef double ( ::SireMM::GromacsBond::*at_function_type)( int ) const;
@@ -101,6 +113,17 @@ void register_GromacsBond_class(){
                 , "Return a hash for this bond" );
         
         }
+        { //::SireMM::GromacsBond::isResolved
+        
+            typedef bool ( ::SireMM::GromacsBond::*isResolved_function_type)(  ) const;
+            isResolved_function_type isResolved_function_value( &::SireMM::GromacsBond::isResolved );
+            
+            GromacsBond_exposer.def( 
+                "isResolved"
+                , isResolved_function_value
+                , "" );
+        
+        }
         { //::SireMM::GromacsBond::isSimple
         
             typedef bool ( ::SireMM::GromacsBond::*isSimple_function_type)(  ) const;
@@ -110,6 +133,17 @@ void register_GromacsBond_class(){
                 "isSimple"
                 , isSimple_function_value
                 , "All Gromacs bonds are simple (just a function of the bond length)" );
+        
+        }
+        { //::SireMM::GromacsBond::needsResolving
+        
+            typedef bool ( ::SireMM::GromacsBond::*needsResolving_function_type)(  ) const;
+            needsResolving_function_type needsResolving_function_value( &::SireMM::GromacsBond::needsResolving );
+            
+            GromacsBond_exposer.def( 
+                "needsResolving"
+                , needsResolving_function_value
+                , "" );
         
         }
         GromacsBond_exposer.def( bp::self != bp::self );

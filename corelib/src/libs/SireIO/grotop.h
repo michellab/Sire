@@ -33,8 +33,13 @@
 
 #include "SireMol/atomname.h"
 #include "SireMol/resname.h"
+#include "SireMol/bondid.h"
+#include "SireMol/angleid.h"
+#include "SireMol/dihedralid.h"
 
 #include "SireMM/gromacsparams.h"
+
+#include <QMultiHash>
 
 SIRE_BEGIN_HEADER
 
@@ -56,6 +61,10 @@ QDataStream& operator>>(QDataStream&, SireIO::GroAtom&);
 
 namespace SireIO
 {
+
+using SireMM::GromacsBond;
+using SireMM::GromacsAngle;
+using SireMM::GromacsDihedral;
 
 /** This class is used by GroTop to hold the intermediate representation of
     a Gromacs atom in a moleculetype
@@ -139,7 +148,7 @@ private:
     SireUnits::Dimension::MolarMass mss;
 };
 
-/** This class is used by GroTop to hold an intermediate representation of a 
+/** This class is used by GroTop to hold an intermediate representation of a
     Gromacs moleculetype. This provides metadata about the molecule that is
     needed to construct the whole molecule.
     
@@ -178,6 +187,14 @@ public:
     
     void addAtom(const GroAtom &atom);
     
+    void addBond(const SireMol::BondID &bond, const GromacsBond &parm);
+    void addAngle(const SireMol::AngleID &angle, const GromacsAngle &parm);
+    void addDihedral(const SireMol::DihedralID &dihedral, const GromacsDihedral &parm);
+    
+    void addBonds(const QMultiHash<SireMol::BondID,GromacsBond> &bonds);
+    void addAngles(const QMultiHash<SireMol::AngleID,GromacsAngle> &angles);
+    void addDihedrals(const QMultiHash<SireMol::DihedralID,GromacsDihedral> &dihedrals);
+    
     void sanitise();
      
     void addWarning(const QString &warning);
@@ -197,6 +214,10 @@ public:
     QVector<GroAtom> atoms(const SireMol::ResNum &resnum) const;
     QVector<GroAtom> atoms(const SireMol::ResName &resnam) const;
     
+    QMultiHash<SireMol::BondID,GromacsBond> bonds() const;
+    QMultiHash<SireMol::AngleID,GromacsAngle> angles() const;
+    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihedrals() const;
+    
     QStringList warnings() const;
     
     bool needsSanitising() const;
@@ -213,6 +234,15 @@ private:
     
     /** Array giving the index of the first atom in each residue */
     QVector<qint64> first_atoms;
+
+    /** Hash of all of the bonds */
+    QMultiHash<SireMol::BondID,GromacsBond> bnds;
+    
+    /** Hash of all of the angles */
+    QMultiHash<SireMol::AngleID,GromacsAngle> angs;
+    
+    /** Hash of all of the dihedrals */
+    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihs;
 
     /** The number of excluded atoms */
     qint64 nexcl;

@@ -41,10 +41,22 @@ void register_GromacsDihedral_class(){
         typedef bp::class_< SireMM::GromacsDihedral > GromacsDihedral_exposer_t;
         GromacsDihedral_exposer_t GromacsDihedral_exposer = GromacsDihedral_exposer_t( "GromacsDihedral", "This class holds all of the information about a Gromacs Dihedral\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope GromacsDihedral_scope( GromacsDihedral_exposer );
+        GromacsDihedral_exposer.def( bp::init< int >(( bp::arg("function_type") ), "Copy constructor") );
         GromacsDihedral_exposer.def( bp::init< int, double, bp::optional< double, double, double, double, double > >(( bp::arg("function_type"), bp::arg("k0"), bp::arg("k1")=0, bp::arg("k2")=0, bp::arg("k3")=0, bp::arg("k4")=0, bp::arg("k5")=0 ), "Construct an dihedral of the specified function type with specified parameters\n(the order should be the same as in the Gromacs Manual, table 5.5)") );
         GromacsDihedral_exposer.def( bp::init< int, QList< double > const & >(( bp::arg("function_type"), bp::arg("params") ), "Construct a dihedral of the specified function type by interpreting the parameter\ndata from the passed list of parameter values. These should be in the\nsame order as in the Gromacs Manual, table 5.5") );
         GromacsDihedral_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("angle"), bp::arg("theta") ), "Construct from the passed dihedral, using phi as the symbol for the phi value") );
         GromacsDihedral_exposer.def( bp::init< SireMM::GromacsDihedral const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireMM::GromacsDihedral::assertResolved
+        
+            typedef void ( ::SireMM::GromacsDihedral::*assertResolved_function_type)(  ) const;
+            assertResolved_function_type assertResolved_function_value( &::SireMM::GromacsDihedral::assertResolved );
+            
+            GromacsDihedral_exposer.def( 
+                "assertResolved"
+                , assertResolved_function_value
+                , "" );
+        
+        }
         { //::SireMM::GromacsDihedral::at
         
             typedef double ( ::SireMM::GromacsDihedral::*at_function_type)( int ) const;
@@ -123,6 +135,17 @@ void register_GromacsDihedral_class(){
                 , "Return whether or not this dihedral is really an improper angle term" );
         
         }
+        { //::SireMM::GromacsDihedral::isResolved
+        
+            typedef bool ( ::SireMM::GromacsDihedral::*isResolved_function_type)(  ) const;
+            isResolved_function_type isResolved_function_value( &::SireMM::GromacsDihedral::isResolved );
+            
+            GromacsDihedral_exposer.def( 
+                "isResolved"
+                , isResolved_function_value
+                , "" );
+        
+        }
         { //::SireMM::GromacsDihedral::isSimple
         
             typedef bool ( ::SireMM::GromacsDihedral::*isSimple_function_type)(  ) const;
@@ -132,6 +155,17 @@ void register_GromacsDihedral_class(){
                 "isSimple"
                 , isSimple_function_value
                 , "Return whether or not this is a simple dihedral function, based only on the\nsize of the torsion" );
+        
+        }
+        { //::SireMM::GromacsDihedral::needsResolving
+        
+            typedef bool ( ::SireMM::GromacsDihedral::*needsResolving_function_type)(  ) const;
+            needsResolving_function_type needsResolving_function_value( &::SireMM::GromacsDihedral::needsResolving );
+            
+            GromacsDihedral_exposer.def( 
+                "needsResolving"
+                , needsResolving_function_value
+                , "" );
         
         }
         GromacsDihedral_exposer.def( bp::self != bp::self );

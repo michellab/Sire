@@ -40,6 +40,10 @@
 #include "Helpers/tuples.hpp"
 #include "Base/convertpackedarray.hpp"
 
+#include "SireMol/bondid.h"
+#include "SireMol/angleid.h"
+#include "SireMol/dihedralid.h"
+
 #include "SireMM/ljparameter.h"
 #include "SireMM/twoatomfunctions.h"
 #include "SireMM/threeatomfunctions.h"
@@ -85,4 +89,8 @@ void register_SireMM_containers()
     register_dict< QMultiHash<QString,GromacsBond> >();
     register_dict< QMultiHash<QString,GromacsAngle> >();
     register_dict< QMultiHash<QString,GromacsDihedral> >();
+
+    register_dict< QMultiHash<SireMol::BondID,GromacsBond> >();
+    register_dict< QMultiHash<SireMol::AngleID,GromacsAngle> >();
+    register_dict< QMultiHash<SireMol::DihedralID,GromacsDihedral> >();
 }

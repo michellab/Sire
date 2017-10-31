@@ -16,8 +16,8 @@ set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 ############ SETTING INITIAL SIRE VARIABLES
 ############
 
-# require cmake >= 2.8.11.2
-cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
+# require cmake >= 3.0.0
+cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
 
 # use loose loop syntax in CMakeLists files

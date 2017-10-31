@@ -41,10 +41,22 @@ void register_GromacsAngle_class(){
         typedef bp::class_< SireMM::GromacsAngle > GromacsAngle_exposer_t;
         GromacsAngle_exposer_t GromacsAngle_exposer = GromacsAngle_exposer_t( "GromacsAngle", "This class holds all of the information about a Gromacs Angle\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope GromacsAngle_scope( GromacsAngle_exposer );
+        GromacsAngle_exposer.def( bp::init< int >(( bp::arg("function_type") ), "Copy constructor") );
         GromacsAngle_exposer.def( bp::init< int, double, bp::optional< double, double, double, double, double > >(( bp::arg("function_type"), bp::arg("k0"), bp::arg("k1")=0, bp::arg("k2")=0, bp::arg("k3")=0, bp::arg("k4")=0, bp::arg("k5")=0 ), "Construct an angle of the specified function type with specified parameters\n(the order should be the same as in the Gromacs Manual, table 5.5)") );
         GromacsAngle_exposer.def( bp::init< int, QList< double > const & >(( bp::arg("function_type"), bp::arg("params") ), "Construct an angle of the specified function type by interpreting the parameter\ndata from the passed list of parameter values. These should be in the\nsame order as in the Gromacs Manual, table 5.5") );
         GromacsAngle_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("angle"), bp::arg("theta") ), "Construct from the passed angle, using theta as the symbol for the theta value") );
         GromacsAngle_exposer.def( bp::init< SireMM::GromacsAngle const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireMM::GromacsAngle::assertResolved
+        
+            typedef void ( ::SireMM::GromacsAngle::*assertResolved_function_type)(  ) const;
+            assertResolved_function_type assertResolved_function_value( &::SireMM::GromacsAngle::assertResolved );
+            
+            GromacsAngle_exposer.def( 
+                "assertResolved"
+                , assertResolved_function_value
+                , "" );
+        
+        }
         { //::SireMM::GromacsAngle::at
         
             typedef double ( ::SireMM::GromacsAngle::*at_function_type)( int ) const;
@@ -123,6 +135,17 @@ void register_GromacsAngle_class(){
                 , "Return whether or not this angle is really a mix of multiple bond terms" );
         
         }
+        { //::SireMM::GromacsAngle::isResolved
+        
+            typedef bool ( ::SireMM::GromacsAngle::*isResolved_function_type)(  ) const;
+            isResolved_function_type isResolved_function_value( &::SireMM::GromacsAngle::isResolved );
+            
+            GromacsAngle_exposer.def( 
+                "isResolved"
+                , isResolved_function_value
+                , "" );
+        
+        }
         { //::SireMM::GromacsAngle::isSimple
         
             typedef bool ( ::SireMM::GromacsAngle::*isSimple_function_type)(  ) const;
@@ -132,6 +155,17 @@ void register_GromacsAngle_class(){
                 "isSimple"
                 , isSimple_function_value
                 , "Return whether or not this is a simple angle function, based only on the\nsize of the angle" );
+        
+        }
+        { //::SireMM::GromacsAngle::needsResolving
+        
+            typedef bool ( ::SireMM::GromacsAngle::*needsResolving_function_type)(  ) const;
+            needsResolving_function_type needsResolving_function_value( &::SireMM::GromacsAngle::needsResolving );
+            
+            GromacsAngle_exposer.def( 
+                "needsResolving"
+                , needsResolving_function_value
+                , "" );
         
         }
         GromacsAngle_exposer.def( bp::self != bp::self );
