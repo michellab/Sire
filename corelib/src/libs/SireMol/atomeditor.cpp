@@ -310,7 +310,9 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
 
 /** Null constructor */
 AtomStructureEditor::AtomStructureEditor() : StructureEditor()
-{}
+{
+    this->operator=( StructureEditor::addAtom() );
+}
 
 /** Construct from an Atom */
 AtomStructureEditor::AtomStructureEditor(const Atom &atom)

@@ -398,7 +398,6 @@ public:
 
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
-    void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
 private:
     void assertSane() const;
@@ -421,6 +420,8 @@ private:
                                   const QHash<QString,int> &ntags);
 
     const QVector<QString>& expandedLines() const;
+    
+    SireMol::Molecule createMolecule(QString moltype, QStringList &errors) const;
     
     /** This is the full search path of all directories that should
         be searched for Gromacs include files */

@@ -33,6 +33,9 @@
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
 
+#include "SireMol/molecule.h"
+#include "SireMol/moleditor.h"
+#include "SireMol/moleculegroup.h"
 #include "SireMol/errors.h"
 
 #include "SireBase/parallel.h"
@@ -3444,27 +3447,191 @@ void GroTop::parseLines(const QString &path, const PropertyMap &map)
     this->interpret();
 }
 
+/** This function is used to create a molecule. Any errors should be written
+    to the 'errors' QStringList passed as an argument */
+Molecule GroTop::createMolecule(QString moltype_name, QStringList &errors) const
+{
+    //find the molecular template for this molecule
+    int idx = -1;
+    
+    for (int i=0; i<moltypes.count(); ++i)
+    {
+        if (moltypes.constData()[i].name() == moltype_name)
+        {
+            idx = i;
+            break;
+        }
+    }
+    
+    if (idx == -1)
+    {
+        QStringList typs;
+        
+        for (const auto &moltype : moltypes)
+        {
+            typs.append( moltype.name() );
+        }
+    
+        errors.append( QObject::tr("There is no molecular template called '%1' "
+          "in this Gromacs file. Available templates are [ %2 ]")
+            .arg(moltype_name).arg(Sire::toString(typs)) );
+        return Molecule();
+    }
+
+    const auto moltype = moltypes.constData()[idx];
+
+    MolStructureEditor mol;
+    mol = mol.rename( MolName(moltype_name) );
+
+    //first go through and create the Molecule layout
+    //(the atoms are already sorted into Residues)
+    int cgidx = 1;
+    ResStructureEditor res;
+    CGStructureEditor cgroup;
+
+    for (const auto &atom : moltype.atoms())
+    {
+        if (cgroup.nAtoms() == 0)
+        {
+            //this is the first atom in the molecule
+            cgroup = mol.add( CGName( QString::number(cgidx) ) );
+            cgidx += 1;
+            
+            res = mol.add( ResNum(atom.residueNumber()) );
+            res = res.rename( atom.residueName() );
+        }
+        else if (atom.residueNumber() != res.number() or
+                 atom.residueName() != res.name())
+        {
+            //this atom is in a different residue
+            cgroup = mol.add( CGName( QString::number(cgidx) ) );
+            cgidx += 1;
+            
+            res = mol.add( ResNum(atom.residueNumber()) );
+            res = res.rename(atom.residueName());
+        }
+        
+        //add the atom to the residue
+        auto a = res.add( AtomName(atom.name()) );
+        a = a.renumber(atom.number());
+        a = a.reparent(cgroup.name());
+    }
+
+    return mol.commit();
+}
+
 /** Use the data contained in this parser to create a new System of molecules,
     assigning properties based on the mapping in 'map' */
 System GroTop::startSystem(const PropertyMap &map) const
 {
-    //you should now take the data that you have parsed into the intermediate
-    //format and use it to start a new System and create all molecules,
-    //which are added to this System
+    if (grosys.isEmpty())
+    {
+        //there are no molecules to process
+        return System();
+    }
     
-    System system;
+    //first, create template molecules for each of the unique molecule types
+    const auto unique_typs = grosys.uniqueTypes();
     
+    QHash<QString,Molecule> mol_templates;
+    QHash<QString,QStringList> template_errors;
+    mol_templates.reserve(unique_typs.count());
+    
+    //loop over each unique type, creating the associated molecule and storing
+    //in mol_templates. If there are any errors, then store them in template_errors
+    if (usesParallel())
+    {
+        QMutex mutex;
+
+        tbb::parallel_for( tbb::blocked_range<int>(0,unique_typs.count()),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                auto typ = unique_typs[i];
+            
+                QStringList errors;
+                Molecule mol = this->createMolecule(typ, errors);
+                
+                QMutexLocker lkr(&mutex);
+                
+                if (not errors.isEmpty())
+                {
+                    template_errors.insert(typ, errors);
+                }
+
+                mol_templates.insert(typ, mol);
+            }
+        });
+    }
+    else
+    {
+        for (auto typ : unique_typs)
+        {
+            QStringList errors;
+            Molecule mol = this->createMolecule(typ, errors);
+            
+            if (not errors.isEmpty())
+            {
+                template_errors.insert(typ, errors);
+            }
+            
+            mol_templates.insert(typ,mol);
+        }
+    }
+    
+    //next, we see if there were any errors. If there are, then raise an exception
+    if (not template_errors.isEmpty())
+    {
+        QStringList errors;
+        
+        for (auto it = template_errors.constBegin();
+             it != template_errors.constEnd(); ++it)
+        {
+            errors.append( QObject::tr("Error constructing the molecule associated with "
+               "template '%1' : %2").arg(it.key()).arg(it.value().join("\n")) );
+        }
+
+        throw SireIO::parse_error( QObject::tr(
+                "Could not construct a molecule system from the information stored "
+                "in this Gromacs topology file. Errors include:\n%1")
+                    .arg(errors.join("\n\n")), CODELOC );
+    }
+    
+    //next, make sure that none of the molecules are empty...
+    {
+        QStringList errors;
+
+        for (auto it = mol_templates.constBegin();
+             it != mol_templates.constEnd(); ++it)
+        {
+            if (it.value().isNull())
+            {
+                errors.append( QObject::tr("Error constructing the molecule associated with "
+                  "template '%1' : The molecule is empty!")
+                    .arg(it.key()) );
+            }
+        }
+        
+        if (not errors.isEmpty())
+            throw SireIO::parse_error( QObject::tr(
+                "Could not construct a molecule system from the information stored "
+                "in this Gromacs topology file. Errors include:\n%1")
+                    .arg(errors.join("\n\n")), CODELOC );
+    }
+    
+    //now that we have the molecules, we just need to duplicate them
+    //the correct number of times to create the full system
+    MoleculeGroup molgroup("all");
+    
+    for (int i=0; i<grosys.nMolecules(); ++i)
+    {
+        molgroup.add( mol_templates.value(grosys[i]).edit().renumber() );
+    }
+    
+    System system(grosys.name());
+    system.add(molgroup);
+    system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
     
     return system;
-}
-
-/** Use the data contained in this parser to add information from the file to
-    the molecules that exist already in the passed System. For example, this
-    may be used to add coordinate data from this file to the molecules in 
-    the passed System that are missing coordinate data. */
-void GroTop::addToSystem(System &system, const PropertyMap &map) const
-{
-    //you should loop through each molecule in the system and work out
-    //which ones are described in the file, and then add data from the file
-    //to thise molecules.
 }
