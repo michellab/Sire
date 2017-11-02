@@ -1300,6 +1300,12 @@ void PDB2::parseLines(const PropertyMap &map)
                             break;
                         }
                     }
+
+                    // Add the residue to the hash.
+                    else
+                    {
+                        num_to_name.insert(num, nam);
+                    }
                 }
 
                 // Re-number all of the residues.
