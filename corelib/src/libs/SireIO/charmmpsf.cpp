@@ -509,6 +509,9 @@ QString CharmmPSF::toString() const
 /** Convert the parsed data to a collection of PSF record lines. */
 QVector<QString> CharmmPSF::toLines() const
 {
+    // A good description of the PSF format is given here:
+    // http://www.ks.uiuc.edu/Training/Tutorials/namd/namd-tutorial-win-html/node24.html
+
     // No records.
     if ((nAtoms() + nBonds() + nAngles() + nDihedrals()
         + nImpropers() + nCrossTerms()) == 0)
