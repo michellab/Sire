@@ -75,7 +75,7 @@ public:
     PSFAtom();
 
     /** Constructor. */
-    PSFAtom(const QString &line, QStringList &errors);
+    PSFAtom(const QString &line, int index, QStringList &errors);
 
     /** Constructor. */
     PSFAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors);
@@ -87,6 +87,9 @@ public:
     QString toPDBName() const;
 
     static const char* typeName();
+
+    /** Get the atom index. */
+    int getIndex() const;
 
     /** Get the atom number. */
     int getNumber() const;
@@ -113,6 +116,9 @@ public:
     double getMass() const;
 
 private:
+    /** The index in the atoms vector. */
+    qint64 index;
+
     /** Serial number. */
     qint64 number;
 
@@ -189,7 +195,9 @@ public:
 
     bool isLead() const;
 
+    int nMolecules() const;
     int nAtoms() const;
+    int nAtoms(int i) const;
     int nBonds() const;
     int nAngles() const;
     int nDihedrals() const;
@@ -209,6 +217,14 @@ private:
 
     SireMol::MolEditor getMolecule(int imol,
         const PropertyMap &map = PropertyMap()) const;
+
+    void findMolecules();
+
+    void findBondedAtoms(int atom_idx, int mol_idx, const QHash<int, int> &bonded_atoms,
+        QHash<int, int> &atom_to_mol, QSet<qint64> &atoms_in_mol) const;
+
+    /** The indices of the atoms in each molecule. */
+    QVector<QVector<qint64> > molecules;
 
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;

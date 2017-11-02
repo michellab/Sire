@@ -157,6 +157,18 @@ void register_CharmmPSF_class(){
                 , "" );
         
         }
+        { //::SireIO::CharmmPSF::nAtoms
+        
+            typedef int ( ::SireIO::CharmmPSF::*nAtoms_function_type)( int ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::CharmmPSF::nAtoms );
+            
+            CharmmPSF_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
         { //::SireIO::CharmmPSF::nBonds
         
             typedef int ( ::SireIO::CharmmPSF::*nBonds_function_type)(  ) const;
@@ -198,6 +210,17 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nImpropers"
                 , nImpropers_function_value
+                , "" );
+        
+        }
+        { //::SireIO::CharmmPSF::nMolecules
+        
+            typedef int ( ::SireIO::CharmmPSF::*nMolecules_function_type)(  ) const;
+            nMolecules_function_type nMolecules_function_value( &::SireIO::CharmmPSF::nMolecules );
+            
+            CharmmPSF_exposer.def( 
+                "nMolecules"
+                , nMolecules_function_value
                 , "" );
         
         }

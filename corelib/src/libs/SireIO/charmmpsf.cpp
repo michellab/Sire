@@ -66,8 +66,9 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PSFAtom &psfatom)
 
     SharedDataStream sds(ds);
 
-    sds << psfatom.number << psfatom.segment << psfatom.res_num << psfatom.res_name
-        << psfatom.name << psfatom.type << psfatom.charge << psfatom.mass;
+    sds << psfatom.index << psfatom.number << psfatom.segment << psfatom.res_num
+        << psfatom.res_name << psfatom.name << psfatom.type << psfatom.charge
+        << psfatom.mass;
 
     return ds;
 }
@@ -80,8 +81,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PSFAtom &psfatom)
     {
         SharedDataStream sds(ds);
 
-        sds >> psfatom.number >> psfatom.segment >> psfatom.res_num >> psfatom.res_name
-            >> psfatom.name >> psfatom.type >> psfatom.charge >> psfatom.mass;
+        sds >> psfatom.index >> psfatom.number >> psfatom.segment >> psfatom.res_num
+            >> psfatom.res_name >> psfatom.name >> psfatom.type >> psfatom.charge
+            >> psfatom.mass;
     }
     else
         throw version_error(v, "1", r_psfatom, CODELOC);
@@ -93,8 +95,9 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmPSF &psf)
 {
     writeHeader(ds, r_psf, 1);
 
-    ds << psf.atoms << psf.bonds << psf.angles << psf.dihedrals << psf.impropers
-       << psf.cross_terms << psf.coords << static_cast<const MoleculeParser&>(psf);
+    ds << psf.molecules << psf.atoms << psf.bonds << psf.angles << psf.dihedrals
+       << psf.impropers << psf.cross_terms << psf.coords
+       << static_cast<const MoleculeParser&>(psf);
 
     return ds;
 }
@@ -105,8 +108,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmPSF &psf)
 
     if (v == 1)
     {
-        ds >> psf.atoms >> psf.bonds << psf.angles >> psf.dihedrals << psf.impropers
-           >> psf.cross_terms >> psf.coords >> static_cast<MoleculeParser&>(psf);
+        ds >> psf.molecules >> psf.atoms >> psf.bonds >> psf.angles >> psf.dihedrals
+           >> psf.impropers >> psf.cross_terms >> psf.coords
+           >> static_cast<MoleculeParser&>(psf);
     }
     else
         throw version_error(v, "1", r_psf, CODELOC);
@@ -116,6 +120,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmPSF &psf)
 
 /** Default constructor. */
 PSFAtom::PSFAtom() :
+    index(0),
     number(0),
     res_num(0),
     type("X"),
@@ -125,7 +130,8 @@ PSFAtom::PSFAtom() :
 }
 
 /** Constructor. */
-PSFAtom::PSFAtom(const QString &line, QStringList &errors) :
+PSFAtom::PSFAtom(const QString &line, int index, QStringList &errors) :
+    index(index),
     number(0),
     res_num(0),
     type("X"),
@@ -205,6 +211,7 @@ PSFAtom::PSFAtom(const QString &line, QStringList &errors) :
 
 /** Constructor. */
 PSFAtom::PSFAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
+    index(0),
     number(0),
     res_num(0),
     type("X"),
@@ -284,6 +291,12 @@ QString PSFAtom::toPDBName() const
 const char* PSFAtom::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<PSFAtom>() );
+}
+
+/** Get the atom index. */
+int PSFAtom::getIndex() const
+{
+    return index;
 }
 
 /** Get the atom number. */
@@ -396,6 +409,13 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
 /** Copy constructor */
 CharmmPSF::CharmmPSF(const CharmmPSF &other) :
     ConcreteProperty<CharmmPSF,MoleculeParser>(other),
+    molecules(other.molecules),
+    atoms(other.atoms),
+    bonds(other.bonds),
+    angles(other.angles),
+    dihedrals(other.dihedrals),
+    impropers(other.impropers),
+    cross_terms(other.cross_terms),
     parse_warnings(other.parse_warnings)
 {}
 
@@ -408,6 +428,12 @@ CharmmPSF& CharmmPSF::operator=(const CharmmPSF &other)
 {
     if (this != &other)
     {
+        molecules = other.molecules;
+        bonds = other.bonds;
+        angles = other.angles;
+        dihedrals = other.dihedrals;
+        impropers = other.impropers;
+        cross_terms = other.cross_terms;
         parse_warnings = other.parse_warnings;
 
         MoleculeParser::operator=(other);
@@ -471,11 +497,11 @@ QString CharmmPSF::toString() const
         return QObject::tr("CharmmPSF::null");
     else
     {
-        return QObject::tr("CharmmPSF( nAtoms() = %1, "
-            "nBonds() = %2, nAngles() = %3, nDihedrals() = %4, "
-            "nImpropers() = %5, nCrossTerms() = %6 )")
-            .arg(nAtoms()).arg(nBonds()).arg(nAngles()).arg(nDihedrals())
-            .arg(nImpropers()).arg(nCrossTerms());
+        return QObject::tr("CharmmPSF( nMolecules() = %1, nAtoms() = %2, "
+            "nBonds() = %3, nAngles() = %4, nDihedrals() = %5, "
+            "nImpropers() = %6, nCrossTerms() = %7 )")
+            .arg(nMolecules()).arg(nAtoms()).arg(nBonds()).arg(nAngles())
+            .arg(nDihedrals()).arg(nImpropers()).arg(nCrossTerms());
     }
 }
 
@@ -761,10 +787,22 @@ QStringList CharmmPSF::formatSuffix() const
     return suffixes;
 }
 
+/** Return the number of molecules. */
+int CharmmPSF::nMolecules() const
+{
+    return molecules.count();
+}
+
 /** Return the number of atom records. */
 int CharmmPSF::nAtoms() const
 {
     return atoms.count();
+}
+
+/** Return the number of atoms in molecule i. */
+int CharmmPSF::nAtoms(int i) const
+{
+    return molecules[i].count();
 }
 
 /** Return the number of bond records. */
@@ -911,7 +949,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
                     for (int i=r.begin(); i<r.end(); ++i)
                     {
                         // Parse the data from the atom record.
-                        atoms[i] = PSFAtom(lines()[iline+i], local_errors);
+                        atoms[i] = PSFAtom(lines()[iline+i], i, local_errors);
                     }
 
                     if (not local_errors.isEmpty())
@@ -932,7 +970,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
                 for (int i=0; i<num_atoms; ++i)
                 {
                     // Parse the data from the atom record.
-                    atoms[i] = PSFAtom(lines()[++iline], parse_warnings);
+                    atoms[i] = PSFAtom(lines()[++iline], i, parse_warnings);
                 }
             }
         }
@@ -1273,6 +1311,9 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         }
     }
 
+    // Use bonding information to break the parsed data into molecules.
+    findMolecules();
+
     this->setScore(num_atoms);
 }
 
@@ -1280,6 +1321,11 @@ void CharmmPSF::parseLines(const PropertyMap &map)
     assigning properties based on the mapping in 'map' */
 System CharmmPSF::startSystem(const PropertyMap &map) const
 {
+    // The PSF file format doesn't distinguish between different
+    // molecules. As such, we construct a single molecule, then
+    // later split it into its constituent parts based on the bonding
+    // information.
+
     /*const int nmols = nMolecules();
 
     if (nmols == 0)
@@ -1317,9 +1363,9 @@ System CharmmPSF::startSystem(const PropertyMap &map) const
     System system;
     system.add(molgroup);
     system.setProperty(map["filename"].source(), StringProperty(filename));
-    system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));*/
+    system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
 
-    //return system;
+    return system;*/
 }
 
 /** Use the data contained in this parser to add information from the file to
@@ -1348,4 +1394,87 @@ MolEditor CharmmPSF::getMolecule(int imol, const PropertyMap &map) const
               .setProperty(map["charge"], charges)
               .setProperty(map["element"], elements)
               .commit();*/
+}
+
+void CharmmPSF::findMolecules()
+{
+    // Clear any existing molecule data.
+    molecules.clear();
+
+    // Create a hash of the bonded atoms.
+    QHash<int, int> bonded_atoms;
+
+    for (int i=0; i<nBonds(); ++i)
+    {
+        bonded_atoms.insertMulti(bonds[i][0], bonds[i][1]);
+        bonded_atoms.insertMulti(bonds[i][1], bonds[i][0]);
+    }
+
+    // Now recursively walk along each atom to find all the atoms that
+    // are in the same molecule.
+
+    // The number of molecules that are found.
+    int nmols = 0;
+
+    // A hash between atom and molecule indices.
+    QHash<int, int> atom_to_mol;
+
+    // Create a hash between atom number and index.
+    QHash<int, int> num_to_idx;
+
+    for(int i=0; i<nAtoms(); ++i)
+        num_to_idx.insert(atoms[i].getNumber(), i);
+
+    // Loop over all atoms by index.
+    for (int i = 0; i<nAtoms(); ++i)
+    {
+        // Get the atom number.
+        int num = atoms[i].getNumber();
+
+        // The molecule doesn't already contain this atom.
+        if (not atom_to_mol.contains(num))
+        {
+            // Initialise a set for atoms in this molecule.
+            QSet<qint64> atoms_in_mol;
+
+            nmols += 1;
+            atom_to_mol[i] = nmols;
+            atoms_in_mol.insert(num);
+
+            // Recursive walk from this atom.
+            findBondedAtoms(num, nmols, bonded_atoms, atom_to_mol, atoms_in_mol);
+
+            // We've now found all of the atoms in this molecule!
+
+            // Convert to a vector of atom numbers.
+            QVector<qint64> mol_atoms = atoms_in_mol.toList().toVector();
+
+            // Now convert the atom numbers to indices in the atoms vector.
+            for (auto &atom : mol_atoms)
+                atom = num_to_idx[atom];
+
+            // Add the sorted atom indices.
+            qSort(mol_atoms);
+            molecules.append(mol_atoms);
+        }
+    }
+}
+
+/** Helper function to recursively walk through bonded atoms in a molecule. */
+void CharmmPSF::findBondedAtoms(int atom_num, int mol_idx, const QHash<int, int> &bonded_atoms,
+    QHash<int, int> &atom_to_mol, QSet<qint64> &atoms_in_mol) const
+{
+    for (auto bonded_atom : bonded_atoms.values(atom_num))
+    {
+        // The molecule doesn't already contain this atom.
+        if (not atoms_in_mol.contains(bonded_atom))
+        {
+            // Add the atom tho the molecule.
+            atom_to_mol[bonded_atom] = mol_idx;
+            atoms_in_mol.insert(bonded_atom);
+
+            // Continue search from the next atom in the chain.
+            findBondedAtoms(bonded_atom, mol_idx, bonded_atoms, atom_to_mol, atoms_in_mol);
+        }
+    }
 }
