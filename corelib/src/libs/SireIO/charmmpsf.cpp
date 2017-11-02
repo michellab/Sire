@@ -39,6 +39,7 @@
 #include "SireMol/atomcharges.h"
 #include "SireMol/atomcoords.h"
 #include "SireMol/atomelements.h"
+#include "SireMol/atommasses.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
 
@@ -1321,12 +1322,10 @@ void CharmmPSF::parseLines(const PropertyMap &map)
     assigning properties based on the mapping in 'map' */
 System CharmmPSF::startSystem(const PropertyMap &map) const
 {
-    // The PSF file format doesn't distinguish between different
-    // molecules. As such, we construct a single molecule, then
-    // later split it into its constituent parts based on the bonding
-    // information.
+    // This assumes that we've already run "findMolecules()" to
+    // break the parsed data into molecules using the bond records.
 
-    /*const int nmols = nMolecules();
+    const int nmols = nMolecules();
 
     if (nmols == 0)
         return System();
@@ -1350,6 +1349,7 @@ System CharmmPSF::startSystem(const PropertyMap &map) const
         for (int i=0; i<nmols; ++i)
         {
             mols_array[i] = this->getMolecule(i, map);
+            break;
         }
     }
 
@@ -1365,7 +1365,7 @@ System CharmmPSF::startSystem(const PropertyMap &map) const
     system.setProperty(map["filename"].source(), StringProperty(filename));
     system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
 
-    return system;*/
+    return system;
 }
 
 /** Use the data contained in this parser to add information from the file to
@@ -1382,7 +1382,118 @@ void CharmmPSF::addToSystem(System &system, const PropertyMap &map) const
 /** Internal function used to get the molecule structure for molecule 'imol'. */
 MolStructureEditor CharmmPSF::getMolStructure(int imol, const PropertyName &cutting) const
 {
+    // Make sure the frame index is within range.
+    if ((imol < 0) or (imol > molecules.count()))
+    {
+        throw SireError::program_bug(QObject::tr("The molecule index %1 is out of "
+            "range, 0 - %2").arg(imol).arg(molecules.count()), CODELOC);
+    }
+
+    // Make sure that there are atoms in the molecule.
+    if (molecules[imol].count() == 0)
+    {
+        throw SireError::program_bug(QObject::tr(
+            "Strange - there are no atoms in molecule %1?")
+                .arg(imol), CODELOC);
+    }
+
+    // First step is to build the structure of the molecule, i.e.
+    // the layout of cutgroups, residues and atoms.
     MolStructureEditor mol;
+
+    /* To do this we'll walk through all of the atoms in the molecule to
+       work out what residues exist. Then we can add the residues to
+       the molecules, then add the atoms, reparenting them to their residue.
+
+       Note that PSF does not contain chain information.
+     */
+
+    // Mapping between residues and atoms.
+    // There will be multiple atoms per residue.
+    QMultiMap<int, int> res_to_atom;
+
+    // Mapping between residue number and name.
+    QMap<int, QString> num_to_name;
+
+    // Loop through all the atoms in the molecule.
+    for (int i=0; i<nAtoms(imol); ++i)
+    {
+        // Store the current atom ID.
+        int atom_id = molecules[imol][i];
+
+        // Store a reference to the current atom.
+        const PSFAtom &atom = atoms[atom_id];
+
+        // Store the atom number.
+        const int res_num = atom.getResNum();
+
+        // Map the atom to its residue.
+        res_to_atom.insert(res_num, atom_id);
+
+        // Make sure the residue number doesn't already exist
+        // in the map. Residue numbers must be unique.
+        if (not num_to_name.contains(res_num))
+        {
+            // Map the residue number to its name.
+            num_to_name.insert(res_num, atom.getResName());
+        }
+        else
+        {
+            // This residue number has already appeared with a different name.
+            if (atom.getResName() != num_to_name[res_num])
+            {
+                throw SireError::program_bug(QObject::tr("The parsed data "
+                    "contains non-unique residue numbers! Residue number %1 "
+                    "for atom number %2 is named %3, was previously assigned name %4")
+                    .arg(res_num).arg(atom.getNumber()).arg(atom.getResName())
+                    .arg(num_to_name[res_num]), CODELOC);
+            }
+        }
+    }
+
+    // Residue index.
+    int ires = 0;
+
+    // Loop over all unique residues in the molecule.
+    for (auto res_num : res_to_atom.uniqueKeys())
+    {
+        // Get the residue name.
+        QString res_name = num_to_name[res_num];
+
+        // By default we will use one CutGroup per residue.
+        // This may be changed later by the cutting system.
+        auto cutgroup = mol.add(CGName(QString::number(ires)));
+
+        // Get a sorted list of the atoms in the residue.
+        QList<int> res_atoms = res_to_atom.values(res_num);
+        qSort(res_atoms);
+
+        // Add the residue to the molecule.
+        auto res = mol.add(ResNum(res_num));
+        res.rename(ResName(res_name.trimmed()));
+
+        // Add each atom in the residue to the molecule.
+        for (auto res_atom : res_atoms)
+        {
+            auto atom = cutgroup.add(AtomNum(atoms[res_atom].getNumber()));
+            atom.rename(AtomName(atoms[res_atom].getName().trimmed()));
+
+            // Reparent the atom to its residue.
+            atom.reparent(ResNum(res_num));
+        }
+
+        ires++;
+    }
+
+    if (cutting.hasValue())
+    {
+        const CuttingFunction &cutfunc = cutting.value().asA<CuttingFunction>();
+
+        if (not cutfunc.isA<ResidueCutting>())
+        {
+            mol = cutfunc(mol);
+        }
+    }
 
     return mol;
 }
@@ -1390,10 +1501,48 @@ MolStructureEditor CharmmPSF::getMolStructure(int imol, const PropertyName &cutt
 /** Internal function used to get the molecule structure for molecule 'imol'. */
 MolEditor CharmmPSF::getMolecule(int imol, const PropertyMap &map) const
 {
-    /*return mol.setProperty(map["coordinates"], coords)
-              .setProperty(map["charge"], charges)
-              .setProperty(map["element"], elements)
-              .commit();*/
+    // Make sure the molecule (model) index is within range.
+    if ((imol < 0) or (imol > molecules.count()))
+    {
+        throw SireError::program_bug(QObject::tr("The frame index %1 is out of "
+            "range, 0 - %2").arg(imol).arg(molecules.count()), CODELOC);
+    }
+
+    // Make sure that there are atoms in the frame.
+    if (nAtoms(imol) == 0)
+    {
+        throw SireError::program_bug(QObject::tr(
+            "Strange - there are no atoms in molecule %1?")
+                .arg(imol), CODELOC);
+    }
+
+    // First, construct the layout of the molecule (sorting of atoms into residues and cutgroups).
+    auto mol = this->getMolStructure(imol, map["cutting"]).commit().edit();
+
+    // Get the info object that can map between AtomNum to AtomIdx etc.
+    const auto molinfo = mol.info();
+
+    // Instantiate the atom property objects that we need.
+    AtomCharges charges(molinfo);
+    AtomMasses  masses(molinfo);
+
+    // Now loop through the atoms in the molecule and set each property.
+    for (int i=0; i<nAtoms(imol); ++i)
+    {
+        // Store a reference to the current atom.
+        const PSFAtom &atom = atoms[molecules[imol][i]];
+
+        // Determine the CGAtomIdx for this atom.
+        auto cgatomidx = molinfo.cgAtomIdx(AtomNum(atom.getNumber()));
+
+        // Set the properties.
+        masses.set(cgatomidx, atom.getMass() * SireUnits::g_per_mol);
+        charges.set(cgatomidx, double(atom.getCharge()) * SireUnits::mod_electron);
+    }
+
+    return mol.setProperty(map["charge"], charges)
+              .setProperty(map["mass"], masses)
+              .commit();
 }
 
 void CharmmPSF::findMolecules()
