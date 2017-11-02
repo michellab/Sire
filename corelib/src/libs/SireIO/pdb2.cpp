@@ -1059,7 +1059,7 @@ void PDB2::parseLines(const PropertyMap &map)
     int prev_nats = 0;
 
     // The indices for lines containing atom data.
-    // For each frame we identify the lines containing atom data, then parse them.
+    // For each molecule we identify the lines containing atom data, then parse them.
     QVector<int> atom_lines;
 
     // The residue map for the molecule.
@@ -1428,7 +1428,7 @@ void PDB2::parseLines(const PropertyMap &map)
                     }
                 }
 
-                // Finally, append frame data and clear the vectors.
+                // Finally, append molecule data and clear the vectors.
 
                 atoms.append(mol_atoms);
                 atom_lines.clear();
@@ -1584,7 +1584,7 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
 /** Internal function used to get the molecule structure for molecule 'imol'. */
 MolStructureEditor PDB2::getMolStructure(int imol, const PropertyName &cutting) const
 {
-    // Make sure the frame index is within range.
+    // Make sure the molecule index is within range.
     if ((imol < 0) or (imol > atoms.count()))
     {
         throw SireError::program_bug(QObject::tr("The molecule index %1 is out of "
@@ -1603,7 +1603,7 @@ MolStructureEditor PDB2::getMolStructure(int imol, const PropertyName &cutting) 
     // the layout of cutgroups, residues and atoms.
     MolStructureEditor mol;
 
-    // To do this we'll walk through all of the residues in the frame,
+    // To do this we'll walk through all of the residues in the molecule,
     // adding each atom contained within the residue.
 
     // Residue index.
@@ -1625,7 +1625,7 @@ MolStructureEditor PDB2::getMolStructure(int imol, const PropertyName &cutting) 
             res_to_chain.insert(residue, chain);
     }
 
-    // Loop over all unique residues in the frame.
+    // Loop over all unique residues in the molecule.
     for (auto residue : residues[imol].uniqueKeys())
     {
         // Extract the residue number and name.
@@ -1677,17 +1677,14 @@ MolStructureEditor PDB2::getMolStructure(int imol, const PropertyName &cutting) 
 /** Internal function used to get the molecule structure for molecule 'imol'. */
 MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
 {
-    // At the moment we'll assume that there is a single molecule. Once the molecule
-    // is constructed we can use connectivity information to break it into sub-molecules.
-
     // Make sure the molecule (model) index is within range.
     if ((imol < 0) or (imol > atoms.count()))
     {
-        throw SireError::program_bug(QObject::tr("The frame index %1 is out of "
+        throw SireError::program_bug(QObject::tr("The molecule index %1 is out of "
             "range, 0 - %2").arg(imol).arg(atoms.count()), CODELOC);
     }
 
-    // Make sure that there are atoms in the frame.
+    // Make sure that there are atoms in the molecule.
     if (nAtoms(imol) == 0)
     {
         throw SireError::program_bug(QObject::tr(
