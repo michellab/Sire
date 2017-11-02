@@ -1338,7 +1338,7 @@ System CharmmPSF::startSystem(const PropertyMap &map) const
 
     if (usesParallel())
     {
-        tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
+        tbb::parallel_for(tbb::blocked_range<int>(0, nmols),
                            [&](tbb::blocked_range<int> r)
         {
             for (int i=r.begin(); i<r.end(); ++i)
@@ -1352,7 +1352,6 @@ System CharmmPSF::startSystem(const PropertyMap &map) const
         for (int i=0; i<nmols; ++i)
         {
             mols_array[i] = this->getMolecule(i, map);
-            break;
         }
     }
 
