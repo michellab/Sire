@@ -2615,9 +2615,6 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
     QVector<QString> &atom_lines, QVector<QString> &substructure_lines, QStringList &errors,
     const SireBase::PropertyMap &map)
 {
-    // Convert the molecule view to an actual molecule object.
-    auto mol = sire_mol.molecule();
-
     // Store the number of atoms in the molecule.
     int num_atoms = sire_mol.nAtoms();
 
