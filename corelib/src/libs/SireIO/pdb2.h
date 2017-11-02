@@ -90,7 +90,7 @@ public:
     void setTerminal(bool is_ter);
 
     /** Get the atom serial number. */
-    qint64 getSerial() const;
+    qint64 getNumber() const;
 
     /** Set the atom serial number. */
     void setSerial(int serial);
@@ -252,6 +252,11 @@ private:
 
     void parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &atom_lines,
         QStringList &errors, const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SireMol::Molecule updateMolecule(const SireMol::Molecule &sire_mol,
+        const SireBase::PropertyMap &map = SireBase::PropertyMap()) const;
+
+    bool findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx) const;
 
     SireMol::MolStructureEditor getMolStructure(int imol,
         const SireBase::PropertyName &cutting) const;
