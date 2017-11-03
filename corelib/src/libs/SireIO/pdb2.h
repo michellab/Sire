@@ -102,13 +102,25 @@ public:
     QString getResName() const;
 
     /** Get the chain id. */
-    QChar getChainId() const;
+    QChar getChainID() const;
+
+    /** Set the chain id. */
+    void setChainID(QChar id);
 
     /** Get the residue sequence number. */
     qint64 getResNum() const;
 
     /** Set the residue sequence number. */
     void setResNum(int num);
+
+    /** Get the residue index. */
+    qint64 getResIdx() const;
+
+    /** Set the residue index. */
+    void setResIdx(int idx);
+
+    /** Get the residue insertion code. */
+    QChar getInsertCode() const;
 
     /** Get the atom coordinates. */
     SireMaths::Vector getCoord() const;
@@ -155,6 +167,9 @@ private:
 
     /** Residue sequence number. */
     qint64 res_num;
+
+    /** Residue index. */
+    qint64 res_idx;
 
     /** Residue insertion code. */
     QChar insert_code;
@@ -266,14 +281,14 @@ private:
     bool isModel() const;
     bool isModel(const SireSystem::System &system) const;
 
-    //* Atom record data (possibly multiple frames). */
+    //* Atom record data for each molecule. */
     QVector<QVector<PDBAtom> > atoms;
 
-    //* Residue mapping. */
-    QVector<QMultiMap<QPair<qint64, QString>, qint64> > residues;
-
-    //* Chain identifier mappings for each frame. */
+    //* Mapping between chain identifiers and residue index for each molecule. */
     QVector<QMultiMap<QChar, qint64> > chains;
+
+    //* Mapping between residue and atom indices for each molecule. */
+    QVector<QMultiMap<qint64, qint64> > residues;
 
     /** The name of the file from which data was parsed. */
     QString filename;

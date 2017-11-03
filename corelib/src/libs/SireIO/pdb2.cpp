@@ -329,6 +329,10 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     {
         res_name = atom.residue().name().value();
         res_num  = atom.residue().number().value();
+
+        // Optional insertion code property.
+        if (atom.residue().hasProperty("insert-code"))
+            insert_code = atom.residue().property<QString>("insert-code")[0];
     }
 
     // The atom is within a chain.
@@ -474,9 +478,15 @@ QString PDBAtom::getResName() const
 }
 
 /** Get the chain id. */
-QChar PDBAtom::getChainId() const
+QChar PDBAtom::getChainID() const
 {
     return chain_id;
+}
+
+/** Set the chain id. */
+void PDBAtom::setChainID(QChar id)
+{
+    chain_id = id;
 }
 
 /** Get the residue sequence number. */
@@ -489,6 +499,24 @@ qint64 PDBAtom::getResNum() const
 void PDBAtom::setResNum(int num)
 {
     res_num = num;
+}
+
+/** Get the residue index. */
+qint64 PDBAtom::getResIdx() const
+{
+    return res_idx;
+}
+
+/** Set the residue sequence index. */
+void PDBAtom::setResIdx(int idx)
+{
+    res_idx = idx;
+}
+
+/** Get the residue insertion code. */
+QChar PDBAtom::getInsertCode() const
+{
+    return insert_code;
 }
 
 /** Get the residue sequence number. */
@@ -746,8 +774,8 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
 PDB2::PDB2(const PDB2 &other) :
     ConcreteProperty<PDB2,MoleculeParser>(other),
     atoms(other.atoms),
-    residues(other.residues),
     chains(other.chains),
+    residues(other.residues),
     filename(other.filename),
     parse_warnings(other.parse_warnings)
 {}
@@ -762,8 +790,8 @@ PDB2& PDB2::operator=(const PDB2 &other)
     if (this != &other)
     {
         this->atoms = other.atoms;
-        this->residues = other.residues;
         this->chains = other.chains;
+        this->residues = other.residues;
         this->filename = other.filename;
         this->parse_warnings = other.parse_warnings;
 
@@ -984,7 +1012,7 @@ int PDB2::nResidues() const
     return num_residues;
 }
 
-/** Return the number of residues in model 'i'. */
+/** Return the number of residues in molecule 'i'. */
 int PDB2::nResidues(int i) const
 {
     return residues[i].uniqueKeys().count();
@@ -1001,7 +1029,7 @@ int PDB2::nChains() const
     return num_chains;
 }
 
-/** Return the number of chains in model 'i'. */
+/** Return the number of chains in molecule 'i'. */
 int PDB2::nChains(int i) const
 {
     return chains[i].uniqueKeys().count();
@@ -1018,7 +1046,7 @@ int PDB2::nAtoms() const
     return num_atoms;
 }
 
-/** Return the number of atoms in model 'i'. */
+/** Return the number of atoms in molecule 'i'. */
 int PDB2::nAtoms(int i) const
 {
     return atoms[i].count();
@@ -1062,11 +1090,11 @@ void PDB2::parseLines(const PropertyMap &map)
     // For each molecule we identify the lines containing atom data, then parse them.
     QVector<int> atom_lines;
 
-    // The residue map for the molecule.
-    QMultiMap<QPair<qint64, QString>, qint64> mol_residues;
-
-    // The chain identifier map for the molecule.
+    // The chain mapping for the molecule.
     QMultiMap<QChar, qint64> mol_chains;
+
+    // The residue mapping for the molecule.
+    QMultiMap<qint64, qint64> mol_residues;
 
     // Internal function used to parse a single atom line in the file.
     auto parse_atoms = [&](const QString &line, int iatm,
@@ -1084,28 +1112,6 @@ void PDB2::parseLines(const PropertyMap &map)
                 (lines()[iline + 1].simplified() != "TER"))
             {
                 atom.setTerminal(true);
-            }
-        }
-    };
-
-    // Internal function used to parse residue and chain data from a parsed atom record.
-    auto parse_residues = [](const PDBAtom &atom, int iatm,
-        QMultiMap<QPair<qint64, QString>, qint64> &local_residues,
-        QMultiMap<QChar, qint64> &local_chains, QStringList &errors)
-    {
-        // Create residue <number, name> pair.
-        QPair<qint64, QString> res(atom.getResNum(), atom.getResName());
-
-        // Update the residue multi-map (residue <number, name> --> atom index).
-        local_residues.insert(res, iatm);
-
-        // Insert the chain identifier (ignore if it is blank).
-        if (not atom.getChainId().isSpace())
-        {
-            // Don't duplicate values, only keys.
-            if (not local_chains.contains(atom.getChainId(), atom.getResNum()))
-            {
-                local_chains.insert(atom.getChainId(), atom.getResNum());
             }
         }
     };
@@ -1237,18 +1243,18 @@ void PDB2::parseLines(const PropertyMap &map)
                 /* We now attempt to the following common PDB errors:
 
                    1) Duplicate atom names.
-                   2) Duplicate residue numbers.
-                        This can occur in two ways:
-                          i) Two different named residues with the same number.
-                         ii) The same residue number and name appearing in multiple chains.
-                   3) Non-sensical temperature factors.
+                   1) Duplicate chain identifiers.
+                   3) Duplicate residue numbers.
+                   4) Non-sensical temperature factors.
                  */
 
-                // A list of the recorded atom numbers.
-                QVector<int> atom_numbers;
+                /**************** 1) FIX ATOM NUMBERS ****************/
 
                 // Check whether there are duplicate atom numbers.
                 // If there are, re-number them according to their indices.
+
+                // A vector of the recorded atom numbers.
+                QVector<int> atom_numbers;
 
                 bool ok = true;
                 for (int i=0; i<nats; ++i)
@@ -1266,7 +1272,7 @@ void PDB2::parseLines(const PropertyMap &map)
                     }
                 }
 
-                // Re-number all of the atoms.
+                // There were duplicates: Re-number all of the atoms.
                 if (not ok)
                 {
                     parse_warnings.append(QObject::tr("Warning: There are duplicate atom "
@@ -1277,34 +1283,164 @@ void PDB2::parseLines(const PropertyMap &map)
                         mol_atoms[i].setSerial(i+1);
                 }
 
-                // Check whether there are duplicate residue numbers,
-                // if so, we need to re-number all of the residues in
-                // ascending order.
+                /**************** 2) FIX CHAIN IDS ****************/
 
-                // A hash betwen residue number and name.
-                QHash<int, QString> num_to_name;
+                /* Check whether there are duplicate chain idenfitiers.
+                   If there are, re-label them using alphanumberic characters,
+                   first the alphabet in upper case, followed by the alphabet
+                   in lower case, then digits 0-9.
+                 */
+
+                // A vector of the recorded chain identifiers.
+                QVector<QChar> chain_ids;
+
+                QChar curr_id = mol_atoms[0].getChainID();
+
+                // Insert the first chain identifier.
+                if (not curr_id.isSpace())
+                    chain_ids.append(curr_id);
+
+                ok = true;
+                for (int i=1; i<nats; ++i)
+                {
+                    QChar id = mol_atoms[i].getChainID();
+
+                    // We've reached the next chain record.
+                    if ((not id.isSpace()) and (id != curr_id))
+                    {
+                        // Check whether we've already seen this chain.
+                        if (not chain_ids.contains(id))
+                        {
+                            chain_ids.append(id);
+                            curr_id = id;
+                        }
+                        else
+                        {
+                            // Often HETATM records can be at the end of the
+                            // file, far away from the rest of the chain record.
+                            if (not mol_atoms[i].isHet())
+                            {
+                                ok = false;
+                                break;
+                            }
+
+                            /* TODO:
+                               Because of the above, we would no longer be able
+                               to write to file in order of chain, then residue.
+                               This means that isolated HETATM records will appear
+                               at the end of the file, which might be the TER
+                               entry for their chain (which appears higher up in
+                               the file).
+
+                               The only way to fix this would be to insert HETATM
+                               records into the appropriate place, i.e. at the end
+                               of the chain where it first appears, although this
+                               in turn can cause problems with atom numbering,
+                               although these could be updated afterwards.
+                             */
+                        }
+                    }
+                }
+
+                // There were duplicates: re-label all of the chains.
+                if (not ok)
+                {
+                    parse_warnings.append(QObject::tr("Warning: There are duplicate chain "
+                        "identifiers in the PDB file. Chains have been relabelled!"));
+
+                    int num_chains = 0;
+
+                    // The current chain identifier.
+                    QChar curr_id = mol_atoms[0].getChainID();
+
+                    // List of all possible chain identifiers.
+                    QString identifiers("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
+
+                    for (int i=0; i<nats; ++i)
+                    {
+                        if (not mol_atoms[i].getChainID().isSpace())
+                        {
+                            // Get the chain identifier for the atom.
+                            QChar id = mol_atoms[i].getChainID();
+
+                            if ((not id.isSpace()) and (id != curr_id))
+                            {
+                                // Increment the chain count and check that it
+                                // doesn't exceed the PDF file limit.
+                                num_chains++;
+
+                                if (num_chains > 62)
+                                {
+                                    parse_warnings.append(QObject::tr("Warning: There number "
+                                        "of chains exceeds the limit for the PDB format (62)."));
+
+                                    return;
+                                }
+
+                                // Update the current chain identifier.
+                                curr_id = mol_atoms[i].getChainID();
+                            }
+
+                            // Update the chain idenfifier.
+                            mol_atoms[i].setChainID(identifiers[num_chains]);
+                        }
+                    }
+                }
+
+                /************* 3) FIX RESIDUE NUMBERS *************/
+
+                /* Check whether there are duplicate residue numbers,
+                   if so, we need to re-number all of the residues in
+                   ascending order.
+
+				   However, residue numbers are not unique across
+                   chains, so we need to preserved the numbering if
+                   the chain ID differs.
+                 */
+
+                /* A hash betwen residue numbers and a residue name, chain identifier pair.
+                   Note that we create a string representation of the residue number by
+                   appending the insertion code. This ensures a unique number if a residue
+                   has been inserted into the PDB.
+                 */
+                QHash<QString, QPair<QString, QChar>> res_hash;
 
                 ok = true;
                 for (int i=0; i<nats; ++i)
                 {
-                    QString nam = mol_atoms[i].getResName();
-                    int     num = mol_atoms[i].getResNum();
+                    QString res_name = mol_atoms[i].getResName();
+                    int     res_num  = mol_atoms[i].getResNum();
+                    QChar   icode    = mol_atoms[i].getInsertCode();
+                    QChar   chain_id = mol_atoms[i].getChainID();
+
+                    // Create a string out of the residue number and insertion code.
+                    QString num(QString("%1%2").arg(res_num).arg(icode));
 
                     // We've already seen this residue number.
-                    if (num_to_name.contains(num))
+                    if (res_hash.contains(num))
                     {
-                        // The previous name was different.
-                        if (nam != num_to_name[num])
+                        // The previous name was different and the residue is
+                        // part of the same chain.
+                        if ((res_name != res_hash[num].first) and
+                            (chain_id == res_hash[num].second))
                         {
                             ok = false;
                             break;
+                        }
+
+                        // Add the residue to the hash.
+                        else
+                        {
+                            res_hash.insert(num,
+                                QPair<QString, QChar>(res_name, chain_id));
                         }
                     }
 
                     // Add the residue to the hash.
                     else
                     {
-                        num_to_name.insert(num, nam);
+                        res_hash.insert(num,
+                            QPair<QString, QChar>(res_name, chain_id));
                     }
                 }
 
@@ -1339,6 +1475,44 @@ void PDB2::parseLines(const PropertyMap &map)
                     }
                 }
 
+                // Now we need to loop through all of the atoms and set a residue "index".
+                // This will help with breaking the molecule up into its constituent parts.
+
+                // A string identifying the previous residue.
+                // name + number + insert_code + chain.
+                QString prev_res(QString("%1%2%3%4")
+                                 .arg(mol_atoms[0].getResName())
+                                 .arg(mol_atoms[0].getResNum())
+                                 .arg(mol_atoms[0].getInsertCode())
+                                 .arg(mol_atoms[0].getChainID()));
+
+                // The current residue index.
+                int res_idx = 0;
+
+                // Set the index for the residue of the first atom.
+                mol_atoms[0].setResIdx(0);
+
+                // Loop through the rest of the residues.
+                for (int i=1; i<nats; ++i)
+                {
+                    // A string identifying the current residue.
+                    QString curr_res(QString("%1%2%3%4")
+                                    .arg(mol_atoms[i].getResName())
+                                    .arg(mol_atoms[i].getResNum())
+                                    .arg(mol_atoms[i].getInsertCode())
+                                    .arg(mol_atoms[i].getChainID()));
+
+                    // The residue is different.
+                    if (curr_res != prev_res)
+                    {
+                        res_idx++;
+                        prev_res = curr_res;
+                    }
+
+                    // Set the residue index.
+                    mol_atoms[i].setResIdx(res_idx);
+                }
+
                 // Now check whether the temperature factors are sane.
                 // If any exceed 100, then set all to the default of zero.
 
@@ -1362,61 +1536,57 @@ void PDB2::parseLines(const PropertyMap &map)
                         mol_atoms[i].setTemperature(0);
                 }
 
-                // Now used the parsed data to construct the residue and chain
-                // information for the molecule.
+                /* Now used the parsed data to construct the residue and chain
+                   information for the molecule.
+
+                   Each chain contains residues, and the residues contain atoms.
+                   However, residues within different chains may have the same
+                   same name and number.
+                 */
 
                 if (usesParallel())
                 {
                     QMutex mutex;
 
-                    // Chain-residue multimap for parallel processing.
-                    // There will likely be duplicate residue entries for each chain
-                    // which will need to be corrected afterwards.
-                    QMultiMap<QChar, qint64> temp_chains;
-
                     tbb::parallel_for( tbb::blocked_range<int>(0, nats),
                                     [&](const tbb::blocked_range<int> &r)
                     {
-                        QStringList local_errors;
-                        QMultiMap<QPair<qint64, QString>, qint64> local_residues;
-                        QMultiMap<QChar, qint64> local_chains;
+                        // Local data objects.
+                        QMultiMap<QChar, qint64>  local_chains;
+                        QMultiMap<qint64, qint64> local_residues;
 
                         for (int i=r.begin(); i<r.end(); ++i)
                         {
-                            // Generate the residue and chain data from this atom record.
-                            parse_residues(mol_atoms[i], i,
-                                local_residues, local_chains, local_errors);
+                            // Store a reference to the atom.
+                            const PDBAtom &atom = mol_atoms[i];
+
+                            // Map the chain identifier to the residue index.
+                            if (not atom.getChainID().isSpace())
+                                local_chains.insert(atom.getChainID(), atom.getResIdx());
+
+                            // Map the residue index to the atom index.
+                            local_residues.insert(atom.getResIdx(), i);
                         }
 
                         QMutexLocker lkr(&mutex);
 
-                        mol_residues   += local_residues;
-                        temp_chains    += local_chains;
-                        parse_warnings += local_errors;
+                        mol_chains   += local_chains;
+                        mol_residues += local_residues;
                     });
-
-                    // Remove duplicate residue records from the chains.
-                    for (auto chain : temp_chains.uniqueKeys())
-                    {
-                        // Get a list of the residues that are part of this chain.
-                        QList<qint64> chain_residues = temp_chains.values(chain);
-
-                        // Loop over all of the residues.
-                        for (auto residue : chain_residues)
-                        {
-                            // Only insert the residue once.
-                            if (not mol_chains.contains(chain, residue))
-                                mol_chains.insert(chain, residue);
-                        }
-                    }
                 }
                 else
                 {
                     for (int i=0; i<nats; ++i)
                     {
-                        // Generate the residue and chain data from this atom record.
-                        parse_residues(mol_atoms[i], i,
-                            mol_residues, mol_chains, parse_warnings);
+                        // Store a reference to the atom.
+                        const PDBAtom &atom = mol_atoms[i];
+
+                        // Map the chain identifier to the residue index.
+                        if (not atom.getChainID().isSpace())
+                            mol_chains.insert(atom.getChainID(), atom.getResIdx());
+
+                        // Map the residue index to the atom index.
+                        mol_residues.insert(atom.getResIdx(), i);
                     }
                 }
 
@@ -1425,11 +1595,11 @@ void PDB2::parseLines(const PropertyMap &map)
                 atoms.append(mol_atoms);
                 atom_lines.clear();
 
-                residues.append(mol_residues);
-                mol_residues.clear();
-
                 chains.append(mol_chains);
                 mol_chains.clear();
+
+                residues.append(mol_residues);
+                mol_residues.clear();
 
                 nats = 0;
             }
@@ -1464,7 +1634,7 @@ bool PDB2::isModel() const
             // The following data must be the same for all models (I think...)
             if (atom1.getName()    != atom2.getName()    or
                 atom1.getResName() != atom2.getResName() or
-                atom1.getChainId() != atom2.getChainId() or
+                atom1.getChainID() != atom2.getChainID() or
                 atom1.getResNum()  != atom2.getResNum()) return false;
         }
     }
@@ -1647,50 +1817,37 @@ MolStructureEditor PDB2::getMolStructure(int imol, const PropertyName &cutting) 
     // the layout of cutgroups, residues and atoms.
     MolStructureEditor mol;
 
-    // To do this we'll walk through all of the residues in the molecule,
-    // adding each atom contained within the residue.
-
-    // Residue index.
-    int ires = 0;
-
-    // Create a reverse mapping between residues and chains.
-    QMap<qint64, QChar> res_to_chain;
-
-    // Add any chains to the molecule.
+    // Now add any chains to the molecule.
     for (auto chain : chains[imol].uniqueKeys())
     {
         mol.add(ChainName(chain));
-
-        // Get a list of the residues that are part of this chain.
-        QList<qint64> chain_residues = chains[imol].values(chain);
-
-        // Create the reverse mapping.
-        for (auto residue : chain_residues)
-            res_to_chain.insert(residue, chain);
     }
 
     // Loop over all unique residues in the molecule.
-    for (auto residue : residues[imol].uniqueKeys())
+    for (auto res_idx : residues[imol].uniqueKeys())
     {
-        // Extract the residue number and name.
-        auto res_num  = residue.first;
-        auto res_name = residue.second;
-
         // By default we will use one CutGroup per residue.
         // This may be changed later by the cutting system.
-        auto cutgroup = mol.add(CGName(QString::number(ires)));
+        auto cutgroup = mol.add(CGName(QString::number(res_idx)));
 
         // Get a sorted list of the atoms that are part of the residue.
-        QList<qint64> res_atoms = residues[imol].values(residue);
+        QList<qint64> res_atoms = residues[imol].values(res_idx);
         qSort(res_atoms);
+
+        // Use the first atom to get the name and number of this residue
+        QString res_name = atoms[imol][res_atoms[0]].getResName();
+        qint64  res_num  = atoms[imol][res_atoms[0]].getResNum();
+
+        // Store the chain identifier and insertion code.
+        QChar chain_id = atoms[imol][res_atoms[0]].getChainID();
 
         // Add the residue to the molecule.
         auto res = mol.add(ResNum(res_num));
         res.rename(ResName(res_name.trimmed()));
 
         // Reparent the residue to its chain.
-        if (res_to_chain.contains(res_num))
-            res.reparent(ChainName(res_to_chain[res_num]));
+        if (not chain_id.isSpace())
+            res.reparent(ChainName(chain_id));
 
         // Add each atom in the residue to the molecule.
         for (auto res_atom : res_atoms)
@@ -1699,10 +1856,8 @@ MolStructureEditor PDB2::getMolStructure(int imol, const PropertyName &cutting) 
             atom.rename(AtomName(atoms[imol][res_atom].getName().trimmed()));
 
             // Reparent the atom to its residue.
-            atom.reparent(ResNum(res_num));
+            atom.reparent(ResIdx(res_idx));
         }
-
-        ires++;
     }
 
     if (cutting.hasValue())
@@ -1742,13 +1897,19 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
     // Get the info object that can map between AtomNum to AtomIdx etc.
     const auto molinfo = mol.info();
 
-    // Instantiate the atom property objects that we need.
+    // Atom property objects.
     AtomCoords         coords(molinfo);
     AtomCharges        charges(molinfo);
     AtomElements       elements(molinfo);
     AtomFloatProperty  occupancies(molinfo);
     AtomFloatProperty  temperatures(molinfo);
     AtomStringProperty is_het_atom(molinfo);
+
+    // Residue property objects.
+    ResStringProperty  insert_codes(molinfo);
+
+    // The list of residues that have had properties updated.
+    QVector<qint64> res_list;
 
     // Now loop through the atoms in the molecule and set each property.
     for (int i=0; i<nAtoms(imol); ++i)
@@ -1770,6 +1931,23 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
 
         if (isHet) is_het_atom.set(cgatomidx, "True");
         else       is_het_atom.set(cgatomidx, "False");
+
+        // Store the residue index for the atom.
+        qint64 res_idx = atom.getResIdx();
+
+        // This residue hasn't already been processed.
+        if (not res_list.contains(res_idx))
+        {
+            QChar icode = atom.getInsertCode();
+
+            // Set the insert code property for this residue.
+            if (not icode.isSpace())
+            {
+                insert_codes.set(ResIdx(res_idx), QString(icode));
+            }
+
+            res_list.append(res_idx);
+        }
     }
 
     return mol.setProperty(map["coordinates"], coords)
@@ -1778,6 +1956,7 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
               .setProperty(map["occupancy"], occupancies)
               .setProperty(map["beta-factor"], temperatures)
               .setProperty(map["is-het"], is_het_atom)
+              .setProperty(map["insert-code"], insert_codes)
               .commit();
 }
 
