@@ -354,8 +354,11 @@ Mol2Atom::Mol2Atom(const QString &line, QStringList &errors) :
 
     @param errors
         An array of error messages.
+
+    @param is_idx
+        Whether to number residues by their index. (optional)
  */
-Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors) :
+Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors, bool is_idx) :
     number(atom.number().value()),
     name(atom.name().value()),
     type("Du"),
@@ -375,9 +378,12 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors) :
     // The atom is within a residue.
     if (atom.isWithinResidue())
     {
-        // Extract the residue number and name.
-        subst_id = atom.residue().number().value();
+        // Set the substructure name.
         subst_name = atom.residue().name().value();
+
+        // Set the substructure number.
+        if (is_idx) subst_id = atom.residue().index().value() + 1;
+        else        subst_id = atom.residue().number().value();
     }
 
     // Extract the SYBYL atom type.
@@ -1373,15 +1379,21 @@ Mol2Substructure::Mol2Substructure(const QString &line, QStringList &errors) :
 
     @param errors
         An array of error messages.
+
+    @param is_idx
+        Whether to number residues by their index. (optional)
  */
-Mol2Substructure::Mol2Substructure(const SireMol::Residue &res,
-    QStringList &errors) :
-    number(res.number().value()),
+Mol2Substructure::Mol2Substructure(const SireMol::Residue &res, QStringList &errors,
+    bool is_idx) :
     name(res.name().value()),
     type("RESIDUE"),
     dict_type(0),
     num_inter_bonds(0)
 {
+    // Set the residue number.
+    if (is_idx) number = res.index().value() + 1;
+    else        number = res.number().value();
+
     // Set the chain.
     if (res.isWithinChain())
         chain = res.chain().name().value();
@@ -1681,7 +1693,7 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
                     local_errors, filename, i);
 
                 // Now parse the rest of the molecular data, i.e. atoms, residues, etc.
-                parseMolecule(molecules[i], system[molnums[i]].molecule(),
+                parseMolecule(molecules[i], system[molnums[i]].molecule(), i,
                     atom_lines[i], substructure_lines[i], local_errors, map);
 
                 // Generate the Mol2 data record lines.
@@ -1706,7 +1718,7 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
             molecules[i] = Mol2Molecule(system[molnums[i]].molecule(), parse_warnings);
 
             // Now parse the rest of the molecular data, i.e. atoms, residues, etc.
-            parseMolecule(molecules[i], system[molnums[i]].molecule(), atom_lines[i],
+            parseMolecule(molecules[i], system[molnums[i]].molecule(), i, atom_lines[i],
                 substructure_lines[i], parse_warnings, map);
 
             // Generate the Mol2 data record lines.
@@ -2611,7 +2623,7 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
 
 /** Internal function used to parse a Sire molecule view into a Mol2 molecule using
     the parameters in the property map. */
-void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_mol,
+void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_mol, int imol,
     QVector<QString> &atom_lines, QVector<QString> &substructure_lines, QStringList &errors,
     const SireBase::PropertyMap &map)
 {
@@ -2627,6 +2639,37 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
     // Resize the data record containers.
     atom_lines.resize(num_atoms);
     substructure_lines.resize(num_res);
+
+    /* We first need to check whether there are duplicate residue numbers.
+       If so, then we need to number residues by index since Mol2 assumes unique numbering.
+       Note that this means that you can't always perform a round-trip file conversion
+       and retain the same residue numbers, e.g. PDB -> Mol2 -> PDB. (PDB can have
+       duplicate residue numbers in different chains, or with different insertion codes.
+     */
+
+    // Whether to number by residue index.
+    bool is_idx = false;
+
+    // A vector of the residue numbers seen to date.
+    QVector<int> res_nums;
+
+    for (int i=0; i<num_res; ++i)
+    {
+        int res_num = sire_mol.residue(ResIdx(i)).number().value();
+
+        if (not res_nums.contains(res_num))
+        {
+            res_nums.append(res_num);
+        }
+        else
+        {
+            errors.append(QObject::tr("Warning: there are duplicate residue "
+                "numbers in molecule %1, converting to unique indices.").arg(imol));
+
+            is_idx = true;
+            break;
+        }
+    }
 
     if (usesParallel())
     {
@@ -2646,7 +2689,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
             // and generate a Mol2 data record.
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                local_atoms[i] = Mol2Atom(sire_mol.atom(AtomIdx(i)), local_errors);
+                local_atoms[i] = Mol2Atom(sire_mol.atom(AtomIdx(i)), local_errors, is_idx);
                 atom_lines[i] = local_atoms[i].toMol2Record();
             }
 
@@ -2670,7 +2713,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
             // and generate a Mol2 data record.
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                local_subst[i] = Mol2Substructure(sire_mol.residue(ResIdx(i)), local_errors);
+                local_subst[i] = Mol2Substructure(sire_mol.residue(ResIdx(i)), local_errors, is_idx);
                 substructure_lines[i] = local_subst[i].toMol2Record();
             }
 
@@ -2690,7 +2733,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
         for (int i=0; i<num_atoms; ++i)
         {
             // Initalise a Mol2Atom.
-            Mol2Atom atom(sire_mol.atom(AtomIdx(i)), errors);
+            Mol2Atom atom(sire_mol.atom(AtomIdx(i)), errors, is_idx);
 
             // Generate a Mol2 atom data record.
             atom_lines[i] = atom.toMol2Record();
@@ -2700,7 +2743,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
         for (int i=0; i<num_res; ++i)
         {
             // Initalise a Mol2Substructure.
-            Mol2Substructure subst(sire_mol.residue(ResIdx(i)), errors);
+            Mol2Substructure subst(sire_mol.residue(ResIdx(i)), errors, is_idx);
 
             // Generate a Mol2 substructure data record.
             substructure_lines[i] = subst.toMol2Record();
