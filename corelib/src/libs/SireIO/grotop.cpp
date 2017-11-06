@@ -1193,6 +1193,14 @@ const char* GroTop::what() const
     return GroTop::typeName();
 }
 
+/** Return whether or not this is a lead parser. The lead parser is responsible
+    for starting the process of turning the parsed file into the System. There
+    must be one and one-only lead parser in a set of parsers creating a System */
+bool GroTop::isLead() const
+{
+    return true;
+}
+
 /** Return the list of names of directories in which to search for 
     include files. The directories are either absolute, or relative
     to the current directory. If "absolute_paths" is true then

@@ -35,6 +35,9 @@
 #include "SireMol/moleculeinfo.h"
 #include "SireMol/atomcoords.h"
 #include "SireMol/atomvelocities.h"
+#include "SireMol/mgname.h"
+#include "SireMol/molidx.h"
+#include "SireMol/moleditor.h"
 
 #include "SireUnits/units.h"
 
@@ -43,9 +46,11 @@
 #include "SireBase/parallel.h"
 #include "SireBase/timeproperty.h"
 #include "SireBase/numberproperty.h"
+#include "SireBase/stringproperty.h"
 
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
+#include "SireMol/errors.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -1491,15 +1496,285 @@ void Gro87::parseLines(const PropertyMap &map)
     this->setScore(nats);
 }
 
+/** This function finds the index of the atom called 'atomname' with number
+    'atomnum' in residue 'resname' with residue number 'resnum'. The passed
+    hint suggest where in the array to start looking */
+int Gro87::findAtom(const MoleculeInfoData &molinfo, int atmidx, int hint) const
+{
+    const int natoms = atmnams.count();
+
+    if (hint < 0 or hint >= natoms)
+        hint = 0;
+
+    //get the atom/residue name/number for this atom
+    const auto residx = molinfo.parentResidue( AtomIdx(atmidx) );
+    const auto atmname = molinfo.name( AtomIdx(atmidx) ).value();
+    const auto atmnum = molinfo.number( AtomIdx(atmidx) ).value();
+    const auto resname = molinfo.name(residx).value();
+    const auto resnum = molinfo.number(residx).value();
+
+    QMap<int,int> partial_matches;
+
+    auto is_match = [&](int i)
+    {
+        bool same_atmname = (atmname == atmnams.constData()[i]);
+        bool same_atmnum = (atmnum == atmnums.constData()[i]);
+        bool same_resname = (resname == resnams.constData()[i]);
+        bool same_resnum = (resnum == resnums.constData()[i]);
+        
+        if (same_atmname and same_resname and i == hint)
+        {
+            return true;
+        }
+        else if (same_atmname and same_resname and same_atmnum and same_resnum)
+        {
+            return true;
+        }
+        else if (same_atmname)
+        {
+            //score a partial match - MUST match atom name, then ideally
+            //residue name, then atom number than residue number
+            partial_matches.insert( (10 * same_resname) +
+                                    (5 * same_atmnum) +
+                                    (2 * same_resnum) +
+                                    (1 * (i == hint)), i );
+        }
+
+        return false;
+    };
+
+    //scan through the atoms and find a match (starting from 'hint')
+    int match = -1;
+    
+    for (int i=hint; i<natoms; ++i)
+    {
+        if (is_match(i))
+        {
+            match = i;
+            break;
+        }
+    }
+
+    if (match == -1)
+    {
+        for (int i=0; i<hint; ++i)
+        {
+            if (is_match(i))
+            {
+                match = i;
+                break;
+            }
+        }
+    }
+
+    if (match == -1)
+    {
+        //no match found - did we find any partial matches?
+        if (not partial_matches.isEmpty())
+        {
+            //return the match with the highest score
+            return partial_matches.last();
+        }
+        else
+            throw SireMol::missing_atom( QObject::tr(
+                "Cannot find the atom %1(%2) : %3(%4) in the set of atoms loaded "
+                "from this .gro file.")
+                    .arg(atmname).arg(atmnum).arg(resname).arg(resnum), CODELOC );
+    }
+    
+    return match;
+}
+
 /** Use the data contained in this parser to add information from the file to
     the molecules that exist already in the passed System. For example, this
     may be used to add coordinate data from this file to the molecules in 
     the passed System that are missing coordinate data. */
 void Gro87::addToSystem(System &system, const PropertyMap &map) const
 {
-    //you should loop through each molecule in the system and work out
-    //which ones are described in the file, and then add data from the file
-    //to these molecules
+    const bool has_coords = hasCoordinates();
+    const bool has_vels = hasVelocities();
+
+    if (not (has_coords or has_vels))
+    {
+        //nothing to add...
+        return;
+    }
+
+    //first, we are going to work with the group of all molecules, which should
+    //be called "all". We have to assume that the molecules are ordered in "all"
+    //in the same order as they are in this gro file, with the data
+    //in MolIdx/AtomIdx order (this should be the default for all parsers!)
+    MoleculeGroup allmols = system[MGName("all")];
+
+    const int nmols = allmols.nMolecules();
+
+    QVector<int> atom_pointers(nmols+1, -1);
     
+    int natoms = 0;
     
+    for (int i=0; i<nmols; ++i)
+    {
+        atom_pointers[i] = natoms;
+        const int nats = allmols[MolIdx(i)].data().info().nAtoms();
+        natoms += nats;
+    }
+    
+    atom_pointers[nmols] = natoms;
+    
+    if (natoms != this->nAtoms())
+        throw SireError::incompatible_error( QObject::tr(
+                "Incompatibility between the files, as this .gro file contains data "
+                "for %1 atom(s), while the other file(s) have created a system with "
+                "%2 atom(s)").arg(this->nAtoms()).arg(natoms), CODELOC );
+    
+    //next, copy the coordinates and optionally the velocities into the molecules
+    QVector<Molecule> mols(nmols);
+    Molecule *mols_array = mols.data();
+    
+    const PropertyName coords_property = map["coordinates"];
+    const PropertyName vels_property = map["velocity"];
+
+    const Vector *coords_array = this->coordinates().constData();
+    const Vector *vels_array = this->velocities().constData();
+    
+    auto add_moldata = [&](int i)
+    {
+        const int atom_start_idx = atom_pointers.constData()[i];
+        auto mol = allmols[MolIdx(i)].molecule();
+        const auto molinfo = mol.data().info();
+        
+        //first, get the index of each atom in the gro file
+        QVector<int> idx_in_gro( molinfo.nAtoms(), -1 );
+        
+        for (int j=0; j<molinfo.nAtoms(); ++j)
+        {
+            idx_in_gro[j] = findAtom( molinfo, j, atom_start_idx + j );
+        }
+        
+        //now use this index to locate the correct coordinate and/or velocity
+        //data to add to the molecules
+        auto moleditor = mol.edit();
+        
+        if (has_coords)
+        {
+            auto coords = QVector< QVector<Vector> >(molinfo.nCutGroups());
+
+            for (int j=0; j<molinfo.nCutGroups(); ++j)
+            {
+                coords[j] = QVector<Vector>(molinfo.nAtoms(CGIdx(j)));
+            }
+
+            for (int j=0; j<mol.nAtoms(); ++j)
+            {
+                auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
+                
+                const int atom_idx = idx_in_gro.constData()[j];
+                
+                coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[atom_idx];
+            }
+
+            moleditor.setProperty( coords_property,AtomCoords(CoordGroupArray(coords)) );
+        }
+        
+        if (has_vels)
+        {
+            auto vels = AtomVelocities(molinfo);
+
+            for (int j=0; j<mol.nAtoms(); ++j)
+            {
+                auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(j));
+                
+                const int atom_idx = idx_in_gro.constData()[j];
+
+                //velocity is Angstroms per 1/20.455 ps
+                const auto vel_unit = (1.0 / 20.455) * angstrom / picosecond;
+                
+                const Vector &vel = vels_array[atom_idx];
+                vels.set(cgatomidx, Velocity3D(vel.x() * vel_unit,
+                                               vel.y() * vel_unit,
+                                               vel.z() * vel_unit));
+            }
+            
+            moleditor.setProperty( vels_property, vels );
+        }
+        
+        mols_array[i] = moleditor.commit();
+    };
+    
+    if (usesParallel())
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
+                           [&](tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                add_moldata(i);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<nmols; ++i)
+        {
+            add_moldata(i);
+        }
+    }
+    
+    system.update( Molecules(mols) );
+
+/*
+    PropertyName space_property = map["space"];
+    if (space_property.hasValue())
+    {
+        system.setProperty("space", space_property.value());
+    }
+    else if ((not box_dims.isEmpty()) and space_property.hasSource())
+    {
+        if (box_angs[0] != cubic_angs)
+        {
+            throw SireIO::parse_error( QObject::tr(
+                    "Sire cannot currently support a non-cubic periodic box! %1")
+                        .arg(box_angs[0].toString()), CODELOC );
+        }
+        
+        system.setProperty( space_property.source(), SireVol::PeriodicBox(box_dims[0]) );
+    }
+*/
+    
+    //update the System fileformat property to record that it includes
+    //data from this file format
+    QString fileformat = this->formatName();
+    
+    PropertyName fileformat_property = map["fileformat"];
+    
+    try
+    {
+        QString last_format = system.property(fileformat_property).asA<StringProperty>().value();
+        fileformat = QString("%1,%2").arg(last_format,fileformat);
+    }
+    catch(...)
+    {}
+    
+    if (fileformat_property.hasSource())
+    {
+        system.setProperty(fileformat_property.source(), StringProperty(fileformat));
+    }
+    else
+    {
+        system.setProperty("fileformat", StringProperty(fileformat));
+    }
+    
+    if (not current_time.isEmpty())
+    {
+        PropertyName time_property = map["time"];
+        
+        if (time_property.hasSource())
+        {
+            system.setProperty(time_property.source(), TimeProperty(current_time[0]*picosecond));
+        }
+        else
+        {
+            system.setProperty("time", TimeProperty(current_time[0]*picosecond));
+        }
+    }
 }

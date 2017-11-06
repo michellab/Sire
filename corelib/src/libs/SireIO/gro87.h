@@ -43,6 +43,8 @@ class Gro87;
 QDataStream& operator<<(QDataStream&, const SireIO::Gro87&);
 QDataStream& operator>>(QDataStream&, SireIO::Gro87&);
 
+namespace SireMol{ class MoleculeInfoData; }
+
 namespace SireIO
 {
 
@@ -140,6 +142,9 @@ protected:
 private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
+
+    int findAtom(const SireMol::MoleculeInfoData &molinfo,
+                 int atomidx, int hint=0) const;
 
     /** The title of the file */
     QString ttle;

@@ -182,7 +182,7 @@ public:
     QString toString() const;
     
     bool isNull() const;
-    
+
     QString name() const;
     void setName(const QString &name);
     
@@ -341,6 +341,8 @@ public:
     static const char* typeName();
     
     const char* what() const;
+
+    bool isLead() const;
 
     QStringList includePath(bool absolute_paths=false) const;
     QStringList includedFiles(bool absolute_paths=false) const;
