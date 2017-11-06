@@ -417,6 +417,7 @@ CharmmPSF::CharmmPSF(const CharmmPSF &other) :
     dihedrals(other.dihedrals),
     impropers(other.impropers),
     cross_terms(other.cross_terms),
+    filename(other.filename),
     parse_warnings(other.parse_warnings)
 {}
 
@@ -435,6 +436,7 @@ CharmmPSF& CharmmPSF::operator=(const CharmmPSF &other)
         dihedrals = other.dihedrals;
         impropers = other.impropers;
         cross_terms = other.cross_terms;
+        filename = other.filename;
         parse_warnings = other.parse_warnings;
 
         MoleculeParser::operator=(other);
@@ -1444,7 +1446,7 @@ MolStructureEditor CharmmPSF::getMolStructure(int imol, const PropertyName &cutt
             // This residue number has already appeared with a different name.
             if (atom.getResName() != num_to_name[res_num])
             {
-                throw SireError::program_bug(QObject::tr("The parsed data "
+                throw SireError::incompatible_error(QObject::tr("The parsed data "
                     "contains non-unique residue numbers! Residue number %1 "
                     "for atom number %2 is named %3, was previously assigned name %4")
                     .arg(res_num).arg(atom.getNumber()).arg(atom.getResName())

@@ -42,6 +42,7 @@
 #include "SireMol/atomcharges.h"
 #include "SireMol/atomcoords.h"
 #include "SireMol/atomelements.h"
+#include "SireMol/errors.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
 
@@ -1756,6 +1757,9 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
     if (num_mols == 0)
         return;
 
+    // A vector of the updated molecules.
+    QVector<Molecule> mols(num_mols);
+
     // Loop over the molecules to work out the total number of atoms.
     int num_atoms = 0;
     for (int i=0; i<num_mols; ++i)
@@ -1766,7 +1770,7 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
     // The number of atoms must match.
     if (nAtoms() != num_atoms)
     {
-        throw SireError::program_bug(QObject::tr("The number of atoms "
+        throw SireError::incompatible_error(QObject::tr("The number of atoms "
             "does not match the passed system. Found %1, expected %2")
             .arg(nAtoms()).arg(num_atoms), CODELOC);
     }
@@ -1781,7 +1785,7 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 // Add coordinate information to the molecule.
-                system[molnums[i]] = updateMolecule(system[molnums[i]].molecule(), map);
+                mols[i] = updateMolecule(system[molnums[i]].molecule(), map);
             }
         });
     }
@@ -1790,9 +1794,58 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
         for (int i=0; i<num_mols; ++i)
         {
             // Add coordinate information to the molecule.
-            system[molnums[i]] = updateMolecule(system[molnums[i]].molecule(), map);
+            mols[i] = updateMolecule(system[molnums[i]].molecule(), map);
         }
     }
+
+    // Update the system.
+    system.update(Molecules(mols));
+
+	// Update the System fileformat property to record that it includes
+    // data from this file format.
+    QString fileformat = this->formatName();
+    
+    PropertyName fileformat_property = map["fileformat"];
+    
+    try
+    {
+        QString last_format = system.property(fileformat_property).asA<StringProperty>();
+        fileformat = QString("%1,%2").arg(last_format,fileformat);
+    }
+    catch(...)
+    {}
+    
+    if (fileformat_property.hasSource())
+    {
+        system.setProperty(fileformat_property.source(), StringProperty(fileformat));
+    }
+    else
+    {
+        system.setProperty("fileformat", StringProperty(fileformat));
+	}
+
+	// Update the System filename property to record that it includes
+    // data from this file.
+    QString file_name = this->filename;
+    
+    PropertyName filename_property = map["filename"];
+    
+    try
+    {
+        QString last_filename = system.property(filename_property).asA<StringProperty>();
+        file_name = QString("%1,%2").arg(last_filename,file_name);
+    }
+    catch(...)
+    {}
+    
+    if (filename_property.hasSource())
+    {
+        system.setProperty(filename_property.source(), StringProperty(file_name));
+    }
+    else
+    {
+        system.setProperty("filename", StringProperty(file_name));
+	}
 }
 
 /** Internal function used to get the molecule structure for molecule 'imol'. */
@@ -2125,18 +2178,29 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
        we throw an error and abort.
      */
 
-    MolEditor edit_mol = sire_mol.edit();
-
     // Get the info object that can map between AtomNum to AtomIdx etc.
-    const auto molinfo = edit_mol.info();
+    const auto molinfo = sire_mol.info();
 
-    // Initialise the atom coordinates object.
+    // Initialise the property objects.
     AtomCoords coords(molinfo);
+    AtomCharges        charges(molinfo);
+    AtomElements       elements(molinfo);
+    AtomFloatProperty  occupancies(molinfo);
+    AtomFloatProperty  temperatures(molinfo);
+    AtomStringProperty is_het_atom(molinfo);
+
+    // Residue property objects.
+    ResStringProperty  insert_codes(molinfo);
+
+    // The list of residues that have had properties updated.
+    QVector<qint64> res_list;
 
     // Loop over all atoms in the molecule.
     // Here we are looping by AtomIdx.
     if (usesParallel())
     {
+        QMutex mutex;
+
         tbb::parallel_for(tbb::blocked_range<int>(0, sire_mol.nAtoms()),
                            [&](const tbb::blocked_range<int> r)
         {
@@ -2146,19 +2210,44 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
                 int mol_idx, atom_idx;
 
                 // Try to find a matching atom in the atoms vector.
-                if (findAtom(sire_mol.atom(AtomIdx(i)), mol_idx, atom_idx))
-                {
-                    // Determine the CGAtomIdx for this atom.
-                    auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
+                findAtom(sire_mol.atom(AtomIdx(i)), mol_idx, atom_idx);
 
-                    // Set the properties.
-                    coords.set(cgatomidx, atoms[mol_idx][atom_idx].getCoord());
-                }
-                else
+                // Acquire a lock.
+                QMutexLocker lkr(&mutex);
+
+                // Determine the CGAtomIdx for this atom.
+                auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
+
+                // Store a reference to the atom.
+                const PDBAtom &atom = atoms[mol_idx][atom_idx];
+
+                // Set the properties.
+                coords.set(cgatomidx, atom.getCoord());
+                charges.set(cgatomidx, int(atom.getCharge()) * SireUnits::mod_electron);
+                elements.set(cgatomidx, atom.getElement());
+                occupancies.set(cgatomidx, atom.getOccupancy());
+                temperatures.set(cgatomidx, atom.getTemperature());
+
+                bool isHet = atom.isHet();
+
+                if (isHet) is_het_atom.set(cgatomidx, "True");
+                else       is_het_atom.set(cgatomidx, "False");
+
+                // Store the residue index for the atom.
+                qint64 res_idx = atom.getResIdx();
+
+                // This residue hasn't already been processed.
+                if (not res_list.contains(res_idx))
                 {
-                    throw SireError::program_bug(QObject::tr("Could not find "
-                        "a matching atom record for AtomIdx %1.")
-                        .arg(i), CODELOC);
+                    QChar icode = atom.getInsertCode();
+
+                    // Set the insert code property for this residue.
+                    if (not icode.isSpace())
+                    {
+                        insert_codes.set(ResIdx(res_idx), QString(icode));
+                    }
+
+                    res_list.append(res_idx);
                 }
             }
         });
@@ -2171,71 +2260,304 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
             int mol_idx, atom_idx;
 
             // Try to find a matching atom in the atoms vector.
-            if (findAtom(sire_mol.atom(AtomIdx(i)), mol_idx, atom_idx))
-            {
-                // Determine the CGAtomIdx for this atom.
-                auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
+            findAtom(sire_mol.atom(AtomIdx(i)), mol_idx, atom_idx);
 
-                // Set the properties.
-                coords.set(cgatomidx, atoms[mol_idx][atom_idx].getCoord());
-            }
-            else
+            // Determine the CGAtomIdx for this atom.
+            auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
+
+            // Store a reference to the atom.
+            const PDBAtom &atom = atoms[mol_idx][atom_idx];
+
+            // Set the properties.
+            coords.set(cgatomidx, atom.getCoord());
+            charges.set(cgatomidx, int(atom.getCharge()) * SireUnits::mod_electron);
+            elements.set(cgatomidx, atom.getElement());
+            occupancies.set(cgatomidx, atom.getOccupancy());
+            temperatures.set(cgatomidx, atom.getTemperature());
+
+            bool isHet = atom.isHet();
+
+            if (isHet) is_het_atom.set(cgatomidx, "True");
+            else       is_het_atom.set(cgatomidx, "False");
+
+            // Store the residue index for the atom.
+            qint64 res_idx = atom.getResIdx();
+
+            // This residue hasn't already been processed.
+            if (not res_list.contains(res_idx))
             {
-                throw SireError::program_bug(QObject::tr("Could not find "
-                    "a matching atom record for AtomIdx %1")
-                    .arg(i), CODELOC);
+                QChar icode = atom.getInsertCode();
+
+                // Set the insert code property for this residue.
+                if (not icode.isSpace())
+                {
+                    insert_codes.set(ResIdx(res_idx), QString(icode));
+                }
+
+                res_list.append(res_idx);
             }
         }
     }
 
-    // Set the coordinates property and return the updated molecule.
-    return sire_mol.edit().setProperty(map["coordinates"], coords).commit();
+    // Set the additional properties.
+
+    MolEditor edit_mol = sire_mol.edit();
+
+    // Coordinates.
+    if (not sire_mol.hasProperty(map["coordinates"]))
+    {
+        edit_mol.setProperty(map["coordinates"], coords);
+    }
+    else
+    {
+        if (not sire_mol.hasProperty(map["PDB.coordinates"]))
+        {
+            edit_mol.setProperty(map["PDB.coordinates"], coords);
+        }
+        else
+        {
+            edit_mol.setProperty(map["PDB.coordinates[2]"], coords);
+        }
+    }
+
+    // Charges.
+    if (not sire_mol.hasProperty(map["coordinates"]))
+    {
+        edit_mol.setProperty(map["formal-charge"], charges);
+    }
+    else
+    {
+        if (not sire_mol.hasProperty(map["PDB.formal-charge"]))
+        {
+            edit_mol.setProperty(map["PDB.formal-charge"], charges);
+        }
+        else
+        {
+            edit_mol.setProperty(map["PDB.formal-charge[2]"], charges);
+        }
+    }
+
+    // Elements.
+    if (not sire_mol.hasProperty(map["element"]))
+    {
+        edit_mol.setProperty(map["element"], elements);
+    }
+    else
+    {
+        if (not sire_mol.hasProperty(map["PDB.element"]))
+        {
+            edit_mol.setProperty(map["PDB.element"], elements);
+        }
+        else
+        {
+            edit_mol.setProperty(map["PDB.element[2]"], elements);
+        }
+    }
+
+    // Occupancy.
+    if (not sire_mol.hasProperty(map["occupancy"]))
+    {
+        edit_mol.setProperty(map["occupancy"], occupancies);
+    }
+    else
+    {
+        if (not sire_mol.hasProperty(map["PDB.occupancy"]))
+        {
+            edit_mol.setProperty(map["PDB.occupancy"], occupancies);
+        }
+        else
+        {
+            edit_mol.setProperty(map["PDB.occupancy[2]"], occupancies);
+        }
+    }
+
+    // Temperature factors.
+    if (not sire_mol.hasProperty(map["beta-factor"]))
+    {
+        edit_mol.setProperty(map["beta-factor"], temperatures);
+    }
+    else
+    {
+        if (not sire_mol.hasProperty(map["PDB.beta-factor"]))
+        {
+            edit_mol.setProperty(map["PDB.beta-factor"], temperatures);
+        }
+        else
+        {
+            edit_mol.setProperty(map["PDB.beta-factor[2]"], temperatures);
+        }
+    }
+
+    // Hetero-atoms.
+    if (not sire_mol.hasProperty(map["is-het"]))
+    {
+        edit_mol.setProperty(map["is-het"], is_het_atom);
+    }
+    else
+    {
+        if (not sire_mol.hasProperty(map["PDB.is-het"]))
+        {
+            edit_mol.setProperty(map["PDB.is-het"], is_het_atom);
+        }
+        else
+        {
+            edit_mol.setProperty(map["PDB.is-het[2]"], is_het_atom);
+        }
+    }
+
+    // Residue insert codes.
+    if (not sire_mol.hasProperty(map["insert-code"]))
+    {
+        edit_mol.setProperty(map["insert-code"], insert_codes);
+    }
+    else
+    {
+        if (not sire_mol.hasProperty(map["PDB.insert-code"]))
+        {
+            edit_mol.setProperty(map["PDB.insert-code"], insert_codes);
+        }
+        else
+        {
+            edit_mol.setProperty(map["PDB.insert-code[2]"], insert_codes);
+        }
+    }
+
+    return edit_mol.commit();
 }
 
 /** Find the atom at index [ mol_idx ][ atom_idx ] in the atoms vector that
     matches the Sire Atom. Return false if no match is found. */
-bool PDB2::findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx) const
+void PDB2::findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx) const
 {
-    // Store the atom number.
-    int atom_num = sire_atom.number().value();
+    // Store the atom properties.
+    const QString atom_name = sire_atom.name().value();
+    const int atom_num = sire_atom.number().value();
 
-    // Loop over all of the molecules.
-    for (int i=0; i<nMolecules(); ++i)
+    bool is_within_res = false;
+    if (sire_atom.isWithinResidue())
+        is_within_res = true;
+
+    // Store residue properties.
+    const QString res_name = is_within_res ?
+        sire_atom.residue().name().value().left(3) : QString();
+
+    const int res_num = is_within_res ?
+        sire_atom.residue().number().value() : 0;
+
+    // First, we'll locate the molecule that likely contains the
+    // atom, i.e. the molecule where the last atom has a number
+    // larger than the one that we're searching for.
+    // This avoids doing an order N^2 search.
+
+    // Molecule index.
+    int imol = 0;
+    while (atoms[imol][nAtoms(imol)-1].getNumber() < atom_num)
+        imol++;
+
+    // Now search the molecule in question.
+
+    // The index to start our search, assuming ascending atom numbers.
+    int hint = atom_num - atoms[imol][0].getNumber();
+
+    // Make sure the start index is in range.
+    if (hint < 0 or hint >= nAtoms(imol))
+        hint = 0;
+
+    // A map of partial matches: score -> (mol_idx, atom_idx)
+    QMap<int, QPair<int, int>> partial_matches;
+
+    auto is_match = [&](int i, int j)
     {
-        // Loop over all of the atoms in the molecule.
-        for (int j=0; j<nAtoms(i); ++j)
+        bool same_atom_name = (atom_name == atoms[i][j].getName());
+        bool same_atom_num  = (atom_num  == atoms[i][j].getNumber());
+
+        // This is true by default, since some atoms aren't in residues.
+        bool same_res_name = true;
+        bool same_res_num  = true;
+
+        if (is_within_res)
         {
-            // Atom numbers match.
-            if (atoms[i][j].getNumber() == atom_num)
+            same_res_name = (res_name == atoms[i][j].getResName());
+            same_res_num  = (res_num  == atoms[i][j].getResNum());
+        }
+
+        if (same_atom_name and same_res_name and j == hint)
+        {
+            return true;
+        }
+        if (same_atom_name and same_atom_num and
+            same_res_name  and same_res_num)
+        {
+            return true;
+        }
+        else if (same_atom_name)
+        {
+            // Score a partial match. MUST match atom name, then ideally
+            // residue name, atom number, residue number.
+            partial_matches.insert((10 * same_res_name ) +
+                                   ( 5 * same_atom_num ) +
+                                   ( 2 * same_res_num  ) +
+                                   ( 1 * (j == hint)   ),
+                                   QPair<int, int>(i, j));
+        }   
+
+        return false;
+    };
+
+    // Whether a matching atom was found.
+    bool match_found = false;
+
+    // Search all atoms in the suspected molecule.
+    for (int i=hint; i<nAtoms(imol); i++)
+    {
+        if (is_match(imol, i))
+        {
+            mol_idx  = imol;
+            atom_idx = i;
+
+            match_found = true;
+            break;
+        }
+    }
+
+    // Didn't find a match, search all molecules.
+    if (not match_found)
+    {
+        // Loop over all of the molecules.
+        for (int i=0; i<nMolecules(); ++i)
+        {
+            // Loop over all of the atoms in the molecule.
+            for (int j=0; j<nAtoms(i); ++j)
             {
-                // Atom names match.
-                if (atoms[i][j].getName() == sire_atom.name().value())
+                if (is_match(i, j))
                 {
-                    // The atom is within a residue.
-                    if (sire_atom.isWithinResidue())
-                    {
-                        // Store the residue name (limit to three characters).
-                        QString res_name = sire_atom.residue().name().value().left(3);
+                    mol_idx  = i;
+                    atom_idx = j;
 
-                        // Store the residue number.
-                        int res_num  = sire_atom.residue().number().value();
-
-                        // We found a match. Store the mol and atom id
-                        // numbers and return that we were successful.
-                        if ((atoms[i][j].getResName() == res_name) and
-                            (atoms[i][j].getResNum() == res_num))
-                        {
-                            mol_idx = i;
-                            atom_idx = j;
-
-                            return true;
-                        }
-                    }
+                    match_found = true;
+                    break;
                 }
             }
         }
     }
 
-    // No match found.
-    return false;
+    // Still no match, check for partial matches.
+    if (not match_found)
+    {
+        if (not partial_matches.isEmpty())
+        {
+            // Use the match with the highest score.
+            auto match = partial_matches.last();
+
+            mol_idx  = match.first;
+            atom_idx = match.second;
+
+        }
+        else
+        {
+            throw SireMol::missing_atom(QObject::tr("Could not find "
+                "a matching atom record for AtomIdx %1.")
+                .arg(sire_atom.index().value()), CODELOC);
+        }
+    }
 }

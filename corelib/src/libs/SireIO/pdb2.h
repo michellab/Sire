@@ -271,7 +271,7 @@ private:
     SireMol::Molecule updateMolecule(const SireMol::Molecule &sire_mol,
         const SireBase::PropertyMap &map = SireBase::PropertyMap()) const;
 
-    bool findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx) const;
+    void findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx) const;
 
     SireMol::MolStructureEditor getMolStructure(int imol,
         const SireBase::PropertyName &cutting) const;
