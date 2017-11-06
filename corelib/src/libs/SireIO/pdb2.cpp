@@ -1804,9 +1804,9 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
 	// Update the System fileformat property to record that it includes
     // data from this file format.
     QString fileformat = this->formatName();
-    
+
     PropertyName fileformat_property = map["fileformat"];
-    
+
     try
     {
         QString last_format = system.property(fileformat_property).asA<StringProperty>();
@@ -1814,7 +1814,7 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
     }
     catch(...)
     {}
-    
+
     if (fileformat_property.hasSource())
     {
         system.setProperty(fileformat_property.source(), StringProperty(fileformat));
@@ -1827,9 +1827,9 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
 	// Update the System filename property to record that it includes
     // data from this file.
     QString file_name = this->filename;
-    
+
     PropertyName filename_property = map["filename"];
-    
+
     try
     {
         QString last_filename = system.property(filename_property).asA<StringProperty>();
@@ -1837,7 +1837,7 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
     }
     catch(...)
     {}
-    
+
     if (filename_property.hasSource())
     {
         system.setProperty(filename_property.source(), StringProperty(file_name));
@@ -2452,7 +2452,16 @@ void PDB2::findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx)
     // Molecule index.
     int imol = 0;
     while (atoms[imol][nAtoms(imol)-1].getNumber() < atom_num)
+    {
         imol++;
+
+        // Make sure the molecule index is in range.
+        if (imol == nMolecules())
+        {
+            imol = 0;
+            break;
+        }
+    }
 
     // Now search the molecule in question.
 
@@ -2499,7 +2508,7 @@ void PDB2::findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx)
                                    ( 2 * same_res_num  ) +
                                    ( 1 * (j == hint)   ),
                                    QPair<int, int>(i, j));
-        }   
+        }
 
         return false;
     };
