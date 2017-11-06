@@ -1474,9 +1474,9 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers) const
     // If so, move them to the followers until only a single lead remains.
     if (leaders.count() > 1)
     {
-        // Whether each leader has been removed.
-        QVector<bool> is_removed(leaders.count());
-        is_removed.fill(false);
+        // Whether the parser is the new leader.
+        QVector<bool> is_leader(leaders.count());
+        is_leader.fill(true);
 
         // The number of leaders.
         int num_lead = leaders.count();
@@ -1490,7 +1490,7 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers) const
                 if (leaders[i].read().canFollow())
                 {
                     followers.append(leaders[i]);
-                    is_removed[i] = true;
+                    is_leader[i] = false;
                     num_lead--;
                 }
             }
@@ -1504,11 +1504,23 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers) const
                 "none can follow!"), CODELOC );
         }
 
-        // Remove the all redundant leaders.
+        // Find the new lead parser..
         for (int i=0; i<leaders.count(); ++i)
         {
-            if (is_removed[i])
-                leaders.removeAt(i);
+            // This parser is the new leader.
+            if (is_leader[i])
+            {
+                // Copy the ptr to the new lead.
+                MoleculeParserPtr leader = leaders[i];
+
+                // Clear the leaders list.
+                leaders.clear();
+
+                // Append the new leader.
+                leaders.append(leader);
+
+                break;
+            }
         }
     }
 
