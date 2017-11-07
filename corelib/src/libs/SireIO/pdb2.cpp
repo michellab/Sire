@@ -1775,6 +1775,12 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
             .arg(nAtoms()).arg(num_atoms), CODELOC);
     }
 
+
+    // Whether each atom from the PDB record has been used as
+    // a match for the system constructed by the lead parser.
+    // This is used to avoid duplicate matches.
+    QVector<bool> used_atoms(nAtoms(), false);
+
     // We now need to iterate over the molecules in the passed system,
     // find the matching atoms from the PDB data and add coordinate properties.
     if (usesParallel())
@@ -1785,7 +1791,7 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 // Add coordinate information to the molecule.
-                mols[i] = updateMolecule(system[molnums[i]].molecule(), map);
+                mols[i] = updateMolecule(system[molnums[i]].molecule(), used_atoms, map);
             }
         });
     }
@@ -1794,7 +1800,7 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
         for (int i=0; i<num_mols; ++i)
         {
             // Add coordinate information to the molecule.
-            mols[i] = updateMolecule(system[molnums[i]].molecule(), map);
+            mols[i] = updateMolecule(system[molnums[i]].molecule(), used_atoms, map);
         }
     }
 
@@ -2040,8 +2046,7 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
     atom_lines.resize(num_atoms + num_chains);
 
     // Whether each atom is a terminal atom, i.e. the end of a chain.
-    QVector<bool> is_ter(num_atoms);
-    is_ter.fill(false);
+    QVector<bool> is_ter(num_atoms, false);
 
     // Loop over the chains.
     for (int i=0; i<num_chains; ++i)
@@ -2160,7 +2165,7 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
 /** Internal function used to parse a add PDB coordinate data to an existing
     Sire Molecule. */
 SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
-    const SireBase::PropertyMap &map) const
+    QVector<bool> &used_atoms, const SireBase::PropertyMap &map) const
 {
     /* Now we need to match the atoms in the passed system to those
        in the PDB2 object.
@@ -2195,6 +2200,45 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
     // The list of residues that have had properties updated.
     QVector<qint64> res_list;
 
+    // Internal function to update atom properties for AtomIdx 'i'
+    auto update_atom = [&](int i, int mol_idx, int atom_idx)
+    {
+        // Determine the CGAtomIdx for this atom.
+        auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
+
+        // Store a reference to the atom.
+        const PDBAtom &atom = atoms[mol_idx][atom_idx];
+
+        // Set the properties.
+        coords.set(cgatomidx, atom.getCoord());
+        charges.set(cgatomidx, int(atom.getCharge()) * SireUnits::mod_electron);
+        elements.set(cgatomidx, atom.getElement());
+        occupancies.set(cgatomidx, atom.getOccupancy());
+        temperatures.set(cgatomidx, atom.getTemperature());
+
+        bool isHet = atom.isHet();
+
+        if (isHet) is_het_atom.set(cgatomidx, "True");
+        else       is_het_atom.set(cgatomidx, "False");
+
+        // Store the residue index for the atom.
+        qint64 res_idx = atom.getResIdx();
+
+        // This residue hasn't already been processed.
+        if (not res_list.contains(res_idx))
+        {
+            QChar icode = atom.getInsertCode();
+
+            // Set the insert code property for this residue.
+            if (not icode.isSpace())
+            {
+                insert_codes.set(ResIdx(res_idx), QString(icode));
+            }
+
+            res_list.append(res_idx);
+        }
+    };
+
     // Loop over all atoms in the molecule.
     // Here we are looping by AtomIdx.
     if (usesParallel())
@@ -2210,45 +2254,13 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
                 int mol_idx, atom_idx;
 
                 // Try to find a matching atom in the atoms vector.
-                findAtom(sire_mol.atom(AtomIdx(i)), mol_idx, atom_idx);
+                findAtom(sire_mol.atom(AtomIdx(i)), mol_idx, atom_idx, used_atoms);
 
                 // Acquire a lock.
                 QMutexLocker lkr(&mutex);
 
-                // Determine the CGAtomIdx for this atom.
-                auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
-
-                // Store a reference to the atom.
-                const PDBAtom &atom = atoms[mol_idx][atom_idx];
-
-                // Set the properties.
-                coords.set(cgatomidx, atom.getCoord());
-                charges.set(cgatomidx, int(atom.getCharge()) * SireUnits::mod_electron);
-                elements.set(cgatomidx, atom.getElement());
-                occupancies.set(cgatomidx, atom.getOccupancy());
-                temperatures.set(cgatomidx, atom.getTemperature());
-
-                bool isHet = atom.isHet();
-
-                if (isHet) is_het_atom.set(cgatomidx, "True");
-                else       is_het_atom.set(cgatomidx, "False");
-
-                // Store the residue index for the atom.
-                qint64 res_idx = atom.getResIdx();
-
-                // This residue hasn't already been processed.
-                if (not res_list.contains(res_idx))
-                {
-                    QChar icode = atom.getInsertCode();
-
-                    // Set the insert code property for this residue.
-                    if (not icode.isSpace())
-                    {
-                        insert_codes.set(ResIdx(res_idx), QString(icode));
-                    }
-
-                    res_list.append(res_idx);
-                }
+                // Update the atom properties.
+                update_atom(i, mol_idx, atom_idx);
             }
         });
     }
@@ -2260,42 +2272,10 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
             int mol_idx, atom_idx;
 
             // Try to find a matching atom in the atoms vector.
-            findAtom(sire_mol.atom(AtomIdx(i)), mol_idx, atom_idx);
+            findAtom(sire_mol.atom(AtomIdx(i)), mol_idx, atom_idx, used_atoms);
 
-            // Determine the CGAtomIdx for this atom.
-            auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
-
-            // Store a reference to the atom.
-            const PDBAtom &atom = atoms[mol_idx][atom_idx];
-
-            // Set the properties.
-            coords.set(cgatomidx, atom.getCoord());
-            charges.set(cgatomidx, int(atom.getCharge()) * SireUnits::mod_electron);
-            elements.set(cgatomidx, atom.getElement());
-            occupancies.set(cgatomidx, atom.getOccupancy());
-            temperatures.set(cgatomidx, atom.getTemperature());
-
-            bool isHet = atom.isHet();
-
-            if (isHet) is_het_atom.set(cgatomidx, "True");
-            else       is_het_atom.set(cgatomidx, "False");
-
-            // Store the residue index for the atom.
-            qint64 res_idx = atom.getResIdx();
-
-            // This residue hasn't already been processed.
-            if (not res_list.contains(res_idx))
-            {
-                QChar icode = atom.getInsertCode();
-
-                // Set the insert code property for this residue.
-                if (not icode.isSpace())
-                {
-                    insert_codes.set(ResIdx(res_idx), QString(icode));
-                }
-
-                res_list.append(res_idx);
-            }
+            // Update the atom properties.
+            update_atom(i, mol_idx, atom_idx);
         }
     }
 
@@ -2427,7 +2407,8 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
 
 /** Find the atom at index [ mol_idx ][ atom_idx ] in the atoms vector that
     matches the Sire Atom. Return false if no match is found. */
-void PDB2::findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx) const
+void PDB2::findAtom(const SireMol::Atom &sire_atom, int &mol_idx,
+    int &atom_idx, QVector<bool> &used_atoms) const
 {
     // Store the atom properties.
     const QString atom_name = sire_atom.name().value();
@@ -2447,7 +2428,8 @@ void PDB2::findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx)
     // First, we'll locate the molecule that likely contains the
     // atom, i.e. the molecule where the last atom has a number
     // larger than the one that we're searching for.
-    // This avoids doing an order N^2 search.
+    // This avoids doing an order N^2 search if we assume that
+    // the atoms are likely in the same order in the lead file.
 
     // Molecule index.
     int imol = 0;
@@ -2475,6 +2457,7 @@ void PDB2::findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx)
     // A map of partial matches: score -> (mol_idx, atom_idx)
     QMap<int, QPair<int, int>> partial_matches;
 
+    // Internal function to check whether we find a matching atom.
     auto is_match = [&](int i, int j)
     {
         bool same_atom_name = (atom_name == atoms[i][j].getName());
@@ -2513,13 +2496,38 @@ void PDB2::findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx)
         return false;
     };
 
+    // Internal function to determine whether an atom has already been
+    // used as a match for a different record.
+    auto is_available = [&](int i, int j)
+    {
+        // Work out the index of this atom.
+
+        int atom_idx = 0;
+
+        for (int idx=0; idx<i; idx++)
+            atom_idx += nAtoms(idx);
+
+        atom_idx += j;
+
+        if (used_atoms[atom_idx])
+        {
+            return false;
+        }
+        else
+        {
+            used_atoms[atom_idx] = true;
+            return true;
+        }
+    };
+
     // Whether a matching atom was found.
     bool match_found = false;
 
     // Search all atoms in the suspected molecule.
     for (int i=hint; i<nAtoms(imol); i++)
     {
-        if (is_match(imol, i))
+        if (is_match(imol, i) and
+            is_available(imol, i))
         {
             mol_idx  = imol;
             atom_idx = i;
@@ -2538,7 +2546,8 @@ void PDB2::findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx)
             // Loop over all of the atoms in the molecule.
             for (int j=0; j<nAtoms(i); ++j)
             {
-                if (is_match(i, j))
+                if (is_match(i, j) and
+                    is_available(i, j))
                 {
                     mol_idx  = i;
                     atom_idx = j;
@@ -2553,20 +2562,36 @@ void PDB2::findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx)
     // Still no match, check for partial matches.
     if (not match_found)
     {
-        if (not partial_matches.isEmpty())
+        // Try the partial matches in order of decreasing score.
+        while (not partial_matches.isEmpty())
         {
-            // Use the match with the highest score.
-            auto match = partial_matches.last();
+            // Take the match with the highest score from the map.
+            auto match = partial_matches.take(partial_matches.lastKey());
 
             mol_idx  = match.first;
             atom_idx = match.second;
 
+            if (is_available(mol_idx, atom_idx))
+            {
+                match_found = true;
+                break;
+            }
         }
-        else
+
+        if (not match_found)
         {
-            throw SireMol::missing_atom(QObject::tr("Could not find "
-                "a matching atom record for AtomIdx %1.")
-                .arg(sire_atom.index().value()), CODELOC);
+            if (is_within_res)
+            {
+                throw SireMol::missing_atom(QObject::tr("Could not find "
+                    "a matching atom record: AtomName(\'%1\'), AtomNum(%2), ResName(\'%3\'), ResNum(%4)")
+                    .arg(atom_name).arg(atom_num).arg(res_name).arg(res_num), CODELOC);
+            }
+            else
+            {
+                throw SireMol::missing_atom(QObject::tr("Could not find "
+                    "a matching atom record: AtomName(\'%1\'), AtomNum(%2)")
+                    .arg(atom_name).arg(atom_num), CODELOC);
+            }
         }
     }
 }

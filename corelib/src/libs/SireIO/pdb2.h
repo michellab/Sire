@@ -268,10 +268,11 @@ private:
     void parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &atom_lines,
         QStringList &errors, const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
-    SireMol::Molecule updateMolecule(const SireMol::Molecule &sire_mol,
+    SireMol::Molecule updateMolecule(const SireMol::Molecule &sire_mol, QVector<bool> &used_atoms,
         const SireBase::PropertyMap &map = SireBase::PropertyMap()) const;
 
-    void findAtom(const SireMol::Atom &sire_atom, int &mol_idx, int &atom_idx) const;
+    void findAtom(const SireMol::Atom &sire_atom, int &mol_idx,
+        int &atom_idx, QVector<bool> &used_atoms) const;
 
     SireMol::MolStructureEditor getMolStructure(int imol,
         const SireBase::PropertyName &cutting) const;
