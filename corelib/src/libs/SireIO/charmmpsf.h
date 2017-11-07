@@ -199,6 +199,7 @@ public:
     int nAtoms() const;
     int nAtoms(int i) const;
     int nBonds() const;
+    int nBonds(int i) const;
     int nAngles() const;
     int nDihedrals() const;
     int nImpropers() const;
@@ -221,10 +222,14 @@ private:
     void findMolecules();
 
     void findBondedAtoms(int atom_idx, int mol_idx, const QHash<int, int> &bonded_atoms,
-        QHash<int, int> &atom_to_mol, QSet<qint64> &atoms_in_mol) const;
+        QHash<int, int> &atom_to_mol, QSet<qint64> &atoms_in_mol,
+        QVector<QPair<qint64, qint64> >& bonds_in_mol) const;
 
     /** The indices of the atoms in each molecule. */
     QVector<QVector<qint64> > molecules;
+
+    /** Pairs of bonds (atom-to-atom) for each molecule. */
+    QVector<QVector<QPair<qint64, qint64> > > molecule_bonds;
 
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;

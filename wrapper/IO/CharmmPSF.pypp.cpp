@@ -180,6 +180,18 @@ void register_CharmmPSF_class(){
                 , "" );
         
         }
+        { //::SireIO::CharmmPSF::nBonds
+        
+            typedef int ( ::SireIO::CharmmPSF::*nBonds_function_type)( int ) const;
+            nBonds_function_type nBonds_function_value( &::SireIO::CharmmPSF::nBonds );
+            
+            CharmmPSF_exposer.def( 
+                "nBonds"
+                , nBonds_function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
         { //::SireIO::CharmmPSF::nCrossTerms
         
             typedef int ( ::SireIO::CharmmPSF::*nCrossTerms_function_type)(  ) const;
