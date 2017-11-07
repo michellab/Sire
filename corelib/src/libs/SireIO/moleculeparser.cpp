@@ -1499,9 +1499,9 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers) const
         // Can only have one leader.
         if (num_lead > 1)
         {
-            throw SireError::program_bug( QObject::tr(
+            throw SireError::incompatible_error(QObject::tr(
                 "Cannot construct a System from multiple lead parsers if "
-                "none can follow!"), CODELOC );
+                "none can follow!"), CODELOC);
         }
 
         // Find the new lead parser..
