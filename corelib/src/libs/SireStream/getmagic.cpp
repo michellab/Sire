@@ -26,6 +26,8 @@
   *
 \*********************************************/
 
+#include <QString>
+#include <QLatin1String>
 #include "sireglobal.h"
 
 #include "ThirdParty/md5.h"

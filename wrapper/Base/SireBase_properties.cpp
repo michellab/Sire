@@ -13,14 +13,10 @@
 #include <QMutex>
 #include "property.h"
 #include "SireStream/datastream.h"
-#include "SireStream/shareddatastream.h"
-#include "stringmangler.h"
-#include <QMutex>
-#include "stringmangler.h"
-#include "SireStream/datastream.h"
 #include "range.h"
 #include "ranges.h"
 #include "range.h"
+
 void register_SireBase_properties()
 {
     register_property_container< SireBase::PropertyPtr, SireBase::Property >();

@@ -13,6 +13,8 @@
 
 #include "AmberRst7.pypp.hpp"
 
+#include "CharmmPSF.pypp.hpp"
+
 #include "Cube.pypp.hpp"
 
 #include "FlexibilityLibrary.pypp.hpp"
@@ -33,6 +35,8 @@
 
 #include "IOParametersBase.pypp.hpp"
 
+#include "Mol2.pypp.hpp"
+
 #include "MoleculeParser.pypp.hpp"
 
 #include "NullIO.pypp.hpp"
@@ -40,6 +44,8 @@
 #include "NullParser.pypp.hpp"
 
 #include "PDB.pypp.hpp"
+
+#include "PDB2.pypp.hpp"
 
 #include "PDBParameters.pypp.hpp"
 
@@ -82,6 +88,8 @@ BOOST_PYTHON_MODULE(_IO){
 
     register_AmberRst7_class();
 
+    register_CharmmPSF_class();
+
     register_Cube_class();
 
     register_FlexibilityLibrary_class();
@@ -102,11 +110,15 @@ BOOST_PYTHON_MODULE(_IO){
 
     register_IOParametersBase_class();
 
+    register_Mol2_class();
+
     register_NullIO_class();
 
     register_NullParser_class();
 
     register_PDB_class();
+
+    register_PDB2_class();
 
     register_PDBParameters_class();
 

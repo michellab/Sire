@@ -3,14 +3,14 @@
 
 #include "SireVol_registrars.h"
 
+#include "periodicbox.h"
+#include "coordgroup.h"
+#include "cartesian.h"
 #include "patching.h"
 #include "aabox.h"
-#include "gridinfo.h"
-#include "cartesian.h"
-#include "coordgroup.h"
-#include "grid.h"
 #include "combinedspace.h"
-#include "periodicbox.h"
+#include "grid.h"
+#include "gridinfo.h"
 #include "combinespaces.h"
 
 #include "Helpers/objectregistry.hpp"
@@ -18,20 +18,20 @@
 void register_SireVol_objects()
 {
 
-    ObjectRegistry::registerConverterFor< SireVol::NullPatching >();
-    ObjectRegistry::registerConverterFor< SireVol::BoxPatching >();
-    ObjectRegistry::registerConverterFor< SireVol::AABox >();
-    ObjectRegistry::registerConverterFor< SireVol::GridIndex >();
-    ObjectRegistry::registerConverterFor< SireVol::GridInfo >();
-    ObjectRegistry::registerConverterFor< SireVol::Cartesian >();
+    ObjectRegistry::registerConverterFor< SireVol::PeriodicBox >();
     ObjectRegistry::registerConverterFor< SireVol::CoordGroup >();
     ObjectRegistry::registerConverterFor< SireVol::CoordGroupEditor >();
     ObjectRegistry::registerConverterFor< SireVol::CoordGroupArray >();
     ObjectRegistry::registerConverterFor< SireVol::CoordGroupArrayArray >();
+    ObjectRegistry::registerConverterFor< SireVol::Cartesian >();
+    ObjectRegistry::registerConverterFor< SireVol::NullPatching >();
+    ObjectRegistry::registerConverterFor< SireVol::BoxPatching >();
+    ObjectRegistry::registerConverterFor< SireVol::AABox >();
+    ObjectRegistry::registerConverterFor< SireVol::CombinedSpace >();
     ObjectRegistry::registerConverterFor< SireVol::NullGrid >();
     ObjectRegistry::registerConverterFor< SireVol::RegularGrid >();
-    ObjectRegistry::registerConverterFor< SireVol::CombinedSpace >();
-    ObjectRegistry::registerConverterFor< SireVol::PeriodicBox >();
+    ObjectRegistry::registerConverterFor< SireVol::GridIndex >();
+    ObjectRegistry::registerConverterFor< SireVol::GridInfo >();
     ObjectRegistry::registerConverterFor< SireVol::CombineSpaces >();
 
 }

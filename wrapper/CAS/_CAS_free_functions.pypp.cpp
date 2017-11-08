@@ -79,42 +79,6 @@ namespace bp = boost::python;
 
 #include "expression.h"
 
-#include "SireMaths/complex.h"
-
-#include "SireMaths/maths.h"
-
-#include "SireStream/datastream.h"
-
-#include "complexvalues.h"
-
-#include "exbase.h"
-
-#include "expression.h"
-
-#include "functions.h"
-
-#include "i.h"
-
-#include "identities.h"
-
-#include "integrationconstant.h"
-
-#include "power.h"
-
-#include "powerconstant.h"
-
-#include "product.h"
-
-#include "sum.h"
-
-#include "symbol.h"
-
-#include "symbols.h"
-
-#include "values.h"
-
-#include "expression.h"
-
 #include "SireCAS/errors.h"
 
 #include "SireStream/datastream.h"
@@ -750,6 +714,42 @@ namespace bp = boost::python;
 #include "values.h"
 
 #include "exbase.h"
+
+#include "SireMaths/complex.h"
+
+#include "SireMaths/maths.h"
+
+#include "SireStream/datastream.h"
+
+#include "complexvalues.h"
+
+#include "exbase.h"
+
+#include "expression.h"
+
+#include "functions.h"
+
+#include "i.h"
+
+#include "identities.h"
+
+#include "integrationconstant.h"
+
+#include "power.h"
+
+#include "powerconstant.h"
+
+#include "product.h"
+
+#include "sum.h"
+
+#include "symbol.h"
+
+#include "symbols.h"
+
+#include "values.h"
+
+#include "expression.h"
 
 #include "SireMaths/complex.h"
 
@@ -833,8 +833,8 @@ void register_free_functions(){
         bp::def( 
             "cbrt"
             , cbrt_function_value
-            , ( bp::arg("arg0") )
-            , "" );
+            , ( bp::arg("__x") )
+            , "Return the cube root of X." );
     
     }
 
@@ -859,8 +859,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("arg0"), bp::arg("arg1") )
-            , "" );
+            , ( bp::arg("__x"), bp::arg("__y") )
+            , "Return X to the Y power." );
     
     }
 
@@ -1015,8 +1015,8 @@ void register_free_functions(){
         bp::def( 
             "sqrt"
             , sqrt_function_value
-            , ( bp::arg("arg0") )
-            , "" );
+            , ( bp::arg("__x") )
+            , "Return the square root of X." );
     
     }
 

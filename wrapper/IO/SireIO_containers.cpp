@@ -41,7 +41,6 @@
 #include "Base/convertpackedarray.hpp"
 
 #include "SireIO/moleculeparser.h"
-#include "SireIO/grotop.h"
 
 using namespace SireIO;
 

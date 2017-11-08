@@ -630,7 +630,7 @@ if __name__ == "__main__":
                                 xml_generator_path=generator_path,
                                 xml_generator=generator_name,
                                 compiler="gcc",
-                                cflags = "-m64 -fPIC",
+                                cflags = "-m64 -fPIC -std=c++14",
                                 include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs,
                                 define_symbols = ["GCCXML_PARSE", "__PIE__",
@@ -648,7 +648,7 @@ if __name__ == "__main__":
                                 xml_generator_path=generator_path,
                                 xml_generator=generator_name,
                                 compiler="gcc",
-                                cflags = "-m64 -fPIC",
+                                cflags = "-m64 -fPIC -std=c++14",
                                 include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs +
                                            openmm_include_dirs,

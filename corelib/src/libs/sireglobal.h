@@ -12,6 +12,7 @@
 #ifdef __cplusplus
 
 #include <qmetatype.h>
+#include <QString>
 
 #include <boost/current_function.hpp>
 //macro used to return the current file and line as a QString
@@ -233,6 +234,11 @@ public:
     {
         return typnam;
     }
+    
+    QString typeNameString() const
+    {
+        return QLatin1String(typnam);
+    }
 
     int ID() const
     {
@@ -271,7 +277,7 @@ public:
     {
         qRegisterMetaType<T>(this->typeName());
         qRegisterMetaTypeStreamOperators<T>(this->typeName());
-        detail::registerLeaf(this->typeName(), T::ROOT::typeName());
+        detail::registerLeaf(this->typeNameString(), T::ROOT::typeName());
     }
 
     /** Use this constructor to register a concrete class with no root */
@@ -282,21 +288,21 @@ public:
     {
         qRegisterMetaType<T>(this->typeName());
         qRegisterMetaTypeStreamOperators<T>(this->typeName());
-        detail::registerRootless(this->typeName());
+        detail::registerRootless(this->typeNameString());
     }
 
     /** Use this construct to register a pure-virtual class */
     RegisterMetaType(MagicOnlyEnum, const char *type_name)
         : RegisterMetaTypeBase( getMagic(type_name), type_name, 0 )
     {
-        detail::registerBranch(this->typeName(), T::ROOT::typeName());
+        detail::registerBranch(this->typeNameString(), T::ROOT::typeName());
     }
 
     /** Use this construct to register a pure-virtual class with no registered root */
     RegisterMetaType(MagicOnlyEnum, NoRootEnum, const char *type_name)
         : RegisterMetaTypeBase( getMagic(type_name), type_name, 0 )
     {
-        detail::registerRootless(this->typeName());
+        detail::registerRootless(this->typeNameString());
     }
 
     /** Use this constructor to register a class that cannot be streamed */
@@ -306,7 +312,7 @@ public:
                                 qMetaTypeId<T>() )
     {
         qRegisterMetaType<T>(this->typeName());
-        detail::registerLeaf(this->typeName(), T::ROOT::typeName());
+        detail::registerLeaf(this->typeNameString(), T::ROOT::typeName());
     }
 
     /** Use this constructor to register a class that cannot be streamed
@@ -317,7 +323,7 @@ public:
                                 qMetaTypeId<T>() )
     {
         qRegisterMetaType<T>(this->typeName());
-        detail::registerRootless(this->typeName());
+        detail::registerRootless(this->typeNameString());
     }
 
     /** Destructor */
