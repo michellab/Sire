@@ -1242,12 +1242,29 @@ System MoleculeParser::toSystem(const MoleculeParser &other, const PropertyMap &
     // Construct a list of parsers.
     QList<MoleculeParserPtr> parsers({*this, MoleculeParserPtr(other)});
 
-    // Sort the parsers: lead, then follower.
-    sortParsers(parsers);
+    // A list of supplementary parers.
+    QList<MoleculeParserPtr> supplementary;
 
-    // Construct the system: leader, then follower.
-    System system = parsers[0].read().startSystem(map);
-    parsers[1].read().addToSystem(system, map);
+    // Sort the parsers: lead, then follower.
+    sortParsers(parsers, supplementary);
+
+    // Instantiate an empty system.
+    System system;
+
+    // No supplementary data.
+    if (supplementary.count() == 0)
+    {
+        // Construct the system: leader, then follower.
+        system = parsers[0].read().startSystem(map);
+        parsers[1].read().addToSystem(system, map);
+    }
+    else
+    {
+        system = parsers[0].read()
+            .startSystem(supplementary[0].read().lines(), map);
+
+        parsers[1].read().addToSystem(system, map);
+    }
 
     return system;
 }
@@ -1264,15 +1281,43 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
     // Add this parser to the list.
     parsers.append(*this);
 
+    // A list of supplementary parers.
+    QList<MoleculeParserPtr> supplementary;
+
     // Sort the parsers: leader, then followers.
-    sortParsers(parsers);
+    sortParsers(parsers, supplementary);
 
-    // Construct the initial system from the leader.
-    System system = parsers[0].read().startSystem(map);
+    // Instantiate an empty system.
+    System system;
 
-    // Add to the system, using properties parsed by the followers.
-    for (int i=1; i<parsers.count(); ++i)
-        parsers[i].read().addToSystem(system, map);
+    // No supplementary data.
+    if (supplementary.count() == 0)
+    {
+        // Construct the initial system from the leader.
+        system = parsers[0].read().startSystem(map);
+
+        // Add to the system, using properties parsed by the followers.
+        for (int i=1; i<parsers.count(); ++i)
+            parsers[i].read().addToSystem(system, map);
+    }
+    else
+    {
+        // The list of supplementary record lines.
+        QVector<QString> supp_lines;
+
+        // Combine all of the supplementary data into a single
+        // lists of record lines.
+        for (const auto &supp : supplementary)
+            supp_lines += supp.read().lines();
+
+        // Start a system using the lead parser, passing the
+        // supplementary data records.
+        system = parsers[0].read().startSystem(supp_lines, map);
+
+        // Add to the system, using properties parsed by the followers.
+        for (int i=1; i<parsers.count(); ++i)
+            parsers[i].read().addToSystem(system, map);
+    }
 
     return system;
 }
@@ -1280,6 +1325,17 @@ System MoleculeParser::toSystem(const QList<MoleculeParserPtr> &others,
 /** Start creating a new System using the information contained in this parser,
     using the (optional) property map to name the properties */
 System MoleculeParser::startSystem(const PropertyMap &map) const
+{
+    throw SireError::io_error( QObject::tr(
+            "There is not enough information in this parser (%1) to start "
+            "the creation of a new System. You need to use a more detailed input file.")
+                .arg(this->toString()), CODELOC );
+}
+
+/** Start creating a new System using the information contained in this parser
+    and the supplementary records contained in 'lines', using the (optional)
+    property map to name the properties */
+System MoleculeParser::startSystem(const QVector<QString> &lines, const PropertyMap &map) const
 {
     throw SireError::io_error( QObject::tr(
             "There is not enough information in this parser (%1) to start "
@@ -1436,7 +1492,8 @@ MoleculeParserPtr NullParser::construct(const SireSystem::System &system,
 }
 
 /** Sort the parsers: Lead first, then followers. */
-void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers) const
+void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers,
+    QList<MoleculeParserPtr> &supplementary) const
 {
     /* Parsers can be leaders or followers. Leaders are capable of
        constructing an entire molecular system on their own, whereas
@@ -1457,10 +1514,26 @@ void MoleculeParser::sortParsers(QList<MoleculeParserPtr> &parsers) const
     // First pass: work out leaders and followers.
     for (auto parser : parsers)
     {
+        // This is a lead parser.
         if (parser.read().isLead())
+        {
             leaders.append(parser);
+        }
         else
-            followers.append(parser);
+        {
+            // This parser can follow.
+            if (parser.read().canFollow())
+            {
+                followers.append(parser);
+            }
+
+            // This parser must contain data that
+            // is supplementary to the lead.
+            else
+            {
+                supplementary.append(parser);
+            }
+        }
     }
 
     // No leaders.

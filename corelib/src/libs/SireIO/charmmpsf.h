@@ -31,8 +31,6 @@
 
 #include "moleculeparser.h"
 
-#include "SireMaths/vector.h"
-
 SIRE_BEGIN_HEADER
 
 namespace SireIO
@@ -215,6 +213,8 @@ public:
 
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
+    SireSystem::System startSystem(const QVector<QString> &lines,
+                                   const PropertyMap &map) const;
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
 private:

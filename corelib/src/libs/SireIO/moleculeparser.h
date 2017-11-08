@@ -242,13 +242,16 @@ protected:
     void setScore(double score);
 
     virtual SireSystem::System startSystem(const PropertyMap &map) const;
+    virtual SireSystem::System startSystem(const QVector<QString> &lines,
+                                           const PropertyMap &map) const;
     virtual void addToSystem(SireSystem::System &system,
                              const PropertyMap &map) const;
 
 private:
     static MoleculeParserPtr _pvt_parse(const QString &filename, const PropertyMap &map);
 
-    void sortParsers(QList<MoleculeParserPtr>& parsers) const;
+    void sortParsers(QList<MoleculeParserPtr>& parsers,
+                     QList<MoleculeParserPtr>& supplementary) const;
 
     /** All of the lines in the file */
     QVector<QString> lnes;
