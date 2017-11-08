@@ -91,6 +91,12 @@ public:
     /** Get the atom index. */
     int getIndex() const;
 
+    /** Get the molecule index. */
+    int getMolIndex() const;
+
+    /** Set the molecule index. */
+    void setMolIndex(int index);
+
     /** Get the atom number. */
     int getNumber() const;
 
@@ -118,6 +124,9 @@ public:
 private:
     /** The index in the atoms vector. */
     qint64 index;
+
+    /** The index of the molecule to which this atom belongs. */
+    qint64 mol_idx;
 
     /** Serial number. */
     qint64 number;
@@ -199,7 +208,6 @@ public:
     int nAtoms() const;
     int nAtoms(int i) const;
     int nBonds() const;
-    int nBonds(int i) const;
     int nAngles() const;
     int nDihedrals() const;
     int nImpropers() const;
@@ -222,14 +230,7 @@ private:
     void findMolecules();
 
     void findBondedAtoms(int atom_idx, int mol_idx, const QHash<int, int> &bonded_atoms,
-        QHash<int, int> &atom_to_mol, QSet<qint64> &atoms_in_mol,
-        QVector<QPair<qint64, qint64> >& bonds_in_mol) const;
-
-    /** The indices of the atoms in each molecule. */
-    QVector<QVector<qint64> > molecules;
-
-    /** Pairs of bonds (atom-to-atom) for each molecule. */
-    QVector<QVector<QPair<qint64, qint64> > > molecule_bonds;
+        QHash<int, int> &atom_to_mol, QSet<qint64> &atoms_in_mol) const;
 
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;
@@ -249,8 +250,12 @@ private:
     /** The cross term record data (!NCRTERM). */
     QVector<QVector<qint64> > cross_terms;
 
-    /** The atomic coordinates. */
-    QVector<SireMaths::Vector> coords;
+    /** A hash between atom numbers from the PSF record and 
+        incices in the atoms vector. */
+    QHash<qint64, qint64> num_to_idx;
+
+    /** The indices of the atoms in each molecule. */
+    QVector<QVector<qint64> > molecules;
 
     /** The name of the parsed file (if from a file). */
     QString filename;

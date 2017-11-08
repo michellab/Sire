@@ -37,7 +37,6 @@
 #include "SireIO/errors.h"
 
 #include "SireMol/atomcharges.h"
-#include "SireMol/atomcoords.h"
 #include "SireMol/atomelements.h"
 #include "SireMol/atommasses.h"
 #include "SireMol/connectivity.h"
@@ -68,9 +67,9 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PSFAtom &psfatom)
 
     SharedDataStream sds(ds);
 
-    sds << psfatom.index << psfatom.number << psfatom.segment << psfatom.res_num
-        << psfatom.res_name << psfatom.name << psfatom.type << psfatom.charge
-        << psfatom.mass;
+    sds << psfatom.index << psfatom.mol_idx << psfatom.number << psfatom.segment
+        << psfatom.res_num << psfatom.res_name << psfatom.name << psfatom.type
+        << psfatom.charge << psfatom.mass;
 
     return ds;
 }
@@ -83,9 +82,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PSFAtom &psfatom)
     {
         SharedDataStream sds(ds);
 
-        sds >> psfatom.index >> psfatom.number >> psfatom.segment >> psfatom.res_num
-            >> psfatom.res_name >> psfatom.name >> psfatom.type >> psfatom.charge
-            >> psfatom.mass;
+        sds >> psfatom.index >> psfatom.mol_idx >> psfatom.number >> psfatom.segment
+            >> psfatom.res_num >> psfatom.res_name >> psfatom.name >> psfatom.type
+            >> psfatom.charge >> psfatom.mass;
     }
     else
         throw version_error(v, "1", r_psfatom, CODELOC);
@@ -97,9 +96,9 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmPSF &psf)
 {
     writeHeader(ds, r_psf, 1);
 
-    ds << psf.molecules << psf.molecule_bonds << psf.atoms << psf.bonds
-       << psf.angles << psf.dihedrals << psf.impropers << psf.cross_terms
-       << psf.coords << static_cast<const MoleculeParser&>(psf);
+    ds << psf.atoms << psf.bonds << psf.angles << psf.dihedrals << psf.impropers
+       << psf.cross_terms << psf.molecules << psf.num_to_idx
+       << static_cast<const MoleculeParser&>(psf);
 
     return ds;
 }
@@ -110,9 +109,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmPSF &psf)
 
     if (v == 1)
     {
-        ds >> psf.molecules >> psf.molecule_bonds >> psf.atoms >> psf.bonds
-           >> psf.angles >> psf.dihedrals >> psf.impropers >> psf.cross_terms
-           >> psf.coords >> static_cast<MoleculeParser&>(psf);
+        ds >> psf.atoms >> psf.bonds >> psf.angles >> psf.dihedrals >> psf.impropers
+           >> psf.cross_terms >> psf.molecules >> psf.num_to_idx
+           >> static_cast<MoleculeParser&>(psf);
     }
     else
         throw version_error(v, "1", r_psf, CODELOC);
@@ -123,6 +122,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmPSF &psf)
 /** Default constructor. */
 PSFAtom::PSFAtom() :
     index(0),
+    mol_idx(0),
     number(0),
     res_num(0),
     type("X"),
@@ -134,6 +134,7 @@ PSFAtom::PSFAtom() :
 /** Constructor. */
 PSFAtom::PSFAtom(const QString &line, int index, QStringList &errors) :
     index(index),
+    mol_idx(0),
     number(0),
     res_num(0),
     type("X"),
@@ -214,6 +215,7 @@ PSFAtom::PSFAtom(const QString &line, int index, QStringList &errors) :
 /** Constructor. */
 PSFAtom::PSFAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     index(0),
+    mol_idx(0),
     number(0),
     res_num(0),
     type("X"),
@@ -299,6 +301,18 @@ const char* PSFAtom::typeName()
 int PSFAtom::getIndex() const
 {
     return index;
+}
+
+/** Get the molecule index. */
+int PSFAtom::getMolIndex() const
+{
+    return mol_idx;
+}
+
+/** Set the molecule index. */
+void PSFAtom::setMolIndex(int index)
+{
+    mol_idx = index;
 }
 
 /** Get the atom number. */
@@ -411,14 +425,14 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
 /** Copy constructor */
 CharmmPSF::CharmmPSF(const CharmmPSF &other) :
     ConcreteProperty<CharmmPSF,MoleculeParser>(other),
-    molecules(other.molecules),
-    molecule_bonds(other.molecule_bonds),
     atoms(other.atoms),
     bonds(other.bonds),
     angles(other.angles),
     dihedrals(other.dihedrals),
     impropers(other.impropers),
     cross_terms(other.cross_terms),
+    num_to_idx(other.num_to_idx),
+    molecules(other.molecules),
     filename(other.filename),
     parse_warnings(other.parse_warnings)
 {}
@@ -433,12 +447,13 @@ CharmmPSF& CharmmPSF::operator=(const CharmmPSF &other)
     if (this != &other)
     {
         molecules = other.molecules;
-        molecule_bonds = other.molecule_bonds;
         bonds = other.bonds;
         angles = other.angles;
         dihedrals = other.dihedrals;
         impropers = other.impropers;
         cross_terms = other.cross_terms;
+        num_to_idx = other.num_to_idx;
+        molecules = other.molecules;
         filename = other.filename;
         parse_warnings = other.parse_warnings;
 
@@ -818,12 +833,6 @@ int CharmmPSF::nAtoms(int i) const
 int CharmmPSF::nBonds() const
 {
     return bonds.count();
-}
-
-/** Return the number of bonds in molecule i. */
-int CharmmPSF::nBonds(int i) const
-{
-    return molecule_bonds[i].count();
 }
 
 /** Return the number of angle records. */
@@ -1553,19 +1562,46 @@ MolEditor CharmmPSF::getMolecule(int imol, const PropertyMap &map) const
         charges.set(cgatomidx, double(atom.getCharge()) * SireUnits::mod_electron);
     }
 
+    // Now work out which bonds are part of this molecule.
+
+    // The indices of the bonds in the molecule.
+    QSet<int> mol_bonds;
+
+    // Loop over all of the bonds.
+    for (int i=0; i<nBonds(); ++i)
+    {
+        // The bond is part of this molecule.
+        if (atoms[num_to_idx[bonds[i][0]]].getMolIndex() == imol)
+        {
+            // Make sure the terminal atom is also in the molecule.
+            if (atoms[num_to_idx[bonds[i][1]]].getMolIndex() == imol)
+            {
+                mol_bonds.insert(i);
+            }
+            else
+            {
+                throw SireError::program_bug(QObject::tr("The bonded atoms "
+                    "are not in the same atom: [ AtomNum(%1), MolIdx(%2) ] "
+                    "and [ AtomNum(%3), MolIdx(%4) ]")
+                    .arg(bonds[i][0]).arg(atoms[num_to_idx[bonds[i][0]]].getMolIndex())
+                    .arg(bonds[i][1]).arg(atoms[num_to_idx[bonds[i][1]]].getMolIndex()), CODELOC);
+            }
+        }
+    }
+
     // Connectivity object for bonded atoms.
     ConnectivityEditor connectivity(molinfo);
 
     // Loop over all bonds in the molecule.
-    for (int i=0; i<nBonds(imol); ++i)
+    for (const auto &bond : mol_bonds)
     {
-        // Store references to the start and end atoms in the bond.
-        const auto &atom1 = atoms[molecule_bonds[imol][i].first];
-        const auto &atom2 = atoms[molecule_bonds[imol][i].second];
+        // Get the atom indices for the two bonds.
+        int idx1 = num_to_idx[bonds[bond][0]];
+        int idx2 = num_to_idx[bonds[bond][1]];
 
         // Add the bond to the connectivity object.
-        connectivity.connect(AtomNum(atom1.getNumber()),
-                             AtomNum(atom2.getNumber()));
+        connectivity.connect(AtomNum(atoms[idx1].getNumber()),
+                             AtomNum(atoms[idx2].getNumber()));
     }
 
     return mol.setProperty(map["charge"], charges)
@@ -1597,9 +1633,9 @@ void CharmmPSF::findMolecules()
     // A hash between atom and molecule indices.
     QHash<int, int> atom_to_mol;
 
-    // Create a hash between atom number and index.
-    QHash<int, int> num_to_idx;
-
+    // Create the hash between atom number and index.
+    // Clear any existing hash first.
+    num_to_idx.clear();
     for(int i=0; i<nAtoms(); ++i)
         num_to_idx.insert(atoms[i].getNumber(), i);
 
@@ -1615,47 +1651,36 @@ void CharmmPSF::findMolecules()
             // Initialise a set for atoms in this molecule.
             QSet<qint64> atoms_in_mol;
 
-            // Initalise a vector of bond pairs for this molecule.
-            QVector<QPair<qint64, qint64> > bonds_in_mol;
-
             nmols += 1;
             atom_to_mol[i] = nmols;
             atoms_in_mol.insert(num);
 
             // Recursive walk from this atom.
-            findBondedAtoms(num, nmols, bonded_atoms,
-                atom_to_mol, atoms_in_mol, bonds_in_mol);
+            findBondedAtoms(num, nmols, bonded_atoms, atom_to_mol, atoms_in_mol);
 
             // We've now found all of the atoms in this molecule!
 
             // Convert to a vector of atom numbers.
             QVector<qint64> mol_atoms = atoms_in_mol.toList().toVector();
 
-            // Now convert the atom numbers to indices in the atoms vector.
+            // Now convert the atom numbers to indices in the atoms vector
+            // and set the molecule index for each atom.
             for (auto &atom : mol_atoms)
+            {
                 atom = num_to_idx[atom];
+                atoms[atom].setMolIndex(nmols-1);
+            }
 
             // Add the sorted atom indices.
             qSort(mol_atoms);
             molecules.append(mol_atoms);
-
-            // Convert the bonds to atom indices.
-            for (auto &bond : bonds_in_mol)
-            {
-                bond.first  = num_to_idx[bond.first];
-                bond.second = num_to_idx[bond.second];
-            }
-
-            // Add the bonds.
-            molecule_bonds.append(bonds_in_mol);
         }
     }
 }
 
 /** Helper function to recursively walk through bonded atoms in a molecule. */
 void CharmmPSF::findBondedAtoms(int atom_num, int mol_idx, const QHash<int, int> &bonded_atoms,
-    QHash<int, int> &atom_to_mol, QSet<qint64> &atoms_in_mol,
-    QVector<QPair<qint64, qint64> > &bonds_in_mol) const
+    QHash<int, int> &atom_to_mol, QSet<qint64> &atoms_in_mol) const
 {
     for (auto bonded_atom : bonded_atoms.values(atom_num))
     {
@@ -1666,12 +1691,8 @@ void CharmmPSF::findBondedAtoms(int atom_num, int mol_idx, const QHash<int, int>
             atom_to_mol[bonded_atom] = mol_idx;
             atoms_in_mol.insert(bonded_atom);
 
-            // Add the bond to the molecule.
-            bonds_in_mol.append(QPair<qint64, qint64>(atom_num, bonded_atom));
-
             // Continue search from the next atom in the chain.
-            findBondedAtoms(bonded_atom, mol_idx, bonded_atoms,
-                atom_to_mol, atoms_in_mol, bonds_in_mol);
+            findBondedAtoms(bonded_atom, mol_idx, bonded_atoms, atom_to_mol, atoms_in_mol);
         }
     }
 }
