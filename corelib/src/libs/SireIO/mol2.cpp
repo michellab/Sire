@@ -47,9 +47,9 @@
 
 #include "SireUnits/units.h"
 
+using namespace SireBase;
 using namespace SireIO;
 using namespace SireMol;
-using namespace SireBase;
 using namespace SireSystem;
 using namespace SireStream;
 

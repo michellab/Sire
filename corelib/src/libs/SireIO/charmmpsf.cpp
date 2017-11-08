@@ -51,11 +51,11 @@
 #include <QDateTime>
 #include <QtMath>
 
+using namespace SireBase;
 using namespace SireIO;
 using namespace SireMol;
-using namespace SireBase;
-using namespace SireSystem;
 using namespace SireStream;
+using namespace SireSystem;
 
 const RegisterParser<CharmmPSF> register_psf;
 static const RegisterMetaType<CharmmPSF> r_psf;
