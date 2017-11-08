@@ -80,10 +80,6 @@ public:
     
     QString toString() const;
     
-    operator double() const;
-    operator int() const;
-    operator qint64() const;
-    
 private:
     union
     {

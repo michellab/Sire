@@ -54,20 +54,7 @@ set ( PYPP_SOURCES
        CLJSoftShiftFunction.pypp.cpp
        IntraSoftCLJFFBase.pypp.cpp
        CoulombPotentialInterface_InterCoulombPotential_.pypp.cpp
-       InterGroupCLJFFBase.pypp.cpp
-       AmberNB14.pypp.cpp
-       StretchBendTorsionSymbols.pypp.cpp
-       CLJBoxIndex.pypp.cpp
-       BondComponent.pypp.cpp
-       CLJCutoffFunction.pypp.cpp
-       SoftCLJComponent.pypp.cpp
-       LJPerturbation.pypp.cpp
-       CLJProbe.pypp.cpp
-       InterCLJFFBase.pypp.cpp
-       CLJ14Group.pypp.cpp
-       ScaledLJParameterNames3D.pypp.cpp
-       CLJDelta.pypp.cpp
-       RestraintFF.pypp.cpp
+
        ImproperComponent.pypp.cpp
        TwoAtomPerturbation.pypp.cpp
        AtomFunction.pypp.cpp

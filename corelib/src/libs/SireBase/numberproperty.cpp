@@ -187,21 +187,3 @@ QString NumberProperty::toString() const
     else
         return QString::number(val.dval);
 }
-
-/** Return this number cast as a double */
-NumberProperty::operator double() const
-{
-    return this->toDouble();
-}
-
-/** Return this number cast as an int */
-NumberProperty::operator int() const
-{
-    return this->toInt();
-}
-
-/** Return this number cast as an int */
-NumberProperty::operator qint64() const
-{
-    return this->toInt();
-}

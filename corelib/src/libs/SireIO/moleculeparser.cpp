@@ -466,6 +466,44 @@ private:
 
 Q_GLOBAL_STATIC( FileContentsCache, getFileCache );
 
+/** Internal function that can be used by the parsers to read the contents
+    of a text file into memory. This uses a cache to ensure that every file
+    is read only once */
+QVector<QString> MoleculeParser::readTextFile(QString filename)
+{
+    filename = QFileInfo(filename).absoluteFilePath();
+
+    QVector<QString> lines = getFileCache()->read(filename);
+
+    if (not lines.isEmpty())
+        return lines;
+
+    QFile file(filename);
+    
+    if (not file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
+    {
+        throw SireError::file_error(file, CODELOC);
+    }
+        
+    QTextStream ts(&file);
+        
+    QStringList l;
+        
+    while (not ts.atEnd())
+    {
+        l.append( ts.readLine() );
+    }
+        
+    file.close();
+        
+    lines = l.toVector();
+        
+    if (not lines.isEmpty())
+        getFileCache()->save(filename, lines);
+
+    return lines;
+}
+
 /** Construct the parser, parsing in all of the lines in the file
     with passed filename */
 MoleculeParser::MoleculeParser(const QString &filename,
@@ -477,35 +515,7 @@ MoleculeParser::MoleculeParser(const QString &filename,
         run_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
 
-    //we will be continually reloading the same file when testing parsers,
-    //so check whether this file exists in the cache
-    lnes = getFileCache()->read(filename);
-
-    if (lnes.isEmpty())
-    {
-        QFile file(filename);
-
-        if (not file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
-        {
-            throw SireError::file_error(file, CODELOC);
-        }
-
-        QTextStream ts(&file);
-
-        QStringList l;
-
-        while (not ts.atEnd())
-        {
-            l.append( ts.readLine() );
-        }
-
-        file.close();
-
-        lnes = l.toVector();
-
-        if (not lnes.isEmpty())
-            getFileCache()->save(filename, lnes);
-    }
+    lnes = readTextFile(filename);
 }
 
 /** Construct the parser, parsing in all of the passed text lines */
@@ -533,6 +543,12 @@ MoleculeParser::MoleculeParser(const MoleculeParser &other)
 /** Destructor */
 MoleculeParser::~MoleculeParser()
 {}
+
+/** Function used by derived classes to set the lines */
+void MoleculeParser::setLines( const QVector<QString> &lines )
+{
+    lnes = lines;
+}
 
 const char* MoleculeParser::typeName()
 {

@@ -121,9 +121,3 @@ QString LengthProperty::toString() const
 {
     return val.toString();
 }
-
-/** Return this number cast as a double */
-LengthProperty::operator Length() const
-{
-    return val;
-}

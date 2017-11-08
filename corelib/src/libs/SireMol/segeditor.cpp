@@ -300,7 +300,9 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
 /** Null constructor */
 SegStructureEditor::SegStructureEditor()
                   : StructureEditor(), uid(0)
-{}
+{
+    this->operator=( StructureEditor::addSegment() );
+}
 
 /** Construct to edit a copy of the Segment 'segment' */
 SegStructureEditor::SegStructureEditor(const Segment &segment)

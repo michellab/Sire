@@ -40,12 +40,17 @@
 #include "Helpers/tuples.hpp"
 #include "Base/convertpackedarray.hpp"
 
+#include "SireMol/bondid.h"
+#include "SireMol/angleid.h"
+#include "SireMol/dihedralid.h"
+
 #include "SireMM/ljparameter.h"
 #include "SireMM/twoatomfunctions.h"
 #include "SireMM/threeatomfunctions.h"
 #include "SireMM/fouratomfunctions.h"
 #include "SireMM/cljatoms.h"
 #include "SireMM/amberparams.h"
+#include "SireMM/gromacsparams.h"
 
 #include "SireMM/cljboxes.h"
 
@@ -70,9 +75,23 @@ void register_SireMM_containers()
     register_list< QVector<CLJBox> >();
     register_list< QVector<CLJBoxIndex> >();
 
+    register_list< QList<GromacsBond> >();
+    register_list< QList<GromacsAngle> >();
+    register_list< QList<GromacsDihedral> >();
+
     register_dict< QHash<BondID,AmberBond> >();
     register_dict< QHash<AngleID,AmberAngle> >();
     register_dict< QHash<DihedralID,AmberDihedral> >();
     register_dict< QHash<ImproperID,AmberDihedral> >();
     register_dict< QHash<BondID,AmberNB14> >();
+
+    register_dict< QHash<QString,GromacsAtomType> >();
+    register_dict< QMultiHash<QString,GromacsAtomType> >();
+    register_dict< QMultiHash<QString,GromacsBond> >();
+    register_dict< QMultiHash<QString,GromacsAngle> >();
+    register_dict< QMultiHash<QString,GromacsDihedral> >();
+
+    register_dict< QMultiHash<SireMol::BondID,GromacsBond> >();
+    register_dict< QMultiHash<SireMol::AngleID,GromacsAngle> >();
+    register_dict< QMultiHash<SireMol::DihedralID,GromacsDihedral> >();
 }

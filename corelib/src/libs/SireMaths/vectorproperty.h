@@ -83,6 +83,8 @@ public:
     
     QString toString() const;
     
+    Vector value() const;
+    
     VectorProperty* clone() const;
 };
 

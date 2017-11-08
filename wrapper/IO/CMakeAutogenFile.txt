@@ -4,10 +4,7 @@ set ( PYPP_SOURCES
        PDB.pypp.cpp
        TrajectoryMonitor.pypp.cpp
        Cube.pypp.cpp
-       AmberRst7.pypp.cpp
-       TinkerParameters.pypp.cpp
-       ZmatrixMaker.pypp.cpp
-       PDB2.pypp.cpp
+
        IOBase.pypp.cpp
        ProtoMSParameters.pypp.cpp
        CharmmPSF.pypp.cpp

@@ -6635,8 +6635,15 @@ void IntraCLJPotential::calculateEnergy(const IntraCLJPotential::Molecule &mol,
     
     const CoordGroup *groups_array = mol.coordinates().constData();
     
-    BOOST_ASSERT( mol.parameters().atomicParameters().count() == int(ngroups) );
-    const Parameters::Array *molparams_array 
+    if (mol.parameters().atomicParameters().count() != int(ngroups))
+    {
+        throw SireError::program_bug( QObject::tr(
+            "SERIOUS BUG! Disagreement in IntraCLJPotential::calculateEnergy: "
+            "%1 versus %2").arg(mol.parameters().atomicParameters().count())
+                           .arg(ngroups), CODELOC );
+    }
+    
+    const Parameters::Array *molparams_array
                             = mol.parameters().atomicParameters().constData();
 
     const CLJNBPairs &nbpairs = mol.parameters().intraScaleFactors();

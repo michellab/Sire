@@ -10,6 +10,8 @@
 #include "charmmpsf.h"
 #include "cube.h"
 #include "flexibilitylibrary.h"
+#include "gro87.h"
+#include "grotop.h"
 #include "iobase.h"
 #include "mol2.h"
 #include "moleculeparser.h"

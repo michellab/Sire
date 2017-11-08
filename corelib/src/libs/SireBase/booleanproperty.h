@@ -75,8 +75,6 @@ public:
     
     QString toString() const;
     
-    operator bool() const;
-    
 private:
     bool val;
 };
