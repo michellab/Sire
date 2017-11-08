@@ -71,6 +71,17 @@ void register_StringProperty_class(){
                 , "" );
         
         }
+        { //::SireBase::StringProperty::value
+        
+            typedef ::QString ( ::SireBase::StringProperty::*value_function_type)(  ) const;
+            value_function_type value_function_value( &::SireBase::StringProperty::value );
+            
+            StringProperty_exposer.def( 
+                "value"
+                , value_function_value
+                , "" );
+        
+        }
         StringProperty_exposer.staticmethod( "typeName" );
         StringProperty_exposer.def( "__copy__", &__copy__);
         StringProperty_exposer.def( "__deepcopy__", &__copy__);

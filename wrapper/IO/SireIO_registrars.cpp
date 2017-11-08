@@ -25,7 +25,6 @@
 
 void register_SireIO_objects()
 {
-
     ObjectRegistry::registerConverterFor< SireIO::PDBAtom >();
     ObjectRegistry::registerConverterFor< SireIO::PDB2 >();
     ObjectRegistry::registerConverterFor< SireIO::AmberPrm >();
@@ -51,6 +50,4 @@ void register_SireIO_objects()
     ObjectRegistry::registerConverterFor< SireIO::PDB >();
     ObjectRegistry::registerConverterFor< SireIO::Amber >();
     ObjectRegistry::registerConverterFor< SireIO::ProtoMS >();
-
 }
-

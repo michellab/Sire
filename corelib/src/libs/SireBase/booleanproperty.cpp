@@ -122,9 +122,3 @@ QString BooleanProperty::toString() const
     else
         return QObject::tr("False");
 }
-
-/** Return this number cast as a double */
-BooleanProperty::operator bool() const
-{
-    return val;
-}

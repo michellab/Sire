@@ -79,8 +79,6 @@ public:
     
     QString toString() const;
     
-    operator Length() const;
-    
 private:
     Length val;
 };

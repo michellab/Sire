@@ -116,11 +116,8 @@ public:
     
     QList<T> toList() const;
     QVector<T> toVector() const;
-    
-    T value(int i) const;
-    T value(int i, T default_value) const;
-    
-    operator QVector<T>() const;
+
+    QVector<T> value() const;
  
 protected:
     /** These functions must be reimplemented by the deriving class */
@@ -518,35 +515,10 @@ QVector<T> ArrayProperty<T>::toVector() const
     return a;
 }
 
-/** Return the value at index 'i', or 'default_value' if this 
-    is an invalid index */
+/** Return the actual array */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-T ArrayProperty<T>::value(int i, T default_value) const
-{
-    int idx = i;
-    
-    if (i < 0)
-        idx = a.count() + i;
-    
-    if (idx < 0 or idx >= a.count())
-        return default_value;
-    else
-        return a.constData()[idx];
-}
-
-/** Return the value at index 'i' */
-template<class T>
-SIRE_OUTOFLINE_TEMPLATE
-T ArrayProperty<T>::value(int i) const
-{
-    return this->value(i, T());
-}
-
-/** Allow for automatic casting to QVector<T> */
-template<class T>
-SIRE_OUTOFLINE_TEMPLATE
-ArrayProperty<T>::operator QVector<T>() const
+QVector<T> ArrayProperty<T>::value() const
 {
     return a;
 }

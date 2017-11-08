@@ -263,7 +263,7 @@ bool QMMMFF::setIntermolecularOnly(bool on)
     (energy between the QM and MM atoms) */
 bool QMMMFF::isIntermolecularOnly() const
 {
-    return intermolecular_only;
+    return intermolecular_only.value();
 }
 
 /** Set the property 'name' to the value 'value'
@@ -378,7 +378,7 @@ void QMMMFF::recalculateEnergy()
 
     QMMMElecEmbedPotential::calculateEnergy(qmmols, mmmols, nrg);
     
-    if (intermolecular_only)
+    if (intermolecular_only.value())
     {
         //also calculate only the QM energy, and subtract this from the QM/MM energy
         QMEnergy qmnrg(0);

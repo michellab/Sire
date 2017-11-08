@@ -247,6 +247,10 @@ protected:
     virtual void addToSystem(SireSystem::System &system,
                              const PropertyMap &map) const;
 
+    void setLines(const QVector<QString> &lines);
+
+    static QVector<QString> readTextFile(QString filename);
+
 private:
     static MoleculeParserPtr _pvt_parse(const QString &filename, const PropertyMap &map);
 

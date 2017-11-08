@@ -119,8 +119,8 @@ QString StringProperty::toString() const
     return s;
 }
 
-/** Allow automatic casting to the underlying QString */
-StringProperty::operator QString() const
+/** Return the actual string */
+QString StringProperty::value() const
 {
     return s;
 }

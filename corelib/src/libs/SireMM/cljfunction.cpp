@@ -242,7 +242,7 @@ CLJFunctionPtr CLJFunction::setProperty(const QString &name, const Property &val
         if (value.isA<VariantProperty>())
             typ = value.asA<VariantProperty>().toString();
         else
-            typ = value.asA<StringProperty>();
+            typ = value.asA<StringProperty>().value();
         
         if (typ.toLower() == "arithmetic")
             ret.edit().setCombiningRules( CLJFunction::ARITHMETIC );
@@ -1564,11 +1564,11 @@ CLJFunctionPtr CLJCutoffFunction::setProperty(const QString &name, const Propert
     }
     else if (name == "coulombCutoff")
     {
-        ret.edit().setCoulombCutoff( value.asA<LengthProperty>() );
+        ret.edit().setCoulombCutoff( value.asA<LengthProperty>().value() );
     }
     else if (name == "ljCutoff")
     {
-        ret.edit().setLJCutoff( value.asA<LengthProperty>() );
+        ret.edit().setLJCutoff( value.asA<LengthProperty>().value() );
     }
     else
     {

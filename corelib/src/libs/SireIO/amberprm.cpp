@@ -3528,7 +3528,7 @@ MolStructureEditor AmberPrm::getMolStructure(int start_idx, int natoms,
                                                         // of atom in next residue
         }
         
-        //by default we will use one CutGroup per molecule - this
+        //by default we will use one CutGroup per residue - this
         //may be changed later by the cutting system.
         auto cutgroup = mol.add( CGName(QString::number(i)) );
         
