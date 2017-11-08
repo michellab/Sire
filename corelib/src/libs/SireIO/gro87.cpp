@@ -1499,7 +1499,8 @@ void Gro87::parseLines(const PropertyMap &map)
 /** This function finds the index of the atom called 'atomname' with number
     'atomnum' in residue 'resname' with residue number 'resnum'. The passed
     hint suggest where in the array to start looking */
-int Gro87::findAtom(const MoleculeInfoData &molinfo, int atmidx, int hint) const
+int Gro87::findAtom(const MoleculeInfoData &molinfo, int atmidx, int hint,
+                    bool *ids_match) const
 {
     const int natoms = atmnams.count();
 
@@ -1521,6 +1522,16 @@ int Gro87::findAtom(const MoleculeInfoData &molinfo, int atmidx, int hint) const
         bool same_atmnum = (atmnum == atmnums.constData()[i]);
         bool same_resname = (resname == resnams.constData()[i]);
         bool same_resnum = (resnum == resnums.constData()[i]);
+        
+        //make sure that we set the flag 'ids_match' to false if it
+        //is not already false and any of the IDs don't match up
+        if (ids_match)
+        {
+            if (*ids_match and not (same_atmname and same_atmnum and same_resname and same_resnum))
+            {
+                *ids_match = false;
+            }
+        }
         
         if (same_atmname and same_resname and i == hint)
         {
@@ -1646,9 +1657,38 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
         //first, get the index of each atom in the gro file
         QVector<int> idx_in_gro( molinfo.nAtoms(), -1 );
         
+        bool ids_match = true;
+        
         for (int j=0; j<molinfo.nAtoms(); ++j)
         {
-            idx_in_gro[j] = findAtom( molinfo, j, atom_start_idx + j );
+            idx_in_gro[j] = findAtom( molinfo, j, atom_start_idx + j, &ids_match );
+        }
+        
+        //if the IDs don't match, then we need to update the ID information
+        //of the atoms and residues in the molecule
+        if (not ids_match)
+        {
+            MolStructureEditor moleditor(mol);
+            
+            for (int j=0; j<mol.nAtoms(); ++j)
+            {
+                auto atom = moleditor.atom( AtomIdx(j) );
+                int idx = idx_in_gro[j];
+                
+                if (atom.number() != atmnums.constData()[idx])
+                {
+                    atom = atom.renumber( AtomNum(atmnums.constData()[idx]) );
+                }
+                
+                auto res = atom.residue();
+                
+                if (res.number() != resnums.constData()[idx])
+                {
+                    res = res.renumber( ResNum(resnums.constData()[idx]) );
+                }
+            }
+            
+            mol = moleditor.commit();
         }
         
         //now use this index to locate the correct coordinate and/or velocity
@@ -1720,26 +1760,41 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
         }
     }
     
-    system.update( Molecules(mols) );
+    MoleculeGroup new_group("all");
 
-/*
+    for (const auto mol : mols)
+    {
+        new_group.add(mol);
+    }
+    
+    system.remove(MGName("all"));
+    system.add(new_group);
+
     PropertyName space_property = map["space"];
     if (space_property.hasValue())
     {
         system.setProperty("space", space_property.value());
     }
-    else if ((not box_dims.isEmpty()) and space_property.hasSource())
+    else if ((not box_v1.isEmpty()) and space_property.hasSource())
     {
-        if (box_angs[0] != cubic_angs)
+        //need to make sure that this is cubic, i.e. have (x,0,0), (0,y,0), (0,0,z)
+        double x = box_v1.at(0).x();
+        double y = box_v2.at(0).y();
+        double z = box_v3.at(0).z();
+        
+        if (box_v1.at(0).manhattanLength() != x or
+            box_v2.at(0).manhattanLength() != y or
+            box_v3.at(0).manhattanLength() != z)
         {
             throw SireIO::parse_error( QObject::tr(
-                    "Sire cannot currently support a non-cubic periodic box! %1")
-                        .arg(box_angs[0].toString()), CODELOC );
+                    "Sire cannot currently support a non-cubic periodic box! %1 x %2 x %3")
+                        .arg(box_v1.at(0).toString())
+                        .arg(box_v2.at(0).toString())
+                        .arg(box_v3.at(0).toString()), CODELOC );
         }
         
-        system.setProperty( space_property.source(), SireVol::PeriodicBox(box_dims[0]) );
+        system.setProperty( space_property.source(), SireVol::PeriodicBox(Vector(x,y,z)) );
     }
-*/
     
     //update the System fileformat property to record that it includes
     //data from this file format

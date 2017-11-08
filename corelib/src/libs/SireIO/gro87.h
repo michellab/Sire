@@ -144,7 +144,7 @@ private:
     void parseLines(const PropertyMap &map);
 
     int findAtom(const SireMol::MoleculeInfoData &molinfo,
-                 int atomidx, int hint=0) const;
+                 int atomidx, int hint=0, bool *ids_match=0) const;
 
     /** The title of the file */
     QString ttle;
