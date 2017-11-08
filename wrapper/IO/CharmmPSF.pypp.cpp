@@ -23,6 +23,10 @@ namespace bp = boost::python;
 
 #include "SireMol/atomelements.h"
 
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
 #include "SireMol/molecule.h"
 
 #include "SireMol/moleditor.h"
@@ -36,6 +40,10 @@ namespace bp = boost::python;
 #include "SireUnits/units.h"
 
 #include "charmmpsf.h"
+
+#include <QDateTime>
+
+#include <QtMath>
 
 #include "charmmpsf.h"
 
@@ -143,7 +151,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nAngles"
                 , nAngles_function_value
-                , "" );
+                , "Return the number of angle records." );
         
         }
         { //::SireIO::CharmmPSF::nAtoms
@@ -154,7 +162,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
-                , "" );
+                , "Return the number of atom records." );
         
         }
         { //::SireIO::CharmmPSF::nAtoms
@@ -166,7 +174,7 @@ void register_CharmmPSF_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("i") )
-                , "" );
+                , "Return the number of atoms in molecule i." );
         
         }
         { //::SireIO::CharmmPSF::nBonds
@@ -177,7 +185,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nBonds"
                 , nBonds_function_value
-                , "" );
+                , "Return the number of bond records." );
         
         }
         { //::SireIO::CharmmPSF::nBonds
@@ -189,7 +197,7 @@ void register_CharmmPSF_class(){
                 "nBonds"
                 , nBonds_function_value
                 , ( bp::arg("i") )
-                , "" );
+                , "Return the number of bonds in molecule i." );
         
         }
         { //::SireIO::CharmmPSF::nCrossTerms
@@ -200,7 +208,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nCrossTerms"
                 , nCrossTerms_function_value
-                , "" );
+                , "Return the number of cross-term records." );
         
         }
         { //::SireIO::CharmmPSF::nDihedrals
@@ -211,7 +219,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nDihedrals"
                 , nDihedrals_function_value
-                , "" );
+                , "Return the number of dihedral records." );
         
         }
         { //::SireIO::CharmmPSF::nImpropers
@@ -222,7 +230,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nImpropers"
                 , nImpropers_function_value
-                , "" );
+                , "Return the number of improper records." );
         
         }
         { //::SireIO::CharmmPSF::nMolecules
@@ -233,7 +241,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
-                , "" );
+                , "Return the number of molecules." );
         
         }
         CharmmPSF_exposer.def( bp::self != bp::self );
@@ -259,7 +267,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "toLines"
                 , toLines_function_value
-                , "" );
+                , "Convert the parsed data to a collection of PSF record lines." );
         
         }
         { //::SireIO::CharmmPSF::toString

@@ -91,7 +91,7 @@ void register_VectorProperty_class(){
             VectorProperty_exposer.def( 
                 "value"
                 , value_function_value
-                , "" );
+                , "Return the actual value of the vector" );
         
         }
         { //::SireMaths::VectorProperty::what

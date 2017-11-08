@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireMol/atomelements.h"
 
+#include "SireMol/errors.h"
+
 #include "SireMol/molecule.h"
 
 #include "SireMol/moleditor.h"
@@ -166,7 +168,7 @@ void register_PDB2_class(){
                 "nAtoms"
                 , nAtoms_function_value
                 , ( bp::arg("i") )
-                , "Return the number of atoms in model i." );
+                , "Return the number of atoms in molecule i." );
         
         }
         { //::SireIO::PDB2::nChains
@@ -189,7 +191,7 @@ void register_PDB2_class(){
                 "nChains"
                 , nChains_function_value
                 , ( bp::arg("i") )
-                , "Return the number of chains in model i." );
+                , "Return the number of chains in molecule i." );
         
         }
         { //::SireIO::PDB2::nMolecules
@@ -200,7 +202,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
-                , "" );
+                , "Return the number of models (molecules)." );
         
         }
         { //::SireIO::PDB2::nResidues
@@ -223,7 +225,7 @@ void register_PDB2_class(){
                 "nResidues"
                 , nResidues_function_value
                 , ( bp::arg("i") )
-                , "Return the number of residues in model i." );
+                , "Return the number of residues in molecule i." );
         
         }
         PDB2_exposer.def( bp::self != bp::self );
@@ -249,7 +251,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "toLines"
                 , toLines_function_value
-                , "" );
+                , "Convert the parsed data to a collection of PDB record lines." );
         
         }
         { //::SireIO::PDB2::toString

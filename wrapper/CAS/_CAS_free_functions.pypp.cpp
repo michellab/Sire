@@ -79,26 +79,6 @@ namespace bp = boost::python;
 
 #include "expression.h"
 
-#include "SireCAS/errors.h"
-
-#include "SireStream/datastream.h"
-
-#include "complexvalues.h"
-
-#include "exbase.h"
-
-#include "expression.h"
-
-#include "expressionbase.h"
-
-#include "functions.h"
-
-#include "identities.h"
-
-#include "values.h"
-
-#include "exbase.h"
-
 #include "SireMaths/complex.h"
 
 #include "SireMaths/maths.h"
@@ -750,6 +730,26 @@ namespace bp = boost::python;
 #include "values.h"
 
 #include "expression.h"
+
+#include "SireCAS/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "complexvalues.h"
+
+#include "exbase.h"
+
+#include "expression.h"
+
+#include "expressionbase.h"
+
+#include "functions.h"
+
+#include "identities.h"
+
+#include "values.h"
+
+#include "exbase.h"
 
 #include "SireMaths/complex.h"
 
@@ -833,8 +833,8 @@ void register_free_functions(){
         bp::def( 
             "cbrt"
             , cbrt_function_value
-            , ( bp::arg("__x") )
-            , "Return the cube root of X." );
+            , ( bp::arg("arg0") )
+            , "" );
     
     }
 
@@ -859,8 +859,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("__x"), bp::arg("__y") )
-            , "Return X to the Y power." );
+            , ( bp::arg("arg0"), bp::arg("arg1") )
+            , "" );
     
     }
 
@@ -1015,8 +1015,8 @@ void register_free_functions(){
         bp::def( 
             "sqrt"
             , sqrt_function_value
-            , ( bp::arg("__x") )
-            , "Return the square root of X." );
+            , ( bp::arg("arg0") )
+            , "" );
     
     }
 

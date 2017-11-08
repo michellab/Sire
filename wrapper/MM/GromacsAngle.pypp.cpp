@@ -41,7 +41,7 @@ void register_GromacsAngle_class(){
         typedef bp::class_< SireMM::GromacsAngle > GromacsAngle_exposer_t;
         GromacsAngle_exposer_t GromacsAngle_exposer = GromacsAngle_exposer_t( "GromacsAngle", "This class holds all of the information about a Gromacs Angle\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope GromacsAngle_scope( GromacsAngle_exposer );
-        GromacsAngle_exposer.def( bp::init< int >(( bp::arg("function_type") ), "Copy constructor") );
+        GromacsAngle_exposer.def( bp::init< int >(( bp::arg("function_type") ), "Construct an angle that is of the specified type, but the parameters have yet\nto be resolved. This is because Gromacs can indicate the required type of\nfunction in the molecule specification, without providing the parameters") );
         GromacsAngle_exposer.def( bp::init< int, double, bp::optional< double, double, double, double, double > >(( bp::arg("function_type"), bp::arg("k0"), bp::arg("k1")=0, bp::arg("k2")=0, bp::arg("k3")=0, bp::arg("k4")=0, bp::arg("k5")=0 ), "Construct an angle of the specified function type with specified parameters\n(the order should be the same as in the Gromacs Manual, table 5.5)") );
         GromacsAngle_exposer.def( bp::init< int, QList< double > const & >(( bp::arg("function_type"), bp::arg("params") ), "Construct an angle of the specified function type by interpreting the parameter\ndata from the passed list of parameter values. These should be in the\nsame order as in the Gromacs Manual, table 5.5") );
         GromacsAngle_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("angle"), bp::arg("theta") ), "Construct from the passed angle, using theta as the symbol for the theta value") );
@@ -54,7 +54,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "assertResolved"
                 , assertResolved_function_value
-                , "" );
+                , "Assert that the parameters for this angle have been resolved" );
         
         }
         { //::SireMM::GromacsAngle::at
@@ -143,7 +143,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "isResolved"
                 , isResolved_function_value
-                , "" );
+                , "Return whether or not the parameters for this angle are resolved" );
         
         }
         { //::SireMM::GromacsAngle::isSimple
@@ -165,7 +165,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "needsResolving"
                 , needsResolving_function_value
-                , "" );
+                , "Return whether or not this parameter needs resolving" );
         
         }
         GromacsAngle_exposer.def( bp::self != bp::self );

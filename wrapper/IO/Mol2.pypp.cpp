@@ -282,7 +282,7 @@ void register_Mol2_class(){
             Mol2_exposer.def( 
                 "toLines"
                 , toLines_function_value
-                , "" );
+                , "Convert the the parsed data to a collection of Mol2 record lines." );
         
         }
         { //::SireIO::Mol2::toString

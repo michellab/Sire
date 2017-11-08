@@ -79,7 +79,7 @@ void register_StringProperty_class(){
             StringProperty_exposer.def( 
                 "value"
                 , value_function_value
-                , "" );
+                , "Return the actual string" );
         
         }
         StringProperty_exposer.staticmethod( "typeName" );

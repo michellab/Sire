@@ -21,6 +21,12 @@ namespace bp = boost::python;
 
 #include "SireMol/errors.h"
 
+#include "SireMol/molecule.h"
+
+#include "SireMol/moleculegroup.h"
+
+#include "SireMol/moleditor.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -331,6 +337,17 @@ void register_GroTop_class(){
                 , "Return the list of names of files that were included when reading or\nwriting this file. The files are relative. If absolute_paths\nis true then the full absolute paths for the files will be\nused" );
         
         }
+        { //::SireIO::GroTop::isLead
+        
+            typedef bool ( ::SireIO::GroTop::*isLead_function_type)(  ) const;
+            isLead_function_type isLead_function_value( &::SireIO::GroTop::isLead );
+            
+            GroTop_exposer.def( 
+                "isLead"
+                , isLead_function_value
+                , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
+        
+        }
         { //::SireIO::GroTop::moleculeType
         
             typedef ::SireIO::GroMolType ( ::SireIO::GroTop::*moleculeType_function_type)( ::QString const & ) const;
@@ -410,7 +427,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "warnings"
                 , warnings_function_value
-                , "" );
+                , "Return all of the warnings that were raised when parsing the file" );
         
         }
         { //::SireIO::GroTop::what
