@@ -41,7 +41,7 @@ void register_GromacsBond_class(){
         typedef bp::class_< SireMM::GromacsBond > GromacsBond_exposer_t;
         GromacsBond_exposer_t GromacsBond_exposer = GromacsBond_exposer_t( "GromacsBond", "This class holds all of the information about a Gromacs Bond\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope GromacsBond_scope( GromacsBond_exposer );
-        GromacsBond_exposer.def( bp::init< int >(( bp::arg("function_type") ), "Copy constructor") );
+        GromacsBond_exposer.def( bp::init< int >(( bp::arg("function_type") ), "Construct a bond that is of the specified type, but the parameters have yet\nto be resolved. This is because Gromacs can indicate the required type of\nfunction in the molecule specification, without providing the parameters") );
         GromacsBond_exposer.def( bp::init< int, double, bp::optional< double, double, double > >(( bp::arg("function_type"), bp::arg("k0"), bp::arg("k1")=0, bp::arg("k2")=0, bp::arg("k3")=0 ), "Construct a bond of the specified function type with specified parameters\n(the order should be the same as in the Gromacs Manual, table 5.5)") );
         GromacsBond_exposer.def( bp::init< int, QList< double > const & >(( bp::arg("function_type"), bp::arg("params") ), "Construct a bond of the specified function type by interpreting the parameter\ndata from the passed list of parameter values. These should be in the\nsame order as in the Gromacs Manual, table 5.5") );
         GromacsBond_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("bond"), bp::arg("R") ), "Construct from the passed bond, using R as the symbol for the R value") );
@@ -54,7 +54,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "assertResolved"
                 , assertResolved_function_value
-                , "" );
+                , "Assert that the parameters for this bond have been resolved" );
         
         }
         { //::SireMM::GromacsBond::at
@@ -121,7 +121,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "isResolved"
                 , isResolved_function_value
-                , "" );
+                , "Return whether or not the parameters for this bond are resolved" );
         
         }
         { //::SireMM::GromacsBond::isSimple
@@ -143,7 +143,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "needsResolving"
                 , needsResolving_function_value
-                , "" );
+                , "Return whether or not this parameter needs resolving" );
         
         }
         GromacsBond_exposer.def( bp::self != bp::self );

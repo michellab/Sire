@@ -21,6 +21,12 @@ namespace bp = boost::python;
 
 #include "SireMol/errors.h"
 
+#include "SireMol/molecule.h"
+
+#include "SireMol/moleculegroup.h"
+
+#include "SireMol/moleditor.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"

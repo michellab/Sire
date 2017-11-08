@@ -6,6 +6,7 @@ set ( PYPP_SOURCES
        Cube.pypp.cpp
        AmberRst7.pypp.cpp
        TinkerParameters.pypp.cpp
+       GroSystem.pypp.cpp
        ZmatrixMaker.pypp.cpp
        Supplementary.pypp.cpp
        PDB2.pypp.cpp
@@ -13,14 +14,18 @@ set ( PYPP_SOURCES
        ProtoMSParameters.pypp.cpp
        CharmmPSF.pypp.cpp
        AmberRst.pypp.cpp
+       Gro87.pypp.cpp
        MoleculeParser.pypp.cpp
        Amber.pypp.cpp
        Mol2.pypp.cpp
        PerturbationsTemplate.pypp.cpp
        PDBParameters.pypp.cpp
+       GroMolType.pypp.cpp
        IOParametersBase.pypp.cpp
+       GroAtom.pypp.cpp
        Tinker.pypp.cpp
        FlexibilityLibrary.pypp.cpp
+       GroTop.pypp.cpp
        PerturbationsLibrary.pypp.cpp
        NullParser.pypp.cpp
        AmberPrm.pypp.cpp

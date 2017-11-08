@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireError/errors.h"
+
 #include "SireIO/supplementary.h"
 
 #include "SireStream/datastream.h"
@@ -67,7 +69,7 @@ void register_Supplementary_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("system"), bp::arg("map") )
-                , "Return the parser that has been constructed by reading in the passed\nfile using the passed properties" );
+                , "Return this parser constructed from the passed SireSystem::System" );
         
         }
         { //::SireIO::Supplementary::formatDescription

@@ -21,6 +21,12 @@ namespace bp = boost::python;
 
 #include "SireMol/errors.h"
 
+#include "SireMol/molecule.h"
+
+#include "SireMol/moleculegroup.h"
+
+#include "SireMol/moleditor.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -51,10 +57,10 @@ void register_GroSystem_class(){
 
     { //::SireIO::GroSystem
         typedef bp::class_< SireIO::GroSystem > GroSystem_exposer_t;
-        GroSystem_exposer_t GroSystem_exposer = GroSystem_exposer_t( "GroSystem", "This class describes a Gromacs System", bp::init< >("") );
+        GroSystem_exposer_t GroSystem_exposer = GroSystem_exposer_t( "GroSystem", "This class describes a Gromacs System", bp::init< >("Construct a null GroSystem") );
         bp::scope GroSystem_scope( GroSystem_exposer );
-        GroSystem_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
-        GroSystem_exposer.def( bp::init< SireIO::GroSystem const & >(( bp::arg("other") ), "") );
+        GroSystem_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "Construct a GroSystem with the passed name") );
+        GroSystem_exposer.def( bp::init< SireIO::GroSystem const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireIO::GroSystem::add
         
             typedef void ( ::SireIO::GroSystem::*add_function_type)( ::QString,int ) ;
@@ -64,7 +70,7 @@ void register_GroSystem_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("moltype"), bp::arg("ncopies")=(int)(1) )
-                , "" );
+                , "Add (optionally ncopies) copies of the molecule with type moltype\nto the system" );
         
         }
         { //::SireIO::GroSystem::at
@@ -76,7 +82,7 @@ void register_GroSystem_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , "" );
+                , "Return the molecule type of the ith molecule" );
         
         }
         { //::SireIO::GroSystem::count
@@ -87,7 +93,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "count"
                 , count_function_value
-                , "" );
+                , "Return the number of molecules in the system" );
         
         }
         { //::SireIO::GroSystem::isEmpty
@@ -98,7 +104,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
-                , "" );
+                , "Return whether or not this is an empty system (no molecules)" );
         
         }
         { //::SireIO::GroSystem::isNull
@@ -109,7 +115,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "isNull"
                 , isNull_function_value
-                , "" );
+                , "Return whether or not this is a null GroSystem" );
         
         }
         { //::SireIO::GroSystem::nMolecules
@@ -120,7 +126,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "nMolecules"
                 , nMolecules_function_value
-                , "" );
+                , "Return the number of molecules in the system" );
         
         }
         { //::SireIO::GroSystem::name
@@ -131,7 +137,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "name"
                 , name_function_value
-                , "" );
+                , "Return the name of the system" );
         
         }
         GroSystem_exposer.def( bp::self != bp::self );
@@ -170,7 +176,7 @@ void register_GroSystem_class(){
                 "setName"
                 , setName_function_value
                 , ( bp::arg("name") )
-                , "" );
+                , "Set the name of the system" );
         
         }
         { //::SireIO::GroSystem::size
@@ -181,7 +187,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "size"
                 , size_function_value
-                , "" );
+                , "Return the number of molecules in the system" );
         
         }
         { //::SireIO::GroSystem::toString
@@ -192,7 +198,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "toString"
                 , toString_function_value
-                , "" );
+                , "Return a string representation of this system" );
         
         }
         { //::SireIO::GroSystem::typeName
@@ -214,7 +220,7 @@ void register_GroSystem_class(){
             GroSystem_exposer.def( 
                 "uniqueTypes"
                 , uniqueTypes_function_value
-                , "" );
+                , "Return the list of unique molecule types held in the system" );
         
         }
         { //::SireIO::GroSystem::what

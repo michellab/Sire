@@ -1815,7 +1815,7 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
 
     try
     {
-        QString last_format = system.property(fileformat_property).asA<StringProperty>();
+        QString last_format = system.property(fileformat_property).asA<StringProperty>().value();
         fileformat = QString("%1,%2").arg(last_format,fileformat);
     }
     catch(...)
@@ -1838,7 +1838,7 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
 
     try
     {
-        QString last_filename = system.property(filename_property).asA<StringProperty>();
+        QString last_filename = system.property(filename_property).asA<StringProperty>().value();
         file_name = QString("%1,%2").arg(last_filename,file_name);
     }
     catch(...)
