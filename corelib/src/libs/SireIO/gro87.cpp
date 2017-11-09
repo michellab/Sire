@@ -569,6 +569,18 @@ int Gro87::size() const
     return this->nFrames();
 }
 
+/** Gro87 can be a lead parser as well as a follower */
+bool Gro87::isLead() const
+{
+    return true;
+}
+
+/** Gro87 can be a lead parser as well as a follower */
+bool Gro87::canFollow() const
+{
+    return true;
+}
+
 /** Return the Gro87 object that contains only the information for the ith
     frame. This allows you to extract and create a system for the ith frame
     from a trajectory */
@@ -1596,6 +1608,205 @@ int Gro87::findAtom(const MoleculeInfoData &molinfo, int atmidx, int hint,
     return match;
 }
 
+/** Internal function used to add the final properties to a system */
+void Gro87::finaliseSystem(System &system, const PropertyMap &map) const
+{
+    PropertyName space_property = map["space"];
+    if (space_property.hasValue())
+    {
+        system.setProperty("space", space_property.value());
+    }
+    else if ((not box_v1.isEmpty()) and space_property.hasSource())
+    {
+        //need to make sure that this is cubic, i.e. have (x,0,0), (0,y,0), (0,0,z)
+        double x = box_v1.at(0).x();
+        double y = box_v2.at(0).y();
+        double z = box_v3.at(0).z();
+        
+        if (box_v1.at(0).manhattanLength() != x or
+            box_v2.at(0).manhattanLength() != y or
+            box_v3.at(0).manhattanLength() != z)
+        {
+            throw SireIO::parse_error( QObject::tr(
+                    "Sire cannot currently support a non-cubic periodic box! %1 x %2 x %3")
+                        .arg(box_v1.at(0).toString())
+                        .arg(box_v2.at(0).toString())
+                        .arg(box_v3.at(0).toString()), CODELOC );
+        }
+        
+        system.setProperty( space_property.source(), SireVol::PeriodicBox(Vector(x,y,z)) );
+    }
+    
+    //update the System fileformat property to record that it includes
+    //data from this file format
+    QString fileformat = this->formatName();
+    
+    PropertyName fileformat_property = map["fileformat"];
+    
+    try
+    {
+        QString last_format = system.property(fileformat_property).asA<StringProperty>().value();
+        fileformat = QString("%1,%2").arg(last_format,fileformat);
+    }
+    catch(...)
+    {}
+    
+    if (fileformat_property.hasSource())
+    {
+        system.setProperty(fileformat_property.source(), StringProperty(fileformat));
+    }
+    else
+    {
+        system.setProperty("fileformat", StringProperty(fileformat));
+    }
+    
+    if (not current_time.isEmpty())
+    {
+        PropertyName time_property = map["time"];
+        
+        if (time_property.hasSource())
+        {
+            system.setProperty(time_property.source(), TimeProperty(current_time[0]*picosecond));
+        }
+        else
+        {
+            system.setProperty("time", TimeProperty(current_time[0]*picosecond));
+        }
+    }
+}
+
+/** Use the data contained in this parser to create a new System from scratch. 
+    This will be a one-molecule system as Gro87 files don't divide atoms up
+    into molecules. */
+System Gro87::startSystem(const PropertyMap &map) const
+{
+    const bool has_coords = hasCoordinates();
+    const bool has_vels = hasVelocities();
+
+    if (not (has_coords or has_vels))
+    {
+        //nothing to add...
+        return System();
+    }
+    
+    //loop through all atoms and add them to a single molecule
+    Molecule mol;
+    {
+        MolStructureEditor moleditor;
+        
+        //add all of the atoms, creating residues as needed
+        const auto atmnams = this->atomNames();
+        const auto atmnums = this->atomNumbers();
+        const auto resnums = this->residueNumbers();
+        const auto resnams = this->residueNames();
+        
+        int ncg = 0;
+        
+        QSet<ResNum> completed_residues;
+        
+        for (int i=0; i<atmnams.count(); ++i)
+        {
+            auto atom = moleditor.add( AtomNum(atmnums[i]) );
+            atom = atom.rename( AtomName(atmnams[i]) );
+            
+            const ResNum resnum(resnums[i]);
+            
+            if (completed_residues.contains(resnum))
+            {
+                auto res = moleditor.residue(resnum);
+                
+                if (res.name().value() != resnams[i])
+                {
+                    //different residue
+                    res = moleditor.add(resnum);
+                    res = res.rename( ResName(resnams[i]) );
+                    ncg += 1;
+                    moleditor.add( CGName(QString::number(ncg)) );
+                }
+                
+                atom = atom.reparent(res.index());
+                atom = atom.reparent(CGName(QString::number(ncg)));
+            }
+            else
+            {
+                auto res = moleditor.add(resnum);
+                res = res.rename( ResName(resnams[i]) );
+                atom = atom.reparent(res.index());
+                
+                ncg += 1;
+                auto cg = moleditor.add( CGName(QString::number(ncg)) );
+                atom = atom.reparent(cg.index());
+                
+                completed_residues.insert(resnum);
+            }
+        }
+        
+        //we have created the molecule - now add in the coordinates/velocities as needed
+        mol = moleditor.commit();
+    }
+    
+    //now add the coordinates and velocities
+    {
+        auto moleditor = mol.edit();
+        const auto molinfo = mol.info();
+        
+        if (has_coords)
+        {
+            auto coords = QVector< QVector<Vector> >(molinfo.nCutGroups());
+            const auto coords_array = this->coordinates().constData();
+
+            for (int i=0; i<molinfo.nCutGroups(); ++i)
+            {
+                coords[i] = QVector<Vector>(molinfo.nAtoms(CGIdx(i)));
+            }
+
+            for (int i=0; i<mol.nAtoms(); ++i)
+            {
+                auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
+
+                coords[cgatomidx.cutGroup()][cgatomidx.atom()] = coords_array[i];
+            }
+
+            moleditor.setProperty( map["coordinates"], AtomCoords(CoordGroupArray(coords)) );
+        }
+        
+        if (has_vels)
+        {
+            auto vels = AtomVelocities(molinfo);
+            const auto vels_array = this->velocities().constData();
+
+            for (int i=0; i<mol.nAtoms(); ++i)
+            {
+                auto cgatomidx = molinfo.cgAtomIdx(AtomIdx(i));
+
+                //velocity is Angstroms per 1/20.455 ps
+                const auto vel_unit = (1.0 / 20.455) * angstrom / picosecond;
+                
+                const Vector &vel = vels_array[i];
+                vels.set(cgatomidx, Velocity3D(vel.x() * vel_unit,
+                                               vel.y() * vel_unit,
+                                               vel.z() * vel_unit));
+            }
+            
+            moleditor.setProperty( map["velocity"], vels );
+        }
+        
+        mol = moleditor.commit();
+    }
+    
+    //now that we have the molecule, add this to the System
+    System system(this->title());
+    
+    MoleculeGroup all("all");
+    all.add(mol);
+    
+    system.add(all);
+    
+    this->finaliseSystem(system,map);
+    
+    return system;
+}
+
 /** Use the data contained in this parser to add information from the file to
     the molecules that exist already in the passed System. For example, this
     may be used to add coordinate data from this file to the molecules in 
@@ -1770,66 +1981,5 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
     system.remove(MGName("all"));
     system.add(new_group);
 
-    PropertyName space_property = map["space"];
-    if (space_property.hasValue())
-    {
-        system.setProperty("space", space_property.value());
-    }
-    else if ((not box_v1.isEmpty()) and space_property.hasSource())
-    {
-        //need to make sure that this is cubic, i.e. have (x,0,0), (0,y,0), (0,0,z)
-        double x = box_v1.at(0).x();
-        double y = box_v2.at(0).y();
-        double z = box_v3.at(0).z();
-        
-        if (box_v1.at(0).manhattanLength() != x or
-            box_v2.at(0).manhattanLength() != y or
-            box_v3.at(0).manhattanLength() != z)
-        {
-            throw SireIO::parse_error( QObject::tr(
-                    "Sire cannot currently support a non-cubic periodic box! %1 x %2 x %3")
-                        .arg(box_v1.at(0).toString())
-                        .arg(box_v2.at(0).toString())
-                        .arg(box_v3.at(0).toString()), CODELOC );
-        }
-        
-        system.setProperty( space_property.source(), SireVol::PeriodicBox(Vector(x,y,z)) );
-    }
-    
-    //update the System fileformat property to record that it includes
-    //data from this file format
-    QString fileformat = this->formatName();
-    
-    PropertyName fileformat_property = map["fileformat"];
-    
-    try
-    {
-        QString last_format = system.property(fileformat_property).asA<StringProperty>().value();
-        fileformat = QString("%1,%2").arg(last_format,fileformat);
-    }
-    catch(...)
-    {}
-    
-    if (fileformat_property.hasSource())
-    {
-        system.setProperty(fileformat_property.source(), StringProperty(fileformat));
-    }
-    else
-    {
-        system.setProperty("fileformat", StringProperty(fileformat));
-    }
-    
-    if (not current_time.isEmpty())
-    {
-        PropertyName time_property = map["time"];
-        
-        if (time_property.hasSource())
-        {
-            system.setProperty(time_property.source(), TimeProperty(current_time[0]*picosecond));
-        }
-        else
-        {
-            system.setProperty("time", TimeProperty(current_time[0]*picosecond));
-        }
-    }
+    this->finaliseSystem(system, map);
 }

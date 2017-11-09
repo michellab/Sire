@@ -136,7 +136,11 @@ public:
 
     QStringList warnings() const;
 
+    bool isLead() const;
+    bool canFollow() const;
+
 protected:
+    SireSystem::System startSystem(const PropertyMap &map) const;
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
 private:
@@ -145,6 +149,8 @@ private:
 
     int findAtom(const SireMol::MoleculeInfoData &molinfo,
                  int atomidx, int hint=0, bool *ids_match=0) const;
+
+    void finaliseSystem(SireSystem::System &system, const PropertyMap &map) const;
 
     /** The title of the file */
     QString ttle;
