@@ -109,6 +109,8 @@ public:
     static const char* typeName();
     const char* what() const;
     
+    bool isNull() const;
+    
     bool hasMassOnly() const;
     
     QString toString() const;
@@ -196,6 +198,8 @@ public:
     
     QString toString() const;
     SireCAS::Expression toExpression(const SireCAS::Symbol &R) const;
+    
+    bool atomsAreBonded() const;
     
     uint hash() const;
 
@@ -400,6 +404,12 @@ inline GromacsAtomType::PARTICLE_TYPE GromacsAtomType::particleType() const
 inline SireMM::LJParameter GromacsAtomType::ljParameter() const
 {
     return _lj;
+}
+
+/** Return whether or not this is a null atom type */
+inline bool GromacsAtomType::isNull() const
+{
+    return _typ.isNull();
 }
 
 /** Return whether or not this atom type has only the mass specified */

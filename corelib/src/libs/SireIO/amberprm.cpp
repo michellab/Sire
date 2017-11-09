@@ -3861,6 +3861,7 @@ MolEditor AmberPrm::getMolecule(int molidx, int start_idx, int natoms,
     mol.setProperty(map["mass"], amber_params.masses());
     mol.setProperty(map["element"], amber_params.elements());
     mol.setProperty(map["ambertype"], amber_params.amberTypes());
+    mol.setProperty(map["atomtype"], amber_params.amberTypes());
     mol.setProperty(map["connectivity"], amber_params.connectivity());
     mol.setProperty(map["bond"],
                     amber_params.bondFunctions(InternalPotential::symbols().bond().r()));

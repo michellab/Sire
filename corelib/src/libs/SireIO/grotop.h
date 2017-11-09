@@ -423,7 +423,15 @@ private:
 
     const QVector<QString>& expandedLines() const;
     
-    SireMol::Molecule createMolecule(QString moltype, QStringList &errors) const;
+    SireMol::Molecule createMolecule(const GroMolType &moltype, QStringList &errors,
+                                     const PropertyMap &map) const;
+    SireMol::Molecule createMolecule(QString moltype, QStringList &errors,
+                                     const PropertyMap &map) const;
+    
+    void addAtomProperties(SireMol::Molecule &mol, const GroMolType &moltype,
+                           QStringList &errors, const PropertyMap &map) const;
+    void addBondProperties(SireMol::Molecule &mol, const GroMolType &moltype,
+                           QStringList &errors, const PropertyMap &map) const;
     
     /** This is the full search path of all directories that should
         be searched for Gromacs include files */

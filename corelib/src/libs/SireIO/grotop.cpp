@@ -37,6 +37,14 @@
 #include "SireMol/moleditor.h"
 #include "SireMol/moleculegroup.h"
 #include "SireMol/errors.h"
+#include "SireMol/atomcharges.h"
+#include "SireMol/atommasses.h"
+#include "SireMol/atomelements.h"
+#include "SireMol/connectivity.h"
+
+#include "SireMM/internalff.h"
+#include "SireMM/atomljs.h"
+#include "SireMM/twoatomfunctions.h"
 
 #include "SireBase/parallel.h"
 #include "SireBase/stringproperty.h"
@@ -3457,39 +3465,10 @@ void GroTop::parseLines(const QString &path, const PropertyMap &map)
 
 /** This function is used to create a molecule. Any errors should be written
     to the 'errors' QStringList passed as an argument */
-Molecule GroTop::createMolecule(QString moltype_name, QStringList &errors) const
+Molecule GroTop::createMolecule(const GroMolType &moltype, QStringList &errors,
+                                const PropertyMap&) const
 {
-    //find the molecular template for this molecule
-    int idx = -1;
-    
-    for (int i=0; i<moltypes.count(); ++i)
-    {
-        if (moltypes.constData()[i].name() == moltype_name)
-        {
-            idx = i;
-            break;
-        }
-    }
-    
-    if (idx == -1)
-    {
-        QStringList typs;
-        
-        for (const auto &moltype : moltypes)
-        {
-            typs.append( moltype.name() );
-        }
-    
-        errors.append( QObject::tr("There is no molecular template called '%1' "
-          "in this Gromacs file. Available templates are [ %2 ]")
-            .arg(moltype_name).arg(Sire::toString(typs)) );
-        return Molecule();
-    }
-
-    const auto moltype = moltypes.constData()[idx];
-
     MolStructureEditor mol;
-    mol = mol.rename( MolName(moltype_name) );
 
     //first go through and create the Molecule layout
     //(the atoms are already sorted into Residues)
@@ -3528,6 +3507,223 @@ Molecule GroTop::createMolecule(QString moltype_name, QStringList &errors) const
     return mol.commit();
 }
 
+/** Internal function to simplify setting a molecular property */
+static void setMoleculeProperty(MolEditor &mol, const PropertyMap &map,
+                         const QString &key, const Property &value)
+{
+    const auto propname = map[key];
+
+    if (propname.hasValue())
+    {
+        mol = mol.setProperty(key, propname.value());
+    }
+    else
+    {
+        mol = mol.setProperty(propname.source(), value);
+    }
+}
+
+/** This function is used to add atom properties to the passed molecule */
+void GroTop::addAtomProperties(Molecule &mol, const GroMolType &moltype,
+                               QStringList &errors, const PropertyMap &map) const
+{
+    const auto molinfo = mol.info();
+
+    //create space for all of the properties
+    AtomStringProperty atom_type(molinfo);
+    AtomIntProperty charge_group(molinfo);
+    AtomCharges atom_chgs(molinfo);
+    AtomMasses atom_masses(molinfo);
+
+    AtomLJs atom_ljs(molinfo);
+    AtomElements atom_elements(molinfo);
+    AtomStringProperty particle_type(molinfo);
+
+    const auto atoms = moltype.atoms();
+
+    //loop over each atom and look up parameters
+    for (int i=0; i<atoms.count(); ++i)
+    {
+        auto cgatomidx = molinfo.cgAtomIdx( AtomIdx(i) );
+
+        //get the template for this atom (templates in same order as atoms)
+        const auto atom = atoms.constData()[i];
+        
+        //information from the template
+        atom_type.set(cgatomidx, atom.atomType());
+        charge_group.set(cgatomidx, atom.chargeGroup());
+        atom_chgs.set(cgatomidx, atom.charge());
+        atom_masses.set(cgatomidx, atom.mass());
+        
+        //information from the atom type
+        const auto atmtyp = atom_types.value(atom.atomType());
+        
+        if (atmtyp.isNull())
+        {
+            errors.append( QObject::tr("There are no parameters for the atom "
+               "type '%1', needed by atom '%2'")
+                    .arg(atom.atomType()).arg(atom.toString()) );
+            continue;
+        }
+        else if (atmtyp.hasMassOnly())
+        {
+            errors.append( QObject::tr("The parameters for the atom type '%1' needed "
+               "by atom '%2' has mass parameters only! '%3'")
+                    .arg(atom.atomType()).arg(atom.toString()).arg(atmtyp.toString()) );
+            continue;
+        }
+        
+        atom_ljs.set(cgatomidx, atmtyp.ljParameter());
+        atom_elements.set(cgatomidx, atmtyp.element());
+        particle_type.set(cgatomidx, atmtyp.particleTypeString());
+    }
+    
+    //save the parameters into the atom
+    auto moleditor = mol.edit();
+
+    setMoleculeProperty(moleditor, map, "atomtype", atom_type);
+    setMoleculeProperty(moleditor, map, "charge_group", charge_group);
+    setMoleculeProperty(moleditor, map, "charge", atom_chgs);
+    setMoleculeProperty(moleditor, map, "mass", atom_masses);
+    setMoleculeProperty(moleditor, map, "LJ", atom_ljs);
+    setMoleculeProperty(moleditor, map, "element", atom_elements);
+    setMoleculeProperty(moleditor, map, "particle_type", particle_type);
+    
+    mol = moleditor.commit();
+}
+
+/** This internal function is used to add in bond properties */
+void GroTop::addBondProperties(Molecule &mol, const GroMolType &moltype,
+                               QStringList &errors, const PropertyMap &map) const
+{
+    const auto molinfo = mol.info();
+
+    const auto R = InternalPotential::symbols().bond().r();
+
+    //add in all of the bond functions, together with the connectivity of the
+    //molecule
+    auto connectivity = Connectivity(molinfo).edit();
+    connectivity = connectivity.disconnectAll();
+    
+    TwoAtomFunctions bondfuncs(molinfo);
+    
+    const auto bonds = moltype.bonds();
+    
+    for (auto it = bonds.constBegin(); it != bonds.constEnd(); ++it)
+    {
+        const auto &bond = it.key();
+        auto potential = it.value();
+
+        AtomIdx idx0 = molinfo.atomIdx( bond.atom0() );
+        AtomIdx idx1 = molinfo.atomIdx( bond.atom1() );
+        
+        if (idx1 < idx0)
+        {
+            qSwap(idx0, idx1);
+        }
+        
+        //do we need to resolve this bond parameter (look up the parameters)?
+        if (not potential.isResolved())
+        {
+            //look up the atoms in the molecule template
+            const auto atom0 = moltype.atom(idx0);
+            const auto atom1 = moltype.atom(idx1);
+            
+            //get the bond parameter for these atom types
+            auto new_potential = this->bond(atom0.atomType(), atom1.atomType());
+            
+            if (not new_potential.isResolved())
+            {
+                errors.append( QObject::tr("Cannot find the bond parameters for "
+                  "the bond between atoms %1-%2 (atom types %3-%4).")
+                    .arg(atom0.toString()).arg(atom1.toString())
+                    .arg(atom0.atomType()).arg(atom1.atomType()) );
+                continue;
+            }
+            
+            potential = new_potential;
+        }
+        
+        //add the connection
+        if (potential.atomsAreBonded())
+        {
+            connectivity.connect(idx0, idx1);
+        }
+        
+        //now create the bond expression
+        auto exp = potential.toExpression(R);
+
+        if (not exp.isZero())
+        {
+            //add this expression onto any existing expression
+            auto oldfunc = bondfuncs.potential(idx0, idx1);
+            
+            if (not oldfunc.isZero())
+            {
+                bondfuncs.set(idx0, idx1, exp+oldfunc);
+            }
+            else
+            {
+                bondfuncs.set(idx0, idx1, exp);
+            }
+        }
+    }
+    
+    auto moleditor = mol.edit();
+    
+    setMoleculeProperty(moleditor, map, "connectivity", connectivity.commit());
+    setMoleculeProperty(moleditor, map, "bond", bondfuncs);
+    
+    mol = moleditor.commit();
+}
+
+/** This function is used to create a molecule. Any errors should be written
+    to the 'errors' QStringList passed as an argument */
+Molecule GroTop::createMolecule(QString moltype_name, QStringList &errors,
+                                const PropertyMap &map) const
+{
+    //find the molecular template for this molecule
+    int idx = -1;
+    
+    for (int i=0; i<moltypes.count(); ++i)
+    {
+        if (moltypes.constData()[i].name() == moltype_name)
+        {
+            idx = i;
+            break;
+        }
+    }
+    
+    if (idx == -1)
+    {
+        QStringList typs;
+        
+        for (const auto &moltype : moltypes)
+        {
+            typs.append( moltype.name() );
+        }
+    
+        errors.append( QObject::tr("There is no molecular template called '%1' "
+          "in this Gromacs file. Available templates are [ %2 ]")
+            .arg(moltype_name).arg(Sire::toString(typs)) );
+        return Molecule();
+    }
+
+    const auto moltype = moltypes.constData()[idx];
+
+    auto mol = this->createMolecule(moltype, errors, map);
+
+    //set the name of the molecule
+    mol = mol.edit().rename(moltype_name).commit();
+    
+    //now add the various properties
+    this->addAtomProperties(mol, moltype, errors, map);
+    this->addBondProperties(mol, moltype, errors, map);
+    //etc.
+    
+    return mol;
+}
+
 /** Use the data contained in this parser to create a new System of molecules,
     assigning properties based on the mapping in 'map' */
 System GroTop::startSystem(const PropertyMap &map) const
@@ -3559,7 +3755,7 @@ System GroTop::startSystem(const PropertyMap &map) const
                 auto typ = unique_typs[i];
             
                 QStringList errors;
-                Molecule mol = this->createMolecule(typ, errors);
+                Molecule mol = this->createMolecule(typ, errors, map);
                 
                 QMutexLocker lkr(&mutex);
                 
@@ -3577,7 +3773,7 @@ System GroTop::startSystem(const PropertyMap &map) const
         for (auto typ : unique_typs)
         {
             QStringList errors;
-            Molecule mol = this->createMolecule(typ, errors);
+            Molecule mol = this->createMolecule(typ, errors, map);
             
             if (not errors.isEmpty())
             {
