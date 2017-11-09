@@ -641,9 +641,6 @@ PDB2::PDB2(const QString &filename, const PropertyMap &map) :
     //we are allowed to use multiple cores to parse the file, e.g.
     //MoleculeParser::usesParallel() will be true
 
-    // Set the file name.
-    this->filename = filename;
-
     //parse the data in the parse function
     this->parseLines(map);
 
@@ -663,9 +660,6 @@ PDB2::PDB2(const QStringList &lines, const PropertyMap &map) :
     //a parameter has also been read in MoleculeParser to say whether
     //we are allowed to use multiple cores to parse the file, e.g.
     //MoleculeParser::usesParallel() will be true
-
-    // Set the file name.
-    this->filename = filename;
 
     //parse the data in the parse function
     this->parseLines(map);
@@ -699,13 +693,6 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
 
     // Lines for different PDB data records (one for each molecule).
     QVector<QVector<QString> > atom_lines(nmols);
-
-    // Set the name of the file from which the SireSystem was constructed.
-    if (system.properties().hasProperty("filename"))
-    {
-        filename = system.property("filename").toString();
-    }
-    else filename.clear();
 
     if (usesParallel())
     {
@@ -777,7 +764,6 @@ PDB2::PDB2(const PDB2 &other) :
     atoms(other.atoms),
     chains(other.chains),
     residues(other.residues),
-    filename(other.filename),
     parse_warnings(other.parse_warnings)
 {}
 
@@ -793,7 +779,6 @@ PDB2& PDB2::operator=(const PDB2 &other)
         this->atoms = other.atoms;
         this->chains = other.chains;
         this->residues = other.residues;
-        this->filename = other.filename;
         this->parse_warnings = other.parse_warnings;
 
         MoleculeParser::operator=(other);
@@ -1727,7 +1712,6 @@ System PDB2::startSystem(const PropertyMap &map) const
 
     System system;
     system.add(molgroup);
-    system.setProperty(map["filename"].source(), StringProperty(filename));
     system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
 
     return system;
@@ -1828,29 +1812,6 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
     else
     {
         system.setProperty("fileformat", StringProperty(fileformat));
-	}
-
-	// Update the System filename property to record that it includes
-    // data from this file.
-    QString file_name = this->filename;
-
-    PropertyName filename_property = map["filename"];
-
-    try
-    {
-        QString last_filename = system.property(filename_property).asA<StringProperty>().value();
-        file_name = QString("%1,%2").arg(last_filename,file_name);
-    }
-    catch(...)
-    {}
-
-    if (filename_property.hasSource())
-    {
-        system.setProperty(filename_property.source(), StringProperty(file_name));
-    }
-    else
-    {
-        system.setProperty("filename", StringProperty(file_name));
 	}
 }
 

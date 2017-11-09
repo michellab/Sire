@@ -291,9 +291,6 @@ private:
     //* Mapping between residue and atom indices for each molecule. */
     QVector<QMultiMap<qint64, qint64> > residues;
 
-    /** The name of the file from which data was parsed. */
-    QString filename;
-
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;
 };

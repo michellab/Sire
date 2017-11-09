@@ -380,9 +380,6 @@ CharmmPSF::CharmmPSF(const QString &filename, const PropertyMap &map)
     //we are allowed to use multiple cores to parse the file, e.g.
     //MoleculeParser::usesParallel() will be true
 
-    // Store the name of the input file.
-    this->filename = filename;
-
     //parse the data in the parse function
     this->parseLines(map);
 
@@ -402,9 +399,6 @@ CharmmPSF::CharmmPSF(const QStringList &lines, const PropertyMap &map)
     //a parameter has also been read in MoleculeParser to say whether
     //we are allowed to use multiple cores to parse the file, e.g.
     //MoleculeParser::usesParallel() will be true
-
-    // Store the name of the input file.
-    this->filename = filename;
 
     //parse the data in the parse function
     this->parseLines(map);
@@ -433,7 +427,6 @@ CharmmPSF::CharmmPSF(const CharmmPSF &other) :
     cross_terms(other.cross_terms),
     num_to_idx(other.num_to_idx),
     molecules(other.molecules),
-    filename(other.filename),
     parse_warnings(other.parse_warnings)
 {}
 
@@ -454,7 +447,6 @@ CharmmPSF& CharmmPSF::operator=(const CharmmPSF &other)
         cross_terms = other.cross_terms;
         num_to_idx = other.num_to_idx;
         molecules = other.molecules;
-        filename = other.filename;
         parse_warnings = other.parse_warnings;
 
         MoleculeParser::operator=(other);
@@ -583,7 +575,6 @@ QVector<QString> CharmmPSF::toLines() const
     lines.append("PSF");
     lines.append("");
     lines.append("       2 !NTITLE");
-    lines.append(QString(" REMARKS FILENAME=\"%1\"").arg(filename));
     lines.append(QString(" REMARKS DATE:%1    created by BioSimSpace (v)")
          .arg(QDateTime::currentDateTime().toString("dd-MMM-yy  hh:mm:ss")));
     lines.append("");
@@ -1400,7 +1391,6 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
 
     System system;
     system.add(molgroup);
-    system.setProperty(map["filename"].source(), StringProperty(filename));
     system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
 
     return system;

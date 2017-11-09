@@ -257,9 +257,6 @@ private:
     /** The indices of the atoms in each molecule. */
     QVector<QVector<qint64> > molecules;
 
-    /** The name of the parsed file (if from a file). */
-    QString filename;
-
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;
 };
