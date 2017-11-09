@@ -67,23 +67,23 @@ public:
           const PropertyMap &map = PropertyMap());
     Gro87(const SireSystem::System &system,
           const PropertyMap &map = PropertyMap());
-    
+
     Gro87(const Gro87 &other);
-    
+
     ~Gro87();
-    
+
     Gro87& operator=(const Gro87 &other);
-    
+
     bool operator==(const Gro87 &other) const;
     bool operator!=(const Gro87 &other) const;
-    
+
     static const char* typeName();
-    
+
     const char* what() const;
 
     int count() const;
     int size() const;
-    
+
     Gro87 operator[](int i) const;
 
     MoleculeParserPtr construct(const QString &filename,
@@ -91,7 +91,7 @@ public:
 
     MoleculeParserPtr construct(const QStringList &lines,
                                 const PropertyMap &map) const;
-    
+
     MoleculeParserPtr construct(const SireSystem::System &system,
                                 const PropertyMap &map) const;
 
@@ -108,7 +108,7 @@ public:
 
     int nAtoms() const;
     int nResidues() const;
-    
+
     bool hasCoordinates() const;
     bool hasVelocities() const;
 
@@ -122,7 +122,7 @@ public:
     QVector<qint64> residueNumbers() const;
 
     int nFrames() const;
-    
+
     QVector<SireMaths::Vector> coordinates(int frame) const;
     QVector<SireMaths::Vector> velocities(int frame) const;
 
@@ -136,7 +136,11 @@ public:
 
     QStringList warnings() const;
 
+    bool isLead() const;
+    bool canFollow() const;
+
 protected:
+    SireSystem::System startSystem(const PropertyMap &map) const;
     void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
 private:
@@ -146,33 +150,35 @@ private:
     int findAtom(const SireMol::MoleculeInfoData &molinfo,
                  int atomidx, int hint=0, bool *ids_match=0) const;
 
+    void finaliseSystem(SireSystem::System &system, const PropertyMap &map) const;
+
     /** The title of the file */
     QString ttle;
-    
+
     /** The current time of the simulation in picoseconds */
     QVector<double> current_time;
-    
+
     /** The coordinate data in internal units (angstroms) */
     QVector< QVector<SireMaths::Vector> > coords;
-    
+
     /** The velocity data in internal units (angstrom/picosecond) */
     QVector< QVector<SireMaths::Vector> > vels;
-    
+
     /** The box dimensions - each of the three vectors */
     QVector<SireMaths::Vector> box_v1, box_v2, box_v3;
-    
+
     /** The residue numbers */
     QVector<qint64> resnums;
-    
+
     /** The residue names */
     QVector<QString> resnams;
-    
+
     /** The atom names */
     QVector<QString> atmnams;
-    
+
     /** The atom numbers */
     QVector<qint64> atmnums;
-    
+
     /** Any warnings that were raised when reading the file */
     QStringList parse_warnings;
 };

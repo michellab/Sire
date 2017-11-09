@@ -479,25 +479,25 @@ QVector<QString> MoleculeParser::readTextFile(QString filename)
         return lines;
 
     QFile file(filename);
-    
+
     if (not file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
     {
         throw SireError::file_error(file, CODELOC);
     }
-        
+
     QTextStream ts(&file);
-        
+
     QStringList l;
-        
+
     while (not ts.atEnd())
     {
         l.append( ts.readLine() );
     }
-        
+
     file.close();
-        
+
     lines = l.toVector();
-        
+
     if (not lines.isEmpty())
         getFileCache()->save(filename, lines);
 

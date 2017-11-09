@@ -250,8 +250,8 @@ private:
     /** The cross term record data (!NCRTERM). */
     QVector<QVector<qint64> > cross_terms;
 
-    /** A hash between atom numbers from the PSF record and 
-        incices in the atoms vector. */
+    /** A hash between atom numbers from the PSF record and
+        indices in the atoms vector. */
     QHash<qint64, qint64> num_to_idx;
 
     /** The indices of the atoms in each molecule. */
