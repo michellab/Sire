@@ -61,6 +61,17 @@ void register_CharmmPSF_class(){
         CharmmPSF_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to read in the data from the passed text lines. The\npassed property map can be used to pass extra parameters to control\nthe parsing") );
         CharmmPSF_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct this parser by extracting all necessary information from the\npassed SireSystem::System, looking for the properties that are specified\nin the passed property map") );
         CharmmPSF_exposer.def( bp::init< SireIO::CharmmPSF const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireIO::CharmmPSF::canFollow
+        
+            typedef bool ( ::SireIO::CharmmPSF::*canFollow_function_type)(  ) const;
+            canFollow_function_type canFollow_function_value( &::SireIO::CharmmPSF::canFollow );
+            
+            CharmmPSF_exposer.def( 
+                "canFollow"
+                , canFollow_function_value
+                , "Return whether or not this parser can follow another lead parser, and add\ndata to an existing molecular system. The CharmmPSF parser cannot follow." );
+        
+        }
         { //::SireIO::CharmmPSF::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::CharmmPSF::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -138,7 +149,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "isLead"
                 , isLead_function_value
-                , "" );
+                , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
         
         }
         { //::SireIO::CharmmPSF::nAngles

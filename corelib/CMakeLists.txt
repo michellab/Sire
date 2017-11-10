@@ -119,7 +119,7 @@ else()
     endif()
 
     set( SIRE_INSTALL_PREFIX "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
-            "Install directory for Sire within the Anaconda/Miniconda distribution" )
+        "Install directory for Sire within the Anaconda/Miniconda distribution" FORCE)
 
     set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
              "Prefix prepended to install directories" FORCE )

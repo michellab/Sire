@@ -216,3 +216,10 @@ QStringList Supplementary::formatSuffix() const
     static const QStringList suffixes = { "prm, inp" };
     return suffixes;
 }
+
+/** Return whether or not this parser can follow another lead parser, and add
+    data to an existing molecular system. The Supplementary parser cannot follow. */
+bool Supplementary::canFollow() const
+{
+    return false;
+}

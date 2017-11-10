@@ -174,7 +174,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
-                , "" );
+                , "Gro87 can be a lead parser as well as a follower" );
         
         }
         { //::SireIO::Gro87::construct
@@ -310,7 +310,7 @@ void register_Gro87_class(){
             Gro87_exposer.def( 
                 "isLead"
                 , isLead_function_value
-                , "" );
+                , "Gro87 can be a lead parser as well as a follower" );
         
         }
         { //::SireIO::Gro87::nAtoms

@@ -247,7 +247,6 @@ public:
     QStringList formatSuffix() const;
 
     bool isLead() const;
-    bool canFollow() const;
 
     int nMolecules() const;
     int nAtoms() const;
@@ -294,23 +293,6 @@ private:
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;
 };
-
-#ifndef SIRE_SKIP_INLINE_FUNCTIONS
-
-/** The PDB2 parser is a lead parser - it is capable alone
-    of creating the System */
-inline bool PDB2::isLead() const
-{
-    return true;
-}
-
-/** The PDB2 parser can follow another a lead parser. */
-inline bool PDB2::canFollow() const
-{
-    return true;
-}
-
-#endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }
 

@@ -154,6 +154,17 @@ void register_GroTop_class(){
                 , "Return the bond potential data for the passed pair of atoms. This returns\na list of all associated parameters" );
         
         }
+        { //::SireIO::GroTop::canFollow
+        
+            typedef bool ( ::SireIO::GroTop::*canFollow_function_type)(  ) const;
+            canFollow_function_type canFollow_function_value( &::SireIO::GroTop::canFollow );
+            
+            GroTop_exposer.def( 
+                "canFollow"
+                , canFollow_function_value
+                , "Return whether or not this parser can follow another lead parser, and add\ndata to an existing molecular system. The GroTop parser cannot follow." );
+        
+        }
         { //::SireIO::GroTop::combiningRules
         
             typedef int ( ::SireIO::GroTop::*combiningRules_function_type)(  ) const;

@@ -981,6 +981,14 @@ QStringList PDB2::formatSuffix() const
     return suffixes;
 }
 
+/** Return whether or not this is a lead parser. The lead parser is responsible
+    for starting the process of turning the parsed file into the System. There
+    must be one and one-only lead parser in a set of parsers creating a System */
+bool PDB2::isLead() const
+{
+    return true;
+}
+
 /** Return the number of models (molecules). */
 int PDB2::nMolecules() const
 {

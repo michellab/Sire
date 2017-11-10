@@ -91,22 +91,12 @@ public:
     QString formatDescription() const;
     QStringList formatSuffix() const;
 
-    bool isLead() const;
+    bool canFollow() const;
 
 private:
     /** The name of the parsed file (if from a file). */
     QString filename;
 };
-
-#ifndef SIRE_SKIP_INLINE_FUNCTIONS
-
-/** The Supplementary parser is not lead parser. */
-inline bool Supplementary::isLead() const
-{
-    return false;
-}
-
-#endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }
 

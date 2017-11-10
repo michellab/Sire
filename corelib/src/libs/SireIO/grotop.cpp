@@ -68,36 +68,36 @@ static const RegisterMetaType<GroAtom> r_groatom(NO_ROOT);
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroAtom &atom)
 {
     writeHeader(ds, r_groatom, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << atom.atmname << atom.resname << atom.atmtyp
         << atom.atmnum << atom.resnum << atom.chggrp
         << atom.chg.to(mod_electron) << atom.mss.to(g_per_mol);
-    
+
     return ds;
 }
 
 QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroAtom &atom)
 {
     VersionID v = readHeader(ds, r_groatom);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         double chg, mass;
-        
+
         sds >> atom.atmname >> atom.resname >> atom.atmtyp
             >> atom.atmnum >> atom.resnum >> atom.chggrp
             >> chg >> mass;
-        
+
         atom.chg = chg*mod_electron;
         atom.mss = mass*g_per_mol;
     }
     else
         throw version_error(v, "1", r_groatom, CODELOC);
-    
+
     return ds;
 }
 
@@ -131,7 +131,7 @@ GroAtom& GroAtom::operator=(const GroAtom &other)
         chg = other.chg;
         mss = other.mss;
     }
-    
+
     return *this;
 }
 
@@ -287,31 +287,31 @@ static const RegisterMetaType<GroMolType> r_gromoltyp(NO_ROOT);
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroMolType &moltyp)
 {
     writeHeader(ds, r_gromoltyp, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << moltyp.nme << moltyp.warns << moltyp.atms
         << moltyp.bnds << moltyp.angs << moltyp.dihs
         << moltyp.first_atoms << moltyp.nexcl;
-    
+
     return ds;
 }
 
 QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroMolType &moltyp)
 {
     VersionID v = readHeader(ds, r_gromoltyp);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> moltyp.nme >> moltyp.warns >> moltyp.atms
             >> moltyp.bnds >> moltyp.angs >> moltyp.dihs
             >> moltyp.first_atoms >> moltyp.nexcl;
     }
     else
         throw version_error(v, "1", r_gromoltyp, CODELOC);
-    
+
     return ds;
 }
 
@@ -345,7 +345,7 @@ GroMolType& GroMolType::operator=(const GroMolType &other)
         dihs = other.dihs;
         nexcl = other.nexcl;
     }
-    
+
     return *this;
 }
 
@@ -457,7 +457,7 @@ int GroMolType::nResidues() const
         other.sanitise();
         return other.nResidues();
     }
-    
+
     return first_atoms.count();
 }
 
@@ -470,7 +470,7 @@ GroAtom GroMolType::atom(const AtomIdx &atomidx) const
         other.sanitise();
         return other.atom(atomidx);
     }
-    
+
     int i = atomidx.map(atms.count());
     return atms.constData()[i];
 }
@@ -484,7 +484,7 @@ GroAtom GroMolType::atom(const AtomNum &atomnum) const
         other.sanitise();
         return other.atom(atomnum);
     }
-    
+
     for (int i=0; i<atms.count(); ++i)
     {
         if (atms.constData()[i].number() == atomnum)
@@ -492,7 +492,7 @@ GroAtom GroMolType::atom(const AtomNum &atomnum) const
             return atms.constData()[i];
         }
     }
-    
+
     throw SireMol::missing_atom( QObject::tr(
         "There is no atom with number '%1' in this molecule '%2'")
             .arg(atomnum.toString()).arg(this->toString()), CODELOC );
@@ -532,9 +532,9 @@ QVector<GroAtom> GroMolType::atoms(const AtomName &atomnam) const
         other.sanitise();
         return other.atoms(atomnam);
     }
-    
+
     QVector<GroAtom> ret;
-    
+
     for (int i=0; i<atms.count(); ++i)
     {
         if (atms.constData()[i].name() == atomnam)
@@ -542,7 +542,7 @@ QVector<GroAtom> GroMolType::atoms(const AtomName &atomnam) const
             ret.append( atms.constData()[i] );
         }
     }
-    
+
     return ret;
 }
 
@@ -568,17 +568,17 @@ QVector<GroAtom> GroMolType::atoms(const ResIdx &residx) const
         other.sanitise();
         return other.atoms(residx);
     }
-    
+
     int ires = residx.map( first_atoms.count() );
-    
+
     int start = first_atoms.constData()[ires];
     int end = atms.count();
-    
+
     if (ires+1 < first_atoms.count())
     {
         end = first_atoms.constData()[ires+1];
     }
-    
+
     return atms.mid(start, end);
 }
 
@@ -591,10 +591,10 @@ QVector<GroAtom> GroMolType::atoms(const ResNum &resnum) const
         other.sanitise();
         return other.atoms(resnum);
     }
-    
+
     //find the indicies all all matching residues
     QList<ResIdx> idxs;
-    
+
     for (int idx=0; idx<first_atoms.count(); ++idx)
     {
         if (atms[first_atoms.at(idx)].residueNumber() == resnum)
@@ -602,14 +602,14 @@ QVector<GroAtom> GroMolType::atoms(const ResNum &resnum) const
             idxs.append( ResIdx(idx) );
         }
     }
-    
+
     QVector<GroAtom> ret;
-    
+
     for (const auto idx : idxs)
     {
         ret += this->atoms(idx);
     }
-    
+
     return ret;
 }
 
@@ -625,7 +625,7 @@ QVector<GroAtom> GroMolType::atoms(const ResName &resnam) const
 
     //find the indicies all all matching residues
     QList<ResIdx> idxs;
-    
+
     for (int idx=0; idx<first_atoms.count(); ++idx)
     {
         if (atms[first_atoms.at(idx)].residueName() == resnam)
@@ -633,20 +633,20 @@ QVector<GroAtom> GroMolType::atoms(const ResName &resnam) const
             idxs.append( ResIdx(idx) );
         }
     }
-    
+
     QVector<GroAtom> ret;
-    
+
     for (const auto idx : idxs)
     {
         ret += this->atoms(idx);
     }
-    
+
     return ret;
 }
 
 /** Sanitise this moleculetype. This assumes that the moleculetype has
     been fully specified, so it collects everything together and checks that the
-    molecule makes sense. Any warnings generated can be retrieved using the 
+    molecule makes sense. Any warnings generated can be retrieved using the
     'warnings' function */
 void GroMolType::sanitise()
 {
@@ -657,9 +657,9 @@ void GroMolType::sanitise()
     //we check and remove duplicate atom numbers
 
     first_atoms.append(0);
-    
+
     //also check that the bonds/angles/dihedrals all refer to actual atoms...
-    
+
 }
 
 /** Add a warning that has been generated while parsing or creatig this object */
@@ -737,26 +737,26 @@ static const RegisterMetaType<GroSystem> r_grosys(NO_ROOT);
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroSystem &grosys)
 {
     writeHeader(ds, r_grosys, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << grosys.nme << grosys.moltypes << grosys.nmols;
-    
+
     return ds;
 }
 
 QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroSystem &grosys)
 {
     VersionID v = readHeader(ds, r_grosys);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> grosys.nme >> grosys.moltypes >> grosys.nmols;
-        
+
         grosys.total_nmols = 0;
-        
+
         for (auto it = grosys.nmols.constBegin();
              it != grosys.nmols.constEnd(); ++it)
         {
@@ -765,7 +765,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroSystem &grosys)
     }
     else
         throw version_error(v, "1", r_grosys, CODELOC);
-    
+
     return ds;
 }
 
@@ -816,7 +816,7 @@ bool GroSystem::operator!=(const GroSystem &other) const
 QString GroSystem::operator[](int i) const
 {
     i = Index(i).map(total_nmols);
-    
+
     auto it2 = moltypes.constBegin();
     for (auto it = nmols.constBegin(); it != nmols.constEnd(); ++it)
     {
@@ -830,7 +830,7 @@ QString GroSystem::operator[](int i) const
             ++it2;
         }
     }
-    
+
     //we should never get here...
     throw SireError::program_bug( QObject::tr(
         "How did we get here? %1 : %2 : %3")
@@ -919,7 +919,7 @@ bool GroSystem::isEmpty() const
 QStringList GroSystem::uniqueTypes() const
 {
     QStringList typs;
-    
+
     for (const auto moltype : moltypes)
     {
         if (not typs.contains(moltype))
@@ -927,7 +927,7 @@ QStringList GroSystem::uniqueTypes() const
             typs.append(moltype);
         }
     }
-    
+
     return typs;
 }
 
@@ -963,9 +963,9 @@ static const RegisterMetaType<GroTop> r_grotop;
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroTop &grotop)
 {
     writeHeader(ds, r_grotop, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << grotop.include_path << grotop.included_files
         << grotop.expanded_lines
         << grotop.atom_types
@@ -978,18 +978,18 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroTop &grotop)
         << grotop.combining_rule << grotop.fudge_lj
         << grotop.fudge_qq << grotop.parse_warnings << grotop.generate_pairs
         << static_cast<const MoleculeParser&>(grotop);
-    
+
     return ds;
 }
 
 QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroTop &grotop)
 {
     VersionID v = readHeader(ds, r_grotop);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-    
+
         sds >> grotop.include_path >> grotop.included_files
             >> grotop.expanded_lines
             >> grotop.atom_types
@@ -1029,7 +1029,7 @@ void GroTop::getIncludePath(const PropertyMap &map)
     try
     {
         const auto p = map["GROMACS_PATH"];
-        
+
         if (p.hasValue())
         {
             path += p.value().asA<StringProperty>().toString().split(":", QString::SkipEmptyParts);
@@ -1041,15 +1041,15 @@ void GroTop::getIncludePath(const PropertyMap &map)
     }
     catch(...)
     {}
-    
+
     //now, see if the path is given in the "GROMACS_PATH" environment variable
     QString val = QString::fromLocal8Bit( qgetenv("GROMACS_PATH") );
-    
+
     if (not val.isEmpty())
     {
         path += val.split(":", QString::SkipEmptyParts);
     }
-    
+
     //now go through each path and convert it into an absolute path based on the
     //current directory
     for (const auto p : path)
@@ -1058,7 +1058,7 @@ void GroTop::getIncludePath(const PropertyMap &map)
     }
 }
 
-/** Construct to read in the data from the file called 'filename'. The 
+/** Construct to read in the data from the file called 'filename'. The
     passed property map can be used to pass extra parameters to control
     the parsing */
 GroTop::GroTop(const QString &filename, const PropertyMap &map)
@@ -1071,7 +1071,7 @@ GroTop::GroTop(const QString &filename, const PropertyMap &map)
     //parse the data in the parse function, passing in the absolute path
     //to the directory that contains this file
     this->parseLines( QFileInfo(filename).absolutePath(), map);
-    
+
     //now make sure that everything is correct with this object
     this->assertSane();
 }
@@ -1089,7 +1089,7 @@ GroTop::GroTop(const QStringList &lines, const PropertyMap &map)
     //parse the data in the parse function, assuming the file has
     //come from the current directory
     this->parseLines(QDir::current().absolutePath(), map);
-    
+
     //now make sure that everything is correct with this object
     this->assertSane();
 }
@@ -1108,15 +1108,15 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
     //that is needed to go into the file, based on the properties
     //found in 'map'. Do this to create the set of text lines that
     //will make up the file
-    
+
     QStringList lines;  // = code used to generate the lines
-    
+
     //now that you have the lines, reparse them back into a GroTop object,
     //so that the information is consistent, and you have validated that
     //the lines you have written are able to be correctly read in by
     //this parser. This will also implicitly call 'assertSane()'
     GroTop parsed( lines, map );
-    
+
     this->operator=(parsed);
 }
 
@@ -1162,7 +1162,7 @@ GroTop& GroTop::operator=(const GroTop &other)
         generate_pairs = other.generate_pairs;
         MoleculeParser::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -1201,25 +1201,32 @@ bool GroTop::isLead() const
     return true;
 }
 
-/** Return the list of names of directories in which to search for 
+/** Return whether or not this parser can follow another lead parser, and add
+    data to an existing molecular system. The GroTop parser cannot follow. */
+bool GroTop::canFollow() const
+{
+    return false;
+}
+
+/** Return the list of names of directories in which to search for
     include files. The directories are either absolute, or relative
     to the current directory. If "absolute_paths" is true then
-    the full absolute paths for directories that exist on this 
+    the full absolute paths for directories that exist on this
     machine will be returned */
 QStringList GroTop::includePath(bool absolute_paths) const
 {
     if (absolute_paths)
     {
         QStringList abspaths;
-        
+
         for (const auto path : include_path)
         {
             QFileInfo file(path);
-            
+
             if (file.exists())
                 abspaths.append( file.absoluteFilePath() );
         }
-        
+
         return abspaths;
     }
     else
@@ -1234,7 +1241,7 @@ QStringList GroTop::includedFiles(bool absolute_paths) const
 {
     //first, go through the list of included files
     QStringList files;
-    
+
     for (auto it = included_files.constBegin(); it != included_files.constEnd(); ++it)
     {
         files += it.value();
@@ -1249,7 +1256,7 @@ QStringList GroTop::includedFiles(bool absolute_paths) const
     {
         //subtract any paths that relate to the current directory or GROMACS_PATH
         QString curpath = QDir::current().absolutePath();
-        
+
         for (auto it = files.begin(); it != files.end(); ++it)
         {
             if ( it->startsWith(curpath) )
@@ -1267,7 +1274,7 @@ QStringList GroTop::includedFiles(bool absolute_paths) const
                 }
             }
         }
-        
+
         return files;
     }
 }
@@ -1280,7 +1287,7 @@ MoleculeParserPtr GroTop::construct(const QString &filename,
     return GroTop(filename,map);
 }
 
-/** Return the parser that has been constructed by reading in the passed  
+/** Return the parser that has been constructed by reading in the passed
     text lines using the passed properties */
 MoleculeParserPtr GroTop::construct(const QStringList &lines,
                                   const PropertyMap &map) const
@@ -1340,7 +1347,7 @@ GromacsAtomType GroTop::atomType(const QString &atm) const
 /** Return the ID string for the bond atom types 'atm0' 'atm1'. This
     creates the string 'atm0;atm1' or 'atm1;atm0' depending on which
     of the atoms is lower. The ';' character is used as a separator
-    as it cannot be in the atom names, as it is used as a comment 
+    as it cannot be in the atom names, as it is used as a comment
     character in the Gromacs Top file */
 static QString get_bond_id(const QString &atm0, const QString &atm1)
 {
@@ -1357,7 +1364,7 @@ static QString get_bond_id(const QString &atm0, const QString &atm1)
 /** Return the ID string for the angle atom types 'atm0' 'atm1' 'atm2'. This
     creates the string 'atm0;atm1;atm2' or 'atm2;atm1;atm0' depending on which
     of the atoms is lower. The ';' character is used as a separator
-    as it cannot be in the atom names, as it is used as a comment 
+    as it cannot be in the atom names, as it is used as a comment
     character in the Gromacs Top file */
 static QString get_angle_id(const QString &atm0, const QString &atm1, const QString &atm2)
 {
@@ -1374,7 +1381,7 @@ static QString get_angle_id(const QString &atm0, const QString &atm1, const QStr
 /** Return the ID string for the dihedral atom types 'atm0' 'atm1' 'atm2' 'atm3'. This
     creates the string 'atm0;atm1;atm2;atm3' or 'atm3;atm2;atm1;atm0' depending on which
     of the atoms is lower. The ';' character is used as a separator
-    as it cannot be in the atom names, as it is used as a comment 
+    as it cannot be in the atom names, as it is used as a comment
     character in the Gromacs Top file */
 static QString get_dihedral_id(const QString &atm0, const QString &atm1,
                                const QString &atm2, const QString &atm3)
@@ -1477,7 +1484,7 @@ GroMolType GroTop::moleculeType(const QString &name) const
         if (moltype.name() == name)
             return moltype;
     }
-    
+
     return GroMolType();
 }
 
@@ -1495,7 +1502,7 @@ static bool gromacs_preprocess_would_change(const QVector<QString> &lines,
     //create the regexps that are needed to find all of the
     //data that may be #define'd
     QVector<QRegularExpression> regexps;
-    
+
     if (not defines.isEmpty())
     {
         regexps.reserve(defines.count());
@@ -1526,25 +1533,25 @@ static bool gromacs_preprocess_would_change(const QVector<QString> &lines,
                 if (line.contains( regexps.constData()[i] ))
                     return true;
             }
-            
+
             if (line.trimmed().endsWith("\\"))
             {
                 //this is a continuation line
                 return true;
             }
-            
+
             return false;
         }
     };
-    
+
     const auto lines_data = lines.constData();
-    
+
     if (use_parallel)
     {
         QMutex mutex;
-    
+
         bool must_change = false;
-    
+
         tbb::parallel_for( tbb::blocked_range<int>(0, lines.count()),
                            [&](const tbb::blocked_range<int> &r)
         {
@@ -1561,7 +1568,7 @@ static bool gromacs_preprocess_would_change(const QVector<QString> &lines,
                 }
             }
         });
-        
+
         return must_change;
     }
     else
@@ -1592,21 +1599,21 @@ QString GroTop::findIncludeFile(QString filename, QString current_dir)
                 "Cannot find the file '%1'. Please make sure that this file exists "
                 "and is readable").arg(filename), CODELOC );
         }
-        
+
         return filename;
     }
-    
+
     //does this exist from the current directory?
     file = QFileInfo( QString("%1/%2").arg(current_dir).arg(filename) );
-    
+
     if (file.exists() and file.isReadable())
         return file.absoluteFilePath();
-    
+
     //otherwise search the GROMACS_PATH
     for (const auto path : include_path)
     {
         file = QFileInfo( QString("%1/%2").arg(path).arg(filename) );
-            
+
         if (file.exists() and file.isReadable())
         {
             return file.absoluteFilePath();
@@ -1628,14 +1635,14 @@ QString GroTop::findIncludeFile(QString filename, QString current_dir)
 }
 
 /** This function will use the Gromacs search path to find and load the
-    passed include file. This will load the file and return the 
+    passed include file. This will load the file and return the
     un-preprocessed text. The file, together with its QFileInfo, will
     be saved in the 'included_files' hash */
 QVector<QString> GroTop::loadInclude(QString filename, QString current_dir)
 {
     //try to find the file
     QString absfile = findIncludeFile(filename, current_dir);
-    
+
     //now load the file
     return MoleculeParser::readTextFile(absfile);
 }
@@ -1653,28 +1660,28 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
         //nothing to do
         return lines;
     }
-    
+
     //Ok, we have to change the lines...
     QVector<QString> new_lines;
     new_lines.reserve(lines.count());
 
     //regexps used to parse the files...
     QRegularExpression include_regexp("#include\\s+['\"]([\\w\\d/\\.]+)['\"]\\s*");
-    
+
     //loop through all of the lines...
     QVectorIterator<QString> lines_it(lines);
-    
+
     QList<bool> ifparse;
-    
+
     while (lines_it.hasNext())
     {
         QString line = lines_it.next();
-    
+
         //remove any comments
         if (line.indexOf(QLatin1String(";")) != -1)
         {
             line = line.mid(0, line.indexOf(QLatin1String(";"))).simplified();
-            
+
             //this is just an empty line, so ignore it
             if (line.isEmpty())
             {
@@ -1691,7 +1698,7 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
             //simplify the line to remove weirdness
             line = line.simplified();
         }
-        
+
         //now look to see if the line should be joined to the next line
         while (line.endsWith("\\"))
         {
@@ -1701,11 +1708,11 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
                     "Continuation line on the last line of the Gromacs file! '%1'")
                         .arg(line), CODELOC );
             }
-            
+
             line += lines_it.next();
             line = line.simplified();
         }
-        
+
         //first, look to see if the line starts with #error, as this should
         //terminate processing
         if (line.startsWith("#error"))
@@ -1716,7 +1723,7 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
                 "Error in Gromacs file! '%1'")
                     .arg(line), CODELOC );
         }
-        
+
         //now look to see if there is an #ifdef
         if (line.startsWith("#ifdef"))
         {
@@ -1733,12 +1740,12 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
         {
             //we have an ifndef - has it been defined?
             auto symbol = line.split(" ", QString::SkipEmptyParts).last();
-            
+
             //push the current parse state (whether we parse if or else)
             ifparse.append( defines.value(symbol,"0") == "0" );
             continue;
         }
-        
+
         if (line == "#else")
         {
             //switch the last ifdef state
@@ -1749,18 +1756,18 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
             ifparse.last() = not ifparse.last();
             continue;
         }
-        
+
         if (line == "#endif")
         {
             //pop off the last 'ifdef' state
             if (ifparse.isEmpty())
                 throw SireIO::parse_error( QObject::tr(
                     "Unmatched '#endif' in the GROMACS file!"), CODELOC );
-        
+
             ifparse.removeLast();
             continue;
         }
-        
+
         if (not ifparse.isEmpty())
         {
             //are we allowed to read this?
@@ -1770,16 +1777,16 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
                 continue;
             }
         }
-        
+
         //now look for any #define lines
         if (line.startsWith("#define"))
         {
             auto words = line.split(" ", QString::SkipEmptyParts);
-            
+
             if (words.count() == 1)
                 throw SireIO::parse_error( QObject::tr(
                     "Malformed #define line in Gromacs file? %1").arg(line), CODELOC );
-            
+
             if (words.count() == 2)
             {
                 defines.insert(words[1], "1");
@@ -1791,14 +1798,14 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
 
             continue;
         }
-        
+
         //now try to substitute any 'defines' in the line with their defined values
         for (auto it = defines.constBegin(); it != defines.constEnd(); ++it)
         {
             if (line.indexOf(it.key()) != -1)
             {
                 auto words = line.split(" ", QString::SkipEmptyParts);
-                
+
                 for (int i=0; i<words.count(); ++i)
                 {
                     if (words[i] == it.key())
@@ -1806,40 +1813,40 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
                         words[i] = it.value();
                     }
                 }
-                
+
                 line = words.join(" ");
             }
         }
-        
+
         //now look for #include lines
         if (line.startsWith("#include"))
         {
             //now insert the contents of any included files
             auto m = include_regexp.match(line);
-        
+
             if (not m.hasMatch())
             {
                 throw SireIO::parse_error( QObject::tr(
                     "Malformed #include line in Gromacs file? %1").arg(line), CODELOC );
             }
-            
+
             //we have to include a file
             auto filename = m.captured(1);
-            
+
             //now find the absolute path to the file...
             auto absfile = findIncludeFile(filename, current_directory);
 
             //now load the file
             auto included_lines = MoleculeParser::readTextFile(absfile);
-            
+
             //now get the absolute path to the included file
             auto parts = absfile.split("/");
             parts.removeLast();
-            
+
             //fully preprocess these lines using the current set of defines
             included_lines = preprocess(included_lines, defines,
                                         parts.join("/"), absfile);
-            
+
             //add these included lines to the set
             new_lines.reserve( new_lines.count() + included_lines.count() );
             new_lines += included_lines;
@@ -1849,14 +1856,14 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
 
             continue;
         }
-        
+
         //finally, make sure that we have not missed any '#' directives...
         if (line.startsWith("#"))
         {
             throw SireIO::parse_error( QObject::tr(
                 "Unrecognised directive on Gromacs file line '%1'").arg(line), CODELOC );
         }
-        
+
         //skip empty lines
         if (not line.isEmpty())
         {
@@ -1864,13 +1871,13 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
             new_lines.append(line);
         }
     }
-    
+
     if (not ifparse.isEmpty())
     {
         throw SireIO::parse_error( QObject::tr(
             "Unmatched #ifdef or #ifndef in Gromacs file!"), CODELOC );
     }
-    
+
     return new_lines;
 }
 
@@ -1929,7 +1936,7 @@ static LJParameter toLJParameter(double v, double w, int rule)
     }
 }
 
-/** Internal function to convert a LJParameter to V and W based on the passed gromacs 
+/** Internal function to convert a LJParameter to V and W based on the passed gromacs
     combining rule */
 static std::tuple<double,double> fromLJParameter(const LJParameter &lj, int rule)
 {
@@ -1945,7 +1952,7 @@ static std::tuple<double,double> fromLJParameter(const LJParameter &lj, int rule
         double sig6 = SireMaths::pow(sigma, 6);
         double v = 4.0 * epsilon * sig6;
         double w = v * sig6;
-        
+
         return std::make_tuple(v, w);
     }
 }
@@ -1963,11 +1970,11 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         {
             return QStringList();
         }
-        
+
         bool found = false;
         int start = 0;
         int end = expandedLines().count();
-        
+
         //find the tag
         for (auto it = taglocs.constBegin(); it != taglocs.constEnd(); ++it)
         {
@@ -1977,33 +1984,33 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 {
                     found = true;
                     start = it.key()+1;
-                    
+
                     ++it;
-                    
+
                     if (it != taglocs.constEnd())
                     {
                         end = it.key();
                     }
-                    
+
                     break;
                 }
                 else
                     n -= 1;
             }
         }
-        
+
         if (not found)
             throw SireError::program_bug( QObject::tr(
                 "Cannot find tag '%1' at index '%2'. This should not happen!")
                     .arg(directive).arg(n), CODELOC );
-        
+
         QStringList lines;
-        
+
         for (int i=start; i<end; ++i)
         {
             lines.append( expandedLines().constData()[i] );
         }
-        
+
         return lines;
     };
 
@@ -2011,27 +2018,27 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     auto getDirectiveLines = [&](int linenum) -> QStringList
     {
         auto it = taglocs.constFind(linenum);
-        
+
         if (it == taglocs.constEnd())
             throw SireError::program_bug( QObject::tr(
                 "Cannot find a tag associated with line '%1'. This should not happen!")
                     .arg(linenum), CODELOC );
-        
+
         int start = it.key() + 1;
         int end = expandedLines().count();
-        
+
         ++it;
-        
+
         if (it != taglocs.constEnd())
             end = it.key();
-        
+
         QStringList lines;
-        
+
         for (int i=start; i<end; ++i)
         {
             lines.append( expandedLines().constData()[i] );
         }
-        
+
         return lines;
     };
 
@@ -2039,12 +2046,12 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     auto getAllLines = [&](const QString &directive) -> QStringList
     {
         QStringList lines;
-        
+
         for (int i=0; i<ntags.value(directive,0); ++i)
         {
             lines += getLines(directive, i);
         }
-        
+
         return lines;
     };
 
@@ -2054,7 +2061,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         QString w = word.toLower();
 
         if (ok) *ok = true;
-        
+
         if (w == "yes" or w == "y" or w == "true" or w == "1")
         {
             return true;
@@ -2074,17 +2081,17 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     auto processDefaults = [&]()
     {
         QStringList warnings;
-    
+
         //there should only be one defaults line
         const auto lines = getLines("defaults", 0);
-        
+
         if (lines.isEmpty())
             throw SireIO::parse_error( QObject::tr(
                 "The required data for the '[defaults]' directive in Gromacs is "
                 "not supplied. This is not a valid Gromacs topology file!"), CODELOC );
-        
+
         auto words = lines[0].split(" ", QString::SkipEmptyParts);
-        
+
         //there should be five words; non-bonded function type, combinination rule,
         //                            generate pairs, fudge LJ and fudge QQ
         if (words.count() < 5)
@@ -2096,35 +2103,35 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
 
         bool ok;
         int nbtyp = words[0].toInt(&ok);
-        
+
         if (not ok)
             throw SireIO::parse_error( QObject::tr(
                 "The first value for the '[defaults]' line '%1' is not an integer. "
                 "This is not a valid Gromacs topology file!").arg(lines[0]), CODELOC );
-        
+
         int combrule = words[1].toInt(&ok);
-        
+
         if (not ok)
             throw SireIO::parse_error( QObject::tr(
                 "The second value for the '[defaults]' line '%1' is not an integer. "
                 "This is not a valid Gromacs topology file!").arg(lines[0]), CODELOC );
-        
+
         bool gen_pairs = gromacs_toBool(words[2], &ok);
-        
+
         if (not ok)
             throw SireIO::parse_error( QObject::tr(
                 "The third value for the '[defaults]' line '%1' is not a yes/no. "
                 "This is not a valid Gromacs topology file!").arg(lines[0]), CODELOC );
-        
+
         double lj = words[3].toDouble(&ok);
-        
+
         if (not ok)
             throw SireIO::parse_error( QObject::tr(
                 "The fourth value for the '[defaults]' line '%1' is not a double. "
                 "This is not a valid Gromacs topology file!").arg(lines[0]), CODELOC );
-        
+
         double qq = words[4].toDouble(&ok);
-        
+
         if (not ok)
             throw SireIO::parse_error( QObject::tr(
                 "The fifth value for the '[defaults]' line '%1' is not a double. "
@@ -2136,37 +2143,37 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             warnings.append( QObject::tr("A non-supported non-bonded function type (%1) "
               "is requested.").arg(nbtyp) );
         }
-        
+
         if (combrule <= 0 or combrule > 3)
         {
             warnings.append( QObject::tr("A non-supported combinig rule (%1) is requested!")
                 .arg(combrule) );
         }
-        
+
         if (lj < 0 or lj > 1)
         {
             warnings.append( QObject::tr("An invalid value of fudge_lj (%1) is requested!")
                 .arg(lj) );
-            
+
             if (lj < 0) lj = 0;
             else if (lj > 1) lj = 1;
         }
-        
+
         if (qq < 0 or qq > 1)
         {
             warnings.append( QObject::tr("An invalid value of fudge_qq (%1) is requested1")
                 .arg(qq) );
-            
+
             if (qq < 0) qq = 0;
             else if (qq > 1) qq = 1;
         }
-        
+
         nb_func_type = nbtyp;
         combining_rule = combrule;
         fudge_lj = lj;
         fudge_qq = qq;
         generate_pairs = gen_pairs;
-        
+
         return warnings;
     };
 
@@ -2177,18 +2184,18 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     auto processAtomTypes = [&]()
     {
         QStringList warnings;
-        
+
         //get all 'atomtypes' lines
         const auto lines = getAllLines("atomtypes");
-    
+
         //the database of all atom types
         QHash<QString,GromacsAtomType> typs;
-    
+
         //now parse each atom
         for (const auto line : lines)
         {
             const auto words = line.split(" ", QString::SkipEmptyParts);
-            
+
             //should either have 2 words (atom type, mass) or
             //have 6 words; atom type, mass, charge, type, V, W or
             //have 7 words; atom type, atom number, mass, charge, type, V, W
@@ -2198,7 +2205,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                   "atomtype data '%1'. Skipping this line." ).arg(line) );
                 continue;
             }
-            
+
             GromacsAtomType typ;
 
             if (words.count() < 6)
@@ -2206,14 +2213,14 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 //only getting the atom type and mass
                 bool ok_mass;
                 double mass = words[1].toDouble( &ok_mass );
-                
+
                 if (not ok_mass)
                 {
                     warnings.append( QObject::tr( "Could not interpret the atom type data "
                        "from line '%1'. Skipping this line.").arg(line) );
                     continue;
                 }
-                
+
                 typ = GromacsAtomType(words[0], mass*g_per_mol);
             }
             else if (words.count() < 7)
@@ -2224,14 +2231,14 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 auto ptyp = GromacsAtomType::toParticleType(words[3], &ok_ptyp);
                 double v = words[4].toDouble(&ok_v);
                 double w = words[5].toDouble(&ok_w);
-                
+
                 if (not (ok_mass and ok_charge and ok_ptyp and ok_v and ok_w))
                 {
                     warnings.append( QObject::tr( "Could not interpret the atom type data "
                       "from line '%1'. Skipping this line.").arg(line) );
                     continue;
                 }
-                
+
                 typ = GromacsAtomType(words[0], mass*g_per_mol, chg*mod_electron,
                                       ptyp, ::toLJParameter(v,w,combining_rule));
             }
@@ -2244,36 +2251,36 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 auto ptyp = GromacsAtomType::toParticleType(words[4], &ok_ptyp);
                 double v = words[5].toDouble(&ok_v);
                 double w = words[6].toDouble(&ok_w);
-                
+
                 if (not (ok_elem and ok_mass and ok_charge and ok_ptyp and ok_v and ok_w))
                 {
                     warnings.append( QObject::tr( "Could not interpret the atom type data "
                       "from line '%1'. Skipping this line.").arg(line) );
                     continue;
                 }
-                
+
                 typ = GromacsAtomType(words[0], mass*g_per_mol, chg*mod_electron,
                                       ptyp, ::toLJParameter(v,w,combining_rule),
                                       Element(nprotons));
             }
-            
+
             if (typs.contains(typ.atomType()))
             {
                 //only replace if the new type is fully specified
                 if (typ.hasMassOnly())
                     continue;
-            
+
                 warnings.append( QObject::tr( "The data for atom type '%1' exists already! "
                  "This will now be replaced with new data from line '%2'")
                     .arg(typ.atomType()).arg(line) );
             }
-            
+
             typs.insert( typ.atomType(), typ );
         }
-    
+
         //save the database of types
         atom_types = typs;
-    
+
         return warnings;
     };
 
@@ -2281,7 +2288,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     auto processBondTypes = [&]()
     {
         QStringList warnings;
-        
+
         //get all 'bondtypes' lines
         const auto lines = getAllLines("bondtypes");
 
@@ -2293,7 +2300,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             //each line should contain the atom types of the two atoms, then
             //the function type, then the parameters for the function
             const auto words = line.split(" ", QString::SkipEmptyParts);
-            
+
             if (words.count() < 3)
             {
                 warnings.append( QObject::tr("There is not enough data on the "
@@ -2301,13 +2308,13 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     .arg(line) );
                 continue;
             }
-            
+
             const auto atm0 = words[0];
             const auto atm1 = words[1];
-            
+
             bool ok;
             int func_type = words[2].toInt(&ok);
-            
+
             if (not ok)
             {
                 warnings.append( QObject::tr("Unable to determine the function type "
@@ -2315,19 +2322,19 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     .arg(line) );
                 continue;
             }
-            
+
             //now read in all of the remaining values as numbers...
             QList<double> params;
-            
+
             for (int i=3; i<words.count(); ++i)
             {
                 double param = words[i].toDouble(&ok);
-                
+
                 if (ok) params.append(param);
             }
-            
+
             GromacsBond bond;
-            
+
             try
             {
                 bond = GromacsBond(func_type, params);
@@ -2339,7 +2346,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     .arg(line).arg(e.error()) );
                 continue;
             }
-            
+
             QString key = get_bond_id(atm0,atm1);
             bnds.insertMulti(key, bond);
         }
@@ -2353,7 +2360,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     auto processPairTypes = [&]()
     {
         QStringList warnings;
-        
+
         //get all 'bondtypes' lines
         const auto lines = getAllLines("pairtypes");
 
@@ -2369,7 +2376,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     auto processAngleTypes = [&]()
     {
         QStringList warnings;
-        
+
         //get all 'bondtypes' lines
         const auto lines = getAllLines("angletypes");
 
@@ -2381,7 +2388,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             //each line should contain the atom types of the three atoms, then
             //the function type, then the parameters for the function
             const auto words = line.split(" ", QString::SkipEmptyParts);
-            
+
             if (words.count() < 4)
             {
                 warnings.append( QObject::tr("There is not enough data on the "
@@ -2389,14 +2396,14 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     .arg(line) );
                 continue;
             }
-            
+
             const auto atm0 = words[0];
             const auto atm1 = words[1];
             const auto atm2 = words[2];
-            
+
             bool ok;
             int func_type = words[3].toInt(&ok);
-            
+
             if (not ok)
             {
                 warnings.append( QObject::tr("Unable to determine the function type "
@@ -2404,19 +2411,19 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     .arg(line) );
                 continue;
             }
-            
+
             //now read in all of the remaining values as numbers...
             QList<double> params;
-            
+
             for (int i=4; i<words.count(); ++i)
             {
                 double param = words[i].toDouble(&ok);
-                
+
                 if (ok) params.append(param);
             }
-            
+
             GromacsAngle angle;
-            
+
             try
             {
                 angle = GromacsAngle(func_type, params);
@@ -2428,7 +2435,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     .arg(line).arg(e.error()) );
                 continue;
             }
-            
+
             QString key = get_angle_id(atm0,atm1,atm2);
             angs.insertMulti(key, angle);
         }
@@ -2442,7 +2449,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     auto processDihedralTypes = [&]()
     {
         QStringList warnings;
-        
+
         //get all 'bondtypes' lines
         const auto lines = getAllLines("dihedraltypes");
 
@@ -2456,7 +2463,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             //(however, some files have the atom types of just two atoms, which
             // I assume are the two middle atoms of the dihedral...)
             const auto words = line.split(" ", QString::SkipEmptyParts);
-            
+
             if (words.count() < 3)
             {
                 warnings.append( QObject::tr("There is not enough data on the "
@@ -2464,24 +2471,24 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     .arg(line) );
                 continue;
             }
-            
+
             //first, let's try to parse this assuming that it is a 2-atom dihedral line...
             //(most cases this should fail)
             auto atm0 = wildcard_atomtype;
             auto atm1 = words[0];
             auto atm2 = words[1];
             auto atm3 = wildcard_atomtype;
-            
+
             GromacsDihedral dihedral;
-            
+
             bool ok;
             int func_type = words[2].toInt(&ok);
-            
+
             if (ok)
             {
                 //this may be a two-atom dihedral - read in the rest of the parameters
                 QList<double> params;
-                
+
                 for (int i=3; i<words.count(); ++i)
                 {
                     double param = words[i].toDouble(&ok);
@@ -2498,11 +2505,11 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     ok = false;
                 }
             }
-            
+
             if (not ok)
             {
                 //we couldn't parse as a two-atom dihedral, so parse as a four-atom dihedral
-            
+
                 if (words.count() < 5)
                 {
                     warnings.append( QObject::tr("There is not enough data on the "
@@ -2515,10 +2522,10 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 auto atm1 = words[1];
                 auto atm2 = words[2];
                 auto atm3 = words[3];
-                
+
                 bool ok;
                 int func_type = words[4].toInt(&ok);
-            
+
                 if (not ok)
                 {
                     warnings.append( QObject::tr("Unable to determine the function type "
@@ -2526,17 +2533,17 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                         .arg(line) );
                     continue;
                 }
-                
+
                 //now read in all of the remaining values as numbers...
                 QList<double> params;
-                
+
                 for (int i=5; i<words.count(); ++i)
                 {
                     double param = words[i].toDouble(&ok);
-                    
+
                     if (ok) params.append(param);
                 }
-            
+
                 try
                 {
                     dihedral = GromacsDihedral(func_type, params);
@@ -2549,7 +2556,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     continue;
                 }
             }
-            
+
             QString key = get_dihedral_id(atm0,atm1,atm2,atm3);
             dihs.insertMulti(key, dihedral);
         }
@@ -2563,7 +2570,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     auto processConstraintTypes = [&]()
     {
         QStringList warnings;
-        
+
         //get all 'bondtypes' lines
         const auto lines = getAllLines("constrainttypes");
 
@@ -2579,7 +2586,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     auto processNonBondParams = [&]()
     {
         QStringList warnings;
-        
+
         //get all 'bondtypes' lines
         const auto lines = getAllLines("nonbond_params");
 
@@ -2590,12 +2597,12 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
 
         return warnings;
     };
-    
+
     //internal function to process moleculetype lines
     auto processMoleculeTypes = [&]()
     {
         QStringList warnings;
-        
+
         //how many moleculetypes are there? Divide them up and get
         //the child tags for each moleculetype
         QList< QMultiHash<QString,int> > moltags;
@@ -2607,9 +2614,9 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                                              "virtual_sitesn", "position_restraints",
                                              "distance_restraints", "orientation_restraints",
                                              "angle_restraints", "angle_restraints_z" };
-        
+
             auto it = taglocs.constBegin();
-            
+
             while (it != taglocs.constEnd())
             {
                 if (it.value() == "moleculetype")
@@ -2619,7 +2626,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     QMultiHash<QString,int> tags;
                     tags.insert(it.value(), it.key());
                     ++it;
-                    
+
                     while (it != taglocs.constEnd())
                     {
                         //save all child tags until we reach the end
@@ -2638,7 +2645,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                             break;
                         }
                     }
-                    
+
                     moltags.append(tags);
                 }
                 else
@@ -2647,10 +2654,10 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 }
             }
         }
-        
+
         //now we define a set of functions that are needed to parse the
         //various child tags
-        
+
         //function that extract the metadata about the moleculetype
         //and returns it as a 'GroMolType' object
         auto getMolType = [&]( int linenum )
@@ -2660,7 +2667,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             //get the directives for this molecule - there should be
             //one line that contains the name and number of excluded atoms
             const auto lines = getDirectiveLines(linenum);
-            
+
             if (lines.count() != 1)
             {
                 moltype.addWarning( QObject::tr("Expecting only one line that "
@@ -2668,29 +2675,29 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                   "Instead, the number of lines is %1 : [\n%2\n]")
                     .arg(lines.count()).arg(lines.join("\n")) );
             }
-            
+
             if (lines.count() > 0)
             {
                 //try to read the infromation from the first line only
                 const auto words = lines[0].split(" ");
-                
+
                 if (words.count() != 2)
                 {
                     moltype.addWarning( QObject::tr("Expecting two words for the "
                       "moleculetype line, containing the name and number of excluded "
                       "atoms. Instead we get '%1'").arg(lines[0]) );
                 }
-                
+
                 if (words.count() > 0)
                 {
                     moltype.setName( words[0] );
                 }
-                
+
                 if (words.count() > 1)
                 {
                     bool ok;
                     qint64 nexcl = words[1].toInt(&ok);
-                    
+
                     if (not ok)
                     {
                         moltype.addWarning( QObject::tr("Expecting the second word in "
@@ -2703,29 +2710,29 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     }
                 }
             }
-        
+
             return moltype;
         };
-        
+
         //function that extracts all of the information from the 'atoms' lines
         //and adds it to the passed GroMolType
         auto addAtomsTo = [&](GroMolType &moltype, int linenum)
         {
             QStringList lines = getDirectiveLines(linenum);
-            
+
             for (const auto line : lines)
             {
                 //each line should contain index number, atom type,
                 //residue number, residue name, atom name, charge group number,
                 //charge (mod_electron) and mass (atomic mass)
                 const auto words = line.split(" ");
-                
+
                 if (words.count() < 6)
                 {
                     moltype.addWarning( QObject::tr("Cannot extract atom information "
                       "from the line '%1' as it should contain at least six words "
                       "(pieces of information)").arg(line) );
-                
+
                     continue;
                 }
                 else if (words.count() > 8)
@@ -2734,24 +2741,24 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                        "'%1' contains more information than can be parsed. It should only "
                        "contain six-eight words (pieces of information)").arg(line) );
                 }
-                
+
                 bool ok_idx, ok_resnum, ok_chggrp, ok_chg, ok_mass;
-                
+
                 const qint64 atomnum = words[0].toInt(&ok_idx);
                 const auto atomtyp = words[1];
                 const auto resnum = words[2].toInt(&ok_resnum);
                 const auto resnam = words[3];
                 const auto atmnam = words[4];
                 const qint64 chggrp = words[5].toInt(&ok_chggrp);
-                
+
                 double chg = 0; ok_chg = true;
                 if (words.count() > 6)
                     chg = words[6].toDouble(&ok_chg);
-                
+
                 double mass = 0; ok_mass = true;
                 if (words.count() > 7)
                     mass = words[7].toDouble(&ok_mass);
-                
+
                 if (not (ok_idx and ok_resnum and ok_chggrp and ok_chg and ok_mass))
                 {
                     moltype.addWarning( QObject::tr("Could not interpret the necessary "
@@ -2760,7 +2767,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                         .arg(ok_chg).arg(ok_mass) );
                     continue;
                 }
-                
+
                 GroAtom atom;
                 atom.setNumber(atomnum);
                 atom.setAtomType(atomtyp);
@@ -2770,23 +2777,23 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 atom.setChargeGroup(chggrp);
                 atom.setCharge(chg*mod_electron);
                 atom.setMass(mass*g_per_mol);
-                
+
                 moltype.addAtom(atom);
             }
         };
-        
+
         //function that extracts all of the information from the 'bonds' lines
         auto addBondsTo = [&](GroMolType &moltype, int linenum)
         {
             QStringList lines = getDirectiveLines(linenum);
-            
+
             QMultiHash<BondID,GromacsBond> bonds;
             bonds.reserve(lines.count());
-            
+
             for (const auto line : lines)
             {
                 const auto words = line.split(" ");
-                
+
                 if (words.count() < 2)
                 {
                     moltype.addWarning( QObject::tr("Cannot extract bond information "
@@ -2794,12 +2801,12 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                       "(pieces of information)").arg(line) );
                     continue;
                 }
-                
+
                 bool ok0, ok1;
-                
+
                 int atm0 = words[0].toInt(&ok0);
                 int atm1 = words[1].toInt(&ok1);
-                
+
                 if (not (ok0 and ok1))
                 {
                     moltype.addWarning( QObject::tr("Cannot extract bond information "
@@ -2815,7 +2822,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 {
                     bool ok;
                     int func_type = words[2].toInt(&ok);
-                    
+
                     if (not ok)
                     {
                         moltype.addWarning( QObject::tr("Unable to extract the correct "
@@ -2823,19 +2830,19 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                            "is not an integer.").arg(line) );
                         continue;
                     }
-                    
+
                     if (words.count() > 3)
                     {
                         //now read in all of the remaining values as numbers...
                         QList<double> params;
-                        
+
                         for (int i=3; i<words.count(); ++i)
                         {
                             double param = words[i].toDouble(&ok);
-                            
+
                             if (ok) params.append(param);
                         }
-                        
+
                         try
                         {
                             bond = GromacsBond(func_type, params);
@@ -2853,11 +2860,11 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                         bond = GromacsBond(func_type);
                     }
                 }
-                
+
                 bonds.insertMulti( BondID(AtomNum(atm0),AtomNum(atm1)),
                                    bond );
             }
-            
+
             //save the bonds in the molecule
             moltype.addBonds(bonds);
         };
@@ -2866,14 +2873,14 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         auto addAnglesTo = [&](GroMolType &moltype, int linenum)
         {
             QStringList lines = getDirectiveLines(linenum);
-            
+
             QMultiHash<AngleID,GromacsAngle> angs;
             angs.reserve(lines.count());
-            
+
             for (const auto line : lines)
             {
                 const auto words = line.split(" ");
-                
+
                 if (words.count() < 3)
                 {
                     moltype.addWarning( QObject::tr("Cannot extract angle information "
@@ -2881,13 +2888,13 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                       "(pieces of information)").arg(line) );
                     continue;
                 }
-                
+
                 bool ok0, ok1, ok2;
-                
+
                 int atm0 = words[0].toInt(&ok0);
                 int atm1 = words[1].toInt(&ok1);
                 int atm2 = words[2].toInt(&ok2);
-                
+
                 if (not (ok0 and ok1 and ok2))
                 {
                     moltype.addWarning( QObject::tr("Cannot extract angle information "
@@ -2903,7 +2910,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 {
                     bool ok;
                     int func_type = words[3].toInt(&ok);
-                    
+
                     if (not ok)
                     {
                         moltype.addWarning( QObject::tr("Unable to extract the correct "
@@ -2911,19 +2918,19 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                            "is not an integer.").arg(line) );
                         continue;
                     }
-                    
+
                     if (words.count() > 4)
                     {
                         //now read in all of the remaining values as numbers...
                         QList<double> params;
-                        
+
                         for (int i=4; i<words.count(); ++i)
                         {
                             double param = words[i].toDouble(&ok);
-                            
+
                             if (ok) params.append(param);
                         }
-                        
+
                         try
                         {
                             angle = GromacsAngle(func_type, params);
@@ -2941,11 +2948,11 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                         angle = GromacsAngle(func_type);
                     }
                 }
-                
+
                 angs.insertMulti( AngleID(AtomNum(atm0),AtomNum(atm1),AtomNum(atm2)),
                                   angle );
             }
-            
+
             //save the angles in the molecule
             moltype.addAngles(angs);
         };
@@ -2954,14 +2961,14 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         auto addDihedralsTo = [&](GroMolType &moltype, int linenum)
         {
             QStringList lines = getDirectiveLines(linenum);
-            
+
             QMultiHash<DihedralID,GromacsDihedral> dihs;
             dihs.reserve(lines.count());
-            
+
             for (const auto line : lines)
             {
                 const auto words = line.split(" ");
-                
+
                 if (words.count() < 4)
                 {
                     moltype.addWarning( QObject::tr("Cannot extract dihedral information "
@@ -2969,14 +2976,14 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                       "(pieces of information)").arg(line) );
                     continue;
                 }
-                
+
                 bool ok0, ok1, ok2, ok3;
-                
+
                 int atm0 = words[0].toInt(&ok0);
                 int atm1 = words[1].toInt(&ok1);
                 int atm2 = words[2].toInt(&ok2);
                 int atm3 = words[3].toInt(&ok3);
-                
+
                 if (not (ok0 and ok1 and ok2 and ok3))
                 {
                     moltype.addWarning( QObject::tr("Cannot extract dihedral information "
@@ -2992,7 +2999,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 {
                     bool ok;
                     int func_type = words[4].toInt(&ok);
-                    
+
                     if (not ok)
                     {
                         moltype.addWarning( QObject::tr("Unable to extract the correct "
@@ -3000,19 +3007,19 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                            "is not an integer.").arg(line) );
                         continue;
                     }
-                    
+
                     if (words.count() > 5)
                     {
                         //now read in all of the remaining values as numbers...
                         QList<double> params;
-                        
+
                         for (int i=5; i<words.count(); ++i)
                         {
                             double param = words[i].toDouble(&ok);
-                            
+
                             if (ok) params.append(param);
                         }
-                        
+
                         try
                         {
                             dihedral = GromacsDihedral(func_type, params);
@@ -3030,16 +3037,16 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                         dihedral = GromacsDihedral(func_type);
                     }
                 }
-                
+
                 dihs.insertMulti( DihedralID(AtomNum(atm0),AtomNum(atm1),
                                              AtomNum(atm2),AtomNum(atm3)),
                                   dihedral );
             }
-            
+
             //save the dihedrals in the molecule
             moltype.addDihedrals(dihs);
         };
-        
+
         //ok, now we know the location of all child tags of each moleculetype
         auto processMolType = [&](const QHash<QString,int> &moltag)
         {
@@ -3049,7 +3056,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             {
                 addAtomsTo( moltype, linenum );
             }
-            
+
             for (auto linenum : moltag.values("bonds"))
             {
                 addBondsTo( moltype, linenum );
@@ -3064,7 +3071,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             {
                 addDihedralsTo( moltype, linenum );
             }
-            
+
             //now print out warnings for any lines that are missed...
             const QStringList missed_tags = { "pairs", "pairs_nb",
                                               "exclusions",
@@ -3083,17 +3090,17 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                         .arg(tag).arg( getDirectiveLines(linenum).join("\n") ) );
                 }
             }
-            
+
             //should be finished, run some checks that this looks sane
             moltype.sanitise();
-            
+
             return moltype;
         };
-        
+
         //set the size of the array of moltypes
         moltypes = QVector<GroMolType>(moltags.count());
         auto moltypes_array = moltypes.data();
-        
+
         //load all of the molecule types (in parallel if possible)
         if (usesParallel())
         {
@@ -3115,7 +3122,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 moltypes_array[i] = moltype;
             }
         }
-        
+
         //now collect any warnings from the types
         for (const auto moltype : moltypes)
         {
@@ -3124,23 +3131,23 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 warnings.append(moltype.warnings());
             }
         }
-        
+
         return warnings;
     };
-    
+
     //function used to parse the [system] part of the file
     auto processSystem = [&]
     {
         QStringList warnings;
-        
+
         //look for the locations of the child tags of [system]
         QList< QMultiHash<QString,int> > systags;
         {
             //list of tags that are valid within a [system]
             const QStringList valid_tags = { "molecules" };
-        
+
             auto it = taglocs.constBegin();
-            
+
             while (it != taglocs.constEnd())
             {
                 if (it.value() == "system")
@@ -3150,7 +3157,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     QMultiHash<QString,int> tags;
                     tags.insert(it.value(), it.key());
                     ++it;
-                    
+
                     while (it != taglocs.constEnd())
                     {
                         //save all child tags until we reach the end
@@ -3169,7 +3176,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                             break;
                         }
                     }
-                    
+
                     systags.append(tags);
                 }
                 else
@@ -3178,7 +3185,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 }
             }
         }
-        
+
         //in theory, there should be one, and only one [system]
         if (systags.count() != 1)
         {
@@ -3187,10 +3194,10 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
               "[system] sections equals %1.").arg(systags.count()) );
             return warnings;
         }
-        
+
         //now parse the two parts of [system]
         const auto tags = systags.at(0);
-        
+
         if (not (tags.contains("system") and tags.contains("molecules")))
         {
             warnings.append( QObject::tr("The [system] section should contain "
@@ -3198,37 +3205,37 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 .arg( Sire::toString(tags) ) );
             return warnings;
         }
-        
+
         //process [system] first..
         //each of these lines is part of the title of the system
         GroSystem mysys( getDirectiveLines(tags.value("system")).join(" ") );
-        
+
         //now process the [molecules]
         for (auto linenum : tags.values("molecules"))
         {
             const auto lines = getDirectiveLines(linenum);
-            
+
             for (const auto line : lines)
             {
                 //each line should be the molecule type name, followed by the number
                 const auto words = line.split(" ");
-                
+
                 if (words.count() < 2)
                 {
                     warnings.append( QObject::tr("Cannot understand the [molecules] line "
                       "'%1' as it should have two words!").arg(line) );
                     continue;
                 }
-                
+
                 if (words.count() > 2)
                 {
                     warnings.append( QObject::tr("Ignoring the extraneous information at "
                       "the end of the [molecules] line '%1'").arg(line) );
                 }
-                
+
                 bool ok;
                 int nmols = words[1].toInt(&ok);
-                
+
                 if (not ok)
                 {
                     warnings.append( QObject::tr("Cannot interpret the number of molecules "
@@ -3236,17 +3243,17 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                       "that gives the number of molecules...").arg(line) );
                     continue;
                 }
-                
+
                 mysys.add(words[0], nmols);
             }
         }
-        
+
         //save the system object to this GroTop
         grosys = mysys;
-        
+
         return warnings;
     };
-    
+
     //process the defaults data first, as this affects the rest of the parsing
     auto warnings = processDefaults();
 
@@ -3260,17 +3267,17 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     if (usesParallel())
     {
         QMutex mutex;
-        
+
         tbb::parallel_for( tbb::blocked_range<int>(0, funcs.count()),
                            [&](const tbb::blocked_range<int> &r)
         {
             QStringList local_warnings;
-            
+
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 local_warnings += funcs[i]();
             }
-            
+
             if (not local_warnings.isEmpty())
             {
                 QMutexLocker lkr(&mutex);
@@ -3285,7 +3292,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             warnings += funcs[i]();
         }
     }
-    
+
     return warnings;
 }
 
@@ -3305,27 +3312,27 @@ void GroTop::interpret()
     if (usesParallel())
     {
         QMutex mutex;
-    
+
         tbb::parallel_for( tbb::blocked_range<int>(0,nlines),
                            [&](const tbb::blocked_range<int> &r)
         {
             QMap<int,QString> mylocs;
-        
+
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 auto m = re.match(lines[i]);
-                
+
                 if (m.hasMatch())
                 {
                     auto tag = m.captured(1);
                     mylocs.insert(i,tag);
                 }
             }
-            
+
             if (not mylocs.isEmpty())
             {
                 QMutexLocker lkr(&mutex);
-                
+
                 for (auto it=mylocs.constBegin(); it!=mylocs.constEnd(); ++it)
                 {
                     taglocs.insert(it.key(), it.value());
@@ -3338,7 +3345,7 @@ void GroTop::interpret()
         for (int i=0; i<nlines; ++i)
         {
             auto m = re.match(lines[i]);
-            
+
             if (m.hasMatch())
             {
                 auto tag = m.captured(1);
@@ -3349,10 +3356,10 @@ void GroTop::interpret()
 
     //now, validate that this looks like a gromacs top file. Rules are taken
     //from page 138 of the Gromacs 5.1 PDF reference manual
-    
+
     //first, count up the number of each tag
     QHash<QString,int> ntags;
-    
+
     for (auto it = taglocs.constBegin(); it != taglocs.constEnd(); ++it)
     {
         if (not ntags.contains(it.value()))
@@ -3389,18 +3396,18 @@ void GroTop::interpret()
 QStringList GroTop::warnings() const
 {
     QStringList w = parse_warnings;
-    
+
     for (const auto moltype : moltypes)
     {
         auto molwarns = moltype.warnings();
-        
+
         if (not molwarns.isEmpty())
         {
             w.append( QObject::tr("Warnings for molecule type %1").arg(moltype.toString()) );
             w += molwarns;
         }
     }
-    
+
     return w;
 }
 
@@ -3416,9 +3423,9 @@ void GroTop::parseLines(const QString &path, const PropertyMap &map)
         try
         {
             const auto p = map["GROMACS_DEFINE"];
-            
+
             QStringList d;
-            
+
             if (p.hasValue())
             {
                 d = p.value().asA<StringProperty>().toString().split(":", QString::SkipEmptyParts);
@@ -3427,11 +3434,11 @@ void GroTop::parseLines(const QString &path, const PropertyMap &map)
             {
                 d = p.source().split(":", QString::SkipEmptyParts);
             }
-            
+
             for (const auto define : d)
             {
                 auto words = define.split("=");
-                
+
                 if (words.count() == 1)
                 {
                     defines.insert( words[0].simplified(), "1" );
@@ -3461,7 +3468,7 @@ Molecule GroTop::createMolecule(QString moltype_name, QStringList &errors) const
 {
     //find the molecular template for this molecule
     int idx = -1;
-    
+
     for (int i=0; i<moltypes.count(); ++i)
     {
         if (moltypes.constData()[i].name() == moltype_name)
@@ -3470,16 +3477,16 @@ Molecule GroTop::createMolecule(QString moltype_name, QStringList &errors) const
             break;
         }
     }
-    
+
     if (idx == -1)
     {
         QStringList typs;
-        
+
         for (const auto &moltype : moltypes)
         {
             typs.append( moltype.name() );
         }
-    
+
         errors.append( QObject::tr("There is no molecular template called '%1' "
           "in this Gromacs file. Available templates are [ %2 ]")
             .arg(moltype_name).arg(Sire::toString(typs)) );
@@ -3504,7 +3511,7 @@ Molecule GroTop::createMolecule(QString moltype_name, QStringList &errors) const
             //this is the first atom in the molecule
             cgroup = mol.add( CGName( QString::number(cgidx) ) );
             cgidx += 1;
-            
+
             res = mol.add( ResNum(atom.residueNumber()) );
             res = res.rename( atom.residueName() );
         }
@@ -3514,11 +3521,11 @@ Molecule GroTop::createMolecule(QString moltype_name, QStringList &errors) const
             //this atom is in a different residue
             cgroup = mol.add( CGName( QString::number(cgidx) ) );
             cgidx += 1;
-            
+
             res = mol.add( ResNum(atom.residueNumber()) );
             res = res.rename(atom.residueName());
         }
-        
+
         //add the atom to the residue
         auto a = res.add( AtomName(atom.name()) );
         a = a.renumber(atom.number());
@@ -3537,14 +3544,14 @@ System GroTop::startSystem(const PropertyMap &map) const
         //there are no molecules to process
         return System();
     }
-    
+
     //first, create template molecules for each of the unique molecule types
     const auto unique_typs = grosys.uniqueTypes();
-    
+
     QHash<QString,Molecule> mol_templates;
     QHash<QString,QStringList> template_errors;
     mol_templates.reserve(unique_typs.count());
-    
+
     //loop over each unique type, creating the associated molecule and storing
     //in mol_templates. If there are any errors, then store them in template_errors
     if (usesParallel())
@@ -3557,12 +3564,12 @@ System GroTop::startSystem(const PropertyMap &map) const
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 auto typ = unique_typs[i];
-            
+
                 QStringList errors;
                 Molecule mol = this->createMolecule(typ, errors);
-                
+
                 QMutexLocker lkr(&mutex);
-                
+
                 if (not errors.isEmpty())
                 {
                     template_errors.insert(typ, errors);
@@ -3578,21 +3585,21 @@ System GroTop::startSystem(const PropertyMap &map) const
         {
             QStringList errors;
             Molecule mol = this->createMolecule(typ, errors);
-            
+
             if (not errors.isEmpty())
             {
                 template_errors.insert(typ, errors);
             }
-            
+
             mol_templates.insert(typ,mol);
         }
     }
-    
+
     //next, we see if there were any errors. If there are, then raise an exception
     if (not template_errors.isEmpty())
     {
         QStringList errors;
-        
+
         for (auto it = template_errors.constBegin();
              it != template_errors.constEnd(); ++it)
         {
@@ -3605,7 +3612,7 @@ System GroTop::startSystem(const PropertyMap &map) const
                 "in this Gromacs topology file. Errors include:\n%1")
                     .arg(errors.join("\n\n")), CODELOC );
     }
-    
+
     //next, make sure that none of the molecules are empty...
     {
         QStringList errors;
@@ -3620,26 +3627,26 @@ System GroTop::startSystem(const PropertyMap &map) const
                     .arg(it.key()) );
             }
         }
-        
+
         if (not errors.isEmpty())
             throw SireIO::parse_error( QObject::tr(
                 "Could not construct a molecule system from the information stored "
                 "in this Gromacs topology file. Errors include:\n%1")
                     .arg(errors.join("\n\n")), CODELOC );
     }
-    
+
     //now that we have the molecules, we just need to duplicate them
     //the correct number of times to create the full system
     MoleculeGroup molgroup("all");
-    
+
     for (int i=0; i<grosys.nMolecules(); ++i)
     {
         molgroup.add( mol_templates.value(grosys[i]).edit().renumber() );
     }
-    
+
     System system(grosys.name());
     system.add(molgroup);
     system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
-    
+
     return system;
 }

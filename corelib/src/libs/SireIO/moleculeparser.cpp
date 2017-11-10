@@ -601,10 +601,11 @@ bool MoleculeParser::isLead() const
     return false;
 }
 
-/** Return whether or not this parser can follow a lead parser. */
+/** Return whether or not this parser can follow a lead parser and add data
+    to an existing molecular system. By default, all parsers can follow. */
 bool MoleculeParser::canFollow() const
 {
-    return false;
+    return true;
 }
 
 /** Write the parsed data back to the file called 'filename'. This will
