@@ -279,6 +279,14 @@ private:
     void findBondedAtoms(int atom_idx, int mol_idx, const QHash<int, int> &bonded_atoms,
         QHash<int, int> &atom_to_mol, QSet<qint64> &atoms_in_mol) const;
 
+    int findParameters(const QVector<QString> &param_atoms,
+        const QVector<CharmmParam> &params) const;
+
+    SireMol::Molecule parameteriseMolecule(const SireMol::Molecule &sire_mol,
+        const QVector<CharmmParam> &bond_params, const QVector<CharmmParam> &angle_params,
+        const QVector<CharmmParam> &dihedral_params, const QVector<CharmmParam> &improper_params,
+        const QVector<CharmmParam> &cross_params, const PropertyMap &map = PropertyMap()) const;
+
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;
 

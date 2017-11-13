@@ -36,6 +36,10 @@
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
 
+#include "SireMM/twoatomfunctions.h"
+#include "SireMM/threeatomfunctions.h"
+#include "SireMM/fouratomfunctions.h"
+
 #include "SireMol/atomcharges.h"
 #include "SireMol/atomelements.h"
 #include "SireMol/atommasses.h"
@@ -53,6 +57,7 @@
 
 using namespace SireBase;
 using namespace SireIO;
+using namespace SireMM;
 using namespace SireMol;
 using namespace SireStream;
 using namespace SireSystem;
@@ -1614,7 +1619,25 @@ void CharmmPSF::parseLines(const PropertyMap &map)
     this->setScore(num_atoms);
 }
 
-/** Internal function that is used to parse a CHARMM parameter file. */
+/** Internal function that is used to parse a CHARMM parameter file.
+        @param lines
+            The lines from the parameter file.
+
+        @param bond_params
+            A vector to store the parsed bond parameters.
+
+        @param angle_params
+            A vector to store the parsed angle parameters.
+
+        @param dihedral_params
+            A vector to store the parsed dihedral parameters.
+
+        @param improper_params
+            A vector to store the parsed improper parameters.
+
+        @param cross_params
+            A vector to store the parsed cross-term parameters.
+ */
 void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
     QVector<CharmmParam> &bond_params, QVector<CharmmParam> &angle_params,
     QVector<CharmmParam> &dihedral_params, QVector<CharmmParam> &improper_params,
@@ -1796,6 +1819,85 @@ void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
     }
 }
 
+/** Internal function that is used to parameterise an existing molecule using
+    the data from a CHARMM parameter file.
+        @param sire_mol
+            The molecule to parameterise.
+
+        @param bond_params
+            A vector to store the parsed bond parameters.
+
+        @param angle_params
+            A vector to store the parsed angle parameters.
+
+        @param dihedral_params
+            A vector to store the parsed dihedral parameters.
+
+        @param improper_params
+            A vector to store the parsed improper parameters.
+
+        @param cross_params
+            A vector to store the parsed cross-term parameters.
+
+        @return
+            The parameterised molecule.
+ */
+SireMol::Molecule CharmmPSF::parameteriseMolecule(const SireMol::Molecule &sire_mol,
+    const QVector<CharmmParam> &bond_params, const QVector<CharmmParam> &angle_params,
+    const QVector<CharmmParam> &dihedral_params, const QVector<CharmmParam> &improper_params,
+    const QVector<CharmmParam> &cross_params, const PropertyMap &map) const
+{
+    // Get an editable version of the molecule.
+    MolEditor edit_mol = sire_mol.edit();
+
+    // Get the info object that can map between AtomNum to AtomIdx etc.
+    const auto molinfo = sire_mol.info();
+
+    // Parameterise the bonds.
+    if (sire_mol.hasProperty(map["connectivity"]))
+    {
+        // Get the connectivity information.
+        const ConnectivityEditor &connectivity = sire_mol.property(map["connectivity"])
+                                                         .asA<ConnectivityEditor>();
+
+        // Initialise the bond parameter object.
+        TwoAtomFunctions bond_funcs(edit_mol);
+
+        // Loop over all of the bonds.
+        for (const auto &bond : connectivity.getBonds())
+        {
+            // Extract the names of the two atoms.
+            QString atom0 = molinfo.name(bond.atom0()).value();
+            QString atom1 = molinfo.name(bond.atom1()).value();
+
+            // Create a vector of the atom names.
+            QVector<QString> bond_atoms({atom0, atom1});
+
+            // Find the parameters for the bond.
+            int index = findParameters(bond_atoms, bond_params);
+        }
+    }
+
+    return edit_mol.commit();
+}
+
+/** Find the index of the parameters associated with the 'param_atoms'.
+        @param param_atoms
+            The list of atoms to parameterise.
+
+        @params
+            The vector of parameterisation records.
+
+        @return
+            The index in the parameterisation record.
+            Returns -1 if no match is found.
+  */
+int CharmmPSF::findParameters(const QVector<QString> &param_atoms,
+    const QVector<CharmmParam> &params) const
+{
+
+}
+
 /** Use the data contained in this parser to create a new System of molecules,
     assigning properties based on the mapping in 'map' */
 System CharmmPSF::startSystem(const PropertyMap &map) const
@@ -1870,6 +1972,61 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     parseParameters(param_lines, bond_params, angle_params,
         dihedral_params, improper_params, cross_params);
 
+    // Early exit if parameters are missing.
+    if ((nBonds()      > 0 and bond_params.count()     == 0) or
+        (nAngles()     > 0 and angle_params.count()    == 0) or
+        (nDihedrals()  > 0 and dihedral_params.count() == 0) or
+        (nImpropers()  > 0 and improper_params.count() == 0) or
+        (nCrossTerms() > 0 and cross_params.count()    == 0))
+    {
+        throw SireError::incompatible_error(QObject::tr("The parameter file "
+            "is missing information that is required for generating a system!"));
+    }
+
+    // Get the MolNums of each molecule in the System - this returns the
+    // numbers in MolIdx order.
+    const QVector<MolNum> molnums = system.getMoleculeNumbers().toVector();
+
+    // Store the number of molecules.
+    const int num_mols = molnums.count();
+
+    // No molecules in the system.
+    if (num_mols == 0)
+        return system;
+
+    // A vector of the updated molecules.
+    QVector<Molecule> mols(num_mols);
+
+    // Parameterise each molecule in the system.
+    if (usesParallel())
+    {
+        tbb::parallel_for(tbb::blocked_range<int>(0, num_mols),
+                           [&](const tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                // Parameterise the molecule.
+                mols[i] = parameteriseMolecule(system[molnums[i]].molecule(),
+                    bond_params, angle_params, dihedral_params, improper_params,
+                    cross_params, map);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<num_mols; ++i)
+        {
+            // Parameterise the molecule.
+            mols[i] = parameteriseMolecule(system[molnums[i]].molecule(),
+                bond_params, angle_params, dihedral_params, improper_params,
+                cross_params, map);
+        }
+    }
+
+    // Update the system.
+    system.update(Molecules(mols));
+
+    // Return the parameterised system.
     return system;
 }
 
