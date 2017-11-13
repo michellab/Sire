@@ -157,7 +157,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
-                , "The AmberPrm cannot follow another lead parsers." );
+                , "" );
         
         }
         { //::SireIO::AmberPrm::construct
@@ -308,7 +308,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "isLead"
                 , isLead_function_value
-                , "The AmberPrm parser is a lead parser - it is capable alone\nof creating the System." );
+                , "" );
         
         }
         { //::SireIO::AmberPrm::linesForFlag

@@ -134,7 +134,7 @@ void register_PDB2_class(){
             PDB2_exposer.def( 
                 "isLead"
                 , isLead_function_value
-                , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
+                , "" );
         
         }
         { //::SireIO::PDB2::nAtoms

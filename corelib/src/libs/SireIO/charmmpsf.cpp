@@ -59,6 +59,7 @@ using namespace SireSystem;
 
 const RegisterParser<CharmmPSF> register_psf;
 static const RegisterMetaType<CharmmPSF> r_psf;
+static const RegisterMetaType<CharmmParam> r_charmmparam(NO_ROOT);
 static const RegisterMetaType<PSFAtom> r_psfatom(NO_ROOT);
 
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PSFAtom &psfatom)
@@ -88,6 +89,33 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PSFAtom &psfatom)
     }
     else
         throw version_error(v, "1", r_psfatom, CODELOC);
+
+    return ds;
+}
+
+QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmParam &charmmparam)
+{
+    writeHeader(ds, r_charmmparam, 1);
+
+    SharedDataStream sds(ds);
+
+    sds << charmmparam.atoms << charmmparam.params << charmmparam.type;
+
+    return ds;
+}
+
+QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmParam &charmmparam)
+{
+    VersionID v = readHeader(ds, r_charmmparam);
+
+    if (v == 1)
+    {
+        SharedDataStream sds(ds);
+
+        sds >> charmmparam.atoms >> charmmparam.params >> charmmparam.type;
+    }
+    else
+        throw version_error(v, "1", r_charmmparam, CODELOC);
 
     return ds;
 }
@@ -361,6 +389,245 @@ double PSFAtom::getCharge() const
 double PSFAtom::getMass() const
 {
     return mass;
+}
+
+/** Default constructor. */
+CharmmParam::CharmmParam() : type(-1)
+{
+}
+
+/** Constructor.
+
+    @param line
+        A record line from a parameter file.
+
+    @param type
+        The type of parameter record: 0 = bond
+                                      1 = angle
+                                      2 = dihedral
+                                      3 = improper
+                                      4 = cross term
+
+    @param errors
+        A list of parse errors.
+ */
+CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors)
+    : type(type)
+{
+    // Tokenize the line.
+    // First split on the comment identifier '!', take the first record,
+    // i.e. the data, then split this by a single whitespace character.
+    QStringList data = line.simplified().split("!")[0].split(QRegExp("\\s"));
+
+    // Bond parameters.
+    if (type == 0)
+    {
+        // Check record count.
+        if (data.count() < 4)
+        {
+            errors.append(QObject::tr("This doesn't look like a CHARMM bond "
+                "parameter record! There should be at least 4 entries, found %1: %2")
+                .arg(data.count()).arg(line));
+
+            return;
+        }
+
+        // Atom data.
+        atoms.append(data[0]);
+        atoms.append(data[1]);
+
+        // Parameter data.
+        bool ok1, ok2;
+
+        // Attempt to read the parameter values.
+        double p1 = data[2].toDouble(&ok1);
+        double p2 = data[3].toDouble(&ok2);
+
+        if (not ok1 or not ok2)
+        {
+            errors.append(QObject::tr("Could not read CHARMM bond parameter record! %1")
+                .arg(line));
+
+            return;
+        }
+
+        // Append the parameters.
+        params.append(p1);
+        params.append(p2);
+    }
+
+    // Angle parameters.
+    else if (type == 1)
+    {
+        // Check record count.
+        if (data.count() < 5)
+        {
+            errors.append(QObject::tr("This doesn't look like a CHARMM angle "
+                "parameter record! There should be at least 5 entries, found %1: %2")
+                .arg(data.count()).arg(line));
+
+            return;
+        }
+
+        // Atom data.
+        atoms.append(data[0]);
+        atoms.append(data[1]);
+        atoms.append(data[2]);
+
+        // Parameter data.
+        bool ok1, ok2;
+
+        // Attempt to read the parameter values.
+        double p1 = data[3].toDouble(&ok1);
+        double p2 = data[4].toDouble(&ok2);
+
+        if (not ok1 or not ok2)
+        {
+            errors.append(QObject::tr("Could not read CHARMM angle parameter record! %1")
+                .arg(line));
+
+            return;
+        }
+
+        // Append the parameters.
+        params.append(p1);
+        params.append(p2);
+
+        // Check whether there are Urey-Bradley parameters.
+        if ((data.count() > 6) and (data[5].at(0) != '!'))
+        {
+            // Attempt to read the parameter values.
+            p1 = data[5].toDouble(&ok1);
+            p2 = data[6].toDouble(&ok2);
+
+            if (not ok1 or not ok2)
+            {
+                errors.append(QObject::tr("Could not read CHARMM Urey-Bradley angle "
+                    "parameters '%1' and '%2' from line '%3'")
+                    .arg(data[5]).arg(data[6]).arg(line));
+
+                return;
+            }
+        }
+    }
+
+    // Dihedral parameters.
+    else if (type == 2)
+    {
+        // Check record count.
+        if (data.count() < 7)
+        {
+            errors.append(QObject::tr("This doesn't look like a CHARMM dihedral "
+                "parameter record! There should be at least 7 entries, found %1: %2")
+                .arg(data.count()).arg(line));
+
+            return;
+        }
+
+        // Atom data.
+        atoms.append(data[0]);
+        atoms.append(data[1]);
+        atoms.append(data[2]);
+        atoms.append(data[3]);
+
+        // Parameter data.
+        bool ok1, ok2, ok3;
+
+        // Attempt to read the parameter values.
+        double p1 = data[4].toDouble(&ok1);
+        double p2 = data[5].toDouble(&ok2);
+        double p3 = data[6].toDouble(&ok3);
+
+        if (not ok1 or not ok2 or not ok3)
+        {
+            errors.append(QObject::tr("Could not read CHARMM dihedral parameter record! %1")
+                .arg(line));
+
+            return;
+        }
+
+        // Append the parameters.
+        params.append(p1);
+        params.append(p2);
+        params.append(p3);
+    }
+
+    // Improper parameters.
+    else if (type == 3)
+    {
+        // Check record count.
+        if (data.count() < 7)
+        {
+            errors.append(QObject::tr("This doesn't look like a CHARMM improper "
+                "parameter record! There should be at least 6 entries, found %1: %2")
+                .arg(data.count()).arg(line));
+
+            return;
+        }
+
+        // Atom data.
+        atoms.append(data[0]);
+        atoms.append(data[1]);
+        atoms.append(data[2]);
+        atoms.append(data[3]);
+
+        // Parameter data.
+        bool ok1, ok2;
+
+        // Attempt to read the parameter values.
+        double p1 = data[4].toDouble(&ok1);
+        double p2 = data[5].toDouble(&ok2);
+
+        if (not ok1 or not ok2)
+        {
+            errors.append(QObject::tr("Could not read CHARMM improper parameter record! %1")
+                .arg(line));
+
+            return;
+        }
+
+        // Append the parameters.
+        params.append(p1);
+        params.append(p2);
+    }
+
+    // Cross term parameters.
+    else if (type == 4)
+    {
+        // TODO: Not sure what these parameter records look like. Find an example
+        //       In the CHARMM forcefield files.
+
+    }
+
+    // Uknown parameter type.
+    else
+    {
+        throw SireError::program_bug(QObject::tr("Unknown parameter type (%1). "
+            "Valid types are 0, 1, 2, 3, 4").arg(type), CODELOC);
+    }
+}
+
+/** Return the atoms to which the parameters apply. */
+const QVector<QString>& CharmmParam::getAtoms() const
+{
+    return atoms;
+}
+
+/** Return the parameter terms. */
+const QVector<double>& CharmmParam::getParams() const
+{
+    return params;
+}
+
+/** Return the paramter type. */
+qint64 CharmmParam::getType() const
+{
+    return type;
+}
+
+const char* CharmmParam::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<CharmmParam>() );
 }
 
 /** Constructor */
@@ -1347,6 +1614,188 @@ void CharmmPSF::parseLines(const PropertyMap &map)
     this->setScore(num_atoms);
 }
 
+/** Internal function that is used to parse a CHARMM parameter file. */
+void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
+    QVector<CharmmParam> &bond_params, QVector<CharmmParam> &angle_params,
+    QVector<CharmmParam> &dihedral_params, QVector<CharmmParam> &improper_params,
+    QVector<CharmmParam> &cross_params) const
+{
+    /* CHARMM parameter files are split in sections for different record types,
+       i.e. bonds, angles, etc., separated by blank lines.
+
+       The specifics of the formatting is dependent on the type of CHARMM
+       forcefiled. Currently, we support the following types:
+
+       1) As in CHARMM 22:
+            - Record sections start with an upper-case record type identifier,
+              e.g. BONDS.
+
+       2) As in CHARMM 19:
+            - Record sections have no starting identifier, but each record
+              line in a section begins with a lower-case record indentifier,
+              e.g. bond
+
+       We assume that parameter files are formatted correctly, i.e. there
+       is no overlap between record sections, and all sections must be
+       separated by at least one blank line.
+     */
+
+    QStringList errors;
+
+    for (int i=0; i<parameter_lines.count(); ++i)
+    {
+        // Extract the first word in the line.
+        QStringList data = parameter_lines[i].simplified().split(QRegExp("\\s"));
+        QString start = data[0];
+
+        // Bond parameters.
+        if (start == "BONDS")
+        {
+            bool is_blank_line = false;
+
+            // Advance to the next line.
+            i++;
+
+            // Step-forward until we end the section.
+            while (not is_blank_line)
+            {
+                QString line = parameter_lines[i].simplified();
+
+                // Blank line.
+                if (line.count() == 0)
+                {
+                    is_blank_line = true;
+                    break;
+                }
+
+                // Not a comment.
+                if (not (line[0] == '!'))
+                {
+                    bond_params.append(CharmmParam(line, 0, errors));
+                }
+
+                i++;
+            }
+        }
+        else if (start == "bond")
+        {
+            data.removeFirst();
+            bond_params.append(CharmmParam(data.join(" "), 0, errors));
+        }
+
+        // Angle parameters.
+        else if (start == "ANGLES")
+        {
+            bool is_blank_line = false;
+
+            // Advance to the next line.
+            i++;
+
+            // Step-forward until we end the section.
+            while (not is_blank_line)
+            {
+                QString line = parameter_lines[i].simplified();
+
+                // Blank line.
+                if (line.count() == 0)
+                {
+                    is_blank_line = true;
+                    break;
+                }
+
+                // Not a comment.
+                if (not (line[0] == '!'))
+                {
+                    angle_params.append(CharmmParam(line, 1, errors));
+                }
+
+                i++;
+            }
+        }
+        else if (start == "angle")
+        {
+            data.removeFirst();
+            angle_params.append(CharmmParam(data.join(" "), 1, errors));
+        }
+
+        // Dihedral parameters.
+        else if (start == "DIHEDRALS")
+        {
+            bool is_blank_line = false;
+
+            // Advance to the next line.
+            i++;
+
+            // Step-forward until we end the section.
+            while (not is_blank_line)
+            {
+                QString line = parameter_lines[i].simplified();
+
+                // Blank line.
+                if (line.count() == 0)
+                {
+                    is_blank_line = true;
+                    break;
+                }
+
+                // Not a comment.
+                if (not (line[0] == '!'))
+                {
+                    dihedral_params.append(CharmmParam(line, 2, errors));
+                }
+
+                i++;
+            }
+        }
+        else if (start == "dihe")
+        {
+            data.removeFirst();
+            dihedral_params.append(CharmmParam(data.join(" "), 2, errors));
+        }
+
+        // Improper parameters.
+        else if (start == "IMPROPER")
+        {
+            bool is_blank_line = false;
+
+            // Advance to the next line.
+            i++;
+
+            // Step-forward until we end the section.
+            while (not is_blank_line)
+            {
+                QString line = parameter_lines[i].simplified();
+
+                // Blank line.
+                if (line.count() == 0)
+                {
+                    is_blank_line = true;
+                    break;
+                }
+
+                // Not a comment.
+                if (not (line[0] == '!'))
+                {
+                    improper_params.append(CharmmParam(line, 3, errors));
+                }
+
+                i++;
+            }
+        }
+        else if (start == "impr")
+        {
+            data.removeFirst();
+            improper_params.append(CharmmParam(data.join(" "), 3, errors));
+        }
+    }
+
+    if (not errors.isEmpty())
+    {
+        throw SireIO::parse_error(QObject::tr("There were errors reading the CHARMM "
+          "paramter file:\n%1").arg(errors.join("\n\n")), CODELOC);
+    }
+}
+
 /** Use the data contained in this parser to create a new System of molecules,
     assigning properties based on the mapping in 'map' */
 System CharmmPSF::startSystem(const PropertyMap &map) const
@@ -1410,18 +1859,18 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     // Generate the unparameterised system.
     System system = startSystem(map);
 
-    return system;
-}
+    // Initialise the parameter objects.
+    QVector<CharmmParam> bond_params;
+    QVector<CharmmParam> angle_params;
+    QVector<CharmmParam> dihedral_params;
+    QVector<CharmmParam> improper_params;
+    QVector<CharmmParam> cross_params;
 
-/** Use the data contained in this parser to add information from the file to
-    the molecules that exist already in the passed System. For example, this
-    may be used to add coordinate data from this file to the molecules in
-    the passed System that are missing coordinate data. */
-void CharmmPSF::addToSystem(System &system, const PropertyMap &map) const
-{
-    //you should loop through each molecule in the system and work out
-    //which ones are described in the file, and then add data from the file
-    //to thise molecules.
+    // Parse the parameter file.
+    parseParameters(param_lines, bond_params, angle_params,
+        dihedral_params, improper_params, cross_params);
+
+    return system;
 }
 
 /** Internal function used to get the molecule structure for molecule 'imol'. */

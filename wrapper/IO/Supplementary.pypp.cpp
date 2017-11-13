@@ -44,7 +44,7 @@ void register_Supplementary_class(){
             Supplementary_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
-                , "Return whether or not this parser can follow another lead parser, and add\ndata to an existing molecular system. The Supplementary parser cannot follow." );
+                , "" );
         
         }
         { //::SireIO::Supplementary::construct

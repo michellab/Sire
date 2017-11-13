@@ -36,6 +36,7 @@ SIRE_BEGIN_HEADER
 namespace SireIO
 {
 class PSFAtom;
+class CharmmParam;
 class CharmmPSF;
 }
 
@@ -50,6 +51,9 @@ class Residue;
 
 QDataStream& operator<<(QDataStream&, const SireIO::PSFAtom&);
 QDataStream& operator>>(QDataStream&, SireIO::PSFAtom&);
+
+QDataStream& operator<<(QDataStream&, const SireIO::CharmmParam&);
+QDataStream& operator>>(QDataStream&, SireIO::CharmmParam&);
 
 QDataStream& operator<<(QDataStream&, const SireIO::CharmmPSF&);
 QDataStream& operator>>(QDataStream&, SireIO::CharmmPSF&);
@@ -151,6 +155,45 @@ private:
     double mass;
 };
 
+/** This is a container class for CHARMM parameter records.
+
+    @author Lester Hedges
+*/
+class SIREIO_EXPORT CharmmParam
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const CharmmParam&);
+friend QDataStream& ::operator>>(QDataStream&, CharmmParam&);
+
+public:
+    /* Default constructor. */
+    CharmmParam();
+
+    /** Constructor. */
+    CharmmParam(const QString &line, int type, QStringList &errors);
+
+    static const char* typeName();
+
+    /** Get the vector of atoms. */
+    const QVector<QString>& getAtoms() const;
+
+    /** Get the vector of parameters. */
+    const QVector<double>& getParams() const;
+
+    /** Get the parameter type. */
+    qint64 getType() const;
+
+private:
+    /** The vector of atoms to which the parameter set applies. */
+    QVector<QString> atoms;
+
+    /** The vector of parameters. */
+    QVector<double> params;
+
+    /** The paramter type. */
+    qint64 type;
+};
+
 /** This class holds a parser for reading and writing CHARMM PSF files.
 
     @author Lester Hedges
@@ -214,13 +257,16 @@ public:
 
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
-    SireSystem::System startSystem(const QVector<QString> &lines,
+    SireSystem::System startSystem(const QVector<QString> &param_lines,
                                    const PropertyMap &map) const;
-    void addToSystem(SireSystem::System &system, const PropertyMap &map) const;
 
 private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
+    void parseParameters(const QVector<QString> &param_lines,
+            QVector<CharmmParam> &bond_params, QVector<CharmmParam> &angle_params,
+            QVector<CharmmParam> &dihedral_params, QVector<CharmmParam> &improper_params,
+            QVector<CharmmParam> &cross_params) const;
 
     SireMol::MolStructureEditor getMolStructure(int imol,
         const SireBase::PropertyName &cutting) const;
@@ -265,6 +311,7 @@ private:
 }
 
 Q_DECLARE_METATYPE( SireIO::PSFAtom )
+Q_DECLARE_METATYPE( SireIO::CharmmParam )
 Q_DECLARE_METATYPE( SireIO::CharmmPSF )
 
 SIRE_EXPOSE_CLASS( SireIO::CharmmPSF )

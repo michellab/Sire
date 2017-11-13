@@ -69,7 +69,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
-                , "Return whether or not this parser can follow another lead parser, and add\ndata to an existing molecular system. The CharmmPSF parser cannot follow." );
+                , "" );
         
         }
         { //::SireIO::CharmmPSF::construct
@@ -149,7 +149,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "isLead"
                 , isLead_function_value
-                , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
+                , "" );
         
         }
         { //::SireIO::CharmmPSF::nAngles
