@@ -1351,24 +1351,8 @@ void CharmmPSF::parseLines(const PropertyMap &map)
     assigning properties based on the mapping in 'map' */
 System CharmmPSF::startSystem(const PropertyMap &map) const
 {
-    throw SireError::incompatible_error(QObject::tr("This parser "
-        "requires supplementary data from a CHARMM parameter file "
-        "in order to construct a system!"), CODELOC);
-
-    return System();
-}
-
-/** Use the data contained in this parser to create a new System of molecules,
-    using the supplementary data records from 'lines' and assigning properties
-    based on the mapping in 'map' */
-System CharmmPSF::startSystem(const QVector<QString> &param_lines, const PropertyMap &map) const
-{
     // This assumes that we've already run 'findMolecules()' to
     // break the parsed data into molecules using the bond records.
-
-    // Potential parameter file data is contained in the 'param_lines' vector.
-    // This is parsed separately by 'parseParameters()' before the system
-    // can be constructed.
 
     const int nmols = nMolecules();
 
@@ -1407,6 +1391,24 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     System system;
     system.add(molgroup);
     system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
+
+    return system;
+}
+
+/** Use the data contained in this parser to create a new System of molecules,
+    using the supplementary data records from 'lines' and assigning properties
+    based on the mapping in 'map' */
+System CharmmPSF::startSystem(const QVector<QString> &param_lines, const PropertyMap &map) const
+{
+    // This assumes that we've already run 'findMolecules()' to
+    // break the parsed data into molecules using the bond records.
+
+    // Potential parameter file data is contained in the 'param_lines' vector.
+    // This is parsed separately by 'parseParameters()' before the system
+    // can be constructed.
+
+    // Generate the unparameterised system.
+    System system = startSystem(map);
 
     return system;
 }
