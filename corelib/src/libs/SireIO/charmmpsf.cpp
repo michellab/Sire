@@ -36,6 +36,7 @@
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
 
+#include "SireMM/internalff.h"
 #include "SireMM/twoatomfunctions.h"
 #include "SireMM/threeatomfunctions.h"
 #include "SireMM/fouratomfunctions.h"
@@ -1624,24 +1625,27 @@ void CharmmPSF::parseLines(const PropertyMap &map)
             The lines from the parameter file.
 
         @param bond_params
-            A vector to store the parsed bond parameters.
+            A multi-hash of the parsed bond parameters.
 
         @param angle_params
-            A vector to store the parsed angle parameters.
+            A multi-hash of the parsed angle parameters.
 
         @param dihedral_params
-            A vector to store the parsed dihedral parameters.
+            A multi-hash of the parsed dihedral parameters.
 
         @param improper_params
-            A vector to store the parsed improper parameters.
+            A multi-hash of the parsed improper parameters.
 
         @param cross_params
-            A vector to store the parsed cross-term parameters.
+            A multi-hash of the parsed cross-term parameters.
  */
-void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
-    QVector<CharmmParam> &bond_params, QVector<CharmmParam> &angle_params,
-    QVector<CharmmParam> &dihedral_params, QVector<CharmmParam> &improper_params,
-    QVector<CharmmParam> &cross_params) const
+void CharmmPSF::parseParameters(
+    const QVector<QString> &parameter_lines,
+    QMultiHash<QString, CharmmParam> &bond_params,
+    QMultiHash<QString, CharmmParam> &angle_params,
+    QMultiHash<QString, CharmmParam> &dihedral_params,
+    QMultiHash<QString, CharmmParam> &improper_params,
+    QMultiHash<QString, CharmmParam> &cross_params) const
 {
     /* CHARMM parameter files are split in sections for different record types,
        i.e. bonds, angles, etc., separated by blank lines.
@@ -1694,7 +1698,8 @@ void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
                 // Not a comment.
                 if (not (line[0] == '!'))
                 {
-                    bond_params.append(CharmmParam(line, 0, errors));
+                    CharmmParam param(line, 0, errors);
+                    bond_params.insert(generateKey(param.getAtoms()), param);
                 }
 
                 i++;
@@ -1703,7 +1708,8 @@ void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
         else if (start == "bond")
         {
             data.removeFirst();
-            bond_params.append(CharmmParam(data.join(" "), 0, errors));
+            CharmmParam param(data.join(" "), 0, errors);
+            bond_params.insert(generateKey(param.getAtoms()), param);
         }
 
         // Angle parameters.
@@ -1729,7 +1735,8 @@ void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
                 // Not a comment.
                 if (not (line[0] == '!'))
                 {
-                    angle_params.append(CharmmParam(line, 1, errors));
+                    CharmmParam param(line, 1, errors);
+                    angle_params.insert(generateKey(param.getAtoms()), param);
                 }
 
                 i++;
@@ -1738,7 +1745,8 @@ void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
         else if (start == "angle")
         {
             data.removeFirst();
-            angle_params.append(CharmmParam(data.join(" "), 1, errors));
+            CharmmParam param(data.join(" "), 1, errors);
+            angle_params.insert(generateKey(param.getAtoms()), param);
         }
 
         // Dihedral parameters.
@@ -1764,7 +1772,8 @@ void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
                 // Not a comment.
                 if (not (line[0] == '!'))
                 {
-                    dihedral_params.append(CharmmParam(line, 2, errors));
+                    CharmmParam param(line, 2, errors);
+                    dihedral_params.insert(generateKey(param.getAtoms()), param);
                 }
 
                 i++;
@@ -1773,7 +1782,8 @@ void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
         else if (start == "dihe")
         {
             data.removeFirst();
-            dihedral_params.append(CharmmParam(data.join(" "), 2, errors));
+            CharmmParam param(data.join(" "), 2, errors);
+            dihedral_params.insert(generateKey(param.getAtoms()), param);
         }
 
         // Improper parameters.
@@ -1799,7 +1809,8 @@ void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
                 // Not a comment.
                 if (not (line[0] == '!'))
                 {
-                    improper_params.append(CharmmParam(line, 3, errors));
+                    CharmmParam param(line, 3, errors);
+                    improper_params.insert(generateKey(param.getAtoms()), param);
                 }
 
                 i++;
@@ -1808,7 +1819,8 @@ void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
         else if (start == "impr")
         {
             data.removeFirst();
-            improper_params.append(CharmmParam(data.join(" "), 3, errors));
+            CharmmParam param(data.join(" "), 3, errors);
+            improper_params.insert(generateKey(param.getAtoms()), param);
         }
     }
 
@@ -1825,27 +1837,32 @@ void CharmmPSF::parseParameters(const QVector<QString> &parameter_lines,
             The molecule to parameterise.
 
         @param bond_params
-            A vector to store the parsed bond parameters.
+            A multi-hash of the parsed bond parameters.
 
         @param angle_params
-            A vector to store the parsed angle parameters.
+            A multi-hash of the parsed angle parameters.
 
         @param dihedral_params
-            A vector to store the parsed dihedral parameters.
+            A multi-hash of the parsed dihedral parameters.
 
         @param improper_params
-            A vector to store the parsed improper parameters.
+            A multi-hash of the parsed improper parameters.
 
         @param cross_params
-            A vector to store the parsed cross-term parameters.
+            A multi-hash of the parsed cross-term parameters.
 
         @return
             The parameterised molecule.
  */
-SireMol::Molecule CharmmPSF::parameteriseMolecule(const SireMol::Molecule &sire_mol,
-    const QVector<CharmmParam> &bond_params, const QVector<CharmmParam> &angle_params,
-    const QVector<CharmmParam> &dihedral_params, const QVector<CharmmParam> &improper_params,
-    const QVector<CharmmParam> &cross_params, const PropertyMap &map) const
+SireMol::Molecule CharmmPSF::parameteriseMolecule(
+    int imol,
+    const SireMol::Molecule &sire_mol,
+    const QMultiHash<QString, CharmmParam> &bond_params,
+    const QMultiHash<QString, CharmmParam> &angle_params,
+    const QMultiHash<QString, CharmmParam> &dihedral_params,
+    const QMultiHash<QString, CharmmParam> &improper_params,
+    const QMultiHash<QString, CharmmParam> &cross_params,
+    const PropertyMap &map) const
 {
     // Get an editable version of the molecule.
     MolEditor edit_mol = sire_mol.edit();
@@ -1853,49 +1870,409 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(const SireMol::Molecule &sire_
     // Get the info object that can map between AtomNum to AtomIdx etc.
     const auto molinfo = sire_mol.info();
 
-    // Parameterise the bonds.
+    // Check for "atomtype" property.
+    if (not sire_mol.hasProperty(map["atomtype"]))
+    {
+        throw SireError::program_bug(QObject::tr("The molecule is missing "
+            "property: \"atomtype\""), CODELOC);
+    }
+
+    // Get the atom type property object.
+    const auto &atom_types = sire_mol.property(map["atomtype"]).asA<AtomStringProperty>();
+
+    // The molecule has bond connectivity information. Parameterise the bonds.
     if (sire_mol.hasProperty(map["connectivity"]))
     {
-        // Get the connectivity information.
-        const ConnectivityEditor &connectivity = sire_mol.property(map["connectivity"])
-                                                         .asA<ConnectivityEditor>();
+        // Get the atom connectivity object.
+        const auto &connectivity = sire_mol.property(map["connectivity"])
+                                        .asA<ConnectivityEditor>();
 
         // Initialise the bond parameter object.
         TwoAtomFunctions bond_funcs(edit_mol);
 
+        // Get the potential object.
+        const auto R = InternalPotential::symbols().bond().r();
+
         // Loop over all of the bonds.
         for (const auto &bond : connectivity.getBonds())
         {
-            // Extract the names of the two atoms.
-            QString atom0 = molinfo.name(bond.atom0()).value();
-            QString atom1 = molinfo.name(bond.atom1()).value();
+            // Extract the type names of the two atoms.
+            auto atom0 = atom_types[molinfo.cgAtomIdx(bond.atom0())];
+            auto atom1 = atom_types[molinfo.cgAtomIdx(bond.atom1())];
 
             // Create a vector of the atom names.
             QVector<QString> bond_atoms({atom0, atom1});
 
             // Find the parameters for the bond.
-            int index = findParameters(bond_atoms, bond_params);
+            auto matches = findParameters(bond_atoms, bond_params, 0);
+
+            // No matches!
+            if (matches.count() == 0)
+            {
+                throw SireError::incompatible_error(QObject::tr("Missing bond parameters "
+                    "for atom types \'%1\' and \'%2\'").arg(atom0).arg(atom1), CODELOC);
+            }
         }
+    }
+
+    // Parameterise the angles.
+    if (nAngles() > 0)
+    {
+        // Initialise the angle parameter object.
+        ThreeAtomFunctions angle_funcs(edit_mol);
+
+        // Loop over all of the angles.
+        for (int i=0; i<nAngles(); ++i)
+        {
+            // The angle interaction is part of this molecule.
+            if (atoms[num_to_idx[angles[i][0]]].getMolIndex() == imol)
+            {
+                // Make sure the terminal atom is also in the molecule.
+                if (atoms[num_to_idx[angles[i][2]]].getMolIndex() == imol)
+                {
+                    // Create a vector of the atom names.
+                    QVector<QString> angle_atoms({atoms[num_to_idx[angles[i][0]]].getType(),
+                                                  atoms[num_to_idx[angles[i][1]]].getType(),
+                                                  atoms[num_to_idx[angles[i][2]]].getType()});
+
+                    // Find the parameters for the angle.
+                    auto matches = findParameters(angle_atoms, angle_params, 1);
+
+                    // No matches!
+                    if (matches.count() == 0)
+                    {
+                        throw SireError::incompatible_error(QObject::tr("Missing angle parameters "
+                            "for atom types \'%1\', \'%2\', and \'%3\'")
+                            .arg(angle_atoms[0]).arg(angle_atoms[1]).arg(angle_atoms[2]), CODELOC);
+                    }
+                }
+                else
+                {
+                    throw SireError::program_bug(QObject::tr("The atoms involved in an "
+                        "angle interaction are not in the same molecule: [ AtomNum(%1), MolIdx(%2) ] "
+                        "and [ AtomNum(%3), MolIdx(%4) ]")
+                        .arg(angles[i][0]).arg(atoms[num_to_idx[angles[i][0]]].getMolIndex())
+                        .arg(angles[i][2]).arg(atoms[num_to_idx[angles[i][2]]].getMolIndex()), CODELOC);
+                }
+            }
+        }
+    }
+
+    // Parameterise the dihedrals.
+    if (nDihedrals() > 0)
+    {
+        // Initialise the dihedral parameter object.
+        FourAtomFunctions dihedral_funcs(edit_mol);
+
+        // Loop over all of the dihedrals.
+        for (int i=0; i<nDihedrals(); ++i)
+        {
+            // The dihedral interaction is part of this molecule.
+            if (atoms[num_to_idx[dihedrals[i][0]]].getMolIndex() == imol)
+            {
+                // Make sure the terminal atom is also in the molecule.
+                if (atoms[num_to_idx[dihedrals[i][3]]].getMolIndex() == imol)
+                {
+                    // Create a vector of the atom names.
+                    QVector<QString> dihedral_atoms({atoms[num_to_idx[dihedrals[i][0]]].getType(),
+                                                     atoms[num_to_idx[dihedrals[i][1]]].getType(),
+                                                     atoms[num_to_idx[dihedrals[i][2]]].getType(),
+                                                     atoms[num_to_idx[dihedrals[i][3]]].getType()});
+
+                    // Find the parameters for the dihedral.
+                    auto matches = findParameters(dihedral_atoms, dihedral_params, 2);
+
+                    // No matches!
+                    if (matches.count() == 0)
+                    {
+                        throw SireError::incompatible_error(QObject::tr("Missing dihedral parameters "
+                            "for atom types \'%1\', \'%2\', \'%3\', and \'%4\'")
+                            .arg(dihedral_atoms[0]).arg(dihedral_atoms[1]).arg(dihedral_atoms[2])
+                            .arg(dihedral_atoms[3]), CODELOC);
+                    }
+                }
+                else
+                {
+                    throw SireError::program_bug(QObject::tr("The atoms involved in a "
+                        "dihedral interaction are not in the same molecule: [ AtomNum(%1), MolIdx(%2) ] "
+                        "and [ AtomNum(%3), MolIdx(%4) ]")
+                        .arg(dihedrals[i][0]).arg(atoms[num_to_idx[dihedrals[i][0]]].getMolIndex())
+                        .arg(dihedrals[i][2]).arg(atoms[num_to_idx[dihedrals[i][3]]].getMolIndex()), CODELOC);
+                }
+            }
+        }
+    }
+
+    // Parameterise the impropers.
+    if (nImpropers() > 0)
+    {
+        // Initialise the improper parameter object.
+        FourAtomFunctions improper_funcs(edit_mol);
+
+        // Loop over all of the dihedrals.
+        for (int i=0; i<nImpropers(); ++i)
+        {
+            // The improper interaction is part of this molecule.
+            if (atoms[num_to_idx[impropers[i][0]]].getMolIndex() == imol)
+            {
+                // Make sure the terminal atom is also in the molecule.
+                if (atoms[num_to_idx[impropers[i][3]]].getMolIndex() == imol)
+                {
+                    // Create a vector of the atom names.
+                    QVector<QString> improper_atoms({atoms[num_to_idx[impropers[i][0]]].getType(),
+                                                     atoms[num_to_idx[impropers[i][1]]].getType(),
+                                                     atoms[num_to_idx[impropers[i][2]]].getType(),
+                                                     atoms[num_to_idx[impropers[i][3]]].getType()});
+
+                    // Find the parameters for the improper.
+                    auto matches = findParameters(improper_atoms, improper_params, 3);
+
+                    // No matches!
+                    if (matches.count() == 0)
+                    {
+                        throw SireError::incompatible_error(QObject::tr("Missing improper parameters "
+                            "for atom types \'%1\', \'%2\', \'%3\', and \'%4\'")
+                            .arg(improper_atoms[0]).arg(improper_atoms[1]).arg(improper_atoms[2])
+                            .arg(improper_atoms[3]), CODELOC);
+                    }
+                }
+                else
+                {
+                    throw SireError::program_bug(QObject::tr("The atoms involved in an "
+                        "improper interaction are not in the same molecule: [ AtomNum(%1), MolIdx(%2) ] "
+                        "and [ AtomNum(%3), MolIdx(%4) ]")
+                        .arg(impropers[i][0]).arg(atoms[num_to_idx[impropers[i][0]]].getMolIndex())
+                        .arg(impropers[i][2]).arg(atoms[num_to_idx[impropers[i][3]]].getMolIndex()), CODELOC);
+                }
+            }
+        }
+    }
+
+    // Parameterise the cross-terms.
+    if (nCrossTerms() > 0)
+    {
+        // TODO: Work out what to do here...
     }
 
     return edit_mol.commit();
 }
 
-/** Find the index of the parameters associated with the 'param_atoms'.
-        @param param_atoms
+/** Find the index of the parameters associated with the 'search_atoms'.
+        @param search_atoms
             The list of atoms to parameterise.
 
-        @params
-            The vector of parameterisation records.
+        @param params
+            A multi-hash of the parameterisation records.
+
+        @param type
+            The type of paramterisation record.
 
         @return
-            The index in the parameterisation record.
-            Returns -1 if no match is found.
+            A vector of the indices of the matching parameter sets.
   */
-int CharmmPSF::findParameters(const QVector<QString> &param_atoms,
-    const QVector<CharmmParam> &params) const
+QList<CharmmParam> CharmmPSF::findParameters(const QVector<QString> &search_atoms,
+    const QMultiHash<QString, CharmmParam> &params, int type) const
 {
+    // Bond params.
+    if (type == 0)
+    {
+        // Make sure that there are two atoms to search for.
+        if (search_atoms.count() != 2)
+        {
+            throw SireError::program_bug(QObject::tr("Cannot search for CHARMM "
+                "bond parameters, incorrect number of atoms passed. Given "
+                "%1, expected 2").arg(search_atoms.count()), CODELOC);
+        }
 
+        // Generate the key for this set of atoms.
+        QString key = generateKey(search_atoms);
+
+        // Return the matches.
+        return params.values(key);
+    }
+
+    // Angle params.
+    else if (type == 1)
+    {
+        // Make sure that there are three atoms to search for.
+        if (search_atoms.count() != 3)
+        {
+            throw SireError::program_bug(QObject::tr("Cannot search for CHARMM "
+                "angle parameters, incorrect number of atoms passed. Given "
+                "%1, expected 3").arg(search_atoms.count()), CODELOC);
+        }
+
+        // Generate the key for this set of atoms.
+        QString key = generateKey(search_atoms);
+
+        // Return the matches.
+        return params.values(key);
+    }
+
+    // Dihedral params.
+    else if ((type == 2) or (type == 3))
+    {
+        // Make sure that there are four atoms to search for.
+        if (search_atoms.count() != 4)
+        {
+            throw SireError::program_bug(QObject::tr("Cannot search for CHARMM "
+                "%1 parameters, incorrect number of atoms passed. Given "
+                "%2, expected 4")
+                .arg((type == 2) ? "dihedral" : "improper")
+                .arg(search_atoms.count()), CODELOC);
+        }
+
+        // Generate the key for this set of atoms.
+        QString key = generateKey(search_atoms);
+
+        // Check for matches.
+        auto matches = params.values(key);
+
+        // No matches, try wildcards.
+        if (matches.count() == 0)
+        {
+            // Backup the original vector of atom types.
+            auto copy_atoms = search_atoms;
+
+            // Single wildcard.
+            for (int i=0; i<4; ++i)
+            {
+                // Replace the atom type with a wildcard.
+                copy_atoms[i] = "X";
+
+                // Generate the key for this set of atoms.
+                QString key = generateKey(copy_atoms);
+
+                // Check for matches.
+                matches = params.values(key);
+
+                // Return the matches.
+                if (matches.count() > 0)
+                    return matches;
+
+                // Reset the atom type.
+                copy_atoms[i] = search_atoms[i];
+            }
+
+            // Double wildcard.
+            for (int i=0; i<4; ++i)
+            {
+                // Replace atom type 'i' with a wildcard.
+                copy_atoms[i] = "X";
+
+                for (int j=i+i; j<4; ++j)
+                {
+                    // Replace atom type 'j' with a wildcard.
+                    copy_atoms[j] = "X";
+
+                    // Generate the key for this set of atoms.
+                    QString key = generateKey(copy_atoms);
+
+                    // Check for matches.
+                    matches = params.values(key);
+
+                    // Return the matches.
+                    if (matches.count() > 0)
+                        return matches;
+
+                    // Reset the type for atom 'j'.
+                    copy_atoms[j] = search_atoms[j];
+                }
+
+                // Reset the type for atom 'i'.
+                copy_atoms[i] = search_atoms[i];
+            }
+
+            // Triple wildcard.
+            for (int i=0; i<4; ++i)
+            {
+                // Replace atom type 'i' with a wildcard.
+                copy_atoms[i] = "X";
+
+                for (int j=i+i; j<4; ++j)
+                {
+                    // Replace atom type 'j' with a wildcard.
+                    copy_atoms[j] = "X";
+
+                    for (int k=j+1; k<4; ++k)
+                    {
+                        // Replace atom type 'k' with a wildcard.
+                        copy_atoms[k] = "X";
+
+                        // Generate the key for this set of atoms.
+                        QString key = generateKey(copy_atoms);
+
+                        // Check for matches.
+                        matches = params.values(key);
+
+                        // Return the matches.
+                        if (matches.count() > 0)
+                            return matches;
+
+                        // Reset the type for atom 'k'.
+                        copy_atoms[k] = search_atoms[k];
+                    }
+
+                    // Reset the type for atom 'j'.
+                    copy_atoms[j] = search_atoms[j];
+                }
+
+                // Reset the type for atom 'i'.
+                copy_atoms[i] = search_atoms[i];
+            }
+
+            // Quadruple wildcard.
+            // Unlikley, but what the heck!
+
+            // Check for matches.
+            matches = params.values("X;X;X;X");
+
+            // If we've got this far, then there are no matches.
+            // Return the empty list.
+            return matches;
+        }
+        else return matches;
+    }
+
+    else if (type == 4)
+    {
+        // TODO: Not sure what these parameter records look like. Find an example
+        //       In the CHARMM forcefield files.
+
+        return QList<CharmmParam>();
+    }
+
+    // Uknown parameter type.
+    else
+    {
+        throw SireError::program_bug(QObject::tr("Unknown parameter type (%1). "
+            "Valid types are 0, 1, 2, 3, 4").arg(type), CODELOC);
+    }
+}
+
+/** Generate a key from the vector of words.
+        @param words
+            The list of words.
+
+        @return
+            The key.
+ */
+QString CharmmPSF::generateKey(QVector<QString> words) const
+{
+    if (words.count() == 0)
+        return QString();
+
+    // Sort the words.
+    qSort(words);
+
+    // Initialise the key string.
+    QString key(words[0]);
+
+    // Append each word to the key, semicolon separated.
+    for (int i=1; i<words.count(); ++i)
+        key += QString(";%1").arg(words[i]);
+
+    return key;
 }
 
 /** Use the data contained in this parser to create a new System of molecules,
@@ -1962,11 +2339,11 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     System system = startSystem(map);
 
     // Initialise the parameter objects.
-    QVector<CharmmParam> bond_params;
-    QVector<CharmmParam> angle_params;
-    QVector<CharmmParam> dihedral_params;
-    QVector<CharmmParam> improper_params;
-    QVector<CharmmParam> cross_params;
+    QMultiHash<QString, CharmmParam> bond_params;
+    QMultiHash<QString, CharmmParam> angle_params;
+    QMultiHash<QString, CharmmParam> dihedral_params;
+    QMultiHash<QString, CharmmParam> improper_params;
+    QMultiHash<QString, CharmmParam> cross_params;
 
     // Parse the parameter file.
     parseParameters(param_lines, bond_params, angle_params,
@@ -2006,7 +2383,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 // Parameterise the molecule.
-                mols[i] = parameteriseMolecule(system[molnums[i]].molecule(),
+                mols[i] = parameteriseMolecule(i, system[molnums[i]].molecule(),
                     bond_params, angle_params, dihedral_params, improper_params,
                     cross_params, map);
             }
@@ -2017,7 +2394,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
         for (int i=0; i<num_mols; ++i)
         {
             // Parameterise the molecule.
-            mols[i] = parameteriseMolecule(system[molnums[i]].molecule(),
+            mols[i] = parameteriseMolecule(i, system[molnums[i]].molecule(),
                 bond_params, angle_params, dihedral_params, improper_params,
                 cross_params, map);
         }
@@ -2174,8 +2551,9 @@ MolEditor CharmmPSF::getMolecule(int imol, const PropertyMap &map) const
     const auto molinfo = mol.info();
 
     // Instantiate the atom property objects that we need.
-    AtomCharges charges(molinfo);
-    AtomMasses  masses(molinfo);
+    AtomStringProperty types(molinfo);
+    AtomCharges        charges(molinfo);
+    AtomMasses         masses(molinfo);
 
     // Now loop through the atoms in the molecule and set each property.
     for (int i=0; i<nAtoms(imol); ++i)
@@ -2187,6 +2565,7 @@ MolEditor CharmmPSF::getMolecule(int imol, const PropertyMap &map) const
         auto cgatomidx = molinfo.cgAtomIdx(AtomNum(atom.getNumber()));
 
         // Set the properties.
+        types.set(cgatomidx, atom.getType());
         masses.set(cgatomidx, atom.getMass() * SireUnits::g_per_mol);
         charges.set(cgatomidx, double(atom.getCharge()) * SireUnits::mod_electron);
     }
@@ -2233,7 +2612,8 @@ MolEditor CharmmPSF::getMolecule(int imol, const PropertyMap &map) const
                              AtomNum(atoms[idx2].getNumber()));
     }
 
-    return mol.setProperty(map["charge"], charges)
+    return mol.setProperty(map["atomtype"], types)
+              .setProperty(map["charge"], charges)
               .setProperty(map["mass"], masses)
               .setProperty(map["connectivity"], connectivity)
               .commit();

@@ -263,10 +263,13 @@ protected:
 private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
-    void parseParameters(const QVector<QString> &param_lines,
-            QVector<CharmmParam> &bond_params, QVector<CharmmParam> &angle_params,
-            QVector<CharmmParam> &dihedral_params, QVector<CharmmParam> &improper_params,
-            QVector<CharmmParam> &cross_params) const;
+    void parseParameters(
+        const QVector<QString> &param_lines,
+        QMultiHash<QString, CharmmParam> &bond_params,
+        QMultiHash<QString, CharmmParam> &angle_params,
+        QMultiHash<QString, CharmmParam> &dihedral_params,
+        QMultiHash<QString, CharmmParam> &improper_params,
+        QMultiHash<QString, CharmmParam> &cross_params) const;
 
     SireMol::MolStructureEditor getMolStructure(int imol,
         const SireBase::PropertyName &cutting) const;
@@ -279,13 +282,20 @@ private:
     void findBondedAtoms(int atom_idx, int mol_idx, const QHash<int, int> &bonded_atoms,
         QHash<int, int> &atom_to_mol, QSet<qint64> &atoms_in_mol) const;
 
-    int findParameters(const QVector<QString> &param_atoms,
-        const QVector<CharmmParam> &params) const;
+    QList<CharmmParam> findParameters(const QVector<QString> &search_atoms,
+        const QMultiHash<QString, CharmmParam> &params, int type) const;
 
-    SireMol::Molecule parameteriseMolecule(const SireMol::Molecule &sire_mol,
-        const QVector<CharmmParam> &bond_params, const QVector<CharmmParam> &angle_params,
-        const QVector<CharmmParam> &dihedral_params, const QVector<CharmmParam> &improper_params,
-        const QVector<CharmmParam> &cross_params, const PropertyMap &map = PropertyMap()) const;
+    QString generateKey(QVector<QString> words) const;
+
+    SireMol::Molecule parameteriseMolecule(
+        int imol,
+        const SireMol::Molecule &sire_mol,
+        const QMultiHash<QString, CharmmParam> &bond_params,
+        const QMultiHash<QString, CharmmParam> &angle_params,
+        const QMultiHash<QString, CharmmParam> &dihedral_params,
+        const QMultiHash<QString, CharmmParam> &improper_params,
+        const QMultiHash<QString, CharmmParam> &cross_params,
+        const PropertyMap &map = PropertyMap()) const;
 
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;
