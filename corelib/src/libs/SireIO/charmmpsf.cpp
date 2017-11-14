@@ -1880,6 +1880,8 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
     // Get the atom type property object.
     const auto &atom_types = sire_mol.property(map["atomtype"]).asA<AtomStringProperty>();
 
+    const auto R = InternalPotential::symbols().bond().r();
+
     // The molecule has bond connectivity information. Parameterise the bonds.
     if (sire_mol.hasProperty(map["connectivity"]))
     {
@@ -1890,15 +1892,16 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
         // Initialise the bond parameter object.
         TwoAtomFunctions bond_funcs(edit_mol);
 
-        // Get the potential object.
-        const auto R = InternalPotential::symbols().bond().r();
-
         // Loop over all of the bonds.
         for (const auto &bond : connectivity.getBonds())
         {
-            // Extract the type names of the two atoms.
-            auto atom0 = atom_types[molinfo.cgAtomIdx(bond.atom0())];
-            auto atom1 = atom_types[molinfo.cgAtomIdx(bond.atom1())];
+            // Extract the cgAtomIdx for the two atoms.
+            auto idx0 = molinfo.cgAtomIdx(bond.atom0());
+            auto idx1 = molinfo.cgAtomIdx(bond.atom1());
+
+            // Now get the type for each atom.
+            auto atom0 = atom_types[idx0];
+            auto atom1 = atom_types[idx1];
 
             // Create a vector of the atom names.
             QVector<QString> bond_atoms({atom0, atom1});
@@ -1912,7 +1915,19 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
                 throw SireError::incompatible_error(QObject::tr("Missing bond parameters "
                     "for atom types \'%1\' and \'%2\'").arg(atom0).arg(atom1), CODELOC);
             }
+
+            // Get the bond parameters.
+            auto params = matches[0].getParams();
+
+            // Create the expression for the bond function.
+            Expression bond_func = params[0] * SireMaths::pow_2( R - params[1] );
+
+            // Set the bond function parameter.
+            bond_funcs.set(idx0, idx1, bond_func);
         }
+
+        // Set the bond property.
+        edit_mol.setProperty(map["bond"], bond_funcs);
     }
 
     // Parameterise the angles.
