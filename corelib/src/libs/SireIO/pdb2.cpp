@@ -698,7 +698,7 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
     {
         QMutex mutex;
 
-        tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
+        tbb::parallel_for(tbb::blocked_range<int>(0, nmols),
                            [&](const tbb::blocked_range<int> r)
         {
             // Create local data objects.
@@ -883,7 +883,7 @@ QVector<QString> PDB2::toLines() const
 
         if (usesParallel())
         {
-            tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
                             [&](const tbb::blocked_range<int> r)
             {
                 for (int j=r.begin(); j<r.end(); ++j)
@@ -1207,7 +1207,7 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     QMutex mutex;
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0, nats),
+                    tbb::parallel_for(tbb::blocked_range<int>(0, nats),
                                     [&](const tbb::blocked_range<int> &r)
                     {
                         QStringList local_errors;
@@ -1219,9 +1219,14 @@ void PDB2::parseLines(const PropertyMap &map)
                                 lines().count(), mol_atoms[i], local_errors);
                         }
 
-                        QMutexLocker lkr(&mutex);
+                        if (not local_errors.isEmpty())
+                        {
+                            // Acquire a lock.
+                            QMutexLocker lkr(&mutex);
 
-                        parse_warnings += local_errors;
+                            // Update the global error messages.
+                            parse_warnings += local_errors;
+                        }
                     });
                 }
                 else
@@ -1542,7 +1547,7 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     QMutex mutex;
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0, nats),
+                    tbb::parallel_for(tbb::blocked_range<int>(0, nats),
                                     [&](const tbb::blocked_range<int> &r)
                     {
                         // Local data objects.
@@ -2044,7 +2049,7 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
         // Local data storage.
         QVector<PDBAtom> local_atoms(num_atoms);
 
-        tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+        tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
                         [&](const tbb::blocked_range<int> &r)
         {
             // Create local data objects.

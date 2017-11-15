@@ -1671,7 +1671,7 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
     {
         QMutex mutex;
 
-        tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
+        tbb::parallel_for(tbb::blocked_range<int>(0, nmols),
                            [&](const tbb::blocked_range<int> r)
         {
             // Create local data objects.
@@ -1854,7 +1854,7 @@ QVector<QString> Mol2::toLines() const
 
         if (usesParallel())
         {
-            tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
                             [&](const tbb::blocked_range<int> r)
             {
                 for (int j=r.begin(); j<r.end(); ++j)
@@ -1864,7 +1864,7 @@ QVector<QString> Mol2::toLines() const
                 }
             });
 
-            tbb::parallel_for( tbb::blocked_range<int>(0, num_subst),
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_subst),
                             [&](const tbb::blocked_range<int> r)
             {
                 for (int j=r.begin(); j<r.end(); ++j)
@@ -2111,7 +2111,7 @@ void Mol2::parseLines(const PropertyMap &map)
                     // Local data storage for atom objects.
                     QVector<Mol2Atom> local_atoms(num_atoms);
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+                    tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
                                     [&](const tbb::blocked_range<int> &r)
                     {
                         // Create local data objects.
@@ -2178,7 +2178,7 @@ void Mol2::parseLines(const PropertyMap &map)
                     // Local data storage for bond objects.
                     QVector<Mol2Bond> local_bonds(num_bonds);
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0, num_bonds),
+                    tbb::parallel_for(tbb::blocked_range<int>(0, num_bonds),
                                     [&](const tbb::blocked_range<int> &r)
                     {
                         // Create local data objects.
@@ -2245,7 +2245,7 @@ void Mol2::parseLines(const PropertyMap &map)
                     // Local data storage for substructure objects.
                     QVector<Mol2Substructure> local_subst(num_subst);
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0, num_subst),
+                    tbb::parallel_for(tbb::blocked_range<int>(0, num_subst),
                                     [&](const tbb::blocked_range<int> &r)
                     {
                         // Create local data objects.
@@ -2305,7 +2305,7 @@ System Mol2::startSystem(const PropertyMap &map) const
 
     if (usesParallel())
     {
-        tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
+        tbb::parallel_for(tbb::blocked_range<int>(0, nmols),
                            [&](tbb::blocked_range<int> r)
         {
             for (int i=r.begin(); i<r.end(); ++i)
@@ -2667,7 +2667,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
         QVector<Mol2Atom> local_atoms(num_atoms);
         QVector<Mol2Substructure> local_subst(num_res);
 
-        tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+        tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
                         [&](const tbb::blocked_range<int> &r)
         {
             // Create local data objects.
@@ -2691,7 +2691,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
             }
         });
 
-        tbb::parallel_for( tbb::blocked_range<int>(0, num_res),
+        tbb::parallel_for(tbb::blocked_range<int>(0, num_res),
                         [&](const tbb::blocked_range<int> &r)
         {
             // Create local data objects.
