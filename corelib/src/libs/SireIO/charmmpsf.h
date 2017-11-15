@@ -250,10 +250,15 @@ public:
     int nAtoms() const;
     int nAtoms(int i) const;
     int nBonds() const;
+    int nBonds(int i) const;
     int nAngles() const;
+    int nAngles(int i) const;
     int nDihedrals() const;
+    int nDihedrals(int i) const;
     int nImpropers() const;
+    int nImpropers(int i) const;
     int nCrossTerms() const;
+    int nCrossTerms(int i) const;
 
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
@@ -303,17 +308,32 @@ private:
     /** The bond record data (!NBOND). */
     QVector<QVector<qint64> > bonds;
 
+    /** The indices of the bonds for each molecule. */
+    QVector<QVector<qint64> > mol_bonds;
+
     /** The angle record data (!NTHETA). */
     QVector<QVector<qint64> > angles;
+
+    /** The indices of the angles for each molecule. */
+    QVector<QVector<qint64> > mol_angles;
 
     /** The dihedral record data (!NPHI). */
     QVector<QVector<qint64> > dihedrals;
 
+    /** The indices of the dihedrals for each molecule. */
+    QVector<QVector<qint64> > mol_dihedrals;
+
     /** The improper record data (!NIMPHI). */
     QVector<QVector<qint64> > impropers;
 
+    /** The indices of the impropers for each molecule. */
+    QVector<QVector<qint64> > mol_impropers;
+
     /** The cross term record data (!NCRTERM). */
     QVector<QVector<qint64> > cross_terms;
+
+    /** The indices of the cross-terms for each molecule. */
+    QVector<QVector<qint64> > mol_cross_terms;
 
     /** A hash between atom numbers from the PSF record and
         indices in the atoms vector. */

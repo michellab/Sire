@@ -33,6 +33,8 @@
 #include "SireBase/parallel.h"
 #include "SireBase/stringproperty.h"
 
+#include "SireCAS/trigfuncs.h"
+
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
 
@@ -57,6 +59,7 @@
 #include <QtMath>
 
 using namespace SireBase;
+using namespace SireCAS;
 using namespace SireIO;
 using namespace SireMM;
 using namespace SireMol;
@@ -130,8 +133,9 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmPSF &psf)
 {
     writeHeader(ds, r_psf, 1);
 
-    ds << psf.atoms << psf.bonds << psf.angles << psf.dihedrals << psf.impropers
-       << psf.cross_terms << psf.molecules << psf.num_to_idx
+    ds << psf.atoms << psf.bonds << psf.mol_bonds << psf.angles << psf.mol_angles
+       << psf.dihedrals << psf.mol_dihedrals << psf.impropers << psf.mol_impropers
+       << psf.cross_terms << psf.mol_cross_terms << psf.molecules << psf.num_to_idx
        << static_cast<const MoleculeParser&>(psf);
 
     return ds;
@@ -143,8 +147,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmPSF &psf)
 
     if (v == 1)
     {
-        ds >> psf.atoms >> psf.bonds >> psf.angles >> psf.dihedrals >> psf.impropers
-           >> psf.cross_terms >> psf.molecules >> psf.num_to_idx
+        ds >> psf.atoms >> psf.bonds >> psf.mol_bonds >> psf.angles >> psf.mol_angles
+           >> psf.dihedrals >> psf.mol_dihedrals >> psf.impropers >> psf.mol_impropers
+           >> psf.cross_terms >> psf.mol_cross_terms >> psf.molecules >> psf.num_to_idx
            >> static_cast<MoleculeParser&>(psf);
     }
     else
@@ -694,10 +699,15 @@ CharmmPSF::CharmmPSF(const CharmmPSF &other) :
     ConcreteProperty<CharmmPSF,MoleculeParser>(other),
     atoms(other.atoms),
     bonds(other.bonds),
+    mol_bonds(other.mol_bonds),
     angles(other.angles),
+    mol_angles(other.mol_angles),
     dihedrals(other.dihedrals),
+    mol_dihedrals(other.mol_dihedrals),
     impropers(other.impropers),
+    mol_impropers(other.mol_impropers),
     cross_terms(other.cross_terms),
+    mol_cross_terms(other.mol_cross_terms),
     num_to_idx(other.num_to_idx),
     molecules(other.molecules),
     parse_warnings(other.parse_warnings)
@@ -714,10 +724,15 @@ CharmmPSF& CharmmPSF::operator=(const CharmmPSF &other)
     {
         molecules = other.molecules;
         bonds = other.bonds;
+        mol_bonds = other.mol_bonds;
         angles = other.angles;
+        mol_angles = other.mol_angles;
         dihedrals = other.dihedrals;
+        mol_dihedrals = other.mol_dihedrals;
         impropers = other.impropers;
+        mol_impropers = other.mol_impropers;
         cross_terms = other.cross_terms;
+        mol_cross_terms = other.mol_cross_terms;
         num_to_idx = other.num_to_idx;
         molecules = other.molecules;
         parse_warnings = other.parse_warnings;
@@ -1114,10 +1129,22 @@ int CharmmPSF::nBonds() const
     return bonds.count();
 }
 
+/** Return the number of bonds in molecule 'i'. */
+int CharmmPSF::nBonds(int i) const
+{
+    return mol_bonds[i].count();
+}
+
 /** Return the number of angle records. */
 int CharmmPSF::nAngles() const
 {
     return angles.count();
+}
+
+/** Return the number of angles in molecule 'i'. */
+int CharmmPSF::nAngles(int i) const
+{
+    return mol_angles[i].count();
 }
 
 /** Return the number of dihedral records. */
@@ -1126,16 +1153,34 @@ int CharmmPSF::nDihedrals() const
     return dihedrals.count();
 }
 
+/** Return the number of dihedrals in molecule 'i'. */
+int CharmmPSF::nDihedrals(int i) const
+{
+    return mol_dihedrals[i].count();
+}
+
 /** Return the number of improper records. */
 int CharmmPSF::nImpropers() const
 {
     return impropers.count();
 }
 
+/** Return the number of impropers in molecule 'i'. */
+int CharmmPSF::nImpropers(int i) const
+{
+    return mol_impropers[i].count();
+}
+
 /** Return the number of cross-term records. */
 int CharmmPSF::nCrossTerms() const
 {
     return cross_terms.count();
+}
+
+/** Return the number of cross-terms in molecule 'i'. */
+int CharmmPSF::nCrossTerms(int i) const
+{
+    return mol_cross_terms[i].count();
 }
 
 /** Function that is called to assert that this object is sane. This
@@ -1880,14 +1925,18 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
     // Get the atom type property object.
     const auto &atom_types = sire_mol.property(map["atomtype"]).asA<AtomStringProperty>();
 
-    const auto R = InternalPotential::symbols().bond().r();
+    // Symbols for the various molecular potentials.
+    const auto R     = InternalPotential::symbols().bond().r();
+    const auto R_UB  = InternalPotential::symbols().ureyBradley().r();
+    const auto Theta = InternalPotential::symbols().angle().theta();
+    const auto Phi   = InternalPotential::symbols().dihedral().phi();
 
     // The molecule has bond connectivity information. Parameterise the bonds.
     if (sire_mol.hasProperty(map["connectivity"]))
     {
         // Get the atom connectivity object.
         const auto &connectivity = sire_mol.property(map["connectivity"])
-                                        .asA<ConnectivityEditor>();
+                                           .asA<ConnectivityEditor>();
 
         // Initialise the bond parameter object.
         TwoAtomFunctions bond_funcs(edit_mol);
@@ -1903,7 +1952,7 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             auto atom0 = atom_types[idx0];
             auto atom1 = atom_types[idx1];
 
-            // Create a vector of the atom names.
+            // Create a vector of the atom types.
             QVector<QString> bond_atoms({atom0, atom1});
 
             // Find the parameters for the bond.
@@ -1920,10 +1969,10 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             auto params = matches[0].getParams();
 
             // Create the expression for the bond function.
-            Expression bond_func = params[0] * SireMaths::pow_2( R - params[1] );
+            Expression func = params[0] * SireMaths::pow_2( R - params[1] );
 
             // Set the bond function parameter.
-            bond_funcs.set(idx0, idx1, bond_func);
+            bond_funcs.set(idx0, idx1, func);
         }
 
         // Set the bond property.
@@ -1931,140 +1980,200 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
     }
 
     // Parameterise the angles.
-    if (nAngles() > 0)
+    if (nAngles(imol) > 0)
     {
         // Initialise the angle parameter object.
         ThreeAtomFunctions angle_funcs(edit_mol);
 
+        // Intialise Urey-Bradley parameter object.
+        TwoAtomFunctions ub_funcs(edit_mol);
+
+        // Whether Urey-Bradley terms are present.
+        bool has_ub = false;
+
         // Loop over all of the angles.
-        for (int i=0; i<nAngles(); ++i)
+        for (int i=0; i<nAngles(imol); ++i)
         {
-            // The angle interaction is part of this molecule.
-            if (atoms[num_to_idx[angles[i][0]]].getMolIndex() == imol)
+            // Get the angle index.
+            const int idx = mol_angles[imol][i];
+
+            // Get the indices of the three atoms.
+            const int idx0 = num_to_idx[angles[idx][0]];
+            const int idx1 = num_to_idx[angles[idx][1]];
+            const int idx2 = num_to_idx[angles[idx][2]];
+
+            // Create a vector of the atom types.
+            QVector<QString> angle_atoms({atoms[idx0].getType(),
+                                          atoms[idx1].getType(),
+                                          atoms[idx2].getType()});
+
+            // Find the parameters for the angle.
+            auto matches = findParameters(angle_atoms, angle_params, 1);
+
+            // No matches!
+            if (matches.count() == 0)
             {
-                // Make sure the terminal atom is also in the molecule.
-                if (atoms[num_to_idx[angles[i][2]]].getMolIndex() == imol)
-                {
-                    // Create a vector of the atom names.
-                    QVector<QString> angle_atoms({atoms[num_to_idx[angles[i][0]]].getType(),
-                                                  atoms[num_to_idx[angles[i][1]]].getType(),
-                                                  atoms[num_to_idx[angles[i][2]]].getType()});
-
-                    // Find the parameters for the angle.
-                    auto matches = findParameters(angle_atoms, angle_params, 1);
-
-                    // No matches!
-                    if (matches.count() == 0)
-                    {
-                        throw SireError::incompatible_error(QObject::tr("Missing angle parameters "
-                            "for atom types \'%1\', \'%2\', and \'%3\'")
-                            .arg(angle_atoms[0]).arg(angle_atoms[1]).arg(angle_atoms[2]), CODELOC);
-                    }
-                }
-                else
-                {
-                    throw SireError::program_bug(QObject::tr("The atoms involved in an "
-                        "angle interaction are not in the same molecule: [ AtomNum(%1), MolIdx(%2) ] "
-                        "and [ AtomNum(%3), MolIdx(%4) ]")
-                        .arg(angles[i][0]).arg(atoms[num_to_idx[angles[i][0]]].getMolIndex())
-                        .arg(angles[i][2]).arg(atoms[num_to_idx[angles[i][2]]].getMolIndex()), CODELOC);
-                }
+                throw SireError::incompatible_error(QObject::tr("Missing angle parameters "
+                    "for atom types \'%1\', \'%2\', and \'%3\'")
+                    .arg(angle_atoms[0]).arg(angle_atoms[1]).arg(angle_atoms[2]), CODELOC);
             }
+
+            // Get the angle parameters.
+            auto params = matches[0].getParams();
+
+            // Create the expression for the angle function.
+            Expression func = params[0] * SireMaths::pow_2( Theta - params[1] );
+
+            // Set the angle function parameter.
+            angle_funcs.set(AtomNum(atoms[idx0].getNumber()),
+                            AtomNum(atoms[idx1].getNumber()),
+                            AtomNum(atoms[idx2].getNumber()),
+                            func);
+
+            // Add a Urey-Bradley bond function.
+            if (params.count() > 2)
+            {
+                func = params[2] * SireMaths::pow_2( R_UB - params[3] );
+
+                // Set the Urey-Bradley function parameter.
+                ub_funcs.set(AtomNum(atoms[idx0].getNumber()),
+                             AtomNum(atoms[idx1].getNumber()),
+                             func);
+
+                // Flag that we've found Urey-Bradley parameters.
+                has_ub = true;
+            }
+        }
+
+        // Set the angle property...
+        edit_mol.setProperty(map["angle"], angle_funcs);
+
+        // ...and Urey-Bradley, if present.
+        if (has_ub)
+        {
+            edit_mol.setProperty(map["urey-bradley"], ub_funcs);
         }
     }
 
     // Parameterise the dihedrals.
-    if (nDihedrals() > 0)
+    if (nDihedrals(imol) > 0)
     {
         // Initialise the dihedral parameter object.
         FourAtomFunctions dihedral_funcs(edit_mol);
 
         // Loop over all of the dihedrals.
-        for (int i=0; i<nDihedrals(); ++i)
+        for (int i=0; i<nDihedrals(imol); ++i)
         {
-            // The dihedral interaction is part of this molecule.
-            if (atoms[num_to_idx[dihedrals[i][0]]].getMolIndex() == imol)
+            // Get the dihedral index.
+            const int idx = mol_dihedrals[imol][i];
+
+            // Get the indices of the four atoms.
+            const int idx0 = num_to_idx[dihedrals[idx][0]];
+            const int idx1 = num_to_idx[dihedrals[idx][1]];
+            const int idx2 = num_to_idx[dihedrals[idx][2]];
+            const int idx3 = num_to_idx[dihedrals[idx][3]];
+
+            // Create a vector of the atom types.
+            QVector<QString> dihedral_atoms({atoms[idx0].getType(),
+                                             atoms[idx1].getType(),
+                                             atoms[idx2].getType(),
+                                             atoms[idx3].getType()});
+
+            // Find the parameters for the dihedral.
+            auto matches = findParameters(dihedral_atoms, dihedral_params, 2);
+
+            // No matches!
+            if (matches.count() == 0)
             {
-                // Make sure the terminal atom is also in the molecule.
-                if (atoms[num_to_idx[dihedrals[i][3]]].getMolIndex() == imol)
-                {
-                    // Create a vector of the atom names.
-                    QVector<QString> dihedral_atoms({atoms[num_to_idx[dihedrals[i][0]]].getType(),
-                                                     atoms[num_to_idx[dihedrals[i][1]]].getType(),
-                                                     atoms[num_to_idx[dihedrals[i][2]]].getType(),
-                                                     atoms[num_to_idx[dihedrals[i][3]]].getType()});
-
-                    // Find the parameters for the dihedral.
-                    auto matches = findParameters(dihedral_atoms, dihedral_params, 2);
-
-                    // No matches!
-                    if (matches.count() == 0)
-                    {
-                        throw SireError::incompatible_error(QObject::tr("Missing dihedral parameters "
-                            "for atom types \'%1\', \'%2\', \'%3\', and \'%4\'")
-                            .arg(dihedral_atoms[0]).arg(dihedral_atoms[1]).arg(dihedral_atoms[2])
-                            .arg(dihedral_atoms[3]), CODELOC);
-                    }
-                }
-                else
-                {
-                    throw SireError::program_bug(QObject::tr("The atoms involved in a "
-                        "dihedral interaction are not in the same molecule: [ AtomNum(%1), MolIdx(%2) ] "
-                        "and [ AtomNum(%3), MolIdx(%4) ]")
-                        .arg(dihedrals[i][0]).arg(atoms[num_to_idx[dihedrals[i][0]]].getMolIndex())
-                        .arg(dihedrals[i][2]).arg(atoms[num_to_idx[dihedrals[i][3]]].getMolIndex()), CODELOC);
-                }
+                throw SireError::incompatible_error(QObject::tr("Missing dihedral parameters "
+                    "for atom types \'%1\', \'%2\', \'%3\', and \'%4\'")
+                    .arg(dihedral_atoms[0]).arg(dihedral_atoms[1]).arg(dihedral_atoms[2])
+                    .arg(dihedral_atoms[3]), CODELOC);
             }
+
+            // Intialise the function object.
+            Expression func;
+
+            // Loop over all matches.
+            // Potentially mutliple multiplicity values.
+            for (const auto &match : matches)
+            {
+                // Get the dihedral parameters.
+                auto params = match.getParams();
+
+                // Update the function.
+                func += params[0] * (1 + Cos(( params[1] * Phi ) - params[2] ));
+            }
+
+            // Set the dihedral function parameter.
+            dihedral_funcs.set(AtomNum(atoms[idx0].getNumber()),
+                               AtomNum(atoms[idx1].getNumber()),
+                               AtomNum(atoms[idx2].getNumber()),
+                               AtomNum(atoms[idx3].getNumber()),
+                               func);
         }
+
+        // Set the dihedral property.
+        edit_mol.setProperty(map["dihedral"], dihedral_funcs);
     }
 
     // Parameterise the impropers.
-    if (nImpropers() > 0)
+    if (nImpropers(imol) > 0)
     {
         // Initialise the improper parameter object.
         FourAtomFunctions improper_funcs(edit_mol);
 
-        // Loop over all of the dihedrals.
-        for (int i=0; i<nImpropers(); ++i)
+        // Loop over all of the impropers.
+        for (int i=0; i<nImpropers(imol); ++i)
         {
-            // The improper interaction is part of this molecule.
-            if (atoms[num_to_idx[impropers[i][0]]].getMolIndex() == imol)
+            // Get the improper index.
+            const int idx = mol_impropers[imol][i];
+
+            // Get the indices of the four atoms.
+            const int idx0 = num_to_idx[impropers[idx][0]];
+            const int idx1 = num_to_idx[impropers[idx][1]];
+            const int idx2 = num_to_idx[impropers[idx][2]];
+            const int idx3 = num_to_idx[impropers[idx][3]];
+
+            // Create a vector of the atom types.
+            QVector<QString> improper_atoms({atoms[idx0].getType(),
+                                             atoms[idx1].getType(),
+                                             atoms[idx2].getType(),
+                                             atoms[idx3].getType()});
+
+            // Find the parameters for the improper.
+            auto matches = findParameters(improper_atoms, improper_params, 3);
+
+            // No matches!
+            if (matches.count() == 0)
             {
-                // Make sure the terminal atom is also in the molecule.
-                if (atoms[num_to_idx[impropers[i][3]]].getMolIndex() == imol)
-                {
-                    // Create a vector of the atom names.
-                    QVector<QString> improper_atoms({atoms[num_to_idx[impropers[i][0]]].getType(),
-                                                     atoms[num_to_idx[impropers[i][1]]].getType(),
-                                                     atoms[num_to_idx[impropers[i][2]]].getType(),
-                                                     atoms[num_to_idx[impropers[i][3]]].getType()});
-
-                    // Find the parameters for the improper.
-                    auto matches = findParameters(improper_atoms, improper_params, 3);
-
-                    // No matches!
-                    if (matches.count() == 0)
-                    {
-                        throw SireError::incompatible_error(QObject::tr("Missing improper parameters "
-                            "for atom types \'%1\', \'%2\', \'%3\', and \'%4\'")
-                            .arg(improper_atoms[0]).arg(improper_atoms[1]).arg(improper_atoms[2])
-                            .arg(improper_atoms[3]), CODELOC);
-                    }
-                }
-                else
-                {
-                    throw SireError::program_bug(QObject::tr("The atoms involved in an "
-                        "improper interaction are not in the same molecule: [ AtomNum(%1), MolIdx(%2) ] "
-                        "and [ AtomNum(%3), MolIdx(%4) ]")
-                        .arg(impropers[i][0]).arg(atoms[num_to_idx[impropers[i][0]]].getMolIndex())
-                        .arg(impropers[i][2]).arg(atoms[num_to_idx[impropers[i][3]]].getMolIndex()), CODELOC);
-                }
+                throw SireError::incompatible_error(QObject::tr("Missing improper parameters "
+                    "for atom types \'%1\', \'%2\', \'%3\', and \'%4\'")
+                    .arg(improper_atoms[0]).arg(improper_atoms[1]).arg(improper_atoms[2])
+                    .arg(improper_atoms[3]), CODELOC);
             }
+
+            // Get the improper parameters.
+            auto params = matches[0].getParams();
+
+            // Intialise the function object.
+            Expression func = params[0] * SireMaths::pow_2( Phi - params[1] );
+
+            // Set the improper function parameter.
+            improper_funcs.set(AtomNum(atoms[idx0].getNumber()),
+                               AtomNum(atoms[idx1].getNumber()),
+                               AtomNum(atoms[idx2].getNumber()),
+                               AtomNum(atoms[idx3].getNumber()),
+                               func);
+
         }
+
+        // Set the improper property.
+        edit_mol.setProperty(map["improper"], improper_funcs);
     }
 
     // Parameterise the cross-terms.
-    if (nCrossTerms() > 0)
+    if (nCrossTerms(imol) > 0)
     {
         // TODO: Work out what to do here...
     }
@@ -2360,7 +2469,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     QMultiHash<QString, CharmmParam> improper_params;
     QMultiHash<QString, CharmmParam> cross_params;
 
-    // Parse the parameter file.
+    // Parse and validate the parameter file.
     parseParameters(param_lines, bond_params, angle_params,
         dihedral_params, improper_params, cross_params);
 
@@ -2585,38 +2694,13 @@ MolEditor CharmmPSF::getMolecule(int imol, const PropertyMap &map) const
         charges.set(cgatomidx, double(atom.getCharge()) * SireUnits::mod_electron);
     }
 
-    // Now work out which bonds are part of this molecule.
-
-    // The indices of the bonds in the molecule.
-    QSet<int> mol_bonds;
-
-    // Loop over all of the bonds.
-    for (int i=0; i<nBonds(); ++i)
-    {
-        // The bond is part of this molecule.
-        if (atoms[num_to_idx[bonds[i][0]]].getMolIndex() == imol)
-        {
-            // Make sure the terminal atom is also in the molecule.
-            if (atoms[num_to_idx[bonds[i][1]]].getMolIndex() == imol)
-            {
-                mol_bonds.insert(i);
-            }
-            else
-            {
-                throw SireError::program_bug(QObject::tr("The bonded atoms "
-                    "are not in the same atom: [ AtomNum(%1), MolIdx(%2) ] "
-                    "and [ AtomNum(%3), MolIdx(%4) ]")
-                    .arg(bonds[i][0]).arg(atoms[num_to_idx[bonds[i][0]]].getMolIndex())
-                    .arg(bonds[i][1]).arg(atoms[num_to_idx[bonds[i][1]]].getMolIndex()), CODELOC);
-            }
-        }
-    }
+    // Now create the connectivity object for the molecular system. */
 
     // Connectivity object for bonded atoms.
     ConnectivityEditor connectivity(molinfo);
 
     // Loop over all bonds in the molecule.
-    for (const auto &bond : mol_bonds)
+    for (const auto &bond : mol_bonds[imol])
     {
         // Get the atom indices for the two bonds.
         int idx1 = num_to_idx[bonds[bond][0]];
@@ -2634,6 +2718,7 @@ MolEditor CharmmPSF::getMolecule(int imol, const PropertyMap &map) const
               .commit();
 }
 
+/** Internal function to break the parsed PSF record data into molecules. */
 void CharmmPSF::findMolecules()
 {
     // Clear any existing molecule data.
@@ -2662,6 +2747,10 @@ void CharmmPSF::findMolecules()
     num_to_idx.clear();
     for(int i=0; i<nAtoms(); ++i)
         num_to_idx.insert(atoms[i].getNumber(), i);
+
+    /*************************************************/
+    /* Work out which atoms belong to this molecule. */
+    /*************************************************/
 
     // Loop over all atoms by index.
     for (int i = 0; i<nAtoms(); ++i)
@@ -2698,6 +2787,144 @@ void CharmmPSF::findMolecules()
             // Add the sorted atom indices.
             qSort(mol_atoms);
             molecules.append(mol_atoms);
+        }
+    }
+
+    // Store the number of molecules.
+    const auto num_mols = nMolecules();
+
+    /*************************************************/
+    /* Work out which bonds belong to this molecule. */
+    /*************************************************/
+
+    mol_bonds.resize(num_mols);
+
+    // Loop over all of the bonds.
+    for (int i=0; i<nBonds(); ++i)
+    {
+        // Get the molecule index.
+        const int molidx = atoms[num_to_idx[bonds[i][0]]].getMolIndex();
+
+        // Make sure the terminal atom is also in the molecule.
+        if (atoms[num_to_idx[bonds[i][1]]].getMolIndex() == molidx)
+        {
+            mol_bonds[molidx].append(i);
+        }
+        else
+        {
+            throw SireError::program_bug(QObject::tr("The bonded atoms "
+                "are not in the same atom: [ AtomNum(%1), MolIdx(%2) ] "
+                "and [ AtomNum(%3), MolIdx(%4) ]")
+                .arg(bonds[i][0]).arg(atoms[num_to_idx[bonds[i][0]]].getMolIndex())
+                .arg(bonds[i][1]).arg(atoms[num_to_idx[bonds[i][1]]].getMolIndex()), CODELOC);
+        }
+    }
+
+    /***************************************************/
+    /*  Work out which angles belong to this molecule. */
+    /***************************************************/
+
+    mol_angles.resize(num_mols);
+
+    // Loop over all of the angles.
+    for (int i=0; i<nAngles(); ++i)
+    {
+        // Get the molecule index.
+        const int molidx = atoms[num_to_idx[angles[i][0]]].getMolIndex();
+
+        // Make sure the terminal atom is also in the molecule.
+        if (atoms[num_to_idx[angles[i][2]]].getMolIndex() == molidx)
+        {
+            mol_angles[molidx].append(i);
+        }
+        else
+        {
+            throw SireError::program_bug(QObject::tr("The atoms involved in an "
+                "angle interaction are not in the same molecule: [ AtomNum(%1), MolIdx(%2) ] "
+                "and [ AtomNum(%3), MolIdx(%4) ]")
+                .arg(angles[i][0]).arg(atoms[num_to_idx[angles[i][0]]].getMolIndex())
+                .arg(angles[i][2]).arg(atoms[num_to_idx[angles[i][2]]].getMolIndex()), CODELOC);
+        }
+    }
+
+    /*****************************************************/
+    /* Work out which dihedrals belong to this molecule. */
+    /*****************************************************/
+
+    mol_dihedrals.resize(num_mols);
+
+    // Loop over all of the dihedrals.
+    for (int i=0; i<nDihedrals(); ++i)
+    {
+        // Get the molecule index.
+        int molidx = atoms[num_to_idx[dihedrals[i][0]]].getMolIndex();
+
+        // Make sure the terminal atom is also in the molecule.
+        if (atoms[num_to_idx[dihedrals[i][3]]].getMolIndex() == molidx)
+        {
+            mol_dihedrals[molidx].append(i);
+        }
+        else
+        {
+            throw SireError::program_bug(QObject::tr("The atoms involved in a "
+                "dihedral interaction are not in the same molecule: [ AtomNum(%1), MolIdx(%2) ] "
+                "and [ AtomNum(%3), MolIdx(%4) ]")
+                .arg(dihedrals[i][0]).arg(atoms[num_to_idx[dihedrals[i][0]]].getMolIndex())
+                .arg(dihedrals[i][2]).arg(atoms[num_to_idx[dihedrals[i][3]]].getMolIndex()), CODELOC);
+        }
+    }
+
+    /*****************************************************/
+    /* Work out which impropers belong to this molecule. */
+    /*****************************************************/
+
+    mol_impropers.resize(num_mols);
+
+    // Loop over all of the impropers.
+    for (int i=0; i<nImpropers(); ++i)
+    {
+        // Get the molecule index.
+        int molidx = atoms[num_to_idx[impropers[i][0]]].getMolIndex();
+
+        // Make sure the terminal atom is also in the molecule.
+        if (atoms[num_to_idx[impropers[i][3]]].getMolIndex() == molidx)
+        {
+            mol_impropers[molidx].append(i);
+        }
+        else
+        {
+            throw SireError::program_bug(QObject::tr("The atoms involved in an "
+                "improper interaction are not in the same molecule: [ AtomNum(%1), MolIdx(%2) ] "
+                "and [ AtomNum(%3), MolIdx(%4) ]")
+                .arg(impropers[i][0]).arg(atoms[num_to_idx[impropers[i][0]]].getMolIndex())
+                .arg(impropers[i][2]).arg(atoms[num_to_idx[impropers[i][3]]].getMolIndex()), CODELOC);
+        }
+    }
+
+    /*******************************************************/
+    /* Work out which cross-terms belong to this molecule. */
+    /*******************************************************/
+
+    mol_cross_terms.resize(num_mols);
+
+    // Loop over all of the cross-terms.
+    for (int i=0; i<nCrossTerms(); ++i)
+    {
+        // Get the molecule index.
+        int molidx = atoms[num_to_idx[cross_terms[i][0]]].getMolIndex();
+
+        // Make sure the terminal atom is also in the molecule.
+        if (atoms[num_to_idx[cross_terms[i][3]]].getMolIndex() == molidx)
+        {
+            mol_cross_terms[molidx].append(i);
+        }
+        else
+        {
+            throw SireError::program_bug(QObject::tr("The atoms involved in a "
+                "cross term are not in the same molecule: [ AtomNum(%1), MolIdx(%2) ] "
+                "and [ AtomNum(%3), MolIdx(%4) ]")
+                .arg(cross_terms[i][0]).arg(atoms[num_to_idx[cross_terms[i][0]]].getMolIndex())
+                .arg(cross_terms[i][2]).arg(atoms[num_to_idx[cross_terms[i][3]]].getMolIndex()), CODELOC);
         }
     }
 }
