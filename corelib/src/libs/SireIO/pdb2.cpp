@@ -345,13 +345,13 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
     }
 
     // Extract the occupancy.
-    if (atom.hasProperty("occupancy"))
+    if (atom.hasProperty(map["occupancy"]))
     {
         occupancy = atom.property<double>(map["occupancy"]);
     }
 
     // Extract the temperature factor.
-    if (atom.hasProperty("beta-factor"))
+    if (atom.hasProperty(map["beta-factor"]))
     {
         temperature = atom.property<double>(map["beta-factor"]);
     }
@@ -368,7 +368,7 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
     }
 
     // Extract the atomic charge.
-    if (atom.hasProperty("formal-charge"))
+    if (atom.hasProperty(map["formal-charge"]))
     {
         // TODO: This doesn't seem to be working in all cases.
         charge = atom.property<SireUnits::Dimension::Charge>(map["formal-charge"]).value();
