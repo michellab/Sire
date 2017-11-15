@@ -252,15 +252,36 @@ PSFAtom::PSFAtom(const QString &line, int index, QStringList &errors) :
 }
 
 /** Constructor. */
-PSFAtom::PSFAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
+PSFAtom::PSFAtom(const SireMol::Atom &atom, const QString &segment,
+    QStringList &errors, const PropertyMap &map) :
     index(0),
     mol_idx(0),
-    number(0),
+    number(atom.number().value()),
+    segment(segment),
     res_num(0),
+    name(atom.name().value().toUpper()),
     type("X"),
     charge(0),
     mass(0)
 {
+    // The atom is within a residue.
+    if (atom.isWithinResidue())
+    {
+        res_name = atom.residue().name().value();
+        res_num  = atom.residue().number().value();
+    }
+
+    // Extract the atomic charge.
+    if (atom.hasProperty("charge"))
+    {
+        charge = atom.property<SireUnits::Dimension::Charge>(map["charge"]).value();
+    }
+
+    // Extract the mass.
+    if (atom.hasProperty(map["mass"]))
+    {
+        mass = atom.property<double>(map["mass"]);
+    }
 }
 
 /** Generate a PSF record from the atom data. */
@@ -691,7 +712,84 @@ CharmmPSF::CharmmPSF(const QStringList &lines, const PropertyMap &map)
 CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
      : ConcreteProperty<CharmmPSF,MoleculeParser>(map)
 {
-    //this->operator=(parsed);
+    // Get the MolNums of each molecule in the System - this returns the
+    // numbers in MolIdx order.
+    const QVector<MolNum> molnums = system.getMoleculeNumbers().toVector();
+
+    // Store the number of molecules.
+    const int nmols = molnums.count();
+
+    // No molecules in the system.
+    if (nmols == 0)
+    {
+        this->operator=(CharmmPSF());
+        return;
+    }
+
+    // The list of lines.
+    QStringList lines;
+
+    // Generate the header.
+    // Add header information.
+    // TODO: Add BioSimSpace version info.
+    lines.append("PSF");
+    lines.append("");
+    lines.append("       2 !NTITLE");
+    lines.append(QString(" REMARKS DATE:%1    created by BioSimSpace (v)")
+         .arg(QDateTime::currentDateTime().toString("dd-MMM-yy  hh:mm:ss")));
+    lines.append("");
+
+    // Lines for different PDB data records (one for each molecule).
+    QVector<QVector<QString> > atom_lines(nmols);
+
+    if (usesParallel())
+    {
+        QMutex mutex;
+
+        tbb::parallel_for(tbb::blocked_range<int>(0, nmols),
+                           [&](const tbb::blocked_range<int> r)
+        {
+            // Create local data objects.
+            QVector<PSFAtom> local_atoms;
+            QVector<QVector<qint64> > local_bonds;
+            QVector<QVector<qint64> > local_angles;
+            QVector<QVector<qint64> > local_dihedrals;
+            QVector<QVector<qint64> > local_impropers;
+            QStringList local_errors;
+
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                // Parse the molecular system.
+                parseMolecule(i, system[molnums[i]].molecule(), local_atoms, local_bonds,
+                    local_angles, local_dihedrals, local_impropers, local_errors, map);
+            }
+
+            // Acquire a lock.
+            QMutexLocker lkr(&mutex);
+
+            // Update global data.
+            parse_warnings += local_errors;
+            atoms          += local_atoms;
+            bonds          += local_bonds;
+            angles         += local_angles;
+            dihedrals      += local_dihedrals;
+            impropers      += local_dihedrals;
+        });
+    }
+    else
+    {
+        for (int i=0; i<nmols; ++i)
+        {
+            // Parse the molecular system.
+            parseMolecule(i, system[molnums[i]].molecule(), atoms, bonds,
+                angles, dihedrals, impropers, parse_warnings, map);
+        }
+    }
+
+    // Reparse the lines as a self-consistency check.
+    CharmmPSF parsed(lines, map);
+
+    this->operator=(parsed);
 }
 
 /** Copy constructor */
@@ -877,7 +975,7 @@ QVector<QString> CharmmPSF::toLines() const
 
         if (usesParallel())
         {
-            tbb::parallel_for( tbb::blocked_range<int>(0, num_records),
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_records),
                             [&](const tbb::blocked_range<int> &r)
             {
                 for (int i=r.begin(); i<r.end(); ++i)
@@ -911,7 +1009,7 @@ QVector<QString> CharmmPSF::toLines() const
 
         if (usesParallel())
         {
-            tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
                             [&](const tbb::blocked_range<int> &r)
             {
                 for (int i=r.begin(); i<r.end(); ++i)
@@ -945,7 +1043,7 @@ QVector<QString> CharmmPSF::toLines() const
 
         if (usesParallel())
         {
-            tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
                             [&](const tbb::blocked_range<int> &r)
             {
                 for (int i=r.begin(); i<r.end(); ++i)
@@ -979,7 +1077,7 @@ QVector<QString> CharmmPSF::toLines() const
 
         if (usesParallel())
         {
-            tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
                             [&](const tbb::blocked_range<int> &r)
             {
                 for (int i=r.begin(); i<r.end(); ++i)
@@ -1013,7 +1111,7 @@ QVector<QString> CharmmPSF::toLines() const
 
         if (usesParallel())
         {
-            tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
                             [&](const tbb::blocked_range<int> &r)
             {
                 for (int i=r.begin(); i<r.end(); ++i)
@@ -1047,7 +1145,7 @@ QVector<QString> CharmmPSF::toLines() const
 
         if (usesParallel())
         {
-            tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
                             [&](const tbb::blocked_range<int> &r)
             {
                 for (int i=r.begin(); i<r.end(); ++i)
@@ -1288,7 +1386,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
                 QMutex mutex;
 
-                tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+                tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
                                 [&](const tbb::blocked_range<int> &r)
                 {
                     // Create local data objects.
@@ -1353,7 +1451,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
             {
                 QMutex mutex;
 
-                tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
                                 [&](const tbb::blocked_range<int> &r)
                 {
                     // Create local data objects.
@@ -1420,7 +1518,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
             {
                 QMutex mutex;
 
-                tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
                                 [&](const tbb::blocked_range<int> &r)
                 {
                     // Create local data objects.
@@ -1487,7 +1585,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
             {
                 QMutex mutex;
 
-                tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
                                 [&](const tbb::blocked_range<int> &r)
                 {
                     // Create local data objects.
@@ -1554,7 +1652,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
             {
                 QMutex mutex;
 
-                tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
                                 [&](const tbb::blocked_range<int> &r)
                 {
                     // Create local data objects.
@@ -1621,7 +1719,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
             {
                 QMutex mutex;
 
-                tbb::parallel_for( tbb::blocked_range<int>(0, num_lines),
+                tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
                                 [&](const tbb::blocked_range<int> &r)
                 {
                     // Create local data objects.
@@ -2181,6 +2279,105 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
     return edit_mol.commit();
 }
 
+/** Internal function to generate CHARMM PSF record data from a Sire molecule
+
+    @param imol
+        The molecule index.
+
+    @param sire_mol
+        A reference to the Sire molecule.
+
+    @param local_atoms
+        The PSFAtom vector local to the molecule.
+
+    @param local_bonds
+        The bond records vector local to the molecule.
+
+    @param local_angles
+        The angle records vector local to the molecule.
+
+    @param local_dihedrals
+        The dihedral records vector local to the molecule.
+
+    @param local_impropers
+        The improper records vector local to the molecule.
+ */
+void CharmmPSF::parseMolecule(
+        int imol,
+        const SireMol::Molecule &sire_mol,
+        QVector<PSFAtom> &local_atoms,
+        QVector<QVector<qint64> > &local_bonds,
+        QVector<QVector<qint64> > &local_angles,
+        QVector<QVector<qint64> > &local_dihedrals,
+        QVector<QVector<qint64> > &local_impropers,
+        QStringList &local_errors,
+        const PropertyMap &map)
+{
+    // Store the number of atoms in the molecule.
+    int num_atoms = sire_mol.nAtoms();
+
+    // Early exit.
+    if (num_atoms == 0) return;
+
+    // Extract the molecule data.
+    const auto moldata = sire_mol.data();
+
+    // Resize the atoms vector.
+    local_atoms.resize(num_atoms);
+
+    // Get the molecule name (used for a "segment" ID in the PSF file).
+    QString segment = QString("SEG%1").arg(imol+1);
+    if (sire_mol.hasProperty(map["mol-name"]))
+    {
+        // Extract the molecule name.
+        segment = sire_mol.property(map["mol-name"]).toString().simplified().toUpper();
+    }
+
+    if (usesParallel())
+    {
+        QMutex mutex;
+
+        tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
+                           [&](const tbb::blocked_range<int> r)
+        {
+            // Create local data objects.
+            QStringList local_errors;
+
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                // Parse atom data.
+                local_atoms[i] = PSFAtom(sire_mol.atom(AtomIdx(i)), segment, local_errors, map);
+            }
+
+            if (not local_errors.isEmpty())
+            {
+                // Acquire a lock.
+                QMutexLocker lkr(&mutex);
+
+                // Update global error data.
+                parse_warnings += local_errors;
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<num_atoms; ++i)
+        {
+            // Parse atom data.
+            atoms += PSFAtom(sire_mol.atom(AtomIdx(i)), segment, local_errors, map);
+        }
+    }
+
+    bool has_bonds, has_ubs, has_angles, has_dihedrals, has_impropers;
+
+    // Get the required properties.
+    const auto bonds = getProperty<TwoAtomFunctions>(map["bond"], moldata, &has_bonds);
+    const auto ub_bonds = getProperty<TwoAtomFunctions>(map["urey-bradley"], moldata, &has_ubs);
+    const auto angles = getProperty<ThreeAtomFunctions>(map["angle"], moldata, &has_angles);
+    const auto dihedrals = getProperty<FourAtomFunctions>(map["dihedral"], moldata, &has_dihedrals);
+    const auto impropers = getProperty<FourAtomFunctions>(map["improper"], moldata, &has_impropers);
+}
+
 /** Find the index of the parameters associated with the 'search_atoms'.
         @param search_atoms
             The list of atoms to parameterise.
@@ -2671,6 +2868,9 @@ MolEditor CharmmPSF::getMolecule(int imol, const PropertyMap &map) const
     // First, construct the layout of the molecule (sorting of atoms into residues and cutgroups).
     auto mol = this->getMolStructure(imol, map["cutting"]).commit().edit();
 
+    // Set the molecule name.
+    mol.setProperty(map["mol-name"], StringProperty(atoms[molecules[imol][0]].getSegment()));
+
     // Get the info object that can map between AtomNum to AtomIdx etc.
     const auto molinfo = mol.info();
 
@@ -2946,4 +3146,24 @@ void CharmmPSF::findBondedAtoms(int atom_num, int mol_idx, const QHash<int, int>
             findBondedAtoms(bonded_atom, mol_idx, bonded_atoms, atom_to_mol, atoms_in_mol);
         }
     }
+}
+
+/** Internal function used to grab the property, catching errors and signalling if
+    the correct property has been found */
+template<class T>
+T CharmmPSF::getProperty(const PropertyName &prop, const MoleculeData &moldata, bool *found)
+{
+    if (moldata.hasProperty(prop))
+    {
+        const Property &p = moldata.property(prop);
+
+        if (p.isA<T>())
+        {
+            *found = true;
+            return p.asA<T>();
+        }
+    }
+
+    *found = false;
+    return T();
 }

@@ -44,6 +44,7 @@ namespace SireMol
 {
 class Atom;
 class MolEditor;
+class MoleculeData;
 class MoleculeInfoData;
 class MoleculeView;
 class Residue;
@@ -80,7 +81,8 @@ public:
     PSFAtom(const QString &line, int index, QStringList &errors);
 
     /** Constructor. */
-    PSFAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors);
+    PSFAtom(const SireMol::Atom &atom, const QString &segment,
+        QStringList &errors, const PropertyMap &map);
 
     /** Generate a PSD record from the atom data. */
     QString toPSFRecord() const;
@@ -292,6 +294,9 @@ private:
 
     QString generateKey(QVector<QString> words) const;
 
+    template<class T>
+    T getProperty(const SireBase::PropertyName &prop, const SireMol::MoleculeData &moldata, bool *found);
+
     SireMol::Molecule parameteriseMolecule(
         int imol,
         const SireMol::Molecule &sire_mol,
@@ -301,6 +306,17 @@ private:
         const QMultiHash<QString, CharmmParam> &improper_params,
         const QMultiHash<QString, CharmmParam> &cross_params,
         const PropertyMap &map = PropertyMap()) const;
+
+    void parseMolecule(
+        int imol,
+        const SireMol::Molecule &sire_mol,
+        QVector<PSFAtom> &local_atoms,
+        QVector<QVector<qint64> > &local_bonds,
+        QVector<QVector<qint64> > &local_angles,
+        QVector<QVector<qint64> > &local_dihedrals,
+        QVector<QVector<qint64> > &local_impropers,
+        QStringList &local_errors,
+        const PropertyMap &map);
 
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;
