@@ -90,7 +90,8 @@ public:
     Mol2Atom(const QString &line, QStringList &errors);
 
     /** Constructor. */
-    Mol2Atom(const SireMol::Atom &atom, QStringList &errors, bool is_idx = false);
+    Mol2Atom(const SireMol::Atom &atom, const PropertyMap &map,
+        QStringList &errors, bool is_idx = false);
 
     /** Generate a Mol2 record from the atom data. */
     QString toMol2Record() const;
@@ -228,7 +229,7 @@ public:
         int &num_records, int imol = -1);
 
     /** Constructor (from a Sire Molecule). */
-    Mol2Molecule(const SireMol::Molecule &mol,
+    Mol2Molecule(const SireMol::Molecule &mol, const PropertyMap &map,
         QStringList &errors, int imol = -1);
 
     /** Generate a Mol2 record from the molecule data. */
@@ -365,7 +366,8 @@ public:
     Mol2Substructure(const QString &line, QStringList &errors);
 
     /** Constructor. */
-    Mol2Substructure(const SireMol::Residue &res, QStringList &errors, bool is_idx = false);
+    Mol2Substructure(const SireMol::Residue &res, const PropertyMap &map,
+        QStringList &errors, bool is_idx = false);
 
     /** Generate a Mol2 record from the feature data. */
     QString toMol2Record() const;

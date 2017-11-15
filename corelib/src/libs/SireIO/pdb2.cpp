@@ -304,7 +304,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
     @param errors
         An array of error messages.
  */
-PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
+PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map, QStringList &errors) :
     serial(atom.number().value()),
     name(atom.name().value().toUpper()),
     occupancy(1.0),
@@ -315,7 +315,7 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     is_ter(is_ter)
 {
     // The atom must have atomic coordinates to be valid.
-    if (not atom.hasProperty("coordinates"))
+    if (not atom.hasProperty(map["coordinates"]))
     {
         errors.append(QObject::tr("The atom does not have coordinates!"));
 
@@ -323,7 +323,7 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     }
 
     // Extract the atomic coordinates.
-    coord = atom.property<SireMaths::Vector>("coordinates");
+    coord = atom.property<SireMaths::Vector>(map["coordinates"]);
 
     // The atom is within a residue.
     if (atom.isWithinResidue())
@@ -333,7 +333,7 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
 
         // Optional insertion code property.
         if (atom.residue().hasProperty("insert-code"))
-            insert_code = atom.residue().property<QString>("insert-code")[0];
+            insert_code = atom.residue().property<QString>(map["insert-code"])[0];
     }
 
     // The atom is within a chain.
@@ -347,19 +347,19 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     // Extract the occupancy.
     if (atom.hasProperty("occupancy"))
     {
-        occupancy = atom.property<double>("occupancy");
+        occupancy = atom.property<double>(map["occupancy"]);
     }
 
     // Extract the temperature factor.
     if (atom.hasProperty("beta-factor"))
     {
-        temperature = atom.property<double>("beta-factor");
+        temperature = atom.property<double>(map["beta-factor"]);
     }
 
     // Extract the element name.
-    if (atom.hasProperty("element"))
+    if (atom.hasProperty(map["element"]))
     {
-        element = atom.property<Element>("element").symbol()[0];
+        element = atom.property<Element>(map["element"]).symbol()[0];
     }
     // Otherwise, try to guess from the atom name.
     else
@@ -371,14 +371,14 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     if (atom.hasProperty("formal-charge"))
     {
         // TODO: This doesn't seem to be working in all cases.
-        charge = atom.property<SireUnits::Dimension::Charge>("formal-charge").value();
+        charge = atom.property<SireUnits::Dimension::Charge>(map["formal-charge"]).value();
         charge /= SireUnits::mod_electron;
     }
 
     // Determine whether this is a HETATM.
-    if (atom.hasProperty("is-het"))
+    if (atom.hasProperty(map["is-het"]))
     {
-        if (atom.property<QString>("is-het") == "True")
+        if (atom.property<QString>(map["is-het"]) == "True")
             is_het = true;
     }
 }
@@ -2054,7 +2054,7 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
             // and generate a PDB data record.
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                local_atoms[i] = PDBAtom(sire_mol.atom(AtomIdx(i)), is_ter[i], local_errors);
+                local_atoms[i] = PDBAtom(sire_mol.atom(AtomIdx(i)), is_ter[i], map, local_errors);
                 atom_lines[i] = local_atoms[i].toPDBRecord();
             }
 
@@ -2109,7 +2109,7 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
         for (int i=0; i<num_atoms; ++i)
         {
             // Initalise a PDBAtom.
-            PDBAtom atom(sire_mol.atom(AtomIdx(i)), is_ter[i], errors);
+            PDBAtom atom(sire_mol.atom(AtomIdx(i)), is_ter[i], map, errors);
 
             // Generate a PDB atom data record.
             atom_lines[iline] = atom.toPDBRecord();
