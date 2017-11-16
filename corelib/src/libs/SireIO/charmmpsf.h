@@ -50,6 +50,13 @@ class MoleculeView;
 class Residue;
 }
 
+namespace SireMM
+{
+class TwoAtomFunctions;
+class ThreeAtomFunctions;
+class FourAtomFunctions;
+}
+
 QDataStream& operator<<(QDataStream&, const SireIO::PSFAtom&);
 QDataStream& operator>>(QDataStream&, SireIO::PSFAtom&);
 
@@ -295,7 +302,8 @@ private:
     QString generateKey(QVector<QString> words) const;
 
     template<class T>
-    T getProperty(const SireBase::PropertyName &prop, const SireMol::MoleculeData &moldata, bool *found);
+    T getProperty(const SireBase::PropertyName &prop,
+        const SireMol::MoleculeData &moldata, bool *found);
 
     SireMol::Molecule parameteriseMolecule(
         int imol,
@@ -317,6 +325,15 @@ private:
         QVector<QVector<qint64> > &local_impropers,
         QStringList &local_errors,
         const PropertyMap &map);
+
+    void getBondsFrom(const SireMM::TwoAtomFunctions &funcs,
+        const SireMol::MoleculeInfoData &molinfo, QVector<QVector<qint64> > &local_bonds);
+
+    void getAnglesFrom(const SireMM::ThreeAtomFunctions &funcs,
+        const SireMol::MoleculeInfoData &molinfo, QVector<QVector<qint64> > &local_angles);
+
+    void getFourAtomFrom(const SireMM::FourAtomFunctions &funcs,
+        const SireMol::MoleculeInfoData &molinfo, QVector<QVector<qint64> > &four_atom);
 
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;

@@ -271,6 +271,12 @@ PSFAtom::PSFAtom(const SireMol::Atom &atom, const QString &segment,
         res_num  = atom.residue().number().value();
     }
 
+    // Extract the atom type.
+    if (atom.hasProperty(map["atomtype"]))
+    {
+        type = atom.property<QString>(map["atomtype"]);
+    }
+
     // Extract the atomic charge.
     if (atom.hasProperty("charge"))
     {
@@ -280,7 +286,7 @@ PSFAtom::PSFAtom(const SireMol::Atom &atom, const QString &segment,
     // Extract the mass.
     if (atom.hasProperty(map["mass"]))
     {
-        mass = atom.property<double>(map["mass"]);
+        mass = atom.property<SireUnits::Dimension::MolarMass>(map["mass"]).value();
     }
 }
 
@@ -726,68 +732,36 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
         return;
     }
 
-    // The list of lines.
-    QStringList lines;
-
-    // Generate the header.
-    // Add header information.
-    // TODO: Add BioSimSpace version info.
-    lines.append("PSF");
-    lines.append("");
-    lines.append("       2 !NTITLE");
-    lines.append(QString(" REMARKS DATE:%1    created by BioSimSpace (v)")
-         .arg(QDateTime::currentDateTime().toString("dd-MMM-yy  hh:mm:ss")));
-    lines.append("");
-
-    // Lines for different PDB data records (one for each molecule).
-    QVector<QVector<QString> > atom_lines(nmols);
-
-    if (usesParallel())
+    // Reconstruct the record data for each molecule.
+    for (int i=0; i<nmols; ++i)
     {
-        QMutex mutex;
+        // Create local data objects.
+        QVector<PSFAtom> local_atoms;
+        QVector<QVector<qint64> > local_bonds;
+        QVector<QVector<qint64> > local_angles;
+        QVector<QVector<qint64> > local_dihedrals;
+        QVector<QVector<qint64> > local_impropers;
 
-        tbb::parallel_for(tbb::blocked_range<int>(0, nmols),
-                           [&](const tbb::blocked_range<int> r)
-        {
-            // Create local data objects.
-            QVector<PSFAtom> local_atoms;
-            QVector<QVector<qint64> > local_bonds;
-            QVector<QVector<qint64> > local_angles;
-            QVector<QVector<qint64> > local_dihedrals;
-            QVector<QVector<qint64> > local_impropers;
-            QStringList local_errors;
+        // Parse the molecular system.
+        parseMolecule(i, system[molnums[i]].molecule(), local_atoms, local_bonds,
+            local_angles, local_dihedrals, local_impropers, parse_warnings, map);
 
-            for (int i=r.begin(); i<r.end(); ++i)
-            {
-                // Parse the molecular system.
-                parseMolecule(i, system[molnums[i]].molecule(), local_atoms, local_bonds,
-                    local_angles, local_dihedrals, local_impropers, local_errors, map);
-            }
-
-            // Acquire a lock.
-            QMutexLocker lkr(&mutex);
-
-            // Update global data.
-            parse_warnings += local_errors;
-            atoms          += local_atoms;
-            bonds          += local_bonds;
-            angles         += local_angles;
-            dihedrals      += local_dihedrals;
-            impropers      += local_dihedrals;
-        });
+        atoms     += local_atoms;
+        bonds     += local_bonds;
+        angles    += local_angles;
+        dihedrals += local_dihedrals;
+        impropers += local_impropers;
     }
-    else
-    {
-        for (int i=0; i<nmols; ++i)
-        {
-            // Parse the molecular system.
-            parseMolecule(i, system[molnums[i]].molecule(), atoms, bonds,
-                angles, dihedrals, impropers, parse_warnings, map);
-        }
-    }
+
+    // Generate the PSF record lines.
+    QVector<QString> lines = toLines();
+
+    QStringList lines_list;
+	for (const auto &line : lines)
+		lines_list << line;
 
     // Reparse the lines as a self-consistency check.
-    CharmmPSF parsed(lines, map);
+    CharmmPSF parsed(lines_list, map);
 
     this->operator=(parsed);
 }
@@ -1005,7 +979,7 @@ QVector<QString> CharmmPSF::toLines() const
         const int num_lines = qCeil(num_records/4.0);
 
         QVector<QString> record_lines(num_lines + 2);
-        record_lines[0] = QString("%1 !NBONDS: bonds").arg(num_records, 8);
+        record_lines[0] = QString("%1 !NBOND: bonds").arg(num_records, 8);
 
         if (usesParallel())
         {
@@ -2325,11 +2299,12 @@ void CharmmPSF::parseMolecule(
     // Resize the atoms vector.
     local_atoms.resize(num_atoms);
 
-    // Get the molecule name (used for a "segment" ID in the PSF file).
-    QString segment = QString("SEG%1").arg(imol+1);
+    // Set a default molecule name (used for a "segment" ID in the PSF file).
+    QString segment = QString("M%1").arg(imol+1);
+
+    // Extract the existing molecule name.
     if (sire_mol.hasProperty(map["mol-name"]))
     {
-        // Extract the molecule name.
         segment = sire_mol.property(map["mol-name"]).toString().simplified().toUpper();
     }
 
@@ -2364,18 +2339,35 @@ void CharmmPSF::parseMolecule(
         for (int i=0; i<num_atoms; ++i)
         {
             // Parse atom data.
-            atoms += PSFAtom(sire_mol.atom(AtomIdx(i)), segment, local_errors, map);
+            local_atoms[i] = PSFAtom(sire_mol.atom(AtomIdx(i)), segment, local_errors, map);
         }
     }
 
-    bool has_bonds, has_ubs, has_angles, has_dihedrals, has_impropers;
+    bool has_bonds, has_angles, has_dihedrals, has_impropers;
 
     // Get the required properties.
-    const auto bonds = getProperty<TwoAtomFunctions>(map["bond"], moldata, &has_bonds);
-    const auto ub_bonds = getProperty<TwoAtomFunctions>(map["urey-bradley"], moldata, &has_ubs);
-    const auto angles = getProperty<ThreeAtomFunctions>(map["angle"], moldata, &has_angles);
-    const auto dihedrals = getProperty<FourAtomFunctions>(map["dihedral"], moldata, &has_dihedrals);
-    const auto impropers = getProperty<FourAtomFunctions>(map["improper"], moldata, &has_impropers);
+    const auto bond_funcs = getProperty<TwoAtomFunctions>(map["bond"], moldata, &has_bonds);
+    const auto angle_funcs = getProperty<ThreeAtomFunctions>(map["angle"], moldata, &has_angles);
+    const auto dihedral_funcs = getProperty<FourAtomFunctions>(map["dihedral"], moldata, &has_dihedrals);
+    const auto improper_funcs = getProperty<FourAtomFunctions>(map["improper"], moldata, &has_impropers);
+
+    // Now construct the PSF record data...
+
+    // Bonds.
+    if (has_bonds)
+        getBondsFrom(bond_funcs, sire_mol.info(), local_bonds);
+
+    // Angles.
+    if (has_angles)
+        getAnglesFrom(angle_funcs, sire_mol.info(), local_angles);
+
+    // Dihedrals.
+    if (has_dihedrals)
+        getFourAtomFrom(dihedral_funcs, sire_mol.info(), local_dihedrals);
+
+    // Impropers.
+    if (has_impropers)
+        getFourAtomFrom(improper_funcs, sire_mol.info(), local_impropers);
 }
 
 /** Find the index of the parameters associated with the 'search_atoms'.
@@ -3166,4 +3158,148 @@ T CharmmPSF::getProperty(const PropertyName &prop, const MoleculeData &moldata, 
 
     *found = false;
     return T();
+}
+
+/** Construct PSF bond records from the set of two-atom functions. */
+void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const MoleculeInfoData &molinfo,
+    QVector<QVector<qint64> > &local_bonds)
+{
+    // Get the set of all bond functions.
+    const auto potentials = funcs.potentials();
+
+    // Store the number of bonds.
+    const int num_bonds = potentials.count();
+
+    // Resize the bonds vector.
+    local_bonds.resize(num_bonds);
+
+    // A multi-map between the start atom in a bond and the atom pair.
+    // This allows us to reconstruct the correct bond order.
+    QMultiMap<int, QVector<qint64> > bond_map;
+
+    // Create the bond map.
+    for (int i=0; i<num_bonds; ++i)
+    {
+        // Resize the bond vector.
+        local_bonds[i].resize(2);
+
+        // Get the potential.
+        const auto potential = potentials.constData()[i];
+
+        // Store the atom numbers.
+        int atom0 = molinfo.number(potential.atom0()).value();
+        int atom1 = molinfo.number(potential.atom1()).value();
+
+        // Create the map value.
+        QVector<qint64> value({atom0, atom1});
+
+        // Insert the bond into the map.
+        // Use negative atom number as the index so we can loop over in ascending order.
+        bond_map.insert(-atom0, value);
+    }
+
+    // Now populate the bond vector.
+    int i = 0;
+    while (not bond_map.isEmpty())
+    {
+        local_bonds[i] = bond_map.take(bond_map.lastKey());
+        i++;
+    }
+}
+
+/** Construct PSF angle records from the set of three-atom functions. */
+void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const MoleculeInfoData &molinfo,
+    QVector<QVector<qint64> > &local_angles)
+{
+    // Get the set of all angle functions.
+    const auto potentials = funcs.potentials();
+
+    // Store the number of angles.
+    const int num_angles = potentials.count();
+
+    // Resize the angles vector.
+    local_angles.resize(num_angles);
+
+    // A multi-map between the start atom in an angle and the atom triplet.
+    // This allows us to reconstruct the correct order for the PSF records.
+    QMultiMap<int, QVector<qint64> > angle_map;
+
+    // Populate the angle map.
+    for (int i=0; i<num_angles; ++i)
+    {
+        // Resize the angles vector.
+        local_angles[i].resize(3);
+
+        // Get the potential.
+        const auto potential = potentials.constData()[i];
+
+        // Store the atom numbers.
+        int atom0 = molinfo.number(potential.atom0()).value();
+        int atom1 = molinfo.number(potential.atom1()).value();
+        int atom2 = molinfo.number(potential.atom2()).value();
+
+        // Create the map value.
+        QVector<qint64> value({atom0, atom1, atom2});
+
+        // Insert the angle into the map.
+        // Use negative atom number as the index so we can loop over in ascending order.
+        angle_map.insert(-atom0, value);
+    }
+
+    // Now populate the angle vector.
+    int i = 0;
+    while (not angle_map.isEmpty())
+    {
+        local_angles[i] = angle_map.take(angle_map.lastKey());
+        i++;
+    }
+}
+
+/** Construct PSF four-atom records from the set of four-atom functions. */
+void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const MoleculeInfoData &molinfo,
+    QVector<QVector<qint64> > &four_atom)
+{
+    // Get the set of all four-atom functions.
+    const auto potentials = funcs.potentials();
+
+    // Store the number of functions.
+    const int num_funcs = potentials.count();
+
+    // Resize the fuctions vector.
+    four_atom.resize(num_funcs);
+
+    // A multi-map between the start atom in a four-atom function and the atom quartet.
+    // This allows us to reconstruct the correct order for the PSF records.
+    QMultiMap<int, QVector<qint64> > map;
+
+    // Populate the function map.
+    for (int i=0; i<num_funcs; ++i)
+    {
+        // Resize the vector.
+        four_atom[i].resize(4);
+
+        // Get the potential.
+        const auto potential = potentials.constData()[i];
+
+        // Store the atom numbers.
+        int atom0 = molinfo.number(potential.atom0()).value();
+        int atom1 = molinfo.number(potential.atom1()).value();
+        int atom2 = molinfo.number(potential.atom2()).value();
+        int atom3 = molinfo.number(potential.atom3()).value();
+
+        // Create the map value.
+        QVector<qint64> value({atom0, atom1, atom2, atom3});
+
+        // Insert into the map.
+        // Use negative atom number as the index so we can loop over in ascending order.
+        map.insert(-atom0, value);
+    }
+
+    // Now populate the vector.
+    int i = 0;
+    while (not map.isEmpty())
+    {
+        four_atom[i] = map.take(map.lastKey());
+        i++;
+    }
 }
