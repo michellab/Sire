@@ -33,6 +33,11 @@
 
 SIRE_BEGIN_HEADER
 
+namespace SireCAS
+{
+class Expression;
+}
+
 namespace SireIO
 {
 class PSFAtom;
@@ -320,17 +325,23 @@ private:
         QVector<QVector<qint64> > &local_angles,
         QVector<QVector<qint64> > &local_dihedrals,
         QVector<QVector<qint64> > &local_impropers,
+        QSet<QString> &bond_params,
+        QSet<QString> &angle_params,
+        QSet<QString> &dihedral_params,
+        QSet<QString> &improper_params,
         QStringList &local_errors,
         const PropertyMap &map);
 
-    void getBondsFrom(const SireMM::TwoAtomFunctions &funcs,
-        const SireMol::MoleculeInfoData &molinfo, QVector<QVector<qint64> > &local_bonds);
+    void getBondsFrom(const SireMM::TwoAtomFunctions &funcs, const SireMol::Molecule &sire_mol,
+        QVector<QVector<qint64> > &local_bonds, QSet<QString> &bond_params, const PropertyMap &map);
 
     void getAnglesFrom(const SireMM::ThreeAtomFunctions &funcs,
         const SireMol::MoleculeInfoData &molinfo, QVector<QVector<qint64> > &local_angles);
 
     void getFourAtomFrom(const SireMM::FourAtomFunctions &funcs,
         const SireMol::MoleculeInfoData &molinfo, QVector<QVector<qint64> > &four_atom);
+
+    QString toBondParameter(const QString &bond_atoms, const SireCAS::Expression &func);
 
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;
@@ -371,6 +382,9 @@ private:
 
     /** The indices of the atoms in each molecule. */
     QVector<QVector<qint64> > molecules;
+
+    /** A list of CHARMM parameter strings. */
+    QStringList charmm_params;
 
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;

@@ -135,8 +135,8 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmPSF &psf)
 
     ds << psf.atoms << psf.bonds << psf.mol_bonds << psf.angles << psf.mol_angles
        << psf.dihedrals << psf.mol_dihedrals << psf.impropers << psf.mol_impropers
-       << psf.cross_terms << psf.mol_cross_terms << psf.molecules << psf.num_to_idx
-       << static_cast<const MoleculeParser&>(psf);
+       << psf.cross_terms << psf.mol_cross_terms << psf.num_to_idx << psf.molecules
+       << psf.charmm_params << static_cast<const MoleculeParser&>(psf);
 
     return ds;
 }
@@ -149,8 +149,8 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmPSF &psf)
     {
         ds >> psf.atoms >> psf.bonds >> psf.mol_bonds >> psf.angles >> psf.mol_angles
            >> psf.dihedrals >> psf.mol_dihedrals >> psf.impropers >> psf.mol_impropers
-           >> psf.cross_terms >> psf.mol_cross_terms >> psf.molecules >> psf.num_to_idx
-           >> static_cast<MoleculeParser&>(psf);
+           >> psf.cross_terms >> psf.mol_cross_terms >> psf.num_to_idx >> psf.molecules
+           >> psf.charmm_params >> static_cast<MoleculeParser&>(psf);
     }
     else
         throw version_error(v, "1", r_psf, CODELOC);
@@ -682,6 +682,12 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
         return;
     }
 
+    // The unique CHARMM parameter strings.
+    QSet<QString> bond_params;
+    QSet<QString> angle_params;
+    QSet<QString> dihedral_params;
+    QSet<QString> improper_params;
+
     // Reconstruct the record data for each molecule.
     for (int i=0; i<nmols; ++i)
     {
@@ -694,7 +700,8 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
 
         // Parse the molecular system.
         parseMolecule(i, system[molnums[i]].molecule(), local_atoms, local_bonds,
-            local_angles, local_dihedrals, local_impropers, parse_warnings, map);
+            local_angles, local_dihedrals, local_impropers, bond_params, angle_params,
+            dihedral_params, improper_params, parse_warnings, map);
 
         atoms     += local_atoms;
         bonds     += local_bonds;
@@ -706,9 +713,19 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
     // Generate the PSF record lines.
     QVector<QString> lines = toLines();
 
+    // Convert the vector of records to a list.
     QStringList lines_list;
 	for (const auto &line : lines)
 		lines_list << line;
+
+    // Generate a list of CHARMM parameter records:
+    // bonds, angles, dihedrals, and impropers.
+    // The records strings are sorted before appending to the list.
+    charmm_params.append("BONDS");
+    QStringList params = bond_params.toList();
+    params.sort();
+    charmm_params.append(params);
+    charmm_params.append("");
 
     // Reparse the lines as a self-consistency check.
     CharmmPSF parsed(lines_list, map);
@@ -732,6 +749,7 @@ CharmmPSF::CharmmPSF(const CharmmPSF &other) :
     mol_cross_terms(other.mol_cross_terms),
     num_to_idx(other.num_to_idx),
     molecules(other.molecules),
+    charmm_params(other.charmm_params),
     parse_warnings(other.parse_warnings)
 {}
 
@@ -757,6 +775,7 @@ CharmmPSF& CharmmPSF::operator=(const CharmmPSF &other)
         mol_cross_terms = other.mol_cross_terms;
         num_to_idx = other.num_to_idx;
         molecules = other.molecules;
+        charmm_params = other.charmm_params;
         parse_warnings = other.parse_warnings;
 
         MoleculeParser::operator=(other);
@@ -1967,12 +1986,12 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
         for (const auto &bond : connectivity.getBonds())
         {
             // Extract the cgAtomIdx for the two atoms.
-            auto idx0 = molinfo.cgAtomIdx(bond.atom0());
-            auto idx1 = molinfo.cgAtomIdx(bond.atom1());
+            const auto idx0 = molinfo.cgAtomIdx(bond.atom0());
+            const auto idx1 = molinfo.cgAtomIdx(bond.atom1());
 
             // Now get the type for each atom.
-            auto atom0 = atom_types[idx0];
-            auto atom1 = atom_types[idx1];
+            const auto atom0 = atom_types[idx0];
+            const auto atom1 = atom_types[idx1];
 
             // Create a vector of the atom types.
             QVector<QString> bond_atoms({atom0, atom1});
@@ -2225,6 +2244,24 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
 
     @param local_impropers
         The improper records vector local to the molecule.
+
+    @param bond_params
+        The set of CHARMM bond parameter strings.
+
+    @param angle_params
+        The set of CHARMM angle parameter strings.
+
+    @param dihedral_params
+        The set of CHARMM dihedral parameter strings.
+
+    @param improper_params
+        The set of CHARMM improper parameter strings.
+
+    @param local_errors
+        A list of error messages local to the molecule.
+
+    @param map
+        The map of user properties.
  */
 void CharmmPSF::parseMolecule(
         int imol,
@@ -2234,6 +2271,10 @@ void CharmmPSF::parseMolecule(
         QVector<QVector<qint64> > &local_angles,
         QVector<QVector<qint64> > &local_dihedrals,
         QVector<QVector<qint64> > &local_impropers,
+        QSet<QString> &bond_params,
+        QSet<QString> &angle_params,
+        QSet<QString> &dihedral_params,
+        QSet<QString> &improper_params,
         QStringList &local_errors,
         const PropertyMap &map)
 {
@@ -2293,11 +2334,12 @@ void CharmmPSF::parseMolecule(
         }
     }
 
-    bool has_bonds, has_angles, has_dihedrals, has_impropers;
+    bool has_bonds, has_angles, has_ubs, has_dihedrals, has_impropers;
 
     // Get the required properties.
     const auto bond_funcs = getProperty<TwoAtomFunctions>(map["bond"], moldata, &has_bonds);
     const auto angle_funcs = getProperty<ThreeAtomFunctions>(map["angle"], moldata, &has_angles);
+    const auto ub_funcs = getProperty<ThreeAtomFunctions>(map["urey-bradley"], moldata, &has_ubs);
     const auto dihedral_funcs = getProperty<FourAtomFunctions>(map["dihedral"], moldata, &has_dihedrals);
     const auto improper_funcs = getProperty<FourAtomFunctions>(map["improper"], moldata, &has_impropers);
 
@@ -2305,19 +2347,25 @@ void CharmmPSF::parseMolecule(
 
     // Bonds.
     if (has_bonds)
-        getBondsFrom(bond_funcs, sire_mol.info(), local_bonds);
+        getBondsFrom(bond_funcs, sire_mol, local_bonds, bond_params, map);
 
     // Angles.
     if (has_angles)
+    {
         getAnglesFrom(angle_funcs, sire_mol.info(), local_angles);
+    }
 
     // Dihedrals.
     if (has_dihedrals)
+    {
         getFourAtomFrom(dihedral_funcs, sire_mol.info(), local_dihedrals);
+    }
 
     // Impropers.
     if (has_impropers)
+    {
         getFourAtomFrom(improper_funcs, sire_mol.info(), local_impropers);
+    }
 }
 
 /** Find the index of the parameters associated with the 'search_atoms'.
@@ -3111,9 +3159,12 @@ T CharmmPSF::getProperty(const PropertyName &prop, const MoleculeData &moldata, 
 }
 
 /** Construct PSF bond records from the set of two-atom functions. */
-void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const MoleculeInfoData &molinfo,
-    QVector<QVector<qint64> > &local_bonds)
+void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire_mol,
+    QVector<QVector<qint64> > &local_bonds, QSet<QString> &bond_params, const PropertyMap &map)
 {
+    // Get the molecule info object.
+    const auto molinfo = sire_mol.info();
+
     // Get the set of all bond functions.
     const auto potentials = funcs.potentials();
 
@@ -3136,9 +3187,29 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const MoleculeInfoDa
         // Get the potential.
         const auto potential = potentials.constData()[i];
 
+        // Extract the cgAtomIdx for the two atoms.
+        const auto idx0 = molinfo.cgAtomIdx(potential.atom0());
+        const auto idx1 = molinfo.cgAtomIdx(potential.atom1());
+
         // Store the atom numbers.
-        int atom0 = molinfo.number(potential.atom0()).value();
-        int atom1 = molinfo.number(potential.atom1()).value();
+        int atom0 = molinfo.number(idx0).value();
+        int atom1 = molinfo.number(idx1).value();
+
+        // If the atoms have an "atomtype" property then we can generate
+        // CHARMM bond parameters.
+        if ((sire_mol.atom(idx0).hasProperty(map["atomtype"])) and
+            (sire_mol.atom(idx1).hasProperty(map["atomtype"])))
+        {
+            // Extract the atom types.
+            QString type0 = sire_mol.atom(idx0).property<QString>(map["atomtype"]);
+            QString type1 = sire_mol.atom(idx1).property<QString>(map["atomtype"]);
+
+            // Create a string from the types.
+            QString bond_atoms = QString("%1 %2").arg(type0, -4).arg(type1, -4);
+
+            // Create the CHARMM bond parameters.
+            bond_params.insert(toBondParameter(bond_atoms, potential.function()));
+        }
 
         // Create the map value.
         QVector<qint64> value({atom0, atom1});
@@ -3252,4 +3323,103 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const MoleculeIn
         four_atom[i] = map.take(map.lastKey());
         i++;
     }
+}
+
+/** Convert a Sire two-atom function to a CHARMM bond paramater string. */
+QString CharmmPSF::toBondParameter(const QString &bond_atoms, const Expression &func)
+{
+    const auto R = InternalPotential::symbols().bond().r();
+
+    // The function should be of the form "k(r - r0)^2".
+    // We need to get the factors of R.
+    const auto factors = func.expand(R);
+
+    bool has_k = false;
+
+    QStringList errors;
+
+    double k = 0.0;
+    double kr0_2 = 0.0;
+    double kr0 = 0.0;
+
+    for (const auto factor : factors)
+    {
+        if (factor.symbol() == R)
+        {
+            if (not factor.power().isConstant())
+            {
+                errors.append(QObject::tr("Power of R must be constant, not %1")
+                                .arg(factor.power().toString()));
+                continue;
+            }
+
+            if (not factor.factor().isConstant())
+            {
+                errors.append(QObject::tr("The value of K in K (R - R0)^2 must be constant. "
+                                "Here it is %1").arg(factor.factor().toString()));
+                continue;
+            }
+
+            double power = factor.power().evaluate(Values());
+
+            if (power == 0.0)
+            {
+                // This is the constant.
+                kr0_2 += factor.factor().evaluate(Values());
+            }
+            else if (power == 1.0)
+            {
+                // This is the -kR0 term.
+                kr0 = factor.factor().evaluate(Values());
+            }
+            else if (power == 2.0)
+            {
+                // This is the R^2 term.
+                if (has_k)
+                {
+                    // We cannot have two R2 factors?
+                    errors.append(QObject::tr("Cannot have two R^2 factors!"));
+                    continue;
+                }
+
+                k = factor.factor().evaluate(Values());
+                has_k = true;
+            }
+            else
+            {
+                errors.append(QObject::tr("Power of R^2 must equal 2.0, 1.0 or 0.0, not %1")
+                                .arg(power));
+                continue;
+            }
+        }
+        else
+        {
+            errors.append(QObject::tr("Cannot have a factor that does not include R. %1")
+                        .arg(factor.symbol().toString()));
+        }
+    }
+
+    if (kr0_2 < 0)
+    {
+        errors.append(QObject::tr("How can K R0^2 be negative? %1").arg(kr0_2));
+    }
+
+    double r0 = std::sqrt( kr0_2 / k );
+
+    // kr0 should be equal to -2 k r0
+    if (std::abs(k*r0 + 0.5 * kr0) > 0.001)
+    {
+        errors.append(QObject::tr("How can the power of R be %1. It should be 2 x %2 x %3 = %4.")
+                        .arg(kr0).arg(k).arg(r0).arg(2*k*r0));
+    }
+
+    if (not errors.isEmpty())
+    {
+        throw SireError::incompatible_error(QObject::tr(
+                "Cannot construct a CHARMM bond parameter K ( %1 - R0 )^2 from the "
+                "expression %2, because\n%3")
+                    .arg(R.toString()).arg(func.toString()).arg(errors.join("\n")), CODELOC );
+    }
+
+    return QString("%1 %2 %3").arg(bond_atoms).arg(k, 10, 'f', 3).arg(r0, 10, 'f', 4);
 }
