@@ -299,63 +299,13 @@ QString PSFAtom::toPSFRecord() const
     line.append(QString(" %1").arg(segment, -4));
     line.append(QString(" %1").arg(res_num, -4));
     line.append(QString(" %1").arg(res_name, -4));
-    line.append(QString(" %1").arg(toPDBName(), 4));
+    line.append(QString(" %1").arg(name, -4));
     line.append(QString(" %1").arg(type, -4));
     line.append(QString(" %1").arg(charge, 10, 'f', 6));
     line.append(QString(" %1").arg(mass, 13, 'f', 4));
     line.append(QString("%1").arg("0", 12));
 
     return line;
-}
-
-/** Convert the name to PDB format. */
-QString PSFAtom::toPDBName() const
-{
-    QString pdb_name = name;
-
-    /* PDB atom names are a maximum of 4 characters wide and obey the
-       following rules:
-
-       All names start in the second position (i.e. start with a space)
-       unless the first character of the name is a digit.
-
-       3 character names:
-         - Name starts with a digit
-             --> append a space, e.g. "1HE "
-         - Else...
-             --> prepend a space, e.g. " NE1"
-
-       2 character names:
-         - Start in second position, e.g. " CA "
-
-       1 character names:
-         - Put in second position, e.g. " H  "
-     */
-
-    // Truncate the name to 4 characters.
-    if (pdb_name.count() > 4) pdb_name = pdb_name.left(4);
-
-    // Apply formatting rules.
-    else if (pdb_name.count() < 4)
-    {
-        if (pdb_name.count() == 3)
-        {
-            if (pdb_name[0].isDigit()) pdb_name.append(" ");
-            else                       pdb_name.prepend(" ");
-        }
-        else if (pdb_name.count() == 2)
-        {
-            pdb_name.prepend(" ");
-            pdb_name.append(" ");
-        }
-        else if (pdb_name.count() == 1)
-        {
-            pdb_name.prepend(" ");
-            pdb_name.append("  ");
-        }
-    }
-
-    return pdb_name;
 }
 
 const char* PSFAtom::typeName()

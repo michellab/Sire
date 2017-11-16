@@ -94,9 +94,6 @@ public:
     /** Generate a PSD record from the atom data. */
     QString toPSFRecord() const;
 
-    /** Convert the atom name to PDB format. */
-    QString toPDBName() const;
-
     static const char* typeName();
 
     /** Get the atom index. */
