@@ -634,6 +634,7 @@ void PropertyConstraint::setSystem(const System &system)
     if (not constrained_value.isNull())
     {
         constrained_val = constrained_value.read().asADouble();
+        has_constrained_value = true;
     }
     
     component_vals = system.constants(syms);
@@ -674,7 +675,6 @@ bool PropertyConstraint::deltaApply(Delta &delta, quint32 last_subversion)
     bool changed_prop = delta.sinceChanged(propname, last_subversion);
     bool changed_syms = delta.sinceChanged(syms, last_subversion);
     bool changed_target = false;
-    bool use_number_property= false;
 
     if (changed_prop or changed_syms)
     {
@@ -730,7 +730,10 @@ bool PropertyConstraint::deltaApply(Delta &delta, quint32 last_subversion)
             //get the current value of the property
             if (not constrained_value.isNull())
             {
-                target_value = constrained_value.read().asADouble();
+                if (target_value == constrained_value.read().asADouble())
+                {
+                    return false;
+                }
             }
             
             if (ffidxs.isEmpty())
