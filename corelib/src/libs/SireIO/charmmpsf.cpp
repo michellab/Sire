@@ -34,6 +34,7 @@
 #include "SireBase/stringproperty.h"
 
 #include "SireCAS/trigfuncs.h"
+#include "SireCAS/sum.h"
 
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
@@ -735,6 +736,11 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
         // The records strings are sorted before appending to the list.
         charmm_params.append("BONDS");
         QStringList params = bond_params.toList();
+        params.sort();
+        charmm_params.append(params);
+        charmm_params.append("");
+        charmm_params.append("DIHEDRALS");
+        params = dihedral_params.toList();
         params.sort();
         charmm_params.append(params);
         charmm_params.append("");
@@ -2367,21 +2373,15 @@ void CharmmPSF::parseMolecule(
 
     // Angles.
     if (has_angles)
-    {
         getAnglesFrom(angle_funcs, sire_mol.info(), local_angles);
-    }
 
     // Dihedrals.
     if (has_dihedrals)
-    {
-        getFourAtomFrom(dihedral_funcs, sire_mol.info(), local_dihedrals);
-    }
+        getFourAtomFrom(dihedral_funcs, sire_mol, local_dihedrals, dihedral_params, map);
 
     // Impropers.
     if (has_impropers)
-    {
-        getFourAtomFrom(improper_funcs, sire_mol.info(), local_impropers);
-    }
+        getFourAtomFrom(improper_funcs, sire_mol, local_impropers, improper_params, map, true);
 }
 
 /** Find the index of the parameters associated with the 'search_atoms'.
@@ -2753,7 +2753,7 @@ void CharmmPSF::writeToFile(const QString &filename) const
 
     QFile f(filename);
 
-    if (not f.open( QIODevice::WriteOnly | QIODevice::Text ))
+    if (not f.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         throw SireError::file_error(f, CODELOC);
     }
@@ -2780,7 +2780,7 @@ void CharmmPSF::writeToFile(const QString &filename) const
 
         QFile f(param_filename);
 
-        if (not f.open( QIODevice::WriteOnly | QIODevice::Text ))
+        if (not f.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             throw SireError::file_error(f, CODELOC);
         }
@@ -3355,9 +3355,13 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const MoleculeInf
 }
 
 /** Construct PSF four-atom records from the set of four-atom functions. */
-void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const MoleculeInfoData &molinfo,
-    QVector<QVector<qint64> > &four_atom)
+void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &sire_mol,
+    QVector<QVector<qint64> > &four_atom, QSet<QString> &four_atom_params, const PropertyMap &map,
+    bool is_improper)
 {
+    // Get the molecule info object.
+    const auto molinfo = sire_mol.info();
+
     // Get the set of all four-atom functions.
     const auto potentials = funcs.potentials();
 
@@ -3369,7 +3373,7 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const MoleculeIn
 
     // A multi-map between the start atom in a four-atom function and the atom quartet.
     // This allows us to reconstruct the correct order for the PSF records.
-    QMultiMap<int, QVector<qint64> > map;
+    QMultiMap<int, QVector<qint64> > four_atom_map;
 
     // Populate the function map.
     for (int i=0; i<num_funcs; ++i)
@@ -3380,25 +3384,63 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const MoleculeIn
         // Get the potential.
         const auto potential = potentials.constData()[i];
 
+        // Extract the cgAtomIdx for the four atoms.
+        const auto idx0 = molinfo.cgAtomIdx(potential.atom0());
+        const auto idx1 = molinfo.cgAtomIdx(potential.atom1());
+        const auto idx2 = molinfo.cgAtomIdx(potential.atom2());
+        const auto idx3 = molinfo.cgAtomIdx(potential.atom3());
+
         // Store the atom numbers.
-        int atom0 = molinfo.number(potential.atom0()).value();
-        int atom1 = molinfo.number(potential.atom1()).value();
-        int atom2 = molinfo.number(potential.atom2()).value();
-        int atom3 = molinfo.number(potential.atom3()).value();
+        int atom0 = molinfo.number(idx0).value();
+        int atom1 = molinfo.number(idx1).value();
+        int atom2 = molinfo.number(idx2).value();
+        int atom3 = molinfo.number(idx3).value();
+
+        // If the atoms have an "atomtype" property then we can generate
+        // CHARMM four-atom parameters.
+        if ((sire_mol.atom(idx0).hasProperty(map["atomtype"])) and
+            (sire_mol.atom(idx1).hasProperty(map["atomtype"])) and
+            (sire_mol.atom(idx2).hasProperty(map["atomtype"])) and
+            (sire_mol.atom(idx3).hasProperty(map["atomtype"])))
+        {
+            // Extract the atom types.
+            QString type0 = sire_mol.atom(idx0).property<QString>(map["atomtype"]);
+            QString type1 = sire_mol.atom(idx1).property<QString>(map["atomtype"]);
+            QString type2 = sire_mol.atom(idx2).property<QString>(map["atomtype"]);
+            QString type3 = sire_mol.atom(idx3).property<QString>(map["atomtype"]);
+
+            // Create a string from the types.
+            QString func_atoms = QString("%1 %2 %3 %4")
+                .arg(type0, -4).arg(type1, -4).arg(type2, -4).arg(type3, -4);
+
+            // Create the CHARMM bond parameters.
+            if (is_improper)
+            {
+
+            }
+            else
+            {
+                // Generate the vector of four-atom parameter strings.
+                QVector<QString> params = toDihedralParameter(func_atoms, potential.function());
+
+                for (const auto &param : params)
+                    four_atom_params.insert(param);
+            }
+        }
 
         // Create the map value.
         QVector<qint64> value({atom0, atom1, atom2, atom3});
 
         // Insert into the map.
         // Use negative atom number as the index so we can loop over in ascending order.
-        map.insert(-atom0, value);
+        four_atom_map.insert(-atom0, value);
     }
 
     // Now populate the vector.
     int i = 0;
-    while (not map.isEmpty())
+    while (not four_atom_map.isEmpty())
     {
-        four_atom[i] = map.take(map.lastKey());
+        four_atom[i] = four_atom_map.take(four_atom_map.lastKey());
         i++;
     }
 }
@@ -3500,4 +3542,161 @@ QString CharmmPSF::toBondParameter(const QString &bond_atoms, const Expression &
     }
 
     return QString("%1 %2 %3").arg(bond_atoms).arg(k, 10, 'f', 3).arg(r0, 10, 'f', 4);
+}
+
+/** Convert a Sire four-atom function to a set of CHARMM dihedral paramater strings. */
+QVector<QString> CharmmPSF::toDihedralParameter(const QString &dihedral_atoms, const Expression &func)
+{
+    const auto phi = InternalPotential::symbols().dihedral().phi();
+
+    // This expression should be a sum of cos terms, plus constant terms.
+    QList<Expression> cos_terms;
+    double constant = 0.0;
+
+    QStringList errors;
+
+    if (func.base().isA<Sum>())
+    {
+        for (const auto child : func.base().asA<Sum>().children())
+        {
+            if (child.isConstant())
+            {
+                constant += func.factor() * child.evaluate(Values());
+            }
+            else if (child.base().isA<Cos>())
+            {
+                if (func.factor() == 1)
+                {
+                    cos_terms.append(child);
+                }
+                else
+                {
+                    cos_terms.append(func.factor() * child);
+                }
+            }
+            else
+            {
+                errors.append(QObject::tr("Cannot interpret the dihedral expression "
+                   "from '%1' as it should be a series of cosine terms involving %2.")
+                        .arg(func.toString()).arg(phi.toString()));
+            }
+        }
+    }
+    else
+    {
+        if (func.isConstant())
+        {
+            constant += func.evaluate(Values());
+        }
+        else if (func.base().isA<Cos>())
+        {
+            cos_terms.append(func);
+        }
+        else
+        {
+            errors.append( QObject::tr("Cannot interpret the dihedral expression "
+               "from '%1' as it should be a series of cosine terms involving %2.")
+                    .arg(func.toString()).arg(phi.toString()));
+        }
+    }
+
+    // Next extract all of the data from the cos terms.
+    QList<std::tuple<double,double,double> > terms;
+
+    double check_constant = 0;
+
+    for (const auto cos_term : cos_terms)
+    {
+        // Term should be of the form 'k cos( periodicity * phi - phase )'.
+        double k = cos_term.factor();
+        check_constant += k;
+
+        double periodicity = 0.0;
+        double phase = 0.0;
+
+        const auto factors = cos_term.base().asA<Cos>().argument().expand(phi);
+
+        bool ok = true;
+
+        for (const auto factor : factors)
+        {
+            if (not factor.power().isConstant())
+            {
+                errors.append(QObject::tr("Power of phi must be constant, not %1")
+                                .arg(factor.power().toString()));
+                ok = false;
+                continue;
+            }
+
+            if (not factor.factor().isConstant())
+            {
+                errors.append(QObject::tr("The value of periodicity must be "
+                                "constant. Here it is %1").arg(factor.factor().toString()));
+                ok = false;
+                continue;
+            }
+
+            double power = factor.power().evaluate(Values());
+
+            if (power == 0.0)
+            {
+                // This is the constant phase.
+                phase += factor.factor().evaluate(Values());
+            }
+            else if (power == 1.0)
+            {
+                // This is the periodicity * phi term
+                periodicity = factor.factor().evaluate(Values());
+            }
+            else
+            {
+                errors.append(QObject::tr("Power of phi must equal 1.0 or 0.0, not %1")
+                                    .arg(power));
+                ok = false;
+                continue;
+            }
+        }
+
+        if (ok)
+        {
+            terms.append(std::make_tuple(k, periodicity, phase));
+        }
+    }
+
+    // Now sum up the individual values of 'k'. These should equal the constant, which
+    // is the aggregate of the "k [ 1 + cos ]" terms.
+    if ( std::abs(constant - check_constant) > 0.001 )
+    {
+        errors.append(QObject::tr("The set of constants should sum up to the same total, "
+            "i.e. should equal %1. Instead they equal %2. This is weird.")
+                .arg(constant).arg(check_constant));
+    }
+
+    if (not errors.isEmpty())
+    {
+        throw SireError::incompatible_error(QObject::tr(
+            "Cannot extract a CHARMM dihedral parameter from '%1' as "
+            "the expression must be a series of terms of type "
+            "'k{ 1 + cos[ per %2 - phase ] }'. Errors include\n%3")
+                .arg(func.toString()).arg(phi.toString()).arg(errors.join("\n")),
+                    CODELOC);
+    }
+
+    // The vector of dihedral parameter strings.
+    QVector<QString> parameter_strings;
+
+    if (not terms.isEmpty())
+    {
+        // Append each parameter string to the vector.
+        for (const auto term : terms)
+        {
+            parameter_strings.append(QString("%1 %2 %3 %4")
+                .arg(dihedral_atoms)
+                .arg(std::get<0>(term), 10, 'f', 4)
+                .arg(std::get<1>(term), 3)
+                .arg(-std::get<2>(term), 10, 'f', 2));
+        }
+    }
+
+    return parameter_strings;
 }

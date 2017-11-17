@@ -340,10 +340,12 @@ private:
     void getAnglesFrom(const SireMM::ThreeAtomFunctions &funcs,
         const SireMol::MoleculeInfoData &molinfo, QVector<QVector<qint64> > &local_angles);
 
-    void getFourAtomFrom(const SireMM::FourAtomFunctions &funcs,
-        const SireMol::MoleculeInfoData &molinfo, QVector<QVector<qint64> > &four_atom);
+    void getFourAtomFrom(const SireMM::FourAtomFunctions &funcs, const SireMol::Molecule &sire_mol,
+        QVector<QVector<qint64> > &four_atom, QSet<QString> &four_atom_params, const PropertyMap &map,
+        bool is_improper=false);
 
     QString toBondParameter(const QString &bond_atoms, const SireCAS::Expression &func);
+    QVector<QString> toDihedralParameter(const QString &dihedral_atoms, const SireCAS::Expression &func);
 
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;
