@@ -56,6 +56,7 @@
 #include "SireUnits/units.h"
 
 #include <QDateTime>
+#include <QFileInfo>
 #include <QtMath>
 
 using namespace SireBase;
@@ -607,7 +608,7 @@ const QVector<double>& CharmmParam::getParams() const
     return params;
 }
 
-/** Return the paramter type. */
+/** Return the parameter type. */
 qint64 CharmmParam::getType() const
 {
     return type;
@@ -718,17 +719,32 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
 	for (const auto &line : lines)
 		lines_list << line;
 
-    // Generate a list of CHARMM parameter records:
-    // bonds, angles, dihedrals, and impropers.
-    // The records strings are sorted before appending to the list.
-    charmm_params.append("BONDS");
-    QStringList params = bond_params.toList();
-    params.sort();
-    charmm_params.append(params);
-    charmm_params.append("");
+    // Extract the existing CHARMM parameters.
+    try
+    {
+        // Extract the existing parameters from the system.
+        QString params = system.property(map["charmm-params"]).asA<StringProperty>().value();
+
+        // Convert into a list.
+        charmm_params = params.split("\n");
+    }
+    catch (...)
+    {
+        // Generate a new list of CHARMM parameter records:
+        // bonds, angles, dihedrals, and impropers.
+        // The records strings are sorted before appending to the list.
+        charmm_params.append("BONDS");
+        QStringList params = bond_params.toList();
+        params.sort();
+        charmm_params.append(params);
+        charmm_params.append("");
+    }
 
     // Reparse the lines as a self-consistency check.
     CharmmPSF parsed(lines_list, map);
+
+    // Set the CHARMM parameters.
+    parsed.charmm_params = charmm_params;
 
     this->operator=(parsed);
 }
@@ -1913,7 +1929,7 @@ void CharmmPSF::parseParameters(
     if (not errors.isEmpty())
     {
         throw SireIO::parse_error(QObject::tr("There were errors reading the CHARMM "
-          "paramter file:\n%1").arg(errors.join("\n\n")), CODELOC);
+          "parameter file:\n%1").arg(errors.join("\n\n")), CODELOC);
     }
 }
 
@@ -2376,7 +2392,7 @@ void CharmmPSF::parseMolecule(
             A multi-hash of the parameterisation records.
 
         @param type
-            The type of paramterisation record.
+            The type of parameterisation record.
 
         @return
             A vector of the indices of the matching parameter sets.
@@ -2714,8 +2730,70 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     // Update the system.
     system.update(Molecules(mols));
 
+    // Convert the vector of params to a single string.
+    QString params_string;
+	for (const auto &line : param_lines)
+		params_string.append(line + "\n");
+
+    // Add the CHARMM parameters as a property.
+    system.setProperty(map["charmm-params"].source(), StringProperty(params_string));
+
     // Return the parameterised system.
     return system;
+}
+
+/** Write the parsed data back to the file called 'filename'. This will
+    overwrite the file if it exists already, so be careful! */
+void CharmmPSF::writeToFile(const QString &filename) const
+{
+    QVector<QString> lines = toLines();
+
+    if (lines.isEmpty())
+        return;
+
+    QFile f(filename);
+
+    if (not f.open( QIODevice::WriteOnly | QIODevice::Text ))
+    {
+        throw SireError::file_error(f, CODELOC);
+    }
+
+    // Write the PSF file.
+
+    QTextStream ts(&f);
+
+    for (const QString &line : lines)
+    {
+        ts << line << '\n';
+    }
+
+    f.close();
+
+    // Write supplementary CHARMM parameters.
+
+    if (not charmm_params.isEmpty())
+    {
+        QFileInfo fi(filename);
+
+        QString param_filename = fi.completeBaseName();
+        param_filename.append(".params");
+
+        QFile f(param_filename);
+
+        if (not f.open( QIODevice::WriteOnly | QIODevice::Text ))
+        {
+            throw SireError::file_error(f, CODELOC);
+        }
+
+        QTextStream ts(&f);
+
+        for (const QString &line : charmm_params)
+        {
+            ts << line << '\n';
+        }
+
+        f.close();
+    }
 }
 
 /** Internal function used to get the molecule structure for molecule 'imol'. */
