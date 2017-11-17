@@ -31,15 +31,15 @@ namespace bp = boost::python;
 
 void register_ArrayProperty_int__class(){
 
-    { //::SireBase::ArrayProperty< int >
-        typedef bp::class_< SireBase::ArrayProperty< int >, bp::bases< SireBase::Property >, boost::noncopyable > ArrayProperty_int__exposer_t;
+    { //::SireBase::ArrayProperty< long long >
+        typedef bp::class_< SireBase::ArrayProperty< long long >, bp::bases< SireBase::Property >, boost::noncopyable > ArrayProperty_int__exposer_t;
         ArrayProperty_int__exposer_t ArrayProperty_int__exposer = ArrayProperty_int__exposer_t( "ArrayProperty_int_", "", bp::no_init );
         bp::scope ArrayProperty_int__scope( ArrayProperty_int__exposer );
-        { //::SireBase::ArrayProperty< int >::append
+        { //::SireBase::ArrayProperty< long long >::append
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*append_function_type)( int ) ;
-            append_function_type append_function_value( &::SireBase::ArrayProperty< int >::append );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*append_function_type)( long long int ) ;
+            append_function_type append_function_value( &::SireBase::ArrayProperty< long long >::append );
             
             ArrayProperty_int__exposer.def( 
                 "append"
@@ -48,11 +48,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::append
+        { //::SireBase::ArrayProperty< long long >::append
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*append_function_type)( ::SireBase::ArrayProperty< int > const & ) ;
-            append_function_type append_function_value( &::SireBase::ArrayProperty< int >::append );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*append_function_type)( ::SireBase::ArrayProperty< long long > const & ) ;
+            append_function_type append_function_value( &::SireBase::ArrayProperty< long long >::append );
             
             ArrayProperty_int__exposer.def( 
                 "append"
@@ -61,11 +61,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::array
+        { //::SireBase::ArrayProperty< long long >::array
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef ::QVector< int > ( ::SireBase::ArrayProperty< int >::*array_function_type)(  ) const;
-            array_function_type array_function_value( &::SireBase::ArrayProperty< int >::array );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef ::QVector< long long > ( ::SireBase::ArrayProperty< long long >::*array_function_type)(  ) const;
+            array_function_type array_function_value( &::SireBase::ArrayProperty< long long >::array );
             
             ArrayProperty_int__exposer.def( 
                 "array"
@@ -73,11 +73,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::at
+        { //::SireBase::ArrayProperty< long long >::at
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef int ( ::SireBase::ArrayProperty< int >::*at_function_type)( int ) const;
-            at_function_type at_function_value( &::SireBase::ArrayProperty< int >::at );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef long long int ( ::SireBase::ArrayProperty< long long >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireBase::ArrayProperty< long long >::at );
             
             ArrayProperty_int__exposer.def( 
                 "at"
@@ -86,11 +86,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::clear
+        { //::SireBase::ArrayProperty< long long >::clear
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*clear_function_type)(  ) ;
-            clear_function_type clear_function_value( &::SireBase::ArrayProperty< int >::clear );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*clear_function_type)(  ) ;
+            clear_function_type clear_function_value( &::SireBase::ArrayProperty< long long >::clear );
             
             ArrayProperty_int__exposer.def( 
                 "clear"
@@ -98,11 +98,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::count
+        { //::SireBase::ArrayProperty< long long >::count
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef int ( ::SireBase::ArrayProperty< int >::*count_function_type)(  ) const;
-            count_function_type count_function_value( &::SireBase::ArrayProperty< int >::count );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef int ( ::SireBase::ArrayProperty< long long >::*count_function_type)(  ) const;
+            count_function_type count_function_value( &::SireBase::ArrayProperty< long long >::count );
             
             ArrayProperty_int__exposer.def( 
                 "count"
@@ -110,11 +110,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::empty
+        { //::SireBase::ArrayProperty< long long >::empty
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef bool ( ::SireBase::ArrayProperty< int >::*empty_function_type)(  ) const;
-            empty_function_type empty_function_value( &::SireBase::ArrayProperty< int >::empty );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef bool ( ::SireBase::ArrayProperty< long long >::*empty_function_type)(  ) const;
+            empty_function_type empty_function_value( &::SireBase::ArrayProperty< long long >::empty );
             
             ArrayProperty_int__exposer.def( 
                 "empty"
@@ -122,11 +122,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::getitem
+        { //::SireBase::ArrayProperty< long long >::getitem
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef int ( ::SireBase::ArrayProperty< int >::*getitem_function_type)( int ) const;
-            getitem_function_type getitem_function_value( &::SireBase::ArrayProperty< int >::getitem );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef long long int ( ::SireBase::ArrayProperty< long long >::*getitem_function_type)( int ) const;
+            getitem_function_type getitem_function_value( &::SireBase::ArrayProperty< long long >::getitem );
             
             ArrayProperty_int__exposer.def( 
                 "getitem"
@@ -135,11 +135,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::insert
+        { //::SireBase::ArrayProperty< long long >::insert
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*insert_function_type)( int,int ) ;
-            insert_function_type insert_function_value( &::SireBase::ArrayProperty< int >::insert );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*insert_function_type)( int,long long int ) ;
+            insert_function_type insert_function_value( &::SireBase::ArrayProperty< long long >::insert );
             
             ArrayProperty_int__exposer.def( 
                 "insert"
@@ -148,11 +148,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::isEmpty
+        { //::SireBase::ArrayProperty< long long >::isEmpty
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef bool ( ::SireBase::ArrayProperty< int >::*isEmpty_function_type)(  ) const;
-            isEmpty_function_type isEmpty_function_value( &::SireBase::ArrayProperty< int >::isEmpty );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef bool ( ::SireBase::ArrayProperty< long long >::*isEmpty_function_type)(  ) const;
+            isEmpty_function_type isEmpty_function_value( &::SireBase::ArrayProperty< long long >::isEmpty );
             
             ArrayProperty_int__exposer.def( 
                 "isEmpty"
@@ -160,11 +160,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::move
+        { //::SireBase::ArrayProperty< long long >::move
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*move_function_type)( int,int ) ;
-            move_function_type move_function_value( &::SireBase::ArrayProperty< int >::move );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*move_function_type)( int,int ) ;
+            move_function_type move_function_value( &::SireBase::ArrayProperty< long long >::move );
             
             ArrayProperty_int__exposer.def( 
                 "move"
@@ -173,11 +173,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::operator[]
+        { //::SireBase::ArrayProperty< long long >::operator[]
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef int ( ::SireBase::ArrayProperty< int >::*__getitem___function_type)( int ) const;
-            __getitem___function_type __getitem___function_value( &::SireBase::ArrayProperty< int >::operator[] );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef long long int ( ::SireBase::ArrayProperty< long long >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireBase::ArrayProperty< long long >::operator[] );
             
             ArrayProperty_int__exposer.def( 
                 "__getitem__"
@@ -186,11 +186,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::pop_back
+        { //::SireBase::ArrayProperty< long long >::pop_back
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*pop_back_function_type)(  ) ;
-            pop_back_function_type pop_back_function_value( &::SireBase::ArrayProperty< int >::pop_back );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*pop_back_function_type)(  ) ;
+            pop_back_function_type pop_back_function_value( &::SireBase::ArrayProperty< long long >::pop_back );
             
             ArrayProperty_int__exposer.def( 
                 "pop_back"
@@ -198,11 +198,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::pop_front
+        { //::SireBase::ArrayProperty< long long >::pop_front
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*pop_front_function_type)(  ) ;
-            pop_front_function_type pop_front_function_value( &::SireBase::ArrayProperty< int >::pop_front );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*pop_front_function_type)(  ) ;
+            pop_front_function_type pop_front_function_value( &::SireBase::ArrayProperty< long long >::pop_front );
             
             ArrayProperty_int__exposer.def( 
                 "pop_front"
@@ -210,11 +210,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::prepend
+        { //::SireBase::ArrayProperty< long long >::prepend
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*prepend_function_type)( int ) ;
-            prepend_function_type prepend_function_value( &::SireBase::ArrayProperty< int >::prepend );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*prepend_function_type)( long long int ) ;
+            prepend_function_type prepend_function_value( &::SireBase::ArrayProperty< long long >::prepend );
             
             ArrayProperty_int__exposer.def( 
                 "prepend"
@@ -223,11 +223,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::push_back
+        { //::SireBase::ArrayProperty< long long >::push_back
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*push_back_function_type)( int ) ;
-            push_back_function_type push_back_function_value( &::SireBase::ArrayProperty< int >::push_back );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*push_back_function_type)( long long int ) ;
+            push_back_function_type push_back_function_value( &::SireBase::ArrayProperty< long long >::push_back );
             
             ArrayProperty_int__exposer.def( 
                 "push_back"
@@ -236,11 +236,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::push_front
+        { //::SireBase::ArrayProperty< long long >::push_front
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*push_front_function_type)( int ) ;
-            push_front_function_type push_front_function_value( &::SireBase::ArrayProperty< int >::push_front );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*push_front_function_type)( long long int ) ;
+            push_front_function_type push_front_function_value( &::SireBase::ArrayProperty< long long >::push_front );
             
             ArrayProperty_int__exposer.def( 
                 "push_front"
@@ -249,11 +249,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::removeAt
+        { //::SireBase::ArrayProperty< long long >::removeAt
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*removeAt_function_type)( int ) ;
-            removeAt_function_type removeAt_function_value( &::SireBase::ArrayProperty< int >::removeAt );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*removeAt_function_type)( int ) ;
+            removeAt_function_type removeAt_function_value( &::SireBase::ArrayProperty< long long >::removeAt );
             
             ArrayProperty_int__exposer.def( 
                 "removeAt"
@@ -262,11 +262,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::removeFirst
+        { //::SireBase::ArrayProperty< long long >::removeFirst
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*removeFirst_function_type)(  ) ;
-            removeFirst_function_type removeFirst_function_value( &::SireBase::ArrayProperty< int >::removeFirst );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*removeFirst_function_type)(  ) ;
+            removeFirst_function_type removeFirst_function_value( &::SireBase::ArrayProperty< long long >::removeFirst );
             
             ArrayProperty_int__exposer.def( 
                 "removeFirst"
@@ -274,11 +274,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::removeLast
+        { //::SireBase::ArrayProperty< long long >::removeLast
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*removeLast_function_type)(  ) ;
-            removeLast_function_type removeLast_function_value( &::SireBase::ArrayProperty< int >::removeLast );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*removeLast_function_type)(  ) ;
+            removeLast_function_type removeLast_function_value( &::SireBase::ArrayProperty< long long >::removeLast );
             
             ArrayProperty_int__exposer.def( 
                 "removeLast"
@@ -286,11 +286,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::replace
+        { //::SireBase::ArrayProperty< long long >::replace
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*replace_function_type)( int,int ) ;
-            replace_function_type replace_function_value( &::SireBase::ArrayProperty< int >::replace );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*replace_function_type)( int,long long int ) ;
+            replace_function_type replace_function_value( &::SireBase::ArrayProperty< long long >::replace );
             
             ArrayProperty_int__exposer.def( 
                 "replace"
@@ -299,11 +299,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::size
+        { //::SireBase::ArrayProperty< long long >::size
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef int ( ::SireBase::ArrayProperty< int >::*size_function_type)(  ) const;
-            size_function_type size_function_value( &::SireBase::ArrayProperty< int >::size );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef int ( ::SireBase::ArrayProperty< long long >::*size_function_type)(  ) const;
+            size_function_type size_function_value( &::SireBase::ArrayProperty< long long >::size );
             
             ArrayProperty_int__exposer.def( 
                 "size"
@@ -311,11 +311,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::swap
+        { //::SireBase::ArrayProperty< long long >::swap
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*swap_function_type)( ::SireBase::ArrayProperty< int > & ) ;
-            swap_function_type swap_function_value( &::SireBase::ArrayProperty< int >::swap );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*swap_function_type)( ::SireBase::ArrayProperty< long long > & ) ;
+            swap_function_type swap_function_value( &::SireBase::ArrayProperty< long long >::swap );
             
             ArrayProperty_int__exposer.def( 
                 "swap"
@@ -324,11 +324,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::swap
+        { //::SireBase::ArrayProperty< long long >::swap
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef void ( ::SireBase::ArrayProperty< int >::*swap_function_type)( int,int ) ;
-            swap_function_type swap_function_value( &::SireBase::ArrayProperty< int >::swap );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef void ( ::SireBase::ArrayProperty< long long >::*swap_function_type)( int,int ) ;
+            swap_function_type swap_function_value( &::SireBase::ArrayProperty< long long >::swap );
             
             ArrayProperty_int__exposer.def( 
                 "swap"
@@ -337,11 +337,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::takeAt
+        { //::SireBase::ArrayProperty< long long >::takeAt
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef int ( ::SireBase::ArrayProperty< int >::*takeAt_function_type)( int ) ;
-            takeAt_function_type takeAt_function_value( &::SireBase::ArrayProperty< int >::takeAt );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef long long int ( ::SireBase::ArrayProperty< long long >::*takeAt_function_type)( int ) ;
+            takeAt_function_type takeAt_function_value( &::SireBase::ArrayProperty< long long >::takeAt );
             
             ArrayProperty_int__exposer.def( 
                 "takeAt"
@@ -350,11 +350,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::takeFirst
+        { //::SireBase::ArrayProperty< long long >::takeFirst
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef int ( ::SireBase::ArrayProperty< int >::*takeFirst_function_type)(  ) ;
-            takeFirst_function_type takeFirst_function_value( &::SireBase::ArrayProperty< int >::takeFirst );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef long long int ( ::SireBase::ArrayProperty< long long >::*takeFirst_function_type)(  ) ;
+            takeFirst_function_type takeFirst_function_value( &::SireBase::ArrayProperty< long long >::takeFirst );
             
             ArrayProperty_int__exposer.def( 
                 "takeFirst"
@@ -362,11 +362,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::takeLast
+        { //::SireBase::ArrayProperty< long long >::takeLast
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef int ( ::SireBase::ArrayProperty< int >::*takeLast_function_type)(  ) ;
-            takeLast_function_type takeLast_function_value( &::SireBase::ArrayProperty< int >::takeLast );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef long long int ( ::SireBase::ArrayProperty< long long >::*takeLast_function_type)(  ) ;
+            takeLast_function_type takeLast_function_value( &::SireBase::ArrayProperty< long long >::takeLast );
             
             ArrayProperty_int__exposer.def( 
                 "takeLast"
@@ -374,11 +374,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::toList
+        { //::SireBase::ArrayProperty< long long >::toList
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef ::QList< int > ( ::SireBase::ArrayProperty< int >::*toList_function_type)(  ) const;
-            toList_function_type toList_function_value( &::SireBase::ArrayProperty< int >::toList );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef ::QList< long long > ( ::SireBase::ArrayProperty< long long >::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireBase::ArrayProperty< long long >::toList );
             
             ArrayProperty_int__exposer.def( 
                 "toList"
@@ -386,11 +386,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::toString
+        { //::SireBase::ArrayProperty< long long >::toString
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef ::QString ( ::SireBase::ArrayProperty< int >::*toString_function_type)(  ) const;
-            toString_function_type toString_function_value( &::SireBase::ArrayProperty< int >::toString );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef ::QString ( ::SireBase::ArrayProperty< long long >::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireBase::ArrayProperty< long long >::toString );
             
             ArrayProperty_int__exposer.def( 
                 "toString"
@@ -398,11 +398,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::toVector
+        { //::SireBase::ArrayProperty< long long >::toVector
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef ::QVector< int > ( ::SireBase::ArrayProperty< int >::*toVector_function_type)(  ) const;
-            toVector_function_type toVector_function_value( &::SireBase::ArrayProperty< int >::toVector );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef ::QVector< long long > ( ::SireBase::ArrayProperty< long long >::*toVector_function_type)(  ) const;
+            toVector_function_type toVector_function_value( &::SireBase::ArrayProperty< long long >::toVector );
             
             ArrayProperty_int__exposer.def( 
                 "toVector"
@@ -410,11 +410,11 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        { //::SireBase::ArrayProperty< int >::value
+        { //::SireBase::ArrayProperty< long long >::value
         
-            typedef SireBase::ArrayProperty< int > exported_class_t;
-            typedef ::QVector< int > ( ::SireBase::ArrayProperty< int >::*value_function_type)(  ) const;
-            value_function_type value_function_value( &::SireBase::ArrayProperty< int >::value );
+            typedef SireBase::ArrayProperty< long long > exported_class_t;
+            typedef ::QVector< long long > ( ::SireBase::ArrayProperty< long long >::*value_function_type)(  ) const;
+            value_function_type value_function_value( &::SireBase::ArrayProperty< long long >::value );
             
             ArrayProperty_int__exposer.def( 
                 "value"
@@ -422,10 +422,10 @@ void register_ArrayProperty_int__class(){
                 , "" );
         
         }
-        ArrayProperty_int__exposer.def( "__str__", &__str__< ::SireBase::ArrayProperty<int> > );
-        ArrayProperty_int__exposer.def( "__repr__", &__str__< ::SireBase::ArrayProperty<int> > );
-        ArrayProperty_int__exposer.def( "__len__", &__len_size< ::SireBase::ArrayProperty<int> > );
-        ArrayProperty_int__exposer.def( "__getitem__", &::SireBase::ArrayProperty<int>::getitem );
+        ArrayProperty_int__exposer.def( "__str__", &__str__< ::SireBase::ArrayProperty<long long> > );
+        ArrayProperty_int__exposer.def( "__repr__", &__str__< ::SireBase::ArrayProperty<long long> > );
+        ArrayProperty_int__exposer.def( "__len__", &__len_size< ::SireBase::ArrayProperty<long long> > );
+        ArrayProperty_int__exposer.def( "__getitem__", &::SireBase::ArrayProperty<long long>::getitem );
     }
 
 }

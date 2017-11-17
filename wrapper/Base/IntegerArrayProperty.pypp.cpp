@@ -36,7 +36,7 @@ SireBase::IntegerArrayProperty __copy__(const SireBase::IntegerArrayProperty &ot
 void register_IntegerArrayProperty_class(){
 
     { //::SireBase::IntegerArrayProperty
-        typedef bp::class_< SireBase::IntegerArrayProperty, bp::bases< SireBase::Property > > IntegerArrayProperty_exposer_t;
+        typedef bp::class_< SireBase::IntegerArrayProperty, bp::bases< SireBase::ArrayProperty<long long>, SireBase::Property > > IntegerArrayProperty_exposer_t;
         IntegerArrayProperty_exposer_t IntegerArrayProperty_exposer = IntegerArrayProperty_exposer_t( "IntegerArrayProperty", "", bp::init< >("") );
         bp::scope IntegerArrayProperty_scope( IntegerArrayProperty_exposer );
         IntegerArrayProperty_exposer.def( bp::init< QList< long long > const & >(( bp::arg("array") ), "") );

@@ -542,13 +542,13 @@ SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<QString>),
 SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<double>),
                     SireBase::ArrayProperty_double_ )
 
-SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<int>),
+SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<long long>),
                     SireBase::ArrayProperty_int_ )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireBase::ArrayProperty<QString>;
 template class SireBase::ArrayProperty<double>;
-template class SireBase::ArrayProperty<int>;
+template class SireBase::ArrayProperty<qint64>;
 #endif
 
 SIRE_END_HEADER
