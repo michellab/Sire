@@ -536,6 +536,21 @@ QVector<T> ArrayProperty<T>::value() const
 
 }
 
+SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<QString>),
+                    SireBase::ArrayProperty_QString_ )
+
+SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<double>),
+                    SireBase::ArrayProperty_double_ )
+
+SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<int>),
+                    SireBase::ArrayProperty_int_ )
+
+#ifdef SIRE_INSTANTIATE_TEMPLATES
+template class SireBase::ArrayProperty<QString>;
+template class SireBase::ArrayProperty<double>;
+template class SireBase::ArrayProperty<int>;
+#endif
+
 SIRE_END_HEADER
 
 #endif

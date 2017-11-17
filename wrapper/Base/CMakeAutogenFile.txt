@@ -7,6 +7,8 @@ set ( PYPP_SOURCES
        CombineProperties.pypp.cpp
        _Base_free_functions.pypp.cpp
        PackedArray2D_QString_Array.pypp.cpp
+       ArrayProperty_int_.pypp.cpp
+       ArrayProperty_double_.pypp.cpp
        Incremint.pypp.cpp
        vector_less__double__greater_.pypp.cpp
        PackedArray2D_int_Array.pypp.cpp
@@ -33,6 +35,7 @@ set ( PYPP_SOURCES
        PropertyList.pypp.cpp
        TrigArray2D_double_.pypp.cpp
        VariantProperty.pypp.cpp
+       ArrayProperty_QString_.pypp.cpp
        CPUID.pypp.cpp
        UpperCaseString.pypp.cpp
        PackedArray2D_QVariant_Array.pypp.cpp

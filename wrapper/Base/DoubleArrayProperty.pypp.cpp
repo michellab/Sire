@@ -36,7 +36,7 @@ SireBase::DoubleArrayProperty __copy__(const SireBase::DoubleArrayProperty &othe
 void register_DoubleArrayProperty_class(){
 
     { //::SireBase::DoubleArrayProperty
-        typedef bp::class_< SireBase::DoubleArrayProperty, bp::bases< SireBase::Property > > DoubleArrayProperty_exposer_t;
+        typedef bp::class_< SireBase::DoubleArrayProperty, bp::bases< SireBase::ArrayProperty<double>, SireBase::Property > > DoubleArrayProperty_exposer_t;
         DoubleArrayProperty_exposer_t DoubleArrayProperty_exposer = DoubleArrayProperty_exposer_t( "DoubleArrayProperty", "", bp::init< >("") );
         bp::scope DoubleArrayProperty_scope( DoubleArrayProperty_exposer );
         DoubleArrayProperty_exposer.def( bp::init< QList< double > const & >(( bp::arg("array") ), "") );

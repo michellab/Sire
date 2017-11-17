@@ -36,7 +36,7 @@ SireBase::StringArrayProperty __copy__(const SireBase::StringArrayProperty &othe
 void register_StringArrayProperty_class(){
 
     { //::SireBase::StringArrayProperty
-        typedef bp::class_< SireBase::StringArrayProperty, bp::bases< SireBase::Property > > StringArrayProperty_exposer_t;
+        typedef bp::class_< SireBase::StringArrayProperty, bp::bases< SireBase::ArrayProperty<QString>, SireBase::Property > > StringArrayProperty_exposer_t;
         StringArrayProperty_exposer_t StringArrayProperty_exposer = StringArrayProperty_exposer_t( "StringArrayProperty", "", bp::init< >("") );
         bp::scope StringArrayProperty_scope( StringArrayProperty_exposer );
         StringArrayProperty_exposer.def( bp::init< QList< QString > const & >(( bp::arg("array") ), "") );

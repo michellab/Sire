@@ -9,6 +9,10 @@ namespace bp = boost::python;
 
 #include "SireBase/timeproperty.h"
 
+#include "SireBase/variantproperty.h"
+
+#include "SireError/errors.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -31,7 +35,7 @@ void register_TimeProperty_class(){
         bp::scope TimeProperty_scope( TimeProperty_exposer );
         TimeProperty_exposer.def( bp::init< SireUnits::Dimension::Time >(( bp::arg("value") ), "Construct from the passed length") );
         TimeProperty_exposer.def( bp::init< SireBase::TimeProperty const & >(( bp::arg("other") ), "Copy constructor") );
-        TimeProperty_exposer.def( bp::init< SireBase::Property const & >(( bp::arg("other") ), "Copy constructor") );
+        TimeProperty_exposer.def( bp::init< SireBase::Property const & >(( bp::arg("other") ), "Construct from a Property") );
         TimeProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::TimeProperty::operator=
         

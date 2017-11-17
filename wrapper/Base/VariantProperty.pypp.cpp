@@ -86,7 +86,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "convertToBool"
                 , convertToBool_function_value
-                , "" );
+                , "Return the variant property converted to a bool using the QVariant conversion function" );
         
         }
         { //::SireBase::VariantProperty::convertToDouble
@@ -97,7 +97,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "convertToDouble"
                 , convertToDouble_function_value
-                , "" );
+                , "Return the variant property converted to a double using the QVariant conversion function" );
         
         }
         { //::SireBase::VariantProperty::convertToInt
@@ -108,7 +108,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "convertToInt"
                 , convertToInt_function_value
-                , "" );
+                , "Return the variant property converted to an integer using the QVariant conversion function" );
         
         }
         { //::SireBase::VariantProperty::convertToString
@@ -119,7 +119,7 @@ void register_VariantProperty_class(){
             VariantProperty_exposer.def( 
                 "convertToString"
                 , convertToString_function_value
-                , "" );
+                , "Return the variant property converted to a string using the QVariant conversion function" );
         
         }
         { //::SireBase::VariantProperty::isABoolean
