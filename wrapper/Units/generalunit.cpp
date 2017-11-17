@@ -371,7 +371,7 @@ namespace SireUnits
 namespace dimension
 {
 
-PropertyPtr wrap(const GeneralUnit &unit)
+PropertyPtr SIREUNITS_EXPORT wrap(const GeneralUnit &unit)
 {
     if (::is_unit<Length>(unit))
     {
