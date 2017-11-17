@@ -5,6 +5,7 @@
 #include "SireMol/mover.hpp"
 
 #include "SireBase/property.h"
+#include "SireBase/variantproperty.h"
 
 #include "SireMol/molecule.h"
 

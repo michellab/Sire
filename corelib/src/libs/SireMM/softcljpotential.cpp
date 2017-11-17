@@ -38,6 +38,7 @@
 #include "SireVol/cartesian.h"
 
 #include "SireBase/countflops.h"
+#include "SireBase/propertylist.h"
 
 #include "SireMaths/maths.h"
 
@@ -140,7 +141,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
                 if (prop.isA<NullProperty>())
                     continue;
             
-                double alpha = prop.asA<VariantProperty>().convertTo<double>();
+                double alpha = prop.asADouble();
                                      
                 int idx = alpha_values.indexOf(alpha);
                 
@@ -160,7 +161,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
             
             if (not prop.isA<NullProperty>())
             {
-                double alpha = prop.asA<VariantProperty>().convertTo<double>();
+                double alpha = prop.asADouble();
                                  
                 if (alpha_values.count() == 0)
                 {
@@ -193,13 +194,13 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
         cljpot.rebuildAlphaProperties();
     
         cljpot.shift_delta = cljpot.props.property("shiftDelta")
-                                  .asA<VariantProperty>().convertTo<double>();
+                                         .asADouble();
                 
         cljpot.coul_power = cljpot.props.property("coulombPower")
-                                  .asA<VariantProperty>().convertTo<quint32>();
+                                        .asAnInteger();
 
         cljpot.lj_power = cljpot.props.property("ljPower")
-                                  .asA<VariantProperty>().convertTo<quint32>();
+                                      .asAnInteger();
     }
     else 
         throw version_error(v, "1,2", r_cljpot, CODELOC);
@@ -220,9 +221,9 @@ SoftCLJPotential::SoftCLJPotential()
     this->rebuildAlphaProperties();
 
     //record the defaults
-    props.setProperty( "shiftDelta", VariantProperty(shift_delta) );
-    props.setProperty( "coulombPower", VariantProperty(coul_power) );
-    props.setProperty( "ljPower", VariantProperty(lj_power) );
+    props.setProperty( "shiftDelta", wrap(shift_delta) );
+    props.setProperty( "coulombPower", wrap(coul_power) );
+    props.setProperty( "ljPower", wrap(lj_power) );
 }
 
 /** Copy constructor */
@@ -341,7 +342,7 @@ void SoftCLJPotential::rebuildAlphaProperties()
 {
     if (alpha_values.count() == 1)
     {
-        props.setProperty("alpha", VariantProperty(alpha_values.at(0)));
+        props.setProperty("alpha", wrap(alpha_values.at(0)));
     }
     else
     {
@@ -359,7 +360,7 @@ void SoftCLJPotential::rebuildAlphaProperties()
         else
         {
             props.setProperty( QString("alpha%1").arg(i), 
-                               VariantProperty(alpha_values.at(idx)) );
+                               wrap(alpha_values.at(idx)) );
         }
     }
 }
@@ -465,7 +466,7 @@ bool SoftCLJPotential::setShiftDelta(double new_delta)
     if (shift_delta != new_delta)
     {
         shift_delta = new_delta;
-        props.setProperty("shiftDelta", VariantProperty(shift_delta));
+        props.setProperty("shiftDelta", wrap(shift_delta));
         this->changedPotential();
         return true;
     }
@@ -487,7 +488,7 @@ bool SoftCLJPotential::setCoulombPower(int power)
     if (coul_power != new_power)
     {
         coul_power = new_power;
-        props.setProperty("coulombPower", VariantProperty(coul_power));
+        props.setProperty("coulombPower", wrap(coul_power));
         this->changedPotential();
         return true;
     }
@@ -509,7 +510,7 @@ bool SoftCLJPotential::setLJPower(int power)
     if (lj_power != new_power)
     {
         lj_power = new_power;
-        props.setProperty("ljPower", VariantProperty(lj_power));
+        props.setProperty("ljPower", wrap(lj_power));
         this->changedPotential();
         return true;
     }
@@ -527,19 +528,19 @@ bool SoftCLJPotential::setProperty(const QString &name, const Property &value)
 {
     if (name == QLatin1String("alpha"))
     {
-        return this->setAlpha( value.asA<VariantProperty>().convertTo<double>() );
+        return this->setAlpha( value.asADouble() );
     }
     else if (name == QLatin1String("shiftDelta"))
     {
-        return this->setShiftDelta( value.asA<VariantProperty>().convertTo<double>() );
+        return this->setShiftDelta( value.asADouble() );
     }
     else if (name == QLatin1String("coulombPower"))
     {
-        return this->setCoulombPower( value.asA<VariantProperty>().convertTo<int>() );
+        return this->setCoulombPower( value.asAnInteger() );
     }
     else if (name == QLatin1String("ljPower"))
     {
-        return this->setLJPower( value.asA<VariantProperty>().convertTo<int>() );
+        return this->setLJPower( value.asAnInteger() );
     }
     else
     {
@@ -550,8 +551,7 @@ bool SoftCLJPotential::setProperty(const QString &name, const Property &value)
             
             if (name == propname)
             {
-                return this->setAlpha(i, value.asA<VariantProperty>()
-                                              .convertTo<double>() );
+                return this->setAlpha(i, value.asADouble());
             }
         }
     

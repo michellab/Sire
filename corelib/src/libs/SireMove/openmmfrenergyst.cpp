@@ -42,6 +42,8 @@
 
 #include "SireSystem/system.h"
 
+#include "SireBase/variantproperty.h"
+
 #include "SireFF/forcetable.h"
 
 #include "SireMaths/rangenerator.h"

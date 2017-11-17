@@ -89,6 +89,14 @@ VariantProperty::VariantProperty(const Property &property)
     *this = property;
 }
 
+VariantProperty::VariantProperty(const QString &value)
+                : ConcreteProperty<VariantProperty,Property>(), QVariant(value)
+{}
+    
+VariantProperty::VariantProperty(double value)
+                : ConcreteProperty<VariantProperty,Property>(), QVariant(value)
+{}
+
 /** Copy constructor */
 VariantProperty::VariantProperty(const VariantProperty &other)
 : ConcreteProperty<VariantProperty,Property>(other), QVariant(other)

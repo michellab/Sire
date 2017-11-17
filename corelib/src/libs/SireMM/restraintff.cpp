@@ -34,6 +34,8 @@
 #include "SireMol/partialmolecule.h"
 #include "SireMol/viewsofmol.h"
 
+#include "SireBase/propertylist.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
@@ -110,8 +112,7 @@ void RestraintFF::rebuildProperties()
 
     foreach (Symbol symbol, user_values.symbols())
     {
-        props.setProperty( symbol.toString(), 
-                           VariantProperty(user_values[symbol]) );
+        props.setProperty( symbol.toString(), wrap(user_values[symbol]) );
     }
 }
 
@@ -638,7 +639,7 @@ bool RestraintFF::setValue(const Symbol &symbol, double value)
         
         restraints_by_idx = new_restraints;
         
-        props.setProperty( symbol.toString(), VariantProperty(value) );
+        props.setProperty( symbol.toString(), wrap(value) );
         
         return true;
     }
@@ -679,8 +680,7 @@ bool RestraintFF::setProperty(const QString &name, const Property &property)
     }
     else if (props.hasProperty(name))
     {
-        return this->setValue( Symbol(name), property.asA<VariantProperty>()
-                                                     .convertTo<double>() );
+        return this->setValue( Symbol(name), property.asADouble() );
     }
     else
     {

@@ -31,6 +31,7 @@
 #include "delta.h"
 
 #include "SireBase/numberproperty.h"
+#include "SireBase/propertylist.h"
 
 #include "SireMaths/maths.h"
 
@@ -632,29 +633,7 @@ void PropertyConstraint::setSystem(const System &system)
 
     if (not constrained_value.isNull())
     {
-        if (constrained_value.read().isA<VariantProperty>())
-        {
-            const VariantProperty &var = constrained_value.read().asA<VariantProperty>();
-            
-            if (var.canConvert<double>())
-            {
-                has_constrained_value = true;
-                constrained_val = var.convertTo<double>();
-            }
-        }
-        else if (constrained_value.read().isA<NumberProperty>())
-        {
-            has_constrained_value = true;
-            constrained_val = constrained_value.read().asA<NumberProperty>().value();
-        }
-        else
-        {
-            throw SireError::invalid_cast( QObject::tr(
-                    "Cannot convert the constrained property %1 ( equals %2 ) into a number. "
-                    "This is needed to constrain it to a numeric value to satisfy %3")
-                        .arg(propname).arg(constrained_value.read().toString())
-                        .arg(this->toString()), CODELOC );
-        }
+        constrained_val = constrained_value.read().asADouble();
     }
     
     component_vals = system.constants(syms);
@@ -675,9 +654,9 @@ bool PropertyConstraint::fullApply(Delta &delta)
     bool changed = false;
 
     if (ffidxs.isEmpty())
-        changed = delta.update(propname, VariantProperty(target_value));
+        changed = delta.update(propname, wrap(target_value));
     else
-        changed = delta.update(propname, ffidxs, VariantProperty(target_value));
+        changed = delta.update(propname, ffidxs, wrap(target_value));
     
     if (changed)
         this->setSystem( delta.deltaSystem() );
@@ -751,42 +730,13 @@ bool PropertyConstraint::deltaApply(Delta &delta, quint32 last_subversion)
             //get the current value of the property
             if (not constrained_value.isNull())
             {
-                if (constrained_value.read().isA<VariantProperty>())
-                {
-                    const VariantProperty &var 
-                                    = constrained_value.read().asA<VariantProperty>();
-                                        
-                    if (var.canConvert<double>())
-                    {
-                        if (target_value == var.convertTo<double>())
-                            //no need to make any changes
-                            return false;
-                    }
-                }
-                else if (constrained_value.read().isA<NumberProperty>())
-                {
-                    use_number_property = true;
-                
-                    if (target_value == constrained_value.read().asA<NumberProperty>().value())
-                        //no need to make any changes
-                        return false;
-                }
+                target_value = constrained_value.read().asADouble();
             }
             
-            if (use_number_property)
-            {
-                if (ffidxs.isEmpty())
-                    return delta.update(propname, NumberProperty(target_value));
-                else
-                    return delta.update(propname, ffidxs, NumberProperty(target_value));
-            }
+            if (ffidxs.isEmpty())
+                return delta.update(propname, wrap(target_value));
             else
-            {
-                if (ffidxs.isEmpty())
-                    return delta.update(propname, VariantProperty(target_value));
-                else
-                    return delta.update(propname, ffidxs, VariantProperty(target_value));
-            }
+                return delta.update(propname, ffidxs, wrap(target_value));
         }
     }
     else if (not this->isSatisfied(delta.deltaSystem()))

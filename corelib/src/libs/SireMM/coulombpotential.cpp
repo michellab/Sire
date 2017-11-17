@@ -37,6 +37,7 @@
 #include "SireVol/cartesian.h"
 
 #include "SireBase/countflops.h"
+#include "SireBase/propertylist.h"
 
 #include "SireMaths/maths.h"
 
@@ -262,7 +263,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
                                           .asA<SwitchingFunction>();
     
         coulpot.use_electrostatic_shifting = coulpot.props.property("shiftElectrostatics")
-                                        .asA<VariantProperty>().convertTo<bool>();
+                                                    .asABoolean();
     }
     else 
         throw version_error(v, "1", r_coulpot, CODELOC);
@@ -278,8 +279,7 @@ CoulombPotential::CoulombPotential()
     //record the defaults
     props.setProperty( "space", spce );
     props.setProperty( "switchingFunction", switchfunc );
-    props.setProperty( "shiftElectrostatics",
-                       VariantProperty(use_electrostatic_shifting) );
+    props.setProperty( "shiftElectrostatics", wrap(use_electrostatic_shifting) );
 }
 
 /** Copy constructor */
@@ -377,7 +377,7 @@ bool CoulombPotential::setShiftElectrostatics(bool switchelectro)
     if (switchelectro != use_electrostatic_shifting)
     {
         use_electrostatic_shifting = switchelectro;
-        props.setProperty( "shiftElectrostatics", VariantProperty(switchelectro) );
+        props.setProperty( "shiftElectrostatics", wrap(switchelectro) );
         this->changedPotential();
         return true;
     }
@@ -403,8 +403,7 @@ bool CoulombPotential::setProperty(const QString &name, const Property &value)
     }
     else if (name == QLatin1String("shiftElectrostatics"))
     {
-        return this->setShiftElectrostatics( value.asA<VariantProperty>()
-                                                     .convertTo<bool>() );
+        return this->setShiftElectrostatics( value.asABoolean() );
     }
     else
         throw SireBase::missing_property( QObject::tr(
