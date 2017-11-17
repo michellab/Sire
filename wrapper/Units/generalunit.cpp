@@ -354,42 +354,22 @@ GeneralUnit GeneralUnit::invert() const
     return ret;
 }
 
-template<class D>
-static bool is_unit(const GeneralUnit &gen_unit)
+PropertyPtr GeneralUnit::toProperty() const
 {
-    return gen_unit.MASS() == D::MASS() and
-           gen_unit.LENGTH() == D::LENGTH() and
-           gen_unit.TIME() == D::TIME() and
-           gen_unit.CHARGE() == D::CHARGE() and
-           gen_unit.TEMPERATURE() == D::TEMPERATURE() and
-           gen_unit.QUANTITY() == D::QUANTITY() and
-           gen_unit.ANGLE() == D::ANGLE();
-}
-
-namespace SireUnits
-{
-namespace dimension
-{
-
-PropertyPtr SIREUNITS_EXPORT wrap(const GeneralUnit &unit)
-{
-    if (::is_unit<Length>(unit))
+    if (this->isUnit<SireUnits::Dimension::Length>())
     {
-        return LengthProperty( Length(unit.value()) );
+        return LengthProperty( SireUnits::Dimension::Length(this->value()) );
     }
-    else if (::is_unit<Time>(unit))
+    else if (this->isUnit<SireUnits::Dimension::Time>())
     {
-        return TimeProperty( Time(unit.value()) );
+        return TimeProperty( SireUnits::Dimension::Time(this->value()) );
     }
     else
     {
         throw SireError::incomplete_code( QObject::tr(
                 "Tell the programmers that they need to add in automatic "
-                "wrapping of units of type '%s'").arg(unit.toString()),
+                "wrapping of units of type '%s'").arg(this->toString()),
                    CODELOC );
         return PropertyPtr();
     }
-}
-
-}
 }

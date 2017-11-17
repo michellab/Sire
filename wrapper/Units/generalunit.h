@@ -110,15 +110,35 @@ public:
     
     QString toString() const;
 
+    SireBase::PropertyPtr toProperty() const;
+
+    template<class T>
+    bool isUnit() const;
+
 private:
     void assertCompatible(const GeneralUnit &other) const;
 
     int Mass, Length, Time, Charge, temperature, Quantity, Angle;
 };
 
-SireBase::PropertyPtr wrap(const GeneralUnit &unit);
+inline SireBase::PropertyPtr wrap(const GeneralUnit &unit)
+{
+    return unit.toProperty();
+}
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+template<class T>
+inline bool GeneralUnit::isUnit() const
+{
+    return this->MASS() == T::MASS() and
+           this->LENGTH() == T::LENGTH() and
+           this->TIME() == T::TIME() and
+           this->CHARGE() == T::CHARGE() and
+           this->TEMPERATURE() == T::TEMPERATURE() and
+           this->QUANTITY() == T::QUANTITY() and
+           this->ANGLE() == T::ANGLE();
+}
 
 inline GeneralUnit operator*(double val, const GeneralUnit &unit)
 {
