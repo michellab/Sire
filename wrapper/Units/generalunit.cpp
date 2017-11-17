@@ -8,11 +8,18 @@
 
 #include "generalunit.h"
 
+#include "SireBase/lengthproperty.h"
+#include "SireBase/timeproperty.h"
+#include "SireBase/variantproperty.h"
+
+#include "SireError/errors.h"
+
 #include "SireUnits/dimensions.h"
 #include "SireUnits/temperature.h"
 
 using namespace SireUnits;
 using namespace SireUnits::Dimension;
+using namespace SireBase;
 
 namespace SireUnits
 {
@@ -345,4 +352,44 @@ GeneralUnit GeneralUnit::invert() const
     ret.Angle = -Angle;
     
     return ret;
+}
+
+template<class D>
+static bool is_unit(const GeneralUnit &gen_unit)
+{
+    return gen_unit.MASS() == D::MASS() and
+           gen_unit.LENGTH() == D::LENGTH() and
+           gen_unit.TIME() == D::TIME() and
+           gen_unit.CHARGE() == D::CHARGE() and
+           gen_unit.TEMPERATURE() == D::TEMPERATURE() and
+           gen_unit.QUANTITY() == D::QUANTITY() and
+           gen_unit.ANGLE() == D::ANGLE();
+}
+
+namespace SireUnits
+{
+namespace dimension
+{
+
+PropertyPtr wrap(const GeneralUnit &unit)
+{
+    if (::is_unit<Length>(unit))
+    {
+        return LengthProperty( Length(unit.value()) );
+    }
+    else if (::is_unit<Time>(unit))
+    {
+        return TimeProperty( Time(unit.value()) );
+    }
+    else
+    {
+        throw SireError::incomplete_code( QObject::tr(
+                "Tell the programmers that they need to add in automatic "
+                "wrapping of units of type '%s'").arg(unit.toString()),
+                   CODELOC );
+        return PropertyPtr();
+    }
+}
+
+}
 }

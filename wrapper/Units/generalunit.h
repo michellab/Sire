@@ -10,6 +10,9 @@
 
 #include "SireUnits/dimensions.h"
 
+#include "SireBase/property.h"
+#include "SireBase/propertylist.h"
+
 SIRE_BEGIN_HEADER
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
@@ -112,6 +115,8 @@ private:
 
     int Mass, Length, Time, Charge, temperature, Quantity, Angle;
 };
+
+SireBase::PropertyPtr wrap(const GeneralUnit &unit);
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
@@ -248,6 +253,7 @@ void register_dimension()
 }
 
 SIRE_EXPOSE_CLASS( SireUnits::Dimension::GeneralUnit )
+SIRE_EXPOSE_FUNCTION( SireUnits::Dimension::wrap )
 
 SIRE_END_HEADER
 

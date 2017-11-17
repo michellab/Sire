@@ -9,6 +9,10 @@ namespace bp = boost::python;
 
 #include "generalunit.h"
 
+#include "SireBase/lengthproperty.h"
+
+#include "SireBase/timeproperty.h"
+
 #include "SireUnits/dimensions.h"
 
 #include "SireUnits/temperature.h"
