@@ -57,8 +57,11 @@ friend QDataStream& ::operator>>(QDataStream&, StringProperty&);
 
 public:
     StringProperty();
+    
     StringProperty(const QString &s);
-    StringProperty(const VariantProperty &other);
+    StringProperty(double value);
+    
+    StringProperty(const Property &other);
     StringProperty(const StringProperty &other);
     
     ~StringProperty();
@@ -73,6 +76,16 @@ public:
     QString toString() const;
     
     QString value() const;
+
+    bool isAString() const;
+    bool isADouble() const;
+    bool isAnInteger() const;
+    bool isABoolean() const;
+    
+    QString asAString() const;
+    double asADouble() const;
+    int asAnInteger() const;
+    bool asABoolean() const;
 
 private:
     /** The actual string */

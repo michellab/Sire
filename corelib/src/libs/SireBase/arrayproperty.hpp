@@ -66,6 +66,7 @@ class SIREBASE_EXPORT ArrayProperty : public Property
 
 public:
     ArrayProperty();
+    ArrayProperty(const T &value);
     
     ~ArrayProperty();
     
@@ -144,6 +145,14 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 ArrayProperty<T>::ArrayProperty() : Property()
 {}
+
+/** Construct from a single value */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+ArrayProperty<T>::ArrayProperty(const T &value) : Property()
+{
+    a.append(value);
+}
 
 /** Construct from the passed list */
 template<class T>

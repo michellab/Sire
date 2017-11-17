@@ -87,11 +87,6 @@ namespace SireBase
         return NumberProperty(value);
     }
     
-    PropertyPtr SIREBASE_EXPORT wrap(int value)
-    {
-        return NumberProperty(value);
-    }
-    
     PropertyPtr SIREBASE_EXPORT wrap(const QList<int> &values)
     {
         QVector<qint64> ivals;
@@ -137,6 +132,11 @@ namespace SireBase
     {
         return StringArrayProperty(values);
     }
+    
+    PropertyPtr SIREBASE_EXPORT wrap(const QStringList &values)
+    {
+        return StringArrayProperty(values);
+    }
 }
 
 ////////
@@ -173,9 +173,67 @@ PropertyList::PropertyList() : ConcreteProperty<PropertyList,Property>()
 {}
 
 /** Construct from the passed list */
+PropertyList::PropertyList(const QList<double> &numbers)
+             : ConcreteProperty<PropertyList,Property>()
+{
+    for (auto val : numbers)
+    {
+        l.append( NumberProperty(val) );
+    }
+}
+
+
+/** Construct from the passed list */
+PropertyList::PropertyList(const QStringList &strings)
+             : ConcreteProperty<PropertyList,Property>()
+{
+    for (auto string : strings)
+    {
+        l.append( StringProperty(string) );
+    }
+}
+
+/** Construct from the passed list */
+PropertyList::PropertyList(const DoubleArrayProperty &array)
+             : ConcreteProperty<PropertyList,Property>()
+{
+    for (auto val : array.toVector())
+    {
+        l.append( NumberProperty(val) );
+    }
+}
+
+/** Construct from the passed list */
+PropertyList::PropertyList(const IntegerArrayProperty &array)
+             : ConcreteProperty<PropertyList,Property>()
+{
+    for (auto val : array.toVector())
+    {
+        l.append( NumberProperty(val) );
+    }
+}
+
+/** Construct from the passed list */
+PropertyList::PropertyList(const StringArrayProperty &array)
+             : ConcreteProperty<PropertyList,Property>()
+{
+    for (auto val : array.toVector())
+    {
+        l.append( StringProperty(val) );
+    }
+}
+
+/** Construct from the passed list */
 PropertyList::PropertyList(const QList<PropertyPtr> &props)
              : ConcreteProperty<PropertyList,Property>(), l(props)
 {}
+
+/** Construct to hold the passed single value */
+PropertyList::PropertyList(const Property &other)
+             : ConcreteProperty<PropertyList,Property>()
+{
+    l.append(other);
+}
 
 /** Copy constructor */
 PropertyList::PropertyList(const PropertyList &other)
@@ -486,3 +544,72 @@ PropertyList::operator QList<PropertyPtr>() const
 {
     return l;
 }
+
+bool PropertyList::isAString() const
+{
+    if (l.count() == 1)
+        return l.at(0).read().isAString();
+    else
+        return false;
+}
+
+bool PropertyList::isADouble() const
+{
+    if (l.count() == 1)
+        return l.at(0).read().isADouble();
+    else
+        return false;
+}
+
+bool PropertyList::isAnInteger() const
+{
+    if (l.count() == 1)
+        return l.at(0).read().isAnInteger();
+    else
+        return false;
+}
+
+bool PropertyList::isABoolean() const
+{
+    if (l.count() == 1)
+        return l.at(0).read().isABoolean();
+    else
+        return false;
+}
+
+QString PropertyList::asAString() const
+{
+    if (l.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot convert %s to a string").arg(this->toString()), CODELOC );
+    
+    return l.at(0).read().asAString();
+}
+
+double PropertyList::asADouble() const
+{
+    if (l.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot convert %s to a double").arg(this->toString()), CODELOC );
+    
+    return l.at(0).read().asADouble();
+}
+
+int PropertyList::asAnInteger() const
+{
+    if (l.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot convert %s to an integer").arg(this->toString()), CODELOC );
+    
+    return l.at(0).read().asAnInteger();
+}
+
+bool PropertyList::asABoolean() const
+{
+    if (l.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot convert %s to a boolean").arg(this->toString()), CODELOC );
+    
+    return l.at(0).read().asABoolean();
+}
+

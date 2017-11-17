@@ -9,19 +9,13 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
-#include "SireError/getbacktrace.h"
-
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
 
-#include "property.h"
+#include "variantproperty.h"
 
-#include <QDebug>
-
-#include <QMutex>
-
-#include "property.h"
+#include "variantproperty.h"
 
 SireBase::VariantProperty __copy__(const SireBase::VariantProperty &other){ return SireBase::VariantProperty(other); }
 
@@ -37,7 +31,141 @@ void register_VariantProperty_class(){
         bp::scope VariantProperty_scope( VariantProperty_exposer );
         VariantProperty_exposer.def( bp::init< QVariant const & >(( bp::arg("value") ), "Construct a property equal to value") );
         VariantProperty_exposer.def( bp::init< SireBase::Property const & >(( bp::arg("other") ), "Copy constructor") );
+        VariantProperty_exposer.def( bp::init< QString const & >(( bp::arg("value") ), "Construct a property equal to value") );
+        VariantProperty_exposer.def( bp::init< double >(( bp::arg("value") ), "Construct a property equal to value") );
         VariantProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireBase::VariantProperty::asABoolean
+        
+            typedef bool ( ::SireBase::VariantProperty::*asABoolean_function_type)(  ) const;
+            asABoolean_function_type asABoolean_function_value( &::SireBase::VariantProperty::asABoolean );
+            
+            VariantProperty_exposer.def( 
+                "asABoolean"
+                , asABoolean_function_value
+                , "Return the property converted to a string" );
+        
+        }
+        { //::SireBase::VariantProperty::asADouble
+        
+            typedef double ( ::SireBase::VariantProperty::*asADouble_function_type)(  ) const;
+            asADouble_function_type asADouble_function_value( &::SireBase::VariantProperty::asADouble );
+            
+            VariantProperty_exposer.def( 
+                "asADouble"
+                , asADouble_function_value
+                , "Return the property converted to a string" );
+        
+        }
+        { //::SireBase::VariantProperty::asAString
+        
+            typedef ::QString ( ::SireBase::VariantProperty::*asAString_function_type)(  ) const;
+            asAString_function_type asAString_function_value( &::SireBase::VariantProperty::asAString );
+            
+            VariantProperty_exposer.def( 
+                "asAString"
+                , asAString_function_value
+                , "Return the property converted to a string" );
+        
+        }
+        { //::SireBase::VariantProperty::asAnInteger
+        
+            typedef int ( ::SireBase::VariantProperty::*asAnInteger_function_type)(  ) const;
+            asAnInteger_function_type asAnInteger_function_value( &::SireBase::VariantProperty::asAnInteger );
+            
+            VariantProperty_exposer.def( 
+                "asAnInteger"
+                , asAnInteger_function_value
+                , "Return the property converted to a string" );
+        
+        }
+        { //::SireBase::VariantProperty::convertToBool
+        
+            typedef bool ( ::SireBase::VariantProperty::*convertToBool_function_type)(  ) const;
+            convertToBool_function_type convertToBool_function_value( &::SireBase::VariantProperty::convertToBool );
+            
+            VariantProperty_exposer.def( 
+                "convertToBool"
+                , convertToBool_function_value
+                , "" );
+        
+        }
+        { //::SireBase::VariantProperty::convertToDouble
+        
+            typedef double ( ::SireBase::VariantProperty::*convertToDouble_function_type)(  ) const;
+            convertToDouble_function_type convertToDouble_function_value( &::SireBase::VariantProperty::convertToDouble );
+            
+            VariantProperty_exposer.def( 
+                "convertToDouble"
+                , convertToDouble_function_value
+                , "" );
+        
+        }
+        { //::SireBase::VariantProperty::convertToInt
+        
+            typedef int ( ::SireBase::VariantProperty::*convertToInt_function_type)(  ) const;
+            convertToInt_function_type convertToInt_function_value( &::SireBase::VariantProperty::convertToInt );
+            
+            VariantProperty_exposer.def( 
+                "convertToInt"
+                , convertToInt_function_value
+                , "" );
+        
+        }
+        { //::SireBase::VariantProperty::convertToString
+        
+            typedef ::QString ( ::SireBase::VariantProperty::*convertToString_function_type)(  ) const;
+            convertToString_function_type convertToString_function_value( &::SireBase::VariantProperty::convertToString );
+            
+            VariantProperty_exposer.def( 
+                "convertToString"
+                , convertToString_function_value
+                , "" );
+        
+        }
+        { //::SireBase::VariantProperty::isABoolean
+        
+            typedef bool ( ::SireBase::VariantProperty::*isABoolean_function_type)(  ) const;
+            isABoolean_function_type isABoolean_function_value( &::SireBase::VariantProperty::isABoolean );
+            
+            VariantProperty_exposer.def( 
+                "isABoolean"
+                , isABoolean_function_value
+                , "Return whether or not this can be converted to a bool" );
+        
+        }
+        { //::SireBase::VariantProperty::isADouble
+        
+            typedef bool ( ::SireBase::VariantProperty::*isADouble_function_type)(  ) const;
+            isADouble_function_type isADouble_function_value( &::SireBase::VariantProperty::isADouble );
+            
+            VariantProperty_exposer.def( 
+                "isADouble"
+                , isADouble_function_value
+                , "Return whether or not this can be converted to a double" );
+        
+        }
+        { //::SireBase::VariantProperty::isAString
+        
+            typedef bool ( ::SireBase::VariantProperty::*isAString_function_type)(  ) const;
+            isAString_function_type isAString_function_value( &::SireBase::VariantProperty::isAString );
+            
+            VariantProperty_exposer.def( 
+                "isAString"
+                , isAString_function_value
+                , "Return whether or not this can be converted to a string" );
+        
+        }
+        { //::SireBase::VariantProperty::isAnInteger
+        
+            typedef bool ( ::SireBase::VariantProperty::*isAnInteger_function_type)(  ) const;
+            isAnInteger_function_type isAnInteger_function_value( &::SireBase::VariantProperty::isAnInteger );
+            
+            VariantProperty_exposer.def( 
+                "isAnInteger"
+                , isAnInteger_function_value
+                , "Return whether or not this can be converted to an integer" );
+        
+        }
         VariantProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::VariantProperty::operator=
         

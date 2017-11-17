@@ -40,7 +40,13 @@ void register_PropertyList_class(){
         typedef bp::class_< SireBase::PropertyList, bp::bases< SireBase::Property > > PropertyList_exposer_t;
         PropertyList_exposer_t PropertyList_exposer = PropertyList_exposer_t( "PropertyList", "This class provides a simple list of properties. This is useful,\ne.g. if the user wants to store a list of values in a molecule.\n\nThis class is designed to be used with StringProperty, NumberProperty\nand VectorProperty (from SireMaths) to make it easy to attach\narbitrary data to any Sire object, e.g. storing a fixed center\npoint in a molecule, saving a list of velocities with a molecule,\netc.\n\nNote also that Properties already provides a Property dictionary.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope PropertyList_scope( PropertyList_exposer );
+        PropertyList_exposer.def( bp::init< QList< double > const & >(( bp::arg("numbers") ), "Construct from the passed list") );
+        PropertyList_exposer.def( bp::init< QStringList const & >(( bp::arg("strings") ), "Construct from the passed list") );
+        PropertyList_exposer.def( bp::init< SireBase::DoubleArrayProperty const & >(( bp::arg("array") ), "Construct from the passed list") );
+        PropertyList_exposer.def( bp::init< SireBase::IntegerArrayProperty const & >(( bp::arg("array") ), "Construct from the passed list") );
+        PropertyList_exposer.def( bp::init< SireBase::StringArrayProperty const & >(( bp::arg("array") ), "Construct from the passed list") );
         PropertyList_exposer.def( bp::init< QList< SireBase::PropPtr< SireBase::Property > > const & >(( bp::arg("props") ), "Construct from the passed list") );
+        PropertyList_exposer.def( bp::init< SireBase::Property const & >(( bp::arg("other") ), "Copy constructor") );
         PropertyList_exposer.def( bp::init< SireBase::PropertyList const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::PropertyList::append
         
@@ -74,6 +80,50 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "array"
                 , array_function_value
+                , "" );
+        
+        }
+        { //::SireBase::PropertyList::asABoolean
+        
+            typedef bool ( ::SireBase::PropertyList::*asABoolean_function_type)(  ) const;
+            asABoolean_function_type asABoolean_function_value( &::SireBase::PropertyList::asABoolean );
+            
+            PropertyList_exposer.def( 
+                "asABoolean"
+                , asABoolean_function_value
+                , "" );
+        
+        }
+        { //::SireBase::PropertyList::asADouble
+        
+            typedef double ( ::SireBase::PropertyList::*asADouble_function_type)(  ) const;
+            asADouble_function_type asADouble_function_value( &::SireBase::PropertyList::asADouble );
+            
+            PropertyList_exposer.def( 
+                "asADouble"
+                , asADouble_function_value
+                , "" );
+        
+        }
+        { //::SireBase::PropertyList::asAString
+        
+            typedef ::QString ( ::SireBase::PropertyList::*asAString_function_type)(  ) const;
+            asAString_function_type asAString_function_value( &::SireBase::PropertyList::asAString );
+            
+            PropertyList_exposer.def( 
+                "asAString"
+                , asAString_function_value
+                , "" );
+        
+        }
+        { //::SireBase::PropertyList::asAnInteger
+        
+            typedef int ( ::SireBase::PropertyList::*asAnInteger_function_type)(  ) const;
+            asAnInteger_function_type asAnInteger_function_value( &::SireBase::PropertyList::asAnInteger );
+            
+            PropertyList_exposer.def( 
+                "asAnInteger"
+                , asAnInteger_function_value
                 , "" );
         
         }
@@ -133,6 +183,50 @@ void register_PropertyList_class(){
                 , insert_function_value
                 , ( bp::arg("i"), bp::arg("value") )
                 , "Insert the passed value at index i" );
+        
+        }
+        { //::SireBase::PropertyList::isABoolean
+        
+            typedef bool ( ::SireBase::PropertyList::*isABoolean_function_type)(  ) const;
+            isABoolean_function_type isABoolean_function_value( &::SireBase::PropertyList::isABoolean );
+            
+            PropertyList_exposer.def( 
+                "isABoolean"
+                , isABoolean_function_value
+                , "" );
+        
+        }
+        { //::SireBase::PropertyList::isADouble
+        
+            typedef bool ( ::SireBase::PropertyList::*isADouble_function_type)(  ) const;
+            isADouble_function_type isADouble_function_value( &::SireBase::PropertyList::isADouble );
+            
+            PropertyList_exposer.def( 
+                "isADouble"
+                , isADouble_function_value
+                , "" );
+        
+        }
+        { //::SireBase::PropertyList::isAString
+        
+            typedef bool ( ::SireBase::PropertyList::*isAString_function_type)(  ) const;
+            isAString_function_type isAString_function_value( &::SireBase::PropertyList::isAString );
+            
+            PropertyList_exposer.def( 
+                "isAString"
+                , isAString_function_value
+                , "" );
+        
+        }
+        { //::SireBase::PropertyList::isAnInteger
+        
+            typedef bool ( ::SireBase::PropertyList::*isAnInteger_function_type)(  ) const;
+            isAnInteger_function_type isAnInteger_function_value( &::SireBase::PropertyList::isAnInteger );
+            
+            PropertyList_exposer.def( 
+                "isAnInteger"
+                , isAnInteger_function_value
+                , "" );
         
         }
         { //::SireBase::PropertyList::isEmpty

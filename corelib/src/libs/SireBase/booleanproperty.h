@@ -36,7 +36,6 @@ SIRE_BEGIN_HEADER
 namespace SireBase
 {
 class BooleanProperty;
-class VariantProperty;
 }
 
 QDataStream& operator<<(QDataStream&, const SireBase::BooleanProperty&);
@@ -57,9 +56,10 @@ friend QDataStream& ::operator>>(QDataStream&, BooleanProperty&);
 
 public:
     BooleanProperty();
+    BooleanProperty(const QString &value);
     BooleanProperty(bool value);
 
-    BooleanProperty(const VariantProperty &other);    
+    BooleanProperty(const Property &other);
     BooleanProperty(const BooleanProperty &other);
     
     ~BooleanProperty();
@@ -74,6 +74,16 @@ public:
     bool value() const;
     
     QString toString() const;
+    
+    bool isAString() const;
+    bool isADouble() const;
+    bool isAnInteger() const;
+    bool isABoolean() const;
+    
+    QString asAString() const;
+    double asADouble() const;
+    int asAnInteger() const;
+    bool asABoolean() const;
     
 private:
     bool val;

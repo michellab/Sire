@@ -42,6 +42,105 @@ void register_IntegerArrayProperty_class(){
         IntegerArrayProperty_exposer.def( bp::init< QList< long long > const & >(( bp::arg("array") ), "") );
         IntegerArrayProperty_exposer.def( bp::init< QVector< long long > const & >(( bp::arg("array") ), "") );
         IntegerArrayProperty_exposer.def( bp::init< SireBase::IntegerArrayProperty const & >(( bp::arg("other") ), "") );
+        { //::SireBase::IntegerArrayProperty::asABoolean
+        
+            typedef bool ( ::SireBase::IntegerArrayProperty::*asABoolean_function_type)(  ) const;
+            asABoolean_function_type asABoolean_function_value( &::SireBase::IntegerArrayProperty::asABoolean );
+            
+            IntegerArrayProperty_exposer.def( 
+                "asABoolean"
+                , asABoolean_function_value
+                , "" );
+        
+        }
+        { //::SireBase::IntegerArrayProperty::asADouble
+        
+            typedef double ( ::SireBase::IntegerArrayProperty::*asADouble_function_type)(  ) const;
+            asADouble_function_type asADouble_function_value( &::SireBase::IntegerArrayProperty::asADouble );
+            
+            IntegerArrayProperty_exposer.def( 
+                "asADouble"
+                , asADouble_function_value
+                , "" );
+        
+        }
+        { //::SireBase::IntegerArrayProperty::asAString
+        
+            typedef ::QString ( ::SireBase::IntegerArrayProperty::*asAString_function_type)(  ) const;
+            asAString_function_type asAString_function_value( &::SireBase::IntegerArrayProperty::asAString );
+            
+            IntegerArrayProperty_exposer.def( 
+                "asAString"
+                , asAString_function_value
+                , "" );
+        
+        }
+        { //::SireBase::IntegerArrayProperty::asAnArray
+        
+            typedef ::SireBase::PropertyList ( ::SireBase::IntegerArrayProperty::*asAnArray_function_type)(  ) const;
+            asAnArray_function_type asAnArray_function_value( &::SireBase::IntegerArrayProperty::asAnArray );
+            
+            IntegerArrayProperty_exposer.def( 
+                "asAnArray"
+                , asAnArray_function_value
+                , "" );
+        
+        }
+        { //::SireBase::IntegerArrayProperty::asAnInteger
+        
+            typedef int ( ::SireBase::IntegerArrayProperty::*asAnInteger_function_type)(  ) const;
+            asAnInteger_function_type asAnInteger_function_value( &::SireBase::IntegerArrayProperty::asAnInteger );
+            
+            IntegerArrayProperty_exposer.def( 
+                "asAnInteger"
+                , asAnInteger_function_value
+                , "" );
+        
+        }
+        { //::SireBase::IntegerArrayProperty::isABoolean
+        
+            typedef bool ( ::SireBase::IntegerArrayProperty::*isABoolean_function_type)(  ) const;
+            isABoolean_function_type isABoolean_function_value( &::SireBase::IntegerArrayProperty::isABoolean );
+            
+            IntegerArrayProperty_exposer.def( 
+                "isABoolean"
+                , isABoolean_function_value
+                , "" );
+        
+        }
+        { //::SireBase::IntegerArrayProperty::isADouble
+        
+            typedef bool ( ::SireBase::IntegerArrayProperty::*isADouble_function_type)(  ) const;
+            isADouble_function_type isADouble_function_value( &::SireBase::IntegerArrayProperty::isADouble );
+            
+            IntegerArrayProperty_exposer.def( 
+                "isADouble"
+                , isADouble_function_value
+                , "" );
+        
+        }
+        { //::SireBase::IntegerArrayProperty::isAString
+        
+            typedef bool ( ::SireBase::IntegerArrayProperty::*isAString_function_type)(  ) const;
+            isAString_function_type isAString_function_value( &::SireBase::IntegerArrayProperty::isAString );
+            
+            IntegerArrayProperty_exposer.def( 
+                "isAString"
+                , isAString_function_value
+                , "" );
+        
+        }
+        { //::SireBase::IntegerArrayProperty::isAnInteger
+        
+            typedef bool ( ::SireBase::IntegerArrayProperty::*isAnInteger_function_type)(  ) const;
+            isAnInteger_function_type isAnInteger_function_value( &::SireBase::IntegerArrayProperty::isAnInteger );
+            
+            IntegerArrayProperty_exposer.def( 
+                "isAnInteger"
+                , isAnInteger_function_value
+                , "" );
+        
+        }
         IntegerArrayProperty_exposer.def( bp::self != bp::self );
         IntegerArrayProperty_exposer.def( bp::self + bp::self );
         { //::SireBase::IntegerArrayProperty::operator=

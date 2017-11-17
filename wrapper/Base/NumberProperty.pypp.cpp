@@ -9,11 +9,15 @@ namespace bp = boost::python;
 
 #include "SireBase/numberproperty.h"
 
+#include "SireError/errors.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
 
 #include "numberproperty.h"
+
+#include <cmath>
 
 #include "numberproperty.h"
 
@@ -30,10 +34,98 @@ void register_NumberProperty_class(){
         NumberProperty_exposer_t NumberProperty_exposer = NumberProperty_exposer_t( "NumberProperty", "This class provides a thin Property wrapper around numbers (doubles and ints)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this constructs the integer 0") );
         bp::scope NumberProperty_scope( NumberProperty_exposer );
         NumberProperty_exposer.def( bp::init< double >(( bp::arg("value") ), "Construct from the passed double") );
-        NumberProperty_exposer.def( bp::init< int >(( bp::arg("value") ), "Construct from the passed integer") );
         NumberProperty_exposer.def( bp::init< qint64 >(( bp::arg("value") ), "Construct from the passed integer") );
-        NumberProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") ), "Construct from the passed VariantProperty") );
+        NumberProperty_exposer.def( bp::init< QString const & >(( bp::arg("value") ), "Construct from a passed string") );
+        NumberProperty_exposer.def( bp::init< SireBase::Property const & >(( bp::arg("other") ), "Construct from the passed Property") );
         NumberProperty_exposer.def( bp::init< SireBase::NumberProperty const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireBase::NumberProperty::asABoolean
+        
+            typedef bool ( ::SireBase::NumberProperty::*asABoolean_function_type)(  ) const;
+            asABoolean_function_type asABoolean_function_value( &::SireBase::NumberProperty::asABoolean );
+            
+            NumberProperty_exposer.def( 
+                "asABoolean"
+                , asABoolean_function_value
+                , "" );
+        
+        }
+        { //::SireBase::NumberProperty::asADouble
+        
+            typedef double ( ::SireBase::NumberProperty::*asADouble_function_type)(  ) const;
+            asADouble_function_type asADouble_function_value( &::SireBase::NumberProperty::asADouble );
+            
+            NumberProperty_exposer.def( 
+                "asADouble"
+                , asADouble_function_value
+                , "" );
+        
+        }
+        { //::SireBase::NumberProperty::asAString
+        
+            typedef ::QString ( ::SireBase::NumberProperty::*asAString_function_type)(  ) const;
+            asAString_function_type asAString_function_value( &::SireBase::NumberProperty::asAString );
+            
+            NumberProperty_exposer.def( 
+                "asAString"
+                , asAString_function_value
+                , "" );
+        
+        }
+        { //::SireBase::NumberProperty::asAnInteger
+        
+            typedef int ( ::SireBase::NumberProperty::*asAnInteger_function_type)(  ) const;
+            asAnInteger_function_type asAnInteger_function_value( &::SireBase::NumberProperty::asAnInteger );
+            
+            NumberProperty_exposer.def( 
+                "asAnInteger"
+                , asAnInteger_function_value
+                , "" );
+        
+        }
+        { //::SireBase::NumberProperty::isABoolean
+        
+            typedef bool ( ::SireBase::NumberProperty::*isABoolean_function_type)(  ) const;
+            isABoolean_function_type isABoolean_function_value( &::SireBase::NumberProperty::isABoolean );
+            
+            NumberProperty_exposer.def( 
+                "isABoolean"
+                , isABoolean_function_value
+                , "" );
+        
+        }
+        { //::SireBase::NumberProperty::isADouble
+        
+            typedef bool ( ::SireBase::NumberProperty::*isADouble_function_type)(  ) const;
+            isADouble_function_type isADouble_function_value( &::SireBase::NumberProperty::isADouble );
+            
+            NumberProperty_exposer.def( 
+                "isADouble"
+                , isADouble_function_value
+                , "" );
+        
+        }
+        { //::SireBase::NumberProperty::isAString
+        
+            typedef bool ( ::SireBase::NumberProperty::*isAString_function_type)(  ) const;
+            isAString_function_type isAString_function_value( &::SireBase::NumberProperty::isAString );
+            
+            NumberProperty_exposer.def( 
+                "isAString"
+                , isAString_function_value
+                , "" );
+        
+        }
+        { //::SireBase::NumberProperty::isAnInteger
+        
+            typedef bool ( ::SireBase::NumberProperty::*isAnInteger_function_type)(  ) const;
+            isAnInteger_function_type isAnInteger_function_value( &::SireBase::NumberProperty::isAnInteger );
+            
+            NumberProperty_exposer.def( 
+                "isAnInteger"
+                , isAnInteger_function_value
+                , "" );
+        
+        }
         NumberProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::NumberProperty::operator=
         

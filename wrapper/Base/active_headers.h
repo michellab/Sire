@@ -35,6 +35,7 @@
 #include "trigarray2d.h"
 #include "trigarray2d.hpp"
 #include "unittest.h"
+#include "variantproperty.h"
 
 #endif
 
