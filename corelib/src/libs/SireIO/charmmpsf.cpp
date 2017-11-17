@@ -566,7 +566,7 @@ CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors)
 
         // Attempt to read the parameter values.
         double p1 = data[4].toDouble(&ok1);
-        double p2 = data[5].toDouble(&ok2);
+        double p2 = data[6].toDouble(&ok2);
 
         if (not ok1 or not ok2)
         {
