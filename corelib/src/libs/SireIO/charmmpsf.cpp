@@ -3286,7 +3286,8 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
             QString bond_atoms = QString("%1 %2").arg(type0, -4).arg(type1, -4);
 
             // Create the CHARMM bond parameters.
-            bond_params.insert(toBondParameter(bond_atoms, potential.function()));
+            const auto R = InternalPotential::symbols().bond().r();
+            bond_params.insert(toBondParameter(bond_atoms, potential.function(), R));
         }
 
         // Create the map value.
@@ -3446,10 +3447,9 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
 }
 
 /** Convert a Sire two-atom function to a CHARMM bond paramater string. */
-QString CharmmPSF::toBondParameter(const QString &bond_atoms, const Expression &func)
+QString CharmmPSF::toBondParameter(const QString &bond_atoms, const Expression &func,
+    const Symbol &R, bool is_improper)
 {
-    const auto R = InternalPotential::symbols().bond().r();
-
     // The function should be of the form "k(r - r0)^2".
     // We need to get the factors of R.
     const auto factors = func.expand(R);

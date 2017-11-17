@@ -36,6 +36,7 @@ SIRE_BEGIN_HEADER
 namespace SireCAS
 {
 class Expression;
+class Symbol;
 }
 
 namespace SireIO
@@ -344,7 +345,8 @@ private:
         QVector<QVector<qint64> > &four_atom, QSet<QString> &four_atom_params, const PropertyMap &map,
         bool is_improper=false);
 
-    QString toBondParameter(const QString &bond_atoms, const SireCAS::Expression &func);
+    QString toBondParameter(const QString &bond_atoms, const SireCAS::Expression &func,
+        const SireCAS::Symbol &R, bool is_improper = false);
     QVector<QString> toDihedralParameter(const QString &dihedral_atoms, const SireCAS::Expression &func);
 
     /** The atom record data (!NATOM). */
