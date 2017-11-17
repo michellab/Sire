@@ -159,6 +159,30 @@ QString VariantProperty::toString() const
     }
 }
 
+/** Return the variant property converted to a double using the QVariant conversion function */
+double VariantProperty::convertToDouble() const
+{
+    return this->convertTo<double>();
+}
+
+/** Return the variant property converted to an integer using the QVariant conversion function */
+int VariantProperty::convertToInt() const
+{
+    return this->convertTo<int>();
+}
+
+/** Return the variant property converted to a string using the QVariant conversion function */
+QString VariantProperty::convertToString() const
+{
+    return this->convertTo<QString>();
+}
+
+/** Return the variant property converted to a bool using the QVariant conversion function */
+bool VariantProperty::convertToBool() const
+{
+    return this->convertTo<bool>();
+}
+
 /** Return whether or not this can be converted to a string */
 bool VariantProperty::isAString() const
 {
