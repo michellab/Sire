@@ -28,6 +28,8 @@
 
 #include "SireBase/lengthproperty.h"
 
+#include "SireBase/variantproperty.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 

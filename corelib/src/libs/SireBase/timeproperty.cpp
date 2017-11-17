@@ -27,6 +27,7 @@
 \*********************************************/
 
 #include "SireBase/timeproperty.h"
+#include "SireBase/variantproperty.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
