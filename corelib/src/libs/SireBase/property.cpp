@@ -414,6 +414,66 @@ Property& PropPtrBase::write()
     return PropPtrBase::edit();
 }
 
+bool PropPtrBase::isAString() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAString();
+}
+
+bool PropPtrBase::isADouble() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isADouble();
+}
+
+bool PropPtrBase::isAnInteger() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAnInteger();
+}
+
+bool PropPtrBase::isABoolean() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isABoolean();
+}
+
+bool PropPtrBase::isAnArray() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAnArray();
+}
+
+QString PropPtrBase::asAString() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAString();
+}
+
+double PropPtrBase::asADouble() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asADouble();
+}
+
+int PropPtrBase::asAnInteger() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAnInteger();
+}
+
+bool PropPtrBase::asABoolean() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asABoolean();
+}
+
+PropertyList PropPtrBase::asAnArray() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAnArray();
+}
+
 /** Throw an error as we can't cast 'got_type' into 'want_type'
 
     \throw SireError::invalid_cast
@@ -532,6 +592,65 @@ const Property& GlobalPropPtrBase::read() const
 {
     BOOST_ASSERT( ptr.constData() != 0 );
     return *ptr;
+}
+bool GlobalPropPtrBase::isAString() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAString();
+}
+
+bool GlobalPropPtrBase::isADouble() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isADouble();
+}
+
+bool GlobalPropPtrBase::isAnInteger() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAnInteger();
+}
+
+bool GlobalPropPtrBase::isABoolean() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isABoolean();
+}
+
+bool GlobalPropPtrBase::isAnArray() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAnArray();
+}
+
+QString GlobalPropPtrBase::asAString() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAString();
+}
+
+double GlobalPropPtrBase::asADouble() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asADouble();
+}
+
+int GlobalPropPtrBase::asAnInteger() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAnInteger();
+}
+
+bool GlobalPropPtrBase::asABoolean() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asABoolean();
+}
+
+PropertyList GlobalPropPtrBase::asAnArray() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAnArray();
 }
 
 /** Throw an error as we can't cast 'got_type' into 'want_type'

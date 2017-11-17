@@ -281,6 +281,18 @@ public:
 
     operator const Property&() const;
 
+    bool isAString() const;
+    bool isADouble() const;
+    bool isAnInteger() const;
+    bool isABoolean() const;
+    bool isAnArray() const;
+
+    QString asAString() const;
+    double asADouble() const;
+    int asAnInteger() const;
+    bool asABoolean() const;
+    PropertyList asAnArray() const;
+
 protected:
     PropPtrBase(const Property &property);
     PropPtrBase(Property *property);
@@ -323,6 +335,18 @@ public:
     bool operator!=(const GlobalPropPtrBase &other) const;
 
     bool unique() const;
+
+    bool isAString() const;
+    bool isADouble() const;
+    bool isAnInteger() const;
+    bool isABoolean() const;
+    bool isAnArray() const;
+
+    QString asAString() const;
+    double asADouble() const;
+    int asAnInteger() const;
+    bool asABoolean() const;
+    PropertyList asAnArray() const;
 
     operator const Property&() const;
 
