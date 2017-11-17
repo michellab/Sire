@@ -14,13 +14,24 @@
 
 from Sire.Base._Base import *
 
-import Sire.Maths
+_wrap_functions = []
+
+_base_wrap = wrap
 
 def wrap(value):
-    try:
-        return Sire.Base._Base.wrap(value)
-    except:
-        return Sire.Maths.wrap(value)
+    for func in _wrap_functions:
+        try:
+            return func(value)
+        except:
+            pass            
+
+    return _base_wrap(value)
+
+_original_wrap = wrap
+
+def _add_wrap_function(func):
+    _wrap_functions.append(func)
+    return _original_wrap
 
 # cludgy quick fix for an anaconda install
 _getBundledLibDir = getBundledLibDir
