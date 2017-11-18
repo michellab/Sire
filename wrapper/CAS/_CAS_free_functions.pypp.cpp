@@ -823,6 +823,38 @@ namespace bp = boost::python;
 
 #include "expression.h"
 
+#include "SireBase/numberproperty.h"
+
+#include "SireCAS/expressionproperty.h"
+
+#include "SireCAS/values.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "expressionproperty.h"
+
+#include "expressionproperty.h"
+
+#include "SireBase/numberproperty.h"
+
+#include "SireCAS/expressionproperty.h"
+
+#include "SireCAS/values.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "expressionproperty.h"
+
+#include "expressionproperty.h"
+
 void register_free_functions(){
 
     { //::cbrt
@@ -1029,6 +1061,32 @@ void register_free_functions(){
             "sqrt"
             , sqrt_function_value
             , ( bp::arg("ex0") )
+            , "" );
+    
+    }
+
+    { //::SireCAS::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::SireCAS::ExBase const & );
+        wrap_function_type wrap_function_value( &::SireCAS::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("expression") )
+            , "" );
+    
+    }
+
+    { //::SireCAS::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::SireCAS::Expression const & );
+        wrap_function_type wrap_function_value( &::SireCAS::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("expression") )
             , "" );
     
     }

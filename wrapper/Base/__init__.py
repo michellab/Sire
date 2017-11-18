@@ -25,7 +25,12 @@ def wrap(value):
         except:
             pass            
 
-    return _base_wrap(value)
+    try:
+        return _base_wrap(value)
+    except:
+        pass
+
+    return PropertyList(value)
 
 _original_wrap = wrap
 
