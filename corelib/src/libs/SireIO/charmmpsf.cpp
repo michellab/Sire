@@ -998,7 +998,7 @@ QVector<QString> CharmmPSF::toLines() const
     // TODO: Add BioSimSpace version info.
     lines.append("PSF");
     lines.append("");
-    lines.append("       2 !NTITLE");
+    lines.append("       1 !NTITLE");
     lines.append(QString(" REMARKS DATE:%1    created by BioSimSpace (v)")
          .arg(QDateTime::currentDateTime().toString("dd-MMM-yy  hh:mm:ss")));
     lines.append("");
