@@ -1389,11 +1389,14 @@ void CharmmPSF::parseLines(const PropertyMap &map)
     // Loop through all lines in the file.
     for (int iline=0; iline<lines().count(); ++iline)
     {
+        // Store the line.
+        const QString line = lines()[iline];
+
         // Tokenize the line, splitting using a single whitespace character.
         QStringList data = lines()[iline].simplified().split(QRegExp("\\s"));
 
         // Atom records.
-        if (data.last() == "!NATOM")
+        if (line.contains("!NATOM"))
         {
             // Extract the number of atoms (should be the first record).
             bool ok;
@@ -1460,7 +1463,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         }
 
         // Bond records.
-        else if (data.contains("!NBOND:"))
+        else if (line.contains("!NBOND"))
         {
             // Extract the number of bonds;
             bool ok;
@@ -1527,7 +1530,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         }
 
         // Angle records.
-        else if (data.contains("!NTHETA:"))
+        else if (line.contains("!NTHETA"))
         {
             // Extract the number of bonds;
             bool ok;
@@ -1594,7 +1597,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         }
 
         // Dihedral records.
-        else if (data.contains("!NPHI:"))
+        else if (line.contains("!NPHI"))
         {
             // Extract the number of dihedrals;
             bool ok;
@@ -1661,7 +1664,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         }
 
         // Improper records.
-        else if (data.contains("!NIMPHI:"))
+        else if (line.contains("!NIMPHI"))
         {
             // Extract the number of impropers;
             bool ok;
@@ -1728,7 +1731,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         }
 
         // Cross-term records.
-        else if (data.contains("!NCRTERM:"))
+        else if (line.contains("!NCRTERM"))
         {
             // Extract the number of cross terms;
             bool ok;
