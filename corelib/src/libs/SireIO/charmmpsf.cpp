@@ -744,6 +744,11 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
         params.sort();
         charmm_params.append(params);
         charmm_params.append("");
+        charmm_params.append("IMPROPER");
+        params = improper_params.toList();
+        params.sort();
+        charmm_params.append(params);
+        charmm_params.append("");
     }
 
     // Reparse the lines as a self-consistency check.
@@ -3414,14 +3419,17 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
             QString func_atoms = QString("%1 %2 %3 %4")
                 .arg(type0, -4).arg(type1, -4).arg(type2, -4).arg(type3, -4);
 
-            // Create the CHARMM bond parameters.
+            // Create the CHARMM parameters.
             if (is_improper)
             {
+                const auto phi = InternalPotential::symbols().dihedral().phi();
 
+                // Generate the improper parameter string.
+                four_atom_params.insert(toBondParameter(func_atoms, potential.function(), phi, true));
             }
             else
             {
-                // Generate the vector of four-atom parameter strings.
+                // Generate the vector of dihedral parameter strings.
                 QVector<QString> params = toDihedralParameter(func_atoms, potential.function());
 
                 for (const auto &param : params)
@@ -3541,7 +3549,16 @@ QString CharmmPSF::toBondParameter(const QString &bond_atoms, const Expression &
                     .arg(R.toString()).arg(func.toString()).arg(errors.join("\n")), CODELOC );
     }
 
-    return QString("%1 %2 %3").arg(bond_atoms).arg(k, 10, 'f', 3).arg(r0, 10, 'f', 4);
+    if (is_improper)
+    {
+        return QString("%1 %2 %3 %4")
+            .arg(bond_atoms).arg(k, 10, 'f', 3).arg(0, 10).arg(r0, 10, 'f', 4);
+    }
+
+    else
+    {
+        return QString("%1 %2 %3").arg(bond_atoms).arg(k, 10, 'f', 3).arg(r0, 10, 'f', 4);
+    }
 }
 
 /** Convert a Sire four-atom function to a set of CHARMM dihedral paramater strings. */
