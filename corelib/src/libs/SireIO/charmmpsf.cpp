@@ -735,29 +735,75 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
     }
     catch (...)
     {
-        // Generate a new list of CHARMM parameter records:
-        // bonds, angles, dihedrals, and impropers.
+        // Generate a new list of CHARMM parameter records.
         // The records strings are sorted before appending to the list.
+
+        // Bonds.
         charmm_params.append("BONDS");
+        charmm_params.append("!");
+        charmm_params.append("!V(bond) = Kb(b - b0)**2");
+        charmm_params.append("!");
+        charmm_params.append("!Kb: kcal/mole/A**2");
+        charmm_params.append("!");
+        charmm_params.append("!atom type   Kb          b0");
+        charmm_params.append("!");
         QStringList params = bond_params.toList();
         params.sort();
         charmm_params.append(params);
         charmm_params.append("");
+
+        // Angles.
         charmm_params.append("ANGLES");
+        charmm_params.append("!");
+        charmm_params.append("!V(angle) = Ktheta(Theta - Theta0)**2");
+        charmm_params.append("!");
+        charmm_params.append("!V(Urey-Bradley) = Kub(S - S0)**2");
+        charmm_params.append("!");
+        charmm_params.append("!Ktheta: kcal/mole/rad**2");
+        charmm_params.append("!Theta0: degrees");
+        charmm_params.append("!Kub: kcal/mole/A**2 (Urey-Bradley)");
+        charmm_params.append("!S0: A");
+        charmm_params.append("!");
+        charmm_params.append("!atom types        Ktheta   Theta0       Kub        S0");
+        charmm_params.append("!");
         params = angle_params.toList();
         params.sort();
         charmm_params.append(params);
         charmm_params.append("");
+
+        // Dihedrals.
         charmm_params.append("DIHEDRALS");
+        charmm_params.append("!");
+        charmm_params.append("!V(dihedral) = Kchi(1 + cos(n(chi) - delta))");
+        charmm_params.append("!");
+        charmm_params.append("!Kchi: kcal/mole");
+        charmm_params.append("!n: multiplicity");
+        charmm_params.append("!delta: degrees");
+        charmm_params.append("!");
+        charmm_params.append("!atom types             Kchi     n     delta");
+        charmm_params.append("!");
         params = dihedral_params.toList();
         params.sort();
         charmm_params.append(params);
         charmm_params.append("");
+
+        // Impropers.
         charmm_params.append("IMPROPER");
+        charmm_params.append("!");
+        charmm_params.append("!V(improper) = Kpsi(psi - psi0)**2");
+        charmm_params.append("!");
+        charmm_params.append("!Kpsi: kcal/mole/rad**2");
+        charmm_params.append("!psi0: degrees");
+        charmm_params.append("!note that the second column of numbers (0) is ignored");
+        charmm_params.append("!");
+        charmm_params.append("!atom types             Kpsi                  psi0");
+        charmm_params.append("!");
         params = improper_params.toList();
         params.sort();
         charmm_params.append(params);
         charmm_params.append("");
+
+        charmm_params.append("END");
     }
 
     // Reparse the lines as a self-consistency check.
