@@ -338,16 +338,18 @@ private:
     void getBondsFrom(const SireMM::TwoAtomFunctions &funcs, const SireMol::Molecule &sire_mol,
         QVector<QVector<qint64> > &local_bonds, QSet<QString> &bond_params, const PropertyMap &map);
 
-    void getAnglesFrom(const SireMM::ThreeAtomFunctions &funcs,
-        const SireMol::MoleculeInfoData &molinfo, QVector<QVector<qint64> > &local_angles);
+    void getAnglesFrom(const SireMM::ThreeAtomFunctions &funcs, const SireMM::TwoAtomFunctions &ub_funcs,
+        const SireMol::Molecule &sire_mol, QVector<QVector<qint64> > &local_angles,
+        QSet<QString> &angle_params, const PropertyMap &map);
 
     void getFourAtomFrom(const SireMM::FourAtomFunctions &funcs, const SireMol::Molecule &sire_mol,
         QVector<QVector<qint64> > &four_atom, QSet<QString> &four_atom_params, const PropertyMap &map,
         bool is_improper=false);
 
-    QString toBondParameter(const QString &bond_atoms, const SireCAS::Expression &func,
+    QString toHarmonicParameter(const QString &bond_atoms, const SireCAS::Expression &func,
         const SireCAS::Symbol &R, bool is_improper = false);
-    QVector<QString> toDihedralParameter(const QString &dihedral_atoms, const SireCAS::Expression &func);
+
+    QVector<QString> toFourAtomParameter(const QString &dihedral_atoms, const SireCAS::Expression &func);
 
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;

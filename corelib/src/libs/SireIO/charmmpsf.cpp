@@ -498,6 +498,10 @@ CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors)
 
                 return;
             }
+
+            // Append the parameters.
+            params.append(p1);
+            params.append(p2);
         }
     }
 
@@ -736,6 +740,11 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
         // The records strings are sorted before appending to the list.
         charmm_params.append("BONDS");
         QStringList params = bond_params.toList();
+        params.sort();
+        charmm_params.append(params);
+        charmm_params.append("");
+        charmm_params.append("ANGLES");
+        params = angle_params.toList();
         params.sort();
         charmm_params.append(params);
         charmm_params.append("");
@@ -2105,7 +2114,7 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
 
                 // Set the Urey-Bradley function parameter.
                 ub_funcs.set(AtomNum(atoms[idx0].getNumber()),
-                             AtomNum(atoms[idx1].getNumber()),
+                             AtomNum(atoms[idx2].getNumber()),
                              func);
 
                 // Flag that we've found Urey-Bradley parameters.
@@ -2366,7 +2375,7 @@ void CharmmPSF::parseMolecule(
     // Get the required properties.
     const auto bond_funcs = getProperty<TwoAtomFunctions>(map["bond"], moldata, &has_bonds);
     const auto angle_funcs = getProperty<ThreeAtomFunctions>(map["angle"], moldata, &has_angles);
-    const auto ub_funcs = getProperty<ThreeAtomFunctions>(map["urey-bradley"], moldata, &has_ubs);
+    const auto ub_funcs = getProperty<TwoAtomFunctions>(map["urey-bradley"], moldata, &has_ubs);
     const auto dihedral_funcs = getProperty<FourAtomFunctions>(map["dihedral"], moldata, &has_dihedrals);
     const auto improper_funcs = getProperty<FourAtomFunctions>(map["improper"], moldata, &has_impropers);
 
@@ -2378,7 +2387,7 @@ void CharmmPSF::parseMolecule(
 
     // Angles.
     if (has_angles)
-        getAnglesFrom(angle_funcs, sire_mol.info(), local_angles);
+        getAnglesFrom(angle_funcs, ub_funcs, sire_mol, local_angles, angle_params, map);
 
     // Dihedrals.
     if (has_dihedrals)
@@ -3292,7 +3301,7 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
 
             // Create the CHARMM bond parameters.
             const auto R = InternalPotential::symbols().bond().r();
-            bond_params.insert(toBondParameter(bond_atoms, potential.function(), R));
+            bond_params.insert(toHarmonicParameter(bond_atoms, potential.function(), R));
         }
 
         // Create the map value.
@@ -3313,14 +3322,24 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
 }
 
 /** Construct PSF angle records from the set of three-atom functions. */
-void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const MoleculeInfoData &molinfo,
-    QVector<QVector<qint64> > &local_angles)
+void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunctions &ub_funcs,
+    const Molecule &sire_mol, QVector<QVector<qint64> > &local_angles,
+    QSet<QString> &angle_params, const PropertyMap &map)
 {
+    // Get the molecule info object.
+    const auto molinfo = sire_mol.info();
+
     // Get the set of all angle functions.
     const auto potentials = funcs.potentials();
 
+    // Get the set of all Urey-Bradley functions.
+    const auto ub_potentials = ub_funcs.potentials();
+
     // Store the number of angles.
     const int num_angles = potentials.count();
+
+    // Store the number of Urey-Bradley functions.
+    const int num_ubs = ub_potentials.count();
 
     // Resize the angles vector.
     local_angles.resize(num_angles);
@@ -3338,10 +3357,70 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const MoleculeInf
         // Get the potential.
         const auto potential = potentials.constData()[i];
 
+        // Extract the cgAtomIdx for the three atoms.
+        const auto idx0 = molinfo.cgAtomIdx(potential.atom0());
+        const auto idx1 = molinfo.cgAtomIdx(potential.atom1());
+        const auto idx2 = molinfo.cgAtomIdx(potential.atom2());
+
         // Store the atom numbers.
-        int atom0 = molinfo.number(potential.atom0()).value();
-        int atom1 = molinfo.number(potential.atom1()).value();
-        int atom2 = molinfo.number(potential.atom2()).value();
+        int atom0 = molinfo.number(idx0).value();
+        int atom1 = molinfo.number(idx1).value();
+        int atom2 = molinfo.number(idx2).value();
+
+        // If the atoms have an "atomtype" property then we can generate
+        // CHARMM angle parameters.
+        if ((sire_mol.atom(idx0).hasProperty(map["atomtype"])) and
+            (sire_mol.atom(idx1).hasProperty(map["atomtype"])) and
+            (sire_mol.atom(idx2).hasProperty(map["atomtype"])))
+        {
+            // Extract the atom types.
+            QString type0 = sire_mol.atom(idx0).property<QString>(map["atomtype"]);
+            QString type1 = sire_mol.atom(idx1).property<QString>(map["atomtype"]);
+            QString type2 = sire_mol.atom(idx2).property<QString>(map["atomtype"]);
+
+            // Create a string from the types.
+            QString angle_atoms = QString("%1 %2 %3")
+                .arg(type0, -4).arg(type1, -4).arg(type2, -4);
+
+            // Create the CHARMM angle parameters.
+            const auto Theta = InternalPotential::symbols().angle().theta();
+            QString angle_param = toHarmonicParameter(angle_atoms, potential.function(), Theta);
+
+            // Now check whether there is an additional Urey-Bradley term for this angle.
+            for (int j=0; j<num_ubs; ++j)
+            {
+                // Get the potential.
+                const auto potential = ub_potentials.constData()[j];
+
+                // Extract the cgAtomIdx for the three atoms.
+                const auto ub_idx0 = molinfo.cgAtomIdx(potential.atom0());
+                const auto ub_idx1 = molinfo.cgAtomIdx(potential.atom1());
+
+                // If the atoms have an "atomtype" property then we can generate
+                // CHARMM Urey-Bradley parameters.
+                if ((sire_mol.atom(ub_idx0).hasProperty(map["atomtype"])) and
+                    (sire_mol.atom(ub_idx1).hasProperty(map["atomtype"])))
+                {
+                    // Extract the atom types.
+                    QString ub_type0 = sire_mol.atom(ub_idx0).property<QString>(map["atomtype"]);
+                    QString ub_type1 = sire_mol.atom(ub_idx1).property<QString>(map["atomtype"]);
+
+                    // If the index and type of the first and third atoms match, then add
+                    // Urey-Bradley terms to the angle parameter string.
+                    if ((ub_idx0  == idx0)  and (ub_idx1  == idx2) and
+                        (ub_type0 == type0) and (ub_type1 == type2))
+                    {
+                        const auto R = InternalPotential::symbols().bond().r();
+                        angle_param += toHarmonicParameter(QString(""), potential.function(), R);
+
+                        break;
+                    }
+                }
+            }
+
+            // Insert the angle parameter string into the set.
+            angle_params.insert(angle_param);
+        }
 
         // Create the map value.
         QVector<qint64> value({atom0, atom1, atom2});
@@ -3425,12 +3504,12 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
                 const auto phi = InternalPotential::symbols().dihedral().phi();
 
                 // Generate the improper parameter string.
-                four_atom_params.insert(toBondParameter(func_atoms, potential.function(), phi, true));
+                four_atom_params.insert(toHarmonicParameter(func_atoms, potential.function(), phi, true));
             }
             else
             {
                 // Generate the vector of dihedral parameter strings.
-                QVector<QString> params = toDihedralParameter(func_atoms, potential.function());
+                QVector<QString> params = toFourAtomParameter(func_atoms, potential.function());
 
                 for (const auto &param : params)
                     four_atom_params.insert(param);
@@ -3455,7 +3534,7 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
 }
 
 /** Convert a Sire two-atom function to a CHARMM bond paramater string. */
-QString CharmmPSF::toBondParameter(const QString &bond_atoms, const Expression &func,
+QString CharmmPSF::toHarmonicParameter(const QString &bond_atoms, const Expression &func,
     const Symbol &R, bool is_improper)
 {
     // The function should be of the form "k(r - r0)^2".
@@ -3562,7 +3641,7 @@ QString CharmmPSF::toBondParameter(const QString &bond_atoms, const Expression &
 }
 
 /** Convert a Sire four-atom function to a set of CHARMM dihedral paramater strings. */
-QVector<QString> CharmmPSF::toDihedralParameter(const QString &dihedral_atoms, const Expression &func)
+QVector<QString> CharmmPSF::toFourAtomParameter(const QString &dihedral_atoms, const Expression &func)
 {
     const auto phi = InternalPotential::symbols().dihedral().phi();
 
