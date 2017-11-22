@@ -57,7 +57,7 @@ void register_MoleculeParser_class(){
             MoleculeParser_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
-                , "Return whether or not this parser can follow a lead parser." );
+                , "Return whether or not this parser can follow a lead parser and add data\nto an existing molecular system. By default, all parsers can follow." );
         
         }
         { //::SireIO::MoleculeParser::construct

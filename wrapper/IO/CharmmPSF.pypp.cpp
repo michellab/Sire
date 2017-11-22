@@ -11,11 +11,23 @@ namespace bp = boost::python;
 
 #include "SireBase/stringproperty.h"
 
+#include "SireCAS/sum.h"
+
+#include "SireCAS/trigfuncs.h"
+
 #include "SireError/errors.h"
 
 #include "SireIO/charmmpsf.h"
 
 #include "SireIO/errors.h"
+
+#include "SireMM/fouratomfunctions.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/threeatomfunctions.h"
+
+#include "SireMM/twoatomfunctions.h"
 
 #include "SireMol/atomcharges.h"
 
@@ -40,6 +52,8 @@ namespace bp = boost::python;
 #include "charmmpsf.h"
 
 #include <QDateTime>
+
+#include <QFileInfo>
 
 #include <QtMath>
 
@@ -69,7 +83,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
-                , "" );
+                , "Return whether or not this parser can follow another lead parser, and add\ndata to an existing molecular system. The CharmmPSF parser cannot follow." );
         
         }
         { //::SireIO::CharmmPSF::construct
@@ -149,7 +163,7 @@ void register_CharmmPSF_class(){
             CharmmPSF_exposer.def( 
                 "isLead"
                 , isLead_function_value
-                , "" );
+                , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
         
         }
         { //::SireIO::CharmmPSF::nAngles
@@ -161,6 +175,19 @@ void register_CharmmPSF_class(){
                 "nAngles"
                 , nAngles_function_value
                 , "Return the number of angle records." );
+        
+        }
+        { //::SireIO::CharmmPSF::nAngles
+        
+            typedef int ( ::SireIO::CharmmPSF::*nAngles_function_type)( int ) const;
+            nAngles_function_type nAngles_function_value( &::SireIO::CharmmPSF::nAngles );
+            
+            CharmmPSF_exposer.def( 
+                "nAngles"
+                , nAngles_function_value
+                , ( bp::arg("i") )
+                , "Return the number of angles in molecule i." );
+        
         }
         { //::SireIO::CharmmPSF::nAtoms
         
@@ -217,6 +244,19 @@ void register_CharmmPSF_class(){
                 "nCrossTerms"
                 , nCrossTerms_function_value
                 , "Return the number of cross-term records." );
+        
+        }
+        { //::SireIO::CharmmPSF::nCrossTerms
+        
+            typedef int ( ::SireIO::CharmmPSF::*nCrossTerms_function_type)( int ) const;
+            nCrossTerms_function_type nCrossTerms_function_value( &::SireIO::CharmmPSF::nCrossTerms );
+            
+            CharmmPSF_exposer.def( 
+                "nCrossTerms"
+                , nCrossTerms_function_value
+                , ( bp::arg("i") )
+                , "Return the number of cross-terms in molecule i." );
+        
         }
         { //::SireIO::CharmmPSF::nDihedrals
         
@@ -227,6 +267,19 @@ void register_CharmmPSF_class(){
                 "nDihedrals"
                 , nDihedrals_function_value
                 , "Return the number of dihedral records." );
+        
+        }
+        { //::SireIO::CharmmPSF::nDihedrals
+        
+            typedef int ( ::SireIO::CharmmPSF::*nDihedrals_function_type)( int ) const;
+            nDihedrals_function_type nDihedrals_function_value( &::SireIO::CharmmPSF::nDihedrals );
+            
+            CharmmPSF_exposer.def( 
+                "nDihedrals"
+                , nDihedrals_function_value
+                , ( bp::arg("i") )
+                , "Return the number of dihedrals in molecule i." );
+        
         }
         { //::SireIO::CharmmPSF::nImpropers
         
@@ -237,6 +290,18 @@ void register_CharmmPSF_class(){
                 "nImpropers"
                 , nImpropers_function_value
                 , "Return the number of improper records." );
+        
+        }
+        { //::SireIO::CharmmPSF::nImpropers
+        
+            typedef int ( ::SireIO::CharmmPSF::*nImpropers_function_type)( int ) const;
+            nImpropers_function_type nImpropers_function_value( &::SireIO::CharmmPSF::nImpropers );
+            
+            CharmmPSF_exposer.def( 
+                "nImpropers"
+                , nImpropers_function_value
+                , ( bp::arg("i") )
+                , "Return the number of impropers in molecule i." );
         
         }
         { //::SireIO::CharmmPSF::nMolecules

@@ -69,6 +69,17 @@ void register_GromacsBond_class(){
                 , "Return the ith parameter for this bond" );
         
         }
+        { //::SireMM::GromacsBond::atomsAreBonded
+        
+            typedef bool ( ::SireMM::GromacsBond::*atomsAreBonded_function_type)(  ) const;
+            atomsAreBonded_function_type atomsAreBonded_function_value( &::SireMM::GromacsBond::atomsAreBonded );
+            
+            GromacsBond_exposer.def( 
+                "atomsAreBonded"
+                , atomsAreBonded_function_value
+                , "Return whether or not this GromacsBond implies that the atoms are actually\nbonded together" );
+        
+        }
         { //::SireMM::GromacsBond::count
         
             typedef int ( ::SireMM::GromacsBond::*count_function_type)(  ) const;

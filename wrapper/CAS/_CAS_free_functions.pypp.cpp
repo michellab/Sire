@@ -79,42 +79,6 @@ namespace bp = boost::python;
 
 #include "expression.h"
 
-#include "SireMaths/complex.h"
-
-#include "SireMaths/maths.h"
-
-#include "SireStream/datastream.h"
-
-#include "complexvalues.h"
-
-#include "exbase.h"
-
-#include "expression.h"
-
-#include "functions.h"
-
-#include "i.h"
-
-#include "identities.h"
-
-#include "integrationconstant.h"
-
-#include "power.h"
-
-#include "powerconstant.h"
-
-#include "product.h"
-
-#include "sum.h"
-
-#include "symbol.h"
-
-#include "symbols.h"
-
-#include "values.h"
-
-#include "expression.h"
-
 #include "SireCAS/errors.h"
 
 #include "SireStream/datastream.h"
@@ -750,6 +714,42 @@ namespace bp = boost::python;
 #include "values.h"
 
 #include "exbase.h"
+
+#include "SireMaths/complex.h"
+
+#include "SireMaths/maths.h"
+
+#include "SireStream/datastream.h"
+
+#include "complexvalues.h"
+
+#include "exbase.h"
+
+#include "expression.h"
+
+#include "functions.h"
+
+#include "i.h"
+
+#include "identities.h"
+
+#include "integrationconstant.h"
+
+#include "power.h"
+
+#include "powerconstant.h"
+
+#include "product.h"
+
+#include "sum.h"
+
+#include "symbol.h"
+
+#include "symbols.h"
+
+#include "values.h"
+
+#include "expression.h"
 
 #include "SireMaths/complex.h"
 

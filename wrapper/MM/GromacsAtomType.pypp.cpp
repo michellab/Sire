@@ -93,6 +93,17 @@ void register_GromacsAtomType_class(){
                 , "" );
         
         }
+        { //::SireMM::GromacsAtomType::isNull
+        
+            typedef bool ( ::SireMM::GromacsAtomType::*isNull_function_type)(  ) const;
+            isNull_function_type isNull_function_value( &::SireMM::GromacsAtomType::isNull );
+            
+            GromacsAtomType_exposer.def( 
+                "isNull"
+                , isNull_function_value
+                , "" );
+        
+        }
         { //::SireMM::GromacsAtomType::ljParameter
         
             typedef ::SireMM::LJParameter ( ::SireMM::GromacsAtomType::*ljParameter_function_type)(  ) const;

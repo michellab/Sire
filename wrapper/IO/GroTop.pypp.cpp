@@ -19,6 +19,20 @@ namespace bp = boost::python;
 
 #include "SireIO/grotop.h"
 
+#include "SireMM/atomljs.h"
+
+#include "SireMM/internalff.h"
+
+#include "SireMM/twoatomfunctions.h"
+
+#include "SireMol/atomcharges.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/connectivity.h"
+
 #include "SireMol/errors.h"
 
 #include "SireMol/molecule.h"
@@ -162,7 +176,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "canFollow"
                 , canFollow_function_value
-                , "" );
+                , "Return whether or not this parser can follow another lead parser, and add\ndata to an existing molecular system. The GroTop parser cannot follow." );
         
         }
         { //::SireIO::GroTop::combiningRules
