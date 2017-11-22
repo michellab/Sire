@@ -12,12 +12,15 @@ import Sire.Maths
 
 # Import all of the Qt classes
 import Sire.Qt
+import Sire.Base
 
 # Import all of the classes and functions from the C++ library
 from Sire.CAS._CAS import *
 
 # Now define some pure Python functions and classes that are part of
 # this library...
+
+wrap = Sire.Base._add_wrap_function(wrap)
 
 #enable ** operator for exbase types
 ExBase.__pow__ = pow

@@ -34,6 +34,7 @@
 
 #include "SireBase/property.h"
 #include "SireBase/stringproperty.h"
+#include "SireBase/propertylist.h"
 
 #include "SireMol/mover.hpp"
 
@@ -2120,12 +2121,10 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
         
         internalff._pvt_updateName();
         internalff.isstrict = internalff.props.property("strict")
-                                        .asA<VariantProperty>()
-                                        .convertTo<bool>();
+                                              .asABoolean();
         
         internalff.calc_14_nrgs = internalff.props.property("calculate14")
-                                            .asA<VariantProperty>()
-                                            .convertTo<bool>();
+                                                  .asABoolean();
     }
     else if (v == 1)
     {
@@ -2140,8 +2139,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
         
         internalff._pvt_updateName();
         internalff.isstrict = internalff.props.property("strict")
-                                        .asA<VariantProperty>()
-                                        .convertTo<bool>();
+                                              .asABoolean();
         
         internalff.calc_14_nrgs = false;
     }
@@ -2156,9 +2154,9 @@ InternalFF::InternalFF()
            : ConcreteProperty<InternalFF,G1FF>(),
              FF3D(), InternalPotential(), calc_14_nrgs(false)
 {
-    props.setProperty("strict", VariantProperty(true));
-    props.setProperty("calculate14", VariantProperty(calc_14_nrgs));
-    props.setProperty("combiningRules", VariantProperty("arithmetic"));
+    props.setProperty("strict", wrap(true));
+    props.setProperty("calculate14", wrap(calc_14_nrgs));
+    props.setProperty("combiningRules", wrap("arithmetic"));
 }
 
 /** Construct a named internal forcefield */
@@ -2167,9 +2165,9 @@ InternalFF::InternalFF(const QString &name)
              FF3D(), InternalPotential(), calc_14_nrgs(false)
 {
     G1FF::setName(name);
-    props.setProperty("strict", VariantProperty(true));
-    props.setProperty("calculate14", VariantProperty(calc_14_nrgs));
-    props.setProperty("combiningRules", VariantProperty("arithmetic"));
+    props.setProperty("strict", wrap(true));
+    props.setProperty("calculate14", wrap(calc_14_nrgs));
+    props.setProperty("combiningRules", wrap("arithmetic"));
 }
 
 /** Copy constructor */
@@ -2318,7 +2316,7 @@ bool InternalFF::setStrict(bool strict)
         throw;
     }
     
-    props.setProperty( "strict", VariantProperty(isstrict) );
+    props.setProperty( "strict", wrap(isstrict) );
     
     return true;
 }
@@ -2342,7 +2340,7 @@ void InternalFF::enable14Calculation()
                                                         PropertyMap())) );
         }
         
-        props.setProperty("calculate14", VariantProperty(true));
+        props.setProperty("calculate14", wrap(true));
     }
 }
 
@@ -2354,7 +2352,7 @@ void InternalFF::disable14Calculation()
         calc_14_nrgs = false;
         cljgroups.clear();
         
-        props.setProperty("calculate14", VariantProperty(false));
+        props.setProperty("calculate14", wrap(false));
     }
 }
 
@@ -2382,7 +2380,7 @@ void InternalFF::setGeometricCombiningRules(bool on)
     nonbonded energy */
 CLJFunction::COMBINING_RULES InternalFF::combiningRules() const
 {
-    QString rules = props.property("combiningRules").asA<VariantProperty>().convertTo<QString>();
+    QString rules = props.property("combiningRules").asAString();
     
     if (rules == QLatin1String("arithmetic"))
         return CLJFunction::ARITHMETIC;
@@ -2414,10 +2412,10 @@ bool InternalFF::setCombiningRules(CLJFunction::COMBINING_RULES rules)
         switch(rules)
         {
         case CLJFunction::ARITHMETIC:
-            props.setProperty("combiningRules", VariantProperty("arithmetic"));
+            props.setProperty("combiningRules", wrap("arithmetic"));
             break;
         case CLJFunction::GEOMETRIC:
-            props.setProperty("combiningRules", VariantProperty("geometric"));
+            props.setProperty("combiningRules", wrap("geometric"));
             break;
         }
         
@@ -2474,12 +2472,11 @@ bool InternalFF::setProperty(const QString &name, const Property &value)
 {
     if (name == QLatin1String("strict"))
     {
-        return this->setStrict( value.asA<VariantProperty>()
-                                     .convertTo<bool>() );
+        return this->setStrict( value.asABoolean() );
     }
     else if (name == QLatin1String("combiningRules"))
     {
-        QString rules = value.asA<VariantProperty>().convertTo<QString>();
+        QString rules = value.asAString();
 
         CLJFunction::COMBINING_RULES new_rules;
         
@@ -2497,8 +2494,7 @@ bool InternalFF::setProperty(const QString &name, const Property &value)
     }
     else if (name == QLatin1String("calculate14"))
     {
-        return this->setUse14Calculation( value.asA<VariantProperty>()
-                                               .convertTo<bool>() );
+        return this->setUse14Calculation( value.asABoolean() );
     }
     else
         throw SireBase::missing_property( QObject::tr(

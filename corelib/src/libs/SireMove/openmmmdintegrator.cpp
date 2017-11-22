@@ -38,6 +38,8 @@
 #include "SireMol/atomcoords.h"
 #include "SireMol/moleditor.h"
 
+#include "SireBase/variantproperty.h"
+
 #include "SireMol/amberparameters.h"
 
 #include "SireSystem/system.h"
@@ -384,7 +386,6 @@ QString OpenMMMDIntegrator::toString() const
 
 void OpenMMMDIntegrator::initialise()
 {
-    qDebug()<<CODELOC;
     bool Debug = false;
 
     if (Debug)

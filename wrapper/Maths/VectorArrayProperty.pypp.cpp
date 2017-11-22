@@ -28,7 +28,7 @@ SireMaths::VectorArrayProperty __copy__(const SireMaths::VectorArrayProperty &ot
 void register_VectorArrayProperty_class(){
 
     { //::SireMaths::VectorArrayProperty
-        typedef bp::class_< SireMaths::VectorArrayProperty, bp::bases< SireBase::Property > > VectorArrayProperty_exposer_t;
+        typedef bp::class_< SireMaths::VectorArrayProperty, bp::bases< SireBase::ArrayProperty<SireMaths::Vector>, SireBase::Property > > VectorArrayProperty_exposer_t;
         VectorArrayProperty_exposer_t VectorArrayProperty_exposer = VectorArrayProperty_exposer_t( "VectorArrayProperty", "", bp::init< >("") );
         bp::scope VectorArrayProperty_scope( VectorArrayProperty_exposer );
         VectorArrayProperty_exposer.def( bp::init< QList< SireMaths::Vector > const & >(( bp::arg("array") ), "") );

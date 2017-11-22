@@ -161,19 +161,6 @@ void register_CharmmPSF_class(){
                 "nAngles"
                 , nAngles_function_value
                 , "Return the number of angle records." );
-        
-        }
-        { //::SireIO::CharmmPSF::nAngles
-        
-            typedef int ( ::SireIO::CharmmPSF::*nAngles_function_type)( int ) const;
-            nAngles_function_type nAngles_function_value( &::SireIO::CharmmPSF::nAngles );
-            
-            CharmmPSF_exposer.def( 
-                "nAngles"
-                , nAngles_function_value
-                , ( bp::arg("i") )
-                , "" );
-        
         }
         { //::SireIO::CharmmPSF::nAtoms
         
@@ -218,7 +205,7 @@ void register_CharmmPSF_class(){
                 "nBonds"
                 , nBonds_function_value
                 , ( bp::arg("i") )
-                , "" );
+                , "Return the number of bonds in molecule i." );
         
         }
         { //::SireIO::CharmmPSF::nCrossTerms
@@ -230,19 +217,6 @@ void register_CharmmPSF_class(){
                 "nCrossTerms"
                 , nCrossTerms_function_value
                 , "Return the number of cross-term records." );
-        
-        }
-        { //::SireIO::CharmmPSF::nCrossTerms
-        
-            typedef int ( ::SireIO::CharmmPSF::*nCrossTerms_function_type)( int ) const;
-            nCrossTerms_function_type nCrossTerms_function_value( &::SireIO::CharmmPSF::nCrossTerms );
-            
-            CharmmPSF_exposer.def( 
-                "nCrossTerms"
-                , nCrossTerms_function_value
-                , ( bp::arg("i") )
-                , "" );
-        
         }
         { //::SireIO::CharmmPSF::nDihedrals
         
@@ -253,19 +227,6 @@ void register_CharmmPSF_class(){
                 "nDihedrals"
                 , nDihedrals_function_value
                 , "Return the number of dihedral records." );
-        
-        }
-        { //::SireIO::CharmmPSF::nDihedrals
-        
-            typedef int ( ::SireIO::CharmmPSF::*nDihedrals_function_type)( int ) const;
-            nDihedrals_function_type nDihedrals_function_value( &::SireIO::CharmmPSF::nDihedrals );
-            
-            CharmmPSF_exposer.def( 
-                "nDihedrals"
-                , nDihedrals_function_value
-                , ( bp::arg("i") )
-                , "" );
-        
         }
         { //::SireIO::CharmmPSF::nImpropers
         
@@ -276,18 +237,6 @@ void register_CharmmPSF_class(){
                 "nImpropers"
                 , nImpropers_function_value
                 , "Return the number of improper records." );
-        
-        }
-        { //::SireIO::CharmmPSF::nImpropers
-        
-            typedef int ( ::SireIO::CharmmPSF::*nImpropers_function_type)( int ) const;
-            nImpropers_function_type nImpropers_function_value( &::SireIO::CharmmPSF::nImpropers );
-            
-            CharmmPSF_exposer.def( 
-                "nImpropers"
-                , nImpropers_function_value
-                , ( bp::arg("i") )
-                , "" );
         
         }
         { //::SireIO::CharmmPSF::nMolecules

@@ -79,26 +79,6 @@ namespace bp = boost::python;
 
 #include "expression.h"
 
-#include "SireCAS/errors.h"
-
-#include "SireStream/datastream.h"
-
-#include "complexvalues.h"
-
-#include "exbase.h"
-
-#include "expression.h"
-
-#include "expressionbase.h"
-
-#include "functions.h"
-
-#include "identities.h"
-
-#include "values.h"
-
-#include "exbase.h"
-
 #include "SireMaths/complex.h"
 
 #include "SireMaths/maths.h"
@@ -751,6 +731,26 @@ namespace bp = boost::python;
 
 #include "expression.h"
 
+#include "SireCAS/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "complexvalues.h"
+
+#include "exbase.h"
+
+#include "expression.h"
+
+#include "expressionbase.h"
+
+#include "functions.h"
+
+#include "identities.h"
+
+#include "values.h"
+
+#include "exbase.h"
+
 #include "SireMaths/complex.h"
 
 #include "SireMaths/maths.h"
@@ -822,6 +822,38 @@ namespace bp = boost::python;
 #include "values.h"
 
 #include "expression.h"
+
+#include "SireBase/numberproperty.h"
+
+#include "SireCAS/expressionproperty.h"
+
+#include "SireCAS/values.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "expressionproperty.h"
+
+#include "expressionproperty.h"
+
+#include "SireBase/numberproperty.h"
+
+#include "SireCAS/expressionproperty.h"
+
+#include "SireCAS/values.h"
+
+#include "SireError/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "expressionproperty.h"
+
+#include "expressionproperty.h"
 
 void register_free_functions(){
 
@@ -833,8 +865,8 @@ void register_free_functions(){
         bp::def( 
             "cbrt"
             , cbrt_function_value
-            , ( bp::arg("__x") )
-            , "Return the cube root of X." );
+            , ( bp::arg("arg0") )
+            , "" );
     
     }
 
@@ -859,8 +891,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("__x"), bp::arg("__y") )
-            , "Return X to the Y power." );
+            , ( bp::arg("arg0"), bp::arg("arg1") )
+            , "" );
     
     }
 
@@ -1015,8 +1047,8 @@ void register_free_functions(){
         bp::def( 
             "sqrt"
             , sqrt_function_value
-            , ( bp::arg("__x") )
-            , "Return the square root of X." );
+            , ( bp::arg("arg0") )
+            , "" );
     
     }
 
@@ -1029,6 +1061,32 @@ void register_free_functions(){
             "sqrt"
             , sqrt_function_value
             , ( bp::arg("ex0") )
+            , "" );
+    
+    }
+
+    { //::SireCAS::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::SireCAS::ExBase const & );
+        wrap_function_type wrap_function_value( &::SireCAS::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("expression") )
+            , "" );
+    
+    }
+
+    { //::SireCAS::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::SireCAS::Expression const & );
+        wrap_function_type wrap_function_value( &::SireCAS::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("expression") )
             , "" );
     
     }

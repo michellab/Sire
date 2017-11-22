@@ -36,7 +36,6 @@ SIRE_BEGIN_HEADER
 namespace SireBase
 {
 class NumberProperty;
-class VariantProperty;
 }
 
 QDataStream& operator<<(QDataStream&, const SireBase::NumberProperty&);
@@ -58,10 +57,10 @@ friend QDataStream& ::operator>>(QDataStream&, NumberProperty&);
 public:
     NumberProperty();
     NumberProperty(double value);
-    NumberProperty(int value);
     NumberProperty(qint64 value);
+    NumberProperty(const QString &value);
 
-    NumberProperty(const VariantProperty &other);    
+    NumberProperty(const Property &other);
     NumberProperty(const NumberProperty &other);
     
     ~NumberProperty();
@@ -79,6 +78,16 @@ public:
     double value() const;
     
     QString toString() const;
+    
+    bool isAString() const;
+    bool isADouble() const;
+    bool isAnInteger() const;
+    bool isABoolean() const;
+    
+    QString asAString() const;
+    double asADouble() const;
+    int asAnInteger() const;
+    bool asABoolean() const;
     
 private:
     union

@@ -348,7 +348,7 @@ void register_MoleculeInfo_class(){
                 "cgIdx"
                 , cgIdx_function_value
                 , ( bp::arg("residx") )
-                , "Return the index of the identified CutGroup" );
+                , "Return the index of the CutGroup that contains the atoms for residue\nwith ID id, if this molecule uses residue cutting. If not, an\nexception is thrown" );
         
         }
         { //::SireMol::MoleculeInfo::cgIdx
@@ -360,7 +360,7 @@ void register_MoleculeInfo_class(){
                 "cgIdx"
                 , cgIdx_function_value
                 , ( bp::arg("resid") )
-                , "Return the index of the identified CutGroup" );
+                , "Return the index of the CutGroup that contains the atoms for residue\nwith ID id, if this molecule uses residue cutting. If not, an\nexception is thrown" );
         
         }
         { //::SireMol::MoleculeInfo::chainIdx
@@ -863,7 +863,7 @@ void register_MoleculeInfo_class(){
                 "isResidueCutting"
                 , isResidueCutting_function_value
                 , ( bp::arg("residx") )
-                , "" );
+                , "Return whether or not residue-based cutting is used for the specifed\nresidue" );
         
         }
         { //::SireMol::MoleculeInfo::isResidueCutting
@@ -875,7 +875,7 @@ void register_MoleculeInfo_class(){
                 "isResidueCutting"
                 , isResidueCutting_function_value
                 , ( bp::arg("resid") )
-                , "" );
+                , "Return whether or not residue-based cutting is used for the specifed\nresidue" );
         
         }
         { //::SireMol::MoleculeInfo::isWithinChain

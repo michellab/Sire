@@ -2246,7 +2246,13 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
     amber_masses = getProperty<AtomMasses>( map["mass"], moldata, &has_masses );
     amber_elements = getProperty<AtomElements>( map["element"], moldata, &has_elements );
     amber_types = getProperty<AtomStringProperty>( map["ambertype"], moldata, &has_ambertypes );
-
+    
+    if (not has_ambertypes)
+    {
+        //look for the atomtypes property
+        amber_types = getProperty<AtomStringProperty>( map["atomtype"], moldata, &has_ambertypes );
+    }
+    
     if (not has_elements)
     {
         //try to guess the elements from the names and/or masses

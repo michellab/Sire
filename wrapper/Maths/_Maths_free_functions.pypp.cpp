@@ -473,7 +473,7 @@ void register_free_functions(){
             "gamma"
             , gamma_function_value
             , ( bp::arg("arg0") )
-            , "Obsolete alias for `lgamma." );
+            , "Legacy BSD API: please use C99 tgamma( ) instead." );
     
     }
 

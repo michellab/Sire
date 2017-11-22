@@ -12,6 +12,7 @@
 #include "exp.h"
 #include "expression.h"
 #include "expressionbase.h"
+#include "expressionproperty.h"
 #include "function.h"
 #include "functionsignature.h"
 #include "hyperbolicfuncs.h"

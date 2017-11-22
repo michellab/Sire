@@ -13,6 +13,12 @@
 
 #include "Array2D_double_.pypp.hpp"
 
+#include "ArrayProperty_QString_.pypp.hpp"
+
+#include "ArrayProperty_double_.pypp.hpp"
+
+#include "ArrayProperty_int_.pypp.hpp"
+
 #include "BooleanProperty.pypp.hpp"
 
 #include "CPUID.pypp.hpp"
@@ -135,6 +141,12 @@ BOOST_PYTHON_MODULE(_Base){
     register_Array2D_double__class();
 
     register_Property_class();
+
+    register_ArrayProperty_QString__class();
+
+    register_ArrayProperty_double__class();
+
+    register_ArrayProperty_int__class();
 
     register_BooleanProperty_class();
 

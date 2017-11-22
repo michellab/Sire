@@ -66,6 +66,7 @@ class SIREBASE_EXPORT ArrayProperty : public Property
 
 public:
     ArrayProperty();
+    ArrayProperty(const T &value);
     
     ~ArrayProperty();
     
@@ -144,6 +145,14 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 ArrayProperty<T>::ArrayProperty() : Property()
 {}
+
+/** Construct from a single value */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+ArrayProperty<T>::ArrayProperty(const T &value) : Property()
+{
+    a.append(value);
+}
 
 /** Construct from the passed list */
 template<class T>
@@ -526,6 +535,21 @@ QVector<T> ArrayProperty<T>::value() const
 #endif
 
 }
+
+SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<QString>),
+                    SireBase::ArrayProperty_QString_ )
+
+SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<double>),
+                    SireBase::ArrayProperty_double_ )
+
+SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<long long>),
+                    SireBase::ArrayProperty_int_ )
+
+#ifdef SIRE_INSTANTIATE_TEMPLATES
+template class SireBase::ArrayProperty<QString>;
+template class SireBase::ArrayProperty<double>;
+template class SireBase::ArrayProperty<qint64>;
+#endif
 
 SIRE_END_HEADER
 

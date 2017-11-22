@@ -33,6 +33,8 @@
 
 #include "SireMol/atomelements.h"
 
+#include "SireBase/propertylist.h"
+
 #include "SireError/errors.h"
 #include "SireFF/errors.h"
 #include "SireBase/errors.h"
@@ -170,8 +172,7 @@ QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, QMPotential &qmpot)
         qmpot.spce = qmpot.props.property("space");
         qmpot.qmprog = qmpot.props.property("quantum program");
         qmpot.zero_energy = qmpot.props.property("zero energy")
-                                       .asA<VariantProperty>()
-                                       .toDouble();
+                                       .asADouble();
     }
     else
         throw version_error(v, "1", r_qmpot, CODELOC);
@@ -184,7 +185,7 @@ QMPotential::QMPotential() : zero_energy(0)
 {
     props.setProperty( "space", spce );
     props.setProperty( "quantum program", qmprog );
-    props.setProperty( "zero energy", VariantProperty(zero_energy) );
+    props.setProperty( "zero energy", wrap(zero_energy) );
 }
 
 /** Copy constructor */
@@ -500,7 +501,7 @@ bool QMPotential::setZeroEnergy(MolarEnergy zeroenergy)
     if ( zero_energy != zeroenergy )
     {
         zero_energy = zeroenergy;
-        props.setProperty("zero energy", VariantProperty(zero_energy));
+        props.setProperty("zero energy", wrap(zero_energy));
         this->changedPotential();
         return true;
     }
@@ -527,8 +528,7 @@ bool QMPotential::setProperty(const QString &name, const Property &value)
     }
     else if (name == QLatin1String("zero energy"))
     {
-        return this->setZeroEnergy( MolarEnergy(value.asA<VariantProperty>()
-                                                     .convertTo<double>()) );
+        return this->setZeroEnergy( MolarEnergy(value.asADouble()) );
     }
     else
         throw SireBase::missing_property( QObject::tr(

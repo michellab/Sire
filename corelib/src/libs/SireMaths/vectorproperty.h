@@ -128,6 +128,13 @@ SIRE_EXPOSE_FUNCTION( SireMaths::wrap )
 SIRE_EXPOSE_CLASS( SireMaths::VectorProperty )
 SIRE_EXPOSE_CLASS( SireMaths::VectorArrayProperty )
 
+SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<SireMaths::Vector>),
+                    SireBase::ArrayProperty_Vector_ )
+
+#ifdef SIRE_INSTANTIATE_TEMPLATES
+template class SireBase::ArrayProperty<SireMaths::Vector>;
+#endif
+
 SIRE_END_HEADER
 
 #endif

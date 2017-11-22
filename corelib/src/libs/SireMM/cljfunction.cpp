@@ -237,12 +237,7 @@ CLJFunctionPtr CLJFunction::setProperty(const QString &name, const Property &val
     }
     else if (name == "combiningRules")
     {
-        QString typ;
-    
-        if (value.isA<VariantProperty>())
-            typ = value.asA<VariantProperty>().toString();
-        else
-            typ = value.asA<StringProperty>().value();
+        QString typ = value.asAString();
         
         if (typ.toLower() == "arithmetic")
             ret.edit().setCombiningRules( CLJFunction::ARITHMETIC );
@@ -2035,22 +2030,6 @@ Properties CLJSoftFunction::properties() const
     return props;
 }
 
-static double get_number(const Property &value)
-{
-    if (value.isA<NumberProperty>())
-    {
-        return value.asA<NumberProperty>().toDouble();
-    }
-    else if (value.isA<VariantProperty>())
-    {
-        return value.asA<VariantProperty>().toDouble();
-    }
-    else
-        throw SireError::invalid_cast( QObject::tr(
-                "Cannot extract a number from the passed property %1")
-                    .arg(value.toString()), CODELOC );
-}
-
 /** Set the property with name 'name' to value 'value' */
 CLJFunctionPtr CLJSoftFunction::setProperty(const QString &name, const Property &value) const
 {
@@ -2059,17 +2038,17 @@ CLJFunctionPtr CLJSoftFunction::setProperty(const QString &name, const Property 
     if (name == "alpha")
     {
         ret.edit().asA<CLJSoftFunction>()
-                  .setAlpha( get_number(value) );
+                  .setAlpha( value.asADouble() );
     }
     else if (name == "shiftDelta")
     {
         ret.edit().asA<CLJSoftFunction>()
-                  .setShiftDelta( get_number(value) );
+                  .setShiftDelta( value.asADouble() );
     }
     else if (name == "coulombPower")
     {
         ret.edit().asA<CLJSoftFunction>()
-                  .setCoulombPower( get_number(value) );
+                  .setCoulombPower( value.asADouble() );
     }
     else
     {
@@ -2327,17 +2306,17 @@ CLJFunctionPtr CLJSoftIntraFunction::setProperty(const QString &name, const Prop
     if (name == "alpha")
     {
         ret.edit().asA<CLJSoftIntraFunction>()
-                  .setAlpha( get_number(value) );
+                  .setAlpha( value.asADouble() );
     }
     else if (name == "shiftDelta")
     {
         ret.edit().asA<CLJSoftIntraFunction>()
-                  .setShiftDelta( get_number(value) );
+                  .setShiftDelta( value.asADouble() );
     }
     else if (name == "coulombPower")
     {
         ret.edit().asA<CLJSoftIntraFunction>()
-                  .setCoulombPower( get_number(value) );
+                  .setCoulombPower( value.asADouble() );
     }
     else
     {

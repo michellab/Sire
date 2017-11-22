@@ -69,6 +69,7 @@ set ( SIREBASE_HEADERS
       trigarray2d.h
       trigarray2d.hpp
       unittest.h
+      variantproperty.h
     )
 
 # Define the sources in SireBase
@@ -111,6 +112,7 @@ set ( SIREBASE_SOURCES
       timeproperty.cpp
       trigarray2d.cpp 
       unittest.cpp
+      variantproperty.cpp
 
       test_sharedptr.cpp
 

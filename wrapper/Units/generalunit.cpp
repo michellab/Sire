@@ -8,11 +8,18 @@
 
 #include "generalunit.h"
 
+#include "SireBase/lengthproperty.h"
+#include "SireBase/timeproperty.h"
+#include "SireBase/variantproperty.h"
+
+#include "SireError/errors.h"
+
 #include "SireUnits/dimensions.h"
 #include "SireUnits/temperature.h"
 
 using namespace SireUnits;
 using namespace SireUnits::Dimension;
+using namespace SireBase;
 
 namespace SireUnits
 {
@@ -345,4 +352,24 @@ GeneralUnit GeneralUnit::invert() const
     ret.Angle = -Angle;
     
     return ret;
+}
+
+PropertyPtr GeneralUnit::toProperty() const
+{
+    if (this->isUnit<SireUnits::Dimension::Length>())
+    {
+        return LengthProperty( SireUnits::Dimension::Length(this->value()) );
+    }
+    else if (this->isUnit<SireUnits::Dimension::Time>())
+    {
+        return TimeProperty( SireUnits::Dimension::Time(this->value()) );
+    }
+    else
+    {
+        throw SireError::incomplete_code( QObject::tr(
+                "Tell the programmers that they need to add in automatic "
+                "wrapping of units of type '%s'").arg(this->toString()),
+                   CODELOC );
+        return PropertyPtr();
+    }
 }

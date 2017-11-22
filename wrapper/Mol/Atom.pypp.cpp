@@ -46,43 +46,43 @@ namespace bp = boost::python;
 
 #include "atom.h"
 
+#include "atomenergies.h"
+
+#include "SireVol/space.h"
+
+#include "atompolarisabilities.h"
+
+#include "atomvelocities.h"
+
+#include "atomcharges.h"
+
+#include "atomelements.h"
+
+#include "SireError/errors.h"
+
+#include "atombeads.h"
+
+#include "atomproperty.hpp"
+
+#include "SireBase/quickcopy.hpp"
+
+#include "SireStream/shareddatastream.h"
+
+#include "atomcoords.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireMaths/vector.h"
+
 #include "atomforces.h"
 
 #include "atomljs.h"
 
-#include "atomcharges.h"
-
-#include "SireBase/quickcopy.hpp"
-
-#include "SireStream/datastream.h"
-
-#include "SireVol/space.h"
-
-#include "atomenergies.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "SireError/errors.h"
-
-#include "atomelements.h"
-
-#include "atommasses.h"
-
-#include "atomvelocities.h"
+#include "SireMaths/align.h"
 
 #include "atomradii.h"
 
-#include "atomcoords.h"
-
-#include "atompolarisabilities.h"
-
-#include "atomproperty.hpp"
-
-#include "SireMaths/align.h"
-
-#include "atombeads.h"
-
-#include "SireMaths/vector.h"
+#include "atommasses.h"
 
 const SireMM::LJParameter& get_Metadata_SireMM_AtomLJs_function1(const SireMol::Atom &atom,
                                    const QString &metakey){ return atom.metadata< SireMM::LJParameter >(metakey); }

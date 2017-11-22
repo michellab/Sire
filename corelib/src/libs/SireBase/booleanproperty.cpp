@@ -28,6 +28,8 @@
 
 #include "SireBase/booleanproperty.h"
 
+#include "SireError/errors.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
@@ -66,10 +68,44 @@ BooleanProperty::BooleanProperty(bool value)
                : ConcreteProperty<BooleanProperty,Property>(), val(value)
 {}
 
+/** Construct from the passed string */
+BooleanProperty::BooleanProperty(const QString &value)
+                : ConcreteProperty<BooleanProperty,Property>()
+{
+    QString v = value.toLower().simplified();
+    
+    if (v == "true" or v == "t" or v == "yes" or v == "y" or v == "on")
+    {
+        val = true;
+    }
+    else if (v == "false" or v == "f" or v == "no" or v == "n" or v == "off")
+    {
+        val = false;
+    }
+    else
+    {
+        bool ok;
+        
+        double dv = v.toDouble(&ok);
+        
+        if (ok)
+        {
+            val = dv;
+        }
+        else
+        {
+            throw SireError::invalid_cast( QObject::tr(
+                    "Cannot convert the string '%1' to a boolean. Valid strings include "
+                    "true/false, yes/no, t/f, y/n, on/off, 1/0, 1.0/0.0.")
+                        .arg(value), CODELOC );
+        }
+    }
+}
+
 /** Construct from a VariantProperty */
-BooleanProperty::BooleanProperty(const VariantProperty &other)
+BooleanProperty::BooleanProperty(const Property &other)
                 : ConcreteProperty<BooleanProperty,Property>(other),
-                  val( other.convertTo<bool>() )
+                  val( other.asABoolean() )
 {}
 
 /** Copy constructor */
@@ -122,3 +158,44 @@ QString BooleanProperty::toString() const
     else
         return QObject::tr("False");
 }
+
+bool BooleanProperty::isAString() const
+{
+    return true;
+}
+
+bool BooleanProperty::isADouble() const
+{
+    return true;
+}
+
+bool BooleanProperty::isAnInteger() const
+{
+    return true;
+}
+
+bool BooleanProperty::isABoolean() const
+{
+    return true;
+}
+
+QString BooleanProperty::asAString() const
+{
+    return this->toString();
+}
+
+double BooleanProperty::asADouble() const
+{
+    return val;
+}
+
+int BooleanProperty::asAnInteger() const
+{
+    return val;
+}
+
+bool BooleanProperty::asABoolean() const
+{
+    return val;
+}
+

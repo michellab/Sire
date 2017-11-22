@@ -505,7 +505,7 @@ const char* GromacsBond::what() const
 /** Return whether or not this parameter needs resolving */
 bool GromacsBond::needsResolving() const
 {
-    return k[0] == unresolved_parameter_value;
+    return k[0] == unresolved_parameter_value or func_type == 0;
 }
 
 /** Return whether or not the parameters for this bond are resolved */
@@ -652,6 +652,13 @@ QString GromacsBond::toString() const
             return QObject::tr("Gromacsbond( functionType() = %1, parameters() = [ %2 ] )")
                     .arg(functionTypeString()).arg(params.join(", "));
     }
+}
+
+/** Return whether or not this GromacsBond implies that the atoms are actually
+    bonded together */
+bool GromacsBond::atomsAreBonded() const
+{
+    return true;
 }
 
 /** Return this function converted to a SireCAS::Expression using the passed symbol
@@ -1352,7 +1359,7 @@ uint GromacsAngle::hash() const
 /** Return whether or not this parameter needs resolving */
 bool GromacsAngle::needsResolving() const
 {
-    return k[0] == unresolved_parameter_value;
+    return k[0] == unresolved_parameter_value or func_type == 0;
 }
 
 /** Return whether or not the parameters for this angle are resolved */
@@ -1927,7 +1934,7 @@ uint GromacsDihedral::hash() const
 /** Return whether or not this parameter needs resolving */
 bool GromacsDihedral::needsResolving() const
 {
-    return k[0] == unresolved_parameter_value;
+    return k[0] == unresolved_parameter_value or func_type == 0;
 }
 
 /** Return whether or not the parameters for this dihedral are resolved */

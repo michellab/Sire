@@ -170,6 +170,9 @@ def has_function(c, funcname):
        return False
 
 def find_class(mb, classname):
+   # replace Qt integers with C++
+   classname = classname.replace("qint64", "long long")
+
    for clas in mb.classes():
        if str(clas).find("%s [class]" % classname) != -1 or \
           str(clas).find("%s [struct]" % classname) != -1 or \

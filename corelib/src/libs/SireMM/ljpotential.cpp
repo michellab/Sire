@@ -40,6 +40,7 @@
 #include "SireVol/cartesian.h"
 
 #include "SireBase/countflops.h"
+#include "SireBase/propertylist.h"
 
 #include "SireMaths/maths.h"
 
@@ -279,7 +280,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
     
         ljpot.combining_rules = LJParameterDB::interpret(
                                     ljpot.props.property("combiningRules")
-                                        .asA<VariantProperty>().convertTo<QString>() );
+                                               .asAString() );
                                         
         ljpot.need_update_ljpairs = true;
     }
@@ -298,8 +299,7 @@ LJPotential::LJPotential()
     //record the defaults
     props.setProperty( "space", spce );
     props.setProperty( "switchingFunction", switchfunc );
-    props.setProperty( "combiningRules", 
-                       VariantProperty( LJParameterDB::toString(combining_rules) ) );
+    props.setProperty( "combiningRules", wrap( LJParameterDB::toString(combining_rules) ) );
 }
 
 /** Copy constructor */
@@ -408,7 +408,7 @@ bool LJPotential::setCombiningRules(const QString &combiningrules)
     {
         combining_rules = new_rules;
         need_update_ljpairs = true;
-        props.setProperty( "combiningRules", VariantProperty(combiningrules) );
+        props.setProperty( "combiningRules", wrap(combiningrules) );
         this->changedPotential();
         return true;
     }
@@ -434,8 +434,7 @@ bool LJPotential::setProperty(const QString &name, const Property &value)
     }
     else if (name == QLatin1String("combiningRules"))
     {
-        return this->setCombiningRules( value.asA<VariantProperty>()
-                                                     .convertTo<QString>() );
+        return this->setCombiningRules( value.asAString() );
     }
     else
         throw SireBase::missing_property( QObject::tr(

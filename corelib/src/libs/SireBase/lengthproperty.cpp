@@ -27,6 +27,9 @@
 \*********************************************/
 
 #include "SireBase/lengthproperty.h"
+#include "SireBase/variantproperty.h"
+
+#include "SireError/errors.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -69,10 +72,17 @@ LengthProperty::LengthProperty(Length value)
 {}
 
 /** Construct from a VariantProperty */
-LengthProperty::LengthProperty(const VariantProperty &other)
-               : ConcreteProperty<LengthProperty,Property>(other),
-                 val(other.convertTo<Length>())
-{}
+LengthProperty::LengthProperty(const Property &other)
+               : ConcreteProperty<LengthProperty,Property>(other)
+{
+    if (other.isA<VariantProperty>())
+    {
+        val = other.asA<VariantProperty>().convertTo<Length>();
+    }
+    else
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast a %s into a LengthProperty").arg(other.toString()), CODELOC );
+}
 
 /** Copy constructor */
 LengthProperty::LengthProperty(const LengthProperty &other)
