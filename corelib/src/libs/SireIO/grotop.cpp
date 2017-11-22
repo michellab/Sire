@@ -3762,6 +3762,7 @@ System GroTop::startSystem(const PropertyMap &map) const
                 auto typ = unique_typs[i];
 
                 QStringList errors;
+                Molecule mol = this->createMolecule(typ, errors, map);
                 
                 QMutexLocker lkr(&mutex);
 
