@@ -1828,30 +1828,6 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
     {
         system.setProperty("fileformat", StringProperty(fileformat));
 	}
-
-	// Update the System filename property to record that it includes
-    // data from this file.
-    QString file_name = this->filename;
-
-    PropertyName filename_property = map["filename"];
-
-    try
-    {
-        QString last_filename = system.property(filename_property)
-                                  .asA<StringProperty>().value();
-        file_name = QString("%1,%2").arg(last_filename,file_name);
-    }
-    catch(...)
-    {}
-
-    if (filename_property.hasSource())
-    {
-        system.setProperty(filename_property.source(), StringProperty(file_name));
-    }
-    else
-    {
-        system.setProperty("filename", StringProperty(file_name));
-	}
 }
 
 /** Internal function used to get the molecule structure for molecule 'imol'. */
