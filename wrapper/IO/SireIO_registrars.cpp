@@ -3,6 +3,7 @@
 
 #include "SireIO_registrars.h"
 
+
 #include "amberprm.h"
 #include "amber.h"
 #include "protoms.h"
@@ -27,6 +28,7 @@
 void register_SireIO_objects()
 {
 
+
     ObjectRegistry::registerConverterFor< SireIO::AmberPrm >();
     ObjectRegistry::registerConverterFor< SireIO::Amber >();
     ObjectRegistry::registerConverterFor< SireIO::ProtoMS >();
@@ -46,12 +48,14 @@ void register_SireIO_objects()
     ObjectRegistry::registerConverterFor< SireIO::Mol2Molecule >();
     ObjectRegistry::registerConverterFor< SireIO::Mol2Substructure >();
     ObjectRegistry::registerConverterFor< SireIO::Mol2 >();
+
     ObjectRegistry::registerConverterFor< SireIO::AmberRst >();
     ObjectRegistry::registerConverterFor< SireIO::NullParser >();
     ObjectRegistry::registerConverterFor< SireIO::GroTop >();
     ObjectRegistry::registerConverterFor< SireIO::GroMolType >();
     ObjectRegistry::registerConverterFor< SireIO::GroAtom >();
     ObjectRegistry::registerConverterFor< SireIO::GroSystem >();
+
     ObjectRegistry::registerConverterFor< SireIO::TrajectoryMonitor >();
     ObjectRegistry::registerConverterFor< SireIO::PDB >();
     ObjectRegistry::registerConverterFor< SireIO::PerturbationsLibrary >();

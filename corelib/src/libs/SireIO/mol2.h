@@ -90,7 +90,8 @@ public:
     Mol2Atom(const QString &line, QStringList &errors);
 
     /** Constructor. */
-    Mol2Atom(const SireMol::Atom &atom, QStringList &errors, bool is_idx = false);
+    Mol2Atom(const SireMol::Atom &atom, const PropertyMap &map,
+        QStringList &errors, bool is_idx = false);
 
     /** Generate a Mol2 record from the atom data. */
     QString toMol2Record() const;
@@ -225,11 +226,11 @@ public:
 
     /** Constructor (from a Mol2 data record). */
     Mol2Molecule(const QVector<QString> &lines, QStringList &errors,
-        int &num_records, QString filename = QString(), int imol = -1);
+        int &num_records, int imol = -1);
 
     /** Constructor (from a Sire Molecule). */
-    Mol2Molecule(const SireMol::Molecule &mol, QStringList &errors,
-        QString filename = QString(), int imol = -1);
+    Mol2Molecule(const SireMol::Molecule &mol, const PropertyMap &map,
+        QStringList &errors, int imol = -1);
 
     /** Generate a Mol2 record from the molecule data. */
     QVector<QString> toMol2Record() const;
@@ -365,7 +366,8 @@ public:
     Mol2Substructure(const QString &line, QStringList &errors);
 
     /** Constructor. */
-    Mol2Substructure(const SireMol::Residue &res, QStringList &errors, bool is_idx = false);
+    Mol2Substructure(const SireMol::Residue &res, const PropertyMap &map,
+        QStringList &errors, bool is_idx = false);
 
     /** Generate a Mol2 record from the feature data. */
     QString toMol2Record() const;
@@ -535,9 +537,6 @@ private:
 
     /** The molecular data object. */
     QVector<Mol2Molecule> molecules;
-
-    /** The name of the parsed file (if from a file). */
-    QString filename;
 
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;

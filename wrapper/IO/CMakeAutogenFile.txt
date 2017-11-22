@@ -6,6 +6,7 @@ set ( PYPP_SOURCES
        AmberRst7.pypp.cpp
        CharmmPSF.pypp.cpp
        Cube.pypp.cpp
+
        FlexibilityLibrary.pypp.cpp
        FlexibilityTemplate.pypp.cpp
        Gro87.pypp.cpp
@@ -22,6 +23,7 @@ set ( PYPP_SOURCES
        PDB.pypp.cpp
        PDB2.pypp.cpp
        PDBParameters.pypp.cpp
+
        PerturbationsLibrary.pypp.cpp
        PerturbationsTemplate.pypp.cpp
        ProtoMS.pypp.cpp

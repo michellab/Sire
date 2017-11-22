@@ -57,17 +57,6 @@ void register_PDB2_class(){
         PDB2_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to read in the data from the passed text lines. The\npassed property map can be used to pass extra parameters to control\nthe parsing") );
         PDB2_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct this parser by extracting all necessary information from the\npassed SireSystem::System, looking for the properties that are specified\nin the passed property map") );
         PDB2_exposer.def( bp::init< SireIO::PDB2 const & >(( bp::arg("other") ), "Copy constructor") );
-        { //::SireIO::PDB2::canFollow
-        
-            typedef bool ( ::SireIO::PDB2::*canFollow_function_type)(  ) const;
-            canFollow_function_type canFollow_function_value( &::SireIO::PDB2::canFollow );
-            
-            PDB2_exposer.def( 
-                "canFollow"
-                , canFollow_function_value
-                , "" );
-        
-        }
         { //::SireIO::PDB2::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::PDB2::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;

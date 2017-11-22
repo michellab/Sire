@@ -3,6 +3,7 @@
 
 #include "SireMM_registrars.h"
 
+
 #include "internalparameters.h"
 #include "ljperturbation.h"
 #include "fouratomfunctions.h"
@@ -56,10 +57,12 @@
 #include "twoatomfunctions.h"
 #include "internalcomponent.h"
 
+
 #include "Helpers/objectregistry.hpp"
 
 void register_SireMM_objects()
 {
+
 
     ObjectRegistry::registerConverterFor< SireMM::InternalParameters >();
     ObjectRegistry::registerConverterFor< SireMM::InternalParameters3D >();
@@ -74,6 +77,7 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::IntraCLJFF >();
     ObjectRegistry::registerConverterFor< SireMM::IntraGroupCLJFFBase >();
     ObjectRegistry::registerConverterFor< SireMM::IntraGroupCLJFF >();
+
     ObjectRegistry::registerConverterFor< SireMM::AmberParams >();
     ObjectRegistry::registerConverterFor< SireMM::AmberBond >();
     ObjectRegistry::registerConverterFor< SireMM::AmberAngle >();
@@ -81,6 +85,7 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::AmberDihedral >();
     ObjectRegistry::registerConverterFor< SireMM::AmberNB14 >();
     ObjectRegistry::registerConverterFor< SireMM::AmberNBDihPart >();
+
     ObjectRegistry::registerConverterFor< SireMM::CLJShiftFunction >();
     ObjectRegistry::registerConverterFor< SireMM::CLJIntraShiftFunction >();
     ObjectRegistry::registerConverterFor< SireMM::CLJSoftShiftFunction >();
@@ -112,6 +117,7 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::InterGroupLJFFBase >();
     ObjectRegistry::registerConverterFor< SireMM::InterGroupLJFF >();
     ObjectRegistry::registerConverterFor< SireMM::CLJGroup >();
+
     ObjectRegistry::registerConverterFor< SireMM::IntraFF >();
     ObjectRegistry::registerConverterFor< SireMM::MultiCLJComponent >();
     ObjectRegistry::registerConverterFor< SireMM::IntraCoulombFFBase >();

@@ -47,9 +47,9 @@
 
 #include "SireUnits/units.h"
 
+using namespace SireBase;
 using namespace SireIO;
 using namespace SireMol;
-using namespace SireBase;
 using namespace SireSystem;
 using namespace SireStream;
 
@@ -352,20 +352,24 @@ Mol2Atom::Mol2Atom(const QString &line, QStringList &errors) :
     @param atom
         A reference to a Sire Atom object.
 
+    @param map
+        A reference to the user parameter map.
+
     @param errors
         An array of error messages.
 
     @param is_idx
         Whether to number residues by their index. (optional)
  */
-Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors, bool is_idx) :
+Mol2Atom::Mol2Atom(const SireMol::Atom &atom, const PropertyMap &map,
+    QStringList &errors, bool is_idx) :
     number(atom.number().value()),
     name(atom.name().value()),
     type("Du"),
     charge(0)
 {
     // The atom must have atomic coordinates to be valid.
-    if (not atom.hasProperty("coordinates"))
+    if (not atom.hasProperty(map["coordinates"]))
     {
         errors.append(QObject::tr("The atom does not have coordinates!"));
 
@@ -373,7 +377,7 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors, bool is_idx) 
     }
 
     // Extract the atomic coordinates.
-    coord = atom.property<SireMaths::Vector>("coordinates");
+    coord = atom.property<SireMaths::Vector>(map["coordinates"]);
 
     // The atom is within a residue.
     if (atom.isWithinResidue())
@@ -387,9 +391,9 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors, bool is_idx) 
     }
 
     // Extract the SYBYL atom type.
-    if (atom.hasProperty("sybyl-atom-type"))
+    if (atom.hasProperty(map["sybyl-atom-type"]))
     {
-        type = atom.property<QString>("sybyl-atom-type");
+        type = atom.property<QString>(map["sybyl-atom-type"]);
     }
     else
     {
@@ -397,20 +401,20 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, QStringList &errors, bool is_idx) 
     }
 
     // Extract the atomic charge.
-    if (atom.hasProperty("charge"))
+    if (atom.hasProperty(map["charge"]))
     {
-        charge = atom.property<SireUnits::Dimension::Charge>("charge").value();
+        charge = atom.property<SireUnits::Dimension::Charge>(map["charge"]).value();
     }
-    else if (atom.hasProperty("formal-charge"))
+    else if (atom.hasProperty(map["formal-charge"]))
     {
-        // TOD: Need some conversion here, I assume.
-        charge = atom.property<SireUnits::Dimension::Charge>("formal-charge").value();
+        // TODO: Need some conversion here, I assume.
+        charge = atom.property<SireUnits::Dimension::Charge>(map["formal-charge"]).value();
     }
 
     // Extract the SYBYL status bits.
-    if (atom.hasProperty("atom-status-bits"))
+    if (atom.hasProperty(map["atom-status-bits"]))
     {
-        status_bits = atom.property<QString>("atom-status-bits");
+        status_bits = atom.property<QString>(map["atom-status-bits"]);
     }
 }
 
@@ -673,7 +677,7 @@ Mol2Molecule::Mol2Molecule() :
         The molecule index (optional).
  */
 Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
-    QStringList &errors, int &num_records, QString filename, int imol) :
+    QStringList &errors, int &num_records, int imol) :
     record(lines),
     num_atoms(0),
     num_bonds(0),
@@ -686,12 +690,10 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     // Extract the molecule name.
     name = lines[0].simplified();
 
-    // If the name is blank, then name the molecule after the file.
-    // If the filename is empty, then name the molecule "Molecule".
+    // If the name is blank, then name the molecule "Molecule".
     if (name.isEmpty())
     {
-        if (not filename.isEmpty()) name = filename;
-        else                        name = QString("Molecule: ");
+        name = QString("Molecule: ");
 
         // Append a molecule index (for multiple molecule records).
         if (imol != -1)
@@ -890,17 +892,17 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     @param mol
         A reference to a Sire Molecule object.
 
+    @param map
+        A reference to the user parameter map.
+
     @param errors
         An array of error messages.
-
-    @param filename
-        The filename from which this molecular data originated (optional).
 
     @param imol
         The molecule index.
  */
-Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
-    QStringList &errors, QString filename, int imol) :
+Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol, const PropertyMap &map,
+    QStringList &errors, int imol) :
     name(mol.name().value()),
     num_atoms(mol.nAtoms()),
     num_bonds(0),
@@ -910,12 +912,10 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
     mol_type("SMALL"),
     charge_type("GASTEIGER")
 {
-    // If the name is blank, then name the molecule after the file.
-    // If the filename is empty, then name the molecule "Molecule".
+    // If the name is blank, then name the molecule "Molecule".
     if (name.isEmpty())
     {
-        if (not filename.isEmpty()) name = filename;
-        else                        name = QString("Molecule");
+        name = QString("Molecule");
 
         // Append a molecule index (for multiple molecule records).
         if (imol != -1)
@@ -928,7 +928,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
     }
 
     // Extract the molecule type.
-    if (mol.hasProperty("mol-type"))
+    if (mol.hasProperty(map["mol-type"]))
     {
         // List of valid molecule types.
         QStringList valid_mols;
@@ -941,7 +941,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
                    << "SACCHARIDE";
 
         // Extract the molecule type.
-        mol_type = mol.property("mol-type").toString().simplified().toUpper();
+        mol_type = mol.property(map["mol-type"]).toString().simplified().toUpper();
 
         // Check that the status bit is valid.
         if (not valid_mols.contains(mol_type))
@@ -958,7 +958,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
     }
 
     // Extract the charge type.
-    if (mol.hasProperty("charge-type"))
+    if (mol.hasProperty(map["charge-type"]))
     {
         // List of valid molecule types.
         QStringList valid_chgs;
@@ -978,7 +978,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
                    << "USER_CHARGES";
 
         // Extract the molecule type.
-        charge_type = mol.property("charge-type").toString().simplified().toUpper();
+        charge_type = mol.property(map["charge-type"]).toString().simplified().toUpper();
 
         // Check that the status bit is valid.
         if (not valid_chgs.contains(charge_type))
@@ -995,9 +995,9 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
     }
 
     // Extract the status bits.
-    if (mol.hasProperty("mol-status-bits"))
+    if (mol.hasProperty(map["mol-status-bits"]))
     {
-        status_bits = mol.property("mol-status-bits").toString().simplified().toUpper();
+        status_bits = mol.property(map["mol-status-bits"]).toString().simplified().toUpper();
 
         // List of valid SYBYL atom status bits.
         QStringList valid_bits;
@@ -1033,7 +1033,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol,
     }
 
     // Extract the comment.
-    if (mol.hasProperty("mol-comment"))
+    if (mol.hasProperty(map["mol-comment"]))
     {
         comment = mol.property("mol-comment").toString();
     }
@@ -1377,13 +1377,17 @@ Mol2Substructure::Mol2Substructure(const QString &line, QStringList &errors) :
     @param res
         A reference to a Sire Residue object.
 
+    @param map
+        A reference to the user parameter map.
+
     @param errors
         An array of error messages.
 
     @param is_idx
         Whether to number residues by their index. (optional)
  */
-Mol2Substructure::Mol2Substructure(const SireMol::Residue &res, QStringList &errors,
+Mol2Substructure::Mol2Substructure(const SireMol::Residue &res,
+    const PropertyMap &map, QStringList &errors,
     bool is_idx) :
     name(res.name().value()),
     type("RESIDUE"),
@@ -1407,28 +1411,28 @@ Mol2Substructure::Mol2Substructure(const SireMol::Residue &res, QStringList &err
     // Extract some optional data.
 
     // Substructure type.
-    if (res.hasProperty("res-type"))
-        type = res.property<QString>("res-type");
+    if (res.hasProperty(map["res-type"]))
+        type = res.property<QString>(map["res-type"]);
 
     // Dictionary type.
-    if (res.hasProperty("res-dict-type"))
-        dict_type = res.property<qint64>("res-dict-type");
+    if (res.hasProperty(map["res-dict-type"]))
+        dict_type = res.property<qint64>(map["res-dict-type"]);
 
     // Chain sub-type.
-    if (res.hasProperty("chain-sub-type"))
-        sub_type = res.property<QString>("chain-sub-type");
+    if (res.hasProperty(map["chain-sub-type"]))
+        sub_type = res.property<QString>(map["chain-sub-type"]);
 
     // Internal substructure bonds.
-    if (res.hasProperty("res-inter-bonds"))
-        num_inter_bonds = res.property<qint64>("res-inter-bonds");
+    if (res.hasProperty(map["res-inter-bonds"]))
+        num_inter_bonds = res.property<qint64>(map["res-inter-bonds"]);
 
     // Status bits.
-    if (res.hasProperty("res-status-bits"))
-        status_bits = res.property<QString>("res-status-bits");
+    if (res.hasProperty(map["res-status-bits"]))
+        status_bits = res.property<QString>(map["res-status-bits"]);
 
     // Comments.
-    if (res.hasProperty("res-comment"))
-        comment = res.property<QString>("res-comment");
+    if (res.hasProperty(map["res-comment"]))
+        comment = res.property<QString>(map["res-comment"]);
 }
 
 /** Generate a Mol2 record from the substructure data. */
@@ -1605,9 +1609,6 @@ Mol2::Mol2(const QString &filename, const PropertyMap &map)
     //we are allowed to use multiple cores to parse the file, e.g.
     //MoleculeParser::usesParallel() will be true
 
-    // Store the name of the input file.
-    this->filename = filename;
-
     //parse the data in the parse function
     this->parseLines(map);
 
@@ -1627,9 +1628,6 @@ Mol2::Mol2(const QStringList &lines, const PropertyMap &map)
     //a parameter has also been read in MoleculeParser to say whether
     //we are allowed to use multiple cores to parse the file, e.g.
     //MoleculeParser::usesParallel() will be true
-
-    // Store the name of the input file.
-    this->filename = filename;
 
     //parse the data in the parse function
     this->parseLines(map);
@@ -1669,18 +1667,11 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
     // Resize the molecules vector.
     molecules.resize(nmols);
 
-    // Set the name of the file from which the SireSystem was constructed.
-    if (system.properties().hasProperty("filename"))
-    {
-        filename = system.property("filename").toString();
-    }
-    else filename.clear();
-
     if (usesParallel())
     {
         QMutex mutex;
 
-        tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
+        tbb::parallel_for(tbb::blocked_range<int>(0, nmols),
                            [&](const tbb::blocked_range<int> r)
         {
             // Create local data objects.
@@ -1690,7 +1681,7 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
             {
                 // Parse the SireMolecule data into a Mol2Molecule.
                 molecules[i] = Mol2Molecule(system[molnums[i]].molecule(),
-                    local_errors, filename, i);
+                    map, local_errors, i);
 
                 // Now parse the rest of the molecular data, i.e. atoms, residues, etc.
                 parseMolecule(molecules[i], system[molnums[i]].molecule(), i,
@@ -1715,7 +1706,7 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
         for (int i=0; i<nmols; ++i)
         {
             // Parse the SireMolecule data into a Mol2Molecule.
-            molecules[i] = Mol2Molecule(system[molnums[i]].molecule(), parse_warnings);
+            molecules[i] = Mol2Molecule(system[molnums[i]].molecule(), map, parse_warnings);
 
             // Now parse the rest of the molecular data, i.e. atoms, residues, etc.
             parseMolecule(molecules[i], system[molnums[i]].molecule(), i, atom_lines[i],
@@ -1753,7 +1744,6 @@ Mol2::Mol2(const SireSystem::System &system, const PropertyMap &map)
 Mol2::Mol2(const Mol2 &other) :
     ConcreteProperty<Mol2,MoleculeParser>(other),
     molecules(other.molecules),
-    filename(other.filename),
     parse_warnings(other.parse_warnings)
 {}
 
@@ -1767,7 +1757,6 @@ Mol2& Mol2::operator=(const Mol2 &other)
     if (this != &other)
     {
         molecules = other.molecules;
-        filename = other.filename;
         parse_warnings = other.parse_warnings;
 
         MoleculeParser::operator=(other);
@@ -1865,7 +1854,7 @@ QVector<QString> Mol2::toLines() const
 
         if (usesParallel())
         {
-            tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
                             [&](const tbb::blocked_range<int> r)
             {
                 for (int j=r.begin(); j<r.end(); ++j)
@@ -1875,7 +1864,7 @@ QVector<QString> Mol2::toLines() const
                 }
             });
 
-            tbb::parallel_for( tbb::blocked_range<int>(0, num_subst),
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_subst),
                             [&](const tbb::blocked_range<int> r)
             {
                 for (int j=r.begin(); j<r.end(); ++j)
@@ -2087,7 +2076,7 @@ void Mol2::parseLines(const PropertyMap &map)
 
                 // Create a molecule.
                 Mol2Molecule mol(lines().mid(iline, iline+5),
-                    parse_warnings, num_records, filename, ++imol);
+                    parse_warnings, num_records, ++imol);
 
                 // Append a new molecule.
                 molecules.append(mol);
@@ -2122,7 +2111,7 @@ void Mol2::parseLines(const PropertyMap &map)
                     // Local data storage for atom objects.
                     QVector<Mol2Atom> local_atoms(num_atoms);
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+                    tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
                                     [&](const tbb::blocked_range<int> &r)
                     {
                         // Create local data objects.
@@ -2189,7 +2178,7 @@ void Mol2::parseLines(const PropertyMap &map)
                     // Local data storage for bond objects.
                     QVector<Mol2Bond> local_bonds(num_bonds);
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0, num_bonds),
+                    tbb::parallel_for(tbb::blocked_range<int>(0, num_bonds),
                                     [&](const tbb::blocked_range<int> &r)
                     {
                         // Create local data objects.
@@ -2256,7 +2245,7 @@ void Mol2::parseLines(const PropertyMap &map)
                     // Local data storage for substructure objects.
                     QVector<Mol2Substructure> local_subst(num_subst);
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0, num_subst),
+                    tbb::parallel_for(tbb::blocked_range<int>(0, num_subst),
                                     [&](const tbb::blocked_range<int> &r)
                     {
                         // Create local data objects.
@@ -2316,7 +2305,7 @@ System Mol2::startSystem(const PropertyMap &map) const
 
     if (usesParallel())
     {
-        tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
+        tbb::parallel_for(tbb::blocked_range<int>(0, nmols),
                            [&](tbb::blocked_range<int> r)
         {
             for (int i=r.begin(); i<r.end(); ++i)
@@ -2342,7 +2331,6 @@ System Mol2::startSystem(const PropertyMap &map) const
 
     System system;
     system.add(molgroup);
-    system.setProperty(map["filename"].source(), StringProperty(filename));
     system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
 
     return system;
@@ -2679,7 +2667,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
         QVector<Mol2Atom> local_atoms(num_atoms);
         QVector<Mol2Substructure> local_subst(num_res);
 
-        tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+        tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
                         [&](const tbb::blocked_range<int> &r)
         {
             // Create local data objects.
@@ -2689,7 +2677,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
             // and generate a Mol2 data record.
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                local_atoms[i] = Mol2Atom(sire_mol.atom(AtomIdx(i)), local_errors, is_idx);
+                local_atoms[i] = Mol2Atom(sire_mol.atom(AtomIdx(i)), map, local_errors, is_idx);
                 atom_lines[i] = local_atoms[i].toMol2Record();
             }
 
@@ -2703,7 +2691,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
             }
         });
 
-        tbb::parallel_for( tbb::blocked_range<int>(0, num_res),
+        tbb::parallel_for(tbb::blocked_range<int>(0, num_res),
                         [&](const tbb::blocked_range<int> &r)
         {
             // Create local data objects.
@@ -2713,7 +2701,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
             // and generate a Mol2 data record.
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                local_subst[i] = Mol2Substructure(sire_mol.residue(ResIdx(i)), local_errors, is_idx);
+                local_subst[i] = Mol2Substructure(sire_mol.residue(ResIdx(i)), map, local_errors, is_idx);
                 substructure_lines[i] = local_subst[i].toMol2Record();
             }
 
@@ -2733,7 +2721,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
         for (int i=0; i<num_atoms; ++i)
         {
             // Initalise a Mol2Atom.
-            Mol2Atom atom(sire_mol.atom(AtomIdx(i)), errors, is_idx);
+            Mol2Atom atom(sire_mol.atom(AtomIdx(i)), map, errors, is_idx);
 
             // Generate a Mol2 atom data record.
             atom_lines[i] = atom.toMol2Record();
@@ -2743,7 +2731,7 @@ void Mol2::parseMolecule(Mol2Molecule &mol2_mol, const SireMol::Molecule &sire_m
         for (int i=0; i<num_res; ++i)
         {
             // Initalise a Mol2Substructure.
-            Mol2Substructure subst(sire_mol.residue(ResIdx(i)), errors, is_idx);
+            Mol2Substructure subst(sire_mol.residue(ResIdx(i)), map, errors, is_idx);
 
             // Generate a Mol2 substructure data record.
             substructure_lines[i] = subst.toMol2Record();

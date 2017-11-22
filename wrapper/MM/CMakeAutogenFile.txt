@@ -64,6 +64,7 @@ set ( PYPP_SOURCES
        CoulombComponent.pypp.cpp
        CoulombNBPairs.pypp.cpp
        CoulombPotentialInterface_InterCoulombPotential_.pypp.cpp
+
        CoulombPotentialInterface_IntraCoulombPotential_.pypp.cpp
        CoulombProbe.pypp.cpp
        CoulombScaleFactor.pypp.cpp
@@ -136,6 +137,7 @@ set ( PYPP_SOURCES
        IntraSoftCLJFF.pypp.cpp
        IntraSoftCLJFFBase.pypp.cpp
        LJComponent.pypp.cpp
+
        LJNBPairs.pypp.cpp
        LJParameter.pypp.cpp
        LJParameterName.pypp.cpp

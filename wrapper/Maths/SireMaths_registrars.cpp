@@ -3,6 +3,7 @@
 
 #include "SireMaths_registrars.h"
 
+
 #include "plane.h"
 #include "nmatrix.h"
 #include "complex.h"
@@ -30,6 +31,7 @@
 void register_SireMaths_objects()
 {
 
+
     ObjectRegistry::registerConverterFor< SireMaths::Plane >();
     ObjectRegistry::registerConverterFor< SireMaths::NMatrix >();
     ObjectRegistry::registerConverterFor< SireMaths::Complex >();
@@ -55,6 +57,7 @@ void register_SireMaths_objects()
     ObjectRegistry::registerConverterFor< SireMaths::ExpAverage >();
     ObjectRegistry::registerConverterFor< SireMaths::Median >();
     ObjectRegistry::registerConverterFor< SireMaths::RecordValues >();
+
     ObjectRegistry::registerConverterFor< SireMaths::DistVector >();
     ObjectRegistry::registerConverterFor< SireMaths::RanGenerator >();
     ObjectRegistry::registerConverterFor< SireMaths::Histogram >();

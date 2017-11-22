@@ -166,6 +166,17 @@ void register_Gro87_class(){
                 , "Return the box V3 vector for the frame frame" );
         
         }
+        { //::SireIO::Gro87::canFollow
+        
+            typedef bool ( ::SireIO::Gro87::*canFollow_function_type)(  ) const;
+            canFollow_function_type canFollow_function_value( &::SireIO::Gro87::canFollow );
+            
+            Gro87_exposer.def( 
+                "canFollow"
+                , canFollow_function_value
+                , "" );
+        
+        }
         { //::SireIO::Gro87::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::Gro87::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -289,6 +300,17 @@ void register_Gro87_class(){
                 "hasVelocities"
                 , hasVelocities_function_value
                 , "Return whether or not this file contained velocity data" );
+        
+        }
+        { //::SireIO::Gro87::isLead
+        
+            typedef bool ( ::SireIO::Gro87::*isLead_function_type)(  ) const;
+            isLead_function_type isLead_function_value( &::SireIO::Gro87::isLead );
+            
+            Gro87_exposer.def( 
+                "isLead"
+                , isLead_function_value
+                , "" );
         
         }
         { //::SireIO::Gro87::nAtoms

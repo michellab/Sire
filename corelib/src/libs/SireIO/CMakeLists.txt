@@ -40,6 +40,7 @@ set ( SIREIO_HEADERS
       pdb2.h
       perturbationslibrary.h
       protoms.h
+      supplementary.h
       tinker.h
       trajectorymonitor.h
       zmatrixmaker.h
@@ -69,6 +70,7 @@ set ( SIREIO_SOURCES
       pdb2.cpp
       perturbationslibrary.cpp
       protoms.cpp
+      supplementary.cpp
       tinker.cpp
       trajectorymonitor.cpp    
       zmatrixmaker.cpp

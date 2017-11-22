@@ -76,7 +76,8 @@ public:
     PDBAtom(const QString &line, QStringList &errors);
 
     /** Constructor. */
-    PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors);
+    PDBAtom(const SireMol::Atom &atom, bool is_ter,
+        const PropertyMap &map, QStringList &errors);
 
     /** Generate a PDB record from the atom data. */
     QString toPDBRecord() const;
@@ -247,7 +248,6 @@ public:
     QStringList formatSuffix() const;
 
     bool isLead() const;
-    bool canFollow() const;
 
     int nMolecules() const;
     int nAtoms() const;
@@ -291,29 +291,9 @@ private:
     //* Mapping between residue and atom indices for each molecule. */
     QVector<QMultiMap<qint64, qint64> > residues;
 
-    /** The name of the file from which data was parsed. */
-    QString filename;
-
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;
 };
-
-#ifndef SIRE_SKIP_INLINE_FUNCTIONS
-
-/** The PDB2 parser is a lead parser - it is capable alone
-    of creating the System */
-inline bool PDB2::isLead() const
-{
-    return true;
-}
-
-/** The PDB2 parser can follow another a lead parser. */
-inline bool PDB2::canFollow() const
-{
-    return true;
-}
-
-#endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }
 

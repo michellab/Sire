@@ -19,6 +19,7 @@
 #include "pdb2.h"
 #include "perturbationslibrary.h"
 #include "protoms.h"
+#include "supplementary.h"
 #include "tinker.h"
 #include "trajectorymonitor.h"
 #include "zmatrixmaker.h"

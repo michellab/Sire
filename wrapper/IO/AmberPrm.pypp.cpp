@@ -149,6 +149,17 @@ void register_AmberPrm_class(){
                 , "Run through all of the data that has been read and perform a series\nof tests that will see if the prm7 data is sane. If any test fails,\nthen an exception will be thrown" );
         
         }
+        { //::SireIO::AmberPrm::canFollow
+        
+            typedef bool ( ::SireIO::AmberPrm::*canFollow_function_type)(  ) const;
+            canFollow_function_type canFollow_function_value( &::SireIO::AmberPrm::canFollow );
+            
+            AmberPrm_exposer.def( 
+                "canFollow"
+                , canFollow_function_value
+                , "" );
+        
+        }
         { //::SireIO::AmberPrm::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::AmberPrm::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;

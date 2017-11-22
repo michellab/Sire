@@ -48,11 +48,11 @@
 
 #include "SireUnits/units.h"
 
+using namespace SireBase;
 using namespace SireIO;
 using namespace SireMol;
-using namespace SireBase;
-using namespace SireSystem;
 using namespace SireStream;
+using namespace SireSystem;
 using namespace SireUnits;
 
 const RegisterParser<PDB2> register_pdb;
@@ -304,7 +304,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
     @param errors
         An array of error messages.
  */
-PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
+PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map, QStringList &errors) :
     serial(atom.number().value()),
     name(atom.name().value().toUpper()),
     occupancy(1.0),
@@ -315,7 +315,7 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     is_ter(is_ter)
 {
     // The atom must have atomic coordinates to be valid.
-    if (not atom.hasProperty("coordinates"))
+    if (not atom.hasProperty(map["coordinates"]))
     {
         errors.append(QObject::tr("The atom does not have coordinates!"));
 
@@ -323,7 +323,7 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     }
 
     // Extract the atomic coordinates.
-    coord = atom.property<SireMaths::Vector>("coordinates");
+    coord = atom.property<SireMaths::Vector>(map["coordinates"]);
 
     // The atom is within a residue.
     if (atom.isWithinResidue())
@@ -333,7 +333,7 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
 
         // Optional insertion code property.
         if (atom.residue().hasProperty("insert-code"))
-            insert_code = atom.residue().property<QString>("insert-code")[0];
+            insert_code = atom.residue().property<QString>(map["insert-code"])[0];
     }
 
     // The atom is within a chain.
@@ -345,21 +345,21 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     }
 
     // Extract the occupancy.
-    if (atom.hasProperty("occupancy"))
+    if (atom.hasProperty(map["occupancy"]))
     {
-        occupancy = atom.property<double>("occupancy");
+        occupancy = atom.property<double>(map["occupancy"]);
     }
 
     // Extract the temperature factor.
-    if (atom.hasProperty("beta-factor"))
+    if (atom.hasProperty(map["beta-factor"]))
     {
-        temperature = atom.property<double>("beta-factor");
+        temperature = atom.property<double>(map["beta-factor"]);
     }
 
     // Extract the element name.
-    if (atom.hasProperty("element"))
+    if (atom.hasProperty(map["element"]))
     {
-        element = atom.property<Element>("element").symbol()[0];
+        element = atom.property<Element>(map["element"]).symbol()[0];
     }
     // Otherwise, try to guess from the atom name.
     else
@@ -368,17 +368,17 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, QStringList &errors) :
     }
 
     // Extract the atomic charge.
-    if (atom.hasProperty("formal-charge"))
+    if (atom.hasProperty(map["formal-charge"]))
     {
         // TODO: This doesn't seem to be working in all cases.
-        charge = atom.property<SireUnits::Dimension::Charge>("formal-charge").value();
+        charge = atom.property<SireUnits::Dimension::Charge>(map["formal-charge"]).value();
         charge /= SireUnits::mod_electron;
     }
 
     // Determine whether this is a HETATM.
-    if (atom.hasProperty("is-het"))
+    if (atom.hasProperty(map["is-het"]))
     {
-        if (atom.property<QString>("is-het") == "True")
+        if (atom.property<QString>(map["is-het"]) == "True")
             is_het = true;
     }
 }
@@ -641,9 +641,6 @@ PDB2::PDB2(const QString &filename, const PropertyMap &map) :
     //we are allowed to use multiple cores to parse the file, e.g.
     //MoleculeParser::usesParallel() will be true
 
-    // Set the file name.
-    this->filename = filename;
-
     //parse the data in the parse function
     this->parseLines(map);
 
@@ -663,9 +660,6 @@ PDB2::PDB2(const QStringList &lines, const PropertyMap &map) :
     //a parameter has also been read in MoleculeParser to say whether
     //we are allowed to use multiple cores to parse the file, e.g.
     //MoleculeParser::usesParallel() will be true
-
-    // Set the file name.
-    this->filename = filename;
 
     //parse the data in the parse function
     this->parseLines(map);
@@ -700,18 +694,11 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
     // Lines for different PDB data records (one for each molecule).
     QVector<QVector<QString> > atom_lines(nmols);
 
-    // Set the name of the file from which the SireSystem was constructed.
-    if (system.properties().hasProperty("filename"))
-    {
-        filename = system.property("filename").toString();
-    }
-    else filename.clear();
-
     if (usesParallel())
     {
         QMutex mutex;
 
-        tbb::parallel_for( tbb::blocked_range<int>(0, nmols),
+        tbb::parallel_for(tbb::blocked_range<int>(0, nmols),
                            [&](const tbb::blocked_range<int> r)
         {
             // Create local data objects.
@@ -777,7 +764,6 @@ PDB2::PDB2(const PDB2 &other) :
     atoms(other.atoms),
     chains(other.chains),
     residues(other.residues),
-    filename(other.filename),
     parse_warnings(other.parse_warnings)
 {}
 
@@ -793,7 +779,6 @@ PDB2& PDB2::operator=(const PDB2 &other)
         this->atoms = other.atoms;
         this->chains = other.chains;
         this->residues = other.residues;
-        this->filename = other.filename;
         this->parse_warnings = other.parse_warnings;
 
         MoleculeParser::operator=(other);
@@ -898,7 +883,7 @@ QVector<QString> PDB2::toLines() const
 
         if (usesParallel())
         {
-            tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
                             [&](const tbb::blocked_range<int> r)
             {
                 for (int j=r.begin(); j<r.end(); ++j)
@@ -994,6 +979,14 @@ QStringList PDB2::formatSuffix() const
 {
     static const QStringList suffixes = { "PDB" };
     return suffixes;
+}
+
+/** Return whether or not this is a lead parser. The lead parser is responsible
+    for starting the process of turning the parsed file into the System. There
+    must be one and one-only lead parser in a set of parsers creating a System */
+bool PDB2::isLead() const
+{
+    return true;
 }
 
 /** Return the number of models (molecules). */
@@ -1214,7 +1207,7 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     QMutex mutex;
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0, nats),
+                    tbb::parallel_for(tbb::blocked_range<int>(0, nats),
                                     [&](const tbb::blocked_range<int> &r)
                     {
                         QStringList local_errors;
@@ -1226,9 +1219,14 @@ void PDB2::parseLines(const PropertyMap &map)
                                 lines().count(), mol_atoms[i], local_errors);
                         }
 
-                        QMutexLocker lkr(&mutex);
+                        if (not local_errors.isEmpty())
+                        {
+                            // Acquire a lock.
+                            QMutexLocker lkr(&mutex);
 
-                        parse_warnings += local_errors;
+                            // Update the global error messages.
+                            parse_warnings += local_errors;
+                        }
                     });
                 }
                 else
@@ -1549,7 +1547,7 @@ void PDB2::parseLines(const PropertyMap &map)
                 {
                     QMutex mutex;
 
-                    tbb::parallel_for( tbb::blocked_range<int>(0, nats),
+                    tbb::parallel_for(tbb::blocked_range<int>(0, nats),
                                     [&](const tbb::blocked_range<int> &r)
                     {
                         // Local data objects.
@@ -1727,7 +1725,6 @@ System PDB2::startSystem(const PropertyMap &map) const
 
     System system;
     system.add(molgroup);
-    system.setProperty(map["filename"].source(), StringProperty(filename));
     system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
 
     return system;
@@ -1817,6 +1814,7 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
     {
         QString last_format = system.property(fileformat_property)
                                     .asA<StringProperty>().value();
+
         fileformat = QString("%1,%2").arg(last_format,fileformat);
     }
     catch(...)
@@ -2077,7 +2075,7 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
         // Local data storage.
         QVector<PDBAtom> local_atoms(num_atoms);
 
-        tbb::parallel_for( tbb::blocked_range<int>(0, num_atoms),
+        tbb::parallel_for(tbb::blocked_range<int>(0, num_atoms),
                         [&](const tbb::blocked_range<int> &r)
         {
             // Create local data objects.
@@ -2087,7 +2085,7 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
             // and generate a PDB data record.
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                local_atoms[i] = PDBAtom(sire_mol.atom(AtomIdx(i)), is_ter[i], local_errors);
+                local_atoms[i] = PDBAtom(sire_mol.atom(AtomIdx(i)), is_ter[i], map, local_errors);
                 atom_lines[i] = local_atoms[i].toPDBRecord();
             }
 
@@ -2142,7 +2140,7 @@ void PDB2::parseMolecule(const SireMol::Molecule &sire_mol, QVector<QString> &at
         for (int i=0; i<num_atoms; ++i)
         {
             // Initalise a PDBAtom.
-            PDBAtom atom(sire_mol.atom(AtomIdx(i)), is_ter[i], errors);
+            PDBAtom atom(sire_mol.atom(AtomIdx(i)), is_ter[i], map, errors);
 
             // Generate a PDB atom data record.
             atom_lines[iline] = atom.toPDBRecord();

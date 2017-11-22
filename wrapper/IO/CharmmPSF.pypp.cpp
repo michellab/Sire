@@ -19,8 +19,6 @@ namespace bp = boost::python;
 
 #include "SireMol/atomcharges.h"
 
-#include "SireMol/atomcoords.h"
-
 #include "SireMol/atomelements.h"
 
 #include "SireMol/atommasses.h"
@@ -63,6 +61,17 @@ void register_CharmmPSF_class(){
         CharmmPSF_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to read in the data from the passed text lines. The\npassed property map can be used to pass extra parameters to control\nthe parsing") );
         CharmmPSF_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct this parser by extracting all necessary information from the\npassed SireSystem::System, looking for the properties that are specified\nin the passed property map") );
         CharmmPSF_exposer.def( bp::init< SireIO::CharmmPSF const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireIO::CharmmPSF::canFollow
+        
+            typedef bool ( ::SireIO::CharmmPSF::*canFollow_function_type)(  ) const;
+            canFollow_function_type canFollow_function_value( &::SireIO::CharmmPSF::canFollow );
+            
+            CharmmPSF_exposer.def( 
+                "canFollow"
+                , canFollow_function_value
+                , "" );
+        
+        }
         { //::SireIO::CharmmPSF::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::CharmmPSF::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -152,7 +161,6 @@ void register_CharmmPSF_class(){
                 "nAngles"
                 , nAngles_function_value
                 , "Return the number of angle records." );
-        
         }
         { //::SireIO::CharmmPSF::nAtoms
         
@@ -209,7 +217,6 @@ void register_CharmmPSF_class(){
                 "nCrossTerms"
                 , nCrossTerms_function_value
                 , "Return the number of cross-term records." );
-        
         }
         { //::SireIO::CharmmPSF::nDihedrals
         
@@ -220,7 +227,6 @@ void register_CharmmPSF_class(){
                 "nDihedrals"
                 , nDihedrals_function_value
                 , "Return the number of dihedral records." );
-        
         }
         { //::SireIO::CharmmPSF::nImpropers
         

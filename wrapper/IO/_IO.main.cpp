@@ -57,6 +57,8 @@
 
 #include "ProtoMSParameters.pypp.hpp"
 
+#include "Supplementary.pypp.hpp"
+
 #include "Tinker.pypp.hpp"
 
 #include "TinkerParameters.pypp.hpp"
@@ -129,6 +131,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_ProtoMS_class();
 
     register_ProtoMSParameters_class();
+
+    register_Supplementary_class();
 
     register_Tinker_class();
 

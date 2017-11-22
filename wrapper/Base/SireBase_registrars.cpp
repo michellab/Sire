@@ -24,10 +24,12 @@
 void register_SireBase_objects()
 {
 
+
     ObjectRegistry::registerConverterFor< SireBase::DoubleArrayProperty >();
     ObjectRegistry::registerConverterFor< SireBase::IntegerArrayProperty >();
     ObjectRegistry::registerConverterFor< SireBase::StringArrayProperty >();
     ObjectRegistry::registerConverterFor< SireBase::PropertyList >();
+
     ObjectRegistry::registerConverterFor< SireBase::BooleanProperty >();
     ObjectRegistry::registerConverterFor< SireBase::Properties >();
     ObjectRegistry::registerConverterFor< SireBase::MajorMinorVersion >();
@@ -42,6 +44,7 @@ void register_SireBase_objects()
     ObjectRegistry::registerConverterFor< SireBase::TrimString >();
     ObjectRegistry::registerConverterFor< SireBase::UpperCaseString >();
     ObjectRegistry::registerConverterFor< SireBase::LowerCaseString >();
+
     ObjectRegistry::registerConverterFor< SireBase::NumberProperty >();
     ObjectRegistry::registerConverterFor< SireBase::TimeProperty >();
     ObjectRegistry::registerConverterFor< SireBase::PropertyName >();

@@ -4,6 +4,7 @@
 #include "Base/convertproperty.hpp"
 #include "SireMM_properties.h"
 
+
 #include "SireBase/errors.h"
 #include "SireBase/lengthproperty.h"
 #include "SireBase/numberproperty.h"
@@ -50,6 +51,7 @@
 #include "restraint.h"
 void register_SireMM_properties()
 {
+
     register_property_container< SireMM::CLJFunctionPtr, SireMM::CLJFunction >();
     register_property_container< SireMM::SwitchFuncPtr, SireMM::SwitchingFunction >();
     register_property_container< SireMM::RestraintPtr, SireMM::Restraint >();
