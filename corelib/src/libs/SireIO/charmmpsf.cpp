@@ -269,7 +269,7 @@ PSFAtom::PSFAtom(const SireMol::Atom &atom, const QString &segment,
     // The atom is within a residue.
     if (atom.isWithinResidue())
     {
-        res_name = atom.residue().name().value();
+        res_name = atom.residue().name().value().left(3);
         res_num  = atom.residue().number().value();
     }
 
