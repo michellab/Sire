@@ -19,6 +19,16 @@ _wrap_functions = []
 _base_wrap = wrap
 
 def wrap(value):
+    # First, try to wrap the python concrete classes
+    if isinstance(value, bool):
+        return BooleanProperty(value)
+
+    elif isinstance(value, int) or isinstance(value, float):
+        return NumberProperty(value)
+
+    elif isinstance(value, str):
+        return StringProperty(value)
+
     for func in _wrap_functions:
         try:
             return func(value)
