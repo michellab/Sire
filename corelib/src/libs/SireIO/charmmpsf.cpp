@@ -1210,7 +1210,7 @@ QVector<QString> CharmmPSF::toLines() const
 /** Return the format name that is used to identify this file format within Sire */
 QString CharmmPSF::formatName() const
 {
-    return "CHARMMPSF";
+    return "PSF";
 }
 
 /** Return a description of the file format */
