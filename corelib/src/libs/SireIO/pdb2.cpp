@@ -1827,7 +1827,7 @@ void PDB2::addToSystem(System &system, const PropertyMap &map) const
     else
     {
         system.setProperty("fileformat", StringProperty(fileformat));
-	}
+    }
 }
 
 /** Internal function used to get the molecule structure for molecule 'imol'. */
