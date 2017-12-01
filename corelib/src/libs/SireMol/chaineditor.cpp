@@ -313,7 +313,9 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
 /** Null constructor */
 ChainStructureEditor::ChainStructureEditor()
                   : StructureEditor(), uid(0)
-{}
+{
+    this->operator=( StructureEditor::addChain() );
+}
 
 /** Construct to edit a copy of the Chain 'chain' */
 ChainStructureEditor::ChainStructureEditor(const Chain &chain)

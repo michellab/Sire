@@ -17,6 +17,8 @@ namespace bp = boost::python;
 
 #include "property.h"
 
+#include "propertylist.h"
+
 #include <QDebug>
 
 #include <QMutex>

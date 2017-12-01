@@ -38,7 +38,6 @@ SIRE_BEGIN_HEADER
 namespace SireBase
 {
 class TimeProperty;
-class VariantProperty;
 }
 
 QDataStream& operator<<(QDataStream&, const SireBase::TimeProperty&);
@@ -63,8 +62,8 @@ public:
     TimeProperty();
     TimeProperty(Time value);
 
-    TimeProperty(const VariantProperty &other);    
     TimeProperty(const TimeProperty &other);
+    TimeProperty(const Property &other);    
     
     ~TimeProperty();
     

@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/booleanproperty.h"
 
+#include "SireError/errors.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -29,9 +31,98 @@ void register_BooleanProperty_class(){
         typedef bp::class_< SireBase::BooleanProperty, bp::bases< SireBase::Property > > BooleanProperty_exposer_t;
         BooleanProperty_exposer_t BooleanProperty_exposer = BooleanProperty_exposer_t( "BooleanProperty", "This class provides a thin Property wrapper around bools\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this constructs the integer 0") );
         bp::scope BooleanProperty_scope( BooleanProperty_exposer );
+        BooleanProperty_exposer.def( bp::init< QString const & >(( bp::arg("value") ), "Construct from the passed string") );
         BooleanProperty_exposer.def( bp::init< bool >(( bp::arg("value") ), "Construct from the passed boolean") );
-        BooleanProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") ), "Construct from a VariantProperty") );
+        BooleanProperty_exposer.def( bp::init< SireBase::Property const & >(( bp::arg("other") ), "Construct from a VariantProperty") );
         BooleanProperty_exposer.def( bp::init< SireBase::BooleanProperty const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireBase::BooleanProperty::asABoolean
+        
+            typedef bool ( ::SireBase::BooleanProperty::*asABoolean_function_type)(  ) const;
+            asABoolean_function_type asABoolean_function_value( &::SireBase::BooleanProperty::asABoolean );
+            
+            BooleanProperty_exposer.def( 
+                "asABoolean"
+                , asABoolean_function_value
+                , "" );
+        
+        }
+        { //::SireBase::BooleanProperty::asADouble
+        
+            typedef double ( ::SireBase::BooleanProperty::*asADouble_function_type)(  ) const;
+            asADouble_function_type asADouble_function_value( &::SireBase::BooleanProperty::asADouble );
+            
+            BooleanProperty_exposer.def( 
+                "asADouble"
+                , asADouble_function_value
+                , "" );
+        
+        }
+        { //::SireBase::BooleanProperty::asAString
+        
+            typedef ::QString ( ::SireBase::BooleanProperty::*asAString_function_type)(  ) const;
+            asAString_function_type asAString_function_value( &::SireBase::BooleanProperty::asAString );
+            
+            BooleanProperty_exposer.def( 
+                "asAString"
+                , asAString_function_value
+                , "" );
+        
+        }
+        { //::SireBase::BooleanProperty::asAnInteger
+        
+            typedef int ( ::SireBase::BooleanProperty::*asAnInteger_function_type)(  ) const;
+            asAnInteger_function_type asAnInteger_function_value( &::SireBase::BooleanProperty::asAnInteger );
+            
+            BooleanProperty_exposer.def( 
+                "asAnInteger"
+                , asAnInteger_function_value
+                , "" );
+        
+        }
+        { //::SireBase::BooleanProperty::isABoolean
+        
+            typedef bool ( ::SireBase::BooleanProperty::*isABoolean_function_type)(  ) const;
+            isABoolean_function_type isABoolean_function_value( &::SireBase::BooleanProperty::isABoolean );
+            
+            BooleanProperty_exposer.def( 
+                "isABoolean"
+                , isABoolean_function_value
+                , "" );
+        
+        }
+        { //::SireBase::BooleanProperty::isADouble
+        
+            typedef bool ( ::SireBase::BooleanProperty::*isADouble_function_type)(  ) const;
+            isADouble_function_type isADouble_function_value( &::SireBase::BooleanProperty::isADouble );
+            
+            BooleanProperty_exposer.def( 
+                "isADouble"
+                , isADouble_function_value
+                , "" );
+        
+        }
+        { //::SireBase::BooleanProperty::isAString
+        
+            typedef bool ( ::SireBase::BooleanProperty::*isAString_function_type)(  ) const;
+            isAString_function_type isAString_function_value( &::SireBase::BooleanProperty::isAString );
+            
+            BooleanProperty_exposer.def( 
+                "isAString"
+                , isAString_function_value
+                , "" );
+        
+        }
+        { //::SireBase::BooleanProperty::isAnInteger
+        
+            typedef bool ( ::SireBase::BooleanProperty::*isAnInteger_function_type)(  ) const;
+            isAnInteger_function_type isAnInteger_function_value( &::SireBase::BooleanProperty::isAnInteger );
+            
+            BooleanProperty_exposer.def( 
+                "isAnInteger"
+                , isAnInteger_function_value
+                , "" );
+        
+        }
         BooleanProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::BooleanProperty::operator=
         

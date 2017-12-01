@@ -27,6 +27,9 @@
 \*********************************************/
 
 #include "SireBase/timeproperty.h"
+#include "SireBase/variantproperty.h"
+
+#include "SireError/errors.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -68,11 +71,18 @@ TimeProperty::TimeProperty(Time value)
                : ConcreteProperty<TimeProperty,Property>(), val(value)
 {}
 
-/** Construct from a VariantProperty */
-TimeProperty::TimeProperty(const VariantProperty &other)
-               : ConcreteProperty<TimeProperty,Property>(other),
-                 val(other.convertTo<Time>())
-{}
+/** Construct from a Property */
+TimeProperty::TimeProperty(const Property &other)
+               : ConcreteProperty<TimeProperty,Property>(other)
+{
+    if (other.isA<VariantProperty>())
+    {
+        val = other.asA<VariantProperty>().convertTo<Time>();
+    }
+    else
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast a %s into a TimeProperty").arg(other.toString()), CODELOC );
+}
 
 /** Copy constructor */
 TimeProperty::TimeProperty(const TimeProperty &other)

@@ -17,6 +17,8 @@
 
 #include "Array2D_Vector_.pypp.hpp"
 
+#include "ArrayProperty_Vector_.pypp.hpp"
+
 #include "Average.pypp.hpp"
 
 #include "AverageAndStddev.pypp.hpp"
@@ -117,6 +119,8 @@ BOOST_PYTHON_MODULE(_Maths){
     register_Array2D_NMatrix__class();
 
     register_Array2D_Vector__class();
+
+    register_ArrayProperty_Vector__class();
 
     register_TrigArray2D_Matrix__class();
 

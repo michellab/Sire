@@ -5,6 +5,7 @@
 
 #include "array2d.h"
 #include "array2d.hpp"
+#include "arrayproperty.hpp"
 #include "booleanproperty.h"
 #include "chunkedvector.hpp"
 #include "combineproperties.h"
@@ -35,6 +36,7 @@
 #include "trigarray2d.h"
 #include "trigarray2d.hpp"
 #include "unittest.h"
+#include "variantproperty.h"
 
 #endif
 

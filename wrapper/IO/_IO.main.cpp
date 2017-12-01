@@ -13,15 +13,29 @@
 
 #include "AmberRst7.pypp.hpp"
 
+#include "CharmmPSF.pypp.hpp"
+
 #include "Cube.pypp.hpp"
 
 #include "FlexibilityLibrary.pypp.hpp"
 
 #include "FlexibilityTemplate.pypp.hpp"
 
+#include "Gro87.pypp.hpp"
+
+#include "GroAtom.pypp.hpp"
+
+#include "GroMolType.pypp.hpp"
+
+#include "GroSystem.pypp.hpp"
+
+#include "GroTop.pypp.hpp"
+
 #include "IOBase.pypp.hpp"
 
 #include "IOParametersBase.pypp.hpp"
+
+#include "Mol2.pypp.hpp"
 
 #include "MoleculeParser.pypp.hpp"
 
@@ -30,6 +44,8 @@
 #include "NullParser.pypp.hpp"
 
 #include "PDB.pypp.hpp"
+
+#include "PDB2.pypp.hpp"
 
 #include "PDBParameters.pypp.hpp"
 
@@ -40,6 +56,8 @@
 #include "ProtoMS.pypp.hpp"
 
 #include "ProtoMSParameters.pypp.hpp"
+
+#include "Supplementary.pypp.hpp"
 
 #include "Tinker.pypp.hpp"
 
@@ -72,21 +90,37 @@ BOOST_PYTHON_MODULE(_IO){
 
     register_AmberRst7_class();
 
+    register_CharmmPSF_class();
+
     register_Cube_class();
 
     register_FlexibilityLibrary_class();
 
     register_FlexibilityTemplate_class();
 
+    register_Gro87_class();
+
+    register_GroAtom_class();
+
+    register_GroMolType_class();
+
+    register_GroSystem_class();
+
+    register_GroTop_class();
+
     register_IOBase_class();
 
     register_IOParametersBase_class();
+
+    register_Mol2_class();
 
     register_NullIO_class();
 
     register_NullParser_class();
 
     register_PDB_class();
+
+    register_PDB2_class();
 
     register_PDBParameters_class();
 
@@ -97,6 +131,8 @@ BOOST_PYTHON_MODULE(_IO){
     register_ProtoMS_class();
 
     register_ProtoMSParameters_class();
+
+    register_Supplementary_class();
 
     register_Tinker_class();
 

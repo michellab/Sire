@@ -38,6 +38,7 @@
 #include "SireVol/cartesian.h"
 
 #include "SireBase/countflops.h"
+#include "SireBase/propertylist.h"
 
 #include "SireMaths/maths.h"
 
@@ -299,20 +300,20 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
                                         .asA<SwitchingFunction>();
     
         cljpot.rf_dielectric_constant = cljpot.props.property("reactionFieldDielectric")
-                                            .asA<VariantProperty>().convertTo<double>();
+                                            .asADouble();
                                             
         cljpot.use_reaction_field = cljpot.props.property("useReactionField")
-                                        .asA<VariantProperty>().convertTo<bool>();
+                                        .asABoolean();
     
         cljpot.combining_rules = LJParameterDB::interpret(
                                     cljpot.props.property("combiningRules")
-                                        .asA<VariantProperty>().convertTo<QString>() );
+                                        .asAString() );
 
         cljpot.use_electrostatic_shifting = cljpot.props.property("shiftElectrostatics")
-                                        .asA<VariantProperty>().convertTo<bool>();
+                                        .asABoolean();
         
         cljpot.use_atomistic_cutoff = cljpot.props.property("useAtomisticCutoff")
-                                        .asA<VariantProperty>().convertTo<bool>();
+                                        .asABoolean();
         
         cljpot.need_update_ljpairs = true;
     }
@@ -333,14 +334,12 @@ CLJPotential::CLJPotential()
     //record the defaults
     props.setProperty( "space", spce );
     props.setProperty( "switchingFunction", switchfunc );
-    props.setProperty( "combiningRules", 
-                       VariantProperty( LJParameterDB::toString(combining_rules) ) );
-    props.setProperty( "shiftElectrostatics",
-                       VariantProperty(use_electrostatic_shifting) );
-    props.setProperty("useReactionField", VariantProperty(use_reaction_field));
-    props.setProperty("reactionFieldDielectric", VariantProperty(rf_dielectric_constant));
-    props.setProperty("useAtomisticCutoff", VariantProperty(use_atomistic_cutoff));
-    props.setProperty("useGroupCutoff", VariantProperty(true));
+    props.setProperty( "combiningRules", wrap(LJParameterDB::toString(combining_rules)) );
+    props.setProperty( "shiftElectrostatics", wrap(use_electrostatic_shifting) );
+    props.setProperty("useReactionField", wrap(use_reaction_field));
+    props.setProperty("reactionFieldDielectric", wrap(rf_dielectric_constant));
+    props.setProperty("useAtomisticCutoff", wrap(use_atomistic_cutoff));
+    props.setProperty("useGroupCutoff", wrap(true));
 }
 
 /** Copy constructor */
@@ -475,12 +474,11 @@ bool CLJPotential::setUseGroupCutoff(bool switchgroup)
             rf_dielectric_constant = 1;
             use_electrostatic_shifting = false;
             
-            props.setProperty( "shiftElectrostatics",
-                               VariantProperty(use_electrostatic_shifting) );
-            props.setProperty("useReactionField", VariantProperty(use_reaction_field));
-            props.setProperty("reactionFieldDielectric", VariantProperty(rf_dielectric_constant));
-            props.setProperty("useAtomisticCutoff", VariantProperty(use_atomistic_cutoff));
-            props.setProperty("useGroupCutoff", VariantProperty(true));
+            props.setProperty( "shiftElectrostatics", wrap(use_electrostatic_shifting) );
+            props.setProperty("useReactionField", wrap(use_reaction_field));
+            props.setProperty("reactionFieldDielectric", wrap(rf_dielectric_constant));
+            props.setProperty("useAtomisticCutoff", wrap(use_atomistic_cutoff));
+            props.setProperty("useGroupCutoff", wrap(true));
         }
         else
             setUseAtomisticCutoff(true);
@@ -506,12 +504,11 @@ bool CLJPotential::setUseAtomisticCutoff(bool switchatomistic)
             rf_dielectric_constant = 1;
             use_electrostatic_shifting = false;
             
-            props.setProperty( "shiftElectrostatics",
-                               VariantProperty(use_electrostatic_shifting) );
-            props.setProperty("useReactionField", VariantProperty(use_reaction_field));
-            props.setProperty("reactionFieldDielectric", VariantProperty(rf_dielectric_constant));
-            props.setProperty("useAtomisticCutoff", VariantProperty(use_atomistic_cutoff));
-            props.setProperty("useGroupCutoff", VariantProperty(false));
+            props.setProperty( "shiftElectrostatics", wrap(use_electrostatic_shifting) );
+            props.setProperty("useReactionField", wrap(use_reaction_field));
+            props.setProperty("reactionFieldDielectric", wrap(rf_dielectric_constant));
+            props.setProperty("useAtomisticCutoff", wrap(use_atomistic_cutoff));
+            props.setProperty("useGroupCutoff", wrap(false));
         }
         else
         {
@@ -541,12 +538,11 @@ bool CLJPotential::setShiftElectrostatics(bool switchelectro)
             rf_dielectric_constant = 1;
             use_electrostatic_shifting = true;
             
-            props.setProperty( "shiftElectrostatics",
-                               VariantProperty(use_electrostatic_shifting) );
-            props.setProperty("useReactionField", VariantProperty(use_reaction_field));
-            props.setProperty("reactionFieldDielectric", VariantProperty(rf_dielectric_constant));
-            props.setProperty("useAtomisticCutoff", VariantProperty(use_atomistic_cutoff));
-            props.setProperty("useGroupCutoff", VariantProperty(false));
+            props.setProperty( "shiftElectrostatics", wrap(use_electrostatic_shifting) );
+            props.setProperty("useReactionField", wrap(use_reaction_field));
+            props.setProperty("reactionFieldDielectric", wrap(rf_dielectric_constant));
+            props.setProperty("useAtomisticCutoff", wrap(use_atomistic_cutoff));
+            props.setProperty("useGroupCutoff", wrap(false));
         }
         else
         {
@@ -571,7 +567,7 @@ bool CLJPotential::setCombiningRules(const QString &combiningrules)
     {
         combining_rules = new_rules;
         need_update_ljpairs = true;
-        props.setProperty( "combiningRules", VariantProperty(combiningrules) );
+        props.setProperty( "combiningRules", wrap(combiningrules) );
         this->changedPotential();
         return true;
     }
@@ -597,23 +593,19 @@ bool CLJPotential::setProperty(const QString &name, const Property &value)
     }
     else if (name == QLatin1String("shiftElectrostatics"))
     {
-        return this->setShiftElectrostatics( value.asA<VariantProperty>()
-                                                     .convertTo<bool>() );
+        return this->setShiftElectrostatics( value.asABoolean() );
     }
     else if (name == QLatin1String("useReactionField"))
     {
-        return this->setUseReactionField( value.asA<VariantProperty>()
-                                                    .convertTo<bool>() );
+        return this->setUseReactionField( value.asABoolean() );
     }
     else if (name == QLatin1String("reactionFieldDielectric"))
     {
-        return this->setReactionFieldDielectric( value.asA<VariantProperty>()
-                                                        .convertTo<double>() );
+        return this->setReactionFieldDielectric( value.asADouble() );
     }
     else if (name == QLatin1String("combiningRules"))
     {
-        return this->setCombiningRules( value.asA<VariantProperty>()
-                                                     .convertTo<QString>() );
+        return this->setCombiningRules( value.asAString() );
     }
     else
         throw SireBase::missing_property( QObject::tr(
@@ -662,12 +654,11 @@ bool CLJPotential::setUseReactionField(bool switchrf)
             use_reaction_field = true;
             use_electrostatic_shifting = false;
             
-            props.setProperty( "shiftElectrostatics",
-                               VariantProperty(use_electrostatic_shifting) );
-            props.setProperty("useReactionField", VariantProperty(use_reaction_field));
-            props.setProperty("reactionFieldDielectric", VariantProperty(rf_dielectric_constant));
-            props.setProperty("useAtomisticCutoff", VariantProperty(use_atomistic_cutoff));
-            props.setProperty("useGroupCutoff", VariantProperty(false));
+            props.setProperty( "shiftElectrostatics", wrap(use_electrostatic_shifting) );
+            props.setProperty("useReactionField", wrap(use_reaction_field));
+            props.setProperty("reactionFieldDielectric", wrap(rf_dielectric_constant));
+            props.setProperty("useAtomisticCutoff", wrap(use_atomistic_cutoff));
+            props.setProperty("useGroupCutoff", wrap(false));
         }
         else
         {
@@ -696,7 +687,7 @@ bool CLJPotential::setReactionFieldDielectric(double dielectric)
     if (dielectric != rf_dielectric_constant)
     {
         rf_dielectric_constant = dielectric;
-        props.setProperty("reactionFieldDielectric", VariantProperty(dielectric) );
+        props.setProperty("reactionFieldDielectric", wrap(dielectric) );
         
         if (use_reaction_field)
             this->changedPotential();
@@ -6635,8 +6626,15 @@ void IntraCLJPotential::calculateEnergy(const IntraCLJPotential::Molecule &mol,
     
     const CoordGroup *groups_array = mol.coordinates().constData();
     
-    BOOST_ASSERT( mol.parameters().atomicParameters().count() == int(ngroups) );
-    const Parameters::Array *molparams_array 
+    if (mol.parameters().atomicParameters().count() != int(ngroups))
+    {
+        throw SireError::program_bug( QObject::tr(
+            "SERIOUS BUG! Disagreement in IntraCLJPotential::calculateEnergy: "
+            "%1 versus %2").arg(mol.parameters().atomicParameters().count())
+                           .arg(ngroups), CODELOC );
+    }
+    
+    const Parameters::Array *molparams_array
                             = mol.parameters().atomicParameters().constData();
 
     const CLJNBPairs &nbpairs = mol.parameters().intraScaleFactors();

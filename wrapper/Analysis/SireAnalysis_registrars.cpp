@@ -3,27 +3,27 @@
 
 #include "SireAnalysis_registrars.h"
 
-#include "ticomponents.h"
 #include "bennetts.h"
-#include "fep.h"
+#include "ticomponents.h"
 #include "ti.h"
+#include "fep.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_SireAnalysis_objects()
 {
 
-    ObjectRegistry::registerConverterFor< SireAnalysis::TIComponents >();
-    ObjectRegistry::registerConverterFor< SireAnalysis::ComponentGradients >();
     ObjectRegistry::registerConverterFor< SireAnalysis::BennettsRatios >();
     ObjectRegistry::registerConverterFor< SireAnalysis::Bennetts >();
+    ObjectRegistry::registerConverterFor< SireAnalysis::TIComponents >();
+    ObjectRegistry::registerConverterFor< SireAnalysis::ComponentGradients >();
+    ObjectRegistry::registerConverterFor< SireAnalysis::Gradients >();
+    ObjectRegistry::registerConverterFor< SireAnalysis::TI >();
+    ObjectRegistry::registerConverterFor< SireAnalysis::TIPMF >();
     ObjectRegistry::registerConverterFor< SireAnalysis::FEP >();
     ObjectRegistry::registerConverterFor< SireAnalysis::FEPDeltas >();
     ObjectRegistry::registerConverterFor< SireAnalysis::DataPoint >();
     ObjectRegistry::registerConverterFor< SireAnalysis::PMF >();
-    ObjectRegistry::registerConverterFor< SireAnalysis::Gradients >();
-    ObjectRegistry::registerConverterFor< SireAnalysis::TI >();
-    ObjectRegistry::registerConverterFor< SireAnalysis::TIPMF >();
 
 }
 

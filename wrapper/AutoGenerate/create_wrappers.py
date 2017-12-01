@@ -170,6 +170,9 @@ def has_function(c, funcname):
        return False
 
 def find_class(mb, classname):
+   # replace Qt integers with C++
+   classname = classname.replace("qint64", "long long")
+
    for clas in mb.classes():
        if str(clas).find("%s [class]" % classname) != -1 or \
           str(clas).find("%s [struct]" % classname) != -1 or \
@@ -630,7 +633,7 @@ if __name__ == "__main__":
                                 xml_generator_path=generator_path,
                                 xml_generator=generator_name,
                                 compiler="gcc",
-                                cflags = "-m64 -fPIC",
+                                cflags = "-m64 -fPIC -std=c++14",
                                 include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs,
                                 define_symbols = ["GCCXML_PARSE", "__PIE__",
@@ -648,7 +651,7 @@ if __name__ == "__main__":
                                 xml_generator_path=generator_path,
                                 xml_generator=generator_name,
                                 compiler="gcc",
-                                cflags = "-m64 -fPIC",
+                                cflags = "-m64 -fPIC -std=c++14",
                                 include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs +
                                            openmm_include_dirs,

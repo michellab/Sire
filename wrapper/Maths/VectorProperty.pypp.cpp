@@ -83,6 +83,17 @@ void register_VectorProperty_class(){
                 , "" );
         
         }
+        { //::SireMaths::VectorProperty::value
+        
+            typedef ::SireMaths::Vector ( ::SireMaths::VectorProperty::*value_function_type)(  ) const;
+            value_function_type value_function_value( &::SireMaths::VectorProperty::value );
+            
+            VectorProperty_exposer.def( 
+                "value"
+                , value_function_value
+                , "Return the actual value of the vector" );
+        
+        }
         { //::SireMaths::VectorProperty::what
         
             typedef char const * ( ::SireMaths::VectorProperty::*what_function_type)(  ) const;

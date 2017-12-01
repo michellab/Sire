@@ -78,7 +78,13 @@ friend QDataStream& ::operator>>(QDataStream&, PropertyList&);
 
 public:
     PropertyList();
+    PropertyList(const QList<double> &numbers);
+    PropertyList(const QStringList &strings);
+    PropertyList(const DoubleArrayProperty &array);
+    PropertyList(const IntegerArrayProperty &array);
+    PropertyList(const StringArrayProperty &array);
     PropertyList(const QList<PropertyPtr> &props);
+    PropertyList(const Property &other);
     PropertyList(const PropertyList &other);
     
     ~PropertyList();
@@ -142,6 +148,16 @@ public:
     PropertyPtr value(int i) const;
     PropertyPtr value(int i, const Property &default_value) const;
     
+    bool isAString() const;
+    bool isADouble() const;
+    bool isAnInteger() const;
+    bool isABoolean() const;
+    
+    QString asAString() const;
+    double asADouble() const;
+    int asAnInteger() const;
+    bool asABoolean() const;
+    
     operator QList<PropertyPtr>() const;
     
 private:
@@ -173,6 +189,17 @@ public:
 
     DoubleArrayProperty operator+(const DoubleArrayProperty &other) const;
     DoubleArrayProperty& operator+=(const DoubleArrayProperty &other);
+
+    bool isAString() const;
+    bool isADouble() const;
+    bool isAnInteger() const;
+    bool isABoolean() const;
+    
+    QString asAString() const;
+    double asADouble() const;
+    int asAnInteger() const;
+    bool asABoolean() const;
+    PropertyList asAnArray() const;
 };
 
 class SIREMATHS_EXPORT IntegerArrayProperty
@@ -199,6 +226,17 @@ public:
 
     IntegerArrayProperty operator+(const IntegerArrayProperty &other) const;
     IntegerArrayProperty& operator+=(const IntegerArrayProperty &other);
+
+    bool isAString() const;
+    bool isADouble() const;
+    bool isAnInteger() const;
+    bool isABoolean() const;
+    
+    QString asAString() const;
+    double asADouble() const;
+    int asAnInteger() const;
+    bool asABoolean() const;
+    PropertyList asAnArray() const;
 };
 
 class SIREMATHS_EXPORT StringArrayProperty
@@ -225,20 +263,31 @@ public:
 
     StringArrayProperty operator+(const StringArrayProperty &other) const;
     StringArrayProperty& operator+=(const StringArrayProperty &other);
+
+    bool isAString() const;
+    bool isADouble() const;
+    bool isAnInteger() const;
+    bool isABoolean() const;
+    
+    QString asAString() const;
+    double asADouble() const;
+    int asAnInteger() const;
+    bool asABoolean() const;
+    PropertyList asAnArray() const;
 };
 
 PropertyPtr wrap(const Property &value);
-PropertyPtr wrap(const QList<PropertyPtr> &value);
 PropertyPtr wrap(const QString &value);
 PropertyPtr wrap(double value);
-PropertyPtr wrap(int value);
 
-PropertyPtr wrap(const QList<int> &values);
+PropertyPtr wrap(const QList<PropertyPtr> &value);
 PropertyPtr wrap(const QList<double> &values);
-PropertyPtr wrap(const QVector<int> &values);
+PropertyPtr wrap(const QList<int> &values);
 PropertyPtr wrap(const QVector<double> &values);
+PropertyPtr wrap(const QVector<int> &values);
 PropertyPtr wrap(const QList<QString> &values);
 PropertyPtr wrap(const QVector<QString> &values);
+PropertyPtr wrap(const QStringList &values);
 
 }
 

@@ -299,7 +299,9 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
 /** Null constructor */
 CGStructureEditor::CGStructureEditor()
                   : StructureEditor(), uid(0)
-{}
+{
+    this->operator=( StructureEditor::addCutGroup() );
+}
 
 /** Construct to edit a copy of the CutGroup 'cutgroup' */
 CGStructureEditor::CGStructureEditor(const CutGroup &cutgroup)

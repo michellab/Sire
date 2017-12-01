@@ -9,6 +9,10 @@ namespace bp = boost::python;
 
 #include "SireBase/timeproperty.h"
 
+#include "SireBase/variantproperty.h"
+
+#include "SireError/errors.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -30,8 +34,8 @@ void register_TimeProperty_class(){
         TimeProperty_exposer_t TimeProperty_exposer = TimeProperty_exposer_t( "TimeProperty", "This class provides a thin Property wrapper around times\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this constructs the integer 0") );
         bp::scope TimeProperty_scope( TimeProperty_exposer );
         TimeProperty_exposer.def( bp::init< SireUnits::Dimension::Time >(( bp::arg("value") ), "Construct from the passed length") );
-        TimeProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") ), "Construct from a VariantProperty") );
         TimeProperty_exposer.def( bp::init< SireBase::TimeProperty const & >(( bp::arg("other") ), "Copy constructor") );
+        TimeProperty_exposer.def( bp::init< SireBase::Property const & >(( bp::arg("other") ), "Construct from a Property") );
         TimeProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::TimeProperty::operator=
         

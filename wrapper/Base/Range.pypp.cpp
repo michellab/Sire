@@ -46,7 +46,7 @@ void register_Range_class(){
                 "create"
                 , create_function_value
                 , ( bp::arg("i") )
-                , "" );
+                , "Return the range that represents the single value i" );
         
         }
         { //::SireBase::Range::create
@@ -58,7 +58,7 @@ void register_Range_class(){
                 "create"
                 , create_function_value
                 , ( bp::arg("start"), bp::arg("end") )
-                , "" );
+                , "Return the range that represents the range from [start,end)" );
         
         }
         { //::SireBase::Range::create
@@ -70,7 +70,7 @@ void register_Range_class(){
                 "create"
                 , create_function_value
                 , ( bp::arg("start"), bp::arg("end"), bp::arg("increment") )
-                , "" );
+                , "Return the range that represents the range from [start,end,increment)" );
         
         }
         { //::SireBase::Range::hasNext

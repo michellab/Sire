@@ -61,6 +61,7 @@
 #include "SireMol/cuttingfunction.h"
 
 #include "SireBase/stringmangler.h"
+#include "SireBase/variantproperty.h"
 
 #include "SireUnits/units.h"
 

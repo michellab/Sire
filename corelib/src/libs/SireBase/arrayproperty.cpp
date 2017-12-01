@@ -27,6 +27,11 @@
 \*********************************************/
 
 #include "SireBase/propertylist.h"
+#include "SireBase/numberproperty.h"
+#include "SireBase/stringproperty.h"
+#include "SireBase/booleanproperty.h"
+
+#include "SireError/errors.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -118,6 +123,72 @@ DoubleArrayProperty& DoubleArrayProperty::operator+=(const DoubleArrayProperty &
     return *this;
 }
 
+bool DoubleArrayProperty::isAString() const
+{
+    return a.count() == 1;
+}
+
+bool DoubleArrayProperty::isADouble() const
+{
+    return a.count() == 1;
+}
+
+bool DoubleArrayProperty::isAnInteger() const
+{
+    if (a.count() == 1)
+    {
+        return NumberProperty(a.at(0)).isAnInteger();
+    }
+    
+    return false;
+}
+
+bool DoubleArrayProperty::isABoolean() const
+{
+    return a.count() == 1;
+}
+
+QString DoubleArrayProperty::asAString() const
+{
+    if (a.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast %s to a string").arg(this->toString()), CODELOC );
+    
+    return StringProperty(a.at(0)).asAString();
+}
+
+double DoubleArrayProperty::asADouble() const
+{
+    if (a.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast %s to a double").arg(this->toString()), CODELOC );
+    
+    return NumberProperty(a.at(0)).asADouble();
+}
+
+int DoubleArrayProperty::asAnInteger() const
+{
+    if (a.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast %s to an integer").arg(this->toString()), CODELOC );
+    
+    return NumberProperty(a.at(0)).asAnInteger();
+}
+
+bool DoubleArrayProperty::asABoolean() const
+{
+    if (a.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast %s to a boolean").arg(this->toString()), CODELOC );
+    
+    return BooleanProperty(a.at(0)).asABoolean();
+}
+
+PropertyList DoubleArrayProperty::asAnArray() const
+{
+    return PropertyList(*this);
+}
+
 //////////
 ////////// Implementation of IntegerArrayProperty
 //////////
@@ -202,6 +273,67 @@ IntegerArrayProperty& IntegerArrayProperty::operator+=(const IntegerArrayPropert
     return *this;
 }
 
+bool IntegerArrayProperty::isAString() const
+{
+    return a.count() == 1;
+}
+
+bool IntegerArrayProperty::isADouble() const
+{
+    return a.count() == 1;
+}
+
+bool IntegerArrayProperty::isAnInteger() const
+{
+    return a.count() == 1;
+}
+
+bool IntegerArrayProperty::isABoolean() const
+{
+    return a.count() == 1;
+}
+
+QString IntegerArrayProperty::asAString() const
+{
+    if (a.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast %s to a string").arg(this->toString()), CODELOC );
+    
+    return StringProperty(a.at(0)).asAString();
+}
+
+double IntegerArrayProperty::asADouble() const
+{
+    if (a.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast %s to a double").arg(this->toString()), CODELOC );
+    
+    return NumberProperty(a.at(0)).asADouble();
+}
+
+int IntegerArrayProperty::asAnInteger() const
+{
+    if (a.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast %s to an integer").arg(this->toString()), CODELOC );
+    
+    return NumberProperty(a.at(0)).asAnInteger();
+}
+
+bool IntegerArrayProperty::asABoolean() const
+{
+    if (a.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast %s to a boolean").arg(this->toString()), CODELOC );
+    
+    return BooleanProperty(a.at(0)).asABoolean();
+}
+
+PropertyList IntegerArrayProperty::asAnArray() const
+{
+    return PropertyList(*this);
+}
+
 //////////
 ////////// Implementation of StringArrayProperty
 //////////
@@ -284,5 +416,96 @@ StringArrayProperty& StringArrayProperty::operator+=(const StringArrayProperty &
 {
     ArrayProperty<QString>::operator+=(other);
     return *this;
+}
+
+bool StringArrayProperty::isAString() const
+{
+    return a.count() == 1;
+}
+
+bool StringArrayProperty::isADouble() const
+{
+    if (a.count() == 1)
+    {
+        try
+        {
+            return NumberProperty(a.at(0)).isADouble();
+        }
+        catch(...)
+        {}
+    }
+    
+    return false;
+}
+
+bool StringArrayProperty::isAnInteger() const
+{
+    if (a.count() == 1)
+    {
+        try
+        {
+            return NumberProperty(a.at(0)).isAnInteger();
+        }
+        catch(...)
+        {}
+    }
+    
+    return false;
+}
+
+bool StringArrayProperty::isABoolean() const
+{
+    if (a.count() == 1)
+    {
+        try
+        {
+            return BooleanProperty(a.at(0)).isABoolean();
+        }
+        catch(...)
+        {}
+    }
+    
+    return false;
+}
+
+QString StringArrayProperty::asAString() const
+{
+    if (a.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast %s to a string").arg(this->toString()), CODELOC );
+    
+    return StringProperty(a.at(0)).asAString();
+}
+
+double StringArrayProperty::asADouble() const
+{
+    if (a.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast %s to a double").arg(this->toString()), CODELOC );
+    
+    return NumberProperty(a.at(0)).asADouble();
+}
+
+int StringArrayProperty::asAnInteger() const
+{
+    if (a.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast %s to an integer").arg(this->toString()), CODELOC );
+    
+    return NumberProperty(a.at(0)).asAnInteger();
+}
+
+bool StringArrayProperty::asABoolean() const
+{
+    if (a.count() != 1)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast %s to a boolean").arg(this->toString()), CODELOC );
+    
+    return BooleanProperty(a.at(0)).asABoolean();
+}
+
+PropertyList StringArrayProperty::asAnArray() const
+{
+    return PropertyList(*this);
 }
 

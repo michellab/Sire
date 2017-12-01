@@ -144,7 +144,13 @@ public:
     ResIdx resIdx(const ResID &resid) const;
     ChainIdx chainIdx(const ChainID &chainid) const;
     SegIdx segIdx(const SegID &segid) const;
+
     CGIdx cgIdx(const CGID &cgid) const;
+    CGIdx cgIdx(const ResIdx &residx) const;
+    CGIdx cgIdx(const ResID &resid) const;
+
+    bool isResidueCutting(const ResIdx &residx) const;
+    bool isResidueCutting(const ResID &resid) const;
 
     QList<SegIdx> getSegments() const;
     QList<CGIdx> getCutGroups() const;

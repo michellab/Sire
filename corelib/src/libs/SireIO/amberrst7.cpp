@@ -784,7 +784,7 @@ AmberRst7::AmberRst7(const System &system, const PropertyMap &map)
     }
 
     //now generate this object by re-reading these lines
-    AmberRst7 parsed(lines);
+    AmberRst7 parsed(lines,map);
 
     this->operator=(parsed);
 }
@@ -1051,7 +1051,7 @@ void AmberRst7::addToSystem(System &system, const PropertyMap &map) const
     
     try
     {
-        QString last_format = system.property(fileformat_property).asA<StringProperty>();
+        QString last_format = system.property(fileformat_property).asA<StringProperty>().value();
         fileformat = QString("%1,%2").arg(last_format,fileformat);
     }
     catch(...)

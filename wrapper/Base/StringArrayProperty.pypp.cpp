@@ -36,12 +36,111 @@ SireBase::StringArrayProperty __copy__(const SireBase::StringArrayProperty &othe
 void register_StringArrayProperty_class(){
 
     { //::SireBase::StringArrayProperty
-        typedef bp::class_< SireBase::StringArrayProperty, bp::bases< SireBase::Property > > StringArrayProperty_exposer_t;
+        typedef bp::class_< SireBase::StringArrayProperty, bp::bases< SireBase::ArrayProperty<QString>, SireBase::Property > > StringArrayProperty_exposer_t;
         StringArrayProperty_exposer_t StringArrayProperty_exposer = StringArrayProperty_exposer_t( "StringArrayProperty", "", bp::init< >("") );
         bp::scope StringArrayProperty_scope( StringArrayProperty_exposer );
         StringArrayProperty_exposer.def( bp::init< QList< QString > const & >(( bp::arg("array") ), "") );
         StringArrayProperty_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("array") ), "") );
         StringArrayProperty_exposer.def( bp::init< SireBase::StringArrayProperty const & >(( bp::arg("other") ), "") );
+        { //::SireBase::StringArrayProperty::asABoolean
+        
+            typedef bool ( ::SireBase::StringArrayProperty::*asABoolean_function_type)(  ) const;
+            asABoolean_function_type asABoolean_function_value( &::SireBase::StringArrayProperty::asABoolean );
+            
+            StringArrayProperty_exposer.def( 
+                "asABoolean"
+                , asABoolean_function_value
+                , "" );
+        
+        }
+        { //::SireBase::StringArrayProperty::asADouble
+        
+            typedef double ( ::SireBase::StringArrayProperty::*asADouble_function_type)(  ) const;
+            asADouble_function_type asADouble_function_value( &::SireBase::StringArrayProperty::asADouble );
+            
+            StringArrayProperty_exposer.def( 
+                "asADouble"
+                , asADouble_function_value
+                , "" );
+        
+        }
+        { //::SireBase::StringArrayProperty::asAString
+        
+            typedef ::QString ( ::SireBase::StringArrayProperty::*asAString_function_type)(  ) const;
+            asAString_function_type asAString_function_value( &::SireBase::StringArrayProperty::asAString );
+            
+            StringArrayProperty_exposer.def( 
+                "asAString"
+                , asAString_function_value
+                , "" );
+        
+        }
+        { //::SireBase::StringArrayProperty::asAnArray
+        
+            typedef ::SireBase::PropertyList ( ::SireBase::StringArrayProperty::*asAnArray_function_type)(  ) const;
+            asAnArray_function_type asAnArray_function_value( &::SireBase::StringArrayProperty::asAnArray );
+            
+            StringArrayProperty_exposer.def( 
+                "asAnArray"
+                , asAnArray_function_value
+                , "" );
+        
+        }
+        { //::SireBase::StringArrayProperty::asAnInteger
+        
+            typedef int ( ::SireBase::StringArrayProperty::*asAnInteger_function_type)(  ) const;
+            asAnInteger_function_type asAnInteger_function_value( &::SireBase::StringArrayProperty::asAnInteger );
+            
+            StringArrayProperty_exposer.def( 
+                "asAnInteger"
+                , asAnInteger_function_value
+                , "" );
+        
+        }
+        { //::SireBase::StringArrayProperty::isABoolean
+        
+            typedef bool ( ::SireBase::StringArrayProperty::*isABoolean_function_type)(  ) const;
+            isABoolean_function_type isABoolean_function_value( &::SireBase::StringArrayProperty::isABoolean );
+            
+            StringArrayProperty_exposer.def( 
+                "isABoolean"
+                , isABoolean_function_value
+                , "" );
+        
+        }
+        { //::SireBase::StringArrayProperty::isADouble
+        
+            typedef bool ( ::SireBase::StringArrayProperty::*isADouble_function_type)(  ) const;
+            isADouble_function_type isADouble_function_value( &::SireBase::StringArrayProperty::isADouble );
+            
+            StringArrayProperty_exposer.def( 
+                "isADouble"
+                , isADouble_function_value
+                , "" );
+        
+        }
+        { //::SireBase::StringArrayProperty::isAString
+        
+            typedef bool ( ::SireBase::StringArrayProperty::*isAString_function_type)(  ) const;
+            isAString_function_type isAString_function_value( &::SireBase::StringArrayProperty::isAString );
+            
+            StringArrayProperty_exposer.def( 
+                "isAString"
+                , isAString_function_value
+                , "" );
+        
+        }
+        { //::SireBase::StringArrayProperty::isAnInteger
+        
+            typedef bool ( ::SireBase::StringArrayProperty::*isAnInteger_function_type)(  ) const;
+            isAnInteger_function_type isAnInteger_function_value( &::SireBase::StringArrayProperty::isAnInteger );
+            
+            StringArrayProperty_exposer.def( 
+                "isAnInteger"
+                , isAnInteger_function_value
+                , "" );
+        
+        }
         StringArrayProperty_exposer.def( bp::self != bp::self );
         StringArrayProperty_exposer.def( bp::self + bp::self );
         { //::SireBase::StringArrayProperty::operator=

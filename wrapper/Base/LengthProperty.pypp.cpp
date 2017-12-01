@@ -9,6 +9,10 @@ namespace bp = boost::python;
 
 #include "SireBase/lengthproperty.h"
 
+#include "SireBase/variantproperty.h"
+
+#include "SireError/errors.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -30,8 +34,8 @@ void register_LengthProperty_class(){
         LengthProperty_exposer_t LengthProperty_exposer = LengthProperty_exposer_t( "LengthProperty", "This class provides a thin Property wrapper around lengths\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this constructs the integer 0") );
         bp::scope LengthProperty_scope( LengthProperty_exposer );
         LengthProperty_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("value") ), "Construct from the passed length") );
-        LengthProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") ), "Construct from a VariantProperty") );
         LengthProperty_exposer.def( bp::init< SireBase::LengthProperty const & >(( bp::arg("other") ), "Copy constructor") );
+        LengthProperty_exposer.def( bp::init< SireBase::Property const & >(( bp::arg("other") ), "Construct from a VariantProperty") );
         LengthProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::LengthProperty::operator=
         

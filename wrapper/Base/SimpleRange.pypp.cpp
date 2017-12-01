@@ -31,7 +31,7 @@ void register_SimpleRange_class(){
         typedef bp::class_< SireBase::SimpleRange, bp::bases< SireBase::Range, SireBase::Property > > SimpleRange_exposer_t;
         SimpleRange_exposer_t SimpleRange_exposer = SimpleRange_exposer_t( "SimpleRange", "This class represents a simple range from start to end in steps\nof increment\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a null range") );
         bp::scope SimpleRange_scope( SimpleRange_exposer );
-        SimpleRange_exposer.def( bp::init< qint64 >(( bp::arg("i") ), "Copy constructor") );
+        SimpleRange_exposer.def( bp::init< qint64 >(( bp::arg("i") ), "Construct a range that represents a single value, i") );
         SimpleRange_exposer.def( bp::init< qint64, qint64, bp::optional< qint64 > >(( bp::arg("start"), bp::arg("end"), bp::arg("increment")=(::qint64)(1) ), "Construct a range from [start,end) in units of increment") );
         SimpleRange_exposer.def( bp::init< SireBase::SimpleRange const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::SimpleRange::atEnd
@@ -42,7 +42,7 @@ void register_SimpleRange_class(){
             SimpleRange_exposer.def( 
                 "atEnd"
                 , atEnd_function_value
-                , "" );
+                , "Return whether or not this range is at its end" );
         
         }
         { //::SireBase::SimpleRange::next

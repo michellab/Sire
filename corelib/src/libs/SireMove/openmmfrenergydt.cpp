@@ -49,6 +49,8 @@
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
+#include "SireBase/variantproperty.h"
+
 #include "SireUnits/units.h"
 #include "SireUnits/temperature.h"
 #include "SireUnits/convert.h"

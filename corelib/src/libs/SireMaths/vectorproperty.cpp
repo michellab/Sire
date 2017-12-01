@@ -225,6 +225,12 @@ bool VectorProperty::operator!=(const VectorProperty &other) const
     return Vector::operator!=(other);
 }
 
+/** Return the actual value of the vector */
+Vector VectorProperty::value() const
+{
+    return Vector(*this);
+}
+
 QString VectorProperty::toString() const
 {
     return Vector::toString();

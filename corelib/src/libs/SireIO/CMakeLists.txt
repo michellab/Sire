@@ -26,15 +26,21 @@ set ( SIREIO_HEADERS
       amberprm.h
       amberrst.h
       amberrst7.h
+      charmmpsf.h
       cube.h
       errors.h
       flexibilitylibrary.h
+      gro87.h
+      grotop.h
       iobase.h
+      mol2.h
       moleculeparser.h
       netcdffile.h
       pdb.h
+      pdb2.h
       perturbationslibrary.h
       protoms.h
+      supplementary.h
       tinker.h
       trajectorymonitor.h
       zmatrixmaker.h
@@ -50,15 +56,21 @@ set ( SIREIO_SOURCES
       amberprm.cpp
       amberrst.cpp
       amberrst7.cpp
+      charmmpsf.cpp
       cube.cpp
       errors.cpp
       flexibilitylibrary.cpp
+      gro87.cpp
+      grotop.cpp
       iobase.cpp
+      mol2.cpp
       moleculeparser.cpp
       netcdffile.cpp
       pdb.cpp
+      pdb2.cpp
       perturbationslibrary.cpp
       protoms.cpp
+      supplementary.cpp
       tinker.cpp
       trajectorymonitor.cpp    
       zmatrixmaker.cpp
