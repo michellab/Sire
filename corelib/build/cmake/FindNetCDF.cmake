@@ -1,14 +1,14 @@
 # Find NetCDF library.
 #
-# Looks for the NetCDF libraries at the default (/usr/local) location 
-# or custom location found in the NETCDF_ROOT_DIR environment variable. 
+# Looks for the NetCDF libraries at the default (/usr/local) location
+# or custom location found in the NETCDF_ROOT_DIR environment variable.
 #
-# The script defines defines: 
+# The script defines defines:
 #  NetCDF_FOUND
 #  NetCDF_ROOT_DIR
 #  NetCDF_INCLUDE_DIR
 #  NetCDF_LIBRARY_DIR
-#  NetCDF_LIBRARIES      
+#  NetCDF_LIBRARIES
 #
 
 if(NetCDF_INCLUDE_DIR AND NetCDF_LIBRARY_DIR)
@@ -23,29 +23,29 @@ find_library(NetCDF_LIBRARIES
     NAMES netcdf
     PATHS "${NetCDF_ROOT_DIR}/lib"
     CACHE STRING "NetCDF libraries"
-    NO_CMAKE_SYSTEM_PATH)
+    NO_DEFAULT_PATH)
 
 message( STATUS "Found it in ${NetCDF_LIBRARIES}" )
 
-get_filename_component(NetCDF_LIBRARY_DIR 
-    ${NetCDF_LIBRARIES} 
+get_filename_component(NetCDF_LIBRARY_DIR
+    ${NetCDF_LIBRARIES}
     PATH
     CACHE STRING "NetCDF library path")
 
-find_path(NetCDF_INCLUDE_DIR 
-    NAMES netcdf.h 
+find_path(NetCDF_INCLUDE_DIR
+    NAMES netcdf.h
     PATHS "${NetCDF_ROOT_DIR}/include" "${NetCDF_LIBRARY_DIR}/../include"
     CACHE STRING "NetCDF include directory"
-    NO_CMAKE_SYSTEM_PATH)    
+    NO_DEFAULT_PATH)
 
-# if we did not manage to set the root dir at the beginning but found the 
+# if we did not manage to set the root dir at the beginning but found the
 # libs then set the ${NetCDF_LIBRARY_DIR}/.. as root
 if(NOT IS_DIRECTORY ${NetCDF_ROOT_DIR})
     if (IS_DIRECTORY "${NetCDF_LIBRARY_DIR}/..") # just double-checking
-        get_filename_component(NetCDF_ROOT_DIR 
-            "${NetCDF_LIBRARY_DIR}/.." 
+        get_filename_component(NetCDF_ROOT_DIR
+            "${NetCDF_LIBRARY_DIR}/.."
             ABSOLUTE)
-    endif()   
+    endif()
 endif()
 
 if(NOT IS_DIRECTORY ${NetCDF_ROOT_DIR})
@@ -69,14 +69,13 @@ if ( ${NetCDF_FOUND} )
   set(NetCDF_ROOT_DIR ${NetCDF_ROOT_DIR} CACHE PATH "NetCDF installation directory")
 
   include(FindPackageHandleStandardArgs)
-  find_package_handle_standard_args(NetCDF DEFAULT_MSG 
+  find_package_handle_standard_args(NetCDF DEFAULT_MSG
                                       NetCDF_ROOT_DIR
-                                      NetCDF_LIBRARIES 
-                                      NetCDF_LIBRARY_DIR 
+                                      NetCDF_LIBRARIES
+                                      NetCDF_LIBRARY_DIR
                                       NetCDF_INCLUDE_DIR)
- 
+
   mark_as_advanced(NetCDF_INCLUDE_DIR
                    NetCDF_LIBRARIES
                    NetCDF_LIBRARY_DIR)
 endif()
-
