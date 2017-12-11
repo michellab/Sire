@@ -2851,8 +2851,11 @@ void CharmmPSF::writeToFile(const QString &filename) const
     {
         QFileInfo fi(filename);
 
-        QString param_filename = fi.completeBaseName();
-        param_filename.append(".params");
+        // Create the name of the parameter file.
+        QString param_filename = fi.absolutePath()
+                               + '/'
+                               + fi.completeBaseName()
+                               + ".params";
 
         QFile f(param_filename);
 
