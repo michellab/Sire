@@ -281,7 +281,7 @@ void register_PDB2_class(){
         }
         { //::SireIO::PDB2::writeVelocityFile
         
-            typedef void ( ::SireIO::PDB2::*writeVelocityFile_function_type)( ::QString const & ) const;
+            typedef bool ( ::SireIO::PDB2::*writeVelocityFile_function_type)( ::QString const & ) const;
             writeVelocityFile_function_type writeVelocityFile_function_value( &::SireIO::PDB2::writeVelocityFile );
             
             PDB2_exposer.def( 

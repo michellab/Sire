@@ -1040,17 +1040,17 @@ QVector<QString> PDB2::toLines(bool is_velocity) const
 }
 
 /** Write a velocity file in PDB format. This can be used as a restart for NAMD simulations. */
-void PDB2::writeVelocityFile(const QString &filename) const
+bool PDB2::writeVelocityFile(const QString &filename) const
 {
     if (velocities.isEmpty())
-        return;
+        return false;
 
     // Generate the vector of record lines.
     // Here atomic coordinates are replaced by velocities.
     QVector<QString> lines = toLines(true);
 
     if (lines.isEmpty())
-        return;
+        return false;
 
     QFile f(filename);
 
@@ -1067,6 +1067,8 @@ void PDB2::writeVelocityFile(const QString &filename) const
     }
 
     f.close();
+
+    return true;
 }
 
 /** Return the format name that is used to identify this file format within Sire */

@@ -244,7 +244,7 @@ public:
     QString toString() const;
     QVector<QString> toLines(bool is_velocity = false) const;
 
-    void writeVelocityFile(const QString &filename) const;
+    bool writeVelocityFile(const QString &filename) const;
 
     QString formatName() const;
     QString formatDescription() const;
