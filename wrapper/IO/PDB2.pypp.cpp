@@ -39,6 +39,8 @@ namespace bp = boost::python;
 
 #include "pdb2.h"
 
+#include <QFile>
+
 #include "pdb2.h"
 
 SireIO::PDB2 __copy__(const SireIO::PDB2 &other){ return SireIO::PDB2(other); }
@@ -234,12 +236,13 @@ void register_PDB2_class(){
         PDB2_exposer.def( bp::self == bp::self );
         { //::SireIO::PDB2::toLines
         
-            typedef ::QVector< QString > ( ::SireIO::PDB2::*toLines_function_type)(  ) const;
+            typedef ::QVector< QString > ( ::SireIO::PDB2::*toLines_function_type)( bool ) const;
             toLines_function_type toLines_function_value( &::SireIO::PDB2::toLines );
             
             PDB2_exposer.def( 
                 "toLines"
                 , toLines_function_value
+                , ( bp::arg("is_velocity")=(bool)(false) )
                 , "Convert the parsed data to a collection of PDB record lines." );
         
         }
@@ -274,6 +277,18 @@ void register_PDB2_class(){
                 "what"
                 , what_function_value
                 , "Return the C++ name for this class" );
+        
+        }
+        { //::SireIO::PDB2::writeVelocityFile
+        
+            typedef void ( ::SireIO::PDB2::*writeVelocityFile_function_type)( ::QString const & ) const;
+            writeVelocityFile_function_type writeVelocityFile_function_value( &::SireIO::PDB2::writeVelocityFile );
+            
+            PDB2_exposer.def( 
+                "writeVelocityFile"
+                , writeVelocityFile_function_value
+                , ( bp::arg("filename") )
+                , "Write a velocity file in PDB format. This can be used as a restart for NAMD simulations." );
         
         }
         PDB2_exposer.staticmethod( "typeName" );
