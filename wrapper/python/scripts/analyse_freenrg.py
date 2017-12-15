@@ -506,7 +506,7 @@ if __name__ == '__main__':
         if not args.lam:
             print ("#Lambda array was not given, trying to infer lambda values from simulation files...")
         else:
-            lamvals = args.lam
+            lamvals = numpy.array(args.lam)
         lam = None
         if not args.temperature:
             T_previous = None
@@ -644,11 +644,11 @@ if __name__ == '__main__':
             FILE.write(bytes('#Overlap matrix\n', "UTF-8"))
             numpy.savetxt(FILE, M, fmt='%.4f')
 
-        # mbar DG for neighbourting lambda
+        # mbar DG for neighbouring lambda
         pairwise_F = free_energy_obj.pairwise_F
         pairwise_F[:, 2] = pairwise_F[:, 2] * T * k_boltz
         pairwise_F[:, 3] = pairwise_F[:, 3] * T * k_boltz
-        FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
+        FILE.write(bytes('#DG from neighbouring lambda in kcal/mol\n', "UTF-8"))
         numpy.savetxt(FILE, pairwise_F, fmt=['%.4f', '%.4f', '%.4f', '%.4f'])
 
         # mbar pmf
