@@ -48,6 +48,8 @@
 
 #include "SireUnits/units.h"
 
+#include <QFile>
+
 using namespace SireBase;
 using namespace SireIO;
 using namespace SireMol;
@@ -520,7 +522,7 @@ QChar PDBAtom::getInsertCode() const
     return insert_code;
 }
 
-/** Get the residue sequence number. */
+/** Get the atomic coordinates. */
 SireMaths::Vector PDBAtom::getCoord() const
 {
     return coord;
@@ -688,6 +690,43 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
         return;
     }
 
+    // Check for velocities.
+    // All molecules must have velocity properties to be able to generate a PDB
+    // velocity file for NAMD.
+    for (int i=0; i<nmols; ++i)
+    {
+        // Extract the molecule.
+        auto mol = system[molnums[i]].molecule();
+
+        // All molecules must have velocities.
+        if (not mol.hasProperty(map["velocity"]))
+        {
+            velocities.clear();
+            break;
+        }
+
+        // Loop over all atoms in the molecule.
+        for (int j=0; j<mol.nAtoms(); j++)
+        {
+            // Extract the atom.
+            auto atom = mol.atom(AtomIdx(j));
+
+            // All atoms in the molecule must have velocities.
+            if (not atom.hasProperty(map["velocity"]))
+            {
+                velocities.clear();
+                i = nmols;
+                break;
+            }
+
+            // Append the velocity to the vector.
+            else
+            {
+                velocities.append(atom.property<SireMol::Velocity3D>(map["velocity"]));
+            }
+        }
+    }
+
     // The list of lines.
     QStringList lines;
 
@@ -755,6 +794,9 @@ PDB2::PDB2(const SireSystem::System &system, const PropertyMap &map) :
     // Reparse the lines as a self-consistency check.
     PDB2 parsed(lines, map);
 
+    // Copy the velocities vector to the new object.
+    parsed.velocities = velocities;
+
     this->operator=(parsed);
 }
 
@@ -764,6 +806,7 @@ PDB2::PDB2(const PDB2 &other) :
     atoms(other.atoms),
     chains(other.chains),
     residues(other.residues),
+    velocities(other.velocities),
     parse_warnings(other.parse_warnings)
 {}
 
@@ -779,6 +822,7 @@ PDB2& PDB2::operator=(const PDB2 &other)
         this->atoms = other.atoms;
         this->chains = other.chains;
         this->residues = other.residues;
+        this->velocities = other.velocities;
         this->parse_warnings = other.parse_warnings;
 
         MoleculeParser::operator=(other);
@@ -849,7 +893,7 @@ QString PDB2::toString() const
 }
 
 /** Convert the parsed data to a collection of PDB record lines. */
-QVector<QString> PDB2::toLines() const
+QVector<QString> PDB2::toLines(bool is_velocity) const
 {
     // Store the number of molecules.
     const int nmols = nMolecules();
@@ -863,6 +907,9 @@ QVector<QString> PDB2::toLines() const
 
     // Whether the object contains MODEL records (trajectory frames).
     bool is_model = isModel();
+
+    // The index offset for the velocities vector.
+    int offset = 0;
 
     // Now assemble the lines from the record data for each molecule.
     // We do this in serial since the order matters.
@@ -889,6 +936,19 @@ QVector<QString> PDB2::toLines() const
                 for (int j=r.begin(); j<r.end(); ++j)
                 {
                     atom_lines[j] = atoms[i][j].toPDBRecord();
+
+                    // We are writing a PDB "velocity" file for NAMD.
+                    if (is_velocity)
+                    {
+                        // Create the velocity string.
+                        QString vel_string(QString("   %1\%2\%3")
+                            .arg(velocities[offset+j][0].value(), 8, 'f', 3)
+                            .arg(velocities[offset+j][1].value(), 8, 'f', 3)
+                            .arg(velocities[offset+j][2].value(), 8, 'f', 3));
+
+                        // Replace the coordinate record data with velocities.
+                        atom_lines[j].replace(30, 24, vel_string);
+                    }
                 }
             });
 
@@ -932,6 +992,20 @@ QVector<QString> PDB2::toLines() const
             for (int j=0; j<num_atoms; ++j)
             {
                 atom_lines[iline] = atoms[i][j].toPDBRecord();
+
+                // We are writing a PDB "velocity" file for NAMD.
+                if (is_velocity)
+                {
+                    // Create the velocity string.
+                    QString vel_string(QString("   %1\%2\%3")
+                        .arg(velocities[offset+j][0].value(), 8, 'f', 3)
+                        .arg(velocities[offset+j][1].value(), 8, 'f', 3)
+                        .arg(velocities[offset+j][2].value(), 8, 'f', 3));
+
+                    // Replace the coordinate record data with velocities.
+                    atom_lines[j].replace(30, 24, vel_string);
+                }
+
                 iline++;
 
                 // Add a TER record for this atom.
@@ -955,11 +1029,46 @@ QVector<QString> PDB2::toLines() const
         // Record the end of this molecule.
         if (is_model) lines.append("ENDMDL");
         else          lines.append("TER");
+
+        // Update the offset.
+        offset += num_atoms;
     }
 
     lines.append("END");
 
     return lines;
+}
+
+/** Write a velocity file in PDB format. This can be used as a restart for NAMD simulations. */
+bool PDB2::writeVelocityFile(const QString &filename) const
+{
+    if (velocities.isEmpty())
+        return false;
+
+    // Generate the vector of record lines.
+    // Here atomic coordinates are replaced by velocities.
+    QVector<QString> lines = toLines(true);
+
+    if (lines.isEmpty())
+        return false;
+
+    QFile f(filename);
+
+    if (not f.open( QIODevice::WriteOnly | QIODevice::Text ))
+    {
+        throw SireError::file_error(f, CODELOC);
+    }
+
+    QTextStream ts(&f);
+
+    for (const QString &line : lines)
+    {
+        ts << line << '\n';
+    }
+
+    f.close();
+
+    return true;
 }
 
 /** Return the format name that is used to identify this file format within Sire */

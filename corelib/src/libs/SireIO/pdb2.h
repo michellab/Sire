@@ -32,6 +32,7 @@
 #include "moleculeparser.h"
 
 #include "SireMaths/vector.h"
+#include "SireMol/atomvelocities.h"
 
 SIRE_BEGIN_HEADER
 
@@ -241,7 +242,9 @@ public:
                                 const PropertyMap &map) const;
 
     QString toString() const;
-    QVector<QString> toLines() const;
+    QVector<QString> toLines(bool is_velocity = false) const;
+
+    bool writeVelocityFile(const QString &filename) const;
 
     QString formatName() const;
     QString formatDescription() const;
@@ -282,14 +285,17 @@ private:
     bool isModel() const;
     bool isModel(const SireSystem::System &system) const;
 
-    //* Atom record data for each molecule. */
+    /** Atom record data for each molecule. */
     QVector<QVector<PDBAtom> > atoms;
 
-    //* Mapping between chain identifiers and residue index for each molecule. */
+    /** Mapping between chain identifiers and residue index for each molecule. */
     QVector<QMultiMap<QChar, qint64> > chains;
 
-    //* Mapping between residue and atom indices for each molecule. */
+    /** Mapping between residue and atom indices for each molecule. */
     QVector<QMultiMap<qint64, qint64> > residues;
+
+    /** Additional atom velocity data. */
+    QVector<SireMol::Velocity3D> velocities;
 
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;
