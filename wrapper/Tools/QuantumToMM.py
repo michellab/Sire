@@ -178,7 +178,7 @@ def createQMMMMoves(system):
             scale_moves = 10
 
             # get the amount to translate and rotate from the ligand's flexibility object
-            flex = mobile_ligand.moleculeAt(0).molecule().property("flexibility")
+            flex = mobile_ligand.moleculeAt(0)[0].molecule().property("flexibility")
 
             # only move the solute if it is not the only molecule in the system
             if system.nMolecules() > 1 and (flex.translation().value() != 0 or flex.rotation().value() != 0):
@@ -449,7 +449,7 @@ def loadQMMMSystem():
 
         # Center the system with the ligand at (0,0,0)
         loadsys = centerSystem(loadsys, ligand_mol)
-        ligand_mol = loadsys[ligand_mol.number()].molecule()
+        ligand_mol = loadsys[ligand_mol.number()][0].molecule()
 
         if reflection_radius.val is None:
             loadsys = addFlexibility(loadsys, naming_scheme=sys_scheme )
@@ -525,7 +525,7 @@ def loadQMMMSystem():
     if MGName("mobile_solvents") in loadsys.mgNames():
         mols = loadsys[MGName("mobile_solvents")]
         for molnum in mols.molNums():
-            solvent_mol = mols[molnum].molecule()
+            solvent_mol = mols[molnum][0].molecule()
             mobile_solvents_group.add(solvent_mol)
 
         all_group.add(mobile_solvents_group)
@@ -728,7 +728,8 @@ def loadQMMMSystem():
             print("MM energy = %s kcal mol-1 (took %s ms)" % (mm_intra, t.elapsed()))
 
             t.start()
-            zero_sys = System(qm_ligand)
+            zero_sys = System()
+            zero_sys.add(qm_ligand)
             qm_intra = zero_sys.energy().value()
             print("QM energy = %s kcal mol-1 (took %s ms)" % (qm_intra, t.elapsed()))
 

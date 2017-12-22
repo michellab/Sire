@@ -360,7 +360,7 @@ def createLSRCMoves(system):
             scale_moves = 10
 
             # get the amount to translate and rotate from the ligand's flexibility object
-            flex = mobile_ligand.moleculeAt(0).molecule().property("flexibility")
+            flex = mobile_ligand.moleculeAt(0)[0].molecule().property("flexibility")
 
             if use_rot_trans_ligand.val:
                 if (flex.translation().value() != 0 or flex.rotation().value() != 0):
@@ -476,7 +476,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             mols = water_system[MGName("mobile_solvents")].molecules()
             for molnum in mols.molNums():
                 # only add this water if it doesn't overlap with ligand1
-                water_mol = mols[molnum].molecule().edit().renumber().commit()
+                water_mol = mols[molnum][0].molecule().edit().renumber().commit()
 
                 if getMinimumDistance(ligand_mol1,water_mol) > 1.5:
                     for j in range(0,water_mol.nResidues()):
@@ -493,7 +493,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         if MGName("fixed_molecules") in water_system.mgNames():
             mols = water_system[MGName("fixed_molecules")].molecules()
             for molnum in mols.molNums():
-                fixed_free_water_group.add( mols[molnum].molecule().edit().renumber().commit() )
+                fixed_free_water_group.add( mols[molnum][0].molecule().edit().renumber().commit() )
 
     # create a group to hold all of the fixed molecules in the bound leg
     fixed_bound_group = MoleculeGroup("fixed_bound")
@@ -515,7 +515,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     if MGName("mobile_solvents") in protein_system.mgNames():
         mols = protein_system[MGName("mobile_solvents")]
         for molnum in mols.molNums():
-            solvent_mol = mols[molnum].molecule()
+            solvent_mol = mols[molnum][0].molecule()
 
             try:
                 # this is a water molecule if we can swap the coordinates with the 
@@ -1586,14 +1586,14 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         dist = water_monitor_distance.val.to(angstrom)
 
         for molnum in mobile_bound_water_group.molNums():
-            water_mol = mobile_bound_water_group[molnum].molecule()
+            water_mol = mobile_bound_water_group[molnum][0].molecule()
             if getMinimumDistance(ligand_mol0,water_mol) < dist:
                 # we should monitor this water
                 boundwater_points.append( VectorPoint(water_mol.evaluate().center()) )
     
         for molnum in mobile_free_water_group.molNums():
             #this is a mobile water, so a candidate for monitoring
-            water_mol = mobile_free_water_group[molnum].molecule()
+            water_mol = mobile_free_water_group[molnum][0].molecule()
             if getMinimumDistance(ligand_mol0,water_mol) < dist:
                 # we should monitor this water
                 freewater_points.append( VectorPoint(water_mol.evaluate().center()) )
@@ -1796,7 +1796,7 @@ def loadSystem(topfile, crdfile, s3file, ligand_name):
 
         # Center the system with the ligand at (0,0,0)
         system = centerSystem(system, ligand_mol)
-        ligand_mol = system[ligand_mol.number()].molecule()
+        ligand_mol = system[ligand_mol.number()][0].molecule()
 
         system = addFlexibility(system, Vector(0,0,0), reflection_radius.val, scheme )
         Sire.Stream.save(system, s3file)
