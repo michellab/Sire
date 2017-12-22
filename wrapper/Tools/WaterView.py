@@ -279,7 +279,7 @@ def makeSim(system, ligand_mol, watersys):
             pass
 
         for molnum in all_proteins.molNums():
-            protein_mol = all_proteins[molnum].join()
+            protein_mol = Molecule.join(all_proteins[molnum])
             fixed_group.add(protein_mol)
 
     stage1_fixed_group = MoleculeGroup(fixed_group)

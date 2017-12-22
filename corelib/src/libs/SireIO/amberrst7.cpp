@@ -328,7 +328,7 @@ void AmberRst7::parse(const PropertyMap &map)
     if (lines().count() < (2 + ((natoms+1)/2) + ((natoms+1)/2)))
     {
         //there are no velocities - see if there is periodic box information
-        int boxidx = 2 + (natoms/2);
+        int boxidx = 2 + ((natoms+1)/2);
         
         if (boxidx < lines().count())
         {

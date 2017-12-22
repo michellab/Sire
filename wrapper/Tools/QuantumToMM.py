@@ -565,7 +565,7 @@ def loadQMMMSystem():
             boundary_molecules = MoleculeGroup()
 
         for molnum in all_proteins.molNums():
-            protein_mol = all_proteins[molnum].join()
+            protein_mol = Molecule.join(all_proteins[molnum])
             
             if protein_mol.selectedAll():
                 protein_intra_group.add(protein_mol)
@@ -590,7 +590,7 @@ def loadQMMMSystem():
                     pass
 
                 if not (mobile_protein is None):
-                    mobile_proteins_group.add( mobile_protein.join() )
+                    mobile_proteins_group.add( Molecule.join(mobile_protein) )
 
             else:
                 # only some of the atoms have been selected. We will extract
@@ -728,7 +728,8 @@ def loadQMMMSystem():
             print("MM energy = %s kcal mol-1 (took %s ms)" % (mm_intra, t.elapsed()))
 
             t.start()
-            qm_intra = qm_ligand.energy().value()
+            zero_sys = System(qm_ligand)
+            qm_intra = zero_sys.energy().value()
             print("QM energy = %s kcal mol-1 (took %s ms)" % (qm_intra, t.elapsed()))
 
             print("\nSetting the QM zero energy to %s kcal mol-1" % (qm_intra - mm_intra))
@@ -835,7 +836,7 @@ def loadQMMMSystem():
         protein_intraff = InternalFF("protein_intra")
 
         for molnum in protein_intra_mols.molNums():
-            protein_mol = protein_intra_mols[molnum].join()
+            protein_mol = Molecule.join(protein_intra_mols[molnum])
             protein_intraclj.add(protein_mol)
             protein_intraff.add(protein_mol)
 
@@ -852,7 +853,7 @@ def loadQMMMSystem():
         solute_intraff = InternalFF("solute_intra")
 
         for molnum in solute_intra_mols.molNums():
-            solute_mol = solute_intra_mols[molnum].join()
+            solute_mol = Molecule.join(solute_intra_mols[molnum])
             solute_intraclj.add(solute_mol)
             solute_intraff.add(solute_mol)
 

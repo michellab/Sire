@@ -199,7 +199,7 @@ def findMolecule(system, molname):
     molname = molname.upper()
 
     for molnum in molecules.molNums():
-        molecule = molecules[molnum].molecule()
+        molecule = molecules[molnum][0].molecule()
 
         if str(molecule.name().value()).upper() == molname:
             return molecule
@@ -409,7 +409,7 @@ def centerSystem(system, molecule):
     moved_mols = Molecules()
 
     for molnum in system.molNums():
-        molecule = system[molnum].molecule()
+        molecule = system[molnum][0].molecule()
         molecule = molecule.move().translate(-center).commit()
         moved_mols.add(molecule)
 

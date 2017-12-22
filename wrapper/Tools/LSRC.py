@@ -569,7 +569,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             boundary_molecules = MoleculeGroup()
 
         for molnum in all_proteins.molNums():
-            protein_mol = all_proteins[molnum].join()
+            protein_mol = Molecule.join(all_proteins[molnum])
             
             if protein_mol.selectedAll():
                 bound_protein_intra_group.add(protein_mol)
@@ -594,7 +594,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
                     pass
 
                 if not (mobile_protein is None):
-                    mobile_bound_proteins_group.add( mobile_protein.join() )
+                    mobile_bound_proteins_group.add( Molecule.join(mobile_protein) )
 
             else:
                 # only some of the atoms have been selected. We will extract
@@ -956,7 +956,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             protein_intraff = InternalFF("bound:protein_intra")
 
             for molnum in bound_protein_intra_mols.molNums():
-                protein_mol = bound_protein_intra_mols[molnum].join()
+                protein_mol = Molecule.join(bound_protein_intra_mols[molnum])
                 protein_intraclj.add(protein_mol)
                 protein_intraff.add(protein_mol)
 
@@ -969,7 +969,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             protein_intraff.setUse14Calculation(True)
 
             for molnum in bound_protein_intra_mols.molNums():
-                protein_mol = bound_protein_intra_mols[molnum].join()
+                protein_mol = Molecule.join(bound_protein_intra_mols[molnum])
                 protein_intraclj.add(protein_mol)
                 protein_intraff.add(protein_mol)
 
@@ -985,7 +985,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             solute_intraff = InternalFF("bound:solute_intra")
 
             for molnum in bound_solute_intra_mols.molNums():
-                solute_mol = bound_solute_intra_mols[molnum].join()
+                solute_mol = Molecule.join(bound_solute_intra_mols[molnum])
                 solute_intraclj.add(solute_mol)
                 solute_intraff.add(solute_mol)
 
@@ -998,7 +998,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             solute_intraff.setUse14Calculation(True)
 
             for molnum in bound_solute_intra_mols.molNums():
-                solute_mol = bound_solute_intra_mols[molnum].join()
+                solute_mol = Molecule.join(bound_solute_intra_mols[molnum])
                 solute_intraclj.add(solute_mol)
                 solute_intraff.add(solute_mol)
 
