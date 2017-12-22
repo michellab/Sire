@@ -250,7 +250,7 @@ def getOverlapWaters(ligand, waters, radius=2*angstrom):
     coords = CoordGroup(coords)
 
     for molnum in waters.molNums():
-        water = waters[molnum].molecule()
+        water = waters[molnum][0].molecule()
 
         oxygen = None
 
@@ -590,7 +590,7 @@ def createWSRCMoves(system):
             scale_moves = 10
 
             # get the amount to translate and rotate from the ligand's flexibility object
-            flex = mobile_ligand.moleculeAt(0).molecule().property("flexibility")
+            flex = mobile_ligand.moleculeAt(0)[0].molecule().property("flexibility")
 
             if use_rot_trans_ligand.val:
                 if (flex.translation().value() != 0 or flex.rotation().value() != 0):
@@ -602,7 +602,7 @@ def createWSRCMoves(system):
                     # the ligand is not allowed to move away from its original position,
                     # as we don't want to sample "unbound" states
                     if not ligand_reflection_radius.val is None:
-                        rb_moves.setReflectionSphere(mobile_ligand.moleculeAt(0).molecule().evaluate().centerOfMass(), 
+                        rb_moves.setReflectionSphere(mobile_ligand.moleculeAt(0)[0].molecule().evaluate().centerOfMass(), 
                                                      ligand_reflection_radius.val)
 
                     scale_moves = scale_moves / 2
@@ -682,7 +682,7 @@ def createWSRCMoves(system):
 def renumberMolecules(molgroup):
     newgroup = MoleculeGroup(molgroup.name().value())
     for molnum in molgroup.molNums():
-        mol = molgroup[molnum]
+        mol = molgroup[molnum][0]
         newmol = mol.molecule().edit().renumber().commit()
         newgroup.add( ViewsOfMol(newmol,mol.selections()) )
 
@@ -810,7 +810,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
     if MGName("mobile_solvents") in water_system.mgNames():
         mols = water_system[MGName("mobile_solvents")].molecules()
         for molnum in mols.molNums():
-            water_mol = mols[molnum].molecule().edit().renumber().commit()
+            water_mol = mols[molnum][0].molecule().edit().renumber().commit()
             for j in range(0,water_mol.nResidues()):
                 water_mol = water_mol.residue( ResIdx(j) ).edit() \
                                            .setProperty( PDB.parameters().pdbResidueName(), "FWT" ) \
@@ -823,7 +823,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
     if MGName("fixed_molecules") in water_system.mgNames():
         mols = water_system[MGName("fixed_molecules")].molecules()
         for molnum in mols.molNums():
-            fixed_free_water_group.add( mols[molnum].molecule().edit().renumber().commit() )
+            fixed_free_water_group.add( mols[molnum][0].molecule().edit().renumber().commit() )
 
     # create a group to hold all of the fixed molecules in the bound leg
     fixed_bound_group = MoleculeGroup("fixed_bound")
@@ -852,7 +852,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
     if MGName("mobile_solvents") in protein_system.mgNames():
         mols = protein_system[MGName("mobile_solvents")]
         for molnum in mols.molNums():
-            solvent_mol = mols[molnum].molecule()
+            solvent_mol = mols[molnum][0].molecule()
 
             try:
                 # this is a water molecule if we can swap the coordinates with the 
@@ -1021,7 +1021,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
         # Rename the residues of the swap solvent so that they are easy
         # to find in the output PDBs
         for i in range(0,len(identity_points)):
-            swap_water_mol = mobile_free_water_group.moleculeAt(i).molecule()
+            swap_water_mol = mobile_free_water_group.moleculeAt(i)[0].molecule()
             mobile_free_water_group.remove(swap_water_mol)
 
             for j in range(0,swap_water_mol.nResidues()):
@@ -1083,7 +1083,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
             fixed_points = []
 
             for i in range(0,swap_water_group.nMolecules()):
-                sw = swap_water_group.molecule(MolIdx(i)).molecule()
+                sw = swap_water_group.molecule(MolIdx(i))[0].molecule()
                 fixed_points.append( VectorPoint(sw.evaluate().centerOfMass()) )
 
             print("Using fixed identity points %s" % fixed_points)
@@ -1103,7 +1103,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
         print("Swap water cluster based on the %d water molecules overlapping with the ligand." % swap_waters.nMolecules())
 
         for molnum in swap_waters.molNums():
-            swap_water = swap_waters[molnum].molecule()
+            swap_water = swap_waters[molnum][0].molecule()
 
             for j in range(0,swap_water.nResidues()):
                 swap_water = swap_water.residue( ResIdx(j) ).edit() \
@@ -2715,7 +2715,7 @@ def loadWSRC():
 
         # Center the system with the ligand at (0,0,0)
         proteinsys = centerSystem(proteinsys, ligand_mol)
-        ligand_mol = proteinsys[ligand_mol.number()].molecule()
+        ligand_mol = proteinsys[ligand_mol.number()][0].molecule()
 
         proteinsys = addFlexibility(proteinsys, Vector(0,0,0), reflection_radius.val, proteinsys_scheme )
         Sire.Stream.save(proteinsys, protein_s3file.val)
