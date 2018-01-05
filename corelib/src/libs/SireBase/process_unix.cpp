@@ -36,11 +36,13 @@
 
 #include "SireError/errors.h"
 
-#include <unistd.h>  // CONDITIONAL_INCLUDE
-#include <signal.h>  // CONDITIONAL_INCLUDE
-#include <errno.h>   // CONDITIONAL_INCLUDE
-#include <string.h>  // CONDITIONAL_INCLUDE
+#include <fcntl.h>      // CONDITIONAL_INCLUDE
+#include <unistd.h>     // CONDITIONAL_INCLUDE
+#include <signal.h>     // CONDITIONAL_INCLUDE
+#include <errno.h>      // CONDITIONAL_INCLUDE
+#include <string.h>     // CONDITIONAL_INCLUDE
 
+#include <sys/stat.h>   // CONDITIONAL_INCLUDE
 #include <sys/types.h>  // CONDITIONAL_INCLUDE
 #include <sys/wait.h>   // CONDITIONAL_INCLUDE
 
@@ -65,27 +67,27 @@ class ProcessData
 public:
     ProcessData() : pid(-1), is_running(false), is_error(false), was_killed(false)
     {}
-    
+
     ~ProcessData()
     {}
-    
+
     QMutex datamutex;
 
     /** The command being run */
     QString command;
-    
+
     /** The arguments to the command */
     QStringList arguments;
-    
+
     /** The process ID of the process */
     pid_t pid;
-   
+
     /** Whether or not the process is running */
     bool is_running;
-    
+
     /** Whether or not the job exited with an error */
     bool is_error;
-    
+
     /** Whether or not the job was killed */
     bool was_killed;
 };
@@ -100,7 +102,8 @@ Q_GLOBAL_STATIC( QMutex, registryMutex );
 
 /** Null constructor */
 Process::Process()
-{}
+{
+}
 
 /** Copy constructor */
 Process::Process(const Process &other) : d(other.d)
@@ -120,7 +123,7 @@ Process& Process::operator=(const Process &other)
 {
     if (d.get() != other.d.get())
         d = other.d;
-    
+
     return *this;
 }
 
@@ -136,14 +139,14 @@ bool Process::operator!=(const Process &other) const
     return d.get() != other.d.get();
 }
 
-/** Internal function used to clean up a running job that has 
+/** Internal function used to clean up a running job that has
     just finished - only call this function if you are
     holding d->datamutex */
 void Process::cleanUpJob(int status, int child_exit_status)
 {
     if (d.get() == 0)
         return;
-        
+
     if (WEXITSTATUS(child_exit_status) != 0)
     {
         //something went wrong with the job
@@ -178,15 +181,15 @@ void Process::cleanUpJob(int status, int child_exit_status)
             d->is_error = true;
         }
     }
-    
+
     //make sure that all of the child processes have finished
     //by killing the child's process group
     killpg(d->pid, SIGKILL);
-    
+
     d->is_running = false;
 }
 
-/** From the return value in 'child_exit_status' work out 
+/** From the return value in 'child_exit_status' work out
     and return whether or not the child process is still running */
 static bool processRunning(int child_exit_status)
 {
@@ -201,7 +204,7 @@ static bool processRunning(int child_exit_status)
         else
             return true;
     }
-    
+
     //the job has exited normally
     return false;
 }
@@ -211,15 +214,15 @@ void Process::wait()
 {
     if (d.get() == 0)
         return;
-    
+
     QMutexLocker lkr( &(d->datamutex) );
-    
+
     if (not d->is_running)
         return;
-    
+
     int child_exit_status;
     int status = waitpid(d->pid, &child_exit_status, 0);
-    
+
     if (status == -1)
     {
         qDebug() << "waitpid exited with status -1!" << strerror(errno);
@@ -231,7 +234,7 @@ void Process::wait()
                  << "vs." << d->pid << ")" << strerror(errno);
         return;
     }
-    
+
     if ( processRunning(child_exit_status) )
     {
         qDebug() << "child process has not finished!";
@@ -259,10 +262,10 @@ bool Process::wait(int ms)
 {
     if (d.get() == 0)
         return true;
-        
+
     QTime t;
     t.start();
-    
+
     #if QT_VERSION >= 0x040300
     if (d->datamutex.tryLock(ms))
     #else
@@ -274,12 +277,12 @@ bool Process::wait(int ms)
             d->datamutex.unlock();
             return true;
         }
-    
+
         try
         {
             int child_exit_status;
             int status;
-        
+
             while (t.elapsed() < ms)
             {
                 status = waitpid(d->pid, &child_exit_status, WNOHANG);
@@ -300,7 +303,7 @@ bool Process::wait(int ms)
                              << "vs." << d->pid << ")" << strerror(errno);
                     return true;
                 }
-                
+
                 if ( processRunning(child_exit_status) )
                 {
                     //the job is still running - wait then
@@ -315,7 +318,7 @@ bool Process::wait(int ms)
                     return true;
                 }
             }
-            
+
             d->datamutex.unlock();
             return false;
         }
@@ -328,15 +331,24 @@ bool Process::wait(int ms)
     else
         return false;
 }
+/** Run the command 'command' with the arguments 'arguments', and
+    return a Process object that can be used to query and control the
+    job */
+Process Process::run(const QString &command, const QStringList &arguments)
+{
+    return Process::run(command, arguments, QString(), QString());
+}
 
 /** Run the command 'command' with the arguments 'arguments', and
-    return a Process object that can be used to query and control the 
-    job */
-Process Process::run(const QString &command,  const QStringList &arguments)
+    return a Process object that can be used to query and control the
+    job. Stdout and stderr of the running process are redirected to
+    the user specified files. */
+Process Process::run(const QString &command, const QStringList &arguments,
+    const QString &stdout_file, const QString &stderr_file)
 {
     //fork to run the command
     pid_t pid = fork();
-    
+
     if (pid == -1)
     {
         throw SireError::unsupported( QObject::tr(
@@ -348,50 +360,68 @@ Process Process::run(const QString &command,  const QStringList &arguments)
     {
         //this is the child process!
 
-        //move this child (and all of its children) into a new 
+        //move this child (and all of its children) into a new
         //process ID group - the new group will have the same
         //process ID as this child
         setpgrp();
-        
+
         QByteArray cmd = command.toUtf8();
         QList<QByteArray> args;
         char** char_args = new char*[ arguments.count() + 2 ];
-        
+
         char_args[0] = cmd.data();
-        
+
         for (int i=0; i<arguments.count(); ++i)
         {
             args.append( arguments[i].toUtf8() );
             char_args[i+1] = args[i].data();
         }
-        
+
         char_args[arguments.count()+1] = 0;
-       
+
+        // Redirect stdout.
+        if (not stdout_file.isNull())
+        {
+            int out = open(stdout_file.toLatin1().data(),
+                O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+            dup2(out, STDOUT_FILENO);
+            close(out);
+        }
+
+        // Redirect stderr.
+        if (not stderr_file.isNull())
+        {
+            int err = open(stderr_file.toLatin1().data(),
+                O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+            dup2(err, STDERR_FILENO);
+            close(err);
+        }
+
         //now run the command
         int status = execvp( char_args[0], char_args );
-        
+
         delete[] char_args;
-        
+
         if (status != 0)
         {
-            qDebug() << "Problem starting the command" << command 
+            qDebug() << "Problem starting the command" << command
                      << "with arguments" << arguments.join(" ")
-                     << ". Status ==" << status << ", error =" 
+                     << ". Status ==" << status << ", error ="
                      << strerror(errno);
-                     
+
             exit(-1);
         }
-        
+
         exit(0);
     }
     else
     {
         //parent
         Process p;
-        
+
         p.d.reset( new ProcessData() );
         p.d->pid = pid;
-        
+
         p.d->is_running = true;
 
         p.d->command = command;
@@ -403,15 +433,23 @@ Process Process::run(const QString &command,  const QStringList &arguments)
 
         return p;
     }
-    
+
     return Process();
 }
-           
+
 /** Run the command 'command' and return a Process object that can be
-    used to monitor the command */        
+    used to monitor the command */
 Process Process::run(const QString &command)
 {
-    return Process::run(command, QStringList());
+    return Process::run(command, QStringList(), QString(), QString());
+}
+
+/** Run the command 'command' and return a Process object that can be
+    used to monitor the command. Stdout and stderr of the running
+    process are redirected to the user specified files. */
+Process Process::run(const QString &command, const QString &stdout_file, const QString &stderr_file)
+{
+    return Process::run(command, QStringList(), stdout_file, stderr_file);
 }
 
 /** Run the command 'command' with the solitary argument 'arg' */
@@ -419,8 +457,20 @@ Process Process::run(const QString &command, const QString &arg)
 {
     QStringList args;
     args.append(arg);
-    
-    return Process::run(command, args);
+
+    return Process::run(command, args, QString(), QString());
+}
+
+/** Run the command 'command' with the solitary argument 'arg'.
+    Stdout and stderr of the running process are redirected to
+    the user specified files. */
+Process Process::run(const QString &command, const QString &arg,
+    const QString &stdout_file, const QString &stderr_file)
+{
+    QStringList args;
+    args.append(arg);
+
+    return Process::run(command, args, stdout_file, stderr_file);
 }
 
 /** Kill this process */
@@ -428,7 +478,7 @@ void Process::kill()
 {
     if (d.get() == 0)
         return;
-    
+
     //kill the job
     if (d->is_running)
     {
@@ -436,7 +486,7 @@ void Process::kill()
                  << d->arguments.join(" ").toUtf8().constData();
         killpg(d->pid, SIGKILL);
     }
-    
+
     //now wait for it to finish
     if (not this->wait(1000))
     {
@@ -450,7 +500,7 @@ void Process::kill()
 void Process::killAll()
 {
     QMutexLocker lkr( registryMutex() );
-    
+
     QList< weak_ptr<ProcessData> > &process_list = *(processRegistry());
 
     for (QList< weak_ptr<ProcessData> >::iterator it = process_list.begin();
@@ -459,10 +509,10 @@ void Process::killAll()
     {
         Process p;
         p.d = it->lock();
-        
+
         p.kill();
     }
-    
+
     process_list.clear();
 }
 
@@ -471,7 +521,7 @@ bool Process::isRunning()
 {
     if (d.get() == 0)
         return false;
-        
+
     QMutexLocker lkr( &(d->datamutex) );
     return d->is_running;
 }
@@ -481,7 +531,7 @@ bool Process::hasFinished()
 {
     if (d.get() == 0)
         return true;
-        
+
     QMutexLocker lkr( &(d->datamutex) );
     return not d->is_running;
 }

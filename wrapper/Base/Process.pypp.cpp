@@ -106,6 +106,18 @@ void register_Process_class(){
         }
         { //::SireBase::Process::run
         
+            typedef ::SireBase::Process ( *run_function_type )( ::QString const &,::QString const &,::QString const & );
+            run_function_type run_function_value( &::SireBase::Process::run );
+            
+            Process_exposer.def( 
+                "run"
+                , run_function_value
+                , ( bp::arg("command"), bp::arg("stdout_file"), bp::arg("stderr_file") )
+                , "Run the command command and return a Process object that can be\nused to monitor the command. Stdout and stderr of the running\nprocess are redirected to the user specified files." );
+        
+        }
+        { //::SireBase::Process::run
+        
             typedef ::SireBase::Process ( *run_function_type )( ::QString const &,::QString const & );
             run_function_type run_function_value( &::SireBase::Process::run );
             
@@ -118,6 +130,18 @@ void register_Process_class(){
         }
         { //::SireBase::Process::run
         
+            typedef ::SireBase::Process ( *run_function_type )( ::QString const &,::QString const &,::QString const &,::QString const & );
+            run_function_type run_function_value( &::SireBase::Process::run );
+            
+            Process_exposer.def( 
+                "run"
+                , run_function_value
+                , ( bp::arg("command"), bp::arg("arg"), bp::arg("stdout_file"), bp::arg("stderr_file") )
+                , "Run the command command with the solitary argument arg.\nStdout and stderr of the running process are redirected to\nthe user specified files." );
+        
+        }
+        { //::SireBase::Process::run
+        
             typedef ::SireBase::Process ( *run_function_type )( ::QString const &,::QStringList const & );
             run_function_type run_function_value( &::SireBase::Process::run );
             
@@ -126,6 +150,18 @@ void register_Process_class(){
                 , run_function_value
                 , ( bp::arg("command"), bp::arg("arguments") )
                 , "Run the command command with the arguments arguments, and\nreturn a Process object that can be used to query and control the\njob" );
+        
+        }
+        { //::SireBase::Process::run
+        
+            typedef ::SireBase::Process ( *run_function_type )( ::QString const &,::QStringList const &,::QString const &,::QString const & );
+            run_function_type run_function_value( &::SireBase::Process::run );
+            
+            Process_exposer.def( 
+                "run"
+                , run_function_value
+                , ( bp::arg("command"), bp::arg("arguments"), bp::arg("stdout_file"), bp::arg("stderr_file") )
+                , "Run the command command with the arguments arguments, and\nreturn a Process object that can be used to query and control the\njob. Stdout and stderr of the running process are redirected to\nthe user specified files." );
         
         }
         { //::SireBase::Process::typeName
