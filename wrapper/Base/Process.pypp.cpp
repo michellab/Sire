@@ -19,7 +19,7 @@ void register_Process_class(){
 
     { //::SireBase::Process
         typedef bp::class_< SireBase::Process > Process_exposer_t;
-        Process_exposer_t Process_exposer = Process_exposer_t( "Process", "This class provides a means to run an external process\n(executable). This provides the equivalent of\nstd::system, but with added error handling and\nsignal handling (which ensures that any child processes\nare killed when Sire exits)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
+        Process_exposer_t Process_exposer = Process_exposer_t( "Process", "This class provides a means to run an external process\n(executable). This provides the equivalent of\nstd::system, but with added error handling and\nsignal handling (which ensures that any child processes\nare killed when Sire exits)\n\nAuthor: Christopher Woods, Lester Hedges\n", bp::init< >("Null constructor") );
         bp::scope Process_scope( Process_exposer );
         Process_exposer.def( bp::init< SireBase::Process const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::Process::hasFinished
