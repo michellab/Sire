@@ -575,31 +575,29 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
                 bound_protein_intra_group.add(protein_mol)
                 bound_leg.add(protein_mol)
 
-                mobile_protein = None                
+                mobile_protein = []                
 
-                try:
-                    mobile_protein = protein_sidechains[molnum]
-                    mobile_bound_protein_sidechains_group.add( mobile_protein )
-                except:
-                    pass
+                if protein_sidechains.contains(molnum):
+                    sidechains = protein_sidechains[molnum]
+                    for sidechain in sidechains:
+                        mobile_bound_protein_sidechains_group.add( sidechain )
 
-                try:
-                    if mobile_protein is None:
-                        mobile_protein = protein_backbones[molnum]
-                        mobile_bound_protein_backbones_group.add( mobile_protein )
-                    else:
-                        mobile_protein.add( protein_backbones[molnum].selection() )
-                        mobile_bound_protein_backbones_group.add( protein_backbones[molnum] )
-                except:
-                    pass
+                    mobile_protein += sidechains
 
-                if not (mobile_protein is None):
+                if protein_backbones.contains(molnum):
+                    backbones = protein_backbones[molnum]
+                    for backbone in backbones:
+                        mobile_bound_protein_backbones_group.add( backbone )
+
+                    mobile_protein += backbones
+
+                if len(mobile_protein) > 0:
                     mobile_bound_proteins_group.add( Molecule.join(mobile_protein) )
 
             else:
                 # only some of the atoms have been selected. We will extract
                 # the mobile atoms and will then update all of the other selections
-                print("Extracting the mobile atoms of protein %s" % protein_mol)
+                print("Extracting the mobile atoms of protein %s" % protein_mol.molecule())
                 new_protein_mol = protein_mol.extract()
                 print("Extracted %d mobile atoms from %d total atoms..." % \
                                         (new_protein_mol.nAtoms(), protein_mol.molecule().nAtoms()))
@@ -610,14 +608,14 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
                 mobile_protein_view = new_protein_mol.selection()
                 mobile_protein_view = mobile_protein_view.selectNone()
 
-                try:
+                if protein_sidechains.contains(molnum):
                     sidechains = protein_sidechains[molnum]
 
-                    for i in range(0,sidechains.nViews()):
+                    for sidechain in sidechains:
                         view = new_protein_mol.selection()
                         view = view.selectNone()
 
-                        for atomid in sidechains.viewAt(i).selectedAtoms():
+                        for atomid in sidechain.selection().selectedAtoms():
                             atom = protein_mol.atom(atomid)
                             resatomid = ResAtomID( atom.residue().number(), atom.name() )
                             view = view.select( resatomid )
@@ -625,17 +623,15 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
                         if view.nSelected() > 0:
                             mobile_bound_protein_sidechains_group.add( PartialMolecule(new_protein_mol, view) )
-                except:
-                    pass
 
-                try:
+                if protein_backbones.contains(molnum):
                     backbones = protein_backbones[molnum]
 
-                    for i in range(0,backbones.nViews()):
+                    for backbone in backbones:
                         view = new_protein_mol.selection()
                         view = view.selectNone()
 
-                        for atomid in backbones.viewAt(i).selectedAtoms():
+                        for atomid in backbone.selection().selectedAtoms():
                             atom = protein_mol.atom(atomid)
                             resatomid = ResAtomID( atom.residue().number(), atom.name() )
                             view = view.select( resatomid )
@@ -643,8 +639,9 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
                         if view.nSelected() > 0:
                             mobile_bound_protein_backbones_group.add( PartialMolecule(new_protein_mol, view) )
-                except:
-                    pass
+
+                print("Number of moved protein sidechain residues = %s" % mobile_bound_protein_sidechains_group.nViews())
+                print("Number of moved protein backbone residues = %s" % mobile_bound_protein_backbones_group.nViews())
 
                 if mobile_protein_view.nSelected() > 0:
                     mobile_bound_proteins_group.add( PartialMolecule(new_protein_mol, mobile_protein_view) )
