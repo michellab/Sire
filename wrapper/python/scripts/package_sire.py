@@ -1,6 +1,8 @@
 
 from Sire.Base import *
 
+import Sire
+
 import shutil
 import sys
 import time
