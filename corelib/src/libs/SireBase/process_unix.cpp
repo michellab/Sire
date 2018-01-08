@@ -256,6 +256,52 @@ public:
     }
 };
 
+/** Test the process to see if it's still running. If it has just finished, clean up
+    and set appropriate flags. WARNING: You must hold datamutex while calling this
+    function. */
+void Process::testWait()
+{
+    if (not d->is_running)
+        return;
+
+    int child_exit_status;
+    int status;
+
+    status = waitpid(d->pid, &child_exit_status, WNOHANG);
+
+    if (status == 0)
+        return;
+
+    if (status == -1)
+    {
+        qDebug() << "waitpid exited with status -1!" << strerror(errno);
+
+        d->is_running = false;
+        d->pid = 0;
+        return;
+    }
+    else if (status != d->pid)
+    {
+        qDebug() << "waitpid exited with the wrong PID (" << status
+                    << "vs." << d->pid << ")" << strerror(errno);
+
+        d->is_running = false;
+        d->pid = 0;
+        return;
+    }
+
+    if ( processRunning(child_exit_status) )
+    {
+        return;
+    }
+    else
+    {
+        //the job has finished - process the finished job
+        this->cleanUpJob(status, child_exit_status);
+        return;
+    }
+}
+
 /** Wait until the process has finished, or until 'ms' milliseconds have passed.
     This returns whether or not the process has finished */
 bool Process::wait(int ms)
@@ -280,40 +326,16 @@ bool Process::wait(int ms)
 
         try
         {
-            int child_exit_status;
-            int status;
-
             while (t.elapsed() < ms)
             {
-                status = waitpid(d->pid, &child_exit_status, WNOHANG);
+                testWait();
 
-                if (status == 0)
+                if (d->is_running)
                 {
-                    Sleeper::msleep(25);
-                    continue;
-                }
-                else if (status == -1)
-                {
-                    qDebug() << "waitpid exited with status -1!" << strerror(errno);
-                    return true;
-                }
-                else if (status != d->pid)
-                {
-                    qDebug() << "waitpid exited with the wrong PID (" << status
-                             << "vs." << d->pid << ")" << strerror(errno);
-                    return true;
-                }
-
-                if ( processRunning(child_exit_status) )
-                {
-                    //the job is still running - wait then
-                    //try again
                     Sleeper::msleep(25);
                 }
                 else
                 {
-                    //the job has finished - process the finished job
-                    this->cleanUpJob(status, child_exit_status);
                     d->datamutex.unlock();
                     return true;
                 }
@@ -324,13 +346,15 @@ bool Process::wait(int ms)
         }
         catch(...)
         {
+            bool is_running = d->is_running;
             d->datamutex.unlock();
-            return true;
+            return is_running;
         }
     }
     else
         return false;
 }
+
 /** Run the command 'command' with the arguments 'arguments', and
     return a Process object that can be used to query and control the
     job */
@@ -482,9 +506,16 @@ void Process::kill()
     //kill the job
     if (d->is_running)
     {
-        qDebug() << "Killing job " << d->command.toUtf8().constData()
-                 << d->arguments.join(" ").toUtf8().constData();
-        killpg(d->pid, SIGKILL);
+        testWait();
+
+        if (d->is_running)
+        {
+            qDebug() << "Killing job " << d->command.toUtf8().constData()
+                    << d->arguments.join(" ").toUtf8().constData();
+            killpg(d->pid, SIGKILL);
+        }
+        else
+            return;
     }
 
     //now wait for it to finish
@@ -494,6 +525,12 @@ void Process::kill()
         qDebug() << "...job still not dead. You may want to check it "
                  << "is not still running.";
     }
+
+    QMutexLocker lkr(&d->datamutex);
+
+    d->is_running = false;
+    d->was_killed = true;
+    d->pid = 0;
 }
 
 /** Use this function to kill all of the jobs that are currently running */
@@ -523,6 +560,7 @@ bool Process::isRunning()
         return false;
 
     QMutexLocker lkr( &(d->datamutex) );
+    testWait();
     return d->is_running;
 }
 
@@ -533,6 +571,7 @@ bool Process::hasFinished()
         return true;
 
     QMutexLocker lkr( &(d->datamutex) );
+    testWait();
     return not d->is_running;
 }
 
@@ -543,6 +582,7 @@ bool Process::isError()
         return false;
 
     QMutexLocker lkr( &(d->datamutex) );
+    testWait();
     return d->is_error;
 }
 

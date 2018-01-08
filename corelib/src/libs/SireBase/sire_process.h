@@ -51,7 +51,7 @@ class ProcessData;
     signal handling (which ensures that any child processes
     are killed when Sire exits)
 
-    @author Christopher Woods
+    @author Christopher Woods, Lester Hedges
 */
 class SIREBASE_EXPORT Process
 {
@@ -79,7 +79,7 @@ public:
     void wait();
     bool wait(int ms);
 
-    static Process run(const QString &command); 
+    static Process run(const QString &command);
     static Process run(const QString &command, const QString &stdout_file,
         const QString &stderr_file);
 
@@ -103,6 +103,8 @@ public:
 
 private:
     void cleanUpJob(int status, int child_exit_status);
+
+    void testWait();
 
     /** PIMPL pointer to the data for this process */
     boost::shared_ptr<detail::ProcessData> d;
