@@ -46,6 +46,8 @@ SireMol::Molecule __copy__(const SireMol::Molecule &other){ return SireMol::Mole
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_Molecule_class(){
 
     { //::SireMol::Molecule
@@ -449,6 +451,7 @@ void register_Molecule_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Molecule_exposer.def( "__str__", &__str__< ::SireMol::Molecule > );
         Molecule_exposer.def( "__repr__", &__str__< ::SireMol::Molecule > );
+        Molecule_exposer.def( "__len__", &__len_size< ::SireMol::Molecule > );
     }
 
 }

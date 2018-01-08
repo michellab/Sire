@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/stringmangler.h"
 
+#include "SireBase/variantproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireIO/errors.h"

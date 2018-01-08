@@ -150,13 +150,13 @@ void ViewsOfMol::setEqualTo(const Selector<T> &selection)
     
     if (nviews == 1)
     { 
-        selected_atoms = selection.at(0).selection();
+        selected_atoms = selection(0).selection();
     }
     else if (nviews > 1)
     {
         for (int i=0; i<nviews; ++i)
         {
-            views.append( selection.at(i).selection() );
+            views.append( selection(i).selection() );
         }
         
         selected_atoms = views.at(0);
@@ -316,24 +316,18 @@ int ViewsOfMol::nViews() const
         return views.count();
 }
 
-/** Return the number of views in this set */
-int ViewsOfMol::count() const
-{
-    return this->nViews();
-}
-
 /** Return the ith view in this set
 
     \throw SireError::invalid_index
 */
-PartialMolecule ViewsOfMol::operator[](int i) const
+MolViewPtr ViewsOfMol::operator[](int i) const
 {
     i = Index(i).map( this->nViews() );
     
     if ( i == 0 and views.isEmpty() )
-        return PartialMolecule(*d, selected_atoms);
+        return PartialMolecule(*d, selected_atoms).toUnit();
     else
-        return PartialMolecule(*d, views.at(i));
+        return PartialMolecule(*d, views.at(i)).toUnit();
 }
 
 /** Return the name of the molecule being viewed */
@@ -363,15 +357,6 @@ quint64 ViewsOfMol::version(const PropertyName &key) const
     return d->version(key);
 }
 
-/** Return the ith view in this set
-
-    \throw SireError::invalid_index
-*/
-PartialMolecule ViewsOfMol::at(int i) const
-{
-    return this->operator[](i);
-}
-
 /** Synonym for ViewsOfMol::selection(i)
 
     \throw SireError::invalid_index
@@ -379,6 +364,11 @@ PartialMolecule ViewsOfMol::at(int i) const
 const AtomSelection& ViewsOfMol::viewAt(int i) const
 {
     return this->selection(i);
+}
+
+PartialMolecule ViewsOfMol::valueAt(int i) const
+{
+    return PartialMolecule(*this, this->viewAt(i));
 }
 
 /** Add the view 'view' to this set - this adds the 

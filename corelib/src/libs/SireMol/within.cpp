@@ -229,7 +229,7 @@ QList<AtomIdx> Within::map(const MoleculeView &molview, const PropertyMap &map) 
         
         for (int i=0; i<atoms.count(); ++i)
         {
-            points.append( coords[atoms[i].cgAtomIdx()] );
+            points.append( coords[atoms(i).cgAtomIdx()] );
         }
         
         if (molview.selectedAll())

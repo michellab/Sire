@@ -360,7 +360,7 @@ def createLSRCMoves(system):
             scale_moves = 10
 
             # get the amount to translate and rotate from the ligand's flexibility object
-            flex = mobile_ligand.moleculeAt(0).molecule().property("flexibility")
+            flex = mobile_ligand.moleculeAt(0)[0].molecule().property("flexibility")
 
             if use_rot_trans_ligand.val:
                 if (flex.translation().value() != 0 or flex.rotation().value() != 0):
@@ -476,7 +476,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             mols = water_system[MGName("mobile_solvents")].molecules()
             for molnum in mols.molNums():
                 # only add this water if it doesn't overlap with ligand1
-                water_mol = mols[molnum].molecule().edit().renumber().commit()
+                water_mol = mols[molnum][0].molecule().edit().renumber().commit()
 
                 if getMinimumDistance(ligand_mol1,water_mol) > 1.5:
                     for j in range(0,water_mol.nResidues()):
@@ -493,7 +493,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         if MGName("fixed_molecules") in water_system.mgNames():
             mols = water_system[MGName("fixed_molecules")].molecules()
             for molnum in mols.molNums():
-                fixed_free_water_group.add( mols[molnum].molecule().edit().renumber().commit() )
+                fixed_free_water_group.add( mols[molnum][0].molecule().edit().renumber().commit() )
 
     # create a group to hold all of the fixed molecules in the bound leg
     fixed_bound_group = MoleculeGroup("fixed_bound")
@@ -515,7 +515,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     if MGName("mobile_solvents") in protein_system.mgNames():
         mols = protein_system[MGName("mobile_solvents")]
         for molnum in mols.molNums():
-            solvent_mol = mols[molnum].molecule()
+            solvent_mol = mols[molnum][0].molecule()
 
             try:
                 # this is a water molecule if we can swap the coordinates with the 
@@ -569,37 +569,35 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             boundary_molecules = MoleculeGroup()
 
         for molnum in all_proteins.molNums():
-            protein_mol = all_proteins[molnum].join()
+            protein_mol = Molecule.join(all_proteins[molnum])
             
             if protein_mol.selectedAll():
                 bound_protein_intra_group.add(protein_mol)
                 bound_leg.add(protein_mol)
 
-                mobile_protein = None                
+                mobile_protein = []                
 
-                try:
-                    mobile_protein = protein_sidechains[molnum]
-                    mobile_bound_protein_sidechains_group.add( mobile_protein )
-                except:
-                    pass
+                if protein_sidechains.contains(molnum):
+                    sidechains = protein_sidechains[molnum]
+                    for sidechain in sidechains:
+                        mobile_bound_protein_sidechains_group.add( sidechain )
 
-                try:
-                    if mobile_protein is None:
-                        mobile_protein = protein_backbones[molnum]
-                        mobile_bound_protein_backbones_group.add( mobile_protein )
-                    else:
-                        mobile_protein.add( protein_backbones[molnum].selection() )
-                        mobile_bound_protein_backbones_group.add( protein_backbones[molnum] )
-                except:
-                    pass
+                    mobile_protein += sidechains
 
-                if not (mobile_protein is None):
-                    mobile_bound_proteins_group.add( mobile_protein.join() )
+                if protein_backbones.contains(molnum):
+                    backbones = protein_backbones[molnum]
+                    for backbone in backbones:
+                        mobile_bound_protein_backbones_group.add( backbone )
+
+                    mobile_protein += backbones
+
+                if len(mobile_protein) > 0:
+                    mobile_bound_proteins_group.add( Molecule.join(mobile_protein) )
 
             else:
                 # only some of the atoms have been selected. We will extract
                 # the mobile atoms and will then update all of the other selections
-                print("Extracting the mobile atoms of protein %s" % protein_mol)
+                print("Extracting the mobile atoms of protein %s" % protein_mol.molecule())
                 new_protein_mol = protein_mol.extract()
                 print("Extracted %d mobile atoms from %d total atoms..." % \
                                         (new_protein_mol.nAtoms(), protein_mol.molecule().nAtoms()))
@@ -610,14 +608,14 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
                 mobile_protein_view = new_protein_mol.selection()
                 mobile_protein_view = mobile_protein_view.selectNone()
 
-                try:
+                if protein_sidechains.contains(molnum):
                     sidechains = protein_sidechains[molnum]
 
-                    for i in range(0,sidechains.nViews()):
+                    for sidechain in sidechains:
                         view = new_protein_mol.selection()
                         view = view.selectNone()
 
-                        for atomid in sidechains.viewAt(i).selectedAtoms():
+                        for atomid in sidechain.selection().selectedAtoms():
                             atom = protein_mol.atom(atomid)
                             resatomid = ResAtomID( atom.residue().number(), atom.name() )
                             view = view.select( resatomid )
@@ -625,17 +623,15 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
                         if view.nSelected() > 0:
                             mobile_bound_protein_sidechains_group.add( PartialMolecule(new_protein_mol, view) )
-                except:
-                    pass
 
-                try:
+                if protein_backbones.contains(molnum):
                     backbones = protein_backbones[molnum]
 
-                    for i in range(0,backbones.nViews()):
+                    for backbone in backbones:
                         view = new_protein_mol.selection()
                         view = view.selectNone()
 
-                        for atomid in backbones.viewAt(i).selectedAtoms():
+                        for atomid in backbone.selection().selectedAtoms():
                             atom = protein_mol.atom(atomid)
                             resatomid = ResAtomID( atom.residue().number(), atom.name() )
                             view = view.select( resatomid )
@@ -643,8 +639,9 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
                         if view.nSelected() > 0:
                             mobile_bound_protein_backbones_group.add( PartialMolecule(new_protein_mol, view) )
-                except:
-                    pass
+
+                print("Number of moved protein sidechain residues = %s" % mobile_bound_protein_sidechains_group.nViews())
+                print("Number of moved protein backbone residues = %s" % mobile_bound_protein_backbones_group.nViews())
 
                 if mobile_protein_view.nSelected() > 0:
                     mobile_bound_proteins_group.add( PartialMolecule(new_protein_mol, mobile_protein_view) )
@@ -956,7 +953,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             protein_intraff = InternalFF("bound:protein_intra")
 
             for molnum in bound_protein_intra_mols.molNums():
-                protein_mol = bound_protein_intra_mols[molnum].join()
+                protein_mol = Molecule.join(bound_protein_intra_mols[molnum])
                 protein_intraclj.add(protein_mol)
                 protein_intraff.add(protein_mol)
 
@@ -969,7 +966,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             protein_intraff.setUse14Calculation(True)
 
             for molnum in bound_protein_intra_mols.molNums():
-                protein_mol = bound_protein_intra_mols[molnum].join()
+                protein_mol = Molecule.join(bound_protein_intra_mols[molnum])
                 protein_intraclj.add(protein_mol)
                 protein_intraff.add(protein_mol)
 
@@ -985,7 +982,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             solute_intraff = InternalFF("bound:solute_intra")
 
             for molnum in bound_solute_intra_mols.molNums():
-                solute_mol = bound_solute_intra_mols[molnum].join()
+                solute_mol = Molecule.join(bound_solute_intra_mols[molnum])
                 solute_intraclj.add(solute_mol)
                 solute_intraff.add(solute_mol)
 
@@ -998,7 +995,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
             solute_intraff.setUse14Calculation(True)
 
             for molnum in bound_solute_intra_mols.molNums():
-                solute_mol = bound_solute_intra_mols[molnum].join()
+                solute_mol = Molecule.join(bound_solute_intra_mols[molnum])
                 solute_intraclj.add(solute_mol)
                 solute_intraff.add(solute_mol)
 
@@ -1586,14 +1583,14 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         dist = water_monitor_distance.val.to(angstrom)
 
         for molnum in mobile_bound_water_group.molNums():
-            water_mol = mobile_bound_water_group[molnum].molecule()
+            water_mol = mobile_bound_water_group[molnum][0].molecule()
             if getMinimumDistance(ligand_mol0,water_mol) < dist:
                 # we should monitor this water
                 boundwater_points.append( VectorPoint(water_mol.evaluate().center()) )
     
         for molnum in mobile_free_water_group.molNums():
             #this is a mobile water, so a candidate for monitoring
-            water_mol = mobile_free_water_group[molnum].molecule()
+            water_mol = mobile_free_water_group[molnum][0].molecule()
             if getMinimumDistance(ligand_mol0,water_mol) < dist:
                 # we should monitor this water
                 freewater_points.append( VectorPoint(water_mol.evaluate().center()) )
@@ -1796,7 +1793,7 @@ def loadSystem(topfile, crdfile, s3file, ligand_name):
 
         # Center the system with the ligand at (0,0,0)
         system = centerSystem(system, ligand_mol)
-        ligand_mol = system[ligand_mol.number()].molecule()
+        ligand_mol = system[ligand_mol.number()][0].molecule()
 
         system = addFlexibility(system, Vector(0,0,0), reflection_radius.val, scheme )
         Sire.Stream.save(system, s3file)

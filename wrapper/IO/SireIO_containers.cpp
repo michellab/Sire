@@ -41,6 +41,7 @@
 #include "Base/convertpackedarray.hpp"
 
 #include "SireIO/moleculeparser.h"
+#include "SireIO/grotop.h"
 
 using namespace SireIO;
 
@@ -49,4 +50,7 @@ using boost::python::register_tuple;
 void register_SireIO_containers()
 {
     register_list< QList<MoleculeParserPtr> >();
+
+    register_list< QVector<GroMolType> >();
+    register_list< QVector<GroAtom> >();
 }

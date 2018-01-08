@@ -72,23 +72,41 @@ CGID::CGID(const CGID &other) : ID(other)
 /** Destructor */
 CGID::~CGID()
 {}
-  
-/** Return a specific atom that matches this ID */
-Specify<CGID> CGID::operator[](int i) const
+
+/** Return a specific object that matches this ID */
+Specify<CGID> CGID::operator[](qint64 i) const
 {
     return Specify<CGID>(*this, i);
 }
 
-/** Return a specific atom that matches this ID */
-Specify<CGID> CGID::operator()(int i) const
+/** Return a range of objects that match this ID */
+Specify<CGID> CGID::operator[](const SireBase::Range &range) const
+{
+    return Specify<CGID>(*this, range);
+}
+
+/** Return a range of objects that match this ID */
+Specify<CGID> CGID::operator()(const SireBase::Range &range) const
+{
+    return Specify<CGID>(*this, range);
+}
+
+/** Return a specific object that matches this ID */
+Specify<CGID> CGID::operator()(qint64 i) const
 {
     return this->operator[](i);
 }
 
-/** Return a range of atoms that match this ID */
-Specify<CGID> CGID::operator()(int i, int j) const
+/** Return a range of objects that match this ID */
+Specify<CGID> CGID::operator()(qint64 start, qint64 end) const
 {
-    return Specify<CGID>(*this, i, j);
+    return Specify<CGID>(*this, start, end);
+}
+
+/** Return a range of objects that match this ID */
+Specify<CGID> CGID::operator()(qint64 start, qint64 end, qint64 increment) const
+{
+    return Specify<CGID>(*this, start, end, increment);
 }
 
 /** Combine with another ID */
@@ -197,6 +215,90 @@ IDOrSet<CGID> CGID::operator||(const CGID &other) const
 IDOrSet<CGID> CGID::operator|(const CGID &other) const
 {
     return this->operator*(other);
+}
+
+/** Return the combination of this ID or 'other' */
+IDOrSet<AtomID> CGID::operator*(const AtomID &other) const
+{
+    return other * *this;
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> CGID::operator||(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> CGID::operator|(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the combination of this with not other */
+IDAndSet<CGID> CGID::operator-(const CGID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the combination of this with not other */
+GroupAtomID<CGID,AtomID> CGID::operator-(const AtomID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the combination of this with not other */
+GroupGroupID<SegID,CGID> CGID::operator-(const SegID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the combination of this with not other */
+GroupGroupID<CGID,ChainID> CGID::operator-(const ChainID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the combination of this with not other */
+GroupGroupID<CGID,ResID> CGID::operator-(const ResID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return not this */
+SireID::InvertMatch<CGID> CGID::operator-() const
+{
+    return InvertMatch<CGID>(*this);
+}
+
+/** Return a match for any cutgroup */
+MatchAll<CGID> CGID::any()
+{
+    return MatchAll<CGID>();
+}
+
+/** Return the inverse of this match */
+InvertMatch<CGID> CGID::invert() const
+{
+    return InvertMatch<CGID>(*this);
+}
+
+/** Return the inverse of this match */
+InvertMatch<CGID> CGID::inverse() const
+{
+    return this->invert();
+}
+
+/** Return the inverse of this match */
+InvertMatch<CGID> CGID::operator!() const
+{
+    return this->invert();
+}
+
+/** Return all of the matching objects */
+QList<CGIdx> CGID::matchAll(const MolInfo &molinfo)
+{
+    return molinfo.getCutGroups();
 }
 
 /** Return the atoms in the matching residues */
@@ -354,7 +456,7 @@ CutGroup CGID::selectFrom(const Molecules &molecules, const PropertyMap &map) co
                 .arg(atoms.data().number()).arg(this->toString()),
                     CODELOC );
                     
-    return atoms[0];
+    return atoms(0);
 }
 
 /** Return the atom from the molecule group 'molgroup' that matches

@@ -32,6 +32,7 @@
 
 using namespace SireMM;
 using namespace SireMol;
+using namespace SireID;
 using namespace SireBase;
 using namespace SireStream;
 
@@ -493,6 +494,107 @@ bool CLJNBPairs::operator==(const CLJNBPairs &other) const
 bool CLJNBPairs::operator!=(const CLJNBPairs &other) const
 {
     return AtomPairs<CLJScaleFactor>::operator!=(other);
+}
+
+/** Return the excluded atoms for the atom matching ID 'atomid'. This
+    returns all of the atoms for which the interaction with atomid is
+    equal to zero */
+QVector<AtomIdx> CLJNBPairs::excludedAtoms(const AtomID &atomid) const
+{
+    const auto molinfo = info();
+
+    auto const cgatomidx = molinfo.cgAtomIdx(atomid);
+
+    QVector<AtomIdx> excluded_atoms;
+    
+    //loop through all of the CGAtomPairs
+    for (int i=0; i<molinfo.nCutGroups(); ++i)
+    {
+        const auto cgpairs = this->get( cgatomidx.cutGroup(), CGIdx(i) );
+        
+        if (cgpairs.isEmpty())
+        {
+            //all of the pairs have the same value
+            const auto cljscl = cgpairs.defaultValue();
+            
+            if (cljscl.coulomb() == 0 and cljscl.lj() == 0)
+            {
+                //all of the pairs are excluded!
+                for (int j=0; j<molinfo.nAtoms( CGIdx(i) ); ++j)
+                {
+                    excluded_atoms.append( molinfo.atomIdx( CGAtomIdx( CGIdx(i), Index(j) ) ) );
+                }
+            }
+        }
+        else
+        {
+            //the pairs have different values, so add these in
+            for (int j=0; j<molinfo.nAtoms( CGIdx(i) ); ++j)
+            {
+                const auto cljscl = cgpairs.get(cgatomidx.atom().value(), j);
+                
+                if (cljscl.coulomb() == 0 and cljscl.lj() == 0)
+                {
+                    //this pair is excluded
+                    excluded_atoms.append( molinfo.atomIdx( CGAtomIdx( CGIdx(i), Index(j) ) ) );
+                }
+            }
+        }
+    }
+    
+    //don't include the atom excluded from itself
+    int idx = excluded_atoms.indexOf( molinfo.atomIdx(atomid) );
+    
+    if (idx >= 0)
+        excluded_atoms.remove(idx);
+    
+    return excluded_atoms;
+}
+
+/** Return the number of excluded atoms for the atom matching ID 'atomid'.
+    This returns the number of atoms that do not interact with this atom
+    using a non-bonded potential */
+int CLJNBPairs::nExcludedAtoms(const AtomID &atomid) const
+{
+    const auto molinfo = info();
+
+    auto const cgatomidx = molinfo.cgAtomIdx(atomid);
+
+    int nexcluded = 0;
+    
+    //loop through all of the CGAtomPairs
+    for (int i=0; i<molinfo.nCutGroups(); ++i)
+    {
+        const auto cgpairs = this->get( cgatomidx.cutGroup(), CGIdx(i) );
+        
+        if (cgpairs.isEmpty())
+        {
+            //all of the pairs have the same value
+            const auto cljscl = cgpairs.defaultValue();
+            
+            if (cljscl.coulomb() == 0 and cljscl.lj() == 0)
+            {
+                nexcluded += molinfo.nAtoms( CGIdx(i) );
+            }
+        }
+        else
+        {
+            //the pairs have different values, so add these in
+            for (int j=0; j<molinfo.nAtoms( CGIdx(i) ); ++j)
+            {
+                const auto cljscl = cgpairs.get(cgatomidx.atom().value(), j);
+                
+                if (cljscl.coulomb() == 0 and cljscl.lj() == 0)
+                {
+                    //this pair is excluded
+                   nexcluded += 1;
+                }
+            }
+        }
+    }
+    
+    //don't count the atom excluded with itself
+    return nexcluded - 1;
 }
 
 const char* CoulombScaleFactor::typeName()

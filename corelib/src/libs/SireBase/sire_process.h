@@ -46,55 +46,65 @@ class ProcessData;
 }
 
 /** This class provides a means to run an external process
-    (executable). This provides the equivalent of 
-    std::system, but with added error handling and 
+    (executable). This provides the equivalent of
+    std::system, but with added error handling and
     signal handling (which ensures that any child processes
     are killed when Sire exits)
-    
-    @author Christopher Woods
+
+    @author Christopher Woods, Lester Hedges
 */
 class SIREBASE_EXPORT Process
 {
 public:
     Process();
     Process(const Process &other);
-    
+
     ~Process();
 
     Process& operator=(const Process &other);
-    
+
     bool operator==(const Process &other) const;
     bool operator!=(const Process &other) const;
-    
+
     static const char* typeName()
     {
         return "SireBase::Process";
     }
-    
+
     const char* what() const
     {
         return Process::typeName();
     }
-    
+
     void wait();
     bool wait(int ms);
-    
+
     static Process run(const QString &command);
-    static Process run(const QString &command, const QString &arg);
-    static Process run(const QString &command, const QStringList &arguments);
-    
+    static Process run(const QString &command, const QString &stdout_file,
+        const QString &stderr_file);
+
+    static Process run(const QString &command, const QString& arg);
+    static Process run(const QString &command, const QString& arg,
+        const QString &stdout_file, const QString &stderr_file);
+
+    static Process run(const QString &command, const QStringList& arguments);
+    static Process run(const QString &command, const QStringList& arguments,
+        const QString &stdout_file, const QString &stderr_file);
+
     static void killAll();
-    
+
     bool isRunning();
     bool hasFinished();
-    
+
     bool isError();
     bool wasKilled();
-    
+
     void kill();
 
 private:
     void cleanUpJob(int status, int child_exit_status);
+
+    void testWait();
 
     /** PIMPL pointer to the data for this process */
     boost::shared_ptr<detail::ProcessData> d;

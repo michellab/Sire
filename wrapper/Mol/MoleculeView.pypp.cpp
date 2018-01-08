@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "MoleculeView.pypp.hpp"
 
 namespace bp = boost::python;
@@ -42,6 +43,8 @@ namespace bp = boost::python;
 #include "Qt/qdatastream.hpp"
 
 #include "Helpers/str.hpp"
+
+#include "Helpers/len.hpp"
 
 void register_MoleculeView_class(){
 
@@ -119,6 +122,90 @@ void register_MoleculeView_class(){
                 , assertSameMolecule_function_value
                 , ( bp::arg("other") )
                 , "Assert that this view is looking at the molecule whose data is\nin other (albeit perhaps a different version of that molecule)\nThrow: SireError::incompatible_error\n" );
+        
+        }
+        { //::SireMol::MoleculeView::at
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::MoleculeView::at );
+            
+            MoleculeView_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::at
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*at_function_type)( ::SireMol::AtomID const & ) const;
+            at_function_type at_function_value( &::SireMol::MoleculeView::at );
+            
+            MoleculeView_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("atomid") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::at
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*at_function_type)( ::SireMol::ResID const & ) const;
+            at_function_type at_function_value( &::SireMol::MoleculeView::at );
+            
+            MoleculeView_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("resid") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::at
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*at_function_type)( ::SireMol::CGID const & ) const;
+            at_function_type at_function_value( &::SireMol::MoleculeView::at );
+            
+            MoleculeView_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("cgid") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::at
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*at_function_type)( ::SireMol::ChainID const & ) const;
+            at_function_type at_function_value( &::SireMol::MoleculeView::at );
+            
+            MoleculeView_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("chainid") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::at
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*at_function_type)( ::SireMol::SegID const & ) const;
+            at_function_type at_function_value( &::SireMol::MoleculeView::at );
+            
+            MoleculeView_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("segid") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::at
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*at_function_type)( ::SireID::Index const & ) const;
+            at_function_type at_function_value( &::SireMol::MoleculeView::at );
+            
+            MoleculeView_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("idx") )
+                , "" );
         
         }
         { //::SireMol::MoleculeView::atom
@@ -223,6 +310,17 @@ void register_MoleculeView_class(){
                 , constData_function_value
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the MoleculeData that contains all of the information\nabout the molecule which this view is showing" );
+        
+        }
+        { //::SireMol::MoleculeView::count
+        
+            typedef int ( ::SireMol::MoleculeView::*count_function_type)(  ) const;
+            count_function_type count_function_value( &::SireMol::MoleculeView::count );
+            
+            MoleculeView_exposer.def( 
+                "count"
+                , count_function_value
+                , "Return the number of sub-views in this view. Most MoleculeViews are\njust a single view, but some (e.g. ViewsOfMol or Selector<T>) have\nmultiple views" );
         
         }
         { //::SireMol::MoleculeView::cutGroup
@@ -365,6 +463,17 @@ void register_MoleculeView_class(){
                 , "Return whether or not this view is of the same molecule as other\n(albeit perhaps a different version of the molecule)" );
         
         }
+        { //::SireMol::MoleculeView::keys
+        
+            typedef ::QStringList ( ::SireMol::MoleculeView::*keys_function_type)(  ) const;
+            keys_function_type keys_function_value( &::SireMol::MoleculeView::keys );
+            
+            MoleculeView_exposer.def( 
+                "keys"
+                , keys_function_value
+                , "Synonym for MoleculeView::propertyKeys" );
+        
+        }
         { //::SireMol::MoleculeView::metadataKeys
         
             typedef ::QStringList ( ::SireMol::MoleculeView::*metadataKeys_function_type)(  ) const;
@@ -421,6 +530,113 @@ void register_MoleculeView_class(){
                 "molecule"
                 , molecule_function_value
                 , "Return the molecule involved with this view" );
+        
+        }
+        { //::SireMol::MoleculeView::nViews
+        
+            typedef int ( ::SireMol::MoleculeView::*nViews_function_type)(  ) const;
+            nViews_function_type nViews_function_value( &::SireMol::MoleculeView::nViews );
+            
+            MoleculeView_exposer.def( 
+                "nViews"
+                , nViews_function_value
+                , "Return the number of sub-views in this view. Most MoleculeViews are\njust a single view, but some (e.g. ViewsOfMol or Selector<T>) have\nmultiple views" );
+        
+        }
+        { //::SireMol::MoleculeView::null
+        
+            typedef ::SireMol::MoleculeView const & ( *null_function_type )(  );
+            null_function_type null_function_value( &::SireMol::MoleculeView::null );
+            
+            MoleculeView_exposer.def( 
+                "null"
+                , null_function_value
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return a completely null molecule" );
+        
+        }
+        { //::SireMol::MoleculeView::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::MoleculeView::operator[] );
+            
+            MoleculeView_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*__getitem___function_type)( ::SireMol::AtomID const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::MoleculeView::operator[] );
+            
+            MoleculeView_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("atomid") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*__getitem___function_type)( ::SireMol::ResID const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::MoleculeView::operator[] );
+            
+            MoleculeView_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("resid") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*__getitem___function_type)( ::SireMol::CGID const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::MoleculeView::operator[] );
+            
+            MoleculeView_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("cgid") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*__getitem___function_type)( ::SireMol::ChainID const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::MoleculeView::operator[] );
+            
+            MoleculeView_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("chainid") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*__getitem___function_type)( ::SireMol::SegID const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::MoleculeView::operator[] );
+            
+            MoleculeView_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("segid") )
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*__getitem___function_type)( ::SireID::Index const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::MoleculeView::operator[] );
+            
+            MoleculeView_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idx") )
+                , "" );
         
         }
         { //::SireMol::MoleculeView::propertyKeys
@@ -746,6 +962,17 @@ void register_MoleculeView_class(){
                 , "Return the atoms that are selected as part of this view" );
         
         }
+        { //::SireMol::MoleculeView::size
+        
+            typedef int ( ::SireMol::MoleculeView::*size_function_type)(  ) const;
+            size_function_type size_function_value( &::SireMol::MoleculeView::size );
+            
+            MoleculeView_exposer.def( 
+                "size"
+                , size_function_value
+                , "Return the number of sub-views in this view. Most MoleculeViews are\njust a single view, but some (e.g. ViewsOfMol or Selector<T>) have\nmultiple views" );
+        
+        }
         { //::SireMol::MoleculeView::toString
         
             typedef ::QString ( ::SireMol::MoleculeView::*toString_function_type)(  ) const;
@@ -780,6 +1007,7 @@ void register_MoleculeView_class(){
                 , "Update this view with a new version of the molecule. You\ncan only update the molecule if it has the same layout UID\n(so same atoms, residues, cutgroups etc.)\nThrow: SireError::incompatible_error\n" );
         
         }
+        MoleculeView_exposer.staticmethod( "null" );
         MoleculeView_exposer.staticmethod( "typeName" );
         MoleculeView_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMol::MoleculeView >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
@@ -787,6 +1015,7 @@ void register_MoleculeView_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MoleculeView_exposer.def( "__str__", &__str__< ::SireMol::MoleculeView > );
         MoleculeView_exposer.def( "__repr__", &__str__< ::SireMol::MoleculeView > );
+        MoleculeView_exposer.def( "__len__", &__len_size< ::SireMol::MoleculeView > );
     }
 
 }

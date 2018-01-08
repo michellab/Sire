@@ -36,6 +36,8 @@
 #include "SireID/idandset.hpp"
 #include "SireID/idorset.hpp"
 #include "SireID/specify.hpp"
+#include "SireID/invertmatch.hpp"
+#include "SireID/matchall.hpp"
 
 SIRE_BEGIN_HEADER
 
@@ -85,15 +87,26 @@ public:
 
     virtual ~CGID();
 
-    Specify<CGID> operator[](int i) const;
-    Specify<CGID> operator()(int i) const;
-    Specify<CGID> operator()(int i, int j) const;
+    Specify<CGID> operator[](qint64 i) const;
+    Specify<CGID> operator[](const SireBase::Range &range) const;
+    Specify<CGID> operator()(const SireBase::Range &range) const;
+    Specify<CGID> operator()(qint64 i) const;
+    Specify<CGID> operator()(qint64 start, qint64 end) const;
+    Specify<CGID> operator()(qint64 start, qint64 end, qint64 increment) const;
     
     IDAndSet<CGID> operator+(const CGID &other) const;
     GroupAtomID<CGID,AtomID> operator+(const AtomID &other) const;
     GroupGroupID<SegID,CGID> operator+(const SegID &other) const;
     GroupGroupID<CGID,ChainID> operator+(const ChainID &other) const;
     GroupGroupID<CGID,ResID> operator+(const ResID &other) const;
+
+    IDAndSet<CGID> operator-(const CGID &other) const;
+    GroupAtomID<CGID,AtomID> operator-(const AtomID &other) const;
+    GroupGroupID<SegID,CGID> operator-(const SegID &other) const;
+    GroupGroupID<CGID,ChainID> operator-(const ChainID &other) const;
+    GroupGroupID<CGID,ResID> operator-(const ResID &other) const;
+
+    SireID::InvertMatch<CGID> operator-() const;
 
     IDAndSet<CGID> operator&&(const CGID &other) const;
     GroupAtomID<CGID,AtomID> operator&&(const AtomID &other) const;
@@ -108,12 +121,23 @@ public:
     GroupGroupID<CGID,ResID> operator&(const ResID &other) const;
     
     IDOrSet<CGID> operator*(const CGID &other) const;
+    IDOrSet<AtomID> operator*(const AtomID &other) const;
+
     IDOrSet<CGID> operator||(const CGID &other) const;
+    IDOrSet<AtomID> operator||(const AtomID &other) const;
+
     IDOrSet<CGID> operator|(const CGID &other) const;
+    IDOrSet<AtomID> operator|(const AtomID &other) const;
+    
+    SireID::InvertMatch<CGID> operator!() const;
     
     AtomsIn<CGID> atoms() const;
     AtomsIn<CGID> atom(int i) const;
     AtomsIn<CGID> atoms(int i, int j) const;
+    
+    static SireID::MatchAll<CGID> any();
+    SireID::InvertMatch<CGID> invert() const;
+    SireID::InvertMatch<CGID> inverse() const;
     
     static const char* typeName()
     {
@@ -157,6 +181,8 @@ public:
                               const PropertyMap &map = PropertyMap()) const;
 
 protected:
+    static QList<CGIdx> matchAll(const MolInfo &molinfo);
+
     void processMatches(QList<CGIdx> &matches, const MolInfo &molinfo) const;
 
 };
@@ -170,12 +196,16 @@ SIRE_EXPOSE_ALIAS( (SireID::Specify<SireMol::CGID>), SireMol::Specify_CGID_ )
 SIRE_EXPOSE_ALIAS( (SireMol::AtomsIn<SireMol::CGID>), SireMol::AtomsIn_CGID_ )
 SIRE_EXPOSE_ALIAS( SireID::IDAndSet<SireMol::CGID>, SireMol::IDAndSet_CGID_ )
 SIRE_EXPOSE_ALIAS( SireID::IDOrSet<SireMol::CGID>, SireMol::IDOrSet_CGID_ )
+SIRE_EXPOSE_ALIAS( SireID::MatchAll<SireMol::CGID>, SireMol::MatchAll_CGID_ )
+SIRE_EXPOSE_ALIAS( SireID::InvertMatch<SireMol::CGID>, SireMol::InvertMatch_CGID_ )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireID::Specify<SireMol::CGID>;
 template class SireMol::AtomsIn<SireMol::CGID>;
 template class SireID::IDAndSet<SireMol::CGID>;
 template class SireID::IDOrSet<SireMol::CGID>;
+template class SireID::InvertMatch<SireMol::CGID>;
+template class SireID::MatchAll<SireMol::CGID>;
 #endif
 
 SIRE_END_HEADER

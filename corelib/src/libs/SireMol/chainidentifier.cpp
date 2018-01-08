@@ -353,7 +353,10 @@ uint ChainName::hash() const
 
 QString ChainName::toString() const
 {
-    return QString("ChainName('%1')").arg(_name);
+    if (case_sensitive)
+        return QString("ChainName('%1')").arg(_name);
+    else
+        return QString("ChainName('%1', isCaseSensitive=False)").arg(_name);
 }
 
 ChainName& ChainName::operator=(const ChainName &other)

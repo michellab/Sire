@@ -697,6 +697,11 @@ Expressions Sum::children() const
         exps.append( it->negate() );
     }
 
+    if (strtval != 0)
+    {
+        exps.append( Expression(strtval) );
+    }
+
     return exps;
 }
 

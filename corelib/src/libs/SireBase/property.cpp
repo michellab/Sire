@@ -29,6 +29,7 @@
 #include <QMutex>
 
 #include "property.h"
+#include "propertylist.h"
 
 #include <QDebug>
 
@@ -96,6 +97,87 @@ QString Property::toString() const
     return QString("%1()").arg( this->what() );
 }
 
+/** Return whether or not this property holds a string (or can convert
+    to a string) */
+bool Property::isAString() const
+{
+    return false;
+}
+
+/** Return whether or not this property holds a double (or can convert
+    to a double) */
+bool Property::isADouble() const
+{
+    return false;
+}
+
+/** Return whether or not this property holds an integer (or can convert
+    to an integer) */
+bool Property::isAnInteger() const
+{
+    return false;
+}
+
+/** Return whether or not this is an array property (or can convert to an 
+    array property) */
+bool Property::isAnArray() const
+{
+    return true;
+}
+
+/** Return whether or not this property holds a bool (or can convert
+    to a bool) */
+bool Property::isABoolean() const
+{
+    return false;
+}
+
+/** Return this property converted to a string. This throws an invalid
+    cast if this is not possible */
+QString Property::asAString() const
+{
+    this->throwInvalidCast("string");
+    return QString();
+}
+
+/** Return this property converted to a double. This throws an invalid
+    cast if this is not possible */
+double Property::asADouble() const
+{
+    this->throwInvalidCast("double");
+    return 0;
+}
+
+/** Return this property converted to an integer. This throws an invalid
+    cast if this is not possible */
+int Property::asAnInteger() const
+{
+    this->throwInvalidCast("integer");
+    return 0;
+}
+
+/** Return this property converted to a bool. This throws an invalid
+    cast if this is not possible */
+bool Property::asABoolean() const
+{
+    this->throwInvalidCast("boolean");
+    return false;
+}
+
+/** Return this property converted to an array property. By default, this
+    automatically puts this property into a PropertyList and returns that */
+PropertyList Property::asAnArray() const
+{
+    if (this->isA<PropertyList>())
+    {
+        return this->asA<PropertyList>();
+    }
+    else
+    {
+        return PropertyList(*this);
+    }
+}
+
 /** Throw an invalid cast!
 
     \throw SireError::invalid_cast
@@ -140,121 +222,6 @@ QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, Property&)
         throw version_error(v, "0", r_propbase, CODELOC);
 
     return ds;
-}
-
-///////////////
-/////////////// Implementation of VariantProperty
-///////////////
-
-static const RegisterMetaType<VariantProperty> r_varprop;
-
-/** Serialise to a binary data stream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const VariantProperty &varprop)
-{
-    writeHeader(ds, r_varprop, 1)
-          << static_cast<const Property&>(varprop)
-          << static_cast<const QVariant&>(varprop);
-
-    return ds;
-}
-
-/** Deserialise from a binary data stream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, VariantProperty &varprop)
-{
-    VersionID v = readHeader(ds, r_varprop);
-
-    if (v == 1)
-    {
-        ds >> static_cast<Property&>(varprop)
-           >> static_cast<QVariant&>(varprop);
-    }
-    else
-        throw version_error(v, "1", r_varprop, CODELOC);
-
-    return ds;
-}
-
-/** Null constructor */
-VariantProperty::VariantProperty()
-                : ConcreteProperty<VariantProperty,Property>(), QVariant()
-{}
-
-/** Construct a property equal to 'value' */
-VariantProperty::VariantProperty(const QVariant &value)
-                : ConcreteProperty<VariantProperty,Property>(), QVariant(value)
-{}
-
-/** Construct from a 'Property' - the property must be able to
-    be cast to a VariantProperty
-
-    \throw SireError::invalid_cast
-*/
-VariantProperty::VariantProperty(const Property &property)
-                : ConcreteProperty<VariantProperty,Property>(), QVariant()
-{
-    *this = property;
-}
-
-/** Copy constructor */
-VariantProperty::VariantProperty(const VariantProperty &other)
-                : ConcreteProperty<VariantProperty,Property>(other), QVariant(other)
-{}
-
-/** Destructor */
-VariantProperty::~VariantProperty()
-{}
-
-/** Throw an invalid cast error */
-void VariantProperty::throwInvalidCast(const QString &typname) const
-{
-    throw SireError::invalid_cast( QObject::tr(
-        "Cannot convert an object of type %1 to an object of type %2.")
-            .arg(QVariant::typeName()).arg(typname), CODELOC );
-}
-
-/** Assignment operator from a QVariant */
-VariantProperty& VariantProperty::operator=(const QVariant &other)
-{
-    QVariant::operator=(other);
-    return *this;
-}
-
-/** Assignment operator from a VariantProperty */
-VariantProperty& VariantProperty::operator=(const VariantProperty &other)
-{
-    QVariant::operator=(other);
-    Property::operator=(other);
-
-    return *this;
-}
-
-/** Comparison operator */
-bool VariantProperty::operator==(const VariantProperty &other) const
-{
-    return QVariant::operator==(other);
-}
-
-/** Comparison operator */
-bool VariantProperty::operator!=(const VariantProperty &other) const
-{
-    return QVariant::operator!=(other);
-}
-
-const char* VariantProperty::typeName()
-{
-    return QMetaType::typeName( qMetaTypeId<VariantProperty>() );
-}
-
-/** String operator */
-QString VariantProperty::toString() const
-{
-    if (this->canConvert<QString>())
-        return this->value<QString>();
-    else
-    {
-        return QString("VariantProperty( %1() )")
-                    .arg(this->typeName());
-    }
 }
 
 ///////////////
@@ -447,6 +414,66 @@ Property& PropPtrBase::write()
     return PropPtrBase::edit();
 }
 
+bool PropPtrBase::isAString() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAString();
+}
+
+bool PropPtrBase::isADouble() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isADouble();
+}
+
+bool PropPtrBase::isAnInteger() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAnInteger();
+}
+
+bool PropPtrBase::isABoolean() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isABoolean();
+}
+
+bool PropPtrBase::isAnArray() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAnArray();
+}
+
+QString PropPtrBase::asAString() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAString();
+}
+
+double PropPtrBase::asADouble() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asADouble();
+}
+
+int PropPtrBase::asAnInteger() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAnInteger();
+}
+
+bool PropPtrBase::asABoolean() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asABoolean();
+}
+
+PropertyList PropPtrBase::asAnArray() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAnArray();
+}
+
 /** Throw an error as we can't cast 'got_type' into 'want_type'
 
     \throw SireError::invalid_cast
@@ -565,6 +592,65 @@ const Property& GlobalPropPtrBase::read() const
 {
     BOOST_ASSERT( ptr.constData() != 0 );
     return *ptr;
+}
+bool GlobalPropPtrBase::isAString() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAString();
+}
+
+bool GlobalPropPtrBase::isADouble() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isADouble();
+}
+
+bool GlobalPropPtrBase::isAnInteger() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAnInteger();
+}
+
+bool GlobalPropPtrBase::isABoolean() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isABoolean();
+}
+
+bool GlobalPropPtrBase::isAnArray() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAnArray();
+}
+
+QString GlobalPropPtrBase::asAString() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAString();
+}
+
+double GlobalPropPtrBase::asADouble() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asADouble();
+}
+
+int GlobalPropPtrBase::asAnInteger() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAnInteger();
+}
+
+bool GlobalPropPtrBase::asABoolean() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asABoolean();
+}
+
+PropertyList GlobalPropPtrBase::asAnArray() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAnArray();
 }
 
 /** Throw an error as we can't cast 'got_type' into 'want_type'

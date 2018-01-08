@@ -45,6 +45,8 @@ SireMol::MolEditor __copy__(const SireMol::MolEditor &other){ return SireMol::Mo
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_MolEditor_class(){
 
     { //::SireMol::MolEditor
@@ -359,6 +361,7 @@ void register_MolEditor_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MolEditor_exposer.def( "__str__", &__str__< ::SireMol::MolEditor > );
         MolEditor_exposer.def( "__repr__", &__str__< ::SireMol::MolEditor > );
+        MolEditor_exposer.def( "__len__", &__len_size< ::SireMol::MolEditor > );
     }
 
 }

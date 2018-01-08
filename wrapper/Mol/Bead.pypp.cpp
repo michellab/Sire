@@ -108,18 +108,6 @@ void register_Bead_class(){
                 , "Assert that this bead contains the property with key key\nThrow: SireBase::missing_property\n" );
         
         }
-        { //::SireMol::Bead::at
-        
-            typedef ::SireMol::Atom ( ::SireMol::Bead::*at_function_type)( int ) const;
-            at_function_type at_function_value( &::SireMol::Bead::at );
-            
-            Bead_exposer.def( 
-                "at"
-                , at_function_value
-                , ( bp::arg("i") )
-                , "Return the ith atom in this bead\nThrow: SireError::invalid_index\n" );
-        
-        }
         { //::SireMol::Bead::atom
         
             typedef ::SireMol::Atom ( ::SireMol::Bead::*atom_function_type)( int ) const;
@@ -188,17 +176,6 @@ void register_Bead_class(){
                 , contains_function_value
                 , ( bp::arg("atomid") )
                 , "Return whether or not this bead contains the atom with ID atomid" );
-        
-        }
-        { //::SireMol::Bead::count
-        
-            typedef int ( ::SireMol::Bead::*count_function_type)(  ) const;
-            count_function_type count_function_value( &::SireMol::Bead::count );
-            
-            Bead_exposer.def( 
-                "count"
-                , count_function_value
-                , "Return the number of atoms in this bead" );
         
         }
         { //::SireMol::Bead::edit
@@ -338,6 +315,17 @@ void register_Bead_class(){
                 , "Return the number of atoms in this bead" );
         
         }
+        { //::SireMol::Bead::nViews
+        
+            typedef int ( ::SireMol::Bead::*nViews_function_type)(  ) const;
+            nViews_function_type nViews_function_value( &::SireMol::Bead::nViews );
+            
+            Bead_exposer.def( 
+                "nViews"
+                , nViews_function_value
+                , "" );
+        
+        }
         Bead_exposer.def( bp::self != bp::self );
         { //::SireMol::Bead::operator=
         
@@ -355,7 +343,7 @@ void register_Bead_class(){
         Bead_exposer.def( bp::self == bp::self );
         { //::SireMol::Bead::operator[]
         
-            typedef ::SireMol::Atom ( ::SireMol::Bead::*__getitem___function_type)( int ) const;
+            typedef ::SireMol::MolViewPtr ( ::SireMol::Bead::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::Bead::operator[] );
             
             Bead_exposer.def( 
@@ -396,17 +384,6 @@ void register_Bead_class(){
                 "selection"
                 , selection_function_value
                 , "Return the selection of atoms that are part of this bead" );
-        
-        }
-        { //::SireMol::Bead::size
-        
-            typedef int ( ::SireMol::Bead::*size_function_type)(  ) const;
-            size_function_type size_function_value( &::SireMol::Bead::size );
-            
-            Bead_exposer.def( 
-                "size"
-                , size_function_value
-                , "Return the number of atoms in this bead" );
         
         }
         { //::SireMol::Bead::toString

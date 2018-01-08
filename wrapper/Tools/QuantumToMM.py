@@ -178,7 +178,7 @@ def createQMMMMoves(system):
             scale_moves = 10
 
             # get the amount to translate and rotate from the ligand's flexibility object
-            flex = mobile_ligand.moleculeAt(0).molecule().property("flexibility")
+            flex = mobile_ligand.moleculeAt(0)[0].molecule().property("flexibility")
 
             # only move the solute if it is not the only molecule in the system
             if system.nMolecules() > 1 and (flex.translation().value() != 0 or flex.rotation().value() != 0):
@@ -449,7 +449,7 @@ def loadQMMMSystem():
 
         # Center the system with the ligand at (0,0,0)
         loadsys = centerSystem(loadsys, ligand_mol)
-        ligand_mol = loadsys[ligand_mol.number()].molecule()
+        ligand_mol = loadsys[ligand_mol.number()][0].molecule()
 
         if reflection_radius.val is None:
             loadsys = addFlexibility(loadsys, naming_scheme=sys_scheme )
@@ -525,7 +525,7 @@ def loadQMMMSystem():
     if MGName("mobile_solvents") in loadsys.mgNames():
         mols = loadsys[MGName("mobile_solvents")]
         for molnum in mols.molNums():
-            solvent_mol = mols[molnum].molecule()
+            solvent_mol = mols[molnum][0].molecule()
             mobile_solvents_group.add(solvent_mol)
 
         all_group.add(mobile_solvents_group)
@@ -565,37 +565,35 @@ def loadQMMMSystem():
             boundary_molecules = MoleculeGroup()
 
         for molnum in all_proteins.molNums():
-            protein_mol = all_proteins[molnum].join()
+            protein_mol = Molecule.join(all_proteins[molnum])
             
             if protein_mol.selectedAll():
                 protein_intra_group.add(protein_mol)
                 all_group.add(protein_mol)
 
-                mobile_protein = None                
+                mobile_protein = []
 
-                try:
-                    mobile_protein = protein_sidechains[molnum]
-                    mobile_protein_sidechains_group.add( mobile_protein )
-                except:
-                    pass
+                if protein_sidechains.contains(molnum):
+                    sidechains = protein_sidechains[molnum]
+                    for sidechain in sidechains:
+                        mobile_protein_sidechains_group.add( sidechain )
 
-                try:
-                    if mobile_protein is None:
-                        mobile_protein = protein_backbones[molnum]
-                        mobile_protein_backbones_group.add( mobile_protein )
-                    else:
-                        mobile_protein.add( protein_backbones[molnum].selection() )
-                        mobile_protein_backbones_group.add( protein_backbones[molnum] )
-                except:
-                    pass
+                    mobile_protein += sidechains
 
-                if not (mobile_protein is None):
-                    mobile_proteins_group.add( mobile_protein.join() )
+                if protein_backbones.contains(molnum):
+                    backbones = protein_backbones[molnum]
+                    for backbone in backbones:
+                        mobile_protein_backbones_group.add( backbone )
+
+                    mobile_protein += backbones
+
+                if len(mobile_protein) > 0:
+                    mobile_proteins_group.add( Molecule.join(mobile_protein) )
 
             else:
                 # only some of the atoms have been selected. We will extract
                 # the mobile atoms and will then update all of the other selections
-                print("Extracting the mobile atoms of protein %s" % protein_mol)
+                print("Extracting the mobile atoms of protein %s" % protein_mol.molecule())
                 new_protein_mol = protein_mol.extract()
                 print("Extracted %d mobile atoms from %d total atoms..." % \
                                         (new_protein_mol.nAtoms(), protein_mol.molecule().nAtoms()))
@@ -606,14 +604,14 @@ def loadQMMMSystem():
                 mobile_protein_view = new_protein_mol.selection()
                 mobile_protein_view = mobile_protein_view.selectNone()
 
-                try:
+                if protein_sidechains.contains(molnum):
                     sidechains = protein_sidechains[molnum]
 
-                    for i in range(0,sidechains.nViews()):
+                    for sidechain in sidechains:
                         view = new_protein_mol.selection()
                         view = view.selectNone()
 
-                        for atomid in sidechains.viewAt(i).selectedAtoms():
+                        for atomid in sidechain.selection().selectedAtoms():
                             atom = protein_mol.atom(atomid)
                             resatomid = ResAtomID( atom.residue().number(), atom.name() )
                             view = view.select( resatomid )
@@ -621,17 +619,15 @@ def loadQMMMSystem():
 
                         if view.nSelected() > 0:
                             mobile_protein_sidechains_group.add( PartialMolecule(new_protein_mol, view) )
-                except:
-                    pass
 
-                try:
+                if protein_backbones.contains(molnum):
                     backbones = protein_backbones[molnum]
 
-                    for i in range(0,backbones.nViews()):
+                    for backbone in backbones:
                         view = new_protein_mol.selection()
                         view = view.selectNone()
 
-                        for atomid in backbones.viewAt(i).selectedAtoms():
+                        for atomid in backbone.selection().selectedAtoms():
                             atom = protein_mol.atom(atomid)
                             resatomid = ResAtomID( atom.residue().number(), atom.name() )
                             view = view.select( resatomid )
@@ -639,8 +635,9 @@ def loadQMMMSystem():
 
                         if view.nSelected() > 0:
                             mobile_protein_backbones_group.add( PartialMolecule(new_protein_mol, view) )
-                except:
-                    pass
+
+                print("Number of moved protein sidechain residues = %s" % mobile_protein_sidechains_group.nViews())
+                print("Number of moved protein backbone residues = %s" % mobile_protein_backbones_group.nViews())
 
                 if mobile_protein_view.nSelected() > 0:
                     mobile_proteins_group.add( PartialMolecule(new_protein_mol, mobile_protein_view) )
@@ -728,7 +725,9 @@ def loadQMMMSystem():
             print("MM energy = %s kcal mol-1 (took %s ms)" % (mm_intra, t.elapsed()))
 
             t.start()
-            qm_intra = qm_ligand.energy().value()
+            zero_sys = System()
+            zero_sys.add(qm_ligand)
+            qm_intra = zero_sys.energy().value()
             print("QM energy = %s kcal mol-1 (took %s ms)" % (qm_intra, t.elapsed()))
 
             print("\nSetting the QM zero energy to %s kcal mol-1" % (qm_intra - mm_intra))
@@ -835,7 +834,7 @@ def loadQMMMSystem():
         protein_intraff = InternalFF("protein_intra")
 
         for molnum in protein_intra_mols.molNums():
-            protein_mol = protein_intra_mols[molnum].join()
+            protein_mol = Molecule.join(protein_intra_mols[molnum])
             protein_intraclj.add(protein_mol)
             protein_intraff.add(protein_mol)
 
@@ -852,7 +851,7 @@ def loadQMMMSystem():
         solute_intraff = InternalFF("solute_intra")
 
         for molnum in solute_intra_mols.molNums():
-            solute_mol = solute_intra_mols[molnum].join()
+            solute_mol = Molecule.join(solute_intra_mols[molnum])
             solute_intraclj.add(solute_mol)
             solute_intraff.add(solute_mol)
 

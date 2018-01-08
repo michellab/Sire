@@ -560,7 +560,7 @@ Molecule ZmatrixMaker::applyTemplates( Molecule &molecule)
 
         for (int i=0; i<atoms.count(); ++i)
        	{
-            Atom atom = atoms[i];
+            Atom atom = atoms(i);
             
             //qDebug() << " Finding template for atom " << atom.name().toString();
 

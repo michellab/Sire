@@ -81,6 +81,8 @@ SireMol::Mover<SireMol::Segment> __copy__(const SireMol::Mover<SireMol::Segment>
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_Mover_Segment__class(){
 
     { //::SireMol::Mover< SireMol::Segment >
@@ -496,6 +498,7 @@ void register_Mover_Segment__class(){
         Mover_Segment__exposer.def( "clone", &__copy__);
         Mover_Segment__exposer.def( "__str__", &__str__< ::SireMol::Mover<SireMol::Segment> > );
         Mover_Segment__exposer.def( "__repr__", &__str__< ::SireMol::Mover<SireMol::Segment> > );
+        Mover_Segment__exposer.def( "__len__", &__len_size< ::SireMol::Mover<SireMol::Segment> > );
     }
 
 }

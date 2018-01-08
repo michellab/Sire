@@ -147,6 +147,24 @@ IDOrSet<MolID> MolID::operator|(const MolID &other) const
     return this->operator*(other);
 }
 
+/** Search for matching molecules using this ID, or other */
+IDOrSet<AtomID> MolID::operator*(const AtomID &other) const
+{
+    return other * *this;
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> MolID::operator||(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> MolID::operator|(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
 void MolID::processMatches(QList<MolNum> &matches, const Molecules &mols) const
 {
     if (matches.isEmpty())
@@ -454,7 +472,10 @@ uint MolName::hash() const
 
 QString MolName::toString() const
 {
-    return QString("MolName('%1')").arg(_name);
+    if (case_sensitive)
+        return QString("MolName('%1')").arg(_name);
+    else
+        return QString("MolName('%1', isCaseSensitive=False)").arg(_name);
 }
 
 MolName& MolName::operator=(const MolName &other)

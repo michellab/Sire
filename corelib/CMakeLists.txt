@@ -7,7 +7,7 @@
 ################################
 
 set (S_VERSION_MAJOR "2017")
-set (S_VERSION_MINOR "1")
+set (S_VERSION_MINOR "3")
 set (S_VERSION_PATCH "0")             
 
 set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
@@ -16,8 +16,8 @@ set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 ############ SETTING INITIAL SIRE VARIABLES
 ############
 
-# require cmake >= 2.8.11.2
-cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
+# require cmake >= 3.0.0
+cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
 
 # use loose loop syntax in CMakeLists files
@@ -119,7 +119,7 @@ else()
     endif()
 
     set( SIRE_INSTALL_PREFIX "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
-            "Install directory for Sire within the Anaconda/Miniconda distribution" )
+        "Install directory for Sire within the Anaconda/Miniconda distribution" FORCE)
 
     set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
              "Prefix prepended to install directories" FORCE )
@@ -698,7 +698,8 @@ else()
   set (SIRE_FOUND_BOOST FALSE)
   set (SIRE_FOUND_BLASLAPACK FALSE)
   set (SIRE_FOUND_QT FALSE)
-  set (SIRE_FOUND_OPENMM FALSE)
+  set (SIRE_FOUND_OPENMM FALSE)  
+  set (SIRE_FOUND_NETCDF FALSE)
 
   if ( ${SIRE_ENABLE_BUNDLING} )
     message( STATUS "Sire will be compiled to use its own copy of bundled libraries." )
@@ -769,6 +770,29 @@ endif()
 if ( NOT ${SIRE_FOUND_QT} )
     # look for Qt5 in the system
     find_package( Qt5Core REQUIRED )
+endif()
+
+if ( NOT ${SIRE_FOUND_NETCDF} )
+    # look for netcdf in the system (ideally from conda)
+    if (ANACONDA_BUILD)
+        set(NetCDF_ROOT_DIR "${ANACONDA_BASE}")
+    endif()
+
+    FIND_PACKAGE( NetCDF )
+
+    if ( ${NetCDF_FOUND} )
+        message(STATUS "Found NetCDF in ${NetCDF_INCLUDE_DIR} | ${NetCDF_LIBRARIES}")
+        set( SIRE_FOUND_NETCDF 1 )
+        save_sire_variable( "SIRE_NetCDF_INCLUDE_DIR" "${NetCDF_INCLUDE_DIR}" )
+        save_sire_variable( "SIRE_NetCDF_LIBRARIES" "${NetCDF_LIBRARIES}" )
+        save_sire_variable( "SIRE_NetCDF_FOUND" "${NetCDF_FOUND}" )
+    else()
+        message(STATUS "Cannot find NetCDF - disabling its use!")
+        save_sire_variable( "SIRE_NetCDF_FOUND" "${NetCDF_FOUND}" )
+        set( SIRE_FOUND_NETCDF 0 )
+    endif()
+else()
+    message(STATUS "Using NetCDF from ${NetCDF_INCLUDE_DIR} | ${NetCDF_LIBRARIES}")
 endif()
 
 if ( SIRE_USE_OPENMM )

@@ -10,6 +10,13 @@ include_directories(${BOOST_INCLUDE_DIR})
 # Other Sire libraries
 include_directories(${CMAKE_SOURCE_DIR}/src/libs)
 
+# If we have NetCDF, then include the header files
+if ( ${SIRE_FOUND_NETCDF} )
+  message( STATUS "Adding in NetCDF support to SireIO using ${NetCDF_ROOT_DIR}" )
+  message( STATUS "${NetCDF_INCLUDE_DIR} | ${NetCDF_LIBRARIES}" )
+  set ( SIREAPP_NETCDF_LIBRARIES ${NetCDF_LIBRARIES} )
+endif()
+
 if ( SIRE_USE_MPI )
   message( STATUS " ** Adding MPI support to sire ** " )
   message( STATUS "MPI headers: ${MPI_INCLUDE_PATH}" )
@@ -51,6 +58,7 @@ target_link_libraries (sire
                        SireCluster
                        SireBase
                        SireStream
+                       ${SIREAPP_NETCDF_LIBRARIES}
                       )
 
 # installation

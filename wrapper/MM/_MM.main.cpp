@@ -163,6 +163,14 @@
 
 #include "GridFF2.pypp.hpp"
 
+#include "GromacsAngle.pypp.hpp"
+
+#include "GromacsAtomType.pypp.hpp"
+
+#include "GromacsBond.pypp.hpp"
+
+#include "GromacsDihedral.pypp.hpp"
+
 #include "GroupInternalParameters.pypp.hpp"
 
 #include "HarmonicSwitchingFunction.pypp.hpp"
@@ -609,6 +617,14 @@ BOOST_PYTHON_MODULE(_MM){
     register_GridFF_class();
 
     register_GridFF2_class();
+
+    register_GromacsAngle_class();
+
+    register_GromacsAtomType_class();
+
+    register_GromacsBond_class();
+
+    register_GromacsDihedral_class();
 
     register_GroupInternalParameters_class();
 

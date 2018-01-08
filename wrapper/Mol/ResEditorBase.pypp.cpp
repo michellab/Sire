@@ -85,6 +85,8 @@ SireMol::ResEditorBase& set_Metadata_SireMol_ResVariantProperty_function2(
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_ResEditorBase_class(){
 
     { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >
@@ -381,6 +383,7 @@ void register_ResEditorBase_class(){
         ResEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_ResVariantProperty_function2, bp::return_self< >());
         ResEditorBase_exposer.def( "__str__", &__str__< ::SireMol::Editor<SireMol::ResEditor, SireMol::Residue> > );
         ResEditorBase_exposer.def( "__repr__", &__str__< ::SireMol::Editor<SireMol::ResEditor, SireMol::Residue> > );
+        ResEditorBase_exposer.def( "__len__", &__len_size< ::SireMol::Editor<SireMol::ResEditor, SireMol::Residue> > );
     }
 
 }

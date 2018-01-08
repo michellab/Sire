@@ -380,7 +380,6 @@ special_code = { "SireMol::Atom" : fix_Atom,
                  "SireMol::MolStructureEditor" : fix_MolStructureEditor,
                  "SireMol::Mover<SireMol::Molecule>" : fix_Mover,
                  "SireMol::Mover<SireMol::PartialMolecule>" : fix_Mover,
-                 "SireMol::Mover<SireMol::ViewsOfMol>" : fix_Mover,
 
                  "AtomStringProperty" : fix_MolViewProperty,
                  "AtomIntProperty" : fix_MolViewProperty,
@@ -416,6 +415,7 @@ special_code = { "SireMol::Atom" : fix_Atom,
                  "AtomMasses"  : fix_MolViewProperty,
                  "AtomVelocities" : fix_MolViewProperty,
                  "AtomPolarisabilities" : fix_MolViewProperty,
+                 "AtomRadii" : fix_MolViewProperty,
 
                  "SireMol::ConnectivityEditor" : fix_ConnectivityEditor,
                  "SireMol::MGName" : fix_MGName,
@@ -440,7 +440,8 @@ implicitly_convertible = [ ("SireMol::AtomID", "SireMol::AtomIdentifier"),
                            ("SireMol::MolID", "SireMol::MolIdentifier"),
                            ("SireMol::MGID", "SireMol::MGIdentifier"),
                            ("SireMol::MoleculeView", "SireMol::MoleculeData"),
-                           ("SireMol::MoleculeView", "SireMol::PartialMolecule") ]
+                           ("SireMol::MoleculeView", "SireMol::PartialMolecule"),
+                           ("SireMol::MoleculeInfoData", "SireMol::MoleculeInfo") ]
 
 def fixMB(mb):
     mb.add_declaration_code("#include \"SireMol/moleculedata.h\"")
@@ -448,3 +449,4 @@ def fixMB(mb):
     mb.add_declaration_code("#include \"SireMol/partialmolecule.h\"")
     mb.add_declaration_code("#include \"SireMol/mover.hpp\"")
     mb.add_declaration_code("#include \"SireMol/mgidentifier.h\"")
+    mb.add_declaration_code("#include \"SireMol/moleculeinfo.h\"")

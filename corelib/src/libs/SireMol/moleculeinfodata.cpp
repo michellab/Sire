@@ -88,6 +88,11 @@ public:
     /** The index of the chain this residue is in */
     ChainIdx chainidx;
 
+    /** The CutGroup that contains all of the atoms of this residue
+        (and only the atoms of this residue), which signifies residue-based cutting.
+        Null if the residue is spread between mixed CutGroups */
+    CGIdx cgidx;
+
     /** The list of the indicies of all atoms that are in this residue
         in the order they were added to this residue */
     QList<AtomIdx> atom_indicies;
@@ -287,7 +292,9 @@ QDataStream& operator>>(QDataStream &ds,
 {
     ds >> resinfo.name >> resinfo.number >> resinfo.chainidx
        >> resinfo.atom_indicies;
-       
+
+    resinfo.cgidx = CGIdx::null();
+
     return ds;
 }
 
@@ -413,6 +420,7 @@ void MoleculeInfoData::rebuildNameAndNumberIndexes()
     
     int nats = atoms_by_index.count();
     
+    //create the index of the atom names and numbers
     if (nats > 0)
     {
         const AtomInfo *atoms_by_index_array = atoms_by_index.constData();
@@ -428,7 +436,26 @@ void MoleculeInfoData::rebuildNameAndNumberIndexes()
                 atoms_by_num.insert(atominfo.number, i);
         }
     }
+
+    //create the index for the cutgroup names
+    cg_by_name.clear();
+    int ncg = cg_by_index.count();
     
+    if (ncg > 0)
+    {
+        const CGInfo *cg_by_index_array = cg_by_index.constData();
+        
+        for (CGIdx i(0); i < ncg; ++i)
+        {
+            const CGInfo &cginfo = cg_by_index_array[i];
+        
+            if (not cginfo.name.isNull())
+                cg_by_name.insert(cginfo.name, i);
+        }
+    }
+
+    //create the indexes for the residue names and numbers, and
+    //the internal indexe for each residue for atoms
     res_by_name.clear();
     res_by_num.clear();
     
@@ -449,12 +476,32 @@ void MoleculeInfoData::rebuildNameAndNumberIndexes()
             if (not resinfo.number.isNull())
                 res_by_num.insert(resinfo.number, i);
             
-            //index the names of all of the atoms in this residue
+            //index the names of all of the atoms in this residue and find out
+            //which CutGroup they are in...
+            CGIdx res_cgroup = CGIdx::null();
+            bool same_cgroup = true;
+            
             foreach (AtomIdx atomidx, resinfo.atom_indicies)
             {
                 BOOST_ASSERT( atomidx >= 0 and atomidx < nats );
             
                 const AtomInfo &atominfo = atoms_by_index_array[atomidx];
+            
+                if (same_cgroup)
+                {
+                    if (res_cgroup.isNull())
+                    {
+                        res_cgroup = atominfo.cgatomidx.cutGroup();
+                    }
+                    else
+                    {
+                        if (res_cgroup != atominfo.cgatomidx.cutGroup())
+                        {
+                            same_cgroup = false;
+                            res_cgroup = CGIdx::null();
+                        }
+                    }
+                }
             
                 if (not atominfo.name.isNull())
                     resinfo.atoms_by_name.insert(atominfo.name, atomidx);
@@ -462,9 +509,21 @@ void MoleculeInfoData::rebuildNameAndNumberIndexes()
             
             if (not resinfo.atoms_by_name.isEmpty())
                 resinfo.atoms_by_name.squeeze();
+            
+            if (same_cgroup)
+            {
+                //all of the atoms are in one CutGroup, but does this CutGroup
+                //contain only atoms from this residue?
+                if (resinfo.atom_indicies.count() == this->nAtoms(res_cgroup))
+                {
+                    //yes - this is a single-residue/single-cutgroup
+                    resinfo.cgidx = res_cgroup;
+                }
+            }
         }
     }
  
+    //create the indexes for the chain names, and within the chains for the atoms
     chains_by_name.clear();
 
     int nchains = chains_by_index.count();
@@ -481,6 +540,7 @@ void MoleculeInfoData::rebuildNameAndNumberIndexes()
         }
     }
     
+    //create the index for the segment names, and within the segment for the atoms
     seg_by_name.clear();
     
     int nseg = seg_by_index.count();
@@ -495,23 +555,6 @@ void MoleculeInfoData::rebuildNameAndNumberIndexes()
         
             if (not seginfo.name.isNull())
                 seg_by_name.insert(seginfo.name, i);
-        }
-    }
-    
-    
-    cg_by_name.clear();
-    int ncg = cg_by_index.count();
-    
-    if (ncg > 0)
-    {
-        const CGInfo *cg_by_index_array = cg_by_index.constData();
-        
-        for (CGIdx i(0); i < ncg; ++i)
-        {
-            const CGInfo &cginfo = cg_by_index_array[i];
-        
-            if (not cginfo.name.isNull())
-                cg_by_name.insert(cginfo.name, i);
         }
     }
     
@@ -1525,6 +1568,53 @@ CGIdx MoleculeInfoData::cgIdx(const CGID &cgid) const
     return cgidxs.first();
 }
 
+/** Return the index of the CutGroup that contains the atoms for residue
+    with ID 'id', if this molecule uses residue cutting. If not, an
+    exception is thrown */
+CGIdx MoleculeInfoData::cgIdx(const ResIdx &residx) const
+{
+    const auto resinfo = res_by_index.at( residx.map(this->nResidues()) );
+    
+    if (resinfo.cgidx.isNull())
+        throw SireError::invalid_state( QObject::tr(
+            "Cannot get the CutGroup for residue '%1' as residue-based cutting "
+            "is not used for this residue.").arg(residx.toString()), CODELOC );
+    
+    return resinfo.cgidx;
+}
+
+/** Return the index of the CutGroup that contains the atoms for residue
+    with ID 'id', if this molecule uses residue cutting. If not, an
+    exception is thrown */
+CGIdx MoleculeInfoData::cgIdx(const ResID &resid) const
+{
+    QList<ResIdx> residxs = resid.map(*this);
+    
+    this->assertSingleResidue(residxs);
+    
+    return this->cgIdx(residxs.first());
+}
+
+/** Return whether or not residue-based cutting is used for the specifed
+    residue */
+bool MoleculeInfoData::isResidueCutting(const ResIdx &residx) const
+{
+    const auto resinfo = res_by_index.at( residx.map(this->nResidues()) );
+    
+    return not (resinfo.cgidx.isNull());
+}
+
+/** Return whether or not residue-based cutting is used for the specifed
+    residue */
+bool MoleculeInfoData::isResidueCutting(const ResID &resid) const
+{
+    QList<ResIdx> residxs = resid.map(*this);
+    
+    this->assertSingleResidue(residxs);
+    
+    return this->isResidueCutting(residxs.first());
+}
+
 /** Return the indicies of all of the segments in this molecule */
 QList<SegIdx> MoleculeInfoData::getSegments() const
 {
@@ -1916,7 +2006,13 @@ QVector<CGAtomIdx> MoleculeInfoData::cgAtomIdxs(CGIdx cgidx) const
 */
 QVector<CGAtomIdx> MoleculeInfoData::cgAtomIdxs(ResIdx residx) const
 {
-    return this->_pvt_cgAtomIdxs( this->getAtomsIn(residx) );
+    const auto resinfo = res_by_index.at( residx.map(this->nResidues()) );
+    
+    if (not resinfo.cgidx.isNull())
+        //this is a single CutGroup residue
+        return this->cgAtomIdxs(resinfo.cgidx);
+    else
+        return this->_pvt_cgAtomIdxs( this->getAtomsIn(residx) );
 }
 
 /** Return the CGAtomIdxs of all of the atoms in the chain 

@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/variantproperty.h"
+
 #include "SireFF/forcetable.h"
 
 #include "SireIO/amber.h"

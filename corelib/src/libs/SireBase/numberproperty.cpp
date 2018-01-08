@@ -28,8 +28,12 @@
 
 #include "SireBase/numberproperty.h"
 
+#include "SireError/errors.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
+
+#include <cmath>
 
 using namespace SireBase;
 using namespace SireStream;
@@ -76,20 +80,25 @@ NumberProperty::NumberProperty() : ConcreteProperty<NumberProperty,Property>(),
     val.ival = 0;
 }
 
+static bool is_integer(double value)
+{
+    return std::floor(value) == value;
+}
+
 /** Construct from the passed double */
 NumberProperty::NumberProperty(double value)
                : ConcreteProperty<NumberProperty,Property>(),
                  is_int(false)
 {
-    val.dval = value;
-}
-
-/** Construct from the passed integer */
-NumberProperty::NumberProperty(int value)
-               : ConcreteProperty<NumberProperty,Property>(),
-                 is_int(true)
-{
-    val.ival = value;
+    if (is_integer(value))
+    {
+        is_int = true;
+        val.ival = std::floor(value);
+    }
+    else
+    {
+        val.dval = value;
+    }
 }
 
 /** Construct from the passed integer */
@@ -100,12 +109,28 @@ NumberProperty::NumberProperty(qint64 value)
     val.ival = value;
 }
 
-/** Construct from the passed VariantProperty */
-NumberProperty::NumberProperty(const VariantProperty &other)
+/** Construct from a passed string */
+NumberProperty::NumberProperty(const QString &value)
                : ConcreteProperty<NumberProperty,Property>(),
                  is_int(false)
 {
-    val.dval = other.convertTo<double>();
+    bool ok;
+    double dval = value.toDouble(&ok);
+    
+    if (not ok)
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot convert the string '%1' to a NumberProperty")
+                .arg(value), CODELOC );
+    
+    this->operator=( NumberProperty(dval) );
+}
+
+/** Construct from the passed Property */
+NumberProperty::NumberProperty(const Property &other)
+               : ConcreteProperty<NumberProperty,Property>(),
+                 is_int(false)
+{
+    this->operator=( NumberProperty(other.asADouble()) );
 }
 
 /** Copy constructor */
@@ -188,20 +213,52 @@ QString NumberProperty::toString() const
         return QString::number(val.dval);
 }
 
-/** Return this number cast as a double */
-NumberProperty::operator double() const
+bool NumberProperty::isAString() const
+{
+    return true;
+}
+
+bool NumberProperty::isADouble() const
+{
+    return true;
+}
+
+bool NumberProperty::isAnInteger() const
+{
+    return is_int;
+}
+
+bool NumberProperty::isABoolean() const
+{
+    return true;
+}
+
+QString NumberProperty::asAString() const
+{
+    return this->toString();
+}
+
+double NumberProperty::asADouble() const
 {
     return this->toDouble();
 }
 
-/** Return this number cast as an int */
-NumberProperty::operator int() const
+int NumberProperty::asAnInteger() const
 {
-    return this->toInt();
+    if (not is_int)
+    {
+        throw SireError::invalid_cast( QObject::tr(
+            "Cannot convert a non-integer NumberProperty(%1) to an integer.")
+                .arg(this->toDouble()), CODELOC) ;
+    }
+    else
+        return val.ival;
 }
 
-/** Return this number cast as an int */
-NumberProperty::operator qint64() const
+bool NumberProperty::asABoolean() const
 {
-    return this->toInt();
+    if (is_int)
+        return val.ival;
+    else
+        return val.dval;
 }

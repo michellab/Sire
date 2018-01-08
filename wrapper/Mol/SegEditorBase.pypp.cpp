@@ -83,6 +83,8 @@ SireMol::SegEditorBase& set_Metadata_SireMol_SegVariantProperty_function2(
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_SegEditorBase_class(){
 
     { //::SireMol::Editor< SireMol::SegEditor, SireMol::Segment >
@@ -379,6 +381,7 @@ void register_SegEditorBase_class(){
         SegEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_SegVariantProperty_function2, bp::return_self< >());
         SegEditorBase_exposer.def( "__str__", &__str__< ::SireMol::Editor<SireMol::SegEditor, SireMol::Segment> > );
         SegEditorBase_exposer.def( "__repr__", &__str__< ::SireMol::Editor<SireMol::SegEditor, SireMol::Segment> > );
+        SegEditorBase_exposer.def( "__len__", &__len_size< ::SireMol::Editor<SireMol::SegEditor, SireMol::Segment> > );
     }
 
 }

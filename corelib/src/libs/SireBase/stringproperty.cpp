@@ -27,6 +27,10 @@
 \*********************************************/
 
 #include "stringproperty.h"
+#include "numberproperty.h"
+#include "booleanproperty.h"
+
+#include "SireError/errors.h"
 
 #include "SireStream/sharestrings.h"
 #include "SireStream/datastream.h"
@@ -75,10 +79,16 @@ StringProperty::StringProperty(const QString &str)
                  s(shareString(str))
 {}
 
-/** Cast from the passed VariantProperty */
-StringProperty::StringProperty(const VariantProperty &other)
+/** Construct from the the passed number */
+StringProperty::StringProperty(double value)
+               : ConcreteProperty<StringProperty,Property>(),
+                 s(shareString(QString::number(value)))
+{}
+
+/** Cast from the passed property */
+StringProperty::StringProperty(const Property &other)
                : ConcreteProperty<StringProperty,Property>(other),
-                 s(other.convertTo<QString>())
+                 s(shareString(other.asAString()))
 {}
 
 /** Copy constructor */
@@ -119,8 +129,109 @@ QString StringProperty::toString() const
     return s;
 }
 
-/** Allow automatic casting to the underlying QString */
-StringProperty::operator QString() const
+/** Return the actual string */
+QString StringProperty::value() const
 {
     return s;
+}
+
+bool StringProperty::isAString() const
+{
+    return true;
+}
+
+bool StringProperty::isADouble() const
+{
+    try
+    {
+        NumberProperty n(s);
+        return n.isADouble();
+    }
+    catch(...)
+    {
+        return false;
+    }
+}
+
+bool StringProperty::isAnInteger() const
+{
+    try
+    {
+        NumberProperty n(s);
+        return n.isAnInteger();
+    }
+    catch(...)
+    {
+        return false;
+    }
+}
+
+bool StringProperty::isABoolean() const
+{
+    try
+    {
+        BooleanProperty b(s);
+    }
+    catch(...)
+    {
+        return false;
+    }
+    
+    return true;
+}
+
+QString StringProperty::asAString() const
+{
+    return s;
+}
+
+double StringProperty::asADouble() const
+{
+    try
+    {
+        NumberProperty n(s);
+        return n.asADouble();
+    }
+    catch(...)
+    {}
+    
+    throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast the StringProperty('%1') as a double")
+                .arg(s), CODELOC );
+    
+    return 0;
+}
+
+int StringProperty::asAnInteger() const
+{
+    try
+    {
+        NumberProperty n(s);
+        return n.asAnInteger();
+    }
+    catch(...)
+    {}
+    
+    throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast the StringProperty('%1') as an integer")
+                .arg(s), CODELOC );
+    
+    return 0;
+}
+
+bool StringProperty::asABoolean() const
+{
+    try
+    {
+        BooleanProperty n(s);
+        return n.asABoolean();
+    }
+    catch(...)
+    {}
+    
+    throw SireError::invalid_cast( QObject::tr(
+            "Cannot cast the StringProperty('%1') as a boolean")
+                .arg(s), CODELOC );
+    
+    return 0;
 }

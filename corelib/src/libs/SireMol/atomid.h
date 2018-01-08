@@ -36,6 +36,8 @@
 #include "SireID/specify.hpp"
 #include "SireID/idorset.hpp"
 #include "SireID/idandset.hpp"
+#include "SireID/invertmatch.hpp"
+#include "SireID/matchall.hpp"
 
 SIRE_BEGIN_HEADER
 
@@ -98,9 +100,12 @@ public:
     
     virtual ~AtomID();
     
-    Specify<AtomID> operator[](int i) const;
-    Specify<AtomID> operator()(int i) const;
-    Specify<AtomID> operator()(int i, int j) const;
+    Specify<AtomID> operator[](qint64 i) const;
+    Specify<AtomID> operator[](const SireBase::Range &range) const;
+    Specify<AtomID> operator()(const SireBase::Range &range) const;
+    Specify<AtomID> operator()(qint64 i) const;
+    Specify<AtomID> operator()(qint64 start, qint64 end) const;
+    Specify<AtomID> operator()(qint64 start, qint64 end, qint64 increment) const;
 
     IDAndSet<AtomID> operator+(const AtomID &other) const;
 
@@ -110,7 +115,22 @@ public:
     GroupAtomID<SegID,AtomID> operator+(const SegID &other) const;
     MolAtomID operator+(const MolID &other) const;
 
+    SireID::InvertMatch<AtomID> operator-() const;
+
+    IDAndSet<AtomID> operator-(const AtomID &other) const;
+
+    GroupAtomID<CGID,AtomID> operator-(const CGID &other) const;
+    GroupAtomID<ResID,AtomID> operator-(const ResID &other) const;
+    GroupAtomID<ChainID,AtomID> operator-(const ChainID &other) const;
+    GroupAtomID<SegID,AtomID> operator-(const SegID &other) const;
+
     IDOrSet<AtomID> operator*(const AtomID &other) const;
+
+    IDOrSet<AtomID> operator*(const CGID &other) const;
+    IDOrSet<AtomID> operator*(const ResID &other) const;
+    IDOrSet<AtomID> operator*(const ChainID &other) const;
+    IDOrSet<AtomID> operator*(const SegID &other) const;
+    IDOrSet<AtomID> operator*(const MolID &other) const;
     
     IDAndSet<AtomID> operator&&(const AtomID &other) const;
     IDAndSet<AtomID> operator&(const AtomID &other) const;
@@ -129,6 +149,20 @@ public:
 
     IDOrSet<AtomID> operator||(const AtomID &other) const;
     IDOrSet<AtomID> operator|(const AtomID &other) const;
+
+    IDOrSet<AtomID> operator|(const CGID &other) const;
+    IDOrSet<AtomID> operator|(const ResID &other) const;
+    IDOrSet<AtomID> operator|(const ChainID &other) const;
+    IDOrSet<AtomID> operator|(const SegID &other) const;
+    IDOrSet<AtomID> operator|(const MolID &other) const;
+
+    IDOrSet<AtomID> operator||(const CGID &other) const;
+    IDOrSet<AtomID> operator||(const ResID &other) const;
+    IDOrSet<AtomID> operator||(const ChainID &other) const;
+    IDOrSet<AtomID> operator||(const SegID &other) const;
+    IDOrSet<AtomID> operator||(const MolID &other) const;
+
+    SireID::InvertMatch<AtomID> operator!() const;
 
     ResWithAtoms residues() const;
     CGsWithAtoms cutGroups() const;
@@ -175,7 +209,14 @@ public:
                 selectAllFrom(const MolGroupsBase &molgroups,
                               const PropertyMap &map = PropertyMap()) const;
 
+    SireID::InvertMatch<AtomID> invert() const;
+    SireID::InvertMatch<AtomID> inverse() const;
+
+    static SireID::MatchAll<AtomID> any();
+
 protected:
+    static QList<AtomIdx> matchAll(const MolInfo &molinfo);
+    
     void processMatches(QList<AtomIdx> &matches, const MolInfo &molinfo) const;
 };
 
@@ -187,11 +228,15 @@ SIRE_EXPOSE_CLASS( SireMol::AtomID )
 SIRE_EXPOSE_ALIAS( SireID::Specify<SireMol::AtomID>, SireMol::Specify_AtomID_ )
 SIRE_EXPOSE_ALIAS( SireID::IDAndSet<SireMol::AtomID>, SireMol::IDAndSet_AtomID_ )
 SIRE_EXPOSE_ALIAS( SireID::IDOrSet<SireMol::AtomID>, SireMol::IDOrSet_AtomID_ )
+SIRE_EXPOSE_ALIAS( SireID::MatchAll<SireMol::AtomID>, SireMol::MatchAll_AtomID_ )
+SIRE_EXPOSE_ALIAS( SireID::InvertMatch<SireMol::AtomID>, SireMol::InvertMatch_AtomID_ )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireID::Specify<SireMol::AtomID>;
 template class SireID::IDAndSet<SireMol::AtomID>;
 template class SireID::IDOrSet<SireMol::AtomID>;
+template class SireID::MatchAll<SireMol::AtomID>;
+template class SireID::InvertMatch<SireMol::AtomID>;
 #endif
 
 SIRE_END_HEADER

@@ -355,7 +355,10 @@ uint CGName::hash() const
 
 QString CGName::toString() const
 {
-    return QString("CGName('%1')").arg(_name);
+    if (case_sensitive)
+        return QString("CGName('%1')").arg(_name);
+    else
+        return QString("CGName('%1', isCaseSensitive=False)").arg(_name);
 }
 
 CGName& CGName::operator=(const CGName &other)

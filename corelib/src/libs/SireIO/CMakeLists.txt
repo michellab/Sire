@@ -10,18 +10,37 @@ include_directories(${CMAKE_SOURCE_DIR}/src/libs)
 # This library uses Intel Threaded Building blocks
 include_directories(${TBB_INCLUDE_DIR})
 
+# If we have NetCDF, then include the header files
+if ( ${SIRE_FOUND_NETCDF} )
+  message( STATUS "Adding in NetCDF support to SireIO using ${NetCDF_ROOT_DIR}" )
+  message( STATUS "${NetCDF_INCLUDE_DIR} | ${NetCDF_LIBRARIES}" )
+  include_directories(${NetCDF_INCLUDE_DIR})
+  set ( SIREIO_NETCDF_LIBRARIES ${NetCDF_LIBRARIES} )
+  add_definitions( "-DSIRE_USE_NETCDF" )
+endif()
+
 # Define the headers in SireIO
 set ( SIREIO_HEADERS
       amber.h
-      amber2.h
+      amberformat.h
+      amberprm.h
+      amberrst.h
+      amberrst7.h
+      charmmpsf.h
       cube.h
       errors.h
       flexibilitylibrary.h
+      gro87.h
+      grotop.h
       iobase.h
+      mol2.h
       moleculeparser.h
+      netcdffile.h
       pdb.h
+      pdb2.h
       perturbationslibrary.h
       protoms.h
+      supplementary.h
       tinker.h
       trajectorymonitor.h
       zmatrixmaker.h
@@ -33,15 +52,25 @@ set ( SIREIO_SOURCES
       register_sireio.cpp
 
       amber.cpp
-      amber2.cpp
+      amberformat.cpp
+      amberprm.cpp
+      amberrst.cpp
+      amberrst7.cpp
+      charmmpsf.cpp
       cube.cpp
       errors.cpp
       flexibilitylibrary.cpp
+      gro87.cpp
+      grotop.cpp
       iobase.cpp
+      mol2.cpp
       moleculeparser.cpp
+      netcdffile.cpp
       pdb.cpp
+      pdb2.cpp
       perturbationslibrary.cpp
       protoms.cpp
+      supplementary.cpp
       tinker.cpp
       trajectorymonitor.cpp    
       zmatrixmaker.cpp
@@ -62,6 +91,7 @@ target_link_libraries (SireIO
                        SireMove
                        SireMol
                        SireStream
+                       ${SIREIO_NETCDF_LIBRARIES}
                        )
 
 # installation

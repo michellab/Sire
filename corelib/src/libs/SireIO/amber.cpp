@@ -575,8 +575,8 @@ static int setConnectivity(MolEditor &editmol, int pointer,
                            const PropertyName &connectivity_property,
                            int last_idx = -1)
 {
-    int atomStart = editmol.atoms().at(0).number().value();
-    int atomEnd = editmol.atoms().at(-1).number().value();
+    int atomStart = editmol.atoms()(0).number().value();
+    int atomEnd = editmol.atoms()(-1).number().value();
     int start_idx = last_idx;
     bool got_to_end = true;
 
@@ -634,8 +634,8 @@ static int setBonds(MolEditor &editmol, int pointer,
                     const PropertyName &amberparameters_property,
                     int last_idx=-1)
 {
-    int atomStart = editmol.atoms().at(0).number().value();
-    int atomEnd = editmol.atoms().at(-1).number().value();
+    int atomStart = editmol.atoms()(0).number().value();
+    int atomEnd = editmol.atoms()(-1).number().value();
 
     int start_idx = last_idx;
     /*if (last_idx < 0)
@@ -708,8 +708,8 @@ static int setAngles(MolEditor &editmol, int pointer,
                      int last_idx=-1)
 {
     //QSet<AtomNum> moleculeAtomNumbers = _pvt_selectAtomsbyNumber(editmol);
-    int atomStart = editmol.atoms().at(0).number().value();
-    int atomEnd = editmol.atoms().at(-1).number().value();
+    int atomStart = editmol.atoms()(0).number().value();
+    int atomEnd = editmol.atoms()(-1).number().value();
 
     int start_idx = last_idx;
     /*if (last_idx < 0)
@@ -794,8 +794,8 @@ static int setDihedrals(MolEditor &editmol, int pointer,
                          int last_idx)
 {
     //QSet<AtomNum> moleculeAtomNumbers = _pvt_selectAtomsbyNumber(editmol);
-    int atomStart = editmol.atoms().at(0).number().value();
-    int atomEnd = editmol.atoms().at(-1).number().value();
+    int atomStart = editmol.atoms()(0).number().value();
+    int atomEnd = editmol.atoms()(-1).number().value();
 
     QHash<DofID,Expression> improper_hash;
     QHash<DofID,Expression> dihedral_hash;

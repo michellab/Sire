@@ -38,7 +38,6 @@ SIRE_BEGIN_HEADER
 namespace SireBase
 {
 class LengthProperty;
-class VariantProperty;
 }
 
 QDataStream& operator<<(QDataStream&, const SireBase::LengthProperty&);
@@ -63,8 +62,8 @@ public:
     LengthProperty();
     LengthProperty(Length value);
 
-    LengthProperty(const VariantProperty &other);    
     LengthProperty(const LengthProperty &other);
+    LengthProperty(const Property &other);
     
     ~LengthProperty();
     
@@ -78,8 +77,6 @@ public:
     Length value() const;
     
     QString toString() const;
-    
-    operator Length() const;
     
 private:
     Length val;

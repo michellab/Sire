@@ -713,7 +713,7 @@ def createSystem(molecules, space, naming_scheme=NamingScheme()):
         new_protein_and_buffer = MoleculeGroup("protein_and_buffer")
 
         for molnum in protein_and_buffer.molNums():
-            protein_mol = protein_and_buffer[molnum].join()
+            protein_mol = Molecule.join(protein_and_buffer[molnum])
 
             if protein_mol.selectedAll():
                 new_protein_and_buffer.add( protein_mol )

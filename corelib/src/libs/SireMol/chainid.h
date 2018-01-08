@@ -37,6 +37,8 @@
 #include "SireID/idandset.hpp"
 #include "SireID/idorset.hpp"
 #include "SireID/specify.hpp"
+#include "SireID/matchall.hpp"
+#include "SireID/invertmatch.hpp"
 
 SIRE_BEGIN_HEADER
 
@@ -88,15 +90,26 @@ public:
 
     virtual ~ChainID();
     
-    Specify<ChainID> operator[](int i) const;
-    Specify<ChainID> operator()(int i) const;
-    Specify<ChainID> operator()(int i, int j) const;
+    Specify<ChainID> operator[](qint64 i) const;
+    Specify<ChainID> operator[](const SireBase::Range &range) const;
+    Specify<ChainID> operator()(const SireBase::Range &range) const;
+    Specify<ChainID> operator()(qint64 i) const;
+    Specify<ChainID> operator()(qint64 start, qint64 end) const;
+    Specify<ChainID> operator()(qint64 start, qint64 end, qint64 increment) const;
     
     IDAndSet<ChainID> operator+(const ChainID &other) const;
     ChainResID operator+(const ResID &other) const;
     GroupAtomID<ChainID,AtomID> operator+(const AtomID &other) const;
     GroupGroupID<SegID,ChainID> operator+(const SegID &other) const;
     GroupGroupID<CGID,ChainID> operator+(const CGID &other) const;
+    
+    IDAndSet<ChainID> operator-(const ChainID &other) const;
+    ChainResID operator-(const ResID &other) const;
+    GroupAtomID<ChainID,AtomID> operator-(const AtomID &other) const;
+    GroupGroupID<SegID,ChainID> operator-(const SegID &other) const;
+    GroupGroupID<CGID,ChainID> operator-(const CGID &other) const;
+
+    SireID::InvertMatch<ChainID> operator-() const;
 
     IDAndSet<ChainID> operator&&(const ChainID &other) const;
     ChainResID operator&&(const ResID &other) const;
@@ -113,7 +126,17 @@ public:
     IDOrSet<ChainID> operator*(const ChainID &other) const;
     IDOrSet<ChainID> operator||(const ChainID &other) const;
     IDOrSet<ChainID> operator|(const ChainID &other) const;
-    
+
+    IDOrSet<ResID> operator*(const ResID &other) const;
+    IDOrSet<ResID> operator||(const ResID &other) const;
+    IDOrSet<ResID> operator|(const ResID &other) const;
+
+    IDOrSet<AtomID> operator*(const AtomID &other) const;
+    IDOrSet<AtomID> operator||(const AtomID &other) const;
+    IDOrSet<AtomID> operator|(const AtomID &other) const;
+
+    SireID::InvertMatch<ChainID> operator!() const;
+
     AtomsIn<ChainID> atoms() const;
     AtomsIn<ChainID> atom(int i) const;
     AtomsIn<ChainID> atoms(int i, int j) const;
@@ -121,6 +144,11 @@ public:
     ResIn<ChainID> residues() const;
     ResIn<ChainID> residue(int i) const;
     ResIn<ChainID> residues(int i, int j) const;
+    
+    static SireID::MatchAll<ChainID> any();
+    
+    SireID::InvertMatch<ChainID> invert() const;
+    SireID::InvertMatch<ChainID> inverse() const;
     
     static const char* typeName()
     {
@@ -164,6 +192,8 @@ public:
                               const PropertyMap &map = PropertyMap()) const;
 
 protected:
+    static QList<ChainIdx> matchAll(const MolInfo &molinfo);
+
     void processMatches(QList<ChainIdx> &matches, const MolInfo &molinfo) const;
 
 };
@@ -178,6 +208,8 @@ SIRE_EXPOSE_ALIAS( SireMol::AtomsIn<SireMol::ChainID>, SireMol::AtomsIn_ChainID_
 SIRE_EXPOSE_ALIAS( SireMol::ResIn<SireMol::ChainID>, SireMol::ResIn_ChainID_ )
 SIRE_EXPOSE_ALIAS( SireID::IDAndSet<SireMol::ChainID>, SireMol::IDAndSet_ChainID_ )
 SIRE_EXPOSE_ALIAS( SireID::IDOrSet<SireMol::ChainID>, SireMol::IDOrSet_ChainID_ )
+SIRE_EXPOSE_ALIAS( SireID::MatchAll<SireMol::ChainID>, SireMol::MatchAll_ChainID_ )
+SIRE_EXPOSE_ALIAS( SireID::InvertMatch<SireMol::ChainID>, SireMol::InvertMatch_ChainID_ )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireID::Specify<SireMol::ChainID>;
@@ -185,6 +217,8 @@ template class SireMol::AtomsIn<SireMol::ChainID>;
 template class SireMol::ResIn<SireMol::ChainID>;
 template class SireID::IDAndSet<SireMol::ChainID>;
 template class SireID::IDOrSet<SireMol::ChainID>;
+template class SireID::MatchAll<SireMol::ChainID>;
+template class SireID::InvertMatch<SireMol::ChainID>;
 #endif
 
 SIRE_END_HEADER

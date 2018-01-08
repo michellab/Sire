@@ -100,6 +100,42 @@ SegEditorBase.setProperty = __set_property__
 Segment.metadata = __get_metadata__
 SegEditorBase.setMetadata = __set_metadata__
 
+def get_molview(mol):
+    """Convert the passed molecule into the most appropriate view,
+       e.g. a PartialMolecule containing all atoms will be returned
+       as a Molecule, a PartialMolecule with a single atom will be
+       returned as an Atom etc."""
+    return mol
+
+class IncompatibleError(Exception):
+    pass
+
+# Python automatically converts ViewsOfMol into a list. Need
+# to add a Molecule.join function to convert a list back into
+# a single molecule
+@staticmethod
+def _molecule_join( views ):
+    """Join the passed views of a molecule into a single molecule"""
+    if len(views) == 0:
+        return Molecule()
+    elif len(views) == 1:
+        return views[0]
+    else:
+        atoms = views[0].selection()
+        molnum = views[0].molecule().number()
+
+        for i in range(1,len(views)):
+            if views[i].molecule().number() != molnum:
+                raise IncompatibleError( \
+                    "Cannot join different molecules together! %s vs. %s" \
+                        % (molnum, views[i].number()) )
+
+            atoms = atoms.unite(views[i].selection())
+
+        return get_molview( PartialMolecule(views[i], atoms) )
+
+Molecule.join = _molecule_join
+
 ##########
 ########## CLUDGY WORKAROUND
 ##########

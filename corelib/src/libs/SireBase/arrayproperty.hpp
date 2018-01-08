@@ -66,6 +66,7 @@ class SIREBASE_EXPORT ArrayProperty : public Property
 
 public:
     ArrayProperty();
+    ArrayProperty(const T &value);
     
     ~ArrayProperty();
     
@@ -116,11 +117,8 @@ public:
     
     QList<T> toList() const;
     QVector<T> toVector() const;
-    
-    T value(int i) const;
-    T value(int i, T default_value) const;
-    
-    operator QVector<T>() const;
+
+    QVector<T> value() const;
  
 protected:
     /** These functions must be reimplemented by the deriving class */
@@ -147,6 +145,14 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 ArrayProperty<T>::ArrayProperty() : Property()
 {}
+
+/** Construct from a single value */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+ArrayProperty<T>::ArrayProperty(const T &value) : Property()
+{
+    a.append(value);
+}
 
 /** Construct from the passed list */
 template<class T>
@@ -518,35 +524,10 @@ QVector<T> ArrayProperty<T>::toVector() const
     return a;
 }
 
-/** Return the value at index 'i', or 'default_value' if this 
-    is an invalid index */
+/** Return the actual array */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-T ArrayProperty<T>::value(int i, T default_value) const
-{
-    int idx = i;
-    
-    if (i < 0)
-        idx = a.count() + i;
-    
-    if (idx < 0 or idx >= a.count())
-        return default_value;
-    else
-        return a.constData()[idx];
-}
-
-/** Return the value at index 'i' */
-template<class T>
-SIRE_OUTOFLINE_TEMPLATE
-T ArrayProperty<T>::value(int i) const
-{
-    return this->value(i, T());
-}
-
-/** Allow for automatic casting to QVector<T> */
-template<class T>
-SIRE_OUTOFLINE_TEMPLATE
-ArrayProperty<T>::operator QVector<T>() const
+QVector<T> ArrayProperty<T>::value() const
 {
     return a;
 }
@@ -554,6 +535,21 @@ ArrayProperty<T>::operator QVector<T>() const
 #endif
 
 }
+
+SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<QString>),
+                    SireBase::ArrayProperty_QString_ )
+
+SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<double>),
+                    SireBase::ArrayProperty_double_ )
+
+SIRE_EXPOSE_ALIAS( (SireBase::ArrayProperty<long long>),
+                    SireBase::ArrayProperty_int_ )
+
+#ifdef SIRE_INSTANTIATE_TEMPLATES
+template class SireBase::ArrayProperty<QString>;
+template class SireBase::ArrayProperty<double>;
+template class SireBase::ArrayProperty<qint64>;
+#endif
 
 SIRE_END_HEADER
 

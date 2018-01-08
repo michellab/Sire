@@ -61,6 +61,8 @@ friend QDataStream& ::operator<<(QDataStream&, const LJParameter&);
 friend QDataStream& ::operator>>(QDataStream&, LJParameter&);
 
 public:
+    enum CombiningRules { ARITHMETIC=0, GEOMETRIC=1 };
+
     LJParameter();
     LJParameter(SireUnits::Dimension::Length sigma, 
                 SireUnits::Dimension::MolarEnergy epsilon);
@@ -77,6 +79,10 @@ public:
     {
         return LJParameter::typeName();
     }
+    
+    LJParameter combine(const LJParameter &other, CombiningRules rules) const;
+    LJParameter combineArithmetic(const LJParameter &other) const;
+    LJParameter combineGeometric(const LJParameter &other) const;
     
     bool isDummy() const;
     bool zeroLJ() const;

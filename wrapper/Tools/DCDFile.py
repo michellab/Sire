@@ -49,7 +49,7 @@ class DCDFile(object):
         molecules = group.molecules()
         molnums = molecules.molNums()
         for molnum in molnums:
-            mol = molecules.molecule(molnum).molecule()
+            mol = molecules.molecule(molnum)[0].molecule()
             nat = mol.nAtoms()
             natoms += nat
 
@@ -97,7 +97,7 @@ class DCDFile(object):
         natoms = 0
 
         for i in range(0,group.nMolecules()):
-            mol = group[MolIdx(i)].molecule()
+            mol = group[MolIdx(i)][0].molecule()
             nat = mol.nAtoms()
             natoms += nat
 
@@ -121,7 +121,7 @@ class DCDFile(object):
 
         for i in range(0,group.nMolecules()):
             #mol = group[MolIdx(i)].molecule()
-            mol = group[molnums[i]].molecule()
+            mol = group[molnums[i]][0].molecule()
             #print (mol)
             molcoords = mol.property("coordinates")
 
@@ -180,7 +180,7 @@ class DCDFile(object):
 
         # Find the number of buffered frames we have by inspecting the first molecule in the group
         # assuming all molecules have same number of buffered coordinates...
-        mol = group.first().molecule()
+        mol = group.first()[0].molecule()
         molprops = mol.propertyKeys()
         nbuf = 0
         for molprop in molprops:
@@ -216,7 +216,7 @@ class DCDFile(object):
             
 
             for i in range(0,group.nMolecules()):
-                mol = group[MolIdx(i)].molecule()
+                mol = group[MolIdx(i)][0].molecule()
                 nat = mol.nAtoms()
                 natoms += nat
 
@@ -233,7 +233,7 @@ class DCDFile(object):
             molnums.sort()
             for i in range(0,group.nMolecules()):
                 #mol = group[MolIdx(i)].molecule()
-                mol = group[molnums[i]].molecule()
+                mol = group[molnums[i]][0]
                 molcoords = mol.property("buffered_coord_%s" % x)
 
                 coords += molcoords.toVector()

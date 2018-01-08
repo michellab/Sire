@@ -356,7 +356,10 @@ uint ResName::hash() const
 
 QString ResName::toString() const
 {
-    return QString("ResName('%1')").arg(_name);
+    if (case_sensitive)
+        return QString("ResName('%1')").arg(_name);
+    else
+        return QString("ResName('%1', isCaseSensitive=False)").arg(_name);
 }
 
 ResName& ResName::operator=(const ResName &other)

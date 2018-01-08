@@ -179,6 +179,108 @@ IDOrSet<ChainID> ChainID::operator|(const ChainID &other) const
     return this->operator*(other);
 }
 
+/** Return the combination of this ID or other */
+IDOrSet<ResID> ChainID::operator*(const ResID &other) const
+{
+    return other * *this;
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<ResID> ChainID::operator||(const ResID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<ResID> ChainID::operator|(const ResID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the combination of this ID or other */
+IDOrSet<AtomID> ChainID::operator*(const AtomID &other) const
+{
+    return other * *this;
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> ChainID::operator||(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> ChainID::operator|(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Inverse this match */
+InvertMatch<ChainID> ChainID::invert() const
+{
+    return InvertMatch<ChainID>(*this);
+}
+
+/** Inverse this match */
+InvertMatch<ChainID> ChainID::inverse() const
+{
+    return this->invert();
+}
+
+/** Inverse this match */
+InvertMatch<ChainID> ChainID::operator!() const
+{
+    return this->invert();
+}
+
+/** Return this and not other */
+IDAndSet<ChainID> ChainID::operator-(const ChainID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return this and not other */
+ChainResID ChainID::operator-(const ResID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return this and not other */
+GroupAtomID<ChainID,AtomID> ChainID::operator-(const AtomID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return this and not other */
+GroupGroupID<SegID,ChainID> ChainID::operator-(const SegID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return this and not other */
+GroupGroupID<CGID,ChainID> ChainID::operator-(const CGID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return not this */
+SireID::InvertMatch<ChainID> ChainID::operator-() const
+{
+    return InvertMatch<ChainID>(*this);
+}
+
+/** Return a match for any chains */
+MatchAll<ChainID> ChainID::any()
+{
+    return MatchAll<ChainID>();
+}
+
+/** Match everything */
+QList<ChainIdx> ChainID::matchAll(const MolInfo &molinfo)
+{
+    return molinfo.getChains();
+}
+
 /** Return the atoms in the matching residues */
 AtomsIn<ChainID> ChainID::atoms() const
 {
@@ -214,23 +316,41 @@ ResIn<ChainID> ChainID::residues(int i, int j) const
 {
     return ResIn<ChainID>(*this, i, j);
 }
-  
-/** Return a specific atom that matches this ID */
-Specify<ChainID> ChainID::operator[](int i) const
+
+/** Return a specific object that matches this ID */
+Specify<ChainID> ChainID::operator[](qint64 i) const
 {
     return Specify<ChainID>(*this, i);
 }
 
-/** Return a specific atom that matches this ID */
-Specify<ChainID> ChainID::operator()(int i) const
+/** Return a range of objects that match this ID */
+Specify<ChainID> ChainID::operator[](const SireBase::Range &range) const
+{
+    return Specify<ChainID>(*this, range);
+}
+
+/** Return a range of objects that match this ID */
+Specify<ChainID> ChainID::operator()(const SireBase::Range &range) const
+{
+    return Specify<ChainID>(*this, range);
+}
+
+/** Return a specific object that matches this ID */
+Specify<ChainID> ChainID::operator()(qint64 i) const
 {
     return this->operator[](i);
 }
 
-/** Return a range of atoms that match this ID */
-Specify<ChainID> ChainID::operator()(int i, int j) const
+/** Return a range of objects that match this ID */
+Specify<ChainID> ChainID::operator()(qint64 start, qint64 end) const
 {
-    return Specify<ChainID>(*this, i, j);
+    return Specify<ChainID>(*this, start, end);
+}
+
+/** Return a range of objects that match this ID */
+Specify<ChainID> ChainID::operator()(qint64 start, qint64 end, qint64 increment) const
+{
+    return Specify<ChainID>(*this, start, end, increment);
 }
 
 void ChainID::processMatches(QList<ChainIdx> &matches, const MolInfo&) const
@@ -370,7 +490,7 @@ Chain ChainID::selectFrom(const Molecules &molecules, const PropertyMap &map) co
                 .arg(chains.data().number()).arg(this->toString()),
                     CODELOC );
                     
-    return chains[0];
+    return chains(0);
 }
 
 /** Return the chain from the molecule group 'molgroup' that matches

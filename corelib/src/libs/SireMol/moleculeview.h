@@ -61,6 +61,10 @@ class Atom;
 template<class T>
 class Selector;
 
+class MoleculeView;
+
+typedef SireBase::PropPtr<MoleculeView> MolViewPtr;
+
 /** This is the base class of all views of a Molecule. Derived
     classes include Molecule, Segment, Chain, CutGroup, Residue and Atom.
     
@@ -113,6 +117,26 @@ public:
     virtual AtomSelection selection() const=0;
 
     bool isNull() const;
+
+    int size() const;
+    int count() const;
+    virtual int nViews() const;
+
+    virtual MolViewPtr operator[](int i) const;
+    virtual MolViewPtr operator[](const AtomID &atomid) const;
+    virtual MolViewPtr operator[](const ResID &resid) const;
+    virtual MolViewPtr operator[](const CGID &cgid) const;
+    virtual MolViewPtr operator[](const ChainID &chainid) const;
+    virtual MolViewPtr operator[](const SegID &segid) const;
+    virtual MolViewPtr operator[](const SireID::Index &idx) const;
+
+    MolViewPtr at(int i) const;
+    MolViewPtr at(const AtomID &atomid) const;
+    MolViewPtr at(const ResID &resid) const;
+    MolViewPtr at(const CGID &cgid) const;
+    MolViewPtr at(const ChainID &chainid) const;
+    MolViewPtr at(const SegID &segid) const;
+    MolViewPtr at(const SireID::Index &idx) const;
 
     Atom atom(const AtomID &atomid, const PropertyMap &map = PropertyMap()) const;
     
@@ -213,6 +237,8 @@ public:
         this returns the keys of all AtomProperty derived objects */
     virtual QStringList propertyKeys() const=0;
     
+    QStringList keys() const;
+    
     /** Return the list of metakeys of metadata that fit this view,
         e.g. if this is a view of an atom, or group of atoms, then
         this returns the metakeys of all AtomProperty derived objects */
@@ -242,6 +268,8 @@ public:
     void assertSameMolecule(const MoleculeData &other) const;
 
     virtual void assertContains(AtomIdx atomidx) const;
+
+    static const MoleculeView& null();
 
 protected:
     MoleculeView();
@@ -536,6 +564,8 @@ void set_metadata(MoleculeData &moldata,
 }
 
 SIRE_EXPOSE_CLASS( SireMol::MoleculeView )
+
+SIRE_EXPOSE_PROPERTY( SireMol::MolViewPtr, SireMol::MoleculeView )
 
 SIRE_END_HEADER
 

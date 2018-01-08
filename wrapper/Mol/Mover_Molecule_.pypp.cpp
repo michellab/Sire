@@ -87,6 +87,8 @@ SireMol::Mover<SireMol::Molecule> __copy__(const SireMol::Mover<SireMol::Molecul
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_Mover_Molecule__class(){
 
     { //::SireMol::Mover< SireMol::Molecule >
@@ -502,6 +504,7 @@ void register_Mover_Molecule__class(){
         Mover_Molecule__exposer.def( "clone", &__copy__);
         Mover_Molecule__exposer.def( "__str__", &__str__< ::SireMol::Mover<SireMol::Molecule> > );
         Mover_Molecule__exposer.def( "__repr__", &__str__< ::SireMol::Mover<SireMol::Molecule> > );
+        Mover_Molecule__exposer.def( "__len__", &__len_size< ::SireMol::Mover<SireMol::Molecule> > );
     }
 
 }

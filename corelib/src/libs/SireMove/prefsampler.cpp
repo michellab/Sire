@@ -172,7 +172,7 @@ void PrefSampler::recalculateWeights()
         const ViewsOfMol &mol = molgroup[viewidx.get<0>()];
             
         //calculate the distance from the focal point
-        Vector new_center = mol.at(viewidx.get<1>()).evaluate()
+        Vector new_center = mol.valueAt(viewidx.get<1>()).evaluate()
                                .centerOfGeometry(map);
                                
         double dist = current_space->calcDist(new_center, focal_point);
@@ -684,7 +684,7 @@ void PrefSampler::setGroup(const MoleculeGroup &molgroup)
             
         //the molecule has changed - calculate the new distance from
         //the focal point
-        Vector new_center = mol.at(viewidx.get<1>()).evaluate()
+        Vector new_center = mol.valueAt(viewidx.get<1>()).evaluate()
                                .centerOfGeometry(map);
 
         double dist = current_space->calcDist(new_center, focal_point);
@@ -817,7 +817,7 @@ tuple<Molecule,double> PrefSampler::sampleMolecule() const
         
         for (int i=0; i<views.nViews(); ++i)
         {
-            sum_prob += this->probabilityOf( views.at(i) );
+            sum_prob += this->probabilityOf( views.valueAt(i) );
         }
         
         return tuple<Molecule,double>(mol, sum_prob);
@@ -896,7 +896,7 @@ double PrefSampler::probabilityOfMolecule(const Molecule &molecule) const
     
     for (int i=0; i<views.nViews(); ++i)
     {
-        sum_of_prob += this->probabilityOf(views.at(i));
+        sum_of_prob += this->probabilityOf(views.valueAt(i));
     }
     
     return sum_of_prob;

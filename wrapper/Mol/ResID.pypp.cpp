@@ -61,6 +61,17 @@ void register_ResID_class(){
         typedef bp::class_< SireMol::ResID, bp::bases< SireID::ID >, boost::noncopyable > ResID_exposer_t;
         ResID_exposer_t ResID_exposer = ResID_exposer_t( "ResID", "This is the base class of all identifiers that are used\nto identify a residue within a molecule\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope ResID_scope( ResID_exposer );
+        { //::SireMol::ResID::any
+        
+            typedef ::SireID::MatchAll< SireMol::ResID > ( *any_function_type )(  );
+            any_function_type any_function_value( &::SireMol::ResID::any );
+            
+            ResID_exposer.def( 
+                "any"
+                , any_function_value
+                , "Return a match for all residues" );
+        
+        }
         { //::SireMol::ResID::atom
         
             typedef ::SireMol::AtomsIn< SireMol::ResID > ( ::SireMol::ResID::*atom_function_type)( int ) const;
@@ -107,6 +118,28 @@ void register_ResID_class(){
                 , "Return a Chain ID that matches chains that contain residues\nthat match this Residue ID" );
         
         }
+        { //::SireMol::ResID::inverse
+        
+            typedef ::SireID::InvertMatch< SireMol::ResID > ( ::SireMol::ResID::*inverse_function_type)(  ) const;
+            inverse_function_type inverse_function_value( &::SireMol::ResID::inverse );
+            
+            ResID_exposer.def( 
+                "inverse"
+                , inverse_function_value
+                , "Invert this match" );
+        
+        }
+        { //::SireMol::ResID::invert
+        
+            typedef ::SireID::InvertMatch< SireMol::ResID > ( ::SireMol::ResID::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::ResID::invert );
+            
+            ResID_exposer.def( 
+                "invert"
+                , invert_function_value
+                , "Invert this match" );
+        
+        }
         { //::SireMol::ResID::map
         
             typedef ::QList< SireMol::ResIdx > ( ::SireMol::ResID::*map_function_type)( ::SireMol::MolInfo const & ) const;
@@ -131,6 +164,7 @@ void register_ResID_class(){
                 , "Map this ResID to the atoms in the passed molecule view\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
+        ResID_exposer.def( !bp::self );
         ResID_exposer.def( bp::self & bp::self );
         ResID_exposer.def( bp::self & bp::other< SireMol::ChainID >() );
         ResID_exposer.def( bp::self & bp::other< SireMol::AtomID >() );
@@ -138,7 +172,19 @@ void register_ResID_class(){
         ResID_exposer.def( bp::self & bp::other< SireMol::CGID >() );
         { //::SireMol::ResID::operator()
         
-            typedef ::SireID::Specify< SireMol::ResID > ( ::SireMol::ResID::*__call___function_type)( int ) const;
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireMol::ResID::*__call___function_type)( ::SireBase::Range const & ) const;
+            __call___function_type __call___function_value( &::SireMol::ResID::operator() );
+            
+            ResID_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("range") )
+                , "" );
+        
+        }
+        { //::SireMol::ResID::operator()
+        
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireMol::ResID::*__call___function_type)( ::qint64 ) const;
             __call___function_type __call___function_value( &::SireMol::ResID::operator() );
             
             ResID_exposer.def( 
@@ -150,25 +196,45 @@ void register_ResID_class(){
         }
         { //::SireMol::ResID::operator()
         
-            typedef ::SireID::Specify< SireMol::ResID > ( ::SireMol::ResID::*__call___function_type)( int,int ) const;
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireMol::ResID::*__call___function_type)( ::qint64,::qint64 ) const;
             __call___function_type __call___function_value( &::SireMol::ResID::operator() );
             
             ResID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") )
+                , ( bp::arg("start"), bp::arg("end") )
+                , "" );
+        
+        }
+        { //::SireMol::ResID::operator()
+        
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireMol::ResID::*__call___function_type)( ::qint64,::qint64,::qint64 ) const;
+            __call___function_type __call___function_value( &::SireMol::ResID::operator() );
+            
+            ResID_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("start"), bp::arg("end"), bp::arg("increment") )
                 , "" );
         
         }
         ResID_exposer.def( bp::self * bp::self );
+        ResID_exposer.def( bp::self * bp::other< SireMol::AtomID >() );
+        ResID_exposer.def( bp::self * bp::other< SireMol::ChainID >() );
         ResID_exposer.def( bp::self + bp::self );
         ResID_exposer.def( bp::self + bp::other< SireMol::ChainID >() );
         ResID_exposer.def( bp::self + bp::other< SireMol::AtomID >() );
         ResID_exposer.def( bp::self + bp::other< SireMol::SegID >() );
         ResID_exposer.def( bp::self + bp::other< SireMol::CGID >() );
+        ResID_exposer.def( bp::self - bp::self );
+        ResID_exposer.def( bp::self - bp::other< SireMol::ChainID >() );
+        ResID_exposer.def( bp::self - bp::other< SireMol::AtomID >() );
+        ResID_exposer.def( bp::self - bp::other< SireMol::SegID >() );
+        ResID_exposer.def( bp::self - bp::other< SireMol::CGID >() );
+        ResID_exposer.def( -bp::self );
         { //::SireMol::ResID::operator[]
         
-            typedef ::SireID::Specify< SireMol::ResID > ( ::SireMol::ResID::*__getitem___function_type)( int ) const;
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireMol::ResID::*__getitem___function_type)( ::qint64 ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::ResID::operator[] );
             
             ResID_exposer.def( 
@@ -178,7 +244,21 @@ void register_ResID_class(){
                 , "" );
         
         }
+        { //::SireMol::ResID::operator[]
+        
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireMol::ResID::*__getitem___function_type)( ::SireBase::Range const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ResID::operator[] );
+            
+            ResID_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("range") )
+                , "" );
+        
+        }
         ResID_exposer.def( bp::self | bp::self );
+        ResID_exposer.def( bp::self | bp::other< SireMol::AtomID >() );
+        ResID_exposer.def( bp::self | bp::other< SireMol::ChainID >() );
         { //::SireMol::ResID::selectAllFrom
         
             typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::ResID::*selectAllFrom_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
@@ -286,6 +366,7 @@ void register_ResID_class(){
                 , "" );
         
         }
+        ResID_exposer.staticmethod( "any" );
         ResID_exposer.staticmethod( "typeName" );
         ResID_exposer.def( "__str__", &__str__< ::SireMol::ResID > );
         ResID_exposer.def( "__repr__", &__str__< ::SireMol::ResID > );

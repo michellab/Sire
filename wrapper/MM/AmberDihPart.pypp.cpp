@@ -7,11 +7,21 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/errors.h"
+
+#include "SireBase/parallel.h"
+
+#include "SireBase/stringproperty.h"
+
 #include "SireCAS/expression.h"
+
+#include "SireCAS/sum.h"
 
 #include "SireCAS/symbol.h"
 
 #include "SireCAS/trigfuncs.h"
+
+#include "SireCAS/values.h"
 
 #include "SireError/errors.h"
 
@@ -72,6 +82,17 @@ void register_AmberDihPart_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberDihPart::hash
+        
+            typedef ::uint ( ::SireMM::AmberDihPart::*hash_function_type)(  ) const;
+            hash_function_type hash_function_value( &::SireMM::AmberDihPart::hash );
+            
+            AmberDihPart_exposer.def( 
+                "hash"
+                , hash_function_value
+                , "" );
+        
+        }
         { //::SireMM::AmberDihPart::k
         
             typedef double ( ::SireMM::AmberDihPart::*k_function_type)(  ) const;
@@ -84,6 +105,8 @@ void register_AmberDihPart_class(){
         
         }
         AmberDihPart_exposer.def( bp::self != bp::self );
+        AmberDihPart_exposer.def( bp::self < bp::self );
+        AmberDihPart_exposer.def( bp::self <= bp::self );
         { //::SireMM::AmberDihPart::operator=
         
             typedef ::SireMM::AmberDihPart & ( ::SireMM::AmberDihPart::*assign_function_type)( ::SireMM::AmberDihPart const & ) ;
@@ -98,6 +121,8 @@ void register_AmberDihPart_class(){
         
         }
         AmberDihPart_exposer.def( bp::self == bp::self );
+        AmberDihPart_exposer.def( bp::self > bp::self );
+        AmberDihPart_exposer.def( bp::self >= bp::self );
         { //::SireMM::AmberDihPart::operator[]
         
             typedef double ( ::SireMM::AmberDihPart::*__getitem___function_type)( int ) const;
@@ -143,6 +168,29 @@ void register_AmberDihPart_class(){
                 , "" );
         
         }
+        { //::SireMM::AmberDihPart::typeName
+        
+            typedef char const * ( *typeName_function_type )(  );
+            typeName_function_type typeName_function_value( &::SireMM::AmberDihPart::typeName );
+            
+            AmberDihPart_exposer.def( 
+                "typeName"
+                , typeName_function_value
+                , "" );
+        
+        }
+        { //::SireMM::AmberDihPart::what
+        
+            typedef char const * ( ::SireMM::AmberDihPart::*what_function_type)(  ) const;
+            what_function_type what_function_value( &::SireMM::AmberDihPart::what );
+            
+            AmberDihPart_exposer.def( 
+                "what"
+                , what_function_value
+                , "" );
+        
+        }
+        AmberDihPart_exposer.staticmethod( "typeName" );
         AmberDihPart_exposer.def( "__copy__", &__copy__);
         AmberDihPart_exposer.def( "__deepcopy__", &__copy__);
         AmberDihPart_exposer.def( "clone", &__copy__);
@@ -152,6 +200,7 @@ void register_AmberDihPart_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AmberDihPart_exposer.def( "__str__", &__str__< ::SireMM::AmberDihPart > );
         AmberDihPart_exposer.def( "__repr__", &__str__< ::SireMM::AmberDihPart > );
+        AmberDihPart_exposer.def( "__hash__", &::SireMM::AmberDihPart::hash );
     }
 
 }

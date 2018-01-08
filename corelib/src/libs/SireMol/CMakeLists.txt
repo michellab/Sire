@@ -33,6 +33,7 @@ set ( SIREMOL_HEADERS
       atomnum.h
       atompolarisabilities.h
       atomproperty.hpp
+      atomradii.h
       atomselection.h
       atomsin.hpp
       atomvelocities.h

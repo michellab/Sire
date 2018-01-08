@@ -19,6 +19,7 @@ set ( SIRECAS_HEADERS
       exp.h
       expressionbase.h
       expression.h
+      expressionproperty.h
       expressions.h
       function.h
       functions.h
@@ -59,6 +60,7 @@ set ( SIRECAS_SOURCES
       exp.cpp                     
       expressionbase.cpp          
       expression.cpp              
+      expressionproperty.cpp
       expressions.cpp             
       function.cpp                
       functions.cpp               

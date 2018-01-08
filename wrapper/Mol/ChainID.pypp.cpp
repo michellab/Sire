@@ -57,6 +57,17 @@ void register_ChainID_class(){
         typedef bp::class_< SireMol::ChainID, bp::bases< SireID::ID >, boost::noncopyable > ChainID_exposer_t;
         ChainID_exposer_t ChainID_exposer = ChainID_exposer_t( "ChainID", "This is the base class of all identifiers that are used\nto identify a chain within a molecule\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope ChainID_scope( ChainID_exposer );
+        { //::SireMol::ChainID::any
+        
+            typedef ::SireID::MatchAll< SireMol::ChainID > ( *any_function_type )(  );
+            any_function_type any_function_value( &::SireMol::ChainID::any );
+            
+            ChainID_exposer.def( 
+                "any"
+                , any_function_value
+                , "Return a match for any chains" );
+        
+        }
         { //::SireMol::ChainID::atom
         
             typedef ::SireMol::AtomsIn< SireMol::ChainID > ( ::SireMol::ChainID::*atom_function_type)( int ) const;
@@ -92,6 +103,28 @@ void register_ChainID_class(){
                 , "Return a range of atoms in the matching residues" );
         
         }
+        { //::SireMol::ChainID::inverse
+        
+            typedef ::SireID::InvertMatch< SireMol::ChainID > ( ::SireMol::ChainID::*inverse_function_type)(  ) const;
+            inverse_function_type inverse_function_value( &::SireMol::ChainID::inverse );
+            
+            ChainID_exposer.def( 
+                "inverse"
+                , inverse_function_value
+                , "Inverse this match" );
+        
+        }
+        { //::SireMol::ChainID::invert
+        
+            typedef ::SireID::InvertMatch< SireMol::ChainID > ( ::SireMol::ChainID::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::ChainID::invert );
+            
+            ChainID_exposer.def( 
+                "invert"
+                , invert_function_value
+                , "Inverse this match" );
+        
+        }
         { //::SireMol::ChainID::map
         
             typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainID::*map_function_type)( ::SireMol::MolInfo const & ) const;
@@ -116,6 +149,7 @@ void register_ChainID_class(){
                 , "Map this ChainID to the chains in the passed molecule view\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
+        ChainID_exposer.def( !bp::self );
         ChainID_exposer.def( bp::self & bp::self );
         ChainID_exposer.def( bp::self & bp::other< SireMol::ResID >() );
         ChainID_exposer.def( bp::self & bp::other< SireMol::AtomID >() );
@@ -123,7 +157,19 @@ void register_ChainID_class(){
         ChainID_exposer.def( bp::self & bp::other< SireMol::CGID >() );
         { //::SireMol::ChainID::operator()
         
-            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( int ) const;
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( ::SireBase::Range const & ) const;
+            __call___function_type __call___function_value( &::SireMol::ChainID::operator() );
+            
+            ChainID_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("range") )
+                , "" );
+        
+        }
+        { //::SireMol::ChainID::operator()
+        
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( ::qint64 ) const;
             __call___function_type __call___function_value( &::SireMol::ChainID::operator() );
             
             ChainID_exposer.def( 
@@ -135,25 +181,45 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::operator()
         
-            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( int,int ) const;
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( ::qint64,::qint64 ) const;
             __call___function_type __call___function_value( &::SireMol::ChainID::operator() );
             
             ChainID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") )
+                , ( bp::arg("start"), bp::arg("end") )
+                , "" );
+        
+        }
+        { //::SireMol::ChainID::operator()
+        
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( ::qint64,::qint64,::qint64 ) const;
+            __call___function_type __call___function_value( &::SireMol::ChainID::operator() );
+            
+            ChainID_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("start"), bp::arg("end"), bp::arg("increment") )
                 , "" );
         
         }
         ChainID_exposer.def( bp::self * bp::self );
+        ChainID_exposer.def( bp::self * bp::other< SireMol::ResID >() );
+        ChainID_exposer.def( bp::self * bp::other< SireMol::AtomID >() );
         ChainID_exposer.def( bp::self + bp::self );
         ChainID_exposer.def( bp::self + bp::other< SireMol::ResID >() );
         ChainID_exposer.def( bp::self + bp::other< SireMol::AtomID >() );
         ChainID_exposer.def( bp::self + bp::other< SireMol::SegID >() );
         ChainID_exposer.def( bp::self + bp::other< SireMol::CGID >() );
+        ChainID_exposer.def( bp::self - bp::self );
+        ChainID_exposer.def( bp::self - bp::other< SireMol::ResID >() );
+        ChainID_exposer.def( bp::self - bp::other< SireMol::AtomID >() );
+        ChainID_exposer.def( bp::self - bp::other< SireMol::SegID >() );
+        ChainID_exposer.def( bp::self - bp::other< SireMol::CGID >() );
+        ChainID_exposer.def( -bp::self );
         { //::SireMol::ChainID::operator[]
         
-            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__getitem___function_type)( int ) const;
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__getitem___function_type)( ::qint64 ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::ChainID::operator[] );
             
             ChainID_exposer.def( 
@@ -163,7 +229,21 @@ void register_ChainID_class(){
                 , "" );
         
         }
+        { //::SireMol::ChainID::operator[]
+        
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__getitem___function_type)( ::SireBase::Range const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ChainID::operator[] );
+            
+            ChainID_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("range") )
+                , "" );
+        
+        }
         ChainID_exposer.def( bp::self | bp::self );
+        ChainID_exposer.def( bp::self | bp::other< SireMol::ResID >() );
+        ChainID_exposer.def( bp::self | bp::other< SireMol::AtomID >() );
         { //::SireMol::ChainID::residue
         
             typedef ::SireMol::ResIn< SireMol::ChainID > ( ::SireMol::ChainID::*residue_function_type)( int ) const;
@@ -306,6 +386,7 @@ void register_ChainID_class(){
                 , "" );
         
         }
+        ChainID_exposer.staticmethod( "any" );
         ChainID_exposer.staticmethod( "typeName" );
         ChainID_exposer.def( "__str__", &__str__< ::SireMol::ChainID > );
         ChainID_exposer.def( "__repr__", &__str__< ::SireMol::ChainID > );

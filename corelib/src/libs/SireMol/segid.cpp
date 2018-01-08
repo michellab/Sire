@@ -71,23 +71,41 @@ SegID::SegID(const SegID &other) : ID(other)
 /** Destructor */
 SegID::~SegID()
 {}
-  
-/** Return a specific atom that matches this ID */
-Specify<SegID> SegID::operator[](int i) const
+
+/** Return a specific object that matches this ID */
+Specify<SegID> SegID::operator[](qint64 i) const
 {
     return Specify<SegID>(*this, i);
 }
 
-/** Return a specific atom that matches this ID */
-Specify<SegID> SegID::operator()(int i) const
+/** Return a range of objects that match this ID */
+Specify<SegID> SegID::operator[](const SireBase::Range &range) const
+{
+    return Specify<SegID>(*this, range);
+}
+
+/** Return a range of objects that match this ID */
+Specify<SegID> SegID::operator()(const SireBase::Range &range) const
+{
+    return Specify<SegID>(*this, range);
+}
+
+/** Return a specific object that matches this ID */
+Specify<SegID> SegID::operator()(qint64 i) const
 {
     return this->operator[](i);
 }
 
-/** Return a range of atoms that match this ID */
-Specify<SegID> SegID::operator()(int i, int j) const
+/** Return a range of objects that match this ID */
+Specify<SegID> SegID::operator()(qint64 start, qint64 end) const
 {
-    return Specify<SegID>(*this, i, j);
+    return Specify<SegID>(*this, start, end);
+}
+
+/** Return a range of objects that match this ID */
+Specify<SegID> SegID::operator()(qint64 start, qint64 end, qint64 increment) const
+{
+    return Specify<SegID>(*this, start, end, increment);
 }
 
 /** Combine two ID types */
@@ -196,6 +214,90 @@ IDOrSet<SegID> SegID::operator||(const SegID &other) const
 IDOrSet<SegID> SegID::operator|(const SegID &other) const
 {
     return this->operator*(other);
+}
+
+/** Return the object to search for the match of this or 'other' */
+IDOrSet<AtomID> SegID::operator*(const AtomID &other) const
+{
+    return other * *this;
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> SegID::operator||(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> SegID::operator|(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the inverse of this match */
+InvertMatch<SegID> SegID::invert() const
+{
+    return InvertMatch<SegID>(*this);
+}
+
+/** Return the inverse of this match */
+InvertMatch<SegID> SegID::inverse() const
+{
+    return this->invert();
+}
+
+/** Return the inverse of this match */
+InvertMatch<SegID> SegID::operator!() const
+{
+    return this->invert();
+}
+
+/** Return this and not other */
+IDAndSet<SegID> SegID::operator-(const SegID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupAtomID<SegID,AtomID> SegID::operator-(const AtomID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupGroupID<SegID,CGID> SegID::operator-(const CGID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupGroupID<SegID,ResID> SegID::operator-(const ResID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupGroupID<SegID,ChainID> SegID::operator-(const ChainID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return not this */
+SireID::InvertMatch<SegID> SegID::operator-() const
+{
+    return InvertMatch<SegID>(*this);
+}
+
+/** Return a match for anything */
+MatchAll<SegID> SegID::any()
+{
+    return MatchAll<SegID>();
+}
+
+/** Match everything */
+QList<SegIdx> SegID::matchAll(const MolInfo &molinfo)
+{
+    return molinfo.getSegments();
 }
 
 /** Return the atoms in the matching residues */
@@ -353,7 +455,7 @@ Segment SegID::selectFrom(const Molecules &molecules, const PropertyMap &map) co
                 .arg(atoms.data().number()).arg(this->toString()),
                     CODELOC );
                     
-    return atoms[0];
+    return atoms(0);
 }
 
 /** Return the atom from the molecule group 'molgroup' that matches

@@ -10,6 +10,8 @@ namespace bp = boost::python;
 
 #include "SireBase/errors.h"
 
+#include "SireBase/propertylist.h"
+
 #include "SireError/errors.h"
 
 #include "SireFF/errors.h"

@@ -10,6 +10,9 @@
 
 #include "SireUnits/dimensions.h"
 
+#include "SireBase/property.h"
+#include "SireBase/propertylist.h"
+
 SIRE_BEGIN_HEADER
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
@@ -107,13 +110,35 @@ public:
     
     QString toString() const;
 
+    SireBase::PropertyPtr toProperty() const;
+
+    template<class T>
+    bool isUnit() const;
+
 private:
     void assertCompatible(const GeneralUnit &other) const;
 
     int Mass, Length, Time, Charge, temperature, Quantity, Angle;
 };
 
+inline SireBase::PropertyPtr wrap(const GeneralUnit &unit)
+{
+    return unit.toProperty();
+}
+
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
+
+template<class T>
+inline bool GeneralUnit::isUnit() const
+{
+    return this->MASS() == T::MASS() and
+           this->LENGTH() == T::LENGTH() and
+           this->TIME() == T::TIME() and
+           this->CHARGE() == T::CHARGE() and
+           this->TEMPERATURE() == T::TEMPERATURE() and
+           this->QUANTITY() == T::QUANTITY() and
+           this->ANGLE() == T::ANGLE();
+}
 
 inline GeneralUnit operator*(double val, const GeneralUnit &unit)
 {
@@ -248,6 +273,7 @@ void register_dimension()
 }
 
 SIRE_EXPOSE_CLASS( SireUnits::Dimension::GeneralUnit )
+SIRE_EXPOSE_FUNCTION( SireUnits::Dimension::wrap )
 
 SIRE_END_HEADER
 

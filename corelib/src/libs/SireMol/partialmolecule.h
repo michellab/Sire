@@ -134,6 +134,8 @@ public:
     const Property& metadata(const PropertyName &key,
                              const PropertyName &metakey) const;
 
+    MolViewPtr toUnit() const;
+
 private:
     /** The atoms that are selected in this view */
     AtomSelection selected_atoms;

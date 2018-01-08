@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/unittest.h"
+
 #include "SireError/errors.h"
 
 #include "multidouble.h"
@@ -48,6 +50,8 @@ void register_MultiFloat_class(){
         MultiFloat_exposer_t MultiFloat_exposer = MultiFloat_exposer_t( "MultiFloat", "This class provides a vectorised float. This represents\na single vector of floats on the compiled machine, e.g.\n4 floats if we use SSE2, 8 floats for AVX\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MultiFloat_scope( MultiFloat_exposer );
         MultiFloat_exposer.def( bp::init< float >(( bp::arg("value") ), "Construct from the passed array - this must be the same size as the vector") );
+        MultiFloat_exposer.def( bp::init< double >(( bp::arg("value") ), "Construct from the passed array - this must be the same size as the vector") );
+        MultiFloat_exposer.def( bp::init< int >(( bp::arg("value") ), "Construct from a MultiInt") );
         MultiFloat_exposer.def( bp::init< float const *, int >(( bp::arg("array"), bp::arg("size") ), "Construct from the passed array. If size is greater than MultiFloat::size()\nthen an error will be raised. If size is less than MultiFloat::size() then\nthis float will be padded with zeroes") );
         MultiFloat_exposer.def( bp::init< float const *, SireMaths::MultiInt const & >(( bp::arg("array"), bp::arg("indicies") ), "Construct from the passed array, taking the values of each element\nof the vector from the index in the associated MultiInt, e.g.\nMultiFloat[i] = array[ MultiInt[i] ]\n") );
         MultiFloat_exposer.def( bp::init< QVector< float > const & >(( bp::arg("array") ), "Construct from the passed array - this must be the same size as the vector") );

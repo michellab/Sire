@@ -71,6 +71,8 @@
 
 #include "ExpressionBase.pypp.hpp"
 
+#include "ExpressionProperty.pypp.hpp"
+
 #include "Factor.pypp.hpp"
 
 #include "GreaterOrEqualThan.pypp.hpp"
@@ -233,6 +235,8 @@ BOOST_PYTHON_MODULE(_CAS){
     register_Expression_class();
 
     register_ExpressionBase_class();
+
+    register_ExpressionProperty_class();
 
     register_Factor_class();
 

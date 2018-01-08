@@ -69,6 +69,8 @@
 
 #include "AtomProp.pypp.hpp"
 
+#include "AtomRadii.pypp.hpp"
+
 #include "AtomResultMatcher.pypp.hpp"
 
 #include "AtomSelection.pypp.hpp"
@@ -249,6 +251,16 @@
 
 #include "ImproperID.pypp.hpp"
 
+#include "InvertMatch_AtomID_.pypp.hpp"
+
+#include "InvertMatch_CGID_.pypp.hpp"
+
+#include "InvertMatch_ChainID_.pypp.hpp"
+
+#include "InvertMatch_ResID_.pypp.hpp"
+
+#include "InvertMatch_SegID_.pypp.hpp"
+
 #include "MGID.pypp.hpp"
 
 #include "MGIDsAndMaps.pypp.hpp"
@@ -258,6 +270,16 @@
 #include "MGName.pypp.hpp"
 
 #include "MGNum.pypp.hpp"
+
+#include "MatchAll_AtomID_.pypp.hpp"
+
+#include "MatchAll_CGID_.pypp.hpp"
+
+#include "MatchAll_ChainID_.pypp.hpp"
+
+#include "MatchAll_ResID_.pypp.hpp"
+
+#include "MatchAll_SegID_.pypp.hpp"
 
 #include "MolAtomID.pypp.hpp"
 
@@ -332,8 +354,6 @@
 #include "Mover_Selector_Residue_.pypp.hpp"
 
 #include "Mover_Selector_Segment_.pypp.hpp"
-
-#include "Mover_ViewsOfMol_.pypp.hpp"
 
 #include "NullBeading.pypp.hpp"
 
@@ -453,8 +473,6 @@
 
 #include "Velocity3D.pypp.hpp"
 
-#include "ViewsOfMol.pypp.hpp"
-
 #include "VolumeMap.pypp.hpp"
 
 #include "WeightFunction.pypp.hpp"
@@ -480,6 +498,8 @@ namespace bp = boost::python;
 #include "SireMol/mover.hpp"
 
 #include "SireMol/mgidentifier.h"
+
+#include "SireMol/moleculeinfo.h"
 
 BOOST_PYTHON_MODULE(_Mol){
     register_SireMol_objects();
@@ -527,6 +547,26 @@ BOOST_PYTHON_MODULE(_Mol){
     register_IDOrSet_ResID__class();
 
     register_IDOrSet_SegID__class();
+
+    register_InvertMatch_AtomID__class();
+
+    register_InvertMatch_CGID__class();
+
+    register_InvertMatch_ChainID__class();
+
+    register_InvertMatch_ResID__class();
+
+    register_InvertMatch_SegID__class();
+
+    register_MatchAll_AtomID__class();
+
+    register_MatchAll_CGID__class();
+
+    register_MatchAll_ChainID__class();
+
+    register_MatchAll_ResID__class();
+
+    register_MatchAll_SegID__class();
 
     register_Specify_AtomID__class();
 
@@ -613,6 +653,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_AtomElements_class();
 
     register_AtomCharges_class();
+
+    register_AtomRadii_class();
 
     register_AtomPolarisabilities_class();
 
@@ -864,10 +906,6 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_Mover_Selector_Segment__class();
 
-    register_ViewsOfMol_class();
-
-    register_Mover_ViewsOfMol__class();
-
     register_NullBeading_class();
 
     register_NullBondHunter_class();
@@ -959,6 +997,8 @@ BOOST_PYTHON_MODULE(_Mol){
     bp::implicitly_convertible< SireMol::MoleculeView, SireMol::MoleculeData >();
 
     bp::implicitly_convertible< SireMol::MoleculeView, SireMol::PartialMolecule >();
+
+    bp::implicitly_convertible< SireMol::MoleculeInfoData, SireMol::MoleculeInfo >();
 
     register_free_functions();
 }

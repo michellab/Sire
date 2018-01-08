@@ -74,23 +74,41 @@ ResID::ResID(const ResID &other) : ID(other)
 /** Destructor */
 ResID::~ResID()
 {}
-  
-/** Return a specific residue that matches this ID */
-Specify<ResID> ResID::operator[](int i) const
+
+/** Return a specific object that matches this ID */
+Specify<ResID> ResID::operator[](qint64 i) const
 {
     return Specify<ResID>(*this, i);
 }
 
-/** Return a specific residue that matches this ID */
-Specify<ResID> ResID::operator()(int i) const
+/** Return a range of objects that match this ID */
+Specify<ResID> ResID::operator[](const SireBase::Range &range) const
+{
+    return Specify<ResID>(*this, range);
+}
+
+/** Return a range of objects that match this ID */
+Specify<ResID> ResID::operator()(const SireBase::Range &range) const
+{
+    return Specify<ResID>(*this, range);
+}
+
+/** Return a specific object that matches this ID */
+Specify<ResID> ResID::operator()(qint64 i) const
 {
     return this->operator[](i);
 }
 
-/** Return a range of residues that match this ID */
-Specify<ResID> ResID::operator()(int i, int j) const
+/** Return a range of objects that match this ID */
+Specify<ResID> ResID::operator()(qint64 start, qint64 end) const
 {
-    return Specify<ResID>(*this, i, j);
+    return Specify<ResID>(*this, start, end);
+}
+
+/** Return a range of objects that match this ID */
+Specify<ResID> ResID::operator()(qint64 start, qint64 end, qint64 increment) const
+{
+    return Specify<ResID>(*this, start, end, increment);
 }
 
 /** Combine with another ID type */
@@ -199,6 +217,108 @@ IDOrSet<ResID> ResID::operator||(const ResID &other) const
 IDOrSet<ResID> ResID::operator|(const ResID &other) const
 {
     return this->operator*(other);
+}
+
+/** Return the match for this ID or 'other' */
+IDOrSet<AtomID> ResID::operator*(const AtomID &other) const
+{
+    return other * *this;
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> ResID::operator||(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<AtomID> ResID::operator|(const AtomID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the match for this ID or 'other' */
+IDOrSet<ResID> ResID::operator*(const ChainID &other) const
+{
+    return IDOrSet<ResID>(*this, other+ResID::any());
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<ResID> ResID::operator||(const ChainID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for operator* */
+IDOrSet<ResID> ResID::operator|(const ChainID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Invert this match */
+InvertMatch<ResID> ResID::invert() const
+{
+    return InvertMatch<ResID>(*this);
+}
+
+/** Invert this match */
+InvertMatch<ResID> ResID::inverse() const
+{
+    return this->invert();
+}
+
+/** Invert this match */
+InvertMatch<ResID> ResID::operator!() const
+{
+    return this->invert();
+}
+
+/** Return this and not other */
+IDAndSet<ResID> ResID::operator-(const ResID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+ChainResID ResID::operator-(const ChainID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupAtomID<ResID,AtomID> ResID::operator-(const AtomID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupGroupID<SegID,ResID> ResID::operator-(const SegID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return this and not other */
+GroupGroupID<CGID,ResID> ResID::operator-(const CGID &other) const
+{
+    return this->operator+(other.invert());
+}
+
+/** Return not this */
+SireID::InvertMatch<ResID> ResID::operator-() const
+{
+    return InvertMatch<ResID>(*this);
+}
+
+/** Return a match for all residues */
+MatchAll<ResID> ResID::any()
+{
+    return MatchAll<ResID>();
+}
+
+/** Match everything */
+QList<ResIdx> ResID::matchAll(const MolInfo &molinfo)
+{
+    return molinfo.getResidues();
 }
 
 /** Return the atoms in the matching residues */
@@ -363,7 +483,7 @@ Residue ResID::selectFrom(const Molecules &molecules, const PropertyMap &map) co
                 .arg(atoms.data().number()).arg(this->toString()),
                     CODELOC );
                     
-    return atoms[0];
+    return atoms(0);
 }
 
 /** Return the atom from the molecule group 'molgroup' that matches

@@ -9,6 +9,14 @@ namespace bp = boost::python;
 
 #include "generalunit.h"
 
+#include "SireBase/lengthproperty.h"
+
+#include "SireBase/timeproperty.h"
+
+#include "SireBase/variantproperty.h"
+
+#include "SireError/errors.h"
+
 #include "SireUnits/dimensions.h"
 
 #include "SireUnits/temperature.h"
@@ -171,6 +179,17 @@ void register_GeneralUnit_class(){
                 "to"
                 , to_function_value
                 , ( bp::arg("other") )
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::toProperty
+        
+            typedef ::SireBase::PropertyPtr ( ::SireUnits::Dimension::GeneralUnit::*toProperty_function_type)(  ) const;
+            toProperty_function_type toProperty_function_value( &::SireUnits::Dimension::GeneralUnit::toProperty );
+            
+            GeneralUnit_exposer.def( 
+                "toProperty"
+                , toProperty_function_value
                 , "" );
         
         }

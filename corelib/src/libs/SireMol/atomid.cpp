@@ -81,21 +81,39 @@ AtomID::~AtomID()
 {}
   
 /** Return a specific atom that matches this ID */
-Specify<AtomID> AtomID::operator[](int i) const
+Specify<AtomID> AtomID::operator[](qint64 i) const
 {
     return Specify<AtomID>(*this, i);
 }
 
+/** Return a range of atoms that match this ID */
+Specify<AtomID> AtomID::operator[](const SireBase::Range &range) const
+{
+    return Specify<AtomID>(*this, range);
+}
+
+/** Return a range of atoms that match this ID */
+Specify<AtomID> AtomID::operator()(const SireBase::Range &range) const
+{
+    return Specify<AtomID>(*this, range);
+}
+
 /** Return a specific atom that matches this ID */
-Specify<AtomID> AtomID::operator()(int i) const
+Specify<AtomID> AtomID::operator()(qint64 i) const
 {
     return this->operator[](i);
 }
 
 /** Return a range of atoms that match this ID */
-Specify<AtomID> AtomID::operator()(int i, int j) const
+Specify<AtomID> AtomID::operator()(qint64 start, qint64 end) const
 {
-    return Specify<AtomID>(*this, i, j);
+    return Specify<AtomID>(*this, start, end);
+}
+
+/** Return a range of atoms that match this ID */
+Specify<AtomID> AtomID::operator()(qint64 start, qint64 end, qint64 increment) const
+{
+    return Specify<AtomID>(*this, start, end, increment);
 }
 
 /** Combine with other ID types */
@@ -206,6 +224,42 @@ MolAtomID AtomID::operator&(const MolID &other) const
     return this->operator+(other);
 }
 
+/** Return the inverse (negative) of this match */
+SireID::InvertMatch<AtomID> AtomID::operator-() const
+{
+    return InvertMatch<AtomID>(*this);
+}
+
+/** Return the match of this atom name and not other */
+IDAndSet<AtomID> AtomID::operator-(const AtomID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the match of this atom name and not other */
+GroupAtomID<CGID,AtomID> AtomID::operator-(const CGID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the match of this atom name and not other */
+GroupAtomID<ResID,AtomID> AtomID::operator-(const ResID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the match of this atom name and not other */
+GroupAtomID<ChainID,AtomID> AtomID::operator-(const ChainID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
+/** Return the match of this atom name and not other */
+GroupAtomID<SegID,AtomID> AtomID::operator-(const SegID &other) const
+{
+    return this->operator+(other.inverse());
+}
+
 /** Return the selection that matches this atom or 'other' */
 IDOrSet<AtomID> AtomID::operator*(const AtomID &other) const
 {
@@ -224,6 +278,120 @@ IDOrSet<AtomID> AtomID::operator|(const AtomID &other) const
     return this->operator*(other);
 }
 
+/** Return the selection that matches this atom or all atoms in 'other' */
+IDOrSet<AtomID> AtomID::operator*(const CGID &other) const
+{
+    return IDOrSet<AtomID>(*this, other+AtomID::any());
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator||(const CGID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator|(const CGID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the selection that matches this atom or all atoms in 'other' */
+IDOrSet<AtomID> AtomID::operator*(const ResID &other) const
+{
+    return IDOrSet<AtomID>(*this, other+AtomID::any());
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator||(const ResID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator|(const ResID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the selection that matches this atom or all atoms in 'other' */
+IDOrSet<AtomID> AtomID::operator*(const ChainID &other) const
+{
+    return IDOrSet<AtomID>(*this, other+AtomID::any());
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator||(const ChainID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator|(const ChainID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the selection that matches this atom or all atoms in 'other' */
+IDOrSet<AtomID> AtomID::operator*(const SegID &other) const
+{
+    return IDOrSet<AtomID>(*this, other+AtomID::any());
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator||(const SegID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator|(const SegID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the selection that matches this atom or all atoms in 'other' */
+IDOrSet<AtomID> AtomID::operator*(const MolID &other) const
+{
+    return IDOrSet<AtomID>(*this, other+AtomID::any());
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator||(const MolID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Syntactic sugar for *this * other */
+IDOrSet<AtomID> AtomID::operator|(const MolID &other) const
+{
+    return this->operator*(other);
+}
+
+/** Return the invert (not) of this match */
+InvertMatch<AtomID> AtomID::operator!() const
+{
+    return InvertMatch<AtomID>(*this);
+}
+
+/** Return the invert (not) of this match */
+InvertMatch<AtomID> AtomID::invert() const
+{
+    return InvertMatch<AtomID>(*this);
+}
+
+/** Syntactic sugar for AtomID::invert() */
+InvertMatch<AtomID> AtomID::inverse() const
+{
+    return this->invert();
+}
+
+/** Return an AtomID that matches everything */
+MatchAll<AtomID> AtomID::any()
+{
+    return MatchAll<AtomID>();
+}
+
 void AtomID::processMatches(QList<AtomIdx> &matches, const MolInfo&) const
 {
     if (matches.isEmpty())
@@ -232,6 +400,13 @@ void AtomID::processMatches(QList<AtomIdx> &matches, const MolInfo&) const
                 .arg(this->toString()), CODELOC );
 
     qSort(matches);
+}
+
+/** Function used by MatchAll<AtomID> to return everything */
+QList<AtomIdx> AtomID::matchAll(const MolInfo &molinfo)
+{
+    QList<AtomIdx> idxs = molinfo.getAtoms();
+    return idxs;
 }
 
 /** Map this AtomID to the atoms in the passed molecule view
@@ -361,7 +536,7 @@ Atom AtomID::selectFrom(const Molecules &molecules, const PropertyMap &map) cons
                 .arg(atoms.data().number()).arg(this->toString()),
                     CODELOC );
                     
-    return atoms[0];
+    return atoms(0);
 }
 
 /** Return the atom from the molecule group 'molgroup' that matches
@@ -694,7 +869,10 @@ uint AtomName::hash() const
 
 QString AtomName::toString() const
 {
-    return QString("AtomName('%1')").arg(_name);
+    if (case_sensitive)
+        return QString("AtomName('%1')").arg(_name);
+    else
+        return QString("AtomName('%1', isCaseSensitive=False)").arg(_name);
 }
 
 AtomName& AtomName::operator=(const AtomName &other)

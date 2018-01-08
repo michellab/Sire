@@ -315,7 +315,9 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
 /** Null constructor */
 ResStructureEditor::ResStructureEditor()
                    : StructureEditor(), uid(0)
-{}
+{
+    this->operator=( StructureEditor::addResidue() );
+}
 
 /** Construct an editor to edit the structure of a copy of the 
     residue 'residue' */

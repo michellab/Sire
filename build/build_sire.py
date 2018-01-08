@@ -85,6 +85,14 @@ if __name__ == "__main__":
         print("Installing ipython using %s install ipython" % conda_exe)
         os.system("%s install --yes ipython" % conda_exe)
 
+    # pytest
+    try:
+        import pytest
+        print("pytest is already installed...")
+    except:
+        print("Installing pytest using %s install pytest" % conda_exe)
+        os.system("%s install --yes pytest" % conda_exe)
+
     # nose
     try:
         import nose
@@ -101,6 +109,14 @@ if __name__ == "__main__":
         print("Installing openmm from the omnia repository...")
         os.system("%s config --add channels http://conda.binstar.org/omnia" % conda_exe)
         os.system("%s install --yes openmm=7.0" % conda_exe)
+
+    # libnetcdf
+    try:
+        import netCDF4
+        print("netCDF4 is already installed...")
+    except:
+        print("Installing netCDF4 using '%s install netcdf4'" % conda_exe)
+        os.system("%s install --yes netcdf4" % conda_exe)
 
     # Now that the miniconda distribution is ok, the next step
     # is to use cmake to build the corelib and wrapper in the build/corelib

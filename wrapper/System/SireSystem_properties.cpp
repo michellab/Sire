@@ -11,6 +11,7 @@
 #include <QMutex>
 #include "systemmonitor.h"
 #include "SireBase/numberproperty.h"
+#include "SireBase/propertylist.h"
 #include "SireError/errors.h"
 #include "SireMaths/maths.h"
 #include "SireStream/datastream.h"

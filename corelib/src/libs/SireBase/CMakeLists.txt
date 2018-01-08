@@ -46,6 +46,8 @@ set ( SIREBASE_HEADERS
       packedarray2d.hpp
       packedarrays.h
       pairmatrix.hpp
+      range.h
+      ranges.h
       refcountdata.h
       sire_process.h
       parallel.h
@@ -63,9 +65,11 @@ set ( SIREBASE_HEADERS
       stringmangler.h
       stringproperty.h
       tempdir.h
+      timeproperty.h
       trigarray2d.h
       trigarray2d.hpp
       unittest.h
+      variantproperty.h
     )
 
 # Define the sources in SireBase
@@ -97,14 +101,18 @@ set ( SIREBASE_SOURCES
       property.cpp
       propertylist.cpp
       propertymap.cpp
+      range.cpp
+      ranges.cpp
       refcountdata.cpp
       savestate.cpp
       sharedpolypointer.cpp
       stringmangler.cpp 
       stringproperty.cpp    
       tempdir.cpp
+      timeproperty.cpp
       trigarray2d.cpp 
       unittest.cpp
+      variantproperty.cpp
 
       test_sharedptr.cpp
 

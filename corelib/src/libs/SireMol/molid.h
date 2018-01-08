@@ -99,6 +99,17 @@ public:
     IDOrSet<MolID> operator||(const MolID &other) const;
     IDOrSet<MolID> operator|(const MolID &other) const;
     
+    IDOrSet<AtomID> operator*(const AtomID &other) const;
+    IDOrSet<AtomID> operator|(const AtomID &other) const;
+    IDOrSet<AtomID> operator||(const AtomID &other) const;
+    
+    /* TODO!!!
+    SireID::InvertMatch<MolID> operator!() const;
+    SireID::InvertMatch<MolID> invert() const;
+    SireID::InvertMatch<MolID> inverse() const;
+    
+    static SireID::MatchAll<MolID> any();*/
+    
     virtual QList<MolNum> map(const Molecules &molecules) const=0;
     virtual QList<MolNum> map(const MoleculeGroup &molgroup) const=0;
     virtual QList<MolNum> map(const MolGroupsBase &molgroupsbase) const=0;

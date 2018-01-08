@@ -42,6 +42,7 @@ SIRE_BEGIN_HEADER
 namespace SireBase
 {
 class Property;
+class PropertyList;
 class VariantProperty;
 class NullProperty;
 
@@ -58,9 +59,6 @@ class GlobalPropPtr;
 
 QDataStream& operator<<(QDataStream&, const SireBase::Property&);
 QDataStream& operator>>(QDataStream&, SireBase::Property&);
-
-QDataStream& operator<<(QDataStream&, const SireBase::VariantProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::VariantProperty&);
 
 QDataStream& operator<<(QDataStream&, const SireBase::NullProperty&);
 QDataStream& operator>>(QDataStream&, SireBase::NullProperty&);
@@ -126,9 +124,6 @@ public:
     virtual void save(QDataStream &ds) const=0;
     virtual void load(QDataStream &ds)=0;
 
-    //virtual void save(XMLStream &xs) const=0;
-    //virtual void load(XMLStream &xs)=0;
-
     virtual const char* what() const=0;
 
     static const char* typeName()
@@ -144,6 +139,18 @@ public:
     
     template<class T>
     T& asA();
+
+    virtual bool isAString() const;
+    virtual bool isADouble() const;
+    virtual bool isAnInteger() const;
+    virtual bool isABoolean() const;
+    virtual bool isAnArray() const;
+
+    virtual QString asAString() const;
+    virtual double asADouble() const;
+    virtual int asAnInteger() const;
+    virtual bool asABoolean() const;
+    virtual PropertyList asAnArray() const;
 
     static const NullProperty& null();
 
@@ -231,50 +238,6 @@ protected:
     bool operator!=(const ConcreteProperty<Derived,Base> &other) const;
 };
 
-/** This is a simple property that holds any value as a QVariant. This
-    is designed to be used for metadata that doesn't need any tight
-    checking (e.g. the author of the molecule file, the source of
-    the coordinates, the 'header' lines etc.)
-
-    @author Christopher Woods
-*/
-class SIREBASE_EXPORT VariantProperty
-          : public ConcreteProperty<VariantProperty,Property>, public QVariant
-{
-public:
-    VariantProperty();
-
-    VariantProperty(const QVariant &value);
-
-    VariantProperty(const Property &other);
-
-    VariantProperty(const VariantProperty &other);
-
-    virtual ~VariantProperty();
-
-    VariantProperty& operator=(const QVariant &value);
-    VariantProperty& operator=(const VariantProperty &other);
-
-    bool operator==(const VariantProperty &other) const;
-    bool operator!=(const VariantProperty &other) const;
-
-    static const char* typeName();
-    
-    QString toString() const;
-            
-    template<class T>
-    T convertTo() const
-    {
-        if (not this->canConvert<T>())
-            this->throwInvalidCast( QMetaType::typeName( qMetaTypeId<T>() ) );
-            
-        return this->value<T>();
-    }
-
-private:
-    void throwInvalidCast(const QString &typname) const;
-};
-
 /** This is a null property */
 class SIREBASE_EXPORT NullProperty
               : public ConcreteProperty<NullProperty,Property>
@@ -317,6 +280,18 @@ public:
     bool unique() const;
 
     operator const Property&() const;
+
+    bool isAString() const;
+    bool isADouble() const;
+    bool isAnInteger() const;
+    bool isABoolean() const;
+    bool isAnArray() const;
+
+    QString asAString() const;
+    double asADouble() const;
+    int asAnInteger() const;
+    bool asABoolean() const;
+    PropertyList asAnArray() const;
 
 protected:
     PropPtrBase(const Property &property);
@@ -361,6 +336,18 @@ public:
 
     bool unique() const;
 
+    bool isAString() const;
+    bool isADouble() const;
+    bool isAnInteger() const;
+    bool isABoolean() const;
+    bool isAnArray() const;
+
+    QString asAString() const;
+    double asADouble() const;
+    int asAnInteger() const;
+    bool asABoolean() const;
+    PropertyList asAnArray() const;
+
     operator const Property&() const;
 
 protected:
@@ -393,6 +380,10 @@ friend QDataStream& ::operator<<<>(QDataStream&, const PropPtr<T>&);
 friend QDataStream& ::operator>><>(QDataStream&, PropPtr<T>&);
 
 public:
+    typedef T element_type;
+    typedef T value_type;
+    typedef T* pointer;
+
     PropPtr();
 
     PropPtr(const T &obj);
@@ -1279,11 +1270,9 @@ QDataStream& operator>>(QDataStream &ds, SireBase::GlobalPropPtr<T> &prop)
 #endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 Q_DECLARE_METATYPE(SireBase::NullProperty);
-Q_DECLARE_METATYPE(SireBase::VariantProperty);
 
 SIRE_EXPOSE_CLASS( SireBase::Property )
 SIRE_EXPOSE_CLASS( SireBase::NullProperty )
-SIRE_EXPOSE_CLASS( SireBase::VariantProperty )
 
 SIRE_EXPOSE_PROPERTY( SireBase::PropertyPtr, SireBase::Property )
 

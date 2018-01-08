@@ -5,6 +5,7 @@
 
 #include "array2d.h"
 #include "array2d.hpp"
+#include "arrayproperty.hpp"
 #include "booleanproperty.h"
 #include "chunkedvector.hpp"
 #include "combineproperties.h"
@@ -25,13 +26,17 @@
 #include "propertylist.h"
 #include "propertymap.h"
 #include "qvariant_metatype.h"
+#include "range.h"
+#include "ranges.h"
 #include "sire_process.h"
 #include "stringmangler.h"
 #include "stringproperty.h"
 #include "tempdir.h"
+#include "timeproperty.h"
 #include "trigarray2d.h"
 #include "trigarray2d.hpp"
 #include "unittest.h"
+#include "variantproperty.h"
 
 #endif
 

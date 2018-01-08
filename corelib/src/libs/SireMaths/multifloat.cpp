@@ -1035,12 +1035,7 @@ void test_multifloat_math(bool verbose)
     // compare to less than 3
     MultiFloat three(3.0);
 
-    qDebug() << f.toString();
-    qDebug() << f.compareLess(3.0).toString();
-
     f &= f.compareLess(3.0);
-
-    qDebug() << f.toString();
 
     for (int i=0; i<MultiFloat::count(); ++i)
     {

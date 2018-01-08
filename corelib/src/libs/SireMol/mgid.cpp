@@ -204,7 +204,10 @@ uint MGName::hash() const
 
 QString MGName::toString() const
 {
-    return QString("MGName('%1')").arg(_name);
+    if (case_sensitive)
+        return QString("MGName('%1')").arg(_name);
+    else
+        return QString("MGName('%1', isCaseSensitive=False)").arg(_name);
 }
 
 MGName& MGName::operator=(const MGName &other)

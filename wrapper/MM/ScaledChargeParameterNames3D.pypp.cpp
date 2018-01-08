@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireBase/errors.h"
 
+#include "SireBase/propertylist.h"
+
 #include "SireBase/sparsematrix.hpp"
 
 #include "SireError/errors.h"

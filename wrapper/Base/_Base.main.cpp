@@ -13,6 +13,12 @@
 
 #include "Array2D_double_.pypp.hpp"
 
+#include "ArrayProperty_QString_.pypp.hpp"
+
+#include "ArrayProperty_double_.pypp.hpp"
+
+#include "ArrayProperty_int_.pypp.hpp"
+
 #include "BooleanProperty.pypp.hpp"
 
 #include "CPUID.pypp.hpp"
@@ -73,6 +79,10 @@
 
 #include "PropertyName.pypp.hpp"
 
+#include "Range.pypp.hpp"
+
+#include "SimpleRange.pypp.hpp"
+
 #include "StringArrayProperty.pypp.hpp"
 
 #include "StringMangler.pypp.hpp"
@@ -80,6 +90,8 @@
 #include "StringProperty.pypp.hpp"
 
 #include "TempDir.pypp.hpp"
+
+#include "TimeProperty.pypp.hpp"
 
 #include "TrigArray2DBase.pypp.hpp"
 
@@ -129,6 +141,12 @@ BOOST_PYTHON_MODULE(_Base){
     register_Array2D_double__class();
 
     register_Property_class();
+
+    register_ArrayProperty_QString__class();
+
+    register_ArrayProperty_double__class();
+
+    register_ArrayProperty_int__class();
 
     register_BooleanProperty_class();
 
@@ -182,11 +200,17 @@ BOOST_PYTHON_MODULE(_Base){
 
     register_PropertyName_class();
 
+    register_Range_class();
+
+    register_SimpleRange_class();
+
     register_StringArrayProperty_class();
 
     register_StringProperty_class();
 
     register_TempDir_class();
+
+    register_TimeProperty_class();
 
     register_TrigArray2DBase_class();
 
@@ -214,23 +238,7 @@ BOOST_PYTHON_MODULE(_Base){
 
     bp::implicitly_convertible< QString, SireBase::PropertyName >();
 
-    bp::implicitly_convertible< QString, SireBase::VariantProperty >();
-
-    bp::implicitly_convertible< double, SireBase::VariantProperty >();
-
-    bp::implicitly_convertible< QString, SireBase::PropertyName >();
-
     bp::implicitly_convertible< SireBase::Property, SireBase::PropertyName >();
-
-    bp::implicitly_convertible< QString, SireBase::StringProperty >();
-
-    bp::implicitly_convertible< SireBase::StringProperty, QString >();
-
-    bp::implicitly_convertible< double, SireBase::NumberProperty >();
-
-    bp::implicitly_convertible< int, SireBase::NumberProperty >();
-
-    bp::implicitly_convertible< SireBase::LengthProperty, SireUnits::Dimension::Length >();
 
     bp::implicitly_convertible< QHash<QString,SireBase::PropertyName>, SireBase::PropertyMap >();
 

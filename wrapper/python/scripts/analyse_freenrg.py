@@ -171,11 +171,14 @@ if __name__ == '__main__':
     parser_mbar.add_argument('-p', '--percent', type=float,
                              help="Supply the percentage of iterations over which to average. By default "
                                   "the average will be over the last 60 percent of iterations.")
+    parser_mbar.add_argument('--discard', type=int,
+                             help="Number of saved simulation snapshots that should be discarded at the beginning of a trajectory.")
+
     parser_mbar.add_argument('--lam', type=float, nargs='*',
                              help="lambda array")
 
     parser_mbar.add_argument('--temperature', type=float,
-                             help="lambda array")
+                             help="Temperature at which the simulation was run in Kelvin.")
 
     parser_mbar.add_argument('--subsampling', action="store_true",
                              help="Subsampling of data according to statistical inefficiency should be done.")
@@ -425,6 +428,11 @@ if __name__ == '__main__':
         from Sire.Tools.FreeEnergyAnalysis import FreeEnergies
         from Sire.Tools.FreeEnergyAnalysis import SubSample
 
+        if len(unknown)>0:
+            parser_mbar.print_help()
+            print ('analyse_freenrg: error: unrecognized arguments: %s ' % unknown[0])
+            sys.exit(1)
+
         must_exit = False
         # MBAR is true and we run and MBAR analysis
         print('Simulation data is analysed using the python module pymbar')
@@ -447,7 +455,20 @@ if __name__ == '__main__':
 
         input_files = args.input
         output_file = args.output
-        percentage = args.percent
+        if args.percent and args.discard:
+            print ("Please choose either to discard a number of frames with the discard option or a certain percentage of all trajectories with "
+                   "the percent option.")
+            sys.exit(-1)
+        if args.percent:
+            percentage = args.percent
+        else:
+            percentage = 95.0
+
+        if args.discard:
+            discard = args.discard
+        else:
+            discard = None
+
         T = args.temperature
 
         # boolean arguemtns
@@ -485,8 +506,12 @@ if __name__ == '__main__':
         if not args.lam:
             print ("#Lambda array was not given, trying to infer lambda values from simulation files...")
         else:
-            lamvals = args.lam
+            lamvals = numpy.array(args.lam)
         lam = None
+        if not args.temperature:
+            T_previous = None
+        else:
+            T_previous = T
         for f in input_files:
             print ('working on input file %s' % f)
             # Compressed file
@@ -502,8 +527,25 @@ if __name__ == '__main__':
                         else:
                             lam = (line.split(b'(')[-1].split(b')')[0].split(b','))
                             lam = numpy.array([float(i) for i in lam])
+                    elif line.startswith(b'#Generating temperature'):
+                        temp = line.split()[3]
+                        unit = line.split()[4]
+                        if unit == b'C':
+                            T = float(temp)+273
+                        else:
+                            T = float(temp)
+                        if T_previous is None:
+                            T_previous = T
+                            continue
+                        else:
+                            if T_previous !=T:
+                                print ('Generating temperature is %.2f and does not match with other temperature given %.2f, '
+                                       'please make sure all simulations are run at the same temperature' %(T, T_previous))
+                                sys.exit(-1)
+                            else:
+                                T_previous = T
                         break
-                        # Normal file
+            # Normal file
             else:
                 for line in open(f):
                     if line.startswith('#Alchemical'):
@@ -515,6 +557,23 @@ if __name__ == '__main__':
                         else:
                             lam = (line.split('(')[-1].split(')')[0].split(','))
                             lam = numpy.array([float(i) for i in lam])
+                    elif line.startswith('#Generating temperature'):
+                        temp = line.split()[3]
+                        unit = line.split()[4]
+                        if unit == 'C':
+                            T = float(temp)+273
+                        else:
+                            T = float(temp)
+                        if T_previous is None:
+                            T_previous = T
+                            continue
+                        else:
+                            if T_previous !=T:
+                                print ('Generating temperature is %.2f and does not match with other temperature given %.2f, '
+                                       'please make sure all simulations are run at the same temperature' %(T, T_previous))
+                                sys.exit(-1)
+                            else:
+                                T_previous = T
                         break
             if not numpy.array_equal(lam, lamvals):
                 print ("Lambda arrays do not match! Make sure your input data is consistent")
@@ -524,8 +583,13 @@ if __name__ == '__main__':
 
         # We will load all the data now
         data = []
-        for f in input_files:
-            data.append(numpy.loadtxt(f))
+        if discard is None:
+            for f in input_files:
+                data.append(numpy.loadtxt(f))
+        else:
+            print ('Loading data and discarding %d frames' %discard)
+            for f in input_files:
+                data.append(numpy.loadtxt(f, skiprows=discard))
 
         # N_k is the number of samples at generating thermodynamic state (lambda) k
         N_k = numpy.zeros(shape=lamvals.shape[0], dtype='int32')
@@ -561,10 +625,10 @@ if __name__ == '__main__':
         ti_warn_msg = ''
         mbar_warn_msg = ''
         if subsample_obj.gradients_kn.shape[1]<50:
-            ti_warn_msg = ' #WARNING SUBSAMLING GRADIENTS RESULTED IN LESS THAN 50 SAMPLES, CONSIDER RERUN WITHOUT SUBSAMPLE OPTION'
+            ti_warn_msg = ' #WARNING SUBSAMPLING GRADIENTS RESULTED IN LESS THAN 50 SAMPLES, CONSIDER RERUN WITHOUT SUBSAMPLE OPTION'
 
         if subsample_obj.u_kln.shape[2]<50:
-            mbar_warn_msg = ' #WARNING SUBSAMLING ENERGIES RESULTED IN LESS THAN 50 SAMPLES, CONSIDER RERUN WITHOUT SUBSAMPLE OPTION'
+            mbar_warn_msg = ' #WARNING SUBSAMPLING ENERGIES RESULTED IN LESS THAN 50 SAMPLES, CONSIDER RERUN WITHOUT SUBSAMPLE OPTION'
 
         if not subsampling:
             ti_warn_msg = " #WARNING SUBSAMPLING DISABLED, CONSIDER RERUN WITH SUBSAMPLING OPTION"
@@ -575,50 +639,38 @@ if __name__ == '__main__':
             diag_elements = numpy.array([numpy.diag(M, k=1), numpy.diag(M, k=-1)])
             if numpy.min(diag_elements) < 0.03:
                 warnings.warn(
-                    'Off diagonal elements of the overlap matrix are smaller than 0.03! Your free energy estiamte is '
+                    'Off diagonal elements of the overlap matrix are smaller than 0.03! Your free energy estimate is '
                     'not reliable!')
             FILE.write(bytes('#Overlap matrix\n', "UTF-8"))
             numpy.savetxt(FILE, M, fmt='%.4f')
 
-        # mbar DG for neighbourting lambda
+        # mbar DG for neighbouring lambda
         pairwise_F = free_energy_obj.pairwise_F
-        if T is not None:
-            pairwise_F[:, 2] = pairwise_F[:, 2] * T * k_boltz
-            pairwise_F[:, 3] = pairwise_F[:, 3] * T * k_boltz
-            FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
-        else:
-            FILE.write(bytes('#PMF from MBAR in reduced units\n', "UTF-8"))
+        pairwise_F[:, 2] = pairwise_F[:, 2] * T * k_boltz
+        pairwise_F[:, 3] = pairwise_F[:, 3] * T * k_boltz
+        FILE.write(bytes('#DG from neighbouring lambda in kcal/mol\n', "UTF-8"))
         numpy.savetxt(FILE, pairwise_F, fmt=['%.4f', '%.4f', '%.4f', '%.4f'])
 
         # mbar pmf
         pmf_mbar = free_energy_obj.pmf_mbar
-        if T is not None:
-            pmf_mbar[:, 1] = pmf_mbar[:, 1] * T * k_boltz
-            pmf_mbar[:, 2] = pmf_mbar[:, 2] * T * k_boltz
-            FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
-        else:
-            FILE.write(bytes('#PMF from MBAR in reduced units\n', "UTF-8"))
+        pmf_mbar[:, 1] = pmf_mbar[:, 1] * T * k_boltz
+        pmf_mbar[:, 2] = pmf_mbar[:, 2] * T * k_boltz
+        FILE.write(bytes('#PMF from MBAR in kcal/mol\n', "UTF-8"))
         numpy.savetxt(FILE, pmf_mbar, fmt=['%.4f', '%.4f', '%.4f'])
 
         # ti mean gradients and std.
         grad_mean = numpy.mean(subsample_obj.gradients_kn, axis=1)
         grad_std = numpy.std(subsample_obj.gradients_kn, axis=1)
-        if T is not None:
-            grad_mean = grad_mean * T * k_boltz
-            grad_std = grad_std * T * k_boltz
-            FILE.write(bytes('#TI average gradients and standard deviation in kcal/mol\n', "UTF-8"))
-        else:
-            FILE.write(bytes('#TI average gradients and standard deviation in reduced units\n', "UTF-8"))
+        grad_mean = grad_mean * T * k_boltz
+        grad_std = grad_std * T * k_boltz
+        FILE.write(bytes('#TI average gradients and standard deviation in kcal/mol\n', "UTF-8"))
         grad_data = numpy.column_stack((lamvals, grad_mean, grad_std))
         numpy.savetxt(FILE, grad_data, fmt=['%.4f', '%.4f', '%.4f'])
 
         # TI pmf
         pmf_ti = free_energy_obj.pmf_ti
-        if T is not None:
-            pmf_ti[:, 1] = pmf_ti[:, 1] * T * k_boltz
-            FILE.write(bytes('#PMF from TI in kcal/mol\n', "UTF-8"))
-        else:
-            FILE.write(bytes('#PMF from TI in reduced units\n', "UTF-8"))
+        pmf_ti[:, 1] = pmf_ti[:, 1] * T * k_boltz
+        FILE.write(bytes('#PMF from TI in kcal/mol\n', "UTF-8"))
         numpy.savetxt(FILE, pmf_ti, fmt=['%.4f', '%.4f'])
 
         df_mbar_kcal = free_energy_obj.deltaF_mbar
@@ -626,18 +678,12 @@ if __name__ == '__main__':
         df_ti_kcal = free_energy_obj.deltaF_ti
         dDf_mbar_kcal = free_energy_obj.errorF_mbar
         dDf_mbar_kJ = free_energy_obj.errorF_mbar
-        if T is not None:
-            df_mbar_kcal = df_mbar_kcal * T * k_boltz
-            dDf_mbar_kcal = dDf_mbar_kcal * T * k_boltz
-            df_ti_kcal = free_energy_obj.deltaF_ti * T * k_boltz
-            FILE.write(
-                bytes("#MBAR free energy difference in kcal/mol: \n%f, %f %s\n" % (df_mbar_kcal, dDf_mbar_kcal, mbar_warn_msg), "UTF-8"))
-            FILE.write(bytes("#TI free energy difference in kcal/mol: \n%f %s \n" % (df_ti_kcal, ti_warn_msg), "UTF-8"))
+        df_mbar_kcal = df_mbar_kcal * T * k_boltz
+        dDf_mbar_kcal = dDf_mbar_kcal * T * k_boltz
+        df_ti_kcal = free_energy_obj.deltaF_ti * T * k_boltz
+        FILE.write(
+            bytes("#MBAR free energy difference in kcal/mol: \n%f, %f %s\n" % (df_mbar_kcal, dDf_mbar_kcal, mbar_warn_msg), "UTF-8"))
+        FILE.write(bytes("#TI free energy difference in kcal/mol: \n%f %s \n" % (df_ti_kcal, ti_warn_msg), "UTF-8"))
 
-        else:
-            FILE.write(
-                bytes("#MBAR free energy difference in reduced units: \n%f, %f %s\n" % (df_mbar_kcal, dDf_mbar_kcal, mbar_warn_msg),
-                      "UTF-8"))
-            FILE.write(bytes("#TI free energy difference in reduced units: \n%f %s\n" % (df_ti_kcal, ti_warn_msg), "UTF-8"))
 
         FILE.close()

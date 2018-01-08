@@ -108,6 +108,8 @@ Q_DECLARE_METATYPE( SireID::Specify<SireMol::ResID> );
 Q_DECLARE_METATYPE( SireMol::AtomsIn<SireMol::ResID> );
 Q_DECLARE_METATYPE( SireID::IDAndSet<SireMol::ResID> );
 Q_DECLARE_METATYPE( SireID::IDOrSet<SireMol::ResID> );
+Q_DECLARE_METATYPE( SireID::MatchAll<SireMol::ResID> );
+Q_DECLARE_METATYPE( SireID::InvertMatch<SireMol::ResID> );
 
 Q_DECLARE_METATYPE(SireMol::ResIdentifier);
 

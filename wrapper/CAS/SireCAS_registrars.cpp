@@ -3,36 +3,43 @@
 
 #include "SireCAS_registrars.h"
 
+#include "abs.h"
+#include "functionsignature.h"
+#include "complexvalues.h"
+#include "exp.h"
+#include "constant.h"
 #include "sum.h"
-#include "values.h"
+#include "power.h"
 #include "conditional.h"
 #include "i.h"
-#include "powerconstant.h"
-#include "expression.h"
-#include "integrationconstant.h"
-#include "invtrigfuncs.h"
-#include "functionsignature.h"
-#include "product.h"
-#include "abs.h"
-#include "exp.h"
-#include "function.h"
-#include "minmax.h"
-#include "trigfuncs.h"
-#include "invhyperbolicfuncs.h"
-#include "complexvalues.h"
-#include "symbol.h"
-#include "hyperbolicfuncs.h"
 #include "identities.h"
-#include "power.h"
-#include "constant.h"
+#include "function.h"
+#include "powerconstant.h"
+#include "trigfuncs.h"
+#include "expression.h"
+#include "hyperbolicfuncs.h"
+#include "invhyperbolicfuncs.h"
+#include "symbol.h"
+#include "product.h"
+#include "values.h"
+#include "integrationconstant.h"
+#include "minmax.h"
+#include "expressionproperty.h"
+#include "invtrigfuncs.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_SireCAS_objects()
 {
 
+    ObjectRegistry::registerConverterFor< SireCAS::Abs >();
+    ObjectRegistry::registerConverterFor< SireCAS::FunctionSignature >();
+    ObjectRegistry::registerConverterFor< SireCAS::ComplexValues >();
+    ObjectRegistry::registerConverterFor< SireCAS::Exp >();
+    ObjectRegistry::registerConverterFor< SireCAS::Ln >();
+    ObjectRegistry::registerConverterFor< SireCAS::Constant >();
     ObjectRegistry::registerConverterFor< SireCAS::Sum >();
-    ObjectRegistry::registerConverterFor< SireCAS::Values >();
+    ObjectRegistry::registerConverterFor< SireCAS::Power >();
     ObjectRegistry::registerConverterFor< SireCAS::Conditional >();
     ObjectRegistry::registerConverterFor< SireCAS::GreaterThan >();
     ObjectRegistry::registerConverterFor< SireCAS::LessThan >();
@@ -43,50 +50,45 @@ void register_SireCAS_objects()
     ObjectRegistry::registerConverterFor< SireCAS::AlwaysTrue >();
     ObjectRegistry::registerConverterFor< SireCAS::AlwaysFalse >();
     ObjectRegistry::registerConverterFor< SireCAS::I >();
+    ObjectRegistry::registerConverterFor< SireCAS::Identities >();
+    ObjectRegistry::registerConverterFor< SireCAS::Function >();
     ObjectRegistry::registerConverterFor< SireCAS::PowerConstant >();
     ObjectRegistry::registerConverterFor< SireCAS::IntegerPower >();
     ObjectRegistry::registerConverterFor< SireCAS::RationalPower >();
     ObjectRegistry::registerConverterFor< SireCAS::RealPower >();
     ObjectRegistry::registerConverterFor< SireCAS::ComplexPower >();
-    ObjectRegistry::registerConverterFor< SireCAS::Expression >();
-    ObjectRegistry::registerConverterFor< SireCAS::IntegrationConstant >();
-    ObjectRegistry::registerConverterFor< SireCAS::ArcCos >();
-    ObjectRegistry::registerConverterFor< SireCAS::ArcSin >();
-    ObjectRegistry::registerConverterFor< SireCAS::ArcTan >();
-    ObjectRegistry::registerConverterFor< SireCAS::ArcCsc >();
-    ObjectRegistry::registerConverterFor< SireCAS::ArcSec >();
-    ObjectRegistry::registerConverterFor< SireCAS::ArcCot >();
-    ObjectRegistry::registerConverterFor< SireCAS::FunctionSignature >();
-    ObjectRegistry::registerConverterFor< SireCAS::Product >();
-    ObjectRegistry::registerConverterFor< SireCAS::Abs >();
-    ObjectRegistry::registerConverterFor< SireCAS::Exp >();
-    ObjectRegistry::registerConverterFor< SireCAS::Ln >();
-    ObjectRegistry::registerConverterFor< SireCAS::Function >();
-    ObjectRegistry::registerConverterFor< SireCAS::Min >();
-    ObjectRegistry::registerConverterFor< SireCAS::Max >();
     ObjectRegistry::registerConverterFor< SireCAS::Cos >();
     ObjectRegistry::registerConverterFor< SireCAS::Sin >();
     ObjectRegistry::registerConverterFor< SireCAS::Tan >();
     ObjectRegistry::registerConverterFor< SireCAS::Csc >();
     ObjectRegistry::registerConverterFor< SireCAS::Sec >();
     ObjectRegistry::registerConverterFor< SireCAS::Cot >();
-    ObjectRegistry::registerConverterFor< SireCAS::ArcCosh >();
-    ObjectRegistry::registerConverterFor< SireCAS::ArcSinh >();
-    ObjectRegistry::registerConverterFor< SireCAS::ArcTanh >();
-    ObjectRegistry::registerConverterFor< SireCAS::ArcCsch >();
-    ObjectRegistry::registerConverterFor< SireCAS::ArcSech >();
-    ObjectRegistry::registerConverterFor< SireCAS::ArcCoth >();
-    ObjectRegistry::registerConverterFor< SireCAS::ComplexValues >();
-    ObjectRegistry::registerConverterFor< SireCAS::Symbol >();
+    ObjectRegistry::registerConverterFor< SireCAS::Expression >();
     ObjectRegistry::registerConverterFor< SireCAS::Cosh >();
     ObjectRegistry::registerConverterFor< SireCAS::Sinh >();
     ObjectRegistry::registerConverterFor< SireCAS::Tanh >();
     ObjectRegistry::registerConverterFor< SireCAS::Csch >();
     ObjectRegistry::registerConverterFor< SireCAS::Sech >();
     ObjectRegistry::registerConverterFor< SireCAS::Coth >();
-    ObjectRegistry::registerConverterFor< SireCAS::Identities >();
-    ObjectRegistry::registerConverterFor< SireCAS::Power >();
-    ObjectRegistry::registerConverterFor< SireCAS::Constant >();
+    ObjectRegistry::registerConverterFor< SireCAS::ArcCosh >();
+    ObjectRegistry::registerConverterFor< SireCAS::ArcSinh >();
+    ObjectRegistry::registerConverterFor< SireCAS::ArcTanh >();
+    ObjectRegistry::registerConverterFor< SireCAS::ArcCsch >();
+    ObjectRegistry::registerConverterFor< SireCAS::ArcSech >();
+    ObjectRegistry::registerConverterFor< SireCAS::ArcCoth >();
+    ObjectRegistry::registerConverterFor< SireCAS::Symbol >();
+    ObjectRegistry::registerConverterFor< SireCAS::Product >();
+    ObjectRegistry::registerConverterFor< SireCAS::Values >();
+    ObjectRegistry::registerConverterFor< SireCAS::IntegrationConstant >();
+    ObjectRegistry::registerConverterFor< SireCAS::Min >();
+    ObjectRegistry::registerConverterFor< SireCAS::Max >();
+    ObjectRegistry::registerConverterFor< SireCAS::ExpressionProperty >();
+    ObjectRegistry::registerConverterFor< SireCAS::ArcCos >();
+    ObjectRegistry::registerConverterFor< SireCAS::ArcSin >();
+    ObjectRegistry::registerConverterFor< SireCAS::ArcTan >();
+    ObjectRegistry::registerConverterFor< SireCAS::ArcCsc >();
+    ObjectRegistry::registerConverterFor< SireCAS::ArcSec >();
+    ObjectRegistry::registerConverterFor< SireCAS::ArcCot >();
 
 }
 

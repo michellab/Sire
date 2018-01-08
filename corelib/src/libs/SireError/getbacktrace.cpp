@@ -46,27 +46,6 @@
 
 namespace SireError
 {
-        
-//need to extract the symbol from the output of 'backtrace_symbols'
-
-//a typical output from backtrace_symbols will look like;
-//a.out(_ZNK1A12getBackTraceEv+0x12) [0x804ad36]
-
-// This needs to be split into;
-//  (1) The program or library containing the symbol (a.out)
-//  (2) The symbol itself (_ZNK1A12getBackTraceEv)
-//  (3) The offset? +0x12
-//  (4) The symbol address ([0x804ad36])
-
-// This is achieved by the following regexp
-//              (unit )  (symbol)   (offset)          (address)
-QRegExp regexp("([^(]+)\\(([^)^+]+)(\\+[^)]+)\\)\\s(\\[[^]]+\\])");
-
-//However, on OS X the output looks something like this;
-//2 libSireBase.0.dylib 0x00da01a5 _ZNK8SireBase10PropertiesixERKNS_12PropertyNameE + 595
-//
-// Word 2 is the library, word 3 is the symbol address, word 4 is the symbol
-// itself and word 6 is the offset(?)
 
 /** Obtain a backtrace and return as a QStringList.
     This is not well-optimised, requires compilation with "-rdynamic" on linux
@@ -99,6 +78,27 @@ QStringList SIREERROR_EXPORT getBackTrace()
                     "like this code was compiled without a frame pointer\n"
                     "(e.g. using -fomit-frame-pointer)") );
     }
+
+    //need to extract the symbol from the output of 'backtrace_symbols'
+
+    //a typical output from backtrace_symbols will look like;
+    //a.out(_ZNK1A12getBackTraceEv+0x12) [0x804ad36]
+
+    // This needs to be split into;
+    //  (1) The program or library containing the symbol (a.out)
+    //  (2) The symbol itself (_ZNK1A12getBackTraceEv)
+    //  (3) The offset? +0x12
+    //  (4) The symbol address ([0x804ad36])
+
+    // This is achieved by the following regexp
+    //              (unit )  (symbol)   (offset)          (address)
+    QRegExp regexp("([^(]+)\\(([^)^+]+)(\\+[^)]+)\\)\\s(\\[[^]]+\\])");
+
+    //However, on OS X the output looks something like this;
+    //2 libSireBase.0.dylib 0x00da01a5 _ZNK8SireBase10PropertiesixERKNS_12PropertyNameE + 595
+    //
+    // Word 2 is the library, word 3 is the symbol address, word 4 is the symbol
+    // itself and word 6 is the offset(?)
 
     for (int i=0; i<nfuncs; i++)
     {

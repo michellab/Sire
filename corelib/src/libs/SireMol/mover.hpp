@@ -58,7 +58,7 @@ using SireVol::Space;
     @author Christopher Woods
 */
 template<class T>
-class Mover : public SireBase::ConcreteProperty<Mover<T>,T>, public MoverBase
+class SIREMOL_EXPORT Mover : public SireBase::ConcreteProperty<Mover<T>,T>, public MoverBase
 {
 public:
     Mover();

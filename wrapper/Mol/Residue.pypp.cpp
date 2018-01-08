@@ -75,6 +75,8 @@ SireMol::Residue __copy__(const SireMol::Residue &other){ return SireMol::Residu
 
 #include "Helpers/str.hpp"
 
+#include "Helpers/len.hpp"
+
 void register_Residue_class(){
 
     { //::SireMol::Residue
@@ -440,6 +442,7 @@ void register_Residue_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Residue_exposer.def( "__str__", &__str__< ::SireMol::Residue > );
         Residue_exposer.def( "__repr__", &__str__< ::SireMol::Residue > );
+        Residue_exposer.def( "__len__", &__len_size< ::SireMol::Residue > );
     }
 
 }

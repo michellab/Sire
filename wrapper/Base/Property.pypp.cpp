@@ -17,6 +17,8 @@ namespace bp = boost::python;
 
 #include "property.h"
 
+#include "propertylist.h"
+
 #include <QDebug>
 
 #include <QMutex>
@@ -33,6 +35,61 @@ void register_Property_class(){
         typedef bp::class_< SireBase::Property, boost::noncopyable > Property_exposer_t;
         Property_exposer_t Property_exposer = Property_exposer_t( "Property", "This is the base class of all properties that may be attached to a\nmolecule. Properties are used to assign extra information to a molecule,\nwhich may then be carried by the molecule throughout its passage\nthrough the simulation. Examples of properties may include the file\nfrom which the molecule was read, the charge parameters on the atoms,\nthe PDB code etc.\n\nProperties form a polymorphic hierarchy which are implicitly shared\nvia SireBase::SharedPolyPointer smart pointers.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Property_scope( Property_exposer );
+        { //::SireBase::Property::asABoolean
+        
+            typedef bool ( ::SireBase::Property::*asABoolean_function_type)(  ) const;
+            asABoolean_function_type asABoolean_function_value( &::SireBase::Property::asABoolean );
+            
+            Property_exposer.def( 
+                "asABoolean"
+                , asABoolean_function_value
+                , "Return this property converted to a bool. This throws an invalid\ncast if this is not possible" );
+        
+        }
+        { //::SireBase::Property::asADouble
+        
+            typedef double ( ::SireBase::Property::*asADouble_function_type)(  ) const;
+            asADouble_function_type asADouble_function_value( &::SireBase::Property::asADouble );
+            
+            Property_exposer.def( 
+                "asADouble"
+                , asADouble_function_value
+                , "Return this property converted to a double. This throws an invalid\ncast if this is not possible" );
+        
+        }
+        { //::SireBase::Property::asAString
+        
+            typedef ::QString ( ::SireBase::Property::*asAString_function_type)(  ) const;
+            asAString_function_type asAString_function_value( &::SireBase::Property::asAString );
+            
+            Property_exposer.def( 
+                "asAString"
+                , asAString_function_value
+                , "Return this property converted to a string. This throws an invalid\ncast if this is not possible" );
+        
+        }
+        { //::SireBase::Property::asAnArray
+        
+            typedef ::SireBase::PropertyList ( ::SireBase::Property::*asAnArray_function_type)(  ) const;
+            asAnArray_function_type asAnArray_function_value( &::SireBase::Property::asAnArray );
+            
+            Property_exposer.def( 
+                "asAnArray"
+                , asAnArray_function_value
+                , "Return this property converted to an array property. By default, this\nautomatically puts this property into a PropertyList and returns that" );
+        
+        }
+        { //::SireBase::Property::asAnInteger
+        
+            typedef int ( ::SireBase::Property::*asAnInteger_function_type)(  ) const;
+            asAnInteger_function_type asAnInteger_function_value( &::SireBase::Property::asAnInteger );
+            
+            Property_exposer.def( 
+                "asAnInteger"
+                , asAnInteger_function_value
+                , "Return this property converted to an integer. This throws an invalid\ncast if this is not possible" );
+        
+        }
         { //::SireBase::Property::copy
         
             typedef void ( ::SireBase::Property::*copy_function_type)( ::SireBase::Property const & ) ;
@@ -55,6 +112,61 @@ void register_Property_class(){
                 , equals_function_value
                 , ( bp::arg("other") )
                 , "" );
+        
+        }
+        { //::SireBase::Property::isABoolean
+        
+            typedef bool ( ::SireBase::Property::*isABoolean_function_type)(  ) const;
+            isABoolean_function_type isABoolean_function_value( &::SireBase::Property::isABoolean );
+            
+            Property_exposer.def( 
+                "isABoolean"
+                , isABoolean_function_value
+                , "Return whether or not this property holds a bool (or can convert\nto a bool)" );
+        
+        }
+        { //::SireBase::Property::isADouble
+        
+            typedef bool ( ::SireBase::Property::*isADouble_function_type)(  ) const;
+            isADouble_function_type isADouble_function_value( &::SireBase::Property::isADouble );
+            
+            Property_exposer.def( 
+                "isADouble"
+                , isADouble_function_value
+                , "Return whether or not this property holds a double (or can convert\nto a double)" );
+        
+        }
+        { //::SireBase::Property::isAString
+        
+            typedef bool ( ::SireBase::Property::*isAString_function_type)(  ) const;
+            isAString_function_type isAString_function_value( &::SireBase::Property::isAString );
+            
+            Property_exposer.def( 
+                "isAString"
+                , isAString_function_value
+                , "Return whether or not this property holds a string (or can convert\nto a string)" );
+        
+        }
+        { //::SireBase::Property::isAnArray
+        
+            typedef bool ( ::SireBase::Property::*isAnArray_function_type)(  ) const;
+            isAnArray_function_type isAnArray_function_value( &::SireBase::Property::isAnArray );
+            
+            Property_exposer.def( 
+                "isAnArray"
+                , isAnArray_function_value
+                , "Return whether or not this is an array property (or can convert to an\narray property)" );
+        
+        }
+        { //::SireBase::Property::isAnInteger
+        
+            typedef bool ( ::SireBase::Property::*isAnInteger_function_type)(  ) const;
+            isAnInteger_function_type isAnInteger_function_value( &::SireBase::Property::isAnInteger );
+            
+            Property_exposer.def( 
+                "isAnInteger"
+                , isAnInteger_function_value
+                , "Return whether or not this property holds an integer (or can convert\nto an integer)" );
         
         }
         { //::SireBase::Property::load

@@ -14,13 +14,39 @@
 
 from Sire.Base._Base import *
 
-import Sire.Maths
+_wrap_functions = []
+
+_base_wrap = wrap
 
 def wrap(value):
+    # First, try to wrap the python concrete classes
+    if isinstance(value, bool):
+        return BooleanProperty(value)
+
+    elif isinstance(value, int) or isinstance(value, float):
+        return NumberProperty(value)
+
+    elif isinstance(value, str):
+        return StringProperty(value)
+
+    for func in _wrap_functions:
+        try:
+            return func(value)
+        except:
+            pass            
+
     try:
-        return Sire.Base._Base.wrap(value)
+        return _base_wrap(value)
     except:
-        return Sire.Maths.wrap(value)
+        pass
+
+    return PropertyList(value)
+
+_original_wrap = wrap
+
+def _add_wrap_function(func):
+    _wrap_functions.append(func)
+    return _original_wrap
 
 # cludgy quick fix for an anaconda install
 _getBundledLibDir = getBundledLibDir
