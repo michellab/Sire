@@ -6,8 +6,8 @@ INSTALLATION INSTRUCTIONS
 
    To compile and install Sire you need to have a UNIX or UNIX-like
    environment (e.g. working bash shell), a  working C++ compiler
-   (e.g. gcc or clang are recommended), a working installation of
-   cmake (version 2.8.11.2 minimum), and a working git client, so
+   that fully supports C++-14 (e.g. gcc >= 5.0 or clang >= 3.7 are recommended), a working installation of
+   cmake (version 3.0.0 minimum), and a working git client, so
    that you can download the source. You also need an internet connection
    to allow you to download Sire and for the Sire build to automatically
    download all of its dependencies.

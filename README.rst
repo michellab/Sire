@@ -2,10 +2,6 @@
 `Sire <http://siremol.org>`__
 ****
 
-.. image:: https://travis-ci.org/michellab/Sire.svg?branch=autobuild_feature
-   :target: https://travis-ci.org/michellab/Sire
-
-
 About
 =====
 `Sire <http://siremol.org>`__ is a free, open source, multiscale 
@@ -30,9 +26,9 @@ which are available for Linux, Mac OS X and Windows, which are quick and easy to
 
 However, as you are here, it is likely you want to download the latest,
 greatest version of the code, which you will need to compile. To compile Sire,
-you need a working C++ compiler with at least C++ 2011 support (gcc or clang), 
+you need a working C++ compiler with at least C++ 2014 support (gcc >= 5 or clang >= 3.7), 
 `cmake <http://cmake.org>`__ 
-(version 2.8.11.2 or above), a Git client to download the source,
+(version 3.0.0 or above), a Git client to download the source,
 and a working internet connection (needed by
 the Sire compilation scripts to download additional dependencies).
 
