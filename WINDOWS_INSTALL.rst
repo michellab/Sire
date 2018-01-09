@@ -1,5 +1,10 @@
 == Instructions for compiling and installing on windows ==
 
+== All of this is EXPERIMENTAL == 
+This will be updated and replaced by instructions to compile against the
+acaconda that is available as part of the WSL (Windows subsystem for Linux)
+that is available as part of Windows 10
+ 
 == MSYS2 BUILD ==
 
 First, install msys2 by following the instructions on http://msys2.github.io

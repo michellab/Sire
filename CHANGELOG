@@ -3,6 +3,23 @@ SIRE changelog
 
 devel branch:
 
+    [2017.3.0] December 2017 - Added new PDB (PDB2), Mol2, Gro87, and CharmmPSF
+               parsers, as well as a GroTop parser, all part of the new
+               MoleculeParser framework. Updated all of the swap-based
+               methods to use this.
+
+               Removed the ViewsOfMol Python wrapper and now have the
+               code automatically return the correct python object for
+               the molecule (or part of molecule) that is returned from
+               the system. This makes simple scripts easier to write.
+
+               General bugfixes and optimisations, including fixing
+               bugs with the way that PropertyMap worked, cleaning
+               up to/from converters from python objects to automatic
+               Property wrappers, and fixing Process so that it can
+               redirect to stdout and that isRunning works without the
+               user having to call "wait" first!
+
     [2017.2.0] September 2017 - The MoleculeParser framework has 
                been created to support reading and writing of molecules 
                in lots of different formats. The first set of formats 
