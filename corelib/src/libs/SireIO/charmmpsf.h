@@ -31,6 +31,8 @@
 
 #include "moleculeparser.h"
 
+#include "SireVol/periodicbox.h"
+
 SIRE_BEGIN_HEADER
 
 namespace SireCAS
@@ -46,6 +48,13 @@ class CharmmParam;
 class CharmmPSF;
 }
 
+namespace SireMM
+{
+class TwoAtomFunctions;
+class ThreeAtomFunctions;
+class FourAtomFunctions;
+}
+
 namespace SireMol
 {
 class Atom;
@@ -54,13 +63,6 @@ class MoleculeData;
 class MoleculeInfoData;
 class MoleculeView;
 class Residue;
-}
-
-namespace SireMM
-{
-class TwoAtomFunctions;
-class ThreeAtomFunctions;
-class FourAtomFunctions;
 }
 
 QDataStream& operator<<(QDataStream&, const SireIO::PSFAtom&);
@@ -288,7 +290,8 @@ private:
         QMultiHash<QString, CharmmParam> &angle_params,
         QMultiHash<QString, CharmmParam> &dihedral_params,
         QMultiHash<QString, CharmmParam> &improper_params,
-        QMultiHash<QString, CharmmParam> &cross_params) const;
+        QMultiHash<QString, CharmmParam> &cross_params,
+        SireVol::PeriodicBox &box, bool &has_box_params) const;
 
     SireMol::MolStructureEditor getMolStructure(int imol,
         const SireBase::PropertyName &cutting) const;
@@ -393,6 +396,12 @@ private:
 
     /** A list of CHARMM parameter strings. */
     QStringList charmm_params;
+
+    /** Periodic box data. */
+    SireVol::PeriodicBox box;
+
+    /** Whether the system has a periodic box. */
+    bool has_box;
 
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;
