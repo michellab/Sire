@@ -56,6 +56,8 @@
 
 #include "SireUnits/units.h"
 
+#include "SireVol/periodicbox.h"
+
 #include <QDateTime>
 #include <QFileInfo>
 #include <QtMath>
@@ -67,6 +69,7 @@ using namespace SireMM;
 using namespace SireMol;
 using namespace SireStream;
 using namespace SireSystem;
+using namespace SireVol;
 
 const RegisterParser<CharmmPSF> register_psf;
 static const RegisterMetaType<CharmmPSF> r_psf;
@@ -138,7 +141,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmPSF &psf)
     ds << psf.atoms << psf.bonds << psf.mol_bonds << psf.angles << psf.mol_angles
        << psf.dihedrals << psf.mol_dihedrals << psf.impropers << psf.mol_impropers
        << psf.cross_terms << psf.mol_cross_terms << psf.num_to_idx << psf.molecules
-       << psf.charmm_params << static_cast<const MoleculeParser&>(psf);
+       << psf.charmm_params << psf.box << psf.has_box << static_cast<const MoleculeParser&>(psf);
 
     return ds;
 }
@@ -152,7 +155,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmPSF &psf)
         ds >> psf.atoms >> psf.bonds >> psf.mol_bonds >> psf.angles >> psf.mol_angles
            >> psf.dihedrals >> psf.mol_dihedrals >> psf.impropers >> psf.mol_impropers
            >> psf.cross_terms >> psf.mol_cross_terms >> psf.num_to_idx >> psf.molecules
-           >> psf.charmm_params >> static_cast<MoleculeParser&>(psf);
+           >> psf.charmm_params >> psf.box >> psf.has_box >> static_cast<MoleculeParser&>(psf);
     }
     else
         throw version_error(v, "1", r_psf, CODELOC);
@@ -625,14 +628,15 @@ const char* CharmmParam::typeName()
 }
 
 /** Constructor */
-CharmmPSF::CharmmPSF() : ConcreteProperty<CharmmPSF,MoleculeParser>()
+CharmmPSF::CharmmPSF() :
+    ConcreteProperty<CharmmPSF,MoleculeParser>(), has_box(false)
 {}
 
 /** Construct to read in the data from the file called 'filename'. The
 passed property map can be used to pass extra parameters to control
 the parsing */
-CharmmPSF::CharmmPSF(const QString &filename, const PropertyMap &map)
-     : ConcreteProperty<CharmmPSF,MoleculeParser>(filename,map)
+CharmmPSF::CharmmPSF(const QString &filename, const PropertyMap &map) :
+    ConcreteProperty<CharmmPSF,MoleculeParser>(filename, map), has_box(false)
 {
     //the file has been read into memory and is available via
     //the MoleculeParser::lines() function.
@@ -651,8 +655,8 @@ CharmmPSF::CharmmPSF(const QString &filename, const PropertyMap &map)
 /** Construct to read in the data from the passed text lines. The
     passed property map can be used to pass extra parameters to control
     the parsing */
-CharmmPSF::CharmmPSF(const QStringList &lines, const PropertyMap &map)
-     : ConcreteProperty<CharmmPSF,MoleculeParser>(lines,map)
+CharmmPSF::CharmmPSF(const QStringList &lines, const PropertyMap &map) :
+    ConcreteProperty<CharmmPSF,MoleculeParser>(lines, map), has_box(false)
 {
     //the file has been read into memory and is available via
     //the MoleculeParser::lines() function.
@@ -671,8 +675,8 @@ CharmmPSF::CharmmPSF(const QStringList &lines, const PropertyMap &map)
 /** Construct this parser by extracting all necessary information from the
     passed SireSystem::System, looking for the properties that are specified
     in the passed property map */
-CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
-     : ConcreteProperty<CharmmPSF,MoleculeParser>(map)
+CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
+    ConcreteProperty<CharmmPSF,MoleculeParser>(map), has_box(false)
 {
     // Get the MolNums of each molecule in the System - this returns the
     // numbers in MolIdx order.
@@ -819,11 +823,29 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map)
             charmm_params.append("END");
     }
 
+    // Flag whether the system has a periodic simulation box.
+    has_box = false;
+
+    try
+    {
+        box = system.property(map["space"]).asA<PeriodicBox>();
+        has_box = true;
+    }
+    catch(...)
+    {}
+
     // Reparse the lines as a self-consistency check.
     CharmmPSF parsed(lines_list, map);
 
     // Set the CHARMM parameters.
     parsed.charmm_params = charmm_params;
+
+    // Set the box.
+    if (has_box)
+    {
+        parsed.box = box;
+        parsed.has_box = true;
+    }
 
     this->operator=(parsed);
 }
@@ -845,6 +867,7 @@ CharmmPSF::CharmmPSF(const CharmmPSF &other) :
     num_to_idx(other.num_to_idx),
     molecules(other.molecules),
     charmm_params(other.charmm_params),
+    box(other.box),
     parse_warnings(other.parse_warnings)
 {}
 
@@ -871,6 +894,7 @@ CharmmPSF& CharmmPSF::operator=(const CharmmPSF &other)
         num_to_idx = other.num_to_idx;
         molecules = other.molecules;
         charmm_params = other.charmm_params;
+        box = other.box;
         parse_warnings = other.parse_warnings;
 
         MoleculeParser::operator=(other);
@@ -1822,6 +1846,12 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
         @param cross_params
             A multi-hash of the parsed cross-term parameters.
+
+        @param box
+            A periodic box object.
+
+        @param has_box_params
+            Whether the parameters contained box record information.
  */
 void CharmmPSF::parseParameters(
     const QVector<QString> &parameter_lines,
@@ -1829,7 +1859,8 @@ void CharmmPSF::parseParameters(
     QMultiHash<QString, CharmmParam> &angle_params,
     QMultiHash<QString, CharmmParam> &dihedral_params,
     QMultiHash<QString, CharmmParam> &improper_params,
-    QMultiHash<QString, CharmmParam> &cross_params) const
+    QMultiHash<QString, CharmmParam> &cross_params,
+    PeriodicBox &box, bool &has_box_params) const
 {
     /* CHARMM parameter files are split in sections for different record types,
        i.e. bonds, angles, etc., separated by blank lines.
@@ -1849,6 +1880,9 @@ void CharmmPSF::parseParameters(
        We assume that parameter files are formatted correctly, i.e. there
        is no overlap between record sections, and all sections must be
        separated by at least one blank line.
+
+       We also parse NAMD XSC box data, which is added to the Sire System
+       as a PeriodicBox Space property.
      */
 
     QStringList errors;
@@ -2005,6 +2039,40 @@ void CharmmPSF::parseParameters(
             data.removeFirst();
             CharmmParam param(data.join(" "), 3, errors);
             improper_params.insert(generateKey(param.getAtoms()), param);
+        }
+
+        // Periodic box record data.
+        // TODO: Figure out how to make this work if the file doesn't contain
+        //       a $LABEL comment preceeding the cell record data.
+        else if (start == "#$LABELS")
+        {
+            // Get the next line.
+            i++;
+            QStringList data = parameter_lines[i].simplified().split(QRegExp("\\s"));
+
+            // Now try to read the cell parameters.
+            // Here we are assuming a periodic, rectilinear simulation box.
+            // TODO: Add support for other box types.
+            bool ok_x, ok_y, ok_z;
+
+            double x = data[1].toDouble(&ok_x);
+            double y = data[5].toDouble(&ok_y);
+            double z = data[9].toDouble(&ok_z);
+
+            if (not ok_x or not ok_y or not ok_z)
+            {
+                errors.append(QObject::tr("Could not read NAMD XSC record! %1")
+                    .arg(parameter_lines[i]));
+
+                return;
+            }
+
+            else
+            {
+                // Create a periodic box object.
+                box = PeriodicBox(Vector(x, y, z));
+                has_box_params = true;
+            }
         }
     }
 
@@ -2748,9 +2816,13 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     QMultiHash<QString, CharmmParam> improper_params;
     QMultiHash<QString, CharmmParam> cross_params;
 
+    // Initialise a periodic box object.
+    PeriodicBox box;
+    bool has_box_params = false;
+
     // Parse and validate the parameter file.
     parseParameters(param_lines, bond_params, angle_params,
-        dihedral_params, improper_params, cross_params);
+        dihedral_params, improper_params, cross_params, box, has_box_params);
 
     // Early exit if parameters are missing.
     if ((nBonds()      > 0 and bond_params.count()     == 0) or
@@ -2814,6 +2886,10 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     // Add the CHARMM parameters as a property.
     system.setProperty(map["charmm-params"].source(), StringProperty(params_string));
 
+    // Add the periodic box property.
+    if (has_box_params)
+        system.setProperty(map["space"].source(), box);
+
     // Return the parameterised system.
     return system;
 }
@@ -2870,6 +2946,41 @@ void CharmmPSF::writeToFile(const QString &filename) const
         {
             ts << line << '\n';
         }
+
+        f.close();
+    }
+
+    // Write periodic box information as a NAMD XSC file.
+
+    if (has_box)
+    {
+        QFileInfo fi(filename);
+
+        // Create the name of the XSC file.
+        QString xsc_filename = fi.absolutePath()
+                             + '/'
+                             + fi.completeBaseName()
+                             + ".xsc";
+
+        QFile f(xsc_filename);
+
+        if (not f.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            throw SireError::file_error(f, CODELOC);
+        }
+
+        // Get the box dimensions.
+        Vector box_size = box.dimensions();
+
+        QTextStream ts(&f);
+
+        QString l1 = "# NAMD extended system configuration output file\n";
+        QString l2 = "step a_x a_y a_z b_x b_y b_z c_x c_y c_z o_x o_y o_z s_x s_y s_z s_u s_v s_w\n";
+        QString l3 = QString("1 %1 0 0 0 %2 0 0 0 %3 0 0 0 0 0 0\n")
+            .arg(box_size[0]).arg(box_size[1]).arg(box_size[2]);
+
+        // Write the box data to file.
+        ts << l1 << l2 << l3;
 
         f.close();
     }

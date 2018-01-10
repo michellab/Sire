@@ -49,6 +49,8 @@ namespace bp = boost::python;
 
 #include "SireUnits/units.h"
 
+#include "SireVol/periodicbox.h"
+
 #include "charmmpsf.h"
 
 #include <QDateTime>
