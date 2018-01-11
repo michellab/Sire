@@ -490,8 +490,17 @@ CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors)
         if ((data.count() > 6) and (data[5].at(0) != '!'))
         {
             // Attempt to read the parameter values.
-            p1 = data[5].toDouble(&ok1);
-            p2 = data[6].toDouble(&ok2);
+
+            if (data[5] == "UB")
+            {
+                p1 = data[6].toDouble(&ok1);
+                p2 = data[7].toDouble(&ok2);
+            }
+            else
+            {
+                p1 = data[5].toDouble(&ok1);
+                p2 = data[6].toDouble(&ok2);
+            }
 
             if (not ok1 or not ok2)
             {
@@ -1923,7 +1932,7 @@ void CharmmPSF::parseParameters(
                 i++;
             }
         }
-        else if (start == "bond")
+        else if ((start == "bond") or (start == "BOND"))
         {
             data.removeFirst();
             CharmmParam param(data.join(" "), 0, errors);
@@ -1960,7 +1969,7 @@ void CharmmPSF::parseParameters(
                 i++;
             }
         }
-        else if (start == "angle")
+        else if ((start == "angle") or (start == "ANGLE"))
         {
             data.removeFirst();
             CharmmParam param(data.join(" "), 1, errors);
@@ -1997,15 +2006,62 @@ void CharmmPSF::parseParameters(
                 i++;
             }
         }
-        else if (start == "dihe")
+        else if ((start == "dihe") or (start == "DIHEDRAL"))
         {
-            data.removeFirst();
-            CharmmParam param(data.join(" "), 2, errors);
-            dihedral_params.insert(generateKey(param.getAtoms()), param);
+            // Special handling for parameter records spanning multiple lines.
+            if (data[5].toUpper() == "MULTIPLE=")
+            {
+                // Store the atom names.
+                QStringList atoms = QStringList() << data[1] << data[2] << data[3] << data[4];
+
+                // Process the first record.
+                QStringList tmp = QStringList() << atoms << data[7] << data[8] << data[9];
+                CharmmParam param(tmp.join(" "), 2, errors);
+                dihedral_params.insert(generateKey(param.getAtoms()), param);
+
+                // Now find all of the accompanying records.
+                // We loop through the file until we ecounter the next dihedral record.
+                while (true)
+                {
+                    // Move to the next line in the parameter file.
+                    i++;
+
+                    // Extract the first word in the line.
+                    QStringList data = parameter_lines[i].simplified().split(QRegExp("\\s"));
+                    start = data[0];
+
+                    if (start == "DIHEDRAL")
+                    {
+                        // Go back a line and exit the loop.
+                        i--;
+                        break;
+                    }
+
+                    // Avoid blank lines.
+                    if (data.count() > 0)
+                    {
+                        // This isn't a comment line.
+                        if (data.first() != "!")
+                        {
+                            tmp = QStringList() << atoms << data[0] << data[1] << data[2];
+                            CharmmParam param(tmp.join(" "), 2, errors);
+                            dihedral_params.insert(generateKey(param.getAtoms()), param);
+                        }
+                    }
+                }
+            }
+
+            // Standard, CHARMM-style dihedral records.
+            else
+            {
+                data.removeFirst();
+                CharmmParam param(data.join(" "), 2, errors);
+                dihedral_params.insert(generateKey(param.getAtoms()), param);
+            }
         }
 
         // Improper parameters.
-        else if (start == "IMPROPER")
+        else if ((start == "IMPROPER") and (data.count() == 1))
         {
             bool is_blank_line = false;
 
@@ -2034,7 +2090,7 @@ void CharmmPSF::parseParameters(
                 i++;
             }
         }
-        else if (start == "impr")
+        else if ((start == "impr") or (start == "IMPROPER"))
         {
             data.removeFirst();
             CharmmParam param(data.join(" "), 3, errors);
