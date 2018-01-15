@@ -2884,8 +2884,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     if ((nBonds()      > 0 and bond_params.count()     == 0) or
         (nAngles()     > 0 and angle_params.count()    == 0) or
         (nDihedrals()  > 0 and dihedral_params.count() == 0) or
-        (nImpropers()  > 0 and improper_params.count() == 0) or
-        (nCrossTerms() > 0 and cross_params.count()    == 0))
+        (nImpropers()  > 0 and improper_params.count() == 0))
     {
         throw SireError::incompatible_error(QObject::tr("The parameter file "
             "is missing information that is required for generating a system!"));
