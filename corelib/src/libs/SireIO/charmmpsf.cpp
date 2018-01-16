@@ -877,6 +877,7 @@ CharmmPSF::CharmmPSF(const CharmmPSF &other) :
     molecules(other.molecules),
     charmm_params(other.charmm_params),
     box(other.box),
+    has_box(other.has_box),
     parse_warnings(other.parse_warnings)
 {}
 
@@ -904,6 +905,7 @@ CharmmPSF& CharmmPSF::operator=(const CharmmPSF &other)
         molecules = other.molecules;
         charmm_params = other.charmm_params;
         box = other.box;
+        has_box = other.has_box;
         parse_warnings = other.parse_warnings;
 
         MoleculeParser::operator=(other);
