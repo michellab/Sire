@@ -2100,8 +2100,11 @@ void CharmmPSF::parseParameters(
         }
 
         // Periodic box record data.
-        // TODO: Figure out how to make this work if the file doesn't contain
-        //       a $LABEL comment preceeding the cell record data.
+        // TODO:
+        //  1) Figure out how to make this work if the file doesn't contain
+        //     a $LABEL comment preceeding the cell record data.
+        //
+        //  2) How to handle boxes where the centre isn't at (0, 0, 0)?
         else if (start == "#$LABELS")
         {
             // Get the next line.
@@ -3032,8 +3035,8 @@ void CharmmPSF::writeToFile(const QString &filename) const
         QTextStream ts(&f);
 
         QString l1 = "# NAMD extended system configuration output file\n";
-        QString l2 = "step a_x a_y a_z b_x b_y b_z c_x c_y c_z o_x o_y o_z s_x s_y s_z s_u s_v s_w\n";
-        QString l3 = QString("1 %1 0 0 0 %2 0 0 0 %3 0 0 0 0 0 0\n")
+        QString l2 = "#$LABELS step a_x a_y a_z b_x b_y b_z c_x c_y c_z\n";
+        QString l3 = QString("0 %1 0 0 0 %2 0 0 0 %3 0 0 0\n")
             .arg(box_size[0]).arg(box_size[1]).arg(box_size[2]);
 
         // Write the box data to file.
