@@ -2289,8 +2289,8 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             // Get the angle parameters.
             auto params = matches[0].getParams();
 
-            // Create the expression for the angle function.
-            Expression func = params[0] * SireMaths::pow_2( Theta - params[1] );
+            // Create the expression for the angle function, converting the angle to radians.
+            Expression func = params[0] * SireMaths::pow_2( Theta - (params[1] * M_PI/180) );
 
             // Set the angle function parameter.
             angle_funcs.set(AtomNum(atoms[idx0].getNumber()),
@@ -2369,8 +2369,8 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
                 // Get the dihedral parameters.
                 auto params = match.getParams();
 
-                // Update the function.
-                func += params[0] * (1 + Cos(( params[1] * Phi ) - params[2] ));
+                // Update the function, converting the phase shift to radians.
+                func += params[0] * (1 + Cos(( params[1] * Phi ) - (params[2] * M_PI/180) ));
             }
 
             // Set the dihedral function parameter.
@@ -2424,8 +2424,8 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             // Get the improper parameters.
             auto params = matches[0].getParams();
 
-            // Intialise the function object.
-            Expression func = params[0] * SireMaths::pow_2( Phi - params[1] );
+            // Intialise the function object, converting the out of plane angle to radians.
+            Expression func = params[0] * SireMaths::pow_2( Phi - (params[1] * M_PI/180) );
 
             // Set the improper function parameter.
             improper_funcs.set(AtomNum(atoms[idx0].getNumber()),
@@ -3620,7 +3620,7 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
 
             // Create the CHARMM angle parameters.
             const auto Theta = InternalPotential::symbols().angle().theta();
-            QString angle_param = toHarmonicParameter(angle_atoms, potential.function(), Theta);
+            QString angle_param = toHarmonicParameter(angle_atoms, potential.function(), Theta, 3);
 
             // Now check whether there is an additional Urey-Bradley term for this angle.
             for (int j=0; j<num_ubs; ++j)
@@ -3740,7 +3740,7 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
                 const auto phi = InternalPotential::symbols().dihedral().phi();
 
                 // Generate the improper parameter string.
-                four_atom_params.insert(toHarmonicParameter(func_atoms, potential.function(), phi, true));
+                four_atom_params.insert(toHarmonicParameter(func_atoms, potential.function(), phi, 4));
             }
             else
             {
@@ -3771,7 +3771,7 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
 
 /** Convert a Sire two-atom function to a CHARMM bond paramater string. */
 QString CharmmPSF::toHarmonicParameter(const QString &bond_atoms, const Expression &func,
-    const Symbol &R, bool is_improper)
+    const Symbol &R, int num_atoms)
 {
     // The function should be of the form "k(r - r0)^2".
     // We need to get the factors of R.
@@ -3864,14 +3864,23 @@ QString CharmmPSF::toHarmonicParameter(const QString &bond_atoms, const Expressi
                     .arg(R.toString()).arg(func.toString()).arg(errors.join("\n")), CODELOC );
     }
 
-    if (is_improper)
+    // Improper function.
+    if (num_atoms == 4)
     {
+        // Convert out of plane angle to degrees.
+        r0 *= (180 / M_PI);
+
         return QString("%1 %2 %3 %4")
             .arg(bond_atoms).arg(k, 10, 'f', 3).arg(0, 10).arg(r0, 10, 'f', 4);
     }
 
     else
     {
+        // Angle function.
+        // Convert equilibrium angle deviation to degrees.
+        if (num_atoms == 3)
+            r0 *= (180 / M_PI);
+
         return QString("%1 %2 %3").arg(bond_atoms).arg(k, 10, 'f', 3).arg(r0, 10, 'f', 4);
     }
 }
@@ -4019,14 +4028,15 @@ QVector<QString> CharmmPSF::toFourAtomParameter(const QString &dihedral_atoms, c
 
     if (not terms.isEmpty())
     {
-        // Append each parameter string to the vector.
+        // Append each parameter string to the vector, converting the phase
+        // shift to degrees.
         for (const auto term : terms)
         {
             parameter_strings.append(QString("%1 %2 %3 %4")
                 .arg(dihedral_atoms)
                 .arg(std::get<0>(term), 10, 'f', 4)
                 .arg(std::get<1>(term), 3)
-                .arg(-std::get<2>(term), 10, 'f', 2));
+                .arg(-std::get<2>(term) * (180 / M_PI), 10, 'f', 2));
         }
     }
 

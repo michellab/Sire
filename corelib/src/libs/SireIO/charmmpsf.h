@@ -350,7 +350,7 @@ private:
         bool is_improper=false);
 
     QString toHarmonicParameter(const QString &bond_atoms, const SireCAS::Expression &func,
-        const SireCAS::Symbol &R, bool is_improper = false);
+        const SireCAS::Symbol &R, int num_atoms=2);
 
     QVector<QString> toFourAtomParameter(const QString &dihedral_atoms, const SireCAS::Expression &func);
 
