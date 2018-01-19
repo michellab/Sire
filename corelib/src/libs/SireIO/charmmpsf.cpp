@@ -2290,7 +2290,7 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             auto params = matches[0].getParams();
 
             // Create the expression for the angle function, converting the angle to radians.
-            Expression func = params[0] * SireMaths::pow_2( Theta - (params[1] * M_PI/180) );
+            Expression func = params[0] * SireMaths::pow_2( Theta - qDegreesToRadians(params[1]) );
 
             // Set the angle function parameter.
             angle_funcs.set(AtomNum(atoms[idx0].getNumber()),
@@ -2370,7 +2370,7 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
                 auto params = match.getParams();
 
                 // Update the function, converting the phase shift to radians.
-                func += params[0] * (1 + Cos(( params[1] * Phi ) - (params[2] * M_PI/180) ));
+                func += params[0] * (1 + Cos(( params[1] * Phi ) - qDegreesToRadians(params[2]) ));
             }
 
             // Set the dihedral function parameter.
@@ -2425,7 +2425,7 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             auto params = matches[0].getParams();
 
             // Intialise the function object, converting the out of plane angle to radians.
-            Expression func = params[0] * SireMaths::pow_2( Phi - (params[1] * M_PI/180) );
+            Expression func = params[0] * SireMaths::pow_2( Phi - qDegreesToRadians(params[1]) );
 
             // Set the improper function parameter.
             improper_funcs.set(AtomNum(atoms[idx0].getNumber()),
@@ -3868,7 +3868,7 @@ QString CharmmPSF::toHarmonicParameter(const QString &bond_atoms, const Expressi
     if (num_atoms == 4)
     {
         // Convert out of plane angle to degrees.
-        r0 *= (180 / M_PI);
+        r0 = qRadiansToDegrees(r0);
 
         return QString("%1 %2 %3 %4")
             .arg(bond_atoms).arg(k, 10, 'f', 3).arg(0, 10).arg(r0, 10, 'f', 4);
@@ -3879,7 +3879,7 @@ QString CharmmPSF::toHarmonicParameter(const QString &bond_atoms, const Expressi
         // Angle function.
         // Convert equilibrium angle deviation to degrees.
         if (num_atoms == 3)
-            r0 *= (180 / M_PI);
+            r0 = qRadiansToDegrees(r0);
 
         return QString("%1 %2 %3").arg(bond_atoms).arg(k, 10, 'f', 3).arg(r0, 10, 'f', 4);
     }
@@ -4036,7 +4036,7 @@ QVector<QString> CharmmPSF::toFourAtomParameter(const QString &dihedral_atoms, c
                 .arg(dihedral_atoms)
                 .arg(std::get<0>(term), 10, 'f', 4)
                 .arg(std::get<1>(term), 3)
-                .arg(-std::get<2>(term) * (180 / M_PI), 10, 'f', 2));
+                .arg(-qRadiansToDegrees(std::get<2>(term)), 10, 'f', 2));
         }
     }
 
