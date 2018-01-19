@@ -598,7 +598,7 @@ QString PDBAtom::toPDBRecord() const
     auto local_insert_code = insert_code;
 
     // Make sure the residue number doesn't exceed 9999.
-    // If it does, the we set the number to mod(resnum, 999) and use the insertion
+    // If it does, the we set the number to mod(resnum, 9999) and use the insertion
     // code character to identify unique residues.
     if (local_res_num > 9999)
     {
