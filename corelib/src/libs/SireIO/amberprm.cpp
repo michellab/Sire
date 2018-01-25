@@ -1721,6 +1721,10 @@ QStringList toLines(const QVector<AmberParams> &params,
         pointers[27] = 1;
     }
 
+    //here is the number of solvent molecules, and the index of the last
+    //solute residue. These will be updated by the 'getAllAtomNames' function
+    int nsolvents = 0; int last_solute_residue = 0;
+
     //function used to generate the text for the atom names
     auto getAllAtomNames = [&]()
     {
@@ -1742,6 +1746,46 @@ QStringList toLines(const QVector<AmberParams> &params,
             for (int i=0; i<params.count(); ++i)
             {
                 atom_names[i] = getAtomNames(params[i]);
+            }
+        }
+
+        //now loop from the last molecule backwards to find the first solvent
+        //molecule. Solvent molecules are those that have the same number
+        //of atoms as the last molecule, and that have the same atom names
+        {
+            const auto last_molinfo = params.last().info();
+            
+            int first_solvent = params.count()-1;
+            
+            for (int i=params.count()-2; i>=0; --i)
+            {
+                const auto molinfo = params[i].info();
+            
+                //compare the number of atoms in this molecule to that of
+                //the last molecule - if different, then this is not the solvent
+                if (last_molinfo.nAtoms() != molinfo.nAtoms())
+                {
+                    break;
+                }
+                
+                //compare the atom names - these must be the same in the same order
+                for (AtomIdx j(0); j<molinfo.nAtoms(); ++j)
+                {
+                    if (last_molinfo.name(j) != molinfo.name(j))
+                    {
+                        break;
+                    }
+                }
+                
+                first_solvent = i;
+            }
+         
+            nsolvents = params.count() - first_solvent;
+            
+            //now count up the number of residues in the "solute" molecules
+            for (int i=0; i<first_solvent; ++i)
+            {
+                last_solute_residue += params[i].info().nResidues();
             }
         }
 
@@ -2956,11 +3000,20 @@ QStringList toLines(const QVector<AmberParams> &params,
     if (has_periodic_box)
     {
         //write out the "SOLVENT_POINTERS". Amber has a concept of solute(s) and solvent.
-        //with all solutes written first, and then all solvents. We need to work what is
-        //a solvent, and then when the first solvent exists. As a test, we will say that
-        //the solvent is the molecule that
+        //with all solutes written first, and then all solvents. We have above calculated
+        //the number of solvents by finding the last "nsolvents" molecules that have the
+        //same number of atoms, with the same atom names in the same order. We are relying
+        //on being passed a pre-sorted system that has all solvent molecules at the end
         lines.append("%FLAG SOLVENT_POINTERS");
         QVector<qint64> solvent_pointers(3,0);
+        
+        if (nsolvents > 0)
+        {
+            solvent_pointers[0] = last_solute_residue; // last solute residue index
+            solvent_pointers[1] = params.count();  // total number of molecules
+            solvent_pointers[2] = params.count() - nsolvents + 1; // first solvent molecule index
+        }
+        
         lines += writeIntData(solvent_pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
 
         lines.append("%FLAG ATOMS_PER_MOLECULE");
@@ -4048,6 +4101,20 @@ System AmberPrm::startSystem(const PropertyMap &map) const
     System system( this->title() );
     system.add(molgroup);
     system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
+
+    //some top files contains "BOX_DIMENSIONS" information. Add this now, as it
+    //now in case it is not replaced by the coordinates file
+    const auto boxdims = float_data.value("BOX_DIMENSIONS");
+    
+    if (boxdims.count() == 4)
+    {
+        // ANGLE, X, Y, Z dimensions - we will only read this if the angle is 90
+        if (boxdims[0] == 90.0)
+        {
+            PeriodicBox space( Vector(boxdims[1], boxdims[2], boxdims[3]) );
+            system.setProperty("space", space);
+        }
+    }
 
     return system;
 }

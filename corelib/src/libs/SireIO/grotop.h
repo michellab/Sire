@@ -408,6 +408,9 @@ private:
 
     void getIncludePath(const PropertyMap &map);
 
+    QString searchForDihType(const QString &atom0, const QString &atom1,
+                             const QString &atom2, const QString &atom3) const;
+
     QString findIncludeFile(QString filename, QString current_directory);
 
     QVector<QString> loadInclude(QString filename, QString current_directory);
@@ -429,10 +432,16 @@ private:
     SireMol::Molecule createMolecule(QString moltype, QStringList &errors,
                                      const PropertyMap &map) const;
     
-    void addAtomProperties(SireMol::Molecule &mol, const GroMolType &moltype,
-                           QStringList &errors, const PropertyMap &map) const;
-    void addBondProperties(SireMol::Molecule &mol, const GroMolType &moltype,
-                           QStringList &errors, const PropertyMap &map) const;
+    typedef std::tuple<SireBase::Properties,QStringList> PropsAndErrors;
+    
+    PropsAndErrors getAtomProperties(const SireMol::MoleculeInfo &molinfo,
+                                     const GroMolType &moltype) const;
+    PropsAndErrors getBondProperties(const SireMol::MoleculeInfo &molinfo,
+                                     const GroMolType &moltype) const;
+    PropsAndErrors getAngleProperties(const SireMol::MoleculeInfo &molinfo,
+                                      const GroMolType &moltype) const;
+    PropsAndErrors getDihedralProperties(const SireMol::MoleculeInfo &molinfo,
+                                         const GroMolType &moltype) const;
     
     /** This is the full search path of all directories that should
         be searched for Gromacs include files */

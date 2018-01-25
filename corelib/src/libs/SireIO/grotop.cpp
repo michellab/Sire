@@ -1442,6 +1442,40 @@ QList<GromacsAngle> GroTop::angles(const QString &atm0, const QString &atm1,
     return ang_potentials.values( get_angle_id(atm0,atm1,atm2) );
 }
 
+/** Search for a dihedral type parameter that matches the atom types
+    atom0-atom1-atom2-atom3. This will try to find an exact match. If that fails,
+    it will then use one of the wildcard matches. Returns a null string if there
+    is no match. This will return the key into the dih_potentials dictionary */
+/*QString GroTop::searchForDihedral(const QString &atm0, const QString &atm1,
+                                  const QString &atm2, const QString &atm3) const
+{
+    QString key = get_dihedral_id(atm0,atm1,atm2,atm3);
+    
+    if (dih_potentials.contains(key))
+        return key;
+    
+    const QString wild = "*";
+    
+    //this failed. Look for *-atm1-atm2-* or *-atm2-atm1-*
+    key = get_dihedral_id(wild, atm1, atm2, wild);
+    
+    if (dih_potentials.contains(key))
+        return key;
+    
+    key = get_dihedral_id(wild, atm2, atm1, wild);
+    
+    if (dih_potentials.contains(key))
+        return key;
+    
+    //finally look for *-*-*-*
+    key = get_dihedral_id(wild, wild, wild, wild);
+    
+    if (dih_potentials.contains(key))
+        return key;
+    
+    return QString();
+}*/
+
 /** Return the dihedral potential data for the passed quad of atoms. This only returns
     the most recently inserted parameter for these atoms. Use 'dihedrals' if you want
     to allow for multiple return values */
@@ -3514,28 +3548,10 @@ Molecule GroTop::createMolecule(const GroMolType &moltype, QStringList &errors,
     return mol.commit();
 }
 
-/** Internal function to simplify setting a molecular property */
-static void setMoleculeProperty(MolEditor &mol, const PropertyMap &map,
-                         const QString &key, const Property &value)
+/** This function is used to return atom properties for the passed molecule */
+GroTop::PropsAndErrors GroTop::getAtomProperties(const MoleculeInfo &molinfo,
+                                                 const GroMolType &moltype) const
 {
-    const auto propname = map[key];
-
-    if (propname.hasValue())
-    {
-        mol = mol.setProperty(key, propname.value());
-    }
-    else
-    {
-        mol = mol.setProperty(propname.source(), value);
-    }
-}
-
-/** This function is used to add atom properties to the passed molecule */
-void GroTop::addAtomProperties(Molecule &mol, const GroMolType &moltype,
-                               QStringList &errors, const PropertyMap &map) const
-{
-    const auto molinfo = mol.info();
-
     //create space for all of the properties
     AtomStringProperty atom_type(molinfo);
     AtomIntProperty charge_group(molinfo);
@@ -3547,6 +3563,8 @@ void GroTop::addAtomProperties(Molecule &mol, const GroMolType &moltype,
     AtomStringProperty particle_type(molinfo);
 
     const auto atoms = moltype.atoms();
+
+    QStringList errors;
 
     //loop over each atom and look up parameters
     for (int i=0; i<atoms.count(); ++i)
@@ -3585,27 +3603,27 @@ void GroTop::addAtomProperties(Molecule &mol, const GroMolType &moltype,
         particle_type.set(cgatomidx, atmtyp.particleTypeString());
     }
     
-    //save the parameters into the atom
-    auto moleditor = mol.edit();
-
-    setMoleculeProperty(moleditor, map, "atomtype", atom_type);
-    setMoleculeProperty(moleditor, map, "charge_group", charge_group);
-    setMoleculeProperty(moleditor, map, "charge", atom_chgs);
-    setMoleculeProperty(moleditor, map, "mass", atom_masses);
-    setMoleculeProperty(moleditor, map, "LJ", atom_ljs);
-    setMoleculeProperty(moleditor, map, "element", atom_elements);
-    setMoleculeProperty(moleditor, map, "particle_type", particle_type);
+    Properties props;
     
-    mol = moleditor.commit();
+    props.setProperty("atomtype", atom_type);
+    props.setProperty("charge_group", charge_group);
+    props.setProperty("charge", atom_chgs);
+    props.setProperty("mass", atom_masses);
+    props.setProperty("LJ", atom_ljs);
+    props.setProperty("element", atom_elements);
+    props.setProperty("particle_type", particle_type);
+    
+    return std::make_tuple(props, errors);
 }
 
-/** This internal function is used to add in bond properties */
-void GroTop::addBondProperties(Molecule &mol, const GroMolType &moltype,
-                               QStringList &errors, const PropertyMap &map) const
+/** This internal function is used to return all of the bond properties
+    for the passed molecule */
+GroTop::PropsAndErrors GroTop::getBondProperties(const MoleculeInfo &molinfo,
+                                                 const GroMolType &moltype) const
 {
-    const auto molinfo = mol.info();
-
     const auto R = InternalPotential::symbols().bond().r();
+
+    QStringList errors;
 
     //add in all of the bond functions, together with the connectivity of the
     //molecule
@@ -3676,12 +3694,170 @@ void GroTop::addBondProperties(Molecule &mol, const GroMolType &moltype,
         }
     }
     
-    auto moleditor = mol.edit();
+    Properties props;
+    props.setProperty("connectivity", connectivity.commit());
+    props.setProperty("bond", bondfuncs);
     
-    setMoleculeProperty(moleditor, map, "connectivity", connectivity.commit());
-    setMoleculeProperty(moleditor, map, "bond", bondfuncs);
+    return std::make_tuple(props, errors);
+}
+
+/** This internal function is used to return all of the angle properties
+    for the passed molecule */
+GroTop::PropsAndErrors GroTop::getAngleProperties(const MoleculeInfo &molinfo,
+                                                  const GroMolType &moltype) const
+{
+    const auto THETA = InternalPotential::symbols().angle().theta();
+
+    QStringList errors;
+
+    //add in all of the angle functions
+    ThreeAtomFunctions angfuncs(molinfo);
     
-    mol = moleditor.commit();
+    const auto angles = moltype.angles();
+    
+    for (auto it = angles.constBegin(); it != angles.constEnd(); ++it)
+    {
+        const auto &angle = it.key();
+        auto potential = it.value();
+
+        AtomIdx idx0 = molinfo.atomIdx( angle.atom0() );
+        AtomIdx idx1 = molinfo.atomIdx( angle.atom1() );
+        AtomIdx idx2 = molinfo.atomIdx( angle.atom2() );
+        
+        if (idx2 < idx0)
+        {
+            qSwap(idx0, idx2);
+        }
+        
+        //do we need to resolve this angle parameter (look up the parameters)?
+        if (not potential.isResolved())
+        {
+            //look up the atoms in the molecule template
+            const auto atom0 = moltype.atom(idx0);
+            const auto atom1 = moltype.atom(idx1);
+            const auto atom2 = moltype.atom(idx2);
+            
+            //get the angle parameter for these atom types
+            auto new_potential = this->angle(atom0.atomType(), atom1.atomType(),
+                                             atom2.atomType());
+            
+            if (not new_potential.isResolved())
+            {
+                errors.append( QObject::tr("Cannot find the angle parameters for "
+                  "the angle between atoms %1-%2-%3 (atom types %4-%5-%6).")
+                    .arg(atom0.toString()).arg(atom1.toString()).arg(atom2.toString())
+                    .arg(atom0.atomType()).arg(atom1.atomType()).arg(atom2.atomType()) );
+                continue;
+            }
+            
+            potential = new_potential;
+        }
+        
+        //now create the angle expression
+        auto exp = potential.toExpression(THETA);
+
+        if (not exp.isZero())
+        {
+            //add this expression onto any existing expression
+            auto oldfunc = angfuncs.potential(idx0, idx1, idx2);
+            
+            if (not oldfunc.isZero())
+            {
+                angfuncs.set(idx0, idx1, idx2, exp+oldfunc);
+            }
+            else
+            {
+                angfuncs.set(idx0, idx1, idx2, exp);
+            }
+        }
+    }
+    
+    Properties props;
+    props.setProperty("angle", angfuncs);
+    
+    return std::make_tuple(props, errors);
+}
+
+/** This internal function is used to return all of the dihedral properties
+    for the passed molecule */
+GroTop::PropsAndErrors GroTop::getDihedralProperties(const MoleculeInfo &molinfo,
+                                                     const GroMolType &moltype) const
+{
+    const auto PHI = InternalPotential::symbols().dihedral().phi();
+
+    QStringList errors;
+
+    //add in all of the dihedral and improper functions
+    FourAtomFunctions dihfuncs(molinfo);
+    
+    const auto dihedrals = moltype.dihedrals();
+    
+    for (auto it = dihedrals.constBegin(); it != dihedrals.constEnd(); ++it)
+    {
+        const auto &dihedral = it.key();
+        auto potential = it.value();
+
+        AtomIdx idx0 = molinfo.atomIdx( dihedral.atom0() );
+        AtomIdx idx1 = molinfo.atomIdx( dihedral.atom1() );
+        AtomIdx idx2 = molinfo.atomIdx( dihedral.atom2() );
+        AtomIdx idx3 = molinfo.atomIdx( dihedral.atom3() );
+        
+        if (idx3 < idx0)
+        {
+            qSwap(idx0, idx3);
+            qSwap(idx2, idx1);
+        }
+        
+        //do we need to resolve this dihedral parameter (look up the parameters)?
+        if (not potential.isResolved())
+        {
+            //look up the atoms in the molecule template
+            const auto atom0 = moltype.atom(idx0);
+            const auto atom1 = moltype.atom(idx1);
+            const auto atom2 = moltype.atom(idx2);
+            const auto atom3 = moltype.atom(idx3);
+            
+            //get the dihedral parameter for these atom types
+            auto new_potential = this->dihedral(atom0.atomType(), atom1.atomType(),
+                                                atom2.atomType(), atom3.atomType());
+            
+            if (not new_potential.isResolved())
+            {
+                errors.append( QObject::tr("Cannot find the dihedral parameters for "
+                  "the dihedral between atoms %1-%2-%3-%4 (atom types %5-%6-%7-%8).")
+                    .arg(atom0.toString()).arg(atom1.toString())
+                    .arg(atom2.toString()).arg(atom3.toString())
+                    .arg(atom0.atomType()).arg(atom1.atomType())
+                    .arg(atom2.atomType()).arg(atom3.atomType()) );
+                continue;
+            }
+            
+            potential = new_potential;
+        }
+        
+        //now create the dihedral expression
+        auto exp = potential.toExpression(PHI);
+
+        if (not exp.isZero())
+        {
+            //add this expression onto any existing expression
+            auto oldfunc = dihfuncs.potential(idx0, idx1, idx2, idx3);
+            
+            if (not oldfunc.isZero())
+            {
+                dihfuncs.set(idx0, idx1, idx2, idx3, exp+oldfunc);
+            }
+            else
+            {
+                dihfuncs.set(idx0, idx1, idx2, idx3, exp);
+            }
+        }
+    }
+    
+    Properties props;
+    props.setProperty("dihedral", dihfuncs);
+    
+    return std::make_tuple(props, errors);
 }
 
 /** This function is used to create a molecule. Any errors should be written
@@ -3718,17 +3894,67 @@ Molecule GroTop::createMolecule(QString moltype_name, QStringList &errors,
 
     const auto moltype = moltypes.constData()[idx];
 
-    auto mol = this->createMolecule(moltype, errors, map);
+    //create the underlying molecule
+    auto mol = this->createMolecule(moltype, errors, map).edit();
+    mol.rename(moltype_name);
+    const auto molinfo = mol.info();
 
-    //set the name of the molecule
-    mol = mol.edit().rename(moltype_name).commit();
+    //now get all of the molecule properties
+    const QVector< std::function<PropsAndErrors()> > funcs =
+                { [&](){ return getAtomProperties(molinfo, moltype); },
+                  [&](){ return getBondProperties(molinfo, moltype); },
+                  [&](){ return getAngleProperties(molinfo, moltype); },
+                  [&](){ return getDihedralProperties(molinfo, moltype); } };
+
+    QVector<PropsAndErrors> props(funcs.count());
+    auto props_data = props.data();
+
+    if (usesParallel())
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0,funcs.count()),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                props_data[i] = funcs.at(i)();
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<funcs.count(); ++i)
+        {
+            props_data[i] = funcs.at(i)();
+        }
+    }
+
+    //assemble all of the properties together
+    for (int i=0; i<props.count(); ++i)
+    {
+        const auto &p = std::get<0>(props.at(i));
+        const auto &pe = std::get<1>(props.at(i));
+        
+        if (not pe.isEmpty())
+        {
+            errors += pe;
+        }
+        
+        for (const auto key : p.propertyKeys())
+        {
+            const auto mapped = map[key];
+            
+            if (mapped.hasValue())
+            {
+                mol.setProperty(key, mapped.value());
+            }
+            else
+            {
+                mol.setProperty(mapped, p.property(key));
+            }
+        }
+    }
     
-    //now add the various properties
-    this->addAtomProperties(mol, moltype, errors, map);
-    this->addBondProperties(mol, moltype, errors, map);
-    //etc.
-    
-    return mol;
+    return mol.commit();
 }
 
 /** Use the data contained in this parser to create a new System of molecules,
