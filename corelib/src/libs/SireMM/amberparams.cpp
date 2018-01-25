@@ -639,13 +639,20 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
             }
             else if (child.base().isA<Cos>())
             {
-                if (f.factor() == 1)
+                auto cos_term = child.base().asA<Cos>();
+            
+                //if the factor is negative, then we need to add pi to the periodicity
+                //as amber does not have negative cos factors
+                double factor = f.factor() * child.factor();
+
+                if (factor < 0)
                 {
-                    cos_terms.append(child);
+                    factor *= -1;
+                    cos_terms.append( factor * Cos( cos_term.argument() + SireMaths::pi ) );
                 }
                 else
                 {
-                    cos_terms.append( f.factor() * child );
+                    cos_terms.append( factor * cos_term );
                 }
             }
             else
@@ -664,7 +671,18 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
         }
         else if (f.base().isA<Cos>())
         {
-            cos_terms.append(f);
+            auto cos_term = f.base().asA<Cos>();
+            double factor = f.factor();
+        
+            if (factor < 0)
+            {
+                factor *= -1;
+                cos_terms.append( factor * Cos(cos_term.argument() + SireMaths::pi) );
+            }
+            else
+            {
+                cos_terms.append( factor * cos_term );
+            }
         }
         else
         {

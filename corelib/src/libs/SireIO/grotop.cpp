@@ -45,6 +45,9 @@
 #include "SireMM/internalff.h"
 #include "SireMM/atomljs.h"
 #include "SireMM/twoatomfunctions.h"
+#include "SireMM/threeatomfunctions.h"
+#include "SireMM/fouratomfunctions.h"
+#include "SireMM/cljnbpairs.h"
 
 #include "SireBase/parallel.h"
 #include "SireBase/stringproperty.h"
@@ -1446,15 +1449,15 @@ QList<GromacsAngle> GroTop::angles(const QString &atm0, const QString &atm1,
     atom0-atom1-atom2-atom3. This will try to find an exact match. If that fails,
     it will then use one of the wildcard matches. Returns a null string if there
     is no match. This will return the key into the dih_potentials dictionary */
-/*QString GroTop::searchForDihedral(const QString &atm0, const QString &atm1,
-                                  const QString &atm2, const QString &atm3) const
+QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
+                                 const QString &atm2, const QString &atm3) const
 {
     QString key = get_dihedral_id(atm0,atm1,atm2,atm3);
     
     if (dih_potentials.contains(key))
         return key;
     
-    const QString wild = "*";
+    static const QString wild = "*";
     
     //this failed. Look for *-atm1-atm2-* or *-atm2-atm1-*
     key = get_dihedral_id(wild, atm1, atm2, wild);
@@ -1474,7 +1477,7 @@ QList<GromacsAngle> GroTop::angles(const QString &atm0, const QString &atm1,
         return key;
     
     return QString();
-}*/
+}
 
 /** Return the dihedral potential data for the passed quad of atoms. This only returns
     the most recently inserted parameter for these atoms. Use 'dihedrals' if you want
@@ -1482,7 +1485,8 @@ QList<GromacsAngle> GroTop::angles(const QString &atm0, const QString &atm1,
 GromacsDihedral GroTop::dihedral(const QString &atm0, const QString &atm1,
                                  const QString &atm2, const QString &atm3) const
 {
-    return dih_potentials.value( get_dihedral_id(atm0,atm1,atm2,atm3), GromacsDihedral() );
+    return dih_potentials.value( searchForDihType(atm0,atm1,atm2,atm3),
+                                 GromacsDihedral() );
 }
 
 /** Return the dihedral potential data for the passed quad of atoms. This returns
@@ -3694,9 +3698,41 @@ GroTop::PropsAndErrors GroTop::getBondProperties(const MoleculeInfo &molinfo,
         }
     }
     
+    auto conn = connectivity.commit();
+    
     Properties props;
-    props.setProperty("connectivity", connectivity.commit());
+    props.setProperty("connectivity", conn);
     props.setProperty("bond", bondfuncs);
+
+    //if 'generate_pairs' is true, then we need to automatically generate
+    //the excluded atom pairs, using fudge_qq and fudge_lj for the 1-4 interactions
+    if (generate_pairs)
+    {
+        //default is that atoms are not bonded (so scale factor is 1)
+        CLJNBPairs nbpairs(molinfo, CLJScaleFactor(1.0,1.0));
+
+        //now go over each atom and set bonded and angled atoms to zero,
+        //and dihedralled atoms to fudge_qq and fudge_lj
+        for (AtomIdx i(0); i<molinfo.nAtoms()-1; ++i)
+        {
+            auto icg = molinfo.cgAtomIdx(i);
+        
+            for (AtomIdx j(i+1); j<molinfo.nAtoms(); ++j)
+            {
+                if (conn.areBonded(i,j) or conn.areAngled(i,j))
+                {
+                    nbpairs.set(icg, molinfo.cgAtomIdx(j), CLJScaleFactor(0,0));
+                }
+                else if (conn.areDihedraled(i,j))
+                {
+                    nbpairs.set(icg, molinfo.cgAtomIdx(j),
+                                CLJScaleFactor(fudge_qq, fudge_lj));
+                }
+            }
+        }
+
+        props.setProperty("intrascale", nbpairs);
+    }
     
     return std::make_tuple(props, errors);
 }
