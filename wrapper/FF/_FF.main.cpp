@@ -23,6 +23,8 @@
 
 #include "FFComponent.pypp.hpp"
 
+#include "FFDetail.pypp.hpp"
+
 #include "FFID.pypp.hpp"
 
 #include "FFIdx.pypp.hpp"
@@ -113,6 +115,8 @@ BOOST_PYTHON_MODULE(_FF){
     register_FF3D_class();
 
     register_FFComponent_class();
+
+    register_FFDetail_class();
 
     register_FFID_class();
 

@@ -12,6 +12,7 @@ set ( PYPP_SOURCES
        Specify_FFID_.pypp.cpp
        FF.pypp.cpp
        Point.pypp.cpp
+       FFDetail.pypp.cpp
        AtomPoint.pypp.cpp
        ForceFields.pypp.cpp
        GridFieldTable.pypp.cpp
