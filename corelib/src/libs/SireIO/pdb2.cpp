@@ -49,6 +49,7 @@
 #include "SireUnits/units.h"
 
 #include <QFile>
+#include <QtMath>
 
 using namespace SireBase;
 using namespace SireIO;
@@ -592,12 +593,38 @@ QString PDBAtom::toPDBRecord() const
     if (not chain_id.isNull()) line.append(QString(" %1").arg(chain_id));
     else                       line.append("  ");
 
+    // Make a copy of the res_num and insert_code member data.
+    auto local_res_num = res_num;
+    auto local_insert_code = insert_code;
+
+    // Make sure the residue number doesn't exceed 9999.
+    // If it does, the we set the number to mod(resnum, 9999) and use the insertion
+    // code character to identify unique residues.
+    if (local_res_num > 9999)
+    {
+        // Upper-case alphabet and digits 0 through 9.
+        QString characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        // Work out the insertion code index (the multiple of 9999).
+        int index = qFloor(local_res_num / 9999.0) - 1;
+
+        // Cap the character index.
+        if (index > 35)
+            index = 35;
+
+        // Update the insertion code.
+        local_insert_code = characters[index];
+
+        // Wrap the residue number.
+        local_res_num = local_res_num % 9999;
+    }
+
     // Append the residue sequence number.
-    line.append(QString("%1").arg(res_num, 4));
+    line.append(QString("%1").arg(local_res_num, 4));
 
     // Append the residue insertion code
-    if (not insert_code.isNull()) line.append(insert_code);
-    else                          line.append(" ");
+    if (not local_insert_code.isNull()) line.append(local_insert_code);
+    else                                line.append(" ");
 
     // Append the atomic coordinates.
     line.append(QString("   %1\%2\%3")
