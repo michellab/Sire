@@ -34,6 +34,15 @@ mcs_timeout = Parameter("match timeout", 5*second,
                         """The maximum amount of time to give the maximum common substructure
                            algorithm to find a match between the two ligands.""")
 
+mcs_prematch = Parameter("match atoms", None,
+                         """The names of atoms that must match when aligning the two ligands.
+                            The format is a comma-separated list of atom pairs, saying that
+                            the atom called 'A' in ligand0 matches the atom called 'B' in
+                            ligand1. This is needed when the maximum common substructure 
+                            algorithm fails to find a good match. For example, the string
+                            'A1:B1,A2:B2,A3:B3' would match atom A1 in ligand0 to atom
+                            B1 in ligand1, A2 to B2 and A3 to B3.""")
+
 cutoff_method = Parameter("cutoff method", "shift electrostatics",
                           """Method used to apply the non-bonded electrostatic cutoff.""")
 
@@ -1678,8 +1687,13 @@ def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
         print("Merging the two ligand complexes with a vacuum box to create the ligandswap system...")
 
     print("\nFirst, mapping the atoms from the first ligand to the atoms of the second...")
-    mapping = AtomMCSMatcher(mcs_timeout.val).match(ligand0_mol, PropertyMap(), 
-                                                    ligand1_mol, PropertyMap())
+    if mcs_prematch.val:
+        mapping = AtomMCSMatcher( AtomIDMatcher(mcs_prematch.val),
+                                  mcs_timeout.val ).match(ligand0_mol, PropertyMap(),
+                                                          ligand1_mol, PropertyMap())
+    else:
+        mapping = AtomMCSMatcher(mcs_timeout.val).match(ligand0_mol, PropertyMap(), 
+                                                        ligand1_mol, PropertyMap())
 
     lines = []
     for key in mapping.keys():

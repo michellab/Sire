@@ -185,6 +185,8 @@ public:
     AtomIDMatcher(const QHash<int,int> &match_idxs);
     AtomIDMatcher(const QHash<AtomIdentifier,AtomIdentifier> &match_ids);
     
+    AtomIDMatcher(const QString &match_names);
+    
     AtomIDMatcher(const AtomIDMatcher &other);
     
     ~AtomIDMatcher();
