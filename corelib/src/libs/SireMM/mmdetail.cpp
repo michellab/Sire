@@ -295,3 +295,17 @@ bool MMDetail::usesCosineDihedrals() const
 {
     return dihedralStyle() == "cosine";
 }
+
+/** Return whether or not this is an Amber-style forcefield. An Amber-style
+    forcefield is one that uses only coulomb's law between point charges for electrostatics,
+    LJ with arithmetic combining rules for vdw, harmonic bonds and angles and a 
+    set of cosine functions for dihedrals */
+bool MMDetail::isAmberStyle() const
+{
+    return usesArithmeticCombiningRules() and
+           usesCoulombCharges() and
+           usesLJTerm() and
+           usesHarmonicBonds() and
+           usesHarmonicAngles() and
+           usesCosineDihedrals();
+}

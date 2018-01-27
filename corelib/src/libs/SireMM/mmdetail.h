@@ -100,6 +100,8 @@ public:
     
     bool usesCosineDihedrals() const;
     QString dihedralStyle() const;
+    
+    bool isAmberStyle() const;
 };
 
 }

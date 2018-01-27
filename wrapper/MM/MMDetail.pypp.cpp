@@ -99,6 +99,17 @@ void register_MMDetail_class(){
                 , "Return the electrostatic model used by this forcefield" );
         
         }
+        { //::SireMM::MMDetail::isAmberStyle
+        
+            typedef bool ( ::SireMM::MMDetail::*isAmberStyle_function_type)(  ) const;
+            isAmberStyle_function_type isAmberStyle_function_value( &::SireMM::MMDetail::isAmberStyle );
+            
+            MMDetail_exposer.def( 
+                "isAmberStyle"
+                , isAmberStyle_function_value
+                , "" );
+        
+        }
         MMDetail_exposer.def( bp::self != bp::self );
         { //::SireMM::MMDetail::operator=
         

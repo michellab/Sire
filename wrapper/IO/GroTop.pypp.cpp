@@ -21,7 +21,13 @@ namespace bp = boost::python;
 
 #include "SireMM/atomljs.h"
 
+#include "SireMM/cljnbpairs.h"
+
+#include "SireMM/fouratomfunctions.h"
+
 #include "SireMM/internalff.h"
+
+#include "SireMM/threeatomfunctions.h"
 
 #include "SireMM/twoatomfunctions.h"
 

@@ -116,12 +116,13 @@ const RegisterParser<AmberPrm> register_amberparm;
 /** Serialise to a binary datastream */
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberPrm &parm)
 {
-    writeHeader(ds, r_parm, 1);
+    writeHeader(ds, r_parm, 2);
 
     SharedDataStream sds(ds);
 
     sds << parm.flag_to_line
         << parm.int_data << parm.float_data << parm.string_data
+        << parm.ffield
         << static_cast<const MoleculeParser&>(parm);
 
     return ds;
@@ -485,25 +486,45 @@ void AmberPrm::rebuildAfterReload()
     }
 }
 
+Q_GLOBAL_STATIC( QMutex, getAmberMutex );
+
+/** Internal function used to get the canonical Amber forcefield */
+static MMDetail getAmberForceField()
+{
+    QMutexLocker lkr( getAmberMutex() );
+    
+    static MMDetail amberff( "amber::ff", "arithmetic",
+                             1.0 / 1.2, 0.5, "coulomb", "lj",
+                             "harmonic", "harmonic", "cosine" );
+    
+    return amberff;
+}
+
 /** Read from a binary datastream */
 QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberPrm &parm)
 {
     VersionID v = readHeader(ds, r_parm);
 
-    if (v == 1)
+    if (v == 1 or v == 2)
     {
         SharedDataStream sds(ds);
 
         parm = AmberPrm();
 
         sds >> parm.flag_to_line
-            >> parm.int_data >> parm.float_data >> parm.string_data
-            >> static_cast<MoleculeParser&>(parm);
+            >> parm.int_data >> parm.float_data >> parm.string_data;
+        
+            if (v == 2)
+                sds >> parm.ffield;
+            else
+                parm.ffield = getAmberForceField();
+        
+            sds >> static_cast<MoleculeParser&>(parm);
 
         parm.rebuildAfterReload();
     }
     else
-        throw version_error(v, "1", r_parm, CODELOC);
+        throw version_error(v, "1,2", r_parm, CODELOC);
 
     return ds;
 }
@@ -629,6 +650,12 @@ QVector<QString> AmberPrm::stringData(const QString &flag) const
     }
 
     return QVector<QString>();
+}
+
+/** Return the forcefield for the molecules in this file */
+MMDetail AmberPrm::forcefield() const
+{
+    return ffield;
 }
 
 /** This function finds all atoms that are bonded to the atom at index 'atom_idx'
@@ -904,6 +931,23 @@ void AmberPrm::parse(const PropertyMap &map)
 
     //now process all of the flag data
     score += this->processAllFlags();
+
+    if (map["forcefield"].hasValue())
+    {
+        ffield = map["forcefield"].value().asA<MMDetail>();
+        
+        if (not ffield.isAmberStyle())
+            throw SireError::incompatible_error( QObject::tr(
+                "This AmberPrm reader can only parse Amber parm files that hold molecules "
+                "that are parameterised using an Amber-style forcefield. It cannot read "
+                "molecules using the forcefield\n%1").arg(ffield.toString()), CODELOC );
+    }
+    else
+    {
+        //now set the forcefield - at the moment we can't detect the forcefield
+        //so will set this to "generic amber"
+        ffield = getAmberForceField();
+    }
 
     //finally, make sure that we have been constructed sane
     this->assertSane();
@@ -3122,7 +3166,8 @@ AmberPrm::AmberPrm(const AmberPrm &other)
              bonds_inc_h(other.bonds_inc_h), bonds_exc_h(other.bonds_exc_h),
              angs_inc_h(other.angs_inc_h), angs_exc_h(other.angs_exc_h),
              dihs_inc_h(other.dihs_inc_h), dihs_exc_h(other.dihs_exc_h),
-             excl_atoms(other.excl_atoms), pointers(other.pointers)
+             excl_atoms(other.excl_atoms), pointers(other.pointers),
+             ffield(other.ffield)
 {}
 
 /** Destructor */
@@ -3147,6 +3192,7 @@ AmberPrm& AmberPrm::operator=(const AmberPrm &other)
         dihs_exc_h = other.dihs_exc_h;
         excl_atoms = other.excl_atoms;
         pointers = other.pointers;
+        ffield = other.ffield;
         MoleculeParser::operator=(other);
     }
 
@@ -3887,6 +3933,21 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
     return params;
 }
 
+/** Internal function to set a property in a molecule */
+void _setProperty(MolEditor &mol, const PropertyMap &map, QString key, const Property &value)
+{
+    const auto mapped = map[key];
+    
+    if (mapped.hasValue())
+    {
+        mol.setProperty(key, mapped.value());
+    }
+    else
+    {
+        mol.setProperty(mapped.source(), value);
+    }
+}
+
 /** Internal function used to get the molecule structure that starts at index 'start_idx'
     in the file, and that has 'natoms' atoms */
 MolEditor AmberPrm::getMolecule(int molidx, int start_idx, int natoms,
@@ -3909,28 +3970,28 @@ MolEditor AmberPrm::getMolecule(int molidx, int start_idx, int natoms,
 
     amber_params.setPropertyMap(map);
 
-    mol.setProperty(map["charge"], amber_params.charges());
-    mol.setProperty(map["LJ"], amber_params.ljs());
-    mol.setProperty(map["mass"], amber_params.masses());
-    mol.setProperty(map["element"], amber_params.elements());
-    mol.setProperty(map["ambertype"], amber_params.amberTypes());
-    mol.setProperty(map["atomtype"], amber_params.amberTypes());
-    mol.setProperty(map["connectivity"], amber_params.connectivity());
-    mol.setProperty(map["bond"],
+    _setProperty(mol, map, "charge", amber_params.charges());
+    _setProperty(mol, map, "LJ", amber_params.ljs());
+    _setProperty(mol, map, "mass", amber_params.masses());
+    _setProperty(mol, map, "element", amber_params.elements());
+    _setProperty(mol, map, "ambertype", amber_params.amberTypes());
+    _setProperty(mol, map, "atomtype", amber_params.amberTypes());
+    _setProperty(mol, map, "connectivity", amber_params.connectivity());
+    _setProperty(mol, map, "bond",
                     amber_params.bondFunctions(InternalPotential::symbols().bond().r()));
-    mol.setProperty(map["angle"],
+    _setProperty(mol, map, "angle",
                     amber_params.angleFunctions(InternalPotential::symbols().angle().theta()));
-    mol.setProperty(map["dihedral"],
+    _setProperty(mol, map, "dihedral",
                     amber_params.dihedralFunctions(InternalPotential::symbols().dihedral().phi()));
-    mol.setProperty(map["improper"],
+    _setProperty(mol, map, "improper",
                     amber_params.improperFunctions(InternalPotential::symbols().dihedral().phi()));
-    mol.setProperty(map["intrascale"], amber_params.cljScaleFactors());
-    mol.setProperty(map["gb_radii"], amber_params.gbRadii());
-    mol.setProperty(map["gb_screening"], amber_params.gbScreening());
-    mol.setProperty(map["gb_radius_set"], StringProperty(amber_params.radiusSet()));
-    mol.setProperty(map["treechain"], amber_params.treeChains());
-    mol.setProperty(map["parameters"], amber_params);
-    mol.setProperty(map["forcefield"], StringProperty("amber_FFXX"));
+    _setProperty(mol, map, "intrascale", amber_params.cljScaleFactors());
+    _setProperty(mol, map, "gb_radii", amber_params.gbRadii());
+    _setProperty(mol, map, "gb_screening", amber_params.gbScreening());
+    _setProperty(mol, map, "gb_radius_set", StringProperty(amber_params.radiusSet()));
+    _setProperty(mol, map, "treechain", amber_params.treeChains());
+    _setProperty(mol, map, "parameters", amber_params);
+    _setProperty(mol, map, "forcefield", ffield);
 
     return mol;
 }
