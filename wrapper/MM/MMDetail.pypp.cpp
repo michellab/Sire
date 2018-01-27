@@ -99,6 +99,18 @@ void register_MMDetail_class(){
                 , "Return the electrostatic model used by this forcefield" );
         
         }
+        { //::SireMM::MMDetail::guessFrom
+        
+            typedef ::SireMM::MMDetail ( *guessFrom_function_type )( ::QString,::QString,::QString,double,double,::QString,::QString,::QString );
+            guessFrom_function_type guessFrom_function_value( &::SireMM::MMDetail::guessFrom );
+            
+            MMDetail_exposer.def( 
+                "guessFrom"
+                , guessFrom_function_value
+                , ( bp::arg("combrule"), bp::arg("elecstyle"), bp::arg("vdwstyle"), bp::arg("elec14"), bp::arg("vdw14"), bp::arg("bondstyle"), bp::arg("anglestyle"), bp::arg("dihedralstyle") )
+                , "" );
+        
+        }
         { //::SireMM::MMDetail::isAmberStyle
         
             typedef bool ( ::SireMM::MMDetail::*isAmberStyle_function_type)(  ) const;
@@ -257,6 +269,7 @@ void register_MMDetail_class(){
                 , "" );
         
         }
+        MMDetail_exposer.staticmethod( "guessFrom" );
         MMDetail_exposer.staticmethod( "typeName" );
         MMDetail_exposer.def( "__copy__", &__copy__);
         MMDetail_exposer.def( "__deepcopy__", &__copy__);

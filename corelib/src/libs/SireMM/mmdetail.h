@@ -102,6 +102,10 @@ public:
     QString dihedralStyle() const;
     
     bool isAmberStyle() const;
+    
+    static MMDetail guessFrom(QString combrule, QString elecstyle, QString vdwstyle,
+                              double elec14, double vdw14, QString bondstyle,
+                              QString anglestyle, QString dihedralstyle);
 };
 
 }

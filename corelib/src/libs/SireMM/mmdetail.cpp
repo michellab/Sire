@@ -69,6 +69,48 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, MMDetail &mm)
 MMDetail::MMDetail() : ConcreteProperty<MMDetail,FFDetail>()
 {}
 
+static bool _isHarmonic(QString style)
+{
+    return style.simplified().toLower() == "harmonic";
+}
+
+static bool _isCosine(QString style)
+{
+    return style.simplified().toLower() == "cosine";
+}
+
+static bool _isGromacs(QString style)
+{
+    return style.simplified().toLower() == "gromacs";
+}
+
+static bool _isCoulomb(QString style)
+{
+    return style.simplified().toLower() == "coulomb";
+}
+
+static bool _isLJ(QString style)
+{
+    auto s = style.simplified().toLower();
+    
+    return (s == "lj") or (s == "lennard jones");
+}
+
+static bool _isBuckingham(QString style)
+{
+    return style.simplified().toLower() == "buckingham";
+}
+
+static bool _isArithmetic(QString rules)
+{
+    return rules.simplified().toLower() == "arithmetic";
+}
+
+static bool _isGeometric(QString rules)
+{
+    return rules.simplified().toLower() == "geometric";
+}
+
 /** Construct passing in all of the required values */
 MMDetail::MMDetail(QString name, QString combining_rules,
                   double scale14elec, double scale14vdw,
@@ -78,11 +120,11 @@ MMDetail::MMDetail(QString name, QString combining_rules,
          : ConcreteProperty<MMDetail,FFDetail>(name)
 {
     //convert all of the passed data into a canonical form
-    if (combining_rules.startsWith("arith", Qt::CaseInsensitive))
+    if ( _isArithmetic(combining_rules) )
     {
         setProperty("combining_rules", wrap("arithmetic"));
     }
-    else if (combining_rules.startsWith("geo", Qt::CaseInsensitive))
+    else if ( _isGeometric(combining_rules) )
     {
         setProperty("combining_rules", wrap("geometric"));
     }
@@ -94,7 +136,7 @@ MMDetail::MMDetail(QString name, QString combining_rules,
     setProperty("scale14elec", wrap(scale14elec));
     setProperty("scale14vdw", wrap(scale14vdw));
     
-    if (elecstyle.startsWith("coul", Qt::CaseInsensitive))
+    if ( _isCoulomb(elecstyle) )
     {
         setProperty("elecstyle", wrap("coulomb"));
     }
@@ -103,25 +145,37 @@ MMDetail::MMDetail(QString name, QString combining_rules,
             "Cannot understand the required electrostatic model from '%1'. This should "
             "be 'coulomb'").arg(elecstyle), CODELOC );
     
-    if (vdwstyle.startsWith("lj", Qt::CaseInsensitive))
+    if ( _isLJ(vdwstyle) )
     {
         setProperty("vdwstyle", wrap("lj"));
+    }
+    else if ( _isBuckingham(vdwstyle) )
+    {
+        setProperty("vdwstyle", wrap("buckingham"));
     }
     else
         throw SireError::invalid_arg( QObject::tr(
             "Cannot understand the required vdw model from '%1'. This should "
             "be 'lj'").arg(vdwstyle), CODELOC );
     
-    if (bondstyle.startsWith("harm", Qt::CaseInsensitive))
+    if ( _isHarmonic(bondstyle) )
     {
         setProperty("bondstyle", wrap("harmonic"));
+    }
+    else if ( _isGromacs(bondstyle) )
+    {
+        setProperty("bondstyle", wrap("gromacs"));
     }
     else
         throw SireError::invalid_arg( QObject::tr(
             "Cannot understand the required bond model from '%1'. This should "
             "be 'harmonic'").arg(bondstyle), CODELOC );
     
-    if (anglestyle.startsWith("harm", Qt::CaseInsensitive))
+    if ( _isHarmonic(anglestyle) )
+    {
+        setProperty("anglestyle", wrap("harmonic"));
+    }
+    else if ( _isGromacs(anglestyle) )
     {
         setProperty("anglestyle", wrap("harmonic"));
     }
@@ -130,16 +184,21 @@ MMDetail::MMDetail(QString name, QString combining_rules,
             "Cannot understand the required angle model from '%1'. This should "
             "be 'harmonic'").arg(anglestyle), CODELOC );
     
-    if (dihedralstyle.startsWith("cos", Qt::CaseInsensitive))
+    if ( _isCosine(dihedralstyle) )
     {
         setProperty("dihedralstyle", wrap("cosine"));
+    }
+    else if ( _isGromacs(dihedralstyle) )
+    {
+        setProperty("dihedralstyle", wrap("gromacs"));
     }
     else
         throw SireError::invalid_arg( QObject::tr(
             "Cannot understand the required dihedral model from '%1'. This should "
             "be 'cosine'").arg(dihedralstyle), CODELOC );
     
-    this->operator=( FFDetail::registerForceField(*this).read().asA<MMDetail>() );
+    if (name != "unknown")
+        this->operator=( FFDetail::registerForceField(*this).read().asA<MMDetail>() );
 }
 
 /** Copy constructor */
@@ -308,4 +367,55 @@ bool MMDetail::isAmberStyle() const
            usesHarmonicBonds() and
            usesHarmonicAngles() and
            usesCosineDihedrals();
+}
+
+/** Function used to guess the forcefield from the passed set of conditions.
+    This returns a null MMDetail object if we can't guess */
+MMDetail MMDetail::guessFrom(QString combrules, QString elecstyle,
+                             QString vdwstyle, double elec14, double vdw14,
+                             QString bondstyle, QString angstyle, QString dihstyle)
+{
+    //start with the internals
+    if ( _isHarmonic(bondstyle) and _isHarmonic(angstyle) and _isCosine(dihstyle) )
+    {
+        if ( _isCoulomb(elecstyle) and _isLJ(vdwstyle) )
+        {
+            //looking like an amber or opls style forcefield...
+            if ( _isArithmetic(combrules) )
+            {
+                if (elec14 == (1.0/1.2) and vdw14 == 0.5)
+                {
+                    //this is a standard amber::ff forcefield
+                    return MMDetail("amber::ff", combrules, elec14, vdw14,
+                                    elecstyle, vdwstyle, bondstyle, angstyle, dihstyle);
+                }
+                else
+                {
+                    //this is a weird amber::ff forcefield with strange 1-4 terms...
+                    return MMDetail( QString("amber::ff[%1,%2]").arg(elec14).arg(vdw14),
+                                     combrules, elec14, vdw14, elecstyle, vdwstyle,
+                                     bondstyle, angstyle, dihstyle );
+                }
+            }
+            else if ( _isGeometric(combrules) )
+            {
+                if (elec14 == 0.5 and vdw14 == 0.5)
+                {
+                    //this is a standard opls::ff forcefield
+                    return MMDetail("opls::ff", combrules, elec14, vdw14,
+                                    elecstyle, vdwstyle, bondstyle, angstyle, dihstyle);
+                }
+                else
+                {
+                    //this is a weird opls::ff forcefield with strange 1-4 terms...
+                    return MMDetail( QString("opls::ff[%1,%2]").arg(elec14).arg(vdw14),
+                                     combrules, elec14, vdw14, elecstyle, vdwstyle,
+                                     bondstyle, angstyle, dihstyle );
+                }
+            }
+        }
+    }
+
+    return MMDetail("unknown", combrules, elec14, vdw14, elecstyle, vdwstyle,
+                    bondstyle, angstyle, dihstyle);
 }

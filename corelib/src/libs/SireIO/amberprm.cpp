@@ -486,20 +486,6 @@ void AmberPrm::rebuildAfterReload()
     }
 }
 
-Q_GLOBAL_STATIC( QMutex, getAmberMutex );
-
-/** Internal function used to get the canonical Amber forcefield */
-static MMDetail getAmberForceField()
-{
-    QMutexLocker lkr( getAmberMutex() );
-    
-    static MMDetail amberff( "amber::ff", "arithmetic",
-                             1.0 / 1.2, 0.5, "coulomb", "lj",
-                             "harmonic", "harmonic", "cosine" );
-    
-    return amberff;
-}
-
 /** Read from a binary datastream */
 QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberPrm &parm)
 {
@@ -517,7 +503,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberPrm &parm)
             if (v == 2)
                 sds >> parm.ffield;
             else
-                parm.ffield = getAmberForceField();
+                parm.ffield = MMDetail();
         
             sds >> static_cast<MoleculeParser&>(parm);
 
@@ -944,9 +930,10 @@ void AmberPrm::parse(const PropertyMap &map)
     }
     else
     {
-        //now set the forcefield - at the moment we can't detect the forcefield
-        //so will set this to "generic amber"
-        ffield = getAmberForceField();
+        //now guess the forcefield based on what we know about the potential
+        ffield = MMDetail::guessFrom("arithmetic", "coulomb", "lj",
+                                     1.0/1.2, 0.5, "harmonic", "harmonic",
+                                     "cosine");
     }
 
     //finally, make sure that we have been constructed sane

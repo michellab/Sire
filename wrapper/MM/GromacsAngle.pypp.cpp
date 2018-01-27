@@ -135,6 +135,17 @@ void register_GromacsAngle_class(){
                 , "Return whether or not this angle is really a mix of multiple bond terms" );
         
         }
+        { //::SireMM::GromacsAngle::isHarmonic
+        
+            typedef bool ( ::SireMM::GromacsAngle::*isHarmonic_function_type)(  ) const;
+            isHarmonic_function_type isHarmonic_function_value( &::SireMM::GromacsAngle::isHarmonic );
+            
+            GromacsAngle_exposer.def( 
+                "isHarmonic"
+                , isHarmonic_function_value
+                , "" );
+        
+        }
         { //::SireMM::GromacsAngle::isResolved
         
             typedef bool ( ::SireMM::GromacsAngle::*isResolved_function_type)(  ) const;

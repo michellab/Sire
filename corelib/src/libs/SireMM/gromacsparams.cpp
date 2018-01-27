@@ -610,6 +610,22 @@ bool GromacsBond::isSimple() const
     return true;
 }
 
+/** Return whether or not this is a harmonic bond */
+bool GromacsBond::isHarmonic() const
+{
+    switch (func_type)
+    {
+    case 0: //null, so zero, which is a zero harmonic
+    case 1: //harmonic
+    case 5: //connection, so zero, which is a zero harmonic
+    case 6: //harmonic
+        return true;
+    default:
+        qDebug() << "NOT HARMONIC!" << func_type << this->toString();
+        return false;
+    }
+}
+
 /** Return all of the parameters for this bond */
 QList<double> GromacsBond::parameters() const
 {
@@ -1154,6 +1170,19 @@ QString GromacsAngle::functionTypeString() const
             return "restricted bending potential";
         default:
             return "unknown";
+    }
+}
+
+/** Return whether or not this is a harmonic angle */
+bool GromacsAngle::isHarmonic() const
+{
+    switch (func_type)
+    {
+    case 0: //null, so zero, which is a zero harmonic
+    case 1: //harmonic
+        return true;
+    default:
+        return false;
     }
 }
 
@@ -1743,6 +1772,22 @@ QString GromacsDihedral::functionTypeString() const
             return "combined bending torsion potential";
         default:
             return "unknown";
+    }
+}
+
+/** Return whether or not this is a cosine-series dihedral */
+bool GromacsDihedral::isCosine() const
+{
+    switch (func_type)
+    {
+    case 0: //null, so zero, which is a zero cosine
+    case 1: //proper dihedral
+    case 4: //improper dihedral
+    case 5: //fourier dihedral
+    case 9: //proper dihedral (multiple)
+        return true;
+    default:
+        return false;
     }
 }
 

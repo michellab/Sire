@@ -192,6 +192,8 @@ public:
     
     bool isSimple() const;
     
+    bool isHarmonic() const;
+    
     void assertResolved() const;
     
     QList<double> parameters() const;
@@ -270,6 +272,8 @@ public:
     
     QString toString() const;
     
+    bool isHarmonic() const;
+    
     bool isResolved() const;
     bool needsResolving() const;
     
@@ -343,6 +347,8 @@ public:
     QString functionTypeString() const;
     
     QList<double> parameters() const;
+    
+    bool isCosine() const;
     
     bool isSimple() const;
     
