@@ -251,6 +251,9 @@ protected:
 
     static QVector<QString> readTextFile(QString filename);
 
+    virtual SireBase::PropertyPtr getForceField(const SireSystem::System &system,
+                                                const PropertyMap &map) const;
+
 private:
     static MoleculeParserPtr _pvt_parse(const QString &filename, const PropertyMap &map);
 

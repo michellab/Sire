@@ -103,6 +103,8 @@ public:
     
     bool isAmberStyle() const;
     
+    bool isCompatibleWith(const FFDetail &other) const;
+    
     static MMDetail guessFrom(QString combrule, QString elecstyle, QString vdwstyle,
                               double elec14, double vdw14, QString bondstyle,
                               QString anglestyle, QString dihedralstyle);

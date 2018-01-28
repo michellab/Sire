@@ -33,6 +33,18 @@ void register_FFDetail_class(){
         typedef bp::class_< SireFF::FFDetail, bp::bases< SireBase::Property >, boost::noncopyable > FFDetail_exposer_t;
         FFDetail_exposer_t FFDetail_exposer = FFDetail_exposer_t( "FFDetail", "This is the base class of the classes that provide details about\nthe forcefield of a molecule or system. The details include the\ncanonical name of the forcefield. When specialised into\nSireMM::MMDetail it describes whether it uses LJ parameters,\ncombining rules, default 1-4 scale factors, functional forms\nof internal parameters etc. etc.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope FFDetail_scope( FFDetail_exposer );
+        { //::SireFF::FFDetail::assertCompatibleWith
+        
+            typedef void ( ::SireFF::FFDetail::*assertCompatibleWith_function_type)( ::SireFF::FFDetail const & ) const;
+            assertCompatibleWith_function_type assertCompatibleWith_function_value( &::SireFF::FFDetail::assertCompatibleWith );
+            
+            FFDetail_exposer.def( 
+                "assertCompatibleWith"
+                , assertCompatibleWith_function_value
+                , ( bp::arg("other") )
+                , "" );
+        
+        }
         { //::SireFF::FFDetail::forcefields
         
             typedef ::QStringList ( *forcefields_function_type )(  );
@@ -54,6 +66,18 @@ void register_FFDetail_class(){
                 , get_function_value
                 , ( bp::arg("forcefield") )
                 , "Return the forcefield that has been registered with this name. This\nreturns a null property if there is no property with this name" );
+        
+        }
+        { //::SireFF::FFDetail::isCompatibleWith
+        
+            typedef bool ( ::SireFF::FFDetail::*isCompatibleWith_function_type)( ::SireFF::FFDetail const & ) const;
+            isCompatibleWith_function_type isCompatibleWith_function_value( &::SireFF::FFDetail::isCompatibleWith );
+            
+            FFDetail_exposer.def( 
+                "isCompatibleWith"
+                , isCompatibleWith_function_value
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireFF::FFDetail::isNull

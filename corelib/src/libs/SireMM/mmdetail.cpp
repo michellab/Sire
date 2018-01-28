@@ -369,6 +369,29 @@ bool MMDetail::isAmberStyle() const
            usesCosineDihedrals();
 }
 
+/** Return whether or not this forcefield is compatible with 'other' */
+bool MMDetail::isCompatibleWith(const FFDetail &other) const
+{
+    if (not other.isA<MMDetail>())
+        return false;
+    
+    const auto &mm = other.asA<MMDetail>();
+    
+    if (this->operator==(mm))
+        return true;
+    
+    //to be compatible they need to use the same combining rules, elecstyle,
+    //vdwstyle
+    if (this->combiningRules() != mm.combiningRules() or
+        this->electrostaticStyle() != mm.electrostaticStyle() or
+        this->vdwStyle() != mm.vdwStyle())
+    {
+        return false;
+    }
+    
+    return true;
+}
+
 /** Function used to guess the forcefield from the passed set of conditions.
     This returns a null MMDetail object if we can't guess */
 MMDetail MMDetail::guessFrom(QString combrules, QString elecstyle,

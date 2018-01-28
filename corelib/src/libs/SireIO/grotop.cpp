@@ -60,12 +60,14 @@
 
 #include <QRegularExpression>
 #include <QFileInfo>
+#include <QDateTime>
 #include <QDir>
 
 using namespace SireIO;
 using namespace SireUnits;
 using namespace SireMol;
 using namespace SireMM;
+using namespace SireFF;
 using namespace SireBase;
 using namespace SireSystem;
 using namespace SireStream;
@@ -336,6 +338,33 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroMolType &moltyp)
 /** Constructor */
 GroMolType::GroMolType() : nexcl(0)
 {}
+
+/** Construct from the passed molecule */
+GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
+           : nexcl(0)
+{
+    if (mol.nAtoms() == 0)
+        return;
+
+    //get the name either from the molecule name or the name of the first
+    //residue
+    nme = mol.name();
+    
+    if (nme.isEmpty())
+    {
+        nme = mol.residue(ResIdx(0)).name();
+    }
+    
+    //get the forcefield for this molecule
+    try
+    {
+        ffield = mol.property(map["forcefield"]).asA<MMDetail>();
+    }
+    catch(...)
+    {
+        warns.append( QObject::tr("Cannot find a valid MM forcefield for this molecule!") );
+    }
+}
 
 /** Copy constructor */
 GroMolType::GroMolType(const GroMolType &other)
@@ -1171,6 +1200,105 @@ GroTop::GroTop(const QStringList &lines, const PropertyMap &map)
     this->assertSane();
 }
 
+/** Internal function used to generate the lines for the defaults section */
+static QStringList writeDefaults(const FFDetail &ffield)
+{
+    QStringList lines;
+    lines.append("; Gromacs Topology File written by Sire");
+    lines.append(QString("; File written %1")
+        .arg( QDateTime::currentDateTime().toString("MM/dd/yy  hh:mm:ss") ) );
+
+    lines.append("[ defaults ]");
+    
+    //need more to write!
+    
+    return lines;
+}
+
+/** Internal function used to convert a Gromacs Moltyp to a set of lines */
+static QStringList writeMolType(const QString &name, const GroMolType &moltype)
+{
+    QStringList lines;
+    
+    lines.append( "[ moleculetype ]" );
+    lines.append( "; name  nrexcl" );
+    lines.append( QString("%1  %2").arg(name).arg(moltype.nExcludedAtoms()) );
+    lines.append( "" );
+    
+    lines.append( "[ atoms ]" );
+    lines.append( "" );
+    
+    //bonds, angles, dihedrals
+    
+    return lines;
+}
+
+/** Internal function used to convert an array of Gromacs Moltyps into 
+    lines of a Gromacs topology file */
+static QStringList writeMolTypes(const QHash<QString,GroMolType> &moltyps)
+{
+    QHash<QString,QStringList> typs;
+    
+    for (auto it = moltyps.constBegin(); it != moltyps.constEnd(); ++it)
+    {
+        typs.insert( it.key(), ::writeMolType(it.key(), it.value()) );
+    }
+    
+    QStringList keys = moltyps.keys();
+    keys.sort();
+    
+    QStringList lines;
+    
+    for (const auto key : keys)
+    {
+        lines += typs[key];
+        lines += "";
+    }
+    
+    return lines;
+}
+
+/** Internal function used to write the system part of the gromacs file */
+static QStringList writeSystem(QString name, const QStringList &mol_to_moltype)
+{
+    QStringList lines;
+    lines.append( "[ system ]" );
+    lines.append( name );
+    lines.append( "" );
+    lines.append( "[ molecules ]" );
+    lines.append( ";molecule name    nr." );
+    
+    QString lastmol;
+    
+    int count = 0;
+    
+    for (auto it = mol_to_moltype.constBegin(); it != mol_to_moltype.constEnd(); ++it)
+    {
+        if (*it != lastmol)
+        {
+            if (lastmol.isNull())
+            {
+                lastmol = *it;
+                count = 1;
+            }
+            else
+            {
+                lines.append( QString("%1   %2").arg(lastmol).arg(count) );
+                lastmol = *it;
+                count = 1;
+            }
+        }
+        else
+            count += 1;
+    }
+    
+    lines.append( QString("%1   %2").arg(lastmol).arg(count) );
+    
+    lines.append("");
+    
+    return lines;
+}
+
 /** Construct this parser by extracting all necessary information from the
     passed SireSystem::System, looking for the properties that are specified
     in the passed property map */
@@ -1179,19 +1307,128 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
          nb_func_type(0), combining_rule(0), fudge_lj(0), fudge_qq(0),
          generate_pairs(false)
 {
-    this->getIncludePath(map);
+    //first, go through all of the molecules to find the forcefield. This is
+    //used to get the defaults for the file, e.g. combining rules, 1-4 scaling
+    //etc. etc.
+    const auto ffield = this->getForceField(system, map);
 
-    //look through the system and extract out the information
-    //that is needed to go into the file, based on the properties
-    //found in 'map'. Do this to create the set of text lines that
-    //will make up the file
+    qDebug() << "COMMON FORCEFIELD=" << ffield.read().toString();
 
-    QStringList lines;  // = code used to generate the lines
+    //get the MolNums of each molecule in the System - this returns the
+    //numbers in MolIdx order
+    const QVector<MolNum> molnums = system.getMoleculeNumbers().toVector();
 
-    //now that you have the lines, reparse them back into a GroTop object,
-    //so that the information is consistent, and you have validated that
-    //the lines you have written are able to be correctly read in by
-    //this parser. This will also implicitly call 'assertSane()'
+    if (molnums.isEmpty())
+    {
+        //no molecules in the system
+        this->operator=(GroTop());
+        return;
+    }
+
+    //generate the GroMolType object for each molecule in the system. It is likely
+    //the multiple molecules will have the same GroMolType. We will be a bit slow
+    //now and generate this for all molecules independently, and will then consolidate
+    //them later
+    QVector<GroMolType> mtyps(molnums.count());
+
+    if (usesParallel())
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0,molnums.count()),
+                           [&](const tbb::blocked_range<int> r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                mtyps[i] = GroMolType(system[molnums[i]].molecule(),map);
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<molnums.count(); ++i)
+        {
+            mtyps[i] = GroMolType(system[molnums[i]].molecule(),map);
+        }
+    }
+
+    //now go through each type, remove duplicates, and record the name of
+    //each molecule so that we can write this in the [system] section
+    QStringList mol_to_moltype;
+    QHash<QString,GroMolType> name_to_mtyp;
+    
+    for (int i=0; i<mtyps.count(); ++i)
+    {
+        const auto moltype = mtyps[i];
+        QString name = moltype.name();
+        
+        if (name_to_mtyp.contains(name))
+        {
+            if (moltype != name_to_mtyp[name])
+            {
+                //this has the same name but different details. Give this a new
+                //name
+                int j = 0;
+                
+                while(true)
+                {
+                    j++;
+                    name = QString("%1_%2").arg(moltype.name()).arg(j);
+                    
+                    if (name_to_mtyp.contains(name))
+                    {
+                        if (moltype == name_to_mtyp[name])
+                            //match :-)
+                            break;
+                    }
+                    else
+                    {
+                        //new moltype
+                        name_to_mtyp.insert(name, moltype);
+                        break;
+                    }
+                
+                    //we have got here, meaning that we need to try a different name
+                }
+            }
+        }
+        else
+        {
+            name_to_mtyp.insert(name, moltype);
+        }
+        
+        mol_to_moltype.append(name);
+    }
+
+    QStringList errors;
+
+    //first, we need to write the defaults section of the file
+    QStringList lines = ::writeDefaults(ffield.read().asA<FFDetail>());
+
+    lines += "";
+
+    //now convert these into text lines that can be written as the file
+    lines += ::writeMolTypes(name_to_mtyp);
+
+    lines += "";
+    
+    //now write the system part
+    lines += ::writeSystem(system.name(), mol_to_moltype);
+
+    if (not errors.isEmpty())
+    {
+        throw SireIO::parse_error( QObject::tr(
+            "Errors converting the system to a Gromacs Top format...\n%1")
+                .arg(lines.join("\n")), CODELOC );
+    }
+
+    //we don't need params any more, so free the memory
+    mtyps.clear();
+    name_to_mtyp.clear();
+    mol_to_moltype.clear();
+
+    qDebug() << "\nTHIS IS WHAT WILL BE WRITTEN\n\n" << lines.join("\n");
+
+    //now we have the lines, reparse them to make sure that they are correct
+    //and we have a fully-constructed and sane GroTop object
     GroTop parsed( lines, map );
 
     this->operator=(parsed);

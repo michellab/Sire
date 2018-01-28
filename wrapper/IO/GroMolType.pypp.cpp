@@ -77,6 +77,7 @@ void register_GroMolType_class(){
         typedef bp::class_< SireIO::GroMolType > GroMolType_exposer_t;
         GroMolType_exposer_t GroMolType_exposer = GroMolType_exposer_t( "GroMolType", "This class is used by GroTop to hold an intermediate representation of a\nGromacs moleculetype. This provides metadata about the molecule that is\nneeded to construct the whole molecule.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope GroMolType_scope( GroMolType_exposer );
+        GroMolType_exposer.def( bp::init< SireMol::Molecule const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mol"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         GroMolType_exposer.def( bp::init< SireIO::GroMolType const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireIO::GroMolType::addAngle
         
