@@ -124,6 +124,17 @@ void register_GromacsDihedral_class(){
                 , "Return whether or not this dihedral is a angletorsion cross term" );
         
         }
+        { //::SireMM::GromacsDihedral::isCosine
+        
+            typedef bool ( ::SireMM::GromacsDihedral::*isCosine_function_type)(  ) const;
+            isCosine_function_type isCosine_function_value( &::SireMM::GromacsDihedral::isCosine );
+            
+            GromacsDihedral_exposer.def( 
+                "isCosine"
+                , isCosine_function_value
+                , "" );
+        
+        }
         { //::SireMM::GromacsDihedral::isImproperAngleTerm
         
             typedef bool ( ::SireMM::GromacsDihedral::*isImproperAngleTerm_function_type)(  ) const;

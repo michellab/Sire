@@ -297,13 +297,13 @@ static const RegisterMetaType<GroMolType> r_gromoltyp(NO_ROOT);
 
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroMolType &moltyp)
 {
-    writeHeader(ds, r_gromoltyp, 1);
+    writeHeader(ds, r_gromoltyp, 2);
 
     SharedDataStream sds(ds);
 
     sds << moltyp.nme << moltyp.warns << moltyp.atms
         << moltyp.bnds << moltyp.angs << moltyp.dihs
-        << moltyp.first_atoms << moltyp.nexcl;
+        << moltyp.first_atoms << moltyp.ffield << moltyp.nexcl;
 
     return ds;
 }
@@ -312,16 +312,23 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroMolType &moltyp)
 {
     VersionID v = readHeader(ds, r_gromoltyp);
 
-    if (v == 1)
+    if (v == 1 or v == 2)
     {
         SharedDataStream sds(ds);
 
         sds >> moltyp.nme >> moltyp.warns >> moltyp.atms
             >> moltyp.bnds >> moltyp.angs >> moltyp.dihs
-            >> moltyp.first_atoms >> moltyp.nexcl;
+            >> moltyp.first_atoms;
+        
+        if (v == 2)
+            sds >> moltyp.ffield;
+        else
+            moltyp.ffield = MMDetail();
+        
+        sds >> moltyp.nexcl;
     }
     else
-        throw version_error(v, "1", r_gromoltyp, CODELOC);
+        throw version_error(v, "1,2", r_gromoltyp, CODELOC);
 
     return ds;
 }
@@ -335,7 +342,7 @@ GroMolType::GroMolType(const GroMolType &other)
            : nme(other.nme), warns(other.warns),
              atms(other.atms), first_atoms(other.first_atoms),
              bnds(other.bnds), angs(other.angs), dihs(other.dihs),
-             nexcl(other.nexcl)
+             ffield(other.ffield), nexcl(other.nexcl)
 {}
 
 /** Destructor */
@@ -354,6 +361,7 @@ GroMolType& GroMolType::operator=(const GroMolType &other)
         bnds = other.bnds;
         angs = other.angs;
         dihs = other.dihs;
+        ffield = other.ffield;
         nexcl = other.nexcl;
     }
 
@@ -417,6 +425,12 @@ QString GroMolType::name() const
     return nme;
 }
 
+/** Return the guessed forcefield for this molecule type */
+MMDetail GroMolType::forcefield() const
+{
+    return ffield;
+}
+
 /** Set the number of excluded atoms */
 void GroMolType::setNExcludedAtoms(qint64 n)
 {
@@ -443,7 +457,10 @@ void GroMolType::addAtom(const GroAtom &atom)
 /** Return whether or not this molecule needs sanitising */
 bool GroMolType::needsSanitising() const
 {
-    return (not atms.isEmpty()) and first_atoms.isEmpty();
+    if (atms.isEmpty())
+        return false;
+    else
+        return ffield.isNull() or first_atoms.isEmpty();
 }
 
 /** Return the number of atoms in this molecule */
@@ -452,7 +469,7 @@ int GroMolType::nAtoms() const
     if (needsSanitising())
     {
         GroMolType other(*this);
-        other.sanitise();
+        other._pvt_sanitise();
         return other.nAtoms();
     }
     else
@@ -465,7 +482,7 @@ int GroMolType::nResidues() const
     if (needsSanitising())
     {
         GroMolType other(*this);
-        other.sanitise();
+        other._pvt_sanitise();
         return other.nResidues();
     }
 
@@ -478,7 +495,7 @@ GroAtom GroMolType::atom(const AtomIdx &atomidx) const
     if (needsSanitising())
     {
         GroMolType other(*this);
-        other.sanitise();
+        other._pvt_sanitise();
         return other.atom(atomidx);
     }
 
@@ -492,7 +509,7 @@ GroAtom GroMolType::atom(const AtomNum &atomnum) const
     if (needsSanitising())
     {
         GroMolType other(*this);
-        other.sanitise();
+        other._pvt_sanitise();
         return other.atom(atomnum);
     }
 
@@ -516,7 +533,7 @@ GroAtom GroMolType::atom(const AtomName &atomnam) const
     if (needsSanitising())
     {
         GroMolType other(*this);
-        other.sanitise();
+        other._pvt_sanitise();
         return other.atom(atomnam);
     }
 
@@ -540,7 +557,7 @@ QVector<GroAtom> GroMolType::atoms(const AtomName &atomnam) const
     if (needsSanitising())
     {
         GroMolType other(*this);
-        other.sanitise();
+        other._pvt_sanitise();
         return other.atoms(atomnam);
     }
 
@@ -563,7 +580,7 @@ QVector<GroAtom> GroMolType::atoms() const
     if (needsSanitising())
     {
         GroMolType other(*this);
-        other.sanitise();
+        other._pvt_sanitise();
         return other.atoms();
     }
 
@@ -576,7 +593,7 @@ QVector<GroAtom> GroMolType::atoms(const ResIdx &residx) const
     if (needsSanitising())
     {
         GroMolType other(*this);
-        other.sanitise();
+        other._pvt_sanitise();
         return other.atoms(residx);
     }
 
@@ -599,7 +616,7 @@ QVector<GroAtom> GroMolType::atoms(const ResNum &resnum) const
     if (needsSanitising())
     {
         GroMolType other(*this);
-        other.sanitise();
+        other._pvt_sanitise();
         return other.atoms(resnum);
     }
 
@@ -630,7 +647,7 @@ QVector<GroAtom> GroMolType::atoms(const ResName &resnam) const
     if (needsSanitising())
     {
         GroMolType other(*this);
-        other.sanitise();
+        other._pvt_sanitise();
         return other.atoms(resnam);
     }
 
@@ -655,22 +672,71 @@ QVector<GroAtom> GroMolType::atoms(const ResName &resnam) const
     return ret;
 }
 
-/** Sanitise this moleculetype. This assumes that the moleculetype has
-    been fully specified, so it collects everything together and checks that the
-    molecule makes sense. Any warnings generated can be retrieved using the
-    'warnings' function */
-void GroMolType::sanitise()
+/** Internal function to do the non-forcefield parts of sanitising */
+void GroMolType::_pvt_sanitise()
 {
-    if (not needsSanitising())
-        return;
-
     //sort the atoms so that they are in residue number / atom number order, and
     //we check and remove duplicate atom numbers
 
     first_atoms.append(0);
+}
+
+/** Sanitise this moleculetype. This assumes that the moleculetype has
+    been fully specified, so it collects everything together and checks that the
+    molecule makes sense. Any warnings generated can be retrieved using the
+    'warnings' function. It also uses the passed defaults from the top file,
+    together with the information in the molecule to guess the forcefield for 
+    the molecule */
+void GroMolType::sanitise(QString elecstyle, QString vdwstyle,
+                          QString combrule, double elec14, double vdw14)
+{
+    if (not needsSanitising())
+        return;
+
+    this->_pvt_sanitise();
 
     //also check that the bonds/angles/dihedrals all refer to actual atoms...
 
+    //work out the bond, angle and dihedral function styles. We will
+    //do this assuming that anything other than simple harmonic/cosine is
+    //an "interesting" gromacs-style forcefield
+    QString bondstyle = "harmonic";
+
+    for (auto it = bnds.constBegin(); it != bnds.constEnd(); ++it)
+    {
+        if (not (it.value().isSimple() and it.value().isHarmonic()))
+        {
+            bondstyle = "gromacs";
+            break;
+        }
+    }
+
+    QString anglestyle = "harmonic";
+
+    for (auto it = angs.constBegin(); it != angs.constEnd(); ++it)
+    {
+        if (not (it.value().isSimple() and it.value().isHarmonic()))
+        {
+            anglestyle = "gromacs";
+            break;
+        }
+    }
+
+    QString dihedralstyle = "cosine";
+
+    for (auto it = dihs.constBegin(); it != dihs.constEnd(); ++it)
+    {
+        if (not (it.value().isSimple() and it.value().isCosine()))
+        {
+            dihedralstyle = "gromacs";
+            break;
+        }
+    }
+
+    //finally generate a forcefield description for this molecule based on the
+    //passed defaults and the functional forms of the internals
+    ffield = MMDetail::guessFrom(combrule, elecstyle, vdwstyle, elec14, vdw14,
+                                 bondstyle, anglestyle, dihedralstyle);
 }
 
 /** Add a warning that has been generated while parsing or creatig this object */
@@ -2003,6 +2069,36 @@ static std::tuple<double,double> fromLJParameter(const LJParameter &lj, int rule
     }
 }
 
+/** Internal function to create a string version of the LJ function type */
+static QString _getVDWStyle(int type)
+{
+    if (type == 1)
+        return "lj";
+    else if (type == 2)
+        return "buckingham";
+    else
+        throw SireError::invalid_arg( QObject::tr(
+            "Cannot find the VDW function type from value '%1'. Should be 1 or 2.")
+                .arg(type), CODELOC );
+    
+    return QString();
+}
+
+/** Internal function to create the string version of the combining rules */
+static QString _getCombiningRules(int type)
+{
+    if (type == 1 or type == 3)
+        return "geometric";
+    else if (type == 2)
+        return "arithmetic";
+    else
+        throw SireError::invalid_arg( QObject::tr(
+            "Cannot find the combining rules type from value '%1'. Should be 1, 2 or 3.")
+                .arg(type), CODELOC );
+    
+    return QString();
+}
+
 /** Internal function, called by ::interpret() that processes all of the data
     from all of the directives, returning a set of warnings */
 QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
@@ -2207,11 +2303,18 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
 
         if (qq < 0 or qq > 1)
         {
-            warnings.append( QObject::tr("An invalid value of fudge_qq (%1) is requested1")
+            warnings.append( QObject::tr("An invalid value of fudge_qq (%1) is requested!")
                 .arg(qq) );
 
             if (qq < 0) qq = 0;
             else if (qq > 1) qq = 1;
+        }
+
+        // Gromacs uses a non-exact value of the Amber fudge_qq (1.0/1.2). Correct this
+        // in case we convert to another file format
+        if (std::abs( qq - (1.0/1.2) ) < 0.01)
+        {
+            qq = 1.0 / 1.2;
         }
 
         nb_func_type = nbtyp;
@@ -3093,6 +3196,12 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             moltype.addDihedrals(dihs);
         };
 
+        //interpret the defaults so that the forcefield for each moltype can
+        //be determined
+        const QString elecstyle = "coulomb";
+        const QString vdwstyle = _getVDWStyle(nb_func_type);
+        const QString combrules = _getCombiningRules(combining_rule);
+
         //ok, now we know the location of all child tags of each moleculetype
         auto processMolType = [&](const QHash<QString,int> &moltag)
         {
@@ -3138,7 +3247,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             }
 
             //should be finished, run some checks that this looks sane
-            moltype.sanitise();
+            moltype.sanitise(elecstyle, vdwstyle, combrules, fudge_qq, fudge_lj);
 
             return moltype;
         };
@@ -3988,6 +4097,18 @@ Molecule GroTop::createMolecule(QString moltype_name, QStringList &errors,
                 mol.setProperty(mapped, p.property(key));
             }
         }
+    }
+    
+    //finally set the forcefield property
+    const auto mapped = map["forcefield"];
+    
+    if (mapped.hasValue())
+    {
+        mol.setProperty("forcefield", mapped.value());
+    }
+    else
+    {
+        mol.setProperty(mapped, moltype.forcefield());
     }
     
     return mol.commit();

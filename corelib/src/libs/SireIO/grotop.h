@@ -38,6 +38,7 @@
 #include "SireMol/dihedralid.h"
 
 #include "SireMM/gromacsparams.h"
+#include "SireMM/mmdetail.h"
 
 #include <QMultiHash>
 
@@ -189,6 +190,8 @@ public:
     qint64 nExcludedAtoms() const;
     void setNExcludedAtoms(qint64 nexcl);
 
+    SireMM::MMDetail forcefield() const;
+
     void addAtom(const GroAtom &atom);
 
     void addBond(const SireMol::BondID &bond, const GromacsBond &parm);
@@ -199,7 +202,8 @@ public:
     void addAngles(const QMultiHash<SireMol::AngleID,GromacsAngle> &angles);
     void addDihedrals(const QMultiHash<SireMol::DihedralID,GromacsDihedral> &dihedrals);
 
-    void sanitise();
+    void sanitise(QString elecstyle, QString vdwstyle,
+                  QString combrule, double elec14, double vdw14);
 
     void addWarning(const QString &warning);
 
@@ -227,6 +231,8 @@ public:
     bool needsSanitising() const;
 
 private:
+    void _pvt_sanitise();
+
     /** The name of this moleculetype */
     QString nme;
 
@@ -247,6 +253,9 @@ private:
 
     /** Hash of all of the dihedrals */
     QMultiHash<SireMol::DihedralID,GromacsDihedral> dihs;
+
+    /** The details about the forcefield used for this molecule */
+    SireMM::MMDetail ffield;
 
     /** The number of excluded atoms */
     qint64 nexcl;

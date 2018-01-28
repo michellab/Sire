@@ -124,6 +124,17 @@ void register_GromacsBond_class(){
                 , "Return a hash for this bond" );
         
         }
+        { //::SireMM::GromacsBond::isHarmonic
+        
+            typedef bool ( ::SireMM::GromacsBond::*isHarmonic_function_type)(  ) const;
+            isHarmonic_function_type isHarmonic_function_value( &::SireMM::GromacsBond::isHarmonic );
+            
+            GromacsBond_exposer.def( 
+                "isHarmonic"
+                , isHarmonic_function_value
+                , "" );
+        
+        }
         { //::SireMM::GromacsBond::isResolved
         
             typedef bool ( ::SireMM::GromacsBond::*isResolved_function_type)(  ) const;

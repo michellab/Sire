@@ -116,6 +116,7 @@ set ( PYPP_SOURCES
        InterGroupCLJFFBase.pypp.cpp
        CLJSoftIntraShiftFunction.pypp.cpp
        ImproperSymbols.pypp.cpp
+       MMDetail.pypp.cpp
        StretchBendComponent.pypp.cpp
        CLJSoftShiftFunction.pypp.cpp
        IntraGroupSoftCLJFFBase.pypp.cpp

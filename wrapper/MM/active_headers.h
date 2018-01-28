@@ -51,6 +51,7 @@
 #include "ljparameter.h"
 #include "ljperturbation.h"
 #include "ljpotential.h"
+#include "mmdetail.h"
 #include "multicljcomponent.h"
 #include "restraint.h"
 #include "restraintcomponent.h"

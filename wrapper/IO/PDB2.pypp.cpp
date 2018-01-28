@@ -41,6 +41,8 @@ namespace bp = boost::python;
 
 #include <QFile>
 
+#include <QtMath>
+
 #include "pdb2.h"
 
 SireIO::PDB2 __copy__(const SireIO::PDB2 &other){ return SireIO::PDB2(other); }

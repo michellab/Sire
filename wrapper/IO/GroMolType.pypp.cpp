@@ -21,7 +21,13 @@ namespace bp = boost::python;
 
 #include "SireMM/atomljs.h"
 
+#include "SireMM/cljnbpairs.h"
+
+#include "SireMM/fouratomfunctions.h"
+
 #include "SireMM/internalff.h"
+
+#include "SireMM/threeatomfunctions.h"
 
 #include "SireMM/twoatomfunctions.h"
 
@@ -296,6 +302,17 @@ void register_GroMolType_class(){
                 , "Return all of the dihedrals" );
         
         }
+        { //::SireIO::GroMolType::forcefield
+        
+            typedef ::SireMM::MMDetail ( ::SireIO::GroMolType::*forcefield_function_type)(  ) const;
+            forcefield_function_type forcefield_function_value( &::SireIO::GroMolType::forcefield );
+            
+            GroMolType_exposer.def( 
+                "forcefield"
+                , forcefield_function_value
+                , "" );
+        
+        }
         { //::SireIO::GroMolType::isNull
         
             typedef bool ( ::SireIO::GroMolType::*isNull_function_type)(  ) const;
@@ -379,13 +396,14 @@ void register_GroMolType_class(){
         GroMolType_exposer.def( bp::self == bp::self );
         { //::SireIO::GroMolType::sanitise
         
-            typedef void ( ::SireIO::GroMolType::*sanitise_function_type)(  ) ;
+            typedef void ( ::SireIO::GroMolType::*sanitise_function_type)( ::QString,::QString,::QString,double,double ) ;
             sanitise_function_type sanitise_function_value( &::SireIO::GroMolType::sanitise );
             
             GroMolType_exposer.def( 
                 "sanitise"
                 , sanitise_function_value
-                , "Sanitise this moleculetype. This assumes that the moleculetype has\nbeen fully specified, so it collects everything together and checks that the\nmolecule makes sense. Any warnings generated can be retrieved using the\nwarnings function" );
+                , ( bp::arg("elecstyle"), bp::arg("vdwstyle"), bp::arg("combrule"), bp::arg("elec14"), bp::arg("vdw14") )
+                , "" );
         
         }
         { //::SireIO::GroMolType::setNExcludedAtoms

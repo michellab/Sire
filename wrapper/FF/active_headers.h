@@ -7,6 +7,7 @@
 #include "ff.h"
 #include "ff3d.h"
 #include "ffcomponent.h"
+#include "ffdetail.h"
 #include "ffid.h"
 #include "ffidentifier.h"
 #include "ffidx.h"
