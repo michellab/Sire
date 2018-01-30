@@ -367,7 +367,14 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
     
     const auto molinfo = mol.info();
     
+    bool uses_parallel = true;
+    if (map["parallel"].hasValue())
+    {
+        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+    
     //get information about all atoms in this molecule
+    auto extract_atoms = [&]()
     {
         atms = QVector<GroAtom>(molinfo.nAtoms());
     
@@ -432,8 +439,10 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
         }
         
         //run through the atoms in AtomIdx order
-        for (AtomIdx i(0); i<molinfo.nAtoms(); ++i)
+        auto extract_atom = [&](int iatm)
         {
+            AtomIdx i(iatm);
+        
             const auto cgatomidx = molinfo.cgAtomIdx(i);
             const auto residx = molinfo.parentResidue(i);
             
@@ -476,10 +485,30 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
             atom.setCharge(charge);
             atom.setMass(mass);
             atom.setAtomType(atomtype);
+        };
+        
+        if (uses_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,molinfo.nAtoms()),
+                               [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    extract_atom(i);
+                }
+            });
         }
-    }
+        else
+        {
+            for (int i=0; i<molinfo.nAtoms(); ++i)
+            {
+                extract_atom(i);
+            }
+        }
+    };
     
     //get all of the bonds in this molecule
+    auto extract_bonds = [&]()
     {
         bool has_conn(false), has_funcs(false);
         
@@ -538,9 +567,10 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                 }
             }
         }
-    }
+    };
 
     //get all of the angles in this molecule
+    auto extract_angles = [&]()
     {
         bool has_funcs(false);
         
@@ -571,9 +601,10 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                              GromacsAngle(angle.function(), theta) );
             }
         }
-    }
+    };
 
     //get all of the dihedrals in this molecule
+    auto extract_dihedrals = [&]()
     {
         bool has_funcs(false);
         
@@ -615,27 +646,22 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                 }
             }
         }
-    }
 
-    //get all of the impropers in this molecule
-    {
-        bool has_funcs(false);
+        bool has_imps(false);
         
-        FourAtomFunctions funcs;
-        
-        const auto phi = InternalPotential::symbols().dihedral().phi();
+        FourAtomFunctions imps;
         
         try
         {
-            funcs = mol.property(map["improper"]).asA<FourAtomFunctions>();
-            has_funcs = true;
+            imps = mol.property(map["improper"]).asA<FourAtomFunctions>();
+            has_imps = true;
         }
         catch(...)
         {}
         
-        if (has_funcs)
+        if (has_imps)
         {
-            for (const auto improper : funcs.potentials())
+            for (const auto improper : imps.potentials())
             {
                 AtomIdx atom0 = molinfo.atomIdx(improper.atom0());
                 AtomIdx atom1 = molinfo.atomIdx(improper.atom1());
@@ -652,6 +678,28 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                     dihs.insertMulti(impid, part);
                 }
             }
+        }
+    };
+    
+    const QVector< std::function< void() > > functions = { extract_atoms, extract_bonds,
+                                                           extract_angles, extract_dihedrals };
+    
+    if (uses_parallel)
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0,functions.count(),1),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                functions[i]();
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<functions.count(); ++i)
+        {
+            functions[i]();
         }
     }
     
@@ -1682,11 +1730,14 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
                 particle_type = "D"; //this atomtype is a Dummy
             }
             
-            atomtypes.insert( atomtype, QString("%1  %2  %3  %4  %5  %6  %7")
-                    .arg(atomtype).arg(elem.nProtons())
-                    .arg(elem.mass().to(g_per_mol))
-                    .arg(chg).arg(particle_type)
-                    .arg(std::get<0>(ljparams)).arg(std::get<1>(ljparams)) );
+            atomtypes.insert( atomtype, QString("  %1        %2  %3  %4  %5  %6  %7")
+                    .arg(atomtype, 4)
+                    .arg(elem.nProtons(), 4)
+                    .arg(elem.mass().to(g_per_mol), 10, 'f', 6)
+                    .arg(chg, 10, 'f', 6)
+                    .arg(particle_type, 3)
+                    .arg(std::get<0>(ljparams), 10, 'f', 6)
+                    .arg(std::get<1>(ljparams), 10, 'f', 6) );
         }
     }
     
@@ -1696,7 +1747,7 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
     qSort(keys);
     
     lines.append( "[ atomtypes ]" );
-    lines.append( "; name      at.num  mass     charge ptype  sigma      epsilon" );
+    lines.append( "; name      at.num   mass         charge     ptype      sigma      epsilon" );
 
     for (const auto key : keys )
     {
@@ -1709,7 +1760,8 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
 }
 
 /** Internal function used to convert a Gromacs Moltyp to a set of lines */
-static QStringList writeMolType(const QString &name, const GroMolType &moltype)
+static QStringList writeMolType(const QString &name, const GroMolType &moltype,
+                                bool uses_parallel)
 {
     QStringList lines;
     
@@ -1718,28 +1770,30 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype)
     lines.append( QString("%1  %2").arg(name).arg(moltype.nExcludedAtoms()) );
     lines.append( "" );
 
+    QStringList atomlines, bondlines, anglines, dihlines;
+
     //write all of the atoms
-    lines.append( "[ atoms ]" );
-    lines.append(";   nr   type  resnr residue  atom   cgnr     charge       mass");
-
-    for (const auto &atom : moltype.atoms())
+    auto write_atoms = [&]()
     {
-        lines.append( QString("%1  %2  %3  %4  %5  %6  %7  %8")
-                .arg(atom.number().value()).arg(atom.atomType())
-                .arg(atom.residueNumber().value())
-                .arg(atom.residueName().value())
-                .arg(atom.name().value())
-                .arg(atom.chargeGroup())
-                .arg(atom.charge().to(mod_electron))
-                .arg(atom.mass().to(g_per_mol)) );
-    }
+        for (const auto &atom : moltype.atoms())
+        {
+            atomlines.append( QString("%1   %2 %3    %4  %5   %6 %7   %8")
+                    .arg(atom.number().value(), 6)
+                    .arg(atom.atomType(), 4)
+                    .arg(atom.residueNumber().value(), 6)
+                    .arg(atom.residueName().value(), 4)
+                    .arg(atom.name().value(), 4)
+                    .arg(atom.chargeGroup(), 4)
+                    .arg(atom.charge().to(mod_electron), 10, 'f', 6)
+                    .arg(atom.mass().to(g_per_mol), 10, 'f', 6) );
+        }
 
-    lines.append( "" );
+        atomlines.append( "" );
+    };
     
     //write all of the bonds
+    auto write_bonds = [&]()
     {
-        QStringList bondlines;
-        
         for (auto it = moltype.bonds().constBegin(); it != moltype.bonds().constEnd(); ++it)
         {
             const auto &bond = it.key();
@@ -1755,26 +1809,17 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype)
                 params.append( QString::number(p) );
             }
             
-            bondlines.append( QString("%1  %2  %3  %4")
-                    .arg(atom0).arg(atom1).arg(param.functionType())
+            bondlines.append( QString("%1 %2 %3  %4")
+                    .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
                     .arg(params.join("  ")) );
         }
         
         qSort(bondlines);
-        
-        if (not bondlines.isEmpty())
-        {
-            lines.append( "[bonds]" );
-            lines.append( ";  ai    aj   funct   parameters" );
-            lines += bondlines;
-            lines.append("");
-        }
-    }
+    };
 
     //write all of the angles
+    auto write_angs = [&]()
     {
-        QStringList anglines;
-        
         for (auto it = moltype.angles().constBegin(); it != moltype.angles().constEnd(); ++it)
         {
             const auto &angle = it.key();
@@ -1791,26 +1836,17 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype)
                 params.append( QString::number(p) );
             }
             
-            anglines.append( QString("%1  %2  %3  %4  %5")
-                    .arg(atom0).arg(atom1).arg(atom2).arg(param.functionType())
+            anglines.append( QString("%1 %2 %3 %4  %5")
+                    .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),6)
                     .arg(params.join("  ")) );
         }
         
         qSort(anglines);
-        
-        if (not anglines.isEmpty())
-        {
-            lines.append( "[angles]" );
-            lines.append( ";  ai    aj    ak   funct   parameters" );
-            lines += anglines;
-            lines.append("");
-        }
-    }
+    };
     
     //write all of the dihedrals/impropers (they are merged)
+    auto write_dihs = [&]()
     {
-        QStringList dihlines;
-        
         for (auto it = moltype.dihedrals().constBegin(); it != moltype.dihedrals().constEnd();
              ++it)
         {
@@ -1829,34 +1865,98 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype)
                 params.append( QString::number(p) );
             }
             
-            dihlines.append( QString("%1  %2  %3  %4  %5  %6")
-                    .arg(atom0).arg(atom1).arg(atom2).arg(atom3).arg(param.functionType())
+            dihlines.append( QString("%1 %2 %3 %4 %5  %6")
+                    .arg(atom0,6).arg(atom1,6)
+                    .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
                     .arg(params.join("  ")) );
         }
         
         qSort(dihlines);
-        
-        if (not dihlines.isEmpty())
+    };
+
+    const QVector< std::function<void()> > funcs =
+                 { write_atoms, write_bonds, write_angs, write_dihs };
+
+    if (uses_parallel)
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0, funcs.count(), 1),
+                           [&](const tbb::blocked_range<int> &r)
         {
-            lines.append( "[dihedrals]" );
-            lines.append( ";  ai    aj    ak    al   funct   parameters" );
-            lines += dihlines;
-            lines.append("");
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                funcs[i]();
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<funcs.count(); ++i)
+        {
+            funcs[i]();
         }
     }
 
+    lines.append( "[ atoms ]" );
+    lines.append(";   nr   type  resnr residue  atom   cgnr     charge         mass");
+    lines.append(atomlines);
+
+    if (not bondlines.isEmpty())
+    {
+        lines.append( "[bonds]" );
+        lines.append( ";  ai    aj   funct   parameters" );
+        lines += bondlines;
+        lines.append("");
+    }
+    
+    if (not anglines.isEmpty())
+    {
+        lines.append( "[angles]" );
+        lines.append( ";  ai    aj    ak   funct   parameters" );
+        lines += anglines;
+        lines.append("");
+    }
+
+    if (not dihlines.isEmpty())
+    {
+        lines.append( "[dihedrals]" );
+        lines.append( ";  ai    aj    ak    al   funct   parameters" );
+        lines += dihlines;
+        lines.append("");
+    }
+        
     return lines;
 }
 
 /** Internal function used to convert an array of Gromacs Moltyps into 
     lines of a Gromacs topology file */
-static QStringList writeMolTypes(const QHash<QString,GroMolType> &moltyps)
+static QStringList writeMolTypes(const QHash<QString,GroMolType> &moltyps,
+                                 bool uses_parallel)
 {
     QHash<QString,QStringList> typs;
     
-    for (auto it = moltyps.constBegin(); it != moltyps.constEnd(); ++it)
+    if (uses_parallel)
     {
-        typs.insert( it.key(), ::writeMolType(it.key(), it.value()) );
+        QVector<QString> keys = moltyps.keys().toVector();
+        QMutex mutex;
+        
+        tbb::parallel_for( tbb::blocked_range<int>(0,keys.count(),1),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                QStringList typlines = ::writeMolType(keys[i], moltyps[keys[i]], uses_parallel);
+                
+                QMutexLocker lkr(&mutex);
+                typs.insert(keys[i], typlines);
+            }
+        });
+    }
+    else
+    {
+        for (auto it = moltyps.constBegin(); it != moltyps.constEnd(); ++it)
+        {
+            typs.insert( it.key(), ::writeMolType(it.key(), it.value(), uses_parallel) );
+        }
     }
     
     QStringList keys = moltyps.keys();
@@ -1898,7 +1998,7 @@ static QStringList writeSystem(QString name, const QStringList &mol_to_moltype)
             }
             else
             {
-                lines.append( QString("%1   %2").arg(lastmol).arg(count) );
+                lines.append( QString("%1 %2").arg(lastmol,14).arg(count,6) );
                 lastmol = *it;
                 count = 1;
             }
@@ -1907,7 +2007,7 @@ static QStringList writeSystem(QString name, const QStringList &mol_to_moltype)
             count += 1;
     }
     
-    lines.append( QString("%1   %2").arg(lastmol).arg(count) );
+    lines.append( QString("%1 %2").arg(lastmol,14).arg(count,6) );
     
     lines.append("");
     
@@ -2044,7 +2144,7 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
     lines += ::writeAtomTypes(name_to_mtyp, name_to_example, ffield, map);
 
     //now convert these into text lines that can be written as the file
-    lines += ::writeMolTypes(name_to_mtyp);
+    lines += ::writeMolTypes(name_to_mtyp, usesParallel());
     
     //now write the system part
     lines += ::writeSystem(system.name(), mol_to_moltype);
