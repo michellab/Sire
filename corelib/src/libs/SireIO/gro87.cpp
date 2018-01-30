@@ -405,7 +405,7 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
     {}
 
     //what precision should be used - this can be set by the user
-    int precision = 3;
+    int precision = 6;
     try
     {
         precision = map["precision"].value().asA<NumberProperty>().value();
@@ -1634,7 +1634,10 @@ void Gro87::finaliseSystem(System &system, const PropertyMap &map) const
                         .arg(box_v3.at(0).toString()), CODELOC );
         }
         
-        system.setProperty( space_property.source(), SireVol::PeriodicBox(Vector(x,y,z)) );
+        if (x + y + z > 0)
+        {
+            system.setProperty( space_property.source(), SireVol::PeriodicBox(Vector(x,y,z)) );
+        }
     }
     
     //update the System fileformat property to record that it includes

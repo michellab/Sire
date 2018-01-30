@@ -27,6 +27,7 @@
 \*********************************************/
 
 #include "gromacsparams.h"
+#include "amberparams.h"
 
 #include "SireID/index.h"
 
@@ -316,10 +317,51 @@ GromacsBond::GromacsBond(const SireCAS::Expression &bond, const SireCAS::Symbol 
     {
         k[i] = 0;
     }
-    
+
+    //first, let's see if this is an Amber-style harmonic bond
+    {
+        AmberBond amberbond;
+        bool is_amber = false;
+
+        try
+        {
+            amberbond = AmberBond(bond, R);
+            is_amber = true;
+        }
+        catch(...)
+        {}
+        
+        if (is_amber)
+        {
+            //yes, this is a valid amber bond ( 0.5 kb (r - r0)^2 )
+            double kb = 2.0 * amberbond.k();
+            double r0 = amberbond.r0();
+            
+            if (kb == 0)
+            {
+                //this is a null bond (connection)
+                func_type = 5;
+            }
+            else
+            {
+                //this is a harmonic bond
+                func_type = 1;
+
+                const double kj_per_mol_per_nm2 = ((kJ_per_mol) / (nanometer*nanometer)).value();
+                const double nm = nanometer.value();
+
+                k[0] = r0 / nm;
+                k[1] = kb / kj_per_mol_per_nm2;
+            }
+            
+            return;
+        }
+    }
+
     // a LOT of introspection will be needed to extract the function type
     // and parameters from a generic expression...
-    throw SireError::incomplete_code( QObject::tr("THIS CODE NEEDS WRITING!"), CODELOC );
+    throw SireError::incomplete_code( QObject::tr("Sire cannot yet interpret bonds "
+       "that are not in a standard harmonic format! (%1)").arg(bond.toString()), CODELOC );
 }
 
 static void assert_valid_bond_function(int func_type)
@@ -835,7 +877,7 @@ GromacsAngle::GromacsAngle()
 }
 
 /** Construct from the passed 'angle', using 'theta' as the symbol for the theta value */
-GromacsAngle::GromacsAngle(const SireCAS::Expression &bond, const SireCAS::Symbol &theta)
+GromacsAngle::GromacsAngle(const SireCAS::Expression &angle, const SireCAS::Symbol &theta)
              : func_type(0)
 {
     for (int i=0; i<MAX_ANGLE_PARAMS; ++i)
@@ -843,9 +885,42 @@ GromacsAngle::GromacsAngle(const SireCAS::Expression &bond, const SireCAS::Symbo
         k[i] = 0;
     }
     
+    //first, let's see if this is an Amber-style harmonic angle
+    {
+        AmberAngle amberangle;
+        bool is_amber = false;
+
+        try
+        {
+            amberangle = AmberAngle(angle, theta);
+            is_amber = true;
+        }
+        catch(...)
+        {}
+        
+        if (is_amber)
+        {
+            //yes, this is a valid amber angle ( 0.5 kb (theta - theta0)^2 )
+            double kb = 2.0 * amberangle.k();
+            double t0 = amberangle.theta0();
+            
+            //this is a harmonic angle
+            func_type = 1;
+
+            const double kj_per_mol_per_rad2 = ((kJ_per_mol) / (radian*radian)).value();
+            const double deg = degree.value();
+
+            k[0] = t0 / deg;
+            k[1] = kb / kj_per_mol_per_rad2;
+            
+            return;
+        }
+    }
+
     // a LOT of introspection will be needed to extract the function type
     // and parameters from a generic expression...
-    throw SireError::incomplete_code( QObject::tr("THIS CODE NEEDS WRITING!"), CODELOC );
+    throw SireError::incomplete_code( QObject::tr("Sire cannot yet interpret angles "
+       "that are not in a standard harmonic format! (%1)").arg(angle.toString()), CODELOC );
 }
 
 static void assert_valid_angle_function(int func_type)
@@ -1462,6 +1537,81 @@ GromacsDihedral::GromacsDihedral()
 }
 
 /** Construct from the passed 'dihedral', using 'phi' as the symbol for the phi value */
+QList<GromacsDihedral> GromacsDihedral::construct(const Expression &dihedral, const Symbol &phi)
+{
+    //first, let's see if this is an Amber-style cosine-based dihedral
+    {
+        AmberDihedral amberdihedral;
+        bool is_amber = false;
+
+        try
+        {
+            amberdihedral = AmberDihedral(dihedral, phi);
+            is_amber = true;
+        }
+        catch(...)
+        {}
+        
+        if (is_amber)
+        {
+            //yes, this is a valid amber dihedral. We need to create one
+            //GromacsDihedral for each AmberDihPart
+            QList<GromacsDihedral> dihs;
+            
+            bool multiterm = amberdihedral.terms().count() > 1;
+            
+            for (const auto amberdih : amberdihedral.terms())
+            {
+                double kb = amberdih.k();
+                double per = amberdih.periodicity();
+                double phase = amberdih.phase();
+            
+                //this is a cosine dihedral in from k [ 1 + cos(per phi - phase) ]
+                //(will one day have to work out how to say this is an improper rather
+                // than a dihedral...)
+                int func_type = 1;
+
+                if (multiterm)
+                    func_type = 9;  // multiple periodic dihedral
+
+                const double kj_per_mol = kJ_per_mol.value();
+                const double deg = degree.value();
+
+                phase = phase / deg;
+                kb = kb / kj_per_mol;
+                //per = per;
+                
+                dihs.append( GromacsDihedral(func_type, phase, kb, per) );
+            }
+            
+            return dihs;
+        }
+    }
+
+    // a LOT of introspection will be needed to extract the function type
+    // and parameters from a generic expression...
+    throw SireError::incomplete_code( QObject::tr("Sire cannot yet interpret dihedrals "
+       "that are not in a standard cosine format! (%1)").arg(dihedral.toString()), CODELOC );
+}
+
+/** Construct from the passed 'improper', using 'phi' as the symbol for the phi value */
+QList<GromacsDihedral> GromacsDihedral::constructImproper(
+                                const Expression &dihedral, const Symbol &phi)
+{
+    auto parts = GromacsDihedral::construct(dihedral, phi);
+    
+    for (auto &part : parts)
+    {
+        if (part.functionType() == 1 or part.functionType() == 9)
+        {
+            part.func_type = 4;
+        }
+    }
+    
+    return parts;
+}
+
+/** Construct from the passed 'dihedral', using 'phi' as the symbol for the phi value */
 GromacsDihedral::GromacsDihedral(const SireCAS::Expression &dihedral, const SireCAS::Symbol &phi)
                 : func_type(0)
 {
@@ -1470,9 +1620,19 @@ GromacsDihedral::GromacsDihedral(const SireCAS::Expression &dihedral, const Sire
         k[i] = 0;
     }
     
-    // a LOT of introspection will be needed to extract the function type
-    // and parameters from a generic expression...
-    throw SireError::incomplete_code( QObject::tr("THIS CODE NEEDS WRITING!"), CODELOC );
+    auto parts = GromacsDihedral::construct(dihedral,phi);
+    
+    if (parts.count() == 1)
+    {
+        this->operator=(parts[0]);
+        return;
+    }
+    else if (parts.count() > 1)
+        throw SireError::incompatible_error( QObject::tr(
+            "The passed expression (%1) is made up of multiple GromacsDihedral terms (%2). "
+            "Please use GromacsDihedral::construct(...) to convert the expression into "
+            "a valid set of GromacsDihedrals.")
+                .arg(dihedral.toString()).arg(Sire::toString(parts)), CODELOC );
 }
 
 static void assert_valid_dihedral_function(int func_type)
@@ -1902,7 +2062,7 @@ SireCAS::Expression GromacsDihedral::toExpression(const SireCAS::Symbol &phi) co
         const double phi_s = k[0] * deg;
         const double n = k[2];
         
-        return k0 * ( 1.0 - Cos( (n*phi) - phi_s ) );
+        return k0 * ( 1.0 + Cos( (n*phi) - phi_s ) );
     }
     else if (func_type == 2)
     {

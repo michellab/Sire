@@ -316,7 +316,13 @@ public:
                     double k0, double k1=0, double k2=0, double k3=0, double k4=0, double k5=0);
     GromacsDihedral(int function_type, const QList<double> &params);
     
-    GromacsDihedral(const SireCAS::Expression &angle, const SireCAS::Symbol &theta);
+    GromacsDihedral(const SireCAS::Expression &dihedral, const SireCAS::Symbol &phi);
+    
+    static QList<GromacsDihedral> construct(const SireCAS::Expression &dihedral,
+                                            const SireCAS::Symbol &phi);
+    static QList<GromacsDihedral> constructImproper(
+                                            const SireCAS::Expression &dihedral,
+                                            const SireCAS::Symbol &phi);
     
     GromacsDihedral(const GromacsDihedral &other);
     

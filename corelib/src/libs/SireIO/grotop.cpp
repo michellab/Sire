@@ -490,7 +490,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
         
         try
         {
-            funcs = mol.property(map["bonds"]).asA<TwoAtomFunctions>();
+            funcs = mol.property(map["bond"]).asA<TwoAtomFunctions>();
             has_funcs = true;
         }
         catch(...)
@@ -535,6 +535,121 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                 if (not bnds.contains(b))
                 {
                     bnds.insert(b, GromacsBond(5));  // function 5 is a simple connection
+                }
+            }
+        }
+    }
+
+    //get all of the angles in this molecule
+    {
+        bool has_funcs(false);
+        
+        ThreeAtomFunctions funcs;
+        
+        const auto theta = InternalPotential::symbols().angle().theta();
+        
+        try
+        {
+            funcs = mol.property(map["angle"]).asA<ThreeAtomFunctions>();
+            has_funcs = true;
+        }
+        catch(...)
+        {}
+        
+        if (has_funcs)
+        {
+            for (const auto angle : funcs.potentials())
+            {
+                AtomIdx atom0 = molinfo.atomIdx(angle.atom0());
+                AtomIdx atom1 = molinfo.atomIdx(angle.atom1());
+                AtomIdx atom2 = molinfo.atomIdx(angle.atom2());
+                
+                if (atom0 > atom2)
+                    qSwap(atom0,atom2);
+            
+                angs.insert( AngleID(atom0,atom1,atom2),
+                             GromacsAngle(angle.function(), theta) );
+            }
+        }
+    }
+
+    //get all of the dihedrals in this molecule
+    {
+        bool has_funcs(false);
+        
+        FourAtomFunctions funcs;
+        
+        const auto phi = InternalPotential::symbols().dihedral().phi();
+        
+        try
+        {
+            funcs = mol.property(map["dihedral"]).asA<FourAtomFunctions>();
+            has_funcs = true;
+        }
+        catch(...)
+        {}
+        
+        if (has_funcs)
+        {
+            for (const auto dihedral : funcs.potentials())
+            {
+                AtomIdx atom0 = molinfo.atomIdx(dihedral.atom0());
+                AtomIdx atom1 = molinfo.atomIdx(dihedral.atom1());
+                AtomIdx atom2 = molinfo.atomIdx(dihedral.atom2());
+                AtomIdx atom3 = molinfo.atomIdx(dihedral.atom3());
+                
+                if (atom0 > atom3)
+                {
+                    qSwap(atom0,atom3);
+                    qSwap(atom1,atom2);
+                }
+
+                //get all of the dihedral terms (could be a lot)
+                auto parts = GromacsDihedral::construct(dihedral.function(), phi);
+                
+                DihedralID dihid(atom0,atom1,atom2,atom3);
+                
+                for (const auto part : parts)
+                {
+                    dihs.insertMulti(dihid, part);
+                }
+            }
+        }
+    }
+
+    //get all of the impropers in this molecule
+    {
+        bool has_funcs(false);
+        
+        FourAtomFunctions funcs;
+        
+        const auto phi = InternalPotential::symbols().dihedral().phi();
+        
+        try
+        {
+            funcs = mol.property(map["improper"]).asA<FourAtomFunctions>();
+            has_funcs = true;
+        }
+        catch(...)
+        {}
+        
+        if (has_funcs)
+        {
+            for (const auto improper : funcs.potentials())
+            {
+                AtomIdx atom0 = molinfo.atomIdx(improper.atom0());
+                AtomIdx atom1 = molinfo.atomIdx(improper.atom1());
+                AtomIdx atom2 = molinfo.atomIdx(improper.atom2());
+                AtomIdx atom3 = molinfo.atomIdx(improper.atom3());
+                
+                //get all of the dihedral terms (could be a lot)
+                auto parts = GromacsDihedral::constructImproper(improper.function(), phi);
+                
+                DihedralID impid(atom0,atom1,atom2,atom3);
+                
+                for (const auto part : parts)
+                {
+                    dihs.insertMulti(impid, part);
                 }
             }
         }
@@ -1655,7 +1770,81 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype)
             lines.append("");
         }
     }
+
+    //write all of the angles
+    {
+        QStringList anglines;
+        
+        for (auto it = moltype.angles().constBegin(); it != moltype.angles().constEnd(); ++it)
+        {
+            const auto &angle = it.key();
+            const auto &param = it.value();
+            
+            //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+            int atom0 = angle.atom0().asA<AtomIdx>().value() + 1;
+            int atom1 = angle.atom1().asA<AtomIdx>().value() + 1;
+            int atom2 = angle.atom2().asA<AtomIdx>().value() + 1;
+            
+            QStringList params;
+            for (const auto p : param.parameters())
+            {
+                params.append( QString::number(p) );
+            }
+            
+            anglines.append( QString("%1  %2  %3  %4  %5")
+                    .arg(atom0).arg(atom1).arg(atom2).arg(param.functionType())
+                    .arg(params.join("  ")) );
+        }
+        
+        qSort(anglines);
+        
+        if (not anglines.isEmpty())
+        {
+            lines.append( "[angles]" );
+            lines.append( ";  ai    aj    ak   funct   parameters" );
+            lines += anglines;
+            lines.append("");
+        }
+    }
     
+    //write all of the dihedrals/impropers (they are merged)
+    {
+        QStringList dihlines;
+        
+        for (auto it = moltype.dihedrals().constBegin(); it != moltype.dihedrals().constEnd();
+             ++it)
+        {
+            const auto &dihedral = it.key();
+            const auto &param = it.value();
+            
+            //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+            int atom0 = dihedral.atom0().asA<AtomIdx>().value() + 1;
+            int atom1 = dihedral.atom1().asA<AtomIdx>().value() + 1;
+            int atom2 = dihedral.atom2().asA<AtomIdx>().value() + 1;
+            int atom3 = dihedral.atom3().asA<AtomIdx>().value() + 1;
+            
+            QStringList params;
+            for (const auto p : param.parameters())
+            {
+                params.append( QString::number(p) );
+            }
+            
+            dihlines.append( QString("%1  %2  %3  %4  %5  %6")
+                    .arg(atom0).arg(atom1).arg(atom2).arg(atom3).arg(param.functionType())
+                    .arg(params.join("  ")) );
+        }
+        
+        qSort(dihlines);
+        
+        if (not dihlines.isEmpty())
+        {
+            lines.append( "[dihedrals]" );
+            lines.append( ";  ai    aj    ak    al   funct   parameters" );
+            lines += dihlines;
+            lines.append("");
+        }
+    }
+
     return lines;
 }
 
