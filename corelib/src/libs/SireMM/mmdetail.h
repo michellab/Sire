@@ -90,6 +90,7 @@ public:
     QString electrostaticStyle() const;
     
     bool usesLJTerm() const;
+    bool usesBuckinghamTerm() const;
     QString vdwStyle() const;
     
     bool usesHarmonicBonds() const;

@@ -319,6 +319,12 @@ bool MMDetail::usesLJTerm() const
     return vdwStyle() == "lj";
 }
 
+/** Return whether or not this forcefield uses the Buckingham vdw model */
+bool MMDetail::usesBuckinghamTerm() const
+{
+    return vdwStyle() == "buckingham";
+}
+
 /** Return the bond model used by this forcefield */
 QString MMDetail::bondStyle() const
 {

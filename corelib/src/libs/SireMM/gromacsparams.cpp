@@ -505,7 +505,8 @@ const char* GromacsBond::what() const
 /** Return whether or not this parameter needs resolving */
 bool GromacsBond::needsResolving() const
 {
-    return k[0] == unresolved_parameter_value or func_type == 0;
+    //don't need to resolve the 'connection' function type (5), as it has no parameters
+    return func_type != 5 and (k[0] == unresolved_parameter_value or func_type == 0);
 }
 
 /** Return whether or not the parameters for this bond are resolved */

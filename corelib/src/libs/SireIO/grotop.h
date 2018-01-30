@@ -407,6 +407,8 @@ public:
 
     GroSystem groSystem() const;
 
+    QStringList postprocessedLines() const;
+
     QStringList warnings() const;
 
 protected:

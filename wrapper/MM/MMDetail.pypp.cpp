@@ -182,6 +182,17 @@ void register_MMDetail_class(){
                 , "Return whether or not this forcefield uses arithmetic combining rules" );
         
         }
+        { //::SireMM::MMDetail::usesBuckinghamTerm
+        
+            typedef bool ( ::SireMM::MMDetail::*usesBuckinghamTerm_function_type)(  ) const;
+            usesBuckinghamTerm_function_type usesBuckinghamTerm_function_value( &::SireMM::MMDetail::usesBuckinghamTerm );
+            
+            MMDetail_exposer.def( 
+                "usesBuckinghamTerm"
+                , usesBuckinghamTerm_function_value
+                , "" );
+        
+        }
         { //::SireMM::MMDetail::usesCosineDihedrals
         
             typedef bool ( ::SireMM::MMDetail::*usesCosineDihedrals_function_type)(  ) const;

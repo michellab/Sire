@@ -428,6 +428,17 @@ void register_GroTop_class(){
         
         }
         GroTop_exposer.def( bp::self == bp::self );
+        { //::SireIO::GroTop::postprocessedLines
+        
+            typedef ::QStringList ( ::SireIO::GroTop::*postprocessedLines_function_type)(  ) const;
+            postprocessedLines_function_type postprocessedLines_function_value( &::SireIO::GroTop::postprocessedLines );
+            
+            GroTop_exposer.def( 
+                "postprocessedLines"
+                , postprocessedLines_function_value
+                , "" );
+        
+        }
         { //::SireIO::GroTop::toString
         
             typedef ::QString ( ::SireIO::GroTop::*toString_function_type)(  ) const;
