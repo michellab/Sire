@@ -1817,11 +1817,6 @@ System Gro87::startSystem(const PropertyMap &map) const
     the passed System that are missing coordinate data. */
 void Gro87::addToSystem(System &system, const PropertyMap &map) const
 {
-    qDebug() << "Adding coordinates / velocities...";
-
-    QElapsedTimer t;
-    t.start();
-
     const bool has_coords = hasCoordinates();
     const bool has_vels = hasVelocities();
 
@@ -1888,27 +1883,38 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
         //of the atoms and residues in the molecule
         if (not ids_match)
         {
-            MolStructureEditor moleditor(mol);
+            QHash<AtomNum,AtomNum> renumbered_atoms;
+            QHash<ResNum,ResNum> renumbered_residues;
 
-            for (int j=0; j<mol.nAtoms(); ++j)
+            for (int j=0; j<molinfo.nAtoms(); ++j)
             {
-                auto atom = moleditor.atom( AtomIdx(j) );
                 int idx = idx_in_gro[j];
 
-                if (atom.number() != atmnums.constData()[idx])
+                auto oldnum = molinfo.number( AtomIdx(j) );
+                AtomNum newnum(atmnums.constData()[idx]);
+                
+                if (oldnum != newnum)
+                    renumbered_atoms.insert(oldnum, newnum);
+            }
+            
+            for (int j=0; j<molinfo.nResidues(); ++j)
+            {
+                auto oldnum = molinfo.number( ResIdx(j) );
+            
+                auto atoms_in_res = molinfo.getAtomsIn(ResIdx(j));
+                
+                if (not atoms_in_res.isEmpty())
                 {
-                    atom = atom.renumber( AtomNum(atmnums.constData()[idx]) );
-                }
-
-                auto res = atom.residue();
-
-                if (res.number() != resnums.constData()[idx])
-                {
-                    res = res.renumber( ResNum(resnums.constData()[idx]) );
+                    int idx = idx_in_gro[ atoms_in_res.at(0).value() ];
+                    
+                    ResNum newnum(resnums.constData()[idx]);
+                    
+                    if (oldnum != newnum)
+                        renumbered_residues.insert(oldnum, newnum);
                 }
             }
 
-            mol = moleditor.commit();
+            mol = mol.edit().renumber(renumbered_atoms, renumbered_residues).commit();
         }
 
         //now use this index to locate the correct coordinate and/or velocity
@@ -1990,10 +1996,5 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
     system.remove(MGName("all"));
     system.add(new_group);
 
-    qint64 ns = t.nsecsElapsed();
-    qDebug() << "took" << (0.000001*ns) << "ms";
-
-    qDebug() << "Finalising...";
     this->finaliseSystem(system, map);
-    qDebug() << "Done :-)";
 }

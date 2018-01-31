@@ -329,6 +329,45 @@ void register_MolEditor_class(){
                 , "Give this molecule the ID number newnum" );
         
         }
+        { //::SireMol::MolEditor::renumber
+        
+            typedef ::SireMol::MolEditor & ( ::SireMol::MolEditor::*renumber_function_type)( ::QHash< SireMol::AtomNum, SireMol::AtomNum > const & ) ;
+            renumber_function_type renumber_function_value( &::SireMol::MolEditor::renumber );
+            
+            MolEditor_exposer.def( 
+                "renumber"
+                , renumber_function_value
+                , ( bp::arg("atomnums") )
+                , bp::return_self< >()
+                , "Give this molecule the ID number newnum" );
+        
+        }
+        { //::SireMol::MolEditor::renumber
+        
+            typedef ::SireMol::MolEditor & ( ::SireMol::MolEditor::*renumber_function_type)( ::QHash< SireMol::ResNum, SireMol::ResNum > const & ) ;
+            renumber_function_type renumber_function_value( &::SireMol::MolEditor::renumber );
+            
+            MolEditor_exposer.def( 
+                "renumber"
+                , renumber_function_value
+                , ( bp::arg("resnums") )
+                , bp::return_self< >()
+                , "Give this molecule the ID number newnum" );
+        
+        }
+        { //::SireMol::MolEditor::renumber
+        
+            typedef ::SireMol::MolEditor & ( ::SireMol::MolEditor::*renumber_function_type)( ::QHash< SireMol::AtomNum, SireMol::AtomNum > const &,::QHash< SireMol::ResNum, SireMol::ResNum > const & ) ;
+            renumber_function_type renumber_function_value( &::SireMol::MolEditor::renumber );
+            
+            MolEditor_exposer.def( 
+                "renumber"
+                , renumber_function_value
+                , ( bp::arg("atomnums"), bp::arg("resnums") )
+                , bp::return_self< >()
+                , "" );
+        
+        }
         { //::SireMol::MolEditor::toString
         
             typedef ::QString ( ::SireMol::MolEditor::*toString_function_type)(  ) const;

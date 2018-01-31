@@ -58,6 +58,8 @@ namespace SireMol
 
 class MoleculeInfoData;
 
+class AtomMatcher;
+
 class AtomNum;
 class AtomIdx;
 class AtomName;
@@ -238,6 +240,11 @@ public:
     void renumber(ResIdx residx, ResNum newnum);
     void renumber(const ResID &resid, ResNum newnum);
 
+    void renumber(const QHash<AtomNum,AtomNum> &atomnums);
+    void renumber(const QHash<ResNum,ResNum> &resnums);
+    void renumber(const QHash<AtomNum,AtomNum> &atomnums,
+                  const QHash<ResNum,ResNum> &resnums);
+
     void setProperty(const QString &key, 
                      const Property &value, bool clear_metadata=false);
 
@@ -258,6 +265,9 @@ public:
     void assertHasMetadata(const PropertyName &metakey) const;
     void assertHasMetadata(const PropertyName &key,
                            const PropertyName &metakey) const;
+
+    void updatePropertyMolInfo();
+    void updatePropertyMolInfo(const AtomMatcher &matcher);
 
     /** Return the shared null MoleculeData */
     static SireBase::SharedDataPointer<MoleculeData> null();

@@ -181,6 +181,11 @@ public:
     MoleculeInfoData rename(ChainIdx chainidx, const ChainName &newname) const;
     MoleculeInfoData rename(SegIdx segidx, const SegName &newname) const;
     
+    MoleculeInfoData renumber( const QHash<AtomNum,AtomNum> &atomnums ) const;
+    MoleculeInfoData renumber( const QHash<ResNum,ResNum> &resnums) const;
+    MoleculeInfoData renumber( const QHash<AtomNum,AtomNum> &atomnums,
+                               const QHash<ResNum,ResNum> &resnums ) const;
+    
     const CGAtomIdx& cgAtomIdx(AtomIdx atomidx) const;
     const CGAtomIdx& cgAtomIdx(const AtomID &atomid) const;
     

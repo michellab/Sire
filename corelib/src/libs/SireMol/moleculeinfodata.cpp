@@ -1274,6 +1274,82 @@ MoleculeInfoData MoleculeInfoData::renumber(AtomIdx atomidx,
     return newinfo;
 }
 
+/** Renumber all of the atoms and residues in the passed maps */
+MoleculeInfoData MoleculeInfoData::renumber(const QHash<AtomNum,AtomNum> &atomnums,
+                                            const QHash<ResNum,ResNum> &resnums) const
+{
+    if (atomnums.isEmpty() and resnums.isEmpty())
+        return *this;
+
+    //make the change in a copy of this object
+    MoleculeInfoData newinfo(*this);
+
+    //go through and get the index of all atoms and residues that must be renamed,
+    //removing the original numbers
+    QHash<AtomIdx,AtomNum> changed_atoms;   changed_atoms.reserve(atomnums.count());
+    QHash<ResIdx,ResNum> changed_res;       changed_res.reserve(resnums.count());
+    
+    //remove the old atom numbers (and update the AtomInfo objects)
+    for (auto it = atomnums.constBegin(); it != atomnums.constEnd(); ++it)
+    {
+        if (it.key() != it.value())
+        {
+            auto idx = this->atomIdx(it.key());
+            
+            AtomInfo &atom = newinfo.atoms_by_index[idx];
+            newinfo.atoms_by_num.remove(atom.number, idx);
+            atom.number = it.value();
+
+            if (not it.value().isNull())
+                changed_atoms.insert(idx, it.value());
+        }
+    }
+    
+    //update the new numbers
+    for (auto it = changed_atoms.constBegin(); it != changed_atoms.constEnd(); ++it)
+    {
+        newinfo.atoms_by_num.insert(it.value(), it.key());
+    }
+    
+    //remove the old residue numbers (and update the ResInfo objects)
+    for (auto it = resnums.constBegin(); it != resnums.constEnd(); ++it)
+    {
+        if (it.key() != it.value())
+        {
+            auto idx = this->resIdx(it.key());
+            
+            ResInfo &res = newinfo.res_by_index[idx];
+            newinfo.res_by_num.remove(res.number, idx);
+            res.number = it.value();
+
+            if (not it.value().isNull())
+                changed_res.insert(idx, it.value());
+        }
+    }
+    
+    //update the new numbers
+    for (auto it = changed_res.constBegin(); it != changed_res.constEnd(); ++it)
+    {
+        newinfo.res_by_num.insert(it.value(), it.key());
+    }
+    
+    newinfo.uid = QUuid::createUuid();
+    
+    return newinfo;
+}
+
+/** Renumber all of the atoms in map */
+MoleculeInfoData MoleculeInfoData::renumber(const QHash<AtomNum,AtomNum> &atomnums) const
+{
+    return this->renumber(atomnums, QHash<ResNum,ResNum>());
+}
+
+/** Renumber all of the residues in map */
+MoleculeInfoData MoleculeInfoData::renumber(const QHash<ResNum,ResNum> &resnums) const
+{
+    return this->renumber(QHash<AtomNum,AtomNum>(), resnums);
+}
+
 /** Rename the residue at index 'residx' with the name 'newname'. 
 
     \throw SireError::invalid_index
