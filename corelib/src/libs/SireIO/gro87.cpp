@@ -57,6 +57,7 @@
 
 #include <QRegularExpression>
 #include <QDebug>
+#include <QElapsedTimer>
 
 using namespace SireIO;
 using namespace SireMol;
@@ -1816,6 +1817,11 @@ System Gro87::startSystem(const PropertyMap &map) const
     the passed System that are missing coordinate data. */
 void Gro87::addToSystem(System &system, const PropertyMap &map) const
 {
+    qDebug() << "Adding coordinates / velocities...";
+
+    QElapsedTimer t;
+    t.start();
+
     const bool has_coords = hasCoordinates();
     const bool has_vels = hasVelocities();
 
@@ -1984,5 +1990,10 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
     system.remove(MGName("all"));
     system.add(new_group);
 
+    qint64 ns = t.nsecsElapsed();
+    qDebug() << "took" << (0.000001*ns) << "ms";
+
+    qDebug() << "Finalising...";
     this->finaliseSystem(system, map);
+    qDebug() << "Done :-)";
 }

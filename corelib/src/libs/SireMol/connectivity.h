@@ -37,6 +37,7 @@
 
 #include "bondhunter.h"
 #include "molviewproperty.h"
+#include "moleculeinfo.h"
 
 #include "SireBase/property.h"
 #include "SireBase/shareddatapointer.hpp"
@@ -103,6 +104,8 @@ public:
 
     QString toString() const;
 
+    MoleculeInfo info() const;
+
     bool isCompatibleWith(const MoleculeInfoData &molinfo) const;
 
     bool areConnected(AtomIdx atom0, AtomIdx atom1) const;
@@ -111,6 +114,9 @@ public:
     bool areConnected(ResIdx res0, ResIdx res1) const;
     bool areConnected(const ResID &res0, const ResID &res1) const;
 
+    bool areConnected(CGIdx cg0, CGIdx cg1) const;
+    bool areConnected(const CGID &cg0, const CGID &cg1) const;
+
     bool areBonded(AtomIdx atom0, AtomIdx atom1) const;
     bool areAngled(AtomIdx atom0, AtomIdx atom2) const;
     bool areDihedraled(AtomIdx atom0, AtomIdx atom3) const;
@@ -118,6 +124,9 @@ public:
     bool areBonded(const AtomID &atom0, const AtomID &atom1) const;
     bool areAngled(const AtomID &atom0, const AtomID &atom2) const;
     bool areDihedraled(const AtomID &atom0, const AtomID &atom3) const;
+
+    int connectionType(AtomIdx atom0, AtomIdx atom1) const;
+    int connectionType(const AtomID &atom0, const AtomID &atom1) const;
 
     QList<AtomIdx> findPath(AtomIdx atom0, AtomIdx atom1) const;
     QList< QList<AtomIdx> > findPaths(AtomIdx atom0, AtomIdx atom1) const;
@@ -244,8 +253,6 @@ protected:
     bool operator==(const ConnectivityBase &other) const;
     bool operator!=(const ConnectivityBase &other) const;
 
-    inline const MoleculeInfoData& info() const;
-
     SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
                                                   const AtomMatcher &atommatcher) const;
 
@@ -258,7 +265,7 @@ protected:
     QVector< QSet<ResIdx> > connected_res;
 
     /** The info object that describes the molecule */
-    SireBase::SharedDataPointer<MoleculeInfoData> d;
+    MoleculeInfo minfo;
 
 private:
     const QSet<AtomIdx>& _pvt_connectedTo(AtomIdx atomidx) const;

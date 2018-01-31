@@ -27,7 +27,20 @@ void register_CLJNBPairs_class(){
         bp::scope CLJNBPairs_scope( CLJNBPairs_exposer );
         CLJNBPairs_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireMM::CLJScaleFactor const & > >(( bp::arg("molview"), bp::arg("default_scale")=SireMM::CLJScaleFactor(1, 1) ), "Construct for the molecule viewed in molview") );
         CLJNBPairs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, bp::optional< SireMM::CLJScaleFactor const & > >(( bp::arg("molinfo"), bp::arg("default_scale")=SireMM::CLJScaleFactor(1, 1) ), "Construct, using default_scale for all of the atom-atom\ninteractions in the molecule molinfo") );
+        CLJNBPairs_exposer.def( bp::init< SireMol::MoleculeInfo const &, bp::optional< SireMM::CLJScaleFactor const & > >(( bp::arg("molinfo"), bp::arg("default_scale")=SireMM::CLJScaleFactor(1, 1) ), "Construct, using default_scale for all of the atom-atom\ninteractions in the molecule molinfo") );
+        CLJNBPairs_exposer.def( bp::init< SireMol::Connectivity const &, SireMM::CLJScaleFactor const & >(( bp::arg("connectivity"), bp::arg("scale14") ), "Construct for the molecule viewed in molview") );
         CLJNBPairs_exposer.def( bp::init< SireMM::CLJNBPairs const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireMM::CLJNBPairs::excludedAtoms
+        
+            typedef ::QVector< SireMol::AtomIdx > ( ::SireMM::CLJNBPairs::*excludedAtoms_function_type)(  ) const;
+            excludedAtoms_function_type excludedAtoms_function_value( &::SireMM::CLJNBPairs::excludedAtoms );
+            
+            CLJNBPairs_exposer.def( 
+                "excludedAtoms"
+                , excludedAtoms_function_value
+                , "" );
+        
+        }
         { //::SireMM::CLJNBPairs::excludedAtoms
         
             typedef ::QVector< SireMol::AtomIdx > ( ::SireMM::CLJNBPairs::*excludedAtoms_function_type)( ::SireMol::AtomID const & ) const;
@@ -38,6 +51,17 @@ void register_CLJNBPairs_class(){
                 , excludedAtoms_function_value
                 , ( bp::arg("atomid") )
                 , "Return the excluded atoms for the atom matching ID atomid. This\nreturns all of the atoms for which the interaction with atomid is\nequal to zero" );
+        
+        }
+        { //::SireMM::CLJNBPairs::nExcludedAtoms
+        
+            typedef int ( ::SireMM::CLJNBPairs::*nExcludedAtoms_function_type)(  ) const;
+            nExcludedAtoms_function_type nExcludedAtoms_function_value( &::SireMM::CLJNBPairs::nExcludedAtoms );
+            
+            CLJNBPairs_exposer.def( 
+                "nExcludedAtoms"
+                , nExcludedAtoms_function_value
+                , "" );
         
         }
         { //::SireMM::CLJNBPairs::nExcludedAtoms

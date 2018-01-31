@@ -28,6 +28,10 @@
 
 #include "cljnbpairs.h"
 
+#include "SireMol/moleculeinfo.h"
+
+#include "SireBase/parallel.h"
+
 #include "SireStream/datastream.h"
 
 using namespace SireMM;
@@ -461,12 +465,115 @@ CLJNBPairs::CLJNBPairs(const MoleculeInfoData &molinfo,
                    AtomPairs<CLJScaleFactor> >(molinfo, default_scale)
 {}
 
+/** Construct, using 'default_scale' for all of the atom-atom
+    interactions in the molecule 'molinfo' */
+CLJNBPairs::CLJNBPairs(const MoleculeInfo &molinfo,
+                       const CLJScaleFactor &default_scale)
+           : ConcreteProperty<CLJNBPairs,
+                   AtomPairs<CLJScaleFactor> >(molinfo, default_scale)
+{}
+
 /** Construct for the molecule viewed in 'molview' */
 CLJNBPairs::CLJNBPairs(const MoleculeView &molview,
                        const CLJScaleFactor &default_scale)
            : ConcreteProperty<CLJNBPairs,
                     AtomPairs<CLJScaleFactor> >(molview, default_scale)
 {}
+
+/** Construct, automatically setting the bonded pairs to 0 (bond and angled atoms),
+    non-bonded pairs to 1, and 1-4 pairs to 'scale14' */
+CLJNBPairs::CLJNBPairs(const Connectivity &connectivity,
+                       const CLJScaleFactor &scale14)
+           : ConcreteProperty< CLJNBPairs,
+                   AtomPairs<CLJScaleFactor> >(connectivity.info(), CLJScaleFactor(1,1))
+{
+    const auto molinfo = connectivity.info();
+    
+    if (molinfo.nAtoms() == 0)
+        return;
+    
+    //create a list of connected CutGroups
+    QList< std::tuple<CGIdx,CGIdx> > connected_cgroups;
+    
+    const int ncg = molinfo.nCutGroups();
+    
+    for (CGIdx i(0); i<ncg; ++i)
+    {
+        for (CGIdx j(i); j<ncg; ++j)
+        {
+            if (i == j or connectivity.areConnected(i,j))
+                connected_cgroups.append( std::make_tuple(i,j) );
+        }
+    }
+    
+    //now we have the set of connected pairs, loop through all pairs of atoms
+    //of connected cutgroups and work out how they are bonded
+    QMutex mutex;
+    
+    auto get_pairs = [&]( std::tuple<CGIdx,CGIdx> cgpair )
+    {
+        //loop over all pairs of atoms between the two cutgroups
+        const CGIdx cg0 = std::get<0>(cgpair);
+        const CGIdx cg1 = std::get<1>(cgpair);
+        
+        const int nats0 = molinfo.nAtoms(cg0);
+        const int nats1 = molinfo.nAtoms(cg1);
+        
+        //default is that atoms are not bonded, so scale factor is 1,1
+        CGPairs atompairs( CLJScaleFactor(1,1) );
+        
+        for (int i=0; i<nats0; ++i)
+        {
+            const CGAtomIdx cgidx0(cg0, Index(i));
+            const AtomIdx atom0 = molinfo.atomIdx(cgidx0);
+            
+            for (int j=0; j<nats1; ++j)
+            {
+                const CGAtomIdx cgidx1(cg1, Index(j));
+                const AtomIdx atom1 = molinfo.atomIdx(cgidx1);
+                
+                int connection_type = connectivity.connectionType(atom0,atom1);
+                
+                if (connection_type > 0 and connection_type < 4)
+                {
+                    //this is either the same pair, bonded pair or angled pair
+                    atompairs.set(i,j,CLJScaleFactor(0,0));
+                }
+                else if (connection_type == 4)
+                {
+                    //this is a 1-4 pair
+                    atompairs.set(i,j,scale14);
+                }
+            }
+        }
+        
+        //now update the global map for all cg/cg pairs
+        QMutexLocker lkr(&mutex);
+        cgpairs.set(cg0.value(), cg1.value(), atompairs);
+    };
+    
+    bool uses_parallel = true;
+    
+    if (uses_parallel)
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0, connected_cgroups.count()),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                get_pairs( connected_cgroups.at(i) );
+           
+             }
+        });
+    }
+    else
+    {
+        for (int i=0; i<connected_cgroups.count(); ++i)
+        {
+            get_pairs( connected_cgroups.at(i) );
+        }
+    }
+}
 
 /** Copy constructor */
 CLJNBPairs::CLJNBPairs(const CLJNBPairs &other)
@@ -595,6 +702,47 @@ int CLJNBPairs::nExcludedAtoms(const AtomID &atomid) const
     
     //don't count the atom excluded with itself
     return nexcluded - 1;
+}
+
+/** Return the total number of atoms that are excluded from the internal
+    non-bonded calculation. These are atoms that do not interact with any
+    other atoms (e.g. because their nbscl factors to all other atoms in 
+    the molecule are zero) */
+int CLJNBPairs::nExcludedAtoms() const
+{
+    //loop through all atoms and find those that don't interact with any others
+    int nats = info().nAtoms();
+    int nexcl = 0;
+    
+    for (AtomIdx i(0); i<nats; ++i)
+    {
+        if (this->nExcludedAtoms(i) == nats-1)
+        {
+            nexcl += 1;
+        }
+    }
+    
+    return nexcl;
+}
+
+/** Return the IDs of atoms that don't interact with any other atom in 
+    the intramolecular non-bonded calculation (their scale factors to all
+    other atoms is zero) */
+QVector<AtomIdx> CLJNBPairs::excludedAtoms() const
+{
+    //loop through all atoms and find those that don't interact with any others
+    int nats = info().nAtoms();
+    QVector<AtomIdx> excl;
+    
+    for (AtomIdx i(0); i<nats; ++i)
+    {
+        if (this->nExcludedAtoms(i) == nats-1)
+        {
+            excl.append(i);
+        }
+    }
+    
+    return excl;
 }
 
 const char* CoulombScaleFactor::typeName()

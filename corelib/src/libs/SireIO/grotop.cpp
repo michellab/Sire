@@ -62,6 +62,7 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QDir>
+#include <QElapsedTimer>
 
 using namespace SireIO;
 using namespace SireUnits;
@@ -4730,6 +4731,14 @@ GroTop::PropsAndErrors GroTop::getBondProperties(const MoleculeInfo &molinfo,
     //the excluded atom pairs, using fudge_qq and fudge_lj for the 1-4 interactions
     if (generate_pairs)
     {
+        qDebug() << "Generating pairs...";
+    
+        QElapsedTimer t;
+        t.start();
+    
+        CLJNBPairs nbpairs(conn, CLJScaleFactor(fudge_qq,fudge_lj));
+    
+        /*
         //default is that atoms are not bonded (so scale factor is 1)
         CLJNBPairs nbpairs(molinfo, CLJScaleFactor(1.0,1.0));
 
@@ -4751,9 +4760,12 @@ GroTop::PropsAndErrors GroTop::getBondProperties(const MoleculeInfo &molinfo,
                                 CLJScaleFactor(fudge_qq, fudge_lj));
                 }
             }
-        }
+        }*/
 
         props.setProperty("intrascale", nbpairs);
+        
+        qint64 ns = t.nsecsElapsed();
+        qDebug() << "NBPairs took" << (0.000001*ns) << "ms";
     }
     
     return std::make_tuple(props, errors);
@@ -5037,6 +5049,9 @@ System GroTop::startSystem(const PropertyMap &map) const
         return System();
     }
 
+    QElapsedTimer t;
+    t.start();
+
     //first, create template molecules for each of the unique molecule types
     const auto unique_typs = grosys.uniqueTypes();
 
@@ -5105,6 +5120,9 @@ System GroTop::startSystem(const PropertyMap &map) const
                     .arg(errors.join("\n\n")), CODELOC );
     }
 
+    qint64 ns = t.nsecsElapsed();
+    qDebug() << "Creating templates took" << (0.000001*ns) << "ms";
+
     //next, make sure that none of the molecules are empty...
     {
         QStringList errors;
@@ -5127,6 +5145,8 @@ System GroTop::startSystem(const PropertyMap &map) const
                     .arg(errors.join("\n\n")), CODELOC );
     }
 
+    t.restart();
+
     //now that we have the molecules, we just need to duplicate them
     //the correct number of times to create the full system
     MoleculeGroup molgroup("all");
@@ -5136,9 +5156,14 @@ System GroTop::startSystem(const PropertyMap &map) const
         molgroup.add( mol_templates.value(grosys[i]).edit().renumber() );
     }
 
+    ns = t.nsecsElapsed();
+    qDebug() << "Creating molecules took" << (0.000001*ns) << "ms";
+
     System system(grosys.name());
     system.add(molgroup);
     system.setProperty(map["fileformat"].source(), StringProperty(this->formatName()));
+
+    qDebug() << "System has been created :-)";
 
     return system;
 }

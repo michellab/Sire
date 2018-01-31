@@ -149,6 +149,10 @@ public:
     CGIdx cgIdx(const ResIdx &residx) const;
     CGIdx cgIdx(const ResID &resid) const;
 
+    bool isAtomCutting() const;
+    bool isResidueCutting() const;
+    bool isMoleculeCutting() const;
+
     bool isResidueCutting(const ResIdx &residx) const;
     bool isResidueCutting(const ResID &resid) const;
 

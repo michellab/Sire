@@ -207,6 +207,10 @@ public:
     CGIdx cgIdx(const ResIdx &residx) const;
     CGIdx cgIdx(const ResID &resid) const;
 
+    bool isAtomCutting() const;
+    bool isResidueCutting() const;
+    bool isMoleculeCutting() const;
+
     bool isResidueCutting(const ResIdx &residx) const;
     bool isResidueCutting(const ResID &resid) const;
 
@@ -409,6 +413,10 @@ private:
 
     /** Hash mapping CutGroup name to CutGroup indicies */
     QMultiHash<QString,CGIdx> cg_by_name;
+    
+    /** The cutting scheme for the molecule. This is either
+        0 = unknown, 1 = atom, 2 = residue or 3 = molecule */
+    qint32 cutting_scheme;
 };
 
 } //end of namespace SireMol 

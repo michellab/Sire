@@ -373,6 +373,32 @@ CGIdx MoleculeInfo::cgIdx(const ResID &resid) const
     return d->cgIdx(resid);
 }
 
+/** Return whether or not atom-based cutting is used for the entire
+    molecule (meaning that there is exactly one cutgroup per atom). This
+    is highly unusual, except for single-atom molecules */
+bool MoleculeInfo::isAtomCutting() const
+{
+    return d->isAtomCutting();
+}
+
+/** Return whether or not residue-based cutting is used for the entire 
+    molecule (meaning that there is exactly one cutgroup per residue, and 
+    atoms in a cutgroup are in the same order as atoms in the residue). This
+    is the default. Note that a single atom molecule is simultaneously
+    atom cutting, residue cutting and molecule cutting. */
+bool MoleculeInfo::isResidueCutting() const
+{
+    return d->isResidueCutting();
+}
+
+/** Return whether or not molecule-based cutting is used for the entire
+    molecule (meaning that there is exactly one cutgroup for the whole molecule). This
+    is unusual, except for single-residue molecules */
+bool MoleculeInfo::isMoleculeCutting() const
+{
+    return d->isMoleculeCutting();
+}
+
 /** Return whether or not residue-based cutting is used for the specifed
     residue */
 bool MoleculeInfo::isResidueCutting(const ResIdx &residx) const
