@@ -854,6 +854,39 @@ void register_MoleculeInfo_class(){
                 , "Return whether or not the specified chain contains the specified residue" );
         
         }
+        { //::SireMol::MoleculeInfo::isAtomCutting
+        
+            typedef bool ( ::SireMol::MoleculeInfo::*isAtomCutting_function_type)(  ) const;
+            isAtomCutting_function_type isAtomCutting_function_value( &::SireMol::MoleculeInfo::isAtomCutting );
+            
+            MoleculeInfo_exposer.def( 
+                "isAtomCutting"
+                , isAtomCutting_function_value
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::isMoleculeCutting
+        
+            typedef bool ( ::SireMol::MoleculeInfo::*isMoleculeCutting_function_type)(  ) const;
+            isMoleculeCutting_function_type isMoleculeCutting_function_value( &::SireMol::MoleculeInfo::isMoleculeCutting );
+            
+            MoleculeInfo_exposer.def( 
+                "isMoleculeCutting"
+                , isMoleculeCutting_function_value
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeInfo::isResidueCutting
+        
+            typedef bool ( ::SireMol::MoleculeInfo::*isResidueCutting_function_type)(  ) const;
+            isResidueCutting_function_type isResidueCutting_function_value( &::SireMol::MoleculeInfo::isResidueCutting );
+            
+            MoleculeInfo_exposer.def( 
+                "isResidueCutting"
+                , isResidueCutting_function_value
+                , "" );
+        
+        }
         { //::SireMol::MoleculeInfo::isResidueCutting
         
             typedef bool ( ::SireMol::MoleculeInfo::*isResidueCutting_function_type)( ::SireMol::ResIdx const & ) const;

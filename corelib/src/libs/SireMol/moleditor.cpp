@@ -157,6 +157,40 @@ MolEditor& MolEditor::renumber(MolNum newnum)
     return *this;
 }
 
+/** Renumber the atoms in the molecule according to the passed map */
+MolEditor& MolEditor::renumber(const QHash<AtomNum,AtomNum> &atomnums)
+{
+    if (atomnums.isEmpty())
+        return *this;
+    
+    d->renumber(atomnums);
+    
+    return *this;
+}
+
+/** Renumber the residues in the molecule according to the passed map */
+MolEditor& MolEditor::renumber(const QHash<ResNum,ResNum> &resnums)
+{
+    if (resnums.isEmpty())
+        return *this;
+    
+    d->renumber(resnums);
+    
+    return *this;
+}
+
+/** Renumber the atoms and residues in the molecule according to the passed maps */
+MolEditor& MolEditor::renumber(const QHash<AtomNum,AtomNum> &atomnums,
+                               const QHash<ResNum,ResNum> &resnums)
+{
+    if (atomnums.isEmpty() and resnums.isEmpty())
+        return *this;
+    
+    d->renumber(atomnums,resnums);
+    
+    return *this;
+}
+
 /** Add an atom called 'name' and return an editor that can
     be used to edit it */
 AtomStructureEditor MolEditor::add(const AtomName &name) const

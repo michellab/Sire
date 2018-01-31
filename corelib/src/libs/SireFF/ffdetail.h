@@ -86,6 +86,9 @@ public:
 
     bool isNull() const;
 
+    virtual bool isCompatibleWith(const FFDetail &other) const=0;
+    void assertCompatibleWith(const FFDetail &other) const;
+
     static SireBase::PropertyPtr get(QString forcefield);
     static QStringList forcefields();
 

@@ -122,6 +122,18 @@ void register_MMDetail_class(){
                 , "" );
         
         }
+        { //::SireMM::MMDetail::isCompatibleWith
+        
+            typedef bool ( ::SireMM::MMDetail::*isCompatibleWith_function_type)( ::SireFF::FFDetail const & ) const;
+            isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMM::MMDetail::isCompatibleWith );
+            
+            MMDetail_exposer.def( 
+                "isCompatibleWith"
+                , isCompatibleWith_function_value
+                , ( bp::arg("other") )
+                , "" );
+        
+        }
         MMDetail_exposer.def( bp::self != bp::self );
         { //::SireMM::MMDetail::operator=
         
@@ -168,6 +180,17 @@ void register_MMDetail_class(){
                 "usesArithmeticCombiningRules"
                 , usesArithmeticCombiningRules_function_value
                 , "Return whether or not this forcefield uses arithmetic combining rules" );
+        
+        }
+        { //::SireMM::MMDetail::usesBuckinghamTerm
+        
+            typedef bool ( ::SireMM::MMDetail::*usesBuckinghamTerm_function_type)(  ) const;
+            usesBuckinghamTerm_function_type usesBuckinghamTerm_function_value( &::SireMM::MMDetail::usesBuckinghamTerm );
+            
+            MMDetail_exposer.def( 
+                "usesBuckinghamTerm"
+                , usesBuckinghamTerm_function_value
+                , "" );
         
         }
         { //::SireMM::MMDetail::usesCosineDihedrals

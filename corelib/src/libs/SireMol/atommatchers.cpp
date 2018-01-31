@@ -158,6 +158,7 @@ QHash<AtomIdx,AtomIdx> AtomIdxMatcher::pvt_match(const MoleculeView &mol0,
     
     return map;
 }
+
 /** Match the atoms in 'mol1' to the atoms in 'mol0' - this
     returns the AtomIdxs of the atoms in 'mol1' that are in
     'mol0', indexed by the AtomIdx of the atom in 'mol0'.
@@ -179,6 +180,13 @@ QHash<AtomIdx,AtomIdx> AtomIdxMatcher::pvt_match(const MoleculeInfoData &mol0,
     }
     
     return map;
+}
+
+/** The AtomIdx matcher does not change the order of the atoms */
+bool AtomIdxMatcher::pvt_changesOrder(const MoleculeInfoData &molinfo0,
+                                      const MoleculeInfoData &molinfo1) const
+{
+    return false;
 }
 
 const char* AtomIdxMatcher::typeName()

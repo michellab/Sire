@@ -206,3 +206,12 @@ const Property& FFDetail::property(const QString &key) const
     
     return props.property(key);
 }
+
+/** Assert that this forcefield is compatible with 'other' */
+void FFDetail::assertCompatibleWith(const FFDetail &other) const
+{
+    if (not this->isCompatibleWith(other))
+        throw SireError::incompatible_error( QObject::tr(
+            "The two forcefields are not compatible with one another.\n%1\nversus\n%2.")
+                .arg(this->toString()).arg(other.toString()), CODELOC );
+}

@@ -153,6 +153,30 @@ void register_ConnectivityBase_class(){
                 , "Return whether the residues identified by res0 and res1 are connected" );
         
         }
+        { //::SireMol::ConnectivityBase::areConnected
+        
+            typedef bool ( ::SireMol::ConnectivityBase::*areConnected_function_type)( ::SireMol::CGIdx,::SireMol::CGIdx ) const;
+            areConnected_function_type areConnected_function_value( &::SireMol::ConnectivityBase::areConnected );
+            
+            ConnectivityBase_exposer.def( 
+                "areConnected"
+                , areConnected_function_value
+                , ( bp::arg("cg0"), bp::arg("cg1") )
+                , "Return whether or not the residues at indicies res0 and res1\nare connected\nThrow: SireError::invalid_index\n" );
+        
+        }
+        { //::SireMol::ConnectivityBase::areConnected
+        
+            typedef bool ( ::SireMol::ConnectivityBase::*areConnected_function_type)( ::SireMol::CGID const &,::SireMol::CGID const & ) const;
+            areConnected_function_type areConnected_function_value( &::SireMol::ConnectivityBase::areConnected );
+            
+            ConnectivityBase_exposer.def( 
+                "areConnected"
+                , areConnected_function_value
+                , ( bp::arg("cg0"), bp::arg("cg1") )
+                , "Return whether the residues identified by res0 and res1 are connected" );
+        
+        }
         { //::SireMol::ConnectivityBase::areDihedraled
         
             typedef bool ( ::SireMol::ConnectivityBase::*areDihedraled_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
@@ -175,6 +199,30 @@ void register_ConnectivityBase_class(){
                 , areDihedraled_function_value
                 , ( bp::arg("atom0"), bp::arg("atom3") )
                 , "Return whether or not the two atoms are bonded together" );
+        
+        }
+        { //::SireMol::ConnectivityBase::connectionType
+        
+            typedef int ( ::SireMol::ConnectivityBase::*connectionType_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            connectionType_function_type connectionType_function_value( &::SireMol::ConnectivityBase::connectionType );
+            
+            ConnectivityBase_exposer.def( 
+                "connectionType"
+                , connectionType_function_value
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "" );
+        
+        }
+        { //::SireMol::ConnectivityBase::connectionType
+        
+            typedef int ( ::SireMol::ConnectivityBase::*connectionType_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            connectionType_function_type connectionType_function_value( &::SireMol::ConnectivityBase::connectionType );
+            
+            ConnectivityBase_exposer.def( 
+                "connectionType"
+                , connectionType_function_value
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "" );
         
         }
         { //::SireMol::ConnectivityBase::connectionsTo
@@ -512,6 +560,17 @@ void register_ConnectivityBase_class(){
                 , inRing_function_value
                 , ( bp::arg("dihedral") )
                 , "This function returns whether or not the four atoms in the passed dihedral\nare all part of the same ring" );
+        
+        }
+        { //::SireMol::ConnectivityBase::info
+        
+            typedef ::SireMol::MoleculeInfo ( ::SireMol::ConnectivityBase::*info_function_type)(  ) const;
+            info_function_type info_function_value( &::SireMol::ConnectivityBase::info );
+            
+            ConnectivityBase_exposer.def( 
+                "info"
+                , info_function_value
+                , "" );
         
         }
         { //::SireMol::ConnectivityBase::isCompatibleWith

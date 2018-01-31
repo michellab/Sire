@@ -167,6 +167,7 @@ friend QDataStream& ::operator>>(QDataStream&, GroMolType&);
 
 public:
     GroMolType();
+    GroMolType(const SireMol::Molecule &mol, const PropertyMap &map=PropertyMap());
 
     GroMolType(const GroMolType &other);
 
@@ -406,6 +407,8 @@ public:
 
     GroSystem groSystem() const;
 
+    QStringList postprocessedLines() const;
+
     QStringList warnings() const;
 
 protected:
@@ -451,7 +454,7 @@ private:
                                       const GroMolType &moltype) const;
     PropsAndErrors getDihedralProperties(const SireMol::MoleculeInfo &molinfo,
                                          const GroMolType &moltype) const;
-    
+        
     /** This is the full search path of all directories that should
         be searched for Gromacs include files */
     QStringList include_path;

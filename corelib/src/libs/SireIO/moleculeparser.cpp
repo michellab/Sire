@@ -35,6 +35,11 @@
 #include "SireBase/booleanproperty.h"
 #include "SireBase/stringproperty.h"
 
+#include "SireFF/ffdetail.h"
+#include "SireMM/mmdetail.h"
+
+#include "SireMol/molecule.h"
+
 #include "SireSystem/system.h"
 
 #include "SireError/errors.h"
@@ -51,6 +56,7 @@
 
 using namespace SireIO;
 using namespace SireSystem;
+using namespace SireFF;
 using namespace SireBase;
 using namespace SireStream;
 
@@ -606,6 +612,79 @@ bool MoleculeParser::isLead() const
 bool MoleculeParser::canFollow() const
 {
     return true;
+}
+
+/** Extract and return a FFDetail forcefield that is compatible with all of the 
+    molecules in this system, using the passed property map to find the property.
+    Note that this will raise an incompatible_error exception if there is no
+    forcefield that adequately covers all of the molecules */
+PropertyPtr MoleculeParser::getForceField(const System &system, const PropertyMap &map) const
+{
+    const auto ffprop = map["forcefield"];
+    
+    //make sure that the user is not telling us a specific forcefield to use
+    if (ffprop.hasValue())
+    {
+        if (not ffprop.value().isA<FFDetail>())
+            throw SireError::incompatible_error( QObject::tr(
+                "Cannot convert the passed mapped value '%1' to an object of type FFDetail. "
+                "If you want to specify the focefield it must be an object derived from FFDetail.")
+                    .arg(ffprop.value().toString()), CODELOC );
+        
+        return ffprop.value();
+    }
+
+    const auto molnums = system.molNums().toVector();
+
+    if (molnums.isEmpty())
+        return SireMM::MMDetail();
+
+    PropertyPtr ffield;
+    QStringList errors;
+
+    for (int i=0; i<molnums.count(); ++i)
+    {
+        const auto mol = system[ molnums[i] ].molecule();
+        PropertyPtr molff;
+        
+        if (mol.hasProperty(ffprop))
+        {
+            const auto &p = mol.property(ffprop);
+            
+            if (p.isA<FFDetail>())
+                molff = p;
+        }
+        
+        if (molff.isNull())
+        {
+            errors.append( QObject::tr("Molecule '%1' does not have a valid 'forcefield' "
+               "property. Please make sure that it has a property called '%2' that is "
+               "derived from FFDetail")
+                    .arg(mol.toString()).arg(ffprop.source()) );
+        }
+        else if (ffield.isNull())
+        {
+            //this is the first valid forcefield
+            ffield = molff;
+        }
+        else if (not ffield.read().asA<FFDetail>()
+                           .isCompatibleWith(molff.read().asA<FFDetail>()))
+        {
+            //incompatible forcefields!
+            errors.append( QObject::tr("The forcefield for molecule '%1' is not compatible "
+              "with that for other molecules.\n%2\nversus\n%3.")
+                    .arg(mol.toString()).arg(molff.read().toString())
+                    .arg(ffield.read().toString()) );
+        }
+    }
+    
+    if (not errors.isEmpty())
+        throw SireError::incompatible_error( QObject::tr("There were some problems "
+          "extracting a valid forcefield object from all of the molecules.\n\n%1")
+            .arg(errors.join("\n")), CODELOC );
+
+    //we should have a valid FFDetail now...
+    return ffield.read().asA<FFDetail>();
 }
 
 /** Write the parsed data back to the file called 'filename'. This will

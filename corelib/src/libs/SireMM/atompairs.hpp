@@ -218,7 +218,6 @@ protected:
     SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
                                                   const AtomMatcher &atommatcher) const;
 
-private:
     /** Info about the molecule that contains these atom pairs */
     SireBase::SharedDataPointer<MoleculeInfoData> molinfo;
 

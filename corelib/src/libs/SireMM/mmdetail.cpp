@@ -319,6 +319,12 @@ bool MMDetail::usesLJTerm() const
     return vdwStyle() == "lj";
 }
 
+/** Return whether or not this forcefield uses the Buckingham vdw model */
+bool MMDetail::usesBuckinghamTerm() const
+{
+    return vdwStyle() == "buckingham";
+}
+
 /** Return the bond model used by this forcefield */
 QString MMDetail::bondStyle() const
 {
@@ -367,6 +373,29 @@ bool MMDetail::isAmberStyle() const
            usesHarmonicBonds() and
            usesHarmonicAngles() and
            usesCosineDihedrals();
+}
+
+/** Return whether or not this forcefield is compatible with 'other' */
+bool MMDetail::isCompatibleWith(const FFDetail &other) const
+{
+    if (not other.isA<MMDetail>())
+        return false;
+    
+    const auto &mm = other.asA<MMDetail>();
+    
+    if (this->operator==(mm))
+        return true;
+    
+    //to be compatible they need to use the same combining rules, elecstyle,
+    //vdwstyle
+    if (this->combiningRules() != mm.combiningRules() or
+        this->electrostaticStyle() != mm.electrostaticStyle() or
+        this->vdwStyle() != mm.vdwStyle())
+    {
+        return false;
+    }
+    
+    return true;
 }
 
 /** Function used to guess the forcefield from the passed set of conditions.

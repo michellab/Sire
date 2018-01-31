@@ -33,6 +33,7 @@
 #include "structureeditor.h"
 #include "moleculeview.h"
 #include "atomselection.h"
+#include "atommatchers.h"
 #include "moleditor.h"
 
 #include "SireBase/incremint.h"
@@ -564,6 +565,31 @@ const Property& MoleculeData::metadata(const PropertyName &key,
     return props.metadata(key, metakey, default_value);
 }
 
+/** Update all of the properties of this molecule with the new molecule info object.
+    This uses the passed matcher to match up atoms from the old molinfo to the new */
+void MoleculeData::updatePropertyMolInfo(const AtomMatcher &matcher)
+{
+    Properties newprops = props;
+    
+    for (auto it = props.constBegin(); it != props.constEnd(); ++it)
+    {
+        if (it.value().read().isA<MolViewProperty>())
+        {
+            newprops.setProperty(it.key(), it.value().read().asA<MolViewProperty>()
+                                            .makeCompatibleWith(molinfo.read(),matcher));
+        }
+    }
+    
+    props = newprops;
+}
+
+/** Update all of the properties of this molecule with the new molecule info object.
+    This assumes that the update hasn't changed the order of the atoms in the molecule */
+void MoleculeData::updatePropertyMolInfo()
+{
+    this->updatePropertyMolInfo( AtomIdxMatcher() );
+}
+
 /** Rename this molecule to 'newname'. This changes the info().UID()
     number, and the version number, but doesn't change this->number() */
 void MoleculeData::rename(const MolName &newname)
@@ -571,6 +597,7 @@ void MoleculeData::rename(const MolName &newname)
     if (newname != molname)
     {
         molname = newname;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -586,6 +613,7 @@ void MoleculeData::rename(AtomIdx atomidx, const AtomName &newname)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -607,6 +635,7 @@ void MoleculeData::rename(const AtomID &atomid, const AtomName &newname)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -622,6 +651,7 @@ void MoleculeData::rename(CGIdx cgidx, const CGName &newname)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -643,6 +673,7 @@ void MoleculeData::rename(const CGID &cgid, const CGName &newname)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -658,6 +689,7 @@ void MoleculeData::rename(ResIdx residx, const ResName &newname)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -678,8 +710,9 @@ void MoleculeData::rename(const ResID &resid, const ResName &newname)
     
     if (newinfo.UID() != molinfo.constData()->UID())
     {
-        molinfo = newinfo;
-        vrsn = vrsns->increment();
+       molinfo = newinfo;
+       updatePropertyMolInfo();
+       vrsn = vrsns->increment();
     }
 }
 
@@ -694,6 +727,7 @@ void MoleculeData::rename(ChainIdx chainidx, const ChainName &newname)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -715,6 +749,7 @@ void MoleculeData::rename(const ChainID &chainid, const ChainName &newname)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -730,6 +765,7 @@ void MoleculeData::rename(SegIdx segidx, const SegName &newname)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -751,6 +787,7 @@ void MoleculeData::rename(const SegID &segid, const SegName &newname)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -766,6 +803,7 @@ void MoleculeData::renumber(AtomIdx atomidx, AtomNum newnum)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -787,6 +825,7 @@ void MoleculeData::renumber(const AtomID &atomid, AtomNum newnum)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -802,6 +841,7 @@ void MoleculeData::renumber(ResIdx residx, ResNum newnum)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }
@@ -823,6 +863,47 @@ void MoleculeData::renumber(const ResID &resid, ResNum newnum)
     if (newinfo.UID() != molinfo.constData()->UID())
     {
         molinfo = newinfo;
+        updatePropertyMolInfo();
+        vrsn = vrsns->increment();
+    }
+}
+
+/** Renumber all of the atoms in map */
+void MoleculeData::renumber(const QHash<AtomNum,AtomNum> &atomnums)
+{
+    MoleculeInfoData newinfo = molinfo->renumber(atomnums);
+    
+    if (newinfo.UID() != molinfo.constData()->UID())
+    {
+        molinfo = newinfo;
+        updatePropertyMolInfo();
+        vrsn = vrsns->increment();
+    }
+}
+
+/** Renumber all of the residues in map */
+void MoleculeData::renumber(const QHash<ResNum,ResNum> &resnums)
+{
+    MoleculeInfoData newinfo = molinfo->renumber(resnums);
+    
+    if (newinfo.UID() != molinfo.constData()->UID())
+    {
+        molinfo = newinfo;
+        updatePropertyMolInfo();
+        vrsn = vrsns->increment();
+    }
+}
+
+/** Renumber all of the atoms and residues in the passed maps */
+void MoleculeData::renumber(const QHash<AtomNum,AtomNum> &atomnums,
+                            const QHash<ResNum,ResNum> &resnums)
+{
+    MoleculeInfoData newinfo = molinfo->renumber(atomnums,resnums);
+    
+    if (newinfo.UID() != molinfo.constData()->UID())
+    {
+        molinfo = newinfo;
+        updatePropertyMolInfo();
         vrsn = vrsns->increment();
     }
 }

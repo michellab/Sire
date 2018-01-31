@@ -109,6 +109,11 @@ public:
     MolEditor& renumber();
     MolEditor& renumber(MolNum newnum);
     
+    MolEditor& renumber(const QHash<AtomNum,AtomNum> &atomnums);
+    MolEditor& renumber(const QHash<ResNum,ResNum> &resnums);
+    MolEditor& renumber(const QHash<AtomNum,AtomNum> &atomnums,
+                        const QHash<ResNum,ResNum> &resnums);
+    
     AtomStructureEditor add(const AtomName &atom) const;
     AtomStructureEditor add(const AtomNum &atom) const;
     

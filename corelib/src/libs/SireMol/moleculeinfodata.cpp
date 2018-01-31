@@ -415,6 +415,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 void MoleculeInfoData::rebuildNameAndNumberIndexes()
 {
     //now rebuild the other indexes
+    cutting_scheme = 0;
     atoms_by_name.clear();
     atoms_by_num.clear();
     
@@ -460,6 +461,8 @@ void MoleculeInfoData::rebuildNameAndNumberIndexes()
     res_by_num.clear();
     
     int nres = res_by_index.count();
+    
+    int nsame_cgroup = 0;
     
     if (nres > 0)
     {
@@ -518,9 +521,33 @@ void MoleculeInfoData::rebuildNameAndNumberIndexes()
                 {
                     //yes - this is a single-residue/single-cutgroup
                     resinfo.cgidx = res_cgroup;
+                    nsame_cgroup += 1;
                 }
             }
         }
+    }
+ 
+    if (nats == 1 or ncg == nats)
+    {
+        //this is atom-based cutting
+        cutting_scheme = 1;
+    }
+    else if (nsame_cgroup == nres)
+    {
+        //this is residue-based cutting
+        cutting_scheme = 2;
+    }
+    else if (ncg == 1)
+    {
+        //this is molecule-based cutting
+        cutting_scheme = 3;
+    }
+    else
+    {
+        //weird cutting?
+        qDebug() << "Cannot auto-detect the cutting scheme?"
+                 << "natoms == " << nats << "nresidues == " << nres
+                 << "nsame_cgroup == " << nsame_cgroup << "ncutgroups == " << ncg;
     }
  
     //create the indexes for the chain names, and within the chains for the atoms
@@ -843,7 +870,8 @@ MoleculeInfoData::MoleculeInfoData(const MoleculeInfoData &other)
                    seg_by_index(other.seg_by_index),
                    seg_by_name(other.seg_by_name),
                    cg_by_index(other.cg_by_index),
-                   cg_by_name(other.cg_by_name)
+                   cg_by_name(other.cg_by_name),
+                   cutting_scheme(other.cutting_scheme)
 {}
   
 /** Destructor */  
@@ -868,6 +896,7 @@ MoleculeInfoData& MoleculeInfoData::operator=(const MoleculeInfoData &other)
         seg_by_name = other.seg_by_name;
         cg_by_index = other.cg_by_index;
         cg_by_name = other.cg_by_name;
+        cutting_scheme = other.cutting_scheme;
     }
     
     return *this;
@@ -1245,6 +1274,82 @@ MoleculeInfoData MoleculeInfoData::renumber(AtomIdx atomidx,
     return newinfo;
 }
 
+/** Renumber all of the atoms and residues in the passed maps */
+MoleculeInfoData MoleculeInfoData::renumber(const QHash<AtomNum,AtomNum> &atomnums,
+                                            const QHash<ResNum,ResNum> &resnums) const
+{
+    if (atomnums.isEmpty() and resnums.isEmpty())
+        return *this;
+
+    //make the change in a copy of this object
+    MoleculeInfoData newinfo(*this);
+
+    //go through and get the index of all atoms and residues that must be renamed,
+    //removing the original numbers
+    QHash<AtomIdx,AtomNum> changed_atoms;   changed_atoms.reserve(atomnums.count());
+    QHash<ResIdx,ResNum> changed_res;       changed_res.reserve(resnums.count());
+    
+    //remove the old atom numbers (and update the AtomInfo objects)
+    for (auto it = atomnums.constBegin(); it != atomnums.constEnd(); ++it)
+    {
+        if (it.key() != it.value())
+        {
+            auto idx = this->atomIdx(it.key());
+            
+            AtomInfo &atom = newinfo.atoms_by_index[idx];
+            newinfo.atoms_by_num.remove(atom.number, idx);
+            atom.number = it.value();
+
+            if (not it.value().isNull())
+                changed_atoms.insert(idx, it.value());
+        }
+    }
+    
+    //update the new numbers
+    for (auto it = changed_atoms.constBegin(); it != changed_atoms.constEnd(); ++it)
+    {
+        newinfo.atoms_by_num.insert(it.value(), it.key());
+    }
+    
+    //remove the old residue numbers (and update the ResInfo objects)
+    for (auto it = resnums.constBegin(); it != resnums.constEnd(); ++it)
+    {
+        if (it.key() != it.value())
+        {
+            auto idx = this->resIdx(it.key());
+            
+            ResInfo &res = newinfo.res_by_index[idx];
+            newinfo.res_by_num.remove(res.number, idx);
+            res.number = it.value();
+
+            if (not it.value().isNull())
+                changed_res.insert(idx, it.value());
+        }
+    }
+    
+    //update the new numbers
+    for (auto it = changed_res.constBegin(); it != changed_res.constEnd(); ++it)
+    {
+        newinfo.res_by_num.insert(it.value(), it.key());
+    }
+    
+    newinfo.uid = QUuid::createUuid();
+    
+    return newinfo;
+}
+
+/** Renumber all of the atoms in map */
+MoleculeInfoData MoleculeInfoData::renumber(const QHash<AtomNum,AtomNum> &atomnums) const
+{
+    return this->renumber(atomnums, QHash<ResNum,ResNum>());
+}
+
+/** Renumber all of the residues in map */
+MoleculeInfoData MoleculeInfoData::renumber(const QHash<ResNum,ResNum> &resnums) const
+{
+    return this->renumber(QHash<AtomNum,AtomNum>(), resnums);
+}
+
 /** Rename the residue at index 'residx' with the name 'newname'. 
 
     \throw SireError::invalid_index
@@ -1593,6 +1698,33 @@ CGIdx MoleculeInfoData::cgIdx(const ResID &resid) const
     this->assertSingleResidue(residxs);
     
     return this->cgIdx(residxs.first());
+}
+
+/** Return whether or not atom-based cutting is used for the entire
+    molecule (meaning that there is exactly one cutgroup per atom). This
+    is highly unusual, except for single-atom molecules */
+bool MoleculeInfoData::isAtomCutting() const
+{
+    return cutting_scheme == 1 or this->nAtoms() == 1;
+}
+
+/** Return whether or not residue-based cutting is used for the entire 
+    molecule (meaning that there is exactly one cutgroup per residue, and 
+    atoms in a cutgroup are in the same order as atoms in the residue). This
+    is the default. Note that a single atom molecule is simultaneously
+    atom cutting, residue cutting and molecule cutting. */
+bool MoleculeInfoData::isResidueCutting() const
+{
+    return cutting_scheme == 2 or (cutting_scheme > 1 and this->nResidues() == 1);
+}
+
+/** Return whether or not molecule-based cutting is used for the entire
+    molecule (meaning that there is exactly one cutgroup for the whole molecule). This
+    is unusual, except for single-residue molecules */
+bool MoleculeInfoData::isMoleculeCutting() const
+{
+    return cutting_scheme == 3 or (cutting_scheme > 1 and this->nResidues() == 1) or
+                                  (cutting_scheme == 1 and this->nAtoms() == 1);
 }
 
 /** Return whether or not residue-based cutting is used for the specifed
