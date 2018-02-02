@@ -82,6 +82,8 @@ namespace detail
 
         QStringList suffixes() const;
 
+        QString toString() const;
+
         MoleculeParserPtr construct(const QString &filename,
                                     const PropertyMap &map) const;
 

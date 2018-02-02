@@ -176,6 +176,11 @@ namespace detail
         }
     }
 
+    QString ParserFactoryHelper::toString() const
+    {
+        return QString("Parser( %1 : %2 )").arg(formatName()).arg(formatDescription());
+    }
+
     /** Return all of the suffixes recognised by this parser, in their order
         of preference */
     QStringList ParserFactoryHelper::suffixes() const
@@ -289,6 +294,7 @@ namespace detail
 
             if (not missing.isEmpty())
             {
+                lkr.unlock();
                 throw SireError::io_error( QObject::tr(
                         "Cannot find parsers that support the following formats: %1.\n"
                         "Supported parsers are:\n%2")

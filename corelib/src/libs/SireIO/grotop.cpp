@@ -2495,24 +2495,62 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     if (dih_potentials.contains(key))
         return key;
     
-    static const QString wild = "*";
-    
+    static const QString wild = "X";
+ 
+    //look for *-atm1-atm2-atm3
+    key = get_dihedral_id(wild, atm1, atm2, atm3);
+
+    if (dih_potentials.contains(key))
+    {
+        return key;
+    }
+
+    //look for *-atm2-atm1-atm0
+    key = get_dihedral_id(wild, atm2, atm1, atm0);
+
+    if (dih_potentials.contains(key))
+    {
+        return key;
+    }
+
     //this failed. Look for *-atm1-atm2-* or *-atm2-atm1-*
     key = get_dihedral_id(wild, atm1, atm2, wild);
     
     if (dih_potentials.contains(key))
+    {
         return key;
+    }
     
     key = get_dihedral_id(wild, atm2, atm1, wild);
     
     if (dih_potentials.contains(key))
+    {
         return key;
+    }
+    
+    //look for *-*-atm2-atm3
+    key = get_dihedral_id(wild, wild, atm2, atm3);
+
+    if (dih_potentials.contains(key))
+    {
+        return key;
+    }
+
+    //look for *-*-atm1-atm0
+    key = get_dihedral_id(wild, wild, atm1, atm0);
+
+    if (dih_potentials.contains(key))
+    {
+        return key;
+    }
     
     //finally look for *-*-*-*
     key = get_dihedral_id(wild, wild, wild, wild);
     
     if (dih_potentials.contains(key))
+    {
         return key;
+    }
     
     return QString();
 }
@@ -2750,7 +2788,7 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
     new_lines.reserve(lines.count());
 
     //regexps used to parse the files...
-    QRegularExpression include_regexp("#include\\s+['\"]([\\w\\d/\\.]+)['\"]\\s*");
+    QRegularExpression include_regexp("\\#include\\s*(<([^\"<>|\\b]+)>|\"([^\"<>|\\b]+)\")");
 
     //loop through all of the lines...
     QVectorIterator<QString> lines_it(lines);
@@ -2915,7 +2953,7 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
             }
 
             //we have to include a file
-            auto filename = m.captured(1);
+            auto filename = m.captured( m.lastCapturedIndex() );
 
             //now find the absolute path to the file...
             auto absfile = findIncludeFile(filename, current_directory);
@@ -3235,8 +3273,8 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
         return warnings;
     };
 
-    //wildcard atomtype
-    static const QString wildcard_atomtype = "*";
+    //wildcard atomtype (this is 'X' in gromacs files)
+    static const QString wildcard_atomtype = "X";
 
     //internal function to process the atomtypes lines
     auto processAtomTypes = [&]()
@@ -3576,10 +3614,10 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     continue;
                 }
 
-                auto atm0 = words[0];
-                auto atm1 = words[1];
-                auto atm2 = words[2];
-                auto atm3 = words[3];
+                atm0 = words[0];
+                atm1 = words[1];
+                atm2 = words[2];
+                atm3 = words[3];
 
                 bool ok;
                 int func_type = words[4].toInt(&ok);
