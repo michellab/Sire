@@ -96,6 +96,13 @@ public:
                     PARTICLE_TYPE particle_type,
                     const LJParameter &ljparam,
                     const SireMol::Element &element = SireMol::Element(0));
+
+    GromacsAtomType(QString atom_type, QString bond_type,
+                    SireUnits::Dimension::MolarMass mass,
+                    SireUnits::Dimension::Charge charge,
+                    PARTICLE_TYPE particle_type,
+                    const LJParameter &ljparam,
+                    const SireMol::Element &element = SireMol::Element(0));
     
     GromacsAtomType(const GromacsAtomType &other);
     
@@ -116,6 +123,7 @@ public:
     QString toString() const;
     
     QString atomType() const;
+    QString bondType() const;
     SireUnits::Dimension::MolarMass mass() const;
     SireUnits::Dimension::Charge charge() const;
     SireMM::LJParameter ljParameter() const;
@@ -133,6 +141,7 @@ private:
     void assertSane() const;
 
     QString _typ;
+    QString _btyp;
     SireUnits::Dimension::MolarMass _mass;
     SireUnits::Dimension::Charge _chg;
     SireMM::LJParameter _lj;
@@ -392,6 +401,13 @@ private:
 inline QString GromacsAtomType::atomType() const
 {
     return _typ;
+}
+
+/** Return the bond type name - this is normally the same as the atom type,
+    but is different for some forcefields, like OPLS */
+inline QString GromacsAtomType::bondType() const
+{
+    return _btyp;
 }
 
 /** Return the atom mass */

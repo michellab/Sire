@@ -58,11 +58,11 @@ static const RegisterMetaType<GromacsAtomType> r_atomtype(NO_ROOT);
 
 QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const GromacsAtomType &typ)
 {
-    writeHeader(ds, r_atomtype, 1);
+    writeHeader(ds, r_atomtype, 2);
     
     SharedDataStream sds(ds);
     
-    sds << typ._typ << typ._mass.to(g_per_mol)
+    sds << typ._typ << typ._btyp << typ._mass.to(g_per_mol)
         << typ._chg.to(mod_electron) << typ.particleTypeString()
         << typ._lj << typ._elem;
     
@@ -73,7 +73,21 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, GromacsAtomType &typ)
 {
     VersionID v = readHeader(ds, r_atomtype);
     
-    if (v == 1)
+    if (v == 2)
+    {
+        SharedDataStream sds(ds);
+        
+        double chg, mass;
+        QString ptyp;
+        
+        sds >> typ._typ >> typ._btyp >> mass >> chg >> ptyp >> typ._lj >> typ._elem;
+        
+        typ._btyp = typ._typ;
+        typ._mass = mass * g_per_mol;
+        typ._chg = chg * mod_electron;
+        typ._ptyp = GromacsAtomType::toParticleType(ptyp);
+    }
+    else if (v == 1)
     {
         SharedDataStream sds(ds);
         
@@ -82,12 +96,13 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, GromacsAtomType &typ)
         
         sds >> typ._typ >> mass >> chg >> ptyp >> typ._lj >> typ._elem;
         
+        typ._btyp = typ._typ;
         typ._mass = mass * g_per_mol;
         typ._chg = chg * mod_electron;
         typ._ptyp = GromacsAtomType::toParticleType(ptyp);
     }
     else
-        throw version_error(v, "1", r_atomtype, CODELOC);
+        throw version_error(v, "1,2", r_atomtype, CODELOC);
     
     return ds;
 }
@@ -98,7 +113,7 @@ void GromacsAtomType::assertSane() const
 
 /** Null constructor */
 GromacsAtomType::GromacsAtomType()
-                : _typ(), _mass(0), _chg(0),
+                : _typ(), _btyp(), _mass(0), _chg(0),
                   _ptyp(GromacsAtomType::UNKNOWN_TYPE),
                   _elem(0)
 {}
@@ -110,7 +125,20 @@ GromacsAtomType::GromacsAtomType(QString atom_type,
                                  PARTICLE_TYPE particle_type,
                                  const LJParameter &ljparam,
                                  const Element &element)
-                : _typ(atom_type), _mass(mass), _chg(charge),
+                : _typ(atom_type), _btyp(atom_type), _mass(mass), _chg(charge),
+                  _lj(ljparam), _ptyp(particle_type), _elem(element)
+{
+    assertSane();
+}
+
+/** Construct passing in all parameters */
+GromacsAtomType::GromacsAtomType(QString atom_type, QString bond_type,
+                                 SireUnits::Dimension::MolarMass mass,
+                                 SireUnits::Dimension::Charge charge,
+                                 PARTICLE_TYPE particle_type,
+                                 const LJParameter &ljparam,
+                                 const Element &element)
+                : _typ(atom_type), _btyp(bond_type), _mass(mass), _chg(charge),
                   _lj(ljparam), _ptyp(particle_type), _elem(element)
 {
     assertSane();
@@ -118,14 +146,14 @@ GromacsAtomType::GromacsAtomType(QString atom_type,
 
 /** Construct, specifying only the mass */
 GromacsAtomType::GromacsAtomType(QString atom_type, SireUnits::Dimension::MolarMass mass)
-                : _typ(atom_type), _mass(mass), _chg(0),
+                : _typ(atom_type), _btyp(atom_type), _mass(mass), _chg(0),
                   _ptyp(GromacsAtomType::UNKNOWN_TYPE),
                   _elem(0)
 {}
 
 /** Copy constructor */
 GromacsAtomType::GromacsAtomType(const GromacsAtomType &other)
-                : _typ(other._typ), _mass(other._mass), _chg(other._chg),
+                : _typ(other._typ), _btyp(other._btyp), _mass(other._mass), _chg(other._chg),
                   _lj(other._lj), _ptyp(other._ptyp), _elem(other._elem)
 {}
 
@@ -139,6 +167,7 @@ GromacsAtomType& GromacsAtomType::operator=(const GromacsAtomType &other)
     if (this != &other)
     {
         _typ = other._typ;
+        _btyp = other._btyp;
         _mass = other._mass;
         _chg = other._chg;
         _ptyp = other._ptyp;
@@ -152,7 +181,8 @@ GromacsAtomType& GromacsAtomType::operator=(const GromacsAtomType &other)
 /** Comparison operator */
 bool GromacsAtomType::operator==(const GromacsAtomType &other) const
 {
-    return _typ == other._typ and _mass == other._mass and _chg == other._chg and
+    return _typ == other._typ and _btyp == other._btyp and _mass == other._mass and
+           _chg == other._chg and
            _ptyp == other._ptyp and _lj == other._lj and _elem == other._elem;
 }
 
@@ -180,7 +210,7 @@ QString GromacsAtomType::toString() const
         return QObject::tr("GromacsAtomType( atomType() = %1, mass() = %2 g mol-1 )")
                 .arg(atomType()).arg(mass().to(g_per_mol));
     }
-    else
+    else if (_btyp == _typ)
     {
         return QObject::tr("GromacsAtomType( atomType() = %1, mass() = %2 g mol-1, "
                               "charge() = %3 |e|, "
@@ -190,6 +220,19 @@ QString GromacsAtomType::toString() const
                               .arg(particleTypeString())
                               .arg(ljParameter().toString())
                               .arg(element().toString());
+    }
+    else
+    {
+        return QObject::tr("GromacsAtomType( atomType() = %1, bondType() = %7, "
+                              "mass() = %2 g mol-1, "
+                              "charge() = %3 |e|, "
+                              "particleType() = %4, ljParameter() = %5, element() = %6 )")
+                              .arg(atomType()).arg(mass().to(g_per_mol))
+                              .arg(charge().to(mod_electron))
+                              .arg(particleTypeString())
+                              .arg(ljParameter().toString())
+                              .arg(element().toString())
+                              .arg(bondType());
     }
 }
 
@@ -2074,7 +2117,7 @@ SireCAS::Expression GromacsDihedral::toExpression(const SireCAS::Symbol &phi) co
     else if (func_type == 3)
     {
         //Ryckaert-Bellemans function
-        // Sum_(n=0,5) C_n ( cos(phi) )^n
+        // Sum_(n=0,5) C_n ( cos(psi) )^n   where psi = phi - 180
         const double c0 = k[0] * kj_per_mol;
         const double c1 = k[1] * kj_per_mol;
         const double c2 = k[2] * kj_per_mol;
@@ -2082,12 +2125,16 @@ SireCAS::Expression GromacsDihedral::toExpression(const SireCAS::Symbol &phi) co
         const double c4 = k[4] * kj_per_mol;
         const double c5 = k[5] * kj_per_mol;
         
-        const auto cos_phi = Cos(phi);
+        //Gromacs calculates dihedrals with a shift of 180 degrees??? (not included)
+        const auto cos_psi = Cos(phi - SireMaths::pi);
         
-        return c0 + (c1*cos_phi) + (c2*SireMaths::pow_2(cos_phi)) +
-                                   (c3*SireMaths::pow_3(cos_phi)) +
-                                   (c4*SireMaths::pow_4(cos_phi)) +
-                                   (c5*SireMaths::pow_5(cos_phi));
+        
+        auto f = c0 + (c1*cos_psi) + (c2*cos_psi*cos_psi) +
+                                   (c3*cos_psi*cos_psi*cos_psi) +
+                                   (c4*cos_psi*cos_psi*cos_psi*cos_psi) +
+                                   (c5*cos_psi*cos_psi*cos_psi*cos_psi*cos_psi);
+
+        return f;
     }
     else if (func_type == 5)
     {

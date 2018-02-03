@@ -89,6 +89,17 @@ void register_GroAtom_class(){
                 , "Return the atom type of this atom" );
         
         }
+        { //::SireIO::GroAtom::bondType
+        
+            typedef ::QString ( ::SireIO::GroAtom::*bondType_function_type)(  ) const;
+            bondType_function_type bondType_function_value( &::SireIO::GroAtom::bondType );
+            
+            GroAtom_exposer.def( 
+                "bondType"
+                , bondType_function_value
+                , "" );
+        
+        }
         { //::SireIO::GroAtom::charge
         
             typedef ::SireUnits::Dimension::Charge ( ::SireIO::GroAtom::*charge_function_type)(  ) const;
@@ -202,6 +213,18 @@ void register_GroAtom_class(){
                 , setAtomType_function_value
                 , ( bp::arg("atomtype") )
                 , "Set the atom type of this atom" );
+        
+        }
+        { //::SireIO::GroAtom::setBondType
+        
+            typedef void ( ::SireIO::GroAtom::*setBondType_function_type)( ::QString const & ) ;
+            setBondType_function_type setBondType_function_value( &::SireIO::GroAtom::setBondType );
+            
+            GroAtom_exposer.def( 
+                "setBondType"
+                , setBondType_function_value
+                , ( bp::arg("bondtype") )
+                , "" );
         
         }
         { //::SireIO::GroAtom::setCharge

@@ -110,6 +110,7 @@ public:
     qint64 chargeGroup() const;
 
     QString atomType() const;
+    QString bondType() const;
 
     SireUnits::Dimension::Charge charge() const;
     SireUnits::Dimension::MolarMass mass() const;
@@ -123,7 +124,8 @@ public:
     void setChargeGroup(qint64 grp);
 
     void setAtomType(const QString &atomtype);
-
+    void setBondType(const QString &bondtype);
+    
     void setCharge(SireUnits::Dimension::Charge charge);
     void setMass(SireUnits::Dimension::MolarMass mass);
 
@@ -136,6 +138,9 @@ private:
 
     /** Atom type */
     QString atmtyp;
+    
+    /** Bond type - normally the same as the atom type */
+    QString bndtyp;
 
     /** Atom number */
     qint64 atmnum;

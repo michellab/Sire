@@ -81,11 +81,11 @@ static const RegisterMetaType<GroAtom> r_groatom(NO_ROOT);
 
 QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroAtom &atom)
 {
-    writeHeader(ds, r_groatom, 1);
+    writeHeader(ds, r_groatom, 2);
 
     SharedDataStream sds(ds);
 
-    sds << atom.atmname << atom.resname << atom.atmtyp
+    sds << atom.atmname << atom.resname << atom.atmtyp << atom.bndtyp
         << atom.atmnum << atom.resnum << atom.chggrp
         << atom.chg.to(mod_electron) << atom.mss.to(g_per_mol);
 
@@ -96,7 +96,20 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroAtom &atom)
 {
     VersionID v = readHeader(ds, r_groatom);
 
-    if (v == 1)
+    if (v == 2)
+    {
+        SharedDataStream sds(ds);
+
+        double chg, mass;
+
+        sds >> atom.atmname >> atom.resname >> atom.atmtyp >> atom.bndtyp
+            >> atom.atmnum >> atom.resnum >> atom.chggrp
+            >> chg >> mass;
+
+        atom.chg = chg*mod_electron;
+        atom.mss = mass*g_per_mol;
+    }
+    else if (v == 1)
     {
         SharedDataStream sds(ds);
 
@@ -106,11 +119,12 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroAtom &atom)
             >> atom.atmnum >> atom.resnum >> atom.chggrp
             >> chg >> mass;
 
+        atom.bndtyp = atom.atmtyp;
         atom.chg = chg*mod_electron;
         atom.mss = mass*g_per_mol;
     }
     else
-        throw version_error(v, "1", r_groatom, CODELOC);
+        throw version_error(v, "1,2", r_groatom, CODELOC);
 
     return ds;
 }
@@ -122,7 +136,7 @@ GroAtom::GroAtom() : atmnum(-1), resnum(-1), chggrp(-1), chg(0), mss(0)
 /** Copy constructor */
 GroAtom::GroAtom(const GroAtom &other)
         : atmname(other.atmname), resname(other.resname),
-          atmtyp(other.atmtyp), atmnum(other.atmnum),
+          atmtyp(other.atmtyp), bndtyp(other.bndtyp), atmnum(other.atmnum),
           resnum(other.resnum), chggrp(other.chggrp),
           chg(other.chg), mss(other.mss)
 {}
@@ -139,6 +153,7 @@ GroAtom& GroAtom::operator=(const GroAtom &other)
         atmname = other.atmname;
         resname = other.resname;
         atmtyp = other.atmtyp;
+        bndtyp = other.bndtyp;
         atmnum = other.atmnum;
         resnum = other.resnum;
         chggrp = other.chggrp;
@@ -155,6 +170,7 @@ bool GroAtom::operator==(const GroAtom &other) const
     return atmname == other.atmname and
            resname == other.resname and
            atmtyp == other.atmtyp and
+           bndtyp == other.bndtyp and
            atmnum == other.atmnum and
            resnum == other.resnum and
            chggrp == other.chggrp and
@@ -229,6 +245,12 @@ QString GroAtom::atomType() const
     return atmtyp;
 }
 
+/** Return the bond type of this atom. This is normally the same as the atom type */
+QString GroAtom::bondType() const
+{
+    return bndtyp;
+}
+
 /** Return the charge on this atom */
 SireUnits::Dimension::Charge GroAtom::charge() const
 {
@@ -273,10 +295,19 @@ void GroAtom::setChargeGroup(qint64 grp)
         chggrp = grp;
 }
 
-/** Set the atom type of this atom */
+/** Set the atom type and bond type of this atom. To set
+    the bond type separately, you need to set it after calling
+    this function */
 void GroAtom::setAtomType(const QString &atomtype)
 {
     atmtyp = atomtype;
+    bndtyp = atomtype;
+}
+
+/** Set the bond type of this atom */
+void GroAtom::setBondType(const QString &bondtype)
+{
+    bndtyp = bondtype;
 }
 
 /** Set the charge on this atom */
@@ -384,8 +415,10 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
         AtomCharges charges;
         AtomIntProperty groups;
         AtomStringProperty atomtypes;
+        AtomStringProperty bondtypes;
         
         bool has_mass(false), has_elem(false), has_chg(false), has_group(false), has_type(false);
+        bool has_bondtype(false);
         
         try
         {
@@ -426,6 +459,14 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
         {
             atomtypes = mol.property(map["atomtype"]).asA<AtomStringProperty>();
             has_type = true;
+        }
+        catch(...)
+        {}
+        
+        try
+        {
+            bondtypes = mol.property(map["bondtype"]).asA<AtomStringProperty>();
+            has_bondtype = true;
         }
         catch(...)
         {}
@@ -486,6 +527,15 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
             atom.setCharge(charge);
             atom.setMass(mass);
             atom.setAtomType(atomtype);
+            
+            if (has_bondtype)
+            {
+                atom.setBondType(bondtypes[cgatomidx]);
+            }
+            else
+            {
+                atom.setBondType(atomtype);
+            }
         };
         
         if (uses_parallel)
@@ -3348,16 +3398,26 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 double v = words[5].toDouble(&ok_v);
                 double w = words[6].toDouble(&ok_w);
 
-                if (not (ok_elem and ok_mass and ok_charge and ok_ptyp and ok_v and ok_w))
+                if (not (ok_mass and ok_charge and ok_ptyp and ok_v and ok_w))
                 {
                     warnings.append( QObject::tr( "Could not interpret the atom type data "
                       "from line '%1'. Skipping this line.").arg(line) );
                     continue;
                 }
 
-                typ = GromacsAtomType(words[0], mass*g_per_mol, chg*mod_electron,
-                                      ptyp, ::toLJParameter(v,w,combining_rule),
-                                      Element(nprotons));
+                if (ok_elem)
+                {
+                    typ = GromacsAtomType(words[0], mass*g_per_mol, chg*mod_electron,
+                                          ptyp, ::toLJParameter(v,w,combining_rule),
+                                          Element(nprotons));
+                }
+                else
+                {
+                    //some gromacs files don't use 'nprotons', but instead give
+                    //a "bond_type" ambertype
+                    typ = GromacsAtomType(words[0], words[1], mass*g_per_mol, chg*mod_electron,
+                                          ptyp, ::toLJParameter(v,w,combining_rule));
+                }
             }
 
             if (typs.contains(typ.atomType()))
@@ -3879,6 +3939,15 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 atom.setCharge(chg*mod_electron);
                 atom.setMass(mass*g_per_mol);
 
+                //we now need to look up the atom type of this atom to see if there
+                //is a separate bond_type
+                const auto atom_type = atom_types.value(atomtyp);
+
+                if ((not atom_type.isNull()) and atom_type.bondType() != atomtyp)
+                {
+                    atom.setBondType(atom_type.bondType());
+                }
+
                 moltype.addAtom(atom);
             }
         };
@@ -4364,9 +4433,13 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
     //process the defaults data first, as this affects the rest of the parsing
     auto warnings = processDefaults();
 
+    //next, read in the atom types as these have to be present before
+    //reading anything else...
+    warnings += processAtomTypes();
+
     //now we can process the other tags
     const QVector< std::function<QStringList()> > funcs =
-                 { processAtomTypes, processBondTypes, processPairTypes,
+                 { processBondTypes, processPairTypes,
                    processAngleTypes, processDihedralTypes, processConstraintTypes,
                    processNonBondParams, processMoleculeTypes, processSystem
                  };
@@ -4619,6 +4692,7 @@ GroTop::PropsAndErrors GroTop::getAtomProperties(const MoleculeInfo &molinfo,
 {
     //create space for all of the properties
     AtomStringProperty atom_type(molinfo);
+    AtomStringProperty bond_type(molinfo);
     AtomIntProperty charge_group(molinfo);
     AtomCharges atom_chgs(molinfo);
     AtomMasses atom_masses(molinfo);
@@ -4631,6 +4705,8 @@ GroTop::PropsAndErrors GroTop::getAtomProperties(const MoleculeInfo &molinfo,
 
     QStringList errors;
 
+    bool uses_bondtypes = false;
+
     //loop over each atom and look up parameters
     for (int i=0; i<atoms.count(); ++i)
     {
@@ -4641,6 +4717,11 @@ GroTop::PropsAndErrors GroTop::getAtomProperties(const MoleculeInfo &molinfo,
         
         //information from the template
         atom_type.set(cgatomidx, atom.atomType());
+        bond_type.set(cgatomidx, atom.bondType());
+        
+        if (atom.atomType() != atom.bondType())
+            uses_bondtypes = true;
+        
         charge_group.set(cgatomidx, atom.chargeGroup());
         atom_chgs.set(cgatomidx, atom.charge());
         atom_masses.set(cgatomidx, atom.mass());
@@ -4671,6 +4752,13 @@ GroTop::PropsAndErrors GroTop::getAtomProperties(const MoleculeInfo &molinfo,
     Properties props;
     
     props.setProperty("atomtype", atom_type);
+    
+    if (uses_bondtypes)
+    {
+        //this forcefield uses a different ato
+        props.setProperty("bondtype", bond_type);
+    }
+    
     props.setProperty("charge_group", charge_group);
     props.setProperty("charge", atom_chgs);
     props.setProperty("mass", atom_masses);
@@ -4720,15 +4808,15 @@ GroTop::PropsAndErrors GroTop::getBondProperties(const MoleculeInfo &molinfo,
             const auto atom0 = moltype.atom(idx0);
             const auto atom1 = moltype.atom(idx1);
             
-            //get the bond parameter for these atom types
-            auto new_potential = this->bond(atom0.atomType(), atom1.atomType());
+            //get the bond parameter for these bond types
+            auto new_potential = this->bond(atom0.bondType(), atom1.bondType());
             
             if (not new_potential.isResolved())
             {
                 errors.append( QObject::tr("Cannot find the bond parameters for "
                   "the bond between atoms %1-%2 (atom types %3-%4).")
                     .arg(atom0.toString()).arg(atom1.toString())
-                    .arg(atom0.atomType()).arg(atom1.atomType()) );
+                    .arg(atom0.bondType()).arg(atom1.bondType()) );
                 continue;
             }
             
@@ -4825,15 +4913,15 @@ GroTop::PropsAndErrors GroTop::getAngleProperties(const MoleculeInfo &molinfo,
             const auto atom2 = moltype.atom(idx2);
             
             //get the angle parameter for these atom types
-            auto new_potential = this->angle(atom0.atomType(), atom1.atomType(),
-                                             atom2.atomType());
+            auto new_potential = this->angle(atom0.bondType(), atom1.bondType(),
+                                             atom2.bondType());
             
             if (not new_potential.isResolved())
             {
                 errors.append( QObject::tr("Cannot find the angle parameters for "
                   "the angle between atoms %1-%2-%3 (atom types %4-%5-%6).")
                     .arg(atom0.toString()).arg(atom1.toString()).arg(atom2.toString())
-                    .arg(atom0.atomType()).arg(atom1.atomType()).arg(atom2.atomType()) );
+                    .arg(atom0.bondType()).arg(atom1.bondType()).arg(atom2.bondType()) );
                 continue;
             }
             
@@ -4905,8 +4993,8 @@ GroTop::PropsAndErrors GroTop::getDihedralProperties(const MoleculeInfo &molinfo
             const auto atom3 = moltype.atom(idx3);
             
             //get the dihedral parameter for these atom types
-            auto new_potential = this->dihedral(atom0.atomType(), atom1.atomType(),
-                                                atom2.atomType(), atom3.atomType());
+            auto new_potential = this->dihedral(atom0.bondType(), atom1.bondType(),
+                                                atom2.bondType(), atom3.bondType());
             
             if (not new_potential.isResolved())
             {
@@ -4914,8 +5002,8 @@ GroTop::PropsAndErrors GroTop::getDihedralProperties(const MoleculeInfo &molinfo
                   "the dihedral between atoms %1-%2-%3-%4 (atom types %5-%6-%7-%8).")
                     .arg(atom0.toString()).arg(atom1.toString())
                     .arg(atom2.toString()).arg(atom3.toString())
-                    .arg(atom0.atomType()).arg(atom1.atomType())
-                    .arg(atom2.atomType()).arg(atom3.atomType()) );
+                    .arg(atom0.bondType()).arg(atom1.bondType())
+                    .arg(atom2.bondType()).arg(atom3.bondType()) );
                 continue;
             }
             
