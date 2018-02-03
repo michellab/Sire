@@ -1812,7 +1812,7 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
 
 /** Internal function used to convert a Gromacs Moltyp to a set of lines */
 static QStringList writeMolType(const QString &name, const GroMolType &moltype,
-                                bool uses_parallel)
+                                const Molecule &mol, bool uses_parallel)
 {
     QStringList lines;
     
@@ -1821,7 +1821,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     lines.append( QString("%1  %2").arg(name).arg(moltype.nExcludedAtoms()) );
     lines.append( "" );
 
-    QStringList atomlines, bondlines, anglines, dihlines;
+    QStringList atomlines, bondlines, anglines, dihlines, scllines;
 
     //write all of the atoms
     auto write_atoms = [&]()
@@ -1925,8 +1925,40 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
         qSort(dihlines);
     };
 
-    const QVector< std::function<void()> > funcs =
-                 { write_atoms, write_bonds, write_angs, write_dihs };
+    //write all of the pairs (1-4 scaling factors)
+    auto write_pairs = [&]()
+    {
+        CLJNBPairs scl;
+        
+        try
+        {
+            scl = mol.property("intrascale").asA<CLJNBPairs>();
+        }
+        catch(...)
+        {
+            return;
+        }
+        
+        // must record every pair that has a non-default scaling factor
+        for (int i=0; i<scl.nAtoms()-1; ++i)
+        {
+            for (int j=i+1; j<scl.nAtoms(); ++j)
+            {
+                const auto s = scl.get( AtomIdx(i), AtomIdx(j) );
+                
+                if ( not ( (s.coulomb() == 0 and s.lj() == 0) or
+                           (s.coulomb() == 1 and s.lj() == 1) ) )
+                {
+                    //this is a non-default pair
+                    scllines.append( QString("%1 %2     1")
+                                        .arg(i+1,6).arg(j+1,6) );
+                }
+            }
+        }
+    };
+
+    const QVector< std::function<void()> > funcs =                    // don't write pairs yet...
+                 { write_atoms, write_bonds, write_angs, write_dihs }; //, write_pairs };
 
     if (uses_parallel)
     {
@@ -1959,6 +1991,14 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
         lines.append("");
     }
     
+    if (not scllines.isEmpty())
+    {
+        lines.append( "[pairs]" );
+        lines.append( ";  ai    aj funct " );
+        lines += scllines;
+        lines.append("");
+    }
+    
     if (not anglines.isEmpty())
     {
         lines.append( "[angles]" );
@@ -1981,13 +2021,14 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
 /** Internal function used to convert an array of Gromacs Moltyps into 
     lines of a Gromacs topology file */
 static QStringList writeMolTypes(const QHash<QString,GroMolType> &moltyps,
+                                 const QHash<QString,Molecule> &examples,
                                  bool uses_parallel)
 {
     QHash<QString,QStringList> typs;
     
     if (uses_parallel)
     {
-        QVector<QString> keys = moltyps.keys().toVector();
+        const QVector<QString> keys = moltyps.keys().toVector();
         QMutex mutex;
         
         tbb::parallel_for( tbb::blocked_range<int>(0,keys.count(),1),
@@ -1995,7 +2036,8 @@ static QStringList writeMolTypes(const QHash<QString,GroMolType> &moltyps,
         {
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                QStringList typlines = ::writeMolType(keys[i], moltyps[keys[i]], uses_parallel);
+                QStringList typlines = ::writeMolType(keys[i], moltyps[keys[i]],
+                                                      examples[keys[i]], uses_parallel);
                 
                 QMutexLocker lkr(&mutex);
                 typs.insert(keys[i], typlines);
@@ -2006,7 +2048,8 @@ static QStringList writeMolTypes(const QHash<QString,GroMolType> &moltyps,
     {
         for (auto it = moltyps.constBegin(); it != moltyps.constEnd(); ++it)
         {
-            typs.insert( it.key(), ::writeMolType(it.key(), it.value(), uses_parallel) );
+            typs.insert( it.key(), ::writeMolType(it.key(), it.value(),
+                                                  examples[it.key()], uses_parallel) );
         }
     }
     
@@ -2195,7 +2238,7 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
     lines += ::writeAtomTypes(name_to_mtyp, name_to_example, ffield, map);
 
     //now convert these into text lines that can be written as the file
-    lines += ::writeMolTypes(name_to_mtyp, usesParallel());
+    lines += ::writeMolTypes(name_to_mtyp, name_to_example, usesParallel());
     
     //now write the system part
     lines += ::writeSystem(system.name(), mol_to_moltype);
@@ -2543,7 +2586,9 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     QString key = get_dihedral_id(atm0,atm1,atm2,atm3);
     
     if (dih_potentials.contains(key))
+    {
         return key;
+    }
     
     static const QString wild = "X";
  
@@ -2620,7 +2665,7 @@ GromacsDihedral GroTop::dihedral(const QString &atm0, const QString &atm1,
 QList<GromacsDihedral> GroTop::dihedrals(const QString &atm0, const QString &atm1,
                                          const QString &atm2, const QString &atm3) const
 {
-    return dih_potentials.values( get_dihedral_id(atm0,atm1,atm2,atm3) );
+    return dih_potentials.values( searchForDihType(atm0,atm1,atm2,atm3) );
 }
 
 /** Return the atom types loaded from this file */
@@ -4983,6 +5028,8 @@ GroTop::PropsAndErrors GroTop::getDihedralProperties(const MoleculeInfo &molinfo
             qSwap(idx2, idx1);
         }
         
+        Expression exp;
+        
         //do we need to resolve this dihedral parameter (look up the parameters)?
         if (not potential.isResolved())
         {
@@ -4992,11 +5039,12 @@ GroTop::PropsAndErrors GroTop::getDihedralProperties(const MoleculeInfo &molinfo
             const auto atom2 = moltype.atom(idx2);
             const auto atom3 = moltype.atom(idx3);
             
-            //get the dihedral parameter for these atom types
-            auto new_potential = this->dihedral(atom0.bondType(), atom1.bondType(),
-                                                atom2.bondType(), atom3.bondType());
+            //get the dihedral parameter for these atom types - could be
+            //many, as they will be added together
+            auto resolved = this->dihedrals(atom0.bondType(), atom1.bondType(),
+                                            atom2.bondType(), atom3.bondType());
             
-            if (not new_potential.isResolved())
+            if (resolved.isEmpty())
             {
                 errors.append( QObject::tr("Cannot find the dihedral parameters for "
                   "the dihedral between atoms %1-%2-%3-%4 (atom types %5-%6-%7-%8).")
@@ -5007,11 +5055,20 @@ GroTop::PropsAndErrors GroTop::getDihedralProperties(const MoleculeInfo &molinfo
                 continue;
             }
             
-            potential = new_potential;
+            //sum all of the parts together
+            for (const auto r : resolved)
+            {
+                if (r.isResolved())
+                {
+                    exp += r.toExpression(PHI);
+                }
+            }
         }
-        
-        //now create the dihedral expression
-        auto exp = potential.toExpression(PHI);
+        else
+        {
+            //we have a fully-resolved dihedral potential
+            exp = potential.toExpression(PHI);
+        }
 
         if (not exp.isZero())
         {
