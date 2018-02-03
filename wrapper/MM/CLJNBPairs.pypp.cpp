@@ -91,6 +91,17 @@ void register_CLJNBPairs_class(){
         
         }
         CLJNBPairs_exposer.def( bp::self == bp::self );
+        { //::SireMM::CLJNBPairs::toString
+        
+            typedef ::QString ( ::SireMM::CLJNBPairs::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireMM::CLJNBPairs::toString );
+            
+            CLJNBPairs_exposer.def( 
+                "toString"
+                , toString_function_value
+                , "" );
+        
+        }
         { //::SireMM::CLJNBPairs::typeName
         
             typedef char const * ( *typeName_function_type )(  );

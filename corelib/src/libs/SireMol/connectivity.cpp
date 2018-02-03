@@ -597,7 +597,7 @@ int ConnectivityBase::connectionType(AtomIdx atom0, AtomIdx atom1) const
     else if (areBonded(atom0,atom1))
         return 2;
     
-    else if (areAngled(atom1,atom1))
+    else if (areAngled(atom0,atom1))
         return 3;
     
     else if (areDihedraled(atom0,atom1))

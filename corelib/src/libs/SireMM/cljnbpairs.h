@@ -160,6 +160,8 @@ public:
         return CLJScaleFactor::typeName();
     }
 
+    QString toString() const;
+
     CLJScaleFactor& operator=(const CLJScaleFactor &other);
 
     bool operator==(const CLJScaleFactor &other) const;
@@ -298,6 +300,8 @@ public:
     
     bool operator==(const CLJNBPairs &other) const;
     bool operator!=(const CLJNBPairs &other) const;
+    
+    QString toString() const;
     
     int nExcludedAtoms() const;
     QVector<AtomIdx> excludedAtoms() const;

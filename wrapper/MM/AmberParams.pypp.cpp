@@ -724,6 +724,17 @@ void register_AmberParams_class(){
                 , "Validate this set of parameters. This checks that all of the requirements\nfor an Amber set of parameters are met, e.g. that all Atom indicies are\ncontiguous and in-order, and that all atoms contiguously fill all residues\netc. This returns any errors as strings. An empty set of strings indicates\nthat there are no errors" );
         
         }
+        { //::SireMM::AmberParams::validateAndFix
+        
+            typedef ::QStringList ( ::SireMM::AmberParams::*validateAndFix_function_type)(  ) ;
+            validateAndFix_function_type validateAndFix_function_value( &::SireMM::AmberParams::validateAndFix );
+            
+            AmberParams_exposer.def( 
+                "validateAndFix"
+                , validateAndFix_function_value
+                , "" );
+        
+        }
         AmberParams_exposer.staticmethod( "typeName" );
         AmberParams_exposer.def( "__copy__", &__copy__);
         AmberParams_exposer.def( "__deepcopy__", &__copy__);

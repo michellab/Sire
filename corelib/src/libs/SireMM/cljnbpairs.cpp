@@ -244,6 +244,12 @@ bool CLJScaleFactor::operator!=(const CLJScaleFactor &other) const
            LJScaleFactor::operator!=(other);
 }
 
+QString CLJScaleFactor::toString() const
+{
+    return QObject::tr("CLJScaleFactor( coulomb() == %1, lj() == %2 )")
+                .arg(coulomb()).arg(lj());
+}
+
 ////////
 //////// Implementation of CoulombNBPairs
 ////////
@@ -520,7 +526,16 @@ CLJNBPairs::CLJNBPairs(const Connectivity &connectivity,
         const int nats1 = molinfo.nAtoms(cg1);
         
         //default is that atoms are not bonded, so scale factor is 1,1
-        CGPairs atompairs( CLJScaleFactor(1,1) );
+        CGPairs pairs01( CLJScaleFactor(1,1) );
+        pairs01.reserve(nats0,nats1);
+        
+        CGPairs pairs10 = pairs01;
+        
+        if (cg0 != cg1)
+        {
+            pairs10 = CGPairs(CLJScaleFactor(1,1));
+            pairs10.reserve(nats1,nats0);
+        }
         
         for (int i=0; i<nats0; ++i)
         {
@@ -537,19 +552,28 @@ CLJNBPairs::CLJNBPairs(const Connectivity &connectivity,
                 if (connection_type > 0 and connection_type < 4)
                 {
                     //this is either the same pair, bonded pair or angled pair
-                    atompairs.set(i,j,CLJScaleFactor(0,0));
+                    pairs01.set(i,j,CLJScaleFactor(0,0));
+                    
+                    if (cg0 != cg1)
+                        pairs10.set(j,i,CLJScaleFactor(0,0));
                 }
                 else if (connection_type == 4)
                 {
                     //this is a 1-4 pair
-                    atompairs.set(i,j,scale14);
+                    pairs01.set(i,j,scale14);
+                    
+                    if (cg0 != cg1)
+                        pairs10.set(j,i,scale14);
                 }
             }
         }
         
         //now update the global map for all cg/cg pairs
         QMutexLocker lkr(&mutex);
-        cgpairs.set(cg0.value(), cg1.value(), atompairs);
+        cgpairs.set(cg0.value(), cg1.value(), pairs01);
+        
+        if (cg0 != cg1)
+            cgpairs.set(cg1.value(), cg0.value(), pairs10);
     };
     
     bool uses_parallel = true;
@@ -562,8 +586,7 @@ CLJNBPairs::CLJNBPairs(const Connectivity &connectivity,
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 get_pairs( connected_cgroups.at(i) );
-           
-             }
+            }
         });
     }
     else
@@ -601,6 +624,15 @@ bool CLJNBPairs::operator==(const CLJNBPairs &other) const
 bool CLJNBPairs::operator!=(const CLJNBPairs &other) const
 {
     return AtomPairs<CLJScaleFactor>::operator!=(other);
+}
+
+QString CLJNBPairs::toString() const
+{
+    if (nAtoms() == 0)
+        return QObject::tr("CLJNBPairs::null");
+    
+    return QObject::tr("CLJNBPairs( nAtoms() == %1, nGroups() == %2 )")
+                .arg(nAtoms()).arg(nGroups());
 }
 
 /** Return the excluded atoms for the atom matching ID 'atomid'. This

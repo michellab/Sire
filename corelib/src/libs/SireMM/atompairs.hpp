@@ -831,6 +831,32 @@ SireBase::PropertyPtr
 AtomPairs<T>::_pvt_makeCompatibleWith(const MoleculeInfoData &other_info,
                                       const AtomMatcher &atommatcher) const
 {
+    //if the atommatcher doesn't change order and the new molecule info
+    //has the same number of atoms in the same number of cutgroups, then
+    //there is nothing that we need to do
+    if (not atommatcher.changesOrder(this->info(), other_info))
+    {
+        bool same_arrangement = true;
+    
+        //ensure that the number of atoms and number of cutgroups are the same
+        if (this->info().nAtoms() == other_info.nAtoms() and
+            this->info().nCutGroups() == other_info.nCutGroups())
+        {
+            for (int i=0; i<other_info.nCutGroups(); ++i)
+            {
+                if (this->info().nAtoms( CGIdx(i) ) != other_info.nAtoms( CGIdx(i) ))
+                {
+                    same_arrangement = false;
+                    break;
+                }
+            }
+        }
+        
+        if (same_arrangement)
+            //there is no change in the atom order - this AtomPairs object is still valid
+            return *this;
+    }
+
     QHash<AtomIdx,AtomIdx> matched_atoms = atommatcher.match(this->info(), other_info);
     
     SireBase::PropertyPtr retptr( *(this->create()) );

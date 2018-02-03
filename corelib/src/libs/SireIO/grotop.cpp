@@ -4690,13 +4690,14 @@ GroTop::PropsAndErrors GroTop::getBondProperties(const MoleculeInfo &molinfo,
 
     QStringList errors;
 
+
     //add in all of the bond functions, together with the connectivity of the
     //molecule
     auto connectivity = Connectivity(molinfo).edit();
     connectivity = connectivity.disconnectAll();
     
     TwoAtomFunctions bondfuncs(molinfo);
-    
+
     const auto bonds = moltype.bonds();
     
     for (auto it = bonds.constBegin(); it != bonds.constEnd(); ++it)
@@ -4769,8 +4770,19 @@ GroTop::PropsAndErrors GroTop::getBondProperties(const MoleculeInfo &molinfo,
     //the excluded atom pairs, using fudge_qq and fudge_lj for the 1-4 interactions
     if (generate_pairs)
     {
-        CLJNBPairs nbpairs(conn, CLJScaleFactor(fudge_qq,fudge_lj));
-        props.setProperty("intrascale", nbpairs);
+        if (bonds.isEmpty())
+        {
+            //there are no bonds, so there cannot be any intramolecular nonbonded
+            //energy (don't know how atoms are connected). This likely means
+            //that this is a solvent molecule, so set the intrascales to 0
+            CLJNBPairs nbpairs(molinfo, CLJScaleFactor(0));
+            props.setProperty("intrascale", nbpairs);
+        }
+        else
+        {
+            CLJNBPairs nbpairs(conn, CLJScaleFactor(fudge_qq,fudge_lj));
+            props.setProperty("intrascale", nbpairs);
+        }
     }
     
     return std::make_tuple(props, errors);

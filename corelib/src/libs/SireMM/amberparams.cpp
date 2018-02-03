@@ -58,6 +58,8 @@
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
+#include <QDebug>
+
 using namespace SireMol;
 using namespace SireCAS;
 using namespace SireMM;
@@ -1336,10 +1338,98 @@ const PropertyMap& AmberParams::propertyMap() const
     for an Amber set of parameters are met, e.g. that all Atom indicies are
     contiguous and in-order, and that all atoms contiguously fill all residues
     etc. This returns any errors as strings. An empty set of strings indicates
-    that there are no errors */
+    that there are no errors  */
 QStringList AmberParams::validate() const
 {
     return QStringList();
+}
+
+/** Validate this set of parameters. In addition to checking that the
+    requirements are met, this also does any work needed to fix problems,
+    if they are fixable. */
+QStringList AmberParams::validateAndFix()
+{
+    QStringList errors;
+
+    Connectivity conn;
+    bool has_connectivity = false;
+
+    auto new_dihedrals = amber_dihedrals;
+    auto new_nb14s = amber_nb14s;
+    auto new_exc = exc_atoms;
+
+    //All 1-4 scaling factors should match up with actual dihedrals - validate
+    //that this is the case and fix any problems if we can
+    for (int i=0; i<exc_atoms.nAtoms(); ++i)
+    {
+        for (int j=0; j<exc_atoms.nAtoms(); ++j)
+        {
+            const auto s = exc_atoms.get(AtomIdx(i),AtomIdx(j));
+            
+            if ( (not (s.coulomb() == 0 or s.coulomb() == 1)) or
+                 (not (s.lj() == 0 or s.lj() == 1)) )
+            {
+                AtomIdx atm0(i); AtomIdx atm3(j);
+            
+                if (not has_connectivity)
+                {
+                    //have to use the connectivity that is implied by the bonds
+                    conn = this->connectivity();
+                    has_connectivity = true;
+                }
+            
+                //find the shortest bonded path between these two atoms
+                const auto path = conn.findPath(atm0,atm3);
+                
+                if (path.count() != 4)
+                {
+                    errors.append( QObject::tr("Have a 1-4 scaling factor (%1/%2) between "
+                      "atoms %3:%4 and %5:%6 despite there being no physical dihedral between "
+                      "these two atoms. All 1-4 scaling factors MUST be associated with "
+                      "physical dihedrals. The shortest path is %7")
+                        .arg(s.coulomb()).arg(s.lj())
+                        .arg(molinfo.name(atm0).value()).arg(atm0.value())
+                        .arg(molinfo.name(atm3).value()).arg(atm3.value())
+                        .arg(Sire::toString(path)) );
+                    continue;
+                }
+                
+                //convert the atom IDs into a canonical form
+                auto dih = this->convert( DihedralID(path[0],path[1],path[2],path[3]) );
+
+                //does this bond involve hydrogen? - this relies on "AtomElements" being full
+                bool contains_hydrogen = false;
+
+                if (not amber_elements.isEmpty())
+                {
+                    contains_hydrogen =
+                    (amber_elements.at( molinfo.cgAtomIdx(dih.atom0()) ).nProtons() < 2) or
+                    (amber_elements.at( molinfo.cgAtomIdx(dih.atom1()) ).nProtons() < 2) or
+                    (amber_elements.at( molinfo.cgAtomIdx(dih.atom2()) ).nProtons() < 2) or
+                    (amber_elements.at( molinfo.cgAtomIdx(dih.atom3()) ).nProtons() < 2);
+                }
+
+                //create a null dihedral parameter and add this to the set
+                new_dihedrals.insert(dih, qMakePair(AmberDihedral(Expression(0),Symbol("phi")),
+                                                    contains_hydrogen));
+
+                //now add in the 1-4 pair
+                BondID nb14pair = this->convert( BondID(dih.atom0(), dih.atom3()) );
+
+                //add them to the list of 14 scale factors
+                new_nb14s.insert(nb14pair, AmberNB14(s.coulomb(),s.lj()));
+
+                //and remove them from the excluded atoms list
+                new_exc.set(nb14pair.atom0(),nb14pair.atom1(), CLJScaleFactor(0));
+            }
+        }
+    }
+    
+    amber_dihedrals = new_dihedrals;
+    amber_nb14s = new_nb14s;
+    exc_atoms = new_exc;
+    
+    return errors + this->validate();
 }
 
 QString AmberParams::toString() const
@@ -2375,7 +2465,7 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
     SireBase::parallel_invoke(nb_functions);
 
     //ensure that the resulting object is valid
-    QStringList errors = this->validate();
+    QStringList errors = this->validateAndFix();
 
     if (not errors.isEmpty())
     {

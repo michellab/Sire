@@ -502,6 +502,7 @@ public:
     CLJNBPairs cljScaleFactors() const;
   
     QStringList validate() const;
+    QStringList validateAndFix();
   
     void setPropertyMap(const PropertyMap &map);
     const PropertyMap& propertyMap() const;
