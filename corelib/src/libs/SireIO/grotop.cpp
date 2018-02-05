@@ -2592,11 +2592,11 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
 {
     QString key = get_dihedral_id(atm0,atm1,atm2,atm3);
     
-    qDebug() << "SEARCHING FOR" << key;
+    //qDebug() << "SEARCHING FOR" << key;
     
     if (dih_potentials.contains(key))
     {
-        qDebug() << "FOUND" << key;
+        //qDebug() << "FOUND" << key;
         return key;
     }
     
@@ -2607,7 +2607,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
 
     if (dih_potentials.contains(key))
     {
-        qDebug() << "FOUND" << key;
+        //qDebug() << "FOUND" << key;
         return key;
     }
 
@@ -2616,7 +2616,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
 
     if (dih_potentials.contains(key))
     {
-        qDebug() << "FOUND" << key;
+        //qDebug() << "FOUND" << key;
         return key;
     }
 
@@ -2625,7 +2625,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     
     if (dih_potentials.contains(key))
     {
-        qDebug() << "FOUND" << key;
+        //qDebug() << "FOUND" << key;
         return key;
     }
     
@@ -2633,7 +2633,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     
     if (dih_potentials.contains(key))
     {
-        qDebug() << "FOUND" << key;
+        //qDebug() << "FOUND" << key;
         return key;
     }
     
@@ -2642,7 +2642,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
 
     if (dih_potentials.contains(key))
     {
-        qDebug() << "FOUND" << key;
+        //qDebug() << "FOUND" << key;
         return key;
     }
 
@@ -2651,7 +2651,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
 
     if (dih_potentials.contains(key))
     {
-        qDebug() << "FOUND" << key;
+        //qDebug() << "FOUND" << key;
         return key;
     }
     
@@ -2660,7 +2660,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     
     if (dih_potentials.contains(key))
     {
-        qDebug() << "FOUND" << key;
+        //qDebug() << "FOUND" << key;
         return key;
     }
     
@@ -2673,11 +2673,11 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
 GromacsDihedral GroTop::dihedral(const QString &atm0, const QString &atm1,
                                  const QString &atm2, const QString &atm3) const
 {
-    auto key = searchForDihType(atm0,atm1,atm2,atm3);
+    //auto key = searchForDihType(atm0,atm1,atm2,atm3);
 
-    qDebug() << key << dih_potentials.value(key).toString();
+    //qDebug() << key << dih_potentials.value(key).toString();
 
-    return dih_potentials.value( key, //searchForDihType(atm0,atm1,atm2,atm3),
+    return dih_potentials.value( searchForDihType(atm0,atm1,atm2,atm3),
                                  GromacsDihedral() );
 }
 
@@ -2686,10 +2686,9 @@ GromacsDihedral GroTop::dihedral(const QString &atm0, const QString &atm1,
 QList<GromacsDihedral> GroTop::dihedrals(const QString &atm0, const QString &atm1,
                                          const QString &atm2, const QString &atm3) const
 {
-    auto key = searchForDihType(atm0,atm1,atm2,atm3);
+    //auto key = searchForDihType(atm0,atm1,atm2,atm3);
 
-    qDebug() << key << Sire::toString(dih_potentials.values(key));
-
+    //qDebug() << key << Sire::toString(dih_potentials.values(key));
 
     return dih_potentials.values( searchForDihType(atm0,atm1,atm2,atm3) );
 }
