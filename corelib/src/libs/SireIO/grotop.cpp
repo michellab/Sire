@@ -516,6 +516,12 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                 mass = elements[cgatomidx].mass();
             }
             
+            if (mass <= 0)
+            {
+                //not allowed to have a zero or negative mass
+                mass = 1.0 * g_per_mol;
+            }
+            
             QString atomtype = atomtypes[cgatomidx];
             
             auto &atom = atms[i];
@@ -1704,10 +1710,10 @@ static QStringList writeDefaults(const MMDetail &ffield)
     lines.append("[ defaults ]");
     lines.append("; nbfunc      comb-rule       gen-pairs      fudgeLJ     fudgeQQ");
     
-    //all forcefields we support have gen-pairs = true
-    const bool gen_pairs = true;
+    //all forcefields we support have gen-pairs = true (gromacs only understands 'yes' and 'no')
+    const QString gen_pairs = "yes";
     
-    lines.append( QString("  %1           %2               %3              %4         %5")
+    lines.append( QString("  %1           %2               %3            %4         %5")
                         .arg( _getVDWStyleFromFF(ffield) )
                         .arg( _getCombiningRulesFromFF(ffield) )
                         .arg(gen_pairs)
@@ -1925,7 +1931,8 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
         qSort(dihlines);
     };
 
-    //write all of the pairs (1-4 scaling factors)
+    //write all of the pairs (1-4 scaling factors). This is needed even though
+    //we have set autogenerate pairs to "yes"
     auto write_pairs = [&]()
     {
         CLJNBPairs scl;
@@ -1957,8 +1964,8 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
         }
     };
 
-    const QVector< std::function<void()> > funcs =                    // don't write pairs yet...
-                 { write_atoms, write_bonds, write_angs, write_dihs }; //, write_pairs };
+    const QVector< std::function<void()> > funcs =
+                 { write_atoms, write_bonds, write_angs, write_dihs, write_pairs };
 
     if (uses_parallel)
     {
@@ -2585,8 +2592,11 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
 {
     QString key = get_dihedral_id(atm0,atm1,atm2,atm3);
     
+    qDebug() << "SEARCHING FOR" << key;
+    
     if (dih_potentials.contains(key))
     {
+        qDebug() << "FOUND" << key;
         return key;
     }
     
@@ -2597,6 +2607,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
 
     if (dih_potentials.contains(key))
     {
+        qDebug() << "FOUND" << key;
         return key;
     }
 
@@ -2605,6 +2616,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
 
     if (dih_potentials.contains(key))
     {
+        qDebug() << "FOUND" << key;
         return key;
     }
 
@@ -2613,6 +2625,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     
     if (dih_potentials.contains(key))
     {
+        qDebug() << "FOUND" << key;
         return key;
     }
     
@@ -2620,6 +2633,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     
     if (dih_potentials.contains(key))
     {
+        qDebug() << "FOUND" << key;
         return key;
     }
     
@@ -2628,6 +2642,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
 
     if (dih_potentials.contains(key))
     {
+        qDebug() << "FOUND" << key;
         return key;
     }
 
@@ -2636,6 +2651,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
 
     if (dih_potentials.contains(key))
     {
+        qDebug() << "FOUND" << key;
         return key;
     }
     
@@ -2644,6 +2660,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     
     if (dih_potentials.contains(key))
     {
+        qDebug() << "FOUND" << key;
         return key;
     }
     
@@ -2656,7 +2673,11 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
 GromacsDihedral GroTop::dihedral(const QString &atm0, const QString &atm1,
                                  const QString &atm2, const QString &atm3) const
 {
-    return dih_potentials.value( searchForDihType(atm0,atm1,atm2,atm3),
+    auto key = searchForDihType(atm0,atm1,atm2,atm3);
+
+    qDebug() << key << dih_potentials.value(key).toString();
+
+    return dih_potentials.value( key, //searchForDihType(atm0,atm1,atm2,atm3),
                                  GromacsDihedral() );
 }
 
@@ -2665,6 +2686,11 @@ GromacsDihedral GroTop::dihedral(const QString &atm0, const QString &atm1,
 QList<GromacsDihedral> GroTop::dihedrals(const QString &atm0, const QString &atm1,
                                          const QString &atm2, const QString &atm3) const
 {
+    auto key = searchForDihType(atm0,atm1,atm2,atm3);
+
+    qDebug() << key << Sire::toString(dih_potentials.values(key));
+
+
     return dih_potentials.values( searchForDihType(atm0,atm1,atm2,atm3) );
 }
 
@@ -3961,9 +3987,12 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 if (words.count() > 6)
                     chg = words[6].toDouble(&ok_chg);
 
-                double mass = 0; ok_mass = true;
+                double mass = 0; ok_mass = true; bool found_mass = false;
                 if (words.count() > 7)
+                {
                     mass = words[7].toDouble(&ok_mass);
+                    found_mass = true;
+                }
 
                 if (not (ok_idx and ok_resnum and ok_chggrp and ok_chg and ok_mass))
                 {
@@ -3991,6 +4020,12 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 if ((not atom_type.isNull()) and atom_type.bondType() != atomtyp)
                 {
                     atom.setBondType(atom_type.bondType());
+                }
+                
+                //now do the same to assign the mass if it has not been given explicitly
+                if ( (not found_mass) and (not atom_type.isNull()) )
+                {
+                    atom.setMass( atom_type.mass() );
                 }
 
                 moltype.addAtom(atom);

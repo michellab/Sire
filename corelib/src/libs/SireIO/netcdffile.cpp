@@ -166,6 +166,7 @@ using namespace SireIO;
 static QVector<QVariant> extract_values(const QByteArray &memdata, int nc_type, int nvals)
 {
     //ensure there is enough space in the data
+    #ifdef SIRE_USE_NETCDF
     if (nvals > (memdata.count() / nc_type_to_size(nc_type)))
     {
         throw SireError::invalid_arg( QObject::tr(
@@ -175,6 +176,7 @@ static QVector<QVariant> extract_values(const QByteArray &memdata, int nc_type, 
                     .arg(memdata.count() / nc_type_to_size(nc_type))
                     .arg(nc_type_to_string(nc_type)), CODELOC );
     }
+    #endif
     
     QVector<QVariant> vals;
     
@@ -262,7 +264,11 @@ static QVector<QVariant> extract_values(const QByteArray &memdata, int nc_type, 
 static QVariant extract_value(const QByteArray &memdata, int nc_type)
 {
     //see if this is a single value or an array
+    #ifdef SIRE_USE_NETCDF
     int nvals = memdata.count() / nc_type_to_size(nc_type);
+    #else
+    int nvals = 0;
+    #endif
 
     if (nvals > 0)
     {
@@ -484,6 +490,7 @@ bool NetCDFDataInfo::isNull() const
 /** Return a string representation of this data info */
 QString NetCDFDataInfo::toString() const
 {
+    #ifdef SIRE_USE_NETCDF
     if (isNull())
         return QObject::tr("NetCDFDataInfo::null");
     else if (dim_names.isEmpty())
@@ -535,19 +542,30 @@ QString NetCDFDataInfo::toString() const
                     .arg(atts.join(", "));
         }
     }
+    #else
+        return QObject::tr("NetCDFDataInfo::null (netcdf is not supported)");
+    #endif
 }
 
 /** Return the data type of this piece of data. This is a string
     version of the NC_TYPE, e.g. NC_FLOAT, NC_STRING etc. */
 QString NetCDFDataInfo::type() const
 {
+    #ifdef SIRE_USE_NETCDF
     return nc_type_to_string(xtyp);
+    #else
+    return QString();
+    #endif
 }
 
 /** Return the size in bytes of a variable of this type */
 int NetCDFDataInfo::typeSize() const
 {
+    #ifdef SIRE_USE_NETCDF
     return nc_type_to_size(xtyp);
+    #else
+    return 0;
+    #endif
 }
 
 /** Return the number of values that should be held by this data */
@@ -607,6 +625,7 @@ QVariant NetCDFDataInfo::attribute(const QString &name) const
     an empty string if there is not attribute with this name */
 QString NetCDFDataInfo::attributeType(const QString &name) const
 {
+    #ifdef SIRE_USE_NETCDF
     for (int i=0; i<att_names.count(); ++i)
     {
         if (name == att_names[i])
@@ -614,6 +633,7 @@ QString NetCDFDataInfo::attributeType(const QString &name) const
             return nc_type_to_string(att_types[i]);
         }
     }
+    #endif
 
     return QString();
 }
@@ -640,7 +660,8 @@ QHash<QString,QVariant> NetCDFDataInfo::attributes() const
 QHash<QString,QString> NetCDFDataInfo::attributeTypes() const
 {
     QHash<QString,QString> atts;
-    
+ 
+    #ifdef SIRE_USE_NETCDF
     if (not att_names.isEmpty())
     {
         atts.reserve(att_names.count());
@@ -650,6 +671,7 @@ QHash<QString,QString> NetCDFDataInfo::attributeTypes() const
             atts.insert(att_names[i], nc_type_to_string(att_types[i]));
         }
     }
+    #endif
     
     return atts;
 }
@@ -734,6 +756,7 @@ QVector<QVariant> NetCDFData::toArray() const
 /** Return the data cast as an array of floats */
 QVector<float> NetCDFData::toFloatArray() const
 {
+    #ifdef SIRE_USE_NETCDF
     const int nvals = this->nValues();
     QVector<float> values( nvals );
     
@@ -767,11 +790,15 @@ QVector<float> NetCDFData::toFloatArray() const
     }
     
     return values;
+    #else
+    return QVector<float>();
+    #endif
 }
 
 /** Return the data cast as an array of doubles */
 QVector<double> NetCDFData::toDoubleArray() const
 {
+    #ifdef SIRE_USE_NETCDF
     const int nvals = this->nValues();
     QVector<double> values( nvals );
     
@@ -805,6 +832,9 @@ QVector<double> NetCDFData::toDoubleArray() const
     }
     
     return values;
+    #else
+    return QVector<double>();
+    #endif
 }
 
 /////////////
