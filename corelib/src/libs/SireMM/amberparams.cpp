@@ -1360,6 +1360,7 @@ QStringList AmberParams::validateAndFix()
 
     //All 1-4 scaling factors should match up with actual dihedrals - validate
     //that this is the case and fix any problems if we can
+    /*
     for (int i=0; i<exc_atoms.nAtoms(); ++i)
     {
         for (int j=0; j<exc_atoms.nAtoms(); ++j)
@@ -1424,6 +1425,7 @@ QStringList AmberParams::validateAndFix()
             }
         }
     }
+    */
     
     amber_dihedrals = new_dihedrals;
     amber_nb14s = new_nb14s;
