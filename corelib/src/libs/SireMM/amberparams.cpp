@@ -1430,7 +1430,7 @@ QStringList AmberParams::validateAndFix()
                             //convert the atom IDs into a canonical form
                             auto dih = this->convert( DihedralID(path[0],path[1],path[2],path[3]) );
 
-                            qDebug() << "ADDING NULL DIHEDRAL FOR" << dih.toString();
+                            //qDebug() << "ADDING NULL DIHEDRAL FOR" << dih.toString();
 
                             //does this bond involve hydrogen?
                             //- this relies on "AtomElements" being full

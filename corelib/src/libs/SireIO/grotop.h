@@ -386,20 +386,22 @@ public:
 
     SireMM::GromacsAtomType atomType(const QString &atm) const;
 
-    SireMM::GromacsBond bond(const QString &atm0, const QString &atm1) const;
-    QList<SireMM::GromacsBond> bonds(const QString &atm0, const QString &atm1) const;
+    SireMM::GromacsBond bond(const QString &atm0, const QString &atm1, int func) const;
+    QList<SireMM::GromacsBond> bonds(const QString &atm0, const QString &atm1, int func) const;
 
     SireMM::GromacsAngle angle(const QString &atm0, const QString &atm1,
-                               const QString &atm2) const;
+                               const QString &atm2, int func) const;
 
     QList<SireMM::GromacsAngle> angles(const QString &atm0, const QString &atm1,
-                                       const QString &atm2) const;
+                                       const QString &atm2, int func) const;
 
     SireMM::GromacsDihedral dihedral(const QString &atm0, const QString &atm1,
-                                     const QString &atm2, const QString &atm3) const;
+                                     const QString &atm2, const QString &atm3,
+                                     int func) const;
 
     QList<SireMM::GromacsDihedral> dihedrals(const QString &atm0, const QString &atm1,
-                                             const QString &atm2, const QString &atm3) const;
+                                             const QString &atm2, const QString &atm3,
+                                             int func) const;
 
     QHash<QString,SireMM::GromacsAtomType> atomTypes() const;
 
@@ -426,7 +428,8 @@ private:
     void getIncludePath(const PropertyMap &map);
 
     QString searchForDihType(const QString &atom0, const QString &atom1,
-                             const QString &atom2, const QString &atom3) const;
+                             const QString &atom2, const QString &atom3,
+                             int func) const;
 
     QString findIncludeFile(QString filename, QString current_directory);
 

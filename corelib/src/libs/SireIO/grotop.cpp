@@ -2498,15 +2498,18 @@ GromacsAtomType GroTop::atomType(const QString &atm) const
     of the atoms is lower. The ';' character is used as a separator
     as it cannot be in the atom names, as it is used as a comment
     character in the Gromacs Top file */
-static QString get_bond_id(const QString &atm0, const QString &atm1)
+static QString get_bond_id(const QString &atm0, const QString &atm1, int func_type)
 {
+    if (func_type == 0) // default type
+        func_type = 1;
+
     if (atm0 < atm1)
     {
-        return QString("%1;%2").arg(atm0,atm1);
+        return QString("%1;%2;%3").arg(atm0,atm1).arg(func_type);
     }
     else
     {
-        return QString("%1;%2").arg(atm1,atm0);
+        return QString("%1;%2;%3").arg(atm1,atm0).arg(func_type);
     }
 }
 
@@ -2515,15 +2518,19 @@ static QString get_bond_id(const QString &atm0, const QString &atm1)
     of the atoms is lower. The ';' character is used as a separator
     as it cannot be in the atom names, as it is used as a comment
     character in the Gromacs Top file */
-static QString get_angle_id(const QString &atm0, const QString &atm1, const QString &atm2)
+static QString get_angle_id(const QString &atm0, const QString &atm1, const QString &atm2,
+                            int func_type)
 {
+    if (func_type == 0)
+        func_type = 1;  //default type
+
     if (atm0 < atm2)
     {
-        return QString("%1;%2;%3").arg(atm0,atm1,atm2);
+        return QString("%1;%2;%3;%4").arg(atm0,atm1,atm2).arg(func_type);
     }
     else
     {
-        return QString("%1;%2;%3").arg(atm2,atm1,atm0);
+        return QString("%1;%2;%3;%4").arg(atm2,atm1,atm0).arg(func_type);
     }
 }
 
@@ -2533,15 +2540,16 @@ static QString get_angle_id(const QString &atm0, const QString &atm1, const QStr
     as it cannot be in the atom names, as it is used as a comment
     character in the Gromacs Top file */
 static QString get_dihedral_id(const QString &atm0, const QString &atm1,
-                               const QString &atm2, const QString &atm3)
+                               const QString &atm2, const QString &atm3,
+                               int func_type)
 {
     if (atm0 < atm3)
     {
-        return QString("%1;%2;%3;%4").arg(atm0,atm1,atm2,atm3);
+        return QString("%1;%2;%3;%4;%5").arg(atm0,atm1,atm2,atm3).arg(func_type);
     }
     else
     {
-        return QString("%1;%2;%3;%4").arg(atm3,atm2,atm1,atm0);
+        return QString("%1;%2;%3;%4;%5").arg(atm3,atm2,atm1,atm0).arg(func_type);
     }
 }
 
@@ -2555,32 +2563,34 @@ GroSystem GroTop::groSystem() const
 /** Return the bond potential data for the passed pair of atoms. This only returns
     the most recently inserted parameter for this pair. Use 'bonds' if you want
     to allow for multiple return values */
-GromacsBond GroTop::bond(const QString &atm0, const QString &atm1) const
+GromacsBond GroTop::bond(const QString &atm0, const QString &atm1,
+                         int func_type) const
 {
-    return bond_potentials.value( get_bond_id(atm0,atm1), GromacsBond() );
+    return bond_potentials.value( get_bond_id(atm0,atm1,func_type), GromacsBond() );
 }
 
 /** Return the bond potential data for the passed pair of atoms. This returns
     a list of all associated parameters */
-QList<GromacsBond> GroTop::bonds(const QString &atm0, const QString &atm1) const
+QList<GromacsBond> GroTop::bonds(const QString &atm0, const QString &atm1, int func_type) const
 {
-    return bond_potentials.values( get_bond_id(atm0,atm1) );
+    return bond_potentials.values( get_bond_id(atm0,atm1,func_type) );
 }
 
 /** Return the angle potential data for the passed triple of atoms. This only returns
     the most recently inserted parameter for these atoms. Use 'angles' if you want
     to allow for multiple return values */
-GromacsAngle GroTop::angle(const QString &atm0, const QString &atm1, const QString &atm2) const
+GromacsAngle GroTop::angle(const QString &atm0, const QString &atm1, const QString &atm2,
+                           int func_type) const
 {
-    return ang_potentials.value( get_angle_id(atm0,atm1,atm2), GromacsAngle() );
+    return ang_potentials.value( get_angle_id(atm0,atm1,atm2,func_type), GromacsAngle() );
 }
 
 /** Return the angle potential data for the passed triple of atoms. This returns
     a list of all associated parameters */
 QList<GromacsAngle> GroTop::angles(const QString &atm0, const QString &atm1,
-                                   const QString &atm2) const
+                                   const QString &atm2, int func_type) const
 {
-    return ang_potentials.values( get_angle_id(atm0,atm1,atm2) );
+    return ang_potentials.values( get_angle_id(atm0,atm1,atm2,func_type) );
 }
 
 /** Search for a dihedral type parameter that matches the atom types
@@ -2588,9 +2598,10 @@ QList<GromacsAngle> GroTop::angles(const QString &atm0, const QString &atm1,
     it will then use one of the wildcard matches. Returns a null string if there
     is no match. This will return the key into the dih_potentials dictionary */
 QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
-                                 const QString &atm2, const QString &atm3) const
+                                 const QString &atm2, const QString &atm3,
+                                 int func_type) const
 {
-    QString key = get_dihedral_id(atm0,atm1,atm2,atm3);
+    QString key = get_dihedral_id(atm0,atm1,atm2,atm3,func_type);
     
     //qDebug() << "SEARCHING FOR" << key;
     
@@ -2603,7 +2614,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     static const QString wild = "X";
  
     //look for *-atm1-atm2-atm3
-    key = get_dihedral_id(wild, atm1, atm2, atm3);
+    key = get_dihedral_id(wild, atm1, atm2, atm3, func_type);
 
     if (dih_potentials.contains(key))
     {
@@ -2612,7 +2623,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     }
 
     //look for *-atm2-atm1-atm0
-    key = get_dihedral_id(wild, atm2, atm1, atm0);
+    key = get_dihedral_id(wild, atm2, atm1, atm0, func_type);
 
     if (dih_potentials.contains(key))
     {
@@ -2621,7 +2632,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     }
 
     //this failed. Look for *-atm1-atm2-* or *-atm2-atm1-*
-    key = get_dihedral_id(wild, atm1, atm2, wild);
+    key = get_dihedral_id(wild, atm1, atm2, wild, func_type);
     
     if (dih_potentials.contains(key))
     {
@@ -2629,7 +2640,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
         return key;
     }
     
-    key = get_dihedral_id(wild, atm2, atm1, wild);
+    key = get_dihedral_id(wild, atm2, atm1, wild, func_type);
     
     if (dih_potentials.contains(key))
     {
@@ -2638,7 +2649,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     }
     
     //look for *-*-atm2-atm3
-    key = get_dihedral_id(wild, wild, atm2, atm3);
+    key = get_dihedral_id(wild, wild, atm2, atm3, func_type);
 
     if (dih_potentials.contains(key))
     {
@@ -2647,7 +2658,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     }
 
     //look for *-*-atm1-atm0
-    key = get_dihedral_id(wild, wild, atm1, atm0);
+    key = get_dihedral_id(wild, wild, atm1, atm0, func_type);
 
     if (dih_potentials.contains(key))
     {
@@ -2656,7 +2667,7 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     }
     
     //finally look for *-*-*-*
-    key = get_dihedral_id(wild, wild, wild, wild);
+    key = get_dihedral_id(wild, wild, wild, wild, func_type);
     
     if (dih_potentials.contains(key))
     {
@@ -2671,26 +2682,20 @@ QString GroTop::searchForDihType(const QString &atm0, const QString &atm1,
     the most recently inserted parameter for these atoms. Use 'dihedrals' if you want
     to allow for multiple return values */
 GromacsDihedral GroTop::dihedral(const QString &atm0, const QString &atm1,
-                                 const QString &atm2, const QString &atm3) const
+                                 const QString &atm2, const QString &atm3,
+                                 int func_type) const
 {
-    //auto key = searchForDihType(atm0,atm1,atm2,atm3);
-
-    //qDebug() << key << dih_potentials.value(key).toString();
-
-    return dih_potentials.value( searchForDihType(atm0,atm1,atm2,atm3),
+    return dih_potentials.value( searchForDihType(atm0,atm1,atm2,atm3,func_type),
                                  GromacsDihedral() );
 }
 
 /** Return the dihedral potential data for the passed quad of atoms. This returns
     a list of all associated parameters */
 QList<GromacsDihedral> GroTop::dihedrals(const QString &atm0, const QString &atm1,
-                                         const QString &atm2, const QString &atm3) const
+                                         const QString &atm2, const QString &atm3,
+                                         int func_type) const
 {
-    //auto key = searchForDihType(atm0,atm1,atm2,atm3);
-
-    //qDebug() << key << Sire::toString(dih_potentials.values(key));
-
-    return dih_potentials.values( searchForDihType(atm0,atm1,atm2,atm3) );
+    return dih_potentials.values( searchForDihType(atm0,atm1,atm2,atm3,func_type) );
 }
 
 /** Return the atom types loaded from this file */
@@ -3573,7 +3578,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 continue;
             }
 
-            QString key = get_bond_id(atm0,atm1);
+            QString key = get_bond_id(atm0,atm1,bond.functionType());
             bnds.insertMulti(key, bond);
         }
 
@@ -3662,7 +3667,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 continue;
             }
 
-            QString key = get_angle_id(atm0,atm1,atm2);
+            QString key = get_angle_id(atm0,atm1,atm2,angle.functionType());
             angs.insertMulti(key, angle);
         }
 
@@ -3783,7 +3788,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                 }
             }
 
-            QString key = get_dihedral_id(atm0,atm1,atm2,atm3);
+            QString key = get_dihedral_id(atm0,atm1,atm2,atm3,dihedral.functionType());
             dihs.insertMulti(key, dihedral);
         }
 
@@ -4888,14 +4893,16 @@ GroTop::PropsAndErrors GroTop::getBondProperties(const MoleculeInfo &molinfo,
             const auto atom1 = moltype.atom(idx1);
             
             //get the bond parameter for these bond types
-            auto new_potential = this->bond(atom0.bondType(), atom1.bondType());
+            auto new_potential = this->bond(atom0.bondType(), atom1.bondType(),
+                                            potential.functionType());
             
             if (not new_potential.isResolved())
             {
                 errors.append( QObject::tr("Cannot find the bond parameters for "
-                  "the bond between atoms %1-%2 (atom types %3-%4).")
+                  "the bond between atoms %1-%2 (atom types %3-%4, function type %5).")
                     .arg(atom0.toString()).arg(atom1.toString())
-                    .arg(atom0.bondType()).arg(atom1.bondType()) );
+                    .arg(atom0.bondType()).arg(atom1.bondType())
+                    .arg(potential.functionType()) );
                 continue;
             }
             
@@ -4993,14 +5000,16 @@ GroTop::PropsAndErrors GroTop::getAngleProperties(const MoleculeInfo &molinfo,
             
             //get the angle parameter for these atom types
             auto new_potential = this->angle(atom0.bondType(), atom1.bondType(),
-                                             atom2.bondType());
+                                             atom2.bondType(), potential.functionType());
             
             if (not new_potential.isResolved())
             {
                 errors.append( QObject::tr("Cannot find the angle parameters for "
-                  "the angle between atoms %1-%2-%3 (atom types %4-%5-%6).")
+                  "the angle between atoms %1-%2-%3 (atom types %4-%5-%6, "
+                  "function type %7).")
                     .arg(atom0.toString()).arg(atom1.toString()).arg(atom2.toString())
-                    .arg(atom0.bondType()).arg(atom1.bondType()).arg(atom2.bondType()) );
+                    .arg(atom0.bondType()).arg(atom1.bondType()).arg(atom2.bondType())
+                    .arg(potential.functionType()) );
                 continue;
             }
             
@@ -5076,16 +5085,19 @@ GroTop::PropsAndErrors GroTop::getDihedralProperties(const MoleculeInfo &molinfo
             //get the dihedral parameter for these atom types - could be
             //many, as they will be added together
             auto resolved = this->dihedrals(atom0.bondType(), atom1.bondType(),
-                                            atom2.bondType(), atom3.bondType());
+                                            atom2.bondType(), atom3.bondType(),
+                                            potential.functionType());
             
             if (resolved.isEmpty())
             {
                 errors.append( QObject::tr("Cannot find the dihedral parameters for "
-                  "the dihedral between atoms %1-%2-%3-%4 (atom types %5-%6-%7-%8).")
+                  "the dihedral between atoms %1-%2-%3-%4 (atom types %5-%6-%7-%8, "
+                  "function type %9).")
                     .arg(atom0.toString()).arg(atom1.toString())
                     .arg(atom2.toString()).arg(atom3.toString())
                     .arg(atom0.bondType()).arg(atom1.bondType())
-                    .arg(atom2.bondType()).arg(atom3.bondType()) );
+                    .arg(atom2.bondType()).arg(atom3.bondType())
+                    .arg(potential.functionType()) );
                 continue;
             }
             
