@@ -1351,6 +1351,8 @@ QStringList AmberParams::validateAndFix()
 {
     QStringList errors;
 
+    if (not exc_atoms.isEmpty())
+    {
     Connectivity conn;
     bool has_connectivity = false;
 
@@ -1358,78 +1360,117 @@ QStringList AmberParams::validateAndFix()
     auto new_nb14s = amber_nb14s;
     auto new_exc = exc_atoms;
 
+    QMutex mutex;
+
     //All 1-4 scaling factors should match up with actual dihedrals - validate
     //that this is the case and fix any problems if we can
-    /*
-    for (int i=0; i<exc_atoms.nAtoms(); ++i)
+    tbb::parallel_for( tbb::blocked_range<int>(0, exc_atoms.nGroups()),
+                       [&](const tbb::blocked_range<int> &r)
     {
-        for (int j=0; j<exc_atoms.nAtoms(); ++j)
+        for (int icg = r.begin(); icg < r.end(); ++icg)
         {
-            const auto s = exc_atoms.get(AtomIdx(i),AtomIdx(j));
-            
-            if ( (not (s.coulomb() == 0 or s.coulomb() == 1)) or
-                 (not (s.lj() == 0 or s.lj() == 1)) )
+            const int nats0 = molinfo.nAtoms( CGIdx(icg) );
+        
+            for (int jcg = 0; jcg < exc_atoms.nGroups(); ++jcg)
             {
-                AtomIdx atm0(i); AtomIdx atm3(j);
+                auto group_pairs = exc_atoms.get( CGIdx(icg), CGIdx(jcg) );
             
-                if (not has_connectivity)
+                if (group_pairs.isEmpty() and
+                    group_pairs.defaultValue() == CLJScaleFactor(1,1))
                 {
-                    //have to use the connectivity that is implied by the bonds
-                    conn = this->connectivity();
-                    has_connectivity = true;
-                }
-            
-                //find the shortest bonded path between these two atoms
-                const auto path = conn.findPath(atm0,atm3);
-                
-                if (path.count() != 4)
-                {
-                    errors.append( QObject::tr("Have a 1-4 scaling factor (%1/%2) between "
-                      "atoms %3:%4 and %5:%6 despite there being no physical dihedral between "
-                      "these two atoms. All 1-4 scaling factors MUST be associated with "
-                      "physical dihedrals. The shortest path is %7")
-                        .arg(s.coulomb()).arg(s.lj())
-                        .arg(molinfo.name(atm0).value()).arg(atm0.value())
-                        .arg(molinfo.name(atm3).value()).arg(atm3.value())
-                        .arg(Sire::toString(path)) );
+                    //non of the pairs of atoms between these two groups are
+                    //bonded
                     continue;
                 }
                 
-                //convert the atom IDs into a canonical form
-                auto dih = this->convert( DihedralID(path[0],path[1],path[2],path[3]) );
-
-                //does this bond involve hydrogen? - this relies on "AtomElements" being full
-                bool contains_hydrogen = false;
-
-                if (not amber_elements.isEmpty())
+                const int nats1 = molinfo.nAtoms( CGIdx(jcg) );
+                
+                //compare all pairs of atoms
+                for (int i=0; i<nats0; ++i)
                 {
-                    contains_hydrogen =
-                    (amber_elements.at( molinfo.cgAtomIdx(dih.atom0()) ).nProtons() < 2) or
-                    (amber_elements.at( molinfo.cgAtomIdx(dih.atom1()) ).nProtons() < 2) or
-                    (amber_elements.at( molinfo.cgAtomIdx(dih.atom2()) ).nProtons() < 2) or
-                    (amber_elements.at( molinfo.cgAtomIdx(dih.atom3()) ).nProtons() < 2);
+                    for (int j=0; j<nats1; ++j)
+                    {
+                        const auto s = group_pairs.get(i,j);
+                        
+                        if ( (not (s.coulomb() == 0 or s.coulomb() == 1)) or
+                             (not (s.lj() == 0 or s.lj() == 1)) )
+                        {
+                            const auto atm0 = molinfo.atomIdx( CGAtomIdx(CGIdx(icg),Index(i)) );
+                            const auto atm3 = molinfo.atomIdx( CGAtomIdx(CGIdx(jcg),Index(j)) );
+                        
+                            if (not has_connectivity)
+                            {
+                                //have to use the connectivity that is implied by the bonds
+                                QMutexLocker lkr(&mutex);
+                                if (not has_connectivity)
+                                {
+                                    conn = this->connectivity();
+                                    has_connectivity = true;
+                                }
+                            }
+                        
+                            //find the shortest bonded path between these two atoms
+                            const auto path = conn.findPath(atm0,atm3);
+                            
+                            if (path.count() != 4)
+                            {
+                                QMutexLocker lkr(&mutex);
+                                errors.append( QObject::tr("Have a 1-4 scaling factor (%1/%2) "
+                                  "between atoms %3:%4 and %5:%6 despite there being no physical "
+                                  "dihedral between these two atoms. All 1-4 scaling factors MUST "
+                                  "be associated with "
+                                  "physical dihedrals. The shortest path is %7")
+                                    .arg(s.coulomb()).arg(s.lj())
+                                    .arg(molinfo.name(atm0).value()).arg(atm0.value())
+                                    .arg(molinfo.name(atm3).value()).arg(atm3.value())
+                                    .arg(Sire::toString(path)) );
+                                continue;
+                            }
+                            
+                            //convert the atom IDs into a canonical form
+                            auto dih = this->convert( DihedralID(path[0],path[1],path[2],path[3]) );
+
+                            qDebug() << "ADDING NULL DIHEDRAL FOR" << dih.toString();
+
+                            //does this bond involve hydrogen?
+                            //- this relies on "AtomElements" being full
+                            bool contains_hydrogen = false;
+
+                            if (not amber_elements.isEmpty())
+                            {
+                                contains_hydrogen =
+                            (amber_elements.at( molinfo.cgAtomIdx(dih.atom0()) ).nProtons() < 2) or
+                            (amber_elements.at( molinfo.cgAtomIdx(dih.atom1()) ).nProtons() < 2) or
+                            (amber_elements.at( molinfo.cgAtomIdx(dih.atom2()) ).nProtons() < 2) or
+                            (amber_elements.at( molinfo.cgAtomIdx(dih.atom3()) ).nProtons() < 2);
+                            }
+
+                            //create a null dihedral parameter and add this to the set
+                            QMutexLocker lkr(&mutex);
+                            new_dihedrals.insert(dih,
+                                qMakePair(AmberDihedral(Expression(0),Symbol("phi")),
+                                          contains_hydrogen));
+
+                            //now add in the 1-4 pair
+                            BondID nb14pair = this->convert( BondID(dih.atom0(), dih.atom3()) );
+
+                            //add them to the list of 14 scale factors
+                            new_nb14s.insert(nb14pair, AmberNB14(s.coulomb(),s.lj()));
+
+                            //and remove them from the excluded atoms list
+                            new_exc.set(nb14pair.atom0(),nb14pair.atom1(), CLJScaleFactor(0));
+                        }
+                    }
                 }
-
-                //create a null dihedral parameter and add this to the set
-                new_dihedrals.insert(dih, qMakePair(AmberDihedral(Expression(0),Symbol("phi")),
-                                                    contains_hydrogen));
-
-                //now add in the 1-4 pair
-                BondID nb14pair = this->convert( BondID(dih.atom0(), dih.atom3()) );
-
-                //add them to the list of 14 scale factors
-                new_nb14s.insert(nb14pair, AmberNB14(s.coulomb(),s.lj()));
-
-                //and remove them from the excluded atoms list
-                new_exc.set(nb14pair.atom0(),nb14pair.atom1(), CLJScaleFactor(0));
             }
         }
-    }
-    */
+    });
     
     amber_dihedrals = new_dihedrals;
     amber_nb14s = new_nb14s;
     exc_atoms = new_exc;
+    
+    } // if not exc_atoms.isEmpty()
     
     return errors + this->validate();
 }
