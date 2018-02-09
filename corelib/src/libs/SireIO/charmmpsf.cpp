@@ -3769,7 +3769,7 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
     }
 }
 
-/** Convert a Sire two-atom function to a CHARMM bond paramater string. */
+/** Convert a Sire two-atom function to a CHARMM bond parameter string. */
 QString CharmmPSF::toHarmonicParameter(const QString &bond_atoms, const Expression &func,
     const Symbol &R, int num_atoms)
 {
@@ -3885,7 +3885,7 @@ QString CharmmPSF::toHarmonicParameter(const QString &bond_atoms, const Expressi
     }
 }
 
-/** Convert a Sire four-atom function to a set of CHARMM dihedral paramater strings. */
+/** Convert a Sire four-atom function to a set of CHARMM dihedral parameter strings. */
 QVector<QString> CharmmPSF::toFourAtomParameter(const QString &dihedral_atoms, const Expression &func)
 {
     const auto phi = InternalPotential::symbols().dihedral().phi();
