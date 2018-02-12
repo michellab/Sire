@@ -107,8 +107,8 @@ AmberParameters::AmberParameters(const MoleculeData &molecule)
 /** Copy constructor */
 AmberParameters::AmberParameters(const AmberParameters &other)
                 : ConcreteProperty<AmberParameters,MoleculeProperty>(),
-		  bonds(other.bonds),angles(other.angles),dihedrals(other.dihedrals),
-		  impropers(other.impropers),nb14pairs(other.nb14pairs)
+		  molinfo(other.molinfo), bonds(other.bonds),angles(other.angles),
+          dihedrals(other.dihedrals),impropers(other.impropers),nb14pairs(other.nb14pairs)
 {}
 
 /** Copy assignment operator */
@@ -118,11 +118,11 @@ AmberParameters& AmberParameters::operator=(const AmberParameters &other)
     {
         MoleculeProperty::operator=(other);
         molinfo = other.molinfo;
-	bonds = other.bonds;
-	angles = other.angles;
-	dihedrals = other.dihedrals;
-	impropers = other.impropers;
-	nb14pairs = other.nb14pairs;
+        bonds = other.bonds;
+        angles = other.angles;
+        dihedrals = other.dihedrals;
+        impropers = other.impropers;
+        nb14pairs = other.nb14pairs;
     }
   
     return *this;
