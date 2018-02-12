@@ -53,6 +53,8 @@ namespace bp = boost::python;
 
 #include <QDebug>
 
+#include <QElapsedTimer>
+
 #include <QRegularExpression>
 
 #include "gro87.h"

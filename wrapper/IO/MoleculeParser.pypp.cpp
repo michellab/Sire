@@ -15,7 +15,13 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireFF/ffdetail.h"
+
 #include "SireIO/errors.h"
+
+#include "SireMM/mmdetail.h"
+
+#include "SireMol/molecule.h"
 
 #include "SireStream/datastream.h"
 

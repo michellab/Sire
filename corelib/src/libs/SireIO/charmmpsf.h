@@ -184,7 +184,7 @@ public:
     CharmmParam();
 
     /** Constructor. */
-    CharmmParam(const QString &line, int type, QStringList &errors);
+    CharmmParam(const QString &line, int type, QStringList &errors, bool is_xplor = false);
 
     static const char* typeName();
 
@@ -290,7 +290,7 @@ private:
         QMultiHash<QString, CharmmParam> &angle_params,
         QMultiHash<QString, CharmmParam> &dihedral_params,
         QMultiHash<QString, CharmmParam> &improper_params,
-        QMultiHash<QString, CharmmParam> &cross_params,
+        QMultiHash<QString, CharmmParam> &nonbonded_params,
         SireVol::PeriodicBox &box, bool &has_box_params) const;
 
     SireMol::MolStructureEditor getMolStructure(int imol,
@@ -320,7 +320,7 @@ private:
         const QMultiHash<QString, CharmmParam> &angle_params,
         const QMultiHash<QString, CharmmParam> &dihedral_params,
         const QMultiHash<QString, CharmmParam> &improper_params,
-        const QMultiHash<QString, CharmmParam> &cross_params,
+        const QMultiHash<QString, CharmmParam> &nonbonded_params,
         const PropertyMap &map = PropertyMap()) const;
 
     void parseMolecule(

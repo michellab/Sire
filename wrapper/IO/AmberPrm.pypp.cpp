@@ -239,7 +239,7 @@ void register_AmberPrm_class(){
             AmberPrm_exposer.def( 
                 "forcefield"
                 , forcefield_function_value
-                , "" );
+                , "Return the forcefield for the molecules in this file" );
         
         }
         { //::SireIO::AmberPrm::formatDescription

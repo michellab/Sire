@@ -399,12 +399,15 @@ CharmmParam::CharmmParam() : type(-1)
                                       1 = angle
                                       2 = dihedral
                                       3 = improper
-                                      4 = cross term
+                                      4 = non-bonded
 
     @param errors
         A list of parse errors.
+
+    @param is_xplor
+        Whether this is an xplor format record.
  */
-CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors)
+CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors, bool is_xplor)
     : type(type)
 {
     // Tokenize the line.
@@ -597,12 +600,92 @@ CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors)
         params.append(p2);
     }
 
-    // Cross term parameters.
+    // Non-bonded parameters.
     else if (type == 4)
     {
-        // TODO: Not sure what these parameter records look like. Find an example
-        //       In the CHARMM forcefield files.
+        int min_records = 3;
+        if (not is_xplor) min_records = 4;
 
+        // Check record count.
+        if (data.count() < 3)
+        {
+            errors.append(QObject::tr("This doesn't look like a CHARMM non-bonded "
+                "parameter record! There should be at least %1 entries, found %2: %3")
+                .arg(min_records).arg(data.count()).arg(line));
+
+            return;
+        }
+
+        // Atom data.
+        atoms.append(data[0]);
+
+        // Parameter data.
+        bool ok1, ok2;
+        double p1, p2;
+
+        // Attempt to read the parameter values.
+        if (is_xplor)
+        {
+            p1 = data[1].toDouble(&ok1);
+            p2 = data[2].toDouble(&ok2);
+        }
+        else
+        {
+            p1 = data[2].toDouble(&ok1);
+            p2 = data[3].toDouble(&ok2);
+        }
+
+        if (not ok1 or not ok2)
+        {
+            errors.append(QObject::tr("Could not read CHARMM non-bonded parameter record! %1")
+                .arg(line));
+
+            return;
+        }
+
+        // Append the parameters.
+        params.append(p1);
+        params.append(p2);
+
+        // Now check for 1-4 non-bonded parameters.
+        bool is_nb14 = false;
+
+        if (is_xplor)
+        {
+            if ((data.count() > 4) and (data[3].at(0) != '!'))
+                is_nb14 = true;
+        }
+        else
+        {
+            if ((data.count() > 6) and (data[4].at(0) != '!'))
+                is_nb14 = true;
+        }
+
+        if (is_nb14)
+        {
+            if (is_xplor)
+            {
+                p1 = data[3].toDouble(&ok1);
+                p2 = data[4].toDouble(&ok2);
+            }
+            else
+            {
+                p1 = data[5].toDouble(&ok1);
+                p2 = data[6].toDouble(&ok2);
+            }
+
+            if (not ok1 or not ok2)
+            {
+                errors.append(QObject::tr("Could not read CHARMM non-bonded 1-4 parameter record! %1")
+                    .arg(line));
+
+                return;
+            }
+
+            // Append the parameters.
+            params.append(p1);
+            params.append(p2);
+        }
     }
 
     // Uknown parameter type.
@@ -1030,11 +1113,11 @@ QVector<QString> CharmmPSF::toLines() const
     QVector<QString> lines;
 
     // Add header information.
-    // TODO: Add BioSimSpace version info.
+    // TODO: Add Sire version info.
     lines.append("PSF");
     lines.append("");
     lines.append("       1 !NTITLE");
-    lines.append(QString(" REMARKS DATE:%1    created by BioSimSpace (v)")
+    lines.append(QString(" REMARKS DATE:%1    created by Sire")
          .arg(QDateTime::currentDateTime().toString("dd-MMM-yy  hh:mm:ss")));
     lines.append("");
 
@@ -1855,8 +1938,8 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         @param improper_params
             A multi-hash of the parsed improper parameters.
 
-        @param cross_params
-            A multi-hash of the parsed cross-term parameters.
+        @param nonbonded_params
+            A multi-hash of the parsed non-bonded parameters.
 
         @param box
             A periodic box object.
@@ -1870,7 +1953,7 @@ void CharmmPSF::parseParameters(
     QMultiHash<QString, CharmmParam> &angle_params,
     QMultiHash<QString, CharmmParam> &dihedral_params,
     QMultiHash<QString, CharmmParam> &improper_params,
-    QMultiHash<QString, CharmmParam> &cross_params,
+    QMultiHash<QString, CharmmParam> &nonbonded_params,
     PeriodicBox &box, bool &has_box_params) const
 {
     /* CHARMM parameter files are split in sections for different record types,
@@ -1890,7 +1973,8 @@ void CharmmPSF::parseParameters(
 
        We assume that parameter files are formatted correctly, i.e. there
        is no overlap between record sections, and all sections must be
-       separated by at least one blank line.
+       separated by at least one blank line. (There are no blank lines within
+       a record section.)
 
        We also parse NAMD XSC box data, which is added to the Sire System
        as a PeriodicBox Space property.
@@ -2099,6 +2183,51 @@ void CharmmPSF::parseParameters(
             improper_params.insert(generateKey(param.getAtoms()), param);
         }
 
+        // Non-bonded parameters.
+        else if (start.toUpper() == "NONBONDED")
+        {
+            // There must be more than one record on the line.
+            if (data.count() > 1)
+            {
+                // This is a CHARMM format parameter file.
+                if (data[1] == "nbxmod")
+                {
+                    bool is_blank_line = false;
+
+                    // Skip two lines.
+                    i += 2;
+
+                    // Step-forward until we end the section.
+                    while (not is_blank_line)
+                    {
+                        QString line = parameter_lines[i].simplified();
+
+                        // Blank line.
+                        if (line.count() == 0)
+                        {
+                            is_blank_line = true;
+                            break;
+                        }
+
+                        // Not a comment.
+                        if (not (line[0] == '!'))
+                        {
+                            CharmmParam param(line, 4, errors);
+                            nonbonded_params.insert(generateKey(param.getAtoms()), param);
+                        }
+
+                        i++;
+                    }
+                }
+                else
+                {
+                    data.removeFirst();
+                    CharmmParam param(data.join(" "), 4, errors, true);
+                    nonbonded_params.insert(generateKey(param.getAtoms()), param);
+                }
+            }
+        }
+
         // Periodic box record data.
         // TODO:
         //  1) Figure out how to make this work if the file doesn't contain
@@ -2161,8 +2290,8 @@ void CharmmPSF::parseParameters(
         @param improper_params
             A multi-hash of the parsed improper parameters.
 
-        @param cross_params
-            A multi-hash of the parsed cross-term parameters.
+        @param nonbonded_params
+            A multi-hash of the non-bonded parameters.
 
         @return
             The parameterised molecule.
@@ -2174,7 +2303,7 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
     const QMultiHash<QString, CharmmParam> &angle_params,
     const QMultiHash<QString, CharmmParam> &dihedral_params,
     const QMultiHash<QString, CharmmParam> &improper_params,
-    const QMultiHash<QString, CharmmParam> &cross_params,
+    const QMultiHash<QString, CharmmParam> &nonbonded_params,
     const PropertyMap &map) const
 {
     // Get an editable version of the molecule.
@@ -2875,7 +3004,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     QMultiHash<QString, CharmmParam> angle_params;
     QMultiHash<QString, CharmmParam> dihedral_params;
     QMultiHash<QString, CharmmParam> improper_params;
-    QMultiHash<QString, CharmmParam> cross_params;
+    QMultiHash<QString, CharmmParam> nonbonded_params;
 
     // Initialise a periodic box object.
     PeriodicBox box;
@@ -2883,7 +3012,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
 
     // Parse and validate the parameter file.
     parseParameters(param_lines, bond_params, angle_params,
-        dihedral_params, improper_params, cross_params, box, has_box_params);
+        dihedral_params, improper_params, nonbonded_params, box, has_box_params);
 
     // Early exit if parameters are missing.
     if ((nBonds()      > 0 and bond_params.count()     == 0) or
@@ -2920,7 +3049,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
                 // Parameterise the molecule.
                 mols[i] = parameteriseMolecule(i, system[molnums[i]].molecule(),
                     bond_params, angle_params, dihedral_params, improper_params,
-                    cross_params, map);
+                    nonbonded_params, map);
             }
         });
     }
@@ -2931,7 +3060,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
             // Parameterise the molecule.
             mols[i] = parameteriseMolecule(i, system[molnums[i]].molecule(),
                 bond_params, angle_params, dihedral_params, improper_params,
-                cross_params, map);
+                nonbonded_params, map);
         }
     }
 
