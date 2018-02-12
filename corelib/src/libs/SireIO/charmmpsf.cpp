@@ -39,6 +39,7 @@
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
 
+#include "SireMM/atomljs.h"
 #include "SireMM/internalff.h"
 #include "SireMM/twoatomfunctions.h"
 #include "SireMM/threeatomfunctions.h"
@@ -2575,6 +2576,60 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
         // TODO: Work out what to do here...
     }
 
+    // Add non-bonded parameter.
+    if (nonbonded_params.count() > 0)
+    {
+        // The atomic Lennard-Jones properties.
+        AtomLJs lj_funcs(molinfo);
+
+        // Create an actual molecule from the passed object.
+        auto mol = sire_mol.molecule();
+
+        for (int i=0; i<nAtoms(imol); ++i)
+        {
+            // Store a reference to the current atom.
+            const auto &atom = atoms[molecules[imol][i]];
+
+            // Determine the CGAtomIdx and type for this atom.
+            auto cgatomidx = molinfo.cgAtomIdx(AtomNum(atom.getNumber()));
+            auto type = atom.getType();
+
+            // Get the parameters.
+            auto matches = nonbonded_params.values(type);
+
+            // We found a match.
+            if (matches.count() > 0)
+            {
+                // Extract the first parameter set.
+                // There should only be one match!
+                auto params = matches[0].getParams();
+
+                // Extract the epsilon and rmin terms.
+                double epsilon = qAbs(params[0]);
+                double rmin = params[1];
+
+                /* Convert from rmin to sigma.
+
+                    CHARMM uses:
+                        U = eps * ((rmin/r)^12 - 2(rmin/r)^6)
+
+                    Sire uses:
+                        U = 4*eps * ((sigma/r)^12 - (sigma/r)^6)
+
+                    where rmin = sigma * 2^(1/6)
+                    */
+                double sigma = rmin / qPow(2.0, 1.0/6.0);
+
+                lj_funcs.set(cgatomidx, LJParameter(sigma * SireUnits::angstrom,
+                                                    epsilon * SireUnits::kcal_per_mol));
+            }
+        }
+
+        // Set the Lennard-Jones property.
+        if (lj_funcs.count() > 0)
+            edit_mol.setProperty(map["LJ"], lj_funcs);
+    }
+
     return edit_mol.commit();
 }
 
@@ -2893,14 +2948,6 @@ QList<CharmmParam> CharmmPSF::findParameters(const QVector<QString> &search_atom
             return matches;
         }
         else return matches;
-    }
-
-    else if (type == 4)
-    {
-        // TODO: Not sure what these parameter records look like. Find an example
-        //       In the CHARMM forcefield files.
-
-        return QList<CharmmParam>();
     }
 
     // Uknown parameter type.
