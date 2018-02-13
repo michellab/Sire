@@ -137,6 +137,12 @@ public:
     /** Get the atom mass. */
     double getMass() const;
 
+    /** Get the non-bonded exclusion. */
+    bool isNonBondedExcluded() const;
+
+    /** Set the non-bonded exclusion. */
+    void setNonBondedExclusion(bool is_nb_excluded);
+
 private:
     /** The index in the atoms vector. */
     qint64 index;
@@ -167,6 +173,9 @@ private:
 
     /** Mass. */
     double mass;
+
+    /** Non-bonded exclusion. */
+    bool is_nb_excluded;
 };
 
 /** This is a container class for CHARMM parameter records.
@@ -271,6 +280,8 @@ public:
     int nDihedrals(int i) const;
     int nImpropers() const;
     int nImpropers(int i) const;
+    int nNonBondedExclusions() const;
+    int nNonBondedExclusions(int i) const;
     int nCrossTerms() const;
     int nCrossTerms(int i) const;
 
@@ -331,10 +342,12 @@ private:
         QVector<QVector<qint64> > &local_angles,
         QVector<QVector<qint64> > &local_dihedrals,
         QVector<QVector<qint64> > &local_impropers,
+        QVector<QVector<qint64> > &local_nonbonded,
         QSet<QString> &bond_params,
         QSet<QString> &angle_params,
         QSet<QString> &dihedral_params,
         QSet<QString> &improper_params,
+        QSet<QString> &nonbonded_params,
         QStringList &local_errors,
         const PropertyMap &map);
 
@@ -353,6 +366,8 @@ private:
         const SireCAS::Symbol &R, int num_atoms=2);
 
     QVector<QString> toFourAtomParameter(const QString &dihedral_atoms, const SireCAS::Expression &func);
+
+    QString toNonBondedParameter(const SireMol::Atom &atom, const PropertyMap &map) const;
 
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;
@@ -380,6 +395,12 @@ private:
 
     /** The indices of the impropers for each molecule. */
     QVector<QVector<qint64> > mol_impropers;
+
+    /** The indices of the atoms that are excluded from non-bonded interactions. */
+    QVector<QVector<qint64> > nonbonded_exclusions;
+
+    /** The indices of the non-bonded exclusions for each molecule. */
+    QVector<QVector<qint64> > mol_nonbonded_exclusions;
 
     /** The cross term record data (!NCRTERM). */
     QVector<QVector<qint64> > cross_terms;

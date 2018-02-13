@@ -141,8 +141,9 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmPSF &psf)
 
     ds << psf.atoms << psf.bonds << psf.mol_bonds << psf.angles << psf.mol_angles
        << psf.dihedrals << psf.mol_dihedrals << psf.impropers << psf.mol_impropers
-       << psf.cross_terms << psf.mol_cross_terms << psf.num_to_idx << psf.molecules
-       << psf.charmm_params << psf.box << psf.has_box << static_cast<const MoleculeParser&>(psf);
+       << psf.nonbonded_exclusions << psf.mol_nonbonded_exclusions << psf.cross_terms
+       << psf.mol_cross_terms << psf.num_to_idx << psf.molecules << psf.charmm_params
+       << psf.box << psf.has_box << static_cast<const MoleculeParser&>(psf);
 
     return ds;
 }
@@ -155,8 +156,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmPSF &psf)
     {
         ds >> psf.atoms >> psf.bonds >> psf.mol_bonds >> psf.angles >> psf.mol_angles
            >> psf.dihedrals >> psf.mol_dihedrals >> psf.impropers >> psf.mol_impropers
-           >> psf.cross_terms >> psf.mol_cross_terms >> psf.num_to_idx >> psf.molecules
-           >> psf.charmm_params >> psf.box >> psf.has_box >> static_cast<MoleculeParser&>(psf);
+           >> psf.nonbonded_exclusions >> psf.mol_nonbonded_exclusions >> psf.cross_terms
+           >> psf.mol_cross_terms >> psf.num_to_idx >> psf.molecules >> psf.charmm_params
+           >> psf.box >> psf.has_box >> static_cast<MoleculeParser&>(psf);
     }
     else
         throw version_error(v, "1", r_psf, CODELOC);
@@ -172,7 +174,8 @@ PSFAtom::PSFAtom() :
     res_num(0),
     type("X"),
     charge(0),
-    mass(0)
+    mass(0),
+    is_nb_excluded(false)
 {
 }
 
@@ -184,7 +187,8 @@ PSFAtom::PSFAtom(const QString &line, int index, QStringList &errors) :
     res_num(0),
     type("X"),
     charge(0),
-    mass(0)
+    mass(0),
+    is_nb_excluded(false)
 {
     // Tokenize the line, splitting using a single whitespace character.
     QStringList data = line.simplified().split(QRegExp("\\s"));
@@ -268,7 +272,8 @@ PSFAtom::PSFAtom(const SireMol::Atom &atom, const QString &segment,
     name(atom.name().value().toUpper()),
     type("X"),
     charge(0),
-    mass(0)
+    mass(0),
+    is_nb_excluded(false)
 {
     // The atom is within a residue.
     if (atom.isWithinResidue())
@@ -293,6 +298,12 @@ PSFAtom::PSFAtom(const SireMol::Atom &atom, const QString &segment,
     if (atom.hasProperty(map["mass"]))
     {
         mass = atom.property<SireUnits::Dimension::MolarMass>(map["mass"]).value();
+    }
+
+    // Extract the non-bonded exclusion flag.
+    if (atom.hasProperty(map["is_nb_excluded"]))
+    {
+        is_nb_excluded = atom.property<qint64>(map["is_nb_excluded"]);
     }
 }
 
@@ -383,6 +394,18 @@ double PSFAtom::getCharge() const
 double PSFAtom::getMass() const
 {
     return mass;
+}
+
+/** Get the non-bonded exclusion. */
+bool PSFAtom::isNonBondedExcluded() const
+{
+    return is_nb_excluded;
+}
+
+/** Set the non-bonded exclusion. */
+void PSFAtom::setNonBondedExclusion(bool is_nb_excluded)
+{
+    this->is_nb_excluded = is_nb_excluded;
 }
 
 /** Default constructor. */
@@ -790,6 +813,7 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
     QSet<QString> angle_params;
     QSet<QString> dihedral_params;
     QSet<QString> improper_params;
+    QSet<QString> nonbonded_params;
 
     // Reconstruct the record data for each molecule.
     for (int i=0; i<nmols; ++i)
@@ -800,17 +824,19 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
         QVector<QVector<qint64> > local_angles;
         QVector<QVector<qint64> > local_dihedrals;
         QVector<QVector<qint64> > local_impropers;
+        QVector<QVector<qint64> > local_nonbonded;
 
         // Parse the molecular system.
         parseMolecule(i, system[molnums[i]].molecule(), local_atoms, local_bonds,
-            local_angles, local_dihedrals, local_impropers, bond_params, angle_params,
-            dihedral_params, improper_params, parse_warnings, map);
+            local_angles, local_dihedrals, local_impropers, local_nonbonded, bond_params,
+            angle_params, dihedral_params, improper_params, nonbonded_params, parse_warnings, map);
 
-        atoms     += local_atoms;
-        bonds     += local_bonds;
-        angles    += local_angles;
-        dihedrals += local_dihedrals;
-        impropers += local_impropers;
+        atoms                += local_atoms;
+        bonds                += local_bonds;
+        angles               += local_angles;
+        dihedrals            += local_dihedrals;
+        impropers            += local_impropers;
+        nonbonded_exclusions += local_nonbonded;
     }
 
     // Generate the PSF record lines.
@@ -912,6 +938,28 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
             charmm_params.append("");
         }
 
+        // Non-bonded.
+        if (nonbonded_params.count() > 0)
+        {
+            // Note that the non-bonded parameters are output in sorted order, i.e.
+            // they aren't grouped into sections as they are in the original forcefield file.
+            charmm_params.append("NONBONDED nbxmod  5 atom cdiel shift vatom vdistance vswitch -");
+			charmm_params.append("cutnb 14.0 ctofnb 12.0 ctonnb 10.0 eps 1.0 e14fac 1.0 wmin 1.5");
+            charmm_params.append("                !adm jr., 5/08/91, suggested cutoff scheme");
+            charmm_params.append("!");
+            charmm_params.append("!V(Lennard-Jones) = Eps,i,j[(Rmin,i,j/ri,j)**12 - 2(Rmin,i,j/ri,j)**6]");
+            charmm_params.append("!");
+            charmm_params.append("!epsilon: kcal/mole, Eps,i,j = sqrt(eps,i * eps,j)");
+            charmm_params.append("!Rmin/2: A, Rmin,i,j = Rmin/2,i + Rmin/2,j");
+            charmm_params.append("!");
+            charmm_params.append("!atom  ignored    epsilon      Rmin/2    ignored    eps,1-4      Rmin/2,1-4");
+            charmm_params.append("!");
+            QStringList params = nonbonded_params.toList();
+            params.sort();
+            charmm_params.append(params);
+            charmm_params.append("");
+        }
+
         if (charmm_params.count() > 0)
             charmm_params.append("END");
     }
@@ -955,6 +1003,8 @@ CharmmPSF::CharmmPSF(const CharmmPSF &other) :
     mol_dihedrals(other.mol_dihedrals),
     impropers(other.impropers),
     mol_impropers(other.mol_impropers),
+    nonbonded_exclusions(other.nonbonded_exclusions),
+    mol_nonbonded_exclusions(other.mol_nonbonded_exclusions),
     cross_terms(other.cross_terms),
     mol_cross_terms(other.mol_cross_terms),
     num_to_idx(other.num_to_idx),
@@ -983,6 +1033,8 @@ CharmmPSF& CharmmPSF::operator=(const CharmmPSF &other)
         mol_dihedrals = other.mol_dihedrals;
         impropers = other.impropers;
         mol_impropers = other.mol_impropers;
+        nonbonded_exclusions = other.nonbonded_exclusions;
+        mol_nonbonded_exclusions = other.mol_nonbonded_exclusions;
         cross_terms = other.cross_terms;
         mol_cross_terms = other.mol_cross_terms;
         num_to_idx = other.num_to_idx;
@@ -1055,9 +1107,9 @@ QString CharmmPSF::toString() const
     {
         return QObject::tr("CharmmPSF( nMolecules() = %1, nAtoms() = %2, "
             "nBonds() = %3, nAngles() = %4, nDihedrals() = %5, "
-            "nImpropers() = %6, nCrossTerms() = %7 )")
-            .arg(nMolecules()).arg(nAtoms()).arg(nBonds()).arg(nAngles())
-            .arg(nDihedrals()).arg(nImpropers()).arg(nCrossTerms());
+            "nImpropers() = %6, nNonBondedExclusions() = %7, nCrossTerms() = %8 )")
+            .arg(nMolecules()).arg(nAtoms()).arg(nBonds()).arg(nAngles()).arg(nDihedrals())
+            .arg(nImpropers()).arg(nNonBondedExclusions()).arg(nCrossTerms());
     }
 }
 
@@ -1069,7 +1121,7 @@ QVector<QString> CharmmPSF::toLines() const
 
     // No records.
     if ((nAtoms() + nBonds() + nAngles() + nDihedrals()
-        + nImpropers() + nCrossTerms()) == 0)
+        + nImpropers() + nNonBondedExclusions() + nCrossTerms()) == 0)
     {
         return QVector<QString>();
     }
@@ -1289,6 +1341,40 @@ QVector<QString> CharmmPSF::toLines() const
         lines += record_lines;
     }
 
+    // Add any non-bonded exclusions.
+    if (nNonBondedExclusions() > 0)
+    {
+        const int num_records = nNonBondedExclusions();
+
+        // There are 8 non-nonded exclusion records per line.
+        const int num_lines = qCeil(num_records/8.0);
+
+        QVector<QString> record_lines(num_lines + 2);
+        record_lines[0] = QString("%1 !NNB").arg(num_records, 8);
+
+        if (usesParallel())
+        {
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
+                            [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    record_lines[i+1] = generate_line(nonbonded_exclusions, i, num_lines, num_records, 1);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<num_lines; ++i)
+            {
+                record_lines[i+1] = generate_line(nonbonded_exclusions, i, num_lines, num_records, 1);
+            }
+        }
+
+        // Append the non-bonded exclusion record lines.
+        lines += record_lines;
+    }
+
     // Add any cross-term records.
     if (nCrossTerms() > 0)
     {
@@ -1424,6 +1510,18 @@ int CharmmPSF::nImpropers() const
 int CharmmPSF::nImpropers(int i) const
 {
     return mol_impropers[i].count();
+}
+
+/** Return the number of non-bonded exclusion records. */
+int CharmmPSF::nNonBondedExclusions() const
+{
+    return nonbonded_exclusions.count();
+}
+
+/** Return the number of non-bonded exclusions in molecule 'i'. */
+int CharmmPSF::nNonBondedExclusions(int i) const
+{
+    return mol_nonbonded_exclusions[i].count();
 }
 
 /** Return the number of cross-term records. */
@@ -1584,7 +1682,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         // Bond records.
         else if (line.contains("!NBOND"))
         {
-            // Extract the number of bonds;
+            // Extract the number of bonds.
             bool ok;
             int num_bonds = data.first().toInt(&ok);
 
@@ -1651,7 +1749,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         // Angle records.
         else if (line.contains("!NTHETA"))
         {
-            // Extract the number of bonds;
+            // Extract the number of angles.
             bool ok;
             int num_angles = data.first().toInt(&ok);
 
@@ -1718,7 +1816,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         // Dihedral records.
         else if (line.contains("!NPHI"))
         {
-            // Extract the number of dihedrals;
+            // Extract the number of dihedrals.
             bool ok;
             int num_dihedrals = data.first().toInt(&ok);
 
@@ -1785,7 +1883,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         // Improper records.
         else if (line.contains("!NIMPHI"))
         {
-            // Extract the number of impropers;
+            // Extract the number of impropers.
             bool ok;
             int num_impropers = data.first().toInt(&ok);
 
@@ -1849,10 +1947,77 @@ void CharmmPSF::parseLines(const PropertyMap &map)
             }
         }
 
+        // Non-bonded exclusion records.
+        else if (line.contains("!NNB"))
+        {
+            // Extract the number of non-bonded exclusions.
+            bool ok;
+            int num_exclusions = data.first().toInt(&ok);
+
+            if (not ok)
+            {
+                parse_warnings.append(QObject::tr("Cannot extract number of non-bonded exclusions "
+                    "from part (%1) from line '%2'").arg(data.first()).arg(lines()[iline]));
+
+                return;
+            }
+
+            // Resize data structures.
+            nonbonded_exclusions.resize(num_exclusions);
+            for (int i=0; i<num_exclusions; ++i)
+                nonbonded_exclusions[i].resize(1);
+
+            // Work out the number of record lines.
+            // There are 8 non-bonded exclusion records per line.
+            const int num_lines = qCeil(num_exclusions/8.0);
+
+            ++iline;
+
+            if (usesParallel())
+            {
+                QMutex mutex;
+
+                tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
+                                [&](const tbb::blocked_range<int> &r)
+                {
+                    // Create local data objects.
+                    QStringList local_errors;
+
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        // Parse an angle record line.
+                        parse_line(lines()[iline+i], nonbonded_exclusions, i,
+                            num_lines, num_exclusions, 8, local_errors);
+                    }
+
+                    if (not local_errors.isEmpty())
+                    {
+                        // Acquire a lock.
+                        QMutexLocker lkr(&mutex);
+
+                        // Update the warning messages.
+                        parse_warnings += local_errors;
+                    }
+                });
+
+                // Fast-forward the line index.
+                iline += (num_lines - 1);
+            }
+            else
+            {
+                for (int i=0; i<num_lines; ++i)
+                {
+                    // Parse a non-bonded exclusion record line.
+                    parse_line(lines()[iline+i], nonbonded_exclusions, i,
+                        num_lines, num_exclusions, 8, parse_warnings);
+                }
+            }
+        }
+
         // Cross-term records.
         else if (line.contains("!NCRTERM"))
         {
-            // Extract the number of cross terms;
+            // Extract the number of cross terms.
             bool ok;
             int num_cross = data.first().toInt(&ok);
 
@@ -2369,8 +2534,12 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             // Create the expression for the bond function.
             Expression func = params[0] * SireMaths::pow_2( R - params[1] );
 
-            // Set the bond function parameter.
-            bond_funcs.set(idx0, idx1, func);
+            // Don't include zero functions.
+            if (func.toString() != "0")
+            {
+                // Set the bond function parameter.
+                bond_funcs.set(idx0, idx1, func);
+            }
         }
 
         // Set the bond property.
@@ -2422,24 +2591,32 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             // Create the expression for the angle function, converting the angle to radians.
             Expression func = params[0] * SireMaths::pow_2( Theta - qDegreesToRadians(params[1]) );
 
-            // Set the angle function parameter.
-            angle_funcs.set(AtomNum(atoms[idx0].getNumber()),
-                            AtomNum(atoms[idx1].getNumber()),
-                            AtomNum(atoms[idx2].getNumber()),
-                            func);
+            // Don't include zero functions.
+            if (func.toString() != "0")
+            {
+                // Set the angle function parameter.
+                angle_funcs.set(AtomNum(atoms[idx0].getNumber()),
+                                AtomNum(atoms[idx1].getNumber()),
+                                AtomNum(atoms[idx2].getNumber()),
+                                func);
+            }
 
             // Add a Urey-Bradley bond function.
             if (params.count() > 2)
             {
                 func = params[2] * SireMaths::pow_2( R_UB - params[3] );
 
-                // Set the Urey-Bradley function parameter.
-                ub_funcs.set(AtomNum(atoms[idx0].getNumber()),
-                             AtomNum(atoms[idx2].getNumber()),
-                             func);
+                // Don't include zero functions.
+                if (func.toString() != "0")
+                {
+                    // Set the Urey-Bradley function parameter.
+                    ub_funcs.set(AtomNum(atoms[idx0].getNumber()),
+                                 AtomNum(atoms[idx2].getNumber()),
+                                 func);
 
-                // Flag that we've found Urey-Bradley parameters.
-                has_ub = true;
+                    // Flag that we've found Urey-Bradley parameters.
+                    has_ub = true;
+                }
             }
         }
 
@@ -2503,12 +2680,16 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
                 func += params[0] * (1 + Cos(( params[1] * Phi ) - qDegreesToRadians(params[2]) ));
             }
 
-            // Set the dihedral function parameter.
-            dihedral_funcs.set(AtomNum(atoms[idx0].getNumber()),
-                               AtomNum(atoms[idx1].getNumber()),
-                               AtomNum(atoms[idx2].getNumber()),
-                               AtomNum(atoms[idx3].getNumber()),
-                               func);
+            // Don't include zero functions.
+            if (func.toString() != "0")
+            {
+                // Set the dihedral function parameter.
+                dihedral_funcs.set(AtomNum(atoms[idx0].getNumber()),
+                                   AtomNum(atoms[idx1].getNumber()),
+                                   AtomNum(atoms[idx2].getNumber()),
+                                   AtomNum(atoms[idx3].getNumber()),
+                                   func);
+            }
         }
 
         // Set the dihedral property.
@@ -2557,12 +2738,16 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             // Intialise the function object, converting the out of plane angle to radians.
             Expression func = params[0] * SireMaths::pow_2( Phi - qDegreesToRadians(params[1]) );
 
-            // Set the improper function parameter.
-            improper_funcs.set(AtomNum(atoms[idx0].getNumber()),
-                               AtomNum(atoms[idx1].getNumber()),
-                               AtomNum(atoms[idx2].getNumber()),
-                               AtomNum(atoms[idx3].getNumber()),
-                               func);
+            // Don't include zero functions.
+            if (func.toString() != "0")
+            {
+                // Set the improper function parameter.
+                improper_funcs.set(AtomNum(atoms[idx0].getNumber()),
+                                   AtomNum(atoms[idx1].getNumber()),
+                                   AtomNum(atoms[idx2].getNumber()),
+                                   AtomNum(atoms[idx3].getNumber()),
+                                   func);
+            }
 
         }
 
@@ -2581,6 +2766,12 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
     {
         // The atomic Lennard-Jones properties.
         AtomLJs lj_funcs(molinfo);
+
+        // The atomic Lennard-Jones properties for 1-4 non-bonded atoms.
+        AtomLJs lj_14_funcs(molinfo);
+
+        // Whether each atom is excluded from non-bonded interactions.
+        AtomIntProperty is_excluded(molinfo);
 
         // Create an actual molecule from the passed object.
         auto mol = sire_mol.molecule();
@@ -2605,7 +2796,7 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
                 auto params = matches[0].getParams();
 
                 // Extract the epsilon and rmin terms.
-                double epsilon = qAbs(params[0]);
+                double epsilon = -params[0];    // CHARMM stores minus epsilon.
                 double rmin = params[1];
 
                 /* Convert from rmin to sigma.
@@ -2617,17 +2808,41 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
                         U = 4*eps * ((sigma/r)^12 - (sigma/r)^6)
 
                     where rmin = sigma * 2^(1/6)
-                    */
+                 */
                 double sigma = rmin / qPow(2.0, 1.0/6.0);
 
                 lj_funcs.set(cgatomidx, LJParameter(sigma * SireUnits::angstrom,
                                                     epsilon * SireUnits::kcal_per_mol));
+
+                // There are modified 1-4 non-bonded Lennard-Jones parameters for this atom type.
+                if (params.count() == 4)
+                {
+                    // Extract the parameters, converting from rmin to sigma.
+                    epsilon = -params[2];
+                    sigma = params[3] / qPow(2.0, 1.0/6.0);
+
+                    lj_14_funcs.set(cgatomidx, LJParameter(sigma * SireUnits::angstrom,
+                                    epsilon * SireUnits::kcal_per_mol));
+                }
             }
+
+            // Set the non-bonded exclusion flag.
+            if (atom.isNonBondedExcluded())
+                is_excluded.set(cgatomidx, 1);
+            else
+                is_excluded.set(cgatomidx, 0);
         }
 
         // Set the Lennard-Jones property.
         if (lj_funcs.count() > 0)
             edit_mol.setProperty(map["LJ"], lj_funcs);
+
+        // Set the 1-4 modified Lennard-Jones property.
+        if (lj_14_funcs.count() > 0)
+            edit_mol.setProperty(map["LJ_14"], lj_14_funcs);
+
+        // Set the non-bonded exclusion property.
+        edit_mol.setProperty(map["is_nb_excluded"], is_excluded);
     }
 
     return edit_mol.commit();
@@ -2656,6 +2871,9 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
     @param local_impropers
         The improper records vector local to the molecule.
 
+    @param local_nonbonded
+        The non-bonded records vector local to the molecule.
+
     @param bond_params
         The set of CHARMM bond parameter strings.
 
@@ -2667,6 +2885,9 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
 
     @param improper_params
         The set of CHARMM improper parameter strings.
+
+    @param nonbonded_params
+        The set of CHARMM non-bonded parameter strings.
 
     @param local_errors
         A list of error messages local to the molecule.
@@ -2682,10 +2903,12 @@ void CharmmPSF::parseMolecule(
         QVector<QVector<qint64> > &local_angles,
         QVector<QVector<qint64> > &local_dihedrals,
         QVector<QVector<qint64> > &local_impropers,
+        QVector<QVector<qint64> > &local_nonbonded,
         QSet<QString> &bond_params,
         QSet<QString> &angle_params,
         QSet<QString> &dihedral_params,
         QSet<QString> &improper_params,
+        QSet<QString> &nonbonded_params,
         QStringList &local_errors,
         const PropertyMap &map)
 {
@@ -2724,6 +2947,17 @@ void CharmmPSF::parseMolecule(
             {
                 // Parse atom data.
                 local_atoms[i] = PSFAtom(sire_mol.atom(AtomIdx(i)), segment, local_errors, map);
+
+                // Add the atom to the list of non-bonded exclusions.
+                if (local_atoms[i].isNonBondedExcluded())
+                    local_nonbonded.append(QVector<qint64>(i));
+
+                // Extract any non-bonded parameters from the atom.
+                auto params = toNonBondedParameter(sire_mol.atom(AtomIdx(i)), map);
+
+                // Insert into the parameter set.
+                if (not params.isEmpty())
+                    nonbonded_params.insert(params);
             }
 
             if (not local_errors.isEmpty())
@@ -2742,6 +2976,17 @@ void CharmmPSF::parseMolecule(
         {
             // Parse atom data.
             local_atoms[i] = PSFAtom(sire_mol.atom(AtomIdx(i)), segment, local_errors, map);
+
+            // Add the atom to the list of non-bonded exclusions.
+            if (local_atoms[i].isNonBondedExcluded())
+                local_nonbonded.append(QVector<qint64>(i));
+
+            // Extract any non-bonded parameters from the atom.
+            auto params = toNonBondedParameter(sire_mol.atom(AtomIdx(i)), map);
+
+            // Insert into the parameter set.
+            if (not params.isEmpty())
+                nonbonded_params.insert(params);
         }
     }
 
@@ -3595,6 +3840,28 @@ void CharmmPSF::findMolecules()
         }
     }
 
+    /*****************************************************************/
+    /* Work out which non-bonded exclusions belong to this molecule. */
+    /*****************************************************************/
+
+    mol_nonbonded_exclusions.resize(num_mols);
+
+    // Loop over all of the non-bonded exclusions.
+    for (int i=0; i<nNonBondedExclusions(); ++i)
+    {
+        // Get the atom index.
+        int atomidx = num_to_idx[nonbonded_exclusions[i][0]];
+
+        // Get the molecule index.
+        int molidx = atoms[atomidx].getMolIndex();
+
+        // Record that the exclusion belongs to this molecule.
+        mol_nonbonded_exclusions[molidx].append(i);
+
+        // Set the non-bonded exclusion flag.
+        atoms[atomidx].setNonBondedExclusion(true);
+    }
+
     /*******************************************************/
     /* Work out which cross-terms belong to this molecule. */
     /*******************************************************/
@@ -3709,11 +3976,21 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
             QString type1 = sire_mol.atom(idx1).property<QString>(map["atomtype"]);
 
             // Create a string from the types.
-            QString bond_atoms = QString("%1 %2").arg(type0, -4).arg(type1, -4);
+            QVector<QString> bond_atoms = {type0, type1};
+
+            // Generate the ordered key.
+            auto key = generateKey(bond_atoms);
+
+            // Split the key into its constituent parts.
+            auto sorted_atoms = key.split(";");
+
+            // Create the atom type part of the parameter string.
+            QString atom_string = QString("%1 %2")
+                .arg(sorted_atoms[0], -4).arg(sorted_atoms[1], -4);
 
             // Create the CHARMM bond parameters.
             const auto R = InternalPotential::symbols().bond().r();
-            bond_params.insert(toHarmonicParameter(bond_atoms, potential.function(), R));
+            bond_params.insert(toHarmonicParameter(atom_string, potential.function(), R));
         }
 
         // Create the map value.
@@ -3791,12 +4068,21 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
             QString type2 = sire_mol.atom(idx2).property<QString>(map["atomtype"]);
 
             // Create a string from the types.
-            QString angle_atoms = QString("%1 %2 %3")
-                .arg(type0, -4).arg(type1, -4).arg(type2, -4);
+            QVector<QString> bond_atoms = {type0, type1, type2};
+
+            // Generate the ordered key.
+            auto key = generateKey(bond_atoms);
+
+            // Split the key into its constituent parts.
+            auto sorted_atoms = key.split(";");
+
+            // Create the atom type part of the parameter string.
+            QString atom_string = QString("%1 %2 %3")
+                .arg(sorted_atoms[0], -4).arg(sorted_atoms[1], -4).arg(sorted_atoms[2], -4);
 
             // Create the CHARMM angle parameters.
             const auto Theta = InternalPotential::symbols().angle().theta();
-            QString angle_param = toHarmonicParameter(angle_atoms, potential.function(), Theta, 3);
+            QString angle_param = toHarmonicParameter(atom_string, potential.function(), Theta, 3);
 
             // Now check whether there is an additional Urey-Bradley term for this angle.
             for (int j=0; j<num_ubs; ++j)
@@ -3907,8 +4193,18 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
             QString type3 = sire_mol.atom(idx3).property<QString>(map["atomtype"]);
 
             // Create a string from the types.
-            QString func_atoms = QString("%1 %2 %3 %4")
-                .arg(type0, -4).arg(type1, -4).arg(type2, -4).arg(type3, -4);
+            QVector<QString> bond_atoms = {type0, type1, type2, type3};
+
+            // Generate the ordered key.
+            auto key = generateKey(bond_atoms);
+
+            // Split the key into its constituent parts.
+            auto sorted_atoms = key.split(";");
+
+            // Create the atom type part of the parameter string.
+            QString atom_string = QString("%1 %2 %3 %4")
+                .arg(sorted_atoms[0], -4).arg(sorted_atoms[1], -4)
+                .arg(sorted_atoms[2], -4).arg(sorted_atoms[3], -4);
 
             // Create the CHARMM parameters.
             if (is_improper)
@@ -3916,12 +4212,12 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
                 const auto phi = InternalPotential::symbols().dihedral().phi();
 
                 // Generate the improper parameter string.
-                four_atom_params.insert(toHarmonicParameter(func_atoms, potential.function(), phi, 4));
+                four_atom_params.insert(toHarmonicParameter(atom_string, potential.function(), phi, 4));
             }
             else
             {
                 // Generate the vector of dihedral parameter strings.
-                QVector<QString> params = toFourAtomParameter(func_atoms, potential.function());
+                QVector<QString> params = toFourAtomParameter(atom_string, potential.function());
 
                 for (const auto &param : params)
                     four_atom_params.insert(param);
@@ -4217,4 +4513,40 @@ QVector<QString> CharmmPSF::toFourAtomParameter(const QString &dihedral_atoms, c
     }
 
     return parameter_strings;
+}
+
+/** Extract Lennard-Jones non-bonded parameters from an atom. */
+QString CharmmPSF::toNonBondedParameter(const SireMol::Atom &atom, const PropertyMap &map) const
+{
+    QString param_string;
+
+    if (atom.hasProperty(map["atomtype"]) and atom.hasProperty(map["LJ"]))
+    {
+        auto type = atom.property<QString>(map["atomtype"]);
+        auto lj = atom.property<LJParameter>(map["LJ"]);
+
+        // Extract the Lennard-Jones terms.
+        double epsilon = lj.epsilon();
+        double rmin = lj.sigma() * qPow(2.0, 1.0/6.0);
+
+        // Create the parameter string.
+        param_string = QString("%1 0.000000 %2 %3")
+            .arg(type, -6).arg(-epsilon, 10, 'f', 6).arg(rmin, 12, 'f', 6);
+
+        // There are also modified 1-4 parameters for this atom type.
+        if (atom.hasProperty(map["LJ_14"]))
+        {
+            auto lj_14 = atom.property<LJParameter>(map["LJ_14"]);
+
+            // Extract the Lennard-Jones terms.
+            epsilon = lj.epsilon();
+            rmin = lj.sigma() * qPow(2.0, 1.0/6.0);
+
+            // Append the terms to the parameter string.
+            param_string.append(QString("  0.000000 %2 %3")
+                .arg(-epsilon, 10, 'f', 6).arg(rmin, 12, 'f', 6));
+        }
+    }
+
+    return param_string;
 }
