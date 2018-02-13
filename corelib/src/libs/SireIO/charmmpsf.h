@@ -358,16 +358,13 @@ private:
         const SireMol::Molecule &sire_mol, QVector<QVector<qint64> > &local_angles,
         QSet<QString> &angle_params, const PropertyMap &map);
 
-    void getFourAtomFrom(const SireMM::FourAtomFunctions &funcs, const SireMol::Molecule &sire_mol,
-        QVector<QVector<qint64> > &four_atom, QSet<QString> &four_atom_params, const PropertyMap &map,
-        bool is_improper=false);
+    void getDihedralsFrom(const SireMM::FourAtomFunctions &funcs, const SireMol::Molecule &sire_mol,
+        QVector<QVector<qint64> > &local_dihedrals, QSet<QString> &dihedral_params, const PropertyMap &map);
 
-    QString toHarmonicParameter(const QString &bond_atoms, const SireCAS::Expression &func,
-        const SireCAS::Symbol &R, int num_atoms=2);
+    void getImpropersFrom(const SireMM::FourAtomFunctions &funcs, const SireMol::Molecule &sire_mol,
+        QVector<QVector<qint64> > &local_impropers, QSet<QString> &improper_params, const PropertyMap &map);
 
-    QVector<QString> toFourAtomParameter(const QString &dihedral_atoms, const SireCAS::Expression &func);
-
-    QString toNonBondedParameter(const SireMol::Atom &atom, const PropertyMap &map) const;
+    QString getNonBondedFrom(const SireMol::Atom &atom, const PropertyMap &map) const;
 
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;
@@ -396,7 +393,7 @@ private:
     /** The indices of the impropers for each molecule. */
     QVector<QVector<qint64> > mol_impropers;
 
-    /** The indices of the atoms that are excluded from non-bonded interactions. */
+    /** The non-bonded exclusion record data (!NNB) . */
     QVector<QVector<qint64> > nonbonded_exclusions;
 
     /** The indices of the non-bonded exclusions for each molecule. */

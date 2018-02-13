@@ -39,6 +39,7 @@
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
 
+#include "SireMM/amberparams.h"
 #include "SireMM/atomljs.h"
 #include "SireMM/internalff.h"
 #include "SireMM/twoatomfunctions.h"
@@ -2516,10 +2517,10 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             const auto atom1 = atom_types[idx1];
 
             // Create a vector of the atom types.
-            QVector<QString> bond_atoms({atom0, atom1});
+            QVector<QString> atom_types({atom0, atom1});
 
             // Find the parameters for the bond.
-            auto matches = findParameters(bond_atoms, bond_params, 0);
+            auto matches = findParameters(atom_types, bond_params, 0);
 
             // No matches!
             if (matches.count() == 0)
@@ -2953,7 +2954,7 @@ void CharmmPSF::parseMolecule(
                     local_nonbonded.append(QVector<qint64>(i));
 
                 // Extract any non-bonded parameters from the atom.
-                auto params = toNonBondedParameter(sire_mol.atom(AtomIdx(i)), map);
+                auto params = getNonBondedFrom(sire_mol.atom(AtomIdx(i)), map);
 
                 // Insert into the parameter set.
                 if (not params.isEmpty())
@@ -2982,7 +2983,7 @@ void CharmmPSF::parseMolecule(
                 local_nonbonded.append(QVector<qint64>(i));
 
             // Extract any non-bonded parameters from the atom.
-            auto params = toNonBondedParameter(sire_mol.atom(AtomIdx(i)), map);
+            auto params = getNonBondedFrom(sire_mol.atom(AtomIdx(i)), map);
 
             // Insert into the parameter set.
             if (not params.isEmpty())
@@ -3011,11 +3012,45 @@ void CharmmPSF::parseMolecule(
 
     // Dihedrals.
     if (has_dihedrals)
-        getFourAtomFrom(dihedral_funcs, sire_mol, local_dihedrals, dihedral_params, map);
+        getDihedralsFrom(dihedral_funcs, sire_mol, local_dihedrals, dihedral_params, map);
 
     // Impropers.
     if (has_impropers)
-        getFourAtomFrom(improper_funcs, sire_mol, local_impropers, improper_params, map, true);
+    {
+        // Extract the first improper function.
+        const auto func = improper_funcs.potentials().constData()[0].function();
+
+        // Set the function symbol.
+        const auto Phi = InternalPotential::symbols().dihedral().phi();
+
+        try
+        {
+            // Regular CHARMM style harmonic improper.
+
+            AmberBond amberbond(func, Phi);
+
+            getImpropersFrom(improper_funcs, sire_mol, local_impropers, improper_params, map);
+        }
+        catch (...)
+        {
+            try
+            {
+                // A cosine style improper, e.g. as in AMBER. We'll add support for this
+                // by treating it as a dihedral term.
+
+                AmberDihedral amberdihedral(func, Phi);
+
+                getDihedralsFrom(improper_funcs, sire_mol, local_impropers, improper_params, map);
+            }
+            catch (...)
+            {
+                throw SireError::incompatible_error(QObject::tr(
+                        "Cannot construct a CHARMM improper parameter from "
+                        "expression %1. Supported styles are \"harmonic\" and \"cosine\".")
+                        .arg(func.toString()), CODELOC );
+            }
+        }
+    }
 }
 
 /** Find the index of the parameters associated with the 'search_atoms'.
@@ -3929,7 +3964,7 @@ T CharmmPSF::getProperty(const PropertyName &prop, const MoleculeData &moldata, 
     return T();
 }
 
-/** Construct PSF bond records from the set of two-atom functions. */
+/** Construct PSF bond records and CHARMM parameters from the set of two-atom functions. */
 void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire_mol,
     QVector<QVector<qint64> > &local_bonds, QSet<QString> &bond_params, const PropertyMap &map)
 {
@@ -3976,21 +4011,39 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
             QString type1 = sire_mol.atom(idx1).property<QString>(map["atomtype"]);
 
             // Create a string from the types.
-            QVector<QString> bond_atoms = {type0, type1};
+            QVector<QString> atom_types = {type0, type1};
 
             // Generate the ordered key.
-            auto key = generateKey(bond_atoms);
+            auto key = generateKey(atom_types);
 
             // Split the key into its constituent parts.
-            auto sorted_atoms = key.split(";");
+            auto sorted_types = key.split(";");
 
             // Create the atom type part of the parameter string.
             QString atom_string = QString("%1 %2")
-                .arg(sorted_atoms[0], -4).arg(sorted_atoms[1], -4);
+                .arg(sorted_types[0], -4).arg(sorted_types[1], -4);
 
-            // Create the CHARMM bond parameters.
-            const auto R = InternalPotential::symbols().bond().r();
-            bond_params.insert(toHarmonicParameter(atom_string, potential.function(), R));
+            try
+            {
+                const auto R = InternalPotential::symbols().bond().r();
+                AmberBond amberbond(potential.function(), R);
+
+                // This is a valid amber bond ( kb (r - r0)^2 )
+                double kb = amberbond.k();
+                double r0 = amberbond.r0();
+
+                // Create the bond parameter string.
+                QString param_string = QString("%1 %2 %3").arg(atom_string).arg(kb, 10, 'f', 3).arg(r0, 10, 'f', 4);
+
+                // Insert the string into the parameter set.
+                bond_params.insert(param_string);
+            }
+            catch (...)
+            {
+                throw SireError::incompatible_error(QObject::tr(
+                        "Cannot construct a CHARMM bond parameter K ( R - R0 )^2 from the "
+                        "expression %1").arg(potential.function().toString()), CODELOC );
+            }
         }
 
         // Create the map value.
@@ -4010,7 +4063,7 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
     }
 }
 
-/** Construct PSF angle records from the set of three-atom functions. */
+/** Construct PSF angle records and CHARMM parameters from the set of three-atom functions. */
 void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunctions &ub_funcs,
     const Molecule &sire_mol, QVector<QVector<qint64> > &local_angles,
     QSet<QString> &angle_params, const PropertyMap &map)
@@ -4068,21 +4121,42 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
             QString type2 = sire_mol.atom(idx2).property<QString>(map["atomtype"]);
 
             // Create a string from the types.
-            QVector<QString> bond_atoms = {type0, type1, type2};
+            QVector<QString> bond_types = {type0, type1, type2};
 
             // Generate the ordered key.
-            auto key = generateKey(bond_atoms);
+            auto key = generateKey(bond_types);
 
             // Split the key into its constituent parts.
-            auto sorted_atoms = key.split(";");
+            auto sorted_types = key.split(";");
 
             // Create the atom type part of the parameter string.
             QString atom_string = QString("%1 %2 %3")
-                .arg(sorted_atoms[0], -4).arg(sorted_atoms[1], -4).arg(sorted_atoms[2], -4);
+                .arg(sorted_types[0], -4).arg(sorted_types[1], -4).arg(sorted_types[2], -4);
 
-            // Create the CHARMM angle parameters.
-            const auto Theta = InternalPotential::symbols().angle().theta();
-            QString angle_param = toHarmonicParameter(atom_string, potential.function(), Theta, 3);
+            // Initialise the parameter string.
+            QString param_string;
+
+            try
+            {
+                const auto Theta = InternalPotential::symbols().angle().theta();
+                AmberBond amberbond(potential.function(), Theta);
+
+                // This is a valid amber bond ( kb (Theta - Theta0)^2 )
+                double kb = 2.0 * amberbond.k();
+                double r0 = amberbond.r0();
+
+                // Convert the angle to degrees.
+                r0 = qRadiansToDegrees(r0);
+
+                // Create the angle parameter string.
+                param_string = QString("%1 %2 %3").arg(atom_string).arg(kb, 10, 'f', 3).arg(r0, 10, 'f', 4);
+            }
+            catch (...)
+            {
+                throw SireError::incompatible_error(QObject::tr(
+                        "Cannot construct a CHARMM angle parameter K ( Theta - Theta0 )^2 from the "
+                        "expression %1").arg(potential.function().toString()), CODELOC );
+            }
 
             // Now check whether there is an additional Urey-Bradley term for this angle.
             for (int j=0; j<num_ubs; ++j)
@@ -4108,16 +4182,32 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
                     if ((ub_idx0  == idx0)  and (ub_idx1  == idx2) and
                         (ub_type0 == type0) and (ub_type1 == type2))
                     {
-                        const auto R = InternalPotential::symbols().bond().r();
-                        angle_param += toHarmonicParameter(QString(""), potential.function(), R);
+                        try
+                        {
+                            const auto R = InternalPotential::symbols().bond().r();
+                            AmberBond amberbond(potential.function(), R);
 
-                        break;
+                            // This is a valid amber bond ( kb (S - S0)^2 )
+                            double kb = 2.0 * amberbond.k();
+                            double r0 = amberbond.r0();
+
+                            // Append the Urey-Bradley parameter string.
+                            param_string += QString("%1 %2").arg(kb, 10, 'f', 3).arg(r0, 10, 'f', 4);
+
+                            break;
+                        }
+                        catch (...)
+                        {
+                            throw SireError::incompatible_error(QObject::tr(
+                                    "Cannot construct a CHARMM Urey-Bradley parameter K ( S - S0 )^2 from the "
+                                    "expression %1").arg(potential.function().toString()), CODELOC );
+                        }
                     }
                 }
             }
 
             // Insert the angle parameter string into the set.
-            angle_params.insert(angle_param);
+            angle_params.insert(param_string);
         }
 
         // Create the map value.
@@ -4137,10 +4227,9 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
     }
 }
 
-/** Construct PSF four-atom records from the set of four-atom functions. */
-void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &sire_mol,
-    QVector<QVector<qint64> > &four_atom, QSet<QString> &four_atom_params, const PropertyMap &map,
-    bool is_improper)
+/** Construct PSF dihedral records and CHARMM parameters from the set of four-atom functions. */
+void CharmmPSF::getDihedralsFrom(const FourAtomFunctions &funcs, const Molecule &sire_mol,
+    QVector<QVector<qint64> > &local_dihedrals, QSet<QString> &dihedral_params, const PropertyMap &map)
 {
     // Get the molecule info object.
     const auto molinfo = sire_mol.info();
@@ -4151,18 +4240,22 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
     // Store the number of functions.
     const int num_funcs = potentials.count();
 
-    // Resize the fuctions vector.
-    four_atom.resize(num_funcs);
+    // Store the current size of the local_dihedrals vector, since it could be used to
+    // store additional cosine improper terms.
+    int offset = local_dihedrals.count();
 
-    // A multi-map between the start atom in a four-atom function and the atom quartet.
+    // Resize the dihedrals vector.
+    local_dihedrals.resize(num_funcs + offset);
+
+    // A multi-map between the start atom in a dihedral function and the atom quartet.
     // This allows us to reconstruct the correct order for the PSF records.
-    QMultiMap<int, QVector<qint64> > four_atom_map;
+    QMultiMap<int, QVector<qint64> > dihedral_map;
 
     // Populate the function map.
     for (int i=0; i<num_funcs; ++i)
     {
         // Resize the vector.
-        four_atom[i].resize(4);
+        local_dihedrals[i + offset].resize(4);
 
         // Get the potential.
         const auto potential = potentials.constData()[i];
@@ -4180,7 +4273,7 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
         int atom3 = molinfo.number(idx3).value();
 
         // If the atoms have an "atomtype" property then we can generate
-        // CHARMM four-atom parameters.
+        // CHARMM dihedral parameters.
         if ((sire_mol.atom(idx0).hasProperty(map["atomtype"])) and
             (sire_mol.atom(idx1).hasProperty(map["atomtype"])) and
             (sire_mol.atom(idx2).hasProperty(map["atomtype"])) and
@@ -4193,34 +4286,48 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
             QString type3 = sire_mol.atom(idx3).property<QString>(map["atomtype"]);
 
             // Create a string from the types.
-            QVector<QString> bond_atoms = {type0, type1, type2, type3};
+            QVector<QString> atom_types = {type0, type1, type2, type3};
 
             // Generate the ordered key.
-            auto key = generateKey(bond_atoms);
+            auto key = generateKey(atom_types);
 
             // Split the key into its constituent parts.
-            auto sorted_atoms = key.split(";");
+            auto sorted_types = key.split(";");
 
             // Create the atom type part of the parameter string.
             QString atom_string = QString("%1 %2 %3 %4")
-                .arg(sorted_atoms[0], -4).arg(sorted_atoms[1], -4)
-                .arg(sorted_atoms[2], -4).arg(sorted_atoms[3], -4);
+                .arg(sorted_types[0], -4).arg(sorted_types[1], -4)
+                .arg(sorted_types[2], -4).arg(sorted_types[3], -4);
 
-            // Create the CHARMM parameters.
-            if (is_improper)
+            try
             {
-                const auto phi = InternalPotential::symbols().dihedral().phi();
+                const auto Phi = InternalPotential::symbols().dihedral().phi();
+                AmberDihedral amberdihedral(potential.function(), Phi);
 
-                // Generate the improper parameter string.
-                four_atom_params.insert(toHarmonicParameter(atom_string, potential.function(), phi, 4));
+                for (const auto amberdih : amberdihedral.terms())
+                {
+                    double kb = amberdih.k();
+                    double per = amberdih.periodicity();
+                    double phase = amberdih.phase();
+
+                    // This is a cosine dihedral in from k [ 1 + cos(per phi - phase) ].
+
+                    // Create the bond parameter string, converting the phase to degrees.
+                    QString param_string(QString("%1 %2 %3 %4")
+                        .arg(atom_string)
+                        .arg(kb, 10, 'f', 4)
+                        .arg(per, 3)
+                        .arg(qRadiansToDegrees(phase), 10, 'f', 2));
+
+                    // Insert into the parameter set.
+                    dihedral_params.insert(param_string);
+                }
             }
-            else
+            catch (...)
             {
-                // Generate the vector of dihedral parameter strings.
-                QVector<QString> params = toFourAtomParameter(atom_string, potential.function());
-
-                for (const auto &param : params)
-                    four_atom_params.insert(param);
+                throw SireError::incompatible_error(QObject::tr(
+                        "Cannot construct CHARMM dihedral parameter terms, K ( 1 + cos(n Phi - Phi0) ], from the "
+                        "expression %1").arg(potential.function().toString()), CODELOC );
             }
         }
 
@@ -4229,294 +4336,138 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
 
         // Insert into the map.
         // Use negative atom number as the index so we can loop over in ascending order.
-        four_atom_map.insert(-atom0, value);
+        dihedral_map.insert(-atom0, value);
+    }
+
+    // Insert existing values into the dihedral map.
+    if (offset > 0)
+    {
+        for (int i=0; i<offset; ++i)
+            dihedral_map.insert(-local_dihedrals[i][0], local_dihedrals[i]);
     }
 
     // Now populate the vector.
     int i = 0;
-    while (not four_atom_map.isEmpty())
+    while (not dihedral_map.isEmpty())
     {
-        four_atom[i] = four_atom_map.take(four_atom_map.lastKey());
+        local_dihedrals[i] = dihedral_map.take(dihedral_map.lastKey());
         i++;
     }
 }
 
-/** Convert a Sire two-atom function to a CHARMM bond parameter string. */
-QString CharmmPSF::toHarmonicParameter(const QString &bond_atoms, const Expression &func,
-    const Symbol &R, int num_atoms)
+/** Construct PSF improper records and CHARMM parameters from the set of four-atom functions. */
+void CharmmPSF::getImpropersFrom(const FourAtomFunctions &funcs, const Molecule &sire_mol,
+    QVector<QVector<qint64> > &local_impropers, QSet<QString> &improper_params, const PropertyMap &map)
 {
-    // The function should be of the form "k(r - r0)^2".
-    // We need to get the factors of R.
-    const auto factors = func.expand(R);
+    // Get the molecule info object.
+    const auto molinfo = sire_mol.info();
 
-    bool has_k = false;
+    // Get the set of all four-atom functions.
+    const auto potentials = funcs.potentials();
 
-    QStringList errors;
+    // Store the number of functions.
+    const int num_funcs = potentials.count();
 
-    double k = 0.0;
-    double kr0_2 = 0.0;
-    double kr0 = 0.0;
+    // Resize the impropers vector.
+    local_impropers.resize(num_funcs);
 
-    for (const auto factor : factors)
+    // A multi-map between the start atom in an improper function and the atom quartet.
+    // This allows us to reconstruct the correct order for the PSF records.
+    QMultiMap<int, QVector<qint64> > improper_map;
+
+    // Populate the function map.
+    for (int i=0; i<num_funcs; ++i)
     {
-        if (factor.symbol() == R)
+        // Resize the vector.
+        local_impropers[i].resize(4);
+
+        // Get the potential.
+        const auto potential = potentials.constData()[i];
+
+        // Extract the cgAtomIdx for the four atoms.
+        const auto idx0 = molinfo.cgAtomIdx(potential.atom0());
+        const auto idx1 = molinfo.cgAtomIdx(potential.atom1());
+        const auto idx2 = molinfo.cgAtomIdx(potential.atom2());
+        const auto idx3 = molinfo.cgAtomIdx(potential.atom3());
+
+        // Store the atom numbers.
+        int atom0 = molinfo.number(idx0).value();
+        int atom1 = molinfo.number(idx1).value();
+        int atom2 = molinfo.number(idx2).value();
+        int atom3 = molinfo.number(idx3).value();
+
+        // If the atoms have an "atomtype" property then we can generate
+        // CHARMM improper parameters.
+        if ((sire_mol.atom(idx0).hasProperty(map["atomtype"])) and
+            (sire_mol.atom(idx1).hasProperty(map["atomtype"])) and
+            (sire_mol.atom(idx2).hasProperty(map["atomtype"])) and
+            (sire_mol.atom(idx3).hasProperty(map["atomtype"])))
         {
-            if (not factor.power().isConstant())
+            // Extract the atom types.
+            QString type0 = sire_mol.atom(idx0).property<QString>(map["atomtype"]);
+            QString type1 = sire_mol.atom(idx1).property<QString>(map["atomtype"]);
+            QString type2 = sire_mol.atom(idx2).property<QString>(map["atomtype"]);
+            QString type3 = sire_mol.atom(idx3).property<QString>(map["atomtype"]);
+
+            // Create a string from the types.
+            QVector<QString> atom_types = {type0, type1, type2, type3};
+
+            // Generate the ordered key.
+            auto key = generateKey(atom_types);
+
+            // Split the key into its constituent parts.
+            auto sorted_types = key.split(";");
+
+            // Create the atom type part of the parameter string.
+            QString atom_string = QString("%1 %2 %3 %4")
+                .arg(sorted_types[0], -4).arg(sorted_types[1], -4)
+                .arg(sorted_types[2], -4).arg(sorted_types[3], -4);
+
+            try
             {
-                errors.append(QObject::tr("Power of R must be constant, not %1")
-                                .arg(factor.power().toString()));
-                continue;
+                const auto Phi = InternalPotential::symbols().dihedral().phi();
+                AmberBond amberbond(potential.function(), Phi);
+
+                // This is a valid amber bond ( kb (Phi - Phi0)^2 )
+                double kb = amberbond.k();
+                double r0 = amberbond.r0();
+
+                // Convert out of plane angle to degrees.
+                r0 = qRadiansToDegrees(r0);
+
+                QString param_string = QString("%1 %2 %3 %4")
+                    .arg(atom_string).arg(kb, 10, 'f', 3).arg(0, 10).arg(r0, 10, 'f', 4);
+
+                // Insert the string into the parameter set.
+                improper_params.insert(param_string);
             }
-
-            if (not factor.factor().isConstant())
+            catch (...)
             {
-                errors.append(QObject::tr("The value of K in K (R - R0)^2 must be constant. "
-                                "Here it is %1").arg(factor.factor().toString()));
-                continue;
-            }
-
-            double power = factor.power().evaluate(Values());
-
-            if (power == 0.0)
-            {
-                // This is the constant.
-                kr0_2 += factor.factor().evaluate(Values());
-            }
-            else if (power == 1.0)
-            {
-                // This is the -kR0 term.
-                kr0 = factor.factor().evaluate(Values());
-            }
-            else if (power == 2.0)
-            {
-                // This is the R^2 term.
-                if (has_k)
-                {
-                    // We cannot have two R2 factors?
-                    errors.append(QObject::tr("Cannot have two R^2 factors!"));
-                    continue;
-                }
-
-                k = factor.factor().evaluate(Values());
-                has_k = true;
-            }
-            else
-            {
-                errors.append(QObject::tr("Power of R^2 must equal 2.0, 1.0 or 0.0, not %1")
-                                .arg(power));
-                continue;
-            }
-        }
-        else
-        {
-            errors.append(QObject::tr("Cannot have a factor that does not include R. %1")
-                        .arg(factor.symbol().toString()));
-        }
-    }
-
-    if (kr0_2 < 0)
-    {
-        errors.append(QObject::tr("How can K R0^2 be negative? %1").arg(kr0_2));
-    }
-
-    double r0 = std::sqrt( kr0_2 / k );
-
-    // kr0 should be equal to -2 k r0
-    if (std::abs(k*r0 + 0.5 * kr0) > 0.001)
-    {
-        errors.append(QObject::tr("How can the power of R be %1. It should be 2 x %2 x %3 = %4.")
-                        .arg(kr0).arg(k).arg(r0).arg(2*k*r0));
-    }
-
-    if (not errors.isEmpty())
-    {
-        throw SireError::incompatible_error(QObject::tr(
-                "Cannot construct a CHARMM bond parameter K ( %1 - R0 )^2 from the "
-                "expression %2, because\n%3")
-                    .arg(R.toString()).arg(func.toString()).arg(errors.join("\n")), CODELOC );
-    }
-
-    // Improper function.
-    if (num_atoms == 4)
-    {
-        // Convert out of plane angle to degrees.
-        r0 = qRadiansToDegrees(r0);
-
-        return QString("%1 %2 %3 %4")
-            .arg(bond_atoms).arg(k, 10, 'f', 3).arg(0, 10).arg(r0, 10, 'f', 4);
-    }
-
-    else
-    {
-        // Angle function.
-        // Convert equilibrium angle deviation to degrees.
-        if (num_atoms == 3)
-            r0 = qRadiansToDegrees(r0);
-
-        return QString("%1 %2 %3").arg(bond_atoms).arg(k, 10, 'f', 3).arg(r0, 10, 'f', 4);
-    }
-}
-
-/** Convert a Sire four-atom function to a set of CHARMM dihedral parameter strings. */
-QVector<QString> CharmmPSF::toFourAtomParameter(const QString &dihedral_atoms, const Expression &func)
-{
-    const auto phi = InternalPotential::symbols().dihedral().phi();
-
-    // This expression should be a sum of cos terms, plus constant terms.
-    QList<Expression> cos_terms;
-    double constant = 0.0;
-
-    QStringList errors;
-
-    if (func.base().isA<Sum>())
-    {
-        for (const auto child : func.base().asA<Sum>().children())
-        {
-            if (child.isConstant())
-            {
-                constant += func.factor() * child.evaluate(Values());
-            }
-            else if (child.base().isA<Cos>())
-            {
-                if (func.factor() == 1)
-                {
-                    cos_terms.append(child);
-                }
-                else
-                {
-                    cos_terms.append(func.factor() * child);
-                }
-            }
-            else
-            {
-                errors.append(QObject::tr("Cannot interpret the dihedral expression "
-                   "from '%1' as it should be a series of cosine terms involving %2.")
-                        .arg(func.toString()).arg(phi.toString()));
-            }
-        }
-    }
-    else
-    {
-        if (func.isConstant())
-        {
-            constant += func.evaluate(Values());
-        }
-        else if (func.base().isA<Cos>())
-        {
-            cos_terms.append(func);
-        }
-        else
-        {
-            errors.append( QObject::tr("Cannot interpret the dihedral expression "
-               "from '%1' as it should be a series of cosine terms involving %2.")
-                    .arg(func.toString()).arg(phi.toString()));
-        }
-    }
-
-    // Next extract all of the data from the cos terms.
-    QList<std::tuple<double,double,double> > terms;
-
-    double check_constant = 0;
-
-    for (const auto cos_term : cos_terms)
-    {
-        // Term should be of the form 'k cos( periodicity * phi - phase )'.
-        double k = cos_term.factor();
-        check_constant += k;
-
-        double periodicity = 0.0;
-        double phase = 0.0;
-
-        const auto factors = cos_term.base().asA<Cos>().argument().expand(phi);
-
-        bool ok = true;
-
-        for (const auto factor : factors)
-        {
-            if (not factor.power().isConstant())
-            {
-                errors.append(QObject::tr("Power of phi must be constant, not %1")
-                                .arg(factor.power().toString()));
-                ok = false;
-                continue;
-            }
-
-            if (not factor.factor().isConstant())
-            {
-                errors.append(QObject::tr("The value of periodicity must be "
-                                "constant. Here it is %1").arg(factor.factor().toString()));
-                ok = false;
-                continue;
-            }
-
-            double power = factor.power().evaluate(Values());
-
-            if (power == 0.0)
-            {
-                // This is the constant phase.
-                phase += factor.factor().evaluate(Values());
-            }
-            else if (power == 1.0)
-            {
-                // This is the periodicity * phi term
-                periodicity = factor.factor().evaluate(Values());
-            }
-            else
-            {
-                errors.append(QObject::tr("Power of phi must equal 1.0 or 0.0, not %1")
-                                    .arg(power));
-                ok = false;
-                continue;
+                throw SireError::incompatible_error(QObject::tr(
+                        "Cannot construct a CHARMM improper parameter K ( Psi - Psi0 )^2 from the "
+                        "expression %1").arg(potential.function().toString()), CODELOC );
             }
         }
 
-        if (ok)
-        {
-            terms.append(std::make_tuple(k, periodicity, phase));
-        }
+        // Create the map value.
+        QVector<qint64> value({atom0, atom1, atom2, atom3});
+
+        // Insert into the map.
+        // Use negative atom number as the index so we can loop over in ascending order.
+        improper_map.insert(-atom0, value);
     }
 
-    // Now sum up the individual values of 'k'. These should equal the constant, which
-    // is the aggregate of the "k [ 1 + cos ]" terms.
-    if ( std::abs(constant - check_constant) > 0.001 )
+    // Now populate the vector.
+    int i = 0;
+    while (not improper_map.isEmpty())
     {
-        errors.append(QObject::tr("The set of constants should sum up to the same total, "
-            "i.e. should equal %1. Instead they equal %2. This is weird.")
-                .arg(constant).arg(check_constant));
+        local_impropers[i] = improper_map.take(improper_map.lastKey());
+        i++;
     }
-
-    if (not errors.isEmpty())
-    {
-        throw SireError::incompatible_error(QObject::tr(
-            "Cannot extract a CHARMM dihedral parameter from '%1' as "
-            "the expression must be a series of terms of type "
-            "'k{ 1 + cos[ per %2 - phase ] }'. Errors include\n%3")
-                .arg(func.toString()).arg(phi.toString()).arg(errors.join("\n")),
-                    CODELOC);
-    }
-
-    // The vector of dihedral parameter strings.
-    QVector<QString> parameter_strings;
-
-    if (not terms.isEmpty())
-    {
-        // Append each parameter string to the vector, converting the phase
-        // shift to degrees.
-        for (const auto term : terms)
-        {
-            parameter_strings.append(QString("%1 %2 %3 %4")
-                .arg(dihedral_atoms)
-                .arg(std::get<0>(term), 10, 'f', 4)
-                .arg(std::get<1>(term), 3)
-                .arg(-qRadiansToDegrees(std::get<2>(term)), 10, 'f', 2));
-        }
-    }
-
-    return parameter_strings;
 }
 
 /** Extract Lennard-Jones non-bonded parameters from an atom. */
-QString CharmmPSF::toNonBondedParameter(const SireMol::Atom &atom, const PropertyMap &map) const
+QString CharmmPSF::getNonBondedFrom(const SireMol::Atom &atom, const PropertyMap &map) const
 {
     QString param_string;
 
