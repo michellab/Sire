@@ -391,9 +391,9 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, const PropertyMap &map,
     }
 
     // Extract the SYBYL atom type.
-    if (atom.hasProperty(map["sybyl-atom-type"]))
+    if (atom.hasProperty(map["sybyl_atom_type"]))
     {
-        type = atom.property<QString>(map["sybyl-atom-type"]);
+        type = atom.property<QString>(map["sybyl_atom_type"]);
     }
     else
     {
@@ -412,9 +412,9 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, const PropertyMap &map,
     }
 
     // Extract the SYBYL status bits.
-    if (atom.hasProperty(map["atom-status-bits"]))
+    if (atom.hasProperty(map["atom_status_bits"]))
     {
-        status_bits = atom.property<QString>(map["atom-status-bits"]);
+        status_bits = atom.property<QString>(map["atom_status_bits"]);
     }
 }
 
@@ -928,7 +928,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol, const PropertyMap &map,
     }
 
     // Extract the molecule type.
-    if (mol.hasProperty(map["mol-type"]))
+    if (mol.hasProperty(map["mol_type"]))
     {
         // List of valid molecule types.
         QStringList valid_mols;
@@ -941,7 +941,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol, const PropertyMap &map,
                    << "SACCHARIDE";
 
         // Extract the molecule type.
-        mol_type = mol.property(map["mol-type"]).toString().simplified().toUpper();
+        mol_type = mol.property(map["mol_type"]).toString().simplified().toUpper();
 
         // Check that the status bit is valid.
         if (not valid_mols.contains(mol_type))
@@ -958,7 +958,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol, const PropertyMap &map,
     }
 
     // Extract the charge type.
-    if (mol.hasProperty(map["charge-type"]))
+    if (mol.hasProperty(map["charge_type"]))
     {
         // List of valid molecule types.
         QStringList valid_chgs;
@@ -978,7 +978,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol, const PropertyMap &map,
                    << "USER_CHARGES";
 
         // Extract the molecule type.
-        charge_type = mol.property(map["charge-type"]).toString().simplified().toUpper();
+        charge_type = mol.property(map["charge_type"]).toString().simplified().toUpper();
 
         // Check that the status bit is valid.
         if (not valid_chgs.contains(charge_type))
@@ -995,9 +995,9 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol, const PropertyMap &map,
     }
 
     // Extract the status bits.
-    if (mol.hasProperty(map["mol-status-bits"]))
+    if (mol.hasProperty(map["mol_status_bits"]))
     {
-        status_bits = mol.property(map["mol-status-bits"]).toString().simplified().toUpper();
+        status_bits = mol.property(map["mol_status_bits"]).toString().simplified().toUpper();
 
         // List of valid SYBYL atom status bits.
         QStringList valid_bits;
@@ -1033,9 +1033,9 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol, const PropertyMap &map,
     }
 
     // Extract the comment.
-    if (mol.hasProperty(map["mol-comment"]))
+    if (mol.hasProperty(map["mol_comment"]))
     {
-        comment = mol.property("mol-comment").toString();
+        comment = mol.property("mol_comment").toString();
     }
 }
 
@@ -1411,28 +1411,28 @@ Mol2Substructure::Mol2Substructure(const SireMol::Residue &res,
     // Extract some optional data.
 
     // Substructure type.
-    if (res.hasProperty(map["res-type"]))
-        type = res.property<QString>(map["res-type"]);
+    if (res.hasProperty(map["res_type"]))
+        type = res.property<QString>(map["res_type"]);
 
     // Dictionary type.
     if (res.hasProperty(map["res-dict-type"]))
         dict_type = res.property<qint64>(map["res-dict-type"]);
 
     // Chain sub-type.
-    if (res.hasProperty(map["chain-sub-type"]))
-        sub_type = res.property<QString>(map["chain-sub-type"]);
+    if (res.hasProperty(map["chain_sub_type"]))
+        sub_type = res.property<QString>(map["chain_sub_type"]);
 
     // Internal substructure bonds.
-    if (res.hasProperty(map["res-inter-bonds"]))
-        num_inter_bonds = res.property<qint64>(map["res-inter-bonds"]);
+    if (res.hasProperty(map["res_inter_bonds"]))
+        num_inter_bonds = res.property<qint64>(map["res_inter_bonds"]);
 
     // Status bits.
-    if (res.hasProperty(map["res-status-bits"]))
-        status_bits = res.property<QString>(map["res-status-bits"]);
+    if (res.hasProperty(map["res_status_bits"]))
+        status_bits = res.property<QString>(map["res_status_bits"]);
 
     // Comments.
-    if (res.hasProperty(map["res-comment"]))
-        comment = res.property<QString>(map["res-comment"]);
+    if (res.hasProperty(map["res_comment"]))
+        comment = res.property<QString>(map["res_comment"]);
 }
 
 /** Generate a Mol2 record from the substructure data. */
@@ -2521,21 +2521,21 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
     mol.rename(MolName(molecules[imol].getName()));
 
     // Set properties for the molecule.
-    mol.setProperty(map["mol-type"], StringProperty(molecules[imol].getMolType()))
-       .setProperty(map["charge-type"], StringProperty(molecules[imol].getChargeType()))
+    mol.setProperty(map["mol_type"], StringProperty(molecules[imol].getMolType()))
+       .setProperty(map["charge_type"], StringProperty(molecules[imol].getChargeType()))
        .commit();
 
     // Add status bits, if present.
     if (not molecules[imol].getStatusBits().isEmpty())
     {
-        mol.setProperty(map["mol-status-bits"], StringProperty(molecules[imol].getStatusBits()))
+        mol.setProperty(map["mol_status_bits"], StringProperty(molecules[imol].getStatusBits()))
            .commit();
     }
 
     // Add comments, if present.
     if (not molecules[imol].getComment().isEmpty())
     {
-        mol.setProperty(map["mol-comment"], StringProperty(molecules[imol].getComment()))
+        mol.setProperty(map["mol_comment"], StringProperty(molecules[imol].getComment()))
            .commit();
     }
 
@@ -2598,14 +2598,14 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
     return mol.setProperty(map["coordinates"], coords)
               .setProperty(map["charge"], charges)
               .setProperty(map["element"], elements)
-              .setProperty(map["sybyl-atom-type"], types)
-              .setProperty(map["atom-status-bits"], status_bits)
-              .setProperty(map["res-type"], subst_types)
+              .setProperty(map["sybyl_atom_type"], types)
+              .setProperty(map["atom_status_bits"], status_bits)
+              .setProperty(map["res_type"], subst_types)
               .setProperty(map["res-dict-type"], dict_types)
-              .setProperty(map["chain-sub-type"], chain_sub_types)
-              .setProperty(map["res-inter-bonds"], inter_bonds)
-              .setProperty(map["res-status-bits"], subst_status_bits)
-              .setProperty(map["res-comment"], comments)
+              .setProperty(map["chain_sub_type"], chain_sub_types)
+              .setProperty(map["res_inter_bonds"], inter_bonds)
+              .setProperty(map["res_status_bits"], subst_status_bits)
+              .setProperty(map["res_comment"], comments)
               .commit();
 }
 

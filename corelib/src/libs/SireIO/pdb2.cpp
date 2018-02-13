@@ -335,8 +335,8 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
         res_num  = atom.residue().number().value();
 
         // Optional insertion code property.
-        if (atom.residue().hasProperty("insert-code"))
-            insert_code = atom.residue().property<QString>(map["insert-code"])[0];
+        if (atom.residue().hasProperty("insert_code"))
+            insert_code = atom.residue().property<QString>(map["insert_code"])[0];
     }
 
     // The atom is within a chain.
@@ -354,9 +354,9 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
     }
 
     // Extract the temperature factor.
-    if (atom.hasProperty(map["beta-factor"]))
+    if (atom.hasProperty(map["beta_factor"]))
     {
-        temperature = atom.property<double>(map["beta-factor"]);
+        temperature = atom.property<double>(map["beta_factor"]);
     }
 
     // Extract the element name.
@@ -371,17 +371,17 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
     }
 
     // Extract the atomic charge.
-    if (atom.hasProperty(map["formal-charge"]))
+    if (atom.hasProperty(map["formal_charge"]))
     {
         // TODO: This doesn't seem to be working in all cases.
-        charge = atom.property<SireUnits::Dimension::Charge>(map["formal-charge"]).value();
+        charge = atom.property<SireUnits::Dimension::Charge>(map["formal_charge"]).value();
         charge /= SireUnits::mod_electron;
     }
 
     // Determine whether this is a HETATM.
-    if (atom.hasProperty(map["is-het"]))
+    if (atom.hasProperty(map["is_het"]))
     {
-        if (atom.property<QString>(map["is-het"]) == "True")
+        if (atom.property<QString>(map["is_het"]) == "True")
             is_het = true;
     }
 }
@@ -2122,12 +2122,12 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
     }
 
     return mol.setProperty(map["coordinates"], coords)
-              .setProperty(map["formal-charge"], charges)
+              .setProperty(map["formal_charge"], charges)
               .setProperty(map["element"], elements)
               .setProperty(map["occupancy"], occupancies)
-              .setProperty(map["beta-factor"], temperatures)
-              .setProperty(map["is-het"], is_het_atom)
-              .setProperty(map["insert-code"], insert_codes)
+              .setProperty(map["beta_factor"], temperatures)
+              .setProperty(map["is_het"], is_het_atom)
+              .setProperty(map["insert_code"], insert_codes)
               .commit();
 }
 
@@ -2415,17 +2415,17 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
     // Charges.
     if (not sire_mol.hasProperty(map["coordinates"]))
     {
-        edit_mol.setProperty(map["formal-charge"], charges);
+        edit_mol.setProperty(map["formal_charge"], charges);
     }
     else
     {
-        if (not sire_mol.hasProperty(map["PDB.formal-charge"]))
+        if (not sire_mol.hasProperty(map["PDB.formal_charge"]))
         {
-            edit_mol.setProperty(map["PDB.formal-charge"], charges);
+            edit_mol.setProperty(map["PDB.formal_charge"], charges);
         }
         else
         {
-            edit_mol.setProperty(map["PDB.formal-charge[2]"], charges);
+            edit_mol.setProperty(map["PDB.formal_charge[2]"], charges);
         }
     }
 
@@ -2464,53 +2464,53 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
     }
 
     // Temperature factors.
-    if (not sire_mol.hasProperty(map["beta-factor"]))
+    if (not sire_mol.hasProperty(map["beta_factor"]))
     {
-        edit_mol.setProperty(map["beta-factor"], temperatures);
+        edit_mol.setProperty(map["beta_factor"], temperatures);
     }
     else
     {
-        if (not sire_mol.hasProperty(map["PDB.beta-factor"]))
+        if (not sire_mol.hasProperty(map["PDB.beta_factor"]))
         {
-            edit_mol.setProperty(map["PDB.beta-factor"], temperatures);
+            edit_mol.setProperty(map["PDB.beta_factor"], temperatures);
         }
         else
         {
-            edit_mol.setProperty(map["PDB.beta-factor[2]"], temperatures);
+            edit_mol.setProperty(map["PDB.beta_factor[2]"], temperatures);
         }
     }
 
     // Hetero-atoms.
-    if (not sire_mol.hasProperty(map["is-het"]))
+    if (not sire_mol.hasProperty(map["is_het"]))
     {
-        edit_mol.setProperty(map["is-het"], is_het_atom);
+        edit_mol.setProperty(map["is_het"], is_het_atom);
     }
     else
     {
-        if (not sire_mol.hasProperty(map["PDB.is-het"]))
+        if (not sire_mol.hasProperty(map["PDB.is_het"]))
         {
-            edit_mol.setProperty(map["PDB.is-het"], is_het_atom);
+            edit_mol.setProperty(map["PDB.is_het"], is_het_atom);
         }
         else
         {
-            edit_mol.setProperty(map["PDB.is-het[2]"], is_het_atom);
+            edit_mol.setProperty(map["PDB.is_het[2]"], is_het_atom);
         }
     }
 
     // Residue insert codes.
-    if (not sire_mol.hasProperty(map["insert-code"]))
+    if (not sire_mol.hasProperty(map["insert_code"]))
     {
-        edit_mol.setProperty(map["insert-code"], insert_codes);
+        edit_mol.setProperty(map["insert_code"], insert_codes);
     }
     else
     {
-        if (not sire_mol.hasProperty(map["PDB.insert-code"]))
+        if (not sire_mol.hasProperty(map["PDB.insert_code"]))
         {
-            edit_mol.setProperty(map["PDB.insert-code"], insert_codes);
+            edit_mol.setProperty(map["PDB.insert_code"], insert_codes);
         }
         else
         {
-            edit_mol.setProperty(map["PDB.insert-code[2]"], insert_codes);
+            edit_mol.setProperty(map["PDB.insert_code[2]"], insert_codes);
         }
     }
 
