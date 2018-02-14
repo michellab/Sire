@@ -170,11 +170,6 @@ AmberBond::AmberBond(const Expression &f, const Symbol &R) : _k(0), _r0(0)
         }
     }
 
-    if (kr0_2 < 0)
-    {
-        errors.append( QObject::tr("How can K R0^2 be negative? %1").arg(kr0_2) );
-    }
-
     _k = k;
     _r0 = std::sqrt( kr0_2 / k );
 
