@@ -333,7 +333,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, UreyBradleyComponent &ub)
 
 /** Constructor */
 UreyBradleyComponent::UreyBradleyComponent(const FFName &ffname)
-                     : FFComponent(ffname, QLatin1String("urey-bradley"))
+                     : FFComponent(ffname, QLatin1String("urey_bradley"))
 {}
 
 /** Construct from a symbol
@@ -341,7 +341,7 @@ UreyBradleyComponent::UreyBradleyComponent(const FFName &ffname)
     \throw SireError::incompatible_error
 */
 UreyBradleyComponent::UreyBradleyComponent(const SireCAS::Symbol &symbol)
-                     : FFComponent(symbol, QLatin1String("urey-bradley"))
+                     : FFComponent(symbol, QLatin1String("urey_bradley"))
 {}
 
 /** Copy constructor */  

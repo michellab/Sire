@@ -2464,7 +2464,7 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
     bool has_bonds, has_ubs, has_angles, has_dihedrals, has_impropers, has_nbpairs;
 
     const auto bonds = getProperty<TwoAtomFunctions>( map["bond"], moldata, &has_bonds );
-    const auto ub_bonds = getProperty<TwoAtomFunctions>( map["urey-bradley"], moldata, &has_ubs );
+    const auto ub_bonds = getProperty<TwoAtomFunctions>( map["urey_bradley"], moldata, &has_ubs );
     const auto angles = getProperty<ThreeAtomFunctions>( map["angle"], moldata, &has_angles );
     const auto dihedrals = getProperty<FourAtomFunctions>( map["dihedral"],
                                                            moldata, &has_dihedrals );

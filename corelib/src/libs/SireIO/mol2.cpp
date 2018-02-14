@@ -405,10 +405,10 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, const PropertyMap &map,
     {
         charge = atom.property<SireUnits::Dimension::Charge>(map["charge"]).value();
     }
-    else if (atom.hasProperty(map["formal-charge"]))
+    else if (atom.hasProperty(map["formal_charge"]))
     {
         // TODO: Need some conversion here, I assume.
-        charge = atom.property<SireUnits::Dimension::Charge>(map["formal-charge"]).value();
+        charge = atom.property<SireUnits::Dimension::Charge>(map["formal_charge"]).value();
     }
 
     // Extract the SYBYL status bits.

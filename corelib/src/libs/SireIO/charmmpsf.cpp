@@ -2627,7 +2627,7 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
         // ...and Urey-Bradley, if present.
         if (has_ub)
         {
-            edit_mol.setProperty(map["urey-bradley"], ub_funcs);
+            edit_mol.setProperty(map["urey_bradley"], ub_funcs);
         }
     }
 
@@ -2996,7 +2996,7 @@ void CharmmPSF::parseMolecule(
     // Get the required properties.
     const auto bond_funcs = getProperty<TwoAtomFunctions>(map["bond"], moldata, &has_bonds);
     const auto angle_funcs = getProperty<ThreeAtomFunctions>(map["angle"], moldata, &has_angles);
-    const auto ub_funcs = getProperty<TwoAtomFunctions>(map["urey-bradley"], moldata, &has_ubs);
+    const auto ub_funcs = getProperty<TwoAtomFunctions>(map["urey_bradley"], moldata, &has_ubs);
     const auto dihedral_funcs = getProperty<FourAtomFunctions>(map["dihedral"], moldata, &has_dihedrals);
     const auto improper_funcs = getProperty<FourAtomFunctions>(map["improper"], moldata, &has_impropers);
 
