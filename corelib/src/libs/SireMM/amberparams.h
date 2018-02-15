@@ -133,34 +133,34 @@ public:
     friend QDataStream& ::operator>>(QDataStream&, AmberBond&);
 
     AmberBond(double k=0, double r0=0);
-    
+
     AmberBond(const SireCAS::Expression &eqn, const SireCAS::Symbol &R);
-    
+
     AmberBond(const AmberBond &other);
-    
+
     ~AmberBond();
-    
+
     static const char* typeName();
     const char* what() const;
-    
+
     double k() const;
     double r0() const;
-    
+
     double operator[](int i) const;
-    
+
     AmberBond& operator=(const AmberBond &other);
-    
+
     bool operator==(const AmberBond &other) const;
     bool operator!=(const AmberBond &other) const;
-    
+
     bool operator<(const AmberBond &other) const;
     bool operator<=(const AmberBond &other) const;
-    
+
     bool operator>(const AmberBond &other) const;
     bool operator>=(const AmberBond &other) const;
-    
+
     double energy(double r) const;
-    
+
     QString toString() const;
     SireCAS::Expression toExpression(const SireCAS::Symbol &R) const;
 
@@ -178,37 +178,37 @@ public:
     friend QDataStream& ::operator>>(QDataStream&, AmberAngle&);
 
     AmberAngle(double k=0, double theta0=0);
-    
+
     AmberAngle(const SireCAS::Expression &eqn, const SireCAS::Symbol &THETA);
-    
+
     AmberAngle(const AmberAngle &other);
-    
+
     ~AmberAngle();
-    
+
     static const char* typeName();
     const char* what() const;
-    
+
     double k() const;
-    
+
     double theta0() const;
-    
+
     double operator[](int i) const;
-    
+
     AmberAngle& operator=(const AmberAngle &other);
-    
+
     bool operator==(const AmberAngle &other) const;
     bool operator!=(const AmberAngle &other) const;
-    
+
     bool operator<(const AmberAngle &other) const;
     bool operator<=(const AmberAngle &other) const;
-    
+
     bool operator>(const AmberAngle &other) const;
     bool operator>=(const AmberAngle &other) const;
-    
+
     double energy(double theta) const;
-    
+
     SireCAS::Expression toExpression(const SireCAS::Symbol &THETA) const;
-    
+
     QString toString() const;
 
     uint hash() const;
@@ -225,35 +225,35 @@ public:
     friend QDataStream& ::operator>>(QDataStream&, AmberDihPart&);
 
     AmberDihPart(double k=0, double periodicity=0, double phase=0);
-    
+
     AmberDihPart(const AmberDihPart &other);
-    
+
     ~AmberDihPart();
-    
+
     static const char* typeName();
     const char* what() const;
-    
+
     double k() const;
-    
+
     double periodicity() const;
-    
+
     double phase() const;
-    
+
     double operator[](int i) const;
-    
+
     AmberDihPart& operator=(const AmberDihPart &other);
-    
+
     bool operator==(const AmberDihPart &other) const;
     bool operator!=(const AmberDihPart &other) const;
-    
+
     bool operator<(const AmberDihPart &other) const;
     bool operator<=(const AmberDihPart &other) const;
-    
+
     bool operator>(const AmberDihPart &other) const;
     bool operator>=(const AmberDihPart &other) const;
-    
+
     double energy(double phi) const;
-    
+
     QString toString() const;
 
     uint hash() const;
@@ -270,34 +270,34 @@ public:
     friend QDataStream& ::operator>>(QDataStream&, AmberDihedral&);
 
     AmberDihedral();
-    
+
     AmberDihedral(AmberDihPart part);
-    
-    AmberDihedral(const SireCAS::Expression &f, const SireCAS::Symbol &PHI);
-    
+
+    AmberDihedral(const SireCAS::Expression &f, const SireCAS::Symbol &PHI, bool has_neg_cos = false);
+
     AmberDihedral(const AmberDihedral &other);
-    
+
     ~AmberDihedral();
-    
+
     static const char* typeName();
     const char* what() const;
-    
+
     AmberDihedral& operator+=(const AmberDihPart &part);
     AmberDihedral operator+(const AmberDihPart &part) const;
-    
+
     AmberDihedral& operator=(const AmberDihedral &other);
-    
+
     bool operator==(const AmberDihedral &other) const;
     bool operator!=(const AmberDihedral &other) const;
-    
+
     AmberDihPart operator[](int i) const;
-    
+
     QVector<AmberDihPart> terms() const;
-    
+
     double energy(double phi) const;
-    
+
     SireCAS::Expression toExpression(const SireCAS::Symbol &PHI) const;
-    
+
     QString toString() const;
 
     uint hash() const;
@@ -312,35 +312,35 @@ class SIREMM_EXPORT AmberNB14
 public:
     friend QDataStream& ::operator<<(QDataStream&, const AmberNB14&);
     friend QDataStream& ::operator>>(QDataStream&, AmberNB14&);
-    
+
     AmberNB14(double cscl=0, double ljscl=0);
-    
+
     AmberNB14(const AmberNB14 &other);
-    
+
     ~AmberNB14();
-    
+
     static const char* typeName();
     const char* what() const;
-    
+
     double cscl() const;
-    
+
     double ljscl() const;
-    
+
     double operator[](int i) const;
-    
+
     AmberNB14& operator=(const AmberNB14 &other);
-    
+
     bool operator==(const AmberNB14 &other) const;
     bool operator!=(const AmberNB14 &other) const;
-    
+
     bool operator<(const AmberNB14 &other) const;
     bool operator<=(const AmberNB14 &other) const;
-    
+
     bool operator>(const AmberNB14 &other) const;
     bool operator>=(const AmberNB14 &other) const;
-    
+
     QString toString() const;
-    
+
     SireMM::CLJScaleFactor toScaleFactor() const;
 
 private:
@@ -357,28 +357,28 @@ public:
 
     AmberNBDihPart();
     AmberNBDihPart(const AmberDihPart &dih, const AmberNB14 &nb14);
-    
+
     AmberNBDihPart(const AmberNBDihPart &other);
-    
+
     ~AmberNBDihPart();
-    
+
     static const char* typeName();
     const char* what() const;
 
     const AmberDihPart& parameter() const;
     const AmberNB14& scl() const;
-    
+
     AmberNBDihPart& operator=(const AmberNBDihPart &other);
-    
+
     bool operator==(const AmberNBDihPart &other) const;
     bool operator!=(const AmberNBDihPart &other) const;
-    
+
     bool operator<(const AmberNBDihPart &other) const;
     bool operator<=(const AmberNBDihPart &other) const;
-    
+
     bool operator>(const AmberNBDihPart &other) const;
     bool operator>=(const AmberNBDihPart &other) const;
-    
+
     QString toString() const;
 
     uint hash() const;
@@ -386,13 +386,13 @@ public:
 private:
     /** The dihedral parameters */
     AmberDihPart dih;
-    
+
     /** The 14 scale factor */
     AmberNB14 nbscl;
 };
 
-/** This class stores AMBER bonded force field parameters for 
-    a collection of bonds, angles, dihedrals, impropers 
+/** This class stores AMBER bonded force field parameters for
+    a collection of bonds, angles, dihedrals, impropers
     and 1-4 scaling factors.
 
     @author Julien Michel / Christopher Woods
@@ -408,10 +408,10 @@ public:
     AmberParams();
     AmberParams(const SireMol::MoleculeView &molecule,
                 const SireBase::PropertyMap &map = SireBase::PropertyMap());
-                
+
     AmberParams(const SireMol::MoleculeInfo &molinfo);
     AmberParams(const SireMol::MoleculeInfoData &molinfo);
-    
+
     AmberParams(const AmberParams &other);
 
     ~AmberParams();
@@ -419,12 +419,12 @@ public:
     static const char* typeName();
 
     AmberParams& operator=(const AmberParams &other);
-    
+
     bool operator==(const AmberParams &other) const;
     bool operator!=(const AmberParams &other) const;
 
     AmberParams& operator+=(const AmberParams &other);
-    
+
     AmberParams operator+(const AmberParams &other) const;
 
     SireMol::MoleculeInfo info() const;
@@ -462,7 +462,7 @@ public:
 
     void add(const BondID &bond, double k, double r0, bool includes_hydrogen);
     void remove(const BondID &bond);
-    
+
     AmberBond getParameter(const BondID &bond) const;
     QHash< BondID,QPair<AmberBond,bool> > bonds() const;
     TwoAtomFunctions bondFunctions() const;
@@ -500,21 +500,21 @@ public:
     AmberNB14 getNB14(const BondID &pair) const;
     QHash<BondID,AmberNB14> nb14s() const;
     CLJNBPairs cljScaleFactors() const;
-  
+
     QStringList validate() const;
     QStringList validateAndFix();
-  
+
     void setPropertyMap(const PropertyMap &map);
     const PropertyMap& propertyMap() const;
-  
+
     void updateFrom(const MoleculeView &molview);
 
     BondID convert(const BondID &bond) const;
     AngleID convert(const AngleID &angle) const;
     DihedralID convert(const DihedralID &dihedral) const;
     ImproperID convert(const ImproperID &improper) const;
-  
-private: 
+
+private:
     void _pvt_createFrom(const MoleculeData &moldata);
     void _pvt_updateFrom(const MoleculeData &moldata);
 
@@ -522,30 +522,30 @@ private:
     void getAmberAnglesFrom(const ThreeAtomFunctions &funcs);
     void getAmberDihedralsFrom(const FourAtomFunctions &funcs);
     void getAmberImpropersFrom(const FourAtomFunctions &funcs);
-    
+
     void getAmberNBsFrom(const CLJNBPairs &nbpairs, const FourAtomFunctions &funcs);
- 
+
     /** The molecule that this flexibility operates on */
     SireMol::MoleculeInfo molinfo;
 
     /** All of the atom charges */
     SireMol::AtomCharges amber_charges;
-    
+
     /** All of the atom LJs */
     SireMM::AtomLJs amber_ljs;
-    
+
     /** All of the atom masses */
     SireMol::AtomMasses amber_masses;
-    
+
     /** All of the atom elements */
     SireMol::AtomElements amber_elements;
-    
+
     /** All of the amber atom types */
     SireMol::AtomStringProperty amber_types;
 
     /** All of the amber atom Born radii */
     SireMol::AtomRadii born_radii;
-    
+
     /** All of the amber GB screening parameters */
     SireMol::AtomFloatProperty amber_screens;
 
@@ -570,10 +570,10 @@ private:
 
     /** A hash of coulombic and lennard jones scale factors for 1,4 pairs**/
     QHash<BondID,AmberNB14> amber_nb14s;
-    
+
     /** The radius set chosen by LEAP when assigning the Born radii */
     QString radius_set;
-    
+
     /** The property map used (if any) to identify the properties that
         hold the amber parameters */
     SireBase::PropertyMap propmap;
@@ -698,7 +698,7 @@ inline uint qHash(const AmberDihPart &param)
 inline uint AmberDihedral::hash() const
 {
     uint h = 0;
-    
+
     for (int i=0; i<_parts.count(); ++i)
     {
         h |= _parts[i].hash();

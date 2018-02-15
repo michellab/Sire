@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireUnits/units.h"
 
+#include "amberparams.h"
+
 #include "gromacsparams.h"
 
 #include "gromacsparams.h"
@@ -48,7 +50,7 @@ void register_GromacsAtomType_class(){
             ;
         GromacsAtomType_exposer.def( bp::init< QString, SireUnits::Dimension::MolarMass >(( bp::arg("atom_type"), bp::arg("mass") ), "Construct, specifying only the mass") );
         GromacsAtomType_exposer.def( bp::init< QString, SireUnits::Dimension::MolarMass, SireUnits::Dimension::Charge, SireMM::GromacsAtomType::PARTICLE_TYPE, SireMM::LJParameter const &, bp::optional< SireMol::Element const & > >(( bp::arg("atom_type"), bp::arg("mass"), bp::arg("charge"), bp::arg("particle_type"), bp::arg("ljparam"), bp::arg("element")=SireMol::Element(0) ), "Construct passing in all parameters") );
-        GromacsAtomType_exposer.def( bp::init< QString, QString, SireUnits::Dimension::MolarMass, SireUnits::Dimension::Charge, SireMM::GromacsAtomType::PARTICLE_TYPE, SireMM::LJParameter const &, bp::optional< SireMol::Element const & > >(( bp::arg("atom_type"), bp::arg("bond_type"), bp::arg("mass"), bp::arg("charge"), bp::arg("particle_type"), bp::arg("ljparam"), bp::arg("element")=SireMol::Element(0) ), "") );
+        GromacsAtomType_exposer.def( bp::init< QString, QString, SireUnits::Dimension::MolarMass, SireUnits::Dimension::Charge, SireMM::GromacsAtomType::PARTICLE_TYPE, SireMM::LJParameter const &, bp::optional< SireMol::Element const & > >(( bp::arg("atom_type"), bp::arg("bond_type"), bp::arg("mass"), bp::arg("charge"), bp::arg("particle_type"), bp::arg("ljparam"), bp::arg("element")=SireMol::Element(0) ), "Construct passing in all parameters") );
         GromacsAtomType_exposer.def( bp::init< SireMM::GromacsAtomType const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::GromacsAtomType::atomType
         

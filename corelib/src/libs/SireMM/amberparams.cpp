@@ -618,13 +618,16 @@ AmberDihedral::AmberDihedral(AmberDihPart part)
     _parts = QVector<AmberDihPart>(1, part);
 }
 
-AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
+AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi, bool has_neg_cos)
 {
     //this expression should be a sum of cos terms, plus constant terms
     QList<Expression> cos_terms;
     double constant = 0.0;
 
     QStringList errors;
+
+    // Whether the cosine term has been phase shifted.
+    QVector<bool> is_shifted;
 
     if (f.base().isA<Sum>())
     {
@@ -637,19 +640,24 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
             else if (child.base().isA<Cos>())
             {
                 auto cos_term = child.base().asA<Cos>();
-            
-                //if the factor is negative, then we need to add pi to the periodicity
-                //as amber does not have negative cos factors
+
+                // If the factor is negative, then we need to add pi to the periodicity
+                // as amber does not have negative cos factors.
+                // Since we also use AmberDihedral to handle CHARMM improper and dihedral
+                // functions, which can have negative cos factors, we use the "has_neg_cos"
+                // argument to distinguish the two use cases.
                 double factor = f.factor() * child.factor();
 
-                if (factor < 0)
+                if ((factor < 0) and not has_neg_cos)
                 {
                     factor *= -1;
                     cos_terms.append( factor * Cos( cos_term.argument() + SireMaths::pi ) );
+                    is_shifted.append(true);
                 }
                 else
                 {
                     cos_terms.append( factor * cos_term );
+                    is_shifted.append(false);
                 }
             }
             else
@@ -670,8 +678,8 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
         {
             auto cos_term = f.base().asA<Cos>();
             double factor = f.factor();
-        
-            if (factor < 0)
+
+            if ((factor < 0) and not has_neg_cos)
             {
                 factor *= -1;
                 cos_terms.append( factor * Cos(cos_term.argument() + SireMaths::pi) );
@@ -693,12 +701,18 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
     QList< std::tuple<double,double,double> > terms;
 
     double check_constant = 0;
+    int i = 0;
 
     for (const auto cos_term : cos_terms)
     {
         //term should be of the form 'k cos( periodicity * phi - phase )'
         double k = cos_term.factor();
-        check_constant += k;
+
+        // Swap the sign of k if the cosine term has been phase shifted.
+        if (is_shifted[i++])
+            check_constant -= k;
+        else
+            check_constant += k;
 
         double periodicity = 0.0;
         double phase = 0.0;
@@ -1365,11 +1379,11 @@ QStringList AmberParams::validateAndFix()
         for (int icg = r.begin(); icg < r.end(); ++icg)
         {
             const int nats0 = molinfo.nAtoms( CGIdx(icg) );
-        
+
             for (int jcg = 0; jcg < exc_atoms.nGroups(); ++jcg)
             {
                 auto group_pairs = exc_atoms.get( CGIdx(icg), CGIdx(jcg) );
-            
+
                 if (group_pairs.isEmpty() and
                     group_pairs.defaultValue() == CLJScaleFactor(1,1))
                 {
@@ -1377,22 +1391,22 @@ QStringList AmberParams::validateAndFix()
                     //bonded
                     continue;
                 }
-                
+
                 const int nats1 = molinfo.nAtoms( CGIdx(jcg) );
-                
+
                 //compare all pairs of atoms
                 for (int i=0; i<nats0; ++i)
                 {
                     for (int j=0; j<nats1; ++j)
                     {
                         const auto s = group_pairs.get(i,j);
-                        
+
                         if ( (not (s.coulomb() == 0 or s.coulomb() == 1)) or
                              (not (s.lj() == 0 or s.lj() == 1)) )
                         {
                             const auto atm0 = molinfo.atomIdx( CGAtomIdx(CGIdx(icg),Index(i)) );
                             const auto atm3 = molinfo.atomIdx( CGAtomIdx(CGIdx(jcg),Index(j)) );
-                        
+
                             if (not has_connectivity)
                             {
                                 //have to use the connectivity that is implied by the bonds
@@ -1403,10 +1417,10 @@ QStringList AmberParams::validateAndFix()
                                     has_connectivity = true;
                                 }
                             }
-                        
+
                             //find the shortest bonded path between these two atoms
                             const auto path = conn.findPath(atm0,atm3);
-                            
+
                             if (path.count() != 4)
                             {
                                 QMutexLocker lkr(&mutex);
@@ -1421,7 +1435,7 @@ QStringList AmberParams::validateAndFix()
                                     .arg(Sire::toString(path)) );
                                 continue;
                             }
-                            
+
                             //convert the atom IDs into a canonical form
                             auto dih = this->convert( DihedralID(path[0],path[1],path[2],path[3]) );
 
@@ -1460,13 +1474,13 @@ QStringList AmberParams::validateAndFix()
             }
         }
     });
-    
+
     amber_dihedrals = new_dihedrals;
     amber_nb14s = new_nb14s;
     exc_atoms = new_exc;
-    
+
     } // if not exc_atoms.isEmpty()
-    
+
     return errors + this->validate();
 }
 
@@ -2392,13 +2406,13 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
     amber_masses = getProperty<AtomMasses>( map["mass"], moldata, &has_masses );
     amber_elements = getProperty<AtomElements>( map["element"], moldata, &has_elements );
     amber_types = getProperty<AtomStringProperty>( map["ambertype"], moldata, &has_ambertypes );
-    
+
     if (not has_ambertypes)
     {
         //look for the atomtypes property
         amber_types = getProperty<AtomStringProperty>( map["atomtype"], moldata, &has_ambertypes );
     }
-    
+
     if (not has_elements)
     {
         //try to guess the elements from the names and/or masses
