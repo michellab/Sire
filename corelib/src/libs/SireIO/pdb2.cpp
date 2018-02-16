@@ -1540,7 +1540,12 @@ void PDB2::parseLines(const PropertyMap &map)
                  */
                 QHash<QString, QPair<QString, QChar>> res_hash;
 
-                ok = true;
+                // A multimap between duplicate residues and the atoms in those residues.
+                QMultiMap<int, int> duplicates;
+
+                // Initalise the maximum residue number.
+                int max_res_num = -1000000;
+
                 for (int i=0; i<nats; ++i)
                 {
                     QString res_name = mol_atoms[i].getResName();
@@ -1551,6 +1556,10 @@ void PDB2::parseLines(const PropertyMap &map)
                     // Create a string out of the residue number and insertion code.
                     QString num(QString("%1%2").arg(res_num).arg(icode));
 
+                    // Check if this residue number exceeds the current maximum.
+                    if (res_num > max_res_num)
+                        max_res_num = res_num;
+
                     // We've already seen this residue number.
                     if (res_hash.contains(num))
                     {
@@ -1559,8 +1568,8 @@ void PDB2::parseLines(const PropertyMap &map)
                         if ((res_name != res_hash[num].first) and
                             (chain_id == res_hash[num].second))
                         {
-                            ok = false;
-                            break;
+                            // Insert the atom into the duplicate resiude multi-map.
+                            duplicates.insert(res_num, i);
                         }
 
                         // Add the residue to the hash.
@@ -1580,46 +1589,44 @@ void PDB2::parseLines(const PropertyMap &map)
                 }
 
                 // Re-number all of the residues.
-                if (not ok)
+                if (not duplicates.isEmpty())
                 {
+                    // The incorrect residues are re-numbered starting at a value of one
+                    // above the maximum residue number found in the PDB file. This means
+                    // that we preserve the numbers of the correct residues. However, the
+                    // residue numbers in the file will now be out of sequence.
+
                     parse_warnings.append(QObject::tr("Warning: There are duplicate residue "
-                        "numbers in the PDB file. Residue numbers have been replaced "
-                        "by their index."));
+                        "numbers in the PDB file. Residue numbers have been updated."));
 
-                    // The residue counter.
-                    int num_res = 1;
+                    // The residue counter. Start at one above the current maximum.
+                    int num_res = max_res_num + 1;
 
-                    // The current residue name and number.
-                    QString curr_nam = mol_atoms[0].getResName();
-                    int     curr_num = mol_atoms[0].getResNum();
-
-                    for (int i=0; i<nats; ++i)
+                    // Loop over all duplicated residue numbers in the molecule.
+                    for (const auto &res_num : duplicates.uniqueKeys())
                     {
-                        if ((mol_atoms[i].getResNum()  != curr_num) or
-                            (mol_atoms[i].getResName() != curr_nam))
+                        // Loop over all of the atoms in the residue.
+                        for (const auto &atom_num : duplicates.values(res_num))
                         {
-                            // Increment the residue count and store
-                            // the new number.
-                            num_res++;
-                            curr_num = mol_atoms[i].getResNum();
-                            curr_nam = mol_atoms[i].getResName();
+                            // Update the residue number.
+                            mol_atoms[atom_num].setResNum(num_res);
                         }
 
-                        // Update the residue number.
-                        mol_atoms[i].setResNum(num_res);
+                        // Increment the residue number.
+                        num_res++;
                     }
                 }
 
                 // Now we need to loop through all of the atoms and set a residue "index".
                 // This will help with breaking the molecule up into its constituent parts.
 
-                // A string identifying the previous residue.
+                // A string identifying the current residue.
                 // name + number + insert_code + chain.
-                QString prev_res(QString("%1%2%3%4")
-                                 .arg(mol_atoms[0].getResName())
-                                 .arg(mol_atoms[0].getResNum())
-                                 .arg(mol_atoms[0].getInsertCode())
-                                 .arg(mol_atoms[0].getChainID()));
+                QString res_string(QString("%1%2%3%4")
+                    .arg(mol_atoms[0].getResName())
+                    .arg(mol_atoms[0].getResNum())
+                    .arg(mol_atoms[0].getInsertCode())
+                    .arg(mol_atoms[0].getChainID()));
 
                 // The current residue index.
                 int res_idx = 0;
@@ -1627,25 +1634,41 @@ void PDB2::parseLines(const PropertyMap &map)
                 // Set the index for the residue of the first atom.
                 mol_atoms[0].setResIdx(0);
 
+                // A has between the residue string and its index.
+                QHash<QString, int> res_indices;
+
+                // Add the first residue to the hash.
+                res_indices[res_string] = res_idx;
+
                 // Loop through the rest of the residues.
                 for (int i=1; i<nats; ++i)
                 {
                     // A string identifying the current residue.
-                    QString curr_res(QString("%1%2%3%4")
-                                    .arg(mol_atoms[i].getResName())
-                                    .arg(mol_atoms[i].getResNum())
-                                    .arg(mol_atoms[i].getInsertCode())
-                                    .arg(mol_atoms[i].getChainID()));
+                    QString res_string(QString("%1%2%3%4")
+                        .arg(mol_atoms[i].getResName())
+                        .arg(mol_atoms[i].getResNum())
+                        .arg(mol_atoms[i].getInsertCode())
+                        .arg(mol_atoms[i].getChainID()));
 
-                    // The residue is different.
-                    if (curr_res != prev_res)
+                    // This residue has already been added.
+                    if (res_indices.contains(res_string))
                     {
-                        res_idx++;
-                        prev_res = curr_res;
+                        // Set the residue index to the hash value.
+                        mol_atoms[i].setResIdx(res_indices[res_string]);
                     }
 
-                    // Set the residue index.
-                    mol_atoms[i].setResIdx(res_idx);
+                    // This is a new residue.
+                    else
+                    {
+                        // Increment the residue index.
+                        res_idx++;
+
+                        // Set the residue index.
+                        mol_atoms[i].setResIdx(res_idx);
+
+                        // Add the new residue to the hash.
+                        res_indices[res_string] = res_idx;
+                    }
                 }
 
                 // Now check whether the temperature factors are sane.
