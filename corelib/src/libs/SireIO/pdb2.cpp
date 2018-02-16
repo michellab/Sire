@@ -236,7 +236,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
         occupancy = tmp_dbl;
 
         // Check occupancy is valid.
-        if ((occupancy < 1) or
+        if ((occupancy < 0) or
             (occupancy > 1))
         {
             errors.append(QObject::tr("The occupancy (%1) was out of range! "
@@ -244,7 +244,6 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
                 .arg(occupancy));
 
             occupancy = 1;
-            return;
         }
     }
 
@@ -269,7 +268,6 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
                 .arg(temperature));
 
             temperature = 0;
-            return;
         }
     }
 
