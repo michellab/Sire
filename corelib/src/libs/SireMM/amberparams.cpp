@@ -615,99 +615,143 @@ AmberDihedral::AmberDihedral(AmberDihPart part)
 
 AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi, bool has_neg_cos)
 {
-    //this expression should be a sum of cos terms, plus constant terms
-    QList<Expression> cos_terms;
+    // This expression should be a sum of cos terms, plus constant terms.
+    // The cosine terms can be positive or negative depending on the sign
+    // of the factor.
+    QVector<QPair<double, Expression> > pos_terms;
+    QVector<QPair<double, Expression> > neg_terms;
     double constant = 0.0;
 
     QStringList errors;
 
-    // Whether the cosine term has been phase shifted.
-    QVector<bool> is_shifted;
-
+    // Loop over all terms in the series.
     if (f.base().isA<Sum>())
     {
-        for (const auto child : f.base().asA<Sum>().children())
+        for (const auto &child : f.base().asA<Sum>().children())
         {
             if (child.isConstant())
             {
+                // Accumulate the constant factors.
                 constant += f.factor() * child.evaluate(Values());
             }
             else if (child.base().isA<Cos>())
             {
+                // Compute the factor and extract the cosine term.
+                double factor = f.factor() * child.factor();
                 auto cos_term = child.base().asA<Cos>();
 
-                // If the factor is negative, then we need to add pi to the periodicity
-                // as amber does not have negative cos factors.
-                // Since we also use AmberDihedral to handle CHARMM improper and dihedral
-                // functions, which can have negative cos factors, we use the "has_neg_cos"
-                // argument to distinguish the two use cases.
-                double factor = f.factor() * child.factor();
+                // Now store a <factor, cos_term> pair, storing the
+                // positive and negative terms separately.
 
-                if ((factor < 0) and not has_neg_cos)
-                {
-                    factor *= -1;
-                    cos_terms.append( factor * Cos( cos_term.argument() + SireMaths::pi ) );
-                    is_shifted.append(true);
-                }
+                if (factor < 0)
+                    neg_terms.append(QPair<double, Expression>(factor, cos_term));
                 else
+                    pos_terms.append(QPair<double, Expression>(factor, cos_term));
+            }
+        }
+    }
+
+    // Now loop over the factors and work out what combination adds
+    // up to the constant term, usings the raw factors, their absolute
+    // values, or combinations thereof.
+
+    // First add up the positive terms. These always represent standard
+    // AMBER dihderal terms.
+    double pos_sum = 0.0;
+    for (const auto &term : pos_terms)
+        pos_sum += term.first;
+
+    // Store the number of negative terms.
+    int num_neg = neg_terms.count();
+
+    // There are negative factors.
+	if (num_neg > 0)
+    {
+        // The number of ways of combining the factors, using either the
+        // negative or absolute values of each.
+        int num_combs = std::pow(2, num_neg);
+
+        // The vector of factors for the current combination.
+        QVector<double> factors(num_neg);
+
+        QVector<unsigned int> temp(num_combs);
+        for (int i=0; i<num_combs; ++i)
+            temp[i] = i;
+
+        bool has_match = false;
+
+        // Now add the negative terms, trying all combinations.
+        // Abort if we find a combination that matches the constant term.
+        for (int i=0; i<num_combs; ++i)
+        {
+            // Reset the sum.
+            double sum = pos_sum;
+
+            // Loop over all terms.
+            for (int j=0; j<num_neg; ++j)
+            {
+                unsigned int k = temp[i] >> j;
+
+                if (k & 1) factors[j] = neg_terms[j].first;
+                else       factors[j] = -neg_terms[j].first;
+
+                // Update the sum.
+                sum += factors[j];
+            }
+
+            // Woohoo, we've found a combination of terms that match the constant.
+            if (std::abs(sum - constant) < 0.001)
+            {
+                has_match = true;
+                break;
+            }
+        }
+
+        if (has_match)
+        {
+            for (int i=0; i<num_neg; ++i)
+            {
+                // The term factor has been flipped. We need to phase shift
+                // the cosine term.
+                if (factors[i] > 0)
                 {
-                    cos_terms.append( factor * cos_term );
-                    is_shifted.append(false);
+                    auto cos_term = neg_terms[i].second.base().asA<Cos>();
+
+                    // Store the negated factor and shifted cosine term.
+                    neg_terms[i] = QPair<double, Expression>
+                        (factors[i], Cos(cos_term.argument() + SireMaths::pi));
                 }
             }
-            else
-            {
-                errors.append( QObject::tr( "Cannot interpret the dihedral expression "
-                   "from '%1' as it should be a series of cosine terms involving %2.")
-                        .arg(f.toString()).arg(phi.toString()) );
-            }
-        }
-    }
-    else
-    {
-        if (f.isConstant())
-        {
-            constant += f.evaluate(Values());
-        }
-        else if (f.base().isA<Cos>())
-        {
-            auto cos_term = f.base().asA<Cos>();
-            double factor = f.factor();
-
-            if ((factor < 0) and not has_neg_cos)
-            {
-                factor *= -1;
-                cos_terms.append( factor * Cos(cos_term.argument() + SireMaths::pi) );
-            }
-            else
-            {
-                cos_terms.append( factor * cos_term );
-            }
         }
         else
         {
-            errors.append( QObject::tr( "Cannot interpret the dihedral expression "
-               "from '%1' as it should be a series of cosine terms involving %2.")
-                    .arg(f.toString()).arg(phi.toString()) );
+            throw SireError::incompatible_error( QObject::tr(
+                "Cannot extract an Amber-format dihedral expression from '%1' as "
+                "the expression must be a series of terms of type "
+                "'k{ 1 + cos[ per %2 - phase ] }'. Errors include\n%3")
+                    .arg(f.toString()).arg(phi.toString()).arg(errors.join("\n")),
+                        CODELOC );
         }
     }
 
-    //next extract all of the data from the cos terms
-    QList< std::tuple<double,double,double> > terms;
+    // Create a vector of the cosine terms.
+    QVector<Expression> cos_terms;
 
-    double check_constant = 0;
-    int i = 0;
+    // First add the positive terms.
+    for (const auto &term : pos_terms)
+        cos_terms.append(term.first * term.second);
 
-    for (const auto cos_term : cos_terms)
+    // Now add the negative terms.
+    for (const auto &term : neg_terms)
+        cos_terms.append(term.first * term.second);
+
+    // Next extract all of the data from the cos terms.
+    QVector< std::tuple<double,double,double> > terms;
+
+    for (const auto &cos_term : cos_terms)
     {
-        //term should be of the form 'k cos( periodicity * phi - phase )'
+        // Term should be of the form 'k cos( periodicity * phi - phase )'.
         double k = cos_term.factor();
-
-        // Swap the sign of k if the cosine term has been phase shifted.
-        if (is_shifted[i++])
-            check_constant -= k;
-        else
-            check_constant += k;
 
         double periodicity = 0.0;
         double phase = 0.0;
@@ -716,7 +760,7 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi, bool has_ne
 
         bool ok = true;
 
-        for (const auto factor : factors)
+        for (const auto &factor : factors)
         {
             if (not factor.power().isConstant())
             {
@@ -738,12 +782,12 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi, bool has_ne
 
             if (power == 0.0)
             {
-                //this is the constant phase
+                // This is the constant phase.
                 phase += factor.factor().evaluate(Values());
             }
             else if (power == 1.0)
             {
-                //this is the periodicity * phi term
+                // This is the periodicity * phi term.
                 periodicity = factor.factor().evaluate(Values());
             }
             else
@@ -761,15 +805,6 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi, bool has_ne
         }
     }
 
-    //now sum up the individual values of 'k'. These should equal the constant, which
-    //is the aggregate of the "k [ 1 + cos ]" terms
-    if ( std::abs(constant - check_constant) > 0.001 )
-    {
-        errors.append( QObject::tr( "The set of constants should sum up to the same total, "
-            "i.e. should equal %1. Instead they equal %2. This is weird.")
-                .arg(constant).arg(check_constant) );
-    }
-
     if (not errors.isEmpty())
     {
         throw SireError::incompatible_error( QObject::tr(
@@ -780,14 +815,14 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi, bool has_ne
                     CODELOC );
     }
 
-    //otherwise, add in all of the terms
+    // Otherwise, add in all of the terms.
     if (not terms.isEmpty())
     {
         _parts.reserve(terms.count());
 
-        for (const auto term : terms)
+        for (const auto &term : terms)
         {
-            //remember that the expression uses the negative of the phase ;-)
+            // Remember that the expression uses the negative of the phase ;-)
             _parts.append( AmberDihPart(std::get<0>(term), std::get<1>(term), -std::get<2>(term)) );
         }
     }
