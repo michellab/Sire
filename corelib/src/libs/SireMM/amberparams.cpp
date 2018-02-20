@@ -373,11 +373,6 @@ AmberAngle::AmberAngle(const Expression &f, const Symbol &theta) : _k(0), _theta
         }
     }
 
-    if (ktheta0_2 < 0)
-    {
-        errors.append( QObject::tr("How can K theta0^2 be negative? %1").arg(ktheta0_2) );
-    }
-
     _k = k;
     _theta0 = std::sqrt( ktheta0_2 / k );
 
