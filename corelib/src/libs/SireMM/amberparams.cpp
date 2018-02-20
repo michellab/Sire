@@ -613,7 +613,7 @@ AmberDihedral::AmberDihedral(AmberDihPart part)
     _parts = QVector<AmberDihPart>(1, part);
 }
 
-AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi, bool has_neg_cos)
+AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
 {
     // This expression should be a sum of cos terms, plus constant terms.
     // The cosine terms can be positive or negative depending on the sign

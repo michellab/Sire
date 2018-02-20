@@ -3038,7 +3038,7 @@ void CharmmPSF::parseMolecule(
                 // A cosine style improper, e.g. as in AMBER. We'll add support for this
                 // by treating it as a dihedral term.
 
-                AmberDihedral amberdihedral(func, Phi, true);
+                AmberDihedral amberdihedral(func, Phi);
 
                 getDihedralsFrom(improper_funcs, sire_mol, local_impropers, improper_params, map);
             }
@@ -4302,7 +4302,7 @@ void CharmmPSF::getDihedralsFrom(const FourAtomFunctions &funcs, const Molecule 
             try
             {
                 const auto Phi = InternalPotential::symbols().dihedral().phi();
-                AmberDihedral amberdihedral(potential.function(), Phi, true);
+                AmberDihedral amberdihedral(potential.function(), Phi);
 
                 for (const auto amberdih : amberdihedral.terms())
                 {

@@ -273,7 +273,7 @@ public:
 
     AmberDihedral(AmberDihPart part);
 
-    AmberDihedral(const SireCAS::Expression &f, const SireCAS::Symbol &PHI, bool has_neg_cos = false);
+    AmberDihedral(const SireCAS::Expression &f, const SireCAS::Symbol &PHI);
 
     AmberDihedral(const AmberDihedral &other);
 
