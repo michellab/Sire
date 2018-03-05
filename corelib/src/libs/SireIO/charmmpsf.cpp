@@ -3017,37 +3017,42 @@ void CharmmPSF::parseMolecule(
     // Impropers.
     if (has_impropers)
     {
-        // Extract the first improper function.
-        const auto func = improper_funcs.potentials().constData()[0].function();
-
-        // Set the function symbol.
-        const auto Phi = InternalPotential::symbols().dihedral().phi();
-
-        try
+        // Make sure there are actually functions since Sire only lets you know
+        // whether the system has a property, not a specific molecule.
+        if (improper_funcs.potentials().count() > 0)
         {
-            // Regular CHARMM style harmonic improper.
+            // Extract the first improper function.
+            const auto func = improper_funcs.potentials().constData()[0].function();
 
-            AmberBond amberbond(func, Phi);
+            // Set the function symbol.
+            const auto Phi = InternalPotential::symbols().dihedral().phi();
 
-            getImpropersFrom(improper_funcs, sire_mol, local_impropers, improper_params, map);
-        }
-        catch (...)
-        {
             try
             {
-                // A cosine style improper, e.g. as in AMBER. We'll add support for this
-                // by treating it as a dihedral term.
+                // Regular CHARMM style harmonic improper.
 
-                AmberDihedral amberdihedral(func, Phi);
+                AmberBond amberbond(func, Phi);
 
-                getDihedralsFrom(improper_funcs, sire_mol, local_impropers, improper_params, map);
+                getImpropersFrom(improper_funcs, sire_mol, local_impropers, improper_params, map);
             }
             catch (...)
             {
-                throw SireError::incompatible_error(QObject::tr(
-                        "Cannot construct a CHARMM improper parameter from "
-                        "expression %1. Supported styles are \"harmonic\" and \"cosine\".")
-                        .arg(func.toString()), CODELOC );
+                try
+                {
+                    // A cosine style improper, e.g. as in AMBER. We'll add support for this
+                    // by treating it as a dihedral term.
+
+                    AmberDihedral amberdihedral(func, Phi);
+
+                    getDihedralsFrom(improper_funcs, sire_mol, local_dihedrals, dihedral_params, map);
+                }
+                catch (...)
+                {
+                    throw SireError::incompatible_error(QObject::tr(
+                            "Cannot construct a CHARMM improper parameter from "
+                            "expression %1. Supported styles are \"harmonic\" and \"cosine\".")
+                            .arg(func.toString()), CODELOC );
+                }
             }
         }
     }
