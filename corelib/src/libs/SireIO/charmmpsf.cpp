@@ -3466,6 +3466,11 @@ void CharmmPSF::writeToFile(const QString &filename) const
         for (const QString &line : charmm_params)
         {
             ts << line << '\n';
+
+            // Break if we've reached the end of the parameters.
+            // (The parameter strings might also contain box record info).
+            if (line.left(3) == "END")
+                break;
         }
 
         f.close();
