@@ -3987,9 +3987,6 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
     // Store the number of bonds.
     const int num_bonds = potentials.count();
 
-    // Resize the bonds vector.
-    local_bonds.resize(num_bonds);
-
     // A multi-map between the start atom in a bond and the atom pair.
     // This allows us to reconstruct the correct bond order.
     QMultiMap<int, QVector<qint64> > bond_map;
@@ -3997,11 +3994,12 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
     // Create the bond map.
     for (int i=0; i<num_bonds; ++i)
     {
-        // Resize the bond vector.
-        local_bonds[i].resize(2);
-
         // Get the potential.
         const auto potential = potentials.constData()[i];
+
+        // Don't include zero functions.
+        if (potential.function().toString() == "0")
+            continue;
 
         // Extract the cgAtomIdx for the two atoms.
         const auto idx0 = molinfo.cgAtomIdx(potential.atom0());
@@ -4023,15 +4021,9 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
             // Create a string from the types.
             QVector<QString> atom_types = {type0, type1};
 
-            // Generate the ordered key.
-            auto key = generateKey(atom_types);
-
-            // Split the key into its constituent parts.
-            auto sorted_types = key.split(";");
-
             // Create the atom type part of the parameter string.
             QString atom_string = QString("%1 %2")
-                .arg(sorted_types[0], -4).arg(sorted_types[1], -4);
+                .arg(type0, -4).arg(type1, -4);
 
             try
             {
@@ -4065,12 +4057,8 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
     }
 
     // Now populate the bond vector.
-    int i = 0;
     while (not bond_map.isEmpty())
-    {
-        local_bonds[i] = bond_map.take(bond_map.lastKey());
-        i++;
-    }
+        local_bonds.append(bond_map.take(bond_map.lastKey()));
 }
 
 /** Construct PSF angle records and CHARMM parameters from the set of three-atom functions. */
@@ -4093,9 +4081,6 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
     // Store the number of Urey-Bradley functions.
     const int num_ubs = ub_potentials.count();
 
-    // Resize the angles vector.
-    local_angles.resize(num_angles);
-
     // A multi-map between the start atom in an angle and the atom triplet.
     // This allows us to reconstruct the correct order for the PSF records.
     QMultiMap<int, QVector<qint64> > angle_map;
@@ -4103,11 +4088,12 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
     // Populate the angle map.
     for (int i=0; i<num_angles; ++i)
     {
-        // Resize the angles vector.
-        local_angles[i].resize(3);
-
         // Get the potential.
         const auto potential = potentials.constData()[i];
+
+        // Don't include zero functions.
+        if (potential.function().toString() == "0")
+            continue;
 
         // Extract the cgAtomIdx for the three atoms.
         const auto idx0 = molinfo.cgAtomIdx(potential.atom0());
@@ -4133,15 +4119,9 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
             // Create a string from the types.
             QVector<QString> bond_types = {type0, type1, type2};
 
-            // Generate the ordered key.
-            auto key = generateKey(bond_types);
-
-            // Split the key into its constituent parts.
-            auto sorted_types = key.split(";");
-
             // Create the atom type part of the parameter string.
             QString atom_string = QString("%1 %2 %3")
-                .arg(sorted_types[0], -4).arg(sorted_types[1], -4).arg(sorted_types[2], -4);
+                .arg(type0, -4).arg(type1, -4).arg(type2, -4);
 
             // Initialise the parameter string.
             QString param_string;
@@ -4229,12 +4209,8 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
     }
 
     // Now populate the angle vector.
-    int i = 0;
     while (not angle_map.isEmpty())
-    {
-        local_angles[i] = angle_map.take(angle_map.lastKey());
-        i++;
-    }
+        local_angles.append(angle_map.take(angle_map.lastKey()));
 }
 
 /** Construct PSF dihedral records and CHARMM parameters from the set of four-atom functions. */
@@ -4250,13 +4226,6 @@ void CharmmPSF::getDihedralsFrom(const FourAtomFunctions &funcs, const Molecule 
     // Store the number of functions.
     const int num_funcs = potentials.count();
 
-    // Store the current size of the local_dihedrals vector, since it could be used to
-    // store additional cosine improper terms.
-    int offset = local_dihedrals.count();
-
-    // Resize the dihedrals vector.
-    local_dihedrals.resize(num_funcs + offset);
-
     // A multi-map between the start atom in a dihedral function and the atom quartet.
     // This allows us to reconstruct the correct order for the PSF records.
     QMultiMap<int, QVector<qint64> > dihedral_map;
@@ -4264,11 +4233,12 @@ void CharmmPSF::getDihedralsFrom(const FourAtomFunctions &funcs, const Molecule 
     // Populate the function map.
     for (int i=0; i<num_funcs; ++i)
     {
-        // Resize the vector.
-        local_dihedrals[i + offset].resize(4);
-
         // Get the potential.
         const auto potential = potentials.constData()[i];
+
+        // Don't include zero functions.
+        if (potential.function().toString() == "0")
+            continue;
 
         // Extract the cgAtomIdx for the four atoms.
         const auto idx0 = molinfo.cgAtomIdx(potential.atom0());
@@ -4298,16 +4268,10 @@ void CharmmPSF::getDihedralsFrom(const FourAtomFunctions &funcs, const Molecule 
             // Create a string from the types.
             QVector<QString> atom_types = {type0, type1, type2, type3};
 
-            // Generate the ordered key.
-            auto key = generateKey(atom_types);
-
-            // Split the key into its constituent parts.
-            auto sorted_types = key.split(";");
-
             // Create the atom type part of the parameter string.
             QString atom_string = QString("%1 %2 %3 %4")
-                .arg(sorted_types[0], -4).arg(sorted_types[1], -4)
-                .arg(sorted_types[2], -4).arg(sorted_types[3], -4);
+                .arg(type0, -4).arg(type1, -4)
+                .arg(type2, -4).arg(type3, -4);
 
             try
             {
@@ -4350,19 +4314,15 @@ void CharmmPSF::getDihedralsFrom(const FourAtomFunctions &funcs, const Molecule 
     }
 
     // Insert existing values into the dihedral map.
-    if (offset > 0)
-    {
-        for (int i=0; i<offset; ++i)
-            dihedral_map.insert(-local_dihedrals[i][0], local_dihedrals[i]);
-    }
+    for (int i=0; i<local_dihedrals.count(); ++i)
+        dihedral_map.insert(-local_dihedrals[i][0], local_dihedrals[i]);
 
-    // Now populate the vector.
-    int i = 0;
+    // Clear the existing dihedrals vector.
+    local_dihedrals.clear();
+
+    // Now re-populate the vector.
     while (not dihedral_map.isEmpty())
-    {
-        local_dihedrals[i] = dihedral_map.take(dihedral_map.lastKey());
-        i++;
-    }
+        local_dihedrals.append(dihedral_map.take(dihedral_map.lastKey()));
 }
 
 /** Construct PSF improper records and CHARMM parameters from the set of four-atom functions. */
@@ -4422,16 +4382,10 @@ void CharmmPSF::getImpropersFrom(const FourAtomFunctions &funcs, const Molecule 
             // Create a string from the types.
             QVector<QString> atom_types = {type0, type1, type2, type3};
 
-            // Generate the ordered key.
-            auto key = generateKey(atom_types);
-
-            // Split the key into its constituent parts.
-            auto sorted_types = key.split(";");
-
             // Create the atom type part of the parameter string.
             QString atom_string = QString("%1 %2 %3 %4")
-                .arg(sorted_types[0], -4).arg(sorted_types[1], -4)
-                .arg(sorted_types[2], -4).arg(sorted_types[3], -4);
+                .arg(type0, -4).arg(type1, -4)
+                .arg(type2, -4).arg(type3, -4);
 
             try
             {
