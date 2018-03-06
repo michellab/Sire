@@ -606,13 +606,14 @@ CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors, boo
         atoms.append(data[3]);
 
         // Parameter data.
-        bool ok1, ok2;
+        bool ok1, ok2, ok3;
 
         // Attempt to read the parameter values.
         double p1 = data[4].toDouble(&ok1);
-        double p2 = data[6].toDouble(&ok2);
+        double p2 = data[5].toDouble(&ok2);
+        double p3 = data[6].toDouble(&ok3);
 
-        if (not ok1 or not ok2)
+        if (not ok1 or not ok2 or not ok3)
         {
             errors.append(QObject::tr("Could not read CHARMM improper parameter record! %1")
                 .arg(line));
@@ -623,6 +624,7 @@ CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors, boo
         // Append the parameters.
         params.append(p1);
         params.append(p2);
+        params.append(p3);
     }
 
     // Non-bonded parameters.
@@ -2733,11 +2735,33 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
                     .arg(improper_atoms[3]), CODELOC);
             }
 
-            // Get the improper parameters.
-            auto params = matches[0].getParams();
+            // Intialise the function object.
+            Expression func;
 
-            // Intialise the function object, converting the out of plane angle to radians.
-            Expression func = params[0] * SireMaths::pow_2( Phi - qDegreesToRadians(params[1]) );
+            // Loop over all matches.
+            // Potentially mutliple multiplicity values if this is a cosine improper.
+            for (const auto &match : matches)
+            {
+                // Get the dihedral parameters.
+                auto params = match.getParams();
+
+                // Harmonic improper.
+                if (std::abs(params[1]) < 1e-3)
+                {
+                    // Intialise the function object, converting the out of plane angle to radians.
+                    func = params[0] * SireMaths::pow_2( Phi - qDegreesToRadians(params[2]) );
+
+                    // Only use the first match. (Should only be a single match if harmonic.)
+                    break;
+                }
+
+                // Cosine improper.
+                else
+                {
+                    // Update the function, converting the phase shift to radians.
+                    func += params[0] * (1 + Cos(( params[1] * Phi ) - qDegreesToRadians(params[2]) ));
+                }
+            }
 
             // Don't include zero functions.
             if (func.toString() != "0")
@@ -3044,7 +3068,7 @@ void CharmmPSF::parseMolecule(
 
                     AmberDihedral amberdihedral(func, Phi);
 
-                    getDihedralsFrom(improper_funcs, sire_mol, local_dihedrals, dihedral_params, map);
+                    getDihedralsFrom(improper_funcs, sire_mol, local_impropers, improper_params, map);
                 }
                 catch (...)
                 {
@@ -4313,14 +4337,7 @@ void CharmmPSF::getDihedralsFrom(const FourAtomFunctions &funcs, const Molecule 
         dihedral_map.insert(-atom0, value);
     }
 
-    // Insert existing values into the dihedral map.
-    for (int i=0; i<local_dihedrals.count(); ++i)
-        dihedral_map.insert(-local_dihedrals[i][0], local_dihedrals[i]);
-
-    // Clear the existing dihedrals vector.
-    local_dihedrals.clear();
-
-    // Now re-populate the vector.
+    // Now populate the vector.
     while (not dihedral_map.isEmpty())
         local_dihedrals.append(dihedral_map.take(dihedral_map.lastKey()));
 }
