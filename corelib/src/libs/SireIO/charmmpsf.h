@@ -318,7 +318,7 @@ private:
     QList<CharmmParam> findParameters(const QVector<QString> &search_atoms,
         const QMultiHash<QString, CharmmParam> &params, int type) const;
 
-    QString generateKey(QVector<QString> words) const;
+    QString generateKey(QVector<QString> words, int type) const;
 
     template<class T>
     T getProperty(const SireBase::PropertyName &prop,

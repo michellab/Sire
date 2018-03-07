@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 #include "SireIO/errors.h"
 
+#include "SireMM/amberparams.h"
+
 #include "SireMM/atomljs.h"
 
 #include "SireMM/fouratomfunctions.h"

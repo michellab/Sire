@@ -2181,7 +2181,7 @@ void CharmmPSF::parseParameters(
                 if (not (line[0] == '!'))
                 {
                     CharmmParam param(line, 0, errors);
-                    bond_params.insert(generateKey(param.getAtoms()), param);
+                    bond_params.insert(generateKey(param.getAtoms(), 0), param);
                 }
 
                 i++;
@@ -2191,7 +2191,7 @@ void CharmmPSF::parseParameters(
         {
             data.removeFirst();
             CharmmParam param(data.join(" "), 0, errors);
-            bond_params.insert(generateKey(param.getAtoms()), param);
+            bond_params.insert(generateKey(param.getAtoms(), 0), param);
         }
 
         // Angle parameters.
@@ -2218,7 +2218,7 @@ void CharmmPSF::parseParameters(
                 if (not (line[0] == '!'))
                 {
                     CharmmParam param(line, 1, errors);
-                    angle_params.insert(generateKey(param.getAtoms()), param);
+                    angle_params.insert(generateKey(param.getAtoms(), 1), param);
                 }
 
                 i++;
@@ -2228,7 +2228,7 @@ void CharmmPSF::parseParameters(
         {
             data.removeFirst();
             CharmmParam param(data.join(" "), 1, errors);
-            angle_params.insert(generateKey(param.getAtoms()), param);
+            angle_params.insert(generateKey(param.getAtoms(), 1), param);
         }
 
         // Dihedral parameters.
@@ -2255,7 +2255,7 @@ void CharmmPSF::parseParameters(
                 if (not (line[0] == '!'))
                 {
                     CharmmParam param(line, 2, errors);
-                    dihedral_params.insert(generateKey(param.getAtoms()), param);
+                    dihedral_params.insert(generateKey(param.getAtoms(), 2), param);
                 }
 
                 i++;
@@ -2272,7 +2272,7 @@ void CharmmPSF::parseParameters(
                 // Process the first record.
                 QStringList tmp = QStringList() << atoms << data[7] << data[8] << data[9];
                 CharmmParam param(tmp.join(" "), 2, errors);
-                dihedral_params.insert(generateKey(param.getAtoms()), param);
+                dihedral_params.insert(generateKey(param.getAtoms(), 2), param);
 
                 // Now find all of the accompanying records.
                 // We loop through the file until we ecounter the next dihedral record.
@@ -2300,7 +2300,7 @@ void CharmmPSF::parseParameters(
                         {
                             tmp = QStringList() << atoms << data[0] << data[1] << data[2];
                             CharmmParam param(tmp.join(" "), 2, errors);
-                            dihedral_params.insert(generateKey(param.getAtoms()), param);
+                            dihedral_params.insert(generateKey(param.getAtoms(), 2), param);
                         }
                     }
                 }
@@ -2311,7 +2311,7 @@ void CharmmPSF::parseParameters(
             {
                 data.removeFirst();
                 CharmmParam param(data.join(" "), 2, errors);
-                dihedral_params.insert(generateKey(param.getAtoms()), param);
+                dihedral_params.insert(generateKey(param.getAtoms(), 2), param);
             }
         }
 
@@ -2339,7 +2339,7 @@ void CharmmPSF::parseParameters(
                 if (not (line[0] == '!'))
                 {
                     CharmmParam param(line, 3, errors);
-                    improper_params.insert(generateKey(param.getAtoms()), param);
+                    improper_params.insert(generateKey(param.getAtoms(), 3), param);
                 }
 
                 i++;
@@ -2349,7 +2349,7 @@ void CharmmPSF::parseParameters(
         {
             data.removeFirst();
             CharmmParam param(data.join(" "), 3, errors);
-            improper_params.insert(generateKey(param.getAtoms()), param);
+            improper_params.insert(generateKey(param.getAtoms(), 3), param);
         }
 
         // Non-bonded parameters.
@@ -2382,7 +2382,7 @@ void CharmmPSF::parseParameters(
                         if (not (line[0] == '!'))
                         {
                             CharmmParam param(line, 4, errors);
-                            nonbonded_params.insert(generateKey(param.getAtoms()), param);
+                            nonbonded_params.insert(generateKey(param.getAtoms(), 4), param);
                         }
 
                         i++;
@@ -2392,7 +2392,7 @@ void CharmmPSF::parseParameters(
                 {
                     data.removeFirst();
                     CharmmParam param(data.join(" "), 4, errors, true);
-                    nonbonded_params.insert(generateKey(param.getAtoms()), param);
+                    nonbonded_params.insert(generateKey(param.getAtoms(), 4), param);
                 }
             }
         }
@@ -2674,6 +2674,8 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
 
             // Loop over all matches.
             // Potentially mutliple multiplicity values.
+            // TODO:
+            // Raise a warning if we encounter multiple matches with the same periodicity.
             for (const auto &match : matches)
             {
                 // Get the dihedral parameters.
@@ -2773,7 +2775,6 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
                                    AtomNum(atoms[idx3].getNumber()),
                                    func);
             }
-
         }
 
         // Set the improper property.
@@ -3109,7 +3110,7 @@ QList<CharmmParam> CharmmPSF::findParameters(const QVector<QString> &search_atom
         }
 
         // Generate the key for this set of atoms.
-        QString key = generateKey(search_atoms);
+        QString key = generateKey(search_atoms, type);
 
         // Return the matches.
         return params.values(key);
@@ -3127,83 +3128,93 @@ QList<CharmmParam> CharmmPSF::findParameters(const QVector<QString> &search_atom
         }
 
         // Generate the key for this set of atoms.
-        QString key = generateKey(search_atoms);
+        QString key = generateKey(search_atoms, type);
 
         // Return the matches.
         return params.values(key);
     }
 
     // Dihedral params.
-    else if ((type == 2) or (type == 3))
+    else if (type == 2)
     {
         // Make sure that there are four atoms to search for.
         if (search_atoms.count() != 4)
         {
             throw SireError::program_bug(QObject::tr("Cannot search for CHARMM "
-                "%1 parameters, incorrect number of atoms passed. Given "
-                "%2, expected 4")
-                .arg((type == 2) ? "dihedral" : "improper")
-                .arg(search_atoms.count()), CODELOC);
+                "dihedral parameters, incorrect number of atoms passed. Given "
+                "%1, expected 4").arg(search_atoms.count()), CODELOC);
         }
 
         // Generate the key for this set of atoms.
-        QString key = generateKey(search_atoms);
+        QString key = generateKey(search_atoms, type);
 
         // Check for matches.
         auto matches = params.values(key);
 
-        // No matches, try wildcards "X".
-        // For dihedrals, wildcards may be included for the terminal atoms (1 and 4).
-        // For impropers, wildcards may appear in a number of variations. Since we
-        // handle both dihedrals and impropers together, we search for all possible
-        // combinations of wildcards (both position and number). This is clearly
-        // overkill, and will include some non-physical arrangements, but provides
-        // a simple way of achieving an exhaustive search.
+        // No matches, try adding wildcards to the terminal atoms.
         if (matches.count() == 0)
         {
-            // Backup the original vector of atom types.
+            // Backup the original vectory of atoms.
             auto copy_atoms = search_atoms;
 
-            // Single wildcard.
-            for (int i=0; i<4; ++i)
-            {
-                // Replace the atom type with a wildcard.
-                copy_atoms[i] = "X";
+            // Add the wildcards.
+            copy_atoms[0] = "X";
+            copy_atoms[3] = "X";
 
-                // Generate the key for this set of atoms.
-                QString key = generateKey(copy_atoms);
+            // Generate the key for this set of atoms.
+            QString key = generateKey(copy_atoms, type);
 
-                // Check for matches.
-                matches = params.values(key);
+            // Check for matches.
+            matches = params.values(key);
 
-                // Return the matches.
-                if (matches.count() > 0)
-                    return matches;
+            return matches;
+        }
+        else return matches;
+    }
 
-                // Reset the atom type.
-                copy_atoms[i] = search_atoms[i];
-            }
+    // Improper params.
+    else if (type == 3)
+    {
+        // Make sure that there are four atoms to search for.
+        if (search_atoms.count() != 4)
+        {
+            throw SireError::program_bug(QObject::tr("Cannot search for CHARMM "
+                "improper parameters, incorrect number of atoms passed. Given "
+                "%1, expected 4").arg(search_atoms.count()), CODELOC);
+        }
 
-            // Double wildcard.
+        // Generate the key for this set of atoms.
+        QString key = generateKey(search_atoms, type);
+
+        // Check for matches.
+        auto matches = params.values(key);
+
+        // No matches, try adding wildcards. For impropers, wildcards may appear
+        // in a number of variations so we enumerate all possible combinations.
+        if (matches.count() == 0)
+        {
+            // Backup the original vector of atoms.
+            auto copy_atoms = search_atoms;
+
             for (int i=0; i<4; ++i)
             {
                 // Replace atom type 'i' with a wildcard.
                 copy_atoms[i] = "X";
 
-                for (int j=i+i; j<4; ++j)
+                for (int j=i+1; j<4; ++j)
                 {
                     // Replace atom type 'j' with a wildcard.
                     copy_atoms[j] = "X";
 
                     // Generate the key for this set of atoms.
-                    QString key = generateKey(copy_atoms);
+                    QString key = generateKey(copy_atoms, type);
 
                     // Check for matches.
                     matches = params.values(key);
 
-                    // Return the matches.
+					// Return as soon as a match is found.
                     if (matches.count() > 0)
-                        return matches;
+                       return matches;
 
                     // Reset the type for atom 'j'.
                     copy_atoms[j] = search_atoms[j];
@@ -3213,52 +3224,8 @@ QList<CharmmParam> CharmmPSF::findParameters(const QVector<QString> &search_atom
                 copy_atoms[i] = search_atoms[i];
             }
 
-            // Triple wildcard.
-            for (int i=0; i<4; ++i)
-            {
-                // Replace atom type 'i' with a wildcard.
-                copy_atoms[i] = "X";
-
-                for (int j=i+i; j<4; ++j)
-                {
-                    // Replace atom type 'j' with a wildcard.
-                    copy_atoms[j] = "X";
-
-                    for (int k=j+1; k<4; ++k)
-                    {
-                        // Replace atom type 'k' with a wildcard.
-                        copy_atoms[k] = "X";
-
-                        // Generate the key for this set of atoms.
-                        QString key = generateKey(copy_atoms);
-
-                        // Check for matches.
-                        matches = params.values(key);
-
-                        // Return the matches.
-                        if (matches.count() > 0)
-                            return matches;
-
-                        // Reset the type for atom 'k'.
-                        copy_atoms[k] = search_atoms[k];
-                    }
-
-                    // Reset the type for atom 'j'.
-                    copy_atoms[j] = search_atoms[j];
-                }
-
-                // Reset the type for atom 'i'.
-                copy_atoms[i] = search_atoms[i];
-            }
-
-            // Quadruple wildcard.
-            // Unlikley, but what the heck!
-
-            // Check for matches.
-            matches = params.values("X;X;X;X");
-
-            // If we've got this far, then there are no matches.
-            // Return the empty list.
+            // If we've made it this far, then there are no matches.
+            // Return the empty vector.
             return matches;
         }
         else return matches;
@@ -3268,7 +3235,7 @@ QList<CharmmParam> CharmmPSF::findParameters(const QVector<QString> &search_atom
     else
     {
         throw SireError::program_bug(QObject::tr("Unknown parameter type (%1). "
-            "Valid types are 0, 1, 2, 3, 4").arg(type), CODELOC);
+            "Valid types are 0-4").arg(type), CODELOC);
     }
 }
 
@@ -3276,25 +3243,119 @@ QList<CharmmParam> CharmmPSF::findParameters(const QVector<QString> &search_atom
         @param words
             The list of words.
 
+        @param type
+        The type of parameter record: 0 = bond
+                                      1 = angle
+                                      2 = dihedral
+                                      3 = improper
+                                      4 = non-bonded
+
         @return
             The key.
  */
-QString CharmmPSF::generateKey(QVector<QString> words) const
+QString CharmmPSF::generateKey(QVector<QString> words, int type) const
 {
-    if (words.count() == 0)
-        return QString();
+    // Bond parameter.
+    if (type == 0)
+    {
+        if (words.count() != 2)
+        {
+            throw SireError::program_bug(QObject::tr("Incorrect number of "
+                "atoms for bond parameter. Expected 2, found %1.")
+                .arg(words.count()), CODELOC);
+        }
 
-    // Sort the words.
-    qSort(words);
+        // Sort the words.
+        qSort(words);
 
-    // Initialise the key string.
-    QString key(words[0]);
+        // Now create the key.
 
-    // Append each word to the key, semicolon separated.
-    for (int i=1; i<words.count(); ++i)
-        key += QString(";%1").arg(words[i]);
+        // Initialise the key string.
+        QString key(words[0]);
 
-    return key;
+        // Append each word to the key, semicolon separated.
+        for (int i=1; i<words.count(); ++i)
+            key += QString(";%1").arg(words[i]);
+
+        return key;
+    }
+
+    // Angle parameter.
+    else if (type == 1)
+    {
+        if (words.count() != 3)
+        {
+            throw SireError::program_bug(QObject::tr("Incorrect number of "
+                "atoms for angle parameter. Expected 3, found %1.")
+                .arg(words.count()), CODELOC);
+        }
+
+        // There are two possible combinations: A-B-C and C-B-A.
+
+        // Create the two keys.
+        QString key1(words[0]);
+        QString key2(words[2]);
+
+        // Append each word to the keys, semicolon separated.
+        for (int i=1; i<words.count(); ++i)
+        {
+            key1 += QString(";%1").arg(words[i]);
+            key2 += QString(";%1").arg(words[2-i]);
+        }
+
+        // Return the smaller key.
+        if (key1 < key2) return key1;
+        else             return key2;
+    }
+
+    // Dihedral/improper parameter.
+	else if ((type == 2) or (type == 3))
+    {
+        if (words.count() != 4)
+        {
+            throw SireError::program_bug(QObject::tr("Incorrect number of "
+                "atoms for %1 parameter. Expected 4, found %2.")
+                .arg((type == 2) ? "dihedral" : "improper")
+                .arg(words.count()), CODELOC);
+        }
+
+        // There are two possible combinations: A-B-C-D and D-C-B-A.
+
+        // Create the two keys.
+        QString key1(words[0]);
+        QString key2(words[3]);
+
+        // Append each word to the keys, semicolon separated.
+        for (int i=1; i<words.count(); ++i)
+        {
+            key1 += QString(";%1").arg(words[i]);
+            key2 += QString(";%1").arg(words[3-i]);
+        }
+
+        // Create the smaller key.
+        if (key1 < key2) return key1;
+        else             return key2;
+    }
+
+    // Non-bonded parameter.
+    else if (type == 4)
+    {
+        if (words.count() != 1)
+        {
+            throw SireError::program_bug(QObject::tr("Incorrect number of "
+                "atoms for non-bonded parameter. Expected 1, found %1.")
+                .arg(words.count()), CODELOC);
+        }
+
+        return words[0];
+    }
+
+    else
+    {
+        throw SireError::program_bug(QObject::tr("Invalid parameter "
+            "type key (%1). Supported values are 0-%2.")
+            .arg(type).arg(4), CODELOC);
+    }
 }
 
 /** Use the data contained in this parser to create a new System of molecules,
