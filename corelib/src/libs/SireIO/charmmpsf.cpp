@@ -3063,8 +3063,7 @@ void CharmmPSF::parseMolecule(
             {
                 try
                 {
-                    // A cosine style improper, e.g. as in AMBER. We'll add support for this
-                    // by treating it as a dihedral term.
+                    // A cosine style improper, e.g. as in AMBER.
 
                     AmberDihedral amberdihedral(func, Phi);
 
