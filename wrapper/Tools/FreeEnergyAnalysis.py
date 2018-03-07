@@ -9,6 +9,7 @@
 from Sire.Analysis import *
 import Sire.Stream
 import warnings
+from Sire.Units import *
 
 try:
     numpy = Sire.try_import("numpy")
@@ -25,6 +26,15 @@ try:
 except ImportError:
     raise ImportError('pymbar is not installed. Please install pymbar in order to use MBAR for your free energy '
                       'analysis.')
+import matplotlib.pylab as plt
+from ipywidgets import interact, interactive, fixed, interact_manual, Layout, Label
+import ipywidgets as widgets
+import bz2
+import glob
+import os
+import sys
+import warnings
+
 
 class FreeEnergies(object):
     r"""This class contains all the different pmf information
@@ -275,3 +285,207 @@ class SubSample(object):
     @property
     def N_k_gradients(self):
         return self._subsampled_N_k_gradients
+
+class NotebookHelper(object):
+    r"""
+
+    """
+    def __init__(self):
+        self._out = None
+        self._basedir = None
+        self._outputdir = None
+        self._free_energy_file = None
+        self._discrad = None
+        self._overlap = None
+        self._subsample = None
+        self._generate_notebook = None
+        self._perturbation_list = None
+
+
+    def initialise_notebook(self):
+        ''' initialises the checkboxes for the jupyter notebook
+
+
+        '''
+        style = {'description_width': 'initial'}
+        layout = Layout(flex='2 1 auto', width='auto')
+        a = widgets.Text(placeholder='/path/to/simulation/data', description='Simulation Base Directory:',disabled=False,layout=layout, 
+    style = style)
+        b = widgets.Text(placeholder='/path/to/output/directory', description='Output Directory:',disabled=False,layout=layout, 
+    style = style)
+        c = widgets.Text(placeholder='Free_energy_summary.csv', description='Free energy file:',disabled=False,layout=layout, 
+    style = style)
+        d = widgets.BoundedIntText(value=0, min=0, max=1000000, step=1, description='Number of frames to discard',layout=layout, 
+    style = style)
+        e = widgets.Checkbox(False, description='Plot Overlap matrices',layout=layout, 
+    style = style)
+        f = widgets.Checkbox(False, description='Subsample data according to statistical inefficiency',layout=layout, 
+    style = style)
+        g = widgets.Checkbox(False, description='Generate Network analysis notebook',layout=layout, 
+    style = style)
+        ui = widgets.VBox([a, b, c, d, e, f, g], layout=Layout(display='flex',
+                        flex_flow='column',
+                        align_items='stretch',
+                        border='solid',
+                        width='100%'))
+        def _func(a,b,c,d,e,f,g):
+            print((a,b,c,d,e,f,g))    
+
+        self._out = widgets.interactive_output(_func, {'a': a, 'b': b, 'c': c, 'd': d, 'e': e, 'f': f, 'g': g})
+        return ui
+
+    def update(self):
+        inputs = (self._out.get_state()['outputs'][0]['text'])
+        bad_chars = '()"\n '
+        inputs = ''.join(c for c in inputs if c not in bad_chars).split(',')
+        self._basedir = inputs[0].strip("'")
+        self._outputdir = inputs[1].strip("'")
+        self._free_energy_file = inputs[2].strip("'")
+        self._discard = int(inputs[3].strip("'"))
+        self._overlap = self._get_boolean_state((inputs[4].strip("'")))
+        self._subsample = self._get_boolean_state((inputs[5].strip("'")))
+        self._generate_notebook = self._get_boolean_state((inputs[6].strip("'")))
+
+        #Set the output directory to the current working directory if no path has been given
+        if self._outputdir == '':
+            self._outputdir = os.getcwd()
+        else:
+            #check if outputdir exists
+            if not os.path.isdir(self._outputdir):
+                os.makedirs(self._outputdir)
+
+    def compute_free_energies(self, input_files, TI = False):
+        T, lamdas = self._read_sim_parameters(input_files)
+        data = self._read_data(input_files)
+        free_energies = self._run_preprocessing(data, lamdas)
+        free_energies.run_mbar()
+        if TI:
+            free_energies.run_ti()
+        return free_energies, T
+
+    def _read_sim_parameters(self, input_files):
+        lamvals = None
+        T_previous = None
+        for f in input_files:
+            #print ('working on input file %s' % f)
+            # Compressed file
+            if f.endswith('.bz2'):
+                bz_file = bz2.BZ2File(f)
+                for line in bz_file:
+                    if line.startswith(b'#Alchemical'):
+                        if lamvals is None:
+                            lamvals = (line.split(b'(')[-1].split(b')')[0].split(b','))
+                            lamvals = numpy.array([float(i) for i in lamvals])
+                            lam = lamvals
+
+                        else:
+                            lam = (line.split(b'(')[-1].split(b')')[0].split(b','))
+                            lam = numpy.array([float(i) for i in lam])
+                    elif line.startswith(b'#Generating temperature'):
+                        temp = line.split()[3]
+                        unit = line.split()[4]
+                        if unit == b'C':
+                            T = float(temp)+273
+                        else:
+                            T = float(temp)
+                        if T_previous is None:
+                            T_previous = T
+                            continue
+                        else:
+                            if T_previous !=T:
+                                print ('Generating temperature is %.2f and does not match with other temperature given %.2f, '
+                                       'please make sure all simulations are run at the same temperature' %(T, T_previous))
+                                sys.exit(-1)
+                            else:
+                                T_previous = T
+                        break
+            # Normal file
+            else:
+                for line in open(f):
+                    if line.startswith('#Alchemical'):
+                        if lamvals is None:
+                            lamvals = (line.split('(')[-1].split(')')[0].split(','))
+                            lamvals = numpy.array([float(i) for i in lamvals])
+                            lam = lamvals
+
+                        else:
+                            lam = (line.split('(')[-1].split(')')[0].split(','))
+                            lam = numpy.array([float(i) for i in lam])
+                    elif line.startswith('#Generating temperature'):
+                        temp = line.split()[3]
+                        unit = line.split()[4]
+                        if unit == 'C':
+                            T = float(temp)+273
+                        else:
+                            T = float(temp)
+                        if T_previous is None:
+                            T_previous = T
+                            continue
+                        else:
+                            if T_previous !=T:
+                                print ('Generating temperature is %.2f and does not match with other temperature given %.2f, '
+                                       'please make sure all simulations are run at the same temperature' %(T, T_previous))
+                                sys.exit(-1)
+                            else:
+                                T_previous = T
+                        break
+            if not numpy.array_equal(lam, lamvals):
+                print ("Lambda arrays do not match! Make sure your input data is consistent")
+                print (lam)
+                print (lamvals)
+                sys.exit(-1)
+        return T_previous, lamvals
+
+    def _read_data(self, input_files):
+        data = []
+        if self._discard is None:
+            for f in input_files:
+                data.append(numpy.loadtxt(f))
+        else:
+            print ('Loading data and discarding %d frames' %self._discard)
+            for f in input_files:
+                data.append(numpy.loadtxt(f, skiprows=self._discard))
+        return data
+
+    def _run_preprocessing(self, data, lamvals):
+        # N_k is the number of samples at generating thermodynamic state (lambda) k
+        N_k = numpy.zeros(shape=lamvals.shape[0], dtype='int32')
+        for k in range(0, lamvals.shape[0]):
+            N_k[k] = data[k].shape[0]
+
+        max_sample = int(max(N_k))
+        grad_kn = numpy.zeros(shape=(lamvals.shape[0], max_sample))
+        energies_kn = numpy.zeros(shape=(lamvals.shape[0], max_sample))
+
+        for k in range(0, N_k.shape[0]):
+            grad_kn[k, 0:N_k[k]] = data[k][:, 2]  # get the gradient information
+            energies_kn[k, 0:N_k[k]] = data[k][:, 1]  # get the potential energies from the file.
+
+        # Are the reduced perturbed potential energies generated at thermodynamic state k evaluated at state l, over
+        # all n samples. This information is contained as is in the simulation file.
+        u_kln = numpy.zeros(shape=(lamvals.shape[0], lamvals.shape[0], max_sample))
+        for k in range(0, lamvals.shape[0]):
+            u_kln[k, :, 0:N_k[k]] = data[k][:, 5:].transpose()
+
+        # now we use the subsampling information to subsample the data.
+        subsample_obj = SubSample(grad_kn, energies_kn, u_kln, N_k, subsample=self._subsample)
+        subsample_obj.subsample_energies()
+        subsample_obj.subsample_gradients()
+
+        free_energy_obj = FreeEnergies(subsample_obj.u_kln, subsample_obj.N_k_energies, lamvals,
+                                       subsample_obj.gradients_kn)
+        return free_energy_obj
+
+    def _get_boolean_state(self, s):
+        if s == "True":
+            return True
+        elif s == "False":
+            return False
+        else:
+            print ("The string you have supplied does not seem to contain boolean information")
+
+    @property
+    def perturbation_list(self):
+        if self._perturbation_list == None:
+            self._perturbation_list = os.listdir(self._basedir)
+        return self._perturbation_list
