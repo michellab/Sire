@@ -3152,7 +3152,13 @@ QList<CharmmParam> CharmmPSF::findParameters(const QVector<QString> &search_atom
         // Check for matches.
         auto matches = params.values(key);
 
-        // No matches, try wildcards.
+        // No matches, try wildcards "X".
+        // For dihedrals, wildcards may be included for the terminal atoms (1 and 4).
+        // For impropers, wildcards may appear in a number of variations. Since we
+        // handle both dihedrals and impropers together, we search for all possible
+        // combinations of wildcards (both position and number). This is clearly
+        // overkill, and will include some non-physical arrangements, but provides
+        // a simple way of achieving an exhaustive search.
         if (matches.count() == 0)
         {
             // Backup the original vector of atom types.
