@@ -433,7 +433,7 @@ CharmmParam::CharmmParam() : type(-1)
         Whether this is an xplor format record.
  */
 CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors, bool is_xplor)
-    : type(type)
+    : param_string(line), type(type)
 {
     // Tokenize the line.
     // First split on the comment identifier '!', take the first record,
@@ -721,6 +721,12 @@ CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors, boo
         throw SireError::program_bug(QObject::tr("Unknown parameter type (%1). "
             "Valid types are 0, 1, 2, 3, 4").arg(type), CODELOC);
     }
+}
+
+/** Return the original parameter string. */
+QString CharmmParam::getString() const
+{
+    return param_string;
 }
 
 /** Return the atoms to which the parameters apply. */
@@ -2669,17 +2675,38 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
                     .arg(dihedral_atoms[3]), CODELOC);
             }
 
-            // Intialise the function object.
-            Expression func;
+            // A vector of dihedral periodicity values.
+            QVector<int> periodicity;
 
-            // Loop over all matches.
-            // Potentially mutliple multiplicity values.
-            // TODO:
-            // Raise a warning if we encounter multiple matches with the same periodicity.
+            // A hash between periodicity and the dihedral term parameters.
+            QHash<int, CharmmParam> param_hash;
+
+            // Check to see if there are duplicate dihedral terms, i.e. with the same periodicity.
             for (const auto &match : matches)
             {
                 // Get the dihedral parameters.
                 auto params = match.getParams();
+
+                // Warn the user that a duplicate term was found.
+                if (param_hash.contains(params[1]))
+                {
+                    qDebug() << QObject::tr("Duplicate dihedral term found! Overwriting "
+                        "'%1' with '%2'.").arg(param_hash[params[1]].getString()).arg(match.getString());
+                }
+
+                // Insert the dihdedral term into the hash (overwriting existing value).
+                param_hash.insert(params[1], match);
+            }
+
+            // Intialise the function object.
+            Expression func;
+
+            // Loop over unique dihedral terms.
+            QHash<int, CharmmParam>::iterator term;
+            for (term = param_hash.begin(); term != param_hash.end(); ++term)
+            {
+                // Get the dihedral parameters.
+                auto params = term.value().getParams();
 
                 // Update the function, converting the phase shift to radians.
                 func += params[0] * (1 + Cos(( params[1] * Phi ) - qDegreesToRadians(params[2]) ));

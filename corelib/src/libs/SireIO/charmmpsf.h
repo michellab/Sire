@@ -197,6 +197,9 @@ public:
 
     static const char* typeName();
 
+    /** Get the original parameter string. */
+    QString getString() const;
+
     /** Get the vector of atoms. */
     const QVector<QString>& getAtoms() const;
 
@@ -207,6 +210,9 @@ public:
     qint64 getType() const;
 
 private:
+    /** The original parameter string. */
+    QString param_string;
+
     /** The vector of atoms to which the parameter set applies. */
     QVector<QString> atoms;
 
