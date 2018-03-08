@@ -3256,6 +3256,7 @@ QList<CharmmParam> CharmmPSF::findParameters(const QVector<QString> &search_atom
 QString CharmmPSF::generateKey(QVector<QString> words, int type) const
 {
     // Bond parameter.
+    // These are insensitive to the ordering of atoms.
     if (type == 0)
     {
         if (words.count() != 2)
@@ -3280,59 +3281,52 @@ QString CharmmPSF::generateKey(QVector<QString> words, int type) const
         return key;
     }
 
-    // Angle parameter.
-    else if (type == 1)
+    // Angle, dihedral, or improper parameter.
+    // Here the atom ordering is significant. The ordering can be reversed
+    // without affecting the resulting potential.
+    else if ((type == 1) or
+		     (type == 2) or
+		     (type == 3))
     {
-        if (words.count() != 3)
+        // Store the number of words.
+        int num_words = words.count();
+
+		if (type == 1)
+		{
+			if (num_words != 3)
+			{
+				throw SireError::program_bug(QObject::tr("Incorrect number of "
+					"atoms for angle parameter. Expected 3, found %1.")
+					.arg(num_words), CODELOC);
+			}
+		}
+		else
         {
-            throw SireError::program_bug(QObject::tr("Incorrect number of "
-                "atoms for angle parameter. Expected 3, found %1.")
-                .arg(words.count()), CODELOC);
+            if (num_words != 4)
+            {
+                throw SireError::program_bug(QObject::tr("Incorrect number of "
+                    "atoms for %1 parameter. Expected 4, found %2.")
+                    .arg((type == 2) ? "dihedral" : "improper")
+                    .arg(num_words), CODELOC);
+            }
         }
 
-        // There are two possible combinations: A-B-C and C-B-A.
+        // There are two possible combinations: forward, and reverse.
+        //    Angles:               A-B-C   and C-B-A.
+        //    Dihedrals/Impropers:  A-B-C-D and D-C-B-A
 
         // Create the two keys.
-        QString key1(words[0]);
-        QString key2(words[2]);
+        QString key1(words.first());
+        QString key2(words.last());
 
         // Append each word to the keys, semicolon separated.
-        for (int i=1; i<words.count(); ++i)
+        for (int i=1; i<num_words; ++i)
         {
             key1 += QString(";%1").arg(words[i]);
-            key2 += QString(";%1").arg(words[2-i]);
+            key2 += QString(";%1").arg(words[num_words-1-i]);
         }
 
         // Return the smaller key.
-        if (key1 < key2) return key1;
-        else             return key2;
-    }
-
-    // Dihedral/improper parameter.
-	else if ((type == 2) or (type == 3))
-    {
-        if (words.count() != 4)
-        {
-            throw SireError::program_bug(QObject::tr("Incorrect number of "
-                "atoms for %1 parameter. Expected 4, found %2.")
-                .arg((type == 2) ? "dihedral" : "improper")
-                .arg(words.count()), CODELOC);
-        }
-
-        // There are two possible combinations: A-B-C-D and D-C-B-A.
-
-        // Create the two keys.
-        QString key1(words[0]);
-        QString key2(words[3]);
-
-        // Append each word to the keys, semicolon separated.
-        for (int i=1; i<words.count(); ++i)
-        {
-            key1 += QString(";%1").arg(words[i]);
-            key2 += QString(";%1").arg(words[3-i]);
-        }
-
-        // Create the smaller key.
         if (key1 < key2) return key1;
         else             return key2;
     }
