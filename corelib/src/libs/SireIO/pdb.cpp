@@ -469,6 +469,15 @@ QString PDBAtom::writeToLine() const
         resnum -= 10000;
     }
     
+    QString s;
+    s.sprintf("%-6s%5d %4s%1s%3s %1s%4d%1s   %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s",
+            qPrintable(record_name), num, qPrintable(name),
+            qPrintable(altloc), qPrintable(resname), qPrintable(chainid),
+            resnum, qPrintable(icode), x, y, z, occupancy, tempfactor,
+            qPrintable(segid), qPrintable(element), qPrintable(chg));
+    
+    return s.trimmed();
+/*
     qsnprintf(line, 82,
      "%-6s%5d %4s%1s%3s %1s%4d%1s   %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s",
             qPrintable(record_name), num, qPrintable(name),
@@ -476,7 +485,7 @@ QString PDBAtom::writeToLine() const
             resnum, qPrintable(icode), x, y, z, occupancy, tempfactor,
             qPrintable(segid), qPrintable(element), qPrintable(chg));
 
-    return QString::fromLocal8Bit(line).trimmed();
+    return QString::fromLocal8Bit(line).trimmed();*/
 }
 
 bool PDBAtom::isATOM() const
