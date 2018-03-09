@@ -363,7 +363,81 @@ class NotebookHelper(object):
             free_energies.run_ti()
         return free_energies, T
 
+    def run_free_energy_analysis(self, perturbation, files_input_bound, files_input_free, TI= False, separator = '~'):
+        ## input files
+        # Test if files are ok here. 
+        r""" runs free energy analysis for ligand bound to protein and ligand in water
+        Parameters
+        ----------
+        perturbation : string
+            directory in which to find the perturbation. Usually it would take the form:
+            compound1~compoound2. The separator '~' can be set separately. 
+        files_input_bound : list
+            list of path to files containing simfile.dat for a particular perturbation of the simulations where
+            the ligand is bound to the protein during the alchemical perturbation.
+        files_input_free : list
+            list of path to files containing simfile.dat for a particular perturbation of the simulations, where
+            the ligand is solvated in a water box during the alchemical perturbation.
+        TI : boolean
+            Default = False
+            Indicates wheter to also evaluate Free energy differences using thermodynamic integration
+        separator : string
+            Default = '~'
+            Separator used to indicate the perturbation, e.g. compound1-compound2, or compound1%compound2. The use of
+            '~' as a separator is recommended. 
+
+        Retruns:
+        --------
+        result : string
+            preformatted string used to output free energies in the format: compound1,compound2,DDG,dDDG
+            This preformatted output will support a further network analysis. 
+        """
+        
+        #bound
+        T, lamdas = self._read_sim_parameters(files_input_bound)
+        data = self._read_data(files_input_bound)
+        bound = self._run_preprocessing(data, lamdas)
+        bound.run_mbar(self._overlap)
+        if TI:
+            bound.run_ti()
+        if self._overlap:
+            self._write_overlap_info(perturbation, bound.overlap_matrix, sim_type='bound')
+        
+        #free
+        T_free, lamdas = self._read_sim_parameters(files_input_free)
+        data = self._read_data(files_input_free)
+        free = self._run_preprocessing(data, lamdas)
+        free.run_mbar(self._overlap)
+        if TI:
+            free.run_ti()
+        if self._overlap:
+            self._write_overlap_info(perturbation, free.overlap_matrix, sim_type='free')
+        
+        #gathering results
+        if TI:
+            DDG = (bound.deltaF_ti* T * k_boltz)-(free.deltaF_ti* T_free * k_boltz)
+            return ('%s,%s,%.2f' %(perturbation.split(separator)[0],perturbation.split(separator)[1],DDG))
+        # mbar results
+        else:
+            DDG = (bound.deltaF_mbar* T * k_boltz)-(free.deltaF_mbar* T_free * k_boltz)
+            dDDG = numpy.sqrt((bound.errorF_mbar * T * k_boltz)**2+(free.errorF_mbar * T_free * k_boltz)**2) 
+            return ('%s,%s,%.2f,%.2f' %(perturbation.split(separator)[0],perturbation.split(separator)[1],DDG,dDDG))
+
     def _read_sim_parameters(self, input_files):
+        r""" reading input files from a given file list of simfile.dat files
+        Parameters:
+        ----------
+        input_files : list
+            list containing all simfile.dat files to read from
+
+        Returns:
+        --------
+        T : float
+            simulation temperature as extracted from the simfile.dat
+        lambda : numpy array
+            array containing lambda values at which simulation was carried out
+
+        """
         lamvals = None
         T_previous = None
         for f in input_files:
@@ -483,6 +557,27 @@ class NotebookHelper(object):
             return False
         else:
             print ("The string you have supplied does not seem to contain boolean information")
+
+    def _write_overlap_info(self,perturbation, M, sim_type=''):
+        r"""hi
+
+        """
+        diag_elements = numpy.array([numpy.diag(M, k=1), numpy.diag(M, k=-1)])
+        fname = os.path.join(self._outputdir,perturbation)+'_'+sim_type+'_matrix.dat'
+        fh = open(fname, 'wb')
+        fh.write(bytes('#Overlap matrix\n', "UTF-8"))
+        if numpy.min(diag_elements) < 0.03:
+            fh.write(bytes('#Off diagonal elements of the overlap matrix are smaller than 0.03! Your free energy estimate is \n'
+                        '#not reliable!\n', "UTF-8"))
+        numpy.savetxt(fh, M, fmt='%.4f')
+        fh.close()
+        #now plotting the matrix
+        fplot = os.path.join(self._outputdir,perturbation)+'_'+sim_type+'_matrix.png'
+        # turns off interactive plotting
+        plt.ioff()
+        plt.matshow(M)
+        plt.colorbar()
+        plt.savefig(fplot, dpi=100)   
 
     @property
     def perturbation_list(self):
