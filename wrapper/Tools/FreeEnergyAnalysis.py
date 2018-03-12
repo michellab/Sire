@@ -183,8 +183,8 @@ class SubSample(object):
     def subsample_gradients(self):
         r''' method to subsample gradients and get a better estiamte.
         '''
-        if self.percentage == 100:
-            warnings.warn("You are not subsampling your data according to the statistical inefficiency nor are"
+        if self.percentage == 100 and not self.subsample:
+            warnings.warn("You are not subsampling your data according to the statistical inefficiency nor are "
                            "you discarding initial data. Please set percentage to another value than 100!")
         percentage_removal = (self._N_k*(1-self.percentage/100.0)).astype('int32')
         self._subsampled_N_k_gradients = self._N_k-percentage_removal
@@ -228,8 +228,8 @@ class SubSample(object):
 
         '''
         #removing percent
-        if self.percentage == 100:
-            warnings.warn("You are not subsampling your data according to the statistical inefficiency nor are"
+        if self.percentage == 100 and not self.subsample:
+            warnings.warn("You are not subsampling your data according to the statistical inefficiency nor are "
                            "you discarding initial data. Please set percentage to another value than 100!")
 
         percentage_removal = (self._N_k*(1-self.percentage/100.0)).astype('int32')
@@ -304,8 +304,6 @@ class NotebookHelper(object):
 
     def initialise_notebook(self):
         ''' initialises the checkboxes for the jupyter notebook
-
-
         '''
         style = {'description_width': 'initial'}
         layout = Layout(flex='2 1 auto', width='auto')
@@ -329,12 +327,15 @@ class NotebookHelper(object):
                         border='solid',
                         width='100%'))
         def _func(a,b,c,d,e,f,g):
-            print((a,b,c,d,e,f,g))    
+            print((a,b,c,d,e,f,g))
 
         self._out = widgets.interactive_output(_func, {'a': a, 'b': b, 'c': c, 'd': d, 'e': e, 'f': f, 'g': g})
         return ui
 
     def update(self):
+        r"""updates the information passed from the widgets of the notebook cells. 
+
+        """
         inputs = (self._out.get_state()['outputs'][0]['text'])
         bad_chars = '()"\n '
         inputs = ''.join(c for c in inputs if c not in bad_chars).split(',')
@@ -355,6 +356,22 @@ class NotebookHelper(object):
                 os.makedirs(self._outputdir)
 
     def compute_free_energies(self, input_files, TI = False):
+        r"""computes free energies
+        Paratmerters:
+        -------------
+        input_files : FILES
+            list of simulation.dat files for a given lambda
+        TI : boolean
+            decides whether to also compute TI free energies or just MBAR free energies
+            Default: False
+
+        Retruns:
+        free_energies : FreeEnergy object
+            object contains free energy differences 
+        T : Float
+            temperature at which simulations were run, as recorded in the simulation.dat files
+        """
+
         T, lamdas = self._read_sim_parameters(input_files)
         data = self._read_data(input_files)
         free_energies = self._run_preprocessing(data, lamdas)
@@ -364,8 +381,6 @@ class NotebookHelper(object):
         return free_energies, T
 
     def run_free_energy_analysis(self, perturbation, files_input_bound, files_input_free, TI= False, separator = '~'):
-        ## input files
-        # Test if files are ok here. 
         r""" runs free energy analysis for ligand bound to protein and ligand in water
         Parameters
         ----------
@@ -392,7 +407,6 @@ class NotebookHelper(object):
             preformatted string used to output free energies in the format: compound1,compound2,DDG,dDDG
             This preformatted output will support a further network analysis. 
         """
-        
         #bound
         T, lamdas = self._read_sim_parameters(files_input_bound)
         data = self._read_data(files_input_bound)
@@ -422,6 +436,22 @@ class NotebookHelper(object):
             DDG = (bound.deltaF_mbar* T * k_boltz)-(free.deltaF_mbar* T_free * k_boltz)
             dDDG = numpy.sqrt((bound.errorF_mbar * T * k_boltz)**2+(free.errorF_mbar * T_free * k_boltz)**2) 
             return ('%s,%s,%.2f,%.2f' %(perturbation.split(separator)[0],perturbation.split(separator)[1],DDG,dDDG))
+
+    def write_free_energies(self, DDG_list):
+        r"""
+        writes energies either to file or std out
+        Parameters:
+        DDG_list : list of strings
+            output from run__free_energy_analysis, preformatted free energy string
+        """
+        if self._free_energy_file is None:
+            fh = sys.stdout
+        else:
+            fname = os.path.join(self._outputdir,self._free_energy_file)
+            fh = open(fname, 'w')
+        for line in DDG_list:
+            fh.write(line+'\n')
+        fh.close()
 
     def _read_sim_parameters(self, input_files):
         r""" reading input files from a given file list of simfile.dat files
@@ -511,6 +541,17 @@ class NotebookHelper(object):
         return T_previous, lamvals
 
     def _read_data(self, input_files):
+        r"""reads data from simfile.dat
+        Parameters:
+        -----------
+        input_files : list of files
+            list of files containing paths to simfile.dat
+
+        Returns:
+        --------
+        data : numpy nd-array
+            array containing all simfile.dat file data. 
+        """
         data = []
         if self._discard is None:
             for f in input_files:
@@ -522,6 +563,20 @@ class NotebookHelper(object):
         return data
 
     def _run_preprocessing(self, data, lamvals):
+        r""" preprocess data files
+        Parameters:
+        -----------
+        data : nd-array
+            data from simfiles.dat
+        lamvals : 1D numpy array
+            list of lambda values from the simulation
+
+        Returns:
+        --------
+        free_energy_obj = FreeEnergy object
+            can be used to run MBAR and TI analysis
+
+        """
         # N_k is the number of samples at generating thermodynamic state (lambda) k
         N_k = numpy.zeros(shape=lamvals.shape[0], dtype='int32')
         for k in range(0, lamvals.shape[0]):
@@ -551,6 +606,16 @@ class NotebookHelper(object):
         return free_energy_obj
 
     def _get_boolean_state(self, s):
+        r"""assess if a string is True or False
+        Parameters:
+        -----------
+        s : string
+            string name either True or False
+        Reuturns:
+        ---------
+        b : boolean
+
+        """
         if s == "True":
             return True
         elif s == "False":
@@ -559,8 +624,15 @@ class NotebookHelper(object):
             print ("The string you have supplied does not seem to contain boolean information")
 
     def _write_overlap_info(self,perturbation, M, sim_type=''):
-        r"""hi
-
+        r"""computes and saves overlap matrix plots and info
+        Parameters:
+        -----------
+        perturbation : string
+            string identifying the perturbation for which the overlap is being computed
+        M : 2D numpy array
+            matrix containing the overlap information
+        sim_type : string
+            Identifier for bound type or free type simulation
         """
         diag_elements = numpy.array([numpy.diag(M, k=1), numpy.diag(M, k=-1)])
         fname = os.path.join(self._outputdir,perturbation)+'_'+sim_type+'_matrix.dat'
@@ -581,6 +653,9 @@ class NotebookHelper(object):
 
     @property
     def perturbation_list(self):
+        r""""
+        returns the list of pertubration directories
+        """
         if self._perturbation_list == None:
             self._perturbation_list = os.listdir(self._basedir)
         return self._perturbation_list
