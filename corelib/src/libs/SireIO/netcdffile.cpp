@@ -161,6 +161,30 @@ using namespace SireIO;
         
         return 0;
     }
+#else
+    static QString nc_type_to_string(nc_type typ)
+    {
+        return QString("NC_UNKNOWN");
+    }
+
+    static int nc_type_to_size(nc_type typ)
+    {
+        return 0;
+    }
+
+    static nc_type string_to_nc_type(const QString &typ)
+    {
+        throw SireError::io_error( QObject::tr(
+            "Unrecognised NetCDF type - %1").arg(typ), CODELOC );
+    }
+
+    static nc_type qvariant_to_nc_type(const QVariant &typ)
+    {
+        throw SireError::io_error( QObject::tr(
+                "Unable to convert the QVariant type %1 to an NC_TYPE")
+                    .arg(typ.typeName()), CODELOC );
+        return 0;
+    }
 #endif
 
 static QVector<QVariant> extract_values(const QByteArray &memdata, int nc_type, int nvals)
