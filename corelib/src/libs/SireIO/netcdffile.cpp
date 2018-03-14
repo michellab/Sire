@@ -162,23 +162,23 @@ using namespace SireIO;
         return 0;
     }
 #else
-    static QString nc_type_to_string(nc_type typ)
+    static QString nc_type_to_string(int typ)
     {
         return QString("NC_UNKNOWN");
     }
 
-    static int nc_type_to_size(nc_type typ)
+    static int nc_type_to_size(int typ)
     {
         return 0;
     }
 
-    static nc_type string_to_nc_type(const QString &typ)
+    static int string_to_nc_type(const QString &typ)
     {
         throw SireError::io_error( QObject::tr(
             "Unrecognised NetCDF type - %1").arg(typ), CODELOC );
     }
 
-    static nc_type qvariant_to_nc_type(const QVariant &typ)
+    static int qvariant_to_nc_type(const QVariant &typ)
     {
         throw SireError::io_error( QObject::tr(
                 "Unable to convert the QVariant type %1 to an NC_TYPE")
@@ -982,6 +982,10 @@ static void assert_no_netcdf_error(int errnum)
     
         throw SireError::io_error( QObject::tr(
             "NetCDF experienced an error: %1 (%2)").arg(err).arg(errnum), CODELOC );
+    #else
+        throw SireError::io_error( QObject::tr(
+            "NetCDF experienced an error as it is not compiled and supported with "
+            "this version of Sire."), CODELOC );
     #endif
 }
 
