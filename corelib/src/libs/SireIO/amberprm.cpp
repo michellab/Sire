@@ -3508,8 +3508,12 @@ void AmberPrm::assertSane() const
     live_test( [&](){ SireBase::assert_equal(this->floatData("CHARGE").count(),
                                              natoms, CODELOC);}, errors );
 
-    live_test( [&](){ SireBase::assert_equal(this->intData("ATOMIC_NUMBER").count(),
-                                             natoms, CODELOC);}, errors );
+    //it is allowable for a prm7 file to not contain any atomic number information
+    if (this->intData("ATOMIC_NUMBER").count() != 0)
+    {
+        live_test( [&](){ SireBase::assert_equal(this->intData("ATOMIC_NUMBER").count(),
+                                                 natoms, CODELOC);}, errors );
+    }
 
     live_test( [&](){ SireBase::assert_equal(this->floatData("MASS").count(),
                                              natoms, CODELOC);}, errors );
