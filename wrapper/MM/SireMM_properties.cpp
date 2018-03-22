@@ -3,7 +3,6 @@
 
 #include "Base/convertproperty.hpp"
 #include "SireMM_properties.h"
-
 #include "SireCAS/errors.h"
 #include "SireCAS/expression.h"
 #include "SireCAS/symbols.h"

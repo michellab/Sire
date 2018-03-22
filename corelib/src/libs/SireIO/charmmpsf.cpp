@@ -39,6 +39,8 @@
 #include "SireError/errors.h"
 #include "SireIO/errors.h"
 
+#include "SireMM/amberparams.h"
+#include "SireMM/atomljs.h"
 #include "SireMM/internalff.h"
 #include "SireMM/twoatomfunctions.h"
 #include "SireMM/threeatomfunctions.h"
@@ -140,8 +142,9 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmPSF &psf)
 
     ds << psf.atoms << psf.bonds << psf.mol_bonds << psf.angles << psf.mol_angles
        << psf.dihedrals << psf.mol_dihedrals << psf.impropers << psf.mol_impropers
-       << psf.cross_terms << psf.mol_cross_terms << psf.num_to_idx << psf.molecules
-       << psf.charmm_params << psf.box << psf.has_box << static_cast<const MoleculeParser&>(psf);
+       << psf.nonbonded_exclusions << psf.mol_nonbonded_exclusions << psf.cross_terms
+       << psf.mol_cross_terms << psf.num_to_idx << psf.molecules << psf.charmm_params
+       << psf.box << psf.has_box << static_cast<const MoleculeParser&>(psf);
 
     return ds;
 }
@@ -154,8 +157,9 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmPSF &psf)
     {
         ds >> psf.atoms >> psf.bonds >> psf.mol_bonds >> psf.angles >> psf.mol_angles
            >> psf.dihedrals >> psf.mol_dihedrals >> psf.impropers >> psf.mol_impropers
-           >> psf.cross_terms >> psf.mol_cross_terms >> psf.num_to_idx >> psf.molecules
-           >> psf.charmm_params >> psf.box >> psf.has_box >> static_cast<MoleculeParser&>(psf);
+           >> psf.nonbonded_exclusions >> psf.mol_nonbonded_exclusions >> psf.cross_terms
+           >> psf.mol_cross_terms >> psf.num_to_idx >> psf.molecules >> psf.charmm_params
+           >> psf.box >> psf.has_box >> static_cast<MoleculeParser&>(psf);
     }
     else
         throw version_error(v, "1", r_psf, CODELOC);
@@ -171,7 +175,8 @@ PSFAtom::PSFAtom() :
     res_num(0),
     type("X"),
     charge(0),
-    mass(0)
+    mass(0),
+    is_nb_excluded(false)
 {
 }
 
@@ -183,7 +188,8 @@ PSFAtom::PSFAtom(const QString &line, int index, QStringList &errors) :
     res_num(0),
     type("X"),
     charge(0),
-    mass(0)
+    mass(0),
+    is_nb_excluded(false)
 {
     // Tokenize the line, splitting using a single whitespace character.
     QStringList data = line.simplified().split(QRegExp("\\s"));
@@ -267,7 +273,8 @@ PSFAtom::PSFAtom(const SireMol::Atom &atom, const QString &segment,
     name(atom.name().value().toUpper()),
     type("X"),
     charge(0),
-    mass(0)
+    mass(0),
+    is_nb_excluded(false)
 {
     // The atom is within a residue.
     if (atom.isWithinResidue())
@@ -292,6 +299,12 @@ PSFAtom::PSFAtom(const SireMol::Atom &atom, const QString &segment,
     if (atom.hasProperty(map["mass"]))
     {
         mass = atom.property<SireUnits::Dimension::MolarMass>(map["mass"]).value();
+    }
+
+    // Extract the non-bonded exclusion flag.
+    if (atom.hasProperty(map["is_nb_excluded"]))
+    {
+        is_nb_excluded = atom.property<qint64>(map["is_nb_excluded"]);
     }
 }
 
@@ -384,6 +397,18 @@ double PSFAtom::getMass() const
     return mass;
 }
 
+/** Get the non-bonded exclusion. */
+bool PSFAtom::isNonBondedExcluded() const
+{
+    return is_nb_excluded;
+}
+
+/** Set the non-bonded exclusion. */
+void PSFAtom::setNonBondedExclusion(bool is_nb_excluded)
+{
+    this->is_nb_excluded = is_nb_excluded;
+}
+
 /** Default constructor. */
 CharmmParam::CharmmParam() : type(-1)
 {
@@ -399,13 +424,16 @@ CharmmParam::CharmmParam() : type(-1)
                                       1 = angle
                                       2 = dihedral
                                       3 = improper
-                                      4 = cross term
+                                      4 = non-bonded
 
     @param errors
         A list of parse errors.
+
+    @param is_xplor
+        Whether this is an xplor format record.
  */
-CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors)
-    : type(type)
+CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors, bool is_xplor)
+    : param_string(line), type(type)
 {
     // Tokenize the line.
     // First split on the comment identifier '!', take the first record,
@@ -578,13 +606,14 @@ CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors)
         atoms.append(data[3]);
 
         // Parameter data.
-        bool ok1, ok2;
+        bool ok1, ok2, ok3;
 
         // Attempt to read the parameter values.
         double p1 = data[4].toDouble(&ok1);
-        double p2 = data[6].toDouble(&ok2);
+        double p2 = data[5].toDouble(&ok2);
+        double p3 = data[6].toDouble(&ok3);
 
-        if (not ok1 or not ok2)
+        if (not ok1 or not ok2 or not ok3)
         {
             errors.append(QObject::tr("Could not read CHARMM improper parameter record! %1")
                 .arg(line));
@@ -595,14 +624,95 @@ CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors)
         // Append the parameters.
         params.append(p1);
         params.append(p2);
+        params.append(p3);
     }
 
-    // Cross term parameters.
+    // Non-bonded parameters.
     else if (type == 4)
     {
-        // TODO: Not sure what these parameter records look like. Find an example
-        //       In the CHARMM forcefield files.
+        int min_records = 3;
+        if (not is_xplor) min_records = 4;
 
+        // Check record count.
+        if (data.count() < 3)
+        {
+            errors.append(QObject::tr("This doesn't look like a CHARMM non-bonded "
+                "parameter record! There should be at least %1 entries, found %2: %3")
+                .arg(min_records).arg(data.count()).arg(line));
+
+            return;
+        }
+
+        // Atom data.
+        atoms.append(data[0]);
+
+        // Parameter data.
+        bool ok1, ok2;
+        double p1, p2;
+
+        // Attempt to read the parameter values.
+        if (is_xplor)
+        {
+            p1 = data[1].toDouble(&ok1);
+            p2 = data[2].toDouble(&ok2);
+        }
+        else
+        {
+            p1 = data[2].toDouble(&ok1);
+            p2 = data[3].toDouble(&ok2);
+        }
+
+        if (not ok1 or not ok2)
+        {
+            errors.append(QObject::tr("Could not read CHARMM non-bonded parameter record! %1")
+                .arg(line));
+
+            return;
+        }
+
+        // Append the parameters.
+        params.append(p1);
+        params.append(p2);
+
+        // Now check for 1-4 non-bonded parameters.
+        bool is_nb14 = false;
+
+        if (is_xplor)
+        {
+            if ((data.count() > 4) and (data[3].at(0) != '!'))
+                is_nb14 = true;
+        }
+        else
+        {
+            if ((data.count() > 6) and (data[4].at(0) != '!'))
+                is_nb14 = true;
+        }
+
+        if (is_nb14)
+        {
+            if (is_xplor)
+            {
+                p1 = data[3].toDouble(&ok1);
+                p2 = data[4].toDouble(&ok2);
+            }
+            else
+            {
+                p1 = data[5].toDouble(&ok1);
+                p2 = data[6].toDouble(&ok2);
+            }
+
+            if (not ok1 or not ok2)
+            {
+                errors.append(QObject::tr("Could not read CHARMM non-bonded 1-4 parameter record! %1")
+                    .arg(line));
+
+                return;
+            }
+
+            // Append the parameters.
+            params.append(p1);
+            params.append(p2);
+        }
     }
 
     // Uknown parameter type.
@@ -611,6 +721,12 @@ CharmmParam::CharmmParam(const QString& line, int type, QStringList &errors)
         throw SireError::program_bug(QObject::tr("Unknown parameter type (%1). "
             "Valid types are 0, 1, 2, 3, 4").arg(type), CODELOC);
     }
+}
+
+/** Return the original parameter string. */
+QString CharmmParam::getString() const
+{
+    return param_string;
 }
 
 /** Return the atoms to which the parameters apply. */
@@ -706,6 +822,7 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
     QSet<QString> angle_params;
     QSet<QString> dihedral_params;
     QSet<QString> improper_params;
+    QSet<QString> nonbonded_params;
 
     // Reconstruct the record data for each molecule.
     for (int i=0; i<nmols; ++i)
@@ -716,17 +833,19 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
         QVector<QVector<qint64> > local_angles;
         QVector<QVector<qint64> > local_dihedrals;
         QVector<QVector<qint64> > local_impropers;
+        QVector<QVector<qint64> > local_nonbonded;
 
         // Parse the molecular system.
         parseMolecule(i, system[molnums[i]].molecule(), local_atoms, local_bonds,
-            local_angles, local_dihedrals, local_impropers, bond_params, angle_params,
-            dihedral_params, improper_params, parse_warnings, map);
+            local_angles, local_dihedrals, local_impropers, local_nonbonded, bond_params,
+            angle_params, dihedral_params, improper_params, nonbonded_params, parse_warnings, map);
 
-        atoms     += local_atoms;
-        bonds     += local_bonds;
-        angles    += local_angles;
-        dihedrals += local_dihedrals;
-        impropers += local_impropers;
+        atoms                += local_atoms;
+        bonds                += local_bonds;
+        angles               += local_angles;
+        dihedrals            += local_dihedrals;
+        impropers            += local_impropers;
+        nonbonded_exclusions += local_nonbonded;
     }
 
     // Generate the PSF record lines.
@@ -828,6 +947,28 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
             charmm_params.append("");
         }
 
+        // Non-bonded.
+        if (nonbonded_params.count() > 0)
+        {
+            // Note that the non-bonded parameters are output in sorted order, i.e.
+            // they aren't grouped into sections as they are in the original forcefield file.
+            charmm_params.append("NONBONDED nbxmod  5 atom cdiel shift vatom vdistance vswitch -");
+			charmm_params.append("cutnb 14.0 ctofnb 12.0 ctonnb 10.0 eps 1.0 e14fac 1.0 wmin 1.5");
+            charmm_params.append("                !adm jr., 5/08/91, suggested cutoff scheme");
+            charmm_params.append("!");
+            charmm_params.append("!V(Lennard-Jones) = Eps,i,j[(Rmin,i,j/ri,j)**12 - 2(Rmin,i,j/ri,j)**6]");
+            charmm_params.append("!");
+            charmm_params.append("!epsilon: kcal/mole, Eps,i,j = sqrt(eps,i * eps,j)");
+            charmm_params.append("!Rmin/2: A, Rmin,i,j = Rmin/2,i + Rmin/2,j");
+            charmm_params.append("!");
+            charmm_params.append("!atom  ignored    epsilon      Rmin/2    ignored    eps,1-4      Rmin/2,1-4");
+            charmm_params.append("!");
+            QStringList params = nonbonded_params.toList();
+            params.sort();
+            charmm_params.append(params);
+            charmm_params.append("");
+        }
+
         if (charmm_params.count() > 0)
             charmm_params.append("END");
     }
@@ -871,6 +1012,8 @@ CharmmPSF::CharmmPSF(const CharmmPSF &other) :
     mol_dihedrals(other.mol_dihedrals),
     impropers(other.impropers),
     mol_impropers(other.mol_impropers),
+    nonbonded_exclusions(other.nonbonded_exclusions),
+    mol_nonbonded_exclusions(other.mol_nonbonded_exclusions),
     cross_terms(other.cross_terms),
     mol_cross_terms(other.mol_cross_terms),
     num_to_idx(other.num_to_idx),
@@ -899,6 +1042,8 @@ CharmmPSF& CharmmPSF::operator=(const CharmmPSF &other)
         mol_dihedrals = other.mol_dihedrals;
         impropers = other.impropers;
         mol_impropers = other.mol_impropers;
+        nonbonded_exclusions = other.nonbonded_exclusions;
+        mol_nonbonded_exclusions = other.mol_nonbonded_exclusions;
         cross_terms = other.cross_terms;
         mol_cross_terms = other.mol_cross_terms;
         num_to_idx = other.num_to_idx;
@@ -971,9 +1116,9 @@ QString CharmmPSF::toString() const
     {
         return QObject::tr("CharmmPSF( nMolecules() = %1, nAtoms() = %2, "
             "nBonds() = %3, nAngles() = %4, nDihedrals() = %5, "
-            "nImpropers() = %6, nCrossTerms() = %7 )")
-            .arg(nMolecules()).arg(nAtoms()).arg(nBonds()).arg(nAngles())
-            .arg(nDihedrals()).arg(nImpropers()).arg(nCrossTerms());
+            "nImpropers() = %6, nNonBondedExclusions() = %7, nCrossTerms() = %8 )")
+            .arg(nMolecules()).arg(nAtoms()).arg(nBonds()).arg(nAngles()).arg(nDihedrals())
+            .arg(nImpropers()).arg(nNonBondedExclusions()).arg(nCrossTerms());
     }
 }
 
@@ -985,7 +1130,7 @@ QVector<QString> CharmmPSF::toLines() const
 
     // No records.
     if ((nAtoms() + nBonds() + nAngles() + nDihedrals()
-        + nImpropers() + nCrossTerms()) == 0)
+        + nImpropers() + nNonBondedExclusions() + nCrossTerms()) == 0)
     {
         return QVector<QString>();
     }
@@ -1030,11 +1175,11 @@ QVector<QString> CharmmPSF::toLines() const
     QVector<QString> lines;
 
     // Add header information.
-    // TODO: Add BioSimSpace version info.
+    // TODO: Add Sire version info.
     lines.append("PSF");
     lines.append("");
     lines.append("       1 !NTITLE");
-    lines.append(QString(" REMARKS DATE:%1    created by BioSimSpace (v)")
+    lines.append(QString(" REMARKS DATE:%1    created by Sire")
          .arg(QDateTime::currentDateTime().toString("dd-MMM-yy  hh:mm:ss")));
     lines.append("");
 
@@ -1205,6 +1350,40 @@ QVector<QString> CharmmPSF::toLines() const
         lines += record_lines;
     }
 
+    // Add any non-bonded exclusions.
+    if (nNonBondedExclusions() > 0)
+    {
+        const int num_records = nNonBondedExclusions();
+
+        // There are 8 non-nonded exclusion records per line.
+        const int num_lines = qCeil(num_records/8.0);
+
+        QVector<QString> record_lines(num_lines + 2);
+        record_lines[0] = QString("%1 !NNB").arg(num_records, 8);
+
+        if (usesParallel())
+        {
+            tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
+                            [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    record_lines[i+1] = generate_line(nonbonded_exclusions, i, num_lines, num_records, 1);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<num_lines; ++i)
+            {
+                record_lines[i+1] = generate_line(nonbonded_exclusions, i, num_lines, num_records, 1);
+            }
+        }
+
+        // Append the non-bonded exclusion record lines.
+        lines += record_lines;
+    }
+
     // Add any cross-term records.
     if (nCrossTerms() > 0)
     {
@@ -1340,6 +1519,18 @@ int CharmmPSF::nImpropers() const
 int CharmmPSF::nImpropers(int i) const
 {
     return mol_impropers[i].count();
+}
+
+/** Return the number of non-bonded exclusion records. */
+int CharmmPSF::nNonBondedExclusions() const
+{
+    return nonbonded_exclusions.count();
+}
+
+/** Return the number of non-bonded exclusions in molecule 'i'. */
+int CharmmPSF::nNonBondedExclusions(int i) const
+{
+    return mol_nonbonded_exclusions[i].count();
 }
 
 /** Return the number of cross-term records. */
@@ -1500,7 +1691,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         // Bond records.
         else if (line.contains("!NBOND"))
         {
-            // Extract the number of bonds;
+            // Extract the number of bonds.
             bool ok;
             int num_bonds = data.first().toInt(&ok);
 
@@ -1567,7 +1758,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         // Angle records.
         else if (line.contains("!NTHETA"))
         {
-            // Extract the number of bonds;
+            // Extract the number of angles.
             bool ok;
             int num_angles = data.first().toInt(&ok);
 
@@ -1634,7 +1825,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         // Dihedral records.
         else if (line.contains("!NPHI"))
         {
-            // Extract the number of dihedrals;
+            // Extract the number of dihedrals.
             bool ok;
             int num_dihedrals = data.first().toInt(&ok);
 
@@ -1701,7 +1892,7 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         // Improper records.
         else if (line.contains("!NIMPHI"))
         {
-            // Extract the number of impropers;
+            // Extract the number of impropers.
             bool ok;
             int num_impropers = data.first().toInt(&ok);
 
@@ -1765,10 +1956,77 @@ void CharmmPSF::parseLines(const PropertyMap &map)
             }
         }
 
+        // Non-bonded exclusion records.
+        else if (line.contains("!NNB"))
+        {
+            // Extract the number of non-bonded exclusions.
+            bool ok;
+            int num_exclusions = data.first().toInt(&ok);
+
+            if (not ok)
+            {
+                parse_warnings.append(QObject::tr("Cannot extract number of non-bonded exclusions "
+                    "from part (%1) from line '%2'").arg(data.first()).arg(lines()[iline]));
+
+                return;
+            }
+
+            // Resize data structures.
+            nonbonded_exclusions.resize(num_exclusions);
+            for (int i=0; i<num_exclusions; ++i)
+                nonbonded_exclusions[i].resize(1);
+
+            // Work out the number of record lines.
+            // There are 8 non-bonded exclusion records per line.
+            const int num_lines = qCeil(num_exclusions/8.0);
+
+            ++iline;
+
+            if (usesParallel())
+            {
+                QMutex mutex;
+
+                tbb::parallel_for(tbb::blocked_range<int>(0, num_lines),
+                                [&](const tbb::blocked_range<int> &r)
+                {
+                    // Create local data objects.
+                    QStringList local_errors;
+
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        // Parse an angle record line.
+                        parse_line(lines()[iline+i], nonbonded_exclusions, i,
+                            num_lines, num_exclusions, 8, local_errors);
+                    }
+
+                    if (not local_errors.isEmpty())
+                    {
+                        // Acquire a lock.
+                        QMutexLocker lkr(&mutex);
+
+                        // Update the warning messages.
+                        parse_warnings += local_errors;
+                    }
+                });
+
+                // Fast-forward the line index.
+                iline += (num_lines - 1);
+            }
+            else
+            {
+                for (int i=0; i<num_lines; ++i)
+                {
+                    // Parse a non-bonded exclusion record line.
+                    parse_line(lines()[iline+i], nonbonded_exclusions, i,
+                        num_lines, num_exclusions, 8, parse_warnings);
+                }
+            }
+        }
+
         // Cross-term records.
         else if (line.contains("!NCRTERM"))
         {
-            // Extract the number of cross terms;
+            // Extract the number of cross terms.
             bool ok;
             int num_cross = data.first().toInt(&ok);
 
@@ -1855,8 +2113,8 @@ void CharmmPSF::parseLines(const PropertyMap &map)
         @param improper_params
             A multi-hash of the parsed improper parameters.
 
-        @param cross_params
-            A multi-hash of the parsed cross-term parameters.
+        @param nonbonded_params
+            A multi-hash of the parsed non-bonded parameters.
 
         @param box
             A periodic box object.
@@ -1870,7 +2128,7 @@ void CharmmPSF::parseParameters(
     QMultiHash<QString, CharmmParam> &angle_params,
     QMultiHash<QString, CharmmParam> &dihedral_params,
     QMultiHash<QString, CharmmParam> &improper_params,
-    QMultiHash<QString, CharmmParam> &cross_params,
+    QMultiHash<QString, CharmmParam> &nonbonded_params,
     PeriodicBox &box, bool &has_box_params) const
 {
     /* CHARMM parameter files are split in sections for different record types,
@@ -1890,7 +2148,8 @@ void CharmmPSF::parseParameters(
 
        We assume that parameter files are formatted correctly, i.e. there
        is no overlap between record sections, and all sections must be
-       separated by at least one blank line.
+       separated by at least one blank line. (There are no blank lines within
+       a record section.)
 
        We also parse NAMD XSC box data, which is added to the Sire System
        as a PeriodicBox Space property.
@@ -1928,7 +2187,7 @@ void CharmmPSF::parseParameters(
                 if (not (line[0] == '!'))
                 {
                     CharmmParam param(line, 0, errors);
-                    bond_params.insert(generateKey(param.getAtoms()), param);
+                    bond_params.insert(generateKey(param.getAtoms(), 0), param);
                 }
 
                 i++;
@@ -1938,7 +2197,7 @@ void CharmmPSF::parseParameters(
         {
             data.removeFirst();
             CharmmParam param(data.join(" "), 0, errors);
-            bond_params.insert(generateKey(param.getAtoms()), param);
+            bond_params.insert(generateKey(param.getAtoms(), 0), param);
         }
 
         // Angle parameters.
@@ -1965,7 +2224,7 @@ void CharmmPSF::parseParameters(
                 if (not (line[0] == '!'))
                 {
                     CharmmParam param(line, 1, errors);
-                    angle_params.insert(generateKey(param.getAtoms()), param);
+                    angle_params.insert(generateKey(param.getAtoms(), 1), param);
                 }
 
                 i++;
@@ -1975,7 +2234,7 @@ void CharmmPSF::parseParameters(
         {
             data.removeFirst();
             CharmmParam param(data.join(" "), 1, errors);
-            angle_params.insert(generateKey(param.getAtoms()), param);
+            angle_params.insert(generateKey(param.getAtoms(), 1), param);
         }
 
         // Dihedral parameters.
@@ -2002,7 +2261,7 @@ void CharmmPSF::parseParameters(
                 if (not (line[0] == '!'))
                 {
                     CharmmParam param(line, 2, errors);
-                    dihedral_params.insert(generateKey(param.getAtoms()), param);
+                    dihedral_params.insert(generateKey(param.getAtoms(), 2), param);
                 }
 
                 i++;
@@ -2019,7 +2278,7 @@ void CharmmPSF::parseParameters(
                 // Process the first record.
                 QStringList tmp = QStringList() << atoms << data[7] << data[8] << data[9];
                 CharmmParam param(tmp.join(" "), 2, errors);
-                dihedral_params.insert(generateKey(param.getAtoms()), param);
+                dihedral_params.insert(generateKey(param.getAtoms(), 2), param);
 
                 // Now find all of the accompanying records.
                 // We loop through the file until we ecounter the next dihedral record.
@@ -2047,7 +2306,7 @@ void CharmmPSF::parseParameters(
                         {
                             tmp = QStringList() << atoms << data[0] << data[1] << data[2];
                             CharmmParam param(tmp.join(" "), 2, errors);
-                            dihedral_params.insert(generateKey(param.getAtoms()), param);
+                            dihedral_params.insert(generateKey(param.getAtoms(), 2), param);
                         }
                     }
                 }
@@ -2058,7 +2317,7 @@ void CharmmPSF::parseParameters(
             {
                 data.removeFirst();
                 CharmmParam param(data.join(" "), 2, errors);
-                dihedral_params.insert(generateKey(param.getAtoms()), param);
+                dihedral_params.insert(generateKey(param.getAtoms(), 2), param);
             }
         }
 
@@ -2086,7 +2345,7 @@ void CharmmPSF::parseParameters(
                 if (not (line[0] == '!'))
                 {
                     CharmmParam param(line, 3, errors);
-                    improper_params.insert(generateKey(param.getAtoms()), param);
+                    improper_params.insert(generateKey(param.getAtoms(), 3), param);
                 }
 
                 i++;
@@ -2096,7 +2355,52 @@ void CharmmPSF::parseParameters(
         {
             data.removeFirst();
             CharmmParam param(data.join(" "), 3, errors);
-            improper_params.insert(generateKey(param.getAtoms()), param);
+            improper_params.insert(generateKey(param.getAtoms(), 3), param);
+        }
+
+        // Non-bonded parameters.
+        else if (start.toUpper() == "NONBONDED")
+        {
+            // There must be more than one record on the line.
+            if (data.count() > 1)
+            {
+                // This is a CHARMM format parameter file.
+                if (data[1] == "nbxmod")
+                {
+                    bool is_blank_line = false;
+
+                    // Skip two lines.
+                    i += 2;
+
+                    // Step-forward until we end the section.
+                    while (not is_blank_line)
+                    {
+                        QString line = parameter_lines[i].simplified();
+
+                        // Blank line.
+                        if (line.count() == 0)
+                        {
+                            is_blank_line = true;
+                            break;
+                        }
+
+                        // Not a comment.
+                        if (not (line[0] == '!'))
+                        {
+                            CharmmParam param(line, 4, errors);
+                            nonbonded_params.insert(generateKey(param.getAtoms(), 4), param);
+                        }
+
+                        i++;
+                    }
+                }
+                else
+                {
+                    data.removeFirst();
+                    CharmmParam param(data.join(" "), 4, errors, true);
+                    nonbonded_params.insert(generateKey(param.getAtoms(), 4), param);
+                }
+            }
         }
 
         // Periodic box record data.
@@ -2161,8 +2465,8 @@ void CharmmPSF::parseParameters(
         @param improper_params
             A multi-hash of the parsed improper parameters.
 
-        @param cross_params
-            A multi-hash of the parsed cross-term parameters.
+        @param nonbonded_params
+            A multi-hash of the non-bonded parameters.
 
         @return
             The parameterised molecule.
@@ -2174,7 +2478,7 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
     const QMultiHash<QString, CharmmParam> &angle_params,
     const QMultiHash<QString, CharmmParam> &dihedral_params,
     const QMultiHash<QString, CharmmParam> &improper_params,
-    const QMultiHash<QString, CharmmParam> &cross_params,
+    const QMultiHash<QString, CharmmParam> &nonbonded_params,
     const PropertyMap &map) const
 {
     // Get an editable version of the molecule.
@@ -2221,10 +2525,10 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             const auto atom1 = atom_types[idx1];
 
             // Create a vector of the atom types.
-            QVector<QString> bond_atoms({atom0, atom1});
+            QVector<QString> atom_types({atom0, atom1});
 
             // Find the parameters for the bond.
-            auto matches = findParameters(bond_atoms, bond_params, 0);
+            auto matches = findParameters(atom_types, bond_params, 0);
 
             // No matches!
             if (matches.count() == 0)
@@ -2239,8 +2543,12 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             // Create the expression for the bond function.
             Expression func = params[0] * SireMaths::pow_2( R - params[1] );
 
-            // Set the bond function parameter.
-            bond_funcs.set(idx0, idx1, func);
+            // Don't include zero functions.
+            if (func.toString() != "0")
+            {
+                // Set the bond function parameter.
+                bond_funcs.set(idx0, idx1, func);
+            }
         }
 
         // Set the bond property.
@@ -2292,24 +2600,32 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
             // Create the expression for the angle function, converting the angle to radians.
             Expression func = params[0] * SireMaths::pow_2( Theta - qDegreesToRadians(params[1]) );
 
-            // Set the angle function parameter.
-            angle_funcs.set(AtomNum(atoms[idx0].getNumber()),
-                            AtomNum(atoms[idx1].getNumber()),
-                            AtomNum(atoms[idx2].getNumber()),
-                            func);
+            // Don't include zero functions.
+            if (func.toString() != "0")
+            {
+                // Set the angle function parameter.
+                angle_funcs.set(AtomNum(atoms[idx0].getNumber()),
+                                AtomNum(atoms[idx1].getNumber()),
+                                AtomNum(atoms[idx2].getNumber()),
+                                func);
+            }
 
             // Add a Urey-Bradley bond function.
             if (params.count() > 2)
             {
                 func = params[2] * SireMaths::pow_2( R_UB - params[3] );
 
-                // Set the Urey-Bradley function parameter.
-                ub_funcs.set(AtomNum(atoms[idx0].getNumber()),
-                             AtomNum(atoms[idx2].getNumber()),
-                             func);
+                // Don't include zero functions.
+                if (func.toString() != "0")
+                {
+                    // Set the Urey-Bradley function parameter.
+                    ub_funcs.set(AtomNum(atoms[idx0].getNumber()),
+                                 AtomNum(atoms[idx2].getNumber()),
+                                 func);
 
-                // Flag that we've found Urey-Bradley parameters.
-                has_ub = true;
+                    // Flag that we've found Urey-Bradley parameters.
+                    has_ub = true;
+                }
             }
         }
 
@@ -2319,7 +2635,7 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
         // ...and Urey-Bradley, if present.
         if (has_ub)
         {
-            edit_mol.setProperty(map["urey-bradley"], ub_funcs);
+            edit_mol.setProperty(map["urey_bradley"], ub_funcs);
         }
     }
 
@@ -2359,26 +2675,53 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
                     .arg(dihedral_atoms[3]), CODELOC);
             }
 
-            // Intialise the function object.
-            Expression func;
+            // A vector of dihedral periodicity values.
+            QVector<int> periodicity;
 
-            // Loop over all matches.
-            // Potentially mutliple multiplicity values.
+            // A hash between periodicity and the dihedral term parameters.
+            QHash<int, CharmmParam> param_hash;
+
+            // Check to see if there are duplicate dihedral terms, i.e. with the same periodicity.
             for (const auto &match : matches)
             {
                 // Get the dihedral parameters.
                 auto params = match.getParams();
 
+                // Warn the user that a duplicate term was found.
+                if (param_hash.contains(params[1]))
+                {
+                    qDebug() << QObject::tr("Duplicate dihedral term found! Overwriting "
+                        "'%1' with '%2'.").arg(param_hash[params[1]].getString()).arg(match.getString());
+                }
+
+                // Insert the dihdedral term into the hash (overwriting existing value).
+                param_hash.insert(params[1], match);
+            }
+
+            // Intialise the function object.
+            Expression func;
+
+            // Loop over unique dihedral terms.
+            QHash<int, CharmmParam>::iterator term;
+            for (term = param_hash.begin(); term != param_hash.end(); ++term)
+            {
+                // Get the dihedral parameters.
+                auto params = term.value().getParams();
+
                 // Update the function, converting the phase shift to radians.
                 func += params[0] * (1 + Cos(( params[1] * Phi ) - qDegreesToRadians(params[2]) ));
             }
 
-            // Set the dihedral function parameter.
-            dihedral_funcs.set(AtomNum(atoms[idx0].getNumber()),
-                               AtomNum(atoms[idx1].getNumber()),
-                               AtomNum(atoms[idx2].getNumber()),
-                               AtomNum(atoms[idx3].getNumber()),
-                               func);
+            // Don't include zero functions.
+            if (func.toString() != "0")
+            {
+                // Set the dihedral function parameter.
+                dihedral_funcs.set(AtomNum(atoms[idx0].getNumber()),
+                                   AtomNum(atoms[idx1].getNumber()),
+                                   AtomNum(atoms[idx2].getNumber()),
+                                   AtomNum(atoms[idx3].getNumber()),
+                                   func);
+            }
         }
 
         // Set the dihedral property.
@@ -2421,19 +2764,44 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
                     .arg(improper_atoms[3]), CODELOC);
             }
 
-            // Get the improper parameters.
-            auto params = matches[0].getParams();
+            // Intialise the function object.
+            Expression func;
 
-            // Intialise the function object, converting the out of plane angle to radians.
-            Expression func = params[0] * SireMaths::pow_2( Phi - qDegreesToRadians(params[1]) );
+            // Loop over all matches.
+            // Potentially mutliple multiplicity values if this is a cosine improper.
+            for (const auto &match : matches)
+            {
+                // Get the dihedral parameters.
+                auto params = match.getParams();
 
-            // Set the improper function parameter.
-            improper_funcs.set(AtomNum(atoms[idx0].getNumber()),
-                               AtomNum(atoms[idx1].getNumber()),
-                               AtomNum(atoms[idx2].getNumber()),
-                               AtomNum(atoms[idx3].getNumber()),
-                               func);
+                // Harmonic improper.
+                if (std::abs(params[1]) < 1e-3)
+                {
+                    // Intialise the function object, converting the out of plane angle to radians.
+                    func = params[0] * SireMaths::pow_2( Phi - qDegreesToRadians(params[2]) );
 
+                    // Only use the first match. (Should only be a single match if harmonic.)
+                    break;
+                }
+
+                // Cosine improper.
+                else
+                {
+                    // Update the function, converting the phase shift to radians.
+                    func += params[0] * (1 + Cos(( params[1] * Phi ) - qDegreesToRadians(params[2]) ));
+                }
+            }
+
+            // Don't include zero functions.
+            if (func.toString() != "0")
+            {
+                // Set the improper function parameter.
+                improper_funcs.set(AtomNum(atoms[idx0].getNumber()),
+                                   AtomNum(atoms[idx1].getNumber()),
+                                   AtomNum(atoms[idx2].getNumber()),
+                                   AtomNum(atoms[idx3].getNumber()),
+                                   func);
+            }
         }
 
         // Set the improper property.
@@ -2444,6 +2812,90 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
     if (nCrossTerms(imol) > 0)
     {
         // TODO: Work out what to do here...
+    }
+
+    // Add non-bonded parameter.
+    if (nonbonded_params.count() > 0)
+    {
+        // The atomic Lennard-Jones properties.
+        AtomLJs lj_funcs(molinfo);
+
+        // The atomic Lennard-Jones properties for 1-4 non-bonded atoms.
+        AtomLJs lj_14_funcs(molinfo);
+
+        // Whether each atom is excluded from non-bonded interactions.
+        AtomIntProperty is_excluded(molinfo);
+
+        // Create an actual molecule from the passed object.
+        auto mol = sire_mol.molecule();
+
+        for (int i=0; i<nAtoms(imol); ++i)
+        {
+            // Store a reference to the current atom.
+            const auto &atom = atoms[molecules[imol][i]];
+
+            // Determine the CGAtomIdx and type for this atom.
+            auto cgatomidx = molinfo.cgAtomIdx(AtomNum(atom.getNumber()));
+            auto type = atom.getType();
+
+            // Get the parameters.
+            auto matches = nonbonded_params.values(type);
+
+            // We found a match.
+            if (matches.count() > 0)
+            {
+                // Extract the first parameter set.
+                // There should only be one match!
+                auto params = matches[0].getParams();
+
+                // Extract the epsilon and rmin terms.
+                double epsilon = -params[0];    // CHARMM stores minus epsilon.
+                double rmin = params[1];
+
+                /* Convert from rmin to sigma.
+
+                    CHARMM uses:
+                        U = eps * ((rmin/r)^12 - 2(rmin/r)^6)
+
+                    Sire uses:
+                        U = 4*eps * ((sigma/r)^12 - (sigma/r)^6)
+
+                    where rmin = sigma * 2^(1/6)
+                 */
+                double sigma = rmin / qPow(2.0, 1.0/6.0);
+
+                lj_funcs.set(cgatomidx, LJParameter(sigma * SireUnits::angstrom,
+                                                    epsilon * SireUnits::kcal_per_mol));
+
+                // There are modified 1-4 non-bonded Lennard-Jones parameters for this atom type.
+                if (params.count() == 4)
+                {
+                    // Extract the parameters, converting from rmin to sigma.
+                    epsilon = -params[2];
+                    sigma = params[3] / qPow(2.0, 1.0/6.0);
+
+                    lj_14_funcs.set(cgatomidx, LJParameter(sigma * SireUnits::angstrom,
+                                    epsilon * SireUnits::kcal_per_mol));
+                }
+            }
+
+            // Set the non-bonded exclusion flag.
+            if (atom.isNonBondedExcluded())
+                is_excluded.set(cgatomidx, 1);
+            else
+                is_excluded.set(cgatomidx, 0);
+        }
+
+        // Set the Lennard-Jones property.
+        if (lj_funcs.count() > 0)
+            edit_mol.setProperty(map["LJ"], lj_funcs);
+
+        // Set the 1-4 modified Lennard-Jones property.
+        if (lj_14_funcs.count() > 0)
+            edit_mol.setProperty(map["LJ_14"], lj_14_funcs);
+
+        // Set the non-bonded exclusion property.
+        edit_mol.setProperty(map["is_nb_excluded"], is_excluded);
     }
 
     return edit_mol.commit();
@@ -2472,6 +2924,9 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
     @param local_impropers
         The improper records vector local to the molecule.
 
+    @param local_nonbonded
+        The non-bonded records vector local to the molecule.
+
     @param bond_params
         The set of CHARMM bond parameter strings.
 
@@ -2483,6 +2938,9 @@ SireMol::Molecule CharmmPSF::parameteriseMolecule(
 
     @param improper_params
         The set of CHARMM improper parameter strings.
+
+    @param nonbonded_params
+        The set of CHARMM non-bonded parameter strings.
 
     @param local_errors
         A list of error messages local to the molecule.
@@ -2498,10 +2956,12 @@ void CharmmPSF::parseMolecule(
         QVector<QVector<qint64> > &local_angles,
         QVector<QVector<qint64> > &local_dihedrals,
         QVector<QVector<qint64> > &local_impropers,
+        QVector<QVector<qint64> > &local_nonbonded,
         QSet<QString> &bond_params,
         QSet<QString> &angle_params,
         QSet<QString> &dihedral_params,
         QSet<QString> &improper_params,
+        QSet<QString> &nonbonded_params,
         QStringList &local_errors,
         const PropertyMap &map)
 {
@@ -2540,6 +3000,17 @@ void CharmmPSF::parseMolecule(
             {
                 // Parse atom data.
                 local_atoms[i] = PSFAtom(sire_mol.atom(AtomIdx(i)), segment, local_errors, map);
+
+                // Add the atom to the list of non-bonded exclusions.
+                if (local_atoms[i].isNonBondedExcluded())
+                    local_nonbonded.append(QVector<qint64>(i));
+
+                // Extract any non-bonded parameters from the atom.
+                auto params = getNonBondedFrom(sire_mol.atom(AtomIdx(i)), map);
+
+                // Insert into the parameter set.
+                if (not params.isEmpty())
+                    nonbonded_params.insert(params);
             }
 
             if (not local_errors.isEmpty())
@@ -2558,6 +3029,17 @@ void CharmmPSF::parseMolecule(
         {
             // Parse atom data.
             local_atoms[i] = PSFAtom(sire_mol.atom(AtomIdx(i)), segment, local_errors, map);
+
+            // Add the atom to the list of non-bonded exclusions.
+            if (local_atoms[i].isNonBondedExcluded())
+                local_nonbonded.append(QVector<qint64>(i));
+
+            // Extract any non-bonded parameters from the atom.
+            auto params = getNonBondedFrom(sire_mol.atom(AtomIdx(i)), map);
+
+            // Insert into the parameter set.
+            if (not params.isEmpty())
+                nonbonded_params.insert(params);
         }
     }
 
@@ -2566,7 +3048,7 @@ void CharmmPSF::parseMolecule(
     // Get the required properties.
     const auto bond_funcs = getProperty<TwoAtomFunctions>(map["bond"], moldata, &has_bonds);
     const auto angle_funcs = getProperty<ThreeAtomFunctions>(map["angle"], moldata, &has_angles);
-    const auto ub_funcs = getProperty<TwoAtomFunctions>(map["urey-bradley"], moldata, &has_ubs);
+    const auto ub_funcs = getProperty<TwoAtomFunctions>(map["urey_bradley"], moldata, &has_ubs);
     const auto dihedral_funcs = getProperty<FourAtomFunctions>(map["dihedral"], moldata, &has_dihedrals);
     const auto improper_funcs = getProperty<FourAtomFunctions>(map["improper"], moldata, &has_impropers);
 
@@ -2582,11 +3064,49 @@ void CharmmPSF::parseMolecule(
 
     // Dihedrals.
     if (has_dihedrals)
-        getFourAtomFrom(dihedral_funcs, sire_mol, local_dihedrals, dihedral_params, map);
+        getDihedralsFrom(dihedral_funcs, sire_mol, local_dihedrals, dihedral_params, map);
 
     // Impropers.
     if (has_impropers)
-        getFourAtomFrom(improper_funcs, sire_mol, local_impropers, improper_params, map, true);
+    {
+        // Make sure there are actually functions since Sire only lets you know
+        // whether the system has a property, not a specific molecule.
+        if (improper_funcs.potentials().count() > 0)
+        {
+            // Extract the first improper function.
+            const auto func = improper_funcs.potentials().constData()[0].function();
+
+            // Set the function symbol.
+            const auto Phi = InternalPotential::symbols().dihedral().phi();
+
+            try
+            {
+                // Regular CHARMM style harmonic improper.
+
+                AmberBond amberbond(func, Phi);
+
+                getImpropersFrom(improper_funcs, sire_mol, local_impropers, improper_params, map);
+            }
+            catch (...)
+            {
+                try
+                {
+                    // A cosine style improper, e.g. as in AMBER.
+
+                    AmberDihedral amberdihedral(func, Phi);
+
+                    getDihedralsFrom(improper_funcs, sire_mol, local_impropers, improper_params, map);
+                }
+                catch (...)
+                {
+                    throw SireError::incompatible_error(QObject::tr(
+                            "Cannot construct a CHARMM improper parameter from "
+                            "expression %1. Supported styles are \"harmonic\" and \"cosine\".")
+                            .arg(func.toString()), CODELOC );
+                }
+            }
+        }
+    }
 }
 
 /** Find the index of the parameters associated with the 'search_atoms'.
@@ -2617,7 +3137,7 @@ QList<CharmmParam> CharmmPSF::findParameters(const QVector<QString> &search_atom
         }
 
         // Generate the key for this set of atoms.
-        QString key = generateKey(search_atoms);
+        QString key = generateKey(search_atoms, type);
 
         // Return the matches.
         return params.values(key);
@@ -2635,150 +3155,114 @@ QList<CharmmParam> CharmmPSF::findParameters(const QVector<QString> &search_atom
         }
 
         // Generate the key for this set of atoms.
-        QString key = generateKey(search_atoms);
+        QString key = generateKey(search_atoms, type);
 
         // Return the matches.
         return params.values(key);
     }
 
     // Dihedral params.
-    else if ((type == 2) or (type == 3))
+    else if (type == 2)
     {
         // Make sure that there are four atoms to search for.
         if (search_atoms.count() != 4)
         {
             throw SireError::program_bug(QObject::tr("Cannot search for CHARMM "
-                "%1 parameters, incorrect number of atoms passed. Given "
-                "%2, expected 4")
-                .arg((type == 2) ? "dihedral" : "improper")
-                .arg(search_atoms.count()), CODELOC);
+                "dihedral parameters, incorrect number of atoms passed. Given "
+                "%1, expected 4").arg(search_atoms.count()), CODELOC);
         }
 
         // Generate the key for this set of atoms.
-        QString key = generateKey(search_atoms);
+        QString key = generateKey(search_atoms, type);
 
         // Check for matches.
         auto matches = params.values(key);
 
-        // No matches, try wildcards.
+        // No matches, try adding wildcards to the terminal atoms.
         if (matches.count() == 0)
         {
-            // Backup the original vector of atom types.
+            // Backup the original vectory of atoms.
             auto copy_atoms = search_atoms;
 
-            // Single wildcard.
-            for (int i=0; i<4; ++i)
-            {
-                // Replace the atom type with a wildcard.
-                copy_atoms[i] = "X";
+            // Add the wildcards.
+            copy_atoms[0] = "X";
+            copy_atoms[3] = "X";
 
-                // Generate the key for this set of atoms.
-                QString key = generateKey(copy_atoms);
-
-                // Check for matches.
-                matches = params.values(key);
-
-                // Return the matches.
-                if (matches.count() > 0)
-                    return matches;
-
-                // Reset the atom type.
-                copy_atoms[i] = search_atoms[i];
-            }
-
-            // Double wildcard.
-            for (int i=0; i<4; ++i)
-            {
-                // Replace atom type 'i' with a wildcard.
-                copy_atoms[i] = "X";
-
-                for (int j=i+i; j<4; ++j)
-                {
-                    // Replace atom type 'j' with a wildcard.
-                    copy_atoms[j] = "X";
-
-                    // Generate the key for this set of atoms.
-                    QString key = generateKey(copy_atoms);
-
-                    // Check for matches.
-                    matches = params.values(key);
-
-                    // Return the matches.
-                    if (matches.count() > 0)
-                        return matches;
-
-                    // Reset the type for atom 'j'.
-                    copy_atoms[j] = search_atoms[j];
-                }
-
-                // Reset the type for atom 'i'.
-                copy_atoms[i] = search_atoms[i];
-            }
-
-            // Triple wildcard.
-            for (int i=0; i<4; ++i)
-            {
-                // Replace atom type 'i' with a wildcard.
-                copy_atoms[i] = "X";
-
-                for (int j=i+i; j<4; ++j)
-                {
-                    // Replace atom type 'j' with a wildcard.
-                    copy_atoms[j] = "X";
-
-                    for (int k=j+1; k<4; ++k)
-                    {
-                        // Replace atom type 'k' with a wildcard.
-                        copy_atoms[k] = "X";
-
-                        // Generate the key for this set of atoms.
-                        QString key = generateKey(copy_atoms);
-
-                        // Check for matches.
-                        matches = params.values(key);
-
-                        // Return the matches.
-                        if (matches.count() > 0)
-                            return matches;
-
-                        // Reset the type for atom 'k'.
-                        copy_atoms[k] = search_atoms[k];
-                    }
-
-                    // Reset the type for atom 'j'.
-                    copy_atoms[j] = search_atoms[j];
-                }
-
-                // Reset the type for atom 'i'.
-                copy_atoms[i] = search_atoms[i];
-            }
-
-            // Quadruple wildcard.
-            // Unlikley, but what the heck!
+            // Generate the key for this set of atoms.
+            QString key = generateKey(copy_atoms, type);
 
             // Check for matches.
-            matches = params.values("X;X;X;X");
+            matches = params.values(key);
 
-            // If we've got this far, then there are no matches.
-            // Return the empty list.
             return matches;
         }
         else return matches;
     }
 
-    else if (type == 4)
+    // Improper params.
+    else if (type == 3)
     {
-        // TODO: Not sure what these parameter records look like. Find an example
-        //       In the CHARMM forcefield files.
+        // Make sure that there are four atoms to search for.
+        if (search_atoms.count() != 4)
+        {
+            throw SireError::program_bug(QObject::tr("Cannot search for CHARMM "
+                "improper parameters, incorrect number of atoms passed. Given "
+                "%1, expected 4").arg(search_atoms.count()), CODELOC);
+        }
 
-        return QList<CharmmParam>();
+        // Generate the key for this set of atoms.
+        QString key = generateKey(search_atoms, type);
+
+        // Check for matches.
+        auto matches = params.values(key);
+
+        // No matches, try adding wildcards. For impropers, wildcards may appear
+        // in a number of variations so we enumerate all possible combinations.
+        if (matches.count() == 0)
+        {
+            // Backup the original vector of atoms.
+            auto copy_atoms = search_atoms;
+
+            for (int i=0; i<4; ++i)
+            {
+                // Replace atom type 'i' with a wildcard.
+                copy_atoms[i] = "X";
+
+                for (int j=i+1; j<4; ++j)
+                {
+                    // Replace atom type 'j' with a wildcard.
+                    copy_atoms[j] = "X";
+
+                    // Generate the key for this set of atoms.
+                    QString key = generateKey(copy_atoms, type);
+
+                    // Check for matches.
+                    matches = params.values(key);
+
+					// Return as soon as a match is found.
+                    if (matches.count() > 0)
+                       return matches;
+
+                    // Reset the type for atom 'j'.
+                    copy_atoms[j] = search_atoms[j];
+                }
+
+                // Reset the type for atom 'i'.
+                copy_atoms[i] = search_atoms[i];
+            }
+
+            // If we've made it this far, then there are no matches.
+            // Return the empty vector.
+            return matches;
+        }
+        else return matches;
     }
 
     // Uknown parameter type.
     else
     {
         throw SireError::program_bug(QObject::tr("Unknown parameter type (%1). "
-            "Valid types are 0, 1, 2, 3, 4").arg(type), CODELOC);
+            "Valid types are 0-4").arg(type), CODELOC);
     }
 }
 
@@ -2786,25 +3270,113 @@ QList<CharmmParam> CharmmPSF::findParameters(const QVector<QString> &search_atom
         @param words
             The list of words.
 
+        @param type
+        The type of parameter record: 0 = bond
+                                      1 = angle
+                                      2 = dihedral
+                                      3 = improper
+                                      4 = non-bonded
+
         @return
             The key.
  */
-QString CharmmPSF::generateKey(QVector<QString> words) const
+QString CharmmPSF::generateKey(QVector<QString> words, int type) const
 {
-    if (words.count() == 0)
-        return QString();
+    // Bond parameter.
+    // These are insensitive to the ordering of atoms.
+    if (type == 0)
+    {
+        if (words.count() != 2)
+        {
+            throw SireError::program_bug(QObject::tr("Incorrect number of "
+                "atoms for bond parameter. Expected 2, found %1.")
+                .arg(words.count()), CODELOC);
+        }
 
-    // Sort the words.
-    qSort(words);
+        // Sort the words.
+        qSort(words);
 
-    // Initialise the key string.
-    QString key(words[0]);
+        // Now create the key.
 
-    // Append each word to the key, semicolon separated.
-    for (int i=1; i<words.count(); ++i)
-        key += QString(";%1").arg(words[i]);
+        // Initialise the key string.
+        QString key(words[0]);
 
-    return key;
+        // Append each word to the key, semicolon separated.
+        for (int i=1; i<words.count(); ++i)
+            key += QString(";%1").arg(words[i]);
+
+        return key;
+    }
+
+    // Angle, dihedral, or improper parameter.
+    // Here the atom ordering is significant. The ordering can be reversed
+    // without affecting the resulting potential.
+    else if ((type == 1) or
+		     (type == 2) or
+		     (type == 3))
+    {
+        // Store the number of words.
+        int num_words = words.count();
+
+		if (type == 1)
+		{
+			if (num_words != 3)
+			{
+				throw SireError::program_bug(QObject::tr("Incorrect number of "
+					"atoms for angle parameter. Expected 3, found %1.")
+					.arg(num_words), CODELOC);
+			}
+		}
+		else
+        {
+            if (num_words != 4)
+            {
+                throw SireError::program_bug(QObject::tr("Incorrect number of "
+                    "atoms for %1 parameter. Expected 4, found %2.")
+                    .arg((type == 2) ? "dihedral" : "improper")
+                    .arg(num_words), CODELOC);
+            }
+        }
+
+        // There are two possible combinations: forward, and reverse.
+        //    Angles:               A-B-C   and C-B-A.
+        //    Dihedrals/Impropers:  A-B-C-D and D-C-B-A
+
+        // Create the two keys.
+        QString key1(words.first());
+        QString key2(words.last());
+
+        // Append each word to the keys, semicolon separated.
+        for (int i=1; i<num_words; ++i)
+        {
+            key1 += QString(";%1").arg(words[i]);
+            key2 += QString(";%1").arg(words[num_words-1-i]);
+        }
+
+        // Return the smaller key.
+        if (key1 < key2) return key1;
+        else             return key2;
+    }
+
+    // Non-bonded parameter.
+    else if (type == 4)
+    {
+        if (words.count() != 1)
+        {
+            throw SireError::program_bug(QObject::tr("Incorrect number of "
+                "atoms for non-bonded parameter. Expected 1, found %1.")
+                .arg(words.count()), CODELOC);
+        }
+
+        return words[0];
+    }
+
+    else
+    {
+        throw SireError::program_bug(QObject::tr("Invalid parameter "
+            "type key (%1). Supported values are 0-%2.")
+            .arg(type).arg(4), CODELOC);
+    }
 }
 
 /** Use the data contained in this parser to create a new System of molecules,
@@ -2875,7 +3447,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     QMultiHash<QString, CharmmParam> angle_params;
     QMultiHash<QString, CharmmParam> dihedral_params;
     QMultiHash<QString, CharmmParam> improper_params;
-    QMultiHash<QString, CharmmParam> cross_params;
+    QMultiHash<QString, CharmmParam> nonbonded_params;
 
     // Initialise a periodic box object.
     PeriodicBox box;
@@ -2883,7 +3455,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
 
     // Parse and validate the parameter file.
     parseParameters(param_lines, bond_params, angle_params,
-        dihedral_params, improper_params, cross_params, box, has_box_params);
+        dihedral_params, improper_params, nonbonded_params, box, has_box_params);
 
     // Early exit if parameters are missing.
     if ((nBonds()      > 0 and bond_params.count()     == 0) or
@@ -2920,7 +3492,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
                 // Parameterise the molecule.
                 mols[i] = parameteriseMolecule(i, system[molnums[i]].molecule(),
                     bond_params, angle_params, dihedral_params, improper_params,
-                    cross_params, map);
+                    nonbonded_params, map);
             }
         });
     }
@@ -2931,7 +3503,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
             // Parameterise the molecule.
             mols[i] = parameteriseMolecule(i, system[molnums[i]].molecule(),
                 bond_params, angle_params, dihedral_params, improper_params,
-                cross_params, map);
+                nonbonded_params, map);
         }
     }
 
@@ -3005,6 +3577,11 @@ void CharmmPSF::writeToFile(const QString &filename) const
         for (const QString &line : charmm_params)
         {
             ts << line << '\n';
+
+            // Break if we've reached the end of the parameters.
+            // (The parameter strings might also contain box record info).
+            if (line.left(3) == "END")
+                break;
         }
 
         f.close();
@@ -3419,6 +3996,28 @@ void CharmmPSF::findMolecules()
         }
     }
 
+    /*****************************************************************/
+    /* Work out which non-bonded exclusions belong to this molecule. */
+    /*****************************************************************/
+
+    mol_nonbonded_exclusions.resize(num_mols);
+
+    // Loop over all of the non-bonded exclusions.
+    for (int i=0; i<nNonBondedExclusions(); ++i)
+    {
+        // Get the atom index.
+        int atomidx = num_to_idx[nonbonded_exclusions[i][0]];
+
+        // Get the molecule index.
+        int molidx = atoms[atomidx].getMolIndex();
+
+        // Record that the exclusion belongs to this molecule.
+        mol_nonbonded_exclusions[molidx].append(i);
+
+        // Set the non-bonded exclusion flag.
+        atoms[atomidx].setNonBondedExclusion(true);
+    }
+
     /*******************************************************/
     /* Work out which cross-terms belong to this molecule. */
     /*******************************************************/
@@ -3486,7 +4085,7 @@ T CharmmPSF::getProperty(const PropertyName &prop, const MoleculeData &moldata, 
     return T();
 }
 
-/** Construct PSF bond records from the set of two-atom functions. */
+/** Construct PSF bond records and CHARMM parameters from the set of two-atom functions. */
 void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire_mol,
     QVector<QVector<qint64> > &local_bonds, QSet<QString> &bond_params, const PropertyMap &map)
 {
@@ -3499,9 +4098,6 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
     // Store the number of bonds.
     const int num_bonds = potentials.count();
 
-    // Resize the bonds vector.
-    local_bonds.resize(num_bonds);
-
     // A multi-map between the start atom in a bond and the atom pair.
     // This allows us to reconstruct the correct bond order.
     QMultiMap<int, QVector<qint64> > bond_map;
@@ -3509,11 +4105,12 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
     // Create the bond map.
     for (int i=0; i<num_bonds; ++i)
     {
-        // Resize the bond vector.
-        local_bonds[i].resize(2);
-
         // Get the potential.
         const auto potential = potentials.constData()[i];
+
+        // Don't include zero functions.
+        if (potential.function().toString() == "0")
+            continue;
 
         // Extract the cgAtomIdx for the two atoms.
         const auto idx0 = molinfo.cgAtomIdx(potential.atom0());
@@ -3533,11 +4130,33 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
             QString type1 = sire_mol.atom(idx1).property<QString>(map["atomtype"]);
 
             // Create a string from the types.
-            QString bond_atoms = QString("%1 %2").arg(type0, -4).arg(type1, -4);
+            QVector<QString> atom_types = {type0, type1};
 
-            // Create the CHARMM bond parameters.
-            const auto R = InternalPotential::symbols().bond().r();
-            bond_params.insert(toHarmonicParameter(bond_atoms, potential.function(), R));
+            // Create the atom type part of the parameter string.
+            QString atom_string = QString("%1 %2")
+                .arg(type0, -4).arg(type1, -4);
+
+            try
+            {
+                const auto R = InternalPotential::symbols().bond().r();
+                AmberBond amberbond(potential.function(), R);
+
+                // This is a valid amber bond ( kb (r - r0)^2 )
+                double kb = amberbond.k();
+                double r0 = amberbond.r0();
+
+                // Create the bond parameter string.
+                QString param_string = QString("%1 %2 %3").arg(atom_string).arg(kb, 10, 'f', 3).arg(r0, 10, 'f', 4);
+
+                // Insert the string into the parameter set.
+                bond_params.insert(param_string);
+            }
+            catch (...)
+            {
+                throw SireError::incompatible_error(QObject::tr(
+                        "Cannot construct a CHARMM bond parameter K ( R - R0 )^2 from the "
+                        "expression %1").arg(potential.function().toString()), CODELOC );
+            }
         }
 
         // Create the map value.
@@ -3549,15 +4168,11 @@ void CharmmPSF::getBondsFrom(const TwoAtomFunctions &funcs, const Molecule &sire
     }
 
     // Now populate the bond vector.
-    int i = 0;
     while (not bond_map.isEmpty())
-    {
-        local_bonds[i] = bond_map.take(bond_map.lastKey());
-        i++;
-    }
+        local_bonds.append(bond_map.take(bond_map.lastKey()));
 }
 
-/** Construct PSF angle records from the set of three-atom functions. */
+/** Construct PSF angle records and CHARMM parameters from the set of three-atom functions. */
 void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunctions &ub_funcs,
     const Molecule &sire_mol, QVector<QVector<qint64> > &local_angles,
     QSet<QString> &angle_params, const PropertyMap &map)
@@ -3577,9 +4192,6 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
     // Store the number of Urey-Bradley functions.
     const int num_ubs = ub_potentials.count();
 
-    // Resize the angles vector.
-    local_angles.resize(num_angles);
-
     // A multi-map between the start atom in an angle and the atom triplet.
     // This allows us to reconstruct the correct order for the PSF records.
     QMultiMap<int, QVector<qint64> > angle_map;
@@ -3587,11 +4199,12 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
     // Populate the angle map.
     for (int i=0; i<num_angles; ++i)
     {
-        // Resize the angles vector.
-        local_angles[i].resize(3);
-
         // Get the potential.
         const auto potential = potentials.constData()[i];
+
+        // Don't include zero functions.
+        if (potential.function().toString() == "0")
+            continue;
 
         // Extract the cgAtomIdx for the three atoms.
         const auto idx0 = molinfo.cgAtomIdx(potential.atom0());
@@ -3615,12 +4228,36 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
             QString type2 = sire_mol.atom(idx2).property<QString>(map["atomtype"]);
 
             // Create a string from the types.
-            QString angle_atoms = QString("%1 %2 %3")
+            QVector<QString> bond_types = {type0, type1, type2};
+
+            // Create the atom type part of the parameter string.
+            QString atom_string = QString("%1 %2 %3")
                 .arg(type0, -4).arg(type1, -4).arg(type2, -4);
 
-            // Create the CHARMM angle parameters.
-            const auto Theta = InternalPotential::symbols().angle().theta();
-            QString angle_param = toHarmonicParameter(angle_atoms, potential.function(), Theta, 3);
+            // Initialise the parameter string.
+            QString param_string;
+
+            try
+            {
+                const auto Theta = InternalPotential::symbols().angle().theta();
+                AmberBond amberbond(potential.function(), Theta);
+
+                // This is a valid amber bond ( kb (Theta - Theta0)^2 )
+                double kb = 2.0 * amberbond.k();
+                double r0 = amberbond.r0();
+
+                // Convert the angle to degrees.
+                r0 = qRadiansToDegrees(r0);
+
+                // Create the angle parameter string.
+                param_string = QString("%1 %2 %3").arg(atom_string).arg(kb, 10, 'f', 3).arg(r0, 10, 'f', 4);
+            }
+            catch (...)
+            {
+                throw SireError::incompatible_error(QObject::tr(
+                        "Cannot construct a CHARMM angle parameter K ( Theta - Theta0 )^2 from the "
+                        "expression %1").arg(potential.function().toString()), CODELOC );
+            }
 
             // Now check whether there is an additional Urey-Bradley term for this angle.
             for (int j=0; j<num_ubs; ++j)
@@ -3646,16 +4283,32 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
                     if ((ub_idx0  == idx0)  and (ub_idx1  == idx2) and
                         (ub_type0 == type0) and (ub_type1 == type2))
                     {
-                        const auto R = InternalPotential::symbols().bond().r();
-                        angle_param += toHarmonicParameter(QString(""), potential.function(), R);
+                        try
+                        {
+                            const auto R = InternalPotential::symbols().bond().r();
+                            AmberBond amberbond(potential.function(), R);
 
-                        break;
+                            // This is a valid amber bond ( kb (S - S0)^2 )
+                            double kb = 2.0 * amberbond.k();
+                            double r0 = amberbond.r0();
+
+                            // Append the Urey-Bradley parameter string.
+                            param_string += QString("%1 %2").arg(kb, 10, 'f', 3).arg(r0, 10, 'f', 4);
+
+                            break;
+                        }
+                        catch (...)
+                        {
+                            throw SireError::incompatible_error(QObject::tr(
+                                    "Cannot construct a CHARMM Urey-Bradley parameter K ( S - S0 )^2 from the "
+                                    "expression %1").arg(potential.function().toString()), CODELOC );
+                        }
                     }
                 }
             }
 
             // Insert the angle parameter string into the set.
-            angle_params.insert(angle_param);
+            angle_params.insert(param_string);
         }
 
         // Create the map value.
@@ -3667,18 +4320,13 @@ void CharmmPSF::getAnglesFrom(const ThreeAtomFunctions &funcs, const TwoAtomFunc
     }
 
     // Now populate the angle vector.
-    int i = 0;
     while (not angle_map.isEmpty())
-    {
-        local_angles[i] = angle_map.take(angle_map.lastKey());
-        i++;
-    }
+        local_angles.append(angle_map.take(angle_map.lastKey()));
 }
 
-/** Construct PSF four-atom records from the set of four-atom functions. */
-void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &sire_mol,
-    QVector<QVector<qint64> > &four_atom, QSet<QString> &four_atom_params, const PropertyMap &map,
-    bool is_improper)
+/** Construct PSF dihedral records and CHARMM parameters from the set of four-atom functions. */
+void CharmmPSF::getDihedralsFrom(const FourAtomFunctions &funcs, const Molecule &sire_mol,
+    QVector<QVector<qint64> > &local_dihedrals, QSet<QString> &dihedral_params, const PropertyMap &map)
 {
     // Get the molecule info object.
     const auto molinfo = sire_mol.info();
@@ -3689,18 +4337,123 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
     // Store the number of functions.
     const int num_funcs = potentials.count();
 
-    // Resize the fuctions vector.
-    four_atom.resize(num_funcs);
-
-    // A multi-map between the start atom in a four-atom function and the atom quartet.
+    // A multi-map between the start atom in a dihedral function and the atom quartet.
     // This allows us to reconstruct the correct order for the PSF records.
-    QMultiMap<int, QVector<qint64> > four_atom_map;
+    QMultiMap<int, QVector<qint64> > dihedral_map;
+
+    // Populate the function map.
+    for (int i=0; i<num_funcs; ++i)
+    {
+        // Get the potential.
+        const auto potential = potentials.constData()[i];
+
+        // Don't include zero functions.
+        if (potential.function().toString() == "0")
+            continue;
+
+        // Extract the cgAtomIdx for the four atoms.
+        const auto idx0 = molinfo.cgAtomIdx(potential.atom0());
+        const auto idx1 = molinfo.cgAtomIdx(potential.atom1());
+        const auto idx2 = molinfo.cgAtomIdx(potential.atom2());
+        const auto idx3 = molinfo.cgAtomIdx(potential.atom3());
+
+        // Store the atom numbers.
+        int atom0 = molinfo.number(idx0).value();
+        int atom1 = molinfo.number(idx1).value();
+        int atom2 = molinfo.number(idx2).value();
+        int atom3 = molinfo.number(idx3).value();
+
+        // If the atoms have an "atomtype" property then we can generate
+        // CHARMM dihedral parameters.
+        if ((sire_mol.atom(idx0).hasProperty(map["atomtype"])) and
+            (sire_mol.atom(idx1).hasProperty(map["atomtype"])) and
+            (sire_mol.atom(idx2).hasProperty(map["atomtype"])) and
+            (sire_mol.atom(idx3).hasProperty(map["atomtype"])))
+        {
+            // Extract the atom types.
+            QString type0 = sire_mol.atom(idx0).property<QString>(map["atomtype"]);
+            QString type1 = sire_mol.atom(idx1).property<QString>(map["atomtype"]);
+            QString type2 = sire_mol.atom(idx2).property<QString>(map["atomtype"]);
+            QString type3 = sire_mol.atom(idx3).property<QString>(map["atomtype"]);
+
+            // Create a string from the types.
+            QVector<QString> atom_types = {type0, type1, type2, type3};
+
+            // Create the atom type part of the parameter string.
+            QString atom_string = QString("%1 %2 %3 %4")
+                .arg(type0, -4).arg(type1, -4)
+                .arg(type2, -4).arg(type3, -4);
+
+            try
+            {
+                const auto Phi = InternalPotential::symbols().dihedral().phi();
+                AmberDihedral amberdihedral(potential.function(), Phi);
+
+                for (const auto amberdih : amberdihedral.terms())
+                {
+                    double kb = amberdih.k();
+                    double per = amberdih.periodicity();
+                    double phase = amberdih.phase();
+
+                    // This is a cosine dihedral in from k [ 1 + cos(per phi - phase) ].
+
+                    // Create the bond parameter string, converting the phase to degrees.
+                    QString param_string(QString("%1 %2 %3 %4")
+                        .arg(atom_string)
+                        .arg(kb, 10, 'f', 4)
+                        .arg(per, 3)
+                        .arg(qRadiansToDegrees(phase), 10, 'f', 2));
+
+                    // Insert into the parameter set.
+                    dihedral_params.insert(param_string);
+                }
+            }
+            catch (...)
+            {
+                throw SireError::incompatible_error(QObject::tr(
+                        "Cannot construct CHARMM dihedral parameter terms, K ( 1 + cos(n Phi - Phi0) ], from the "
+                        "expression %1").arg(potential.function().toString()), CODELOC );
+            }
+        }
+
+        // Create the map value.
+        QVector<qint64> value({atom0, atom1, atom2, atom3});
+
+        // Insert into the map.
+        // Use negative atom number as the index so we can loop over in ascending order.
+        dihedral_map.insert(-atom0, value);
+    }
+
+    // Now populate the vector.
+    while (not dihedral_map.isEmpty())
+        local_dihedrals.append(dihedral_map.take(dihedral_map.lastKey()));
+}
+
+/** Construct PSF improper records and CHARMM parameters from the set of four-atom functions. */
+void CharmmPSF::getImpropersFrom(const FourAtomFunctions &funcs, const Molecule &sire_mol,
+    QVector<QVector<qint64> > &local_impropers, QSet<QString> &improper_params, const PropertyMap &map)
+{
+    // Get the molecule info object.
+    const auto molinfo = sire_mol.info();
+
+    // Get the set of all four-atom functions.
+    const auto potentials = funcs.potentials();
+
+    // Store the number of functions.
+    const int num_funcs = potentials.count();
+
+    // Resize the impropers vector.
+    local_impropers.resize(num_funcs);
+
+    // A multi-map between the start atom in an improper function and the atom quartet.
+    // This allows us to reconstruct the correct order for the PSF records.
+    QMultiMap<int, QVector<qint64> > improper_map;
 
     // Populate the function map.
     for (int i=0; i<num_funcs; ++i)
     {
         // Resize the vector.
-        four_atom[i].resize(4);
+        local_impropers[i].resize(4);
 
         // Get the potential.
         const auto potential = potentials.constData()[i];
@@ -3718,7 +4471,7 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
         int atom3 = molinfo.number(idx3).value();
 
         // If the atoms have an "atomtype" property then we can generate
-        // CHARMM four-atom parameters.
+        // CHARMM improper parameters.
         if ((sire_mol.atom(idx0).hasProperty(map["atomtype"])) and
             (sire_mol.atom(idx1).hasProperty(map["atomtype"])) and
             (sire_mol.atom(idx2).hasProperty(map["atomtype"])) and
@@ -3731,24 +4484,36 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
             QString type3 = sire_mol.atom(idx3).property<QString>(map["atomtype"]);
 
             // Create a string from the types.
-            QString func_atoms = QString("%1 %2 %3 %4")
-                .arg(type0, -4).arg(type1, -4).arg(type2, -4).arg(type3, -4);
+            QVector<QString> atom_types = {type0, type1, type2, type3};
 
-            // Create the CHARMM parameters.
-            if (is_improper)
+            // Create the atom type part of the parameter string.
+            QString atom_string = QString("%1 %2 %3 %4")
+                .arg(type0, -4).arg(type1, -4)
+                .arg(type2, -4).arg(type3, -4);
+
+            try
             {
-                const auto phi = InternalPotential::symbols().dihedral().phi();
+                const auto Phi = InternalPotential::symbols().dihedral().phi();
+                AmberBond amberbond(potential.function(), Phi);
 
-                // Generate the improper parameter string.
-                four_atom_params.insert(toHarmonicParameter(func_atoms, potential.function(), phi, 4));
+                // This is a valid amber bond ( kb (Phi - Phi0)^2 )
+                double kb = amberbond.k();
+                double r0 = amberbond.r0();
+
+                // Convert out of plane angle to degrees.
+                r0 = qRadiansToDegrees(r0);
+
+                QString param_string = QString("%1 %2 %3 %4")
+                    .arg(atom_string).arg(kb, 10, 'f', 3).arg(0, 10).arg(r0, 10, 'f', 4);
+
+                // Insert the string into the parameter set.
+                improper_params.insert(param_string);
             }
-            else
+            catch (...)
             {
-                // Generate the vector of dihedral parameter strings.
-                QVector<QString> params = toFourAtomParameter(func_atoms, potential.function());
-
-                for (const auto &param : params)
-                    four_atom_params.insert(param);
+                throw SireError::incompatible_error(QObject::tr(
+                        "Cannot construct a CHARMM improper parameter K ( Psi - Psi0 )^2 from the "
+                        "expression %1").arg(potential.function().toString()), CODELOC );
             }
         }
 
@@ -3757,288 +4522,50 @@ void CharmmPSF::getFourAtomFrom(const FourAtomFunctions &funcs, const Molecule &
 
         // Insert into the map.
         // Use negative atom number as the index so we can loop over in ascending order.
-        four_atom_map.insert(-atom0, value);
+        improper_map.insert(-atom0, value);
     }
 
     // Now populate the vector.
     int i = 0;
-    while (not four_atom_map.isEmpty())
+    while (not improper_map.isEmpty())
     {
-        four_atom[i] = four_atom_map.take(four_atom_map.lastKey());
+        local_impropers[i] = improper_map.take(improper_map.lastKey());
         i++;
     }
 }
 
-/** Convert a Sire two-atom function to a CHARMM bond paramater string. */
-QString CharmmPSF::toHarmonicParameter(const QString &bond_atoms, const Expression &func,
-    const Symbol &R, int num_atoms)
+/** Extract Lennard-Jones non-bonded parameters from an atom. */
+QString CharmmPSF::getNonBondedFrom(const SireMol::Atom &atom, const PropertyMap &map) const
 {
-    // The function should be of the form "k(r - r0)^2".
-    // We need to get the factors of R.
-    const auto factors = func.expand(R);
+    QString param_string;
 
-    bool has_k = false;
-
-    QStringList errors;
-
-    double k = 0.0;
-    double kr0_2 = 0.0;
-    double kr0 = 0.0;
-
-    for (const auto factor : factors)
+    if (atom.hasProperty(map["atomtype"]) and atom.hasProperty(map["LJ"]))
     {
-        if (factor.symbol() == R)
+        auto type = atom.property<QString>(map["atomtype"]);
+        auto lj = atom.property<LJParameter>(map["LJ"]);
+
+        // Extract the Lennard-Jones terms.
+        double epsilon = lj.epsilon();
+        double rmin = lj.sigma() * qPow(2.0, 1.0/6.0);
+
+        // Create the parameter string.
+        param_string = QString("%1 0.000000 %2 %3")
+            .arg(type, -6).arg(-epsilon, 10, 'f', 6).arg(rmin, 12, 'f', 6);
+
+        // There are also modified 1-4 parameters for this atom type.
+        if (atom.hasProperty(map["LJ_14"]))
         {
-            if (not factor.power().isConstant())
-            {
-                errors.append(QObject::tr("Power of R must be constant, not %1")
-                                .arg(factor.power().toString()));
-                continue;
-            }
+            auto lj_14 = atom.property<LJParameter>(map["LJ_14"]);
 
-            if (not factor.factor().isConstant())
-            {
-                errors.append(QObject::tr("The value of K in K (R - R0)^2 must be constant. "
-                                "Here it is %1").arg(factor.factor().toString()));
-                continue;
-            }
+            // Extract the Lennard-Jones terms.
+            epsilon = lj.epsilon();
+            rmin = lj.sigma() * qPow(2.0, 1.0/6.0);
 
-            double power = factor.power().evaluate(Values());
-
-            if (power == 0.0)
-            {
-                // This is the constant.
-                kr0_2 += factor.factor().evaluate(Values());
-            }
-            else if (power == 1.0)
-            {
-                // This is the -kR0 term.
-                kr0 = factor.factor().evaluate(Values());
-            }
-            else if (power == 2.0)
-            {
-                // This is the R^2 term.
-                if (has_k)
-                {
-                    // We cannot have two R2 factors?
-                    errors.append(QObject::tr("Cannot have two R^2 factors!"));
-                    continue;
-                }
-
-                k = factor.factor().evaluate(Values());
-                has_k = true;
-            }
-            else
-            {
-                errors.append(QObject::tr("Power of R^2 must equal 2.0, 1.0 or 0.0, not %1")
-                                .arg(power));
-                continue;
-            }
-        }
-        else
-        {
-            errors.append(QObject::tr("Cannot have a factor that does not include R. %1")
-                        .arg(factor.symbol().toString()));
+            // Append the terms to the parameter string.
+            param_string.append(QString("  0.000000 %2 %3")
+                .arg(-epsilon, 10, 'f', 6).arg(rmin, 12, 'f', 6));
         }
     }
 
-    if (kr0_2 < 0)
-    {
-        errors.append(QObject::tr("How can K R0^2 be negative? %1").arg(kr0_2));
-    }
-
-    double r0 = std::sqrt( kr0_2 / k );
-
-    // kr0 should be equal to -2 k r0
-    if (std::abs(k*r0 + 0.5 * kr0) > 0.001)
-    {
-        errors.append(QObject::tr("How can the power of R be %1. It should be 2 x %2 x %3 = %4.")
-                        .arg(kr0).arg(k).arg(r0).arg(2*k*r0));
-    }
-
-    if (not errors.isEmpty())
-    {
-        throw SireError::incompatible_error(QObject::tr(
-                "Cannot construct a CHARMM bond parameter K ( %1 - R0 )^2 from the "
-                "expression %2, because\n%3")
-                    .arg(R.toString()).arg(func.toString()).arg(errors.join("\n")), CODELOC );
-    }
-
-    // Improper function.
-    if (num_atoms == 4)
-    {
-        // Convert out of plane angle to degrees.
-        r0 = qRadiansToDegrees(r0);
-
-        return QString("%1 %2 %3 %4")
-            .arg(bond_atoms).arg(k, 10, 'f', 3).arg(0, 10).arg(r0, 10, 'f', 4);
-    }
-
-    else
-    {
-        // Angle function.
-        // Convert equilibrium angle deviation to degrees.
-        if (num_atoms == 3)
-            r0 = qRadiansToDegrees(r0);
-
-        return QString("%1 %2 %3").arg(bond_atoms).arg(k, 10, 'f', 3).arg(r0, 10, 'f', 4);
-    }
-}
-
-/** Convert a Sire four-atom function to a set of CHARMM dihedral paramater strings. */
-QVector<QString> CharmmPSF::toFourAtomParameter(const QString &dihedral_atoms, const Expression &func)
-{
-    const auto phi = InternalPotential::symbols().dihedral().phi();
-
-    // This expression should be a sum of cos terms, plus constant terms.
-    QList<Expression> cos_terms;
-    double constant = 0.0;
-
-    QStringList errors;
-
-    if (func.base().isA<Sum>())
-    {
-        for (const auto child : func.base().asA<Sum>().children())
-        {
-            if (child.isConstant())
-            {
-                constant += func.factor() * child.evaluate(Values());
-            }
-            else if (child.base().isA<Cos>())
-            {
-                if (func.factor() == 1)
-                {
-                    cos_terms.append(child);
-                }
-                else
-                {
-                    cos_terms.append(func.factor() * child);
-                }
-            }
-            else
-            {
-                errors.append(QObject::tr("Cannot interpret the dihedral expression "
-                   "from '%1' as it should be a series of cosine terms involving %2.")
-                        .arg(func.toString()).arg(phi.toString()));
-            }
-        }
-    }
-    else
-    {
-        if (func.isConstant())
-        {
-            constant += func.evaluate(Values());
-        }
-        else if (func.base().isA<Cos>())
-        {
-            cos_terms.append(func);
-        }
-        else
-        {
-            errors.append( QObject::tr("Cannot interpret the dihedral expression "
-               "from '%1' as it should be a series of cosine terms involving %2.")
-                    .arg(func.toString()).arg(phi.toString()));
-        }
-    }
-
-    // Next extract all of the data from the cos terms.
-    QList<std::tuple<double,double,double> > terms;
-
-    double check_constant = 0;
-
-    for (const auto cos_term : cos_terms)
-    {
-        // Term should be of the form 'k cos( periodicity * phi - phase )'.
-        double k = cos_term.factor();
-        check_constant += k;
-
-        double periodicity = 0.0;
-        double phase = 0.0;
-
-        const auto factors = cos_term.base().asA<Cos>().argument().expand(phi);
-
-        bool ok = true;
-
-        for (const auto factor : factors)
-        {
-            if (not factor.power().isConstant())
-            {
-                errors.append(QObject::tr("Power of phi must be constant, not %1")
-                                .arg(factor.power().toString()));
-                ok = false;
-                continue;
-            }
-
-            if (not factor.factor().isConstant())
-            {
-                errors.append(QObject::tr("The value of periodicity must be "
-                                "constant. Here it is %1").arg(factor.factor().toString()));
-                ok = false;
-                continue;
-            }
-
-            double power = factor.power().evaluate(Values());
-
-            if (power == 0.0)
-            {
-                // This is the constant phase.
-                phase += factor.factor().evaluate(Values());
-            }
-            else if (power == 1.0)
-            {
-                // This is the periodicity * phi term
-                periodicity = factor.factor().evaluate(Values());
-            }
-            else
-            {
-                errors.append(QObject::tr("Power of phi must equal 1.0 or 0.0, not %1")
-                                    .arg(power));
-                ok = false;
-                continue;
-            }
-        }
-
-        if (ok)
-        {
-            terms.append(std::make_tuple(k, periodicity, phase));
-        }
-    }
-
-    // Now sum up the individual values of 'k'. These should equal the constant, which
-    // is the aggregate of the "k [ 1 + cos ]" terms.
-    if ( std::abs(constant - check_constant) > 0.001 )
-    {
-        errors.append(QObject::tr("The set of constants should sum up to the same total, "
-            "i.e. should equal %1. Instead they equal %2. This is weird.")
-                .arg(constant).arg(check_constant));
-    }
-
-    if (not errors.isEmpty())
-    {
-        throw SireError::incompatible_error(QObject::tr(
-            "Cannot extract a CHARMM dihedral parameter from '%1' as "
-            "the expression must be a series of terms of type "
-            "'k{ 1 + cos[ per %2 - phase ] }'. Errors include\n%3")
-                .arg(func.toString()).arg(phi.toString()).arg(errors.join("\n")),
-                    CODELOC);
-    }
-
-    // The vector of dihedral parameter strings.
-    QVector<QString> parameter_strings;
-
-    if (not terms.isEmpty())
-    {
-        // Append each parameter string to the vector, converting the phase
-        // shift to degrees.
-        for (const auto term : terms)
-        {
-            parameter_strings.append(QString("%1 %2 %3 %4")
-                .arg(dihedral_atoms)
-                .arg(std::get<0>(term), 10, 'f', 4)
-                .arg(std::get<1>(term), 3)
-                .arg(-qRadiansToDegrees(std::get<2>(term)), 10, 'f', 2));
-        }
-    }
-
-    return parameter_strings;
+    return param_string;
 }

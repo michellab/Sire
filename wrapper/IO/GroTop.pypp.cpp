@@ -57,7 +57,11 @@ namespace bp = boost::python;
 
 #include "grotop.h"
 
+#include <QDateTime>
+
 #include <QDir>
+
+#include <QElapsedTimer>
 
 #include <QFileInfo>
 
@@ -90,7 +94,7 @@ void register_GroTop_class(){
                 "angle"
                 , angle_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2"), bp::arg("func") )
-                , "" );
+                , "Return the angle potential data for the passed triple of atoms. This only returns\nthe most recently inserted parameter for these atoms. Use angles if you want\nto allow for multiple return values" );
         
         }
         { //::SireIO::GroTop::anglePotentials
@@ -113,7 +117,7 @@ void register_GroTop_class(){
                 "angles"
                 , angles_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2"), bp::arg("func") )
-                , "" );
+                , "Return the angle potential data for the passed triple of atoms. This returns\na list of all associated parameters" );
         
         }
         { //::SireIO::GroTop::atomType
@@ -148,7 +152,7 @@ void register_GroTop_class(){
                 "bond"
                 , bond_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("func") )
-                , "" );
+                , "Return the bond potential data for the passed pair of atoms. This only returns\nthe most recently inserted parameter for this pair. Use bonds if you want\nto allow for multiple return values" );
         
         }
         { //::SireIO::GroTop::bondPotentials
@@ -171,7 +175,7 @@ void register_GroTop_class(){
                 "bonds"
                 , bonds_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("func") )
-                , "" );
+                , "Return the bond potential data for the passed pair of atoms. This returns\na list of all associated parameters" );
         
         }
         { //::SireIO::GroTop::canFollow
@@ -241,7 +245,7 @@ void register_GroTop_class(){
                 "dihedral"
                 , dihedral_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2"), bp::arg("atm3"), bp::arg("func") )
-                , "" );
+                , "Return the dihedral potential data for the passed quad of atoms. This only returns\nthe most recently inserted parameter for these atoms. Use dihedrals if you want\nto allow for multiple return values" );
         
         }
         { //::SireIO::GroTop::dihedralPotentials
@@ -264,7 +268,7 @@ void register_GroTop_class(){
                 "dihedrals"
                 , dihedrals_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("atm2"), bp::arg("atm3"), bp::arg("func") )
-                , "" );
+                , "Return the dihedral potential data for the passed quad of atoms. This returns\na list of all associated parameters" );
         
         }
         { //::SireIO::GroTop::formatDescription
@@ -436,7 +440,7 @@ void register_GroTop_class(){
             GroTop_exposer.def( 
                 "postprocessedLines"
                 , postprocessedLines_function_value
-                , "" );
+                , "Public function used to return the list of post-processed lines" );
         
         }
         { //::SireIO::GroTop::toString

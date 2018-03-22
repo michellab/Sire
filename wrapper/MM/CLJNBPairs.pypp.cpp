@@ -7,6 +7,10 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/parallel.h"
+
+#include "SireMol/moleculeinfo.h"
+
 #include "SireStream/datastream.h"
 
 #include "cljnbpairs.h"
@@ -28,7 +32,7 @@ void register_CLJNBPairs_class(){
         CLJNBPairs_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireMM::CLJScaleFactor const & > >(( bp::arg("molview"), bp::arg("default_scale")=SireMM::CLJScaleFactor(1, 1) ), "Construct for the molecule viewed in molview") );
         CLJNBPairs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, bp::optional< SireMM::CLJScaleFactor const & > >(( bp::arg("molinfo"), bp::arg("default_scale")=SireMM::CLJScaleFactor(1, 1) ), "Construct, using default_scale for all of the atom-atom\ninteractions in the molecule molinfo") );
         CLJNBPairs_exposer.def( bp::init< SireMol::MoleculeInfo const &, bp::optional< SireMM::CLJScaleFactor const & > >(( bp::arg("molinfo"), bp::arg("default_scale")=SireMM::CLJScaleFactor(1, 1) ), "Construct, using default_scale for all of the atom-atom\ninteractions in the molecule molinfo") );
-        CLJNBPairs_exposer.def( bp::init< SireMol::Connectivity const &, SireMM::CLJScaleFactor const & >(( bp::arg("connectivity"), bp::arg("scale14") ), "Construct for the molecule viewed in molview") );
+        CLJNBPairs_exposer.def( bp::init< SireMol::Connectivity const &, SireMM::CLJScaleFactor const & >(( bp::arg("connectivity"), bp::arg("scale14") ), "Construct, automatically setting the bonded pairs to 0 (bond and angled atoms),\nnon-bonded pairs to 1, and 1-4 pairs to scale14") );
         CLJNBPairs_exposer.def( bp::init< SireMM::CLJNBPairs const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJNBPairs::excludedAtoms
         
@@ -38,7 +42,7 @@ void register_CLJNBPairs_class(){
             CLJNBPairs_exposer.def( 
                 "excludedAtoms"
                 , excludedAtoms_function_value
-                , "" );
+                , "Return the IDs of atoms that dont interact with any other atom in\nthe intramolecular non-bonded calculation (their scale factors to all\nother atoms is zero)" );
         
         }
         { //::SireMM::CLJNBPairs::excludedAtoms
@@ -61,7 +65,7 @@ void register_CLJNBPairs_class(){
             CLJNBPairs_exposer.def( 
                 "nExcludedAtoms"
                 , nExcludedAtoms_function_value
-                , "" );
+                , "Return the total number of atoms that are excluded from the internal\nnon-bonded calculation. These are atoms that do not interact with any\nother atoms (e.g. because their nbscl factors to all other atoms in\nthe molecule are zero)" );
         
         }
         { //::SireMM::CLJNBPairs::nExcludedAtoms

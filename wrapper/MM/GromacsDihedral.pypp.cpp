@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireUnits/units.h"
 
+#include "amberparams.h"
+
 #include "gromacsparams.h"
 
 #include "gromacsparams.h"
@@ -78,7 +80,7 @@ void register_GromacsDihedral_class(){
                 "construct"
                 , construct_function_value
                 , ( bp::arg("dihedral"), bp::arg("phi") )
-                , "" );
+                , "Construct from the passed dihedral, using phi as the symbol for the phi value" );
         
         }
         { //::SireMM::GromacsDihedral::constructImproper
@@ -90,7 +92,7 @@ void register_GromacsDihedral_class(){
                 "constructImproper"
                 , constructImproper_function_value
                 , ( bp::arg("dihedral"), bp::arg("phi") )
-                , "" );
+                , "Construct from the passed improper, using phi as the symbol for the phi value" );
         
         }
         { //::SireMM::GromacsDihedral::count
@@ -156,7 +158,7 @@ void register_GromacsDihedral_class(){
             GromacsDihedral_exposer.def( 
                 "isCosine"
                 , isCosine_function_value
-                , "" );
+                , "Return whether or not this is a cosine-series dihedral" );
         
         }
         { //::SireMM::GromacsDihedral::isImproperAngleTerm

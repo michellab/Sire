@@ -2,7 +2,6 @@
 #include <Python.h>
 
 #include "SireMM_registrars.h"
-
 #include "cljgrid.h"
 #include "cljatoms.h"
 #include "fouratomfunctions.h"
@@ -61,7 +60,6 @@
 
 void register_SireMM_objects()
 {
-
     ObjectRegistry::registerConverterFor< SireMM::CLJGrid >();
     ObjectRegistry::registerConverterFor< SireMM::CLJAtom >();
     ObjectRegistry::registerConverterFor< SireMM::CLJAtoms >();
@@ -188,6 +186,5 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::CLJComponent >();
     ObjectRegistry::registerConverterFor< SireMM::RestraintComponent >();
     ObjectRegistry::registerConverterFor< SireMM::CLJCalculator >();
-
 }
 

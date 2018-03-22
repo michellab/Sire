@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireUnits/units.h"
 
+#include "amberparams.h"
+
 #include "gromacsparams.h"
 
 #include "gromacsparams.h"
@@ -132,7 +134,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "isHarmonic"
                 , isHarmonic_function_value
-                , "" );
+                , "Return whether or not this is a harmonic bond" );
         
         }
         { //::SireMM::GromacsBond::isResolved

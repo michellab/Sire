@@ -108,7 +108,7 @@ void register_MMDetail_class(){
                 "guessFrom"
                 , guessFrom_function_value
                 , ( bp::arg("combrule"), bp::arg("elecstyle"), bp::arg("vdwstyle"), bp::arg("elec14"), bp::arg("vdw14"), bp::arg("bondstyle"), bp::arg("anglestyle"), bp::arg("dihedralstyle") )
-                , "" );
+                , "Function used to guess the forcefield from the passed set of conditions.\nThis returns a null MMDetail object if we cant guess" );
         
         }
         { //::SireMM::MMDetail::isAmberStyle
@@ -119,7 +119,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "isAmberStyle"
                 , isAmberStyle_function_value
-                , "" );
+                , "Return whether or not this is an Amber-style forcefield. An Amber-style\nforcefield is one that uses only coulombs law between point charges for electrostatics,\nLJ with arithmetic combining rules for vdw, harmonic bonds and angles and a\nset of cosine functions for dihedrals" );
         
         }
         { //::SireMM::MMDetail::isCompatibleWith
@@ -131,7 +131,7 @@ void register_MMDetail_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("other") )
-                , "" );
+                , "Return whether or not this forcefield is compatible with other" );
         
         }
         MMDetail_exposer.def( bp::self != bp::self );
@@ -190,7 +190,7 @@ void register_MMDetail_class(){
             MMDetail_exposer.def( 
                 "usesBuckinghamTerm"
                 , usesBuckinghamTerm_function_value
-                , "" );
+                , "Return whether or not this forcefield uses the Buckingham vdw model" );
         
         }
         { //::SireMM::MMDetail::usesCosineDihedrals

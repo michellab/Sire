@@ -57,7 +57,11 @@ namespace bp = boost::python;
 
 #include "grotop.h"
 
+#include <QDateTime>
+
 #include <QDir>
+
+#include <QElapsedTimer>
 
 #include <QFileInfo>
 

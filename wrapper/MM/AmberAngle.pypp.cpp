@@ -55,6 +55,8 @@ namespace bp = boost::python;
 
 #include "amberparams.h"
 
+#include <QDebug>
+
 #include "amberparams.h"
 
 SireMM::AmberAngle __copy__(const SireMM::AmberAngle &other){ return SireMM::AmberAngle(other); }

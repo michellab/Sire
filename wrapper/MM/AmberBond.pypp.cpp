@@ -55,6 +55,8 @@ namespace bp = boost::python;
 
 #include "amberparams.h"
 
+#include <QDebug>
+
 #include "amberparams.h"
 
 SireMM::AmberBond __copy__(const SireMM::AmberBond &other){ return SireMM::AmberBond(other); }

@@ -57,7 +57,11 @@ namespace bp = boost::python;
 
 #include "grotop.h"
 
+#include <QDateTime>
+
 #include <QDir>
+
+#include <QElapsedTimer>
 
 #include <QFileInfo>
 
@@ -97,7 +101,7 @@ void register_GroAtom_class(){
             GroAtom_exposer.def( 
                 "bondType"
                 , bondType_function_value
-                , "" );
+                , "Return the bond type of this atom. This is normally the same as the atom type" );
         
         }
         { //::SireIO::GroAtom::charge
@@ -212,7 +216,7 @@ void register_GroAtom_class(){
                 "setAtomType"
                 , setAtomType_function_value
                 , ( bp::arg("atomtype") )
-                , "Set the atom type of this atom" );
+                , "Set the atom type and bond type of this atom. To set\nthe bond type separately, you need to set it after calling\nthis function" );
         
         }
         { //::SireIO::GroAtom::setBondType
@@ -224,7 +228,7 @@ void register_GroAtom_class(){
                 "setBondType"
                 , setBondType_function_value
                 , ( bp::arg("bondtype") )
-                , "" );
+                , "Set the bond type of this atom" );
         
         }
         { //::SireIO::GroAtom::setCharge

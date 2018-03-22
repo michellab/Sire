@@ -55,6 +55,8 @@ namespace bp = boost::python;
 
 #include "amberparams.h"
 
+#include <QDebug>
+
 #include "amberparams.h"
 
 SireMM::AmberParams __copy__(const SireMM::AmberParams &other){ return SireMM::AmberParams(other); }
@@ -732,7 +734,7 @@ void register_AmberParams_class(){
             AmberParams_exposer.def( 
                 "validateAndFix"
                 , validateAndFix_function_value
-                , "" );
+                , "Validate this set of parameters. In addition to checking that the\nrequirements are met, this also does any work needed to fix problems,\nif they are fixable." );
         
         }
         AmberParams_exposer.staticmethod( "typeName" );

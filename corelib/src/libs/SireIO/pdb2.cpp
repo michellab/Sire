@@ -236,7 +236,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
         occupancy = tmp_dbl;
 
         // Check occupancy is valid.
-        if ((occupancy < 1) or
+        if ((occupancy < 0) or
             (occupancy > 1))
         {
             errors.append(QObject::tr("The occupancy (%1) was out of range! "
@@ -244,7 +244,6 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
                 .arg(occupancy));
 
             occupancy = 1;
-            return;
         }
     }
 
@@ -269,7 +268,6 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
                 .arg(temperature));
 
             temperature = 0;
-            return;
         }
     }
 
@@ -335,8 +333,8 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
         res_num  = atom.residue().number().value();
 
         // Optional insertion code property.
-        if (atom.residue().hasProperty("insert-code"))
-            insert_code = atom.residue().property<QString>(map["insert-code"])[0];
+        if (atom.residue().hasProperty("insert_code"))
+            insert_code = atom.residue().property<QString>(map["insert_code"])[0];
     }
 
     // The atom is within a chain.
@@ -354,9 +352,9 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
     }
 
     // Extract the temperature factor.
-    if (atom.hasProperty(map["beta-factor"]))
+    if (atom.hasProperty(map["beta_factor"]))
     {
-        temperature = atom.property<double>(map["beta-factor"]);
+        temperature = atom.property<double>(map["beta_factor"]);
     }
 
     // Extract the element name.
@@ -371,17 +369,17 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
     }
 
     // Extract the atomic charge.
-    if (atom.hasProperty(map["formal-charge"]))
+    if (atom.hasProperty(map["formal_charge"]))
     {
         // TODO: This doesn't seem to be working in all cases.
-        charge = atom.property<SireUnits::Dimension::Charge>(map["formal-charge"]).value();
+        charge = atom.property<SireUnits::Dimension::Charge>(map["formal_charge"]).value();
         charge /= SireUnits::mod_electron;
     }
 
     // Determine whether this is a HETATM.
-    if (atom.hasProperty(map["is-het"]))
+    if (atom.hasProperty(map["is_het"]))
     {
-        if (atom.property<QString>(map["is-het"]) == "True")
+        if (atom.property<QString>(map["is_het"]) == "True")
             is_het = true;
     }
 }
@@ -1540,7 +1538,12 @@ void PDB2::parseLines(const PropertyMap &map)
                  */
                 QHash<QString, QPair<QString, QChar>> res_hash;
 
-                ok = true;
+                // A multimap between duplicate residues and the atoms in those residues.
+                QMultiMap<int, int> duplicates;
+
+                // Initalise the maximum residue number.
+                int max_res_num = -1000000;
+
                 for (int i=0; i<nats; ++i)
                 {
                     QString res_name = mol_atoms[i].getResName();
@@ -1551,6 +1554,10 @@ void PDB2::parseLines(const PropertyMap &map)
                     // Create a string out of the residue number and insertion code.
                     QString num(QString("%1%2").arg(res_num).arg(icode));
 
+                    // Check if this residue number exceeds the current maximum.
+                    if (res_num > max_res_num)
+                        max_res_num = res_num;
+
                     // We've already seen this residue number.
                     if (res_hash.contains(num))
                     {
@@ -1559,8 +1566,8 @@ void PDB2::parseLines(const PropertyMap &map)
                         if ((res_name != res_hash[num].first) and
                             (chain_id == res_hash[num].second))
                         {
-                            ok = false;
-                            break;
+                            // Insert the atom into the duplicate resiude multi-map.
+                            duplicates.insert(res_num, i);
                         }
 
                         // Add the residue to the hash.
@@ -1580,46 +1587,44 @@ void PDB2::parseLines(const PropertyMap &map)
                 }
 
                 // Re-number all of the residues.
-                if (not ok)
+                if (not duplicates.isEmpty())
                 {
+                    // The incorrect residues are re-numbered starting at a value of one
+                    // above the maximum residue number found in the PDB file. This means
+                    // that we preserve the numbers of the correct residues. However, the
+                    // residue numbers in the file will now be out of sequence.
+
                     parse_warnings.append(QObject::tr("Warning: There are duplicate residue "
-                        "numbers in the PDB file. Residue numbers have been replaced "
-                        "by their index."));
+                        "numbers in the PDB file. Residue numbers have been updated."));
 
-                    // The residue counter.
-                    int num_res = 1;
+                    // The residue counter. Start at one above the current maximum.
+                    int num_res = max_res_num + 1;
 
-                    // The current residue name and number.
-                    QString curr_nam = mol_atoms[0].getResName();
-                    int     curr_num = mol_atoms[0].getResNum();
-
-                    for (int i=0; i<nats; ++i)
+                    // Loop over all duplicated residue numbers in the molecule.
+                    for (const auto &res_num : duplicates.uniqueKeys())
                     {
-                        if ((mol_atoms[i].getResNum()  != curr_num) or
-                            (mol_atoms[i].getResName() != curr_nam))
+                        // Loop over all of the atoms in the residue.
+                        for (const auto &atom_num : duplicates.values(res_num))
                         {
-                            // Increment the residue count and store
-                            // the new number.
-                            num_res++;
-                            curr_num = mol_atoms[i].getResNum();
-                            curr_nam = mol_atoms[i].getResName();
+                            // Update the residue number.
+                            mol_atoms[atom_num].setResNum(num_res);
                         }
 
-                        // Update the residue number.
-                        mol_atoms[i].setResNum(num_res);
+                        // Increment the residue number.
+                        num_res++;
                     }
                 }
 
                 // Now we need to loop through all of the atoms and set a residue "index".
                 // This will help with breaking the molecule up into its constituent parts.
 
-                // A string identifying the previous residue.
+                // A string identifying the current residue.
                 // name + number + insert_code + chain.
-                QString prev_res(QString("%1%2%3%4")
-                                 .arg(mol_atoms[0].getResName())
-                                 .arg(mol_atoms[0].getResNum())
-                                 .arg(mol_atoms[0].getInsertCode())
-                                 .arg(mol_atoms[0].getChainID()));
+                QString res_string(QString("%1%2%3%4")
+                    .arg(mol_atoms[0].getResName())
+                    .arg(mol_atoms[0].getResNum())
+                    .arg(mol_atoms[0].getInsertCode())
+                    .arg(mol_atoms[0].getChainID()));
 
                 // The current residue index.
                 int res_idx = 0;
@@ -1627,25 +1632,41 @@ void PDB2::parseLines(const PropertyMap &map)
                 // Set the index for the residue of the first atom.
                 mol_atoms[0].setResIdx(0);
 
+                // A has between the residue string and its index.
+                QHash<QString, int> res_indices;
+
+                // Add the first residue to the hash.
+                res_indices[res_string] = res_idx;
+
                 // Loop through the rest of the residues.
                 for (int i=1; i<nats; ++i)
                 {
                     // A string identifying the current residue.
-                    QString curr_res(QString("%1%2%3%4")
-                                    .arg(mol_atoms[i].getResName())
-                                    .arg(mol_atoms[i].getResNum())
-                                    .arg(mol_atoms[i].getInsertCode())
-                                    .arg(mol_atoms[i].getChainID()));
+                    QString res_string(QString("%1%2%3%4")
+                        .arg(mol_atoms[i].getResName())
+                        .arg(mol_atoms[i].getResNum())
+                        .arg(mol_atoms[i].getInsertCode())
+                        .arg(mol_atoms[i].getChainID()));
 
-                    // The residue is different.
-                    if (curr_res != prev_res)
+                    // This residue has already been added.
+                    if (res_indices.contains(res_string))
                     {
-                        res_idx++;
-                        prev_res = curr_res;
+                        // Set the residue index to the hash value.
+                        mol_atoms[i].setResIdx(res_indices[res_string]);
                     }
 
-                    // Set the residue index.
-                    mol_atoms[i].setResIdx(res_idx);
+                    // This is a new residue.
+                    else
+                    {
+                        // Increment the residue index.
+                        res_idx++;
+
+                        // Set the residue index.
+                        mol_atoms[i].setResIdx(res_idx);
+
+                        // Add the new residue to the hash.
+                        res_indices[res_string] = res_idx;
+                    }
                 }
 
                 // Now check whether the temperature factors are sane.
@@ -2122,12 +2143,12 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
     }
 
     return mol.setProperty(map["coordinates"], coords)
-              .setProperty(map["formal-charge"], charges)
+              .setProperty(map["formal_charge"], charges)
               .setProperty(map["element"], elements)
               .setProperty(map["occupancy"], occupancies)
-              .setProperty(map["beta-factor"], temperatures)
-              .setProperty(map["is-het"], is_het_atom)
-              .setProperty(map["insert-code"], insert_codes)
+              .setProperty(map["beta_factor"], temperatures)
+              .setProperty(map["is_het"], is_het_atom)
+              .setProperty(map["insert_code"], insert_codes)
               .commit();
 }
 
@@ -2415,17 +2436,17 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
     // Charges.
     if (not sire_mol.hasProperty(map["coordinates"]))
     {
-        edit_mol.setProperty(map["formal-charge"], charges);
+        edit_mol.setProperty(map["formal_charge"], charges);
     }
     else
     {
-        if (not sire_mol.hasProperty(map["PDB.formal-charge"]))
+        if (not sire_mol.hasProperty(map["PDB.formal_charge"]))
         {
-            edit_mol.setProperty(map["PDB.formal-charge"], charges);
+            edit_mol.setProperty(map["PDB.formal_charge"], charges);
         }
         else
         {
-            edit_mol.setProperty(map["PDB.formal-charge[2]"], charges);
+            edit_mol.setProperty(map["PDB.formal_charge[2]"], charges);
         }
     }
 
@@ -2464,53 +2485,53 @@ SireMol::Molecule PDB2::updateMolecule(const SireMol::Molecule &sire_mol,
     }
 
     // Temperature factors.
-    if (not sire_mol.hasProperty(map["beta-factor"]))
+    if (not sire_mol.hasProperty(map["beta_factor"]))
     {
-        edit_mol.setProperty(map["beta-factor"], temperatures);
+        edit_mol.setProperty(map["beta_factor"], temperatures);
     }
     else
     {
-        if (not sire_mol.hasProperty(map["PDB.beta-factor"]))
+        if (not sire_mol.hasProperty(map["PDB.beta_factor"]))
         {
-            edit_mol.setProperty(map["PDB.beta-factor"], temperatures);
+            edit_mol.setProperty(map["PDB.beta_factor"], temperatures);
         }
         else
         {
-            edit_mol.setProperty(map["PDB.beta-factor[2]"], temperatures);
+            edit_mol.setProperty(map["PDB.beta_factor[2]"], temperatures);
         }
     }
 
     // Hetero-atoms.
-    if (not sire_mol.hasProperty(map["is-het"]))
+    if (not sire_mol.hasProperty(map["is_het"]))
     {
-        edit_mol.setProperty(map["is-het"], is_het_atom);
+        edit_mol.setProperty(map["is_het"], is_het_atom);
     }
     else
     {
-        if (not sire_mol.hasProperty(map["PDB.is-het"]))
+        if (not sire_mol.hasProperty(map["PDB.is_het"]))
         {
-            edit_mol.setProperty(map["PDB.is-het"], is_het_atom);
+            edit_mol.setProperty(map["PDB.is_het"], is_het_atom);
         }
         else
         {
-            edit_mol.setProperty(map["PDB.is-het[2]"], is_het_atom);
+            edit_mol.setProperty(map["PDB.is_het[2]"], is_het_atom);
         }
     }
 
     // Residue insert codes.
-    if (not sire_mol.hasProperty(map["insert-code"]))
+    if (not sire_mol.hasProperty(map["insert_code"]))
     {
-        edit_mol.setProperty(map["insert-code"], insert_codes);
+        edit_mol.setProperty(map["insert_code"], insert_codes);
     }
     else
     {
-        if (not sire_mol.hasProperty(map["PDB.insert-code"]))
+        if (not sire_mol.hasProperty(map["PDB.insert_code"]))
         {
-            edit_mol.setProperty(map["PDB.insert-code"], insert_codes);
+            edit_mol.setProperty(map["PDB.insert_code"], insert_codes);
         }
         else
         {
-            edit_mol.setProperty(map["PDB.insert-code[2]"], insert_codes);
+            edit_mol.setProperty(map["PDB.insert_code[2]"], insert_codes);
         }
     }
 

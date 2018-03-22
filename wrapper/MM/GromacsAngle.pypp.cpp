@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireUnits/units.h"
 
+#include "amberparams.h"
+
 #include "gromacsparams.h"
 
 #include "gromacsparams.h"
@@ -143,7 +145,7 @@ void register_GromacsAngle_class(){
             GromacsAngle_exposer.def( 
                 "isHarmonic"
                 , isHarmonic_function_value
-                , "" );
+                , "Return whether or not this is a harmonic angle" );
         
         }
         { //::SireMM::GromacsAngle::isResolved
