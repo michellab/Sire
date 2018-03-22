@@ -133,6 +133,17 @@ void register_Median_class(){
         
         }
         Median_exposer.def( bp::self == bp::self );
+        { //::SireMaths::Median::toString
+        
+            typedef ::QString ( ::SireMaths::Median::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireMaths::Median::toString );
+            
+            Median_exposer.def( 
+                "toString"
+                , toString_function_value
+                , "" );
+        
+        }
         { //::SireMaths::Median::typeName
         
             typedef char const * ( *typeName_function_type )(  );

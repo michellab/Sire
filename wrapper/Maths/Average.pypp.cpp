@@ -90,6 +90,17 @@ void register_Average_class(){
         
         }
         Average_exposer.def( bp::self == bp::self );
+        { //::SireMaths::Average::toString
+        
+            typedef ::QString ( ::SireMaths::Average::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireMaths::Average::toString );
+            
+            Average_exposer.def( 
+                "toString"
+                , toString_function_value
+                , "" );
+        
+        }
         { //::SireMaths::Average::typeName
         
             typedef char const * ( *typeName_function_type )(  );

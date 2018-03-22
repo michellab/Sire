@@ -15,6 +15,7 @@ def fix_MolViewProperty(c):
 
 def fix_AtomLJs(c):
     fix_MolViewProperty(c)
+    c.add_declaration_code("#include \"SireMol/moleculeview.h\"")
 
 def fix_AtomFunctions(c):
     c.add_declaration_code("#include \"SireMol/moleculedata.h\"")

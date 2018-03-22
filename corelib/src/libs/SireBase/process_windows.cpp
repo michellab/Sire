@@ -54,6 +54,24 @@ Process Process::run(const QString &command, const QStringList &arguments)
     return Process();
 }
 
+Process Process::run(const QString &command, const QString &stdout_file,
+                     const QString &stderr_file)
+{
+    return Process();
+}
+
+Process Process::run(const QString &command, const QString& arg,
+                     const QString &stdout_file, const QString &stderr_file)
+{
+    return Process();
+}
+
+Process Process::run(const QString &command, const QStringList& arguments,
+                     const QString &stdout_file, const QString &stderr_file)
+{
+    return Process();
+}
+
 void Process::killAll()
 {
     return;

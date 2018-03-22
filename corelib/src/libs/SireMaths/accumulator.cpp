@@ -336,6 +336,11 @@ void Average::clear()
     Accumulator::clear();
 }
 
+QString Average::toString() const
+{
+    return QObject::tr("Average( %s )").arg(this->average());
+}
+
 /** Accumulate the passed value onto the average */
 void Average::accumulate(double value)
 {
@@ -476,6 +481,12 @@ void AverageAndStddev::clear()
 {
     avgval2 = 0;
     Average::clear();
+}
+
+QString AverageAndStddev::toString() const
+{
+    return QObject::tr("AverageAndStddev( %s : %s )")
+                .arg(this->average()).arg(this->stddev());
 }
 
 /** Accumulate the average and standard deviation */
@@ -665,6 +676,11 @@ void ExpAverage::clear()
     Accumulator::clear();
 }
 
+QString ExpAverage::toString() const
+{
+    return QObject::tr("ExpAverage( %s )").arg(this->average());
+}
+
 /** Accumulate the passed value onto the average */
 void ExpAverage::accumulate(double value)
 {
@@ -796,6 +812,11 @@ void Median::clear()
     minval = 0;
     maxval = 0;
     Accumulator::clear();
+}
+
+QString Median::toString() const
+{
+    return QObject::tr("Median( %s )").arg(this->median());
 }
 
 /** Accumulate the passed value onto the average */
@@ -943,6 +964,12 @@ void RecordValues::clear()
 {
     vals.clear();
     Accumulator::clear();
+}
+
+QString RecordValues::toString() const
+{
+    return QObject::tr("AverageAndStddev( %s : %s )")
+                .arg(this->mean()).arg(this->stddev());
 }
 
 /** Accumulate the passed value onto the average */
