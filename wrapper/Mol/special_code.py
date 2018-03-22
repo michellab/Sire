@@ -265,6 +265,7 @@ def fix_Mover(c):
 
 def fix_MolViewProperty(c):
     c.add_declaration_code( "#include \"SireMaths/vector.h\"" )
+    c.add_declaration_code( "#include \"SireMol/moleculeview.h\"" )
     c.decls("set").call_policies = call_policies.return_self()
 
 def fix_AtomCoords(c):
@@ -441,7 +442,8 @@ implicitly_convertible = [ ("SireMol::AtomID", "SireMol::AtomIdentifier"),
                            ("SireMol::MGID", "SireMol::MGIdentifier"),
                            ("SireMol::MoleculeView", "SireMol::MoleculeData"),
                            ("SireMol::MoleculeView", "SireMol::PartialMolecule"),
-                           ("SireMol::MoleculeInfoData", "SireMol::MoleculeInfo") ]
+                           ("SireMol::MoleculeInfoData", "SireMol::MoleculeInfo"),
+                           ("SireMol::MoleculeInfo", "SireMol::MoleculeInfoData") ]
 
 def fixMB(mb):
     mb.add_declaration_code("#include \"SireMol/moleculedata.h\"")

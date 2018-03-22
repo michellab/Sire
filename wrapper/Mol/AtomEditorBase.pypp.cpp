@@ -49,43 +49,43 @@ namespace bp = boost::python;
 
 #include "atomeditor.h"
 
+#include "SireStream/shareddatastream.h"
+
+#include "atomforces.h"
+
+#include "SireMaths/align.h"
+
+#include "atomelements.h"
+
 #include "atomljs.h"
 
 #include "atombeads.h"
 
-#include "atommasses.h"
-
-#include "atomcharges.h"
-
-#include "atompolarisabilities.h"
-
-#include "atomradii.h"
-
-#include "SireBase/quickcopy.hpp"
-
 #include "SireVol/space.h"
-
-#include "atomproperty.hpp"
-
-#include "SireStream/shareddatastream.h"
-
-#include "atomcoords.h"
-
-#include "SireMaths/align.h"
-
-#include "SireError/errors.h"
-
-#include "atomenergies.h"
-
-#include "SireMaths/vector.h"
-
-#include "atomelements.h"
-
-#include "atomforces.h"
 
 #include "atomvelocities.h"
 
 #include "SireStream/datastream.h"
+
+#include "SireError/errors.h"
+
+#include "atomcoords.h"
+
+#include "atompolarisabilities.h"
+
+#include "atommasses.h"
+
+#include "SireBase/quickcopy.hpp"
+
+#include "SireMaths/vector.h"
+
+#include "atomcharges.h"
+
+#include "atomradii.h"
+
+#include "atomenergies.h"
+
+#include "atomproperty.hpp"
 
 SireMol::AtomEditorBase& set_Metadata_SireMM_AtomLJs_function1(
                                   SireMol::AtomEditorBase &molview,

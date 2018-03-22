@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/vector.h"
 
+#include "SireMol/moleculeview.h"
+
 SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 3, 0, 0, 0, 0, 0> > __copy__(const SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 3, 0, 0, 0, 0, 0> > &other){ return SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 3, 0, 0, 0, 0, 0> >(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -27,6 +29,10 @@ void register_AtomPolarisabilities_class(){
         typedef bp::class_< SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomPolarisabilities_exposer_t;
         AtomPolarisabilities_exposer_t AtomPolarisabilities_exposer = AtomPolarisabilities_exposer_t( "AtomPolarisabilities", "", bp::init< >("") );
         bp::scope AtomPolarisabilities_scope( AtomPolarisabilities_exposer );
+        AtomPolarisabilities_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "") );
+        AtomPolarisabilities_exposer.def( bp::init< SireMol::MoleculeInfo const &, SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomPolarisabilities_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "") );
+        AtomPolarisabilities_exposer.def( bp::init< SireMol::MoleculeView const &, SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > const & >(( bp::arg("molview"), bp::arg("default_value") ), "") );
         AtomPolarisabilities_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
         AtomPolarisabilities_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
         AtomPolarisabilities_exposer.def( bp::init< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > const & >(( bp::arg("value") ), "") );

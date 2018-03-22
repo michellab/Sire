@@ -1000,6 +1000,8 @@ BOOST_PYTHON_MODULE(_Mol){
 
     bp::implicitly_convertible< SireMol::MoleculeInfoData, SireMol::MoleculeInfo >();
 
+    bp::implicitly_convertible< SireMol::MoleculeInfo, SireMol::MoleculeInfoData >();
+
     register_free_functions();
 }
 

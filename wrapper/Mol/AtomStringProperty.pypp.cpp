@@ -35,6 +35,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/vector.h"
 
+#include "SireMol/moleculeview.h"
+
 SireMol::AtomProperty<QString> __copy__(const SireMol::AtomProperty<QString> &other){ return SireMol::AtomProperty<QString>(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -49,6 +51,10 @@ void register_AtomStringProperty_class(){
         typedef bp::class_< SireMol::AtomProperty< QString >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomStringProperty_exposer_t;
         AtomStringProperty_exposer_t AtomStringProperty_exposer = AtomStringProperty_exposer_t( "AtomStringProperty", "", bp::init< >("") );
         bp::scope AtomStringProperty_scope( AtomStringProperty_exposer );
+        AtomStringProperty_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "") );
+        AtomStringProperty_exposer.def( bp::init< SireMol::MoleculeInfo const &, QString const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomStringProperty_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "") );
+        AtomStringProperty_exposer.def( bp::init< SireMol::MoleculeView const &, QString const & >(( bp::arg("molview"), bp::arg("default_value") ), "") );
         AtomStringProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
         AtomStringProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const &, QString const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
         AtomStringProperty_exposer.def( bp::init< QString const & >(( bp::arg("value") ), "") );
