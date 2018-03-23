@@ -1011,8 +1011,6 @@ def mergeSystems(protein_system, water_system, ligand_mol):
             identity_points = fixed_points
             print(identity_points) 
 
-        Sire.Stream.save(mobile_free_water_group, "mobilegroup.s3")
-
         print("\nIdentifying the swap-water cluster...")
         swap_water_group = MoleculeGroup("swap water")
         mobile_free_water_group = IdentityConstraint.constrain( mobile_free_water_group, identity_points )
