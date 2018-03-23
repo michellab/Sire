@@ -1011,15 +1011,19 @@ def mergeSystems(protein_system, water_system, ligand_mol):
             identity_points = fixed_points
             print(identity_points) 
 
+        Sire.Stream.save(mobile_free_water_group, "mobilegroup.s3")
+
         print("\nIdentifying the swap-water cluster...")
         swap_water_group = MoleculeGroup("swap water")
         mobile_free_water_group = IdentityConstraint.constrain( mobile_free_water_group, identity_points )
 
         # Rename the residues of the swap solvent so that they are easy
-        # to find in the output PDBs
+        # to find in the output PDBs. Also remove them from the group as they
+        # are moved to the swap water group
         for i in range(0,len(identity_points)):
-            swap_water_mol = mobile_free_water_group.moleculeAt(i)[0].molecule()
-            mobile_free_water_group.remove(swap_water_mol)
+            # always grab the first molecule as the swap water molcules are being removed
+            swap_water_mol = mobile_free_water_group.moleculeAt(0)
+            mobile_free_water_group.remove(swap_water_mol.number())
 
             for j in range(0,swap_water_mol.nResidues()):
                 swap_water_mol = swap_water_mol.residue( ResIdx(j) ).edit() \
@@ -1029,7 +1033,10 @@ def mergeSystems(protein_system, water_system, ligand_mol):
             swap_water_group.add(swap_water_mol)
 
         print("found %d molecules that are now part of the swap water cluster" % swap_water_group.nMolecules())
-        PDB().write(swap_water_group.molecules(), "swapcluster00.pdb")
+        tmp = MoleculeGroup("tmp")
+        tmp.add(ligand_mol)
+        tmp.add(swap_water_group)
+        PDB().write(tmp, "swapcluster00.pdb")
 
         # now equilibrate the swap water cluster, if requested
         if n_equil_swap.val:
@@ -1067,7 +1074,8 @@ def mergeSystems(protein_system, water_system, ligand_mol):
 
             swap_water_group = equil_system[ swap_water_group.name() ]
 
-            PDB().write(swap_water_group, "swapcluster01.pdb")
+            tmp.update(swap_water_group)
+            PDB().write(tmp, "swapcluster01.pdb")
 
             print("Complete. Equilibrated water molecules in file 'swapcluster01.pdb'")
 
