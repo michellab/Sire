@@ -444,7 +444,7 @@ class NotebookHelper(object):
         DDG_list : list of strings
             output from run__free_energy_analysis, preformatted free energy string
         """
-        if self._free_energy_file is None:
+        if self._free_energy_file is None or self._free_energy_file is '':
             fh = sys.stdout
         else:
             fname = os.path.join(self._outputdir,self._free_energy_file)
