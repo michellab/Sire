@@ -8,8 +8,8 @@
 ################################
 
 # project version
-set (SIRE_VERSION_MAJOR "2017")
-set (SIRE_VERSION_MINOR "3")
+set (SIRE_VERSION_MAJOR "2018")
+set (SIRE_VERSION_MINOR "1")
 set (SIRE_VERSION_PATCH "0")
 
 set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
