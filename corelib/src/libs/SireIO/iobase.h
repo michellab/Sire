@@ -224,7 +224,7 @@ protected:
 
     @author Christopher Woods
 */
-class SIREMOVE_EXPORT NullIO : public SireBase::ConcreteProperty<NullIO,IOBase>
+class SIREIO_EXPORT NullIO : public SireBase::ConcreteProperty<NullIO,IOBase>
 {
 
 friend QDataStream& ::operator<<(QDataStream&, const NullIO&);
