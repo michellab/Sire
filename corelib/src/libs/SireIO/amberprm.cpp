@@ -849,6 +849,14 @@ double AmberPrm::processAllFlags()
         int_data.insert("ATOMS_PER_MOLECULE", atoms_per_mol);
     }
 
+    //some older prm7 files don't provide any information for ATOMIC_NUMBER. We need
+    //to add dummy information here
+    if (this->intData("ATOMIC_NUMBER").count() == 0)
+    {
+        auto atomic_number = QVector<qint64>(nAtoms(), 0);
+        int_data.insert("ATOMIC_NUMBER", atomic_number);
+    }
+
     //build everything that can be derived from this information
     this->rebuildAfterReload();
 
