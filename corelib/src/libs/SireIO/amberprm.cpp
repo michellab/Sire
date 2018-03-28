@@ -849,6 +849,14 @@ double AmberPrm::processAllFlags()
         int_data.insert("ATOMS_PER_MOLECULE", atoms_per_mol);
     }
 
+    //some older prm7 files don't provide any information for ATOMIC_NUMBER. We need
+    //to add dummy information here
+    if (this->intData("ATOMIC_NUMBER").count() == 0)
+    {
+        auto atomic_number = QVector<qint64>(0, nAtoms());
+        int_data.insert("ATOMIC_NUMBER", atomic_number);
+    }
+
     //build everything that can be derived from this information
     this->rebuildAfterReload();
 
@@ -3508,12 +3516,8 @@ void AmberPrm::assertSane() const
     live_test( [&](){ SireBase::assert_equal(this->floatData("CHARGE").count(),
                                              natoms, CODELOC);}, errors );
 
-    //it is allowable for a prm7 file to not contain any atomic number information
-    if (this->intData("ATOMIC_NUMBER").count() != 0)
-    {
-        live_test( [&](){ SireBase::assert_equal(this->intData("ATOMIC_NUMBER").count(),
-                                                 natoms, CODELOC);}, errors );
-    }
+    live_test( [&](){ SireBase::assert_equal(this->intData("ATOMIC_NUMBER").count(),
+                                             natoms, CODELOC);}, errors );
 
     live_test( [&](){ SireBase::assert_equal(this->floatData("MASS").count(),
                                              natoms, CODELOC);}, errors );
