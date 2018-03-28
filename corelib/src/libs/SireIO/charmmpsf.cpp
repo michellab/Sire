@@ -2121,8 +2121,11 @@ void CharmmPSF::parseLines(const PropertyMap &map)
 
         @param has_box_params
             Whether the parameters contained box record information.
+
+        @returns
+            Whether the parameters are in CHARMM format.
  */
-void CharmmPSF::parseParameters(
+bool CharmmPSF::parseParameters(
     const QVector<QString> &parameter_lines,
     QMultiHash<QString, CharmmParam> &bond_params,
     QMultiHash<QString, CharmmParam> &angle_params,
@@ -2134,17 +2137,8 @@ void CharmmPSF::parseParameters(
     /* CHARMM parameter files are split in sections for different record types,
        i.e. bonds, angles, etc., separated by blank lines.
 
-       The specifics of the formatting is dependent on the type of CHARMM
-       forcefiled. Currently, we support the following types:
-
-       1) As in CHARMM 22:
-            - Record sections start with an upper-case record type identifier,
-              e.g. BONDS.
-
-       2) As in CHARMM 19:
-            - Record sections have no starting identifier, but each record
-              line in a section begins with a lower-case record indentifier,
-              e.g. bond
+       We can support parameter files in both CHARMM and X-PLOR format, but
+       don't support mixed format files.
 
        We assume that parameter files are formatted correctly, i.e. there
        is no overlap between record sections, and all sections must be
@@ -2157,6 +2151,10 @@ void CharmmPSF::parseParameters(
 
     QStringList errors;
 
+    // Whether these are CHARMM or X-PLOR format parameters.
+    bool is_charmm = false;
+    bool is_xplor = false;
+
     for (int i=0; i<parameter_lines.count(); ++i)
     {
         // Extract the first word in the line.
@@ -2166,6 +2164,9 @@ void CharmmPSF::parseParameters(
         // Bond parameters.
         if (start == "BONDS")
         {
+            // Flag that these are CHARMM format parameters.
+            is_charmm = true;
+
             bool is_blank_line = false;
 
             // Advance to the next line.
@@ -2195,6 +2196,9 @@ void CharmmPSF::parseParameters(
         }
         else if ((start == "bond") or (start == "BOND"))
         {
+            // Flag that these are X-PLOR format parameters.
+            is_xplor = true;
+
             data.removeFirst();
             CharmmParam param(data.join(" "), 0, errors);
             bond_params.insert(generateKey(param.getAtoms(), 0), param);
@@ -2203,6 +2207,9 @@ void CharmmPSF::parseParameters(
         // Angle parameters.
         else if (start == "ANGLES")
         {
+            // Flag that these are CHARMM format parameters.
+            is_charmm = true;
+
             bool is_blank_line = false;
 
             // Advance to the next line.
@@ -2232,6 +2239,9 @@ void CharmmPSF::parseParameters(
         }
         else if ((start == "angle") or (start == "ANGLE"))
         {
+            // Flag that these are X-PLOR format parameters.
+            is_xplor = true;
+
             data.removeFirst();
             CharmmParam param(data.join(" "), 1, errors);
             angle_params.insert(generateKey(param.getAtoms(), 1), param);
@@ -2240,6 +2250,9 @@ void CharmmPSF::parseParameters(
         // Dihedral parameters.
         else if (start == "DIHEDRALS")
         {
+            // Flag that these are CHARMM format parameters.
+            is_charmm = true;
+
             bool is_blank_line = false;
 
             // Advance to the next line.
@@ -2269,6 +2282,9 @@ void CharmmPSF::parseParameters(
         }
         else if ((start == "dihe") or (start == "DIHEDRAL"))
         {
+            // Flag that these are X-PLOR format parameters.
+            is_xplor = true;
+
             // Special handling for parameter records spanning multiple lines.
             if (data[5].toUpper() == "MULTIPLE=")
             {
@@ -2312,7 +2328,7 @@ void CharmmPSF::parseParameters(
                 }
             }
 
-            // Standard, CHARMM-style dihedral records.
+            // Standard, CHARMM format dihedral records.
             else
             {
                 data.removeFirst();
@@ -2324,6 +2340,9 @@ void CharmmPSF::parseParameters(
         // Improper parameters.
         else if ((start == "IMPROPER") and (data.count() == 1))
         {
+            // Flag that these are CHARMM format parameters.
+            is_charmm = true;
+
             bool is_blank_line = false;
 
             // Advance to the next line.
@@ -2353,6 +2372,9 @@ void CharmmPSF::parseParameters(
         }
         else if ((start == "impr") or (start == "IMPROPER"))
         {
+            // Flag that these are X-PLOR format parameters.
+            is_xplor = true;
+
             data.removeFirst();
             CharmmParam param(data.join(" "), 3, errors);
             improper_params.insert(generateKey(param.getAtoms(), 3), param);
@@ -2367,6 +2389,9 @@ void CharmmPSF::parseParameters(
                 // This is a CHARMM format parameter file.
                 if (data[1] == "nbxmod")
                 {
+                    // Flag that these are CHARMM format parameters.
+                    is_charmm = true;
+
                     bool is_blank_line = false;
 
                     // Skip two lines.
@@ -2396,6 +2421,9 @@ void CharmmPSF::parseParameters(
                 }
                 else
                 {
+                    // Flag that these are X-PLOR format parameters.
+                    is_xplor = true;
+
                     data.removeFirst();
                     CharmmParam param(data.join(" "), 4, errors, true);
                     nonbonded_params.insert(generateKey(param.getAtoms(), 4), param);
@@ -2428,10 +2456,7 @@ void CharmmPSF::parseParameters(
             {
                 errors.append(QObject::tr("Could not read NAMD XSC record! %1")
                     .arg(parameter_lines[i]));
-
-                return;
             }
-
             else
             {
                 // Create a periodic box object.
@@ -2441,11 +2466,20 @@ void CharmmPSF::parseParameters(
         }
     }
 
+    // Mixed format parameter file.
+    if (is_charmm & is_xplor)
+    {
+        errors.append(QObject::tr("The parameter file contains both CHARMM "
+            "and X-PLOR format records!"));
+    }
+
     if (not errors.isEmpty())
     {
         throw SireIO::parse_error(QObject::tr("There were errors reading the CHARMM "
           "parameter file:\n%1").arg(errors.join("\n\n")), CODELOC);
     }
+
+    return is_charmm;
 }
 
 /** Internal function that is used to parameterise an existing molecule using
@@ -3454,7 +3488,7 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     bool has_box_params = false;
 
     // Parse and validate the parameter file.
-    parseParameters(param_lines, bond_params, angle_params,
+    bool is_charmm = parseParameters(param_lines, bond_params, angle_params,
         dihedral_params, improper_params, nonbonded_params, box, has_box_params);
 
     // Early exit if parameters are missing.
@@ -3515,8 +3549,14 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
 	for (const auto &line : param_lines)
 		params_string.append(line + "\n");
 
+    // Indicate the format of the parameters.
+    QString param_format;
+    if (is_charmm) param_format = "CHARMM";
+    else           param_format = "X-PLOR";
+
     // Add the CHARMM parameters as a property.
     system.setProperty(map["charmm-params"].source(), StringProperty(params_string));
+    system.setProperty(map["param-format"].source(), StringProperty(param_format));
 
     // Add the periodic box property.
     if (has_box_params)

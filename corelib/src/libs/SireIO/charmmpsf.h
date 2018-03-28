@@ -301,7 +301,7 @@ protected:
 private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
-    void parseParameters(
+    bool parseParameters(
         const QVector<QString> &param_lines,
         QMultiHash<QString, CharmmParam> &bond_params,
         QMultiHash<QString, CharmmParam> &angle_params,
