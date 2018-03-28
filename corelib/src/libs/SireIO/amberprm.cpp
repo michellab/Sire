@@ -853,7 +853,7 @@ double AmberPrm::processAllFlags()
     //to add dummy information here
     if (this->intData("ATOMIC_NUMBER").count() == 0)
     {
-        auto atomic_number = QVector<qint64>(0, nAtoms());
+        auto atomic_number = QVector<qint64>(nAtoms(), 0);
         int_data.insert("ATOMIC_NUMBER", atomic_number);
     }
 
