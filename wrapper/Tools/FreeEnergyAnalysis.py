@@ -19,13 +19,8 @@ try:
     scipy = Sire.try_import("scipy")
 except ImportError:
     raise ImportError('Numpy is not installed. Please install numpy in order to use MBAR for your free energy analysis.')
-try:
-    pymbar = Sire.try_import("pymbar")
-    from pymbar import MBAR
-    from pymbar import timeseries
-except ImportError:
-    raise ImportError('pymbar is not installed. Please install pymbar in order to use MBAR for your free energy '
-                      'analysis.')
+from pymbar import MBAR
+from pymbar import timeseries
 import matplotlib.pylab as plt
 from ipywidgets import interact, interactive, fixed, interact_manual, Layout, Label
 import ipywidgets as widgets
