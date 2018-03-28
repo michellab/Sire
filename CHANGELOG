@@ -3,6 +3,17 @@ SIRE changelog
 
 devel branch:
 
+    [2018.1.0] March 2018 - Signficantly improved the Gromacs and Charmm
+               parser and  fixed bugs. Can now write with both :-). Fixed
+               compilation on Windows 7 and above. Small changes to
+               the API of AtomProperties to make them easier to work
+               with from Python. Added a script to automatically color
+               code swap-based free energies. Fixed localisation
+               problems for the PDB writer. Improved mbar analysis
+               code. Added code to track forcefield data of a molecue.
+               Added code to better manage processes, including redirection
+               of standard output and error.
+
     [2017.3.0] December 2017 - Added new PDB (PDB2), Mol2, Gro87, and CharmmPSF
                parsers, as well as a GroTop parser, all part of the new
                MoleculeParser framework. Updated all of the swap-based
