@@ -3546,8 +3546,15 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
 
     // Convert the vector of params to a single string.
     QString params_string;
-	for (const auto &line : param_lines)
-		params_string.append(line + "\n");
+    for (int i=0; i<param_lines.count(); ++i)
+    {
+        QStringList data = param_lines[i].simplified().split(QRegExp("\\s"));
+        QString start = data[0];
+
+        // Skip box record data.
+        if (start == "#$LABELS") i += 2;
+        else params_string.append(param_lines[i] + "\n");
+    }
 
     // Indicate the format of the parameters.
     QString param_format;
