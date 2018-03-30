@@ -19,12 +19,18 @@ SireMol::AtomProperty<SireMM::LJParameter> __copy__(const SireMol::AtomProperty<
 
 #include "Helpers/len.hpp"
 
+#include "SireMol/moleculeview.h"
+
 void register_AtomLJs_class(){
 
     { //::SireMol::AtomProperty< SireMM::LJParameter >
         typedef bp::class_< SireMol::AtomProperty< SireMM::LJParameter >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomLJs_exposer_t;
         AtomLJs_exposer_t AtomLJs_exposer = AtomLJs_exposer_t( "AtomLJs", "", bp::init< >("") );
         bp::scope AtomLJs_scope( AtomLJs_exposer );
+        AtomLJs_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "") );
+        AtomLJs_exposer.def( bp::init< SireMol::MoleculeInfo const &, SireMM::LJParameter const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomLJs_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "") );
+        AtomLJs_exposer.def( bp::init< SireMol::MoleculeView const &, SireMM::LJParameter const & >(( bp::arg("molview"), bp::arg("default_value") ), "") );
         AtomLJs_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
         AtomLJs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMM::LJParameter const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
         AtomLJs_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("value") ), "") );

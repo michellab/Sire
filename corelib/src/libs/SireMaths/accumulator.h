@@ -178,6 +178,8 @@ public:
     Average operator+(const Average &other) const;
     Average& operator+=(const Average &other);
     
+    QString toString() const;
+    
     void clear();
     
     void accumulate(double value);
@@ -221,6 +223,8 @@ public:
     bool operator!=(const AverageAndStddev &other) const;
     
     void clear();
+    
+    QString toString() const;
     
     void accumulate(double value);
 
@@ -274,6 +278,8 @@ public:
     
     void clear();
     
+    QString toString() const;
+    
     void accumulate(double value);
 
     double average() const;
@@ -323,6 +329,8 @@ public:
     
     void clear();
     
+    QString toString() const;
+    
     void accumulate(double value);
 
     double max() const;
@@ -371,6 +379,8 @@ public:
     bool operator!=(const RecordValues &other) const;
     
     void clear();
+    
+    QString toString() const;
     
     void accumulate(double value);
 

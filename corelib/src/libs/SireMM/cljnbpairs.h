@@ -31,11 +31,12 @@
 
 #include "atompairs.hpp"
 
+#include "SireMol/connectivity.h"
+
 SIRE_BEGIN_HEADER
 
 namespace SireMM
 {
-
 class CoulombScaleFactor;
 class LJScaleFactor;
 class CLJScaleFactor;
@@ -159,6 +160,8 @@ public:
         return CLJScaleFactor::typeName();
     }
 
+    QString toString() const;
+
     CLJScaleFactor& operator=(const CLJScaleFactor &other);
 
     bool operator==(const CLJScaleFactor &other) const;
@@ -281,6 +284,12 @@ public:
     CLJNBPairs(const MoleculeInfoData &molinfo,
                const CLJScaleFactor &default_scale = CLJScaleFactor(1,1));
 
+    CLJNBPairs(const SireMol::MoleculeInfo &molinfo,
+               const CLJScaleFactor &default_scale = CLJScaleFactor(1,1));
+
+    CLJNBPairs(const SireMol::Connectivity &connectivity,
+               const CLJScaleFactor &scale14);
+
     CLJNBPairs(const CLJNBPairs &other);
 
     ~CLJNBPairs();
@@ -291,6 +300,11 @@ public:
     
     bool operator==(const CLJNBPairs &other) const;
     bool operator!=(const CLJNBPairs &other) const;
+    
+    QString toString() const;
+    
+    int nExcludedAtoms() const;
+    QVector<AtomIdx> excludedAtoms() const;
     
     int nExcludedAtoms(const AtomID &atomid) const;
     QVector<AtomIdx> excludedAtoms(const AtomID &atomid) const;

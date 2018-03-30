@@ -135,6 +135,17 @@ void register_AverageAndStddev_class(){
                 , "Return the standard deviation of the average\n(calculated as the sqrt of the mean of the squares minus\nthe square of the mean)" );
         
         }
+        { //::SireMaths::AverageAndStddev::toString
+        
+            typedef ::QString ( ::SireMaths::AverageAndStddev::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireMaths::AverageAndStddev::toString );
+            
+            AverageAndStddev_exposer.def( 
+                "toString"
+                , toString_function_value
+                , "" );
+        
+        }
         { //::SireMaths::AverageAndStddev::typeName
         
             typedef char const * ( *typeName_function_type )(  );

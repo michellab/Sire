@@ -89,11 +89,3 @@ RefCountData::Counter::~Counter()
 {
     //qDebug() << "DELETING REFCOUNTDATA" << qintptr(this);
 }
-
-/** Error function called when a counter is dereferenced below 0 */
-void RefCountData::Counter::doubleDereferenced() const
-{
-    //qDebug() << "WARNING - MEMORY CORRUPTION: PROGRAM BUG: REFCOUNT" << qintptr(this)
-    //         << "HAS BEEN DEREFERENCED BELOW ZERO - DOUBLE FREE'D. BACKTRACE\n"
-    //         << SireError::getBackTrace().join("\n");
-}

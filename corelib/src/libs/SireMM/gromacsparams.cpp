@@ -27,6 +27,7 @@
 \*********************************************/
 
 #include "gromacsparams.h"
+#include "amberparams.h"
 
 #include "SireID/index.h"
 
@@ -57,11 +58,11 @@ static const RegisterMetaType<GromacsAtomType> r_atomtype(NO_ROOT);
 
 QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const GromacsAtomType &typ)
 {
-    writeHeader(ds, r_atomtype, 1);
+    writeHeader(ds, r_atomtype, 2);
     
     SharedDataStream sds(ds);
     
-    sds << typ._typ << typ._mass.to(g_per_mol)
+    sds << typ._typ << typ._btyp << typ._mass.to(g_per_mol)
         << typ._chg.to(mod_electron) << typ.particleTypeString()
         << typ._lj << typ._elem;
     
@@ -72,7 +73,21 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, GromacsAtomType &typ)
 {
     VersionID v = readHeader(ds, r_atomtype);
     
-    if (v == 1)
+    if (v == 2)
+    {
+        SharedDataStream sds(ds);
+        
+        double chg, mass;
+        QString ptyp;
+        
+        sds >> typ._typ >> typ._btyp >> mass >> chg >> ptyp >> typ._lj >> typ._elem;
+        
+        typ._btyp = typ._typ;
+        typ._mass = mass * g_per_mol;
+        typ._chg = chg * mod_electron;
+        typ._ptyp = GromacsAtomType::toParticleType(ptyp);
+    }
+    else if (v == 1)
     {
         SharedDataStream sds(ds);
         
@@ -81,12 +96,13 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, GromacsAtomType &typ)
         
         sds >> typ._typ >> mass >> chg >> ptyp >> typ._lj >> typ._elem;
         
+        typ._btyp = typ._typ;
         typ._mass = mass * g_per_mol;
         typ._chg = chg * mod_electron;
         typ._ptyp = GromacsAtomType::toParticleType(ptyp);
     }
     else
-        throw version_error(v, "1", r_atomtype, CODELOC);
+        throw version_error(v, "1,2", r_atomtype, CODELOC);
     
     return ds;
 }
@@ -97,7 +113,7 @@ void GromacsAtomType::assertSane() const
 
 /** Null constructor */
 GromacsAtomType::GromacsAtomType()
-                : _typ(), _mass(0), _chg(0),
+                : _typ(), _btyp(), _mass(0), _chg(0),
                   _ptyp(GromacsAtomType::UNKNOWN_TYPE),
                   _elem(0)
 {}
@@ -109,7 +125,20 @@ GromacsAtomType::GromacsAtomType(QString atom_type,
                                  PARTICLE_TYPE particle_type,
                                  const LJParameter &ljparam,
                                  const Element &element)
-                : _typ(atom_type), _mass(mass), _chg(charge),
+                : _typ(atom_type), _btyp(atom_type), _mass(mass), _chg(charge),
+                  _lj(ljparam), _ptyp(particle_type), _elem(element)
+{
+    assertSane();
+}
+
+/** Construct passing in all parameters */
+GromacsAtomType::GromacsAtomType(QString atom_type, QString bond_type,
+                                 SireUnits::Dimension::MolarMass mass,
+                                 SireUnits::Dimension::Charge charge,
+                                 PARTICLE_TYPE particle_type,
+                                 const LJParameter &ljparam,
+                                 const Element &element)
+                : _typ(atom_type), _btyp(bond_type), _mass(mass), _chg(charge),
                   _lj(ljparam), _ptyp(particle_type), _elem(element)
 {
     assertSane();
@@ -117,14 +146,14 @@ GromacsAtomType::GromacsAtomType(QString atom_type,
 
 /** Construct, specifying only the mass */
 GromacsAtomType::GromacsAtomType(QString atom_type, SireUnits::Dimension::MolarMass mass)
-                : _typ(atom_type), _mass(mass), _chg(0),
+                : _typ(atom_type), _btyp(atom_type), _mass(mass), _chg(0),
                   _ptyp(GromacsAtomType::UNKNOWN_TYPE),
                   _elem(0)
 {}
 
 /** Copy constructor */
 GromacsAtomType::GromacsAtomType(const GromacsAtomType &other)
-                : _typ(other._typ), _mass(other._mass), _chg(other._chg),
+                : _typ(other._typ), _btyp(other._btyp), _mass(other._mass), _chg(other._chg),
                   _lj(other._lj), _ptyp(other._ptyp), _elem(other._elem)
 {}
 
@@ -138,6 +167,7 @@ GromacsAtomType& GromacsAtomType::operator=(const GromacsAtomType &other)
     if (this != &other)
     {
         _typ = other._typ;
+        _btyp = other._btyp;
         _mass = other._mass;
         _chg = other._chg;
         _ptyp = other._ptyp;
@@ -151,7 +181,8 @@ GromacsAtomType& GromacsAtomType::operator=(const GromacsAtomType &other)
 /** Comparison operator */
 bool GromacsAtomType::operator==(const GromacsAtomType &other) const
 {
-    return _typ == other._typ and _mass == other._mass and _chg == other._chg and
+    return _typ == other._typ and _btyp == other._btyp and _mass == other._mass and
+           _chg == other._chg and
            _ptyp == other._ptyp and _lj == other._lj and _elem == other._elem;
 }
 
@@ -179,7 +210,7 @@ QString GromacsAtomType::toString() const
         return QObject::tr("GromacsAtomType( atomType() = %1, mass() = %2 g mol-1 )")
                 .arg(atomType()).arg(mass().to(g_per_mol));
     }
-    else
+    else if (_btyp == _typ)
     {
         return QObject::tr("GromacsAtomType( atomType() = %1, mass() = %2 g mol-1, "
                               "charge() = %3 |e|, "
@@ -189,6 +220,19 @@ QString GromacsAtomType::toString() const
                               .arg(particleTypeString())
                               .arg(ljParameter().toString())
                               .arg(element().toString());
+    }
+    else
+    {
+        return QObject::tr("GromacsAtomType( atomType() = %1, bondType() = %7, "
+                              "mass() = %2 g mol-1, "
+                              "charge() = %3 |e|, "
+                              "particleType() = %4, ljParameter() = %5, element() = %6 )")
+                              .arg(atomType()).arg(mass().to(g_per_mol))
+                              .arg(charge().to(mod_electron))
+                              .arg(particleTypeString())
+                              .arg(ljParameter().toString())
+                              .arg(element().toString())
+                              .arg(bondType());
     }
 }
 
@@ -316,10 +360,51 @@ GromacsBond::GromacsBond(const SireCAS::Expression &bond, const SireCAS::Symbol 
     {
         k[i] = 0;
     }
-    
+
+    //first, let's see if this is an Amber-style harmonic bond
+    {
+        AmberBond amberbond;
+        bool is_amber = false;
+
+        try
+        {
+            amberbond = AmberBond(bond, R);
+            is_amber = true;
+        }
+        catch(...)
+        {}
+        
+        if (is_amber)
+        {
+            //yes, this is a valid amber bond ( 0.5 kb (r - r0)^2 )
+            double kb = 2.0 * amberbond.k();
+            double r0 = amberbond.r0();
+            
+            if (kb == 0)
+            {
+                //this is a null bond (connection)
+                func_type = 5;
+            }
+            else
+            {
+                //this is a harmonic bond
+                func_type = 1;
+
+                const double kj_per_mol_per_nm2 = ((kJ_per_mol) / (nanometer*nanometer)).value();
+                const double nm = nanometer.value();
+
+                k[0] = r0 / nm;
+                k[1] = kb / kj_per_mol_per_nm2;
+            }
+            
+            return;
+        }
+    }
+
     // a LOT of introspection will be needed to extract the function type
     // and parameters from a generic expression...
-    throw SireError::incomplete_code( QObject::tr("THIS CODE NEEDS WRITING!"), CODELOC );
+    throw SireError::incomplete_code( QObject::tr("Sire cannot yet interpret bonds "
+       "that are not in a standard harmonic format! (%1)").arg(bond.toString()), CODELOC );
 }
 
 static void assert_valid_bond_function(int func_type)
@@ -505,7 +590,8 @@ const char* GromacsBond::what() const
 /** Return whether or not this parameter needs resolving */
 bool GromacsBond::needsResolving() const
 {
-    return k[0] == unresolved_parameter_value or func_type == 0;
+    //don't need to resolve the 'connection' function type (5), as it has no parameters
+    return func_type != 5 and (k[0] == unresolved_parameter_value or func_type == 0);
 }
 
 /** Return whether or not the parameters for this bond are resolved */
@@ -608,6 +694,22 @@ QString GromacsBond::functionTypeString() const
 bool GromacsBond::isSimple() const
 {
     return true;
+}
+
+/** Return whether or not this is a harmonic bond */
+bool GromacsBond::isHarmonic() const
+{
+    switch (func_type)
+    {
+    case 0: //null, so zero, which is a zero harmonic
+    case 1: //harmonic
+    case 5: //connection, so zero, which is a zero harmonic
+    case 6: //harmonic
+        return true;
+    default:
+        qDebug() << "NOT HARMONIC!" << func_type << this->toString();
+        return false;
+    }
 }
 
 /** Return all of the parameters for this bond */
@@ -818,7 +920,7 @@ GromacsAngle::GromacsAngle()
 }
 
 /** Construct from the passed 'angle', using 'theta' as the symbol for the theta value */
-GromacsAngle::GromacsAngle(const SireCAS::Expression &bond, const SireCAS::Symbol &theta)
+GromacsAngle::GromacsAngle(const SireCAS::Expression &angle, const SireCAS::Symbol &theta)
              : func_type(0)
 {
     for (int i=0; i<MAX_ANGLE_PARAMS; ++i)
@@ -826,9 +928,42 @@ GromacsAngle::GromacsAngle(const SireCAS::Expression &bond, const SireCAS::Symbo
         k[i] = 0;
     }
     
+    //first, let's see if this is an Amber-style harmonic angle
+    {
+        AmberAngle amberangle;
+        bool is_amber = false;
+
+        try
+        {
+            amberangle = AmberAngle(angle, theta);
+            is_amber = true;
+        }
+        catch(...)
+        {}
+        
+        if (is_amber)
+        {
+            //yes, this is a valid amber angle ( 0.5 kb (theta - theta0)^2 )
+            double kb = 2.0 * amberangle.k();
+            double t0 = amberangle.theta0();
+            
+            //this is a harmonic angle
+            func_type = 1;
+
+            const double kj_per_mol_per_rad2 = ((kJ_per_mol) / (radian*radian)).value();
+            const double deg = degree.value();
+
+            k[0] = t0 / deg;
+            k[1] = kb / kj_per_mol_per_rad2;
+            
+            return;
+        }
+    }
+
     // a LOT of introspection will be needed to extract the function type
     // and parameters from a generic expression...
-    throw SireError::incomplete_code( QObject::tr("THIS CODE NEEDS WRITING!"), CODELOC );
+    throw SireError::incomplete_code( QObject::tr("Sire cannot yet interpret angles "
+       "that are not in a standard harmonic format! (%1)").arg(angle.toString()), CODELOC );
 }
 
 static void assert_valid_angle_function(int func_type)
@@ -1157,6 +1292,19 @@ QString GromacsAngle::functionTypeString() const
     }
 }
 
+/** Return whether or not this is a harmonic angle */
+bool GromacsAngle::isHarmonic() const
+{
+    switch (func_type)
+    {
+    case 0: //null, so zero, which is a zero harmonic
+    case 1: //harmonic
+        return true;
+    default:
+        return false;
+    }
+}
+
 /** Return all of the parameters for this angle */
 QList<double> GromacsAngle::parameters() const
 {
@@ -1432,6 +1580,81 @@ GromacsDihedral::GromacsDihedral()
 }
 
 /** Construct from the passed 'dihedral', using 'phi' as the symbol for the phi value */
+QList<GromacsDihedral> GromacsDihedral::construct(const Expression &dihedral, const Symbol &phi)
+{
+    //first, let's see if this is an Amber-style cosine-based dihedral
+    {
+        AmberDihedral amberdihedral;
+        bool is_amber = false;
+
+        try
+        {
+            amberdihedral = AmberDihedral(dihedral, phi);
+            is_amber = true;
+        }
+        catch(...)
+        {}
+        
+        if (is_amber)
+        {
+            //yes, this is a valid amber dihedral. We need to create one
+            //GromacsDihedral for each AmberDihPart
+            QList<GromacsDihedral> dihs;
+            
+            bool multiterm = amberdihedral.terms().count() > 1;
+            
+            for (const auto amberdih : amberdihedral.terms())
+            {
+                double kb = amberdih.k();
+                double per = amberdih.periodicity();
+                double phase = amberdih.phase();
+            
+                //this is a cosine dihedral in from k [ 1 + cos(per phi - phase) ]
+                //(will one day have to work out how to say this is an improper rather
+                // than a dihedral...)
+                int func_type = 1;
+
+                if (multiterm)
+                    func_type = 9;  // multiple periodic dihedral
+
+                const double kj_per_mol = kJ_per_mol.value();
+                const double deg = degree.value();
+
+                phase = phase / deg;
+                kb = kb / kj_per_mol;
+                //per = per;
+                
+                dihs.append( GromacsDihedral(func_type, phase, kb, per) );
+            }
+            
+            return dihs;
+        }
+    }
+
+    // a LOT of introspection will be needed to extract the function type
+    // and parameters from a generic expression...
+    throw SireError::incomplete_code( QObject::tr("Sire cannot yet interpret dihedrals "
+       "that are not in a standard cosine format! (%1)").arg(dihedral.toString()), CODELOC );
+}
+
+/** Construct from the passed 'improper', using 'phi' as the symbol for the phi value */
+QList<GromacsDihedral> GromacsDihedral::constructImproper(
+                                const Expression &dihedral, const Symbol &phi)
+{
+    auto parts = GromacsDihedral::construct(dihedral, phi);
+    
+    for (auto &part : parts)
+    {
+        if (part.functionType() == 1 or part.functionType() == 9)
+        {
+            part.func_type = 4;
+        }
+    }
+    
+    return parts;
+}
+
+/** Construct from the passed 'dihedral', using 'phi' as the symbol for the phi value */
 GromacsDihedral::GromacsDihedral(const SireCAS::Expression &dihedral, const SireCAS::Symbol &phi)
                 : func_type(0)
 {
@@ -1440,9 +1663,19 @@ GromacsDihedral::GromacsDihedral(const SireCAS::Expression &dihedral, const Sire
         k[i] = 0;
     }
     
-    // a LOT of introspection will be needed to extract the function type
-    // and parameters from a generic expression...
-    throw SireError::incomplete_code( QObject::tr("THIS CODE NEEDS WRITING!"), CODELOC );
+    auto parts = GromacsDihedral::construct(dihedral,phi);
+    
+    if (parts.count() == 1)
+    {
+        this->operator=(parts[0]);
+        return;
+    }
+    else if (parts.count() > 1)
+        throw SireError::incompatible_error( QObject::tr(
+            "The passed expression (%1) is made up of multiple GromacsDihedral terms (%2). "
+            "Please use GromacsDihedral::construct(...) to convert the expression into "
+            "a valid set of GromacsDihedrals.")
+                .arg(dihedral.toString()).arg(Sire::toString(parts)), CODELOC );
 }
 
 static void assert_valid_dihedral_function(int func_type)
@@ -1746,6 +1979,22 @@ QString GromacsDihedral::functionTypeString() const
     }
 }
 
+/** Return whether or not this is a cosine-series dihedral */
+bool GromacsDihedral::isCosine() const
+{
+    switch (func_type)
+    {
+    case 0: //null, so zero, which is a zero cosine
+    case 1: //proper dihedral
+    case 4: //improper dihedral
+    case 5: //fourier dihedral
+    case 9: //proper dihedral (multiple)
+        return true;
+    default:
+        return false;
+    }
+}
+
 /** Return all of the parameters for this dihedral */
 QList<double> GromacsDihedral::parameters() const
 {
@@ -1856,7 +2105,7 @@ SireCAS::Expression GromacsDihedral::toExpression(const SireCAS::Symbol &phi) co
         const double phi_s = k[0] * deg;
         const double n = k[2];
         
-        return k0 * ( 1.0 - Cos( (n*phi) - phi_s ) );
+        return k0 * ( 1.0 + Cos( (n*phi) - phi_s ) );
     }
     else if (func_type == 2)
     {
@@ -1868,7 +2117,7 @@ SireCAS::Expression GromacsDihedral::toExpression(const SireCAS::Symbol &phi) co
     else if (func_type == 3)
     {
         //Ryckaert-Bellemans function
-        // Sum_(n=0,5) C_n ( cos(phi) )^n
+        // Sum_(n=0,5) C_n ( cos(psi) )^n   where psi = phi - 180
         const double c0 = k[0] * kj_per_mol;
         const double c1 = k[1] * kj_per_mol;
         const double c2 = k[2] * kj_per_mol;
@@ -1876,12 +2125,16 @@ SireCAS::Expression GromacsDihedral::toExpression(const SireCAS::Symbol &phi) co
         const double c4 = k[4] * kj_per_mol;
         const double c5 = k[5] * kj_per_mol;
         
-        const auto cos_phi = Cos(phi);
+        //Gromacs calculates dihedrals with a shift of 180 degrees??? (not included)
+        const auto cos_psi = Cos(phi - SireMaths::pi);
         
-        return c0 + (c1*cos_phi) + (c2*SireMaths::pow_2(cos_phi)) +
-                                   (c3*SireMaths::pow_3(cos_phi)) +
-                                   (c4*SireMaths::pow_4(cos_phi)) +
-                                   (c5*SireMaths::pow_5(cos_phi));
+        
+        auto f = c0 + (c1*cos_psi) + (c2*cos_psi*cos_psi) +
+                                   (c3*cos_psi*cos_psi*cos_psi) +
+                                   (c4*cos_psi*cos_psi*cos_psi*cos_psi) +
+                                   (c5*cos_psi*cos_psi*cos_psi*cos_psi*cos_psi);
+
+        return f;
     }
     else if (func_type == 5)
     {

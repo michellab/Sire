@@ -1662,19 +1662,19 @@ void AmberRst::writeToFile(const QString &filename) const
         QVector<char> values = { 'x', 'y', 'z' };
         data.insert( "spatial", NetCDFData("spatial", values, dimensions, dimension_sizes) );
 
-        dimensions = { "cell_spatial" };
+        QStringList dimensions2 = { "cell_spatial" };
         dimension_sizes = { 3 };
         values = { 'a', 'b', 'c' };
         data.insert( "cell_spatial", NetCDFData("cell_spatial", values,
-                                                dimensions, dimension_sizes) );
+                                                dimensions2, dimension_sizes) );
         
-        dimensions = { "cell_angular", "label" };
+        QStringList dimensions3 = { "cell_angular", "label" };
         dimension_sizes = { 3, 5 };
         values = { 'a', 'l', 'p', 'h', 'a',
                    'b', 'e', 't', 'a', ' ',
                    'g', 'a', 'm', 'm', 'a' };
         data.insert( "cell_angular", NetCDFData("cell_angular", values,
-                                                dimensions, dimension_sizes) );
+                                                dimensions3, dimension_sizes) );
     }
     
     //now the time
@@ -1774,11 +1774,11 @@ void AmberRst::writeToFile(const QString &filename) const
                                                     dimensions, dimension_sizes,
                                                     angstrom_units) );
 
-            dimensions = { "cell_angular" };
+            QStringList dimensions2 = { "cell_angular" };
             values = { box_angs[0].x(), box_angs[0].y(), box_angs[0].z() };
 
             data.insert( "cell_angles", NetCDFData("cell_angles", values,
-                                                    dimensions, dimension_sizes,
+                                                    dimensions2, dimension_sizes,
                                                     degree_units) );
         }
         else
@@ -1798,7 +1798,7 @@ void AmberRst::writeToFile(const QString &filename) const
                                                     dimensions, dimension_sizes,
                                                     angstrom_units) );
 
-            dimensions = { "frame", "cell_angular" };
+            dimensions[1] = "cell_angular";
 
             for (int i=0; i<box_dims.count(); ++i)
             {

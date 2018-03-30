@@ -105,6 +105,12 @@ parser.add_argument('-n', '--num_iterations', type=int, nargs="?",
 parser.add_argument('--vacuum', action="store_true",
                     help="Swap ligands into a vacuum box rather than a water box (for relative hydration calculations).") 
 
+parser.add_argument('-m', '--match', nargs="?",
+                    help="Supply an optional match string to control alignment of the ligands. "
+                         "This should be a comma separated list of colon-separated atom name "
+                         "pairs, e.g. 'A1:B1,A2:B2,A3:B3' would match the atom named 'A1' "
+                         "in ligand0 to the atom named 'B1' in ligand1 etc.")
+
 sys.stdout.write("\n")
 args = parser.parse_args()
 
@@ -177,6 +183,9 @@ else:
 if args.vacuum:
     params["vacuum calculation"] = True
     print("\nPerforming a relative hydration free energy calculation.\n")
+
+if args.match:
+    params["match atoms"] = args.match
 
 if not (os.path.exists(coord_file0) and os.path.exists(top_file0) and
         os.path.exists(coord_file1) and os.path.exists(top_file1)):

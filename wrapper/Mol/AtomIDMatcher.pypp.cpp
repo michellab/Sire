@@ -56,6 +56,7 @@ void register_AtomIDMatcher_class(){
         AtomIDMatcher_exposer.def( bp::init< QHash< QString, QString > const & >(( bp::arg("match_names") ), "Construct to match atom names") );
         AtomIDMatcher_exposer.def( bp::init< QHash< int, int > const & >(( bp::arg("match_idxs") ), "Construct to match atom indexes") );
         AtomIDMatcher_exposer.def( bp::init< QHash< SireMol::AtomIdentifier, SireMol::AtomIdentifier > const & >(( bp::arg("match_ids") ), "Construct to match specified AtomIdentifiers") );
+        AtomIDMatcher_exposer.def( bp::init< QString const & >(( bp::arg("match_names") ), "Construct to match atom names") );
         AtomIDMatcher_exposer.def( bp::init< SireMol::AtomIDMatcher const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AtomIDMatcher::isNull
         

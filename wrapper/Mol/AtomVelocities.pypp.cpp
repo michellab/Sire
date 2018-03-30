@@ -14,6 +14,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/vector.h"
 
+#include "SireMol/moleculeview.h"
+
 SireMol::AtomProperty<SireMaths::Vector3D<SireUnits::Dimension::Velocity> > __copy__(const SireMol::AtomProperty<SireMaths::Vector3D<SireUnits::Dimension::Velocity> > &other){ return SireMol::AtomProperty<SireMaths::Vector3D<SireUnits::Dimension::Velocity> >(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -28,6 +30,10 @@ void register_AtomVelocities_class(){
         typedef bp::class_< SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomVelocities_exposer_t;
         AtomVelocities_exposer_t AtomVelocities_exposer = AtomVelocities_exposer_t( "AtomVelocities", "", bp::init< >("") );
         bp::scope AtomVelocities_scope( AtomVelocities_exposer );
+        AtomVelocities_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "") );
+        AtomVelocities_exposer.def( bp::init< SireMol::MoleculeInfo const &, SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomVelocities_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "") );
+        AtomVelocities_exposer.def( bp::init< SireMol::MoleculeView const &, SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > const & >(( bp::arg("molview"), bp::arg("default_value") ), "") );
         AtomVelocities_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
         AtomVelocities_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
         AtomVelocities_exposer.def( bp::init< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > const & >(( bp::arg("value") ), "") );

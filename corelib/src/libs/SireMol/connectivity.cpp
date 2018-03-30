@@ -72,8 +72,10 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 
     SharedDataStream sds(ds);
 
+    SharedDataPointer<MoleculeInfoData> d( conbase.minfo );
+
     sds << conbase.connected_atoms << conbase.connected_res
-        << conbase.d << static_cast<const MolViewProperty&>(conbase);
+        << d << static_cast<const MolViewProperty&>(conbase);
 
     return ds;
 }
@@ -88,17 +90,25 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
     {
         SharedDataStream sds(ds);
         
+        SharedDataPointer<MoleculeInfoData> d;
+        
         sds >> conbase.connected_atoms >> conbase.connected_res
-            >> conbase.d
+            >> d
             >> static_cast<MolViewProperty&>(conbase);
+        
+        conbase.minfo = d;
     }
     else if (v == 1)
     {
         SharedDataStream sds(ds);
+
+        SharedDataPointer<MoleculeInfoData> d;
         
         sds >> conbase.connected_atoms >> conbase.connected_res
-            >> conbase.d
+            >> d
             >> static_cast<Property&>(conbase);
+        
+        conbase.minfo = d;
     }
     else
         throw version_error(v, "1,2", r_conbase, CODELOC);
@@ -109,30 +119,28 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
 /** Null constructor */
 ConnectivityBase::ConnectivityBase()
                  : MolViewProperty()
-{
-    MoleculeInfo null_info;
-    d = null_info.data();
-}
+{}
 
-const MoleculeInfoData& ConnectivityBase::info() const
+/** Return the info object that describes the molecule for which this connectivity applies */
+MoleculeInfo ConnectivityBase::info() const
 {
-    return *d;
+    return minfo;
 }
 
 /** Construct the connectivity for molecule described by 
     the passed info object */
-ConnectivityBase::ConnectivityBase(const MoleculeInfo &molinfo)
-                 : MolViewProperty(), d(molinfo.data())
+ConnectivityBase::ConnectivityBase(const MoleculeInfo &info)
+                 : MolViewProperty(), minfo(info)
 {
-    if (info().nAtoms() > 0)
+    if (minfo.nAtoms() > 0)
     {
-        connected_atoms.resize(info().nAtoms());
+        connected_atoms.resize(minfo.nAtoms());
         connected_atoms.squeeze();
     }
     
-    if (info().nResidues() > 0)
+    if (minfo.nResidues() > 0)
     {
-        connected_res.resize(info().nResidues());
+        connected_res.resize(minfo.nResidues());
         connected_res.squeeze();
     }
 }
@@ -140,7 +148,7 @@ ConnectivityBase::ConnectivityBase(const MoleculeInfo &molinfo)
 /** Construct the connectivity for molecule described by 
     the passed info object */
 ConnectivityBase::ConnectivityBase(const MoleculeData &moldata)
-                 : MolViewProperty(), d(moldata.info())
+                 : MolViewProperty(), minfo(moldata.info())
 {
     if (info().nAtoms() > 0)
     {
@@ -160,7 +168,7 @@ ConnectivityBase::ConnectivityBase(const ConnectivityBase &other)
                  : MolViewProperty(other),
                    connected_atoms(other.connected_atoms),
                    connected_res(other.connected_res),
-                   d(other.d)
+                   minfo(other.minfo)
 {}
 
 /** Destructor */
@@ -174,7 +182,7 @@ ConnectivityBase& ConnectivityBase::operator=(const ConnectivityBase &other)
     {
         connected_atoms = other.connected_atoms;
         connected_res = other.connected_res;
-        d = other.d;
+        minfo = other.minfo;
     }
     
     return *this;
@@ -183,20 +191,19 @@ ConnectivityBase& ConnectivityBase::operator=(const ConnectivityBase &other)
 /** Comparison operator */
 bool ConnectivityBase::operator==(const ConnectivityBase &other) const
 {
-    return (d == other.d or *d == *(other.d)) and 
+    return minfo == other.minfo and
            connected_atoms == other.connected_atoms;
 }
 
 /** Comparison operator */
 bool ConnectivityBase::operator!=(const ConnectivityBase &other) const
 {
-    return (d != other.d and *d != *(other.d)) or
-           connected_atoms != other.connected_atoms;
+    return not operator==(other);
 }
 
 bool ConnectivityBase::isCompatibleWith(const MoleculeInfoData &molinfo) const
 {
-    return molinfo == this->info();
+    return minfo == MoleculeInfo(molinfo);
 }
 
 PropertyPtr ConnectivityBase::_pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
@@ -211,14 +218,14 @@ PropertyPtr ConnectivityBase::_pvt_makeCompatibleWith(const MoleculeInfoData &mo
             Connectivity ret;
             ret.connected_atoms = connected_atoms;
             ret.connected_res = connected_res;
-            ret.d = molinfo;
+            ret.minfo = MoleculeInfo(molinfo);
             return ret;
         }
 
         QHash<AtomIdx,AtomIdx> matched_atoms = atommatcher.match(this->info(), molinfo);
 
         ConnectivityEditor editor;
-        editor.d = molinfo;
+        editor.minfo = MoleculeInfo(molinfo);
         editor.connected_atoms = QVector< QSet<AtomIdx> >( molinfo.nAtoms() );
         editor.connected_res = QVector< QSet<ResIdx> >( molinfo.nResidues() );
 
@@ -285,14 +292,14 @@ QString ConnectivityBase::toString() const
             foreach (ResIdx j, connected_res.at(i))
             {
                 resnums.append( QString("%1:%2")
-                                 .arg(d->name(j))
-                                 .arg(d->number(j)) );
+                                 .arg(minfo.name(j))
+                                 .arg(minfo.number(j)) );
             }
             
             if (not connected_res.at(i).isEmpty())
                 lines.append( QObject::tr("  * Residue %1:%2 bonded to %3.")
-                        .arg(d->name(ResIdx(i)))
-                        .arg(d->number(ResIdx(i)))
+                        .arg(minfo.name(ResIdx(i)))
+                        .arg(minfo.number(ResIdx(i)))
                         .arg(resnums.join(" ")) );
         }
     }
@@ -508,8 +515,8 @@ bool ConnectivityBase::areBonded(AtomIdx atom0, AtomIdx atom1) const
 /** Return whether or not the two atoms are angled together */
 bool ConnectivityBase::areAngled(AtomIdx atom0, AtomIdx atom2) const
 {
-    atom0 = d.read().atomIdx(atom0);
-    atom2 = d.read().atomIdx(atom2);
+    atom0 = minfo.atomIdx(atom0);
+    atom2 = minfo.atomIdx(atom2);
 
     if (atom0 == atom2)
         return false;
@@ -526,8 +533,8 @@ bool ConnectivityBase::areAngled(AtomIdx atom0, AtomIdx atom2) const
 /** Return whether or not the two atoms are dihedraled together */
 bool ConnectivityBase::areDihedraled(AtomIdx atom0, AtomIdx atom3) const
 {
-    atom0 = d.read().atomIdx(atom0);
-    atom3 = d.read().atomIdx(atom3);
+    atom0 = minfo.atomIdx(atom0);
+    atom3 = minfo.atomIdx(atom3);
     
     if (atom0 == atom3)
         return false;
@@ -553,19 +560,67 @@ bool ConnectivityBase::areDihedraled(AtomIdx atom0, AtomIdx atom3) const
 /** Return whether or not the two atoms are bonded together */
 bool ConnectivityBase::areBonded(const AtomID &atom0, const AtomID &atom1) const
 {
-    return areBonded(d.read().atomIdx(atom0), d.read().atomIdx(atom1));
+    return areBonded(minfo.atomIdx(atom0), minfo.atomIdx(atom1));
 }
 
 /** Return whether or not the two atoms are angled together */
 bool ConnectivityBase::areAngled(const AtomID &atom0, const AtomID &atom2) const
 {
-    return areAngled(d.read().atomIdx(atom0), d.read().atomIdx(atom2));
+    return areAngled(minfo.atomIdx(atom0), minfo.atomIdx(atom2));
 }
 
 /** Return whether or not the two atoms are bonded together */
 bool ConnectivityBase::areDihedraled(const AtomID &atom0, const AtomID &atom3) const
 {
-    return areDihedraled(d.read().atomIdx(atom0), d.read().atomIdx(atom3));
+    return areDihedraled(minfo.atomIdx(atom0), minfo.atomIdx(atom3));
+}
+
+/** Return the connection type of the passed two atoms. This returns;
+
+    0 = the atoms are "non-bonded", meaning no bond, angle or dihedral relationship
+    1 = it is the same atom
+    2 = the two atoms are directly bonded
+    3 = the two atoms are part of an angle
+    4 = the two atoms are part of a dihedral
+    
+    The closest connection is returned, e.g. atom pairs in rings that are simultanouesly
+    bonded, angled and dihedraled are reported as bonded.
+*/
+int ConnectivityBase::connectionType(AtomIdx atom0, AtomIdx atom1) const
+{
+    atom0 = atom0.map(minfo.nAtoms());
+    atom1 = atom1.map(minfo.nAtoms());
+    
+    if (atom0 == atom1)
+        return 1;
+
+    else if (areBonded(atom0,atom1))
+        return 2;
+    
+    else if (areAngled(atom0,atom1))
+        return 3;
+    
+    else if (areDihedraled(atom0,atom1))
+        return 4;
+    
+    else
+        return 0;
+}
+
+/** Return the connection type of the passed two atoms. This returns;
+
+    0 = the atoms are "non-bonded", meaning no bond, angle or dihedral relationship
+    1 = it is the same atom
+    2 = the two atoms are directly bonded
+    3 = the two atoms are part of an angle
+    4 = the two atoms are part of a dihedral
+    
+    The closest connection is returned, e.g. atom pairs in rings that are simultanouesly
+    bonded, angled and dihedraled are reported as bonded.
+*/
+int ConnectivityBase::connectionType(const AtomID &atom0, const AtomID &atom1) const
+{
+    return this->connectionType( minfo.atomIdx(atom0), minfo.atomIdx(atom1) );
 }
 
 /** Return whether or not the residues at indicies 'res0' and 'res1' 
@@ -583,6 +638,45 @@ bool ConnectivityBase::areConnected(ResIdx res0, ResIdx res1) const
 bool ConnectivityBase::areConnected(const ResID &res0, const ResID &res1) const
 {
     return this->connectionsTo(res0).contains( info().resIdx(res1) );
+}
+
+/** Return whether or not the CutGroups at indicies 'cg0' and 'cg1' are 
+    connected */
+bool ConnectivityBase::areConnected(CGIdx cg0, CGIdx cg1) const
+{
+    cg0 = cg0.map( minfo.nCutGroups() );
+    cg1 = cg1.map( minfo.nCutGroups() );
+
+    if (cg0 == cg1)
+    {
+        return true;
+    }
+    else if (minfo.isResidueCutting())
+    {
+        //can work from the residues
+        return this->areConnected( ResIdx(cg0), ResIdx(cg1) );
+    }
+    else
+    {
+        //need to look at all pairs of atoms in both CutGroups
+        for (const auto atom0 : minfo.getAtomsIn(cg0))
+        {
+            for (const auto atom1 : minfo.getAtomsIn(cg1))
+            {
+                if (this->areConnected(atom0,atom1))
+                    return true;
+            }
+        }
+        
+        return false;
+    }
+}
+
+/** Return whether or not the CutGroups at indicies 'cg0' and 'cg1' are 
+    connected */
+bool ConnectivityBase::areConnected(const CGID &cg0, const CGID &cg1) const
+{
+    return this->areConnected( minfo.cgIdx(cg0), minfo.cgIdx(cg1) );
 }
 
 /** Non-checking version of Connectivity::connectedTo(AtomIdx) */
@@ -644,14 +738,14 @@ QList< QList<AtomIdx> > ConnectivityBase::_pvt_findPaths(AtomIdx cursor, const A
     list if there are no bonded paths between the two atoms */
 QList< QList<AtomIdx> > ConnectivityBase::findPaths(AtomIdx atom0, AtomIdx atom1) const
 {
-    atom0 = atom0.map( d->nAtoms() );
-    atom1 = atom1.map( d->nAtoms() );
+    atom0 = atom0.map( minfo.nAtoms() );
+    atom1 = atom1.map( minfo.nAtoms() );
     
     if (atom0 == atom1)
         return QList< QList<AtomIdx> >();
     
     QSet<AtomIdx> done;
-    done.reserve(d->nAtoms());
+    done.reserve(minfo.nAtoms());
     
     return this->_pvt_findPaths(atom0, atom1, done);
 }
@@ -680,14 +774,14 @@ QList<AtomIdx> ConnectivityBase::findPath(AtomIdx atom0, AtomIdx atom1) const
     list if there are no bonded paths between the two atoms */
 QList<AtomIdx> ConnectivityBase::findPath(const AtomID &atom0, const AtomID &atom1) const
 {
-    return this->findPath( d->atomIdx(atom0), d->atomIdx(atom1) );
+    return this->findPath( minfo.atomIdx(atom0), minfo.atomIdx(atom1) );
 }
 
 /** Find the shortest bonded path between two atoms. This returns an empty
     list if there is no bonded path between these two atoms */
 QList< QList<AtomIdx> > ConnectivityBase::findPaths(const AtomID &atom0, const AtomID &atom1) const
 {
-    return this->findPaths( d->atomIdx(atom0), d->atomIdx(atom1) );
+    return this->findPaths( minfo.atomIdx(atom0), minfo.atomIdx(atom1) );
 }
 
 /** This function returns whether or not the two passed atoms are part of
@@ -707,7 +801,7 @@ bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const
 {
     QList< QList<AtomIdx> > paths = findPaths(atom0, atom2);
     
-    atom1 = atom1.map(d->nAtoms());
+    atom1 = atom1.map(minfo.nAtoms());
     
     if (paths.count() > 1)
     {
@@ -729,8 +823,8 @@ bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2, AtomI
 {
     QList< QList<AtomIdx> > paths = findPaths(atom0, atom3);
     
-    atom1 = atom1.map(d->nAtoms());
-    atom2 = atom2.map(d->nAtoms());
+    atom1 = atom1.map(minfo.nAtoms());
+    atom2 = atom2.map(minfo.nAtoms());
     
     if (paths.count() > 1)
     {
@@ -904,8 +998,8 @@ tuple<AtomSelection,AtomSelection>
 ConnectivityBase::selectGroups(const QSet<AtomIdx> &group0,
                                const QSet<AtomIdx> &group1) const
 {
-    AtomSelection grp0(*d);
-    AtomSelection grp1(*d);
+    AtomSelection grp0(minfo);
+    AtomSelection grp1(minfo);
 
     tuple<AtomSelection,AtomSelection> groups( grp0.selectOnly(group0),
                                                grp1.selectOnly(group1) );
@@ -939,7 +1033,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1) const
     QSet<AtomIdx> root0, root1;
 
     //map the atoms
-    int nats = d->nAtoms();
+    int nats = minfo.nAtoms();
     atom0 = atom0.map(nats);
     atom1 = atom1.map(nats);
 
@@ -1005,7 +1099,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1) const
             if (bonded_atom != atom1 and group1.contains(bonded_atom))
             {
                 editor.disconnect(atom0, bonded_atom);
-                //qDebug() << "DISCONNECTING(0)" << d->name(bonded_atom) << d->name(atom0);
+                //qDebug() << "DISCONNECTING(0)" << minfo.name(bonded_atom) << minfo.name(atom0);
             }
         }
         
@@ -1014,7 +1108,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1) const
             if (bonded_atom != atom0 and group0.contains(bonded_atom))
             {
                 editor.disconnect(atom1, bonded_atom);
-                //qDebug() << "DISCONNECTING(1)" << d->name(bonded_atom) << d->name(atom1);
+                //qDebug() << "DISCONNECTING(1)" << minfo.name(bonded_atom) << minfo.name(atom1);
             }
         }
         
@@ -1031,12 +1125,12 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1) const
         
         foreach (const AtomIdx &atom, group0)
         {
-            names0.insert( d->name(atom) );
+            names0.insert( minfo.name(atom) );
         }
         
         foreach (const AtomIdx &atom, group1)
         {
-            names1.insert( d->name(atom) );
+            names1.insert( minfo.name(atom) );
         }
     
         qDebug() << "group0" << Sire::toString(names0);
@@ -1056,7 +1150,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1) const
 tuple<AtomSelection,AtomSelection> 
 ConnectivityBase::split(const AtomID &atom0, const AtomID &atom1) const
 {
-    return this->split( d->atomIdx(atom0), d->atomIdx(atom1) );
+    return this->split( minfo.atomIdx(atom0), minfo.atomIdx(atom1) );
 }
 
 /** Split the molecule into two parts about the bond 'bond'
@@ -1103,7 +1197,7 @@ tuple<AtomSelection,AtomSelection>
 ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1, 
                         const AtomSelection &selected_atoms) const
 {
-    selected_atoms.assertCompatibleWith(*d);
+    selected_atoms.assertCompatibleWith(minfo);
     
     if (selected_atoms.selectedAll())
         return this->split(atom0, atom1);
@@ -1123,8 +1217,8 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1,
     root1.reserve(selected_atoms.nSelected());
     
     //map the atoms
-    atom0 = atom0.map(d->nAtoms());
-    atom1 = atom1.map(d->nAtoms());
+    atom0 = atom0.map(minfo.nAtoms());
+    atom1 = atom1.map(minfo.nAtoms());
 
     if (atom0 == atom1)
         throw SireMol::ring_error( QObject::tr(
@@ -1206,7 +1300,7 @@ tuple<AtomSelection,AtomSelection>
 ConnectivityBase::split(const AtomID &atom0, const AtomID &atom1,
                         const AtomSelection &selected_atoms) const
 {
-    return this->split( d->atomIdx(atom0), d->atomIdx(atom1),
+    return this->split( minfo.atomIdx(atom0), minfo.atomIdx(atom1),
                         selected_atoms );
 }
 
@@ -1250,7 +1344,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const
     QSet<AtomIdx> root0, root1;
 
     //map the atoms
-    int nats = d->nAtoms();
+    int nats = minfo.nAtoms();
     atom0 = atom0.map(nats);
     atom1 = atom1.map(nats);
     atom2 = atom2.map(nats);
@@ -1315,7 +1409,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const
             if (group1.contains(bonded_atom))
             {
                 editor.disconnect(atom0, bonded_atom);
-                //qDebug() << "DISCONNECTING(0)" << d->name(bonded_atom) << d->name(atom0);
+                //qDebug() << "DISCONNECTING(0)" << minfo.name(bonded_atom) << minfo.name(atom0);
             }
         }
         
@@ -1324,7 +1418,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const
             if (group0.contains(bonded_atom))
             {
                 editor.disconnect(atom2, bonded_atom);
-                //qDebug() << "DISCONNECTING(1)" << d->name(bonded_atom) << d->name(atom2);
+                //qDebug() << "DISCONNECTING(1)" << minfo.name(bonded_atom) << minfo.name(atom2);
             }
         }
         
@@ -1341,12 +1435,12 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const
         
         foreach (const AtomIdx &atom, group0)
         {
-            names0.insert( d->name(atom) );
+            names0.insert( minfo.name(atom) );
         }
         
         foreach (const AtomIdx &atom, group1)
         {
-            names1.insert( d->name(atom) );
+            names1.insert( minfo.name(atom) );
         }
     
         qDebug() << "group0" << Sire::toString(names0);
@@ -1367,8 +1461,8 @@ tuple<AtomSelection,AtomSelection>
 ConnectivityBase::split(const AtomID &atom0, const AtomID &atom1,
                         const AtomID &atom2) const
 {
-    return this->split( d->atomIdx(atom0), d->atomIdx(atom1),
-                        d->atomIdx(atom2) );
+    return this->split( minfo.atomIdx(atom0), minfo.atomIdx(atom1),
+                        minfo.atomIdx(atom2) );
 }
 
 /** Split the molecule into two parts based on the supplied angle
@@ -1413,7 +1507,7 @@ tuple<AtomSelection,AtomSelection>
 ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2,
                         const AtomSelection &selected_atoms) const
 {
-    selected_atoms.assertCompatibleWith(*d);
+    selected_atoms.assertCompatibleWith(minfo);
     
     if (selected_atoms.selectedAll())
         return this->split(atom0, atom1, atom2);
@@ -1434,9 +1528,9 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2,
     root1.reserve(selected_atoms.nSelected());
     
     //map the atoms
-    atom0 = atom0.map(d->nAtoms());
-    atom1 = atom1.map(d->nAtoms());
-    atom2 = atom2.map(d->nAtoms());
+    atom0 = atom0.map(minfo.nAtoms());
+    atom1 = atom1.map(minfo.nAtoms());
+    atom2 = atom2.map(minfo.nAtoms());
 
     if (atom0 == atom1 or atom0 == atom2 or atom1 == atom2)
         throw SireMol::ring_error( QObject::tr(
@@ -1492,7 +1586,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2,
             if (group1.contains(bonded_atom))
             {
                 editor.disconnect(atom0, bonded_atom);
-                //qDebug() << "DISCONNECTING(0)" << d->name(bonded_atom) << d->name(atom0);
+                //qDebug() << "DISCONNECTING(0)" << minfo.name(bonded_atom) << minfo.name(atom0);
             }
         }
         
@@ -1501,7 +1595,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2,
             if (group0.contains(bonded_atom))
             {
                 editor.disconnect(atom2, bonded_atom);
-                //qDebug() << "DISCONNECTING(1)" << d->name(bonded_atom) << d->name(atom2);
+                //qDebug() << "DISCONNECTING(1)" << minfo.name(bonded_atom) << minfo.name(atom2);
             }
         }
         
@@ -1518,12 +1612,12 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2,
         
         foreach (const AtomIdx &atom, group0)
         {
-            names0.insert( d->name(atom) );
+            names0.insert( minfo.name(atom) );
         }
         
         foreach (const AtomIdx &atom, group1)
         {
-            names1.insert( d->name(atom) );
+            names1.insert( minfo.name(atom) );
         }
     
         qDebug() << "group0" << Sire::toString(names0);
@@ -1546,8 +1640,8 @@ tuple<AtomSelection,AtomSelection>
 ConnectivityBase::split(const AtomID &atom0, const AtomID &atom1, const AtomID &atom2,
                         const AtomSelection &selected_atoms) const
 {
-    return this->split( d->atomIdx(atom0), d->atomIdx(atom1),
-                        d->atomIdx(atom2), selected_atoms );
+    return this->split( minfo.atomIdx(atom0), minfo.atomIdx(atom1),
+                        minfo.atomIdx(atom2), selected_atoms );
 }
       
 /** Split the selected atoms 'selected_atoms' of this molecule  
@@ -1598,7 +1692,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1,
     QSet<AtomIdx> root0, root1;
 
     //map the atoms
-    int nats = d->nAtoms();
+    int nats = minfo.nAtoms();
     atom0 = atom0.map(nats);
     atom1 = atom1.map(nats);
     atom2 = atom2.map(nats);
@@ -1670,7 +1764,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1,
             if (group1.contains(bonded_atom))
             {
                 editor.disconnect(atom0, bonded_atom);
-                //qDebug() << "DISCONNECTING(0)" << d->name(bonded_atom) << d->name(atom0);
+                //qDebug() << "DISCONNECTING(0)" << minfo.name(bonded_atom) << minfo.name(atom0);
             }
         }
         
@@ -1679,7 +1773,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1,
             if (group0.contains(bonded_atom))
             {
                 editor.disconnect(atom3, bonded_atom);
-                //qDebug() << "DISCONNECTING(1)" << d->name(bonded_atom) << d->name(atom3);
+                //qDebug() << "DISCONNECTING(1)" << minfo.name(bonded_atom) << minfo.name(atom3);
             }
         }
         
@@ -1696,12 +1790,12 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1,
         
         foreach (const AtomIdx &atom, group0)
         {
-            names0.insert( d->name(atom) );
+            names0.insert( minfo.name(atom) );
         }
         
         foreach (const AtomIdx &atom, group1)
         {
-            names1.insert( d->name(atom) );
+            names1.insert( minfo.name(atom) );
         }
     
         qDebug() << "group0" << Sire::toString(names0);
@@ -1724,8 +1818,8 @@ tuple<AtomSelection,AtomSelection>
 ConnectivityBase::split(const AtomID &atom0, const AtomID &atom1, 
                     const AtomID &atom2, const AtomID &atom3) const
 {
-    return this->split( d->atomIdx(atom0), d->atomIdx(atom1),
-                        d->atomIdx(atom2), d->atomIdx(atom3) );
+    return this->split( minfo.atomIdx(atom0), minfo.atomIdx(atom1),
+                        minfo.atomIdx(atom2), minfo.atomIdx(atom3) );
 }
       
 /** Split this molecule into two parts based on the dihedral identified in 
@@ -1777,7 +1871,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1,
                         AtomIdx atom2, AtomIdx atom3,
                         const AtomSelection &selected_atoms) const
 {
-    selected_atoms.assertCompatibleWith(*d);
+    selected_atoms.assertCompatibleWith(minfo);
     
     if (selected_atoms.selectedAll())
         return this->split(atom0, atom1, atom2, atom3);
@@ -1799,10 +1893,10 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1,
     root1.reserve(selected_atoms.nSelected());
     
     //map the atoms
-    atom0 = atom0.map(d->nAtoms());
-    atom1 = atom1.map(d->nAtoms());
-    atom2 = atom2.map(d->nAtoms());
-    atom3 = atom3.map(d->nAtoms());
+    atom0 = atom0.map(minfo.nAtoms());
+    atom1 = atom1.map(minfo.nAtoms());
+    atom2 = atom2.map(minfo.nAtoms());
+    atom3 = atom3.map(minfo.nAtoms());
 
     if (atom0 == atom1 or atom0 == atom2 or atom0 == atom3 or
         atom1 == atom2 or atom1 == atom3 or
@@ -1864,7 +1958,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1,
             if (group1.contains(bonded_atom))
             {
                 editor.disconnect(atom0, bonded_atom);
-                //qDebug() << "DISCONNECTING(0)" << d->name(bonded_atom) << d->name(atom0);
+                //qDebug() << "DISCONNECTING(0)" << minfo.name(bonded_atom) << minfo.name(atom0);
             }
         }
         
@@ -1873,7 +1967,7 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1,
             if (group0.contains(bonded_atom))
             {
                 editor.disconnect(atom3, bonded_atom);
-                //qDebug() << "DISCONNECTING(1)" << d->name(bonded_atom) << d->name(atom3);
+                //qDebug() << "DISCONNECTING(1)" << minfo.name(bonded_atom) << minfo.name(atom3);
             }
         }
         
@@ -1890,12 +1984,12 @@ ConnectivityBase::split(AtomIdx atom0, AtomIdx atom1,
         
         foreach (const AtomIdx &atom, group0)
         {
-            names0.insert( d->name(atom) );
+            names0.insert( minfo.name(atom) );
         }
         
         foreach (const AtomIdx &atom, group1)
         {
-            names1.insert( d->name(atom) );
+            names1.insert( minfo.name(atom) );
         }
     
         qDebug() << "group0" << Sire::toString(names0);
@@ -1921,8 +2015,8 @@ ConnectivityBase::split(const AtomID &atom0, const AtomID &atom1,
                     const AtomID &atom2, const AtomID &atom3,
                     const AtomSelection &selected_atoms) const
 {
-    return this->split( d->atomIdx(atom0), d->atomIdx(atom1),
-                        d->atomIdx(atom2), d->atomIdx(atom3),
+    return this->split( minfo.atomIdx(atom0), minfo.atomIdx(atom1),
+                        minfo.atomIdx(atom2), minfo.atomIdx(atom3),
                         selected_atoms );
 }
       
@@ -2249,7 +2343,7 @@ QVector< QVector<bool> > ConnectivityBase::getBondMatrix(int start, int end) con
     
     QVector< QVector<bool> > ret;
     
-    const int nats = d.read().nAtoms();
+    const int nats = minfo.nAtoms();
     
     if (nats == 0)
         return ret;

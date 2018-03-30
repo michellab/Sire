@@ -96,6 +96,13 @@ public:
                     PARTICLE_TYPE particle_type,
                     const LJParameter &ljparam,
                     const SireMol::Element &element = SireMol::Element(0));
+
+    GromacsAtomType(QString atom_type, QString bond_type,
+                    SireUnits::Dimension::MolarMass mass,
+                    SireUnits::Dimension::Charge charge,
+                    PARTICLE_TYPE particle_type,
+                    const LJParameter &ljparam,
+                    const SireMol::Element &element = SireMol::Element(0));
     
     GromacsAtomType(const GromacsAtomType &other);
     
@@ -116,6 +123,7 @@ public:
     QString toString() const;
     
     QString atomType() const;
+    QString bondType() const;
     SireUnits::Dimension::MolarMass mass() const;
     SireUnits::Dimension::Charge charge() const;
     SireMM::LJParameter ljParameter() const;
@@ -133,6 +141,7 @@ private:
     void assertSane() const;
 
     QString _typ;
+    QString _btyp;
     SireUnits::Dimension::MolarMass _mass;
     SireUnits::Dimension::Charge _chg;
     SireMM::LJParameter _lj;
@@ -191,6 +200,8 @@ public:
     bool isResolved() const;
     
     bool isSimple() const;
+    
+    bool isHarmonic() const;
     
     void assertResolved() const;
     
@@ -270,6 +281,8 @@ public:
     
     QString toString() const;
     
+    bool isHarmonic() const;
+    
     bool isResolved() const;
     bool needsResolving() const;
     
@@ -312,7 +325,13 @@ public:
                     double k0, double k1=0, double k2=0, double k3=0, double k4=0, double k5=0);
     GromacsDihedral(int function_type, const QList<double> &params);
     
-    GromacsDihedral(const SireCAS::Expression &angle, const SireCAS::Symbol &theta);
+    GromacsDihedral(const SireCAS::Expression &dihedral, const SireCAS::Symbol &phi);
+    
+    static QList<GromacsDihedral> construct(const SireCAS::Expression &dihedral,
+                                            const SireCAS::Symbol &phi);
+    static QList<GromacsDihedral> constructImproper(
+                                            const SireCAS::Expression &dihedral,
+                                            const SireCAS::Symbol &phi);
     
     GromacsDihedral(const GromacsDihedral &other);
     
@@ -343,6 +362,8 @@ public:
     QString functionTypeString() const;
     
     QList<double> parameters() const;
+    
+    bool isCosine() const;
     
     bool isSimple() const;
     
@@ -380,6 +401,13 @@ private:
 inline QString GromacsAtomType::atomType() const
 {
     return _typ;
+}
+
+/** Return the bond type name - this is normally the same as the atom type,
+    but is different for some forcefields, like OPLS */
+inline QString GromacsAtomType::bondType() const
+{
+    return _btyp;
 }
 
 /** Return the atom mass */

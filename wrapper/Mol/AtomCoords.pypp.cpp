@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/vector.h"
 
+#include "SireMol/moleculeview.h"
+
 #include "SireMaths/quaternion.h"
 
 #include "SireMaths/matrix.h"

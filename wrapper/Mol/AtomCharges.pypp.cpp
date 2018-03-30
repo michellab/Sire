@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/vector.h"
 
+#include "SireMol/moleculeview.h"
+
 SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 0, 0, 1, 0, 0, 0> > __copy__(const SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 0, 0, 1, 0, 0, 0> > &other){ return SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 0, 0, 1, 0, 0, 0> >(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -27,6 +29,10 @@ void register_AtomCharges_class(){
         typedef bp::class_< SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomCharges_exposer_t;
         AtomCharges_exposer_t AtomCharges_exposer = AtomCharges_exposer_t( "AtomCharges", "", bp::init< >("") );
         bp::scope AtomCharges_scope( AtomCharges_exposer );
+        AtomCharges_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "") );
+        AtomCharges_exposer.def( bp::init< SireMol::MoleculeInfo const &, SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomCharges_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "") );
+        AtomCharges_exposer.def( bp::init< SireMol::MoleculeView const &, SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > const & >(( bp::arg("molview"), bp::arg("default_value") ), "") );
         AtomCharges_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
         AtomCharges_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
         AtomCharges_exposer.def( bp::init< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > const & >(( bp::arg("value") ), "") );

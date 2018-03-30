@@ -57,6 +57,7 @@
 
 #include <QRegularExpression>
 #include <QDebug>
+#include <QElapsedTimer>
 
 using namespace SireIO;
 using namespace SireMol;
@@ -405,7 +406,7 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
     {}
 
     //what precision should be used - this can be set by the user
-    int precision = 3;
+    int precision = 6;
     try
     {
         precision = map["precision"].value().asA<NumberProperty>().value();
@@ -1634,7 +1635,10 @@ void Gro87::finaliseSystem(System &system, const PropertyMap &map) const
                         .arg(box_v3.at(0).toString()), CODELOC );
         }
         
-        system.setProperty( space_property.source(), SireVol::PeriodicBox(Vector(x,y,z)) );
+        if (x + y + z > 0)
+        {
+            system.setProperty( space_property.source(), SireVol::PeriodicBox(Vector(x,y,z)) );
+        }
     }
     
     //update the System fileformat property to record that it includes
@@ -1879,27 +1883,38 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
         //of the atoms and residues in the molecule
         if (not ids_match)
         {
-            MolStructureEditor moleditor(mol);
+            QHash<AtomNum,AtomNum> renumbered_atoms;
+            QHash<ResNum,ResNum> renumbered_residues;
 
-            for (int j=0; j<mol.nAtoms(); ++j)
+            for (int j=0; j<molinfo.nAtoms(); ++j)
             {
-                auto atom = moleditor.atom( AtomIdx(j) );
                 int idx = idx_in_gro[j];
 
-                if (atom.number() != atmnums.constData()[idx])
+                auto oldnum = molinfo.number( AtomIdx(j) );
+                AtomNum newnum(atmnums.constData()[idx]);
+                
+                if (oldnum != newnum)
+                    renumbered_atoms.insert(oldnum, newnum);
+            }
+            
+            for (int j=0; j<molinfo.nResidues(); ++j)
+            {
+                auto oldnum = molinfo.number( ResIdx(j) );
+            
+                auto atoms_in_res = molinfo.getAtomsIn(ResIdx(j));
+                
+                if (not atoms_in_res.isEmpty())
                 {
-                    atom = atom.renumber( AtomNum(atmnums.constData()[idx]) );
-                }
-
-                auto res = atom.residue();
-
-                if (res.number() != resnums.constData()[idx])
-                {
-                    res = res.renumber( ResNum(resnums.constData()[idx]) );
+                    int idx = idx_in_gro[ atoms_in_res.at(0).value() ];
+                    
+                    ResNum newnum(resnums.constData()[idx]);
+                    
+                    if (oldnum != newnum)
+                        renumbered_residues.insert(oldnum, newnum);
                 }
             }
 
-            mol = moleditor.commit();
+            mol = mol.edit().renumber(renumbered_atoms, renumbered_residues).commit();
         }
 
         //now use this index to locate the correct coordinate and/or velocity

@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/vector.h"
 
+#include "SireMol/moleculeview.h"
+
 SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 1, 0, 0, 0, 0, 0> > __copy__(const SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 1, 0, 0, 0, 0, 0> > &other){ return SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<0, 1, 0, 0, 0, 0, 0> >(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -27,6 +29,10 @@ void register_AtomRadii_class(){
         typedef bp::class_< SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomRadii_exposer_t;
         AtomRadii_exposer_t AtomRadii_exposer = AtomRadii_exposer_t( "AtomRadii", "", bp::init< >("") );
         bp::scope AtomRadii_scope( AtomRadii_exposer );
+        AtomRadii_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "") );
+        AtomRadii_exposer.def( bp::init< SireMol::MoleculeInfo const &, SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomRadii_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "") );
+        AtomRadii_exposer.def( bp::init< SireMol::MoleculeView const &, SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > const & >(( bp::arg("molview"), bp::arg("default_value") ), "") );
         AtomRadii_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
         AtomRadii_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
         AtomRadii_exposer.def( bp::init< SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > const & >(( bp::arg("value") ), "") );

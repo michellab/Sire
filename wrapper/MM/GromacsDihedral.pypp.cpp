@@ -23,6 +23,8 @@ namespace bp = boost::python;
 
 #include "SireUnits/units.h"
 
+#include "amberparams.h"
+
 #include "gromacsparams.h"
 
 #include "gromacsparams.h"
@@ -44,7 +46,7 @@ void register_GromacsDihedral_class(){
         GromacsDihedral_exposer.def( bp::init< int >(( bp::arg("function_type") ), "Construct a dihedral that is of the specified type, but the parameters have yet\nto be resolved. This is because Gromacs can indicate the required type of\nfunction in the molecule specification, without providing the parameters") );
         GromacsDihedral_exposer.def( bp::init< int, double, bp::optional< double, double, double, double, double > >(( bp::arg("function_type"), bp::arg("k0"), bp::arg("k1")=0, bp::arg("k2")=0, bp::arg("k3")=0, bp::arg("k4")=0, bp::arg("k5")=0 ), "Construct an dihedral of the specified function type with specified parameters\n(the order should be the same as in the Gromacs Manual, table 5.5)") );
         GromacsDihedral_exposer.def( bp::init< int, QList< double > const & >(( bp::arg("function_type"), bp::arg("params") ), "Construct a dihedral of the specified function type by interpreting the parameter\ndata from the passed list of parameter values. These should be in the\nsame order as in the Gromacs Manual, table 5.5") );
-        GromacsDihedral_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("angle"), bp::arg("theta") ), "Construct from the passed dihedral, using phi as the symbol for the phi value") );
+        GromacsDihedral_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Symbol const & >(( bp::arg("dihedral"), bp::arg("phi") ), "Construct from the passed dihedral, using phi as the symbol for the phi value") );
         GromacsDihedral_exposer.def( bp::init< SireMM::GromacsDihedral const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::GromacsDihedral::assertResolved
         
@@ -67,6 +69,30 @@ void register_GromacsDihedral_class(){
                 , at_function_value
                 , ( bp::arg("i") )
                 , "Return the ith parameter for this dihedral" );
+        
+        }
+        { //::SireMM::GromacsDihedral::construct
+        
+            typedef ::QList< SireMM::GromacsDihedral > ( *construct_function_type )( ::SireCAS::Expression const &,::SireCAS::Symbol const & );
+            construct_function_type construct_function_value( &::SireMM::GromacsDihedral::construct );
+            
+            GromacsDihedral_exposer.def( 
+                "construct"
+                , construct_function_value
+                , ( bp::arg("dihedral"), bp::arg("phi") )
+                , "Construct from the passed dihedral, using phi as the symbol for the phi value" );
+        
+        }
+        { //::SireMM::GromacsDihedral::constructImproper
+        
+            typedef ::QList< SireMM::GromacsDihedral > ( *constructImproper_function_type )( ::SireCAS::Expression const &,::SireCAS::Symbol const & );
+            constructImproper_function_type constructImproper_function_value( &::SireMM::GromacsDihedral::constructImproper );
+            
+            GromacsDihedral_exposer.def( 
+                "constructImproper"
+                , constructImproper_function_value
+                , ( bp::arg("dihedral"), bp::arg("phi") )
+                , "Construct from the passed improper, using phi as the symbol for the phi value" );
         
         }
         { //::SireMM::GromacsDihedral::count
@@ -122,6 +148,17 @@ void register_GromacsDihedral_class(){
                 "isAngleTorsionCrossTerm"
                 , isAngleTorsionCrossTerm_function_value
                 , "Return whether or not this dihedral is a angletorsion cross term" );
+        
+        }
+        { //::SireMM::GromacsDihedral::isCosine
+        
+            typedef bool ( ::SireMM::GromacsDihedral::*isCosine_function_type)(  ) const;
+            isCosine_function_type isCosine_function_value( &::SireMM::GromacsDihedral::isCosine );
+            
+            GromacsDihedral_exposer.def( 
+                "isCosine"
+                , isCosine_function_value
+                , "Return whether or not this is a cosine-series dihedral" );
         
         }
         { //::SireMM::GromacsDihedral::isImproperAngleTerm
@@ -290,6 +327,8 @@ void register_GromacsDihedral_class(){
                 , "" );
         
         }
+        GromacsDihedral_exposer.staticmethod( "construct" );
+        GromacsDihedral_exposer.staticmethod( "constructImproper" );
         GromacsDihedral_exposer.staticmethod( "typeName" );
         GromacsDihedral_exposer.def( "__copy__", &__copy__);
         GromacsDihedral_exposer.def( "__deepcopy__", &__copy__);

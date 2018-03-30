@@ -79,6 +79,8 @@ void register_SireMM_containers()
     register_list< QList<GromacsAngle> >();
     register_list< QList<GromacsDihedral> >();
 
+    register_list< QVector<AmberDihPart> >();
+
     register_dict< QHash<BondID,AmberBond> >();
     register_dict< QHash<AngleID,AmberAngle> >();
     register_dict< QHash<DihedralID,AmberDihedral> >();

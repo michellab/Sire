@@ -85,10 +85,14 @@ Supplementary::Supplementary(const QString &filename, const PropertyMap &map)
     // Store the name of the input file.
     this->filename = filename;
 
-    // Set score to one. (Need a low, non-zero score)
+    // Set score to 2. (Need a low, non-zero score)
     // This ensures that not all files will be flagged as supplementary,
     // i.e. they will be scored more highly by their native parser.
-    this->setScore(1);
+    // We can't set the score to 1 since certain supplementary NAMD data
+    // records, e.g. box information, are given a score of 1 by the AmberRst7
+    // parser due apparent to similarities in the record formatting.
+    // TODO: Work out why AmberRst7 thinks xst/xsc box records are atoms.
+    this->setScore(2);
 }
 
 /** Construct to read in the data from the passed text lines. The

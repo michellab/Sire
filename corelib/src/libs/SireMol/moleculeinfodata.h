@@ -181,6 +181,11 @@ public:
     MoleculeInfoData rename(ChainIdx chainidx, const ChainName &newname) const;
     MoleculeInfoData rename(SegIdx segidx, const SegName &newname) const;
     
+    MoleculeInfoData renumber( const QHash<AtomNum,AtomNum> &atomnums ) const;
+    MoleculeInfoData renumber( const QHash<ResNum,ResNum> &resnums) const;
+    MoleculeInfoData renumber( const QHash<AtomNum,AtomNum> &atomnums,
+                               const QHash<ResNum,ResNum> &resnums ) const;
+    
     const CGAtomIdx& cgAtomIdx(AtomIdx atomidx) const;
     const CGAtomIdx& cgAtomIdx(const AtomID &atomid) const;
     
@@ -206,6 +211,10 @@ public:
     CGIdx cgIdx(const CGID &cgid) const;
     CGIdx cgIdx(const ResIdx &residx) const;
     CGIdx cgIdx(const ResID &resid) const;
+
+    bool isAtomCutting() const;
+    bool isResidueCutting() const;
+    bool isMoleculeCutting() const;
 
     bool isResidueCutting(const ResIdx &residx) const;
     bool isResidueCutting(const ResID &resid) const;
@@ -409,6 +418,10 @@ private:
 
     /** Hash mapping CutGroup name to CutGroup indicies */
     QMultiHash<QString,CGIdx> cg_by_name;
+    
+    /** The cutting scheme for the molecule. This is either
+        0 = unknown, 1 = atom, 2 = residue or 3 = molecule */
+    qint32 cutting_scheme;
 };
 
 } //end of namespace SireMol 

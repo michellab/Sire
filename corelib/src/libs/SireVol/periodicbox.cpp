@@ -221,13 +221,13 @@ const Vector& PeriodicBox::dimensions() const
 /** Return the minimum coordinates of the box that has its center at 'center' */
 Vector PeriodicBox::minCoords(const Vector &center) const
 {
-    return center + halflength;
+    return center - halflength;
 }
 
 /** Return the maximum coordinates of the box that has its center at 'center' */
 Vector PeriodicBox::maxCoords(const Vector &center) const
 {
-    return center - halflength;
+    return center + halflength;
 }
 
 /** Return a string representation of this space */

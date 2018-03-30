@@ -18,6 +18,7 @@ set ( SIREFF_HEADERS
       ff.h
       ff3d.h
       ffcomponent.h
+      ffdetail.h
       ffid.h
       ffidentifier.h
       ffidx.h
@@ -63,6 +64,7 @@ set ( SIREFF_SOURCES
       ff.cpp
       ff3d.cpp
       ffcomponent.cpp
+      ffdetail.cpp
       ffid.cpp
       ffidentifier.cpp
       ffmolgroup.cpp

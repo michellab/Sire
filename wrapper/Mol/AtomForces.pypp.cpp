@@ -14,6 +14,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/vector.h"
 
+#include "SireMol/moleculeview.h"
+
 SireMol::AtomProperty<SireMaths::Vector3D<SireUnits::Dimension::Force> > __copy__(const SireMol::AtomProperty<SireMaths::Vector3D<SireUnits::Dimension::Force> > &other){ return SireMol::AtomProperty<SireMaths::Vector3D<SireUnits::Dimension::Force> >(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -28,6 +30,10 @@ void register_AtomForces_class(){
         typedef bp::class_< SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomForces_exposer_t;
         AtomForces_exposer_t AtomForces_exposer = AtomForces_exposer_t( "AtomForces", "", bp::init< >("") );
         bp::scope AtomForces_scope( AtomForces_exposer );
+        AtomForces_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "") );
+        AtomForces_exposer.def( bp::init< SireMol::MoleculeInfo const &, SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomForces_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "") );
+        AtomForces_exposer.def( bp::init< SireMol::MoleculeView const &, SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & >(( bp::arg("molview"), bp::arg("default_value") ), "") );
         AtomForces_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
         AtomForces_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
         AtomForces_exposer.def( bp::init< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & >(( bp::arg("value") ), "") );

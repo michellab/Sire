@@ -21,6 +21,10 @@ namespace bp = boost::python;
 
 #include "SireIO/errors.h"
 
+#include "SireMM/amberparams.h"
+
+#include "SireMM/atomljs.h"
+
 #include "SireMM/fouratomfunctions.h"
 
 #include "SireMM/internalff.h"
@@ -48,6 +52,8 @@ namespace bp = boost::python;
 #include "SireSystem/system.h"
 
 #include "SireUnits/units.h"
+
+#include "SireVol/periodicbox.h"
 
 #include "charmmpsf.h"
 
@@ -313,6 +319,29 @@ void register_CharmmPSF_class(){
                 "nMolecules"
                 , nMolecules_function_value
                 , "Return the number of molecules." );
+        
+        }
+        { //::SireIO::CharmmPSF::nNonBondedExclusions
+        
+            typedef int ( ::SireIO::CharmmPSF::*nNonBondedExclusions_function_type)(  ) const;
+            nNonBondedExclusions_function_type nNonBondedExclusions_function_value( &::SireIO::CharmmPSF::nNonBondedExclusions );
+            
+            CharmmPSF_exposer.def( 
+                "nNonBondedExclusions"
+                , nNonBondedExclusions_function_value
+                , "Return the number of non-bonded exclusion records." );
+        
+        }
+        { //::SireIO::CharmmPSF::nNonBondedExclusions
+        
+            typedef int ( ::SireIO::CharmmPSF::*nNonBondedExclusions_function_type)( int ) const;
+            nNonBondedExclusions_function_type nNonBondedExclusions_function_value( &::SireIO::CharmmPSF::nNonBondedExclusions );
+            
+            CharmmPSF_exposer.def( 
+                "nNonBondedExclusions"
+                , nNonBondedExclusions_function_value
+                , ( bp::arg("i") )
+                , "Return the number of non-bonded exclusions in molecule i." );
         
         }
         CharmmPSF_exposer.def( bp::self != bp::self );

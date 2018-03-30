@@ -234,6 +234,17 @@ void register_RecordValues_class(){
                 , "Return the sum of the square of all of the values" );
         
         }
+        { //::SireMaths::RecordValues::toString
+        
+            typedef ::QString ( ::SireMaths::RecordValues::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireMaths::RecordValues::toString );
+            
+            RecordValues_exposer.def( 
+                "toString"
+                , toString_function_value
+                , "" );
+        
+        }
         { //::SireMaths::RecordValues::typeName
         
             typedef char const * ( *typeName_function_type )(  );

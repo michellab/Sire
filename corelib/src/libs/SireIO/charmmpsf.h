@@ -31,6 +31,8 @@
 
 #include "moleculeparser.h"
 
+#include "SireVol/periodicbox.h"
+
 SIRE_BEGIN_HEADER
 
 namespace SireCAS
@@ -46,6 +48,13 @@ class CharmmParam;
 class CharmmPSF;
 }
 
+namespace SireMM
+{
+class TwoAtomFunctions;
+class ThreeAtomFunctions;
+class FourAtomFunctions;
+}
+
 namespace SireMol
 {
 class Atom;
@@ -54,13 +63,6 @@ class MoleculeData;
 class MoleculeInfoData;
 class MoleculeView;
 class Residue;
-}
-
-namespace SireMM
-{
-class TwoAtomFunctions;
-class ThreeAtomFunctions;
-class FourAtomFunctions;
 }
 
 QDataStream& operator<<(QDataStream&, const SireIO::PSFAtom&);
@@ -135,6 +137,12 @@ public:
     /** Get the atom mass. */
     double getMass() const;
 
+    /** Get the non-bonded exclusion. */
+    bool isNonBondedExcluded() const;
+
+    /** Set the non-bonded exclusion. */
+    void setNonBondedExclusion(bool is_nb_excluded);
+
 private:
     /** The index in the atoms vector. */
     qint64 index;
@@ -165,6 +173,9 @@ private:
 
     /** Mass. */
     double mass;
+
+    /** Non-bonded exclusion. */
+    bool is_nb_excluded;
 };
 
 /** This is a container class for CHARMM parameter records.
@@ -182,9 +193,12 @@ public:
     CharmmParam();
 
     /** Constructor. */
-    CharmmParam(const QString &line, int type, QStringList &errors);
+    CharmmParam(const QString &line, int type, QStringList &errors, bool is_xplor = false);
 
     static const char* typeName();
+
+    /** Get the original parameter string. */
+    QString getString() const;
 
     /** Get the vector of atoms. */
     const QVector<QString>& getAtoms() const;
@@ -196,6 +210,9 @@ public:
     qint64 getType() const;
 
 private:
+    /** The original parameter string. */
+    QString param_string;
+
     /** The vector of atoms to which the parameter set applies. */
     QVector<QString> atoms;
 
@@ -269,6 +286,8 @@ public:
     int nDihedrals(int i) const;
     int nImpropers() const;
     int nImpropers(int i) const;
+    int nNonBondedExclusions() const;
+    int nNonBondedExclusions(int i) const;
     int nCrossTerms() const;
     int nCrossTerms(int i) const;
 
@@ -282,13 +301,14 @@ protected:
 private:
     void assertSane() const;
     void parseLines(const PropertyMap &map);
-    void parseParameters(
+    bool parseParameters(
         const QVector<QString> &param_lines,
         QMultiHash<QString, CharmmParam> &bond_params,
         QMultiHash<QString, CharmmParam> &angle_params,
         QMultiHash<QString, CharmmParam> &dihedral_params,
         QMultiHash<QString, CharmmParam> &improper_params,
-        QMultiHash<QString, CharmmParam> &cross_params) const;
+        QMultiHash<QString, CharmmParam> &nonbonded_params,
+        SireVol::PeriodicBox &box, bool &has_box_params) const;
 
     SireMol::MolStructureEditor getMolStructure(int imol,
         const SireBase::PropertyName &cutting) const;
@@ -304,7 +324,7 @@ private:
     QList<CharmmParam> findParameters(const QVector<QString> &search_atoms,
         const QMultiHash<QString, CharmmParam> &params, int type) const;
 
-    QString generateKey(QVector<QString> words) const;
+    QString generateKey(QVector<QString> words, int type) const;
 
     template<class T>
     T getProperty(const SireBase::PropertyName &prop,
@@ -317,7 +337,7 @@ private:
         const QMultiHash<QString, CharmmParam> &angle_params,
         const QMultiHash<QString, CharmmParam> &dihedral_params,
         const QMultiHash<QString, CharmmParam> &improper_params,
-        const QMultiHash<QString, CharmmParam> &cross_params,
+        const QMultiHash<QString, CharmmParam> &nonbonded_params,
         const PropertyMap &map = PropertyMap()) const;
 
     void parseMolecule(
@@ -328,10 +348,12 @@ private:
         QVector<QVector<qint64> > &local_angles,
         QVector<QVector<qint64> > &local_dihedrals,
         QVector<QVector<qint64> > &local_impropers,
+        QVector<QVector<qint64> > &local_nonbonded,
         QSet<QString> &bond_params,
         QSet<QString> &angle_params,
         QSet<QString> &dihedral_params,
         QSet<QString> &improper_params,
+        QSet<QString> &nonbonded_params,
         QStringList &local_errors,
         const PropertyMap &map);
 
@@ -342,14 +364,13 @@ private:
         const SireMol::Molecule &sire_mol, QVector<QVector<qint64> > &local_angles,
         QSet<QString> &angle_params, const PropertyMap &map);
 
-    void getFourAtomFrom(const SireMM::FourAtomFunctions &funcs, const SireMol::Molecule &sire_mol,
-        QVector<QVector<qint64> > &four_atom, QSet<QString> &four_atom_params, const PropertyMap &map,
-        bool is_improper=false);
+    void getDihedralsFrom(const SireMM::FourAtomFunctions &funcs, const SireMol::Molecule &sire_mol,
+        QVector<QVector<qint64> > &local_dihedrals, QSet<QString> &dihedral_params, const PropertyMap &map);
 
-    QString toHarmonicParameter(const QString &bond_atoms, const SireCAS::Expression &func,
-        const SireCAS::Symbol &R, bool is_improper = false);
+    void getImpropersFrom(const SireMM::FourAtomFunctions &funcs, const SireMol::Molecule &sire_mol,
+        QVector<QVector<qint64> > &local_impropers, QSet<QString> &improper_params, const PropertyMap &map);
 
-    QVector<QString> toFourAtomParameter(const QString &dihedral_atoms, const SireCAS::Expression &func);
+    QString getNonBondedFrom(const SireMol::Atom &atom, const PropertyMap &map) const;
 
     /** The atom record data (!NATOM). */
     QVector<PSFAtom> atoms;
@@ -378,6 +399,12 @@ private:
     /** The indices of the impropers for each molecule. */
     QVector<QVector<qint64> > mol_impropers;
 
+    /** The non-bonded exclusion record data (!NNB) . */
+    QVector<QVector<qint64> > nonbonded_exclusions;
+
+    /** The indices of the non-bonded exclusions for each molecule. */
+    QVector<QVector<qint64> > mol_nonbonded_exclusions;
+
     /** The cross term record data (!NCRTERM). */
     QVector<QVector<qint64> > cross_terms;
 
@@ -393,6 +420,12 @@ private:
 
     /** A list of CHARMM parameter strings. */
     QStringList charmm_params;
+
+    /** Periodic box data. */
+    SireVol::PeriodicBox box;
+
+    /** Whether the system has a periodic box. */
+    bool has_box;
 
     /** Any warnings that were raised when reading the file. */
     QStringList parse_warnings;

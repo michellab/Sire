@@ -75,8 +75,6 @@ public:
         bool isNotReferenced() const;
         
     private:
-        void doubleDereferenced() const;
-
         /** The atomic holding the reference count */
         tbb::atomic<int> refcount;
 
@@ -185,11 +183,6 @@ inline bool RefCountData::Counter::deref()
     #ifdef SIRE_USE_REFCOUNT_MUTEX
         mutex.unlock();
     #endif
-    
-    if (oldval <= 0)
-    {
-        this->doubleDereferenced();
-    }
 
     return (oldval > 1);
 }

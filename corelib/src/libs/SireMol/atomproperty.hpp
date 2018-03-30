@@ -135,6 +135,12 @@ public:
 
     AtomProperty();
 
+    AtomProperty(const MoleculeInfo &molinfo);
+    AtomProperty(const MoleculeInfo &molinfo, const T &default_value);
+    
+    AtomProperty(const MoleculeView &molview);
+    AtomProperty(const MoleculeView &molview, const T &default_value);
+    
     AtomProperty(const MoleculeInfoData &molinfo);
     AtomProperty(const MoleculeInfoData &molinfo, const T &default_value);
     
@@ -277,6 +283,41 @@ AtomProperty<T>::AtomProperty(const MoleculeInfoData &molinfo)
         //now copy this into the PackedArray
         props = PackedArray2D<T>(tmp_props);
     }
+}
+
+/** Create an AtomProperty that holds one value for each 
+    atom described in 'molinfo'. Each atom starts with
+    a default-constructed value of the property */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+AtomProperty<T>::AtomProperty(const MoleculeInfo &molinfo)
+                : SireBase::ConcreteProperty<AtomProperty<T>,AtomProp>()
+{
+    this->operator=( AtomProperty<T>(molinfo.data()) );
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+AtomProperty<T>::AtomProperty(const MoleculeInfo &molinfo, const T &default_value)
+                : SireBase::ConcreteProperty<AtomProperty<T>,AtomProp>()
+{
+    this->operator=( AtomProperty<T>(molinfo.data(), default_value) );
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+AtomProperty<T>::AtomProperty(const MoleculeView &molview)
+                : SireBase::ConcreteProperty<AtomProperty<T>,AtomProp>()
+{
+    this->operator=( AtomProperty<T>(MoleculeInfo(molview)) );
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+AtomProperty<T>::AtomProperty(const MoleculeView &molview, const T &default_value)
+                : SireBase::ConcreteProperty<AtomProperty<T>,AtomProp>()
+{
+    this->operator=( AtomProperty<T>(MoleculeInfo(molview), default_value) );
 }
 
 /** Create an AtomProperty that holds one value for each 

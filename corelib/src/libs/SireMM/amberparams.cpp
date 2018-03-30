@@ -58,6 +58,8 @@
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
+#include <QDebug>
+
 using namespace SireMol;
 using namespace SireCAS;
 using namespace SireMM;
@@ -166,11 +168,6 @@ AmberBond::AmberBond(const Expression &f, const Symbol &R) : _k(0), _r0(0)
             errors.append( QObject::tr("Cannot have a factor that does not include R. %1")
                         .arg(factor.symbol().toString()) );
         }
-    }
-
-    if (kr0_2 < 0)
-    {
-        errors.append( QObject::tr("How can K R0^2 be negative? %1").arg(kr0_2) );
     }
 
     _k = k;
@@ -374,11 +371,6 @@ AmberAngle::AmberAngle(const Expression &f, const Symbol &theta) : _k(0), _theta
             errors.append( QObject::tr("Cannot have a factor that does not include theta. %1")
                         .arg(factor.symbol().toString()) );
         }
-    }
-
-    if (ktheta0_2 < 0)
-    {
-        errors.append( QObject::tr("How can K theta0^2 be negative? %1").arg(ktheta0_2) );
     }
 
     _k = k;
@@ -623,67 +615,143 @@ AmberDihedral::AmberDihedral(AmberDihPart part)
 
 AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
 {
-    //this expression should be a sum of cos terms, plus constant terms
-    QList<Expression> cos_terms;
+    // This expression should be a sum of cos terms, plus constant terms.
+    // The cosine terms can be positive or negative depending on the sign
+    // of the factor.
+    QVector<QPair<double, Expression> > pos_terms;
+    QVector<QPair<double, Expression> > neg_terms;
     double constant = 0.0;
 
     QStringList errors;
 
+    // Loop over all terms in the series.
     if (f.base().isA<Sum>())
     {
-        for (const auto child : f.base().asA<Sum>().children())
+        for (const auto &child : f.base().asA<Sum>().children())
         {
             if (child.isConstant())
             {
+                // Accumulate the constant factors.
                 constant += f.factor() * child.evaluate(Values());
             }
             else if (child.base().isA<Cos>())
             {
-                if (f.factor() == 1)
-                {
-                    cos_terms.append(child);
-                }
+                // Compute the factor and extract the cosine term.
+                double factor = f.factor() * child.factor();
+                auto cos_term = child.base().asA<Cos>();
+
+                // Now store a <factor, cos_term> pair, storing the
+                // positive and negative terms separately.
+
+                if (factor < 0)
+                    neg_terms.append(QPair<double, Expression>(factor, cos_term));
                 else
-                {
-                    cos_terms.append( f.factor() * child );
-                }
-            }
-            else
-            {
-                errors.append( QObject::tr( "Cannot interpret the dihedral expression "
-                   "from '%1' as it should be a series of cosine terms involving %2.")
-                        .arg(f.toString()).arg(phi.toString()) );
+                    pos_terms.append(QPair<double, Expression>(factor, cos_term));
             }
         }
     }
-    else
+
+    // Now loop over the factors and work out what combination adds
+    // up to the constant term, usings the raw factors, their absolute
+    // values, or combinations thereof.
+
+    // First add up the positive terms. These always represent standard
+    // AMBER dihderal terms.
+    double pos_sum = 0.0;
+    for (const auto &term : pos_terms)
+        pos_sum += term.first;
+
+    // Store the number of negative terms.
+    int num_neg = neg_terms.count();
+
+    // There are negative factors.
+	if (num_neg > 0)
     {
-        if (f.isConstant())
+        // The number of ways of combining the factors, using either the
+        // negative or absolute values of each.
+        int num_combs = std::pow(2, num_neg);
+
+        // The vector of factors for the current combination.
+        QVector<double> factors(num_neg);
+
+        QVector<unsigned int> temp(num_combs);
+        for (int i=0; i<num_combs; ++i)
+            temp[i] = i;
+
+        bool has_match = false;
+
+        // Now add the negative terms, trying all combinations.
+        // Abort if we find a combination that matches the constant term.
+        for (int i=0; i<num_combs; ++i)
         {
-            constant += f.evaluate(Values());
+            // Reset the sum.
+            double sum = pos_sum;
+
+            // Loop over all terms.
+            for (int j=0; j<num_neg; ++j)
+            {
+                unsigned int k = temp[i] >> j;
+
+                if (k & 1) factors[j] = neg_terms[j].first;
+                else       factors[j] = -neg_terms[j].first;
+
+                // Update the sum.
+                sum += factors[j];
+            }
+
+            // Woohoo, we've found a combination of terms that match the constant.
+            if (std::abs(sum - constant) < 0.001)
+            {
+                has_match = true;
+                break;
+            }
         }
-        else if (f.base().isA<Cos>())
+
+        if (has_match)
         {
-            cos_terms.append(f);
+            for (int i=0; i<num_neg; ++i)
+            {
+                // The term factor has been flipped. We need to phase shift
+                // the cosine term.
+                if (factors[i] > 0)
+                {
+                    auto cos_term = neg_terms[i].second.base().asA<Cos>();
+
+                    // Store the negated factor and shifted cosine term.
+                    neg_terms[i] = QPair<double, Expression>
+                        (factors[i], Cos(cos_term.argument() + SireMaths::pi));
+                }
+            }
         }
         else
         {
-            errors.append( QObject::tr( "Cannot interpret the dihedral expression "
-               "from '%1' as it should be a series of cosine terms involving %2.")
-                    .arg(f.toString()).arg(phi.toString()) );
+            throw SireError::incompatible_error( QObject::tr(
+                "Cannot extract an Amber-format dihedral expression from '%1' as "
+                "the expression must be a series of terms of type "
+                "'k{ 1 + cos[ per %2 - phase ] }'. Errors include\n%3")
+                    .arg(f.toString()).arg(phi.toString()).arg(errors.join("\n")),
+                        CODELOC );
         }
     }
 
-    //next extract all of the data from the cos terms
-    QList< std::tuple<double,double,double> > terms;
+    // Create a vector of the cosine terms.
+    QVector<Expression> cos_terms;
 
-    double check_constant = 0;
+    // First add the positive terms.
+    for (const auto &term : pos_terms)
+        cos_terms.append(term.first * term.second);
 
-    for (const auto cos_term : cos_terms)
+    // Now add the negative terms.
+    for (const auto &term : neg_terms)
+        cos_terms.append(term.first * term.second);
+
+    // Next extract all of the data from the cos terms.
+    QVector< std::tuple<double,double,double> > terms;
+
+    for (const auto &cos_term : cos_terms)
     {
-        //term should be of the form 'k cos( periodicity * phi - phase )'
+        // Term should be of the form 'k cos( periodicity * phi - phase )'.
         double k = cos_term.factor();
-        check_constant += k;
 
         double periodicity = 0.0;
         double phase = 0.0;
@@ -692,7 +760,7 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
 
         bool ok = true;
 
-        for (const auto factor : factors)
+        for (const auto &factor : factors)
         {
             if (not factor.power().isConstant())
             {
@@ -714,12 +782,12 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
 
             if (power == 0.0)
             {
-                //this is the constant phase
+                // This is the constant phase.
                 phase += factor.factor().evaluate(Values());
             }
             else if (power == 1.0)
             {
-                //this is the periodicity * phi term
+                // This is the periodicity * phi term.
                 periodicity = factor.factor().evaluate(Values());
             }
             else
@@ -737,15 +805,6 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
         }
     }
 
-    //now sum up the individual values of 'k'. These should equal the constant, which
-    //is the aggregate of the "k [ 1 + cos ]" terms
-    if ( std::abs(constant - check_constant) > 0.001 )
-    {
-        errors.append( QObject::tr( "The set of constants should sum up to the same total, "
-            "i.e. should equal %1. Instead they equal %2. This is weird.")
-                .arg(constant).arg(check_constant) );
-    }
-
     if (not errors.isEmpty())
     {
         throw SireError::incompatible_error( QObject::tr(
@@ -756,14 +815,14 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
                     CODELOC );
     }
 
-    //otherwise, add in all of the terms
+    // Otherwise, add in all of the terms.
     if (not terms.isEmpty())
     {
         _parts.reserve(terms.count());
 
-        for (const auto term : terms)
+        for (const auto &term : terms)
         {
-            //remember that the expression uses the negative of the phase ;-)
+            // Remember that the expression uses the negative of the phase ;-)
             _parts.append( AmberDihPart(std::get<0>(term), std::get<1>(term), -std::get<2>(term)) );
         }
     }
@@ -1318,10 +1377,141 @@ const PropertyMap& AmberParams::propertyMap() const
     for an Amber set of parameters are met, e.g. that all Atom indicies are
     contiguous and in-order, and that all atoms contiguously fill all residues
     etc. This returns any errors as strings. An empty set of strings indicates
-    that there are no errors */
+    that there are no errors  */
 QStringList AmberParams::validate() const
 {
     return QStringList();
+}
+
+/** Validate this set of parameters. In addition to checking that the
+    requirements are met, this also does any work needed to fix problems,
+    if they are fixable. */
+QStringList AmberParams::validateAndFix()
+{
+    QStringList errors;
+
+    if (not exc_atoms.isEmpty())
+    {
+    Connectivity conn;
+    bool has_connectivity = false;
+
+    auto new_dihedrals = amber_dihedrals;
+    auto new_nb14s = amber_nb14s;
+    auto new_exc = exc_atoms;
+
+    QMutex mutex;
+
+    //All 1-4 scaling factors should match up with actual dihedrals - validate
+    //that this is the case and fix any problems if we can
+    tbb::parallel_for( tbb::blocked_range<int>(0, exc_atoms.nGroups()),
+                       [&](const tbb::blocked_range<int> &r)
+    {
+        for (int icg = r.begin(); icg < r.end(); ++icg)
+        {
+            const int nats0 = molinfo.nAtoms( CGIdx(icg) );
+
+            for (int jcg = 0; jcg < exc_atoms.nGroups(); ++jcg)
+            {
+                auto group_pairs = exc_atoms.get( CGIdx(icg), CGIdx(jcg) );
+
+                if (group_pairs.isEmpty() and
+                    group_pairs.defaultValue() == CLJScaleFactor(1,1))
+                {
+                    //non of the pairs of atoms between these two groups are
+                    //bonded
+                    continue;
+                }
+
+                const int nats1 = molinfo.nAtoms( CGIdx(jcg) );
+
+                //compare all pairs of atoms
+                for (int i=0; i<nats0; ++i)
+                {
+                    for (int j=0; j<nats1; ++j)
+                    {
+                        const auto s = group_pairs.get(i,j);
+
+                        if ( (not (s.coulomb() == 0 or s.coulomb() == 1)) or
+                             (not (s.lj() == 0 or s.lj() == 1)) )
+                        {
+                            const auto atm0 = molinfo.atomIdx( CGAtomIdx(CGIdx(icg),Index(i)) );
+                            const auto atm3 = molinfo.atomIdx( CGAtomIdx(CGIdx(jcg),Index(j)) );
+
+                            if (not has_connectivity)
+                            {
+                                //have to use the connectivity that is implied by the bonds
+                                QMutexLocker lkr(&mutex);
+                                if (not has_connectivity)
+                                {
+                                    conn = this->connectivity();
+                                    has_connectivity = true;
+                                }
+                            }
+
+                            //find the shortest bonded path between these two atoms
+                            const auto path = conn.findPath(atm0,atm3);
+
+                            if (path.count() != 4)
+                            {
+                                QMutexLocker lkr(&mutex);
+                                errors.append( QObject::tr("Have a 1-4 scaling factor (%1/%2) "
+                                  "between atoms %3:%4 and %5:%6 despite there being no physical "
+                                  "dihedral between these two atoms. All 1-4 scaling factors MUST "
+                                  "be associated with "
+                                  "physical dihedrals. The shortest path is %7")
+                                    .arg(s.coulomb()).arg(s.lj())
+                                    .arg(molinfo.name(atm0).value()).arg(atm0.value())
+                                    .arg(molinfo.name(atm3).value()).arg(atm3.value())
+                                    .arg(Sire::toString(path)) );
+                                continue;
+                            }
+
+                            //convert the atom IDs into a canonical form
+                            auto dih = this->convert( DihedralID(path[0],path[1],path[2],path[3]) );
+
+                            //qDebug() << "ADDING NULL DIHEDRAL FOR" << dih.toString();
+
+                            //does this bond involve hydrogen?
+                            //- this relies on "AtomElements" being full
+                            bool contains_hydrogen = false;
+
+                            if (not amber_elements.isEmpty())
+                            {
+                                contains_hydrogen =
+                            (amber_elements.at( molinfo.cgAtomIdx(dih.atom0()) ).nProtons() < 2) or
+                            (amber_elements.at( molinfo.cgAtomIdx(dih.atom1()) ).nProtons() < 2) or
+                            (amber_elements.at( molinfo.cgAtomIdx(dih.atom2()) ).nProtons() < 2) or
+                            (amber_elements.at( molinfo.cgAtomIdx(dih.atom3()) ).nProtons() < 2);
+                            }
+
+                            //create a null dihedral parameter and add this to the set
+                            QMutexLocker lkr(&mutex);
+                            new_dihedrals.insert(dih,
+                                qMakePair(AmberDihedral(Expression(0),Symbol("phi")),
+                                          contains_hydrogen));
+
+                            //now add in the 1-4 pair
+                            BondID nb14pair = this->convert( BondID(dih.atom0(), dih.atom3()) );
+
+                            //add them to the list of 14 scale factors
+                            new_nb14s.insert(nb14pair, AmberNB14(s.coulomb(),s.lj()));
+
+                            //and remove them from the excluded atoms list
+                            new_exc.set(nb14pair.atom0(),nb14pair.atom1(), CLJScaleFactor(0));
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    amber_dihedrals = new_dihedrals;
+    amber_nb14s = new_nb14s;
+    exc_atoms = new_exc;
+
+    } // if not exc_atoms.isEmpty()
+
+    return errors + this->validate();
 }
 
 QString AmberParams::toString() const
@@ -2246,13 +2436,13 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
     amber_masses = getProperty<AtomMasses>( map["mass"], moldata, &has_masses );
     amber_elements = getProperty<AtomElements>( map["element"], moldata, &has_elements );
     amber_types = getProperty<AtomStringProperty>( map["ambertype"], moldata, &has_ambertypes );
-    
+
     if (not has_ambertypes)
     {
         //look for the atomtypes property
         amber_types = getProperty<AtomStringProperty>( map["atomtype"], moldata, &has_ambertypes );
     }
-    
+
     if (not has_elements)
     {
         //try to guess the elements from the names and/or masses
@@ -2313,7 +2503,7 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
     bool has_bonds, has_ubs, has_angles, has_dihedrals, has_impropers, has_nbpairs;
 
     const auto bonds = getProperty<TwoAtomFunctions>( map["bond"], moldata, &has_bonds );
-    const auto ub_bonds = getProperty<TwoAtomFunctions>( map["urey-bradley"], moldata, &has_ubs );
+    const auto ub_bonds = getProperty<TwoAtomFunctions>( map["urey_bradley"], moldata, &has_ubs );
     const auto angles = getProperty<ThreeAtomFunctions>( map["angle"], moldata, &has_angles );
     const auto dihedrals = getProperty<FourAtomFunctions>( map["dihedral"],
                                                            moldata, &has_dihedrals );
@@ -2357,7 +2547,7 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
     SireBase::parallel_invoke(nb_functions);
 
     //ensure that the resulting object is valid
-    QStringList errors = this->validate();
+    QStringList errors = this->validateAndFix();
 
     if (not errors.isEmpty())
     {

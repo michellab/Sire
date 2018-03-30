@@ -7,6 +7,10 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/parallel.h"
+
+#include "SireMol/moleculeinfo.h"
+
 #include "SireStream/datastream.h"
 
 #include "cljnbpairs.h"
@@ -17,7 +21,7 @@ SireMM::CLJScaleFactor __copy__(const SireMM::CLJScaleFactor &other){ return Sir
 
 #include "Qt/qdatastream.hpp"
 
-const char* pvt_get_name(const SireMM::CLJScaleFactor&){ return "SireMM::CLJScaleFactor";}
+#include "Helpers/str.hpp"
 
 void register_CLJScaleFactor_class(){
 
@@ -42,6 +46,17 @@ void register_CLJScaleFactor_class(){
         
         }
         CLJScaleFactor_exposer.def( bp::self == bp::self );
+        { //::SireMM::CLJScaleFactor::toString
+        
+            typedef ::QString ( ::SireMM::CLJScaleFactor::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireMM::CLJScaleFactor::toString );
+            
+            CLJScaleFactor_exposer.def( 
+                "toString"
+                , toString_function_value
+                , "" );
+        
+        }
         { //::SireMM::CLJScaleFactor::typeName
         
             typedef char const * ( *typeName_function_type )(  );
@@ -72,8 +87,8 @@ void register_CLJScaleFactor_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CLJScaleFactor_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::CLJScaleFactor >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        CLJScaleFactor_exposer.def( "__str__", &pvt_get_name);
-        CLJScaleFactor_exposer.def( "__repr__", &pvt_get_name);
+        CLJScaleFactor_exposer.def( "__str__", &__str__< ::SireMM::CLJScaleFactor > );
+        CLJScaleFactor_exposer.def( "__repr__", &__str__< ::SireMM::CLJScaleFactor > );
     }
 
 }

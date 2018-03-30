@@ -31,6 +31,8 @@
 
 #include "moleculeparser.h"
 
+#include "SireMM/mmdetail.h"
+
 #include "SireMaths/vector.h"
 #include "SireMM/ljparameter.h"
 
@@ -169,6 +171,8 @@ public:
 
     void assertSane() const;
 
+    SireMM::MMDetail forcefield() const;
+
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;
 
@@ -225,6 +229,9 @@ private:
 
     /** A copy of the POINTER data to prevent over-lookup */
     QVector<qint64> pointers;
+    
+    /** The forcefield for the molecules in this file */
+    SireMM::MMDetail ffield;
 };
 
 }

@@ -7,6 +7,10 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/parallel.h"
+
+#include "SireMol/moleculeinfo.h"
+
 #include "SireStream/datastream.h"
 
 #include "cljnbpairs.h"

@@ -105,6 +105,9 @@ public:
     bool operator!=(const AtomIdxMatcher &other) const;
 
 protected:
+    bool pvt_changesOrder(const MoleculeInfoData &molinfo0,
+                          const MoleculeInfoData &molinfo1) const;
+
     QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeInfoData &molinfo0,
                                      const MoleculeInfoData &molinfo1) const;
     
@@ -184,6 +187,8 @@ public:
     AtomIDMatcher(const QHash<QString,QString> &match_names);
     AtomIDMatcher(const QHash<int,int> &match_idxs);
     AtomIDMatcher(const QHash<AtomIdentifier,AtomIdentifier> &match_ids);
+    
+    AtomIDMatcher(const QString &match_names);
     
     AtomIDMatcher(const AtomIDMatcher &other);
     

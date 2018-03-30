@@ -101,6 +101,17 @@ void register_ExpAverage_class(){
         
         }
         ExpAverage_exposer.def( bp::self == bp::self );
+        { //::SireMaths::ExpAverage::toString
+        
+            typedef ::QString ( ::SireMaths::ExpAverage::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireMaths::ExpAverage::toString );
+            
+            ExpAverage_exposer.def( 
+                "toString"
+                , toString_function_value
+                , "" );
+        
+        }
         { //::SireMaths::ExpAverage::typeName
         
             typedef char const * ( *typeName_function_type )(  );

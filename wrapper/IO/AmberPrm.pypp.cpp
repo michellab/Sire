@@ -231,6 +231,17 @@ void register_AmberPrm_class(){
                 , "Return the float data for the passed flag. This returns an empty\nlist if there is no data associated with this flag. This raises\nan invalid_cast error if data exists, but it is the wrong type" );
         
         }
+        { //::SireIO::AmberPrm::forcefield
+        
+            typedef ::SireMM::MMDetail ( ::SireIO::AmberPrm::*forcefield_function_type)(  ) const;
+            forcefield_function_type forcefield_function_value( &::SireIO::AmberPrm::forcefield );
+            
+            AmberPrm_exposer.def( 
+                "forcefield"
+                , forcefield_function_value
+                , "Return the forcefield for the molecules in this file" );
+        
+        }
         { //::SireIO::AmberPrm::formatDescription
         
             typedef ::QString ( ::SireIO::AmberPrm::*formatDescription_function_type)(  ) const;

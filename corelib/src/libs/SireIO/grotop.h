@@ -38,6 +38,7 @@
 #include "SireMol/dihedralid.h"
 
 #include "SireMM/gromacsparams.h"
+#include "SireMM/mmdetail.h"
 
 #include <QMultiHash>
 
@@ -109,6 +110,7 @@ public:
     qint64 chargeGroup() const;
 
     QString atomType() const;
+    QString bondType() const;
 
     SireUnits::Dimension::Charge charge() const;
     SireUnits::Dimension::MolarMass mass() const;
@@ -122,7 +124,8 @@ public:
     void setChargeGroup(qint64 grp);
 
     void setAtomType(const QString &atomtype);
-
+    void setBondType(const QString &bondtype);
+    
     void setCharge(SireUnits::Dimension::Charge charge);
     void setMass(SireUnits::Dimension::MolarMass mass);
 
@@ -135,6 +138,9 @@ private:
 
     /** Atom type */
     QString atmtyp;
+    
+    /** Bond type - normally the same as the atom type */
+    QString bndtyp;
 
     /** Atom number */
     qint64 atmnum;
@@ -166,6 +172,7 @@ friend QDataStream& ::operator>>(QDataStream&, GroMolType&);
 
 public:
     GroMolType();
+    GroMolType(const SireMol::Molecule &mol, const PropertyMap &map=PropertyMap());
 
     GroMolType(const GroMolType &other);
 
@@ -189,6 +196,8 @@ public:
     qint64 nExcludedAtoms() const;
     void setNExcludedAtoms(qint64 nexcl);
 
+    SireMM::MMDetail forcefield() const;
+
     void addAtom(const GroAtom &atom);
 
     void addBond(const SireMol::BondID &bond, const GromacsBond &parm);
@@ -199,7 +208,8 @@ public:
     void addAngles(const QMultiHash<SireMol::AngleID,GromacsAngle> &angles);
     void addDihedrals(const QMultiHash<SireMol::DihedralID,GromacsDihedral> &dihedrals);
 
-    void sanitise();
+    void sanitise(QString elecstyle, QString vdwstyle,
+                  QString combrule, double elec14, double vdw14);
 
     void addWarning(const QString &warning);
 
@@ -227,6 +237,8 @@ public:
     bool needsSanitising() const;
 
 private:
+    void _pvt_sanitise();
+
     /** The name of this moleculetype */
     QString nme;
 
@@ -247,6 +259,9 @@ private:
 
     /** Hash of all of the dihedrals */
     QMultiHash<SireMol::DihedralID,GromacsDihedral> dihs;
+
+    /** The details about the forcefield used for this molecule */
+    SireMM::MMDetail ffield;
 
     /** The number of excluded atoms */
     qint64 nexcl;
@@ -371,20 +386,22 @@ public:
 
     SireMM::GromacsAtomType atomType(const QString &atm) const;
 
-    SireMM::GromacsBond bond(const QString &atm0, const QString &atm1) const;
-    QList<SireMM::GromacsBond> bonds(const QString &atm0, const QString &atm1) const;
+    SireMM::GromacsBond bond(const QString &atm0, const QString &atm1, int func) const;
+    QList<SireMM::GromacsBond> bonds(const QString &atm0, const QString &atm1, int func) const;
 
     SireMM::GromacsAngle angle(const QString &atm0, const QString &atm1,
-                               const QString &atm2) const;
+                               const QString &atm2, int func) const;
 
     QList<SireMM::GromacsAngle> angles(const QString &atm0, const QString &atm1,
-                                       const QString &atm2) const;
+                                       const QString &atm2, int func) const;
 
     SireMM::GromacsDihedral dihedral(const QString &atm0, const QString &atm1,
-                                     const QString &atm2, const QString &atm3) const;
+                                     const QString &atm2, const QString &atm3,
+                                     int func) const;
 
     QList<SireMM::GromacsDihedral> dihedrals(const QString &atm0, const QString &atm1,
-                                             const QString &atm2, const QString &atm3) const;
+                                             const QString &atm2, const QString &atm3,
+                                             int func) const;
 
     QHash<QString,SireMM::GromacsAtomType> atomTypes() const;
 
@@ -397,6 +414,8 @@ public:
 
     GroSystem groSystem() const;
 
+    QStringList postprocessedLines() const;
+
     QStringList warnings() const;
 
 protected:
@@ -407,6 +426,10 @@ private:
     void parseLines(const QString &path, const PropertyMap &map);
 
     void getIncludePath(const PropertyMap &map);
+
+    QString searchForDihType(const QString &atom0, const QString &atom1,
+                             const QString &atom2, const QString &atom3,
+                             int func) const;
 
     QString findIncludeFile(QString filename, QString current_directory);
 
@@ -429,11 +452,17 @@ private:
     SireMol::Molecule createMolecule(QString moltype, QStringList &errors,
                                      const PropertyMap &map) const;
     
-    void addAtomProperties(SireMol::Molecule &mol, const GroMolType &moltype,
-                           QStringList &errors, const PropertyMap &map) const;
-    void addBondProperties(SireMol::Molecule &mol, const GroMolType &moltype,
-                           QStringList &errors, const PropertyMap &map) const;
+    typedef std::tuple<SireBase::Properties,QStringList> PropsAndErrors;
     
+    PropsAndErrors getAtomProperties(const SireMol::MoleculeInfo &molinfo,
+                                     const GroMolType &moltype) const;
+    PropsAndErrors getBondProperties(const SireMol::MoleculeInfo &molinfo,
+                                     const GroMolType &moltype) const;
+    PropsAndErrors getAngleProperties(const SireMol::MoleculeInfo &molinfo,
+                                      const GroMolType &moltype) const;
+    PropsAndErrors getDihedralProperties(const SireMol::MoleculeInfo &molinfo,
+                                         const GroMolType &moltype) const;
+        
     /** This is the full search path of all directories that should
         be searched for Gromacs include files */
     QStringList include_path;

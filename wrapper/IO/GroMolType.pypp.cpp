@@ -21,7 +21,13 @@ namespace bp = boost::python;
 
 #include "SireMM/atomljs.h"
 
+#include "SireMM/cljnbpairs.h"
+
+#include "SireMM/fouratomfunctions.h"
+
 #include "SireMM/internalff.h"
+
+#include "SireMM/threeatomfunctions.h"
 
 #include "SireMM/twoatomfunctions.h"
 
@@ -51,7 +57,11 @@ namespace bp = boost::python;
 
 #include "grotop.h"
 
+#include <QDateTime>
+
 #include <QDir>
+
+#include <QElapsedTimer>
 
 #include <QFileInfo>
 
@@ -71,6 +81,7 @@ void register_GroMolType_class(){
         typedef bp::class_< SireIO::GroMolType > GroMolType_exposer_t;
         GroMolType_exposer_t GroMolType_exposer = GroMolType_exposer_t( "GroMolType", "This class is used by GroTop to hold an intermediate representation of a\nGromacs moleculetype. This provides metadata about the molecule that is\nneeded to construct the whole molecule.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope GroMolType_scope( GroMolType_exposer );
+        GroMolType_exposer.def( bp::init< SireMol::Molecule const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("mol"), bp::arg("map")=SireBase::PropertyMap() ), "Construct from the passed molecule") );
         GroMolType_exposer.def( bp::init< SireIO::GroMolType const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireIO::GroMolType::addAngle
         
@@ -296,6 +307,17 @@ void register_GroMolType_class(){
                 , "Return all of the dihedrals" );
         
         }
+        { //::SireIO::GroMolType::forcefield
+        
+            typedef ::SireMM::MMDetail ( ::SireIO::GroMolType::*forcefield_function_type)(  ) const;
+            forcefield_function_type forcefield_function_value( &::SireIO::GroMolType::forcefield );
+            
+            GroMolType_exposer.def( 
+                "forcefield"
+                , forcefield_function_value
+                , "Return the guessed forcefield for this molecule type" );
+        
+        }
         { //::SireIO::GroMolType::isNull
         
             typedef bool ( ::SireIO::GroMolType::*isNull_function_type)(  ) const;
@@ -379,13 +401,14 @@ void register_GroMolType_class(){
         GroMolType_exposer.def( bp::self == bp::self );
         { //::SireIO::GroMolType::sanitise
         
-            typedef void ( ::SireIO::GroMolType::*sanitise_function_type)(  ) ;
+            typedef void ( ::SireIO::GroMolType::*sanitise_function_type)( ::QString,::QString,::QString,double,double ) ;
             sanitise_function_type sanitise_function_value( &::SireIO::GroMolType::sanitise );
             
             GroMolType_exposer.def( 
                 "sanitise"
                 , sanitise_function_value
-                , "Sanitise this moleculetype. This assumes that the moleculetype has\nbeen fully specified, so it collects everything together and checks that the\nmolecule makes sense. Any warnings generated can be retrieved using the\nwarnings function" );
+                , ( bp::arg("elecstyle"), bp::arg("vdwstyle"), bp::arg("combrule"), bp::arg("elec14"), bp::arg("vdw14") )
+                , "Sanitise this moleculetype. This assumes that the moleculetype has\nbeen fully specified, so it collects everything together and checks that the\nmolecule makes sense. Any warnings generated can be retrieved using the\nwarnings function. It also uses the passed defaults from the top file,\ntogether with the information in the molecule to guess the forcefield for\nthe molecule" );
         
         }
         { //::SireIO::GroMolType::setNExcludedAtoms

@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/vector.h"
 
+#include "SireMol/moleculeview.h"
+
 SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<1, 2, -2, 0, 0, -1, 0> > __copy__(const SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<1, 2, -2, 0, 0, -1, 0> > &other){ return SireMol::AtomProperty<SireUnits::Dimension::PhysUnit<1, 2, -2, 0, 0, -1, 0> >(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -27,6 +29,10 @@ void register_AtomEnergies_class(){
         typedef bp::class_< SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomEnergies_exposer_t;
         AtomEnergies_exposer_t AtomEnergies_exposer = AtomEnergies_exposer_t( "AtomEnergies", "", bp::init< >("") );
         bp::scope AtomEnergies_scope( AtomEnergies_exposer );
+        AtomEnergies_exposer.def( bp::init< SireMol::MoleculeInfo const & >(( bp::arg("molinfo") ), "") );
+        AtomEnergies_exposer.def( bp::init< SireMol::MoleculeInfo const &, SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomEnergies_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "") );
+        AtomEnergies_exposer.def( bp::init< SireMol::MoleculeView const &, SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > const & >(( bp::arg("molview"), bp::arg("default_value") ), "") );
         AtomEnergies_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
         AtomEnergies_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
         AtomEnergies_exposer.def( bp::init< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > const & >(( bp::arg("value") ), "") );

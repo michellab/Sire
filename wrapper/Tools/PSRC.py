@@ -1031,9 +1031,11 @@ def mergeSystems(protein0_system, protein1_system, water_system, ligand_mol):
     mobile_free_water_group = IdentityConstraint.constrain( mobile_free_water_group, identity_points )
 
     # Rename the residues of the swap solvent so that they are easy
-    # to find in the output PDBs
+    # to find in the output PDBs. Also remove them from the group as they
+    # are moved to the swap water group
     for i in range(0,len(identity_points)):
-        swap_water_mol = mobile_free_water_group.moleculeAt(i)[0].molecule()
+        swap_water_mol = mobile_free_water_group.moleculeAt(0)
+        mobile_free_water_group.remove(swap_water_mol.number())
 
         for j in range(0,swap_water_mol.nResidues()):
             swap_water_mol = swap_water_mol.residue( ResIdx(j) ).edit() \

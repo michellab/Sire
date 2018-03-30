@@ -82,6 +82,8 @@ namespace detail
 
         QStringList suffixes() const;
 
+        QString toString() const;
+
         MoleculeParserPtr construct(const QString &filename,
                                     const PropertyMap &map) const;
 
@@ -250,6 +252,9 @@ protected:
     void setLines(const QVector<QString> &lines);
 
     static QVector<QString> readTextFile(QString filename);
+
+    virtual SireBase::PropertyPtr getForceField(const SireSystem::System &system,
+                                                const PropertyMap &map) const;
 
 private:
     static MoleculeParserPtr _pvt_parse(const QString &filename, const PropertyMap &map);

@@ -13,6 +13,8 @@ namespace bp = boost::python;
 
 #include "SireMaths/vector.h"
 
+#include "SireMol/moleculeview.h"
+
 SireMol::ResProperty<double> __copy__(const SireMol::ResProperty<double> &other){ return SireMol::ResProperty<double>(other); }
 
 #include "Qt/qdatastream.hpp"

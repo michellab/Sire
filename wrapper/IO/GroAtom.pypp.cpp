@@ -21,7 +21,13 @@ namespace bp = boost::python;
 
 #include "SireMM/atomljs.h"
 
+#include "SireMM/cljnbpairs.h"
+
+#include "SireMM/fouratomfunctions.h"
+
 #include "SireMM/internalff.h"
+
+#include "SireMM/threeatomfunctions.h"
 
 #include "SireMM/twoatomfunctions.h"
 
@@ -51,7 +57,11 @@ namespace bp = boost::python;
 
 #include "grotop.h"
 
+#include <QDateTime>
+
 #include <QDir>
+
+#include <QElapsedTimer>
 
 #include <QFileInfo>
 
@@ -81,6 +91,17 @@ void register_GroAtom_class(){
                 "atomType"
                 , atomType_function_value
                 , "Return the atom type of this atom" );
+        
+        }
+        { //::SireIO::GroAtom::bondType
+        
+            typedef ::QString ( ::SireIO::GroAtom::*bondType_function_type)(  ) const;
+            bondType_function_type bondType_function_value( &::SireIO::GroAtom::bondType );
+            
+            GroAtom_exposer.def( 
+                "bondType"
+                , bondType_function_value
+                , "Return the bond type of this atom. This is normally the same as the atom type" );
         
         }
         { //::SireIO::GroAtom::charge
@@ -195,7 +216,19 @@ void register_GroAtom_class(){
                 "setAtomType"
                 , setAtomType_function_value
                 , ( bp::arg("atomtype") )
-                , "Set the atom type of this atom" );
+                , "Set the atom type and bond type of this atom. To set\nthe bond type separately, you need to set it after calling\nthis function" );
+        
+        }
+        { //::SireIO::GroAtom::setBondType
+        
+            typedef void ( ::SireIO::GroAtom::*setBondType_function_type)( ::QString const & ) ;
+            setBondType_function_type setBondType_function_value( &::SireIO::GroAtom::setBondType );
+            
+            GroAtom_exposer.def( 
+                "setBondType"
+                , setBondType_function_value
+                , ( bp::arg("bondtype") )
+                , "Set the bond type of this atom" );
         
         }
         { //::SireIO::GroAtom::setCharge
