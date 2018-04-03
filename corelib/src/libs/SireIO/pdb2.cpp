@@ -1321,7 +1321,7 @@ void PDB2::parseLines(const PropertyMap &map)
 
         // A standalone TER record.
         // This is used to flag the end of a molecule.
-        else if (lines()[iline] == "TER")
+        else if (lines()[iline].simplified() == "TER")
             isParse = true;
 
         // End of the file.
