@@ -2439,29 +2439,33 @@ bool CharmmPSF::parseParameters(
         //  2) How to handle boxes where the centre isn't at (0, 0, 0)?
         else if (start == "#$LABELS")
         {
-            // Get the next line.
-            i++;
-            QStringList data = parameter_lines[i].simplified().split(QRegExp("\\s"));
-
-            // Now try to read the cell parameters.
-            // Here we are assuming a periodic, rectilinear simulation box.
-            // TODO: Add support for other box types.
-            bool ok_x, ok_y, ok_z;
-
-            double x = data[1].toDouble(&ok_x);
-            double y = data[5].toDouble(&ok_y);
-            double z = data[9].toDouble(&ok_z);
-
-            if (not ok_x or not ok_y or not ok_z)
+            // Make sure there is cell axis information.
+            if (data[2] == "a_x")
             {
-                errors.append(QObject::tr("Could not read NAMD XSC record! %1")
-                    .arg(parameter_lines[i]));
-            }
-            else
-            {
-                // Create a periodic box object.
-                box = PeriodicBox(Vector(x, y, z));
-                has_box_params = true;
+                // Get the next line.
+                i++;
+                QStringList data = parameter_lines[i].simplified().split(QRegExp("\\s"));
+
+                // Now try to read the cell parameters.
+                // Here we are assuming a periodic, rectilinear simulation box.
+                // TODO: Add support for other box types.
+                bool ok_x, ok_y, ok_z;
+
+                double x = data[1].toDouble(&ok_x);
+                double y = data[5].toDouble(&ok_y);
+                double z = data[9].toDouble(&ok_z);
+
+                if (not ok_x or not ok_y or not ok_z)
+                {
+                    errors.append(QObject::tr("Could not read NAMD XSC record! %1")
+                        .arg(parameter_lines[i]));
+                }
+                else
+                {
+                    // Create a periodic box object.
+                    box = PeriodicBox(Vector(x, y, z));
+                    has_box_params = true;
+                }
             }
         }
     }
@@ -3551,7 +3555,11 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
         QStringList data = param_lines[i].simplified().split(QRegExp("\\s"));
         QString start = data[0];
 
-        // Skip box record data.
+        // Skip any NAMD output records.
+        if ((data.count() > 1) && (data[1] == "NAMD"))
+            continue;
+
+        // Append the parameter lines, skipping any box record data.
         if (start == "#$LABELS") i += 2;
         else params_string.append(param_lines[i] + "\n");
     }

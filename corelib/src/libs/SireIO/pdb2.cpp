@@ -1321,7 +1321,7 @@ void PDB2::parseLines(const PropertyMap &map)
 
         // A standalone TER record.
         // This is used to flag the end of a molecule.
-        else if (lines()[iline] == "TER")
+        else if (lines()[iline].simplified() == "TER")
             isParse = true;
 
         // End of the file.
@@ -1765,7 +1765,7 @@ void PDB2::parseLines(const PropertyMap &map)
     this->setScore(nAtoms());
 }
 
-/** Helper function used to determine whether the object contains mutliple models. */
+/** Helper function used to determine whether the object contains multiple models. */
 bool PDB2::isModel() const
 {
     // Different MODEL records are typically used to index frames in
@@ -1799,7 +1799,7 @@ bool PDB2::isModel() const
     return true;
 }
 
-/** Helper function used to determine whether the Sire system contains mutliple models. */
+/** Helper function used to determine whether the Sire system contains multiple models. */
 bool PDB2::isModel(const SireSystem::System &system) const
 {
     // Get the MolNums of each molecule in the System - this returns the
