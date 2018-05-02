@@ -58,6 +58,8 @@
 #include <QTime>
 #include <QElapsedTimer>
 
+#include <cmath>
+
 using namespace SireMove;
 using namespace SireSystem;
 using namespace SireMol;
@@ -364,13 +366,19 @@ QString RigidBodyMC::toString() const
 /** Set the maximum delta for any translation */
 void RigidBodyMC::setMaximumTranslation(Dimension::Length max_translation)
 {
-    adel = max_translation;
+    if (std::isnan(max_translation.value()) or std::isinf(max_translation.value()))
+        adel = Dimension::Length(0);
+    else
+        adel = max_translation;
 }
 
 /** Set the maximum delta for any rotation */
 void RigidBodyMC::setMaximumRotation(Dimension::Angle max_rotation)
 {
-    rdel = max_rotation;
+    if (std::isnan(max_rotation.value()) or std::isinf(max_rotation.value()))
+        rdel = Dimension::Angle(0);
+    else
+        rdel = max_rotation;
 }
 
 /** Set the function used to get the center of rotation for each molecule */
@@ -1115,6 +1123,10 @@ void RigidBodyMC::performMove(System &system,
     //get the random amounts by which to translate and
     //rotate the molecule(s)
     Vector delta = generator().vectorOnSphere(adel);
+
+    if (std::isnan(rdel.value()) or std::isinf(rdel.value()))
+        throw SireError::program_bug( QObject::tr("INVALID ROTATION DELTA! %1")
+                            .arg(rdel), CODELOC );
 
     Quaternion rotdelta( rdel * generator().rand(),
                          generator().vectorOnSphere() );

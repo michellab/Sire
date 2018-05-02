@@ -40,6 +40,7 @@
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
+#include "SireStream/streamdata.hpp"
 
 #include <QDebug>
 
