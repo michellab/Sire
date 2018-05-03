@@ -3,6 +3,9 @@ SIRE changelog
 
 devel branch:
 
+    [2018.1.1] May 2018 - Small bug fixes to allow single-atom solutes
+               and also to fix small issues with some parsers for BioSimSpace
+
     [2018.1.0] March 2018 - Signficantly improved the Gromacs and Charmm
                parser and  fixed bugs. Can now write with both :-). Fixed
                compilation on Windows 7 and above. Small changes to
