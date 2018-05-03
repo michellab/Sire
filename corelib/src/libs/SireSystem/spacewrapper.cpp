@@ -234,12 +234,12 @@ void SpaceWrapper::setSystem(const System &system)
     
         const AtomCoords &coords = molecule.property(coords_property)
                                            .asA<AtomCoords>();
-                                                 
+        
         //translate the molecule as a single entity (we don't want
         //molecules splitting over two sides of the box)
         CoordGroupArray new_coords = space.getMinimumImage(coords.array(),
                                                            center_point, true);
-                                                           
+        
         if (new_coords.constData() != coords.constData())
         {
             //the molecule has moved
