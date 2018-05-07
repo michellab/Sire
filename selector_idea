@@ -1,0 +1,112 @@
+boost spirit parser
+
+Selector real class. streams QString.
+Internal SelectorEngine hierarchy that is not exposed to python or streamed
+
+Selector(QString)
+Selector.toString() returns string selection
+
+/** Create a selector from the passed string */
+Selector::Selector(QString)
+
+/** Return the string used to create this selection */
+QString <= Selector.toString() const
+
+/** Select the matching items from the passed MoleculeGroup(s)
+    Returned molecule group preserves order of match is is
+    named after the selection string used to select */
+MoleculeGroup <= Selector.select(MoleculeGroup(s)) const
+MoleculeGroup <= Selector.select(MoleculeGroup(s), PropertyMap) const
+
+MoleculeGroup <= Selector.select(Molecules) const <- orders by MolNum
+              <= Selector.select(MoleculeView) const <- uses selector interface
+
+Allowed to have Selector return an empty MoleculeGroup. Completely ok
+
+                        string = "string" or "(string)", simplified, spaces allowed between string and brackets
+StringSelector(QString) "string"
+
+AndSelector(Selector,Selector)   "string and string"
+OrSelector(Selector,Selector)    "string or string"
+NotSelector(Selector)            "not string"
+
+                                 allow negative (pythonic) indexing
+IndexSelector(Selector)          "string[integer]" "string[start:end]" "string[start:end:jump]"
+
+                        value = "regexp"
+                        regexp = "thing" or "/thing/i" or "'thing'" (use single quotes to mean literal string, inc spaces, no regexp}
+                        values = "value"  "[value,value,value]", "== value", "!= value"
+                        number = integer
+                        numbers = "[number]" "[start,end]" "[start:end:jump]" "== value" "< value" "> value" "!= value" 
+AtomSelector(AtomID)    "atomname values" "atomnum numbers" "atomindex numbers"
+ResSelector(ResID)      "resname values" "resnum numbers" "resindex numbers"
+GroupSelector(CGID)     "groupname values" "groupindex numbers"
+ChainSelector(ChainID)  "chainname values" "chainindex numbers"
+SegSelector(SegID)      "segname values" "segindex numbers"
+MolSelector(MolID)      "molname values" "molnum numbers" "molindex numbers"
+
+MolWithSelector(Selector)       "molecule(s) with something"
+SegWithSelector(Selector)       "segment(s) with something"
+ChainWithSelector(Selector)     "chain(s) with something"
+ResWithSelector(Selector)       "residue(s) with something"
+GroupWithSelector(Selector)     "group(s) with something"
+WithSelector(Selector,Selector) "something with something"  - everything in selector1 that has any match with selector2 - does not split into parts
+
+InSelector(Selector)          "molecules(s) in something", "atom(s) in something" etc.
+                              This returns selection as a ViewsOfMol with the specified parts, e.g. each individual Atom, Residue etc.
+
+ProteinSelector               "protein" "sidechain" "backbone"
+WaterSelector                 "water"
+SolventSelector               "solvent"
+LigandSelector                "ligand"
+IonSelector                   "ion"
+NoHSelector                   "noh"
+ElementSelector               "element values"  (name or proton numbers)
+
+                              part = x y z center_x center_y center_z max_x min_x max_y min_y max_z min_z
+                              operator = "==" "<" "<=" ">" ">="
+                              number_unit = "number*unit" or "numberunit" or "number unit"
+CoordinateSelector            "part of something operator number_unit" "part operator number_unit"
+ChargeSelector                "charge of something operator number_unit" "charge operator number_unit"
+BetaSelector                  "beta of something operator number_unit" "beta operator number_unit"
+RadiusSelector                "radius of something operator number_unit" "radius operator number unit"
+
+                              LJ = "sigma" "epsilon" "r_min" "e_min"
+LJSelector                    "LJ of something operator numberunit" or "LJ operator numberunit"
+
+DistanceSelector              "part within number_unit of something" or "within number_unit of something"
+
+UserSelector                  "selector_id"  => is a user selection that has been registered
+                              Selector::register("selector_id", Selector)
+                              Selector::register("selector_id", "selection")
+
+So can have in Python
+
+Selector.register("hydrophilic", "protein and resname [ala,gly,val,ile]")
+
+h = s["hydrophilic"]
+
+ca = s["hydrophilic and atomname ca"]
+ca = s["hydrophilic and atomname /^ca/i"]
+ca = s["/ca/i"]  - case insensitive ca
+
+"closemols" == "molecule with center within 5.0 A of ligand"
+
+"noh and closemols"
+
+"closemols with atomname ca"
+
+"(noh and within 10A of resname ALA) with resname /LIG/i"
+
+"beta > 48 and beta < 52 and protein"
+
+"solvent and not water"
+
+"ion and charge < 0"
+"ion and charge == 2"
+
+"protein and atomname == [ca,CA]"
+
+atoms = s["atoms in resname ARG"]
+last_atoms = s["(atoms in resname ARG)[-3:-1]"]  - last three atoms in last arginine
+last_atoms = s["atoms in (resname ARG and atomindex [-3:-1])"] - last three atoms in every arginine

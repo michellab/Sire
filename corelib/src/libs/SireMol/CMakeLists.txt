@@ -108,6 +108,7 @@ set ( SIREMOL_HEADERS
       mover.h
       mover.hpp
       mover_metaid.h
+      parser.h
       partialmolecule.h
       perturbation.h
       reseditor.h
@@ -208,6 +209,7 @@ set ( SIREMOL_SOURCES
       molwithresid.cpp
       molviewproperty.cpp
       mover.cpp
+      parser.cpp
       partialmolecule.cpp
       perturbation.cpp
       reseditor.cpp
