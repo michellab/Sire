@@ -48,6 +48,7 @@ namespace qi = boost::spirit::qi;
 namespace ascii = boost::spirit::ascii;
 namespace phoenix = boost::phoenix;
 
+
 /** Internal class providing the SelectEngine for objects 
     based on their IDs (names, numbers, indicies etc.) 
     
@@ -64,22 +65,43 @@ public:
                MOLECULE = 6 };
     
     enum Typ { NAME = 1,
-               NAME_REGEXP = 2,
-               NUMBER = 3,
-               NUMBER_LIST = 4,
-               INDEX = 5,
-               INDEX_LIST = 6 };
+               NUMBER = 2,
+               INDEX = 3 };
 
     IDEngine() : SelectEngine()
     {}
     
-    IDEngine(const std::wstring &nam)
+    IDEngine(const QString &nam)
     {
-        idnam = QString::fromStdWString(nam);
+        idnam = nam;
     }
     
     ~IDEngine()
     {}
+    
+    IDEngine& operator+=(const QPair<int,int> &ids)
+    {
+        obj = IDEngine::Obj(ids.first);
+        typ = IDEngine::Typ(ids.second);
+        
+        qDebug() << obj << typ;
+        
+        return *this;
+    }
+    
+    IDEngine& operator+=(const std::wstring &str)
+    {
+        idnam = QString::fromStdWString(str);
+        qDebug() << "NAME" << idnam;
+        return *this;
+    }
+    
+    IDEngine& operator+=(int val)
+    {
+        idnum = val;
+        qDebug() << "NUM" << idnum;
+        return *this;
+    }
     
     Obj obj;
     Typ typ;
@@ -88,6 +110,41 @@ public:
     qint64 idnum;
     QList<qint64> idnums;
 };
+
+struct name_objects_ : qi::symbols< char, QPair<int,int> >
+{
+    name_objects_()
+    {
+        add
+            ("atomname"    ,    QPair<int,int>(IDEngine::ATOM, IDEngine::NAME))
+            ("groupname"    ,    QPair<int,int>(IDEngine::CUTGROUP, IDEngine::NAME))
+            ("resname"    ,    QPair<int,int>(IDEngine::RESIDUE, IDEngine::NAME))
+            ("chainname"    ,    QPair<int,int>(IDEngine::CHAIN, IDEngine::NAME))
+            ("segname"    ,    QPair<int,int>(IDEngine::SEGMENT, IDEngine::NAME))
+            ("molname"    ,    QPair<int,int>(IDEngine::MOLECULE, IDEngine::NAME))
+        ;
+    }
+
+} name_objects;
+
+struct num_objects_ : qi::symbols< char, QPair<int,int> >
+{
+    num_objects_()
+    {
+        add
+            ("atomnum"    ,    QPair<int,int>(IDEngine::ATOM, IDEngine::NUMBER))
+            ("resnum"    ,    QPair<int,int>(IDEngine::RESIDUE, IDEngine::NUMBER))
+            ("molnum"    ,    QPair<int,int>(IDEngine::MOLECULE, IDEngine::NUMBER))
+            ("atomidx"    ,    QPair<int,int>(IDEngine::ATOM, IDEngine::INDEX))
+            ("groupidx"    ,    QPair<int,int>(IDEngine::CUTGROUP, IDEngine::INDEX))
+            ("residx"    ,    QPair<int,int>(IDEngine::RESIDUE, IDEngine::INDEX))
+            ("chainidx"    ,    QPair<int,int>(IDEngine::CHAIN, IDEngine::INDEX))
+            ("segidx"    ,    QPair<int,int>(IDEngine::SEGMENT, IDEngine::INDEX))
+            ("molidx"    ,    QPair<int,int>(IDEngine::MOLECULE, IDEngine::INDEX))
+        ;
+    }
+
+} num_objects;
 
 template<typename Iterator>
 struct idengine_parser : qi::grammar<Iterator, IDEngine(), ascii::space_type>
@@ -103,11 +160,17 @@ struct idengine_parser : qi::grammar<Iterator, IDEngine(), ascii::space_type>
         using qi::lexeme;
         using ascii::char_;
 
-        string_or_regexp %= lexeme[+char_];
+        string_or_regexp = lexeme[+char_];
 
-        start %=
-                lit("resname")
-                >> string_or_regexp
+        start = eps [ _val = IDEngine() ] >>
+            (
+                name_objects[ _val += _1 ] >>
+                string_or_regexp[ _val += _1 ]
+            ) |
+            (
+                num_objects[ _val += _1 ] >>
+                +int_[ _val += _1 ]
+            )
             ;
     }
     
