@@ -154,6 +154,7 @@ set ( PYPP_SOURCES
        AtomsIn_SegID_.pypp.cpp
        ChainAtomID.pypp.cpp
        SegName.pypp.cpp
+       Select.pypp.cpp
        ResidueBeading.pypp.cpp
        MGID.pypp.cpp
        ConnectivityBase.pypp.cpp
@@ -210,6 +211,7 @@ set ( PYPP_SOURCES
        ResIdx.pypp.cpp
        AtomCharges.pypp.cpp
        Mover_Bead_.pypp.cpp
+       SelectBase.pypp.cpp
        AtomElements.pypp.cpp
        NullGeometryPerturbation.pypp.cpp
        BeadIntProperty.pypp.cpp

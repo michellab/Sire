@@ -161,6 +161,7 @@ message( STATUS "Sire will be compiled and installed to directory ${CMAKE_INSTAL
 
 # Absolutely can't run cmake in the source directory!
 if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
+  message( STATUS "${CMAKE_BINARY_DIR} | ${CMAKE_SOURCE_DIR}" )
   message( FATAL_ERROR "You must run CMake in a different directory to the source!" ) 
 endif()
 

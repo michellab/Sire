@@ -221,7 +221,7 @@ Expression Expression::pow(int n) const
 }
 
 /** Return this expression raised to the rational power 'n' */
-Expression Expression::pow(const Rational &n) const
+/*Expression Expression::pow(const Rational &n) const
 {
     if (n.denominator() == 1)
         return this->pow(n.numerator());
@@ -229,7 +229,7 @@ Expression Expression::pow(const Rational &n) const
         return SireMaths::pow(evaluate(ComplexValues()), n);
     else
         return RationalPower( *this, n ).reduce();
-}
+}*/
 
 /** Return this expression raised to a real number power */
 Expression Expression::pow(double n) const

@@ -108,6 +108,7 @@
 #include "segment.h"
 #include "segname.h"
 #include "segproperty.hpp"
+#include "select.h"
 #include "specifymol.h"
 #include "viewsofmol.h"
 #include "volumemap.h"

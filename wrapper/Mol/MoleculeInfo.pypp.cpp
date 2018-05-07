@@ -862,7 +862,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "isAtomCutting"
                 , isAtomCutting_function_value
-                , "" );
+                , "Return whether or not atom-based cutting is used for the entire\nmolecule (meaning that there is exactly one cutgroup per atom). This\nis highly unusual, except for single-atom molecules" );
         
         }
         { //::SireMol::MoleculeInfo::isMoleculeCutting
@@ -873,7 +873,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "isMoleculeCutting"
                 , isMoleculeCutting_function_value
-                , "" );
+                , "Return whether or not molecule-based cutting is used for the entire\nmolecule (meaning that there is exactly one cutgroup for the whole molecule). This\nis unusual, except for single-residue molecules" );
         
         }
         { //::SireMol::MoleculeInfo::isResidueCutting
@@ -884,7 +884,7 @@ void register_MoleculeInfo_class(){
             MoleculeInfo_exposer.def( 
                 "isResidueCutting"
                 , isResidueCutting_function_value
-                , "" );
+                , "Return whether or not residue-based cutting is used for the entire\nmolecule (meaning that there is exactly one cutgroup per residue, and\natoms in a cutgroup are in the same order as atoms in the residue). This\nis the default. Note that a single atom molecule is simultaneously\natom cutting, residue cutting and molecule cutting." );
         
         }
         { //::SireMol::MoleculeInfo::isResidueCutting

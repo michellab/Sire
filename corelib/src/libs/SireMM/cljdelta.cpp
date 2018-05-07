@@ -396,7 +396,7 @@ CLJAtoms CLJDelta::mergeOld(const QVector<CLJDelta> &deltas)
 tuple<CLJAtoms,CLJAtoms,CLJAtoms> CLJDelta::merge(const CLJDelta *deltas, int n)
 {
     if (n == 0)
-        return CLJAtoms();
+        return tuple<CLJAtoms,CLJAtoms,CLJAtoms>();
     else
     {
         //work out which atoms have changed and which ones haven't...

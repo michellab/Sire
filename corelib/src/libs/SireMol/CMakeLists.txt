@@ -128,6 +128,7 @@ set ( SIREMOL_HEADERS
       segname.h
       segment.h
       segproperty.hpp
+      select.h
       selector.hpp
       specifymol.h
       structureeditor.h
@@ -223,6 +224,7 @@ set ( SIREMOL_SOURCES
       segidentifier.cpp
       segment.cpp
       segproperty.cpp
+      select.cpp
       specifymol.cpp
       structureeditor.cpp
       viewsofmol.cpp
