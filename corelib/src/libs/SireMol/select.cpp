@@ -34,71 +34,19 @@
 using namespace SireBase;
 using namespace SireStream;
 using namespace SireMol;
+using namespace SireMol::parser;
 
 ///////////
-/////////// Implementation of SelectBase
+/////////// Implementation of SelectEngine
 ///////////
-
-static const RegisterMetaType<SelectBase> r_base( MAGIC_ONLY, SelectBase::typeName() );
-
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const SelectBase &select)
-{
-    writeHeader(ds, r_base, 1);
-    ds << static_cast<const Property&>(select);
-    return ds;
-}
-
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, SelectBase &select)
-{
-    VersionID v = readHeader(ds, r_base);
-    
-    if (v == 1)
-    {
-        ds >> static_cast<Property&>(select);
-    }
-    else
-        throw version_error( v, "1", r_base, CODELOC );
-    
-    return ds;
-}
 
 /** Constructor */
-SelectBase::SelectBase() : Property()
-{}
-
-/** Copy constructor */
-SelectBase::SelectBase(const SelectBase &other) : Property(other)
+SelectEngine::SelectEngine()
 {}
 
 /** Destructor */
-SelectBase::~SelectBase()
+SelectEngine::~SelectEngine()
 {}
-
-const char* SelectBase::typeName()
-{
-    return "SireMol::SelectBase";
-}
-
-SelectBase& SelectBase::operator=(const SelectBase &other)
-{
-    Property::operator=(other);
-    return *this;
-}
-
-bool SelectBase::operator==(const SelectBase &other) const
-{
-    return Property::operator==(other);
-}
-
-bool SelectBase::operator!=(const SelectBase &other) const
-{
-    return not SelectBase::operator==(other);
-}
-
-const Select& SelectBase::null()
-{
-    return *(create_shared_null<Select>());
-}
 
 ///////////
 /////////// Implementation of Select
@@ -112,8 +60,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Select &select)
     
     SharedDataStream sds(ds);
     
-    sds << select.search_string << select.p
-        << static_cast<const SelectBase&>(select);
+    sds << select.search_string;
     
     return ds;
 }
@@ -126,8 +73,10 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Select &select)
     {
         SharedDataStream sds(ds);
         
-        sds >> select.search_string >> select.p
-            >> static_cast<SelectBase&>(select);
+        QString search_string;
+        sds >> search_string;
+
+        select = Select(search_string);
     }
     else
         throw version_error(v, "1", r_select, CODELOC);
@@ -136,20 +85,20 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Select &select)
 }
 
 /** Construct an empty selection (will select nothing) */
-Select::Select() : ConcreteProperty<Select,SelectBase>()
+Select::Select() : ConcreteProperty<Select,Property>()
 {}
 
 /** Construct a selection based on the passed string */
-Select::Select(const QString &str) : ConcreteProperty<Select,SelectBase>()
+Select::Select(const QString &str) : ConcreteProperty<Select,Property>()
 {
-    p = parse(str);
+    e = parse(str);
     search_string = str;
 }
 
 /** Copy constructor */
 Select::Select(const Select &other)
-       : ConcreteProperty<Select,SelectBase>(other),
-         search_string(other.search_string), p(other.p)
+       : ConcreteProperty<Select,Property>(other),
+         search_string(other.search_string), e(other.e)
 {}
 
 /** Destructor */
@@ -159,14 +108,14 @@ Select::~Select()
 Select& Select::operator=(const Select &other)
 {
     search_string = other.search_string;
-    p = other.p;
-    SelectBase::operator=(other);
+    e = other.e;
+    Property::operator=(other);
     return *this;
 }
 
 bool Select::operator==(const Select &other) const
 {
-    return p == other.p and SelectBase::operator==(other);
+    return search_string == other.search_string and Property::operator==(other);
 }
 
 bool Select::operator!=(const Select &other) const
@@ -191,10 +140,10 @@ const char* Select::typeName()
 
 QString Select::toString() const
 {
-    if (p.isEmpty())
+    if (search_string.isEmpty())
     {
         return QObject::tr("Select::null");
     }
     else
-        return search_string;
+        return QObject::tr("Select( %1 )").arg(search_string);
 }

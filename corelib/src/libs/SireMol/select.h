@@ -31,63 +31,43 @@
 
 #include "SireBase/property.h"
 
-#include <QList>
+#include <boost/shared_ptr.hpp>
 
 SIRE_BEGIN_HEADER
 
 namespace SireMol
 {
-class SelectBase;
 class Select;
 }
-
-QDataStream& operator<<(QDataStream&, const SireMol::SelectBase&);
-QDataStream& operator>>(QDataStream&, SireMol::SelectBase&);
 
 QDataStream& operator<<(QDataStream&, const SireMol::Select&);
 QDataStream& operator>>(QDataStream&, SireMol::Select&);
 
-
 namespace SireMol
 {
 
-typedef SireBase::PropPtr<SelectBase> SelectPtr;
-
-/** This is the base class of all of the select objects 
+namespace parser
+{
+/** This is the base class of all of the select objects. It is a private
+    object that should only be used by Select
 
     @author Christopher Woods
 */
-class SIREMOL_EXPORT SelectBase : public SireBase::Property
+class SelectEngine
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SelectBase&);
-friend QDataStream& ::operator>>(QDataStream&, SelectBase&);
-
 public:
-    SelectBase();
-    SelectBase(const SelectBase &other);
-    
-    virtual ~SelectBase();
-    
-    virtual SelectBase* clone() const=0;
-    
-    static const char* typeName();
-    
-    static const Select& null();
-    
-protected:
-    SelectBase& operator=(const SelectBase &other);
-    bool operator==(const SelectBase &other) const;
-    bool operator!=(const SelectBase &other) const;
-
+    SelectEngine();
+    virtual ~SelectEngine();
 };
+} //end of namespace parser
 
 /** This is the only publicly visible selector class. This provides a 
     front-end interface to selecting atoms and molecules
     
     @author Christopher Woods
 */
-class SIREMOL_EXPORT Select : public SireBase::ConcreteProperty<Select,SelectBase>
+class SIREMOL_EXPORT Select : public SireBase::ConcreteProperty<Select,SireBase::Property>
 {
 
 friend QDataStream& ::operator<<(QDataStream&, const Select&);
@@ -117,18 +97,15 @@ private:
     /** The actual search string */
     QString search_string;
 
-    /** All of the parts that make up this selection */
-    QList<SelectPtr> p;
+    /** The underlying engine used to perform the selection */
+    boost::shared_ptr<SireMol::parser::SelectEngine> e;
 };
 
 }
 
 Q_DECLARE_METATYPE( SireMol::Select )
 
-SIRE_EXPOSE_CLASS( SireMol::SelectBase )
 SIRE_EXPOSE_CLASS( SireMol::Select )
-
-SIRE_EXPOSE_PROPERTY( SireMol::SelectPtr, SireMol::SelectBase )
 
 SIRE_END_HEADER
 

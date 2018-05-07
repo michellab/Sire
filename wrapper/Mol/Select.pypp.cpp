@@ -26,7 +26,7 @@ SireMol::Select __copy__(const SireMol::Select &other){ return SireMol::Select(o
 void register_Select_class(){
 
     { //::SireMol::Select
-        typedef bp::class_< SireMol::Select, bp::bases< SireMol::SelectBase, SireBase::Property > > Select_exposer_t;
+        typedef bp::class_< SireMol::Select, bp::bases< SireBase::Property > > Select_exposer_t;
         Select_exposer_t Select_exposer = Select_exposer_t( "Select", "This is the only publicly visible selector class. This provides a\nfront-end interface to selecting atoms and molecules\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty selection (will select nothing)") );
         bp::scope Select_scope( Select_exposer );
         Select_exposer.def( bp::init< QString const & >(( bp::arg("str") ), "Construct a selection based on the passed string") );

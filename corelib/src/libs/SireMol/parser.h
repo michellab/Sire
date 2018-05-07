@@ -34,7 +34,7 @@
 namespace SireMol
 {
 
-QList<SelectPtr> parse(const QString &str);
+boost::shared_ptr<SireMol::parser::SelectEngine> parse(const QString &str);
 
 }
 

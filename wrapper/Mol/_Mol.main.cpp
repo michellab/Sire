@@ -447,8 +447,6 @@
 
 #include "Select.pypp.hpp"
 
-#include "SelectBase.pypp.hpp"
-
 #include "Selector_Atom_.pypp.hpp"
 
 #include "Selector_Chain_.pypp.hpp"
@@ -973,8 +971,6 @@ BOOST_PYTHON_MODULE(_Mol){
     register_SegStructureEditor_class();
 
     register_SegsWithAtoms_class();
-
-    register_SelectBase_class();
 
     register_Select_class();
 
