@@ -368,6 +368,9 @@ void RigidBodyMC::setMaximumTranslation(Dimension::Length max_translation)
 {
     if (std::isnan(max_translation.value()) or std::isinf(max_translation.value()))
         adel = Dimension::Length(0);
+    else if (max_translation.value() > 1000000 or max_translation.value() < -1000000)
+        //likely a mistake!
+        adel = Dimension::Length(0);
     else
         adel = max_translation;
 }
@@ -376,6 +379,9 @@ void RigidBodyMC::setMaximumTranslation(Dimension::Length max_translation)
 void RigidBodyMC::setMaximumRotation(Dimension::Angle max_rotation)
 {
     if (std::isnan(max_rotation.value()) or std::isinf(max_rotation.value()))
+        rdel = Dimension::Angle(0);
+    else if (max_rotation.value() > 10000 or max_rotation.value() < -10000)
+        //likely a mistake!
         rdel = Dimension::Angle(0);
     else
         rdel = max_rotation;
