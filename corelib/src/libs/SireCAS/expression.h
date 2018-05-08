@@ -130,6 +130,7 @@ public:
 
     Expression pow(double n) const;
     Expression pow(const Complex &n) const;
+    Expression pow(const Rational &n) const;
     Expression pow(const Expression &n) const;
 
     Expression root(int n) const;
@@ -206,6 +207,7 @@ Expression pow(const Expression &ex0, int n);
 Expression pow(const Expression &ex0, double n);
 Expression pow(const Expression &ex0, const Expression &n);
 Expression pow(const Expression &ex0, const Complex &n);
+Expression pow(const Expression &ex0, const Rational &n);
 Expression root(const Expression &ex0, int n);
 Expression sqrt(const Expression &ex0);
 Expression cbrt(const Expression &ex0);
@@ -400,6 +402,12 @@ inline Expression pow(const Expression &ex0,
 
 /** Raise an expression to a complex power */
 inline Expression pow(const Expression &ex0, const Complex &n)
+{
+    return ex0.pow(n);
+}
+
+/** Raise an expression to a rational power */
+inline Expression pow(const Expression &ex0, const Rational &n)
 {
     return ex0.pow(n);
 }

@@ -122,9 +122,14 @@ struct name_objects_ : qi::symbols< char, QPair<int,int> >
             ("chainname"    ,    QPair<int,int>(IDEngine::CHAIN, IDEngine::NAME))
             ("segname"    ,    QPair<int,int>(IDEngine::SEGMENT, IDEngine::NAME))
             ("molname"    ,    QPair<int,int>(IDEngine::MOLECULE, IDEngine::NAME))
+            ("atomnam"    ,    QPair<int,int>(IDEngine::ATOM, IDEngine::NAME))
+            ("groupnam"    ,    QPair<int,int>(IDEngine::CUTGROUP, IDEngine::NAME))
+            ("resnam"    ,    QPair<int,int>(IDEngine::RESIDUE, IDEngine::NAME))
+            ("chainnam"    ,    QPair<int,int>(IDEngine::CHAIN, IDEngine::NAME))
+            ("segnam"    ,    QPair<int,int>(IDEngine::SEGMENT, IDEngine::NAME))
+            ("molnam"    ,    QPair<int,int>(IDEngine::MOLECULE, IDEngine::NAME))
         ;
     }
-
 } name_objects;
 
 struct num_objects_ : qi::symbols< char, QPair<int,int> >
@@ -141,9 +146,17 @@ struct num_objects_ : qi::symbols< char, QPair<int,int> >
             ("chainidx"    ,    QPair<int,int>(IDEngine::CHAIN, IDEngine::INDEX))
             ("segidx"    ,    QPair<int,int>(IDEngine::SEGMENT, IDEngine::INDEX))
             ("molidx"    ,    QPair<int,int>(IDEngine::MOLECULE, IDEngine::INDEX))
+            ("atomnumber"    ,    QPair<int,int>(IDEngine::ATOM, IDEngine::NUMBER))
+            ("resnumber"    ,    QPair<int,int>(IDEngine::RESIDUE, IDEngine::NUMBER))
+            ("molnumber"    ,    QPair<int,int>(IDEngine::MOLECULE, IDEngine::NUMBER))
+            ("atomindex"    ,    QPair<int,int>(IDEngine::ATOM, IDEngine::INDEX))
+            ("groupindex"    ,    QPair<int,int>(IDEngine::CUTGROUP, IDEngine::INDEX))
+            ("resindex"    ,    QPair<int,int>(IDEngine::RESIDUE, IDEngine::INDEX))
+            ("chainindex"    ,    QPair<int,int>(IDEngine::CHAIN, IDEngine::INDEX))
+            ("segindex"    ,    QPair<int,int>(IDEngine::SEGMENT, IDEngine::INDEX))
+            ("molindex"    ,    QPair<int,int>(IDEngine::MOLECULE, IDEngine::INDEX))
         ;
     }
-
 } num_objects;
 
 template<typename Iterator>

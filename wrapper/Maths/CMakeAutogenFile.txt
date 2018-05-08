@@ -28,6 +28,7 @@ set ( PYPP_SOURCES
        Quaternion.pypp.cpp
        Matrix.pypp.cpp
        Accumulator.pypp.cpp
+       Rational.pypp.cpp
        Transform.pypp.cpp
        HistogramValue.pypp.cpp
        Array2D_Vector_.pypp.cpp

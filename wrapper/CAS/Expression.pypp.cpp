@@ -488,6 +488,18 @@ void register_Expression_class(){
         }
         { //::SireCAS::Expression::pow
         
+            typedef ::SireCAS::Expression ( ::SireCAS::Expression::*pow_function_type)( ::SireMaths::Rational const & ) const;
+            pow_function_type pow_function_value( &::SireCAS::Expression::pow );
+            
+            Expression_exposer.def( 
+                "pow"
+                , pow_function_value
+                , ( bp::arg("n") )
+                , "Return this expression raised to the rational power n" );
+        
+        }
+        { //::SireCAS::Expression::pow
+        
             typedef ::SireCAS::Expression ( ::SireCAS::Expression::*pow_function_type)( ::SireCAS::Expression const & ) const;
             pow_function_type pow_function_value( &::SireCAS::Expression::pow );
             

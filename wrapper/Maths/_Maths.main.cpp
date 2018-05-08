@@ -73,6 +73,8 @@
 
 #include "RanGenerator.pypp.hpp"
 
+#include "Rational.pypp.hpp"
+
 #include "RecordValues.pypp.hpp"
 
 #include "Sphere.pypp.hpp"
@@ -183,6 +185,8 @@ BOOST_PYTHON_MODULE(_Maths){
     register_Quaternion_class();
 
     register_RanGenerator_class();
+
+    register_Rational_class();
 
     register_RecordValues_class();
 
