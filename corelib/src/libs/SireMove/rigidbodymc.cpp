@@ -378,8 +378,6 @@ void RigidBodyMC::setMaximumTranslation(Dimension::Length max_translation)
 /** Set the maximum delta for any rotation */
 void RigidBodyMC::setMaximumRotation(Dimension::Angle max_rotation)
 {
-    qDebug() << "SET MAX ROT" << max_rotation.value();
-
     if (std::isnan(max_rotation.value()) or std::isinf(max_rotation.value()))
         rdel = Dimension::Angle(0);
     else if (max_rotation.value() > 10000 or max_rotation.value() < -10000)
@@ -387,8 +385,6 @@ void RigidBodyMC::setMaximumRotation(Dimension::Angle max_rotation)
         rdel = Dimension::Angle(0);
     else
         rdel = max_rotation;
-
-    qDebug() << "VALUE SET TO" << rdel.value();
 }
 
 /** Set the function used to get the center of rotation for each molecule */
