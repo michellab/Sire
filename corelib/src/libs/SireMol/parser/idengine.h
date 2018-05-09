@@ -55,8 +55,11 @@ public:
     StringsOrRegexps();
     ~StringsOrRegexps();
     
+    StringsOrRegexps& operator+=(const std::vector<char> &s);
     StringsOrRegexps& operator+=(const std::string &s);
     StringsOrRegexps& operator+=(const std::wstring &s);
+
+    StringsOrRegexps& operator+=(const QString &s);
     
     QStringList strings;
     QList<QRegExp> regexps;

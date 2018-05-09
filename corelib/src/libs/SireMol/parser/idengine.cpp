@@ -113,11 +113,26 @@ StringsOrRegexps::StringsOrRegexps()
 StringsOrRegexps::~StringsOrRegexps()
 {}
 
-StringsOrRegexps& StringsOrRegexps::operator+=(const std::wstring &s)
+StringsOrRegexps& StringsOrRegexps::operator+=(const QString &s)
 {
-    strings.append( QString::fromStdWString(s) );
+    strings.append(s);
     qSort(strings);
     return *this;
+}
+
+StringsOrRegexps& StringsOrRegexps::operator+=(const std::wstring &s)
+{
+    return this->operator+=( QString::fromStdWString(s) );
+}
+
+StringsOrRegexps& StringsOrRegexps::operator+=(const std::string &s)
+{
+    return this->operator+=( QString::fromStdString(s) );
+}
+
+StringsOrRegexps& StringsOrRegexps::operator+=(const std::vector<char> &s)
+{
+    return this->operator+=( QString::fromUtf8(s.data(), s.size()) );
 }
 
 /////////
@@ -264,11 +279,11 @@ idengine_parser::idengine_parser() : idengine_parser::base_type(start)
     using qi::lexeme;
     using ascii::char_;
 
-    strings_or_regexps = eps [ _val = StringsOrRegexps() ];/* >>
+    strings_or_regexps = eps [ _val = StringsOrRegexps() ] >>
         (
             lexeme[+char_][ _val += _1 ]
         )
-        ;*/
+        ;
     
     id_range = eps [ _val = IDRange() ] >>
         (
