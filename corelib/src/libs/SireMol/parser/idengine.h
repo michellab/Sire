@@ -55,11 +55,11 @@ public:
     StringsOrRegexps();
     ~StringsOrRegexps();
     
-    StringsOrRegexps& operator+=(const std::vector<char> &s);
-    StringsOrRegexps& operator+=(const std::string &s);
     StringsOrRegexps& operator+=(const std::wstring &s);
+    StringsOrRegexps& operator-=(const std::wstring &s);
 
     StringsOrRegexps& operator+=(const QString &s);
+    StringsOrRegexps& operator-=(const QString &s);
     
     QStringList strings;
     QList<QRegExp> regexps;
@@ -137,6 +137,8 @@ struct idengine_parser : qi::grammar<std::wstring::const_iterator, IDEngine(), a
     
     qi::rule<Iterator, IDEngine(), ascii::space_type> start;
     qi::rule<Iterator, IDRange(), ascii::space_type> id_range;
+    qi::rule<Iterator, std::wstring(), ascii::space_type> strings;
+    qi::rule<Iterator, std::wstring(), ascii::space_type> regexps;
     qi::rule<Iterator, StringsOrRegexps(), ascii::space_type> strings_or_regexps;
     qi::rule<Iterator, NumbersOrRanges(), ascii::space_type> numbers_or_ranges;
 };

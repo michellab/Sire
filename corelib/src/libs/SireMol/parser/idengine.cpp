@@ -115,6 +115,7 @@ StringsOrRegexps::~StringsOrRegexps()
 
 StringsOrRegexps& StringsOrRegexps::operator+=(const QString &s)
 {
+    qDebug() << "ADDING STRING" << s;
     strings.append(s);
     qSort(strings);
     return *this;
@@ -125,14 +126,17 @@ StringsOrRegexps& StringsOrRegexps::operator+=(const std::wstring &s)
     return this->operator+=( QString::fromStdWString(s) );
 }
 
-StringsOrRegexps& StringsOrRegexps::operator+=(const std::string &s)
+StringsOrRegexps& StringsOrRegexps::operator-=(const QString &s)
 {
-    return this->operator+=( QString::fromStdString(s) );
+    qDebug() << "ADDING REGEXP" << s;
+    strings.append(s);
+    qSort(strings);
+    return *this;
 }
 
-StringsOrRegexps& StringsOrRegexps::operator+=(const std::vector<char> &s)
+StringsOrRegexps& StringsOrRegexps::operator-=(const std::wstring &s)
 {
-    return this->operator+=( QString::fromUtf8(s.data(), s.size()) );
+    return this->operator-=( QString::fromStdWString(s) );
 }
 
 /////////
@@ -277,18 +281,33 @@ idengine_parser::idengine_parser() : idengine_parser::base_type(start)
     using qi::_1;
     using qi::_2;
     using qi::lexeme;
+    using qi::as_wstring;
+    using qi::repeat;
     using ascii::char_;
+
+    strings = eps [ _val = std::wstring() ] >>
+        (
+            lexeme[ '\'' >> as_wstring[+(char_ - '\'')][ _val = _1 ] >> '\'' ]
+        )
+        ;
+    
+    regexps = eps [ _val = std::wstring() ] >>
+        (
+            lexeme[ '/' >> as_wstring[+(char_ - '/')][ _val = _1 ] >> '/' ]
+        )
+        ;
 
     strings_or_regexps = eps [ _val = StringsOrRegexps() ] >>
         (
-            lexeme[+char_][ _val += _1 ]
+            ( strings[_val += _1] | regexps[_val -= _1] ) >>
+            *( ',' >> (strings[_val += _1] | regexps[_val -= _1]) )
         )
         ;
     
     id_range = eps [ _val = IDRange() ] >>
         (
             int_[ _val += _1 ] >>
-            *( ':' >> int_[ _val += _1 ] )
+            repeat(0,2)[( ':' >> int_[ _val += _1 ] )]
         )
         ;
     
