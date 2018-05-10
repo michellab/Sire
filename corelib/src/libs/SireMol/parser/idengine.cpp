@@ -30,6 +30,8 @@
 
 #include "tostring.h"
 
+#include <QRegExp>
+
 using namespace parser_idengine;
 
 ////////
@@ -91,8 +93,22 @@ QString IDEngine::toString() const
     switch (typ)
     {
     case NAME:
-        typstr = QString("name = %1").arg(idnams.strings.join(","));
+    {
+        QStringList rxs;
+        
+        for (const auto rx : idnams.regexps)
+        {
+            if (rx.caseSensitivity() == Qt::CaseSensitive)
+                rxs.append( QString("{{%1}}").arg(rx.pattern()) );
+            else
+                rxs.append( QString("((%1))").arg(rx.pattern()) );
+        }
+        
+        rxs += idnams.strings;
+        
+        typstr = QString("name = %1").arg(rxs.join(","));
         break;
+    }
     case NUMBER:
         typstr = QString("num = %1").arg(Sire::toString(idnums.numbers));
         break;
@@ -101,6 +117,28 @@ QString IDEngine::toString() const
     }
     
     return QString("%1%2").arg(objstr,typstr);
+}
+
+/////////
+///////// Implementation of Regexp
+/////////
+
+Regexp::Regexp()
+{}
+
+Regexp::~Regexp()
+{}
+
+Regexp& Regexp::operator+=(const std::wstring &s)
+{
+    regexp = QRegExp( QString::fromStdWString(s), Qt::CaseSensitive );
+    return *this;
+}
+
+Regexp& Regexp::operator*=(const std::wstring &s)
+{
+    regexp = QRegExp( QString::fromStdWString(s), Qt::CaseInsensitive );
+    return *this;
 }
 
 /////////
@@ -113,30 +151,17 @@ StringsOrRegexps::StringsOrRegexps()
 StringsOrRegexps::~StringsOrRegexps()
 {}
 
-StringsOrRegexps& StringsOrRegexps::operator+=(const QString &s)
-{
-    qDebug() << "ADDING STRING" << s;
-    strings.append(s);
-    qSort(strings);
-    return *this;
-}
-
 StringsOrRegexps& StringsOrRegexps::operator+=(const std::wstring &s)
 {
-    return this->operator+=( QString::fromStdWString(s) );
-}
-
-StringsOrRegexps& StringsOrRegexps::operator-=(const QString &s)
-{
-    qDebug() << "ADDING REGEXP" << s;
-    strings.append(s);
+    strings.append( QString::fromStdWString(s) );
     qSort(strings);
     return *this;
 }
 
-StringsOrRegexps& StringsOrRegexps::operator-=(const std::wstring &s)
+StringsOrRegexps& StringsOrRegexps::operator+=(const Regexp &r)
 {
-    return this->operator-=( QString::fromStdWString(s) );
+    regexps.append( r.regexp );
+    return *this;
 }
 
 /////////
@@ -279,7 +304,6 @@ idengine_parser::idengine_parser() : idengine_parser::base_type(start)
     using qi::lit;
     using qi::double_;
     using qi::_1;
-    using qi::_2;
     using qi::lexeme;
     using qi::as_wstring;
     using qi::repeat;
@@ -287,20 +311,24 @@ idengine_parser::idengine_parser() : idengine_parser::base_type(start)
 
     strings = eps [ _val = std::wstring() ] >>
         (
-            lexeme[ '\'' >> as_wstring[+(char_ - '\'')][ _val = _1 ] >> '\'' ]
+            lexeme[ "'" >> as_wstring[+(char_ - "'")][ _val = _1 ] >> "'" ]
         )
         ;
     
-    regexps = eps [ _val = std::wstring() ] >>
+    regexps = eps [ _val = Regexp() ] >>
         (
-            lexeme[ '/' >> as_wstring[+(char_ - '/')][ _val = _1 ] >> '/' ]
+            lexeme[ "((" >> as_wstring[+(char_ - "))")][ _val *= _1 ] >> "))" ]
+        )
+        |
+        (
+            lexeme[ "{{" >> as_wstring[+(char_ - "}}")][ _val += _1 ] >> "}}" ]
         )
         ;
 
     strings_or_regexps = eps [ _val = StringsOrRegexps() ] >>
         (
-            ( strings[_val += _1] | regexps[_val -= _1] ) >>
-            *( ',' >> (strings[_val += _1] | regexps[_val -= _1]) )
+            ( strings[_val += _1] | regexps[_val += _1] ) >>
+            *( ',' >> (strings[_val += _1] | regexps[_val += _1]) )
         )
         ;
     

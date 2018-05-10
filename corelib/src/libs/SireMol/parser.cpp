@@ -37,6 +37,39 @@ using namespace SireBase;
 //the parsers used to select by atom/chain/etc ID (name, number, index)
 #include "parser/idengine.h"
 
+/*
+class NGin
+{
+public:
+    NGin()
+    {}
+    
+    ~NGin()
+    {}
+    
+    template<class T>
+    NGin& operator+=(const T &ngin)
+    {
+        engine.reset( new T(ngin) );
+        return *this;
+    }
+    
+    boost::shared_ptr<SelectEngine> engine;
+};
+
+struct select_parser : qi::grammar<std::wstring::const_iterator, NGin(), ascii::space_type>
+{
+    typedef std::wstring::const_iterator Iterator;
+
+    select_parser()
+    {
+        parser_
+    }
+    
+    qi::rule<Iterator, NGin(), ascii::space_type> start;
+};
+*/
+
 namespace SireMol
 {
     /** Internal function used to parse the passed string and convert
