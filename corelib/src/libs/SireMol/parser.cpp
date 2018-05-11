@@ -51,50 +51,35 @@ using namespace SireBase;
 struct ASTValue;
 struct ASTObject;
 struct ASTArray;
+struct ASTNameValuePair;
 using ASTVariant        = boost::variant<
                                        boost::recursive_wrapper<ASTObject>,
                                        boost::recursive_wrapper<ASTArray>,
                                        std::string>;
-using ASTAttributeMapT  = std::map<std::string, ASTValue>;
+using ASTAttributesT  = std::vector<ASTNameValuePair>;
 using ASTValuesT        = std::vector<ASTValue>;
+
 struct ASTValue
 {
    ASTVariant value;
 };
 struct ASTObject
 { 
-   ASTAttributeMapT attributes;
+   ASTAttributesT attributes;
 };
 struct ASTArray
 {
    ASTValuesT values;
 };
+struct ASTNameValuePair
+{
+    std::string name;
+    ASTValue value;
+};
 
+void to_string(const ASTNameValuePair);
 void to_string(const ASTObject &obj);
 void to_string(const ASTValue &val);
-
-class ASTNameValuePairT : public std::pair<std::string,ASTValue>
-{
-public:
-    ASTNameValuePairT() : std::pair<std::string,ASTValue>()
-    {
-        std::cout << "empty pair" << std::endl;
-    }
-    
-    ASTNameValuePairT(const std::string &s) : std::pair<std::string,ASTValue>(s,ASTValue())
-    {
-        std::cout << "no value " << s << std::endl;
-    }
-    
-    ASTNameValuePairT(const ASTNameValuePairT &other) : std::pair<std::string,ASTValue>(other)
-    {
-        std::cout << std::get<0>(other) << " = ";
-        to_string( std::get<1>(other) );
-    }
-    
-    ~ASTNameValuePairT()
-    {}
-};
 
 class print_visitor : public boost::static_visitor<int>
 {
@@ -141,16 +126,19 @@ void to_string(const ASTObject &obj)
     for (auto attribute : obj.attributes)
     {
         std::cout << "attribute " << i << std::endl;
-        std::cout << std::get<0>(attribute) << " = ";
-        to_string( std::get<1>(attribute) );
+        std::cout << attribute.name << " = ";
+        to_string( attribute.value );
         std::cout << "\n";
         i += 1;
     }
 }
 
 BOOST_FUSION_ADAPT_STRUCT(ASTValue,(ASTVariant,value))
-BOOST_FUSION_ADAPT_STRUCT(ASTObject,(ASTAttributeMapT,attributes ))
+BOOST_FUSION_ADAPT_STRUCT(ASTObject,(ASTAttributesT,attributes ))
 BOOST_FUSION_ADAPT_STRUCT(ASTArray,(ASTValuesT,values))
+BOOST_FUSION_ADAPT_STRUCT(ASTNameValuePair,
+                          (std::string, name),
+                          (ASTValue, value))
 
 namespace spirit  = boost::spirit;
 namespace qi      = spirit::qi;
@@ -252,8 +240,8 @@ public:
    }
    qi::rule<IteratorT, ASTObject(), SkipperT> objectRule;
    qi::rule<IteratorT, ASTArray(), SkipperT> arrayRule;
-   qi::rule<IteratorT, ASTAttributeMapT(), SkipperT> attributesRule;
-   qi::rule<IteratorT, ASTNameValuePairT(), SkipperT> attributeRule;
+   qi::rule<IteratorT, ASTAttributesT(), SkipperT> attributesRule;
+   qi::rule<IteratorT, ASTNameValuePair(), SkipperT> attributeRule;
    qi::rule<IteratorT, std::string(), SkipperT> nameRule;
    qi::rule<IteratorT, ASTValuesT(), SkipperT> valuesRule;
    qi::rule<IteratorT, ASTValue(), SkipperT> valueRule;
