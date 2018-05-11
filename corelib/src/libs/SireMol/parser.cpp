@@ -39,10 +39,195 @@ using namespace SireBase;
 
 // word count lexer
 #include <boost/spirit/include/qi.hpp>
+#include <boost/spirit/include/support_line_pos_iterator.hpp>
 #include <boost/spirit/include/lex_lexertl.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/phoenix_statement.hpp>
 #include <boost/spirit/include/phoenix_container.hpp>
+
+///////////
+///////////
+
+struct ASTValue;
+struct ASTObject;
+struct ASTArray;
+using ASTVariant        = boost::variant<
+                                       boost::recursive_wrapper<ASTObject>,
+                                       boost::recursive_wrapper<ASTArray>,
+                                       std::string>;
+using ASTAttributeMapT  = std::map<std::string, ASTValue>;
+using ASTValuesT        = std::vector<ASTValue>;
+struct ASTValue
+{
+   ASTVariant value;
+};
+struct ASTObject
+{ 
+   ASTAttributeMapT attributes;
+};
+struct ASTArray
+{
+   ASTValuesT values;
+};
+
+BOOST_FUSION_ADAPT_STRUCT(ASTValue,(ASTVariant,value))
+BOOST_FUSION_ADAPT_STRUCT(ASTObject,(ASTAttributeMapT,attributes ))
+BOOST_FUSION_ADAPT_STRUCT(ASTArray,(ASTValuesT,values))
+
+namespace spirit  = boost::spirit;
+namespace qi      = spirit::qi;
+namespace phoenix = boost::phoenix;
+
+template<typename IteratorT>
+class SkipperGrammar : public qi::grammar<IteratorT>
+{
+public:
+ SkipperGrammar()
+    :SkipperGrammar::base_type( rule )
+ {
+    lineCommentRule  = qi::lit( "//" ) >> 
+                       *(qi::char_ -qi::eol) >> 
+                       qi::eol;
+    blockCommentRule = qi::lit( "/*" ) >> 
+                       *(qi::char_ -qi::lit( "*/" ) ) >> 
+                       qi::lit( "*/" );
+    spaceRule        = qi::space;
+    rule             = spaceRule | lineCommentRule | blockCommentRule;
+  }
+  qi::rule<IteratorT> lineCommentRule;
+  qi::rule<IteratorT> blockCommentRule;
+  qi::rule<IteratorT> spaceRule;
+  qi::rule<IteratorT> rule;
+};
+
+template<typename IteratorT, typename SkipperT>
+class ValueGrammar : public qi::grammar<IteratorT, std::string(), SkipperT>
+{
+public:
+ValueGrammar()
+   :ValueGrammar::base_type( rule, "String" )
+  {
+    escapedStringRule   %= qi::lexeme[
+         qi::lit( '"' ) >>
+         *( escapeCharSymbols | ( qi::char_ - qi::char_( '"' ) ) ) >
+         qi::lit( '"') ];
+    rawStringRule       %= qi::lexeme[
+                +( qi::alnum |
+                   qi::char_( '.' ) |
+                   qi::char_( '/' ) |
+                   qi::char_( '_' ) |
+                   qi::char_( '-' )
+                  ) ];
+    rule                %= rawStringRule | escapedStringRule;
+    escapeCharSymbols.add    ( "\\a", '\a' )
+                             ( "\\b", '\b' )
+                             ( "\\f", '\f' )
+                             ( "\\n", '\n' )
+                             ( "\\r", '\r' )
+                             ( "\\t", '\t' )
+                             ( "\\v", '\v' )
+                             ( "\\\\", '\\' )
+                             ( "\\\'", '\'' )
+                             ( "\\\"", '\"' );
+    escapedStringRule.name( "Escaped String" );
+    rawStringRule.name( "Escaped String" );
+    
+    escapeCharSymbols.name( "Escaped Chars" );
+  }
+  qi::rule<IteratorT, std::string(), SkipperT>   escapedStringRule;
+  qi::rule<IteratorT, std::string(), SkipperT>   rawStringRule;
+  qi::rule<IteratorT, std::string(), SkipperT>   rule;
+  qi::symbols<const char, const char>            escapeCharSymbols;
+};
+
+using ASTNameValuePairT = std::pair<std::string, ASTValue>;
+template<typename IteratorT, typename SkipperT>
+class Grammar : public qi::grammar<IteratorT, ASTObject(), SkipperT>
+{
+public:
+  Grammar()
+    :Grammar::base_type( objectRule, "Object" )
+  {
+    objectRule     %= qi::lit( '{' ) >> -attributesRule > qi::lit( '}' );
+    
+    arrayRule      %= qi::lit( '(' ) >> 
+                      -valuesRule >> 
+                      -qi::lit( ',' ) > 
+                      qi::lit( ')' );
+    attributesRule %= attributeRule >> 
+                      *( qi::lit( ';' ) >> attributeRule ) >> 
+                      -qi::lit( ';' );
+    
+    //attributeRule  %= nameRule > qi::lit( '=' ) > valueRule;
+    nameRule       %= qi::lexeme[ +( qi::alnum | qi::char_( '_' ) ) ];
+    valuesRule     %= ( objectRule % qi::lit( ',' ) ) |
+                      ( arrayRule % qi::lit( ',' ) ) |
+                      ( stringRule % qi::lit( ',' ) );
+    valueRule      %= objectRule | arrayRule | stringRule;
+    objectRule.name( "Object" );
+    arrayRule.name( "Array" );
+    attributesRule.name( "Attributes" );
+    attributeRule.name( "Attribute" );
+    nameRule.name( "Name" );
+    valuesRule.name( "Values" );
+    valueRule.name( "Value" );
+    stringRule.name( "String" );
+   }
+   qi::rule<IteratorT, ASTObject(), SkipperT> objectRule;
+   qi::rule<IteratorT, ASTArray(), SkipperT> arrayRule;
+   qi::rule<IteratorT, ASTAttributeMapT(), SkipperT> attributesRule;
+   qi::rule<IteratorT, ASTNameValuePairT(), SkipperT> attributeRule;
+   qi::rule<IteratorT, std::string(), SkipperT> nameRule;
+   qi::rule<IteratorT, ASTValuesT(), SkipperT> valuesRule;
+   qi::rule<IteratorT, ASTValue(), SkipperT> valueRule;
+   ValueGrammar<IteratorT, SkipperT> stringRule;
+};
+
+template<typename IteratorT>
+ASTObject parse(  const IteratorT & begin,
+                  const IteratorT & end
+               )
+{
+  using LinePosIteratorT  = spirit::line_pos_iterator<IteratorT>;
+  
+  using SkipperGrammarT   = SkipperGrammar<LinePosIteratorT>;
+  using ParserGrammarT    = Grammar<LinePosIteratorT, SkipperGrammarT>;
+  SkipperGrammarT  skipper;
+  ParserGrammarT   grammar;
+  LinePosIteratorT posIterBegin( begin );
+  LinePosIteratorT posIterEnd( end );
+  try
+  {
+    ASTObject result;
+  
+    const bool parseResult = qi::phrase_parse( posIterBegin,
+                                               posIterEnd,
+                                               grammar,
+                                               skipper,
+                                               result );
+    if( parseResult && posIterBegin == posIterEnd )
+    {
+      return result;
+    } else {
+      throw std::runtime_error{ "Parser Failed" };
+    }
+   } catch ( ... ) {
+      throw std::runtime_error{ "Parser Failed" };
+   }
+   return ASTObject{};
+}
+
+int parse_main(const std::string &str)
+{
+    // Read file contents.
+    ASTObject result = parse( str.begin(), str.end() );
+
+    return 0;
+}
+
+
+///////////
+///////////
 
 using namespace boost::spirit;
 using namespace boost::spirit::ascii;
@@ -221,6 +406,8 @@ namespace SireMol
         word_count_grammar<iterator_type> gw (word_count);  // Our parser
         
         const auto cstr = str.toStdString();
+
+        parse_main(cstr);
 
         char const* first = cstr.c_str();
         char const* last = &first[cstr.size()];
