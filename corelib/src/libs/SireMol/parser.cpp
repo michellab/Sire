@@ -45,8 +45,11 @@ using namespace SireMol;
 
 namespace AST
 {
+    enum IDObject { ID_UNKNOWN = 0, ATOM = 1, CUTGROUP = 2,
+                    RESIDUE = 3, CHAIN = 4, SEGMENT = 5, MOLECULE = 6 };
+    
     struct Value;      // holder for a generic value
-    struct NameValue;  // combination of a name with a value
+    struct Attribute;  // a named generic value
     struct Node;       // a node in the tree
     struct Array;      // an array of nodes
 
@@ -55,8 +58,8 @@ namespace AST
                                    boost::recursive_wrapper<Array>,
                                    std::string>;
     
-    // the attributes are the set of name-value pairs
-    using Attributes = std::vector<NameValue>;
+    // an array of attribute objects
+    using Attributes = std::vector<Attribute>;
     
     // an array of generic value objects
     using Values = std::vector<Value>;
@@ -79,14 +82,14 @@ namespace AST
         Values values;
     };
 
-    // a NameValue provides both a name and a value
-    struct NameValue
+    // an Attribute provides both a name and a value
+    struct Attribute
     {
         std::string name;
         Value value;
     };
 
-    void to_string(const NameValue &val);
+    void to_string(const Attribute &val);
     void to_string(const Node &node);
     void to_string(const Value &val);
 
@@ -155,7 +158,7 @@ BOOST_FUSION_ADAPT_STRUCT( AST::Array,
                            (AST::Values,values)
                          )
 
-BOOST_FUSION_ADAPT_STRUCT( AST::NameValue,
+BOOST_FUSION_ADAPT_STRUCT( AST::Attribute,
                            (std::string, name),
                            (AST::Value, value)
                          )
@@ -237,10 +240,10 @@ template<typename IteratorT, typename SkipperT>
 class Grammar : public qi::grammar<IteratorT, AST::Node(), SkipperT>
 {
 public:
-    Grammar() : Grammar::base_type( objectRule, "Object" )
+    Grammar() : Grammar::base_type( nodeRule, "Node" )
     {
-        objectRule %= qi::lit( '{' ) >> -attributesRule > qi::lit( '}' );
-        
+        nodeRule %= qi::lit( '{' ) >> -attributesRule > qi::lit( '}' );
+    
         arrayRule %= qi::lit( '(' ) >>
                        -valuesRule >>
                        -qi::lit( ',' ) >
@@ -249,18 +252,23 @@ public:
         attributesRule %= attributeRule >>
                           *( qi::lit( ';' ) >> attributeRule ) >> 
                           -qi::lit( ';' );
+
+        name_tokens.add( "resnam", "resname" )
+                       ( "resname", "resname" )
+                       ( "atomnam", "atomname" )
+                       ( "atomname", "atomname" );
         
-        attributeRule  %= nameRule > qi::lit( '=' ) > valueRule;
+        attributeRule  %= nameRule > valueRule;
         
         nameRule       %= qi::lexeme[ +( qi::alnum | qi::char_( '_' ) ) ];
         
-        valuesRule     %= ( objectRule % qi::lit( ',' ) ) |
+        valuesRule     %= ( nodeRule % qi::lit( ',' ) ) |
                           ( arrayRule % qi::lit( ',' ) ) |
                           ( stringRule % qi::lit( ',' ) );
         
-        valueRule      %= objectRule | arrayRule | stringRule;
+        valueRule      %= nodeRule | arrayRule | stringRule;
         
-        objectRule.name( "Object" );
+        nodeRule.name( "Node" );
         arrayRule.name( "Array" );
         attributesRule.name( "Attributes" );
         attributeRule.name( "Attribute" );
@@ -270,13 +278,16 @@ public:
         stringRule.name( "String" );
     }
     
-    qi::rule<IteratorT, AST::Node(), SkipperT> objectRule;
+    qi::rule<IteratorT, AST::Node(), SkipperT> nodeRule;
     qi::rule<IteratorT, AST::Array(), SkipperT> arrayRule;
     qi::rule<IteratorT, AST::Attributes(), SkipperT> attributesRule;
-    qi::rule<IteratorT, AST::NameValue(), SkipperT> attributeRule;
+    qi::rule<IteratorT, AST::Attribute(), SkipperT> attributeRule;
     qi::rule<IteratorT, std::string(), SkipperT> nameRule;
     qi::rule<IteratorT, AST::Values(), SkipperT> valuesRule;
     qi::rule<IteratorT, AST::Value(), SkipperT> valueRule;
+    
+    qi::symbols<char,std::string> name_tokens;
+
     ValueGrammar<IteratorT, SkipperT> stringRule;
 };
 
