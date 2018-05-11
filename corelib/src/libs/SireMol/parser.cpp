@@ -70,6 +70,84 @@ struct ASTArray
    ASTValuesT values;
 };
 
+void to_string(const ASTObject &obj);
+void to_string(const ASTValue &val);
+
+class ASTNameValuePairT : public std::pair<std::string,ASTValue>
+{
+public:
+    ASTNameValuePairT() : std::pair<std::string,ASTValue>()
+    {
+        std::cout << "empty pair" << std::endl;
+    }
+    
+    ASTNameValuePairT(const std::string &s) : std::pair<std::string,ASTValue>(s,ASTValue())
+    {
+        std::cout << "no value " << s << std::endl;
+    }
+    
+    ASTNameValuePairT(const ASTNameValuePairT &other) : std::pair<std::string,ASTValue>(other)
+    {
+        std::cout << std::get<0>(other) << " = ";
+        to_string( std::get<1>(other) );
+    }
+    
+    ~ASTNameValuePairT()
+    {}
+};
+
+class print_visitor : public boost::static_visitor<int>
+{
+public:
+    int operator()(const ASTObject &obj) const
+    {
+        std::cout << "ASTObject--\n";
+        to_string(obj);
+        return 0;
+    }
+    
+    int operator()(const ASTArray &array) const
+    {
+        std::cout << "ASTArray--\n";
+        
+        int i = 0;
+        for (auto value : array.values)
+        {
+            std::cout << "value" << i << std::endl;
+            to_string(value);
+            std::cout << "\n";
+            i += 1;
+        }
+        
+        return 0;
+    }
+    
+    int operator()(const std::string &str) const
+    {
+        std::cout << "value: " << str << " ";
+        return 0;
+    }
+};
+
+void to_string(const ASTValue &value)
+{
+    boost::apply_visitor( print_visitor(), value.value );
+}
+
+void to_string(const ASTObject &obj)
+{
+    std::cout << "attributes\n";
+    int i = 0;
+    for (auto attribute : obj.attributes)
+    {
+        std::cout << "attribute " << i << std::endl;
+        std::cout << std::get<0>(attribute) << " = ";
+        to_string( std::get<1>(attribute) );
+        std::cout << "\n";
+        i += 1;
+    }
+}
+
 BOOST_FUSION_ADAPT_STRUCT(ASTValue,(ASTVariant,value))
 BOOST_FUSION_ADAPT_STRUCT(ASTObject,(ASTAttributeMapT,attributes ))
 BOOST_FUSION_ADAPT_STRUCT(ASTArray,(ASTValuesT,values))
@@ -140,7 +218,6 @@ ValueGrammar()
   qi::symbols<const char, const char>            escapeCharSymbols;
 };
 
-using ASTNameValuePairT = std::pair<std::string, ASTValue>;
 template<typename IteratorT, typename SkipperT>
 class Grammar : public qi::grammar<IteratorT, ASTObject(), SkipperT>
 {
@@ -158,7 +235,7 @@ public:
                       *( qi::lit( ';' ) >> attributeRule ) >> 
                       -qi::lit( ';' );
     
-    //attributeRule  %= nameRule > qi::lit( '=' ) > valueRule;
+    attributeRule  %= nameRule > qi::lit( '=' ) > valueRule;
     nameRule       %= qi::lexeme[ +( qi::alnum | qi::char_( '_' ) ) ];
     valuesRule     %= ( objectRule % qi::lit( ',' ) ) |
                       ( arrayRule % qi::lit( ',' ) ) |
@@ -207,6 +284,7 @@ ASTObject parse(  const IteratorT & begin,
                                                result );
     if( parseResult && posIterBegin == posIterEnd )
     {
+        qDebug() << "PARSED USING AST!";
       return result;
     } else {
       throw std::runtime_error{ "Parser Failed" };
@@ -220,8 +298,19 @@ ASTObject parse(  const IteratorT & begin,
 int parse_main(const std::string &str)
 {
     // Read file contents.
-    ASTObject result = parse( str.begin(), str.end() );
+    ASTObject result;
 
+    try
+    {
+        result = parse( str.begin(), str.end() );
+    }
+    catch(...)
+    {
+        qDebug() << "ERROR IN PARSING";
+    }
+
+    to_string(result);
+    
     return 0;
 }
 
