@@ -149,9 +149,9 @@ namespace AST
     // a binary ID expression, e.g. something AND something
     struct IDBinary
     {
-        IDAttribute attribute0;
+        ExpressionPart part0;
         IDOperation operation;
-        IDAttribute attribute1;
+        ExpressionPart part1;
     };
 
     void to_string(const Node &node);
@@ -194,9 +194,9 @@ namespace AST
         int operator()(const IDBinary &bin) const
         {
             std::cout << "BINARY\n";
-            to_string(bin.attribute0);
+            to_string(bin.part0);
             std::cout << idoperation_to_string(bin.operation) << "\n";
-            to_string(bin.attribute1);
+            to_string(bin.part1);
             return 0;
         }
         
@@ -255,9 +255,9 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDAttribute,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDBinary,
-                           (AST::IDAttribute, attribute0),
+                           (AST::ExpressionPart, part0),
                            (AST::IDOperation, operation),
-                           (AST::IDAttribute, attribute1)
+                           (AST::ExpressionPart, part1)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::ExpressionPart,
@@ -362,6 +362,7 @@ public:
 
         attributeRule  %= name_token >> valueRule;
         binaryRule %= attributeRule >> op_token >> attributeRule;
+        //binaryRule %= expressionPartRule >> op_token >> expressionPartRule; // CRASHES!
 
         //expressionPartRule %= (expressionPartBracketRule); // |
  //                             (qi::lit( '(' ) > -expressionPartBracketRule > qi::lit( ')' ));
@@ -377,7 +378,9 @@ public:
         name_token.add( "resnam", AST::RESIDUE )
                       ( "resname", AST::RESIDUE )
                       ( "atomnam", AST::ATOM )
-                      ( "atomname", AST::ATOM );
+                      ( "atomname", AST::ATOM )
+                      ( "chainnam", AST::CHAIN )
+                      ( "chainname", AST::CHAIN );
         
         op_token.add( "and", AST::ID_AND )
                     ( "AND", AST::ID_AND )
