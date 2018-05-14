@@ -353,6 +353,12 @@ public:
         using phoenix::val;
     
         nodeRule %= expressionPartsRule;
+
+        //must be first so that we greedily parse as much as we can
+        expressionPartsRule %= ( expressionPartRule % qi::lit( ';' ) );
+
+        //must be first so that we greedily parse as much as we can
+        expressionPartRule %= binaryRule | attributeRule;
     
         arrayRule %= qi::lit( '(' ) >>
                        -valuesRule >>
@@ -381,10 +387,6 @@ public:
         valuesRule     %= ( nodeRule % qi::lit( ',' ) ) |
                           ( arrayRule % qi::lit( ',' ) ) |
                           ( stringRule % qi::lit( ',' ) );
-
-        expressionPartsRule %= ( expressionPartRule % qi::lit( ';' ) );
-
-        expressionPartRule %= attributeRule | binaryRule;
         
         valueRule      %= nodeRule | arrayRule | stringRule;
         
@@ -460,12 +462,20 @@ AST::Node parse(const IteratorT & begin, const IteratorT & end)
         }
         else
         {
-            throw std::runtime_error{ "Parser Failed" };
+            std::cout << "FAILED TO PARSE EVERYTHING - MISSING \"";
+            for ( ; posIterBegin != posIterEnd; ++posIterBegin )
+            {
+                std::cout << *posIterBegin;
+            }
+            std::cout << "\"\n";
+            
+            return result;
         }
     }
-    catch ( ... )
+    catch (std::exception &e)
     {
-        throw std::runtime_error{ "Parser Failed" };
+        qDebug() << "CAUGHT ERROR" << e.what();
+        throw;
     }
     
     return AST::Node{};
@@ -480,9 +490,9 @@ int parse_main(const std::string &str)
     {
         result = parse( str.begin(), str.end() );
     }
-    catch(...)
+    catch(std::exception &e)
     {
-        qDebug() << "ERROR IN PARSING";
+        qDebug() << "ERROR IN PARSING" << e.what();
     }
 
     AST::to_string(result);
