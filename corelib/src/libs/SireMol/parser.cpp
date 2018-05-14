@@ -48,8 +48,31 @@ namespace AST
     enum IDObject { ID_UNKNOWN = 0, ATOM = 1, CUTGROUP = 2,
                     RESIDUE = 3, CHAIN = 4, SEGMENT = 5, MOLECULE = 6 };
     
+    std::string idobject_to_string(IDObject obj)
+    {
+        switch(obj)
+        {
+        case ID_UNKNOWN:
+            return "unknown";
+        case ATOM:
+            return "atom";
+        case CUTGROUP:
+            return "cutgroup";
+        case RESIDUE:
+            return "residue";
+        case CHAIN:
+            return "chain";
+        case SEGMENT:
+            return "segment";
+        case MOLECULE:
+            return "molecule";
+        default:
+            return "unknown";
+        }
+    }
+    
     struct Value;      // holder for a generic value
-    struct Attribute;  // a named generic value
+    struct IDAttribute;  // a named generic value
     struct Node;       // a node in the tree
     struct Array;      // an array of nodes
 
@@ -59,7 +82,7 @@ namespace AST
                                    std::string>;
     
     // an array of attribute objects
-    using Attributes = std::vector<Attribute>;
+    using IDAttributes = std::vector<IDAttribute>;
     
     // an array of generic value objects
     using Values = std::vector<Value>;
@@ -73,7 +96,7 @@ namespace AST
     // a Node contains an array of attributes (which are name-value pairs)
     struct Node
     {
-        Attributes attributes;
+        IDAttributes attributes;
     };
 
     // an Array contains an array of generic value objects
@@ -83,13 +106,12 @@ namespace AST
     };
 
     // an Attribute provides both a name and a value
-    struct Attribute
+    struct IDAttribute
     {
-        std::string name;
+        IDObject name;
         Value value;
     };
 
-    void to_string(const Attribute &val);
     void to_string(const Node &node);
     void to_string(const Value &val);
 
@@ -138,7 +160,7 @@ namespace AST
         for (auto attribute : node.attributes)
         {
             std::cout << "attribute " << i << std::endl;
-            std::cout << attribute.name << " = ";
+            std::cout << idobject_to_string(attribute.name) << " = ";
             to_string( attribute.value );
             std::cout << "\n";
             i += 1;
@@ -151,15 +173,15 @@ BOOST_FUSION_ADAPT_STRUCT( AST::Value,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::Node,
-                           (AST::Attributes,attributes)
+                           (AST::IDAttributes,attributes)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::Array,
                            (AST::Values,values)
                          )
 
-BOOST_FUSION_ADAPT_STRUCT( AST::Attribute,
-                           (std::string, name),
+BOOST_FUSION_ADAPT_STRUCT( AST::IDAttribute,
+                           (AST::IDObject, name),
                            (AST::Value, value)
                          )
 
@@ -253,12 +275,12 @@ public:
                           *( qi::lit( ';' ) >> attributeRule ) >> 
                           -qi::lit( ';' );
 
-        name_tokens.add( "resnam", "resname" )
-                       ( "resname", "resname" )
-                       ( "atomnam", "atomname" )
-                       ( "atomname", "atomname" );
+        name_tokens.add( "resnam", AST::RESIDUE )
+                       ( "resname", AST::RESIDUE )
+                       ( "atomnam", AST::ATOM )
+                       ( "atomname", AST::ATOM );
         
-        attributeRule  %= nameRule > valueRule;
+        attributeRule  %= name_tokens > valueRule;
         
         nameRule       %= qi::lexeme[ +( qi::alnum | qi::char_( '_' ) ) ];
         
@@ -280,13 +302,13 @@ public:
     
     qi::rule<IteratorT, AST::Node(), SkipperT> nodeRule;
     qi::rule<IteratorT, AST::Array(), SkipperT> arrayRule;
-    qi::rule<IteratorT, AST::Attributes(), SkipperT> attributesRule;
-    qi::rule<IteratorT, AST::Attribute(), SkipperT> attributeRule;
+    qi::rule<IteratorT, AST::IDAttributes(), SkipperT> attributesRule;
+    qi::rule<IteratorT, AST::IDAttribute(), SkipperT> attributeRule;
     qi::rule<IteratorT, std::string(), SkipperT> nameRule;
     qi::rule<IteratorT, AST::Values(), SkipperT> valuesRule;
     qi::rule<IteratorT, AST::Value(), SkipperT> valueRule;
     
-    qi::symbols<char,std::string> name_tokens;
+    qi::symbols<char,AST::IDObject> name_tokens;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;
 };
