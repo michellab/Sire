@@ -36,6 +36,12 @@ using namespace SireMol;
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/support_line_pos_iterator.hpp>
 
+#include <boost/spirit/include/phoenix_core.hpp>
+#include <boost/spirit/include/phoenix_operator.hpp>
+#include <boost/spirit/include/phoenix_fusion.hpp>
+#include <boost/spirit/include/phoenix_stl.hpp>
+#include <boost/spirit/include/phoenix_object.hpp>
+
 // A lot of the below code is heavily inspired by
 // https://medium.com/@alinakipoglu/parsing-with-spirit-qi-fcaeaf4357b3
 
@@ -71,15 +77,32 @@ namespace AST
         }
     }
     
+    enum IDOperation { ID_OP_UNKNOWN = 0, ID_AND = 1, ID_OR = 2 };
+    
+    std::string idoperation_to_string(IDOperation op)
+    {
+        switch(op)
+        {
+        case ID_AND:
+            return "and";
+        case ID_OR:
+            return "or";
+        default:
+            return "unknown";
+        }
+    }
+    
     struct Value;      // holder for a generic value
     struct IDAttribute;  // a named generic value
+    struct IDBinary;   // a binary ID expression
     struct Node;       // a node in the tree
     struct Array;      // an array of nodes
 
     // a Variant can hold a single node, an array of values or a string
     using Variant = boost::variant<boost::recursive_wrapper<Node>,
                                    boost::recursive_wrapper<Array>,
-                                   std::string>;
+                                   std::string,
+                                   boost::recursive_wrapper<IDBinary> >;
     
     // an array of attribute objects
     using IDAttributes = std::vector<IDAttribute>;
@@ -112,8 +135,17 @@ namespace AST
         Value value;
     };
 
+    // a binary ID expression, e.g. something AND something
+    struct IDBinary
+    {
+        IDAttribute attribute0;
+        IDOperation operation;
+        IDAttribute attribute1;
+    };
+
     void to_string(const Node &node);
     void to_string(const Value &val);
+    void to_string(const IDAttribute &attribute);
 
     class print_visitor : public boost::static_visitor<int>
     {
@@ -146,11 +178,26 @@ namespace AST
             std::cout << "value: " << str << " ";
             return 0;
         }
+        
+        int operator()(const IDBinary &bin) const
+        {
+            std::cout << "BINARY\n";
+            to_string(bin.attribute0);
+            std::cout << idoperation_to_string(bin.operation) << "\n";
+            to_string(bin.attribute1);
+            return 0;
+        }
     };
 
     void to_string(const Value &value)
     {
         boost::apply_visitor( print_visitor(), value.value );
+    }
+
+    void to_string(const IDAttribute &attribute)
+    {
+        std::cout << idobject_to_string(attribute.name) << " = ";
+        to_string( attribute.value );
     }
 
     void to_string(const Node &node)
@@ -160,8 +207,7 @@ namespace AST
         for (auto attribute : node.attributes)
         {
             std::cout << "attribute " << i << std::endl;
-            std::cout << idobject_to_string(attribute.name) << " = ";
-            to_string( attribute.value );
+            to_string(attribute);
             std::cout << "\n";
             i += 1;
         }
@@ -183,6 +229,12 @@ BOOST_FUSION_ADAPT_STRUCT( AST::Array,
 BOOST_FUSION_ADAPT_STRUCT( AST::IDAttribute,
                            (AST::IDObject, name),
                            (AST::Value, value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDBinary,
+                           (AST::IDAttribute, attribute0),
+                           (AST::IDOperation, operation),
+                           (AST::IDAttribute, attribute1)
                          )
 
 namespace spirit  = boost::spirit;
@@ -264,6 +316,15 @@ class Grammar : public qi::grammar<IteratorT, AST::Node(), SkipperT>
 public:
     Grammar() : Grammar::base_type( nodeRule, "Node" )
     {
+        using qi::lit;
+        using qi::lexeme;
+        using qi::on_error;
+        using qi::fail;
+        using namespace qi::labels;
+
+        using phoenix::construct;
+        using phoenix::val;
+    
         nodeRule %= qi::lit( '{' ) >> -attributesRule > qi::lit( '}' );
     
         arrayRule %= qi::lit( '(' ) >>
@@ -275,12 +336,19 @@ public:
                           *( qi::lit( ';' ) >> attributeRule ) >> 
                           -qi::lit( ';' );
 
-        name_tokens.add( "resnam", AST::RESIDUE )
-                       ( "resname", AST::RESIDUE )
-                       ( "atomnam", AST::ATOM )
-                       ( "atomname", AST::ATOM );
+        name_token.add( "resnam", AST::RESIDUE )
+                      ( "resname", AST::RESIDUE )
+                      ( "atomnam", AST::ATOM )
+                      ( "atomname", AST::ATOM );
         
-        attributeRule  %= name_tokens > valueRule;
+        op_token.add( "and", AST::ID_AND )
+                    ( "AND", AST::ID_AND )
+                    ( "or", AST::ID_OR )
+                    ( "OR", AST::ID_OR );
+        
+        attributeRule  %= name_token > valueRule;
+        
+        binaryRule %= attributeRule > op_token > attributeRule;
         
         nameRule       %= qi::lexeme[ +( qi::alnum | qi::char_( '_' ) ) ];
         
@@ -288,7 +356,7 @@ public:
                           ( arrayRule % qi::lit( ',' ) ) |
                           ( stringRule % qi::lit( ',' ) );
         
-        valueRule      %= nodeRule | arrayRule | stringRule;
+        valueRule      %= nodeRule | arrayRule | stringRule | binaryRule;
         
         nodeRule.name( "Node" );
         arrayRule.name( "Array" );
@@ -298,17 +366,31 @@ public:
         valuesRule.name( "Values" );
         valueRule.name( "Value" );
         stringRule.name( "String" );
+        
+        on_error<fail>
+        (
+            nodeRule
+          , std::cout
+                << val("Error! Expecting ")
+                << _4                               // what failed?
+                << val(" here: \"")
+                << construct<std::string>(_3, _2)   // iterators to error-pos, end
+                << val("\"")
+                << std::endl
+        );
     }
     
     qi::rule<IteratorT, AST::Node(), SkipperT> nodeRule;
     qi::rule<IteratorT, AST::Array(), SkipperT> arrayRule;
     qi::rule<IteratorT, AST::IDAttributes(), SkipperT> attributesRule;
     qi::rule<IteratorT, AST::IDAttribute(), SkipperT> attributeRule;
+    qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule;
     qi::rule<IteratorT, std::string(), SkipperT> nameRule;
     qi::rule<IteratorT, AST::Values(), SkipperT> valuesRule;
     qi::rule<IteratorT, AST::Value(), SkipperT> valueRule;
     
-    qi::symbols<char,AST::IDObject> name_tokens;
+    qi::symbols<char,AST::IDObject> name_token;
+    qi::symbols<char,AST::IDOperation> op_token;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;
 };
