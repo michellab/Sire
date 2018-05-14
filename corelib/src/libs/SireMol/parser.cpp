@@ -359,6 +359,12 @@ public:
 
         //must be first so that we greedily parse as much as we can
         expressionPartRule %= binaryRule | attributeRule;
+
+        attributeRule  %= name_token >> valueRule;
+        binaryRule %= attributeRule >> op_token >> attributeRule;
+
+        //expressionPartRule %= (expressionPartBracketRule); // |
+ //                             (qi::lit( '(' ) > -expressionPartBracketRule > qi::lit( ')' ));
     
         arrayRule %= qi::lit( '(' ) >>
                        -valuesRule >>
@@ -377,10 +383,6 @@ public:
                     ( "AND", AST::ID_AND )
                     ( "or", AST::ID_OR )
                     ( "OR", AST::ID_OR );
-        
-        attributeRule  %= (name_token > valueRule);
-        
-        binaryRule %= attributeRule > op_token > attributeRule;
         
         nameRule       %= qi::lexeme[ +( qi::alnum | qi::char_( '_' ) ) ];
         
@@ -423,6 +425,7 @@ public:
 
     qi::rule<IteratorT, AST::ExpressionParts(), SkipperT> expressionPartsRule;
     qi::rule<IteratorT, AST::ExpressionPart(), SkipperT> expressionPartRule;
+    qi::rule<IteratorT, AST::ExpressionPart(), SkipperT> expressionPartBracketRule;
     qi::rule<IteratorT, AST::Values(), SkipperT> valuesRule;
     qi::rule<IteratorT, AST::Value(), SkipperT> valueRule;
     
