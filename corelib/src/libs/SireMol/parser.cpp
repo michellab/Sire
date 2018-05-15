@@ -173,7 +173,7 @@ namespace AST
     struct IDName
     {
         IDObject name;
-        NameValue value;
+        NameValues values;
     };
 
     // a binary ID expression, e.g. something AND something
@@ -219,7 +219,7 @@ namespace AST
         
         int operator()(const std::string &str) const
         {
-            std::cout << "string: " << str;
+            std::cout << "string: " << str << " ";
             return 0;
         }
         
@@ -280,7 +280,10 @@ namespace AST
     void to_string(const IDName &value)
     {
         std::cout << idobject_to_string(value.name) << " = ";
-        to_string(value.value);
+        for (const auto value : value.values)
+        {
+            to_string(value);
+        }
     }
 
     void to_string(const Node &node)
@@ -320,7 +323,7 @@ BOOST_FUSION_ADAPT_STRUCT( AST::Array,
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDName,
                            (AST::IDObject, name),
-                           (AST::NameValue, value)
+                           (AST::NameValues, values)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDBinary,
@@ -433,7 +436,7 @@ public:
         //must be first so that we greedily parse as much as we can
         expressionRule %= binaryRule2 | binaryRule | expressionPartRule;
 
-        attributeRule  %= name_token >> nameValueRule;
+        attributeRule  %= name_token >> nameValuesRule;
         
         binaryRule %= (expressionPartRule >> op_token >> expressionPartRule) |
                       ( qi::lit('(') >> binaryRule >> qi::lit(')') );
