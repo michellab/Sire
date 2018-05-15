@@ -358,11 +358,13 @@ public:
         expressionPartsRule %= ( expressionPartRule % qi::lit( ';' ) );
 
         //must be first so that we greedily parse as much as we can
-        expressionPartRule %= binaryRule | attributeRule;
+        expressionPartRule %= binaryRule2 |
+                              binaryRule |
+                              attributeRule;
 
         attributeRule  %= name_token >> valueRule;
-        binaryRule %= attributeRule >> op_token >> attributeRule;
-        //binaryRule %= expressionPartRule >> op_token >> expressionPartRule; // CRASHES!
+        binaryRule %= (attributeRule >> op_token >> attributeRule);
+        binaryRule2 %= (binaryRule >> op_token >> attributeRule);
 
         //expressionPartRule %= (expressionPartBracketRule); // |
  //                             (qi::lit( '(' ) > -expressionPartBracketRule > qi::lit( ')' ));
@@ -424,6 +426,7 @@ public:
     qi::rule<IteratorT, AST::IDAttributes(), SkipperT> attributesRule;
     qi::rule<IteratorT, AST::IDAttribute(), SkipperT> attributeRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule;
+    qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
     qi::rule<IteratorT, std::string(), SkipperT> nameRule;
 
     qi::rule<IteratorT, AST::ExpressionParts(), SkipperT> expressionPartsRule;
