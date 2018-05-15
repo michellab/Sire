@@ -385,7 +385,8 @@ public:
         //must be first so that we greedily parse as much as we can
         expressionRule %= binaryRule2 | binaryRule | expressionPartRule;
 
-        attributeRule  %= name_token >> valueRule;
+        attributeRule  %= name_token >> nameValueRule;
+        
         binaryRule %= (expressionPartRule >> op_token >> expressionPartRule) |
                       ( qi::lit('(') >> binaryRule >> qi::lit(')') );
         binaryRule2 %= binaryRule >> op_token >> binaryRule |
@@ -415,13 +416,17 @@ public:
                     ( "or", AST::ID_OR )
                     ( "OR", AST::ID_OR );
         
-        nameRule       %= qi::lexeme[ +( qi::alnum | qi::char_( '_' ) ) ];
-        
         valuesRule     %= ( nodeRule % qi::lit( ',' ) ) |
                           ( arrayRule % qi::lit( ',' ) ) |
                           ( stringRule % qi::lit( ',' ) );
         
         valueRule      %= nodeRule | arrayRule | stringRule;
+
+        nameValuesRule     %= ( nodeRule % qi::lit( ',' ) ) |
+                              ( arrayRule % qi::lit( ',' ) ) |
+                              ( stringRule % qi::lit( ',' ) );
+        
+        nameValueRule      %= nodeRule | arrayRule | stringRule;
         
         nodeRule.name( "Node" );
         arrayRule.name( "Array" );
@@ -429,7 +434,6 @@ public:
         attributeRule.name( "Attribute" );
         expressionsRule.name( "Expressions" );
         expressionRule.name( "Expression" );
-        nameRule.name( "Name" );
         valuesRule.name( "Values" );
         valueRule.name( "Value" );
         stringRule.name( "String" );
@@ -453,7 +457,6 @@ public:
     qi::rule<IteratorT, AST::IDAttribute(), SkipperT> attributeRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
-    qi::rule<IteratorT, std::string(), SkipperT> nameRule;
 
     qi::rule<IteratorT, AST::Expressions(), SkipperT> expressionsRule;
     qi::rule<IteratorT, AST::Expression(), SkipperT> expressionRule;
@@ -462,6 +465,9 @@ public:
     
     qi::rule<IteratorT, AST::Values(), SkipperT> valuesRule;
     qi::rule<IteratorT, AST::Value(), SkipperT> valueRule;
+    
+    qi::rule<IteratorT, AST::Values(), SkipperT> nameValuesRule;
+    qi::rule<IteratorT, AST::Value(), SkipperT> nameValueRule;
     
     qi::symbols<char,AST::IDObject> name_token;
     qi::symbols<char,AST::IDOperation> op_token;
