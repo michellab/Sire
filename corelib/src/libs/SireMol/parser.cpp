@@ -153,6 +153,8 @@ namespace AST
     using ExpressionVariant = boost::variant<boost::recursive_wrapper<IDName>,
                                              boost::recursive_wrapper<IDNumber>,
                                              boost::recursive_wrapper<IDBinary>,
+                                             boost::recursive_wrapper<IDWith>,
+                                             boost::recursive_wrapper<IDWhere>,
                                              boost::recursive_wrapper<ExpressionPart> >;
     
     using NameVariant = boost::variant<boost::recursive_wrapper<RegExpValue>,
@@ -394,6 +396,14 @@ namespace AST
         IDObject name;
         IDToken token;
         Expression value;
+        
+        QString toString() const
+        {
+            return QObject::tr("%1s %2 %3")
+                        .arg(idobject_to_string(name))
+                        .arg(idtoken_to_string(token))
+                        .arg(value.toString());
+        }
     };
     
     // a where expression, e.g. molecules where charge > 1
@@ -401,6 +411,11 @@ namespace AST
     {
         IDObject name;
         Expression value;
+        
+        QString toString() const
+        {
+            return "TODO";
+        }
     };
 }
 
@@ -563,7 +578,7 @@ public:
                        binaryRule >> op_token >> expressionPartRule |
                        (qi::lit('(') >> binaryRule2 >> qi::lit(')') );
 
-        expressionPartRule %= ( idNameRule ) | (idNumberRule ) |
+        expressionPartRule %= ( idNameRule ) | (idNumberRule ) | (withRule) |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         name_token.add( "atomnam", AST::ATOM )
@@ -625,6 +640,26 @@ public:
                             )
                             ;
 
+        obj_token.add( "atom",  AST::ATOM )
+                     ( "atoms", AST::ATOM )
+                     ( "cutgroup", AST::CUTGROUP )
+                     ( "cutgroups", AST::CUTGROUP )
+                     ( "residue", AST::RESIDUE )
+                     ( "residues", AST::RESIDUE )
+                     ( "chain", AST::CHAIN )
+                     ( "chains", AST::CHAIN )
+                     ( "segment", AST::SEGMENT )
+                     ( "segments", AST::SEGMENT )
+                     ( "molecule", AST::MOLECULE )
+                     ( "molecules", AST::MOLECULE )
+                    ;
+
+        with_token.add( "with", AST::ID_WITH )
+                      ( "in", AST::ID_IN )
+                    ;
+
+        withRule %= obj_token >> with_token >> expressionRule;
+
         nodeRule.name( "Node" );
         expressionsRule.name( "Expressions" );
         expressionRule.name( "Expression" );
@@ -649,6 +684,8 @@ public:
     qi::rule<IteratorT, AST::IDNumber(), SkipperT> idNumberRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
+    qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule;
+    qi::rule<IteratorT, AST::IDWhere(), SkipperT> whereRule;
 
     qi::rule<IteratorT, AST::Expressions(), SkipperT> expressionsRule;
     qi::rule<IteratorT, AST::Expression(), SkipperT> expressionRule;
@@ -664,6 +701,8 @@ public:
     qi::symbols<char,AST::IDObject> name_token;
     qi::symbols<char,QPair<AST::IDObject,AST::IDNumType> > number_token;
     qi::symbols<char,AST::IDOperation> op_token;
+    qi::symbols<char,AST::IDObject> obj_token;
+    qi::symbols<char,AST::IDToken> with_token;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;
     qi::rule<IteratorT, AST::RegExpValue(), SkipperT> regExpRule;
