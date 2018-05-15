@@ -383,13 +383,17 @@ public:
         expressionsRule %= ( expressionRule % qi::lit( ';' ) );
 
         //must be first so that we greedily parse as much as we can
-        expressionRule %= expressionPartRule;
+        expressionRule %= binaryRule2 | binaryRule | expressionPartRule;
 
         attributeRule  %= name_token >> valueRule;
-        binaryRule %= (attributeRule >> op_token >> attributeRule);
-        binaryRule2 %= (binaryRule >> op_token >> attributeRule);
+        binaryRule %= (expressionPartRule >> op_token >> expressionPartRule) |
+                      ( qi::lit('(') >> binaryRule >> qi::lit(')') );
+        binaryRule2 %= binaryRule >> op_token >> binaryRule |
+                       binaryRule >> op_token >> expressionPartRule |
+                       (qi::lit('(') >> binaryRule2 >> qi::lit(')') );
 
-        expressionPartRule %= binaryRule2 | binaryRule | attributeRule;
+        expressionPartRule %= ( attributeRule ) |
+                              ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         arrayRule %= qi::lit( '(' ) >>
                        -valuesRule >>
