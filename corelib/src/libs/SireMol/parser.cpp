@@ -28,6 +28,8 @@
 
 #include "parser.h"
 
+#include "SireError/errors.h"
+
 #include <QDebug>
 
 using namespace SireMol;
@@ -87,6 +89,21 @@ namespace AST
         }
     }
     
+    enum IDNumType { ID_TYP_UNKNOWN = 0, ID_NUMBER = 1, ID_INDEX = 2 };
+    
+    QString idnumtype_to_string(IDNumType typ)
+    {
+        switch(typ)
+        {
+        case ID_NUMBER:
+            return "number";
+        case ID_INDEX:
+            return "index";
+        default:
+            return "unknown";
+        }
+    }
+    
     enum IDOperation { ID_OP_UNKNOWN = 0, ID_AND = 1, ID_OR = 2 };
     
     QString idoperation_to_string(IDOperation op)
@@ -102,15 +119,39 @@ namespace AST
         }
     }
     
+    enum IDToken { ID_TOKEN_UNKNOWN = 0, ID_WHERE = 1, ID_WITH = 2, ID_IN = 3 };
+    
+    QString idtoken_to_string(IDToken token)
+    {
+        switch(token)
+        {
+        case ID_WHERE:
+            return "where";
+        case ID_WITH:
+            return "with";
+        case ID_IN:
+            return "in";
+        default:
+            return "unknown";
+        }
+    }
+    
     struct NameValue;       // holder for a generic name value
+    struct RangeValue;      // holder for a range of numbers
     struct RegExpValue;     // holder for a regular expression value
-    struct IDName;          // a named generic value
+
+    struct IDName;          // a part of a molecule with a specified name
+    struct IDNumber;        // a part of a molecule with a specified number or index
     struct IDBinary;        // a binary ID expression
+    struct IDWith;          // a with/in expression
+    struct IDWhere;         // a where expression
+
     struct Expression;  // holder for a generic expression
     struct ExpressionPart;  //holder for a generic part of an expression
     struct Node;       // a node in the tree
     
     using ExpressionVariant = boost::variant<boost::recursive_wrapper<IDName>,
+                                             boost::recursive_wrapper<IDNumber>,
                                              boost::recursive_wrapper<IDBinary>,
                                              boost::recursive_wrapper<ExpressionPart> >;
     
@@ -120,6 +161,7 @@ namespace AST
     using IDNames = std::vector<IDName>;
     using Expressions = std::vector<Expression>;
     using NameValues = std::vector<NameValue>;
+    using RangeValues = std::vector<RangeValue>;
 
     // a holder for a regular expression
     struct RegExpValue
@@ -181,6 +223,57 @@ namespace AST
         }
     };
 
+    // a single integer range
+    struct RangeValue
+    {
+        RangeValue() : start(0), end(0), step(1), _c(0)
+        {}
+    
+        int start;
+        int end;
+        int step;
+        
+        RangeValue& operator+=(const int val)
+        {
+            if (_c == 0)
+            {
+                start = val;
+                end = val;
+                step = 1;
+                _c += 1;
+            }
+            else if (_c == 1)
+            {
+                end = val;
+                step = 1;
+                _c += 1;
+            }
+            else if (_c == 2)
+            {
+                step = val;
+                _c += 1;
+            }
+            else
+                throw SireError::program_bug( QObject::tr(
+                    "Should not add more than three values to a range..."), CODELOC );
+        
+            return *this;
+        }
+        
+        QString toString() const
+        {
+            if (start == end)
+                return QString::number(start);
+            else if (step == 1)
+                return QString("%1:%2").arg(start).arg(end);
+            else
+                return QString("%1:%2:%3").arg(start).arg(end).arg(step);
+        }
+
+    private:
+        int _c;
+    };
+
     // an Expression
     struct Expression
     {
@@ -237,7 +330,45 @@ namespace AST
         
             return QObject::tr("%1name %2")
                             .arg( idobject_to_string(name) )
-                            .arg(lines.join(","));
+                            .arg( lines.join(",") );
+        }
+    };
+
+    //a holder for a number of an item
+    struct IDNumber
+    {
+        IDObject name;
+        IDNumType numtype;
+        RangeValues values;
+        
+        IDNumber() : name(ID_UNKNOWN), numtype(ID_TYP_UNKNOWN)
+        {}
+        
+        IDNumber& operator+=(const QPair<IDObject,IDNumType> &v)
+        {
+            name = v.first;
+            numtype = v.second;
+            return *this;
+        }
+        
+        IDNumber& operator+=(const RangeValues &vals)
+        {
+            values = vals;
+            return *this;
+        }
+        
+        QString toString() const
+        {
+            QStringList lines;
+            for (const auto value : values)
+            {
+                lines.append( value.toString() );
+            }
+            
+            return QObject::tr("%1%2 %3")
+                        .arg( idobject_to_string(name) )
+                        .arg( idnumtype_to_string(numtype) )
+                        .arg( lines.join(",") );
         }
     };
 
@@ -255,6 +386,21 @@ namespace AST
                         .arg(idoperation_to_string(operation))
                         .arg(part1.toString());
         }
+    };
+    
+    // a with/in expression, e.g. molecules with something, or atoms in something
+    struct IDWith
+    {
+        IDObject name;
+        IDToken token;
+        Expression value;
+    };
+    
+    // a where expression, e.g. molecules where charge > 1
+    struct IDWhere
+    {
+        IDObject name;
+        Expression value;
     };
 }
 
@@ -276,10 +422,27 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDName,
                            (AST::NameValues, values)
                          )
 
+BOOST_FUSION_ADAPT_STRUCT( AST::IDNumber,
+                           (AST::IDObject, name),
+                           (AST::IDNumType, numtype),
+                           (AST::RangeValues, values)
+                         )
+
 BOOST_FUSION_ADAPT_STRUCT( AST::IDBinary,
                            (AST::Expression, part0),
                            (AST::IDOperation, operation),
                            (AST::Expression, part1)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDWith,
+                           (AST::IDObject,name)
+                           (AST::IDToken,token)
+                           (AST::Expression,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDWhere,
+                           (AST::IDObject,name)
+                           (AST::Expression,value)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::Expression,
@@ -373,6 +536,7 @@ public:
         using qi::lexeme;
         using qi::eps;
         using qi::_1;
+        using qi::int_;
         using qi::on_error;
         using qi::fail;
         using namespace qi::labels;
@@ -399,20 +563,40 @@ public:
                        binaryRule >> op_token >> expressionPartRule |
                        (qi::lit('(') >> binaryRule2 >> qi::lit(')') );
 
-        expressionPartRule %= ( idNameRule ) |
+        expressionPartRule %= ( idNameRule ) | (idNumberRule ) |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
-        name_token.add( "resnam", AST::RESIDUE )
-                      ( "resname", AST::RESIDUE )
-                      ( "atomnam", AST::ATOM )
+        name_token.add( "atomnam", AST::ATOM )
                       ( "atomname", AST::ATOM )
+                      ( "cgname", AST::CUTGROUP )
+                      ( "cgnam", AST::CUTGROUP )
+                      ( "resnam", AST::RESIDUE )
+                      ( "resname", AST::RESIDUE )
                       ( "chainnam", AST::CHAIN )
-                      ( "chainname", AST::CHAIN );
+                      ( "chainname", AST::CHAIN )
+                      ( "segnam", AST::SEGMENT )
+                      ( "segname", AST::SEGMENT )
+                      ( "molnam", AST::MOLECULE )
+                      ( "molname", AST::MOLECULE );
         
         op_token.add( "and", AST::ID_AND )
                     ( "AND", AST::ID_AND )
                     ( "or", AST::ID_OR )
                     ( "OR", AST::ID_OR );
+        
+        number_token.add( "atomnum", QPair<AST::IDObject,AST::IDNumType>(AST::ATOM,AST::ID_NUMBER) )
+                        ( "atomidx", QPair<AST::IDObject,AST::IDNumType>(AST::ATOM,AST::ID_INDEX) )
+                        ( "cgnum", QPair<AST::IDObject,AST::IDNumType>(AST::CUTGROUP,AST::ID_NUMBER) )
+                        ( "cgidx", QPair<AST::IDObject,AST::IDNumType>(AST::CUTGROUP,AST::ID_INDEX) )
+                        ( "resnum", QPair<AST::IDObject,AST::IDNumType>(AST::RESIDUE,AST::ID_NUMBER) )
+                        ( "residx", QPair<AST::IDObject,AST::IDNumType>(AST::RESIDUE,AST::ID_INDEX) )
+                        ( "chainnum", QPair<AST::IDObject,AST::IDNumType>(AST::CHAIN,AST::ID_NUMBER) )
+                        ( "chainidx", QPair<AST::IDObject,AST::IDNumType>(AST::CHAIN,AST::ID_INDEX) )
+                        ( "segnum", QPair<AST::IDObject,AST::IDNumType>(AST::SEGMENT,AST::ID_NUMBER) )
+                        ( "segidx", QPair<AST::IDObject,AST::IDNumType>(AST::SEGMENT,AST::ID_INDEX) )
+                        ( "molnum", QPair<AST::IDObject,AST::IDNumType>(AST::MOLECULE,AST::ID_NUMBER) )
+                        ( "molidx", QPair<AST::IDObject,AST::IDNumType>(AST::MOLECULE,AST::ID_INDEX) )
+                        ;
         
         nameValuesRule     %= ( nameValueRule % qi::lit( ',' ) );
         
@@ -424,7 +608,23 @@ public:
                         >> -qi::lit("i")[ _val *= 1 ]
                      )
                      ;
+
+        rangeValuesRule %= ( rangeValueRule % qi::lit( ',' ) );
         
+        rangeValueRule = eps [ _val = AST::RangeValue() ] >>
+                            (
+                                int_[ _val += _1 ] >>
+                                qi::repeat(0,2)[( ':' >> int_[ _val += _1 ] )]
+                            )
+                            ;
+        
+        idNumberRule = eps [ _val = AST::IDNumber() ] >>
+                            (
+                                number_token[ _val += _1 ] >>
+                                rangeValuesRule[ _val += _1 ]
+                            )
+                            ;
+
         nodeRule.name( "Node" );
         expressionsRule.name( "Expressions" );
         expressionRule.name( "Expression" );
@@ -446,6 +646,7 @@ public:
     
     qi::rule<IteratorT, AST::Node(), SkipperT> nodeRule;
     qi::rule<IteratorT, AST::IDName(), SkipperT> idNameRule;
+    qi::rule<IteratorT, AST::IDNumber(), SkipperT> idNumberRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
 
@@ -457,7 +658,11 @@ public:
     qi::rule<IteratorT, AST::NameValues(), SkipperT> nameValuesRule;
     qi::rule<IteratorT, AST::NameValue(), SkipperT> nameValueRule;
     
+    qi::rule<IteratorT, AST::RangeValues(), SkipperT> rangeValuesRule;
+    qi::rule<IteratorT, AST::RangeValue(), SkipperT> rangeValueRule;
+    
     qi::symbols<char,AST::IDObject> name_token;
+    qi::symbols<char,QPair<AST::IDObject,AST::IDNumType> > number_token;
     qi::symbols<char,AST::IDOperation> op_token;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;
