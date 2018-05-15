@@ -95,7 +95,6 @@ namespace AST
         }
     }
     
-    struct Value;           // holder for a generic value
     struct NameValue;       // holder for a generic name value
     struct RegExpValue;     // holder for a regular expression value
     struct IDName;          // a named generic value
@@ -103,13 +102,6 @@ namespace AST
     struct Expression;  // holder for a generic expression
     struct ExpressionPart;  //holder for a generic part of an expression
     struct Node;       // a node in the tree
-    struct Array;      // an array of nodes
-
-    // a Variant can hold a single node, an array of values or a string
-    using Variant = boost::variant<boost::recursive_wrapper<Node>,
-                                   boost::recursive_wrapper<Array>,
-                                   std::string,
-                                   boost::recursive_wrapper<IDBinary> >;
     
     using ExpressionVariant = boost::variant<boost::recursive_wrapper<IDName>,
                                              boost::recursive_wrapper<IDBinary>,
@@ -118,19 +110,9 @@ namespace AST
     using NameVariant = boost::variant<boost::recursive_wrapper<RegExpValue>,
                                        std::string>;
     
-    // an array of attribute objects
     using IDNames = std::vector<IDName>;
     using Expressions = std::vector<Expression>;
-    
-    // an array of generic value objects
-    using Values = std::vector<Value>;
     using NameValues = std::vector<NameValue>;
-
-    // a value holds a single variant (which can be a Node, Array of Nodes or a string)
-    struct Value
-    {
-        Variant value;
-    };
 
     // a holder for a regular expression
     struct RegExpValue
@@ -177,13 +159,7 @@ namespace AST
     // a Node contains an array of attributes (which are name-value pairs)
     struct Node
     {
-        Expressions attributes;
-    };
-
-    // an Array contains an array of generic value objects
-    struct Array
-    {
-        Values values;
+        Expressions values;
     };
 
     //a holder for a name of an item
@@ -202,7 +178,6 @@ namespace AST
     };
 
     void to_string(const Node &node);
-    void to_string(const Value &val);
     void to_string(const IDName &name);
     void to_string(const RegExpValue &value);
     void to_string(const Expression &part);
@@ -215,22 +190,6 @@ namespace AST
         {
             std::cout << "node--\n";
             to_string(node);
-            return 0;
-        }
-        
-        int operator()(const Array &array) const
-        {
-            std::cout << "Array--\n";
-            
-            int i = 0;
-            for (auto value : array.values)
-            {
-                std::cout << "value" << i << std::endl;
-                to_string(value);
-                std::cout << "\n";
-                i += 1;
-            }
-            
             return 0;
         }
         
@@ -284,11 +243,6 @@ namespace AST
         boost::apply_visitor( print_visitor(), part.value );
     }
 
-    void to_string(const Value &value)
-    {
-        boost::apply_visitor( print_visitor(), value.value );
-    }
-
     void to_string(const NameValue &value)
     {
         boost::apply_visitor( print_visitor(), value.value );
@@ -305,21 +259,13 @@ namespace AST
 
     void to_string(const Node &node)
     {
-        std::cout << "attributes\n";
-        int i = 0;
-        for (auto attribute : node.attributes)
+        for (auto value : node.values)
         {
-            std::cout << "attribute " << i << std::endl;
-            to_string(attribute);
+            to_string(value);
             std::cout << "\n";
-            i += 1;
         }
     }
 }
-
-BOOST_FUSION_ADAPT_STRUCT( AST::Value,
-                           (AST::Variant,value)
-                         )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::NameValue,
                            (AST::NameVariant,value)
@@ -331,11 +277,7 @@ BOOST_FUSION_ADAPT_STRUCT( AST::RegExpValue,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::Node,
-                           (AST::Expressions,attributes)
-                         )
-
-BOOST_FUSION_ADAPT_STRUCT( AST::Array,
-                           (AST::Values,values)
+                           (AST::Expressions,values)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDName,
@@ -458,7 +400,7 @@ public:
         //must be first so that we greedily parse as much as we can
         expressionRule %= binaryRule2 | binaryRule | expressionPartRule;
 
-        attributeRule  %= name_token >> nameValuesRule;
+        idNameRule  %= name_token >> nameValuesRule;
         
         binaryRule %= (expressionPartRule >> op_token >> expressionPartRule) |
                       ( qi::lit('(') >> binaryRule >> qi::lit(')') );
@@ -466,16 +408,8 @@ public:
                        binaryRule >> op_token >> expressionPartRule |
                        (qi::lit('(') >> binaryRule2 >> qi::lit(')') );
 
-        expressionPartRule %= ( attributeRule ) |
+        expressionPartRule %= ( idNameRule ) |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
-
-        arrayRule %= qi::lit( '(' ) >>
-                       -valuesRule >>
-                       -qi::lit( ',' ) >
-                        qi::lit( ')' );
-        
-        attributesRule %= attributeRule >>
-                          *( qi::lit( ';' ) >> attributeRule );
 
         name_token.add( "resnam", AST::RESIDUE )
                       ( "resname", AST::RESIDUE )
@@ -489,12 +423,6 @@ public:
                     ( "or", AST::ID_OR )
                     ( "OR", AST::ID_OR );
         
-        valuesRule     %= ( nodeRule % qi::lit( ',' ) ) |
-                          ( arrayRule % qi::lit( ',' ) ) |
-                          ( stringRule % qi::lit( ',' ) );
-        
-        valueRule      %= nodeRule | arrayRule | stringRule;
-
         nameValuesRule     %= ( nameValueRule % qi::lit( ',' ) );
         
         nameValueRule      %= regExpRule | stringRule;
@@ -507,13 +435,8 @@ public:
                      ;
         
         nodeRule.name( "Node" );
-        arrayRule.name( "Array" );
-        attributesRule.name( "Attributes" );
-        attributeRule.name( "Attribute" );
         expressionsRule.name( "Expressions" );
         expressionRule.name( "Expression" );
-        valuesRule.name( "Values" );
-        valueRule.name( "Value" );
         stringRule.name( "String" );
         regExpRule.name( "RegExp" );
         
@@ -531,9 +454,7 @@ public:
     }
     
     qi::rule<IteratorT, AST::Node(), SkipperT> nodeRule;
-    qi::rule<IteratorT, AST::Array(), SkipperT> arrayRule;
-    qi::rule<IteratorT, AST::IDNames(), SkipperT> attributesRule;
-    qi::rule<IteratorT, AST::IDName(), SkipperT> attributeRule;
+    qi::rule<IteratorT, AST::IDName(), SkipperT> idNameRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
 
@@ -541,9 +462,6 @@ public:
     qi::rule<IteratorT, AST::Expression(), SkipperT> expressionRule;
     
     qi::rule<IteratorT, AST::ExpressionPart(), SkipperT> expressionPartRule;
-    
-    qi::rule<IteratorT, AST::Values(), SkipperT> valuesRule;
-    qi::rule<IteratorT, AST::Value(), SkipperT> valueRule;
     
     qi::rule<IteratorT, AST::NameValues(), SkipperT> nameValuesRule;
     qi::rule<IteratorT, AST::NameValue(), SkipperT> nameValueRule;
