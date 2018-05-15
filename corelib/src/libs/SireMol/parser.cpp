@@ -42,6 +42,9 @@ using namespace SireMol;
 #include <boost/spirit/include/phoenix_stl.hpp>
 #include <boost/spirit/include/phoenix_object.hpp>
 
+#include <boost/fusion/include/adapt_struct.hpp>
+#include <boost/fusion/include/io.hpp>
+
 // A lot of the below code is heavily inspired by
 // https://medium.com/@alinakipoglu/parsing-with-spirit-qi-fcaeaf4357b3
 
@@ -134,6 +137,20 @@ namespace AST
     {
         RegExpValue() : is_case_sensitive(true)
         {}
+    
+        template<class T>
+        RegExpValue& operator+=(const T &val)
+        {
+            value = val;
+            return *this;
+        }
+        
+        template<class T>
+        RegExpValue& operator*=(const T &val)
+        {
+            is_case_sensitive = false;
+            return *this;
+        }
     
         std::string value;
         bool is_case_sensitive;
@@ -253,7 +270,7 @@ namespace AST
 
     void to_string(const RegExpValue &value)
     {
-        std::cout << "REGEXP " << value.value << " " << value.is_case_sensitive << std::endl;
+        std::cout << "regexp: " << value.value << " " << value.is_case_sensitive << " ";
     }
 
     void to_string(const Expression &part)
@@ -421,12 +438,17 @@ public:
     {
         using qi::lit;
         using qi::lexeme;
+        using qi::eps;
+        using qi::_1;
         using qi::on_error;
         using qi::fail;
         using namespace qi::labels;
+        using qi::as_string;
 
         using phoenix::construct;
         using phoenix::val;
+    
+        using boost::spirit::ascii::char_;
     
         nodeRule %= expressionsRule;
 
@@ -473,9 +495,16 @@ public:
         
         valueRule      %= nodeRule | arrayRule | stringRule;
 
-        nameValuesRule     %= ( stringRule % qi::lit( ',' ) );
+        nameValuesRule     %= ( nameValueRule % qi::lit( ',' ) );
         
-        nameValueRule      %= stringRule;
+        nameValueRule      %= regExpRule | stringRule;
+        
+        regExpRule = eps [ _val = AST::RegExpValue() ] >>
+                     (
+                        lexeme[ "/" >> as_string[+(char_ - "/")][ _val += _1 ] >> "/" ]
+                        >> -qi::lit("i")[ _val *= 1 ]
+                     )
+                     ;
         
         nodeRule.name( "Node" );
         arrayRule.name( "Array" );
@@ -486,6 +515,7 @@ public:
         valuesRule.name( "Values" );
         valueRule.name( "Value" );
         stringRule.name( "String" );
+        regExpRule.name( "RegExp" );
         
         on_error<fail>
         (
@@ -522,6 +552,7 @@ public:
     qi::symbols<char,AST::IDOperation> op_token;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;
+    qi::rule<IteratorT, AST::RegExpValue(), SkipperT> regExpRule;
 };
 
 template<typename IteratorT>
