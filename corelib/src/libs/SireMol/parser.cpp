@@ -145,6 +145,7 @@ namespace AST
     struct IDBinary;        // a binary ID expression
     struct IDWith;          // a with/in expression
     struct IDWhere;         // a where expression
+    struct IDNot;           // a not expression
 
     struct Expression;  // holder for a generic expression
     struct ExpressionPart;  //holder for a generic part of an expression
@@ -155,6 +156,7 @@ namespace AST
                                              boost::recursive_wrapper<IDBinary>,
                                              boost::recursive_wrapper<IDWith>,
                                              boost::recursive_wrapper<IDWhere>,
+                                             boost::recursive_wrapper<IDNot>,
                                              boost::recursive_wrapper<ExpressionPart> >;
     
     using NameVariant = boost::variant<boost::recursive_wrapper<RegExpValue>,
@@ -417,10 +419,25 @@ namespace AST
             return "TODO";
         }
     };
+    
+    // a not expression, e.g. not resname ala
+    struct IDNot
+    {
+        Expression value;
+        
+        QString toString() const
+        {
+            return QString("not %1").arg(value.toString());
+        }
+    };
 }
 
 BOOST_FUSION_ADAPT_STRUCT( AST::NameValue,
                            (AST::NameVariant,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDNot,
+                           (AST::Expression,value)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::RegExpValue,
@@ -578,7 +595,7 @@ public:
                        binaryRule >> op_token >> expressionPartRule |
                        (qi::lit('(') >> binaryRule2 >> qi::lit(')') );
 
-        expressionPartRule %= ( idNameRule ) | (idNumberRule ) | (withRule) |
+        expressionPartRule %= idNameRule | idNumberRule | withRule | notRule |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         name_token.add( "atomnam", AST::ATOM )
@@ -660,6 +677,8 @@ public:
 
         withRule %= obj_token >> with_token >> expressionRule;
 
+        notRule %= qi::lit("not") >> expressionRule;
+
         nodeRule.name( "Node" );
         expressionsRule.name( "Expressions" );
         expressionRule.name( "Expression" );
@@ -686,6 +705,7 @@ public:
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
     qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule;
     qi::rule<IteratorT, AST::IDWhere(), SkipperT> whereRule;
+    qi::rule<IteratorT, AST::IDNot(), SkipperT> notRule;
 
     qi::rule<IteratorT, AST::Expressions(), SkipperT> expressionsRule;
     qi::rule<IteratorT, AST::Expression(), SkipperT> expressionRule;
