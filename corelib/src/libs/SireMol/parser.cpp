@@ -93,7 +93,9 @@ namespace AST
     }
     
     struct Value;           // holder for a generic value
-    struct IDAttribute;     // a named generic value
+    struct NameValue;       // holder for a generic name value
+    struct RegExpValue;     // holder for a regular expression value
+    struct IDName;          // a named generic value
     struct IDBinary;        // a binary ID expression
     struct Expression;  // holder for a generic expression
     struct ExpressionPart;  //holder for a generic part of an expression
@@ -106,21 +108,41 @@ namespace AST
                                    std::string,
                                    boost::recursive_wrapper<IDBinary> >;
     
-    using ExpressionVariant = boost::variant<boost::recursive_wrapper<IDAttribute>,
+    using ExpressionVariant = boost::variant<boost::recursive_wrapper<IDName>,
                                              boost::recursive_wrapper<IDBinary>,
                                              boost::recursive_wrapper<ExpressionPart> >;
     
+    using NameVariant = boost::variant<boost::recursive_wrapper<RegExpValue>,
+                                       std::string>;
+    
     // an array of attribute objects
-    using IDAttributes = std::vector<IDAttribute>;
+    using IDNames = std::vector<IDName>;
     using Expressions = std::vector<Expression>;
     
     // an array of generic value objects
     using Values = std::vector<Value>;
+    using NameValues = std::vector<NameValue>;
 
     // a value holds a single variant (which can be a Node, Array of Nodes or a string)
     struct Value
     {
         Variant value;
+    };
+
+    // a holder for a regular expression
+    struct RegExpValue
+    {
+        RegExpValue() : is_case_sensitive(true)
+        {}
+    
+        std::string value;
+        bool is_case_sensitive;
+    };
+
+    // a single name value. Holds a string or a regular expression
+    struct NameValue
+    {
+        NameVariant value;
     };
 
     // an Expression
@@ -147,11 +169,11 @@ namespace AST
         Values values;
     };
 
-    // an Attribute provides both a name and a value
-    struct IDAttribute
+    //a holder for a name of an item
+    struct IDName
     {
         IDObject name;
-        Value value;
+        NameValue value;
     };
 
     // a binary ID expression, e.g. something AND something
@@ -164,7 +186,8 @@ namespace AST
 
     void to_string(const Node &node);
     void to_string(const Value &val);
-    void to_string(const IDAttribute &attribute);
+    void to_string(const IDName &name);
+    void to_string(const RegExpValue &value);
     void to_string(const Expression &part);
     void to_string(const ExpressionPart &part);
 
@@ -196,7 +219,7 @@ namespace AST
         
         int operator()(const std::string &str) const
         {
-            std::cout << "value: " << str << " ";
+            std::cout << "string: " << str;
             return 0;
         }
         
@@ -209,7 +232,7 @@ namespace AST
             return 0;
         }
         
-        int operator()(const IDAttribute &idatt) const
+        int operator()(const IDName &idatt) const
         {
             to_string(idatt);
             return 0;
@@ -220,7 +243,18 @@ namespace AST
             to_string(value);
             return 0;
         }
+        
+        int operator()(const RegExpValue &value) const
+        {
+            to_string(value);
+            return 0;
+        }
     };
+
+    void to_string(const RegExpValue &value)
+    {
+        std::cout << "REGEXP " << value.value << " " << value.is_case_sensitive << std::endl;
+    }
 
     void to_string(const Expression &part)
     {
@@ -238,10 +272,15 @@ namespace AST
         boost::apply_visitor( print_visitor(), value.value );
     }
 
-    void to_string(const IDAttribute &attribute)
+    void to_string(const NameValue &value)
     {
-        std::cout << idobject_to_string(attribute.name) << " = ";
-        to_string( attribute.value );
+        boost::apply_visitor( print_visitor(), value.value );
+    }
+
+    void to_string(const IDName &value)
+    {
+        std::cout << idobject_to_string(value.name) << " = ";
+        to_string(value.value);
     }
 
     void to_string(const Node &node)
@@ -262,6 +301,15 @@ BOOST_FUSION_ADAPT_STRUCT( AST::Value,
                            (AST::Variant,value)
                          )
 
+BOOST_FUSION_ADAPT_STRUCT( AST::NameValue,
+                           (AST::NameVariant,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::RegExpValue,
+                           (std::string,value)
+                           (bool,is_case_sensitive)
+                         )
+
 BOOST_FUSION_ADAPT_STRUCT( AST::Node,
                            (AST::Expressions,attributes)
                          )
@@ -270,9 +318,9 @@ BOOST_FUSION_ADAPT_STRUCT( AST::Array,
                            (AST::Values,values)
                          )
 
-BOOST_FUSION_ADAPT_STRUCT( AST::IDAttribute,
+BOOST_FUSION_ADAPT_STRUCT( AST::IDName,
                            (AST::IDObject, name),
-                           (AST::Value, value)
+                           (AST::NameValue, value)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDBinary,
@@ -422,11 +470,9 @@ public:
         
         valueRule      %= nodeRule | arrayRule | stringRule;
 
-        nameValuesRule     %= ( nodeRule % qi::lit( ',' ) ) |
-                              ( arrayRule % qi::lit( ',' ) ) |
-                              ( stringRule % qi::lit( ',' ) );
+        nameValuesRule     %= ( stringRule % qi::lit( ',' ) );
         
-        nameValueRule      %= nodeRule | arrayRule | stringRule;
+        nameValueRule      %= stringRule;
         
         nodeRule.name( "Node" );
         arrayRule.name( "Array" );
@@ -453,8 +499,8 @@ public:
     
     qi::rule<IteratorT, AST::Node(), SkipperT> nodeRule;
     qi::rule<IteratorT, AST::Array(), SkipperT> arrayRule;
-    qi::rule<IteratorT, AST::IDAttributes(), SkipperT> attributesRule;
-    qi::rule<IteratorT, AST::IDAttribute(), SkipperT> attributeRule;
+    qi::rule<IteratorT, AST::IDNames(), SkipperT> attributesRule;
+    qi::rule<IteratorT, AST::IDName(), SkipperT> attributeRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
 
@@ -466,8 +512,8 @@ public:
     qi::rule<IteratorT, AST::Values(), SkipperT> valuesRule;
     qi::rule<IteratorT, AST::Value(), SkipperT> valueRule;
     
-    qi::rule<IteratorT, AST::Values(), SkipperT> nameValuesRule;
-    qi::rule<IteratorT, AST::Value(), SkipperT> nameValueRule;
+    qi::rule<IteratorT, AST::NameValues(), SkipperT> nameValuesRule;
+    qi::rule<IteratorT, AST::NameValue(), SkipperT> nameValueRule;
     
     qi::symbols<char,AST::IDObject> name_token;
     qi::symbols<char,AST::IDOperation> op_token;
