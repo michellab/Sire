@@ -32,6 +32,13 @@
 
 using namespace SireMol;
 
+const char* parse_error::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<parse_error>() );
+}
+
+static const RegisterMetaType<parse_error> r_parse;
+
 // include boost::spirit::qi for parsing
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/support_line_pos_iterator.hpp>
@@ -57,7 +64,7 @@ namespace AST
     enum IDObject { ID_UNKNOWN = 0, ATOM = 1, CUTGROUP = 2,
                     RESIDUE = 3, CHAIN = 4, SEGMENT = 5, MOLECULE = 6 };
     
-    std::string idobject_to_string(IDObject obj)
+    QString idobject_to_string(IDObject obj)
     {
         switch(obj)
         {
@@ -82,7 +89,7 @@ namespace AST
     
     enum IDOperation { ID_OP_UNKNOWN = 0, ID_AND = 1, ID_OR = 2 };
     
-    std::string idoperation_to_string(IDOperation op)
+    QString idoperation_to_string(IDOperation op)
     {
         switch(op)
         {
@@ -134,32 +141,84 @@ namespace AST
             return *this;
         }
     
+        QString toString() const
+        {
+            QString qstr = QString::fromStdString(value);
+        
+            if (is_case_sensitive)
+                return QObject::tr("/%1/").arg(qstr);
+            else
+                return QObject::tr("/%1/i").arg(qstr);
+        }
+    
         std::string value;
         bool is_case_sensitive;
+    };
+
+    class qstring_visitor : public boost::static_visitor<QString>
+    {
+    public:
+        template<class T>
+        QString operator()(const T &value) const
+        {
+            return value.toString();
+        }
+    
+        QString operator()(const std::string &string) const
+        {
+            return QString("'%1'").arg(QString::fromStdString(string));
+        }
     };
 
     // a single name value. Holds a string or a regular expression
     struct NameValue
     {
         NameVariant value;
+        
+        QString toString() const
+        {
+            return boost::apply_visitor( qstring_visitor(), value );
+        }
     };
 
     // an Expression
     struct Expression
     {
         ExpressionVariant value;
+        
+        QString toString() const
+        {
+            return boost::apply_visitor( qstring_visitor(), value );
+        }
     };
 
     //part of an expression
     struct ExpressionPart
     {
         ExpressionVariant value;
+
+        QString toString() const
+        {
+            return boost::apply_visitor( qstring_visitor(), value );
+        }
     };
 
     // a Node contains an array of attributes (which are name-value pairs)
     struct Node
     {
         Expressions values;
+        
+        QString toString() const
+        {
+            QStringList lines;
+            
+            for (const auto value : values)
+            {
+                lines.append( value.toString() );
+            }
+            
+            return lines.join("; ");
+        }
     };
 
     //a holder for a name of an item
@@ -167,6 +226,19 @@ namespace AST
     {
         IDObject name;
         NameValues values;
+        
+        QString toString() const
+        {
+            QStringList lines;
+            for (const auto value : values)
+            {
+                lines.append( value.toString() );
+            }
+        
+            return QObject::tr("%1name %2")
+                            .arg( idobject_to_string(name) )
+                            .arg(lines.join(","));
+        }
     };
 
     // a binary ID expression, e.g. something AND something
@@ -175,96 +247,15 @@ namespace AST
         Expression part0;
         IDOperation operation;
         Expression part1;
-    };
-
-    void to_string(const Node &node);
-    void to_string(const IDName &name);
-    void to_string(const RegExpValue &value);
-    void to_string(const Expression &part);
-    void to_string(const ExpressionPart &part);
-
-    class print_visitor : public boost::static_visitor<int>
-    {
-    public:
-        int operator()(const Node &node) const
-        {
-            std::cout << "node--\n";
-            to_string(node);
-            return 0;
-        }
         
-        int operator()(const std::string &str) const
+        QString toString() const
         {
-            std::cout << "string: " << str << " ";
-            return 0;
-        }
-        
-        int operator()(const IDBinary &bin) const
-        {
-            std::cout << "BINARY\n";
-            to_string(bin.part0);
-            std::cout << idoperation_to_string(bin.operation) << "\n";
-            to_string(bin.part1);
-            return 0;
-        }
-        
-        int operator()(const IDName &idatt) const
-        {
-            to_string(idatt);
-            return 0;
-        }
-        
-        int operator()(const ExpressionPart &value) const
-        {
-            to_string(value);
-            return 0;
-        }
-        
-        int operator()(const RegExpValue &value) const
-        {
-            to_string(value);
-            return 0;
+            return QObject::tr("(%1 %2 %3)")
+                        .arg(part0.toString())
+                        .arg(idoperation_to_string(operation))
+                        .arg(part1.toString());
         }
     };
-
-    void to_string(const RegExpValue &value)
-    {
-        std::cout << "regexp: " << value.value << " " << value.is_case_sensitive << " ";
-    }
-
-    void to_string(const Expression &part)
-    {
-        boost::apply_visitor( print_visitor(), part.value );
-    }
-
-    void to_string(const ExpressionPart &part)
-    {
-        std::cout << "ExpressionPart\n";
-        boost::apply_visitor( print_visitor(), part.value );
-    }
-
-    void to_string(const NameValue &value)
-    {
-        boost::apply_visitor( print_visitor(), value.value );
-    }
-
-    void to_string(const IDName &value)
-    {
-        std::cout << idobject_to_string(value.name) << " = ";
-        for (const auto value : value.values)
-        {
-            to_string(value);
-        }
-    }
-
-    void to_string(const Node &node)
-    {
-        for (auto value : node.values)
-        {
-            to_string(value);
-            std::cout << "\n";
-        }
-    }
 }
 
 BOOST_FUSION_ADAPT_STRUCT( AST::NameValue,
@@ -474,6 +465,18 @@ public:
 };
 
 template<typename IteratorT>
+QString toString(IteratorT begin, IteratorT end)
+{
+    QStringList lines;
+    for (; begin != end; ++begin)
+    {
+        lines.append( QString( *begin ) );
+    }
+    
+    return lines.join("");
+}
+
+template<typename IteratorT>
 AST::Node parse(const IteratorT & begin, const IteratorT & end)
 {
     using LinePosIteratorT  = spirit::line_pos_iterator<IteratorT>;
@@ -486,57 +489,33 @@ AST::Node parse(const IteratorT & begin, const IteratorT & end)
     LinePosIteratorT posIterBegin( begin );
     LinePosIteratorT posIterEnd( end );
   
-    try
+    AST::Node result;
+
+    const bool parseResult = qi::phrase_parse( posIterBegin,
+                                               posIterEnd,
+                                               grammar,
+                                               skipper,
+                                               result );
+    
+    if( not (parseResult && posIterBegin == posIterEnd) )
     {
-        AST::Node result;
-  
-        const bool parseResult = qi::phrase_parse( posIterBegin,
-                                                   posIterEnd,
-                                                   grammar,
-                                                   skipper,
-                                                   result );
-        
-        if( parseResult && posIterBegin == posIterEnd )
-        {
-            qDebug() << "PARSED USING AST!";
-            return result;
-        }
-        else
-        {
-            std::cout << "FAILED TO PARSE EVERYTHING - MISSING \"";
-            for ( ; posIterBegin != posIterEnd; ++posIterBegin )
-            {
-                std::cout << *posIterBegin;
-            }
-            std::cout << "\"\n";
-            
-            return result;
-        }
-    }
-    catch (std::exception &e)
-    {
-        qDebug() << "CAUGHT ERROR" << e.what();
-        throw;
+        QString line = toString( LinePosIteratorT(begin), LinePosIteratorT(end) );
+        QString left = toString( posIterBegin, posIterEnd );
+
+        throw SireMol::parse_error( QObject::tr("Failed to parse the selection '%1'. "
+          "Successfully parsed the beginning, but failed to parse '%2'")
+            .arg(line).arg(left), CODELOC );
     }
     
-    return AST::Node{};
+    return result;
 }
 
 int parse_main(const std::string &str)
 {
     // Read file contents.
-    AST::Node result;
+    auto result = parse( str.begin(), str.end() );
 
-    try
-    {
-        result = parse( str.begin(), str.end() );
-    }
-    catch(std::exception &e)
-    {
-        qDebug() << "ERROR IN PARSING" << e.what();
-    }
-
-    AST::to_string(result);
+    qDebug() << result.toString();
     
     return 0;
 }
@@ -547,10 +526,7 @@ namespace SireMol
         it into a SelectEngine object */
     boost::shared_ptr<parser::SelectEngine> parse( const QString &str )
     {
-        const auto cstr = str.toStdString();
-
-        parse_main(cstr);
-        
+        parse_main( str.toStdString() );
         return boost::shared_ptr<parser::SelectEngine>();
     }
 }

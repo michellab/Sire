@@ -30,12 +30,52 @@
 #define SIREMOL_PARSER_H
 
 #include "select.h"
+#include "SireMol/errors.h"
+
+SIRE_BEGIN_HEADER
 
 namespace SireMol
 {
 
+/** This exception is thrown when there was an error parsing a selection
+
+    @author Christopher Woods
+*/
+class SIREMOL_EXPORT parse_error : public siremol_error
+{
+public:
+    parse_error() : siremol_error()
+    {}
+
+    parse_error(QString err, QString place = QString::null)
+              : siremol_error(err,place)
+    {}
+
+    parse_error(const parse_error &other) : siremol_error(other)
+    {}
+
+    ~parse_error() throw()
+    {}
+
+    static const char* typeName();
+
+    const char* what() const throw()
+    {
+        return parse_error::typeName();
+    }
+    
+    void throwSelf() const
+    {
+        throw parse_error(*this);
+    }
+};
+
 boost::shared_ptr<SireMol::parser::SelectEngine> parse(const QString &str);
 
 }
+
+Q_DECLARE_METATYPE(SireMol::parse_error)
+
+SIRE_END_HEADER
 
 #endif
