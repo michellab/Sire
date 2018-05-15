@@ -95,7 +95,7 @@ namespace AST
     struct Value;           // holder for a generic value
     struct IDAttribute;     // a named generic value
     struct IDBinary;        // a binary ID expression
-    struct ExpressionPart;  // holder for a generic expression part
+    struct Expression;  // holder for a generic expression part
     struct Node;       // a node in the tree
     struct Array;      // an array of nodes
 
@@ -110,7 +110,7 @@ namespace AST
     
     // an array of attribute objects
     using IDAttributes = std::vector<IDAttribute>;
-    using ExpressionParts = std::vector<ExpressionPart>;
+    using Expressions = std::vector<Expression>;
     
     // an array of generic value objects
     using Values = std::vector<Value>;
@@ -121,8 +121,8 @@ namespace AST
         Variant value;
     };
 
-    // an ExpressionPart
-    struct ExpressionPart
+    // an Expression
+    struct Expression
     {
         ExpressionVariant value;
     };
@@ -130,7 +130,7 @@ namespace AST
     // a Node contains an array of attributes (which are name-value pairs)
     struct Node
     {
-        ExpressionParts attributes;
+        Expressions attributes;
     };
 
     // an Array contains an array of generic value objects
@@ -149,15 +149,15 @@ namespace AST
     // a binary ID expression, e.g. something AND something
     struct IDBinary
     {
-        ExpressionPart part0;
+        Expression part0;
         IDOperation operation;
-        ExpressionPart part1;
+        Expression part1;
     };
 
     void to_string(const Node &node);
     void to_string(const Value &val);
     void to_string(const IDAttribute &attribute);
-    void to_string(const ExpressionPart &part);
+    void to_string(const Expression &part);
 
     class print_visitor : public boost::static_visitor<int>
     {
@@ -207,7 +207,7 @@ namespace AST
         }
     };
 
-    void to_string(const ExpressionPart &part)
+    void to_string(const Expression &part)
     {
         boost::apply_visitor( print_visitor(), part.value );
     }
@@ -242,7 +242,7 @@ BOOST_FUSION_ADAPT_STRUCT( AST::Value,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::Node,
-                           (AST::ExpressionParts,attributes)
+                           (AST::Expressions,attributes)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::Array,
@@ -255,12 +255,12 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDAttribute,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDBinary,
-                           (AST::ExpressionPart, part0),
+                           (AST::Expression, part0),
                            (AST::IDOperation, operation),
-                           (AST::ExpressionPart, part1)
+                           (AST::Expression, part1)
                          )
 
-BOOST_FUSION_ADAPT_STRUCT( AST::ExpressionPart,
+BOOST_FUSION_ADAPT_STRUCT( AST::Expression,
                            (AST::ExpressionVariant, value)
                          )
 
@@ -352,23 +352,20 @@ public:
         using phoenix::construct;
         using phoenix::val;
     
-        nodeRule %= expressionPartsRule;
+        nodeRule %= expressionsRule;
 
         //must be first so that we greedily parse as much as we can
-        expressionPartsRule %= ( expressionPartRule % qi::lit( ';' ) );
+        expressionsRule %= ( expressionRule % qi::lit( ';' ) );
 
         //must be first so that we greedily parse as much as we can
-        expressionPartRule %= binaryRule2 |
-                              binaryRule |
-                              attributeRule;
+        expressionRule %= binaryRule2 |
+                          binaryRule |
+                          attributeRule;
 
         attributeRule  %= name_token >> valueRule;
         binaryRule %= (attributeRule >> op_token >> attributeRule);
         binaryRule2 %= (binaryRule >> op_token >> attributeRule);
 
-        //expressionPartRule %= (expressionPartBracketRule); // |
- //                             (qi::lit( '(' ) > -expressionPartBracketRule > qi::lit( ')' ));
-    
         arrayRule %= qi::lit( '(' ) >>
                        -valuesRule >>
                        -qi::lit( ',' ) >
@@ -401,8 +398,8 @@ public:
         arrayRule.name( "Array" );
         attributesRule.name( "Attributes" );
         attributeRule.name( "Attribute" );
-        expressionPartsRule.name( "ExpressionParts" );
-        expressionPartRule.name( "ExpressionPart" );
+        expressionsRule.name( "Expressions" );
+        expressionRule.name( "Expression" );
         nameRule.name( "Name" );
         valuesRule.name( "Values" );
         valueRule.name( "Value" );
@@ -429,9 +426,8 @@ public:
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
     qi::rule<IteratorT, std::string(), SkipperT> nameRule;
 
-    qi::rule<IteratorT, AST::ExpressionParts(), SkipperT> expressionPartsRule;
-    qi::rule<IteratorT, AST::ExpressionPart(), SkipperT> expressionPartRule;
-    qi::rule<IteratorT, AST::ExpressionPart(), SkipperT> expressionPartBracketRule;
+    qi::rule<IteratorT, AST::Expressions(), SkipperT> expressionsRule;
+    qi::rule<IteratorT, AST::Expression(), SkipperT> expressionRule;
     qi::rule<IteratorT, AST::Values(), SkipperT> valuesRule;
     qi::rule<IteratorT, AST::Value(), SkipperT> valueRule;
     
