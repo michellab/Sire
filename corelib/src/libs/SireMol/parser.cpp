@@ -376,9 +376,9 @@ public:
     ValueGrammar() : ValueGrammar::base_type( rule, "String" )
     {
         escapedStringRule %= qi::lexeme[
-             qi::lit( '"' ) >>
-             *( escapeCharSymbols | ( qi::char_ - qi::char_( '"' ) ) ) >
-             qi::lit( '"') ];
+             qi::lit( "'" ) >>
+             *( escapeCharSymbols | ( qi::char_ - qi::char_( "'" ) ) ) >
+             qi::lit( "'" ) ];
         
         rawStringRule %= qi::lexeme[
                     +( qi::alnum |
