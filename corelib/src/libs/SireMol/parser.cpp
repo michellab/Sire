@@ -95,7 +95,8 @@ namespace AST
     struct Value;           // holder for a generic value
     struct IDAttribute;     // a named generic value
     struct IDBinary;        // a binary ID expression
-    struct Expression;  // holder for a generic expression part
+    struct Expression;  // holder for a generic expression
+    struct ExpressionPart;  //holder for a generic part of an expression
     struct Node;       // a node in the tree
     struct Array;      // an array of nodes
 
@@ -106,7 +107,8 @@ namespace AST
                                    boost::recursive_wrapper<IDBinary> >;
     
     using ExpressionVariant = boost::variant<boost::recursive_wrapper<IDAttribute>,
-                                             boost::recursive_wrapper<IDBinary> >;
+                                             boost::recursive_wrapper<IDBinary>,
+                                             boost::recursive_wrapper<ExpressionPart> >;
     
     // an array of attribute objects
     using IDAttributes = std::vector<IDAttribute>;
@@ -123,6 +125,12 @@ namespace AST
 
     // an Expression
     struct Expression
+    {
+        ExpressionVariant value;
+    };
+
+    //part of an expression
+    struct ExpressionPart
     {
         ExpressionVariant value;
     };
@@ -158,6 +166,7 @@ namespace AST
     void to_string(const Value &val);
     void to_string(const IDAttribute &attribute);
     void to_string(const Expression &part);
+    void to_string(const ExpressionPart &part);
 
     class print_visitor : public boost::static_visitor<int>
     {
@@ -205,10 +214,22 @@ namespace AST
             to_string(idatt);
             return 0;
         }
+        
+        int operator()(const ExpressionPart &value) const
+        {
+            to_string(value);
+            return 0;
+        }
     };
 
     void to_string(const Expression &part)
     {
+        boost::apply_visitor( print_visitor(), part.value );
+    }
+
+    void to_string(const ExpressionPart &part)
+    {
+        std::cout << "ExpressionPart\n";
         boost::apply_visitor( print_visitor(), part.value );
     }
 
@@ -261,6 +282,10 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDBinary,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::Expression,
+                           (AST::ExpressionVariant, value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::ExpressionPart,
                            (AST::ExpressionVariant, value)
                          )
 
@@ -358,13 +383,13 @@ public:
         expressionsRule %= ( expressionRule % qi::lit( ';' ) );
 
         //must be first so that we greedily parse as much as we can
-        expressionRule %= binaryRule2 |
-                          binaryRule |
-                          attributeRule;
+        expressionRule %= expressionPartRule;
 
         attributeRule  %= name_token >> valueRule;
         binaryRule %= (attributeRule >> op_token >> attributeRule);
         binaryRule2 %= (binaryRule >> op_token >> attributeRule);
+
+        expressionPartRule %= binaryRule2 | binaryRule | attributeRule;
 
         arrayRule %= qi::lit( '(' ) >>
                        -valuesRule >>
@@ -428,6 +453,9 @@ public:
 
     qi::rule<IteratorT, AST::Expressions(), SkipperT> expressionsRule;
     qi::rule<IteratorT, AST::Expression(), SkipperT> expressionRule;
+    
+    qi::rule<IteratorT, AST::ExpressionPart(), SkipperT> expressionPartRule;
+    
     qi::rule<IteratorT, AST::Values(), SkipperT> valuesRule;
     qi::rule<IteratorT, AST::Value(), SkipperT> valueRule;
     
