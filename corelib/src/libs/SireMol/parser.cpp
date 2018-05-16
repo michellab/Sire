@@ -1017,6 +1017,13 @@ public:
                                 lengthValueRule[ _val += _1 ] >>
                                 qi::repeat(0,2)[( ',' >> lengthValueRule[ _val += _1 ] )]
                             )
+                            |
+                            (
+                                qi::lit('(') >>
+                                lengthValueRule[ _val += _1 ] >>
+                                qi::repeat(0,2)[( ',' >> lengthValueRule[ _val += _1 ] )] >>
+                                qi::lit(')')
+                            )
                             ;
         
         idNumberRule = eps [ _val = AST::IDNumber() ] >>
