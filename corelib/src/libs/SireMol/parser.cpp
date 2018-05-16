@@ -163,11 +163,57 @@ namespace AST
         }
     }
     
+    enum IDCoordType { ID_COORD_UNKNOWN = 0, ID_COORD_CENTER = 1, ID_COORD_CENTER_X = 2,
+                       ID_COORD_CENTER_Y = 3, ID_COORD_CENTER_Z = 4, ID_COORD_MAX = 5,
+                       ID_COORD_MAX_X = 6, ID_COORD_MAX_Y = 7, ID_COORD_MAX_Z = 8,
+                       ID_COORD_MIN = 9, ID_COORD_MIN_X = 10, ID_COORD_MIN_Y = 11,
+                       ID_COORD_MIN_Z = 12, ID_COORD_X = 13, ID_COORD_Y = 14, ID_COORD_Z = 15 };
+    
+    QString idcoordtype_to_string(IDCoordType typ)
+    {
+        switch(typ)
+        {
+        case ID_COORD_CENTER:
+            return "coords.center";
+        case ID_COORD_CENTER_X:
+            return "coords.center.x";
+        case ID_COORD_CENTER_Y:
+            return "coords.center.y";
+        case ID_COORD_CENTER_Z:
+            return "coords.center.z";
+        case ID_COORD_MAX:
+            return "coords.max";
+        case ID_COORD_MAX_X:
+            return "coords.max.x";
+        case ID_COORD_MAX_Y:
+            return "coords.max.y";
+        case ID_COORD_MAX_Z:
+            return "coords.max.z";
+        case ID_COORD_MIN:
+            return "coords.min";
+        case ID_COORD_MIN_X:
+            return "coords.min.x";
+        case ID_COORD_MIN_Y:
+            return "coords.min.y";
+        case ID_COORD_MIN_Z:
+            return "coords.min.z";
+        case ID_COORD_X:
+            return "coords.x";
+        case ID_COORD_Y:
+            return "coords.y";
+        case ID_COORD_Z:
+            return "coords.z";
+        default:
+            return "unknown";
+        }
+    }
+    
     struct NameValue;       // holder for a generic name value
     struct RangeValue;      // holder for a range of numbers
     struct CompareValue;    // holder for a comparison value (numeric)
     struct RegExpValue;     // holder for a regular expression value
     struct LengthValue;     // holder for a distance / length
+    struct VectorValue;     // holder for a point in space
 
     struct IDName;          // a part of a molecule with a specified name
     struct IDNumber;        // a part of a molecule with a specified number or index
@@ -178,6 +224,9 @@ namespace AST
     struct IDSubscript;     // a subscripted expression
     struct IDWithin;        // a selection within a distance
     struct IDUser;          // a user-supplied identifier
+
+    struct IDWhereCompare;
+    struct IDWhereWithin;
 
     struct Expression;  // holder for a generic expression
     struct ExpressionPart;  //holder for a generic part of an expression
@@ -199,6 +248,9 @@ namespace AST
     
     using RangeVariant = boost::variant<boost::recursive_wrapper<RangeValue>,
                                         boost::recursive_wrapper<CompareValue> >;
+    
+    using IDWhereVariant = boost::variant<boost::recursive_wrapper<IDWhereCompare>,
+                                          boost::recursive_wrapper<IDWhereWithin> >;
     
     using IDNames = std::vector<IDName>;
     using Expressions = std::vector<Expression>;
@@ -230,6 +282,61 @@ namespace AST
         {
             return (value * unit).toString();
         }
+    };
+
+    // a holder for a vector value (3D point in space)
+    struct VectorValue
+    {
+        LengthValue x;
+        LengthValue y;
+        LengthValue z;
+        
+        VectorValue() : _c(0)
+        {}
+        
+        VectorValue& operator+=(const LengthValue &val)
+        {
+            if (_c == 0)
+            {
+                x = val;
+                y = val;
+                z = val;
+                _c += 1;
+            }
+            else if (_c == 1)
+            {
+                y = val;
+                z = val;
+                _c += 1;
+            }
+            else if (_c == 2)
+            {
+                z = val;
+                _c += 1;
+            }
+            else
+                throw SireMol::parse_error( QObject::tr(
+                    "Cannot add more than there points to a vector"), CODELOC );
+        
+            return *this;
+        }
+
+        QString toString() const
+        {
+            if (_c == 0)
+                return "unset";
+            else if (_c == 1)
+                return x.toString();
+            else if (_c == 2)
+                return QString("( %1, %2 )").arg(x.toString()).arg(y.toString());
+            else
+                return QString("( %1, %2, %3 )")
+                            .arg(x.toString()).arg(y.toString()).arg(z.toString());
+        }
+
+    private:
+        int _c;
+
     };
 
     // a holder for a regular expression
@@ -506,15 +613,47 @@ namespace AST
         }
     };
     
-    // a where expression, e.g. molecules where charge > 1
-    struct IDWhere
+    // a position / distance holder
+    struct IDWhereWithin
     {
-        IDObject name;
+        LengthValue distance;
         Expression value;
         
         QString toString() const
         {
-            return "TODO";
+            return QString("is within %1 of %2")
+                        .arg(distance.toString())
+                        .arg(value.toString());
+        }
+    };
+    
+    // a position comparison holder
+    struct IDWhereCompare
+    {
+        IDComparison compare;
+        VectorValue value;
+        
+        QString toString() const
+        {
+            return QString("%1 %2")
+                    .arg(idcomparison_to_string(compare))
+                    .arg(value.toString());
+        }
+    };
+    
+    // a where expression, e.g. molecules where charge > 1
+    struct IDWhere
+    {
+        IDObject name;
+        IDCoordType typ;
+        IDWhereVariant value;
+        
+        QString toString() const
+        {
+            return QString("%1s where %2 %3")
+                        .arg(idobject_to_string(name))
+                        .arg(idcoordtype_to_string(typ))
+                        .arg(boost::apply_visitor( qstring_visitor(), value ));
         }
     };
     
@@ -569,6 +708,22 @@ BOOST_FUSION_ADAPT_STRUCT( AST::LengthValue,
                            (SireUnits::Dimension::Length,unit)
                          )
 
+BOOST_FUSION_ADAPT_STRUCT( AST::IDWhereWithin,
+                           (AST::LengthValue,distance)
+                           (AST::Expression,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDWhereCompare,
+                           (AST::IDComparison,compare)
+                           (AST::VectorValue,value)
+                         )
+  
+BOOST_FUSION_ADAPT_STRUCT( AST::IDWhere,
+                           (AST::IDObject,name)
+                           (AST::IDCoordType,typ)
+                           (AST::IDWhereVariant,value)
+                         )
+
 BOOST_FUSION_ADAPT_STRUCT( AST::NameValue,
                            (AST::NameVariant,value)
                          )
@@ -616,11 +771,6 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDBinary,
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWith,
                            (AST::IDObject,name)
                            (AST::IDToken,token)
-                           (AST::Expression,value)
-                         )
-
-BOOST_FUSION_ADAPT_STRUCT( AST::IDWhere,
-                           (AST::IDObject,name)
                            (AST::Expression,value)
                          )
 
@@ -774,7 +924,7 @@ public:
         user_token = getUserTokens();
 
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule |
-                              withRule | withinRule | notRule | user_token |
+                              withRule | withinRule | whereRule | notRule | user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         name_token.add( "atomnam", AST::ATOM )
@@ -862,6 +1012,13 @@ public:
                             )
                             ;
         
+        vectorValueRule = eps[ _val = AST::VectorValue() ] >>
+                            (
+                                lengthValueRule[ _val += _1 ] >>
+                                qi::repeat(0,2)[( ',' >> lengthValueRule[ _val += _1 ] )]
+                            )
+                            ;
+        
         idNumberRule = eps [ _val = AST::IDNumber() ] >>
                             (
                                 number_token[ _val += _1 ] >>
@@ -897,6 +1054,46 @@ public:
         subscriptRule %= qi::lit("{") >> expressionRule >> qi::lit("}") >>
                          qi::lit("[") >> rangeValueRule >> qi::lit("]");
 
+        coord_token.add( "center", AST::ID_COORD_CENTER )
+                       ( "coords.center", AST::ID_COORD_CENTER )
+                       ( "center.x", AST::ID_COORD_CENTER_X )
+                       ( "coords.center.x", AST::ID_COORD_CENTER_X )
+                       ( "center.y", AST::ID_COORD_CENTER_Y )
+                       ( "coords.center.y", AST::ID_COORD_CENTER_Y )
+                       ( "center.z", AST::ID_COORD_CENTER_Z )
+                       ( "coords.center.z", AST::ID_COORD_CENTER_Z )
+                       ( "max", AST::ID_COORD_MAX )
+                       ( "coords.max", AST::ID_COORD_MAX )
+                       ( "max.x", AST::ID_COORD_MAX_X )
+                       ( "coords.max.x", AST::ID_COORD_MAX_X )
+                       ( "max.y", AST::ID_COORD_MAX_Y )
+                       ( "coords.max.y", AST::ID_COORD_MAX_Y )
+                       ( "max.z", AST::ID_COORD_MAX_Z )
+                       ( "coords.max.z", AST::ID_COORD_MAX_Z )
+                       ( "min", AST::ID_COORD_MIN )
+                       ( "coords.min", AST::ID_COORD_MIN )
+                       ( "min.x", AST::ID_COORD_MIN_X )
+                       ( "coords.min.x", AST::ID_COORD_MIN_X )
+                       ( "min.y", AST::ID_COORD_MIN_Y )
+                       ( "coords.min.y", AST::ID_COORD_MIN_Y )
+                       ( "min.z", AST::ID_COORD_MIN_Z )
+                       ( "coords.min.z", AST::ID_COORD_MIN_Z )
+                       ( "x", AST::ID_COORD_X )
+                       ( "coords.x", AST::ID_COORD_X )
+                       ( "y", AST::ID_COORD_Y )
+                       ( "coords.y", AST::ID_COORD_Y )
+                       ( "z", AST::ID_COORD_Z )
+                       ( "coords.z", AST::ID_COORD_Z )
+                    ;
+
+        whereRule %= obj_token >> qi::lit("where") >> coord_token >>
+                        (whereWithinRule | whereCompareRule);
+
+        whereWithinRule %= qi::lit("within") >> lengthValueRule >> qi::lit("of")
+                              >> expressionRule;
+
+        whereCompareRule %= cmp_token >> vectorValueRule;
+
         nodeRule.name( "Node" );
         expressionsRule.name( "Expressions" );
         expressionRule.name( "Expression" );
@@ -922,10 +1119,13 @@ public:
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
     qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule;
-    qi::rule<IteratorT, AST::IDWhere(), SkipperT> whereRule;
     qi::rule<IteratorT, AST::IDWithin(), SkipperT> withinRule;
     qi::rule<IteratorT, AST::IDNot(), SkipperT> notRule;
     qi::rule<IteratorT, AST::IDSubscript(), SkipperT> subscriptRule;
+
+    qi::rule<IteratorT, AST::IDWhere(), SkipperT> whereRule;
+    qi::rule<IteratorT, AST::IDWhereWithin(), SkipperT> whereWithinRule;
+    qi::rule<IteratorT, AST::IDWhereCompare(), SkipperT> whereCompareRule;
 
     qi::rule<IteratorT, AST::Expressions(), SkipperT> expressionsRule;
     qi::rule<IteratorT, AST::Expression(), SkipperT> expressionRule;
@@ -940,6 +1140,7 @@ public:
     qi::rule<IteratorT, AST::RangeValue(), SkipperT> rangeValueRule;
     
     qi::rule<IteratorT, AST::LengthValue(), SkipperT> lengthValueRule;
+    qi::rule<IteratorT, AST::VectorValue(), SkipperT> vectorValueRule;
     
     qi::symbols<char,AST::IDObject> name_token;
     qi::symbols<char,QPair<AST::IDObject,AST::IDNumType> > number_token;
@@ -948,6 +1149,7 @@ public:
     qi::symbols<char,AST::IDToken> with_token;
     qi::symbols<char,SireUnits::Dimension::Length> length_token;
     qi::symbols<char,AST::IDComparison> cmp_token;
+    qi::symbols<char,AST::IDCoordType> coord_token;
     UserTokens user_token;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;
