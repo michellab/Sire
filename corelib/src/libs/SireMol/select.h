@@ -93,6 +93,9 @@ public:
     
     QString toString() const;
 
+    static void setToken(const QString &token, const QString &selection);
+    static void resetTokens();
+
 private:
     /** The actual search string */
     QString search_string;

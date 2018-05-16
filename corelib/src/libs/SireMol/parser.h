@@ -70,7 +70,13 @@ public:
     }
 };
 
-boost::shared_ptr<SireMol::parser::SelectEngine> parse(const QString &str);
+namespace parser
+{
+    void set_token(const QString &token, const QString &selection);
+    void reset_tokens();
+
+    boost::shared_ptr<SireMol::parser::SelectEngine> parse(const QString &str);
+}
 
 }
 

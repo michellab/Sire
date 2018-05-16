@@ -46,6 +46,29 @@ void register_Select_class(){
         
         }
         Select_exposer.def( bp::self == bp::self );
+        { //::SireMol::Select::resetTokens
+        
+            typedef void ( *resetTokens_function_type )(  );
+            resetTokens_function_type resetTokens_function_value( &::SireMol::Select::resetTokens );
+            
+            Select_exposer.def( 
+                "resetTokens"
+                , resetTokens_function_value
+                , "" );
+        
+        }
+        { //::SireMol::Select::setToken
+        
+            typedef void ( *setToken_function_type )( ::QString const &,::QString const & );
+            setToken_function_type setToken_function_value( &::SireMol::Select::setToken );
+            
+            Select_exposer.def( 
+                "setToken"
+                , setToken_function_value
+                , ( bp::arg("token"), bp::arg("selection") )
+                , "" );
+        
+        }
         { //::SireMol::Select::toString
         
             typedef ::QString ( ::SireMol::Select::*toString_function_type)(  ) const;
@@ -79,6 +102,8 @@ void register_Select_class(){
                 , "" );
         
         }
+        Select_exposer.staticmethod( "resetTokens" );
+        Select_exposer.staticmethod( "setToken" );
         Select_exposer.staticmethod( "typeName" );
         Select_exposer.def( "__copy__", &__copy__);
         Select_exposer.def( "__deepcopy__", &__copy__);

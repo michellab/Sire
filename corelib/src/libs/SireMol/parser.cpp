@@ -177,6 +177,7 @@ namespace AST
     struct IDNot;           // a not expression
     struct IDSubscript;     // a subscripted expression
     struct IDWithin;        // a selection within a distance
+    struct IDUser;          // a user-supplied identifier
 
     struct Expression;  // holder for a generic expression
     struct ExpressionPart;  //holder for a generic part of an expression
@@ -190,6 +191,7 @@ namespace AST
                                              boost::recursive_wrapper<IDNot>,
                                              boost::recursive_wrapper<IDSubscript>,
                                              boost::recursive_wrapper<IDWithin>,
+                                             boost::recursive_wrapper<IDUser>,
                                              boost::recursive_wrapper<ExpressionPart> >;
     
     using NameVariant = boost::variant<boost::recursive_wrapper<RegExpValue>,
@@ -373,6 +375,26 @@ namespace AST
         QString toString() const
         {
             return boost::apply_visitor( qstring_visitor(), value );
+        }
+    };
+    
+    //part of an expression that has been set by the user
+    struct IDUser
+    {
+        std::string token;
+        ExpressionVariant value;
+    
+        IDUser()
+        {}
+        
+        IDUser(const std::string t, const ExpressionVariant &s)
+            : token(t), value(s)
+        {}
+        
+        QString toString() const
+        {
+            return QString("{ %1 => %2 }").arg( QString::fromStdString(token) )
+                                          .arg( boost::apply_visitor( qstring_visitor(), value ) );
         }
     };
 
@@ -614,6 +636,34 @@ namespace spirit  = boost::spirit;
 namespace qi      = spirit::qi;
 namespace phoenix = boost::phoenix;
 
+#include <QMutex>
+#include <QHash>
+
+typedef qi::symbols<char,AST::IDUser> UserTokens;
+static UserTokens *_user_tokens = 0;
+
+Q_GLOBAL_STATIC( QMutex, tokensMutex )
+
+/** Get the set of user-supplied tokens */
+static UserTokens getUserTokens()
+{
+    QMutexLocker lkr(tokensMutex());
+    
+    if (_user_tokens == 0)
+        _user_tokens = new UserTokens();
+    
+    return *_user_tokens;
+}
+
+/** Clear all of the user-supplied tokens */
+static void reset_tokens()
+{
+    QMutexLocker lkr(tokensMutex());
+    
+    delete _user_tokens;
+    _user_tokens = 0;
+}
+
 /** This is the grammar that enables skipping of spaces, newlines and comments */
 template<typename IteratorT>
 class SkipperGrammar : public qi::grammar<IteratorT>
@@ -721,8 +771,10 @@ public:
                        binaryRule >> op_token >> expressionPartRule |
                        (qi::lit('(') >> binaryRule2 >> qi::lit(')') );
 
+        user_token = getUserTokens();
+
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule |
-                              withRule | withinRule | notRule |
+                              withRule | withinRule | notRule | user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         name_token.add( "atomnam", AST::ATOM )
@@ -896,6 +948,7 @@ public:
     qi::symbols<char,AST::IDToken> with_token;
     qi::symbols<char,SireUnits::Dimension::Length> length_token;
     qi::symbols<char,AST::IDComparison> cmp_token;
+    UserTokens user_token;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;
     qi::rule<IteratorT, AST::RegExpValue(), SkipperT> regExpRule;
@@ -947,7 +1000,24 @@ AST::Node parse(const IteratorT & begin, const IteratorT & end)
     return result;
 }
 
-int parse_main(const std::string &str)
+static void set_token(const std::string &token, const std::string &str)
+{
+    //first parse this into an AST::Node
+    auto node = parse( str.begin(), str.end() );
+    
+    if (node.values.size() != 1)
+        throw SireMol::parse_error( QObject::tr(
+            "Cannot set a token based on a multi-line selection!"), CODELOC );
+    
+    QMutexLocker lkr(tokensMutex());
+    
+    if (_user_tokens == 0)
+        _user_tokens = new UserTokens();
+    
+    _user_tokens->add(token, AST::IDUser(token,node.values[0].value));
+}
+
+static int parse_main(const std::string &str)
 {
     // Read file contents.
     auto result = parse( str.begin(), str.end() );
@@ -959,11 +1029,24 @@ int parse_main(const std::string &str)
 
 namespace SireMol
 {
-    /** Internal function used to parse the passed string and convert
-        it into a SelectEngine object */
-    boost::shared_ptr<parser::SelectEngine> parse( const QString &str )
+    namespace parser
     {
-        parse_main( str.toStdString() );
-        return boost::shared_ptr<parser::SelectEngine>();
+        /** Internal function used to parse the passed string and convert
+            it into a SelectEngine object */
+        boost::shared_ptr<parser::SelectEngine> parse( const QString &str )
+        {
+            ::parse_main( str.toStdString() );
+            return boost::shared_ptr<SelectEngine>();
+        }
+        
+        void set_token(const QString &token, const QString &selection)
+        {
+            ::set_token(token.toStdString(), selection.toStdString());
+        }
+        
+        void reset_tokens()
+        {
+            ::reset_tokens();
+        }
     }
 }

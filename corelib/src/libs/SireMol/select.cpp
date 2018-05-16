@@ -34,18 +34,17 @@
 using namespace SireBase;
 using namespace SireStream;
 using namespace SireMol;
-using namespace SireMol::parser;
 
 ///////////
 /////////// Implementation of SelectEngine
 ///////////
 
 /** Constructor */
-SelectEngine::SelectEngine()
+SireMol::parser::SelectEngine::SelectEngine()
 {}
 
 /** Destructor */
-SelectEngine::~SelectEngine()
+SireMol::parser::SelectEngine::~SelectEngine()
 {}
 
 ///////////
@@ -91,7 +90,7 @@ Select::Select() : ConcreteProperty<Select,Property>()
 /** Construct a selection based on the passed string */
 Select::Select(const QString &str) : ConcreteProperty<Select,Property>()
 {
-    e = parse(str);
+    e = SireMol::parser::parse(str);
     search_string = str;
 }
 
@@ -136,6 +135,16 @@ const char* Select::what() const
 const char* Select::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<Select>() );
+}
+
+void Select::setToken(const QString &token, const QString &selection)
+{
+    SireMol::parser::set_token(token, selection);
+}
+
+void Select::resetTokens()
+{
+    SireMol::parser::reset_tokens();
 }
 
 QString Select::toString() const
