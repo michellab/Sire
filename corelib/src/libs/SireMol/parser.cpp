@@ -28,6 +28,9 @@
 
 #include "parser.h"
 
+#include "SireUnits/dimensions.h"
+#include "SireUnits/units.h"
+
 #include "SireError/errors.h"
 
 #include <QDebug>
@@ -119,6 +122,30 @@ namespace AST
         }
     }
     
+    enum IDComparison { ID_CMP_UNKNOWN = 0, ID_CMP_LT = 1, ID_CMP_LE = 2,
+                        ID_CMP_EQ = 3, ID_CMP_NE = 4, ID_CMP_GT = 5, ID_CMP_GE = 6 };
+    
+    QString idcomparison_to_string(IDComparison cmp)
+    {
+        switch(cmp)
+        {
+        case ID_CMP_LT:
+            return "<";
+        case ID_CMP_LE:
+            return "<=";
+        case ID_CMP_EQ:
+            return "==";
+        case ID_CMP_NE:
+            return "!=";
+        case ID_CMP_GT:
+            return ">";
+        case ID_CMP_GE:
+            return ">=";
+        default:
+            return "unknown";
+        }
+    }
+    
     enum IDToken { ID_TOKEN_UNKNOWN = 0, ID_WHERE = 1, ID_WITH = 2, ID_IN = 3 };
     
     QString idtoken_to_string(IDToken token)
@@ -138,7 +165,9 @@ namespace AST
     
     struct NameValue;       // holder for a generic name value
     struct RangeValue;      // holder for a range of numbers
+    struct CompareValue;    // holder for a comparison value (numeric)
     struct RegExpValue;     // holder for a regular expression value
+    struct LengthValue;     // holder for a distance / length
 
     struct IDName;          // a part of a molecule with a specified name
     struct IDNumber;        // a part of a molecule with a specified number or index
@@ -147,6 +176,7 @@ namespace AST
     struct IDWhere;         // a where expression
     struct IDNot;           // a not expression
     struct IDSubscript;     // a subscripted expression
+    struct IDWithin;        // a selection within a distance
 
     struct Expression;  // holder for a generic expression
     struct ExpressionPart;  //holder for a generic part of an expression
@@ -159,15 +189,46 @@ namespace AST
                                              boost::recursive_wrapper<IDWhere>,
                                              boost::recursive_wrapper<IDNot>,
                                              boost::recursive_wrapper<IDSubscript>,
+                                             boost::recursive_wrapper<IDWithin>,
                                              boost::recursive_wrapper<ExpressionPart> >;
     
     using NameVariant = boost::variant<boost::recursive_wrapper<RegExpValue>,
                                        std::string>;
     
+    using RangeVariant = boost::variant<boost::recursive_wrapper<RangeValue>,
+                                        boost::recursive_wrapper<CompareValue> >;
+    
     using IDNames = std::vector<IDName>;
     using Expressions = std::vector<Expression>;
     using NameValues = std::vector<NameValue>;
-    using RangeValues = std::vector<RangeValue>;
+    using RangeValues = std::vector<RangeVariant>;
+
+    // a holder for a distance
+    struct LengthValue
+    {
+        LengthValue() : value(0), unit(1.0)
+        {}
+        
+        LengthValue& operator+=(double v)
+        {
+            value = v;
+            return *this;
+        }
+        
+        LengthValue& operator+=(SireUnits::Dimension::Length v)
+        {
+            unit = v;
+            return *this;
+        }
+        
+        double value;
+        SireUnits::Dimension::Length unit;
+        
+        QString toString() const
+        {
+            return (value * unit).toString();
+        }
+    };
 
     // a holder for a regular expression
     struct RegExpValue
@@ -226,6 +287,19 @@ namespace AST
         QString toString() const
         {
             return boost::apply_visitor( qstring_visitor(), value );
+        }
+    };
+
+    // comparison against an integer
+    struct CompareValue
+    {
+        IDComparison compare;
+        int value;
+        
+        QString toString() const
+        {
+            return QString("%1 %2").arg(idcomparison_to_string(compare))
+                                   .arg(value);
         }
     };
 
@@ -368,7 +442,7 @@ namespace AST
             QStringList lines;
             for (const auto value : values)
             {
-                lines.append( value.toString() );
+                lines.append( boost::apply_visitor( qstring_visitor(), value ) );
             }
             
             return QObject::tr("%1%2 %3")
@@ -444,10 +518,42 @@ namespace AST
             return QString("{%1}[%2]").arg(value.toString()).arg(range.toString());
         }
     };
+    
+    // an ID based on objects within a distance of other objects
+    struct IDWithin
+    {
+        IDObject name;
+        LengthValue distance;
+        Expression value;
+        
+        QString toString() const
+        {
+            return QObject::tr("%1s within %2 of %3")
+                        .arg(idobject_to_string(name))
+                        .arg(distance.toString())
+                        .arg(value.toString());
+        }
+    };
 }
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDWithin,
+                           (AST::IDObject,name)
+                           (AST::LengthValue,distance)
+                           (AST::Expression,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::LengthValue,
+                           (double,value)
+                           (SireUnits::Dimension::Length,unit)
+                         )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::NameValue,
                            (AST::NameVariant,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::CompareValue,
+                           (AST::IDComparison,compare)
+                           (int,value)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDNot,
@@ -588,6 +694,7 @@ public:
         using qi::eps;
         using qi::_1;
         using qi::int_;
+        using qi::double_;
         using qi::on_error;
         using qi::fail;
         using namespace qi::labels;
@@ -614,7 +721,8 @@ public:
                        binaryRule >> op_token >> expressionPartRule |
                        (qi::lit('(') >> binaryRule2 >> qi::lit(')') );
 
-        expressionPartRule %= subscriptRule | idNameRule | idNumberRule | withRule | notRule |
+        expressionPartRule %= subscriptRule | idNameRule | idNumberRule |
+                              withRule | withinRule | notRule |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         name_token.add( "atomnam", AST::ATOM )
@@ -660,12 +768,45 @@ public:
                      )
                      ;
 
-        rangeValuesRule %= ( rangeValueRule % qi::lit( ',' ) );
+        rangeValuesRule %= ( (rangeValueRule | compareValueRule) % qi::lit( ',' ) );
+        
+        cmp_token.add( "<=", AST::ID_CMP_LE )
+                     ( "<", AST::ID_CMP_LT )
+                     ( "==", AST::ID_CMP_EQ )
+                     ( "!=", AST::ID_CMP_NE )
+                     ( ">=", AST::ID_CMP_GE )
+                     ( ">", AST::ID_CMP_GT );
+        
+        compareValueRule %= cmp_token >> int_;
         
         rangeValueRule = eps [ _val = AST::RangeValue() ] >>
                             (
                                 int_[ _val += _1 ] >>
                                 qi::repeat(0,2)[( ':' >> int_[ _val += _1 ] )]
+                            )
+                            ;
+        
+        length_token.add( "Angstroms", SireUnits::angstrom )
+                        ( "Angstrom", SireUnits::angstrom )
+                        ( "angstroms", SireUnits::angstrom )
+                        ( "angstrom", SireUnits::angstrom )
+                        ( "A", SireUnits::angstrom )
+                        ( "picometers", SireUnits::picometer )
+                        ( "picometer", SireUnits::picometer )
+                        ( "pm", SireUnits::picometer )
+                        ( "nanometers", SireUnits::nanometer )
+                        ( "nanometer", SireUnits::nanometer )
+                        ( "nm", SireUnits::nanometer )
+                        ;
+        
+        lengthValueRule = eps [ _val = AST::LengthValue() ] >>
+                            (
+                                double_[ _val += _1 ] >>
+                                length_token[ _val += _1 ]
+                            )
+                            |
+                            (
+                                double_[ _val += _1 ]
                             )
                             ;
         
@@ -698,6 +839,9 @@ public:
 
         notRule %= qi::lit("not") >> expressionRule;
 
+        withinRule %= obj_token >> qi::lit("within") >> lengthValueRule
+                                >> qi::lit("of") >> expressionRule;
+
         subscriptRule %= qi::lit("{") >> expressionRule >> qi::lit("}") >>
                          qi::lit("[") >> rangeValueRule >> qi::lit("]");
 
@@ -727,6 +871,7 @@ public:
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
     qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule;
     qi::rule<IteratorT, AST::IDWhere(), SkipperT> whereRule;
+    qi::rule<IteratorT, AST::IDWithin(), SkipperT> withinRule;
     qi::rule<IteratorT, AST::IDNot(), SkipperT> notRule;
     qi::rule<IteratorT, AST::IDSubscript(), SkipperT> subscriptRule;
 
@@ -739,13 +884,18 @@ public:
     qi::rule<IteratorT, AST::NameValue(), SkipperT> nameValueRule;
     
     qi::rule<IteratorT, AST::RangeValues(), SkipperT> rangeValuesRule;
+    qi::rule<IteratorT, AST::CompareValue(), SkipperT> compareValueRule;
     qi::rule<IteratorT, AST::RangeValue(), SkipperT> rangeValueRule;
+    
+    qi::rule<IteratorT, AST::LengthValue(), SkipperT> lengthValueRule;
     
     qi::symbols<char,AST::IDObject> name_token;
     qi::symbols<char,QPair<AST::IDObject,AST::IDNumType> > number_token;
     qi::symbols<char,AST::IDOperation> op_token;
     qi::symbols<char,AST::IDObject> obj_token;
     qi::symbols<char,AST::IDToken> with_token;
+    qi::symbols<char,SireUnits::Dimension::Length> length_token;
+    qi::symbols<char,AST::IDComparison> cmp_token;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;
     qi::rule<IteratorT, AST::RegExpValue(), SkipperT> regExpRule;
