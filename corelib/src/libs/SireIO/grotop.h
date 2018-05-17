@@ -436,7 +436,7 @@ private:
     QVector<QString> loadInclude(QString filename, QString current_directory);
 
     QVector<QString> preprocess(const QVector<QString> &lines,
-                                QHash<QString,QString> defines,
+                                QHash<QString,QString> &defines,
                                 const QString &current_directory,
                                 const QString &parent_file);
 

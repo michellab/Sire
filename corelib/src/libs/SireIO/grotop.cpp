@@ -2898,7 +2898,7 @@ QVector<QString> GroTop::loadInclude(QString filename, QString current_dir)
 /** This function scans through a set of gromacs file lines and expands all
     macros, removes all comments and includes all #included files */
 QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
-                                    QHash<QString,QString> defines,
+                                    QHash<QString,QString> &defines,
                                     const QString &current_directory,
                                     const QString &parent_file)
 {
@@ -3041,7 +3041,10 @@ QVector<QString> GroTop::preprocess(const QVector<QString> &lines,
             }
             else
             {
-                defines.insert(words[1], words[2]);
+                auto key = words[1];
+                words.takeFirst();
+                words.takeFirst();
+                defines.insert(key, words.join(" "));
             }
 
             continue;
