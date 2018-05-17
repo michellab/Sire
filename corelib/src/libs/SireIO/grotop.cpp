@@ -2766,6 +2766,7 @@ static bool gromacs_preprocess_would_change(const QVector<QString> &lines,
         if (line.indexOf(QLatin1String(";")) != -1 or
             line.indexOf(QLatin1String("#include")) != -1 or
             line.indexOf(QLatin1String("#ifdef")) != -1 or
+            line.indexOf(QLatin1String("#ifndef")) != -1 or
             line.indexOf(QLatin1String("#else")) != -1 or
             line.indexOf(QLatin1String("#endif")) != -1 or
             line.indexOf(QLatin1String("#define")) != -1 or
