@@ -715,7 +715,7 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     // Loop over all entries in the data list.
     for (int i=0; i<data.count(); ++i)
     {
-        bool ok;
+        bool ok = false;
 
         // Extract the appropriate data record.
         if      (i == 0) num_atoms = data[0].toInt(&ok);

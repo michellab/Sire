@@ -3133,7 +3133,7 @@ AmberPrm::AmberPrm(const System &system, const PropertyMap &map)
     {
         throw SireIO::parse_error( QObject::tr(
             "Errors converting the system to a Amber Parm format...\n%1")
-                .arg(lines.join("\n")), CODELOC );
+                .arg(errors.join("\n")), CODELOC );
     }
 
     //we don't need params any more, so free the memory

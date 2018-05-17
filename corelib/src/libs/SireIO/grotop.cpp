@@ -3421,6 +3421,7 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
             //should either have 2 words (atom type, mass) or
             //have 6 words; atom type, mass, charge, type, V, W or
             //have 7 words; atom type, atom number, mass, charge, type, V, W
+            //have 8 words; atom type, bond type, atom number, mass, charge, type, V, W
             if (words.count() < 2)
             {
                 warnings.append( QObject::tr( "There is not enough data for the "
@@ -3494,6 +3495,32 @@ QStringList GroTop::processDirectives(const QMap<int,QString> &taglocs,
                     typ = GromacsAtomType(words[0], words[1], mass*g_per_mol, chg*mod_electron,
                                           ptyp, ::toLJParameter(v,w,combining_rule));
                 }
+            }
+            else if (words.count() < 9)
+            {
+                bool ok_mass, ok_elem, ok_charge, ok_ptyp, ok_v, ok_w;
+                int nprotons = words[2].toInt(&ok_elem);
+                double mass = words[3].toDouble(&ok_mass);
+                double chg = words[4].toDouble(&ok_charge);
+                auto ptyp = GromacsAtomType::toParticleType(words[5], &ok_ptyp);
+                double v = words[6].toDouble(&ok_v);
+                double w = words[7].toDouble(&ok_w);
+
+                if (not (ok_mass and ok_charge and ok_ptyp and ok_v and ok_w))
+                {
+                    warnings.append( QObject::tr( "Could not interpret the atom type data "
+                      "from line '%1'. Skipping this line.").arg(line) );
+                    continue;
+                }
+
+                typ = GromacsAtomType(words[0], words[1], mass*g_per_mol, chg*mod_electron,
+                                      ptyp, ::toLJParameter(v,w,combining_rule),
+                                      Element(nprotons));
+            }
+            else
+            {
+                warnings.append( QObject::tr( "The atomtype line '%1' contains more data "
+                  "than is expected!").arg(line) );
             }
 
             if (typs.contains(typ.atomType()))
