@@ -1992,7 +1992,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
 
     if (not bondlines.isEmpty())
     {
-        lines.append( "[bonds]" );
+        lines.append( "[ bonds ]" );
         lines.append( ";  ai    aj   funct   parameters" );
         lines += bondlines;
         lines.append("");
@@ -2000,7 +2000,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     
     if (not scllines.isEmpty())
     {
-        lines.append( "[pairs]" );
+        lines.append( "[ pairs ]" );
         lines.append( ";  ai    aj funct " );
         lines += scllines;
         lines.append("");
@@ -2008,7 +2008,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     
     if (not anglines.isEmpty())
     {
-        lines.append( "[angles]" );
+        lines.append( "[ angles ]" );
         lines.append( ";  ai    aj    ak   funct   parameters" );
         lines += anglines;
         lines.append("");
@@ -2016,7 +2016,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
 
     if (not dihlines.isEmpty())
     {
-        lines.append( "[dihedrals]" );
+        lines.append( "[ dihedrals ]" );
         lines.append( ";  ai    aj    ak    al   funct   parameters" );
         lines += dihlines;
         lines.append("");
