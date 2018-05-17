@@ -1081,7 +1081,9 @@ QVector<QString> getAtomTreeChains(const AmberParams &params)
 }
 
 /** Internal function used to get the amber atom types of each atom */
-QVector<QString> getAmberTypes(const AmberParams &params)
+QVector<QString> getAmberTypes(const AmberParams &params,
+                               QHash<QString,int> &unique_names,
+                               QMutex &name_mutex)
 {
     const auto info = params.info();
 
@@ -1091,7 +1093,48 @@ QVector<QString> getAmberTypes(const AmberParams &params)
 
     for (int i=0; i<info.nAtoms(); ++i)
     {
-        ambtyps[i] = t[ info.cgAtomIdx(AtomIdx(i)) ];
+        auto atomtype = t[ info.cgAtomIdx(AtomIdx(i)) ];
+
+        if (atomtype.length() > 4)
+        {
+            //we need to shorten the atom type name to 4 characters. Do this by
+            //creating a unique name...
+            QMutexLocker lkr(&name_mutex);
+            
+            int index = 0;
+            
+            if (unique_names.contains(atomtype))
+            {
+                index = unique_names[atomtype];
+            }
+            else
+            {
+                //find the highest index used so far
+                int highest = 0;
+                
+                for (auto it = unique_names.constBegin(); it != unique_names.constEnd(); ++it)
+                {
+                    if (it.value() > highest)
+                        highest = it.value();
+                }
+            
+                highest += 1;
+                unique_names.insert(atomtype, highest);
+
+                index = highest;
+            }
+
+            if (index < 1000)
+                atomtype = QString("X%1").arg(index);
+            else if (index < 10000)
+                atomtype = QString("%1").arg(index);
+            else
+                throw SireError::incompatible_error( QObject::tr(
+                    "Cannot write an Amber file as the number of atom types with string "
+                    "lengths greater than 4 is greater than 9999"), CODELOC );
+        }
+
+        ambtyps[i] = atomtype;
     }
 
     return ambtyps;
@@ -2131,6 +2174,9 @@ QStringList toLines(const QVector<AmberParams> &params,
     {
         QVector< QVector<QString> > amber_types(params.count());
 
+        QHash<QString,int> unique_types;
+        QMutex unique_mutex;
+
         if (use_parallel)
         {
             tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
@@ -2138,7 +2184,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             {
                 for (int i=r.begin(); i<r.end(); ++i)
                 {
-                    amber_types[i] = getAmberTypes(params[i]);
+                    amber_types[i] = getAmberTypes(params[i], unique_types, unique_mutex);
                 }
             });
         }
@@ -2146,7 +2192,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         {
             for (int i=0; i<params.count(); ++i)
             {
-                amber_types[i] = getAmberTypes(params[i]);
+                amber_types[i] = getAmberTypes(params[i], unique_types, unique_mutex);
             }
         }
 
