@@ -27,6 +27,7 @@
 \*********************************************/
 
 #include "ast.h"
+#include "idengine.h"
 
 namespace AST
 {
@@ -309,4 +310,75 @@ namespace AST
                     .arg(value.toString());
     }
 
+    SelectEnginePtr Node::toEngine() const
+    {
+        //return vector of SelectEngines...
+    
+        return SelectEnginePtr();
+    }
+
+    SelectEnginePtr Expression::toEngine() const
+    {
+        return boost::apply_visitor( engine_visitor(), value );
+    }
+    
+    SelectEnginePtr ExpressionPart::toEngine() const
+    {
+        return boost::apply_visitor( engine_visitor(), value );
+    }
+    
+    SelectEnginePtr IDUser::toEngine() const
+    {
+        return SelectEnginePtr();
+    }
+    
+    SelectEnginePtr IDName::toEngine() const
+    {
+        return SelectEnginePtr();
+    }
+    
+    SelectEnginePtr IDNumber::toEngine() const
+    {
+        return SelectEnginePtr();
+    }
+    
+    SelectEnginePtr IDBinary::toEngine() const
+    {
+        return SelectEnginePtr();
+    }
+    
+    SelectEnginePtr IDWith::toEngine() const
+    {
+        return SelectEnginePtr();
+    }
+    
+    SelectEnginePtr IDWhereWithin::toEngine() const
+    {
+        return SelectEnginePtr();
+    }
+    
+    SelectEnginePtr IDWhereCompare::toEngine() const
+    {
+        return SelectEnginePtr();
+    }
+    
+    SelectEnginePtr IDWhere::toEngine() const
+    {
+        return SelectEnginePtr();
+    }
+
+    SelectEnginePtr IDNot::toEngine() const
+    {
+        return SelectEnginePtr();
+    }
+    
+    SelectEnginePtr IDSubscript::toEngine() const
+    {
+        return SelectEnginePtr();
+    }
+    
+    SelectEnginePtr IDWithin::toEngine() const
+    {
+        return SelectEnginePtr();
+    }
 }

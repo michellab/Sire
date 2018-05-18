@@ -173,13 +173,13 @@ namespace SireMol
     {
         /** Internal function used to parse the passed string and convert
             it into a SelectEngine object */
-        boost::shared_ptr<parser::SelectEngine> parse( const QString &str )
+        SelectEnginePtr parse( const QString &str )
         {
             auto ast = ::parse_main( str.toStdString() );
             
             qDebug() << ast.toString();
             
-            return boost::shared_ptr<SelectEngine>();
+            return ast.toEngine();
         }
         
         /** Internal function used to associate a named token with the

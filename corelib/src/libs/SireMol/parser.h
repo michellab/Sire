@@ -72,10 +72,12 @@ public:
 
 namespace parser
 {
+    using SireMol::parser::SelectEnginePtr;
+
     void set_token(const QString &token, const QString &selection);
     void reset_tokens();
 
-    boost::shared_ptr<SireMol::parser::SelectEngine> parse(const QString &str);
+    SelectEnginePtr parse(const QString &str);
 }
 
 }

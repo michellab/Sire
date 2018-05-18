@@ -29,82 +29,14 @@
 #ifndef SIREMOL_PARSER_IDENGINE_H
 #define SIREMOL_PARSER_IDENGINE_H
 
-#include <boost/config/warning_disable.hpp>
-#include <boost/spirit/include/qi.hpp>
-#include <boost/spirit/include/phoenix_core.hpp>
-#include <boost/spirit/include/phoenix_operator.hpp>
-#include <boost/spirit/include/phoenix_object.hpp>
-#include <boost/fusion/include/adapt_struct.hpp>
-#include <boost/fusion/include/io.hpp>
-
 #include "SireMol/select.h"
 
-#include <QRegExp>
+SIRE_BEGIN_HEADER
 
 namespace parser_idengine
 {
 
-namespace qi = boost::spirit::qi;
-namespace ascii = boost::spirit::ascii;
-namespace phoenix = boost::phoenix;
-
 using SireMol::parser::SelectEngine;
-
-/** Internal class used to parse a regexp */
-class Regexp
-{
-public:
-    Regexp();
-    ~Regexp();
-    
-    Regexp& operator+=(const std::wstring &s);
-    Regexp& operator*=(const std::wstring &s);
-    
-    QRegExp regexp;
-};
-
-/** Internal class used to parse strings or regexps */
-class StringsOrRegexps
-{
-public:
-    StringsOrRegexps();
-    ~StringsOrRegexps();
-
-    StringsOrRegexps& operator+=(const std::wstring &s);
-    StringsOrRegexps& operator+=(const Regexp &r);
-    
-    QStringList strings;
-    QList<QRegExp> regexps;
-};
-
-/** Internal class used to parse a range of integers */
-class IDRange
-{
-public:
-    IDRange();
-    ~IDRange();
-    
-    IDRange& operator+=(int val);
-    
-    int start;
-    int end;
-    int step;
-
-private:
-    int c;
-};
-
-/** Internal class used to parse numbers or ranges */
-class NumbersOrRanges
-{
-public:
-    NumbersOrRanges();
-    ~NumbersOrRanges();
-    
-    NumbersOrRanges& operator+=(const IDRange &range);
-    
-    QList<int> numbers;
-};
 
 /** Internal class providing the SelectEngine for objects 
     based on their IDs (names, numbers, indicies etc.) 
@@ -114,47 +46,12 @@ public:
 class IDEngine : public SelectEngine
 {
 public:
-    enum Obj { ATOM = 1,
-               CUTGROUP = 2,
-               RESIDUE = 3,
-               CHAIN = 4,
-               SEGMENT = 5,
-               MOLECULE = 6 };
-    
-    enum Typ { NAME = 1,
-               NUMBER = 2,
-               INDEX = 3 };
-
     IDEngine();
     ~IDEngine();
-    
-    IDEngine& operator+=(const QPair<int,int> &ids);
-    IDEngine& operator+=(const StringsOrRegexps &names);
-    IDEngine& operator+=(const NumbersOrRanges &numbers);
-    
-    QString toString() const;
-    
-    Obj obj;
-    Typ typ;
-    
-    StringsOrRegexps idnams;
-    NumbersOrRanges idnums;
-};
-
-struct idengine_parser : qi::grammar<std::wstring::const_iterator, IDEngine(), ascii::space_type>
-{
-    typedef std::wstring::const_iterator Iterator;
-
-    idengine_parser();
-    
-    qi::rule<Iterator, IDEngine(), ascii::space_type> start;
-    qi::rule<Iterator, IDRange(), ascii::space_type> id_range;
-    qi::rule<Iterator, std::wstring(), ascii::space_type> strings;
-    qi::rule<Iterator, Regexp(), ascii::space_type> regexps;
-    qi::rule<Iterator, StringsOrRegexps(), ascii::space_type> strings_or_regexps;
-    qi::rule<Iterator, NumbersOrRanges(), ascii::space_type> numbers_or_ranges;
 };
 
 }
+
+SIRE_END_HEADER
 
 #endif

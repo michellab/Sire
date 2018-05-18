@@ -31,6 +31,7 @@
 
 #include "SireUnits/dimensions.h"
 #include "SireUnits/units.h"
+#include "SireMol/select.h"
 
 #include "SireError/errors.h"
 
@@ -50,12 +51,16 @@ SIRE_BEGIN_HEADER
 #include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/io.hpp>
 
+#include <boost/shared_ptr.hpp>
+
 // A lot of the below code is heavily inspired by
 // https://medium.com/@alinakipoglu/parsing-with-spirit-qi-fcaeaf4357b3
 
 /** Namespace holding the objects used in the abstract syntax tree */
 namespace AST
 {
+    using SireMol::parser::SelectEnginePtr;
+
     /** The different objects that can be identified */
     enum IDObject { ID_UNKNOWN = 0, ATOM = 1, CUTGROUP = 2,
                     RESIDUE = 3, CHAIN = 4, SEGMENT = 5, MOLECULE = 6 };
@@ -160,6 +165,18 @@ namespace AST
         QString operator()(const std::string &string) const
         {
             return QString("'%1'").arg(QString::fromStdString(string));
+        }
+    };
+
+    /** Visitorused to get SelectEnginePtr values from a boost::variant */
+    class engine_visitor : public boost::static_visitor<SelectEnginePtr>
+    {
+    public:
+        /** In general, use the .toEngine() function from a class */
+        template<class T>
+        SelectEnginePtr operator()(const T &value) const
+        {
+            return value.toEngine();
         }
     };
 
@@ -326,6 +343,8 @@ namespace AST
         ExpressionVariant value;
         
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
 
     /** Struct that holds an atomic part of a selection expression */
@@ -334,6 +353,8 @@ namespace AST
         ExpressionVariant value;
 
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
     
     /** Struct that holds an ID token that represents a user-supplied selection */
@@ -350,6 +371,8 @@ namespace AST
         {}
         
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
 
     /** The root node of the AST - this holds a set of Expressions */
@@ -358,6 +381,8 @@ namespace AST
         Expressions values;
         
         QString toString() const;
+        
+        SelectEnginePtr toEngine() const;
     };
 
     /** Struct that holds a name and associated values */
@@ -367,6 +392,8 @@ namespace AST
         NameValues values;
         
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
 
     /** Struct that holds a number and associated values */
@@ -393,6 +420,8 @@ namespace AST
         }
         
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
 
     /** Struct that holds a binary expression, e.g. something and other */
@@ -403,6 +432,8 @@ namespace AST
         Expression part1;
         
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
     
     /** Struct that holds a "with" expression, e.g. molecules with resname ala */
@@ -413,6 +444,8 @@ namespace AST
         Expression value;
         
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
     
     /** Struct that holds a "where within" 
@@ -423,6 +456,8 @@ namespace AST
         Expression value;
         
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
     
     /** Struct that holds a "where" comparison expression, e.g.
@@ -433,6 +468,8 @@ namespace AST
         VectorValue value;
         
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
     
     /** Struct that holds a general "where" expression */
@@ -443,6 +480,8 @@ namespace AST
         IDWhereVariant value;
         
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
     
     /** Struct to hold a negated (not) expression */
@@ -451,6 +490,8 @@ namespace AST
         Expression value;
         
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
     
     /** Struct to hold a subscripted expression, e.g. {something}[0:10:2] */
@@ -460,6 +501,8 @@ namespace AST
         RangeValue range;
         
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
     
     /** Struct to hold expressions that select based on being within a distance */
@@ -470,6 +513,8 @@ namespace AST
         Expression value;
         
         QString toString() const;
+
+        SelectEnginePtr toEngine() const;
     };
 }
 

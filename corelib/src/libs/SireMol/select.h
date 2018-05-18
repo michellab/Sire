@@ -60,6 +60,9 @@ public:
     SelectEngine();
     virtual ~SelectEngine();
 };
+
+using SelectEnginePtr = boost::shared_ptr<SelectEngine>;
+
 } //end of namespace parser
 
 /** This is the only publicly visible selector class. This provides a 
@@ -101,7 +104,7 @@ private:
     QString search_string;
 
     /** The underlying engine used to perform the selection */
-    boost::shared_ptr<SireMol::parser::SelectEngine> e;
+    parser::SelectEnginePtr e;
 };
 
 }
