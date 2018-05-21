@@ -113,6 +113,7 @@ namespace AST
     struct IDSubscript;     
     struct IDWithin;        
     struct IDUser;
+    struct IDJoin;
 
     struct IDWhereCompare;
     struct IDWhereWithin;
@@ -131,6 +132,7 @@ namespace AST
                                              boost::recursive_wrapper<IDSubscript>,
                                              boost::recursive_wrapper<IDWithin>,
                                              boost::recursive_wrapper<IDUser>,
+                                             boost::recursive_wrapper<IDJoin>,
                                              boost::recursive_wrapper<ExpressionPart> >;
     
     /** Base holder for strings or regular expressions */
@@ -494,6 +496,16 @@ namespace AST
         SelectEnginePtr toEngine() const;
     };
     
+    /** Struct to hold a join expression */
+    struct IDJoin
+    {
+        Expression value;
+        
+        QString toString() const;
+        
+        SelectEnginePtr toEngine() const;
+    };
+    
     /** Struct to hold a subscripted expression, e.g. {something}[0:10:2] */
     struct IDSubscript
     {
@@ -555,6 +567,10 @@ BOOST_FUSION_ADAPT_STRUCT( AST::CompareValue,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDNot,
+                           (AST::Expression,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDJoin,
                            (AST::Expression,value)
                          )
 

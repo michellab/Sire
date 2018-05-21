@@ -292,9 +292,14 @@ namespace AST
                     .arg(boost::apply_visitor( qstring_visitor(), value ));
     }
 
+    QString IDJoin::toString() const
+    {
+        return QString("join (%1)").arg(value.toString());
+    }
+
     QString IDNot::toString() const
     {
-        return QString("not %1").arg(value.toString());
+        return QString("not (%1)").arg(value.toString());
     }
 
     QString IDSubscript::toString() const
@@ -363,6 +368,11 @@ namespace AST
     }
     
     SelectEnginePtr IDWhere::toEngine() const
+    {
+        return SelectEnginePtr();
+    }
+
+    SelectEnginePtr IDJoin::toEngine() const
     {
         return SelectEnginePtr();
     }

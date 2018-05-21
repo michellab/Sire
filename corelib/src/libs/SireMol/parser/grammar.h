@@ -169,18 +169,25 @@ public:
                      ( ">", AST::ID_CMP_GT );
 
         //all of the different object identification tokens
-        obj_token.add( "atom",  AST::ATOM )
-                     ( "atoms", AST::ATOM )
-                     ( "cutgroup", AST::CUTGROUP )
+        obj_token.add( "atoms",  AST::ATOM )
+                     ( "atom", AST::ATOM )
                      ( "cutgroups", AST::CUTGROUP )
-                     ( "residue", AST::RESIDUE )
+                     ( "cutgroup", AST::CUTGROUP )
+                     ( "group", AST::CUTGROUP )
+                     ( "groups", AST::CUTGROUP )
                      ( "residues", AST::RESIDUE )
-                     ( "chain", AST::CHAIN )
+                     ( "residue", AST::RESIDUE )
+                     ( "res", AST::RESIDUE )
                      ( "chains", AST::CHAIN )
-                     ( "segment", AST::SEGMENT )
+                     ( "chain", AST::CHAIN )
                      ( "segments", AST::SEGMENT )
-                     ( "molecule", AST::MOLECULE )
+                     ( "segment", AST::SEGMENT )
+                     ( "segs", AST::SEGMENT )
+                     ( "seg", AST::SEGMENT )
                      ( "molecules", AST::MOLECULE )
+                     ( "molecule", AST::MOLECULE )
+                     ( "mol", AST::MOLECULE )
+                     ( "mols", AST::MOLECULE )
                     ;
 
         //all of the different length unit tokens
@@ -262,8 +269,8 @@ public:
 
         //an expression is either a subscript, name, number, with, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
-        expressionPartRule %= subscriptRule | idNameRule | idNumberRule |
-                              withRule | withinRule | whereRule | notRule | user_token |
+        expressionPartRule %= subscriptRule | idNameRule | idNumberRule | withRule |
+                              withinRule | whereRule | notRule | joinRule | user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
         
         //grammar that specifies a list of names (comma-separated)
@@ -338,6 +345,9 @@ public:
         //grammar for a "not" expression
         notRule %= qi::lit("not") >> expressionRule;
 
+        //grammar for a "join" expression
+        joinRule %= qi::lit("join") >> expressionRule;
+
         //grammar for a "within" expression
         withinRule %= obj_token >> qi::lit("within") >> lengthValueRule
                                 >> qi::lit("of") >> expressionRule;
@@ -368,6 +378,7 @@ public:
         withRule.name( "With" );
         withinRule.name( "Within" );
         notRule.name( "Not" );
+        joinRule.name( "Join" );
         subscriptRule.name( "Subscript" );
         whereRule.name( "Where" );
         whereWithinRule.name( "Where Within" );
@@ -407,6 +418,7 @@ public:
     qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule;
     qi::rule<IteratorT, AST::IDWithin(), SkipperT> withinRule;
     qi::rule<IteratorT, AST::IDNot(), SkipperT> notRule;
+    qi::rule<IteratorT, AST::IDJoin(), SkipperT> joinRule;
     qi::rule<IteratorT, AST::IDSubscript(), SkipperT> subscriptRule;
 
     qi::rule<IteratorT, AST::IDWhere(), SkipperT> whereRule;
