@@ -32,6 +32,66 @@ void register_Select_class(){
         Select_exposer.def( bp::init< QString const & >(( bp::arg("str") ), "Construct a selection based on the passed string") );
         Select_exposer.def( bp::init< SireMol::Select const & >(( bp::arg("other") ), "Copy constructor") );
         Select_exposer.def( bp::self != bp::self );
+        { //::SireMol::Select::operator()
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::Select::*__call___function_type)( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Select::operator() );
+            
+            Select_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::Select::operator()
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::Select::*__call___function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Select::operator() );
+            
+            Select_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::Select::operator()
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::Select::*__call___function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Select::operator() );
+            
+            Select_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::Select::operator()
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::Select::*__call___function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Select::operator() );
+            
+            Select_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::Select::operator()
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::Select::*__call___function_type)( ::SireMol::SelectResult const &,::SireBase::PropertyMap const & ) const;
+            __call___function_type __call___function_value( &::SireMol::Select::operator() );
+            
+            Select_exposer.def( 
+                "__call__"
+                , __call___function_value
+                , ( bp::arg("result"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
         { //::SireMol::Select::operator=
         
             typedef ::SireMol::Select & ( ::SireMol::Select::*assign_function_type)( ::SireMol::Select const & ) ;

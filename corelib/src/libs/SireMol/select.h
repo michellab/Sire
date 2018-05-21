@@ -34,6 +34,16 @@
 
 #include "SireMol/viewsofmol.h"
 #include "SireMol/mover.hpp"
+#include "SireMol/atom.h"
+#include "SireMol/cutgroup.h"
+#include "SireMol/residue.h"
+#include "SireMol/chain.h"
+#include "SireMol/segment.h"
+#include "SireMol/partialmolecule.h"
+#include "SireMol/molecule.h"
+#include "SireMol/molecules.h"
+#include "SireMol/moleculegroup.h"
+#include "SireMol/moleculegroups.h"
 
 #include <boost/shared_ptr.hpp>
 
@@ -53,9 +63,6 @@ QDataStream& operator>>(QDataStream&, SireMol::Select&);
 
 QDataStream& operator<<(QDataStream&, const SireMol::SelectResult&);
 QDataStream& operator>>(QDataStream&, SireMol::SelectResult&);
-
-QDataStream& operator<<(QDataStream&, const SireMol::SelectResultMover&);
-QDataStream& operator>>(QDataStream&, SireMol::SelectResultMover&);
 
 namespace SireMol
 {
@@ -79,6 +86,9 @@ class SelectEngine
 public:
     SelectEngine();
     virtual ~SelectEngine();
+    
+    SelectResult operator()(const SelectResult &result,
+                            const PropertyMap &map = PropertyMap()) const;
     
     SelectResult operator()(const MolGroupsBase &molgroups,
                             const PropertyMap &map = PropertyMap()) const;
@@ -106,6 +116,9 @@ protected:
                                 const PropertyMap &map) const;
     
     virtual SelectResult select(const MolGroupsBase &molgroups,
+                                const PropertyMap &map) const;
+    
+    virtual SelectResult select(const SelectResult &result,
                                 const PropertyMap &map) const;
 };
 
@@ -154,6 +167,9 @@ public:
                             const PropertyMap &map = PropertyMap()) const;
     
     SelectResult operator()(const MoleculeView &molecule,
+                            const PropertyMap &map = PropertyMap()) const;
+
+    SelectResult operator()(const SelectResult &result,
                             const PropertyMap &map = PropertyMap()) const;
 
     static void setToken(const QString &token, const QString &selection);
@@ -229,10 +245,6 @@ private:
 class SIREMOL_EXPORT SelectResultMover
     : public SireBase::ConcreteProperty<SelectResultMover,SireBase::Property>
 {
-
-friend QDataStream& ::operator<<(QDataStream &ds, const SelectResultMover&);
-friend QDataStream& ::operator>>(QDataStream &ds, SelectResultMover&);
-
 public:
     SelectResultMover();
     SelectResultMover(const SelectResult &other);

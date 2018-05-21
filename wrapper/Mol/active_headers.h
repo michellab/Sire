@@ -90,6 +90,7 @@
 #include "molwithresid.h"
 #include "mover.h"
 #include "mover_metaid.h"
+#include "parser.h"
 #include "partialmolecule.h"
 #include "perturbation.h"
 #include "reseditor.h"

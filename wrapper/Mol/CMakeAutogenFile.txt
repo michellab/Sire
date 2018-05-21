@@ -81,6 +81,7 @@ set ( PYPP_SOURCES
        IDAndSet_MGID_.pypp.cpp
        BeadEditorBase.pypp.cpp
        MolStructureEditor.pypp.cpp
+       SelectResultMover.pypp.cpp
        Element.pypp.cpp
        IDOrSet_SegID_.pypp.cpp
        BeadIdx.pypp.cpp
@@ -197,6 +198,7 @@ set ( PYPP_SOURCES
        ResName.pypp.cpp
        ResProp.pypp.cpp
        ResID.pypp.cpp
+       SelectResult.pypp.cpp
        DihedralPerturbation.pypp.cpp
        MolAtomID.pypp.cpp
        CGStructureEditor.pypp.cpp

@@ -447,6 +447,10 @@
 
 #include "Select.pypp.hpp"
 
+#include "SelectResult.pypp.hpp"
+
+#include "SelectResultMover.pypp.hpp"
+
 #include "Selector_Atom_.pypp.hpp"
 
 #include "Selector_Chain_.pypp.hpp"
@@ -973,6 +977,10 @@ BOOST_PYTHON_MODULE(_Mol){
     register_SegsWithAtoms_class();
 
     register_Select_class();
+
+    register_SelectResult_class();
+
+    register_SelectResultMover_class();
 
     register_SpecifyMol_class();
 
