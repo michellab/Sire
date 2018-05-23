@@ -103,23 +103,7 @@ public:
                             const PropertyMap &map = PropertyMap()) const;
     
 protected:
-    virtual ViewsOfMol selectFromMolecule(const MoleculeView &molecule,
-                                          const PropertyMap &map) const=0;
-
-    virtual SelectResult select(const MoleculeView &molecule,
-                                const PropertyMap &map) const;
-
-    virtual SelectResult select(const Molecules &molecules,
-                                const PropertyMap &map) const;
-
-    virtual SelectResult select(const MoleculeGroup &molgroup,
-                                const PropertyMap &map) const;
-    
-    virtual SelectResult select(const MolGroupsBase &molgroups,
-                                const PropertyMap &map) const;
-    
-    virtual SelectResult select(const SelectResult &result,
-                                const PropertyMap &map) const;
+    virtual SelectResult select(const SelectResult &result, const PropertyMap &map) const=0;
 };
 
 using SelectEnginePtr = boost::shared_ptr<SelectEngine>;
@@ -195,6 +179,8 @@ friend QDataStream& ::operator<<(QDataStream &ds, const SelectResult&);
 friend QDataStream& ::operator>>(QDataStream &ds, SelectResult&);
 
 public:
+    typedef QList<ViewsOfMol> Container;
+
     SelectResult();
     
     SelectResult(const MolGroupsBase &molgroups);

@@ -31,6 +31,8 @@
 
 #include "SireMol/select.h"
 
+#include "ast.h"
+
 SIRE_BEGIN_HEADER
 
 namespace parser_idengine
@@ -38,16 +40,178 @@ namespace parser_idengine
 
 using SireMol::parser::SelectEngine;
 
+using SireMol::SelectResult;
+using SireBase::PropertyMap;
+
+using namespace AST;
+
 /** Internal class providing the SelectEngine for objects 
-    based on their IDs (names, numbers, indicies etc.) 
+    based on their names
     
     @author Christopher Woods
 */
-class IDEngine : public SelectEngine
+class IDNameEngine : public SelectEngine
 {
 public:
-    IDEngine();
-    ~IDEngine();
+    IDNameEngine( IDObject obj, NameValues vals );
+    ~IDNameEngine();
+    
+protected:
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+    
+private:
+    IDObject obj;
+    NameValues vals;
+};
+
+/** Internal class providing the SelectEngine for objects 
+    based on their numbers
+    
+    @author Christopher Woods
+*/
+class IDNumberEngine : public SelectEngine
+{
+public:
+    IDNumberEngine( IDObject obj, RangeValues vals );
+    ~IDNumberEngine();
+    
+protected:
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+    
+private:
+    IDObject obj;
+    RangeValues vals;
+};
+
+/** Internal class providing the SelectEngine for objects 
+    based on their indicies (index)
+    
+    @author Christopher Woods
+*/
+class IDIndexEngine : public SelectEngine
+{
+public:
+    IDIndexEngine( IDObject obj, RangeValues vals );
+    ~IDIndexEngine();
+    
+protected:
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+    
+private:
+    IDObject obj;
+    RangeValues vals;
+};
+
+/** Internal class providing the SelectEngine for objects 
+    in an "and" expression
+    
+    @author Christopher Woods
+*/
+class IDAndEngine : public SelectEngine
+{
+public:
+    IDAndEngine( const SelectEnginePtr &part0, const SelectEnginePtr &part1 );
+    ~IDAndEngine();
+    
+protected:
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+    
+private:
+    SelectEnginePtr part0, part1;
+};
+
+/** Internal class providing the SelectEngine for objects 
+    in an "or" expression
+    
+    @author Christopher Woods
+*/
+class IDOrEngine : public SelectEngine
+{
+public:
+    IDOrEngine( const SelectEnginePtr &part0, const SelectEnginePtr &part1 );
+    IDOrEngine( const QList<SelectEnginePtr> &parts );
+    ~IDOrEngine();
+    
+protected:
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+    
+private:
+    QList<SelectEnginePtr> parts;
+};
+
+/** Internal class providing the SelectEngine for objects 
+    in a "not" expression
+    
+    @author Christopher Woods
+*/
+class IDNotEngine : public SelectEngine
+{
+public:
+    IDNotEngine( const SelectEnginePtr &part );
+    ~IDNotEngine();
+    
+protected:
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+    
+private:
+    SelectEnginePtr part;
+};
+
+/** Internal class providing the SelectEngine for objects 
+    in a "join" expression
+    
+    @author Christopher Woods
+*/
+class IDJoinEngine : public SelectEngine
+{
+public:
+    IDJoinEngine( const SelectEnginePtr &part );
+    ~IDJoinEngine();
+    
+protected:
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+    
+private:
+    SelectEnginePtr part;
+};
+
+/** Internal class providing the SelectEngine for objects 
+    in a "subscript" expression
+    
+    @author Christopher Woods
+*/
+class IDSubScriptEngine : public SelectEngine
+{
+public:
+    IDSubScriptEngine( const SelectEnginePtr &part, const RangeValue &val );
+    ~IDSubScriptEngine();
+    
+protected:
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+    
+private:
+    SelectEnginePtr part;
+    RangeValue val;
+};
+
+/** Internal class providing the SelectEngine for objects 
+    in a "with" expression
+    
+    @author Christopher Woods
+*/
+class IDWithEngine : public SelectEngine
+{
+public:
+    IDWithEngine( IDObject obj, IDToken token, const SelectEnginePtr &part );
+    ~IDWithEngine();
+    
+protected:
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+    
+private:
+    IDObject obj;
+    IDToken token;
+    SelectEnginePtr part;
 };
 
 }

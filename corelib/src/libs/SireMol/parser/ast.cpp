@@ -29,6 +29,10 @@
 #include "ast.h"
 #include "idengine.h"
 
+#include "SireError/errors.h"
+
+using namespace parser_idengine;
+
 namespace AST
 {
     QString idobject_to_string(IDObject obj)
@@ -317,9 +321,21 @@ namespace AST
 
     SelectEnginePtr Node::toEngine() const
     {
-        //return vector of SelectEngines...
-    
-        return SelectEnginePtr();
+        if (values.size() == 0)
+            return SelectEnginePtr();
+        else if (values.size() == 1)
+            return values.at(0).toEngine();
+        else
+        {
+            QList<SelectEnginePtr> engines;
+        
+            for (const auto value : values)
+            {
+                engines.append( value.toEngine() );
+            }
+
+            return SelectEnginePtr( new IDOrEngine(engines) );
+        }
     }
 
     SelectEnginePtr Expression::toEngine() const
@@ -334,27 +350,43 @@ namespace AST
     
     SelectEnginePtr IDUser::toEngine() const
     {
-        return SelectEnginePtr();
+        return boost::apply_visitor( engine_visitor(), value );
     }
     
     SelectEnginePtr IDName::toEngine() const
     {
-        return SelectEnginePtr();
+        return SelectEnginePtr( new IDNameEngine(name,values) );
     }
     
     SelectEnginePtr IDNumber::toEngine() const
     {
-        return SelectEnginePtr();
+        switch(numtype)
+        {
+        case ID_NUMBER:
+            return SelectEnginePtr( new IDNumberEngine(name,values) );
+        case ID_INDEX:
+            return SelectEnginePtr( new IDIndexEngine(name,values) );
+        default:
+            return SelectEnginePtr();
+        }
     }
     
     SelectEnginePtr IDBinary::toEngine() const
     {
-        return SelectEnginePtr();
+        switch(operation)
+        {
+        case ID_AND:
+            return SelectEnginePtr( new IDAndEngine(part0.toEngine(),part1.toEngine()) );
+        case ID_OR:
+            return SelectEnginePtr( new IDOrEngine(part0.toEngine(),part1.toEngine()) );
+        default:
+            return SelectEnginePtr();
+        }
     }
     
     SelectEnginePtr IDWith::toEngine() const
     {
-        return SelectEnginePtr();
+        return SelectEnginePtr( new IDWithEngine(name, token, value.toEngine()) );
     }
     
     SelectEnginePtr IDWhereWithin::toEngine() const
@@ -374,17 +406,17 @@ namespace AST
 
     SelectEnginePtr IDJoin::toEngine() const
     {
-        return SelectEnginePtr();
+        return SelectEnginePtr( new IDJoinEngine(value.toEngine()) );
     }
 
     SelectEnginePtr IDNot::toEngine() const
     {
-        return SelectEnginePtr();
+        return SelectEnginePtr( new IDNotEngine(value.toEngine()) );
     }
     
     SelectEnginePtr IDSubscript::toEngine() const
     {
-        return SelectEnginePtr();
+        return SelectEnginePtr( new IDSubScriptEngine(value.toEngine(),range) );
     }
     
     SelectEnginePtr IDWithin::toEngine() const

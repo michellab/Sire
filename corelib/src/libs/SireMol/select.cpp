@@ -51,105 +51,31 @@ SireMol::parser::SelectEngine::~SelectEngine()
 SelectResult SireMol::parser::SelectEngine::operator()(const MolGroupsBase &molgroups,
                                                        const PropertyMap &map) const
 {
-    return this->select(molgroups, map);
+    return this->select( SelectResult(molgroups), map);
 }
 
 SelectResult SireMol::parser::SelectEngine::operator()(const MoleculeGroup &molgroup,
                                                        const PropertyMap &map) const
 {
-    return this->select(molgroup, map);
+    return this->select( SelectResult(molgroup), map);
 }
 
 SelectResult SireMol::parser::SelectEngine::operator()(const Molecules &molecules,
                                                        const PropertyMap &map) const
 {
-    return this->select(molecules, map);
+    return this->select( SelectResult(molecules), map);
 }
 
 SelectResult SireMol::parser::SelectEngine::operator()(const MoleculeView &molecule,
                                                        const PropertyMap &map) const
 {
-    return this->select(molecule, map);
+    return this->select( SelectResult(molecule), map);
 }
 
 SelectResult SireMol::parser::SelectEngine::operator()(const SelectResult &result,
                                                        const PropertyMap &map) const
 {
     return this->select(result, map);
-}
-
-SelectResult SireMol::parser::SelectEngine::select(const MoleculeView &molecule,
-                                                   const PropertyMap &map) const
-{
-    ViewsOfMol views = this->selectFromMolecule(molecule, map);
-    
-    if (views.isEmpty())
-        return SelectResult();
-    else
-    {
-        QList<ViewsOfMol> result;
-        result.append(views);
-        return SelectResult(views);
-    }
-}
-
-SelectResult SireMol::parser::SelectEngine::select(const Molecules &molecules,
-                                                   const PropertyMap &map) const
-{
-    //loop through in molecule number order so that we are consistent
-    //every time we run this search
-    auto molnums = molecules.molNums().toList();
-    qSort(molnums);
-    
-    QList<ViewsOfMol> result;
-    
-    for (const auto molnum : molnums)
-    {
-        auto views = this->selectFromMolecule( molecules[molnum], map );
-        
-        if (not views.isEmpty())
-            result.append(views);
-    }
-    
-    return SelectResult(result);
-}
-
-SelectResult SireMol::parser::SelectEngine::select(const MoleculeGroup &molgroup,
-                                                   const PropertyMap &map) const
-{
-    QList<ViewsOfMol> result;
-    
-    for (int i=0; i<molgroup.nMolecules(); ++i)
-    {
-        auto views = this->selectFromMolecule( molgroup.moleculeAt(i), map );
-        
-        if (not views.isEmpty())
-            result.append(views);
-    }
-    
-    return SelectResult(result);
-}
-
-SelectResult SireMol::parser::SelectEngine::select(const MolGroupsBase &molgroups,
-                                                   const PropertyMap &map) const
-{
-    return this->select(molgroups.molecules(), map);
-}
-
-SelectResult SireMol::parser::SelectEngine::select(const SelectResult &mols,
-                                                   const PropertyMap &map) const
-{
-    QList<ViewsOfMol> result;
-    
-    for (const auto view : mols.views())
-    {
-        auto views = this->selectFromMolecule(view,map);
-        
-        if (not views.isEmpty())
-            result.append(views);
-    }
-    
-    return SelectResult(result);
 }
 
 ///////////
