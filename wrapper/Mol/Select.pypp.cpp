@@ -31,6 +31,17 @@ void register_Select_class(){
         bp::scope Select_scope( Select_exposer );
         Select_exposer.def( bp::init< QString const & >(( bp::arg("str") ), "Construct a selection based on the passed string") );
         Select_exposer.def( bp::init< SireMol::Select const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireMol::Select::objectType
+        
+            typedef ::QString ( ::SireMol::Select::*objectType_function_type)(  ) const;
+            objectType_function_type objectType_function_value( &::SireMol::Select::objectType );
+            
+            Select_exposer.def( 
+                "objectType"
+                , objectType_function_value
+                , "" );
+        
+        }
         Select_exposer.def( bp::self != bp::self );
         { //::SireMol::Select::operator()
         

@@ -75,6 +75,12 @@ class ViewsOfMol;
 
 namespace parser
 {
+
+class SelectEngine;
+
+using SelectEnginePtr = boost::shared_ptr<SelectEngine>;
+using SelectEngineWeakPtr = boost::weak_ptr<SelectEngine>;
+
 /** This is the base class of all of the select objects. It is a private
     object that should only be used by Select
 
@@ -84,7 +90,14 @@ class SelectEngine
 {
 
 public:
-    SelectEngine();
+    enum ObjType { COMPLEX = 0,
+                   ATOM = 1,
+                   CUTGROUP = 2,
+                   RESIDUE = 3,
+                   CHAIN = 4,
+                   SEGMENT = 5,
+                   MOLECULE = 6 };
+
     virtual ~SelectEngine();
     
     SelectResult operator()(const SelectResult &result,
@@ -102,11 +115,33 @@ public:
     SelectResult operator()(const MoleculeView &molecule,
                             const PropertyMap &map = PropertyMap()) const;
     
+    virtual SelectEnginePtr simplify();
+    
+    virtual bool usesCoordinates() const;
+    
+    bool hasParent() const;
+    
+    SelectEnginePtr self();
+    
+    void setParent(SelectEnginePtr parent) const;
+    
+    virtual ObjType objectType() const=0;
+    
 protected:
-    virtual SelectResult select(const SelectResult &result, const PropertyMap &map) const=0;
-};
+    SelectEngine();
 
-using SelectEnginePtr = boost::shared_ptr<SelectEngine>;
+    virtual SelectResult select(const SelectResult &result, const PropertyMap &map) const=0;
+    
+    virtual SelectResult expand(const SelectResult &result) const;
+
+    static SelectEnginePtr makePtr(SelectEngine *ptr);
+    
+    /** The parent engine */
+    SelectEngineWeakPtr parent;
+    
+    /** Weak pointer to self */
+    SelectEngineWeakPtr selfptr;
+};
 
 } //end of namespace parser
 
@@ -140,6 +175,8 @@ public:
     static const char* typeName();
     
     QString toString() const;
+
+    QString objectType() const;
 
     SelectResult operator()(const MolGroupsBase &molgroups,
                             const PropertyMap &map = PropertyMap()) const;

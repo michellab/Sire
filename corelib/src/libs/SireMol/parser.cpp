@@ -177,9 +177,12 @@ namespace SireMol
         {
             auto ast = ::parse_main( str.toStdString() );
             
-            qDebug() << ast.toString();
+            auto engine = ast.toEngine();
             
-            return ast.toEngine();
+            if (engine.get())
+                engine = engine->simplify();
+            
+            return engine;
         }
         
         /** Internal function used to associate a named token with the

@@ -56,10 +56,13 @@ using namespace AST;
 class IDNameEngine : public SelectEngine
 {
 public:
-    IDNameEngine( IDObject obj, NameValues vals );
+    static SelectEnginePtr construct( IDObject obj, NameValues vals );
     ~IDNameEngine();
     
+    ObjType objectType() const;
+    
 protected:
+    IDNameEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
     
 private:
@@ -83,10 +86,13 @@ private:
 class IDNumberEngine : public SelectEngine
 {
 public:
-    IDNumberEngine( IDObject obj, RangeValues vals );
+    static SelectEnginePtr construct( IDObject obj, RangeValues vals );
     ~IDNumberEngine();
+
+    ObjType objectType() const;
     
 protected:
+    IDNumberEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
     
 private:
@@ -102,10 +108,13 @@ private:
 class IDIndexEngine : public SelectEngine
 {
 public:
-    IDIndexEngine( IDObject obj, RangeValues vals );
+    static SelectEnginePtr construct( IDObject obj, RangeValues vals );
     ~IDIndexEngine();
     
+    ObjType objectType() const;
+
 protected:
+    IDIndexEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
     
 private:
@@ -121,10 +130,15 @@ private:
 class IDAndEngine : public SelectEngine
 {
 public:
-    IDAndEngine( const SelectEnginePtr &part0, const SelectEnginePtr &part1 );
+    static SelectEnginePtr construct(SelectEnginePtr part0, SelectEnginePtr part1);
     ~IDAndEngine();
+
+    ObjType objectType() const;
+    
+    SelectEnginePtr simplify();
     
 protected:
+    IDAndEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
     
 private:
@@ -139,11 +153,16 @@ private:
 class IDOrEngine : public SelectEngine
 {
 public:
-    IDOrEngine( const SelectEnginePtr &part0, const SelectEnginePtr &part1 );
-    IDOrEngine( const QList<SelectEnginePtr> &parts );
+    static SelectEnginePtr construct(SelectEnginePtr part0, SelectEnginePtr part1);
+    static SelectEnginePtr construct(QList<SelectEnginePtr> parts);
     ~IDOrEngine();
-    
+
+    ObjType objectType() const;
+
+    SelectEnginePtr simplify();
+
 protected:
+    IDOrEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
     
 private:
@@ -158,10 +177,15 @@ private:
 class IDNotEngine : public SelectEngine
 {
 public:
-    IDNotEngine( const SelectEnginePtr &part );
+    static SelectEnginePtr construct(SelectEnginePtr part);
     ~IDNotEngine();
+
+    ObjType objectType() const;
+
+    SelectEnginePtr simplify();
     
 protected:
+    IDNotEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
     
 private:
@@ -176,10 +200,15 @@ private:
 class IDJoinEngine : public SelectEngine
 {
 public:
-    IDJoinEngine( const SelectEnginePtr &part );
+    static SelectEnginePtr construct(SelectEnginePtr part);
     ~IDJoinEngine();
+
+    ObjType objectType() const;
+
+    SelectEnginePtr simplify();
     
 protected:
+    IDJoinEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
     
 private:
@@ -194,10 +223,15 @@ private:
 class IDSubScriptEngine : public SelectEngine
 {
 public:
-    IDSubScriptEngine( const SelectEnginePtr &part, const RangeValue &val );
+    static SelectEnginePtr construct(SelectEnginePtr part, const RangeValue &val);
     ~IDSubScriptEngine();
+
+    ObjType objectType() const;
+
+    SelectEnginePtr simplify();
     
 protected:
+    IDSubScriptEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
     
 private:
@@ -213,10 +247,15 @@ private:
 class IDWithEngine : public SelectEngine
 {
 public:
-    IDWithEngine( IDObject obj, IDToken token, const SelectEnginePtr &part );
+    static SelectEnginePtr construct( IDObject obj, IDToken token, SelectEnginePtr part);
     ~IDWithEngine();
-    
+
+    ObjType objectType() const;
+
+    SelectEnginePtr simplify();
+
 protected:
+    IDWithEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
     
 private:

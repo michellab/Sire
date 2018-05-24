@@ -68,15 +68,15 @@ void register_SelectResultMover_class(){
         }
         { //::SireMol::SelectResultMover::translate
         
-       //     typedef ::SireMol::SelectResultMover & ( ::SireMol::SelectResultMover::*translate_function_type)( ::SireMaths::Vector const & ) ;
-       //     translate_function_type translate_function_value( &::SireMol::SelectResultMover::translate );
+            typedef ::SireMol::SelectResultMover & ( ::SireMol::SelectResultMover::*translate_function_type)( ::SireMaths::Vector const & ) ;
+            translate_function_type translate_function_value( &::SireMol::SelectResultMover::translate );
             
-       //     SelectResultMover_exposer.def( 
-       //         "translate"
-       //         , translate_function_value
-       //         , ( bp::arg("delta") )
-       //             /* undefined call policies */
-       //         , "" );
+            SelectResultMover_exposer.def( 
+                "translate"
+                , translate_function_value
+                , ( bp::arg("delta") )
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::SelectResultMover::typeName

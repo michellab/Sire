@@ -48,34 +48,83 @@ SireMol::parser::SelectEngine::SelectEngine()
 SireMol::parser::SelectEngine::~SelectEngine()
 {}
 
-SelectResult SireMol::parser::SelectEngine::operator()(const MolGroupsBase &molgroups,
-                                                       const PropertyMap &map) const
+/** Return the pointer to self */
+SireMol::parser::SelectEnginePtr SireMol::parser::SelectEngine::self()
 {
-    return this->select( SelectResult(molgroups), map);
-}
-
-SelectResult SireMol::parser::SelectEngine::operator()(const MoleculeGroup &molgroup,
-                                                       const PropertyMap &map) const
-{
-    return this->select( SelectResult(molgroup), map);
-}
-
-SelectResult SireMol::parser::SelectEngine::operator()(const Molecules &molecules,
-                                                       const PropertyMap &map) const
-{
-    return this->select( SelectResult(molecules), map);
-}
-
-SelectResult SireMol::parser::SelectEngine::operator()(const MoleculeView &molecule,
-                                                       const PropertyMap &map) const
-{
-    return this->select( SelectResult(molecule), map);
+    return selfptr.lock();
 }
 
 SelectResult SireMol::parser::SelectEngine::operator()(const SelectResult &result,
                                                        const PropertyMap &map) const
 {
-    return this->select(result, map);
+    SelectResult r = this->select(result, map);
+    
+    if (hasParent())
+        return r;
+    else
+        return this->expand(r);
+}
+
+SelectResult SireMol::parser::SelectEngine::operator()(const MolGroupsBase &molgroups,
+                                                       const PropertyMap &map) const
+{
+    return this->operator()( SelectResult(molgroups), map );
+}
+
+SelectResult SireMol::parser::SelectEngine::operator()(const MoleculeGroup &molgroup,
+                                                       const PropertyMap &map) const
+{
+    return this->operator()( SelectResult(molgroup), map);
+}
+
+SelectResult SireMol::parser::SelectEngine::operator()(const Molecules &molecules,
+                                                       const PropertyMap &map) const
+{
+    return this->operator()( SelectResult(molecules), map);
+}
+
+SelectResult SireMol::parser::SelectEngine::operator()(const MoleculeView &molecule,
+                                                       const PropertyMap &map) const
+{
+    return this->operator()( SelectResult(molecule), map);
+}
+
+/** Internal function used to set the parent of this engine */
+void SireMol::parser::SelectEngine::setParent(SireMol::parser::SelectEnginePtr ptr) const
+{
+    const_cast<SireMol::parser::SelectEngine*>(this)->parent = ptr;
+}
+
+/** Internal function used to make a shared pointer out of the passed pointer */
+SireMol::parser::SelectEnginePtr SireMol::parser::SelectEngine::makePtr(SelectEngine *ptr)
+{
+    SelectEnginePtr p(ptr);
+    ptr->selfptr = p;
+    return p;
+}
+
+/** Return a simplified version of this engine (e.g. remove double-nots etc.) */
+SireMol::parser::SelectEnginePtr SireMol::parser::SelectEngine::simplify()
+{
+    return selfptr.lock();
+}
+
+/** Return whether or not this selection depends on coordinates of atoms */
+bool SireMol::parser::SelectEngine::usesCoordinates() const
+{
+    return false;
+}
+
+/** Return whether or not this engine has a parent */
+bool SireMol::parser::SelectEngine::hasParent() const
+{
+    return parent.lock().get() != 0;
+}
+
+/** Expand the passed SelectResult based on the selection type of this SelectEngine */
+SelectResult SireMol::parser::SelectEngine::expand(const SelectResult &result) const
+{
+    return result;
 }
 
 ///////////
@@ -213,14 +262,48 @@ SelectResult Select::operator()(const SelectResult &result,
         return SelectResult();
 }
 
+/** Set a user token that will be substituted for the passed selection, e.g.
+
+    setToken("protein", "molecules with resname /ala/i")
+    
+    would allow you to use "protein" to refer to any molecules that contain
+    residues called /ala/i
+    
+    Note that the token is set globally for all searches
+*/
 void Select::setToken(const QString &token, const QString &selection)
 {
     SireMol::parser::set_token(token, selection);
 }
 
+/** Clear all user-set tokens */
 void Select::resetTokens()
 {
     SireMol::parser::reset_tokens();
+}
+
+QString Select::objectType() const
+{
+    if (e.get() == 0)
+        return QObject::tr("nothing");
+    
+    switch(e->objectType())
+    {
+    case SireMol::parser::SelectEngine::COMPLEX:
+        return QObject::tr("complex view");
+    case SireMol::parser::SelectEngine::ATOM:
+        return QObject::tr("atoms");
+    case SireMol::parser::SelectEngine::CUTGROUP:
+        return QObject::tr("cutgroups");
+    case SireMol::parser::SelectEngine::RESIDUE:
+        return QObject::tr("residues");
+    case SireMol::parser::SelectEngine::CHAIN:
+        return QObject::tr("chains");
+    case SireMol::parser::SelectEngine::SEGMENT:
+        return QObject::tr("segments");
+    case SireMol::parser::SelectEngine::MOLECULE:
+        return QObject::tr("molecules");
+    }
 }
 
 QString Select::toString() const
@@ -230,7 +313,7 @@ QString Select::toString() const
         return QObject::tr("Select::null");
     }
     else
-        return QObject::tr("Select( %1 )").arg(search_string);
+        return QObject::tr("Select( %1, result=%2 )").arg(search_string).arg(objectType());
 }
 
 ///////////

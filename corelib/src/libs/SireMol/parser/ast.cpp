@@ -334,7 +334,7 @@ namespace AST
                 engines.append( value.toEngine() );
             }
 
-            return SelectEnginePtr( new IDOrEngine(engines) );
+            return IDOrEngine::construct(engines);
         }
     }
 
@@ -355,7 +355,7 @@ namespace AST
     
     SelectEnginePtr IDName::toEngine() const
     {
-        return SelectEnginePtr( new IDNameEngine(name,values) );
+        return IDNameEngine::construct(name,values);
     }
     
     SelectEnginePtr IDNumber::toEngine() const
@@ -363,9 +363,9 @@ namespace AST
         switch(numtype)
         {
         case ID_NUMBER:
-            return SelectEnginePtr( new IDNumberEngine(name,values) );
+            return IDNumberEngine::construct(name,values);
         case ID_INDEX:
-            return SelectEnginePtr( new IDIndexEngine(name,values) );
+            return IDIndexEngine::construct(name,values);
         default:
             return SelectEnginePtr();
         }
@@ -376,9 +376,9 @@ namespace AST
         switch(operation)
         {
         case ID_AND:
-            return SelectEnginePtr( new IDAndEngine(part0.toEngine(),part1.toEngine()) );
+            return IDAndEngine::construct(part0.toEngine(),part1.toEngine());
         case ID_OR:
-            return SelectEnginePtr( new IDOrEngine(part0.toEngine(),part1.toEngine()) );
+            return IDOrEngine::construct(part0.toEngine(),part1.toEngine());
         default:
             return SelectEnginePtr();
         }
@@ -386,7 +386,7 @@ namespace AST
     
     SelectEnginePtr IDWith::toEngine() const
     {
-        return SelectEnginePtr( new IDWithEngine(name, token, value.toEngine()) );
+        return IDWithEngine::construct(name, token, value.toEngine());
     }
     
     SelectEnginePtr IDWhereWithin::toEngine() const
@@ -406,17 +406,17 @@ namespace AST
 
     SelectEnginePtr IDJoin::toEngine() const
     {
-        return SelectEnginePtr( new IDJoinEngine(value.toEngine()) );
+        return IDJoinEngine::construct(value.toEngine());
     }
 
     SelectEnginePtr IDNot::toEngine() const
     {
-        return SelectEnginePtr( new IDNotEngine(value.toEngine()) );
+        return IDNotEngine::construct(value.toEngine());
     }
     
     SelectEnginePtr IDSubscript::toEngine() const
     {
-        return SelectEnginePtr( new IDSubScriptEngine(value.toEngine(),range) );
+        return IDSubScriptEngine::construct(value.toEngine(),range);
     }
     
     SelectEnginePtr IDWithin::toEngine() const
