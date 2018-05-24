@@ -528,6 +528,25 @@ SelectResultMover SelectResult::move() const
     return SelectResultMover(*this);
 }
 
+SelectResult::const_iterator SelectResult::begin() const
+{
+    return molviews.begin();
+}
+
+SelectResult::const_iterator SelectResult::end() const
+{
+    return molviews.end();
+}
+
+SelectResult::const_iterator SelectResult::constBegin() const
+{
+    return begin();
+}
+
+SelectResult::const_iterator SelectResult::constEnd() const
+{
+    return end();
+}
 ///////////
 /////////// Implementation of SelectResult
 ///////////

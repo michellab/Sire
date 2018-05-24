@@ -39,49 +39,75 @@ using namespace parser_idengine;
 //////// Implementation of the IDNameEngine
 ////////
 
-IDNameEngine::IDNameEngine(IDObject o, NameValues v)
-             : SelectEngine(), obj(o), vals(v)
-{}
+IDNameEngine::IDNameEngine(IDObject o, NameValues vals)
+             : SelectEngine(), obj(o)
+{
+    for (const auto val : vals)
+    {
+        if (val.value.which() == 0)
+        {
+            RegExpValue v = boost::get<RegExpValue>(val.value);
+            QString r = QString::fromStdString(v.value);
+            
+            if (v.is_case_sensitive)
+                regexps.append( QRegExp(r, Qt::CaseSensitive) );
+            else
+                regexps.append( QRegExp(r, Qt::CaseInsensitive) );
+        }
+        else if (val.value.which() == 1)
+            names.append( QString::fromStdString(boost::get<std::string>(val.value)) );
+    }
+}
 
 IDNameEngine::~IDNameEngine()
 {}
 
-SelectResult selectAtom(const NameValues &vals, const SelectResult &mols)
+SelectResult IDNameEngine::selectAtoms(const SelectResult &mols) const
+{
+    SelectResult::Container result;
+    
+    for (const auto mol : mols)
+    {
+        QSet<AtomIdx> atoms;
+        
+        for (const auto name : names)
+        {
+            
+        }
+    }
+    
+    return result;
+}
+
+SelectResult IDNameEngine::selectCutGroups(const SelectResult &mols) const
 {
     SelectResult::Container result;
     
     return result;
 }
 
-SelectResult selectCutGroup(const NameValues &vals, const SelectResult &mols)
+SelectResult IDNameEngine::selectResidues(const SelectResult &mols) const
 {
     SelectResult::Container result;
     
     return result;
 }
 
-SelectResult selectResidue(const NameValues &vals, const SelectResult &mols)
+SelectResult IDNameEngine::selectChains(const SelectResult &mols) const
 {
     SelectResult::Container result;
     
     return result;
 }
 
-SelectResult selectChain(const NameValues &vals, const SelectResult &mols)
+SelectResult IDNameEngine::selectSegments(const SelectResult &mols) const
 {
     SelectResult::Container result;
     
     return result;
 }
 
-SelectResult selectSegment(const NameValues &vals, const SelectResult &mols)
-{
-    SelectResult::Container result;
-    
-    return result;
-}
-
-SelectResult selectMolecule(const NameValues &vals, const SelectResult &mols)
+SelectResult IDNameEngine::selectMolecules(const SelectResult &mols) const
 {
     SelectResult::Container result;
     
@@ -92,22 +118,20 @@ SelectResult IDNameEngine::select(const SelectResult &mols, const PropertyMap&) 
 {
     SelectResult::Container result;
     
-    qDebug() << CODELOC;
-    
     switch(obj)
     {
     case ATOM:
-        return selectAtom(vals, mols);
+        return selectAtoms(mols);
     case CUTGROUP:
-        return selectCutGroup(vals, mols);
+        return selectCutGroups(mols);
     case RESIDUE:
-        return selectResidue(vals, mols);
+        return selectResidues(mols);
     case CHAIN:
-        return selectChain(vals, mols);
+        return selectChains(mols);
     case SEGMENT:
-        return selectSegment(vals, mols);
+        return selectSegments(mols);
     case MOLECULE:
-        return selectMolecule(vals, mols);
+        return selectMolecules(mols);
     default:
         return SelectResult();
     }

@@ -180,6 +180,8 @@ friend QDataStream& ::operator>>(QDataStream &ds, SelectResult&);
 
 public:
     typedef QList<ViewsOfMol> Container;
+    typedef Container::const_iterator const_iterator;
+    typedef const_iterator iterator;
 
     SelectResult();
     
@@ -202,6 +204,12 @@ public:
     static const char* typeName();
     
     const char* what() const;
+    
+    const_iterator begin() const;
+    const_iterator end() const;
+    
+    const_iterator constBegin() const;
+    const_iterator constEnd() const;
     
     SelectResult* clone() const;
 

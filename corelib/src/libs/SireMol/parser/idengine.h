@@ -33,6 +33,9 @@
 
 #include "ast.h"
 
+#include <QString>
+#include <QRegExp>
+
 SIRE_BEGIN_HEADER
 
 namespace parser_idengine
@@ -60,8 +63,16 @@ protected:
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
     
 private:
+    SelectResult selectAtoms(const SelectResult &mols) const;
+    SelectResult selectCutGroups(const SelectResult &mols) const;
+    SelectResult selectResidues(const SelectResult &mols) const;
+    SelectResult selectChains(const SelectResult &mols) const;
+    SelectResult selectSegments(const SelectResult &mols) const;
+    SelectResult selectMolecules(const SelectResult &mols) const;
+
     IDObject obj;
-    NameValues vals;
+    QStringList names;
+    QList<QRegExp> regexps;
 };
 
 /** Internal class providing the SelectEngine for objects 
