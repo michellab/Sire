@@ -98,11 +98,50 @@ SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
 IDNameEngine::~IDNameEngine()
 {}
 
+/** Function used to find the matching parts in mols using 'searchFunction' */
+template<class T>
+SelectResult searchForMatch(const SelectResult &mols, const T &searchFunction, bool uses_parallel)
+{
+    //now loop through all of the molecules and find the matching atoms
+    SelectResult::Container result;
+    
+    if (uses_parallel)
+    {
+        QVector<ViewsOfMol> tmpresult(mols.count());
+        const auto molviews = mols.views();
+
+        tbb::parallel_for( tbb::blocked_range<int>(0,mols.count()),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                tmpresult[i] = searchFunction(molviews[i]);
+            }
+        });
+        
+        for (const auto &r : tmpresult)
+        {
+            if (not r.isEmpty())
+                result.append(r);
+        }
+    }
+    else
+    {
+        for (const auto mol : mols)
+        {
+            auto match = searchFunction(mol);
+            
+            if (not match.isEmpty())
+                result.append(match);
+        }
+    }
+
+    return result;
+}
+
 /** Function used to find all of the atoms that match by name */
 SelectResult IDNameEngine::selectAtoms(const SelectResult &mols, bool uses_parallel) const
 {
-    uses_parallel = false;
-
     // function that finds all of the atoms that have been selected from the molecule
     auto selectFromMol = [&](const ViewsOfMol &mol)
     {
@@ -228,76 +267,563 @@ SelectResult IDNameEngine::selectAtoms(const SelectResult &mols, bool uses_paral
         }
     };
     
-    //now loop through all of the molecules and find the matching atoms
-    SelectResult::Container result;
-    
-    if (uses_parallel)
-    {
-        QVector<ViewsOfMol> tmpresult(mols.count());
-        const auto molviews = mols.views();
-
-        tbb::parallel_for( tbb::blocked_range<int>(0,mols.count()),
-                           [&](const tbb::blocked_range<int> &r)
-        {
-            for (int i=r.begin(); i<r.end(); ++i)
-            {
-                tmpresult[i] = selectFromMol(molviews[i]);
-            }
-        });
-        
-        for (const auto &r : tmpresult)
-        {
-            if (not r.isEmpty())
-                result.append(r);
-        }
-    }
-    else
-    {
-        for (const auto mol : mols)
-        {
-            auto match = selectFromMol(mol);
-            
-            if (not match.isEmpty())
-                result.append(match);
-        }
-    }
-
-    return result;
+    return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
 SelectResult IDNameEngine::selectCutGroups(const SelectResult &mols, bool uses_parallel) const
 {
-    SelectResult::Container result;
+    // function that finds all of the cutgroups that have been selected from the molecule
+    auto selectFromMol = [&](const ViewsOfMol &mol)
+    {
+        const auto molinfo = mol.data().info();
+
+        // function that tests whether or not the passed cutgroup has been selected
+        auto selectFromCutGroup = [&](const CGIdx &idx)
+        {
+            const auto cgname = molinfo.name(idx).value();
+
+            //try all of the fixed names
+            for (const auto name : names)
+            {
+                if (name == cgname)
+                {
+                    //name matches exactly
+                    return true;
+                }
+            }
+            
+            //now try all of the regexps
+            for (const auto regexp : regexps)
+            {
+                auto match = regexp.match(cgname);
+                
+                if (match.hasMatch())
+                {
+                    //we have a regexp match :-)
+                    return true;
+                }
+            }
+            
+            return false;
+        };
+
+        QList<CGIdx> selected_cutgroups;
+
+        if (mol.selectedAll())
+        {
+            const int ncgs = molinfo.nCutGroups();
+        
+            if (uses_parallel)
+            {
+                QMutex mutex;
+            
+                tbb::parallel_for( tbb::blocked_range<int>(0,ncgs),
+                                   [&](const tbb::blocked_range<int> &r)
+                {
+                    QList<CGIdx> cutgroups;
+                    
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        const CGIdx idx(i);
+                        
+                        if (selectFromCutGroup(idx))
+                            cutgroups.append(idx);
+                    }
+                    
+                    QMutexLocker lkr(&mutex);
+                    selected_cutgroups += cutgroups;
+                });
+            }
+            else
+            {
+                for (int i=0; i<ncgs; ++i)
+                {
+                    const CGIdx idx(i);
+                
+                    if (selectFromCutGroup(idx))
+                        selected_cutgroups.append(idx);
+                }
+            }
+        }
+        else
+        {
+            const auto view_cutgroups = mol.selection().selectedCutGroups();
+            
+            if (uses_parallel)
+            {
+                QMutex mutex;
+            
+                tbb::parallel_for( tbb::blocked_range<int>(0,view_cutgroups.count()),
+                                   [&](const tbb::blocked_range<int> &r)
+                {
+                    QList<CGIdx> cutgroups;
+                    
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        const auto cutgroup = view_cutgroups[i];
+                    
+                        if (selectFromCutGroup(cutgroup))
+                            cutgroups.append(cutgroup);
+                    }
+                    
+                    QMutexLocker lkr(&mutex);
+                    selected_cutgroups += cutgroups;
+                });
+            }
+            else
+            {
+                for (const auto cutgroup : view_cutgroups)
+                {
+                    if (selectFromCutGroup(cutgroup))
+                        selected_cutgroups.append(cutgroup);
+                }
+            }
+        }
+        
+        if (selected_cutgroups.isEmpty())
+            //no cutgroups matched
+            return ViewsOfMol();
+        else if (selected_cutgroups.count() == 1)
+            //only a single cutgroup matched
+            return ViewsOfMol( CutGroup(mol.data(),selected_cutgroups[0]) );
+        else if (selected_cutgroups.count() == molinfo.nCutGroups())
+            //the entire molecule matched
+            return ViewsOfMol( mol.molecule() );
+        else
+        {
+            //a subset of the molecule matches
+            return ViewsOfMol( mol.data(),
+                               Selector<CutGroup>(mol.data(),selected_cutgroups).selection() );
+        }
+    };
     
-    return result;
+    return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
 SelectResult IDNameEngine::selectResidues(const SelectResult &mols, bool uses_parallel) const
 {
-    SelectResult::Container result;
+    // function that finds all of the atoms that have been selected from the molecule
+    auto selectFromMol = [&](const ViewsOfMol &mol)
+    {
+        const auto molinfo = mol.data().info();
+
+        // function that tests whether or not the passed residue has been selected
+        auto selectFromResidue = [&](const ResIdx &idx)
+        {
+            const auto resname = molinfo.name(idx).value();
+
+            //try all of the fixed names
+            for (const auto name : names)
+            {
+                if (name == resname)
+                {
+                    //name matches exactly
+                    return true;
+                }
+            }
+            
+            //now try all of the regexps
+            for (const auto regexp : regexps)
+            {
+                auto match = regexp.match(resname);
+                
+                if (match.hasMatch())
+                {
+                    //we have a regexp match :-)
+                    return true;
+                }
+            }
+            
+            return false;
+        };
+
+        QList<ResIdx> selected_residues;
+
+        if (mol.selectedAll())
+        {
+            const int nres = molinfo.nResidues();
+        
+            if (uses_parallel)
+            {
+                QMutex mutex;
+            
+                tbb::parallel_for( tbb::blocked_range<int>(0,nres),
+                                   [&](const tbb::blocked_range<int> &r)
+                {
+                    QList<ResIdx> residues;
+                    
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        const ResIdx idx(i);
+                        
+                        if (selectFromResidue(idx))
+                            residues.append(idx);
+                    }
+                    
+                    QMutexLocker lkr(&mutex);
+                    selected_residues += residues;
+                });
+            }
+            else
+            {
+                for (int i=0; i<nres; ++i)
+                {
+                    const ResIdx idx(i);
+                
+                    if (selectFromResidue(idx))
+                        selected_residues.append(idx);
+                }
+            }
+        }
+        else
+        {
+            const auto view_residues = mol.selection().selectedResidues();
+            
+            if (uses_parallel)
+            {
+                QMutex mutex;
+            
+                tbb::parallel_for( tbb::blocked_range<int>(0,view_residues.count()),
+                                   [&](const tbb::blocked_range<int> &r)
+                {
+                    QList<ResIdx> residues;
+                    
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        const auto residue = view_residues[i];
+                    
+                        if (selectFromResidue(residue))
+                            residues.append(residue);
+                    }
+                    
+                    QMutexLocker lkr(&mutex);
+                    selected_residues += residues;
+                });
+            }
+            else
+            {
+                for (const auto residue : view_residues)
+                {
+                    if (selectFromResidue(residue))
+                        selected_residues.append(residue);
+                }
+            }
+        }
+        
+        if (selected_residues.isEmpty())
+            //no residues matched
+            return ViewsOfMol();
+        else if (selected_residues.count() == 1)
+            //only a single residue matched
+            return ViewsOfMol( Residue(mol.data(),selected_residues[0]) );
+        else if (selected_residues.count() == molinfo.nResidues())
+            //the entire molecule matched
+            return ViewsOfMol( mol.molecule() );
+        else
+        {
+            //a subset of the molecule matches
+            return ViewsOfMol( mol.data(),
+                               Selector<Residue>(mol.data(),selected_residues).selection() );
+        }
+    };
     
-    return result;
+    return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
 SelectResult IDNameEngine::selectChains(const SelectResult &mols, bool uses_parallel) const
 {
-    SelectResult::Container result;
-    
-    return result;
+    // function that finds all of the atoms that have been selected from the molecule
+    auto selectFromMol = [&](const ViewsOfMol &mol)
+    {
+        const auto molinfo = mol.data().info();
+
+        // function that tests whether or not the passed chain has been selected
+        auto selectFromChain = [&](const ChainIdx &idx)
+        {
+            const auto chainname = molinfo.name(idx).value();
+
+            //try all of the fixed names
+            for (const auto name : names)
+            {
+                if (name == chainname)
+                {
+                    //name matches exactly
+                    return true;
+                }
+            }
+            
+            //now try all of the regexps
+            for (const auto regexp : regexps)
+            {
+                auto match = regexp.match(chainname);
+                
+                if (match.hasMatch())
+                {
+                    //we have a regexp match :-)
+                    return true;
+                }
+            }
+            
+            return false;
+        };
+
+        QList<ChainIdx> selected_chains;
+
+        if (mol.selectedAll())
+        {
+            const int nchains = molinfo.nChains();
+        
+            if (uses_parallel)
+            {
+                QMutex mutex;
+            
+                tbb::parallel_for( tbb::blocked_range<int>(0,nchains),
+                                   [&](const tbb::blocked_range<int> &r)
+                {
+                    QList<ChainIdx> chains;
+                    
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        const ChainIdx idx(i);
+                        
+                        if (selectFromChain(idx))
+                            chains.append(idx);
+                    }
+                    
+                    QMutexLocker lkr(&mutex);
+                    selected_chains += chains;
+                });
+            }
+            else
+            {
+                for (int i=0; i<nchains; ++i)
+                {
+                    const ChainIdx idx(i);
+                
+                    if (selectFromChain(idx))
+                        selected_chains.append(idx);
+                }
+            }
+        }
+        else
+        {
+            const auto view_chains = mol.selection().selectedChains();
+            
+            if (uses_parallel)
+            {
+                QMutex mutex;
+            
+                tbb::parallel_for( tbb::blocked_range<int>(0,view_chains.count()),
+                                   [&](const tbb::blocked_range<int> &r)
+                {
+                    QList<ChainIdx> chains;
+                    
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        const auto chain = view_chains[i];
+                    
+                        if (selectFromChain(chain))
+                            chains.append(chain);
+                    }
+                    
+                    QMutexLocker lkr(&mutex);
+                    selected_chains += chains;
+                });
+            }
+            else
+            {
+                for (const auto chain : view_chains)
+                {
+                    if (selectFromChain(chain))
+                        selected_chains.append(chain);
+                }
+            }
+        }
+        
+        if (selected_chains.isEmpty())
+            //no chains matched
+            return ViewsOfMol();
+        else if (selected_chains.count() == 1)
+            //only a single chain matched
+            return ViewsOfMol( Chain(mol.data(),selected_chains[0]) );
+        else if (selected_chains.count() == molinfo.nChains())
+            //the entire molecule matched
+            return ViewsOfMol( mol.molecule() );
+        else
+        {
+            //a subset of the molecule matches
+            return ViewsOfMol( mol.data(),
+                               Selector<Chain>(mol.data(),selected_chains).selection() );
+        }
+    };
+
+    return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
 SelectResult IDNameEngine::selectSegments(const SelectResult &mols, bool uses_parallel) const
 {
-    SelectResult::Container result;
-    
-    return result;
+    // function that finds all of the segments that have been selected from the molecule
+    auto selectFromMol = [&](const ViewsOfMol &mol)
+    {
+        const auto molinfo = mol.data().info();
+
+        // function that tests whether or not the passed segment has been selected
+        auto selectFromSegment = [&](const SegIdx &idx)
+        {
+            const auto segname = molinfo.name(idx).value();
+
+            //try all of the fixed names
+            for (const auto name : names)
+            {
+                if (name == segname)
+                {
+                    //name matches exactly
+                    return true;
+                }
+            }
+            
+            //now try all of the regexps
+            for (const auto regexp : regexps)
+            {
+                auto match = regexp.match(segname);
+                
+                if (match.hasMatch())
+                {
+                    //we have a regexp match :-)
+                    return true;
+                }
+            }
+            
+            return false;
+        };
+
+        QList<SegIdx> selected_segments;
+
+        if (mol.selectedAll())
+        {
+            const int nsegs = molinfo.nSegments();
+        
+            if (uses_parallel)
+            {
+                QMutex mutex;
+            
+                tbb::parallel_for( tbb::blocked_range<int>(0,nsegs),
+                                   [&](const tbb::blocked_range<int> &r)
+                {
+                    QList<SegIdx> segments;
+                    
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        const SegIdx idx(i);
+                        
+                        if (selectFromSegment(idx))
+                            segments.append(idx);
+                    }
+                    
+                    QMutexLocker lkr(&mutex);
+                    selected_segments += segments;
+                });
+            }
+            else
+            {
+                for (int i=0; i<nsegs; ++i)
+                {
+                    const SegIdx idx(i);
+                
+                    if (selectFromSegment(idx))
+                        selected_segments.append(idx);
+                }
+            }
+        }
+        else
+        {
+            const auto view_segments = mol.selection().selectedSegments();
+            
+            if (uses_parallel)
+            {
+                QMutex mutex;
+            
+                tbb::parallel_for( tbb::blocked_range<int>(0,view_segments.count()),
+                                   [&](const tbb::blocked_range<int> &r)
+                {
+                    QList<SegIdx> segments;
+                    
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        const auto segment = view_segments[i];
+                    
+                        if (selectFromSegment(segment))
+                            segments.append(segment);
+                    }
+                    
+                    QMutexLocker lkr(&mutex);
+                    selected_segments += segments;
+                });
+            }
+            else
+            {
+                for (const auto segment : view_segments)
+                {
+                    if (selectFromSegment(segment))
+                        selected_segments.append(segment);
+                }
+            }
+        }
+        
+        if (selected_segments.isEmpty())
+            //no segments matched
+            return ViewsOfMol();
+        else if (selected_segments.count() == 1)
+            //only a single segments matched
+            return ViewsOfMol( Segment(mol.data(),selected_segments[0]) );
+        else if (selected_segments.count() == molinfo.nSegments())
+            //the entire molecule matched
+            return ViewsOfMol( mol.molecule() );
+        else
+        {
+            //a subset of the molecule matches
+            return ViewsOfMol( mol.data(),
+                               Selector<Segment>(mol.data(),selected_segments).selection() );
+        }
+    };
+
+    return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
 SelectResult IDNameEngine::selectMolecules(const SelectResult &mols, bool uses_parallel) const
 {
-    SelectResult::Container result;
-    
-    return result;
+    // function that finds all of the molecules that have been selected
+    auto selectFromMol = [&](const ViewsOfMol &mol)
+    {
+        const auto molname = mol.data().name().value();
+        
+        //try all of the fixed names
+        for (const auto name : names)
+        {
+            if (name == molname)
+            {
+                //name matches exactly
+                return ViewsOfMol(mol.molecule());
+            }
+        }
+        
+        //now try all of the regexps
+        for (const auto regexp : regexps)
+        {
+            auto match = regexp.match(molname);
+            
+            if (match.hasMatch())
+            {
+                //we have a regexp match :-)
+                return ViewsOfMol(mol.molecule());
+            }
+        }
+        
+        //no match
+        return ViewsOfMol();
+    };
+
+    return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
 SelectResult IDNameEngine::select(const SelectResult &mols, const PropertyMap &map) const
