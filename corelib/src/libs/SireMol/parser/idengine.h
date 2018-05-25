@@ -96,6 +96,10 @@ protected:
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
     
 private:
+    SelectResult selectAtoms(const SelectResult &mols, bool use_parallel) const;
+    SelectResult selectResidues(const SelectResult &mols, bool use_parallel) const;
+    SelectResult selectMolecules(const SelectResult &mols, bool use_parallel) const;
+
     IDObject obj;
     RangeValues vals;
 };
@@ -118,6 +122,13 @@ protected:
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
     
 private:
+    SelectResult selectAtoms(const SelectResult &mols, bool use_parallel) const;
+    SelectResult selectCutGroups(const SelectResult &mols, bool use_parallel) const;
+    SelectResult selectResidues(const SelectResult &mols, bool use_parallel) const;
+    SelectResult selectChains(const SelectResult &mols, bool use_parallel) const;
+    SelectResult selectSegments(const SelectResult &mols, bool use_parallel) const;
+    SelectResult selectMolecules(const SelectResult &mols, bool use_parallel) const;
+
     IDObject obj;
     RangeValues vals;
 };
