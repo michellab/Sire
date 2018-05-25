@@ -73,6 +73,8 @@ private:
     SelectResult selectSegments(const SelectResult &mols, bool use_parallel) const;
     SelectResult selectMolecules(const SelectResult &mols, bool use_parallel) const;
 
+    bool match(const QString &name) const;
+
     IDObject obj;
     QStringList names;
     QList<QRegularExpression> regexps;
@@ -99,6 +101,8 @@ private:
     SelectResult selectAtoms(const SelectResult &mols, bool use_parallel) const;
     SelectResult selectResidues(const SelectResult &mols, bool use_parallel) const;
     SelectResult selectMolecules(const SelectResult &mols, bool use_parallel) const;
+
+    bool match(int val) const;
 
     IDObject obj;
     RangeValues vals;
@@ -128,6 +132,8 @@ private:
     SelectResult selectChains(const SelectResult &mols, bool use_parallel) const;
     SelectResult selectSegments(const SelectResult &mols, bool use_parallel) const;
     SelectResult selectMolecules(const SelectResult &mols, bool use_parallel) const;
+
+    bool match(int val, int count) const;
 
     IDObject obj;
     RangeValues vals;
