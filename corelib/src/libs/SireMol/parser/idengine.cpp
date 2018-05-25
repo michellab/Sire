@@ -221,8 +221,11 @@ SelectResult IDNameEngine::selectAtoms(const SelectResult &mols, bool uses_paral
             //the entire molecule matched
             return ViewsOfMol( mol.molecule() );
         else
+        {
             //a subset of the molecule matches
-            return ViewsOfMol( Selector<Atom>(mol.data(),selected_atoms) );
+            return ViewsOfMol( mol.data(),
+                               Selector<Atom>(mol.data(),selected_atoms).selection() );
+        }
     };
     
     //now loop through all of the molecules and find the matching atoms

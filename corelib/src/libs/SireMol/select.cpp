@@ -122,9 +122,59 @@ bool SireMol::parser::SelectEngine::hasParent() const
 }
 
 /** Expand the passed SelectResult based on the selection type of this SelectEngine */
-SelectResult SireMol::parser::SelectEngine::expand(const SelectResult &result) const
+SelectResult SireMol::parser::SelectEngine::expand(const SelectResult &results) const
 {
-    return result;
+    const auto objtyp = this->objectType();
+    
+    if (objtyp == SelectEngine::COMPLEX or objtyp == SelectEngine::MOLECULE)
+    {
+        //we don't need to do anything
+        return results;
+    }
+
+    QList<ViewsOfMol> expanded;
+
+    if (objtyp == SelectEngine::ATOM)
+    {
+        for (auto result : results)
+        {
+            expanded.append( ViewsOfMol(result.atoms()) );
+        }
+    }
+    else if (objtyp == SelectEngine::CUTGROUP)
+    {
+        for (auto result : results)
+        {
+            expanded.append( ViewsOfMol(result.cutGroups()) );
+        }
+    }
+    else if (objtyp == SelectEngine::RESIDUE)
+    {
+        for (auto result : results)
+        {
+            expanded.append( ViewsOfMol(result.residues()) );
+        }
+    }
+    else if (objtyp == SelectEngine::CHAIN)
+    {
+        for (auto result : results)
+        {
+            expanded.append( ViewsOfMol(result.chains()) );
+        }
+    }
+    else if (objtyp == SelectEngine::SEGMENT)
+    {
+        for (auto result : results)
+        {
+            expanded.append( ViewsOfMol(result.segments()) );
+        }
+    }
+    else
+    {
+        return results;
+    }
+
+    return SelectResult(expanded);
 }
 
 ///////////
@@ -580,7 +630,7 @@ QString SelectResult::toString() const
 {
     QStringList lines;
 
-    const int nviews = molviews.count();
+    const int nviews = this->count();
 
     if (nviews == 0)
         return QObject::tr("SelectResult::empty");
@@ -589,20 +639,25 @@ QString SelectResult::toString() const
     {
         for (int i=0; i<nviews; ++i)
         {
-            lines.append( this->operator[](i).read().toString() );
+            lines.append( QString("%1 : %2").arg(i).arg(this->operator[](i).read().toString()) );
         }
     }
     else
     {
         for (int i=0; i<3; ++i)
         {
-            lines.append( this->operator[](i).read().toString() );
+            lines.append( QString("%1 : %2").arg(i).arg(this->operator[](i).read().toString()) );
         }
         
         lines.append( "..." );
 
-        lines.append( this->operator[](-2).read().toString() );
-        lines.append( this->operator[](-1).read().toString() );
+        for (int i=-2; i<0; ++i)
+        {
+            int idx = Index(i).map(nviews);
+        
+            lines.append( QString("%1 : %2").arg(idx)
+                                            .arg(this->operator[](idx).read().toString()) );
+        }
     }
     
     return QObject::tr("SelectResult{ count() == %1,\n  %2\n}")
