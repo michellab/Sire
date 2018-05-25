@@ -678,7 +678,7 @@ static int map(int idx, int n)
 {
     if (idx >= 0)
         return idx;
-    else if idx < 0 and idx >= -n)
+    else if (idx < 0 and idx >= -n)
         return n + idx;
     else
         return -1;
@@ -956,7 +956,38 @@ IDAndEngine::~IDAndEngine()
 
 SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
+    if (part0.get() == 0 and part1.get() == 0)
+        return SelectResult();
+    else if (part0.get() == 0)
+        return part1->operator()(mols, map);
+    else if (part1.get() == 0)
+        return part0->operator()(mols, map);
+
     SelectResult::Container result;
+
+    //first get the results of both sub-matches
+    auto result0 = part0->operator()(mols, map);
+    auto result1 = part1->operator()(mols, map);
+    
+    //match up the results
+    for (const auto mol0 : result0.views())
+    {
+        const auto molnum = mol0.data().number();
+        
+        //is this molecule in the other match?
+        for (const auto mol1 : result1.views())
+        {
+            if (mol1.data().number() == molnum)
+            {
+                //yes - unite these two views
+                auto selected_atoms = mol0.selection();
+                selected_atoms = selected_atoms.intersect(mol1.selection());
+                
+                if (not selected_atoms.isEmpty())
+                    result.append( ViewsOfMol(mol0.data(),selected_atoms) );
+            }
+        }
+    }
     
     return result;
 }
