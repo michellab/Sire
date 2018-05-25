@@ -514,9 +514,13 @@ MolViewPtr SelectResult::operator[](int i) const
 {
     i = Index(i).map( this->count() );
     
+    int nmol = 0;
+    
     for (const auto &view : molviews)
     {
-        if (view.nViews() > i)
+        nmol += 1;
+    
+        if (i >= view.nViews())
         {
             i -= view.nViews();
         }
@@ -596,13 +600,13 @@ QString SelectResult::toString() const
         }
         
         lines.append( "..." );
-        
+
         lines.append( this->operator[](-2).read().toString() );
         lines.append( this->operator[](-1).read().toString() );
     }
     
     return QObject::tr("SelectResult{ count() == %1,\n  %2\n}")
-                .arg(lines.join(",\n  "));
+                .arg(nviews).arg(lines.join(",\n  "));
 }
 
 /** Return a object that can be used to move all of the views in this result */

@@ -28,11 +28,13 @@
 
 #include "idengine.h"
 
+#include "SireBase/parallel.h"
+#include "SireBase/booleanproperty.h"
+
 #include "tostring.h"
 
-#include <QRegExp>
-
 using namespace SireMol;
+using namespace SireBase;
 using namespace parser_idengine;
 
 ////////
@@ -56,10 +58,29 @@ SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
                 RegExpValue v = boost::get<RegExpValue>(val.value);
                 QString r = QString::fromStdString(v.value);
                 
+                QRegularExpression regexp;
+                
                 if (v.is_case_sensitive)
-                    ptr->regexps.append( QRegExp(r, Qt::CaseSensitive) );
+                    regexp = QRegularExpression(r);
                 else
-                    ptr->regexps.append( QRegExp(r, Qt::CaseInsensitive) );
+                    regexp = QRegularExpression(r, QRegularExpression::CaseInsensitiveOption);
+                
+                if (not regexp.isValid())
+                {
+                    throw SireMol::parse_error( QObject::tr("Failed to interpret the "
+                      "regular expression '%1' (escaped version is '%2'). Error is '%3'")
+                        .arg( QString::fromStdString(v.value) )
+                        .arg(r)
+                        .arg(regexp.errorString()), CODELOC );
+                }
+                
+                //optimise (JIT-compile) the regular expression now as it will
+                //be used a lot
+                #if QT_VERSION >= 0x504000
+                    regexp.optimize();  // introduced in Qt 5.4
+                #endif
+                
+                ptr->regexps.append(regexp);
             }
             else if (val.value.which() == 1)
                 ptr->names.append( QString::fromStdString(boost::get<std::string>(val.value)) );
@@ -77,76 +98,230 @@ SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
 IDNameEngine::~IDNameEngine()
 {}
 
-SelectResult IDNameEngine::selectAtoms(const SelectResult &mols) const
+/** Function used to find all of the atoms that match by name */
+SelectResult IDNameEngine::selectAtoms(const SelectResult &mols, bool uses_parallel) const
 {
+    uses_parallel = false;
+
+    // function that finds all of the atoms that have been selected from the molecule
+    auto selectFromMol = [&](const ViewsOfMol &mol)
+    {
+        const auto molinfo = mol.data().info();
+
+        // function that tests whether or not the passed atom has been selected
+        auto selectFromAtom = [&](const AtomIdx &idx)
+        {
+            const auto atomname = molinfo.name(idx).value();
+
+            //try all of the fixed names
+            for (const auto name : names)
+            {
+                if (name == atomname)
+                {
+                    //name matches exactly
+                    return true;
+                }
+            }
+            
+            //now try all of the regexps
+            for (const auto regexp : regexps)
+            {
+                auto match = regexp.match(atomname);
+                
+                if (match.hasMatch())
+                {
+                    //we have a regexp match :-)
+                    return true;
+                }
+            }
+            
+            return false;
+        };
+
+        QList<AtomIdx> selected_atoms;
+
+        if (mol.selectedAll())
+        {
+            const int natoms = molinfo.nAtoms();
+        
+            if (uses_parallel)
+            {
+                QMutex mutex;
+            
+                tbb::parallel_for( tbb::blocked_range<int>(0,natoms),
+                                   [&](const tbb::blocked_range<int> &r)
+                {
+                    QList<AtomIdx> atoms;
+                    
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        const AtomIdx idx(i);
+                        
+                        if (selectFromAtom(idx))
+                            atoms.append(idx);
+                    }
+                    
+                    QMutexLocker lkr(&mutex);
+                    selected_atoms += atoms;
+                });
+            }
+            else
+            {
+                for (int i=0; i<natoms; ++i)
+                {
+                    const AtomIdx idx(i);
+                
+                    if (selectFromAtom(idx))
+                        selected_atoms.append(idx);
+                }
+            }
+        }
+        else
+        {
+            const auto view_atoms = mol.selection().selectedAtoms();
+            
+            if (uses_parallel)
+            {
+                QMutex mutex;
+            
+                tbb::parallel_for( tbb::blocked_range<int>(0,view_atoms.count()),
+                                   [&](const tbb::blocked_range<int> &r)
+                {
+                    QList<AtomIdx> atoms;
+                    
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        const auto atom = view_atoms.constData()[i];
+                    
+                        if (selectFromAtom(atom))
+                            atoms.append(atom);
+                    }
+                    
+                    QMutexLocker lkr(&mutex);
+                    selected_atoms += atoms;
+                });
+            }
+            else
+            {
+                for (const auto atom : view_atoms)
+                {
+                    if (selectFromAtom(atom))
+                        selected_atoms.append(atom);
+                }
+            }
+        }
+        
+        if (selected_atoms.isEmpty())
+            //no atoms matched
+            return ViewsOfMol();
+        else if (selected_atoms.count() == 1)
+            //only a single atom matched
+            return ViewsOfMol( Atom(mol.data(),selected_atoms[0]) );
+        else if (selected_atoms.count() == molinfo.nAtoms())
+            //the entire molecule matched
+            return ViewsOfMol( mol.molecule() );
+        else
+            //a subset of the molecule matches
+            return ViewsOfMol( Selector<Atom>(mol.data(),selected_atoms) );
+    };
+    
+    //now loop through all of the molecules and find the matching atoms
     SelectResult::Container result;
     
-    for (const auto mol : mols)
+    if (uses_parallel)
     {
-        auto selected_atoms = mol.selection();
+        QVector<ViewsOfMol> tmpresult(mols.count());
+        const auto molviews = mols.views();
 
-        for (const auto name : names)
+        tbb::parallel_for( tbb::blocked_range<int>(0,mols.count()),
+                           [&](const tbb::blocked_range<int> &r)
         {
-            
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                tmpresult[i] = selectFromMol(molviews[i]);
+            }
+        });
+        
+        for (const auto &r : tmpresult)
+        {
+            if (not r.isEmpty())
+                result.append(r);
         }
     }
-    
+    else
+    {
+        for (const auto mol : mols)
+        {
+            auto match = selectFromMol(mol);
+            
+            if (not match.isEmpty())
+                result.append(match);
+        }
+    }
+
     return result;
 }
 
-SelectResult IDNameEngine::selectCutGroups(const SelectResult &mols) const
+SelectResult IDNameEngine::selectCutGroups(const SelectResult &mols, bool uses_parallel) const
 {
     SelectResult::Container result;
     
     return result;
 }
 
-SelectResult IDNameEngine::selectResidues(const SelectResult &mols) const
+SelectResult IDNameEngine::selectResidues(const SelectResult &mols, bool uses_parallel) const
 {
     SelectResult::Container result;
     
     return result;
 }
 
-SelectResult IDNameEngine::selectChains(const SelectResult &mols) const
+SelectResult IDNameEngine::selectChains(const SelectResult &mols, bool uses_parallel) const
 {
     SelectResult::Container result;
     
     return result;
 }
 
-SelectResult IDNameEngine::selectSegments(const SelectResult &mols) const
+SelectResult IDNameEngine::selectSegments(const SelectResult &mols, bool uses_parallel) const
 {
     SelectResult::Container result;
     
     return result;
 }
 
-SelectResult IDNameEngine::selectMolecules(const SelectResult &mols) const
+SelectResult IDNameEngine::selectMolecules(const SelectResult &mols, bool uses_parallel) const
 {
     SelectResult::Container result;
     
     return result;
 }
 
-SelectResult IDNameEngine::select(const SelectResult &mols, const PropertyMap&) const
+SelectResult IDNameEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
     SelectResult::Container result;
+
+    bool uses_parallel = true;
+    
+    if (map["parallel"].hasValue())
+    {
+        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
     
     switch(obj)
     {
     case AST::ATOM:
-        return selectAtoms(mols);
+        return selectAtoms(mols, uses_parallel);
     case AST::CUTGROUP:
-        return selectCutGroups(mols);
+        return selectCutGroups(mols, uses_parallel);
     case AST::RESIDUE:
-        return selectResidues(mols);
+        return selectResidues(mols, uses_parallel);
     case AST::CHAIN:
-        return selectChains(mols);
+        return selectChains(mols, uses_parallel);
     case AST::SEGMENT:
-        return selectSegments(mols);
+        return selectSegments(mols, uses_parallel);
     case AST::MOLECULE:
-        return selectMolecules(mols);
+        return selectMolecules(mols, uses_parallel);
     default:
         return SelectResult();
     }
