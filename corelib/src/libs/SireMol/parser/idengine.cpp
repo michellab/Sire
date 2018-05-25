@@ -678,8 +678,10 @@ static int map(int idx, int n)
 {
     if (idx >= 0)
         return idx;
-    else
+    else if idx < 0 and idx >= -n)
         return n + idx;
+    else
+        return -1;
 }
 
 /** Internal function used to see if the passed integer matches any of the 
@@ -697,20 +699,24 @@ bool IDIndexEngine::match(int idx, const int count) const
             int start = map(v.start,count);
             int end = map(v.end,count);
             
-            if (start <= end)
+            //only loop if the range is valid
+            if (start < count and end < count and start >= 0 and end >= 0)
             {
-                for (int i=start; i<=end; i+=v.step)
+                if (start <= end)
                 {
-                    if (i == idx)
-                        return true;
+                    for (int i=start; i<=end; i+=v.step)
+                    {
+                        if (i == idx)
+                            return true;
+                    }
                 }
-            }
-            else
-            {
-                for (int i=start; i>=end; i-=v.step)
+                else
                 {
-                    if (i == idx)
-                        return true;
+                    for (int i=start; i>=end; i-=v.step)
+                    {
+                        if (i == idx)
+                            return true;
+                    }
                 }
             }
         }
@@ -720,34 +726,37 @@ bool IDIndexEngine::match(int idx, const int count) const
             
             int value = map(v.value,count);
             
-            switch(v.compare)
+            if (value < count and value >= 0)
             {
-            case ID_CMP_LT:
-                if (idx < value)
-                    return true;
-                break;
-            case ID_CMP_LE:
-                if (idx <= value)
-                    return true;
-                break;
-            case ID_CMP_EQ:
-                if (idx == value)
-                    return true;
-                break;
-            case ID_CMP_NE:
-                if (idx != value)
-                    return true;
-                break;
-            case ID_CMP_GE:
-                if (idx >= value)
-                    return true;
-                break;
-            case ID_CMP_GT:
-                if (idx > value)
-                    return true;
-                break;
-            default:
-                return false;
+                switch(v.compare)
+                {
+                case ID_CMP_LT:
+                    if (idx < value)
+                        return true;
+                    break;
+                case ID_CMP_LE:
+                    if (idx <= value)
+                        return true;
+                    break;
+                case ID_CMP_EQ:
+                    if (idx == value)
+                        return true;
+                    break;
+                case ID_CMP_NE:
+                    if (idx != value)
+                        return true;
+                    break;
+                case ID_CMP_GE:
+                    if (idx >= value)
+                        return true;
+                    break;
+                case ID_CMP_GT:
+                    if (idx > value)
+                        return true;
+                    break;
+                default:
+                    return false;
+                }
             }
         }
     }
