@@ -965,9 +965,26 @@ SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &ma
 
     SelectResult::Container result;
 
+    bool uses_parallel = true;
+    
+    if (map["parallel"].hasValue())
+    {
+        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+
+    SelectResult result0, result1;
+    
     //first get the results of both sub-matches
-    auto result0 = part0->operator()(mols, map);
-    auto result1 = part1->operator()(mols, map);
+    if (uses_parallel)
+    {
+        tbb::parallel_invoke( [&](){ result0 = part0->operator()(mols, map); },
+                              [&](){ result1 = part1->operator()(mols, map); } );
+    }
+    else
+    {
+        result0 = part0->operator()(mols, map);
+        result1 = part1->operator()(mols, map);
+    }
     
     //match up the results
     for (const auto mol0 : result0.views())
@@ -1080,11 +1097,106 @@ SelectEnginePtr IDOrEngine::construct(QList<SelectEnginePtr> parts)
 IDOrEngine::~IDOrEngine()
 {}
 
+/** Simple internal function that expands a mol into the specified type of views */
+static ViewsOfMol expand(const ViewsOfMol &mol, SelectEngine::ObjType obj)
+{
+    switch(obj)
+    {
+    case SelectEngine::ATOM:
+        return ViewsOfMol(mol.atoms());
+    case SelectEngine::CUTGROUP:
+        return ViewsOfMol(mol.cutGroups());
+    case SelectEngine::RESIDUE:
+        return ViewsOfMol(mol.residues());
+    case SelectEngine::CHAIN:
+        return ViewsOfMol(mol.chains());
+    case SelectEngine::SEGMENT:
+        return ViewsOfMol(mol.segments());
+    case SelectEngine::MOLECULE:
+        return ViewsOfMol(mol.molecule());
+    default:
+        return mol;
+    }
+}
+
 SelectResult IDOrEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    SelectResult::Container result;
+    if (parts.isEmpty())
+        return SelectResult();
+    else if (parts.count() == 1)
+        return parts[0]->operator()(mols, map);
+
+    bool uses_parallel = true;
     
-    return result;
+    if (map["parallel"].hasValue())
+    {
+        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+
+    QVector<SelectResult> results(parts.count());
+    
+    //first get the results of the sub-matches
+    if (uses_parallel)
+    {
+        tbb::parallel_for( tbb::blocked_range<int>(0,parts.count(),1),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                auto r = parts.at(i)->operator()(mols, map);
+                results[i] = r;
+            }
+        });
+    }
+    else
+    {
+        for (int i=0; i<parts.count(); ++i)
+        {
+            results[i] = parts.at(i)->operator()(mols, map);
+        }
+    }
+    
+    //see if all parts use the same object type
+    bool same_type = true;
+    
+    for (int i=1; i<parts.count(); ++i)
+    {
+        if (parts.at(i)->objectType() != parts.at(0)->objectType())
+        {
+            same_type = false;
+            break;
+        }
+    }
+    
+    //combine all of the results
+    QMap<MolNum,ViewsOfMol> result;
+    
+    for (int i=0; i<results.count(); ++i)
+    {
+        for (const auto mol : results[i].views())
+        {
+            const auto molnum = mol.data().number();
+            
+            auto it = result.find(molnum);
+            
+            if (it == result.end())
+            {
+                if (same_type)
+                    result.insert(molnum, mol);
+                else
+                    result.insert(molnum, ::expand(mol,parts.at(i)->objectType()));
+            }
+            else
+            {
+                if (same_type)
+                    it.value() = ViewsOfMol((it.value() + mol).join());
+                else
+                    it.value().add( ::expand(mol,parts.at(i)->objectType()).selections() );
+            }
+        }
+    }
+    
+    return SelectResult( result.values() );
 }
 
 SelectEnginePtr IDOrEngine::simplify()
