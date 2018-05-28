@@ -37,6 +37,18 @@ void register_SelectResult_class(){
         SelectResult_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "") );
         SelectResult_exposer.def( bp::init< QList< SireMol::ViewsOfMol > >(( bp::arg("molviews") ), "") );
         SelectResult_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("other") ), "") );
+        { //::SireMol::SelectResult::contains
+        
+            typedef bool ( ::SireMol::SelectResult::*contains_function_type)( ::SireMol::MolNum ) const;
+            contains_function_type contains_function_value( &::SireMol::SelectResult::contains );
+            
+            SelectResult_exposer.def( 
+                "contains"
+                , contains_function_value
+                , ( bp::arg("molnum") )
+                , "" );
+        
+        }
         { //::SireMol::SelectResult::count
         
             typedef int ( ::SireMol::SelectResult::*count_function_type)(  ) const;
@@ -56,6 +68,17 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
+                , "" );
+        
+        }
+        { //::SireMol::SelectResult::molNums
+        
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::SelectResult::*molNums_function_type)(  ) const;
+            molNums_function_type molNums_function_value( &::SireMol::SelectResult::molNums );
+            
+            SelectResult_exposer.def( 
+                "molNums"
+                , molNums_function_value
                 , "" );
         
         }
@@ -94,6 +117,18 @@ void register_SelectResult_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectResult::operator[]
+        
+            typedef ::SireMol::MolViewPtr ( ::SireMol::SelectResult::*__getitem___function_type)( ::SireMol::MolNum ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::SelectResult::operator[] );
+            
+            SelectResult_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("molnum") )
                 , "" );
         
         }
@@ -138,6 +173,18 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "views"
                 , views_function_value
+                , "" );
+        
+        }
+        { //::SireMol::SelectResult::views
+        
+            typedef ::SireMol::ViewsOfMol ( ::SireMol::SelectResult::*views_function_type)( ::SireMol::MolNum ) const;
+            views_function_type views_function_value( &::SireMol::SelectResult::views );
+            
+            SelectResult_exposer.def( 
+                "views"
+                , views_function_value
+                , ( bp::arg("molnum") )
                 , "" );
         
         }

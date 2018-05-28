@@ -253,6 +253,7 @@ public:
     QString toString() const;
 
     MolViewPtr operator[](int i) const;
+    MolViewPtr operator[](MolNum molnum) const;
 
     SelectResultMover move() const;
     
@@ -261,7 +262,12 @@ public:
     int count() const;
     int size() const;
 
+    bool contains(MolNum molnum) const;
+
     QList<ViewsOfMol> views() const;
+    ViewsOfMol views(MolNum molnum) const;
+    
+    QList<MolNum> molNums() const;
 
 private:
     /** The list of all ViewsOfMol views */

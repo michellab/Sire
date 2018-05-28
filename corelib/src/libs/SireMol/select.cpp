@@ -552,10 +552,50 @@ int SelectResult::size() const
     return this->count();
 }
 
+/** Return whether or not this set contains views of the molecule with 
+    number 'molnum' */
+bool SelectResult::contains(MolNum molnum) const
+{
+    for (const auto &molview : molviews)
+    {
+        if (molview.data().number() == molnum)
+            return true;
+    }
+    
+    return false;
+}
+
 /** Return all of the views in this result, grouped by molecule */
 QList<ViewsOfMol> SelectResult::views() const
 {
     return molviews;
+}
+
+/** Return all of the views of the molecule with number 'molnum'. This
+    returns an empty set of views if the molecule is not in this set */
+ViewsOfMol SelectResult::views(MolNum molnum) const
+{
+    for (const auto &molview : molviews)
+    {
+        if (molview.data().number() == molnum)
+            return molview;
+    }
+    
+    return ViewsOfMol();
+}
+
+/** Return the numbers of all molecules whose views are in this set,
+    in the order they appear in this set */
+QList<MolNum> SelectResult::molNums() const
+{
+    QList<MolNum> molnums;
+    
+    for (const auto &molview : molviews)
+    {
+        molnums.append(molview.data().number());
+    }
+    
+    return molnums;
 }
 
 /** Return the ith view in the result. This is automatically converted to
@@ -626,6 +666,13 @@ MolViewPtr SelectResult::operator[](int i) const
     return MolViewPtr();
 }
 
+/** Return any views of the molecule with number 'molnum'. This returns
+    an empty molecule if there are no matching molecules */
+MolViewPtr SelectResult::operator[](MolNum molnum) const
+{
+    return this->views(molnum);
+}
+
 QString SelectResult::toString() const
 {
     QStringList lines;
@@ -689,6 +736,7 @@ SelectResult::const_iterator SelectResult::constEnd() const
 {
     return end();
 }
+
 ///////////
 /////////// Implementation of SelectResult
 ///////////

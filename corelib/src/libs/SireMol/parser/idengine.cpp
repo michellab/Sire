@@ -107,10 +107,10 @@ SelectResult searchForMatch(const SelectResult &mols, const T &searchFunction, b
     
     if (uses_parallel)
     {
-        QVector<ViewsOfMol> tmpresult(mols.count());
         const auto molviews = mols.views();
+        QVector<ViewsOfMol> tmpresult(molviews.count());
 
-        tbb::parallel_for( tbb::blocked_range<int>(0,mols.count()),
+        tbb::parallel_for( tbb::blocked_range<int>(0,molviews.count()),
                            [&](const tbb::blocked_range<int> &r)
         {
             for (int i=r.begin(); i<r.end(); ++i)
@@ -127,7 +127,7 @@ SelectResult searchForMatch(const SelectResult &mols, const T &searchFunction, b
     }
     else
     {
-        for (const auto mol : mols)
+        for (const auto mol : mols.views())
         {
             auto match = searchFunction(mol);
             
@@ -1258,9 +1258,73 @@ IDNotEngine::~IDNotEngine()
 
 SelectResult IDNotEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    SelectResult::Container result;
+    if (not part.get())
+        return SelectResult();
+
+    bool uses_parallel = true;
     
-    return result;
+    if (map["parallel"].hasValue())
+    {
+        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+
+    //first, select the parts...
+    auto selected = part->operator()(mols, map);
+
+    //function that returns the parts of 'original' that are not in 'selected'
+    auto invert = [&](const ViewsOfMol &original, const ViewsOfMol &selected)
+    {
+        if (selected.selectedAll())
+            return ViewsOfMol();
+        else if (selected.isEmpty())
+            return original;
+        
+        auto inverted = original.selection() - selected.selection();
+        
+        return ViewsOfMol(original.data(),inverted);
+    };
+    
+    //now go through and find from 'mols' what is not in 'selected'
+    QList<ViewsOfMol> result;
+
+    if (uses_parallel)
+    {
+        QVector<ViewsOfMol> resultmols(mols.count());
+        const auto molviews = mols.views();
+
+        tbb::parallel_for( tbb::blocked_range<int>(0,molviews.count()),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                const auto mol = molviews.at(i);
+            
+                //find the molecule in the set of selected
+                const auto selectmol = selected.views(mol.data().number());
+                
+                resultmols[i] = invert(mol, selectmol);
+            }
+        });
+        
+        for (const auto &mol : resultmols)
+        {
+            if (not mol.isEmpty())
+                result.append(mol);
+        }
+    }
+    else
+    {
+        for (const auto &mol : mols.views())
+        {
+        
+            auto inverted = invert(mol, selected.views(mol.data().number()));
+            
+            if (not inverted.isEmpty())
+                result.append(inverted);
+        }
+    }
+    
+    return SelectResult(result);
 }
 
 SelectEnginePtr IDNotEngine::simplify()
