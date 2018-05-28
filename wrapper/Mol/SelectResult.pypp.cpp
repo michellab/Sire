@@ -138,6 +138,18 @@ void register_SelectResult_class(){
                 , "" );
         
         }
+        { //::SireMol::SelectResult::search
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::SelectResult::*search_function_type)( ::QString const & ) const;
+            search_function_type search_function_value( &::SireMol::SelectResult::search );
+            
+            SelectResult_exposer.def( 
+                "search"
+                , search_function_value
+                , ( bp::arg("search_term") )
+                , "" );
+        
+        }
         { //::SireMol::SelectResult::size
         
             typedef int ( ::SireMol::SelectResult::*size_function_type)(  ) const;

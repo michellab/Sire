@@ -766,6 +766,12 @@ Molecules SelectResult::toMolecules() const
     return Molecules(*this);
 }
 
+/** Return the result of searching this result with 'search_term' */
+SelectResult SelectResult::search(const QString &search_term) const
+{
+    return Select(search_term)(*this);
+}
+
 SelectResult::const_iterator SelectResult::begin() const
 {
     return molviews.begin();

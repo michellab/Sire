@@ -275,6 +275,8 @@ public:
     
     Molecules toMolecules() const;
 
+    SelectResult search(const QString &search_term) const;
+
 private:
     /** The list of all ViewsOfMol views */
     QList<ViewsOfMol> molviews;
