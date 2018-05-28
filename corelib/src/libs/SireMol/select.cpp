@@ -121,12 +121,34 @@ bool SireMol::parser::SelectEngine::hasParent() const
     return parent.lock().get() != 0;
 }
 
+/** Expand the passed molecule based on the selection type of this SelectEngine */
+ViewsOfMol SireMol::parser::SelectEngine::expandMol(const ViewsOfMol &mol) const
+{
+    switch(this->objectType())
+    {
+    case SelectEngine::ATOM:
+        return ViewsOfMol( mol.atoms() );
+    case SelectEngine::CUTGROUP:
+        return ViewsOfMol( mol.cutGroups() );
+    case SelectEngine::RESIDUE:
+        return ViewsOfMol( mol.residues() );
+    case SelectEngine::CHAIN:
+        return ViewsOfMol( mol.chains() );
+    case SelectEngine::SEGMENT:
+        return ViewsOfMol( mol.segments() );
+    case SelectEngine::MOLECULE:
+        return ViewsOfMol( mol.molecule() );
+    default:
+        return mol;
+    }
+}
+
 /** Expand the passed SelectResult based on the selection type of this SelectEngine */
 SelectResult SireMol::parser::SelectEngine::expand(const SelectResult &results) const
 {
     const auto objtyp = this->objectType();
     
-    if (objtyp == SelectEngine::COMPLEX or objtyp == SelectEngine::MOLECULE)
+    if (objtyp == SelectEngine::COMPLEX)
     {
         //we don't need to do anything
         return results;
@@ -167,6 +189,13 @@ SelectResult SireMol::parser::SelectEngine::expand(const SelectResult &results) 
         for (auto result : results)
         {
             expanded.append( ViewsOfMol(result.segments()) );
+        }
+    }
+    else if (objtyp == SelectEngine::MOLECULE)
+    {
+        for (auto result : results)
+        {
+            expanded.append( ViewsOfMol(result.molecule()) );
         }
     }
     else

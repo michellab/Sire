@@ -131,10 +131,11 @@ protected:
     SelectEngine();
 
     virtual SelectResult select(const SelectResult &result, const PropertyMap &map) const=0;
-    
-    virtual SelectResult expand(const SelectResult &result) const;
 
     static SelectEnginePtr makePtr(SelectEngine *ptr);
+    
+    virtual ViewsOfMol expandMol(const ViewsOfMol &mol) const;
+    virtual SelectResult expand(const SelectResult &result) const;
     
     /** The parent engine */
     SelectEngineWeakPtr parent;

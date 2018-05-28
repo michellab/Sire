@@ -1368,9 +1368,38 @@ IDJoinEngine::~IDJoinEngine()
 
 SelectResult IDJoinEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    SelectResult::Container result;
+    if (not part.get())
+        return SelectResult();
+
+    //first, select the parts...
+    auto selected = part->operator()(mols, map);
+
+    //do we need to do anything?
+    bool needs_joining = false;
     
-    return result;
+    for (const auto &molview : selected.views())
+    {
+        if (molview.nViews() > 1)
+        {
+            needs_joining = true;
+            break;
+        }
+    }
+    
+    if (not needs_joining)
+        return selected;
+    
+    QList<ViewsOfMol> result;
+    
+    for (const auto &molview : selected.views())
+    {
+        if (molview.nViews() > 1)
+            result.append( molview.join() );
+        else
+            result.append( molview );
+    }
+    
+    return SelectResult(result);
 }
 
 SelectEnginePtr IDJoinEngine::simplify()
@@ -1412,9 +1441,67 @@ IDSubScriptEngine::~IDSubScriptEngine()
 
 SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    SelectResult::Container result;
+    if (not part.get())
+        return SelectResult();
+
+    //first, select the parts...
+    auto selected = this->expand( part->operator()(mols, map) );
+
+    //how many views are there?
+    const int nviews = selected.count();
     
-    return result;
+    //now get the range of views to return
+    const int start = ::map(val.start,nviews);
+    const int end = ::map(val.end,nviews);
+    const int step = val.step;
+    
+    auto addView = [](const MoleculeView &view, QList<ViewsOfMol> &result)
+    {
+        const int molnum = view.data().number();
+        
+        for (auto mol : result)
+        {
+            if (mol.data().number() == molnum)
+            {
+                mol += view;
+                return;
+            }
+        }
+        
+        result.append( ViewsOfMol(view) );
+    };
+
+    QList<ViewsOfMol> result;
+    
+    //only loop if the range is valid
+    if (start < nviews and end < nviews and start >= 0 and end >= 0)
+    {
+        if (start <= end)
+        {
+            for (int i=start; i<=end; i+=step)
+            {
+                addView( selected[i], result );
+            }
+        }
+        else
+        {
+            for (int i=start; i>=end; i-=step)
+            {
+                addView( selected[i], result );
+            }
+        }
+    }
+    
+    //re-join the views if this is a simple view type
+    if (this->objectType() != SelectEngine::COMPLEX)
+    {
+        for (auto &mol : result)
+        {
+            mol = mol.join();
+        }
+    }
+    
+    return SelectResult(result);
 }
 
 SelectEnginePtr IDSubScriptEngine::simplify()
@@ -1460,9 +1547,93 @@ IDWithEngine::~IDWithEngine()
 
 SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    SelectResult::Container result;
+    if (not part.get())
+        return SelectResult();
+
+    //first, select the parts...
+    auto selected = part->operator()(mols, map);
+
+    const auto objtype = this->objectType();
+
+    if (objtype == SelectEngine::COMPLEX)
+        return selected;
+
+    QList<ViewsOfMol> result;
+
+    if (objtype == SelectEngine::ATOM or token == AST::ID_WITH)
+    {
+        //we just need to expand and then re-join the parts
+        selected = this->expand(selected);
+        
+        for (const auto mol : selected.views())
+        {
+            result.append( mol.join() );
+        }
+    }
+    else if (token == AST::ID_IN)
+    {
+        // 'in' will not include partially selected parts, so only completely
+        // selected molecules, chains, residues etc.
+        for (auto mol : selected.views())
+        {
+            //get the original molecule
+            auto selected = mols.views(mol.data().number()).selection();
+        
+            //is the whole molecule selected?
+            if (selected.selectedAll())
+            {
+                //yes - by definition it will contain all parts
+                result.append( mol.join() );
+            }
+            else
+            {
+                auto in_selected = selected;
+                in_selected = in_selected.selectNone();
+                
+                if (objtype == SelectEngine::CUTGROUP)
+                {
+                    for (auto cgidx : mol.selection().selectedCutGroups())
+                    {
+                        if (selected.selectedAll(cgidx))
+                            in_selected = in_selected.select(cgidx);
+                    }
+                }
+                else if (objtype == SelectEngine::RESIDUE)
+                {
+                    for (auto residx : mol.selection().selectedResidues())
+                    {
+                        if (selected.selectedAll(residx))
+                            in_selected = in_selected.select(residx);
+                    }
+                }
+                else if (objtype == SelectEngine::CHAIN)
+                {
+                    for (auto chainidx : mol.selection().selectedChains())
+                    {
+                        if (selected.selectedAll(chainidx))
+                            in_selected = in_selected.select(chainidx);
+                    }
+                }
+                else if (objtype == SelectEngine::SEGMENT)
+                {
+                    for (auto segidx : mol.selection().selectedSegments())
+                    {
+                        if (selected.selectedAll(segidx))
+                            in_selected = in_selected.select(segidx);
+                    }
+                }
+                
+                result.append( ViewsOfMol(mol.data(),in_selected) );
+            }
+        }
+    }
+    else
+    {
+        throw SireError::program_bug( QObject::tr(
+                "Invalid 'with' token? %1").arg(AST::idtoken_to_string(token)), CODELOC );
+    }
     
-    return result;
+    return SelectResult(result);
 }
 
 SelectEnginePtr IDWithEngine::simplify()
