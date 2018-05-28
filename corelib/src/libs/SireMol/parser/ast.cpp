@@ -406,19 +406,38 @@ namespace AST
         return IDWithEngine::construct(name, token, value.toEngine());
     }
     
-    SelectEnginePtr IDWhereWithin::toEngine() const
+    SelectEnginePtr IDWhereWithin::toEngine(IDObject name, IDCoordType typ) const
     {
+        return IDDistanceEngine::construct(name, typ, distance.value * distance.unit,
+                                           value.toEngine());
+    }
+    
+    SelectEnginePtr IDWhereCompare::toEngine(IDObject name, IDCoordType typ) const
+    {
+        qDebug() << "NOT YET IMPLEMENTED IDWhereCompare!";
         return SelectEnginePtr();
     }
     
-    SelectEnginePtr IDWhereCompare::toEngine() const
+    class where_engine_visitor : public boost::static_visitor<SelectEnginePtr>
     {
-        return SelectEnginePtr();
-    }
+    public:
+        where_engine_visitor(IDObject o, IDCoordType t)
+            : boost::static_visitor<SelectEnginePtr>(), obj(o), typ(t)
+        {}
+        
+        IDObject obj;
+        IDCoordType typ;
+
+        template<class T>
+        SelectEnginePtr operator()(const T &value) const
+        {
+            return value.toEngine(obj,typ);
+        }
+    };
     
     SelectEnginePtr IDWhere::toEngine() const
     {
-        return SelectEnginePtr();
+        return boost::apply_visitor( where_engine_visitor(name,typ), value );
     }
 
     SelectEnginePtr IDJoin::toEngine() const
@@ -438,6 +457,6 @@ namespace AST
     
     SelectEnginePtr IDWithin::toEngine() const
     {
-        return SelectEnginePtr();
+        return IDDistanceEngine::construct(name, distance.value * distance.unit, value.toEngine());
     }
 }

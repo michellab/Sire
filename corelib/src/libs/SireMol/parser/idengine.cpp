@@ -33,6 +33,9 @@
 
 #include "SireMol/atomelements.h"
 
+#include "SireVol/space.h"
+#include "SireVol/cartesian.h"
+
 #include "tostring.h"
 
 using namespace SireMol;
@@ -1667,7 +1670,6 @@ SelectEngine::ObjType IDWithEngine::objectType() const
     }
 }
 
-
 ////////
 //////// Implementation of the IDElementEngine
 ////////
@@ -1781,4 +1783,322 @@ SelectResult IDElementEngine::select(const SelectResult &mols, const PropertyMap
 SelectEngine::ObjType IDElementEngine::objectType() const
 {
     return SelectEngine::ATOM;
+}
+
+////////
+//////// Implementation of the IDDistanceEngine
+////////
+
+IDDistanceEngine::IDDistanceEngine()
+{}
+
+SelectEnginePtr IDDistanceEngine::construct(IDObject obj, IDCoordType typ,
+                                            SireUnits::Dimension::Length distance,
+                                            SelectEnginePtr part)
+{
+    IDDistanceEngine *ptr = new IDDistanceEngine();
+    auto p = makePtr(ptr);
+
+    if (part)
+        part->setParent(p);
+    
+    ptr->part = part;
+    ptr->obj = obj;
+    ptr->typ = typ;
+    ptr->distance = distance.value();
+    
+    return p;
+}
+
+SelectEnginePtr IDDistanceEngine::construct(IDObject obj,
+                                            SireUnits::Dimension::Length distance,
+                                            SelectEnginePtr part)
+{
+    return IDDistanceEngine::construct(obj, ID_COORD_CLOSEST, distance, part);
+}
+
+IDDistanceEngine::~IDDistanceEngine()
+{}
+
+SelectEnginePtr IDDistanceEngine::simplify()
+{
+    if (part.get() != 0)
+        part->simplify();
+    
+    return selfptr.lock();
+}
+
+SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMap &map) const
+{
+    //first, get the objects against where the distance is calculated
+    if (part.get() == 0)
+        return SelectResult();
+    
+    const auto refmols = part->operator()(mols, map);
+
+    if (refmols.isEmpty())
+        //nothing against which to compare
+        return SelectResult();
+
+    const auto coords_property = map["coordinates"];
+    
+    bool uses_parallel = true;
+    
+    if (map["parallel"].hasValue())
+    {
+        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+
+    SireVol::SpacePtr space = SireVol::Cartesian();
+    
+    if (map["space"].hasValue())
+    {
+        space = map["space"].value().asA<SireVol::Space>();
+    }
+
+    //function that gets the reference coordinates of the passed view
+    auto getCoords = [&](const AtomSelection &selection, const MoleculeInfoData &molinfo,
+                         const AtomCoords &coords)
+    {
+        Vector minval(0), maxval(0), center(0);
+
+        auto atoms = selection.selectedAtoms();
+        
+        if (atoms.isEmpty())
+            return Vector(0);
+        
+        minval = coords[ molinfo.cgAtomIdx(atoms.at(0)) ];
+        maxval = minval;
+        center = minval;
+        
+        //now find the maximum and minimum of all other coordinates
+        for (int i=1; i<atoms.count(); ++i)
+        {
+            const auto c = coords[ molinfo.cgAtomIdx(atoms.at(i)) ];
+            minval.setMin(c);
+            maxval.setMax(c);
+        }
+ 
+        center = minval + 0.5*(maxval-minval);
+
+        switch (typ)
+        {
+        case ID_COORD_MAX:
+            return maxval;
+        case ID_COORD_MIN:
+            return minval;
+        case ID_COORD_MAX_X:
+            center.setX(maxval.x());
+            return center;
+        case ID_COORD_MAX_Y:
+            center.setY(maxval.y());
+            return center;
+        case ID_COORD_MAX_Z:
+            center.setZ(maxval.z());
+            return center;
+        case ID_COORD_MIN_X:
+            center.setX(minval.x());
+            return center;
+        case ID_COORD_MIN_Y:
+            center.setY(minval.y());
+            return center;
+        case ID_COORD_MIN_Z:
+            center.setZ(minval.z());
+            return center;
+        default:
+            return center;
+        }
+    };
+
+    const double dist2 = distance*distance;
+
+    //function that tests whether the passed point is within the
+    //distance of the atoms in the passed molecule - this could
+    //be made significantly more efficient if we use the rapid distance
+    //calculation abilities of Space and CoordGroup better...
+    auto isWithin = [&](const Vector &point, const ViewsOfMol &mol)
+    {
+        const auto &moldata = mol.data();
+        
+        if (not moldata.hasProperty(coords_property))
+            return false;
+        
+        const auto &prop = moldata.property(coords_property);
+        
+        if (not prop.isA<AtomCoords>())
+            return false;
+        
+        const auto &coords = prop.asA<AtomCoords>();
+        const auto &molinfo = moldata.info();
+
+        if (mol.selectedAll())
+        {
+            //loop over all coordinates
+            for (int i=0; i<molinfo.nAtoms(); ++i)
+            {
+                if (space.read().calcDist2(point, coords[molinfo.cgAtomIdx(AtomIdx(i))]) < dist2)
+                {
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            for (const auto atom : mol.selection().selectedAtoms())
+            {
+                if (space.read().calcDist2(point, coords[molinfo.cgAtomIdx(atom)]) < dist2)
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    };
+
+    //function that gets the views within the specified distance
+    auto getWithin = [&](const ViewsOfMol &searchmol)
+    {
+        const auto &moldata = searchmol.data();
+        const auto &molinfo = moldata.info();
+    
+        //get the atoms that are to be selected
+        auto selected_atoms = searchmol.selection();
+        selected_atoms = selected_atoms.selectNone();
+        
+        //now get the coordinates of the atoms
+        if (not moldata.hasProperty(coords_property))
+            return ViewsOfMol();
+        
+        const auto &prop = moldata.property(coords_property);
+        
+        if (not prop.isA<AtomCoords>())
+            return ViewsOfMol();
+        
+        const auto &coords = prop.asA<AtomCoords>();
+        
+        //we need to loop over the expanded molecule
+        ViewsOfMol mol = this->expandMol(searchmol);
+        
+        //loop over each view in 'mol'
+        for (int i=0; i<mol.nViews(); ++i)
+        {
+            bool within_distance = false;
+
+            if (typ == ID_COORD_CLOSEST)
+            {
+                //need to compare all atoms in this view...
+                for (const auto &atom : mol.viewAt(i).selectedAtoms())
+                {
+                    const auto point = coords[ molinfo.cgAtomIdx(atom) ];
+                    
+                    //now loop over all atoms in selected molecules and see if they
+                    //are within the distance
+                    for (const auto &refmol : refmols)
+                    {
+                        bool is_within = isWithin(point, refmol);
+                        
+                        if (is_within)
+                        {
+                            within_distance = true;
+                            break;
+                        }
+                    }
+
+                    if (within_distance)
+                        break;
+                }
+            }
+            else
+            {
+                //get the comparison coordinates for this view
+                const auto point = getCoords(mol.viewAt(i), molinfo, coords);
+                
+                //now loop over all atoms in selected molecules and see if they
+                //are within the distance
+                for (const auto &refmol : refmols)
+                {
+                    bool is_within = isWithin(point, refmol);
+                    
+                    if (is_within)
+                    {
+                        within_distance = true;
+                        break;
+                    }
+                }
+            }
+            
+            if (within_distance)
+            {
+                selected_atoms = selected_atoms.select(mol.viewAt(i));
+                
+                if (selected_atoms.selectedAll())
+                    break;
+            }
+        }
+        
+        if (selected_atoms.isEmpty())
+            return ViewsOfMol();
+        else
+            return ViewsOfMol(moldata, selected_atoms);
+    };
+    
+    QList<ViewsOfMol> result;
+    
+    if (uses_parallel)
+    {
+        const auto molviews = mols.views();
+        QVector<ViewsOfMol> matched(molviews.count());
+        
+        tbb::parallel_for( tbb::blocked_range<int>(0,molviews.count()),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                auto match = getWithin(molviews.at(i));
+                
+                if (not match.isEmpty())
+                    matched[i] = match;
+            }
+        });
+        
+        for (const auto &match : matched)
+        {
+            if (not match.isEmpty())
+                result.append(match);
+        }
+    }
+    else
+    {
+        for (const auto mol : mols.views())
+        {
+            auto match = getWithin(mol);
+            
+            if (not match.isEmpty())
+                result.append(match);
+        }
+    }
+    
+    return SelectResult(result);
+}
+
+SelectEngine::ObjType IDDistanceEngine::objectType() const
+{
+    switch(obj)
+    {
+    case AST::ATOM:
+        return SelectEngine::ATOM;
+    case AST::CUTGROUP:
+        return SelectEngine::CUTGROUP;
+    case AST::RESIDUE:
+        return SelectEngine::RESIDUE;
+    case AST::CHAIN:
+        return SelectEngine::CHAIN;
+    case AST::SEGMENT:
+        return SelectEngine::SEGMENT;
+    case AST::MOLECULE:
+        return SelectEngine::MOLECULE;
+    default:
+        return SelectEngine::COMPLEX;
+    }
 }

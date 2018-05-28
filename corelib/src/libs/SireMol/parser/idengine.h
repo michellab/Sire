@@ -301,6 +301,38 @@ private:
     SelectEnginePtr part;
 };
 
+/** Internal class used to select objects that are within a certain
+    distance of other objects
+    
+    @author Christopher Woods
+*/
+class IDDistanceEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct( IDObject obj, SireUnits::Dimension::Length distance,
+                                      SelectEnginePtr part );
+    
+    static SelectEnginePtr construct( IDObject obj, IDCoordType typ,
+                                      SireUnits::Dimension::Length distance,
+                                      SelectEnginePtr part );
+    
+    ~IDDistanceEngine();
+    
+    ObjType objectType() const;
+    
+    SelectEnginePtr simplify();
+    
+protected:
+    IDDistanceEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+    
+private:
+    IDObject obj;
+    IDCoordType typ;
+    SelectEnginePtr part;
+    double distance;
+};
+
 }
 
 SIRE_END_HEADER

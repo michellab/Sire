@@ -94,7 +94,8 @@ namespace AST
                        ID_COORD_CENTER_Y = 3, ID_COORD_CENTER_Z = 4, ID_COORD_MAX = 5,
                        ID_COORD_MAX_X = 6, ID_COORD_MAX_Y = 7, ID_COORD_MAX_Z = 8,
                        ID_COORD_MIN = 9, ID_COORD_MIN_X = 10, ID_COORD_MIN_Y = 11,
-                       ID_COORD_MIN_Z = 12, ID_COORD_X = 13, ID_COORD_Y = 14, ID_COORD_Z = 15 };
+                       ID_COORD_MIN_Z = 12, ID_COORD_X = 13, ID_COORD_Y = 14, ID_COORD_Z = 15,
+                       ID_COORD_CLOSEST = 16 };
     
     QString idcoordtype_to_string(IDCoordType typ);
     
@@ -473,7 +474,7 @@ namespace AST
         
         QString toString() const;
 
-        SelectEnginePtr toEngine() const;
+        SelectEnginePtr toEngine(IDObject name, IDCoordType typ) const;
     };
     
     /** Struct that holds a "where" comparison expression, e.g.
@@ -485,7 +486,7 @@ namespace AST
         
         QString toString() const;
 
-        SelectEnginePtr toEngine() const;
+        SelectEnginePtr toEngine(IDObject name, IDCoordType typ) const;
     };
     
     /** Struct that holds a general "where" expression */
