@@ -50,6 +50,7 @@ namespace SireMol
 {
 
 class MolNumViewIdx;
+class SelectResult;
 
 /** This class provides a container for lots of molecules. This
     forms a general purpose molecule container, which is used as the argument
@@ -76,6 +77,8 @@ public:
 
     Molecules(const MoleculeView &molecule);
     Molecules(const ViewsOfMol &molviews);
+
+    Molecules(const SelectResult &result);
 
     template<class T>
     explicit Molecules(const QList<T> &molecules);
@@ -128,6 +131,8 @@ public:
 
     bool intersects(const MoleculeView &molview) const;
     bool intersects(const Molecules &other) const;
+
+    SelectResult search(const QString &search_string) const;
 
     int count() const;
     int nMolecules() const;

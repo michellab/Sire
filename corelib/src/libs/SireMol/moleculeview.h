@@ -61,6 +61,8 @@ class Atom;
 template<class T>
 class Selector;
 
+class SelectResult;
+
 class MoleculeView;
 
 typedef SireBase::PropPtr<MoleculeView> MolViewPtr;
@@ -179,6 +181,8 @@ public:
     Selector<Segment> segments() const;
     
     Molecule molecule() const;
+    
+    SelectResult search(const QString &search_string) const;
     
     CutGroup select(const CGID &cgid, const PropertyMap &map = PropertyMap()) const;
     Residue select(const ResID &resid, const PropertyMap &map = PropertyMap()) const;

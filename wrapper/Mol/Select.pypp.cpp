@@ -7,9 +7,15 @@
 
 namespace bp = boost::python;
 
+#include "SireMol/moleculegroup.h"
+
+#include "SireMol/molecules.h"
+
 #include "SireMol/parser.h"
 
 #include "SireMol/select.h"
+
+#include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
 
@@ -125,7 +131,7 @@ void register_Select_class(){
             Select_exposer.def( 
                 "resetTokens"
                 , resetTokens_function_value
-                , "" );
+                , "Clear all user-set tokens" );
         
         }
         { //::SireMol::Select::setToken
@@ -137,7 +143,7 @@ void register_Select_class(){
                 "setToken"
                 , setToken_function_value
                 , ( bp::arg("token"), bp::arg("selection") )
-                , "" );
+                , "Set a user token that will be substituted for the passed selection, e.g.\nsetToken(protein, molecules with resname alai)\nwould allow you to use protein to refer to any molecules that contain\nresidues called alai\nNote that the token is set globally for all searches\n" );
         
         }
         { //::SireMol::Select::toString

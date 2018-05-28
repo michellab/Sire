@@ -29,6 +29,7 @@
 #include <boost/tuple/tuple.hpp>
 
 #include "molnum.h"
+#include "select.h"
 #include "SireID/index.h"
 
 namespace SireMol
@@ -355,6 +356,29 @@ MoleculeGroup::MoleculeGroup(const Molecules &molecules)
                 d( create_shared_null<MolGroupPvt>() )
 {
     this->add(molecules);
+}
+
+/** Construct a group that holds the passed search result. The group
+    is called "search_result" */
+MoleculeGroup::MoleculeGroup(const SelectResult &result)
+              : ConcreteProperty<MoleculeGroup,Property>(),
+                d( new MolGroupPvt("search_result") )
+{
+    for (const auto &view : result.views())
+    {
+        this->add( view.join() );
+    }
+}
+
+/** Construct a group called 'name' that holds the passed search result. */
+MoleculeGroup::MoleculeGroup(const QString &name, const SelectResult &result)
+              : ConcreteProperty<MoleculeGroup,Property>(),
+                d( new MolGroupPvt(name) )
+{
+    for (const auto &view : result.views())
+    {
+        this->add( view.join() );
+    }
 }
 
 /** Construct an empty, but named, group */
@@ -1359,6 +1383,12 @@ quint64 MoleculeGroup::majorVersion() const
 quint64 MoleculeGroup::minorVersion() const
 {
     return this->version().minorVersion();
+}
+
+/** Return the result of searching this molecule group with 'search_term' */
+SelectResult MoleculeGroup::search(const QString &search_term) const
+{
+    return Select(search_term)(*this);
 }
 
 /** Add the view of the molecule in 'molview' to this group. 

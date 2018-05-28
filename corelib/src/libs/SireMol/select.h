@@ -270,6 +270,11 @@ public:
     
     QList<MolNum> molNums() const;
 
+    MoleculeGroup toGroup() const;
+    MoleculeGroup toGroup(const QString &name) const;
+    
+    Molecules toMolecules() const;
+
 private:
     /** The list of all ViewsOfMol views */
     QList<ViewsOfMol> molviews;

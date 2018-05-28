@@ -7,9 +7,15 @@
 
 namespace bp = boost::python;
 
+#include "SireMol/moleculegroup.h"
+
+#include "SireMol/molecules.h"
+
 #include "SireMol/parser.h"
 
 #include "SireMol/select.h"
+
+#include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
 
@@ -25,10 +31,10 @@ void register_SelectResultMover_class(){
 
     { //::SireMol::SelectResultMover
         typedef bp::class_< SireMol::SelectResultMover, bp::bases< SireBase::Property > > SelectResultMover_exposer_t;
-        SelectResultMover_exposer_t SelectResultMover_exposer = SelectResultMover_exposer_t( "SelectResultMover", "This class provides a simple move interface to move all\nviews in a SelectResult\n\nAuthor: Christopher Woods\n", bp::init< >("") );
+        SelectResultMover_exposer_t SelectResultMover_exposer = SelectResultMover_exposer_t( "SelectResultMover", "This class provides a simple move interface to move all\nviews in a SelectResult\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope SelectResultMover_scope( SelectResultMover_exposer );
-        SelectResultMover_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("other") ), "") );
-        SelectResultMover_exposer.def( bp::init< SireMol::SelectResultMover const & >(( bp::arg("other") ), "") );
+        SelectResultMover_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("other") ), "Construct from the passed SelectResult") );
+        SelectResultMover_exposer.def( bp::init< SireMol::SelectResultMover const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::SelectResultMover::commit
         
             typedef ::SireMol::SelectResult ( ::SireMol::SelectResultMover::*commit_function_type)(  ) const;
@@ -37,7 +43,7 @@ void register_SelectResultMover_class(){
             SelectResultMover_exposer.def( 
                 "commit"
                 , commit_function_value
-                , "" );
+                , "Commit all of the moves" );
         
         }
         SelectResultMover_exposer.def( bp::self != bp::self );
@@ -76,7 +82,7 @@ void register_SelectResultMover_class(){
                 , translate_function_value
                 , ( bp::arg("delta") )
                 , bp::return_self< >()
-                , "" );
+                , "Translate all of the views by delta" );
         
         }
         { //::SireMol::SelectResultMover::typeName

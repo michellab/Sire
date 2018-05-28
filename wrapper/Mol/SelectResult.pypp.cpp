@@ -7,9 +7,15 @@
 
 namespace bp = boost::python;
 
+#include "SireMol/moleculegroup.h"
+
+#include "SireMol/molecules.h"
+
 #include "SireMol/parser.h"
 
 #include "SireMol/select.h"
+
+#include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
 
@@ -29,14 +35,14 @@ void register_SelectResult_class(){
 
     { //::SireMol::SelectResult
         typedef bp::class_< SireMol::SelectResult, bp::bases< SireBase::Property > > SelectResult_exposer_t;
-        SelectResult_exposer_t SelectResult_exposer = SelectResult_exposer_t( "SelectResult", "This class holds the result of a Select\n\nAuthor: Christopher Woods\n", bp::init< >("") );
+        SelectResult_exposer_t SelectResult_exposer = SelectResult_exposer_t( "SelectResult", "This class holds the result of a Select\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope SelectResult_scope( SelectResult_exposer );
-        SelectResult_exposer.def( bp::init< SireMol::MolGroupsBase const & >(( bp::arg("molgroups") ), "") );
-        SelectResult_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") ), "") );
-        SelectResult_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("molecules") ), "") );
-        SelectResult_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "") );
-        SelectResult_exposer.def( bp::init< QList< SireMol::ViewsOfMol > >(( bp::arg("molviews") ), "") );
-        SelectResult_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("other") ), "") );
+        SelectResult_exposer.def( bp::init< SireMol::MolGroupsBase const & >(( bp::arg("molgroups") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("molecules") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< QList< SireMol::ViewsOfMol > >(( bp::arg("molviews") ), "Construct from the passed molecules") );
+        SelectResult_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::SelectResult::contains
         
             typedef bool ( ::SireMol::SelectResult::*contains_function_type)( ::SireMol::MolNum ) const;
@@ -46,7 +52,7 @@ void register_SelectResult_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("molnum") )
-                , "" );
+                , "Return whether or not this set contains views of the molecule with\nnumber molnum" );
         
         }
         { //::SireMol::SelectResult::count
@@ -57,7 +63,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "count"
                 , count_function_value
-                , "" );
+                , "Return the number of views in this result" );
         
         }
         { //::SireMol::SelectResult::isEmpty
@@ -68,7 +74,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "isEmpty"
                 , isEmpty_function_value
-                , "" );
+                , "Return whether or not this is empty" );
         
         }
         { //::SireMol::SelectResult::molNums
@@ -79,7 +85,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "molNums"
                 , molNums_function_value
-                , "" );
+                , "Return the numbers of all molecules whose views are in this set,\nin the order they appear in this set" );
         
         }
         { //::SireMol::SelectResult::move
@@ -90,7 +96,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "move"
                 , move_function_value
-                , "" );
+                , "Return a object that can be used to move all of the views in this result" );
         
         }
         SelectResult_exposer.def( bp::self != bp::self );
@@ -140,7 +146,41 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "size"
                 , size_function_value
-                , "" );
+                , "Return the number of views in this result" );
+        
+        }
+        { //::SireMol::SelectResult::toGroup
+        
+            typedef ::SireMol::MoleculeGroup ( ::SireMol::SelectResult::*toGroup_function_type)(  ) const;
+            toGroup_function_type toGroup_function_value( &::SireMol::SelectResult::toGroup );
+            
+            SelectResult_exposer.def( 
+                "toGroup"
+                , toGroup_function_value
+                , "Return this result as a new molecule group" );
+        
+        }
+        { //::SireMol::SelectResult::toGroup
+        
+            typedef ::SireMol::MoleculeGroup ( ::SireMol::SelectResult::*toGroup_function_type)( ::QString const & ) const;
+            toGroup_function_type toGroup_function_value( &::SireMol::SelectResult::toGroup );
+            
+            SelectResult_exposer.def( 
+                "toGroup"
+                , toGroup_function_value
+                , ( bp::arg("name") )
+                , "Return this result as a new molecule group called name" );
+        
+        }
+        { //::SireMol::SelectResult::toMolecules
+        
+            typedef ::SireMol::Molecules ( ::SireMol::SelectResult::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMol::SelectResult::toMolecules );
+            
+            SelectResult_exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
+                , "Return this result as a set of Molecules" );
         
         }
         { //::SireMol::SelectResult::toString
@@ -173,7 +213,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "views"
                 , views_function_value
-                , "" );
+                , "Return all of the views in this result, grouped by molecule" );
         
         }
         { //::SireMol::SelectResult::views
@@ -185,7 +225,7 @@ void register_SelectResult_class(){
                 "views"
                 , views_function_value
                 , ( bp::arg("molnum") )
-                , "" );
+                , "Return all of the views of the molecule with number molnum. This\nreturns an empty set of views if the molecule is not in this set" );
         
         }
         { //::SireMol::SelectResult::what

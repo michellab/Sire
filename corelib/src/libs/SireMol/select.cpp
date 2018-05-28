@@ -28,6 +28,8 @@
 
 #include "SireMol/select.h"
 #include "SireMol/parser.h"
+#include "SireMol/molecules.h"
+#include "SireMol/moleculegroup.h"
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
@@ -744,6 +746,24 @@ QString SelectResult::toString() const
 SelectResultMover SelectResult::move() const
 {
     return SelectResultMover(*this);
+}
+
+/** Return this result as a new molecule group */
+MoleculeGroup SelectResult::toGroup() const
+{
+    return MoleculeGroup(*this);
+}
+
+/** Return this result as a new molecule group called 'name' */
+MoleculeGroup SelectResult::toGroup(const QString &name) const
+{
+    return MoleculeGroup(name, *this);
+}
+
+/** Return this result as a set of Molecules */
+Molecules SelectResult::toMolecules() const
+{
+    return Molecules(*this);
 }
 
 SelectResult::const_iterator SelectResult::begin() const
