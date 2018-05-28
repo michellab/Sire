@@ -258,6 +258,18 @@ namespace AST
                     .arg( lines.join(",") );
     }
 
+    QString IDElement::toString() const
+    {
+        QStringList lines;
+        
+        for (const auto element : values)
+        {
+            lines.append( element.symbol() );
+        }
+    
+        return QObject::tr("element %1").arg(lines.join(","));
+    }
+
     QString IDBinary::toString() const
     {
         return QObject::tr("(%1 %2 %3)")
@@ -356,6 +368,11 @@ namespace AST
     SelectEnginePtr IDName::toEngine() const
     {
         return IDNameEngine::construct(name,values);
+    }
+    
+    SelectEnginePtr IDElement::toEngine() const
+    {
+        return IDElementEngine::construct(values);
     }
     
     SelectEnginePtr IDNumber::toEngine() const

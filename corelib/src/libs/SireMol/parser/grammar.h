@@ -242,6 +242,17 @@ public:
                        ( "coords.z", AST::ID_COORD_Z )
                     ;
 
+        //now add in all of the element tokens
+        for (int i=0; i<=111; ++i)  //loop through all known elements
+        {
+            Element e(i);
+            
+            //add tokens for the capitalised symbol, and lowercase symbol and name
+            element_token.add( e.symbol().toLatin1().constData(), e );
+            element_token.add( e.symbol().toLower().toLatin1().constData(), e );
+            element_token.add( e.name().toLower().toLatin1().constData(), e );
+        }
+
         //now get all of the user tokens (user-identified sub-expressions)
         user_token = getUserTokens();
 
@@ -269,8 +280,8 @@ public:
 
         //an expression is either a subscript, name, number, with, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
-        expressionPartRule %= subscriptRule | idNameRule | idNumberRule | withRule |
-                              withinRule | whereRule | notRule | joinRule | user_token |
+        expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
+                              withRule | withinRule | whereRule | notRule | joinRule | user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
         
         //grammar that specifies a list of names (comma-separated)
@@ -339,6 +350,9 @@ public:
                             )
                             ;
 
+        //grammar for selecting by chemical element
+        idElementRule %= qi::lit("element") >> ( element_token % qi::lit(",") );
+
         //grammar for a "with" expression
         withRule %= obj_token >> with_token >> expressionRule;
 
@@ -373,6 +387,7 @@ public:
         nodeRule.name( "Node" );
         idNameRule.name( "Name" );
         idNumberRule.name( "Number" );
+        idElementRule.name( "Element" );
         binaryRule.name( "Binary" );
         binaryRule2.name( "Binary2" );
         withRule.name( "With" );
@@ -413,6 +428,7 @@ public:
     qi::rule<IteratorT, AST::Node(), SkipperT> nodeRule;
     qi::rule<IteratorT, AST::IDName(), SkipperT> idNameRule;
     qi::rule<IteratorT, AST::IDNumber(), SkipperT> idNumberRule;
+    qi::rule<IteratorT, AST::IDElement(), SkipperT> idElementRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule;
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
     qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule;
@@ -448,6 +464,7 @@ public:
     qi::symbols<char,SireUnits::Dimension::Length> length_token;
     qi::symbols<char,AST::IDComparison> cmp_token;
     qi::symbols<char,AST::IDCoordType> coord_token;
+    qi::symbols<char,SireMol::Element> element_token;
     UserTokens user_token;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;

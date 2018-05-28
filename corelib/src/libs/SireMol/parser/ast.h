@@ -32,6 +32,7 @@
 #include "SireUnits/dimensions.h"
 #include "SireUnits/units.h"
 #include "SireMol/select.h"
+#include "SireMol/element.h"
 
 #include "SireError/errors.h"
 
@@ -118,6 +119,8 @@ namespace AST
     struct IDWhereCompare;
     struct IDWhereWithin;
 
+    struct IDElement;
+
     struct Expression;
     struct ExpressionPart;
     struct Node;
@@ -125,6 +128,7 @@ namespace AST
     /** Base holder for all of the different ID expressions */
     using ExpressionVariant = boost::variant<boost::recursive_wrapper<IDName>,
                                              boost::recursive_wrapper<IDNumber>,
+                                             boost::recursive_wrapper<IDElement>,
                                              boost::recursive_wrapper<IDBinary>,
                                              boost::recursive_wrapper<IDWith>,
                                              boost::recursive_wrapper<IDWhere>,
@@ -426,6 +430,16 @@ namespace AST
         SelectEnginePtr toEngine() const;
     };
 
+    /** Structs that holds a list of elements */
+    struct IDElement
+    {
+        std::vector<SireMol::Element> values;
+        
+        QString toString() const;
+        
+        SelectEnginePtr toEngine() const;
+    };
+
     /** Struct that holds a binary expression, e.g. something and other */
     struct IDBinary
     {
@@ -591,6 +605,10 @@ BOOST_FUSION_ADAPT_STRUCT( AST::Node,
 BOOST_FUSION_ADAPT_STRUCT( AST::IDName,
                            (AST::IDObject, name),
                            (AST::NameValues, values)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDElement,
+                           (std::vector<SireMol::Element>, values)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDNumber,

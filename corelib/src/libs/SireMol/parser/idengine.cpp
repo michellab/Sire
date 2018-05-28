@@ -31,6 +31,8 @@
 #include "SireBase/parallel.h"
 #include "SireBase/booleanproperty.h"
 
+#include "SireMol/atomelements.h"
+
 #include "tostring.h"
 
 using namespace SireMol;
@@ -1663,4 +1665,120 @@ SelectEngine::ObjType IDWithEngine::objectType() const
     default:
         return SelectEngine::COMPLEX;
     }
+}
+
+
+////////
+//////// Implementation of the IDElementEngine
+////////
+
+IDElementEngine::IDElementEngine()
+{}
+
+SelectEnginePtr IDElementEngine::construct(const std::vector<SireMol::Element> &vals)
+{
+    IDElementEngine *ptr = new IDElementEngine();
+    auto p = makePtr(ptr);
+
+    for (const auto value : vals)
+    {
+        ptr->elements.insert(value);
+    }
+    
+    return p;
+}
+
+IDElementEngine::~IDElementEngine()
+{}
+
+SelectResult IDElementEngine::select(const SelectResult &mols, const PropertyMap &map) const
+{
+    const auto element_property = map["element"];
+    
+    bool uses_parallel = true;
+    
+    if (map["parallel"].hasValue())
+    {
+        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+    
+    QList<ViewsOfMol> result;
+    
+    //function that extracts all of the atoms with matching elements
+    auto getAtomsWithElement = [&](const ViewsOfMol &mol)
+    {
+        const auto &moldata = mol.data();
+        const auto &molinfo = moldata.info();
+        
+        if (not moldata.hasProperty(element_property))
+            return ViewsOfMol();
+        
+        const auto &prop = moldata.property(element_property);
+        
+        if (not prop.isA<AtomElements>())
+            return ViewsOfMol();
+        
+        const auto &elms = prop.asA<AtomElements>();
+        
+        auto selected = mol.selection();
+        
+        //deselect any atoms that are not the right element
+        for (const auto atomidx : selected.selectedAtoms())
+        {
+            const auto element = elms[ molinfo.cgAtomIdx(atomidx) ];
+            
+            if (not elements.contains(element))
+            {
+                selected = selected.deselect(atomidx);
+            }
+        }
+        
+        if (not selected.selectedNone())
+        {
+            return ViewsOfMol(moldata,selected);
+        }
+        else
+            return ViewsOfMol();
+    };
+    
+    if (uses_parallel)
+    {
+        const auto molviews = mols.views();
+        QVector<ViewsOfMol> matches(molviews.count());
+        
+        tbb::parallel_for( tbb::blocked_range<int>(0,molviews.count()),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                auto match = getAtomsWithElement(molviews.at(i));
+                
+                if (not match.isEmpty())
+                    matches[i] = match;
+            }
+        });
+        
+        for (const auto &match : matches)
+        {
+            if (not match.isEmpty())
+                result.append(match);
+        }
+    }
+    else
+    {
+        for (const auto mol : mols.views())
+        {
+            auto match = getAtomsWithElement(mol);
+            
+            if (not match.isEmpty())
+                result.append(match);
+        }
+    }
+    
+    return SelectResult(result);
+}
+
+SelectEngine::ObjType IDElementEngine::objectType() const
+{
+    return SelectEngine::ATOM;
 }

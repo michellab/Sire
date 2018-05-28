@@ -139,7 +139,27 @@ private:
     RangeValues vals;
 };
 
-/** Internal class providing the SelectEngine for objects 
+/** Internal class providing the SelectEngine for selecting by chemical element
+
+    @author Christopher Woods
+*/
+class IDElementEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct(const std::vector<SireMol::Element> &values);
+    ~IDElementEngine();
+    
+    ObjType objectType() const;
+
+protected:
+    IDElementEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+    
+private:
+    QSet<SireMol::Element> elements;
+};
+
+/** Internal class providing the SelectEngine for objects
     in an "and" expression
     
     @author Christopher Woods
