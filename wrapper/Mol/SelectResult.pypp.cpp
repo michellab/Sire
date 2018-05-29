@@ -43,6 +43,28 @@ void register_SelectResult_class(){
         SelectResult_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "Construct from the passed molecules") );
         SelectResult_exposer.def( bp::init< QList< SireMol::ViewsOfMol > >(( bp::arg("molviews") ), "Construct from the passed molecules") );
         SelectResult_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireMol::SelectResult::atoms
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::SelectResult::*atoms_function_type)(  ) const;
+            atoms_function_type atoms_function_value( &::SireMol::SelectResult::atoms );
+            
+            SelectResult_exposer.def( 
+                "atoms"
+                , atoms_function_value
+                , "" );
+        
+        }
+        { //::SireMol::SelectResult::chains
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::SelectResult::*chains_function_type)(  ) const;
+            chains_function_type chains_function_value( &::SireMol::SelectResult::chains );
+            
+            SelectResult_exposer.def( 
+                "chains"
+                , chains_function_value
+                , "" );
+        
+        }
         { //::SireMol::SelectResult::contains
         
             typedef bool ( ::SireMol::SelectResult::*contains_function_type)( ::SireMol::MolNum ) const;
@@ -66,6 +88,17 @@ void register_SelectResult_class(){
                 , "Return the number of views in this result" );
         
         }
+        { //::SireMol::SelectResult::cutGroups
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::SelectResult::*cutGroups_function_type)(  ) const;
+            cutGroups_function_type cutGroups_function_value( &::SireMol::SelectResult::cutGroups );
+            
+            SelectResult_exposer.def( 
+                "cutGroups"
+                , cutGroups_function_value
+                , "" );
+        
+        }
         { //::SireMol::SelectResult::isEmpty
         
             typedef bool ( ::SireMol::SelectResult::*isEmpty_function_type)(  ) const;
@@ -77,6 +110,17 @@ void register_SelectResult_class(){
                 , "Return whether or not this is empty" );
         
         }
+        { //::SireMol::SelectResult::join
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::SelectResult::*join_function_type)(  ) const;
+            join_function_type join_function_value( &::SireMol::SelectResult::join );
+            
+            SelectResult_exposer.def( 
+                "join"
+                , join_function_value
+                , "" );
+        
+        }
         { //::SireMol::SelectResult::molNums
         
             typedef ::QList< SireMol::MolNum > ( ::SireMol::SelectResult::*molNums_function_type)(  ) const;
@@ -86,6 +130,17 @@ void register_SelectResult_class(){
                 "molNums"
                 , molNums_function_value
                 , "Return the numbers of all molecules whose views are in this set,\nin the order they appear in this set" );
+        
+        }
+        { //::SireMol::SelectResult::molecules
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::SelectResult::*molecules_function_type)(  ) const;
+            molecules_function_type molecules_function_value( &::SireMol::SelectResult::molecules );
+            
+            SelectResult_exposer.def( 
+                "molecules"
+                , molecules_function_value
+                , "" );
         
         }
         { //::SireMol::SelectResult::move
@@ -138,6 +193,17 @@ void register_SelectResult_class(){
                 , "" );
         
         }
+        { //::SireMol::SelectResult::residues
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::SelectResult::*residues_function_type)(  ) const;
+            residues_function_type residues_function_value( &::SireMol::SelectResult::residues );
+            
+            SelectResult_exposer.def( 
+                "residues"
+                , residues_function_value
+                , "" );
+        
+        }
         { //::SireMol::SelectResult::search
         
             typedef ::SireMol::SelectResult ( ::SireMol::SelectResult::*search_function_type)( ::QString const & ) const;
@@ -147,6 +213,17 @@ void register_SelectResult_class(){
                 "search"
                 , search_function_value
                 , ( bp::arg("search_term") )
+                , "" );
+        
+        }
+        { //::SireMol::SelectResult::segments
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::SelectResult::*segments_function_type)(  ) const;
+            segments_function_type segments_function_value( &::SireMol::SelectResult::segments );
+            
+            SelectResult_exposer.def( 
+                "segments"
+                , segments_function_value
                 , "" );
         
         }

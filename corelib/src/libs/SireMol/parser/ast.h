@@ -116,6 +116,7 @@ namespace AST
     struct IDWithin;        
     struct IDUser;
     struct IDJoin;
+    struct IDAll;
 
     struct IDWhereCompare;
     struct IDWhereWithin;
@@ -138,6 +139,7 @@ namespace AST
                                              boost::recursive_wrapper<IDWithin>,
                                              boost::recursive_wrapper<IDUser>,
                                              boost::recursive_wrapper<IDJoin>,
+                                             boost::recursive_wrapper<IDAll>,
                                              boost::recursive_wrapper<ExpressionPart> >;
     
     /** Base holder for strings or regular expressions */
@@ -361,6 +363,13 @@ namespace AST
 
         QString toString() const;
 
+        SelectEnginePtr toEngine() const;
+    };
+    
+    /** Struct that holds an ID token that matches everything */
+    struct IDAll
+    {
+        QString toString() const;
         SelectEnginePtr toEngine() const;
     };
     

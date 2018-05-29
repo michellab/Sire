@@ -333,6 +333,24 @@ private:
     double distance;
 };
 
+/** Internal class used to select all objects
+    
+    @author Christopher Woods
+*/
+class IDAllEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct();
+    
+    ~IDAllEngine();
+    
+    ObjType objectType() const;
+    
+protected:
+    IDAllEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+};
+
 }
 
 SIRE_END_HEADER

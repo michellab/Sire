@@ -124,6 +124,12 @@ public:
         ///// first define all of the tokens recognised by the grammar
         /////
         
+        //all of the different words to match "all"
+        all_token.add( "all", AST::IDAll() )
+                     ( "ALL", AST::IDAll() )
+                     ( "everything", AST::IDAll() )
+                     ( "*", AST::IDAll() );
+        
         //all of the different object names
         name_token.add( "atomnam", AST::ATOM )
                       ( "atomname", AST::ATOM )
@@ -281,7 +287,8 @@ public:
         //an expression is either a subscript, name, number, with, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
-                              withRule | withinRule | whereRule | notRule | joinRule | user_token |
+                              all_token | withRule | withinRule | whereRule | notRule |
+                              joinRule | user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
         
         //grammar that specifies a list of names (comma-separated)
@@ -465,6 +472,7 @@ public:
     qi::symbols<char,AST::IDComparison> cmp_token;
     qi::symbols<char,AST::IDCoordType> coord_token;
     qi::symbols<char,SireMol::Element> element_token;
+    qi::symbols<char,AST::IDAll> all_token;
     UserTokens user_token;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;

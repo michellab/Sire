@@ -244,6 +244,11 @@ namespace AST
                         .arg( lines.join(",") );
     }
 
+    QString IDAll::toString() const
+    {
+        return "all";
+    }
+
     QString IDNumber::toString() const
     {
         QStringList lines;
@@ -386,6 +391,11 @@ namespace AST
         default:
             return SelectEnginePtr();
         }
+    }
+    
+    SelectEnginePtr IDAll::toEngine() const
+    {
+        return IDAllEngine::construct();
     }
     
     SelectEnginePtr IDBinary::toEngine() const

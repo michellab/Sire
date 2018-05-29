@@ -772,6 +772,48 @@ SelectResult SelectResult::search(const QString &search_term) const
     return Select(search_term)(*this);
 }
 
+/** Return a copy of this result with all views joined into single views */
+SelectResult SelectResult::join() const
+{
+    return Select("join all")(*this);
+}
+
+/** Return a copy of this result with all views split into individual atoms */
+SelectResult SelectResult::atoms() const
+{
+    return Select("atoms with *")(*this);
+}
+
+/** Return a copy of this result with all views split into individual cutgroups */
+SelectResult SelectResult::cutGroups() const
+{
+    return Select("cutgroups with *")(*this);
+}
+
+/** Return a copy of this result with all views split into individual residues */
+SelectResult SelectResult::residues() const
+{
+    return Select("residues with *")(*this);
+}
+
+/** Return a copy of this result with all views split into individual chains */
+SelectResult SelectResult::chains() const
+{
+    return Select("chains with *")(*this);
+}
+
+/** Return a copy of this result with all views split into individual segments */
+SelectResult SelectResult::segments() const
+{
+    return Select("segments with *")(*this);
+}
+
+/** Return a copy of this result with all views split into individual molecules */
+SelectResult SelectResult::molecules() const
+{
+    return Select("molecules with *")(*this);
+}
+
 SelectResult::const_iterator SelectResult::begin() const
 {
     return molviews.begin();

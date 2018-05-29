@@ -277,6 +277,15 @@ public:
 
     SelectResult search(const QString &search_term) const;
 
+    SelectResult join() const;
+    
+    SelectResult atoms() const;
+    SelectResult cutGroups() const;
+    SelectResult residues() const;
+    SelectResult chains() const;
+    SelectResult segments() const;
+    SelectResult molecules() const;
+
 private:
     /** The list of all ViewsOfMol views */
     QList<ViewsOfMol> molviews;

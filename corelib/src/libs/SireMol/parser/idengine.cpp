@@ -2102,3 +2102,31 @@ SelectEngine::ObjType IDDistanceEngine::objectType() const
         return SelectEngine::COMPLEX;
     }
 }
+
+////////
+//////// Implementation of the IDAllEngine
+////////
+
+IDAllEngine::IDAllEngine()
+{}
+
+SelectEnginePtr IDAllEngine::construct()
+{
+    IDAllEngine *ptr = new IDAllEngine();
+    auto p = makePtr(ptr);
+    
+    return p;
+}
+
+IDAllEngine::~IDAllEngine()
+{}
+
+SelectResult IDAllEngine::select(const SelectResult &mols, const PropertyMap&) const
+{
+    return mols;
+}
+
+SelectEngine::ObjType IDAllEngine::objectType() const
+{
+    return SelectEngine::COMPLEX;
+}
