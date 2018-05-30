@@ -96,16 +96,10 @@ class QDataStream;
 QDataStream& operator<<(QDataStream&, const SireMaths::Complex&);
 QDataStream& operator>>(QDataStream&, SireMaths::Complex&);
 
-namespace boost
-{
-template<class T>
-class rational;
-}
-
 namespace SireMaths
 {
 
-typedef boost::rational<qint32> Rational;
+class Rational;
 
 /**
 This class represents a complex number to the same precision as 'double'. 

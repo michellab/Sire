@@ -46,6 +46,8 @@ namespace bp = boost::python;
 
 #include "partialmolecule.h"
 
+#include "select.h"
+
 #include "tostring.h"
 
 #include <QDebug>
@@ -75,6 +77,8 @@ void register_MoleculeGroup_class(){
         MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::MoleculeView const & >(( bp::arg("name"), bp::arg("molview") ), "Construct a named group that contains the passed molecule") );
         MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::Molecules const & >(( bp::arg("name"), bp::arg("molecules") ), "Construct a named group that contains the passed molecules") );
         MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::MoleculeGroup const & >(( bp::arg("name"), bp::arg("other") ), "Construct a named group that contains the same molecules as other") );
+        MoleculeGroup_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("result") ), "Construct a group that holds the passed molecules") );
+        MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::SelectResult const & >(( bp::arg("name"), bp::arg("result") ), "Construct a named group that contains the passed molecules") );
         MoleculeGroup_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::MoleculeGroup::accept
         
@@ -1137,6 +1141,18 @@ void register_MoleculeGroup_class(){
                 "removeAll"
                 , removeAll_function_value
                 , "Remove all of the molecules from this group" );
+        
+        }
+        { //::SireMol::MoleculeGroup::search
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::MoleculeGroup::*search_function_type)( ::QString const & ) const;
+            search_function_type search_function_value( &::SireMol::MoleculeGroup::search );
+            
+            MoleculeGroup_exposer.def( 
+                "search"
+                , search_function_value
+                , ( bp::arg("search_term") )
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::setContents

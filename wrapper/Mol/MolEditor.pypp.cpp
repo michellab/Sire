@@ -339,7 +339,7 @@ void register_MolEditor_class(){
                 , renumber_function_value
                 , ( bp::arg("atomnums") )
                 , bp::return_self< >()
-                , "Give this molecule the ID number newnum" );
+                , "Renumber the atoms in the molecule according to the passed map" );
         
         }
         { //::SireMol::MolEditor::renumber
@@ -352,7 +352,7 @@ void register_MolEditor_class(){
                 , renumber_function_value
                 , ( bp::arg("resnums") )
                 , bp::return_self< >()
-                , "Give this molecule the ID number newnum" );
+                , "Renumber the residues in the molecule according to the passed map" );
         
         }
         { //::SireMol::MolEditor::renumber
@@ -365,7 +365,7 @@ void register_MolEditor_class(){
                 , renumber_function_value
                 , ( bp::arg("atomnums"), bp::arg("resnums") )
                 , bp::return_self< >()
-                , "" );
+                , "Renumber the atoms and residues in the molecule according to the passed maps" );
         
         }
         { //::SireMol::MolEditor::toString

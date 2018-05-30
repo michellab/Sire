@@ -60,6 +60,8 @@ namespace bp = boost::python;
 
 #include "segment.h"
 
+#include "select.h"
+
 #include "selector.hpp"
 
 #include "tostring.h"

@@ -57,6 +57,7 @@
 #include "cgid.h"
 #include "atomid.h"
 
+#include "select.h"
 #include "selector.hpp"
 
 #include "tostring.h"
@@ -896,6 +897,12 @@ CutGroup MolGroupsBase::select(const CGID &cgid) const
 Atom MolGroupsBase::select(const AtomID &atomid) const
 {
     return this->at(atomid);
+}
+
+/** Return the result of searching this object for 'search_string' */
+SelectResult MolGroupsBase::search(const QString &search_string) const
+{
+    return Select(search_string)(*this);
 }
 
 /** Return a list of all of the molecule groups in this set */

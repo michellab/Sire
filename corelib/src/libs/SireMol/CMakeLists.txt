@@ -108,6 +108,12 @@ set ( SIREMOL_HEADERS
       mover.h
       mover.hpp
       mover_metaid.h
+
+      parser.h
+      parser/ast.h
+      parser/idengine.h
+      parser/grammar.h
+
       partialmolecule.h
       perturbation.h
       reseditor.h
@@ -127,6 +133,7 @@ set ( SIREMOL_HEADERS
       segname.h
       segment.h
       segproperty.hpp
+      select.h
       selector.hpp
       specifymol.h
       structureeditor.h
@@ -208,6 +215,11 @@ set ( SIREMOL_SOURCES
       molwithresid.cpp
       molviewproperty.cpp
       mover.cpp
+
+      parser.cpp
+      parser/ast.cpp
+      parser/idengine.cpp
+
       partialmolecule.cpp
       perturbation.cpp
       reseditor.cpp
@@ -221,6 +233,7 @@ set ( SIREMOL_SOURCES
       segidentifier.cpp
       segment.cpp
       segproperty.cpp
+      select.cpp
       specifymol.cpp
       structureeditor.cpp
       viewsofmol.cpp

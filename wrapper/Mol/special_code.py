@@ -315,9 +315,11 @@ def fix_BeadID(c):
     for header in active_headers["beadid.h"].dependencies():
         c.add_declaration_code( "#include %s" % header )
 
-
 def fix_PerturbationSymbols(c):
     c.mem_funs("lambda").rename("Lambda")
+
+def fix_SelectResultMover(c):
+    c.decls("translate").call_policies = call_policies.return_self()
 
 special_code = { "SireMol::Atom" : fix_Atom,
                  "SireMol::Editor<SireMol::AtomEditor, SireMol::Atom>" : fix_AtomEditorBase,
@@ -375,6 +377,8 @@ special_code = { "SireMol::Atom" : fix_Atom,
                  "SireMol::SegStructureEditor" : fix_SegStructureEditor,
                  "SireMol::Mover<SireMol::Segment>" : fix_Mover,
                  "SireMol::Mover<SireMol::Selector<SireMol::Segment> >" : fix_Mover,
+
+                 "SireMol::SelectResultMover" : fix_SelectResultMover,
 
                  "SireMol::MolEditor" : fix_MolEditor,
                  "SireMol::Editor<SireMol::MolEditor, SireMol::Molecule>" : fix_MolEditorBase,

@@ -34,6 +34,8 @@ namespace bp = boost::python;
 
 #include "segment.h"
 
+#include "select.h"
+
 #include "selector.hpp"
 
 #include <QDebug>
@@ -706,6 +708,18 @@ void register_MoleculeView_class(){
                 "residues"
                 , residues_function_value
                 , "Return all of the residues that are involved with this view\nThrow: SireMol::missing_residue\n" );
+        
+        }
+        { //::SireMol::MoleculeView::search
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::MoleculeView::*search_function_type)( ::QString const & ) const;
+            search_function_type search_function_value( &::SireMol::MoleculeView::search );
+            
+            MoleculeView_exposer.def( 
+                "search"
+                , search_function_value
+                , ( bp::arg("search_string") )
+                , "Return the result of searching this molecule using the passed\nsearch string" );
         
         }
         { //::SireMol::MoleculeView::segment

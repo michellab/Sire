@@ -60,6 +60,8 @@ namespace bp = boost::python;
 
 #include "segment.h"
 
+#include "select.h"
+
 #include "selector.hpp"
 
 #include "tostring.h"
@@ -1567,6 +1569,18 @@ void register_MolGroupsBase_class(){
                 , residues_function_value
                 , ( bp::arg("resid") )
                 , "Return all of the residues from this set that match the ID resid.\nThe returned residues are arranged by molecule, and only one copy\nof each residue is returned, regardless of how many times it appears\nin this set.\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
+        
+        }
+        { //::SireMol::MolGroupsBase::search
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::MolGroupsBase::*search_function_type)( ::QString const & ) const;
+            search_function_type search_function_value( &::SireMol::MolGroupsBase::search );
+            
+            MolGroupsBase_exposer.def( 
+                "search"
+                , search_function_value
+                , ( bp::arg("search_string") )
+                , "Return the result of searching this object for search_string" );
         
         }
         { //::SireMol::MolGroupsBase::segment
