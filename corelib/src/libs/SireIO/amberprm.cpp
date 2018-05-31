@@ -3660,7 +3660,7 @@ MolStructureEditor AmberPrm::getMolStructure(int start_idx, int natoms,
 
         if (res_idx+1 == res_pointers.count())
         {
-            res_end_atom = res_start_atom + natoms - 1;
+            res_end_atom = res_pointers[res_start_idx] + natoms - 1;
         }
         else
         {
