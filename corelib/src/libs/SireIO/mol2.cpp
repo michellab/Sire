@@ -715,7 +715,7 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     // Loop over all entries in the data list.
     for (int i=0; i<data.count(); ++i)
     {
-        bool ok = false;
+        bool ok;
 
         // Extract the appropriate data record.
         if      (i == 0) num_atoms = data[0].toInt(&ok);
@@ -1550,6 +1550,12 @@ QString Mol2Substructure::getName() const
     return name;
 }
 
+/** Get the index of the root atom. */
+qint64 Mol2Substructure::getRootAtom() const
+{
+    return root_atom;
+}
+
 /** Get the substructure type. */
 QString Mol2Substructure::getType() const
 {
@@ -2348,7 +2354,8 @@ void Mol2::addToSystem(System &system, const PropertyMap &map) const
 }
 
 /** Internal function used to get the molecule structure for molecule 'imol'. */
-MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) const
+MolStructureEditor Mol2::getMolStructure(int imol, QHash<int, int> &res_map,
+    const PropertyName &cutting) const
 {
     // Get the number of atoms in the molecule.
     const int nats = nAtoms(imol);
@@ -2387,6 +2394,9 @@ MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) 
     // Create a map between residue number and name.
     QMap<int, QString> res_names;
 
+    // Create a map between atom number and residue number.
+    QMap<int, int> res_nums;
+
     // Loop through the atoms in the molecule and store the residues.
     for (int i=0; i<nats; ++i)
     {
@@ -2398,6 +2408,9 @@ MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) 
 
         // Insert the residue into the residue name map.
         res_names.insert(atom.getSubstructureNumber(), atom.getSubstructureName());
+
+        // Insert the mapping between atom and residue number.
+        res_nums.insert(atom.getNumber(), atom.getSubstructureNumber());
     }
 
     // Create a multimap between residues and chains.
@@ -2417,7 +2430,13 @@ MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) 
         auto substructure = molecules[imol].getSubstructure(i);
 
         // Get the substructure's number.
-        auto res_num = substructure.getNumber();
+        // (We use the substructure number of the root atom, since the substructure
+        // number in the SUBSTRUCTURE record is just for reference.)
+        auto res_num = res_nums[substructure.getRootAtom()];
+
+        // Map the substructure number. This is useful when the number in the
+        // substructure record doesn't match the one given in the ATOM section.
+        res_map.insert(substructure.getNumber(), res_num);
 
         // Get the name of the chain to which the substructure belongs.
         auto chain = substructure.getChain();
@@ -2425,12 +2444,8 @@ MolStructureEditor Mol2::getMolStructure(int imol, const PropertyName &cutting) 
         // Make sure that this is a valid chain.
         if (not chain.isEmpty())
         {
-            // Make sure that this substructure exists.
-            if (residues.contains(res_num))
-            {
-                // Insert the substructure into the chain map.
-                chains.insert(chain, res_num);
-            }
+            // Insert the substructure into the chain map.
+            chains.insert(chain, res_num);
         }
     }
 
@@ -2511,8 +2526,15 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
                 .arg(imol), CODELOC);
     }
 
+    // Create a mapping between substructure (residue) numbers in the SUBSTRUCTURE
+    // record section and their number in the ATOM record. These numbers are often
+    // different. This is because the number in the SUBSTRUCTURE record section is
+    // purely for reference, so we need to match against the SUBSTRUCTURE ID of the
+    // root atom.
+    QHash<int, int> res_map;
+
     // First, construct the layout of the molecule (sorting of atoms into residues and cutgroups).
-    auto mol = this->getMolStructure(imol, map["cutting"]).commit().edit();
+    auto mol = this->getMolStructure(imol, res_map, map["cutting"]).commit().edit();
 
     // Get the info object that can map between AtomNum to AtomIdx etc.
     const auto molinfo = mol.info();
@@ -2584,7 +2606,7 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
         auto subst = molecules[imol].getSubstructure(i);
 
         // Determine the ResIdx for this residue.
-        auto residx = molinfo.resIdx(ResNum(subst.getNumber()));
+        auto residx = molinfo.resIdx(ResNum(res_map[subst.getNumber()]));
 
         // Set the residue properties.
         subst_types.set(residx, subst.getType());

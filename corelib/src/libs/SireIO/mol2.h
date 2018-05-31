@@ -380,6 +380,9 @@ public:
     /** Get the substructure name. */
     QString getName() const;
 
+    /** Get the root atom index. */
+    qint64 getRootAtom() const;
+
     /** Get the substructure type. */
     QString getType() const;
 
@@ -529,7 +532,7 @@ private:
         QVector<QString> &atom_lines, QVector<QString> &substructure_lines, QStringList &errors,
         const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
-    SireMol::MolStructureEditor getMolStructure(int imol,
+    SireMol::MolStructureEditor getMolStructure(int imol, QHash<int, int> &res_map,
         const SireBase::PropertyName &cutting) const;
 
     SireMol::MolEditor getMolecule(int imol,
