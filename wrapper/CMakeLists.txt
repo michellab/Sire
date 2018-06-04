@@ -149,7 +149,7 @@ if (APPLE)
   # @exeutable_path/../${SIRE_LIBS} and @exeutable_path/../${SIRE_BUNDLED_LIBS}
   set (SIRE_INSTALL_RPATH "@executable_path/../${SIRE_LIBS}:@executable_path/../${SIRE_BUNDLED_LIBS}")
 else()
-  set (SIRE_INSTALL_RPATH "\$ORIGIN/../${SIRE_LIBS}:\$ORIGIN/../${SIRE_BUNDLED_LIBS}")
+  set (SIRE_INSTALL_RPATH "\$ORIGIN/../${SIRE_LIBS}:\$ORIGIN/../${SIRE_BUNDLED_LIBS}:\$ORIGIN/../../../../../${SIRE_LIBS}:\$ORIGIN/../../../../../${SIRE_BUNDLED_LIBS}")
 endif()
 
 set (CMAKE_INSTALL_RPATH "${SIRE_INSTALL_RPATH}")
