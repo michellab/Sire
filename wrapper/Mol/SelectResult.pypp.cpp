@@ -51,7 +51,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , "" );
+                , "Return a copy of this result with all views split into individual atoms" );
         
         }
         { //::SireMol::SelectResult::chains
@@ -62,7 +62,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "chains"
                 , chains_function_value
-                , "" );
+                , "Return a copy of this result with all views split into individual chains" );
         
         }
         { //::SireMol::SelectResult::contains
@@ -96,7 +96,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "cutGroups"
                 , cutGroups_function_value
-                , "" );
+                , "Return a copy of this result with all views split into individual cutgroups" );
         
         }
         { //::SireMol::SelectResult::isEmpty
@@ -118,7 +118,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "join"
                 , join_function_value
-                , "" );
+                , "Return a copy of this result with all views joined into single views" );
         
         }
         { //::SireMol::SelectResult::molNums
@@ -140,7 +140,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "molecules"
                 , molecules_function_value
-                , "" );
+                , "Return a copy of this result with all views split into individual molecules" );
         
         }
         { //::SireMol::SelectResult::move
@@ -201,7 +201,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "residues"
                 , residues_function_value
-                , "" );
+                , "Return a copy of this result with all views split into individual residues" );
         
         }
         { //::SireMol::SelectResult::search
@@ -213,7 +213,7 @@ void register_SelectResult_class(){
                 "search"
                 , search_function_value
                 , ( bp::arg("search_term") )
-                , "" );
+                , "Return the result of searching this result with search_term" );
         
         }
         { //::SireMol::SelectResult::segments
@@ -224,7 +224,7 @@ void register_SelectResult_class(){
             SelectResult_exposer.def( 
                 "segments"
                 , segments_function_value
-                , "" );
+                , "Return a copy of this result with all views split into individual segments" );
         
         }
         { //::SireMol::SelectResult::size
