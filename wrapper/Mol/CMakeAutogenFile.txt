@@ -6,6 +6,7 @@ set ( PYPP_SOURCES
        BondHunter.pypp.cpp
        AtomStructureEditor.pypp.cpp
        AngleID.pypp.cpp
+       ResIdxAtomMCSMatcher.pypp.cpp
        CGFloatProperty.pypp.cpp
        MatchAll_AtomID_.pypp.cpp
        IDOrSet_ChainID_.pypp.cpp

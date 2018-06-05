@@ -387,6 +387,8 @@
 
 #include "ResIdx.pypp.hpp"
 
+#include "ResIdxAtomMCSMatcher.pypp.hpp"
+
 #include "ResIdxAtomNameMatcher.pypp.hpp"
 
 #include "ResIn_ChainID_.pypp.hpp"
@@ -933,6 +935,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_ResEditor_class();
 
     register_ResIdx_class();
+
+    register_ResIdxAtomMCSMatcher_class();
 
     register_ResIdxAtomNameMatcher_class();
 

@@ -7,8 +7,6 @@
 
 namespace bp = boost::python;
 
-#include "SireBase/parallel.h"
-
 #include "SireError/errors.h"
 
 #include "SireStream/datastream.h"

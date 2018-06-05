@@ -405,7 +405,7 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomMCSMatcher &mcsmatch
         mcsmatcher.match_light = false;
     }
     else
-        throw version_error(v, "1,2", r_namematcher, CODELOC);
+        throw version_error(v, "1,2", r_mcsmatcher, CODELOC);
 
     return ds;
 }
@@ -1338,6 +1338,238 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomNameMatcher::pvt_match(const MoleculeInfoData &
 }
 
 const char* ResIdxAtomNameMatcher::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<ResIdxAtomNameMatcher>() );
+}
+
+/////////
+///////// Implementation of ResIdxAtomMCSMatcher
+/////////
+
+static const RegisterMetaType<ResIdxAtomMCSMatcher> r_residxmcsmatcher;
+
+/** Serialise to a binary datastream */
+QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+                                       const ResIdxAtomMCSMatcher &residxmcsmatcher)
+{
+    writeHeader(ds, r_mcsmatcher, 2);
+
+    SharedDataStream sds(ds);
+
+    sds << residxmcsmatcher.prematcher << double(residxmcsmatcher.t.to(second))
+        << residxmcsmatcher.match_light
+        << static_cast<const AtomMatcher&>(residxmcsmatcher);
+
+    return ds;
+}
+
+/** Extract from a binary datastream */
+QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResIdxAtomMCSMatcher &residxmcsmatcher)
+{
+    VersionID v = readHeader(ds, r_residxmcsmatcher);
+
+    if (v == 2)
+    {
+        double timeout;
+
+        SharedDataStream sds(ds);
+
+        sds >> residxmcsmatcher.prematcher >> timeout
+            >> residxmcsmatcher.match_light
+            >> static_cast<AtomMatcher&>(residxmcsmatcher);
+
+        residxmcsmatcher.t = timeout*second;
+    }
+    else if (v == 1)
+    {
+        double timeout;
+
+        SharedDataStream sds(ds);
+
+        sds >> residxmcsmatcher.prematcher >> timeout >> static_cast<AtomMatcher&>(residxmcsmatcher);
+
+        residxmcsmatcher.t = timeout*second;
+        residxmcsmatcher.match_light = false;
+    }
+    else
+        throw version_error(v, "1,2", r_residxmcsmatcher, CODELOC);
+
+    return ds;
+}
+
+/** Constructor */
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher()
+               : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(), t(1*second),
+                 match_light(false)
+{}
+
+/** Construct specifying the timeout for the MCS match */
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const SireUnits::Dimension::Time &timeout)
+               : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(), t(timeout),
+                 match_light(false)
+{}
+
+/** Construct specifying the prematcher for the MCS match */
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const AtomMatcher &matcher)
+               : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(),
+                 prematcher(matcher), t(1*second), match_light(false)
+{}
+
+/** Construct specifying the timeout and prematcher for the MCS match */
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const AtomMatcher &matcher,
+                                           const SireUnits::Dimension::Time &timeout)
+               : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(),
+                 prematcher(matcher), t(timeout), match_light(false)
+{}
+
+/** Constructor, specifying whether or not to match light atoms */
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(bool match_light_atoms)
+               : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(), t(1*second),
+                 match_light(match_light_atoms)
+{}
+
+/** Construct specifying the timeout for the MCS match, and specifying whether or not
+    to match light atoms */
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
+                                           bool match_light_atoms)
+               : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(), t(timeout),
+                 match_light(match_light_atoms)
+{}
+
+/** Construct specifying the prematcher for the MCS match,
+    and specifying whether or not to match light atoms
+*/
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const AtomMatcher &matcher,
+                                           bool match_light_atoms)
+               : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(),
+                 prematcher(matcher), t(1*second), match_light(match_light_atoms)
+{}
+
+/** Construct specifying the timeout and prematcher for the MCS match,
+    and specifying whether or not to match light atoms
+*/
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const AtomMatcher &matcher,
+                               const SireUnits::Dimension::Time &timeout,
+                               bool match_light_atoms)
+               : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(),
+                 prematcher(matcher), t(timeout), match_light(match_light_atoms)
+{}
+
+/** Copy constructor */
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const ResIdxAtomMCSMatcher &other)
+               : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(other),
+                 prematcher(other.prematcher), t(other.t),
+                 match_light(other.match_light)
+{}
+
+/** Destructor */
+ResIdxAtomMCSMatcher::~ResIdxAtomMCSMatcher()
+{}
+
+/** Copy assignment operator */
+ResIdxAtomMCSMatcher& ResIdxAtomMCSMatcher::operator=(const ResIdxAtomMCSMatcher &other)
+{
+    if (this != &other)
+    {
+        t = other.t;
+        prematcher = other.prematcher;
+        match_light = other.match_light;
+    }
+
+    return *this;
+}
+
+/** Comparison operator */
+bool ResIdxAtomMCSMatcher::operator==(const ResIdxAtomMCSMatcher &other) const
+{
+    return prematcher == other.prematcher and t == other.t and match_light == other.match_light;
+}
+
+/** Comparison operator */
+bool ResIdxAtomMCSMatcher::operator!=(const ResIdxAtomMCSMatcher &other) const
+{
+    return not operator==(other);
+}
+
+QString ResIdxAtomMCSMatcher::toString() const
+{
+    if (prematcher.isNull() or prematcher.read().isNull())
+    {
+        return QObject::tr("ResIdxAtomMCSMatcher( timeout() = %1 s, matchingLightAtoms() = %2 )")
+                .arg(t.to(second)).arg(match_light);
+    }
+    else
+    {
+        return QObject::tr("ResIdxAtomMCSMatcher( preMatcher() = %1, timeout() = %2 s, "
+                           "matchingLightAtoms() = %3 )")
+                    .arg(prematcher.read().toString())
+                    .arg(t.to(second))
+                    .arg(match_light);
+    }
+}
+
+/** Return the prematcher (if any) that is used to pre-match atoms
+    before the MCS match */
+const AtomMatcher& ResIdxAtomMCSMatcher::preMatcher() const
+{
+    return prematcher.read();
+}
+
+/** Return the timeout before the MCS match is abandoned */
+SireUnits::Dimension::Time ResIdxAtomMCSMatcher::timeout() const
+{
+    return t;
+}
+
+/** Return whether or not this will include light atoms (e.g. hydrogen)
+    when searching for the maximum common substructure */
+bool ResIdxAtomMCSMatcher::matchingLightAtoms() const
+{
+    return match_light;
+}
+
+/** Match the atoms in 'mol1' to the atoms in 'mol0' by MCS, searching each
+    residue separately (by index) and combining the results. This returns the
+    AtomIdxs of the atoms in 'mol1' that are in 'mol0', indexed by the AtomIdx
+    of the atom in 'mol0'.
+
+    This skips atoms in 'mol1' that are not in 'mol0'
+*/
+QHash<AtomIdx,AtomIdx> ResIdxAtomMCSMatcher::pvt_match(const MoleculeView &mol0,
+                                                       const PropertyMap &map0,
+                                                       const MoleculeView &mol1,
+                                                       const PropertyMap &map1) const
+{
+    const AtomSelection sel0 = mol0.selection();
+    const AtomSelection sel1 = mol1.selection();
+
+    QHash<AtomIdx,AtomIdx> map;
+
+    if (sel0.selectedAll() and sel1.selectedAll())
+    {
+        for (const auto &idx : mol0.data().info().getResidues())
+        {
+            // Perform an MCS match using the same residue in each molecule.
+            QHash<AtomIdx,AtomIdx> local_map;
+            if (prematcher.isNull() or prematcher.read().isNull())
+                    local_map = Evaluator(mol0[idx]).findMCS(mol1[idx], t, match_light, map0, map1);
+                else
+                    local_map = Evaluator(mol0[idx]).findMCS(mol1[idx], prematcher.read(), t, match_light, map0, map1);
+
+            // Update the atom index map.
+            map.unite(local_map);
+        }
+    }
+    else
+    {
+        throw SireError::unsupported(QObject::tr("ResIdxAtomMCSMatcher only works with "
+            "full molecule selections."));
+    }
+
+    return map;
+}
+
+const char* ResIdxAtomMCSMatcher::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<ResIdxAtomNameMatcher>() );
 }
