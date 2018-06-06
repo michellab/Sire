@@ -370,7 +370,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
     SharedDataStream sds(ds);
 
     sds << mcsmatcher.prematcher << double(mcsmatcher.t.to(second))
-        << mcsmatcher.match_light
+        << mcsmatcher.match_light << mcsmatcher.verbose
         << static_cast<const AtomMatcher&>(mcsmatcher);
 
     return ds;
@@ -388,7 +388,7 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomMCSMatcher &mcsmatch
         SharedDataStream sds(ds);
 
         sds >> mcsmatcher.prematcher >> timeout
-            >> mcsmatcher.match_light
+            >> mcsmatcher.match_light >> mcsmatcher.verbose
             >> static_cast<AtomMatcher&>(mcsmatcher);
 
         mcsmatcher.t = timeout*second;
@@ -403,6 +403,7 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomMCSMatcher &mcsmatch
 
         mcsmatcher.t = timeout*second;
         mcsmatcher.match_light = false;
+        mcsmatcher.verbose = false;
     }
     else
         throw version_error(v, "1,2", r_mcsmatcher, CODELOC);
@@ -413,49 +414,69 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomMCSMatcher &mcsmatch
 /** Constructor */
 AtomMCSMatcher::AtomMCSMatcher()
                : ConcreteProperty<AtomMCSMatcher,AtomMatcher>(), t(1*second),
-                 match_light(false)
+                 match_light(false),
+                 verbose(false)
+{}
+
+/** Constructor */
+AtomMCSMatcher::AtomMCSMatcher(bool verbose)
+               : ConcreteProperty<AtomMCSMatcher,AtomMatcher>(), t(1*second),
+                 match_light(false),
+                 verbose(verbose)
 {}
 
 /** Construct specifying the timeout for the MCS match */
-AtomMCSMatcher::AtomMCSMatcher(const SireUnits::Dimension::Time &timeout)
+AtomMCSMatcher::AtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
+                               bool verbose)
                : ConcreteProperty<AtomMCSMatcher,AtomMatcher>(), t(timeout),
-                 match_light(false)
+                 match_light(false),
+                 verbose(verbose)
 {}
 
 /** Construct specifying the prematcher for the MCS match */
-AtomMCSMatcher::AtomMCSMatcher(const AtomMatcher &matcher)
+AtomMCSMatcher::AtomMCSMatcher(const AtomMatcher &matcher,
+                               bool verbose)
                : ConcreteProperty<AtomMCSMatcher,AtomMatcher>(),
-                 prematcher(matcher), t(1*second), match_light(false)
+                 prematcher(matcher), t(1*second),
+                 match_light(false), verbose(verbose)
 {}
 
 /** Construct specifying the timeout and prematcher for the MCS match */
 AtomMCSMatcher::AtomMCSMatcher(const AtomMatcher &matcher,
-                               const SireUnits::Dimension::Time &timeout)
+                               const SireUnits::Dimension::Time &timeout,
+                               bool verbose)
                : ConcreteProperty<AtomMCSMatcher,AtomMatcher>(),
-                 prematcher(matcher), t(timeout), match_light(false)
+                 prematcher(matcher), t(timeout),
+                 match_light(false), verbose(verbose)
 {}
 
 /** Constructor, specifying whether or not to match light atoms */
-AtomMCSMatcher::AtomMCSMatcher(bool match_light_atoms)
+AtomMCSMatcher::AtomMCSMatcher(bool match_light_atoms,
+                               bool verbose)
                : ConcreteProperty<AtomMCSMatcher,AtomMatcher>(), t(1*second),
-                 match_light(match_light_atoms)
+                 match_light(match_light_atoms),
+                 verbose(verbose)
 {}
 
 /** Construct specifying the timeout for the MCS match, and specifying whether or not
     to match light atoms */
 AtomMCSMatcher::AtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
-                               bool match_light_atoms)
+                               bool match_light_atoms,
+                               bool verbose)
                : ConcreteProperty<AtomMCSMatcher,AtomMatcher>(), t(timeout),
-                 match_light(match_light_atoms)
+                 match_light(match_light_atoms),
+                 verbose(verbose)
 {}
 
 /** Construct specifying the prematcher for the MCS match,
     and specifying whether or not to match light atoms
 */
 AtomMCSMatcher::AtomMCSMatcher(const AtomMatcher &matcher,
-                               bool match_light_atoms)
+                               bool match_light_atoms,
+                               bool verbose)
                : ConcreteProperty<AtomMCSMatcher,AtomMatcher>(),
-                 prematcher(matcher), t(1*second), match_light(match_light_atoms)
+                 prematcher(matcher), t(1*second),
+                 match_light(match_light_atoms), verbose(verbose)
 {}
 
 /** Construct specifying the timeout and prematcher for the MCS match,
@@ -463,16 +484,18 @@ AtomMCSMatcher::AtomMCSMatcher(const AtomMatcher &matcher,
 */
 AtomMCSMatcher::AtomMCSMatcher(const AtomMatcher &matcher,
                                const SireUnits::Dimension::Time &timeout,
-                               bool match_light_atoms)
+                               bool match_light_atoms,
+                               bool verbose)
                : ConcreteProperty<AtomMCSMatcher,AtomMatcher>(),
-                 prematcher(matcher), t(timeout), match_light(match_light_atoms)
+                 prematcher(matcher), t(timeout),
+                 match_light(match_light_atoms), verbose(verbose)
 {}
 
 /** Copy constructor */
 AtomMCSMatcher::AtomMCSMatcher(const AtomMCSMatcher &other)
                : ConcreteProperty<AtomMCSMatcher,AtomMatcher>(other),
                  prematcher(other.prematcher), t(other.t),
-                 match_light(other.match_light)
+                 match_light(other.match_light), verbose(other.verbose)
 {}
 
 /** Destructor */
@@ -487,6 +510,7 @@ AtomMCSMatcher& AtomMCSMatcher::operator=(const AtomMCSMatcher &other)
         t = other.t;
         prematcher = other.prematcher;
         match_light = other.match_light;
+        verbose = other.verbose;
     }
 
     return *this;
@@ -495,7 +519,7 @@ AtomMCSMatcher& AtomMCSMatcher::operator=(const AtomMCSMatcher &other)
 /** Comparison operator */
 bool AtomMCSMatcher::operator==(const AtomMCSMatcher &other) const
 {
-    return prematcher == other.prematcher and t == other.t and match_light == other.match_light;
+    return prematcher == other.prematcher and t == other.t and match_light == other.match_light and verbose == other.verbose;
 }
 
 /** Comparison operator */
@@ -508,16 +532,18 @@ QString AtomMCSMatcher::toString() const
 {
     if (prematcher.isNull() or prematcher.read().isNull())
     {
-        return QObject::tr("AtomMCSMatcher( timeout() = %1 s, matchingLightAtoms() = %2 )")
-                .arg(t.to(second)).arg(match_light);
+        return QObject::tr("AtomMCSMatcher( timeout() = %1 s, matchingLightAtoms() = %2, "
+                "isVerbose() = %3 )")
+                .arg(t.to(second)).arg(match_light).arg(verbose);
     }
     else
     {
         return QObject::tr("AtomMCSMatcher( preMatcher() = %1, timeout() = %2 s, "
-                           "matchingLightAtoms() = %3 )")
+                           "matchingLightAtoms() = %3, isVerbose() = %4 )")
                     .arg(prematcher.read().toString())
                     .arg(t.to(second))
-                    .arg(match_light);
+                    .arg(match_light)
+                    .arg(verbose);
     }
 }
 
@@ -546,6 +572,12 @@ bool AtomMCSMatcher::matchingLightAtoms() const
     return match_light;
 }
 
+/** Return whether or not this will report progress to stdout. */
+bool AtomMCSMatcher::isVerbose() const
+{
+    return verbose;
+}
+
 /** Match the atoms in 'mol1' to the atoms in 'mol0' - this
     returns the AtomIdxs of the atoms in 'mol1' that are in
     'mol0', indexed by the AtomIdx of the atom in 'mol0'.
@@ -558,9 +590,9 @@ QHash<AtomIdx,AtomIdx> AtomMCSMatcher::pvt_match(const MoleculeView &mol0,
                                                  const PropertyMap &map1) const
 {
     if (prematcher.isNull() or prematcher.read().isNull())
-        return Evaluator(mol0).findMCS(mol1, t, match_light, map0, map1);
+        return Evaluator(mol0).findMCS(mol1, t, match_light, map0, map1, this-verbose);
     else
-        return Evaluator(mol0).findMCS(mol1, prematcher.read(), t, match_light, map0, map1);
+        return Evaluator(mol0).findMCS(mol1, prematcher.read(), t, match_light, map0, map1, this-verbose);
 }
 
 /////////
@@ -1357,7 +1389,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
     SharedDataStream sds(ds);
 
     sds << residxmcsmatcher.prematcher << double(residxmcsmatcher.t.to(second))
-        << residxmcsmatcher.match_light
+        << residxmcsmatcher.match_light << residxmcsmatcher.verbose
         << static_cast<const AtomMatcher&>(residxmcsmatcher);
 
     return ds;
@@ -1375,7 +1407,7 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResIdxAtomMCSMatcher &re
         SharedDataStream sds(ds);
 
         sds >> residxmcsmatcher.prematcher >> timeout
-            >> residxmcsmatcher.match_light
+            >> residxmcsmatcher.match_light >> residxmcsmatcher.verbose
             >> static_cast<AtomMatcher&>(residxmcsmatcher);
 
         residxmcsmatcher.t = timeout*second;
@@ -1390,6 +1422,7 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResIdxAtomMCSMatcher &re
 
         residxmcsmatcher.t = timeout*second;
         residxmcsmatcher.match_light = false;
+        residxmcsmatcher.verbose = false;
     }
     else
         throw version_error(v, "1,2", r_residxmcsmatcher, CODELOC);
@@ -1400,67 +1433,90 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResIdxAtomMCSMatcher &re
 /** Constructor */
 ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher()
                : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(), t(1*second),
-                 match_light(false)
+                 match_light(false),
+                 verbose(false)
+{}
+
+/** Constructor */
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(bool verbose)
+               : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(), t(1*second),
+                 match_light(false),
+                 verbose(verbose)
 {}
 
 /** Construct specifying the timeout for the MCS match */
-ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const SireUnits::Dimension::Time &timeout)
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
+                                           bool verbose)
                : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(), t(timeout),
-                 match_light(false)
+                 match_light(false),
+                 verbose(verbose)
 {}
 
 /** Construct specifying the prematcher for the MCS match */
-ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const AtomMatcher &matcher)
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const AtomMatcher &matcher,
+                                           bool verbose)
                : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(),
-                 prematcher(matcher), t(1*second), match_light(false)
+                 prematcher(matcher), t(1*second),
+                 match_light(false), verbose(verbose)
 {}
 
 /** Construct specifying the timeout and prematcher for the MCS match */
 ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const AtomMatcher &matcher,
-                                           const SireUnits::Dimension::Time &timeout)
+                                           const SireUnits::Dimension::Time &timeout,
+                                           bool verbose)
                : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(),
-                 prematcher(matcher), t(timeout), match_light(false)
+                 prematcher(matcher), t(timeout),
+                 match_light(false), verbose(verbose)
 {}
 
 /** Constructor, specifying whether or not to match light atoms */
-ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(bool match_light_atoms)
+ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(bool match_light_atoms,
+                                           bool verbose)
                : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(), t(1*second),
-                 match_light(match_light_atoms)
+                 match_light(match_light_atoms),
+                 verbose(verbose)
 {}
 
 /** Construct specifying the timeout for the MCS match, and specifying whether or not
     to match light atoms */
 ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
-                                           bool match_light_atoms)
+                                           bool match_light_atoms,
+                                           bool verbose)
                : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(), t(timeout),
-                 match_light(match_light_atoms)
+                 match_light(match_light_atoms),
+                 verbose(verbose)
 {}
 
 /** Construct specifying the prematcher for the MCS match,
     and specifying whether or not to match light atoms
 */
 ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const AtomMatcher &matcher,
-                                           bool match_light_atoms)
+                                           bool match_light_atoms,
+                                           bool verbose)
                : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(),
-                 prematcher(matcher), t(1*second), match_light(match_light_atoms)
+                 prematcher(matcher), t(1*second),
+                 match_light(match_light_atoms), verbose(verbose)
 {}
 
 /** Construct specifying the timeout and prematcher for the MCS match,
     and specifying whether or not to match light atoms
 */
 ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const AtomMatcher &matcher,
-                               const SireUnits::Dimension::Time &timeout,
-                               bool match_light_atoms)
+                                           const SireUnits::Dimension::Time &timeout,
+                                           bool match_light_atoms,
+                                           bool verbose)
                : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(),
-                 prematcher(matcher), t(timeout), match_light(match_light_atoms)
+                 prematcher(matcher), t(timeout),
+                 match_light(match_light_atoms), verbose(verbose)
 {}
 
 /** Copy constructor */
 ResIdxAtomMCSMatcher::ResIdxAtomMCSMatcher(const ResIdxAtomMCSMatcher &other)
                : ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>(other),
                  prematcher(other.prematcher), t(other.t),
-                 match_light(other.match_light)
-{}
+                 match_light(other.match_light), verbose(other.verbose)
+{
+}
 
 /** Destructor */
 ResIdxAtomMCSMatcher::~ResIdxAtomMCSMatcher()
@@ -1474,6 +1530,7 @@ ResIdxAtomMCSMatcher& ResIdxAtomMCSMatcher::operator=(const ResIdxAtomMCSMatcher
         t = other.t;
         prematcher = other.prematcher;
         match_light = other.match_light;
+        verbose = other.verbose;
     }
 
     return *this;
@@ -1482,7 +1539,7 @@ ResIdxAtomMCSMatcher& ResIdxAtomMCSMatcher::operator=(const ResIdxAtomMCSMatcher
 /** Comparison operator */
 bool ResIdxAtomMCSMatcher::operator==(const ResIdxAtomMCSMatcher &other) const
 {
-    return prematcher == other.prematcher and t == other.t and match_light == other.match_light;
+    return prematcher == other.prematcher and t == other.t and match_light == other.match_light and verbose == other.verbose;
 }
 
 /** Comparison operator */
@@ -1495,16 +1552,18 @@ QString ResIdxAtomMCSMatcher::toString() const
 {
     if (prematcher.isNull() or prematcher.read().isNull())
     {
-        return QObject::tr("ResIdxAtomMCSMatcher( timeout() = %1 s, matchingLightAtoms() = %2 )")
-                .arg(t.to(second)).arg(match_light);
+        return QObject::tr("ResIdxAtomMCSMatcher( timeout() = %1 s, matchingLightAtoms() = %2, "
+                "isVerbose() = %3 )")
+                .arg(t.to(second)).arg(match_light).arg(verbose);
     }
     else
     {
         return QObject::tr("ResIdxAtomMCSMatcher( preMatcher() = %1, timeout() = %2 s, "
-                           "matchingLightAtoms() = %3 )")
+                           "matchingLightAtoms() = %3, isVerbose() = %4 )")
                     .arg(prematcher.read().toString())
                     .arg(t.to(second))
-                    .arg(match_light);
+                    .arg(match_light)
+                    .arg(verbose);
     }
 }
 
@@ -1526,6 +1585,12 @@ SireUnits::Dimension::Time ResIdxAtomMCSMatcher::timeout() const
 bool ResIdxAtomMCSMatcher::matchingLightAtoms() const
 {
     return match_light;
+}
+
+/** Return whether or not this report progress to stdout. */
+bool ResIdxAtomMCSMatcher::isVerbose() const
+{
+    return verbose;
 }
 
 /** Match the atoms in 'mol1' to the atoms in 'mol0' by MCS, searching each
@@ -1552,9 +1617,15 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomMCSMatcher::pvt_match(const MoleculeView &mol0,
             // Perform an MCS match using the same residue in each molecule.
             QHash<AtomIdx,AtomIdx> local_map;
             if (prematcher.isNull() or prematcher.read().isNull())
-                    local_map = Evaluator(mol0[idx]).findMCS(mol1[idx], t, match_light, map0, map1);
-                else
-                    local_map = Evaluator(mol0[idx]).findMCS(mol1[idx], prematcher.read(), t, match_light, map0, map1);
+            {
+                local_map = Evaluator(mol0[idx]).findMCS(mol1[idx], t,
+                    match_light, map0, map1, this->verbose);
+            }
+            else
+            {
+                local_map = Evaluator(mol0[idx]).findMCS(mol1[idx], prematcher.read(),
+                    t, match_light, map0, map1, this->verbose);
+            }
 
             // Update the atom index map.
             map.unite(local_map);
