@@ -3019,9 +3019,9 @@ void CharmmPSF::parseMolecule(
     QString segment = QString("M%1").arg(imol+1);
 
     // Extract the existing molecule name.
-    if (sire_mol.hasProperty(map["mol-name"]))
+    if (sire_mol.hasProperty(map["mol_name"]))
     {
-        segment = sire_mol.property(map["mol-name"]).toString().simplified().toUpper();
+        segment = sire_mol.property(map["mol_name"]).toString().simplified().toUpper();
     }
 
     if (usesParallel())
@@ -3819,7 +3819,7 @@ MolEditor CharmmPSF::getMolecule(int imol, const PropertyMap &map) const
     auto mol = this->getMolStructure(imol, map["cutting"]).commit().edit();
 
     // Set the molecule name.
-    mol.setProperty(map["mol-name"], StringProperty(atoms[molecules[imol][0]].getSegment()));
+    mol.setProperty(map["mol_name"], StringProperty(atoms[molecules[imol][0]].getSegment()));
 
     // Get the info object that can map between AtomNum to AtomIdx etc.
     const auto molinfo = mol.info();
