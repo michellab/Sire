@@ -217,6 +217,8 @@ public:
 protected:
     SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
                                                   const AtomMatcher &atommatcher) const;
+    SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                                  const QHash<AtomIdx,AtomIdx> &map) const;
 
     /** Info about the molecule that contains these atom pairs */
     SireBase::SharedDataPointer<MoleculeInfoData> molinfo;
@@ -393,7 +395,7 @@ AtomPairs<T>::AtomPairs(const MoleculeInfoData &info, const T &default_value)
              : molinfo(info), cgpairs( CGAtomPairs<T>(default_value) )
 {}
 
-/** Construct a set of AtomPairs for the passed molecule view, using the 
+/** Construct a set of AtomPairs for the passed molecule view, using the
     provided default value of 'T' for all within this view. This will set
     a zero value for pairs that involve atoms that are not part of this
     group */
@@ -490,7 +492,7 @@ const CGAtomPairs<T>& AtomPairs<T>::operator()(CGIdx cgid0) const
     the two CutGroups with IDs (cgid0,cgid1) */
 template<class T>
 SIRE_INLINE_TEMPLATE
-const CGAtomPairs<T>& AtomPairs<T>::operator()(const CGID &cgid0, 
+const CGAtomPairs<T>& AtomPairs<T>::operator()(const CGID &cgid0,
                                                const CGID &cgid1) const
 {
     return cgpairs(molinfo.read().cgIdx(cgid0), molinfo.read().cgIdx(cgid1));
@@ -551,7 +553,7 @@ const T& AtomPairs<T>::operator()(const CGAtomIdx &atm0, const CGAtomIdx &atm1) 
 {
     const quint32 cg0 = atm0.cutGroup().map(molinfo.read().nCutGroups());
     const quint32 cg1 = atm1.cutGroup().map(molinfo.read().nCutGroups());
-    
+
     const quint32 atom0 = atm0.atom().map(molinfo.read().nAtoms(atm0.cutGroup()));
     const quint32 atom1 = atm1.atom().map(molinfo.read().nAtoms(atm1.cutGroup()));
 
@@ -662,10 +664,10 @@ void AtomPairs<T>::set(const CGAtomIdx &atm0, const CGAtomIdx &atm1,
     quint32 cg1 = atm1.cutGroup().map(molinfo.read().nCutGroups());
 
     CGAtomPairs<T> cgpair = cgpairs.get(cg0, cg1);
-    
+
     int nats0 = molinfo.read().nAtoms(atm0.cutGroup());
     int nats1 = molinfo.read().nAtoms(atm1.cutGroup());
-    
+
     quint32 atom0 = atm0.atom().map(nats0);
     quint32 atom1 = atm1.atom().map(nats1);
 
@@ -674,7 +676,7 @@ void AtomPairs<T>::set(const CGAtomIdx &atm0, const CGAtomIdx &atm1,
         //we are changing the value
         cgpair.reserve(nats0, nats1);
         cgpair.set(atom0, atom1, value);
-        
+
         if (cg0 == cg1)
         {
             cgpair.set(atom1, atom0, value);
@@ -683,7 +685,7 @@ void AtomPairs<T>::set(const CGAtomIdx &atm0, const CGAtomIdx &atm1,
         else
         {
             cgpairs.set(cg0, cg1, cgpair);
-            
+
             cgpair = cgpairs.get(cg1, cg0);
             cgpair.reserve(nats1, nats0);
             cgpair.set(atom1, atom0, value);
@@ -788,7 +790,7 @@ const MoleculeInfoData& AtomPairs<T>::info() const
     return *molinfo;
 }
 
-/** Return the number of atoms in the molecule (hence the size of the 
+/** Return the number of atoms in the molecule (hence the size of the
     square matrix) */
 template<class T>
 SIRE_INLINE_TEMPLATE
@@ -818,16 +820,16 @@ bool AtomPairs<T>::isCompatibleWith(const MoleculeInfoData &info) const
     with the molecule layout in 'molinfo' - this uses the atom matching
     functions in 'atommatcher' to match atoms from the current molecule
     to the atoms in the molecule whose layout is in 'molinfo'
-    
-    This will only copy the values of pairs of atoms that are 
+
+    This will only copy the values of pairs of atoms that are
     successfully matched - all other pairs will have the default
     value of this AtomPairs object.
-    
+
     \throw SireError::incompatible_error
 */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
-SireBase::PropertyPtr 
+SireBase::PropertyPtr
 AtomPairs<T>::_pvt_makeCompatibleWith(const MoleculeInfoData &other_info,
                                       const AtomMatcher &atommatcher) const
 {
@@ -837,7 +839,7 @@ AtomPairs<T>::_pvt_makeCompatibleWith(const MoleculeInfoData &other_info,
     if (not atommatcher.changesOrder(this->info(), other_info))
     {
         bool same_arrangement = true;
-    
+
         //ensure that the number of atoms and number of cutgroups are the same
         if (this->info().nAtoms() == other_info.nAtoms() and
             this->info().nCutGroups() == other_info.nCutGroups())
@@ -851,16 +853,36 @@ AtomPairs<T>::_pvt_makeCompatibleWith(const MoleculeInfoData &other_info,
                 }
             }
         }
-        
+
         if (same_arrangement)
             //there is no change in the atom order - this AtomPairs object is still valid
             return *this;
     }
 
     QHash<AtomIdx,AtomIdx> matched_atoms = atommatcher.match(this->info(), other_info);
-    
+
+    return this->_pvt_makeCompatibleWith(other_info, matched_atoms);
+}
+
+/** Return a copy of this property that has been made to be compatible
+    with the molecule layout in 'molinfo' - this uses the atom map in
+    'map' to match atoms from the current molecule to the atoms in the
+    molecule whose layout is in 'molinfo'
+
+    This will only copy the values of pairs of atoms that are
+    successfully matched - all other pairs will have the default
+    value of this AtomPairs object.
+
+    \throw SireError::incompatible_error
+*/
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+SireBase::PropertyPtr
+AtomPairs<T>::_pvt_makeCompatibleWith(const MoleculeInfoData &other_info,
+                                      const QHash<AtomIdx,AtomIdx> &map) const
+{
     SireBase::PropertyPtr retptr( *(this->create()) );
-    
+
     AtomPairs<T> &ret = retptr.edit().asA< AtomPairs<T> >();
     ret.molinfo = other_info;
 
@@ -870,30 +892,30 @@ AtomPairs<T>::_pvt_makeCompatibleWith(const MoleculeInfoData &other_info,
     ret.cgpairs.reserve(other_info.nCutGroups(), other_info.nCutGroups());
 
     int nats = this->nAtoms();
-    
+
     for (AtomIdx i(0); i<nats-1; ++i)
     {
-        AtomIdx new_i = matched_atoms.value(i, AtomIdx(-1));
-    
+        AtomIdx new_i = map.value(i, AtomIdx(-1));
+
         if (new_i == -1)
             continue;
-        
+
         T old_value = this->get(i,i);
-        
+
         if (old_value != default_value)
             ret.set(new_i, new_i, this->get(i,i));
-    
+
         ret.set(new_i, new_i, this->get(i,i));
-    
+
         for (AtomIdx j(i+1); j<nats; ++j)
         {
-            AtomIdx new_j = matched_atoms.value(j, AtomIdx(-1));
-            
+            AtomIdx new_j = map.value(j, AtomIdx(-1));
+
             if (new_j == -1)
                 continue;
-            
+
             old_value = this->get(i,j);
-            
+
             if (old_value != default_value)
                 ret.set(new_i, new_j, this->get(i,j));
         }
@@ -902,8 +924,8 @@ AtomPairs<T>::_pvt_makeCompatibleWith(const MoleculeInfoData &other_info,
     if (nats != 0)
     {
         AtomIdx i(nats-1);
-        AtomIdx new_i = matched_atoms.value(i, AtomIdx(-1));
-        
+        AtomIdx new_i = map.value(i, AtomIdx(-1));
+
         if (new_i != -1)
             ret.set(new_i, new_i, this->get(i,i));
     }
@@ -941,7 +963,7 @@ QDataStream& operator<<(QDataStream &ds,
     SireStream::SharedDataStream sds(ds);
 
     sds << atompairs.molinfo << atompairs.cgpairs;
-    
+
     return ds;
 }
 

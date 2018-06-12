@@ -29,6 +29,8 @@
 #ifndef SIREMM_TWOATOMFUNCTIONS_H
 #define SIREMM_TWOATOMFUNCTIONS_H
 
+#include <QHash>
+
 #include "atomfunctions.h"
 
 #include "SireMol/cgatomidx.h"
@@ -197,6 +199,8 @@ public:
 protected:
     SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
                                                   const AtomMatcher &atommatcher) const;
+    SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                                  const QHash<AtomIdx,AtomIdx> &map) const;
     
 private:
     void removeSymbols(QSet<Symbol> symbols);

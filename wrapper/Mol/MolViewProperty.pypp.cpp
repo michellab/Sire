@@ -91,6 +91,18 @@ void register_MolViewProperty_class(){
         }
         { //::SireMol::MolViewProperty::makeCompatibleWith
         
+            typedef ::SireBase::PropertyPtr ( ::SireMol::MolViewProperty::*makeCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const &,::QHash< SireMol::AtomIdx, SireMol::AtomIdx > const & ) const;
+            makeCompatibleWith_function_type makeCompatibleWith_function_value( &::SireMol::MolViewProperty::makeCompatibleWith );
+            
+            MolViewProperty_exposer.def( 
+                "makeCompatibleWith"
+                , makeCompatibleWith_function_value
+                , ( bp::arg("molinfo"), bp::arg("map") )
+                , "Do everything possible to make this property compatible with the\nMoleculeInfoData layout in info - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
+        
+        }
+        { //::SireMol::MolViewProperty::makeCompatibleWith
+        
             typedef ::SireBase::PropertyPtr ( ::SireMol::MolViewProperty::*makeCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             makeCompatibleWith_function_type makeCompatibleWith_function_value( &::SireMol::MolViewProperty::makeCompatibleWith );
             
@@ -122,6 +134,18 @@ void register_MolViewProperty_class(){
                 "makeCompatibleWith"
                 , makeCompatibleWith_function_value
                 , ( bp::arg("mol"), bp::arg("atommatcher") )
+                , "Do everything possible to make this property compatible with the\nMoleculeInfoData layout in info - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
+        
+        }
+        { //::SireMol::MolViewProperty::makeCompatibleWith
+        
+            typedef ::SireBase::PropertyPtr ( ::SireMol::MolViewProperty::*makeCompatibleWith_function_type)( ::SireMol::MoleculeView const &,::QHash< SireMol::AtomIdx, SireMol::AtomIdx > const & ) const;
+            makeCompatibleWith_function_type makeCompatibleWith_function_value( &::SireMol::MolViewProperty::makeCompatibleWith );
+            
+            MolViewProperty_exposer.def( 
+                "makeCompatibleWith"
+                , makeCompatibleWith_function_value
+                , ( bp::arg("mol"), bp::arg("map") )
                 , "Do everything possible to make this property compatible with the\nMoleculeInfoData layout in info - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
         
         }

@@ -90,15 +90,33 @@ PropertyPtr MolViewProperty::_pvt_makeCompatibleWith(const MoleculeInfoData &mol
     return *this;
 }
 
+PropertyPtr MolViewProperty::_pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                                     const QHash<AtomIdx,AtomIdx>&) const
+{
+    this->assertCompatibleWith(molinfo);
+    return *this;
+}
+
 /** Do everything possible to make this property compatible with the
     MoleculeInfoData layout in 'info' - otherwise raise an error
-    
+
     \throw SireError::incompatible_error
 */
 PropertyPtr MolViewProperty::makeCompatibleWith(const MoleculeInfoData &molinfo,
                                                 const AtomMatcher &atommatcher) const
 {
     return this->_pvt_makeCompatibleWith(molinfo, atommatcher);
+}
+
+/** Do everything possible to make this property compatible with the
+    MoleculeInfoData layout in 'info' - otherwise raise an error
+
+    \throw SireError::incompatible_error
+*/
+PropertyPtr MolViewProperty::makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                                const QHash<AtomIdx,AtomIdx> &map) const
+{
+    return this->_pvt_makeCompatibleWith(molinfo, map);
 }
 
 PropertyPtr MolViewProperty::makeCompatibleWith(const MoleculeInfoData &molinfo) const
@@ -108,7 +126,7 @@ PropertyPtr MolViewProperty::makeCompatibleWith(const MoleculeInfoData &molinfo)
 
 /** Do everything possible to make this property compatible with the molecule
     viewed in 'mol' - otherwise raise an error
-    
+
     \throw SireError::incompatible_error
 */
 PropertyPtr MolViewProperty::makeCompatibleWith(const MoleculeView &molview) const
@@ -120,6 +138,12 @@ PropertyPtr MolViewProperty::makeCompatibleWith(const MoleculeView &molview,
                                                 const AtomMatcher &atommatcher) const
 {
     return this->makeCompatibleWith(molview.data().info(), atommatcher);
+}
+
+PropertyPtr MolViewProperty::makeCompatibleWith(const MoleculeView &molview,
+                                                const QHash<AtomIdx,AtomIdx> &map) const
+{
+    return this->makeCompatibleWith(molview.data().info(), map);
 }
 
 /////////
