@@ -1322,7 +1322,8 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomNameMatcher::pvt_match(const MoleculeView &mol0
     AtomIdxs of the atoms in 'mol1' that are in 'mol0', indexed by the AtomIdx
     of the atom in 'mol0'.
 
-    This skips atoms in 'mol1' that are not in 'mol0'
+    This skips atoms in 'mol1' that are not in 'mol0'. Note that we only match
+    the first unique atom within each residue.
 */
 QHash<AtomIdx,AtomIdx> ResIdxAtomNameMatcher::pvt_match(const MoleculeInfoData &mol0,
                                                         const MoleculeInfoData &mol1) const
@@ -1339,31 +1340,31 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomNameMatcher::pvt_match(const MoleculeInfoData &
         auto atoms0 = mol0.getAtomsIn(resIdx);
         auto atoms1 = mol1.getAtomsIn(resIdx);
 
+        // The set of matched atoms from 'mol1' that belong to this residue.
+        QSet<AtomIdx> matched;
+
         // For each atom from mol0, find those atoms in mol1 with the same name.
         for (const auto &idx0 : atoms0)
         {
-            // Initialise a list of the matching atom indices.
-            QList<AtomIdx> matches;
-
             // Get the name of the atom.
             const auto name0 = mol0.name(idx0);
 
-            // Loop over the atoms in mol1.
+            // Loop over the atoms in mol1 until we find the first unique match.
             for (const auto &idx1 : atoms1)
             {
                 // Get the name of the atom.
                 const auto name1 = mol1.name(idx1);
 
-                // Add the match.
-                if (name0 == name1)
-                    matches.append(idx1);
+                // This is a match, and it hasn't already been matched
+                // to another atom in the residue.
+                if ((name0 == name1) and (not matched.contains(idx1)))
+                {
+                    map.insert(idx0, idx1);
+                    matched.insert(idx1);
+                    break;
+                }
             }
-
-            // Only insert unique matche into the map.
-            if (matches.count() == 1)
-                map.insert(idx0, matches[0]);
         }
-
     }
 
     return map;
