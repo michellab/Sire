@@ -855,8 +855,16 @@ AtomPairs<T>::_pvt_makeCompatibleWith(const MoleculeInfoData &other_info,
         }
 
         if (same_arrangement)
-            //there is no change in the atom order - this AtomPairs object is still valid
-            return *this;
+        {
+            //there is no change in the atom order - this AtomPairs object is still valid,
+            //create a copy of the object and update the molinfo
+            SireBase::PropertyPtr retptr( *(this->create()) );
+            AtomPairs<T> &ret = retptr.edit().asA< AtomPairs<T> >();
+            ret.molinfo = other_info;
+            ret.cgpairs = this->cgpairs;
+
+            return ret;
+        }
     }
 
     QHash<AtomIdx,AtomIdx> matched_atoms = atommatcher.match(this->info(), other_info);
