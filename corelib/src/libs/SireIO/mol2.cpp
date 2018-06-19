@@ -693,15 +693,12 @@ Mol2Molecule::Mol2Molecule(const QVector<QString> &lines,
     // If the name is blank, then name the molecule "Molecule".
     if (name.isEmpty())
     {
-        name = QString("Molecule: ");
+        name = QString("Molecule");
 
         // Append a molecule index (for multiple molecule records).
         if (imol != -1)
         {
-            // Ensire indexing starts from one.
-            if (imol == 0) imol = 1;
-
-            name.append(QString(" %1").arg(imol));
+            name.append(QString(": %1").arg(imol+1));
         }
     }
 
@@ -920,10 +917,7 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol, const PropertyMap &map,
         // Append a molecule index (for multiple molecule records).
         if (imol != -1)
         {
-            // Ensire indexing starts from one.
-            if (imol == 0) imol = 1;
-
-            name.append(QString(": %1").arg(imol));
+            name.append(QString(": %1").arg(imol+1));
         }
     }
 
