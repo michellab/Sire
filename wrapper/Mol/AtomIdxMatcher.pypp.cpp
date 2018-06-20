@@ -7,11 +7,17 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/parallel.h"
+
 #include "SireError/errors.h"
+
+#include "SireMaths/vector.h"
 
 #include "SireStream/datastream.h"
 
 #include "SireUnits/units.h"
+
+#include "atom.h"
 
 #include "atomidentifier.h"
 
@@ -30,6 +36,10 @@ namespace bp = boost::python;
 #include "moleculeinfodata.h"
 
 #include "moleculeview.h"
+
+#include "mover.h"
+
+#include "selector.hpp"
 
 #include "tostring.h"
 

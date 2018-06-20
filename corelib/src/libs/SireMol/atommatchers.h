@@ -43,6 +43,7 @@ class AtomMultiMatcher;
 class AtomMCSMatcher;
 class ResIdxAtomNameMatcher;
 class ResIdxAtomMCSMatcher;
+class ResIdxAtomCoordMatcher;
 }
 
 QDataStream& operator<<(QDataStream&, const SireMol::AtomIdxMatcher&);
@@ -65,6 +66,9 @@ QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomNameMatcher&);
 
 QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomMCSMatcher&);
 QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomMCSMatcher&);
+
+QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomCoordMatcher&);
+QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomCoordMatcher&);
 
 namespace SireMol
 {
@@ -484,6 +488,44 @@ private:
     bool verbose;
 };
 
+/** Match atoms by coordinates within each residue.
+
+    @author Lester Hedges
+*/
+class SIREMOL_EXPORT ResIdxAtomCoordMatcher
+         : public SireBase::ConcreteProperty<ResIdxAtomCoordMatcher,AtomMatcher>
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const ResIdxAtomCoordMatcher&);
+friend QDataStream& ::operator>>(QDataStream&, ResIdxAtomCoordMatcher&);
+
+public:
+    ResIdxAtomCoordMatcher();
+    ResIdxAtomCoordMatcher(const ResIdxAtomCoordMatcher&);
+
+    ~ResIdxAtomCoordMatcher();
+
+    static const char* typeName();
+
+    const char* what() const
+    {
+        return ResIdxAtomCoordMatcher::typeName();
+    }
+
+    ResIdxAtomCoordMatcher& operator=(const ResIdxAtomCoordMatcher &other);
+
+    bool operator==(const ResIdxAtomCoordMatcher &other) const;
+    bool operator!=(const ResIdxAtomCoordMatcher &other) const;
+
+    QString toString() const;
+
+protected:
+    QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeView &molview0,
+                                     const PropertyMap &map0,
+                                     const MoleculeView &molview1,
+                                     const PropertyMap &map1) const;
+};
+
 }
 
 Q_DECLARE_METATYPE( SireMol::AtomIdxMatcher )
@@ -493,6 +535,7 @@ Q_DECLARE_METATYPE( SireMol::AtomMultiMatcher )
 Q_DECLARE_METATYPE( SireMol::AtomMCSMatcher )
 Q_DECLARE_METATYPE( SireMol::ResIdxAtomNameMatcher )
 Q_DECLARE_METATYPE( SireMol::ResIdxAtomMCSMatcher )
+Q_DECLARE_METATYPE( SireMol::ResIdxAtomCoordMatcher )
 
 SIRE_EXPOSE_CLASS( SireMol::AtomIdxMatcher )
 SIRE_EXPOSE_CLASS( SireMol::AtomNameMatcher )
@@ -501,6 +544,7 @@ SIRE_EXPOSE_CLASS( SireMol::AtomMultiMatcher )
 SIRE_EXPOSE_CLASS( SireMol::AtomMCSMatcher )
 SIRE_EXPOSE_CLASS( SireMol::ResIdxAtomNameMatcher )
 SIRE_EXPOSE_CLASS( SireMol::ResIdxAtomMCSMatcher )
+SIRE_EXPOSE_CLASS( SireMol::ResIdxAtomCoordMatcher )
 
 SIRE_END_HEADER
 

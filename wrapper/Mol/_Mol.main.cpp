@@ -387,6 +387,8 @@
 
 #include "ResIdx.pypp.hpp"
 
+#include "ResIdxAtomCoordMatcher.pypp.hpp"
+
 #include "ResIdxAtomMCSMatcher.pypp.hpp"
 
 #include "ResIdxAtomNameMatcher.pypp.hpp"
@@ -935,6 +937,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_ResEditor_class();
 
     register_ResIdx_class();
+
+    register_ResIdxAtomCoordMatcher_class();
 
     register_ResIdxAtomMCSMatcher_class();
 

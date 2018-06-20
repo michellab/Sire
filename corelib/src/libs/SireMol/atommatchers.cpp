@@ -26,6 +26,7 @@
   *
 \*********************************************/
 
+#include "atom.h"
 #include "atommatcher.h"
 #include "atommatchers.h"
 #include "atomidx.h"
@@ -35,8 +36,12 @@
 #include "evaluator.h"
 #include "moleculeinfodata.h"
 #include "moleculeview.h"
+#include "mover.h"
+#include "selector.hpp"
 
 #include "tostring.h"
+
+#include "SireMaths/vector.h"
 
 #include "SireUnits/units.h"
 
@@ -909,6 +914,7 @@ QHash<AtomIdx,AtomIdx> AtomIDMatcher::pvt_match(const MoleculeView &mol0,
                 try
                 {
                     AtomIdx idx1 = mol1.data().info().atomIdx(it->second);
+                    Atom atom = mol1.atom(idx1);
 
                     if (sel1.selected(idx1) and not found_1.contains(idx1))
                     {
@@ -1644,4 +1650,190 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomMCSMatcher::pvt_match(const MoleculeView &mol0,
 const char* ResIdxAtomMCSMatcher::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<ResIdxAtomNameMatcher>() );
+}
+
+/////////
+///////// Implementation of ResIdxAtomCoordMatcher
+/////////
+
+static const RegisterMetaType<ResIdxAtomCoordMatcher> r_residxatomcoordmatcher;
+
+/** Serialise to a binary datastream */
+QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+                                       const ResIdxAtomCoordMatcher &residxatomcoordmatcher)
+{
+    writeHeader(ds, r_residxatomcoordmatcher, 1);
+    ds << static_cast<const ResIdxAtomCoordMatcher&>(residxatomcoordmatcher);
+
+    return ds;
+}
+
+/** Extract from a binary datastream */
+QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResIdxAtomCoordMatcher &residxatomcoordmatcher)
+{
+    VersionID v = readHeader(ds, r_residxatomcoordmatcher);
+
+    if (v == 1)
+    {
+        ds >> static_cast<ResIdxAtomCoordMatcher&>(residxatomcoordmatcher);
+    }
+    else
+        throw version_error(v, "1", r_residxatomcoordmatcher, CODELOC);
+
+    return ds;
+}
+
+/** Constructor */
+ResIdxAtomCoordMatcher::ResIdxAtomCoordMatcher() : ConcreteProperty<ResIdxAtomCoordMatcher,AtomMatcher>()
+{}
+
+/** Copy constructor */
+ResIdxAtomCoordMatcher::ResIdxAtomCoordMatcher(const ResIdxAtomCoordMatcher &other)
+               : ConcreteProperty<ResIdxAtomCoordMatcher,AtomMatcher>(other)
+{}
+
+/** Destructor */
+ResIdxAtomCoordMatcher::~ResIdxAtomCoordMatcher()
+{}
+
+/** Copy assignment operator */
+ResIdxAtomCoordMatcher& ResIdxAtomCoordMatcher::operator=(const ResIdxAtomCoordMatcher &other)
+{
+    return *this;
+}
+
+/** Comparison operator */
+bool ResIdxAtomCoordMatcher::operator==(const ResIdxAtomCoordMatcher &other) const
+{
+    return true;
+}
+
+/** Comparison operator */
+bool ResIdxAtomCoordMatcher::operator!=(const ResIdxAtomCoordMatcher &other) const
+{
+    return false;
+}
+
+QString ResIdxAtomCoordMatcher::toString() const
+{
+    return QObject::tr("ResIdxAtomCoordMatcher()");
+}
+
+/** Match the atoms in 'mol1' to the atoms in 'mol0' by coordinates, searching each
+    residue separately (by index) and combining the results. This returns the
+    AtomIdxs of the atoms in 'mol1' that are in 'mol0', indexed by the AtomIdx
+    of the atom in 'mol0'.
+
+    This skips atoms in 'mol1' that are not in 'mol0'
+*/
+QHash<AtomIdx,AtomIdx> ResIdxAtomCoordMatcher::pvt_match(const MoleculeView &mol0,
+                                                         const PropertyMap &map0,
+                                                         const MoleculeView &mol1,
+                                                         const PropertyMap &map1) const
+{
+    const AtomSelection sel0 = mol0.selection();
+    const AtomSelection sel1 = mol1.selection();
+
+    if (sel0.selectedAll() and sel1.selectedAll())
+    {
+        // A hash of mappings between atom indices in each molecule.
+        QHash<AtomIdx,AtomIdx> matches;
+
+        // Get the list of residue indices from the reference molecule.
+        auto resIdxs = mol0.data().info().getResidues();
+
+        // Loop over all of the residues.
+        for (const auto &resIdx : resIdxs)
+        {
+            // Get a list of atoms for the residue for both molecules.
+            auto atoms0 = mol0.data().info().getAtomsIn(resIdx);
+            auto atoms1 = mol1.data().info().getAtomsIn(resIdx);
+
+            // Vectors to store the centre of mass (CoM) of each residue.
+            Vector com0;
+            Vector com1;
+
+            // Work out the CoM of both residues.
+
+            for (const auto &idx : atoms0)
+                com0 += mol0.atom(idx).property<SireMaths::Vector>(map0["coordinates"]);
+            com0 /= atoms0.count();
+
+            for (const auto &idx : atoms1)
+                com1 += mol0.atom(idx).property<SireMaths::Vector>(map1["coordinates"]);
+            com1 /= atoms1.count();
+
+            // Initialise arrays to store the distance of each atom from the CoM.
+            QVarLengthArray<double> dist0(atoms0.count());
+            QVarLengthArray<double> dist1(atoms1.count());
+
+            // For each atom in each residue, work out the distance from the respective CoM.
+
+            // mol0
+            for (int i=0; i<atoms0.count(); ++i)
+            {
+                auto coord = mol0.atom(atoms0[i]).property<SireMaths::Vector>(map0["coordinates"]);
+                dist0[i] = (com0 - coord).magnitude();
+            }
+
+            // mol1
+            for (int i=0; i<atoms1.count(); ++i)
+            {
+                auto coord = mol1.atom(atoms1[i]).property<SireMaths::Vector>(map1["coordinates"]);
+                dist1[i] = (com1 - coord).magnitude();
+            }
+
+            // A set of matched atom indices.
+            QSet<int> matched;
+
+            // For each atom in atoms0, find the atom in atoms1 with the most similar CoM distance.
+            for (int i=0; i<atoms0.count(); ++i)
+            {
+                // Initialise the minimium difference to a large number.
+                double min_diff = 1e6;
+
+                // Initialise the match to an out-of-range number. This way we can tell
+                // when no matches have been found.
+                int match = -1;
+
+                // Loop over all of the atoms to match against.
+                for (int j=0; j<atoms0.count(); ++j)
+                {
+                    double diff = qAbs(dist0[i] - dist1[j]);
+
+                    // Is this the best match to date? If so, update the match and the
+                    // minimum difference.
+                    if (diff < min_diff)
+                    {
+                        // Has this atom already been matched?
+                        if (not matched.contains(j))
+                        {
+                            min_diff = diff;
+                            match = j;
+                        }
+                    }
+                }
+
+                // A match was found, store the best match and append to the list of
+                // matched atoms.
+                if (match != -1)
+                {
+                    matches.insert(atoms0[i], atoms1[match]);
+                    matched.insert(match);
+                }
+            }
+        }
+
+        return matches;
+    }
+    else
+    {
+        throw SireError::unsupported(QObject::tr("ResIdxAtomCoordMatcher only works with "
+            "full molecule selections."));
+    }
+}
+
+const char* ResIdxAtomCoordMatcher::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<ResIdxAtomCoordMatcher>() );
 }

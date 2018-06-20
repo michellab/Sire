@@ -178,6 +178,7 @@ set ( PYPP_SOURCES
        IDOrSet_SegID_.pypp.cpp
        CGIntProperty.pypp.cpp
        AtomIdx.pypp.cpp
+       ResIdxAtomCoordMatcher.pypp.cpp
        ChainEditorBase.pypp.cpp
        ResFloatProperty.pypp.cpp
        AtomNameMatcher.pypp.cpp
