@@ -1742,6 +1742,22 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomCoordMatcher::pvt_match(const MoleculeView &mol
         // Get the list of residue indices from the reference molecule.
         auto resIdxs = mol0.data().info().getResidues();
 
+        // Vectors to store the centre of mass (CoM) of each molecule.
+        Vector com0;
+        Vector com1;
+
+        // Work out the CoM of both molecules.
+
+        // mol0
+        for (int i=0; i<mol0.data().info().nAtoms(); ++i)
+            com0 += mol0.atom(AtomIdx(i)).property<Vector>(map0["coordinates"]);
+        com0 /= mol0.data().info().nAtoms();
+
+        // mol1
+        for (int i=0; i<mol1.data().info().nAtoms(); ++i)
+            com1 += mol1.atom(AtomIdx(i)).property<Vector>(map1["coordinates"]);
+        com1 /= mol1.data().info().nAtoms();
+
         // Loop over all of the residues.
         for (const auto &resIdx : resIdxs)
         {
@@ -1749,44 +1765,12 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomCoordMatcher::pvt_match(const MoleculeView &mol
             auto atoms0 = mol0.data().info().getAtomsIn(resIdx);
             auto atoms1 = mol1.data().info().getAtomsIn(resIdx);
 
-            // Vectors to store the centre of mass (CoM) of each residue.
-            Vector com0;
-            Vector com1;
-
-            // Work out the CoM of both residues.
-
-            for (const auto &idx : atoms0)
-                com0 += mol0.atom(idx).property<SireMaths::Vector>(map0["coordinates"]);
-            com0 /= atoms0.count();
-
-            for (const auto &idx : atoms1)
-                com1 += mol0.atom(idx).property<SireMaths::Vector>(map1["coordinates"]);
-            com1 /= atoms1.count();
-
-            // Initialise arrays to store the distance of each atom from the CoM.
-            QVarLengthArray<double> dist0(atoms0.count());
-            QVarLengthArray<double> dist1(atoms1.count());
-
-            // For each atom in each residue, work out the distance from the respective CoM.
-
-            // mol0
-            for (int i=0; i<atoms0.count(); ++i)
-            {
-                auto coord = mol0.atom(atoms0[i]).property<SireMaths::Vector>(map0["coordinates"]);
-                dist0[i] = (com0 - coord).magnitude();
-            }
-
-            // mol1
-            for (int i=0; i<atoms1.count(); ++i)
-            {
-                auto coord = mol1.atom(atoms1[i]).property<SireMaths::Vector>(map1["coordinates"]);
-                dist1[i] = (com1 - coord).magnitude();
-            }
-
             // A set of matched atom indices.
             QSet<int> matched;
 
-            // For each atom in atoms0, find the atom in atoms1 with the most similar CoM distance.
+            // For each atom in atoms0, find the atom in atoms1 that is closest to it.
+            // To account for possible coordinate frame translations, we shift the
+            // coordinates of each atom by the CoM of its respective molecule.
             for (int i=0; i<atoms0.count(); ++i)
             {
                 // Initialise the minimium difference to a large number.
@@ -1796,10 +1780,26 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomCoordMatcher::pvt_match(const MoleculeView &mol
                 // when no matches have been found.
                 int match = -1;
 
+                // Get the coordinates of atom0.
+                auto coord0 = mol0.atom(atoms0[i])
+                                  .property<Vector>(map0["coordinates"]);
+
+                // Shift by the CoM.
+                coord0 -= com0;
+
                 // Loop over all of the atoms to match against.
                 for (int j=0; j<atoms0.count(); ++j)
                 {
-                    double diff = qAbs(dist0[i] - dist1[j]);
+                    // Get the coordinates of atom1.
+                    auto coord1 = mol1.atom(atoms1[j])
+                                      .property<Vector>(map0["coordinates"]);
+
+                    // Shift by the CoM.
+                    coord1 -= com1;
+
+                    // Compute the separation between the atoms, accounting for
+                    // the CoM. This avoids issues with coordinate frame translations.
+                    double diff = qAbs((coord0 - coord1).magnitude());
 
                     // Is this the best match to date? If so, update the match and the
                     // minimum difference.
