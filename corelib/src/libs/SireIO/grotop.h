@@ -232,6 +232,9 @@ public:
     QMultiHash<SireMol::AngleID,GromacsAngle> angles() const;
     QMultiHash<SireMol::DihedralID,GromacsDihedral> dihedrals() const;
 
+    bool isWater() const;
+    QStringList settlesLines() const;
+
     QStringList warnings() const;
 
     bool needsSanitising() const;
