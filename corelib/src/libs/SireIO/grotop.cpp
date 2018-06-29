@@ -368,12 +368,12 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroMolType &moltyp)
 }
 
 /** Constructor */
-GroMolType::GroMolType() : nexcl(0)
+GroMolType::GroMolType() : nexcl(3)  //default to 3 as this is normal for most molecules
 {}
 
 /** Construct from the passed molecule */
 GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
-           : nexcl(0)
+           : nexcl(3)  //default to '3' as this is normal for most molecules
 {
     if (mol.nAtoms() == 0)
         return;
@@ -488,13 +488,25 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
             const auto cgatomidx = molinfo.cgAtomIdx(i);
             const auto residx = molinfo.parentResidue(i);
 
-            //atom and residue numbers have to count up sequentially from 1
+            //atom numbers have to count up sequentially from 1
             int atomnum = i+1;
             QString atomnam = molinfo.name(i);
 
             //assuming that residues are in the same order as the atoms
             int resnum = residx + 1;
             QString resnam = molinfo.name(residx);
+
+            //people like to preserve the residue numbers of ligands and
+            //proteins. This is very challenging for the gromacs topology,
+            //as it would force a different topology for every solvent molecule,
+            //so deciding on the difference between protein/ligand and solvent
+            //is tough. Will preserve the residue number if the number of
+            //residues is greater than 1 and the number of atoms is greater
+            //than 32 (so octanol is a solvent)
+            if (molinfo.nResidues() > 1 or molinfo.nAtoms() > 32)
+            {
+                resnum = molinfo.number(residx).value();
+            }
 
             int group = atomnum;
 
@@ -1230,6 +1242,99 @@ QMultiHash<AngleID,GromacsAngle> GroMolType::angles() const
 QMultiHash<DihedralID,GromacsDihedral> GroMolType::dihedrals() const
 {
     return dihs;
+}
+
+/** Return whether or not this is a topology for water. This should
+    return true for all water models (including TIP4P and TIP5P) */
+bool GroMolType::isWater() const
+{
+    if (nResidues() == 1)
+    {
+        if (nAtoms() >= 3 and nAtoms() <= 5) // catch SPC/TIP3P to TIP5P
+        {
+            //the total mass of the molecule should be 18 (rounded)
+            //and the number of oxygens should be 1 and hydrogens should be 2
+            int noxy = 0;
+            int nhyd = 0;
+            int total_mass = 0;
+            
+            for (const auto &atm : atms)
+            {
+                //round down the mass to the nearest integer unit, so to
+                //exclude isotopes
+                const int mass = int( std::floor(atm.mass().value()) );
+            
+                total_mass += mass;
+                
+                if (total_mass > 18)
+                    return false;
+                
+                if (mass == 16)
+                {
+                    noxy += 1;
+                    if (noxy > 1)
+                        return false;
+                }
+                else if (mass == 1)
+                {
+                    nhyd += 1;
+                    if (nhyd > 2)
+                        return false;
+                }
+                else
+                    //not an oxygen or hydrogen
+                    return false;
+            }
+            
+            //this is a water :-)
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+/** Return the settles lines for this molecule. This currently only returns
+    settles lines for water molecules. These lines are used to constrain the
+    bonds/angles of the water molecule */
+QStringList GroMolType::settlesLines() const
+{
+    if (not this->isWater())
+        return QStringList();
+    
+    QStringList lines;
+    
+    lines.append("[ settles ]");
+    lines.append("; OW    funct   doh dhh");
+    
+    //find the OH and HH bonds to get the equilibrium OH and HH bond length
+    //for this water molecule - if we don't have it, then use these as default (TIP3P)
+    double hh_length = 0.15136000;
+    double oh_length = 0.09572000;
+    
+    //there should only be two bonds - OH and HH. The longer one is HH
+    if (bnds.count() == 2)
+    {
+        auto it = bnds.begin();
+    
+        double hh_length = it.value().equilibriumLength().to(nanometer);
+        ++it;
+        double oh_length = it.value().equilibriumLength().to(nanometer);
+        
+        if (oh_length > hh_length)
+            qSwap(oh_length, hh_length);
+    }
+    
+    lines.append( QString("1       1       %1 %2").arg(oh_length, 7, 'f', 5)
+                                                  .arg(hh_length, 7, 'f', 5) );
+    
+    lines.append("");
+    lines.append("[ exclusions ]");
+    lines.append("1   2   3");
+    lines.append("2   1   3");
+    lines.append("3   1   2");
+    
+    return lines;
 }
 
 ////////////////
@@ -1990,6 +2095,16 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     lines.append(";   nr   type  resnr residue  atom   cgnr     charge         mass");
     lines.append(atomlines);
 
+    // we need to detect whether this is a water molecule. If so, then we
+    // need to add in "settles" lines to constrain bonds / angles of the
+    // water molecule
+    const bool is_water = moltype.isWater();
+
+    if (is_water)
+    {
+        lines.append( "#ifdef FLEXIBLE" );
+    }
+
     if (not bondlines.isEmpty())
     {
         lines.append( "[ bonds ]" );
@@ -2020,6 +2135,15 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
         lines.append( ";  ai    aj    ak    al   funct   parameters" );
         lines += dihlines;
         lines.append("");
+    }
+
+    if (is_water)
+    {
+        lines.append("#else");
+        lines.append("");
+        lines += moltype.settlesLines();
+        lines.append("");
+        lines.append("#endif");
     }
 
     return lines;

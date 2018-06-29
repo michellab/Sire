@@ -329,6 +329,17 @@ void register_GroMolType_class(){
                 , "Return whether or not this object is null" );
         
         }
+        { //::SireIO::GroMolType::isWater
+        
+            typedef bool ( ::SireIO::GroMolType::*isWater_function_type)(  ) const;
+            isWater_function_type isWater_function_value( &::SireIO::GroMolType::isWater );
+            
+            GroMolType_exposer.def( 
+                "isWater"
+                , isWater_function_value
+                , "" );
+        
+        }
         { //::SireIO::GroMolType::nAtoms
         
             typedef int ( ::SireIO::GroMolType::*nAtoms_function_type)(  ) const;
@@ -433,6 +444,17 @@ void register_GroMolType_class(){
                 , setName_function_value
                 , ( bp::arg("name") )
                 , "Set the name of this moleculetype" );
+        
+        }
+        { //::SireIO::GroMolType::settlesLines
+        
+            typedef ::QStringList ( ::SireIO::GroMolType::*settlesLines_function_type)(  ) const;
+            settlesLines_function_type settlesLines_function_value( &::SireIO::GroMolType::settlesLines );
+            
+            GroMolType_exposer.def( 
+                "settlesLines"
+                , settlesLines_function_value
+                , "" );
         
         }
         { //::SireIO::GroMolType::toString
