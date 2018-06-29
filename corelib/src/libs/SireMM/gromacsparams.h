@@ -203,6 +203,8 @@ public:
     
     bool isHarmonic() const;
     
+    SireUnits::Dimension::Length equilibriumLength() const;
+    
     void assertResolved() const;
     
     QList<double> parameters() const;

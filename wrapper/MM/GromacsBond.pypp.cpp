@@ -93,6 +93,17 @@ void register_GromacsBond_class(){
                 , "Return the number of parameters associated with this bond type" );
         
         }
+        { //::SireMM::GromacsBond::equilibriumLength
+        
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::GromacsBond::*equilibriumLength_function_type)(  ) const;
+            equilibriumLength_function_type equilibriumLength_function_value( &::SireMM::GromacsBond::equilibriumLength );
+            
+            GromacsBond_exposer.def( 
+                "equilibriumLength"
+                , equilibriumLength_function_value
+                , "" );
+        
+        }
         { //::SireMM::GromacsBond::functionType
         
             typedef int ( ::SireMM::GromacsBond::*functionType_function_type)(  ) const;

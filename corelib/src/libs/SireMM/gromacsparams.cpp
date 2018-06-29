@@ -763,6 +763,68 @@ bool GromacsBond::atomsAreBonded() const
     return true;
 }
 
+/** Return the equilibrium length of this bond */
+SireUnits::Dimension::Length GromacsBond::equilibriumLength() const
+{
+    assertResolved();
+    
+    const double nm = nanometer.value();
+
+    if (func_type == 1 or func_type == 6)
+    {
+        //standard bond : 0.5 k (r - r0)^2
+        const double r0 = k[0] * nm;
+        return SireUnits::Dimension::Length(r0);
+    }
+    else if (func_type == 2)
+    {
+        //gromos 96 bond : 0.25 k (r^2 - r0^2)^2
+        const double r0 = k[0] * nm;
+        return SireUnits::Dimension::Length(r0);
+    }
+    else if (func_type == 3)
+    {
+        //morse potential : D[ 1 - exp{ -beta(r - r0) }]^2
+        const double r0 = k[0] * nm;
+        return SireUnits::Dimension::Length(r0);
+    }
+    else if (func_type == 4)
+    {
+        //cubic bond : k1(r - r0)^2 + k1k2(r - r0)^3
+        const double r0 = k[0] * nm;
+        return SireUnits::Dimension::Length(r0);
+    }
+    else if (func_type == 5)
+    {
+        //connection - zero interaction
+        return SireUnits::Dimension::Length(0);
+    }
+    else if (func_type == 7)
+    {
+        //FENE bond : -0.5 k b log( 1 - (r^2/b^2) )
+        const double b = k[0] * nm;
+        return SireUnits::Dimension::Length(b);
+    }
+    else if (func_type == 8 or func_type == 9)
+    {
+        throw SireError::unsupported( QObject::tr(
+            "It is not possible to get an equilibrium length from a tabulated gromacs bond"),
+                CODELOC );
+    }
+    else if (func_type == 10)
+    {
+        //restraint potential
+        // if r < r0 : 0.5 k(r - r0)^2
+        // if r0 <= r < r1 : 0
+        // if r1 <= r < r2 : 0.5 k(r - r1)^2
+        // else : 0.5 k (r2 - r1)(2r - r2 - r1)
+        const double r0 = k[0] * nm;
+        return SireUnits::Dimension::Length(r0);
+    }
+    else
+        return SireUnits::Dimension::Length(0);
+}
+
 /** Return this function converted to a SireCAS::Expression using the passed symbol
     to represent the bond length */
 SireCAS::Expression GromacsBond::toExpression(const SireCAS::Symbol &R) const
