@@ -41,6 +41,9 @@ class AtomNameMatcher;
 class AtomIDMatcher;
 class AtomMultiMatcher;
 class AtomMCSMatcher;
+class ResIdxAtomNameMatcher;
+class ResIdxAtomMCSMatcher;
+class ResIdxAtomCoordMatcher;
 }
 
 QDataStream& operator<<(QDataStream&, const SireMol::AtomIdxMatcher&);
@@ -58,6 +61,15 @@ QDataStream& operator>>(QDataStream&, SireMol::AtomMultiMatcher&);
 QDataStream& operator<<(QDataStream&, const SireMol::AtomMCSMatcher&);
 QDataStream& operator>>(QDataStream&, SireMol::AtomMCSMatcher&);
 
+QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomNameMatcher&);
+QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomNameMatcher&);
+
+QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomMCSMatcher&);
+QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomMCSMatcher&);
+
+QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomCoordMatcher&);
+QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomCoordMatcher&);
+
 namespace SireMol
 {
 
@@ -74,7 +86,7 @@ using SireBase::PropertyMap;
     atom in molinfo0 to the first atom in molinfo1, the second
     atom in molinfo0 to the second atom in molinfo1, and the
     nth atom in molinfo0 to the nth atom in molinfo1
-    
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT AtomIdxMatcher
@@ -87,11 +99,11 @@ friend QDataStream& ::operator>>(QDataStream&, AtomIdxMatcher&);
 public:
     AtomIdxMatcher();
     AtomIdxMatcher(const AtomIdxMatcher&);
-    
+
     ~AtomIdxMatcher();
-    
+
     static const char* typeName();
-    
+
     const char* what() const
     {
         return AtomIdxMatcher::typeName();
@@ -100,7 +112,7 @@ public:
     QString toString() const;
 
     AtomIdxMatcher& operator=(const AtomIdxMatcher &other);
-    
+
     bool operator==(const AtomIdxMatcher &other) const;
     bool operator!=(const AtomIdxMatcher &other) const;
 
@@ -110,7 +122,7 @@ protected:
 
     QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeInfoData &molinfo0,
                                      const MoleculeInfoData &molinfo1) const;
-    
+
     QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeView &molview0,
                                      const PropertyMap &map0,
                                      const MoleculeView &molview1,
@@ -120,7 +132,7 @@ protected:
 /** This is a simple atom matcher that matches the atoms based
     on their names, so the atom called "CA1" in molinfo0 will
     be matched to the atom called "CA1" in molinfo1
-    
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT AtomNameMatcher
@@ -133,27 +145,27 @@ friend QDataStream& ::operator>>(QDataStream&, AtomNameMatcher&);
 public:
     AtomNameMatcher();
     AtomNameMatcher(const AtomNameMatcher&);
-    
+
     ~AtomNameMatcher();
-    
+
     static const char* typeName();
-    
+
     const char* what() const
     {
         return AtomNameMatcher::typeName();
     }
 
     AtomNameMatcher& operator=(const AtomNameMatcher &other);
-    
+
     bool operator==(const AtomNameMatcher &other) const;
     bool operator!=(const AtomNameMatcher &other) const;
-    
+
     QString toString() const;
 
 protected:
     QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeInfoData &molinfo0,
                                      const MoleculeInfoData &molinfo1) const;
-    
+
     QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeView &molview0,
                                      const PropertyMap &map0,
                                      const MoleculeView &molview1,
@@ -163,7 +175,7 @@ protected:
 /** This is an atom matcher that allows the user to specify
     exactly how one atom matches another in the molecule
     by mapping one AtomIdentifier to another
-    
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT AtomIDMatcher
@@ -175,45 +187,45 @@ friend QDataStream& ::operator>>(QDataStream&, AtomIDMatcher&);
 
 public:
     AtomIDMatcher();
-    
+
     AtomIDMatcher(const QList< QPair<QString,QString> > &match_names);
     AtomIDMatcher(const QList< QPair<int,int> > &match_idxs);
     AtomIDMatcher(const QList< QPair<AtomIdentifier,AtomIdentifier> > &match_ids);
-    
+
     AtomIDMatcher(const QList< boost::tuple<QString,QString> > &match_names);
     AtomIDMatcher(const QList< boost::tuple<int,int> > &match_idxs );
     AtomIDMatcher(const QList< boost::tuple<AtomIdentifier,AtomIdentifier> > &match_ids);
-    
+
     AtomIDMatcher(const QHash<QString,QString> &match_names);
     AtomIDMatcher(const QHash<int,int> &match_idxs);
     AtomIDMatcher(const QHash<AtomIdentifier,AtomIdentifier> &match_ids);
-    
+
     AtomIDMatcher(const QString &match_names);
-    
+
     AtomIDMatcher(const AtomIDMatcher &other);
-    
+
     ~AtomIDMatcher();
-    
+
     static const char* typeName();
-    
+
     bool isNull() const;
-    
+
     const char* what() const
     {
         return AtomIDMatcher::typeName();
     }
 
     AtomIDMatcher& operator=(const AtomIDMatcher &other);
-    
+
     bool operator==(const AtomIDMatcher &other) const;
     bool operator!=(const AtomIDMatcher &other) const;
-    
+
     QString toString() const;
 
 protected:
     QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeInfoData &molinfo0,
                                      const MoleculeInfoData &molinfo1) const;
-    
+
     QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeView &molview0,
                                      const PropertyMap &map0,
                                      const MoleculeView &molview1,
@@ -226,7 +238,7 @@ private:
 
 /** This is an atom matcher that matches using the maximum common substructure
     of the two molecules
- 
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT AtomMCSMatcher
@@ -238,43 +250,52 @@ friend QDataStream& ::operator>>(QDataStream&, AtomMCSMatcher&);
 
 public:
     AtomMCSMatcher();
-    AtomMCSMatcher(const SireUnits::Dimension::Time &timeout);
-    AtomMCSMatcher(const AtomMatcher &prematcher);
-    AtomMCSMatcher(const AtomMatcher &prematcher,
-                   const SireUnits::Dimension::Time &timeout);
-
-    AtomMCSMatcher(bool match_light_atoms);
+    AtomMCSMatcher(bool verbose);
     AtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
-                   bool match_light_atoms);
+                   bool verbose);
     AtomMCSMatcher(const AtomMatcher &prematcher,
-                   bool match_light_atoms);
+                   bool verbose);
     AtomMCSMatcher(const AtomMatcher &prematcher,
                    const SireUnits::Dimension::Time &timeout,
-                   bool match_light_atoms);
-    
+                   bool verbose);
+    AtomMCSMatcher(bool match_light_atoms,
+                   bool verbose);
+    AtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
+                   bool match_light_atoms,
+                   bool verbose);
+    AtomMCSMatcher(const AtomMatcher &prematcher,
+                   bool match_light_atoms,
+                   bool verbose);
+    AtomMCSMatcher(const AtomMatcher &prematcher,
+                   const SireUnits::Dimension::Time &timeout,
+                   bool match_light_atoms,
+                   bool verbose);
+
     AtomMCSMatcher(const AtomMCSMatcher &other);
-    
+
     ~AtomMCSMatcher();
-    
+
     static const char* typeName();
-    
+
     const char* what() const
     {
         return AtomMCSMatcher::typeName();
     }
 
     AtomMCSMatcher& operator=(const AtomMCSMatcher &other);
-    
+
     bool operator==(const AtomMCSMatcher &other) const;
     bool operator!=(const AtomMCSMatcher &other) const;
-    
+
     QString toString() const;
 
     const AtomMatcher& preMatcher() const;
-    
+
     SireUnits::Dimension::Time timeout() const;
 
     bool matchingLightAtoms() const;
+
+    bool isVerbose() const;
 
 protected:
     QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeView &molview0,
@@ -288,13 +309,16 @@ private:
 
     /** Timeout for the MCS match */
     SireUnits::Dimension::Time t;
-    
+
     /** Whether or not to match light atoms */
     bool match_light;
+
+    /** Whether or not to report progess to stdout */
+    bool verbose;
 };
 
 /** This is an atom matcher combines several sub-AtomMatchers together
-    
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT AtomMultiMatcher
@@ -308,31 +332,31 @@ public:
     AtomMultiMatcher();
     AtomMultiMatcher(const AtomMatcher &matcher);
     AtomMultiMatcher(const AtomMatcher &m0, const AtomMatcher &m1);
-    
+
     AtomMultiMatcher(const AtomMultiMatcher &other);
-    
+
     ~AtomMultiMatcher();
-    
+
     static const char* typeName();
-    
+
     bool isNull() const;
-    
+
     const char* what() const
     {
         return AtomMultiMatcher::typeName();
     }
 
     AtomMultiMatcher& operator=(const AtomMultiMatcher &other);
-    
+
     bool operator==(const AtomMultiMatcher &other) const;
     bool operator!=(const AtomMultiMatcher &other) const;
-    
+
     QString toString() const;
 
 protected:
     QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeInfoData &molinfo0,
                                      const MoleculeInfoData &molinfo1) const;
-    
+
     QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeView &molview0,
                                      const PropertyMap &map0,
                                      const MoleculeView &molview1,
@@ -343,6 +367,165 @@ private:
     QList<AtomMatcherPtr> m;
 };
 
+/** Match atoms by name within each residue.
+
+    @author Lester Hedges
+*/
+class SIREMOL_EXPORT ResIdxAtomNameMatcher
+         : public SireBase::ConcreteProperty<ResIdxAtomNameMatcher,AtomMatcher>
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const ResIdxAtomNameMatcher&);
+friend QDataStream& ::operator>>(QDataStream&, ResIdxAtomNameMatcher&);
+
+public:
+    ResIdxAtomNameMatcher();
+    ResIdxAtomNameMatcher(const ResIdxAtomNameMatcher&);
+
+    ~ResIdxAtomNameMatcher();
+
+    static const char* typeName();
+
+    const char* what() const
+    {
+        return ResIdxAtomNameMatcher::typeName();
+    }
+
+    ResIdxAtomNameMatcher& operator=(const ResIdxAtomNameMatcher &other);
+
+    bool operator==(const ResIdxAtomNameMatcher &other) const;
+    bool operator!=(const ResIdxAtomNameMatcher &other) const;
+
+    QString toString() const;
+
+protected:
+    QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeInfoData &molinfo0,
+                                     const MoleculeInfoData &molinfo1) const;
+
+    QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeView &molview0,
+                                     const PropertyMap &map0,
+                                     const MoleculeView &molview1,
+                                     const PropertyMap &map1) const;
+};
+
+/** Match atoms by name MCS within each residue.
+
+    @author Lester Hedges
+*/
+class SIREMOL_EXPORT ResIdxAtomMCSMatcher
+         : public SireBase::ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const ResIdxAtomMCSMatcher&);
+friend QDataStream& ::operator>>(QDataStream&, ResIdxAtomMCSMatcher&);
+
+public:
+    ResIdxAtomMCSMatcher();
+    ResIdxAtomMCSMatcher(bool verbose);
+    ResIdxAtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
+                         bool verbose);
+    ResIdxAtomMCSMatcher(const AtomMatcher &prematcher,
+                         bool verbose);
+    ResIdxAtomMCSMatcher(const AtomMatcher &prematcher,
+                         const SireUnits::Dimension::Time &timeout,
+                         bool verbose);
+    ResIdxAtomMCSMatcher(bool match_light_atoms,
+                         bool verbose);
+    ResIdxAtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
+                         bool match_light_atoms,
+                         bool verbose);
+    ResIdxAtomMCSMatcher(const AtomMatcher &prematcher,
+                         bool match_light_atoms,
+                         bool verbose);
+    ResIdxAtomMCSMatcher(const AtomMatcher &prematcher,
+                         const SireUnits::Dimension::Time &timeout,
+                         bool match_light_atoms,
+                         bool verbose);
+
+    ResIdxAtomMCSMatcher(const ResIdxAtomMCSMatcher&);
+
+    ~ResIdxAtomMCSMatcher();
+
+    static const char* typeName();
+
+    const char* what() const
+    {
+        return ResIdxAtomMCSMatcher::typeName();
+    }
+
+    ResIdxAtomMCSMatcher& operator=(const ResIdxAtomMCSMatcher &other);
+
+    bool operator==(const ResIdxAtomMCSMatcher &other) const;
+    bool operator!=(const ResIdxAtomMCSMatcher &other) const;
+
+    QString toString() const;
+
+    const AtomMatcher& preMatcher() const;
+
+    SireUnits::Dimension::Time timeout() const;
+
+    bool matchingLightAtoms() const;
+
+    bool isVerbose() const;
+
+protected:
+    QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeView &molview0,
+                                     const PropertyMap &map0,
+                                     const MoleculeView &molview1,
+                                     const PropertyMap &map1) const;
+
+private:
+    /** The pre-matcher */
+    AtomMatcherPtr prematcher;
+
+    /** Timeout for the MCS match */
+    SireUnits::Dimension::Time t;
+
+    /** Whether or not to match light atoms */
+    bool match_light;
+
+    /** Whether or not to report progess to stdout */
+    bool verbose;
+};
+
+/** Match atoms by coordinates within each residue.
+
+    @author Lester Hedges
+*/
+class SIREMOL_EXPORT ResIdxAtomCoordMatcher
+         : public SireBase::ConcreteProperty<ResIdxAtomCoordMatcher,AtomMatcher>
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const ResIdxAtomCoordMatcher&);
+friend QDataStream& ::operator>>(QDataStream&, ResIdxAtomCoordMatcher&);
+
+public:
+    ResIdxAtomCoordMatcher();
+    ResIdxAtomCoordMatcher(const ResIdxAtomCoordMatcher&);
+
+    ~ResIdxAtomCoordMatcher();
+
+    static const char* typeName();
+
+    const char* what() const
+    {
+        return ResIdxAtomCoordMatcher::typeName();
+    }
+
+    ResIdxAtomCoordMatcher& operator=(const ResIdxAtomCoordMatcher &other);
+
+    bool operator==(const ResIdxAtomCoordMatcher &other) const;
+    bool operator!=(const ResIdxAtomCoordMatcher &other) const;
+
+    QString toString() const;
+
+protected:
+    QHash<AtomIdx,AtomIdx> pvt_match(const MoleculeView &molview0,
+                                     const PropertyMap &map0,
+                                     const MoleculeView &molview1,
+                                     const PropertyMap &map1) const;
+};
+
 }
 
 Q_DECLARE_METATYPE( SireMol::AtomIdxMatcher )
@@ -350,12 +533,18 @@ Q_DECLARE_METATYPE( SireMol::AtomNameMatcher )
 Q_DECLARE_METATYPE( SireMol::AtomIDMatcher )
 Q_DECLARE_METATYPE( SireMol::AtomMultiMatcher )
 Q_DECLARE_METATYPE( SireMol::AtomMCSMatcher )
+Q_DECLARE_METATYPE( SireMol::ResIdxAtomNameMatcher )
+Q_DECLARE_METATYPE( SireMol::ResIdxAtomMCSMatcher )
+Q_DECLARE_METATYPE( SireMol::ResIdxAtomCoordMatcher )
 
 SIRE_EXPOSE_CLASS( SireMol::AtomIdxMatcher )
 SIRE_EXPOSE_CLASS( SireMol::AtomNameMatcher )
 SIRE_EXPOSE_CLASS( SireMol::AtomIDMatcher )
 SIRE_EXPOSE_CLASS( SireMol::AtomMultiMatcher )
 SIRE_EXPOSE_CLASS( SireMol::AtomMCSMatcher )
+SIRE_EXPOSE_CLASS( SireMol::ResIdxAtomNameMatcher )
+SIRE_EXPOSE_CLASS( SireMol::ResIdxAtomMCSMatcher )
+SIRE_EXPOSE_CLASS( SireMol::ResIdxAtomCoordMatcher )
 
 SIRE_END_HEADER
 

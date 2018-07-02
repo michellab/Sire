@@ -29,6 +29,8 @@
 #ifndef SIREMM_THREEATOMFUNCTIONS_H
 #define SIREMM_THREEATOMFUNCTIONS_H
 
+#include <QHash>
+
 #include "atomfunctions.h"
 
 #include "SireMol/cgatomidx.h"
@@ -66,7 +68,7 @@ using SireMol::AngleID;
 using SireMol::AtomSelection;
 using SireMol::AtomMatcher;
 
-/** This class holds a function that acts using the 
+/** This class holds a function that acts using the
     coordinate information of just three atoms */
 class SIREMM_EXPORT ThreeAtomFunction : public AtomFunction
 {
@@ -79,18 +81,18 @@ public:
     ThreeAtomFunction(const CGAtomIdx &atom0, const CGAtomIdx &atom1,
                       const CGAtomIdx &atom2,
                       const SireCAS::Expression &function);
-                  
+
     ThreeAtomFunction(const ThreeAtomFunction &other);
-    
+
     ~ThreeAtomFunction();
 
     ThreeAtomFunction& operator=(const ThreeAtomFunction &other);
-    
+
     bool operator==(const ThreeAtomFunction &other) const;
     bool operator!=(const ThreeAtomFunction &other) const;
-    
+
     QString toString() const;
-    
+
     const CGAtomIdx& atom0() const;
     const CGAtomIdx& atom1() const;
     const CGAtomIdx& atom2() const;
@@ -108,14 +110,14 @@ class IDTriple
 public:
     IDTriple(quint32 atom0=0, quint32 atom1=0, quint32 atom2=0);
     IDTriple(const IDTriple &other);
-    
+
     ~IDTriple();
-    
+
     IDTriple& operator=(const IDTriple &other);
-    
+
     bool operator==(const IDTriple &other) const;
     bool operator!=(const IDTriple &other) const;
-    
+
     quint32 atom0;
     quint32 atom1;
     quint32 atom2;
@@ -131,7 +133,7 @@ inline uint qHash(const IDTriple &idtriple)
 
 /** This class holds the set of ThreeAtomFunction potentials that
     act between the atoms in a molecule
-    
+
     @author Christopher Woods
 */
 class SIREMM_EXPORT ThreeAtomFunctions
@@ -143,18 +145,18 @@ friend QDataStream& ::operator>>(QDataStream&, ThreeAtomFunctions&);
 
 public:
     ThreeAtomFunctions();
-    
+
     ThreeAtomFunctions(const MoleculeData &moldata);
     ThreeAtomFunctions(const MoleculeInfoData &molinfo);
-    
+
     ThreeAtomFunctions(const ThreeAtomFunctions &other);
-    
+
     ~ThreeAtomFunctions();
-    
+
     static const char* typeName();
-    
+
     ThreeAtomFunctions& operator=(const ThreeAtomFunctions &other);
-    
+
     bool operator==(const ThreeAtomFunctions &other) const;
     bool operator!=(const ThreeAtomFunctions &other) const;
 
@@ -162,11 +164,11 @@ public:
 
     void set(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2,
              const Expression &expression);
-             
+
     void set(const AtomID &atom0, const AtomID &atom1,
              const AtomID &atom2,
              const Expression &expression);
-             
+
     void set(const AngleID &angleid, const Expression &expression);
 
     void clear(AtomIdx atom);
@@ -176,7 +178,7 @@ public:
     void clear(const AtomID &atom0, const AtomID &atom1,
                const AtomID &atom2);
     void clear(const AngleID &angleid);
-    
+
     void clear();
 
     void substitute(const Identities &identities);
@@ -190,8 +192,8 @@ public:
     Expression potential(const AtomID &atom0, const AtomID &atom1,
                          const AtomID &atom2) const;
     Expression potential(const AngleID &angleid) const;
-    
-    Expression force(AtomIdx atom0, AtomIdx atom1, 
+
+    Expression force(AtomIdx atom0, AtomIdx atom1,
                      AtomIdx atom2, const Symbol &symbol) const;
     Expression force(const AtomID &atom0, const AtomID &atom1,
                      const AtomID &atom2, const Symbol &symbol) const;
@@ -199,14 +201,16 @@ public:
 
     QVector<ThreeAtomFunction> potentials() const;
     QVector<ThreeAtomFunction> forces(const Symbol &symbol) const;
-    
+
     ThreeAtomFunctions includeOnly(const AtomSelection &selected_atoms,
                                    bool isstrict=true) const;
 
 protected:
     SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
                                                   const AtomMatcher &atommatcher) const;
-    
+    SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                                  const QHash<AtomIdx,AtomIdx> &map) const;
+
 private:
     void removeSymbols(QSet<Symbol> symbols);
 

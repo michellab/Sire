@@ -66,7 +66,7 @@ void register_Molecules_class(){
         bp::scope Molecules_scope( Molecules_exposer );
         Molecules_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molecule") ), "Construct a set that contains only the passed view\nof a molecule") );
         Molecules_exposer.def( bp::init< SireMol::ViewsOfMol const & >(( bp::arg("molviews") ), "Construct a set that contains the passed views\nof a molecule") );
-        Molecules_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("result") ), "Copy constructor") );
+        Molecules_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("result") ), "Construct a set that contains the passed search result") );
         Molecules_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::Molecules::add
         
@@ -569,7 +569,7 @@ void register_Molecules_class(){
                 "search"
                 , search_function_value
                 , ( bp::arg("search_string") )
-                , "" );
+                , "Return the result of searching these molecules with search_string" );
         
         }
         { //::SireMol::Molecules::toString

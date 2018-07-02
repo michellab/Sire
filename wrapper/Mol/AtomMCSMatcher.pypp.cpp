@@ -8,11 +8,17 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/parallel.h"
+
 #include "SireError/errors.h"
+
+#include "SireMaths/vector.h"
 
 #include "SireStream/datastream.h"
 
 #include "SireUnits/units.h"
+
+#include "atom.h"
 
 #include "atomidentifier.h"
 
@@ -32,6 +38,10 @@ namespace bp = boost::python;
 
 #include "moleculeview.h"
 
+#include "mover.h"
+
+#include "selector.hpp"
+
 #include "tostring.h"
 
 #include "atommatchers.h"
@@ -48,14 +58,26 @@ void register_AtomMCSMatcher_class(){
         typedef bp::class_< SireMol::AtomMCSMatcher, bp::bases< SireMol::AtomMatcher, SireBase::Property > > AtomMCSMatcher_exposer_t;
         AtomMCSMatcher_exposer_t AtomMCSMatcher_exposer = AtomMCSMatcher_exposer_t( "AtomMCSMatcher", "This is an atom matcher that matches using the maximum common substructure\nof the two molecules\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AtomMCSMatcher_scope( AtomMCSMatcher_exposer );
-        AtomMCSMatcher_exposer.def( bp::init< SireUnits::Dimension::Time const & >(( bp::arg("timeout") ), "Construct specifying the timeout for the MCS match") );
-        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const & >(( bp::arg("prematcher") ), "Construct specifying the prematcher for the MCS match") );
-        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, SireUnits::Dimension::Time const & >(( bp::arg("prematcher"), bp::arg("timeout") ), "Construct specifying the timeout and prematcher for the MCS match") );
-        AtomMCSMatcher_exposer.def( bp::init< bool >(( bp::arg("match_light_atoms") ), "Constructor, specifying whether or not to match light atoms") );
-        AtomMCSMatcher_exposer.def( bp::init< SireUnits::Dimension::Time const &, bool >(( bp::arg("timeout"), bp::arg("match_light_atoms") ), "Construct specifying the timeout for the MCS match, and specifying whether or not\nto match light atoms") );
-        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, bool >(( bp::arg("prematcher"), bp::arg("match_light_atoms") ), "Construct specifying the prematcher for the MCS match,\nand specifying whether or not to match light atoms\n") );
-        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, SireUnits::Dimension::Time const &, bool >(( bp::arg("prematcher"), bp::arg("timeout"), bp::arg("match_light_atoms") ), "Construct specifying the timeout and prematcher for the MCS match,\nand specifying whether or not to match light atoms\n") );
+        AtomMCSMatcher_exposer.def( bp::init< bool >(( bp::arg("verbose") ), "Constructor") );
+        AtomMCSMatcher_exposer.def( bp::init< SireUnits::Dimension::Time const &, bool >(( bp::arg("timeout"), bp::arg("verbose") ), "Construct specifying the timeout for the MCS match") );
+        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, bool >(( bp::arg("prematcher"), bp::arg("verbose") ), "Construct specifying the prematcher for the MCS match") );
+        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, SireUnits::Dimension::Time const &, bool >(( bp::arg("prematcher"), bp::arg("timeout"), bp::arg("verbose") ), "Construct specifying the timeout and prematcher for the MCS match") );
+        AtomMCSMatcher_exposer.def( bp::init< bool, bool >(( bp::arg("match_light_atoms"), bp::arg("verbose") ), "Constructor, specifying whether or not to match light atoms") );
+        AtomMCSMatcher_exposer.def( bp::init< SireUnits::Dimension::Time const &, bool, bool >(( bp::arg("timeout"), bp::arg("match_light_atoms"), bp::arg("verbose") ), "Construct specifying the timeout for the MCS match, and specifying whether or not\nto match light atoms") );
+        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, bool, bool >(( bp::arg("prematcher"), bp::arg("match_light_atoms"), bp::arg("verbose") ), "Construct specifying the prematcher for the MCS match,\nand specifying whether or not to match light atoms\n") );
+        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, SireUnits::Dimension::Time const &, bool, bool >(( bp::arg("prematcher"), bp::arg("timeout"), bp::arg("match_light_atoms"), bp::arg("verbose") ), "Construct specifying the timeout and prematcher for the MCS match,\nand specifying whether or not to match light atoms\n") );
         AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMCSMatcher const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireMol::AtomMCSMatcher::isVerbose
+        
+            typedef bool ( ::SireMol::AtomMCSMatcher::*isVerbose_function_type)(  ) const;
+            isVerbose_function_type isVerbose_function_value( &::SireMol::AtomMCSMatcher::isVerbose );
+            
+            AtomMCSMatcher_exposer.def( 
+                "isVerbose"
+                , isVerbose_function_value
+                , "Return whether or not this will report progress to stdout." );
+        
+        }
         { //::SireMol::AtomMCSMatcher::matchingLightAtoms
         
             typedef bool ( ::SireMol::AtomMCSMatcher::*matchingLightAtoms_function_type)(  ) const;

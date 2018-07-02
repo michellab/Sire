@@ -50,6 +50,8 @@ class AtomMatchInverter;
 class AtomIDMatcher;
 class AtomMultiMatcher;
 class AtomMCSMatcher;
+class ResIdxAtomNameMatcher;
+class ResIdxAtomMCSMatcher;
 }
 
 QDataStream& operator<<(QDataStream&, const SireMol::AtomMatcher&);

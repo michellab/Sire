@@ -77,8 +77,8 @@ void register_MoleculeGroup_class(){
         MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::MoleculeView const & >(( bp::arg("name"), bp::arg("molview") ), "Construct a named group that contains the passed molecule") );
         MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::Molecules const & >(( bp::arg("name"), bp::arg("molecules") ), "Construct a named group that contains the passed molecules") );
         MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::MoleculeGroup const & >(( bp::arg("name"), bp::arg("other") ), "Construct a named group that contains the same molecules as other") );
-        MoleculeGroup_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("result") ), "Construct a group that holds the passed molecules") );
-        MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::SelectResult const & >(( bp::arg("name"), bp::arg("result") ), "Construct a named group that contains the passed molecules") );
+        MoleculeGroup_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("result") ), "Construct a group that holds the passed search result. The group\nis called search_result") );
+        MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::SelectResult const & >(( bp::arg("name"), bp::arg("result") ), "Construct a group called name that holds the passed search result.") );
         MoleculeGroup_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::MoleculeGroup::accept
         
@@ -272,7 +272,7 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("viewidx") )
-                , "Return the view of hte molecule at viewidx\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireError::invalid_index\n" );
+                , "Return the specified view of the specified molecule in this group.\nThrow: SireMol::missing_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -416,7 +416,7 @@ void register_MoleculeGroup_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("MoleculeGroup") )
-                , "Return whether or not this group contains all of the\nviews of any version of all of the molecules contained\nin the group other" );
+                , "Return whether or not this group contains all of the\nviews of any version of all of the molecules contained\nin molecules" );
         
         }
         { //::SireMol::MoleculeGroup::first
@@ -1152,7 +1152,7 @@ void register_MoleculeGroup_class(){
                 "search"
                 , search_function_value
                 , ( bp::arg("search_term") )
-                , "" );
+                , "Return the result of searching this molecule group with search_term" );
         
         }
         { //::SireMol::MoleculeGroup::setContents

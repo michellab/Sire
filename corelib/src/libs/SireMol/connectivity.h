@@ -130,14 +130,14 @@ public:
 
     QList<AtomIdx> findPath(AtomIdx atom0, AtomIdx atom1) const;
     QList< QList<AtomIdx> > findPaths(AtomIdx atom0, AtomIdx atom1) const;
-    
+
     QList<AtomIdx> findPath(const AtomID &atom0, const AtomID &atom1) const;
     QList< QList<AtomIdx> > findPaths(const AtomID &atom0, const AtomID &atom1) const;
 
     bool inRing(AtomIdx atom0, AtomIdx atom1) const;
     bool inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const;
     bool inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2, AtomIdx atom3) const;
-    
+
     bool inRing(const AtomID &atom0, const AtomID &atom1) const;
     bool inRing(const AtomID &atom0, const AtomID &atom1, const AtomID &atom2) const;
     bool inRing(const AtomID &atom0, const AtomID &atom1,
@@ -194,36 +194,36 @@ public:
     tuple<AtomSelection,AtomSelection>
     split(const AtomID &atom0, const AtomID &atom1, const AtomID &atom2,
           const AtomSelection &selected_atoms) const;
-          
+
     tuple<AtomSelection,AtomSelection>
     split(const AngleID &angle, const AtomSelection &selected_atoms) const;
-    
+
     tuple<AtomSelection,AtomSelection>
     split(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2, AtomIdx atom3) const;
-    
+
     tuple<AtomSelection,AtomSelection>
-    split(const AtomID &atom0, const AtomID &atom1, 
+    split(const AtomID &atom0, const AtomID &atom1,
           const AtomID &atom2, const AtomID &atom3) const;
-          
+
     tuple<AtomSelection,AtomSelection>
     split(const DihedralID &dihedral) const;
-    
+
     tuple<AtomSelection,AtomSelection>
     split(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2, AtomIdx atom3,
           const AtomSelection &selected_atoms) const;
-          
+
     tuple<AtomSelection,AtomSelection>
     split(const AtomID &atom0, const AtomID &atom1,
           const AtomID &atom2, const AtomID &atom3,
           const AtomSelection &selected_atoms) const;
-          
+
     tuple<AtomSelection,AtomSelection>
     split(const DihedralID &dihedral,
           const AtomSelection &selected_atoms) const;
-          
+
     tuple<AtomSelection,AtomSelection>
     split(const ImproperID &improper) const;
-    
+
     tuple<AtomSelection,AtomSelection>
     split(const ImproperID &improper,
           const AtomSelection &selected_atoms) const;
@@ -255,6 +255,8 @@ protected:
 
     SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
                                                   const AtomMatcher &atommatcher) const;
+    SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                                  const QHash<AtomIdx,AtomIdx> &map) const;
 
 
     /** The which atoms are connected to which other atoms
@@ -269,19 +271,19 @@ protected:
 
 private:
     const QSet<AtomIdx>& _pvt_connectedTo(AtomIdx atomidx) const;
-    
+
     QList< QList<AtomIdx> > _pvt_findPaths(AtomIdx cursor, const AtomIdx end_atom,
                                            QSet<AtomIdx> &done) const;
-    
+
     void traceRoute(AtomIdx start, QSet<AtomIdx> &root,
                     QSet<AtomIdx> &group) const;
-    
+
     void traceRoute(const AtomSelection &selected_atoms,
                     AtomIdx start, QSet<AtomIdx> &root,
                     QSet<AtomIdx> &group) const;
-    
-    tuple<AtomSelection,AtomSelection> 
-    selectGroups(const QSet<AtomIdx> &group0, 
+
+    tuple<AtomSelection,AtomSelection>
+    selectGroups(const QSet<AtomIdx> &group0,
                  const QSet<AtomIdx> &group1) const;
 };
 
@@ -379,9 +381,9 @@ public:
 
     ConnectivityEditor& disconnectAll(const AtomID &atomid);
     ConnectivityEditor& disconnectAll(const ResID &resid);
-    
+
     ConnectivityEditor& disconnectAll();
-    
+
     Connectivity commit() const;
 };
 
