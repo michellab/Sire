@@ -860,7 +860,7 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
     try
     {
         // Extract the existing parameters from the system.
-        QString params = system.property(map["charmm-params"]).asA<StringProperty>().value();
+        QString params = system.property(map["charmm_params"]).asA<StringProperty>().value();
 
         // Convert into a list.
         charmm_params = params.split("\n");
@@ -3570,8 +3570,8 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     else           param_format = "X-PLOR";
 
     // Add the CHARMM parameters as a property.
-    system.setProperty(map["charmm-params"].source(), StringProperty(params_string));
-    system.setProperty(map["param-format"].source(), StringProperty(param_format));
+    system.setProperty(map["charmm_params"].source(), StringProperty(params_string));
+    system.setProperty(map["param_format"].source(), StringProperty(param_format));
 
     // Add the periodic box property.
     if (has_box_params)
