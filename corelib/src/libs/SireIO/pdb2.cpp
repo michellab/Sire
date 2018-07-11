@@ -568,8 +568,8 @@ QString PDBAtom::toPDBRecord() const
 {
     QString line;
 
-    if (is_het) line.append("HETATM");
-    else        line.append("ATOM  ");
+    // Write all records as ATOM, i.e. convert HETATM to ATOM.
+    line.append("ATOM  ");
 
     // Append the atom serial number. Since we enforce a hard
     // limit of 99999 atoms, we can assume that the serial is
