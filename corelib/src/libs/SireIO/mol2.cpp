@@ -1409,8 +1409,8 @@ Mol2Substructure::Mol2Substructure(const SireMol::Residue &res,
         type = res.property<QString>(map["res_type"]);
 
     // Dictionary type.
-    if (res.hasProperty(map["res-dict-type"]))
-        dict_type = res.property<qint64>(map["res-dict-type"]);
+    if (res.hasProperty(map["res_dict_type"]))
+        dict_type = res.property<qint64>(map["res_dict_type"]);
 
     // Chain sub-type.
     if (res.hasProperty(map["chain_sub_type"]))
@@ -2617,7 +2617,7 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
               .setProperty(map["sybyl_atom_type"], types)
               .setProperty(map["atom_status_bits"], status_bits)
               .setProperty(map["res_type"], subst_types)
-              .setProperty(map["res-dict-type"], dict_types)
+              .setProperty(map["res_dict_type"], dict_types)
               .setProperty(map["chain_sub_type"], chain_sub_types)
               .setProperty(map["res_inter_bonds"], inter_bonds)
               .setProperty(map["res_status_bits"], subst_status_bits)
