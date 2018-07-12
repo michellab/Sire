@@ -41,6 +41,7 @@
 #include "Helpers/pair.hpp"
 
 #include "SireMaths/vector.h"
+#include "SireMaths/matrix.h"
 #include "SireMaths/nmatrix.h"
 #include "SireMaths/nvector.h"
 #include "SireMaths/accumulator.h"
@@ -73,5 +74,6 @@ void register_SireMaths_containers()
     register_pair< NVector,NMatrix >();
 
     register_tuple< boost::tuple<Vector,Vector,Vector> >();
+    register_tuple< boost::tuple<Matrix,Matrix,Matrix> >();
 }
 
