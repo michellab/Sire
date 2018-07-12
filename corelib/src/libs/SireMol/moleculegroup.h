@@ -75,6 +75,7 @@ class Molecule;
 class MoleculeView;
 class PartialMolecule;
 class ViewsOfMol;
+class SelectResult;
 
 class MolNum;
 class MolNumViewIdx;
@@ -120,6 +121,9 @@ public:
     MoleculeGroup(const QString &name, const MoleculeView &molview);
     MoleculeGroup(const QString &name, const Molecules &molecules);
     MoleculeGroup(const QString &name, const MoleculeGroup &other);
+
+    MoleculeGroup(const SelectResult &result);
+    MoleculeGroup(const QString &name, const SelectResult &result);
 
     MoleculeGroup(const MoleculeGroup &other);
 
@@ -237,6 +241,8 @@ public:
 
     const_iterator find(const MolID &molid) const;
     const_iterator constFind(const MolID &molid) const;
+
+    SelectResult search(const QString &search_term) const;
 
     QSet<MolName> molNames() const;
 

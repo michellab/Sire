@@ -7,11 +7,17 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/parallel.h"
+
 #include "SireError/errors.h"
+
+#include "SireMaths/vector.h"
 
 #include "SireStream/datastream.h"
 
 #include "SireUnits/units.h"
+
+#include "atom.h"
 
 #include "atomidentifier.h"
 
@@ -30,6 +36,10 @@ namespace bp = boost::python;
 #include "moleculeinfodata.h"
 
 #include "moleculeview.h"
+
+#include "mover.h"
+
+#include "selector.hpp"
 
 #include "tostring.h"
 
@@ -51,12 +61,12 @@ void register_AtomIDMatcher_class(){
         AtomIDMatcher_exposer.def( bp::init< QList< QPair< int, int > > const & >(( bp::arg("match_idxs") ), "Construct to match atom indexes") );
         AtomIDMatcher_exposer.def( bp::init< QList< QPair< SireMol::AtomIdentifier, SireMol::AtomIdentifier > > const & >(( bp::arg("match_ids") ), "Construct to match specified AtomIdentifiers") );
         AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< QString, QString, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_names") ), "Construct to match atom names") );
-        AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< int, int, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_idxs") ), "Construct to match atom indexes") );
+        AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< int, int, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_idxs") ), "Construct to match specified AtomIdentifiers") );
         AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< SireMol::AtomIdentifier, SireMol::AtomIdentifier, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_ids") ), "Construct to match specified AtomIdentifiers") );
         AtomIDMatcher_exposer.def( bp::init< QHash< QString, QString > const & >(( bp::arg("match_names") ), "Construct to match atom names") );
         AtomIDMatcher_exposer.def( bp::init< QHash< int, int > const & >(( bp::arg("match_idxs") ), "Construct to match atom indexes") );
         AtomIDMatcher_exposer.def( bp::init< QHash< SireMol::AtomIdentifier, SireMol::AtomIdentifier > const & >(( bp::arg("match_ids") ), "Construct to match specified AtomIdentifiers") );
-        AtomIDMatcher_exposer.def( bp::init< QString const & >(( bp::arg("match_names") ), "Construct to match atom names") );
+        AtomIDMatcher_exposer.def( bp::init< QString const & >(( bp::arg("match_names") ), "Shorthand to construct to match atom names from the passed single string,\nwith format atom0:atom1,atom2:atom3 etc. (i.e. comma separated pairs,\neach pair is colon separated to match atom to atom, e.g. this string\nmatches atom0 to atom1, and atom2 to atom3)") );
         AtomIDMatcher_exposer.def( bp::init< SireMol::AtomIDMatcher const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AtomIDMatcher::isNull
         

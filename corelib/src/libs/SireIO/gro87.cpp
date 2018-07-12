@@ -1600,10 +1600,10 @@ int Gro87::findAtom(const MoleculeInfoData &molinfo, int atmidx, int hint,
             return partial_matches.last();
         }
         else
-            throw SireMol::missing_atom( QObject::tr(
-                "Cannot find the atom %1(%2) : %3(%4) in the set of atoms loaded "
-                "from this .gro file.")
-                    .arg(atmname).arg(atmnum).arg(resname).arg(resnum), CODELOC );
+        {
+            //we can't find the atom, so just go with the hint
+            return hint;
+        }
     }
 
     return match;

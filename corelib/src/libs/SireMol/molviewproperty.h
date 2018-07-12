@@ -29,6 +29,8 @@
 #ifndef SIREMOL_MOLVIEWPROPERTY_H
 #define SIREMOL_MOLVIEWPROPERTY_H
 
+#include <QHash>
+
 #include "SireBase/property.h"
 
 #include "moleculeinfo.h"
@@ -46,6 +48,7 @@ namespace SireMol
 class MoleculeInfoData;
 class MoleculeView;
 class AtomSelection;
+class AtomIdx;
 class AtomMatcher;
 
 /** This is the base class of all properties that are specifically
@@ -74,36 +77,43 @@ public:
 
     SireBase::PropertyPtr makeCompatibleWith(const MoleculeInfoData &molinfo,
                                              const AtomMatcher &atommatcher) const;
+    SireBase::PropertyPtr makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                             const QHash<AtomIdx,AtomIdx> &map) const;
 
     SireBase::PropertyPtr makeCompatibleWith(const MoleculeInfoData &molinfo) const;
 
     SireBase::PropertyPtr makeCompatibleWith(const MoleculeView &mol) const;
     SireBase::PropertyPtr makeCompatibleWith(const MoleculeView &mol,
                                              const AtomMatcher &atommatcher) const;
+    SireBase::PropertyPtr makeCompatibleWith(const MoleculeView &mol,
+                                             const QHash<AtomIdx,AtomIdx> &map) const;
 
     void assertCompatibleWith(const MoleculeInfoData &molinfo) const;
     void assertCompatibleWith(const MoleculeInfo &molinfo) const;
 
 protected:
-    virtual SireBase::PropertyPtr 
+    virtual SireBase::PropertyPtr
                     _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
                                             const AtomMatcher &atommatcher) const;
+    virtual SireBase::PropertyPtr
+                    _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                            const QHash<AtomIdx,AtomIdx> &map) const;
 };
 
 /** This specifically is a property that pertains to an entire
     molecule (e.g. a selection of atoms from that molecule)
-    
+
     @author Christopher Woods
 */
 class SIREMOL_EXPORT MoleculeProperty : public MolViewProperty
 {
 public:
     MoleculeProperty();
-    
+
     MoleculeProperty(const MoleculeProperty &other);
-    
+
     ~MoleculeProperty();
-    
+
     static const char* typeName()
     {
         return "SireMol::MoleculeProperty";

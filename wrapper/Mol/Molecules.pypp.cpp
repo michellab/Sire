@@ -36,6 +36,8 @@ namespace bp = boost::python;
 
 #include "segment.h"
 
+#include "select.h"
+
 #include "selector.hpp"
 
 #include "tostring.h"
@@ -64,6 +66,7 @@ void register_Molecules_class(){
         bp::scope Molecules_scope( Molecules_exposer );
         Molecules_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molecule") ), "Construct a set that contains only the passed view\nof a molecule") );
         Molecules_exposer.def( bp::init< SireMol::ViewsOfMol const & >(( bp::arg("molviews") ), "Construct a set that contains the passed views\nof a molecule") );
+        Molecules_exposer.def( bp::init< SireMol::SelectResult const & >(( bp::arg("result") ), "Construct a set that contains the passed search result") );
         Molecules_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::Molecules::add
         
@@ -555,6 +558,18 @@ void register_Molecules_class(){
                 , reserve_function_value
                 , ( bp::arg("nmolecules") )
                 , "Reserve enough space for nmolecules molecules. This\nwill reserve the memory so that reallocations are minimised" );
+        
+        }
+        { //::SireMol::Molecules::search
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::Molecules::*search_function_type)( ::QString const & ) const;
+            search_function_type search_function_value( &::SireMol::Molecules::search );
+            
+            Molecules_exposer.def( 
+                "search"
+                , search_function_value
+                , ( bp::arg("search_string") )
+                , "Return the result of searching these molecules with search_string" );
         
         }
         { //::SireMol::Molecules::toString

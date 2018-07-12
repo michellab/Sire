@@ -2439,8 +2439,15 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
 
     if (not has_ambertypes)
     {
-        //look for the atomtypes property
-        amber_types = getProperty<AtomStringProperty>( map["atomtype"], moldata, &has_ambertypes );
+        //first look for the bondtypes property, as OPLS uses this
+        amber_types = getProperty<AtomStringProperty>( map["bondtype"], moldata, &has_ambertypes );
+        
+        if (not has_ambertypes)
+        {
+            //look for the atomtypes property
+            amber_types = getProperty<AtomStringProperty>( map["atomtype"], moldata,
+                                                           &has_ambertypes );
+        }
     }
 
     if (not has_elements)

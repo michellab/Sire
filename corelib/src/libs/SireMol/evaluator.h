@@ -86,7 +86,7 @@ using SireVol::AABox;
 
     @author Christopher Woods
 */
-class SIREMOL_EXPORT Evaluator 
+class SIREMOL_EXPORT Evaluator
             : public SireBase::ConcreteProperty<Evaluator,MoleculeView>
 {
 
@@ -97,9 +97,9 @@ public:
     Evaluator();
 
     Evaluator(const MoleculeView &molecule);
-    
+
     Evaluator(const MoleculeData &moldata);
-    
+
     Evaluator(const MoleculeView &molecule,
               const AtomSelection &selected_atoms);
 
@@ -116,9 +116,9 @@ public:
     static const char* typeName();
 
     Evaluator* clone() const;
-    
+
     QString toString() const;
-    
+
     bool isEmpty() const;
     bool selectedAll() const;
 
@@ -170,10 +170,10 @@ public:
     AxisSet principalAxes(Vector &principal_moments,
                           const PropertyMap &map = PropertyMap()) const;
 
-    AxisSet alignmentAxes(const MoleculeView &other, 
+    AxisSet alignmentAxes(const MoleculeView &other,
                           const AtomMatcher &matcher,
                           const PropertyMap &map = PropertyMap()) const;
-                          
+
     AxisSet alignmentAxes(const MoleculeView &other,
                           const AtomMatcher &matcher,
                           const PropertyMap &map0,
@@ -206,7 +206,7 @@ public:
     SireUnits::Dimension::Length rmsd(const MoleculeView &other,
                                       const PropertyMap &map0,
                                       const PropertyMap &map1) const;
-    
+
     SireUnits::Dimension::Length rmsd(const MoleculeView &other,
                                       const AtomMatcher &atommatcher,
                                       const PropertyMap &map=PropertyMap()) const;
@@ -217,88 +217,104 @@ public:
                                       const PropertyMap &map1) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
-                                   const PropertyMap &map=PropertyMap()) const;
+                                   const PropertyMap &map=PropertyMap(),
+                                   bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    const AtomMatcher &atommatcher,
-                                   const PropertyMap &map=PropertyMap()) const;
+                                   const PropertyMap &map=PropertyMap(),
+                                   bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    const PropertyMap &map0,
-                                   const PropertyMap &map1) const;
+                                   const PropertyMap &map1,
+                                   bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    const AtomMatcher &atommatcher,
                                    const PropertyMap &map0,
-                                   const PropertyMap &map1) const;
+                                   const PropertyMap &map1,
+                                   bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    const SireUnits::Dimension::Time &timeout,
-                                   const PropertyMap &map=PropertyMap()) const;
-
-    QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
-                                   const AtomMatcher &atommatcher,
-                                   const SireUnits::Dimension::Time &timeout,
-                                   const PropertyMap &map=PropertyMap()) const;
-
-    QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
-                                   const SireUnits::Dimension::Time &timeout,
-                                   const PropertyMap &map0,
-                                   const PropertyMap &map1) const;
+                                   const PropertyMap &map=PropertyMap(),
+                                   bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    const AtomMatcher &atommatcher,
                                    const SireUnits::Dimension::Time &timeout,
-                                   const PropertyMap &map0,
-                                   const PropertyMap &map1) const;
-
-    QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
-                                   bool match_light_atoms,
-                                   const PropertyMap &map=PropertyMap()) const;
-
-    QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
-                                   const AtomMatcher &atommatcher,
-                                   bool match_light_atoms,
-                                   const PropertyMap &map=PropertyMap()) const;
-
-    QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
-                                   bool match_light_atoms,
-                                   const PropertyMap &map0,
-                                   const PropertyMap &map1) const;
-
-    QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
-                                   const AtomMatcher &atommatcher,
-                                   bool match_light_atoms,
-                                   const PropertyMap &map0,
-                                   const PropertyMap &map1) const;
+                                   const PropertyMap &map=PropertyMap(),
+                                   bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    const SireUnits::Dimension::Time &timeout,
-                                   bool match_light_atoms,
-                                   const PropertyMap &map=PropertyMap()) const;
+                                   const PropertyMap &map0,
+                                   const PropertyMap &map1,
+                                   bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    const AtomMatcher &atommatcher,
                                    const SireUnits::Dimension::Time &timeout,
+                                   const PropertyMap &map0,
+                                   const PropertyMap &map1,
+                                   bool verbose=false) const;
+
+    QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    bool match_light_atoms,
-                                   const PropertyMap &map=PropertyMap()) const;
+                                   const PropertyMap &map=PropertyMap(),
+                                   bool verbose=false) const;
+
+    QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
+                                   const AtomMatcher &atommatcher,
+                                   bool match_light_atoms,
+                                   const PropertyMap &map=PropertyMap(),
+                                   bool verbose=false) const;
+
+    QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
+                                   bool match_light_atoms,
+                                   const PropertyMap &map0,
+                                   const PropertyMap &map1,
+                                   bool verbose=false) const;
+
+    QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
+                                   const AtomMatcher &atommatcher,
+                                   bool match_light_atoms,
+                                   const PropertyMap &map0,
+                                   const PropertyMap &map1,
+                                   bool verbose=false) const;
+
+    QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
+                                   const SireUnits::Dimension::Time &timeout,
+                                   bool match_light_atoms,
+                                   const PropertyMap &map=PropertyMap(),
+                                   bool verbose=false) const;
+
+    QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
+                                   const AtomMatcher &atommatcher,
+                                   const SireUnits::Dimension::Time &timeout,
+                                   bool match_light_atoms,
+                                   const PropertyMap &map=PropertyMap(),
+                                   bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    const SireUnits::Dimension::Time &timeout,
                                    bool match_light_atoms,
                                    const PropertyMap &map0,
-                                   const PropertyMap &map1) const;
+                                   const PropertyMap &map1,
+                                   bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    const AtomMatcher &atommatcher,
                                    const SireUnits::Dimension::Time &timeout,
                                    bool match_light_atoms,
                                    const PropertyMap &map0,
-                                   const PropertyMap &map1) const;
+                                   const PropertyMap &map1,
+                                   bool verbose=false) const;
 
 private:
 
-    /** The atoms over which the properties will be 
+    /** The atoms over which the properties will be
         evaluated */
     AtomSelection selected_atoms;
 };

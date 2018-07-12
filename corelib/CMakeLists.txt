@@ -7,8 +7,8 @@
 ################################
 
 set (S_VERSION_MAJOR "2018")
-set (S_VERSION_MINOR "1")
-set (S_VERSION_PATCH "1")             
+set (S_VERSION_MINOR "2")
+set (S_VERSION_PATCH "0")             
 
 set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 
@@ -161,6 +161,7 @@ message( STATUS "Sire will be compiled and installed to directory ${CMAKE_INSTAL
 
 # Absolutely can't run cmake in the source directory!
 if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
+  message( STATUS "${CMAKE_BINARY_DIR} | ${CMAKE_SOURCE_DIR}" )
   message( FATAL_ERROR "You must run CMake in a different directory to the source!" ) 
 endif()
 

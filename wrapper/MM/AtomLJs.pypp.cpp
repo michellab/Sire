@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "atomljs.h"
 
+#include "SireMol/moleculeview.h"
+
 SireMol::AtomProperty<SireMM::LJParameter> __copy__(const SireMol::AtomProperty<SireMM::LJParameter> &other){ return SireMol::AtomProperty<SireMM::LJParameter>(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -18,8 +20,6 @@ SireMol::AtomProperty<SireMM::LJParameter> __copy__(const SireMol::AtomProperty<
 #include "Helpers/str.hpp"
 
 #include "Helpers/len.hpp"
-
-#include "SireMol/moleculeview.h"
 
 void register_AtomLJs_class(){
 

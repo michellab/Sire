@@ -162,7 +162,7 @@ void register_ConnectivityBase_class(){
                 "areConnected"
                 , areConnected_function_value
                 , ( bp::arg("cg0"), bp::arg("cg1") )
-                , "Return whether or not the residues at indicies res0 and res1\nare connected\nThrow: SireError::invalid_index\n" );
+                , "Return whether or not the CutGroups at indicies cg0 and cg1 are\nconnected" );
         
         }
         { //::SireMol::ConnectivityBase::areConnected
@@ -174,7 +174,7 @@ void register_ConnectivityBase_class(){
                 "areConnected"
                 , areConnected_function_value
                 , ( bp::arg("cg0"), bp::arg("cg1") )
-                , "Return whether the residues identified by res0 and res1 are connected" );
+                , "Return whether or not the CutGroups at indicies cg0 and cg1 are\nconnected" );
         
         }
         { //::SireMol::ConnectivityBase::areDihedraled
@@ -210,7 +210,7 @@ void register_ConnectivityBase_class(){
                 "connectionType"
                 , connectionType_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1") )
-                , "" );
+                , "Return the connection type of the passed two atoms. This returns;\n" );
         
         }
         { //::SireMol::ConnectivityBase::connectionType
@@ -222,7 +222,7 @@ void register_ConnectivityBase_class(){
                 "connectionType"
                 , connectionType_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1") )
-                , "" );
+                , "Return the connection type of the passed two atoms. This returns;\n" );
         
         }
         { //::SireMol::ConnectivityBase::connectionsTo
@@ -570,7 +570,7 @@ void register_ConnectivityBase_class(){
             ConnectivityBase_exposer.def( 
                 "info"
                 , info_function_value
-                , "" );
+                , "Return the info object that describes the molecule for which this connectivity applies" );
         
         }
         { //::SireMol::ConnectivityBase::isCompatibleWith

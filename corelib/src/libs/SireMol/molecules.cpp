@@ -42,6 +42,8 @@
 #include "chain.h"
 #include "segment.h"
 
+#include "select.h"
+
 #include "SireMol/errors.h"
 
 #include "SireStream/datastream.h"
@@ -582,6 +584,16 @@ Molecules::Molecules(const ViewsOfMol &molviews)
     this->add(molviews);
 }
 
+/** Construct a set that contains the passed search result */
+Molecules::Molecules(const SelectResult &result)
+          : ConcreteProperty<Molecules,Property>()
+{
+    for (const auto &view : result.views())
+    {
+        this->add( view.join() );
+    }
+}
+
 /** Copy constructor */
 Molecules::Molecules(const Molecules &other)
           : ConcreteProperty<Molecules,Property>(other),
@@ -696,6 +708,12 @@ PartialMolecule Molecules::at(const tuple<MolNum,Index> &molviewidx) const
 PartialMolecule Molecules::at(MolNum molnum, int viewidx) const
 {
     return this->at(molnum).valueAt(viewidx);
+}
+
+/** Return the result of searching these molecules with 'search_string' */
+SelectResult Molecules::search(const QString &search_string) const
+{
+    return Select(search_string)(*this);
 }
 
 /** Return the Molecules that has had 'other' added to it. Note

@@ -328,7 +328,7 @@ namespace detail
         tuple<CLJAtoms,CLJAtoms,CLJAtoms> merge() const
         {
             if (deltas.isEmpty())
-                return CLJAtoms();
+                return tuple<CLJAtoms,CLJAtoms,CLJAtoms>();
             else
             {
                 return CLJDelta::merge(deltas.constData(), deltas.count());

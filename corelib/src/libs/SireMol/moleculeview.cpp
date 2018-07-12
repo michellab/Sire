@@ -35,6 +35,7 @@
 #include "segment.h"
 #include "selector.hpp"
 #include "molecule.h"
+#include "select.h"
 
 #include "SireBase/errors.h"
 #include "SireError/errors.h"
@@ -662,6 +663,13 @@ Segment MoleculeView::select(const SegID &segid, const PropertyMap &map) const
 Atom MoleculeView::select(const AtomID &atomid, const PropertyMap &map) const
 {
     return this->atom(atomid, map);
+}
+
+/** Return the result of searching this molecule using the passed
+    search string */
+SelectResult MoleculeView::search(const QString &search_string) const
+{
+    return Select(search_string)(*this);
 }
 
 /** Return the atoms from this view that match the ID 'atomid'

@@ -232,6 +232,9 @@ public:
     QMultiHash<SireMol::AngleID,GromacsAngle> angles() const;
     QMultiHash<SireMol::DihedralID,GromacsDihedral> dihedrals() const;
 
+    bool isWater() const;
+    QStringList settlesLines() const;
+
     QStringList warnings() const;
 
     bool needsSanitising() const;
@@ -436,7 +439,7 @@ private:
     QVector<QString> loadInclude(QString filename, QString current_directory);
 
     QVector<QString> preprocess(const QVector<QString> &lines,
-                                QHash<QString,QString> defines,
+                                QHash<QString,QString> &defines,
                                 const QString &current_directory,
                                 const QString &parent_file);
 

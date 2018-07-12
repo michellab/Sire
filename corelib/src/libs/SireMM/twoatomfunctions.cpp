@@ -59,7 +59,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 {
     ds << twoatomfunc.atm0 << twoatomfunc.atm1
        << static_cast<const AtomFunction&>(twoatomfunc);
-       
+
     return ds;
 }
 
@@ -68,7 +68,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
 {
     ds >> twoatomfunc.atm0 >> twoatomfunc.atm1
        >> static_cast<AtomFunction&>(twoatomfunc);
-       
+
     return ds;
 }
 
@@ -82,8 +82,8 @@ TwoAtomFunction::TwoAtomFunction(const CGAtomIdx &atom0, const CGAtomIdx &atom1,
                 : AtomFunction(function),
                   atm0(atom0), atm1(atom1)
 {}
-  
-/** Copy constructor */            
+
+/** Copy constructor */
 TwoAtomFunction::TwoAtomFunction(const TwoAtomFunction &other)
                 : AtomFunction(other),
                   atm0(other.atm0), atm1(other.atm1)
@@ -99,7 +99,7 @@ TwoAtomFunction& TwoAtomFunction::operator=(const TwoAtomFunction &other)
     AtomFunction::operator=(other);
     atm0 = other.atm0;
     atm1 = other.atm1;
-    
+
     return *this;
 }
 
@@ -121,7 +121,7 @@ bool TwoAtomFunction::operator!=(const TwoAtomFunction &other) const
 QString TwoAtomFunction::toString() const
 {
     return QObject::tr("TwoAtomFunction( %1 <-> %2 : %3 )")
-                .arg(atm0.toString(), atm1.toString(), 
+                .arg(atm0.toString(), atm1.toString(),
                      this->function().toString());
 }
 
@@ -141,7 +141,7 @@ inline QDataStream& operator>>(QDataStream &ds, IDPair &idpair)
     return ds;
 }
 
-IDPair::IDPair(quint32 atm0, quint32 atm1) 
+IDPair::IDPair(quint32 atm0, quint32 atm1)
        : atom0(atm0), atom1(atm1)
 {
     if (atm0 > atm1)
@@ -185,12 +185,12 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
                                       const TwoAtomFunctions &twoatomfuncs)
 {
     writeHeader(ds, r_twoatomfuncs, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << twoatomfuncs.potentials_by_atoms
         << static_cast<const AtomFunctions&>(twoatomfuncs);
-    
+
     return ds;
 }
 
@@ -199,17 +199,17 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
                                       TwoAtomFunctions &twoatomfuncs)
 {
     VersionID v = readHeader(ds, r_twoatomfuncs);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> twoatomfuncs.potentials_by_atoms
             >> static_cast<AtomFunctions&>(twoatomfuncs);
     }
     else
         throw version_error(v, "1", r_twoatomfuncs, CODELOC);
-        
+
     return ds;
 }
 
@@ -245,7 +245,7 @@ TwoAtomFunctions& TwoAtomFunctions::operator=(const TwoAtomFunctions &other)
 {
     AtomFunctions::operator=(other);
     potentials_by_atoms = other.potentials_by_atoms;
-    
+
     return *this;
 }
 
@@ -271,8 +271,8 @@ QString TwoAtomFunctions::toString() const
 }
 
 /** Set the potential energy function used by atoms 'atom0' and 'atom1'
-    to be equal to 'expression' - this replaces any existing expression 
-    
+    to be equal to 'expression' - this replaces any existing expression
+
     \throw SireError::invalid_index
     \throw SireMol::duplicate_atom
 */
@@ -282,17 +282,17 @@ void TwoAtomFunctions::set(AtomIdx atom0, AtomIdx atom1, const Expression &expre
     quint32 atm1 = atom1.map( info().nAtoms() );
 
     if (atm0 == atm1)
-        throw SireMol::duplicate_atom( QObject::tr( 
+        throw SireMol::duplicate_atom( QObject::tr(
             "You cannot add a function that acts between the same atom! (%1)")
                 .arg(atm0), CODELOC );
 
     potentials_by_atoms.insert( IDPair(atm0,atm1), expression );
     AtomFunctions::addSymbols(expression.symbols());
 }
-         
+
 /** Set the potential energy function used by atoms 'atom0' and 'atom1'
-    to be equal to 'expression' - this replaces any existing expression 
-    
+    to be equal to 'expression' - this replaces any existing expression
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -305,9 +305,9 @@ void TwoAtomFunctions::set(const AtomID &atom0, const AtomID &atom1,
 
 /** Set the potential energy function used for the bond identified by 'bondid'
     to be equal to 'expression' - this replaces any existing expression
-    
+
     Note that this replaces both 1-2 and 2-1
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -316,7 +316,7 @@ void TwoAtomFunctions::set(const BondID &bondid, const Expression &expression)
 {
     AtomIdx atom0 = info().atomIdx(bondid.atom0());
     AtomIdx atom1 = info().atomIdx(bondid.atom1());
-    
+
     this->clear(atom0, atom1);
     this->clear(atom1, atom0);
 
@@ -326,17 +326,17 @@ void TwoAtomFunctions::set(const BondID &bondid, const Expression &expression)
 /** Check if any of the symbols in 'symbols' need to be removed... */
 void TwoAtomFunctions::removeSymbols(QSet<Symbol> symbols)
 {
-    for (QHash<IDPair,Expression>::const_iterator 
+    for (QHash<IDPair,Expression>::const_iterator
                                     it = potentials_by_atoms.constBegin();
          it != potentials_by_atoms.constEnd();
          ++it)
     {
         if (symbols.isEmpty())
             return;
-            
+
         symbols.subtract(it.value().symbols());
     }
-    
+
     //the only remaining symbols are ones that no longer exist
     //in this set
     AtomFunctions::removeSymbols(symbols);
@@ -350,21 +350,21 @@ void TwoAtomFunctions::clear(AtomIdx atom0, AtomIdx atom1)
 {
     quint32 atm0 = atom0.map( info().nAtoms() );
     quint32 atm1 = atom1.map( info().nAtoms() );
-        
+
     TwoAtomFunctions::removeSymbols( potentials_by_atoms
                                         .take( IDPair(atm0,atm1) ).symbols() );
 }
 
-/** Clear all functions that involve the atom 'atom' 
+/** Clear all functions that involve the atom 'atom'
 
     \throw SireError::invalid_index
 */
 void TwoAtomFunctions::clear(AtomIdx atom)
 {
     quint32 atm = atom.map(info().nAtoms());
-    
+
     QList<IDPair> keys = potentials_by_atoms.keys();
-    
+
     foreach (const IDPair &key, keys)
     {
         if (key.atom0 == atm or key.atom1 == atm)
@@ -383,7 +383,7 @@ void TwoAtomFunctions::clear(AtomIdx atom)
 void TwoAtomFunctions::clear(const AtomID &atom)
 {
     QList<AtomIdx> atomidxs = atom.map(info());
-    
+
     foreach (AtomIdx atomidx, atomidxs)
     {
         this->clear(atomidx);
@@ -399,7 +399,7 @@ void TwoAtomFunctions::clear(const AtomID &atom0, const AtomID &atom1)
 {
     QList<AtomIdx> atoms0 = atom0.map(info());
     QList<AtomIdx> atoms1 = atom1.map(info());
-    
+
     foreach (AtomIdx atm0, atoms0)
     {
         foreach (AtomIdx atm1, atoms1)
@@ -429,7 +429,7 @@ void TwoAtomFunctions::clear()
     AtomFunctions::removeSymbols();
 }
 
-/** Perform the substitutions contained in 'identities' in all of 
+/** Perform the substitutions contained in 'identities' in all of
     the expressions in this set. This could be useful if you have
     defined these expressions with respect to a lambda parameter,
     and now want to set that value of lambda */
@@ -454,8 +454,8 @@ bool TwoAtomFunctions::isEmpty() const
 
 /** Return the function acting between the atoms 'atom0' and 'atom1'.
     This returns an empty expression if there is no expression between
-    these atoms 
-    
+    these atoms
+
     \throw SireError::invalid_index
     \throw SireMol::duplicate_atom
 */
@@ -463,24 +463,24 @@ Expression TwoAtomFunctions::potential(AtomIdx atom0, AtomIdx atom1) const
 {
     quint32 atm0 = atom0.map( info().nAtoms() );
     quint32 atm1 = atom1.map( info().nAtoms() );
-    
+
     if (atm0 == atm1)
         throw SireMol::duplicate_atom( QObject::tr(
             "There is no potential that acts between the same atom! (%1)")
                 .arg(atm0), CODELOC );
-                
+
     return potentials_by_atoms.value( IDPair(atm0,atm1) );
 }
 
 /** Return the function acting between the atoms 'atom0' and 'atom1'.
     This returns an empty expression if there is no expression between
-    these atoms 
-    
+    these atoms
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-Expression TwoAtomFunctions::potential(const AtomID &atom0, 
+Expression TwoAtomFunctions::potential(const AtomID &atom0,
                                        const AtomID &atom1) const
 {
     return this->potential( info().atomIdx(atom0), info().atomIdx(atom1) );
@@ -489,10 +489,10 @@ Expression TwoAtomFunctions::potential(const AtomID &atom0,
 /** Return the function acting on the bond identified by 'bondid'.
     This returns an empty expression if there is no expression on
     this bond
-    
+
     This searches first for the function 1-2, and if that is not
     found then it returns the function for 2-1
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -515,18 +515,18 @@ Expression TwoAtomFunctions::potential(const BondID &bondid) const
 
 /** Return the force (derivative of the potential with respect to 'symbol')
     between the atoms 'atom0' and 'atom1'
-    
+
     \throw SireError::invalid_index
 */
-Expression TwoAtomFunctions::force(AtomIdx atom0, AtomIdx atom1, 
+Expression TwoAtomFunctions::force(AtomIdx atom0, AtomIdx atom1,
                                    const Symbol &symbol) const
 {
     return -(this->potential(atom0,atom1).differentiate(symbol));
 }
-                                 
+
 /** Return the force (derivative of the potential with respect to 'symbol')
     between the atoms 'atom0' and 'atom1'
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -539,10 +539,10 @@ Expression TwoAtomFunctions::force(const AtomID &atom0, const AtomID &atom1,
 
 /** Return the force (derivative of the potential with respect to 'symbol')
     on the bond identified by 'bondid'
-    
+
     This searches first for the function 1-2, and if that is not
     found then it returns the function for 2-1
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -557,11 +557,11 @@ Expression TwoAtomFunctions::force(const BondID &bondid, const Symbol &symbol) c
 QVector<TwoAtomFunction> TwoAtomFunctions::potentials() const
 {
     QVector<TwoAtomFunction> funcs( potentials_by_atoms.count() );
-    
+
     TwoAtomFunction *funcs_array = funcs.data();
-    
+
     int i = 0;
-    
+
     for (QHash<IDPair,Expression>::const_iterator
                                     it = potentials_by_atoms.constBegin();
          it != potentials_by_atoms.constEnd();
@@ -570,10 +570,10 @@ QVector<TwoAtomFunction> TwoAtomFunctions::potentials() const
         funcs_array[i] = TwoAtomFunction( info().cgAtomIdx( AtomIdx(it.key().atom0) ),
                                           info().cgAtomIdx( AtomIdx(it.key().atom1) ),
                                           it.value() );
-    
+
         ++i;
     }
-    
+
     return funcs;
 }
 
@@ -583,27 +583,27 @@ QVector<TwoAtomFunction> TwoAtomFunctions::forces(const Symbol &symbol) const
 {
     QVector<TwoAtomFunction> forces;
     forces.reserve(potentials_by_atoms.count());
-    
+
     for (QHash<IDPair,Expression>::const_iterator
                                     it = potentials_by_atoms.constBegin();
          it != potentials_by_atoms.constEnd();
          ++it)
     {
         Expression force = it.value().differentiate(symbol);
-        
+
         if (not force.isZero())
         {
-            forces.append( TwoAtomFunction( 
+            forces.append( TwoAtomFunction(
                               info().cgAtomIdx( AtomIdx(it.key().atom0) ),
                               info().cgAtomIdx( AtomIdx(it.key().atom1) ),
                               -force ) );
         }
     }
-    
+
     return forces;
 }
 
-/** Return the set of functions where only functions that involve the 
+/** Return the set of functions where only functions that involve the
     atoms in 'selected_atoms' are included. If 'isstrict' is true, then
     only include functions where all of the atoms are in 'selected_atoms',
     while if 'isstrict' is false, include functions where at least one
@@ -620,7 +620,7 @@ TwoAtomFunctions TwoAtomFunctions::includeOnly(const AtomSelection &selected_ato
         while (it.hasNext())
         {
             it.next();
-            
+
             if (not (selected_atoms.selected(AtomIdx(it.key().atom0)) and
                      selected_atoms.selected(AtomIdx(it.key().atom1)) ) )
             {
@@ -633,7 +633,7 @@ TwoAtomFunctions TwoAtomFunctions::includeOnly(const AtomSelection &selected_ato
         while (it.hasNext())
         {
             it.next();
-            
+
             if (not (selected_atoms.selected(AtomIdx(it.key().atom0)) or
                      selected_atoms.selected(AtomIdx(it.key().atom1)) ) )
             {
@@ -641,7 +641,7 @@ TwoAtomFunctions TwoAtomFunctions::includeOnly(const AtomSelection &selected_ato
             }
         }
     }
-    
+
     return ret;
 }
 
@@ -660,18 +660,18 @@ int TwoAtomFunctions::nFunctions() const
     are successfully matched - it does not copy functions for atoms
     that are not matched. Use TwoAtomFunctions::nFunctions() to check
     if the number of functions in the returned set is the same as
-    the number in this set, if you want to ensure that all of the 
+    the number in this set, if you want to ensure that all of the
     functions have been copied.
-    
+
     \throw SireError::incompatible_error
 */
-PropertyPtr 
+PropertyPtr
 TwoAtomFunctions::_pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
                                           const AtomMatcher &atommatcher) const
 {
     if (not atommatcher.changesOrder(this->info(), molinfo))
     {
-        //the order of the atoms remains the same - this means that the 
+        //the order of the atoms remains the same - this means that the
         //AtomIdx indicies are still valid
         TwoAtomFunctions ret(molinfo);
         ret.potentials_by_atoms = this->potentials_by_atoms;
@@ -679,22 +679,43 @@ TwoAtomFunctions::_pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
     }
 
     QHash<AtomIdx,AtomIdx> matched_atoms = atommatcher.match(this->info(), molinfo);
-    
+
+    return this->_pvt_makeCompatibleWith(molinfo, matched_atoms);
+}
+
+/** Return a copy of this property that has been made to be compatible
+    with the molecule layout in 'molinfo' - this uses the atom mapping
+    in 'map' to match atoms from the current molecule to the atoms in
+    the molecule whose layout is in 'molinfo'
+
+    This only copies the TwoAtomFunction for pairs of atoms that
+    are successfully matched - it does not copy functions for atoms
+    that are not matched. Use TwoAtomFunctions::nFunctions() to check
+    if the number of functions in the returned set is the same as
+    the number in this set, if you want to ensure that all of the
+    functions have been copied.
+
+    \throw SireError::incompatible_error
+*/
+PropertyPtr
+TwoAtomFunctions::_pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                          const QHash<AtomIdx,AtomIdx> &map) const
+{
     TwoAtomFunctions ret(molinfo);
-    
+
     for (QHash<IDPair,Expression>::const_iterator it = potentials_by_atoms.constBegin();
          it != potentials_by_atoms.constEnd();
          ++it)
     {
-        AtomIdx new_atom0 = matched_atoms.value( AtomIdx(it.key().atom0), AtomIdx(-1) );
-        AtomIdx new_atom1 = matched_atoms.value( AtomIdx(it.key().atom1), AtomIdx(-1) );
-        
+        AtomIdx new_atom0 = map.value( AtomIdx(it.key().atom0), AtomIdx(-1) );
+        AtomIdx new_atom1 = map.value( AtomIdx(it.key().atom1), AtomIdx(-1) );
+
         if (new_atom0 == -1 or new_atom1 == -1)
             continue;
-        
+
         ret.set( new_atom0, new_atom1, it.value() );
     }
-    
+
     return ret;
 }
 

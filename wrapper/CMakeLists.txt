@@ -9,8 +9,8 @@
 
 # project version
 set (SIRE_VERSION_MAJOR "2018")
-set (SIRE_VERSION_MINOR "1")
-set (SIRE_VERSION_PATCH "1")
+set (SIRE_VERSION_MINOR "2")
+set (SIRE_VERSION_PATCH "0")
 
 set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
 
@@ -149,7 +149,7 @@ if (APPLE)
   # @exeutable_path/../${SIRE_LIBS} and @exeutable_path/../${SIRE_BUNDLED_LIBS}
   set (SIRE_INSTALL_RPATH "@executable_path/../${SIRE_LIBS}:@executable_path/../${SIRE_BUNDLED_LIBS}")
 else()
-  set (SIRE_INSTALL_RPATH "\$ORIGIN/../${SIRE_LIBS}:\$ORIGIN/../${SIRE_BUNDLED_LIBS}")
+  set (SIRE_INSTALL_RPATH "\$ORIGIN/../${SIRE_LIBS}:\$ORIGIN/../${SIRE_BUNDLED_LIBS}:\$ORIGIN/../../../../../${SIRE_LIBS}:\$ORIGIN/../../../../../${SIRE_BUNDLED_LIBS}")
 endif()
 
 set (CMAKE_INSTALL_RPATH "${SIRE_INSTALL_RPATH}")

@@ -169,6 +169,8 @@ public:
     CutGroup at(const CGID &cgid) const;
     Atom at(const AtomID &atomid) const;
 
+    SelectResult search(const QString &search_string) const;
+
     const MoleculeGroup& select(const MGID &mgid) const;
     ViewsOfMol select(const MolID &molid) const;
     Segment select(const SegID &segid) const;

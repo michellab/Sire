@@ -28,6 +28,9 @@
 
 #include "getbacktrace.h"
 
+#define BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED 1
+#include <boost/stacktrace.hpp>
+
 #include <QObject>
 #include <QString>
 #include <QRegExp>

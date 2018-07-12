@@ -911,19 +911,6 @@ void register_free_functions(){
 
     { //::SireCAS::pow
     
-        typedef ::SireCAS::Expression ( *pow_function_type )( ::SireCAS::Expression const &,::SireMaths::Rational const & );
-        pow_function_type pow_function_value( &::SireCAS::pow );
-        
-        bp::def( 
-            "pow"
-            , pow_function_value
-            , ( bp::arg("ex0"), bp::arg("n") )
-            , "" );
-    
-    }
-
-    { //::SireCAS::pow
-    
         typedef ::SireCAS::Expression ( *pow_function_type )( ::SireCAS::Expression const &,double );
         pow_function_type pow_function_value( &::SireCAS::pow );
         
@@ -951,6 +938,19 @@ void register_free_functions(){
     { //::SireCAS::pow
     
         typedef ::SireCAS::Expression ( *pow_function_type )( ::SireCAS::Expression const &,::SireMaths::Complex const & );
+        pow_function_type pow_function_value( &::SireCAS::pow );
+        
+        bp::def( 
+            "pow"
+            , pow_function_value
+            , ( bp::arg("ex0"), bp::arg("n") )
+            , "" );
+    
+    }
+
+    { //::SireCAS::pow
+    
+        typedef ::SireCAS::Expression ( *pow_function_type )( ::SireCAS::Expression const &,::SireMaths::Rational const & );
         pow_function_type pow_function_value( &::SireCAS::pow );
         
         bp::def( 

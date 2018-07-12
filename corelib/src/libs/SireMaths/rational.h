@@ -29,8 +29,6 @@
 #ifndef SIREMATHS_RATIONAL_H
 #define SIREMATHS_RATIONAL_H
 
-#include <boost/rational.hpp>
-
 #include <QString>
 #include <QObject>
 
@@ -43,20 +41,119 @@ SIRE_BEGIN_HEADER
 
 namespace SireMaths
 {
-/** Use boost::rational to provide a rational number */
-typedef boost::rational<qint32> Rational;
+
+/** Thin wrapper around boost::rational - cannot use directly as it kills
+    compilers! */
+class SIREMATHS_EXPORT Rational
+{
+public:
+    Rational() : num(0), den(1)
+    {}
+    
+    
+    Rational(qint32 number) : num(number) , den(1)
+    {}
+    
+    Rational(qint32 numerator, qint32 denominator)
+        : num(numerator), den(denominator)
+    {}
+    
+    Rational(const Rational &other) : num(other.num), den(other.den)
+    {}
+    
+    ~Rational();
+    
+    Rational& operator=(const Rational &other)
+    {
+        num = other.num;
+        den = other.den;
+        return *this;
+    }
+    
+    Rational& operator=(qint32 number)
+    {
+        num = number;
+        den = 1;
+        return *this;
+    }
+    
+    bool operator==(const Rational &other) const;
+    bool operator!=(const Rational &other) const;
+    bool operator>=(const Rational &other) const;
+    bool operator<=(const Rational &other) const;
+    bool operator>(const Rational &other) const;
+    bool operator<(const Rational &other) const;
+    
+    bool operator==(qint32 number) const;
+    bool operator!=(qint32 number) const;
+    bool operator>=(qint32 number) const;
+    bool operator<=(qint32 number) const;
+    bool operator>(qint32 number) const;
+    bool operator<(qint32 number) const;
+    
+    Rational operator-() const
+    {
+        return Rational(-num,den);
+    }
+    
+    Rational& operator+=(const Rational &other);
+    Rational& operator-=(const Rational &other);
+    Rational& operator*=(const Rational &other);
+    Rational& operator/=(const Rational &other);
+    
+    Rational& operator+=(qint32 number)
+    {
+        num += number*den;
+        return *this;
+    }
+    
+    Rational& operator-=(qint32 number)
+    {
+        num -= number*den;
+        return *this;
+    }
+    
+    Rational& operator*=(qint32 number);
+    Rational& operator/=(qint32 number);
+    
+    QString toString() const;
+    
+    const Rational& operator++()
+    {
+        num += den;
+        return *this;
+    }
+    
+    const Rational& operator--()
+    {
+        num -= den;
+        return *this;
+    }
+    
+    bool operator!() const
+    {
+        return !num;
+    }
+
+    qint32 numerator() const
+    {
+        return num;
+    }
+    
+    qint32 denominator() const
+    {
+        return den;
+    }
+
+private:
+    qint32 num, den;
+};
 
 /** Expose the boost gcd and lcm functions */
-inline qint32 gcd(qint32 n, qint32 m)
-{
-    return boost::gcd<qint32>(n,m);
-}
+qint32 gcd(qint32 n, qint32 m);
 
 /** Expose the boost gcd and lcm functions */
-inline qint32 lcm(qint32 n, qint32 m)
-{
-    return boost::lcm<qint32>(n,m);
-}
+qint32 lcm(qint32 n, qint32 m);
 
 }
 
@@ -68,121 +165,38 @@ namespace SireMaths
 {
 
 /** Return a QString representation of the rational number */
-inline QString toString(const SireMaths::Rational &val)
-{
-    if (val.denominator() == 1)
-        return QString::number(val.numerator());
-    else
-        return QString("%1/%2").arg(val.numerator()).arg(val.denominator());
-}
+QString toString(const SireMaths::Rational &val);
 
 /** Private function used by 'pow' to calculate 'x' raised to the positive
     fractional power 'power' */
-inline double pow_pvt(double x, const Rational &power)
-{
-    if ( x == 0 )
-        return 0;
-        
-    else if ( x > 0.0 or SireMaths::isEven(power.numerator()) or 
-              SireMaths::isOdd(power.denominator()) )
-    {
-        switch(power.denominator())
-        {
-            case 2:
-                return std::sqrt( SireMaths::pow(x, power.numerator()) );
-            default:
-                return std::exp( std::log( SireMaths::pow(x, power.numerator()) ) 
-                                              / power.denominator() );
-        }
-    }
-    else 
-        throw SireMaths::domain_error(
-            QObject::tr("Cannot raise the negative number '%1' to a fractional "
-                        "power (%2)").arg(x).arg(toString(power)), CODELOC);
-}
+double pow_pvt(double x, const Rational &power);
 
 /** Return x raised to the fractional power 'power' */
-inline double pow(double x, const Rational &power)
-{
-    if (power.denominator() == 1)
-        return SireMaths::pow(x, power.numerator());
-    else if (power > 0)
-        return pow_pvt(x,power);
-    else
-        return double(1.0) / pow_pvt(x, -power);
-}
+double pow(double x, const Rational &power);
 
 /** Return whether this is a rational number (with maximum denominator = 'maxdenom') */
-inline bool isRational(double val, int maxdenom)
-{
-    for (int i=1; i<=maxdenom; ++i)
-    {
-        int ival = int( val * double(i) );
-        
-        double error = std::abs( val - (double(ival)/double(i)) );
-        
-        if (error < std::numeric_limits<double>::epsilon())
-            return true;
-    }
-    
-    return false;
-}
+bool isRational(double val, int maxdenom);
 
 /** Return 'val' converted into the best approximated rational number
     with maximum denominator 'maxdenom'. A perfect conversion will only 
     result if 'isRational(val,maxdenom)' returned true. */
-inline Rational toRational(double val, int maxdenom)
-{
-    Rational best_rational;
-    double lowest_error = 0.0;
+Rational toRational(double val, int maxdenom);
 
-    //note, would be better if only tested primes...
-    for (int i=1; i<=maxdenom; ++i)
-    {
-        int ival = int( val * double(i) );
-        
-        double error = std::abs( val - (double(ival)/double(i)) );
-        
-        if (error < std::numeric_limits<double>::epsilon())
-            return Rational(ival, i);
-        else if (i == 1 or error < lowest_error)
-        {
-            lowest_error = error;
-            best_rational = Rational(ival, i);
-        }
-    }
-    
-    return best_rational;
-}
+bool isRational(double val);
 
-/** Default value of maxdenom for toRational and isRational */
-const int default_maxdenom = 500;
-
-inline bool isRational(double val)
-{
-    return isRational(val,default_maxdenom);
-}
-
-inline Rational toRational(double val)
-{
-    return toRational(val,default_maxdenom);
-}
+Rational toRational(double val);
 
 /** Return 'val' converted to a double */
-inline double toDouble(const Rational &val)
-{
-    return double(val.numerator()) / double(val.denominator());
-}
+double toDouble(const Rational &val);
 
 /** Return a hash of the rational number */
-inline uint qHash(const Rational &val)
-{
-    return (val.numerator()<<16) | (val.denominator() & 0x0000FFFF);
-}
+uint qHash(const Rational &val);
 
 }
 
 Q_DECLARE_METATYPE(SireMaths::Rational)
+
+SIRE_EXPOSE_CLASS(SireMaths::Rational)
 
 SIRE_END_HEADER
 

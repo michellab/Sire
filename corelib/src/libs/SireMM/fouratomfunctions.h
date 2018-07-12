@@ -29,6 +29,8 @@
 #ifndef SIREMM_FOURATOMFUNCTIONS_H
 #define SIREMM_FOURATOMFUNCTIONS_H
 
+#include <QHash>
+
 #include "atomfunctions.h"
 
 #include "SireMol/cgatomidx.h"
@@ -68,7 +70,7 @@ using SireMol::ImproperID;
 using SireMol::AtomSelection;
 using SireMol::AtomMatcher;
 
-/** This class holds a function that acts using the 
+/** This class holds a function that acts using the
     coordinate information of just four atoms */
 class SIREMM_EXPORT FourAtomFunction : public AtomFunction
 {
@@ -81,18 +83,18 @@ public:
     FourAtomFunction(const CGAtomIdx &atom0, const CGAtomIdx &atom1,
                      const CGAtomIdx &atom2, const CGAtomIdx &atom3,
                      const SireCAS::Expression &function);
-                  
+
     FourAtomFunction(const FourAtomFunction &other);
-    
+
     ~FourAtomFunction();
 
     FourAtomFunction& operator=(const FourAtomFunction &other);
-    
+
     bool operator==(const FourAtomFunction &other) const;
     bool operator!=(const FourAtomFunction &other) const;
-    
+
     QString toString() const;
-    
+
     const CGAtomIdx& atom0() const;
     const CGAtomIdx& atom1() const;
     const CGAtomIdx& atom2() const;
@@ -109,18 +111,18 @@ namespace detail
 class IDQuad
 {
 public:
-    IDQuad(quint32 atom0=0, quint32 atom1=0, 
+    IDQuad(quint32 atom0=0, quint32 atom1=0,
            quint32 atom2=0, quint32 atom3=0);
-           
+
     IDQuad(const IDQuad &other);
-    
+
     ~IDQuad();
-    
+
     IDQuad& operator=(const IDQuad &other);
-    
+
     bool operator==(const IDQuad &other) const;
     bool operator!=(const IDQuad &other) const;
-    
+
     quint32 atom0;
     quint32 atom1;
     quint32 atom2;
@@ -129,7 +131,7 @@ public:
 
 inline uint qHash(const IDQuad &idquad)
 {
-    return (idquad.atom0 << 24) | 
+    return (idquad.atom0 << 24) |
            ( (idquad.atom1 << 16) & 0x00FF0000) |
            ( (idquad.atom2 << 8)  & 0x0000FF00) |
            (idquad.atom3 & 0x000000FF);
@@ -139,7 +141,7 @@ inline uint qHash(const IDQuad &idquad)
 
 /** This class holds the set of FourAtomFunction potentials that
     act between the atoms in a molecule
-    
+
     @author Christopher Woods
 */
 class SIREMM_EXPORT FourAtomFunctions
@@ -151,18 +153,18 @@ friend QDataStream& ::operator>>(QDataStream&, FourAtomFunctions&);
 
 public:
     FourAtomFunctions();
-    
+
     FourAtomFunctions(const MoleculeData &moldata);
     FourAtomFunctions(const MoleculeInfoData &molinfo);
-    
+
     FourAtomFunctions(const FourAtomFunctions &other);
-    
+
     ~FourAtomFunctions();
-    
+
     static const char* typeName();
-    
+
     FourAtomFunctions& operator=(const FourAtomFunctions &other);
-    
+
     bool operator==(const FourAtomFunctions &other) const;
     bool operator!=(const FourAtomFunctions &other) const;
 
@@ -170,28 +172,28 @@ public:
 
     int nFunctions() const;
 
-    void set(AtomIdx atom0, AtomIdx atom1, 
+    void set(AtomIdx atom0, AtomIdx atom1,
              AtomIdx atom2, AtomIdx atom3,
              const Expression &expression);
-             
+
     void set(const AtomID &atom0, const AtomID &atom1,
              const AtomID &atom2, const AtomID &atom3,
              const Expression &expression);
-             
+
     void set(const DihedralID &dihedralid, const Expression &expression);
     void set(const ImproperID &improperid, const Expression &expression);
 
     void clear(AtomIdx atom);
     void clear(const AtomID &atom);
 
-    void clear(AtomIdx atom0, AtomIdx atom1, 
+    void clear(AtomIdx atom0, AtomIdx atom1,
                AtomIdx atom2, AtomIdx atom3);
     void clear(const AtomID &atom0, const AtomID &atom1,
                const AtomID &atom2, const AtomID &atom3);
 
     void clear(const DihedralID &dihedralid);
     void clear(const ImproperID &improperid);
-    
+
     void clear();
 
     void substitute(const Identities &identities);
@@ -205,8 +207,8 @@ public:
 
     Expression potential(const DihedralID &dihedralid) const;
     Expression potential(const ImproperID &improperid) const;
-    
-    Expression force(AtomIdx atom0, AtomIdx atom1, 
+
+    Expression force(AtomIdx atom0, AtomIdx atom1,
                      AtomIdx atom2, AtomIdx atom3,
                      const Symbol &symbol) const;
     Expression force(const AtomID &atom0, const AtomID &atom1,
@@ -218,14 +220,16 @@ public:
 
     QVector<FourAtomFunction> potentials() const;
     QVector<FourAtomFunction> forces(const Symbol &symbol) const;
-    
+
     FourAtomFunctions includeOnly(const AtomSelection &selected_atoms,
                                   bool isstrict=true) const;
 
 protected:
     SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
                                                   const AtomMatcher &atommatcher) const;
-    
+    SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                                  const QHash<AtomIdx,AtomIdx> &map) const;
+
 private:
     void removeSymbols(QSet<Symbol> symbols);
 

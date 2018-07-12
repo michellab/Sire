@@ -360,12 +360,12 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
     // Extract the element name.
     if (atom.hasProperty(map["element"]))
     {
-        element = atom.property<Element>(map["element"]).symbol()[0];
+        element = atom.property<Element>(map["element"]).symbol().toUpper();
     }
     // Otherwise, try to guess from the atom name.
     else
     {
-        element = Element(name).symbol()[0];
+        element = Element(name).symbol().toUpper();
     }
 
     // Extract the atomic charge.
@@ -568,8 +568,8 @@ QString PDBAtom::toPDBRecord() const
 {
     QString line;
 
-    if (is_het) line.append("HETATM");
-    else        line.append("ATOM  ");
+    // Write all records as ATOM, i.e. convert HETATM to ATOM.
+    line.append("ATOM  ");
 
     // Append the atom serial number. Since we enforce a hard
     // limit of 99999 atoms, we can assume that the serial is
@@ -636,8 +636,10 @@ QString PDBAtom::toPDBRecord() const
     // Append the beta factor.
     line.append(QString("%1").arg(temperature, 6, 'f', 2));
 
-    // Append the element, truncating if neccessary.
-    line.append(QString("          %1").arg(element.left(2)));
+    // Append the element (right-justified).
+    auto el = element.left(2);
+    if (el.count() == 1) el = QString(" %1").arg(el);
+    line.append(QString("          %1").arg(el));
 
     // Apped the atomic charge, truncating as necessary.
     if (charge != 0)

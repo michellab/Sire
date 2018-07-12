@@ -464,6 +464,19 @@ void register_free_functions(){
     
     }
 
+    { //::gamma
+    
+        typedef double ( *gamma_function_type )( double );
+        gamma_function_type gamma_function_value( &::gamma );
+        
+        bp::def( 
+            "gamma"
+            , gamma_function_value
+            , ( bp::arg("arg0") )
+            , "Legacy BSD API: please use C99 tgamma( ) instead." );
+    
+    }
+
     { //::SireMaths::getAlignment
     
         typedef ::SireMaths::Transform ( *getAlignment_function_type )( ::QVector< SireMaths::Vector > const &,::QVector< SireMaths::Vector > const &,bool );

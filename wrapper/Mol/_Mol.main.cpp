@@ -387,6 +387,12 @@
 
 #include "ResIdx.pypp.hpp"
 
+#include "ResIdxAtomCoordMatcher.pypp.hpp"
+
+#include "ResIdxAtomMCSMatcher.pypp.hpp"
+
+#include "ResIdxAtomNameMatcher.pypp.hpp"
+
 #include "ResIn_ChainID_.pypp.hpp"
 
 #include "ResIntProperty.pypp.hpp"
@@ -444,6 +450,12 @@
 #include "Segment.pypp.hpp"
 
 #include "SegsWithAtoms.pypp.hpp"
+
+#include "Select.pypp.hpp"
+
+#include "SelectResult.pypp.hpp"
+
+#include "SelectResultMover.pypp.hpp"
 
 #include "Selector_Atom_.pypp.hpp"
 
@@ -926,6 +938,12 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_ResIdx_class();
 
+    register_ResIdxAtomCoordMatcher_class();
+
+    register_ResIdxAtomMCSMatcher_class();
+
+    register_ResIdxAtomNameMatcher_class();
+
     register_ResIn_ChainID__class();
 
     register_ResName_class();
@@ -969,6 +987,12 @@ BOOST_PYTHON_MODULE(_Mol){
     register_SegStructureEditor_class();
 
     register_SegsWithAtoms_class();
+
+    register_Select_class();
+
+    register_SelectResult_class();
+
+    register_SelectResultMover_class();
 
     register_SpecifyMol_class();
 

@@ -59,7 +59,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
     ds << fouratomfunc.atm0 << fouratomfunc.atm1
        << fouratomfunc.atm2 << fouratomfunc.atm3
        << static_cast<const AtomFunction&>(fouratomfunc);
-       
+
     return ds;
 }
 
@@ -69,7 +69,7 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
     ds >> fouratomfunc.atm0 >> fouratomfunc.atm1
        >> fouratomfunc.atm2 >> fouratomfunc.atm3
        >> static_cast<AtomFunction&>(fouratomfunc);
-       
+
     return ds;
 }
 
@@ -84,8 +84,8 @@ FourAtomFunction::FourAtomFunction(const CGAtomIdx &atom0, const CGAtomIdx &atom
                 : AtomFunction(function),
                   atm0(atom0), atm1(atom1), atm2(atom2), atm3(atom3)
 {}
-  
-/** Copy constructor */            
+
+/** Copy constructor */
 FourAtomFunction::FourAtomFunction(const FourAtomFunction &other)
                 : AtomFunction(other),
                   atm0(other.atm0), atm1(other.atm1),
@@ -104,7 +104,7 @@ FourAtomFunction& FourAtomFunction::operator=(const FourAtomFunction &other)
     atm1 = other.atm1;
     atm2 = other.atm2;
     atm3 = other.atm3;
-    
+
     return *this;
 }
 
@@ -141,7 +141,7 @@ QDataStream& operator<<(QDataStream &ds, const IDQuad &idquad)
 {
     ds << idquad.atom0 << idquad.atom1
        << idquad.atom2 << idquad.atom3;
-       
+
     return ds;
 }
 
@@ -149,11 +149,11 @@ QDataStream& operator>>(QDataStream &ds, IDQuad &idquad)
 {
     ds >> idquad.atom0 >> idquad.atom1
        >> idquad.atom2 >> idquad.atom3;
-       
+
     return ds;
 }
 
-IDQuad::IDQuad(quint32 atm0, quint32 atm1, quint32 atm2, quint32 atm3) 
+IDQuad::IDQuad(quint32 atm0, quint32 atm1, quint32 atm2, quint32 atm3)
        : atom0(atm0), atom1(atm1), atom2(atm2), atom3(atm3)
 {
     if (atm0 > atm3)
@@ -168,7 +168,7 @@ IDQuad::IDQuad(quint32 atm0, quint32 atm1, quint32 atm2, quint32 atm3)
 }
 
 IDQuad::IDQuad(const IDQuad &other)
-       : atom0(other.atom0), atom1(other.atom1), 
+       : atom0(other.atom0), atom1(other.atom1),
          atom2(other.atom2), atom3(other.atom3)
 {}
 
@@ -181,7 +181,7 @@ IDQuad& IDQuad::operator=(const IDQuad &other)
     atom1 = other.atom1;
     atom2 = other.atom2;
     atom3 = other.atom3;
-    
+
     return *this;
 }
 
@@ -208,12 +208,12 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
                                       const FourAtomFunctions &fouratomfuncs)
 {
     writeHeader(ds, r_fouratomfuncs, 1);
-    
+
     SharedDataStream sds(ds);
-    
+
     sds << fouratomfuncs.potentials_by_atoms
         << static_cast<const AtomFunctions&>(fouratomfuncs);
-    
+
     return ds;
 }
 
@@ -222,17 +222,17 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
                                       FourAtomFunctions &fouratomfuncs)
 {
     VersionID v = readHeader(ds, r_fouratomfuncs);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
+
         sds >> fouratomfuncs.potentials_by_atoms
             >> static_cast<AtomFunctions&>(fouratomfuncs);
     }
     else
         throw version_error(v, "1", r_fouratomfuncs, CODELOC);
-        
+
     return ds;
 }
 
@@ -268,7 +268,7 @@ FourAtomFunctions& FourAtomFunctions::operator=(const FourAtomFunctions &other)
 {
     AtomFunctions::operator=(other);
     potentials_by_atoms = other.potentials_by_atoms;
-    
+
     return *this;
 }
 
@@ -295,13 +295,13 @@ QString FourAtomFunctions::toString() const
 
 /** Set the potential energy function used by atoms 'atom0' to 'atom3'
     to be equal to 'expression' - this replaces any existing expression
-    
-    If you want to add an improper then use  
-    
+
+    If you want to add an improper then use
+
     \throw SireError::invalid_index
     \throw SireMol::duplicate_atom
 */
-void FourAtomFunctions::set(AtomIdx atom0, AtomIdx atom1, 
+void FourAtomFunctions::set(AtomIdx atom0, AtomIdx atom1,
                             AtomIdx atom2, AtomIdx atom3,
                             const Expression &expression)
 {
@@ -312,7 +312,7 @@ void FourAtomFunctions::set(AtomIdx atom0, AtomIdx atom1,
 
     if (atm0 == atm1 or atm0 == atm2 or atm0 == atm3 or
         atm1 == atm2 or atm1 == atm3 or atm2 == atm3 )
-        throw SireMol::duplicate_atom( QObject::tr( 
+        throw SireMol::duplicate_atom( QObject::tr(
             "You cannot add a function that acts between the same atoms! "
             "(%1-%2-%3-%4)")
                 .arg(atm0).arg(atm1).arg(atm2).arg(atm3), CODELOC );
@@ -320,10 +320,10 @@ void FourAtomFunctions::set(AtomIdx atom0, AtomIdx atom1,
     potentials_by_atoms.insert( IDQuad(atm0,atm1,atm2,atm3), expression );
     AtomFunctions::addSymbols(expression.symbols());
 }
-         
+
 /** Set the potential energy function used by atoms 'atom0' to 'atom3'
-    to be equal to 'expression' - this replaces any existing expression 
-    
+    to be equal to 'expression' - this replaces any existing expression
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -332,7 +332,7 @@ void FourAtomFunctions::set(const AtomID &atom0, const AtomID &atom1,
                             const AtomID &atom2, const AtomID &atom3,
                             const Expression &expression)
 {
-    this->set( info().atomIdx(atom0), info().atomIdx(atom1), 
+    this->set( info().atomIdx(atom0), info().atomIdx(atom1),
                info().atomIdx(atom2), info().atomIdx(atom3), expression );
 }
 
@@ -341,7 +341,7 @@ void FourAtomFunctions::set(const AtomID &atom0, const AtomID &atom1,
 
     Note that this will replace *any* equivalent dihedral, so this will replace
     both 1-2-3-4 and 4-3-2-1 with the new expression
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -352,19 +352,19 @@ void FourAtomFunctions::set(const DihedralID &dihedralid, const Expression &expr
     AtomIdx atom1 = info().atomIdx(dihedralid.atom1());
     AtomIdx atom2 = info().atomIdx(dihedralid.atom2());
     AtomIdx atom3 = info().atomIdx(dihedralid.atom3());
-    
+
     this->clear(atom0, atom1, atom2, atom3);
     this->clear(atom3, atom2, atom1, atom0);
-    
+
     this->set(atom0, atom1, atom2, atom3, expression);
 }
 
 /** Set the potential energy function used for the improper identified by 'improperid'
     to be equal to 'expression' - this replaces any existing expression
-    
+
     Note that this replaces any existing improper with this function,
     e.g. this replaces both 1-2-3-4 and 1-2-4-3 with this function
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -375,27 +375,27 @@ void FourAtomFunctions::set(const ImproperID &improperid, const Expression &expr
     AtomIdx atom1 = info().atomIdx(improperid.atom1());
     AtomIdx atom2 = info().atomIdx(improperid.atom2());
     AtomIdx atom3 = info().atomIdx(improperid.atom3());
-    
+
     this->clear(atom0, atom1, atom2, atom3);
     this->clear(atom0, atom1, atom3, atom2);
-    
+
     this->set(atom0, atom1, atom2, atom3, expression);
 }
 
 /** Check if any of the symbols in 'symbols' need to be removed... */
 void FourAtomFunctions::removeSymbols(QSet<Symbol> symbols)
 {
-    for (QHash<IDQuad,Expression>::const_iterator 
+    for (QHash<IDQuad,Expression>::const_iterator
                                     it = potentials_by_atoms.constBegin();
          it != potentials_by_atoms.constEnd();
          ++it)
     {
         if (symbols.isEmpty())
             return;
-            
+
         symbols.subtract(it.value().symbols());
     }
-    
+
     //the only remaining symbols are ones that no longer exist
     //in this set
     AtomFunctions::removeSymbols(symbols);
@@ -405,31 +405,31 @@ void FourAtomFunctions::removeSymbols(QSet<Symbol> symbols)
 
     \throw SireError::invalid_index
 */
-void FourAtomFunctions::clear(AtomIdx atom0, AtomIdx atom1, 
+void FourAtomFunctions::clear(AtomIdx atom0, AtomIdx atom1,
                               AtomIdx atom2, AtomIdx atom3)
 {
     quint32 atm0 = atom0.map( info().nAtoms() );
     quint32 atm1 = atom1.map( info().nAtoms() );
     quint32 atm2 = atom2.map( info().nAtoms() );
     quint32 atm3 = atom3.map( info().nAtoms() );
-        
+
     FourAtomFunctions::removeSymbols( potentials_by_atoms
                                        .take( IDQuad(atm0,atm1,atm2,atm3) ).symbols() );
 }
 
-/** Clear all functions that involve the atom 'atom' 
+/** Clear all functions that involve the atom 'atom'
 
     \throw SireError::invalid_index
 */
 void FourAtomFunctions::clear(AtomIdx atom)
 {
     quint32 atm = atom.map(info().nAtoms());
-    
+
     QList<IDQuad> keys = potentials_by_atoms.keys();
-    
+
     foreach (const IDQuad &key, keys)
     {
-        if (key.atom0 == atm or key.atom1 == atm or 
+        if (key.atom0 == atm or key.atom1 == atm or
             key.atom2 == atm or key.atom3 == atm)
         {
             FourAtomFunctions::removeSymbols( potentials_by_atoms
@@ -446,7 +446,7 @@ void FourAtomFunctions::clear(AtomIdx atom)
 void FourAtomFunctions::clear(const AtomID &atom)
 {
     QList<AtomIdx> atomidxs = atom.map(info());
-    
+
     foreach (AtomIdx atomidx, atomidxs)
     {
         this->clear(atomidx);
@@ -465,7 +465,7 @@ void FourAtomFunctions::clear(const AtomID &atom0, const AtomID &atom1,
     QList<AtomIdx> atoms1 = atom1.map(info());
     QList<AtomIdx> atoms2 = atom2.map(info());
     QList<AtomIdx> atoms3 = atom3.map(info());
-    
+
     foreach (AtomIdx atm0, atoms0)
     {
         foreach (AtomIdx atm1, atoms1)
@@ -492,7 +492,7 @@ void FourAtomFunctions::clear(const DihedralID &dihedralid)
 {
     this->clear( dihedralid.atom0(), dihedralid.atom1(),
                  dihedralid.atom2(), dihedralid.atom3() );
-                 
+
     this->clear( dihedralid.atom3(), dihedralid.atom2(),
                  dihedralid.atom1(), dihedralid.atom0() );
 }
@@ -508,7 +508,7 @@ void FourAtomFunctions::clear(const ImproperID &improperid)
 {
     this->clear( improperid.atom0(), improperid.atom1(),
                  improperid.atom2(), improperid.atom3() );
-                 
+
     this->clear( improperid.atom0(), improperid.atom1(),
                  improperid.atom3(), improperid.atom2() );
 }
@@ -520,7 +520,7 @@ void FourAtomFunctions::clear()
     AtomFunctions::removeSymbols();
 }
 
-/** Perform the substitutions contained in 'identities' in all of 
+/** Perform the substitutions contained in 'identities' in all of
     the expressions in this set. This could be useful if you have
     defined these expressions with respect to a lambda parameter,
     and now want to set that value of lambda */
@@ -545,8 +545,8 @@ bool FourAtomFunctions::isEmpty() const
 
 /** Return the function acting between the atoms 'atom0' to 'atom3'.
     This returns an empty expression if there is no expression between
-    these atoms 
-    
+    these atoms
+
     \throw SireError::invalid_index
     \throw SireMol::duplicate_atom
 */
@@ -557,26 +557,26 @@ Expression FourAtomFunctions::potential(AtomIdx atom0, AtomIdx atom1,
     quint32 atm1 = atom1.map( info().nAtoms() );
     quint32 atm2 = atom2.map( info().nAtoms() );
     quint32 atm3 = atom3.map( info().nAtoms() );
-    
+
     if (atm0 == atm1 or atm0 == atm2 or atm0 == atm3 or
         atm1 == atm2 or atm1 == atm3 or atm2 == atm3)
         throw SireMol::duplicate_atom( QObject::tr(
             "There is no potential that acts between the same atoms! "
             "(%1-%2-%3-%4)")
                 .arg(atm0).arg(atm1).arg(atm2).arg(atm3), CODELOC );
-                
+
     return potentials_by_atoms.value( IDQuad(atm0,atm1,atm2,atm3) );
 }
 
 /** Return the function acting between the atoms 'atom0' to 'atom3'.
     This returns an empty expression if there is no expression between
-    these atoms 
-    
+    these atoms
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-Expression FourAtomFunctions::potential(const AtomID &atom0, 
+Expression FourAtomFunctions::potential(const AtomID &atom0,
                                         const AtomID &atom1,
                                         const AtomID &atom2,
                                         const AtomID &atom3) const
@@ -588,10 +588,10 @@ Expression FourAtomFunctions::potential(const AtomID &atom0,
 /** Return the function acting on the dihedral identified by 'dihedralid'.
     This returns an empty expression if there is no expression on
     this dihedral
-    
+
     Note that this searches first for 1-2-3-4, then if no function
     is found, it returns the function for 4-3-2-1
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -602,7 +602,7 @@ Expression FourAtomFunctions::potential(const DihedralID &dihedralid) const
     AtomIdx atom1 = info().atomIdx( dihedralid.atom1() );
     AtomIdx atom2 = info().atomIdx( dihedralid.atom2() );
     AtomIdx atom3 = info().atomIdx( dihedralid.atom3() );
-    
+
     quint32 atm0 = atom0.map( info().nAtoms() );
     quint32 atm1 = atom1.map( info().nAtoms() );
     quint32 atm2 = atom2.map( info().nAtoms() );
@@ -619,7 +619,7 @@ Expression FourAtomFunctions::potential(const DihedralID &dihedralid) const
 /** Return the function acting on the improper identified by 'improperid'.
     This returns an empty expression if there is no expression on
     this improper
-   
+
     Note that this searches first for 1-2-3-4, then if no function
     is found, it returns the function for 1-2-4-3
 
@@ -633,7 +633,7 @@ Expression FourAtomFunctions::potential(const ImproperID &improperid) const
     AtomIdx atom1 = info().atomIdx( improperid.atom1() );
     AtomIdx atom2 = info().atomIdx( improperid.atom2() );
     AtomIdx atom3 = info().atomIdx( improperid.atom3() );
-    
+
     quint32 atm0 = atom0.map( info().nAtoms() );
     quint32 atm1 = atom1.map( info().nAtoms() );
     quint32 atm2 = atom2.map( info().nAtoms() );
@@ -649,19 +649,19 @@ Expression FourAtomFunctions::potential(const ImproperID &improperid) const
 
 /** Return the force (derivative of the potential with respect to 'symbol')
     between the atoms 'atom0' to 'atom3'
-    
+
     \throw SireError::invalid_index
 */
-Expression FourAtomFunctions::force(AtomIdx atom0, AtomIdx atom1, 
+Expression FourAtomFunctions::force(AtomIdx atom0, AtomIdx atom1,
                                     AtomIdx atom2, AtomIdx atom3,
                                     const Symbol &symbol) const
 {
     return -(this->potential(atom0,atom1,atom2,atom3).differentiate(symbol));
 }
-                                 
+
 /** Return the force (derivative of the potential with respect to 'symbol')
     between the atoms 'atom0' to 'atom3'
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -675,15 +675,15 @@ Expression FourAtomFunctions::force(const AtomID &atom0, const AtomID &atom1,
 
 /** Return the force (derivative of the potential with respect to 'symbol')
     on the dihedral identified by 'dihedralid'
-    
+
     Note that this searches 1-2-3-4 first, then searches for 4-3-2-1
     if no function is found
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-Expression FourAtomFunctions::force(const DihedralID &dihedralid, 
+Expression FourAtomFunctions::force(const DihedralID &dihedralid,
                                     const Symbol &symbol) const
 {
     return -(this->potential(dihedralid).differentiate(symbol));
@@ -691,7 +691,7 @@ Expression FourAtomFunctions::force(const DihedralID &dihedralid,
 
 /** Return the force (derivative of the potential with respect to 'symbol')
     on the improper identified by 'improperid'
-    
+
     Note that this searches 1-2-3-4 first, then searches for 1-2-4-3
     if no function is found
 
@@ -699,7 +699,7 @@ Expression FourAtomFunctions::force(const DihedralID &dihedralid,
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-Expression FourAtomFunctions::force(const ImproperID &improperid, 
+Expression FourAtomFunctions::force(const ImproperID &improperid,
                                     const Symbol &symbol) const
 {
     return -(this->potential(improperid).differentiate(symbol));
@@ -710,11 +710,11 @@ Expression FourAtomFunctions::force(const ImproperID &improperid,
 QVector<FourAtomFunction> FourAtomFunctions::potentials() const
 {
     QVector<FourAtomFunction> funcs( potentials_by_atoms.count() );
-    
+
     FourAtomFunction *funcs_array = funcs.data();
-    
+
     int i = 0;
-    
+
     for (QHash<IDQuad,Expression>::const_iterator
                                     it = potentials_by_atoms.constBegin();
          it != potentials_by_atoms.constEnd();
@@ -725,10 +725,10 @@ QVector<FourAtomFunction> FourAtomFunctions::potentials() const
                                            info().cgAtomIdx( AtomIdx(it.key().atom2) ),
                                            info().cgAtomIdx( AtomIdx(it.key().atom3) ),
                                            it.value() );
-    
+
         ++i;
     }
-    
+
     return funcs;
 }
 
@@ -738,17 +738,17 @@ QVector<FourAtomFunction> FourAtomFunctions::forces(const Symbol &symbol) const
 {
     QVector<FourAtomFunction> forces;
     forces.reserve(potentials_by_atoms.count());
-    
+
     for (QHash<IDQuad,Expression>::const_iterator
                                     it = potentials_by_atoms.constBegin();
          it != potentials_by_atoms.constEnd();
          ++it)
     {
         Expression force = it.value().differentiate(symbol);
-        
+
         if (not force.isZero())
         {
-            forces.append( FourAtomFunction( 
+            forces.append( FourAtomFunction(
                               info().cgAtomIdx( AtomIdx(it.key().atom0) ),
                               info().cgAtomIdx( AtomIdx(it.key().atom1) ),
                               info().cgAtomIdx( AtomIdx(it.key().atom2) ),
@@ -756,11 +756,11 @@ QVector<FourAtomFunction> FourAtomFunctions::forces(const Symbol &symbol) const
                               -force ) );
         }
     }
-    
+
     return forces;
 }
 
-/** Return the set of functions where only functions that involve the 
+/** Return the set of functions where only functions that involve the
     atoms in 'selected_atoms' are included. If 'isstrict' is true, then
     only include functions where all of the atoms are in 'selected_atoms',
     while if 'isstrict' is false, include functions where at least one
@@ -777,7 +777,7 @@ FourAtomFunctions FourAtomFunctions::includeOnly(const AtomSelection &selected_a
         while (it.hasNext())
         {
             it.next();
-            
+
             if (not (selected_atoms.selected(AtomIdx(it.key().atom0)) and
                      selected_atoms.selected(AtomIdx(it.key().atom1)) and
                      selected_atoms.selected(AtomIdx(it.key().atom2)) and
@@ -792,7 +792,7 @@ FourAtomFunctions FourAtomFunctions::includeOnly(const AtomSelection &selected_a
         while (it.hasNext())
         {
             it.next();
-            
+
             if (not (selected_atoms.selected(AtomIdx(it.key().atom0)) or
                      selected_atoms.selected(AtomIdx(it.key().atom1)) or
                      selected_atoms.selected(AtomIdx(it.key().atom2)) or
@@ -802,7 +802,7 @@ FourAtomFunctions FourAtomFunctions::includeOnly(const AtomSelection &selected_a
             }
         }
     }
-    
+
     return ret;
 }
 
@@ -821,18 +821,18 @@ int FourAtomFunctions::nFunctions() const
     are successfully matched - it does not copy functions for atoms
     that are not matched. Use FouAtomFunctions::nFunctions() to check
     if the number of functions in the returned set is the same as
-    the number in this set, if you want to ensure that all of the 
+    the number in this set, if you want to ensure that all of the
     functions have been copied.
-    
+
     \throw SireError::incompatible_error
 */
-PropertyPtr 
+PropertyPtr
 FourAtomFunctions::_pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
                                            const AtomMatcher &atommatcher) const
 {
     if (not atommatcher.changesOrder(this->info(), molinfo))
     {
-        //the order of the atoms remains the same - this means that the 
+        //the order of the atoms remains the same - this means that the
         //AtomIdx indicies are still valid
         FourAtomFunctions ret(molinfo);
         ret.potentials_by_atoms = this->potentials_by_atoms;
@@ -840,24 +840,45 @@ FourAtomFunctions::_pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
     }
 
     QHash<AtomIdx,AtomIdx> matched_atoms = atommatcher.match(this->info(), molinfo);
-    
+
+    return this->_pvt_makeCompatibleWith(molinfo, matched_atoms);
+}
+
+/** Return a copy of this property that has been made to be compatible
+    with the molecule layout in 'molinfo' - this uses the atom mapping
+    in 'map' to match atoms from the current molecule to the atoms in
+    the molecule whose layout is in 'molinfo'
+
+    This only copies the FourAtomFunction for pairs of atoms that
+    are successfully matched - it does not copy functions for atoms
+    that are not matched. Use FouAtomFunctions::nFunctions() to check
+    if the number of functions in the returned set is the same as
+    the number in this set, if you want to ensure that all of the
+    functions have been copied.
+
+    \throw SireError::incompatible_error
+*/
+PropertyPtr
+FourAtomFunctions::_pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                           const QHash<AtomIdx,AtomIdx> &map) const
+{
     FourAtomFunctions ret(molinfo);
-    
+
     for (QHash<IDQuad,Expression>::const_iterator it = potentials_by_atoms.constBegin();
          it != potentials_by_atoms.constEnd();
          ++it)
     {
-        AtomIdx new_atom0 = matched_atoms.value( AtomIdx(it.key().atom0), AtomIdx(-1) );
-        AtomIdx new_atom1 = matched_atoms.value( AtomIdx(it.key().atom1), AtomIdx(-1) );
-        AtomIdx new_atom2 = matched_atoms.value( AtomIdx(it.key().atom2), AtomIdx(-1) );
-        AtomIdx new_atom3 = matched_atoms.value( AtomIdx(it.key().atom3), AtomIdx(-1) );
+        AtomIdx new_atom0 = map.value( AtomIdx(it.key().atom0), AtomIdx(-1) );
+        AtomIdx new_atom1 = map.value( AtomIdx(it.key().atom1), AtomIdx(-1) );
+        AtomIdx new_atom2 = map.value( AtomIdx(it.key().atom2), AtomIdx(-1) );
+        AtomIdx new_atom3 = map.value( AtomIdx(it.key().atom3), AtomIdx(-1) );
 
         if (new_atom0 == -1 or new_atom1 == -1 or new_atom2 == -1 or new_atom3 == -1)
             continue;
-        
+
         ret.set( new_atom0, new_atom1, new_atom2, new_atom3, it.value() );
     }
-    
+
     return ret;
 }
 

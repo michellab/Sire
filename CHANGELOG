@@ -3,6 +3,15 @@ SIRE changelog
 
 devel branch:
 
+    [2018.2.0] July 2018 - Improvements to the Gromacs topology reader/writer,
+               addition of code to improve matching of atoms in proteins,
+               fixing compile issues on modern Ubuntu, bugfixes for crashes
+               in the AmberPrm reader, added in text-based searching for
+               atoms, residues etc. from Systems, MoleculeGroups, Molecules,
+               etc. based on boost::spirit, updated boost to latest version, 
+               bugfixes for quantomm infinite rotation bug for ions,
+               general bugfixes.
+
     [2018.1.1] May 2018 - Small bug fixes to allow single-atom solutes
                and also to fix small issues with some parsers for BioSimSpace
 
