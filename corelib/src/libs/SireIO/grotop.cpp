@@ -5017,7 +5017,6 @@ GroTop::PropsAndErrors GroTop::getBondProperties(const MoleculeInfo &molinfo,
 
     QStringList errors;
 
-
     //add in all of the bond functions, together with the connectivity of the
     //molecule
     auto connectivity = Connectivity(molinfo).edit();

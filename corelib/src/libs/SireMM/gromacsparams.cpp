@@ -459,7 +459,7 @@ GromacsBond::GromacsBond(int function_type, const QList<double> &params)
 {
     assert_valid_bond_function(func_type);
 
-    if (count() != params.count())
+    if (params.count() < count())
     {
         throw SireError::invalid_arg( QObject::tr(
             "Incorrect number of parameters (%1) passed for a Gromacs bond of type %2. "
@@ -1079,7 +1079,7 @@ GromacsAngle::GromacsAngle(int function_type, const QList<double> &params)
 {
     assert_valid_angle_function(func_type);
 
-    if (count() != params.count())
+    if (params.count() < count())
     {
         throw SireError::invalid_arg( QObject::tr(
             "Incorrect number of parameters (%1) passed for a Gromacs angle of type %2. "
@@ -1791,7 +1791,7 @@ GromacsDihedral::GromacsDihedral(int function_type, const QList<double> &params)
 {
     assert_valid_dihedral_function(func_type);
 
-    if (count() != params.count())
+    if (params.count() < count())
     {
         throw SireError::invalid_arg( QObject::tr(
             "Incorrect number of parameters (%1) passed for a Gromacs dihedral of type %2. "
