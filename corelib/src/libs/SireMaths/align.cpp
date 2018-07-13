@@ -461,6 +461,9 @@ namespace SireMaths
         //ensure that this is a rotation matrix (has a determinant of 1)
         double det = r.determinant();
 
+        // Determinant can be zero if one molecule is planar, i.e. z component of
+        // coordinate vector is zero. If so, we shift both coordinate vectors, p
+        // & q, by a distance of 1 in the z-dimension and try again.
         if (not SireMaths::areEqual(det, 1.0))
         {
             auto p2 = p;
