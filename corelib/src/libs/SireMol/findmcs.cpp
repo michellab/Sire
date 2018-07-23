@@ -92,6 +92,7 @@ private:
     qint64 max_time_ns;
     bool *timed_out;
     QSet<int> user_matched_verts;
+    bool verbose;
 
 public:
     findmcs_callback(const G0 &mg0, const G1 &mg1,
@@ -99,11 +100,11 @@ public:
                      QList< QHash<int,int> > *matches,
                      QElapsedTimer *tt, QElapsedTimer *td,
                      qint64 maxtime, qint64 *update, bool *timedout,
-                     const QSet<int> &user_verts)
+                     const QSet<int> &user_verts, bool verbose)
          : g0(mg0), g1(mg1), max_nats(nats), max_size(msize),
            best_matches(matches),
            t_total(tt), t_delta(td), last_update(update), max_time_ns(maxtime), timed_out(timedout),
-           user_matched_verts(user_verts)
+           user_matched_verts(user_verts), verbose(verbose)
     {
         *max_size = 0;
     }
@@ -177,7 +178,8 @@ public:
         }
         else if (ns > *last_update + 500000000)
         {
-            qDebug() << "Still searching..." << (t_total->nsecsElapsed()*0.000001) << "ms";
+            if (verbose)
+                qDebug() << "Still searching..." << (t_total->nsecsElapsed()*0.000001) << "ms";
             *last_update = ns;
         }
 
@@ -472,7 +474,7 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
     qint64 last_update = 0;
     findmcs_callback<Graph,Graph> func(g0, g1, qMin(nats0-nskip0,nats1-nskip1), &max_size,
                                        &best_matches, &t_total, &t_delta, max_time_ns,
-                                       &last_update, &timed_out, user_matched_verts);
+                                       &last_update, &timed_out, user_matched_verts, verbose);
 
     t_total.start();
     mcgregor_common_subgraphs_unique(g0, g1, true, func,
