@@ -892,7 +892,7 @@ QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, con
                     // Temporary map for each match.
                     QHash<AtomIdx,AtomIdx> map;
 
-                    // Convert from vertex indicies back to AtomIdx values.
+                    // Store the AtomIdx values, remembering to reverse the mapping.
                     for (QHash<AtomIdx,AtomIdx>::const_iterator it = match.constBegin();
                         it != match.constEnd();
                         ++it)
