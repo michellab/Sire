@@ -880,41 +880,45 @@ QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, con
                             AtomMatchInverter(matcher), timeout,
                             match_light_atoms, map1, map0, is_pre_match, false, verbose);
 
-            if (rmaps[0].count() > maps[0].count())
+            // Make sure we found a match.
+            if (rmaps.count() > 0)
             {
-                //the reverse map is better, so lets use that
-                if (verbose)
-                    qDebug() << "...the reverse map is better. Using that :-)";
-                maps.clear();
-
-                for (auto &match : rmaps)
+                if ((maps.count() == 0) or (rmaps[0].count() > maps[0].count()))
                 {
-                    // Temporary map for each match.
-                    QHash<AtomIdx,AtomIdx> map;
+                    //the reverse map is better, so lets use that
+                    if (verbose)
+                        qDebug() << "...the reverse map is better. Using that :-)";
+                    maps.clear();
 
-                    // Store the AtomIdx values, remembering to reverse the mapping.
-                    for (QHash<AtomIdx,AtomIdx>::const_iterator it = match.constBegin();
-                        it != match.constEnd();
-                        ++it)
+                    for (auto &match : rmaps)
                     {
-                        map.insert( it.value(), it.key() );
-                    }
+                        // Temporary map for each match.
+                        QHash<AtomIdx,AtomIdx> map;
 
-                    // Add to the vector of maps.
-                    maps.append(map);
+                        // Store the AtomIdx values, remembering to reverse the mapping.
+                        for (QHash<AtomIdx,AtomIdx>::const_iterator it = match.constBegin();
+                            it != match.constEnd();
+                            ++it)
+                        {
+                            map.insert( it.value(), it.key() );
+                        }
+
+                        // Add to the vector of maps.
+                        maps.append(map);
+                    }
                 }
-            }
-            else
-            {
-                if (verbose)
+                else
                 {
-                    qDebug() << "...the original forwards map was better.";
-                    qDebug() << "We ran out of time when looking for a match. You can speed things"
-                            << "up by using an AtomMatcher to pre-match some of the atoms that you"
-                            << "know should be equivalent, e.g. one of the rings, or the common"
-                            << "framework of the molecules. As it is, only the best-found match"
-                            << "in the time available is being returned, which may not correspond"
-                            << "to the best possible match.";
+                    if (verbose)
+                    {
+                        qDebug() << "...the original forwards map was better.";
+                        qDebug() << "We ran out of time when looking for a match. You can speed things"
+                                << "up by using an AtomMatcher to pre-match some of the atoms that you"
+                                << "know should be equivalent, e.g. one of the rings, or the common"
+                                << "framework of the molecules. As it is, only the best-found match"
+                                << "in the time available is being returned, which may not correspond"
+                                << "to the best possible match.";
+                    }
                 }
             }
         }
