@@ -189,58 +189,59 @@ public:
     QString toString() const;
 
     bool isNull() const;
+    bool isPerturbable() const;
 
     QString name() const;
     void setName(const QString &name);
 
-    qint64 nExcludedAtoms() const;
-    void setNExcludedAtoms(qint64 nexcl);
+    qint64 nExcludedAtoms(bool is_perturbed=false) const;
+    void setNExcludedAtoms(qint64 nexcl, bool is_perturbed=false);
 
-    SireMM::MMDetail forcefield() const;
+    SireMM::MMDetail forcefield(bool is_perturbed=false) const;
 
-    void addAtom(const GroAtom &atom);
+    void addAtom(const GroAtom &atom, bool is_perturbed=false);
 
-    void addBond(const SireMol::BondID &bond, const GromacsBond &parm);
-    void addAngle(const SireMol::AngleID &angle, const GromacsAngle &parm);
-    void addDihedral(const SireMol::DihedralID &dihedral, const GromacsDihedral &parm);
+    void addBond(const SireMol::BondID &bond, const GromacsBond &parm, bool is_perturbed=false);
+    void addAngle(const SireMol::AngleID &angle, const GromacsAngle &parm, bool is_perturbed=false);
+    void addDihedral(const SireMol::DihedralID &dihedral, const GromacsDihedral &parm, bool is_perturbed=false);
 
-    void addBonds(const QMultiHash<SireMol::BondID,GromacsBond> &bonds);
-    void addAngles(const QMultiHash<SireMol::AngleID,GromacsAngle> &angles);
-    void addDihedrals(const QMultiHash<SireMol::DihedralID,GromacsDihedral> &dihedrals);
+    void addBonds(const QMultiHash<SireMol::BondID,GromacsBond> &bonds, bool is_perturbed=false);
+    void addAngles(const QMultiHash<SireMol::AngleID,GromacsAngle> &angles, bool is_perturbed=false);
+    void addDihedrals(const QMultiHash<SireMol::DihedralID,GromacsDihedral> &dihedrals, bool is_perturbed=false);
 
     void sanitise(QString elecstyle, QString vdwstyle,
-                  QString combrule, double elec14, double vdw14);
+                  QString combrule, double elec14, double vdw14, bool is_perturbed=false);
 
     void addWarning(const QString &warning);
 
-    int nAtoms() const;
-    int nResidues() const;
+    int nAtoms(bool is_perturbed=false) const;
+    int nResidues(bool is_perturbed=false) const;
 
-    GroAtom atom(const SireMol::AtomIdx &atomidx) const;
-    GroAtom atom(const SireMol::AtomNum &atomnum) const;
-    GroAtom atom(const SireMol::AtomName &atomnam) const;
+    GroAtom atom(const SireMol::AtomIdx &atomidx, bool is_perturbed=false) const;
+    GroAtom atom(const SireMol::AtomNum &atomnum, bool is_perturbed=false) const;
+    GroAtom atom(const SireMol::AtomName &atomnam, bool is_perturbed=false) const;
 
-    QVector<GroAtom> atoms() const;
+    QVector<GroAtom> atoms(bool is_perturbed=false) const;
 
-    QVector<GroAtom> atoms(const SireMol::AtomName &atomnam) const;
+    QVector<GroAtom> atoms(const SireMol::AtomName &atomnam, bool is_perturbed=false) const;
 
-    QVector<GroAtom> atoms(const SireMol::ResIdx &residx) const;
-    QVector<GroAtom> atoms(const SireMol::ResNum &resnum) const;
-    QVector<GroAtom> atoms(const SireMol::ResName &resnam) const;
+    QVector<GroAtom> atoms(const SireMol::ResIdx &residx, bool is_perturbed=false) const;
+    QVector<GroAtom> atoms(const SireMol::ResNum &resnum, bool is_perturbed=false) const;
+    QVector<GroAtom> atoms(const SireMol::ResName &resnam, bool is_perturbed=false) const;
 
-    QMultiHash<SireMol::BondID,GromacsBond> bonds() const;
-    QMultiHash<SireMol::AngleID,GromacsAngle> angles() const;
-    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihedrals() const;
+    QMultiHash<SireMol::BondID,GromacsBond> bonds(bool is_perturbed=false) const;
+    QMultiHash<SireMol::AngleID,GromacsAngle> angles(bool is_perturbed=false) const;
+    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihedrals(bool is_perturbed=false) const;
 
-    bool isWater() const;
-    QStringList settlesLines() const;
+    bool isWater(bool is_perturbed=false) const;
+    QStringList settlesLines(bool is_perturbed=false) const;
 
     QStringList warnings() const;
 
-    bool needsSanitising() const;
+    bool needsSanitising(bool is_perturbed=false) const;
 
 private:
-    void _pvt_sanitise();
+    void _pvt_sanitise(bool is_perturbed=false);
 
     /** The name of this moleculetype */
     QString nme;
@@ -249,25 +250,35 @@ private:
     QStringList warns;
 
     /** Array of all of the atoms in this molecule */
-    QVector<GroAtom> atms;
+    QVector<GroAtom> atms0;
+    QVector<GroAtom> atms1;
 
     /** Array giving the index of the first atom in each residue */
-    QVector<qint64> first_atoms;
+    QVector<qint64> first_atoms0;
+    QVector<qint64> first_atoms1;
 
     /** Hash of all of the bonds */
-    QMultiHash<SireMol::BondID,GromacsBond> bnds;
+    QMultiHash<SireMol::BondID,GromacsBond> bnds0;
+    QMultiHash<SireMol::BondID,GromacsBond> bnds1;
 
     /** Hash of all of the angles */
-    QMultiHash<SireMol::AngleID,GromacsAngle> angs;
+    QMultiHash<SireMol::AngleID,GromacsAngle> angs0;
+    QMultiHash<SireMol::AngleID,GromacsAngle> angs1;
 
     /** Hash of all of the dihedrals */
-    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihs;
+    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihs0;
+    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihs1;
 
     /** The details about the forcefield used for this molecule */
-    SireMM::MMDetail ffield;
+    SireMM::MMDetail ffield0;
+    SireMM::MMDetail ffield1;
 
     /** The number of excluded atoms */
-    qint64 nexcl;
+    qint64 nexcl0;
+    qint64 nexcl1;
+
+    /** Whether this molecule is perturbable. */
+    bool is_perturbable;
 };
 
 /** This class describes a Gromacs System */
