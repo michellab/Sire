@@ -287,7 +287,7 @@ void CLJGroup::add(const MoleculeView &molview, const PropertyMap &map)
     }
     else
     {
-        CLJExtractor changed(molview, id_source, extract_source);
+        CLJExtractor changed(molview, id_source, extract_source, map);
         
         if (cljworkspace.recalculatingFromScratch())
         {
