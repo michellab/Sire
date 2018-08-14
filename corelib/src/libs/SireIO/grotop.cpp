@@ -439,9 +439,9 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
         auto extract_atoms = [&](bool is_lambda1)
         {
             if (is_lambda1)
-                atms0 = QVector<GroAtom>(molinfo.nAtoms());
-            else
                 atms1 = QVector<GroAtom>(molinfo.nAtoms());
+            else
+                atms0 = QVector<GroAtom>(molinfo.nAtoms());
 
             AtomMasses masses;
             AtomElements elements;
@@ -587,45 +587,49 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
 
                 QString atomtype = atomtypes[cgatomidx];
 
-                auto &atom0 = atms0[i];
-                auto &atom1 = atms1[i];
-
                 if (is_lambda1)
                 {
-                    atom1.setName(atomnam);
-                    atom1.setNumber(atomnum);
-                    atom1.setResidueName(resnam);
-                    atom1.setResidueNumber(resnum);
-                    atom1.setChargeGroup(group);
-                    atom1.setCharge(charge);
-                    atom1.setMass(mass);
-                    atom1.setAtomType(atomtype);
-                }
-                else
-                {
-                    atom0.setName(atomnam);
-                    atom0.setNumber(atomnum);
-                    atom0.setResidueName(resnam);
-                    atom0.setResidueNumber(resnum);
-                    atom0.setChargeGroup(group);
-                    atom0.setCharge(charge);
-                    atom0.setMass(mass);
-                    atom0.setAtomType(atomtype);
-                }
+                    auto &atom = atms1[i];
 
-                if (has_bondtype)
-                {
-                    if (is_lambda1)
-                        atom1.setBondType(bondtypes[cgatomidx]);
+                    atom.setName(atomnam);
+                    atom.setNumber(atomnum);
+                    atom.setResidueName(resnam);
+                    atom.setResidueNumber(resnum);
+                    atom.setChargeGroup(group);
+                    atom.setCharge(charge);
+                    atom.setMass(mass);
+                    atom.setAtomType(atomtype);
+
+                    if (has_bondtype)
+                    {
+                        atom.setBondType(bondtypes[cgatomidx]);
+                    }
                     else
-                        atom0.setBondType(bondtypes[cgatomidx]);
+                    {
+                        atom.setBondType(atomtype);
+                    }
                 }
                 else
                 {
-                    if (is_lambda1)
-                        atom1.setBondType(atomtype);
+                    auto &atom = atms0[i];
+
+                    atom.setName(atomnam);
+                    atom.setNumber(atomnum);
+                    atom.setResidueName(resnam);
+                    atom.setResidueNumber(resnum);
+                    atom.setChargeGroup(group);
+                    atom.setCharge(charge);
+                    atom.setMass(mass);
+                    atom.setAtomType(atomtype);
+
+                    if (has_bondtype)
+                    {
+                        atom.setBondType(bondtypes[cgatomidx]);
+                    }
                     else
-                        atom0.setBondType(atomtype);
+                    {
+                        atom.setBondType(atomtype);
+                    }
                 }
             };
 
@@ -2935,7 +2939,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             {
                 const auto &atom1 = atoms1[i];
 
-                atomlines.append( QString("%1   %2 %3    %4  %5   %6 %7   %8")
+                atomlines.append( QString("%1   %2 %3    %4  %5   %6 %7   %8   %9 %10   %11")
                          .arg(atom0.number().value(), 6)
                          .arg(atom0.atomType(), 4)
                          .arg(atom0.residueNumber().value(), 6)
@@ -2998,7 +3002,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     params1.append( QString::number(p) );
                 }
 
-                bondlines.append( QString("%1 %2 %3  %4")
+                bondlines.append( QString("%1 %2 %3  %4  %5")
                          .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
                          .arg(params0.join("  "))
                          .arg(params1.join("  ")) );
@@ -3048,7 +3052,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     params1.append( QString::number(p) );
                 }
 
-                anglines.append( QString("%1 %2 %3 %4  %5")
+                anglines.append( QString("%1 %2 %3 %4  %5  %6")
                         .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),6)
                         .arg(params0.join("  "))
                         .arg(params1.join("  ")) );
@@ -3100,7 +3104,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     params1.append( QString::number(p) );
                 }
 
-                dihlines.append( QString("%1 %2 %3 %4 %5  %6")
+                dihlines.append( QString("%1 %2 %3 %4 %5  %6  %7")
                         .arg(atom0,6).arg(atom1,6)
                         .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
                         .arg(params0.join("  "))
@@ -3218,7 +3222,10 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     }
 
     lines.append( "[ atoms ]" );
-    lines.append(";   nr   type  resnr residue  atom   cgnr     charge         mass");
+    if (is_perturbable)
+        lines.append(";   nr  type0  resnr residue  atom   cgnr    charge0        mass0  type1    charge1        mass1");
+    else
+        lines.append(";   nr   type  resnr residue  atom   cgnr     charge         mass");
     lines.append(atomlines);
 
     // we need to detect whether this is a water molecule. If so, then we
