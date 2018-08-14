@@ -252,24 +252,24 @@ public:
     AtomMCSMatcher();
     AtomMCSMatcher(bool verbose);
     AtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
-                   bool verbose=false);
+                   bool verbose);
     AtomMCSMatcher(const AtomMatcher &prematcher,
-                   bool verbose=false);
+                   bool verbose);
     AtomMCSMatcher(const AtomMatcher &prematcher,
                    const SireUnits::Dimension::Time &timeout,
-                   bool verbose=false);
+                   bool verbose);
     AtomMCSMatcher(bool match_light_atoms,
-                   bool verbose=false);
+                   bool verbose);
     AtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
                    bool match_light_atoms,
-                   bool verbose=false);
+                   bool verbose);
     AtomMCSMatcher(const AtomMatcher &prematcher,
                    bool match_light_atoms,
-                   bool verbose=false);
+                   bool verbose);
     AtomMCSMatcher(const AtomMatcher &prematcher,
                    const SireUnits::Dimension::Time &timeout,
                    bool match_light_atoms,
-                   bool verbose=false);
+                   bool verbose);
 
     AtomMCSMatcher(const AtomMCSMatcher &other);
 
@@ -423,24 +423,24 @@ public:
     ResIdxAtomMCSMatcher();
     ResIdxAtomMCSMatcher(bool verbose);
     ResIdxAtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
-                         bool verbose=false);
+                         bool verbose);
     ResIdxAtomMCSMatcher(const AtomMatcher &prematcher,
-                         bool verbose=false);
+                         bool verbose);
     ResIdxAtomMCSMatcher(const AtomMatcher &prematcher,
                          const SireUnits::Dimension::Time &timeout,
-                         bool verbose=false);
+                         bool verbose);
     ResIdxAtomMCSMatcher(bool match_light_atoms,
-                         bool verbose=false);
+                         bool verbose);
     ResIdxAtomMCSMatcher(const SireUnits::Dimension::Time &timeout,
                          bool match_light_atoms,
-                         bool verbose=false);
+                         bool verbose);
     ResIdxAtomMCSMatcher(const AtomMatcher &prematcher,
                          bool match_light_atoms,
-                         bool verbose=false);
+                         bool verbose);
     ResIdxAtomMCSMatcher(const AtomMatcher &prematcher,
                          const SireUnits::Dimension::Time &timeout,
                          bool match_light_atoms,
-                         bool verbose=false);
+                         bool verbose);
 
     ResIdxAtomMCSMatcher(const ResIdxAtomMCSMatcher&);
 
