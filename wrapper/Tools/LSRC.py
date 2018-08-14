@@ -1689,11 +1689,11 @@ def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
     print("\nFirst, mapping the atoms from the first ligand to the atoms of the second...")
     if mcs_prematch.val:
         mapping = AtomMCSMatcher( AtomIDMatcher(mcs_prematch.val),
-                                  mcs_timeout.val ).match(ligand0_mol, PropertyMap(),
-                                                          ligand1_mol, PropertyMap())
+                                  mcs_timeout.val, False ).match(ligand0_mol, PropertyMap(),
+                                                                 ligand1_mol, PropertyMap())
     else:
-        mapping = AtomMCSMatcher(mcs_timeout.val).match(ligand0_mol, PropertyMap(), 
-                                                        ligand1_mol, PropertyMap())
+        mapping = AtomMCSMatcher(mcs_timeout.val, False).match(ligand0_mol, PropertyMap(), 
+                                                               ligand1_mol, PropertyMap())
 
     lines = []
     for key in mapping.keys():
