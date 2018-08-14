@@ -2751,9 +2751,9 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
     //first, build up a dictionary of all of the unique atom types
     QHash<QString,QString> atomtypes;
 
-    const auto elemprop = map["element"];
-    const auto massprop = map["mass"];
-    const auto ljprop = map["LJ"];
+    auto elemprop = map["element"];
+    auto massprop = map["mass"];
+    auto ljprop = map["LJ"];
 
     //get the combining rules - these determine the format of the LJ parameter in the file
     const int combining_rules = _getCombiningRulesFromFF(ffield);
@@ -2761,6 +2761,23 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
     for (auto it = moltyps.constBegin(); it != moltyps.constEnd(); ++it)
     {
         const auto moltyp = it.value();
+
+        // Store whether the molecule is perturbable.
+        const auto is_perturbable = moltyp.isPerturbable();
+
+        // Rename property keys.
+        if (is_perturbable)
+        {
+            elemprop = "element0";
+            massprop = "mass0";
+            ljprop = "LJ0";
+        }
+        else
+        {
+            elemprop = map["element"];
+            massprop = map["mass"];
+            ljprop = map["LJ"];
+        }
 
         const auto &atoms = moltyp.atoms();
 
@@ -2810,6 +2827,61 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
                     .arg(particle_type, 3)
                     .arg(std::get<0>(ljparams), 10, 'f', 6)
                     .arg(std::get<1>(ljparams), 10, 'f', 6) );
+
+        }
+
+        // Add additional atom types from lambda = 1.
+        if (is_perturbable)
+        {
+            const auto &atoms = moltyp.atoms(true);
+
+            for (int i=0; i<atoms.count(); ++i)
+            {
+                const auto &atom = atoms[i];
+                const auto atomtype = atom.atomType();
+
+                if (atomtypes.contains(atomtype))
+                    continue;
+
+                //we haven't seen this atom type before. Get the corresponding atom
+                //in the molecule
+                const auto mol = molecules[it.key()];
+                const auto cgatomidx = mol.info().cgAtomIdx( AtomIdx(i) );
+
+                //now get the corresponding Element and LJ properties for this atom
+                Element elem;
+
+                try
+                {
+                    elem = mol.property("element1").asA<AtomElements>()[cgatomidx];
+                }
+                catch(...)
+                {
+                    elem = Element::elementWithMass(
+                                mol.property("mass1").asA<AtomMasses>()[cgatomidx] );
+                }
+
+                double chg = 0;  // always use a zero charge as this will be supplied with the atom
+
+                auto lj = mol.property("LJ1").asA<AtomLJs>()[cgatomidx];
+                auto ljparams = ::fromLJParameter(lj, combining_rules);
+
+                QString particle_type = "A";  // A is for Atom
+
+                if (elem.nProtons() == 0 and lj.isDummy())
+                {
+                    particle_type = "D"; //this atomtype is a Dummy
+                }
+
+                atomtypes.insert( atomtype, QString("  %1        %2  %3  %4  %5  %6  %7")
+                        .arg(atomtype, 4)
+                        .arg(elem.nProtons(), 4)
+                        .arg(elem.mass().to(g_per_mol), 10, 'f', 6)
+                        .arg(chg, 10, 'f', 6)
+                        .arg(particle_type, 3)
+                        .arg(std::get<0>(ljparams), 10, 'f', 6)
+                        .arg(std::get<1>(ljparams), 10, 'f', 6) );
+            }
         }
     }
 
