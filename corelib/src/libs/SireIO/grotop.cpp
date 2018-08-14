@@ -3067,7 +3067,11 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     //write all of the dihedrals/impropers (they are merged)
     auto write_dihs = [&]()
     {
-        for (auto it = moltype.dihedrals().constBegin(); it != moltype.dihedrals().constEnd();
+        // Get the dihedrals from the molecule.
+        const auto &dihedrals0 = moltype.dihedrals();
+        const auto &dihedrals1 = moltype.dihedrals(true);
+
+        for (auto it = dihedrals0.constBegin(); it != dihedrals0.constEnd();
              ++it)
         {
             const auto &dihedral = it.key();
@@ -3079,16 +3083,36 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             int atom2 = dihedral.atom2().asA<AtomIdx>().value() + 1;
             int atom3 = dihedral.atom3().asA<AtomIdx>().value() + 1;
 
-            QStringList params;
+            QStringList params0;
             for (const auto p : param.parameters())
             {
-                params.append( QString::number(p) );
+                params0.append( QString::number(p) );
             }
 
-            dihlines.append( QString("%1 %2 %3 %4 %5  %6")
-                    .arg(atom0,6).arg(atom1,6)
-                    .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
-                    .arg(params.join("  ")) );
+            if (is_perturbable)
+            {
+                // Find the corresponding dihedral parameters at lambda = 1.
+                const auto &param1 = dihedrals1.find(dihedral).value();
+
+                QStringList params1;
+                for (const auto p : param1.parameters())
+                {
+                    params1.append( QString::number(p) );
+                }
+
+                dihlines.append( QString("%1 %2 %3 %4 %5  %6")
+                        .arg(atom0,6).arg(atom1,6)
+                        .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
+                        .arg(params0.join("  "))
+                        .arg(params1.join("  ")) );
+            }
+            else
+            {
+                dihlines.append( QString("%1 %2 %3 %4 %5  %6")
+                        .arg(atom0,6).arg(atom1,6)
+                        .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
+                        .arg(params0.join("  ")) );
+            }
         }
 
         qSort(dihlines);
