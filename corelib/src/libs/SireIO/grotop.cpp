@@ -2968,7 +2968,11 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     //write all of the bonds
     auto write_bonds = [&]()
     {
-        for (auto it = moltype.bonds().constBegin(); it != moltype.bonds().constEnd(); ++it)
+        // Get the bonds from the molecule.
+        const auto &bonds0 = moltype.bonds();
+        const auto &bonds1 = moltype.bonds(true);
+
+        for (auto it = bonds0.constBegin(); it != bonds0.constEnd(); ++it)
         {
             const auto &bond = it.key();
             const auto &param = it.value();
@@ -2977,15 +2981,34 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             int atom0 = bond.atom0().asA<AtomIdx>().value() + 1;
             int atom1 = bond.atom1().asA<AtomIdx>().value() + 1;
 
-            QStringList params;
+            QStringList params0;
             for (const auto p : param.parameters())
             {
-                params.append( QString::number(p) );
+                params0.append( QString::number(p) );
             }
 
-            bondlines.append( QString("%1 %2 %3  %4")
-                    .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
-                    .arg(params.join("  ")) );
+            if (is_perturbable)
+            {
+                // Find the corresponding bond parameters at lambda = 1.
+                const auto &param1 = bonds1.find(bond).value();
+
+                QStringList params1;
+                for (const auto p : param1.parameters())
+                {
+                    params1.append( QString::number(p) );
+                }
+
+                bondlines.append( QString("%1 %2 %3  %4")
+                         .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
+                         .arg(params0.join("  "))
+                         .arg(params1.join("  ")) );
+            }
+            else
+            {
+                bondlines.append( QString("%1 %2 %3  %4")
+                         .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
+                         .arg(params0.join("  ")) );
+            }
         }
 
         qSort(bondlines);
