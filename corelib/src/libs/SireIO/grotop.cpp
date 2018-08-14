@@ -3122,30 +3122,74 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     //we have set autogenerate pairs to "yes"
     auto write_pairs = [&]()
     {
-        CLJNBPairs scl;
+        if (is_perturbable)
+        {
+            CLJNBPairs scl0;
+            CLJNBPairs scl1;
 
-        try
-        {
-            scl = mol.property("intrascale").asA<CLJNBPairs>();
-        }
-        catch(...)
-        {
-            return;
-        }
-
-        // must record every pair that has a non-default scaling factor
-        for (int i=0; i<scl.nAtoms()-1; ++i)
-        {
-            for (int j=i+1; j<scl.nAtoms(); ++j)
+            try
             {
-                const auto s = scl.get( AtomIdx(i), AtomIdx(j) );
+                scl0 = mol.property("intrascale0").asA<CLJNBPairs>();
+            }
+            catch(...)
+            {
+                return;
+            }
 
-                if ( not ( (s.coulomb() == 0 and s.lj() == 0) or
-                           (s.coulomb() == 1 and s.lj() == 1) ) )
+            try
+            {
+                scl1 = mol.property("intrascale1").asA<CLJNBPairs>();
+            }
+            catch(...)
+            {
+                return;
+            }
+
+            // must record every pair that has a non-default scaling factor
+            for (int i=0; i<scl0.nAtoms()-1; ++i)
+            {
+                for (int j=i+1; j<scl0.nAtoms(); ++j)
                 {
-                    //this is a non-default pair
-                    scllines.append( QString("%1 %2     1")
-                                        .arg(i+1,6).arg(j+1,6) );
+                    const auto s0 = scl0.get( AtomIdx(i), AtomIdx(j) );
+                    const auto s1 = scl1.get( AtomIdx(i), AtomIdx(j) );
+
+                    if ( not ( (s0.coulomb() == 0 and s0.lj() == 0 and s1.coulomb() == 0 and s1.lj() == 0) or
+                               (s0.coulomb() == 1 and s0.lj() == 1 and s1.coulomb() == 1 and s1.lj() == 1) ) )
+                    {
+                        //this is a non-default pair
+                        scllines.append( QString("%1 %2     1")
+                                            .arg(i+1,6).arg(j+1,6) );
+                    }
+                }
+            }
+        }
+        else
+        {
+            CLJNBPairs scl;
+
+            try
+            {
+                scl = mol.property("intrascale").asA<CLJNBPairs>();
+            }
+            catch(...)
+            {
+                return;
+            }
+
+            // must record every pair that has a non-default scaling factor
+            for (int i=0; i<scl.nAtoms()-1; ++i)
+            {
+                for (int j=i+1; j<scl.nAtoms(); ++j)
+                {
+                    const auto s = scl.get( AtomIdx(i), AtomIdx(j) );
+
+                    if ( not ( (s.coulomb() == 0 and s.lj() == 0) or
+                            (s.coulomb() == 1 and s.lj() == 1) ) )
+                    {
+                        //this is a non-default pair
+                        scllines.append( QString("%1 %2     1")
+                                            .arg(i+1,6).arg(j+1,6) );
+                    }
                 }
             }
         }
