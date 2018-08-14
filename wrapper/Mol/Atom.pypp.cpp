@@ -46,43 +46,43 @@ namespace bp = boost::python;
 
 #include "atom.h"
 
-#include "SireStream/datastream.h"
+#include "SireMaths/align.h"
 
 #include "atomenergies.h"
 
-#include "SireMaths/align.h"
+#include "SireMaths/vector.h"
+
+#include "atomradii.h"
+
+#include "atombeads.h"
+
+#include "SireStream/datastream.h"
+
+#include "atommasses.h"
+
+#include "SireStream/shareddatastream.h"
 
 #include "atomcharges.h"
 
 #include "atomcoords.h"
 
-#include "SireStream/shareddatastream.h"
-
-#include "atomelements.h"
-
-#include "SireMaths/vector.h"
-
-#include "SireVol/space.h"
-
-#include "SireError/errors.h"
-
-#include "atombeads.h"
-
-#include "atomproperty.hpp"
-
-#include "atommasses.h"
-
-#include "atomvelocities.h"
-
 #include "atomforces.h"
-
-#include "atomljs.h"
-
-#include "atomradii.h"
 
 #include "atompolarisabilities.h"
 
+#include "atomljs.h"
+
 #include "SireBase/quickcopy.hpp"
+
+#include "SireError/errors.h"
+
+#include "atomelements.h"
+
+#include "SireVol/space.h"
+
+#include "atomproperty.hpp"
+
+#include "atomvelocities.h"
 
 const SireMaths::Vector& get_Metadata_SireMol_AtomCoords_function1(const SireMol::Atom &atom,
                                    const QString &metakey){ return atom.metadata< SireMaths::Vector >(metakey); }
