@@ -2943,7 +2943,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                          .arg(atom0.name().value(), 4)
                          .arg(atom0.chargeGroup(), 4)
                          .arg(atom0.charge().to(mod_electron), 10, 'f', 6)
-                         .arg(atom0.mass().to(g_per_mol), 10, 'f', 6) 
+                         .arg(atom0.mass().to(g_per_mol), 10, 'f', 6)
                          .arg(atom1.atomType(), 4)
                          .arg(atom1.charge().to(mod_electron), 10, 'f', 6)
                          .arg(atom1.mass().to(g_per_mol), 10, 'f', 6) );
@@ -3017,7 +3017,11 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     //write all of the angles
     auto write_angs = [&]()
     {
-        for (auto it = moltype.angles().constBegin(); it != moltype.angles().constEnd(); ++it)
+        // Get the angles from the molecule.
+        const auto &angles0 = moltype.angles();
+        const auto &angles1 = moltype.angles(true);
+
+        for (auto it = angles0.constBegin(); it != angles0.constEnd(); ++it)
         {
             const auto &angle = it.key();
             const auto &param = it.value();
@@ -3027,15 +3031,34 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             int atom1 = angle.atom1().asA<AtomIdx>().value() + 1;
             int atom2 = angle.atom2().asA<AtomIdx>().value() + 1;
 
-            QStringList params;
+            QStringList params0;
             for (const auto p : param.parameters())
             {
-                params.append( QString::number(p) );
+                params0.append( QString::number(p) );
             }
 
-            anglines.append( QString("%1 %2 %3 %4  %5")
-                    .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),6)
-                    .arg(params.join("  ")) );
+            if (is_perturbable)
+            {
+                // Find the corresponding angle parameters at lambda = 1.
+                const auto &param1 = angles1.find(angle).value();
+
+                QStringList params1;
+                for (const auto p : param1.parameters())
+                {
+                    params1.append( QString::number(p) );
+                }
+
+                anglines.append( QString("%1 %2 %3 %4  %5")
+                        .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),6)
+                        .arg(params0.join("  "))
+                        .arg(params1.join("  ")) );
+            }
+            else
+            {
+                anglines.append( QString("%1 %2 %3 %4  %5")
+                        .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),6)
+                        .arg(params0.join("  ")) );
+            }
         }
 
         qSort(anglines);
