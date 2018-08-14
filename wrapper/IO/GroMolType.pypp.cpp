@@ -91,7 +91,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "addAngle"
                 , addAngle_function_value
-                , ( bp::arg("angle"), bp::arg("parm"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("angle"), bp::arg("parm"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Add the passed angle to the molecule" );
         
         }
@@ -103,7 +103,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "addAngles"
                 , addAngles_function_value
-                , ( bp::arg("angles"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("angles"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Add the passed angles to the molecule" );
         
         }
@@ -115,7 +115,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "addAtom"
                 , addAtom_function_value
-                , ( bp::arg("atom"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("atom"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Add an atom to this moleculetype, with specified atom type, residue number,\nresidue name, atom name, charge group, charge and mass" );
         
         }
@@ -127,7 +127,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "addBond"
                 , addBond_function_value
-                , ( bp::arg("bond"), bp::arg("parm"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("bond"), bp::arg("parm"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Add the passed bond to the molecule" );
         
         }
@@ -139,7 +139,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "addBonds"
                 , addBonds_function_value
-                , ( bp::arg("bonds"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("bonds"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Add the passed bonds to the molecule" );
         
         }
@@ -151,7 +151,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "addDihedral"
                 , addDihedral_function_value
-                , ( bp::arg("dihedral"), bp::arg("parm"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("dihedral"), bp::arg("parm"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Add the passed dihedral to the molecule" );
         
         }
@@ -163,7 +163,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "addDihedrals"
                 , addDihedrals_function_value
-                , ( bp::arg("dihedrals"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("dihedrals"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Add the passed dihedrals to the molecule" );
         
         }
@@ -187,7 +187,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "angles"
                 , angles_function_value
-                , ( bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("is_lambda1")=(bool)(false) )
                 , "Return all of the angles" );
         
         }
@@ -199,7 +199,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("atomidx"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("atomidx"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Return the atom at index atomidx" );
         
         }
@@ -211,7 +211,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("atomnum"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("atomnum"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Return the atom with number atomnum" );
         
         }
@@ -223,7 +223,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("atomnam"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("atomnam"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Return the first atom with name atomnam. If you want all atoms\nwith this name then call atoms(AtomName atomname)" );
         
         }
@@ -235,7 +235,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("is_lambda1")=(bool)(false) )
                 , "Return all of the atoms in this molecule" );
         
         }
@@ -247,7 +247,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("atomnam"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("atomnam"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Return all atoms that have the passed name. Returns an empty\nlist if there are no atoms with this name" );
         
         }
@@ -259,7 +259,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("residx"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("residx"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Return all of the atoms in the specified residue" );
         
         }
@@ -271,7 +271,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("resnum"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("resnum"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Return all of the atoms in the specified residue(s)" );
         
         }
@@ -283,7 +283,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("resnam"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("resnam"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Return all of the atoms in the specified residue(s)" );
         
         }
@@ -295,7 +295,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "bonds"
                 , bonds_function_value
-                , ( bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("is_lambda1")=(bool)(false) )
                 , "Return all of the bonds" );
         
         }
@@ -307,7 +307,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "dihedrals"
                 , dihedrals_function_value
-                , ( bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("is_lambda1")=(bool)(false) )
                 , "Return all of the dihedrals" );
         
         }
@@ -319,7 +319,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "forcefield"
                 , forcefield_function_value
-                , ( bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("is_lambda1")=(bool)(false) )
                 , "Return the guessed forcefield for this molecule type" );
         
         }
@@ -353,7 +353,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "isWater"
                 , isWater_function_value
-                , ( bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("is_lambda1")=(bool)(false) )
                 , "Return whether or not this is a topology for water. This should\nreturn true for all water models (including TIP4P and TIP5P)" );
         
         }
@@ -365,7 +365,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
-                , ( bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("is_lambda1")=(bool)(false) )
                 , "Return the number of atoms in this molecule" );
         
         }
@@ -377,7 +377,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "nExcludedAtoms"
                 , nExcludedAtoms_function_value
-                , ( bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("is_lambda1")=(bool)(false) )
                 , "Return the number of excluded atoms" );
         
         }
@@ -389,7 +389,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "nResidues"
                 , nResidues_function_value
-                , ( bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("is_lambda1")=(bool)(false) )
                 , "Return the number of residues in this molecule" );
         
         }
@@ -412,7 +412,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "needsSanitising"
                 , needsSanitising_function_value
-                , ( bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("is_lambda1")=(bool)(false) )
                 , "Return whether or not this molecule needs sanitising" );
         
         }
@@ -439,7 +439,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "sanitise"
                 , sanitise_function_value
-                , ( bp::arg("elecstyle"), bp::arg("vdwstyle"), bp::arg("combrule"), bp::arg("elec14"), bp::arg("vdw14"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("elecstyle"), bp::arg("vdwstyle"), bp::arg("combrule"), bp::arg("elec14"), bp::arg("vdw14"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Sanitise this moleculetype. This assumes that the moleculetype has\nbeen fully specified, so it collects everything together and checks that the\nmolecule makes sense. Any warnings generated can be retrieved using the\nwarnings function. It also uses the passed defaults from the top file,\ntogether with the information in the molecule to guess the forcefield for\nthe molecule" );
         
         }
@@ -451,7 +451,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "setNExcludedAtoms"
                 , setNExcludedAtoms_function_value
-                , ( bp::arg("nexcl"), bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("nexcl"), bp::arg("is_lambda1")=(bool)(false) )
                 , "Set the number of excluded atoms" );
         
         }
@@ -475,7 +475,7 @@ void register_GroMolType_class(){
             GroMolType_exposer.def( 
                 "settlesLines"
                 , settlesLines_function_value
-                , ( bp::arg("is_perturbed")=(bool)(false) )
+                , ( bp::arg("is_lambda1")=(bool)(false) )
                 , "Return the settles lines for this molecule. This currently only returns\nsettles lines for water molecules. These lines are used to constrain the\nbondsangles of the water molecule" );
         
         }

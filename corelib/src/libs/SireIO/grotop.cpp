@@ -393,9 +393,500 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
     catch (...)
     {}
 
+    // Perturbable molecule.
     if (is_perturbable)
     {
+        // For perturbable molecules we don't user the user PropertyMap to extract
+        // properties since the naming must be consistent for the properties at
+        // lambda = 0 and lambda = 1, e.g. "charge0" and "charge1".
+
+        //get the name either from the molecule name or the name of the first
+        //residue
+        nme = mol.name();
+
+        if (nme.isEmpty())
+        {
+            nme = mol.residue(ResIdx(0)).name();
+        }
+
+        //get the forcefields for this molecule
+        try
+        {
+            ffield0 = mol.property("forcefield0").asA<MMDetail>();
+        }
+        catch(...)
+        {
+            warns.append( QObject::tr("Cannot find a valid MM forcefield for this molecule at lambda = 0!") );
+        }
+        try
+        {
+            ffield1 = mol.property("forcefield1").asA<MMDetail>();
+        }
+        catch(...)
+        {
+            warns.append( QObject::tr("Cannot find a valid MM forcefield for this molecule at lambda = 1!") );
+        }
+
+        const auto molinfo = mol.info();
+
+        bool uses_parallel = true;
+        if (map["parallel"].hasValue())
+        {
+            uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+        }
+
+        //get information about all atoms in this molecule
+        auto extract_atoms = [&](bool is_lambda1)
+        {
+            if (is_lambda1)
+                atms0 = QVector<GroAtom>(molinfo.nAtoms());
+            else
+                atms1 = QVector<GroAtom>(molinfo.nAtoms());
+
+            AtomMasses masses;
+            AtomElements elements;
+            AtomCharges charges;
+            AtomIntProperty groups;
+            AtomStringProperty atomtypes;
+            AtomStringProperty bondtypes;
+
+            bool has_mass(false), has_elem(false), has_chg(false), has_group(false), has_type(false);
+            bool has_bondtype(false);
+
+            try
+            {
+                if (is_lambda1)
+                    masses = mol.property("mass1").asA<AtomMasses>();
+                else
+                    masses = mol.property("mass0").asA<AtomMasses>();
+                has_mass = true;
+            }
+            catch(...)
+            {}
+
+            if (not has_mass)
+            {
+                try
+                {
+                    if (is_lambda1)
+                        elements = mol.property("element1").asA<AtomElements>();
+                    else
+                        elements = mol.property("element0").asA<AtomElements>();
+                    has_elem = true;
+                }
+                catch(...)
+                {}
+            }
+
+            try
+            {
+                if (is_lambda1)
+                    charges = mol.property("charge1").asA<AtomCharges>();
+                else
+                    charges = mol.property("charge0").asA<AtomCharges>();
+                has_chg = true;
+            }
+            catch(...)
+            {}
+
+            try
+            {
+                if (is_lambda1)
+                    groups = mol.property("charge_group1").asA<AtomIntProperty>();
+                else
+                    groups = mol.property("charge_group0").asA<AtomIntProperty>();
+                has_group = true;
+            }
+            catch(...)
+            {}
+
+            try
+            {
+                if (is_lambda1)
+                    atomtypes = mol.property("atomtype1").asA<AtomStringProperty>();
+                else
+                    atomtypes = mol.property("atomtype0").asA<AtomStringProperty>();
+                has_type = true;
+            }
+            catch(...)
+            {}
+
+            try
+            {
+                if (is_lambda1)
+                    bondtypes = mol.property("bondtype1").asA<AtomStringProperty>();
+                else
+                    bondtypes = mol.property("bondtype0").asA<AtomStringProperty>();
+                has_bondtype = true;
+            }
+            catch(...)
+            {}
+
+            if (not (has_chg and has_type and (has_elem or has_mass)))
+            {
+                warns.append( QObject::tr("Cannot find valid charge, atomtype and (element or mass) "
+                "properties for the molecule. These are needed! "
+                "has_charge=%1, has_atomtype=%2, has_mass=%3, has_element=%4")
+                    .arg(has_chg).arg(has_type).arg(has_mass).arg(has_elem) );
+                return;
+            }
+
+            //run through the atoms in AtomIdx order
+            auto extract_atom = [&](int iatm, bool is_lambda1)
+            {
+                AtomIdx i(iatm);
+
+                const auto cgatomidx = molinfo.cgAtomIdx(i);
+                const auto residx = molinfo.parentResidue(i);
+
+                //atom numbers have to count up sequentially from 1
+                int atomnum = i+1;
+                QString atomnam = molinfo.name(i);
+
+                //assuming that residues are in the same order as the atoms
+                int resnum = residx + 1;
+                QString resnam = molinfo.name(residx);
+
+                //people like to preserve the residue numbers of ligands and
+                //proteins. This is very challenging for the gromacs topology,
+                //as it would force a different topology for every solvent molecule,
+                //so deciding on the difference between protein/ligand and solvent
+                //is tough. Will preserve the residue number if the number of
+                //residues is greater than 1 and the number of atoms is greater
+                //than 32 (so octanol is a solvent)
+                if (molinfo.nResidues() > 1 or molinfo.nAtoms() > 32)
+                {
+                    resnum = molinfo.number(residx).value();
+                }
+
+                int group = atomnum;
+
+                if (has_group)
+                {
+                    group = groups[cgatomidx];
+                }
+
+                auto charge = charges[cgatomidx];
+
+                SireUnits::Dimension::MolarMass mass;
+
+                if (has_mass)
+                {
+                    mass = masses[cgatomidx];
+                }
+                else
+                {
+                    mass = elements[cgatomidx].mass();
+                }
+
+                if (mass <= 0)
+                {
+                    //not allowed to have a zero or negative mass
+                    mass = 1.0 * g_per_mol;
+                }
+
+                QString atomtype = atomtypes[cgatomidx];
+
+                auto &atom0 = atms0[i];
+                auto &atom1 = atms1[i];
+
+                if (is_lambda1)
+                {
+                    atom1.setName(atomnam);
+                    atom1.setNumber(atomnum);
+                    atom1.setResidueName(resnam);
+                    atom1.setResidueNumber(resnum);
+                    atom1.setChargeGroup(group);
+                    atom1.setCharge(charge);
+                    atom1.setMass(mass);
+                    atom1.setAtomType(atomtype);
+                }
+                else
+                {
+                    atom0.setName(atomnam);
+                    atom0.setNumber(atomnum);
+                    atom0.setResidueName(resnam);
+                    atom0.setResidueNumber(resnum);
+                    atom0.setChargeGroup(group);
+                    atom0.setCharge(charge);
+                    atom0.setMass(mass);
+                    atom0.setAtomType(atomtype);
+                }
+
+                if (has_bondtype)
+                {
+                    if (is_lambda1)
+                        atom1.setBondType(bondtypes[cgatomidx]);
+                    else
+                        atom0.setBondType(bondtypes[cgatomidx]);
+                }
+                else
+                {
+                    if (is_lambda1)
+                        atom1.setBondType(atomtype);
+                    else
+                        atom0.setBondType(atomtype);
+                }
+            };
+
+            if (uses_parallel)
+            {
+                tbb::parallel_for( tbb::blocked_range<int>(0,molinfo.nAtoms()),
+                                [&](const tbb::blocked_range<int> &r)
+                {
+                    for (int i=r.begin(); i<r.end(); ++i)
+                    {
+                        extract_atom(i, is_lambda1);
+                    }
+                });
+            }
+            else
+            {
+                for (int i=0; i<molinfo.nAtoms(); ++i)
+                {
+                    extract_atom(i, is_lambda1);
+                }
+            }
+        };
+
+        //get all of the bonds in this molecule
+        auto extract_bonds = [&](bool is_lambda1)
+        {
+            bool has_conn(false), has_funcs(false);
+
+            TwoAtomFunctions funcs;
+            Connectivity conn;
+
+            const auto R = InternalPotential::symbols().bond().r();
+
+            try
+            {
+                if (is_lambda1)
+                    funcs = mol.property("bond1").asA<TwoAtomFunctions>();
+                else
+                    funcs = mol.property("bond0").asA<TwoAtomFunctions>();
+                has_funcs = true;
+            }
+            catch(...)
+            {}
+
+            try
+            {
+                conn = mol.property("connectivity").asA<Connectivity>();
+                has_conn = true;
+            }
+            catch(...)
+            {}
+
+            //get the bond potentials first
+            if (has_funcs)
+            {
+                for (const auto bond : funcs.potentials())
+                {
+                    AtomIdx atom0 = molinfo.atomIdx(bond.atom0());
+                    AtomIdx atom1 = molinfo.atomIdx(bond.atom1());
+
+                    if (atom0 > atom1)
+                        qSwap(atom0,atom1);
+
+                    if (is_lambda1)
+                        bnds1.insert( BondID(atom0,atom1), GromacsBond(bond.function(), R) );
+                    else
+                        bnds0.insert( BondID(atom0,atom1), GromacsBond(bond.function(), R) );
+                }
+            }
+
+            //now fill in any missing bonded atoms with null bonds
+            if (has_conn)
+            {
+                for (const auto bond : conn.getBonds())
+                {
+                    AtomIdx atom0 = molinfo.atomIdx(bond.atom0());
+                    AtomIdx atom1 = molinfo.atomIdx(bond.atom1());
+
+                    if (atom0 > atom1)
+                        qSwap(atom0,atom1);
+
+                    BondID b(atom0,atom1);
+
+                    if (is_lambda1)
+                    {
+                        if (not bnds1.contains(b))
+                            bnds1.insert(b, GromacsBond(5));  // function 5 is a simple connection
+                    }
+                    else
+                    {
+                        if (not bnds0.contains(b))
+                            bnds0.insert(b, GromacsBond(5));  // function 5 is a simple connection
+                    }
+                }
+            }
+        };
+
+        //get all of the angles in this molecule
+        auto extract_angles = [&](bool is_lambda1)
+        {
+            bool has_funcs(false);
+
+            ThreeAtomFunctions funcs;
+
+            const auto theta = InternalPotential::symbols().angle().theta();
+
+            try
+            {
+                if (is_lambda1)
+                    funcs = mol.property("angle1").asA<ThreeAtomFunctions>();
+                else
+                    funcs = mol.property("angle0").asA<ThreeAtomFunctions>();
+                has_funcs = true;
+            }
+            catch(...)
+            {}
+
+            if (has_funcs)
+            {
+                for (const auto angle : funcs.potentials())
+                {
+                    AtomIdx atom0 = molinfo.atomIdx(angle.atom0());
+                    AtomIdx atom1 = molinfo.atomIdx(angle.atom1());
+                    AtomIdx atom2 = molinfo.atomIdx(angle.atom2());
+
+                    if (atom0 > atom2)
+                        qSwap(atom0,atom2);
+
+                    if (is_lambda1)
+                    {
+                        angs1.insert( AngleID(atom0,atom1,atom2),
+                                    GromacsAngle(angle.function(), theta) );
+                    }
+                    {
+                        angs0.insert( AngleID(atom0,atom1,atom2),
+                                    GromacsAngle(angle.function(), theta) );
+                    }
+                }
+            }
+        };
+
+        //get all of the dihedrals in this molecule
+        auto extract_dihedrals = [&](bool is_lambda1)
+        {
+            bool has_funcs(false);
+
+            FourAtomFunctions funcs;
+
+            const auto phi = InternalPotential::symbols().dihedral().phi();
+
+            try
+            {
+                if (is_lambda1)
+                    funcs = mol.property("dihedral1").asA<FourAtomFunctions>();
+                else
+                    funcs = mol.property("dihedral0").asA<FourAtomFunctions>();
+                has_funcs = true;
+            }
+            catch(...)
+            {}
+
+            if (has_funcs)
+            {
+                for (const auto dihedral : funcs.potentials())
+                {
+                    AtomIdx atom0 = molinfo.atomIdx(dihedral.atom0());
+                    AtomIdx atom1 = molinfo.atomIdx(dihedral.atom1());
+                    AtomIdx atom2 = molinfo.atomIdx(dihedral.atom2());
+                    AtomIdx atom3 = molinfo.atomIdx(dihedral.atom3());
+
+                    if (atom0 > atom3)
+                    {
+                        qSwap(atom0,atom3);
+                        qSwap(atom1,atom2);
+                    }
+
+                    //get all of the dihedral terms (could be a lot)
+                    auto parts = GromacsDihedral::construct(dihedral.function(), phi);
+
+                    DihedralID dihid(atom0,atom1,atom2,atom3);
+
+                    for (const auto part : parts)
+                    {
+                        if (is_lambda1)
+                            dihs1.insertMulti(dihid, part);
+                        else
+                            dihs0.insertMulti(dihid, part);
+                    }
+                }
+            }
+
+            bool has_imps(false);
+
+            FourAtomFunctions imps;
+
+            try
+            {
+                if (is_lambda1)
+                    imps = mol.property("improper1").asA<FourAtomFunctions>();
+                else
+                    imps = mol.property("improper0").asA<FourAtomFunctions>();
+                has_imps = true;
+            }
+            catch(...)
+            {}
+
+            if (has_imps)
+            {
+                for (const auto improper : imps.potentials())
+                {
+                    AtomIdx atom0 = molinfo.atomIdx(improper.atom0());
+                    AtomIdx atom1 = molinfo.atomIdx(improper.atom1());
+                    AtomIdx atom2 = molinfo.atomIdx(improper.atom2());
+                    AtomIdx atom3 = molinfo.atomIdx(improper.atom3());
+
+                    //get all of the dihedral terms (could be a lot)
+                    auto parts = GromacsDihedral::constructImproper(improper.function(), phi);
+
+                    DihedralID impid(atom0,atom1,atom2,atom3);
+
+                    for (const auto part : parts)
+                    {
+                        if (is_lambda1)
+                            dihs1.insertMulti(impid, part);
+                        else
+                            dihs0.insertMulti(impid, part);
+                    }
+                }
+            }
+        };
+
+        const QVector< std::function< void(bool) > > functions = { extract_atoms, extract_bonds,
+                                                            extract_angles, extract_dihedrals };
+
+        if (uses_parallel)
+        {
+            tbb::parallel_for( tbb::blocked_range<int>(0,functions.count(),1),
+                            [&](const tbb::blocked_range<int> &r)
+            {
+                for (int i=r.begin(); i<r.end(); ++i)
+                {
+                    functions[i](false);
+                    functions[i](true);
+                }
+            });
+        }
+        else
+        {
+            for (int i=0; i<functions.count(); ++i)
+            {
+                functions[i](false);
+                functions[i](true);
+            }
+        }
+
+        //sanitise this object
+        this->_pvt_sanitise();
+        this->_pvt_sanitise(true);
     }
+
+    // Regular molecule.
     else
     {
         //get the name either from the molecule name or the name of the first
@@ -909,33 +1400,33 @@ QString GroMolType::name() const
 }
 
 /** Return the guessed forcefield for this molecule type */
-MMDetail GroMolType::forcefield(bool is_perturbed) const
+MMDetail GroMolType::forcefield(bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (is_perturbed)
+    if (is_lambda1)
         return ffield1;
     else
         return ffield0;
 }
 
 /** Set the number of excluded atoms */
-void GroMolType::setNExcludedAtoms(qint64 n, bool is_perturbed)
+void GroMolType::setNExcludedAtoms(qint64 n, bool is_lambda1)
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
     if (n >= 0)
-        if (is_perturbed)
+        if (is_lambda1)
             nexcl1 = n;
         else
             nexcl0 = n;
     else
     {
-        if (is_perturbed)
+        if (is_lambda1)
             nexcl1 = 0;
         else
             nexcl0 = 0;
@@ -943,13 +1434,13 @@ void GroMolType::setNExcludedAtoms(qint64 n, bool is_perturbed)
 }
 
 /** Return the number of excluded atoms */
-qint64 GroMolType::nExcludedAtoms(bool is_perturbed) const
+qint64 GroMolType::nExcludedAtoms(bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (is_perturbed)
+    if (is_lambda1)
         return nexcl1;
     else
         return nexcl0;
@@ -957,15 +1448,15 @@ qint64 GroMolType::nExcludedAtoms(bool is_perturbed) const
 
 /** Add an atom to this moleculetype, with specified atom type, residue number,
     residue name, atom name, charge group, charge and mass */
-void GroMolType::addAtom(const GroAtom &atom, bool is_perturbed)
+void GroMolType::addAtom(const GroAtom &atom, bool is_lambda1)
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
     if (not atom.isNull())
     {
-        if (is_perturbed)
+        if (is_lambda1)
             atms1.append( atom );
         else
             atms0.append( atom );
@@ -973,13 +1464,13 @@ void GroMolType::addAtom(const GroAtom &atom, bool is_perturbed)
 }
 
 /** Return whether or not this molecule needs sanitising */
-bool GroMolType::needsSanitising(bool is_perturbed) const
+bool GroMolType::needsSanitising(bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (is_perturbed)
+    if (is_lambda1)
     {
         if (atms1.isEmpty())
             return false;
@@ -996,21 +1487,21 @@ bool GroMolType::needsSanitising(bool is_perturbed) const
 }
 
 /** Return the number of atoms in this molecule */
-int GroMolType::nAtoms(bool is_perturbed) const
+int GroMolType::nAtoms(bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (needsSanitising(is_perturbed))
+    if (needsSanitising(is_lambda1))
     {
         GroMolType other(*this);
-        other._pvt_sanitise(is_perturbed);
-        return other.nAtoms(is_perturbed);
+        other._pvt_sanitise(is_lambda1);
+        return other.nAtoms(is_lambda1);
     }
     else
     {
-        if (is_perturbed)
+        if (is_lambda1)
             return atms1.count();
         else
             return atms0.count();
@@ -1018,21 +1509,21 @@ int GroMolType::nAtoms(bool is_perturbed) const
 }
 
 /** Return the number of residues in this molecule */
-int GroMolType::nResidues(bool is_perturbed) const
+int GroMolType::nResidues(bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (needsSanitising(is_perturbed))
+    if (needsSanitising(is_lambda1))
     {
         GroMolType other(*this);
-        other._pvt_sanitise(is_perturbed);
-        return other.nResidues(is_perturbed);
+        other._pvt_sanitise(is_lambda1);
+        return other.nResidues(is_lambda1);
     }
     else
     {
-        if (is_perturbed)
+        if (is_lambda1)
             return first_atoms1.count();
         else
             return first_atoms0.count();
@@ -1040,21 +1531,21 @@ int GroMolType::nResidues(bool is_perturbed) const
 }
 
 /** Return the atom at index 'atomidx' */
-GroAtom GroMolType::atom(const AtomIdx &atomidx, bool is_perturbed) const
+GroAtom GroMolType::atom(const AtomIdx &atomidx, bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (needsSanitising(is_perturbed))
+    if (needsSanitising(is_lambda1))
     {
         GroMolType other(*this);
-        other._pvt_sanitise(is_perturbed);
-        return other.atom(atomidx, is_perturbed);
+        other._pvt_sanitise(is_lambda1);
+        return other.atom(atomidx, is_lambda1);
     }
     else
     {
-        if (is_perturbed)
+        if (is_lambda1)
         {
             int i = atomidx.map(atms1.count());
             return atms1.constData()[i];
@@ -1068,20 +1559,20 @@ GroAtom GroMolType::atom(const AtomIdx &atomidx, bool is_perturbed) const
 }
 
 /** Return the atom with number 'atomnum' */
-GroAtom GroMolType::atom(const AtomNum &atomnum, bool is_perturbed) const
+GroAtom GroMolType::atom(const AtomNum &atomnum, bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (needsSanitising(is_perturbed))
+    if (needsSanitising(is_lambda1))
     {
         GroMolType other(*this);
-        other._pvt_sanitise(is_perturbed);
-        return other.atom(atomnum, is_perturbed);
+        other._pvt_sanitise(is_lambda1);
+        return other.atom(atomnum, is_lambda1);
     }
 
-    if (is_perturbed)
+    if (is_lambda1)
     {
         for (int i=0; i<atms1.count(); ++i)
         {
@@ -1109,20 +1600,20 @@ GroAtom GroMolType::atom(const AtomNum &atomnum, bool is_perturbed) const
 
 /** Return the first atom with name 'atomnam'. If you want all atoms
     with this name then call 'atoms(AtomName atomname)' */
-GroAtom GroMolType::atom(const AtomName &atomnam, bool is_perturbed) const
+GroAtom GroMolType::atom(const AtomName &atomnam, bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (needsSanitising(is_perturbed))
+    if (needsSanitising(is_lambda1))
     {
         GroMolType other(*this);
-        other._pvt_sanitise(is_perturbed);
-        return other.atom(atomnam, is_perturbed);
+        other._pvt_sanitise(is_lambda1);
+        return other.atom(atomnam, is_lambda1);
     }
 
-    if (is_perturbed)
+    if (is_lambda1)
     {
         for (int i=0; i<atms1.count(); ++i)
         {
@@ -1150,22 +1641,22 @@ GroAtom GroMolType::atom(const AtomName &atomnam, bool is_perturbed) const
 
 /** Return all atoms that have the passed name. Returns an empty
     list if there are no atoms with this name */
-QVector<GroAtom> GroMolType::atoms(const AtomName &atomnam, bool is_perturbed) const
+QVector<GroAtom> GroMolType::atoms(const AtomName &atomnam, bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (needsSanitising(is_perturbed))
+    if (needsSanitising(is_lambda1))
     {
         GroMolType other(*this);
-        other._pvt_sanitise(is_perturbed);
-        return other.atoms(atomnam, is_perturbed);
+        other._pvt_sanitise(is_lambda1);
+        return other.atoms(atomnam, is_lambda1);
     }
 
     QVector<GroAtom> ret;
 
-    if (is_perturbed)
+    if (is_lambda1)
     {
         for (int i=0; i<atms1.count(); ++i)
         {
@@ -1190,40 +1681,40 @@ QVector<GroAtom> GroMolType::atoms(const AtomName &atomnam, bool is_perturbed) c
 }
 
 /** Return all of the atoms in this molecule */
-QVector<GroAtom> GroMolType::atoms(bool is_perturbed) const
+QVector<GroAtom> GroMolType::atoms(bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (needsSanitising(is_perturbed))
+    if (needsSanitising(is_lambda1))
     {
         GroMolType other(*this);
-        other._pvt_sanitise(is_perturbed);
-        return other.atoms(is_perturbed);
+        other._pvt_sanitise(is_lambda1);
+        return other.atoms(is_lambda1);
     }
 
-    if (is_perturbed)
+    if (is_lambda1)
         return atms1;
     else
         return atms0;
 }
 
 /** Return all of the atoms in the specified residue */
-QVector<GroAtom> GroMolType::atoms(const ResIdx &residx, bool is_perturbed) const
+QVector<GroAtom> GroMolType::atoms(const ResIdx &residx, bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (needsSanitising(is_perturbed))
+    if (needsSanitising(is_lambda1))
     {
         GroMolType other(*this);
-        other._pvt_sanitise(is_perturbed);
-        return other.atoms(residx, is_perturbed);
+        other._pvt_sanitise(is_lambda1);
+        return other.atoms(residx, is_lambda1);
     }
 
-    if (is_perturbed)
+    if (is_lambda1)
     {
         int ires = residx.map( first_atoms1.count() );
 
@@ -1254,23 +1745,23 @@ QVector<GroAtom> GroMolType::atoms(const ResIdx &residx, bool is_perturbed) cons
 }
 
 /** Return all of the atoms in the specified residue(s) */
-QVector<GroAtom> GroMolType::atoms(const ResNum &resnum, bool is_perturbed) const
+QVector<GroAtom> GroMolType::atoms(const ResNum &resnum, bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (needsSanitising(is_perturbed))
+    if (needsSanitising(is_lambda1))
     {
         GroMolType other(*this);
-        other._pvt_sanitise(is_perturbed);
-        return other.atoms(resnum, is_perturbed);
+        other._pvt_sanitise(is_lambda1);
+        return other.atoms(resnum, is_lambda1);
     }
 
     //find the indicies all all matching residues
     QList<ResIdx> idxs;
 
-    if (is_perturbed)
+    if (is_lambda1)
     {
         for (int idx=0; idx<first_atoms1.count(); ++idx)
         {
@@ -1295,30 +1786,30 @@ QVector<GroAtom> GroMolType::atoms(const ResNum &resnum, bool is_perturbed) cons
 
     for (const auto idx : idxs)
     {
-        ret += this->atoms(idx, is_perturbed);
+        ret += this->atoms(idx, is_lambda1);
     }
 
     return ret;
 }
 
 /** Return all of the atoms in the specified residue(s) */
-QVector<GroAtom> GroMolType::atoms(const ResName &resnam, bool is_perturbed) const
+QVector<GroAtom> GroMolType::atoms(const ResName &resnam, bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (needsSanitising(is_perturbed))
+    if (needsSanitising(is_lambda1))
     {
         GroMolType other(*this);
-        other._pvt_sanitise(is_perturbed);
-        return other.atoms(resnam, is_perturbed);
+        other._pvt_sanitise(is_lambda1);
+        return other.atoms(resnam, is_lambda1);
     }
 
     //find the indicies all all matching residues
     QList<ResIdx> idxs;
 
-    if (is_perturbed)
+    if (is_lambda1)
     {
         for (int idx=0; idx<first_atoms1.count(); ++idx)
         {
@@ -1343,23 +1834,23 @@ QVector<GroAtom> GroMolType::atoms(const ResName &resnam, bool is_perturbed) con
 
     for (const auto idx : idxs)
     {
-        ret += this->atoms(idx, is_perturbed);
+        ret += this->atoms(idx, is_lambda1);
     }
 
     return ret;
 }
 
 /** Internal function to do the non-forcefield parts of sanitising */
-void GroMolType::_pvt_sanitise(bool is_perturbed)
+void GroMolType::_pvt_sanitise(bool is_lambda1)
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
     //sort the atoms so that they are in residue number / atom number order, and
     //we check and remove duplicate atom numbers
 
-    if (is_perturbed)
+    if (is_lambda1)
         first_atoms1.append(0);
     else
         first_atoms0.append(0);
@@ -1372,16 +1863,16 @@ void GroMolType::_pvt_sanitise(bool is_perturbed)
     together with the information in the molecule to guess the forcefield for
     the molecule */
 void GroMolType::sanitise(QString elecstyle, QString vdwstyle, QString combrule,
-                          double elec14, double vdw14, bool is_perturbed)
+                          double elec14, double vdw14, bool is_lambda1)
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (not needsSanitising(is_perturbed))
+    if (not needsSanitising(is_lambda1))
         return;
 
-    this->_pvt_sanitise(is_perturbed);
+    this->_pvt_sanitise(is_lambda1);
 
     //also check that the bonds/angles/dihedrals all refer to actual atoms...
 
@@ -1390,7 +1881,7 @@ void GroMolType::sanitise(QString elecstyle, QString vdwstyle, QString combrule,
     //an "interesting" gromacs-style forcefield
     QString bondstyle = "harmonic";
 
-    if (is_perturbed)
+    if (is_lambda1)
     {
         for (auto it = bnds1.constBegin(); it != bnds1.constEnd(); ++it)
         {
@@ -1481,13 +1972,13 @@ QStringList GroMolType::warnings() const
 }
 
 /** Add the passed bond to the molecule */
-void GroMolType::addBond(const BondID &bond, const GromacsBond &param, bool is_perturbed)
+void GroMolType::addBond(const BondID &bond, const GromacsBond &param, bool is_lambda1)
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (is_perturbed)
+    if (is_lambda1)
         bnds1.insertMulti(bond, param);
     else
         bnds0.insertMulti(bond, param);
@@ -1495,13 +1986,13 @@ void GroMolType::addBond(const BondID &bond, const GromacsBond &param, bool is_p
 
 /** Add the passed angle to the molecule */
 void GroMolType::addAngle(const AngleID &angle, const GromacsAngle &param,
-                          bool is_perturbed)
+                          bool is_lambda1)
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (is_perturbed)
+    if (is_lambda1)
         angs1.insertMulti(angle, param);
     else
         angs0.insertMulti(angle, param);
@@ -1509,13 +2000,13 @@ void GroMolType::addAngle(const AngleID &angle, const GromacsAngle &param,
 
 /** Add the passed dihedral to the molecule */
 void GroMolType::addDihedral(const DihedralID &dihedral, const GromacsDihedral &param,
-                             bool is_perturbed)
+                             bool is_lambda1)
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (is_perturbed)
+    if (is_lambda1)
         dihs1.insertMulti(dihedral, param);
     else
         dihs0.insertMulti(dihedral, param);
@@ -1523,13 +2014,13 @@ void GroMolType::addDihedral(const DihedralID &dihedral, const GromacsDihedral &
 
 /** Add the passed bonds to the molecule */
 void GroMolType::addBonds(const QMultiHash<BondID,GromacsBond> &bonds,
-                          bool is_perturbed)
+                          bool is_lambda1)
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (is_perturbed)
+    if (is_lambda1)
         bnds1 += bonds;
     else
         bnds0 += bonds;
@@ -1537,13 +2028,13 @@ void GroMolType::addBonds(const QMultiHash<BondID,GromacsBond> &bonds,
 
 /** Add the passed angles to the molecule */
 void GroMolType::addAngles(const QMultiHash<AngleID,GromacsAngle> &angles,
-                           bool is_perturbed)
+                           bool is_lambda1)
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (is_perturbed)
+    if (is_lambda1)
         angs1 += angles;
     else
         angs0 += angles;
@@ -1551,52 +2042,52 @@ void GroMolType::addAngles(const QMultiHash<AngleID,GromacsAngle> &angles,
 
 /** Add the passed dihedrals to the molecule */
 void GroMolType::addDihedrals(const QMultiHash<DihedralID,GromacsDihedral> &dihedrals,
-                              bool is_perturbed)
+                              bool is_lambda1)
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (is_perturbed)
+    if (is_lambda1)
         dihs1 += dihedrals;
     else
         dihs0 += dihedrals;
 }
 
 /** Return all of the bonds */
-QMultiHash<BondID,GromacsBond> GroMolType::bonds(bool is_perturbed) const
+QMultiHash<BondID,GromacsBond> GroMolType::bonds(bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (is_perturbed)
+    if (is_lambda1)
         return bnds1;
     else
         return bnds0;
 }
 
 /** Return all of the angles */
-QMultiHash<AngleID,GromacsAngle> GroMolType::angles(bool is_perturbed) const
+QMultiHash<AngleID,GromacsAngle> GroMolType::angles(bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (is_perturbed)
+    if (is_lambda1)
         return angs1;
     else
         return angs0;
 }
 
 /** Return all of the dihedrals */
-QMultiHash<DihedralID,GromacsDihedral> GroMolType::dihedrals(bool is_perturbed) const
+QMultiHash<DihedralID,GromacsDihedral> GroMolType::dihedrals(bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (is_perturbed)
+    if (is_lambda1)
         return dihs1;
     else
         return dihs0;
@@ -1604,15 +2095,15 @@ QMultiHash<DihedralID,GromacsDihedral> GroMolType::dihedrals(bool is_perturbed) 
 
 /** Return whether or not this is a topology for water. This should
     return true for all water models (including TIP4P and TIP5P) */
-bool GroMolType::isWater(bool is_perturbed) const
+bool GroMolType::isWater(bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (nResidues(is_perturbed) == 1)
+    if (nResidues(is_lambda1) == 1)
     {
-        if (nAtoms(is_perturbed) >= 3 and nAtoms(is_perturbed) <= 5) // catch SPC/TIP3P to TIP5P
+        if (nAtoms(is_lambda1) >= 3 and nAtoms(is_lambda1) <= 5) // catch SPC/TIP3P to TIP5P
         {
             //the total mass of the molecule should be 18 (rounded)
             //and the number of oxygens should be 1 and hydrogens should be 2
@@ -1620,7 +2111,7 @@ bool GroMolType::isWater(bool is_perturbed) const
             int nhyd = 0;
             int total_mass = 0;
 
-            if (is_perturbed)
+            if (is_lambda1)
             {
                 for (const auto &atm : atms1)
                 {
@@ -1695,13 +2186,13 @@ bool GroMolType::isWater(bool is_perturbed) const
 /** Return the settles lines for this molecule. This currently only returns
     settles lines for water molecules. These lines are used to constrain the
     bonds/angles of the water molecule */
-QStringList GroMolType::settlesLines(bool is_perturbed) const
+QStringList GroMolType::settlesLines(bool is_lambda1) const
 {
     // The molecule is not perturbable!
-    if (is_perturbed and not this->is_perturbable)
+    if (is_lambda1 and not this->is_perturbable)
         throw SireError::incompatible_error(QObject::tr("The molecule isn't perturbable!"));
 
-    if (not this->isWater(is_perturbed))
+    if (not this->isWater(is_lambda1))
         return QStringList();
 
     QStringList lines;
@@ -1715,7 +2206,7 @@ QStringList GroMolType::settlesLines(bool is_perturbed) const
     double oh_length = 0.09572000;
 
     //there should only be two bonds - OH and HH. The longer one is HH
-    if (is_perturbed)
+    if (is_lambda1)
     {
         if (bnds1.count() == 2)
         {

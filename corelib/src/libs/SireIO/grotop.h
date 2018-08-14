@@ -125,7 +125,7 @@ public:
 
     void setAtomType(const QString &atomtype);
     void setBondType(const QString &bondtype);
-    
+
     void setCharge(SireUnits::Dimension::Charge charge);
     void setMass(SireUnits::Dimension::MolarMass mass);
 
@@ -138,7 +138,7 @@ private:
 
     /** Atom type */
     QString atmtyp;
-    
+
     /** Bond type - normally the same as the atom type */
     QString bndtyp;
 
@@ -194,54 +194,54 @@ public:
     QString name() const;
     void setName(const QString &name);
 
-    qint64 nExcludedAtoms(bool is_perturbed=false) const;
-    void setNExcludedAtoms(qint64 nexcl, bool is_perturbed=false);
+    qint64 nExcludedAtoms(bool is_lambda1=false) const;
+    void setNExcludedAtoms(qint64 nexcl, bool is_lambda1=false);
 
-    SireMM::MMDetail forcefield(bool is_perturbed=false) const;
+    SireMM::MMDetail forcefield(bool is_lambda1=false) const;
 
-    void addAtom(const GroAtom &atom, bool is_perturbed=false);
+    void addAtom(const GroAtom &atom, bool is_lambda1=false);
 
-    void addBond(const SireMol::BondID &bond, const GromacsBond &parm, bool is_perturbed=false);
-    void addAngle(const SireMol::AngleID &angle, const GromacsAngle &parm, bool is_perturbed=false);
-    void addDihedral(const SireMol::DihedralID &dihedral, const GromacsDihedral &parm, bool is_perturbed=false);
+    void addBond(const SireMol::BondID &bond, const GromacsBond &parm, bool is_lambda1=false);
+    void addAngle(const SireMol::AngleID &angle, const GromacsAngle &parm, bool is_lambda1=false);
+    void addDihedral(const SireMol::DihedralID &dihedral, const GromacsDihedral &parm, bool is_lambda1=false);
 
-    void addBonds(const QMultiHash<SireMol::BondID,GromacsBond> &bonds, bool is_perturbed=false);
-    void addAngles(const QMultiHash<SireMol::AngleID,GromacsAngle> &angles, bool is_perturbed=false);
-    void addDihedrals(const QMultiHash<SireMol::DihedralID,GromacsDihedral> &dihedrals, bool is_perturbed=false);
+    void addBonds(const QMultiHash<SireMol::BondID,GromacsBond> &bonds, bool is_lambda1=false);
+    void addAngles(const QMultiHash<SireMol::AngleID,GromacsAngle> &angles, bool is_lambda1=false);
+    void addDihedrals(const QMultiHash<SireMol::DihedralID,GromacsDihedral> &dihedrals, bool is_lambda1=false);
 
     void sanitise(QString elecstyle, QString vdwstyle,
-                  QString combrule, double elec14, double vdw14, bool is_perturbed=false);
+                  QString combrule, double elec14, double vdw14, bool is_lambda1=false);
 
     void addWarning(const QString &warning);
 
-    int nAtoms(bool is_perturbed=false) const;
-    int nResidues(bool is_perturbed=false) const;
+    int nAtoms(bool is_lambda1=false) const;
+    int nResidues(bool is_lambda1=false) const;
 
-    GroAtom atom(const SireMol::AtomIdx &atomidx, bool is_perturbed=false) const;
-    GroAtom atom(const SireMol::AtomNum &atomnum, bool is_perturbed=false) const;
-    GroAtom atom(const SireMol::AtomName &atomnam, bool is_perturbed=false) const;
+    GroAtom atom(const SireMol::AtomIdx &atomidx, bool is_lambda1=false) const;
+    GroAtom atom(const SireMol::AtomNum &atomnum, bool is_lambda1=false) const;
+    GroAtom atom(const SireMol::AtomName &atomnam, bool is_lambda1=false) const;
 
-    QVector<GroAtom> atoms(bool is_perturbed=false) const;
+    QVector<GroAtom> atoms(bool is_lambda1=false) const;
 
-    QVector<GroAtom> atoms(const SireMol::AtomName &atomnam, bool is_perturbed=false) const;
+    QVector<GroAtom> atoms(const SireMol::AtomName &atomnam, bool is_lambda1=false) const;
 
-    QVector<GroAtom> atoms(const SireMol::ResIdx &residx, bool is_perturbed=false) const;
-    QVector<GroAtom> atoms(const SireMol::ResNum &resnum, bool is_perturbed=false) const;
-    QVector<GroAtom> atoms(const SireMol::ResName &resnam, bool is_perturbed=false) const;
+    QVector<GroAtom> atoms(const SireMol::ResIdx &residx, bool is_lambda1=false) const;
+    QVector<GroAtom> atoms(const SireMol::ResNum &resnum, bool is_lambda1=false) const;
+    QVector<GroAtom> atoms(const SireMol::ResName &resnam, bool is_lambda1=false) const;
 
-    QMultiHash<SireMol::BondID,GromacsBond> bonds(bool is_perturbed=false) const;
-    QMultiHash<SireMol::AngleID,GromacsAngle> angles(bool is_perturbed=false) const;
-    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihedrals(bool is_perturbed=false) const;
+    QMultiHash<SireMol::BondID,GromacsBond> bonds(bool is_lambda1=false) const;
+    QMultiHash<SireMol::AngleID,GromacsAngle> angles(bool is_lambda1=false) const;
+    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihedrals(bool is_lambda1=false) const;
 
-    bool isWater(bool is_perturbed=false) const;
-    QStringList settlesLines(bool is_perturbed=false) const;
+    bool isWater(bool is_lambda1=false) const;
+    QStringList settlesLines(bool is_lambda1=false) const;
 
     QStringList warnings() const;
 
-    bool needsSanitising(bool is_perturbed=false) const;
+    bool needsSanitising(bool is_lambda1=false) const;
 
 private:
-    void _pvt_sanitise(bool is_perturbed=false);
+    void _pvt_sanitise(bool is_lambda1=false);
 
     /** The name of this moleculetype */
     QString nme;
@@ -460,14 +460,14 @@ private:
                                   const QHash<QString,int> &ntags);
 
     const QVector<QString>& expandedLines() const;
-    
+
     SireMol::Molecule createMolecule(const GroMolType &moltype, QStringList &errors,
                                      const PropertyMap &map) const;
     SireMol::Molecule createMolecule(QString moltype, QStringList &errors,
                                      const PropertyMap &map) const;
-    
+
     typedef std::tuple<SireBase::Properties,QStringList> PropsAndErrors;
-    
+
     PropsAndErrors getAtomProperties(const SireMol::MoleculeInfo &molinfo,
                                      const GroMolType &moltype) const;
     PropsAndErrors getBondProperties(const SireMol::MoleculeInfo &molinfo,
@@ -476,7 +476,7 @@ private:
                                       const GroMolType &moltype) const;
     PropsAndErrors getDihedralProperties(const SireMol::MoleculeInfo &molinfo,
                                          const GroMolType &moltype) const;
-        
+
     /** This is the full search path of all directories that should
         be searched for Gromacs include files */
     QStringList include_path;
