@@ -2916,20 +2916,50 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
 
     QStringList atomlines, bondlines, anglines, dihlines, scllines;
 
+    // Store whether the molecule is perturbable.
+    const auto is_perturbable = moltype.isPerturbable();
+
     //write all of the atoms
     auto write_atoms = [&]()
     {
-        for (const auto &atom : moltype.atoms())
+        // Get the atoms from the molecule.
+        const auto &atoms0 = moltype.atoms();
+        const auto &atoms1 = moltype.atoms(true);
+
+        // Loop over all of the atoms.
+        for (int i=0; i<atoms0.count(); ++i)
         {
-            atomlines.append( QString("%1   %2 %3    %4  %5   %6 %7   %8")
-                    .arg(atom.number().value(), 6)
-                    .arg(atom.atomType(), 4)
-                    .arg(atom.residueNumber().value(), 6)
-                    .arg(atom.residueName().value(), 4)
-                    .arg(atom.name().value(), 4)
-                    .arg(atom.chargeGroup(), 4)
-                    .arg(atom.charge().to(mod_electron), 10, 'f', 6)
-                    .arg(atom.mass().to(g_per_mol), 10, 'f', 6) );
+            const auto &atom0 = atoms0[i];
+
+            if (is_perturbable)
+            {
+                const auto &atom1 = atoms1[i];
+
+                atomlines.append( QString("%1   %2 %3    %4  %5   %6 %7   %8")
+                         .arg(atom0.number().value(), 6)
+                         .arg(atom0.atomType(), 4)
+                         .arg(atom0.residueNumber().value(), 6)
+                         .arg(atom0.residueName().value(), 4)
+                         .arg(atom0.name().value(), 4)
+                         .arg(atom0.chargeGroup(), 4)
+                         .arg(atom0.charge().to(mod_electron), 10, 'f', 6)
+                         .arg(atom0.mass().to(g_per_mol), 10, 'f', 6) 
+                         .arg(atom1.atomType(), 4)
+                         .arg(atom1.charge().to(mod_electron), 10, 'f', 6)
+                         .arg(atom1.mass().to(g_per_mol), 10, 'f', 6) );
+            }
+            else
+            {
+                atomlines.append( QString("%1   %2 %3    %4  %5   %6 %7   %8")
+                         .arg(atom0.number().value(), 6)
+                         .arg(atom0.atomType(), 4)
+                         .arg(atom0.residueNumber().value(), 6)
+                         .arg(atom0.residueName().value(), 4)
+                         .arg(atom0.name().value(), 4)
+                         .arg(atom0.chargeGroup(), 4)
+                         .arg(atom0.charge().to(mod_electron), 10, 'f', 6)
+                         .arg(atom0.mass().to(g_per_mol), 10, 'f', 6) );
+            }
         }
 
         atomlines.append( "" );
