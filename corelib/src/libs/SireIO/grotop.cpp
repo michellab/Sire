@@ -763,6 +763,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                         angs1.insert( AngleID(atom0,atom1,atom2),
                                     GromacsAngle(angle.function(), theta) );
                     }
+                    else
                     {
                         angs0.insert( AngleID(atom0,atom1,atom2),
                                     GromacsAngle(angle.function(), theta) );
@@ -2926,17 +2927,16 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     //write all of the atoms
     auto write_atoms = [&]()
     {
-        // Get the atoms from the molecule.
-        const auto &atoms0 = moltype.atoms();
-        const auto &atoms1 = moltype.atoms(true);
-
-        // Loop over all of the atoms.
-        for (int i=0; i<atoms0.count(); ++i)
+        if (is_perturbable)
         {
-            const auto &atom0 = atoms0[i];
+            // Get the atoms from the molecule.
+            const auto &atoms0 = moltype.atoms();
+            const auto &atoms1 = moltype.atoms(true);
 
-            if (is_perturbable)
+            // Loop over all of the atoms.
+            for (int i=0; i<atoms0.count(); ++i)
             {
+                const auto &atom0 = atoms0[i];
                 const auto &atom1 = atoms1[i];
 
                 atomlines.append( QString("%1   %2 %3    %4  %5   %6 %7   %8   %9 %10   %11")
@@ -2952,17 +2952,26 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                          .arg(atom1.charge().to(mod_electron), 10, 'f', 6)
                          .arg(atom1.mass().to(g_per_mol), 10, 'f', 6) );
             }
-            else
+        }
+        else
+        {
+            // Get the atoms from the molecule.
+            const auto &atoms = moltype.atoms();
+
+            // Loop over all of the atoms.
+            for (int i=0; i<atoms.count(); ++i)
             {
+                const auto &atom = atoms[i];
+
                 atomlines.append( QString("%1   %2 %3    %4  %5   %6 %7   %8")
-                         .arg(atom0.number().value(), 6)
-                         .arg(atom0.atomType(), 4)
-                         .arg(atom0.residueNumber().value(), 6)
-                         .arg(atom0.residueName().value(), 4)
-                         .arg(atom0.name().value(), 4)
-                         .arg(atom0.chargeGroup(), 4)
-                         .arg(atom0.charge().to(mod_electron), 10, 'f', 6)
-                         .arg(atom0.mass().to(g_per_mol), 10, 'f', 6) );
+                         .arg(atom.number().value(), 6)
+                         .arg(atom.atomType(), 4)
+                         .arg(atom.residueNumber().value(), 6)
+                         .arg(atom.residueName().value(), 4)
+                         .arg(atom.name().value(), 4)
+                         .arg(atom.chargeGroup(), 4)
+                         .arg(atom.charge().to(mod_electron), 10, 'f', 6)
+                         .arg(atom.mass().to(g_per_mol), 10, 'f', 6) );
             }
         }
 
@@ -2972,27 +2981,27 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     //write all of the bonds
     auto write_bonds = [&]()
     {
-        // Get the bonds from the molecule.
-        const auto &bonds0 = moltype.bonds();
-        const auto &bonds1 = moltype.bonds(true);
-
-        for (auto it = bonds0.constBegin(); it != bonds0.constEnd(); ++it)
+        if (is_perturbable)
         {
-            const auto &bond = it.key();
-            const auto &param = it.value();
+            // Get the bonds from the molecule.
+            const auto &bonds0 = moltype.bonds();
+            const auto &bonds1 = moltype.bonds(true);
 
-            //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
-            int atom0 = bond.atom0().asA<AtomIdx>().value() + 1;
-            int atom1 = bond.atom1().asA<AtomIdx>().value() + 1;
-
-            QStringList params0;
-            for (const auto p : param.parameters())
+            for (auto it = bonds0.constBegin(); it != bonds0.constEnd(); ++it)
             {
-                params0.append( QString::number(p) );
-            }
+                const auto &bond = it.key();
+                const auto &param = it.value();
 
-            if (is_perturbable)
-            {
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = bond.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = bond.atom1().asA<AtomIdx>().value() + 1;
+
+                QStringList params0;
+                for (const auto p : param.parameters())
+                {
+                    params0.append( QString::number(p) );
+                }
+
                 // Find the corresponding bond parameters at lambda = 1.
                 const auto &param1 = bonds1.find(bond).value();
 
@@ -3007,11 +3016,28 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                          .arg(params0.join("  "))
                          .arg(params1.join("  ")) );
             }
-            else
+        }
+        else
+        {
+            // Get the bonds from the molecule.
+            const auto &bonds = moltype.bonds();
+
+            for (auto it = bonds.constBegin(); it != bonds.constEnd(); ++it)
             {
+                const auto &bond = it.key();
+                const auto &param = it.value();
+
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = bond.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = bond.atom1().asA<AtomIdx>().value() + 1;
+
+                QStringList params;
+                for (const auto p : param.parameters())
+                    params.append( QString::number(p) );
+
                 bondlines.append( QString("%1 %2 %3  %4")
                          .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
-                         .arg(params0.join("  ")) );
+                         .arg(params.join("  ")) );
             }
         }
 
@@ -3021,47 +3047,211 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     //write all of the angles
     auto write_angs = [&]()
     {
-        // Get the angles from the molecule.
-        const auto &angles0 = moltype.angles();
-        const auto &angles1 = moltype.angles(true);
-
-        for (auto it = angles0.constBegin(); it != angles0.constEnd(); ++it)
+        if (is_perturbable)
         {
-            const auto &angle = it.key();
-            const auto &param = it.value();
+            // Get the angles from the molecule.
+            const auto &angles0 = moltype.angles();
+            const auto &angles1 = moltype.angles(true);
 
-            //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
-            int atom0 = angle.atom0().asA<AtomIdx>().value() + 1;
-            int atom1 = angle.atom1().asA<AtomIdx>().value() + 1;
-            int atom2 = angle.atom2().asA<AtomIdx>().value() + 1;
+            // Sets to contain the AngleIDs at lambda = 0 and lambda = 1.
+            QSet<AngleID> angles0_idx;
+            QSet<AngleID> angles1_idx;
 
-            QStringList params0;
-            for (const auto p : param.parameters())
+            // Loop over all angles at lambda = 0.
+            for (const auto &idx : angles0.uniqueKeys())
+                angles0_idx.insert(idx);
+
+            // Loop over all angles at lambda = 1.
+            for (const auto &idx : angles1.uniqueKeys())
             {
-                params0.append( QString::number(p) );
+                if (angles0_idx.contains(idx.mirror()))
+                    angles1_idx.insert(idx.mirror());
+                else
+                    angles1_idx.insert(idx);
             }
 
-            if (is_perturbable)
-            {
-                // Find the corresponding angle parameters at lambda = 1.
-                const auto &param1 = angles1.find(angle).value();
+            // Now work out the AngleIDs that are unique at lambda = 0 and lambda = 1,
+            // as well as those that are shared.
+            QSet<AngleID> angles0_uniq_idx;
+            QSet<AngleID> angles1_uniq_idx;
+            QSet<AngleID> angles_shared_idx;
 
-                QStringList params1;
-                for (const auto p : param1.parameters())
+            // lambda = 0
+            for (const auto &idx : angles0_idx)
+            {
+                if (not angles1_idx.contains(idx))
+                    angles0_uniq_idx.insert(idx);
+                else
+                    angles_shared_idx.insert(idx);
+            }
+
+            // lambda = 1
+            for (const auto &idx : angles1_idx)
+            {
+                if (not angles0_idx.contains(idx))
+                    angles1_uniq_idx.insert(idx);
+                else
+                    angles_shared_idx.insert(idx);
+            }
+
+            // First create parameter records for the angles unique to lambda = 0/1.
+
+            // lambda = 0
+            for (const auto &idx : angles0_uniq_idx)
+            {
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = idx.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = idx.atom1().asA<AtomIdx>().value() + 1;
+                int atom2 = idx.atom2().asA<AtomIdx>().value() + 1;
+
+                // Get all of the parameters for this AngleID.
+                const auto &params = angles0.values(idx);
+
+                // Loop over all of the parameters.
+                for (const auto &param : params)
                 {
-                    params1.append( QString::number(p) );
+                    QStringList param_string;
+                    for (const auto p : param.parameters())
+                        param_string.append( QString::number(p) );
+
+                    anglines.append( QString("%1 %2 %3 %4   %5  0  0")
+                            .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),7)
+                            .arg(param_string.join("  ")) );
+                }
+            }
+
+            // lambda = 1
+            for (const auto &idx : angles1_uniq_idx)
+            {
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = idx.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = idx.atom1().asA<AtomIdx>().value() + 1;
+                int atom2 = idx.atom2().asA<AtomIdx>().value() + 1;
+
+                // Get all of the parameters for this AngleID.
+                const auto &params = angles1.values(idx);
+
+                // Loop over all of the parameters.
+                for (const auto &param : params)
+                {
+                    QStringList param_string;
+                    for (const auto p : param.parameters())
+                        param_string.append( QString::number(p) );
+
+                    anglines.append( QString("%1 %2 %3 %4   0  0  %5")
+                            .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),7)
+                            .arg(param_string.join("  ")) );
+                }
+            }
+
+            // Next add the shared angle parameters.
+
+            for (auto idx : angles_shared_idx)
+            {
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = idx.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = idx.atom1().asA<AtomIdx>().value() + 1;
+                int atom2 = idx.atom2().asA<AtomIdx>().value() + 1;
+
+                // Get a list of the parameters at lambda = 0.
+                const auto &params0 = angles0.values(idx);
+
+                // Invert the index.
+                if (not angles1.contains(idx))
+                    idx = idx.mirror();
+
+                // Get a list of the parameters at lambda = 1.
+                const auto &params1 = angles1.values(idx);
+
+                // More or same number of records at lambda = 0.
+                if (params0.count() >= params1.count())
+                {
+                    for (int i=0; i<params1.count(); ++i)
+                    {
+                        QStringList param_string0;
+                        for (const auto p : params0[i].parameters())
+                            param_string0.append( QString::number(p) );
+
+                        QStringList param_string1;
+                        for (const auto p : params1[i].parameters())
+                            param_string1.append( QString::number(p) );
+
+                        anglines.append( QString("%1 %2 %3 %4   %5  %6")
+                                .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(params0[i].functionType(),7)
+                                .arg(param_string0.join("  "))
+                                .arg(param_string1.join("  ")) );
+                    }
+
+                    // Now add parameters for which there is no matching record
+                    // at lambda = 1.
+                    for (int i=params1.count(); i<params0.count(); ++i)
+                    {
+                        QStringList param_string;
+                        for (const auto p : params0[i].parameters())
+                            param_string.append( QString::number(p) );
+
+                        anglines.append( QString("%1 %2 %3 %4   %5  0  0")
+                                .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(params0[i].functionType(),7)
+                                .arg(param_string.join("  ")) );
+                    }
                 }
 
-                anglines.append( QString("%1 %2 %3 %4  %5  %6")
-                        .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),6)
-                        .arg(params0.join("  "))
-                        .arg(params1.join("  ")) );
+                // More records at lambda = 1.
+                else
+                {
+                    for (int i=0; i<params0.count(); ++i)
+                    {
+                        QStringList param_string0;
+                        for (const auto p : params0[i].parameters())
+                            param_string0.append( QString::number(p) );
+
+                        QStringList param_string1;
+                        for (const auto p : params1[i].parameters())
+                            param_string1.append( QString::number(p) );
+
+                        anglines.append( QString("%1 %2 %3 %4   %5  %6")
+                                .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(params1[i].functionType(),7)
+                                .arg(param_string0.join("  "))
+                                .arg(param_string1.join("  ")) );
+                    }
+
+                    // Now add parameters for which there is no matching record
+                    // at lambda = 0.
+                    for (int i=params0.count(); i<params1.count(); ++i)
+                    {
+                        QStringList param_string;
+                        for (const auto p : params1[i].parameters())
+                            param_string.append( QString::number(p) );
+
+                        anglines.append( QString("%1 %2 %3 %4   0  0  %5")
+                                .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(params1[i].functionType(),7)
+                                .arg(param_string.join("  ")) );
+                    }
+                }
             }
-            else
+        }
+        else
+        {
+            // Get the angles from the molecule.
+            const auto &angles = moltype.angles();
+
+            for (auto it = angles.constBegin(); it != angles.constEnd(); ++it)
             {
-                anglines.append( QString("%1 %2 %3 %4  %5")
-                        .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),6)
-                        .arg(params0.join("  ")) );
+                const auto &angle = it.key();
+                const auto &param = it.value();
+
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = angle.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = angle.atom1().asA<AtomIdx>().value() + 1;
+                int atom2 = angle.atom2().asA<AtomIdx>().value() + 1;
+
+                QStringList params;
+                for (const auto p : param.parameters())
+                    params.append( QString::number(p) );
+
+                anglines.append( QString("%1 %2 %3 %4   %5")
+                        .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),7)
+                        .arg(params.join("  ")) );
             }
         }
 
@@ -3071,51 +3261,223 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     //write all of the dihedrals/impropers (they are merged)
     auto write_dihs = [&]()
     {
-        // Get the dihedrals from the molecule.
-        const auto &dihedrals0 = moltype.dihedrals();
-        const auto &dihedrals1 = moltype.dihedrals(true);
-
-        for (auto it = dihedrals0.constBegin(); it != dihedrals0.constEnd();
-             ++it)
+        if (is_perturbable)
         {
-            const auto &dihedral = it.key();
-            const auto &param = it.value();
+            // Get the dihedrals from the molecule.
+            const auto &dihedrals0 = moltype.dihedrals();
+            const auto &dihedrals1 = moltype.dihedrals(true);
 
-            //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
-            int atom0 = dihedral.atom0().asA<AtomIdx>().value() + 1;
-            int atom1 = dihedral.atom1().asA<AtomIdx>().value() + 1;
-            int atom2 = dihedral.atom2().asA<AtomIdx>().value() + 1;
-            int atom3 = dihedral.atom3().asA<AtomIdx>().value() + 1;
+            // Sets to contain the DihedralID at lambda = 0 and lambda = 1.
+            QSet<DihedralID> dihedrals0_idx;
+            QSet<DihedralID> dihedrals1_idx;
 
-            QStringList params0;
-            for (const auto p : param.parameters())
+            // Loop over all dihedrals at lambda = 0.
+            for (const auto &idx : dihedrals0.uniqueKeys())
+                dihedrals0_idx.insert(idx);
+
+            // Loop over all dihedrals at lambda = 1.
+            for (const auto &idx : dihedrals1.uniqueKeys())
             {
-                params0.append( QString::number(p) );
+                if (dihedrals0_idx.contains(idx.mirror()))
+                    dihedrals1_idx.insert(idx.mirror());
+                else
+                    dihedrals1_idx.insert(idx);
             }
 
-            if (is_perturbable)
-            {
-                // Find the corresponding dihedral parameters at lambda = 1.
-                const auto &param1 = dihedrals1.find(dihedral).value();
+            // Now work out the DihedralIDs that are unique at lambda = 0 and lambda = 1,
+            // as well as those that are shared.
+            QSet<DihedralID> dihedrals0_uniq_idx;
+            QSet<DihedralID> dihedrals1_uniq_idx;
+            QSet<DihedralID> dihedrals_shared_idx;
 
-                QStringList params1;
-                for (const auto p : param1.parameters())
+            // lambda = 0
+            for (const auto &idx : dihedrals0_idx)
+            {
+                if (not dihedrals1_idx.contains(idx))
+                    dihedrals0_uniq_idx.insert(idx);
+                else
+                    dihedrals_shared_idx.insert(idx);
+            }
+
+            // lambda = 1
+            for (const auto &idx : dihedrals1_idx)
+            {
+                if (not dihedrals0_idx.contains(idx))
+                    dihedrals1_uniq_idx.insert(idx);
+                else
+                    dihedrals_shared_idx.insert(idx);
+            }
+
+            // First create parameter records for the dihedrals unique to lambda = 0/1.
+
+            // lambda = 0
+            for (const auto &idx : dihedrals0_uniq_idx)
+            {
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = idx.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = idx.atom1().asA<AtomIdx>().value() + 1;
+                int atom2 = idx.atom2().asA<AtomIdx>().value() + 1;
+                int atom3 = idx.atom3().asA<AtomIdx>().value() + 1;
+
+                // Get all of the parameters for this DihedralID.
+                const auto &params = dihedrals0.values(idx);
+
+                // Loop over all of the parameters.
+                for (const auto &param : params)
                 {
-                    params1.append( QString::number(p) );
+                    QStringList param_string;
+                    for (const auto p : param.parameters())
+                        param_string.append( QString::number(p) );
+
+                    dihlines.append( QString("%1 %2 %3 %4 %5  %6  0  0  0")
+                            .arg(atom0,6).arg(atom1,6)
+                            .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
+                            .arg(param_string.join("  ")) );
+                }
+            }
+
+            // lambda = 1
+            for (const auto &idx : dihedrals1_uniq_idx)
+            {
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = idx.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = idx.atom1().asA<AtomIdx>().value() + 1;
+                int atom2 = idx.atom2().asA<AtomIdx>().value() + 1;
+                int atom3 = idx.atom3().asA<AtomIdx>().value() + 1;
+
+                // Get all of the parameters for this AngleID.
+                const auto &params = dihedrals1.values(idx);
+
+                // Loop over all of the parameters.
+                for (const auto &param : params)
+                {
+                    QStringList param_string;
+                    for (const auto p : param.parameters())
+                        param_string.append( QString::number(p) );
+
+                    dihlines.append( QString("%1 %2 %3 %4 %5  0  0  0  %6")
+                            .arg(atom0,6).arg(atom1,6)
+                            .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
+                            .arg(param_string.join("  ")) );
+                }
+            }
+
+            // Next add the shared angle parameters.
+
+            for (auto idx : dihedrals_shared_idx)
+            {
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = idx.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = idx.atom1().asA<AtomIdx>().value() + 1;
+                int atom2 = idx.atom2().asA<AtomIdx>().value() + 1;
+                int atom3 = idx.atom3().asA<AtomIdx>().value() + 1;
+
+                // Get a list of the parameters at lambda = 0.
+                const auto &params0 = dihedrals0.values(idx);
+
+                // Invert the index.
+                if (not dihedrals1.contains(idx))
+                    idx = idx.mirror();
+
+                // Get a list of the parameters at lambda = 1.
+                const auto &params1 = dihedrals1.values(idx);
+
+                // More or same number of records at lambda = 0.
+                if (params0.count() >= params1.count())
+                {
+                    for (int i=0; i<params1.count(); ++i)
+                    {
+                        QStringList param_string0;
+                        for (const auto p : params0[i].parameters())
+                            param_string0.append( QString::number(p) );
+
+                        QStringList param_string1;
+                        for (const auto p : params1[i].parameters())
+                            param_string1.append( QString::number(p) );
+
+                        dihlines.append( QString("%1 %2 %3 %4 %5  %6  %7")
+                                .arg(atom0,6).arg(atom1,6)
+                                .arg(atom2,6).arg(atom3,6).arg(params0[i].functionType(),6)
+                                .arg(param_string0.join("  "))
+                                .arg(param_string1.join("  ")) );
+                    }
+
+                    // Now add parameters for which there is no matching record
+                    // at lambda = 1.
+                    for (int i=params1.count(); i<params0.count(); ++i)
+                    {
+                        QStringList param_string;
+                        for (const auto p : params0[i].parameters())
+                            param_string.append( QString::number(p) );
+
+                        dihlines.append( QString("%1 %2 %3 %4 %5  %6  0  0  0")
+                                .arg(atom0,6).arg(atom1,6)
+                                .arg(atom2,6).arg(atom3,6).arg(params0[i].functionType(),6)
+                                .arg(param_string.join("  ")) );
+                    }
                 }
 
-                dihlines.append( QString("%1 %2 %3 %4 %5  %6  %7")
-                        .arg(atom0,6).arg(atom1,6)
-                        .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
-                        .arg(params0.join("  "))
-                        .arg(params1.join("  ")) );
+                // More records at lambda = 1.
+                else
+                {
+                    for (int i=0; i<params0.count(); ++i)
+                    {
+                        QStringList param_string0;
+                        for (const auto p : params0[i].parameters())
+                            param_string0.append( QString::number(p) );
+
+                        QStringList param_string1;
+                        for (const auto p : params1[i].parameters())
+                            param_string1.append( QString::number(p) );
+
+                        dihlines.append( QString("%1 %2 %3 %4 %5  %6  %7")
+                                .arg(atom0,6).arg(atom1,6)
+                                .arg(atom2,6).arg(atom3,6).arg(params1[i].functionType(),6)
+                                .arg(param_string0.join("  "))
+                                .arg(param_string1.join("  ")) );
+                    }
+
+                    // Now add parameters for which there is no matching record
+                    // at lambda = 0.
+                    for (int i=params0.count(); i<params1.count(); ++i)
+                    {
+                        QStringList param_string;
+                        for (const auto p : params1[i].parameters())
+                            param_string.append( QString::number(p) );
+
+                        dihlines.append( QString("%1 %2 %3 %4 %5  0  0  0  %6")
+                                .arg(atom0,6).arg(atom1,6)
+                                .arg(atom2,6).arg(atom3,6).arg(params1[i].functionType(),6)
+                                .arg(param_string.join("  ")) );
+                    }
+                }
             }
-            else
+        }
+        else
+        {
+            // Get the dihedrals from the molecule.
+            const auto &dihedrals = moltype.dihedrals();
+
+            for (auto it = dihedrals.constBegin(); it != dihedrals.constEnd();
+                ++it)
             {
+                const auto &dihedral = it.key();
+                const auto &param = it.value();
+
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = dihedral.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = dihedral.atom1().asA<AtomIdx>().value() + 1;
+                int atom2 = dihedral.atom2().asA<AtomIdx>().value() + 1;
+                int atom3 = dihedral.atom3().asA<AtomIdx>().value() + 1;
+
+                QStringList params;
+                for (const auto p : param.parameters())
+                    params.append( QString::number(p) );
+
                 dihlines.append( QString("%1 %2 %3 %4 %5  %6")
                         .arg(atom0,6).arg(atom1,6)
                         .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
-                        .arg(params0.join("  ")) );
+                        .arg(params.join("  ")) );
             }
         }
 
@@ -3241,7 +3603,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     if (not bondlines.isEmpty())
     {
         lines.append( "[ bonds ]" );
-        lines.append( ";  ai    aj   funct   parameters" );
+        lines.append( ";   ai     aj  funct  parameters" );
         lines += bondlines;
         lines.append("");
     }
@@ -3257,7 +3619,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     if (not anglines.isEmpty())
     {
         lines.append( "[ angles ]" );
-        lines.append( ";  ai    aj    ak   funct   parameters" );
+        lines.append( ";   ai     aj     ak   funct   parameters" );
         lines += anglines;
         lines.append("");
     }
@@ -3265,7 +3627,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     if (not dihlines.isEmpty())
     {
         lines.append( "[ dihedrals ]" );
-        lines.append( ";  ai    aj    ak    al   funct   parameters" );
+        lines.append( ";   ai     aj     ak     al  funct  parameters" );
         lines += dihlines;
         lines.append("");
     }
