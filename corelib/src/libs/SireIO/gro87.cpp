@@ -340,7 +340,7 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
     QVector< QVector<qint64> > all_resnums(molnums.count());
     QVector< QVector<QString> > all_atmnams(molnums.count());
 
-    const auto coords_property = map["coordinates"];
+    auto coords_property = map["coordinates"];
     const auto vels_property = map["velocity"];
 
     if (usesParallel())
@@ -351,6 +351,34 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 const auto mol = system[molnums[i]].molecule();
+
+                bool is_perturbable = false;
+                try
+                {
+                    is_perturbable = mol.property("is_perturbable").asABoolean();
+                }
+                catch (...)
+                {}
+
+                if (is_perturbable)
+                {
+                    // Allow the user to override the default.
+                    if ((map["coordinates"] == "coordinates0") or
+                        (map["coordinates"] == "coordinates1"))
+                    {
+                            coords_property = map["coordinates"];
+                    }
+                    else
+                    {
+                        // Default to lambda = 0.
+                        if (mol.hasProperty("coordinates0"))
+                            coords_property = "coordinates0";
+                        else if (mol.hasProperty("coordinates1"))
+                            coords_property = "coordinates1";
+                        else
+                            throw SireError::incompatible_error(QObject::tr("Missing coordinates for perturbable molecule!"));
+                    }
+                }
 
                 tbb::parallel_invoke(
                     [&]()
@@ -371,6 +399,34 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
         for (int i=0; i<molnums.count(); ++i)
         {
             const auto mol = system[molnums[i]].molecule();
+
+            bool is_perturbable = false;
+            try
+            {
+                is_perturbable = mol.property("is_perturbable").asABoolean();
+            }
+            catch (...)
+            {}
+
+            if (is_perturbable)
+            {
+                // Allow the user to override the default.
+                if ((map["coordinates"] == "coordinates0") or
+                    (map["coordinates"] == "coordinates1"))
+                {
+                    coords_property = map["coordinates"];
+                }
+                else
+                {
+                    // Default to lambda = 0.
+                    if (mol.hasProperty("coordinates0"))
+                        coords_property = "coordinates0";
+                    else if (mol.hasProperty("coordinates1"))
+                        coords_property = "coordinates1";
+                    else
+                        throw SireError::incompatible_error(QObject::tr("Missing coordinates for perturbable molecule!"));
+                }
+            }
 
             const auto ids = ::getIDs(mol.info());
 
