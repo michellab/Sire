@@ -1690,19 +1690,19 @@ void Gro87::finaliseSystem(System &system, const PropertyMap &map) const
                         .arg(box_v2.at(0).toString())
                         .arg(box_v3.at(0).toString()), CODELOC );
         }
-        
+
         if (x + y + z > 0)
         {
             system.setProperty( space_property.source(), SireVol::PeriodicBox(Vector(x,y,z)) );
         }
     }
-    
+
     //update the System fileformat property to record that it includes
     //data from this file format
     QString fileformat = this->formatName();
-    
+
     PropertyName fileformat_property = map["fileformat"];
-    
+
     try
     {
         QString last_format = system.property(fileformat_property).asA<StringProperty>().value();
@@ -1710,7 +1710,7 @@ void Gro87::finaliseSystem(System &system, const PropertyMap &map) const
     }
     catch(...)
     {}
-    
+
     if (fileformat_property.hasSource())
     {
         system.setProperty(fileformat_property.source(), StringProperty(fileformat));
@@ -1719,11 +1719,11 @@ void Gro87::finaliseSystem(System &system, const PropertyMap &map) const
     {
         system.setProperty("fileformat", StringProperty(fileformat));
     }
-    
+
     if (not current_time.isEmpty())
     {
         PropertyName time_property = map["time"];
-        
+
         if (time_property.hasSource())
         {
             system.setProperty(time_property.source(), TimeProperty(current_time[0]*picosecond));
@@ -1735,7 +1735,7 @@ void Gro87::finaliseSystem(System &system, const PropertyMap &map) const
     }
 }
 
-/** Use the data contained in this parser to create a new System from scratch. 
+/** Use the data contained in this parser to create a new System from scratch.
     This will be a one-molecule system as Gro87 files don't divide atoms up
     into molecules. */
 System Gro87::startSystem(const PropertyMap &map) const
@@ -1759,22 +1759,22 @@ System Gro87::startSystem(const PropertyMap &map) const
         const auto atmnums = this->atomNumbers();
         const auto resnums = this->residueNumbers();
         const auto resnams = this->residueNames();
-        
+
         int ncg = 0;
-        
+
         QSet<ResNum> completed_residues;
 
         for (int i=0; i<atmnams.count(); ++i)
         {
             auto atom = moleditor.add( AtomNum(atmnums[i]) );
             atom = atom.rename( AtomName(atmnams[i]) );
-            
+
             const ResNum resnum(resnums[i]);
-            
+
             if (completed_residues.contains(resnum))
             {
                 auto res = moleditor.residue(resnum);
-                
+
                 if (res.name().value() != resnams[i])
                 {
                     //different residue
@@ -1792,19 +1792,19 @@ System Gro87::startSystem(const PropertyMap &map) const
                 auto res = moleditor.add(resnum);
                 res = res.rename( ResName(resnams[i]) );
                 atom = atom.reparent(res.index());
-                
+
                 ncg += 1;
                 auto cg = moleditor.add( CGName(QString::number(ncg)) );
                 atom = atom.reparent(cg.index());
-                
+
                 completed_residues.insert(resnum);
             }
         }
-        
+
         //we have created the molecule - now add in the coordinates/velocities as needed
         mol = moleditor.commit();
     }
-    
+
     //now add the coordinates and velocities
     {
         auto moleditor = mol.edit();
@@ -1847,23 +1847,23 @@ System Gro87::startSystem(const PropertyMap &map) const
                                                vel.y() * vel_unit,
                                                vel.z() * vel_unit));
             }
-            
+
             moleditor.setProperty( map["velocity"], vels );
         }
-        
+
         mol = moleditor.commit();
     }
-    
+
     //now that we have the molecule, add this to the System
     System system(this->title());
-    
+
     MoleculeGroup all("all");
     all.add(mol);
-    
+
     system.add(all);
-    
+
     this->finaliseSystem(system,map);
-    
+
     return system;
 }
 
@@ -1948,23 +1948,23 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
 
                 auto oldnum = molinfo.number( AtomIdx(j) );
                 AtomNum newnum(atmnums.constData()[idx]);
-                
+
                 if (oldnum != newnum)
                     renumbered_atoms.insert(oldnum, newnum);
             }
-            
+
             for (int j=0; j<molinfo.nResidues(); ++j)
             {
                 auto oldnum = molinfo.number( ResIdx(j) );
-            
+
                 auto atoms_in_res = molinfo.getAtomsIn(ResIdx(j));
-                
+
                 if (not atoms_in_res.isEmpty())
                 {
                     int idx = idx_in_gro[ atoms_in_res.at(0).value() ];
-                    
+
                     ResNum newnum(resnums.constData()[idx]);
-                    
+
                     if (oldnum != newnum)
                         renumbered_residues.insert(oldnum, newnum);
                 }
