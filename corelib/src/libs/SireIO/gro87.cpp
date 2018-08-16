@@ -340,7 +340,6 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
     QVector< QVector<qint64> > all_resnums(molnums.count());
     QVector< QVector<QString> > all_atmnams(molnums.count());
 
-    auto coords_property = map["coordinates"];
     const auto vels_property = map["velocity"];
 
     if (usesParallel())
@@ -351,6 +350,8 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 const auto mol = system[molnums[i]].molecule();
+
+                auto coords_property = map["coordinates"];
 
                 bool is_perturbable = false;
                 try
@@ -399,6 +400,8 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
         for (int i=0; i<molnums.count(); ++i)
         {
             const auto mol = system[molnums[i]].molecule();
+
+            auto coords_property = map["coordinates"];
 
             bool is_perturbable = false;
             try
