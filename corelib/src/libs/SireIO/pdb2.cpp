@@ -644,9 +644,8 @@ QString PDBAtom::toPDBRecord() const
     // Apped the atomic charge, truncating as necessary.
     if (charge != 0)
     {
-        line.append(QString("%1").arg(charge));
-        if (charge < 0) line.append("-");
-        else            line.append("+");
+        if (charge < 0) line.append(QString("%1-").arg(qAbs(charge)));
+        else            line.append(QString("%1+").arg(charge));
     }
 
     return line;
