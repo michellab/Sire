@@ -255,6 +255,7 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
                                    const PropertyMap &map1,
                                    bool is_pre_match,
                                    bool check_reverse_if_timeout,
+                                   int min_heavy_protons,
                                    bool verbose)
 {
     //first, see if the user has specified any match
@@ -342,7 +343,7 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
     {
         for (int i=0; i<nats0; ++i)
         {
-            if (elements0[i].nProtons() < 6 or not selected0.selected(AtomIdx(i)))
+            if (elements0[i].nProtons() < min_heavy_protons or not selected0.selected(AtomIdx(i)))
             {
                 nskip0 += 1;
                 skip0[i] = true;
@@ -351,7 +352,7 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
 
         for (int i=0; i<nats1; ++i)
         {
-            if (elements1[i].nProtons() < 6 or not selected1.selected(AtomIdx(i)))
+            if (elements1[i].nProtons() < min_heavy_protons or not selected1.selected(AtomIdx(i)))
             {
                 nskip1 += 1;
                 skip1[i] = true;
@@ -396,9 +397,12 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
                 put(user_match_0, nvert0, i);
                 user_matched_verts.insert(nvert0);
             }
-            else if (match_light_atoms and elements0[i].nProtons() < 6)
+            else if (match_light_atoms)
             {
-                put(user_match_0, nvert0, -2);
+                if (elements0[i].nProtons() < min_heavy_protons)
+                    put(user_match_0, nvert0, -2);
+                else
+                    put(user_match_0, nvert0, -1);
             }
             else
             {
@@ -440,9 +444,12 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
             {
                 put(user_match_1, nvert1, user_map10.value(AtomIdx(i)).value());
             }
-            else if (match_light_atoms and elements1[i].nProtons() < 6)
+            else if (match_light_atoms)
             {
-                put(user_match_1, nvert1, -2);
+                if (elements1[i].nProtons() < min_heavy_protons)
+                    put(user_match_1, nvert1, -2);
+                else
+                    put(user_match_1, nvert1, -1);
             }
             else
             {
@@ -515,8 +522,8 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
             if (verbose)
                 qDebug() << "Initial match timed out, so trying the reverse match...";
             QHash<AtomIdx,AtomIdx> rmap = pvt_findMCS(other, mol,
-                            AtomMatchInverter(matcher), timeout,
-                            match_light_atoms, map1, map0, is_pre_match, false, verbose);
+                            AtomMatchInverter(matcher), timeout, match_light_atoms,
+                            map1, map0, is_pre_match, false, min_heavy_protons, verbose);
 
             if (rmap.count() > map.count())
             {
@@ -579,6 +586,13 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
 
     If 'match_light_atoms' is true, then include light atoms (e.g. hydrogen)
     in the match. This may make things slower...
+
+    The argument min_heavy_protons specifies the number of protons above which an
+    atom is considered as being heaviy, e.g. 6 means that heavy atoms
+    are the elements including Carbon and above. By setting min_heavy_protons to
+    zero allows the user to match heavy atoms against light atoms.
+
+    The verbose flag can be used to print status messages.
 */
 QHash<AtomIdx,AtomIdx> Evaluator::findMCS(const MoleculeView &other,
                                           const AtomMatcher &matcher,
@@ -586,20 +600,22 @@ QHash<AtomIdx,AtomIdx> Evaluator::findMCS(const MoleculeView &other,
                                           bool match_light_atoms,
                                           const PropertyMap &map0,
                                           const PropertyMap &map1,
+                                          int min_heavy_protons,
                                           bool verbose) const
 {
     if (match_light_atoms)
     {
         //do a pre-match using only the heavy atoms
         QHash<AtomIdx,AtomIdx> pre_match = pvt_findMCS(*this, other, matcher, timeout,
-                                                       false, map0, map1, true, true, verbose);
+                false, map0, map1, true, true, min_heavy_protons, verbose);
 
         //now use the pre-match to speed up the full match
         return pvt_findMCS(*this, other, AtomResultMatcher(pre_match), timeout,
-                           true, map0, map1, false, true, verbose);
+                true, map0, map1, false, true, min_heavy_protons, verbose);
     }
     else
-        return pvt_findMCS(*this, other, matcher, timeout, false, map0, map1, false, true, verbose);
+        return pvt_findMCS(*this, other, matcher, timeout,
+                false, map0, map1, false, true, min_heavy_protons, verbose);
 }
 
 QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, const MoleculeView &other,
@@ -610,6 +626,7 @@ QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, con
                                                     const PropertyMap &map1,
                                                     bool is_pre_match,
                                                     bool check_reverse_if_timeout,
+                                                    int min_heavy_protons,
                                                     bool verbose)
 {
     //first, see if the user has specified any match
@@ -697,7 +714,7 @@ QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, con
     {
         for (int i=0; i<nats0; ++i)
         {
-            if (elements0[i].nProtons() < 6 or not selected0.selected(AtomIdx(i)))
+            if (elements0[i].nProtons() < min_heavy_protons or not selected0.selected(AtomIdx(i)))
             {
                 nskip0 += 1;
                 skip0[i] = true;
@@ -706,7 +723,7 @@ QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, con
 
         for (int i=0; i<nats1; ++i)
         {
-            if (elements1[i].nProtons() < 6 or not selected1.selected(AtomIdx(i)))
+            if (elements1[i].nProtons() < min_heavy_protons or not selected1.selected(AtomIdx(i)))
             {
                 nskip1 += 1;
                 skip1[i] = true;
@@ -751,9 +768,12 @@ QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, con
                 put(user_match_0, nvert0, i);
                 user_matched_verts.insert(nvert0);
             }
-            else if (match_light_atoms and elements0[i].nProtons() < 6)
+            else if (match_light_atoms)
             {
-                put(user_match_0, nvert0, -2);
+                if (elements0[i].nProtons() < min_heavy_protons)
+                    put(user_match_0, nvert0, -2);
+                else
+                    put(user_match_0, nvert0, -1);
             }
             else
             {
@@ -795,9 +815,12 @@ QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, con
             {
                 put(user_match_1, nvert1, user_map10.value(AtomIdx(i)).value());
             }
-            else if (match_light_atoms and elements1[i].nProtons() < 6)
+            else if (match_light_atoms)
             {
-                put(user_match_1, nvert1, -2);
+                if (elements1[i].nProtons() < min_heavy_protons)
+                    put(user_match_1, nvert1, -2);
+                else
+                    put(user_match_1, nvert1, -1);
             }
             else
             {
@@ -877,8 +900,8 @@ QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, con
             if (verbose)
                 qDebug() << "Initial match timed out, so trying the reverse match...";
             QVector<QHash<AtomIdx,AtomIdx> > rmaps = pvt_findMCSmatches(other, mol,
-                            AtomMatchInverter(matcher), timeout,
-                            match_light_atoms, map1, map0, is_pre_match, false, verbose);
+                            AtomMatchInverter(matcher), timeout, match_light_atoms,
+                            map1, map0, is_pre_match, false, min_heavy_protons, verbose);
 
             // Make sure we found a match.
             if (rmaps.count() > 0)
@@ -956,6 +979,13 @@ QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, con
 
     If 'match_light_atoms' is true, then include light atoms (e.g. hydrogen)
     in the match. This may make things slower...
+
+    The argument min_heavy_protons specifies the number of protons above which an
+    atom is considered as being heaviy, e.g. 6 means that heavy atoms
+    are the elements including Carbon and above. By setting min_heavy_protons to
+    zero allows the user to match heavy atoms against light atoms.
+
+    The verbose flag can be used to print status messages.
 */
 QVector<QHash<AtomIdx,AtomIdx> > Evaluator::findMCSmatches(const MoleculeView &other,
                                                            const AtomMatcher &matcher,
@@ -963,18 +993,20 @@ QVector<QHash<AtomIdx,AtomIdx> > Evaluator::findMCSmatches(const MoleculeView &o
                                                            bool match_light_atoms,
                                                            const PropertyMap &map0,
                                                            const PropertyMap &map1,
+                                                           int min_heavy_protons,
                                                            bool verbose) const
 {
     if (match_light_atoms)
     {
         //do a pre-match using only the heavy atoms
         QHash<AtomIdx,AtomIdx> pre_match = pvt_findMCS(*this, other, matcher, timeout,
-                                                       false, map0, map1, true, true, verbose);
+                false, map0, map1, true, true, min_heavy_protons, verbose);
 
         //now use the pre-match to speed up the full match
         return pvt_findMCSmatches(*this, other, AtomResultMatcher(pre_match), timeout,
-                           true, map0, map1, false, true, verbose);
+                true, map0, map1, false, true, min_heavy_protons, verbose);
     }
     else
-        return pvt_findMCSmatches(*this, other, matcher, timeout, false, map0, map1, false, true, verbose);
+        return pvt_findMCSmatches(*this, other, matcher, timeout,
+                false, map0, map1, false, true, min_heavy_protons, verbose);
 }
