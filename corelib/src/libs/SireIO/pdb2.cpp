@@ -276,7 +276,11 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
 
     // If the element is empty, try to guess from the atom name.
     if (element.simplified().isEmpty())
-        element = Element(name).symbol()[0];
+    {
+        // We'll strip all numeric digits and use a maximum of two characters.
+        auto nam = name.remove(QRegExp("[0-9]")).mid(0, 2);
+        element = Element(name).symbol();
+    }
 
     // Extract the charge on the atom.
     QString chargeString = line.mid(78,2);
