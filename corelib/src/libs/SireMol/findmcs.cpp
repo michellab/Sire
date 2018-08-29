@@ -603,7 +603,7 @@ QHash<AtomIdx,AtomIdx> Evaluator::findMCS(const MoleculeView &other,
                                           int min_heavy_protons,
                                           bool verbose) const
 {
-    if (match_light_atoms)
+    if (match_light_atoms and min_heavy_protons > 1)
     {
         //do a pre-match using only the heavy atoms
         QHash<AtomIdx,AtomIdx> pre_match = pvt_findMCS(*this, other, matcher, timeout,
@@ -996,7 +996,7 @@ QVector<QHash<AtomIdx,AtomIdx> > Evaluator::findMCSmatches(const MoleculeView &o
                                                            int min_heavy_protons,
                                                            bool verbose) const
 {
-    if (match_light_atoms)
+    if (match_light_atoms and min_heavy_protons > 1)
     {
         //do a pre-match using only the heavy atoms
         QHash<AtomIdx,AtomIdx> pre_match = pvt_findMCS(*this, other, matcher, timeout,
