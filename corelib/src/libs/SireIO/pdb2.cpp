@@ -323,6 +323,11 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
         return;
     }
 
+    // If the user has mapped "name", this is likely a perturbable
+    // molecule. Replace the AtomName with the user mapped property.
+    if (map["name"] != "name")
+        name = atom.property<QString>(map["name"]);
+
     // Extract the atomic coordinates.
     coord = atom.property<SireMaths::Vector>(map["coordinates"]);
 
