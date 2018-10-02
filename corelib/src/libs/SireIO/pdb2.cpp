@@ -275,7 +275,10 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
     element = line.mid(76,2);
 
     // If the element is empty, try to guess from the atom name.
-    if (element.simplified().isEmpty())
+    // We also test whether the preceding character is a letter or number,
+    // since some PDB files that accompany a Charmm PSF file place the
+    // residue name at the end of the line.
+    if (element.simplified().isEmpty() or line[75].isLetterOrNumber())
     {
         // We'll strip all numeric digits and use a maximum of two characters.
         auto nam = name.remove(QRegExp("[0-9]")).mid(0, 2);
