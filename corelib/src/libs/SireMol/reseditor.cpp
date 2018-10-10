@@ -68,9 +68,9 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
                                        const ResEditor &reseditor)
 {
     writeHeader(ds, r_reseditor, 1);
-    
+
     ds << static_cast<const Editor<ResEditor,Residue>&>(reseditor);
-    
+
     return ds;
 }
 
@@ -79,14 +79,14 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
                                        ResEditor &reseditor)
 {
     VersionID v = readHeader(ds, r_reseditor);
-    
+
     if (v == 1)
     {
         ds >> static_cast<Editor<ResEditor,Residue>&>(reseditor);
     }
     else
         throw version_error( v, "1", r_reseditor, CODELOC );
-        
+
     return ds;
 }
 
@@ -95,12 +95,12 @@ ResEditor::ResEditor() : ConcreteProperty< ResEditor,Editor<ResEditor,Residue> >
 {}
 
 /** Construct an editor that edits a copy of the residue 'residue' */
-ResEditor::ResEditor(const Residue &residue) 
+ResEditor::ResEditor(const Residue &residue)
           : ConcreteProperty< ResEditor,Editor<ResEditor,Residue> >(residue)
 {}
 
 /** Copy constructor */
-ResEditor::ResEditor(const ResEditor &other) 
+ResEditor::ResEditor(const ResEditor &other)
           : ConcreteProperty< ResEditor,Editor<ResEditor,Residue> >(other)
 {}
 
@@ -134,9 +134,9 @@ ResEditor& ResEditor::rename(const ResName &newname)
     if (newname == this->name())
         //nothing to do
         return *this;
-        
-    throw SireError::incomplete_code( CODELOC );
-    
+
+    d->rename( this->index(), newname );
+
     return *this;
 }
 
@@ -146,9 +146,9 @@ ResEditor& ResEditor::renumber(ResNum newnum)
     if (newnum == this->number())
         //nothing to do
         return *this;
-        
-    throw SireError::incomplete_code( CODELOC );
-    
+
+    d->renumber( this->index(), newnum );
+
     return *this;
 }
 
@@ -159,7 +159,7 @@ ResStructureEditor ResEditor::reindex(ResIdx newidx) const
 {
     ResStructureEditor editor(*this);
     editor.reindex(newidx);
-    
+
     return editor;
 }
 
@@ -171,7 +171,7 @@ MolStructureEditor ResEditor::remove() const
     return editor.remove();
 }
 
-/** Move this residue into the chain with ID 'chainid' 
+/** Move this residue into the chain with ID 'chainid'
 
     \throw SireMol::missing_chain
     \throw SireMol::duplicate_chain
@@ -200,7 +200,7 @@ AtomStructureEditor ResEditor::add(AtomNum number) const
     return editor.add(number);
 }
 
-/** Remove all atoms with ID 'atomid' from this residue 
+/** Remove all atoms with ID 'atomid' from this residue
 
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
@@ -225,13 +225,13 @@ ResStructureEditor ResEditor::remove(int i) const
 
 /** Transfer all atoms that match the ID 'atomid' into the residue that
     matches the ID 'resid'
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::missing_residue
     \throw SireMol::duplicate_residue
     \throw SireError::invalid_index
 */
-ResStructureEditor ResEditor::transfer(const AtomID &atomid, 
+ResStructureEditor ResEditor::transfer(const AtomID &atomid,
                                        const ResID &resid) const
 {
     ResStructureEditor editor(*this);
@@ -241,7 +241,7 @@ ResStructureEditor ResEditor::transfer(const AtomID &atomid,
 
 /** Transfer the ith atom from this residue into the residue that
     matches the ID 'resid'
-    
+
     \throw SireMol::missing_residue
     \throw SireMol::duplicate_residue
     \throw SireError::invalid_index
@@ -254,7 +254,7 @@ ResStructureEditor ResEditor::transfer(int i, const ResID &resid) const
 }
 
 /** Transfer all atoms from this residue into the residue with ID 'resid'
-    
+
     \throw SireMol::missing_residue
     \throw SireMol::duplicate_residue
     \throw SireError::invalid_index
@@ -288,10 +288,10 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
                                        const ResStructureEditor &reseditor)
 {
     writeHeader(ds, r_resstructeditor, 1);
-    
+
     ds << reseditor.uid
        << static_cast<const StructureEditor&>(reseditor);
-       
+
     return ds;
 }
 
@@ -300,7 +300,7 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
                                        ResStructureEditor &reseditor)
 {
     VersionID v = readHeader(ds, r_resstructeditor);
-    
+
     if (v == 1)
     {
         ds >> reseditor.uid
@@ -308,7 +308,7 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
     }
     else
         throw version_error( v, "1", r_resstructeditor, CODELOC );
-        
+
     return ds;
 }
 
@@ -319,7 +319,7 @@ ResStructureEditor::ResStructureEditor()
     this->operator=( StructureEditor::addResidue() );
 }
 
-/** Construct an editor to edit the structure of a copy of the 
+/** Construct an editor to edit the structure of a copy of the
     residue 'residue' */
 ResStructureEditor::ResStructureEditor(const Residue &residue)
                    : StructureEditor(residue.data())
@@ -327,9 +327,9 @@ ResStructureEditor::ResStructureEditor(const Residue &residue)
     uid = this->getUID(residue.index());
 }
 
-/** Construct an editor to edit the residue at index 'residx' in the 
+/** Construct an editor to edit the residue at index 'residx' in the
     editor whose data is in 'data'
-    
+
     \throw SireError::invalid_index
 */
 ResStructureEditor::ResStructureEditor(const StructureEditor &data, ResIdx residx)
@@ -352,7 +352,7 @@ ResStructureEditor& ResStructureEditor::operator=(const Residue &residue)
 {
     StructureEditor::operator=(residue.data());
     uid = this->getUID(residue.index());
-    
+
     return *this;
 }
 
@@ -361,7 +361,7 @@ ResStructureEditor& ResStructureEditor::operator=(const ResStructureEditor &othe
 {
     StructureEditor::operator=(other);
     uid = other.uid;
-    
+
     return *this;
 }
 
@@ -424,9 +424,9 @@ AtomStructureEditor ResStructureEditor::atom(int i)
     return AtomStructureEditor(*this, atomIdx(atomInResidue(uid,i)));
 }
 
-/** Return an editor for the atom with ID == 'atomid' in 
+/** Return an editor for the atom with ID == 'atomid' in
     this residue
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -436,8 +436,8 @@ AtomStructureEditor ResStructureEditor::atom(const AtomID &atomid)
     return AtomStructureEditor(*this, atomIdx(atomid));
 }
 
-/** Return an editor for the ith atom in this residue 
-    
+/** Return an editor for the ith atom in this residue
+
     \throw SireError::invalid_index
 */
 AtomStructureEditor ResStructureEditor::select(int i)
@@ -445,9 +445,9 @@ AtomStructureEditor ResStructureEditor::select(int i)
     return AtomStructureEditor(*this, atomIdx(atomInResidue(uid,i)));
 }
 
-/** Return an editor for the atom with ID == 'atomid' in 
+/** Return an editor for the atom with ID == 'atomid' in
     this residue
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
@@ -488,7 +488,7 @@ MolStructureEditor ResStructureEditor::remove()
     return MolStructureEditor(*this);
 }
 
-/** Move this residue into the chain with ID 'chainid' 
+/** Move this residue into the chain with ID 'chainid'
 
     \throw SireMol::missing_chain
     \throw SireMol::duplicate_chain
@@ -509,7 +509,7 @@ AtomStructureEditor ResStructureEditor::add(const AtomName &atomname)
     AtomStructureEditor atom = this->addAtom();
     atom = atom.rename(atomname);
     atom = atom.reparent(this->index());
-    
+
     return atom;
 }
 
@@ -522,11 +522,11 @@ AtomStructureEditor ResStructureEditor::add(AtomNum atomnum)
     AtomStructureEditor atom = this->addAtom();
     atom = atom.renumber(atomnum);
     atom = atom.reparent(this->index());
-    
+
     return atom;
 }
 
-/** Remove all atoms with ID 'atomid' from this residue 
+/** Remove all atoms with ID 'atomid' from this residue
 
     \throw SireMol::missing_atom
     \throw SireError::invalid_index
@@ -549,24 +549,24 @@ ResStructureEditor& ResStructureEditor::remove(int i)
 
 /** Transfer all atoms that match the ID 'atomid' into the residue that
     matches the ID 'resid'
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::missing_residue
     \throw SireMol::duplicate_residue
     \throw SireError::invalid_index
 */
-ResStructureEditor& ResStructureEditor::transfer(const AtomID &atomid, 
+ResStructureEditor& ResStructureEditor::transfer(const AtomID &atomid,
                                                  const ResID &resid)
 {
-    this->reparentAtom( this->getUID(this->index() + atomid), 
+    this->reparentAtom( this->getUID(this->index() + atomid),
                         this->resIdx(resid) );
-                        
+
     return *this;
 }
 
 /** Transfer the ith atom from this residue into the residue that
     matches the ID 'resid'
-    
+
     \throw SireMol::missing_residue
     \throw SireMol::duplicate_residue
     \throw SireError::invalid_index
@@ -578,7 +578,7 @@ ResStructureEditor& ResStructureEditor::transfer(int i, const ResID &resid)
 }
 
 /** Transfer all atoms from this residue into the residue with ID 'resid'
-    
+
     \throw SireMol::missing_residue
     \throw SireMol::duplicate_residue
     \throw SireError::invalid_index
@@ -586,14 +586,14 @@ ResStructureEditor& ResStructureEditor::transfer(int i, const ResID &resid)
 ResStructureEditor& ResStructureEditor::transferAll(const ResID &resid)
 {
     ResIdx residx = this->resIdx(resid);
-    
+
     int nats = this->nAtoms();
-    
+
     for (int i=0; i<nats; ++i)
     {
         this->reparentAtom( atomInResidue(uid,i), residx );
     }
-    
+
     return *this;
 }
 
