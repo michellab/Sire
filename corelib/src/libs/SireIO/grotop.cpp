@@ -319,7 +319,7 @@ void GroAtom::setCharge(SireUnits::Dimension::Charge charge)
 /** Set the mass of this atom */
 void GroAtom::setMass(SireUnits::Dimension::MolarMass mass)
 {
-    if (mass.value() > 0)
+    if (mass.value() >= 0)
         mss = mass;
 }
 
@@ -579,9 +579,9 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                     mass = elements[cgatomidx].mass();
                 }
 
-                if (mass <= 0)
+                if (mass < 0)
                 {
-                    //not allowed to have a zero or negative mass
+                    //not allowed to have a negative mass
                     mass = 1.0 * g_per_mol;
                 }
 
@@ -1044,9 +1044,9 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                     mass = elements[cgatomidx].mass();
                 }
 
-                if (mass <= 0)
+                if (mass < 0)
                 {
-                    //not allowed to have a zero or negative mass
+                    //not allowed to have a negative mass
                     mass = 1.0 * g_per_mol;
                 }
 
