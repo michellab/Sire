@@ -280,8 +280,11 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
     // residue name at the end of the line.
     if (element.simplified().isEmpty() or line[75].isLetterOrNumber())
     {
+        // Copy the name variable.
+        auto nam = name;
+
         // We'll strip all numeric digits and use a maximum of two characters.
-        auto nam = name.remove(QRegExp("[0-9]")).mid(0, 2);
+        nam.remove(QRegExp("[0-9]")).mid(0, 2);
         element = Element::biologicalElement(name).symbol();
     }
 
