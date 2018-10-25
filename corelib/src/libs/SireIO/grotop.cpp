@@ -3362,7 +3362,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 }
             }
 
-            // Next add the shared angle parameters.
+            // Next add the shared dihedral parameters.
 
             for (auto idx : dihedrals_shared_idx)
             {
