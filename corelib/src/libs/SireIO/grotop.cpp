@@ -3329,10 +3329,14 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (const auto p : param.parameters())
                         param_string.append( QString::number(p) );
 
-                    dihlines.append( QString("%1 %2 %3 %4 %5  %6  0  0  0")
+                    // Get the periodicity of the dihedral term. This is the last
+                    // parameter entry.
+                    auto periodicity = param.parameters().last();
+
+                    dihlines.append( QString("%1 %2 %3 %4 %5  %6  0  0  %7")
                             .arg(atom0,6).arg(atom1,6)
                             .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
-                            .arg(param_string.join("  ")) );
+                            .arg(param_string.join("  ")).arg(periodicity) );
                 }
             }
 
@@ -3355,10 +3359,14 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (const auto p : param.parameters())
                         param_string.append( QString::number(p) );
 
-                    dihlines.append( QString("%1 %2 %3 %4 %5  0  0  0  %6")
+                    // Get the periodicity of the dihedral term. This is the last
+                    // parameter entry.
+                    auto periodicity = param.parameters().last();
+
+                    dihlines.append( QString("%1 %2 %3 %4 %5  0  0  %6  %7")
                             .arg(atom0,6).arg(atom1,6)
                             .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
-                            .arg(param_string.join("  ")) );
+                            .arg(periodicity).arg(param_string.join("  ")) );
                 }
             }
 
@@ -3382,73 +3390,93 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 // Get a list of the parameters at lambda = 1.
                 const auto &params1 = dihedrals1.values(idx);
 
-                // More or same number of records at lambda = 0.
-                if (params0.count() >= params1.count())
+                // Create two hashes between the periodicity of each dihedral
+                // term and its corresponding parameters.
+
+                // The maximum periodicity recorded.
+                int max_per = 0;
+
+                // lambda = 0
+                QHash<int, GromacsDihedral> params0_hash;
+                for (const auto &param : params0)
                 {
-                    for (int i=0; i<params1.count(); ++i)
-                    {
-                        QStringList param_string0;
-                        for (const auto p : params0[i].parameters())
-                            param_string0.append( QString::number(p) );
+                    // Extract the periodicity and update the hash.
+                    int periodicity = int(param.parameters().last());
+                    params0_hash.insert(periodicity, param);
 
-                        QStringList param_string1;
-                        for (const auto p : params1[i].parameters())
-                            param_string1.append( QString::number(p) );
-
-                        dihlines.append( QString("%1 %2 %3 %4 %5  %6  %7")
-                                .arg(atom0,6).arg(atom1,6)
-                                .arg(atom2,6).arg(atom3,6).arg(params0[i].functionType(),6)
-                                .arg(param_string0.join("  "))
-                                .arg(param_string1.join("  ")) );
-                    }
-
-                    // Now add parameters for which there is no matching record
-                    // at lambda = 1.
-                    for (int i=params1.count(); i<params0.count(); ++i)
-                    {
-                        QStringList param_string;
-                        for (const auto p : params0[i].parameters())
-                            param_string.append( QString::number(p) );
-
-                        dihlines.append( QString("%1 %2 %3 %4 %5  %6  0  0  0")
-                                .arg(atom0,6).arg(atom1,6)
-                                .arg(atom2,6).arg(atom3,6).arg(params0[i].functionType(),6)
-                                .arg(param_string.join("  ")) );
-                    }
+                    // If necessary, update the maximum periodicity.
+                    if (periodicity > max_per)
+                        max_per = periodicity;
                 }
 
-                // More records at lambda = 1.
-                else
+                // lambda = 1
+                QHash<int, GromacsDihedral> params1_hash;
+                for (const auto &param : params1)
                 {
-                    for (int i=0; i<params0.count(); ++i)
+                    // Extract the periodicity and update the hash.
+                    int periodicity = int(param.parameters().last());
+                    params1_hash.insert(periodicity, param);
+
+                    // If necessary, update the maximum periodicity.
+                    if (periodicity > max_per)
+                        max_per = periodicity;
+                }
+
+                // Loop over the range of dihedral periodicities observed.
+                for (int i=0; i<=max_per; ++i)
+                {
+                    // There is a term at lambda = 0 with this periodicity.
+                    if (params0_hash.contains(i))
                     {
                         QStringList param_string0;
-                        for (const auto p : params0[i].parameters())
+                        QStringList param_string1;
+                        for (const auto p : params0_hash[i].parameters())
                             param_string0.append( QString::number(p) );
 
-                        QStringList param_string1;
-                        for (const auto p : params1[i].parameters())
-                            param_string1.append( QString::number(p) );
+                        // There is a term at lambda = 1 with this periodicity.
+                        if (params1_hash.contains(i))
+                        {
+                            for (const auto p : params1_hash[i].parameters())
+                                param_string1.append( QString::number(p) );
+                        }
+                        // No term, create a zero term with the same periodicity.
+                        else
+                        {
+                            param_string1.append( QString::number(0.0) );
+                            param_string1.append( QString::number(0.0) );
+                            param_string1.append( QString::number(i) );
+                        }
 
+                        // Append the dihedral term.
                         dihlines.append( QString("%1 %2 %3 %4 %5  %6  %7")
                                 .arg(atom0,6).arg(atom1,6)
-                                .arg(atom2,6).arg(atom3,6).arg(params1[i].functionType(),6)
+                                .arg(atom2,6).arg(atom3,6).arg(params0_hash[i].functionType(),6)
                                 .arg(param_string0.join("  "))
                                 .arg(param_string1.join("  ")) );
                     }
-
-                    // Now add parameters for which there is no matching record
-                    // at lambda = 0.
-                    for (int i=params0.count(); i<params1.count(); ++i)
+                    else
                     {
-                        QStringList param_string;
-                        for (const auto p : params1[i].parameters())
-                            param_string.append( QString::number(p) );
+                        // There is a term at lambda = 1 with this periodicity.
+                        if (params1_hash.contains(i))
+                        {
+                            QStringList param_string0;
+                            QStringList param_string1;
 
-                        dihlines.append( QString("%1 %2 %3 %4 %5  0  0  0  %6")
-                                .arg(atom0,6).arg(atom1,6)
-                                .arg(atom2,6).arg(atom3,6).arg(params1[i].functionType(),6)
-                                .arg(param_string.join("  ")) );
+                            // No lambda = 0 term, create a zero term with the same periodicity.
+                            param_string0.append( QString::number(0.0) );
+                            param_string0.append( QString::number(0.0) );
+                            param_string0.append( QString::number(i) );
+
+                            for (const auto p : params1_hash[i].parameters())
+                                param_string1.append( QString::number(p) );
+
+                            // Append the dihedral term.
+                            dihlines.append( QString("%1 %2 %3 %4 %5  %6  %7")
+                                    .arg(atom0,6).arg(atom1,6)
+                                    .arg(atom2,6).arg(atom3,6).arg(params1_hash[i].functionType(),6)
+                                    .arg(param_string0.join("  "))
+                                    .arg(param_string1.join("  ")) );
+                        }
                     }
                 }
             }
