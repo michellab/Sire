@@ -285,7 +285,7 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
 
         // We'll strip all numeric digits and use a maximum of two characters.
         nam.remove(QRegExp("[0-9]")).mid(0, 2);
-        element = Element::biologicalElement(name).symbol();
+        element = Element::biologicalElement(nam).symbol();
     }
 
     // Extract the charge on the atom.
