@@ -2165,8 +2165,12 @@ SelectResult IDWaterEngine::select(const SelectResult &mols, const PropertyMap &
         // Convert to a molecule.
         auto molecule = molview.molecule();
 
+        // Skip if there is no element property.
+        if (not molecule.hasProperty(map["element"]))
+            continue;
+
         // Extract the element property.
-        const auto &elements = molecule.property("element").asA<AtomElements>();
+        const auto &elements = molecule.property(map["element"]).asA<AtomElements>();
 
         // Whether this a water molecule.
         bool is_water = true;
@@ -2217,6 +2221,46 @@ SelectResult IDWaterEngine::select(const SelectResult &mols, const PropertyMap &
 }
 
 SelectEngine::ObjType IDWaterEngine::objectType() const
+{
+    return SelectEngine::COMPLEX;
+}
+
+////////
+//////// Implementation of the IDPerturbableEngine
+////////
+
+IDPerturbableEngine::IDPerturbableEngine()
+{}
+
+SelectEnginePtr IDPerturbableEngine::construct()
+{
+    IDPerturbableEngine *ptr = new IDPerturbableEngine();
+    auto p = makePtr(ptr);
+
+    return p;
+}
+
+IDPerturbableEngine::~IDPerturbableEngine()
+{}
+
+SelectResult IDPerturbableEngine::select(const SelectResult &mols, const PropertyMap &map) const
+{
+    QList<ViewsOfMol> result;
+
+    for (const auto &molview : mols.views())
+    {
+        // Convert to a molecule.
+        auto molecule = molview.molecule();
+
+        // Check whether this molecule is flagged as being perturbable.
+        if (molecule.hasProperty(map["is_perturbable"]))
+            result.append(molecule);
+    }
+
+    return SelectResult(result);
+}
+
+SelectEngine::ObjType IDPerturbableEngine::objectType() const
 {
     return SelectEngine::COMPLEX;
 }

@@ -249,6 +249,16 @@ namespace AST
         return "all";
     }
 
+    QString IDWater::toString() const
+    {
+        return QString("water");
+    }
+
+    QString IDPerturbable::toString() const
+    {
+        return QString("perturbable");
+    }
+
     QString IDNumber::toString() const
     {
         QStringList lines;
@@ -316,11 +326,6 @@ namespace AST
     QString IDJoin::toString() const
     {
         return QString("join (%1)").arg(value.toString());
-    }
-
-    QString IDWater::toString() const
-    {
-        return QString("water");
     }
 
     QString IDNot::toString() const
@@ -403,6 +408,16 @@ namespace AST
         return IDAllEngine::construct();
     }
 
+    SelectEnginePtr IDWater::toEngine() const
+    {
+        return IDWaterEngine::construct();
+    }
+
+    SelectEnginePtr IDPerturbable::toEngine() const
+    {
+        return IDPerturbableEngine::construct();
+    }
+
     SelectEnginePtr IDBinary::toEngine() const
     {
         switch(operation)
@@ -458,11 +473,6 @@ namespace AST
     SelectEnginePtr IDJoin::toEngine() const
     {
         return IDJoinEngine::construct(value.toEngine());
-    }
-
-    SelectEnginePtr IDWater::toEngine() const
-    {
-        return IDWaterEngine::construct();
     }
 
     SelectEnginePtr IDNot::toEngine() const

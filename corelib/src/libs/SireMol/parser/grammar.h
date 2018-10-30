@@ -138,6 +138,12 @@ public:
                        ( "waters", AST::IDWater() )
                        ( "WATERS", AST::IDWater() );
 
+        // all of the different tokens to match "perturbable"
+        pert_token.add( "perturbable", AST::IDPerturbable() )
+                      ( "PERTURBABLE", AST::IDPerturbable() )
+                      ( "pert", AST::IDPerturbable() )
+                      ( "PERT", AST::IDPerturbable() );
+
         //all of the different object names
         name_token.add( "atomnam", AST::ATOM )
                       ( "atomname", AST::ATOM )
@@ -295,8 +301,8 @@ public:
         //an expression is either a subscript, name, number, with, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
-                              all_token | water_token | withRule | withinRule | whereRule |
-                              notRule | joinRule | user_token |
+                              all_token | water_token | pert_token | withRule | withinRule |
+                              whereRule | notRule | joinRule | user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         //grammar that specifies a list of names (comma-separated)
@@ -482,6 +488,7 @@ public:
     qi::symbols<char,SireMol::Element> element_token;
     qi::symbols<char,AST::IDAll> all_token;
     qi::symbols<char,AST::IDWater> water_token;
+    qi::symbols<char,AST::IDPerturbable> pert_token;
     UserTokens user_token;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;

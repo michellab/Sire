@@ -369,6 +369,24 @@ protected:
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
 };
 
+/** Internal class used to select all perturbable molecules.
+
+    @author Lester Hedges
+*/
+class IDPerturbableEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct();
+
+    ~IDPerturbableEngine();
+
+    ObjType objectType() const;
+
+protected:
+    IDPerturbableEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+};
+
 }
 
 SIRE_END_HEADER

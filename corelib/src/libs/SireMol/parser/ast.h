@@ -118,6 +118,7 @@ namespace AST
     struct IDJoin;
     struct IDAll;
     struct IDWater;
+    struct IDPerturbable;
 
     struct IDWhereCompare;
     struct IDWhereWithin;
@@ -142,6 +143,7 @@ namespace AST
                                              boost::recursive_wrapper<IDJoin>,
                                              boost::recursive_wrapper<IDAll>,
                                              boost::recursive_wrapper<IDWater>,
+                                             boost::recursive_wrapper<IDPerturbable>,
                                              boost::recursive_wrapper<ExpressionPart> >;
 
     /** Base holder for strings or regular expressions */
@@ -375,6 +377,22 @@ namespace AST
         SelectEnginePtr toEngine() const;
     };
 
+    /** Struct to hold an ID token that matches water molecules */
+    struct IDWater
+    {
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
+    /** Struct to hold an ID token that matches perturbable molecules */
+    struct IDPerturbable
+    {
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
+
     /** Struct that holds an ID token that represents a user-supplied selection */
     struct IDUser
     {
@@ -527,14 +545,6 @@ namespace AST
     {
         Expression value;
 
-        QString toString() const;
-
-        SelectEnginePtr toEngine() const;
-    };
-
-    /** Struct to hold a water expression */
-    struct IDWater
-    {
         QString toString() const;
 
         SelectEnginePtr toEngine() const;
