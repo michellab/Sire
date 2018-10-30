@@ -75,6 +75,7 @@ set ( SIREMM_HEADERS
       testff.h
       threeatomfunctions.h
       twoatomfunctions.h
+      watermodel.h
     )
 
 set ( SIREMM_DETAIL_HEADERS
@@ -147,6 +148,7 @@ set ( SIREMM_SOURCES
       testff.cpp
       threeatomfunctions.cpp
       twoatomfunctions.cpp    
+      watermodel.cpp
 
       ${SIREMM_HEADERS}
       ${SIREMM_DETAIL_HEADERS}

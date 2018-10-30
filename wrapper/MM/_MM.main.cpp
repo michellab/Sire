@@ -367,6 +367,8 @@
 
 #include "UreyBradleyParameterName.pypp.hpp"
 
+#include "_MM_free_functions.pypp.hpp"
+
 namespace bp = boost::python;
 
 #include "SireMM_containers.h"
@@ -738,8 +740,10 @@ BOOST_PYTHON_MODULE(_MM){
 
     register_UreyBradleyComponent_class();
 
+    register_AtomLJs_class();
+
     register_SireMM_properties();
 
-    register_AtomLJs_class();
+    register_free_functions();
 }
 
