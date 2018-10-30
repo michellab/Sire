@@ -38,6 +38,8 @@
 
 #include "tostring.h"
 
+#include <QRegExp>
+
 using namespace SireMol;
 using namespace SireBase;
 using namespace parser_idengine;
@@ -62,14 +64,14 @@ SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
             {
                 RegExpValue v = boost::get<RegExpValue>(val.value);
                 QString r = QString::fromStdString(v.value);
-                
+
                 QRegularExpression regexp;
-                
+
                 if (v.is_case_sensitive)
                     regexp = QRegularExpression(r);
                 else
                     regexp = QRegularExpression(r, QRegularExpression::CaseInsensitiveOption);
-                
+
                 if (not regexp.isValid())
                 {
                     throw SireMol::parse_error( QObject::tr("Failed to interpret the "
@@ -78,13 +80,13 @@ SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
                         .arg(r)
                         .arg(regexp.errorString()), CODELOC );
                 }
-                
+
                 //optimise (JIT-compile) the regular expression now as it will
                 //be used a lot
                 #if QT_VERSION >= 0x504000
                     regexp.optimize();  // introduced in Qt 5.4
                 #endif
-                
+
                 ptr->regexps.append(regexp);
             }
             else if (val.value.which() == 1)
@@ -96,7 +98,7 @@ SelectEnginePtr IDNameEngine::construct(IDObject o, NameValues vals)
         delete ptr;
         throw;
     }
-    
+
     return makePtr(ptr);
 }
 
@@ -109,7 +111,7 @@ SelectResult searchForMatch(const SelectResult &mols, const T &searchFunction, b
 {
     //now loop through all of the molecules and find the matching atoms
     SelectResult::Container result;
-    
+
     if (uses_parallel)
     {
         const auto molviews = mols.views();
@@ -123,7 +125,7 @@ SelectResult searchForMatch(const SelectResult &mols, const T &searchFunction, b
                 tmpresult[i] = searchFunction(molviews[i]);
             }
         });
-        
+
         for (const auto &r : tmpresult)
         {
             if (not r.isEmpty())
@@ -135,7 +137,7 @@ SelectResult searchForMatch(const SelectResult &mols, const T &searchFunction, b
         for (const auto mol : mols.views())
         {
             auto match = searchFunction(mol);
-            
+
             if (not match.isEmpty())
                 result.append(match);
         }
@@ -161,24 +163,24 @@ ViewsOfMol genericSelect(const ViewsOfMol &mol, const T &selectFunc,
     if (mol.selectedAll())
     {
         const int count = countFunc(molinfo);
-    
+
         if (uses_parallel)
         {
             QMutex mutex;
-        
+
             tbb::parallel_for( tbb::blocked_range<int>(0,count),
                                [&](const tbb::blocked_range<int> &r)
             {
                 QList<IDX> thread_selected;
-                
+
                 for (int i=r.begin(); i<r.end(); ++i)
                 {
                     const IDX idx(i);
-                    
+
                     if (selectFunc(molinfo, idx))
                         thread_selected.append(idx);
                 }
-                
+
                 QMutexLocker lkr(&mutex);
                 selected += thread_selected;
             });
@@ -188,7 +190,7 @@ ViewsOfMol genericSelect(const ViewsOfMol &mol, const T &selectFunc,
             for (int i=0; i<count; ++i)
             {
                 const IDX idx(i);
-            
+
                 if (selectFunc(molinfo, idx))
                     selected.append(idx);
             }
@@ -197,24 +199,24 @@ ViewsOfMol genericSelect(const ViewsOfMol &mol, const T &selectFunc,
     else
     {
         const auto viewed = getSelectedFunc(mol);
-        
+
         if (uses_parallel)
         {
             QMutex mutex;
-        
+
             tbb::parallel_for( tbb::blocked_range<int>(0,viewed.count()),
                                [&](const tbb::blocked_range<int> &r)
             {
                 QList<IDX> thread_selected;
-                
+
                 for (int i=r.begin(); i<r.end(); ++i)
                 {
                     const auto idx = viewed[i];
-                
+
                     if (selectFunc(molinfo, idx))
                         thread_selected.append(idx);
                 }
-                
+
                 QMutexLocker lkr(&mutex);
                 selected += thread_selected;
             });
@@ -228,7 +230,7 @@ ViewsOfMol genericSelect(const ViewsOfMol &mol, const T &selectFunc,
             }
         }
     }
-    
+
     if (selected.isEmpty())
         //nothing matched
         return ViewsOfMol();
@@ -308,19 +310,19 @@ bool IDNameEngine::match(const QString &val) const
             return true;
         }
     }
-    
+
     //now try all of the regexps
     for (const auto regexp : regexps)
     {
         auto match = regexp.match(val);
-        
+
         if (match.hasMatch())
         {
             //we have a regexp match :-)
             return true;
         }
     }
-    
+
     return false;
 }
 
@@ -337,7 +339,7 @@ SelectResult IDNameEngine::selectAtoms(const SelectResult &mols, bool uses_paral
         return ::genericSelect<AtomIdx,Atom>(mol, matchAtom, countAtoms,
                                              getSelectedAtoms, uses_parallel);
     };
-    
+
     return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
@@ -353,7 +355,7 @@ SelectResult IDNameEngine::selectCutGroups(const SelectResult &mols, bool uses_p
         return ::genericSelect<CGIdx,CutGroup>(mol, matchCutGroup, countCutGroups,
                                                getSelectedCutGroups, uses_parallel);
     };
-    
+
     return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
@@ -369,7 +371,7 @@ SelectResult IDNameEngine::selectResidues(const SelectResult &mols, bool uses_pa
         return ::genericSelect<ResIdx,Residue>(mol, matchResidue, countResidues,
                                                getSelectedResidues, uses_parallel);
     };
-    
+
     return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
@@ -385,7 +387,7 @@ SelectResult IDNameEngine::selectChains(const SelectResult &mols, bool uses_para
         return ::genericSelect<ChainIdx,Chain>(mol, matchChain, countChains,
                                                getSelectedChains, uses_parallel);
     };
-    
+
     return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
@@ -401,7 +403,7 @@ SelectResult IDNameEngine::selectSegments(const SelectResult &mols, bool uses_pa
         return ::genericSelect<SegIdx,Segment>(mol, matchSegment, countSegments,
                                                getSelectedSegments, uses_parallel);
     };
-    
+
     return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
@@ -411,7 +413,7 @@ SelectResult IDNameEngine::selectMolecules(const SelectResult &mols, bool uses_p
     auto selectFromMol = [&](const ViewsOfMol &mol)
     {
         const auto molname = mol.data().name().value();
-        
+
         //try all of the fixed names
         for (const auto name : names)
         {
@@ -421,19 +423,19 @@ SelectResult IDNameEngine::selectMolecules(const SelectResult &mols, bool uses_p
                 return ViewsOfMol(mol.molecule());
             }
         }
-        
+
         //now try all of the regexps
         for (const auto regexp : regexps)
         {
             auto match = regexp.match(molname);
-            
+
             if (match.hasMatch())
             {
                 //we have a regexp match :-)
                 return ViewsOfMol(mol.molecule());
             }
         }
-        
+
         //no match
         return ViewsOfMol();
     };
@@ -446,12 +448,12 @@ SelectResult IDNameEngine::select(const SelectResult &mols, const PropertyMap &m
     SelectResult::Container result;
 
     bool uses_parallel = true;
-    
+
     if (map["parallel"].hasValue())
     {
         uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
-    
+
     switch(obj)
     {
     case AST::ATOM:
@@ -496,7 +498,7 @@ SelectEngine::ObjType IDNameEngine::objectType() const
 //////// Implementation of the IDNumberEngine
 ////////
 
-/** Internal function used to see if the passed integer matches any of the 
+/** Internal function used to see if the passed integer matches any of the
     range values */
 bool IDNumberEngine::match(const int idx) const
 {
@@ -505,7 +507,7 @@ bool IDNumberEngine::match(const int idx) const
         if (val.which() == 0)
         {
             auto v = boost::get<RangeValue>(val);
-            
+
             if (v.start <= v.end)
             {
                 for (int i=v.start; i<=v.end; i+=v.step)
@@ -526,7 +528,7 @@ bool IDNumberEngine::match(const int idx) const
         else
         {
             auto v = boost::get<CompareValue>(val);
-            
+
             switch(v.compare)
             {
             case ID_CMP_LT:
@@ -591,7 +593,7 @@ SelectResult IDNumberEngine::selectAtoms(const SelectResult &mols, bool uses_par
         return ::genericSelect<AtomIdx,Atom>(mol, matchAtom, countAtoms,
                                              getSelectedAtoms, uses_parallel);
     };
-    
+
     return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
@@ -609,7 +611,7 @@ SelectResult IDNumberEngine::selectResidues(const SelectResult &mols, bool uses_
         return ::genericSelect<ResIdx,Residue>(mol, matchResidue, countResidues,
                                                getSelectedResidues, uses_parallel);
     };
-    
+
     return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
@@ -620,7 +622,7 @@ SelectResult IDNumberEngine::selectMolecules(const SelectResult &mols, bool uses
     auto selectFromMol = [&](const ViewsOfMol &mol)
     {
         const auto molnum = mol.data().number().value();
-        
+
         if (match(molnum))
             return ViewsOfMol(mol.molecule());
         else
@@ -635,12 +637,12 @@ SelectResult IDNumberEngine::select(const SelectResult &mols, const PropertyMap 
     SelectResult::Container result;
 
     bool uses_parallel = true;
-    
+
     if (map["parallel"].hasValue())
     {
         uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
-    
+
     switch(obj)
     {
     case AST::ATOM:
@@ -689,7 +691,7 @@ static int map(int idx, int n)
         return -1;
 }
 
-/** Internal function used to see if the passed integer matches any of the 
+/** Internal function used to see if the passed integer matches any of the
     range values */
 bool IDIndexEngine::match(int idx, const int count) const
 {
@@ -700,10 +702,10 @@ bool IDIndexEngine::match(int idx, const int count) const
         if (val.which() == 0)
         {
             auto v = boost::get<RangeValue>(val);
-            
+
             int start = map(v.start,count);
             int end = map(v.end,count);
-            
+
             //only loop if the range is valid
             if (start < count and end < count and start >= 0 and end >= 0)
             {
@@ -728,9 +730,9 @@ bool IDIndexEngine::match(int idx, const int count) const
         else
         {
             auto v = boost::get<CompareValue>(val);
-            
+
             int value = map(v.value,count);
-            
+
             if (value < count and value >= 0)
             {
                 switch(v.compare)
@@ -777,7 +779,7 @@ SelectEnginePtr IDIndexEngine::construct( IDObject o, RangeValues v )
     IDIndexEngine *ptr = new IDIndexEngine();
     ptr->obj = o;
     ptr->vals = v;
-    
+
     return makePtr(ptr);
 }
 
@@ -796,7 +798,7 @@ SelectResult IDIndexEngine::selectAtoms(const SelectResult &mols, bool uses_para
         return ::genericSelect<AtomIdx,Atom>(mol, matchAtom, countAtoms,
                                              getSelectedAtoms, uses_parallel);
     };
-    
+
     return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
@@ -812,7 +814,7 @@ SelectResult IDIndexEngine::selectCutGroups(const SelectResult &mols, bool uses_
         return ::genericSelect<CGIdx,CutGroup>(mol, matchCutGroup, countCutGroups,
                                                getSelectedCutGroups, uses_parallel);
     };
-    
+
     return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
@@ -828,7 +830,7 @@ SelectResult IDIndexEngine::selectResidues(const SelectResult &mols, bool uses_p
         return ::genericSelect<ResIdx,Residue>(mol, matchResidue, countResidues,
                                                getSelectedResidues, uses_parallel);
     };
-    
+
     return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
@@ -844,7 +846,7 @@ SelectResult IDIndexEngine::selectChains(const SelectResult &mols, bool uses_par
         return ::genericSelect<ChainIdx,Chain>(mol, matchChain, countChains,
                                                getSelectedChains, uses_parallel);
     };
-    
+
     return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
@@ -860,7 +862,7 @@ SelectResult IDIndexEngine::selectSegments(const SelectResult &mols, bool uses_p
         return ::genericSelect<SegIdx,Segment>(mol, matchSegment, countSegments,
                                                getSelectedSegments, uses_parallel);
     };
-    
+
     return searchForMatch(mols, selectFromMol, uses_parallel);
 }
 
@@ -868,15 +870,15 @@ SelectResult IDIndexEngine::selectMolecules(const SelectResult &mols, bool uses_
 {
     //have to use the index order from 'mols'
     SelectResult::Container result;
-    
+
     const auto m = mols.views();
-    
+
     for (int i=0; i<m.count(); ++i)
     {
         if (match(i,m.count()))
             result.append( ViewsOfMol(m[i].molecule()) );
     }
-    
+
     return result;
 }
 
@@ -885,12 +887,12 @@ SelectResult IDIndexEngine::select(const SelectResult &mols, const PropertyMap &
     SelectResult::Container result;
 
     bool uses_parallel = true;
-    
+
     if (map["parallel"].hasValue())
     {
         uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
-    
+
     switch(obj)
     {
     case AST::ATOM:
@@ -941,9 +943,9 @@ IDAndEngine::IDAndEngine()
 SelectEnginePtr IDAndEngine::construct(SelectEnginePtr p0, SelectEnginePtr p1)
 {
     IDAndEngine *ptr = new IDAndEngine();
-    
+
     auto p = makePtr(ptr);
-    
+
     if (p0)
         p0->setParent(p);
 
@@ -952,7 +954,7 @@ SelectEnginePtr IDAndEngine::construct(SelectEnginePtr p0, SelectEnginePtr p1)
 
     ptr->part0 = p0;
     ptr->part1 = p1;
-    
+
     return p;
 }
 
@@ -971,14 +973,14 @@ SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &ma
     SelectResult::Container result;
 
     bool uses_parallel = true;
-    
+
     if (map["parallel"].hasValue())
     {
         uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
 
     SelectResult result0, result1;
-    
+
     //first get the results of both sub-matches
     if (uses_parallel)
     {
@@ -990,12 +992,12 @@ SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &ma
         result0 = part0->operator()(mols, map);
         result1 = part1->operator()(mols, map);
     }
-    
+
     //match up the results
     for (const auto mol0 : result0.views())
     {
         const auto molnum = mol0.data().number();
-        
+
         //is this molecule in the other match?
         for (const auto mol1 : result1.views())
         {
@@ -1004,13 +1006,13 @@ SelectResult IDAndEngine::select(const SelectResult &mols, const PropertyMap &ma
                 //yes - unite these two views
                 auto selected_atoms = mol0.selection();
                 selected_atoms = selected_atoms.intersect(mol1.selection());
-                
+
                 if (not selected_atoms.isEmpty())
                     result.append( ViewsOfMol(mol0.data(),selected_atoms) );
             }
         }
     }
-    
+
     return result;
 }
 
@@ -1018,10 +1020,10 @@ SelectEnginePtr IDAndEngine::simplify()
 {
     if (part0.get())
         part0 = part0->simplify();
-    
+
     if (part1.get())
         part1 = part1->simplify();
-    
+
     if (part0.get() == 0)
         return part1;
     else if (part1.get() == 0)
@@ -1036,7 +1038,7 @@ SelectEngine::ObjType IDAndEngine::objectType() const
     {
         auto o0 = part0->objectType();
         auto o1 = part1->objectType();
-        
+
         if (o0 == o1)
             return o0;
         else
@@ -1067,15 +1069,15 @@ IDOrEngine::IDOrEngine()
 SelectEnginePtr IDOrEngine::construct(SelectEnginePtr part0, SelectEnginePtr part1)
 {
     IDOrEngine *ptr = new IDOrEngine();
-    
+
     auto p = makePtr(ptr);
-    
+
     if (part0)
         part0->setParent(p);
 
     if (part1)
         part1->setParent(p);
-    
+
     ptr->parts.append(part0);
     ptr->parts.append(part1);
 
@@ -1085,17 +1087,17 @@ SelectEnginePtr IDOrEngine::construct(SelectEnginePtr part0, SelectEnginePtr par
 SelectEnginePtr IDOrEngine::construct(QList<SelectEnginePtr> parts)
 {
     IDOrEngine *ptr = new IDOrEngine();
-    
+
     auto p = makePtr(ptr);
-    
+
     for (auto &part : parts)
     {
         if (part)
             part->setParent(p);
     }
-    
+
     ptr->parts = parts;
-    
+
     return p;
 }
 
@@ -1132,14 +1134,14 @@ SelectResult IDOrEngine::select(const SelectResult &mols, const PropertyMap &map
         return parts[0]->operator()(mols, map);
 
     bool uses_parallel = true;
-    
+
     if (map["parallel"].hasValue())
     {
         uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
 
     QVector<SelectResult> results(parts.count());
-    
+
     //first get the results of the sub-matches
     if (uses_parallel)
     {
@@ -1160,10 +1162,10 @@ SelectResult IDOrEngine::select(const SelectResult &mols, const PropertyMap &map
             results[i] = parts.at(i)->operator()(mols, map);
         }
     }
-    
+
     //see if all parts use the same object type
     bool same_type = true;
-    
+
     for (int i=1; i<parts.count(); ++i)
     {
         if (parts.at(i)->objectType() != parts.at(0)->objectType())
@@ -1172,18 +1174,18 @@ SelectResult IDOrEngine::select(const SelectResult &mols, const PropertyMap &map
             break;
         }
     }
-    
+
     //combine all of the results
     QMap<MolNum,ViewsOfMol> result;
-    
+
     for (int i=0; i<results.count(); ++i)
     {
         for (const auto mol : results[i].views())
         {
             const auto molnum = mol.data().number();
-            
+
             auto it = result.find(molnum);
-            
+
             if (it == result.end())
             {
                 if (same_type)
@@ -1200,7 +1202,7 @@ SelectResult IDOrEngine::select(const SelectResult &mols, const PropertyMap &map
             }
         }
     }
-    
+
     return SelectResult( result.values() );
 }
 
@@ -1210,7 +1212,7 @@ SelectEnginePtr IDOrEngine::simplify()
     {
         part = part->simplify();
     }
-    
+
     return selfptr.lock();
 }
 
@@ -1234,7 +1236,7 @@ SelectEngine::ObjType IDOrEngine::objectType() const
             }
         }
     }
-    
+
     return o;
 }
 
@@ -1249,12 +1251,12 @@ SelectEnginePtr IDNotEngine::construct(SelectEnginePtr part)
 {
     IDNotEngine *ptr = new IDNotEngine();
     auto p = makePtr(ptr);
-    
+
     if (part)
         part->setParent(p);
-    
+
     ptr->part = part;
-    
+
     return p;
 }
 
@@ -1267,7 +1269,7 @@ SelectResult IDNotEngine::select(const SelectResult &mols, const PropertyMap &ma
         return SelectResult();
 
     bool uses_parallel = true;
-    
+
     if (map["parallel"].hasValue())
     {
         uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
@@ -1283,12 +1285,12 @@ SelectResult IDNotEngine::select(const SelectResult &mols, const PropertyMap &ma
             return ViewsOfMol();
         else if (selected.isEmpty())
             return original;
-        
+
         auto inverted = original.selection() - selected.selection();
-        
+
         return ViewsOfMol(original.data(),inverted);
     };
-    
+
     //now go through and find from 'mols' what is not in 'selected'
     QList<ViewsOfMol> result;
 
@@ -1303,14 +1305,14 @@ SelectResult IDNotEngine::select(const SelectResult &mols, const PropertyMap &ma
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 const auto mol = molviews.at(i);
-            
+
                 //find the molecule in the set of selected
                 const auto selectmol = selected.views(mol.data().number());
-                
+
                 resultmols[i] = invert(mol, selectmol);
             }
         });
-        
+
         for (const auto &mol : resultmols)
         {
             if (not mol.isEmpty())
@@ -1321,14 +1323,14 @@ SelectResult IDNotEngine::select(const SelectResult &mols, const PropertyMap &ma
     {
         for (const auto &mol : mols.views())
         {
-        
+
             auto inverted = invert(mol, selected.views(mol.data().number()));
-            
+
             if (not inverted.isEmpty())
                 result.append(inverted);
         }
     }
-    
+
     return SelectResult(result);
 }
 
@@ -1336,7 +1338,7 @@ SelectEnginePtr IDNotEngine::simplify()
 {
     if (part.get())
         part = part->simplify();
-    
+
     return selfptr.lock();
 }
 
@@ -1359,12 +1361,12 @@ SelectEnginePtr IDJoinEngine::construct(SelectEnginePtr part)
 {
     IDJoinEngine *ptr = new IDJoinEngine();
     auto p = makePtr(ptr);
-    
+
     if (part)
         part->setParent(p);
-    
+
     ptr->part = part;
-    
+
     return p;
 }
 
@@ -1381,7 +1383,7 @@ SelectResult IDJoinEngine::select(const SelectResult &mols, const PropertyMap &m
 
     //do we need to do anything?
     bool needs_joining = false;
-    
+
     for (const auto &molview : selected.views())
     {
         if (molview.nViews() > 1)
@@ -1390,12 +1392,12 @@ SelectResult IDJoinEngine::select(const SelectResult &mols, const PropertyMap &m
             break;
         }
     }
-    
+
     if (not needs_joining)
         return selected;
-    
+
     QList<ViewsOfMol> result;
-    
+
     for (const auto &molview : selected.views())
     {
         if (molview.nViews() > 1)
@@ -1403,7 +1405,7 @@ SelectResult IDJoinEngine::select(const SelectResult &mols, const PropertyMap &m
         else
             result.append( molview );
     }
-    
+
     return SelectResult(result);
 }
 
@@ -1411,7 +1413,7 @@ SelectEnginePtr IDJoinEngine::simplify()
 {
     if (part.get())
         part = part->simplify();
-    
+
     return selfptr.lock();
 }
 
@@ -1431,13 +1433,13 @@ SelectEnginePtr IDSubScriptEngine::construct(SelectEnginePtr part, const RangeVa
 {
     IDSubScriptEngine *ptr = new IDSubScriptEngine();
     auto p = makePtr(ptr);
-    
+
     if (part)
         part->setParent(p);
-    
+
     ptr->part = part;
     ptr->val = val;
-    
+
     return p;
 }
 
@@ -1454,16 +1456,16 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
 
     //how many views are there?
     const int nviews = selected.count();
-    
+
     //now get the range of views to return
     const int start = ::map(val.start,nviews);
     const int end = ::map(val.end,nviews);
     const int step = val.step;
-    
+
     auto addView = [](const MoleculeView &view, QList<ViewsOfMol> &result)
     {
         const int molnum = view.data().number();
-        
+
         for (auto mol : result)
         {
             if (mol.data().number() == molnum)
@@ -1472,12 +1474,12 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
                 return;
             }
         }
-        
+
         result.append( ViewsOfMol(view) );
     };
 
     QList<ViewsOfMol> result;
-    
+
     //only loop if the range is valid
     if (start < nviews and end < nviews and start >= 0 and end >= 0)
     {
@@ -1496,7 +1498,7 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
             }
         }
     }
-    
+
     //re-join the views if this is a simple view type
     if (this->objectType() != SelectEngine::COMPLEX)
     {
@@ -1505,7 +1507,7 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
             mol = mol.join();
         }
     }
-    
+
     return SelectResult(result);
 }
 
@@ -1513,7 +1515,7 @@ SelectEnginePtr IDSubScriptEngine::simplify()
 {
     if (part.get())
         part = part->simplify();
-    
+
     return selfptr.lock();
 }
 
@@ -1536,14 +1538,14 @@ SelectEnginePtr IDWithEngine::construct( IDObject obj, IDToken token, SelectEngi
 {
     IDWithEngine *ptr = new IDWithEngine();
     auto p = makePtr(ptr);
-    
+
     if (part)
         part->setParent(p);
-    
+
     ptr->part = part;
     ptr->obj = obj;
     ptr->token = token;
-    
+
     return p;
 }
 
@@ -1569,7 +1571,7 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
     {
         //we just need to expand and then re-join the parts
         selected = this->expand(selected);
-        
+
         for (const auto mol : selected.views())
         {
             result.append( mol.join() );
@@ -1583,7 +1585,7 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
         {
             //get the original molecule
             auto selected = mols.views(mol.data().number()).selection();
-        
+
             //is the whole molecule selected?
             if (selected.selectedAll())
             {
@@ -1594,7 +1596,7 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
             {
                 auto in_selected = selected;
                 in_selected = in_selected.selectNone();
-                
+
                 if (objtype == SelectEngine::CUTGROUP)
                 {
                     for (auto cgidx : mol.selection().selectedCutGroups())
@@ -1627,7 +1629,7 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
                             in_selected = in_selected.select(segidx);
                     }
                 }
-                
+
                 result.append( ViewsOfMol(mol.data(),in_selected) );
             }
         }
@@ -1637,7 +1639,7 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
         throw SireError::program_bug( QObject::tr(
                 "Invalid 'with' token? %1").arg(AST::idtoken_to_string(token)), CODELOC );
     }
-    
+
     return SelectResult(result);
 }
 
@@ -1645,7 +1647,7 @@ SelectEnginePtr IDWithEngine::simplify()
 {
     if (part.get())
         part = part->simplify();
-    
+
     return selfptr.lock();
 }
 
@@ -1686,7 +1688,7 @@ SelectEnginePtr IDElementEngine::construct(const std::vector<SireMol::Element> &
     {
         ptr->elements.insert(value);
     }
-    
+
     return p;
 }
 
@@ -1696,45 +1698,45 @@ IDElementEngine::~IDElementEngine()
 SelectResult IDElementEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
     const auto element_property = map["element"];
-    
+
     bool uses_parallel = true;
-    
+
     if (map["parallel"].hasValue())
     {
         uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
-    
+
     QList<ViewsOfMol> result;
-    
+
     //function that extracts all of the atoms with matching elements
     auto getAtomsWithElement = [&](const ViewsOfMol &mol)
     {
         const auto &moldata = mol.data();
         const auto &molinfo = moldata.info();
-        
+
         if (not moldata.hasProperty(element_property))
             return ViewsOfMol();
-        
+
         const auto &prop = moldata.property(element_property);
-        
+
         if (not prop.isA<AtomElements>())
             return ViewsOfMol();
-        
+
         const auto &elms = prop.asA<AtomElements>();
-        
+
         auto selected = mol.selection();
-        
+
         //deselect any atoms that are not the right element
         for (const auto atomidx : selected.selectedAtoms())
         {
             const auto element = elms[ molinfo.cgAtomIdx(atomidx) ];
-            
+
             if (not elements.contains(element))
             {
                 selected = selected.deselect(atomidx);
             }
         }
-        
+
         if (not selected.selectedNone())
         {
             return ViewsOfMol(moldata,selected);
@@ -1742,24 +1744,24 @@ SelectResult IDElementEngine::select(const SelectResult &mols, const PropertyMap
         else
             return ViewsOfMol();
     };
-    
+
     if (uses_parallel)
     {
         const auto molviews = mols.views();
         QVector<ViewsOfMol> matches(molviews.count());
-        
+
         tbb::parallel_for( tbb::blocked_range<int>(0,molviews.count()),
                            [&](const tbb::blocked_range<int> &r)
         {
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 auto match = getAtomsWithElement(molviews.at(i));
-                
+
                 if (not match.isEmpty())
                     matches[i] = match;
             }
         });
-        
+
         for (const auto &match : matches)
         {
             if (not match.isEmpty())
@@ -1771,12 +1773,12 @@ SelectResult IDElementEngine::select(const SelectResult &mols, const PropertyMap
         for (const auto mol : mols.views())
         {
             auto match = getAtomsWithElement(mol);
-            
+
             if (not match.isEmpty())
                 result.append(match);
         }
     }
-    
+
     return SelectResult(result);
 }
 
@@ -1801,12 +1803,12 @@ SelectEnginePtr IDDistanceEngine::construct(IDObject obj, IDCoordType typ,
 
     if (part)
         part->setParent(p);
-    
+
     ptr->part = part;
     ptr->obj = obj;
     ptr->typ = typ;
     ptr->distance = distance.value();
-    
+
     return p;
 }
 
@@ -1824,7 +1826,7 @@ SelectEnginePtr IDDistanceEngine::simplify()
 {
     if (part.get() != 0)
         part->simplify();
-    
+
     return selfptr.lock();
 }
 
@@ -1833,7 +1835,7 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
     //first, get the objects against where the distance is calculated
     if (part.get() == 0)
         return SelectResult();
-    
+
     const auto refmols = part->operator()(mols, map);
 
     if (refmols.isEmpty())
@@ -1841,16 +1843,16 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
         return SelectResult();
 
     const auto coords_property = map["coordinates"];
-    
+
     bool uses_parallel = true;
-    
+
     if (map["parallel"].hasValue())
     {
         uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
     }
 
     SireVol::SpacePtr space = SireVol::Cartesian();
-    
+
     if (map["space"].hasValue())
     {
         space = map["space"].value().asA<SireVol::Space>();
@@ -1863,14 +1865,14 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
         Vector minval(0), maxval(0), center(0);
 
         auto atoms = selection.selectedAtoms();
-        
+
         if (atoms.isEmpty())
             return Vector(0);
-        
+
         minval = coords[ molinfo.cgAtomIdx(atoms.at(0)) ];
         maxval = minval;
         center = minval;
-        
+
         //now find the maximum and minimum of all other coordinates
         for (int i=1; i<atoms.count(); ++i)
         {
@@ -1878,7 +1880,7 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
             minval.setMin(c);
             maxval.setMax(c);
         }
- 
+
         center = minval + 0.5*(maxval-minval);
 
         switch (typ)
@@ -1919,15 +1921,15 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
     auto isWithin = [&](const Vector &point, const ViewsOfMol &mol)
     {
         const auto &moldata = mol.data();
-        
+
         if (not moldata.hasProperty(coords_property))
             return false;
-        
+
         const auto &prop = moldata.property(coords_property);
-        
+
         if (not prop.isA<AtomCoords>())
             return false;
-        
+
         const auto &coords = prop.asA<AtomCoords>();
         const auto &molinfo = moldata.info();
 
@@ -1952,7 +1954,7 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
                 }
             }
         }
-        
+
         return false;
     };
 
@@ -1961,25 +1963,25 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
     {
         const auto &moldata = searchmol.data();
         const auto &molinfo = moldata.info();
-    
+
         //get the atoms that are to be selected
         auto selected_atoms = searchmol.selection();
         selected_atoms = selected_atoms.selectNone();
-        
+
         //now get the coordinates of the atoms
         if (not moldata.hasProperty(coords_property))
             return ViewsOfMol();
-        
+
         const auto &prop = moldata.property(coords_property);
-        
+
         if (not prop.isA<AtomCoords>())
             return ViewsOfMol();
-        
+
         const auto &coords = prop.asA<AtomCoords>();
-        
+
         //we need to loop over the expanded molecule
         ViewsOfMol mol = this->expandMol(searchmol);
-        
+
         //loop over each view in 'mol'
         for (int i=0; i<mol.nViews(); ++i)
         {
@@ -1991,13 +1993,13 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
                 for (const auto &atom : mol.viewAt(i).selectedAtoms())
                 {
                     const auto point = coords[ molinfo.cgAtomIdx(atom) ];
-                    
+
                     //now loop over all atoms in selected molecules and see if they
                     //are within the distance
                     for (const auto &refmol : refmols)
                     {
                         bool is_within = isWithin(point, refmol);
-                        
+
                         if (is_within)
                         {
                             within_distance = true;
@@ -2013,13 +2015,13 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
             {
                 //get the comparison coordinates for this view
                 const auto point = getCoords(mol.viewAt(i), molinfo, coords);
-                
+
                 //now loop over all atoms in selected molecules and see if they
                 //are within the distance
                 for (const auto &refmol : refmols)
                 {
                     bool is_within = isWithin(point, refmol);
-                    
+
                     if (is_within)
                     {
                         within_distance = true;
@@ -2027,41 +2029,41 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
                     }
                 }
             }
-            
+
             if (within_distance)
             {
                 selected_atoms = selected_atoms.select(mol.viewAt(i));
-                
+
                 if (selected_atoms.selectedAll())
                     break;
             }
         }
-        
+
         if (selected_atoms.isEmpty())
             return ViewsOfMol();
         else
             return ViewsOfMol(moldata, selected_atoms);
     };
-    
+
     QList<ViewsOfMol> result;
-    
+
     if (uses_parallel)
     {
         const auto molviews = mols.views();
         QVector<ViewsOfMol> matched(molviews.count());
-        
+
         tbb::parallel_for( tbb::blocked_range<int>(0,molviews.count()),
                            [&](const tbb::blocked_range<int> &r)
         {
             for (int i=r.begin(); i<r.end(); ++i)
             {
                 auto match = getWithin(molviews.at(i));
-                
+
                 if (not match.isEmpty())
                     matched[i] = match;
             }
         });
-        
+
         for (const auto &match : matched)
         {
             if (not match.isEmpty())
@@ -2073,12 +2075,12 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
         for (const auto mol : mols.views())
         {
             auto match = getWithin(mol);
-            
+
             if (not match.isEmpty())
                 result.append(match);
         }
     }
-    
+
     return SelectResult(result);
 }
 
@@ -2114,7 +2116,7 @@ SelectEnginePtr IDAllEngine::construct()
 {
     IDAllEngine *ptr = new IDAllEngine();
     auto p = makePtr(ptr);
-    
+
     return p;
 }
 
@@ -2127,6 +2129,94 @@ SelectResult IDAllEngine::select(const SelectResult &mols, const PropertyMap&) c
 }
 
 SelectEngine::ObjType IDAllEngine::objectType() const
+{
+    return SelectEngine::COMPLEX;
+}
+
+////////
+//////// Implementation of the IDWaterEngine
+////////
+
+IDWaterEngine::IDWaterEngine()
+{}
+
+SelectEnginePtr IDWaterEngine::construct()
+{
+    IDWaterEngine *ptr = new IDWaterEngine();
+    auto p = makePtr(ptr);
+
+    return p;
+}
+
+IDWaterEngine::~IDWaterEngine()
+{}
+
+SelectResult IDWaterEngine::select(const SelectResult &mols, const PropertyMap &map) const
+{
+    QList<ViewsOfMol> result;
+
+    for (const auto &molview : mols.views())
+    {
+        // Counters for the number of hydrogens, oxygens, and protons in the molecule.
+        int num_hydrogen = 0;
+        int num_oxygen = 0;
+        int num_protons = 0;
+
+        // Convert to a molecule.
+        auto molecule = molview.molecule();
+
+        // Extract the element property.
+        const auto &elements = molecule.property("element").asA<AtomElements>();
+
+        // Whether this a water molecule.
+        bool is_water = true;
+
+        // Loop over all cut-groups associated with the elements.
+        for (int i=0; i<elements.nCutGroups(); ++i)
+        {
+            // Create the cut-group index.
+            CGIdx cg(i);
+
+            // Extract the data for this cut-group.
+            auto data = elements.constData(cg);
+
+            // Loop over all atoms in this cut-group.
+            for (int j=0; j<elements.nAtoms(cg); ++j)
+            {
+                // Get the element.
+                const auto element = data[j];
+
+                // Hydrogen.
+                if (element.nProtons() == 1)
+                    num_hydrogen++;
+                // Oxygen.
+                else if (element.nProtons() == 8)
+                    num_oxygen++;
+                else
+                    num_protons += element.nProtons();
+
+                // Not a water molecule, abort!
+                if (num_oxygen > 1   or num_hydrogen > 2 or num_protons > 10)
+                {
+                    is_water = false;
+                    break;
+                }
+            }
+
+            // Break out of outer loop.
+            if (not is_water)
+                break;
+        }
+
+        // If this is a water molecule, append the result.
+        if (is_water)
+            result.append(molecule);
+    }
+
+    return SelectResult(result);
+}
+
+SelectEngine::ObjType IDWaterEngine::objectType() const
 {
     return SelectEngine::COMPLEX;
 }
