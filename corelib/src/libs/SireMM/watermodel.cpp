@@ -52,6 +52,9 @@ SelectResult SIREMM_EXPORT setAmberWater(const SelectResult& molecules, const Pr
         // Counter for the number of hydrogen atoms.
         int num_hydrogen = 0;
 
+        // Rename the residue.
+        water = water.residue(ResIdx(0)).rename(ResName("WAT")).molecule();
+
         // Loop over all atoms in the water.
         for (int i=0; i<water.nAtoms(); ++i)
         {
@@ -72,20 +75,20 @@ SelectResult SIREMM_EXPORT setAmberWater(const SelectResult& molecules, const Pr
             {
                 if (num_hydrogen == 0)
                 {
-                    water = water.atom(idx).rename(AtomName("H1")).molecule().commit();
+                    water = water.atom(idx).rename(AtomName("H1")).molecule();
                     num_hydrogen++;
                 }
                 else
-                    water = water.atom(idx).rename(AtomName("H2")).molecule().commit();
+                    water = water.atom(idx).rename(AtomName("H2")).molecule();
             }
 
             // Oxygen.
             else if (element == Element("O"))
-                water = water.atom(idx).rename(AtomName("O")).molecule().commit();
+                water = water.atom(idx).rename(AtomName("O")).molecule();
 
             // Dummy.
             else if (element == Element("X"))
-                water = water.atom(idx).rename(AtomName("EPW")).molecule().commit();
+                water = water.atom(idx).rename(AtomName("EPW")).molecule();
         }
 
         // Append the updated water molecule.
@@ -111,6 +114,9 @@ SelectResult SIREMM_EXPORT setGromacsWater(const SelectResult& molecules, const 
         // Counter for the number of hydrogen atoms.
         int num_hydrogen = 0;
 
+        // Rename the residue.
+        water = water.residue(ResIdx(0)).rename(ResName("SOL")).molecule();
+
         // Loop over all atoms in the water.
         for (int i=0; i<water.nAtoms(); ++i)
         {
@@ -131,20 +137,20 @@ SelectResult SIREMM_EXPORT setGromacsWater(const SelectResult& molecules, const 
             {
                 if (num_hydrogen == 0)
                 {
-                    water = water.atom(idx).rename(AtomName("HW1")).molecule().commit();
+                    water = water.atom(idx).rename(AtomName("HW1")).molecule();
                     num_hydrogen++;
                 }
                 else
-                    water = water.atom(idx).rename(AtomName("HW2")).molecule().commit();
+                    water = water.atom(idx).rename(AtomName("HW2")).molecule();
             }
 
             // Oxygen.
             else if (element == Element("O"))
-                water = water.atom(idx).rename(AtomName("OW")).molecule().commit();
+                water = water.atom(idx).rename(AtomName("OW")).molecule();
 
             // Dummy.
             else if (element == Element("X"))
-                water = water.atom(idx).rename(AtomName("MW")).molecule().commit();
+                water = water.atom(idx).rename(AtomName("MW")).molecule();
         }
 
         // Append the updated water molecule.
