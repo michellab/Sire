@@ -397,6 +397,12 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
         if (atom.property<QString>(map["is_het"]) == "True")
             is_het = true;
     }
+
+    // Set the alternate location code.
+    if (atom.hasProperty(map["alt_loc"]))
+    {
+        alt_loc = atom.property<QString>(map["alt_loc"])[0];
+    }
 }
 
 /** Convert the name to PDB format. */
@@ -528,6 +534,12 @@ qint64 PDBAtom::getResIdx() const
 void PDBAtom::setResIdx(int idx)
 {
     res_idx = idx;
+}
+
+/** Get the alternate location indicator. */
+QChar PDBAtom::getAltLoc() const
+{
+    return alt_loc;
 }
 
 /** Get the residue insertion code. */
@@ -2111,6 +2123,7 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
     AtomElements       elements(molinfo);
     AtomFloatProperty  occupancies(molinfo);
     AtomFloatProperty  temperatures(molinfo);
+    AtomStringProperty alt_loc(molinfo);
     AtomStringProperty is_het_atom(molinfo);
 
     // Residue property objects.
@@ -2134,6 +2147,7 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
         elements.set(cgatomidx, atom.getElement());
         occupancies.set(cgatomidx, atom.getOccupancy());
         temperatures.set(cgatomidx, atom.getTemperature());
+        alt_loc.set(cgatomidx, atom.getAltLoc());
 
         bool isHet = atom.isHet();
 
@@ -2165,6 +2179,7 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
               .setProperty(map["beta_factor"], temperatures)
               .setProperty(map["is_het"], is_het_atom)
               .setProperty(map["insert_code"], insert_codes)
+              .setProperty(map["alt_loc"], alt_loc)
               .commit();
 }
 
