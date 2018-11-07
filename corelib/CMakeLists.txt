@@ -1041,6 +1041,13 @@ install (DIRECTORY ${CMAKE_SOURCE_DIR}/parameters
          PATTERN ".svn" EXCLUDE
         )
 
+# install the molecular templates into share/Sire
+install (DIRECTORY ${CMAKE_SOURCE_DIR}/templates
+         DESTINATION ${SIRE_SHARE}
+         USE_SOURCE_PERMISSIONS
+         PATTERN ".svn" EXCLUDE
+        )
+
 install (DIRECTORY ${CMAKE_SOURCE_DIR}/share/build
          DESTINATION ${SIRE_SHARE}
          USE_SOURCE_PERMISSIONS
