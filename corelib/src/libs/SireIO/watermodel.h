@@ -26,27 +26,33 @@
   *
 \*********************************************/
 
-#ifndef SIREMM_WATERMODEL_H
-#define SIREMM_WATERMODEL_H
+#ifndef SIREIO_WATERMODEL_H
+#define SIREIO_WATERMODEL_H
 
 #include "sireglobal.h"
 
 #include "SireBase/propertymap.h"
+
+#include "SireMaths/vector.h"
+
 #include "SireMol/select.h"
 
 SIRE_BEGIN_HEADER
 
 using namespace SireBase;
+using namespace SireMaths;
 using namespace SireMol;
 
-namespace SireMM
+namespace SireIO
 {
-    SelectResult setAmberWater(const SelectResult& molecules, const PropertyMap& map = PropertyMap());
-    SelectResult setGromacsWater(const SelectResult& molecules, const PropertyMap& map = PropertyMap());
+    SelectResult setAmberWater(const SelectResult& molecules, const QString& model, const PropertyMap& map = PropertyMap());
+    SelectResult setGromacsWater(const SelectResult& molecules, const QString& model, const PropertyMap& map = PropertyMap());
+
+    Vector cross(const Vector& v0, const Vector& v1);
 }
 
-SIRE_EXPOSE_FUNCTION( SireMM::setAmberWater )
-SIRE_EXPOSE_FUNCTION( SireMM::setGromacsWater )
+SIRE_EXPOSE_FUNCTION( SireIO::setAmberWater )
+SIRE_EXPOSE_FUNCTION( SireIO::setGromacsWater )
 
 SIRE_END_HEADER
 

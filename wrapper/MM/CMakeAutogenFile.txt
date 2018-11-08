@@ -116,7 +116,6 @@ set ( PYPP_SOURCES
        CoulombScaleFactor.pypp.cpp
        IntraGroupLJFFBase.pypp.cpp
        InterGroupSoftCLJFF.pypp.cpp
-       _MM_free_functions.pypp.cpp
        CLJGroup.pypp.cpp
        IntraLJFFBase.pypp.cpp
        SoftCLJPotentialInterface_InterSoftCLJPotential_.pypp.cpp

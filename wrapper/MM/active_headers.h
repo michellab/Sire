@@ -61,7 +61,6 @@
 #include "testff.h"
 #include "threeatomfunctions.h"
 #include "twoatomfunctions.h"
-#include "watermodel.h"
 
 #endif
 

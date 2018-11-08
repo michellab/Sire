@@ -25,6 +25,7 @@ set ( PYPP_SOURCES
        GroAtom.pypp.cpp
        Tinker.pypp.cpp
        FlexibilityLibrary.pypp.cpp
+       _IO_free_functions.pypp.cpp
        GroTop.pypp.cpp
        PerturbationsLibrary.pypp.cpp
        NullParser.pypp.cpp
