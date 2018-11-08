@@ -91,8 +91,8 @@ SelectResult SIREIO_EXPORT setAmberWater(const SelectResult& molecules, const QS
         // Extract the water molecule.
         auto water = molview.molecule();
 
-        // Make the template water molecule editable.
-        auto edit_mol = template_molecule.edit();
+        // Make the template water molecule editable and renumber it.
+        auto edit_mol = template_molecule.edit().renumber();
 
         // Counter for the number of hydrogen atoms.
         int num_hydrogen = 0;
@@ -208,8 +208,8 @@ SelectResult SIREIO_EXPORT setGromacsWater(const SelectResult& molecules, const 
         // Extract the water molecule.
         auto water = molview.molecule();
 
-        // Make the template water molecule editable.
-        auto edit_mol = template_molecule.edit();
+        // Make the template water molecule editable and renumber it.
+        auto edit_mol = template_molecule.edit().renumber();
 
         // Counter for the number of hydrogen atoms.
         int num_hydrogen = 0;
