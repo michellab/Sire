@@ -3668,7 +3668,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     if (not scllines.isEmpty())
     {
         lines.append( "[ pairs ]" );
-        lines.append( ";  ai    aj funct " );
+        lines.append( ";   ai     aj funct " );
         lines += scllines;
         lines.append("");
     }
