@@ -108,7 +108,7 @@ if __name__ == "__main__":
     except:
         print("Installing openmm from the omnia repository...")
         os.system("%s config --add channels http://conda.binstar.org/omnia" % conda_exe)
-        os.system("%s install --yes openmm=7.0" % conda_exe)
+        os.system("%s install --yes openmm=7.1" % conda_exe)
 
     # libnetcdf
     try:
