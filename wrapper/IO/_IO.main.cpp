@@ -67,6 +67,8 @@
 
 #include "ZmatrixMaker.pypp.hpp"
 
+#include "_IO_free_functions.pypp.hpp"
+
 namespace bp = boost::python;
 
 #include "SireIO_containers.h"
@@ -140,8 +142,10 @@ BOOST_PYTHON_MODULE(_IO){
 
     register_TrajectoryMonitor_class();
 
+    register_ZmatrixMaker_class();
+
     register_SireIO_properties();
 
-    register_ZmatrixMaker_class();
+    register_free_functions();
 }
 

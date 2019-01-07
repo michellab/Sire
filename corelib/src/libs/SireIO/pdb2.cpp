@@ -275,8 +275,18 @@ PDBAtom::PDBAtom(const QString &line, QStringList &errors) :
     element = line.mid(76,2);
 
     // If the element is empty, try to guess from the atom name.
-    if (element.simplified().isEmpty())
-        element = Element(name).symbol()[0];
+    // We also test whether the preceding character is a letter or number,
+    // since some PDB files that accompany a Charmm PSF file place the
+    // residue name at the end of the line.
+    if (element.simplified().isEmpty() or line[75].isLetterOrNumber())
+    {
+        // Copy the name variable.
+        auto nam = name;
+
+        // We'll strip all numeric digits and use a maximum of two characters.
+        nam.remove(QRegExp("[0-9]")).mid(0, 2);
+        element = Element::biologicalElement(nam).symbol();
+    }
 
     // Extract the charge on the atom.
     QString chargeString = line.mid(78,2);
@@ -322,6 +332,11 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
 
         return;
     }
+
+    // If the user has mapped "name", this is likely a perturbable
+    // molecule. Replace the AtomName with the user mapped property.
+    if (map["name"] != "name")
+        name = atom.property<QString>(map["name"]);
 
     // Extract the atomic coordinates.
     coord = atom.property<SireMaths::Vector>(map["coordinates"]);
@@ -381,6 +396,12 @@ PDBAtom::PDBAtom(const SireMol::Atom &atom, bool is_ter, const PropertyMap &map,
     {
         if (atom.property<QString>(map["is_het"]) == "True")
             is_het = true;
+    }
+
+    // Set the alternate location code.
+    if (atom.hasProperty(map["alt_loc"]))
+    {
+        alt_loc = atom.property<QString>(map["alt_loc"])[0];
     }
 }
 
@@ -513,6 +534,12 @@ qint64 PDBAtom::getResIdx() const
 void PDBAtom::setResIdx(int idx)
 {
     res_idx = idx;
+}
+
+/** Get the alternate location indicator. */
+QChar PDBAtom::getAltLoc() const
+{
+    return alt_loc;
 }
 
 /** Get the residue insertion code. */
@@ -2096,6 +2123,7 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
     AtomElements       elements(molinfo);
     AtomFloatProperty  occupancies(molinfo);
     AtomFloatProperty  temperatures(molinfo);
+    AtomStringProperty alt_loc(molinfo);
     AtomStringProperty is_het_atom(molinfo);
 
     // Residue property objects.
@@ -2119,6 +2147,7 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
         elements.set(cgatomidx, atom.getElement());
         occupancies.set(cgatomidx, atom.getOccupancy());
         temperatures.set(cgatomidx, atom.getTemperature());
+        alt_loc.set(cgatomidx, atom.getAltLoc());
 
         bool isHet = atom.isHet();
 
@@ -2150,6 +2179,7 @@ MolEditor PDB2::getMolecule(int imol, const PropertyMap &map) const
               .setProperty(map["beta_factor"], temperatures)
               .setProperty(map["is_het"], is_het_atom)
               .setProperty(map["insert_code"], insert_codes)
+              .setProperty(map["alt_loc"], alt_loc)
               .commit();
 }
 

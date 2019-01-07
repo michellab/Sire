@@ -319,7 +319,7 @@ void GroAtom::setCharge(SireUnits::Dimension::Charge charge)
 /** Set the mass of this atom */
 void GroAtom::setMass(SireUnits::Dimension::MolarMass mass)
 {
-    if (mass.value() > 0)
+    if (mass.value() >= 0)
         mss = mass;
 }
 
@@ -450,8 +450,7 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
             AtomStringProperty atomtypes;
             AtomStringProperty bondtypes;
 
-            bool has_mass(false), has_elem(false), has_chg(false), has_group(false), has_type(false);
-            bool has_bondtype(false);
+            bool has_mass(false), has_elem(false), has_chg(false), has_type(false), has_bondtype(false);
 
             try
             {
@@ -485,17 +484,6 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                 else
                     charges = mol.property("charge0").asA<AtomCharges>();
                 has_chg = true;
-            }
-            catch(...)
-            {}
-
-            try
-            {
-                if (is_lambda1)
-                    groups = mol.property("charge_group1").asA<AtomIntProperty>();
-                else
-                    groups = mol.property("charge_group0").asA<AtomIntProperty>();
-                has_group = true;
             }
             catch(...)
             {}
@@ -559,12 +547,8 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                     resnum = molinfo.number(residx).value();
                 }
 
+                // Just use the atom number as the charge group for perturbable molecules.
                 int group = atomnum;
-
-                if (has_group)
-                {
-                    group = groups[cgatomidx];
-                }
 
                 auto charge = charges[cgatomidx];
 
@@ -579,9 +563,9 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                     mass = elements[cgatomidx].mass();
                 }
 
-                if (mass <= 0)
+                if (mass < 0)
                 {
-                    //not allowed to have a zero or negative mass
+                    //not allowed to have a negative mass
                     mass = 1.0 * g_per_mol;
                 }
 
@@ -1044,9 +1028,9 @@ GroMolType::GroMolType(const SireMol::Molecule &mol, const PropertyMap &map)
                     mass = elements[cgatomidx].mass();
                 }
 
-                if (mass <= 0)
+                if (mass < 0)
                 {
-                    //not allowed to have a zero or negative mass
+                    //not allowed to have a negative mass
                     mass = 1.0 * g_per_mol;
                 }
 
@@ -2789,13 +2773,9 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
         for (int i=0; i<atoms.count(); ++i)
         {
             const auto &atom = atoms[i];
-            const auto atomtype = atom.atomType();
+            auto atomtype = atom.atomType();
 
-            if (atomtypes.contains(atomtype))
-                continue;
-
-            //we haven't seen this atom type before. Get the corresponding atom
-            //in the molecule
+            // Get the corresponding atom in the molecule.
             const auto mol = molecules[it.key()];
             const auto cgatomidx = mol.info().cgAtomIdx( AtomIdx(i) );
 
@@ -2822,17 +2802,23 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
             if (elem.nProtons() == 0 and lj.isDummy())
             {
                 particle_type = "D"; //this atomtype is a Dummy
+
+                if (is_perturbable)
+                    atomtype += "_du";
             }
 
-            atomtypes.insert( atomtype, QString("  %1        %2  %3  %4  %5  %6  %7")
-                    .arg(atomtype, 4)
-                    .arg(elem.nProtons(), 4)
-                    .arg(elem.mass().to(g_per_mol), 10, 'f', 6)
-                    .arg(chg, 10, 'f', 6)
-                    .arg(particle_type, 3)
-                    .arg(std::get<0>(ljparams), 10, 'f', 6)
-                    .arg(std::get<1>(ljparams), 10, 'f', 6) );
-
+            // This is a new atom type.
+            if (not atomtypes.contains(atomtype))
+            {
+                atomtypes.insert( atomtype, QString(" %1        %2  %3  %4  %5  %6  %7")
+                         .arg(atomtype, 5)
+                         .arg(elem.nProtons(), 4)
+                         .arg(elem.mass().to(g_per_mol), 10, 'f', 6)
+                         .arg(chg, 10, 'f', 6)
+                         .arg(particle_type, 6)
+                         .arg(std::get<0>(ljparams), 10, 'f', 6)
+                         .arg(std::get<1>(ljparams), 10, 'f', 6) );
+            }
         }
 
         // Add additional atom types from lambda = 1.
@@ -2843,13 +2829,9 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
             for (int i=0; i<atoms.count(); ++i)
             {
                 const auto &atom = atoms[i];
-                const auto atomtype = atom.atomType();
+                auto atomtype = atom.atomType();
 
-                if (atomtypes.contains(atomtype))
-                    continue;
-
-                //we haven't seen this atom type before. Get the corresponding atom
-                //in the molecule
+                // Get the corresponding atom in the molecule.
                 const auto mol = molecules[it.key()];
                 const auto cgatomidx = mol.info().cgAtomIdx( AtomIdx(i) );
 
@@ -2876,16 +2858,23 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
                 if (elem.nProtons() == 0 and lj.isDummy())
                 {
                     particle_type = "D"; //this atomtype is a Dummy
+
+                    if (is_perturbable)
+                        atomtype += "_du";
                 }
 
-                atomtypes.insert( atomtype, QString("  %1        %2  %3  %4  %5  %6  %7")
-                        .arg(atomtype, 4)
-                        .arg(elem.nProtons(), 4)
-                        .arg(elem.mass().to(g_per_mol), 10, 'f', 6)
-                        .arg(chg, 10, 'f', 6)
-                        .arg(particle_type, 3)
-                        .arg(std::get<0>(ljparams), 10, 'f', 6)
-                        .arg(std::get<1>(ljparams), 10, 'f', 6) );
+                // This is a new atom type.
+                if (not atomtypes.contains(atomtype))
+                {
+                    atomtypes.insert( atomtype, QString(" %1        %2  %3  %4  %5  %6  %7")
+                             .arg(atomtype, 5)
+                             .arg(elem.nProtons(), 4)
+                             .arg(elem.mass().to(g_per_mol), 10, 'f', 6)
+                             .arg(chg, 10, 'f', 6)
+                             .arg(particle_type, 6)
+                             .arg(std::get<0>(ljparams), 10, 'f', 6)
+                             .arg(std::get<1>(ljparams), 10, 'f', 6) );
+                }
             }
         }
     }
@@ -2896,7 +2885,7 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
     qSort(keys);
 
     lines.append( "[ atomtypes ]" );
-    lines.append( "; name      at.num   mass         charge     ptype      sigma      epsilon" );
+    lines.append( "; name      at.num        mass      charge   ptype       sigma     epsilon" );
 
     for (const auto key : keys )
     {
@@ -2939,16 +2928,56 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 const auto &atom0 = atoms0[i];
                 const auto &atom1 = atoms1[i];
 
+                // Extract the atom types.
+                auto atomtype0 = atom0.atomType();
+                auto atomtype1 = atom1.atomType();
+
+                // Get the corresponding atom in the molecule.
+                const auto cgatomidx = mol.info().cgAtomIdx( AtomIdx(i) );
+
+                // Get the element property at each end state.
+
+                Element elem0;
+                Element elem1;
+
+                try
+                {
+                    elem0 = mol.property("element0").asA<AtomElements>()[cgatomidx];
+                }
+                catch(...)
+                {
+                    elem0 = Element::elementWithMass(
+                                mol.property("mass0").asA<AtomMasses>()[cgatomidx] );
+                }
+
+                try
+                {
+                    elem1 = mol.property("element1").asA<AtomElements>()[cgatomidx];
+                }
+                catch(...)
+                {
+                    elem1 = Element::elementWithMass(
+                                mol.property("mass1").asA<AtomMasses>()[cgatomidx] );
+                }
+
+                // Update the atom types.
+
+                if (elem0.nProtons() == 0)
+                    atomtype0 += "_du";
+
+                if (elem1.nProtons() == 0)
+                    atomtype1 += "_du";
+
                 atomlines.append( QString("%1   %2 %3    %4  %5   %6 %7   %8   %9 %10   %11")
                          .arg(atom0.number().value(), 6)
-                         .arg(atom0.atomType(), 4)
+                         .arg(atomtype0, 5)
                          .arg(atom0.residueNumber().value(), 6)
                          .arg(atom0.residueName().value(), 4)
                          .arg(atom0.name().value(), 4)
                          .arg(atom0.chargeGroup(), 4)
                          .arg(atom0.charge().to(mod_electron), 10, 'f', 6)
                          .arg(atom0.mass().to(g_per_mol), 10, 'f', 6)
-                         .arg(atom1.atomType(), 4)
+                         .arg(atomtype1, 5)
                          .arg(atom1.charge().to(mod_electron), 10, 'f', 6)
                          .arg(atom1.mass().to(g_per_mol), 10, 'f', 6) );
             }
@@ -3329,10 +3358,14 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (const auto p : param.parameters())
                         param_string.append( QString::number(p) );
 
-                    dihlines.append( QString("%1 %2 %3 %4 %5  %6  0  0  0")
+                    // Get the periodicity of the dihedral term. This is the last
+                    // parameter entry.
+                    auto periodicity = param.parameters().last();
+
+                    dihlines.append( QString("%1 %2 %3 %4 %5  %6  0  0  %7")
                             .arg(atom0,6).arg(atom1,6)
                             .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
-                            .arg(param_string.join("  ")) );
+                            .arg(param_string.join("  ")).arg(periodicity) );
                 }
             }
 
@@ -3355,14 +3388,18 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (const auto p : param.parameters())
                         param_string.append( QString::number(p) );
 
-                    dihlines.append( QString("%1 %2 %3 %4 %5  0  0  0  %6")
+                    // Get the periodicity of the dihedral term. This is the last
+                    // parameter entry.
+                    auto periodicity = param.parameters().last();
+
+                    dihlines.append( QString("%1 %2 %3 %4 %5  0  0  %6  %7")
                             .arg(atom0,6).arg(atom1,6)
                             .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
-                            .arg(param_string.join("  ")) );
+                            .arg(periodicity).arg(param_string.join("  ")) );
                 }
             }
 
-            // Next add the shared angle parameters.
+            // Next add the shared dihedral parameters.
 
             for (auto idx : dihedrals_shared_idx)
             {
@@ -3382,73 +3419,93 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 // Get a list of the parameters at lambda = 1.
                 const auto &params1 = dihedrals1.values(idx);
 
-                // More or same number of records at lambda = 0.
-                if (params0.count() >= params1.count())
+                // Create two hashes between the periodicity of each dihedral
+                // term and its corresponding parameters.
+
+                // The maximum periodicity recorded.
+                int max_per = 0;
+
+                // lambda = 0
+                QHash<int, GromacsDihedral> params0_hash;
+                for (const auto &param : params0)
                 {
-                    for (int i=0; i<params1.count(); ++i)
-                    {
-                        QStringList param_string0;
-                        for (const auto p : params0[i].parameters())
-                            param_string0.append( QString::number(p) );
+                    // Extract the periodicity and update the hash.
+                    int periodicity = int(param.parameters().last());
+                    params0_hash.insert(periodicity, param);
 
-                        QStringList param_string1;
-                        for (const auto p : params1[i].parameters())
-                            param_string1.append( QString::number(p) );
-
-                        dihlines.append( QString("%1 %2 %3 %4 %5  %6  %7")
-                                .arg(atom0,6).arg(atom1,6)
-                                .arg(atom2,6).arg(atom3,6).arg(params0[i].functionType(),6)
-                                .arg(param_string0.join("  "))
-                                .arg(param_string1.join("  ")) );
-                    }
-
-                    // Now add parameters for which there is no matching record
-                    // at lambda = 1.
-                    for (int i=params1.count(); i<params0.count(); ++i)
-                    {
-                        QStringList param_string;
-                        for (const auto p : params0[i].parameters())
-                            param_string.append( QString::number(p) );
-
-                        dihlines.append( QString("%1 %2 %3 %4 %5  %6  0  0  0")
-                                .arg(atom0,6).arg(atom1,6)
-                                .arg(atom2,6).arg(atom3,6).arg(params0[i].functionType(),6)
-                                .arg(param_string.join("  ")) );
-                    }
+                    // If necessary, update the maximum periodicity.
+                    if (periodicity > max_per)
+                        max_per = periodicity;
                 }
 
-                // More records at lambda = 1.
-                else
+                // lambda = 1
+                QHash<int, GromacsDihedral> params1_hash;
+                for (const auto &param : params1)
                 {
-                    for (int i=0; i<params0.count(); ++i)
+                    // Extract the periodicity and update the hash.
+                    int periodicity = int(param.parameters().last());
+                    params1_hash.insert(periodicity, param);
+
+                    // If necessary, update the maximum periodicity.
+                    if (periodicity > max_per)
+                        max_per = periodicity;
+                }
+
+                // Loop over the range of dihedral periodicities observed.
+                for (int i=0; i<=max_per; ++i)
+                {
+                    // There is a term at lambda = 0 with this periodicity.
+                    if (params0_hash.contains(i))
                     {
                         QStringList param_string0;
-                        for (const auto p : params0[i].parameters())
+                        QStringList param_string1;
+                        for (const auto p : params0_hash[i].parameters())
                             param_string0.append( QString::number(p) );
 
-                        QStringList param_string1;
-                        for (const auto p : params1[i].parameters())
-                            param_string1.append( QString::number(p) );
+                        // There is a term at lambda = 1 with this periodicity.
+                        if (params1_hash.contains(i))
+                        {
+                            for (const auto p : params1_hash[i].parameters())
+                                param_string1.append( QString::number(p) );
+                        }
+                        // No term, create a zero term with the same periodicity.
+                        else
+                        {
+                            param_string1.append( QString::number(0.0) );
+                            param_string1.append( QString::number(0.0) );
+                            param_string1.append( QString::number(i) );
+                        }
 
+                        // Append the dihedral term.
                         dihlines.append( QString("%1 %2 %3 %4 %5  %6  %7")
                                 .arg(atom0,6).arg(atom1,6)
-                                .arg(atom2,6).arg(atom3,6).arg(params1[i].functionType(),6)
+                                .arg(atom2,6).arg(atom3,6).arg(params0_hash[i].functionType(),6)
                                 .arg(param_string0.join("  "))
                                 .arg(param_string1.join("  ")) );
                     }
-
-                    // Now add parameters for which there is no matching record
-                    // at lambda = 0.
-                    for (int i=params0.count(); i<params1.count(); ++i)
+                    else
                     {
-                        QStringList param_string;
-                        for (const auto p : params1[i].parameters())
-                            param_string.append( QString::number(p) );
+                        // There is a term at lambda = 1 with this periodicity.
+                        if (params1_hash.contains(i))
+                        {
+                            QStringList param_string0;
+                            QStringList param_string1;
 
-                        dihlines.append( QString("%1 %2 %3 %4 %5  0  0  0  %6")
-                                .arg(atom0,6).arg(atom1,6)
-                                .arg(atom2,6).arg(atom3,6).arg(params1[i].functionType(),6)
-                                .arg(param_string.join("  ")) );
+                            // No lambda = 0 term, create a zero term with the same periodicity.
+                            param_string0.append( QString::number(0.0) );
+                            param_string0.append( QString::number(0.0) );
+                            param_string0.append( QString::number(i) );
+
+                            for (const auto p : params1_hash[i].parameters())
+                                param_string1.append( QString::number(p) );
+
+                            // Append the dihedral term.
+                            dihlines.append( QString("%1 %2 %3 %4 %5  %6  %7")
+                                    .arg(atom0,6).arg(atom1,6)
+                                    .arg(atom2,6).arg(atom3,6).arg(params1_hash[i].functionType(),6)
+                                    .arg(param_string0.join("  "))
+                                    .arg(param_string1.join("  ")) );
+                        }
                     }
                 }
             }
@@ -3585,7 +3642,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
 
     lines.append( "[ atoms ]" );
     if (is_perturbable)
-        lines.append(";   nr  type0  resnr residue  atom   cgnr    charge0        mass0  type1    charge1        mass1");
+        lines.append(";   nr   type0  resnr residue  atom   cgnr    charge0        mass0   type1    charge1        mass1");
     else
         lines.append(";   nr   type  resnr residue  atom   cgnr     charge         mass");
     lines.append(atomlines);
@@ -3611,7 +3668,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     if (not scllines.isEmpty())
     {
         lines.append( "[ pairs ]" );
-        lines.append( ";  ai    aj funct " );
+        lines.append( ";   ai     aj funct " );
         lines += scllines;
         lines.append("");
     }
