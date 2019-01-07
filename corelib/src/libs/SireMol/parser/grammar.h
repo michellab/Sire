@@ -52,10 +52,10 @@ public:
     SkipperGrammar() : SkipperGrammar::base_type( rule )
     {
         lineCommentRule  = qi::lit( "//" ) >>
-                           *(qi::char_ -qi::eol) >> 
+                           *(qi::char_ -qi::eol) >>
                            qi::eol;
-        blockCommentRule = qi::lit( "/*" ) >> 
-                           *(qi::char_ -qi::lit( "*/" ) ) >> 
+        blockCommentRule = qi::lit( "/*" ) >>
+                           *(qi::char_ -qi::lit( "*/" ) ) >>
                            qi::lit( "*/" );
         spaceRule        = qi::space;
         rule             = spaceRule | lineCommentRule | blockCommentRule;
@@ -79,7 +79,7 @@ public:
              qi::lit( "'" ) >>
              *( escapeCharSymbols | ( qi::char_ - qi::char_( "'" ) ) ) >
              qi::lit( "'" ) ];
-        
+
         rawStringRule %= qi::lexeme[
                     +( qi::alnum |
                        qi::char_( '.' ) |
@@ -87,9 +87,9 @@ public:
                        qi::char_( '_' ) |
                        qi::char_( '-' )
                       ) ];
-        
+
         rule %= rawStringRule | escapedStringRule;
-        
+
         escapeCharSymbols.add( "\\a", '\a' )
                              ( "\\b", '\b' )
                              ( "\\f", '\f' )
@@ -103,10 +103,10 @@ public:
 
         escapedStringRule.name( "Escaped String" );
         rawStringRule.name( "Escaped String" );
-        
+
         escapeCharSymbols.name( "Escaped Chars" );
     }
-    
+
     qi::rule<IteratorT, std::string(), SkipperT>   escapedStringRule;
     qi::rule<IteratorT, std::string(), SkipperT>   rawStringRule;
     qi::rule<IteratorT, std::string(), SkipperT>   rule;
@@ -123,13 +123,27 @@ public:
         /////
         ///// first define all of the tokens recognised by the grammar
         /////
-        
+
         //all of the different words to match "all"
         all_token.add( "all", AST::IDAll() )
                      ( "ALL", AST::IDAll() )
                      ( "everything", AST::IDAll() )
                      ( "*", AST::IDAll() );
-        
+
+        // all of the different tokens to match "water"
+        water_token.add( "water", AST::IDWater() )
+                       ( "WATER", AST::IDWater() )
+                       ( "wat", AST::IDWater() )
+                       ( "WAT", AST::IDWater() )
+                       ( "waters", AST::IDWater() )
+                       ( "WATERS", AST::IDWater() );
+
+        // all of the different tokens to match "perturbable"
+        pert_token.add( "perturbable", AST::IDPerturbable() )
+                      ( "PERTURBABLE", AST::IDPerturbable() )
+                      ( "pert", AST::IDPerturbable() )
+                      ( "PERT", AST::IDPerturbable() );
+
         //all of the different object names
         name_token.add( "atomnam", AST::ATOM )
                       ( "atomname", AST::ATOM )
@@ -159,7 +173,7 @@ public:
               ( "molnum", QPair<AST::IDObject,AST::IDNumType>(AST::MOLECULE,AST::ID_NUMBER) )
               ( "molidx", QPair<AST::IDObject,AST::IDNumType>(AST::MOLECULE,AST::ID_INDEX) )
               ;
-        
+
         //all of the different types of logical operation
         op_token.add( "and", AST::ID_AND )
                     ( "AND", AST::ID_AND )
@@ -209,7 +223,7 @@ public:
                         ( "nanometer", SireUnits::nanometer )
                         ( "nm", SireUnits::nanometer )
                         ;
-        
+
         //all of the different "with" and "in" expression tokens
         with_token.add( "with", AST::ID_WITH )
                       ( "in", AST::ID_IN )
@@ -252,7 +266,7 @@ public:
         for (int i=0; i<=111; ++i)  //loop through all known elements
         {
             Element e(i);
-            
+
             //add tokens for the capitalised symbol, and lowercase symbol and name
             element_token.add( e.symbol().toLatin1().constData(), e );
             element_token.add( e.symbol().toLower().toLatin1().constData(), e );
@@ -265,7 +279,7 @@ public:
         /////
         ///// Now define all of the grammar rules
         /////
-    
+
         //root rule to read a node as a set of expressions
         nodeRule %= expressionsRule;
 
@@ -287,16 +301,16 @@ public:
         //an expression is either a subscript, name, number, with, within, where, not
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
-                              all_token | withRule | withinRule | whereRule | notRule |
-                              joinRule | user_token |
+                              all_token | water_token | pert_token | withRule | withinRule |
+                              whereRule | notRule | joinRule | user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
-        
+
         //grammar that specifies a list of names (comma-separated)
         nameValuesRule %= ( nameValueRule % qi::lit( ',' ) );
-        
+
         //grammar for a single name (string or regular expression)
         nameValueRule %= regExpRule | stringRule;
-        
+
         //grammar for a regular expression (identified using '/')
         regExpRule = eps [ _val = AST::RegExpValue() ] >>
                      (
@@ -307,10 +321,10 @@ public:
 
         //grammar for a set of integers (either as ranges or comparisons)
         rangeValuesRule %= ( (rangeValueRule | compareValueRule) % qi::lit( ',' ) );
-        
+
         //grammar for a comparison (e.g. x > 5)
         compareValueRule %= cmp_token >> int_;
-        
+
         //grammar for an integer or range (e.g. 0:10, or 5)
         rangeValueRule = eps [ _val = AST::RangeValue() ] >>
                             (
@@ -318,7 +332,7 @@ public:
                                 qi::repeat(0,2)[( ':' >> int_[ _val += _1 ] )]
                             )
                             ;
-        
+
         //grammar for a length/distance (with optional unit)
         lengthValueRule = eps [ _val = AST::LengthValue() ] >>
                             (
@@ -330,7 +344,7 @@ public:
                                 double_[ _val += _1 ]
                             )
                             ;
-        
+
         //grammar for a vector/point (with optional units, and optionally in brackets '(')
         vectorValueRule = eps[ _val = AST::VectorValue() ] >>
                             (
@@ -345,7 +359,7 @@ public:
                                 qi::lit(')')
                             )
                             ;
-        
+
         //grammar for an individual name assigned to name values
         idNameRule  %= name_token >> nameValuesRule;
 
@@ -417,7 +431,7 @@ public:
         vectorValueRule.name( "Vector Value" );
         stringRule.name( "String" );
         regExpRule.name( "RegExp" );
-        
+
         //action on failure to parse the string using the grammar
         on_error<fail>
         (
@@ -431,7 +445,7 @@ public:
                 << std::endl
         );
     }
-    
+
     qi::rule<IteratorT, AST::Node(), SkipperT> nodeRule;
     qi::rule<IteratorT, AST::IDName(), SkipperT> idNameRule;
     qi::rule<IteratorT, AST::IDNumber(), SkipperT> idNumberRule;
@@ -450,19 +464,19 @@ public:
 
     qi::rule<IteratorT, AST::Expressions(), SkipperT> expressionsRule;
     qi::rule<IteratorT, AST::Expression(), SkipperT> expressionRule;
-    
+
     qi::rule<IteratorT, AST::ExpressionPart(), SkipperT> expressionPartRule;
-    
+
     qi::rule<IteratorT, AST::NameValues(), SkipperT> nameValuesRule;
     qi::rule<IteratorT, AST::NameValue(), SkipperT> nameValueRule;
-    
+
     qi::rule<IteratorT, AST::RangeValues(), SkipperT> rangeValuesRule;
     qi::rule<IteratorT, AST::CompareValue(), SkipperT> compareValueRule;
     qi::rule<IteratorT, AST::RangeValue(), SkipperT> rangeValueRule;
-    
+
     qi::rule<IteratorT, AST::LengthValue(), SkipperT> lengthValueRule;
     qi::rule<IteratorT, AST::VectorValue(), SkipperT> vectorValueRule;
-    
+
     qi::symbols<char,AST::IDObject> name_token;
     qi::symbols<char,QPair<AST::IDObject,AST::IDNumType> > number_token;
     qi::symbols<char,AST::IDOperation> op_token;
@@ -473,6 +487,8 @@ public:
     qi::symbols<char,AST::IDCoordType> coord_token;
     qi::symbols<char,SireMol::Element> element_token;
     qi::symbols<char,AST::IDAll> all_token;
+    qi::symbols<char,AST::IDWater> water_token;
+    qi::symbols<char,AST::IDPerturbable> pert_token;
     UserTokens user_token;
 
     ValueGrammar<IteratorT, SkipperT> stringRule;

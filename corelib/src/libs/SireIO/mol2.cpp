@@ -376,6 +376,11 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, const PropertyMap &map,
         return;
     }
 
+    // If the user has mapped "name", this is likely a perturbable
+    // molecule. Replace the AtomName with the user mapped property.
+    if (map["name"] != "name")
+        name = atom.property<QString>(map["name"]);
+
     // Extract the atomic coordinates.
     coord = atom.property<SireMaths::Vector>(map["coordinates"]);
 
@@ -2578,11 +2583,10 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
         types.set(cgatomidx, atom.getType());
         status_bits.set(cgatomidx, atom.getStatusBits());
 
-        // The element is usuall the first character of the atom,
-        // unless the name starts with a digit, in which case it's the second.
-        auto name = atom.getName();
-        if (name[0].isDigit()) elements.set(cgatomidx, Element(QString(name[1])));
-        else                   elements.set(cgatomidx, Element(QString(name[0])));
+        // Try to infer the element from the name of the atom.
+        // We'll strip all numeric digits and use a maximum of two characters.
+        auto name = atom.getName().remove(QRegExp("[0-9]")).mid(0, 2);
+        elements.set(cgatomidx, Element::biologicalElement(name));
     }
 
     // Instantiate the residue property objects that we need.

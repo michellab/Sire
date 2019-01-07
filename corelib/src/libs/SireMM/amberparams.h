@@ -514,6 +514,12 @@ public:
     DihedralID convert(const DihedralID &dihedral) const;
     ImproperID convert(const ImproperID &improper) const;
 
+protected:
+    SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                                  const AtomMatcher &atommatcher) const;
+    SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
+                                                  const QHash<AtomIdx,AtomIdx> &map) const;
+
 private:
     void _pvt_createFrom(const MoleculeData &moldata);
     void _pvt_updateFrom(const MoleculeData &moldata);

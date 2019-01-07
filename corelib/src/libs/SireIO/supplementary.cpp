@@ -217,7 +217,7 @@ QString Supplementary::formatDescription() const
 /** Return the suffixes that these files are normally associated with */
 QStringList Supplementary::formatSuffix() const
 {
-    static const QStringList suffixes = { "prm, inp" };
+    static const QStringList suffixes = { "*" };
     return suffixes;
 }
 

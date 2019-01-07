@@ -43,6 +43,7 @@ set ( SIREIO_HEADERS
       supplementary.h
       tinker.h
       trajectorymonitor.h
+      watermodel.h
       zmatrixmaker.h
     )
 
@@ -73,6 +74,7 @@ set ( SIREIO_SOURCES
       supplementary.cpp
       tinker.cpp
       trajectorymonitor.cpp    
+      watermodel.cpp
       zmatrixmaker.cpp
 
       ${SIREIO_HEADERS}
