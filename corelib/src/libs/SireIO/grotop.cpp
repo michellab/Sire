@@ -2801,10 +2801,12 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
 
             if (elem.nProtons() == 0 and lj.isDummy())
             {
-                particle_type = "D"; //this atomtype is a Dummy
-
                 if (is_perturbable)
                     atomtype += "_du";
+
+                // Only label dummies for regular simulations.
+                else
+                    particle_type = "D";
             }
 
             // This is a new atom type.
@@ -2856,12 +2858,7 @@ static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
                 QString particle_type = "A";  // A is for Atom
 
                 if (elem.nProtons() == 0 and lj.isDummy())
-                {
-                    particle_type = "D"; //this atomtype is a Dummy
-
-                    if (is_perturbable)
-                        atomtype += "_du";
-                }
+                    atomtype += "_du";
 
                 // This is a new atom type.
                 if (not atomtypes.contains(atomtype))
