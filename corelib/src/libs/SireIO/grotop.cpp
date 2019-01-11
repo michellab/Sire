@@ -2732,8 +2732,8 @@ static QStringList writeDefaults(const MMDetail &ffield)
 /** Internal function used to write all of the atom types. This function requires
     that the atom types for all molecules are all consistent, i.e. atom type
     X has the same mass, vdw parameters, element type etc. for all molecules */
-static QStringList writeAtomTypes(const QHash<QString,GroMolType> &moltyps,
-                                  const QHash<QString,Molecule> &molecules,
+static QStringList writeAtomTypes(const QMap<QPair<int,QString>,GroMolType> &moltyps,
+                                  const QMap<QPair<int,QString>,Molecule> &molecules,
                                   const MMDetail &ffield,
                                   const PropertyMap &map)
 {
@@ -3700,15 +3700,15 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
 
 /** Internal function used to convert an array of Gromacs Moltyps into
     lines of a Gromacs topology file */
-static QStringList writeMolTypes(const QHash<QString,GroMolType> &moltyps,
-                                 const QHash<QString,Molecule> &examples,
-                                 bool uses_parallel)
+static QStringList writeMolTypes(const QMap<QPair<int,QString>,GroMolType> &moltyps,
+                                 const QMap<QPair<int,QString>,Molecule> &examples,
+                                 bool uses_parallel, bool isSorted=false)
 {
     QHash<QString,QStringList> typs;
 
     if (uses_parallel)
     {
-        const QVector<QString> keys = moltyps.keys().toVector();
+        const QVector<QPair<int,QString>> keys = moltyps.keys().toVector();
         QMutex mutex;
 
         tbb::parallel_for( tbb::blocked_range<int>(0,keys.count(),1),
@@ -3716,11 +3716,11 @@ static QStringList writeMolTypes(const QHash<QString,GroMolType> &moltyps,
         {
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                QStringList typlines = ::writeMolType(keys[i], moltyps[keys[i]],
+                QStringList typlines = ::writeMolType(keys[i].second, moltyps[keys[i]],
                                                       examples[keys[i]], uses_parallel);
 
                 QMutexLocker lkr(&mutex);
-                typs.insert(keys[i], typlines);
+                typs.insert(keys[i].second, typlines);
             }
         });
     }
@@ -3728,13 +3728,17 @@ static QStringList writeMolTypes(const QHash<QString,GroMolType> &moltyps,
     {
         for (auto it = moltyps.constBegin(); it != moltyps.constEnd(); ++it)
         {
-            typs.insert( it.key(), ::writeMolType(it.key(), it.value(),
+            typs.insert( it.key().second, ::writeMolType(it.key().second, it.value(),
                                                   examples[it.key()], uses_parallel) );
         }
     }
 
-    QStringList keys = moltyps.keys();
-    keys.sort();
+    QStringList keys;
+    for (const auto &key : moltyps.keys())
+        keys.append(key.second);
+
+    if (isSorted)
+        keys.sort();
 
     QStringList lines;
 
@@ -3807,6 +3811,12 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
         return;
     }
 
+    bool isSorted = true;
+    if (map["sort"].hasValue())
+    {
+        isSorted = map["sort"].value().asA<BooleanProperty>().value();
+    }
+
     //generate the GroMolType object for each molecule in the system. It is likely
     //the multiple molecules will have the same GroMolType. We will be a bit slow
     //now and generate this for all molecules independently, and will then consolidate
@@ -3832,11 +3842,12 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
         }
     }
 
-    //now go through each type, remove duplicates, and record the name of
-    //each molecule so that we can write this in the [system] section
+    //now go through each type, remove duplicates, and record the indes and name
+    //of each molecule so that we can write this in the [system] section
     QStringList mol_to_moltype;
+    QMap<QPair<int,QString>,GroMolType> name_idx_to_mtyp;
+    QMap<QPair<int,QString>,Molecule> name_idx_to_example;
     QHash<QString,GroMolType> name_to_mtyp;
-    QHash<QString,Molecule> name_to_example;
 
     for (int i=0; i<mtyps.count(); ++i)
     {
@@ -3865,11 +3876,12 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
                     else
                     {
                         //new moltype
+                        name_idx_to_mtyp.insert(QPair<int,QString>(i,name), moltype);
                         name_to_mtyp.insert(name, moltype);
 
                         //save an example of this molecule so that we can
                         //extract any other details necessary
-                        name_to_example.insert(name, system[molnums[i]].molecule());
+                        name_idx_to_example.insert(QPair<int,QString>(i,name), system[molnums[i]].molecule());
 
                         break;
                     }
@@ -3880,8 +3892,9 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
         }
         else
         {
+            name_idx_to_mtyp.insert(QPair<int,QString>(i,name), moltype);
             name_to_mtyp.insert(name, moltype);
-            name_to_example.insert(name, system[molnums[i]].molecule());
+            name_idx_to_example.insert(QPair<int,QString>(i,name), system[molnums[i]].molecule());
         }
 
         mol_to_moltype.append(name);
@@ -3890,15 +3903,15 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
     QStringList errors;
 
     //first, we need to extract the common forcefield from the molecules
-    MMDetail ffield = name_to_mtyp.constBegin()->forcefield();
+    MMDetail ffield = name_idx_to_mtyp.constBegin()->forcefield();
 
-    for (auto it = name_to_mtyp.constBegin(); it != name_to_mtyp.constEnd(); ++it)
+    for (auto it = name_idx_to_mtyp.constBegin(); it != name_idx_to_mtyp.constEnd(); ++it)
     {
         if (not ffield.isCompatibleWith(it.value().forcefield()))
         {
             errors.append( QObject::tr( "The forcefield for molecule '%1' is not "
               "compatible with that for other molecules.\n%1 versus\n%2")
-                .arg(it.key()).arg(it.value().forcefield().toString()).arg(ffield.toString()) );
+                .arg(it.key().second).arg(it.value().forcefield().toString()).arg(ffield.toString()) );
         }
     }
 
@@ -3915,10 +3928,10 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
 
     //next, we need to extract and write all of the atom types from all of
     //the molecules
-    lines += ::writeAtomTypes(name_to_mtyp, name_to_example, ffield, map);
+    lines += ::writeAtomTypes(name_idx_to_mtyp, name_idx_to_example, ffield, map);
 
     //now convert these into text lines that can be written as the file
-    lines += ::writeMolTypes(name_to_mtyp, name_to_example, usesParallel());
+    lines += ::writeMolTypes(name_idx_to_mtyp, name_idx_to_example, usesParallel(), isSorted);
 
     //now write the system part
     lines += ::writeSystem(system.name(), mol_to_moltype);
@@ -3932,7 +3945,7 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
 
     //we don't need params any more, so free the memory
     mtyps.clear();
-    name_to_mtyp.clear();
+    name_idx_to_mtyp.clear();
     mol_to_moltype.clear();
 
     //now we have the lines, reparse them to make sure that they are correct
