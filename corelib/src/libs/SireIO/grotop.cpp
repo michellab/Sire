@@ -3845,8 +3845,8 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
     //now go through each type, remove duplicates, and record the indes and name
     //of each molecule so that we can write this in the [system] section
     QStringList mol_to_moltype;
-    QMap<QPair<int,QString>,GroMolType> name_idx_to_mtyp;
-    QMap<QPair<int,QString>,Molecule> name_idx_to_example;
+    QMap<QPair<int,QString>,GroMolType> idx_name_to_mtyp;
+    QMap<QPair<int,QString>,Molecule> idx_name_to_example;
     QHash<QString,GroMolType> name_to_mtyp;
 
     for (int i=0; i<mtyps.count(); ++i)
@@ -3876,12 +3876,12 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
                     else
                     {
                         //new moltype
-                        name_idx_to_mtyp.insert(QPair<int,QString>(i,name), moltype);
+                        idx_name_to_mtyp.insert(QPair<int,QString>(i,name), moltype);
                         name_to_mtyp.insert(name, moltype);
 
                         //save an example of this molecule so that we can
                         //extract any other details necessary
-                        name_idx_to_example.insert(QPair<int,QString>(i,name), system[molnums[i]].molecule());
+                        idx_name_to_example.insert(QPair<int,QString>(i,name), system[molnums[i]].molecule());
 
                         break;
                     }
@@ -3892,9 +3892,9 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
         }
         else
         {
-            name_idx_to_mtyp.insert(QPair<int,QString>(i,name), moltype);
+            idx_name_to_mtyp.insert(QPair<int,QString>(i,name), moltype);
             name_to_mtyp.insert(name, moltype);
-            name_idx_to_example.insert(QPair<int,QString>(i,name), system[molnums[i]].molecule());
+            idx_name_to_example.insert(QPair<int,QString>(i,name), system[molnums[i]].molecule());
         }
 
         mol_to_moltype.append(name);
@@ -3903,9 +3903,9 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
     QStringList errors;
 
     //first, we need to extract the common forcefield from the molecules
-    MMDetail ffield = name_idx_to_mtyp.constBegin()->forcefield();
+    MMDetail ffield = idx_name_to_mtyp.constBegin()->forcefield();
 
-    for (auto it = name_idx_to_mtyp.constBegin(); it != name_idx_to_mtyp.constEnd(); ++it)
+    for (auto it = idx_name_to_mtyp.constBegin(); it != idx_name_to_mtyp.constEnd(); ++it)
     {
         if (not ffield.isCompatibleWith(it.value().forcefield()))
         {
@@ -3928,10 +3928,10 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
 
     //next, we need to extract and write all of the atom types from all of
     //the molecules
-    lines += ::writeAtomTypes(name_idx_to_mtyp, name_idx_to_example, ffield, map);
+    lines += ::writeAtomTypes(idx_name_to_mtyp, idx_name_to_example, ffield, map);
 
     //now convert these into text lines that can be written as the file
-    lines += ::writeMolTypes(name_idx_to_mtyp, name_idx_to_example, usesParallel(), isSorted);
+    lines += ::writeMolTypes(idx_name_to_mtyp, idx_name_to_example, usesParallel(), isSorted);
 
     //now write the system part
     lines += ::writeSystem(system.name(), mol_to_moltype);
@@ -3945,7 +3945,7 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
 
     //we don't need params any more, so free the memory
     mtyps.clear();
-    name_idx_to_mtyp.clear();
+    idx_name_to_mtyp.clear();
     mol_to_moltype.clear();
 
     //now we have the lines, reparse them to make sure that they are correct
