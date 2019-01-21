@@ -41,7 +41,7 @@ ADD build_cmake.sh $HOME/build_cmake.sh
 RUN scl enable devtoolset-6 ./build_cmake.sh
 
 ENV PATH=$HOME/local/bin:$PATH
-
+ENV PYTHONPATH=""
 # Seed the repo with the latest devel version of Sire.
 # This will stop us downloading too much for each build...
 RUN git clone https://github.com/michellab/Sire
