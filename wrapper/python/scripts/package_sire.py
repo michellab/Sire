@@ -12,17 +12,25 @@ import glob
 
 from os.path import getsize, join
 
+try:
+    sire_run = os.getenv("SIRE_RUN_FILE")
+except:
+    sire_run = None
+
+print("sire_run = %s" % sire_run)
+
 siredir = os.path.abspath( getInstallDir() )
 
-print("\n#################################################################")
-print(  "# This script will create a sire.run install file for the copy")
-print(  "# of Sire running in directory %s" % siredir)
-print(  "#################################################################\n")
+if sire_run is None:
+    print("\n#################################################################")
+    print(  "# This script will create a sire.run install file for the copy")
+    print(  "# of Sire running in directory %s" % siredir)
+    print(  "#################################################################\n")
 
-sys.stdout.write("Please provide a name for the installer (sire.run) : ",)
-sys.stdout.flush()
+    sys.stdout.write("Please provide a name for the installer (sire.run) : ",)
+    sys.stdout.flush()
 
-sire_run = sys.stdin.readline()
+    sire_run = sys.stdin.readline()
 
 try:
     sire_run = sire_run.lstrip().rstrip()
