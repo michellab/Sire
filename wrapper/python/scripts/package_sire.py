@@ -17,8 +17,6 @@ try:
 except:
     sire_run = None
 
-print("sire_run = %s" % sire_run)
-
 siredir = os.path.abspath( getInstallDir() )
 
 if sire_run is None:
