@@ -2,8 +2,7 @@
 `Sire <http://siremol.org>`__
 ****
 
-|Pipelines Badge|
-.. |Pipelines Badge| image:: https://dev.azure.com/michellab/Sire/_apis/build/status/michellab.Sire?branchName=devel
+.. image:: https://dev.azure.com/michellab/Sire/_apis/build/status/michellab.Sire?branchName=devel
 
 About
 =====
