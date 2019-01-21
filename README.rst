@@ -3,6 +3,7 @@
 ****
 
 .. image:: https://dev.azure.com/michellab/Sire/_apis/build/status/michellab.Sire?branchName=devel
+   :target: https://dev.azure.com/michellab/Sire/_build
 
 About
 =====
