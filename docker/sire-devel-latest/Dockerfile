@@ -15,13 +15,11 @@ RUN cd Sire && git checkout devel && git pull
 ADD build_sire.sh $HOME/build_sire.sh
 RUN scl enable devtoolset-6 ./build_sire.sh
 
-# Now package up into a self-extracting executable
-#RUN echo "sire_devel_latest_linux.run" | $HOME/sire.app/bin/package_sire
-#RUN chmod a+x sire_devel_latest_linux.run
-
-# Now extract this package and run the tests
-#RUN echo "$HOME/testsire.app" | ./sire_devel_latest_linux.run
-
-#RUN $HOME/testsire.app/bin/sire_test 2>&1 | tee sire_tests.log
+#Cleaning the conda and pip cache before packaging
+ADD clean.py $HOME/clean.py
+RUN $HOME/sire.app/bin/conda clean -tipsy && \
+    rm -rf $HOME/.cache && \
+    $HOME/sire.app/bin/python $HOME/clean.py && \
+    rm $HOME/clean.py
 
 ENTRYPOINT ["scl", "enable", "devtoolset-6", "bash"]
