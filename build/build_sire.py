@@ -106,9 +106,9 @@ if __name__ == "__main__":
         import simtk.openmm
         print("openmm is already installed...")
     except:
-        print("Installing openmm from the omnia repository...")
-        os.system("%s config --add channels http://conda.binstar.org/omnia" % conda_exe)
-        os.system("%s install --yes openmm=7.1" % conda_exe)
+        print("Installing openmm from the conda-forge repository...")
+        os.system("%s conda install -c omnia -c conda-forge openmm" % conda_exe)
+        #os.system("%s install --yes openmm=7.1" % conda_exe)
 
     # libnetcdf
     try:
