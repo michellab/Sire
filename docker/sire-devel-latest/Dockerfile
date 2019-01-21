@@ -10,7 +10,7 @@ USER $FN_USER
 
 # Update to the latest version
 RUN cd Sire && git checkout devel && git pull
-
+ 
 # Build Sire (takes a long time)
 ADD build_sire.sh $HOME/build_sire.sh
 RUN scl enable devtoolset-6 ./build_sire.sh
