@@ -7,10 +7,10 @@ import importlib
 
 # Check if the Cuda platform is recognised in platforms
 platforms = [ mm.Platform.getPlatform(index).getName() for index in range(mm.Platform.getNumPlatforms()) ]
-print (platforms)
 
 if 'CUDA' in platforms:
     print('The CUDA platform is successfully recognised by openMM! Nothing needs to be done and you can use SOMD')
+    print(platforms)
     sys.exit(0)
 else:
     print('CUDA platform is not recognised by OpenMM!')
@@ -39,9 +39,7 @@ else:
     if nvcc.returncode == 0:
         nvcc_out = nvcc.stdout.decode("ascii").strip()
         match = re.search('release [+-]?([0-9]*[.]?[0-9])+', nvcc_out)
-        print(match)
         nvcc_release = str(match.group().split(' ')[-1])
-        print(type(nvcc_release))
         print('Found a CUDA toolkit release version: '+nvcc_release)
     else:
         nvcc_out = nvcc.stderr.decode("ascii").strip()  
@@ -58,10 +56,9 @@ else:
     conda_proc = subprocess.run(conda_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     importlib.reload(mm)
     if conda_proc.returncode == 0:
-        platforms = []
-        platforms = [ mm.Platform.getPlatform(index).getName() for index in range(mm.Platform.getNumPlatforms()) ]
-        print(platforms)
-        if 'CUDA' in platforms:
+        platform = [ mm.Platform.getPlatform(index).getName() for index in range(mm.Platform.getNumPlatforms()) ]
+        print(platform)
+        if 'CUDA' in platform:
             print('You have now successfully configured OpenMM for use with Sire')
             sys.exit(0)
         else:
