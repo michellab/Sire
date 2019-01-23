@@ -3,6 +3,7 @@ import subprocess
 import re
 import os
 import sys
+import importlib
 
 # Check if the Cuda platform is recognised in platforms
 platforms = [ mm.Platform.getPlatform(index).getName() for index in range(mm.Platform.getNumPlatforms()) ]
@@ -13,9 +14,12 @@ if 'CUDA' in platforms:
     sys.exit(0)
 else:
     print('CUDA platform is not recognised by OpenMM!')
+    print('available platforms are: ')
+    print(platforms)
+    print("Let's see if we can do something about this....\n")
+
     # Find OpenMM version
     mm_version = mm.__version__
-    print(mm_version)
 
     # Let's find out which version of conda you are using!
     conda_base = os.path.abspath(os.path.dirname(sys.executable))
@@ -45,11 +49,16 @@ else:
         print('If you want to use SOMD with CUDA plese double check your CUDA installation')
         sys.exit(-1)
 
+    # Found CUDA version and openMM version, now trying to update this with conda!
     print('Trying to update OpenMM to match your CUDA version %s for your OpenMM version %s' %(nvcc_release,mm_version))
+    print('This may take a little while. Please hold tight!')
+    print('................................................')
     version = nvcc_release.replace('.','')
     conda_cmd = conda_exe +'  install --yes --no-deps -c omnia/label/cuda%s openmm=%s' %(version,mm_version)
     conda_proc = subprocess.run(conda_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    importlib.reload(mm)
     if conda_proc.returncode == 0:
+        platforms = []
         platforms = [ mm.Platform.getPlatform(index).getName() for index in range(mm.Platform.getNumPlatforms()) ]
         print(platforms)
         if 'CUDA' in platforms:
