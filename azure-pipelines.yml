@@ -9,14 +9,14 @@ trigger:
 pool:
   vmImage: 'Ubuntu-16.04'
 
-variables:
-  imageName: 'sire-devel-pipeline:latest'
-
 steps:
 - script: |
-    cd docker/sire-pipeline-devel && docker build -f Dockerfile -t $(imageName) .
     docker login -u $id -p $pswd
-    docker push siremol/$(imageName)
+    docker pull siremol/sire-devel:latest
+    docker tag siremol/sire-devel:latest siremol/sire-devel:last
+    docker push siremol/sire-devel:last
+    cd docker/sire-pipeline-devel && docker build -f Dockerfile -t siremol/sire-devel:latest .
+    docker push siremol/sire-devel:latest
   env:
     pswd: $(dockerPassword)
     id: $(dockerId)
