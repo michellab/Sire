@@ -118,6 +118,10 @@ if __name__ == "__main__":
         print("Installing netCDF4 using '%s install netcdf4'" % conda_exe)
         os.system("%s install --yes netcdf4" % conda_exe)
 
+    # Make sure all of the above output is printed to the screen
+    # before we start running any actual compilation
+    sys.stdout.flush()
+
     # Now that the miniconda distribution is ok, the next step
     # is to use cmake to build the corelib and wrapper in the build/corelib
     # and build/wrapper directories

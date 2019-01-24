@@ -10,8 +10,14 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  imageName: 'sire-pipeline-devel:$(build.buildId)'
+  imageName: 'sire-devel-pipeline:latest'
 
 steps:
-- script: cd docker/sire-pipeline-devel && docker build -f Dockerfile -t $(imageName) .
+- script: |
   displayName: 'docker build'
+  cd docker/sire-pipeline-devel && docker build -f Dockerfile -t $(imageName) .
+  docker login -u $id -p $pswd
+  docker push siremol/$(imageName)
+env:
+  pswd: $(dockerPassword)
+  id: $(dockerId)
