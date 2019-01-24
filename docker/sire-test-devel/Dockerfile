@@ -8,9 +8,11 @@ WORKDIR $HOME
 
 USER $FN_USER
 
-# Now extract this package and run the tests
-RUN echo "$HOME/testsire.app" | ./sire_devel_latest_linux.run
+# Set installation directory.
+ENV SIRE_INSTALL_DIR $HOME/test_sire.app
 
-RUN $HOME/testsire.app/bin/sire_test 2>&1 | tee sire_tests.log
+RUN ./sire_devel_latest_linux.run
+
+RUN $SIRE_INSTALL_DIR/bin/sire_test 2>&1 | tee sire_tests.log
 
 ENTRYPOINT ["scl", "enable", "devtoolset-6", "bash"]

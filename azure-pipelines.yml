@@ -10,8 +10,8 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  imageName: 'sire-devel:$(build.buildId)'
+  imageName: 'sire-pipeline-devel:$(build.buildId)'
 
 steps:
-- script: cd docker/sire-build && docker build -f Dockerfile -t $(imageName) .
+- script: cd docker/sire-pipeline-devel && docker build -f Dockerfile -t $(imageName) .
   displayName: 'docker build'
