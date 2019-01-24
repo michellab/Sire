@@ -17,7 +17,7 @@ steps:
     cd docker/sire-pipeline-devel && docker build -f Dockerfile -t $(imageName) .
     docker login -u $id -p $pswd
     docker push siremol/$(imageName)
-  env: |
+  env:
     pswd: $(dockerPassword)
     id: $(dockerId)
   displayName: 'Sire build'
