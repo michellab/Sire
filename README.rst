@@ -2,6 +2,9 @@
 `Sire <http://siremol.org>`__
 ****
 
+.. image:: https://dev.azure.com/michellab/Sire/_apis/build/status/michellab.Sire?branchName=devel
+   :target: https://dev.azure.com/michellab/Sire/_build
+
 About
 =====
 `Sire <http://siremol.org>`__ is a free, open source, multiscale 
@@ -49,6 +52,19 @@ compiling and installing Sire, then please get in touch using the links below.
 If you want to install Sire into an existing miniconda or Anaconda 
 Python installation, please follow the instructions in `build/INSTALL_INTO_ANACONDA.rst`.
 
+Docker images
+=============
+
+If you don't want to build or install file, you can also run Sire via 
+one of our docker images. The easy way to run the latest development
+image of Sire is via::
+
+    docker run -it siremol/sire-devel:latest
+
+This will download the latest Sire development container, and will run it,
+giving you a bash prompt inside the container.
+
+
 Support and Development
 =======================
 
@@ -63,10 +79,10 @@ Developers guide
 Please `visit the website <http://siremol.org>`__ for information on how to 
 develop applications using Sire. 
 
-Travis -- Autobuild feature
+Azure Pipelines -- Autobuild feature
 ---------------------------
 Since Sire is quite large, a build can take quite long and might not be neccessary 
-if a commit is only fixing a couple of typos. Simply add the line `[ci skip]` 
-to your commit message and Travis will not invoke an autobuild. 
+if a commit is only fixing a couple of typos. Simply add the line `***NO_CI***` 
+to your commit message and Azure Pipelines will not invoke an autobuild. 
 
 Have fun :-)
