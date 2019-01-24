@@ -20,4 +20,4 @@ steps:
   env: |
     pswd: $(dockerPassword)
     id: $(dockerId)
-displayName: 'docker build'
+  displayName: 'Sire build'
