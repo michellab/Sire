@@ -89,6 +89,7 @@ namespace SireMove {
         bool isTimeReversible() const;
 
         void initialise();
+        
 
 
         SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
@@ -105,7 +106,10 @@ namespace SireMove {
 
         IntegratorWorkspacePtr createWorkspace(const PropertyMap &map = PropertyMap()) const;
         IntegratorWorkspacePtr createWorkspace(const MoleculeGroup &molgroup, const PropertyMap &map = PropertyMap()) const;
-
+        
+        QString getCompRules(void);
+        void setCompRules(QString);
+        
         QString getCutoffType(void);
         void setCutoffType(QString);
 
