@@ -424,17 +424,17 @@ void OpenMMFrEnergyST::initialise()
     if (Debug)
         qDebug() << "\nCutoffType = " << CutoffType << "\n";
 
-    int flag_compRules;
+    int flag_combRules;
 
-    if (CompRules == "arithmetic")
-        flag_compRules = ARITHMETIC;
-    else if (CompRules == "geometric")
-        flag_compRules = GEOMETRIC;
+    if (CombRules == "arithmetic")
+        flag_combRules = ARITHMETIC;
+    else if (CombRules == "geometric")
+        flag_combRules = GEOMETRIC;
     else
         throw SireError::program_bug(QObject::tr("The combining rules have not been specified. Possible choises: arithmetic, geometric"), CODELOC);
 
     if (Debug)
-        qDebug() << "\nCompRules = " << CompRules << "\n";
+        qDebug() << "\nCombRules = " << CombRules << "\n";
 
     
     bool flag_noperturbedconstraints = false;
@@ -488,7 +488,7 @@ void OpenMMFrEnergyST::initialise()
     OpenMM::CustomBondForce * custom_intra_14_fromdummy = NULL;
     OpenMM::CustomBondForce * custom_intra_14_fromdummy_todummy = NULL;
 
-    if (flag_compRules == ARITHMETIC)
+    if (flag_combRules == ARITHMETIC)
     {
         
     if (flag_cutoff == NOCUTOFF)
@@ -4169,15 +4169,15 @@ void OpenMMFrEnergyST::setCutoffType(QString cutoff_type)
 }
 
 /** Get the combining rules type: arithmetic, geometric*/
-QString OpenMMFrEnergyST::getCompRules(void)
+QString OpenMMFrEnergyST::getCombRules(void)
 {
-    return CompRules;
+    return CombRules;
 }
 
 /** Set the combining rules type: arithmetic, geometric*/
-void OpenMMFrEnergyST::setCompRules(QString comp_rules)
+void OpenMMFrEnergyST::setCombRules(QString comb_rules)
 {
-    CompRules = comp_rules;
+    CombRules = comb_rules;
 }
 
 
