@@ -17,6 +17,9 @@ steps:
     docker push siremol/sire-devel:last
     cd docker/sire-pipeline-devel && docker build -f Dockerfile -t siremol/sire-devel:latest .
     docker push siremol/sire-devel:latest
+    cd ../sire-test-devel && docker build -f Dockerfile -t siremol/sire-test-devel:latest .
+    cd ../sire-package-devel && docker build -f Dockerfile -t siremol/sire-package-devel:latest .
+    docker push siremol/sire-package-devel:latest
   env:
     pswd: $(dockerPassword)
     id: $(dockerId)
