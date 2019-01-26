@@ -2710,7 +2710,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         QVector< std::tuple< QVector<qint64>, QVector<qint64>,
                              QHash<AmberNBDihPart,qint64> > > all_dih_data(params.count());
 
-        //get all of the angle information from each molecule
+        //get all of the dihedral information from each molecule
         if (use_parallel)
         {
             tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
@@ -2946,6 +2946,8 @@ QStringList toLines(const QVector<AmberParams> &params,
     pointers[14] = std::get<9>(dih_lines);      // NPHIA
     pointers[17] = std::get<10>(dih_lines);      // NPTRA
 
+    const int ntypes = pointers[1];     // number of atom types
+
     lines.append("%FLAG POINTERS");
     lines += writeIntData(pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ) );
 
@@ -3004,9 +3006,9 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines += std::get<4>(dih_lines);
 
     lines.append("%FLAG SOLTY");
-    //this is currently unused in Amber and should be equal to 0.0 for all atoms
+    //this is currently unused in Amber and should be equal to 0.0 for all atom types
     {
-        QVector<double> solty(total_natoms, 0.0);
+        QVector<double> solty(ntypes, 0.0);
         lines += writeFloatData(solty, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ));
     }
 
@@ -3853,24 +3855,24 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
                         if (not scnbfactor.isEmpty())
                             sclnb14 = scnbfactor[param_index];
 
+                        //invert the scale factors
                         if (sclee14 < 0.00001)
                         {
-                            throw SireError::program_bug( QObject::tr(
-                                "A 1,4 pair has a coulombic scaling factor of 0.0 in the top file "
-                                "which would mean an infinite energy!"),
-                                    CODELOC );
+                            sclee14 = 0.0;
                         }
+                        else
+                        {
+                            sclee14 = 1.0/sclee14;
+                        }
+                        
                         if (sclnb14 < 0.00001)
                         {
-                            throw SireError::program_bug( QObject::tr(
-                                "A 1,4 pair has a LJ scaling factor of 0.0 in the top file "
-                                "which would mean an infinite energy!"),
-                                    CODELOC );
+                            sclnb14 = 0.0;
                         }
-
-                        //invert the scale factors
-                        sclee14 = 1.0/sclee14;
-                        sclnb14 = 1.0/sclnb14;
+                        else
+                        {
+                            sclnb14 = 1.0/sclnb14;
+                        }
 
                         //save them into the parameter space
                         params.addNB14( BondID(atom0,atom3), sclee14, sclnb14 );

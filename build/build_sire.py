@@ -6,19 +6,7 @@ import sys
 import os
 import time
 
-from multiprocessing import Pool
-
-def print_progress():
-    while True:
-        print("Build is in progress...")
-        time.sleep(300)
-
 if __name__ == "__main__":
-
-    pool = Pool()
-
-    # run a background process that prints to the screen so that people know that we are still alive...
-    result = pool.apply_async(print_progress)
 
     conda_base = os.path.abspath( os.path.dirname(sys.executable) )
 
@@ -233,19 +221,5 @@ if __name__ == "__main__":
         print("SOMETHING WENT WRONG WHEN INSTALLING WRAPPER!")
         sys.exit(-1)
 
-    # Now that everything has been installed, we should be able 
-    # to import Sire
-    try:
-        import Sire.CAS
-        x = Sire.CAS.Symbol("x")
-        f = x**2 + 5*x - 10
-        g = f.differentiate(x)
-    except Exception as e:
-        print("Something went wrong when trying to test the Sire installation.")
-        print(e)
-        print("Please check things manually yourself...")
-
     print("\n\n=================================")
     print("Congratulations. Everything has installed :-)")
-
-    sys.exit(0)
