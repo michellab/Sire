@@ -17,9 +17,16 @@ if not os.path.exists(upload_file):
 
 data = open(upload_file, "rb").read()
 
+key = "sire_devel_latest_linux.run"
+
+if par_url.endswith("/"):
+    destination = "%s%s" % (par_url, key)
+else:
+    destination = "%s/%s" % (par_url, key)
+
 buffer = BytesIO()
 c = pycurl.Curl()
-c.setopt(c.URL, "%s/sire_devel_latest_linux.run" % par_url)
+c.setopt(c.URL, destination)
 c.setopt(c.WRITEDATA, buffer)
 c.setopt(c.CUSTOMREQUEST, "PUT")
 c.setopt(c.POST, True)
