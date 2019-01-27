@@ -90,7 +90,7 @@ full testing, construction of a package and upload to siremol.org (so that it
 can be downloaded as the latest version of sire_devel_latest_linux.run). Please
 think twice before committing directly to devel. You should ideally be working
 in a feature branch, and only commit to devel once you are happy the code
-works on your branch. Use ***NO_CI*** until you are happy that you want to 
+works on your branch. Use `***NO_CI***` until you are happy that you want to 
 trigger a full build, test and deployment. This full pipeline will take
 about 30 minutes to complete.
 
