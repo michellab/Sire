@@ -1,6 +1,7 @@
 
 import os
-import Sire.Base
+import pycurl
+from io import BytesIO
 
 par_url = os.environ["PAR_URL"]
 
@@ -14,11 +15,15 @@ upload_file = "/home/sireuser/sire_devel_latest_linux.run"
 if not os.path.exists(upload_file):
     raise ValueError("Cannot find %s" % upload_file)
 
-args = ("-v", "-X", "PUT" ,"-F", "'file=@%s'" % upload_file,
-        "%s/sire_devel_latest_linux.run" % par_url)
+data = open(upload_file, "rb").read()
 
-process = Sire.Base.Process.run(upload_cmd, args)
-process.wait()
+buffer = BytesIO()
+c = pycurl.Curl()
+c.setopt(c.URL, "%s/sire_devel_latest_linux.run" % par_url)
+c.setopt(c.WRITEDATA, buffer)
+c.setopt(c.CUSTOMREQUEST, "PUT")
+c.setopt(c.POST, True)
+c.setopt(c.POSTFIELDS, data)
 
-if process.isError():
-    raise ValueError("Something went wrong!")
+c.perform()
+c.close()
