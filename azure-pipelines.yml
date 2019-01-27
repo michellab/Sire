@@ -11,16 +11,32 @@ pool:
 
 steps:
 - script: |
+    # login to docker and get the last successful sire-devel build
     docker login -u $id -p $pswd
     docker pull siremol/sire-devel:latest
+
+    # ensure the last known safe state is saved on docker
     docker tag siremol/sire-devel:latest siremol/sire-devel:last
     docker push siremol/sire-devel:last
+
+    # now build the latest version of devel, starting from the last point
     cd docker/sire-pipeline-devel && docker build -f Dockerfile -t siremol/sire-devel:latest .
+
+    # push this latest version back to docker to be used by others
     docker push siremol/sire-devel:latest
+
+    # now perform the tests - do this before packaging and deploy
     cd ../sire-test-devel && docker build -f Dockerfile -t siremol/sire-test-devel:latest .
+
+    # if the test were successful then create a binary installer package
+    # and ensure this is pushed back to docker for checking
     cd ../sire-package-devel && docker build -f Dockerfile -t siremol/sire-package-devel:latest .
     docker push siremol/sire-package-devel:latest
+
+    # finally deploy the binary to an object store bucket identified by 'par_url'
+    cd ../sire-deploy-devel && docker build -f Dockerfile --build-arg par_url=$par_url .
   env:
     pswd: $(dockerPassword)
     id: $(dockerId)
+    par_url: $(parURL)
   displayName: 'Sire build'
