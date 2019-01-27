@@ -11,16 +11,40 @@ pool:
 
 steps:
 - script: |
+    # login to docker and get the last successful sire-devel build
     docker login -u $id -p $pswd
     docker pull siremol/sire-devel:latest
+
+    # ensure the last known safe state is saved on docker
     docker tag siremol/sire-devel:latest siremol/sire-devel:last
     docker push siremol/sire-devel:last
-    cd docker/sire-pipeline-devel && docker build -f Dockerfile -t siremol/sire-devel:latest .
-    docker push siremol/sire-devel:latest
-    cd ../sire-test-devel && docker build -f Dockerfile -t siremol/sire-test-devel:latest .
-    cd ../sire-package-devel && docker build -f Dockerfile -t siremol/sire-package-devel:latest .
-    docker push siremol/sire-package-devel:latest
   env:
     pswd: $(dockerPassword)
     id: $(dockerId)
-  displayName: 'Sire build'
+  displayName: 'Pull sire-devel:latest'
+- script: |
+    # login to docker and get the last successful sire-devel build
+    docker login -u $id -p $pswd
+    docker pull siremol/sire-devel:latest
+
+    # now build the latest version of devel, starting from the last point
+    cd docker/sire-pipeline-devel && docker build -f Dockerfile -t siremol/sire-devel:latest . && cd - && docker push siremol/sire-devel:latest
+  env:
+    pswd: $(dockerPassword)
+    id: $(dockerId)
+  displayName: 'Build Sire'
+- script: |
+    # now perform the tests - do this before packaging and deploy
+    cd docker/sire-test-devel && docker build -f Dockerfile -t siremol/sire-test-devel:latest . && cd -
+  displayName: 'Run Sire tests'
+- script: |
+    # if the test were successful then create a binary installer package
+    # and ensure this is pushed back to docker for checking
+    cd docker/sire-package-devel && docker build -f Dockerfile -t siremol/sire-package-devel:latest . && cd -
+  displayName: 'Package Sire into a binary'
+- script: |
+    # finally deploy the binary to an object store bucket identified by 'par_url'
+    cd docker/sire-deploy-devel && docker build -f Dockerfile --build-arg par_url=$par_url . && cd -
+  env:
+    par_url: $(parURL)
+  displayName: 'Deploy binary to siremol.org'
