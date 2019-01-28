@@ -103,7 +103,7 @@ equil_iterations = Parameter("equilibration iterations", 2000, """Number of equi
 
 equil_timestep = Parameter("equilibration timestep", 0.5 * femtosecond, """Timestep to use during equilibration.""")
 
-combining_rules = Parameter("combining rules", "arithmetic",
+comb_rules = Parameter("combining rules", "arithmetic",
                             """Combining rules to use for the non-bonded interactions.""")
 
 timestep = Parameter("timestep", 2 * femtosecond, """Timestep for the dynamics simulation.""")
