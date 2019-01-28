@@ -262,6 +262,7 @@ OpenMMFrEnergyST& OpenMMFrEnergyST::operator=(const OpenMMFrEnergyST &other)
     openmm_context = other.openmm_context;
     isSystemInitialised = other.isSystemInitialised;
     isContextInitialised = other.isContextInitialised;
+    CombRules = other.CombRules;
     CutoffType = other.CutoffType;
     cutoff_distance = other.cutoff_distance;
     field_dielectric = other.field_dielectric;
@@ -309,6 +310,7 @@ bool OpenMMFrEnergyST::operator==(const OpenMMFrEnergyST &other) const
     return frequent_save_velocities == other.frequent_save_velocities
         and isSystemInitialised == other.isSystemInitialised
         and isContextInitialised == other.isContextInitialised
+        and CombRules == other.CombRules
         and CutoffType == other.CutoffType
         and cutoff_distance == other.cutoff_distance
         and field_dielectric == other.field_dielectric
