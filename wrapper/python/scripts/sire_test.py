@@ -138,6 +138,9 @@ if len(failures) > 0:
 
     for failure in failures:
         print("One of more jobs in %s failed!" % failure)
+
+    sys.exit(-1)
 else:
     print("\n\nHOORAY - ALL OF THE UNIT TESTS PASSED!!!")
     print("\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/")
+    sys.exit(0)
