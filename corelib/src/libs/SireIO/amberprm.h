@@ -36,6 +36,9 @@
 #include "SireMaths/vector.h"
 #include "SireMM/ljparameter.h"
 
+#include <QSet>
+#include <QHash>
+
 SIRE_BEGIN_HEADER
 
 namespace SireIO
@@ -183,16 +186,15 @@ private:
     void rebuildLJParameters();
     void rebuildBADIndicies();
     void rebuildExcludedAtoms();
+    void rebuildMolNumToAtomNums();
 
     SireMM::AmberParams getAmberParams(int imol, const SireMol::MoleculeInfoData &molinfo) const;
 
-    SireMol::MolStructureEditor getMolStructure(int start_idx, int natoms,
+    SireMol::MolStructureEditor getMolStructure(int molidx,
                                                 const SireBase::PropertyName &cutting) const;
 
-    SireMol::MolEditor getMolecule(int molidx, int start_idx, int natoms,
-                                   const PropertyMap &map) const;
-
-    QVector< QPair<int,int> > moleculeIndicies() const;
+    SireMol::MolEditor getMoleculeEditor(int molidx,
+                                         const PropertyMap &map) const;
 
     QVector<int> getAtomIndexToMolIndex() const;
 
@@ -226,6 +228,9 @@ private:
 
     /** The excluded atoms for each atom of each molecule */
     QVector< QVector< QVector<int> > > excl_atoms;
+
+    /** The AtomNums of each atom in each molecule (indexed by MolNum) */
+    QVector< QVector<int> > molnum_to_atomnums;
 
     /** A copy of the POINTER data to prevent over-lookup */
     QVector<qint64> pointers;
