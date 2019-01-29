@@ -1,20 +1,33 @@
 #!/bin/sh
 
-echo " "
-echo "#######################################################"
-echo "#      Where would you like to install Sire?"
-echo "#      Note that you can move Sire to any"
-echo "#      directory you want after installation"
-echo "#######################################################\n"
-echo " "
-
-echo "Full Path to Install directory ($HOME/sire.app): "
-
-read install_dir
+set install_dir=$SIRE_INSTALL_DIR
 
 if [ "x$install_dir" = "x" ]; then
-    echo "Using default install directory: $HOME/sire.app"
-    install_dir="$HOME/sire.app"
+
+    echo " "
+    echo "#######################################################"
+    echo "#      Where would you like to install Sire?"
+    echo "#      Note that you can move Sire to any"
+    echo "#      directory you want after installation"
+    echo "#######################################################\n"
+    echo " "
+
+    echo "Full Path to Install directory ($HOME/sire.app): "
+
+    read install_dir
+
+    if [ "x$install_dir" = "x" ]; then
+        echo "Using default install directory: $HOME/sire.app"
+        install_dir="$HOME/sire.app"
+    fi
+else
+    echo " "
+    echo "#######################################################"
+    echo "#      Installing to $install_dir"
+    echo "#      If you would like to change this, then unset"
+    echo "#      the SIRE_INSTALL_DIR environment variable."
+    echo "#######################################################\n"
+    echo " "
 fi
 
 echo "Going to install Sire to $install_dir"

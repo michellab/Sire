@@ -101,7 +101,7 @@ void register_GromacsBond_class(){
             GromacsBond_exposer.def( 
                 "equilibriumLength"
                 , equilibriumLength_function_value
-                , "" );
+                , "Return the equilibrium length of this bond" );
         
         }
         { //::SireMM::GromacsBond::functionType

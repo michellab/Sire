@@ -20,7 +20,7 @@ RUN echo "sire_master_latest_linux.run" | $HOME/sire.app/bin/package_sire
 RUN chmod a+x sire_master_latest_linux.run
 
 # Now extract this package and run the tests
-RUN echo "$HOME/testsire.app" | sire_master_latest_linux.run
+RUN echo "$HOME/testsire.app" | ./sire_master_latest_linux.run
 
 RUN $HOME/testsire.app/bin/sire_test 2>&1 | tee sire_tests.log
 

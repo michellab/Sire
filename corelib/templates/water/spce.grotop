@@ -1,0 +1,33 @@
+[ defaults ]
+; nbfunc        comb-rule       gen-pairs       fudgeLJ fudgeQQ
+1               2               yes             0.5     0.8333
+
+[ atomtypes ]
+OW_spc       8      15.9994  0.0000  A   3.16557e-01  6.50629e-01
+HW_spc       1       1.0080  0.0000  A   0.00000e+00  0.00000e+00
+
+[ moleculetype ]
+; molname   nrexcl
+SOL     2
+
+[ atoms ]
+; id  at type     res nr  res name  at name  cg nr  charge    mass
+  1   OW_spc      1       SOL       OW       1      -0.8476   15.99940
+  2   HW_spc      1       SOL       HW1      1       0.4238    1.00800
+  3   HW_spc      1       SOL       HW2      1       0.4238    1.00800
+
+[ bonds ]
+; i     j       funct   length  force.c.
+1       2       1       0.1     345000  0.1     345000
+1       3       1       0.1     345000  0.1     345000
+
+[ angles ]
+; i     j       k       funct   angle   force.c.
+2       1       3       1       109.47  383     109.47  383
+
+[ system ]
+Gromacs SPCE water
+
+[ molecules ]
+;molecule name    nr.
+SOL               1

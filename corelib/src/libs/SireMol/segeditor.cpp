@@ -137,7 +137,7 @@ SegEditor& SegEditor::rename(const SegName &newname)
         //nothing to do
         return *this;
         
-    throw SireError::incomplete_code( CODELOC );
+    d->rename( this->index(), newname );
     
     return *this;
 }

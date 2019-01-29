@@ -595,9 +595,9 @@ QHash<AtomIdx,AtomIdx> AtomMCSMatcher::pvt_match(const MoleculeView &mol0,
                                                  const PropertyMap &map1) const
 {
     if (prematcher.isNull() or prematcher.read().isNull())
-        return Evaluator(mol0).findMCS(mol1, t, match_light, map0, map1, this-verbose);
+        return Evaluator(mol0).findMCS(mol1, t, match_light, map0, map1, 6, this-verbose);
     else
-        return Evaluator(mol0).findMCS(mol1, prematcher.read(), t, match_light, map0, map1, this-verbose);
+        return Evaluator(mol0).findMCS(mol1, prematcher.read(), t, match_light, map0, map1, 6, this-verbose);
 }
 
 /////////
@@ -1626,12 +1626,12 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomMCSMatcher::pvt_match(const MoleculeView &mol0,
             if (prematcher.isNull() or prematcher.read().isNull())
             {
                 local_map = Evaluator(mol0[idx]).findMCS(mol1[idx], t,
-                    match_light, map0, map1, this->verbose);
+                    match_light, map0, map1, 6, this->verbose);
             }
             else
             {
                 local_map = Evaluator(mol0[idx]).findMCS(mol1[idx], prematcher.read(),
-                    t, match_light, map0, map1, this->verbose);
+                    t, match_light, map0, map1, 6, this->verbose);
             }
 
             // Update the atom index map.

@@ -180,7 +180,7 @@ namespace AST
     QString RegExpValue::toString() const
     {
         QString qstr = QString::fromStdString(value);
-    
+
         if (is_case_sensitive)
             return QObject::tr("/%1/").arg(qstr);
         else
@@ -222,12 +222,12 @@ namespace AST
     QString Node::toString() const
     {
         QStringList lines;
-        
+
         for (const auto value : values)
         {
             lines.append( value.toString() );
         }
-        
+
         return lines.join("; ");
     }
 
@@ -238,7 +238,7 @@ namespace AST
         {
             lines.append( value.toString() );
         }
-    
+
         return QObject::tr("%1name %2")
                         .arg( idobject_to_string(name) )
                         .arg( lines.join(",") );
@@ -249,6 +249,16 @@ namespace AST
         return "all";
     }
 
+    QString IDWater::toString() const
+    {
+        return QString("water");
+    }
+
+    QString IDPerturbable::toString() const
+    {
+        return QString("perturbable");
+    }
+
     QString IDNumber::toString() const
     {
         QStringList lines;
@@ -256,7 +266,7 @@ namespace AST
         {
             lines.append( boost::apply_visitor( qstring_visitor(), value ) );
         }
-        
+
         return QObject::tr("%1%2 %3")
                     .arg( idobject_to_string(name) )
                     .arg( idnumtype_to_string(numtype) )
@@ -266,12 +276,12 @@ namespace AST
     QString IDElement::toString() const
     {
         QStringList lines;
-        
+
         for (const auto element : values)
         {
             lines.append( element.symbol() );
         }
-    
+
         return QObject::tr("element %1").arg(lines.join(","));
     }
 
@@ -345,7 +355,7 @@ namespace AST
         else
         {
             QList<SelectEnginePtr> engines;
-        
+
             for (const auto value : values)
             {
                 engines.append( value.toEngine() );
@@ -359,27 +369,27 @@ namespace AST
     {
         return boost::apply_visitor( engine_visitor(), value );
     }
-    
+
     SelectEnginePtr ExpressionPart::toEngine() const
     {
         return boost::apply_visitor( engine_visitor(), value );
     }
-    
+
     SelectEnginePtr IDUser::toEngine() const
     {
         return boost::apply_visitor( engine_visitor(), value );
     }
-    
+
     SelectEnginePtr IDName::toEngine() const
     {
         return IDNameEngine::construct(name,values);
     }
-    
+
     SelectEnginePtr IDElement::toEngine() const
     {
         return IDElementEngine::construct(values);
     }
-    
+
     SelectEnginePtr IDNumber::toEngine() const
     {
         switch(numtype)
@@ -392,12 +402,22 @@ namespace AST
             return SelectEnginePtr();
         }
     }
-    
+
     SelectEnginePtr IDAll::toEngine() const
     {
         return IDAllEngine::construct();
     }
-    
+
+    SelectEnginePtr IDWater::toEngine() const
+    {
+        return IDWaterEngine::construct();
+    }
+
+    SelectEnginePtr IDPerturbable::toEngine() const
+    {
+        return IDPerturbableEngine::construct();
+    }
+
     SelectEnginePtr IDBinary::toEngine() const
     {
         switch(operation)
@@ -410,31 +430,31 @@ namespace AST
             return SelectEnginePtr();
         }
     }
-    
+
     SelectEnginePtr IDWith::toEngine() const
     {
         return IDWithEngine::construct(name, token, value.toEngine());
     }
-    
+
     SelectEnginePtr IDWhereWithin::toEngine(IDObject name, IDCoordType typ) const
     {
         return IDDistanceEngine::construct(name, typ, distance.value * distance.unit,
                                            value.toEngine());
     }
-    
+
     SelectEnginePtr IDWhereCompare::toEngine(IDObject name, IDCoordType typ) const
     {
         qDebug() << "NOT YET IMPLEMENTED IDWhereCompare!";
         return SelectEnginePtr();
     }
-    
+
     class where_engine_visitor : public boost::static_visitor<SelectEnginePtr>
     {
     public:
         where_engine_visitor(IDObject o, IDCoordType t)
             : boost::static_visitor<SelectEnginePtr>(), obj(o), typ(t)
         {}
-        
+
         IDObject obj;
         IDCoordType typ;
 
@@ -444,7 +464,7 @@ namespace AST
             return value.toEngine(obj,typ);
         }
     };
-    
+
     SelectEnginePtr IDWhere::toEngine() const
     {
         return boost::apply_visitor( where_engine_visitor(name,typ), value );
@@ -459,12 +479,12 @@ namespace AST
     {
         return IDNotEngine::construct(value.toEngine());
     }
-    
+
     SelectEnginePtr IDSubscript::toEngine() const
     {
         return IDSubScriptEngine::construct(value.toEngine(),range);
     }
-    
+
     SelectEnginePtr IDWithin::toEngine() const
     {
         return IDDistanceEngine::construct(name, distance.value * distance.unit, value.toEngine());

@@ -2441,7 +2441,7 @@ void AmberParams::_pvt_createFrom(const MoleculeData &moldata)
     {
         //first look for the bondtypes property, as OPLS uses this
         amber_types = getProperty<AtomStringProperty>( map["bondtype"], moldata, &has_ambertypes );
-        
+
         if (not has_ambertypes)
         {
             //look for the atomtypes property
@@ -2581,4 +2581,43 @@ void AmberParams::_pvt_updateFrom(const MoleculeData &moldata)
     molinfo = info;
 
     this->_pvt_createFrom(moldata);
+}
+
+PropertyPtr AmberParams::_pvt_makeCompatibleWith(const MoleculeInfoData &newinfo,
+                                                 const AtomMatcher &atommatcher) const
+{
+    try
+    {
+        if (not atommatcher.changesOrder(this->info(), newinfo))
+        {
+            AmberParams ret(*this);
+            ret.molinfo = MoleculeInfo(newinfo);
+
+            return ret;
+        }
+
+        QHash<AtomIdx,AtomIdx> matched_atoms = atommatcher.match(this->info(), molinfo);
+
+        return this->_pvt_makeCompatibleWith(molinfo, matched_atoms);
+    }
+    catch(const SireError::exception &e)
+    {
+        qDebug() << e.toString();
+        throw;
+        return AmberParams();
+    }
+}
+
+PropertyPtr AmberParams::_pvt_makeCompatibleWith(const MoleculeInfoData &newinfo,
+                                                 const QHash<AtomIdx,AtomIdx> &map) const
+{
+    if (map.isEmpty())
+    {
+        AmberParams ret(*this);
+        ret.molinfo = MoleculeInfo(newinfo);
+
+        return ret;
+    }
+
+    throw SireError::incomplete_code("Cannot make compatible if atom order has changed!", CODELOC);
 }

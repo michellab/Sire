@@ -35,9 +35,12 @@ def __get_metadata__(molview, *args):
     else:
         raise AttributeError( "Only molview.metadata(metakey) or molview.metadata(key, metakey) are valid!" )
 
+_typename_mapping = {"SireMol_Velocity3D" : "SireMaths_Vector3D_SireUnits_Dimension_Velocity_"}
+
 def __get_typename__(obj):
     try:
-        return (obj.typeName().replace("::","_"), obj)
+        typename = obj.typeName().replace("::","_")
+        return (_typename_mapping.get(typename, typename), obj)
     except:
         if isinstance(obj, float):
             return ("double", obj)

@@ -328,7 +328,7 @@ option ( SIRE_DISABLE_SSE "Prevent use of SSE when compiling" OFF )
 option ( SIRE_DISABLE_AVX "Prevent use of AVX when compiling" OFF )
 
 # Add option to disable use of AVX512F)
-option ( SIRE_DISABLE_AVX512F "Prevent use of AVX512F when compiling" OFF )
+option ( SIRE_DISABLE_AVX512F "Prevent use of AVX512F when compiling" ON )
 
 # Add an option to force off Fortran compilation and linking
 option ( SIRE_DISABLE_FORTRAN "Turn off Fortran compilation and linking" ON )
@@ -1073,6 +1073,13 @@ install (FILES ${CMAKE_CURRENT_BINARY_DIR}/sire_config.h
 # install the parameters file (containing forcefield parameters) into
 # share/Sire
 install (DIRECTORY ${CMAKE_SOURCE_DIR}/parameters
+         DESTINATION ${SIRE_SHARE}
+         USE_SOURCE_PERMISSIONS
+         PATTERN ".svn" EXCLUDE
+        )
+
+# install the molecular templates into share/Sire
+install (DIRECTORY ${CMAKE_SOURCE_DIR}/templates
          DESTINATION ${SIRE_SHARE}
          USE_SOURCE_PERMISSIONS
          PATTERN ".svn" EXCLUDE

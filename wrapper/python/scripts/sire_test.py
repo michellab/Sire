@@ -83,13 +83,13 @@ else:
 
 print("You should find the unit tests in %s" % unittestdir)
 
-print("\nRunning C++ unit tests...\n")
-try:
-    Sire.Base.UnitTest.runAll()
-except:
-    pass
-
-print("\nNow running Python-based unit tests...\n")
+#print("\nRunning C++ unit tests...\n")
+#try:
+#    Sire.Base.UnitTest.runAll()
+#except:
+#    pass
+#
+#print("\nNow running Python-based unit tests...\n")
 
 testdir = unittestdir
 
@@ -136,8 +136,15 @@ if len(failures) > 0:
     print("\n\nWARNING: SOME OF THE TEST JOBS FAILED!!!")
     print("#########################################")
 
+    s = []
+
     for failure in failures:
         print("One of more jobs in %s failed!" % failure)
+        s.append("One of more jobs in %s failed!" % failure)
+
+    print("\nEXITING AS FAIL")
+    raise AssertationError("SOME OF THE UNIT TESTS FAILED!\n%s" % 
+                           "\n".join(s))
 else:
     print("\n\nHOORAY - ALL OF THE UNIT TESTS PASSED!!!")
     print("\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/")

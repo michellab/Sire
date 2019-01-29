@@ -6,19 +6,7 @@ import sys
 import os
 import time
 
-from multiprocessing import Pool
-
-def print_progress():
-    while True:
-        print("Build is in progress...")
-        time.sleep(300)
-
 if __name__ == "__main__":
-
-    pool = Pool()
-
-    # run a background process that prints to the screen so that people know that we are still alive...
-    result = pool.apply_async(print_progress)
 
     conda_base = os.path.abspath( os.path.dirname(sys.executable) )
 
@@ -107,9 +95,9 @@ if __name__ == "__main__":
         import simtk.openmm
         print("openmm is already installed...")
     except:
-        print("Installing openmm from the omnia repository...")
-        os.system("%s config --add channels http://conda.binstar.org/omnia" % conda_exe)
-        os.system("%s install --yes openmm=7.0" % conda_exe)
+        print("Installing openmm from the conda-forge repository...")
+        os.system("%s install --yes -c omnia -c conda-forge openmm" % conda_exe)
+        #os.system("%s install --yes openmm=7.1" % conda_exe)
 
     # libnetcdf
     try:
@@ -118,6 +106,10 @@ if __name__ == "__main__":
     except:
         print("Installing netCDF4 using '%s install netcdf4'" % conda_exe)
         os.system("%s install --yes netcdf4" % conda_exe)
+
+    # Make sure all of the above output is printed to the screen
+    # before we start running any actual compilation
+    sys.stdout.flush()
 
     # Now that the miniconda distribution is ok, the next step
     # is to use cmake to build the corelib and wrapper in the build/corelib
@@ -273,19 +265,5 @@ if __name__ == "__main__":
         print("SOMETHING WENT WRONG WHEN INSTALLING WRAPPER!")
         sys.exit(-1)
 
-    # Now that everything has been installed, we should be able 
-    # to import Sire
-    try:
-        import Sire.CAS
-        x = Sire.CAS.Symbol("x")
-        f = x**2 + 5*x - 10
-        g = f.differentiate(x)
-    except Exception as e:
-        print("Something went wrong when trying to test the Sire installation.")
-        print(e)
-        print("Please check things manually yourself...")
-
     print("\n\n=================================")
     print("Congratulations. Everything has installed :-)")
-
-    sys.exit(0)

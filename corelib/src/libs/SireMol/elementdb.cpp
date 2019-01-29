@@ -411,12 +411,12 @@ bool Element::halogen() const
 }
 
 /** Return whether or not this is biological
-    (in first three periods and not a noble gas)
+    (in first three periods and not a noble gas, or a halogen)
     (this does preclude iron, potassium and calcium, which are
     rather biological... :-) */
 bool Element::biological() const
 {
-    return period() <= 3 and not nobleGas();
+    return (period() <= 3 and not nobleGas()) or halogen();
 }
 
 /** Return whether or not this is an alkali metal (group 1 or 2) */

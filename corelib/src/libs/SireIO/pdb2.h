@@ -121,6 +121,9 @@ public:
     /** Set the residue index. */
     void setResIdx(int idx);
 
+    /** Get the alternate location indicator. */
+    QChar getAltLoc() const;
+
     /** Get the residue insertion code. */
     QChar getInsertCode() const;
 

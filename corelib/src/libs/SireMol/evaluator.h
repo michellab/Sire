@@ -263,18 +263,21 @@ public:
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    bool match_light_atoms,
                                    const PropertyMap &map=PropertyMap(),
+                                   int min_heavy_protons=6,
                                    bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    const AtomMatcher &atommatcher,
                                    bool match_light_atoms,
                                    const PropertyMap &map=PropertyMap(),
+                                   int min_heavy_protons=6,
                                    bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    bool match_light_atoms,
                                    const PropertyMap &map0,
                                    const PropertyMap &map1,
+                                   int min_heavy_protons=6,
                                    bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
@@ -282,12 +285,14 @@ public:
                                    bool match_light_atoms,
                                    const PropertyMap &map0,
                                    const PropertyMap &map1,
+                                   int min_heavy_protons=6,
                                    bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
                                    const SireUnits::Dimension::Time &timeout,
                                    bool match_light_atoms,
                                    const PropertyMap &map=PropertyMap(),
+                                   int min_heavy_protons=6,
                                    bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
@@ -295,6 +300,7 @@ public:
                                    const SireUnits::Dimension::Time &timeout,
                                    bool match_light_atoms,
                                    const PropertyMap &map=PropertyMap(),
+                                   int min_heavy_protons=6,
                                    bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
@@ -302,6 +308,7 @@ public:
                                    bool match_light_atoms,
                                    const PropertyMap &map0,
                                    const PropertyMap &map1,
+                                   int min_heavy_protons=6,
                                    bool verbose=false) const;
 
     QHash<AtomIdx,AtomIdx> findMCS(const MoleculeView &other,
@@ -310,6 +317,7 @@ public:
                                    bool match_light_atoms,
                                    const PropertyMap &map0,
                                    const PropertyMap &map1,
+                                   int min_heavy_protons=6,
                                    bool verbose=false) const;
 
     QVector<QHash<AtomIdx,AtomIdx> > findMCSmatches(const MoleculeView &other,
@@ -359,18 +367,21 @@ public:
     QVector<QHash<AtomIdx,AtomIdx> > findMCSmatches(const MoleculeView &other,
                                                     bool match_light_atoms,
                                                     const PropertyMap &map=PropertyMap(),
+                                                    int min_heavy_protons=6,
                                                     bool verbose=false) const;
 
     QVector<QHash<AtomIdx,AtomIdx> > findMCSmatches(const MoleculeView &other,
                                                     const AtomMatcher &atommatcher,
                                                     bool match_light_atoms,
                                                     const PropertyMap &map=PropertyMap(),
+                                                    int min_heavy_protons=6,
                                                     bool verbose=false) const;
 
     QVector<QHash<AtomIdx,AtomIdx> > findMCSmatches(const MoleculeView &other,
                                                     bool match_light_atoms,
                                                     const PropertyMap &map0,
                                                     const PropertyMap &map1,
+                                                    int min_heavy_protons=6,
                                                     bool verbose=false) const;
 
     QVector<QHash<AtomIdx,AtomIdx> > findMCSmatches(const MoleculeView &other,
@@ -378,12 +389,14 @@ public:
                                                     bool match_light_atoms,
                                                     const PropertyMap &map0,
                                                     const PropertyMap &map1,
+                                                    int min_heavy_protons=6,
                                                     bool verbose=false) const;
 
     QVector<QHash<AtomIdx,AtomIdx> > findMCSmatches(const MoleculeView &other,
                                                     const SireUnits::Dimension::Time &timeout,
                                                     bool match_light_atoms,
                                                     const PropertyMap &map=PropertyMap(),
+                                                    int min_heavy_protons=6,
                                                     bool verbose=false) const;
 
     QVector<QHash<AtomIdx,AtomIdx> > findMCSmatches(const MoleculeView &other,
@@ -391,6 +404,7 @@ public:
                                                     const SireUnits::Dimension::Time &timeout,
                                                     bool match_light_atoms,
                                                     const PropertyMap &map=PropertyMap(),
+                                                    int min_heavy_protons=6,
                                                     bool verbose=false) const;
 
     QVector<QHash<AtomIdx,AtomIdx> > findMCSmatches(const MoleculeView &other,
@@ -398,6 +412,7 @@ public:
                                                     bool match_light_atoms,
                                                     const PropertyMap &map0,
                                                     const PropertyMap &map1,
+                                                    int min_heavy_protons=6,
                                                     bool verbose=false) const;
 
     QVector<QHash<AtomIdx,AtomIdx> > findMCSmatches(const MoleculeView &other,
@@ -406,6 +421,7 @@ public:
                                                     bool match_light_atoms,
                                                     const PropertyMap &map0,
                                                     const PropertyMap &map1,
+                                                    int min_heavy_protons=6,
                                                     bool verbose=false) const;
 
 private:
