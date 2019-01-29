@@ -587,6 +587,9 @@ void AmberPrm::rebuildMolNumToAtomNums()
 
     QList<qint64> atoms_per_mol;
 
+    //this is how many atoms the amber file says are in each molecule...
+    const auto a_per_m = int_data.value("ATOMS_PER_MOLECULE");
+
     for ( int i = 1 ; i <= natoms ; i++ )
     {
         if (not atom_to_mol.contains(i))
@@ -594,14 +597,60 @@ void AmberPrm::rebuildMolNumToAtomNums()
             QSet<int> atoms_in_mol;
 
             nmols += 1;
+
+            if (nmols > a_per_m.count())
+            {
+                throw SireIO::parse_error(QObject::tr(
+                    "The files appears to contain more molecules than expected. The file "
+                    "should only contain %1 molecules, but more than this have been "
+                    "found based on the bonding of the molecules.").arg(nmols), CODELOC );
+            }
+
+            //the number of atoms we should expect in this molecule...
+            int expected_nats = a_per_m.at(nmols-1);
+
+            //this is the first atom in the new molecule
             atom_to_mol[ i ] = nmols;
             atoms_in_mol.insert(i);
 
-            // Recursive walk
+            // Recursive walk to find all of the other atoms
             findBondedAtoms(i, nmols, bonded_atoms, atom_to_mol, atoms_in_mol);
 
-            //this has now found all of the atoms in this molecule. Add the
-            //number of atoms in the molecule to atoms_per_mol
+            //this has now found all of the atoms in this molecule. Check we have
+            //all of the molecules expected by the amber file...
+            int next_atom = i+1;
+            
+            while (atoms_in_mol.count() < expected_nats)
+            {
+                //find the next atom which is not yet in a molecule...
+                for (; next_atom <= natoms; ++next_atom)
+                {
+                    if (not atom_to_mol.contains(next_atom))
+                    {
+                        break;
+                    }
+                }
+                
+                //add this, and all of its bonded atoms
+                atom_to_mol[ next_atom ] = nmols;
+                atoms_in_mol.insert(next_atom);
+                findBondedAtoms(next_atom, nmols, bonded_atoms, atom_to_mol, atoms_in_mol);
+                
+                next_atom += 1;
+                if (next_atom > natoms)
+                    break;
+            }
+            
+            if (atoms_in_mol.count() != expected_nats)
+            {
+                throw SireIO::parse_error( QObject::tr(
+                    "Disagreement over the number of atoms in molecule %1. Looking at bonding "
+                    "implies the number of atoms is %2, while the file itself claims the "
+                    "number is %3.").arg(nmols).arg(atoms_in_mol.count()).arg(expected_nats),
+                        CODELOC );
+            }
+            
+            //add the number of atoms in the molecule to atoms_per_mol
             atoms_per_mol.append( atoms_in_mol.count() );
             
             auto atms = atoms_in_mol.toList();
@@ -614,22 +663,6 @@ void AmberPrm::rebuildMolNumToAtomNums()
     // now have all of the atomidxs (1-indexed) for molecule i (1-indexed)
     // in the array molidx_to_atomidxs. Guaranteed to be sorted into AtomNum order
     // in molnum_to_atomnums
-    
-    // should compare this to ATOMS_PER_MOLECULE, as we should match the number
-    // of atoms in each molecule
-    const auto a_per_m = int_data.value("ATOMS_PER_MOLECULE");
-    
-    for (int i=0; i<a_per_m.count(); ++i)
-    {
-        if (molnum_to_atomnums[i+1].count() != a_per_m[i])
-        {
-            throw SireIO::parse_error(QObject::tr(
-                "Disagreement of the number of atoms that should be in molecule "
-                "%1. Scan of bonds suggests %2, while files says %3.")
-                    .arg(i+1).arg(molnum_to_atomnums[i+1].count())
-                    .arg(a_per_m[i]), CODELOC );
-        }
-    }
 }
 
 /** Function called after loading the AmberPrm from a binary stream
