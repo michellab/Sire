@@ -3744,9 +3744,11 @@ MolStructureEditor AmberPrm::getMolStructure(int molidx,
 
             if (not atomnums_in_mol.contains(res_end_atom))
             {
-                qDebug() << "ATOMS" << res_start_atom << "TO" << res_end_atom
-                         << "ARE NOT IN RANGE?" << Sire::toString(atomnums_in_mol);
-                continue;
+                throw SireIO::parse_error( QObject::tr(
+                    "Atoms in residue %1 are not listed as part of the expected "
+                    "molecule %2. Should be atoms %3 to %4, but molecule has %5.")
+                        .arg(res_num).arg(molnum).arg(res_start_atom).arg(res_end_atom)
+                        .arg(Sire::toString(atomnums_in_mol)), CODELOC );
             }
 
             //we assume that this molecules contains the entire residue
@@ -3761,7 +3763,11 @@ MolStructureEditor AmberPrm::getMolStructure(int molidx,
             {
                 if (not atomnums_in_mol.contains(j))
                 {
-                    qDebug() << "MISSING ATOM?" << j << Sire::toString(atomnums_in_mol);
+                    throw SireIO::parse_error( QObject::tr(
+                        "Atom %6 in residue %1 are not listed as part of the expected "
+                        "molecule %2. Should be atoms %3 to %4, but molecule has %5.")
+                            .arg(res_num).arg(molnum).arg(res_start_atom).arg(res_end_atom)
+                            .arg(Sire::toString(atomnums_in_mol)).arg(j), CODELOC );
                 }
                 else
                 {
@@ -3813,7 +3819,7 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
 
             const int atom_idx = atom_num - 1;  // 1-index versus 0-index
 
-            params.add( AtomIdx(i),
+            params.add( AtomNum(atom_num),
                         (charge_array[atom_idx] / AMBERCHARGECONV) * mod_electron,
                         mass_array[atom_idx] * g_per_mol,
                         Element(int(atomic_num_array[atom_idx])),
@@ -4001,7 +4007,7 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
 
             for (int i=0; i<natoms; ++i)
             {
-                const AtomIdx atom0(i);
+                const AtomNum atom0 = molinfo.number(AtomIdx(i));
                 const CGAtomIdx cgatom0 = molinfo.cgAtomIdx(atom0);
 
                 // an atom is bonded to itself
@@ -4012,9 +4018,29 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
                 {
                     if (excluded_atom > 0)
                     {
-                        const AtomNum atomnum1(excluded_atom);
-                        const CGAtomIdx cgatom1 = molinfo.cgAtomIdx(atomnum1);
-                        nbpairs.set( cgatom0, cgatom1, CLJScaleFactor(0,0) );
+                        try
+                        {
+                            const AtomNum atomnum1(excluded_atom);
+                            const CGAtomIdx cgatom1 = molinfo.cgAtomIdx(atomnum1);
+                            nbpairs.set( cgatom0, cgatom1, CLJScaleFactor(0,0) );
+                        }
+                        catch(...)
+                        {
+                            QList<int> nums;
+                            
+                            for (int iat=0; iat<molinfo.nAtoms(); ++iat)
+                            {
+                                nums.append(molinfo.number(AtomIdx(iat)));
+                            }
+                        
+                            throw SireIO::parse_error( QObject::tr(
+                                "Cannot find atom %1 in the molecule. This is likely because "
+                                "the code to deal with molecules with SS bonds is broken..."
+                                "Valid atom numbers are %2")
+                                    .arg(excluded_atom)
+                                    .arg(Sire::toString(nums)),
+                                    CODELOC );
+                        }
                     }
                 }
             }
@@ -4029,7 +4055,7 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
     AmberParams params(molinfo);
 
     //assign all of the parameters
-    if (usesParallel())
+    if (false)//usesParallel())
     {
         AmberParams atoms, bonds, angles, dihedrals, excluded;
 
@@ -4100,7 +4126,7 @@ MolEditor AmberPrm::getMoleculeEditor(int molidx,
 
     amber_params.setPropertyMap(map);
 
-    _setProperty(mol, map, "charge", amber_params.charges());
+  /*  _setProperty(mol, map, "charge", amber_params.charges());
     _setProperty(mol, map, "LJ", amber_params.ljs());
     _setProperty(mol, map, "mass", amber_params.masses());
     _setProperty(mol, map, "element", amber_params.elements());
@@ -4121,7 +4147,7 @@ MolEditor AmberPrm::getMoleculeEditor(int molidx,
     _setProperty(mol, map, "gb_radius_set", StringProperty(amber_params.radiusSet()));
     _setProperty(mol, map, "treechain", amber_params.treeChains());
     _setProperty(mol, map, "parameters", amber_params);
-    _setProperty(mol, map, "forcefield", ffield);
+    _setProperty(mol, map, "forcefield", ffield);*/
 
     return mol;
 }
