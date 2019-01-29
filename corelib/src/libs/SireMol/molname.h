@@ -40,8 +40,8 @@ namespace SireMol
 class MolName;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MolName&);
-QDataStream& operator>>(QDataStream&, SireMol::MolName&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MolName&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MolName&);
 
 namespace SireMol
 {

@@ -47,14 +47,14 @@ class NullInserter;
 class UniformInserter;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::MolInserter&);
-QDataStream& operator>>(QDataStream&, SireMove::MolInserter&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::MolInserter&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::MolInserter&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::NullInserter&);
-QDataStream& operator>>(QDataStream&, SireMove::NullInserter&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::NullInserter&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::NullInserter&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::UniformInserter&);
-QDataStream& operator>>(QDataStream&, SireMove::UniformInserter&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::UniformInserter&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::UniformInserter&);
 
 namespace SireMol
 {

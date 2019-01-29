@@ -42,8 +42,8 @@ namespace SireMaths
 class NMatrix;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMaths::NMatrix&);
-QDataStream& operator>>(QDataStream&, SireMaths::NMatrix&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::NMatrix&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::NMatrix&);
 
 namespace SireBase
 {

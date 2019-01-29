@@ -40,8 +40,8 @@ namespace SireMol
 class Chain;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Chain&);
-QDataStream& operator>>(QDataStream&, SireMol::Chain&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Chain&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Chain&);
 
 namespace SireMol
 {
@@ -377,13 +377,13 @@ void set_metadata(Chain*, MoleculeData &moldata,
     set_metadata<ChainProperty<V>,Chain::Index,V>(moldata,idxs,key,metakey,value);
 }
 
-bool has_property(const Chain*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_property(const Chain*, const MoleculeData &moldata,
                   const PropertyName &key);
                   
-bool has_metadata(const Chain*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Chain*, const MoleculeData &moldata,
                   const PropertyName &metakey);
                   
-bool has_metadata(const Chain*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Chain*, const MoleculeData &moldata,
                   const PropertyName &key, const PropertyName &metakey);                 
 
 } //end of namespace detail

@@ -39,11 +39,11 @@ class SupraSubMoves;
 class SameSupraSubMoves;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::SupraSubMoves&);
-QDataStream& operator>>(QDataStream&, SireMove::SupraSubMoves&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::SupraSubMoves&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::SupraSubMoves&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::SameSupraSubMoves&);
-QDataStream& operator>>(QDataStream&, SireMove::SameSupraSubMoves&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::SameSupraSubMoves&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::SameSupraSubMoves&);
 
 namespace SireMove
 {

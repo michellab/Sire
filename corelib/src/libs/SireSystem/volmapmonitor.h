@@ -42,8 +42,8 @@ namespace SireSystem
 class VolMapMonitor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::VolMapMonitor&);
-QDataStream& operator>>(QDataStream&, SireSystem::VolMapMonitor&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::VolMapMonitor&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::VolMapMonitor&);
 
 namespace SireSystem
 {

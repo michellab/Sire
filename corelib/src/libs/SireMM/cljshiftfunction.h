@@ -41,17 +41,17 @@ class CLJSoftShiftFunction;
 class CLJSoftIntraShiftFunction;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJShiftFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJShiftFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJShiftFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJShiftFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJIntraShiftFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJIntraShiftFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJIntraShiftFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJIntraShiftFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftShiftFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJSoftShiftFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftShiftFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJSoftShiftFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftIntraShiftFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJSoftIntraShiftFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftIntraShiftFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJSoftIntraShiftFunction&);
 
 namespace SireMM
 {

@@ -70,7 +70,7 @@ using namespace SireStream;
 static const RegisterMetaType<SQM> r_sqm;
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const SQM &sqm)
+QDataStream &operator<<(QDataStream &ds, const SQM &sqm)
 {
     writeHeader(ds, r_sqm, 1);
     
@@ -88,7 +88,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const SQM &sqm)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, SQM &sqm)
+QDataStream &operator>>(QDataStream &ds, SQM &sqm)
 {
     VersionID v = readHeader(ds, r_sqm);
     

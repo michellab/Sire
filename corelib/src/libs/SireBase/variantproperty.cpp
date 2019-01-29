@@ -43,7 +43,7 @@ using namespace SireStream;
 static const RegisterMetaType<VariantProperty> r_varprop;
 
 /** Serialise to a binary data stream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const VariantProperty &varprop)
+QDataStream &operator<<(QDataStream &ds, const VariantProperty &varprop)
 {
     writeHeader(ds, r_varprop, 1)
         << static_cast<const Property&>(varprop)
@@ -53,7 +53,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const VariantProperty &
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, VariantProperty &varprop)
+QDataStream &operator>>(QDataStream &ds, VariantProperty &varprop)
 {
     VersionID v = readHeader(ds, r_varprop);
     

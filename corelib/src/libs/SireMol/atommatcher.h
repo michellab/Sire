@@ -54,14 +54,14 @@ class ResIdxAtomNameMatcher;
 class ResIdxAtomMCSMatcher;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomResultMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomResultMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomResultMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomResultMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomMatchInverter&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomMatchInverter&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomMatchInverter&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomMatchInverter&);
 
 namespace SireMol
 {

@@ -44,7 +44,7 @@ using namespace SireStream;
 static const RegisterMetaType<BondComponent> r_bond;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const BondComponent &bond)
+QDataStream &operator<<(QDataStream &ds, const BondComponent &bond)
 {
     writeHeader(ds, r_bond, 1);
     ds << static_cast<const FFComponent&>(bond);
@@ -53,7 +53,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const BondComponent &bond
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, BondComponent &bond)
+QDataStream &operator>>(QDataStream &ds, BondComponent &bond)
 {
     VersionID v = readHeader(ds, r_bond);
     
@@ -110,7 +110,7 @@ void BondComponent::changeEnergy(FF &ff, const BondEnergy &delta) const
 static const RegisterMetaType<AngleComponent> r_angle;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AngleComponent &angle)
+QDataStream &operator<<(QDataStream &ds, const AngleComponent &angle)
 {
     writeHeader(ds, r_angle, 1);
     ds << static_cast<const FFComponent&>(angle);
@@ -119,7 +119,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AngleComponent &ang
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AngleComponent &angle)
+QDataStream &operator>>(QDataStream &ds, AngleComponent &angle)
 {
     VersionID v = readHeader(ds, r_angle);
     
@@ -176,7 +176,7 @@ void AngleComponent::changeEnergy(FF &ff, const AngleEnergy &delta) const
 static const RegisterMetaType<DihedralComponent> r_dihedral;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const DihedralComponent &dihedral)
+QDataStream &operator<<(QDataStream &ds, const DihedralComponent &dihedral)
 {
     writeHeader(ds, r_dihedral, 1);
     ds << static_cast<const FFComponent&>(dihedral);
@@ -185,7 +185,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const DihedralComponent &
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, DihedralComponent &dihedral)
+QDataStream &operator>>(QDataStream &ds, DihedralComponent &dihedral)
 {
     VersionID v = readHeader(ds, r_dihedral);
     
@@ -242,7 +242,7 @@ void DihedralComponent::changeEnergy(FF &ff, const DihedralEnergy &delta) const
 static const RegisterMetaType<ImproperComponent> r_improper;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const ImproperComponent &improper)
+QDataStream &operator<<(QDataStream &ds, const ImproperComponent &improper)
 {
     writeHeader(ds, r_improper, 1);
     ds << static_cast<const FFComponent&>(improper);
@@ -251,7 +251,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const ImproperComponent &
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, ImproperComponent &improper)
+QDataStream &operator>>(QDataStream &ds, ImproperComponent &improper)
 {
     VersionID v = readHeader(ds, r_improper);
     
@@ -308,7 +308,7 @@ void ImproperComponent::changeEnergy(FF &ff, const ImproperEnergy &delta) const
 static const RegisterMetaType<UreyBradleyComponent> r_ub;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const UreyBradleyComponent &ub)
+QDataStream &operator<<(QDataStream &ds, const UreyBradleyComponent &ub)
 {
     writeHeader(ds, r_ub, 1);
     ds << static_cast<const FFComponent&>(ub);
@@ -317,7 +317,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const UreyBradleyComponen
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, UreyBradleyComponent &ub)
+QDataStream &operator>>(QDataStream &ds, UreyBradleyComponent &ub)
 {
     VersionID v = readHeader(ds, r_ub);
     
@@ -374,7 +374,7 @@ void UreyBradleyComponent::changeEnergy(FF &ff, const UreyBradleyEnergy &delta) 
 static const RegisterMetaType<StretchStretchComponent> r_ss;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const StretchStretchComponent &ss)
+QDataStream &operator<<(QDataStream &ds, const StretchStretchComponent &ss)
 {
     writeHeader(ds, r_ss, 1);
     ds << static_cast<const FFComponent&>(ss);
@@ -383,7 +383,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const StretchStretchCompo
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, StretchStretchComponent &ss)
+QDataStream &operator>>(QDataStream &ds, StretchStretchComponent &ss)
 {
     VersionID v = readHeader(ds, r_ss);
     
@@ -441,7 +441,7 @@ void StretchStretchComponent::changeEnergy(FF &ff,
 static const RegisterMetaType<StretchBendComponent> r_sb;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const StretchBendComponent &sb)
+QDataStream &operator<<(QDataStream &ds, const StretchBendComponent &sb)
 {
     writeHeader(ds, r_sb, 1);
     ds << static_cast<const FFComponent&>(sb);
@@ -450,7 +450,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const StretchBendComponen
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, StretchBendComponent &sb)
+QDataStream &operator>>(QDataStream &ds, StretchBendComponent &sb)
 {
     VersionID v = readHeader(ds, r_sb);
     
@@ -507,7 +507,7 @@ void StretchBendComponent::changeEnergy(FF &ff, const StretchBendEnergy &delta) 
 static const RegisterMetaType<BendBendComponent> r_bb;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const BendBendComponent &bb)
+QDataStream &operator<<(QDataStream &ds, const BendBendComponent &bb)
 {
     writeHeader(ds, r_bb, 1);
     ds << static_cast<const FFComponent&>(bb);
@@ -516,7 +516,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const BendBendComponent &
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, BendBendComponent &bb)
+QDataStream &operator>>(QDataStream &ds, BendBendComponent &bb)
 {
     VersionID v = readHeader(ds, r_bb);
     
@@ -573,7 +573,7 @@ void BendBendComponent::changeEnergy(FF &ff, const BendBendEnergy &delta) const
 static const RegisterMetaType<StretchBendTorsionComponent> r_sbt;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const StretchBendTorsionComponent &sbt)
 {
     writeHeader(ds, r_sbt, 1);
@@ -583,7 +583,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, StretchBendTorsionComponent &sbt)
+QDataStream &operator>>(QDataStream &ds, StretchBendTorsionComponent &sbt)
 {
     VersionID v = readHeader(ds, r_sbt);
     
@@ -643,7 +643,7 @@ void StretchBendTorsionComponent::changeEnergy(FF &ff,
 static const RegisterMetaType<Intra14CoulombComponent> r_14coul;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const Intra14CoulombComponent &comp)
+QDataStream &operator<<(QDataStream &ds, const Intra14CoulombComponent &comp)
 {
     writeHeader(ds, r_14coul, 1);
     ds << static_cast<const FFComponent&>(comp);
@@ -652,7 +652,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const Intra14CoulombCompo
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, Intra14CoulombComponent &comp)
+QDataStream &operator>>(QDataStream &ds, Intra14CoulombComponent &comp)
 {
     VersionID v = readHeader(ds, r_14coul);
     
@@ -709,7 +709,7 @@ void Intra14CoulombComponent::changeEnergy(FF &ff, const Intra14CoulombEnergy &d
 static const RegisterMetaType<Intra14LJComponent> r_14lj;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const Intra14LJComponent &comp)
+QDataStream &operator<<(QDataStream &ds, const Intra14LJComponent &comp)
 {
     writeHeader(ds, r_14lj, 1);
     ds << static_cast<const FFComponent&>(comp);
@@ -718,7 +718,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const Intra14LJComponent 
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, Intra14LJComponent &comp)
+QDataStream &operator>>(QDataStream &ds, Intra14LJComponent &comp)
 {
     VersionID v = readHeader(ds, r_14lj);
     
@@ -775,7 +775,7 @@ void Intra14LJComponent::changeEnergy(FF &ff, const Intra14LJEnergy &delta) cons
 static const RegisterMetaType<Intra14Component> r_14;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const Intra14Component &comp)
+QDataStream &operator<<(QDataStream &ds, const Intra14Component &comp)
 {
     writeHeader(ds, r_14, 1);
     
@@ -786,7 +786,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const Intra14Component &c
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, Intra14Component &comp)
+QDataStream &operator>>(QDataStream &ds, Intra14Component &comp)
 {
     VersionID v = readHeader(ds, r_14);
     
@@ -866,7 +866,7 @@ void Intra14Component::changeEnergy(FF &ff, const Intra14Energy &delta) const
 static const RegisterMetaType<InternalComponent> r_internal;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const InternalComponent &internal)
+QDataStream &operator<<(QDataStream &ds, const InternalComponent &internal)
 {
     writeHeader(ds, r_internal, 2);
     
@@ -886,7 +886,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const InternalComponent &
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, InternalComponent &internal)
+QDataStream &operator>>(QDataStream &ds, InternalComponent &internal)
 {
     VersionID v = readHeader(ds, r_internal);
     

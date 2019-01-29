@@ -45,11 +45,11 @@ class MolGroupsBase;
 class MoleculeGroups;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MolGroupsBase&);
-QDataStream& operator>>(QDataStream&, SireMol::MolGroupsBase&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MolGroupsBase&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MolGroupsBase&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::MoleculeGroups&);
-QDataStream& operator>>(QDataStream&, SireMol::MoleculeGroups&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MoleculeGroups&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MoleculeGroups&);
 
 namespace SireMol
 {

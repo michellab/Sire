@@ -42,11 +42,11 @@ class PowerFunction;
 class Power;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::PowerFunction&);
-QDataStream& operator>>(QDataStream&, SireCAS::PowerFunction&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::PowerFunction&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::PowerFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Power&);
-QDataStream& operator>>(QDataStream&, SireCAS::Power&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Power&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Power&);
 
 namespace SireCAS
 {

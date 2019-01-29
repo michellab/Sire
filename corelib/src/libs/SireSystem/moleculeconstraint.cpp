@@ -48,7 +48,7 @@ static const RegisterMetaType<MoleculeConstraint> r_molconstraint( MAGIC_ONLY,
                                                        MoleculeConstraint::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const MoleculeConstraint &molconstraint)
 {
     writeHeader(ds, r_molconstraint, 2);
@@ -59,7 +59,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                           MoleculeConstraint &molconstraint)
 {
     VersionID v = readHeader(ds, r_molconstraint);

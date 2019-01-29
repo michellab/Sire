@@ -50,8 +50,8 @@ template<class T>
 class CGProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::CGProp&);
-QDataStream& operator>>(QDataStream&, SireMol::CGProp&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CGProp&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CGProp&);
 
 template<class T>
 QDataStream& operator<<(QDataStream&, const SireMol::CGProperty<T>&);

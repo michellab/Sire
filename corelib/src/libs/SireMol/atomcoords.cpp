@@ -46,7 +46,7 @@ using namespace SireBase;
 static const RegisterMetaType< AtomProperty<Vector> > r_atomcoords;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const AtomProperty<Vector> &atomcoords)
 {
     writeHeader(ds, r_atomcoords, 1);
@@ -60,7 +60,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        AtomProperty<Vector> &atomcoords)
 {
     VersionID v = readHeader(ds, r_atomcoords);

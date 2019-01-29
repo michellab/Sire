@@ -44,11 +44,11 @@ class RepExSubMove;
 class RepExMove;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::RepExMove&);
-QDataStream& operator>>(QDataStream&, SireMove::RepExMove&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::RepExMove&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::RepExMove&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::RepExSubMove&);
-QDataStream& operator>>(QDataStream&, SireMove::RepExSubMove&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::RepExSubMove&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::RepExSubMove&);
 
 namespace SireCluster
 {

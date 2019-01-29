@@ -43,8 +43,8 @@ namespace Squire
 class SQM;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::SQM&);
-QDataStream& operator>>(QDataStream&, Squire::SQM&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::SQM&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::SQM&);
 
 class QFile;
 

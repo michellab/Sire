@@ -43,7 +43,7 @@ using boost::tuple;
 static const RegisterMetaType<MGIDsAndMaps> r_mgidsandmaps;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                        const MGIDsAndMaps &mgidsandmaps)
 {
     writeHeader(ds, r_mgidsandmaps, 1);
@@ -57,7 +57,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        MGIDsAndMaps &mgidsandmaps)
 {
     VersionID v = readHeader(ds, r_mgidsandmaps);

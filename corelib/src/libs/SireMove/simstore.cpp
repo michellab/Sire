@@ -46,7 +46,7 @@ using namespace SireStream;
 static const RegisterMetaType<SimStore> r_simstore(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const SimStore &simstore)
+QDataStream &operator<<(QDataStream &ds, const SimStore &simstore)
 {
     writeHeader(ds, r_simstore, 5);
     
@@ -76,7 +76,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const SimStore &simstor
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, SimStore &simstore)
+QDataStream &operator>>(QDataStream &ds, SimStore &simstore)
 {
     VersionID v = readHeader(ds, r_simstore);
    

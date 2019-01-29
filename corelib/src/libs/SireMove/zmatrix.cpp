@@ -68,7 +68,7 @@ using namespace SireStream;
 static const RegisterMetaType<ZMatrixLine> r_zmatline(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const ZMatrixLine &zmatline)
+QDataStream &operator<<(QDataStream &ds, const ZMatrixLine &zmatline)
 {
     writeHeader(ds, r_zmatline, 1);
 
@@ -81,7 +81,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const ZMatrixLine &zmat
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, ZMatrixLine &zmatline)
+QDataStream &operator>>(QDataStream &ds, ZMatrixLine &zmatline)
 {
     VersionID v = readHeader(ds, r_zmatline);
 
@@ -247,7 +247,7 @@ const char* ZMatrixLine::typeName()
 static const RegisterMetaType<ZMatrixCoordsLine> r_zmatcoordsline(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const ZMatrixCoordsLine &zmatcoordsline)
 {
     writeHeader(ds, r_zmatcoordsline, 1);
@@ -259,7 +259,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         ZMatrixCoordsLine &zmatcoordsline)
 {
     VersionID v = readHeader(ds, r_zmatcoordsline);
@@ -383,7 +383,7 @@ const char* ZMatrixCoordsLine::typeName()
 static const RegisterMetaType<ZMatrix> r_zmat;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const ZMatrix &zmat)
+QDataStream &operator<<(QDataStream &ds, const ZMatrix &zmat)
 {
     writeHeader(ds, r_zmat, 1);
 
@@ -396,7 +396,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const ZMatrix &zmat)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, ZMatrix &zmat)
+QDataStream &operator>>(QDataStream &ds, ZMatrix &zmat)
 {
     VersionID v = readHeader(ds, r_zmat);
 
@@ -1565,7 +1565,7 @@ const char* ZMatrix::typeName()
 static const RegisterMetaType<ZMatrixCoords> r_zmatcoords;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const ZMatrixCoords &zmatcoords)
+QDataStream &operator<<(QDataStream &ds, const ZMatrixCoords &zmatcoords)
 {
     writeHeader(ds, r_zmatcoords, 1);
 
@@ -1579,7 +1579,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const ZMatrixCoords &zm
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, ZMatrixCoords &zmatcoords)
+QDataStream &operator>>(QDataStream &ds, ZMatrixCoords &zmatcoords)
 {
     VersionID v = readHeader(ds, r_zmatline);
 

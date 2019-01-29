@@ -65,7 +65,7 @@ namespace SireMol
 {
     /** Return the AxisSet needed to move 'view1' so that it is aligned against
         the atoms in 'view0' */
-    Transform SIREMOL_EXPORT getAlignment(const MoleculeView &view0, const PropertyMap &map0,
+    Transform getAlignment(const MoleculeView &view0, const PropertyMap &map0,
                                           const MoleculeView &view1, const PropertyMap &map1,
                                           const AtomMatcher &matcher, bool fit)
     {
@@ -109,7 +109,7 @@ namespace SireMol
 
     /** Return the AxisSet needed to move 'view1' so that it is aligned against
         the atoms in 'view0' */
-    Transform SIREMOL_EXPORT getAlignment(const MoleculeView &view0,
+    Transform getAlignment(const MoleculeView &view0,
                                           const MoleculeView &view1, bool fit)
     {
         return getAlignment(view0, PropertyMap(), view1, PropertyMap(),
@@ -118,7 +118,7 @@ namespace SireMol
 
     /** Return the AxisSet needed to move 'view1' so that it is aligned against
         the atoms in 'view0' */
-    Transform SIREMOL_EXPORT getAlignment(const MoleculeView &view0, const MoleculeView &view1,
+    Transform getAlignment(const MoleculeView &view0, const MoleculeView &view1,
                                           const PropertyMap &map, bool fit)
     {
         return getAlignment(view0, map, view1, map, AtomIdxMatcher(), fit);
@@ -126,7 +126,7 @@ namespace SireMol
 
     /** Return the AxisSet needed to move 'view1' so that it is aligned against
         the atoms in 'view0' */
-    Transform SIREMOL_EXPORT getAlignment(const MoleculeView &view0, const PropertyMap &map0,
+    Transform getAlignment(const MoleculeView &view0, const PropertyMap &map0,
                                           const MoleculeView &view1, const PropertyMap &map1,
                                           bool fit)
     {
@@ -135,7 +135,7 @@ namespace SireMol
 
     /** Return the AxisSet needed to move 'view1' so that it is aligned against
         the atoms in 'view0' */
-    Transform SIREMOL_EXPORT getAlignment(const MoleculeView &view0, const MoleculeView &view1,
+    Transform getAlignment(const MoleculeView &view0, const MoleculeView &view1,
                                           const AtomMatcher &matcher, bool fit)
     {
         return getAlignment(view0, PropertyMap(), view1, PropertyMap(), matcher, fit);
@@ -143,7 +143,7 @@ namespace SireMol
 
     /** Return the AxisSet needed to move 'view1' so that it is aligned against
         the atoms in 'view0' */
-    Transform SIREMOL_EXPORT getAlignment(const MoleculeView &view0, const MoleculeView &view1,
+    Transform getAlignment(const MoleculeView &view0, const MoleculeView &view1,
                                           const AtomMatcher &matcher,
                                           const PropertyMap &map, bool fit)
     {

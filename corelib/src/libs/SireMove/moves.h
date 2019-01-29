@@ -44,11 +44,11 @@ class Moves;
 class SameMoves;
 }
 
-QDataStream &operator<<(QDataStream&, const SireMove::Moves&);
-QDataStream &operator>>(QDataStream&, SireMove::Moves&);
+SIREMOVE_EXPORT QDataStream &operator<<(QDataStream&, const SireMove::Moves&);
+SIREMOVE_EXPORT QDataStream &operator>>(QDataStream&, SireMove::Moves&);
 
-QDataStream &operator<<(QDataStream&, const SireMove::SameMoves&);
-QDataStream &operator>>(QDataStream&, SireMove::SameMoves&);
+SIREMOVE_EXPORT QDataStream &operator<<(QDataStream&, const SireMove::SameMoves&);
+SIREMOVE_EXPORT QDataStream &operator>>(QDataStream&, SireMove::SameMoves&);
 
 namespace SireMove
 {

@@ -48,23 +48,23 @@ class DihedralPerturbation;
 class NullGeometryPerturbation;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::GeometryPerturbation&);
-QDataStream& operator>>(QDataStream&, SireMol::GeometryPerturbation&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::GeometryPerturbation&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::GeometryPerturbation&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::GeometryPerturbations&);
-QDataStream& operator>>(QDataStream&, SireMol::GeometryPerturbations&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::GeometryPerturbations&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::GeometryPerturbations&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::BondPerturbation&);
-QDataStream& operator>>(QDataStream&, SireMol::BondPerturbation&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::BondPerturbation&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::BondPerturbation&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AnglePerturbation&);
-QDataStream& operator>>(QDataStream&, SireMol::AnglePerturbation&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AnglePerturbation&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AnglePerturbation&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::DihedralPerturbation&);
-QDataStream& operator>>(QDataStream&, SireMol::DihedralPerturbation&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::DihedralPerturbation&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::DihedralPerturbation&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::NullGeometryPerturbation&);
-QDataStream& operator>>(QDataStream&, SireMol::NullGeometryPerturbation&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::NullGeometryPerturbation&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::NullGeometryPerturbation&);
 
 namespace SireMol
 {

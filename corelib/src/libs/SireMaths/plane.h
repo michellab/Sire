@@ -41,8 +41,8 @@ class Plane;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireMaths::Plane&);
-QDataStream& operator>>(QDataStream&, SireMaths::Plane&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Plane&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Plane&);
 
 namespace SireMaths
 {

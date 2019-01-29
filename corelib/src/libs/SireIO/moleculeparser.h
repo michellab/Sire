@@ -44,11 +44,11 @@ class MoleculeParser;
 class NullParser;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::MoleculeParser&);
-QDataStream& operator>>(QDataStream&, SireIO::MoleculeParser&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::MoleculeParser&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::MoleculeParser&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::NullParser&);
-QDataStream& operator>>(QDataStream&, SireIO::NullParser&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::NullParser&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::NullParser&);
 
 namespace SireSystem
 {

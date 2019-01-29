@@ -38,8 +38,8 @@ namespace SireBase
 class Range;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::Range&);
-QDataStream& operator>>(QDataStream&, SireBase::Range&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::Range&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::Range&);
 
 namespace SireBase
 {

@@ -54,8 +54,8 @@ template<class T>
 class BeadProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::BeadProp&);
-QDataStream& operator>>(QDataStream&, SireMol::BeadProp&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::BeadProp&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::BeadProp&);
 
 template<class T>
 QDataStream& operator<<(QDataStream&, const SireMol::BeadProperty<T>&);

@@ -41,13 +41,13 @@ namespace SireBase
 class Properties;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::Properties&);
-QDataStream& operator>>(QDataStream&, SireBase::Properties&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::Properties&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::Properties&);
 
-XMLStream& operator<<(XMLStream&, const SireBase::Properties&);
-XMLStream& operator>>(XMLStream&, SireBase::Properties&);
+SIREBASE_EXPORT XMLStream& operator<<(XMLStream&, const SireBase::Properties&);
+SIREBASE_EXPORT XMLStream& operator>>(XMLStream&, SireBase::Properties&);
 
-QTextStream& operator<<(QTextStream&, const SireBase::Properties&);
+SIREBASE_EXPORT QTextStream& operator<<(QTextStream&, const SireBase::Properties&);
 
 namespace SireBase
 {

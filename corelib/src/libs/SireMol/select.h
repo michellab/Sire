@@ -58,11 +58,11 @@ class SelectResult;
 class SelectResultMover;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Select&);
-QDataStream& operator>>(QDataStream&, SireMol::Select&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Select&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Select&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::SelectResult&);
-QDataStream& operator>>(QDataStream&, SireMol::SelectResult&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::SelectResult&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::SelectResult&);
 
 namespace SireMol
 {

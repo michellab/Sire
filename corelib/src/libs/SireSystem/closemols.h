@@ -45,8 +45,8 @@ namespace SireSystem
 class CloseMols;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::CloseMols&);
-QDataStream& operator>>(QDataStream&, SireSystem::CloseMols&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::CloseMols&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::CloseMols&);
 
 namespace SireSystem
 {

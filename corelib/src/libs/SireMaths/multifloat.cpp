@@ -91,7 +91,7 @@ using namespace SireMaths;
 
     namespace SireMaths
     {
-        MultiFloat SIREMATHS_EXPORT cos(const MultiFloat &val)
+        MultiFloat cos(const MultiFloat &val)
         {
             #ifdef HAVE_AVX_MATHFUN
               return MultiFloat( cos256_ps(val.v.x) );
@@ -106,7 +106,7 @@ using namespace SireMaths;
             #endif
         }
         
-        MultiFloat SIREMATHS_EXPORT sin(const MultiFloat &val)
+        MultiFloat sin(const MultiFloat &val)
         {
             #ifdef HAVE_AVX_MATHFUNC
               return MultiFloat( sin256_ps(val.v.x) );
@@ -121,7 +121,7 @@ using namespace SireMaths;
             #endif
         }
         
-        MultiFloat SIREMATHS_EXPORT exp(const MultiFloat &val)
+        MultiFloat exp(const MultiFloat &val)
         {
             #ifndef AVX_MATHFUNC_BROKEN_EXP
                 return MultiFloat( exp256_ps(val.v.x) );
@@ -136,7 +136,7 @@ using namespace SireMaths;
             #endif
         }
         
-        MultiFloat SIREMATHS_EXPORT log(const MultiFloat &val)
+        MultiFloat log(const MultiFloat &val)
         {
             #ifndef AVX_MATHFUNC_BROKEN_LOG
                 return MultiFloat( log256_ps(val.v.x) );
@@ -151,7 +151,7 @@ using namespace SireMaths;
             #endif
         }
         
-        void SIREMATHS_EXPORT sincos(const MultiFloat &val, MultiFloat &sval, MultiFloat &cval)
+        void sincos(const MultiFloat &val, MultiFloat &sval, MultiFloat &cval)
         {
             #ifdef HAVE_AVX_MATHFUN
               sincos256_ps(val.v.x, &(sval.v.x), &(cval.v.x));
@@ -185,27 +185,27 @@ using namespace SireMaths;
 
     namespace SireMaths
     {
-        MultiFloat SIREMATHS_EXPORT cos(const MultiFloat &val)
+        MultiFloat cos(const MultiFloat &val)
         {
             return MultiFloat( cos_ps(val.v.x) );
         }
         
-        MultiFloat SIREMATHS_EXPORT sin(const MultiFloat &val)
+        MultiFloat sin(const MultiFloat &val)
         {
             return MultiFloat( sin_ps(val.v.x) );
         }
         
-        MultiFloat SIREMATHS_EXPORT exp(const MultiFloat &val)
+        MultiFloat exp(const MultiFloat &val)
         {
             return MultiFloat( exp_ps(val.v.x) );
         }
         
-        MultiFloat SIREMATHS_EXPORT log(const MultiFloat &val)
+        MultiFloat log(const MultiFloat &val)
         {
             return MultiFloat( log_ps(val.v.x) );
         }
         
-        void SIREMATHS_EXPORT sincos(const MultiFloat &val, MultiFloat &sval, MultiFloat &cval)
+        void sincos(const MultiFloat &val, MultiFloat &sval, MultiFloat &cval)
         {
             sincos_ps(val.v.x, &(sval.v.x), &(cval.v.x));
         }
@@ -229,7 +229,7 @@ using namespace SireMaths;
 
     namespace SireMaths
     {
-        MultiFloat SIREMATHS_EXPORT cos(const MultiFloat &val)
+        MultiFloat cos(const MultiFloat &val)
         {
             MultiFloat ret;
             
@@ -241,7 +241,7 @@ using namespace SireMaths;
             return ret;
         }
         
-        MultiFloat SIREMATHS_EXPORT sin(const MultiFloat &val)
+        MultiFloat sin(const MultiFloat &val)
         {
             MultiFloat ret;
             
@@ -253,7 +253,7 @@ using namespace SireMaths;
             return ret;
         }
         
-        MultiFloat SIREMATHS_EXPORT exp(const MultiFloat &val)
+        MultiFloat exp(const MultiFloat &val)
         {
             MultiFloat ret;
             
@@ -265,7 +265,7 @@ using namespace SireMaths;
             return ret;
         }
         
-        MultiFloat SIREMATHS_EXPORT log(const MultiFloat &val)
+        MultiFloat log(const MultiFloat &val)
         {
             MultiFloat ret;
             
@@ -277,7 +277,7 @@ using namespace SireMaths;
             return ret;
         }
         
-        void SIREMATHS_EXPORT sincos(const MultiFloat &val, MultiFloat &sval, MultiFloat &cval)
+        void sincos(const MultiFloat &val, MultiFloat &sval, MultiFloat &cval)
         {
             for (int i=0; i<MultiFloat::count(); ++i)
             {

@@ -49,14 +49,14 @@ class LJComponent;
 class CLJComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CoulombComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::CoulombComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CoulombComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CoulombComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::LJComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::LJComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::LJComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::LJComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJComponent&);
 
 namespace SireFF
 {

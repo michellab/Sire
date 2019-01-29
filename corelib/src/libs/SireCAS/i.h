@@ -40,8 +40,8 @@ namespace SireCAS
 class I;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::I&);
-QDataStream& operator>>(QDataStream&, SireCAS::I&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::I&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::I&);
 
 namespace SireCAS
 {

@@ -38,7 +38,7 @@ SIRE_BEGIN_HEADER
 namespace SireError
 {
 
-QStringList getBackTrace();
+SIREERROR_EXPORT QStringList getBackTrace();
 
 };
 

@@ -48,8 +48,8 @@ namespace SireSystem
 class EnergyMonitor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::EnergyMonitor&);
-QDataStream& operator>>(QDataStream&, SireSystem::EnergyMonitor&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::EnergyMonitor&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::EnergyMonitor&);
 
 namespace SireSystem
 {

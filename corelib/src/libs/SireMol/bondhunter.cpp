@@ -64,7 +64,7 @@ static const RegisterMetaType<BondHunter> r_hunter( MAGIC_ONLY,
                                                         "SireMol::BondHunter" );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const BondHunter &hunter)
+QDataStream &operator<<(QDataStream &ds, const BondHunter &hunter)
 {
     writeHeader(ds, r_hunter, 0);
     
@@ -74,7 +74,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const BondHunter &hunter
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, BondHunter &hunter)
+QDataStream &operator>>(QDataStream &ds, BondHunter &hunter)
 {
     VersionID v = readHeader(ds, r_hunter);
     
@@ -108,7 +108,7 @@ BondHunter::~BondHunter()
 static const RegisterMetaType<NullBondHunter> r_nullhunter;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const NullBondHunter &hunter)
+QDataStream &operator<<(QDataStream &ds, const NullBondHunter &hunter)
 {
     writeHeader(ds, r_nullhunter, 1);
     
@@ -118,7 +118,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const NullBondHunter &hu
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, NullBondHunter &hunter)
+QDataStream &operator>>(QDataStream &ds, NullBondHunter &hunter)
 {
     VersionID v = readHeader(ds, r_nullhunter);
     
@@ -180,7 +180,7 @@ CovalentBondHunterParameters CovalentBondHunter::params;
 static const RegisterMetaType<CovalentBondHunter> r_covalenthunter;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CovalentBondHunter &hunter)
+QDataStream &operator<<(QDataStream &ds, const CovalentBondHunter &hunter)
 {
     writeHeader(ds, r_covalenthunter, 1);
     
@@ -190,7 +190,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CovalentBondHunter
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, CovalentBondHunter &hunter)
+QDataStream &operator>>(QDataStream &ds, CovalentBondHunter &hunter)
 {
     VersionID v = readHeader(ds, r_covalenthunter);
     
@@ -598,7 +598,7 @@ const char* CovalentBondHunter::typeName()
 static const RegisterMetaType<ChemicalBondHunter> r_chemicalhunter;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChemicalBondHunter &hunter)
+QDataStream &operator<<(QDataStream &ds, const ChemicalBondHunter &hunter)
 {
     writeHeader(ds, r_chemicalhunter, 1);
     
@@ -608,7 +608,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChemicalBondHunter
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ChemicalBondHunter &hunter)
+QDataStream &operator>>(QDataStream &ds, ChemicalBondHunter &hunter)
 {
     VersionID v = readHeader(ds, r_chemicalhunter);
     

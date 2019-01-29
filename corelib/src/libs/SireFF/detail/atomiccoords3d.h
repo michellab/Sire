@@ -35,8 +35,8 @@ SIRE_BEGIN_HEADER
 
 namespace SireFF { namespace detail { class AtomicCoords3D; } }
 
-QDataStream& operator<<(QDataStream&, const SireFF::detail::AtomicCoords3D&);
-QDataStream& operator>>(QDataStream&, SireFF::detail::AtomicCoords3D&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::detail::AtomicCoords3D&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::detail::AtomicCoords3D&);
 
 namespace SireVol
 {
@@ -68,7 +68,7 @@ using SireBase::PropertyName;
 namespace detail
 {
     
-bool selectedAll(const QSet<quint32> &idxs, quint32 n);
+SIREFF_EXPORT bool selectedAll(const QSet<quint32> &idxs, quint32 n);
 
 /** This class holds the 3D coordinates of all of the atoms,
     optimised for access by the forcefield

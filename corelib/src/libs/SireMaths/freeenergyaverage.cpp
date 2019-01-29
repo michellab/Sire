@@ -52,7 +52,7 @@ using namespace SireStream;
 static const RegisterMetaType<FreeEnergyAverage> r_avg;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                          const FreeEnergyAverage &avg)
 {
     writeHeader(ds, r_avg, 3);
@@ -67,7 +67,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, FreeEnergyAverage &avg)
+QDataStream &operator>>(QDataStream &ds, FreeEnergyAverage &avg)
 {
     VersionID v = readHeader(ds, r_avg);
     
@@ -322,7 +322,7 @@ FreeEnergyAverage::operator double() const
 
 static const RegisterMetaType<BennettsFreeEnergyAverage> r_bennetts;
 
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                          const BennettsFreeEnergyAverage &bennetts)
 {
     writeHeader(ds, r_bennetts, 2);
@@ -336,7 +336,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, BennettsFreeEnergyAverage &bennetts)
+QDataStream &operator>>(QDataStream &ds, BennettsFreeEnergyAverage &bennetts)
 {
     VersionID v = readHeader(ds, r_bennetts);
     

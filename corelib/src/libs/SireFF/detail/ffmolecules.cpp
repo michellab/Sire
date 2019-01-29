@@ -52,7 +52,7 @@ using namespace SireFF::detail;
 using namespace SireStream;
 
 
-void SIREFF_EXPORT 
+void 
 SireFF::detail::throwFFMoleculesIncompatibleParameterNames(const PropertyMap &old_map, 
                                                            const PropertyMap &new_map)
 {
@@ -64,7 +64,7 @@ SireFF::detail::throwFFMoleculesIncompatibleParameterNames(const PropertyMap &ol
             .arg(old_map.toString(), new_map.toString()), CODELOC );
 }
 
-void SIREFF_EXPORT 
+void 
 SireFF::detail::assertCompatible(const FFMoleculeBase &mol0,
                                  const FFMoleculeBase &mol1)
 {
@@ -84,7 +84,7 @@ static const RegisterMetaType<FFMoleculeBase> r_ffmolbase(MAGIC_ONLY, NO_ROOT,
                                                   "SireFF::detail::FFMoleculeBase");
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const FFMoleculeBase &ffmol)
 {
     writeHeader(ds, r_ffmolbase, 1);
@@ -97,7 +97,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       FFMoleculeBase &ffmol)
 {
     VersionID v = readHeader(ds, r_ffmolbase);
@@ -324,7 +324,7 @@ static const RegisterMetaType<FFMoleculesBase> r_ffmolsbase( MAGIC_ONLY, NO_ROOT
                                                 "SireFF::detail::FFMoleculesBase" );
                                                 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const FFMoleculesBase &ffmols)
 {
     writeHeader(ds, r_ffmolsbase, 1);
@@ -337,7 +337,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       FFMoleculesBase &ffmols)
 {
     VersionID v = readHeader(ds, r_ffmolsbase);

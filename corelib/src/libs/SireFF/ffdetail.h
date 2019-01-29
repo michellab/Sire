@@ -39,8 +39,8 @@ namespace SireFF
 class FFDetail;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::FFDetail&);
-QDataStream& operator>>(QDataStream&, SireFF::FFDetail&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::FFDetail&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::FFDetail&);
 
 namespace SireFF
 {

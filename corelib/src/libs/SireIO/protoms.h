@@ -42,8 +42,8 @@ namespace SireIO
 class ProtoMS;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::ProtoMS&);
-QDataStream& operator>>(QDataStream&, SireIO::ProtoMS&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::ProtoMS&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::ProtoMS&);
 
 class QTextStream;
 

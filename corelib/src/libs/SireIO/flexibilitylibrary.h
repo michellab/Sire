@@ -45,11 +45,11 @@ class FlexibilityLibrary;
 class FlexibilityTemplate;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::FlexibilityLibrary&);
-QDataStream& operator>>(QDataStream&, SireIO::FlexibilityLibrary&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::FlexibilityLibrary&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::FlexibilityLibrary&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::FlexibilityTemplate&);
-QDataStream& operator>>(QDataStream&, SireIO::FlexibilityTemplate&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::FlexibilityTemplate&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::FlexibilityTemplate&);
 
 namespace SireMol
 {

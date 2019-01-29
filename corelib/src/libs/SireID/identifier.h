@@ -40,8 +40,8 @@ namespace SireID
 class Identifier;
 }
 
-QDataStream& operator<<(QDataStream&, const SireID::Identifier&);
-QDataStream& operator>>(QDataStream&, SireID::Identifier&);
+SIREID_EXPORT QDataStream& operator<<(QDataStream&, const SireID::Identifier&);
+SIREID_EXPORT QDataStream& operator>>(QDataStream&, SireID::Identifier&);
 
 namespace SireID
 {

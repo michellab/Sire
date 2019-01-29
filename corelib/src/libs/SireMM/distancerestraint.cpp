@@ -59,7 +59,7 @@ using namespace SireUnits::Dimension;
 static const RegisterMetaType<DistanceRestraint> r_distrest;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const DistanceRestraint &distrest)
 {
     writeHeader(ds, r_distrest, 1);
@@ -74,7 +74,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, DistanceRestraint &distrest)
+QDataStream &operator>>(QDataStream &ds, DistanceRestraint &distrest)
 {
     VersionID v = readHeader(ds, r_distrest);
     
@@ -645,7 +645,7 @@ DistanceRestraint DistanceRestraint::halfHarmonic(
 static const RegisterMetaType<DoubleDistanceRestraint> r_doubledistrest;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const DoubleDistanceRestraint &doubledistrest)
 {
     writeHeader(ds, r_doubledistrest, 1);
@@ -662,7 +662,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                       DoubleDistanceRestraint &doubledistrest)
 {
     VersionID v = readHeader(ds, r_doubledistrest);
@@ -1163,7 +1163,7 @@ bool DoubleDistanceRestraint::usesMoleculesIn(const Molecules &molecules) const
 static const RegisterMetaType<TripleDistanceRestraint> r_tripledistrest;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const TripleDistanceRestraint &tripledistrest)
 {
     writeHeader(ds, r_tripledistrest, 1);
@@ -1182,7 +1182,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                       TripleDistanceRestraint &tripledistrest)
 {
     VersionID v = readHeader(ds, r_tripledistrest);

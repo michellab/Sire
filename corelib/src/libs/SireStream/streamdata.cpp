@@ -387,7 +387,7 @@ quint32 LibraryInfo::getMinimumSupportedVersion(const QString &library)
 /////////
 
 /** Write the header to the data stream */
-QDataStream SIRESTREAM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const FileHeader &header)
 {
     ds << header.version();
@@ -433,7 +433,7 @@ QDataStream SIRESTREAM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Read the header from the data stream */
-QDataStream SIRESTREAM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                           FileHeader &header)
 {
     quint32 version;
@@ -1140,7 +1140,7 @@ namespace SireStream
 namespace detail
 {
 
-void SIRESTREAM_EXPORT throwStreamDataInvalidCast(const QString &load_type,
+void throwStreamDataInvalidCast(const QString &load_type,
                                                   const QString &cast_type)
 {
     throw SireError::invalid_cast( QObject::tr(
@@ -1165,7 +1165,7 @@ static int RESERVE_SIZE = 48 * 1024 * 1024;
     
     All of this is written using Qt datastream format for Qt 4.2
 */
-QByteArray SIRESTREAM_EXPORT streamDataSave( 
+QByteArray streamDataSave( 
                                const QList< tuple<const void*,const char*> > &objects )
 {
     FileHeader header;
@@ -1282,7 +1282,7 @@ QByteArray SIRESTREAM_EXPORT streamDataSave(
     
     All of this is written using Qt datastream format for Qt 4.2
 */
-QByteArray SIRESTREAM_EXPORT streamDataSave( 
+QByteArray streamDataSave( 
                                const QList< tuple<shared_ptr<void>,QString> > &objects )
 {
     FileHeader header;
@@ -1389,7 +1389,7 @@ QByteArray SIRESTREAM_EXPORT streamDataSave(
 
 /** Overloaded function that saves the object directly to a file, rather than
     to an array */
-void SIRESTREAM_EXPORT streamDataSave( 
+void streamDataSave( 
                             const QList< tuple<const void*,const char*> > &objects, 
                             const QString &filename )
 {
@@ -1409,7 +1409,7 @@ void SIRESTREAM_EXPORT streamDataSave(
 
 /** Overloaded function that saves the object directly to a file, rather than
     to an array */
-void SIRESTREAM_EXPORT streamDataSave( 
+void streamDataSave( 
                             const QList< tuple<shared_ptr<void>,QString> > &objects, 
                             const QString &filename )
 {
@@ -1427,7 +1427,7 @@ void SIRESTREAM_EXPORT streamDataSave(
                 CODELOC );
 }
 
-QByteArray SIRESTREAM_EXPORT streamDataSave( const void *object, const char *type_name )
+QByteArray streamDataSave( const void *object, const char *type_name )
 {
     QList< tuple<const void*,const char *> > objects;
     
@@ -1436,7 +1436,7 @@ QByteArray SIRESTREAM_EXPORT streamDataSave( const void *object, const char *typ
     return streamDataSave(objects);
 }
 
-void SIRESTREAM_EXPORT streamDataSave( const void *object, const char *type_name,
+void streamDataSave( const void *object, const char *type_name,
                                        const QString &filename )
 {
     QList< tuple<const void*,const char *> > objects;
@@ -1455,7 +1455,7 @@ namespace SireStream
 /** This function is called by each Sire library when it is loaded
     to register the library with the streaming system. You should
     not call this function yourself! */
-void SIRESTREAM_EXPORT registerLibrary(const QString &library,
+void registerLibrary(const QString &library,
                                        quint32 version, 
                                        quint32 min_supported_version)
 {
@@ -1466,7 +1466,7 @@ void SIRESTREAM_EXPORT registerLibrary(const QString &library,
 
     \throw SireError::unsupported
 */
-quint32 SIRESTREAM_EXPORT getLibraryVersion(const QString &library)
+quint32 getLibraryVersion(const QString &library)
 {
     return detail::LibraryInfo::getLibraryVersion(library);
 }
@@ -1476,7 +1476,7 @@ quint32 SIRESTREAM_EXPORT getLibraryVersion(const QString &library)
     
     \throw SireError::unsupported
 */
-quint32 SIRESTREAM_EXPORT getMinimumSupportedVersion(const QString &library)
+quint32 getMinimumSupportedVersion(const QString &library)
 {
     return detail::LibraryInfo::getMinimumSupportedVersion(library);
 }
@@ -1485,7 +1485,7 @@ using namespace SireStream::detail;
 
 /** This loads an object from the passed blob of binary data. This binary
     data *must* have been created by the "save" function below. */
-QList< tuple<shared_ptr<void>,QString> > SIRESTREAM_EXPORT load(const QByteArray &data)
+QList< tuple<shared_ptr<void>,QString> > load(const QByteArray &data)
 {
     QList< tuple<shared_ptr<void>,QString> > loaded_objects;
 
@@ -1611,7 +1611,7 @@ QList< tuple<shared_ptr<void>,QString> > SIRESTREAM_EXPORT load(const QByteArray
 
 /** This loads an object from the specified file. This binary
     data *must* have been created by the "save" function below. */
-QList< tuple<shared_ptr<void>,QString> > SIRESTREAM_EXPORT load(const QString &filename)
+QList< tuple<shared_ptr<void>,QString> > load(const QString &filename)
 {
     QFile f(filename);
     
@@ -1630,7 +1630,7 @@ QList< tuple<shared_ptr<void>,QString> > SIRESTREAM_EXPORT load(const QString &f
 }
 
 /** Return the header for the data */
-FileHeader SIRESTREAM_EXPORT getDataHeader(const QByteArray &data)
+FileHeader getDataHeader(const QByteArray &data)
 {
     QDataStream ds(data);
     
@@ -1652,7 +1652,7 @@ FileHeader SIRESTREAM_EXPORT getDataHeader(const QByteArray &data)
 }
 
 /** Return the header of the file */
-FileHeader SIRESTREAM_EXPORT getDataHeader(const QString &filename)
+FileHeader getDataHeader(const QString &filename)
 {
     QFile f(filename);
     

@@ -46,29 +46,29 @@ class ResIdxAtomMCSMatcher;
 class ResIdxAtomCoordMatcher;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomIdxMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomIdxMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomIdxMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomIdxMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomNameMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomNameMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomNameMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomNameMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomIDMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomIDMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomIDMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomIDMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomMultiMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomMultiMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomMultiMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomMultiMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomMCSMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomMCSMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomMCSMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomMCSMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomNameMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomNameMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomNameMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomNameMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomMCSMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomMCSMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomMCSMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomMCSMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomCoordMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomCoordMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomCoordMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomCoordMatcher&);
 
 namespace SireMol
 {

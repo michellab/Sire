@@ -38,8 +38,8 @@ namespace SireMaths
 class DistVector;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMaths::DistVector&);
-QDataStream& operator>>(QDataStream&, SireMaths::DistVector&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::DistVector&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::DistVector&);
 
 namespace SireMaths
 {

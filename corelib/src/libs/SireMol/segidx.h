@@ -40,8 +40,8 @@ namespace SireMol
 class SegIdx;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::SegIdx&);
-QDataStream& operator>>(QDataStream&, SireMol::SegIdx&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::SegIdx&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::SegIdx&);
 
 namespace SireMol
 {

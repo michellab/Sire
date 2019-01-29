@@ -42,7 +42,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<CLJDelta> r_delta(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJDelta &delta)
+QDataStream &operator<<(QDataStream &ds, const CLJDelta &delta)
 {
     writeHeader(ds, r_delta, 1);
     
@@ -53,7 +53,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJDelta &delta)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJDelta &delta)
+QDataStream &operator>>(QDataStream &ds, CLJDelta &delta)
 {
     VersionID v = readHeader(ds, r_delta);
     

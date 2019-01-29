@@ -38,8 +38,8 @@ namespace SireMove
 class DLMRigidBody;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::DLMRigidBody&);
-QDataStream& operator>>(QDataStream&, SireMove::DLMRigidBody&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::DLMRigidBody&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::DLMRigidBody&);
 
 namespace SireMove
 {

@@ -65,7 +65,7 @@ using std::pair;
 
 static const RegisterMetaType<AssignerGroup> r_assignergroup(NO_ROOT);
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const AssignerGroup &group)
+QDataStream &operator<<(QDataStream &ds, const AssignerGroup &group)
 {
     writeHeader(ds, r_assignergroup, 1);
     
@@ -76,7 +76,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const AssignerGroup &
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, AssignerGroup &group)
+QDataStream &operator>>(QDataStream &ds, AssignerGroup &group)
 {
     VersionID v = readHeader(ds, r_assignergroup);
     
@@ -277,7 +277,7 @@ bool AssignerGroup::isCompatible(const AssignerGroup &other) const
 
 static const RegisterMetaType<FreeEnergyMonitor> r_nrgmonitor;
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const FreeEnergyMonitor &nrgmonitor)
 {
     writeHeader(ds, r_nrgmonitor, 1);
@@ -299,7 +299,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                           FreeEnergyMonitor &nrgmonitor)
 {
     VersionID v = readHeader(ds, r_nrgmonitor);

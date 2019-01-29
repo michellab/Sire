@@ -46,8 +46,8 @@ namespace SireSystem
 class IDAssigner;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::IDAssigner&);
-QDataStream& operator>>(QDataStream&, SireSystem::IDAssigner&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::IDAssigner&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::IDAssigner&);
 
 namespace SireSystem
 {

@@ -23,80 +23,72 @@
 # www.mip.informatik.uni-kiel.de
 # --------------------------------
 
-IF(WIN32)
-  MESSAGE(SEND_ERROR "FindGSL.cmake: gnu scientific library GSL not (yet) supported on WIN32")
+SET(GSL_CONFIG_PREFER_PATH 
+"$ENV{GSL_DIR}/bin"
+"$ENV{GSL_DIR}"
+"$ENV{GSL_HOME}/bin" 
+"$ENV{GSL_HOME}" 
+CACHE STRING "preferred path to GSL (gsl-config)")
+FIND_PROGRAM(GSL_CONFIG gsl-config
+  ${GSL_CONFIG_PREFER_PATH}
+  /usr/bin/
+  ENV PATH
+  )
+#MESSAGE("DBG GSL_CONFIG ${GSL_CONFIG}")
+
+IF (GSL_CONFIG) 
+  # set CXXFLAGS to be fed into CXX_FLAGS by the user:
+  EXEC_PROGRAM( ${GSL_CONFIG}
+                ARGS --cflags
+                OUTPUT_VARIABLE GSL_CXXFLAGS)
   
-ELSE(WIN32)
-  IF(UNIX) 
-    SET(GSL_CONFIG_PREFER_PATH 
-    "$ENV{GSL_DIR}/bin"
-    "$ENV{GSL_DIR}"
-    "$ENV{GSL_HOME}/bin" 
-    "$ENV{GSL_HOME}" 
-    CACHE STRING "preferred path to GSL (gsl-config)")
-    FIND_PROGRAM(GSL_CONFIG gsl-config
-      ${GSL_CONFIG_PREFER_PATH}
-      /usr/bin/
-      ENV PATH
-      )
-    #MESSAGE("DBG GSL_CONFIG ${GSL_CONFIG}")
-    
-    IF (GSL_CONFIG) 
-      # set CXXFLAGS to be fed into CXX_FLAGS by the user:
-      EXEC_PROGRAM( ${GSL_CONFIG}
-                    ARGS --cflags
-                    OUTPUT_VARIABLE GSL_CXXFLAGS)
-      
-      # set INCLUDE_DIRS to prefix+include
-      EXEC_PROGRAM(${GSL_CONFIG}
-        ARGS --prefix
-        OUTPUT_VARIABLE GSL_PREFIX)
-      SET(GSL_INCLUDE_DIR ${GSL_PREFIX}/include CACHE STRING INTERNAL)
+  # set INCLUDE_DIRS to prefix+include
+  EXEC_PROGRAM(${GSL_CONFIG}
+    ARGS --prefix
+    OUTPUT_VARIABLE GSL_PREFIX)
+  SET(GSL_INCLUDE_DIR ${GSL_PREFIX}/include CACHE STRING INTERNAL)
 
-      # set link libraries and link flags
-      EXEC_PROGRAM( ${GSL_CONFIG}
-                    ARGS --libs
-                    OUTPUT_VARIABLE GSL_LIBRARIES )     
- 
-      # extract link dirs for rpath  
-      EXEC_PROGRAM(${GSL_CONFIG}
-        ARGS --libs
-        OUTPUT_VARIABLE GSL_CONFIG_LIBS )
+  # set link libraries and link flags
+  EXEC_PROGRAM( ${GSL_CONFIG}
+                ARGS --libs
+                OUTPUT_VARIABLE GSL_LIBRARIES )     
 
-      # split off the link dirs (for rpath)
-      # use regular expression to match wildcard equivalent "-L*<endchar>"
-      # with <endchar> is a space or a semicolon
-      STRING(REGEX MATCHALL "[-][L]([^ ;])+" 
-        GSL_LINK_DIRECTORIES_WITH_PREFIX 
-        "${GSL_CONFIG_LIBS}" )
-        #      MESSAGE("DBG  GSL_LINK_DIRECTORIES_WITH_PREFIX=${GSL_LINK_DIRECTORIES_WITH_PREFIX}")
+  # extract link dirs for rpath  
+  EXEC_PROGRAM(${GSL_CONFIG}
+    ARGS --libs
+    OUTPUT_VARIABLE GSL_CONFIG_LIBS )
 
-      # remove prefix -L because we need the pure directory for LINK_DIRECTORIES
-      
-      IF (GSL_LINK_DIRECTORIES_WITH_PREFIX)
-        STRING(REGEX REPLACE "[-][L]" "" GSL_LINK_DIRECTORIES ${GSL_LINK_DIRECTORIES_WITH_PREFIX} )
-      ENDIF (GSL_LINK_DIRECTORIES_WITH_PREFIX)
-      SET(GSL_EXE_LINKER_FLAGS "-Wl,-rpath,${GSL_LINK_DIRECTORIES}" CACHE STRING INTERNAL)
-      #      MESSAGE("DBG  GSL_LINK_DIRECTORIES=${GSL_LINK_DIRECTORIES}")
-      #      MESSAGE("DBG  GSL_EXE_LINKER_FLAGS=${GSL_EXE_LINKER_FLAGS}")
+  # split off the link dirs (for rpath)
+  # use regular expression to match wildcard equivalent "-L*<endchar>"
+  # with <endchar> is a space or a semicolon
+  STRING(REGEX MATCHALL "[-][L]([^ ;])+" 
+    GSL_LINK_DIRECTORIES_WITH_PREFIX 
+    "${GSL_CONFIG_LIBS}" )
+    #      MESSAGE("DBG  GSL_LINK_DIRECTORIES_WITH_PREFIX=${GSL_LINK_DIRECTORIES_WITH_PREFIX}")
 
-      #      ADD_DEFINITIONS("-DHAVE_GSL")
-      #      SET(GSL_DEFINITIONS "-DHAVE_GSL")
-      MARK_AS_ADVANCED(
-        GSL_CXX_FLAGS
-        GSL_INCLUDE_DIR
-        GSL_LIBRARIES
-        GSL_LINK_DIRECTORIES
-        GSL_DEFINITIONS
-      )
-      MESSAGE(STATUS "Using GSL from ${GSL_PREFIX}")
-      
-    ELSE(GSL_CONFIG)
-      MESSAGE("FindGSL.cmake: gsl-config not found. Please set it manually. GSL_CONFIG=${GSL_CONFIG}")
-    ENDIF(GSL_CONFIG)
+  # remove prefix -L because we need the pure directory for LINK_DIRECTORIES
+  
+  IF (GSL_LINK_DIRECTORIES_WITH_PREFIX)
+    STRING(REGEX REPLACE "[-][L]" "" GSL_LINK_DIRECTORIES ${GSL_LINK_DIRECTORIES_WITH_PREFIX} )
+  ENDIF (GSL_LINK_DIRECTORIES_WITH_PREFIX)
+  SET(GSL_EXE_LINKER_FLAGS "-Wl,-rpath,${GSL_LINK_DIRECTORIES}" CACHE STRING INTERNAL)
+  #      MESSAGE("DBG  GSL_LINK_DIRECTORIES=${GSL_LINK_DIRECTORIES}")
+  #      MESSAGE("DBG  GSL_EXE_LINKER_FLAGS=${GSL_EXE_LINKER_FLAGS}")
 
-  ENDIF(UNIX)
-ENDIF(WIN32)
+  #      ADD_DEFINITIONS("-DHAVE_GSL")
+  #      SET(GSL_DEFINITIONS "-DHAVE_GSL")
+  MARK_AS_ADVANCED(
+    GSL_CXX_FLAGS
+    GSL_INCLUDE_DIR
+    GSL_LIBRARIES
+    GSL_LINK_DIRECTORIES
+    GSL_DEFINITIONS
+  )
+  MESSAGE(STATUS "Using GSL from ${GSL_PREFIX}")
+  
+ELSE(GSL_CONFIG)
+  MESSAGE("FindGSL.cmake: gsl-config not found. Please set it manually. GSL_CONFIG=${GSL_CONFIG}")
+ENDIF(GSL_CONFIG)
 
 
 IF(GSL_LIBRARIES)

@@ -41,8 +41,8 @@ template<>
 class AtomProperty<SireMaths::Vector>;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomProperty<SireMaths::Vector>&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomProperty<SireMaths::Vector>&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomProperty<SireMaths::Vector>&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomProperty<SireMaths::Vector>&);
 
 namespace SireMaths
 {

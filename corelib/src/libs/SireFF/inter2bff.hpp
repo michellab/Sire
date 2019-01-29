@@ -60,9 +60,9 @@ using SireBase::ChunkedVector;
     @author Christopher Woods
 */
 template<class Potential>
-class SIREFF_EXPORT Inter2BFF 
-                : public SireBase::ConcreteProperty<Inter2BFF<Potential>, G1FF>, 
-                  public Potential
+class Inter2BFF 
+            : public SireBase::ConcreteProperty<Inter2BFF<Potential>, G1FF>, 
+              public Potential
 {
 
 friend QDataStream& ::operator<<<>(QDataStream&, const Inter2BFF<Potential>&);
@@ -147,8 +147,12 @@ protected:
     Components ffcomponents;
 };
 
-#ifndef SIRE_SKIP_INLINE_FUNCTIONS
-
+#if !defined(SIRE_SKIP_INLINE_FUNCTIONS) \
+    && !defined(InterCLJFF_hpp__pyplusplus_wrapper) \
+    && !defined(InterCLJFFBase_hpp__pyplusplus_wrapper) \
+    && !defined(CLJPotentialInterface_InterCLJPotential__hpp__pyplusplus_wrapper) \
+    && !defined(InterGroupCLJFFBase_hpp__pyplusplus_wrapper) \
+    && !defined(InterGroupCLJFF_hpp__pyplusplus_wrapper)
 /** Constructor */
 template<class Potential>
 SIRE_OUTOFLINE_TEMPLATE

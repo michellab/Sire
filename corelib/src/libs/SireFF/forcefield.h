@@ -40,8 +40,8 @@ namespace SireFF
 class NullFF;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::NullFF&);
-QDataStream& operator>>(QDataStream&, SireFF::NullFF&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::NullFF&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::NullFF&);
 
 namespace SireFF
 {

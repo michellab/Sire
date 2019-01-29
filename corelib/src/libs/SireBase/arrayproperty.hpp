@@ -51,7 +51,7 @@ namespace SireBase
 
 namespace detail
 {
-    int checkIndex(int i, int count);
+    SIREBASE_EXPORT int checkIndex(int i, int count);
 }
 
 /** This class provides a thin Property wrapper around an array.
@@ -61,7 +61,7 @@ namespace detail
     @author Christopher Woods
 */
 template<class T>
-class SIREBASE_EXPORT ArrayProperty : public Property
+class ArrayProperty : public Property
 {
 
 public:

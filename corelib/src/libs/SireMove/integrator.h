@@ -46,11 +46,11 @@ class Integrator;
 class NullIntegrator;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::Integrator&);
-QDataStream& operator>>(QDataStream&, SireMove::Integrator&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::Integrator&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::Integrator&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::NullIntegrator&);
-QDataStream& operator>>(QDataStream&, SireMove::NullIntegrator&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::NullIntegrator&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::NullIntegrator&);
 
 namespace SireFF
 {

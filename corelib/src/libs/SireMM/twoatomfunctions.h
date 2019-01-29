@@ -47,11 +47,11 @@ class TwoAtomFunction;
 class TwoAtomFunctions;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::TwoAtomFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::TwoAtomFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::TwoAtomFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::TwoAtomFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::TwoAtomFunctions&);
-QDataStream& operator>>(QDataStream&, SireMM::TwoAtomFunctions&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::TwoAtomFunctions&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::TwoAtomFunctions&);
 
 namespace SireMol
 {

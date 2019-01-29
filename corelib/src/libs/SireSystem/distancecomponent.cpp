@@ -52,7 +52,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<DistanceComponent> r_distcomp;
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const DistanceComponent &distcomp)
 {
     writeHeader(ds, r_distcomp, 1);
@@ -65,7 +65,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, DistanceComponent &distcomp)
+QDataStream &operator>>(QDataStream &ds, DistanceComponent &distcomp)
 {
     VersionID v = readHeader(ds, r_distcomp);
     
@@ -268,7 +268,7 @@ Values DistanceComponent::getValues(const System &system)
 
 static const RegisterMetaType<DoubleDistanceComponent> r_dist2comp;
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const DoubleDistanceComponent &dist2comp)
 {
     writeHeader(ds, r_dist2comp, 1);
@@ -281,7 +281,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                           DoubleDistanceComponent &dist2comp)
 {
     VersionID v = readHeader(ds, r_dist2comp);
@@ -553,7 +553,7 @@ Values DoubleDistanceComponent::getValues(const System &system)
 
 static const RegisterMetaType<TripleDistanceComponent> r_dist3comp;
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const TripleDistanceComponent &dist3comp)
 {
     writeHeader(ds, r_dist3comp, 1);
@@ -567,7 +567,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                           TripleDistanceComponent &dist3comp)
 {
     VersionID v = readHeader(ds, r_dist3comp);

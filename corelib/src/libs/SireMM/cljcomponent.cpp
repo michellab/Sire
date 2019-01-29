@@ -42,7 +42,7 @@ using namespace SireStream;
 static const RegisterMetaType<CoulombComponent> r_coul;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CoulombComponent &coul)
+QDataStream &operator<<(QDataStream &ds, const CoulombComponent &coul)
 {
     writeHeader(ds, r_coul, 1);
     ds << static_cast<const FFComponent&>(coul);
@@ -50,7 +50,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CoulombComponent &c
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CoulombComponent &coul)
+QDataStream &operator>>(QDataStream &ds, CoulombComponent &coul)
 {
     VersionID v = readHeader(ds, r_coul);
     
@@ -117,7 +117,7 @@ const char* CoulombComponent::typeName()
 static const RegisterMetaType<LJComponent> r_lj;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const LJComponent &lj)
+QDataStream &operator<<(QDataStream &ds, const LJComponent &lj)
 {
     writeHeader(ds, r_lj, 1);
     ds << static_cast<const FFComponent&>(lj);
@@ -125,7 +125,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const LJComponent &lj)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, LJComponent &lj)
+QDataStream &operator>>(QDataStream &ds, LJComponent &lj)
 {
     VersionID v = readHeader(ds, r_lj);
     
@@ -192,7 +192,7 @@ const char* LJComponent::typeName()
 static const RegisterMetaType<CLJComponent> r_clj;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJComponent &clj)
+QDataStream &operator<<(QDataStream &ds, const CLJComponent &clj)
 {
     writeHeader(ds, r_clj, 1);
     ds << static_cast<const FFComponent&>(clj)
@@ -202,7 +202,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJComponent &clj)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJComponent &clj)
+QDataStream &operator>>(QDataStream &ds, CLJComponent &clj)
 {
     VersionID v = readHeader(ds, r_clj);
     

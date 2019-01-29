@@ -40,8 +40,8 @@ namespace SireMol
 class BeadNum;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::BeadNum&);
-QDataStream& operator>>(QDataStream&, SireMol::BeadNum&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::BeadNum&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::BeadNum&);
 
 namespace SireMol
 {

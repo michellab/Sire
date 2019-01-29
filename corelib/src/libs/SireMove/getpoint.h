@@ -49,20 +49,20 @@ class GetCOGPoint;
 class GetCentroidPoint;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::GetPoint&);
-QDataStream& operator>>(QDataStream&, SireMove::GetPoint&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::GetPoint&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::GetPoint&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::NullGetPoint&);
-QDataStream& operator>>(QDataStream&, SireMove::NullGetPoint&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::NullGetPoint&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::NullGetPoint&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::GetCOMPoint&);
-QDataStream& operator>>(QDataStream&, SireMove::GetCOMPoint&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::GetCOMPoint&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::GetCOMPoint&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::GetCOGPoint&);
-QDataStream& operator>>(QDataStream&, SireMove::GetCOGPoint&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::GetCOGPoint&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::GetCOGPoint&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::GetCentroidPoint&);
-QDataStream& operator>>(QDataStream&, SireMove::GetCentroidPoint&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::GetCentroidPoint&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::GetCentroidPoint&);
 
 namespace SireMaths
 {

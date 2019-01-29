@@ -3,6 +3,8 @@
 
 #include "SireID_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "identifier.h"
 #include "index.h"
 

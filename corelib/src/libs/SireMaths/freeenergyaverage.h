@@ -43,11 +43,11 @@ class FreeEnergyAverage;
 class BennettsFreeEnergyAverage;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMaths::FreeEnergyAverage&);
-QDataStream& operator>>(QDataStream&, SireMaths::FreeEnergyAverage&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::FreeEnergyAverage&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::FreeEnergyAverage&);
 
-QDataStream& operator<<(QDataStream&, const SireMaths::BennettsFreeEnergyAverage&);
-QDataStream& operator>>(QDataStream&, SireMaths::BennettsFreeEnergyAverage&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::BennettsFreeEnergyAverage&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::BennettsFreeEnergyAverage&);
 
 namespace SireMaths
 {

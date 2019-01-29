@@ -63,7 +63,7 @@ using namespace SireUnits;
 
 static RegisterMetaType<FlexibilityTemplate> r_flextemplate(NO_ROOT);
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const FlexibilityTemplate &flextemplate)
 {
     writeHeader(ds, r_flextemplate, 1);
@@ -79,7 +79,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, FlexibilityTemplate &flextemplate)
+QDataStream &operator>>(QDataStream &ds, FlexibilityTemplate &flextemplate)
 {
     VersionID v = readHeader(ds, r_flextemplate);
     
@@ -288,7 +288,7 @@ static int processVersionLine( QString& line)
 static const RegisterMetaType<FlexibilityLibrary> r_flexibilitymaker;
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const FlexibilityLibrary &flexibilitymaker)
 {
     writeHeader(ds, r_flexibilitymaker, 1);
@@ -301,7 +301,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                       FlexibilityLibrary &flexibilitymaker)
 {
     VersionID v = readHeader(ds, r_flexibilitymaker);

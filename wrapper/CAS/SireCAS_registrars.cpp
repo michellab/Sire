@@ -3,6 +3,8 @@
 
 #include "SireCAS_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "i.h"
 #include "abs.h"
 #include "values.h"

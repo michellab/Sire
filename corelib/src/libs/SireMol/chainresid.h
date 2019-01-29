@@ -39,8 +39,8 @@ namespace SireMol
 class ChainResID;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ChainResID&);
-QDataStream& operator>>(QDataStream&, SireMol::ChainResID&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ChainResID&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ChainResID&);
 
 namespace SireMol
 {

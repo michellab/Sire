@@ -42,11 +42,11 @@ class SegEditor;
 class SegStructureEditor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::SegEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::SegEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::SegEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::SegEditor&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::SegStructureEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::SegStructureEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::SegStructureEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::SegStructureEditor&);
 
 namespace SireMol
 {

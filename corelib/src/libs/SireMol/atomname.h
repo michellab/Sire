@@ -41,8 +41,8 @@ namespace SireMol
 class AtomName;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomName&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomName&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomName&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomName&);
 
 namespace SireMol
 {

@@ -62,7 +62,7 @@ using namespace SireStream;
 static const RegisterMetaType<Atom> r_atom;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Atom &atom)
+QDataStream &operator<<(QDataStream &ds, const Atom &atom)
 {
     writeHeader(ds, r_atom, 1);
 
@@ -72,7 +72,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Atom &atom)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Atom &atom)
+QDataStream &operator>>(QDataStream &ds, Atom &atom)
 {
     VersionID v = readHeader(ds, r_atom);
 
@@ -422,19 +422,19 @@ namespace SireMol
 namespace detail
 {
 
-bool SIREMOL_EXPORT has_property(const Atom*, const MoleculeData &moldata,
+bool has_property(const Atom*, const MoleculeData &moldata,
                                  const PropertyName &key)
 {
     return moldata.hasPropertyOfType<AtomProp>(key);
 }
 
-bool SIREMOL_EXPORT has_metadata(const Atom*, const MoleculeData &moldata,
+bool has_metadata(const Atom*, const MoleculeData &moldata,
                                  const PropertyName &metakey)
 {
     return moldata.hasMetadataOfType<AtomProp>(metakey);
 }
 
-bool SIREMOL_EXPORT has_metadata(const Atom*, const MoleculeData &moldata,
+bool has_metadata(const Atom*, const MoleculeData &moldata,
                                  const PropertyName &key, const PropertyName &metakey)
 {
     return moldata.hasMetadataOfType<AtomProp>(key, metakey);

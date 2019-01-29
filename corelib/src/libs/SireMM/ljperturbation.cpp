@@ -48,7 +48,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<LJPerturbation> r_ljpert;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const LJPerturbation &ljpert)
 {
     writeHeader(ds, r_ljpert, 1);
@@ -61,7 +61,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        LJPerturbation &ljpert)
 {
     VersionID v = readHeader(ds, r_ljpert);

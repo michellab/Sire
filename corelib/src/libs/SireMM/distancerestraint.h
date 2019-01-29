@@ -48,14 +48,14 @@ class DoubleDistanceRestraint;
 class TripleDistanceRestraint;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::DistanceRestraint&);
-QDataStream& operator>>(QDataStream&, SireMM::DistanceRestraint&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::DistanceRestraint&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::DistanceRestraint&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::DoubleDistanceRestraint&);
-QDataStream& operator>>(QDataStream&, SireMM::DoubleDistanceRestraint&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::DoubleDistanceRestraint&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::DoubleDistanceRestraint&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::TripleDistanceRestraint&);
-QDataStream& operator>>(QDataStream&, SireMM::TripleDistanceRestraint&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::TripleDistanceRestraint&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::TripleDistanceRestraint&);
 
 namespace SireMM
 {

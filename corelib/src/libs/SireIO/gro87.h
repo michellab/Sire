@@ -40,8 +40,8 @@ namespace SireIO
 class Gro87;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::Gro87&);
-QDataStream& operator>>(QDataStream&, SireIO::Gro87&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Gro87&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Gro87&);
 
 namespace SireMol{ class MoleculeInfoData; }
 

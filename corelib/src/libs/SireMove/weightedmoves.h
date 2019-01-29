@@ -42,8 +42,8 @@ namespace SireMove
 class WeightedMoves;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::WeightedMoves&);
-QDataStream& operator>>(QDataStream&, SireMove::WeightedMoves&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::WeightedMoves&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::WeightedMoves&);
 
 namespace SireMove
 {

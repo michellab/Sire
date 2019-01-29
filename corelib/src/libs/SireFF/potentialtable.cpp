@@ -55,7 +55,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<MolPotentialTable> r_moltable(NO_ROOT);
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const MolPotentialTable &moltable)
 {
     writeHeader(ds, r_moltable, 1);
@@ -69,7 +69,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, MolPotentialTable &moltable)
+QDataStream &operator>>(QDataStream &ds, MolPotentialTable &moltable)
 {
     VersionID v = readHeader(ds, r_moltable);
     
@@ -237,7 +237,7 @@ MolPotentialTable MolPotentialTable::operator+(const MolarEnergy &potential) con
     return ret;
 }
 
-MolPotentialTable SIREFF_EXPORT operator+(const MolarEnergy &potential, 
+MolPotentialTable operator+(const MolarEnergy &potential, 
                                           const MolPotentialTable &table)
 {
     return table + potential;
@@ -274,7 +274,7 @@ MolPotentialTable MolPotentialTable::operator*(double value) const
 }
 
 /** Return the potential that has been multiplied by 'value' */
-MolPotentialTable SIREFF_EXPORT operator*(double value, const MolPotentialTable &table)
+MolPotentialTable operator*(double value, const MolPotentialTable &table)
 {
     return table * value;
 }
@@ -883,7 +883,7 @@ void MolPotentialTable::subtract(const MolPotentialTable &other)
 
 static const RegisterMetaType<GridPotentialTable> r_gridtable(NO_ROOT);
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const GridPotentialTable &gridtable)
+QDataStream &operator<<(QDataStream &ds, const GridPotentialTable &gridtable)
 {
     writeHeader(ds, r_gridtable, 1);
     
@@ -894,7 +894,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const GridPotentialTable 
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, GridPotentialTable &gridtable)
+QDataStream &operator>>(QDataStream &ds, GridPotentialTable &gridtable)
 {
     VersionID v = readHeader(ds, r_gridtable);
     
@@ -1314,7 +1314,7 @@ GridPotentialTable::const_iterator GridPotentialTable::constEnd() const
 
 static const RegisterMetaType<PotentialTable> r_potentialtable(NO_ROOT);
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const PotentialTable &potentialtable)
+QDataStream &operator<<(QDataStream &ds, const PotentialTable &potentialtable)
 {
     writeHeader(ds, r_potentialtable, 1);
     
@@ -1325,7 +1325,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const PotentialTable &pot
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, PotentialTable &potentialtable)
+QDataStream &operator>>(QDataStream &ds, PotentialTable &potentialtable)
 {
     VersionID v = readHeader(ds, r_potentialtable);
     

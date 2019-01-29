@@ -40,8 +40,8 @@ namespace SireMol
 class CGIdx;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::CGIdx&);
-QDataStream& operator>>(QDataStream&, SireMol::CGIdx&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CGIdx&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CGIdx&);
 
 namespace SireMol
 {
@@ -108,7 +108,7 @@ public:
     QList<CGIdx> map(const MolInfo &molinfo) const;
 };
 
-CGAtomIdx operator+(const SireID::Index &index, const CGIdx &cgidx);
+SIREMOL_EXPORT CGAtomIdx operator+(const SireID::Index &index, const CGIdx &cgidx);
     
 }
 

@@ -44,14 +44,14 @@ namespace SireMaths
 class Transform;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMaths::Transform&);
-QDataStream& operator>>(QDataStream&, SireMaths::Transform&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Transform&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Transform&);
 
 namespace SireMaths
 {
-    Vector getCentroid(const QVector<Vector> &p, int n=-1);
+    SIREMATHS_EXPORT Vector getCentroid(const QVector<Vector> &p, int n=-1);
     
-    double getRMSD(const QVector<Vector> &p, const QVector<Vector> &q, int n=-1);
+    SIREMATHS_EXPORT double getRMSD(const QVector<Vector> &p, const QVector<Vector> &q, int n=-1);
 
     /** This class holds everything needed to apply a transformation on a set
         of points. This holds the amount by which to translate the points, together
@@ -118,17 +118,17 @@ namespace SireMaths
         Quaternion rotmat;
     };
 
-    Transform kabaschFit(const QVector<Vector> &p,
+    SIREMATHS_EXPORT Transform kabaschFit(const QVector<Vector> &p,
                          const QVector<Vector> &q);
 
-    Matrix kabasch(const QVector<Vector> &p,
+    SIREMATHS_EXPORT Matrix kabasch(const QVector<Vector> &p,
                    const QVector<Vector> &q);
 
-    Transform getAlignment(const QVector<Vector> &p,
+    SIREMATHS_EXPORT Transform getAlignment(const QVector<Vector> &p,
                            const QVector<Vector> &q,
                            bool fit=true);
     
-    QVector<Vector> align(const QVector<Vector> &p,
+    SIREMATHS_EXPORT QVector<Vector> align(const QVector<Vector> &p,
                           const QVector<Vector> &q,
                           bool fit=true);
 }

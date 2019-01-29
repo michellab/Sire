@@ -57,7 +57,7 @@ using boost::tuple;
 static const RegisterMetaType<Matrix> r_matrix(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Matrix &matrix)
+QDataStream &operator<<(QDataStream &ds, const Matrix &matrix)
 {
     writeHeader(ds, r_matrix, 1);
     
@@ -70,7 +70,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Matrix &matrix)
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, Matrix &matrix)
+QDataStream &operator>>(QDataStream &ds, Matrix &matrix)
 {
     VersionID v = readHeader(ds, r_matrix);
 
@@ -443,7 +443,7 @@ Matrix& Matrix::operator*=(const Matrix &m)
     return *this;
 }
 
-const Matrix SIREMATHS_EXPORT SireMaths::operator*(const Matrix &m1, const Matrix &m2)
+const Matrix SireMaths::operator*(const Matrix &m1, const Matrix &m2)
 {
     Matrix ret(m1);
     ret *= m2;
@@ -490,7 +490,7 @@ Matrix& Matrix::operator/=(double c)
     return this->operator*=( 1 / c );
 }
 
-const Matrix SIREMATHS_EXPORT SireMaths::operator+(const Matrix &m1, const Matrix &m2)
+const Matrix SireMaths::operator+(const Matrix &m1, const Matrix &m2)
 {
     Matrix ret(m1);
     ret += m2;
@@ -498,21 +498,21 @@ const Matrix SIREMATHS_EXPORT SireMaths::operator+(const Matrix &m1, const Matri
     return ret;
 }
 
-const Matrix SIREMATHS_EXPORT SireMaths::operator-(const Matrix &m1, const Matrix &m2)
+const Matrix SireMaths::operator-(const Matrix &m1, const Matrix &m2)
 {
     Matrix ret(m1);
     ret -= m2;
     return ret;
 }
 
-const Matrix SIREMATHS_EXPORT SireMaths::operator*(const Matrix &m, double c)
+const Matrix SireMaths::operator*(const Matrix &m, double c)
 {
     Matrix ret(m);
     ret *= c;
     return ret;
 }
 
-const Matrix SIREMATHS_EXPORT SireMaths::operator*(double c, const Matrix &m)
+const Matrix SireMaths::operator*(double c, const Matrix &m)
 {
     Matrix ret(m);
     ret *= c;

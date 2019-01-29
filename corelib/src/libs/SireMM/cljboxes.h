@@ -48,20 +48,20 @@ class CLJBoxes;
 class CLJBoxDistance;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJBox&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJBox&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJBox&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJBox&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJBoxIndex&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJBoxIndex&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJBoxIndex&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJBoxIndex&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJBoxPtr&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJBoxPtr&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJBoxPtr&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJBoxPtr&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJBoxes&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJBoxes&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJBoxes&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJBoxes&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJBoxDistance&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJBoxDistance&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJBoxDistance&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJBoxDistance&);
 
 namespace SireVol
 {

@@ -311,7 +311,7 @@ NullIO IOBase::null()
 static const RegisterMetaType<NullIO> r_nullio;
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const NullIO &nullio)
+QDataStream &operator<<(QDataStream &ds, const NullIO &nullio)
 {
     writeHeader(ds, r_nullio, 1);
     
@@ -321,7 +321,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const NullIO &nullio)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, NullIO &nullio)
+QDataStream &operator>>(QDataStream &ds, NullIO &nullio)
 {
     VersionID v = readHeader(ds, r_nullio);
     

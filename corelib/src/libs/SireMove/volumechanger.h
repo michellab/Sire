@@ -50,14 +50,14 @@ class NullVolumeChanger;
 class ScaleVolumeFromCenter;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::VolumeChanger&);
-QDataStream& operator>>(QDataStream&, SireMove::VolumeChanger&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::VolumeChanger&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::VolumeChanger&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::NullVolumeChanger&);
-QDataStream& operator>>(QDataStream&, SireMove::NullVolumeChanger&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::NullVolumeChanger&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::NullVolumeChanger&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::ScaleVolumeFromCenter&);
-QDataStream& operator>>(QDataStream&, SireMove::ScaleVolumeFromCenter&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::ScaleVolumeFromCenter&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::ScaleVolumeFromCenter&);
 
 namespace SireSystem
 {

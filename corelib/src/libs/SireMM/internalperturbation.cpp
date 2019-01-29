@@ -54,7 +54,7 @@ using namespace SireStream;
 static const RegisterMetaType<InternalPerturbation> r_intpert( MAGIC_ONLY,
                                                     InternalPerturbation::typeName() );
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const InternalPerturbation &intpert)
 {
     writeHeader(ds, r_intpert, 1);
@@ -67,7 +67,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       InternalPerturbation &intpert)
 {
     VersionID v = readHeader(ds, r_intpert);
@@ -278,7 +278,7 @@ PerturbationPtr InternalPerturbation::substitute(const Identities &identities) c
 
 static const RegisterMetaType<TwoAtomPerturbation> r_twoatom;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const TwoAtomPerturbation &twoatom)
 {
     writeHeader(ds, r_twoatom, 1);
@@ -291,7 +291,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       TwoAtomPerturbation &twoatom)
 {
     VersionID v = readHeader(ds, r_twoatom);
@@ -535,7 +535,7 @@ void TwoAtomPerturbation::perturbMolecule(MolEditor &molecule,
 
 static const RegisterMetaType<ThreeAtomPerturbation> r_threeatom;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const ThreeAtomPerturbation &threeatom)
 {
     writeHeader(ds, r_threeatom, 1);
@@ -548,7 +548,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       ThreeAtomPerturbation &threeatom)
 {
     VersionID v = readHeader(ds, r_threeatom);
@@ -803,7 +803,7 @@ void ThreeAtomPerturbation::perturbMolecule(MolEditor &molecule,
 
 static const RegisterMetaType<FourAtomPerturbation> r_fouratom;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const FourAtomPerturbation &fouratom)
 {
     writeHeader(ds, r_fouratom, 1);
@@ -816,7 +816,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       FourAtomPerturbation &fouratom)
 {
     VersionID v = readHeader(ds, r_fouratom);

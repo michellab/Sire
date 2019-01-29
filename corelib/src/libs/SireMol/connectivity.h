@@ -52,14 +52,14 @@ class ConnectivityEditor;
 class MoleculeInfo;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ConnectivityBase&);
-QDataStream& operator>>(QDataStream&, SireMol::ConnectivityBase&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ConnectivityBase&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ConnectivityBase&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::Connectivity&);
-QDataStream& operator>>(QDataStream&, SireMol::Connectivity&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Connectivity&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Connectivity&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ConnectivityEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::ConnectivityEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ConnectivityEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ConnectivityEditor&);
 
 namespace SireMol
 {

@@ -42,8 +42,8 @@ namespace SireSystem
 class Constraints;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::Constraints&);
-QDataStream& operator>>(QDataStream&, SireSystem::Constraints&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::Constraints&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::Constraints&);
 
 namespace SireMol
 {

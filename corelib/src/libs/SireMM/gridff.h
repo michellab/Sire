@@ -39,8 +39,8 @@ namespace SireMM
 class GridFF;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::GridFF&);
-QDataStream& operator>>(QDataStream&, SireMM::GridFF&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::GridFF&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::GridFF&);
 
 namespace SireMM
 {

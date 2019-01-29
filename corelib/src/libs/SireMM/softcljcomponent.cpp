@@ -317,7 +317,7 @@ double SoftCLJEnergy::component(const LJComponent&, int i) const
 static const RegisterMetaType<SoftCLJComponent> r_softcljcomp;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const SoftCLJComponent &softcljcomp)
 {
     writeHeader(ds, r_softcljcomp, 1);
@@ -344,7 +344,7 @@ void SoftCLJComponent::rebuildComponents()
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, SoftCLJComponent &softcljcomp)
+QDataStream &operator>>(QDataStream &ds, SoftCLJComponent &softcljcomp)
 {
     VersionID v = readHeader(ds, r_softcljcomp);
     

@@ -36,26 +36,26 @@ SIRE_BEGIN_HEADER
 namespace SireMaths
 {
 
-double boys_f0(double x);
-double boys_f1(double x);
-double boys_f2(double x);
-double boys_f3(double x);
+SIREMATHS_EXPORT double boys_f0(double x);
+SIREMATHS_EXPORT double boys_f1(double x);
+SIREMATHS_EXPORT double boys_f2(double x);
+SIREMATHS_EXPORT double boys_f3(double x);
 
-double boys(double m, double x);
-double boys(int m, double x);
+SIREMATHS_EXPORT double boys(double m, double x);
+SIREMATHS_EXPORT double boys(int m, double x);
 
-void multi_boys_2(double x, double boys[2]);
-void multi_boys_3(double x, double boys[3]);
-void multi_boys_4(double x, double boys[4]);
-void multi_boys_n(double x, double boys[], int n);
+SIREMATHS_EXPORT void multi_boys_2(double x, double boys[2]);
+SIREMATHS_EXPORT void multi_boys_3(double x, double boys[3]);
+SIREMATHS_EXPORT void multi_boys_4(double x, double boys[4]);
+SIREMATHS_EXPORT void multi_boys_n(double x, double boys[], int n);
 
-void multi_boys_2(double x, double boys[2], int start);
-void multi_boys_3(double x, double boys[3], int start);
-void multi_boys_4(double x, double boys[4], int start);
-void multi_boys_n(double x, double boys[], int n, int start);
+SIREMATHS_EXPORT void multi_boys_2(double x, double boys[2], int start);
+SIREMATHS_EXPORT void multi_boys_3(double x, double boys[3], int start);
+SIREMATHS_EXPORT void multi_boys_4(double x, double boys[4], int start);
+SIREMATHS_EXPORT void multi_boys_n(double x, double boys[], int n, int start);
 
-QVector<double> multi_boys(double x, int n);
-QVector<double> multi_boys(double x, int n, int start);
+SIREMATHS_EXPORT QVector<double> multi_boys(double x, int n);
+SIREMATHS_EXPORT QVector<double> multi_boys(double x, int n, int start);
 
 }
 

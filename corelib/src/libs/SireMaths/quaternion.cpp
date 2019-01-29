@@ -45,7 +45,7 @@ using namespace SireStream;
 static const RegisterMetaType<Quaternion> r_quat(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Quaternion &quat)
+QDataStream &operator<<(QDataStream &ds, const Quaternion &quat)
 {
     writeHeader(ds, r_quat, 1)  << quat.sc[0] << quat.sc[1]
                                 << quat.sc[2] << quat.sc[3];
@@ -54,7 +54,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Quaternion &quat
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, Quaternion &quat)
+QDataStream &operator>>(QDataStream &ds, Quaternion &quat)
 {
     VersionID v = readHeader(ds, r_quat);
 
@@ -153,7 +153,7 @@ bool Quaternion::isIdentity() const
     return sc[3] == 1.0;
 }
 
-const Quaternion SIREMATHS_EXPORT SireMaths::operator*(const Quaternion &q, const Vector &p)
+const Quaternion SireMaths::operator*(const Quaternion &q, const Vector &p)
 {
     //quaternion multiplication - p is [0, p]
     double nw = -p.sc[0]*q.sc[0] - p.sc[1]*q.sc[1] - p.sc[2]*q.sc[2];
@@ -170,7 +170,7 @@ const Quaternion SIREMATHS_EXPORT SireMaths::operator*(const Quaternion &q, cons
     return Quaternion(nx,ny,nz,nw);
 }
 
-const Quaternion SIREMATHS_EXPORT SireMaths::operator*(const Vector &p, const Quaternion &q)
+const Quaternion SireMaths::operator*(const Vector &p, const Quaternion &q)
 {
     return q*p;
 }
@@ -476,7 +476,7 @@ bool Quaternion::operator!=(const Quaternion &p1) const
                   or p1.sc[3] != sc[3];
 }
 
-const Quaternion SIREMATHS_EXPORT SireMaths::operator*(const Quaternion &p1,
+const Quaternion SireMaths::operator*(const Quaternion &p1,
                                                        const Quaternion &p2)
 {
     //quaternion multiplication - if quat = [w1, v1], then
@@ -506,13 +506,13 @@ Quaternion& Quaternion::operator=(const Quaternion &p)
     return *this;
 }
 
-const Quaternion SIREMATHS_EXPORT SireMaths::operator+(const Quaternion &p1,
+const Quaternion SireMaths::operator+(const Quaternion &p1,
                                                        const Quaternion &p2)
 {
     return Quaternion(p1.sc[0]+p2.sc[0],p1.sc[1]+p2.sc[1],p1.sc[2]+p2.sc[2],p1.sc[3]+p2.sc[3]);
 }
 
-const Quaternion SIREMATHS_EXPORT SireMaths::operator-(const Quaternion &p1,
+const Quaternion SireMaths::operator-(const Quaternion &p1,
                                                        const Quaternion &p2)
 {
     return Quaternion(p1.sc[0]-p2.sc[0],p1.sc[1]-p2.sc[1],p1.sc[2]-p2.sc[2],p1.sc[3]-p2.sc[3]);

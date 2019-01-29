@@ -42,11 +42,11 @@ class AtomEditor;
 class AtomStructureEditor;
 }
 
-QDataStream &operator<<(QDataStream&, const SireMol::AtomEditor&);
-QDataStream &operator>>(QDataStream&, SireMol::AtomEditor&);
+SIREMOL_EXPORT QDataStream &operator<<(QDataStream&, const SireMol::AtomEditor&);
+SIREMOL_EXPORT QDataStream &operator>>(QDataStream&, SireMol::AtomEditor&);
 
-QDataStream &operator<<(QDataStream&, const SireMol::AtomStructureEditor&);
-QDataStream &operator>>(QDataStream&, SireMol::AtomStructureEditor&);
+SIREMOL_EXPORT QDataStream &operator<<(QDataStream&, const SireMol::AtomStructureEditor&);
+SIREMOL_EXPORT QDataStream &operator>>(QDataStream&, SireMol::AtomStructureEditor&);
 
 namespace SireMol
 {

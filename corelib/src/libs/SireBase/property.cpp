@@ -49,7 +49,7 @@ namespace SireBase
 {
 
 /** Return a pointer to a global mutex */
-QMutex SIREBASE_EXPORT *globalLock()
+QMutex *globalLock()
 {
     return getGlobalMutex();
 }
@@ -206,7 +206,7 @@ static const RegisterMetaType<Property> r_propbase(MAGIC_ONLY,
                                                        "SireBase::Property");
 
 /** Serialise to a binary data stream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const Property&)
+QDataStream &operator<<(QDataStream &ds, const Property&)
 {
     writeHeader(ds, r_propbase, 0);
 
@@ -214,7 +214,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const Property&)
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, Property&)
+QDataStream &operator>>(QDataStream &ds, Property&)
 {
     VersionID v = readHeader(ds, r_propbase);
 
@@ -231,7 +231,7 @@ QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, Property&)
 static const RegisterMetaType<NullProperty> r_nullprop;
 
 /** Serialise to a binary datastream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const NullProperty &property)
+QDataStream &operator<<(QDataStream &ds, const NullProperty &property)
 {
     writeHeader(ds, r_nullprop, 1);
 
@@ -241,7 +241,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const NullProperty &pro
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, NullProperty &property)
+QDataStream &operator>>(QDataStream &ds, NullProperty &property)
 {
     VersionID v = readHeader(ds, r_nullprop);
 
@@ -290,7 +290,7 @@ static const RegisterMetaType<PropPtrBase> r_propptr( MAGIC_ONLY, NO_ROOT,
                                                       "SireBase::PropPtrBase" );
 
 /** Serialise to a binary datastream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                         const PropPtrBase &propptr)
 {
     writeHeader(ds, r_propptr, 1);
@@ -303,7 +303,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, PropPtrBase &propptr)
+QDataStream &operator>>(QDataStream &ds, PropPtrBase &propptr)
 {
     VersionID v = readHeader(ds, r_propptr);
 
@@ -493,7 +493,7 @@ static const RegisterMetaType<GlobalPropPtrBase> r_globalpropptr( MAGIC_ONLY, NO
                                                       "SireBase::GlobalPropPtrBase" );
 
 /** Serialise to a binary datastream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                         const GlobalPropPtrBase &propptr)
 {
     writeHeader(ds, r_globalpropptr, 1);
@@ -506,7 +506,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, GlobalPropPtrBase &propptr)
+QDataStream &operator>>(QDataStream &ds, GlobalPropPtrBase &propptr)
 {
     VersionID v = readHeader(ds, r_globalpropptr);
 

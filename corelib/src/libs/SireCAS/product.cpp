@@ -60,7 +60,7 @@ uint Product::hash() const
 }
 
 /** Serialise a Product to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Product &product)
+QDataStream &operator<<(QDataStream &ds, const Product &product)
 {
     writeHeader(ds, r_product, 1)
           << product.powers << product.strtval << static_cast<const ExBase&>(product);
@@ -69,7 +69,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Product &product)
 }
 
 /** Deserialise a Product from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Product &product)
+QDataStream &operator>>(QDataStream &ds, Product &product)
 {
     VersionID v = readHeader(ds, r_product);
 

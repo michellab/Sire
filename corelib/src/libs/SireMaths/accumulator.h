@@ -45,26 +45,26 @@ class Median;
 class RecordValues;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMaths::Accumulator&);
-QDataStream& operator>>(QDataStream&, SireMaths::Accumulator&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Accumulator&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Accumulator&);
 
-QDataStream& operator<<(QDataStream&, const SireMaths::NullAccumulator&);
-QDataStream& operator>>(QDataStream&, SireMaths::NullAccumulator&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::NullAccumulator&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::NullAccumulator&);
 
-QDataStream& operator<<(QDataStream&, const SireMaths::Average&);
-QDataStream& operator>>(QDataStream&, SireMaths::Average&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Average&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Average&);
 
-QDataStream& operator<<(QDataStream&, const SireMaths::AverageAndStddev&);
-QDataStream& operator>>(QDataStream&, SireMaths::AverageAndStddev&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::AverageAndStddev&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::AverageAndStddev&);
 
-QDataStream& operator<<(QDataStream&, const SireMaths::ExpAverage&);
-QDataStream& operator>>(QDataStream&, SireMaths::ExpAverage&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::ExpAverage&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::ExpAverage&);
 
-QDataStream& operator<<(QDataStream&, const SireMaths::Median&);
-QDataStream& operator>>(QDataStream&, SireMaths::Median&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Median&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Median&);
 
-QDataStream& operator<<(QDataStream&, const SireMaths::RecordValues&);
-QDataStream& operator>>(QDataStream&, SireMaths::RecordValues&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::RecordValues&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::RecordValues&);
 
 namespace SireMaths
 {

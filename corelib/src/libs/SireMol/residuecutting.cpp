@@ -52,7 +52,7 @@ using namespace SireStream;
 static const RegisterMetaType<ResidueCutting> r_rescut;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                        const ResidueCutting &rescut)
 {
     writeHeader(ds, r_rescut, 1);
@@ -63,7 +63,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResidueCutting &rescut)
+QDataStream &operator>>(QDataStream &ds, ResidueCutting &rescut)
 {
     VersionID v = readHeader(ds, r_rescut);
     

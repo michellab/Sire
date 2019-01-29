@@ -38,8 +38,8 @@ namespace SireMol
 class CuttingFunction;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::CuttingFunction&);
-QDataStream& operator>>(QDataStream&, SireMol::CuttingFunction&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CuttingFunction&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CuttingFunction&);
 
 namespace SireMol
 {

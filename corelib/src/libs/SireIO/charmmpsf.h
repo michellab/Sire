@@ -65,14 +65,14 @@ class MoleculeView;
 class Residue;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::PSFAtom&);
-QDataStream& operator>>(QDataStream&, SireIO::PSFAtom&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::PSFAtom&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::PSFAtom&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::CharmmParam&);
-QDataStream& operator>>(QDataStream&, SireIO::CharmmParam&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::CharmmParam&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::CharmmParam&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::CharmmPSF&);
-QDataStream& operator>>(QDataStream&, SireIO::CharmmPSF&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::CharmmPSF&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::CharmmPSF&);
 
 namespace SireIO
 {

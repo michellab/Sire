@@ -40,8 +40,8 @@ namespace SireSystem
 class AngleComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::AngleComponent&);
-QDataStream& operator>>(QDataStream&, SireSystem::AngleComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::AngleComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::AngleComponent&);
 
 namespace SireMaths{ class Triangle; }
 

@@ -42,7 +42,7 @@ using namespace SireStream;
 static const RegisterMetaType<Orbital> r_orbital( MAGIC_ONLY, Orbital::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const Orbital &orbital)
+QDataStream &operator<<(QDataStream &ds, const Orbital &orbital)
 {
     writeHeader(ds, r_orbital, 1);
     
@@ -52,7 +52,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const Orbital &orbital)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, Orbital &orbital)
+QDataStream &operator>>(QDataStream &ds, Orbital &orbital)
 {
     VersionID v = readHeader(ds, r_orbital);
     
@@ -110,7 +110,7 @@ static const RegisterMetaType<OrbitalShell> r_orbshell( MAGIC_ONLY,
                                                         OrbitalShell::typeName() );
                                                         
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const OrbitalShell &orbshell)
+QDataStream &operator<<(QDataStream &ds, const OrbitalShell &orbshell)
 {
     writeHeader(ds, r_orbshell, 1);
     
@@ -120,7 +120,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const OrbitalShell &orbsh
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, OrbitalShell &orbshell)
+QDataStream &operator>>(QDataStream &ds, OrbitalShell &orbshell)
 {
     VersionID v = readHeader(ds, r_orbshell);
     
@@ -177,7 +177,7 @@ const char* OrbitalShell::typeName()
 static const RegisterMetaType<ShellPair> r_shellpair( MAGIC_ONLY, ShellPair::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const ShellPair &pair)
+QDataStream &operator<<(QDataStream &ds, const ShellPair &pair)
 {
     writeHeader(ds, r_shellpair, 1);
     
@@ -187,7 +187,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const ShellPair &pair)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, ShellPair &pair)
+QDataStream &operator>>(QDataStream &ds, ShellPair &pair)
 {
     VersionID v = readHeader(ds, r_shellpair);
     

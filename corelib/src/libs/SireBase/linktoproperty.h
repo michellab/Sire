@@ -41,8 +41,8 @@ namespace SireBase
 class LinkToProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::LinkToProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::LinkToProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::LinkToProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::LinkToProperty&);
 
 namespace SireBase
 {

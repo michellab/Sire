@@ -56,7 +56,7 @@ static const RegisterMetaType<SegProp> r_segprop(MAGIC_ONLY,
                                                  "SireMol::SegProp");
                                                    
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const SegProp &segprop)
+QDataStream &operator<<(QDataStream &ds, const SegProp &segprop)
 {
     writeHeader(ds, r_segprop, 1)
          << static_cast<const MolViewProperty&>(segprop);
@@ -65,7 +65,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const SegProp &segprop)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, SegProp &segprop)
+QDataStream &operator>>(QDataStream &ds, SegProp &segprop)
 {
     VersionID v = readHeader(ds, r_segprop);
     
@@ -95,7 +95,7 @@ SegProp::~SegProp()
 RegisterMetaType<Segment> r_seg;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Segment &seg)
+QDataStream &operator<<(QDataStream &ds, const Segment &seg)
 {
     writeHeader(ds, r_seg, 1);
 
@@ -107,7 +107,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Segment &seg)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Segment &seg)
+QDataStream &operator>>(QDataStream &ds, Segment &seg)
 {
     VersionID v = readHeader(ds, r_seg);
 
@@ -391,19 +391,19 @@ const char* Segment::typeName()
     return QMetaType::typeName( qMetaTypeId<Segment>() );
 }
 
-bool SIREMOL_EXPORT SireMol::detail::has_property(const Segment*, const MoleculeData &moldata,
+bool SireMol::detail::has_property(const Segment*, const MoleculeData &moldata,
                                                   const PropertyName &key)
 {
     return moldata.hasPropertyOfType<SegProp>(key);
 }
 
-bool SIREMOL_EXPORT SireMol::detail::has_metadata(const Segment*, const MoleculeData &moldata,
+bool SireMol::detail::has_metadata(const Segment*, const MoleculeData &moldata,
                                                   const PropertyName &metakey)
 {
     return moldata.hasMetadataOfType<SegProp>(metakey);
 }
 
-bool SIREMOL_EXPORT SireMol::detail::has_metadata(const Segment*, const MoleculeData &moldata,
+bool SireMol::detail::has_metadata(const Segment*, const MoleculeData &moldata,
                                                   const PropertyName &key, const PropertyName &metakey)
 {
     return moldata.hasMetadataOfType<SegProp>(key, metakey);

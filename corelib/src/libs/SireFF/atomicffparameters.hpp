@@ -69,7 +69,7 @@ namespace SireFF
     @author Christopher Woods
 */
 template<class T>
-class SIREFF_EXPORT AtomicFFParameters
+class AtomicFFParameters
         : public SireBase::ConcreteProperty<AtomicFFParameters<T>,FFParameters>
 {
 
@@ -114,7 +114,7 @@ private:
     @author Christopher Woods
 */
 template<class T>
-class SIREFF_EXPORT AtomicFFParametersArray
+class AtomicFFParametersArray
     : public SireBase::ConcreteProperty<AtomicFFParametersArray<T>,FFParametersArray>
 {
 

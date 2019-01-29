@@ -3,6 +3,8 @@
 
 #include "SireIO_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "pdb.h"
 #include "supplementary.h"
 #include "tinker.h"

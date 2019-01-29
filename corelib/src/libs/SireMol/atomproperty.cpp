@@ -53,13 +53,13 @@ static const RegisterMetaType<AtomProp> r_atomprop(MAGIC_ONLY,
                                                    "SireMol::AtomProp");
                                                    
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomProp &atomprop)
+QDataStream &operator<<(QDataStream &ds, const AtomProp &atomprop)
 {
     return ds;
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomProp &atomprop)
+QDataStream &operator>>(QDataStream &ds, AtomProp &atomprop)
 {
     return ds;
 }

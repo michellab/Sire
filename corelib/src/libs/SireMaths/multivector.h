@@ -44,12 +44,13 @@ namespace SireMaths
 class MultiVector;
 class MultiQuaternion;
 
-MultiVector operator+(const MultiVector &p1, const MultiVector &p2);
-MultiVector operator-(const MultiVector &p1, const MultiVector &p2);
-MultiVector operator*(const MultiVector &p1, const MultiDouble &c);
-MultiVector operator*(const MultiDouble &c, const MultiVector &p1);
-MultiQuaternion operator*(const MultiVector &p1, const MultiQuaternion &p2);
-MultiQuaternion operator*(const MultiQuaternion &p1, const MultiVector &p2);
+SIREMATHS_EXPORT MultiVector operator+(const MultiVector &p1, const MultiVector &p2);
+SIREMATHS_EXPORT MultiVector operator-(const MultiVector &p1, const MultiVector &p2);
+SIREMATHS_EXPORT MultiVector operator*(const MultiVector &p1, const MultiDouble &c);
+SIREMATHS_EXPORT MultiVector operator*(const MultiDouble &c, const MultiVector &p1);
+SIREMATHS_EXPORT MultiVector operator/(const MultiVector &p1, const MultiDouble &c);
+SIREMATHS_EXPORT MultiQuaternion operator*(const MultiVector &p1, const MultiQuaternion &p2);
+SIREMATHS_EXPORT MultiQuaternion operator*(const MultiQuaternion &p1, const MultiVector &p2);
 
 /**
 This is a vectorised version of Vector, e.g. x, y, and z 

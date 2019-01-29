@@ -48,8 +48,8 @@ namespace SireMol
 class AmberParameters;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::AmberParameters&);
-QDataStream& operator>>(QDataStream&, SireMol::AmberParameters&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AmberParameters&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AmberParameters&);
 
 namespace SireMol
 {

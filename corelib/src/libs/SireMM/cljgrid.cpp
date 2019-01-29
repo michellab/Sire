@@ -51,7 +51,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<CLJGrid> r_grid(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJGrid &grid)
+QDataStream &operator<<(QDataStream &ds, const CLJGrid &grid)
 {
     writeHeader(ds, r_grid, 2);
     
@@ -65,7 +65,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJGrid &grid)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJGrid &grid)
+QDataStream &operator>>(QDataStream &ds, CLJGrid &grid)
 {
     VersionID v = readHeader(ds, r_grid);
     

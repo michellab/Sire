@@ -52,17 +52,17 @@ class GroAtom;
 class GroSystem;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::GroTop&);
-QDataStream& operator>>(QDataStream&, SireIO::GroTop&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::GroTop&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::GroTop&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::GroMolType&);
-QDataStream& operator>>(QDataStream&, SireIO::GroMolType&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::GroMolType&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::GroMolType&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::GroAtom&);
-QDataStream& operator>>(QDataStream&, SireIO::GroAtom&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::GroAtom&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::GroAtom&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::GroSystem&);
-QDataStream& operator>>(QDataStream&, SireIO::GroSystem&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::GroSystem&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::GroSystem&);
 
 namespace SireIO
 {

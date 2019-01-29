@@ -63,9 +63,9 @@ using SireBase::ChunkedVector;
     @author Christopher Woods
 */
 template<class Potential>
-class SIREFF_EXPORT Intra2BFF 
-                : public SireBase::ConcreteProperty<Intra2BFF<Potential>, G1FF>, 
-                  public Potential
+class Intra2BFF 
+            : public SireBase::ConcreteProperty<Intra2BFF<Potential>, G1FF>, 
+              public Potential
 {
 
 friend QDataStream& ::operator<<<>(QDataStream&, const Intra2BFF<Potential>&);

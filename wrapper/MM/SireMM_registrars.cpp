@@ -3,6 +3,8 @@
 
 #include "SireMM_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "atomljs.h"
 #include "cljshiftfunction.h"
 #include "intercljff.h"

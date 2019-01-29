@@ -40,14 +40,14 @@ class OrbitalShell;
 class ShellPair;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::Orbital&);
-QDataStream& operator>>(QDataStream&, Squire::Orbital&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::Orbital&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::Orbital&);
 
-QDataStream& operator<<(QDataStream&, const Squire::OrbitalShell&);
-QDataStream& operator>>(QDataStream&, Squire::OrbitalShell&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::OrbitalShell&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::OrbitalShell&);
 
-QDataStream& operator<<(QDataStream&, const Squire::ShellPair&);
-QDataStream& operator>>(QDataStream&, Squire::ShellPair&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::ShellPair&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::ShellPair&);
 
 namespace Squire
 {

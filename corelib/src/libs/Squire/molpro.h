@@ -43,8 +43,8 @@ namespace Squire
 class Molpro;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::Molpro&);
-QDataStream& operator>>(QDataStream&, Squire::Molpro&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::Molpro&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::Molpro&);
 
 class QFile;
 

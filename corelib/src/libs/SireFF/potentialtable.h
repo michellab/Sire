@@ -51,14 +51,14 @@ class GridPotentialTable;
 class PotentialTable;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::MolPotentialTable&);
-QDataStream& operator>>(QDataStream&, SireFF::MolPotentialTable&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::MolPotentialTable&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::MolPotentialTable&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::GridPotentialTable&);
-QDataStream& operator>>(QDataStream&, SireFF::GridPotentialTable&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::GridPotentialTable&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::GridPotentialTable&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::PotentialTable&);
-QDataStream& operator>>(QDataStream&, SireFF::PotentialTable&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::PotentialTable&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::PotentialTable&);
 
 namespace SireMol
 {

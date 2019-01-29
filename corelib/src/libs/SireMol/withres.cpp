@@ -39,7 +39,7 @@ using namespace SireStream;
 static const RegisterMetaType<ChainsWithRes> r_chainid;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChainsWithRes &chainid)
+QDataStream &operator<<(QDataStream &ds, const ChainsWithRes &chainid)
 {
     writeHeader(ds, r_chainid, 1);
     
@@ -49,7 +49,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChainsWithRes &cha
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ChainsWithRes &chainid)
+QDataStream &operator>>(QDataStream &ds, ChainsWithRes &chainid)
 {
     VersionID v = readHeader(ds, r_chainid);
     

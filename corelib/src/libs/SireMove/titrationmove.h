@@ -38,8 +38,8 @@ namespace SireMove
 class TitrationMove;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::TitrationMove&);
-QDataStream& operator>>(QDataStream&, SireMove::TitrationMove&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::TitrationMove&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::TitrationMove&);
 
 namespace SireMove
 {

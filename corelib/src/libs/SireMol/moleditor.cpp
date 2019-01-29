@@ -62,7 +62,7 @@ namespace SireMol
 static const RegisterMetaType<MolEditor> r_moleditor;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const MolEditor &moleditor)
 {
     writeHeader(ds, r_moleditor, 1);
@@ -73,7 +73,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        MolEditor &moleditor)
 {
     VersionID v = readHeader(ds, r_moleditor);
@@ -356,7 +356,7 @@ const char* MolEditor::typeName()
 static const RegisterMetaType<MolStructureEditor> r_molstructeditor;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const MolStructureEditor &moleditor)
 {
     writeHeader(ds, r_molstructeditor, 1);
@@ -367,7 +367,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        MolStructureEditor &moleditor)
 {
     VersionID v = readHeader(ds, r_molstructeditor);

@@ -39,8 +39,8 @@ class StringProperty;
 class VariantProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::StringProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::StringProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::StringProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::StringProperty&);
 
 namespace SireBase
 {

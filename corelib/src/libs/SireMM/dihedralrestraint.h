@@ -39,8 +39,8 @@ namespace SireMM
 class DihedralRestraint;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::DihedralRestraint&);
-QDataStream& operator>>(QDataStream&, SireMM::DihedralRestraint&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::DihedralRestraint&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::DihedralRestraint&);
 
 namespace SireMM
 {

@@ -78,7 +78,7 @@ static const RegisterMetaType<CharmmPSF> r_psf;
 static const RegisterMetaType<CharmmParam> r_charmmparam(NO_ROOT);
 static const RegisterMetaType<PSFAtom> r_psfatom(NO_ROOT);
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PSFAtom &psfatom)
+QDataStream &operator<<(QDataStream &ds, const PSFAtom &psfatom)
 {
     writeHeader(ds, r_psfatom, 1);
 
@@ -91,7 +91,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PSFAtom &psfatom)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PSFAtom &psfatom)
+QDataStream &operator>>(QDataStream &ds, PSFAtom &psfatom)
 {
     VersionID v = readHeader(ds, r_psfatom);
 
@@ -109,7 +109,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PSFAtom &psfatom)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmParam &charmmparam)
+QDataStream &operator<<(QDataStream &ds, const CharmmParam &charmmparam)
 {
     writeHeader(ds, r_charmmparam, 1);
 
@@ -120,7 +120,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmParam &charmm
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmParam &charmmparam)
+QDataStream &operator>>(QDataStream &ds, CharmmParam &charmmparam)
 {
     VersionID v = readHeader(ds, r_charmmparam);
 
@@ -136,7 +136,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmParam &charmmparam)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmPSF &psf)
+QDataStream &operator<<(QDataStream &ds, const CharmmPSF &psf)
 {
     writeHeader(ds, r_psf, 1);
 
@@ -149,7 +149,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const CharmmPSF &psf)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, CharmmPSF &psf)
+QDataStream &operator>>(QDataStream &ds, CharmmPSF &psf)
 {
     VersionID v = readHeader(ds, r_psf);
 

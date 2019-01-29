@@ -76,26 +76,26 @@ class CLJNBPairs;
 class CLJScaleFactor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberParams&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberParams&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberParams&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberParams&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberBond&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberBond&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberBond&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberBond&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberAngle&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberAngle&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberAngle&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberAngle&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberDihPart&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberDihPart&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberDihPart&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberDihPart&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberDihedral&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberDihedral&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberDihedral&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberDihedral&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberNB14&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberNB14&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberNB14&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberNB14&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberNBDihPart&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberNBDihPart&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberNBDihPart&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberNBDihPart&);
 
 namespace SireMol
 {

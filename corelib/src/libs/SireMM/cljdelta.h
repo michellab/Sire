@@ -41,8 +41,8 @@ namespace SireMM
 class CLJDelta;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJDelta&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJDelta&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJDelta&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJDelta&);
 
 namespace SireMM
 {

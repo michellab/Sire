@@ -43,8 +43,8 @@ namespace Squire
 class QMMMFF;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::QMMMFF&);
-QDataStream& operator>>(QDataStream&, Squire::QMMMFF&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::QMMMFF&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::QMMMFF&);
 
 namespace Squire
 {

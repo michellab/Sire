@@ -47,11 +47,11 @@ class PolariseCharges;
 class PolariseChargesFF;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::PolariseCharges&);
-QDataStream& operator>>(QDataStream&, SireSystem::PolariseCharges&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::PolariseCharges&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::PolariseCharges&);
 
-QDataStream& operator<<(QDataStream&, const SireSystem::PolariseChargesFF&);
-QDataStream& operator>>(QDataStream&, SireSystem::PolariseChargesFF&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::PolariseChargesFF&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::PolariseChargesFF&);
 
 namespace SireSystem
 {

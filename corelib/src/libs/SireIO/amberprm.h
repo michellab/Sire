@@ -44,8 +44,8 @@ class AmberPrm;
 class AmberRst7;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::AmberPrm&);
-QDataStream& operator>>(QDataStream&, SireIO::AmberPrm&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::AmberPrm&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::AmberPrm&);
 
 namespace SireMol
 {

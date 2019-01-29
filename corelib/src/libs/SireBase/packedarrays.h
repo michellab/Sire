@@ -30,6 +30,7 @@
 #define SIREBASE_PACKEDARRAYS_H
 
 #include "packedarray2d.hpp"
+#include "boost/throw_exception.hpp"
 
 SIRE_BEGIN_HEADER
 

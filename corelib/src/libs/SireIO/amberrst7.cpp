@@ -65,7 +65,7 @@ using namespace SireStream;
 static const RegisterMetaType<AmberRst7> r_rst;
 const RegisterParser<AmberRst7> register_rst7;
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberRst7 &rst)
+QDataStream &operator<<(QDataStream &ds, const AmberRst7 &rst)
 {
     writeHeader(ds, r_rst, 1);
     
@@ -79,7 +79,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberRst7 &rst)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberRst7 &rst)
+QDataStream &operator>>(QDataStream &ds, AmberRst7 &rst)
 {
     VersionID v = readHeader(ds, r_rst);
     

@@ -41,8 +41,8 @@ namespace SireMol
 class ViewsOfMol;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ViewsOfMol&);
-QDataStream& operator>>(QDataStream&, SireMol::ViewsOfMol&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ViewsOfMol&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ViewsOfMol&);
 
 namespace SireMol
 {

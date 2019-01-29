@@ -67,8 +67,10 @@ if ( CMAKE_GENERATOR MATCHES "Xcode" )
 
   # Look for the Sire cmake config file that should have been
   # installed with Sire...
-  set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
-          "The full path to the sire.app installed Sire application." )
+  if (NOT DEFINED SIRE_APP)
+    set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
+            "The full path to the sire.app installed Sire application." )
+  endif()
 
   set( SIRE_INCLUDE_DIR "${SIRE_APP}/include/Sire" )
 
@@ -124,32 +126,35 @@ else()
     set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
              "Prefix prepended to install directories" FORCE )
 
-  elseif( WIN32 OR WIN64 )  # need this instead of MSYS as don't know we are MSYS yet...
-
-    message(STATUS "Compiling on windows using MSYS2/MINGW64...")
-    set( MINGW_BASE "C:/msys64/mingw64" CACHE PATH "MSYS MINGW64 root directory" )
-    get_filename_component(MINGW_CMAKE_BIN ${CMAKE_COMMAND} DIRECTORY)
-    get_filename_component(MINGW_CMAKE_ROOT ${MINGW_CMAKE_BIN} DIRECTORY)
-    message(STATUS "Using cmake ${CMAKE_COMMAND} from MING64 base ${MINGW_CMAKE_ROOT}")
-
-    set( MINGW_BASE "${MINGW_CMAKE_ROOT}")
-    set( MINGW_PYTHON "${MINGW_BASE}/bin/python3.exe" )
-
-    if ( NOT EXISTS "${MINGW_PYTHON}" )
-      message(STATUS "Cannot find mingw python3 executable, ${MINGW_PYTHON}")
-      message(STATUS "Can only install Sire into a MINGW installation with a valid python3.exe.")
-      message(STATUS "This is normally in the file C:/msys64/mingw64/bin/python3.exe.")
-      message(STATUS "Please install MSYS2/MINGW64 with the MINGW python3 package.")
-      message(STATUS "Set MINGW_BASE in cmake to point to your MSYS2/MINGW64 installation directory.")
-      message(FATAL_ERROR "Cannot compile until mingw python3 is installed...")
-    endif()
-
-    set( SIRE_INSTALL_PREFIX "${MINGW_BASE}" )
-    set( CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
-           "Prefix prepended to install directories" FORCE )
+#  elseif( WIN32 OR WIN64 )  # need this instead of MSYS as don't know we are MSYS yet...
+#
+#    message(STATUS "Compiling on windows using MSYS2/MINGW64...")
+#    set( MINGW_BASE "C:/msys64/mingw64" CACHE PATH "MSYS MINGW64 root directory" )
+#    get_filename_component(MINGW_CMAKE_BIN ${CMAKE_COMMAND} DIRECTORY)
+#    get_filename_component(MINGW_CMAKE_ROOT ${MINGW_CMAKE_BIN} DIRECTORY)
+#    message(STATUS "Using cmake ${CMAKE_COMMAND} from MING64 base ${MINGW_CMAKE_ROOT}")
+#
+#    set( MINGW_BASE "${MINGW_CMAKE_ROOT}")
+#    set( MINGW_PYTHON "${MINGW_BASE}/bin/python3.exe" )
+#
+#    if ( NOT EXISTS "${MINGW_PYTHON}" )
+#      message(STATUS "Cannot find mingw python3 executable, ${MINGW_PYTHON}")
+#      message(STATUS "Can only install Sire into a MINGW installation with a valid python3.exe.")
+#      message(STATUS "This is normally in the file C:/msys64/mingw64/bin/python3.exe.")
+#      message(STATUS "Please install MSYS2/MINGW64 with the MINGW python3 package.")
+#      message(STATUS "Set MINGW_BASE in cmake to point to your MSYS2/MINGW64 installation directory.")
+#      message(FATAL_ERROR "Cannot compile until mingw python3 is installed...")
+#    endif()
+#
+#    set( SIRE_INSTALL_PREFIX "${MINGW_BASE}" )
+#    set( CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
+#           "Prefix prepended to install directories" FORCE )
   else()
-    #Â Option to set the install directory of Sire
-    set( SIRE_INSTALL_PREFIX "$ENV{HOME}/sire.app" CACHE PATH
+    # Option to set the install directory of Sire
+    if (NOT DEFINED SIRE_APP)
+      set(SIRE_APP "$ENV{HOME}/sire.app")
+    endif()
+    set( SIRE_INSTALL_PREFIX "${SIRE_APP}" CACHE PATH
             "Install directory for Sire. This directory can be moved after compilation" )
 
     set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
@@ -647,6 +652,22 @@ elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
         set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -rdynamic -Wl,--no-undefined" )
     endif()
 
+elseif ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+
+    add_compile_options("/permissive-")
+    message( STATUS "Compiling with MSVC" )
+    set( SIRE_COMPILER "MSVC" )
+
+    set ( SIRE_SMALL_FLAGS  "" )
+    set ( SIRE_WARNALL_FLAGS  "" )
+    set ( SIRE_RELEASE_FLAGS  "" )
+    set ( SIRE_DEBUG_FLAGS   "" )
+    set ( SIRE_VISIBILITY_FLAGS "-DSIRE_NO_VISIBILITY_AVAILABLE" )    
+    set ( SIRE_SHARE_LINK_FLAGS "" )
+    set ( SIRE_STATIC_LINK_FLAGS "" )
+
+    set ( SIRE_PLATFORM_FLAGS "" )
+    
 else()
     message( STATUS "CMAKE_SYSTEM_NAME == ${CMAKE_SYSTEM_NAME}" )
     message( STATUS "CMAKE_C_COMPILER == ${CMAKE_C_COMPILER}" )
@@ -701,6 +722,7 @@ else()
   set (SIRE_FOUND_QT FALSE)
   set (SIRE_FOUND_OPENMM FALSE)  
   set (SIRE_FOUND_NETCDF FALSE)
+  set (SIRE_FOUND_CPUID FALSE)
 
   if ( ${SIRE_ENABLE_BUNDLING} )
     message( STATUS "Sire will be compiled to use its own copy of bundled libraries." )
@@ -852,7 +874,7 @@ endif()
 
 if (NOT ${SIRE_FOUND_GSL})
   # Sire depends on >= GSL 1.6
-  find_package(GSL 1.6 REQUIRED)
+  find_package(GSL 1.6 QUIET)
 
   message( STATUS "GSL paths ${GSL_LINK_DIRECTORIES} "
                   "${GSL_LIBRARIES} | ${GSL_INCLUDE_DIR}" )
@@ -895,7 +917,22 @@ if (NOT ${SIRE_FOUND_BLASLAPACK})
 endif()
 
 if (NOT ${SIRE_FOUND_CPUID})
-  message( STATUS "Cannot find libcpuid. Will disable CPU detection code." )
+  find_library( CPUID_LIBRARY "cpuid" PATHS ${CPUID_LIBRARY_DIR} )
+  include_directories (${CPUID_INCLUDE_DIR} )
+  set(SIRE_FOUND_CPUID TRUE)
+  if (HAVE_STDINT_H)
+    set( CPUID_DEFINITIONS "-DHAVE_STDINT_H" )
+  endif()
+  #message( STATUS "Cannot find libcpuid. Will disable CPU detection code." )
+endif()
+
+if (NOT ${SIRE_FOUND_TBB})
+  find_library( TBB_LIBRARY "tbb" PATHS ${TBB_LIBRARY_DIR} )
+  find_library( TBB_MALLOC_LIBRARY "tbbmalloc" PATHS ${TBB_LIBRARY_DIR} )
+  include_directories(${TBB_INCLUDE_DIR})
+  save_sire_variable( "TBB_LIBRARY" "${TBB_LIBRARY}" )
+  save_sire_variable( "TBB_MALLOC_LIBRARY" "${TBB_MALLOC_LIBRARY}" )
+  save_sire_variable( "TBB_INCLUDE_DIR" "${TBB_INCLUDE_DIR}" )
 endif()
 
 ###########
@@ -937,7 +974,7 @@ set( SIRE_COMPILE_FLAGS "${SIRE_WARNALL_FLAGS} ${SIRE_PLATFORM_FLAGS}" )
 
 if ( SIRE_SYMBOL_HIDING )
   set ( SIRE_COMPILE_FLAGS "${SIRE_COMPILE_FLAGS} ${SIRE_VISIBILITY_FLAGS}" )
-  set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} ${SIRE_VISIBILITY_FLAGS}" )
+  #set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} ${SIRE_VISIBILITY_FLAGS}" )
 endif()
 
 # Add the small flags here so that they don't accidentally pull in the

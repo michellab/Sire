@@ -43,8 +43,8 @@ namespace SireMol
 class Molecules;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Molecules&);
-QDataStream& operator>>(QDataStream&, SireMol::Molecules&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Molecules&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Molecules&);
 
 namespace SireMol
 {

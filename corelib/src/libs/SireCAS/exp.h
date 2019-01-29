@@ -42,11 +42,11 @@ class Exp;
 class Ln;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Exp&);
-QDataStream& operator>>(QDataStream&, SireCAS::Exp&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Exp&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Exp&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Ln&);
-QDataStream& operator>>(QDataStream&, SireCAS::Ln&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Ln&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Ln&);
 
 namespace SireCAS
 {

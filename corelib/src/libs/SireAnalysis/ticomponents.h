@@ -40,11 +40,11 @@ class TIComponents;
 class ComponentGradients;
 }
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::TIComponents&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::TIComponents&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::TIComponents&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::TIComponents&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::ComponentGradients&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::ComponentGradients&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::ComponentGradients&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::ComponentGradients&);
 
 namespace SireAnalysis
 {

@@ -40,8 +40,8 @@ class InternalMoveSingle;
 class DofID;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::InternalMoveSingle&);
-QDataStream& operator>>(QDataStream&, SireMove::InternalMoveSingle&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::InternalMoveSingle&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::InternalMoveSingle&);
 
 namespace SireMol
 {

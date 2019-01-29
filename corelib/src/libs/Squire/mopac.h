@@ -46,8 +46,8 @@ namespace Squire
 class Mopac;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::Mopac&);
-QDataStream& operator>>(QDataStream&, Squire::Mopac&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::Mopac&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::Mopac&);
 
 class QFile;
 

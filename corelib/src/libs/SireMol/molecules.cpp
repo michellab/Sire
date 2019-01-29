@@ -64,7 +64,7 @@ using boost::tuple;
 static const RegisterMetaType<Molecules> r_mols;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Molecules &mols)
+QDataStream &operator<<(QDataStream &ds, const Molecules &mols)
 {
     writeHeader(ds, r_mols, 2);
 
@@ -77,7 +77,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Molecules &mols)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Molecules &mols)
+QDataStream &operator>>(QDataStream &ds, Molecules &mols)
 {
     VersionID v = readHeader(ds, r_mols);
 

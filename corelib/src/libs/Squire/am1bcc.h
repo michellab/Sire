@@ -39,8 +39,8 @@ namespace Squire
 class AM1BCC;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::AM1BCC&);
-QDataStream& operator>>(QDataStream&, Squire::AM1BCC&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::AM1BCC&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::AM1BCC&);
 
 namespace Squire
 {

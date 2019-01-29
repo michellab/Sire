@@ -42,8 +42,8 @@ namespace SireMM
 class CLJParam;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJParam&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJParam&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJParam&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJParam&);
 
 namespace SireMM
 {

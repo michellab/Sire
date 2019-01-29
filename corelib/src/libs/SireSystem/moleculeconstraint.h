@@ -44,8 +44,8 @@ namespace SireSystem
 class MoleculeConstraint;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::MoleculeConstraint&);
-QDataStream& operator>>(QDataStream&, SireSystem::MoleculeConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::MoleculeConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::MoleculeConstraint&);
 
 namespace SireMol
 {

@@ -45,8 +45,8 @@ namespace SireMol
 class Atom;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Atom&);
-QDataStream& operator>>(QDataStream&, SireMol::Atom&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Atom&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Atom&);
 
 namespace SireMol
 {
@@ -514,13 +514,13 @@ void set_metadata(Atom*, MoleculeData &moldata,
     moldata.setMetadata(key, metakey, atom_prop);
 }
 
-bool has_property(const Atom*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_property(const Atom*, const MoleculeData &moldata,
                   const PropertyName &key);
                   
-bool has_metadata(const Atom*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Atom*, const MoleculeData &moldata,
                   const PropertyName &metakey);
                   
-bool has_metadata(const Atom*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Atom*, const MoleculeData &moldata,
                   const PropertyName &key, const PropertyName &metakey);                 
 
 } // end of namespace detail

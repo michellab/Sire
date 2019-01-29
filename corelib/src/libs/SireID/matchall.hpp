@@ -58,7 +58,7 @@ namespace SireID
     @author Christopher Woods
 */
 template<class ID>
-class SIREID_EXPORT MatchAll : public ID
+class MatchAll : public ID
 {
 
 friend QDataStream& ::operator<<<>(QDataStream&, const MatchAll<ID>&);

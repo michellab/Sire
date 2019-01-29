@@ -43,20 +43,20 @@ class AbortPacket;
 class WorkTest;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCluster::WorkPacketBase&);
-QDataStream& operator>>(QDataStream&, SireCluster::WorkPacketBase&);
+SIRECLUSTER_EXPORT QDataStream& operator<<(QDataStream&, const SireCluster::WorkPacketBase&);
+SIRECLUSTER_EXPORT QDataStream& operator>>(QDataStream&, SireCluster::WorkPacketBase&);
 
-QDataStream& operator<<(QDataStream&, const SireCluster::ErrorPacket&);
-QDataStream& operator>>(QDataStream&, SireCluster::ErrorPacket&);
+SIRECLUSTER_EXPORT QDataStream& operator<<(QDataStream&, const SireCluster::ErrorPacket&);
+SIRECLUSTER_EXPORT QDataStream& operator>>(QDataStream&, SireCluster::ErrorPacket&);
 
-QDataStream& operator<<(QDataStream&, const SireCluster::AbortPacket&);
-QDataStream& operator>>(QDataStream&, SireCluster::AbortPacket&);
+SIRECLUSTER_EXPORT QDataStream& operator<<(QDataStream&, const SireCluster::AbortPacket&);
+SIRECLUSTER_EXPORT QDataStream& operator>>(QDataStream&, SireCluster::AbortPacket&);
 
-QDataStream& operator<<(QDataStream&, const SireCluster::WorkPacket&);
-QDataStream& operator>>(QDataStream&, SireCluster::WorkPacket&);
+SIRECLUSTER_EXPORT QDataStream& operator<<(QDataStream&, const SireCluster::WorkPacket&);
+SIRECLUSTER_EXPORT QDataStream& operator>>(QDataStream&, SireCluster::WorkPacket&);
 
-QDataStream& operator<<(QDataStream&, const SireCluster::WorkTest&);
-QDataStream& operator>>(QDataStream&, SireCluster::WorkTest&);
+SIRECLUSTER_EXPORT QDataStream& operator<<(QDataStream&, const SireCluster::WorkTest&);
+SIRECLUSTER_EXPORT QDataStream& operator>>(QDataStream&, SireCluster::WorkTest&);
 
 namespace SireCluster
 {

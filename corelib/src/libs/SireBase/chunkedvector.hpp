@@ -53,7 +53,7 @@ namespace SireBase
 
 namespace detail
 {
-void ChunkedVector_throwOutOfRangeError(int i, int n);
+SIREBASE_EXPORT void ChunkedVector_throwOutOfRangeError(int i, int n);
 
 template<class T, int N>
 const void* get_shared_container_pointer(const SireBase::ChunkedVector<T,N>&);
@@ -69,7 +69,7 @@ const void* get_shared_container_pointer(const SireBase::ChunkedVector<T,N>&);
     @author Christopher Woods
 */
 template<class T, int N=100>
-class SIREBASE_EXPORT ChunkedVector
+class ChunkedVector
 {
 
 friend QDataStream& ::operator<<<>(QDataStream&, const ChunkedVector<T,N>&);

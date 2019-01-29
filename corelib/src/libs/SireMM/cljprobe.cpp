@@ -45,7 +45,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<CoulombProbe> r_cprobe;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const CoulombProbe &cprobe)
 {
     writeHeader(ds, r_cprobe, 1);
@@ -56,7 +56,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CoulombProbe &cprobe)
+QDataStream &operator>>(QDataStream &ds, CoulombProbe &cprobe)
 {
     VersionID v = readHeader(ds, r_cprobe);
     
@@ -163,7 +163,7 @@ const char* CoulombProbe::typeName()
 
 static const RegisterMetaType<LJProbe> r_ljprobe;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const LJProbe &ljprobe)
+QDataStream &operator<<(QDataStream &ds, const LJProbe &ljprobe)
 {
     writeHeader(ds, r_ljprobe, 1);
     
@@ -172,7 +172,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const LJProbe &ljprobe)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, LJProbe &ljprobe)
+QDataStream &operator>>(QDataStream &ds, LJProbe &ljprobe)
 {
     VersionID v = readHeader(ds, r_ljprobe);
     
@@ -258,7 +258,7 @@ const char* LJProbe::typeName()
 
 static const RegisterMetaType<CLJProbe> r_cljprobe;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJProbe &cljprobe)
+QDataStream &operator<<(QDataStream &ds, const CLJProbe &cljprobe)
 {
     writeHeader(ds, r_cljprobe, 1);
     
@@ -268,7 +268,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJProbe &cljprobe)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJProbe &cljprobe)
+QDataStream &operator>>(QDataStream &ds, CLJProbe &cljprobe)
 {
     VersionID v = readHeader(ds, r_cljprobe);
     

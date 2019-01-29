@@ -46,11 +46,11 @@ class IntraFF;
 namespace detail{ class IntraFFMolData; }
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::IntraFF&);
-QDataStream& operator>>(QDataStream&, SireMM::IntraFF&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::IntraFF&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::IntraFF&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::detail::IntraFFMolData&);
-QDataStream& operator>>(QDataStream&, SireMM::detail::IntraFFMolData&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::detail::IntraFFMolData&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::detail::IntraFFMolData&);
 
 namespace SireMM
 {

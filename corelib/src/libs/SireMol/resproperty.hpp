@@ -50,8 +50,8 @@ template<class T>
 class ResProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResProp&);
-QDataStream& operator>>(QDataStream&, SireMol::ResProp&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResProp&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResProp&);
 
 template<class T>
 QDataStream& operator<<(QDataStream&, const SireMol::ResProperty<T>&);

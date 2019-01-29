@@ -3,6 +3,8 @@
 
 #include "SireVol_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "coordgroup.h"
 #include "aabox.h"
 #include "periodicbox.h"

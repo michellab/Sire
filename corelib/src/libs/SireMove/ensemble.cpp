@@ -73,7 +73,7 @@ static QDataStream& operator>>(QDataStream &ds, CharArray<T> &array)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Ensemble &ensemble)
+QDataStream &operator<<(QDataStream &ds, const Ensemble &ensemble)
 {
     writeHeader(ds, r_ensemble, 1);
     
@@ -87,7 +87,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Ensemble &ensembl
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, Ensemble &ensemble)
+QDataStream &operator>>(QDataStream &ds, Ensemble &ensemble)
 {
     VersionID v = readHeader(ds, r_ensemble);
     

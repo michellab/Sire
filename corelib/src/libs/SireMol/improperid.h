@@ -43,8 +43,8 @@ namespace SireMol
 class ImproperID;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ImproperID&);
-QDataStream& operator>>(QDataStream&, SireMol::ImproperID&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ImproperID&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ImproperID&);
 
 namespace SireMaths
 {

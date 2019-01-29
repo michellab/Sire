@@ -43,8 +43,8 @@ namespace SireMove
 class Dynamics;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::Dynamics&);
-QDataStream& operator>>(QDataStream&, SireMove::Dynamics&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::Dynamics&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::Dynamics&);
 
 namespace SireMove
 {

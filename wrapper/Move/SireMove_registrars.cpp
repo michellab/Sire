@@ -3,6 +3,8 @@
 
 #include "SireMove_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "flexibility.h"
 #include "dlmrigidbody.h"
 #include "zmatmove.h"

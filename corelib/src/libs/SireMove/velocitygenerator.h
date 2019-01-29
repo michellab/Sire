@@ -53,17 +53,17 @@ class MaxwellBoltzmann;
 class NullVelocityGenerator;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::VelocityGenerator&);
-QDataStream& operator>>(QDataStream&, SireMove::VelocityGenerator&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::VelocityGenerator&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::VelocityGenerator&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::NullVelocityGenerator&);
-QDataStream& operator>>(QDataStream&, SireMove::NullVelocityGenerator&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::NullVelocityGenerator&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::NullVelocityGenerator&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::VelocitiesFromProperty&);
-QDataStream& operator>>(QDataStream&, SireMove::VelocitiesFromProperty&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::VelocitiesFromProperty&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::VelocitiesFromProperty&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::MaxwellBoltzmann&);
-QDataStream& operator>>(QDataStream&, SireMove::MaxwellBoltzmann&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::MaxwellBoltzmann&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::MaxwellBoltzmann&);
 
 namespace SireCAS
 {

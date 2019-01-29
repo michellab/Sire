@@ -43,23 +43,23 @@ class ArcSec;
 class ArcCot;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ArcCos&);
-QDataStream& operator>>(QDataStream&, SireCAS::ArcCos&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ArcCos&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ArcCos&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ArcSin&);
-QDataStream& operator>>(QDataStream&, SireCAS::ArcSin&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ArcSin&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ArcSin&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ArcTan&);
-QDataStream& operator>>(QDataStream&, SireCAS::ArcTan&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ArcTan&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ArcTan&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ArcCsc&);
-QDataStream& operator>>(QDataStream&, SireCAS::ArcCsc&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ArcCsc&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ArcCsc&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ArcSec&);
-QDataStream& operator>>(QDataStream&, SireCAS::ArcSec&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ArcSec&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ArcSec&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ArcCot&);
-QDataStream& operator>>(QDataStream&, SireCAS::ArcCot&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ArcCot&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ArcCot&);
 
 namespace SireCAS
 {

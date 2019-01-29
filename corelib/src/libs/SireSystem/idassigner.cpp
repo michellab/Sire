@@ -66,7 +66,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<IDAssigner> r_idassigner;
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const IDAssigner &idassigner)
+QDataStream &operator<<(QDataStream &ds, const IDAssigner &idassigner)
 {
     writeHeader(ds, r_idassigner, 2);
     
@@ -78,7 +78,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const IDAssigner &ida
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, IDAssigner &idassigner)
+QDataStream &operator>>(QDataStream &ds, IDAssigner &idassigner)
 {
     VersionID v = readHeader(ds, r_idassigner);
     

@@ -41,8 +41,8 @@ namespace SireVol
 class CombinedSpace;
 }
 
-QDataStream& operator<<(QDataStream&, const SireVol::CombinedSpace&);
-QDataStream& operator>>(QDataStream&, SireVol::CombinedSpace&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::CombinedSpace&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::CombinedSpace&);
 
 namespace SireVol
 {

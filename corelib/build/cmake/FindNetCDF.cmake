@@ -15,7 +15,7 @@ if(NetCDF_INCLUDE_DIR AND NetCDF_LIBRARY_DIR)
     set(NetCDF_FIND_QUIETLY)
 endif()
 
-file(TO_CMAKE_PATH "$ENV{NetCDF_ROOT_DIR}" _env_NEFCDF_ROOT_DIR)
+file(TO_CMAKE_PATH "$ENV{NetCDF_ROOT_DIR}" NetCDF_ROOT_DIR)
 
 message( STATUS "Looking for NetCDF in ${NetCDF_ROOT_DIR}" )
 

@@ -40,8 +40,8 @@ namespace SireBase
 class TimeProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::TimeProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::TimeProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::TimeProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::TimeProperty&);
 
 namespace SireBase
 {

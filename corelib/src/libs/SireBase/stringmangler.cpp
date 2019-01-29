@@ -44,7 +44,7 @@ static const RegisterMetaType<StringMangler> r_stringmangler( MAGIC_ONLY,
                                                   "SireBase::StringMangler" );
                                                   
 /** Serialise to a binary datastream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                         const StringMangler &stringmangler)
 {
     writeHeader(ds, r_stringmangler, 1);
@@ -54,7 +54,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, StringMangler &stringmangler)
+QDataStream &operator>>(QDataStream &ds, StringMangler &stringmangler)
 {
     VersionID v = readHeader(ds, r_stringmangler);
     
@@ -94,7 +94,7 @@ QString StringMangler::operator()(const QString &input) const
 static const RegisterMetaType<NoMangling> r_nomangle;
 
 /** Serialise to a binary datastream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const NoMangling &nomangle)
 {
     writeHeader(ds, r_nomangle, 1);
@@ -105,7 +105,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, NoMangling &nomangle)
+QDataStream &operator>>(QDataStream &ds, NoMangling &nomangle)
 {
     VersionID v = readHeader(ds, r_nomangle);
     
@@ -173,7 +173,7 @@ const NoMangling& StringMangler::null()
 static const RegisterMetaType<TrimString> r_trimstring;
 
 /** Serialise to a binary datastream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const TrimString &trimstring)
 {
     writeHeader(ds, r_trimstring, 1);
@@ -184,7 +184,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, TrimString &trimstring)
+QDataStream &operator>>(QDataStream &ds, TrimString &trimstring)
 {
     VersionID v = readHeader(ds, r_trimstring);
     
@@ -247,7 +247,7 @@ QString TrimString::mangle(const QString &input) const
 static const RegisterMetaType<UpperCaseString> r_upperstring;
 
 /** Serialise to a binary datastream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const UpperCaseString &upperstring)
 {
     writeHeader(ds, r_upperstring, 1);
@@ -258,7 +258,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, UpperCaseString &upperstring)
+QDataStream &operator>>(QDataStream &ds, UpperCaseString &upperstring)
 {
     VersionID v = readHeader(ds, r_upperstring);
     
@@ -321,7 +321,7 @@ QString UpperCaseString::mangle(const QString &input) const
 static const RegisterMetaType<LowerCaseString> r_lowerstring;
 
 /** Serialise to a binary datastream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const LowerCaseString &lowerstring)
 {
     writeHeader(ds, r_lowerstring, 1);
@@ -332,7 +332,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, LowerCaseString &lowerstring)
+QDataStream &operator>>(QDataStream &ds, LowerCaseString &lowerstring)
 {
     VersionID v = readHeader(ds, r_lowerstring);
     

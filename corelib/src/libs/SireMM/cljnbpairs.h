@@ -46,23 +46,23 @@ class LJNBPairs;
 class CLJNBPairs;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CoulombNBPairs&);
-QDataStream& operator>>(QDataStream&, SireMM::CoulombNBPairs&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CoulombNBPairs&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CoulombNBPairs&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::LJNBPairs&);
-QDataStream& operator>>(QDataStream&, SireMM::LJNBPairs&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::LJNBPairs&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::LJNBPairs&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJNBPairs&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJNBPairs&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJNBPairs&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJNBPairs&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CoulombScaleFactor&);
-QDataStream& operator>>(QDataStream&, SireMM::CoulombScaleFactor&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CoulombScaleFactor&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CoulombScaleFactor&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::LJScaleFactor&);
-QDataStream& operator>>(QDataStream&, SireMM::LJScaleFactor&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::LJScaleFactor&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::LJScaleFactor&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJScaleFactor&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJScaleFactor&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJScaleFactor&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJScaleFactor&);
 
 namespace SireMM
 {

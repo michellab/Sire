@@ -43,23 +43,23 @@ class Sec;
 class Cot;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Cos&);
-QDataStream& operator>>(QDataStream&, SireCAS::Cos&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Cos&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Cos&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Sin&);
-QDataStream& operator>>(QDataStream&, SireCAS::Sin&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Sin&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Sin&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Tan&);
-QDataStream& operator>>(QDataStream&, SireCAS::Tan&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Tan&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Tan&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Csc&);
-QDataStream& operator>>(QDataStream&, SireCAS::Csc&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Csc&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Csc&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Sec&);
-QDataStream& operator>>(QDataStream&, SireCAS::Sec&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Sec&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Sec&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Cot&);
-QDataStream& operator>>(QDataStream&, SireCAS::Cot&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Cot&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Cot&);
 
 namespace SireCAS
 {

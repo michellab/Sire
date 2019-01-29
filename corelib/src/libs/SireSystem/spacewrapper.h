@@ -41,8 +41,8 @@ namespace SireSystem
 class SpaceWrapper;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::SpaceWrapper&);
-QDataStream& operator>>(QDataStream&, SireSystem::SpaceWrapper&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::SpaceWrapper&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::SpaceWrapper&);
 
 namespace SireSystem
 {

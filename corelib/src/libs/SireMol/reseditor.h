@@ -42,11 +42,11 @@ class ResEditor;
 class ResStructureEditor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::ResEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResEditor&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResStructureEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::ResStructureEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResStructureEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResStructureEditor&);
 
 namespace SireMol
 {

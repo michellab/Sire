@@ -42,11 +42,11 @@ class ChainEditor;
 class ChainStructureEditor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ChainEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::ChainEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ChainEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ChainEditor&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ChainStructureEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::ChainStructureEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ChainStructureEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ChainStructureEditor&);
 
 namespace SireMol
 {

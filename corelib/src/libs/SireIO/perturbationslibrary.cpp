@@ -81,7 +81,7 @@ using namespace SireUnits;
 
 static RegisterMetaType<PerturbationsTemplate> r_pertstemplate(NO_ROOT);
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const PerturbationsTemplate &pertstemplate)
 {
     writeHeader(ds, r_pertstemplate, 1);
@@ -104,7 +104,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PerturbationsTemplate &pertstemplate)
+QDataStream &operator>>(QDataStream &ds, PerturbationsTemplate &pertstemplate)
 {
     VersionID v = readHeader(ds, r_pertstemplate);
     
@@ -703,7 +703,7 @@ static int processVersionLine( QString& line)
 static const RegisterMetaType<PerturbationsLibrary> r_pertslibrary(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const PerturbationsLibrary &pertslibrary)
 {
     writeHeader(ds, r_pertslibrary, 1);
@@ -716,7 +716,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                       PerturbationsLibrary &pertslibrary)
 {
     VersionID v = readHeader(ds, r_pertslibrary);

@@ -53,20 +53,20 @@ class MoleculeView;
 class Residue;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2Atom&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2Atom&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Mol2Atom&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Mol2Atom&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2Bond&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2Bond&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Mol2Bond&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Mol2Bond&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2Molecule&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2Molecule&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Mol2Molecule&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Mol2Molecule&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2Substructure&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2Substructure&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Mol2Substructure&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Mol2Substructure&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Mol2&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Mol2&);
 
 namespace SireIO
 {

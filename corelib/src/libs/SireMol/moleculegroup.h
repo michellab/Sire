@@ -46,8 +46,8 @@ namespace SireMol
 class MoleculeGroup;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MoleculeGroup&);
-QDataStream& operator>>(QDataStream&, SireMol::MoleculeGroup&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MoleculeGroup&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MoleculeGroup&);
 
 namespace SireID
 {

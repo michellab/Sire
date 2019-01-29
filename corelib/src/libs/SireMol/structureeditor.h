@@ -105,7 +105,7 @@ namespace detail
 class EditMolData;
 }
 
-QString cacheName(const QString &name);
+SIREMOL_EXPORT QString cacheName(const QString &name);
 
 /** This is the base class of all of the molecule structure editors. 
     The structure editors are classes that can actually add, move

@@ -56,7 +56,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<GromacsAtomType> r_atomtype(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const GromacsAtomType &typ)
+QDataStream &operator<<(QDataStream &ds, const GromacsAtomType &typ)
 {
     writeHeader(ds, r_atomtype, 2);
     
@@ -69,7 +69,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const GromacsAtomType &ty
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, GromacsAtomType &typ)
+QDataStream &operator>>(QDataStream &ds, GromacsAtomType &typ)
 {
     VersionID v = readHeader(ds, r_atomtype);
     
@@ -304,7 +304,7 @@ GromacsAtomType::PARTICLE_TYPE GromacsAtomType::toParticleType(const QString &wo
 
 static const RegisterMetaType<GromacsBond> r_bond(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const GromacsBond &bond)
+QDataStream &operator<<(QDataStream &ds, const GromacsBond &bond)
 {
     writeHeader(ds, r_bond, 1);
     
@@ -318,7 +318,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const GromacsBond &bond)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, GromacsBond &bond)
+QDataStream &operator>>(QDataStream &ds, GromacsBond &bond)
 {
     VersionID v = readHeader(ds, r_bond);
     
@@ -933,7 +933,7 @@ uint GromacsBond::hash() const
 
 static const RegisterMetaType<GromacsAngle> r_ang(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const GromacsAngle &ang)
+QDataStream &operator<<(QDataStream &ds, const GromacsAngle &ang)
 {
     writeHeader(ds, r_ang, 1);
 
@@ -947,7 +947,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const GromacsAngle &ang)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, GromacsAngle &ang)
+QDataStream &operator>>(QDataStream &ds, GromacsAngle &ang)
 {
     VersionID v = readHeader(ds, r_ang);
     
@@ -1593,7 +1593,7 @@ void GromacsAngle::assertResolved() const
 
 static const RegisterMetaType<GromacsDihedral> r_dih(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const GromacsDihedral &dih)
+QDataStream &operator<<(QDataStream &ds, const GromacsDihedral &dih)
 {
     writeHeader(ds, r_dih, 1);
 
@@ -1607,7 +1607,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const GromacsDihedral &di
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, GromacsDihedral &dih)
+QDataStream &operator>>(QDataStream &ds, GromacsDihedral &dih)
 {
     VersionID v = readHeader(ds, r_dih);
     

@@ -40,14 +40,14 @@ class Gradients;
 class TIPMF;
 }
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::TI&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::TI&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::TI&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::TI&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::Gradients&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::Gradients&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::Gradients&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::Gradients&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::TIPMF&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::TIPMF&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::TIPMF&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::TIPMF&);
 
 namespace SireAnalysis
 {

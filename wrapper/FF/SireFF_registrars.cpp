@@ -3,6 +3,8 @@
 
 #include "SireFF_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "ffmolgroup.h"
 #include "ffparameters.h"
 #include "ffcomponent.h"

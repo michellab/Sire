@@ -48,7 +48,7 @@ using namespace SireStream;
 static const RegisterMetaType<MTSMC> r_mtsmc;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const MTSMC &mtsmc)
+QDataStream &operator<<(QDataStream &ds, const MTSMC &mtsmc)
 {
     writeHeader(ds, r_mtsmc, 2);
     
@@ -62,7 +62,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const MTSMC &mtsmc)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, MTSMC &mtsmc)
+QDataStream &operator>>(QDataStream &ds, MTSMC &mtsmc)
 {
     VersionID v = readHeader(ds, r_mtsmc);
     

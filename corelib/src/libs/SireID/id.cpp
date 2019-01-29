@@ -52,7 +52,7 @@ ID::~ID()
 ///////////
 
 /** Serialise a Name class */
-QDataStream SIREID_EXPORT &operator<<(QDataStream &ds, const SireID::Name &name)
+QDataStream &operator<<(QDataStream &ds, const SireID::Name &name)
 {
     SireStream::SharedDataStream sds(ds);
     sds << name._name << name.case_sensitive;
@@ -61,7 +61,7 @@ QDataStream SIREID_EXPORT &operator<<(QDataStream &ds, const SireID::Name &name)
 }
 
 /** Deserialise a Name class */
-QDataStream SIREID_EXPORT &operator>>(QDataStream &ds, SireID::Name &name)
+QDataStream &operator>>(QDataStream &ds, SireID::Name &name)
 {
     SireStream::SharedDataStream sds(ds);
     sds >> name._name >> name.case_sensitive;
@@ -144,14 +144,14 @@ const QString& Name::value() const
 
 
 /** Serialise a Number class */
-QDataStream SIREID_EXPORT &operator<<(QDataStream &ds, const SireID::Number &number)
+QDataStream &operator<<(QDataStream &ds, const SireID::Number &number)
 {
     ds << number._num;
     return ds;
 }
 
 /** Deserialise a Number class */
-QDataStream SIREID_EXPORT &operator>>(QDataStream &ds, SireID::Number &number)
+QDataStream &operator>>(QDataStream &ds, SireID::Number &number)
 {
     ds >> number._num;
     return ds;

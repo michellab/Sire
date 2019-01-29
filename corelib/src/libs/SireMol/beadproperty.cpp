@@ -53,7 +53,7 @@ static const RegisterMetaType<BeadProp> r_beadprop(MAGIC_ONLY,
                                                  "SireMol::BeadProp");
                                                    
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const BeadProp &beadprop)
+QDataStream &operator<<(QDataStream &ds, const BeadProp &beadprop)
 {
     writeHeader(ds, r_beadprop, 1);
     
@@ -64,7 +64,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const BeadProp &beadprop
     return ds;
 }
 
-/** Extract from a binary datastream */QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, BeadProp &beadprop)
+/** Extract from a binary datastream */QDataStream &operator>>(QDataStream &ds, BeadProp &beadprop)
 {
     VersionID v = readHeader(ds, r_beadprop);
     

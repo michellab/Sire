@@ -39,8 +39,8 @@ namespace SireMol
 class PartialMolecule;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::PartialMolecule&);
-QDataStream& operator>>(QDataStream&, SireMol::PartialMolecule&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::PartialMolecule&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::PartialMolecule&);
 
 namespace SireMol
 {

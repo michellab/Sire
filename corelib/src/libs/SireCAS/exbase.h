@@ -32,6 +32,7 @@
 #include <QString>
 
 #include "SireMaths/rational.h"
+#include "SireMaths/complex.h"
 
 #include "SireBase/refcountdata.h"
 
@@ -42,13 +43,8 @@ namespace SireCAS
 class ExBase;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ExBase&);
-QDataStream& operator>>(QDataStream&, SireCAS::ExBase&);
-
-namespace SireMaths
-{
-class Complex;
-}
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ExBase&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ExBase&);
 
 namespace SireCAS
 {
@@ -219,44 +215,44 @@ inline uint qHash(const ExBase &ex)
     return ex.hash();
 }
 
-Expression operator+(const ExBase &base0, const ExBase &base1);
-Expression operator+(const ExBase &base, const Expression &ex);
-Expression operator+(const Expression &ex, const ExBase &base);
-Expression operator+(const ExBase &base, double val);
-Expression operator+(double val, const ExBase &base);
-Expression operator+(const ExBase &base, const Complex &val);
-Expression operator+(const Complex &val, const ExBase &base);
+SIRECAS_EXPORT Expression operator+(const ExBase &base0, const ExBase &base1);
+SIRECAS_EXPORT Expression operator+(const ExBase &base, const Expression &ex);
+SIRECAS_EXPORT Expression operator+(const Expression &ex, const ExBase &base);
+SIRECAS_EXPORT Expression operator+(const ExBase &base, double val);
+SIRECAS_EXPORT Expression operator+(double val, const ExBase &base);
+SIRECAS_EXPORT Expression operator+(const ExBase &base, const Complex &val);
+SIRECAS_EXPORT Expression operator+(const Complex &val, const ExBase &base);
 
-Expression operator-(const ExBase &base0, const ExBase &base1);
-Expression operator-(const ExBase &base, const Expression &ex);
-Expression operator-(const Expression &ex, const ExBase &base);
-Expression operator-(const ExBase &base, double val);
-Expression operator-(double val, const ExBase &base);
-Expression operator-(const ExBase &base, const Complex &val);
-Expression operator-(const Complex &val, const ExBase &base);
+SIRECAS_EXPORT Expression operator-(const ExBase &base0, const ExBase &base1);
+SIRECAS_EXPORT Expression operator-(const ExBase &base, const Expression &ex);
+SIRECAS_EXPORT Expression operator-(const Expression &ex, const ExBase &base);
+SIRECAS_EXPORT Expression operator-(const ExBase &base, double val);
+SIRECAS_EXPORT Expression operator-(double val, const ExBase &base);
+SIRECAS_EXPORT Expression operator-(const ExBase &base, const Complex &val);
+SIRECAS_EXPORT Expression operator-(const Complex &val, const ExBase &base);
 
-Expression operator*(const ExBase &base0, const ExBase &base1);
-Expression operator*(const ExBase &base, const Expression &ex);
-Expression operator*(const Expression &ex, const ExBase &base);
-Expression operator*(const ExBase &base, double val);
-Expression operator*(double val, const ExBase &base);
-Expression operator*(const ExBase &base, const Complex &val);
-Expression operator*(const Complex &val, const ExBase &base);
+SIRECAS_EXPORT Expression operator*(const ExBase &base0, const ExBase &base1);
+SIRECAS_EXPORT Expression operator*(const ExBase &base, const Expression &ex);
+SIRECAS_EXPORT Expression operator*(const Expression &ex, const ExBase &base);
+SIRECAS_EXPORT Expression operator*(const ExBase &base, double val);
+SIRECAS_EXPORT Expression operator*(double val, const ExBase &base);
+SIRECAS_EXPORT Expression operator*(const ExBase &base, const Complex &val);
+SIRECAS_EXPORT Expression operator*(const Complex &val, const ExBase &base);
 
-Expression operator/(const ExBase &base0, const ExBase &base1);
-Expression operator/(const ExBase &base, const Expression &ex);
-Expression operator/(const Expression &ex, const ExBase &base);
-Expression operator/(const ExBase &base, double val);
-Expression operator/(double val, const ExBase &base);
-Expression operator/(const ExBase &base, const Complex &val);
-Expression operator/(const Complex &val, const ExBase &base);
+SIRECAS_EXPORT Expression operator/(const ExBase &base0, const ExBase &base1);
+SIRECAS_EXPORT Expression operator/(const ExBase &base, const Expression &ex);
+SIRECAS_EXPORT Expression operator/(const Expression &ex, const ExBase &base);
+SIRECAS_EXPORT Expression operator/(const ExBase &base, double val);
+SIRECAS_EXPORT Expression operator/(double val, const ExBase &base);
+SIRECAS_EXPORT Expression operator/(const ExBase &base, const Complex &val);
+SIRECAS_EXPORT Expression operator/(const Complex &val, const ExBase &base);
 
-Expression pow(const ExBase &base, int n);
-Expression pow(const ExBase &base, const Rational &n);
-Expression pow(const ExBase &base, double n);
-Expression pow(const ExBase &base, const Complex &n);
-Expression pow(const ExBase &base, const Expression &n);
-Expression pow(const ExBase &base, const ExBase &n);
+SIRECAS_EXPORT Expression pow(const ExBase &base, int n);
+SIRECAS_EXPORT Expression pow(const ExBase &base, const Rational &n);
+SIRECAS_EXPORT Expression pow(const ExBase &base, double n);
+SIRECAS_EXPORT Expression pow(const ExBase &base, const Complex &n);
+SIRECAS_EXPORT Expression pow(const ExBase &base, const Expression &n);
+SIRECAS_EXPORT Expression pow(const ExBase &base, const ExBase &n);
 
 }
 

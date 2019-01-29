@@ -47,14 +47,14 @@ class NullPerturbation;
 class Perturbations;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Perturbation&);
-QDataStream& operator>>(QDataStream&, SireMol::Perturbation&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Perturbation&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Perturbation&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::NullPerturbation&);
-QDataStream& operator>>(QDataStream&, SireMol::NullPerturbation&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::NullPerturbation&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::NullPerturbation&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::Perturbations&);
-QDataStream& operator>>(QDataStream&, SireMol::Perturbations&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Perturbations&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Perturbations&);
 
 namespace SireCAS
 {

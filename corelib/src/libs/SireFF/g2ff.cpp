@@ -42,6 +42,7 @@
 
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
+#include "SireFF/intra2b2gff.hpp"
 
 #include <QDebug>
 
@@ -56,7 +57,7 @@ namespace SireFF
 namespace detail
 {
 
-void SIREFF_EXPORT throwIntra2B2GFFIncompatibeScaleFactorsError(
+void throwIntra2B2GFFIncompatibeScaleFactorsError(
                 const QString &molname, MolNum molnum, quint64 v0, quint64 v1)
 {
     throw SireError::incompatible_error( QObject::tr(
@@ -73,7 +74,7 @@ void SIREFF_EXPORT throwIntra2B2GFFIncompatibeScaleFactorsError(
 static const RegisterMetaType<G2FF> r_g2ff( MAGIC_ONLY, "SireFF::G2FF" );
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const G2FF &g2ff)
 {
     writeHeader(ds, r_g2ff, 1);
@@ -88,7 +89,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       G2FF &g2ff)
 {
     VersionID v = readHeader(ds, r_g2ff);

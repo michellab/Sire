@@ -79,7 +79,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<GroAtom> r_groatom(NO_ROOT);
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroAtom &atom)
+QDataStream &operator<<(QDataStream &ds, const GroAtom &atom)
 {
     writeHeader(ds, r_groatom, 2);
 
@@ -92,7 +92,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroAtom &atom)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroAtom &atom)
+QDataStream &operator>>(QDataStream &ds, GroAtom &atom)
 {
     VersionID v = readHeader(ds, r_groatom);
 
@@ -329,7 +329,7 @@ void GroAtom::setMass(SireUnits::Dimension::MolarMass mass)
 
 static const RegisterMetaType<GroMolType> r_gromoltyp(NO_ROOT);
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroMolType &moltyp)
+QDataStream &operator<<(QDataStream &ds, const GroMolType &moltyp)
 {
     writeHeader(ds, r_gromoltyp, 2);
 
@@ -344,7 +344,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroMolType &moltyp)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroMolType &moltyp)
+QDataStream &operator>>(QDataStream &ds, GroMolType &moltyp)
 {
     VersionID v = readHeader(ds, r_gromoltyp);
 
@@ -2258,7 +2258,7 @@ QStringList GroMolType::settlesLines(bool is_lambda1) const
 
 static const RegisterMetaType<GroSystem> r_grosys(NO_ROOT);
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroSystem &grosys)
+QDataStream &operator<<(QDataStream &ds, const GroSystem &grosys)
 {
     writeHeader(ds, r_grosys, 1);
 
@@ -2269,7 +2269,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroSystem &grosys)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroSystem &grosys)
+QDataStream &operator>>(QDataStream &ds, GroSystem &grosys)
 {
     VersionID v = readHeader(ds, r_grosys);
 
@@ -2484,7 +2484,7 @@ void GroSystem::add(QString moltype, int ncopies)
 const RegisterParser<GroTop> register_grotop;
 static const RegisterMetaType<GroTop> r_grotop;
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroTop &grotop)
+QDataStream &operator<<(QDataStream &ds, const GroTop &grotop)
 {
     writeHeader(ds, r_grotop, 1);
 
@@ -2506,7 +2506,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const GroTop &grotop)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, GroTop &grotop)
+QDataStream &operator>>(QDataStream &ds, GroTop &grotop)
 {
     VersionID v = readHeader(ds, r_grotop);
 

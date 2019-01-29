@@ -47,8 +47,8 @@ namespace SireMove
 class OpenMMFrEnergyDT;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::OpenMMFrEnergyDT&);
-QDataStream& operator>>(QDataStream&, SireMove::OpenMMFrEnergyDT&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::OpenMMFrEnergyDT&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::OpenMMFrEnergyDT&);
 
 namespace SireMove
 {

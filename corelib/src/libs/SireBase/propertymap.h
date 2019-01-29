@@ -43,11 +43,11 @@ class PropertyName;
 class PropertyMap;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::PropertyName&);
-QDataStream& operator>>(QDataStream&, SireBase::PropertyName&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::PropertyName&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::PropertyName&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::PropertyMap&);
-QDataStream& operator>>(QDataStream&, SireBase::PropertyMap&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::PropertyMap&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::PropertyMap&);
 
 namespace SireBase
 {

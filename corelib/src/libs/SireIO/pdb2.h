@@ -49,11 +49,11 @@ class MolEditor;
 class MoleculeInfoData;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::PDBAtom&);
-QDataStream& operator>>(QDataStream&, SireIO::PDBAtom&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::PDBAtom&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::PDBAtom&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::PDB2&);
-QDataStream& operator>>(QDataStream&, SireIO::PDB2&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::PDB2&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::PDB2&);
 
 namespace SireIO
 {

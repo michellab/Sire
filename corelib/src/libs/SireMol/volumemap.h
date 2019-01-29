@@ -48,8 +48,8 @@ namespace SireMol
 class VolumeMap;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::VolumeMap&);
-QDataStream& operator>>(QDataStream&, SireMol::VolumeMap&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::VolumeMap&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::VolumeMap&);
 
 namespace SireMol
 {

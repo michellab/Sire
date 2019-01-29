@@ -45,17 +45,17 @@ class CovalentBondHunter;
 class ChemicalBondHunter;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::BondHunter&);
-QDataStream& operator>>(QDataStream&, SireMol::BondHunter&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::BondHunter&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::BondHunter&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::NullBondHunter&);
-QDataStream& operator>>(QDataStream&, SireMol::NullBondHunter&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::NullBondHunter&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::NullBondHunter&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::CovalentBondHunter&);
-QDataStream& operator>>(QDataStream&, SireMol::CovalentBondHunter&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CovalentBondHunter&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CovalentBondHunter&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ChemicalBondHunter&);
-QDataStream& operator>>(QDataStream&, SireMol::ChemicalBondHunter&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ChemicalBondHunter&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ChemicalBondHunter&);
 
 namespace SireMol
 {

@@ -39,8 +39,8 @@ class SoftCLJComponent;
 class SoftCLJEnergy;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::SoftCLJComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::SoftCLJComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::SoftCLJComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::SoftCLJComponent&);
 
 namespace SireMM
 {

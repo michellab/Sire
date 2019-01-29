@@ -60,7 +60,7 @@ static const RegisterMetaType<Integrator> r_integrator(MAGIC_ONLY,
                                                "SireMove::Integrator");
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Integrator &integrator)
+QDataStream &operator<<(QDataStream &ds, const Integrator &integrator)
 {
     writeHeader(ds, r_integrator, 1);
     
@@ -70,7 +70,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Integrator &integ
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, Integrator &integrator)
+QDataStream &operator>>(QDataStream &ds, Integrator &integrator)
 {
     VersionID v = readHeader(ds, r_integrator);
     
@@ -129,7 +129,7 @@ const NullIntegrator& Integrator::null()
 static const RegisterMetaType<NullIntegrator> r_nullint;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const NullIntegrator &nullint)
+QDataStream &operator<<(QDataStream &ds, const NullIntegrator &nullint)
 {
     writeHeader(ds, r_nullint, 1);
     
@@ -139,7 +139,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const NullIntegrator &n
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, NullIntegrator &nullint)
+QDataStream &operator>>(QDataStream &ds, NullIntegrator &nullint)
 {
     VersionID v = readHeader(ds, r_nullint);
     

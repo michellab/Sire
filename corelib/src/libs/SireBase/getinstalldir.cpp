@@ -72,27 +72,27 @@ namespace SireBase
 
     /** This function returns the URL of the source repository that contains
         the core Sire library */
-    QString SIREBASE_EXPORT getRepositoryURL()
+    QString getRepositoryURL()
     {
         return QString(SIRE_REPOSITORY_URL);
     }
     
     /** This function returns the version number(s) of this copy of the corelib
         from the online source repository */
-    QString SIREBASE_EXPORT getRepositoryVersion()
+    QString getRepositoryVersion()
     {
         return QString(SIRE_REPOSITORY_VERSION);
     }
 
     /** This function returns the branch of the repository for this version of Sire */
-    QString SIREBASE_EXPORT getRepositoryBranch()
+    QString getRepositoryBranch()
     {
         return QString(SIRE_REPOSITORY_BRANCH);
     }
     
     /** Return whether this is a clean copy from this repository version
         (i.e. there have been no local changes to the code) */
-    bool SIREBASE_EXPORT getRepositoryVersionIsClean()
+    bool getRepositoryVersionIsClean()
     {
         return SIRE_REPOSITORY_VERSION_IS_CLEAN;
     }
@@ -101,7 +101,7 @@ namespace SireBase
         This can be used to override the path found from the running
         executable. This is useful when Sire is loaded as an external
         module or library from another executable */
-    void SIREBASE_EXPORT setInstallDir(QString dir)
+    void setInstallDir(QString dir)
     {
         QDir d(dir);
         
@@ -117,10 +117,13 @@ namespace SireBase
     /** This function locates the directory where Sire is installed. This
         returns the install prefix of the installation, e.g. the base
         from which the bin, lib etc. directories can be found */
-    QString SIREBASE_EXPORT getInstallDir()
+    QString getInstallDir()
     {
         if (not install_dir.isEmpty())
             return install_dir;
+        QString sire_root_env = qgetenv("SIRE_ROOT");
+        if (!sire_root_env.isEmpty())
+            return sire_root_env;
     
         //first, find the full path to the running executable. We assume that
         //we are using a Sire executable
@@ -206,7 +209,7 @@ namespace SireBase
         return SIRE_INSTALL_PREFIX/bin. An exception will be raised
         if this file or directory doesn't exist, and 'assert_exists'
         is true */
-    QString SIREBASE_EXPORT getSireDir(const QString &path, bool assert_exists)
+    QString getSireDir(const QString &path, bool assert_exists)
     {
         QDir dir(getInstallDir());
         
@@ -224,31 +227,31 @@ namespace SireBase
     }
     
     /** This returns the directory containing the Sire executables */
-    QString SIREBASE_EXPORT getBinDir()
+    QString getBinDir()
     {
         return getSireDir(SIRE_BIN_DIR);
     }
     
     /** This returns the directory containing the Sire libraries */
-    QString SIREBASE_EXPORT getLibDir()
+    QString getLibDir()
     {
         return getSireDir(SIRE_LIBS_DIR);
     }
     
     /** This returns the directory containing the Sire bundled libraries */
-    QString SIREBASE_EXPORT getBundledLibDir()
+    QString getBundledLibDir()
     {
         return getSireDir(SIRE_BUNDLED_LIBS_DIR);
     }
     
     /** This returns the directory containing the Sire support files */
-    QString SIREBASE_EXPORT getShareDir()
+    QString getShareDir()
     {
         return getSireDir(SIRE_SHARE_DIR);
     }
     
     /** This returns the release version of Sire */
-    QString SIREBASE_EXPORT getReleaseVersion()
+    QString getReleaseVersion()
     {
         return QString("%1.%2.%3").arg(SIRE_VERSION_MAJOR)
                                   .arg(SIRE_VERSION_MINOR)

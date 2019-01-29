@@ -39,11 +39,11 @@ class Probe;
 class NullProbe;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::Probe&);
-QDataStream& operator>>(QDataStream&, SireFF::Probe&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::Probe&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::Probe&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::NullProbe&);
-QDataStream& operator>>(QDataStream&, SireFF::NullProbe&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::NullProbe&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::NullProbe&);
 
 namespace SireFF
 {

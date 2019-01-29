@@ -46,8 +46,8 @@ SIRE_BEGIN_HEADER
     class OpenMMMDIntegrator;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::OpenMMMDIntegrator&);
-QDataStream& operator>>(QDataStream&, SireMove::OpenMMMDIntegrator&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::OpenMMMDIntegrator&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::OpenMMMDIntegrator&);
 
 namespace SireMove {
 

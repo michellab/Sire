@@ -63,7 +63,7 @@ using namespace SireStream;
 static const RegisterMetaType<Mopac> r_mopac;
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const Mopac &mopac)
+QDataStream &operator<<(QDataStream &ds, const Mopac &mopac)
 {
     writeHeader(ds, r_mopac, 1);
     
@@ -80,7 +80,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const Mopac &mopac)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, Mopac &mopac)
+QDataStream &operator>>(QDataStream &ds, Mopac &mopac)
 {
     VersionID v = readHeader(ds, r_mopac);
     

@@ -42,8 +42,8 @@ namespace SireMol
 class BondID;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::BondID&);
-QDataStream& operator>>(QDataStream&, SireMol::BondID&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::BondID&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::BondID&);
 
 namespace SireMaths
 {

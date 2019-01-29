@@ -39,8 +39,8 @@ namespace SireMove
 class VolumeMove;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::VolumeMove&);
-QDataStream& operator>>(QDataStream&, SireMove::VolumeMove&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::VolumeMove&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::VolumeMove&);
 
 namespace SireMove
 {

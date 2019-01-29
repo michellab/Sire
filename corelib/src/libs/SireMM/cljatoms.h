@@ -49,11 +49,11 @@ class CLJAtom;
 class CLJAtoms;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJAtom&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJAtom&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJAtom&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJAtom&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJAtoms&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJAtoms&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJAtoms&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJAtoms&);
 
 namespace SireMol
 {

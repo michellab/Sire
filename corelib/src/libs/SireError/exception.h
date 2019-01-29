@@ -46,8 +46,8 @@ class exception;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireError::exception&);
-QDataStream& operator>>(QDataStream&, SireError::exception&);
+SIREERROR_EXPORT QDataStream& operator<<(QDataStream&, const SireError::exception&);
+SIREERROR_EXPORT QDataStream& operator>>(QDataStream&, SireError::exception&);
 
 namespace SireError
 {

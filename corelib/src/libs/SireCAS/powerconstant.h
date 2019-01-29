@@ -45,23 +45,23 @@ class RealPower;
 class ComplexPower;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::PowerConstant&);
-QDataStream& operator>>(QDataStream&, SireCAS::PowerConstant&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::PowerConstant&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::PowerConstant&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ConstantPower&);
-QDataStream& operator>>(QDataStream&, SireCAS::ConstantPower&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ConstantPower&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ConstantPower&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::IntegerPower&);
-QDataStream& operator>>(QDataStream&, SireCAS::IntegerPower&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::IntegerPower&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::IntegerPower&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::RationalPower&);
-QDataStream& operator>>(QDataStream&, SireCAS::RationalPower&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::RationalPower&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::RationalPower&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::RealPower&);
-QDataStream& operator>>(QDataStream&, SireCAS::RealPower&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::RealPower&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::RealPower&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ComplexPower&);
-QDataStream& operator>>(QDataStream&, SireCAS::ComplexPower&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ComplexPower&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ComplexPower&);
 
 namespace SireCAS
 {

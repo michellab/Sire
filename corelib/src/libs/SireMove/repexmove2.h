@@ -43,8 +43,8 @@ namespace SireMove
 class RepExMove2;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::RepExMove2&);
-QDataStream& operator>>(QDataStream&, SireMove::RepExMove2&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::RepExMove2&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::RepExMove2&);
 
 namespace SireMove
 {

@@ -46,11 +46,11 @@ class Flexibility;
 class DofID;
 }
 
-QDataStream& operator<<(QDataStream &ds, const SireMove::Flexibility&);
-QDataStream& operator>>(QDataStream &ds, SireMove::Flexibility&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream &ds, const SireMove::Flexibility&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream &ds, SireMove::Flexibility&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::DofID&);
-QDataStream& operator>>(QDataStream&, SireMove::DofID&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::DofID&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::DofID&);
 
 namespace SireMol
 {

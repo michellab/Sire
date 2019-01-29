@@ -46,17 +46,17 @@ class ThreeAtomPerturbation;
 class FourAtomPerturbation;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::InternalPerturbation&);
-QDataStream& operator>>(QDataStream&, SireMM::InternalPerturbation&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InternalPerturbation&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::InternalPerturbation&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::TwoAtomPerturbation&);
-QDataStream& operator>>(QDataStream&, SireMM::TwoAtomPerturbation&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::TwoAtomPerturbation&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::TwoAtomPerturbation&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::ThreeAtomPerturbation&);
-QDataStream& operator>>(QDataStream&, SireMM::ThreeAtomPerturbation&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::ThreeAtomPerturbation&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::ThreeAtomPerturbation&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::FourAtomPerturbation&);
-QDataStream& operator>>(QDataStream&, SireMM::FourAtomPerturbation&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::FourAtomPerturbation&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::FourAtomPerturbation&);
 
 namespace SireMM
 {

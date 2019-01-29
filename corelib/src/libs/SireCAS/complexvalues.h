@@ -45,8 +45,8 @@ class ComplexValues;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireCAS::ComplexValues&);
-QDataStream& operator>>(QDataStream&, SireCAS::ComplexValues&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ComplexValues&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ComplexValues&);
 
 namespace SireCAS
 {

@@ -45,8 +45,8 @@ namespace SireMM
 class AngleRestraint;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::AngleRestraint&);
-QDataStream& operator>>(QDataStream&, SireMM::AngleRestraint&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AngleRestraint&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AngleRestraint&);
 
 namespace SireMM
 {

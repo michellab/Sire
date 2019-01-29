@@ -83,7 +83,7 @@ protected:
 
 /** This is the type-specialised version of SharedDataHolder */
 template<class T>
-class SIRESTREAM_EXPORT SharedDataHolderT : public SharedDataHolder
+class SharedDataHolderT : public SharedDataHolder
 {
 public:
     SharedDataHolderT() : SharedDataHolder()
@@ -744,8 +744,8 @@ SharedDataStream& operator>>(SharedDataStream &sds,
     return sds;
 }
 
-SharedDataStream& operator<<(SharedDataStream &sds, const QString &str);
-SharedDataStream& operator>>(SharedDataStream &sds, QString &str);
+SIRESTREAM_EXPORT SharedDataStream& operator<<(SharedDataStream &sds, const QString &str);
+SIRESTREAM_EXPORT SharedDataStream& operator>>(SharedDataStream &sds, QString &str);
 
 namespace detail
 {

@@ -42,8 +42,8 @@ namespace SireMol
 class MoleculeView;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MoleculeView&);
-QDataStream& operator>>(QDataStream&, SireMol::MoleculeView&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MoleculeView&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MoleculeView&);
 
 namespace SireMol
 {

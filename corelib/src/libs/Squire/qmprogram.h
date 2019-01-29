@@ -43,11 +43,11 @@ class QMProgram;
 class NullQM;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::QMProgram&);
-QDataStream& operator>>(QDataStream&, Squire::QMProgram&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::QMProgram&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::QMProgram&);
 
-QDataStream& operator<<(QDataStream&, const Squire::NullQM&);
-QDataStream& operator>>(QDataStream&, Squire::NullQM&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::NullQM&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::NullQM&);
 
 namespace SireMol
 {

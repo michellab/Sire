@@ -41,7 +41,7 @@ using namespace SireVol;
 static const RegisterMetaType<AABox> r_aabox(NO_ROOT);
 
 /** Serialise an AABox to a binary datastream */
-QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const AABox &aabox)
+QDataStream &operator<<(QDataStream &ds, const AABox &aabox)
 {
     writeHeader(ds, r_aabox, 1) << aabox.cent << aabox.halfextents << aabox.rad;
 
@@ -49,7 +49,7 @@ QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const AABox &aabox)
 }
 
 /** Deserialise an AABox from a binary datastream */
-QDataStream SIREVOL_EXPORT &operator>>(QDataStream &ds, AABox &aabox)
+QDataStream &operator>>(QDataStream &ds, AABox &aabox)
 {
     VersionID v = readHeader(ds, r_aabox);
 

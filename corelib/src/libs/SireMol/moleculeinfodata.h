@@ -74,8 +74,8 @@ namespace SireMol
 class MoleculeInfoData;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MoleculeInfoData&);
-QDataStream& operator>>(QDataStream&, SireMol::MoleculeInfoData&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MoleculeInfoData&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MoleculeInfoData&);
 
 namespace SireMol
 {

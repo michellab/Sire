@@ -39,8 +39,8 @@ namespace SireMove
 class ZMatMove;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::ZMatMove&);
-QDataStream& operator>>(QDataStream&, SireMove::ZMatMove&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::ZMatMove&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::ZMatMove&);
 
 namespace SireMol
 {

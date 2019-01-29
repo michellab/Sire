@@ -42,8 +42,8 @@ namespace SireMol
 class Bead;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Bead&);
-QDataStream& operator>>(QDataStream&, SireMol::Bead&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Bead&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Bead&);
 
 namespace SireMol
 {
@@ -414,13 +414,13 @@ void set_metadata(Bead*, MoleculeData &moldata,
     set_metadata<BeadProperty<V>,Bead::Index,V>(moldata,idxs,key,metakey,value);
 }
 
-bool has_property(const Bead*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_property(const Bead*, const MoleculeData &moldata,
                   const PropertyName &key);
                   
-bool has_metadata(const Bead*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Bead*, const MoleculeData &moldata,
                   const PropertyName &metakey);
                   
-bool has_metadata(const Bead*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Bead*, const MoleculeData &moldata,
                   const PropertyName &key, const PropertyName &metakey);                 
 
 

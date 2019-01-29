@@ -49,8 +49,8 @@ namespace SireFF
 class FF;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::FF&);
-QDataStream& operator>>(QDataStream&, SireFF::FF&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::FF&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::FF&);
 
 namespace SireMol
 {

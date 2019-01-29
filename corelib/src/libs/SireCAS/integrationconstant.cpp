@@ -38,7 +38,7 @@ using namespace SireCAS;
 static const RegisterMetaType<IntegrationConstant> r_intconst;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const IntegrationConstant &ic)
+QDataStream &operator<<(QDataStream &ds, const IntegrationConstant &ic)
 {
     writeHeader(ds, r_intconst, 1) << static_cast<const Symbol&>(ic);
 
@@ -46,7 +46,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const IntegrationConstan
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, IntegrationConstant &ic)
+QDataStream &operator>>(QDataStream &ds, IntegrationConstant &ic)
 {
     VersionID v = readHeader(ds, r_intconst);
 

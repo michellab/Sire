@@ -40,8 +40,8 @@ namespace Squire
 class QMChargeConstraint;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::QMChargeConstraint&);
-QDataStream& operator>>(QDataStream&, Squire::QMChargeConstraint&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::QMChargeConstraint&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::QMChargeConstraint&);
 
 namespace Squire
 {

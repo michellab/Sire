@@ -42,11 +42,11 @@ class MultiCLJComponent;
 class MultiCLJEnergy;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::MultiCLJComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::MultiCLJComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::MultiCLJComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::MultiCLJComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::MultiCLJEnergy&);
-QDataStream& operator>>(QDataStream&, SireMM::MultiCLJEnergy&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::MultiCLJEnergy&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::MultiCLJEnergy&);
 
 namespace SireMM
 {

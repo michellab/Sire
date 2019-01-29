@@ -37,7 +37,7 @@
 #include "SireMol/molviewproperty.h"
 
 #include "SireCAS/expression.h"
-#include "SireCAS/symbol.h"
+#include "SireCAS/symbols.h"
 #include "SireCAS/identities.h"
 
 SIRE_BEGIN_HEADER
@@ -48,11 +48,11 @@ class AtomFunction;
 class AtomFunctions;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::AtomFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::AtomFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AtomFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AtomFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AtomFunctions&);
-QDataStream& operator>>(QDataStream&, SireMM::AtomFunctions&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AtomFunctions&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AtomFunctions&);
 
 namespace SireMol
 {

@@ -39,11 +39,11 @@ class Min;
 class Max;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Min&);
-QDataStream& operator>>(QDataStream&, SireCAS::Min&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Min&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Min&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Max&);
-QDataStream& operator>>(QDataStream&, SireCAS::Max&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Max&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Max&);
 
 namespace SireCAS
 {

@@ -55,7 +55,7 @@ using namespace SireStream;
 static const RegisterMetaType<Replica> r_replica;
 
 /** Serialiase to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Replica &replica)
+QDataStream &operator<<(QDataStream &ds, const Replica &replica)
 {
     writeHeader(ds, r_replica, 3);
     
@@ -71,7 +71,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Replica &replica)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, Replica &replica)
+QDataStream &operator>>(QDataStream &ds, Replica &replica)
 {
     VersionID v = readHeader(ds, r_replica);
     

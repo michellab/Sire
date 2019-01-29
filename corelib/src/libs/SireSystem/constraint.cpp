@@ -56,7 +56,7 @@ static const RegisterMetaType<Constraint> r_constraint( MAGIC_ONLY,
                                                         "SireSystem::Constraint" );
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const Constraint &constraint)
+QDataStream &operator<<(QDataStream &ds, const Constraint &constraint)
 {
     writeHeader(ds, r_constraint, 1);
     
@@ -66,7 +66,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const Constraint &con
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, Constraint &constraint)
+QDataStream &operator>>(QDataStream &ds, Constraint &constraint)
 {
     VersionID v = readHeader(ds, r_constraint);
     
@@ -325,7 +325,7 @@ void Constraint::assertSatisfied(const System &system) const
 static const RegisterMetaType<NullConstraint> r_nullconstraint;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const NullConstraint &nullconstraint)
 {
     writeHeader(ds, r_nullconstraint, 1);
@@ -336,7 +336,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                           NullConstraint &nullconstraint)
 {
     VersionID v = readHeader(ds, r_nullconstraint);
@@ -437,7 +437,7 @@ const char* NullConstraint::typeName()
 static const RegisterMetaType<PropertyConstraint> r_propconstraint;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const PropertyConstraint &constraint)
 {
     writeHeader(ds, r_propconstraint, 1);
@@ -452,7 +452,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                           PropertyConstraint &constraint)
 {
     VersionID v = readHeader(ds, r_propconstraint);
@@ -763,7 +763,7 @@ const char* PropertyConstraint::typeName()
 static const RegisterMetaType<ComponentConstraint> r_compconstraint;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const ComponentConstraint &constraint)
 {
     writeHeader(ds, r_compconstraint, 1);
@@ -778,7 +778,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                           ComponentConstraint &constraint)
 {
     VersionID v = readHeader(ds, r_compconstraint);
@@ -1034,7 +1034,7 @@ const char* ComponentConstraint::typeName()
 static const RegisterMetaType<WindowedComponent> r_windowedcomp;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const WindowedComponent &windowedcomp)
 {
     writeHeader(ds, r_windowedcomp, 1);
@@ -1051,7 +1051,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
               
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                           WindowedComponent &windowedcomp)
 {
     VersionID v = readHeader(ds, r_windowedcomp);

@@ -368,7 +368,7 @@ TinkerAtomParam TinkerAtomParam::readFromLine(const QString &line, int linenum)
 static const RegisterMetaType<Tinker> r_tinker;
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Tinker &tinker)
+QDataStream &operator<<(QDataStream &ds, const Tinker &tinker)
 {
     writeHeader(ds, r_tinker, 1);
     
@@ -381,7 +381,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Tinker &tinker)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Tinker &tinker)
+QDataStream &operator>>(QDataStream &ds, Tinker &tinker)
 {
     VersionID v = readHeader(ds, r_tinker);
     

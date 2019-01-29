@@ -40,8 +40,8 @@ namespace SireMol
 class CGName;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::CGName&);
-QDataStream& operator>>(QDataStream&, SireMol::CGName&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CGName&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CGName&);
 
 namespace SireMol
 {

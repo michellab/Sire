@@ -42,8 +42,8 @@ namespace SireStream
 class MD5Sum;
 }
 
-QDataStream& operator<<(QDataStream&, const SireStream::MD5Sum&);
-QDataStream& operator>>(QDataStream&, SireStream::MD5Sum&);
+SIRESTREAM_EXPORT QDataStream& operator<<(QDataStream&, const SireStream::MD5Sum&);
+SIRESTREAM_EXPORT QDataStream& operator>>(QDataStream&, SireStream::MD5Sum&);
 
 typedef unsigned char md5_byte_t;
 

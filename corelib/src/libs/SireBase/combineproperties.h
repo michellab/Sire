@@ -42,8 +42,8 @@ namespace SireBase
 class CombineProperties;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::CombineProperties&);
-QDataStream& operator>>(QDataStream&, SireBase::CombineProperties&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::CombineProperties&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::CombineProperties&);
 
 namespace SireBase
 {

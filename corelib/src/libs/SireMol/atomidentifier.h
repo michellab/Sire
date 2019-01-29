@@ -39,11 +39,11 @@ class AtomIdentifier;
 class AtomIDSet;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomIdentifier&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomIdentifier&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomIdentifier&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomIdentifier&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomIDSet&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomIDSet&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomIDSet&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomIDSet&);
 
 namespace SireMol
 {

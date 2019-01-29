@@ -65,7 +65,7 @@ namespace SireMM
 ////////// Implementation of MultiCLJEnergy
 //////////
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const MultiCLJEnergy &nrg)
+QDataStream &operator<<(QDataStream &ds, const MultiCLJEnergy &nrg)
 {
     quint32 version = 1;
     
@@ -78,7 +78,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const MultiCLJEnergy &nrg
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, MultiCLJEnergy &nrg)
+QDataStream &operator>>(QDataStream &ds, MultiCLJEnergy &nrg)
 {
     quint32 version;
     
@@ -132,7 +132,7 @@ void MultiCLJEnergy::assertValidLJIndex(quint32 i) const
 
 static const RegisterMetaType<MultiCLJComponent> r_cljcomp;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const MultiCLJComponent &cljcomp)
+QDataStream &operator<<(QDataStream &ds, const MultiCLJComponent &cljcomp)
 {
     writeHeader(ds, r_cljcomp, 1);
     
@@ -144,7 +144,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const MultiCLJComponent &
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, MultiCLJComponent &cljcomp)
+QDataStream &operator>>(QDataStream &ds, MultiCLJComponent &cljcomp)
 {
     VersionID v = readHeader(ds, r_cljcomp);
     

@@ -50,8 +50,8 @@ namespace SireIO
 class TrajectoryMonitor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::TrajectoryMonitor&);
-QDataStream& operator>>(QDataStream&, SireIO::TrajectoryMonitor&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::TrajectoryMonitor&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::TrajectoryMonitor&);
 
 class QTemporaryFile;
 

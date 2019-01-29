@@ -49,35 +49,35 @@ class AlwaysTrue;
 class AlwaysFalse;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Conditional&);
-QDataStream& operator>>(QDataStream&, SireCAS::Conditional&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Conditional&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Conditional&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Condition&);
-QDataStream& operator>>(QDataStream&, SireCAS::Condition&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Condition&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Condition&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::GreaterThan&);
-QDataStream& operator>>(QDataStream&, SireCAS::GreaterThan&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::GreaterThan&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::GreaterThan&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::LessThan&);
-QDataStream& operator>>(QDataStream&, SireCAS::LessThan&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::LessThan&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::LessThan&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::GreaterOrEqualThan&);
-QDataStream& operator>>(QDataStream&, SireCAS::GreaterOrEqualThan&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::GreaterOrEqualThan&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::GreaterOrEqualThan&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::LessOrEqualThan&);
-QDataStream& operator>>(QDataStream&, SireCAS::LessOrEqualThan&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::LessOrEqualThan&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::LessOrEqualThan&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::EqualTo&);
-QDataStream& operator>>(QDataStream&, SireCAS::EqualTo&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::EqualTo&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::EqualTo&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::NotEqualTo&);
-QDataStream& operator>>(QDataStream&, SireCAS::NotEqualTo&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::NotEqualTo&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::NotEqualTo&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::AlwaysTrue&);
-QDataStream& operator>>(QDataStream&, SireCAS::AlwaysTrue&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::AlwaysTrue&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::AlwaysTrue&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::AlwaysFalse&);
-QDataStream& operator>>(QDataStream&, SireCAS::AlwaysFalse&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::AlwaysFalse&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::AlwaysFalse&);
 
 namespace SireCAS
 {

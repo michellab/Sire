@@ -44,14 +44,14 @@ SIRE_BEGIN_HEADER
 namespace SireStream
 {
 
-QDataStream& writeHeader(QDataStream &ds, const RegisterMetaTypeBase &r_type,
+SIRESTREAM_EXPORT QDataStream& writeHeader(QDataStream &ds, const RegisterMetaTypeBase &r_type,
                          VersionID version);
 
-QDataStream& writeHeader(QDataStream &ds, MagicID magicid, VersionID version);
+SIRESTREAM_EXPORT QDataStream& writeHeader(QDataStream &ds, MagicID magicid, VersionID version);
 
-VersionID readHeader(QDataStream &ds, const RegisterMetaTypeBase &r_type);
+SIRESTREAM_EXPORT VersionID readHeader(QDataStream &ds, const RegisterMetaTypeBase &r_type);
 
-VersionID readHeader(QDataStream &ds, MagicID magicid, const char *type_name);
+SIRESTREAM_EXPORT VersionID readHeader(QDataStream &ds, MagicID magicid, const char *type_name);
 
 }
 

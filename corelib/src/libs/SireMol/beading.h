@@ -46,20 +46,20 @@ class UserBeading;
 class NullBeading;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Beading&);
-QDataStream& operator>>(QDataStream&, SireMol::Beading&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Beading&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Beading&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::MoleculeBeading&);
-QDataStream& operator>>(QDataStream&, SireMol::MoleculeBeading&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MoleculeBeading&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MoleculeBeading&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResidueBeading&);
-QDataStream& operator>>(QDataStream&, SireMol::ResidueBeading&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResidueBeading&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResidueBeading&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::UserBeading&);
-QDataStream& operator>>(QDataStream&, SireMol::UserBeading&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::UserBeading&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::UserBeading&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::NullBeading&);
-QDataStream& operator>>(QDataStream&, SireMol::NullBeading&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::NullBeading&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::NullBeading&);
 
 namespace SireID
 {

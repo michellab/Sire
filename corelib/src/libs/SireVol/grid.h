@@ -49,14 +49,14 @@ class NullGrid;
 class RegularGrid;
 }
 
-QDataStream& operator<<(QDataStream&, const SireVol::Grid&);
-QDataStream& operator>>(QDataStream&, SireVol::Grid&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::Grid&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::Grid&);
 
-QDataStream& operator<<(QDataStream&, const SireVol::NullGrid&);
-QDataStream& operator>>(QDataStream&, SireVol::NullGrid&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::NullGrid&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::NullGrid&);
 
-QDataStream& operator<<(QDataStream&, const SireVol::RegularGrid&);
-QDataStream& operator>>(QDataStream&, SireVol::RegularGrid&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::RegularGrid&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::RegularGrid&);
 
 namespace SireVol
 {

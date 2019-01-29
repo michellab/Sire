@@ -47,11 +47,11 @@ class MolForceTable;
 class ForceTable;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::MolForceTable&);
-QDataStream& operator>>(QDataStream&, SireFF::MolForceTable&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::MolForceTable&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::MolForceTable&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::ForceTable&);
-QDataStream& operator>>(QDataStream&, SireFF::ForceTable&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::ForceTable&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::ForceTable&);
 
 namespace SireMol
 {

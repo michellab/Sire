@@ -40,8 +40,8 @@ namespace SireMaths
 class NVector;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMaths::NVector&);
-QDataStream& operator>>(QDataStream&, SireMaths::NVector&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::NVector&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::NVector&);
 
 namespace SireMaths
 {

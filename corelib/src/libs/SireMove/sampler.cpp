@@ -50,7 +50,7 @@ static const RegisterMetaType<Sampler> r_sampler(MAGIC_ONLY,
                                                  "SireMove::Sampler");
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                         const Sampler &sampler)
 {
     writeHeader(ds, r_sampler, 1);
@@ -63,7 +63,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                         Sampler &sampler)
 {
     VersionID v = readHeader(ds, r_sampler);

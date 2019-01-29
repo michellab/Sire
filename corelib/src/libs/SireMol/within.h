@@ -43,8 +43,8 @@ namespace SireMol
 class Within;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Within&);
-QDataStream& operator>>(QDataStream&, SireMol::Within&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Within&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Within&);
 
 namespace SireMol
 {

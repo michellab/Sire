@@ -35,11 +35,11 @@ SIRE_BEGIN_HEADER
 
 namespace SireStream
 {
-    void registerAlternativeName(const char *type_name, const char *alternative);
+    SIRESTREAM_EXPORT void registerAlternativeName(const char *type_name, const char *alternative);
 
     /** This class is used for static initialisation to register alternative names */
     template<class T>
-    class SIRESTREAM_EXPORT RegisterAlternativeName
+    class RegisterAlternativeName
     {
     public:
         RegisterAlternativeName(const char *alternative)

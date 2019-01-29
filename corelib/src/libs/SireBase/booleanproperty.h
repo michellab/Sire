@@ -38,8 +38,8 @@ namespace SireBase
 class BooleanProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::BooleanProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::BooleanProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::BooleanProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::BooleanProperty&);
 
 namespace SireBase
 {

@@ -39,8 +39,8 @@ namespace SireMol
 class ChainsWithRes;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ChainsWithRes&);
-QDataStream& operator>>(QDataStream&, SireMol::ChainsWithRes&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ChainsWithRes&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ChainsWithRes&);
 
 namespace SireMol
 {

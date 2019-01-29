@@ -34,6 +34,7 @@
 #include <QStringList>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/throw_exception.hpp>
 
 SIRE_BEGIN_HEADER
 

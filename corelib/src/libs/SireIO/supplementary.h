@@ -38,8 +38,8 @@ namespace SireIO
 class Supplementary;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::Supplementary&);
-QDataStream& operator>>(QDataStream&, SireIO::Supplementary&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Supplementary&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Supplementary&);
 
 namespace SireIO
 {

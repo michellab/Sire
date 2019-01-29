@@ -42,17 +42,17 @@ class IntegerArrayProperty;
 class StringArrayProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::PropertyList&);
-QDataStream& operator>>(QDataStream&, SireBase::PropertyList&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::PropertyList&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::PropertyList&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::DoubleArrayProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::DoubleArrayProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::DoubleArrayProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::DoubleArrayProperty&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::IntegerArrayProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::IntegerArrayProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::IntegerArrayProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::IntegerArrayProperty&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::StringArrayProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::StringArrayProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::StringArrayProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::StringArrayProperty&);
 
 namespace SireBase
 {
@@ -165,7 +165,7 @@ private:
     QList<PropertyPtr> l;
 };
 
-class SIREMATHS_EXPORT DoubleArrayProperty
+class SIREBASE_EXPORT DoubleArrayProperty
         : public ConcreteProperty<DoubleArrayProperty,ArrayProperty<double> >
 {
 
@@ -202,7 +202,7 @@ public:
     PropertyList asAnArray() const;
 };
 
-class SIREMATHS_EXPORT IntegerArrayProperty
+class SIREBASE_EXPORT IntegerArrayProperty
         : public ConcreteProperty<IntegerArrayProperty,ArrayProperty<qint64> >
 {
 
@@ -239,7 +239,7 @@ public:
     PropertyList asAnArray() const;
 };
 
-class SIREMATHS_EXPORT StringArrayProperty
+class SIREBASE_EXPORT StringArrayProperty
         : public ConcreteProperty<StringArrayProperty,ArrayProperty<QString> >
 {
 
@@ -276,18 +276,18 @@ public:
     PropertyList asAnArray() const;
 };
 
-PropertyPtr wrap(const Property &value);
-PropertyPtr wrap(const QString &value);
-PropertyPtr wrap(double value);
+SIREBASE_EXPORT PropertyPtr wrap(const Property &value);
+SIREBASE_EXPORT PropertyPtr wrap(const QString &value);
+SIREBASE_EXPORT PropertyPtr wrap(double value);
 
-PropertyPtr wrap(const QList<PropertyPtr> &value);
-PropertyPtr wrap(const QList<double> &values);
-PropertyPtr wrap(const QList<int> &values);
-PropertyPtr wrap(const QVector<double> &values);
-PropertyPtr wrap(const QVector<int> &values);
-PropertyPtr wrap(const QList<QString> &values);
-PropertyPtr wrap(const QVector<QString> &values);
-PropertyPtr wrap(const QStringList &values);
+SIREBASE_EXPORT PropertyPtr wrap(const QList<PropertyPtr> &value);
+SIREBASE_EXPORT PropertyPtr wrap(const QList<double> &values);
+SIREBASE_EXPORT PropertyPtr wrap(const QList<int> &values);
+SIREBASE_EXPORT PropertyPtr wrap(const QVector<double> &values);
+SIREBASE_EXPORT PropertyPtr wrap(const QVector<int> &values);
+SIREBASE_EXPORT PropertyPtr wrap(const QList<QString> &values);
+SIREBASE_EXPORT PropertyPtr wrap(const QVector<QString> &values);
+SIREBASE_EXPORT PropertyPtr wrap(const QStringList &values);
 
 }
 

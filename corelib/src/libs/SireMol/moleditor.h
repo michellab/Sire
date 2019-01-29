@@ -42,11 +42,11 @@ class MolEditor;
 class MolStructureEditor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MolEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::MolEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MolEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MolEditor&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::MolStructureEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::MolStructureEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MolStructureEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MolStructureEditor&);
 
 namespace SireMol
 {

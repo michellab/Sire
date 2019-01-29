@@ -38,8 +38,8 @@ namespace SireBase
 class NumberProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::NumberProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::NumberProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::NumberProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::NumberProperty&);
 
 namespace SireBase
 {

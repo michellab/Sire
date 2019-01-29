@@ -43,7 +43,7 @@ static const RegisterMetaType<FFComponent> r_ffcomp( MAGIC_ONLY,
                                                      "SireFF::FFComponent" );
                                                      
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFComponent &ffcomp)
+QDataStream &operator<<(QDataStream &ds, const FFComponent &ffcomp)
 {
     writeHeader(ds, r_ffcomp, 1);
     ds << static_cast<const Symbol&>(ffcomp);
@@ -52,7 +52,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFComponent &ffcomp
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, FFComponent &ffcomp)
+QDataStream &operator>>(QDataStream &ds, FFComponent &ffcomp)
 {
     VersionID v = readHeader(ds, r_ffcomp);
     
@@ -158,7 +158,7 @@ void FFComponent::changeEnergy(FF &ff, const Symbol &symbol, double delta) const
 static const RegisterMetaType<SingleComponent> r_single;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const SingleComponent &single)
+QDataStream &operator<<(QDataStream &ds, const SingleComponent &single)
 {
     writeHeader(ds, r_single, 1);
     ds << static_cast<const FFComponent&>(single);
@@ -166,7 +166,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const SingleComponent &si
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, SingleComponent &single)
+QDataStream &operator>>(QDataStream &ds, SingleComponent &single)
 {
     VersionID v = readHeader(ds, r_single);
     

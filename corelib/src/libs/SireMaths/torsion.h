@@ -43,8 +43,8 @@ class Torsion;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireMaths::Torsion&);
-QDataStream& operator>>(QDataStream&, SireMaths::Torsion&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Torsion&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Torsion&);
 
 namespace SireMaths
 {

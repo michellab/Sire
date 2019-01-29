@@ -62,11 +62,11 @@ class ChangedMolecule;
 
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMoleculeBase&);
-QDataStream& operator>>(QDataStream&, SireFF::detail::FFMoleculeBase&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMoleculeBase&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::detail::FFMoleculeBase&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMoleculesBase&);
-QDataStream& operator>>(QDataStream&, SireFF::detail::FFMoleculesBase&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMoleculesBase&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::detail::FFMoleculesBase&);
 
 template<class PTNL>
 QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMolecule<PTNL>&);
@@ -103,10 +103,10 @@ using SireMol::CGIdx;
 using SireBase::PropertyMap;
 using SireBase::ChunkedVector;
 
-void throwFFMoleculesIncompatibleParameterNames(const PropertyMap &old_map, 
+SIREFF_EXPORT void throwFFMoleculesIncompatibleParameterNames(const PropertyMap &old_map, 
                                                 const PropertyMap &new_map);
 
-void assertCompatible(const FFMoleculeBase &mol0, const FFMoleculeBase &mol1);
+SIREFF_EXPORT void assertCompatible(const FFMoleculeBase &mol0, const FFMoleculeBase &mol1);
 
 /** This is the base class of most (all?) of the forcefield
     specialised molecules. Forcefields used specialised molecule

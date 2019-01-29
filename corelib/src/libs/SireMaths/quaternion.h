@@ -45,8 +45,8 @@ class Quaternion;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireMaths::Quaternion&);
-QDataStream& operator>>(QDataStream&, SireMaths::Quaternion&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Quaternion&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Quaternion&);
 
 namespace SireMaths
 {
@@ -56,11 +56,11 @@ class Matrix;
 
 class MultiQuaternion;
 
-const Quaternion operator+(const Quaternion &p1, const Quaternion &p2);
-const Quaternion operator-(const Quaternion &p1, const Quaternion &p2);
-const Quaternion operator*(const Quaternion &p1, const Quaternion &p2);
-const Quaternion operator*(const Quaternion &p1, const Vector &p2);
-const Quaternion operator*(const Vector &p1, const Quaternion &p2);
+SIREMATHS_EXPORT const Quaternion operator+(const Quaternion &p1, const Quaternion &p2);
+SIREMATHS_EXPORT const Quaternion operator-(const Quaternion &p1, const Quaternion &p2);
+SIREMATHS_EXPORT const Quaternion operator*(const Quaternion &p1, const Quaternion &p2);
+SIREMATHS_EXPORT const Quaternion operator*(const Quaternion &p1, const Vector &p2);
+SIREMATHS_EXPORT const Quaternion operator*(const Vector &p1, const Quaternion &p2);
 
 /**
 This is a quaternion class that is used to handle 3D rotations and SLERP.

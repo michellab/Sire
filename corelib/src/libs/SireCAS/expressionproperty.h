@@ -39,8 +39,8 @@ namespace SireCAS
 class ExpressionProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ExpressionProperty&);
-QDataStream& operator>>(QDataStream&, SireCAS::ExpressionProperty&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ExpressionProperty&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ExpressionProperty&);
 
 namespace SireCAS
 {
@@ -87,8 +87,8 @@ private:
     Expression _val;
 };
 
-SireBase::PropertyPtr wrap(const ExBase &expression);
-SireBase::PropertyPtr wrap(const Expression &expression);
+SIRECAS_EXPORT SireBase::PropertyPtr wrap(const ExBase &expression);
+SIRECAS_EXPORT SireBase::PropertyPtr wrap(const Expression &expression);
 
 }
 

@@ -1258,7 +1258,7 @@ static void calcNumberMolecules(int &totalMolecules,
 static const RegisterMetaType<Amber> r_amber(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Amber &amber)
+QDataStream &operator<<(QDataStream &ds, const Amber &amber)
 {
     //empty class so nothing to stream
     writeHeader(ds, r_amber, 1);
@@ -1269,7 +1269,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Amber &amber)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Amber &amber)
+QDataStream &operator>>(QDataStream &ds, Amber &amber)
 {
     //empty class so nothing to stream
 

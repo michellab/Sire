@@ -42,8 +42,8 @@ class Triangle;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireMaths::Triangle&);
-QDataStream& operator>>(QDataStream&, SireMaths::Triangle&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Triangle&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Triangle&);
 
 namespace SireMaths
 {

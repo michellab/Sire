@@ -39,8 +39,8 @@ namespace SireSystem
 class MonitorMonitor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::MonitorMonitor&);
-QDataStream& operator>>(QDataStream&, SireSystem::MonitorMonitor&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::MonitorMonitor&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::MonitorMonitor&);
 
 namespace SireSystem
 {

@@ -50,7 +50,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<VolumeMap> r_volmap;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const VolumeMap &volmap)
+QDataStream &operator<<(QDataStream &ds, const VolumeMap &volmap)
 {
     writeHeader(ds, r_volmap, 2);
     
@@ -66,7 +66,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const VolumeMap &volmap)
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, VolumeMap &volmap)
+QDataStream &operator>>(QDataStream &ds, VolumeMap &volmap)
 {
     VersionID v = readHeader(ds, r_volmap);
     

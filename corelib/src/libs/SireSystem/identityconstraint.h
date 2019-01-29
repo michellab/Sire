@@ -48,8 +48,8 @@ namespace SireSystem
 class IdentityConstraint;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::IdentityConstraint&);
-QDataStream& operator>>(QDataStream&, SireSystem::IdentityConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::IdentityConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::IdentityConstraint&);
 
 namespace SireSystem
 {

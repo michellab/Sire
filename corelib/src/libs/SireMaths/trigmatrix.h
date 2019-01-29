@@ -42,8 +42,8 @@ namespace SireMaths
 class TrigMatrix;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMaths::TrigMatrix&);
-QDataStream& operator>>(QDataStream&, SireMaths::TrigMatrix&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::TrigMatrix&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::TrigMatrix&);
 
 namespace SireMaths
 {

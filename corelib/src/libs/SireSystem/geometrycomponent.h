@@ -46,8 +46,8 @@ namespace SireSystem
 class GeometryComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::GeometryComponent&);
-QDataStream& operator>>(QDataStream&, SireSystem::GeometryComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::GeometryComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::GeometryComponent&);
 
 namespace SireVol
 {

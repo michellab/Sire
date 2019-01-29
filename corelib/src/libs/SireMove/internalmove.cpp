@@ -66,7 +66,7 @@ using namespace SireStream;
 static const RegisterMetaType<InternalMove> r_internalmove;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const InternalMove &internalmove)
+QDataStream &operator<<(QDataStream &ds, const InternalMove &internalmove)
 {
     writeHeader(ds, r_internalmove, 2);
     
@@ -81,7 +81,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const InternalMove &int
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, InternalMove &internalmove)
+QDataStream &operator>>(QDataStream &ds, InternalMove &internalmove)
 {
     VersionID v = readHeader(ds, r_internalmove);
 

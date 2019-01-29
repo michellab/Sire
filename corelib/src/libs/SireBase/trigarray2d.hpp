@@ -70,7 +70,7 @@ namespace SireBase
     @author Christopher Woods
 */
 template<class T>
-class SIREBASE_EXPORT TrigArray2D : public TrigArray2DBase
+class TrigArray2D : public TrigArray2DBase
 {
 
 friend QDataStream& ::operator<<<>(QDataStream&, const TrigArray2D<T>&);

@@ -97,7 +97,7 @@ class PackedArray2D_Array;
 /** This is a simple class that is used to manage the memory and 
     reference counting for the PackedArray2D */
 template<class T>
-class SIREBASE_EXPORT PackedArray2DMemory : public PackedArray2DMemoryBase
+class PackedArray2DMemory : public PackedArray2DMemoryBase
 {
 public:
     static char* create(quint32 narrays, quint32 nvalues);
@@ -116,7 +116,7 @@ public:
     @author Christopher Woods
 */
 template<class T>
-class SIREBASE_EXPORT SharedArray2DPtr
+class SharedArray2DPtr
 {
 
 public:
@@ -265,7 +265,7 @@ private:
     packed array of arrays
 */
 template<class T>
-class SIREBASE_EXPORT PackedArray2DData : public PackedArray2DDataBase
+class PackedArray2DData : public PackedArray2DDataBase
 {
 
 friend class PackedArray2DMemory<T>;
@@ -302,7 +302,7 @@ public:
 /** This class holds the metadata about an individual array
     in the packed collection of arrays */
 template<class T>
-class SIREBASE_EXPORT PackedArray2D_ArrayData : public PackedArray2D_ArrayDataBase
+class PackedArray2D_ArrayData : public PackedArray2D_ArrayDataBase
 {
 
 friend class PackedArray2D<T>;
@@ -338,7 +338,7 @@ public:
     @author Christopher Woods
 */
 template<class T>
-class SIREBASE_EXPORT PackedArray2D_Array
+class PackedArray2D_Array
 {
 
 friend class PackedArray2DMemory<T>;
@@ -407,7 +407,7 @@ private:
     @author Christopher Woods
 */
 template<class T>
-class SIREBASE_EXPORT PackedArray2D
+class PackedArray2D
 {
 
 friend class detail::PackedArray2DMemory<T>;
@@ -1931,9 +1931,9 @@ QString PackedArray2D<T>::toString() const
 namespace detail
 {
 
-void throwCannotConvertVariantError(const char *this_type, 
-                                    const char *type_t,
-                                    const QString &codeloc);
+SIREBASE_EXPORT void throwCannotConvertVariantError(const char *this_type, 
+                                                    const char *type_t,
+                                                    const QString &codeloc);
 
 template<class T>
 T default_construct()

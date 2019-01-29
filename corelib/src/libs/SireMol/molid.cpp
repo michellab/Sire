@@ -180,7 +180,7 @@ void MolID::processMatches(QList<MolNum> &matches, const Molecules &mols) const
 static const RegisterMetaType<MolIdx> r_molidx;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MolIdx &molidx)
+QDataStream &operator<<(QDataStream &ds, const MolIdx &molidx)
 {
     writeHeader(ds, r_molidx, 1);
     
@@ -190,7 +190,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MolIdx &molidx)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MolIdx &molidx)
+QDataStream &operator>>(QDataStream &ds, MolIdx &molidx)
 {
     VersionID v = readHeader(ds, r_molidx);
     
@@ -292,7 +292,7 @@ const char* MolIdx::typeName()
 static const RegisterMetaType<MolNum> r_molnum;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MolNum &molnum)
+QDataStream &operator<<(QDataStream &ds, const MolNum &molnum)
 {
     writeHeader(ds, r_molnum, 1);
     
@@ -302,7 +302,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MolNum &molnum)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MolNum &molnum)
+QDataStream &operator>>(QDataStream &ds, MolNum &molnum)
 {
     VersionID v = readHeader(ds, r_molnum);
     
@@ -420,7 +420,7 @@ const char* MolNum::typeName()
 static const RegisterMetaType<MolName> r_molname;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MolName &molname)
+QDataStream &operator<<(QDataStream &ds, const MolName &molname)
 {
     writeHeader(ds, r_molname, 1);
     
@@ -430,7 +430,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MolName &molname)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MolName &molname)
+QDataStream &operator>>(QDataStream &ds, MolName &molname)
 {
     VersionID v = readHeader(ds, r_molname);
     

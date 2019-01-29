@@ -54,7 +54,7 @@ using namespace SireStream;
 static const RegisterMetaType<HMCVelGen> r_hmcvelgen( MAGIC_ONLY,
                                                       HMCVelGen::typeName() );
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const HMCVelGen &hmcvelgen)
+QDataStream &operator<<(QDataStream &ds, const HMCVelGen &hmcvelgen)
 {
     writeHeader(ds, r_hmcvelgen, 1);
     
@@ -64,7 +64,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const HMCVelGen &hmcvel
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, HMCVelGen &hmcvelgen)
+QDataStream &operator>>(QDataStream &ds, HMCVelGen &hmcvelgen)
 {
     VersionID v = readHeader(ds, r_hmcvelgen);
     
@@ -148,7 +148,7 @@ void HMCVelGen::setTemperature(Temperature temperature)
 
 static const RegisterMetaType<HMCGenerator> r_hmcgen;
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const HMCGenerator &hmcgen)
+QDataStream &operator<<(QDataStream &ds, const HMCGenerator &hmcgen)
 {
     writeHeader(ds, r_hmcgen, 1);
     
@@ -157,7 +157,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const HMCGenerator &hmc
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, HMCGenerator &hmcgen)
+QDataStream &operator>>(QDataStream &ds, HMCGenerator &hmcgen)
 {
     VersionID v = readHeader(ds, r_hmcgen);
     
@@ -341,7 +341,7 @@ AtomVelocities HMCGenerator::generate(const MoleculeView &molview,
 
 static const RegisterMetaType<HybridMC> r_hmc;
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const HybridMC &hmc)
+QDataStream &operator<<(QDataStream &ds, const HybridMC &hmc)
 {
     writeHeader(ds, r_hmc, 1);
     
@@ -352,7 +352,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const HybridMC &hmc)
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, HybridMC &hmc)
+QDataStream &operator>>(QDataStream &ds, HybridMC &hmc)
 {
     VersionID v = readHeader(ds, r_hmc);
     

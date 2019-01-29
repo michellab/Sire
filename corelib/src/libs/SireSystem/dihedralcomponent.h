@@ -40,8 +40,8 @@ namespace SireSystem
 class DihedralComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::DihedralComponent&);
-QDataStream& operator>>(QDataStream&, SireSystem::DihedralComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::DihedralComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::DihedralComponent&);
 
 namespace SireMaths{ class Torsion; }
 

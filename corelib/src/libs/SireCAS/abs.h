@@ -38,8 +38,8 @@ namespace SireCAS
 class Abs;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Abs&);
-QDataStream& operator>>(QDataStream&, SireCAS::Abs&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Abs&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Abs&);
 
 namespace SireCAS
 {

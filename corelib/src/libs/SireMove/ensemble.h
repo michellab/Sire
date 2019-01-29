@@ -40,8 +40,8 @@ namespace SireMove
 class Ensemble;
 }
 
-QDataStream& operator<<(QDataStream &ds, const SireMove::Ensemble&);
-QDataStream& operator>>(QDataStream &ds, SireMove::Ensemble&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream &ds, const SireMove::Ensemble&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream &ds, SireMove::Ensemble&);
 
 namespace SireMove
 {

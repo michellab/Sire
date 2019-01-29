@@ -77,7 +77,7 @@ SIRE_EXPOSE_ALIAS(
     SireFF::Inter2B2G3DFF<SireMM::CLJPotentialInterface<SireMM::InterCLJPotential> >,
     SireMM::InterGroupCLJFF )
 
-#ifdef SIRE_INSTANTIATE_TEMPLATES
+#if defined(SIRE_INSTANTIATE_TEMPLATES) || defined(PYWRAP_SireMM_REGISTRARS_H)
 template class 
 SireMM::CLJPotentialInterface<SireMM::InterCLJPotential>;
 

@@ -42,14 +42,14 @@ class DoubleDistanceComponent;
 class TripleDistanceComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::DistanceComponent&);
-QDataStream& operator>>(QDataStream&, SireSystem::DistanceComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::DistanceComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::DistanceComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireSystem::DoubleDistanceComponent&);
-QDataStream& operator>>(QDataStream&, SireSystem::DoubleDistanceComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::DoubleDistanceComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::DoubleDistanceComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireSystem::TripleDistanceComponent&);
-QDataStream& operator>>(QDataStream&, SireSystem::TripleDistanceComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::TripleDistanceComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::TripleDistanceComponent&);
 
 namespace SireSystem
 {

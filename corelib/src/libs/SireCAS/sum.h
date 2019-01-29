@@ -41,8 +41,8 @@ namespace SireCAS
 class Sum;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Sum&);
-QDataStream& operator>>(QDataStream&, SireCAS::Sum&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Sum&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Sum&);
 
 namespace SireCAS
 {

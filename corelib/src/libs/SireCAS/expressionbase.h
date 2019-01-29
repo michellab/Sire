@@ -48,8 +48,8 @@ class ExpressionBase;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireCAS::ExpressionBase&);
-QDataStream& operator>>(QDataStream&, SireCAS::ExpressionBase&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ExpressionBase&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ExpressionBase&);
 
 namespace SireCAS
 {

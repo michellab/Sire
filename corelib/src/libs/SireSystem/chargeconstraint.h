@@ -42,8 +42,8 @@ namespace SireSystem
 class ChargeConstraint;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::ChargeConstraint&);
-QDataStream& operator>>(QDataStream&, SireSystem::ChargeConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::ChargeConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::ChargeConstraint&);
 
 namespace SireSystem
 {

@@ -37,11 +37,11 @@ class SimpleRange;
 class SetRange;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::SimpleRange&);
-QDataStream& operator>>(QDataStream&, SireBase::SimpleRange&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::SimpleRange&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::SimpleRange&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::SetRange&);
-QDataStream& operator>>(QDataStream&, SireBase::SetRange&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::SetRange&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::SetRange&);
 
 namespace SireBase
 {

@@ -48,17 +48,17 @@ class SystemWideDeleter;
 class SpecifiedGroupsDeleter;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::MolDeleter&);
-QDataStream& operator>>(QDataStream&, SireMove::MolDeleter&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::MolDeleter&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::MolDeleter&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::NullDeleter&);
-QDataStream& operator>>(QDataStream&, SireMove::NullDeleter&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::NullDeleter&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::NullDeleter&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::SpecifiedGroupsDeleter&);
-QDataStream& operator>>(QDataStream&, SireMove::SpecifiedGroupsDeleter&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::SpecifiedGroupsDeleter&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::SpecifiedGroupsDeleter&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::SystemWideDeleter&);
-QDataStream& operator>>(QDataStream&, SireMove::SystemWideDeleter&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::SystemWideDeleter&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::SystemWideDeleter&);
 
 namespace SireSystem
 {

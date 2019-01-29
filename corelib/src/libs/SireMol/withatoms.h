@@ -45,17 +45,17 @@ class ChainsWithAtoms;
 class SegsWithAtoms;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResWithAtoms&);
-QDataStream& operator>>(QDataStream&, SireMol::ResWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResWithAtoms&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::CGsWithAtoms&);
-QDataStream& operator>>(QDataStream&, SireMol::CGsWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CGsWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CGsWithAtoms&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ChainsWithAtoms&);
-QDataStream& operator>>(QDataStream&, SireMol::ChainsWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ChainsWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ChainsWithAtoms&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::SegsWithAtoms&);
-QDataStream& operator>>(QDataStream&, SireMol::SegsWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::SegsWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::SegsWithAtoms&);
 
 namespace SireMol
 {

@@ -45,17 +45,17 @@ class HarmonicSwitchingFunction;
 class CHARMMSwitchingFunction;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::SwitchingFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::SwitchingFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::SwitchingFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::SwitchingFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::NoCutoff&);
-QDataStream& operator>>(QDataStream&, SireMM::NoCutoff&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::NoCutoff&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::NoCutoff&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::HarmonicSwitchingFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::HarmonicSwitchingFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::HarmonicSwitchingFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::HarmonicSwitchingFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CHARMMSwitchingFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CHARMMSwitchingFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CHARMMSwitchingFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CHARMMSwitchingFunction&);
 
 namespace SireMM
 {

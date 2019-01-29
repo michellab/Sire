@@ -41,8 +41,8 @@ namespace SireMM
 class GridFF2;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::GridFF2&);
-QDataStream& operator>>(QDataStream&, SireMM::GridFF2&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::GridFF2&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::GridFF2&);
 
 namespace SireMM
 {

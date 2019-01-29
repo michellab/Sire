@@ -38,8 +38,8 @@ namespace SireMol
 class ChainIdentifier;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ChainIdentifier&);
-QDataStream& operator>>(QDataStream&, SireMol::ChainIdentifier&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ChainIdentifier&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ChainIdentifier&);
 
 namespace SireMol
 {

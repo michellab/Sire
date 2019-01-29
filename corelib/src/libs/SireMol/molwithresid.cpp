@@ -43,7 +43,7 @@ using namespace SireStream;
 static const RegisterMetaType<MolWithResID> r_mol;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MolWithResID &mol)
+QDataStream &operator<<(QDataStream &ds, const MolWithResID &mol)
 {
     writeHeader(ds, r_mol, 1);
     
@@ -54,7 +54,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MolWithResID &mol)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MolWithResID &mol)
+QDataStream &operator>>(QDataStream &ds, MolWithResID &mol)
 {
     VersionID v = readHeader(ds, r_mol);
     

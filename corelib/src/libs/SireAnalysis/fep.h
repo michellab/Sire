@@ -43,17 +43,17 @@ class DataPoint;
 class PMF;
 }
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::FEP&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::FEP&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::FEP&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::FEP&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::FEPDeltas&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::FEPDeltas&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::FEPDeltas&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::FEPDeltas&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::DataPoint&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::DataPoint&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::DataPoint&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::DataPoint&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::PMF&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::PMF&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::PMF&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::PMF&);
 
 namespace SireAnalysis
 {

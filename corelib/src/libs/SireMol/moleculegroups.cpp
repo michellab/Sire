@@ -82,7 +82,7 @@ static const RegisterMetaType<MolGroupsBase> r_molgroupsbase(MAGIC_ONLY,
                                                 "SireMol::MolGroupsBase");
                                                 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const MolGroupsBase &molgroupsbase)
 {
     writeHeader(ds, r_molgroupsbase, 2);
@@ -95,7 +95,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Read from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        MolGroupsBase &molgroupsbase)
 {
     VersionID v = readHeader(ds, r_molgroupsbase);
@@ -2119,7 +2119,7 @@ void MolGroupsBase::clearIndex()
 RegisterMetaType<MoleculeGroups> r_molgroups;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                        const MoleculeGroups &molgroups)
 {
     writeHeader(ds, r_molgroups, 1);
@@ -2133,7 +2133,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MoleculeGroups &molgroups)
+QDataStream &operator>>(QDataStream &ds, MoleculeGroups &molgroups)
 {
     VersionID v = readHeader(ds, r_molgroups);
     

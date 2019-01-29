@@ -40,7 +40,7 @@ namespace SireBase
 {
     namespace detail
     {
-        tbb::spin_mutex SIREBASE_EXPORT *get_shared_null_mutex()
+        tbb::spin_mutex *get_shared_null_mutex()
         {
             return get_spin_mutex();
         }

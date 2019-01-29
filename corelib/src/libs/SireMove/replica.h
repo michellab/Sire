@@ -45,8 +45,8 @@ namespace SireMove
 class Replica;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::Replica&);
-QDataStream& operator>>(QDataStream&, SireMove::Replica&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::Replica&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::Replica&);
 
 namespace SireMove
 {

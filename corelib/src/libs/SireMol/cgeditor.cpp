@@ -65,7 +65,7 @@ namespace SireMol
 static const RegisterMetaType<CGEditor> r_cgeditor;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const CGEditor &cgeditor)
 {
     writeHeader(ds, r_cgeditor, 1);
@@ -76,7 +76,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        CGEditor &cgeditor)
 {
     VersionID v = readHeader(ds, r_cgeditor);
@@ -268,7 +268,7 @@ const char* CGEditor::typeName()
 static const RegisterMetaType<CGStructureEditor> r_cgstructeditor;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const CGStructureEditor &cgeditor)
 {
     writeHeader(ds, r_cgstructeditor, 1);
@@ -280,7 +280,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        CGStructureEditor &cgeditor)
 {
     VersionID v = readHeader(ds, r_cgstructeditor);

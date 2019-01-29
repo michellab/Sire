@@ -43,11 +43,11 @@ class CLJWorkspace;
 namespace detail{ class CLJWorkspaceData; }
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJWorkspace&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJWorkspace&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJWorkspace&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJWorkspace&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::detail::CLJWorkspaceData&);
-QDataStream& operator>>(QDataStream&, SireMM::detail::CLJWorkspaceData&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::detail::CLJWorkspaceData&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::detail::CLJWorkspaceData&);
 
 namespace SireMM
 {

@@ -38,39 +38,39 @@ namespace SireMaths
 /** Return the value of the Gamma function 
     \Gamma(\alpha) = \int_0^{\infty} t^{\alpha-1} e^{-t} dt 
 */
-double SIREMATHS_EXPORT Gamma(double alpha)
+double Gamma(double alpha)
 {
     return gsl_sf_gamma(alpha);
 }
 
 /** Synonym for SireMaths::Gamma */
-double SIREMATHS_EXPORT gamma(double alpha)
+double gamma(double alpha)
 {
     return Gamma(alpha);
 }
 
 /** Return the incomplete gamma function
     \Gamma(\alpha) = \int_x^{\infty} t^{\alpha-1} e^{-t} dt */
-double SIREMATHS_EXPORT Gamma(double alpha, double x)
+double Gamma(double alpha, double x)
 {
     return gsl_sf_gamma_inc_Q(alpha, x) * gsl_sf_gamma(alpha);
 }
 
 /** Return the incomplete gamma function
     \Gamma(\alpha) = \int_0^{x} t^{\alpha-1} e^{-t} dt */
-double SIREMATHS_EXPORT gamma(double alpha, double x)
+double gamma(double alpha, double x)
 {
     return gsl_sf_gamma_inc_P(alpha, x) * gsl_sf_gamma(alpha);
 }
 
 /** Synonym for gamma(alpha,x) */
-double SIREMATHS_EXPORT incomplete_gamma_lower(double alpha, double x)
+double incomplete_gamma_lower(double alpha, double x)
 {
     return gamma(alpha,x);
 }
 
 /** Synonym for Gamma(alpha,x) */
-double SIREMATHS_EXPORT incomplete_gamma_higher(double alpha, double x)
+double incomplete_gamma_higher(double alpha, double x)
 {
     return Gamma(alpha,x);
 }

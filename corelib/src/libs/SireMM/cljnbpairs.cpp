@@ -65,7 +65,7 @@ namespace SireMM
 ////////
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CoulombScaleFactor &sclfac)
+QDataStream &operator<<(QDataStream &ds, const CoulombScaleFactor &sclfac)
 {
     ds << sclfac.cscl;
        
@@ -73,7 +73,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CoulombScaleFactor 
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CoulombScaleFactor &sclfac)
+QDataStream &operator>>(QDataStream &ds, CoulombScaleFactor &sclfac)
 {
     ds >> sclfac.cscl;
        
@@ -124,7 +124,7 @@ double CoulombScaleFactor::coulomb() const
 ////////
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const LJScaleFactor &sclfac)
+QDataStream &operator<<(QDataStream &ds, const LJScaleFactor &sclfac)
 {
     ds << sclfac.ljscl;
        
@@ -132,7 +132,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const LJScaleFactor &sclf
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, LJScaleFactor &sclfac)
+QDataStream &operator>>(QDataStream &ds, LJScaleFactor &sclfac)
 {
     ds >> sclfac.ljscl;
        
@@ -183,7 +183,7 @@ double LJScaleFactor::lj() const
 ////////
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJScaleFactor &sclfac)
+QDataStream &operator<<(QDataStream &ds, const CLJScaleFactor &sclfac)
 {
     ds << static_cast<const CoulombScaleFactor&>(sclfac) 
        << static_cast<const LJScaleFactor&>(sclfac);
@@ -192,7 +192,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJScaleFactor &scl
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJScaleFactor &sclfac)
+QDataStream &operator>>(QDataStream &ds, CLJScaleFactor &sclfac)
 {
     ds >> static_cast<CoulombScaleFactor&>(sclfac) 
        >> static_cast<LJScaleFactor&>(sclfac);
@@ -255,7 +255,7 @@ QString CLJScaleFactor::toString() const
 ////////
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CoulombNBPairs &coulnbpairs)
+QDataStream &operator<<(QDataStream &ds, const CoulombNBPairs &coulnbpairs)
 {
     writeHeader(ds, r_coulnbpairs, 1)
         << static_cast<const AtomPairs<CoulombScaleFactor>&>(coulnbpairs);
@@ -264,7 +264,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CoulombNBPairs &cou
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CoulombNBPairs &coulnbpairs)
+QDataStream &operator>>(QDataStream &ds, CoulombNBPairs &coulnbpairs)
 {
     VersionID v = readHeader(ds, r_coulnbpairs);
 
@@ -346,7 +346,7 @@ bool CoulombNBPairs::operator!=(const CoulombNBPairs &other) const
 ////////
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const LJNBPairs &ljnbpairs)
+QDataStream &operator<<(QDataStream &ds, const LJNBPairs &ljnbpairs)
 {
     writeHeader(ds, r_ljnbpairs, 1)
         << static_cast<const AtomPairs<LJScaleFactor>&>(ljnbpairs);
@@ -355,7 +355,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const LJNBPairs &ljnbpair
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, LJNBPairs &ljnbpairs)
+QDataStream &operator>>(QDataStream &ds, LJNBPairs &ljnbpairs)
 {
     VersionID v = readHeader(ds, r_ljnbpairs);
 
@@ -435,7 +435,7 @@ bool LJNBPairs::operator!=(const LJNBPairs &other) const
 ////////
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJNBPairs &cljnbpairs)
+QDataStream &operator<<(QDataStream &ds, const CLJNBPairs &cljnbpairs)
 {
     writeHeader(ds, r_cljnbpairs, 1)
         << static_cast<const AtomPairs<CLJScaleFactor>&>(cljnbpairs);
@@ -444,7 +444,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJNBPairs &cljnbpa
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJNBPairs &cljnbpairs)
+QDataStream &operator>>(QDataStream &ds, CLJNBPairs &cljnbpairs)
 {
     VersionID v = readHeader(ds, r_cljnbpairs);
 

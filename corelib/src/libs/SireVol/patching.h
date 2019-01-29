@@ -41,14 +41,14 @@ class NullPatching;
 class BoxPatching;
 }
 
-QDataStream& operator<<(QDataStream&, const SireVol::Patching&);
-QDataStream& operator>>(QDataStream&, SireVol::Patching&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::Patching&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::Patching&);
 
-QDataStream& operator<<(QDataStream&, const SireVol::NullPatching&);
-QDataStream& operator>>(QDataStream&, SireVol::NullPatching&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::NullPatching&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::NullPatching&);
 
-QDataStream& operator<<(QDataStream&, const SireVol::BoxPatching&);
-QDataStream& operator>>(QDataStream&, SireVol::BoxPatching&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::BoxPatching&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::BoxPatching&);
 
 namespace SireVol
 {

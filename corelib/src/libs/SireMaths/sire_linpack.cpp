@@ -62,7 +62,7 @@ extern "C"
 namespace SireMaths
 {
 
-std::pair< NMatrix,QVector<int> > SIREMATHS_EXPORT dgeco(const NMatrix &A)
+std::pair< NMatrix,QVector<int> > dgeco(const NMatrix &A)
 {
     #ifdef SIRE_DISABLE_FORTRAN
 
@@ -98,7 +98,7 @@ std::pair< NMatrix,QVector<int> > SIREMATHS_EXPORT dgeco(const NMatrix &A)
     #endif // SIRE_DISABLE_FORTRAN
 }
 
-NMatrix SIREMATHS_EXPORT dgedi_inverse(const NMatrix &A, const QVector<int> &IPVT)
+NMatrix dgedi_inverse(const NMatrix &A, const QVector<int> &IPVT)
 {
     #ifdef SIRE_DISABLE_FORTRAN
 
@@ -135,7 +135,7 @@ NMatrix SIREMATHS_EXPORT dgedi_inverse(const NMatrix &A, const QVector<int> &IPV
     #endif // SIRE_DISABLE_FORTRAN
 }
 
-double SIREMATHS_EXPORT dgedi_determinant(const NMatrix &A, const QVector<int> &IPVT)
+double dgedi_determinant(const NMatrix &A, const QVector<int> &IPVT)
 {
     #ifdef SIRE_DISABLE_FORTRAN
 
@@ -173,7 +173,7 @@ double SIREMATHS_EXPORT dgedi_determinant(const NMatrix &A, const QVector<int> &
     #endif // SIRE_DISABLE_FORTRAN
 }
 
-std::pair<double,NMatrix> SIREMATHS_EXPORT dgedi(const NMatrix &A, 
+std::pair<double,NMatrix> dgedi(const NMatrix &A, 
                                                  const QVector<int> &IPVT)
 {
     #ifdef SIRE_DISABLE_FORTRAN

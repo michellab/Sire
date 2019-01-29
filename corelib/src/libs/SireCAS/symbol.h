@@ -43,8 +43,8 @@ namespace SireCAS
 class Symbol;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Symbol&);
-QDataStream& operator>>(QDataStream&, SireCAS::Symbol&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Symbol&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Symbol&);
 
 namespace SireCAS
 {

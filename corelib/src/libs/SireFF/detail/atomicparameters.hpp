@@ -57,14 +57,14 @@ namespace detail
 
 using SireBase::PackedArray2D;
 
-bool selectedAll(const QSet<quint32> &idxs, quint32 n);
+SIREFF_EXPORT bool selectedAll(const QSet<quint32> &idxs, quint32 n);
 
 /** This class hold parameters of type PARAM, one for each atom
 
     @author Christopher Woods
 */
 template<class PARAM>
-class SIREFF_EXPORT AtomicParameters
+class AtomicParameters
 {
 
 friend QDataStream& ::operator<<<>(QDataStream&, const AtomicParameters<PARAM>&);

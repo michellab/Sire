@@ -40,8 +40,8 @@ namespace SireFF
 class ForceFields;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::ForceFields&);
-QDataStream& operator>>(QDataStream&, SireFF::ForceFields&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::ForceFields&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::ForceFields&);
 
 namespace SireFF
 {

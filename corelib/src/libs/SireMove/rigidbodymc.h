@@ -44,8 +44,8 @@ namespace SireMove
 class RigidBodyMC;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::RigidBodyMC&);
-QDataStream& operator>>(QDataStream&, SireMove::RigidBodyMC&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::RigidBodyMC&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::RigidBodyMC&);
 
 namespace SireMaths
 {

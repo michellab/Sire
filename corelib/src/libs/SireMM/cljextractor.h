@@ -46,8 +46,8 @@ namespace SireMM
 class CLJExtractor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJExtractor&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJExtractor&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJExtractor&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJExtractor&);
 
 namespace SireMM
 {

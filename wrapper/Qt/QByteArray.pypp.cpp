@@ -1189,7 +1189,8 @@ void register_QByteArray_class(){
                 , bp::return_self< >() );
         
         }
-        #ifndef Q_OS_WIN
+        #if 0
+        //#ifndef Q_OS_WIN
         { //::QByteArray::simplified
         
             typedef ::QByteArray ( ::QByteArray::*simplified_function_type )(  ) const;
@@ -1351,7 +1352,8 @@ void register_QByteArray_class(){
                 , ( bp::arg("ok")=bp::object(), bp::arg("base")=(int)(10) ) );
         
         }
-        #ifndef Q_OS_WIN
+        //#ifndef Q_OS_WIN
+        #if 0
         { //::QByteArray::toLower
         
             typedef ::QByteArray ( ::QByteArray::*toLower_function_type )(  ) const;
@@ -1429,7 +1431,8 @@ void register_QByteArray_class(){
                 , ( bp::arg("ok")=bp::object(), bp::arg("base")=(int)(10) ) );
         
         }
-        #ifndef Q_OS_WIN
+        //#ifndef Q_OS_WIN
+        #if 0
         { //::QByteArray::toUpper
         
             typedef ::QByteArray ( ::QByteArray::*toUpper_function_type )(  ) const;
@@ -1441,7 +1444,8 @@ void register_QByteArray_class(){
         
         }
         #endif
-        #ifndef Q_OS_WIN
+        //#ifndef Q_OS_WIN
+        #if 0
         { //::QByteArray::trimmed
         
             typedef ::QByteArray ( ::QByteArray::*trimmed_function_type )(  ) const;

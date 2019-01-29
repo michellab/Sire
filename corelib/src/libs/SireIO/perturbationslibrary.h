@@ -50,11 +50,11 @@ class PerturbationsLibrary;
 class PerturbationsTemplate;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::PerturbationsLibrary&);
-QDataStream& operator>>(QDataStream&, SireIO::PerturbationsLibrary&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::PerturbationsLibrary&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::PerturbationsLibrary&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::PerturbationsTemplate&);
-QDataStream& operator>>(QDataStream&, SireIO::PerturbationsTemplate&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::PerturbationsTemplate&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::PerturbationsTemplate&);
 
 namespace SireMM
 {

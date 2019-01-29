@@ -38,8 +38,8 @@ namespace SireSystem
 class SystemMonitors;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::SystemMonitors&);
-QDataStream& operator>>(QDataStream&, SireSystem::SystemMonitors&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::SystemMonitors&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::SystemMonitors&);
 
 namespace SireSystem
 {

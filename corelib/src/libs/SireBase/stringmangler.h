@@ -43,20 +43,20 @@ class LowerCaseString;
 class UpperCaseString;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::StringMangler&);
-QDataStream& operator>>(QDataStream&, SireBase::StringMangler&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::StringMangler&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::StringMangler&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::NoMangling&);
-QDataStream& operator>>(QDataStream&, SireBase::NoMangling&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::NoMangling&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::NoMangling&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::TrimString&);
-QDataStream& operator>>(QDataStream&, SireBase::TrimString&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::TrimString&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::TrimString&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::LowerCaseString&);
-QDataStream& operator>>(QDataStream&, SireBase::LowerCaseString&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::LowerCaseString&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::LowerCaseString&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::UpperCaseString&);
-QDataStream& operator>>(QDataStream&, SireBase::UpperCaseString&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::UpperCaseString&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::UpperCaseString&);
 
 namespace SireBase
 {

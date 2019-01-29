@@ -51,20 +51,20 @@ class ComponentConstraint;
 class WindowedComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::Constraint&);
-QDataStream& operator>>(QDataStream&, SireSystem::Constraint&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::Constraint&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::Constraint&);
 
-QDataStream& operator<<(QDataStream&, const SireSystem::NullConstraint&);
-QDataStream& operator>>(QDataStream&, SireSystem::NullConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::NullConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::NullConstraint&);
 
-QDataStream& operator<<(QDataStream&, const SireSystem::PropertyConstraint&);
-QDataStream& operator>>(QDataStream&, SireSystem::PropertyConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::PropertyConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::PropertyConstraint&);
 
-QDataStream& operator<<(QDataStream&, const SireSystem::ComponentConstraint&);
-QDataStream& operator>>(QDataStream&, SireSystem::ComponentConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::ComponentConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::ComponentConstraint&);
 
-QDataStream& operator<<(QDataStream&, const SireSystem::WindowedComponent&);
-QDataStream& operator>>(QDataStream&, SireSystem::WindowedComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::WindowedComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::WindowedComponent&);
 
 namespace SireMol
 {

@@ -40,8 +40,8 @@ namespace SireBase
 class CPUID;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::CPUID&);
-QDataStream& operator>>(QDataStream&, SireBase::CPUID&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::CPUID&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::CPUID&);
 
 namespace SireBase
 {

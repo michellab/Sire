@@ -41,8 +41,8 @@ class Sphere;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireMaths::Sphere&);
-QDataStream& operator>>(QDataStream&, SireMaths::Sphere&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Sphere&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Sphere&);
 
 namespace SireMaths
 {

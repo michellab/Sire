@@ -41,8 +41,8 @@ class Line;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireMaths::Line&);
-QDataStream& operator>>(QDataStream&, SireMaths::Line&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Line&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Line&);
 
 namespace SireMaths
 {

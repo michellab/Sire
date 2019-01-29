@@ -41,8 +41,8 @@ namespace SireCAS
 class Product;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Product&);
-QDataStream& operator>>(QDataStream&, SireCAS::Product&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Product&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Product&);
 
 namespace SireCAS
 {

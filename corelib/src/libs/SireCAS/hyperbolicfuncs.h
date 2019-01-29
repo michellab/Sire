@@ -43,23 +43,23 @@ class Sech;
 class Coth;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Cosh&);
-QDataStream& operator>>(QDataStream&, SireCAS::Cosh&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Cosh&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Cosh&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Sinh&);
-QDataStream& operator>>(QDataStream&, SireCAS::Sinh&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Sinh&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Sinh&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Tanh&);
-QDataStream& operator>>(QDataStream&, SireCAS::Tanh&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Tanh&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Tanh&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Csch&);
-QDataStream& operator>>(QDataStream&, SireCAS::Csch&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Csch&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Csch&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Sech&);
-QDataStream& operator>>(QDataStream&, SireCAS::Sech&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Sech&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Sech&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Coth&);
-QDataStream& operator>>(QDataStream&, SireCAS::Coth&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Coth&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Coth&);
 
 namespace SireCAS
 {

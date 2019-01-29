@@ -41,8 +41,8 @@ namespace SireMove
 class MTSMC;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::MTSMC&);
-QDataStream& operator>>(QDataStream&, SireMove::MTSMC&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::MTSMC&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::MTSMC&);
 
 namespace SireMove
 {

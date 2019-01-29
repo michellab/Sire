@@ -44,8 +44,8 @@ namespace SireMol
 class MolIdentifier;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MolIdentifier&);
-QDataStream& operator>>(QDataStream&, SireMol::MolIdentifier&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MolIdentifier&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MolIdentifier&);
 
 namespace SireMol
 {

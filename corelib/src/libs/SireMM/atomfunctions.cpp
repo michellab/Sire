@@ -41,7 +41,7 @@ using namespace SireStream;
 ///////// Implementation of AtomFunction
 /////////
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const AtomFunction &atomfunc)
 {
     SharedDataStream sds(ds);
@@ -50,7 +50,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       AtomFunction &atomfunc)
 {
     SharedDataStream sds(ds);
@@ -104,7 +104,7 @@ static const RegisterMetaType<AtomFunctions> r_atomfuncs(MAGIC_ONLY,
                                                          "SireMM::AtomFunctions");
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const AtomFunctions &atomfuncs)
 {
     writeHeader(ds, r_atomfuncs, 1);
@@ -116,7 +116,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       AtomFunctions &atomfuncs)
 {
     VersionID v = readHeader(ds, r_atomfuncs);

@@ -40,8 +40,8 @@ namespace SireSystem
 class SysName;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::SysName&);
-QDataStream& operator>>(QDataStream&, SireSystem::SysName&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::SysName&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::SysName&);
 
 namespace SireSystem
 {

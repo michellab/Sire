@@ -43,8 +43,8 @@ namespace SireMaths
 class RanGenerator;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMaths::RanGenerator&);
-QDataStream& operator>>(QDataStream&, SireMaths::RanGenerator&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::RanGenerator&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::RanGenerator&);
 
 namespace SireMaths
 {
@@ -56,7 +56,7 @@ namespace detail
 class RanGeneratorPvt;
 }
 
-void seed_qrand();
+SIREMATHS_EXPORT void seed_qrand();
 
 /** This class provides a thread-safe, copyable and streamable
     random number generator. Copies are guaranteed to produce

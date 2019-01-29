@@ -81,7 +81,7 @@ static const RegisterMetaType<Perturbation> r_pert( MAGIC_ONLY,
                                                     Perturbation::typeName() );
                                                     
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const Perturbation &pert)
 {
     writeHeader(ds, r_pert, 1);
@@ -94,7 +94,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Perturbation &pert)
+QDataStream &operator>>(QDataStream &ds, Perturbation &pert)
 {
     VersionID v = readHeader(ds, r_pert);
     
@@ -367,7 +367,7 @@ const NullPerturbation& Perturbation::null()
 
 static const RegisterMetaType<NullPerturbation> r_nullpert;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const NullPerturbation &nullpert)
+QDataStream &operator<<(QDataStream &ds, const NullPerturbation &nullpert)
 {
     writeHeader(ds, r_nullpert, 1);
     
@@ -376,7 +376,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const NullPerturbation &
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, NullPerturbation &nullpert)
+QDataStream &operator>>(QDataStream &ds, NullPerturbation &nullpert)
 {
     VersionID v = readHeader(ds, r_nullpert);
     
@@ -446,7 +446,7 @@ void NullPerturbation::perturbMolecule(MolEditor&, const Values&) const
 static const RegisterMetaType<Perturbations> r_perts;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const Perturbations &perts)
 {
     writeHeader(ds, r_perts, 1);
@@ -459,7 +459,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Perturbations &perts)
+QDataStream &operator>>(QDataStream &ds, Perturbations &perts)
 {
     VersionID v = readHeader(ds, r_perts);
     

@@ -39,11 +39,11 @@ class Bennetts;
 class BennettsRatios;
 }
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::Bennetts&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::Bennetts&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::Bennetts&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::Bennetts&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::BennettsRatios&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::BennettsRatios&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::BennettsRatios&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::BennettsRatios&);
 
 namespace SireAnalysis
 {

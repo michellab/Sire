@@ -44,8 +44,8 @@ namespace SireMol
 class Evaluator;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Evaluator&);
-QDataStream& operator>>(QDataStream&, SireMol::Evaluator&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Evaluator&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Evaluator&);
 
 namespace SireMaths
 {

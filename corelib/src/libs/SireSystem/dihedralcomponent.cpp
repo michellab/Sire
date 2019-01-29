@@ -58,7 +58,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<DihedralComponent> r_dihcomp;
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const DihedralComponent &dihcomp)
 {
     writeHeader(ds, r_dihcomp, 1);
@@ -71,7 +71,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, DihedralComponent &dihcomp)
+QDataStream &operator>>(QDataStream &ds, DihedralComponent &dihcomp)
 {
     VersionID v = readHeader(ds, r_dihcomp);
     

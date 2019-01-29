@@ -40,8 +40,8 @@ namespace SireMM
 class LJPerturbation;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::LJPerturbation&);
-QDataStream& operator>>(QDataStream&, SireMM::LJPerturbation&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::LJPerturbation&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::LJPerturbation&);
 
 namespace SireMM
 {

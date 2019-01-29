@@ -41,7 +41,7 @@ namespace boost
 /** The boost::assert macro calls this function if the assertation fails.
     This function converts the information passed by the macro into
     a Sire::assertation_failed exception, which is thrown. */
-void SIREERROR_EXPORT assertion_failed(char const * expr, char const * function,
+void assertion_failed(char const * expr, char const * function,
                                        char const * file, long line)
 {
     QString s = QObject::tr("**PROGRAM BUG** %1 in %2, at line %3 in file %4")
@@ -115,7 +115,7 @@ QString std_exception::getWhatString(QString typstring, const std::exception &er
 }
 
 /** Return a string representation of the QFile::FileError */
-QString SIREERROR_EXPORT fileError(const QFile &f)
+QString fileError(const QFile &f)
 {
     switch( f.error() )
     {
@@ -183,7 +183,7 @@ QString exitStatusString(QProcess::ExitStatus stat)
     }
 }
 
-QString SIREERROR_EXPORT processError(const QString &executable,
+QString processError(const QString &executable,
                                       const QProcess &process)
 {
     QString err = QObject::tr("There was an error while running the program \"%1\". ")

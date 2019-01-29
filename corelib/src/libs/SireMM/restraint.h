@@ -51,17 +51,17 @@ class ExpressionRestraint3D;
 class NullRestraint;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::Restraint&);
-QDataStream& operator>>(QDataStream&, SireMM::Restraint&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::Restraint&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::Restraint&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::Restraint3D&);
-QDataStream& operator>>(QDataStream&, SireMM::Restraint3D&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::Restraint3D&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::Restraint3D&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::ExpressionRestraint3D&);
-QDataStream& operator>>(QDataStream&, SireMM::ExpressionRestraint3D&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::ExpressionRestraint3D&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::ExpressionRestraint3D&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::NullRestraint&);
-QDataStream& operator>>(QDataStream&, SireMM::NullRestraint&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::NullRestraint&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::NullRestraint&);
 
 namespace SireMol
 {

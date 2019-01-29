@@ -42,11 +42,11 @@ class CGEditor;
 class CGStructureEditor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::CGEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::CGEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CGEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CGEditor&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::CGStructureEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::CGStructureEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CGStructureEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CGStructureEditor&);
 
 namespace std
 {

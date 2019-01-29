@@ -42,8 +42,8 @@ namespace SireMM
 class CLJ14Group;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJ14Group&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJ14Group&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJ14Group&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJ14Group&);
 
 namespace SireMM
 {

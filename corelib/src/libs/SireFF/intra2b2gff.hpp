@@ -51,7 +51,7 @@ namespace SireFF
 
 namespace detail
 {
-void throwIntra2B2GFFIncompatibeScaleFactorsError(const QString &molname,
+SIREFF_EXPORT void throwIntra2B2GFFIncompatibeScaleFactorsError(const QString &molname,
                      MolNum molnum, quint64 v0, quint64 v1);
 }
 
@@ -66,9 +66,9 @@ void throwIntra2B2GFFIncompatibeScaleFactorsError(const QString &molname,
     @author Christopher Woods
 */
 template<class Potential>
-class SIREFF_EXPORT Intra2B2GFF 
-                  : public SireBase::ConcreteProperty<Intra2B2GFF<Potential>, G2FF>, 
-                    public Potential
+class Intra2B2GFF 
+              : public SireBase::ConcreteProperty<Intra2B2GFF<Potential>, G2FF>, 
+                public Potential
 {
 
 friend QDataStream& ::operator<<<>(QDataStream&, const Intra2B2GFF<Potential>&);

@@ -539,7 +539,7 @@ MultiVector& MultiVector::operator/=(const MultiDouble &val)
 namespace SireMaths
 {
     /** Increment, decrement, negate etc. */
-    MultiVector SIREMATHS_EXPORT operator/(const MultiVector &p1, const MultiDouble &c)
+    MultiVector operator/(const MultiVector &p1, const MultiDouble &c)
     {
         MultiVector result(p1);
         result /= c;

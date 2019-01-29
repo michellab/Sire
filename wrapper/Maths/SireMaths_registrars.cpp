@@ -3,6 +3,8 @@
 
 #include "SireMaths_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "line.h"
 #include "histogram.h"
 #include "trigmatrix.h"

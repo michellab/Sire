@@ -38,8 +38,8 @@ namespace SireVol
 class Cartesian;
 }
 
-QDataStream& operator<<(QDataStream&, const SireVol::Cartesian&);
-QDataStream& operator>>(QDataStream&, SireVol::Cartesian&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::Cartesian&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::Cartesian&);
 
 namespace SireVol
 {

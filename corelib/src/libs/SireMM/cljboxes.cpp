@@ -55,7 +55,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<CLJBox> r_cljbox(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJBox &box)
+QDataStream &operator<<(QDataStream &ds, const CLJBox &box)
 {
     writeHeader(ds, r_cljbox, 1);
     
@@ -65,7 +65,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJBox &box)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJBox &box)
+QDataStream &operator>>(QDataStream &ds, CLJBox &box)
 {
     VersionID v = readHeader(ds, r_cljbox);
     
@@ -434,14 +434,14 @@ CLJBox CLJBox::squeeze() const
 /////////// Implementation of CLJBoxPtr
 ///////////
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJBoxPtr &ptr)
+QDataStream &operator<<(QDataStream &ds, const CLJBoxPtr &ptr)
 {
     SharedDataStream sds(ds);
     sds << ptr.d;
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJBoxPtr &ptr)
+QDataStream &operator>>(QDataStream &ds, CLJBoxPtr &ptr)
 {
     SharedDataStream sds(ds);
     sds >> ptr.d;
@@ -542,14 +542,14 @@ bool CLJBoxPtr::operator!=(const CLJBoxPtr &other) const
 
 static const RegisterMetaType<CLJBoxIndex> r_cljboxindex(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJBoxIndex &index)
+QDataStream &operator<<(QDataStream &ds, const CLJBoxIndex &index)
 {
     writeHeader(ds, r_cljboxindex, 1);
     ds << index.v.index.ii << index.v.index.jj << index.v.index.kk << index.v.index.idx;
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJBoxIndex &index)
+QDataStream &operator>>(QDataStream &ds, CLJBoxIndex &index)
 {
     VersionID v = readHeader(ds, r_cljboxindex);
     
@@ -738,7 +738,7 @@ int CLJBoxIndex::countNonDummies(const QVector<CLJBoxIndex> &indicies)
 
 static const RegisterMetaType<CLJBoxDistance> r_boxdist(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJBoxDistance &boxdist)
+QDataStream &operator<<(QDataStream &ds, const CLJBoxDistance &boxdist)
 {
     writeHeader(ds, r_boxdist, 1);
     
@@ -747,7 +747,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJBoxDistance &box
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJBoxDistance &boxdist)
+QDataStream &operator>>(QDataStream &ds, CLJBoxDistance &boxdist)
 {
     VersionID v = readHeader(ds, r_boxdist);
     
@@ -847,7 +847,7 @@ const char* CLJBoxDistance::what() const
 
 static const RegisterMetaType<CLJBoxes> r_cljboxes(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJBoxes &boxes)
+QDataStream &operator<<(QDataStream &ds, const CLJBoxes &boxes)
 {
     writeHeader(ds, r_cljboxes, 1);
     
@@ -858,7 +858,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJBoxes &boxes)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJBoxes &boxes)
+QDataStream &operator>>(QDataStream &ds, CLJBoxes &boxes)
 {
     VersionID v = readHeader(ds, r_cljboxes);
     

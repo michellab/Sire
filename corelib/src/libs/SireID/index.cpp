@@ -42,14 +42,14 @@ using namespace SireStream;
 ////////
 
 /** Serialise an Idx class */
-QDataStream SIREID_EXPORT &operator<<(QDataStream &ds, const IndexBase &idx)
+QDataStream &operator<<(QDataStream &ds, const IndexBase &idx)
 {
     ds << idx._idx;
     return ds;
 }
 
 /** Deserialise an Idx class */
-QDataStream SIREID_EXPORT &operator>>(QDataStream &ds, IndexBase &idx)
+QDataStream &operator>>(QDataStream &ds, IndexBase &idx)
 {
     ds >> idx._idx;
     return ds;
@@ -147,7 +147,7 @@ qint32 IndexBase::map(qint32 n) const
 static const RegisterMetaType<Index> r_index(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREID_EXPORT &operator<<(QDataStream &ds, const Index &index)
+QDataStream &operator<<(QDataStream &ds, const Index &index)
 {
     writeHeader(ds, r_index, 1);
     
@@ -157,7 +157,7 @@ QDataStream SIREID_EXPORT &operator<<(QDataStream &ds, const Index &index)
 }
     
 /** Extract from a binary datastream */
-QDataStream SIREID_EXPORT &operator>>(QDataStream &ds, Index &index)
+QDataStream &operator>>(QDataStream &ds, Index &index)
 {
     VersionID v = readHeader(ds, r_index);
     

@@ -48,11 +48,11 @@ class FourAtomFunction;
 class FourAtomFunctions;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::FourAtomFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::FourAtomFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::FourAtomFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::FourAtomFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::FourAtomFunctions&);
-QDataStream& operator>>(QDataStream&, SireMM::FourAtomFunctions&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::FourAtomFunctions&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::FourAtomFunctions&);
 
 namespace SireMol
 {

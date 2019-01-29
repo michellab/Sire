@@ -51,8 +51,8 @@ namespace SireVol
 class Space;
 }
 
-QDataStream& operator<<(QDataStream&, const SireVol::Space&);
-QDataStream& operator>>(QDataStream&, SireVol::Space&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::Space&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::Space&);
 
 namespace SireMaths
 {

@@ -3,6 +3,8 @@
 
 #include "SireSystem_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "monitorname.h"
 #include "monitoridentifier.h"
 #include "distancecomponent.h"

@@ -38,8 +38,8 @@ namespace SireSystem
 class MonitorIdentifier;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::MonitorIdentifier&);
-QDataStream& operator>>(QDataStream&, SireSystem::MonitorIdentifier&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::MonitorIdentifier&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::MonitorIdentifier&);
 
 namespace SireSystem
 {

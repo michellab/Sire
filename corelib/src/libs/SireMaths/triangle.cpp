@@ -41,7 +41,7 @@ using namespace SireMaths;
 static const RegisterMetaType<Triangle> r_triangle(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Triangle &triangle)
+QDataStream &operator<<(QDataStream &ds, const Triangle &triangle)
 {
     writeHeader(ds, r_triangle, 1)
           << triangle.points[0] << triangle.points[1] << triangle.points[2];
@@ -50,7 +50,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Triangle &triang
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, Triangle &triangle)
+QDataStream &operator>>(QDataStream &ds, Triangle &triangle)
 {
     VersionID v = readHeader(ds, r_triangle);
 

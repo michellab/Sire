@@ -45,14 +45,14 @@ using namespace SireStream;
 static const RegisterMetaType<ExBase> r_exbase(MAGIC_ONLY, "SireCAS::ExBase");
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ExBase&)
+QDataStream &operator<<(QDataStream &ds, const ExBase&)
 {
     writeHeader(ds, r_exbase, 0);
     return ds;
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ExBase&)
+QDataStream &operator>>(QDataStream &ds, ExBase&)
 {
     VersionID v = readHeader(ds, r_exbase);
 
@@ -179,172 +179,172 @@ QString ExBase::toOpenMMString() const{
 namespace SireCAS
 {
 
-Expression SIRECAS_EXPORT operator+(const ExBase &base0, const ExBase &base1)
+Expression operator+(const ExBase &base0, const ExBase &base1)
 {
     return Expression(base0) + Expression(base1);
 }
 
-Expression SIRECAS_EXPORT operator+(const Expression &ex, const ExBase &base)
+Expression operator+(const Expression &ex, const ExBase &base)
 {
     return ex.add(base);
 }
 
-Expression SIRECAS_EXPORT operator+(const ExBase &base, const Expression &ex)
+Expression operator+(const ExBase &base, const Expression &ex)
 {
     return ex.add(base);
 }
 
-Expression SIRECAS_EXPORT operator+(double val, const ExBase &base)
+Expression operator+(double val, const ExBase &base)
 {
     return Expression(base).add(val);
 }
 
-Expression SIRECAS_EXPORT operator+(const ExBase &base, double val)
+Expression operator+(const ExBase &base, double val)
 {
     return Expression(base).add(val);
 }
 
-Expression SIRECAS_EXPORT operator+(const Complex &val, const ExBase &base)
+Expression operator+(const Complex &val, const ExBase &base)
 {
     return Expression(base).add(val);
 }
 
-Expression SIRECAS_EXPORT operator+(const ExBase &base, const Complex &val)
+Expression operator+(const ExBase &base, const Complex &val)
 {
     return Expression(base).add(val);
 }
 
-Expression SIRECAS_EXPORT operator-(const ExBase &base0, const ExBase &base1)
+Expression operator-(const ExBase &base0, const ExBase &base1)
 {
     return Expression(base0) - Expression(base1);
 }
 
-Expression SIRECAS_EXPORT operator-(const Expression &ex, const ExBase &base)
+Expression operator-(const Expression &ex, const ExBase &base)
 {
     return ex.subtract(base);
 }
 
-Expression SIRECAS_EXPORT operator-(const ExBase &base, const Expression &ex)
+Expression operator-(const ExBase &base, const Expression &ex)
 {
     return Expression(base).subtract(ex);
 }
 
-Expression SIRECAS_EXPORT operator-(double val, const ExBase &base)
+Expression operator-(double val, const ExBase &base)
 {
     return Expression(val).subtract(base);
 }
 
-Expression SIRECAS_EXPORT operator-(const ExBase &base, double val)
+Expression operator-(const ExBase &base, double val)
 {
     return Expression(base).subtract(val);
 }
 
-Expression SIRECAS_EXPORT operator-(const Complex &val, const ExBase &base)
+Expression operator-(const Complex &val, const ExBase &base)
 {
     return Expression(val).subtract(base);
 }
 
-Expression SIRECAS_EXPORT operator-(const ExBase &base, const Complex &val)
+Expression operator-(const ExBase &base, const Complex &val)
 {
     return Expression(base).subtract(val);
 }
 
-Expression SIRECAS_EXPORT operator*(const ExBase &base0, const ExBase &base1)
+Expression operator*(const ExBase &base0, const ExBase &base1)
 {
     return Expression(base0) * Expression(base1);
 }
 
-Expression SIRECAS_EXPORT operator*(const Expression &ex, const ExBase &base)
+Expression operator*(const Expression &ex, const ExBase &base)
 {
     return ex.multiply(base);
 }
 
-Expression SIRECAS_EXPORT operator*(const ExBase &base, const Expression &ex)
+Expression operator*(const ExBase &base, const Expression &ex)
 {
     return ex.multiply(base);
 }
 
-Expression SIRECAS_EXPORT operator*(double val, const ExBase &base)
+Expression operator*(double val, const ExBase &base)
 {
     return Expression(base).multiply(val);
 }
 
-Expression SIRECAS_EXPORT operator*(const ExBase &base, double val)
+Expression operator*(const ExBase &base, double val)
 {
     return Expression(base).multiply(val);
 }
 
-Expression SIRECAS_EXPORT operator*(const Complex &val, const ExBase &base)
+Expression operator*(const Complex &val, const ExBase &base)
 {
     return Expression(base).multiply(val);
 }
 
-Expression SIRECAS_EXPORT operator*(const ExBase &base, const Complex &val)
+Expression operator*(const ExBase &base, const Complex &val)
 {
     return Expression(base).multiply(val);
 }
 
-Expression SIRECAS_EXPORT operator/(const ExBase &base0, const ExBase &base1)
+Expression operator/(const ExBase &base0, const ExBase &base1)
 {
     return Expression(base0) / Expression(base1);
 }
 
-Expression SIRECAS_EXPORT operator/(const Expression &ex, const ExBase &base)
+Expression operator/(const Expression &ex, const ExBase &base)
 {
     return ex.divide(base);
 }
 
-Expression SIRECAS_EXPORT operator/(const ExBase &base, const Expression &ex)
+Expression operator/(const ExBase &base, const Expression &ex)
 {
     return Expression(base).divide(ex);
 }
 
-Expression SIRECAS_EXPORT operator/(double val, const ExBase &base)
+Expression operator/(double val, const ExBase &base)
 {
     return Expression(val).divide(base);
 }
 
-Expression SIRECAS_EXPORT operator/(const ExBase &base, double val)
+Expression operator/(const ExBase &base, double val)
 {
     return Expression(base).divide(val);
 }
 
-Expression SIRECAS_EXPORT operator/(const Complex &val, const ExBase &base)
+Expression operator/(const Complex &val, const ExBase &base)
 {
     return Expression(val).divide(base);
 }
 
-Expression SIRECAS_EXPORT operator/(const ExBase &base, const Complex &val)
+Expression operator/(const ExBase &base, const Complex &val)
 {
     return Expression(base).divide(val);
 }
 
-Expression SIRECAS_EXPORT pow(const ExBase &base, int n)
+Expression pow(const ExBase &base, int n)
 {
     return Expression(base).pow(n);
 }
 
-Expression SIRECAS_EXPORT pow(const ExBase &base, const Rational &n)
+Expression pow(const ExBase &base, const Rational &n)
 {
     return Expression(base).pow(n);
 }
 
-Expression SIRECAS_EXPORT pow(const ExBase &base, double n)
+Expression pow(const ExBase &base, double n)
 {
     return Expression(base).pow(n);
 }
 
-Expression SIRECAS_EXPORT pow(const ExBase &base, const Complex &n)
+Expression pow(const ExBase &base, const Complex &n)
 {
     return Expression(base).pow(n);
 }
 
-Expression SIRECAS_EXPORT pow(const ExBase &base, const Expression &n)
+Expression pow(const ExBase &base, const Expression &n)
 {
     return Expression(base).pow(n);
 }
 
-Expression SIRECAS_EXPORT pow(const ExBase &base, const ExBase &n)
+Expression pow(const ExBase &base, const ExBase &n)
 {
     return Expression(base).pow(Expression(n));
 }

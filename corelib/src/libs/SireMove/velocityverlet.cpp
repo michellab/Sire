@@ -63,7 +63,7 @@ using namespace SireUnits::Dimension;
 static const RegisterMetaType<VelocityVerlet> r_velver;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const VelocityVerlet &velver)
+QDataStream &operator<<(QDataStream &ds, const VelocityVerlet &velver)
 {
     writeHeader(ds, r_velver, 1);
     
@@ -75,7 +75,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const VelocityVerlet &v
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, VelocityVerlet &velver)
+QDataStream &operator>>(QDataStream &ds, VelocityVerlet &velver)
 {
     VersionID v = readHeader(ds, r_velver);
     

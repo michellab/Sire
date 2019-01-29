@@ -73,7 +73,7 @@ using namespace SireStream;
 static const RegisterMetaType<Evaluator> r_eval;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const Evaluator &eval)
 {
     writeHeader(ds, r_eval, 1);
@@ -86,7 +86,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Evaluator &eval)
+QDataStream &operator>>(QDataStream &ds, Evaluator &eval)
 {
     VersionID v = readHeader(ds, r_eval);
 
@@ -978,7 +978,11 @@ AxisSet Evaluator::principalAxes(Vector &principal_moments,
         const AtomMasses &masses = d->property(mass_property).asA<AtomMasses>();
 
         // JM 08/14 buggy in current code
+#ifdef _MSC_VER
+        #pragma WARNING(BUGGY IN CURRENT CODE)
+#else
         #warning BUGGY IN CURRENT CODE
+#endif
         throw SireError::program_bug( QObject::tr("CODE IS BROKEN"), CODELOC );
         //return ::getPrincipalAxes(coords, masses, selected_atoms,
         //                          principal_moments);
@@ -988,7 +992,11 @@ AxisSet Evaluator::principalAxes(Vector &principal_moments,
         const AtomElements &elements = d->property(map["element"]).asA<AtomElements>();
 
         // JM 08/14 buggy in current code
+#ifdef _MSC_VER
+        #pragma WARNING(BUGGY IN CURRENT CODE)
+#else
         #warning BUGGY IN CURRENT CODE
+#endif
         throw SireError::program_bug( QObject::tr("CODE IS BROKEN"), CODELOC );
         //return ::getPrincipalAxes(coords, elements, selected_atoms,
         //                          principal_moments);

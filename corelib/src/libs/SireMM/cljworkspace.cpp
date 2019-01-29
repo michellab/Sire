@@ -52,7 +52,7 @@ namespace detail
         
         @author Christopher Woods
     */
-    class SIREMM_EXPORT CLJWorkspaceData
+    class CLJWorkspaceData
     {
     public:
         CLJWorkspaceData()
@@ -457,7 +457,7 @@ QDataStream  &operator>>(QDataStream &ds, SireMM::detail::CLJWorkspaceData &ws)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJWorkspace &ws)
+QDataStream &operator<<(QDataStream &ds, const CLJWorkspace &ws)
 {
     writeHeader(ds, r_workspace, 2);
     
@@ -472,7 +472,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJWorkspace &ws)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJWorkspace &ws)
+QDataStream &operator>>(QDataStream &ds, CLJWorkspace &ws)
 {
     VersionID v = readHeader(ds, r_workspace);
     

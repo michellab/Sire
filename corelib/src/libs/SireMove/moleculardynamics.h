@@ -54,8 +54,8 @@ namespace SireBase
 class PropertyMap;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::MolecularDynamics&);
-QDataStream& operator>>(QDataStream&, SireMove::MolecularDynamics&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::MolecularDynamics&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::MolecularDynamics&);
 
 namespace SireMove
 {

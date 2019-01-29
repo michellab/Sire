@@ -41,8 +41,8 @@ namespace SireMM
 class CLJCalculator;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJCalculator&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJCalculator&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJCalculator&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJCalculator&);
 
 namespace SireMM
 {

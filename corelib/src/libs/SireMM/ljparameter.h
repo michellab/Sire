@@ -41,8 +41,8 @@ class LJParameter;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireMM::LJParameter&);
-QDataStream& operator>>(QDataStream&, SireMM::LJParameter&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::LJParameter&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::LJParameter&);
 
 namespace SireMM
 {

@@ -45,8 +45,8 @@ namespace SireMM
 class InterGroupFF;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::InterGroupFF&);
-QDataStream& operator>>(QDataStream&, SireMM::InterGroupFF&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InterGroupFF&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::InterGroupFF&);
 
 namespace SireMM
 {

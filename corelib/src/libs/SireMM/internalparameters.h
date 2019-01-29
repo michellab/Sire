@@ -54,14 +54,14 @@ class GroupInternalParameters;
 
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::InternalParameters&);
-QDataStream& operator>>(QDataStream&, SireMM::InternalParameters&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InternalParameters&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::InternalParameters&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::InternalParameters3D&);
-QDataStream& operator>>(QDataStream&, SireMM::InternalParameters3D&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InternalParameters3D&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::InternalParameters3D&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::GroupInternalParameters&);
-QDataStream& operator>>(QDataStream&, SireMM::GroupInternalParameters&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::GroupInternalParameters&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::GroupInternalParameters&);
 
 namespace SireBase
 {

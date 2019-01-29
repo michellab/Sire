@@ -52,7 +52,7 @@ namespace SireFF
 static const RegisterMetaType<FFParameters> r_ffparams( MAGIC_ONLY,
                                                         FFParameters::typeName() );
                                                         
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFParameters &ffparams)
+QDataStream &operator<<(QDataStream &ds, const FFParameters &ffparams)
 {
     writeHeader(ds, r_ffparams, 1);
     
@@ -61,7 +61,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFParameters &ffpar
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, FFParameters &ffparams)
+QDataStream &operator>>(QDataStream &ds, FFParameters &ffparams)
 {
     VersionID v = readHeader(ds, r_ffparams);
     
@@ -123,7 +123,7 @@ NullFFParameters FFParameters::null()
 static const RegisterMetaType<FFParametersArray> r_ffparamsarray( MAGIC_ONLY,
                                                     FFParametersArray::typeName() );
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const FFParametersArray &ffparams)
 {
     writeHeader(ds, r_ffparamsarray, 1);
@@ -133,7 +133,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, FFParametersArray &ffparams)
+QDataStream &operator>>(QDataStream &ds, FFParametersArray &ffparams)
 {
     VersionID v = readHeader(ds, r_ffparamsarray);
     
@@ -201,7 +201,7 @@ NullFFParametersArray FFParametersArray::null()
 
 static const RegisterMetaType<NullFFParameters> r_nullffparams;
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const NullFFParameters &nullffparams)
 {
     writeHeader(ds, r_nullffparams, 1);
@@ -211,7 +211,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, NullFFParameters &nullffparams)
+QDataStream &operator>>(QDataStream &ds, NullFFParameters &nullffparams)
 {
     VersionID v = readHeader(ds, r_nullffparams);
     
@@ -275,7 +275,7 @@ FFParametersArrayPtr NullFFParameters::toArray() const
 static const RegisterMetaType<NullFFParametersArray> r_nullffarray;
 
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const NullFFParametersArray &nullffparams)
 {
     writeHeader(ds, r_nullffarray, 1);
@@ -285,7 +285,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                       NullFFParametersArray &nullffparams)
 {
     VersionID v = readHeader(ds, r_nullffarray);

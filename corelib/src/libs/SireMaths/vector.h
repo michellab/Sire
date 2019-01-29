@@ -50,8 +50,8 @@ class Vector;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireMaths::Vector&);
-QDataStream& operator>>(QDataStream&, SireMaths::Vector&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Vector&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Vector&);
 
 uint qHash(const SireMaths::Vector&);
 
@@ -66,14 +66,14 @@ using boost::tuple;
 
 using SireUnits::Dimension::Angle;
 
-const Vector operator+(const Vector &p1, const Vector &p2);
-const Vector operator-(const Vector &p1, const Vector &p2);
-const Vector operator*(const Vector &p1, double c);
-const Vector operator*(double c, const Vector &p1);
-const Vector operator/(const Vector &p1, double c);
-const Quaternion operator*(const Vector &p1, const Quaternion &p2);
-const Quaternion operator*(const Quaternion &p1, const Vector &p2);
-const Vector operator*(const Matrix &m, const Vector &p);
+SIREMATHS_EXPORT const Vector operator+(const Vector &p1, const Vector &p2);
+SIREMATHS_EXPORT const Vector operator-(const Vector &p1, const Vector &p2);
+SIREMATHS_EXPORT const Vector operator*(const Vector &p1, double c);
+SIREMATHS_EXPORT const Vector operator*(double c, const Vector &p1);
+SIREMATHS_EXPORT const Vector operator/(const Vector &p1, double c);
+SIREMATHS_EXPORT const Quaternion operator*(const Vector &p1, const Quaternion &p2);
+SIREMATHS_EXPORT const Quaternion operator*(const Quaternion &p1, const Vector &p2);
+SIREMATHS_EXPORT const Vector operator*(const Matrix &m, const Vector &p);
 
 /**
 This is a simple 3D vector.

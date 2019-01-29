@@ -38,8 +38,8 @@ namespace SireBase
 class Array2DBase;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::Array2DBase&);
-QDataStream& operator>>(QDataStream&, SireBase::Array2DBase&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::Array2DBase&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::Array2DBase&);
 
 namespace SireBase
 {
@@ -48,7 +48,7 @@ namespace SireBase
 
     @author Christopher Woods
 */
-class SIREMOL_EXPORT Array2DBase
+class SIREBASE_EXPORT Array2DBase
 {
 
 friend QDataStream& ::operator<<(QDataStream&, const Array2DBase&);

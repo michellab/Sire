@@ -47,11 +47,11 @@ class MolEnergyTable;
 class EnergyTable;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::MolEnergyTable&);
-QDataStream& operator>>(QDataStream&, SireFF::MolEnergyTable&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::MolEnergyTable&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::MolEnergyTable&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::EnergyTable&);
-QDataStream& operator>>(QDataStream&, SireFF::EnergyTable&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::EnergyTable&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::EnergyTable&);
 
 namespace SireMol
 {

@@ -49,17 +49,17 @@ class ZMatrixCoords;
 class ZMatrixCoordsLine;
 }
 
-QDataStream& operator<<(QDataStream &ds, const SireMove::ZMatrix&);
-QDataStream& operator>>(QDataStream &ds, SireMove::ZMatrix&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream &ds, const SireMove::ZMatrix&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream &ds, SireMove::ZMatrix&);
 
-QDataStream& operator<<(QDataStream &ds, const SireMove::ZMatrixLine&);
-QDataStream& operator>>(QDataStream &ds, SireMove::ZMatrixLine&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream &ds, const SireMove::ZMatrixLine&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream &ds, SireMove::ZMatrixLine&);
 
-QDataStream& operator<<(QDataStream &ds, const SireMove::ZMatrixCoords&);
-QDataStream& operator>>(QDataStream &ds, SireMove::ZMatrixCoords&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream &ds, const SireMove::ZMatrixCoords&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream &ds, SireMove::ZMatrixCoords&);
 
-QDataStream& operator<<(QDataStream &ds, const SireMove::ZMatrixCoordsLine&);
-QDataStream& operator>>(QDataStream &ds, SireMove::ZMatrixCoordsLine&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream &ds, const SireMove::ZMatrixCoordsLine&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream &ds, SireMove::ZMatrixCoordsLine&);
 
 namespace SireMol
 {

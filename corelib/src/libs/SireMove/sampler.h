@@ -44,8 +44,8 @@ namespace SireMove
 class Sampler;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::Sampler&);
-QDataStream& operator>>(QDataStream&, SireMove::Sampler&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::Sampler&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::Sampler&);
 
 namespace SireMol
 {

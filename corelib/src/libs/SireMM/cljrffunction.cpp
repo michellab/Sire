@@ -61,7 +61,7 @@ const float default_dielectric = 1.0;
 
 static const RegisterMetaType<CLJRFFunction> r_shift;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJRFFunction &func)
+QDataStream &operator<<(QDataStream &ds, const CLJRFFunction &func)
 {
     writeHeader(ds, r_shift, 1);
     
@@ -70,7 +70,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJRFFunction &func
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJRFFunction &func)
+QDataStream &operator>>(QDataStream &ds, CLJRFFunction &func)
 {
     VersionID v = readHeader(ds, r_shift);
     
@@ -2081,7 +2081,7 @@ void CLJRFFunction::calcBoxGrid(const CLJAtoms &atoms, const GridInfo &grid_info
 
 static const RegisterMetaType<CLJSoftRFFunction> r_softshift;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJSoftRFFunction &func)
+QDataStream &operator<<(QDataStream &ds, const CLJSoftRFFunction &func)
 {
     writeHeader(ds, r_softshift, 1);
     
@@ -2090,7 +2090,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJSoftRFFunction &
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJSoftRFFunction &func)
+QDataStream &operator>>(QDataStream &ds, CLJSoftRFFunction &func)
 {
     VersionID v = readHeader(ds, r_softshift);
     
@@ -4083,7 +4083,7 @@ void CLJSoftRFFunction::calcBoxEnergyAri(const CLJAtoms &atoms0, const CLJAtoms 
 
 static const RegisterMetaType<CLJIntraRFFunction> r_intra;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJIntraRFFunction &intra)
+QDataStream &operator<<(QDataStream &ds, const CLJIntraRFFunction &intra)
 {
     writeHeader(ds, r_intra, 1);
     
@@ -4092,7 +4092,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJIntraRFFunction 
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJIntraRFFunction &intra)
+QDataStream &operator>>(QDataStream &ds, CLJIntraRFFunction &intra)
 {
     VersionID v = readHeader(ds, r_intra);
     
@@ -5670,7 +5670,7 @@ void CLJIntraRFFunction::calcBoxEnergyAri(const CLJAtoms &atoms0, const CLJAtoms
 
 static const RegisterMetaType<CLJSoftIntraRFFunction> r_softintra;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJSoftIntraRFFunction &intra)
+QDataStream &operator<<(QDataStream &ds, const CLJSoftIntraRFFunction &intra)
 {
     writeHeader(ds, r_softintra, 1);
     
@@ -5679,7 +5679,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJSoftIntraRFFunct
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJSoftIntraRFFunction &intra)
+QDataStream &operator>>(QDataStream &ds, CLJSoftIntraRFFunction &intra)
 {
     VersionID v = readHeader(ds, r_softintra);
     

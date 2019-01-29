@@ -38,8 +38,8 @@ namespace SireMol
 class ResidueCutting;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResidueCutting&);
-QDataStream& operator>>(QDataStream&, SireMol::ResidueCutting&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResidueCutting&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResidueCutting&);
 
 namespace SireMol
 {

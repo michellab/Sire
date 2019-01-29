@@ -54,7 +54,7 @@ static const RegisterMetaType<Coth> r_coth;
 ////////////
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Cosh &cosh)
+QDataStream &operator<<(QDataStream &ds, const Cosh &cosh)
 {
     writeHeader(ds, r_cosh, 1) << static_cast<const SingleFunc&>(cosh);
 
@@ -62,7 +62,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Cosh &cosh)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Cosh &cosh)
+QDataStream &operator>>(QDataStream &ds, Cosh &cosh)
 {
     VersionID v = readHeader(ds, r_cosh);
 
@@ -77,7 +77,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Cosh &cosh)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Sinh &sinh)
+QDataStream &operator<<(QDataStream &ds, const Sinh &sinh)
 {
     writeHeader(ds, r_sinh, 1) << static_cast<const SingleFunc&>(sinh);
 
@@ -85,7 +85,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Sinh &sinh)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Sinh &sinh)
+QDataStream &operator>>(QDataStream &ds, Sinh &sinh)
 {
     VersionID v = readHeader(ds, r_sinh);
 
@@ -100,7 +100,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Sinh &sinh)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Tanh &tanh)
+QDataStream &operator<<(QDataStream &ds, const Tanh &tanh)
 {
     writeHeader(ds, r_tanh, 1) << static_cast<const SingleFunc&>(tanh);
 
@@ -108,7 +108,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Tanh &tanh)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Tanh &tanh)
+QDataStream &operator>>(QDataStream &ds, Tanh &tanh)
 {
     VersionID v = readHeader(ds, r_tanh);
 
@@ -123,7 +123,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Tanh &tanh)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Csch &csch)
+QDataStream &operator<<(QDataStream &ds, const Csch &csch)
 {
     writeHeader(ds, r_csch, 1) << static_cast<const SingleFunc&>(csch);
 
@@ -131,7 +131,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Csch &csch)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Csch &csch)
+QDataStream &operator>>(QDataStream &ds, Csch &csch)
 {
     VersionID v = readHeader(ds, r_csch);
 
@@ -146,7 +146,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Csch &csch)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Sech &sech)
+QDataStream &operator<<(QDataStream &ds, const Sech &sech)
 {
     writeHeader(ds, r_sech, 1) << static_cast<const SingleFunc&>(sech);
 
@@ -154,7 +154,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Sech &sech)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Sech &sech)
+QDataStream &operator>>(QDataStream &ds, Sech &sech)
 {
     VersionID v = readHeader(ds, r_sech);
 
@@ -169,7 +169,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Sech &sech)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Coth &coth)
+QDataStream &operator<<(QDataStream &ds, const Coth &coth)
 {
     writeHeader(ds, r_coth, 1) << static_cast<const SingleFunc&>(coth);
 
@@ -177,7 +177,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Coth &coth)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Coth &coth)
+QDataStream &operator>>(QDataStream &ds, Coth &coth)
 {
     VersionID v = readHeader(ds, r_coth);
 

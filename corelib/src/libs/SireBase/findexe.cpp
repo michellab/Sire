@@ -35,7 +35,7 @@
 
 #include "SireError/errors.h"
 
-QFileInfo SIREBASE_EXPORT SireBase::findExe(const QString &exe)
+QFileInfo SireBase::findExe(const QString &exe)
 {
     //does it exist in the current directory?
     QFileInfo progfile( exe );

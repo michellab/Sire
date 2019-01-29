@@ -43,8 +43,8 @@ namespace SireMol
 class DihedralID;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::DihedralID&);
-QDataStream& operator>>(QDataStream&, SireMol::DihedralID&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::DihedralID&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::DihedralID&);
 
 namespace SireMaths
 {

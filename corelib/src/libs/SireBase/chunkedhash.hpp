@@ -62,7 +62,7 @@ const void* get_shared_container_pointer(const SireBase::ChunkedHash<Key,T,N>&);
     @author Christopher Woods
 */
 template<class Key, class T, int N=100>
-class SIREBASE_EXPORT ChunkedHash
+class ChunkedHash
 {
 
 friend QDataStream& ::operator<<<>(QDataStream&, const ChunkedHash<Key,T,N>&);

@@ -43,11 +43,11 @@ class S_GTO;
 class SS_GTO;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::GTO&);
-QDataStream& operator>>(QDataStream&, Squire::GTO&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::GTO&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::GTO&);
 
-QDataStream& operator<<(QDataStream&, const Squire::GTOPair&);
-QDataStream& operator>>(QDataStream&, Squire::GTOPair&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::GTOPair&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::GTOPair&);
 
 namespace Squire
 {

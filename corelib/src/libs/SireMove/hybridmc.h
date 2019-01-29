@@ -43,14 +43,14 @@ class HMCGenerator;
 //class MEHMCGenerator;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::HybridMC&);
-QDataStream& operator>>(QDataStream&, SireMove::HybridMC&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::HybridMC&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::HybridMC&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::HMCVelGen&);
-QDataStream& operator>>(QDataStream&, SireMove::HMCVelGen&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::HMCVelGen&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::HMCVelGen&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::HMCGenerator&);
-QDataStream& operator>>(QDataStream&, SireMove::HMCGenerator&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::HMCGenerator&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::HMCGenerator&);
 
 namespace SireMove
 {

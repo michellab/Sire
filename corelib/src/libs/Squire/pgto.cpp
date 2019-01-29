@@ -51,7 +51,7 @@ using namespace SireStream;
 static const RegisterMetaType<P_GTO> r_pgto;
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const P_GTO &p)
+QDataStream &operator<<(QDataStream &ds, const P_GTO &p)
 {
     writeHeader(ds, r_pgto, 1);
     
@@ -61,7 +61,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const P_GTO &p)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, P_GTO &p)
+QDataStream &operator>>(QDataStream &ds, P_GTO &p)
 {
     VersionID v = readHeader(ds, r_pgto);
     
@@ -145,7 +145,7 @@ int P_GTO::nOrbitals() const
 static const RegisterMetaType<PS_GTO> r_psgto;
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const PS_GTO &ps)
+QDataStream &operator<<(QDataStream &ds, const PS_GTO &ps)
 {
     writeHeader(ds, r_psgto, 1);
     
@@ -155,7 +155,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const PS_GTO &ps)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, PS_GTO &ps)
+QDataStream &operator>>(QDataStream &ds, PS_GTO &ps)
 {
     VersionID v = readHeader(ds, r_psgto);
     
@@ -284,7 +284,7 @@ int PS_GTO::nOrbitals1() const
 static const RegisterMetaType<PP_GTO> r_ppgto;
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const PP_GTO &pp)
+QDataStream &operator<<(QDataStream &ds, const PP_GTO &pp)
 {
     writeHeader(ds, r_ppgto, 1);
     
@@ -295,7 +295,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const PP_GTO &pp)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, PP_GTO &pp)
+QDataStream &operator>>(QDataStream &ds, PP_GTO &pp)
 {
     VersionID v = readHeader(ds, r_ppgto);
     
@@ -460,14 +460,14 @@ namespace Squire
 //////
 
 /** Return the overlap integral (p||s) */
-Vector SQUIRE_EXPORT overlap_integral(const PS_GTO &ps)
+Vector overlap_integral(const PS_GTO &ps)
 {
     // (pi||s) = (Pi - Ai)(s||s)
     return (ps.scale() * ps.ss()) * ps.P_minus_A();
 }
 
 /** Return the kinetic energy integral, (p|nabla|s) */
-Vector SQUIRE_EXPORT kinetic_integral(const PS_GTO &ps)
+Vector kinetic_integral(const PS_GTO &ps)
 {
     // (p|nabla|s) = ss xi (5 - 2 R^2 xi) (Pi-Ai)
     return ( ps.scale() * ps.ss() * ps.xi() * 
@@ -476,7 +476,7 @@ Vector SQUIRE_EXPORT kinetic_integral(const PS_GTO &ps)
 
 /** Return the potential energy integral with an array of point charges,
     (p|C|s) */
-Vector SQUIRE_EXPORT potential_integral(const QVector<PointCharge> &C, const PS_GTO &P)
+Vector potential_integral(const QVector<PointCharge> &C, const PS_GTO &P)
 {
     // (p|C|s) = 2 ss Sqrt[zeta/pi] ( F0(U) (Pi-Ai) - F1(U) (Pi-Ci) )
     // U = zeta * (P-C)^2
@@ -501,7 +501,7 @@ Vector SQUIRE_EXPORT potential_integral(const QVector<PointCharge> &C, const PS_
 }
 
 /** Return the potential energy integral with a single point charge, (p|C|s) */
-Vector SQUIRE_EXPORT potential_integral(const PointCharge &C, const PS_GTO &ps)
+Vector potential_integral(const PointCharge &C, const PS_GTO &ps)
 {
     QVector<PointCharge> Cs(1, C);
     return potential_integral(Cs, ps);
@@ -509,7 +509,7 @@ Vector SQUIRE_EXPORT potential_integral(const PointCharge &C, const PS_GTO &ps)
 
 /** Return the potential energy integral with an array of point charges,
     (p|C|s)^m */
-Vector SQUIRE_EXPORT potential_integral(const QVector<PointCharge> &C, 
+Vector potential_integral(const QVector<PointCharge> &C, 
                                         const PS_GTO &P, int m)
 {
     // (p|C|s)^m = 2 ss Sqrt[zeta/pi] ( Fm(U) (Pi-Ai) - Fm+1(U) (Pi-Ci) )
@@ -535,7 +535,7 @@ Vector SQUIRE_EXPORT potential_integral(const QVector<PointCharge> &C,
 }
 
 /** Return the potential energy integral with a single point charge, (p|C|s)^m */
-Vector SQUIRE_EXPORT potential_integral(const PointCharge &C, 
+Vector potential_integral(const PointCharge &C, 
                                         const PS_GTO &ps, int m)
 {
     QVector<PointCharge> Cs(1, C);
@@ -543,7 +543,7 @@ Vector SQUIRE_EXPORT potential_integral(const PointCharge &C,
 }
 
 /** Return the potential energy integral with an array of point dipoles, (p|C|s) */
-Vector SQUIRE_EXPORT potential_integral(const QVector<PointDipole> &C,
+Vector potential_integral(const QVector<PointDipole> &C,
                                         const PS_GTO &ps)
 {
     throw SireError::incomplete_code( "Not implemented", CODELOC );
@@ -551,14 +551,14 @@ Vector SQUIRE_EXPORT potential_integral(const QVector<PointDipole> &C,
 }
 
 /** Return the potential energy integral with a single point dipole, (p|C|s) */
-Vector SQUIRE_EXPORT potential_integral(const PointDipole &C, const PS_GTO &ps)
+Vector potential_integral(const PointDipole &C, const PS_GTO &ps)
 {
     QVector<PointDipole> Cs(1, C);
     return potential_integral(Cs, ps);
 }
 
 /** Return the potential energy integral with an array of point dipoles, (p|C|s)^m */
-Vector SQUIRE_EXPORT potential_integral(const QVector<PointDipole> &C,
+Vector potential_integral(const QVector<PointDipole> &C,
                                         const PS_GTO &ps, int m)
 {
     throw SireError::incomplete_code( "Not implemented", CODELOC );
@@ -566,7 +566,7 @@ Vector SQUIRE_EXPORT potential_integral(const QVector<PointDipole> &C,
 }
 
 /** Return the potential energy integral with a single point dipole, (p|C|s)^m */
-Vector SQUIRE_EXPORT potential_integral(const PointDipole &C, 
+Vector potential_integral(const PointDipole &C, 
                                         const PS_GTO &ps, int m)
 {
     QVector<PointDipole> Cs(1, C);
@@ -574,7 +574,7 @@ Vector SQUIRE_EXPORT potential_integral(const PointDipole &C,
 }
 
 /** Return the kinetic energy integral (p|nabla|p) */
-Matrix SQUIRE_EXPORT kinetic_integral(const PP_GTO &pp)
+Matrix kinetic_integral(const PP_GTO &pp)
 {
     // (p|k|p) = -(1/2) (s||s) xi ( 2 (-7 + 2 R^2 xi) (Pi-Ai) (Pj-Bj) + 
     //                              delta_ij zeta (-5 + 2 R^2 xi) ) 
@@ -616,7 +616,7 @@ Matrix SQUIRE_EXPORT kinetic_integral(const PP_GTO &pp)
 }
 
 /** Return the overlap integral (p||p) */
-Matrix SQUIRE_EXPORT overlap_integral(const PP_GTO &pp)
+Matrix overlap_integral(const PP_GTO &pp)
 {
     // (p||p) = ss (Pi-Ai) (Pj-Bj) + delta_ij (1/2 ss zeta) 
     Matrix mat;
@@ -653,7 +653,7 @@ Matrix SQUIRE_EXPORT overlap_integral(const PP_GTO &pp)
 }
 
 /** Return the potential integral with an array of point charges, (p|C|p) */
-Matrix SQUIRE_EXPORT potential_integral(const QVector<PointCharge> &C, 
+Matrix potential_integral(const QVector<PointCharge> &C, 
                                         const PP_GTO &P)
 {
     // (p|C|p) = -2 * Q * ss * Sqrt[zeta/pi] * {
@@ -725,14 +725,14 @@ Matrix SQUIRE_EXPORT potential_integral(const QVector<PointCharge> &C,
 }
 
 /** Return the potential integral with a single point charge (p|C|p) */
-Matrix SQUIRE_EXPORT potential_integral(const PointCharge &C, const PP_GTO &P)
+Matrix potential_integral(const PointCharge &C, const PP_GTO &P)
 {
     QVector<PointCharge> Cs(1, C);
     return potential_integral(Cs, P);
 }
 
 /** Return the potential integral with an array of point charges, (p|C|p)^m */
-Matrix SQUIRE_EXPORT potential_integral(const QVector<PointCharge> &C, 
+Matrix potential_integral(const QVector<PointCharge> &C, 
                                         const PP_GTO &P, int M)
 {
     // (p|C|p)^m = -2 * Q * ss * Sqrt[zeta/pi] * {
@@ -804,28 +804,28 @@ Matrix SQUIRE_EXPORT potential_integral(const QVector<PointCharge> &C,
 }
 
 /** Return the potential integral with a single point charge (p|C|p)^m */
-Matrix SQUIRE_EXPORT potential_integral(const PointCharge &C, const PP_GTO &P, int m)
+Matrix potential_integral(const PointCharge &C, const PP_GTO &P, int m)
 {
     QVector<PointCharge> Cs(1, C);
     return potential_integral(Cs, P, m);
 }
 
 /** Return the potential integral with an array of point dipoles, (p|C|p) */
-Matrix SQUIRE_EXPORT potential_integral(const QVector<PointDipole> &C, const PP_GTO &P)
+Matrix potential_integral(const QVector<PointDipole> &C, const PP_GTO &P)
 {
     throw SireError::incomplete_code( "Not implemented", CODELOC );
     return Matrix();
 }
 
 /** Return the potential integral with a single point dipole, (p|C|p) */
-Matrix SQUIRE_EXPORT potential_integral(const PointDipole &C, const PP_GTO &P)
+Matrix potential_integral(const PointDipole &C, const PP_GTO &P)
 {
     QVector<PointDipole> Cs(1,C);
     return potential_integral(Cs, P);
 }
 
 /** Return the potential integral with an array of point dipoles, (p|C|p)^m */
-Matrix SQUIRE_EXPORT potential_integral(const QVector<PointDipole> &C, 
+Matrix potential_integral(const QVector<PointDipole> &C, 
                                         const PP_GTO &P, int m)
 {
     throw SireError::incomplete_code( "Not implemented", CODELOC );
@@ -833,7 +833,7 @@ Matrix SQUIRE_EXPORT potential_integral(const QVector<PointDipole> &C,
 }
 
 /** Return the potential integral with a single point dipole, (p|C|p)^m */
-Matrix SQUIRE_EXPORT potential_integral(const PointDipole &C, 
+Matrix potential_integral(const PointDipole &C, 
                                         const PP_GTO &P, int m)
 {
     QVector<PointDipole> Cs(1,C);
@@ -855,7 +855,7 @@ static Vector my_electron_integral(const PS_GTO &P, const SS_GTO &Q,
 }
 
 /** Return the electron repulsion integral (ps|ss) */
-Vector SQUIRE_EXPORT electron_integral(const PS_GTO &P, const SS_GTO &Q)
+Vector electron_integral(const PS_GTO &P, const SS_GTO &Q)
 {
     double boys[2];
     multi_boys_2(GTOPair::T(P,Q), boys);
@@ -864,13 +864,13 @@ Vector SQUIRE_EXPORT electron_integral(const PS_GTO &P, const SS_GTO &Q)
 }
 
 /** Return the electron repulsion integral (ss|ps) */
-Vector SQUIRE_EXPORT electron_integral(const SS_GTO &P, const PS_GTO &Q)
+Vector electron_integral(const SS_GTO &P, const PS_GTO &Q)
 {
     return electron_integral(Q, P);
 }
 
 /** Return the auxilliary electron repulsion integral (ps|ss)^m */
-Vector SQUIRE_EXPORT electron_integral(const PS_GTO &P, const SS_GTO &Q, int m)
+Vector electron_integral(const PS_GTO &P, const SS_GTO &Q, int m)
 {
     double boys[2];
     multi_boys_2(GTOPair::T(P,Q), boys, m);
@@ -879,7 +879,7 @@ Vector SQUIRE_EXPORT electron_integral(const PS_GTO &P, const SS_GTO &Q, int m)
 }
 
 /** Return the auxilliary electron repulsion integral (ss|ps)^m */
-Vector SQUIRE_EXPORT electron_integral(const SS_GTO &P, const PS_GTO &Q, int m)
+Vector electron_integral(const SS_GTO &P, const PS_GTO &Q, int m)
 {
     return electron_integral(Q, P, m);
 }
@@ -931,7 +931,7 @@ static Matrix my_electron_integral(const PS_GTO &P, const PS_GTO &Q,
 }
 
 /** Return the electron repulsion integral (ps|ps) */
-Matrix SQUIRE_EXPORT electron_integral(const PS_GTO &P, const PS_GTO &Q)
+Matrix electron_integral(const PS_GTO &P, const PS_GTO &Q)
 {
     double boys[3];
     multi_boys_3( GTOPair::T(P,Q), boys );
@@ -939,7 +939,7 @@ Matrix SQUIRE_EXPORT electron_integral(const PS_GTO &P, const PS_GTO &Q)
 }
 
 /** Return the auxillary electron repulsion integral (ps|ps)^m */
-Matrix SQUIRE_EXPORT electron_integral(const PS_GTO &P, const PS_GTO &Q, int m)
+Matrix electron_integral(const PS_GTO &P, const PS_GTO &Q, int m)
 {
     double boys[3];
     multi_boys_3( GTOPair::T(P,Q), boys, m );
@@ -993,7 +993,7 @@ static Matrix my_electron_integral(const PP_GTO &P, const SS_GTO &Q,
 }
 
 /** Return the electron repulsion integral (pp|ss) */
-Matrix SQUIRE_EXPORT electron_integral(const PP_GTO &P, const SS_GTO &Q)
+Matrix electron_integral(const PP_GTO &P, const SS_GTO &Q)
 {
     double boys[3];
     multi_boys_3( GTOPair::T(P,Q), boys );
@@ -1001,13 +1001,13 @@ Matrix SQUIRE_EXPORT electron_integral(const PP_GTO &P, const SS_GTO &Q)
 }
 
 /** Return the electron repulsion integral (ss|pp) */
-Matrix SQUIRE_EXPORT electron_integral(const SS_GTO &P, const PP_GTO &Q)
+Matrix electron_integral(const SS_GTO &P, const PP_GTO &Q)
 {
     return electron_integral(Q,P);
 }
 
 /** Return the auxilliary electron repulsion integral (pp|ss)^m */
-Matrix SQUIRE_EXPORT electron_integral(const PP_GTO &P, const SS_GTO &Q, int m)
+Matrix electron_integral(const PP_GTO &P, const SS_GTO &Q, int m)
 {
     double boys[3];
     multi_boys_3( GTOPair::T(P,Q), boys, m );
@@ -1015,7 +1015,7 @@ Matrix SQUIRE_EXPORT electron_integral(const PP_GTO &P, const SS_GTO &Q, int m)
 }
 
 /** Return the auxilliary electron repulsion integral (ss|pp)^m */
-Matrix SQUIRE_EXPORT electron_integral(const SS_GTO &P, const PP_GTO &Q, int m)
+Matrix electron_integral(const SS_GTO &P, const PP_GTO &Q, int m)
 {
     return electron_integral(Q,P,m);
 }
@@ -1113,7 +1113,7 @@ static void my_electron_integral(const PP_GTO &P, const PS_GTO &Q, const double 
 }
 
 /** Calculate the electron repulsion integral (pp|ps) into the passed matrix */
-void SQUIRE_EXPORT electron_integral(const PP_GTO &P, const PS_GTO &Q,
+void electron_integral(const PP_GTO &P, const PS_GTO &Q,
                                      Array2D<Vector> &matrix)
 {
     double boys[4];
@@ -1124,7 +1124,7 @@ void SQUIRE_EXPORT electron_integral(const PP_GTO &P, const PS_GTO &Q,
 }
 
 /** Calculate the electron repulsion integral (ps|pp) into the passed matrix */
-void SQUIRE_EXPORT electron_integral(const PS_GTO &P, const PP_GTO &Q,
+void electron_integral(const PS_GTO &P, const PP_GTO &Q,
                                      Array2D<Vector> &matrix)
 {
     electron_integral(Q, P, matrix);
@@ -1132,7 +1132,7 @@ void SQUIRE_EXPORT electron_integral(const PS_GTO &P, const PP_GTO &Q,
 }
 
 /** Return the electron repulsion integral (pp|ps) */
-Array2D<Vector> SQUIRE_EXPORT electron_integral(const PP_GTO &P, const PS_GTO &Q)
+Array2D<Vector> electron_integral(const PP_GTO &P, const PS_GTO &Q)
 {
     Array2D<Vector> matrix(3,3);
     electron_integral(P, Q, matrix);
@@ -1140,13 +1140,13 @@ Array2D<Vector> SQUIRE_EXPORT electron_integral(const PP_GTO &P, const PS_GTO &Q
 }
 
 /** Return the electron repulsion integral (ps,pp) */
-Array2D<Vector> SQUIRE_EXPORT electron_integral(const PS_GTO &P, const PP_GTO &Q)
+Array2D<Vector> electron_integral(const PS_GTO &P, const PP_GTO &Q)
 {
     return electron_integral(Q,P);
 }
 
 /** Calculate the electron repulsion integral (pp|ps) into the passed matrix */
-void SQUIRE_EXPORT electron_integral(const PP_GTO &P, const PS_GTO &Q, int m,
+void electron_integral(const PP_GTO &P, const PS_GTO &Q, int m,
                                      Array2D<Vector> &matrix)
 {
     double boys[4];
@@ -1157,7 +1157,7 @@ void SQUIRE_EXPORT electron_integral(const PP_GTO &P, const PS_GTO &Q, int m,
 }
 
 /** Calculate the electron repulsion integral (ps|pp) into the passed matrix */
-void SQUIRE_EXPORT electron_integral(const PS_GTO &P, const PP_GTO &Q, int m,
+void electron_integral(const PS_GTO &P, const PP_GTO &Q, int m,
                                      Array2D<Vector> &matrix)
 {
     electron_integral(Q, P, m, matrix);
@@ -1165,7 +1165,7 @@ void SQUIRE_EXPORT electron_integral(const PS_GTO &P, const PP_GTO &Q, int m,
 }
 
 /** Return the auxilliary electron repulsion integral (pp|ps)^m */
-Array2D<Vector> SQUIRE_EXPORT electron_integral(const PP_GTO &P, 
+Array2D<Vector> electron_integral(const PP_GTO &P, 
                                                     const PS_GTO &Q, int m)
 {
     Array2D<Vector> matrix(3,3);
@@ -1174,7 +1174,7 @@ Array2D<Vector> SQUIRE_EXPORT electron_integral(const PP_GTO &P,
 }
 
 /** Return the auxilliary electron repulsion integral (ps,pp)^m */
-Array2D<Vector> SQUIRE_EXPORT electron_integral(const PS_GTO &P, 
+Array2D<Vector> electron_integral(const PS_GTO &P, 
                                                 const PP_GTO &Q, int m)
 {
     return electron_integral(Q,P,m);
@@ -1428,7 +1428,7 @@ static void my_electron_integral(const PP_GTO &P, const PP_GTO &Q, const double 
 }
 
 /** Calculate into the passed matrix the electron repulsion integral (pp|pp) */
-void SQUIRE_EXPORT electron_integral(const PP_GTO &P, const PP_GTO &Q,
+void electron_integral(const PP_GTO &P, const PP_GTO &Q,
                                      Array2D<Matrix> &matrix)
 {
     double boys[5];
@@ -1439,7 +1439,7 @@ void SQUIRE_EXPORT electron_integral(const PP_GTO &P, const PP_GTO &Q,
 }
 
 /** Return the electron repulsion integral (pp|pp) */
-Array2D<Matrix> SQUIRE_EXPORT electron_integral(const PP_GTO &P, const PP_GTO &Q)
+Array2D<Matrix> electron_integral(const PP_GTO &P, const PP_GTO &Q)
 {
     Array2D<Matrix> matrix(3,3);
     electron_integral(P, Q, matrix);
@@ -1447,7 +1447,7 @@ Array2D<Matrix> SQUIRE_EXPORT electron_integral(const PP_GTO &P, const PP_GTO &Q
 }
 
 /** Calculate into the passed matrix the electron repulsion integral (pp|pp)^m */
-void SQUIRE_EXPORT electron_integral(const PP_GTO &P, const PP_GTO &Q, int m,
+void electron_integral(const PP_GTO &P, const PP_GTO &Q, int m,
                                      Array2D<Matrix> &matrix)
 {
     double boys[5];
@@ -1458,7 +1458,7 @@ void SQUIRE_EXPORT electron_integral(const PP_GTO &P, const PP_GTO &Q, int m,
 }
 
 /** Return the auxilliary electron repulsion integral (pp|pp)^m */
-Array2D<Matrix> SQUIRE_EXPORT electron_integral(const PP_GTO &P,
+Array2D<Matrix> electron_integral(const PP_GTO &P,
                                                 const PP_GTO &Q, int m)
 {
     Array2D<Matrix> matrix(3,3);

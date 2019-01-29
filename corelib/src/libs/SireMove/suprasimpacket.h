@@ -41,8 +41,8 @@ namespace SireMove
 class SupraSimPacket;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::SupraSimPacket&);
-QDataStream& operator>>(QDataStream&, SireMove::SupraSimPacket&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::SupraSimPacket&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::SupraSimPacket&);
 
 namespace SireMove
 {

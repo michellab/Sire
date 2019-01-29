@@ -106,7 +106,7 @@ static const RegisterMetaType<SoftCLJPotential> r_cljpot( MAGIC_ONLY, NO_ROOT,
                                                           "SireMM::SoftCLJPotential" );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const SoftCLJPotential &cljpot)
 {
     writeHeader(ds, r_cljpot, 2);
@@ -117,7 +117,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       SoftCLJPotential &cljpot)
 {
     VersionID v = readHeader(ds, r_cljpot);
@@ -586,7 +586,7 @@ static const RegisterMetaType<InterSoftCLJPotential> r_interclj( MAGIC_ONLY, NO_
                                                    InterSoftCLJPotential::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const InterSoftCLJPotential &interclj)
 {
     writeHeader(ds, r_interclj, 1);
@@ -597,7 +597,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       InterSoftCLJPotential &interclj)
 {
     VersionID v = readHeader(ds, r_interclj);
@@ -865,19 +865,13 @@ void InterSoftCLJPotential::_pvt_calculateEnergy(
 
     //the alpha_values array contains all of the unique alpha values
     const double *alfa = alpha_values.constData();
-    const int nalpha = alpha_values.count();
+    int nalpha = alpha_values.count();
     
     if (nalpha <= 0)
         return;
     
-    double cnrg[nalpha];
-    double ljnrg[nalpha];
-    
-    for (int i=0; i<nalpha; ++i)
-    {
-        cnrg[i] = 0;
-        ljnrg[i] = 0;
-    }
+    std::vector<double> cnrg(nalpha, 0);
+    std::vector<double> ljnrg(nalpha, 0);
 
     const double Rcoul = qMax(1e-5,qMin(1e9,
                             switchfunc->electrostaticCutoffDistance().to(angstrom)));
@@ -911,8 +905,8 @@ void InterSoftCLJPotential::_pvt_calculateEnergy(
     //  V_{LJ}(r) = 4 epsilon [ (sigma^12 / (alpha^m sigma^6 + r^6)^2) - 
     //                          (sigma^6  / (alpha^m sigma^6 + r^6) ) ]
 
-    double one_minus_alfa_to_n[nalpha];
-    double delta[nalpha];
+    std::vector<double> one_minus_alfa_to_n(nalpha);
+    std::vector<double> delta(nalpha);
     
     for (int i=0; i<nalpha; ++i)
     {
@@ -926,9 +920,9 @@ void InterSoftCLJPotential::_pvt_calculateEnergy(
 
     if (use_electrostatic_shifting)
     {
-        double sRcoul[nalpha];
-        double one_over_sRcoul[nalpha];
-        double one_over_sRcoul2[nalpha];
+        std::vector<double> sRcoul(nalpha);
+        std::vector<double> one_over_sRcoul(nalpha);
+        std::vector<double> one_over_sRcoul2(nalpha);
         
         for (int i=0; i<nalpha; ++i)
         {
@@ -971,17 +965,11 @@ void InterSoftCLJPotential::_pvt_calculateEnergy(
                     continue;
                 }
                    
-                double icnrg[nalpha];
-                double iljnrg[nalpha];
-                
-                for (int i=0; i<nalpha; ++i)
-                {
-                    icnrg[i] = 0;
-                    iljnrg[i] = 0;
-                }
-                
+                std::vector<double> icnrg(nalpha, 0);
+                std::vector<double> iljnrg(nalpha, 0);
+
                 //loop over all interatomic pairs and calculate the energies
-                const quint32 nats1 = group1.count();
+                quint32 nats1 = group1.count();
                 const Parameter *params1_array = params1.constData();
 
                 #ifdef SIRE_USE_SSE
@@ -1232,9 +1220,9 @@ void InterSoftCLJPotential::_pvt_calculateEnergy(
         // E = (q1 q2 / 4 pi eps_0) * ( 1/r + k r^2 - c )
         // where k = (1 / r_c^3) * (eps - 1)/(2 eps + 1)
         // c = (1/r_c) * (3 eps)/(2 eps + 1)
-        double sRcoul[nalpha];
-        double k_rf[nalpha];
-        double c_rf[nalpha];
+        std::vector<double> sRcoul(nalpha);
+        std::vector<double> k_rf(nalpha);
+        std::vector<double> c_rf(nalpha);
         
         for (int i=0; i<nalpha; ++i)
         {
@@ -1279,17 +1267,11 @@ void InterSoftCLJPotential::_pvt_calculateEnergy(
                     continue;
                 }
                    
-                double icnrg[nalpha];
-                double iljnrg[nalpha];
-                
-                for (int i=0; i<nalpha; ++i)
-                {
-                    icnrg[i] = 0;
-                    iljnrg[i] = 0;
-                }
+                std::vector<double> icnrg(nalpha, 0);
+                std::vector<double> iljnrg(nalpha, 0);
                 
                 //loop over all interatomic pairs and calculate the energies
-                const quint32 nats1 = group1.count();
+                quint32 nats1 = group1.count();
                 const Parameter *params1_array = params1.constData();
 
                 #ifdef SIRE_USE_SSE
@@ -1571,15 +1553,9 @@ void InterSoftCLJPotential::_pvt_calculateEnergy(
                     continue;
                 }
                    
-                double icnrg[nalpha];
-                double iljnrg[nalpha];
-                
-                for (int i=0; i<nalpha; ++i)
-                {
-                    icnrg[i] = 0;
-                    iljnrg[i] = 0;
-                }
-                
+                std::vector<double> icnrg(nalpha, 0);
+                std::vector<double> iljnrg(nalpha, 0);
+
                 //loop over all interatomic pairs and calculate the energies
                 const quint32 nats1 = group1.count();
                 const Parameter *params1_array = params1.constData();
@@ -1852,17 +1828,11 @@ void InterSoftCLJPotential::_pvt_calculateEnergy(
                     continue;
                 }
                    
-                double icnrg[nalpha];
-                double iljnrg[nalpha];
-                
-                for (int i=0; i<nalpha; ++i)
-                {
-                    icnrg[i] = 0;
-                    iljnrg[i] = 0;
-                }
-                
+                std::vector<double> icnrg(nalpha, 0);
+                std::vector<double> iljnrg(nalpha, 0);
+
                 //loop over all interatomic pairs and calculate the energies
-                const quint32 nats1 = group1.count();
+                quint32 nats1 = group1.count();
                 const Parameter *params1_array = params1.constData();
 
                 #ifdef SIRE_USE_SSE
@@ -2931,7 +2901,7 @@ static const RegisterMetaType<IntraSoftCLJPotential> r_intraclj( MAGIC_ONLY, NO_
                                                    IntraSoftCLJPotential::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const IntraSoftCLJPotential &intraclj)
 {
     writeHeader(ds, r_intraclj, 1);
@@ -2942,7 +2912,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       IntraSoftCLJPotential &intraclj)
 {
     VersionID v = readHeader(ds, r_intraclj);
@@ -3228,9 +3198,9 @@ void IntraSoftCLJPotential::_pvt_calculateEnergy(const CLJNBPairs::CGPairs &grou
 
         if (use_electrostatic_shifting)
         {
-            double sRcoul[nalpha];
-            double one_over_sRcoul[nalpha];
-            double one_over_sRcoul2[nalpha];
+            std::vector<double> sRcoul(nalpha);
+            std::vector<double> one_over_sRcoul(nalpha);
+            std::vector<double> one_over_sRcoul2(nalpha);
         
             for (int i=0; i<nalpha; ++i)
             {
@@ -3326,9 +3296,9 @@ void IntraSoftCLJPotential::_pvt_calculateEnergy(const CLJNBPairs::CGPairs &grou
         }
         else if (use_reaction_field)
         {
-            double sRcoul[nalpha];
-            double k_rf[nalpha];
-            double c_rf[nalpha];
+            std::vector<double> sRcoul(nalpha);
+            std::vector<double> k_rf(nalpha);
+            std::vector<double> c_rf(nalpha);
         
             for (int i=0; i<nalpha; ++i)
             {
@@ -3575,9 +3545,9 @@ void IntraSoftCLJPotential::_pvt_calculateEnergy(const CLJNBPairs::CGPairs &grou
         //them...
         if (use_electrostatic_shifting)
         {
-            double sRcoul[nalpha];
-            double one_over_sRcoul[nalpha];
-            double one_over_sRcoul2[nalpha];
+            std::vector<double> sRcoul(nalpha);
+            std::vector<double> one_over_sRcoul(nalpha);
+            std::vector<double> one_over_sRcoul2(nalpha);
         
             for (int i=0; i<nalpha; ++i)
             {
@@ -3651,9 +3621,9 @@ void IntraSoftCLJPotential::_pvt_calculateEnergy(const CLJNBPairs::CGPairs &grou
         }
         else if (use_reaction_field)
         {
-            double sRcoul[nalpha];
-            double k_rf[nalpha];
-            double c_rf[nalpha];
+            std::vector<double> sRcoul(nalpha);
+            std::vector<double> k_rf(nalpha);
+            std::vector<double> c_rf(nalpha);
         
             for (int i=0; i<nalpha; ++i)
             {
@@ -3895,9 +3865,9 @@ void IntraSoftCLJPotential::_pvt_calculateEnergy(const CLJNBPairs::CGPairs &grou
         
         if (use_electrostatic_shifting)
         {
-            double sRcoul[nalpha];
-            double one_over_sRcoul[nalpha];
-            double one_over_sRcoul2[nalpha];
+            std::vector<double> sRcoul(nalpha);
+            std::vector<double> one_over_sRcoul(nalpha);
+            std::vector<double> one_over_sRcoul2(nalpha);
         
             for (int i=0; i<nalpha; ++i)
             {
@@ -3968,9 +3938,9 @@ void IntraSoftCLJPotential::_pvt_calculateEnergy(const CLJNBPairs::CGPairs &grou
         }
         else if (use_reaction_field)
         {
-            double sRcoul[nalpha];
-            double k_rf[nalpha];
-            double c_rf[nalpha];
+            std::vector<double> sRcoul(nalpha);
+            std::vector<double> k_rf(nalpha);
+            std::vector<double> c_rf(nalpha);
         
             for (int i=0; i<nalpha; ++i)
             {
@@ -4173,9 +4143,9 @@ void IntraSoftCLJPotential::_pvt_calculateEnergy(const CLJNBPairs::CGPairs &grou
         //them...
         if (use_electrostatic_shifting)
         {
-            double sRcoul[nalpha];
-            double one_over_sRcoul[nalpha];
-            double one_over_sRcoul2[nalpha];
+            std::vector<double> sRcoul(nalpha);
+            std::vector<double> one_over_sRcoul(nalpha);
+            std::vector<double> one_over_sRcoul2(nalpha);
         
             for (int i=0; i<nalpha; ++i)
             {
@@ -4282,9 +4252,9 @@ void IntraSoftCLJPotential::_pvt_calculateEnergy(const CLJNBPairs::CGPairs &grou
         }
         else if (use_reaction_field)
         {
-            double sRcoul[nalpha];
-            double k_rf[nalpha];
-            double c_rf[nalpha];
+            std::vector<double> sRcoul(nalpha);
+            std::vector<double> k_rf(nalpha);
+            std::vector<double> c_rf(nalpha);
         
             for (int i=0; i<nalpha; ++i)
             {
@@ -4582,19 +4552,13 @@ void IntraSoftCLJPotential::calculateEnergy(const IntraSoftCLJPotential::Molecul
 
     //the alpha_values array contains all of the unique alpha values
     const double *alfa = alpha_values.constData();
-    const int nalpha = alpha_values.count();
+    int nalpha = alpha_values.count();
         
     if (nalpha <= 0)
         return;
         
-    double cnrg[nalpha];
-    double ljnrg[nalpha];
-        
-    for (int i=0; i<nalpha; ++i)
-    {
-        cnrg[i] = 0;
-        ljnrg[i] = 0;
-    }
+    std::vector<double> cnrg(nalpha, 0);
+    std::vector<double> ljnrg(nalpha, 0);
         
     //this uses the following potentials
     //           Zacharias and McCammon, J. Chem. Phys., 1994, and also,
@@ -4612,8 +4576,8 @@ void IntraSoftCLJPotential::calculateEnergy(const IntraSoftCLJPotential::Molecul
     //  V_{LJ}(r) = 4 epsilon [ (sigma^12 / (alpha^m sigma^6 + r^6)^2) - 
     //                          (sigma^6  / (alpha^m sigma^6 + r^6) ) ]
     
-    double one_minus_alfa_to_n[nalpha];
-    double delta[nalpha];
+    std::vector<double> one_minus_alfa_to_n(nalpha);
+    std::vector<double> delta(nalpha);
         
     for (int i=0; i<nalpha; ++i)
     {
@@ -4663,21 +4627,15 @@ void IntraSoftCLJPotential::calculateEnergy(const IntraSoftCLJPotential::Molecul
             const CLJNBPairs::CGPairs &group_pairs = nbpairs(cgidx_igroup,
                                                              cgidx_jgroup);
 
-            double icnrg[nalpha];
-            double iljnrg[nalpha];
+            std::vector<double> icnrg(nalpha, 0);
+            std::vector<double> iljnrg(nalpha, 0);
 
-            for (int i=0; i<nalpha; ++i)
-            {
-                icnrg[i] = 0;
-                iljnrg[i] = 0;
-            }
-            
             //loop over all intraatomic pairs and calculate the energies
             const quint32 nats1 = group1.count();
             const Parameter *params1_array = params1.constData();
             
             _pvt_calculateEnergy(group_pairs, distmat, params0_array, params1_array,
-                                 nats0, nats1, icnrg, iljnrg, alfa, delta, nalpha);
+                                 nats0, nats1, icnrg.data(), iljnrg.data(), alfa, delta.data(), nalpha);
             
             //if this is the same group then half the energies to 
             //correct for double-counting
@@ -4787,19 +4745,13 @@ void IntraSoftCLJPotential::calculateEnergy(const IntraSoftCLJPotential::Molecul
     
     //the alpha_values array contains all of the unique alpha values
     const double *alfa = alpha_values.constData();
-    const int nalpha = alpha_values.count();
+    int nalpha = alpha_values.count();
     
     if (nalpha <= 0)
         return;
     
-    double cnrg[nalpha];
-    double ljnrg[nalpha];
-    
-    for (int i=0; i<nalpha; ++i)
-    {
-        cnrg[i] = 0;
-        ljnrg[i] = 0;
-    }
+    std::vector<double> cnrg(nalpha, 0);
+    std::vector<double> ljnrg(nalpha, 0);
 
     //this uses the following potentials
     //           Zacharias and McCammon, J. Chem. Phys., 1994, and also,
@@ -4818,8 +4770,8 @@ void IntraSoftCLJPotential::calculateEnergy(const IntraSoftCLJPotential::Molecul
     //                          (sigma^6  / (alpha^m sigma^6 + r^6) ) ]
     //
 
-    double one_minus_alfa_to_n[nalpha];
-    double delta[nalpha];
+    std::vector<double> one_minus_alfa_to_n(nalpha);
+    std::vector<double> delta(nalpha);
         
     for (int i=0; i<nalpha; ++i)
     {
@@ -4875,15 +4827,9 @@ void IntraSoftCLJPotential::calculateEnergy(const IntraSoftCLJPotential::Molecul
             const CLJNBPairs::CGPairs &group_pairs = nbpairs(cgidx_igroup,
                                                              cgidx_jgroup);
 
-            double icnrg[nalpha];
-            double iljnrg[nalpha];
+            std::vector<double> icnrg(nalpha, 0);
+            std::vector<double> iljnrg(nalpha, 0);
 	                
-            for (int i=0; i<nalpha; ++i)
-            {
-                icnrg[i] = 0;
-                iljnrg[i] = 0;
-            }
-            
             //loop over all intraatomic pairs and calculate the energies
             const quint32 nats1 = group1.count();
             const Parameter *params1_array = params1.constData();
@@ -4914,13 +4860,13 @@ void IntraSoftCLJPotential::calculateEnergy(const IntraSoftCLJPotential::Molecul
                 
                 _pvt_calculateEnergy(group_pairs, atoms0, atoms1, distmat,
 				     params0_array, params1_array, 
-				     nats0, nats1, icnrg, iljnrg, alfa, delta, nalpha);
+				     nats0, nats1, icnrg.data(), iljnrg.data(), alfa, delta.data(), nalpha);
             }
             else
             {
                 _pvt_calculateEnergy(group_pairs, distmat,
                     params0_array, params1_array,
-                    nats0, nats1, icnrg, iljnrg, alfa, delta, nalpha);
+                    nats0, nats1, icnrg.data(), iljnrg.data(), alfa, delta.data(), nalpha);
             }
 
             //now add these energies onto the total for the molecule,

@@ -46,8 +46,8 @@ namespace SireMM
 class RestraintFF;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::RestraintFF&);
-QDataStream& operator>>(QDataStream&, SireMM::RestraintFF&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::RestraintFF&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::RestraintFF&);
 
 namespace SireFF
 {

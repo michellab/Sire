@@ -49,11 +49,11 @@ class AssignerGroup;
 class FreeEnergyMonitor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::AssignerGroup&);
-QDataStream& operator>>(QDataStream&, SireSystem::AssignerGroup&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::AssignerGroup&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::AssignerGroup&);
 
-QDataStream& operator<<(QDataStream&, const SireSystem::FreeEnergyMonitor&);
-QDataStream& operator>>(QDataStream&, SireSystem::FreeEnergyMonitor&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::FreeEnergyMonitor&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::FreeEnergyMonitor&);
 
 namespace SireSystem
 {

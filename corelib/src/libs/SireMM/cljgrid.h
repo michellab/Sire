@@ -45,8 +45,8 @@ namespace SireMM
 class CLJGrid;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJGrid&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJGrid&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJGrid&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJGrid&);
 
 namespace SireMM
 {

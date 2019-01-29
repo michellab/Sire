@@ -159,7 +159,7 @@ public:
 boost::shared_ptr< QMap< DimensionKey,QPair<double,QString> > > default_strings;
 
 /** Return a string representing the unit with specified dimensions */
-QString SIREUNITS_EXPORT getUnitString(double value, int M, int L, int T, int C, 
+QString getUnitString(double value, int M, int L, int T, int C, 
                                        int t, int Q, int A)
 {
     if (default_strings == 0)

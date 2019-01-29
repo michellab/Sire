@@ -40,8 +40,8 @@ namespace SireIO
 class AmberRst7;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::AmberRst7&);
-QDataStream& operator>>(QDataStream&, SireIO::AmberRst7&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::AmberRst7&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::AmberRst7&);
 
 namespace SireIO
 {

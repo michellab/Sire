@@ -40,8 +40,8 @@ namespace SireSystem
 class CheckPoint;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::CheckPoint&);
-QDataStream& operator>>(QDataStream&, SireSystem::CheckPoint&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::CheckPoint&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::CheckPoint&);
 
 namespace SireSystem
 {

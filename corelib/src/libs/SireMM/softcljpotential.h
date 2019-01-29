@@ -41,14 +41,14 @@ class InterSoftCLJPotential;
 class IntraSoftCLJPotential;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::SoftCLJPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::SoftCLJPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::SoftCLJPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::SoftCLJPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::InterSoftCLJPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::InterSoftCLJPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InterSoftCLJPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::InterSoftCLJPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::IntraSoftCLJPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::IntraSoftCLJPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::IntraSoftCLJPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::IntraSoftCLJPotential&);
 
 namespace SireMM
 {

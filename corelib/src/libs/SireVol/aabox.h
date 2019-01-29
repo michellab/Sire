@@ -41,8 +41,8 @@ class AABox;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireVol::AABox&);
-QDataStream& operator>>(QDataStream&, SireVol::AABox&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::AABox&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::AABox&);
 
 namespace SireMaths
 {

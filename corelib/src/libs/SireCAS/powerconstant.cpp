@@ -50,7 +50,7 @@ using namespace SireCAS;
 static const RegisterMetaType<PowerConstant> r_powerconstant;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const PowerConstant &power)
+QDataStream &operator<<(QDataStream &ds, const PowerConstant &power)
 {
     writeHeader(ds, r_powerconstant, 1)
           << power.cre << power.pwr << static_cast<const PowerFunction&>(power);
@@ -59,7 +59,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const PowerConstant &pow
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, PowerConstant &power)
+QDataStream &operator>>(QDataStream &ds, PowerConstant &power)
 {
     VersionID v = readHeader(ds, r_powerconstant);
 
@@ -127,7 +127,7 @@ static const RegisterMetaType<ConstantPower> r_constantpower(MAGIC_ONLY,
                                                              "SireCAS::ConstantPower");
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ConstantPower &power)
+QDataStream &operator<<(QDataStream &ds, const ConstantPower &power)
 {
     writeHeader(ds, r_constantpower, 1)
           << power.ex << static_cast<const PowerFunction&>(power);
@@ -136,7 +136,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ConstantPower &pow
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ConstantPower &power)
+QDataStream &operator>>(QDataStream &ds, ConstantPower &power)
 {
     VersionID v = readHeader(ds, r_constantpower);
 
@@ -163,7 +163,7 @@ uint ConstantPower::hash() const
 static const RegisterMetaType<IntegerPower> r_integerpower;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const IntegerPower &power)
+QDataStream &operator<<(QDataStream &ds, const IntegerPower &power)
 {
     writeHeader(ds, r_integerpower, 1) << power.pwr
                                        << static_cast<const ConstantPower&>(power);
@@ -171,7 +171,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const IntegerPower &powe
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, IntegerPower &power)
+QDataStream &operator>>(QDataStream &ds, IntegerPower &power)
 {
     VersionID v = readHeader(ds, r_integerpower);
 
@@ -237,7 +237,7 @@ Complex IntegerPower::evaluate(const ComplexValues &values) const
 static const RegisterMetaType<RationalPower> r_rationalpower;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const RationalPower &power)
+QDataStream &operator<<(QDataStream &ds, const RationalPower &power)
 {
     writeHeader(ds, r_rationalpower, 1) << power.pwr
                                         << static_cast<const ConstantPower&>(power);
@@ -245,7 +245,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const RationalPower &pow
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, RationalPower &power)
+QDataStream &operator>>(QDataStream &ds, RationalPower &power)
 {
     VersionID v = readHeader(ds, r_rationalpower);
 
@@ -311,7 +311,7 @@ Complex RationalPower::evaluate(const ComplexValues &values) const
 static const RegisterMetaType<RealPower> r_realpower;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const RealPower &power)
+QDataStream &operator<<(QDataStream &ds, const RealPower &power)
 {
     writeHeader(ds, r_realpower, 1) << power.pwr
                                     << static_cast<const ConstantPower&>(power);
@@ -319,7 +319,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const RealPower &power)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, RealPower &power)
+QDataStream &operator>>(QDataStream &ds, RealPower &power)
 {
     VersionID v = readHeader(ds, r_realpower);
 
@@ -385,7 +385,7 @@ Complex RealPower::evaluate(const ComplexValues &values) const
 static const RegisterMetaType<ComplexPower> r_complexpower;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ComplexPower &power)
+QDataStream &operator<<(QDataStream &ds, const ComplexPower &power)
 {
     writeHeader(ds, r_complexpower, 1) << power.pwr
                                        << static_cast<const ConstantPower&>(power);
@@ -393,7 +393,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ComplexPower &powe
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ComplexPower &power)
+QDataStream &operator>>(QDataStream &ds, ComplexPower &power)
 {
     VersionID v = readHeader(ds, r_complexpower);
 

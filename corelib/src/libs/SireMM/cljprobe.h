@@ -44,14 +44,14 @@ class LJProbe;
 class CLJProbe;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CoulombProbe&);
-QDataStream& operator>>(QDataStream&, SireMM::CoulombProbe&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CoulombProbe&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CoulombProbe&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJProbe&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJProbe&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJProbe&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJProbe&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::LJProbe&);
-QDataStream& operator>>(QDataStream&, SireMM::LJProbe&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::LJProbe&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::LJProbe&);
 
 namespace SireMM
 {

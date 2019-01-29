@@ -56,7 +56,7 @@ namespace SireID
     @author Christopher Woods
 */
 template<class ID>
-class SIREID_EXPORT InvertMatch : public ID
+class InvertMatch : public ID
 {
 
 friend QDataStream& ::operator<<<>(QDataStream&, const InvertMatch<ID>&);

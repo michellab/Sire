@@ -40,9 +40,9 @@ namespace SireMaths
 class MultiVector;
 class MultiQuaternion;
 
-MultiQuaternion operator+(const MultiQuaternion &p1, const MultiQuaternion &p2);
-MultiQuaternion operator-(const MultiQuaternion &p1, const MultiQuaternion &p2);
-MultiQuaternion operator*(const MultiQuaternion &p1, const MultiQuaternion &p2);
+SIREMATHS_EXPORT MultiQuaternion operator+(const MultiQuaternion &p1, const MultiQuaternion &p2);
+SIREMATHS_EXPORT MultiQuaternion operator-(const MultiQuaternion &p1, const MultiQuaternion &p2);
+SIREMATHS_EXPORT MultiQuaternion operator*(const MultiQuaternion &p1, const MultiQuaternion &p2);
 
 /**
 This is the MultiX version of Quaternion

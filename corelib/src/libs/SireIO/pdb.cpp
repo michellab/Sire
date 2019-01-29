@@ -702,7 +702,7 @@ bool PDBMolecules::isEmpty() const
 static const RegisterMetaType<PDB> r_pdb;
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDB &pdb)
+QDataStream &operator<<(QDataStream &ds, const PDB &pdb)
 {
     writeHeader(ds, r_pdb, 1);
     
@@ -712,7 +712,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDB &pdb)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB &pdb)
+QDataStream &operator>>(QDataStream &ds, PDB &pdb)
 {
     VersionID v = readHeader(ds, r_pdb);
     

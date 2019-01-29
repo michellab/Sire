@@ -40,8 +40,8 @@ namespace SireFF
 class FFName;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::FFName&);
-QDataStream& operator>>(QDataStream&, SireFF::FFName&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::FFName&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::FFName&);
 
 namespace SireFF
 {

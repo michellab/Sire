@@ -38,8 +38,8 @@ namespace SireMol
 class MGIdentifier;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MGIdentifier&);
-QDataStream& operator>>(QDataStream&, SireMol::MGIdentifier&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MGIdentifier&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MGIdentifier&);
 
 namespace SireMol
 {

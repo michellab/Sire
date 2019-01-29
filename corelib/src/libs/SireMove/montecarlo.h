@@ -45,8 +45,8 @@ namespace SireMove
 class MonteCarlo;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::MonteCarlo&);
-QDataStream& operator>>(QDataStream&, SireMove::MonteCarlo&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::MonteCarlo&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::MonteCarlo&);
 
 namespace SireMove
 {

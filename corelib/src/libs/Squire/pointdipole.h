@@ -38,8 +38,8 @@ namespace Squire
 class PointDipole;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::PointDipole&);
-QDataStream& operator>>(QDataStream&, Squire::PointDipole&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::PointDipole&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::PointDipole&);
 
 namespace Squire
 {

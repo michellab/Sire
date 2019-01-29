@@ -55,8 +55,8 @@ template<class T>
 class AtomProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomProp&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomProp&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomProp&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomProp&);
 
 template<class T>
 QDataStream& operator<<(QDataStream&, const SireMol::AtomProperty<T>&);
@@ -123,7 +123,7 @@ protected:
     @author Christopher Woods
 */
 template<class T>
-class SIREMOL_EXPORT AtomProperty 
+class AtomProperty 
     : public SireBase::ConcreteProperty<AtomProperty<T>, AtomProp>
 {
 

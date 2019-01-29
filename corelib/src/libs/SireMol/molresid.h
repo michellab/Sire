@@ -45,11 +45,11 @@ class MolResID;
 class MolResNum;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MolResID&);
-QDataStream& operator>>(QDataStream&, SireMol::MolResID&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MolResID&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MolResID&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::MolResNum&);
-QDataStream& operator>>(QDataStream&, SireMol::MolResNum&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MolResNum&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MolResNum&);
 
 namespace SireMol
 {

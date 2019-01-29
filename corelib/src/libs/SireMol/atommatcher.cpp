@@ -67,7 +67,7 @@ static const RegisterMetaType<AtomMatcher> r_atommatcher( MAGIC_ONLY,
                                                           "SireMol::AtomMatcher" );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomMatcher &matcher)
+QDataStream &operator<<(QDataStream &ds, const AtomMatcher &matcher)
 {
     writeHeader(ds, r_atommatcher, 1);
     
@@ -77,7 +77,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomMatcher &match
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomMatcher &matcher)
+QDataStream &operator>>(QDataStream &ds, AtomMatcher &matcher)
 {
     VersionID v = readHeader(ds, r_atommatcher);
     
@@ -274,7 +274,7 @@ QHash<AtomIdx,AtomIdx> AtomMatcher::match(const MoleculeInfoData &mol0,
 static const RegisterMetaType<AtomResultMatcher> r_resmatcher;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomResultMatcher &resmatcher)
+QDataStream &operator<<(QDataStream &ds, const AtomResultMatcher &resmatcher)
 {
     writeHeader(ds, r_resmatcher, 1);
     SharedDataStream sds(ds);
@@ -284,7 +284,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomResultMatcher 
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomResultMatcher &resmatcher)
+QDataStream &operator>>(QDataStream &ds, AtomResultMatcher &resmatcher)
 {
     VersionID v = readHeader(ds, r_resmatcher);
     
@@ -441,7 +441,7 @@ const char* AtomResultMatcher::typeName()
 static const RegisterMetaType<AtomMatchInverter> r_inverter;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomMatchInverter &inverter)
+QDataStream &operator<<(QDataStream &ds, const AtomMatchInverter &inverter)
 {
     writeHeader(ds, r_inverter, 1);
     SharedDataStream sds(ds);
@@ -451,7 +451,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomMatchInverter 
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomMatchInverter &inverter)
+QDataStream &operator>>(QDataStream &ds, AtomMatchInverter &inverter)
 {
     VersionID v = readHeader(ds, r_inverter);
     

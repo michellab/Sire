@@ -48,11 +48,11 @@ class FFMolGroupPvt;
 
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::FFMolGroup&);
-QDataStream& operator>>(QDataStream&, SireFF::FFMolGroup&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::FFMolGroup&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::FFMolGroup&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMolGroupPvt&);
-QDataStream& operator>>(QDataStream&, SireFF::detail::FFMolGroupPvt&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMolGroupPvt&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::detail::FFMolGroupPvt&);
 
 namespace SireFF
 {

@@ -46,17 +46,17 @@ class CLJPotentialInterface;
 namespace detail{ class CLJParameter; }
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::InterCLJPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::InterCLJPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InterCLJPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::InterCLJPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::IntraCLJPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::IntraCLJPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::IntraCLJPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::IntraCLJPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::detail::CLJParameter&);
-QDataStream& operator>>(QDataStream&, SireMM::detail::CLJParameter&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::detail::CLJParameter&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::detail::CLJParameter&);
 
 template<class CLJPot>
 QDataStream& operator<<(QDataStream&, const SireMM::CLJPotentialInterface<CLJPot>&);
@@ -1766,8 +1766,8 @@ IntraCLJPotential::calculateForce(const IntraCLJPotential::Molecule &mol,
 
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::detail::CLJParameter&);
-QDataStream& operator>>(QDataStream&, SireMM::detail::CLJParameter&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::detail::CLJParameter&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::detail::CLJParameter&);
 
 template<class CLJPot>
 QDataStream& operator<<(QDataStream &ds,

@@ -43,8 +43,8 @@ namespace SireCAS
 class SingleFunc;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::SingleFunc&);
-QDataStream& operator>>(QDataStream&, SireCAS::SingleFunc&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::SingleFunc&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::SingleFunc&);
 
 namespace SireCAS
 {

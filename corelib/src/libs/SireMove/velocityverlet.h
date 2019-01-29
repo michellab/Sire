@@ -39,8 +39,8 @@ namespace SireMove
 class VelocityVerlet;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::VelocityVerlet&);
-QDataStream& operator>>(QDataStream&, SireMove::VelocityVerlet&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::VelocityVerlet&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::VelocityVerlet&);
 
 namespace SireMove
 {

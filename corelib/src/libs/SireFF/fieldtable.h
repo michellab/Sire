@@ -51,14 +51,14 @@ class GridFieldTable;
 class FieldTable;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::MolFieldTable&);
-QDataStream& operator>>(QDataStream&, SireFF::MolFieldTable&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::MolFieldTable&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::MolFieldTable&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::GridFieldTable&);
-QDataStream& operator>>(QDataStream&, SireFF::GridFieldTable&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::GridFieldTable&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::GridFieldTable&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::FieldTable&);
-QDataStream& operator>>(QDataStream&, SireFF::FieldTable&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::FieldTable&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::FieldTable&);
 
 namespace SireMol
 {

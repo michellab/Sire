@@ -44,11 +44,11 @@ class Move;
 class NullMove;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::Move&);
-QDataStream& operator>>(QDataStream&, SireMove::Move&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::Move&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::Move&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::NullMove&);
-QDataStream& operator>>(QDataStream&, SireMove::NullMove&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::NullMove&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::NullMove&);
 
 namespace SireSystem
 {

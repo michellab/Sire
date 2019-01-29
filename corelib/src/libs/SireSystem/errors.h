@@ -70,7 +70,7 @@ public:
 
     @author Christopher Woods
 */
-class SIREMOL_EXPORT missing_monitor : public siresystem_error
+class SIRESYSTEM_EXPORT missing_monitor : public siresystem_error
 {
 public:
     missing_monitor() : siresystem_error()
@@ -104,7 +104,7 @@ public:
 
     @author Christopher Woods
 */
-class SIREMOL_EXPORT duplicate_monitor : public siresystem_error
+class SIRESYSTEM_EXPORT duplicate_monitor : public siresystem_error
 {
 public:
     duplicate_monitor() : siresystem_error()
@@ -138,7 +138,7 @@ public:
 
     @author Christopher Woods
 */
-class SIREMOL_EXPORT missing_system : public siresystem_error
+class SIRESYSTEM_EXPORT missing_system : public siresystem_error
 {
 public:
     missing_system() : siresystem_error()
@@ -172,7 +172,7 @@ public:
 
     @author Christopher Woods
 */
-class SIREMOL_EXPORT duplicate_system : public siresystem_error
+class SIRESYSTEM_EXPORT duplicate_system : public siresystem_error
 {
 public:
     duplicate_system() : siresystem_error()
@@ -206,7 +206,7 @@ public:
 
     @author Christopher Woods
 */
-class SIREMOL_EXPORT constraint_error : public siresystem_error
+class SIRESYSTEM_EXPORT constraint_error : public siresystem_error
 {
 public:
     constraint_error() : siresystem_error()

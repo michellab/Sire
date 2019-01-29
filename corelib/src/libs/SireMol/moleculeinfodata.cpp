@@ -397,7 +397,7 @@ bool SegInfo::operator!=(const SegInfo &other) const
 static const RegisterMetaType<MoleculeInfoData> r_molinfo(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const MoleculeInfoData &molinfo)
 {
     writeHeader(ds, r_molinfo, 1);
@@ -608,7 +608,7 @@ void MoleculeInfoData::rebuildNameAndNumberIndexes()
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        MoleculeInfoData &molinfo)
 {
     VersionID v = readHeader(ds, r_molinfo);

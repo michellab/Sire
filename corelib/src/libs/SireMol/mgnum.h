@@ -40,8 +40,8 @@ namespace SireMol
 class MGNum;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MGNum&);
-QDataStream& operator>>(QDataStream&, SireMol::MGNum&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MGNum&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MGNum&);
 
 namespace SireMol
 {

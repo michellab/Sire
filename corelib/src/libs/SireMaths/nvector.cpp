@@ -42,7 +42,7 @@ using namespace SireStream;
 static const RegisterMetaType<NVector> r_nvector(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const NVector &vector)
+QDataStream &operator<<(QDataStream &ds, const NVector &vector)
 {
     writeHeader(ds, r_nvector, 1);
     
@@ -54,7 +54,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const NVector &vector)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, NVector &vector)
+QDataStream &operator>>(QDataStream &ds, NVector &vector)
 {
     VersionID v = readHeader(ds, r_nvector);
     

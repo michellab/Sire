@@ -45,7 +45,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<DoubleArrayProperty> r_doublearray;
 
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const DoubleArrayProperty &array)
+QDataStream &operator<<(QDataStream &ds, const DoubleArrayProperty &array)
 {
     writeHeader(ds, r_doublearray, 1);
     
@@ -55,7 +55,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const DoubleArrayProper
     return ds;
 }
 
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, DoubleArrayProperty &array)
+QDataStream &operator>>(QDataStream &ds, DoubleArrayProperty &array)
 {
     VersionID v = readHeader(ds, r_doublearray);
     
@@ -195,7 +195,7 @@ PropertyList DoubleArrayProperty::asAnArray() const
 
 static const RegisterMetaType<IntegerArrayProperty> r_intarray;
 
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const IntegerArrayProperty &array)
+QDataStream &operator<<(QDataStream &ds, const IntegerArrayProperty &array)
 {
     writeHeader(ds, r_intarray, 1);
     
@@ -205,7 +205,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const IntegerArrayPrope
     return ds;
 }
 
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, IntegerArrayProperty &array)
+QDataStream &operator>>(QDataStream &ds, IntegerArrayProperty &array)
 {
     VersionID v = readHeader(ds, r_intarray);
     
@@ -340,7 +340,7 @@ PropertyList IntegerArrayProperty::asAnArray() const
 
 static const RegisterMetaType<StringArrayProperty> r_stringarray;
 
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const StringArrayProperty &array)
+QDataStream &operator<<(QDataStream &ds, const StringArrayProperty &array)
 {
     writeHeader(ds, r_stringarray, 1);
     
@@ -350,7 +350,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const StringArrayProper
     return ds;
 }
 
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, StringArrayProperty &array)
+QDataStream &operator>>(QDataStream &ds, StringArrayProperty &array)
 {
     VersionID v = readHeader(ds, r_stringarray);
     

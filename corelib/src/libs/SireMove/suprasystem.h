@@ -40,8 +40,8 @@ namespace SireMove
 class SupraSystem;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::SupraSystem&);
-QDataStream& operator>>(QDataStream&, SireMove::SupraSystem&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::SupraSystem&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::SupraSystem&);
 
 namespace SireSystem
 {

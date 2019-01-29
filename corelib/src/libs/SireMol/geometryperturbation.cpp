@@ -54,7 +54,7 @@ using namespace SireStream;
 static const RegisterMetaType<GeometryPerturbation> r_geompert( MAGIC_ONLY, 
                                                      GeometryPerturbation::typeName() );
                                                      
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                        const GeometryPerturbation &geompert)
 {
     writeHeader(ds, r_geompert, 1);
@@ -64,7 +64,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, GeometryPerturbation &geompert)
+QDataStream &operator>>(QDataStream &ds, GeometryPerturbation &geompert)
 {
     VersionID v = readHeader(ds, r_geompert);
     
@@ -168,7 +168,7 @@ const NullGeometryPerturbation& GeometryPerturbation::null()
 
 static const RegisterMetaType<NullGeometryPerturbation> r_nullpert;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                        const NullGeometryPerturbation &nullpert)
 {
     writeHeader(ds, r_nullpert, 1);
@@ -178,7 +178,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                        NullGeometryPerturbation &nullpert)
 {
     VersionID v = readHeader(ds, r_nullpert);
@@ -253,7 +253,7 @@ void NullGeometryPerturbation::perturbMolecule(Mover<Molecule>&, const Values&) 
 
 static const RegisterMetaType<GeometryPerturbations> r_geomperts;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const GeometryPerturbations &geomperts)
 {
     writeHeader(ds, r_geomperts, 1);
@@ -265,7 +265,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        GeometryPerturbations &geomperts)
 {
     VersionID v = readHeader(ds, r_geomperts);
@@ -558,7 +558,7 @@ void GeometryPerturbations::perturbMolecule(Mover<Molecule> &molecule,
 static const RegisterMetaType<BondPerturbation> r_bondpert;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                        const BondPerturbation &bondpert)
 {
     writeHeader(ds, r_bondpert, 1);
@@ -573,7 +573,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, BondPerturbation &bondpert)
+QDataStream &operator>>(QDataStream &ds, BondPerturbation &bondpert)
 {
     VersionID v = readHeader(ds, r_bondpert);
     
@@ -757,7 +757,7 @@ void BondPerturbation::perturbMolecule(Mover<Molecule> &molecule,
 static const RegisterMetaType<AnglePerturbation> r_anglepert;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                        const AnglePerturbation &anglepert)
 {
     writeHeader(ds, r_anglepert, 1);
@@ -772,7 +772,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AnglePerturbation &anglepert)
+QDataStream &operator>>(QDataStream &ds, AnglePerturbation &anglepert)
 {
     VersionID v = readHeader(ds, r_anglepert);
     
@@ -957,7 +957,7 @@ void AnglePerturbation::perturbMolecule(Mover<Molecule> &molecule,
 static const RegisterMetaType<DihedralPerturbation> r_dihedralpert;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                        const DihedralPerturbation &dihedralpert)
 {
     writeHeader(ds, r_dihedralpert, 1);
@@ -972,7 +972,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, DihedralPerturbation &dihedralpert)
+QDataStream &operator>>(QDataStream &ds, DihedralPerturbation &dihedralpert)
 {
     VersionID v = readHeader(ds, r_dihedralpert);
     

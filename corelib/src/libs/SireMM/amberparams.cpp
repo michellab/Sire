@@ -72,7 +72,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<AmberBond> r_bond(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberBond &bond)
+QDataStream &operator<<(QDataStream &ds, const AmberBond &bond)
 {
     writeHeader(ds, r_bond, 1);
 
@@ -80,7 +80,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberBond &bond)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberBond &bond)
+QDataStream &operator>>(QDataStream &ds, AmberBond &bond)
 {
     VersionID v = readHeader(ds, r_bond);
 
@@ -278,14 +278,14 @@ QString AmberBond::toString() const
 
 static const RegisterMetaType<AmberAngle> r_angle(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberAngle &angle)
+QDataStream &operator<<(QDataStream &ds, const AmberAngle &angle)
 {
     writeHeader(ds, r_angle, 1);
     ds << angle._k << angle._theta0;
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberAngle &angle)
+QDataStream &operator>>(QDataStream &ds, AmberAngle &angle)
 {
     VersionID v = readHeader(ds, r_angle);
 
@@ -476,14 +476,14 @@ QString AmberAngle::toString() const
 
 static const RegisterMetaType<AmberDihPart> r_dihpart(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberDihPart &dih)
+QDataStream &operator<<(QDataStream &ds, const AmberDihPart &dih)
 {
     writeHeader(ds, r_dihpart, 1);
     ds << dih._k << dih._periodicity << dih._phase;
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberDihPart &dih)
+QDataStream &operator>>(QDataStream &ds, AmberDihPart &dih)
 {
     VersionID v = readHeader(ds, r_dihpart);
 
@@ -584,14 +584,14 @@ QString AmberDihPart::toString() const
 
 static const RegisterMetaType<AmberDihedral> r_dihedral(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberDihedral &dih)
+QDataStream &operator<<(QDataStream &ds, const AmberDihedral &dih)
 {
     writeHeader(ds, r_dihedral, 1);
     ds << dih._parts;
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberDihedral &dih)
+QDataStream &operator>>(QDataStream &ds, AmberDihedral &dih)
 {
     VersionID v = readHeader(ds, r_dihedral);
 
@@ -935,14 +935,14 @@ QString AmberDihedral::toString() const
 
 static const RegisterMetaType<AmberNB14> r_nb14(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberNB14 &nb)
+QDataStream &operator<<(QDataStream &ds, const AmberNB14 &nb)
 {
     writeHeader(ds, r_nb14, 1);
     ds << nb._cscl << nb._ljscl;
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberNB14 &nb)
+QDataStream &operator>>(QDataStream &ds, AmberNB14 &nb)
 {
     VersionID v = readHeader(ds, r_nb14);
 
@@ -1057,14 +1057,14 @@ CLJScaleFactor AmberNB14::toScaleFactor() const
 
 static const RegisterMetaType<AmberNBDihPart> r_nbdihpart(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberNBDihPart &param)
+QDataStream &operator<<(QDataStream &ds, const AmberNBDihPart &param)
 {
     writeHeader(ds, r_nbdihpart, 1);
     ds << param.dih << param.nbscl;
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberNBDihPart &param)
+QDataStream &operator>>(QDataStream &ds, AmberNBDihPart &param)
 {
     VersionID v = readHeader(ds, r_nbdihpart);
 
@@ -1174,7 +1174,7 @@ QString AmberNBDihPart::toString() const
 static const RegisterMetaType<AmberParams> r_amberparam;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberParams &amberparam)
+QDataStream &operator<<(QDataStream &ds, const AmberParams &amberparam)
 {
     writeHeader(ds, r_amberparam, 2);
 
@@ -1197,7 +1197,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const AmberParams &amberp
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AmberParams &amberparam)
+QDataStream &operator>>(QDataStream &ds, AmberParams &amberparam)
 {
     VersionID v = readHeader(ds, r_amberparam);
 

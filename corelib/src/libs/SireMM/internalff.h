@@ -46,8 +46,8 @@ namespace SireMM
 class InternalFF;
 }
 
-QDataStream &operator<<(QDataStream&, const SireMM::InternalFF&);
-QDataStream &operator>>(QDataStream&, SireMM::InternalFF&);
+SIREMM_EXPORT QDataStream &operator<<(QDataStream&, const SireMM::InternalFF&);
+SIREMM_EXPORT QDataStream &operator>>(QDataStream&, SireMM::InternalFF&);
 
 namespace SireVol
 {
@@ -261,7 +261,7 @@ private:
 
 /** This class provides the default name of the 
     property that contains the non-bonded 1-4 scale factors */
-class SIREMM_EXPORT IntrascaleParameterName
+class IntrascaleParameterName
 {
 public:
     IntrascaleParameterName()

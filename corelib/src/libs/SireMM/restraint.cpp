@@ -61,7 +61,7 @@ static const RegisterMetaType<Restraint> r_restraint( MAGIC_ONLY,
                                                       Restraint::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const Restraint &restraint)
+QDataStream &operator<<(QDataStream &ds, const Restraint &restraint)
 {
     writeHeader(ds, r_restraint, 1);
     
@@ -71,7 +71,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const Restraint &restrain
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, Restraint &restraint)
+QDataStream &operator>>(QDataStream &ds, Restraint &restraint)
 {
     VersionID v = readHeader(ds, r_restraint);
     
@@ -136,7 +136,7 @@ static const RegisterMetaType<Restraint3D> r_restraint3d( MAGIC_ONLY,
                                                           Restraint3D::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const Restraint3D &restraint3d)
 {
     writeHeader(ds, r_restraint3d, 1);
@@ -150,7 +150,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, Restraint3D &restraint3d)
+QDataStream &operator>>(QDataStream &ds, Restraint3D &restraint3d)
 {
     VersionID v = readHeader(ds, r_restraint3d);
     
@@ -221,7 +221,7 @@ static const RegisterMetaType<ExpressionRestraint3D> r_exprestraint3d( MAGIC_ONL
                                                    ExpressionRestraint3D::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const ExpressionRestraint3D &exprestraint3d)
 {
     writeHeader(ds, r_exprestraint3d, 1);
@@ -235,7 +235,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                       ExpressionRestraint3D &exprestraint3d)
 {
     VersionID v = readHeader(ds, r_exprestraint3d);
@@ -433,7 +433,7 @@ MolarEnergy ExpressionRestraint3D::energy() const
 static const RegisterMetaType<NullRestraint> r_nullrestraint;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const NullRestraint &nullrestraint)
 {
     writeHeader(ds, r_nullrestraint, 1);
@@ -444,7 +444,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, NullRestraint &nullrestraint)
+QDataStream &operator>>(QDataStream &ds, NullRestraint &nullrestraint)
 {
     VersionID v = readHeader(ds, r_nullrestraint);
     

@@ -45,8 +45,8 @@ namespace SireSystem
 class MonitorProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::MonitorProperty&);
-QDataStream& operator>>(QDataStream&, SireSystem::MonitorProperty&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::MonitorProperty&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::MonitorProperty&);
 
 namespace SireFF
 {
