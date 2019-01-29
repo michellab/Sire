@@ -4179,9 +4179,9 @@ QString OpenMMFrEnergyST::getCombRules(void)
 }
 
 /** Set the combining rules type: arithmetic, geometric*/
-void OpenMMFrEnergyST::setCombRules(QString comb_rules)
+void OpenMMFrEnergyST::setCombRules(QString combining_rules)
 {
-    CombRules = comb_rules;
+    CombRules = combining_rules;
 }
 
 
