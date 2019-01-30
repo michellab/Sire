@@ -3738,7 +3738,6 @@ MolStructureEditor AmberPrm::getMolStructure(int molidx,
     //first step is to build the structure of the molecule - i.e.
     //the layout of cutgroups, residues and atoms
     MolStructureEditor mol;
-    mol.renumber(MolNum(molnum));
 
     const auto atom_names = this->stringData("ATOM_NAME");
 
