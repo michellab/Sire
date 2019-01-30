@@ -162,44 +162,53 @@ void AmberPrm::rebuildExcludedAtoms()
     excl_atoms = QVector< QVector< QVector<int> > >(nmols);
     int nnbidx = 0;
 
+    //we need to loop through the excluded atoms in atomnum order, not molidx order.
+    //This is because a single molecule can be spread over several non-contiguous blocks
+    //of atom numbers!
+    QVector< QPair<int,int> > atomnum_to_molnum_atomidx(natoms+1);
+    
+    // get the molecule number and index of the atom in that molecule for every
+    // atom identified by its atom number
     for (int molnum=1; molnum<=nmols; ++molnum)
     {
         const auto atomnums_in_mol = molnum_to_atomnums.at(molnum);
-
-        QVector< QVector<int> > excl(atomnums_in_mol.count());
-
+        
         for (int iat=0; iat<atomnums_in_mol.count(); ++iat)
         {
-            const int atomnum = atomnums_in_mol.at(iat);
+            const int atomnum = atomnums_in_mol[iat];
+            atomnum_to_molnum_atomidx[atomnum] = QPair<int,int>(molnum,iat);
+        }
+        
+        excl_atoms[molnum-1] = QVector< QVector<int> >(atomnums_in_mol.count());
+    }
 
-            if (atomnum < 1 or atomnum > nnb_per_atom.count())
+    // now loop over the atoms in sequence, looking up their excluded atoms (as these
+    // are arranged in atomnum sequence. Extract the excluded atoms for each atom,
+    // placing the result into excl_atoms, which is indexed by molnum then atomidx in
+    // molecule
+    for (int atomnum=1; atomnum<=natoms; ++atomnum)
+    {
+        int molnum = atomnum_to_molnum_atomidx[atomnum].first;
+        int atomidx = atomnum_to_molnum_atomidx[atomnum].second;
+
+        const int nnb = nnb_per_atom[atomnum-1]; // atomnum is 1-indexed
+
+        QVector<int> ex(nnb);
+
+        for (int k=0; k<nnb; ++k)
+        {
+            if (nnbidx >= inb.count())
             {
                 throw SireIO::parse_error( QObject::tr(
-                    "Disagreement of maximum atom number: %1 versus %2")
-                        .arg(atomnum).arg(nnb_per_atom.count()), CODELOC );
+                    "Disagreement of the number of excluded atom nb terms! %1 versus %2")
+                        .arg(nnbidx).arg(inb.count()), CODELOC );
             }
-            
-            const int nnb = nnb_per_atom[atomnum-1]; // atomnum is 1-indexed
-
-            QVector<int> ex(nnb);
-
-            for (int k=0; k<nnb; ++k)
-            {
-                if (nnbidx >= inb.count())
-                {
-                    throw SireIO::parse_error( QObject::tr(
-                        "Disagreement of the number of excluded atom nb terms! %1 versus %2")
-                            .arg(nnbidx).arg(inb.count()), CODELOC );
-                }
                 
-                ex[k] = inb[nnbidx];
-                nnbidx += 1;
-            }
-
-            excl[iat] = ex;
+            ex[k] = inb[nnbidx];
+            nnbidx += 1;
         }
 
-        excl_atoms[molnum-1] = excl; // molnum is 1-indexed
+        excl_atoms[molnum-1][atomidx] = ex; // molnum is 1-indexed
     }
 }
 
@@ -701,7 +710,6 @@ void AmberPrm::rebuildAfterReload()
 
     //first need to create the map of all of the atom numbers in each molecule
     this->rebuildMolNumToAtomNums();
-    this->rebuildExcludedAtoms();
 
     if (usesParallel())
     {
@@ -710,16 +718,16 @@ void AmberPrm::rebuildAfterReload()
             //now we have to build the LJ parameters (Amber stores them weirdly!)
             [&](){ this->rebuildLJParameters(); },
             //now we have to build the lookup indicies for the bonds, angles and dihedrals
-            [&](){ this->rebuildBADIndicies(); }
+            [&](){ this->rebuildBADIndicies(); },
             //now we have to build the excluded atom lists
-            //[&](){ this->rebuildExcludedAtoms(); }
+            [&](){ this->rebuildExcludedAtoms(); }
         );
     }
     else
     {
         this->rebuildLJParameters();
         this->rebuildBADIndicies();
-        //this->rebuildExcludedAtoms();
+        this->rebuildExcludedAtoms();
     }
 }
 
@@ -4077,9 +4085,10 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
                             throw SireIO::parse_error( QObject::tr(
                                 "Cannot find atom %1 in the molecule. This is likely because "
                                 "the code to deal with molecules with SS bonds is broken..."
-                                "Valid atom numbers are %2")
+                                "Valid atom numbers are %2. Listed excluded atoms are %3")
                                     .arg(excluded_atom)
-                                    .arg(Sire::toString(nums)),
+                                    .arg(Sire::toString(nums))
+                                    .arg(Sire::toString(excluded_atoms[i])),
                                     CODELOC );
                         }
                     }
@@ -4096,7 +4105,7 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
     AmberParams params(molinfo);
 
     //assign all of the parameters
-    if (false)//usesParallel())
+    if (usesParallel())
     {
         AmberParams atoms, bonds, angles, dihedrals, excluded;
 
