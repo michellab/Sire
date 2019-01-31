@@ -143,8 +143,8 @@ if len(failures) > 0:
         s.append("One of more jobs in %s failed!" % failure)
 
     print("\nEXITING AS FAIL")
-    raise AssertationError("SOME OF THE UNIT TESTS FAILED!\n%s" % 
-                           "\n".join(s))
+    raise AssertionError("SOME OF THE UNIT TESTS FAILED!\n%s" % 
+                         "\n".join(s))
 else:
     print("\n\nHOORAY - ALL OF THE UNIT TESTS PASSED!!!")
     print("\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/")
