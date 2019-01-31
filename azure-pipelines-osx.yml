@@ -9,7 +9,7 @@ trigger:
 steps:
 - script: |
     # compile from scratch (no docker with OS X)
-    ./compile_sire.sh
+    ./compile_sire.sh --install $HOME/sire.app
   displayName: 'Build Sire'
 - script: |
     # create the binary package before running tests, as the package must be clean
