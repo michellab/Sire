@@ -18,10 +18,6 @@ steps:
     SIRE_RUN_FILE: $HOME/sire_devel_latest_osx.run
   displayName: 'Package Sire into a binary'
 - script: |
-    # now perform the tests
-    $HOME/sire.app/bin/sire_test
-  displayName: 'Run Sire tests'
-- script: |
     # finally deploy the binary to an object store bucket identified by 'par_url'
     $HOME/sire.app/bin/conda install pycurl
     $HOME/sire.app/bin/python $HOME/Sire/docker/sire-deploy-devel/deploy.py $HOME/sire_devel_latest_osx.run
