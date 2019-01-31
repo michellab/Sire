@@ -2602,7 +2602,6 @@ PropertyPtr AmberParams::_pvt_makeCompatibleWith(const MoleculeInfoData &newinfo
     }
     catch(const SireError::exception &e)
     {
-        qDebug() << e.toString();
         throw;
         return AmberParams();
     }
