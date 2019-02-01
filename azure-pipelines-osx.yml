@@ -21,10 +21,6 @@ steps:
     ./compile_sire.sh --install $HOME/sire.app
   displayName: 'Build Sire'
 - script: |
-    # create and upload the 'build' directory so that we can use this
-    # as a starting point for the next build
-    tar -jcvf sire_builddir_devel_latest_osx.tar.bz2 build > tar.log 2>&1
-
     # create the binary package before running tests, as the package must be clean
     $HOME/sire.app/bin/package_sire > package.log 2>&1
   env:
@@ -33,7 +29,6 @@ steps:
 - script: |
     # finally deploy the binary to an object store bucket identified by 'par_url'
     $HOME/sire.app/bin/conda install -y pycurl
-    $HOME/sire.app/bin/python docker/sire-deploy-devel/deploy.py sire_builddir_devel_latest_osx.tar.bz2
     $HOME/sire.app/bin/python docker/sire-deploy-devel/deploy.py $HOME/sire_devel_latest_osx.run
   env:
     PAR_URL: $(parURL)
