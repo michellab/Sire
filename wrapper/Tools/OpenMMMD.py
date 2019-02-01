@@ -408,7 +408,7 @@ def setupForcefields(system, space):
 
     system.setProperty("space", space)
     system.setProperty("switchingFunction", CHARMMSwitchingFunction(cutoff_dist.val))
-    system.setProperty("combRules", VariantProperty(combining_rules.val))
+    system.setProperty("CombRules", VariantProperty(combining_rules.val))
 
     total_nrg = internonbondedff.components().total() + \
                 intranonbondedff.components().total() + intrabondedff.components().total() + \
@@ -1077,7 +1077,7 @@ def setupForceFieldsFreeEnergy(system, space):
     else:
         system.setProperty("switchingFunction", NoCutoff())
 
-    system.setProperty("combRules", VariantProperty(combining_rules.val))
+    system.setProperty("CombRules", VariantProperty(combining_rules.val))
     system.setProperty("coulombPower", VariantProperty(coulomb_power.val))
     system.setProperty("shiftDelta", VariantProperty(shift_delta.val))
 
