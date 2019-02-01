@@ -103,6 +103,12 @@ enum
     CUTOFFPERIODIC = 2
 };
 
+enum 
+{
+    ARITHMETIC = 0,
+    GEOMETRIC = 1
+};
+
 enum
 {
     NONE = 0,
@@ -696,7 +702,7 @@ void OpenMMFrEnergyST::initialise()
         }
 
     }
-    else
+    else (flag_combRules == GEOMETRIC)
     {//CUTOFF PERIODIC OR NON PERIODIC
 
         const double converted_cutoff_distance = convertTo(cutoff_distance.value(), nanometer);
