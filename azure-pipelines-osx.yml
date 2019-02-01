@@ -27,5 +27,5 @@ steps:
     $HOME/sire.app/bin/python docker/sire-deploy-devel/deploy.py sire_builddir_devel_latest_osx.tar.bz2
     $HOME/sire.app/bin/python docker/sire-deploy-devel/deploy.py $HOME/sire_devel_latest_osx.run
   env:
-    par_url: $(parURL)
+    PAR_URL: $(parURL)
   displayName: 'Deploy binary to siremol.org'
