@@ -102,7 +102,7 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, Moves &moves)
 }
 
 /** Constructor */
-Moves::Moves() : Property(), acceptable_delta(1e-2), check_running_total(true)
+Moves::Moves() : Property(), acceptable_delta(0.1), check_running_total(true)
 {}
 
 /** Copy constructor */
@@ -575,7 +575,7 @@ void Moves::postCheck(System &system) const
                     "The running total energy (%1 kcal mol-1) disagrees with the "
                     "total energy as calculated from scratch (%2 kcal mol-1). "
                     "Energy components which show disagreements greater than %3 kcal mol-1 "
-                    "are listed below:\n")
+                    "are listed below:%4\n")
                         .arg(oldnrgs[system.totalComponent()])
                         .arg(newnrgs[system.totalComponent()])
                         .arg(acceptable_delta)
