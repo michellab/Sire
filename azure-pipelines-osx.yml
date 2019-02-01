@@ -12,17 +12,9 @@ steps:
     echo "Downloading sire_builddir_devel_osx.tar.bz2..."
     wget https://siremol.org/largefiles/sire_releases/download.php?name=sire_builddir_devel_latest_osx.tar.bz2 -O sire_builddir_devel_latest_osx.tar.bz2 > /dev/null 2>&1
 
-    # download and install last OSX build of Sire in $HOME/sire.app
-    echo "Downloading sire_devel_latest_osx.run..."
-    wget https://siremol.org/largefiles/sire_releases/download.php?name=sire_devel_latest_osx.run -O sire_devel_latest_osx.run
-    chmod +x sire_devel_latest_osx.run
-
     echo "Unpacking sire_builddir_devel_latest_osx.tar.bz2 (takes a long time)..."
     tar -jxvf sire_builddir_devel_latest_osx.tar.bz2 > /dev/null 2>&1
-    echo "Unpacking sire_devel_latest_osx.run (takes a long time)..."
-    echo "$HOME/sire.app" | ./sire_devel_latest_osx.run
 
-    # compile from scratch (no docker with OS X)
     echo "Performing an incremental build of Sire..."
     ./compile_sire.sh --install $HOME/sire.app
   displayName: 'Build Sire'
