@@ -8,8 +8,20 @@ trigger:
 
 steps:
 - script: |
+    # download and unpack the build directory from the last successful build
+    curl http://siremol.org/largefiles/sire_releases/download.php?name=sire_builddir_devel_latest_osx.tar.bz2 -o sire_builddir_devel_latest_osx.tar.bz2
+
+    # download and install last OSX build of Sire in $HOME/sire.app
+    curl http://siremol.org/largefiles/sire_releases/download.php?name=sire_devel_latest_osx.run -o sire_devel_latest_osx.run
+    chmod +x sire_devel_latest_osx.run
+
+    tar -jxvf sire_builddir_devel_latest_osx.tar.bz2 > untar.log 2>&1
+    ./sire_devel_latest_osx.run > unpack.log 2>&1
+
     # compile from scratch (no docker with OS X)
     ./compile_sire.sh --install $HOME/sire.app
+  env:
+    SIRE_INSTALL_DIR: $HOME/sire.app
   displayName: 'Build Sire'
 - script: |
     # create and upload the 'build' directory so that we can use this
