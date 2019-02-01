@@ -18,9 +18,9 @@ steps:
     chmod +x sire_devel_latest_osx.run
 
     echo "Unpacking sire_builddir_devel_latest_osx.tar.bz2 (takes a long time)..."
-    tar -jxvf sire_builddir_devel_latest_osx.tar.bz2 > untar.log 2>&1
+    tar -jxvf sire_builddir_devel_latest_osx.tar.bz2
     echo "Unpacking sire_devel_latest_osx.run (takes a long time)..."
-    ./sire_devel_latest_osx.run > unpack.log 2>&1
+    ./sire_devel_latest_osx.run
 
     # compile from scratch (no docker with OS X)
     echo "Performing an incremental build of Sire..."
