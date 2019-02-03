@@ -173,8 +173,8 @@ else
 fi
 
 # Now set the MACOSX_DEPLOYMENT_TARGET to make sure
-# that we can work with Mountain Lion or above
-export MACOSX_DEPLOYMENT_TARGET="10.8"
+# that we can work with Mavericks or above (needed by Qt5)
+export MACOSX_DEPLOYMENT_TARGET="10.9"
 
 # Now run the python install script
 if [ -e "${INSTALL_DIR}/bin/python" ]; then
