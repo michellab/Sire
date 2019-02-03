@@ -87,7 +87,6 @@ if ( NEED_BUILD_QT )
       endif()
     endif()
 
-    list( APPEND QT_OPTIONS "-no-javascript-jit")
     list( APPEND QT_OPTIONS "-no-glib")
     list( APPEND QT_OPTIONS "-no-kms")
     list( APPEND QT_OPTIONS "-no-dbus")
@@ -95,7 +94,6 @@ if ( NEED_BUILD_QT )
     list( APPEND QT_OPTIONS "-no-icu")
     list( APPEND QT_OPTIONS "-no-iconv")
     list( APPEND QT_OPTIONS "-no-cups")
-    list( APPEND QT_OPTIONS "-no-nis")
     list( APPEND QT_OPTIONS "-no-rpath")
     list( APPEND QT_OPTIONS "-no-linuxfb")
     list( APPEND QT_OPTIONS "-no-directfb")
@@ -116,7 +114,7 @@ if ( NEED_BUILD_QT )
     endif()
 
     if (SIRE_HAS_CPP_11)
-      list( APPEND QT_OPTIONS "-c++11")
+      #list( APPEND QT_OPTIONS "-c++11")
 
       if (NEED_UNDEF_STRICT_ANSI)
         set(ENV{CXXFLAGS} "-U__STRICT_ANSI__")
@@ -141,7 +139,7 @@ if ( NEED_BUILD_QT )
     execute_process( COMMAND ${QT_BUILD_DIR}/configure ${QT_OPTIONS}
                      WORKING_DIRECTORY ${QT_BUILD_DIR}
                      RESULT_VARIABLE QT_CONFIGURE_FAILED
-                     OUTPUT_QUIET ERROR_QUIET 
+                     #OUTPUT_QUIET ERROR_QUIET 
                    )
 
     if (QT_CONFIGURE_FAILED)
