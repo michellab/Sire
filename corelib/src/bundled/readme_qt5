@@ -1,0 +1,34 @@
+We bundle Qt5 with Sire. We only use QtCore. To make the download small,
+we remove everything that is not needed by QtCore. To do this, follow
+these instructions.
+
+1. Download the Qt5 source for module QtBase, e.g. qtbase-everywhere-src-5.12.1.tar.xz
+2. Unpack, e.g. tar -jxvf qtbase-everywhere-src-5.12.1.tar.xz
+3. Rename this as qtbase, e.g. mv qtbase-everywhere-src-5.12.1 qtbase
+4. Remove the unnecessary files, e.g. 
+   rm -rf qtbase/docs/* qtbase/examples/* qtbase/tests/*
+5. Retar as qtbase.tar.gz, e.g. tar -zcvf qtbase.tar.gz qtbase
+6. Remove the contents of qtbase, but leave the directory there,
+   e.g. rm -rf qtbase/* ; rm -rf qtbase/.*
+7. Create an empty qtbase_patch file using tar -zcvf qtbase_patch.tar.gz qtbase
+
+8. Now try to compile QtBase by compiling Sire... cd Sire; ./compile_sire.sh
+
+If this works, then everything is ok. That is unlikely though...
+
+To debug a Qt compile issue, edit install_qt5.cmake and comment out
+the lines that read "OUTPUT_QUIET ERROR_QUIET"
+
+This will un-silence the Qt configure and build, enabling you to debug issues.
+
+If there are any files that need patching, copy them into the right
+location in the (now empty) qtbase directory, and then recreate
+the qtbase_patch.tar.gz file. This file will be untarred over qtbase.tar.gz,
+enabling your fixes to be applied without us needing to change or
+modify qtbase.tar.gz (important to keep file sizes down, and also so
+that we have a good record of what needs changing). Your changes should
+*ONLY* be to ensure that Qt5 can compile on your computer. It should not
+change base functionality. Typically, we only need changes to cope
+with new OS releases (e.g. updated OS X!)
+
+(for example, I needed to create the empty directory tests/auto/cmake)

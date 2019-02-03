@@ -28,7 +28,7 @@ steps:
     docker pull siremol/sire-build:latest
 
     # now build the latest version of devel, starting from the last point
-    cd docker/sire-devel && docker build --no-cache -f Dockerfile -t siremol/sire-devel:latest . && cd - && docker push siremol/sire-devel:latest
+    cd docker/sire-devel-latest && docker build --no-cache -f Dockerfile -t siremol/sire-devel:latest . && cd - && docker push siremol/sire-devel:latest
   env:
     pswd: $(dockerPassword)
     id: $(dockerId)
