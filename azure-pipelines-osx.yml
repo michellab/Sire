@@ -1,0 +1,35 @@
+# Pipeline to build the latest version of Sire by starting from a docker
+# image of a recent build. This avoids the (VERY) long build times if
+# we start from scratch. You should ensure that 'sire-devel:latest' 
+# corresponds to the right place to start...
+
+trigger:
+- devel
+
+steps:
+- script: |
+    # download and install last OSX build of Sire in $HOME/sire.app
+    echo "Downloading sire_devel_latest_osx.run..."
+    wget https://siremol.org/largefiles/sire_releases/download.php?name=sire_devel_latest_osx.run -O sire_devel_latest_osx.run > /dev/null 2>&1
+    chmod +x sire_devel_latest_osx.run
+
+    echo "Unpacking sire_devel_latest_osx.run (takes a long time)..."
+    echo "$HOME/sire.app" | ./sire_devel_latest_osx.run > /dev/null 2>&1
+
+    # compile from scratch (no docker with OS X)
+    echo "Performing an incremental build of Sire..."
+    ./compile_sire.sh --install $HOME/sire.app
+  displayName: 'Build Sire'
+- script: |
+    # create the binary package before running tests, as the package must be clean
+    $HOME/sire.app/bin/package_sire > package.log 2>&1
+  env:
+    SIRE_RUN_FILE: $HOME/sire_devel_latest_osx.run
+  displayName: 'Package Sire into a binary'
+- script: |
+    # finally deploy the binary to an object store bucket identified by 'par_url'
+    $HOME/sire.app/bin/conda install -y pycurl
+    $HOME/sire.app/bin/python docker/sire-deploy-devel/deploy.py $HOME/sire_devel_latest_osx.run
+  env:
+    PAR_URL: $(parURL)
+  displayName: 'Deploy binary to siremol.org'

@@ -31,6 +31,7 @@
 
 #include "ff.h"
 #include "g2ff.h"
+#include "SireBase/chunkedvector.hpp"
 
 SIRE_BEGIN_HEADER
 
@@ -48,6 +49,8 @@ QDataStream& operator>>(QDataStream&, SireFF::Intra2B2GFF<Potential>&);
 
 namespace SireFF
 {
+
+using SireBase::ChunkedVector;
 
 namespace detail
 {

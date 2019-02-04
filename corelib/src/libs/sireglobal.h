@@ -43,6 +43,10 @@
 #define SIRE_EXPOSE_SEGMENT_PROPERTY(c,a) /* Exposing segment property #1 with alias #2 */
 #define SIRE_EXPOSE_BEAD_PROPERTY(c,a)  /* Exposing bead property #1 with alias #2 */
 
+#ifdef _WIN32
+#define SIRE_EXPORT __declspec(dllexport)
+#define SIRE_IMPORT __declspec(dllimport)
+#else
 //create the keyword used to export a symbol - this
 //is a copy of Q_DECL_EXPORT, which will definitely
 //be set to the correct value
@@ -56,6 +60,7 @@
 #else
 #define SIRE_EXPORT
 #define SIRE_IMPORT
+#endif
 #endif
 
 //create the keyword to fix symbol visibility problems for out-of-line
@@ -204,15 +209,6 @@
 #define WARNING(desc) message(__FILE__ "(" STRINGIZE(__LINE__) ") : Warning: " #desc)
 #endif
 
-#ifdef SIRE_EXPORT
-#undef SIRE_EXPORT
-#endif
-#define SIRE_EXPORT __declspec(dllexport)
-#ifdef SIRE_IMPORT
-#undef SIRE_IMPORT
-#endif
-#define SIRE_IMPORT __declspec(dllimport)
-
 //I now define seperate SIRE_EXPORT macros for each of the different Sire libraries.
 // SIREANALYSIS_EXPORT definitions
 #ifdef _WIN32
@@ -223,7 +219,7 @@
 #endif
 #endif
 #ifndef SIREANALYSIS_EXPORT
-#define SIREANALYSIS_EXPORT
+#define SIREANALYSIS_EXPORT SIRE_EXPORT
 #endif
 // SIREANALYSIS_EXPORT end definitions
 // SIREBASE_EXPORT definitions
@@ -235,7 +231,7 @@
 #endif
 #endif
 #ifndef SIREBASE_EXPORT
-#define SIREBASE_EXPORT
+#define SIREBASE_EXPORT SIRE_EXPORT
 #endif
 // SIREBASE_EXPORT end definitions
 // SIRECAS_EXPORT definitions
@@ -247,7 +243,7 @@
 #endif
 #endif
 #ifndef SIRECAS_EXPORT
-#define SIRECAS_EXPORT
+#define SIRECAS_EXPORT SIRE_EXPORT
 #endif
 // SIRECAS_EXPORT end definitions
 // SIRECLUSTER_EXPORT definitions
@@ -259,7 +255,7 @@
 #endif
 #endif
 #ifndef SIRECLUSTER_EXPORT
-#define SIRECLUSTER_EXPORT
+#define SIRECLUSTER_EXPORT SIRE_EXPORT
 #endif
 // SIRECLUSTER_EXPORT end definitions
 // SIREERROR_EXPORT definitions
@@ -271,7 +267,7 @@
 #endif
 #endif
 #ifndef SIREERROR_EXPORT
-#define SIREERROR_EXPORT
+#define SIREERROR_EXPORT SIRE_EXPORT
 #endif
 // SIREERROR_EXPORT end definitions
 // SIREFF_EXPORT definitions
@@ -283,7 +279,7 @@
 #endif
 #endif
 #ifndef SIREFF_EXPORT
-#define SIREFF_EXPORT
+#define SIREFF_EXPORT SIRE_EXPORT
 #endif
 // SIREFF_EXPORT end definitions
 // SIREID_EXPORT definitions
@@ -295,7 +291,7 @@
 #endif
 #endif
 #ifndef SIREID_EXPORT
-#define SIREID_EXPORT
+#define SIREID_EXPORT SIRE_EXPORT
 #endif
 // SIREID_EXPORT end definitions
 // SIREIO_EXPORT definitions
@@ -307,7 +303,7 @@
 #endif
 #endif
 #ifndef SIREIO_EXPORT
-#define SIREIO_EXPORT
+#define SIREIO_EXPORT SIRE_EXPORT
 #endif
 // SIREIO_EXPORT end definitions
 // SIREMATHS_EXPORT definitions
@@ -319,7 +315,7 @@
 #endif
 #endif
 #ifndef SIREMATHS_EXPORT
-#define SIREMATHS_EXPORT
+#define SIREMATHS_EXPORT SIRE_EXPORT
 #endif
 // SIREMATHS_EXPORT end definitions
 // SIREMM_EXPORT definitions
@@ -331,7 +327,7 @@
 #endif
 #endif
 #ifndef SIREMM_EXPORT
-#define SIREMM_EXPORT
+#define SIREMM_EXPORT SIRE_EXPORT
 #endif
 // SIREMM_EXPORT end definitions
 // SIREMOL_EXPORT definitions
@@ -343,7 +339,7 @@
 #endif
 #endif
 #ifndef SIREMOL_EXPORT
-#define SIREMOL_EXPORT
+#define SIREMOL_EXPORT SIRE_EXPORT
 #endif
 // SIREMOL_EXPORT end definitions
 // SIREMOVE_EXPORT definitions
@@ -355,7 +351,7 @@
 #endif
 #endif
 #ifndef SIREMOVE_EXPORT
-#define SIREMOVE_EXPORT
+#define SIREMOVE_EXPORT SIRE_EXPORT
 #endif
 // SIREMOVE_EXPORT end definitions
 // SIRESTREAM_EXPORT definitions
@@ -367,7 +363,7 @@
 #endif
 #endif
 #ifndef SIRESTREAM_EXPORT
-#define SIRESTREAM_EXPORT
+#define SIRESTREAM_EXPORT SIRE_EXPORT
 #endif
 // SIRESTREAM_EXPORT end definitions
 // SIRESYSTEM_EXPORT definitions
@@ -379,7 +375,7 @@
 #endif
 #endif
 #ifndef SIRESYSTEM_EXPORT
-#define SIRESYSTEM_EXPORT
+#define SIRESYSTEM_EXPORT SIRE_EXPORT
 #endif
 // SIRESYSTEM_EXPORT end definitions
 // SIREUNITS_EXPORT definitions
@@ -391,7 +387,7 @@
 #endif
 #endif
 #ifndef SIREUNITS_EXPORT
-#define SIREUNITS_EXPORT
+#define SIREUNITS_EXPORT SIRE_EXPORT
 #endif
 // SIREUNITS_EXPORT end definitions
 // SIREVOL_EXPORT definitions
@@ -403,7 +399,7 @@
 #endif
 #endif
 #ifndef SIREVOL_EXPORT
-#define SIREVOL_EXPORT
+#define SIREVOL_EXPORT SIRE_EXPORT
 #endif
 // SIREVOL_EXPORT end definitions
 // SQUIRE_EXPORT definitions
@@ -415,7 +411,7 @@
 #endif
 #endif
 #ifndef SQUIRE_EXPORT
-#define SQUIRE_EXPORT
+#define SQUIRE_EXPORT SIRE_EXPORT
 #endif
 // SQUIRE_EXPORT end definitions
 

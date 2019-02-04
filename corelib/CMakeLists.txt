@@ -6,8 +6,8 @@
 #
 ################################
 
-set (S_VERSION_MAJOR "2018")
-set (S_VERSION_MINOR "2")
+set (S_VERSION_MAJOR "2019")
+set (S_VERSION_MINOR "1")
 set (S_VERSION_PATCH "0")             
 
 set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")

@@ -228,7 +228,6 @@ PropertyPtr ConnectivityBase::_pvt_makeCompatibleWith(const MoleculeInfoData &mo
     }
     catch(const SireError::exception &e)
     {
-        qDebug() << e.toString();
         throw;
         return Connectivity();
     }
@@ -269,7 +268,6 @@ PropertyPtr ConnectivityBase::_pvt_makeCompatibleWith(const MoleculeInfoData &mo
     }
     catch(const SireError::exception &e)
     {
-        qDebug() << e.toString();
         throw;
         return Connectivity();
     }

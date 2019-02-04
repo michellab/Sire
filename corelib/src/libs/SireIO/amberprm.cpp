@@ -152,37 +152,63 @@ void AmberPrm::rebuildExcludedAtoms()
     }
 
     //get the number of atoms in each molecule
-    const auto nats_per_mol = this->intData("ATOMS_PER_MOLECULE");
-    SireBase::assert_equal( nats_per_mol.count(), nmols, CODELOC );
+    if (molnum_to_atomnums.count() != nmols+1) // molnum_to_atomnums has a fake idx 0 value
+    {
+        throw SireIO::parse_error( QObject::tr(
+            "Disagreement of the number of molecules. %1 versus %2")
+                .arg(molnum_to_atomnums.count()-1).arg(nmols), CODELOC );
+    }
 
     excl_atoms = QVector< QVector< QVector<int> > >(nmols);
-    int atomidx = 0;
     int nnbidx = 0;
 
-    for (int i=0; i<nmols; ++i)
+    //we need to loop through the excluded atoms in atomnum order, not molidx order.
+    //This is because a single molecule can be spread over several non-contiguous blocks
+    //of atom numbers!
+    QVector< QPair<int,int> > atomnum_to_molnum_atomidx(natoms+1);
+    
+    // get the molecule number and index of the atom in that molecule for every
+    // atom identified by its atom number
+    for (int molnum=1; molnum<=nmols; ++molnum)
     {
-        const int nats = nats_per_mol[i];
-
-        QVector< QVector<int> > excl(nats);
-
-        for (int j=0; j<nats; ++j)
+        const auto atomnums_in_mol = molnum_to_atomnums.at(molnum);
+        
+        for (int iat=0; iat<atomnums_in_mol.count(); ++iat)
         {
-            const int nnb = nnb_per_atom[atomidx];
+            const int atomnum = atomnums_in_mol[iat];
+            atomnum_to_molnum_atomidx[atomnum] = QPair<int,int>(molnum,iat);
+        }
+        
+        excl_atoms[molnum-1] = QVector< QVector<int> >(atomnums_in_mol.count());
+    }
 
-            QVector<int> ex(nnb);
+    // now loop over the atoms in sequence, looking up their excluded atoms (as these
+    // are arranged in atomnum sequence. Extract the excluded atoms for each atom,
+    // placing the result into excl_atoms, which is indexed by molnum then atomidx in
+    // molecule
+    for (int atomnum=1; atomnum<=natoms; ++atomnum)
+    {
+        int molnum = atomnum_to_molnum_atomidx[atomnum].first;
+        int atomidx = atomnum_to_molnum_atomidx[atomnum].second;
 
-            for (int k=0; k<nnb; ++k)
+        const int nnb = nnb_per_atom[atomnum-1]; // atomnum is 1-indexed
+
+        QVector<int> ex(nnb);
+
+        for (int k=0; k<nnb; ++k)
+        {
+            if (nnbidx >= inb.count())
             {
-                ex[k] = inb[nnbidx];
-                nnbidx += 1;
+                throw SireIO::parse_error( QObject::tr(
+                    "Disagreement of the number of excluded atom nb terms! %1 versus %2")
+                        .arg(nnbidx).arg(inb.count()), CODELOC );
             }
-
-            atomidx += 1;
-
-            excl[j] = ex;
+                
+            ex[k] = inb[nnbidx];
+            nnbidx += 1;
         }
 
-        excl_atoms[i] = excl;
+        excl_atoms[molnum-1][atomidx] = ex; // molnum is 1-indexed
     }
 }
 
@@ -3712,7 +3738,6 @@ MolStructureEditor AmberPrm::getMolStructure(int molidx,
     //first step is to build the structure of the molecule - i.e.
     //the layout of cutgroups, residues and atoms
     MolStructureEditor mol;
-    mol.renumber(MolNum(molnum));
 
     const auto atom_names = this->stringData("ATOM_NAME");
 
@@ -4001,9 +4026,32 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
 
             const int natoms = molinfo.nAtoms();
 
+            if (molidx < 0 or molidx >= excl_atoms.count())
+            {
+                throw SireIO::parse_error( QObject::tr(
+                    "Disagreement over the number of molecules! %1 versus %2")
+                        .arg(molidx+1).arg(excl_atoms.count()), CODELOC );
+            }
+
             //get the set of excluded atoms for each atom of this molecule
             const auto excluded_atoms = excl_atoms[molidx];
-            SireBase::assert_equal( excluded_atoms.count(), natoms, CODELOC );
+            
+            if (excluded_atoms.count() != natoms)
+            {
+                QStringList lines;
+                
+                for (int i=qMax(0,molidx-3); i<qMin(molidx+3,excl_atoms.count()); ++i)
+                {
+                    lines.append( QString("molidx %1: natoms = %2").arg(i)
+                                .arg(excl_atoms[i].count()) );
+                }
+            
+                throw SireIO::parse_error( QObject::tr(
+                    "Disagreement over the number of atoms for molecule at index %1. "
+                    "%2 versus %3. Number of atoms in neighbouring molecules are { %4 }")
+                        .arg(molidx).arg(excluded_atoms.count()).arg(natoms)
+                        .arg(lines.join(", ")), CODELOC );
+            }
 
             for (int i=0; i<natoms; ++i)
             {
@@ -4036,9 +4084,10 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
                             throw SireIO::parse_error( QObject::tr(
                                 "Cannot find atom %1 in the molecule. This is likely because "
                                 "the code to deal with molecules with SS bonds is broken..."
-                                "Valid atom numbers are %2")
+                                "Valid atom numbers are %2. Listed excluded atoms are %3")
                                     .arg(excluded_atom)
-                                    .arg(Sire::toString(nums)),
+                                    .arg(Sire::toString(nums))
+                                    .arg(Sire::toString(excluded_atoms[i])),
                                     CODELOC );
                         }
                     }
@@ -4055,7 +4104,7 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
     AmberParams params(molinfo);
 
     //assign all of the parameters
-    if (false)//usesParallel())
+    if (usesParallel())
     {
         AmberParams atoms, bonds, angles, dihedrals, excluded;
 
@@ -4126,7 +4175,7 @@ MolEditor AmberPrm::getMoleculeEditor(int molidx,
 
     amber_params.setPropertyMap(map);
 
-  /*  _setProperty(mol, map, "charge", amber_params.charges());
+    _setProperty(mol, map, "charge", amber_params.charges());
     _setProperty(mol, map, "LJ", amber_params.ljs());
     _setProperty(mol, map, "mass", amber_params.masses());
     _setProperty(mol, map, "element", amber_params.elements());
@@ -4147,7 +4196,7 @@ MolEditor AmberPrm::getMoleculeEditor(int molidx,
     _setProperty(mol, map, "gb_radius_set", StringProperty(amber_params.radiusSet()));
     _setProperty(mol, map, "treechain", amber_params.treeChains());
     _setProperty(mol, map, "parameters", amber_params);
-    _setProperty(mol, map, "forcefield", ffield);*/
+    _setProperty(mol, map, "forcefield", ffield);
 
     return mol;
 }

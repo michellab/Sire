@@ -5,55 +5,109 @@
 import sys
 import os
 import time
+import argparse
+import multiprocessing
+
+
+def parse_args():
+    parser=argparse.ArgumentParser()
+    parser.add_argument("-C", "--corelib", action="append", nargs=1,
+        metavar=("PARAMETER=VALUE",), default=[],
+        help="pass CMake definitions for corelib")
+    parser.add_argument("-W", "--wrapper", action="append", nargs=1,
+        metavar=("PARAMETER=VALUE",), default=[],
+        help="pass CMake definitions for wrapper")
+    parser.add_argument("-G", dest="generator", action="store", nargs=1,
+        metavar=("GENERATOR",), default="",
+        help="pass CMake generator")
+    parser.add_argument("-n", "--ncores", action="store", type=int, nargs=1,
+        metavar=("N_CORES",), default=multiprocessing.cpu_count(),
+        help="Number of CPU cores used for compiling corelib "
+        "(defaults to all available on the current system)")
+    parser.add_argument("-N", "--npycores", action="store", type=int, nargs=1,
+        metavar=("N_PYTHON_CORES",), default=-1,
+        help="Number of CPU cores used for compiling Python wrappers "
+        "(defaults to the number of CPU cores used for compiling corelib)")
+    parser.add_argument("--pip", action="store_true",
+        help="Use pip rather than conda to install dependencies")
+    return parser.parse_args()
+
+
+def make_cmd(ncores, install = False):
+    try:
+        make = os.environ["MAKE"]
+    except KeyError:
+        make = None
+        with open("CMakeCache.txt", "r") as hnd:
+            line = True
+            while line:
+                line = hnd.readline()
+                if (line and line.startswith("CMAKE_GENERATOR:INTERNAL")
+                    and line.split("=")[-1].startswith("Visual Studio")):
+                    make = "MSBuild.exe"
+                    action = "INSTALL" if install else "BUILD_ALL"
+                    make_args = "/m:%s /p:Configuration=Release /p:Platform=x64 %s.vcxproj" % (ncores, action)
+                    break
+        if (make is None):
+            make = "make"
+    if ("make" in make):
+        action = " install" if install else ""
+        make_args = "-j %s%s" % (ncores, action)
+    return make, make_args
 
 if __name__ == "__main__":
-
-    conda_base = os.path.abspath( os.path.dirname(sys.executable) )
-
-    if conda_base.endswith("bin"):
-        conda_base = os.path.abspath( "%s/.." % os.path.dirname(sys.executable))
-
+    args = parse_args()
+    
     install_script = sys.argv[0]
     build_dir = os.path.abspath( os.path.dirname(install_script) )
 
     # Get the number of cores to use for any compiling - if this is 0, then 
     # we use all of the cores
-    if "NCORES" in os.environ:
+    try:
         NCORES = int(os.environ["NCORES"])
-    else:
-        import multiprocessing
-        NCORES = multiprocessing.cpu_count()
+    except KeyError:
+        NCORES = args.ncores
 
     # Get the number of cores to use for compiling the python wrappers - this 
     # defaults to NCORES
-    if "NPYCORES" in os.environ:
+    try:
         NPYCORES = int(os.environ["NPYCORES"])
-    else:
-        NPYCORES = NCORES
+    except KeyError:
+        NPYCORES = args.npycores if args.npycores > 0 else NCORES
 
     print("Number of cores used for compilation = %d" % NCORES)
 
     if NPYCORES != NCORES:
         print("Number of cores used for wrapper compilation = %d" % NPYCORES)
 
-    python_exe = sys.executable
-    #python_exe = None
-    #conda_exe = None
+    if args.pip:
+        python_exe = sys.executable
+        py_module_install = "%s -m pip install" % python_exe
+        conda_base = ""
+    else:
+        conda_base = os.path.abspath(os.path.dirname(sys.executable))
 
-    #if os.path.exists("%s/bin/conda" % conda_base):
-    #    python_exe = "%s/bin/python" % conda_base
-    #    conda_exe = "%s/bin/conda" % conda_base
-    #elif os.path.exists("%s\python.exe" % conda_base):
-    #    python_exe = "%s/python.exe" % conda_base
-    #    conda_exe = "%s/Scripts/conda.exe" % conda_base
-    #else:
-    #    print("Cannot find a 'conda' binary in directory '%s'. "
-    #          "Are you running this script using the python executable "
-    #          "from a valid miniconda or anaconda installation?" % conda_base) 
-    #    sys.exit(-1)
+        if os.path.basename(conda_base) == "bin":
+            conda_base = os.path.dirname(conda_base)
+
+        python_exe = None
+        conda_exe = None
+
+        if os.path.exists(os.path.join(conda_base, "bin", "conda")):
+            python_exe = os.path.join(conda_base, "bin", "python")
+            conda_exe = os.path.join(conda_base, "bin", "conda")
+        elif os.path.exists(os.path.join(conda_base, "python.exe")):
+            python_exe = os.path.join(conda_base, "python.exe")
+            conda_exe = os.path.join(conda_base, "Scripts", "conda.exe")
+        else:
+            print("Cannot find a 'conda' binary in directory '%s'. "
+                  "Are you running this script using the python executable "
+                  "from a valid miniconda or anaconda installation?" % conda_base) 
+            sys.exit(-1)
+        py_module_install = "%s install --yes" % conda_exe
 
     print("Continuing the Sire install using %s %s" \
-              % (python_exe,sys.argv[0]))
+              % (python_exe, sys.argv[0]))
 
     # now go through all of the python modules that need to be available
     # into this conda installation, and make sure they have been installed
@@ -62,50 +116,61 @@ if __name__ == "__main__":
     try:
         import pip
         print("pip is already installed...")
-    except:
-        print("Installing pip using '%s install pip'" % conda_exe)
-        os.system("%s install --yes pip" % conda_exe)
+    except ImportError:
+        if args.pip:
+            print("Could not import pip - please make sure "
+                "pip is available within your current Python environment "
+                "then re-run this script.")
+            sys.exit(-1)
+        else:
+            print("Installing pip using '%s install pip'" % conda_exe)
+            os.system("%s pip" % py_module_install)
 
     # ipython
     try:
         import IPython
         print("ipython is already installed...")
-    except:
-        print("Installing ipython using %s install ipython" % conda_exe)
-        os.system("%s install --yes ipython" % conda_exe)
+    except ImportError:
+        print("Installing ipython using '%s ipython'" % py_module_install)
+        os.system("%s ipython" % py_module_install)
 
     # pytest
     try:
         import pytest
         print("pytest is already installed...")
-    except:
-        print("Installing pytest using %s install pytest" % conda_exe)
-        os.system("%s install --yes pytest" % conda_exe)
+    except ImportError:
+        print("Installing pytest using '%s pytest'" % py_module_install)
+        os.system("%s pytest" % py_module_install)
 
     # nose
     try:
         import nose
         print("nose is already installed...")
-    except:
-        print("Installing nose using '%s install nose'" % conda_exe)
-        os.system("%s install --yes nose" % conda_exe)
+    except ImportError:
+        print("Installing nose using '%s nose'" % py_module_install)
+        os.system("%s nose" % py_module_install)
 
     # openmm
     try:
         import simtk.openmm
         print("openmm is already installed...")
-    except:
-        print("Installing openmm from the conda-forge repository...")
-        os.system("%s install --yes -c omnia -c conda-forge openmm" % conda_exe)
-        #os.system("%s install --yes openmm=7.1" % conda_exe)
+    except ImportError:
+        if args.pip:
+            print("It looks like the openmm Python modules are not "
+                "available - please check your openmm instllation")
+            sys.exit(-1)
+        else:
+            print("Installing openmm from the conda-forge repository...")
+            os.system("%s install --yes -c omnia -c conda-forge openmm" % conda_exe)
+            #os.system("%s install --yes openmm=7.1" % conda_exe)
 
     # libnetcdf
     try:
         import netCDF4
         print("netCDF4 is already installed...")
-    except:
-        print("Installing netCDF4 using '%s install netcdf4'" % conda_exe)
-        os.system("%s install --yes netcdf4" % conda_exe)
+    except ImportError:
+        print("Installing netCDF4 using '%s netcdf4'" % py_module_install)
+        os.system("%s netcdf4" % py_module_install)
 
     # Make sure all of the above output is printed to the screen
     # before we start running any actual compilation
@@ -124,12 +189,12 @@ if __name__ == "__main__":
             compiler_ext = "intel"
 
     # change into the build/corelib directory
-    OLDPWD = os.path.abspath(os.curdir)
+    OLDPWD = os.getcwd()
 
     if compiler_ext:
-        coredir = "%s/corelib_%s" % (build_dir,compiler_ext)
+        coredir = os.path.join(build_dir, "corelib_%s" % build_dir)
     else:
-        coredir = "%s/corelib" % build_dir
+        coredir = os.path.join(build_dir, "corelib")
 
     if not os.path.exists(coredir):
         os.makedirs(coredir)
@@ -139,65 +204,70 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     os.chdir(coredir)
+    sys.stderr.write("1) I am now here: %s\n" % os.getcwd())
+    sys.stderr.flush()
+
+    def add_default_cmake_defs(cmake_defs):
+        for a in ("ANACONDA_BUILD=ON", "ANACONDA_BASE=%s" % conda_base, "BUILD_NCORES=%s" % NCORES):
+            if (args.pip and a.startswith("ANACONDA")):
+                continue
+            found = False
+            for d in cmake_defs:
+                if (a in d[0]):
+                    found = True
+                    break
+            if (not found):
+                cmake_defs.append([a])
 
     if os.path.exists("CMakeCache.txt"):
         # we have run cmake in this directory before. Run it again.
         status = os.system("cmake .")
     else:
         # this is the first time we are running cmake
-        sourcedir = os.path.abspath("../../corelib")
+        sourcedir = os.path.join(os.path.dirname(os.path.dirname(
+            os.getcwd())), "corelib")
 
-        if not os.path.exists("%s/CMakeLists.txt" % sourcedir):
-            print("SOMETHING IS WRONG. There is no file %s/CMakeLists.txt" % coredir)
+        if not os.path.exists(os.path.join(sourcedir, "CMakeLists.txt")):
+            print("SOMETHING IS WRONG. There is no file %s" % os.path.join(sourcedir, "CMakeLists.txt"))
             sys.exit(-1)
 
         #status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
         #                 % (conda_base,NCORES,sourcedir) )
-        os.environ["NetCDF_ROOT_DIR"] = "C:/build/cresset/sire/netcdf461"
-        os.environ["OPENMM_ROOT_DIR"] = "C:/build/cresset/sire/openmm722"
-        status = os.system("cmake -D ANACONDA_BUILD=OFF -D BUILD_NCORES=%s "
-                           "-D SIRE_APP=C:/build/cresset/sire/sire.app "
-                           "-D SIRE_BUNDLE_BOOST=OFF "
-                           "-D SIRE_BUNDLE_QT=OFF "
-                           "-D SIRE_BUNDLE_GSL=OFF "
-                           "-D SIRE_BUNDLE_TBB=OFF "
-                           "-D SIRE_BUNDLE_BLASLAPACK=OFF "
-                           "-D SIRE_BUNDLE_OPENMM=OFF "
-                           "-D SIRE_BUNDLE_CPUID=OFF "
-                           "-D TBB_INCLUDE_DIR=\"C:/Program Files (x86)/IntelSWTools/compilers_and_libraries_2019.1.144/windows/tbb/include\" "
-                           "-D TBB_LIBRARY_DIR=\"C:/Program Files (x86)/IntelSWTools/compilers_and_libraries_2019.1.144/windows/tbb/lib/intel64_win/vc14\" "
-                           "-D CPUID_INCLUDE_DIR=C:/build/cresset/sire/libcpuid040/include "
-                           "-D CPUID_LIBRARY_DIR=C:/build/cresset/sire/libcpuid040/lib "
-                           "-D Qt5Core_DIR=C:/Qt/5.9.5-openssl-msvc2017-x64/lib/cmake/Qt5Core "
-                           "-D BOOST_ROOT=C:/build/cresset/third-party/boost/bin/trunk "
-                           "-D BLA_VENDOR=OpenBLAS "
-                           "-D BLAS_LIBRARIES=C:/build/cresset/third-party/OpenBLAS/bin/trunk/win32-x86_64/lib/libopenblas_dll.lib "
-                           "-D LAPACK_LIBRARIES=C:/build/cresset/third-party/OpenBLAS/bin/trunk/win32-x86_64/lib/libopenblas_dll.lib "
-                           "-D GSL_LIBRARIES=\"C:/build/cresset/sire/gsl25/lib/gsl.lib;C:/build/cresset/sire/gsl25/lib/gslcblas.lib\" "
-                           "-D GSL_INCLUDE_DIR=C:/build/cresset/sire/gsl25/include "
-                           "-G\"Visual Studio 15 2017 Win64\" "
-                           "%s" \
-                          % (NCORES,sourcedir) )
+        for a in ("NetCDF_ROOT_DIR", "OPENMM_ROOT_DIR"):
+            for i, d in enumerate(args.corelib):
+                if (a in d[0]):
+                    v = args.corelib.pop(i)[0]
+                    if (not a in os.environ):
+                        os.environ[a] = v.split("=")[-1]
+        add_default_cmake_defs(args.corelib)
+        sys.stderr.write("2) args.corelib: %s\n" % str(args.corelib))
+        sys.stderr.flush()
+        cmake_cmd = "cmake %s %s" % (" ".join(["-D \"%s\"" % d[0] for d in args.corelib]), sourcedir)
+        sys.stderr.write("1) cmake_cmd: %s\n" % cmake_cmd)
+        sys.stderr.flush()
+        status = os.system(cmake_cmd)
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN USING CMAKE ON CORELIB!")
         sys.exit(-1)
 
     # Now that cmake has run, we can compile corelib
-    #status = os.system("make -j %s" % NCORES)
-    status = os.system("\"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe\" "
-        "/m:{0:d} /p:Configuration=Release /p:Platform=x64 INSTALL.vcxproj".format(NCORES))
+    make, make_args = make_cmd(NCORES)
+                
+    status = os.system("%s %s" % (make, make_args))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING CORELIB!")
         sys.exit(-1)
 
     # Now the compilation has finished, install corelib
-    #status = os.system("make -j %s install" % NCORES)
+    make, make_args = make_cmd(NCORES, True)
 
-    #if status != 0:
-    #    print("SOMETHING WENT WRONG WHEN INSTALLING CORELIB!")
-    #    sys.exit(-1)
+    status = os.system("%s %s" % (make, make_args))
+
+    if status != 0:
+        print("SOMETHING WENT WRONG WHEN INSTALLING CORELIB!")
+        sys.exit(-1)
 
     # Ok, that is all complete. Next we must work on the
     # python wrappers
@@ -222,27 +292,22 @@ if __name__ == "__main__":
         status = os.system("cmake .")
     else:
         # this is the first time we are running cmake
-        sourcedir = os.path.abspath("../../wrapper")   
+        sourcedir = os.path.join(os.path.dirname(os.path.dirname(
+            os.getcwd())), "wrapper")
 
-        if not os.path.exists("%s/CMakeLists.txt" % sourcedir):
-            print("SOMETHING IS WRONG. There is no file %s/CMakeLists.txt" % wrapperdir)
+        if not os.path.exists(os.path.join(sourcedir, "CMakeLists.txt")):
+            print("SOMETHING IS WRONG. There is no file %s" % os.path.join(sourcedir, "CMakeLists.txt"))
             sys.exit(-1)
-    
+
         #status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
         #                 % (conda_base,NCORES,sourcedir) )
-        status = os.system("cmake -D ANACONDA_BUILD=OFF -D BUILD_NCORES=%s "
-                           "-D Qt5Core_DIR=C:/Qt/5.9.5-openssl-msvc2017-x64/lib/cmake/Qt5Core "
-                           "-D SIRE_BUNDLE_PYTHON=OFF "
-                           "-D SIRE_BUNDLE_BOOST_PYTHON=OFF "
-                           "-D SIRE_PYTHON_ENABLE_BUNDLING=OFF "
-                           "-D PYTHON_LIBRARIES=C:/build/cresset/third-party/Python/bin/trunk/win32-x86_64/libs/python36.lib "
-                           "-D PYTHON_INCLUDE_DIR=C:/build/cresset/third-party/Python/bin/trunk/win32-x86_64/Include "
-                           "-D BOOST_PYTHON_LIBRARY=C:/build/cresset/third-party/boost/bin/trunk/win32-x86_64/boost_python3-vc141-mt-x64-1_66.lib "
-                           "-D BOOST_PYTHON_HEADERS=C:/build/cresset/third-party/boost/bin/trunk/include "
-                           "-D PYTHON_SITE_DIR=C:/build/cresset/sire/Flare/third-party/Python/Lib/site-packages "
-                           "-G\"Visual Studio 15 2017 Win64\" "
-                           "%s" \
-                         % (NCORES,sourcedir) )
+        add_default_cmake_defs(args.wrapper)
+        sys.stderr.write("2) args.wrapper: %s\n" % str(args.wrapper))
+        sys.stderr.flush()
+        cmake_cmd = "cmake %s %s" % (" ".join(["-D \"%s\"" % d[0] for d in args.wrapper]), sourcedir)
+        sys.stderr.write("2) cmake_cmd: %s\n" % cmake_cmd)
+        sys.stderr.flush()
+        status = os.system(cmake_cmd)
 
     if status != 0: 
         print("SOMETHING WENT WRONG WHEN USING CMAKE ON WRAPPER!")
@@ -250,16 +315,18 @@ if __name__ == "__main__":
 
     #Now that cmake has run, we can compile wrapper
     #status = os.system("make -j %s" % NPYCORES)
-    status = os.system("\"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe\" "
-        "/m:{0:d} /p:Configuration=Release /p:Platform=x64 INSTALL.vcxproj".format(NPYCORES))
+    make, make_args = make_cmd(NPYCORES)
+
+    status = os.system("%s %s" % (make, make_args))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING WRAPPER!")
         sys.exit(-1)
 
     # Now the compilation has finished, install wrapper
-    #status = os.system("\"C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe\" "
-    #    "/m:{0:d} /p:Configuration=Release /p:Platform=x64 INSTALL.vcxproj".format(NPYCORES))
+    make, make_args = make_cmd(NPYCORES, True)
+
+    status = os.system("%s %s" % (make, make_args))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN INSTALLING WRAPPER!")
