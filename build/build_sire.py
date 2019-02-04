@@ -42,17 +42,18 @@ def make_cmd(ncores, install = False):
             line = True
             while line:
                 line = hnd.readline()
-                if (line and line.startswith("CMAKE_GENERATOR:INTERNAL")
+                if (line and line.strip().startswith("CMAKE_GENERATOR:INTERNAL")
                     and line.split("=")[-1].startswith("Visual Studio")):
                     make = "MSBuild.exe"
-                    action = "INSTALL" if install else "BUILD_ALL"
-                    make_args = "/m:%s /p:Configuration=Release /p:Platform=x64 %s.vcxproj" % (ncores, action)
                     break
         if (make is None):
             make = "make"
     if ("make" in make):
         action = " install" if install else ""
         make_args = "-j %s%s" % (ncores, action)
+    elif ("msbuild" in make.lower()):
+        action = "INSTALL" if install else "ALL_BUILD"
+        make_args = "/m:%s /p:Configuration=Release /p:Platform=x64 %s.vcxproj" % (ncores, action)
     return make, make_args
 
 if __name__ == "__main__":
@@ -82,7 +83,7 @@ if __name__ == "__main__":
 
     if args.pip:
         python_exe = sys.executable
-        py_module_install = "%s -m pip install" % python_exe
+        py_module_install = "\"%s\" -m pip install" % python_exe
         conda_base = ""
     else:
         conda_base = os.path.abspath(os.path.dirname(sys.executable))
@@ -104,7 +105,7 @@ if __name__ == "__main__":
                   "Are you running this script using the python executable "
                   "from a valid miniconda or anaconda installation?" % conda_base) 
             sys.exit(-1)
-        py_module_install = "%s install --yes" % conda_exe
+        py_module_install = "\"%s\" install --yes" % conda_exe
 
     print("Continuing the Sire install using %s %s" \
               % (python_exe, sys.argv[0]))
@@ -204,8 +205,6 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     os.chdir(coredir)
-    sys.stderr.write("1) I am now here: %s\n" % os.getcwd())
-    sys.stderr.flush()
 
     def add_default_cmake_defs(cmake_defs):
         for a in ("ANACONDA_BUILD=ON", "ANACONDA_BASE=%s" % conda_base, "BUILD_NCORES=%s" % NCORES):
@@ -240,11 +239,7 @@ if __name__ == "__main__":
                     if (not a in os.environ):
                         os.environ[a] = v.split("=")[-1]
         add_default_cmake_defs(args.corelib)
-        sys.stderr.write("2) args.corelib: %s\n" % str(args.corelib))
-        sys.stderr.flush()
         cmake_cmd = "cmake %s %s" % (" ".join(["-D \"%s\"" % d[0] for d in args.corelib]), sourcedir)
-        sys.stderr.write("1) cmake_cmd: %s\n" % cmake_cmd)
-        sys.stderr.flush()
         status = os.system(cmake_cmd)
 
     if status != 0:
@@ -254,7 +249,7 @@ if __name__ == "__main__":
     # Now that cmake has run, we can compile corelib
     make, make_args = make_cmd(NCORES)
                 
-    status = os.system("%s %s" % (make, make_args))
+    status = os.system("\"%s\" %s" % (make, make_args))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING CORELIB!")
@@ -263,7 +258,7 @@ if __name__ == "__main__":
     # Now the compilation has finished, install corelib
     make, make_args = make_cmd(NCORES, True)
 
-    status = os.system("%s %s" % (make, make_args))
+    status = os.system("\"%s\" %s" % (make, make_args))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN INSTALLING CORELIB!")
@@ -274,9 +269,9 @@ if __name__ == "__main__":
     os.chdir(OLDPWD)
 
     if compiler_ext:
-        wrapperdir = "%s/wrapper_%s" % (build_dir,compiler_ext)
+        wrapperdir = os.path.join(build_dir, "wrapper_%s" % compiler_ext)
     else:
-        wrapperdir = "%s/wrapper" % build_dir
+        wrapperdir = os.path.join(build_dir, "wrapper")
     
     if not os.path.exists(wrapperdir):
         os.makedirs(wrapperdir)
@@ -302,11 +297,7 @@ if __name__ == "__main__":
         #status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
         #                 % (conda_base,NCORES,sourcedir) )
         add_default_cmake_defs(args.wrapper)
-        sys.stderr.write("2) args.wrapper: %s\n" % str(args.wrapper))
-        sys.stderr.flush()
         cmake_cmd = "cmake %s %s" % (" ".join(["-D \"%s\"" % d[0] for d in args.wrapper]), sourcedir)
-        sys.stderr.write("2) cmake_cmd: %s\n" % cmake_cmd)
-        sys.stderr.flush()
         status = os.system(cmake_cmd)
 
     if status != 0: 
@@ -317,7 +308,7 @@ if __name__ == "__main__":
     #status = os.system("make -j %s" % NPYCORES)
     make, make_args = make_cmd(NPYCORES)
 
-    status = os.system("%s %s" % (make, make_args))
+    status = os.system("\"%s\" %s" % (make, make_args))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING WRAPPER!")
@@ -326,7 +317,7 @@ if __name__ == "__main__":
     # Now the compilation has finished, install wrapper
     make, make_args = make_cmd(NPYCORES, True)
 
-    status = os.system("%s %s" % (make, make_args))
+    status = os.system("\"%s\" %s" % (make, make_args))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN INSTALLING WRAPPER!")
