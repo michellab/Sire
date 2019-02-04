@@ -139,7 +139,7 @@ if ( NEED_BUILD_QT )
     execute_process( COMMAND ${QT_BUILD_DIR}/configure ${QT_OPTIONS}
                      WORKING_DIRECTORY ${QT_BUILD_DIR}
                      RESULT_VARIABLE QT_CONFIGURE_FAILED
-                     #OUTPUT_QUIET ERROR_QUIET 
+                     OUTPUT_QUIET ERROR_QUIET 
                    )
 
     if (QT_CONFIGURE_FAILED)
