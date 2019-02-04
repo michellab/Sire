@@ -119,6 +119,14 @@ if __name__ == "__main__":
         os.system("%s install --yes -c omnia -c conda-forge openmm" % conda_exe)
         #os.system("%s install --yes openmm=7.1" % conda_exe)
 
+    # Qt5
+    try:
+        import PyQt5
+        print("Qt5 is already installed...")
+    except:
+        print("Installing Qt5 using '%s install pyqt'" % conda_exe)
+        os.system("%s install --yes pyqt" % conda_exe)
+
     # libnetcdf
     try:
         import netCDF4
