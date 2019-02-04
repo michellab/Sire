@@ -102,6 +102,8 @@ else()
           "The full path to the sire.app installed Sire application." )
 endif()
 
+message( STATUS "Using SIRE_APP = ${SIRE_APP}" )
+
 set( SIRE_INCLUDE_DIR "${SIRE_APP}/include/Sire" )
 
 set ( SIRE_COMP_CMAKE "${SIRE_INCLUDE_DIR}/cmake/SireCompileVariables.cmake" )
@@ -274,6 +276,12 @@ else()
   if (SIRE_HAS_NO_OVERLOADED_VIRTUAL)
     set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-overloaded-virtual")
   endif()
+endif()
+
+if (APPLE)
+  # Also need to add '-undefined dynamic_lookup' so that we can build 
+  # modules that can be imported by a python that has statically linked libPython
+  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -undefined dynamic_lookup" )
 endif()
 
 message( STATUS  "CMAKE_SYSTEM_NAME      == ${CMAKE_SYSTEM_NAME}" )

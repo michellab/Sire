@@ -59,7 +59,6 @@ target_link_libraries (Move
                        SIRE_SireIO
                        SIRE_SireMove
                        ${BOOST_PYTHON_LIBRARY}
-                       ${PYTHON_LIBRARIES}
                        ${SIRE_OPENMM_LIBRARIES}
                       )
 

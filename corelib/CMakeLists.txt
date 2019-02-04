@@ -190,6 +190,7 @@ math (EXPR SIRE_VERSION_NUMBER
 
 set (SIRE_VERSION_STRING "${S_VERSION_MAJOR}_${S_VERSION_MINOR}_${S_VERSION_PATCH}")
 
+save_sire_variable( "SIRE_APP" "${SIRE_APP}" )
 save_sire_variable( "S_VERSION_MAJOR" "${S_VERSION_MAJOR}" )
 save_sire_variable( "S_VERSION_MINOR" "${S_VERSION_MINOR}" )
 save_sire_variable( "S_VERSION_PATCH" "${S_VERSION_PATCH}" )

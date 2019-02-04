@@ -44,7 +44,6 @@ target_link_libraries (Analysis
                        SirePython
                        SIRE_SireAnalysis
                        ${BOOST_PYTHON_LIBRARY}
-                       ${PYTHON_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

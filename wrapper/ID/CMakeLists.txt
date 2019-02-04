@@ -43,7 +43,6 @@ target_link_libraries (ID
                        SirePython
                        SIRE_SireID
                        ${BOOST_PYTHON_LIBRARY}
-                       ${PYTHON_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )
