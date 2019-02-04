@@ -158,6 +158,8 @@ else()
 endif()
 
 message( STATUS "Sire will be compiled and installed to directory ${CMAKE_INSTALL_PREFIX}" )
+set ( SIRE_APP "${ANACONDA_BASE}" )
+message( STATUS "sire.app root directory is ${SIRE_APP}" )
 
 # Absolutely can't run cmake in the source directory!
 if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
@@ -830,6 +832,8 @@ get_target_property(QT5_LOCATION Qt5::Core LOCATION)
 get_filename_component(SIRE_QT5CORE_DIR ${QT5_LOCATION} PATH)
 message( STATUS "Qt5Core location ${SIRE_QT5CORE_DIR}" )
 save_sire_variable( "SIRE_QT5CORE_DIR" "${SIRE_QT5CORE_DIR}" )
+
+include_directories( "${SIRE_APP}/include" )
 
 if (NOT ${SIRE_FOUND_BOOST})
   # Sire depends on >= boost 1.31 - all libraries must be dynamically linked

@@ -89,6 +89,27 @@ if __name__ == "__main__":
         print("Installing nose using '%s install nose'" % conda_exe)
         os.system("%s install --yes nose" % conda_exe)
 
+    # boost
+    if os.path.exists("%s/include/boost/python.hpp" % conda_base):
+        print("boost is already installed...")
+    else:
+        print("Installing boost using '%s install boost'" % conda_exe)
+        os.system("%s install --yes boost" % conda_exe)
+
+    # gsl
+    if os.path.exists("%s/include/gsl/gsl_version.h" % conda_base):
+        print("gsl is already installed...")
+    else:
+        print("Installing gsl using '%s install gsl'" % conda_exe)
+        os.system("%s install --yes gsl" % conda_exe)
+
+    # tbb
+    if os.path.exists("%s/include/tbb/tbb.h" % conda_base):
+        print("TBB is already installed...")
+    else:
+        print("Installing TBB and TBB-devel using '%s install tbb tbb-devel'" % conda_exe)
+        os.system("%s install --yes tbb tbb-devel" % conda_exe)
+
     # openmm
     try:
         import simtk.openmm
