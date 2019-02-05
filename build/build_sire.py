@@ -150,14 +150,14 @@ if __name__ == "__main__":
         CC="%s/bin/clang" % conda_base
         CXX="%s/bin/clang++" % conda_base
     elif is_linux:
-        if os.path.exists("%s/bin/g++" % conda_base):
+        if os.path.exists("%s/bin/x86_64-conda_cos6-linux-gnu-g++" % conda_base):
             print("g++ is already installed...")
         else:
             conda_pkgs.append("gcc_linux-64")
             conda_pkgs.append("gxx_linux-64")
 
-        CC="%s/bin/gcc" % conda_base
-        CXX="%s/bin/g++" % conda_base
+        CC="%s/bin/x86_64-conda_cos6-linux-gnu-gcc" % conda_base
+        CXX="%s/bin/x86_64-conda_cos6-linux-gnu-g++" % conda_base
 
     if os.path.exists("%s/bin/make" % conda_base):
         print("make is already installed...")
