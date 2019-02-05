@@ -19,13 +19,16 @@ set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PA
 ############
 
 # require cmake >= 2.8.11.2
-cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
 
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 
 if(COMMAND CMAKE_POLICY)
+  if (POLICY CMP0025)
+    cmake_policy(SET CMP0025 NEW)  # Anaconda clang is called Clang, not AppleClang
+  endif()
   if (POLICY CMP0042)
     cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
   endif()
