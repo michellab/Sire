@@ -198,7 +198,7 @@ if __name__ == "__main__":
         # need to fix numpy - breaks because of MKL blas!
         # see https://github.com/numpy/numpy/issues/11481
         os.system("%s uninstall --yes --force blas" % conda_exe)
-        os.system("%s install \"blas=*=openblas\"" % conda_exe)
+        os.system("%s install --yes \"blas=*=openblas\"" % conda_exe)
         os.system("%s update --yes --force numpy" % conda_exe)
 
     # Make sure all of the above output is printed to the screen

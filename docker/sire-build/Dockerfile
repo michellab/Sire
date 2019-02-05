@@ -6,10 +6,7 @@
 FROM sl:6
 ENV container docker
 
-RUN yum -y install "http://ftp.scientificlinux.org/linux/scientific/6/external_products/softwarecollections/yum-conf-softwarecollections-2.0-1.el6.noarch.rpm"
-RUN yum -y install devtoolset-6
-RUN yum -y install git
-RUN yum -y install wget
+RUN yum -y install git wget
 
 # Configure environment
 ENV SHELL=/bin/bash \
@@ -32,18 +29,10 @@ RUN /usr/bin/fix-permissions $HOME
 
 USER $FN_USER
 
-# Download and install a modern cmake
-RUN wget https://cmake.org/files/v3.6/cmake-3.6.0.tar.gz -O cmake-3.6.0.tar.gz
-RUN tar -zxvf cmake-3.6.0.tar.gz
-
-ADD build_cmake.sh $HOME/build_cmake.sh
-
-RUN scl enable devtoolset-6 ./build_cmake.sh
-
 ENV PATH=$HOME/local/bin:$PATH
+
 # Seed the repo with the latest devel version of Sire.
 # This will stop us downloading too much for each build...
 RUN git clone https://github.com/michellab/Sire
 
-ENTRYPOINT ["scl", "enable", "devtoolset-6", "bash"]
-
+ENTRYPOINT ["bash"]
