@@ -5,8 +5,27 @@
 import sys
 import os
 import time
+import platform
 
 if __name__ == "__main__":
+
+    is_linux = False
+    is_windows = False
+    is_osx = False
+
+    if platform.system() == "Linux":
+        is_linux = True
+        print("Compiling on Linux")
+    elif platform.system() == "Darwin":
+        is_osx = True
+        print("Compiling on OS X")
+    elif platform.system() == "Windows":
+        print("Sorry - compiling into miniconda on Windows is not supported yet")
+        is_windows = True
+        sys.exit(-1)
+    else:
+        print("Unrecognised build platform: %s" % platform.system())
+        sys.exit(-1)
 
     conda_base = os.path.abspath( os.path.dirname(sys.executable) )
 
@@ -57,60 +76,115 @@ if __name__ == "__main__":
     # now go through all of the python modules that need to be available
     # into this conda installation, and make sure they have been installed
 
+    conda_pkgs = []
+
     # first, pip
     try:
         import pip
         print("pip is already installed...")
     except:
-        print("Installing pip using '%s install pip'" % conda_exe)
-        os.system("%s install --yes pip" % conda_exe)
+        conda_pkgs.append("pip")
 
     # ipython
     try:
         import IPython
         print("ipython is already installed...")
     except:
-        print("Installing ipython using %s install ipython" % conda_exe)
-        os.system("%s install --yes ipython" % conda_exe)
+        conda_pkgs.append("ipython")
 
     # pytest
     try:
         import pytest
         print("pytest is already installed...")
     except:
-        print("Installing pytest using %s install pytest" % conda_exe)
-        os.system("%s install --yes pytest" % conda_exe)
+        conda_pkgs.append("pytest")
 
     # nose
     try:
         import nose
         print("nose is already installed...")
     except:
-        print("Installing nose using '%s install nose'" % conda_exe)
-        os.system("%s install --yes nose" % conda_exe)
+        conda_pkgs.append("nose")
 
     # boost
     if os.path.exists("%s/include/boost/python.hpp" % conda_base):
         print("boost is already installed...")
     else:
-        print("Installing boost using '%s install boost'" % conda_exe)
-        os.system("%s install --yes boost" % conda_exe)
+        conda_pkgs.append("boost")
 
     # gsl
     if os.path.exists("%s/include/gsl/gsl_version.h" % conda_base):
         print("gsl is already installed...")
     else:
-        print("Installing gsl using '%s install gsl'" % conda_exe)
-        os.system("%s install --yes gsl" % conda_exe)
+        conda_pkgs.append("gsl")
 
     # tbb
     if os.path.exists("%s/include/tbb/tbb.h" % conda_base):
         print("TBB is already installed...")
     else:
-        print("Installing TBB and TBB-devel using '%s install tbb tbb-devel'" % conda_exe)
-        os.system("%s install --yes tbb tbb-devel" % conda_exe)
+        conda_pkgs.append("tbb")
+        conda_pkgs.append("tbb-devel")
 
-    # openmm
+    # Qt5
+    try:
+        import PyQt5
+        print("Qt5 is already installed...")
+    except:
+        conda_pkgs.append("pyqt")
+
+    # libnetcdf
+    try:
+        import netCDF4
+        print("netCDF4 is already installed...")
+    except:
+        conda_pkgs.append("netcdf4")
+
+    # compilers (so we keep binary compatibility
+    if is_osx:
+        if os.path.exists("%s/bin/clang++" % conda_base):
+            print("clang++ is already installed...")
+        else:
+            conda_pkgs.append("clang_osx-64")
+            conda_pkgs.append("clangxx_osx-64")
+
+        CC="%s/bin/clang" % conda_base
+        CXX="%s/bin/clang++" % conda_base
+    elif is_linux:
+        if os.path.exists("%s/bin/g++" % conda_base):
+            print("g++ is already installed...")
+        else:
+            conda_pkgs.append("gcc_linux-64")
+            conda_pkgs.append("gxx_linux-64")
+
+        CC="%s/bin/gcc" % conda_base
+        CXX="%s/bin/g++" % conda_base
+
+    if os.path.exists("%s/bin/make" % conda_base):
+        print("make is already installed...")
+    else:
+        conda_pkgs.append("make")
+
+    make = "%s/bin/make" % conda_base
+
+    if os.path.exists("%s/bin/cmake" % conda_base):
+        print("cmake is already installed...")
+    else:
+        conda_pkgs.append("cmake")
+
+    cmake = "%s/bin/cmake" % conda_base
+
+    installed_something = False
+
+    if len(conda_pkgs) > 0:
+        cmd = "%s install --yes %s" % (conda_exe, " ".join(conda_pkgs))
+        print("Installing packages using '%s'" % cmd)
+        status = os.system(cmd)
+        installed_something = True
+        if status != 0:
+            print("Something went wrong installing dependencies!")
+            sys.exit(-1)
+
+    # openmm last as different repo
     try:
         import simtk.openmm
         print("openmm is already installed...")
@@ -118,22 +192,14 @@ if __name__ == "__main__":
         print("Installing openmm from the conda-forge repository...")
         os.system("%s install --yes -c omnia -c conda-forge openmm" % conda_exe)
         #os.system("%s install --yes openmm=7.1" % conda_exe)
+        installed_something = True
 
-    # Qt5
-    try:
-        import PyQt5
-        print("Qt5 is already installed...")
-    except:
-        print("Installing Qt5 using '%s install pyqt'" % conda_exe)
-        os.system("%s install --yes pyqt" % conda_exe)
-
-    # libnetcdf
-    try:
-        import netCDF4
-        print("netCDF4 is already installed...")
-    except:
-        print("Installing netCDF4 using '%s install netcdf4'" % conda_exe)
-        os.system("%s install --yes netcdf4" % conda_exe)
+    if installed_something:
+        # need to fix numpy - breaks because of MKL blas!
+        # see https://github.com/numpy/numpy/issues/11481
+        os.system("%s uninstall --yes --force blas" % conda_exe)
+        os.system("%s install \"blas=*=openblas\"" % conda_exe)
+        os.system("%s update --yes --force numpy" % conda_exe)
 
     # Make sure all of the above output is printed to the screen
     # before we start running any actual compilation
@@ -143,21 +209,10 @@ if __name__ == "__main__":
     # is to use cmake to build the corelib and wrapper in the build/corelib
     # and build/wrapper directories
 
-    # first, get the value of the CXX environment variable
-    cxx = os.getenv("CXX")
-    compiler_ext = None
-
-    if cxx:
-        if cxx.find("icpc") != -1:
-            compiler_ext = "intel"
-
     # change into the build/corelib directory
     OLDPWD = os.path.abspath(os.curdir)
 
-    if compiler_ext:
-        coredir = "%s/corelib_%s" % (build_dir,compiler_ext)
-    else:
-        coredir = "%s/corelib" % build_dir
+    coredir = "%s/corelib" % build_dir
 
     if not os.path.exists(coredir):
         os.makedirs(coredir)
@@ -170,7 +225,7 @@ if __name__ == "__main__":
 
     if os.path.exists("CMakeCache.txt"):
         # we have run cmake in this directory before. Run it again.
-        status = os.system("cmake .")
+        status = os.system("%s ." % cmake)
     else:
         # this is the first time we are running cmake
         sourcedir = os.path.abspath("../../corelib")
@@ -179,35 +234,27 @@ if __name__ == "__main__":
             print("SOMETHING IS WRONG. There is no file %s/CMakeLists.txt" % coredir)
             sys.exit(-1)
 
-        status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
-                         % (conda_base,NCORES,sourcedir) )
+        cmd = "CC=%s CXX=%s %s -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
+                         % (CC,CXX,cmake,conda_base,NCORES,sourcedir) 
+        print(cmd)
+        status = os.system(cmd)
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN USING CMAKE ON CORELIB!")
         sys.exit(-1)
 
-    # Now that cmake has run, we can compile corelib
-    status = os.system("make -j %s" % NCORES)
+    # Now that cmake has run, we can compile and install corelib
+    status = os.system("%s -j %s install" % (make,NCORES))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING CORELIB!")
-        sys.exit(-1)
-
-    # Now the compilation has finished, install corelib
-    status = os.system("make -j %s install" % NCORES)
-
-    if status != 0:
-        print("SOMETHING WENT WRONG WHEN INSTALLING CORELIB!")
         sys.exit(-1)
 
     # Ok, that is all complete. Next we must work on the
     # python wrappers
     os.chdir(OLDPWD)
 
-    if compiler_ext:
-        wrapperdir = "%s/wrapper_%s" % (build_dir,compiler_ext)
-    else:
-        wrapperdir = "%s/wrapper" % build_dir
+    wrapperdir = "%s/wrapper" % build_dir
     
     if not os.path.exists(wrapperdir):
         os.makedirs(wrapperdir)
@@ -220,7 +267,7 @@ if __name__ == "__main__":
 
     if os.path.exists("CMakeCache.txt"):
         # we have run cmake in this directory before. Run it again.
-        status = os.system("cmake .")
+        status = os.system("%s ." % cmake)
     else:
         # this is the first time we are running cmake
         sourcedir = os.path.abspath("../../wrapper")   
@@ -229,25 +276,20 @@ if __name__ == "__main__":
             print("SOMETHING IS WRONG. There is no file %s/CMakeLists.txt" % wrapperdir)
             sys.exit(-1)
     
-        status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
-                         % (conda_base,NCORES,sourcedir) )
+        cmd = "CC=%s CXX=%s %s -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
+                         % (CC,CXX,cmake,conda_base,NCORES,sourcedir)
+        print(cmd)
+        status = os.system(cmd)
 
     if status != 0: 
         print("SOMETHING WENT WRONG WHEN USING CMAKE ON WRAPPER!")
         sys.exit(-1)
 
     # Now that cmake has run, we can compile wrapper
-    status = os.system("make -j %s" % NPYCORES)
+    status = os.system("%s -j %s install" % (make,NPYCORES))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING WRAPPER!")
-        sys.exit(-1)
-
-    # Now the compilation has finished, install wrapper
-    status = os.system("make -j %s install" % NPYCORES)
-
-    if status != 0:
-        print("SOMETHING WENT WRONG WHEN INSTALLING WRAPPER!")
         sys.exit(-1)
 
     print("\n\n=================================")
