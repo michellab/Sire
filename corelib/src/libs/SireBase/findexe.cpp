@@ -37,6 +37,13 @@
 
 QFileInfo SireBase::findExe(const QString &exe)
 {
+#ifdef Q_OS_WIN
+    const QString splitChar(";");
+    const QString exeSuffix = ".exe";
+#else
+    const QString splitChar(":");
+    const QString exeSuffix;
+#endif
     //does it exist in the current directory?
     QFileInfo progfile( exe );
 
@@ -55,14 +62,14 @@ QFileInfo SireBase::findExe(const QString &exe)
     {
         if (rexp.indexIn(env_variable) != -1)
         {
-            path = rexp.cap(1).split(":", QString::SkipEmptyParts);
+            path = rexp.cap(1).split(splitChar, QString::SkipEmptyParts);
             break;
         }
     }
 
     foreach (QString dir, path)
     {
-        QFileInfo new_exe( QDir(dir).filePath(progfile.fileName()) );
+        QFileInfo new_exe( QDir(dir).filePath(progfile.fileName() + exeSuffix) );
 
         if (new_exe.isExecutable())
         {

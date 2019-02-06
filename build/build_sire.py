@@ -35,7 +35,7 @@ def parse_args():
 
 def make_cmd(ncores, install = False):
     try:
-        make = os.environ["MAKE"]
+        make = os.environ["MAKE_CMD"]
     except KeyError:
         make = None
         with open("CMakeCache.txt", "r") as hnd:
@@ -239,7 +239,9 @@ if __name__ == "__main__":
                     if (not a in os.environ):
                         os.environ[a] = v.split("=")[-1]
         add_default_cmake_defs(args.corelib)
-        cmake_cmd = "cmake %s %s" % (" ".join(["-D \"%s\"" % d[0] for d in args.corelib]), sourcedir)
+        cmake_cmd = "cmake %s -G \"%s\" %s" % (" ".join(["-D \"%s\"" % d[0] for d in args.corelib]),
+            args.generator[0], sourcedir)
+        print("cmake_cmd = %s" % cmake_cmd)
         status = os.system(cmake_cmd)
 
     if status != 0:
@@ -249,6 +251,7 @@ if __name__ == "__main__":
     # Now that cmake has run, we can compile corelib
     make, make_args = make_cmd(NCORES)
                 
+    print("NOW RUNNING MSBUILD \"%s\" %s" % (make, make_args))
     status = os.system("\"%s\" %s" % (make, make_args))
 
     if status != 0:
@@ -297,7 +300,8 @@ if __name__ == "__main__":
         #status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
         #                 % (conda_base,NCORES,sourcedir) )
         add_default_cmake_defs(args.wrapper)
-        cmake_cmd = "cmake %s %s" % (" ".join(["-D \"%s\"" % d[0] for d in args.wrapper]), sourcedir)
+        cmake_cmd = "cmake %s -G \"%s\" %s" % (" ".join(["-D \"%s\"" % d[0] for d in args.wrapper]),
+            args.generator[0], sourcedir)
         status = os.system(cmake_cmd)
 
     if status != 0: 
