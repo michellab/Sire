@@ -49,7 +49,8 @@ if __name__ == "__main__":
     if "NPYCORES" in os.environ:
         NPYCORES = int(os.environ["NPYCORES"])
     else:
-        NPYCORES = NCORES
+        # default to half the number to save memory
+        NPYCORES = NCORES / 2
 
     print("Number of cores used for compilation = %d" % NCORES)
 
