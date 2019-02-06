@@ -702,7 +702,7 @@ void OpenMMFrEnergyST::initialise()
         }
 
     }
-    else (flag_combRules == GEOMETRIC)
+    else if (flag_combRules == GEOMETRIC)
     {//CUTOFF PERIODIC OR NON PERIODIC
 
         const double converted_cutoff_distance = convertTo(cutoff_distance.value(), nanometer);
