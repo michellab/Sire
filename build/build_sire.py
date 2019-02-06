@@ -143,8 +143,8 @@ if __name__ == "__main__":
     # compilers (so we keep binary compatibility
     if is_osx:
         try:
-            CXX = glob.glob("%s/bin/*-clang++" % conda_base)[0]
-            CC = glob.glob("%s/bin/*-clang" % conda_base)[0]
+            CXX = glob.glob("%s/bin/clang++" % conda_base)[0]
+            CC = glob.glob("%s/bin/clang" % conda_base)[0]
             print("clang++ is already installed...")
         except:
             conda_pkgs.append("clang_osx-64")
@@ -202,8 +202,8 @@ if __name__ == "__main__":
     # make sure we really have found the compilers
     if is_osx:
         try:
-            CXX = glob.glob("%s/bin/*-clang++" % conda_base)[0]
-            CC = glob.glob("%s/bin/*-clang" % conda_base)[0]
+            CXX = glob.glob("%s/bin/clang++" % conda_base)[0]
+            CC = glob.glob("%s/bin/clang" % conda_base)[0]
             print("clang++ is already installed...")
         except:
             print("Cannot find the conda clang++ binaries!")
