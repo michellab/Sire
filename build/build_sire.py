@@ -262,7 +262,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     # Now that cmake has run, we can compile and install corelib
-    status = os.system("%s -j %s install" % (make,NCORES))
+    status = os.system("%s -j %d install" % (make,NCORES))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING CORELIB!")
@@ -304,7 +304,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     # Now that cmake has run, we can compile wrapper
-    status = os.system("%s -j %s install" % (make,NPYCORES))
+    status = os.system("%s -j %d install" % (make,NPYCORES))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING WRAPPER!")
