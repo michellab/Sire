@@ -143,7 +143,7 @@ if len(failures) > 0:
         s.append("One of more jobs in %s failed!" % failure)
 
     print("\nEXITING AS FAIL")
-    error_message = "SOME OF THE UNIT TESTS FAILED!\n%s" %
+    error_message = "SOME OF THE UNIT TESTS FAILED!\n%s" % \
                          "\n".join(s)
     raise AssertionError(error_message)
 else:

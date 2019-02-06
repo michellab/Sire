@@ -4,6 +4,7 @@
 
 import sys
 import os
+import glob
 import time
 import platform
 
@@ -141,23 +142,20 @@ if __name__ == "__main__":
 
     # compilers (so we keep binary compatibility
     if is_osx:
-        if os.path.exists("%s/bin/clang++" % conda_base):
+        try:
+            CXX = glob.glob("%s/bin/*-clang++" % conda_base)[0]
+            CC = glob.glob("%s/bin/*-clang" % conda_base)[0]
             print("clang++ is already installed...")
-        else:
+        except:
             conda_pkgs.append("clang_osx-64")
             conda_pkgs.append("clangxx_osx-64")
-
-        CC="%s/bin/clang" % conda_base
-        CXX="%s/bin/clang++" % conda_base
     elif is_linux:
-        if os.path.exists("%s/bin/x86_64-conda_cos6-linux-gnu-g++" % conda_base):
-            print("g++ is already installed...")
-        else:
+        try:
+            CXX = glob.glob("%s/bin/*-g++" % conda_base)[0]
+            CC = glob.glob("%s/bin/*-gcc" % conda_base)[0]
+        except:
             conda_pkgs.append("gcc_linux-64")
             conda_pkgs.append("gxx_linux-64")
-
-        CC="%s/bin/x86_64-conda_cos6-linux-gnu-gcc" % conda_base
-        CXX="%s/bin/x86_64-conda_cos6-linux-gnu-g++" % conda_base
 
     if os.path.exists("%s/bin/make" % conda_base):
         print("make is already installed...")
@@ -200,6 +198,25 @@ if __name__ == "__main__":
         os.system("%s uninstall --yes --force blas" % conda_exe)
         os.system("%s install --yes \"blas=*=openblas\"" % conda_exe)
         os.system("%s update --yes --force numpy" % conda_exe)
+
+    # make sure we really have found the compilers
+    if is_osx:
+        try:
+            CXX = glob.glob("%s/bin/*-clang++" % conda_base)[0]
+            CC = glob.glob("%s/bin/*-clang" % conda_base)[0]
+            print("clang++ is already installed...")
+        except:
+            print("Cannot find the conda clang++ binaries!")
+            sys.exit(-1)
+    elif is_linux:
+        try:
+            CXX = glob.glob("%s/bin/*-g++" % conda_base)[0]
+            CC = glob.glob("%s/bin/*-gcc" % conda_base)[0]
+        except:
+            print("Cannot find the conda g++ binaries!")
+            sys.exit(-1)
+
+    print("Using compilers %s | %s" % (CC, CXX))
 
     # Make sure all of the above output is printed to the screen
     # before we start running any actual compilation

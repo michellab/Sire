@@ -31,7 +31,6 @@ set ( SIREPYTHON_SOURCES
 add_executable (sire_python ${SIREPYTHON_SOURCES})
 
 target_link_libraries (sire_python
-                       SirePython
                        SIRE_SireCluster
                        SIRE_Squire
                        SIRE_SireMol
