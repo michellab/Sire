@@ -14,4 +14,7 @@ RUN git checkout devel && git pull
 # Build Sire (takes a long time)
 RUN ./compile_sire.sh
 
+# Clean up so that the Docker image size is minimised
+RUN $HOME/sire.app/bin/conda clean -tipy
+
 ENTRYPOINT ["bash"]
