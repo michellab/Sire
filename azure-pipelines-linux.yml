@@ -24,7 +24,7 @@ steps:
   displayName: 'Pull sire-devel:latest'
 - script: |
     # now build the latest version of devel, starting from the last point
-    cd docker/sire-pipeline-latest && docker build -f Dockerfile -t siremol/sire-devel:latest . && cd - && docker push siremol/sire-devel:latest
+    cd docker/sire-pipeline-devel && docker build -f Dockerfile -t siremol/sire-devel:latest . && cd - && docker push siremol/sire-devel:latest
   env:
     pswd: $(dockerPassword)
     id: $(dockerId)
