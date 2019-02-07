@@ -11,7 +11,10 @@ USER $FN_USER
 # Update to the latest version
 RUN git checkout devel && git pull
  
-# Build Sire (this should take less time as it is a small update)
+# Build Sire (takes a long time)
 RUN ./compile_sire.sh
+
+# Clean up so that the Docker image size is minimised
+RUN $HOME/sire.app/bin/conda clean -tipy
 
 ENTRYPOINT ["bash"]
