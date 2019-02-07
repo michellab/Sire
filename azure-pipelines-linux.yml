@@ -9,6 +9,8 @@ trigger:
 pool:
   vmImage: 'Ubuntu-16.04'
 
+timeoutInMinutes: 120
+
 steps:
 - script: |
     # login to docker and get the last successful sire-devel build
