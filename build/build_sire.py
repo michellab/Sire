@@ -97,7 +97,7 @@ if __name__ == "__main__":
         NPYCORES = int(os.environ["NPYCORES"])
     except KeyError:
         # default to half the number to save memory
-        NPYCORES = args.npycores if args.npycores > 0 else NCORES / 2
+        NPYCORES = args.npycores if args.npycores > 0 else NCORES // 2
 
     print("Number of cores used for compilation = %d" % NCORES)
 
@@ -180,14 +180,13 @@ if __name__ == "__main__":
     except ImportError:
         conda_pkgs.append("netcdf4")
 
-<<<<<<< HEAD
     CC = None
     CXX = None
     make = None
     cmake = "cmake%s" % exe_suffix
     if (not args.noconda):
         # boost
-        if (not os.path.exists(os.path.join(conda_base, "include", "boost", "python.hpp"))):
+        if os.path.exists(os.path.join(conda_base, "include", "boost", "python.hpp")):
             print("boost is already installed...")
         else:
             conda_pkgs.append("boost")
@@ -279,16 +278,16 @@ if __name__ == "__main__":
     # make sure we really have found the compilers
     if is_osx:
         try:
-            CXX = glob.glob("%s/bin/clang++" % conda_base)[0]
-            CC = glob.glob("%s/bin/clang" % conda_base)[0]
+            CXX = glob.glob(os.path.join(conda_base, "bin", "clang++"))[0]
+            CC = glob.glob(os.path.join(conda_base, "bin", "clang"))[0]
             print("clang++ is already installed...")
         except:
             print("Cannot find the conda clang++ binaries!")
             sys.exit(-1)
     elif is_linux:
         try:
-            CXX = glob.glob("%s/bin/*-g++" % conda_base)[0]
-            CC = glob.glob("%s/bin/*-gcc" % conda_base)[0]
+            CXX = glob.glob(os.path.join(conda_base, "bin", "*-g++"))[0]
+            CC = glob.glob(os.path.join(conda_base, "bin", "*-gcc"))[0]
         except:
             print("Cannot find the conda g++ binaries!")
             sys.exit(-1)
