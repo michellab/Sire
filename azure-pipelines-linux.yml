@@ -10,7 +10,7 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 steps:
-#- script: |
+- script: |
     # login to docker and get the last successful sire-devel build
     docker login -u $id -p $pswd
     docker pull siremol/sire-devel:latest
