@@ -8,7 +8,7 @@ unset(BOOST_PYTHON_LIBRARY CACHE)
 if ( ANACONDA_BUILD )
   find_library( BOOST_PYTHON_LIBRARY
                 NAMES boost_python
-                PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
+                PATHS ${SIRE_APP}/lib NO_DEFAULT_PATH )
 
 elseif ( MSYS )
   message( STATUS "Looking for MSYS version of boost::python..." )
@@ -94,7 +94,7 @@ if ( MSYS )
   endif()
 else()
   if ( BOOST_PYTHON_LIBRARY )
-    set( BOOST_PYTHON_HEADERS "${BUNDLE_STAGEDIR}/include" )
+    set( BOOST_PYTHON_HEADERS "${SIRE_APP}/include" )
     message( STATUS "Using bundled boost::python in ${BOOST_PYTHON_LIBRARY} | ${BOOST_PYTHON_HEADERS}" )
     set( SIRE_FOUND_BOOST_PYTHON TRUE )
   else()

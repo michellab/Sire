@@ -19,13 +19,16 @@ set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PA
 ############
 
 # require cmake >= 2.8.11.2
-cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
 
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 
 if(COMMAND CMAKE_POLICY)
+  if (POLICY CMP0025)
+    cmake_policy(SET CMP0025 NEW)  #Â Anaconda clang is called Clang, not AppleClang
+  endif()
   if (POLICY CMP0042)
     cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
   endif()
@@ -100,9 +103,13 @@ if ( ANACONDA_BUILD )
 
 else()
   # Option to set the install directory of Sire
-  set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
-          "The full path to the sire.app installed Sire application." )
+  if (NOT DEFINED SIRE_APP)
+    set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
+            "The full path to the sire.app installed Sire application." )
+  endif()
 endif()
+
+message( STATUS "Using SIRE_APP = ${SIRE_APP}" )
 
 set( SIRE_INCLUDE_DIR "${SIRE_APP}/include/Sire" )
 
@@ -282,6 +289,12 @@ else()
   if (SIRE_HAS_NO_OVERLOADED_VIRTUAL)
     set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-overloaded-virtual")
   endif()
+endif()
+
+if (APPLE)
+  # Also need to add '-undefined dynamic_lookup' so that we can build 
+  # modules that can be imported by a python that has statically linked libPython
+  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -undefined dynamic_lookup" )
 endif()
 
 message( STATUS  "CMAKE_SYSTEM_NAME      == ${CMAKE_SYSTEM_NAME}" )

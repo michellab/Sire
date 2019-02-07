@@ -48,7 +48,6 @@ target_link_libraries (Maths
                        SirePython
                        SIRE_SireMaths
                        ${BOOST_PYTHON_LIBRARY}
-                       ${PYTHON_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

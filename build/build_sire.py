@@ -7,6 +7,7 @@ import os
 import time
 import argparse
 import multiprocessing
+import platform
 
 
 def parse_args():
@@ -28,26 +29,26 @@ def parse_args():
         metavar=("N_PYTHON_CORES",), default=-1,
         help="Number of CPU cores used for compiling Python wrappers "
         "(defaults to the number of CPU cores used for compiling corelib)")
-    parser.add_argument("--pip", action="store_true",
+    parser.add_argument("--noconda", action="store_true",
         help="Use pip rather than conda to install dependencies")
     return parser.parse_args()
 
 
-def make_cmd(ncores, install = False):
-    try:
-        make = os.environ["MAKE_CMD"]
-    except KeyError:
-        make = None
-        with open("CMakeCache.txt", "r") as hnd:
-            line = True
-            while line:
-                line = hnd.readline()
-                if (line and line.strip().startswith("CMAKE_GENERATOR:INTERNAL")
-                    and line.split("=")[-1].startswith("Visual Studio")):
-                    make = "MSBuild.exe"
-                    break
-        if (make is None):
-            make = "make"
+def make_cmd(ncores, make = None, install = False):
+    if (not make):
+        try:
+            make = os.environ["MAKE_CMD"]
+        except KeyError:
+            with open("CMakeCache.txt", "r") as hnd:
+                line = True
+                while line:
+                    line = hnd.readline()
+                    if (line and line.strip().startswith("CMAKE_GENERATOR:INTERNAL")
+                        and line.split("=")[-1].startswith("Visual Studio")):
+                        make = "MSBuild.exe"
+                        break
+            if (make is None):
+                make = "make"
     if ("make" in make):
         action = " install" if install else ""
         make_args = "-j %s%s" % (ncores, action)
@@ -58,7 +59,27 @@ def make_cmd(ncores, install = False):
 
 if __name__ == "__main__":
     args = parse_args()
-    
+
+    is_linux = False
+    is_windows = False
+    is_osx = False
+
+    exe_suffix = ""
+    if platform.system() == "Linux":
+        is_linux = True
+        print("Compiling on Linux")
+    elif platform.system() == "Darwin":
+        is_osx = True
+        print("Compiling on OS X")
+    elif platform.system() == "Windows":
+        exe_suffix = ".exe"
+        print("Sorry - compiling into miniconda on Windows is not supported yet")
+        args.noconda = True
+        is_windows = True
+    else:
+        print("Unrecognised build platform: %s" % platform.system())
+        sys.exit(-1)
+
     install_script = sys.argv[0]
     build_dir = os.path.abspath( os.path.dirname(install_script) )
 
@@ -81,7 +102,7 @@ if __name__ == "__main__":
     if NPYCORES != NCORES:
         print("Number of cores used for wrapper compilation = %d" % NPYCORES)
 
-    if args.pip:
+    if args.noconda:
         python_exe = sys.executable
         py_module_install = "\"%s\" -m pip install" % python_exe
         conda_base = ""
@@ -113,65 +134,147 @@ if __name__ == "__main__":
     # now go through all of the python modules that need to be available
     # into this conda installation, and make sure they have been installed
 
+    conda_pkgs = []
+
     # first, pip
     try:
         import pip
         print("pip is already installed...")
     except ImportError:
-        if args.pip:
+        if args.noconda:
             print("Could not import pip - please make sure "
                 "pip is available within your current Python environment "
                 "then re-run this script.")
             sys.exit(-1)
         else:
             print("Installing pip using '%s install pip'" % conda_exe)
-            os.system("%s pip" % py_module_install)
+            conda_pkgs.append("pip")
 
     # ipython
     try:
         import IPython
         print("ipython is already installed...")
     except ImportError:
-        print("Installing ipython using '%s ipython'" % py_module_install)
-        os.system("%s ipython" % py_module_install)
+        conda_pkgs.append("ipython")
 
     # pytest
     try:
         import pytest
         print("pytest is already installed...")
     except ImportError:
-        print("Installing pytest using '%s pytest'" % py_module_install)
-        os.system("%s pytest" % py_module_install)
+        conda_pkgs.append("pytest")
 
     # nose
     try:
         import nose
         print("nose is already installed...")
     except ImportError:
-        print("Installing nose using '%s nose'" % py_module_install)
-        os.system("%s nose" % py_module_install)
-
-    # openmm
-    try:
-        import simtk.openmm
-        print("openmm is already installed...")
-    except ImportError:
-        if args.pip:
-            print("It looks like the openmm Python modules are not "
-                "available - please check your openmm instllation")
-            sys.exit(-1)
-        else:
-            print("Installing openmm from the conda-forge repository...")
-            os.system("%s install --yes -c omnia -c conda-forge openmm" % conda_exe)
-            #os.system("%s install --yes openmm=7.1" % conda_exe)
+        conda_pkgs.append("nose")
 
     # libnetcdf
     try:
         import netCDF4
         print("netCDF4 is already installed...")
     except ImportError:
-        print("Installing netCDF4 using '%s netcdf4'" % py_module_install)
-        os.system("%s netcdf4" % py_module_install)
+        conda_pkgs.append("netcdf4")
+
+    CC = None
+    CXX = None
+    make = None
+    cmake = "cmake%s" % exe_suffix
+    if (not args.noconda):
+        # boost
+        if (not os.path.exists(os.path.join(conda_base, "include", "boost", "python.hpp"))):
+            print("boost is already installed...")
+        else:
+            conda_pkgs.append("boost")
+
+        # gsl
+        if os.path.exists(os.path.join(conda_base, "include", "gsl", "gsl_version.h")):
+            print("gsl is already installed...")
+        else:
+            conda_pkgs.append("gsl")
+
+        # tbb
+        if os.path.exists(os.path.join(conda_base, "include", "tbb", "tbb.h")):
+            print("TBB is already installed...")
+        else:
+            conda_pkgs.append("tbb")
+            conda_pkgs.append("tbb-devel")
+
+        # Qt5
+        try:
+            import PyQt5
+            print("Qt5 is already installed...")
+        except ImportError:
+            conda_pkgs.append("pyqt")
+
+        # compilers (so we keep binary compatibility
+        if is_osx:
+            if os.path.exists(os.path.join(conda_base, "bin", "clang++")):
+                print("clang++ is already installed...")
+            else:
+                conda_pkgs.append("clang_osx-64")
+                conda_pkgs.append("clangxx_osx-64")
+
+            CC=os.path.join(conda_base, "bin", "clang")
+            CXX=os.path.join(conda_base, "bin", "clang++")
+        elif is_linux:
+            if os.path.exists(os.path.join(conda_base, "bin", "x86_64-conda_cos6-linux-gnu-g++")):
+                print("g++ is already installed...")
+            else:
+                conda_pkgs.append("gcc_linux-64")
+                conda_pkgs.append("gxx_linux-64")
+
+            CC=os.path.join(conda_base, "bin", "x86_64-conda_cos6-linux-gnu-gcc")
+            CXX=os.path.join(conda_base, "bin", "x86_64-conda_cos6-linux-gnu-g++")
+
+        if os.path.exists(os.path.join(conda_base, "bin", "make")):
+            print("make is already installed...")
+        else:
+            conda_pkgs.append("make")
+
+        make = os.path.join(conda_base, "bin", "make")
+
+        if os.path.exists(os.path.join(conda_base, "bin", "cmake")):
+            print("cmake is already installed...")
+        else:
+            conda_pkgs.append("cmake")
+
+        cmake = os.path.join(conda_base, "bin", "cmake")
+
+    installed_something = False
+
+    if len(conda_pkgs) > 0:
+        cmd = "%s %s" % (py_module_install, " ".join(conda_pkgs))
+        print("Installing packages using '%s'" % cmd)
+        status = os.system(cmd)
+        installed_something = True
+        if status != 0:
+            print("Something went wrong installing dependencies!")
+            sys.exit(-1)
+
+    # openmm last as different repo
+    try:
+        import simtk.openmm
+        print("openmm is already installed...")
+    except ImportError:
+        if args.noconda:
+            print("It looks like the openmm Python modules are not "
+                "available - please check your openmm installation")
+            sys.exit(-1)
+        else:
+            print("Installing openmm from the conda-forge repository...")
+            os.system("%s install --yes -c omnia -c conda-forge openmm" % conda_exe)
+            #os.system("%s install --yes openmm=7.1" % conda_exe)
+            installed_something = True
+
+    if installed_something and conda_exe:
+        # need to fix numpy - breaks because of MKL blas!
+        # see https://github.com/numpy/numpy/issues/11481
+        os.system("%s uninstall --yes --force blas" % conda_exe)
+        os.system("%s install --yes \"blas=*=openblas\"" % conda_exe)
+        os.system("%s update --yes --force numpy" % conda_exe)
 
     # Make sure all of the above output is printed to the screen
     # before we start running any actual compilation
@@ -181,21 +284,10 @@ if __name__ == "__main__":
     # is to use cmake to build the corelib and wrapper in the build/corelib
     # and build/wrapper directories
 
-    # first, get the value of the CXX environment variable
-    cxx = os.getenv("CXX")
-    compiler_ext = None
-
-    if cxx:
-        if cxx.find("icpc") != -1:
-            compiler_ext = "intel"
-
     # change into the build/corelib directory
     OLDPWD = os.getcwd()
 
-    if compiler_ext:
-        coredir = os.path.join(build_dir, "corelib_%s" % build_dir)
-    else:
-        coredir = os.path.join(build_dir, "corelib")
+    coredir = os.path.join(build_dir, "corelib")
 
     if not os.path.exists(coredir):
         os.makedirs(coredir)
@@ -208,7 +300,7 @@ if __name__ == "__main__":
 
     def add_default_cmake_defs(cmake_defs):
         for a in ("ANACONDA_BUILD=ON", "ANACONDA_BASE=%s" % conda_base, "BUILD_NCORES=%s" % NCORES):
-            if (args.pip and a.startswith("ANACONDA")):
+            if (args.noconda and a.startswith("ANACONDA")):
                 continue
             found = False
             for d in cmake_defs:
@@ -220,7 +312,7 @@ if __name__ == "__main__":
 
     if os.path.exists("CMakeCache.txt"):
         # we have run cmake in this directory before. Run it again.
-        status = os.system("cmake .")
+        status = os.system("%s ." % cmake)
     else:
         # this is the first time we are running cmake
         sourcedir = os.path.join(os.path.dirname(os.path.dirname(
@@ -239,42 +331,34 @@ if __name__ == "__main__":
                     if (not a in os.environ):
                         os.environ[a] = v.split("=")[-1]
         add_default_cmake_defs(args.corelib)
-        cmake_cmd = "cmake %s -G \"%s\" %s" % (" ".join(["-D \"%s\"" % d[0] for d in args.corelib]),
+        cmake_cmd = "%s %s -G \"%s\" %s" % (cmake, " ".join(["-D \"%s\"" % d[0] for d in args.corelib]),
             args.generator[0], sourcedir)
-        print("cmake_cmd = %s" % cmake_cmd)
+        if (CC):
+            os.environ["CC"] = CC
+        if (CXX):
+            os.environ["CXX"] = CXX
+        print(cmake_cmd)
         status = os.system(cmake_cmd)
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN USING CMAKE ON CORELIB!")
         sys.exit(-1)
 
-    # Now that cmake has run, we can compile corelib
-    make, make_args = make_cmd(NCORES)
+    # Now that cmake has run, we can compile and install corelib
+    make, make_args = make_cmd(NCORES, make, True)
                 
-    print("NOW RUNNING MSBUILD \"%s\" %s" % (make, make_args))
+    print("NOW RUNNING \"%s\" %s" % (make, make_args))
     status = os.system("\"%s\" %s" % (make, make_args))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING CORELIB!")
         sys.exit(-1)
 
-    # Now the compilation has finished, install corelib
-    make, make_args = make_cmd(NCORES, True)
-
-    status = os.system("\"%s\" %s" % (make, make_args))
-
-    if status != 0:
-        print("SOMETHING WENT WRONG WHEN INSTALLING CORELIB!")
-        sys.exit(-1)
-
     # Ok, that is all complete. Next we must work on the
     # python wrappers
     os.chdir(OLDPWD)
 
-    if compiler_ext:
-        wrapperdir = os.path.join(build_dir, "wrapper_%s" % compiler_ext)
-    else:
-        wrapperdir = os.path.join(build_dir, "wrapper")
+    wrapperdir = os.path.join(build_dir, "wrapper")
     
     if not os.path.exists(wrapperdir):
         os.makedirs(wrapperdir)
@@ -287,7 +371,7 @@ if __name__ == "__main__":
 
     if os.path.exists("CMakeCache.txt"):
         # we have run cmake in this directory before. Run it again.
-        status = os.system("cmake .")
+        status = os.system("%s ." % cmake)
     else:
         # this is the first time we are running cmake
         sourcedir = os.path.join(os.path.dirname(os.path.dirname(
@@ -300,31 +384,22 @@ if __name__ == "__main__":
         #status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
         #                 % (conda_base,NCORES,sourcedir) )
         add_default_cmake_defs(args.wrapper)
-        cmake_cmd = "cmake %s -G \"%s\" %s" % (" ".join(["-D \"%s\"" % d[0] for d in args.wrapper]),
+        cmake_cmd = "%s %s -G \"%s\" %s" % (cmake, " ".join(["-D \"%s\"" % d[0] for d in args.wrapper]),
             args.generator[0], sourcedir)
+        print(cmake_cmd)
         status = os.system(cmake_cmd)
 
     if status != 0: 
         print("SOMETHING WENT WRONG WHEN USING CMAKE ON WRAPPER!")
         sys.exit(-1)
 
-    #Now that cmake has run, we can compile wrapper
-    #status = os.system("make -j %s" % NPYCORES)
-    make, make_args = make_cmd(NPYCORES)
+    make, make_args = make_cmd(NPYCORES, make, True)
 
+    # Now that cmake has run, we can compile and install wrapper
     status = os.system("\"%s\" %s" % (make, make_args))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING WRAPPER!")
-        sys.exit(-1)
-
-    # Now the compilation has finished, install wrapper
-    make, make_args = make_cmd(NPYCORES, True)
-
-    status = os.system("\"%s\" %s" % (make, make_args))
-
-    if status != 0:
-        print("SOMETHING WENT WRONG WHEN INSTALLING WRAPPER!")
         sys.exit(-1)
 
     print("\n\n=================================")

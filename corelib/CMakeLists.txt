@@ -17,13 +17,16 @@ set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 ############
 
 # require cmake >= 3.0.0
-cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
 
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 
 if(COMMAND CMAKE_POLICY)
+  if (POLICY CMP0025)
+    cmake_policy(SET CMP0025 NEW)  # Anaconda clang is called Clang, not AppleClang
+  endif()
   if (POLICY CMP0042)
     cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
   endif()
@@ -163,6 +166,8 @@ else()
 endif()
 
 message( STATUS "Sire will be compiled and installed to directory ${CMAKE_INSTALL_PREFIX}" )
+set ( SIRE_APP "${ANACONDA_BASE}" )
+message( STATUS "sire.app root directory is ${SIRE_APP}" )
 
 # Absolutely can't run cmake in the source directory!
 if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
@@ -193,6 +198,7 @@ math (EXPR SIRE_VERSION_NUMBER
 
 set (SIRE_VERSION_STRING "${S_VERSION_MAJOR}_${S_VERSION_MINOR}_${S_VERSION_PATCH}")
 
+save_sire_variable( "SIRE_APP" "${SIRE_APP}" )
 save_sire_variable( "S_VERSION_MAJOR" "${S_VERSION_MAJOR}" )
 save_sire_variable( "S_VERSION_MINOR" "${S_VERSION_MINOR}" )
 save_sire_variable( "S_VERSION_PATCH" "${S_VERSION_PATCH}" )
@@ -853,6 +859,8 @@ get_target_property(QT5_LOCATION Qt5::Core LOCATION)
 get_filename_component(SIRE_QT5CORE_DIR ${QT5_LOCATION} PATH)
 message( STATUS "Qt5Core location ${SIRE_QT5CORE_DIR}" )
 save_sire_variable( "SIRE_QT5CORE_DIR" "${SIRE_QT5CORE_DIR}" )
+
+include_directories( "${SIRE_APP}/include" )
 
 if (NOT ${SIRE_FOUND_BOOST})
   # Sire depends on >= boost 1.31 - all libraries must be dynamically linked

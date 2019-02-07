@@ -34,7 +34,7 @@ esac
 # Set the version of miniconda to use. Choose "latest" for the latest
 # miniconda, or set a specific version here
 MINICONDA_VERSION="4.5.12"
-#MINICONDA_VERSION="latest"  # note that on OS X this will be 4.2.12
+#MINICONDA_VERSION="latest"
 
 if [ -z "$INSTALL_SIRE_DIR" ]; then
     # Ask the user where they would like to install sire. By default
@@ -107,7 +107,6 @@ fi
 if [ "$(uname)" == "Darwin" ]; then
     # This is running on a Mac
     PLATFORM="OSX"
-    MINICONDA_VERSION="4.2.12"
     MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-MacOSX-${BIT_TYPE}.sh"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # This is running on Linux

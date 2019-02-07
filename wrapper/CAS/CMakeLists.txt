@@ -44,7 +44,6 @@ target_link_libraries (CAS
                        SirePython
                        SIRE_SireCAS
                        ${BOOST_PYTHON_LIBRARY}
-                       ${PYTHON_LIBRARIES}
                       )
 
 # installation

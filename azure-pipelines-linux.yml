@@ -33,10 +33,10 @@ steps:
     pswd: $(dockerPassword)
     id: $(dockerId)
   displayName: 'Build Sire'
-- script: |
-    # now perform the tests - do this before packaging and deploy
-    cd docker/sire-test-devel && docker build -f Dockerfile -t siremol/sire-test-devel:latest . && cd -
-  displayName: 'Run Sire tests'
+#- script: |
+#    # now perform the tests - do this before packaging and deploy
+#    cd docker/sire-test-devel && docker build -f Dockerfile -t siremol/sire-test-devel:latest . && cd -
+#  displayName: 'Run Sire tests'
 - script: |
     # if the test were successful then create a binary installer package
     # and ensure this is pushed back to docker for checking

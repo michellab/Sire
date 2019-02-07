@@ -41,7 +41,6 @@ target_link_libraries (sire_python
                        SIRE_SireAnalysis
                        SIRE_SireError
                        ${SIRECLUSTER_EXTRA_LIBRARIES}
-                       ${PYTHON_LIBRARIES}
                       )
 
 # installation

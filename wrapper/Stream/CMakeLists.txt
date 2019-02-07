@@ -46,7 +46,6 @@ target_link_libraries (Stream
                        SirePython
                        SIRE_SireStream
                        ${BOOST_PYTHON_LIBRARY}
-                       ${PYTHON_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

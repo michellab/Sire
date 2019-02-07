@@ -4,16 +4,15 @@
 
 FROM siremol/sire-build:latest
 
-WORKDIR $HOME
+WORKDIR $HOME/Sire
 
 USER $FN_USER
 
 # Update to the latest version
-RUN cd Sire && git checkout devel && git pull
+RUN git checkout devel && git pull
  
 # Build Sire (takes a long time)
-ADD build_sire.sh $HOME/build_sire.sh
-RUN scl enable devtoolset-6 ./build_sire.sh
+RUN ./compile_sire.sh
 
 #Cleaning the conda and pip cache before packaging
 ADD clean.py $HOME/clean.py
@@ -22,4 +21,4 @@ RUN $HOME/sire.app/bin/conda clean -tipsy && \
     $HOME/sire.app/bin/python $HOME/clean.py && \
     rm $HOME/clean.py
 
-ENTRYPOINT ["scl", "enable", "devtoolset-6", "bash"]
+ENTRYPOINT ["bash"]
