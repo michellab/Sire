@@ -8,6 +8,6 @@ WORKDIR $HOME
 
 USER $FN_USER
 
-RUN $HOME/sire.app/bin/sire_test 2>&1 | tee sire_tests.log
+RUN $HOME/sire.app/bin/sire_test
 
-ENTRYPOINT ["scl", "enable", "devtoolset-6", "bash"]
+ENTRYPOINT ["bash"]

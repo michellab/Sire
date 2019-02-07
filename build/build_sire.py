@@ -4,6 +4,7 @@
 
 import sys
 import os
+import glob
 import time
 import argparse
 import multiprocessing
@@ -95,7 +96,8 @@ if __name__ == "__main__":
     try:
         NPYCORES = int(os.environ["NPYCORES"])
     except KeyError:
-        NPYCORES = args.npycores if args.npycores > 0 else NCORES
+        # default to half the number to save memory
+        NPYCORES = args.npycores if args.npycores > 0 else NCORES / 2
 
     print("Number of cores used for compilation = %d" % NCORES)
 
@@ -178,6 +180,7 @@ if __name__ == "__main__":
     except ImportError:
         conda_pkgs.append("netcdf4")
 
+<<<<<<< HEAD
     CC = None
     CXX = None
     make = None
@@ -211,23 +214,20 @@ if __name__ == "__main__":
 
         # compilers (so we keep binary compatibility
         if is_osx:
-            if os.path.exists(os.path.join(conda_base, "bin", "clang++")):
+            try:
+                CXX = glob.glob(os.path.join(conda_base, "bin", "clang++"))[0]
+                CC = glob.glob(os.path.join(conda_base, "bin", "clang"))[0]
                 print("clang++ is already installed...")
-            else:
+            except:
                 conda_pkgs.append("clang_osx-64")
                 conda_pkgs.append("clangxx_osx-64")
-
-            CC=os.path.join(conda_base, "bin", "clang")
-            CXX=os.path.join(conda_base, "bin", "clang++")
         elif is_linux:
-            if os.path.exists(os.path.join(conda_base, "bin", "x86_64-conda_cos6-linux-gnu-g++")):
-                print("g++ is already installed...")
-            else:
+            try:
+                CXX = glob.glob(os.path.join(conda_base, "bin", "*-g++"))[0]
+                CC = glob.glob(os.path.join(conda_base, "bin", "*-gcc"))[0]
+            except:
                 conda_pkgs.append("gcc_linux-64")
                 conda_pkgs.append("gxx_linux-64")
-
-            CC=os.path.join(conda_base, "bin", "x86_64-conda_cos6-linux-gnu-gcc")
-            CXX=os.path.join(conda_base, "bin", "x86_64-conda_cos6-linux-gnu-g++")
 
         if os.path.exists(os.path.join(conda_base, "bin", "make")):
             print("make is already installed...")
@@ -275,6 +275,25 @@ if __name__ == "__main__":
         os.system("%s uninstall --yes --force blas" % conda_exe)
         os.system("%s install --yes \"blas=*=openblas\"" % conda_exe)
         os.system("%s update --yes --force numpy" % conda_exe)
+
+    # make sure we really have found the compilers
+    if is_osx:
+        try:
+            CXX = glob.glob("%s/bin/clang++" % conda_base)[0]
+            CC = glob.glob("%s/bin/clang" % conda_base)[0]
+            print("clang++ is already installed...")
+        except:
+            print("Cannot find the conda clang++ binaries!")
+            sys.exit(-1)
+    elif is_linux:
+        try:
+            CXX = glob.glob("%s/bin/*-g++" % conda_base)[0]
+            CC = glob.glob("%s/bin/*-gcc" % conda_base)[0]
+        except:
+            print("Cannot find the conda g++ binaries!")
+            sys.exit(-1)
+
+    print("Using compilers %s | %s" % (CC, CXX))
 
     # Make sure all of the above output is printed to the screen
     # before we start running any actual compilation
@@ -398,6 +417,7 @@ if __name__ == "__main__":
     make, make_args = make_cmd(NPYCORES, make, True)
 
     # Now that cmake has run, we can compile and install wrapper
+    print("NOW RUNNING \"%s\" %s" % (make, make_args))
     status = os.system("\"%s\" %s" % (make, make_args))
 
     if status != 0:

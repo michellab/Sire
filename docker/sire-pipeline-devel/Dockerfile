@@ -4,14 +4,17 @@
 
 FROM siremol/sire-devel:latest
 
-WORKDIR $HOME
+WORKDIR $HOME/Sire
 
 USER $FN_USER
 
 # Update to the latest version
-RUN cd Sire && git checkout devel && git pull
+RUN git checkout devel && git pull
  
-# Build Sire (this should take less time as it is a small update)
-RUN scl enable devtoolset-6 ./build_sire.sh
+# Build Sire (takes a long time)
+RUN ./compile_sire.sh
 
-ENTRYPOINT ["scl", "enable", "devtoolset-6", "bash"]
+# Clean up so that the Docker image size is minimised
+RUN $HOME/sire.app/bin/conda clean -tipy
+
+ENTRYPOINT ["bash"]

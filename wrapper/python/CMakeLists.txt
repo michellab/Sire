@@ -31,7 +31,6 @@ set ( SIREPYTHON_SOURCES
 add_executable (sire_python ${SIREPYTHON_SOURCES})
 
 target_link_libraries (sire_python
-                       SirePython
                        SIRE_SireCluster
                        SIRE_Squire
                        SIRE_SireMol
@@ -41,6 +40,8 @@ target_link_libraries (sire_python
                        SIRE_SireAnalysis
                        SIRE_SireError
                        ${SIRECLUSTER_EXTRA_LIBRARIES}
+                       ${BOOST_PYTHON_LIBRARY}
+                       ${PYTHON_LIBRARY}
                       )
 
 # installation

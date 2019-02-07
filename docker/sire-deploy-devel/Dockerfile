@@ -16,4 +16,4 @@ RUN $HOME/sire.app/bin/conda install -y pycurl
 ADD deploy.py .
 RUN $HOME/sire.app/bin/python deploy.py
 
-ENTRYPOINT ["scl", "enable", "devtoolset-6", "bash"]
+ENTRYPOINT ["bash"]

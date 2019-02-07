@@ -95,6 +95,13 @@ if ( MSYS )
 else()
   if ( BOOST_PYTHON_LIBRARY )
     set( BOOST_PYTHON_HEADERS "${SIRE_APP}/include" )
+
+    if ( APPLE )
+      message( STATUS "Not linking modules to libPython to prevent double-symbols" )
+    else()
+      set( BOOST_PYTHON_LIBRARY "${PYTHON_LIBRARIES};${BOOST_PYTHON_LIBRARY}" )
+    endif()
+
     message( STATUS "Using bundled boost::python in ${BOOST_PYTHON_LIBRARY} | ${BOOST_PYTHON_HEADERS}" )
     set( SIRE_FOUND_BOOST_PYTHON TRUE )
   else()

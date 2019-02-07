@@ -9,19 +9,20 @@ trigger:
 steps:
 - script: |
     # download and install last OSX build of Sire in $HOME/sire.app
-    #echo "Downloading sire_devel_latest_osx.run..."
-    #wget https://siremol.org/largefiles/sire_releases/download.php?name=sire_devel_latest_osx.run -O sire_devel_latest_osx.run > /dev/null 2>&1
-    #chmod +x sire_devel_latest_osx.run
+    echo "Downloading sire_devel_latest_osx.run..."
+    wget https://siremol.org/largefiles/sire_releases/download.php?name=sire_devel_latest_osx.run -O sire_devel_latest_osx.run > /dev/null 2>&1
+    chmod +x sire_devel_latest_osx.run
 
-    #echo "Unpacking sire_devel_latest_osx.run (takes a long time)..."
-    #echo "$HOME/sire.app" | ./sire_devel_latest_osx.run > /dev/null 2>&1
+    echo "Unpacking sire_devel_latest_osx.run (takes a long time)..."
+    echo "$HOME/sire.app" | ./sire_devel_latest_osx.run > /dev/null 2>&1
 
-    # compile from scratch (no docker with OS X)
-    #echo "Performing an incremental build of Sire..."
+    echo "Performing an incremental build of Sire..."
     ./compile_sire.sh --install $HOME/sire.app
   displayName: 'Build Sire'
 - script: |
     # create the binary package before running tests, as the package must be clean
+    $HOME/sire.app/bin/conda uninstall --yes cmake make clang_osx-64 clangxx_osx-64 llvm
+    $HOME/sire.app/bin/conda clean -tipy
     $HOME/sire.app/bin/package_sire > package.log 2>&1
   env:
     SIRE_RUN_FILE: $HOME/sire_devel_latest_osx.run

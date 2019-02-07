@@ -14,11 +14,7 @@ RUN git checkout devel && git pull
 # Build Sire (takes a long time)
 RUN ./compile_sire.sh
 
-#Cleaning the conda and pip cache before packaging
-ADD clean.py $HOME/clean.py
-RUN $HOME/sire.app/bin/conda clean -tipsy && \
-    rm -rf $HOME/.cache && \
-    $HOME/sire.app/bin/python $HOME/clean.py && \
-    rm $HOME/clean.py
+# Clean up so that the Docker image size is minimised
+RUN $HOME/sire.app/bin/conda clean -tipy
 
 ENTRYPOINT ["bash"]
