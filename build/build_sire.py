@@ -331,8 +331,9 @@ if __name__ == "__main__":
                     if (not a in os.environ):
                         os.environ[a] = v.split("=")[-1]
         add_default_cmake_defs(args.corelib)
-        cmake_cmd = "%s %s -G \"%s\" %s" % (cmake, " ".join(["-D \"%s\"" % d[0] for d in args.corelib]),
-            args.generator[0], sourcedir)
+        cmake_cmd = "%s %s %s %s" % (cmake,
+            " ".join(["-D \"%s\"" % d[0] for d in args.corelib]),
+            " ".join(["-G \"%s\"" % g for g in args.generator]), sourcedir)
         if (CC):
             os.environ["CC"] = CC
         if (CXX):
@@ -384,8 +385,9 @@ if __name__ == "__main__":
         #status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
         #                 % (conda_base,NCORES,sourcedir) )
         add_default_cmake_defs(args.wrapper)
-        cmake_cmd = "%s %s -G \"%s\" %s" % (cmake, " ".join(["-D \"%s\"" % d[0] for d in args.wrapper]),
-            args.generator[0], sourcedir)
+        cmake_cmd = "%s %s %s %s" % (cmake,
+            " ".join(["-D \"%s\"" % d[0] for d in args.wrapper]),
+            " ".join(["-G \"%s\"" % g for g in args.generator]), sourcedir)
         print(cmake_cmd)
         status = os.system(cmake_cmd)
 
