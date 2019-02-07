@@ -7,7 +7,7 @@ trigger:
 - devel
 
 jobs:
-- job: 'Sire OSX'
+- job: 'SireOSX'
   pool:
     vmImage: 'macOS-10.13'
 
