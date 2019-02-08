@@ -15,13 +15,17 @@ if(NetCDF_INCLUDE_DIR AND NetCDF_LIBRARY_DIR)
     set(NetCDF_FIND_QUIETLY)
 endif()
 
-file(TO_CMAKE_PATH "$ENV{NetCDF_ROOT_DIR}" NetCDF_ROOT_DIR)
+if ("$ENV{NetCDF_ROOT_DIR}")
+    file(TO_CMAKE_PATH "$ENV{NetCDF_ROOT_DIR}" NetCDF_ROOT_DIR)
+elseif (DEFINED SIRE_APP)
+    file(TO_CMAKE_PATH "${SIRE_APP}" NetCDF_ROOT_DIR)
+endif()
 
 message( STATUS "Looking for NetCDF in ${NetCDF_ROOT_DIR}" )
 
 find_library(NetCDF_LIBRARIES
     NAMES netcdf
-    PATHS "${NetCDF_ROOT_DIR}/lib"
+    PATHS "${NetCDF_ROOT_DIR}/lib" "${NetCDF_ROOT_DIR}/Library/lib"
     CACHE STRING "NetCDF libraries"
     NO_DEFAULT_PATH)
 

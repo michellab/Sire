@@ -113,12 +113,14 @@ else()
   if ( ANACONDA_BUILD )
     message( STATUS "Building into an existing Anaconda/Miniconda installation..." )
     # Where is anaconda installed
-    set( ANACONDA_BASE "$ENV{HOME}/miniconda3" CACHE PATH
-            "Install directory for Anaconda/Miniconda (python3)" )
+    if (NOT DEFINED ANACONDA_BASE)
+      set( ANACONDA_BASE "$ENV{HOME}/miniconda3" CACHE PATH
+              "Install directory for Anaconda/Miniconda (python3)" )
+    endif()
 
     # Make sure that there is a python3 executable in the bin directory
-    if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
-      message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
+    if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" AND NOT EXISTS "${ANACONDA_BASE}/python.exe" )
+      message( FATAL_ERROR "Cannot find python3. "
                            "Please set the full path to the Anaconda or Miniconda "
                            "installation directory." )
     endif()
@@ -661,15 +663,16 @@ elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
 elseif ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
 
     add_compile_options("/permissive-")
+    add_compile_options("/Zc:twoPhase-")
     message( STATUS "Compiling with MSVC" )
     set( SIRE_COMPILER "MSVC" )
 
-    set ( SIRE_SMALL_FLAGS  "" )
+    set ( SIRE_SMALL_FLAGS  "/O1" )
     set ( SIRE_WARNALL_FLAGS  "" )
-    set ( SIRE_RELEASE_FLAGS  "" )
-    set ( SIRE_DEBUG_FLAGS   "" )
+    set ( SIRE_RELEASE_FLAGS  "/O2" )
+    set ( SIRE_DEBUG_FLAGS   "/Zi" )
     set ( SIRE_VISIBILITY_FLAGS "/DSIRE_NO_VISIBILITY_AVAILABLE" )
-    set ( SIRE_VECTOR_FLAGS "/DSIRE_USE_AVX /openmp /arch:AVX" )
+    GET_SIRE_VECTOR_FLAGS( "/openmp" "/arch:SSE2" "/arch:AVX" "/arch:AVX512" )
     set ( SIRE_SHARE_LINK_FLAGS "" )
     set ( SIRE_STATIC_LINK_FLAGS "" )
 

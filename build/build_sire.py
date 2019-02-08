@@ -35,29 +35,6 @@ def parse_args():
     return parser.parse_args()
 
 
-def make_cmd(ncores, make = None, install = False):
-    if (not make):
-        try:
-            make = os.environ["MAKE_CMD"]
-        except KeyError:
-            with open("CMakeCache.txt", "r") as hnd:
-                line = True
-                while line:
-                    line = hnd.readline()
-                    if (line and line.strip().startswith("CMAKE_GENERATOR:INTERNAL")
-                        and line.split("=")[-1].startswith("Visual Studio")):
-                        make = "MSBuild.exe"
-                        break
-            if (make is None):
-                make = "make"
-    if ("make" in make):
-        action = " install" if install else ""
-        make_args = "-j %s%s" % (ncores, action)
-    elif ("msbuild" in make.lower()):
-        action = "INSTALL" if install else "ALL_BUILD"
-        make_args = "/m:%s /p:Configuration=Release /p:Platform=x64 %s.vcxproj" % (ncores, action)
-    return make, make_args
-
 if __name__ == "__main__":
     args = parse_args()
 
@@ -74,8 +51,8 @@ if __name__ == "__main__":
         print("Compiling on OS X")
     elif platform.system() == "Windows":
         exe_suffix = ".exe"
-        print("Sorry - compiling into miniconda on Windows is not supported yet")
-        args.noconda = True
+        #print("Sorry - compiling into miniconda on Windows is not supported yet")
+        #args.noconda = True
         is_windows = True
     else:
         print("Unrecognised build platform: %s" % platform.system())
@@ -97,7 +74,7 @@ if __name__ == "__main__":
         NPYCORES = int(os.environ["NPYCORES"])
     except KeyError:
         # default to half the number to save memory
-        NPYCORES = args.npycores if args.npycores > 0 else NCORES // 2
+        NPYCORES = args.npycores if args.npycores > 0 else NCORES
 
     print("Number of cores used for compilation = %d" % NCORES)
 
@@ -118,9 +95,11 @@ if __name__ == "__main__":
         conda_exe = None
 
         if os.path.exists(os.path.join(conda_base, "bin", "conda")):
-            python_exe = os.path.join(conda_base, "bin", "python")
-            conda_exe = os.path.join(conda_base, "bin", "conda")
+            conda_bin = os.path.join(conda_base, "bin")
+            python_exe = os.path.join(conda_bin, "python")
+            conda_exe = os.path.join(conda_bin, "conda")
         elif os.path.exists(os.path.join(conda_base, "python.exe")):
+            conda_bin = os.path.join(conda_base, "Library", "bin")
             python_exe = os.path.join(conda_base, "python.exe")
             conda_exe = os.path.join(conda_base, "Scripts", "conda.exe")
         else:
@@ -182,7 +161,6 @@ if __name__ == "__main__":
 
     CC = None
     CXX = None
-    make = None
     cmake = "cmake%s" % exe_suffix
     if (not args.noconda):
         # boost
@@ -214,33 +192,33 @@ if __name__ == "__main__":
         # compilers (so we keep binary compatibility
         if is_osx:
             try:
-                CXX = glob.glob(os.path.join(conda_base, "bin", "clang++"))[0]
-                CC = glob.glob(os.path.join(conda_base, "bin", "clang"))[0]
+                CXX = glob.glob(os.path.join(conda_bin, "clang++"))[0]
+                CC = glob.glob(os.path.join(conda_bin, "clang"))[0]
                 print("clang++ is already installed...")
             except:
                 conda_pkgs.append("clang_osx-64")
                 conda_pkgs.append("clangxx_osx-64")
         elif is_linux:
             try:
-                CXX = glob.glob(os.path.join(conda_base, "bin", "*-g++"))[0]
-                CC = glob.glob(os.path.join(conda_base, "bin", "*-gcc"))[0]
+                CXX = glob.glob(os.path.join(conda_bin, "*-g++"))[0]
+                CC = glob.glob(os.path.join(conda_bin, "*-gcc"))[0]
             except:
                 conda_pkgs.append("gcc_linux-64")
                 conda_pkgs.append("gxx_linux-64")
 
-        if os.path.exists(os.path.join(conda_base, "bin", "make")):
-            print("make is already installed...")
-        else:
-            conda_pkgs.append("make")
+        if (not is_windows):
+            if os.path.exists(os.path.join(conda_bin, "make")):
+                print("make is already installed...")
+            else:
+                conda_pkgs.append("make")
+            make = os.path.join(conda_bin, "make")
 
-        make = os.path.join(conda_base, "bin", "make")
-
-        if os.path.exists(os.path.join(conda_base, "bin", "cmake")):
+        if os.path.exists(os.path.join(conda_bin, "cmake%s" % exe_suffix)):
             print("cmake is already installed...")
         else:
             conda_pkgs.append("cmake")
 
-        cmake = os.path.join(conda_base, "bin", "cmake")
+        cmake = os.path.join(conda_bin, "cmake%s" % exe_suffix)
 
     installed_something = False
 
@@ -278,16 +256,16 @@ if __name__ == "__main__":
     # make sure we really have found the compilers
     if is_osx:
         try:
-            CXX = glob.glob(os.path.join(conda_base, "bin", "clang++"))[0]
-            CC = glob.glob(os.path.join(conda_base, "bin", "clang"))[0]
+            CXX = glob.glob(os.path.join(conda_bin, "clang++"))[0]
+            CC = glob.glob(os.path.join(conda_bin, "clang"))[0]
             print("clang++ is already installed...")
         except:
             print("Cannot find the conda clang++ binaries!")
             sys.exit(-1)
     elif is_linux:
         try:
-            CXX = glob.glob(os.path.join(conda_base, "bin", "*-g++"))[0]
-            CC = glob.glob(os.path.join(conda_base, "bin", "*-gcc"))[0]
+            CXX = glob.glob(os.path.join(conda_bin, "*-g++"))[0]
+            CC = glob.glob(os.path.join(conda_bin, "*-gcc"))[0]
         except:
             print("Cannot find the conda g++ binaries!")
             sys.exit(-1)
@@ -317,7 +295,7 @@ if __name__ == "__main__":
     os.chdir(coredir)
 
     def add_default_cmake_defs(cmake_defs):
-        for a in ("ANACONDA_BUILD=ON", "ANACONDA_BASE=%s" % conda_base, "BUILD_NCORES=%s" % NCORES):
+        for a in ("ANACONDA_BUILD=ON", "ANACONDA_BASE=%s" % conda_base.replace("\\", "/"), "BUILD_NCORES=%s" % NCORES):
             if (args.noconda and a.startswith("ANACONDA")):
                 continue
             found = False
@@ -327,6 +305,15 @@ if __name__ == "__main__":
                     break
             if (not found):
                 cmake_defs.append([a])
+
+    def make_cmd(ncores, install = False):
+        if is_windows:
+            action = "INSTALL" if install else "ALL_BUILD"
+            make_args = "%s -- /m:%s /p:Configuration=Release /p:Platform=x64" % (action, ncores)
+        else:
+            action = "install" if install else ""
+            make_args = "%s -- -j %s" % (action, ncores)
+        return make_args
 
     if os.path.exists("CMakeCache.txt"):
         # we have run cmake in this directory before. Run it again.
@@ -364,10 +351,10 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     # Now that cmake has run, we can compile and install corelib
-    make, make_args = make_cmd(NCORES, make, True)
+    make_args = make_cmd(NCORES, True)
                 
-    print("NOW RUNNING \"%s\" %s" % (make, make_args))
-    status = os.system("\"%s\" %s" % (make, make_args))
+    print("NOW RUNNING \"%s\" --build . --target %s" % (cmake, make_args))
+    status = os.system("\"%s\" --build . --target %s" % (cmake, make_args))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING CORELIB!")
@@ -413,11 +400,11 @@ if __name__ == "__main__":
         print("SOMETHING WENT WRONG WHEN USING CMAKE ON WRAPPER!")
         sys.exit(-1)
 
-    make, make_args = make_cmd(NPYCORES, make, True)
+    make_args = make_cmd(NPYCORES, True)
 
     # Now that cmake has run, we can compile and install wrapper
-    print("NOW RUNNING \"%s\" %s" % (make, make_args))
-    status = os.system("\"%s\" %s" % (make, make_args))
+    print("NOW RUNNING \"%s\" --build . --target %s" % (cmake, make_args))
+    status = os.system("\"%s\" --build . --target %s" % (cmake, make_args))
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN COMPILING WRAPPER!")
