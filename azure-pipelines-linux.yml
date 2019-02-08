@@ -11,40 +11,26 @@ jobs:
   pool:
     vmImage: 'Ubuntu-16.04'
 
-  timeoutInMinutes: 120
+  timeoutInMinutes: 180
 
   steps:
   - script: |
-      # login to docker and get the last successful sire-devel build
-      docker login -u $id -p $pswd
-      docker pull siremol/sire-devel:latest
-
-      # ensure the last known safe state is saved on docker
-      docker tag siremol/sire-devel:latest siremol/sire-devel:last
-      docker push siremol/sire-devel:last
-    env:
-      pswd: $(dockerPassword)
-      id: $(dockerId)
-    displayName: 'Pull sire-devel:latest'
-  - script: |
-      # now build the latest version of devel, starting from the last point
-      cd docker/sire-pipeline-devel && docker build -f Dockerfile -t siremol/sire-devel:latest . && cd - && docker push siremol/sire-devel:latest
-    env:
-      pswd: $(dockerPassword)
-      id: $(dockerId)
+      cd docker/sire-devel-latest && docker build -f Dockerfile -t siremol/sire-devel:latest . && cd -
     displayName: 'Build Sire'
   - script: |
-      # now perform the tests - do this before packaging and deploy
       cd docker/sire-test-devel && docker build -f Dockerfile -t siremol/sire-test-devel:latest . && cd -
     displayName: 'Run Sire tests'
   - script: |
-      # if the test were successful then create a binary installer package
-      # and ensure this is pushed back to docker for checking
       cd docker/sire-package-devel && docker build -f Dockerfile -t siremol/sire-package-devel:latest . && cd -
-    displayName: 'Package Sire into a binary'
+    displayName: 'Package Sire'
   - script: |
       # finally deploy the binary to an object store bucket identified by 'par_url'
       cd docker/sire-deploy-devel && docker build -f Dockerfile --build-arg par_url=$par_url . && cd -
+      # now push the latest build to docker
+      docker login -u $id -p $pswd
+      docker push siremol/sire-devel:latest
     env:
       par_url: $(parURL)
-    displayName: 'Deploy binary to siremol.org'
+      pswd: $(dockerPassword)
+      id: $(dockerId)
+    displayName: 'Deploy to siremol.org and docker'
