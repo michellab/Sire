@@ -56,8 +56,8 @@ namespace SireCAS
 class SIRECAS_EXPORT SingleFunc : public ExBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SingleFunc&);
-friend QDataStream& ::operator>>(QDataStream&, SingleFunc&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const SingleFunc&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, SingleFunc&);
 
 public:
     SingleFunc();

@@ -56,8 +56,8 @@ class SIREMOL_EXPORT CGIdx
        : public SireID::Index_T_<CGIdx>, public CGID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CGIdx&);
-friend QDataStream& ::operator>>(QDataStream&, CGIdx&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CGIdx&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, CGIdx&);
 
 public:
     CGIdx();

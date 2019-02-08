@@ -99,8 +99,8 @@ class SIREMOL_EXPORT SegProperty
     : public SireBase::ConcreteProperty<SegProperty<T>, SegProp>
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const SegProperty<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, SegProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const SegProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, SegProperty<T>&);
 
 public:
     SegProperty();

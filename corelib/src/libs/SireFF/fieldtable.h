@@ -97,8 +97,8 @@ using SireVol::GridPtr;
 class SIREFF_EXPORT MolFieldTable : public SireBase::PackedArray2D<SireMaths::Vector>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolFieldTable&);
-friend QDataStream& ::operator>>(QDataStream&, MolFieldTable&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const MolFieldTable&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, MolFieldTable&);
 
 public:
     typedef SireBase::PackedArray2D<SireMaths::Vector>::Array Array;
@@ -202,8 +202,8 @@ private:
 class SIREFF_EXPORT GridFieldTable
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GridFieldTable&);
-friend QDataStream& ::operator>>(QDataStream&, GridFieldTable&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const GridFieldTable&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, GridFieldTable&);
 
 public:
     typedef QVector<Vector>::const_iterator const_iterator;
@@ -318,8 +318,8 @@ private:
 class SIREFF_EXPORT FieldTable
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FieldTable&);
-friend QDataStream& ::operator>>(QDataStream&, FieldTable&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FieldTable&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FieldTable&);
 
 public:
     FieldTable();

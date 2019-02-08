@@ -137,8 +137,8 @@ template<>
 class SIREMOL_EXPORT IDAndSet<MolID> : public MolID
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const IDAndSet<MolID>&);
-friend QDataStream& ::operator>><>(QDataStream&, IDAndSet<MolID>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const IDAndSet<MolID>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, IDAndSet<MolID>&);
 
 public:
     IDAndSet();
@@ -197,8 +197,8 @@ template<>
 class SIREMOL_EXPORT IDOrSet<MolID> : public MolID
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const IDOrSet<MolID>&);
-friend QDataStream& ::operator>><>(QDataStream&, IDOrSet<MolID>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const IDOrSet<MolID>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, IDOrSet<MolID>&);
 
 public:
     IDOrSet();

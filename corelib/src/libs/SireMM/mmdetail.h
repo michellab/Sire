@@ -52,8 +52,8 @@ namespace SireMM
 class SIREMM_EXPORT MMDetail : public SireBase::ConcreteProperty<MMDetail,SireFF::FFDetail>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MMDetail&);
-friend QDataStream& ::operator>>(QDataStream&, MMDetail&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const MMDetail&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, MMDetail&);
 
 public:
     MMDetail();

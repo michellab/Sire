@@ -72,8 +72,8 @@ template<class T, int N=100>
 class ChunkedVector
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const ChunkedVector<T,N>&);
-friend QDataStream& ::operator>><>(QDataStream&, ChunkedVector<T,N>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const ChunkedVector<T,N>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, ChunkedVector<T,N>&);
 
 friend const void* 
 SireBase::detail::get_shared_container_pointer<>(const ChunkedVector<T,N>&);

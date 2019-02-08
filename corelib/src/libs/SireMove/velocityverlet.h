@@ -53,8 +53,8 @@ class SIREMOVE_EXPORT VelocityVerlet
           : public SireBase::ConcreteProperty<VelocityVerlet,Integrator>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const VelocityVerlet&);
-friend QDataStream& ::operator>>(QDataStream&, VelocityVerlet&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const VelocityVerlet&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, VelocityVerlet&);
 
 public:
     VelocityVerlet(bool frequent_save_velocities = false);

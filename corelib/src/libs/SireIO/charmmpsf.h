@@ -85,8 +85,8 @@ namespace SireIO
 class SIREIO_EXPORT PSFAtom
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PSFAtom&);
-friend QDataStream& ::operator>>(QDataStream&, PSFAtom&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const PSFAtom&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, PSFAtom&);
 
 public:
     /** Default constructor. */
@@ -185,8 +185,8 @@ private:
 class SIREIO_EXPORT CharmmParam
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CharmmParam&);
-friend QDataStream& ::operator>>(QDataStream&, CharmmParam&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const CharmmParam&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, CharmmParam&);
 
 public:
     /* Default constructor. */
@@ -230,8 +230,8 @@ private:
 class SIREIO_EXPORT CharmmPSF : public SireBase::ConcreteProperty<CharmmPSF,MoleculeParser>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CharmmPSF&);
-friend QDataStream& ::operator>>(QDataStream&, CharmmPSF&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const CharmmPSF&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, CharmmPSF&);
 
 public:
     CharmmPSF();

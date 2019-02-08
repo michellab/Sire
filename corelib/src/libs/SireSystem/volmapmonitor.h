@@ -62,8 +62,8 @@ class SIRESYSTEM_EXPORT VolMapMonitor
         : public SireBase::ConcreteProperty<VolMapMonitor,SystemMonitor>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const VolMapMonitor&);
-friend QDataStream& ::operator>>(QDataStream&, VolMapMonitor&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const VolMapMonitor&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, VolMapMonitor&);
 
 public:
     VolMapMonitor();

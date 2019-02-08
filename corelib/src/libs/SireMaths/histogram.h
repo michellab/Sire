@@ -59,8 +59,8 @@ namespace SireMaths
 class SIREMATHS_EXPORT HistogramBin
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const HistogramBin&);
-friend QDataStream& ::operator>>(QDataStream&, HistogramBin&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const HistogramBin&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, HistogramBin&);
 
 public:
     HistogramBin();
@@ -91,8 +91,8 @@ private:
 class SIREMATHS_EXPORT HistogramValue : public HistogramBin
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const HistogramValue&);
-friend QDataStream& ::operator>>(QDataStream&, HistogramValue&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const HistogramValue&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, HistogramValue&);
 
 public:
     HistogramValue();
@@ -124,8 +124,8 @@ class SIREMATHS_EXPORT Histogram
         : public SireBase::ConcreteProperty<Histogram,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Histogram&);
-friend QDataStream& ::operator>>(QDataStream&, Histogram&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Histogram&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Histogram&);
 
 public:
     Histogram();

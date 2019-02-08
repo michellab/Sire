@@ -73,8 +73,8 @@ class SIREMATHS_EXPORT Matrix
 
 friend class Quaternion;
 
-friend QDataStream& ::operator<<(QDataStream&, const Matrix&);
-friend QDataStream& ::operator>>(QDataStream&, Matrix&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Matrix&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Matrix&);
 
 public:
     Matrix();
@@ -170,12 +170,12 @@ public:
     Matrix& operator*=(double c);
     Matrix& operator/=(double c);
 
-    friend const Matrix operator+(const Matrix &m1, const Matrix &m2);
-    friend const Matrix operator-(const Matrix &m1, const Matrix &m2);
-    friend const Matrix operator*(const Matrix &m1, const Matrix &m2);
-    friend const Vector operator*(const Matrix &m, const Vector &p);
-    friend const Matrix operator*(const Matrix &m, double c);
-    friend const Matrix operator*(double c, const Matrix &m);
+    friend SIREMATHS_EXPORT const Matrix operator+(const Matrix &m1, const Matrix &m2);
+    friend SIREMATHS_EXPORT const Matrix operator-(const Matrix &m1, const Matrix &m2);
+    friend SIREMATHS_EXPORT const Matrix operator*(const Matrix &m1, const Matrix &m2);
+    friend SIREMATHS_EXPORT const Vector operator*(const Matrix &m, const Vector &p);
+    friend SIREMATHS_EXPORT const Matrix operator*(const Matrix &m, double c);
+    friend SIREMATHS_EXPORT const Matrix operator*(double c, const Matrix &m);
 
     static Matrix covariance(const QVector<Vector> &p,
                              const QVector<Vector> &q,

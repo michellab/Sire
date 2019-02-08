@@ -65,8 +65,8 @@ using SireMol::MoleculeGroup;
 class SIRESYSTEM_EXPORT ChargeConstraint : public MoleculeConstraint
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ChargeConstraint&);
-friend QDataStream& ::operator>>(QDataStream&, ChargeConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const ChargeConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, ChargeConstraint&);
 
 public:
     ChargeConstraint();

@@ -98,8 +98,8 @@ using SireMaths::Vector;
 class SIREMOVE_EXPORT ZMatrixLine
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ZMatrixLine&);
-friend QDataStream& ::operator>>(QDataStream&, ZMatrixLine&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const ZMatrixLine&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, ZMatrixLine&);
 
 public:
     ZMatrixLine();
@@ -155,8 +155,8 @@ private:
 class SIREMOVE_EXPORT ZMatrixCoordsLine : public ZMatrixLine
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ZMatrixCoordsLine&);
-friend QDataStream& ::operator>>(QDataStream&, ZMatrixCoordsLine&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const ZMatrixCoordsLine&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, ZMatrixCoordsLine&);
 
 public:
     ZMatrixCoordsLine();
@@ -205,8 +205,8 @@ class SIREMOVE_EXPORT ZMatrix
           : public SireBase::ConcreteProperty<ZMatrix,SireMol::MoleculeProperty>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ZMatrix&);
-friend QDataStream& ::operator>>(QDataStream&, ZMatrix&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const ZMatrix&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, ZMatrix&);
 
 public:
     ZMatrix();
@@ -347,8 +347,8 @@ class SIREMOVE_EXPORT ZMatrixCoords
             : public SireBase::ConcreteProperty<ZMatrixCoords,SireMol::MoleculeProperty>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ZMatrixCoords&);
-friend QDataStream& ::operator>>(QDataStream&, ZMatrixCoords&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const ZMatrixCoords&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, ZMatrixCoords&);
 
 public:
     ZMatrixCoords();

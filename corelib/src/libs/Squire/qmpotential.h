@@ -190,8 +190,8 @@ typedef SireBase::PropPtr<QMProgram> QMProgPtr;
 class SQUIRE_EXPORT QMPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const QMPotential&);
-friend QDataStream& ::operator>>(QDataStream&, QMPotential&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const QMPotential&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, QMPotential&);
 
 public:
     

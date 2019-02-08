@@ -66,8 +66,8 @@ class SIREMOVE_EXPORT Replica
         : public SireBase::ConcreteProperty<Replica,SupraSubSystem>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Replica&);
-friend QDataStream& ::operator>>(QDataStream&, Replica&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const Replica&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, Replica&);
 
 friend class Replicas; //so can call protected editing functions
 friend class RepExSubMove; //so can call protected editing functions

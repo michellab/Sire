@@ -81,8 +81,8 @@ ExpressionBase is just a proxy for SharedPolyPointer<ExBase>).
 class SIRECAS_EXPORT ExBase : public SireBase::RefCountData
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ExBase&);
-friend QDataStream& ::operator>>(QDataStream&, ExBase&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const ExBase&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, ExBase&);
 
 public:
     typedef ExBase ROOT;

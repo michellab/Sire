@@ -94,8 +94,8 @@ using SireSystem::System;
 class SIREMOVE_EXPORT MolInserter : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolInserter&);
-friend QDataStream& ::operator>>(QDataStream&, MolInserter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const MolInserter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, MolInserter&);
 
 public:
     MolInserter();
@@ -168,8 +168,8 @@ class SIREMOVE_EXPORT NullInserter
             : public SireBase::ConcreteProperty<NullInserter,MolInserter>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullInserter&);
-friend QDataStream& ::operator>>(QDataStream&, NullInserter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const NullInserter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, NullInserter&);
 
 public:
     NullInserter();
@@ -200,8 +200,8 @@ class SIREMOVE_EXPORT UniformInserter
             : public SireBase::ConcreteProperty<UniformInserter,MolInserter>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const UniformInserter&);
-friend QDataStream& ::operator>>(QDataStream&, UniformInserter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const UniformInserter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, UniformInserter&);
 
 public:
     UniformInserter();

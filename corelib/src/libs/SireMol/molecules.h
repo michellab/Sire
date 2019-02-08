@@ -65,8 +65,8 @@ class SIREMOL_EXPORT Molecules
             : public SireBase::ConcreteProperty<Molecules,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Molecules&);
-friend QDataStream& ::operator>>(QDataStream&, Molecules&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Molecules&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Molecules&);
 
 public:
 

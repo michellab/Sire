@@ -70,8 +70,8 @@ class Molecule;
 class SIREMOL_EXPORT Chain : public ConcreteProperty<Chain,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Chain&);
-friend QDataStream& ::operator>>(QDataStream&, Chain&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Chain&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Chain&);
 
 public:
     typedef ChainID ID;

@@ -94,8 +94,8 @@ private:
 class SIREERROR_EXPORT exception : public std::exception
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const exception&);
-friend QDataStream& ::operator>>(QDataStream&, exception&);
+friend SIREERROR_EXPORT QDataStream& ::operator<<(QDataStream&, const exception&);
+friend SIREERROR_EXPORT QDataStream& ::operator>>(QDataStream&, exception&);
 
 public:
     typedef SireError::exception ROOT;

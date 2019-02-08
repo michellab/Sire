@@ -67,8 +67,8 @@ template<class PARAM>
 class AtomicParameters
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const AtomicParameters<PARAM>&);
-friend QDataStream& ::operator>><>(QDataStream&, AtomicParameters<PARAM>&);
+friend SIREFF_EXPORT QDataStream& ::operator<<<>(QDataStream&, const AtomicParameters<PARAM>&);
+friend SIREFF_EXPORT QDataStream& ::operator>><>(QDataStream&, AtomicParameters<PARAM>&);
 
 public:
 

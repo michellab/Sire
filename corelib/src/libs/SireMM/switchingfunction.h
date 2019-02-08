@@ -70,8 +70,8 @@ using SireUnits::Dimension::Length;
 class SIREMM_EXPORT SwitchingFunction : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SwitchingFunction&);
-friend QDataStream& ::operator>>(QDataStream&, SwitchingFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const SwitchingFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, SwitchingFunction&);
 
 public:
     ~SwitchingFunction();
@@ -198,8 +198,8 @@ class SIREMM_EXPORT NoCutoff
         : public SireBase::ConcreteProperty<NoCutoff,SwitchingFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NoCutoff&);
-friend QDataStream& ::operator>>(QDataStream&, NoCutoff&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const NoCutoff&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, NoCutoff&);
 
 public:
     NoCutoff();
@@ -234,8 +234,8 @@ class SIREMM_EXPORT HarmonicSwitchingFunction
                                              SwitchingFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const HarmonicSwitchingFunction&);
-friend QDataStream& ::operator>>(QDataStream&, HarmonicSwitchingFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const HarmonicSwitchingFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, HarmonicSwitchingFunction&);
 
 public:
     HarmonicSwitchingFunction();
@@ -300,8 +300,8 @@ class SIREMM_EXPORT CHARMMSwitchingFunction
                                              SwitchingFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CHARMMSwitchingFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CHARMMSwitchingFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CHARMMSwitchingFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CHARMMSwitchingFunction&);
 
 public:
     CHARMMSwitchingFunction();

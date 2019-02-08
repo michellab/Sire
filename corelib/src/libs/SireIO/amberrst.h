@@ -60,8 +60,8 @@ class NetCDFFile;
 class SIREIO_EXPORT AmberRst : public SireBase::ConcreteProperty<AmberRst,MoleculeParser>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AmberRst&);
-friend QDataStream& ::operator>>(QDataStream&, AmberRst&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const AmberRst&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, AmberRst&);
 
 public:
     AmberRst();

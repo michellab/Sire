@@ -59,8 +59,8 @@ template<class ID>
 class InvertMatch : public ID
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const InvertMatch<ID>&);
-friend QDataStream& ::operator>><>(QDataStream&, InvertMatch<ID>&);
+friend SIREID_EXPORT QDataStream& ::operator<<<>(QDataStream&, const InvertMatch<ID>&);
+friend SIREID_EXPORT QDataStream& ::operator>><>(QDataStream&, InvertMatch<ID>&);
 
 public:
     InvertMatch();

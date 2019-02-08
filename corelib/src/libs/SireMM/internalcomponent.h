@@ -539,8 +539,8 @@ public:
 class SIREMM_EXPORT Intra14Component : public SireFF::FFComponent
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Intra14Component&);
-friend QDataStream& ::operator>>(QDataStream&, Intra14Component&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const Intra14Component&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, Intra14Component&);
 
 public:
     Intra14Component(const FFName &name = FFName());
@@ -595,8 +595,8 @@ protected:
 class SIREMM_EXPORT InternalComponent : public SireFF::FFComponent
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const InternalComponent&);
-friend QDataStream& ::operator>>(QDataStream&, InternalComponent&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const InternalComponent&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, InternalComponent&);
 
 public:
     InternalComponent(const FFName &name = FFName());

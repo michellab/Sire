@@ -143,8 +143,8 @@ class SIREBASE_EXPORT GlobalSharedPointer
         : private SharedPolyPointer<T>, private GlobalSharedPointerBase
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const GlobalSharedPointer<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, GlobalSharedPointer<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const GlobalSharedPointer<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, GlobalSharedPointer<T>&);
 
 public:
 

@@ -56,8 +56,8 @@ using SireMaths::Vector;
 class SQUIRE_EXPORT PointDipole
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PointDipole&);
-friend QDataStream& ::operator>>(QDataStream&, PointDipole&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const PointDipole&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, PointDipole&);
 
 public:
     PointDipole();

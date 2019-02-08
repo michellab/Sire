@@ -74,8 +74,8 @@ using boost::tuple;
 class SIREMOL_EXPORT AngleID : public SireID::ID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AngleID&);
-friend QDataStream& ::operator>>(QDataStream&, AngleID&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AngleID&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AngleID&);
 
 public:
     AngleID();

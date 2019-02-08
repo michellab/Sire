@@ -55,8 +55,8 @@ This class is a mathematical representation of a sphere.
 class SIREMATHS_EXPORT Sphere
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Sphere&);
-friend QDataStream& ::operator>>(QDataStream&, Sphere&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Sphere&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Sphere&);
 
 public:
     Sphere();

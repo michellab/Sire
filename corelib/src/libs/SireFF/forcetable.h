@@ -87,8 +87,8 @@ using SireMaths::Vector;
 class SIREFF_EXPORT MolForceTable : public SireBase::PackedArray2D<SireMaths::Vector>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolForceTable&);
-friend QDataStream& ::operator>>(QDataStream&, MolForceTable&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const MolForceTable&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, MolForceTable&);
 
 public:
     typedef SireBase::PackedArray2D<SireMaths::Vector>::Array Array;
@@ -209,8 +209,8 @@ private:
 class SIREFF_EXPORT ForceTable
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ForceTable&);
-friend QDataStream& ::operator>>(QDataStream&, ForceTable&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const ForceTable&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, ForceTable&);
 
 public:
     ForceTable();

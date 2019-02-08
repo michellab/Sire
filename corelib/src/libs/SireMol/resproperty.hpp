@@ -99,8 +99,8 @@ class SIREMOL_EXPORT ResProperty
     : public SireBase::ConcreteProperty<ResProperty<T>, ResProp>
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const ResProperty<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, ResProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const ResProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, ResProperty<T>&);
 
 public:
     ResProperty();

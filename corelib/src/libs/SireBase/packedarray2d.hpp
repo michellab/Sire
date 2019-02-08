@@ -344,8 +344,8 @@ class PackedArray2D_Array
 friend class PackedArray2DMemory<T>;
 friend class PackedArray2D<T>;
 
-friend QDataStream& ::operator<<<>(QDataStream&, const PackedArray2D_Array<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, PackedArray2D_Array<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const PackedArray2D_Array<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, PackedArray2D_Array<T>&);
 
 public:
     PackedArray2D_Array();
@@ -412,8 +412,8 @@ class PackedArray2D
 
 friend class detail::PackedArray2DMemory<T>;
 
-friend QDataStream& ::operator<<<>(QDataStream&, const PackedArray2D<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, PackedArray2D<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const PackedArray2D<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, PackedArray2D<T>&);
 
 public:
     typedef typename detail::PackedArray2D_Array<T> Array;

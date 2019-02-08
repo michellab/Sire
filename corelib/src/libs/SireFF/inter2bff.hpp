@@ -65,8 +65,8 @@ class Inter2BFF
               public Potential
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const Inter2BFF<Potential>&);
-friend QDataStream& ::operator>><>(QDataStream&, Inter2BFF<Potential>&);
+friend SIREFF_EXPORT QDataStream& ::operator<<<>(QDataStream&, const Inter2BFF<Potential>&);
+friend SIREFF_EXPORT QDataStream& ::operator>><>(QDataStream&, Inter2BFF<Potential>&);
 
 public:
     typedef typename Potential::Components Components;

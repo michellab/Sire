@@ -72,8 +72,8 @@ class Molecule;
 class SIREMOL_EXPORT CutGroup : public SireBase::ConcreteProperty<CutGroup,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CutGroup&);
-friend QDataStream& ::operator>>(QDataStream&, CutGroup&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CutGroup&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, CutGroup&);
 
 public:
     typedef CGID ID;

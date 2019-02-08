@@ -63,8 +63,8 @@ class AtomicParameters3D : public AtomicParameters<PARAM>,
                            public AtomicCoords3D
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const AtomicParameters3D<PARAM>&);
-friend QDataStream& ::operator>><>(QDataStream&, AtomicParameters3D<PARAM>&);
+friend SIREFF_EXPORT QDataStream& ::operator<<<>(QDataStream&, const AtomicParameters3D<PARAM>&);
+friend SIREFF_EXPORT QDataStream& ::operator>><>(QDataStream&, AtomicParameters3D<PARAM>&);
 
 public:
     typedef typename AtomicParameters<PARAM>::Parameter Parameter;

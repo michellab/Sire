@@ -71,8 +71,8 @@ using SireBase::PropertyMap;
 class SIRESYSTEM_EXPORT CloseMols
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CloseMols&);
-friend QDataStream& ::operator>>(QDataStream&, CloseMols&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const CloseMols&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, CloseMols&);
 
 public:
     CloseMols();

@@ -129,8 +129,8 @@ class SIREMOL_EXPORT CovalentBondHunter
            : public SireBase::ConcreteProperty<CovalentBondHunter,BondHunter>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CovalentBondHunter&);
-friend QDataStream& ::operator>>(QDataStream&, CovalentBondHunter&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CovalentBondHunter&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, CovalentBondHunter&);
 
 public:
     CovalentBondHunter(double tolerance=1.1);

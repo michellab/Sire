@@ -59,8 +59,8 @@ class SIREMOVE_EXPORT WeightedMoves
           : public SireBase::ConcreteProperty<WeightedMoves,Moves>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const WeightedMoves&);
-friend QDataStream& ::operator>>(QDataStream&, WeightedMoves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const WeightedMoves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, WeightedMoves&);
 
 public:
     WeightedMoves();

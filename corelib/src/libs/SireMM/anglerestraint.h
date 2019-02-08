@@ -70,8 +70,8 @@ class SIREMM_EXPORT AngleRestraint
             : public SireBase::ConcreteProperty<AngleRestraint,ExpressionRestraint3D>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AngleRestraint&);
-friend QDataStream& ::operator>>(QDataStream&, AngleRestraint&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const AngleRestraint&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, AngleRestraint&);
 
 public:
     AngleRestraint();

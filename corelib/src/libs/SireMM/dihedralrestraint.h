@@ -54,8 +54,8 @@ class SIREMM_EXPORT DihedralRestraint
             : public SireBase::ConcreteProperty<DihedralRestraint,ExpressionRestraint3D>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DihedralRestraint&);
-friend QDataStream& ::operator>>(QDataStream&, DihedralRestraint&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const DihedralRestraint&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, DihedralRestraint&);
 
 public:
     DihedralRestraint();

@@ -71,8 +71,8 @@ using boost::tuple;
 class SIREMOL_EXPORT BondID : public SireID::ID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const BondID&);
-friend QDataStream& ::operator>>(QDataStream&, BondID&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const BondID&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, BondID&);
 
 public:
     BondID();

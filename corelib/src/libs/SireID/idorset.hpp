@@ -61,8 +61,8 @@ template<class ID>
 class IDOrSet : public ID
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const IDOrSet<ID>&);
-friend QDataStream& ::operator>><>(QDataStream&, IDOrSet<ID>&);
+friend SIREID_EXPORT QDataStream& ::operator<<<>(QDataStream&, const IDOrSet<ID>&);
+friend SIREID_EXPORT QDataStream& ::operator>><>(QDataStream&, IDOrSet<ID>&);
 
 public:
     typedef typename ID::Identifier Identifier;

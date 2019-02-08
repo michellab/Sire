@@ -51,8 +51,8 @@ namespace SireBase
 class SIREBASE_EXPORT Array2DBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Array2DBase&);
-friend QDataStream& ::operator>>(QDataStream&, Array2DBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const Array2DBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, Array2DBase&);
 
 public:
     ~Array2DBase();

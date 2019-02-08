@@ -54,8 +54,8 @@ namespace SireBase
 class SIREBASE_EXPORT CPUID : public ConcreteProperty<CPUID,Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CPUID&);
-friend QDataStream& ::operator>>(QDataStream&, CPUID&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const CPUID&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, CPUID&);
 
 public:
     CPUID();

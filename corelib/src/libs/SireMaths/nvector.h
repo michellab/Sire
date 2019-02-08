@@ -56,8 +56,8 @@ class Vector;
 class SIREMATHS_EXPORT NVector
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NVector&);
-friend QDataStream& ::operator>>(QDataStream&, NVector&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const NVector&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, NVector&);
 
 public:
     NVector();

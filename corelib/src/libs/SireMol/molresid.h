@@ -63,8 +63,8 @@ namespace SireMol
 class SIREMOL_EXPORT MolResID : public ResID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolResID&);
-friend QDataStream& ::operator>>(QDataStream&, MolResID&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MolResID&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MolResID&);
 
 public:
     MolResID();
@@ -134,8 +134,8 @@ private:
 class SIREMOL_EXPORT MolResNum : public ResID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolResNum&);
-friend QDataStream& ::operator>>(QDataStream&, MolResNum&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MolResNum&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MolResNum&);
 
 public:
     MolResNum();

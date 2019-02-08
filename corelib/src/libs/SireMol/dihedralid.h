@@ -74,8 +74,8 @@ using boost::tuple;
 class SIREMOL_EXPORT DihedralID : public SireID::ID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DihedralID&);
-friend QDataStream& ::operator>>(QDataStream&, DihedralID&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const DihedralID&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, DihedralID&);
 
 public:
     DihedralID();

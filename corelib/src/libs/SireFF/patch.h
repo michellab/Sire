@@ -76,8 +76,8 @@ class SIREFF_EXPORT Patch
         : public SireBase::ConcreteProperty<Patch,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Patch&);
-friend QDataStream& ::operator>>(QDataStream&, Patch&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const Patch&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, Patch&);
 
 friend class Patches;
 

@@ -53,8 +53,8 @@ namespace SireMol
 class SIREMOL_EXPORT MGName : public SireID::Name, public MGID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MGName&);
-friend QDataStream& ::operator>>(QDataStream&, MGName&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MGName&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MGName&);
 
 public:
     MGName();

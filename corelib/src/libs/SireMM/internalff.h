@@ -461,8 +461,8 @@ class SIREMM_EXPORT InternalFF
               protected InternalPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const InternalFF&);
-friend QDataStream& ::operator>>(QDataStream&, InternalFF&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const InternalFF&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, InternalFF&);
 
 public:
     typedef InternalPotential::Components Components;

@@ -51,8 +51,8 @@ namespace SireMol
 class SIREMOL_EXPORT MGIdentifier : public MGID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MGIdentifier&);
-friend QDataStream& ::operator>>(QDataStream&, MGIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MGIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MGIdentifier&);
 
 public:
     MGIdentifier();

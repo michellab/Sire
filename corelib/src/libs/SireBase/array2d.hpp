@@ -73,8 +73,8 @@ template<class T>
 class Array2D : public Array2DBase
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const Array2D<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, Array2D<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const Array2D<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, Array2D<T>&);
 
 public:
     Array2D();

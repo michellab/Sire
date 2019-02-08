@@ -51,8 +51,8 @@ namespace SireBase
 class SIREBASE_EXPORT BooleanProperty : public ConcreteProperty<BooleanProperty,Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const BooleanProperty&);
-friend QDataStream& ::operator>>(QDataStream&, BooleanProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const BooleanProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, BooleanProperty&);
 
 public:
     BooleanProperty();

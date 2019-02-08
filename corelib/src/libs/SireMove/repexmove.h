@@ -71,8 +71,8 @@ class SIREMOVE_EXPORT RepExSubMove
            : public SireBase::ConcreteProperty<RepExSubMove,SupraSubMove>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RepExSubMove&);
-friend QDataStream& ::operator>>(QDataStream&, RepExSubMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const RepExSubMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, RepExSubMove&);
 
 public:
     RepExSubMove();
@@ -148,8 +148,8 @@ class SIREMOVE_EXPORT RepExMove
         : public SireBase::ConcreteProperty<RepExMove,SupraMove>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RepExMove&);
-friend QDataStream& ::operator>>(QDataStream&, RepExMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const RepExMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, RepExMove&);
 
 public:
     RepExMove();

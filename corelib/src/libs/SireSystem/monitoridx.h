@@ -55,8 +55,8 @@ class SIRESYSTEM_EXPORT MonitorIdx
                 : public SireID::Index_T_<MonitorIdx>, public MonitorID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MonitorIdx&);
-friend QDataStream& ::operator>>(QDataStream&, MonitorIdx&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const MonitorIdx&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, MonitorIdx&);
 
 public:
     MonitorIdx();

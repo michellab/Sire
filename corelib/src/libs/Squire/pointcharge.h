@@ -57,8 +57,8 @@ using SireMaths::Vector;
 class SQUIRE_EXPORT PointCharge
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PointCharge&);
-friend QDataStream& ::operator>>(QDataStream&, PointCharge&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const PointCharge&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, PointCharge&);
 
 public:
     PointCharge();

@@ -59,8 +59,8 @@ class SIREANALYSIS_EXPORT BennettsRatios
         : public SireBase::ConcreteProperty<BennettsRatios,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const BennettsRatios&);
-friend QDataStream& ::operator>>(QDataStream&, BennettsRatios&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator<<(QDataStream&, const BennettsRatios&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator>>(QDataStream&, BennettsRatios&);
 
 public:
     BennettsRatios();
@@ -139,8 +139,8 @@ private:
 class SIREANALYSIS_EXPORT Bennetts : public SireBase::ConcreteProperty<Bennetts,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Bennetts&);
-friend QDataStream& ::operator>>(QDataStream&, Bennetts&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator<<(QDataStream&, const Bennetts&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator>>(QDataStream&, Bennetts&);
 
 public:
     Bennetts();

@@ -99,8 +99,8 @@ using SireUnits::Dimension::MolarEnergy;
 class SIREFF_EXPORT MolPotentialTable : public SireBase::PackedArray2D<MolarEnergy>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolPotentialTable&);
-friend QDataStream& ::operator>>(QDataStream&, MolPotentialTable&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const MolPotentialTable&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, MolPotentialTable&);
 
 public:
     typedef SireBase::PackedArray2D<MolarEnergy>::Array Array;
@@ -204,8 +204,8 @@ private:
 class SIREFF_EXPORT GridPotentialTable
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GridPotentialTable&);
-friend QDataStream& ::operator>>(QDataStream&, GridPotentialTable&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const GridPotentialTable&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, GridPotentialTable&);
 
 public:
     typedef QVector<MolarEnergy>::const_iterator const_iterator;
@@ -320,8 +320,8 @@ private:
 class SIREFF_EXPORT PotentialTable
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PotentialTable&);
-friend QDataStream& ::operator>>(QDataStream&, PotentialTable&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const PotentialTable&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, PotentialTable&);
 
 public:
     PotentialTable();

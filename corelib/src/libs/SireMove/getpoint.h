@@ -94,8 +94,8 @@ using SireMol::MoleculeView;
 class SIREMOVE_EXPORT GetPoint : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GetPoint&);
-friend QDataStream& ::operator>>(QDataStream&, GetPoint&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const GetPoint&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, GetPoint&);
 
 public:
     GetPoint();
@@ -131,8 +131,8 @@ class SIREMOVE_EXPORT NullGetPoint
             : public SireBase::ConcreteProperty<NullGetPoint,GetPoint>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullGetPoint&);
-friend QDataStream& ::operator>>(QDataStream&, NullGetPoint&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const NullGetPoint&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, NullGetPoint&);
 
 public:
     NullGetPoint();
@@ -160,8 +160,8 @@ class SIREMOVE_EXPORT GetCOGPoint
             : public SireBase::ConcreteProperty<GetCOGPoint,GetPoint>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GetCOGPoint&);
-friend QDataStream& ::operator>>(QDataStream&, GetCOGPoint&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const GetCOGPoint&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, GetCOGPoint&);
 
 public:
     GetCOGPoint();
@@ -201,8 +201,8 @@ class SIREMOVE_EXPORT GetCOMPoint
             : public SireBase::ConcreteProperty<GetCOMPoint,GetPoint>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GetCOMPoint&);
-friend QDataStream& ::operator>>(QDataStream&, GetCOMPoint&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const GetCOMPoint&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, GetCOMPoint&);
 
 public:
     GetCOMPoint();
@@ -242,8 +242,8 @@ class SIREMOVE_EXPORT GetCentroidPoint
             : public SireBase::ConcreteProperty<GetCentroidPoint,GetPoint>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GetCentroidPoint&);
-friend QDataStream& ::operator>>(QDataStream&, GetCentroidPoint&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const GetCentroidPoint&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, GetCentroidPoint&);
 
 public:
     GetCentroidPoint();

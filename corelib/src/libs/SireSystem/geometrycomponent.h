@@ -71,8 +71,8 @@ using SireBase::PropertyMap;
 class SIRESYSTEM_EXPORT GeometryComponent : public Constraint
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GeometryComponent&);
-friend QDataStream& ::operator>>(QDataStream&, GeometryComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const GeometryComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, GeometryComponent&);
 
 public:
     GeometryComponent(const PropertyMap &map = PropertyMap());

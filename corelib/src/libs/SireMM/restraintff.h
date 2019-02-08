@@ -91,8 +91,8 @@ class SIREMM_EXPORT RestraintFF
               public SireFF::FF3D
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RestraintFF&);
-friend QDataStream& ::operator>>(QDataStream&, RestraintFF&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const RestraintFF&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, RestraintFF&);
 
 public:
     RestraintFF();

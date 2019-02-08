@@ -58,8 +58,8 @@ class SIRESYSTEM_EXPORT AngleComponent
          : public SireBase::ConcreteProperty<AngleComponent,GeometryComponent>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AngleComponent&);
-friend QDataStream& ::operator>>(QDataStream&, AngleComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const AngleComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, AngleComponent&);
 
 public:
     AngleComponent();

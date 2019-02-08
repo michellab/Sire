@@ -66,8 +66,8 @@ class SIREMOL_EXPORT MGIDsAndMaps
         : public SireBase::ConcreteProperty<MGIDsAndMaps,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MGIDsAndMaps&);
-friend QDataStream& ::operator>>(QDataStream&, MGIDsAndMaps&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MGIDsAndMaps&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MGIDsAndMaps&);
 
 public:
     MGIDsAndMaps();

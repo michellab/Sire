@@ -148,8 +148,8 @@ namespace SireIO
 */
   class SIREIO_EXPORT ZmatrixMaker
   {
-    friend QDataStream& ::operator<<(QDataStream&, const SireIO::ZmatrixMaker&);
-    friend QDataStream& ::operator>>(QDataStream&, SireIO::ZmatrixMaker&);
+    friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const SireIO::ZmatrixMaker&);
+    friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, SireIO::ZmatrixMaker&);
 
   public:
     ZmatrixMaker();

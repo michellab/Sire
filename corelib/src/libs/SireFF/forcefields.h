@@ -80,8 +80,8 @@ class SIREFF_EXPORT ForceFields
         : public SireBase::ConcreteProperty<ForceFields,SireMol::MolGroupsBase>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ForceFields&);
-friend QDataStream& ::operator>>(QDataStream&, ForceFields&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const ForceFields&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, ForceFields&);
 
 public:
     ForceFields();

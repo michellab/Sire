@@ -178,13 +178,13 @@ public:
     static MultiDouble invDistance(const MultiVector &v1, const MultiVector &v2);
     static MultiDouble invDistance2(const MultiVector &v1, const MultiVector &v2);
 
-    friend MultiVector operator+(const MultiVector &p1, const MultiVector &p2);
-    friend MultiVector operator-(const MultiVector &p1, const MultiVector &p2);
-    friend MultiVector operator*(const MultiVector &p1, const MultiDouble &c);
-    friend MultiVector operator*(const MultiDouble &c, const MultiVector &p1);
-    friend MultiVector operator/(const MultiVector &p1, const MultiDouble &c);
-    friend MultiQuaternion operator*(const MultiVector &p1, const MultiQuaternion &p2);
-    friend MultiQuaternion operator*(const MultiQuaternion &p1, const MultiVector &p2);
+    friend SIREMATHS_EXPORT MultiVector operator+(const MultiVector &p1, const MultiVector &p2);
+    friend SIREMATHS_EXPORT MultiVector operator-(const MultiVector &p1, const MultiVector &p2);
+    friend SIREMATHS_EXPORT MultiVector operator*(const MultiVector &p1, const MultiDouble &c);
+    friend SIREMATHS_EXPORT MultiVector operator*(const MultiDouble &c, const MultiVector &p1);
+    friend SIREMATHS_EXPORT MultiVector operator/(const MultiVector &p1, const MultiDouble &c);
+    friend SIREMATHS_EXPORT MultiQuaternion operator*(const MultiVector &p1, const MultiQuaternion &p2);
+    friend SIREMATHS_EXPORT MultiQuaternion operator*(const MultiQuaternion &p1, const MultiVector &p2);
 
     static void swap(MultiVector &v0, int idx0, MultiVector &v1, int idx1);
 

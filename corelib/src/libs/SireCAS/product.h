@@ -55,8 +55,8 @@ This class holds a collection of expressions that are to be multiplied (or divid
 class SIRECAS_EXPORT Product : public ExBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Product&);
-friend QDataStream& ::operator>>(QDataStream&, Product&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Product&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Product&);
 
 public:
     Product();

@@ -68,8 +68,8 @@ class SIRESYSTEM_EXPORT EnergyMonitor
         : public SireBase::ConcreteProperty<EnergyMonitor,SystemMonitor>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const EnergyMonitor&);
-friend QDataStream& ::operator>>(QDataStream&, EnergyMonitor&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const EnergyMonitor&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, EnergyMonitor&);
 
 public:
     EnergyMonitor();

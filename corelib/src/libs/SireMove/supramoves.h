@@ -56,8 +56,8 @@ namespace SireMove
 class SIREMOVE_EXPORT SupraMoves : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SupraMoves&);
-friend QDataStream& ::operator>>(QDataStream&, SupraMoves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SupraMoves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SupraMoves&);
 
 public:
     SupraMoves();
@@ -107,8 +107,8 @@ class SIREMOVE_EXPORT SameSupraMoves
             : public SireBase::ConcreteProperty<SameSupraMoves,SupraMoves>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SameSupraMoves&);
-friend QDataStream& ::operator>>(QDataStream&, SameSupraMoves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SameSupraMoves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SameSupraMoves&);
 
 public:
     SameSupraMoves();

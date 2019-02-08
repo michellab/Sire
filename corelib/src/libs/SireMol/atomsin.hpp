@@ -63,8 +63,8 @@ template<class GROUP>
 class SIREMOL_EXPORT AtomsIn : public AtomID
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const AtomsIn<GROUP>&);
-friend QDataStream& ::operator>><>(QDataStream&, AtomsIn<GROUP>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const AtomsIn<GROUP>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, AtomsIn<GROUP>&);
 
 public:
     AtomsIn();

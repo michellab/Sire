@@ -51,8 +51,8 @@ namespace SireSystem
 class SIRESYSTEM_EXPORT SysIdentifier : public SysID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SysIdentifier&);
-friend QDataStream& ::operator>>(QDataStream&, SysIdentifier&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const SysIdentifier&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, SysIdentifier&);
 
 public:
     SysIdentifier();

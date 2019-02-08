@@ -68,8 +68,8 @@ namespace SireCAS
 class SIRECAS_EXPORT Cosh : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Cosh&);
-friend QDataStream& ::operator>>(QDataStream&, Cosh&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Cosh&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Cosh&);
 
 public:
     Cosh();
@@ -118,8 +118,8 @@ protected:
 class SIRECAS_EXPORT Sinh : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Sinh&);
-friend QDataStream& ::operator>>(QDataStream&, Sinh&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Sinh&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Sinh&);
 
 public:
     Sinh();
@@ -167,8 +167,8 @@ protected:
 class SIRECAS_EXPORT Tanh : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Tanh&);
-friend QDataStream& ::operator>>(QDataStream&, Tanh&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Tanh&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Tanh&);
 
 public:
     Tanh();
@@ -216,8 +216,8 @@ protected:
 class SIRECAS_EXPORT Sech : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Sech&);
-friend QDataStream& ::operator>>(QDataStream&, Sech&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Sech&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Sech&);
 
 public:
     Sech();
@@ -265,8 +265,8 @@ protected:
 class SIRECAS_EXPORT Csch : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Csch&);
-friend QDataStream& ::operator>>(QDataStream&, Csch&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Csch&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Csch&);
 
 public:
     Csch();
@@ -314,8 +314,8 @@ protected:
 class SIRECAS_EXPORT Coth : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Coth&);
-friend QDataStream& ::operator>>(QDataStream&, Coth&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Coth&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Coth&);
 
 public:
     Coth();

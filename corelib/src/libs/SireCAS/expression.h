@@ -64,8 +64,8 @@ An Expression is the base class of all algebraic entities.
 class SIRECAS_EXPORT Expression
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Expression&);
-friend QDataStream& ::operator>>(QDataStream&, Expression&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Expression&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Expression&);
 
 public:
     Expression();

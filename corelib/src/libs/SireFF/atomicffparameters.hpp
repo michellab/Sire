@@ -73,8 +73,8 @@ class AtomicFFParameters
         : public SireBase::ConcreteProperty<AtomicFFParameters<T>,FFParameters>
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const AtomicFFParameters<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, AtomicFFParameters<T>&);
+friend SIREFF_EXPORT QDataStream& ::operator<<<>(QDataStream&, const AtomicFFParameters<T>&);
+friend SIREFF_EXPORT QDataStream& ::operator>><>(QDataStream&, AtomicFFParameters<T>&);
 
 public:
     typedef typename SireBase::PackedArray2D<T>::Array Array;
@@ -118,8 +118,8 @@ class AtomicFFParametersArray
     : public SireBase::ConcreteProperty<AtomicFFParametersArray<T>,FFParametersArray>
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const AtomicFFParametersArray<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, AtomicFFParametersArray<T>&);
+friend SIREFF_EXPORT QDataStream& ::operator<<<>(QDataStream&, const AtomicFFParametersArray<T>&);
+friend SIREFF_EXPORT QDataStream& ::operator>><>(QDataStream&, AtomicFFParametersArray<T>&);
 
 public:
     typedef typename SireBase::PackedArray2D<T>::Array Array;

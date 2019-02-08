@@ -93,8 +93,8 @@ class MoleculeData;
 class SIREMOL_EXPORT Beading : public MolViewProperty
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Beading&);
-friend QDataStream& ::operator>>(QDataStream&, Beading&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Beading&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Beading&);
 
 public:
     Beading();
@@ -157,8 +157,8 @@ class SIREMOL_EXPORT MoleculeBeading
         : public SireBase::ConcreteProperty<MoleculeBeading,Beading>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MoleculeBeading&);
-friend QDataStream& ::operator>>(QDataStream&, MoleculeBeading&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MoleculeBeading&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MoleculeBeading&);
 
 public:
     MoleculeBeading();
@@ -201,8 +201,8 @@ class SIREMOL_EXPORT ResidueBeading
         : public SireBase::ConcreteProperty<ResidueBeading,Beading>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ResidueBeading&);
-friend QDataStream& ::operator>>(QDataStream&, ResidueBeading&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ResidueBeading&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResidueBeading&);
 
 public:
     ResidueBeading();
@@ -254,8 +254,8 @@ class SIREMOL_EXPORT UserBeading
         : public SireBase::ConcreteProperty<UserBeading,Beading>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const UserBeading&);
-friend QDataStream& ::operator>>(QDataStream&, UserBeading&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const UserBeading&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, UserBeading&);
 
 public:
     UserBeading();
@@ -309,8 +309,8 @@ class SIREMOL_EXPORT NullBeading
         : public SireBase::ConcreteProperty<NullBeading,Beading>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullBeading&);
-friend QDataStream& ::operator>>(QDataStream&, NullBeading&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const NullBeading&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, NullBeading&);
 
 public:
     NullBeading();

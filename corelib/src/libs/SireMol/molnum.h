@@ -54,8 +54,8 @@ namespace SireMol
 class SIREMOL_EXPORT MolNum : public SireID::Number, public MolID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolNum&);
-friend QDataStream& ::operator>>(QDataStream&, MolNum&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MolNum&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MolNum&);
 
 public:
     MolNum();

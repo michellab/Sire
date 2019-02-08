@@ -66,8 +66,8 @@ using boost::tuple;
 class SIREMM_EXPORT CLJWorkspace
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJWorkspace&);
-friend QDataStream& ::operator>>(QDataStream&, CLJWorkspace&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJWorkspace&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJWorkspace&);
 
 public:
     CLJWorkspace();

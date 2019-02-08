@@ -69,8 +69,8 @@ namespace detail
 class SIREMM_EXPORT InterFF : public SireBase::ConcreteProperty<InterFF,SireFF::G1FF>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const InterFF&);
-friend QDataStream& ::operator>>(QDataStream&, InterFF&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const InterFF&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, InterFF&);
 
 public:
     InterFF();

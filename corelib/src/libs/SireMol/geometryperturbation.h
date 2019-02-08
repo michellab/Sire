@@ -80,8 +80,8 @@ template<class T> class Mover;
 class SIREMOL_EXPORT GeometryPerturbation : public Perturbation
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Perturbation&);
-friend QDataStream& ::operator>>(QDataStream&, Perturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Perturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Perturbation&);
 
 friend class GeometryPerturbations;
 
@@ -116,8 +116,8 @@ class SIREMOL_EXPORT NullGeometryPerturbation
         : public SireBase::ConcreteProperty<NullGeometryPerturbation,GeometryPerturbation>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullGeometryPerturbation&);
-friend QDataStream& ::operator>>(QDataStream&, NullGeometryPerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const NullGeometryPerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, NullGeometryPerturbation&);
 
 public:
     NullGeometryPerturbation();
@@ -148,8 +148,8 @@ class SIREMOL_EXPORT GeometryPerturbations
         : public SireBase::ConcreteProperty<GeometryPerturbations,GeometryPerturbation>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GeometryPerturbations&);
-friend QDataStream& ::operator>>(QDataStream&, GeometryPerturbations&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const GeometryPerturbations&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, GeometryPerturbations&);
 
 public:
     GeometryPerturbations();
@@ -210,8 +210,8 @@ class SIREMOL_EXPORT BondPerturbation
         : public SireBase::ConcreteProperty<BondPerturbation,GeometryPerturbation>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const BondPerturbation&);
-friend QDataStream& ::operator>>(QDataStream&, BondPerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const BondPerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, BondPerturbation&);
 
 public:
     BondPerturbation();
@@ -283,8 +283,8 @@ class SIREMOL_EXPORT AnglePerturbation
         : public SireBase::ConcreteProperty<AnglePerturbation,GeometryPerturbation>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AnglePerturbation&);
-friend QDataStream& ::operator>>(QDataStream&, AnglePerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AnglePerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AnglePerturbation&);
 
 public:
     AnglePerturbation();
@@ -358,8 +358,8 @@ class SIREMOL_EXPORT DihedralPerturbation
         : public SireBase::ConcreteProperty<DihedralPerturbation,GeometryPerturbation>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DihedralPerturbation&);
-friend QDataStream& ::operator>>(QDataStream&, DihedralPerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const DihedralPerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, DihedralPerturbation&);
 
 public:
     DihedralPerturbation();

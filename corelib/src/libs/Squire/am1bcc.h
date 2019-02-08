@@ -54,8 +54,8 @@ class SQUIRE_EXPORT AM1BCC
         : public SireBase::ConcreteProperty<AM1BCC,QMChargeCalculator>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AM1BCC&);
-friend QDataStream& ::operator>>(QDataStream&, AM1BCC&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const AM1BCC&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, AM1BCC&);
 
 public:
     AM1BCC();

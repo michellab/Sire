@@ -139,8 +139,8 @@ namespace MPI
 class MessageBase : public QSharedData
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MessageBase&);
-friend QDataStream& ::operator>>(QDataStream&, MessageBase&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const MessageBase&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, MessageBase&);
 
 public:
     MessageBase(const MessageBase &other);
@@ -211,8 +211,8 @@ private:
 class Message
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Message&);
-friend QDataStream& ::operator>>(QDataStream&, Message&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const Message&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, Message&);
 
 public:
     Message();
@@ -292,8 +292,8 @@ namespace Messages
 class Broadcast : public MessageBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Broadcast&);
-friend QDataStream& ::operator>>(QDataStream&, Broadcast&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const Broadcast&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, Broadcast&);
 
 public:
     Broadcast();
@@ -366,8 +366,8 @@ private:
 class RegisterBackend : public MessageBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RegisterBackend&);
-friend QDataStream& ::operator>>(QDataStream&, RegisterBackend&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const RegisterBackend&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, RegisterBackend&);
 
 public:
     RegisterBackend();
@@ -409,8 +409,8 @@ private:
 class GetUIDs : public MessageBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GetUIDs&);
-friend QDataStream& ::operator>>(QDataStream&, GetUIDs&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const GetUIDs&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, GetUIDs&);
 
 public:
     GetUIDs();
@@ -444,8 +444,8 @@ public:
 class ReserveBackend : public MessageBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ReserveBackend&);
-friend QDataStream& ::operator>>(QDataStream&, ReserveBackend&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const ReserveBackend&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, ReserveBackend&);
 
 public:
     ReserveBackend();
@@ -493,8 +493,8 @@ private:
 class RequestAvailability : public MessageBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RequestAvailability&);
-friend QDataStream& ::operator>>(QDataStream&, RequestAvailability&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const RequestAvailability&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, RequestAvailability&);
 
 public:
     RequestAvailability();
@@ -540,8 +540,8 @@ private:
 class Reservation : public MessageBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Reservation&);
-friend QDataStream& ::operator>>(QDataStream&, Reservation&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const Reservation&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, Reservation&);
 
 public:
     Reservation();
@@ -587,8 +587,8 @@ private:
 class Result : public MessageBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Result&);
-friend QDataStream& ::operator>>(QDataStream&, Result&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const Result&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, Result&);
 
 public:
     Result();
@@ -630,8 +630,8 @@ private:
 class Error : public MessageBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Error&);
-friend QDataStream& ::operator>>(QDataStream&, Error&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const Error&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, Error&);
 
 public:
     Error();
@@ -689,8 +689,8 @@ private:
 class Shutdown : public MessageBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Shutdown&);
-friend QDataStream& ::operator>>(QDataStream&, Shutdown&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const Shutdown&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, Shutdown&);
 
 public:
     Shutdown();

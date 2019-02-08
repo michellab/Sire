@@ -53,8 +53,8 @@ namespace SireFF
 class SIREFF_EXPORT FFName : public SireID::Name, public FFID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FFName&);
-friend QDataStream& ::operator>>(QDataStream&, FFName&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FFName&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FFName&);
 
 public:
     FFName();

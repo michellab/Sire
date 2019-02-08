@@ -56,8 +56,8 @@ class MonitorName;
 class SIRESYSTEM_EXPORT SystemMonitors
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SystemMonitors&);
-friend QDataStream& ::operator>>(QDataStream&, SystemMonitors&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const SystemMonitors&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, SystemMonitors&);
 
 public:
     SystemMonitors();

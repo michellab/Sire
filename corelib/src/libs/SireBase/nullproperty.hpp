@@ -57,8 +57,8 @@ template<class T>
 class SIREBASE_EXPORT NullProp : public ConcreteProperty< NullProp<T>, T >
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const NullProp<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, NullProp<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const NullProp<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, NullProp<T>&);
 
 public:
     NullProp() : ConcreteProperty< NullProp<T>, T >()

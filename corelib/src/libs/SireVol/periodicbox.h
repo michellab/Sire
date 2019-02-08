@@ -60,8 +60,8 @@ class SIREVOL_EXPORT PeriodicBox
         : public SireBase::ConcreteProperty<PeriodicBox,Cartesian>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PeriodicBox&);
-friend QDataStream& ::operator>>(QDataStream&, PeriodicBox&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const PeriodicBox&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, PeriodicBox&);
 
 public:
     PeriodicBox();

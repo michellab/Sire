@@ -51,8 +51,8 @@ namespace SireSystem
 class SIRESYSTEM_EXPORT MonitorIdentifier : public MonitorID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MonitorIdentifier&);
-friend QDataStream& ::operator>>(QDataStream&, MonitorIdentifier&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const MonitorIdentifier&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, MonitorIdentifier&);
 
 public:
     MonitorIdentifier();

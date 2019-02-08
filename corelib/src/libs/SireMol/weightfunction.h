@@ -78,8 +78,8 @@ using SireBase::PropertyMap;
 class SIREMOL_EXPORT WeightFunction : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const WeightFunction&);
-friend QDataStream& ::operator>>(QDataStream&, WeightFunction&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const WeightFunction&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, WeightFunction&);
 
 public:
     WeightFunction();
@@ -144,8 +144,8 @@ class SIREMOL_EXPORT AbsFromNumber
             : public SireBase::ConcreteProperty<AbsFromNumber,WeightFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AbsFromNumber&);
-friend QDataStream& ::operator>>(QDataStream&, AbsFromNumber&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AbsFromNumber&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AbsFromNumber&);
 
 public:
     AbsFromNumber();
@@ -195,8 +195,8 @@ class SIREMOL_EXPORT RelFromNumber
             : public SireBase::ConcreteProperty<RelFromNumber,WeightFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RelFromNumber&);
-friend QDataStream& ::operator>>(QDataStream&, RelFromNumber&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const RelFromNumber&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, RelFromNumber&);
 
 public:
     RelFromNumber();
@@ -244,8 +244,8 @@ class SIREMOL_EXPORT AbsFromMass
             : public SireBase::ConcreteProperty<AbsFromMass,WeightFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AbsFromMass&);
-friend QDataStream& ::operator>>(QDataStream&, AbsFromMass&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AbsFromMass&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AbsFromMass&);
 
 public:
     AbsFromMass();
@@ -293,8 +293,8 @@ class SIREMOL_EXPORT RelFromMass
             : public SireBase::ConcreteProperty<RelFromMass,WeightFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RelFromMass&);
-friend QDataStream& ::operator>>(QDataStream&, RelFromMass&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const RelFromMass&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, RelFromMass&);
 
 public:
     RelFromMass();

@@ -103,8 +103,8 @@ SIREBASE_EXPORT QMutex* globalLock();
 class SIREBASE_EXPORT Property : public RefCountData
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Property&);
-friend QDataStream& ::operator>>(QDataStream&, Property&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const Property&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, Property&);
 
 public:
     typedef Property ROOT;
@@ -265,8 +265,8 @@ public:
 class SIREBASE_EXPORT PropPtrBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PropPtrBase&);
-friend QDataStream& ::operator>>(QDataStream&, PropPtrBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const PropPtrBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, PropPtrBase&);
 
 public:
     ~PropPtrBase();
@@ -324,8 +324,8 @@ private:
 class SIREBASE_EXPORT GlobalPropPtrBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GlobalPropPtrBase&);
-friend QDataStream& ::operator>>(QDataStream&, GlobalPropPtrBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const GlobalPropPtrBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, GlobalPropPtrBase&);
 
 public:
     ~GlobalPropPtrBase();
@@ -378,8 +378,8 @@ template<class T>
 class PropPtr : public PropPtrBase
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const PropPtr<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, PropPtr<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const PropPtr<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, PropPtr<T>&);
 
 public:
     typedef T element_type;
@@ -437,8 +437,8 @@ template<class T>
 class GlobalPropPtr : public GlobalPropPtrBase
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const GlobalPropPtr<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, GlobalPropPtr<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const GlobalPropPtr<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, GlobalPropPtr<T>&);
 
 public:
     GlobalPropPtr();

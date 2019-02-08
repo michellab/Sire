@@ -51,8 +51,8 @@ namespace SireBase
 class SIREBASE_EXPORT NumberProperty : public ConcreteProperty<NumberProperty,Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NumberProperty&);
-friend QDataStream& ::operator>>(QDataStream&, NumberProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const NumberProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, NumberProperty&);
 
 public:
     NumberProperty();

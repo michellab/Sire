@@ -63,8 +63,8 @@ using SireVol::GridInfo;
 class SIREMM_EXPORT CLJGrid
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJGrid&);
-friend QDataStream& ::operator>>(QDataStream&, CLJGrid&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJGrid&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJGrid&);
 
 public:
     CLJGrid();

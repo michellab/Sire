@@ -87,8 +87,8 @@ public:
 class SQUIRE_EXPORT SS_GTO : public SireBase::ConcreteProperty<SS_GTO,GTOPair>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SS_GTO&);
-friend QDataStream& ::operator>>(QDataStream&, SS_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const SS_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, SS_GTO&);
 
 public:
     SS_GTO();

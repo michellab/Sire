@@ -80,8 +80,8 @@ using SireVol::Space;
 class SIREMM_EXPORT CLJBoxIndex
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJBoxIndex&);
-friend QDataStream& ::operator>>(QDataStream&, CLJBoxIndex&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJBoxIndex&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJBoxIndex&);
 
 public:
     CLJBoxIndex();
@@ -163,8 +163,8 @@ private:
 class SIREMM_EXPORT CLJBox : public SireBase::RefCountData
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJBox&);
-friend QDataStream& ::operator>>(QDataStream&, CLJBox&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJBox&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJBox&);
 
 public:
     CLJBox();
@@ -236,8 +236,8 @@ private:
 class SIREMM_EXPORT CLJBoxPtr
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJBoxPtr&);
-friend QDataStream& ::operator>>(QDataStream&, CLJBoxPtr&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJBoxPtr&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJBoxPtr&);
 
 public:
     CLJBoxPtr();
@@ -270,8 +270,8 @@ private:
 class SIREMM_EXPORT CLJBoxDistance
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJBoxDistance&);
-friend QDataStream& ::operator>>(QDataStream&, CLJBoxDistance&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJBoxDistance&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJBoxDistance&);
 
 public:
     CLJBoxDistance();
@@ -319,8 +319,8 @@ private:
 class SIREMM_EXPORT CLJBoxes
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJBoxes&);
-friend QDataStream& ::operator>>(QDataStream&, CLJBoxes&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJBoxes&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJBoxes&);
 
 public:
     typedef QVector<CLJBoxPtr> Container;

@@ -57,8 +57,8 @@ An LJParameter holds Lennard Jones parameters (sigma and epsilon)
 class SIREMM_EXPORT LJParameter
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const LJParameter&);
-friend QDataStream& ::operator>>(QDataStream&, LJParameter&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const LJParameter&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, LJParameter&);
 
 public:
     enum CombiningRules { ARITHMETIC=0, GEOMETRIC=1 };

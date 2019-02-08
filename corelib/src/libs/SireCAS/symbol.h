@@ -59,8 +59,8 @@ class Values;
 class SIRECAS_EXPORT Symbol : public ExBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Symbol&);
-friend QDataStream& ::operator>>(QDataStream&, Symbol&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Symbol&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Symbol&);
 
 public:
     Symbol();

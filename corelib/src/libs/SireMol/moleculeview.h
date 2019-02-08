@@ -77,8 +77,8 @@ typedef SireBase::PropPtr<MoleculeView> MolViewPtr;
 class SIREMOL_EXPORT MoleculeView : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MoleculeView&);
-friend QDataStream& ::operator>>(QDataStream&, MoleculeView&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MoleculeView&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MoleculeView&);
 
 public:
     virtual ~MoleculeView();

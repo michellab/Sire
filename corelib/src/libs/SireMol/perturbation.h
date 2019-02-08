@@ -102,8 +102,8 @@ class SIREMOL_EXPORT Perturbation : public SireBase::Property
 
 friend class Perturbations;   // so can call perturbMolecule directly
 
-friend QDataStream& ::operator<<(QDataStream&, const Perturbation&);
-friend QDataStream& ::operator>>(QDataStream&, Perturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Perturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Perturbation&);
 
 public:
     Perturbation();
@@ -168,8 +168,8 @@ private:
 class SIREMOL_EXPORT NullPerturbation
         : public SireBase::ConcreteProperty<NullPerturbation,Perturbation>
 {
-friend QDataStream& ::operator<<(QDataStream&, const NullPerturbation&);
-friend QDataStream& ::operator>>(QDataStream&, NullPerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const NullPerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, NullPerturbation&);
 
 public:
     NullPerturbation();
@@ -202,8 +202,8 @@ class SIREMOL_EXPORT Perturbations
         : public SireBase::ConcreteProperty<Perturbations,Perturbation>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Perturbations&);
-friend QDataStream& ::operator>>(QDataStream&, Perturbations&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Perturbations&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Perturbations&);
 
 public:
     Perturbations();

@@ -142,8 +142,8 @@ private:
 class SIREVOL_EXPORT GridInfo
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GridInfo&);
-friend QDataStream& ::operator>>(QDataStream&, GridInfo&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const GridInfo&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, GridInfo&);
 
 public:
     GridInfo();

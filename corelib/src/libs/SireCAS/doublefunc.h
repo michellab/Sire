@@ -56,8 +56,8 @@ namespace SireCAS
 class SIRECAS_EXPORT DoubleFunc : public ExBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DoubleFunc&);
-friend QDataStream& ::operator>>(QDataStream&, DoubleFunc&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const DoubleFunc&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, DoubleFunc&);
 
 public:
     DoubleFunc();

@@ -72,8 +72,8 @@ class Molecule;
 class SIREMOL_EXPORT Segment : public SireBase::ConcreteProperty<Segment,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Segment&);
-friend QDataStream& ::operator>>(QDataStream&, Segment&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Segment&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Segment&);
 
 public:
     typedef SegID ID;

@@ -53,8 +53,8 @@ namespace SireSystem
 class SIRESYSTEM_EXPORT MonitorName : public SireID::Name, public MonitorID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MonitorName&);
-friend QDataStream& ::operator>>(QDataStream&, MonitorName&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const MonitorName&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, MonitorName&);
 
 public:
     MonitorName();

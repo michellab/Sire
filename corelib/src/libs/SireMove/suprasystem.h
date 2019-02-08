@@ -72,8 +72,8 @@ class SIREMOVE_EXPORT SupraSystem
        : public SireBase::ConcreteProperty<SupraSystem,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SupraSystem&);
-friend QDataStream& ::operator>>(QDataStream&, SupraSystem&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SupraSystem&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SupraSystem&);
 
 public:
     SupraSystem();

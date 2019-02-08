@@ -318,8 +318,8 @@ private:
 class SIREIO_EXPORT ProtoMS
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireIO::ProtoMS&);
-friend QDataStream& ::operator>>(QDataStream&, SireIO::ProtoMS&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const SireIO::ProtoMS&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, SireIO::ProtoMS&);
 
 public:
     enum { PROTEIN = 1,     // a ProtoMS protein molecule

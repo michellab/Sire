@@ -160,8 +160,8 @@ public:
 class SIREMM_EXPORT CLJComponent : public SireFF::FFComponent
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJComponent&);
-friend QDataStream& ::operator>>(QDataStream&, CLJComponent&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJComponent&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJComponent&);
 
 public:
     CLJComponent(const FFName &name = FFName());

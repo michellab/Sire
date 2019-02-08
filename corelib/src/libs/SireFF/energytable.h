@@ -87,8 +87,8 @@ using SireMaths::Vector;
 class SIREFF_EXPORT MolEnergyTable : public SireBase::PackedArray2D<SireMaths::Vector>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolEnergyTable&);
-friend QDataStream& ::operator>>(QDataStream&, MolEnergyTable&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const MolEnergyTable&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, MolEnergyTable&);
 
 public:
     typedef SireBase::PackedArray2D<SireMaths::Vector>::Array Array;
@@ -209,8 +209,8 @@ private:
 class SIREFF_EXPORT EnergyTable
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const EnergyTable&);
-friend QDataStream& ::operator>>(QDataStream&, EnergyTable&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const EnergyTable&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, EnergyTable&);
 
 public:
     EnergyTable();

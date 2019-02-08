@@ -73,8 +73,8 @@ class SIREMOL_EXPORT ViewsOfMol
         : public SireBase::ConcreteProperty<ViewsOfMol,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ViewsOfMol&);
-friend QDataStream& ::operator>>(QDataStream&, ViewsOfMol&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ViewsOfMol&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ViewsOfMol&);
 
 public:
     ViewsOfMol();

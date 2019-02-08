@@ -55,8 +55,8 @@ namespace SireMol
 class SIREMOL_EXPORT AtomName : public SireID::Name, public AtomID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomName&);
-friend QDataStream& ::operator>>(QDataStream&, AtomName&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomName&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomName&);
 
 public:
     AtomName();

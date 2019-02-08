@@ -127,8 +127,8 @@ SIREMOL_EXPORT QString cacheName(const QString &name);
 class SIREMOL_EXPORT StructureEditor
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const StructureEditor&);
-friend QDataStream& ::operator>>(QDataStream&, StructureEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const StructureEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, StructureEditor&);
 
 friend class MoleculeInfoData; //so can call query functions when converting
 friend class MoleculeData; //so can call query functions when converting

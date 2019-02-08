@@ -52,8 +52,8 @@ namespace SireMol
 class SIREMOL_EXPORT ChainResID : public ResID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ChainResID&);
-friend QDataStream& ::operator>>(QDataStream&, ChainResID&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ChainResID&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ChainResID&);
 
 public:
     ChainResID();

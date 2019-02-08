@@ -56,8 +56,8 @@ namespace SireMM
 class SIREMM_EXPORT CLJCalculator
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJCalculator&);
-friend QDataStream& ::operator>>(QDataStream&, CLJCalculator&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJCalculator&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJCalculator&);
 
 public:
     CLJCalculator(bool reproducible_sum = false);

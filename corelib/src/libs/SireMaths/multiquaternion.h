@@ -112,11 +112,11 @@ public:
     MultiQuaternion& operator*=(const MultiQuaternion &p);
     MultiQuaternion& operator*=(const MultiVector &p);
 
-    friend MultiQuaternion operator+(const MultiQuaternion &p1, const MultiQuaternion &p2);
-    friend MultiQuaternion operator-(const MultiQuaternion &p1, const MultiQuaternion &p2);
-    friend MultiQuaternion operator*(const MultiQuaternion &p1, const MultiQuaternion &p2);
-    friend MultiQuaternion operator*(const MultiQuaternion &p1, const MultiVector &p2);
-    friend MultiQuaternion operator*(const MultiVector &p1, const MultiQuaternion &p2);
+    friend SIREMATHS_EXPORT MultiQuaternion operator+(const MultiQuaternion &p1, const MultiQuaternion &p2);
+    friend SIREMATHS_EXPORT MultiQuaternion operator-(const MultiQuaternion &p1, const MultiQuaternion &p2);
+    friend SIREMATHS_EXPORT MultiQuaternion operator*(const MultiQuaternion &p1, const MultiQuaternion &p2);
+    friend SIREMATHS_EXPORT MultiQuaternion operator*(const MultiQuaternion &p1, const MultiVector &p2);
+    friend SIREMATHS_EXPORT MultiQuaternion operator*(const MultiVector &p1, const MultiQuaternion &p2);
 
     void swap(MultiQuaternion &q0, int idx0, MultiQuaternion &q1, int idx1);
 

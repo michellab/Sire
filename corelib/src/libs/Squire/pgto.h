@@ -76,8 +76,8 @@ using SireBase::Array2D;
 class SQUIRE_EXPORT P_GTO : public SireBase::ConcreteProperty<P_GTO,GTO>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const P_GTO&);
-friend QDataStream& ::operator>>(QDataStream&, P_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const P_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, P_GTO&);
 
 public:
     P_GTO();
@@ -104,8 +104,8 @@ public:
 class SQUIRE_EXPORT PS_GTO : public SireBase::ConcreteProperty<PS_GTO,GTOPair>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PS_GTO&);
-friend QDataStream& ::operator>>(QDataStream&, PS_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const PS_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, PS_GTO&);
 
 public:
     PS_GTO();
@@ -152,8 +152,8 @@ private:
 class SQUIRE_EXPORT PP_GTO : public SireBase::ConcreteProperty<PP_GTO,GTOPair>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PP_GTO&);
-friend QDataStream& ::operator>>(QDataStream&, PP_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const PP_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, PP_GTO&);
 
 public:
     PP_GTO();

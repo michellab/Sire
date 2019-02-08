@@ -55,8 +55,8 @@ using SireUnits::Dimension::Time;
 class SIREBASE_EXPORT TimeProperty : public ConcreteProperty<TimeProperty,Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TimeProperty&);
-friend QDataStream& ::operator>>(QDataStream&, TimeProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const TimeProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, TimeProperty&);
 
 public:
     TimeProperty();

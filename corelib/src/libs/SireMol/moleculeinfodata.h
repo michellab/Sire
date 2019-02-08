@@ -124,8 +124,8 @@ class SegInfo;
 class SIREMOL_EXPORT MoleculeInfoData : public MolInfo, public SireBase::RefCountData
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MoleculeInfoData&);
-friend QDataStream& ::operator>>(QDataStream&, MoleculeInfoData&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MoleculeInfoData&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MoleculeInfoData&);
 
 public:
     MoleculeInfoData();

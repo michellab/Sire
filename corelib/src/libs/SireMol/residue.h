@@ -71,8 +71,8 @@ class Molecule;
 class SIREMOL_EXPORT Residue : public SireBase::ConcreteProperty<Residue,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Residue&);
-friend QDataStream& ::operator>>(QDataStream&, Residue&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Residue&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Residue&);
 
 public:
     typedef ResID ID;

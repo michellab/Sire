@@ -65,8 +65,8 @@ class SIREMOVE_EXPORT RepExMove2
         : public SireBase::ConcreteProperty<RepExMove2,SupraMove>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RepExMove2&);
-friend QDataStream& ::operator>>(QDataStream&, RepExMove2&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const RepExMove2&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, RepExMove2&);
 
 public:
     RepExMove2();

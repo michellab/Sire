@@ -59,8 +59,8 @@ using boost::tuple;
 class SIREMM_EXPORT CLJDelta
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJDelta&);
-friend QDataStream& ::operator>>(QDataStream&, CLJDelta&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJDelta&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJDelta&);
 
 public:
     CLJDelta();

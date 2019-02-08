@@ -100,8 +100,8 @@ class SIREMOL_EXPORT CGProperty
     : public SireBase::ConcreteProperty<CGProperty<T>, CGProp>
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const CGProperty<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, CGProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const CGProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, CGProperty<T>&);
 
 public:
     CGProperty();

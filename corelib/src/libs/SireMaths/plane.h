@@ -56,8 +56,8 @@ namespace SireMaths
 class SIREMATHS_EXPORT Plane
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Plane&);
-friend QDataStream& ::operator>>(QDataStream&, Plane&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Plane&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Plane&);
 
 public:
     Plane();

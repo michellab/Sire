@@ -72,8 +72,8 @@ using SireMol::Molecules;
 class SIRESYSTEM_EXPORT MoleculeConstraint : public Constraint
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MoleculeConstraint&);
-friend QDataStream& ::operator>>(QDataStream&, MoleculeConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const MoleculeConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, MoleculeConstraint&);
 
 public:
     MoleculeConstraint();

@@ -154,8 +154,8 @@ protected:
 class SIREMOL_EXPORT Select : public SireBase::ConcreteProperty<Select,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Select&);
-friend QDataStream& ::operator>>(QDataStream&, Select&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Select&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Select&);
 
 public:
     Select();
@@ -213,8 +213,8 @@ class SIREMOL_EXPORT SelectResult
     : public SireBase::ConcreteProperty<SelectResult,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream &ds, const SelectResult&);
-friend QDataStream& ::operator>>(QDataStream &ds, SelectResult&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream &ds, const SelectResult&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream &ds, SelectResult&);
 
 public:
     typedef QList<ViewsOfMol> Container;

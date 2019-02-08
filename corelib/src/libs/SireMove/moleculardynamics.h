@@ -73,8 +73,8 @@ class SIREMOVE_EXPORT MolecularDynamics
           : public SireBase::ConcreteProperty<MolecularDynamics,Dynamics>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolecularDynamics&);
-friend QDataStream& ::operator>>(QDataStream&, MolecularDynamics&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const MolecularDynamics&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, MolecularDynamics&);
 
 public:
     MolecularDynamics(const PropertyMap &map = PropertyMap());

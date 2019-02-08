@@ -91,8 +91,8 @@ class ConnectivityEditor;
 class SIREMOL_EXPORT ConnectivityBase : public MolViewProperty
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireMol::ConnectivityBase&);
-friend QDataStream& ::operator>>(QDataStream&, SireMol::ConnectivityBase&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const SireMol::ConnectivityBase&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, SireMol::ConnectivityBase&);
 
 public:
     ~ConnectivityBase();
@@ -306,8 +306,8 @@ class SIREMOL_EXPORT Connectivity
                                                 ConnectivityBase>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireMol::Connectivity&);
-friend QDataStream& ::operator>>(QDataStream&, SireMol::Connectivity&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const SireMol::Connectivity&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, SireMol::Connectivity&);
 
 public:
     Connectivity();
@@ -351,8 +351,8 @@ class SIREMOL_EXPORT ConnectivityEditor
                                             ConnectivityBase>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireMol::ConnectivityEditor&);
-friend QDataStream& ::operator>>(QDataStream&, SireMol::ConnectivityEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const SireMol::ConnectivityEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, SireMol::ConnectivityEditor&);
 
 public:
     ConnectivityEditor();

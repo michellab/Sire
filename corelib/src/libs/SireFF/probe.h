@@ -58,8 +58,8 @@ namespace SireFF
 class SIREFF_EXPORT Probe : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Probe&);
-friend QDataStream& ::operator>>(QDataStream&, Probe&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const Probe&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, Probe&);
 
 public:
     Probe();
@@ -90,8 +90,8 @@ private:
 class SIREFF_EXPORT NullProbe : public SireBase::ConcreteProperty<NullProbe,Probe>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullProbe&);
-friend QDataStream& ::operator>>(QDataStream&, NullProbe&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const NullProbe&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, NullProbe&);
 
 public:
     NullProbe();

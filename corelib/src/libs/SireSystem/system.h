@@ -111,8 +111,8 @@ class SIRESYSTEM_EXPORT System
             : public SireBase::ConcreteProperty<System,MolGroupsBase>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const System&);
-friend QDataStream& ::operator>>(QDataStream&, System&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const System&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, System&);
 
 public:
     System();

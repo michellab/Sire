@@ -82,8 +82,8 @@ class SIRESYSTEM_EXPORT MonitorProperty
         : public SireBase::ConcreteProperty<MonitorProperty,SystemMonitor>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MonitorProperty&);
-friend QDataStream& ::operator>>(QDataStream&, MonitorProperty&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const MonitorProperty&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, MonitorProperty&);
 
 public:
     MonitorProperty();

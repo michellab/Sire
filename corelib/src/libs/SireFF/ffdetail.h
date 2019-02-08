@@ -60,8 +60,8 @@ using SireBase::Properties;
 class SIREFF_EXPORT FFDetail : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FFDetail&);
-friend QDataStream& ::operator>>(QDataStream&, FFDetail&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FFDetail&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FFDetail&);
 
 public:
     FFDetail();

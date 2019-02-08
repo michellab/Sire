@@ -56,8 +56,8 @@ namespace SireMol
 class SIREMOL_EXPORT CGAtomIdx : public AtomID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CGAtomIdx&);
-friend QDataStream& ::operator>>(QDataStream&, CGAtomIdx&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CGAtomIdx&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, CGAtomIdx&);
 
 public:
     CGAtomIdx();

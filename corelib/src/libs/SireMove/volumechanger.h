@@ -93,8 +93,8 @@ using SireSystem::System;
 class SIREMOVE_EXPORT VolumeChanger : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const VolumeChanger&);
-friend QDataStream& ::operator>>(QDataStream&, VolumeChanger&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const VolumeChanger&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, VolumeChanger&);
 
 public:
     VolumeChanger();
@@ -155,8 +155,8 @@ class SIREMOVE_EXPORT NullVolumeChanger
           : public SireBase::ConcreteProperty<NullVolumeChanger,VolumeChanger>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullVolumeChanger&);
-friend QDataStream& ::operator>>(QDataStream&, NullVolumeChanger&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const NullVolumeChanger&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, NullVolumeChanger&);
 
 public:
     NullVolumeChanger();
@@ -188,8 +188,8 @@ class SIREMOVE_EXPORT ScaleVolumeFromCenter
             : public SireBase::ConcreteProperty<ScaleVolumeFromCenter,VolumeChanger>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ScaleVolumeFromCenter&);
-friend QDataStream& ::operator>>(QDataStream&, ScaleVolumeFromCenter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const ScaleVolumeFromCenter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, ScaleVolumeFromCenter&);
 
 public:
     ScaleVolumeFromCenter();

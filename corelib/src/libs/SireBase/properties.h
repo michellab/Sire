@@ -68,11 +68,11 @@ class PropertiesData;
 class SIREBASE_EXPORT Properties : public ConcreteProperty<Properties,Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Properties&);
-friend QDataStream& ::operator>>(QDataStream&, Properties&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const Properties&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, Properties&);
 
-friend XMLStream& ::operator<<(XMLStream&, const Properties&);
-friend XMLStream& ::operator>>(XMLStream&, Properties&);
+friend SIREBASE_EXPORT XMLStream& ::operator<<(XMLStream&, const Properties&);
+friend SIREBASE_EXPORT XMLStream& ::operator>>(XMLStream&, Properties&);
 
 friend class detail::PropertiesData; // so can call private constructor
 

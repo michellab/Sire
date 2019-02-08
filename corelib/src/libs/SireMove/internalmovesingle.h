@@ -81,8 +81,8 @@ class SIREMOVE_EXPORT InternalMoveSingle
             : public SireBase::ConcreteProperty<InternalMoveSingle,MonteCarlo>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const InternalMoveSingle&);
-friend QDataStream& ::operator>>(QDataStream&, InternalMoveSingle&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const InternalMoveSingle&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, InternalMoveSingle&);
 
 public:
 

@@ -100,8 +100,8 @@ class SIRESYSTEM_EXPORT PerturbationConstraint
          : public SireBase::ConcreteProperty<PerturbationConstraint,MoleculeConstraint>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PerturbationConstraint&);
-friend QDataStream& ::operator>>(QDataStream&, PerturbationConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const PerturbationConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, PerturbationConstraint&);
 
 public:
     PerturbationConstraint();

@@ -55,8 +55,8 @@ class SIREVOL_EXPORT Cartesian
           : public SireBase::ConcreteProperty<Cartesian,Space>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Cartesian&);
-friend QDataStream& ::operator>>(QDataStream&, Cartesian&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Cartesian&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, Cartesian&);
 
 public:
     Cartesian();

@@ -93,8 +93,8 @@ class Delta;
 class SIRESYSTEM_EXPORT Constraint : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Constraint&);
-friend QDataStream& ::operator>>(QDataStream&, Constraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const Constraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, Constraint&);
 
 public:
     Constraint();
@@ -178,8 +178,8 @@ class SIRESYSTEM_EXPORT NullConstraint
          : public SireBase::ConcreteProperty<NullConstraint,Constraint>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullConstraint&);
-friend QDataStream& ::operator>>(QDataStream&, NullConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const NullConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, NullConstraint&);
 
 public:
     NullConstraint();
@@ -222,8 +222,8 @@ class SIRESYSTEM_EXPORT PropertyConstraint
          : public SireBase::ConcreteProperty<PropertyConstraint,Constraint>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PropertyConstraint&);
-friend QDataStream& ::operator>>(QDataStream&, PropertyConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const PropertyConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, PropertyConstraint&);
 
 public:
     PropertyConstraint();
@@ -296,8 +296,8 @@ class SIRESYSTEM_EXPORT ComponentConstraint
          : public SireBase::ConcreteProperty<ComponentConstraint,Constraint>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ComponentConstraint&);
-friend QDataStream& ::operator>>(QDataStream&, ComponentConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const ComponentConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, ComponentConstraint&);
 
 public:
     ComponentConstraint();
@@ -364,8 +364,8 @@ class SIRESYSTEM_EXPORT WindowedComponent
          : public SireBase::ConcreteProperty<WindowedComponent,Constraint>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const WindowedComponent&);
-friend QDataStream& ::operator>>(QDataStream&, WindowedComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const WindowedComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, WindowedComponent&);
 
 public:
     WindowedComponent();

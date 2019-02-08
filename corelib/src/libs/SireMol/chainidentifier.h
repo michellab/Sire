@@ -50,8 +50,8 @@ class ChainIdx;
 class SIREMOL_EXPORT ChainIdentifier : public ChainID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ChainIdentifier&);
-friend QDataStream& ::operator>>(QDataStream&, ChainIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ChainIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ChainIdentifier&);
 
 public:
     ChainIdentifier();

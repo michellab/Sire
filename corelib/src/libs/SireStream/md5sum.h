@@ -60,8 +60,8 @@ namespace SireStream
 class SIRESTREAM_EXPORT MD5Sum
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MD5Sum&);
-friend QDataStream& ::operator>>(QDataStream&, MD5Sum&);
+friend SIRESTREAM_EXPORT QDataStream& ::operator<<(QDataStream&, const MD5Sum&);
+friend SIRESTREAM_EXPORT QDataStream& ::operator>>(QDataStream&, MD5Sum&);
 
 public:
   /** Construct a null MD5Sum */

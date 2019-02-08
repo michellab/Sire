@@ -322,8 +322,8 @@ protected:
 class SIREVOL_EXPORT CoordGroup : public CoordGroupBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CoordGroup&);
-friend QDataStream& ::operator>>(QDataStream&, CoordGroup&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CoordGroup&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, CoordGroup&);
 
 friend class CoordGroupEditor;
 friend class detail::CGData; // so can see d pointer
@@ -478,8 +478,8 @@ friend class detail::CGMemory; // so can see d pointer
 
 friend class CoordGroupArrayArray;
 
-friend QDataStream& ::operator<<(QDataStream&, const CoordGroupArray&);
-friend QDataStream& ::operator>>(QDataStream&, CoordGroupArray&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CoordGroupArray&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, CoordGroupArray&);
 
 public:
     CoordGroupArray();
@@ -591,8 +591,8 @@ private:
 class SIREVOL_EXPORT CoordGroupArrayArray
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CoordGroupArrayArray&);
-friend QDataStream& ::operator>>(QDataStream&, CoordGroupArrayArray&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CoordGroupArrayArray&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, CoordGroupArrayArray&);
 
 public:
     CoordGroupArrayArray();

@@ -56,8 +56,8 @@ class SIREMOL_EXPORT BeadIdx
        : public SireID::Index_T_<BeadIdx>, public BeadID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const BeadIdx&);
-friend QDataStream& ::operator>>(QDataStream&, BeadIdx&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const BeadIdx&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, BeadIdx&);
 
 public:
     BeadIdx();

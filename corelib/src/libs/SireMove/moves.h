@@ -63,8 +63,8 @@ using SireCAS::Symbol;
 class SIREMOVE_EXPORT Moves : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Moves&);
-friend QDataStream& ::operator>>(QDataStream&, Moves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const Moves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, Moves&);
 
 public:
     Moves();
@@ -188,8 +188,8 @@ class SIREMOVE_EXPORT SameMoves
          : public SireBase::ConcreteProperty<SameMoves,Moves>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SameMoves&);
-friend QDataStream& ::operator>>(QDataStream&, SameMoves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SameMoves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SameMoves&);
 
 public:
     SameMoves();

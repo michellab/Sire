@@ -84,8 +84,8 @@ class UniformSampler;
 class SIREMOVE_EXPORT Sampler : public Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Sampler&);
-friend QDataStream& ::operator>>(QDataStream&, Sampler&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const Sampler&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, Sampler&);
 
 public:
     Sampler();

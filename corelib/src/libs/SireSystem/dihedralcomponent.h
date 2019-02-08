@@ -58,8 +58,8 @@ class SIRESYSTEM_EXPORT DihedralComponent
          : public SireBase::ConcreteProperty<DihedralComponent,GeometryComponent>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DihedralComponent&);
-friend QDataStream& ::operator>>(QDataStream&, DihedralComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const DihedralComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, DihedralComponent&);
 
 public:
     DihedralComponent();

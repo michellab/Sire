@@ -78,8 +78,8 @@ class SIREMOVE_EXPORT RigidBodyMC
         : public SireBase::ConcreteProperty<RigidBodyMC,MonteCarlo>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RigidBodyMC&);
-friend QDataStream& ::operator>>(QDataStream&, RigidBodyMC&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const RigidBodyMC&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, RigidBodyMC&);
 
 public:
     RigidBodyMC(const PropertyMap &map = PropertyMap());

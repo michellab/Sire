@@ -73,8 +73,8 @@ namespace SireBase
 class SIREBASE_EXPORT PropertyList : public ConcreteProperty<PropertyList,Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PropertyList&);
-friend QDataStream& ::operator>>(QDataStream&, PropertyList&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const PropertyList&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, PropertyList&);
 
 public:
     PropertyList();
@@ -169,8 +169,8 @@ class SIREBASE_EXPORT DoubleArrayProperty
         : public ConcreteProperty<DoubleArrayProperty,ArrayProperty<double> >
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DoubleArrayProperty&);
-friend QDataStream& ::operator>>(QDataStream&, DoubleArrayProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const DoubleArrayProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, DoubleArrayProperty&);
 
 public:
     DoubleArrayProperty();
@@ -206,8 +206,8 @@ class SIREBASE_EXPORT IntegerArrayProperty
         : public ConcreteProperty<IntegerArrayProperty,ArrayProperty<qint64> >
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IntegerArrayProperty&);
-friend QDataStream& ::operator>>(QDataStream&, IntegerArrayProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const IntegerArrayProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, IntegerArrayProperty&);
 
 public:
     IntegerArrayProperty();
@@ -243,8 +243,8 @@ class SIREBASE_EXPORT StringArrayProperty
         : public ConcreteProperty<StringArrayProperty,ArrayProperty<QString> >
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const StringArrayProperty&);
-friend QDataStream& ::operator>>(QDataStream&, StringArrayProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const StringArrayProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, StringArrayProperty&);
 
 public:
     StringArrayProperty();

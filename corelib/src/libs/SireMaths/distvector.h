@@ -52,8 +52,8 @@ namespace SireMaths
 class SIREMATHS_EXPORT DistVector : private Vector
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DistVector&);
-friend QDataStream& ::operator>>(QDataStream&, DistVector&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const DistVector&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, DistVector&);
 
 public:
     DistVector();

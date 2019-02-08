@@ -82,8 +82,8 @@ class SIREMM_EXPORT DistanceRestraint
         : public SireBase::ConcreteProperty<DistanceRestraint,ExpressionRestraint3D>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DistanceRestraint&);
-friend QDataStream& ::operator>>(QDataStream&, DistanceRestraint&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const DistanceRestraint&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, DistanceRestraint&);
 
 public:
     DistanceRestraint();
@@ -179,8 +179,8 @@ class SIREMM_EXPORT DoubleDistanceRestraint
     : public SireBase::ConcreteProperty<DoubleDistanceRestraint,ExpressionRestraint3D>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DoubleDistanceRestraint&);
-friend QDataStream& ::operator>>(QDataStream&, DoubleDistanceRestraint&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const DoubleDistanceRestraint&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, DoubleDistanceRestraint&);
 
 public:
     DoubleDistanceRestraint();
@@ -273,8 +273,8 @@ class SIREMM_EXPORT TripleDistanceRestraint
        : public SireBase::ConcreteProperty<TripleDistanceRestraint,ExpressionRestraint3D>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TripleDistanceRestraint&);
-friend QDataStream& ::operator>>(QDataStream&, TripleDistanceRestraint&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const TripleDistanceRestraint&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, TripleDistanceRestraint&);
 
 public:
     TripleDistanceRestraint();

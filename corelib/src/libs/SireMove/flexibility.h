@@ -89,8 +89,8 @@ using SireMol::MoleculeInfoData;
 class SIREMOVE_EXPORT DofID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DofID&);
-friend QDataStream& ::operator>>(QDataStream&, DofID&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const DofID&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, DofID&);
 
 public:
     DofID();
@@ -143,8 +143,8 @@ private:
 class SIREMOVE_EXPORT Flexibility
     : public SireBase::ConcreteProperty<Flexibility,SireMol::MoleculeProperty>
 {
-    friend QDataStream& ::operator<<(QDataStream&, const Flexibility&);
-    friend QDataStream& ::operator>>(QDataStream&, Flexibility&);
+    friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const Flexibility&);
+    friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, Flexibility&);
       
 public:
     Flexibility();

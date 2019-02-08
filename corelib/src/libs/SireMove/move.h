@@ -90,8 +90,8 @@ using SireMol::Molecules;
 class SIREMOVE_EXPORT Move : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Move&);
-friend QDataStream& ::operator>>(QDataStream&, Move&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const Move&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, Move&);
 
 public:
     Move(const PropertyMap &map = PropertyMap());

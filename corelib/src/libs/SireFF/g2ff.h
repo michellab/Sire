@@ -63,8 +63,8 @@ using SireMol::PartialMolecule;
 class SIREFF_EXPORT G2FF : public FF
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const G2FF&);
-friend QDataStream& ::operator>>(QDataStream&, G2FF&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const G2FF&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, G2FF&);
 
 public:
     ~G2FF();

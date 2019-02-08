@@ -84,8 +84,8 @@ using SireSystem::System;
 class SIREMOVE_EXPORT MolDeleter : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolDeleter&);
-friend QDataStream& ::operator>>(QDataStream&, MolDeleter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const MolDeleter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, MolDeleter&);
 
 public:
     MolDeleter();
@@ -120,8 +120,8 @@ class SIREMOVE_EXPORT NullDeleter
             : public SireBase::ConcreteProperty<NullDeleter,MolDeleter>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullDeleter&);
-friend QDataStream& ::operator>>(QDataStream&, NullDeleter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const NullDeleter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, NullDeleter&);
 
 public:
     NullDeleter();
@@ -152,8 +152,8 @@ class SIREMOVE_EXPORT SystemWideDeleter
         : public SireBase::ConcreteProperty<SystemWideDeleter,MolDeleter>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SystemWideDeleter&);
-friend QDataStream& ::operator>>(QDataStream&, SystemWideDeleter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SystemWideDeleter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SystemWideDeleter&);
 
 public:
     SystemWideDeleter();
@@ -201,8 +201,8 @@ class SIREMOVE_EXPORT SpecifiedGroupsDeleter
             : public SireBase::ConcreteProperty<SpecifiedGroupsDeleter,MolDeleter>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SpecifiedGroupsDeleter&);
-friend QDataStream& ::operator>>(QDataStream&, SpecifiedGroupsDeleter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SpecifiedGroupsDeleter&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SpecifiedGroupsDeleter&);
 
 public:
     SpecifiedGroupsDeleter();

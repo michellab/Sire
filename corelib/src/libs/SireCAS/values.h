@@ -60,8 +60,8 @@ class Symbol;
 class SIRECAS_EXPORT Values
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Values&);
-friend QDataStream& ::operator>>(QDataStream&, Values&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Values&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Values&);
 
 public:
     typedef QHash<SymbolID,double>::const_iterator const_iterator;

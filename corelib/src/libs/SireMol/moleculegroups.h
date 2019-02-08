@@ -99,8 +99,8 @@ class AtomID;
 class SIREMOL_EXPORT MolGroupsBase : public Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolGroupsBase&);
-friend QDataStream& ::operator>>(QDataStream&, MolGroupsBase&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MolGroupsBase&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MolGroupsBase&);
 
 public:    
     virtual ~MolGroupsBase();
@@ -408,8 +408,8 @@ class SIREMOL_EXPORT MoleculeGroups
             : public ConcreteProperty<MoleculeGroups,MolGroupsBase>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MoleculeGroups&);
-friend QDataStream& ::operator>>(QDataStream&, MoleculeGroups&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MoleculeGroups&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MoleculeGroups&);
 
 public:
     MoleculeGroups();

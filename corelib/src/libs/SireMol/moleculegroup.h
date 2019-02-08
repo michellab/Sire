@@ -104,8 +104,8 @@ using SireBase::Version;
 class SIREMOL_EXPORT MoleculeGroup : public ConcreteProperty<MoleculeGroup,Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MoleculeGroup&);
-friend QDataStream& ::operator>>(QDataStream&, MoleculeGroup&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MoleculeGroup&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MoleculeGroup&);
 
 public:
 

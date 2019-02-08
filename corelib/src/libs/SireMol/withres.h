@@ -53,8 +53,8 @@ namespace SireMol
 class SIREMOL_EXPORT ChainsWithRes : public ChainID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ChainsWithRes&);
-friend QDataStream& ::operator>>(QDataStream&, ChainsWithRes&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ChainsWithRes&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ChainsWithRes&);
 
 public:
     ChainsWithRes();

@@ -62,8 +62,8 @@ class SIREMATHS_EXPORT VectorProperty
               public Vector
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const VectorProperty&);
-friend QDataStream& ::operator>>(QDataStream&, VectorProperty&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const VectorProperty&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, VectorProperty&);
 
 public:
     VectorProperty();
@@ -92,8 +92,8 @@ class SIREMATHS_EXPORT VectorArrayProperty
         : public SireBase::ConcreteProperty<VectorArrayProperty,SireBase::ArrayProperty<Vector> >
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const VectorArrayProperty&);
-friend QDataStream& ::operator>>(QDataStream&, VectorArrayProperty&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const VectorArrayProperty&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, VectorArrayProperty&);
 
 public:
     VectorArrayProperty();

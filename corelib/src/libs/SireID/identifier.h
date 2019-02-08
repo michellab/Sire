@@ -53,8 +53,8 @@ namespace SireID
 class SIREID_EXPORT Identifier : public ID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Identifier&);
-friend QDataStream& ::operator>>(QDataStream&, Identifier&);
+friend SIREID_EXPORT QDataStream& ::operator<<(QDataStream&, const Identifier&);
+friend SIREID_EXPORT QDataStream& ::operator>>(QDataStream&, Identifier&);
 
 public:
     Identifier();

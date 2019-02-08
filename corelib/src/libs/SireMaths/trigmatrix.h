@@ -93,8 +93,8 @@ class Vector;
 class SIREMATHS_EXPORT TrigMatrix
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TrigMatrix&);
-friend QDataStream& ::operator>>(QDataStream&, TrigMatrix&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const TrigMatrix&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, TrigMatrix&);
 
 public:
     TrigMatrix();

@@ -53,8 +53,8 @@ class SIRECAS_EXPORT ExpressionProperty
     : public SireBase::ConcreteProperty<ExpressionProperty,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ExpressionProperty&);
-friend QDataStream& ::operator>>(QDataStream&, ExpressionProperty&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const ExpressionProperty&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, ExpressionProperty&);
 
 public:
     ExpressionProperty();

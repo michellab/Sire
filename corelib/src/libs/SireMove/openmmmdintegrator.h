@@ -58,8 +58,8 @@ namespace SireMove {
      */
     class SIREMOVE_EXPORT OpenMMMDIntegrator
     : public SireBase::ConcreteProperty<OpenMMMDIntegrator, Integrator> {
-        friend QDataStream& ::operator<<(QDataStream&, const OpenMMMDIntegrator&);
-        friend QDataStream& ::operator>>(QDataStream&, OpenMMMDIntegrator&);
+        friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const OpenMMMDIntegrator&);
+        friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, OpenMMMDIntegrator&);
 
     public:
         OpenMMMDIntegrator(bool frequent_save_velocities = false);

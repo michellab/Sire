@@ -99,8 +99,8 @@ class SIREMOL_EXPORT ChainProperty
     : public SireBase::ConcreteProperty<ChainProperty<T>, ChainProp>
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const ChainProperty<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, ChainProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const ChainProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, ChainProperty<T>&);
 
 public:
     ChainProperty();

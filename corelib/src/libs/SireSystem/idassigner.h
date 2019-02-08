@@ -69,8 +69,8 @@ class SIRESYSTEM_EXPORT IDAssigner
          : public SireBase::ConcreteProperty<IDAssigner,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IDAssigner&);
-friend QDataStream& ::operator>>(QDataStream&, IDAssigner&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const IDAssigner&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, IDAssigner&);
 
 public:
     IDAssigner();

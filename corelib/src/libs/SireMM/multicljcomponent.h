@@ -63,8 +63,8 @@ boost::tuple<QString,QString> getSubscriptedProperty(QString name);
 class SIREMM_EXPORT MultiCLJComponent : public SireFF::FFComponent
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MultiCLJComponent&);
-friend QDataStream& ::operator>>(QDataStream&, MultiCLJComponent&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const MultiCLJComponent&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, MultiCLJComponent&);
 
 public:
     MultiCLJComponent(const FFName &name = FFName());
@@ -134,8 +134,8 @@ private:
 class SIREMM_EXPORT MultiCLJEnergy : public CLJEnergy
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MultiCLJEnergy&);
-friend QDataStream& ::operator>>(QDataStream&, MultiCLJEnergy&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const MultiCLJEnergy&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, MultiCLJEnergy&);
 
 public:
     typedef MultiCLJComponent Components;

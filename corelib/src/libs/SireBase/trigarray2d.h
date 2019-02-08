@@ -51,8 +51,8 @@ namespace SireBase
 class SIREBASE_EXPORT TrigArray2DBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TrigArray2DBase&);
-friend QDataStream& ::operator>>(QDataStream&, TrigArray2DBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const TrigArray2DBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, TrigArray2DBase&);
 
 public:
     ~TrigArray2DBase();

@@ -67,8 +67,8 @@ class SIREMOVE_EXPORT Titrator
         : public SireBase::ConcreteProperty<Titrator,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Titrator&);
-friend QDataStream& ::operator>>(QDataStream&, Titrator&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const Titrator&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, Titrator&);
 
 public:
     Titrator();

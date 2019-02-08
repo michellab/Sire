@@ -89,8 +89,8 @@ using boost::tuple;
 class SIREMOL_EXPORT ImproperID : public SireID::ID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ImproperID&);
-friend QDataStream& ::operator>>(QDataStream&, ImproperID&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ImproperID&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ImproperID&);
 
 public:
     ImproperID();

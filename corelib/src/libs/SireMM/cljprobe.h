@@ -62,8 +62,8 @@ class SIREMM_EXPORT CoulombProbe
         : public SireBase::ConcreteProperty<CoulombProbe,SireFF::Probe>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CoulombProbe&);
-friend QDataStream& ::operator>>(QDataStream&, CoulombProbe&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CoulombProbe&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CoulombProbe&);
 
 public:
     CoulombProbe();
@@ -99,8 +99,8 @@ class SIREMM_EXPORT LJProbe
         : public SireBase::ConcreteProperty<LJProbe,SireFF::Probe>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const LJProbe&);
-friend QDataStream& ::operator>>(QDataStream&, LJProbe&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const LJProbe&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, LJProbe&);
 
 public:
     LJProbe();
@@ -132,8 +132,8 @@ class SIREMM_EXPORT CLJProbe
         : public SireBase::ConcreteProperty<CLJProbe,SireFF::Probe>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJProbe&);
-friend QDataStream& ::operator>>(QDataStream&, CLJProbe&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJProbe&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJProbe&);
 
 public:
     CLJProbe();

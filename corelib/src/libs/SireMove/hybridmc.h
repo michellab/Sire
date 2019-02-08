@@ -65,8 +65,8 @@ namespace SireMove
 class SIREMOVE_EXPORT HMCVelGen : public VelocityGenerator
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const HMCVelGen&);
-friend QDataStream& ::operator>>(QDataStream&, HMCVelGen&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const HMCVelGen&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, HMCVelGen&);
 
 public:
     HMCVelGen();
@@ -115,8 +115,8 @@ class SIREMOVE_EXPORT HMCGenerator
         : public SireBase::ConcreteProperty<HMCGenerator,HMCVelGen>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const HMCGenerator&);
-friend QDataStream& ::operator>>(QDataStream&, HMCGenerator&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const HMCGenerator&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, HMCGenerator&);
 
 public:
     HMCGenerator();
@@ -149,8 +149,8 @@ public:
 class SIREMOVE_EXPORT HybridMC : public SireBase::ConcreteProperty<HybridMC,MonteCarlo>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const HybridMC&);
-friend QDataStream& ::operator>>(QDataStream&, HybridMC&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const HybridMC&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, HybridMC&);
 
 public:
     HybridMC(const PropertyMap &map = PropertyMap());

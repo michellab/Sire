@@ -80,8 +80,8 @@ namespace SireMaths
 class SIREMATHS_EXPORT Accumulator : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Accumulator&);
-friend QDataStream& ::operator>>(QDataStream&, Accumulator&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Accumulator&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Accumulator&);
 
 public:
     Accumulator();
@@ -129,8 +129,8 @@ class SIREMATHS_EXPORT NullAccumulator
             : public SireBase::ConcreteProperty<NullAccumulator,Accumulator>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullAccumulator&);
-friend QDataStream& ::operator>>(QDataStream&, NullAccumulator&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const NullAccumulator&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, NullAccumulator&);
 
 public:
     NullAccumulator();
@@ -158,8 +158,8 @@ class SIREMATHS_EXPORT Average
             : public SireBase::ConcreteProperty<Average,Accumulator>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Average&);
-friend QDataStream& ::operator>>(QDataStream&, Average&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Average&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Average&);
 
 public:
     Average();
@@ -202,8 +202,8 @@ class SIREMATHS_EXPORT AverageAndStddev
          : public SireBase::ConcreteProperty<AverageAndStddev,Average>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AverageAndStddev&);
-friend QDataStream& ::operator>>(QDataStream&, AverageAndStddev&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const AverageAndStddev&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, AverageAndStddev&);
 
 public:
     AverageAndStddev();
@@ -256,8 +256,8 @@ class SIREMATHS_EXPORT ExpAverage
             : public SireBase::ConcreteProperty<ExpAverage,Accumulator>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ExpAverage&);
-friend QDataStream& ::operator>>(QDataStream&, ExpAverage&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const ExpAverage&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, ExpAverage&);
 
 public:
     ExpAverage(double scale=1);
@@ -310,8 +310,8 @@ class SIREMATHS_EXPORT Median
             : public SireBase::ConcreteProperty<Median,Accumulator>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Median&);
-friend QDataStream& ::operator>>(QDataStream&, Median&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Median&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Median&);
 
 public:
     Median();
@@ -361,8 +361,8 @@ class SIREMATHS_EXPORT RecordValues
             : public SireBase::ConcreteProperty<RecordValues,Accumulator>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RecordValues&);
-friend QDataStream& ::operator>>(QDataStream&, RecordValues&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const RecordValues&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, RecordValues&);
 
 public:
     RecordValues();

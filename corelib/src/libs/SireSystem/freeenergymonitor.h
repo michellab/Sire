@@ -68,8 +68,8 @@ using SireMaths::Accumulator;
 class SIRESYSTEM_EXPORT AssignerGroup
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AssignerGroup&);
-friend QDataStream& ::operator>>(QDataStream&, AssignerGroup&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const AssignerGroup&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, AssignerGroup&);
 
 public:
     AssignerGroup();
@@ -125,8 +125,8 @@ class SIRESYSTEM_EXPORT FreeEnergyMonitor
         : public SireBase::ConcreteProperty<FreeEnergyMonitor,SystemMonitor>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FreeEnergyMonitor&);
-friend QDataStream& ::operator>>(QDataStream&, FreeEnergyMonitor&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const FreeEnergyMonitor&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, FreeEnergyMonitor&);
 
 public:
     FreeEnergyMonitor();

@@ -57,8 +57,8 @@ class AtomIdx;
 class SIREMOL_EXPORT AtomIdentifier : public AtomID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomIdentifier&);
-friend QDataStream& ::operator>>(QDataStream&, AtomIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomIdentifier&);
 
 public:
     AtomIdentifier();

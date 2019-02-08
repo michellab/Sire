@@ -71,8 +71,8 @@ using SireBase::Property;
 class SIREMOL_EXPORT Bead : public SireBase::ConcreteProperty<Bead,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Bead&);
-friend QDataStream& ::operator>>(QDataStream&, Bead&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Bead&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Bead&);
 
 public:
     typedef BeadID ID;

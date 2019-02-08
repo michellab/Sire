@@ -55,8 +55,8 @@ namespace SireIO
 class SIREIO_EXPORT Gro87 : public SireBase::ConcreteProperty<Gro87,MoleculeParser>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Gro87&);
-friend QDataStream& ::operator>>(QDataStream&, Gro87&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const Gro87&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, Gro87&);
 
 public:
     Gro87();

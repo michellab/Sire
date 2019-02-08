@@ -75,8 +75,8 @@ class TrigMatrix;
 class SIREMATHS_EXPORT NMatrix
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NMatrix&);
-friend QDataStream& ::operator>>(QDataStream&, NMatrix&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const NMatrix&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, NMatrix&);
 
 public:
     NMatrix();

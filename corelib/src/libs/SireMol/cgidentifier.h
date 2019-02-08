@@ -53,8 +53,8 @@ class CGIdx;
 class SIREMOL_EXPORT CGIdentifier : public CGID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CGIdentifier&);
-friend QDataStream& ::operator>>(QDataStream&, CGIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CGIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, CGIdentifier&);
 
 public:
     CGIdentifier();

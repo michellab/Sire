@@ -79,8 +79,8 @@ class SIRESYSTEM_EXPORT PolariseCharges
          : public SireBase::ConcreteProperty<PolariseCharges,ChargeConstraint>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PolariseCharges&);
-friend QDataStream& ::operator>>(QDataStream&, PolariseCharges&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const PolariseCharges&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, PolariseCharges&);
 
 public:
     PolariseCharges();
@@ -165,8 +165,8 @@ class SIRESYSTEM_EXPORT PolariseChargesFF
             : public SireBase::ConcreteProperty<PolariseChargesFF,SireFF::G1FF>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PolariseChargesFF&);
-friend QDataStream& ::operator>>(QDataStream&, PolariseChargesFF&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const PolariseChargesFF&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, PolariseChargesFF&);
 
 public:
     PolariseChargesFF();

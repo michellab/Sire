@@ -58,8 +58,8 @@ This class represents a triangle in three-dimensional space. (or three points)
 class SIREMATHS_EXPORT Triangle
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Triangle&);
-friend QDataStream& ::operator>>(QDataStream&, Triangle&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Triangle&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Triangle&);
 
 public:
     Triangle();

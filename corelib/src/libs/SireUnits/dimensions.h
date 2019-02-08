@@ -69,8 +69,8 @@ class TempBase;
 class SIREUNITS_EXPORT Unit
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Unit&);
-friend QDataStream& ::operator>>(QDataStream&, Unit&);
+friend SIREUNITS_EXPORT QDataStream& ::operator<<(QDataStream&, const Unit&);
+friend SIREUNITS_EXPORT QDataStream& ::operator>>(QDataStream&, Unit&);
 
 public:
     ~Unit()

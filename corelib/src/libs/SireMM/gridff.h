@@ -57,8 +57,8 @@ class SIREMM_EXPORT GridFF
             : public SireBase::ConcreteProperty<GridFF,InterGroupCLJFF>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GridFF&);
-friend QDataStream& ::operator>>(QDataStream&, GridFF&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const GridFF&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, GridFF&);
 
 public:
     GridFF();

@@ -84,8 +84,8 @@ class SIREMOL_EXPORT AtomEditor
             : public SireBase::ConcreteProperty<AtomEditor,AtomEditorBase>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomEditor&);
-friend QDataStream& ::operator>>(QDataStream&, AtomEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomEditor&);
 
 public:
     AtomEditor();
@@ -134,8 +134,8 @@ public:
 class SIREMOL_EXPORT AtomStructureEditor : public StructureEditor
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomStructureEditor&);
-friend QDataStream& ::operator>>(QDataStream&, AtomStructureEditor&); 
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomStructureEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomStructureEditor&); 
 
 public:
     AtomStructureEditor();

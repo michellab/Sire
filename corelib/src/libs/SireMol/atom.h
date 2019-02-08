@@ -79,8 +79,8 @@ class Molecule;
 class SIREMOL_EXPORT Atom : public SireBase::ConcreteProperty<Atom,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Atom&);
-friend QDataStream& ::operator>>(QDataStream&, Atom&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Atom&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Atom&);
 
 public:
     typedef AtomID ID;

@@ -64,8 +64,8 @@ using SireSystem::System;
 class SIREMOVE_EXPORT SimStore
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SimStore&);
-friend QDataStream& ::operator>>(QDataStream&, SimStore&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SimStore&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SimStore&);
 
 public:
     SimStore();

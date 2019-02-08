@@ -71,8 +71,8 @@ namespace SireCluster
 class SIRECLUSTER_EXPORT WorkPacketBase : public SireBase::RefCountData
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const WorkPacketBase&);
-friend QDataStream& ::operator>>(QDataStream&, WorkPacketBase&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const WorkPacketBase&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, WorkPacketBase&);
 
 public:
     typedef WorkPacketBase ROOT;
@@ -134,8 +134,8 @@ private:
 class SIRECLUSTER_EXPORT WorkPacket
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const WorkPacket&);
-friend QDataStream& ::operator>>(QDataStream&, WorkPacket&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const WorkPacket&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, WorkPacket&);
 
 public:
     WorkPacket();
@@ -196,8 +196,8 @@ private:
 class SIRECLUSTER_EXPORT AbortPacket : public WorkPacketBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AbortPacket&);
-friend QDataStream& ::operator>>(QDataStream&, AbortPacket&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const AbortPacket&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, AbortPacket&);
 
 public:
     AbortPacket();
@@ -233,8 +233,8 @@ protected:
 class SIRECLUSTER_EXPORT ErrorPacket : public WorkPacketBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ErrorPacket&);
-friend QDataStream& ::operator>>(QDataStream&, ErrorPacket&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const ErrorPacket&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, ErrorPacket&);
 
 public:
     ErrorPacket();
@@ -275,8 +275,8 @@ private:
 class SIRECLUSTER_EXPORT WorkTest : public WorkPacketBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const WorkTest&);
-friend QDataStream& ::operator>>(QDataStream&, WorkTest&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator<<(QDataStream&, const WorkTest&);
+friend SIRECLUSTER_EXPORT QDataStream& ::operator>>(QDataStream&, WorkTest&);
 
 public:
     WorkTest();

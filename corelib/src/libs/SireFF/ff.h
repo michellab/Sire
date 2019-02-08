@@ -128,8 +128,8 @@ void throwForceFieldRestoreBug(const char *this_what, const char *ffield_what);
 class SIREFF_EXPORT FF : public SireMol::MolGroupsBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FF&);
-friend QDataStream& ::operator>>(QDataStream&, FF&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FF&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FF&);
 
 friend class FFMolGroup; // so can call the group_???() functions
 friend class FFComponent; // so can call setComponent and changeComponent

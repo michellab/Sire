@@ -67,8 +67,8 @@ class SIREMOVE_EXPORT MTSMC
             : public SireBase::ConcreteProperty<MTSMC,MonteCarlo>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MTSMC&);
-friend QDataStream& ::operator>>(QDataStream&, MTSMC&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const MTSMC&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, MTSMC&);
 
 public:
     MTSMC(const PropertyMap &map = PropertyMap());

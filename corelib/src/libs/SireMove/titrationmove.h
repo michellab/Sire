@@ -56,8 +56,8 @@ class SIREMOVE_EXPORT TitrationMove
         : public SireBase::ConcreteProperty<TitrationMove,MonteCarlo>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TitrationMove&);
-friend QDataStream& ::operator>>(QDataStream&, TitrationMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const TitrationMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, TitrationMove&);
 
 public:
     TitrationMove();

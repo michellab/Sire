@@ -117,8 +117,8 @@ typedef SireBase::PropPtr<Restraint3D> Restraint3DPtr;
 class SIREMM_EXPORT Restraint : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Restraint&);
-friend QDataStream& ::operator>>(QDataStream&, Restraint&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const Restraint&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, Restraint&);
 
 public:
     Restraint();
@@ -181,8 +181,8 @@ protected:
 class SIREMM_EXPORT Restraint3D : public Restraint
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Restraint3D&);
-friend QDataStream& ::operator>>(QDataStream&, Restraint3D&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const Restraint3D&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, Restraint3D&);
 
 public:
     Restraint3D();
@@ -224,8 +224,8 @@ private:
 class SIREMM_EXPORT ExpressionRestraint3D : public Restraint3D
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ExpressionRestraint3D&);
-friend QDataStream& ::operator>>(QDataStream&, ExpressionRestraint3D&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const ExpressionRestraint3D&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, ExpressionRestraint3D&);
 
 public:
     ExpressionRestraint3D();
@@ -283,8 +283,8 @@ class SIREMM_EXPORT NullRestraint
             : public SireBase::ConcreteProperty<NullRestraint,Restraint3D>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullRestraint &other);
-friend QDataStream& ::operator>>(QDataStream&, NullRestraint &other);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const NullRestraint &other);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, NullRestraint &other);
 
 public:
     NullRestraint();

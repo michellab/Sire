@@ -104,8 +104,8 @@ using SireMol::AtomID;
 class SIREMM_EXPORT InternalPerturbation : public Perturbation
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const InternalPerturbation&);
-friend QDataStream& ::operator>>(QDataStream&, InternalPerturbation&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const InternalPerturbation&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, InternalPerturbation&);
 
 public:
     InternalPerturbation();
@@ -187,8 +187,8 @@ class SIREMM_EXPORT TwoAtomPerturbation
         : public SireBase::ConcreteProperty<TwoAtomPerturbation,InternalPerturbation>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TwoAtomPerturbation&);
-friend QDataStream& ::operator>>(QDataStream&, TwoAtomPerturbation&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const TwoAtomPerturbation&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, TwoAtomPerturbation&);
 
 public:
     TwoAtomPerturbation();
@@ -269,8 +269,8 @@ class SIREMM_EXPORT ThreeAtomPerturbation
         : public SireBase::ConcreteProperty<ThreeAtomPerturbation,InternalPerturbation>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ThreeAtomPerturbation&);
-friend QDataStream& ::operator>>(QDataStream&, ThreeAtomPerturbation&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const ThreeAtomPerturbation&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, ThreeAtomPerturbation&);
 
 public:
     ThreeAtomPerturbation();
@@ -355,8 +355,8 @@ class SIREMM_EXPORT FourAtomPerturbation
         : public SireBase::ConcreteProperty<FourAtomPerturbation,InternalPerturbation>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FourAtomPerturbation&);
-friend QDataStream& ::operator>>(QDataStream&, FourAtomPerturbation&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const FourAtomPerturbation&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, FourAtomPerturbation&);
 
 public:
     FourAtomPerturbation();

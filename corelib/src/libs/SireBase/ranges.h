@@ -54,8 +54,8 @@ namespace SireBase
 class SIREBASE_EXPORT SimpleRange : public SireBase::ConcreteProperty<SimpleRange,Range>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireBase::SimpleRange&);
-friend QDataStream& ::operator>>(QDataStream&, SireBase::SimpleRange&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const SireBase::SimpleRange&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, SireBase::SimpleRange&);
 
 public:
     SimpleRange();

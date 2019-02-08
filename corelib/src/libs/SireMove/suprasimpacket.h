@@ -54,8 +54,8 @@ namespace SireMove
 class SIREMOVE_EXPORT SupraSimPacket : public SireCluster::WorkPacketBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SupraSimPacket&);
-friend QDataStream& ::operator>>(QDataStream&, SupraSimPacket&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SupraSimPacket&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SupraSimPacket&);
 
 public:
     SupraSimPacket();

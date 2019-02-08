@@ -55,8 +55,8 @@ class SIREFF_EXPORT NullFF : public SireBase::ConcreteProperty<NullFF,FF>
 
 friend const NullFF& FF::null();
 
-friend QDataStream& ::operator<<(QDataStream&, const NullFF&);
-friend QDataStream& ::operator>>(QDataStream&, NullFF&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const NullFF&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, NullFF&);
 
 public:
     NullFF();

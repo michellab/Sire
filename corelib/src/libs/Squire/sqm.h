@@ -65,8 +65,8 @@ namespace Squire
 class SQUIRE_EXPORT SQM : public SireBase::ConcreteProperty<SQM,QMProgram>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SQM&);
-friend QDataStream& ::operator>>(QDataStream&, SQM&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const SQM&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, SQM&);
 
 public:
     SQM();

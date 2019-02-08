@@ -76,8 +76,8 @@ using SireBase::SharedPolyPointer;
 class SIRECAS_EXPORT ExpressionBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ExpressionBase&);
-friend QDataStream& ::operator>>(QDataStream&, ExpressionBase&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const ExpressionBase&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, ExpressionBase&);
 
 public:
     ExpressionBase();

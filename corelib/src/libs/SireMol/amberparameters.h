@@ -81,8 +81,8 @@ class SIREMOL_EXPORT AmberParameters
     : public SireBase::ConcreteProperty<AmberParameters,SireMol::MoleculeProperty>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireMol::AmberParameters&);
-friend QDataStream& ::operator>>(QDataStream&, SireMol::AmberParameters&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const SireMol::AmberParameters&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, SireMol::AmberParameters&);
 
  public:
     AmberParameters();

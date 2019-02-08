@@ -86,8 +86,8 @@ class SIREMOL_EXPORT CGEditor
         : public SireBase::ConcreteProperty< CGEditor, Editor<CGEditor, CutGroup> >
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CGEditor&);
-friend QDataStream& ::operator>>(QDataStream&, CGEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CGEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, CGEditor&);
 
 public:
     CGEditor();
@@ -132,8 +132,8 @@ public:
 class SIREMOL_EXPORT CGStructureEditor : public StructureEditor
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CGStructureEditor&);
-friend QDataStream& ::operator>>(QDataStream&, CGStructureEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CGStructureEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, CGStructureEditor&);
 
 public:
     CGStructureEditor();

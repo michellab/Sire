@@ -147,8 +147,8 @@ template <class T>
 class SharedPolyPointer : private SharedPolyPointerBase
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const SharedPolyPointer<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, SharedPolyPointer<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const SharedPolyPointer<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, SharedPolyPointer<T>&);
 
 public:
 

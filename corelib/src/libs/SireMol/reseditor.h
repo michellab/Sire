@@ -81,8 +81,8 @@ class SIREMOL_EXPORT ResEditor
         : public SireBase::ConcreteProperty< ResEditor,Editor<ResEditor,Residue> >
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ResEditor&);
-friend QDataStream& ::operator>>(QDataStream&, ResEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ResEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResEditor&);
 
 public:
     ResEditor();
@@ -131,8 +131,8 @@ public:
 class SIREMOL_EXPORT ResStructureEditor : public StructureEditor
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ResStructureEditor&);
-friend QDataStream& ::operator>>(QDataStream&, ResStructureEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ResStructureEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResStructureEditor&);
 
 public:
     ResStructureEditor();

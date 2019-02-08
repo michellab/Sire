@@ -76,8 +76,8 @@ This class represents a constant raised to a generic power, e.g. 10^x
 class SIRECAS_EXPORT PowerConstant : public PowerFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PowerConstant&);
-friend QDataStream& ::operator>>(QDataStream&, PowerConstant&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const PowerConstant&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, PowerConstant&);
 
 public:
     PowerConstant();
@@ -133,8 +133,8 @@ RealPower (expression raised to a non-rational power).
 class SIRECAS_EXPORT ConstantPower : public PowerFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ConstantPower&);
-friend QDataStream& ::operator>>(QDataStream&, ConstantPower&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const ConstantPower&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, ConstantPower&);
 
 public:
     ConstantPower() : PowerFunction()
@@ -166,8 +166,8 @@ protected:
 class SIRECAS_EXPORT IntegerPower : public ConstantPower
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IntegerPower&);
-friend QDataStream& ::operator>>(QDataStream&, IntegerPower&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const IntegerPower&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, IntegerPower&);
 
 public:
     IntegerPower();
@@ -209,8 +209,8 @@ private:
 class SIRECAS_EXPORT RationalPower : public ConstantPower
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RationalPower&);
-friend QDataStream& ::operator>>(QDataStream&, RationalPower&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const RationalPower&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, RationalPower&);
 
 public:
     RationalPower();
@@ -251,8 +251,8 @@ private:
 class SIRECAS_EXPORT RealPower : public ConstantPower
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RealPower&);
-friend QDataStream& ::operator>>(QDataStream&, RealPower&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const RealPower&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, RealPower&);
 
 public:
     RealPower();
@@ -293,8 +293,8 @@ private:
 class SIRECAS_EXPORT ComplexPower : public ConstantPower
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ComplexPower&);
-friend QDataStream& ::operator>>(QDataStream&, ComplexPower&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const ComplexPower&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, ComplexPower&);
 
 public:
     ComplexPower();

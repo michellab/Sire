@@ -78,8 +78,8 @@ using SireMol::MoleculeInfoData;
 class SIREMM_EXPORT AtomFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomFunction&);
-friend QDataStream& ::operator>>(QDataStream&, AtomFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, AtomFunction&);
 
 public:
     ~AtomFunction();
@@ -111,8 +111,8 @@ private:
 class SIREMM_EXPORT AtomFunctions : public SireMol::MoleculeProperty
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomFunctions&);
-friend QDataStream& ::operator>>(QDataStream&, AtomFunctions&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomFunctions&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, AtomFunctions&);
 
 public:
     ~AtomFunctions();

@@ -68,8 +68,8 @@ using SireBase::PropertyMap;
 class SIREMM_EXPORT CLJ14Group
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJ14Group&);
-friend QDataStream& ::operator>>(QDataStream&, CLJ14Group&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJ14Group&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJ14Group&);
 
 public:
     CLJ14Group();

@@ -67,8 +67,8 @@ class SIRESYSTEM_EXPORT Constraints
             : public SireBase::ConcreteProperty<Constraints,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Constraints&);
-friend QDataStream& ::operator>>(QDataStream&, Constraints&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const Constraints&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, Constraints&);
 
 public:
     Constraints();

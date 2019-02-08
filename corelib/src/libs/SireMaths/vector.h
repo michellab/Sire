@@ -115,8 +115,8 @@ class Quaternion;
 class SIREMATHS_EXPORT Vector
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Vector&);
-friend QDataStream& ::operator>>(QDataStream&, Vector&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Vector&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Vector&);
 
 public:
     typedef double value_type;
@@ -232,14 +232,14 @@ public:
     static Vector generate(double dst, const Vector &v1, const Angle &ang,
                            const Vector &v2, const Angle &dih, const Vector &v3);
 
-    friend const Vector operator+(const Vector &p1, const Vector &p2);
-    friend const Vector operator-(const Vector &p1, const Vector &p2);
-    friend const Vector operator*(const Vector &p1, double c);
-    friend const Vector operator*(double c, const Vector &p1);
-    friend const Vector operator/(const Vector &p1, double c);
-    friend const Quaternion operator*(const Vector &p1, const Quaternion &p2);
-    friend const Quaternion operator*(const Quaternion &p1, const Vector &p2);
-    friend const Vector operator*(const Matrix &m, const Vector &p);
+    friend SIREMATHS_EXPORT const Vector operator+(const Vector &p1, const Vector &p2);
+    friend SIREMATHS_EXPORT const Vector operator-(const Vector &p1, const Vector &p2);
+    friend SIREMATHS_EXPORT const Vector operator*(const Vector &p1, double c);
+    friend SIREMATHS_EXPORT const Vector operator*(double c, const Vector &p1);
+    friend SIREMATHS_EXPORT const Vector operator/(const Vector &p1, double c);
+    friend SIREMATHS_EXPORT const Quaternion operator*(const Vector &p1, const Quaternion &p2);
+    friend SIREMATHS_EXPORT const Quaternion operator*(const Quaternion &p1, const Vector &p2);
+    friend SIREMATHS_EXPORT const Vector operator*(const Matrix &m, const Vector &p);
 
 protected:
     /** Use four values so that vector arrays can be nicely aligned */

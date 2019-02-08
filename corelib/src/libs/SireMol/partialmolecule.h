@@ -68,8 +68,8 @@ class SIREMOL_EXPORT PartialMolecule
         : public SireBase::ConcreteProperty<PartialMolecule,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PartialMolecule&);
-friend QDataStream& ::operator>>(QDataStream&, PartialMolecule&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const PartialMolecule&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, PartialMolecule&);
 
 public:
     PartialMolecule();

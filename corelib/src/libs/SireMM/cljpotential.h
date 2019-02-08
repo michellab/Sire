@@ -188,8 +188,8 @@ public:
 class SIREMM_EXPORT CLJPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJPotential&);
-friend QDataStream& ::operator>>(QDataStream&, CLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJPotential&);
 
 public:
     virtual ~CLJPotential();
@@ -306,8 +306,8 @@ protected:
 class SIREMM_EXPORT InterCLJPotential : public CLJPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const InterCLJPotential&);
-friend QDataStream& ::operator>>(QDataStream&, InterCLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const InterCLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, InterCLJPotential&);
 
 public:
 
@@ -685,8 +685,8 @@ private:
 class SIREMM_EXPORT IntraCLJPotential : public CLJPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IntraCLJPotential&);
-friend QDataStream& ::operator>>(QDataStream&, IntraCLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const IntraCLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, IntraCLJPotential&);
 
 public:
     typedef CLJEnergy Energy;
@@ -1086,8 +1086,8 @@ template<class CLJPot>
 class CLJPotentialInterface : protected CLJPot
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const CLJPotentialInterface<CLJPot>&);
-friend QDataStream& ::operator>><>(QDataStream&, CLJPotentialInterface<CLJPot>&);
+friend SIREMM_EXPORT QDataStream& ::operator<<<>(QDataStream&, const CLJPotentialInterface<CLJPot>&);
+friend SIREMM_EXPORT QDataStream& ::operator>><>(QDataStream&, CLJPotentialInterface<CLJPot>&);
 
 public:
     CLJPotentialInterface() : CLJPot()

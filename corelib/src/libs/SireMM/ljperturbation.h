@@ -57,8 +57,8 @@ class SIREMM_EXPORT LJPerturbation
          : public SireBase::ConcreteProperty<LJPerturbation,SireMol::Perturbation>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const LJPerturbation&);
-friend QDataStream& ::operator>>(QDataStream&, LJPerturbation&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const LJPerturbation&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, LJPerturbation&);
 
 public:
     enum MapType { MAP_SIGMA_AND_EPSILON = 1,

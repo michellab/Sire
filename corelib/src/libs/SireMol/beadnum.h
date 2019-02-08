@@ -54,8 +54,8 @@ namespace SireMol
 class SIREMOL_EXPORT BeadNum : public SireID::Number, public BeadID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const BeadNum&);
-friend QDataStream& ::operator>>(QDataStream&, BeadNum&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const BeadNum&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, BeadNum&);
 
 public:
     BeadNum();

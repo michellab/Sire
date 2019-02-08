@@ -64,8 +64,8 @@ using SireCAS::Symbol;
 class SIREMOVE_EXPORT MonteCarlo : public Move
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MonteCarlo&);
-friend QDataStream& ::operator>>(QDataStream&, MonteCarlo&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const MonteCarlo&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, MonteCarlo&);
 
 public:
     MonteCarlo(const PropertyMap &map = PropertyMap());

@@ -67,8 +67,8 @@ typedef SireBase::PropPtr<Patching> PatchingPtr;
 class SIREVOL_EXPORT Patching : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Patching&);
-friend QDataStream& ::operator>>(QDataStream&, Patching&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Patching&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, Patching&);
 
 public:
     Patching();
@@ -113,8 +113,8 @@ class SIREVOL_EXPORT NullPatching
         : public SireBase::ConcreteProperty<NullPatching,Patching>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullPatching&);
-friend QDataStream& ::operator>>(QDataStream&, NullPatching&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const NullPatching&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, NullPatching&);
 
 public:
     NullPatching();
@@ -148,8 +148,8 @@ class SIREVOL_EXPORT BoxPatching
         : public SireBase::ConcreteProperty<BoxPatching,Patching>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const BoxPatching&);
-friend QDataStream& ::operator>>(QDataStream&, BoxPatching&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const BoxPatching&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, BoxPatching&);
 
 public:
     BoxPatching();

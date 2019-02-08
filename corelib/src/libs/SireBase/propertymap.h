@@ -89,8 +89,8 @@ class Properties;
 class SIREBASE_EXPORT PropertyName
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PropertyName&);
-friend QDataStream& ::operator>>(QDataStream&, PropertyName&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const PropertyName&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, PropertyName&);
 
 public:
     PropertyName();
@@ -166,8 +166,8 @@ private:
 class SIREBASE_EXPORT PropertyMap
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PropertyMap&);
-friend QDataStream& ::operator>>(QDataStream&, PropertyMap&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const PropertyMap&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, PropertyMap&);
 
 public:
     PropertyMap();

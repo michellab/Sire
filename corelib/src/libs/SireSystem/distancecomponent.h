@@ -63,8 +63,8 @@ class SIRESYSTEM_EXPORT DistanceComponent
          : public SireBase::ConcreteProperty<DistanceComponent,GeometryComponent>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DistanceComponent&);
-friend QDataStream& ::operator>>(QDataStream&, DistanceComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const DistanceComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, DistanceComponent&);
 
 public:
     DistanceComponent();
@@ -124,8 +124,8 @@ class SIRESYSTEM_EXPORT DoubleDistanceComponent
          : public SireBase::ConcreteProperty<DoubleDistanceComponent,GeometryComponent>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DoubleDistanceComponent&);
-friend QDataStream& ::operator>>(QDataStream&, DoubleDistanceComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const DoubleDistanceComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, DoubleDistanceComponent&);
 
 public:
     DoubleDistanceComponent();
@@ -191,8 +191,8 @@ class SIRESYSTEM_EXPORT TripleDistanceComponent
          : public SireBase::ConcreteProperty<TripleDistanceComponent,GeometryComponent>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TripleDistanceComponent&);
-friend QDataStream& ::operator>>(QDataStream&, TripleDistanceComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const TripleDistanceComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, TripleDistanceComponent&);
 
 public:
     TripleDistanceComponent();

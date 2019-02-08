@@ -59,8 +59,8 @@ This is the exponential function, e^x
 class SIRECAS_EXPORT Exp : public PowerFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Exp&);
-friend QDataStream& ::operator>>(QDataStream&, Exp&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Exp&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Exp&);
 
 public:
     Exp();
@@ -107,8 +107,8 @@ private:
 class SIRECAS_EXPORT Ln : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Ln&);
-friend QDataStream& ::operator>>(QDataStream&, Ln&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Ln&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Ln&);
 
 public:
     Ln();

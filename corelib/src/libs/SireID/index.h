@@ -63,8 +63,8 @@ namespace SireID
 class SIREID_EXPORT IndexBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IndexBase&);
-friend QDataStream& ::operator>>(QDataStream&, IndexBase&);
+friend SIREID_EXPORT QDataStream& ::operator<<(QDataStream&, const IndexBase&);
+friend SIREID_EXPORT QDataStream& ::operator>>(QDataStream&, IndexBase&);
 
 public:
     ~IndexBase();

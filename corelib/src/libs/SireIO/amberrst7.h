@@ -60,8 +60,8 @@ namespace SireIO
 class SIREIO_EXPORT AmberRst7 : public SireBase::ConcreteProperty<AmberRst7,MoleculeParser>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AmberRst7&);
-friend QDataStream& ::operator>>(QDataStream&, AmberRst7&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const AmberRst7&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, AmberRst7&);
 
 public:
     AmberRst7();

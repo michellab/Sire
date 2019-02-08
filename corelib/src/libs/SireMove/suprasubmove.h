@@ -59,8 +59,8 @@ class SupraSubSystem;
 class SIREMOVE_EXPORT SupraSubMove : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SupraSubMove&);
-friend QDataStream& ::operator>>(QDataStream&, SupraSubMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SupraSubMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SupraSubMove&);
 
 public:
     SupraSubMove();
@@ -102,8 +102,8 @@ class SIREMOVE_EXPORT NullSupraSubMove
         : public SireBase::ConcreteProperty<NullSupraSubMove,SupraSubMove>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullSupraSubMove&);
-friend QDataStream& ::operator>>(QDataStream&, NullSupraSubMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const NullSupraSubMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, NullSupraSubMove&);
 
 public:
     NullSupraSubMove();

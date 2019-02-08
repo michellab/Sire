@@ -68,8 +68,8 @@ class SIREMOVE_EXPORT ZMatMove
             : public SireBase::ConcreteProperty<ZMatMove,MonteCarlo>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ZMatMove&);
-friend QDataStream& ::operator>>(QDataStream&, ZMatMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const ZMatMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, ZMatMove&);
 
 public:
     ZMatMove(const PropertyMap &map = PropertyMap());

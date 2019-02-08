@@ -61,8 +61,8 @@ class SIREMOVE_EXPORT OpenMMFrEnergyDT
 		: public SireBase::ConcreteProperty<OpenMMFrEnergyDT,Integrator>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const OpenMMFrEnergyDT&);
-friend QDataStream& ::operator>>(QDataStream&, OpenMMFrEnergyDT&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const OpenMMFrEnergyDT&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, OpenMMFrEnergyDT&);
 
 public:
 	OpenMMFrEnergyDT(bool frequent_save_velocities = false);

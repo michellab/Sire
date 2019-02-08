@@ -72,8 +72,8 @@ class IntraGroupFFData;
 class SIREMM_EXPORT IntraGroupFF : public SireBase::ConcreteProperty<IntraGroupFF,SireFF::G2FF>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IntraGroupFF&);
-friend QDataStream& ::operator>>(QDataStream&, IntraGroupFF&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const IntraGroupFF&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, IntraGroupFF&);
 
 public:
     IntraGroupFF();

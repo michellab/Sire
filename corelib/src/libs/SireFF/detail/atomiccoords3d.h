@@ -78,8 +78,8 @@ SIREFF_EXPORT bool selectedAll(const QSet<quint32> &idxs, quint32 n);
 class SIREFF_EXPORT AtomicCoords3D
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomicCoords3D&);
-friend QDataStream& ::operator>>(QDataStream&, AtomicCoords3D&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomicCoords3D&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, AtomicCoords3D&);
 
 public:
     AtomicCoords3D();

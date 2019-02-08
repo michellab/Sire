@@ -54,8 +54,8 @@ class SIREMOL_EXPORT ResIdx
        : public SireID::Index_T_<ResIdx>, public ResID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ResIdx&);
-friend QDataStream& ::operator>>(QDataStream&, ResIdx&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ResIdx&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResIdx&);
 
 public:
     ResIdx();

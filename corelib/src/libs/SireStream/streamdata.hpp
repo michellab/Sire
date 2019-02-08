@@ -117,8 +117,8 @@ SIRESTREAM_EXPORT QList< boost::tuple<boost::shared_ptr<void>,QString> > load(co
 class SIRESTREAM_EXPORT FileHeader
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FileHeader&);
-friend QDataStream& ::operator>>(QDataStream&, FileHeader&);
+friend SIRESTREAM_EXPORT QDataStream& ::operator<<(QDataStream&, const FileHeader&);
+friend SIRESTREAM_EXPORT QDataStream& ::operator>>(QDataStream&, FileHeader&);
 
 friend QByteArray detail::streamDataSave( 
                         const QList< boost::tuple<const void*,const char*> >& );

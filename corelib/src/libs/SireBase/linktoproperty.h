@@ -59,8 +59,8 @@ namespace SireBase
 class SIREBASE_EXPORT LinkToProperty : public ConcreteProperty<LinkToProperty,Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const LinkToProperty&);
-friend QDataStream& ::operator>>(QDataStream&, LinkToProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const LinkToProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, LinkToProperty&);
 
 public:
     LinkToProperty();

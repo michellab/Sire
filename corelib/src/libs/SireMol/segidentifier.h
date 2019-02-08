@@ -50,8 +50,8 @@ class SegIdx;
 class SIREMOL_EXPORT SegIdentifier : public SegID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SegIdentifier&);
-friend QDataStream& ::operator>>(QDataStream&, SegIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const SegIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, SegIdentifier&);
 
 public:
     SegIdentifier();

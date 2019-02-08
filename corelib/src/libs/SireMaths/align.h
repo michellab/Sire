@@ -62,8 +62,8 @@ namespace SireMaths
     class SIREMATHS_EXPORT Transform
     {
     
-    friend QDataStream& ::operator<<(QDataStream&, const Transform&);
-    friend QDataStream& ::operator>>(QDataStream&, Transform&);
+    friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Transform&);
+    friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Transform&);
     
     public:
         Transform();

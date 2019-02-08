@@ -68,8 +68,8 @@ SIREMATHS_EXPORT void seed_qrand();
 class SIREMATHS_EXPORT RanGenerator
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RanGenerator&);
-friend QDataStream& ::operator>>(QDataStream&, RanGenerator&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const RanGenerator&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, RanGenerator&);
 
 public:
     RanGenerator();

@@ -73,8 +73,8 @@ using SireMol::AtomMatcher;
 class SIREMM_EXPORT ThreeAtomFunction : public AtomFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ThreeAtomFunction&);
-friend QDataStream& ::operator>>(QDataStream&, ThreeAtomFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const ThreeAtomFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, ThreeAtomFunction&);
 
 public:
     ThreeAtomFunction();
@@ -140,8 +140,8 @@ class SIREMM_EXPORT ThreeAtomFunctions
         : public SireBase::ConcreteProperty<ThreeAtomFunctions,AtomFunctions>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ThreeAtomFunctions&);
-friend QDataStream& ::operator>>(QDataStream&, ThreeAtomFunctions&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const ThreeAtomFunctions&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, ThreeAtomFunctions&);
 
 public:
     ThreeAtomFunctions();

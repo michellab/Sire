@@ -52,8 +52,8 @@ namespace SireBase
 class SIREBASE_EXPORT StringProperty : public ConcreteProperty<StringProperty,Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const StringProperty&);
-friend QDataStream& ::operator>>(QDataStream&, StringProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const StringProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, StringProperty&);
 
 public:
     StringProperty();

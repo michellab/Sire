@@ -52,8 +52,8 @@ namespace SireIO
 class SIREIO_EXPORT Supplementary : public SireBase::ConcreteProperty<Supplementary,MoleculeParser>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Supplementary&);
-friend QDataStream& ::operator>>(QDataStream&, Supplementary&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const Supplementary&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, Supplementary&);
 
 public:
     Supplementary();

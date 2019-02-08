@@ -84,8 +84,8 @@ class SIREMM_EXPORT CLJAtom
 
 friend class CLJAtoms;
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJAtom&);
-friend QDataStream& ::operator>>(QDataStream&, CLJAtom&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJAtom&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJAtom&);
 
 public:
     CLJAtom();
@@ -150,8 +150,8 @@ private:
 class SIREMM_EXPORT CLJAtoms
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJAtoms&);
-friend QDataStream& ::operator>>(QDataStream&, CLJAtoms&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJAtoms&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJAtoms&);
 
 public:
     enum ID_SOURCE
