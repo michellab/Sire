@@ -3,39 +3,48 @@
 
 #include "SireMaths_registrars.h"
 
-#include "line.h"
-#include "histogram.h"
+#include "vectorproperty.h"
+#include "torsion.h"
+#include "align.h"
+#include "freeenergyaverage.h"
+#include "rangenerator.h"
+#include "nmatrix.h"
+#include "n4matrix.h"
+#include "sphere.h"
+#include "quaternion.h"
+#include "matrix.h"
+#include "plane.h"
 #include "trigmatrix.h"
 #include "nvector.h"
-#include "align.h"
-#include "plane.h"
 #include "accumulator.h"
 #include "axisset.h"
-#include "triangle.h"
-#include "rangenerator.h"
-#include "sphere.h"
-#include "vectorproperty.h"
-#include "vector.h"
-#include "n4matrix.h"
-#include "complex.h"
-#include "quaternion.h"
 #include "distvector.h"
-#include "torsion.h"
-#include "nmatrix.h"
-#include "matrix.h"
-#include "freeenergyaverage.h"
+#include "histogram.h"
+#include "triangle.h"
+#include "line.h"
+#include "vector.h"
+#include "complex.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_SireMaths_objects()
 {
 
-    ObjectRegistry::registerConverterFor< SireMaths::Line >();
-    ObjectRegistry::registerConverterFor< SireMaths::Histogram >();
+    ObjectRegistry::registerConverterFor< SireMaths::VectorProperty >();
+    ObjectRegistry::registerConverterFor< SireMaths::VectorArrayProperty >();
+    ObjectRegistry::registerConverterFor< SireMaths::Torsion >();
+    ObjectRegistry::registerConverterFor< SireMaths::Transform >();
+    ObjectRegistry::registerConverterFor< SireMaths::FreeEnergyAverage >();
+    ObjectRegistry::registerConverterFor< SireMaths::BennettsFreeEnergyAverage >();
+    ObjectRegistry::registerConverterFor< SireMaths::RanGenerator >();
+    ObjectRegistry::registerConverterFor< SireMaths::NMatrix >();
+    ObjectRegistry::registerConverterFor< SireMaths::N4Matrix >();
+    ObjectRegistry::registerConverterFor< SireMaths::Sphere >();
+    ObjectRegistry::registerConverterFor< SireMaths::Quaternion >();
+    ObjectRegistry::registerConverterFor< SireMaths::Matrix >();
+    ObjectRegistry::registerConverterFor< SireMaths::Plane >();
     ObjectRegistry::registerConverterFor< SireMaths::TrigMatrix >();
     ObjectRegistry::registerConverterFor< SireMaths::NVector >();
-    ObjectRegistry::registerConverterFor< SireMaths::Transform >();
-    ObjectRegistry::registerConverterFor< SireMaths::Plane >();
     ObjectRegistry::registerConverterFor< SireMaths::NullAccumulator >();
     ObjectRegistry::registerConverterFor< SireMaths::Average >();
     ObjectRegistry::registerConverterFor< SireMaths::AverageAndStddev >();
@@ -43,21 +52,12 @@ void register_SireMaths_objects()
     ObjectRegistry::registerConverterFor< SireMaths::Median >();
     ObjectRegistry::registerConverterFor< SireMaths::RecordValues >();
     ObjectRegistry::registerConverterFor< SireMaths::AxisSet >();
-    ObjectRegistry::registerConverterFor< SireMaths::Triangle >();
-    ObjectRegistry::registerConverterFor< SireMaths::RanGenerator >();
-    ObjectRegistry::registerConverterFor< SireMaths::Sphere >();
-    ObjectRegistry::registerConverterFor< SireMaths::VectorProperty >();
-    ObjectRegistry::registerConverterFor< SireMaths::VectorArrayProperty >();
-    ObjectRegistry::registerConverterFor< SireMaths::Vector >();
-    ObjectRegistry::registerConverterFor< SireMaths::N4Matrix >();
-    ObjectRegistry::registerConverterFor< SireMaths::Complex >();
-    ObjectRegistry::registerConverterFor< SireMaths::Quaternion >();
     ObjectRegistry::registerConverterFor< SireMaths::DistVector >();
-    ObjectRegistry::registerConverterFor< SireMaths::Torsion >();
-    ObjectRegistry::registerConverterFor< SireMaths::NMatrix >();
-    ObjectRegistry::registerConverterFor< SireMaths::Matrix >();
-    ObjectRegistry::registerConverterFor< SireMaths::FreeEnergyAverage >();
-    ObjectRegistry::registerConverterFor< SireMaths::BennettsFreeEnergyAverage >();
+    ObjectRegistry::registerConverterFor< SireMaths::Histogram >();
+    ObjectRegistry::registerConverterFor< SireMaths::Triangle >();
+    ObjectRegistry::registerConverterFor< SireMaths::Line >();
+    ObjectRegistry::registerConverterFor< SireMaths::Vector >();
+    ObjectRegistry::registerConverterFor< SireMaths::Complex >();
 
 }
 

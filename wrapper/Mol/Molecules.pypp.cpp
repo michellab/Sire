@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "Molecules.pypp.hpp"
 
 namespace bp = boost::python;
@@ -161,7 +160,7 @@ void register_Molecules_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the view(s) of the molecule that has number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
@@ -197,7 +196,7 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "back"
                 , back_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "STL compatible version of Molecules::last()" );
         
         }
@@ -279,7 +278,7 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "first"
                 , first_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return a reference to the first molecule in this set.\nThis throws an exception if this set is empty.\nThrow: SireError::invalid_index\n" );
         
         }
@@ -291,7 +290,7 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "front"
                 , front_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "STL compatible version of Molecules::first()" );
         
         }
@@ -338,7 +337,7 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "last"
                 , last_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return a reference to the last molecule in this set.\nThis throws an exception if this set is empty.\nThrow: SireError::invalid_index\n" );
         
         }
@@ -362,7 +361,7 @@ void register_Molecules_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the molecule at number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
@@ -426,7 +425,7 @@ void register_Molecules_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
         }

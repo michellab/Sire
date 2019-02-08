@@ -69,7 +69,7 @@ void register_Element_class(){
             Element_exposer.def( 
                 "biological"
                 , biological_function_value
-                , "Return whether or not this is biological\n(in first three periods and not a noble gas)\n(this does preclude iron, potassium and calcium, which are\nrather biological... :-)" );
+                , "Return whether or not this is biological\n(in first three periods and not a noble gas, or a halogen)\n(this does preclude iron, potassium and calcium, which are\nrather biological... :-)" );
         
         }
         { //::SireMol::Element::biologicalElement
