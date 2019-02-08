@@ -224,6 +224,10 @@ def has_clone_function(t):
     except:
         return False
 
+    if c.name == "ViewsOfMol":
+        # we don't clone-wrap this class!
+        return False
+
     try:
         c.mem_funs("clone")
         return True
@@ -570,20 +574,13 @@ if __name__ == "__main__":
         
     sire_include_dirs = [ rootdir, "%s/%s" % (rootdir,sourcedir) ]
 
-    # All of the headers must be installed in the pkgs/sire-*** directory
-    # - lets locate this directory
-    dir = glob( "%s/../pkgs/sire-*" % os.path.dirname(sys.executable) )
+    # All of the headers must be installed in the sire.app/include directory
+    dir = os.path.dirname(sys.executable)
 
-    if len(dir) == 0:
-        print("Cannot find the Sire directory. Please use the python that comes with "
-              "the anaconda/miniconda python, and that you have already installed the "
-              "Sire corelib into the anaconda/miniconda distribution.")
-        sys.exit(-1)
-
-    qtdir = "%s/bundled/include" % os.path.abspath(dir[0])
-    boostdir = qtdir
-    gsldir = qtdir
-    openmm_include_dir = "%s/../include" % os.path.dirname(sys.executable)
+    qtdir = "%s/../include/qt" % os.path.abspath(dir)
+    boostdir = "%s/../include" % os.path.abspath(dir)
+    gsldir = boostdir
+    openmm_include_dir = boostdir
 
     need_input = False 
 
