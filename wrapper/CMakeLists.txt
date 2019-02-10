@@ -249,6 +249,9 @@ endif()
 if (SIRE_GSL_INCLUDE_PATH)
   include_directories (${SIRE_GSL_INCLUDE_PATH})
 endif()
+if (DEFINED SIRE_APP)
+  include_directories( "${SIRE_APP}/include" "${SIRE_APP}/Library/include" )
+endif()
 
 # MUST build shared libraries
 set (BUILD_SHARED_LIBS ON)

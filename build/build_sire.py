@@ -344,6 +344,7 @@ if __name__ == "__main__":
         if (CXX):
             os.environ["CXX"] = CXX
         print(cmake_cmd)
+        sys.stdout.flush()
         status = os.system(cmake_cmd)
 
     if status != 0:
@@ -354,6 +355,7 @@ if __name__ == "__main__":
     make_args = make_cmd(NCORES, True)
                 
     print("NOW RUNNING \"%s\" --build . --target %s" % (cmake, make_args))
+    sys.stdout.flush()
     status = os.system("\"%s\" --build . --target %s" % (cmake, make_args))
 
     if status != 0:
@@ -394,6 +396,7 @@ if __name__ == "__main__":
             " ".join(["-D \"%s\"" % d[0] for d in args.wrapper]),
             " ".join(["-G \"%s\"" % g for g in args.generator]), sourcedir)
         print(cmake_cmd)
+        sys.stdout.flush()
         status = os.system(cmake_cmd)
 
     if status != 0: 
@@ -404,6 +407,7 @@ if __name__ == "__main__":
 
     # Now that cmake has run, we can compile and install wrapper
     print("NOW RUNNING \"%s\" --build . --target %s" % (cmake, make_args))
+    sys.stdout.flush()
     status = os.system("\"%s\" --build . --target %s" % (cmake, make_args))
 
     if status != 0:

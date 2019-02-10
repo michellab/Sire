@@ -863,7 +863,9 @@ get_filename_component(SIRE_QT5CORE_DIR ${QT5_LOCATION} PATH)
 message( STATUS "Qt5Core location ${SIRE_QT5CORE_DIR}" )
 save_sire_variable( "SIRE_QT5CORE_DIR" "${SIRE_QT5CORE_DIR}" )
 
-include_directories( "${SIRE_APP}/include" )
+if (DEFINED SIRE_APP)
+  include_directories( "${SIRE_APP}/include" "${SIRE_APP}/Library/include" )
+endif()
 
 if (NOT ${SIRE_FOUND_BOOST})
   # Sire depends on >= boost 1.31 - all libraries must be dynamically linked

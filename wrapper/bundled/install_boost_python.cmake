@@ -6,10 +6,30 @@
 unset(BOOST_PYTHON_LIBRARY CACHE)
 
 if ( ANACONDA_BUILD )
-  find_library( BOOST_PYTHON_LIBRARY
-                NAMES boost_python
-                PATHS ${SIRE_APP}/lib NO_DEFAULT_PATH )
-
+  if (MSVC)
+    find_package( Boost 1.31 COMPONENTS
+      python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR} REQUIRED )
+    set ( BOOST_PYTHON_LIBRARY "${Boost_LIBRARIES}" )
+    set ( BOOST_PYTHON_HEADERS "${Boost_INCLUDE_DIR}" )
+    add_definitions("/DBOOST_PYTHON_NO_LIB")
+    #file(READ "${Boost_INCLUDE_DIR}/boost/python/detail/config.hpp" CONFIG_HPP_DATA)
+    #if (NOT CONFIG_HPP_DATA MATCHES "BOOST_PYTHON_CONCAT")
+    #  configure_file("${Boost_INCLUDE_DIR}/boost/python/detail/config.hpp"
+    #    "${Boost_INCLUDE_DIR}/boost/python/detail/config.hpp.orig" COPYONLY)
+    #  string(REGEX REPLACE "(#define BOOST_LIB_NAME boost_python##PY_MAJOR_VERSION##PY_MINOR_VERSION)"
+    #    "\\1\n#define _BOOST_PYTHON_CONCAT(N, M, m) N ## M ## m\n#define BOOST_PYTHON_CONCAT(N, M, m) _BOOST_PYTHON_CONCAT(N, M, m)\n#define BOOST_LIB_NAME BOOST_PYTHON_CONCAT(boost_python, PY_MAJOR_VERSION, PY_MINOR_VERSION)"
+    #    CONFIG_HPP_DATA "${CONFIG_HPP_DATA}")
+    #  string(REGEX REPLACE "(#endif  // auto-linking disabled)"
+    #    "\\1\n#undef BOOST_PYTHON_CONCAT\n#undef _BOOST_PYTHON_CONCAT"
+    #    CONFIG_HPP_DATA "${CONFIG_HPP_DATA}")
+    #  file(WRITE "${Boost_INCLUDE_DIR}/boost/python/detail/config.hpp" "${CONFIG_HPP_DATA}")
+    #endif()
+    message("*** BOOST_PYTHON_LIBRARY ${BOOST_PYTHON_LIBRARY}")
+  else()
+    find_library( BOOST_PYTHON_LIBRARY
+                  NAMES boost_python
+                  PATHS ${SIRE_APP}/lib NO_DEFAULT_PATH )
+  endif()
 elseif ( MSYS )
   message( STATUS "Looking for MSYS version of boost::python..." )
   set (BOOST_ALL_DYN_LINK "YES")

@@ -7,6 +7,8 @@ if (ANACONDA_BUILD)
   # we will just use the python that comes with anaconda
   if (MSYS)
     set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/python" )
+  elseif (MSVC)
+    set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/python.exe" )
   else()
     set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/bin/python3" )
   endif()
@@ -24,6 +26,10 @@ if (ANACONDA_BUILD)
     set( PYTHON_LIBRARY "${ANACONDA_BASE}/lib/python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.lib" )
     set( PYTHON_INCLUDE_DIR "${ANACONDA_BASE}/include" )
     find_package(PythonLibs ${PYTHON_VERSION} REQUIRED)
+  elseif (MSVC)
+    find_library( PYTHON_LIBRARY
+                  NAMES python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.lib
+                  PATHS ${ANACONDA_BASE}/libs NO_DEFAULT_PATH )
   else()
     find_library( PYTHON_LIBRARY
                   NAMES python${PYTHON_VERSION}${PYTHON_ABIFLAGS}
@@ -180,7 +186,12 @@ if ( ANACONDA_BUILD )
     set( PYTHON_MODULE_EXTENSION ".pyd" )
   else()
     set( PYTHON_MODULE_EXTENSION ".so" )
-    set( PYTHON_INCLUDE_DIR "${ANACONDA_BASE}/include/python${PYTHON_VERSION}${PYTHON_ABIFLAGS}")
+    get_filename_component(PYTHON_INCLUDE_DIR "${PYTHON_LIBRARY}" DIRECTORY)
+    get_filename_component(PYTHON_INCLUDE_DIR "${PYTHON_INCLUDE_DIR}" DIRECTORY)
+    set( PYTHON_INCLUDE_DIR "${PYTHON_INCLUDE_DIR}/include")
+    if (NOT MSVC)
+      set( PYTHON_INCLUDE_DIR "${PYTHON_INCLUDE_DIR}/python${PYTHON_VERSION}${PYTHON_ABIFLAGS}" )
+    endif()
   endif()
 
   if (APPLE)
