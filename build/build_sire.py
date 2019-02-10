@@ -212,6 +212,14 @@ if __name__ == "__main__":
             else:
                 conda_pkgs.append("make")
             make = os.path.join(conda_bin, "make")
+            if os.path.exists(os.path.join(conda_bin, "libtool")):
+                print("libtool is already installed...")
+            else:
+                conda_pkgs.append("libtool")
+            if os.path.exists(os.path.join(conda_bin, "autoreconf")):
+                print("autoconf is already installed...")
+            else:
+                conda_pkgs.append("autoconf")
 
         if os.path.exists(os.path.join(conda_bin, "cmake%s" % exe_suffix)):
             print("cmake is already installed...")
