@@ -54,6 +54,8 @@ namespace bp = boost::python;
 
 #include <QTime>
 
+#include <cmath>
+
 #include "rigidbodymc.h"
 
 SireMove::RigidBodyMC __copy__(const SireMove::RigidBodyMC &other){ return SireMove::RigidBodyMC(other); }
