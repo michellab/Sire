@@ -109,6 +109,8 @@ namespace bp = boost::python;
 
 #include <QRegularExpression>
 
+#include <QSet>
+
 #include <QTextStream>
 
 #include <tuple>

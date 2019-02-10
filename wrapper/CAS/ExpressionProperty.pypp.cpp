@@ -36,7 +36,7 @@ void register_ExpressionProperty_class(){
         ExpressionProperty_exposer_t ExpressionProperty_exposer = ExpressionProperty_exposer_t( "ExpressionProperty", "This class provides a thin Property wrapper around SireCAS objects\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this constructs an empty expression") );
         bp::scope ExpressionProperty_scope( ExpressionProperty_exposer );
         ExpressionProperty_exposer.def( bp::init< SireCAS::ExBase const & >(( bp::arg("exbase") ), "Construct from the passed expression") );
-        ExpressionProperty_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("expression") ), "Copy constructor") );
+        ExpressionProperty_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("expression") ), "Construct from the passed expression") );
         ExpressionProperty_exposer.def( bp::init< SireCAS::ExpressionProperty const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ExpressionProperty::asABoolean
         
