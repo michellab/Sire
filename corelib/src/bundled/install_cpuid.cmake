@@ -89,20 +89,23 @@ else()
                      )
     else()
       message( STATUS "Patience... Configuring libcpuid..." )
-      execute_process( COMMAND ${CPUID_BUILD_DIR}/configure ${CPUID_OPTIONS}
+      execute_process( COMMAND "libtoolize"
                        WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                       OUTPUT_QUIET ERROR_QUIET 
+                     )
+      execute_process( COMMAND "autoreconf" "--install"
+                       WORKING_DIRECTORY ${CPUID_BUILD_DIR}
+                     )
+      execute_process( COMMAND "${CPUID_BUILD_DIR}/configure" ${CPUID_OPTIONS}
+                       WORKING_DIRECTORY ${CPUID_BUILD_DIR}
                      )
       message( STATUS "Patience... Compiling libcpuid..." )
-      execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -k -j ${NCORES}
+      execute_process( COMMAND "${CMAKE_MAKE_PROGRAM}" -k -j ${NCORES}
                        WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                       OUTPUT_QUIET ERROR_QUIET 
                      )
 
       message( STATUS "Patience... Installing libcpuid..." )
       execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} install
                        WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                       OUTPUT_QUIET ERROR_QUIET 
                      )
     endif()
 
