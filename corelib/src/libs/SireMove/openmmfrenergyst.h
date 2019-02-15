@@ -242,7 +242,7 @@ namespace SireMove {
         SireUnits::Dimension::Length cutoff_distance;
         double field_dielectric;
            
-        QString CombiningRules; 
+        QString combiningRules; 
         QString combining_rules;
         
         bool Andersen_flag;
