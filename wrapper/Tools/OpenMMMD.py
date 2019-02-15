@@ -408,7 +408,7 @@ def setupForcefields(system, space):
 
     system.setProperty("space", space)
     system.setProperty("switchingFunction", CHARMMSwitchingFunction(cutoff_dist.val))
-    system.setProperty("CombiningRules", VariantProperty(combining_rules.val))
+    system.setProperty("combiningRules", VariantProperty(combining_rules.val))
 
     total_nrg = internonbondedff.components().total() + \
                 intranonbondedff.components().total() + intrabondedff.components().total() + \
@@ -437,7 +437,7 @@ def setupMoves(system, random_seed, GPUS):
     Integrator_OpenMM.setPlatform(platform.val)
     Integrator_OpenMM.setConstraintType(constraint.val)
     Integrator_OpenMM.setCutoffType(cutoff_type.val)
-    Integrator_OpenMM.setCombiningRules(combining_rules.val)
+    Integrator_OpenMM.setcombiningRules(combining_rules.val)
     Integrator_OpenMM.setIntegrator(integrator_type.val)
     Integrator_OpenMM.setFriction(inverse_friction.val)  # Only meaningful for Langevin/Brownian integrators
     Integrator_OpenMM.setPrecision(precision.val)
@@ -1077,7 +1077,7 @@ def setupForceFieldsFreeEnergy(system, space):
     else:
         system.setProperty("switchingFunction", NoCutoff())
 
-    system.setProperty("CombiningRules", VariantProperty(combining_rules.val))
+    system.setProperty("combiningRules", VariantProperty(combining_rules.val))
     system.setProperty("coulombPower", VariantProperty(coulomb_power.val))
     system.setProperty("shiftDelta", VariantProperty(shift_delta.val))
 
@@ -1136,7 +1136,7 @@ def setupMovesFreeEnergy(system, random_seed, GPUS, lam_val):
     Integrator_OpenMM.setFriction(inverse_friction.val)  # Only meaningful for Langevin/Brownian integrators
     Integrator_OpenMM.setPlatform(platform.val)
     Integrator_OpenMM.setConstraintType(constraint.val)
-    Integrator_OpenMM.setCombiningRules(combining_rules.val)
+    Integrator_OpenMM.setcombiningRules(combining_rules.val)
     Integrator_OpenMM.setCutoffType(cutoff_type.val)
     Integrator_OpenMM.setFieldDielectric(rf_dielectric.val)
     Integrator_OpenMM.setAlchemicalValue(lambda_val.val)
