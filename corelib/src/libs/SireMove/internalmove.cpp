@@ -255,6 +255,14 @@ void InternalMove::_pvt_setTemperature(const Temperature &temperature)
     MonteCarlo::setEnsemble( Ensemble::NVT(temperature) );
 }
 
+double clipDouble(double value)
+{
+    static const double mindbl = std::numeric_limits<double>::min();
+    static const double maxdbl = std::numeric_limits<double>::max();
+
+    return (std::min)(maxdbl, (std::max)(mindbl, value));
+}
+
 /** Actually perform 'nmoves' moves of the molecules in the 
     system 'system', optionally recording simulation statistics
     if 'record_stats' is true */
@@ -399,8 +407,8 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
             {
                 //const Length bond_delta_value = flex.bond_deltas[bond];
                 double bond_delta_value = flex.delta(bond);
-                bond_delta = Length( this->generator().rand(-bond_delta_value, 
-                                                             bond_delta_value) );
+                bond_delta = Length( clipDouble(this->generator().rand(-bond_delta_value,
+                                                             bond_delta_value)) );
 
                 mol_mover.change(bond, bond_delta, map);
             }
@@ -412,8 +420,8 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
             {
                 //const Angle angle_delta_value = flex.angle_deltas[angle];
                 double angle_delta_value = flex.delta(angle);
-                angle_delta = Angle( this->generator().rand(-angle_delta_value,
-                                                             angle_delta_value) );	      
+                angle_delta = Angle( clipDouble(this->generator().rand(-angle_delta_value,
+                                                             angle_delta_value)) );
 
                 mol_mover.change(angle, angle_delta, map);
             }
@@ -424,8 +432,8 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
             foreach (const DihedralID &dihedral, moved_dihedrals)
             {
                 double angle_delta_value = flex.delta(dihedral);
-                dihedral_delta =  Angle( this->generator().rand(-angle_delta_value,
-                                                                 angle_delta_value) );
+                dihedral_delta =  Angle( clipDouble(this->generator().rand(-angle_delta_value,
+                                                                 angle_delta_value)) );
 
                 // 50% chance to either rotate around central bond or to just change that dihedral
                 if (this->generator().randBool())

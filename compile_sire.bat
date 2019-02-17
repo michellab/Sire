@@ -26,7 +26,7 @@ rem If first character starts with a - or / it must be an option
 if /i "%getopt_prm:~0,1%"=="-" call :option
 if /i "%getopt_prm:~0,1%"=="/" call :option 
 if /i "%isparam%"=="1" call :param
-goto :main
+exit /B 0
 
 :option
     set isparam=0
@@ -35,7 +35,7 @@ goto :main
 
     rem If the index is GE 0 then we must have a colon in the option.
     if /i "%getopt_eq_idx%"=="0" (call :nocolon) else (call :colon)
-    goto :main
+    exit /B 0
 
         :colon
             rem set the OPTION value to the stuff to the right of the colon
@@ -43,21 +43,21 @@ goto :main
             call set getopt_prm_name=%%getopt_prm:~1,%getopt_prm_name_end%%%
             call set getopt_prm_value=%%getopt_prm:~%getopt_eq_idx%%%
             set OPTION_%getopt_prm_name%=%getopt_prm_value%
-            goto :main
+            exit /B 0
 
         :nocolon
             rem This is a flag, so simply set the value to 1
             set getopt_prm_name=%getopt_prm:~1%
             set getopt_prm_value=1
             set OPTION_%getopt_prm_name%=%getopt_prm_value%
-            goto :main
+            exit /B 0
 
 :param
     rem There was no / or - found, therefore this must be a paramater, not an option
     set PARAM_%getopt_prm_count%=%getopt_prm%
     set PARAM_0=%getopt_prm_count%
     set /a getopt_prm_count+=1
-    goto :main
+    exit /B 0
 
 :main
 if defined OPTION_h set OPTION_help=1
@@ -105,6 +105,8 @@ if exist "%INSTALL_SIRE_DIR%\python.exe" (
     echo ** "%INSTALL_SIRE_DIR%\python.exe" build\build_sire.py -G "%GENERATOR%" **
     call "%INSTALL_SIRE_DIR%\Scripts\activate.bat
     "%INSTALL_SIRE_DIR%\python.exe" build\build_sire.py -G "%GENERATOR%"
+    call conda.bat deactivate
+    exit /B 0
 ) else (
     echo ** FATAL **
     echo ** Cannot find "%INSTALL_SIRE_DIR%\python.exe" **

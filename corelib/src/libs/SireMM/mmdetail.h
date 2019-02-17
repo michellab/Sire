@@ -38,8 +38,8 @@ namespace SireMM
 class MMDetail;
 }
 
-SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::MMDetail&);
-SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMM::MMDetail&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::MMDetail&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::MMDetail&);
 
 namespace SireMM
 {
