@@ -94,19 +94,25 @@ else()
                        OUTPUT_VARIABLE outvar
                        ERROR_VARIABLE errvar
                      )
-      message("libtoolize OUTPUT\n${OUTPUT_VARIABLE}\nERROR\n${ERROR_VARIABLE}\n")
+      message("libtoolize OUTPUT\n${outvar}\nERROR\n${errvar}\n")
       execute_process( COMMAND "autoreconf" "--install"
                        WORKING_DIRECTORY ${CPUID_BUILD_DIR}
                        OUTPUT_VARIABLE outvar
                        ERROR_VARIABLE errvar
                      )
-      message("autoreconf OUTPUT\n${OUTPUT_VARIABLE}\nERROR\n${ERROR_VARIABLE}\n")
+      message("autoreconf OUTPUT\n${outvar}\nERROR\n${errvar}\n")
       execute_process( COMMAND "${CPUID_BUILD_DIR}/configure" ${CPUID_OPTIONS}
                        WORKING_DIRECTORY ${CPUID_BUILD_DIR}
                        OUTPUT_VARIABLE outvar
                        ERROR_VARIABLE errvar
                      )
-      message("configure OUTPUT\n${OUTPUT_VARIABLE}\nERROR\n${ERROR_VARIABLE}\n")
+      message("configure OUTPUT\n${outvar}\nERROR\n${errvar}\n")
+      execute_process( COMMAND "/bin/ls" "${CPUID_BUILD_DIR}"
+                       WORKING_DIRECTORY ${CPUID_BUILD_DIR}
+                       OUTPUT_VARIABLE outvar
+                       ERROR_VARIABLE errvar
+                     )
+      message("ls OUTPUT\n${outvar}\nERROR\n${errvar}\n")
       file(READ "${CPUID_BUILD_DIR}/config.log" configvar)
       message("config.log\n${configvar}\n") 
       message( STATUS "Patience... Compiling libcpuid..." )
