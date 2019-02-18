@@ -106,6 +106,7 @@ if exist "%INSTALL_SIRE_DIR%\python.exe" (
     call "%INSTALL_SIRE_DIR%\Scripts\activate.bat
     "%INSTALL_SIRE_DIR%\python.exe" build\build_sire.py -G "%GENERATOR%"
     call conda.bat deactivate
+    set PROMPT=$P$G
     exit /B 0
 ) else (
     echo ** FATAL **
