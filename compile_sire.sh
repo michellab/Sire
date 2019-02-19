@@ -183,7 +183,7 @@ if [ ! -z "$CONDA_PYTHON" ]; then
     CONDA_BINDIR="`dirname "$CONDA_PYTHON"`"
     echo "** Running the conda activate script... **"
     echo "** . \"$CONDA_BINDIR/activate\""
-    . "$CONDA_BINDIR/activate"
+    source "$CONDA_BINDIR/activate" ""
     echo "** Running the Python install script... **"
     echo "** \"$CONDA_PYTHON\" build/build_sire.py **"
     "$CONDA_PYTHON" build/build_sire.py
