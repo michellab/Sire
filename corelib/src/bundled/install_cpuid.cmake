@@ -91,30 +91,13 @@ else()
       message( STATUS "Patience... Configuring libcpuid..." )
       execute_process( COMMAND "libtoolize"
                        WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                       OUTPUT_VARIABLE outvar
-                       ERROR_VARIABLE errvar
                      )
-      message("libtoolize OUTPUT\n${outvar}\nERROR\n${errvar}\n")
       execute_process( COMMAND "autoreconf" "--install"
                        WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                       OUTPUT_VARIABLE outvar
-                       ERROR_VARIABLE errvar
                      )
-      message("autoreconf OUTPUT\n${outvar}\nERROR\n${errvar}\n")
       execute_process( COMMAND "${CPUID_BUILD_DIR}/configure" ${CPUID_OPTIONS}
                        WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                       OUTPUT_VARIABLE outvar
-                       ERROR_VARIABLE errvar
                      )
-      message("configure OUTPUT\n${outvar}\nERROR\n${errvar}\n")
-      execute_process( COMMAND "/bin/ls" "${CPUID_BUILD_DIR}"
-                       WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                       OUTPUT_VARIABLE outvar
-                       ERROR_VARIABLE errvar
-                     )
-      message("ls OUTPUT\n${outvar}\nERROR\n${errvar}\n")
-      file(READ "${CPUID_BUILD_DIR}/config.log" configvar)
-      message("config.log\n${configvar}\n") 
       message( STATUS "Patience... Compiling libcpuid..." )
       execute_process( COMMAND "${CMAKE_MAKE_PROGRAM}" -k -j ${NCORES}
                        WORKING_DIRECTORY ${CPUID_BUILD_DIR}
@@ -162,5 +145,3 @@ if ( CPUID_LIBRARY )
 else()
   message( STATUS "Strange? Cannot find the installed libcpuid. We cannot compile it, so will need to rely on the system version..." )
 endif()
-message( FATAL_ERROR "quit here after libcpuid")
-
