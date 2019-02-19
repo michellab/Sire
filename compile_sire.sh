@@ -177,19 +177,22 @@ fi
 export MACOSX_DEPLOYMENT_TARGET="10.9"
 
 # Now run the python install script
-if [ -e "${INSTALL_DIR}/bin/python" ]; then
+[ -z "$CONDA_PYTHON" ] && [ -e "${INSTALL_DIR}/bin/python" ] && CONDA_PYTHON="${INSTALL_DIR}/bin/python"
+[ -z "$CONDA_PYTHON" ] && [ -e "${INSTALL_DIR}/python" ] && CONDA_PYTHON="${INSTALL_DIR}/python"
+if [ ! -z "$CONDA_PYTHON" ]; then
+    CONDA_BINDIR="`dirname "$CONDA_PYTHON"`"
+    echo "** Running the conda activate script... **"
+    echo "** source \"$CONDA_BINDIR/activate\""
+    source "$CONDA_BINDIR/activate"
     echo "** Running the Python install script... **"
-    echo "** ${INSTALL_DIR}/bin/python build/build_sire.py **"
-    ${INSTALL_DIR}/bin/python build/build_sire.py
-    exit $?
-elif [ -e "${INSTALL_DIR}/python" ]; then
-    echo "** Running the Python install script... **"
-    echo "** ${INSTALL_DIR}/python build/build_sire.py **"
-    ${INSTALL_DIR}/python build/build_sire.py
-    exit $?
+    echo "** \"$CONDA_PYTHON\" build/build_sire.py **"
+    "$CONDA_PYTHON" build/build_sire.py
+    err=$?
+    conda deactivate
+    exit $err
 else
     echo "** FATAL **"
-    echo "** Cannot find ${INSTALL_DIR}/bin/python **"
+    echo "** Cannot find conda python **"
     echo "** Something went wrong with the miniconda install! **"
     echo "** Remove ${INSTALL_DIR}, then run compile_sire.sh --clean, then try again **"
     exit -1
