@@ -220,6 +220,10 @@ if __name__ == "__main__":
                 print("autoconf is already installed...")
             else:
                 conda_pkgs.append("autoconf")
+            if os.path.exists(os.path.join(conda_bin, "aclocal")):
+                print("automake is already installed...")
+            else:
+                conda_pkgs.append("automake")
 
         if os.path.exists(os.path.join(conda_bin, "cmake%s" % exe_suffix)):
             print("cmake is already installed...")
