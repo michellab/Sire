@@ -56,7 +56,7 @@ static const RegisterMetaType<ArcCot> r_arccot;
 ////////////
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcCos &arccos)
+QDataStream &operator<<(QDataStream &ds, const ArcCos &arccos)
 {
     writeHeader(ds, r_arccos, 1) << static_cast<const SingleFunc&>(arccos);
 
@@ -64,7 +64,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcCos &arccos)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcCos &arccos)
+QDataStream &operator>>(QDataStream &ds, ArcCos &arccos)
 {
     VersionID v = readHeader(ds, r_arccos);
 
@@ -79,7 +79,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcCos &arccos)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcSin &arcsin)
+QDataStream &operator<<(QDataStream &ds, const ArcSin &arcsin)
 {
     writeHeader(ds, r_arcsin, 1) << static_cast<const SingleFunc&>(arcsin);
 
@@ -87,7 +87,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcSin &arcsin)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcSin &arcsin)
+QDataStream &operator>>(QDataStream &ds, ArcSin &arcsin)
 {
     VersionID v = readHeader(ds, r_arcsin);
 
@@ -102,7 +102,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcSin &arcsin)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcTan &arctan)
+QDataStream &operator<<(QDataStream &ds, const ArcTan &arctan)
 {
     writeHeader(ds, r_arctan, 1) << static_cast<const SingleFunc&>(arctan);
 
@@ -110,7 +110,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcTan &arctan)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcTan &arctan)
+QDataStream &operator>>(QDataStream &ds, ArcTan &arctan)
 {
     VersionID v = readHeader(ds, r_arctan);
 
@@ -125,7 +125,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcTan &arctan)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcCsc &arccsc)
+QDataStream &operator<<(QDataStream &ds, const ArcCsc &arccsc)
 {
     writeHeader(ds, r_arccsc, 1) << static_cast<const SingleFunc&>(arccsc);
 
@@ -133,7 +133,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcCsc &arccsc)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcCsc &arccsc)
+QDataStream &operator>>(QDataStream &ds, ArcCsc &arccsc)
 {
     VersionID v = readHeader(ds, r_arccsc);
 
@@ -148,7 +148,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcCsc &arccsc)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcSec &arcsec)
+QDataStream &operator<<(QDataStream &ds, const ArcSec &arcsec)
 {
     writeHeader(ds, r_arcsec, 1) << static_cast<const SingleFunc&>(arcsec);
 
@@ -156,7 +156,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcSec &arcsec)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcSec &arcsec)
+QDataStream &operator>>(QDataStream &ds, ArcSec &arcsec)
 {
     VersionID v = readHeader(ds, r_arcsec);
 
@@ -171,7 +171,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcSec &arcsec)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcCot &arccot)
+QDataStream &operator<<(QDataStream &ds, const ArcCot &arccot)
 {
     writeHeader(ds, r_arccot, 1) << static_cast<const SingleFunc&>(arccot);
 
@@ -179,7 +179,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcCot &arccot)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcCot &arccot)
+QDataStream &operator>>(QDataStream &ds, ArcCot &arccot)
 {
     VersionID v = readHeader(ds, r_arccot);
 

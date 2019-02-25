@@ -50,8 +50,8 @@ namespace SireMove
 class PrefSampler;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::PrefSampler&);
-QDataStream& operator>>(QDataStream&, SireMove::PrefSampler&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::PrefSampler&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::PrefSampler&);
 
 namespace SireCAS
 {
@@ -84,8 +84,8 @@ class SIREMOVE_EXPORT PrefSampler
           : public SireBase::ConcreteProperty<PrefSampler,Sampler>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PrefSampler&);
-friend QDataStream& ::operator>>(QDataStream&, PrefSampler&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const PrefSampler&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, PrefSampler&);
 
 public:
     PrefSampler();

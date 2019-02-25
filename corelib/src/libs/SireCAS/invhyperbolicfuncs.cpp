@@ -62,7 +62,7 @@ static const RegisterMetaType<ArcCoth> r_arccoth;
 ////////////
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcCosh &arccosh)
+QDataStream &operator<<(QDataStream &ds, const ArcCosh &arccosh)
 {
     writeHeader(ds, r_arccosh, 1) << static_cast<const SingleFunc&>(arccosh);
 
@@ -70,7 +70,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcCosh &arccosh)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcCosh &arccosh)
+QDataStream &operator>>(QDataStream &ds, ArcCosh &arccosh)
 {
     VersionID v = readHeader(ds, r_arccosh);
 
@@ -85,7 +85,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcCosh &arccosh)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcSinh &arcsinh)
+QDataStream &operator<<(QDataStream &ds, const ArcSinh &arcsinh)
 {
     writeHeader(ds, r_arcsinh, 1) << static_cast<const SingleFunc&>(arcsinh);
 
@@ -93,7 +93,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcSinh &arcsinh)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcSinh &arcsinh)
+QDataStream &operator>>(QDataStream &ds, ArcSinh &arcsinh)
 {
     VersionID v = readHeader(ds, r_arcsinh);
 
@@ -108,7 +108,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcSinh &arcsinh)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcTanh &arctanh)
+QDataStream &operator<<(QDataStream &ds, const ArcTanh &arctanh)
 {
     writeHeader(ds, r_arctanh, 1) << static_cast<const SingleFunc&>(arctanh);
 
@@ -116,7 +116,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcTanh &arctanh)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcTanh &arctanh)
+QDataStream &operator>>(QDataStream &ds, ArcTanh &arctanh)
 {
     VersionID v = readHeader(ds, r_arctanh);
 
@@ -131,7 +131,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcTanh &arctanh)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcCsch &arccsch)
+QDataStream &operator<<(QDataStream &ds, const ArcCsch &arccsch)
 {
     writeHeader(ds, r_arccsch, 1) << static_cast<const SingleFunc&>(arccsch);
 
@@ -139,7 +139,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcCsch &arccsch)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcCsch &arccsch)
+QDataStream &operator>>(QDataStream &ds, ArcCsch &arccsch)
 {
     VersionID v = readHeader(ds, r_arccsch);
 
@@ -154,7 +154,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcCsch &arccsch)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcSech &arcsech)
+QDataStream &operator<<(QDataStream &ds, const ArcSech &arcsech)
 {
     writeHeader(ds, r_arcsech, 1) << static_cast<const SingleFunc&>(arcsech);
 
@@ -162,7 +162,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcSech &arcsech)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcSech &arcsech)
+QDataStream &operator>>(QDataStream &ds, ArcSech &arcsech)
 {
     VersionID v = readHeader(ds, r_arcsech);
 
@@ -177,7 +177,7 @@ QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcSech &arcsech)
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcCoth &arccoth)
+QDataStream &operator<<(QDataStream &ds, const ArcCoth &arccoth)
 {
     writeHeader(ds, r_arccoth, 1) << static_cast<const SingleFunc&>(arccoth);
 
@@ -185,7 +185,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ArcCoth &arccoth)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ArcCoth &arccoth)
+QDataStream &operator>>(QDataStream &ds, ArcCoth &arccoth)
 {
     VersionID v = readHeader(ds, r_arccoth);
 

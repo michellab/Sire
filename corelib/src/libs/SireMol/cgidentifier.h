@@ -39,11 +39,11 @@ class CGIdentifier;
 class CGIDSet;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::CGIdentifier&);
-QDataStream& operator>>(QDataStream&, SireMol::CGIdentifier&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CGIdentifier&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CGIdentifier&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::CGIDSet&);
-QDataStream& operator>>(QDataStream&, SireMol::CGIDSet&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CGIDSet&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CGIDSet&);
 
 namespace SireMol
 {
@@ -53,8 +53,8 @@ class CGIdx;
 class SIREMOL_EXPORT CGIdentifier : public CGID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CGIdentifier&);
-friend QDataStream& ::operator>>(QDataStream&, CGIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CGIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, CGIdentifier&);
 
 public:
     CGIdentifier();

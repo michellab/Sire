@@ -40,8 +40,8 @@ namespace SireMol
 class ResNum;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResNum&);
-QDataStream& operator>>(QDataStream&, SireMol::ResNum&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResNum&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResNum&);
 
 namespace SireMol
 {
@@ -54,8 +54,8 @@ namespace SireMol
 class SIREMOL_EXPORT ResNum : public SireID::Number, public ResID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ResNum&);
-friend QDataStream& ::operator>>(QDataStream&, ResNum&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ResNum&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResNum&);
 
 public:
     ResNum();

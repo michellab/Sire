@@ -58,7 +58,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<AngleComponent> r_angcomp;
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const AngleComponent &angcomp)
 {
     writeHeader(ds, r_angcomp, 1);
@@ -71,7 +71,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, AngleComponent &angcomp)
+QDataStream &operator>>(QDataStream &ds, AngleComponent &angcomp)
 {
     VersionID v = readHeader(ds, r_angcomp);
     

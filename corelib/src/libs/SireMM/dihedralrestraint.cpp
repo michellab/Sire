@@ -63,7 +63,7 @@ using namespace SireUnits::Dimension;
 static const RegisterMetaType<DihedralRestraint> r_dihrest;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const DihedralRestraint &dihrest)
 {
     writeHeader(ds, r_dihrest, 1);
@@ -78,7 +78,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, DihedralRestraint &dihrest)
+QDataStream &operator>>(QDataStream &ds, DihedralRestraint &dihrest)
 {
     VersionID v = readHeader(ds, r_dihrest);
     

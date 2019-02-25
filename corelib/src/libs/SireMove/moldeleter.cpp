@@ -52,7 +52,7 @@ static const RegisterMetaType<MolDeleter> r_moldeleter( MAGIC_ONLY,
                                                         MolDeleter::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const MolDeleter &moldeleter)
 {
     writeHeader(ds, r_moldeleter, 1);
@@ -63,7 +63,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, MolDeleter &moldeleter)
+QDataStream &operator>>(QDataStream &ds, MolDeleter &moldeleter)
 {
     VersionID v = readHeader(ds, r_moldeleter);
     
@@ -126,7 +126,7 @@ const NullDeleter& MolDeleter::null()
 static const RegisterMetaType<NullDeleter> r_nulldeleter;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const NullDeleter &nulldeleter)
+QDataStream &operator<<(QDataStream &ds, const NullDeleter &nulldeleter)
 {
     writeHeader(ds, r_nulldeleter, 1);
     
@@ -136,7 +136,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const NullDeleter &null
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, NullDeleter &nulldeleter)
+QDataStream &operator>>(QDataStream &ds, NullDeleter &nulldeleter)
 {
     VersionID v = readHeader(ds, r_nulldeleter);
     
@@ -212,7 +212,7 @@ tuple<Molecule,double> NullDeleter::deleteFrom(System&)
 static const RegisterMetaType<SystemWideDeleter> r_syswide;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const SystemWideDeleter &syswide)
 {
     writeHeader(ds, r_syswide, 1);
@@ -225,7 +225,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         SystemWideDeleter &syswide)
 {
     VersionID v = readHeader(ds, r_syswide);
@@ -385,7 +385,7 @@ tuple<Molecule,double> SystemWideDeleter::deleteFrom(System &system)
 static const RegisterMetaType<SpecifiedGroupsDeleter> r_specgroups;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const SpecifiedGroupsDeleter &specgroups)
 {
     writeHeader(ds, r_specgroups, 1);
@@ -399,7 +399,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         SpecifiedGroupsDeleter &specgroups)
 {
     VersionID v = readHeader(ds, r_specgroups);

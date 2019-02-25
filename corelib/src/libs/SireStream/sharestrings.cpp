@@ -41,7 +41,7 @@ namespace SireStream
 /** This function adds the string 'string' to shared storage, and returns 
     a copy of the shared-stored value. Use this function to ensure that
     there is only one copy of duplicate strings */
-QString SIRESTREAM_EXPORT shareString(const QString &string)
+QString shareString(const QString &string)
 {
     QMutex *mutex = stringRegistryMutex();
     
@@ -67,7 +67,7 @@ QString SIRESTREAM_EXPORT shareString(const QString &string)
 }
 
 /** This function adds all of the strings in 'strings' to shared storage */
-void SIRESTREAM_EXPORT shareStrings(QStringList &strings)
+void shareStrings(QStringList &strings)
 {
     for (QStringList::iterator it = strings.begin();
          it != strings.end();

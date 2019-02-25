@@ -52,7 +52,7 @@ static const RegisterMetaType<WeightFunction> r_weightfunc(MAGIC_ONLY,
                                                        "SireMol::WeightFunction");
 
 /** Serialise to a binary datastream */
-QDataStream SIRE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                     const SireMol::WeightFunction &weightfunc)
 {
     writeHeader(ds, r_weightfunc, 1);
@@ -63,7 +63,7 @@ QDataStream SIRE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                     WeightFunction &weightfunc)
 {
     VersionID v = readHeader(ds, r_weightfunc);
@@ -98,7 +98,7 @@ WeightFunction::~WeightFunction()
 static const RegisterMetaType<AbsFromNumber> r_absfromnum;
 
 /** Serialise to a binary datastream */
-QDataStream SIRE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                     const AbsFromNumber &absfromnum)
 {
     writeHeader(ds, r_absfromnum, 1);
@@ -109,7 +109,7 @@ QDataStream SIRE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                     AbsFromNumber &absfromnum)
 {
     VersionID v = readHeader(ds, r_absfromnum);
@@ -187,7 +187,7 @@ const char* AbsFromNumber::typeName()
 static const RegisterMetaType<RelFromNumber> r_relfromnum;
 
 /** Serialise to a binary datastream */
-QDataStream SIRE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                     const RelFromNumber &relfromnum)
 {
     writeHeader(ds, r_relfromnum, 1);
@@ -198,7 +198,7 @@ QDataStream SIRE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                     RelFromNumber &relfromnum)
 {
     VersionID v = readHeader(ds, r_relfromnum);
@@ -266,7 +266,7 @@ const char* RelFromNumber::typeName()
 static const RegisterMetaType<AbsFromMass> r_absfrommass;
 
 /** Serialise to a binary datastream */
-QDataStream SIRE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                     const AbsFromMass &absfrommass)
 {
     writeHeader(ds, r_absfrommass, 1);
@@ -277,7 +277,7 @@ QDataStream SIRE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                     AbsFromMass &absfrommass)
 {
     VersionID v = readHeader(ds, r_absfrommass);
@@ -343,7 +343,7 @@ const char* AbsFromMass::typeName()
 static const RegisterMetaType<RelFromMass> r_relfrommass;
 
 /** Serialise to a binary datastream */
-QDataStream SIRE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                     const RelFromMass &relfrommass)
 {
     writeHeader(ds, r_relfrommass, 1);
@@ -354,7 +354,7 @@ QDataStream SIRE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                     RelFromMass &relfrommass)
 {
     VersionID v = readHeader(ds, r_relfrommass);

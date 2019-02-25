@@ -47,10 +47,10 @@ namespace SireFF
     @author Christopher Woods
 */
 template<class Potential>
-class SIREFF_EXPORT Inter2B2G3DFF 
-                    : public SireBase::ConcreteProperty< Inter2B2G3DFF<Potential>,
-                                                         Inter2B2GFF<Potential> >, 
-                      public FF3D
+class Inter2B2G3DFF 
+                : public SireBase::ConcreteProperty< Inter2B2G3DFF<Potential>,
+                                                     Inter2B2GFF<Potential> >, 
+                  public FF3D
 {
 public:
     Inter2B2G3DFF();
@@ -117,8 +117,12 @@ protected:
     void recalculateEnergy();
 };
 
-#ifndef SIRE_SKIP_INLINE_FUNCTIONS
-
+#if !defined(SIRE_SKIP_INLINE_FUNCTIONS) \
+    && !defined(InterCLJFF_hpp__pyplusplus_wrapper) \
+    && !defined(InterCLJFFBase_hpp__pyplusplus_wrapper) \
+    && !defined(CLJPotentialInterface_InterCLJPotential__hpp__pyplusplus_wrapper) \
+    && !defined(InterGroupCLJFFBase_hpp__pyplusplus_wrapper) \
+    && !defined(InterGroupCLJFF_hpp__pyplusplus_wrapper)
 /** Constructor (without giving the forcefield a name!) */
 template<class Potential>
 SIRE_OUTOFLINE_TEMPLATE

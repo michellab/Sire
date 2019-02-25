@@ -144,11 +144,11 @@ protected:
 
 */
 template <class T>
-class SIREBASE_EXPORT SharedPolyPointer : private SharedPolyPointerBase
+class SharedPolyPointer : private SharedPolyPointerBase
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const SharedPolyPointer<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, SharedPolyPointer<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const SharedPolyPointer<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, SharedPolyPointer<T>&);
 
 public:
 
@@ -222,7 +222,7 @@ public:
 
     const char* what() const
     {
-        return SharedPolyPointerHelper<T>::what(d);
+        return SharedPolyPointerHelper<T>::what(*d);
     }
 
     template<class S>

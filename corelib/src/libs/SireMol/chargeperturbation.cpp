@@ -44,7 +44,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<ChargePerturbation> r_chgpert;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const ChargePerturbation &chgpert)
 {
     writeHeader(ds, r_chgpert, 1);
@@ -54,7 +54,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        ChargePerturbation &chgpert)
 {
     VersionID v = readHeader(ds, r_chgpert);

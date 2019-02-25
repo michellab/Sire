@@ -58,7 +58,7 @@ using namespace SireStream;
 static const RegisterMetaType<ZMatMove> r_zmatmove;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const ZMatMove &zmatmove)
+QDataStream &operator<<(QDataStream &ds, const ZMatMove &zmatmove)
 {
     writeHeader(ds, r_zmatmove, 2);
     
@@ -73,7 +73,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const ZMatMove &zmatmov
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, ZMatMove &zmatmove)
+QDataStream &operator>>(QDataStream &ds, ZMatMove &zmatmove)
 {
     VersionID v = readHeader(ds, r_zmatmove);
     

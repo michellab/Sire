@@ -42,7 +42,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<Patch> r_patch;
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const Patch &patch)
+QDataStream &operator<<(QDataStream &ds, const Patch &patch)
 {
     writeHeader(ds, r_patch, 1);
     
@@ -54,7 +54,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const Patch &patch)
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, Patch &patch)
+QDataStream &operator>>(QDataStream &ds, Patch &patch)
 {
     VersionID v = readHeader(ds, r_patch);
     

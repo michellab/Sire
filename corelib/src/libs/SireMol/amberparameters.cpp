@@ -49,7 +49,7 @@ using namespace SireStream;
 static const RegisterMetaType<AmberParameters> r_amberparam;
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberParameters &amberparam)
+QDataStream &operator<<(QDataStream &ds, const AmberParameters &amberparam)
 {
     //empty class so nothing to stream
 
@@ -65,7 +65,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberParameters &am
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberParameters &amberparam)
+QDataStream &operator>>(QDataStream &ds, AmberParameters &amberparam)
 {
     //empty class so nothing to stream
 

@@ -40,8 +40,8 @@ namespace SireMol
 class Beads;
 }
 
-QDataStream& operator<<(QDataStream &ds, const SireMol::Beads&);
-QDataStream& operator>>(QDataStream &ds, SireMol::Beads&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream &ds, const SireMol::Beads&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream &ds, SireMol::Beads&);
 
 namespace SireMol
 {
@@ -54,8 +54,8 @@ namespace SireMol
 class SIREMOL_EXPORT Beads : public SireBase::ConcreteProperty<Beads,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Beads&);
-friend QDataStream& ::operator>>(QDataStream&, Beads&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Beads&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Beads&);
 
 public:
     Beads();

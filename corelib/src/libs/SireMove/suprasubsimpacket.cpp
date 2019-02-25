@@ -41,7 +41,7 @@ using namespace SireStream;
 static const RegisterMetaType<SupraSubSimPacket> r_suprasubsimpacket;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const SupraSubSimPacket &suprasubsimpacket)
 {
     writeHeader(ds, r_suprasubsimpacket, 1);
@@ -67,7 +67,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         SupraSubSimPacket &suprasubsimpacket)
 {
     VersionID v = readHeader(ds, r_suprasubsimpacket);

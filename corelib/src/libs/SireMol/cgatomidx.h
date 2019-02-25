@@ -41,8 +41,8 @@ namespace SireMol
 class CGAtomIdx;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::CGAtomIdx&);
-QDataStream& operator>>(QDataStream&, SireMol::CGAtomIdx&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CGAtomIdx&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CGAtomIdx&);
 
 namespace SireMol
 {
@@ -56,8 +56,8 @@ namespace SireMol
 class SIREMOL_EXPORT CGAtomIdx : public AtomID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CGAtomIdx&);
-friend QDataStream& ::operator>>(QDataStream&, CGAtomIdx&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CGAtomIdx&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, CGAtomIdx&);
 
 public:
     CGAtomIdx();

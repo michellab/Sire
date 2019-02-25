@@ -50,7 +50,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<CLJExtractor> r_cljext( NO_ROOT );
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJExtractor &cljext)
+QDataStream &operator<<(QDataStream &ds, const CLJExtractor &cljext)
 {
     writeHeader(ds, r_cljext, 2);
     
@@ -66,7 +66,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJExtractor &cljex
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJExtractor &cljext)
+QDataStream &operator>>(QDataStream &ds, CLJExtractor &cljext)
 {
     VersionID v = readHeader(ds, r_cljext);
     

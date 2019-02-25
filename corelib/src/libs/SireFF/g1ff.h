@@ -39,8 +39,8 @@ namespace SireFF
 class G1FF;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::G1FF&);
-QDataStream& operator>>(QDataStream&, SireFF::G1FF&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::G1FF&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::G1FF&);
 
 namespace SireMol
 {
@@ -60,8 +60,8 @@ using SireMol::PartialMolecule;
 class SIREFF_EXPORT G1FF : public FF
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const G1FF&);
-friend QDataStream& ::operator>>(QDataStream&, G1FF&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const G1FF&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, G1FF&);
 
 public:
     ~G1FF();

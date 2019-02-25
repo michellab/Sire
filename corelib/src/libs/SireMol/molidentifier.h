@@ -44,8 +44,8 @@ namespace SireMol
 class MolIdentifier;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MolIdentifier&);
-QDataStream& operator>>(QDataStream&, SireMol::MolIdentifier&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MolIdentifier&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MolIdentifier&);
 
 namespace SireMol
 {
@@ -57,8 +57,8 @@ namespace SireMol
 class SIREMOL_EXPORT MolIdentifier : public MolID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolIdentifier&);
-friend QDataStream& ::operator>>(QDataStream&, MolIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MolIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MolIdentifier&);
 
 public:
     MolIdentifier();

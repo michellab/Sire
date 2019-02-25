@@ -48,8 +48,8 @@ namespace SireMol
 class VolumeMap;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::VolumeMap&);
-QDataStream& operator>>(QDataStream&, SireMol::VolumeMap&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::VolumeMap&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::VolumeMap&);
 
 namespace SireMol
 {
@@ -72,8 +72,8 @@ namespace detail{ class VolumeMapData; }
 class SIREMOL_EXPORT VolumeMap : public SireBase::ConcreteProperty<VolumeMap,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const VolumeMap&);
-friend QDataStream& ::operator>>(QDataStream&, VolumeMap&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const VolumeMap&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, VolumeMap&);
 
 public:
     enum MapType

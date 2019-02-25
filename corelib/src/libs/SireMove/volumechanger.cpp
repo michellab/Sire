@@ -67,7 +67,7 @@ static const RegisterMetaType<VolumeChanger> r_volchanger( MAGIC_ONLY,
                                                            VolumeChanger::typeName() );
                                                            
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const VolumeChanger &volchanger)
+QDataStream &operator<<(QDataStream &ds, const VolumeChanger &volchanger)
 {
     writeHeader(ds, r_volchanger, 1);
     
@@ -80,7 +80,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const VolumeChanger &vo
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, VolumeChanger &volchanger)
+QDataStream &operator>>(QDataStream &ds, VolumeChanger &volchanger)
 {
     VersionID v = readHeader(ds, r_volchanger);
     
@@ -244,7 +244,7 @@ const NullVolumeChanger& VolumeChanger::null()
 static const RegisterMetaType<NullVolumeChanger> r_nullvolchanger;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                         const NullVolumeChanger &nullvolchanger)
 {
     writeHeader(ds, r_nullvolchanger, 1);
@@ -255,7 +255,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         NullVolumeChanger &nullvolchanger)
 {
     VersionID v = readHeader(ds, r_nullvolchanger);
@@ -321,7 +321,7 @@ int NullVolumeChanger::setVolume(System &system, const Volume&, const PropertyMa
 static const RegisterMetaType<ScaleVolumeFromCenter> r_scalevol;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const ScaleVolumeFromCenter &scalevol)
 {
     writeHeader(ds, r_scalevol, 1);
@@ -335,7 +335,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         ScaleVolumeFromCenter &scalevol)
 {
     VersionID v = readHeader(ds, r_scalevol);

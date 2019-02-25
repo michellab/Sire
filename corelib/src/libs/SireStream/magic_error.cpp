@@ -48,7 +48,7 @@ static const RegisterMetaType<exception> r_exception( MAGIC_ONLY,
                                                       "SireError::exception" );
 
 /** Serialise to a binary data stream */
-QDataStream SIRESTREAM_EXPORT &operator<<(QDataStream &ds, const exception &e)
+QDataStream &operator<<(QDataStream &ds, const exception &e)
 {
     writeHeader(ds, r_exception, 1)
        << e.err << e.plce << e.bt << e.pidstr;
@@ -57,7 +57,7 @@ QDataStream SIRESTREAM_EXPORT &operator<<(QDataStream &ds, const exception &e)
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIRESTREAM_EXPORT &operator>>(QDataStream &ds, exception &e)
+QDataStream &operator>>(QDataStream &ds, exception &e)
 {
     VersionID v = readHeader(ds, r_exception);
 

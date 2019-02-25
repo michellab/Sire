@@ -53,20 +53,20 @@ class MoleculeView;
 class Residue;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2Atom&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2Atom&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Mol2Atom&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Mol2Atom&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2Bond&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2Bond&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Mol2Bond&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Mol2Bond&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2Molecule&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2Molecule&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Mol2Molecule&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Mol2Molecule&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2Substructure&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2Substructure&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Mol2Substructure&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Mol2Substructure&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::Mol2&);
-QDataStream& operator>>(QDataStream&, SireIO::Mol2&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Mol2&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Mol2&);
 
 namespace SireIO
 {
@@ -79,8 +79,8 @@ namespace SireIO
 class SIREIO_EXPORT Mol2Atom
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Mol2Atom&);
-friend QDataStream& ::operator>>(QDataStream&, Mol2Atom&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const Mol2Atom&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, Mol2Atom&);
 
 public:
     /** Default constructor. */
@@ -159,8 +159,8 @@ private:
 class SIREIO_EXPORT Mol2Bond
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Mol2Bond&);
-friend QDataStream& ::operator>>(QDataStream&, Mol2Bond&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const Mol2Bond&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, Mol2Bond&);
 
 public:
     /** Default constructor. */
@@ -217,8 +217,8 @@ private:
 class SIREIO_EXPORT Mol2Molecule
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Mol2Molecule&);
-friend QDataStream& ::operator>>(QDataStream&, Mol2Molecule&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const Mol2Molecule&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, Mol2Molecule&);
 
 public:
     /** Default constructor. */
@@ -355,8 +355,8 @@ private:
 class SIREIO_EXPORT Mol2Substructure
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Mol2Substructure&);
-friend QDataStream& ::operator>>(QDataStream&, Mol2Substructure&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const Mol2Substructure&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, Mol2Substructure&);
 
 public:
     /** Default constructor. */
@@ -446,8 +446,8 @@ private:
 class SIREIO_EXPORT Mol2 : public SireBase::ConcreteProperty<Mol2,MoleculeParser>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Mol2&);
-friend QDataStream& ::operator>>(QDataStream&, Mol2&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const Mol2&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, Mol2&);
 
 public:
     Mol2();

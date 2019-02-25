@@ -3,6 +3,8 @@
 
 #include "SireBase_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "propertymap.h"
 #include "ranges.h"
 #include "variantproperty.h"

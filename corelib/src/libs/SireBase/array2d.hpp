@@ -70,11 +70,11 @@ namespace SireBase
     @author Christopher Woods
 */
 template<class T>
-class SIREBASE_EXPORT Array2D : public Array2DBase
+class Array2D : public Array2DBase
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const Array2D<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, Array2D<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const Array2D<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, Array2D<T>&);
 
 public:
     Array2D();

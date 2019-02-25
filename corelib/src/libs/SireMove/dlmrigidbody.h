@@ -38,8 +38,8 @@ namespace SireMove
 class DLMRigidBody;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::DLMRigidBody&);
-QDataStream& operator>>(QDataStream&, SireMove::DLMRigidBody&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::DLMRigidBody&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::DLMRigidBody&);
 
 namespace SireMove
 {
@@ -61,8 +61,8 @@ class SIREMOVE_EXPORT DLMRigidBody
         : public SireBase::ConcreteProperty<DLMRigidBody,Integrator>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DLMRigidBody&);
-friend QDataStream& ::operator>>(QDataStream&, DLMRigidBody&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const DLMRigidBody&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, DLMRigidBody&);
 
 public:
     DLMRigidBody(bool frequent_save_velocities = false);

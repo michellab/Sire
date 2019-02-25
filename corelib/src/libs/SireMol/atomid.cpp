@@ -622,7 +622,7 @@ SegsWithAtoms AtomID::segments() const
 static const RegisterMetaType<AtomIdx> r_atomidx;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomIdx &atomidx)
+QDataStream &operator<<(QDataStream &ds, const AtomIdx &atomidx)
 {
     writeHeader(ds, r_atomidx, 1);
     
@@ -632,7 +632,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomIdx &atomidx)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomIdx &atomidx)
+QDataStream &operator>>(QDataStream &ds, AtomIdx &atomidx)
 {
     VersionID v = readHeader(ds, r_atomidx);
     
@@ -707,7 +707,7 @@ const char* AtomIdx::typeName()
 static const RegisterMetaType<AtomNum> r_atomnum;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomNum &atomnum)
+QDataStream &operator<<(QDataStream &ds, const AtomNum &atomnum)
 {
     writeHeader(ds, r_atomnum, 1);
     
@@ -717,7 +717,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomNum &atomnum)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomNum &atomnum)
+QDataStream &operator>>(QDataStream &ds, AtomNum &atomnum)
 {
     VersionID v = readHeader(ds, r_atomnum);
     
@@ -817,7 +817,7 @@ const char* AtomNum::typeName()
 static const RegisterMetaType<AtomName> r_atomname;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomName &atomname)
+QDataStream &operator<<(QDataStream &ds, const AtomName &atomname)
 {
     writeHeader(ds, r_atomname, 1);
     
@@ -827,7 +827,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomName &atomname
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomName &atomname)
+QDataStream &operator>>(QDataStream &ds, AtomName &atomname)
 {
     VersionID v = readHeader(ds, r_atomname);
     

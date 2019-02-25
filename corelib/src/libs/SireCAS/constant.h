@@ -40,8 +40,8 @@ namespace SireCAS
 class Constant;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Constant&);
-QDataStream& operator>>(QDataStream&, SireCAS::Constant&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Constant&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Constant&);
 
 namespace SireCAS
 {

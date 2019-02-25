@@ -39,8 +39,8 @@ namespace Squire
 class PointCharge;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::PointCharge&);
-QDataStream& operator>>(QDataStream&, Squire::PointCharge&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::PointCharge&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::PointCharge&);
 
 namespace Squire
 {
@@ -57,8 +57,8 @@ using SireMaths::Vector;
 class SQUIRE_EXPORT PointCharge
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PointCharge&);
-friend QDataStream& ::operator>>(QDataStream&, PointCharge&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const PointCharge&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, PointCharge&);
 
 public:
     PointCharge();

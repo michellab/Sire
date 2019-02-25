@@ -76,26 +76,26 @@ class CLJNBPairs;
 class CLJScaleFactor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberParams&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberParams&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberParams&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberParams&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberBond&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberBond&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberBond&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberBond&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberAngle&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberAngle&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberAngle&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberAngle&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberDihPart&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberDihPart&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberDihPart&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberDihPart&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberDihedral&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberDihedral&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberDihedral&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberDihedral&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberNB14&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberNB14&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberNB14&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberNB14&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AmberNBDihPart&);
-QDataStream& operator>>(QDataStream&, SireMM::AmberNBDihPart&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AmberNBDihPart&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AmberNBDihPart&);
 
 namespace SireMol
 {
@@ -129,8 +129,8 @@ using SireMol::MoleculeInfoData;
 class SIREMM_EXPORT AmberBond
 {
 public:
-    friend QDataStream& ::operator<<(QDataStream&, const AmberBond&);
-    friend QDataStream& ::operator>>(QDataStream&, AmberBond&);
+    friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const AmberBond&);
+    friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, AmberBond&);
 
     AmberBond(double k=0, double r0=0);
 
@@ -174,8 +174,8 @@ private:
 class SIREMM_EXPORT AmberAngle
 {
 public:
-    friend QDataStream& ::operator<<(QDataStream&, const AmberAngle&);
-    friend QDataStream& ::operator>>(QDataStream&, AmberAngle&);
+    friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const AmberAngle&);
+    friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, AmberAngle&);
 
     AmberAngle(double k=0, double theta0=0);
 
@@ -221,8 +221,8 @@ private:
 class SIREMM_EXPORT AmberDihPart
 {
 public:
-    friend QDataStream& ::operator<<(QDataStream&, const AmberDihPart&);
-    friend QDataStream& ::operator>>(QDataStream&, AmberDihPart&);
+    friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const AmberDihPart&);
+    friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, AmberDihPart&);
 
     AmberDihPart(double k=0, double periodicity=0, double phase=0);
 
@@ -266,8 +266,8 @@ private:
 class SIREMM_EXPORT AmberDihedral
 {
 public:
-    friend QDataStream& ::operator<<(QDataStream&, const AmberDihedral&);
-    friend QDataStream& ::operator>>(QDataStream&, AmberDihedral&);
+    friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const AmberDihedral&);
+    friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, AmberDihedral&);
 
     AmberDihedral();
 
@@ -310,8 +310,8 @@ private:
 class SIREMM_EXPORT AmberNB14
 {
 public:
-    friend QDataStream& ::operator<<(QDataStream&, const AmberNB14&);
-    friend QDataStream& ::operator>>(QDataStream&, AmberNB14&);
+    friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const AmberNB14&);
+    friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, AmberNB14&);
 
     AmberNB14(double cscl=0, double ljscl=0);
 
@@ -352,8 +352,8 @@ private:
 class SIREMM_EXPORT AmberNBDihPart
 {
 public:
-    friend QDataStream& ::operator<<(QDataStream&, const AmberNBDihPart&);
-    friend QDataStream& ::operator>>(QDataStream&, AmberNBDihPart&);
+    friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const AmberNBDihPart&);
+    friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, AmberNBDihPart&);
 
     AmberNBDihPart();
     AmberNBDihPart(const AmberDihPart &dih, const AmberNB14 &nb14);
@@ -401,8 +401,8 @@ class SIREMM_EXPORT AmberParams
     : public SireBase::ConcreteProperty<AmberParams,SireMol::MoleculeProperty>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireMM::AmberParams&);
-friend QDataStream& ::operator>>(QDataStream&, SireMM::AmberParams&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const SireMM::AmberParams&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, SireMM::AmberParams&);
 
 public:
     AmberParams();

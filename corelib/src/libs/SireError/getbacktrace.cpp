@@ -28,9 +28,6 @@
 
 #include "getbacktrace.h"
 
-#define BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED 1
-#include <boost/stacktrace.hpp>
-
 #include <QObject>
 #include <QString>
 #include <QRegExp>
@@ -54,7 +51,7 @@ namespace SireError
     This is not well-optimised, requires compilation with "-rdynamic" on linux
     and doesn't do a great job of demangling the symbol names. It is sufficient
     though to work out call trace. */
-QStringList SIREERROR_EXPORT getBackTrace()
+QStringList getBackTrace()
 {
     //now get the backtrace of the code at this point
     //(we can only do this if we have 'execinfo.h'

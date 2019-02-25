@@ -43,11 +43,11 @@ class QMProgram;
 class NullQM;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::QMProgram&);
-QDataStream& operator>>(QDataStream&, Squire::QMProgram&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::QMProgram&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::QMProgram&);
 
-QDataStream& operator<<(QDataStream&, const Squire::NullQM&);
-QDataStream& operator>>(QDataStream&, Squire::NullQM&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::NullQM&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::NullQM&);
 
 namespace SireMol
 {
@@ -75,8 +75,8 @@ class QMMMElecEmbedPotential;
 class SQUIRE_EXPORT QMProgram : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const QMProgram&);
-friend QDataStream& ::operator>>(QDataStream&, QMProgram&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const QMProgram&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, QMProgram&);
 
 friend class QMPotential;            //so it can call the force and energy functions
 friend class QMMMElecEmbedPotential; //so it can call the force and energy functions
@@ -215,8 +215,8 @@ class SQUIRE_EXPORT NullQM
         : public SireBase::ConcreteProperty<NullQM,QMProgram>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullQM&);
-friend QDataStream& ::operator>>(QDataStream&, NullQM&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const NullQM&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, NullQM&);
 
 public:
     NullQM();

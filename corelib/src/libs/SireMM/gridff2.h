@@ -41,8 +41,8 @@ namespace SireMM
 class GridFF2;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::GridFF2&);
-QDataStream& operator>>(QDataStream&, SireMM::GridFF2&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::GridFF2&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::GridFF2&);
 
 namespace SireMM
 {
@@ -59,8 +59,8 @@ class SIREMM_EXPORT GridFF2
             : public SireBase::ConcreteProperty<GridFF2,InterGroupCLJFF>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GridFF2&);
-friend QDataStream& ::operator>>(QDataStream&, GridFF2&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const GridFF2&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, GridFF2&);
 
 public:
     GridFF2();

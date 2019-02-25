@@ -3,6 +3,8 @@
 
 #include "SireCAS_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "power.h"
 #include "minmax.h"
 #include "powerconstant.h"

@@ -4,6 +4,9 @@
 #
 ########################################
 
+# Export symbols when building the library
+add_definitions( "-DSIREMATHS_BUILD" )
+
 if (SIRE_DISABLE_FORTRAN)
   add_definitions( "-DSIRE_DISABLE_FORTRAN" )
   message( STATUS "Disabling SireMaths BLAS/LAPACK/LINPACK interfaces.")

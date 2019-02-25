@@ -74,8 +74,8 @@ class SIREMOVE_EXPORT GibbsMove
           : public SireBase::ConcreteProperty<GibbsMove,MonteCarlo>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GibbsMove&);
-friend QDataStream& ::operator>>(QDataStream&, GibbsMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const GibbsMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, GibbsMove&);
 
 public:
     GibbsMove(const PropertyMap &map = PropertyMap());

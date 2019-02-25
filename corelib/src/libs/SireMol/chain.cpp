@@ -58,7 +58,7 @@ static const RegisterMetaType<ChainProp> r_chainprop(MAGIC_ONLY,
                                                    "SireMol::ChainProp");
                                                    
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChainProp &chainprop)
+QDataStream &operator<<(QDataStream &ds, const ChainProp &chainprop)
 {
     writeHeader(ds, r_chainprop, 1)
          << static_cast<const MolViewProperty&>(chainprop);
@@ -67,7 +67,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChainProp &chainpr
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ChainProp &chainprop)
+QDataStream &operator>>(QDataStream &ds, ChainProp &chainprop)
 {
     VersionID v = readHeader(ds, r_chainprop);
     
@@ -97,7 +97,7 @@ ChainProp::~ChainProp()
 RegisterMetaType<Chain> r_chain;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Chain &chain)
+QDataStream &operator<<(QDataStream &ds, const Chain &chain)
 {
     writeHeader(ds, r_chain, 1);
 
@@ -109,7 +109,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Chain &chain)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Chain &chain)
+QDataStream &operator>>(QDataStream &ds, Chain &chain)
 {
     VersionID v = readHeader(ds, r_chain);
 
@@ -430,19 +430,19 @@ namespace SireMol
 namespace detail
 {
 
-bool SIREMOL_EXPORT has_property(const Chain*, const MoleculeData &moldata,
+bool has_property(const Chain*, const MoleculeData &moldata,
                                  const PropertyName &key)
 {
     return moldata.hasPropertyOfType<ChainProp>(key);
 }
 
-bool SIREMOL_EXPORT has_metadata(const Chain*, const MoleculeData &moldata,
+bool has_metadata(const Chain*, const MoleculeData &moldata,
                                  const PropertyName &metakey)
 {
     return moldata.hasMetadataOfType<ChainProp>(metakey);
 }
 
-bool SIREMOL_EXPORT has_metadata(const Chain*, const MoleculeData &moldata,
+bool has_metadata(const Chain*, const MoleculeData &moldata,
                                  const PropertyName &key, const PropertyName &metakey)
 {
     return moldata.hasMetadataOfType<ChainProp>(key, metakey);

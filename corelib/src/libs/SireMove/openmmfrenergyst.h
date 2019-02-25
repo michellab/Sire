@@ -47,8 +47,8 @@ SIRE_BEGIN_HEADER
     class OpenMMFrEnergyST;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::OpenMMFrEnergyST&);
-QDataStream& operator>>(QDataStream&, SireMove::OpenMMFrEnergyST&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::OpenMMFrEnergyST&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::OpenMMFrEnergyST&);
 
 namespace SireMove {
 
@@ -58,8 +58,8 @@ namespace SireMove {
      */
     class SIREMOVE_EXPORT OpenMMFrEnergyST
     : public SireBase::ConcreteProperty<OpenMMFrEnergyST, Integrator> {
-        friend QDataStream& ::operator<<(QDataStream&, const OpenMMFrEnergyST&);
-        friend QDataStream& ::operator>>(QDataStream&, OpenMMFrEnergyST&);
+        friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const OpenMMFrEnergyST&);
+        friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, OpenMMFrEnergyST&);
 
     public:
         OpenMMFrEnergyST(bool frequent_save_velocities = false);

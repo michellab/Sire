@@ -50,11 +50,11 @@ class PerturbationsLibrary;
 class PerturbationsTemplate;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::PerturbationsLibrary&);
-QDataStream& operator>>(QDataStream&, SireIO::PerturbationsLibrary&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::PerturbationsLibrary&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::PerturbationsLibrary&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::PerturbationsTemplate&);
-QDataStream& operator>>(QDataStream&, SireIO::PerturbationsTemplate&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::PerturbationsTemplate&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::PerturbationsTemplate&);
 
 namespace SireMM
 {
@@ -81,8 +81,8 @@ namespace SireIO
 class SIREIO_EXPORT PerturbationsTemplate
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PerturbationsTemplate&);
-friend QDataStream& ::operator>>(QDataStream&, PerturbationsTemplate&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const PerturbationsTemplate&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, PerturbationsTemplate&);
 
 public:
     PerturbationsTemplate();
@@ -251,8 +251,8 @@ class SIREIO_EXPORT PerturbationsLibrary
         : public SireBase::ConcreteProperty<PerturbationsLibrary,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireIO::PerturbationsLibrary&);
-friend QDataStream& ::operator>>(QDataStream&, SireIO::PerturbationsLibrary&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const SireIO::PerturbationsLibrary&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, SireIO::PerturbationsLibrary&);
 
 public:
     PerturbationsLibrary();

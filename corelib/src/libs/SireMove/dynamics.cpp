@@ -37,7 +37,7 @@ static const RegisterMetaType<Dynamics> r_dynamics( MAGIC_ONLY,
                                                     "SireMove::Dynamics" );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Dynamics &dynamics)
+QDataStream &operator<<(QDataStream &ds, const Dynamics &dynamics)
 {
     writeHeader(ds, r_dynamics, 1);
     
@@ -47,7 +47,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Dynamics &dynamic
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, Dynamics &dynamics)
+QDataStream &operator>>(QDataStream &ds, Dynamics &dynamics)
 {
     VersionID v = readHeader(ds, r_dynamics);
     

@@ -145,7 +145,7 @@ static QPair< QString,shared_ptr<QTemporaryFile> >
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const TrajectoryMonitor &trajmon)
 {
     writeHeader(ds, r_trajmon, 2);
@@ -177,7 +177,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, TrajectoryMonitor &trajmon)
+QDataStream &operator>>(QDataStream &ds, TrajectoryMonitor &trajmon)
 {
     VersionID v = readHeader(ds, r_trajmon);
     

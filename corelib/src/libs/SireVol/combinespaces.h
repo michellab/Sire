@@ -40,8 +40,8 @@ namespace SireVol
 class CombineSpaces;
 }
 
-QDataStream& operator<<(QDataStream&, const SireVol::CombineSpaces&);
-QDataStream& operator>>(QDataStream&, SireVol::CombineSpaces&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::CombineSpaces&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::CombineSpaces&);
 
 namespace SireVol
 {
@@ -59,8 +59,8 @@ class SIREVOL_EXPORT CombineSpaces
         : public SireBase::ConcreteProperty<CombineSpaces,SireBase::CombineProperties>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CombineSpaces&);
-friend QDataStream& ::operator>>(QDataStream&, CombineSpaces&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CombineSpaces&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, CombineSpaces&);
 
 public:
     CombineSpaces();

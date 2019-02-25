@@ -42,7 +42,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<Probe> r_probe( MAGIC_ONLY, Probe::typeName() );
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const Probe &probe)
+QDataStream &operator<<(QDataStream &ds, const Probe &probe)
 {
     writeHeader(ds, r_probe, 1);
     
@@ -51,7 +51,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const Probe &probe)
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, Probe &probe)
+QDataStream &operator>>(QDataStream &ds, Probe &probe)
 {
     VersionID v = readHeader(ds, r_probe);
     
@@ -121,7 +121,7 @@ const Probe& Probe::null()
 
 static const RegisterMetaType<NullProbe> r_nullprobe;
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const NullProbe &nullprobe)
+QDataStream &operator<<(QDataStream &ds, const NullProbe &nullprobe)
 {
     writeHeader(ds, r_nullprobe, 1);
     
@@ -130,7 +130,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const NullProbe &nullprob
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, NullProbe &nullprobe)
+QDataStream &operator>>(QDataStream &ds, NullProbe &nullprobe)
 {
     VersionID v = readHeader(ds, r_nullprobe);
     

@@ -115,7 +115,7 @@ static const RegisterMetaType<AmberPrm> r_parm;
 const RegisterParser<AmberPrm> register_amberparm;
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberPrm &parm)
+QDataStream &operator<<(QDataStream &ds, const AmberPrm &parm)
 {
     writeHeader(ds, r_parm, 2);
 
@@ -732,7 +732,7 @@ void AmberPrm::rebuildAfterReload()
 }
 
 /** Read from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberPrm &parm)
+QDataStream &operator>>(QDataStream &ds, AmberPrm &parm)
 {
     VersionID v = readHeader(ds, r_parm);
 

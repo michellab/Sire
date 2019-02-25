@@ -3,6 +3,8 @@
 
 #include "SireMove_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "zmatrix.h"
 #include "integratorworkspacejm.h"
 #include "internalmove.h"

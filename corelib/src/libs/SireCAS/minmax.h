@@ -39,11 +39,11 @@ class Min;
 class Max;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Min&);
-QDataStream& operator>>(QDataStream&, SireCAS::Min&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Min&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Min&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Max&);
-QDataStream& operator>>(QDataStream&, SireCAS::Max&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Max&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Max&);
 
 namespace SireCAS
 {
@@ -52,8 +52,8 @@ namespace SireCAS
 class SIRECAS_EXPORT Min : public DoubleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Min&);
-friend QDataStream& ::operator>>(QDataStream&, Min&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Min&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Min&);
 
 public:
     Min();
@@ -92,8 +92,8 @@ protected:
 class SIRECAS_EXPORT Max : public DoubleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Max&);
-friend QDataStream& ::operator>>(QDataStream&, Max&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Max&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Max&);
 
 public:
     Max();

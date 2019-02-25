@@ -54,7 +54,7 @@ using namespace SireStream;
 static const RegisterMetaType<Constraints> r_constraints;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const Constraints &constraints)
 {
     writeHeader(ds, r_constraints, 3);
@@ -68,7 +68,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, Constraints &constraints)
+QDataStream &operator>>(QDataStream &ds, Constraints &constraints)
 {
     VersionID v = readHeader(ds, r_constraints);
     

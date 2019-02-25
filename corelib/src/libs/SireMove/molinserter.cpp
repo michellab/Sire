@@ -61,7 +61,7 @@ static const RegisterMetaType<MolInserter> r_molinserter( MAGIC_ONLY,
                                                           MolInserter::typeName() );
                                                           
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const MolInserter &molinserter)
 {
     writeHeader(ds, r_molinserter, 1);
@@ -75,7 +75,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, MolInserter &molinserter)
+QDataStream &operator>>(QDataStream &ds, MolInserter &molinserter)
 {
     VersionID v = readHeader(ds, r_molinserter);
     
@@ -210,7 +210,7 @@ const NullInserter& MolInserter::null()
 static const RegisterMetaType<NullInserter> r_nullinserter;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const NullInserter &nullinserter)
 {
     writeHeader(ds, r_nullinserter, 1);
@@ -221,7 +221,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, NullInserter &nullinserter)
+QDataStream &operator>>(QDataStream &ds, NullInserter &nullinserter)
 {
     VersionID v = readHeader(ds, r_nullinserter);
     
@@ -291,7 +291,7 @@ double NullInserter::insert(const PartialMolecule&, System&, const Space&)
 static const RegisterMetaType<UniformInserter> r_uniforminserter;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const UniformInserter &uniforminserter)
 {
     writeHeader(ds, r_uniforminserter, 1);
@@ -302,7 +302,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         UniformInserter &uniforminserter)
 {
     VersionID v = readHeader(ds, r_uniforminserter);

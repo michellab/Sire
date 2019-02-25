@@ -62,7 +62,7 @@ using namespace SireStream;
 static const RegisterMetaType<RepExMove2> r_repexmove2;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const RepExMove2 &repexmove2)
+QDataStream &operator<<(QDataStream &ds, const RepExMove2 &repexmove2)
 {
     writeHeader(ds, r_repexmove2, 1);
 
@@ -79,7 +79,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const RepExMove2 &repex
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, RepExMove2 &repexmove2)
+QDataStream &operator>>(QDataStream &ds, RepExMove2 &repexmove2)
 {
     VersionID v = readHeader(ds, r_repexmove2);
 

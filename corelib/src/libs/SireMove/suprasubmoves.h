@@ -39,11 +39,11 @@ class SupraSubMoves;
 class SameSupraSubMoves;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::SupraSubMoves&);
-QDataStream& operator>>(QDataStream&, SireMove::SupraSubMoves&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::SupraSubMoves&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::SupraSubMoves&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::SameSupraSubMoves&);
-QDataStream& operator>>(QDataStream&, SireMove::SameSupraSubMoves&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::SameSupraSubMoves&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::SameSupraSubMoves&);
 
 namespace SireMove
 {
@@ -55,8 +55,8 @@ namespace SireMove
 class SIREMOVE_EXPORT SupraSubMoves : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SupraSubMoves&);
-friend QDataStream& ::operator>>(QDataStream&, SupraSubMoves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SupraSubMoves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SupraSubMoves&);
 
 public:
     SupraSubMoves();
@@ -105,8 +105,8 @@ class SIREMOVE_EXPORT SameSupraSubMoves
         : public SireBase::ConcreteProperty<SameSupraSubMoves,SupraSubMoves>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SameSupraSubMoves&);
-friend QDataStream& ::operator>>(QDataStream&, SameSupraSubMoves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SameSupraSubMoves&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SameSupraSubMoves&);
 
 public:
     SameSupraSubMoves();

@@ -43,8 +43,8 @@ namespace SireMove
 class Titrator;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::Titrator&);
-QDataStream& operator>>(QDataStream&, SireMove::Titrator&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::Titrator&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::Titrator&);
 
 namespace SireSystem{ class System; }
 namespace SireMol{ class MoleculeGroup; }
@@ -67,8 +67,8 @@ class SIREMOVE_EXPORT Titrator
         : public SireBase::ConcreteProperty<Titrator,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Titrator&);
-friend QDataStream& ::operator>>(QDataStream&, Titrator&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const Titrator&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, Titrator&);
 
 public:
     Titrator();

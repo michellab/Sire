@@ -47,7 +47,7 @@ static const ExpressionBase one = Constant();
 static const RegisterMetaType<ExpressionBase> r_exbase(NO_ROOT);
 
 /** Serialise an ExpressionBase to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ExpressionBase &ex)
+QDataStream &operator<<(QDataStream &ds, const ExpressionBase &ex)
 {
     writeHeader(ds, r_exbase, 1);
 
@@ -58,7 +58,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ExpressionBase &ex
 }
 
 /** Deserialise an ExpressionBase from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ExpressionBase &ex)
+QDataStream &operator>>(QDataStream &ds, ExpressionBase &ex)
 {
     VersionID v = readHeader(ds, r_exbase);
 

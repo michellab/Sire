@@ -51,7 +51,7 @@ static const RegisterMetaType<QMProgram> r_qmprog( MAGIC_ONLY,
                                                    "Squire::QMProgram" );
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const QMProgram &qmprog)
+QDataStream &operator<<(QDataStream &ds, const QMProgram &qmprog)
 {
     writeHeader(ds, r_qmprog, 1);
     
@@ -61,7 +61,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const QMProgram &qmprog)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, QMProgram &qmprog)
+QDataStream &operator>>(QDataStream &ds, QMProgram &qmprog)
 {
     VersionID v = readHeader(ds, r_qmprog);
     
@@ -282,7 +282,7 @@ QString QMProgram::potentialCommandFile(const QMPotential::Molecules&,
 static const RegisterMetaType<NullQM> r_nullqm;
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const NullQM &nullqm)
+QDataStream &operator<<(QDataStream &ds, const NullQM &nullqm)
 {
     writeHeader(ds, r_nullqm, 1);
     ds << static_cast<const QMProgram&>(nullqm);
@@ -291,7 +291,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const NullQM &nullqm)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, NullQM &nullqm)
+QDataStream &operator>>(QDataStream &ds, NullQM &nullqm)
 {
     VersionID v = readHeader(ds, r_nullqm);
     

@@ -3,6 +3,8 @@
 
 #include "SireAnalysis_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "ti.h"
 #include "bennetts.h"
 #include "ticomponents.h"

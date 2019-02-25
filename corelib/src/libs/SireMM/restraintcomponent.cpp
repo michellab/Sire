@@ -38,7 +38,7 @@ using namespace SireStream;
 static const RegisterMetaType<RestraintComponent> r_rest;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const RestraintComponent &rest)
+QDataStream &operator<<(QDataStream &ds, const RestraintComponent &rest)
 {
     writeHeader(ds, r_rest, 1);
     ds << static_cast<const FFComponent&>(rest);
@@ -46,7 +46,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const RestraintComponent 
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, RestraintComponent &rest)
+QDataStream &operator>>(QDataStream &ds, RestraintComponent &rest)
 {
     VersionID v = readHeader(ds, r_rest);
     

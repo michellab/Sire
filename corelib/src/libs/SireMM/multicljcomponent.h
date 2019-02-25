@@ -42,11 +42,11 @@ class MultiCLJComponent;
 class MultiCLJEnergy;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::MultiCLJComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::MultiCLJComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::MultiCLJComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::MultiCLJComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::MultiCLJEnergy&);
-QDataStream& operator>>(QDataStream&, SireMM::MultiCLJEnergy&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::MultiCLJEnergy&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::MultiCLJEnergy&);
 
 namespace SireMM
 {
@@ -63,8 +63,8 @@ boost::tuple<QString,QString> getSubscriptedProperty(QString name);
 class SIREMM_EXPORT MultiCLJComponent : public SireFF::FFComponent
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MultiCLJComponent&);
-friend QDataStream& ::operator>>(QDataStream&, MultiCLJComponent&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const MultiCLJComponent&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, MultiCLJComponent&);
 
 public:
     MultiCLJComponent(const FFName &name = FFName());
@@ -134,8 +134,8 @@ private:
 class SIREMM_EXPORT MultiCLJEnergy : public CLJEnergy
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MultiCLJEnergy&);
-friend QDataStream& ::operator>>(QDataStream&, MultiCLJEnergy&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const MultiCLJEnergy&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, MultiCLJEnergy&);
 
 public:
     typedef MultiCLJComponent Components;

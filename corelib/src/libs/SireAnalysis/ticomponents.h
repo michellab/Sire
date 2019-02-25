@@ -40,11 +40,11 @@ class TIComponents;
 class ComponentGradients;
 }
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::TIComponents&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::TIComponents&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::TIComponents&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::TIComponents&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::ComponentGradients&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::ComponentGradients&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::ComponentGradients&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::ComponentGradients&);
 
 namespace SireAnalysis
 {
@@ -61,8 +61,8 @@ class SIREANALYSIS_EXPORT ComponentGradients
             : public SireBase::ConcreteProperty<ComponentGradients,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ComponentGradients&);
-friend QDataStream& ::operator>>(QDataStream&, ComponentGradients&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator<<(QDataStream&, const ComponentGradients&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator>>(QDataStream&, ComponentGradients&);
 
 public:
     ComponentGradients();
@@ -155,8 +155,8 @@ class SIREANALYSIS_EXPORT TIComponents
             : public SireBase::ConcreteProperty<TIComponents,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TIComponents&);
-friend QDataStream& ::operator>>(QDataStream&, TIComponents&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator<<(QDataStream&, const TIComponents&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator>>(QDataStream&, TIComponents&);
 
 public:
     TIComponents(bool conserve_memory = true);

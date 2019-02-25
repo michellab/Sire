@@ -111,8 +111,8 @@ class FFMolecule3D : public FFMolecule<PTNL>
 
 friend class FFMolecules3D<PTNL>;  //so can call setCoordinates(...)
 
-friend QDataStream& ::operator<<<>(QDataStream&, const FFMolecule3D<PTNL>&);
-friend QDataStream& ::operator>><>(QDataStream&, FFMolecule3D<PTNL>&);
+friend SIREFF_EXPORT QDataStream& ::operator<<<>(QDataStream&, const FFMolecule3D<PTNL>&);
+friend SIREFF_EXPORT QDataStream& ::operator>><>(QDataStream&, FFMolecule3D<PTNL>&);
 
 public:
     typedef typename FFMolecule<PTNL>::Parameters Parameters;
@@ -171,8 +171,8 @@ template<class PTNL>
 class FFMolecules3D : public FFMolecules<PTNL>
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const FFMolecules3D<PTNL>&);
-friend QDataStream& ::operator>><>(QDataStream&, FFMolecules3D<PTNL>&);
+friend SIREFF_EXPORT QDataStream& ::operator<<<>(QDataStream&, const FFMolecules3D<PTNL>&);
+friend SIREFF_EXPORT QDataStream& ::operator>><>(QDataStream&, FFMolecules3D<PTNL>&);
 
 public:
     typedef typename FFMolecules<PTNL>::Molecule Molecule;

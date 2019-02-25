@@ -50,8 +50,8 @@ template<class T>
 class ResProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResProp&);
-QDataStream& operator>>(QDataStream&, SireMol::ResProp&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResProp&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResProp&);
 
 template<class T>
 QDataStream& operator<<(QDataStream&, const SireMol::ResProperty<T>&);
@@ -99,8 +99,8 @@ class SIREMOL_EXPORT ResProperty
     : public SireBase::ConcreteProperty<ResProperty<T>, ResProp>
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const ResProperty<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, ResProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const ResProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, ResProperty<T>&);
 
 public:
     ResProperty();

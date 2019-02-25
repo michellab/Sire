@@ -45,8 +45,8 @@ using namespace SireMol;
 
 namespace SireIO
 {
-    SelectResult setAmberWater(const SelectResult& molecules, const QString& model, const PropertyMap& map = PropertyMap());
-    SelectResult setGromacsWater(const SelectResult& molecules, const QString& model, const PropertyMap& map = PropertyMap());
+    SIREIO_EXPORT SelectResult setAmberWater(const SelectResult& molecules, const QString& model, const PropertyMap& map = PropertyMap());
+    SIREIO_EXPORT SelectResult setGromacsWater(const SelectResult& molecules, const QString& model, const PropertyMap& map = PropertyMap());
 
     Vector cross(const Vector& v0, const Vector& v1);
 }

@@ -59,11 +59,11 @@ namespace SireID
     @author Christopher Woods
 */
 template<class ID>
-class SIREID_EXPORT IDAndSet : public ID
+class IDAndSet : public ID
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const IDAndSet<ID>&);
-friend QDataStream& ::operator>><>(QDataStream&, IDAndSet<ID>&);
+friend SIREID_EXPORT QDataStream& ::operator<<<>(QDataStream&, const IDAndSet<ID>&);
+friend SIREID_EXPORT QDataStream& ::operator>><>(QDataStream&, IDAndSet<ID>&);
 
 public:
     typedef typename ID::Identifier Identifier;

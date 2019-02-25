@@ -3,6 +3,8 @@
 
 #include "SireSystem_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "systemmonitors.h"
 #include "sysidentifier.h"
 #include "checkpoint.h"

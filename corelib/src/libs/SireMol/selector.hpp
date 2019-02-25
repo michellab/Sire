@@ -50,37 +50,37 @@ class MoleculeData;
 namespace detail
 {
 
-bool has_property(const Atom*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_property(const Atom*, const MoleculeData &moldata,
                   const PropertyName &key);
-bool has_property(const Chain*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_property(const Chain*, const MoleculeData &moldata,
                   const PropertyName &key);
-bool has_property(const CutGroup*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_property(const CutGroup*, const MoleculeData &moldata,
                   const PropertyName &key);
-bool has_property(const Residue*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_property(const Residue*, const MoleculeData &moldata,
                   const PropertyName &key);
-bool has_property(const Segment*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_property(const Segment*, const MoleculeData &moldata,
                   const PropertyName &key);
 
-bool has_metadata(const Atom*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Atom*, const MoleculeData &moldata,
                   const PropertyName &metakey);
-bool has_metadata(const Chain*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Chain*, const MoleculeData &moldata,
                   const PropertyName &metakey);
-bool has_metadata(const CutGroup*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const CutGroup*, const MoleculeData &moldata,
                   const PropertyName &metakey);
-bool has_metadata(const Residue*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Residue*, const MoleculeData &moldata,
                   const PropertyName &metakey);
-bool has_metadata(const Segment*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Segment*, const MoleculeData &moldata,
                   const PropertyName &metakey);
 
-bool has_metadata(const Atom*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Atom*, const MoleculeData &moldata,
                   const PropertyName &key, const PropertyName &metakey);
-bool has_metadata(const Chain*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Chain*, const MoleculeData &moldata,
                   const PropertyName &key, const PropertyName &metakey);
-bool has_metadata(const CutGroup*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const CutGroup*, const MoleculeData &moldata,
                   const PropertyName &key, const PropertyName &metakey);
-bool has_metadata(const Residue*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Residue*, const MoleculeData &moldata,
                   const PropertyName &key, const PropertyName &metakey);
-bool has_metadata(const Segment*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Segment*, const MoleculeData &moldata,
                   const PropertyName &key, const PropertyName &metakey);
 
 } // end of namespace detail
@@ -96,7 +96,7 @@ bool has_metadata(const Segment*, const MoleculeData &moldata,
     @author Christopher Woods
 */
 template<class T>
-class SIREMOL_EXPORT Selector : public SireBase::ConcreteProperty<Selector<T>,MoleculeView>
+class Selector : public SireBase::ConcreteProperty<Selector<T>,MoleculeView>
 {
 public:
     Selector();

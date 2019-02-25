@@ -69,17 +69,17 @@ class CoulombPotentialInterface;
 namespace detail{ class CoulombParameter; }
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::InterCoulombPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::InterCoulombPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InterCoulombPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::InterCoulombPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::IntraCoulombPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::IntraCoulombPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::IntraCoulombPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::IntraCoulombPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CoulombPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::CoulombPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CoulombPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CoulombPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::detail::CoulombParameter&);
-QDataStream& operator>>(QDataStream&, SireMM::detail::CoulombParameter&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::detail::CoulombParameter&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::detail::CoulombParameter&);
 
 template<class CoulPot>
 QDataStream& operator<<(QDataStream&, const SireMM::CoulombPotentialInterface<CoulPot>&);
@@ -213,8 +213,8 @@ public:
 class SIREMM_EXPORT CoulombPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CoulombPotential&);
-friend QDataStream& ::operator>>(QDataStream&, CoulombPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CoulombPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CoulombPotential&);
 
 public:
     virtual ~CoulombPotential();
@@ -289,8 +289,8 @@ protected:
 class SIREMM_EXPORT InterCoulombPotential : public CoulombPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const InterCoulombPotential&);
-friend QDataStream& ::operator>>(QDataStream&, InterCoulombPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const InterCoulombPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, InterCoulombPotential&);
 
 public:
 
@@ -564,8 +564,8 @@ private:
 class SIREMM_EXPORT IntraCoulombPotential : public CoulombPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IntraCoulombPotential&);
-friend QDataStream& ::operator>>(QDataStream&, IntraCoulombPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const IntraCoulombPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, IntraCoulombPotential&);
 
 public:
     typedef CoulombEnergy Energy;
@@ -895,9 +895,9 @@ template<class CoulPot>
 class CoulombPotentialInterface : protected CoulPot
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, 
+friend SIREMM_EXPORT QDataStream& ::operator<<<>(QDataStream&, 
                                    const CoulombPotentialInterface<CoulPot>&);
-friend QDataStream& ::operator>><>(QDataStream&, CoulombPotentialInterface<CoulPot>&);
+friend SIREMM_EXPORT QDataStream& ::operator>><>(QDataStream&, CoulombPotentialInterface<CoulPot>&);
 
 public:
     CoulombPotentialInterface() : CoulPot()
@@ -1291,8 +1291,8 @@ IntraCoulombPotential::calculateForce(const IntraCoulombPotential::Molecule &mol
 
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::detail::ChargeParameter&);
-QDataStream& operator>>(QDataStream&, SireMM::detail::ChargeParameter&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::detail::ChargeParameter&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::detail::ChargeParameter&);
 
 template<class CoulPot>
 QDataStream& operator<<(QDataStream &ds,

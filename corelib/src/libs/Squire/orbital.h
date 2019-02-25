@@ -40,14 +40,14 @@ class OrbitalShell;
 class ShellPair;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::Orbital&);
-QDataStream& operator>>(QDataStream&, Squire::Orbital&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::Orbital&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::Orbital&);
 
-QDataStream& operator<<(QDataStream&, const Squire::OrbitalShell&);
-QDataStream& operator>>(QDataStream&, Squire::OrbitalShell&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::OrbitalShell&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::OrbitalShell&);
 
-QDataStream& operator<<(QDataStream&, const Squire::ShellPair&);
-QDataStream& operator>>(QDataStream&, Squire::ShellPair&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::ShellPair&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::ShellPair&);
 
 namespace Squire
 {
@@ -67,8 +67,8 @@ namespace Squire
 class SQUIRE_EXPORT Orbital : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Orbital&);
-friend QDataStream& ::operator>>(QDataStream&, Orbital&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const Orbital&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, Orbital&);
 
 public:
     Orbital();
@@ -107,8 +107,8 @@ protected:
 class SQUIRE_EXPORT OrbitalShell : public Orbital
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const OrbitalShell&);
-friend QDataStream& ::operator>>(QDataStream&, OrbitalShell&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const OrbitalShell&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, OrbitalShell&);
 
 public:
     OrbitalShell();
@@ -134,8 +134,8 @@ protected:
 class SQUIRE_EXPORT ShellPair : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ShellPair&);
-friend QDataStream& ::operator>>(QDataStream&, ShellPair&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const ShellPair&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, ShellPair&);
 
 public:
     ShellPair();

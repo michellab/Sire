@@ -38,8 +38,8 @@ namespace SireIO
 class Tinker;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::Tinker&);
-QDataStream& operator>>(QDataStream&, SireIO::Tinker&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Tinker&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Tinker&);
 
 namespace SireIO
 {
@@ -63,8 +63,8 @@ public:
 class SIREIO_EXPORT Tinker : public SireBase::ConcreteProperty<Tinker,IOBase>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Tinker&);
-friend QDataStream& ::operator>>(QDataStream&, Tinker&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const Tinker&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, Tinker&);
 
 public:
     Tinker();

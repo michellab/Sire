@@ -55,7 +55,7 @@ uint Sum::hash() const
 }
 
 /** Serialise a Sum to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Sum &sum)
+QDataStream &operator<<(QDataStream &ds, const Sum &sum)
 {
     writeHeader(ds, r_sum, 1) << sum.posparts.values()
                               << sum.negparts.values() << sum.strtval
@@ -64,7 +64,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Sum &sum)
 }
 
 /** Deserialise a Sum from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Sum &sum)
+QDataStream &operator>>(QDataStream &ds, Sum &sum)
 {
     VersionID v = readHeader(ds, r_sum);
 

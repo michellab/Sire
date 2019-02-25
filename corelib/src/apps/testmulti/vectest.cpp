@@ -132,16 +132,19 @@ void test_cross()
         cross[i] = Vector::cross(v0[i], v1[i]);
     }
 
-    qDebug() << Sire::toString(v0) << Sire::toString(v1) << Sire::toString(cross);
+    qDebug() << "\nv0" << Sire::toString(v0);
+    qDebug() << "\nv1" << Sire::toString(v1);
+    qDebug() << "\ncross(v0,v1)" << Sire::toString(cross);
 
     MultiVector mv0(v0);
     MultiVector mv1(v1);
 
-    qDebug() << mv0.toString() << mv1.toString();
+    qDebug() << "\nmv0" << mv0.toString();
+    qDebug() << "\nmv1" << mv1.toString();
 
     MultiVector mcross = MultiVector::cross(mv0, mv1);
 
-    qDebug() << mcross.toString();
+    qDebug() << "\nmcross(mv0, mv1)" << mcross.toString();
 
     for (int i=0; i<MultiVector::count(); ++i)
     {

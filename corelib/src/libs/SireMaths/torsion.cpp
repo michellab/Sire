@@ -39,7 +39,7 @@ using namespace SireMaths;
 static RegisterMetaType<Torsion> r_torsion(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Torsion &torsion)
+QDataStream &operator<<(QDataStream &ds, const Torsion &torsion)
 {
     writeHeader(ds, r_torsion, 1) << torsion.points[0] << torsion.points[1]
                                   << torsion.points[2] << torsion.points[3];
@@ -48,7 +48,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Torsion &torsion
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, Torsion &torsion)
+QDataStream &operator>>(QDataStream &ds, Torsion &torsion)
 {
     VersionID v = readHeader(ds, r_torsion);
 

@@ -46,8 +46,8 @@ namespace Squire
 class Mopac;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::Mopac&);
-QDataStream& operator>>(QDataStream&, Squire::Mopac&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::Mopac&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::Mopac&);
 
 class QFile;
 
@@ -67,8 +67,8 @@ namespace Squire
 class SQUIRE_EXPORT Mopac : public SireBase::ConcreteProperty<Mopac,QMProgram>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Mopac&);
-friend QDataStream& ::operator>>(QDataStream&, Mopac&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const Mopac&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, Mopac&);
 
 public:
     Mopac();

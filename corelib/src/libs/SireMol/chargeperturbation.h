@@ -38,8 +38,8 @@ namespace SireMol
 class ChargePerturbation;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ChargePerturbation&);
-QDataStream& operator>>(QDataStream&, SireMol::ChargePerturbation&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ChargePerturbation&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ChargePerturbation&);
 
 namespace SireMol
 {
@@ -53,8 +53,8 @@ class SIREMOL_EXPORT ChargePerturbation
          : public SireBase::ConcreteProperty<ChargePerturbation,Perturbation>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ChargePerturbation&);
-friend QDataStream& ::operator>>(QDataStream&, ChargePerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ChargePerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ChargePerturbation&);
 
 public: 
     ChargePerturbation();

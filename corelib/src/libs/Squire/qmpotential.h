@@ -52,14 +52,14 @@ class QMProgram;
 class QMComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::QMPotential&);
-QDataStream& operator>>(QDataStream&, Squire::QMPotential&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::QMPotential&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::QMPotential&);
 
-QDataStream& operator<<(QDataStream&, const Squire::QMProgram&);
-QDataStream& operator>>(QDataStream&, Squire::QMProgram&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::QMProgram&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::QMProgram&);
 
-QDataStream& operator<<(QDataStream&, const Squire::QMComponent&);
-QDataStream& operator>>(QDataStream&, Squire::QMComponent&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::QMComponent&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::QMComponent&);
 
 namespace SireFF
 {
@@ -190,8 +190,8 @@ typedef SireBase::PropPtr<QMProgram> QMProgPtr;
 class SQUIRE_EXPORT QMPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const QMPotential&);
-friend QDataStream& ::operator>>(QDataStream&, QMPotential&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const QMPotential&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, QMPotential&);
 
 public:
     

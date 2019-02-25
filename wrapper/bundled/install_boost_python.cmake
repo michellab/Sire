@@ -6,10 +6,28 @@
 unset(BOOST_PYTHON_LIBRARY CACHE)
 
 if ( ANACONDA_BUILD )
-  find_library( BOOST_PYTHON_LIBRARY
-                NAMES boost_python
-                PATHS ${SIRE_APP}/lib NO_DEFAULT_PATH )
-
+  if (MSVC)
+    find_package( Boost 1.31 COMPONENTS
+      python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR} REQUIRED )
+    set ( BOOST_PYTHON_LIBRARY "${Boost_LIBRARIES}" )
+    set ( BOOST_PYTHON_HEADERS "${Boost_INCLUDE_DIR}" )
+    add_definitions("/DBOOST_PYTHON_NO_LIB")
+    # unwind_type fails with MSVC >= 15.8.0
+    # (https://github.com/boostorg/python/issues/228)
+    file(READ "${Boost_INCLUDE_DIR}/boost/python/detail/unwind_type.hpp" UNWIND_TYPE_HPP_DATA)
+    if (UNWIND_TYPE_HPP_DATA MATCHES "#ifndef _MSC_VER")
+      configure_file("${Boost_INCLUDE_DIR}/boost/python/detail/unwind_type.hpp"
+        "${Boost_INCLUDE_DIR}/boost/python/detail/unwind_type.hpp.orig" COPYONLY)
+      string(REGEX REPLACE "#ifndef _MSC_VER"
+        "#if _MSC_VER >= 1915"
+        UNWIND_TYPE_HPP_DATA "${UNWIND_TYPE_HPP_DATA}")
+      file(WRITE "${Boost_INCLUDE_DIR}/boost/python/detail/unwind_type.hpp" "${UNWIND_TYPE_HPP_DATA}")
+    endif()
+  else()
+    find_library( BOOST_PYTHON_LIBRARY
+                  NAMES boost_python
+                  PATHS ${SIRE_APP}/lib NO_DEFAULT_PATH )
+  endif()
 elseif ( MSYS )
   message( STATUS "Looking for MSYS version of boost::python..." )
   set (BOOST_ALL_DYN_LINK "YES")

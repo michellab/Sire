@@ -40,8 +40,8 @@ namespace SireFF
 class FFIdx;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::FFIdx&);
-QDataStream& operator>>(QDataStream&, SireFF::FFIdx&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::FFIdx&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::FFIdx&);
 
 namespace SireFF
 {
@@ -54,8 +54,8 @@ namespace SireFF
 class SIREFF_EXPORT FFIdx : public SireID::Index_T_<FFIdx>, public FFID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FFIdx&);
-friend QDataStream& ::operator>>(QDataStream&, FFIdx&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FFIdx&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FFIdx&);
 
 public:
     FFIdx();

@@ -27,6 +27,8 @@
 \*********************************************/
 
 #include "SireStream/streamdata.hpp"
+#include "SireStream/version_error_impl.h"
+
 using namespace SireStream;
 
 static const RegisterLibrary *registry = new RegisterLibrary( QString("SireID"), 1, 1 );

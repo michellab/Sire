@@ -38,7 +38,7 @@
 
 using namespace SireStream;
 
-QDataStream SIRESTREAM_EXPORT &operator<<(QDataStream &ds, const MD5Sum &md5sum)
+QDataStream &operator<<(QDataStream &ds, const MD5Sum &md5sum)
 {
     for (int i=0; i<16; ++i)
     {
@@ -48,7 +48,7 @@ QDataStream SIRESTREAM_EXPORT &operator<<(QDataStream &ds, const MD5Sum &md5sum)
     return ds;
 }
 
-QDataStream SIRESTREAM_EXPORT &operator>>(QDataStream &ds, MD5Sum &md5sum)
+QDataStream &operator>>(QDataStream &ds, MD5Sum &md5sum)
 {
     for (int i=0; i<16; ++i)
     {

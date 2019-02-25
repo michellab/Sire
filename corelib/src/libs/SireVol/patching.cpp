@@ -50,7 +50,7 @@ using namespace SireStream;
 static const RegisterMetaType<Patching> r_patching( MAGIC_ONLY,
                                                     Patching::typeName() );
                                                     
-QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const Patching &patching)
+QDataStream &operator<<(QDataStream &ds, const Patching &patching)
 {
     writeHeader(ds, r_patching, 1);
     
@@ -61,7 +61,7 @@ QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const Patching &patching
     return ds;
 }
 
-QDataStream SIREVOL_EXPORT &operator>>(QDataStream &ds, Patching &patching)
+QDataStream &operator>>(QDataStream &ds, Patching &patching)
 {
     VersionID v = readHeader(ds, r_patching);
     
@@ -149,7 +149,7 @@ NullPatching Patching::null()
 
 static const RegisterMetaType<NullPatching> r_nullpatching;
 
-QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const NullPatching &nullpatching)
+QDataStream &operator<<(QDataStream &ds, const NullPatching &nullpatching)
 {
     writeHeader(ds, r_nullpatching, 1);
     
@@ -158,7 +158,7 @@ QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const NullPatching &null
     return ds;
 }
 
-QDataStream SIREVOL_EXPORT &operator>>(QDataStream &ds, NullPatching &nullpatching)
+QDataStream &operator>>(QDataStream &ds, NullPatching &nullpatching)
 {
     VersionID v = readHeader(ds, r_nullpatching);
     
@@ -244,7 +244,7 @@ PatchingPtr NullPatching::repatch(const Space &new_space) const
 
 static const RegisterMetaType<BoxPatching> r_boxpatching;
 
-QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const BoxPatching &boxpatching)
+QDataStream &operator<<(QDataStream &ds, const BoxPatching &boxpatching)
 {
     writeHeader(ds, r_boxpatching, 1);
     
@@ -258,7 +258,7 @@ QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const BoxPatching &boxpa
     return ds;
 }
 
-QDataStream SIREVOL_EXPORT &operator>>(QDataStream &ds, BoxPatching &boxpatching)
+QDataStream &operator>>(QDataStream &ds, BoxPatching &boxpatching)
 {
     VersionID v = readHeader(ds, r_boxpatching);
     

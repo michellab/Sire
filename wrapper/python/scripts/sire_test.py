@@ -1,6 +1,7 @@
 
 import os
 import sys
+import tarfile
 
 from Sire import try_import
 
@@ -15,12 +16,12 @@ is_clean = Sire.Base.getRepositoryVersionIsClean()
 
 testdir_exists = False
 
-testdir = "%s/test" % Sire.Base.getShareDir()
+testdir = os.path.join(Sire.Base.getShareDir(), "test")
 
 if not os.path.exists(testdir):
     os.makedirs(testdir)
 
-unittestdir = "%s/SireUnitTests/unittests" % testdir
+unittestdir = os.path.join(testdir, "SireUnitTests", "unittests")
 
 old_cwd = os.getcwd()
 
@@ -29,7 +30,7 @@ def downloadTestsFromWebsite():
     try:
         pycurl = try_import("pycurl", package_registry={"pycurl":"PyCurl"})
         test_package = "unittests_%s.tar.bz2" % Sire.Base.getReleaseVersion()
-        test_package_file = "%s/unittests.tar.bz2" % testdir
+        test_package_file = os.path.join(testdir, "unittests.tar.bz2")
         with open(test_package_file, "wb") as f:
             c = pycurl.Curl()
             c.setopt(c.URL, 
@@ -40,7 +41,9 @@ def downloadTestsFromWebsite():
             c.close()
 
             os.chdir(testdir)
-            os.system("tar -jxvf unittests.tar.bz2")
+            tar_file = tarfile.open("unittests.tar.bz2", "r:bz2")
+            tar_file.extractall()
+            #os.system("tar -jxvf unittests.tar.bz2")
 
             if not os.path.exists("SireUnitTests/README.md"):
                 print("Could not find SireUnitTests/README.md in download - everything ok?")
@@ -57,10 +60,10 @@ if os.path.exists(unittestdir):
 
     try:
         gitexe = Sire.Base.findExe("git").absoluteFilePath()
-        os.chdir("%s/.." % unittestdir)
-        os.system("%s fetch" % gitexe)
-        os.system("%s checkout %s" % (gitexe,"devel"))
-        os.system("%s pull" % gitexe)
+        os.chdir(os.path.dirname(unittestdir))
+        os.system("\"%s\" fetch" % gitexe)
+        os.system("\"%s\" checkout %s" % (gitexe,"devel"))
+        os.system("\"%s\" pull" % gitexe)
         os.chdir(old_cwd)
     except:
         pass
@@ -74,7 +77,7 @@ else:
         try:
             gitexe = Sire.Base.findExe("git").absoluteFilePath()
             os.chdir(testdir)
-            gitcmd = "%s clone https://github.com/michellab/SireUnitTests.git -b %s" % (gitexe,"devel")
+            gitcmd = "\"%s\" clone https://github.com/michellab/SireUnitTests.git -b %s" % (gitexe,"devel")
             print("Cloning unittests from git repository - %s" % gitcmd)
             os.system(gitcmd)
             os.chdir(old_cwd)

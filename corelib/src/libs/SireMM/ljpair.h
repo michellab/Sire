@@ -58,8 +58,8 @@ An LJPair holds a combined pair of Lennard Jones parameters
 class SIREMM_EXPORT LJPair
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const LJPair&);
-friend QDataStream& ::operator>>(QDataStream&, LJPair&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const LJPair&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, LJPair&);
 
 public:
     LJPair();

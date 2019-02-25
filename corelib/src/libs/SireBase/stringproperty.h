@@ -39,8 +39,8 @@ class StringProperty;
 class VariantProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::StringProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::StringProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::StringProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::StringProperty&);
 
 namespace SireBase
 {
@@ -52,8 +52,8 @@ namespace SireBase
 class SIREBASE_EXPORT StringProperty : public ConcreteProperty<StringProperty,Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const StringProperty&);
-friend QDataStream& ::operator>>(QDataStream&, StringProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const StringProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, StringProperty&);
 
 public:
     StringProperty();

@@ -32,7 +32,7 @@
 using namespace SireUnits;
 using namespace SireUnits::Dimension;
 
-Angle SIREUNITS_EXPORT SireUnits::acute(Angle angle)
+Angle SireUnits::acute(Angle angle)
 {
     const Angle three_sixty = 360*degrees;
     const Angle one_eighty = 180*degrees;

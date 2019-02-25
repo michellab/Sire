@@ -41,8 +41,8 @@ class AABox;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireVol::AABox&);
-QDataStream& operator>>(QDataStream&, SireVol::AABox&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::AABox&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::AABox&);
 
 namespace SireMaths
 {
@@ -67,8 +67,8 @@ An AABox is an axis-aligned bounding box that is the smallest box that is aligne
 class SIREVOL_EXPORT AABox
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AABox&);
-friend QDataStream& ::operator>>(QDataStream&, AABox&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AABox&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, AABox&);
 
 friend class CoordGroupPvt;
 

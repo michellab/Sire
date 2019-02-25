@@ -54,7 +54,7 @@ static const RegisterMetaType<PowerFunction> r_powerfunc(MAGIC_ONLY,
                                                          "SireCAS::PowerFunction");
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const PowerFunction &powerfunc)
+QDataStream &operator<<(QDataStream &ds, const PowerFunction &powerfunc)
 {
     writeHeader(ds, r_powerfunc, 1) << static_cast<const ExBase&>(powerfunc);
 
@@ -62,7 +62,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const PowerFunction &pow
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, PowerFunction &powerfunc)
+QDataStream &operator>>(QDataStream &ds, PowerFunction &powerfunc)
 {
     VersionID v = readHeader(ds, r_powerfunc);
 
@@ -525,7 +525,7 @@ QList<Factor> PowerFunction::expand(const Symbol &symbol) const
 static const RegisterMetaType<Power> r_power;
 
 /** Serialise a Power to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Power &power)
+QDataStream &operator<<(QDataStream &ds, const Power &power)
 {
     writeHeader(ds, r_power, 1)
           << power.ex << power.pwr << static_cast<const PowerFunction&>(power);
@@ -534,7 +534,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Power &power)
 }
 
 /** Deserialise a Power from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Power &power)
+QDataStream &operator>>(QDataStream &ds, Power &power)
 {
     VersionID v = readHeader(ds, r_power);
 

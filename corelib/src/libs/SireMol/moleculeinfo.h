@@ -38,8 +38,8 @@ namespace SireMol
 class MoleculeInfo;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MoleculeInfo&);
-QDataStream& operator>>(QDataStream&, SireMol::MoleculeInfo&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MoleculeInfo&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MoleculeInfo&);
 
 namespace SireMol
 {
@@ -67,8 +67,8 @@ class SIREMOL_EXPORT MoleculeInfo
         : public SireBase::ConcreteProperty<MoleculeInfo,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MoleculeInfo&);
-friend QDataStream& ::operator>>(QDataStream&, MoleculeInfo&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MoleculeInfo&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MoleculeInfo&);
 
 public:
     MoleculeInfo();

@@ -43,7 +43,7 @@ using namespace SireError;
 
 static const RegisterMetaType<CPUID> r_cpuid;
 
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const CPUID &cpuid)
+QDataStream &operator<<(QDataStream &ds, const CPUID &cpuid)
 {
     writeHeader(ds, r_cpuid, 1);
     
@@ -52,7 +52,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const CPUID &cpuid)
     return ds;
 }
 
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, CPUID &cpuid)
+QDataStream &operator>>(QDataStream &ds, CPUID &cpuid)
 {
     VersionID v = readHeader(ds, r_cpuid);
     

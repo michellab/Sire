@@ -68,7 +68,7 @@ using namespace SireStream;
 static const RegisterMetaType<Moves> r_moves( MAGIC_ONLY, "SireMove::Moves" );
                                                       
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Moves &moves)
+QDataStream &operator<<(QDataStream &ds, const Moves &moves)
 {
     writeHeader(ds, r_moves, 2);
     
@@ -79,7 +79,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Moves &moves)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, Moves &moves)
+QDataStream &operator>>(QDataStream &ds, Moves &moves)
 {
     VersionID v = readHeader(ds, r_moves);
     
@@ -591,7 +591,7 @@ void Moves::postCheck(System &system) const
 static const RegisterMetaType<SameMoves> r_samemoves;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const SameMoves &samemoves)
+QDataStream &operator<<(QDataStream &ds, const SameMoves &samemoves)
 {
     writeHeader(ds, r_samemoves, 2);
     
@@ -603,7 +603,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const SameMoves &samemo
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, SameMoves &samemoves)
+QDataStream &operator>>(QDataStream &ds, SameMoves &samemoves)
 {
     VersionID v = readHeader(ds, r_samemoves);
     

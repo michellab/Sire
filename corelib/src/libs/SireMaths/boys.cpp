@@ -41,7 +41,7 @@ namespace SireMaths
 const int start_m = 50;
 
 /** Return the boys function F0(x) */
-double SIREMATHS_EXPORT boys_f0(double x)
+double boys_f0(double x)
 {
     double two_sqrt_x = 2 * std::sqrt(x);
     
@@ -52,7 +52,7 @@ double SIREMATHS_EXPORT boys_f0(double x)
 }
 
 /** Return the boys function F1(x) */
-double SIREMATHS_EXPORT boys_f1(double x)
+double boys_f1(double x)
 {
     if (x == 0)
         return 1.0/3.0;
@@ -65,7 +65,7 @@ double SIREMATHS_EXPORT boys_f1(double x)
 }
 
 /** Return the boys function F2(x) */
-double SIREMATHS_EXPORT boys_f2(double x)
+double boys_f2(double x)
 {
     if (x == 0)
         return 1.0/5.0;
@@ -81,7 +81,7 @@ double SIREMATHS_EXPORT boys_f2(double x)
 }
 
 /** Return the boys function F3(x) */
-double SIREMATHS_EXPORT boys_f3(double x)
+double boys_f3(double x)
 {
     if (x == 0)
         return 1.0/7.0;
@@ -98,7 +98,7 @@ double SIREMATHS_EXPORT boys_f3(double x)
 }
 
 /** Return the boys function Fm(x) */
-double SIREMATHS_EXPORT boys(int m, double x)
+double boys(int m, double x)
 {
     m = qMax(m, 0);
 
@@ -137,14 +137,14 @@ double SIREMATHS_EXPORT boys(int m, double x)
 }
 
 /** Return the boys function Fm(x) */
-double SIREMATHS_EXPORT boys(double m, double x)
+double boys(double m, double x)
 {
     throw SireError::incomplete_code( QObject::tr("No floating point boys!"), CODELOC );
     return boys( int(m), x );
 }
 
 /** Return F0(x) and F1(x) in boys[0] and boys[1] */
-void SIREMATHS_EXPORT multi_boys_2(double x, double boys[2])
+void multi_boys_2(double x, double boys[2])
 {    
     if (x != 0)
     {
@@ -164,7 +164,7 @@ void SIREMATHS_EXPORT multi_boys_2(double x, double boys[2])
 }
 
 /** Return F0(x), F1(x) and F2(x) in boys[0], boys[1], boys[2] */
-void SIREMATHS_EXPORT multi_boys_3(double x, double boys[3])
+void multi_boys_3(double x, double boys[3])
 {    
     if (x != 0)
     {
@@ -186,7 +186,7 @@ void SIREMATHS_EXPORT multi_boys_3(double x, double boys[3])
 }
 
 /** Return boys[0] = F0(x), boys[1] = F1(x), boys[2] = F2(x), boys[3] = F3(x) */
-void SIREMATHS_EXPORT multi_boys_4(double x, double boys[4])
+void multi_boys_4(double x, double boys[4])
 {    
     if (x != 0)
     {
@@ -210,7 +210,7 @@ void SIREMATHS_EXPORT multi_boys_4(double x, double boys[4])
 }
 
 /** Return boys[0] = F0(x), boys[1] = F1(x) .... boys[n-1] = Fn-1(x) */
-void SIREMATHS_EXPORT multi_boys_n(double x, double b[], int n)
+void multi_boys_n(double x, double b[], int n)
 {
     if (n <= 0)
         return;
@@ -228,7 +228,7 @@ void SIREMATHS_EXPORT multi_boys_n(double x, double b[], int n)
 }
 
 /** Return boys[0] = Fstart(x), boys[1] = Fstart+1(x) */
-void SIREMATHS_EXPORT multi_boys_2(double x, double b[2], int start)
+void multi_boys_2(double x, double b[2], int start)
 {
     start = qMax(start, 0);
 
@@ -242,7 +242,7 @@ void SIREMATHS_EXPORT multi_boys_2(double x, double b[2], int start)
 }
 
 /** Return boys[0] = Fstart(x), boys[1] = Fstart+1(x), boys[2] = Fstart+2(x) */
-void SIREMATHS_EXPORT multi_boys_3(double x, double b[3], int start)
+void multi_boys_3(double x, double b[3], int start)
 {
     start = qMax(start, 0);
 
@@ -258,7 +258,7 @@ void SIREMATHS_EXPORT multi_boys_3(double x, double b[3], int start)
 
 /** Return boys[0] = Fstart(x), boys[1] = Fstart+1(x), boys[2] = Fstart+2(x),
            boys[3] = Fstart+3(x) */
-void SIREMATHS_EXPORT multi_boys_4(double x, double b[4], int start)
+void multi_boys_4(double x, double b[4], int start)
 {
     start = qMax(start, 0);
 
@@ -274,7 +274,7 @@ void SIREMATHS_EXPORT multi_boys_4(double x, double b[4], int start)
 }
 
 /** Return boys[0] = Fstart(x), boys[1] = Fstart+1(x), ... boys[n-1] = Fstart+n-1(x) */
-void SIREMATHS_EXPORT multi_boys_n(double x, double b[], int n, int start)
+void multi_boys_n(double x, double b[], int n, int start)
 {
     if (n <= 0)
         return;
@@ -294,7 +294,7 @@ void SIREMATHS_EXPORT multi_boys_n(double x, double b[], int n, int start)
 }
 
 /** Return an array containing F0(x) to Fn-1(x) */
-QVector<double> SIREMATHS_EXPORT multi_boys(double x, int n)
+QVector<double> multi_boys(double x, int n)
 {
     if (n <= 0)
         return QVector<double>();
@@ -308,7 +308,7 @@ QVector<double> SIREMATHS_EXPORT multi_boys(double x, int n)
 }
 
 /** Return an array containing Fstart(x) to Fstart+n-1(x) */
-QVector<double> SIREMATHS_EXPORT multi_boys(double x, int n, int start)
+QVector<double> multi_boys(double x, int n, int start)
 {
     if (n <= 0)
         return QVector<double>();

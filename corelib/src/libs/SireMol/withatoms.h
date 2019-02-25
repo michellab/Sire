@@ -45,17 +45,17 @@ class ChainsWithAtoms;
 class SegsWithAtoms;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResWithAtoms&);
-QDataStream& operator>>(QDataStream&, SireMol::ResWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResWithAtoms&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::CGsWithAtoms&);
-QDataStream& operator>>(QDataStream&, SireMol::CGsWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CGsWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CGsWithAtoms&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ChainsWithAtoms&);
-QDataStream& operator>>(QDataStream&, SireMol::ChainsWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ChainsWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ChainsWithAtoms&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::SegsWithAtoms&);
-QDataStream& operator>>(QDataStream&, SireMol::SegsWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::SegsWithAtoms&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::SegsWithAtoms&);
 
 namespace SireMol
 {
@@ -68,8 +68,8 @@ namespace SireMol
 class SIREMOL_EXPORT ResWithAtoms : public ResID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ResWithAtoms&);
-friend QDataStream& ::operator>>(QDataStream&, ResWithAtoms&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ResWithAtoms&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResWithAtoms&);
 
 public:
     ResWithAtoms();
@@ -117,8 +117,8 @@ private:
 class SIREMOL_EXPORT CGsWithAtoms : public CGID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CGsWithAtoms&);
-friend QDataStream& ::operator>>(QDataStream&, CGsWithAtoms&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CGsWithAtoms&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, CGsWithAtoms&);
 
 public:
     CGsWithAtoms();
@@ -166,8 +166,8 @@ private:
 class SIREMOL_EXPORT ChainsWithAtoms : public ChainID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ChainsWithAtoms&);
-friend QDataStream& ::operator>>(QDataStream&, ChainsWithAtoms&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ChainsWithAtoms&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ChainsWithAtoms&);
 
 public:
     ChainsWithAtoms();
@@ -215,8 +215,8 @@ private:
 class SIREMOL_EXPORT SegsWithAtoms : public SegID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SegsWithAtoms&);
-friend QDataStream& ::operator>>(QDataStream&, SegsWithAtoms&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const SegsWithAtoms&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, SegsWithAtoms&);
 
 public:
     SegsWithAtoms();

@@ -52,17 +52,17 @@ class GroAtom;
 class GroSystem;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::GroTop&);
-QDataStream& operator>>(QDataStream&, SireIO::GroTop&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::GroTop&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::GroTop&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::GroMolType&);
-QDataStream& operator>>(QDataStream&, SireIO::GroMolType&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::GroMolType&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::GroMolType&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::GroAtom&);
-QDataStream& operator>>(QDataStream&, SireIO::GroAtom&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::GroAtom&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::GroAtom&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::GroSystem&);
-QDataStream& operator>>(QDataStream&, SireIO::GroSystem&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::GroSystem&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::GroSystem&);
 
 namespace SireIO
 {
@@ -79,8 +79,8 @@ using SireMM::GromacsDihedral;
 class SIREIO_EXPORT GroAtom
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GroAtom&);
-friend QDataStream& ::operator>>(QDataStream&, GroAtom&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const GroAtom&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, GroAtom&);
 
 public:
     GroAtom();
@@ -167,8 +167,8 @@ private:
 class SIREIO_EXPORT GroMolType
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GroMolType&);
-friend QDataStream& ::operator>>(QDataStream&, GroMolType&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const GroMolType&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, GroMolType&);
 
 public:
     GroMolType();
@@ -285,8 +285,8 @@ private:
 class SIREIO_EXPORT GroSystem
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GroSystem&);
-friend QDataStream& ::operator>>(QDataStream&, GroSystem&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const GroSystem&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, GroSystem&);
 
 public:
     GroSystem();
@@ -345,8 +345,8 @@ private:
 class SIREIO_EXPORT GroTop : public SireBase::ConcreteProperty<GroTop,MoleculeParser>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GroTop&);
-friend QDataStream& ::operator>>(QDataStream&, GroTop&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const GroTop&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, GroTop&);
 
 public:
     GroTop();

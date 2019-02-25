@@ -48,7 +48,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<ComponentGradients> r_grads;
 
-QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const ComponentGradients &grads)
+QDataStream &operator<<(QDataStream &ds, const ComponentGradients &grads)
 {
     writeHeader(ds, r_grads, 1);
     
@@ -59,7 +59,7 @@ QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const ComponentGrad
     return ds;
 }
 
-QDataStream SIREANALYSIS_EXPORT &operator>>(QDataStream &ds, ComponentGradients &grads)
+QDataStream &operator>>(QDataStream &ds, ComponentGradients &grads)
 {
     VersionID v = readHeader(ds, r_grads);
     
@@ -616,7 +616,7 @@ TIPMF ComponentGradients::integrateLJ(int i, double range_min, double range_max,
 
 static const RegisterMetaType<TIComponents> r_ti;
 
-QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const TIComponents &ti)
+QDataStream &operator<<(QDataStream &ds, const TIComponents &ti)
 {
     writeHeader(ds, r_ti, 2);
     
@@ -626,7 +626,7 @@ QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const TIComponents 
     return ds;
 }
 
-QDataStream SIREANALYSIS_EXPORT &operator>>(QDataStream &ds, TIComponents &ti)
+QDataStream &operator>>(QDataStream &ds, TIComponents &ti)
 {
     VersionID v = readHeader(ds, r_ti);
     

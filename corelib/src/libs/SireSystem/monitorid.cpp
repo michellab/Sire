@@ -115,7 +115,7 @@ QList<MonitorName> MonitorID::processMatches(QList<MonitorName> &matches,
 static const RegisterMetaType<MonitorIdx> r_monidx;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const MonitorIdx &monidx)
+QDataStream &operator<<(QDataStream &ds, const MonitorIdx &monidx)
 {
     writeHeader(ds, r_monidx, 1);
     
@@ -125,7 +125,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const MonitorIdx &mon
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, MonitorIdx &monidx)
+QDataStream &operator>>(QDataStream &ds, MonitorIdx &monidx)
 {
     VersionID v = readHeader(ds, r_monidx);
     
@@ -201,7 +201,7 @@ const char* MonitorIdx::typeName()
 static const RegisterMetaType<MonitorName> r_monname;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const MonitorName &monname)
+QDataStream &operator<<(QDataStream &ds, const MonitorName &monname)
 {
     writeHeader(ds, r_monname, 1);
     
@@ -211,7 +211,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const MonitorName &mo
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, MonitorName &monname)
+QDataStream &operator>>(QDataStream &ds, MonitorName &monname)
 {
     VersionID v = readHeader(ds, r_monname);
     

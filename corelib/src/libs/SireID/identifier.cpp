@@ -37,7 +37,7 @@ using namespace SireStream;
 static const RegisterMetaType<Identifier> r_id;
 
 /** Serialise to a binary datastream */
-QDataStream SIREID_EXPORT &operator<<(QDataStream &ds, const Identifier &id)
+QDataStream &operator<<(QDataStream &ds, const Identifier &id)
 {
     writeHeader(ds, r_id, 1);
     
@@ -47,7 +47,7 @@ QDataStream SIREID_EXPORT &operator<<(QDataStream &ds, const Identifier &id)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREID_EXPORT &operator>>(QDataStream &ds, Identifier &id)
+QDataStream &operator>>(QDataStream &ds, Identifier &id)
 {
     VersionID v = readHeader(ds, r_id);
     
@@ -56,7 +56,7 @@ QDataStream SIREID_EXPORT &operator>>(QDataStream &ds, Identifier &id)
         SireStream::loadPolyPointer(ds, id.d);
     }
     else
-        throw version_error( v, "1", r_id, CODELOC );
+        throw SireStream::version_error( v, "1", r_id, CODELOC );
         
     return ds;
 }

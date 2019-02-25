@@ -58,7 +58,7 @@ using std::pair;
 
 static const RegisterMetaType<EnergyMonitor> r_nrgmonitor;
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const EnergyMonitor &nrgmonitor)
 {
     writeHeader(ds, r_nrgmonitor, 3);
@@ -77,7 +77,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                           EnergyMonitor &nrgmonitor)
 {
     VersionID v = readHeader(ds, r_nrgmonitor);

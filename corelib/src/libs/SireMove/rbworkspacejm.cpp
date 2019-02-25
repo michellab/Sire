@@ -55,7 +55,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<RBWorkspaceJM> r_rbwsjm;
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const RBWorkspaceJM &rbwsjm)
+QDataStream &operator<<(QDataStream &ds, const RBWorkspaceJM &rbwsjm)
 {
     writeHeader(ds, r_rbwsjm, 1);
     
@@ -66,7 +66,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const RBWorkspaceJM &rb
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, RBWorkspaceJM &rbwsjm)
+QDataStream &operator>>(QDataStream &ds, RBWorkspaceJM &rbwsjm)
 {
     VersionID v = readHeader(ds, r_rbwsjm);
     

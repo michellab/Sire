@@ -52,7 +52,7 @@ using namespace SireMol;
 using namespace SireStream;
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const AtomicCoords3D &coords)
 {
     SharedDataStream sds(ds);
@@ -63,7 +63,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       AtomicCoords3D &coords)
 {
     SharedDataStream sds(ds);
@@ -73,7 +73,7 @@ QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds,
     return ds;
 }
 
-bool SIREFF_EXPORT SireFF::detail::selectedAll(const QSet<quint32> &changed_groups, 
+bool SireFF::detail::selectedAll(const QSet<quint32> &changed_groups, 
                                                quint32 n)
 {
     if (quint32(changed_groups.count()) >= n)

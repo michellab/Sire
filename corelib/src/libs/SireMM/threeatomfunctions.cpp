@@ -53,7 +53,7 @@ using namespace SireStream;
 ////// Implementation of ThreeAtomFunction
 //////
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const ThreeAtomFunction &threeatomfunc)
 {
     ds << threeatomfunc.atm0 << threeatomfunc.atm1
@@ -63,7 +63,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       ThreeAtomFunction &threeatomfunc)
 {
     ds >> threeatomfunc.atm0 >> threeatomfunc.atm1
@@ -195,7 +195,7 @@ bool IDTriple::operator!=(const IDTriple &other) const
 static const RegisterMetaType<ThreeAtomFunctions> r_threeatomfuncs;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const ThreeAtomFunctions &threeatomfuncs)
 {
     writeHeader(ds, r_threeatomfuncs, 1);
@@ -209,7 +209,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       ThreeAtomFunctions &threeatomfuncs)
 {
     VersionID v = readHeader(ds, r_threeatomfuncs);

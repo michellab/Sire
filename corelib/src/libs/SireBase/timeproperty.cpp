@@ -39,14 +39,14 @@ using namespace SireStream;
 
 static const RegisterMetaType<TimeProperty> r_prop;
 
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const TimeProperty &prop)
+QDataStream &operator<<(QDataStream &ds, const TimeProperty &prop)
 {
     writeHeader(ds, r_prop, 1);
     ds << prop.val.value();
     return ds;
 }
 
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, TimeProperty &prop)
+QDataStream &operator>>(QDataStream &ds, TimeProperty &prop)
 {
     VersionID v = readHeader(ds, r_prop);
     

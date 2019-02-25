@@ -47,8 +47,8 @@ class AmberPrm;
 class AmberRst7;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::AmberPrm&);
-QDataStream& operator>>(QDataStream&, SireIO::AmberPrm&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::AmberPrm&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::AmberPrm&);
 
 namespace SireMol
 {
@@ -78,8 +78,8 @@ namespace SireIO
 class SIREIO_EXPORT AmberPrm : public SireBase::ConcreteProperty<AmberPrm,MoleculeParser>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AmberPrm&);
-friend QDataStream& ::operator>>(QDataStream&, AmberPrm&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const AmberPrm&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, AmberPrm&);
 
 public:
     enum FLAG_TYPE { UNKNOWN = 0,

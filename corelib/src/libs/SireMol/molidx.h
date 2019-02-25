@@ -40,8 +40,8 @@ namespace SireMol
 class MolIdx;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MolIdx&);
-QDataStream& operator>>(QDataStream&, SireMol::MolIdx&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MolIdx&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MolIdx&);
 
 namespace SireMol
 {
@@ -54,8 +54,8 @@ namespace SireMol
 class SIREMOL_EXPORT MolIdx : public SireID::Index_T_<MolIdx>, public MolID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolIdx&);
-friend QDataStream& ::operator>>(QDataStream&, MolIdx&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MolIdx&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MolIdx&);
 
 public:
     MolIdx();

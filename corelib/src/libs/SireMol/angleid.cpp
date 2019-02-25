@@ -50,7 +50,7 @@ using SireUnits::Dimension::Angle;
 static const RegisterMetaType<AngleID> r_angleid;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const AngleID &angleid)
 {
     writeHeader(ds, r_angleid, 1);
@@ -63,7 +63,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        AngleID &angleid)
 {
     VersionID v = readHeader(ds, r_angleid);

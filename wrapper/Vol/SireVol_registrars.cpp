@@ -3,6 +3,8 @@
 
 #include "SireVol_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "gridinfo.h"
 #include "cartesian.h"
 #include "aabox.h"

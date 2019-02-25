@@ -56,7 +56,7 @@ using namespace SireStream;
 static const RegisterMetaType<Vector> r_vector(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const SireMaths::Vector &vec)
+QDataStream &operator<<(QDataStream &ds, const SireMaths::Vector &vec)
 {
     writeHeader(ds, r_vector, 1) << vec.x() << vec.y() << vec.z();
 
@@ -64,7 +64,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const SireMaths::Vecto
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, SireMaths::Vector &vec)
+QDataStream &operator>>(QDataStream &ds, SireMaths::Vector &vec)
 {
     VersionID v = readHeader(ds, r_vector);
 
@@ -634,7 +634,7 @@ Matrix Vector::metricTensor() const
 }
 
 /** Return the multiple of this vector with the matrix 'm' */
-const Vector SIREMATHS_EXPORT SireMaths::operator*(const Matrix &m, const Vector &p)
+const Vector SireMaths::operator*(const Matrix &m, const Vector &p)
 {
     return Vector(m.xx()*p.sc[0] + m.xy()*p.sc[1] + m.xz()*p.sc[2],
                   m.yx()*p.sc[0] + m.yy()*p.sc[1] + m.yz()*p.sc[2],
@@ -655,7 +655,7 @@ const Vector& Vector::operator/=(const double &val)
 }
 
 /** Increment, decrement, negate etc. */
-const Vector SIREMATHS_EXPORT SireMaths::operator/(const Vector &p1, double c)
+const Vector SireMaths::operator/(const Vector &p1, double c)
 {
     if (isZero(c))
         throw SireMaths::math_error(QObject::tr(
@@ -669,7 +669,7 @@ uint get_hash(double val)
     return qHash( (quint64)(val) );
 }
 
-uint SIREMATHS_EXPORT qHash(const SireMaths::Vector &vec)
+uint qHash(const SireMaths::Vector &vec)
 {
     return get_hash(vec.x()) + get_hash(vec.y()) + get_hash(vec.z());
 }

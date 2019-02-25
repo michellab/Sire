@@ -110,8 +110,8 @@ using SireBase::PropertyName;
 class SIREMOVE_EXPORT IntegratorWorkspaceJM : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IntegratorWorkspaceJM&);
-friend QDataStream& ::operator>>(QDataStream&, IntegratorWorkspaceJM&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const IntegratorWorkspaceJM&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, IntegratorWorkspaceJM&);
 
 public:
     IntegratorWorkspaceJM(const PropertyMap &map = PropertyMap());
@@ -221,8 +221,8 @@ class SIREMOVE_EXPORT NullIntegratorWorkspaceJM
         : public SireBase::ConcreteProperty<NullIntegratorWorkspaceJM,IntegratorWorkspaceJM>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullIntegratorWorkspaceJM&);
-friend QDataStream& ::operator>>(QDataStream&, NullIntegratorWorkspaceJM&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const NullIntegratorWorkspaceJM&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, NullIntegratorWorkspaceJM&);
 
 public:
     NullIntegratorWorkspaceJM();
@@ -253,8 +253,8 @@ class SIREMOVE_EXPORT AtomicVelocityWorkspaceJM
        : public SireBase::ConcreteProperty<AtomicVelocityWorkspaceJM,IntegratorWorkspaceJM>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomicVelocityWorkspaceJM&);
-friend QDataStream& ::operator>>(QDataStream&, AtomicVelocityWorkspaceJM&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomicVelocityWorkspaceJM&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, AtomicVelocityWorkspaceJM&);
 
 public:
     AtomicVelocityWorkspaceJM(const PropertyMap &map = PropertyMap());

@@ -67,7 +67,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<CLJFunction> r_cljfunc(MAGIC_ONLY, CLJFunction::typeName());
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJFunction &cljfunc)
+QDataStream &operator<<(QDataStream &ds, const CLJFunction &cljfunc)
 {
     writeHeader(ds, r_cljfunc, 1);
     
@@ -78,7 +78,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJFunction &cljfun
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJFunction &cljfunc)
+QDataStream &operator>>(QDataStream &ds, CLJFunction &cljfunc)
 {
     VersionID v = readHeader(ds, r_cljfunc);
     
@@ -1247,7 +1247,7 @@ CLJFunction::multiCalculate(const QVector<CLJFunctionPtr> &funcs,
 
 static const RegisterMetaType<NullCLJFunction> r_nullfunc;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const NullCLJFunction &nullfunc)
+QDataStream &operator<<(QDataStream &ds, const NullCLJFunction &nullfunc)
 {
     writeHeader(ds, r_nullfunc, 1);
     
@@ -1256,7 +1256,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const NullCLJFunction &nu
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, NullCLJFunction &nullfunc)
+QDataStream &operator>>(QDataStream &ds, NullCLJFunction &nullfunc)
 {
     VersionID v = readHeader(ds, r_nullfunc);
     
@@ -1377,7 +1377,7 @@ void NullCLJFunction::calcBoxEnergyGeo(const CLJAtoms &atoms0, const CLJAtoms &a
 static const RegisterMetaType<CLJCutoffFunction> r_cutoff(MAGIC_ONLY,
                                                           CLJCutoffFunction::typeName());
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJCutoffFunction &func)
+QDataStream &operator<<(QDataStream &ds, const CLJCutoffFunction &func)
 {
     writeHeader(ds, r_cutoff, 1);
     
@@ -1387,7 +1387,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJCutoffFunction &
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJCutoffFunction &func)
+QDataStream &operator>>(QDataStream &ds, CLJCutoffFunction &func)
 {
     VersionID v = readHeader(ds, r_cutoff);
     
@@ -1649,7 +1649,7 @@ void CLJCutoffFunction::setLJCutoff(Length distance)
 
 static const RegisterMetaType<CLJIntraFunction> r_intra(MAGIC_ONLY, CLJIntraFunction::typeName());
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJIntraFunction &func)
+QDataStream &operator<<(QDataStream &ds, const CLJIntraFunction &func)
 {
     writeHeader(ds, r_intra, 1);
     
@@ -1661,7 +1661,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJIntraFunction &f
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJIntraFunction &func)
+QDataStream &operator>>(QDataStream &ds, CLJIntraFunction &func)
 {
     VersionID v = readHeader(ds, r_intra);
     
@@ -1903,7 +1903,7 @@ bool CLJIntraFunction::isNotBonded(const QVector<MultiInt> &ids0,
 
 static const RegisterMetaType<CLJSoftFunction> r_soft(MAGIC_ONLY, CLJSoftFunction::typeName());
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJSoftFunction &func)
+QDataStream &operator<<(QDataStream &ds, const CLJSoftFunction &func)
 {
     writeHeader(ds, r_soft, 1);
     
@@ -1913,7 +1913,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJSoftFunction &fu
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJSoftFunction &func)
+QDataStream &operator>>(QDataStream &ds, CLJSoftFunction &func)
 {
     VersionID v = readHeader(ds, r_soft);
     
@@ -2172,7 +2172,7 @@ float CLJSoftFunction::alphaTimesShiftDelta() const
 static const RegisterMetaType<CLJSoftIntraFunction> r_softintra(MAGIC_ONLY,
                                                                 CLJSoftIntraFunction::typeName());
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJSoftIntraFunction &func)
+QDataStream &operator<<(QDataStream &ds, const CLJSoftIntraFunction &func)
 {
     writeHeader(ds, r_softintra, 1);
     
@@ -2182,7 +2182,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJSoftIntraFunctio
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJSoftIntraFunction &func)
+QDataStream &operator>>(QDataStream &ds, CLJSoftIntraFunction &func)
 {
     VersionID v = readHeader(ds, r_softintra);
     

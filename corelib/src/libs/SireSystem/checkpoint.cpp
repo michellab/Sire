@@ -38,7 +38,7 @@ using namespace SireStream;
 static const RegisterMetaType<CheckPoint> r_ckpt;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const CheckPoint &ckpt)
+QDataStream &operator<<(QDataStream &ds, const CheckPoint &ckpt)
 {
     writeHeader(ds, r_ckpt, 1);
     
@@ -49,7 +49,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const CheckPoint &ckp
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, CheckPoint &ckpt)
+QDataStream &operator>>(QDataStream &ds, CheckPoint &ckpt)
 {
     VersionID v = readHeader(ds, r_ckpt);
     

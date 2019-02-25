@@ -35,22 +35,22 @@ SIRE_BEGIN_HEADER
 
 namespace SireBase
 {
-    QString getInstallDir();
-    void setInstallDir(QString dir);
+    SIREBASE_EXPORT QString getInstallDir();
+    SIREBASE_EXPORT void setInstallDir(QString dir);
     
-    QString getBinDir();
-    QString getLibDir();
-    QString getBundledLibDir();
-    QString getShareDir();
+    SIREBASE_EXPORT QString getBinDir();
+    SIREBASE_EXPORT QString getLibDir();
+    SIREBASE_EXPORT QString getBundledLibDir();
+    SIREBASE_EXPORT QString getShareDir();
     
-    QString getSireDir(const QString &path, bool assert_exists=true);
+    SIREBASE_EXPORT QString getSireDir(const QString &path, bool assert_exists=true);
     
-    QString getRepositoryURL();
-    QString getRepositoryVersion();
-    QString getRepositoryBranch();
-    bool getRepositoryVersionIsClean();
+    SIREBASE_EXPORT QString getRepositoryURL();
+    SIREBASE_EXPORT QString getRepositoryVersion();
+    SIREBASE_EXPORT QString getRepositoryBranch();
+    SIREBASE_EXPORT bool getRepositoryVersionIsClean();
     
-    QString getReleaseVersion();
+    SIREBASE_EXPORT QString getReleaseVersion();
 }
 
 SIRE_EXPOSE_FUNCTION(SireBase::getInstallDir)

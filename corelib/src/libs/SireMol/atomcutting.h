@@ -38,8 +38,8 @@ namespace SireMol
 class AtomCutting;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomCutting&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomCutting&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomCutting&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomCutting&);
 
 namespace SireMol
 {

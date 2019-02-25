@@ -54,7 +54,7 @@ using boost::tuples::tuple;
 static const RegisterMetaType<WeightedMoves> r_weightedmoves;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                         const WeightedMoves &weightedmoves)
 {
     writeHeader(ds, r_weightedmoves, 3);
@@ -78,7 +78,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, WeightedMoves &weightedmoves)
+QDataStream &operator>>(QDataStream &ds, WeightedMoves &weightedmoves)
 {
     VersionID v = readHeader(ds, r_weightedmoves);
     

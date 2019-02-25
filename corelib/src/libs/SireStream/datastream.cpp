@@ -39,7 +39,7 @@ namespace SireStream
 {
     /** Write a header to the data stream that describes the type and version
         of the object that is about to be written */
-    QDataStream SIRESTREAM_EXPORT &writeHeader(QDataStream &ds,
+    QDataStream &writeHeader(QDataStream &ds,
                                                const RegisterMetaTypeBase &r_type,
                                                VersionID version)
     {
@@ -49,7 +49,7 @@ namespace SireStream
 
     /** Write a header to the data stream that contains the magic and version
         of the object that is about to be written */
-    QDataStream SIRESTREAM_EXPORT &writeHeader(QDataStream &ds,
+    QDataStream &writeHeader(QDataStream &ds,
                                                MagicID magicid,
                                                VersionID version)
     {
@@ -90,7 +90,7 @@ namespace SireStream
 
     /** Function used to register alternative names for a class. This allows a class
         to change names, but to still be loaded using its old name */
-    void SIRESTREAM_EXPORT registerAlternativeName(const char *name, const char *alternative)
+    void registerAlternativeName(const char *name, const char *alternative)
     {
         QLatin1String str(name);
         
@@ -121,7 +121,7 @@ namespace SireStream
 
     /** Read the header of the binary object to check that the type is correct
         and to obtain the binary data version */
-    VersionID SIRESTREAM_EXPORT readHeader(QDataStream &ds,
+    VersionID readHeader(QDataStream &ds,
                                            const RegisterMetaTypeBase &r_type)
     {
         MagicID id;
@@ -137,7 +137,7 @@ namespace SireStream
 
     /** Read the header of the binary object to check that the type is correct
         and to obtain the binary data version */
-    VersionID SIRESTREAM_EXPORT readHeader(QDataStream &ds,
+    VersionID readHeader(QDataStream &ds,
                                            MagicID magicid,
                                            const char *type_name)
     {

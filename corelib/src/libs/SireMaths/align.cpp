@@ -51,7 +51,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<Transform> r_trans(NO_ROOT);
 
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Transform &trans)
+QDataStream &operator<<(QDataStream &ds, const Transform &trans)
 {
     writeHeader(ds, r_trans, 1);
 
@@ -60,7 +60,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Transform &trans
     return ds;
 }
 
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, Transform &trans)
+QDataStream &operator>>(QDataStream &ds, Transform &trans)
 {
     VersionID v = readHeader(ds, r_trans);
 
@@ -343,7 +343,7 @@ namespace SireMaths
 {
     /** Return the centroid of the points in 'p'. If n != -1 then
         only calculate the centroid of the first n points */
-    Vector SIREMATHS_EXPORT getCentroid(const QVector<Vector> &p, int n)
+    Vector getCentroid(const QVector<Vector> &p, int n)
     {
         if (p.isEmpty())
             return Vector(0);
@@ -367,7 +367,7 @@ namespace SireMaths
 
     /** Return the RMSD between the two sets of points. If n != -1 then
         only calculate the RMSD using the first n points */
-    double SIREMATHS_EXPORT getRMSD(const QVector<Vector> &p, const QVector<Vector> &q, int n)
+    double getRMSD(const QVector<Vector> &p, const QVector<Vector> &q, int n)
     {
         if (p.isEmpty() or q.isEmpty())
             return 0;
@@ -429,7 +429,7 @@ namespace SireMaths
         (note that the C++ implement that I have here is licensed under the GPL,
          as stated at the top of this file)
     */
-    Matrix SIREMATHS_EXPORT kabasch(const QVector<Vector> &p,
+    Matrix kabasch(const QVector<Vector> &p,
                                     const QVector<Vector> &q)
     {
         if (p.isEmpty() or q.isEmpty())
@@ -553,7 +553,7 @@ namespace SireMaths
         (note that the C++ implement that I have here is licensed under the GPL,
          as stated at the top of this file)
     */
-    Transform SIREMATHS_EXPORT kabaschFit(const QVector<Vector> &p,
+    Transform kabaschFit(const QVector<Vector> &p,
                                           const QVector<Vector> &q)
     {
         if (p.isEmpty() or q.isEmpty())
@@ -645,7 +645,7 @@ namespace SireMaths
         points in 'p'. If 'fit' is true, then this performs an RMSD
         fit to find the optimal translation vector (as opposed to merely
         taking the difference of centroids) */
-    Transform SIREMATHS_EXPORT getAlignment(const QVector<Vector> &p,
+    Transform getAlignment(const QVector<Vector> &p,
                                             const QVector<Vector> &q,
                                             bool fit)
     {
@@ -686,7 +686,7 @@ namespace SireMaths
         is true, then this performs an RMSD
         fit to find the optimal translation vector (as opposed to merely
         taking the difference of centroids) */
-    QVector<Vector> SIREMATHS_EXPORT align(const QVector<Vector> &p,
+    QVector<Vector> align(const QVector<Vector> &p,
                                            const QVector<Vector> &q,
                                            bool fit)
     {

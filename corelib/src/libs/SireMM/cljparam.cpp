@@ -38,14 +38,14 @@ using namespace SireUnits;
 using namespace SireUnits::Dimension;
 using namespace SireStream;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJParam &cljparam)
+QDataStream &operator<<(QDataStream &ds, const CLJParam &cljparam)
 {
     ds << cljparam.charge().to(mod_electron) << cljparam.lj();
        
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJParam &cljparam)
+QDataStream &operator>>(QDataStream &ds, CLJParam &cljparam)
 {
     double q;
     LJParameter lj;

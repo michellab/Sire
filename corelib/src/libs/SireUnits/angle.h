@@ -36,7 +36,7 @@ SIRE_BEGIN_HEADER
 namespace SireUnits
 {
 
-Dimension::Angle acute(Dimension::Angle angle);
+SIREUNITS_EXPORT Dimension::Angle acute(Dimension::Angle angle);
 
 }
 

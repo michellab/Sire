@@ -51,9 +51,9 @@ SIRE_BEGIN_HEADER
 namespace SireError
 {
 
-QString fileError(const QFile &f);
+SIREERROR_EXPORT QString fileError(const QFile &f);
 
-QString processError(const QString &executable, const QProcess &p);
+SIREERROR_EXPORT QString processError(const QString &executable, const QProcess &p);
 
 /** This exception is thrown when the code detects a programming bug. I hope that
     eventually Sire will not throw too many of these!

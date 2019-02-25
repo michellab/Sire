@@ -61,7 +61,7 @@ static const RegisterMetaType<VelocityGenerator> r_velgen( MAGIC_ONLY,
                                                     VelocityGenerator::typeName() );
                                                     
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const VelocityGenerator &velgen)
 {
     writeHeader(ds, r_velgen, 1);
@@ -72,7 +72,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, VelocityGenerator &velgen)
+QDataStream &operator>>(QDataStream &ds, VelocityGenerator &velgen)
 {
     VersionID v = readHeader(ds, r_velgen);
     
@@ -138,7 +138,7 @@ const NullVelocityGenerator& VelocityGenerator::null()
 static const RegisterMetaType<NullVelocityGenerator> r_nullvelgen;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                         const NullVelocityGenerator &nullvelgen)
 {
     writeHeader(ds, r_nullvelgen, 1);
@@ -149,7 +149,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                         NullVelocityGenerator &nullvelgen)
 {
     VersionID v = readHeader(ds, r_nullvelgen);
@@ -217,7 +217,7 @@ const char* NullVelocityGenerator::typeName()
 static const RegisterMetaType<VelocitiesFromProperty> r_velfromprop;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                         const VelocitiesFromProperty &velfromprop)
 {
     writeHeader(ds, r_velfromprop, 1);
@@ -231,7 +231,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         VelocitiesFromProperty &velfromprop)
 {
     VersionID v = readHeader(ds, r_velfromprop);
@@ -312,7 +312,7 @@ const char* VelocitiesFromProperty::typeName()
 static const RegisterMetaType<MaxwellBoltzmann> r_maxboltz;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                         const MaxwellBoltzmann &maxboltz)
 {
     writeHeader(ds, r_maxboltz, 1);
@@ -326,7 +326,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, MaxwellBoltzmann &maxboltz)
+QDataStream &operator>>(QDataStream &ds, MaxwellBoltzmann &maxboltz)
 {
     VersionID v = readHeader(ds, r_maxboltz);
     

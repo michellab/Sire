@@ -46,11 +46,11 @@ class FFComponent;
 class SingleComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::FFComponent&);
-QDataStream& operator>>(QDataStream&, SireFF::FFComponent&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::FFComponent&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::FFComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::SingleComponent&);
-QDataStream& operator>>(QDataStream&, SireFF::SingleComponent&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::SingleComponent&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::SingleComponent&);
 
 namespace SireFF
 {
@@ -104,7 +104,7 @@ protected:
     @author Christopher Woods
 */
 template<class T>
-class SIREFF_EXPORT ComponentEnergy
+class ComponentEnergy
 {
 public:
     typedef T Components;

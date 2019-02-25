@@ -49,11 +49,11 @@ class MolEditor;
 class MoleculeInfoData;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::PDBAtom&);
-QDataStream& operator>>(QDataStream&, SireIO::PDBAtom&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::PDBAtom&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::PDBAtom&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::PDB2&);
-QDataStream& operator>>(QDataStream&, SireIO::PDB2&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::PDB2&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::PDB2&);
 
 namespace SireIO
 {
@@ -66,8 +66,8 @@ namespace SireIO
 class SIREIO_EXPORT PDBAtom
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PDBAtom&);
-friend QDataStream& ::operator>>(QDataStream&, PDBAtom&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const PDBAtom&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, PDBAtom&);
 
 public:
     /** Default constructor. */
@@ -209,8 +209,8 @@ private:
 class SIREIO_EXPORT PDB2 : public SireBase::ConcreteProperty<PDB2,MoleculeParser>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PDB2&);
-friend QDataStream& ::operator>>(QDataStream&, PDB2&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const PDB2&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, PDB2&);
 
 public:
     PDB2();

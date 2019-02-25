@@ -136,7 +136,6 @@
 /* End Mod */
 
 void
-SIRE_EXPORT
 md5_process(md5_state_t *pms, const md5_byte_t *data /*[64]*/)
 {
     md5_word_t
@@ -318,7 +317,6 @@ md5_process(md5_state_t *pms, const md5_byte_t *data /*[64]*/)
 }
 
 void 
-SIRE_EXPORT
 md5_init(md5_state_t *pms)
 {
     pms->count[0] = pms->count[1] = 0;
@@ -329,7 +327,6 @@ md5_init(md5_state_t *pms)
 }
 
 void 
-SIRE_EXPORT
 md5_append(md5_state_t *pms, const md5_byte_t *data, int nbytes)
 {
     const md5_byte_t *p = data;
@@ -368,7 +365,6 @@ md5_append(md5_state_t *pms, const md5_byte_t *data, int nbytes)
 }
 
 void 
-SIRE_EXPORT
 md5_finish(md5_state_t *pms, md5_byte_t digest[16])
 {
     static const md5_byte_t pad[64] = {

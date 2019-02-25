@@ -373,7 +373,7 @@ QDataStream& operator>>(QDataStream &ds, SireMM::detail::IntraGroupFFMolData &in
 
 static const RegisterMetaType<IntraGroupFF> r_intragroupff;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const IntraGroupFF &intraff)
+QDataStream &operator<<(QDataStream &ds, const IntraGroupFF &intraff)
 {
     writeHeader(ds, r_intragroupff, 1);
     
@@ -390,7 +390,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const IntraGroupFF &intra
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, IntraGroupFF &intraff)
+QDataStream &operator>>(QDataStream &ds, IntraGroupFF &intraff)
 {
     VersionID v = readHeader(ds, r_intragroupff);
     
@@ -1018,7 +1018,7 @@ void IntraGroupFF::mustNowReallyRecalculateFromScratch()
 }
 
 /** Calculate the intramolecular energy of a particular molecule */
-MultiCLJEnergy IntraGroupFF::calcEnergy(detail::IntraGroupFFMolData &mol) const
+MultiCLJEnergy IntraGroupFF::calcEnergy(SireMM::detail::IntraGroupFFMolData &mol) const
 {
     if (mol.needs_energy_calc)
     {

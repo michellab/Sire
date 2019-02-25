@@ -55,11 +55,11 @@ namespace SireMaths
     @author Christopher Woods
 */
 template<class T>
-class SIREMOL_EXPORT Vector3D
+class Vector3D
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const Vector3D<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, Vector3D<T>&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<<>(QDataStream&, const Vector3D<T>&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>><>(QDataStream&, Vector3D<T>&);
 
 public:
     typedef T value_type;

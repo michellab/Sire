@@ -331,7 +331,7 @@ PolariseChargesData::PolariseChargesData(const MoleculeView &molview,
 
 static const RegisterMetaType<PolariseCharges> r_polarise_charges;
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const PolariseCharges &polchgs)
 {
     writeHeader(ds, r_polarise_charges, 2);
@@ -345,7 +345,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                           PolariseCharges &polchgs)
 {
     VersionID v = readHeader(ds, r_polarise_charges);
@@ -936,7 +936,7 @@ PolariseChargesFF PolariseCharges::selfEnergyFF() const
 
 static const RegisterMetaType<PolariseChargesFF> r_polchgff;
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const PolariseChargesFF &polchgff)
 {
     writeHeader(ds, r_polchgff, 1);
@@ -948,7 +948,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                           PolariseChargesFF &polchgff)
 {
     VersionID v = readHeader(ds, r_polchgff);

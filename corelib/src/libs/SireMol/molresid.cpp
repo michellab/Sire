@@ -51,7 +51,7 @@ using boost::tuples::tuple;
 static const RegisterMetaType<MolResID> r_molresid;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MolResID &molresid)
+QDataStream &operator<<(QDataStream &ds, const MolResID &molresid)
 {
     writeHeader(ds, r_molresid, 1);
     
@@ -63,7 +63,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MolResID &molresid
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MolResID &molresid)
+QDataStream &operator>>(QDataStream &ds, MolResID &molresid)
 {
     VersionID v = readHeader(ds, r_molresid);
     
@@ -318,7 +318,7 @@ MolResID* MolResID::clone() const
 static const RegisterMetaType<MolResNum> r_molresnum;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MolResNum &molresnum)
+QDataStream &operator<<(QDataStream &ds, const MolResNum &molresnum)
 {
     writeHeader(ds, r_molresnum, 1);
     
@@ -328,7 +328,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MolResNum &molresn
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MolResNum &molresnum)
+QDataStream &operator>>(QDataStream &ds, MolResNum &molresnum)
 {
     VersionID v = readHeader(ds, r_molresnum);
     

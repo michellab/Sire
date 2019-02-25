@@ -46,11 +46,11 @@ class Integrator;
 class NullIntegrator;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::Integrator&);
-QDataStream& operator>>(QDataStream&, SireMove::Integrator&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::Integrator&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::Integrator&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::NullIntegrator&);
-QDataStream& operator>>(QDataStream&, SireMove::NullIntegrator&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::NullIntegrator&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::NullIntegrator&);
 
 namespace SireFF
 {
@@ -105,8 +105,8 @@ using SireMaths::RanGenerator;
 class SIREMOVE_EXPORT Integrator : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Integrator&);
-friend QDataStream& ::operator>>(QDataStream&, Integrator&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const Integrator&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, Integrator&);
 
 public:
     Integrator();
@@ -157,8 +157,8 @@ class SIREMOVE_EXPORT NullIntegrator
             : public SireBase::ConcreteProperty<NullIntegrator,Integrator>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullIntegrator&);
-friend QDataStream& ::operator>>(QDataStream&, NullIntegrator&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const NullIntegrator&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, NullIntegrator&);
 
 public:
     NullIntegrator();

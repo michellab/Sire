@@ -3,6 +3,8 @@
 
 #include "SireFF_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "point.h"
 #include "ffidentifier.h"
 #include "energytable.h"

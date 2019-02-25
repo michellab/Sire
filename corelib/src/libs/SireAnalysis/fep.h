@@ -43,17 +43,17 @@ class DataPoint;
 class PMF;
 }
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::FEP&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::FEP&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::FEP&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::FEP&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::FEPDeltas&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::FEPDeltas&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::FEPDeltas&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::FEPDeltas&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::DataPoint&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::DataPoint&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::DataPoint&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::DataPoint&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::PMF&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::PMF&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::PMF&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::PMF&);
 
 namespace SireAnalysis
 {
@@ -68,8 +68,8 @@ using SireMaths::FreeEnergyAverage;
 class SIREANALYSIS_EXPORT DataPoint
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DataPoint&);
-friend QDataStream& ::operator>>(QDataStream&, DataPoint&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator<<(QDataStream&, const DataPoint&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator>>(QDataStream&, DataPoint&);
 
 public:
     DataPoint();
@@ -131,8 +131,8 @@ private:
 class SIREANALYSIS_EXPORT PMF : public SireBase::ConcreteProperty<PMF,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PMF&);
-friend QDataStream& ::operator>>(QDataStream&, PMF&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator<<(QDataStream&, const PMF&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator>>(QDataStream&, PMF&);
 
 public:
     PMF();
@@ -179,8 +179,8 @@ class SIREANALYSIS_EXPORT FEPDeltas
       : public SireBase::ConcreteProperty<FEPDeltas,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FEPDeltas&);
-friend QDataStream& ::operator>>(QDataStream&, FEPDeltas&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator<<(QDataStream&, const FEPDeltas&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator>>(QDataStream&, FEPDeltas&);
 
 public:
     FEPDeltas();
@@ -264,8 +264,8 @@ private:
 class SIREANALYSIS_EXPORT FEP : public SireBase::ConcreteProperty<FEP,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FEP&);
-friend QDataStream& ::operator>>(QDataStream&, FEP&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator<<(QDataStream&, const FEP&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator>>(QDataStream&, FEP&);
 
 public:
     FEP();

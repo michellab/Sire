@@ -63,7 +63,7 @@ using namespace SireUnits::Dimension;
 static const RegisterMetaType<AngleRestraint> r_angrest;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const AngleRestraint &angrest)
 {
     writeHeader(ds, r_angrest, 1);
@@ -78,7 +78,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, AngleRestraint &angrest)
+QDataStream &operator>>(QDataStream &ds, AngleRestraint &angrest)
 {
     VersionID v = readHeader(ds, r_angrest);
     

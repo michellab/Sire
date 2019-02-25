@@ -48,11 +48,11 @@ class FFMolGroupPvt;
 
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::FFMolGroup&);
-QDataStream& operator>>(QDataStream&, SireFF::FFMolGroup&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::FFMolGroup&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::FFMolGroup&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMolGroupPvt&);
-QDataStream& operator>>(QDataStream&, SireFF::detail::FFMolGroupPvt&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMolGroupPvt&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::detail::FFMolGroupPvt&);
 
 namespace SireFF
 {
@@ -83,8 +83,8 @@ class SIREFF_EXPORT FFMolGroup
                 : public SireBase::ConcreteProperty<FFMolGroup,MoleculeGroup>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FFMolGroup&);
-friend QDataStream& ::operator>>(QDataStream&, FFMolGroup&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FFMolGroup&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FFMolGroup&);
 
 public:
     FFMolGroup();
@@ -193,8 +193,8 @@ namespace detail
 class SIREFF_EXPORT FFMolGroupPvt : public MoleculeGroup
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FFMolGroupPvt&);
-friend QDataStream& ::operator>>(QDataStream&, FFMolGroupPvt&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FFMolGroupPvt&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FFMolGroupPvt&);
 
 public:
     FFMolGroupPvt();

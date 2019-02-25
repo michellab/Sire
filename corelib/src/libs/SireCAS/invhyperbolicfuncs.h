@@ -43,23 +43,23 @@ class ArcSech;
 class ArcCoth;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ArcCosh&);
-QDataStream& operator>>(QDataStream&, SireCAS::ArcCosh&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ArcCosh&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ArcCosh&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ArcSinh&);
-QDataStream& operator>>(QDataStream&, SireCAS::ArcSinh&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ArcSinh&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ArcSinh&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ArcTanh&);
-QDataStream& operator>>(QDataStream&, SireCAS::ArcTanh&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ArcTanh&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ArcTanh&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ArcCsch&);
-QDataStream& operator>>(QDataStream&, SireCAS::ArcCsch&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ArcCsch&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ArcCsch&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ArcSech&);
-QDataStream& operator>>(QDataStream&, SireCAS::ArcSech&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ArcSech&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ArcSech&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::ArcCoth&);
-QDataStream& operator>>(QDataStream&, SireCAS::ArcCoth&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ArcCoth&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ArcCoth&);
 
 namespace SireCAS
 {
@@ -68,8 +68,8 @@ namespace SireCAS
 class SIRECAS_EXPORT ArcCosh : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ArcCosh&);
-friend QDataStream& ::operator>>(QDataStream&, ArcCosh&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const ArcCosh&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, ArcCosh&);
 
 public:
     ArcCosh();
@@ -118,8 +118,8 @@ protected:
 class SIRECAS_EXPORT ArcSinh : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ArcSinh&);
-friend QDataStream& ::operator>>(QDataStream&, ArcSinh&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const ArcSinh&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, ArcSinh&);
 
 public:
     ArcSinh();
@@ -167,8 +167,8 @@ protected:
 class SIRECAS_EXPORT ArcTanh : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ArcTanh&);
-friend QDataStream& ::operator>>(QDataStream&, ArcTanh&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const ArcTanh&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, ArcTanh&);
 
 public:
     ArcTanh();
@@ -216,8 +216,8 @@ protected:
 class SIRECAS_EXPORT ArcSech : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ArcSech&);
-friend QDataStream& ::operator>>(QDataStream&, ArcSech&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const ArcSech&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, ArcSech&);
 
 public:
     ArcSech();
@@ -265,8 +265,8 @@ protected:
 class SIRECAS_EXPORT ArcCsch : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ArcCsch&);
-friend QDataStream& ::operator>>(QDataStream&, ArcCsch&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const ArcCsch&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, ArcCsch&);
 
 public:
     ArcCsch();
@@ -314,8 +314,8 @@ protected:
 class SIRECAS_EXPORT ArcCoth : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ArcCoth&);
-friend QDataStream& ::operator>>(QDataStream&, ArcCoth&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const ArcCoth&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, ArcCoth&);
 
 public:
     ArcCoth();

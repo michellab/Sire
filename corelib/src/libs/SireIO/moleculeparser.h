@@ -44,11 +44,11 @@ class MoleculeParser;
 class NullParser;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::MoleculeParser&);
-QDataStream& operator>>(QDataStream&, SireIO::MoleculeParser&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::MoleculeParser&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::MoleculeParser&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::NullParser&);
-QDataStream& operator>>(QDataStream&, SireIO::NullParser&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::NullParser&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::NullParser&);
 
 namespace SireSystem
 {
@@ -127,8 +127,8 @@ public:
 class SIREIO_EXPORT MoleculeParser : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MoleculeParser&);
-friend QDataStream& ::operator>>(QDataStream&, MoleculeParser&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const MoleculeParser&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, MoleculeParser&);
 
 public:
     MoleculeParser(const PropertyMap &map = PropertyMap());
@@ -277,8 +277,8 @@ private:
 class SIREIO_EXPORT NullParser : public SireBase::ConcreteProperty<NullParser,MoleculeParser>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullParser&);
-friend QDataStream& ::operator>>(QDataStream&, NullParser&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const NullParser&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, NullParser&);
 
 public:
     NullParser();

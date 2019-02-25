@@ -50,7 +50,7 @@ void exception_translator( const SireError::exception &ex )
     PyErr_SetString(PyExc_UserWarning,ex.toString().toUtf8());
 }
 
-void SIREERROR_EXPORT export_exceptions()
+void export_exceptions()
 {
     register_exception_translator<SireError::exception>(&exception_translator);
     register_exception_translator<SireError::invalid_index>(&out_of_range);

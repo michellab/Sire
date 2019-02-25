@@ -38,8 +38,8 @@ namespace SireMol
 class ResIdentifier;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResIdentifier&);
-QDataStream& operator>>(QDataStream&, SireMol::ResIdentifier&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResIdentifier&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResIdentifier&);
 
 namespace SireMol
 {
@@ -48,8 +48,8 @@ namespace SireMol
 class SIREMOL_EXPORT ResIdentifier : public ResID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ResIdentifier&);
-friend QDataStream& ::operator>>(QDataStream&, ResIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ResIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResIdentifier&);
 
 public:
     ResIdentifier();

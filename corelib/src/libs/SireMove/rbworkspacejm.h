@@ -41,8 +41,8 @@ namespace SireMove
 class RBWorkspaceJM;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::RBWorkspaceJM&);
-QDataStream& operator>>(QDataStream&, SireMove::RBWorkspaceJM&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::RBWorkspaceJM&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::RBWorkspaceJM&);
 
 namespace SireMove
 {
@@ -64,8 +64,8 @@ class SIREMOVE_EXPORT RBWorkspaceJM
        : public SireBase::ConcreteProperty<RBWorkspaceJM,IntegratorWorkspaceJM>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RBWorkspaceJM&);
-friend QDataStream& ::operator>>(QDataStream&, RBWorkspaceJM&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const RBWorkspaceJM&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, RBWorkspaceJM&);
 
 public:
     RBWorkspaceJM(const PropertyMap &map = PropertyMap());

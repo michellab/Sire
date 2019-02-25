@@ -297,7 +297,7 @@ static int processVersionLine( QString& line)
 static const RegisterMetaType<ZmatrixMaker> r_zmatrixmaker(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const ZmatrixMaker &zmatrixmaker)
+QDataStream &operator<<(QDataStream &ds, const ZmatrixMaker &zmatrixmaker)
 {
     writeHeader(ds, r_zmatrixmaker, 1);
     
@@ -309,7 +309,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const ZmatrixMaker &zmatr
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, ZmatrixMaker &zmatrixmaker)
+QDataStream &operator>>(QDataStream &ds, ZmatrixMaker &zmatrixmaker)
 {
     VersionID v = readHeader(ds, r_zmatrixmaker);
     

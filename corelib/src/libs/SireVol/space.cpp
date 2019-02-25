@@ -49,7 +49,7 @@ using namespace SireStream;
 static const RegisterMetaType<Space> r_space(MAGIC_ONLY, "SireVol::Space");
 
 /** Serialise to a binary datastream */
-QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const Space &space)
 {
     writeHeader(ds, r_space, 1)
@@ -59,7 +59,7 @@ QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREVOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        Space &space)
 {
     VersionID v = readHeader(ds, r_space);

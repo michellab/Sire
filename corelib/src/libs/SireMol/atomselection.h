@@ -47,8 +47,8 @@ namespace SireMol
 class AtomSelection;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomSelection&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomSelection&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomSelection&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomSelection&);
 
 namespace SireMol
 {
@@ -93,8 +93,8 @@ class SIREMOL_EXPORT AtomSelection
            : public ConcreteProperty<AtomSelection,MoleculeProperty>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomSelection&);
-friend QDataStream& ::operator>>(QDataStream&, AtomSelection&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomSelection&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomSelection&);
 
 friend class SelectionFromMol; //so can modify a single AtomSelection!
 

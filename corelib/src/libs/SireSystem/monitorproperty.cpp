@@ -50,7 +50,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<MonitorProperty> r_monprop;
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const MonitorProperty &monprop)
 {
     writeHeader(ds, r_monprop, 2);
@@ -77,7 +77,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                           MonitorProperty &monprop)
 {
     VersionID v = readHeader(ds, r_monprop);

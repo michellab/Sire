@@ -398,7 +398,7 @@ SireIO::detail::ParserFactoryHelper::ParserFactoryHelper(MoleculeParser *p)
 
 static const RegisterMetaType<MoleculeParser> r_parser( MAGIC_ONLY, MoleculeParser::typeName() );
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const MoleculeParser &parser)
+QDataStream &operator<<(QDataStream &ds, const MoleculeParser &parser)
 {
     writeHeader(ds, r_parser, 1);
 
@@ -409,7 +409,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const MoleculeParser &par
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, MoleculeParser &parser)
+QDataStream &operator>>(QDataStream &ds, MoleculeParser &parser)
 {
     VersionID v = readHeader(ds, r_parser);
 
@@ -1468,14 +1468,14 @@ const NullParser& MoleculeParser::null()
 
 static const RegisterMetaType<NullParser> r_null;
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const NullParser &parser)
+QDataStream &operator<<(QDataStream &ds, const NullParser &parser)
 {
     writeHeader(ds, r_null, 1);
     ds << static_cast<const MoleculeParser&>(parser);
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, NullParser &parser)
+QDataStream &operator>>(QDataStream &ds, NullParser &parser)
 {
     VersionID v = readHeader(ds, r_null);
 

@@ -44,11 +44,11 @@ class QMChargeCalculator;
 class NullQMChargeCalculator;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::QMChargeCalculator&);
-QDataStream& operator>>(QDataStream&, Squire::QMChargeCalculator&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::QMChargeCalculator&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::QMChargeCalculator&);
 
-QDataStream& operator<<(QDataStream&, const Squire::NullQMChargeCalculator&);
-QDataStream& operator>>(QDataStream&, Squire::NullQMChargeCalculator&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::NullQMChargeCalculator&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::NullQMChargeCalculator&);
 
 namespace SireMol
 {
@@ -76,8 +76,8 @@ using SireBase::PropertyMap;
 class SQUIRE_EXPORT QMChargeCalculator : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const QMChargeCalculator&);
-friend QDataStream& ::operator>>(QDataStream&, QMChargeCalculator&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const QMChargeCalculator&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, QMChargeCalculator&);
 
 public:
     QMChargeCalculator();
@@ -123,8 +123,8 @@ class SQUIRE_EXPORT NullQMChargeCalculator
             : public SireBase::ConcreteProperty<NullQMChargeCalculator,QMChargeCalculator>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullQMChargeCalculator&);
-friend QDataStream& ::operator>>(QDataStream&, NullQMChargeCalculator&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const NullQMChargeCalculator&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, NullQMChargeCalculator&);
 
 public:
     NullQMChargeCalculator();

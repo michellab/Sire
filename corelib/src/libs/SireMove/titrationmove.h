@@ -38,8 +38,8 @@ namespace SireMove
 class TitrationMove;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::TitrationMove&);
-QDataStream& operator>>(QDataStream&, SireMove::TitrationMove&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::TitrationMove&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::TitrationMove&);
 
 namespace SireMove
 {
@@ -56,8 +56,8 @@ class SIREMOVE_EXPORT TitrationMove
         : public SireBase::ConcreteProperty<TitrationMove,MonteCarlo>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TitrationMove&);
-friend QDataStream& ::operator>>(QDataStream&, TitrationMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const TitrationMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, TitrationMove&);
 
 public:
     TitrationMove();

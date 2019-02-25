@@ -87,8 +87,8 @@ template<class T>
 class SIREMM_EXPORT CGAtomPairs
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const CGAtomPairs<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, CGAtomPairs<T>&);
+friend SIREMM_EXPORT QDataStream& ::operator<<<>(QDataStream&, const CGAtomPairs<T>&);
+friend SIREMM_EXPORT QDataStream& ::operator>><>(QDataStream&, CGAtomPairs<T>&);
 
 template<class U> friend class CGAtomPairs;
 
@@ -138,8 +138,8 @@ template<class T>
 class SIREMM_EXPORT AtomPairs : public SireMol::MoleculeProperty
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const AtomPairs<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, AtomPairs<T>&);
+friend SIREMM_EXPORT QDataStream& ::operator<<<>(QDataStream&, const AtomPairs<T>&);
+friend SIREMM_EXPORT QDataStream& ::operator>><>(QDataStream&, AtomPairs<T>&);
 
 template<class U> friend class AtomPairs;
 

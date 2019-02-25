@@ -47,7 +47,7 @@ using namespace SireStream;
 
 static RegisterMetaType<TitrationMove> r_titrationmove;
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const TitrationMove &move)
+QDataStream &operator<<(QDataStream &ds, const TitrationMove &move)
 {
     writeHeader(ds, r_titrationmove, 1);
     
@@ -56,7 +56,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const TitrationMove &mo
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, TitrationMove &move)
+QDataStream &operator>>(QDataStream &ds, TitrationMove &move)
 {
     VersionID v = readHeader(ds, r_titrationmove);
     

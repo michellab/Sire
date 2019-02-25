@@ -42,7 +42,7 @@ using namespace SireCAS;
 static const RegisterMetaType<SingleFunc> r_singlefunc(MAGIC_ONLY, "SireCAS::SingleFunc");
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const SingleFunc &func)
+QDataStream &operator<<(QDataStream &ds, const SingleFunc &func)
 {
     writeHeader(ds, r_singlefunc, 1) << func.ex << static_cast<const ExBase&>(func);
 
@@ -50,7 +50,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const SingleFunc &func)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, SingleFunc &func)
+QDataStream &operator>>(QDataStream &ds, SingleFunc &func)
 {
     VersionID v = readHeader(ds, r_singlefunc);
 

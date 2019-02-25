@@ -61,7 +61,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<DofID> r_dofid(NO_ROOT);
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const DofID &dofid)
+QDataStream &operator<<(QDataStream &ds, const DofID &dofid)
 {
     writeHeader(ds, r_dofid, 2);
 
@@ -73,7 +73,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const DofID &dofid)
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, DofID &dofid)
+QDataStream &operator>>(QDataStream &ds, DofID &dofid)
 {
     VersionID v = readHeader(ds, r_dofid);
 
@@ -214,7 +214,7 @@ const char* DofID::typeName()
 static const RegisterMetaType<Flexibility> r_flex;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Flexibility &flex)
+QDataStream &operator<<(QDataStream &ds, const Flexibility &flex)
 {
     writeHeader(ds, r_flex, 2);
     
@@ -230,7 +230,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Flexibility &flex
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, Flexibility &flex)
+QDataStream &operator>>(QDataStream &ds, Flexibility &flex)
 {
     VersionID v = readHeader(ds, r_flex);
     

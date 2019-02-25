@@ -48,7 +48,7 @@ namespace SireBase
     @author Christopher Woods
 */
 template<class T>
-class SIREBASE_EXPORT PairMatrix
+class PairMatrix
 {
 public:
     /** Construct a null PairMatrix */

@@ -1837,7 +1837,7 @@ void FFTotalExpression::potential(PotentialTable &pottable,
 static const RegisterMetaType<ForceFields> r_ffields;
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const ForceFields &ffields)
+QDataStream &operator<<(QDataStream &ds, const ForceFields &ffields)
 {
     writeHeader(ds, r_ffields, 2);
     
@@ -1854,7 +1854,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const ForceFields &ffield
 }
  
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, ForceFields &ffields)
+QDataStream &operator>>(QDataStream &ds, ForceFields &ffields)
 {
     VersionID v = readHeader(ds, r_ffields);
     

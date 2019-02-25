@@ -44,7 +44,7 @@ using namespace SireStream;
 static const RegisterMetaType<MonitorIdentifier> r_monid;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const MonitorIdentifier &monid)
 {
     writeHeader(ds, r_monid, 1);
@@ -55,7 +55,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, MonitorIdentifier &monid)
+QDataStream &operator>>(QDataStream &ds, MonitorIdentifier &monid)
 {
     VersionID v = readHeader(ds, r_monid);
     

@@ -45,7 +45,7 @@ using namespace SireCAS;
 static const RegisterMetaType<Min> r_min;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Min &min)
+QDataStream &operator<<(QDataStream &ds, const Min &min)
 {
     writeHeader(ds, r_min, 1) << static_cast<const DoubleFunc&>(min);
     
@@ -53,7 +53,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Min &min)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Min &min)
+QDataStream &operator>>(QDataStream &ds, Min &min)
 {
     VersionID v = readHeader(ds, r_min);
     
@@ -149,7 +149,7 @@ const char* Min::typeName()
 static const RegisterMetaType<Max> r_max;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Max &max)
+QDataStream &operator<<(QDataStream &ds, const Max &max)
 {
     writeHeader(ds, r_max, 1) << static_cast<const DoubleFunc&>(max);
     
@@ -157,7 +157,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Max &max)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Max &max)
+QDataStream &operator>>(QDataStream &ds, Max &max)
 {
     VersionID v = readHeader(ds, r_max);
     

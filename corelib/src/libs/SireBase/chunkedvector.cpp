@@ -36,7 +36,7 @@ namespace SireBase
 namespace detail
 {
 
-void SIREBASE_EXPORT ChunkedVector_throwOutOfRangeError(int i, int n)
+void ChunkedVector_throwOutOfRangeError(int i, int n)
 {
     throw SireError::invalid_index( QObject::tr(
         "Invalid index (%1) for a ChunkedVector of size %2.")

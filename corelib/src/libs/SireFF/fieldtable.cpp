@@ -55,7 +55,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<MolFieldTable> r_moltable(NO_ROOT);
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const MolFieldTable &moltable)
 {
     writeHeader(ds, r_moltable, 1);
@@ -68,7 +68,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, MolFieldTable &moltable)
+QDataStream &operator>>(QDataStream &ds, MolFieldTable &moltable)
 {
     VersionID v = readHeader(ds, r_moltable);
     
@@ -234,7 +234,7 @@ MolFieldTable MolFieldTable::operator+(const Vector &field) const
     return ret;
 }
 
-MolFieldTable SIREFF_EXPORT operator+(const Vector &field, const MolFieldTable &table)
+MolFieldTable operator+(const Vector &field, const MolFieldTable &table)
 {
     return table + field;
 }
@@ -270,7 +270,7 @@ MolFieldTable MolFieldTable::operator*(double value) const
 }
 
 /** Return the field that has been multiplied by 'value' */
-MolFieldTable SIREFF_EXPORT operator*(double value, const MolFieldTable &table)
+MolFieldTable operator*(double value, const MolFieldTable &table)
 {
     return table * value;
 }
@@ -875,7 +875,7 @@ void MolFieldTable::subtract(const MolFieldTable &other)
 
 static const RegisterMetaType<GridFieldTable> r_gridtable(NO_ROOT);
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const GridFieldTable &gridtable)
+QDataStream &operator<<(QDataStream &ds, const GridFieldTable &gridtable)
 {
     writeHeader(ds, r_gridtable, 1);
     
@@ -886,7 +886,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const GridFieldTable &gri
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, GridFieldTable &gridtable)
+QDataStream &operator>>(QDataStream &ds, GridFieldTable &gridtable)
 {
     VersionID v = readHeader(ds, r_gridtable);
     
@@ -1306,7 +1306,7 @@ GridFieldTable::const_iterator GridFieldTable::constEnd() const
 
 static const RegisterMetaType<FieldTable> r_fieldtable(NO_ROOT);
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FieldTable &fieldtable)
+QDataStream &operator<<(QDataStream &ds, const FieldTable &fieldtable)
 {
     writeHeader(ds, r_fieldtable, 1);
     
@@ -1317,7 +1317,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FieldTable &fieldta
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, FieldTable &fieldtable)
+QDataStream &operator>>(QDataStream &ds, FieldTable &fieldtable)
 {
     VersionID v = readHeader(ds, r_fieldtable);
     

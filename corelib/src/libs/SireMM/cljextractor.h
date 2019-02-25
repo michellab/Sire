@@ -46,8 +46,8 @@ namespace SireMM
 class CLJExtractor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJExtractor&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJExtractor&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJExtractor&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJExtractor&);
 
 namespace SireMM
 {
@@ -71,8 +71,8 @@ using SireBase::PropertyName;
 class SIREMM_EXPORT CLJExtractor
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJExtractor&);
-friend QDataStream& ::operator>>(QDataStream&, CLJExtractor&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJExtractor&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJExtractor&);
 
 public:
     enum EXTRACT_SOURCE

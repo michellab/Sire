@@ -130,7 +130,7 @@ namespace SireFF
 }
 
 /** Streaming functions for CLJParameter */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const SireMM::detail::CLJParameter &cljparam)
 {
     ds << static_cast<const SireMM::detail::ChargeParameter&>(cljparam)
@@ -139,7 +139,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                       SireMM::detail::CLJParameter &cljparam)
 {
     ds >> static_cast<SireMM::detail::ChargeParameter&>(cljparam)
@@ -274,7 +274,7 @@ static const RegisterMetaType<CLJPotential> r_cljpot( MAGIC_ONLY, NO_ROOT,
                                                       "SireMM::CLJPotential" );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const CLJPotential &cljpot)
 {
     writeHeader(ds, r_cljpot, 1);
@@ -285,7 +285,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       CLJPotential &cljpot)
 {
     VersionID v = readHeader(ds, r_cljpot);
@@ -713,7 +713,7 @@ static const RegisterMetaType<InterCLJPotential> r_interclj( MAGIC_ONLY, NO_ROOT
                                             InterCLJPotential::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const InterCLJPotential &interclj)
 {
     writeHeader(ds, r_interclj, 1);
@@ -724,7 +724,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       InterCLJPotential &interclj)
 {
     VersionID v = readHeader(ds, r_interclj);
@@ -5122,7 +5122,7 @@ static const RegisterMetaType<IntraCLJPotential> r_intraclj( MAGIC_ONLY, NO_ROOT
                                             IntraCLJPotential::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const IntraCLJPotential &intraclj)
 {
     writeHeader(ds, r_intraclj, 1);
@@ -5133,7 +5133,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       IntraCLJPotential &intraclj)
 {
     VersionID v = readHeader(ds, r_intraclj);

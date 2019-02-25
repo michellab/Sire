@@ -111,7 +111,7 @@ namespace SireMM
 
 static RegisterMetaType<InterFF> r_interff;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const InterFF &interff)
+QDataStream &operator<<(QDataStream &ds, const InterFF &interff)
 {
     writeHeader(ds, r_interff, 3);
     
@@ -128,7 +128,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const InterFF &interff)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, InterFF &interff)
+QDataStream &operator>>(QDataStream &ds, InterFF &interff)
 {
     VersionID v = readHeader(ds, r_interff);
     

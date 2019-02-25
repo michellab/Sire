@@ -59,7 +59,7 @@ static const RegisterMetaType<CGProp> r_cgprop(MAGIC_ONLY,
                                                "SireMol::CGProp");
                                                    
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CGProp &cgprop)
+QDataStream &operator<<(QDataStream &ds, const CGProp &cgprop)
 {
     writeHeader(ds, r_cgprop, 1)
          << static_cast<const MolViewProperty&>(cgprop);
@@ -68,7 +68,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CGProp &cgprop)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, CGProp &cgprop)
+QDataStream &operator>>(QDataStream &ds, CGProp &cgprop)
 {
     VersionID v = readHeader(ds, r_cgprop);
     
@@ -98,7 +98,7 @@ CGProp::~CGProp()
 RegisterMetaType<CutGroup> r_cg;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CutGroup &cg)
+QDataStream &operator<<(QDataStream &ds, const CutGroup &cg)
 {
     writeHeader(ds, r_cg, 1);
 
@@ -110,7 +110,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CutGroup &cg)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, CutGroup &cg)
+QDataStream &operator>>(QDataStream &ds, CutGroup &cg)
 {
     VersionID v = readHeader(ds, r_cg);
 
@@ -392,19 +392,19 @@ namespace SireMol
 namespace detail
 {
 
-bool SIREMOL_EXPORT has_property(const CutGroup*, const MoleculeData &moldata,
+bool has_property(const CutGroup*, const MoleculeData &moldata,
                                  const PropertyName &key)
 {
     return moldata.hasPropertyOfType<CGProp>(key);
 }
 
-bool SIREMOL_EXPORT has_metadata(const CutGroup*, const MoleculeData &moldata,
+bool has_metadata(const CutGroup*, const MoleculeData &moldata,
                                  const PropertyName &metakey)
 {
     return moldata.hasMetadataOfType<CGProp>(metakey);
 }
 
-bool SIREMOL_EXPORT has_metadata(const CutGroup*, const MoleculeData &moldata,
+bool has_metadata(const CutGroup*, const MoleculeData &moldata,
                                  const PropertyName &key, const PropertyName &metakey)
 {
     return moldata.hasMetadataOfType<CGProp>(key, metakey);

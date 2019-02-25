@@ -53,7 +53,7 @@ using namespace SireMaths;
 static const RegisterMetaType<Expression> r_expression(NO_ROOT);
 
 /** Serialise an Expression to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Expression &ex)
+QDataStream &operator<<(QDataStream &ds, const Expression &ex)
 {
     writeHeader(ds, r_expression, 1) << ex.fac << ex.exbase;
 
@@ -61,7 +61,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Expression &ex)
 }
 
 /** Deserialise an Expression from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Expression &ex)
+QDataStream &operator>>(QDataStream &ds, Expression &ex)
 {
     VersionID v = readHeader(ds, r_expression);
 

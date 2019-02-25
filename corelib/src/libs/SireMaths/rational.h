@@ -158,36 +158,36 @@ qint32 lcm(qint32 n, qint32 m);
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireMaths::Rational&);
-QDataStream& operator>>(QDataStream&, SireMaths::Rational&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Rational&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Rational&);
 
 namespace SireMaths
 {
 
 /** Return a QString representation of the rational number */
-QString toString(const SireMaths::Rational &val);
+SIREMATHS_EXPORT QString toString(const SireMaths::Rational &val);
 
 /** Private function used by 'pow' to calculate 'x' raised to the positive
     fractional power 'power' */
 double pow_pvt(double x, const Rational &power);
 
 /** Return x raised to the fractional power 'power' */
-double pow(double x, const Rational &power);
+SIREMATHS_EXPORT double pow(double x, const Rational &power);
 
 /** Return whether this is a rational number (with maximum denominator = 'maxdenom') */
-bool isRational(double val, int maxdenom);
+SIREMATHS_EXPORT bool isRational(double val, int maxdenom);
 
 /** Return 'val' converted into the best approximated rational number
     with maximum denominator 'maxdenom'. A perfect conversion will only 
     result if 'isRational(val,maxdenom)' returned true. */
-Rational toRational(double val, int maxdenom);
+SIREMATHS_EXPORT Rational toRational(double val, int maxdenom);
 
-bool isRational(double val);
+SIREMATHS_EXPORT bool isRational(double val);
 
-Rational toRational(double val);
+SIREMATHS_EXPORT Rational toRational(double val);
 
 /** Return 'val' converted to a double */
-double toDouble(const Rational &val);
+SIREMATHS_EXPORT double toDouble(const Rational &val);
 
 /** Return a hash of the rational number */
 uint qHash(const Rational &val);

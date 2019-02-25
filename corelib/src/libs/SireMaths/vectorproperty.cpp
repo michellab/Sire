@@ -37,17 +37,17 @@ using namespace SireStream;
 
 namespace SireMaths
 {
-    PropertyPtr SIREMATHS_EXPORT wrap(const Vector &vector)
+    PropertyPtr wrap(const Vector &vector)
     {
         return PropertyPtr( VectorProperty(vector) );
     }
     
-    PropertyPtr SIREMATHS_EXPORT wrap(const QVector<Vector> &vector)
+    PropertyPtr wrap(const QVector<Vector> &vector)
     {
         return PropertyPtr( VectorArrayProperty(vector) );
     }
     
-    PropertyPtr SIREMATHS_EXPORT wrap(const QList<Vector> &vector)
+    PropertyPtr wrap(const QList<Vector> &vector)
     {
         return PropertyPtr( VectorArrayProperty(vector) );
     }
@@ -59,7 +59,7 @@ namespace SireMaths
 
 static const RegisterMetaType<VectorArrayProperty> r_vectorarray;
 
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const VectorArrayProperty &vecarray)
+QDataStream &operator<<(QDataStream &ds, const VectorArrayProperty &vecarray)
 {
     writeHeader(ds, r_vectorarray, 1);
     
@@ -69,7 +69,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const VectorArrayPrope
     return ds;
 }
 
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, VectorArrayProperty &vecarray)
+QDataStream &operator>>(QDataStream &ds, VectorArrayProperty &vecarray)
 {
     VersionID v = readHeader(ds, r_vectorarray);
     
@@ -143,7 +143,7 @@ VectorArrayProperty& VectorArrayProperty::operator+=(const VectorArrayProperty &
 
 static const RegisterMetaType<VectorProperty> r_vecprop;
 
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const VectorProperty &vecprop)
+QDataStream &operator<<(QDataStream &ds, const VectorProperty &vecprop)
 {
     writeHeader(ds, r_vecprop, 1);
     
@@ -152,7 +152,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const VectorProperty &
     return ds;
 }
 
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, VectorProperty &vecprop)
+QDataStream &operator>>(QDataStream &ds, VectorProperty &vecprop)
 {
     VersionID v = readHeader(ds, r_vecprop);
     

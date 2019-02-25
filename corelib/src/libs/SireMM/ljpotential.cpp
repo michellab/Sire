@@ -123,14 +123,14 @@ namespace SireMM
 /** Streaming functions for LJParamID - these must convert the 
     LJID number to and from an actual LJParameter (as the LJParameterDB
     will have different ID numbers of different processors) */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const SireMM::detail::LJParamID &ljparam)
 {
     ds << LJParameterDB::getLJParameter(ljparam.ljid);
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                       SireMM::detail::LJParamID &ljparam)
 {
     LJParameter lj;
@@ -253,7 +253,7 @@ static const RegisterMetaType<LJPotential> r_ljpot( MAGIC_ONLY, NO_ROOT,
                                                     "SireMM::LJPotential" );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                      const LJPotential &ljpot)
 {
     writeHeader(ds, r_ljpot, 1);
@@ -264,7 +264,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       LJPotential &ljpot)
 {
     VersionID v = readHeader(ds, r_ljpot);
@@ -473,7 +473,7 @@ static const RegisterMetaType<InterLJPotential> r_interlj( MAGIC_ONLY, NO_ROOT,
                                             InterLJPotential::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const InterLJPotential &interlj)
 {
     writeHeader(ds, r_interlj, 1);
@@ -484,7 +484,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       InterLJPotential &interlj)
 {
     VersionID v = readHeader(ds, r_interlj);
@@ -1705,7 +1705,7 @@ static const RegisterMetaType<IntraLJPotential> r_intralj( MAGIC_ONLY, NO_ROOT,
                                             IntraLJPotential::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const IntraLJPotential &intralj)
 {
     writeHeader(ds, r_intralj, 1);
@@ -1716,7 +1716,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       IntraLJPotential &intralj)
 {
     VersionID v = readHeader(ds, r_intralj);

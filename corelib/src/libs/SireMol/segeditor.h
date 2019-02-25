@@ -42,11 +42,11 @@ class SegEditor;
 class SegStructureEditor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::SegEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::SegEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::SegEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::SegEditor&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::SegStructureEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::SegStructureEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::SegStructureEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::SegStructureEditor&);
 
 namespace SireMol
 {
@@ -81,8 +81,8 @@ class SIREMOL_EXPORT SegEditor
         : public SireBase::ConcreteProperty< SegEditor,Editor<SegEditor,Segment> >
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SegEditor&);
-friend QDataStream& ::operator>>(QDataStream&, SegEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const SegEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, SegEditor&);
 
 public:
     SegEditor();
@@ -127,8 +127,8 @@ public:
 class SIREMOL_EXPORT SegStructureEditor : public StructureEditor
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SegStructureEditor&);
-friend QDataStream& ::operator>>(QDataStream&, SegStructureEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const SegStructureEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, SegStructureEditor&);
 
 public:
     SegStructureEditor();

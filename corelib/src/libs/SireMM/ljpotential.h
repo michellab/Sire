@@ -72,17 +72,17 @@ class LJPotentialInterface;
 namespace detail{ class LJParamID; }
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::InterLJPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::InterLJPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InterLJPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::InterLJPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::IntraLJPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::IntraLJPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::IntraLJPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::IntraLJPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::LJPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::LJPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::LJPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::LJPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::detail::LJParamID&);
-QDataStream& operator>>(QDataStream&, SireMM::detail::LJParamID&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::detail::LJParamID&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::detail::LJParamID&);
 
 template<class LJPot>
 QDataStream& operator<<(QDataStream&, const SireMM::LJPotentialInterface<LJPot>&);
@@ -214,8 +214,8 @@ public:
 class SIREMM_EXPORT LJPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const LJPotential&);
-friend QDataStream& ::operator>>(QDataStream&, LJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const LJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, LJPotential&);
 
 public:
     virtual ~LJPotential();
@@ -295,8 +295,8 @@ protected:
 class SIREMM_EXPORT InterLJPotential : public LJPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const InterLJPotential&);
-friend QDataStream& ::operator>>(QDataStream&, InterLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const InterLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, InterLJPotential&);
 
 public:
 
@@ -566,8 +566,8 @@ private:
 class SIREMM_EXPORT IntraLJPotential : public LJPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IntraLJPotential&);
-friend QDataStream& ::operator>>(QDataStream&, IntraLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const IntraLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, IntraLJPotential&);
 
 public:
     typedef LJEnergy Energy;
@@ -879,8 +879,8 @@ template<class LJPot>
 class LJPotentialInterface : protected LJPot
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const LJPotentialInterface<LJPot>&);
-friend QDataStream& ::operator>><>(QDataStream&, LJPotentialInterface<LJPot>&);
+friend SIREMM_EXPORT QDataStream& ::operator<<<>(QDataStream&, const LJPotentialInterface<LJPot>&);
+friend SIREMM_EXPORT QDataStream& ::operator>><>(QDataStream&, LJPotentialInterface<LJPot>&);
 
 public:
     LJPotentialInterface() : LJPot()
@@ -1270,8 +1270,8 @@ IntraLJPotential::calculateForce(const IntraLJPotential::Molecule &mol,
 
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::detail::LJParamID&);
-QDataStream& operator>>(QDataStream&, SireMM::detail::LJParamID&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::detail::LJParamID&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::detail::LJParamID&);
 
 template<class LJPot>
 QDataStream& operator<<(QDataStream &ds,

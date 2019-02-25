@@ -38,8 +38,8 @@ namespace SireMol
 class Molecule;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Molecule&);
-QDataStream& operator>>(QDataStream&, SireMol::Molecule&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Molecule&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Molecule&);
 
 namespace SireMol
 {
@@ -98,8 +98,8 @@ class Segment;
 class SIREMOL_EXPORT Molecule : public SireBase::ConcreteProperty<Molecule,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Molecule&);
-friend QDataStream& ::operator>>(QDataStream&, Molecule&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Molecule&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Molecule&);
 
 public:
     Molecule();

@@ -61,8 +61,8 @@ class SIREMOVE_EXPORT RBWorkspace
        : public SireBase::ConcreteProperty<RBWorkspace,IntegratorWorkspace>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RBWorkspace&);
-friend QDataStream& ::operator>>(QDataStream&, RBWorkspace&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const RBWorkspace&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, RBWorkspace&);
 
 public:
     RBWorkspace(const PropertyMap &map = PropertyMap());

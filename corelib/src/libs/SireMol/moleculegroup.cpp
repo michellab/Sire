@@ -176,7 +176,7 @@ public:
 using namespace SireMol::detail;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                        const MolGroupPvt &molgrouppvt)
 {
     SharedDataStream sds(ds);
@@ -194,7 +194,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,     
+QDataStream &operator>>(QDataStream &ds,     
                                        MolGroupPvt &molgrouppvt)
 {
     SharedDataStream sds(ds);
@@ -301,7 +301,7 @@ void MolGroupPvt::incrementMinor()
 static const RegisterMetaType<MoleculeGroup> r_MoleculeGroup;
 
 /** Serialise a MoleculeGroup to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const MoleculeGroup &molgroup)
 {
     if (molgroup.needsAccepting())
@@ -321,7 +321,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise a MoleculeGroup from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        MoleculeGroup &molgroup)
 {
     VersionID v = readHeader(ds, r_MoleculeGroup);

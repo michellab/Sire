@@ -41,8 +41,8 @@ namespace SireSystem
 class MonitorComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::MonitorComponent&);
-QDataStream& operator>>(QDataStream&, SireSystem::MonitorComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::MonitorComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::MonitorComponent&);
 
 namespace SireSystem 
 {
@@ -62,8 +62,8 @@ class SIRESYSTEM_EXPORT MonitorComponent
         : public SireBase::ConcreteProperty<MonitorComponent,SystemMonitor>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MonitorComponent&);
-friend QDataStream& ::operator>>(QDataStream&, MonitorComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const MonitorComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, MonitorComponent&);
 
 public:
     MonitorComponent();

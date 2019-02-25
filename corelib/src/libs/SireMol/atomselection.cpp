@@ -47,7 +47,7 @@ using namespace SireStream;
 RegisterMetaType<AtomSelection> r_selection;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const AtomSelection &selection)
 {
     writeHeader(ds, r_selection, 2);
@@ -61,7 +61,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        AtomSelection &selection)
 {
     VersionID v = readHeader(ds, r_selection);

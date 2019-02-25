@@ -39,11 +39,11 @@ class SupraSubMove;
 class NullSupraSubMove;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::SupraSubMove&);
-QDataStream& operator>>(QDataStream&, SireMove::SupraSubMove&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::SupraSubMove&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::SupraSubMove&);
 
-QDataStream& operator<<(QDataStream&, const SireMove::NullSupraSubMove&);
-QDataStream& operator>>(QDataStream&, SireMove::NullSupraSubMove&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::NullSupraSubMove&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::NullSupraSubMove&);
 
 namespace SireMove
 {
@@ -59,8 +59,8 @@ class SupraSubSystem;
 class SIREMOVE_EXPORT SupraSubMove : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SupraSubMove&);
-friend QDataStream& ::operator>>(QDataStream&, SupraSubMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SupraSubMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SupraSubMove&);
 
 public:
     SupraSubMove();
@@ -102,8 +102,8 @@ class SIREMOVE_EXPORT NullSupraSubMove
         : public SireBase::ConcreteProperty<NullSupraSubMove,SupraSubMove>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullSupraSubMove&);
-friend QDataStream& ::operator>>(QDataStream&, NullSupraSubMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const NullSupraSubMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, NullSupraSubMove&);
 
 public:
     NullSupraSubMove();

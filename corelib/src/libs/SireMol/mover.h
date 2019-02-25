@@ -70,17 +70,17 @@ using SireBase::PropertyMap;
 
 using SireVol::Space;
 
-Transform getAlignment(const MoleculeView &view0, const MoleculeView &view1, bool fit=true);
-Transform getAlignment(const MoleculeView &view0, const MoleculeView &view1,
+SIREMOL_EXPORT Transform getAlignment(const MoleculeView &view0, const MoleculeView &view1, bool fit=true);
+SIREMOL_EXPORT Transform getAlignment(const MoleculeView &view0, const MoleculeView &view1,
                        const PropertyMap &map, bool fit=true);
-Transform getAlignment(const MoleculeView &view0, const PropertyMap &map0,
+SIREMOL_EXPORT Transform getAlignment(const MoleculeView &view0, const PropertyMap &map0,
                        const MoleculeView &view1, const PropertyMap &map1,
                        bool fit=true);
-Transform getAlignment(const MoleculeView &view0, const MoleculeView &view1,
+SIREMOL_EXPORT Transform getAlignment(const MoleculeView &view0, const MoleculeView &view1,
                        const AtomMatcher &matcher, bool fit=true);
-Transform getAlignment(const MoleculeView &view0, const MoleculeView &view1,
+SIREMOL_EXPORT Transform getAlignment(const MoleculeView &view0, const MoleculeView &view1,
                        const AtomMatcher &matcher, const PropertyMap &map, bool fit=true);
-Transform getAlignment(const MoleculeView &view0, const PropertyMap &map0,
+SIREMOL_EXPORT Transform getAlignment(const MoleculeView &view0, const PropertyMap &map0,
                        const MoleculeView &view1, const PropertyMap &map1,
                        const AtomMatcher &matcher, bool fit=true);
 

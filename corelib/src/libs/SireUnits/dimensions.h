@@ -69,8 +69,8 @@ class TempBase;
 class SIREUNITS_EXPORT Unit
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Unit&);
-friend QDataStream& ::operator>>(QDataStream&, Unit&);
+friend SIREUNITS_EXPORT QDataStream& ::operator<<(QDataStream&, const Unit&);
+friend SIREUNITS_EXPORT QDataStream& ::operator>>(QDataStream&, Unit&);
 
 public:
     ~Unit()
@@ -116,7 +116,7 @@ private:
     double sclfac;
 };
 
-QString getUnitString(double value, int M, int L, int T, int C, int t, int Q, int A);
+SIREUNITS_EXPORT QString getUnitString(double value, int M, int L, int T, int C, int t, int Q, int A);
 
 /** Construct a physical unit with the specified
     Mass, Length, Time, Charge, temperature,
@@ -126,7 +126,7 @@ QString getUnitString(double value, int M, int L, int T, int C, int t, int Q, in
 */
 template<int M, int L, int T,
          int C, int t, int Q, int A>
-class SIREUNITS_EXPORT PhysUnit : public Unit
+class PhysUnit : public Unit
 {
 public:
     PhysUnit() : Unit(0)

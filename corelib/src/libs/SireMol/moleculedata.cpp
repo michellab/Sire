@@ -126,7 +126,7 @@ void MoleculeData::PropVersions::incrementAll(MoleculeData &moldata)
 /////////
 
 /** Serialise to a binary data stream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MoleculeData &moldata)
+QDataStream &operator<<(QDataStream &ds, const MoleculeData &moldata)
 {
     writeHeader(ds, r_moldata, 1);
     
@@ -139,7 +139,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MoleculeData &mold
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MoleculeData &moldata)
+QDataStream &operator>>(QDataStream &ds, MoleculeData &moldata)
 {
     VersionID v = readHeader(ds, r_moldata);
 

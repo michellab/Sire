@@ -56,14 +56,14 @@ using namespace SireStream;
 static const RegisterMetaType<NullFF> r_nullff;
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const NullFF &nullff)
+QDataStream &operator<<(QDataStream &ds, const NullFF &nullff)
 {
     writeHeader(ds, r_nullff, 0);
     return ds;
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, NullFF &nullff)
+QDataStream &operator>>(QDataStream &ds, NullFF &nullff)
 {
     VersionID v = readHeader(ds, r_nullff);
     

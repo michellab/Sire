@@ -44,8 +44,8 @@ class Identities;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireCAS::Identities&);
-QDataStream& operator>>(QDataStream&, SireCAS::Identities&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Identities&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Identities&);
 
 namespace SireCAS
 {
@@ -61,8 +61,8 @@ namespace SireCAS
 class SIRECAS_EXPORT Identities
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Identities&);
-friend QDataStream& ::operator>>(QDataStream&, Identities&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Identities&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Identities&);
 
 public:
     Identities();

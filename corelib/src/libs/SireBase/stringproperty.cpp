@@ -43,7 +43,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<StringProperty> r_stringprop;
 
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const StringProperty &s)
+QDataStream &operator<<(QDataStream &ds, const StringProperty &s)
 {
     writeHeader(ds, r_stringprop, 1);
     
@@ -54,7 +54,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const StringProperty &s
     return ds;
 }
 
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, StringProperty &s)
+QDataStream &operator>>(QDataStream &ds, StringProperty &s)
 {
     VersionID v = readHeader(ds, r_stringprop);
     

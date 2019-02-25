@@ -54,14 +54,14 @@ class GroupInternalParameters;
 
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::InternalParameters&);
-QDataStream& operator>>(QDataStream&, SireMM::InternalParameters&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InternalParameters&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::InternalParameters&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::InternalParameters3D&);
-QDataStream& operator>>(QDataStream&, SireMM::InternalParameters3D&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InternalParameters3D&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::InternalParameters3D&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::GroupInternalParameters&);
-QDataStream& operator>>(QDataStream&, SireMM::GroupInternalParameters&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::GroupInternalParameters&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::GroupInternalParameters&);
 
 namespace SireBase
 {
@@ -299,8 +299,8 @@ public:
 class SIREMM_EXPORT GroupInternalParameters
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GroupInternalParameters&);
-friend QDataStream& ::operator>>(QDataStream&, GroupInternalParameters&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const GroupInternalParameters&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, GroupInternalParameters&);
 
 friend class InternalParameters;  // so can call editing functions
 
@@ -686,8 +686,8 @@ private:
 class SIREMM_EXPORT InternalParameters
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const InternalParameters&);
-friend QDataStream& ::operator>>(QDataStream&, InternalParameters&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const InternalParameters&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, InternalParameters&);
 
 public:
     InternalParameters();
@@ -846,8 +846,8 @@ class SIREMM_EXPORT InternalParameters3D
               : public InternalParameters, protected SireFF::detail::AtomicCoords3D
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const InternalParameters3D&);
-friend QDataStream& ::operator>>(QDataStream&, InternalParameters3D&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const InternalParameters3D&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, InternalParameters3D&);
 
 public:
     InternalParameters3D();

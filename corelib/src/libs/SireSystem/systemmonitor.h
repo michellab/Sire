@@ -39,11 +39,11 @@ class SystemMonitor;
 class NullMonitor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::SystemMonitor&);
-QDataStream& operator>>(QDataStream&, SireSystem::SystemMonitor&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::SystemMonitor&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::SystemMonitor&);
 
-QDataStream& operator<<(QDataStream&, const SireSystem::NullMonitor&);
-QDataStream& operator>>(QDataStream&, SireSystem::NullMonitor&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::NullMonitor&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::NullMonitor&);
 
 namespace SireSystem
 {

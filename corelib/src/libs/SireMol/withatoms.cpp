@@ -43,7 +43,7 @@ using namespace SireStream;
 static const RegisterMetaType<ResWithAtoms> r_resid;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ResWithAtoms &resid)
+QDataStream &operator<<(QDataStream &ds, const ResWithAtoms &resid)
 {
     writeHeader(ds, r_resid, 1);
     
@@ -53,7 +53,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ResWithAtoms &resi
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResWithAtoms &resid)
+QDataStream &operator>>(QDataStream &ds, ResWithAtoms &resid)
 {
     VersionID v = readHeader(ds, r_resid);
     
@@ -189,7 +189,7 @@ ResWithAtoms* ResWithAtoms::clone() const
 static const RegisterMetaType<CGsWithAtoms> r_cgid;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CGsWithAtoms &cgid)
+QDataStream &operator<<(QDataStream &ds, const CGsWithAtoms &cgid)
 {
     writeHeader(ds, r_cgid, 1);
     
@@ -199,7 +199,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CGsWithAtoms &cgid
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, CGsWithAtoms &cgid)
+QDataStream &operator>>(QDataStream &ds, CGsWithAtoms &cgid)
 {
     VersionID v = readHeader(ds, r_cgid);
     
@@ -334,7 +334,7 @@ CGsWithAtoms* CGsWithAtoms::clone() const
 static const RegisterMetaType<ChainsWithAtoms> r_chainid;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChainsWithAtoms &chainid)
+QDataStream &operator<<(QDataStream &ds, const ChainsWithAtoms &chainid)
 {
     writeHeader(ds, r_chainid, 1);
     
@@ -344,7 +344,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChainsWithAtoms &c
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ChainsWithAtoms &chainid)
+QDataStream &operator>>(QDataStream &ds, ChainsWithAtoms &chainid)
 {
     VersionID v = readHeader(ds, r_chainid);
     
@@ -479,7 +479,7 @@ ChainsWithAtoms* ChainsWithAtoms::clone() const
 static const RegisterMetaType<SegsWithAtoms> r_segid;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const SegsWithAtoms &segid)
+QDataStream &operator<<(QDataStream &ds, const SegsWithAtoms &segid)
 {
     writeHeader(ds, r_segid, 1);
     
@@ -489,7 +489,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const SegsWithAtoms &seg
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, SegsWithAtoms &segid)
+QDataStream &operator>>(QDataStream &ds, SegsWithAtoms &segid)
 {
     VersionID v = readHeader(ds, r_segid);
     

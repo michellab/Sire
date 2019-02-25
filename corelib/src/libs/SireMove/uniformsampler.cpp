@@ -47,7 +47,7 @@ using namespace SireStream;
 static const RegisterMetaType<UniformSampler> r_sampler;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const UniformSampler &sampler)
 {
     writeHeader(ds, r_sampler, 1)
@@ -57,7 +57,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, UniformSampler &sampler)
+QDataStream &operator>>(QDataStream &ds, UniformSampler &sampler)
 {
     VersionID v = readHeader(ds, r_sampler);
 

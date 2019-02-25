@@ -43,11 +43,11 @@ class S_GTO;
 class SS_GTO;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::GTO&);
-QDataStream& operator>>(QDataStream&, Squire::GTO&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::GTO&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::GTO&);
 
-QDataStream& operator<<(QDataStream&, const Squire::GTOPair&);
-QDataStream& operator>>(QDataStream&, Squire::GTOPair&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::GTOPair&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::GTOPair&);
 
 namespace Squire
 {
@@ -75,8 +75,8 @@ typedef SireBase::PropPtr<GTO> GTOPtr;
 class SQUIRE_EXPORT GTO : public OrbitalShell
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GTO&);
-friend QDataStream& ::operator>>(QDataStream&, GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, GTO&);
 
 public:
     GTO();
@@ -124,8 +124,8 @@ private:
 class SQUIRE_EXPORT GTOPair : public ShellPair
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GTOPair&);
-friend QDataStream& ::operator>>(QDataStream&, GTOPair&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const GTOPair&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, GTOPair&);
 
 public:
     GTOPair();

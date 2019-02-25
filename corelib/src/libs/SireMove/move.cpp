@@ -57,7 +57,7 @@ using namespace SireStream;
 static const RegisterMetaType<Move> r_move( MAGIC_ONLY, "SireMove::Move" );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Move &move)
+QDataStream &operator<<(QDataStream &ds, const Move &move)
 {
     writeHeader(ds, r_move, 2);
     
@@ -72,7 +72,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Move &move)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, Move &move)
+QDataStream &operator>>(QDataStream &ds, Move &move)
 {
     VersionID v = readHeader(ds, r_move);
     
@@ -459,7 +459,7 @@ void Move::setFugacity(const Pressure &fugacity)
 static const RegisterMetaType<NullMove> r_nullmove;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const NullMove &nullmove)
+QDataStream &operator<<(QDataStream &ds, const NullMove &nullmove)
 {
     writeHeader(ds, r_nullmove, 1);
     ds << static_cast<const Move&>(nullmove);
@@ -468,7 +468,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const NullMove &nullmov
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, NullMove &nullmove)
+QDataStream &operator>>(QDataStream &ds, NullMove &nullmove)
 {
     VersionID v = readHeader(ds, r_nullmove);
     

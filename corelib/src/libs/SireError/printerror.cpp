@@ -44,7 +44,7 @@ void printAaargh(QTextStream &ts)
 }
 
 /** Print the error 'text' to standard output */
-void SIREERROR_EXPORT printError(const QString &text)
+void printError(const QString &text)
 {
     QTextStream ts(stdout);
     
@@ -59,7 +59,7 @@ void SIREERROR_EXPORT printError(const QString &text)
 }
 
 /** Print the error 'e' to standard output */
-void SIREERROR_EXPORT printError(const SireError::exception &e)
+void printError(const SireError::exception &e)
 {
     SireError::printError( e.toString() );
 }

@@ -124,7 +124,7 @@ MultiQuaternion::MultiQuaternion(const MultiDouble &angle, const MultiVector &ax
 MultiQuaternion::~MultiQuaternion()
 {}
 
-MultiQuaternion SIREMATHS_EXPORT SireMaths::operator*(const MultiQuaternion &q,
+MultiQuaternion SireMaths::operator*(const MultiQuaternion &q,
                                                       const MultiVector &p)
 {
     //quaternion multiplication - p is [0, p]
@@ -142,7 +142,7 @@ MultiQuaternion SIREMATHS_EXPORT SireMaths::operator*(const MultiQuaternion &q,
     return MultiQuaternion(nx,ny,nz,nw);
 }
 
-MultiQuaternion SIREMATHS_EXPORT SireMaths::operator*(const MultiVector &p,
+MultiQuaternion SireMaths::operator*(const MultiVector &p,
                                                       const MultiQuaternion &q)
 {
     return q*p;
@@ -293,7 +293,7 @@ bool MultiQuaternion::operator!=(const MultiQuaternion &p1) const
     return not operator==(p1);
 }
 
-MultiQuaternion SIREMATHS_EXPORT SireMaths::operator*(const MultiQuaternion &p1,
+MultiQuaternion SireMaths::operator*(const MultiQuaternion &p1,
                                                       const MultiQuaternion &p2)
 {
     //quaternion multiplication - if quat = [w1, v1], then
@@ -324,14 +324,14 @@ MultiQuaternion& MultiQuaternion::operator=(const MultiQuaternion &p)
     return *this;
 }
 
-MultiQuaternion SIREMATHS_EXPORT SireMaths::operator+(const MultiQuaternion &p1,
+MultiQuaternion SireMaths::operator+(const MultiQuaternion &p1,
                                                       const MultiQuaternion &p2)
 {
     return MultiQuaternion(p1.sc[0]+p2.sc[0],p1.sc[1]+p2.sc[1],
                            p1.sc[2]+p2.sc[2],p1.sc[3]+p2.sc[3]);
 }
 
-MultiQuaternion SIREMATHS_EXPORT SireMaths::operator-(const MultiQuaternion &p1,
+MultiQuaternion SireMaths::operator-(const MultiQuaternion &p1,
                                                       const MultiQuaternion &p2)
 {
     return MultiQuaternion(p1.sc[0]-p2.sc[0],p1.sc[1]-p2.sc[1],

@@ -40,8 +40,8 @@ namespace SireMaths
 class N4Matrix;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMaths::N4Matrix&);
-QDataStream& operator>>(QDataStream&, SireMaths::N4Matrix&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::N4Matrix&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::N4Matrix&);
 
 namespace SireBase
 {
@@ -69,8 +69,8 @@ class NVector;
 class SIREMATHS_EXPORT N4Matrix
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const N4Matrix&);
-friend QDataStream& ::operator>>(QDataStream&, N4Matrix&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const N4Matrix&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, N4Matrix&);
 
 public:
     N4Matrix();

@@ -54,7 +54,7 @@ using namespace SireStream;
 ////// Implementation of TwoAtomFunction
 //////
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const TwoAtomFunction &twoatomfunc)
 {
     ds << twoatomfunc.atm0 << twoatomfunc.atm1
@@ -63,7 +63,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       TwoAtomFunction &twoatomfunc)
 {
     ds >> twoatomfunc.atm0 >> twoatomfunc.atm1
@@ -181,7 +181,7 @@ bool IDPair::operator!=(const IDPair &other) const
 static const RegisterMetaType<TwoAtomFunctions> r_twoatomfuncs;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const TwoAtomFunctions &twoatomfuncs)
 {
     writeHeader(ds, r_twoatomfuncs, 1);
@@ -195,7 +195,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       TwoAtomFunctions &twoatomfuncs)
 {
     VersionID v = readHeader(ds, r_twoatomfuncs);

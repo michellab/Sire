@@ -42,7 +42,7 @@ using namespace SireMaths;
 static const RegisterMetaType<Sphere> r_sphere(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Sphere &sphere)
+QDataStream &operator<<(QDataStream &ds, const Sphere &sphere)
 {
     writeHeader(ds, r_sphere, 1) << sphere._center << sphere._radius;
 
@@ -50,7 +50,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Sphere &sphere)
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, Sphere &sphere)
+QDataStream &operator>>(QDataStream &ds, Sphere &sphere)
 {
     VersionID v = readHeader(ds, r_sphere);
 

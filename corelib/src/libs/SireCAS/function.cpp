@@ -196,7 +196,7 @@ void FunctionPvt::integrate(const Symbol &symbol)
 static const RegisterMetaType<Function> r_function;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Function &f)
+QDataStream &operator<<(QDataStream &ds, const Function &f)
 {
     ds << f.d << static_cast<const Symbol&>(f);
 
@@ -204,7 +204,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Function &f)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Function &f)
+QDataStream &operator>>(QDataStream &ds, Function &f)
 {
     ds >> f.d >> static_cast<Symbol&>(f);
 

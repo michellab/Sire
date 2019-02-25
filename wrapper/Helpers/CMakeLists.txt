@@ -37,6 +37,7 @@ target_link_libraries (SirePython
                        SIRE_SireStream
                        SIRE_SireError
                        ${BOOST_PYTHON_LIBRARY}
+                       ${PYTHON_LIBRARIES}
                       )
 
 # installation

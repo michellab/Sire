@@ -38,8 +38,8 @@ namespace SireBase
 class Range;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::Range&);
-QDataStream& operator>>(QDataStream&, SireBase::Range&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::Range&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::Range&);
 
 namespace SireBase
 {
@@ -54,8 +54,8 @@ typedef PropPtr<Range> RangePtr;
 */
 class SIREBASE_EXPORT Range : public SireBase::Property
 {
-friend QDataStream& ::operator<<(QDataStream&, const SireBase::Range&);
-friend QDataStream& ::operator>>(QDataStream&, SireBase::Range&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const SireBase::Range&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, SireBase::Range&);
 
 public:
     Range();

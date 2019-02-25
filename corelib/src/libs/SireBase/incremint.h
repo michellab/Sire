@@ -39,6 +39,8 @@
   #error You need at least Qt Version 4.1
 #endif
 
+#include <boost/throw_exception.hpp>
+
 SIRE_BEGIN_HEADER
 
 namespace SireBase
@@ -50,7 +52,7 @@ namespace SireBase
     
     @author Christopher Woods
 */
-class SIREBASE_EXPORT Incremint
+class Incremint
 {
 public:
     Incremint(int value=0);

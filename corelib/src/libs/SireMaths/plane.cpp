@@ -36,7 +36,7 @@ using namespace SireStream;
 static const RegisterMetaType<Plane> r_plane(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Plane &plane)
+QDataStream &operator<<(QDataStream &ds, const Plane &plane)
 {
     writeHeader(ds, r_plane, 1) << plane.norm << plane.dist;
 
@@ -44,7 +44,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Plane &plane)
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, Plane &plane)
+QDataStream &operator>>(QDataStream &ds, Plane &plane)
 {
     VersionID v = readHeader(ds, r_plane);
 

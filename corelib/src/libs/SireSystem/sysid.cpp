@@ -129,7 +129,7 @@ QList<SysIdx> Systems::map(const SysID&) const
 static const RegisterMetaType<SysIdx> r_sysidx;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const SysIdx &sysidx)
+QDataStream &operator<<(QDataStream &ds, const SysIdx &sysidx)
 {
     writeHeader(ds, r_sysidx, 1);
     
@@ -139,7 +139,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const SysIdx &sysidx)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, SysIdx &sysidx)
+QDataStream &operator>>(QDataStream &ds, SysIdx &sysidx)
 {
     VersionID v = readHeader(ds, r_sysidx);
     
@@ -214,7 +214,7 @@ const char* SysIdx::typeName()
 static const RegisterMetaType<SysName> r_sysname;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const SysName &sysname)
+QDataStream &operator<<(QDataStream &ds, const SysName &sysname)
 {
     writeHeader(ds, r_sysname, 1);
     
@@ -224,7 +224,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const SysName &sysnam
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, SysName &sysname)
+QDataStream &operator>>(QDataStream &ds, SysName &sysname)
 {
     VersionID v = readHeader(ds, r_sysname);
     

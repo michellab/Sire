@@ -214,7 +214,7 @@ SelectResult SireMol::parser::SelectEngine::expand(const SelectResult &results) 
 
 static const RegisterMetaType<Select> r_select;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Select &select)
+QDataStream &operator<<(QDataStream &ds, const Select &select)
 {
     writeHeader(ds, r_select, 1);
     
@@ -225,7 +225,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Select &select)
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Select &select)
+QDataStream &operator>>(QDataStream &ds, Select &select)
 {
     VersionID v = readHeader(ds, r_select);
     
@@ -403,7 +403,7 @@ QString Select::toString() const
 
 static const RegisterMetaType<SelectResult> r_result;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const SelectResult &result)
+QDataStream &operator<<(QDataStream &ds, const SelectResult &result)
 {
     writeHeader(ds, r_result, 1);
     
@@ -414,7 +414,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const SelectResult &resu
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, SelectResult &result)
+QDataStream &operator>>(QDataStream &ds, SelectResult &result)
 {
     VersionID v = readHeader(ds, r_result);
     

@@ -42,8 +42,8 @@ namespace SireMove
 class SimPacket;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::SimPacket&);
-QDataStream& operator>>(QDataStream&, SireMove::SimPacket&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::SimPacket&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::SimPacket&);
 
 namespace SireMove
 {
@@ -58,8 +58,8 @@ using SireSystem::System;
 class SIREMOVE_EXPORT SimPacket : public SireCluster::WorkPacketBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SimPacket&);
-friend QDataStream& ::operator>>(QDataStream&, SimPacket&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const SimPacket&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, SimPacket&);
 
 public:
     SimPacket();

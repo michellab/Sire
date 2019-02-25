@@ -57,7 +57,7 @@ using namespace SireUnits;
 
 static const RegisterMetaType<VolMapMonitor> r_mon;
 
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const VolMapMonitor &mon)
+QDataStream &operator<<(QDataStream &ds, const VolMapMonitor &mon)
 {
     writeHeader(ds, r_mon, 1);
 
@@ -68,7 +68,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const VolMapMonitor &
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, VolMapMonitor &mon)
+QDataStream &operator>>(QDataStream &ds, VolMapMonitor &mon)
 {
     VersionID v = readHeader(ds, r_mon);
     

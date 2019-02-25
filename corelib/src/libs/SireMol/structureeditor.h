@@ -105,7 +105,7 @@ namespace detail
 class EditMolData;
 }
 
-QString cacheName(const QString &name);
+SIREMOL_EXPORT QString cacheName(const QString &name);
 
 /** This is the base class of all of the molecule structure editors. 
     The structure editors are classes that can actually add, move
@@ -127,8 +127,8 @@ QString cacheName(const QString &name);
 class SIREMOL_EXPORT StructureEditor
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const StructureEditor&);
-friend QDataStream& ::operator>>(QDataStream&, StructureEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const StructureEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, StructureEditor&);
 
 friend class MoleculeInfoData; //so can call query functions when converting
 friend class MoleculeData; //so can call query functions when converting

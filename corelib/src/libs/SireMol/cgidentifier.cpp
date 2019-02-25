@@ -45,7 +45,7 @@ using namespace SireStream;
 static const RegisterMetaType<CGIdentifier> r_cgid;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CGIdentifier &cgid)
+QDataStream &operator<<(QDataStream &ds, const CGIdentifier &cgid)
 {
     writeHeader(ds, r_cgid, 1);
     
@@ -55,7 +55,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CGIdentifier &cgid
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, CGIdentifier &cgid)
+QDataStream &operator>>(QDataStream &ds, CGIdentifier &cgid)
 {
     VersionID v = readHeader(ds, r_cgid);
     
@@ -216,7 +216,7 @@ const char* CGIdentifier::typeName()
 static const RegisterMetaType<CGIdx> r_cgidx;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CGIdx &cgidx)
+QDataStream &operator<<(QDataStream &ds, const CGIdx &cgidx)
 {
     writeHeader(ds, r_cgidx, 1);
     
@@ -226,7 +226,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CGIdx &cgidx)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, CGIdx &cgidx)
+QDataStream &operator>>(QDataStream &ds, CGIdx &cgidx)
 {
     VersionID v = readHeader(ds, r_cgidx);
     
@@ -303,7 +303,7 @@ const char* CGIdx::typeName()
 static const RegisterMetaType<CGName> r_cgname;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CGName &cgname)
+QDataStream &operator<<(QDataStream &ds, const CGName &cgname)
 {
     writeHeader(ds, r_cgname, 1);
     
@@ -313,7 +313,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CGName &cgname)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, CGName &cgname)
+QDataStream &operator>>(QDataStream &ds, CGName &cgname)
 {
     VersionID v = readHeader(ds, r_cgname);
     

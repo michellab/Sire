@@ -51,8 +51,8 @@ namespace SireVol
 class Space;
 }
 
-QDataStream& operator<<(QDataStream&, const SireVol::Space&);
-QDataStream& operator>>(QDataStream&, SireVol::Space&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::Space&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::Space&);
 
 namespace SireMaths
 {
@@ -116,8 +116,8 @@ This is a virtual class that is designed to be used with SharedPolyPointer.
 class SIREVOL_EXPORT Space : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Space&);
-friend QDataStream& ::operator>>(QDataStream&, Space&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Space&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, Space&);
 
 public:
     Space();

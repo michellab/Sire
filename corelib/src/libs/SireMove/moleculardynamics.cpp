@@ -53,7 +53,7 @@ using namespace SireUnits::Dimension;
 static const RegisterMetaType<MolecularDynamics> r_moldyn;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const MolecularDynamics &moldyn)
 {
     writeHeader(ds, r_moldyn, 1);
@@ -68,7 +68,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         MolecularDynamics &moldyn)
 {
     VersionID v = readHeader(ds, r_moldyn);

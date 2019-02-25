@@ -50,7 +50,7 @@ namespace SireFF
     @author Christopher Woods
 */
 template<class Potential>
-class SIREFF_EXPORT Intra2B2G3DFF 
+class Intra2B2G3DFF 
                     : public SireBase::ConcreteProperty< Intra2B2G3DFF<Potential>,
                                                          Intra2B2GFF<Potential> >, 
                       public FF3D

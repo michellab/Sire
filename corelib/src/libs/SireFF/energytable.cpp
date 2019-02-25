@@ -53,7 +53,7 @@ using namespace SireStream;
 static const RegisterMetaType<MolEnergyTable> r_molenergytable(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const MolEnergyTable &molenergytable)
 {
     writeHeader(ds, r_molenergytable, 1);
@@ -70,7 +70,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       MolEnergyTable &molenergytable)
 {
     VersionID v = readHeader(ds, r_molenergytable);
@@ -897,7 +897,7 @@ const char* MolEnergyTable::typeName()
 static const RegisterMetaType<EnergyTable> r_forcetable(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const EnergyTable &forcetable)
 {
     writeHeader(ds, r_forcetable, 1);
@@ -910,7 +910,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       EnergyTable &forcetable)
 {
     VersionID v = readHeader(ds, r_forcetable);

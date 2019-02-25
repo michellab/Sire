@@ -60,7 +60,7 @@ extern "C"
 namespace SireMaths
 {
 
-std::pair<NVector,NMatrix> SIREMATHS_EXPORT dsyev(const NMatrix &A, bool upper)
+std::pair<NVector,NMatrix> dsyev(const NMatrix &A, bool upper)
 {
     #ifdef SIRE_DISABLE_FORTRAN
     throw SireError::unsupported( QObject::tr(
@@ -115,7 +115,7 @@ std::pair<NVector,NMatrix> SIREMATHS_EXPORT dsyev(const NMatrix &A, bool upper)
     #endif // SIRE_DISABLE_FORTRAN
 }
 
-NVector SIREMATHS_EXPORT dsyev_eigenvalues(const NMatrix &A, bool upper)
+NVector dsyev_eigenvalues(const NMatrix &A, bool upper)
 {
     #ifdef SIRE_DISABLE_FORTRAN
     

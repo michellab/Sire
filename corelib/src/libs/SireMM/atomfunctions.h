@@ -37,7 +37,7 @@
 #include "SireMol/molviewproperty.h"
 
 #include "SireCAS/expression.h"
-#include "SireCAS/symbol.h"
+#include "SireCAS/symbols.h"
 #include "SireCAS/identities.h"
 
 SIRE_BEGIN_HEADER
@@ -48,11 +48,11 @@ class AtomFunction;
 class AtomFunctions;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::AtomFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::AtomFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AtomFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AtomFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AtomFunctions&);
-QDataStream& operator>>(QDataStream&, SireMM::AtomFunctions&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AtomFunctions&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AtomFunctions&);
 
 namespace SireMol
 {
@@ -78,8 +78,8 @@ using SireMol::MoleculeInfoData;
 class SIREMM_EXPORT AtomFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomFunction&);
-friend QDataStream& ::operator>>(QDataStream&, AtomFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, AtomFunction&);
 
 public:
     ~AtomFunction();
@@ -111,8 +111,8 @@ private:
 class SIREMM_EXPORT AtomFunctions : public SireMol::MoleculeProperty
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomFunctions&);
-friend QDataStream& ::operator>>(QDataStream&, AtomFunctions&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomFunctions&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, AtomFunctions&);
 
 public:
     ~AtomFunctions();

@@ -43,6 +43,10 @@
 #define SIRE_EXPOSE_SEGMENT_PROPERTY(c,a) /* Exposing segment property #1 with alias #2 */
 #define SIRE_EXPOSE_BEAD_PROPERTY(c,a)  /* Exposing bead property #1 with alias #2 */
 
+#ifdef _WIN32
+#define SIRE_EXPORT __declspec(dllexport)
+#define SIRE_IMPORT __declspec(dllimport)
+#else
 //create the keyword used to export a symbol - this
 //is a copy of Q_DECL_EXPORT, which will definitely
 //be set to the correct value
@@ -56,6 +60,7 @@
 #else
 #define SIRE_EXPORT
 #define SIRE_IMPORT
+#endif
 #endif
 
 //create the keyword to fix symbol visibility problems for out-of-line
@@ -197,6 +202,219 @@
   #fatal No QT_POINTER_SIZE macro defined!
 #endif
 
+// MSVC does not support the #warning preprocessor directive
+#ifdef _MSC_VER
+#define STRINGIZE_HELPER(x) #x
+#define STRINGIZE(x) STRINGIZE_HELPER(x)
+#define WARNING(desc) message(__FILE__ "(" STRINGIZE(__LINE__) ") : Warning: " #desc)
+#endif
+
+//I now define seperate SIRE_EXPORT macros for each of the different Sire libraries.
+// SIREANALYSIS_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIREANALYSIS_BUILD
+#define SIREANALYSIS_EXPORT SIRE_EXPORT
+#else
+#define SIREANALYSIS_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIREANALYSIS_EXPORT
+#define SIREANALYSIS_EXPORT SIRE_EXPORT
+#endif
+// SIREANALYSIS_EXPORT end definitions
+// SIREBASE_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIREBASE_BUILD
+#define SIREBASE_EXPORT SIRE_EXPORT
+#else
+#define SIREBASE_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIREBASE_EXPORT
+#define SIREBASE_EXPORT SIRE_EXPORT
+#endif
+// SIREBASE_EXPORT end definitions
+// SIRECAS_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIRECAS_BUILD
+#define SIRECAS_EXPORT SIRE_EXPORT
+#else
+#define SIRECAS_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIRECAS_EXPORT
+#define SIRECAS_EXPORT SIRE_EXPORT
+#endif
+// SIRECAS_EXPORT end definitions
+// SIRECLUSTER_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIRECLUSTER_BUILD
+#define SIRECLUSTER_EXPORT SIRE_EXPORT
+#else
+#define SIRECLUSTER_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIRECLUSTER_EXPORT
+#define SIRECLUSTER_EXPORT SIRE_EXPORT
+#endif
+// SIRECLUSTER_EXPORT end definitions
+// SIREERROR_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIREERROR_BUILD
+#define SIREERROR_EXPORT SIRE_EXPORT
+#else
+#define SIREERROR_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIREERROR_EXPORT
+#define SIREERROR_EXPORT SIRE_EXPORT
+#endif
+// SIREERROR_EXPORT end definitions
+// SIREFF_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIREFF_BUILD
+#define SIREFF_EXPORT SIRE_EXPORT
+#else
+#define SIREFF_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIREFF_EXPORT
+#define SIREFF_EXPORT SIRE_EXPORT
+#endif
+// SIREFF_EXPORT end definitions
+// SIREID_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIREID_BUILD
+#define SIREID_EXPORT SIRE_EXPORT
+#else
+#define SIREID_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIREID_EXPORT
+#define SIREID_EXPORT SIRE_EXPORT
+#endif
+// SIREID_EXPORT end definitions
+// SIREIO_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIREIO_BUILD
+#define SIREIO_EXPORT SIRE_EXPORT
+#else
+#define SIREIO_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIREIO_EXPORT
+#define SIREIO_EXPORT SIRE_EXPORT
+#endif
+// SIREIO_EXPORT end definitions
+// SIREMATHS_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIREMATHS_BUILD
+#define SIREMATHS_EXPORT SIRE_EXPORT
+#else
+#define SIREMATHS_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIREMATHS_EXPORT
+#define SIREMATHS_EXPORT SIRE_EXPORT
+#endif
+// SIREMATHS_EXPORT end definitions
+// SIREMM_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIREMM_BUILD
+#define SIREMM_EXPORT SIRE_EXPORT
+#else
+#define SIREMM_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIREMM_EXPORT
+#define SIREMM_EXPORT SIRE_EXPORT
+#endif
+// SIREMM_EXPORT end definitions
+// SIREMOL_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIREMOL_BUILD
+#define SIREMOL_EXPORT SIRE_EXPORT
+#else
+#define SIREMOL_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIREMOL_EXPORT
+#define SIREMOL_EXPORT SIRE_EXPORT
+#endif
+// SIREMOL_EXPORT end definitions
+// SIREMOVE_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIREMOVE_BUILD
+#define SIREMOVE_EXPORT SIRE_EXPORT
+#else
+#define SIREMOVE_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIREMOVE_EXPORT
+#define SIREMOVE_EXPORT SIRE_EXPORT
+#endif
+// SIREMOVE_EXPORT end definitions
+// SIRESTREAM_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIRESTREAM_BUILD
+#define SIRESTREAM_EXPORT SIRE_EXPORT
+#else
+#define SIRESTREAM_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIRESTREAM_EXPORT
+#define SIRESTREAM_EXPORT SIRE_EXPORT
+#endif
+// SIRESTREAM_EXPORT end definitions
+// SIRESYSTEM_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIRESYSTEM_BUILD
+#define SIRESYSTEM_EXPORT SIRE_EXPORT
+#else
+#define SIRESYSTEM_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIRESYSTEM_EXPORT
+#define SIRESYSTEM_EXPORT SIRE_EXPORT
+#endif
+// SIRESYSTEM_EXPORT end definitions
+// SIREUNITS_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIREUNITS_BUILD
+#define SIREUNITS_EXPORT SIRE_EXPORT
+#else
+#define SIREUNITS_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIREUNITS_EXPORT
+#define SIREUNITS_EXPORT SIRE_EXPORT
+#endif
+// SIREUNITS_EXPORT end definitions
+// SIREVOL_EXPORT definitions
+#ifdef _WIN32
+#ifdef SIREVOL_BUILD
+#define SIREVOL_EXPORT SIRE_EXPORT
+#else
+#define SIREVOL_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SIREVOL_EXPORT
+#define SIREVOL_EXPORT SIRE_EXPORT
+#endif
+// SIREVOL_EXPORT end definitions
+// SQUIRE_EXPORT definitions
+#ifdef _WIN32
+#ifdef SQUIRE_BUILD
+#define SQUIRE_EXPORT SIRE_EXPORT
+#else
+#define SQUIRE_EXPORT SIRE_IMPORT
+#endif
+#endif
+#ifndef SQUIRE_EXPORT
+#define SQUIRE_EXPORT SIRE_EXPORT
+#endif
+// SQUIRE_EXPORT end definitions
+
 //Add functions that are used to register all public
 //types (this allows them to be streamed to a binary file and
 //created dynamically)
@@ -206,7 +424,7 @@ namespace Sire
 {
 typedef quint32 MagicID;
 
-MagicID getMagic(const char *type_name);
+SIRESTREAM_EXPORT MagicID getMagic(const char *type_name);
 
 /** Enum used to register with only the magic ID */
 enum MagicOnlyEnum{ MAGIC_ONLY = 1 };
@@ -253,10 +471,12 @@ private:
 
 namespace detail
 {
-    void registerLeaf(const QString &type_name, const char *root_class);
-    void registerBranch(const QString &type_name, const char *root_class);
-
-    void registerRootless(const QString &type_name);
+    SIREERROR_EXPORT const QHash< QString, QSet<QString> > branchClasses();
+    SIREERROR_EXPORT const QHash< QString, QSet<QString> > leafClasses();
+    SIREERROR_EXPORT const QSet<QString> rootlessClasses();
+    SIREERROR_EXPORT void registerLeaf(const QString &type_name, const char *root_class);
+    SIREERROR_EXPORT void registerBranch(const QString &type_name, const char *root_class);
+    SIREERROR_EXPORT void registerRootless(const QString &type_name);
 }
 
 /** This is used to register the type 'T' - this
@@ -382,34 +602,5 @@ class QTextStream;
 #endif
 
 #endif // #ifdef __cplusplus
-
-//I now define seperate SIRE_EXPORT macros for each of the different Sire libraries.
-//Eventually these will need to be changed to work properly on windows...
-#define SIREBASE_EXPORT SIRE_EXPORT
-#define SIRECAS_EXPORT SIRE_EXPORT
-#define SIRECLUSTER_EXPORT SIRE_EXPORT
-#define SIREDB_EXPORT SIRE_EXPORT
-#define SIREERROR_EXPORT SIRE_EXPORT
-#define SIREFF_EXPORT SIRE_EXPORT
-#define SIREID_EXPORT SIRE_EXPORT
-#define SIREIO_EXPORT SIRE_EXPORT
-#define SIREMM_EXPORT SIRE_EXPORT
-#define SIREMMDB_EXPORT SIRE_EXPORT
-#define SIREMATHS_EXPORT SIRE_EXPORT
-#define SIREMOL_EXPORT SIRE_EXPORT
-#define SIREMOVE_EXPORT SIRE_EXPORT
-#define SIREMPI_EXPORT SIRE_EXPORT
-#define SIREPY_EXPORT SIRE_EXPORT
-#define SIREQT_EXPORT SIRE_EXPORT
-#define SIRESIM_EXPORT SIRE_EXPORT
-#define SIRESTREAM_EXPORT SIRE_EXPORT
-#define SIRESYSTEM_EXPORT SIRE_EXPORT
-#define SIRETEST_EXPORT SIRE_EXPORT
-#define SIREUNITTEST_EXPORT SIRE_EXPORT
-#define SIREUNITS_EXPORT SIRE_EXPORT
-#define SIREVOL_EXPORT SIRE_EXPORT
-#define SIREANALYSIS_EXPORT SIRE_EXPORT
-#define SPIER_EXPORT SIRE_EXPORT
-#define SQUIRE_EXPORT SIRE_EXPORT
 
 #endif // SIREGLOBAL_H

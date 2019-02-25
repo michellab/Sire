@@ -43,8 +43,8 @@ namespace Squire
 class QMMMFF;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::QMMMFF&);
-QDataStream& operator>>(QDataStream&, Squire::QMMMFF&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::QMMMFF&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::QMMMFF&);
 
 namespace Squire
 {
@@ -91,8 +91,8 @@ class SQUIRE_EXPORT QMMMFF
             protected QMMMElecEmbedPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const QMMMFF&);
-friend QDataStream& ::operator>>(QDataStream&, QMMMFF&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const QMMMFF&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, QMMMFF&);
 
 public:
     typedef ChargeElementParameterNames3D Parameters;

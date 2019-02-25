@@ -61,7 +61,7 @@ using namespace SireBase;
 
 static const RegisterMetaType<GridFF> r_gridff;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const GridFF &gridff)
+QDataStream &operator<<(QDataStream &ds, const GridFF &gridff)
 {
     writeHeader(ds, r_gridff, 5);
     
@@ -109,7 +109,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const GridFF &gridff)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, GridFF &gridff)
+QDataStream &operator>>(QDataStream &ds, GridFF &gridff)
 {
     VersionID v = readHeader(ds, r_gridff);
 
@@ -642,7 +642,7 @@ inline GridFF::Vector4::Vector4(const Vector &v, double chg)
 {}
 
 void GridFF::appendTo(QVector<GridFF::Vector4> &coords_and_charges,
-                      const Vector *coords, const detail::CLJParameter *params,
+                      const Vector *coords, const SireMM::detail::CLJParameter *params,
                       int nats)
 {
     if (nats > 0)

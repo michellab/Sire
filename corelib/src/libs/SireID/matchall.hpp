@@ -58,11 +58,11 @@ namespace SireID
     @author Christopher Woods
 */
 template<class ID>
-class SIREID_EXPORT MatchAll : public ID
+class MatchAll : public ID
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const MatchAll<ID>&);
-friend QDataStream& ::operator>><>(QDataStream&, MatchAll<ID>&);
+friend SIREID_EXPORT QDataStream& ::operator<<<>(QDataStream&, const MatchAll<ID>&);
+friend SIREID_EXPORT QDataStream& ::operator>><>(QDataStream&, MatchAll<ID>&);
 
 public:
     MatchAll();

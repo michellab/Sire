@@ -42,8 +42,8 @@ namespace SireBase
 class CombineProperties;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::CombineProperties&);
-QDataStream& operator>>(QDataStream&, SireBase::CombineProperties&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::CombineProperties&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::CombineProperties&);
 
 namespace SireBase
 {
@@ -60,8 +60,8 @@ namespace SireBase
 class SIREBASE_EXPORT CombineProperties : public Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CombineProperties&);
-friend QDataStream& ::operator>>(QDataStream&, CombineProperties&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const CombineProperties&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, CombineProperties&);
 
 public:
     typedef QVector<PropertyName>::const_iterator const_iterator;

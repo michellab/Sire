@@ -126,11 +126,11 @@ namespace SireBase
     @author Christopher Woods
 */
 template<class T>
-class SIREBASE_EXPORT SparseMatrix
+class SparseMatrix
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const SparseMatrix<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, SparseMatrix<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const SparseMatrix<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, SparseMatrix<T>&);
 
 template<class U> friend class SparseMatrix;
 

@@ -42,7 +42,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<ExpressionProperty> r_expprop;
 
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const ExpressionProperty &expprop)
+QDataStream &operator<<(QDataStream &ds, const ExpressionProperty &expprop)
 {
     writeHeader(ds, r_expprop, 1);
     
@@ -53,7 +53,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const ExpressionPropert
     return ds;
 }
 
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, ExpressionProperty &expprop)
+QDataStream &operator>>(QDataStream &ds, ExpressionProperty &expprop)
 {
     VersionID v = readHeader(ds, r_expprop);
     
@@ -71,12 +71,12 @@ QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, ExpressionProperty &exp
 
 namespace SireCAS
 {
-    PropertyPtr SIRECAS_EXPORT wrap(const ExBase &val)
+    PropertyPtr wrap(const ExBase &val)
     {
         return ExpressionProperty(val);
     }
     
-    PropertyPtr SIRECAS_EXPORT wrap(const Expression &val)
+    PropertyPtr wrap(const Expression &val)
     {
         return ExpressionProperty(val);
     }

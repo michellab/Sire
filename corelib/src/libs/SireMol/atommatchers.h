@@ -46,29 +46,29 @@ class ResIdxAtomMCSMatcher;
 class ResIdxAtomCoordMatcher;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomIdxMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomIdxMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomIdxMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomIdxMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomNameMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomNameMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomNameMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomNameMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomIDMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomIDMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomIDMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomIDMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomMultiMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomMultiMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomMultiMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomMultiMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomMCSMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomMCSMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomMCSMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomMCSMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomNameMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomNameMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomNameMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomNameMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomMCSMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomMCSMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomMCSMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomMCSMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomCoordMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomCoordMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ResIdxAtomCoordMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ResIdxAtomCoordMatcher&);
 
 namespace SireMol
 {
@@ -93,8 +93,8 @@ class SIREMOL_EXPORT AtomIdxMatcher
          : public SireBase::ConcreteProperty<AtomIdxMatcher,AtomMatcher>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomIdxMatcher&);
-friend QDataStream& ::operator>>(QDataStream&, AtomIdxMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomIdxMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomIdxMatcher&);
 
 public:
     AtomIdxMatcher();
@@ -139,8 +139,8 @@ class SIREMOL_EXPORT AtomNameMatcher
          : public SireBase::ConcreteProperty<AtomNameMatcher,AtomMatcher>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomNameMatcher&);
-friend QDataStream& ::operator>>(QDataStream&, AtomNameMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomNameMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomNameMatcher&);
 
 public:
     AtomNameMatcher();
@@ -182,8 +182,8 @@ class SIREMOL_EXPORT AtomIDMatcher
         : public SireBase::ConcreteProperty<AtomIDMatcher,AtomMatcher>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomIDMatcher&);
-friend QDataStream& ::operator>>(QDataStream&, AtomIDMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomIDMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomIDMatcher&);
 
 public:
     AtomIDMatcher();
@@ -245,8 +245,8 @@ class SIREMOL_EXPORT AtomMCSMatcher
         : public SireBase::ConcreteProperty<AtomMCSMatcher,AtomMatcher>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomMCSMatcher&);
-friend QDataStream& ::operator>>(QDataStream&, AtomMCSMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomMCSMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomMCSMatcher&);
 
 public:
     AtomMCSMatcher();
@@ -325,8 +325,8 @@ class SIREMOL_EXPORT AtomMultiMatcher
         : public SireBase::ConcreteProperty<AtomMultiMatcher,AtomMatcher>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomMultiMatcher&);
-friend QDataStream& ::operator>>(QDataStream&, AtomMultiMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomMultiMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomMultiMatcher&);
 
 public:
     AtomMultiMatcher();
@@ -375,8 +375,8 @@ class SIREMOL_EXPORT ResIdxAtomNameMatcher
          : public SireBase::ConcreteProperty<ResIdxAtomNameMatcher,AtomMatcher>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ResIdxAtomNameMatcher&);
-friend QDataStream& ::operator>>(QDataStream&, ResIdxAtomNameMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ResIdxAtomNameMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResIdxAtomNameMatcher&);
 
 public:
     ResIdxAtomNameMatcher();
@@ -416,8 +416,8 @@ class SIREMOL_EXPORT ResIdxAtomMCSMatcher
          : public SireBase::ConcreteProperty<ResIdxAtomMCSMatcher,AtomMatcher>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ResIdxAtomMCSMatcher&);
-friend QDataStream& ::operator>>(QDataStream&, ResIdxAtomMCSMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ResIdxAtomMCSMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResIdxAtomMCSMatcher&);
 
 public:
     ResIdxAtomMCSMatcher();
@@ -496,8 +496,8 @@ class SIREMOL_EXPORT ResIdxAtomCoordMatcher
          : public SireBase::ConcreteProperty<ResIdxAtomCoordMatcher,AtomMatcher>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ResIdxAtomCoordMatcher&);
-friend QDataStream& ::operator>>(QDataStream&, ResIdxAtomCoordMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ResIdxAtomCoordMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResIdxAtomCoordMatcher&);
 
 public:
     ResIdxAtomCoordMatcher();

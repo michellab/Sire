@@ -126,7 +126,7 @@ Molecule PerturbationData::perturb(const Molecule &molecule, const Values &value
 static const RegisterMetaType<PerturbationConstraint> r_pertcons;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const PerturbationConstraint &pertcons)
 {
     writeHeader(ds, r_pertcons, 1);
@@ -140,7 +140,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                           PerturbationConstraint &pertcons)
 {
     VersionID v = readHeader(ds, r_pertcons);

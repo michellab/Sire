@@ -33,6 +33,7 @@ target_link_libraries (Qt
                        SirePython
                        SIRE_SireBase
                        ${BOOST_PYTHON_LIBRARY}
+                       ${PYTHON_LIBRARIES}
                       )
 
 

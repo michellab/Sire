@@ -44,8 +44,8 @@ namespace SireMove
 class RigidBodyMC;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::RigidBodyMC&);
-QDataStream& operator>>(QDataStream&, SireMove::RigidBodyMC&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::RigidBodyMC&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::RigidBodyMC&);
 
 namespace SireMaths
 {
@@ -78,8 +78,8 @@ class SIREMOVE_EXPORT RigidBodyMC
         : public SireBase::ConcreteProperty<RigidBodyMC,MonteCarlo>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RigidBodyMC&);
-friend QDataStream& ::operator>>(QDataStream&, RigidBodyMC&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const RigidBodyMC&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, RigidBodyMC&);
 
 public:
     RigidBodyMC(const PropertyMap &map = PropertyMap());

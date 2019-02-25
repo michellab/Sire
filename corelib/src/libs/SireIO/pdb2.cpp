@@ -62,7 +62,7 @@ const RegisterParser<PDB2> register_pdb;
 static const RegisterMetaType<PDB2> r_pdb2;
 static const RegisterMetaType<PDBAtom> r_pdbatom(NO_ROOT);
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBAtom &pdbatom)
+QDataStream &operator<<(QDataStream &ds, const PDBAtom &pdbatom)
 {
     writeHeader(ds, r_pdbatom, 1);
 
@@ -76,7 +76,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDBAtom &pdbatom)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBAtom &pdbatom)
+QDataStream &operator>>(QDataStream &ds, PDBAtom &pdbatom)
 {
     VersionID v = readHeader(ds, r_pdbatom);
 
@@ -95,7 +95,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDBAtom &pdbatom)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDB2 &pdb2)
+QDataStream &operator<<(QDataStream &ds, const PDB2 &pdb2)
 {
     writeHeader(ds, r_pdb2, 1);
 
@@ -107,7 +107,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const PDB2 &pdb2)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, PDB2 &pdb2)
+QDataStream &operator>>(QDataStream &ds, PDB2 &pdb2)
 {
     VersionID v = readHeader(ds, r_pdb2);
 

@@ -189,7 +189,7 @@ inline bool RefCountData::Counter::deref()
 
 namespace detail
 {
-    tbb::spin_mutex* get_shared_null_mutex();
+    SIREBASE_EXPORT tbb::spin_mutex* get_shared_null_mutex();
 }
 
 /** This function creates a single shared null-constructed instance

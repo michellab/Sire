@@ -40,8 +40,8 @@ namespace SireBase
 class LengthProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::LengthProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::LengthProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::LengthProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::LengthProperty&);
 
 namespace SireBase
 {
@@ -55,8 +55,8 @@ using SireUnits::Dimension::Length;
 class SIREBASE_EXPORT LengthProperty : public ConcreteProperty<LengthProperty,Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const LengthProperty&);
-friend QDataStream& ::operator>>(QDataStream&, LengthProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const LengthProperty&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, LengthProperty&);
 
 public:
     LengthProperty();

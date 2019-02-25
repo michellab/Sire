@@ -51,7 +51,7 @@ using namespace SireStream;
 static const RegisterMetaType<GTO> r_gto( MAGIC_ONLY, GTO::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const GTO &gto)
+QDataStream &operator<<(QDataStream &ds, const GTO &gto)
 {
     writeHeader(ds, r_gto, 1);
     
@@ -61,7 +61,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const GTO &gto)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, GTO &gto)
+QDataStream &operator>>(QDataStream &ds, GTO &gto)
 {
     VersionID v = readHeader(ds, r_gto);
     
@@ -196,7 +196,7 @@ const GTO& GTO::null()
 static const RegisterMetaType<GTOPair> r_gtopair( MAGIC_ONLY, GTOPair::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const GTOPair &gtopair)
+QDataStream &operator<<(QDataStream &ds, const GTOPair &gtopair)
 {
     writeHeader(ds, r_gtopair, 1);
     
@@ -208,7 +208,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const GTOPair &gtopair)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, GTOPair &gtopair)
+QDataStream &operator>>(QDataStream &ds, GTOPair &gtopair)
 {
     VersionID v = readHeader(ds, r_gtopair);
     

@@ -33,17 +33,21 @@
 
 SIRE_BEGIN_HEADER
 
+#if defined(_MSC_VER) && defined(_Maths_free_functions_hpp__pyplusplus_wrapper)
+double gamma(double x) { return tgamma(x); }
+#endif
+
 namespace SireMaths
 {
 
-double Gamma(double alpha);
-double gamma(double alpha);
+SIREMATHS_EXPORT double Gamma(double alpha);
+SIREMATHS_EXPORT double gamma(double alpha);
 
-double Gamma(double alpha, double x);
-double gamma(double alpha, double x);
+SIREMATHS_EXPORT double Gamma(double alpha, double x);
+SIREMATHS_EXPORT double gamma(double alpha, double x);
 
-double incomplete_gamma_lower(double alpha, double x);
-double incomplete_gamma_higher(double alpha, double x);
+SIREMATHS_EXPORT double incomplete_gamma_lower(double alpha, double x);
+SIREMATHS_EXPORT double incomplete_gamma_higher(double alpha, double x);
 
 }
 

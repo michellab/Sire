@@ -159,7 +159,7 @@ MoleculeGroup* FFMolGroupPvt::clone() const
 static const RegisterMetaType<FFMolGroup> r_ffmolgroup;
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFMolGroup &ffmolgroup)
+QDataStream &operator<<(QDataStream &ds, const FFMolGroup &ffmolgroup)
 {
     writeHeader(ds, r_ffmolgroup, 1);
     
@@ -172,7 +172,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFMolGroup &ffmolgr
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, FFMolGroup &ffmolgroup)
+QDataStream &operator>>(QDataStream &ds, FFMolGroup &ffmolgroup)
 {
     VersionID v = readHeader(ds, r_ffmolgroup);
     
@@ -197,7 +197,7 @@ FFMolGroup::FFMolGroup() : ConcreteProperty<FFMolGroup,MoleculeGroup>()
 
 /** Construct from an FFMolGroupPvt - this grabs a copy of the
     forcefield that contains the FFMolGroupPvt */
-FFMolGroup::FFMolGroup(const detail::FFMolGroupPvt &ffmolgroup)
+FFMolGroup::FFMolGroup(const FFMolGroupPvt &ffmolgroup)
            : ConcreteProperty<FFMolGroup,MoleculeGroup>(ffmolgroup), 
              mgidx(ffmolgroup.index()), ffield( ffmolgroup.forceField() )
 {}

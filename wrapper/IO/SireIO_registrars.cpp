@@ -3,6 +3,8 @@
 
 #include "SireIO_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "iobase.h"
 #include "amber.h"
 #include "flexibilitylibrary.h"

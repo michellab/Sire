@@ -40,7 +40,7 @@ using namespace SireMM;
 static const RegisterMetaType<LJParameter> r_ljparam(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const LJParameter &ljparam)
+QDataStream &operator<<(QDataStream &ds, const LJParameter &ljparam)
 {
     writeHeader(ds, r_ljparam, 1) << ljparam.sqrtsig << ljparam.sqrteps;
 
@@ -48,7 +48,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const LJParameter &ljpara
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, LJParameter &ljparam)
+QDataStream &operator>>(QDataStream &ds, LJParameter &ljparam)
 {
     VersionID v = readHeader(ds, r_ljparam);
 

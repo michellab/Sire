@@ -49,14 +49,14 @@ class NullGrid;
 class RegularGrid;
 }
 
-QDataStream& operator<<(QDataStream&, const SireVol::Grid&);
-QDataStream& operator>>(QDataStream&, SireVol::Grid&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::Grid&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::Grid&);
 
-QDataStream& operator<<(QDataStream&, const SireVol::NullGrid&);
-QDataStream& operator>>(QDataStream&, SireVol::NullGrid&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::NullGrid&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::NullGrid&);
 
-QDataStream& operator<<(QDataStream&, const SireVol::RegularGrid&);
-QDataStream& operator>>(QDataStream&, SireVol::RegularGrid&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::RegularGrid&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::RegularGrid&);
 
 namespace SireVol
 {
@@ -76,8 +76,8 @@ using SireMaths::Matrix;
 class SIREVOL_EXPORT Grid : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Grid&);
-friend QDataStream& ::operator>>(QDataStream&, Grid&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Grid&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, Grid&);
 
 public:
     Grid();
@@ -151,8 +151,8 @@ private:
 class SIREVOL_EXPORT NullGrid : public SireBase::ConcreteProperty<NullGrid,Grid>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullGrid&);
-friend QDataStream& ::operator>>(QDataStream&, NullGrid&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const NullGrid&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, NullGrid&);
 
 public:
     NullGrid();
@@ -185,8 +185,8 @@ public:
 class SIREVOL_EXPORT RegularGrid : public SireBase::ConcreteProperty<RegularGrid,Grid>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const RegularGrid&);
-friend QDataStream& ::operator>>(QDataStream&, RegularGrid&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const RegularGrid&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, RegularGrid&);
 
 public:
     RegularGrid();

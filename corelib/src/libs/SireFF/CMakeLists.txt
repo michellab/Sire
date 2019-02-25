@@ -4,6 +4,9 @@
 #
 ########################################
 
+# Export symbols when building the library
+add_definitions( "-DSIREFF_BUILD" )
+
 # Other Sire libraries
 include_directories(${CMAKE_SOURCE_DIR}/src/libs)
 

@@ -3,6 +3,8 @@
 
 #include "Squire_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "qmprogram.h"
 #include "pgto.h"
 #include "pointdipole.h"

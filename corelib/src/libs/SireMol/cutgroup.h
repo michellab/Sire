@@ -42,8 +42,8 @@ namespace SireMol
 class CutGroup;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::CutGroup&);
-QDataStream& operator>>(QDataStream&, SireMol::CutGroup&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CutGroup&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CutGroup&);
 
 namespace SireMol
 {
@@ -72,8 +72,8 @@ class Molecule;
 class SIREMOL_EXPORT CutGroup : public SireBase::ConcreteProperty<CutGroup,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CutGroup&);
-friend QDataStream& ::operator>>(QDataStream&, CutGroup&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CutGroup&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, CutGroup&);
 
 public:
     typedef CGID ID;
@@ -368,13 +368,13 @@ void set_metadata(CutGroup*, MoleculeData &moldata,
     set_metadata<CGProperty<V>,CutGroup::Index,V>(moldata,idxs,key,metakey,value);
 }
 
-bool has_property(const CutGroup*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_property(const CutGroup*, const MoleculeData &moldata,
                   const PropertyName &key);
                   
-bool has_metadata(const CutGroup*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const CutGroup*, const MoleculeData &moldata,
                   const PropertyName &metakey);
                   
-bool has_metadata(const CutGroup*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const CutGroup*, const MoleculeData &moldata,
                   const PropertyName &key, const PropertyName &metakey);                 
 
 } //end of namespace detail

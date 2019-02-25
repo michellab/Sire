@@ -46,7 +46,7 @@ using namespace SireMol;
 namespace SireIO
 {
 
-SelectResult SIREIO_EXPORT setAmberWater(const SelectResult& molecules, const QString& model, const PropertyMap& map)
+SelectResult setAmberWater(const SelectResult& molecules, const QString& model, const PropertyMap& map)
 {
     // Strip all whitespace from the model name and convert to upper case.
     auto _model = model.simplified().replace(" ", "").toUpper();
@@ -162,7 +162,7 @@ SelectResult SIREIO_EXPORT setAmberWater(const SelectResult& molecules, const QS
     return result;
 }
 
-SelectResult SIREIO_EXPORT setGromacsWater(const SelectResult& molecules, const QString& model, const PropertyMap& map)
+SelectResult setGromacsWater(const SelectResult& molecules, const QString& model, const PropertyMap& map)
 {
     // Strip all whitespace from the model name and convert to upper case.
     auto _model = model.simplified().replace(" ", "").toUpper();

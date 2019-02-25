@@ -48,8 +48,8 @@ namespace SireSystem
 class IdentityConstraint;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::IdentityConstraint&);
-QDataStream& operator>>(QDataStream&, SireSystem::IdentityConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::IdentityConstraint&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::IdentityConstraint&);
 
 namespace SireSystem
 {
@@ -120,8 +120,8 @@ class SIRESYSTEM_EXPORT IdentityConstraint
                : public SireBase::ConcreteProperty<IdentityConstraint,MoleculeConstraint>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IdentityConstraint&);
-friend QDataStream& ::operator>>(QDataStream&, IdentityConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const IdentityConstraint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, IdentityConstraint&);
 
 public:
     IdentityConstraint();

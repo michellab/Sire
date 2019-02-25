@@ -44,8 +44,8 @@ namespace SireMol
 class Evaluator;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Evaluator&);
-QDataStream& operator>>(QDataStream&, SireMol::Evaluator&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Evaluator&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Evaluator&);
 
 namespace SireMaths
 {
@@ -90,8 +90,8 @@ class SIREMOL_EXPORT Evaluator
             : public SireBase::ConcreteProperty<Evaluator,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Evaluator&);
-friend QDataStream& ::operator>>(QDataStream&, Evaluator&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Evaluator&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Evaluator&);
 
 public:
     Evaluator();

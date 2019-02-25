@@ -48,11 +48,11 @@ class FourAtomFunction;
 class FourAtomFunctions;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::FourAtomFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::FourAtomFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::FourAtomFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::FourAtomFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::FourAtomFunctions&);
-QDataStream& operator>>(QDataStream&, SireMM::FourAtomFunctions&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::FourAtomFunctions&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::FourAtomFunctions&);
 
 namespace SireMol
 {
@@ -75,8 +75,8 @@ using SireMol::AtomMatcher;
 class SIREMM_EXPORT FourAtomFunction : public AtomFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FourAtomFunction&);
-friend QDataStream& ::operator>>(QDataStream&, FourAtomFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const FourAtomFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, FourAtomFunction&);
 
 public:
     FourAtomFunction();
@@ -148,8 +148,8 @@ class SIREMM_EXPORT FourAtomFunctions
         : public SireBase::ConcreteProperty<FourAtomFunctions,AtomFunctions>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FourAtomFunctions&);
-friend QDataStream& ::operator>>(QDataStream&, FourAtomFunctions&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const FourAtomFunctions&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, FourAtomFunctions&);
 
 public:
     FourAtomFunctions();

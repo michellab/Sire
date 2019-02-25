@@ -43,8 +43,8 @@ namespace SireCAS
 class DoubleFunc;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::DoubleFunc&);
-QDataStream& operator>>(QDataStream&, SireCAS::DoubleFunc&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::DoubleFunc&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::DoubleFunc&);
 
 namespace SireCAS
 {
@@ -56,8 +56,8 @@ namespace SireCAS
 class SIRECAS_EXPORT DoubleFunc : public ExBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const DoubleFunc&);
-friend QDataStream& ::operator>>(QDataStream&, DoubleFunc&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const DoubleFunc&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, DoubleFunc&);
 
 public:
     DoubleFunc();

@@ -35,6 +35,8 @@
 #ifndef _REGRESS_H
 #define _REGRESS_H
 
+#include "sireglobal.h"
+#include "SireStream/datastream.h"
 #include <list>
 #include <cmath>
 #include <vector>

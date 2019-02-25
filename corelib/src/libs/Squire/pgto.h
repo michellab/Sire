@@ -49,14 +49,14 @@ class PP_GTO;
 class PS_GTO;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::P_GTO&);
-QDataStream& operator>>(QDataStream&, Squire::P_GTO&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::P_GTO&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::P_GTO&);
 
-QDataStream& operator<<(QDataStream&, const Squire::PS_GTO&);
-QDataStream& operator>>(QDataStream&, Squire::PS_GTO&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::PS_GTO&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::PS_GTO&);
 
-QDataStream& operator<<(QDataStream&, const Squire::PP_GTO&);
-QDataStream& operator>>(QDataStream&, Squire::PP_GTO&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::PP_GTO&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::PP_GTO&);
 
 namespace Squire
 {
@@ -76,8 +76,8 @@ using SireBase::Array2D;
 class SQUIRE_EXPORT P_GTO : public SireBase::ConcreteProperty<P_GTO,GTO>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const P_GTO&);
-friend QDataStream& ::operator>>(QDataStream&, P_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const P_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, P_GTO&);
 
 public:
     P_GTO();
@@ -104,8 +104,8 @@ public:
 class SQUIRE_EXPORT PS_GTO : public SireBase::ConcreteProperty<PS_GTO,GTOPair>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PS_GTO&);
-friend QDataStream& ::operator>>(QDataStream&, PS_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const PS_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, PS_GTO&);
 
 public:
     PS_GTO();
@@ -152,8 +152,8 @@ private:
 class SQUIRE_EXPORT PP_GTO : public SireBase::ConcreteProperty<PP_GTO,GTOPair>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PP_GTO&);
-friend QDataStream& ::operator>>(QDataStream&, PP_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const PP_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, PP_GTO&);
 
 public:
     PP_GTO();
@@ -312,83 +312,83 @@ inline double PS_GTO::scale() const
 ////////// Integral functions involving P and S orbitals
 //////////
 
-Vector kinetic_integral(const PS_GTO &P);
-Vector overlap_integral(const PS_GTO &P);
+SQUIRE_EXPORT Vector kinetic_integral(const PS_GTO &P);
+SQUIRE_EXPORT Vector overlap_integral(const PS_GTO &P);
 
-Vector potential_integral(const QVector<PointCharge> &C, const PS_GTO &P);
-Vector potential_integral(const QVector<PointDipole> &C, const PS_GTO &P);
+SQUIRE_EXPORT Vector potential_integral(const QVector<PointCharge> &C, const PS_GTO &P);
+SQUIRE_EXPORT Vector potential_integral(const QVector<PointDipole> &C, const PS_GTO &P);
 
-Vector potential_integral(const PointCharge &C, const PS_GTO &P);
-Vector potential_integral(const PointDipole &C, const PS_GTO &P);
+SQUIRE_EXPORT Vector potential_integral(const PointCharge &C, const PS_GTO &P);
+SQUIRE_EXPORT Vector potential_integral(const PointDipole &C, const PS_GTO &P);
 
-Vector potential_integral(const QVector<PointCharge> &C, const PS_GTO &P, int m);
-Vector potential_integral(const QVector<PointDipole> &C, const PS_GTO &P, int m);
+SQUIRE_EXPORT Vector potential_integral(const QVector<PointCharge> &C, const PS_GTO &P, int m);
+SQUIRE_EXPORT Vector potential_integral(const QVector<PointDipole> &C, const PS_GTO &P, int m);
 
-Vector potential_integral(const PointCharge &C, const PS_GTO &P, int m);
-Vector potential_integral(const PointDipole &C, const PS_GTO &P, int m);
+SQUIRE_EXPORT Vector potential_integral(const PointCharge &C, const PS_GTO &P, int m);
+SQUIRE_EXPORT Vector potential_integral(const PointDipole &C, const PS_GTO &P, int m);
 
-Matrix kinetic_integral(const PP_GTO &P);
-Matrix overlap_integral(const PP_GTO &P);
+SQUIRE_EXPORT Matrix kinetic_integral(const PP_GTO &P);
+SQUIRE_EXPORT Matrix overlap_integral(const PP_GTO &P);
 
-Matrix potential_integral(const QVector<PointCharge> &C, const PP_GTO &P);
-Matrix potential_integral(const QVector<PointDipole> &C, const PP_GTO &P);
+SQUIRE_EXPORT Matrix potential_integral(const QVector<PointCharge> &C, const PP_GTO &P);
+SQUIRE_EXPORT Matrix potential_integral(const QVector<PointDipole> &C, const PP_GTO &P);
 
-Matrix potential_integral(const PointCharge &C, const PP_GTO &P);
-Matrix potential_integral(const PointDipole &C, const PP_GTO &P);
+SQUIRE_EXPORT Matrix potential_integral(const PointCharge &C, const PP_GTO &P);
+SQUIRE_EXPORT Matrix potential_integral(const PointDipole &C, const PP_GTO &P);
 
-Matrix potential_integral(const QVector<PointCharge> &C, const PP_GTO &P, int m);
-Matrix potential_integral(const QVector<PointDipole> &C, const PP_GTO &P, int m);
+SQUIRE_EXPORT Matrix potential_integral(const QVector<PointCharge> &C, const PP_GTO &P, int m);
+SQUIRE_EXPORT Matrix potential_integral(const QVector<PointDipole> &C, const PP_GTO &P, int m);
 
-Matrix potential_integral(const PointCharge &C, const PP_GTO &P, int m);
-Matrix potential_integral(const PointDipole &C, const PP_GTO &P, int m);
+SQUIRE_EXPORT Matrix potential_integral(const PointCharge &C, const PP_GTO &P, int m);
+SQUIRE_EXPORT Matrix potential_integral(const PointDipole &C, const PP_GTO &P, int m);
 
 ///// Electron integrals involving S and P orbitals
 
-Vector electron_integral(const PS_GTO &P, const SS_GTO &Q);
-Vector electron_integral(const SS_GTO &P, const PS_GTO &Q);
+SQUIRE_EXPORT Vector electron_integral(const PS_GTO &P, const SS_GTO &Q);
+SQUIRE_EXPORT Vector electron_integral(const SS_GTO &P, const PS_GTO &Q);
 
-Matrix electron_integral(const PS_GTO &P, const PS_GTO &Q);
+SQUIRE_EXPORT Matrix electron_integral(const PS_GTO &P, const PS_GTO &Q);
 
-Matrix electron_integral(const PP_GTO &P, const SS_GTO &Q);
-Matrix electron_integral(const SS_GTO &P, const PP_GTO &Q);
+SQUIRE_EXPORT Matrix electron_integral(const PP_GTO &P, const SS_GTO &Q);
+SQUIRE_EXPORT Matrix electron_integral(const SS_GTO &P, const PP_GTO &Q);
 
-SireBase::Array2D<Vector> electron_integral(const PP_GTO &P, const PS_GTO &Q);
-SireBase::Array2D<Vector> electron_integral(const PS_GTO &P, const PP_GTO &Q);
+SQUIRE_EXPORT SireBase::Array2D<Vector> electron_integral(const PP_GTO &P, const PS_GTO &Q);
+SQUIRE_EXPORT SireBase::Array2D<Vector> electron_integral(const PS_GTO &P, const PP_GTO &Q);
 
-void electron_integral(const PP_GTO &P, const PS_GTO &Q,
+SQUIRE_EXPORT void electron_integral(const PP_GTO &P, const PS_GTO &Q,
                        SireBase::Array2D<Vector> &matrix);
                        
-void electron_integral(const PS_GTO &P, const PP_GTO &Q,
+SQUIRE_EXPORT void electron_integral(const PS_GTO &P, const PP_GTO &Q,
                        SireBase::Array2D<Vector> &matrix);
 
-SireBase::Array2D<Matrix> electron_integral(const PP_GTO &P, const PP_GTO &Q);
+SQUIRE_EXPORT SireBase::Array2D<Matrix> electron_integral(const PP_GTO &P, const PP_GTO &Q);
 
-void electron_integral(const PP_GTO &P, const PP_GTO &Q, 
+SQUIRE_EXPORT void electron_integral(const PP_GTO &P, const PP_GTO &Q, 
                        SireBase::Array2D<Matrix> &matrix);
 
-Vector electron_integral(const PS_GTO &P, const SS_GTO &Q, int m);
-Vector electron_integral(const SS_GTO &P, const PS_GTO &Q, int m);
+SQUIRE_EXPORT Vector electron_integral(const PS_GTO &P, const SS_GTO &Q, int m);
+SQUIRE_EXPORT Vector electron_integral(const SS_GTO &P, const PS_GTO &Q, int m);
 
-Matrix electron_integral(const PS_GTO &P, const PS_GTO &Q, int m);
+SQUIRE_EXPORT Matrix electron_integral(const PS_GTO &P, const PS_GTO &Q, int m);
 
-Matrix electron_integral(const PP_GTO &P, const SS_GTO &Q, int m);
-Matrix electron_integral(const SS_GTO &P, const PP_GTO &Q, int m);
+SQUIRE_EXPORT Matrix electron_integral(const PP_GTO &P, const SS_GTO &Q, int m);
+SQUIRE_EXPORT Matrix electron_integral(const SS_GTO &P, const PP_GTO &Q, int m);
 
-SireBase::Array2D<Vector> 
+SQUIRE_EXPORT SireBase::Array2D<Vector> 
 electron_integral(const PP_GTO &P, const PS_GTO &Q, int m);
-SireBase::Array2D<Vector> 
+SQUIRE_EXPORT SireBase::Array2D<Vector> 
 electron_integral(const PS_GTO &P, const PP_GTO &Q, int m);
 
-void electron_integral(const PP_GTO &P, const PS_GTO &Q, int m,
+SQUIRE_EXPORT void electron_integral(const PP_GTO &P, const PS_GTO &Q, int m,
                        SireBase::Array2D<Vector> &matrix);
                        
-void electron_integral(const PS_GTO &P, const PP_GTO &Q, int m,
+SQUIRE_EXPORT void electron_integral(const PS_GTO &P, const PP_GTO &Q, int m,
                        SireBase::Array2D<Vector> &matrix);
 
-SireBase::Array2D<Matrix> 
+SQUIRE_EXPORT SireBase::Array2D<Matrix> 
 electron_integral(const PP_GTO &P, const PP_GTO &Q, int m);
 
-void electron_integral(const PP_GTO &P, const PP_GTO &Q, int m, 
+SQUIRE_EXPORT void electron_integral(const PP_GTO &P, const PP_GTO &Q, int m, 
                        SireBase::Array2D<Matrix> &matrix);
 
 }

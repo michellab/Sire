@@ -3,6 +3,8 @@
 
 #include "SireMaths_registrars.h"
 
+#include "Helpers/version_error_impl.h"
+
 #include "vectorproperty.h"
 #include "torsion.h"
 #include "align.h"

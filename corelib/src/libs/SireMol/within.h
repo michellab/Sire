@@ -43,8 +43,8 @@ namespace SireMol
 class Within;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Within&);
-QDataStream& operator>>(QDataStream&, SireMol::Within&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Within&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Within&);
 
 namespace SireMol
 {
@@ -60,8 +60,8 @@ using SireMaths::Vector;
 class SIREMOL_EXPORT Within : public AtomID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Within&);
-friend QDataStream& ::operator>>(QDataStream&, Within&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Within&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Within&);
 
 public:
     Within();

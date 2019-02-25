@@ -40,7 +40,7 @@ static const RegisterMetaType<TrigArray2DBase> r_array2d( MAGIC_ONLY, NO_ROOT,
                                                           "SireBase::TrigArray2D<T>" );
                                                       
 /** Serialise to a binary datastream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const TrigArray2DBase &array2d)
 {
     writeHeader(ds, r_array2d, 1);
@@ -50,7 +50,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         TrigArray2DBase &array2d)
 {
     VersionID v = readHeader(ds, r_array2d);

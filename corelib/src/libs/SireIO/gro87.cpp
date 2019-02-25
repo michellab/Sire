@@ -71,7 +71,7 @@ using namespace SireStream;
 const RegisterParser<Gro87> register_gro87;
 static const RegisterMetaType<Gro87> r_gro87;
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Gro87 &gro87)
+QDataStream &operator<<(QDataStream &ds, const Gro87 &gro87)
 {
     writeHeader(ds, r_gro87, 1);
 
@@ -86,7 +86,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Gro87 &gro87)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Gro87 &gro87)
+QDataStream &operator>>(QDataStream &ds, Gro87 &gro87)
 {
     VersionID v = readHeader(ds, r_gro87);
 

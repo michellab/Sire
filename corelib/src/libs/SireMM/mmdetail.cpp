@@ -42,7 +42,7 @@ using namespace SireMM;
 
 static const RegisterMetaType<MMDetail> r_mm;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const MMDetail &mm)
+QDataStream &operator<<(QDataStream &ds, const MMDetail &mm)
 {
     writeHeader(ds, r_mm, 1);
     
@@ -51,7 +51,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const MMDetail &mm)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, MMDetail &mm)
+QDataStream &operator>>(QDataStream &ds, MMDetail &mm)
 {
     VersionID v = readHeader(ds, r_mm);
     

@@ -40,8 +40,8 @@ namespace SireID
 class Number;
 }
 
-QDataStream& operator<<(QDataStream&, const SireID::Number&);
-QDataStream& operator>>(QDataStream&, SireID::Number&);
+SIREID_EXPORT QDataStream& operator<<(QDataStream&, const SireID::Number&);
+SIREID_EXPORT QDataStream& operator>>(QDataStream&, SireID::Number&);
 
 namespace SireID
 {
@@ -63,8 +63,8 @@ namespace SireID
 class SIREID_EXPORT Number
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Number&);
-friend QDataStream& ::operator>>(QDataStream&, Number&);
+friend SIREID_EXPORT QDataStream& ::operator<<(QDataStream&, const Number&);
+friend SIREID_EXPORT QDataStream& ::operator>>(QDataStream&, Number&);
 
 public:
     ~Number();

@@ -41,11 +41,11 @@ class IndexBase;
 class Index;
 }
 
-QDataStream& operator<<(QDataStream&, const SireID::IndexBase&);
-QDataStream& operator>>(QDataStream&, SireID::IndexBase&);
+SIREID_EXPORT QDataStream& operator<<(QDataStream&, const SireID::IndexBase&);
+SIREID_EXPORT QDataStream& operator>>(QDataStream&, SireID::IndexBase&);
 
-QDataStream& operator<<(QDataStream&, const SireID::Index&);
-QDataStream& operator>>(QDataStream&, SireID::Index&);
+SIREID_EXPORT QDataStream& operator<<(QDataStream&, const SireID::Index&);
+SIREID_EXPORT QDataStream& operator>>(QDataStream&, SireID::Index&);
 
 namespace SireID
 {
@@ -63,8 +63,8 @@ namespace SireID
 class SIREID_EXPORT IndexBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IndexBase&);
-friend QDataStream& ::operator>>(QDataStream&, IndexBase&);
+friend SIREID_EXPORT QDataStream& ::operator<<(QDataStream&, const IndexBase&);
+friend SIREID_EXPORT QDataStream& ::operator>>(QDataStream&, IndexBase&);
 
 public:
     ~IndexBase();
@@ -100,7 +100,7 @@ protected:
     @author Christopher Woods
 */
 template<class T>
-class SIREID_EXPORT Index_T_ : public IndexBase
+class Index_T_ : public IndexBase
 {
 public:
     explicit Index_T_(qint32 idx=IndexBase::null());

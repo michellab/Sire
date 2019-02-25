@@ -50,8 +50,8 @@ template<class T>
 class CGProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::CGProp&);
-QDataStream& operator>>(QDataStream&, SireMol::CGProp&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::CGProp&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::CGProp&);
 
 template<class T>
 QDataStream& operator<<(QDataStream&, const SireMol::CGProperty<T>&);
@@ -100,8 +100,8 @@ class SIREMOL_EXPORT CGProperty
     : public SireBase::ConcreteProperty<CGProperty<T>, CGProp>
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const CGProperty<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, CGProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const CGProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, CGProperty<T>&);
 
 public:
     CGProperty();

@@ -43,23 +43,23 @@ class Sec;
 class Cot;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Cos&);
-QDataStream& operator>>(QDataStream&, SireCAS::Cos&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Cos&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Cos&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Sin&);
-QDataStream& operator>>(QDataStream&, SireCAS::Sin&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Sin&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Sin&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Tan&);
-QDataStream& operator>>(QDataStream&, SireCAS::Tan&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Tan&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Tan&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Csc&);
-QDataStream& operator>>(QDataStream&, SireCAS::Csc&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Csc&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Csc&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Sec&);
-QDataStream& operator>>(QDataStream&, SireCAS::Sec&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Sec&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Sec&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Cot&);
-QDataStream& operator>>(QDataStream&, SireCAS::Cot&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Cot&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Cot&);
 
 namespace SireCAS
 {
@@ -68,8 +68,8 @@ namespace SireCAS
 class SIRECAS_EXPORT Cos : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Cos&);
-friend QDataStream& ::operator>>(QDataStream&, Cos&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Cos&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Cos&);
 
 public:
     Cos();
@@ -118,8 +118,8 @@ protected:
 class SIRECAS_EXPORT Sin : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Sin&);
-friend QDataStream& ::operator>>(QDataStream&, Sin&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Sin&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Sin&);
 
 public:
     Sin();
@@ -167,8 +167,8 @@ protected:
 class SIRECAS_EXPORT Tan : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Tan&);
-friend QDataStream& ::operator>>(QDataStream&, Tan&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Tan&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Tan&);
 
 public:
     Tan();
@@ -216,8 +216,8 @@ protected:
 class SIRECAS_EXPORT Sec : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Sec&);
-friend QDataStream& ::operator>>(QDataStream&, Sec&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Sec&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Sec&);
 
 public:
     Sec();
@@ -265,8 +265,8 @@ protected:
 class SIRECAS_EXPORT Csc : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Csc&);
-friend QDataStream& ::operator>>(QDataStream&, Csc&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Csc&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Csc&);
 
 public:
     Csc();
@@ -314,8 +314,8 @@ protected:
 class SIRECAS_EXPORT Cot : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Cot&);
-friend QDataStream& ::operator>>(QDataStream&, Cot&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Cot&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Cot&);
 
 public:
     Cot();
