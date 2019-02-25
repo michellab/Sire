@@ -89,6 +89,7 @@ namespace SireMove {
         bool isTimeReversible() const;
 
         void initialise();
+        
 
 
         SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
@@ -105,7 +106,10 @@ namespace SireMove {
 
         IntegratorWorkspacePtr createWorkspace(const PropertyMap &map = PropertyMap()) const;
         IntegratorWorkspacePtr createWorkspace(const MoleculeGroup &molgroup, const PropertyMap &map = PropertyMap()) const;
-
+        
+        QString getCombiningRules(void);
+        void setCombiningRules(QString);
+        
         QString getCutoffType(void);
         void setCutoffType(QString);
 
@@ -237,7 +241,10 @@ namespace SireMove {
         QString CutoffType;
         SireUnits::Dimension::Length cutoff_distance;
         double field_dielectric;
-
+           
+        QString combiningRules; 
+        QString combining_rules;
+        
         bool Andersen_flag;
         double Andersen_frequency;
 

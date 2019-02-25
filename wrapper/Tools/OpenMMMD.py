@@ -440,6 +440,7 @@ def setupMoves(system, random_seed, GPUS):
     Integrator_OpenMM.setPlatform(platform.val)
     Integrator_OpenMM.setConstraintType(constraint.val)
     Integrator_OpenMM.setCutoffType(cutoff_type.val)
+    Integrator_OpenMM.setCombiningRules(combining_rules.val)
     Integrator_OpenMM.setIntegrator(integrator_type.val)
     Integrator_OpenMM.setFriction(inverse_friction.val)  # Only meaningful for Langevin/Brownian integrators
     Integrator_OpenMM.setPrecision(precision.val)
@@ -1138,6 +1139,7 @@ def setupMovesFreeEnergy(system, random_seed, GPUS, lam_val):
     Integrator_OpenMM.setFriction(inverse_friction.val)  # Only meaningful for Langevin/Brownian integrators
     Integrator_OpenMM.setPlatform(platform.val)
     Integrator_OpenMM.setConstraintType(constraint.val)
+    Integrator_OpenMM.setCombiningRules(combining_rules.val)
     Integrator_OpenMM.setCutoffType(cutoff_type.val)
     Integrator_OpenMM.setFieldDielectric(rf_dielectric.val)
     Integrator_OpenMM.setAlchemicalValue(lambda_val.val)
