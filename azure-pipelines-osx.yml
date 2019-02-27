@@ -21,10 +21,10 @@ jobs:
     env:
       SIRE_RUN_FILE: $HOME/sire_devel_latest_osx.run
     displayName: 'Package Sire into a binary'
-  - script: |
-      # run the tests
-      $HOME/sire.app/bin/sire_test
-    displayName: 'Run Sire tests'
+#  - script: |
+#      # run the tests
+#      $HOME/sire.app/bin/sire_test
+#    displayName: 'Run Sire tests'
   - script: |
       # finally deploy the binary to an object store bucket identified by 'par_url'
       $HOME/sire.app/bin/conda install -y pycurl
