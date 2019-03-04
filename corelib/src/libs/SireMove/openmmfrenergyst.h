@@ -47,8 +47,8 @@ SIRE_BEGIN_HEADER
     class OpenMMFrEnergyST;
 }
 
-SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::OpenMMFrEnergyST&);
-SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::OpenMMFrEnergyST&);
+QDataStream& operator<<(QDataStream&, const SireMove::OpenMMFrEnergyST&);
+QDataStream& operator>>(QDataStream&, SireMove::OpenMMFrEnergyST&);
 
 namespace SireMove {
 
@@ -58,8 +58,8 @@ namespace SireMove {
      */
     class SIREMOVE_EXPORT OpenMMFrEnergyST
     : public SireBase::ConcreteProperty<OpenMMFrEnergyST, Integrator> {
-        friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const OpenMMFrEnergyST&);
-        friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, OpenMMFrEnergyST&);
+        friend QDataStream& ::operator<<(QDataStream&, const OpenMMFrEnergyST&);
+        friend QDataStream& ::operator>>(QDataStream&, OpenMMFrEnergyST&);
 
     public:
         OpenMMFrEnergyST(bool frequent_save_velocities = false);
@@ -89,7 +89,6 @@ namespace SireMove {
         bool isTimeReversible() const;
 
         void initialise();
-        
 
 
         SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
@@ -106,10 +105,7 @@ namespace SireMove {
 
         IntegratorWorkspacePtr createWorkspace(const PropertyMap &map = PropertyMap()) const;
         IntegratorWorkspacePtr createWorkspace(const MoleculeGroup &molgroup, const PropertyMap &map = PropertyMap()) const;
-        
-        QString getCombiningRules(void);
-        void setCombiningRules(QString);
-        
+
         QString getCutoffType(void);
         void setCutoffType(QString);
 
@@ -241,10 +237,7 @@ namespace SireMove {
         QString CutoffType;
         SireUnits::Dimension::Length cutoff_distance;
         double field_dielectric;
-           
-        QString combiningRules; 
-        QString combining_rules;
-        
+
         bool Andersen_flag;
         double Andersen_frequency;
 
