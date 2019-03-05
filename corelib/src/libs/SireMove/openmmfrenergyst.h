@@ -109,6 +109,9 @@ namespace SireMove {
         QString getCutoffType(void);
         void setCutoffType(QString);
 
+        QString getCombiningRules(void);
+        void setCombiningRules(QString);
+       
         SireUnits::Dimension::Length getCutoffDistance(void);
         void setCutoffDistance(SireUnits::Dimension::Length);
 
@@ -240,7 +243,10 @@ namespace SireMove {
 
         bool Andersen_flag;
         double Andersen_frequency;
-
+   
+        QString combiningRules; 
+        QString combining_rules;
+        
         bool MCBarostat_flag;
         int MCBarostat_frequency;
 
