@@ -82,9 +82,6 @@ random_seed = Parameter("random seed", None, """Random number seed. Set this if 
 ncycles = Parameter("ncycles", 1,
                     """The number of MD cycles. The total elapsed time will be nmoves*ncycles*timestep""")
 
-maxcycles = Parameter("maxcycles",99999,
-                      """The maximum number of MD cycles to carry out. Useful to restart simulations from a checkpoint""")
-
 ncycles_per_snap = Parameter("ncycles_per_snap", 1, """Number of cycles between saving snapshots""")
 
 save_coords = Parameter("save coordinates", True, """Whether or not to save coordinates.""")
@@ -1601,15 +1598,8 @@ def runFreeNrg():
         restart = True
 
     cycle_start = int(moves.nMoves() / nmoves.val) + 1
-
-    if cycle_start > maxcycles.val:
-        print("Maxinum number of cycles reached (%s). If you wish to extend the simulation increase the value of the parameter maxcycle." % maxcycles.val)
-        sys.exit(-1)
-        
     cycle_end = cycle_start + ncycles.val
 
-    if (cycle_end > maxcycles.val):
-        cycle_end = maxcycles.val + 1
 
     outgradients = open("gradients.dat", "a", 1)
     outgradients.write("# lambda_val.val %s\n" % lam_str)
@@ -1689,12 +1679,6 @@ def runFreeNrg():
         for gradient in gradients:
             #grads[lambda_val.val].accumulate(gradients[i-1])
             grads[lambda_val.val].accumulate(gradient)
-        # Save restart
-        print("Backing up previous restart")
-        cmd = "cp %s %s.previous" % (restart_file.val, restart_file.val)
-        os.system(cmd)
-        print ("Saving new restart")
-        Sire.Stream.save([system, moves], restart_file.val)            
     s2 = timer.elapsed() / 1000.
     outgradients.flush()
     outfile.flush()
@@ -1717,8 +1701,8 @@ def runFreeNrg():
         # Necessary to write correct restart
         system.mustNowRecalculateFromScratch()
 
- #   print("Backing up previous restart")
- #   cmd = "cp %s %s.previous" % (restart_file.val, restart_file.val)
- #   os.system(cmd)
- #   print ("Saving new restart")
- #   Sire.Stream.save([system, moves], restart_file.val)
+    print("Backing up previous restart")
+    cmd = "cp %s %s.previous" % (restart_file.val, restart_file.val)
+    os.system(cmd)
+    print ("Saving new restart")
+    Sire.Stream.save([system, moves], restart_file.val)
