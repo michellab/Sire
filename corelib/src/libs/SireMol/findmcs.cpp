@@ -130,7 +130,7 @@ public:
         }
 
         //we must match all user-supplied vertices
-        if (nuser >= user_matched_verts.count())
+        if ((nuser > 0) && (nuser >= user_matched_verts.count()))
         {
             if (nmatch > *max_size)
             {
