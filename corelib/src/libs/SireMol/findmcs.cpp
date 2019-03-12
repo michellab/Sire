@@ -92,6 +92,7 @@ private:
     qint64 max_time_ns;
     bool *timed_out;
     QSet<int> user_matched_verts;
+    bool is_user_map;
     bool verbose;
 
 public:
@@ -100,11 +101,11 @@ public:
                      QList< QHash<int,int> > *matches,
                      QElapsedTimer *tt, QElapsedTimer *td,
                      qint64 maxtime, qint64 *update, bool *timedout,
-                     const QSet<int> &user_verts, bool verbose)
+                     const QSet<int> &user_verts, bool is_user_map, bool verbose)
          : g0(mg0), g1(mg1), max_nats(nats), max_size(msize),
            best_matches(matches),
            t_total(tt), t_delta(td), last_update(update), max_time_ns(maxtime), timed_out(timedout),
-           user_matched_verts(user_verts), verbose(verbose)
+           user_matched_verts(user_verts), is_user_map(is_user_map), verbose(verbose)
     {
         *max_size = 0;
     }
@@ -129,8 +130,9 @@ public:
             }
         }
 
-        //we must match all user-supplied vertices
-        if ((nuser > 0) && (nuser >= user_matched_verts.count()))
+        // We must match all user-supplied vertices if the user has supplied a pre-match.
+        // The 'is_user_map' flag indicates whether the pre-match gives a valid atom mapping.
+        if ((not is_user_map) or ((nuser > 0) && (nuser >= user_matched_verts.count())))
         {
             if (nmatch > *max_size)
             {
@@ -262,9 +264,16 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
     QHash<AtomIdx,AtomIdx> user_map01;
     QHash<AtomIdx,AtomIdx> user_map10;
 
+    // Whether the user has supplied a pre-match map.
+    bool is_user_map = false;
+
     if (not matcher.isNull())
     {
         user_map01 = matcher.match(mol, map0, other, map1);
+
+        // If there are matching atoms, then flag that a user map is present.
+        if (user_map01.count() > 0)
+            is_user_map = true;
 
         //create the inverted map from molecule 1 to molecule 0
         for (QHash<AtomIdx,AtomIdx>::const_iterator it = user_map01.constBegin();
@@ -481,7 +490,8 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
     qint64 last_update = 0;
     findmcs_callback<Graph,Graph> func(g0, g1, qMin(nats0-nskip0,nats1-nskip1), &max_size,
                                        &best_matches, &t_total, &t_delta, max_time_ns,
-                                       &last_update, &timed_out, user_matched_verts, verbose);
+                                       &last_update, &timed_out, user_matched_verts,
+                                       is_user_map, verbose);
 
     t_total.start();
     mcgregor_common_subgraphs_unique(g0, g1, true, func,
@@ -633,9 +643,16 @@ QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, con
     QHash<AtomIdx,AtomIdx> user_map01;
     QHash<AtomIdx,AtomIdx> user_map10;
 
+    // Whether the user has supplied a pre-match map.
+    bool is_user_map = false;
+
     if (not matcher.isNull())
     {
         user_map01 = matcher.match(mol, map0, other, map1);
+
+        // If there are matching atoms, then flag that a user map is present.
+        if (user_map01.count() > 0)
+            is_user_map = true;
 
         //create the inverted map from molecule 1 to molecule 0
         for (QHash<AtomIdx,AtomIdx>::const_iterator it = user_map01.constBegin();
@@ -852,7 +869,8 @@ QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, con
     qint64 last_update = 0;
     findmcs_callback<Graph,Graph> func(g0, g1, qMin(nats0-nskip0,nats1-nskip1), &max_size,
                                        &best_matches, &t_total, &t_delta, max_time_ns,
-                                       &last_update, &timed_out, user_matched_verts, verbose);
+                                       &last_update, &timed_out, user_matched_verts,
+                                       is_user_map, verbose);
 
     t_total.start();
     mcgregor_common_subgraphs_unique(g0, g1, true, func,
