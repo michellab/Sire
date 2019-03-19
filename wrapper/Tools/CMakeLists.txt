@@ -15,7 +15,7 @@ set ( SCRIPTS
         FDTISingleFree.py
         LJcutoff.py
         LSRC.py
-        Nautilus.py 
+        Nautilus.py
         QuantumToMM.py
         OpenMMMD.py
         Plot.py
@@ -43,7 +43,7 @@ install( DIRECTORY ${CONFIGDIRS} DESTINATION ${SIRE_SHARE}/Tools
 
 # If this is an anaconda build, then make sure that all of the
 # necessary files are copied from the pkgs directory into the
-# anaconda lib and bin directories
+# anaconda lib, bin, and share directories
 # (do this here to make sure that it happens after installing
 #  everything else)
 if (ANACONDA_BUILD)
@@ -61,11 +61,11 @@ if (ANACONDA_BUILD)
 
   install( CODE "execute_process(COMMAND \"${ANACONDA_BASE}/bin/python\"
                       ${CMAKE_SOURCE_DIR}/build/copy_into_conda.py
-       	              ${CMAKE_INSTALL_PREFIX}/bin ${ANACONDA_BASE}/bin force
-       	                    WORKING_DIRECTORY \"${ANACONDA_BASE}\")" )
+	                  ${CMAKE_INSTALL_PREFIX}/bin ${ANACONDA_BASE}/bin force
+	                        WORKING_DIRECTORY \"${ANACONDA_BASE}\")" )
 
-  #install( CODE "execute_process(COMMAND \"${ANACONDA_BASE}/bin/python\"
-  #                    ${CMAKE_SOURCE_DIR}/build/copy_into_conda.py
-  #                    ${CMAKE_INSTALL_PREFIX}/share/Sire ${ANACONDA_BASE}/share/Sire force
-  #                          WORKING_DIRECTORY \"${ANACONDA_BASE}\")" )
+  install( CODE "execute_process(COMMAND \"${ANACONDA_BASE}/bin/python\"
+                      ${CMAKE_SOURCE_DIR}/build/copy_into_conda.py
+	                  ${CMAKE_INSTALL_PREFIX}/share ${ANACONDA_BASE}/share force
+	                        WORKING_DIRECTORY \"${ANACONDA_BASE}\")" )
 endif()
