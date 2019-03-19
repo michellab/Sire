@@ -12,17 +12,17 @@ mkdir sire_conda
 # Create the required sub-directories.
 mkdir -p sire_conda/lib/python3.7/site-packages
 
-# Now copy the files into place.
+# Copy the files into place.
 cp -r $HOME/sire.app/pkgs/sire*/bin sire_conda
 cp -r $HOME/sire.app/pkgs/sire*/include sire_conda
 cp -r $HOME/sire.app/pkgs/sire*/lib sire_conda
 cp -r $HOME/sire.app/pkgs/sire*/bundled/lib sire_conda
 cp -r $HOME/sire.app/pkgs/sire*/share sire_conda
 
-# Now copy across the Sire Python package.
+# Copy across the Sire Python package.
 cp -r $HOME/sire.app/lib/python3.7/site-packages/Sire sire_conda/lib/python3.7/site-packages
 
-# Now compress the Conda package directory.
+# Compress the Conda package directory.
 tar cjf $ARCHIVE sire_conda
 
 # Remove the redundant package directory.
