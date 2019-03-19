@@ -33,7 +33,7 @@ jobs:
       PAR_URL: $(parURL)
     displayName: 'Deploy binary to siremol.org'
   - script: |
-      # finally create files needed for the Sire Conda package and deploy to oan object store bucket
+      # finally create files needed for the Sire Conda package and deploy to an object store bucket
       # identified by 'par_url'
       $HOME/sire.app/bin/python docker/sire-conda-devel/package_conda.sh
       $HOME/sire.app/bin/conda install -y pycurl
