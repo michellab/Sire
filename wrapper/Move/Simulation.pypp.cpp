@@ -217,7 +217,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread" );
+                , "Run a simulation consisting of nmoves moves (in move)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread" );
         
         }
         { //::SireMove::Simulation::run
@@ -229,7 +229,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
-                , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
+                , "Run a simulation consisting of nmoves moves (in move)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
         { //::SireMove::Simulation::run
@@ -301,7 +301,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("node"), bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
-                , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
+                , "Run a simulation consisting of nmoves moves (in move)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
         { //::SireMove::Simulation::run
@@ -313,7 +313,7 @@ void register_Simulation_class(){
                 "run"
                 , run_function_value
                 , ( bp::arg("node"), bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
-                , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
+                , "Run a simulation consisting of nmoves moves (in move)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
         { //::SireMove::Simulation::run
