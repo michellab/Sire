@@ -13,7 +13,7 @@ try:
     upload_file = sys.argv[1]
     key = upload_file.split("/")[-1]
 except:
-    upload_file = "/home/sireuser/sire_devel_latest_linux.run"
+    upload_file = "/home/sireuser/sire_conda_latest_linux.tar.bz2"
     key = "sire_devel_latest_linux.run"
 
 if not os.path.exists(upload_file):
