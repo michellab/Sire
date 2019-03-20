@@ -2,7 +2,7 @@
 
 # Create the archive name.
 ARCHIVE=sire_conda_linux_latest.tar.bz2
-if [ "$(uname)" == "Darwin" ]; then
+if [ "$(uname)" == "Darwin" ] ; then
     ARCHIVE=sire_conda_osx_latest.tar.bz2
 fi
 
