@@ -170,7 +170,7 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velve
         velver.isSystemInitialised = false;
         velver.isContextInitialised = false;
 
-        qDebug() << " Re-initialisation of OpenMMFrEnergyST from datastream";
+        //qDebug() << " Re-initialisation of OpenMMFrEnergyST from datastream";
 
         velver.initialise();
     }
