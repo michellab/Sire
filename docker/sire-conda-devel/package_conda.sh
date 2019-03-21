@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Create the archive name.
-ARCHIVE=sire_conda_latest_linux.tar.bz2
+ARCHIVE=$HOME/sire_conda_latest_linux.tar.bz2
 if [ "$(uname)" = "Darwin" ]; then
-    ARCHIVE=sire_conda_latest_osx.tar.bz2
+    ARCHIVE=$HOME/sire_conda_latest_osx.tar.bz2
 fi
 
 # Create a directory to store all of the necessary files for the Conda package.
