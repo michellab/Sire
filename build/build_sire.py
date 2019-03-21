@@ -253,7 +253,7 @@ if __name__ == "__main__":
                 "available - please check your openmm installation")
             sys.exit(-1)
         else:
-            print("Installing openmm from the conda-forge repository...")
+            print("Installing openmm from the Omnia channel...")
             os.system("%s install --yes -c omnia -c conda-forge openmm" % conda_exe)
             #os.system("%s install --yes openmm=7.1" % conda_exe)
             installed_something = True
