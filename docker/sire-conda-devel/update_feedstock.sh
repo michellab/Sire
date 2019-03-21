@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+# Get the GitHub token and email.
+GITHUB_TOKEN=$1
+GITHUB_EMAIL=$2
+
+# Set the Conda Forge feedstock directory.
+CONDA_DIR=staged-recipes
+
+# Delete any existing Conda Forge directory.
+if [ -d $CONDA_DIR ]; then
+    rm -rf $CONDA_DIR
+fi
+
+# Store the name of the recipe and template yaml files.
+RECIPE=$CONDA_DIR/recipes/sire/meta.yaml
+TEMPLATE=$CONDA_DIR/recipes/sire/template.yaml
+
+# List of python dependencies.
+DEPS=(boost gsl netcdf4 openmm pyqt tbb tbb-dev)
+
+# Where the Conda environment is stored.
+CONDA_ENV=.conda_env
+
+# Get the Sire version.
+SIRE_VER=$(git --git-dir=$HOME/Sire/.git describe --tags)
+
+# Store the conda environment.
+$HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
+
+# Clone the feedstock repository.
+git clone --single-branch --branch devel https://github.com/michellab/staged-recipes.git > /dev/null 2>&1
+
+# Overwite the recipe with the template file.
+cp $TEMPLATE $RECIPE
+
+# Loop over all dependences and replace with the version installed
+# within the Conda enviroment.
+for dep in ${DEPS[@]}; do
+    ver=$(grep "\- $dep=" $CONDA_ENV | awk -F "=" '{print $2}')
+    sed -i.bak -e "s/$dep/$dep $ver/" -- $RECIPE && rm -- $RECIPE.bak
+    echo $dep $ver
+done
+
+# Update the Sire version number.
+sed -i.bak -e "s/VERSION/$SIRE_VER/" -- $RECIPE && rm -- $RECIPE.bak
+
+rm -f $RECIPE.bak
+rm -f .conda_env
+
+# Change to Conda package directory and update git config.
+cd $CONDA_DIR
+git config user.name "BioSimSpaceBot"
+git config user.email "$GITHUB_EMAIL"
+
+# Commit the changes to the Conda recipe.
+git commit -a -m "Updating Conda recipe."
+git push --repo https://biosimspacebot:$GITHUB_TOKEN@github.com/michellab/staged-recipes.git > /dev/null 2>&1
