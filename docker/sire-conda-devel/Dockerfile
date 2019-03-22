@@ -26,7 +26,7 @@ ADD deploy.py .
 RUN $HOME/sire.app/bin/python deploy.py $HOME/sire_conda_*.tar.bz2
 
 # Udpate the Conda Forge feedstock.
-ADD update_feedstock.sh
+ADD update_feedstock.sh .
 RUN $HOME/update_feedstock.sh $GITHUB_TOKEN $GITHUB_EMAIL
 
 ENTRYPOINT ["bash"]
