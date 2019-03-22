@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
+# Switch to the home directory.
+
 # Get the GitHub token and email.
 GITHUB_TOKEN=${GITHUB_TOKEN:-$1}
 GITHUB_EMAIL=${GITHUB_EMAIL:-$2}
 
 # Set the Conda Forge feedstock directory.
-CONDA_DIR=staged-recipes
+CONDA_DIR=$HOME/staged-recipes
 
 # Delete any existing Conda Forge directory.
 if [ -d $CONDA_DIR ]; then
@@ -39,7 +41,7 @@ elif [ "$(uname)" = "Linux" ]; then
     $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
 
     # Clone the feedstock repository.
-    git clone --single-branch --branch devel https://github.com/michellab/staged-recipes.git > /dev/null 2>&1
+    git clone --single-branch --branch devel https://github.com/michellab/staged-recipes.git $CONDA_DIR > /dev/null 2>&1
 
     # Overwite the recipe with the template file.
     cp $TEMPLATE $RECIPE
