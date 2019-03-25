@@ -41,7 +41,7 @@ elif [ "$(uname)" = "Linux" ]; then
     $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
 
     # Clone the feedstock repository.
-    git clone --single-branch --branch devel https://github.com/michellab/staged-recipes.git $CONDA_DIR > /dev/null 2>&1
+    git clone --branch devel https://github.com/michellab/staged-recipes.git $CONDA_DIR > /dev/null 2>&1
 
     # Overwite the recipe with the template file.
     cp $TEMPLATE $RECIPE
