@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-# We use the Git installed within the Sire miniconda since the default on the
-# macOS build image is too old to support username:token https authentication.
+# Install Git into the Sire miniconda. The default installed on the macOS
+# build image is too old to support username:token https authentication.
+$HOME/sire.app/bin/conda install -y git
 GIT=$HOME/sire.app/bin/git
 
 # Get the GitHub token and email.
