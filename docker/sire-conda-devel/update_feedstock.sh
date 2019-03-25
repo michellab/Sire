@@ -14,9 +14,15 @@ if [ -d $CONDA_DIR ]; then
     rm -rf $CONDA_DIR
 fi
 
-# Store the name of the recipe and template yaml files.
+# Store the name of the recipe and template YAML files.
 RECIPE=$CONDA_DIR/recipes/sire/meta.yaml
 TEMPLATE=$CONDA_DIR/recipes/sire/template.yaml
+
+# Clone the feedstock repository.
+git clone --branch devel https://github.com/michellab/staged-recipes.git $CONDA_DIR > /dev/null 2>&1
+
+# Overwite the recipe with the template file.
+cp $TEMPLATE $RECIPE
 
 # MacOS.
 if [ "$(uname)" = "Darwin" ]; then
@@ -39,12 +45,6 @@ elif [ "$(uname)" = "Linux" ]; then
 
     # Store the conda environment.
     $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
-
-    # Clone the feedstock repository.
-    git clone --branch devel https://github.com/michellab/staged-recipes.git $CONDA_DIR > /dev/null 2>&1
-
-    # Overwite the recipe with the template file.
-    cp $TEMPLATE $RECIPE
 
     # Loop over all dependences and replace with the version installed
     # within the Conda enviroment.
