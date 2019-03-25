@@ -77,6 +77,9 @@ cd $CONDA_DIR
 git config user.name "BioSimSpaceBot"
 git config user.email "$GITHUB_EMAIL"
 
-# Commit the changes to the Conda recipe.
+# Commit the changes to the Conda recipe. Make sure to pull and rebase before
+# pushing to avoid conflicts in the unlikely event that the Linux and macOS
+# builds make simultaneous edits.
 git commit -a -m "Updating Conda recipe."
+git pull --rebase origin devel
 git push --repo https://biosimspacebot:$GITHUB_TOKEN@github.com/michellab/staged-recipes.git origin devel
