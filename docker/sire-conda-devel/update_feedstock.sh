@@ -79,4 +79,4 @@ git config user.email "$GITHUB_EMAIL"
 
 # Commit the changes to the Conda recipe.
 git commit -a -m "Updating Conda recipe."
-git push --repo https://biosimspacebot:$GITHUB_TOKEN@github.com/michellab/staged-recipes.git > /dev/null 2>&1
+git push --repo https://biosimspacebot:$GITHUB_TOKEN@github.com/michellab/staged-recipes.git origin devel
