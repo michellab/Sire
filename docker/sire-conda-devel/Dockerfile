@@ -18,8 +18,8 @@ ENV GITHUB_EMAIL=$github_email
 ADD package_conda.sh .
 RUN $HOME/package_conda.sh
 
-# Install pycurl
-RUN $HOME/sire.app/bin/conda install -y pycurl
+# Install a recent Git and PyCurl.
+RUN $HOME/sire.app/bin/conda install -y git pycurl
 
 # Deploy the Conda package.
 ADD deploy.py .

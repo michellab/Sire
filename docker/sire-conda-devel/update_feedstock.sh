@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-# Switch to the home directory.
+# We use the Git installed within the Sire miniconda since the default on the
+# macOS build image is too old to support username:token https authentication.
+GIT=$HOME/sire.app/bin/git
 
 # Get the GitHub token and email.
 GITHUB_TOKEN=${GITHUB_TOKEN:-$1}
@@ -19,7 +21,7 @@ RECIPE=$CONDA_DIR/recipes/sire/meta.yaml
 TEMPLATE=$CONDA_DIR/recipes/sire/template.yaml
 
 # Clone the feedstock repository.
-git clone --branch devel https://github.com/michellab/staged-recipes.git $CONDA_DIR > /dev/null 2>&1
+$GIT clone --branch devel https://github.com/michellab/staged-recipes.git $CONDA_DIR > /dev/null 2>&1
 
 # Overwite the recipe with the template file.
 cp $TEMPLATE $RECIPE
@@ -41,7 +43,7 @@ elif [ "$(uname)" = "Linux" ]; then
     CONDA_ENV=.conda_env
 
     # Get the Sire version.
-    SIRE_VER=$(git --git-dir=$HOME/Sire/.git describe --tags)
+    SIRE_VER=$($GIT --git-dir=$HOME/Sire/.git describe --tags)
 
     # Store the conda environment.
     $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
@@ -74,12 +76,12 @@ rm -f $RECIPE.bak
 
 # Change to Conda package directory and update git config.
 cd $CONDA_DIR
-git config user.name "BioSimSpaceBot"
-git config user.email "$GITHUB_EMAIL"
+$GIT config user.name "BioSimSpaceBot"
+$GIT config user.email "$GITHUB_EMAIL"
 
 # Commit the changes to the Conda recipe. Make sure to pull and rebase before
 # pushing to avoid conflicts in the unlikely event that the Linux and macOS
 # builds make simultaneous edits.
-git commit -a -m "Updating Conda recipe."
-git pull --rebase origin devel
-git push --repo https://biosimspacebot:$GITHUB_TOKEN@github.com/michellab/staged-recipes.git origin devel
+$GIT commit -a -m "Updating Conda recipe."
+$GIT pull --rebase origin devel
+$GIT push --repo https://biosimspacebot:$GITHUB_TOKEN@github.com/michellab/staged-recipes.git origin devel
