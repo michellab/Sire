@@ -25,7 +25,7 @@ if ( ANACONDA_BUILD )
     endif()
   else()
     find_library( BOOST_PYTHON_LIBRARY
-                  NAMES boost_python
+                  NAMES boost_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}
                   PATHS ${SIRE_APP}/lib NO_DEFAULT_PATH )
   endif()
 elseif ( MSYS )
@@ -36,7 +36,7 @@ elseif ( MSYS )
   set ( BOOST_PYTHON_HEADERS "${Boost_INCLUDE_DIR}" )
 
 else()
-  find_library( BOOST_PYTHON_LIBRARY 
+  find_library( BOOST_PYTHON_LIBRARY
                 NAMES boost_python
                 PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
 endif()
