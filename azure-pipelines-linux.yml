@@ -38,4 +38,4 @@ jobs:
       github_token: $(githubToken)
       github_email: $(githubEmail)
       par_url: $(parURL)
-    displayName: 'Create Conda package files and deploy to object store'
+    displayName: 'Create Conda package files, deploy to object store, and update feedstock'
