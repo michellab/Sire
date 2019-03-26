@@ -23,7 +23,7 @@ RUN $HOME/sire.app/bin/conda install -y pycurl
 
 # Deploy the Conda package.
 ADD deploy.py .
-RUN $HOME/sire.app/bin/python deploy.py $HOME/sire_conda_*.tar.bz2
+RUN $HOME/sire.app/bin/python deploy.py $HOME/sire_conda_latest_linux.tar.bz2
 
 # Udpate the Conda Forge feedstock.
 ADD update_feedstock.sh .
