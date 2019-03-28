@@ -190,7 +190,7 @@ if __name__ == "__main__":
             import PyQt5
             print("Qt5 is already installed...")
         except ImportError:
-            conda_pkgs.append("pyqt=5.6")
+            conda_pkgs.append("pyqt=5.9.2")
 
         # compilers (so we keep binary compatibility
         if is_osx:
