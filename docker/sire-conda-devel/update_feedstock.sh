@@ -41,7 +41,7 @@ DEPS=(boost gsl netcdf4 openmm pyqt tbb tbb-devel)
 CONDA_ENV=.conda_env
 
 # Get the Sire version.
-SIRE_VER=$(git --git-dir=$HOME/Sire/.git describe --tags)
+SIRE_VER=$(git --git-dir=$HOME/Sire/.git describe --tags | tr - _)
 
 # Store the conda environment.
 $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
