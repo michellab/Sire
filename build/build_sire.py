@@ -61,14 +61,14 @@ if __name__ == "__main__":
     install_script = sys.argv[0]
     build_dir = os.path.abspath( os.path.dirname(install_script) )
 
-    # Get the number of cores to use for any compiling - if this is 0, then 
+    # Get the number of cores to use for any compiling - if this is 0, then
     # we use all of the cores
     try:
         NCORES = int(os.environ["NCORES"])
     except KeyError:
         NCORES = args.ncores
 
-    # Get the number of cores to use for compiling the python wrappers - this 
+    # Get the number of cores to use for compiling the python wrappers - this
     # defaults to NCORES
     try:
         NPYCORES = int(os.environ["NPYCORES"])
@@ -105,7 +105,7 @@ if __name__ == "__main__":
         else:
             print("Cannot find a 'conda' binary in directory '%s'. "
                   "Are you running this script using the python executable "
-                  "from a valid miniconda or anaconda installation?" % conda_base) 
+                  "from a valid miniconda or anaconda installation?" % conda_base)
             sys.exit(-1)
         py_module_install = "\"%s\" install --yes" % conda_exe
 
@@ -235,8 +235,14 @@ if __name__ == "__main__":
     installed_something = False
 
     if len(conda_pkgs) > 0:
+        cmd = "%s config --prepend channels conda-forge" % conda_exe
+        print("Activating conda-forge channel using: '%s'" % cmd)
+        status = os.system(cmd)
+        if status != 0:
+            print("Failed to add conda-forge channel!")
+            sys.exit(-1)
         cmd = "%s %s" % (py_module_install, " ".join(conda_pkgs))
-        print("Installing packages using '%s'" % cmd)
+        print("Installing packages using: '%s'" % cmd)
         status = os.system(cmd)
         installed_something = True
         if status != 0:
@@ -253,17 +259,10 @@ if __name__ == "__main__":
                 "available - please check your openmm installation")
             sys.exit(-1)
         else:
-            print("Installing openmm from the conda-forge repository...")
-            os.system("%s install --yes -c omnia -c conda-forge openmm" % conda_exe)
+            print("Installing openmm from the Omnia channel...")
+            os.system("%s install --yes -c omnia openmm" % conda_exe)
             #os.system("%s install --yes openmm=7.1" % conda_exe)
             installed_something = True
-
-    if installed_something and conda_exe:
-        # need to fix numpy - breaks because of MKL blas!
-        # see https://github.com/numpy/numpy/issues/11481
-        os.system("%s uninstall --yes --force blas" % conda_exe)
-        os.system("%s install --yes \"blas=*=openblas\"" % conda_exe)
-        os.system("%s update --yes --force numpy" % conda_exe)
 
     # make sure we really have found the compilers
     if is_osx:
@@ -365,7 +364,7 @@ if __name__ == "__main__":
 
     # Now that cmake has run, we can compile and install corelib
     make_args = make_cmd(NCORES, True)
-                
+
     print("NOW RUNNING \"%s\" --build . --target %s" % (cmake, make_args))
     sys.stdout.flush()
     status = os.system("\"%s\" --build . --target %s" % (cmake, make_args))
@@ -379,7 +378,7 @@ if __name__ == "__main__":
     os.chdir(OLDPWD)
 
     wrapperdir = os.path.join(build_dir, "wrapper")
-    
+
     if not os.path.exists(wrapperdir):
         os.makedirs(wrapperdir)
 
@@ -411,7 +410,7 @@ if __name__ == "__main__":
         sys.stdout.flush()
         status = os.system(cmake_cmd)
 
-    if status != 0: 
+    if status != 0:
         print("SOMETHING WENT WRONG WHEN USING CMAKE ON WRAPPER!")
         sys.exit(-1)
 

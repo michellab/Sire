@@ -20,7 +20,7 @@ jobs:
       cd docker/sire-package-devel && docker build -f Dockerfile -t siremol/sire-package-devel:latest . && cd -
     displayName: 'Package Sire'
   - script: |
-      # finally deploy the binary to an object store bucket identified by 'par_url'
+      # deploy the binary to an object store bucket identified by 'par_url'
       cd docker/sire-deploy-devel && docker build -f Dockerfile --build-arg par_url=$par_url . && cd -
       # now push the latest build to docker
       docker login -u $id -p $pswd
@@ -30,3 +30,12 @@ jobs:
       pswd: $(dockerPassword)
       id: $(dockerId)
     displayName: 'Deploy to siremol.org and docker'
+  - script: |
+      # finally create files needed for the Sire Conda package, deploy to an object store bucket
+      # identified by 'par_url', and update the Conda-Forge feedstock.
+      cd docker/sire-conda-devel && docker build -f Dockerfile --build-arg par_url=$par_url --build-arg github_token="$github_token" --build-arg github_email="$github_email" . && cd -
+    env:
+      github_token: $(githubToken)
+      github_email: $(githubEmail)
+      par_url: $(parURL)
+    displayName: 'Create Conda package files, deploy to object store, and update feedstock'
