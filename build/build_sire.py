@@ -157,37 +157,40 @@ if __name__ == "__main__":
         import netCDF4
         print("netCDF4 is already installed...")
     except ImportError:
-        conda_pkgs.append("netcdf4")
+        conda_pkgs.append("netcdf4=1.5.0")
 
     CC = None
     CXX = None
     cmake = "cmake%s" % exe_suffix
     if (not args.noconda):
+        # We pin Conda packages to the highest version that is available on
+        # Linux, macOS, and Windows-x64.
+
         # boost
         if os.path.exists(os.path.join(conda_base, "include", "boost", "python.hpp")):
             print("boost is already installed...")
         else:
-            conda_pkgs.append("boost")
+            conda_pkgs.append("boost=1.69.0")
 
         # gsl
         if os.path.exists(os.path.join(conda_base, "include", "gsl", "gsl_version.h")):
             print("gsl is already installed...")
         else:
-            conda_pkgs.append("gsl")
+            conda_pkgs.append("gsl=2.4")
 
         # tbb
         if os.path.exists(os.path.join(conda_base, "include", "tbb", "tbb.h")):
             print("TBB is already installed...")
         else:
-            conda_pkgs.append("tbb")
-            conda_pkgs.append("tbb-devel")
+            conda_pkgs.append("tbb=2019.4")
+            conda_pkgs.append("tbb-devel=2019.4")
 
         # Qt5
         try:
             import PyQt5
             print("Qt5 is already installed...")
         except ImportError:
-            conda_pkgs.append("pyqt")
+            conda_pkgs.append("pyqt=5.6")
 
         # compilers (so we keep binary compatibility
         if is_osx:
@@ -260,8 +263,7 @@ if __name__ == "__main__":
             sys.exit(-1)
         else:
             print("Installing openmm from the Omnia channel...")
-            os.system("%s install --yes -c omnia openmm" % conda_exe)
-            #os.system("%s install --yes openmm=7.1" % conda_exe)
+            os.system("%s install --yes -c omnia openmm=7.3.1" % conda_exe)
             installed_something = True
 
     # make sure we really have found the compilers
