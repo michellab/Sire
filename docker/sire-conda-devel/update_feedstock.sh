@@ -35,7 +35,7 @@ echo "Downloading macOS Conda package file"
 curl --silent --insecure --location https://objectstorage.eu-frankfurt-1.oraclecloud.com/p/LSe3OL7yKxPq2d5BgBVrvWFWdFlMzBG4VKUbbMahXMU/n/chryswoods/b/sire_releases/o/sire_conda_latest_osx.tar.bz2 --output $HOME/sire_conda_latest_osx.tar.bz2
 
 # List of python dependencies.
-DEPS=(boost gsl netcdf4 openmm pyqt tbb tbb-devel)
+DEPS=(boost gsl netcdf4 pyqt tbb tbb-devel)
 
 # Where the Conda environment is stored.
 CONDA_ENV=.conda_env
