@@ -281,7 +281,7 @@ def adjustPerturbedDOFs( molecule ):
 
 
 def getDummies(molecule):
-    print "Selecting dummy groups"
+    print("Selecting dummy groups")
     natoms = molecule.nAtoms()
     atoms = molecule.atoms()
 
