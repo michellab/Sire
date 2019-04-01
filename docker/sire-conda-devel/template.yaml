@@ -24,6 +24,14 @@ requirements:
     - pyqt
     - tbb
     - tbb-devel
+  run:
+    -  {{ pin_compatible('python') }}
+    -  {{ pin_compatible('boost') }}
+    -  {{ pin_compatible('gsl') }}
+    -  {{ pin_compatible('netcdf4') }}
+    -  {{ pin_compatible('pyqt') }}
+    -  {{ pin_compatible('tbb') }}
+    -  {{ pin_compatible('tbb-devel') }}
 
 test:
   imports:
