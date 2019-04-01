@@ -15,7 +15,7 @@ fi
 
 # Store the name of the recipe and template YAML files.
 RECIPE=$CONDA_DIR/recipes/sire/meta.yaml
-TEMPLATE=$CONDA_DIR/recipes/sire/template.yaml
+TEMPLATE=$HOME/Sire/docker/sire-conda-devel/template.yaml
 
 # Clone the feedstock repository.
 echo "Cloning Conda Forge feedstock: https://github.com/michellab/staged-recipes.git"
