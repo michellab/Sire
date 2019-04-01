@@ -22,7 +22,7 @@ from Sire.Tools import Parameter, resolveParameters
 
 import Sire.Stream
 
-##### This is how we can have the script specify all of the 
+##### This is how we can have the script specify all of the
 ##### user-controllable parameters
 
 use_sphere = Parameter("use sphere", False,
@@ -37,7 +37,7 @@ use_softcore = Parameter("use softcore", True,
                        """Whether or not to use a soft-core potential for the perturbed solute.""")
 
 use_grid = Parameter("use grid", False,
-                     """Whether or not to use a grid for the interactions with atoms 
+                     """Whether or not to use a grid for the interactions with atoms
                         that are beyond the spherical boundary""")
 
 grid_spacing = Parameter("grid spacing", 0.5*angstrom,
@@ -56,7 +56,7 @@ cutoff_scheme = Parameter("cutoff scheme", "group",
                              (2) reaction_field : This uses the atomistic reaction field cutoff. You can
                                                   set the reaction field dielectric using the "dielectric"
                                                   parameter.
-                             (3) group : This is the default, and uses a group-based cutoff with a feather. Note that this is 
+                             (3) group : This is the default, and uses a group-based cutoff with a feather. Note that this is
                                          incompatible with a grid, so an error will be raised if you try
                                          to use a group-based cutoff with a grid.""")
 
@@ -91,15 +91,15 @@ random_seed = Parameter("random seed", 0, """The random number seed""")
 nmoves = Parameter("number of moves", 50, """The number of moves per block""")
 
 nmoves_per_energy = Parameter("number of energy snapshots", 1,
-                              """The number of times during the simulation that you want the 
+                              """The number of times during the simulation that you want the
                                  energy to be recorded.""")
 
 nmoves_per_pdb = Parameter("number of structure snapshots", 1,
-                           """The number of times during the simulation that you want the 
+                           """The number of times during the simulation that you want the
                                     structure to be recorded (as a PDB).""")
 
 nmoves_per_pdb_intermediates = Parameter("number of intermediate structure snapshots", None,
-                                         """The number of times during an intermediate simulation to save 
+                                         """The number of times during an intermediate simulation to save
                                             the structure (as a PDB).""")
 
 temperature = Parameter("temperature", 25 * celsius, """The temperature of the simulation""")
@@ -139,7 +139,7 @@ max_solvent_translation = Parameter("maximum solvent translation", 0.15*angstrom
 
 max_solvent_rotation = Parameter("maximum solvent rotation", 15*degrees,
                                  """Maximum amount to rotate the solvent""")
-                             
+
 solvent_mc_weight_factor = Parameter("solvent move weight", 1,
                                      """Factor used to multiply the weight of the solvent moves.""")
 
@@ -157,14 +157,14 @@ compress = Parameter("compression method", "bzip2 -f",
 
 lam_val = Parameter("lambda", 0.0, """Value of lambda for the simulation""")
 
-print_nrgs = Parameter("print energies", None, 
-                       """Whether or not to print all energy components after loading 
+print_nrgs = Parameter("print energies", None,
+                       """Whether or not to print all energy components after loading
                           the restart file or starting the simulation. Useful for debugging.""")
 
 def adjustPerturbedDOFs( molecule ):
-    
+
     perturbations = molecule.property("perturbations").perturbations()
-    
+
     r0 = Symbol("r0")
     theta0 = Symbol("theta0")
 
@@ -196,7 +196,7 @@ def adjustPerturbedDOFs( molecule ):
                 theta = theta * radians
                 angle = AngleID(pert.atom0(), pert.atom1(), pert.atom2() )
                 mover = molecule.move()
-                try:                
+                try:
                     mover.set(angle, theta)
                 except UserWarning:
                     # extract the type of the errror
@@ -209,7 +209,7 @@ def adjustPerturbedDOFs( molecule ):
 
 
 def getDummies(molecule):
-    print "Selecting dummy groups"
+    print("Selecting dummy groups")
     natoms = molecule.nAtoms()
     atoms = molecule.atoms()
 
@@ -228,7 +228,7 @@ def getDummies(molecule):
                 to_dummies = molecule.selectAll( atom.index() )
             else:
                 to_dummies += molecule.selectAll( atom.index() )
-    
+
     return to_dummies, from_dummies
 
 
@@ -307,14 +307,14 @@ def createSystem(molecules, space):
     lam = Symbol("lambda")
     lam_fwd = Symbol("lambda_{fwd}")
     lam_bwd = Symbol("lambda_{bwd}")
-    
+
     initial = Perturbation.symbols().initial()
     final = Perturbation.symbols().final()
 
     solute = solute.edit().setProperty("perturbations",
                 perturbations.recreate( (1-lam)*initial + lam*final ) ).commit()
 
-    # Set the geometry of perturbed bonds/angles to match the corresponding equilibrium value 
+    # Set the geometry of perturbed bonds/angles to match the corresponding equilibrium value
     solute = adjustPerturbedDOFs( solute )
 
     solute_fwd = solute.edit().renumber().setProperty("perturbations",
@@ -346,7 +346,7 @@ def createSystem(molecules, space):
     solute_grp_bwd_hard = MoleculeGroup("solute_bwd_hard")
     solute_grp_bwd_todummy = MoleculeGroup("solute_bwd_todummy")
     solute_grp_bwd_fromdummy = MoleculeGroup("solute_bwd_fromdummy")
-    
+
     solute_ref_hard = solute.selectAllAtoms()
     solute_ref_todummy = solute_ref_hard.invert()
     solute_ref_fromdummy = solute_ref_hard.invert()
@@ -432,7 +432,7 @@ def createSystem(molecules, space):
     system.add(solute_grp_bwd_todummy)
     system.add(solute_grp_bwd_fromdummy)
 
-    # Now sort out the solvent group - how we do this depends on the 
+    # Now sort out the solvent group - how we do this depends on the
     # type of boundary conditions
 
     if use_sphere.val:
@@ -486,7 +486,7 @@ def createSystem(molecules, space):
 
                 # if we are in a periodic space, we need to manually mirror this molecule
                 # into each of the periodic boxes and keep those images that lie within cutoff+sphere_radius
-                # of the solute (since these images will be seen by mobile solvent molecules on the 
+                # of the solute (since these images will be seen by mobile solvent molecules on the
                 # edge of the sphere
                 if space.isPeriodic():
                     image_cutoff = cutoff + radius
@@ -606,7 +606,7 @@ def setupForcefields(system, space):
     # Now solute bond, angle, dihedral energy
     solute_intraff = InternalFF("solute_intraff")
     solute_intraff.add(solute)
-    
+
     solute_fwd_intraff = InternalFF("solute_fwd_intraff")
     solute_fwd_intraff.add(solute_fwd)
 
@@ -735,19 +735,19 @@ def setupForcefields(system, space):
     # Here is the list of all forcefields
     forcefields = [ solute_intraff, solute_fwd_intraff, solute_bwd_intraff,
                     solute_hard_intraclj, solute_todummy_intraclj, solute_fromdummy_intraclj,
-                    solute_hard_todummy_intraclj, solute_hard_fromdummy_intraclj, 
+                    solute_hard_todummy_intraclj, solute_hard_fromdummy_intraclj,
                     solute_todummy_fromdummy_intraclj,
                     solute_fwd_hard_intraclj, solute_fwd_todummy_intraclj, solute_fwd_fromdummy_intraclj,
-                    solute_fwd_hard_todummy_intraclj, solute_fwd_hard_fromdummy_intraclj, 
+                    solute_fwd_hard_todummy_intraclj, solute_fwd_hard_fromdummy_intraclj,
                     solute_fwd_todummy_fromdummy_intraclj,
                     solute_bwd_hard_intraclj, solute_bwd_todummy_intraclj, solute_bwd_fromdummy_intraclj,
-                    solute_bwd_hard_todummy_intraclj, solute_bwd_hard_fromdummy_intraclj, 
+                    solute_bwd_hard_todummy_intraclj, solute_bwd_hard_fromdummy_intraclj,
                     solute_bwd_todummy_fromdummy_intraclj,
-                    solventff, 
+                    solventff,
                     solute_hard_solventff, solute_todummy_solventff, solute_fromdummy_solventff,
                     solute_fwd_hard_solventff, solute_fwd_todummy_solventff, solute_fwd_fromdummy_solventff,
                     solute_bwd_hard_solventff, solute_bwd_todummy_solventff, solute_bwd_fromdummy_solventff ]
-    
+
     if use_sphere.val:
         # we need to add on the energy of interaction between the fixed and mobile atoms
         fixed_solvent = system[MGName("fixed_solvent")]
@@ -764,7 +764,7 @@ def setupForcefields(system, space):
             gridff.setBuffer( grid_buffer.val )
             gridff.setCoulombCutoff( coul_cutoff.val )
             gridff.setLJCutoff( lj_cutoff.val )
-            
+
             if cutoff_scheme.val == "shift_electrostatics":
                 gridff.setShiftElectrostatics(True)
 
@@ -841,8 +841,8 @@ def setupForcefields(system, space):
             forcefields.append(solute_bwd_fromdummy_fixed_solventff)
 
             # Now remove the "fixed_solvent" group from the system. This will remove
-            # all copies of these molecules from the system, leaving their data in the 
-            # "fixed_atoms" arrays in each of the GridFF forcefields. 
+            # all copies of these molecules from the system, leaving their data in the
+            # "fixed_atoms" arrays in each of the GridFF forcefields.
             system.remove( MGName("fixed_solvent") )
 
         else:
@@ -966,7 +966,7 @@ def setupForcefields(system, space):
     lam = Symbol("lambda")
     lam_fwd = Symbol("lambda_{fwd}")
     lam_bwd = Symbol("lambda_{bwd}")
-    
+
     total_nrg = solute_intraff.components().total() + solute_hard_intraclj.components().total() + \
         solute_todummy_intraclj.components().total(0) + solute_fromdummy_intraclj.components().total(0) + \
         solute_hard_todummy_intraclj.components().total(0) + solute_hard_fromdummy_intraclj.components().total(0) + \
@@ -984,7 +984,7 @@ def setupForcefields(system, space):
         solute_fwd_hard_solventff.components().total() +\
         solute_fwd_todummy_solventff.components().total(0) +\
         solute_fwd_fromdummy_solventff.components().total(0)
-        
+
     bwd_nrg = solute_bwd_intraff.components().total() + solute_bwd_hard_intraclj.components().total() +\
         solute_bwd_todummy_intraclj.components().total(0) + solute_bwd_fromdummy_intraclj.components().total(0) +\
         solute_bwd_hard_todummy_intraclj.components().total(0) + solute_bwd_hard_fromdummy_intraclj.components().total(0) +\
@@ -1045,7 +1045,7 @@ def setupForcefields(system, space):
     if nmoves_per_energy.val:
         if nmoves_per_energy.val > 0:
             system.add( "energies", MonitorComponents(RecordValues()), nmoves.val / nmoves_per_energy.val )
-    
+
 
     # Add a monitor that records the coordinates of the system
     if (lam_val.val < 0.001 or lam_val.val > 0.999):
@@ -1062,7 +1062,7 @@ def setupForcefields(system, space):
         system.add( PropertyConstraint( "alpha0", FFName("solute_fromdummy_intraclj"), 1 - lam ) )
         system.add( PropertyConstraint( "alpha0", FFName("solute_hard:todummy_intraclj"), lam ) )
         system.add( PropertyConstraint( "alpha0", FFName("solute_hard:fromdummy_intraclj"), 1 - lam ) )
-        system.add( PropertyConstraint( "alpha0", FFName("solute_todummy:fromdummy_intraclj"), Max( lam, 1 - lam )  ) ) 
+        system.add( PropertyConstraint( "alpha0", FFName("solute_todummy:fromdummy_intraclj"), Max( lam, 1 - lam )  ) )
         system.add( PropertyConstraint( "alpha0", FFName("solute_todummy:solvent"), lam ) )
         system.add( PropertyConstraint( "alpha0", FFName("solute_fromdummy:solvent"), 1 - lam ) )
 
@@ -1070,7 +1070,7 @@ def setupForcefields(system, space):
         system.add( PropertyConstraint( "alpha0", FFName("solute_fwd_fromdummy_intraclj"), 1 - lam_fwd ) )
         system.add( PropertyConstraint( "alpha0", FFName("solute_fwd_hard:todummy_intraclj"), lam_fwd ) )
         system.add( PropertyConstraint( "alpha0", FFName("solute_fwd_hard:fromdummy_intraclj"), 1 - lam_fwd ) )
-        system.add( PropertyConstraint( "alpha0", FFName("solute_fwd_todummy:fromdummy_intraclj"), Min( lam_fwd, 1 - lam_fwd ) ) ) 
+        system.add( PropertyConstraint( "alpha0", FFName("solute_fwd_todummy:fromdummy_intraclj"), Min( lam_fwd, 1 - lam_fwd ) ) )
         system.add( PropertyConstraint( "alpha0", FFName("solute_fwd_todummy:solvent"), lam_fwd ) )
         system.add( PropertyConstraint( "alpha0", FFName("solute_fwd_fromdummy:solvent"), 1 - lam_fwd ) )
 
@@ -1078,7 +1078,7 @@ def setupForcefields(system, space):
         system.add( PropertyConstraint( "alpha0", FFName("solute_bwd_fromdummy_intraclj"), 1 - lam_bwd ) )
         system.add( PropertyConstraint( "alpha0", FFName("solute_bwd_hard:todummy_intraclj"), lam_bwd ) )
         system.add( PropertyConstraint( "alpha0", FFName("solute_bwd_hard:fromdummy_intraclj"), 1 - lam_bwd ) )
-        system.add( PropertyConstraint( "alpha0", FFName("solute_bwd_todummy:fromdummy_intraclj"), Min( lam_bwd, 1 - lam_bwd ) ) ) 
+        system.add( PropertyConstraint( "alpha0", FFName("solute_bwd_todummy:fromdummy_intraclj"), Min( lam_bwd, 1 - lam_bwd ) ) )
         system.add( PropertyConstraint( "alpha0", FFName("solute_bwd_todummy:solvent"), lam_bwd ) )
         system.add( PropertyConstraint( "alpha0", FFName("solute_bwd_fromdummy:solvent"), 1 - lam_bwd ) )
     else:
@@ -1113,11 +1113,11 @@ def setupMoves(system, random_seed):
     solute_ref = system[ MGName("solute_ref") ]
 
     solvent = system[ MGName("solvent") ]
-    
+
     print "Setting up moves..."
     # Setup Moves
 
-    solute_moves = RigidBodyMC( solutes ) 
+    solute_moves = RigidBodyMC( solutes )
 
     # No translation for a solvation calculation
     solute_moves.setMaximumTranslation( 0.0 * angstrom )
@@ -1132,18 +1132,18 @@ def setupMoves(system, random_seed):
 
     solute_intra_moves = InternalMoveSingle( solute_ref )
 
-    # Each molecule in perturbed_solutes will have its coordinates set to those 
+    # Each molecule in perturbed_solutes will have its coordinates set to those
     # of solute_ref after the move
     perturbed_solutes = system[ MGName("perturbed_solutes") ]
     solute_intra_moves.setSynchronisedCoordinates(perturbed_solutes)
-    
+
     moves = WeightedMoves()
 
     if use_sphere.val:
         # Do not use preferential sampling with the reflection sphere. Preferential
         # sampling causes volume expansion around the solute, which would push the
         # solvent towards the boundary of the sphere. Given we have already really
-        # reduced the number of moving solvent molecules, preferential sampling 
+        # reduced the number of moving solvent molecules, preferential sampling
         # is not needed
         solvent_moves = RigidBodyMC(solvent)
         solvent_moves.setReflectionSphere(sphere_center, sphere_radius.val)
@@ -1184,7 +1184,7 @@ def setupMoves(system, random_seed):
 	print "Generated random seed number %d " % random_seed
 
     moves.setGenerator( RanGenerator(random_seed) )
-    
+
     return moves
 
 def writeComponents(components, filename):
@@ -1250,17 +1250,17 @@ def writeSystemData(system, moves, block):
         pass
 
     total_energy = monitors[MonitorName("total_energy")]
-    
+
     dg_fwd = monitors[MonitorName("dg_fwd")]
     dg_bwd = monitors[MonitorName("dg_bwd")]
-    
+
     dg_fwd = dg_fwd.accumulator().average() / delta_lambda.val
     dg_bwd = dg_bwd.accumulator().average() / delta_lambda.val
 
     system.clearStatistics()
 
     # Ugly
-    lam = system.constantExpression(Symbol("lambda")).toString().toDouble()    
+    lam = system.constantExpression(Symbol("lambda")).toString().toDouble()
     #print dg_bwd, dg_fwd, lam
 
     if lam < 0.0001:
@@ -1274,7 +1274,7 @@ def writeSystemData(system, moves, block):
 
     FILE = open("%s/gradients.dat" % outdir , 'a')
     print >>FILE, "%9d %12.8f " % ( block, dg_avg)
-   
+
     FILE = open("%s/moves.dat" % outdir, "w")
     print >>FILE, "%s" % moves
 
@@ -1298,7 +1298,7 @@ def run():
 
     if not os.path.exists("%s/%s" % (out_dir.val,restart_file.val)):
         print "New run. Loading input and creating restart"
-        print "Lambda is %5.3f" % lam_val.val       
+        print "Lambda is %5.3f" % lam_val.val
 
         amber = Amber()
 
@@ -1329,14 +1329,14 @@ def run():
 
     if print_nrgs.val:
         printComponents(system.energies())
-    
+
     system = moves.move(system, nmoves.val, True)
 
     s2 = timer.elapsed()/1000.
     print "Simulation took %d s " % ( s2 - s1)
 
     # Update statistics and save restart
-    writeSystemData(system, moves, block_number) 
+    writeSystemData(system, moves, block_number)
 
     Sire.Stream.save( [system, moves], "%s/%s" % (out_dir.val,restart_file.val) )
 
