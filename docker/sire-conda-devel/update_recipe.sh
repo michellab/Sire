@@ -19,7 +19,7 @@ ARCHIVE_LINUX=$HOME/sire_conda_latest_linux.tar.bz2
 ARCHIVE_OSX=$HOME/sire_conda_latest_osx.tar.bz2
 
 # List of python dependencies.
-DEPS=(boost gsl netcdf4 pyqt tbb tbb-devel)
+DEPS=(boost gsl netcdf4 openmm pyqt tbb tbb-devel)
 
 # Where the Conda environment is stored.
 CONDA_ENV=.conda_env

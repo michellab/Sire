@@ -21,6 +21,7 @@ requirements:
     - boost
     - gsl
     - netcdf4
+    - openmm
     - pyqt
     - tbb
     - tbb-devel
@@ -29,6 +30,7 @@ requirements:
     -  {{ pin_compatible('boost') }}
     -  {{ pin_compatible('gsl') }}
     -  {{ pin_compatible('netcdf4') }}
+    -  {{ pin_compatible('openmm') }}
     -  {{ pin_compatible('pyqt') }}
     -  {{ pin_compatible('tbb') }}
     -  {{ pin_compatible('tbb-devel') }}
