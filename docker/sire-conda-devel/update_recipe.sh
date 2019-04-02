@@ -8,6 +8,14 @@ if [ ! -d $CONDA_DIR ]; then
     CONDA_DIR=$HOME/Sire/docker/sire-conda-devel/recipe
 fi
 
+# Set the Sire source directory.
+SRC_DIR=.
+
+# Linux runs in a docker container from $HOME.
+if [ ! -d $SRC_DIR ]; then
+    SRC_DIR=$HOME/Sire
+fi
+
 # Store the name of the recipe and template YAML files.
 RECIPE=$CONDA_DIR/meta.yaml
 TEMPLATE=$CONDA_DIR/template.yaml
@@ -25,7 +33,7 @@ DEPS=(boost gsl netcdf4 openmm pyqt tbb tbb-devel)
 CONDA_ENV=.conda_env
 
 # Get the Sire version.
-SIRE_VER=$(git --git-dir=$HOME/Sire/.git describe --tags | tr - _)
+SIRE_VER=$(git --git-dir=$SRC_DIR/.git describe --tags | tr - _)
 
 # Store the conda environment.
 $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
