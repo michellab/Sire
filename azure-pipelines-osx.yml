@@ -42,4 +42,4 @@ jobs:
     env:
       ANACONDA_TOKEN: $(anacondaToken)
       PAR_URL: $(parURL)
-    displayName: 'Create Conda package and upload to anaconda.org'
+    displayName: 'Create Conda package and upload to the Anaconda Cloud'

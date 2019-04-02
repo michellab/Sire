@@ -25,5 +25,5 @@ cp $HOME/Sire/LICENSE .
 # Build the Conda package.
 $BIN_DIR/conda-build -c conda-forge -c omnia .
 
-# Upload the package to the michellab channel on anaconda.org
+# Upload the package to the michellab channel Anaconda Cloud.
 $BIN_DIR/anaconda -t $ANACONDA_TOKEN --user michellab $HOME/sire.app/conda-bld/$OS/sire-* --label dev
