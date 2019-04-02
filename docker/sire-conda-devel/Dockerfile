@@ -1,4 +1,4 @@
-# This image is used to build the Sire Conda package.
+# This image is used to build and deploy the Sire Conda package.
 
 FROM siremol/sire-devel:latest
 
