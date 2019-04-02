@@ -14,13 +14,10 @@ fi
 BIN_DIR=$HOME/sire.app/bin
 
 # Set the Conda build directory.
-CONDA_DIR=$HOME/conda
+CONDA_DIR=$HOME/Sire/docker/sire-conda-devel/recipe
 
 # Move the to build directory.
 cd $CONDA_DIR
-
-# Copy the Sire license file into the build directory.
-cp $HOME/Sire/LICENSE .
 
 # Build the Conda package.
 $BIN_DIR/conda-build -c conda-forge -c omnia .

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Set the Conda Forge feedstock directory.
-CONDA_DIR=$HOME/conda
+# Set the Conda build directory.
+CONDA_DIR=$HOME/Sire/docker/sire-conda-devel/recipe
 
 # Create the Conda build directory.
 if [ ! -d $CONDA_DIR ]; then
@@ -10,7 +10,7 @@ fi
 
 # Store the name of the recipe and template YAML files.
 RECIPE=$CONDA_DIR/meta.yaml
-TEMPLATE=$HOME/Sire/docker/sire-conda-devel/template.yaml
+TEMPLATE=$CONDA_DIR/template.yaml
 
 # Overwite the recipe with the template file.
 cp $TEMPLATE $RECIPE
