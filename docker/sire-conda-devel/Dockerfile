@@ -8,25 +8,27 @@ USER $FN_USER
 
 # Import arguments and set environment variables.
 ARG par_url
-ARG github_token
-ARG github_email
+ARG anaconda_token
 ENV PAR_URL=$par_url
-ENV GITHUB_TOKEN=$github_token
-ENV GITHUB_EMAIL=$github_email
+ENV ANACONDA_TOKEN=$anaconda_token
 
 # Create the compressed Conda package.
-ADD package_conda.sh .
-RUN $HOME/package_conda.sh
+ADD create_package_file.sh .
+RUN $HOME/create_package_file.sh
 
-# Install PycURL.
-RUN $HOME/sire.app/bin/conda install -y pycurl
+# Install PycURL, conda-build, and anaconda-client
+RUN $HOME/sire.app/bin/conda install -y pycurl conda-build anaconda-client
 
-# Deploy the Conda package.
+# Deploy the Conda package files.
 ADD deploy.py .
 RUN $HOME/sire.app/bin/python deploy.py $HOME/sire_conda_latest_linux.tar.bz2
 
-# Udpate the Conda Forge feedstock.
-ADD update_feedstock.sh .
-RUN $HOME/update_feedstock.sh $GITHUB_TOKEN $GITHUB_EMAIL
+# Update the Conda package recipe.
+ADD update_recipe.sh .
+RUN $HOME/update_recipe.sh
+
+# Build and deploy the Conda package.
+ADD build_and_deploy.sh .
+RUN $HOME/build_and_deploy.sh
 
 ENTRYPOINT ["bash"]

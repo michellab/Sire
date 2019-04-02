@@ -33,9 +33,8 @@ jobs:
   - script: |
       # finally create files needed for the Sire Conda package, deploy to an object store bucket
       # identified by 'par_url', and update the Conda-Forge feedstock.
-      cd docker/sire-conda-devel && docker build -f Dockerfile --build-arg par_url=$par_url --build-arg github_token="$github_token" --build-arg github_email="$github_email" . && cd -
+      cd docker/sire-conda-devel && docker build -f Dockerfile --buld-arg anaconda_token=$anaconda_token --build-arg par_url=$par_url . && cd -
     env:
-      github_token: $(githubToken)
-      github_email: $(githubEmail)
+      anaconda_token: $(anacondaToken)
       par_url: $(parURL)
-    displayName: 'Create Conda package files, deploy to object store, and update feedstock'
+    displayName: 'Create Conda package and upload to anaconda.org'
