@@ -27,5 +27,5 @@ cd $CONDA_DIR
 # Build the Conda package.
 $BIN_DIR/conda-build -c conda-forge -c omnia .
 
-# Upload the package to the michellab channel Anaconda Cloud.
+# Upload the package to the michellab channel on Anaconda Cloud.
 $BIN_DIR/anaconda -t $ANACONDA_TOKEN upload --user michellab $HOME/sire.app/conda-bld/$OS/sire-* --label dev
