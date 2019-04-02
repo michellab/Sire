@@ -31,8 +31,7 @@ jobs:
       id: $(dockerId)
     displayName: 'Deploy to siremol.org and docker'
   - script: |
-      # finally create files needed for the Sire Conda package, deploy to an object store bucket
-      # identified by 'par_url', and update the Conda-Forge feedstock.
+      # finally create the Sire Conda package and upload to the Anaconda Cloud.
       cd docker/sire-conda-devel && docker build -f Dockerfile --buld-arg anaconda_token=$anaconda_token --build-arg par_url=$par_url . && cd -
     env:
       anaconda_token: $(anacondaToken)

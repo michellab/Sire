@@ -33,8 +33,7 @@ jobs:
       PAR_URL: $(parURL)
     displayName: 'Deploy binary to siremol.org'
   - script: |
-      # finally create files needed for the Sire Conda package, deploy to an object store bucket
-      # identified by 'par_url'.
+      # finally create the Sire Conda package and upload to the Anaconda Cloud.
       bash docker/sire-conda-devel/create_package_file.sh
       $HOME/sire.app/bin/python docker/sire-conda-devel/deploy.py $HOME/sire_conda_latest_osx.tar.bz2
       bash docker/sire-conda-devel/update_recipe.sh
