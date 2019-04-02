@@ -19,6 +19,9 @@ CONDA_DIR=$HOME/conda
 # Move the to build directory.
 cd $CONDA_DIR
 
+# Copy the Sire license file into the build directory.
+cp $HOME/Sire/LICENSE .
+
 # Build the Conda package.
 $BIN_DIR/conda-build -c conda-forge -c omnia .
 
