@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Get the Anaconda usernam and access token.
+# Get the Anaconda Cloud access token.
 ANACONDA_TOKEN=${ANACONDA_TOKEN:-$1}
 
 # Check the OS.
