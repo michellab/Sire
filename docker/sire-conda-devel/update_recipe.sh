@@ -48,7 +48,7 @@ done
 
 # Update the Sire version number.
 echo "Updating Sire version number: '$SIRE_VER'"
-sed -i.bak "s/VERSION/$SIRE_VER/" $RECIPE && rm $RECIPE.bak
+sed -i.bak -e "s/VERSION/$SIRE_VER/" $RECIPE && rm $RECIPE.bak
 
 # Remove the Conda environment file.
 rm -f .conda_env
