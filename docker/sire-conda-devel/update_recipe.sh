@@ -42,13 +42,13 @@ $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
 echo "Updating Python dependencies..."
 for dep in ${DEPS[@]}; do
     ver=$(grep "\- $dep=" $CONDA_ENV | awk -F "=" '{print $2}')
-    sed -i.bak -e  "0,/$dep/s//$dep $ver/" -- $RECIPE && rm -- $RECIPE.bak
+    sed -i.bak -e  "0,/$dep/s//$dep $ver/" $RECIPE && rm $RECIPE.bak
     echo "  $dep $ver"
 done
 
 # Update the Sire version number.
 echo "Updating Sire version number: '$SIRE_VER'"
-sed -i.bak "s/VERSION/$SIRE_VER/" -- $RECIPE && rm -- $RECIPE.bak
+sed -i.bak "s/VERSION/$SIRE_VER/" $RECIPE && rm $RECIPE.bak
 
 # Remove the Conda environment file.
 rm -f .conda_env
@@ -59,11 +59,11 @@ echo "Updating package checksums..."
 if [ "$(uname)" == "Darwin" ]; then
     CHECKSUM_OSX=$(openssl sha256 $ARCHIVE_OSX | awk '{print $2}')
     echo "  macOS: $CHECKSUM_OSX"
-    sed -i.bak -e "s/SHA256_OSX/$CHECKSUM_OSX/" -- $RECIPE && rm -- $RECIPE.bak
+    sed -i.bak -e "s/SHA256_OSX/$CHECKSUM_OSX/" $RECIPE && rm $RECIPE.bak
 else
     CHECKSUM_LINUX=$(openssl sha256 $ARCHIVE_LINUX | awk '{print $2}')
     echo "  Linux: $CHECKSUM_LINUX"
-    sed -i.bak -e "s/SHA256_LINUX/$CHECKSUM_LINUX/" -- $RECIPE && rm -- $RECIPE.bak
+    sed -i.bak -e "s/SHA256_LINUX/$CHECKSUM_LINUX/" $RECIPE && rm $RECIPE.bak
 fi
 
 echo "Recipe updated!"
