@@ -252,7 +252,7 @@ def createSystem(molecules, space):
                         (cutoff, space)
             raise RuntimeError()
 
-    print "Applying flexibility and zmatrix templates..."
+    print("Applying flexibility and zmatrix templates...")
 
     moleculeNumbers = molecules.molNums()
     moleculeList = []
