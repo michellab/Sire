@@ -1,18 +1,13 @@
 #!/usr/bin/env bash
 
-# Set the Conda build directory on macOS.
+# Set the source and Conda build directory on macOS.
+SRC_DIR=.
 CONDA_DIR=./docker/sire-conda-devel/recipe
 
 # Linux runs in a docker container from $HOME.
 if [ ! -d $CONDA_DIR ]; then
-    CONDA_DIR=$HOME/Sire/docker/sire-conda-devel/recipe
-fi
-
-# Set the Sire source directory.
-if [ -d corelib ]; then
-    SRC_DIR=.
-else
     SRC_DIR=$HOME/Sire
+    CONDA_DIR=$HOME/Sire/docker/sire-conda-devel/recipe
 fi
 
 # Store the name of the recipe and template YAML files.
