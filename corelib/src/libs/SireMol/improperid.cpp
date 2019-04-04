@@ -129,6 +129,18 @@ bool ImproperID::operator!=(const ImproperID &other) const
            atm2 != other.atm2 or atm3 != other.atm3;
 }
 
+/** Are these impropers generally equivalent, i.e. do they contain the same
+    atom indices. This is useful since the ordering of improper atoms is
+    inconsistent between different molecular topology formats.
+*/
+bool ImproperID::equivalent(const ImproperID &other) const
+{
+    return (atm0 == other.atm0 or atm0 == other.atm1 or atm0 == other.atm2 or atm0 == other.atm3) and
+           (atm1 == other.atm0 or atm1 == other.atm1 or atm1 == other.atm2 or atm1 == other.atm3) and
+           (atm2 == other.atm0 or atm2 == other.atm1 or atm2 == other.atm2 or atm2 == other.atm3) and
+           (atm3 == other.atm0 or atm3 == other.atm1 or atm3 == other.atm2 or atm3 == other.atm3);
+}
+
 /** Return a hash for this ID */
 uint ImproperID::hash() const
 {

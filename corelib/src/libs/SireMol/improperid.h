@@ -122,7 +122,9 @@ public:
     
     bool operator==(const ImproperID &other) const;
     bool operator!=(const ImproperID &other) const;
-    
+
+    bool equivalent(const ImproperID &other) const;
+
     tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx> 
     map(const MoleculeInfoData &molinfo) const;
     
