@@ -63,9 +63,8 @@ Python installation, please follow the instructions in `build/INSTALL_INTO_ANACO
 Docker images
 =============
 
-If you don't want to build or install file, you can also run Sire via 
-one of our docker images. The easy way to run the latest development
-image of Sire is via::
+If you don't want to build or install, you can also run Sire via one of our
+docker images. The easy way to run the latest development image of Sire is via::
 
     docker run -it siremol/sire-devel:latest
 
