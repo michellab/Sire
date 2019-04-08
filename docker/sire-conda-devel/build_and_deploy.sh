@@ -35,6 +35,7 @@ TAG=$(git --git-dir=$SRC_DIR/.git tag --contains)
 # If the tag is not empty, then set the label to main.
 if [ ! -e $TAG ]; then
     LABEL=main
+fi
 
 # Build the Conda package.
 $BIN_DIR/conda-build -c conda-forge -c omnia .
