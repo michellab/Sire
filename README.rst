@@ -24,11 +24,11 @@ built with Sire, please `visit the Sire website <http://siremol.org>`__.
 Installation 
 ============
 
-The easiest way to install Sire is using our `conda channel <https://anaconda.org/michellab/repo>`__:
+The easiest way to install Sire is using our `conda channel <https://anaconda.org/michellab/repo>`__::
 
     conda install -c conda-forge -c omnia -c michellab sire
 
-To install the latest development version you can use:
+To install the latest development version you can use::
 
     conda install -c conda-forge -c omnia -c michellab/label/dev sire
 
