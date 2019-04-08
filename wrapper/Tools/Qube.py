@@ -1,3 +1,14 @@
+#
+#
+from Sire.IO import *
+from Sire.Mol import *
+from Sire.MM import *
+from Sire.System import *
+from Sire.Units import *
+from Sire.CAS import * 
+from Sire.Maths import * 
+from Sire.Base import *
+
 
 def vsiteListToProperty(list):
     prop = Properties()
