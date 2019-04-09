@@ -183,7 +183,6 @@ def try_import_from(name, fromlist, package_registry=_module_to_package):
 #these are vital for the rest of the module
 from . import Qt
 from . import Error
-from . import Error
 from . import Config
 
 __version__ = Config.__version__
