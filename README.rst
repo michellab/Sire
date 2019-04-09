@@ -36,7 +36,7 @@ To install the latest development version you can use::
     conda install -c conda-forge -c omnia -c michellab/label/dev sire
 
 Unless you add the required channels to your Conda configuration, then you'll
-need to add them when updating, e.g. for the development package:
+need to add them when updating, e.g., for the development package:
 
     conda update -c conda-forge -c omnia -c michellab/label/dev sire
 
