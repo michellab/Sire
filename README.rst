@@ -35,6 +35,11 @@ To install the latest development version you can use::
 
     conda install -c conda-forge -c omnia -c michellab/label/dev sire
 
+Unless you add the required channels to your Conda configuration, then you'll
+need to add them when updating, e.g. for the development package:
+
+    conda update -c conda-forge -c omnia -c michellab/label/dev sire
+
 There are also many `pre-built binary packages <http://siremol.org/pages/binaries.html>`__,
 which are available for Linux, Mac OS X and Windows, which are quick and easy to install.
 
