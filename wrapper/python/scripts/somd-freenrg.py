@@ -22,6 +22,9 @@ parser = argparse.ArgumentParser(description="Perform molecular dynamics single 
 parser.add_argument('-C', '--config', nargs="?", 
                     help='Supply an optional CONFIG file to control the calculation.')
 
+parser.add_argument('-r', '--restr_atoms', nargs="?",
+                    help="A txt file with the atom numbers of the ones to be restrained ")
+
 parser.add_argument('-H', '--help-config', action="store_true",
                     help="Get additional help regarding all of the parameters "
                          "(and their default values) that can be "
@@ -128,6 +131,10 @@ if args.nmoves:
 if args.lambda_val:
     lambda_val = float(args.lambda_val)
     params["lambda_val"] = lambda_val
+
+if args.restr_atoms:
+	restr_atoms = args.restr_atoms
+	params["restrained_atoms"] = restr_atoms
 
 if not (os.path.exists(coord_file) and os.path.exists(top_file) and os.path.exists(morph_file)):
     parser.print_help()
