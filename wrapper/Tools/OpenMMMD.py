@@ -155,6 +155,8 @@ heavy_mass_restraint = Parameter("heavy mass restraint", 1.10,
 unrestrained_residues = Parameter("unrestrained residues", ["WAT", "HOH"],
                                   """Names of residues that are never restrained.""")
 
+restrained_atoms = Parameter("restrain atoms", False, """Restrained atoms for position restrained proteins.""")
+
 freeze_residues = Parameter("freeze residues", False, """Whether or not to freeze certain residues.""")
 
 frozen_residues = Parameter("frozen residues", ["LGR", "SIT", "NEG", "POS"],
@@ -570,7 +572,7 @@ def propertyToAtomNumVectorList(prop):
 
 
 def setupRestraints(system):
-
+    
     molecules = system[MGName("all")].molecules()
 
     molnums = molecules.molNums()
@@ -600,6 +602,17 @@ def setupRestraints(system):
             atcoords = at.property("coordinates")
             #print at
             restrainedAtoms.append((atnumber, atcoords, k_restraint))
+  
+
+		    if restrained_atoms.val == True:
+		      	with open("restrained_atoms.txt") as f:
+		        		lines = f.read().splitlines()
+
+		      	for x in lines:
+			         	at = atoms[x]
+			        	atnumber = at.number()
+	        			atcoords = at.property("coordinates")
+		        		restrainedAtoms.append((atnumber, atcoords, k_restraint))
 
             #restrainedAtoms.append( atnumber )
 
