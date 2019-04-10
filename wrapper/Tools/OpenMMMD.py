@@ -603,16 +603,15 @@ def setupRestraints(system):
             #print at
             restrainedAtoms.append((atnumber, atcoords, k_restraint))
   
+        if restrained_atoms.val == True:
+            with open("restrained_atoms.txt") as f:
+                lines = f.read().splitlines()
 
-	if restrained_atoms.val == True:
-	    with open("restrained_atoms.txt") as f:
-		lines = f.read().splitlines()
-
-	    for x in lines:
-		at = atoms[x]
-		atnumber = at.number()
-	        atcoords = at.property("coordinates")
-		restrainedAtoms.append((atnumber, atcoords, k_restraint))
+        for x in lines:
+            at = atoms[x]
+            atnumber = at.number()
+            atcoords = at.property("coordinates")
+            restrainedAtoms.append((atnumber, atcoords, k_restraint))
 
             #restrainedAtoms.append( atnumber )
 
