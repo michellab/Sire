@@ -37,7 +37,7 @@ $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
 echo "Updating Python dependencies..."
 for dep in ${DEPS[@]}; do
     ver=$(grep "\- $dep=" $CONDA_ENV | awk -F "=" '{print $2}')
-    sed -i.bak -e  "0,/$dep/s//$dep $ver/" $RECIPE && rm $RECIPE.bak
+    sed -i.bak -e "1 s/$dep/$dep $ver/; t" -e "1,// s//$dep $ver/" $RECIPE && rm $RECIPE.bak
     echo "  $dep $ver"
 done
 
