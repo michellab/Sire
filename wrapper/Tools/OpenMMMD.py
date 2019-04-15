@@ -156,7 +156,7 @@ heavy_mass_restraint = Parameter("heavy mass restraint", 1.10,
 unrestrained_residues = Parameter("unrestrained residues", ["WAT", "HOH"],
                                   """Names of residues that are never restrained.""")
 
-restrained_atoms_file = Parameter("restrain atoms", False, """Restrained atoms for position restrained proteins.""")
+restrained_atoms_file = Parameter("restrain atoms", None, """Restrained atoms for position restrained proteins.""")
 
 freeze_residues = Parameter("freeze residues", False, """Whether or not to freeze certain residues.""")
 
