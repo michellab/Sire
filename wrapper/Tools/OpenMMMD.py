@@ -156,7 +156,7 @@ heavy_mass_restraint = Parameter("heavy mass restraint", 1.10,
 unrestrained_residues = Parameter("unrestrained residues", ["WAT", "HOH"],
                                   """Names of residues that are never restrained.""")
 
-restrained_atoms_file = Parameter("restrain atoms", None, """Restrained atoms for position restrained proteins.""")
+rstr_atoms_file = Parameter("rstr_atoms_file", None, """Restrained atoms for position restrained proteins.""")
 
 freeze_residues = Parameter("freeze residues", False, """Whether or not to freeze certain residues.""")
 
@@ -615,8 +615,8 @@ def setupRestraints(system):
             #print at
             restrainedAtoms.append((atnumber, atcoords, k_restraint))
   
-        if restrained_atoms_file.val == True:
-            with open("restrained_atoms") as f:
+        if os.path.exists(rstr_atoms_file.val):
+            with open("rstr_atoms_file") as f:
                 lines = f.read().splitlines()
 
         for x in lines:
