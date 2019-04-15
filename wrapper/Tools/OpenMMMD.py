@@ -40,7 +40,7 @@ from Sire.Config import *
 from Sire.Analysis import *
 from Sire.Tools.DCDFile import *
 from Sire.Tools import Parameter, resolveParameters
-from Qube import readxml
+from Qube import readXmlParameters
 import Sire.Stream
 import time
 import numpy as np
