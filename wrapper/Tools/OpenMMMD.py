@@ -616,7 +616,7 @@ def setupRestraints(system):
             restrainedAtoms.append((atnumber, atcoords, k_restraint))
   
         if os.path.exists(rstr_atoms_file.val):
-            with open("rstr_atoms_file") as f:
+            with open(rstr_atoms_file.val,'r') as f:
                 lines = f.read().splitlines()
 
         for x in lines:
