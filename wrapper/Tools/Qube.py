@@ -10,17 +10,6 @@ from Sire.Maths import *
 from Sire.Base import *
 
 
-def vsiteListToProperty(list):
-    prop = Properties()
-    i = 0
-    for entry in list:
-        for key, value in entry.items():
-            prop.setProperty("%s(%d)" % (key,i), VariantProperty(value))
-        i += 1
-    prop.setProperty("nvirtualsites",VariantProperty(i))
-    return prop
-
-
 def readXmlParameters(pdbfile, xmlfile):
     # 1) Read a pdb file describing the system to simulate
 
