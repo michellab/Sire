@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(description="Perform molecular dynamics using O
                                         "http://siremol.org",
                                  prog="somd")
 
-parser.add_argument('-r', '--restr_atoms', nargs="?",
+parser.add_argument('-r', '--restrained_atoms_file', nargs="?",
                     help="A txt file with the atom numbers of the ones to be restrained ")
 
 parser.add_argument('-C', '--config', nargs="?",
@@ -112,9 +112,10 @@ if args.nmoves:
     nmoves = int(args.nmoves)
     params["nmoves"] = nmoves
 
-if args.restr_atoms:
-	restr_atoms = args.restr_atoms
-	params["restrained_atoms"] = restr_atoms
+if args.restrained_atoms_file:
+    res_atoms_file = args.restrained_atoms_file
+    params["rstr_atoms_file"] = res_atoms_file
+
 
 if not (os.path.exists(coord_file) and os.path.exists(top_file)):
     parser.print_help()
