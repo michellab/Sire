@@ -40,6 +40,7 @@ from Sire.Config import *
 from Sire.Analysis import *
 from Sire.Tools.DCDFile import *
 from Sire.Tools import Parameter, resolveParameters
+from Qube import readxml
 import Sire.Stream
 import time
 import numpy as np
@@ -211,6 +212,17 @@ verbose = Parameter("verbose", False, """Print debug output""")
 #   Helper functions
 #
 ####################################################################################################
+
+def vsiteListToProperty(list):
+    prop = Properties()
+    i = 0
+    for entry in list:
+        for key, value in entry.items():
+            prop.setProperty("%s(%d)" % (key,i), VariantProperty(value))
+        i += 1
+    prop.setProperty("nvirtualsites",VariantProperty(i))
+    return prop
+
 
 def setupDCD(system):
     r"""
