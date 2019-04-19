@@ -267,21 +267,22 @@ if __name__ == "__main__":
             installed_something = True
 
     # make sure we really have found the compilers
-    if is_osx:
-        try:
-            CXX = glob.glob(os.path.join(conda_bin, "clang++"))[0]
-            CC = glob.glob(os.path.join(conda_bin, "clang"))[0]
-            print("clang++ is already installed...")
-        except:
-            print("Cannot find the conda clang++ binaries!")
-            sys.exit(-1)
-    elif is_linux:
-        try:
-            CXX = glob.glob(os.path.join(conda_bin, "*-g++"))[0]
-            CC = glob.glob(os.path.join(conda_bin, "*-gcc"))[0]
-        except:
-            print("Cannot find the conda g++ binaries!")
-            sys.exit(-1)
+    if (not args.noconda):
+        if is_osx:
+            try:
+                CXX = glob.glob(os.path.join(conda_bin, "clang++"))[0]
+                CC = glob.glob(os.path.join(conda_bin, "clang"))[0]
+                print("clang++ is already installed...")
+            except:
+                print("Cannot find the conda clang++ binaries!")
+                sys.exit(-1)
+        elif is_linux:
+            try:
+                CXX = glob.glob(os.path.join(conda_bin, "*-g++"))[0]
+                CC = glob.glob(os.path.join(conda_bin, "*-gcc"))[0]
+            except:
+                print("Cannot find the conda g++ binaries!")
+                sys.exit(-1)
 
     print("Using compilers %s | %s" % (CC, CXX))
 

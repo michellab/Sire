@@ -1,70 +1,64 @@
 @echo off
 
-set getopt_prm_count=1
+set OPTIND=0
+set OPTION_h=
+set OPTION_help=
+set OPTION_install=
+set OPTION_G=
+set OPTION_clean=
 
-set argc=0
-for %%x in (%*) do set /A argc+=1
-echo %*&echo.
-
-set _myvar=%*
-
-rem Loop through all command line arguments one at a time
-:varloop
-set isparam=1
-for /f "tokens=1*" %%a in ('echo %_myvar%') DO (
-    set getopt_prm=%%a
-    set _myvar=%%b
-    call :paramtype
-
-    rem shift along arguments and rerun loop
-    if not "%%b"=="" goto varloop
-)
+:_loop_args
+    set _getopt_arg=%1
+    if defined _getopt_arg (
+        call :parse_arg %_getopt_arg%
+        if not errorlevel 1 (
+            shift /1
+            set /a OPTIND+=1
+            goto :_loop_args
+        )
+    )
+set _getopt_arg=
+set _getopt_opt=
+set _getopt_value=
+set _getopt_bool=
 goto :main
 
-:paramtype
-rem If first character starts with a - or / it must be an option
-if /i "%getopt_prm:~0,1%"=="-" call :option
-if /i "%getopt_prm:~0,1%"=="/" call :option 
-if /i "%isparam%"=="1" call :param
+:parse_arg
+set _getopt_opt=
+set _getopt_value=%~1
+set _getopt_bool=1
+if not "%_getopt_value:~0,1%"=="/" goto :_parse_arg_ret
+set _getopt_value=%_getopt_value:~1%
+:_loop_arg_chars
+    if not defined _getopt_value goto :_parse_arg_ret
+    if "%_getopt_value:~0,1%"==":" (
+        set _getopt_bool=
+        set _getopt_value=%_getopt_value:~1%
+        goto :_parse_arg_ret
+    ) else (
+        set _getopt_opt=%_getopt_opt%%_getopt_value:~0,1%
+        set _getopt_value=%_getopt_value:~1%
+    )
+    goto :_loop_arg_chars
+:_parse_arg_ret
+if not defined _getopt_opt exit /B 1
+if defined _getopt_bool (
+    call :set_opt %_getopt_opt% %_getopt_bool%
+) else (
+    call :set_opt %_getopt_opt% %_getopt_value%
+)
 exit /B 0
 
-:option
-    set isparam=0
-    rem Set the Equal Index to the position of the colon.  0 means none was found
-    for /f %%j in ('findstring %getopt_prm% :') do set getopt_eq_idx=%%j
-
-    rem If the index is GE 0 then we must have a colon in the option.
-    if /i "%getopt_eq_idx%"=="0" (call :nocolon) else (call :colon)
-    exit /B 0
-
-        :colon
-            rem set the OPTION value to the stuff to the right of the colon
-            set /a getopt_prm_name_end=%getopt_eq_idx%-2
-            call set getopt_prm_name=%%getopt_prm:~1,%getopt_prm_name_end%%%
-            call set getopt_prm_value=%%getopt_prm:~%getopt_eq_idx%%%
-            set OPTION_%getopt_prm_name%=%getopt_prm_value%
-            exit /B 0
-
-        :nocolon
-            rem This is a flag, so simply set the value to 1
-            set getopt_prm_name=%getopt_prm:~1%
-            set getopt_prm_value=1
-            set OPTION_%getopt_prm_name%=%getopt_prm_value%
-            exit /B 0
-
-:param
-    rem There was no / or - found, therefore this must be a paramater, not an option
-    set PARAM_%getopt_prm_count%=%getopt_prm%
-    set PARAM_0=%getopt_prm_count%
-    set /a getopt_prm_count+=1
-    exit /B 0
+:set_opt
+set OPTION_%1=%~2
+exit /B 0
 
 :main
 if defined OPTION_h set OPTION_help=1
 if defined OPTION_help (
-    echo compile_sire.bat /h or /help shows help.
-    echo compile_sire.bat /install:\path\to\sire.app will install Sire in \path\to\sire.app
-    echo compile_sire.bat /clean completely cleans the build directory.
+    echo compile_sire.bat /h or /help shows help. 1>&2
+    echo compile_sire.bat /install:\path\to\sire.app will install Sire in \path\to\sire.app 1>&2
+    echo compile_sire.bat /clean completely cleans the build directory. 1>&2
     exit /B 0
 )
 if not defined OPTION_install set OPTION_install=C:\sire.app

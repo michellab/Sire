@@ -34,6 +34,8 @@
 
 #include "getbacktrace.h"
 
+#include <sstream>
+
 #include <QDataStream>
 #include <QThreadStorage>
 
