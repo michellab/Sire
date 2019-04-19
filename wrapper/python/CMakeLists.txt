@@ -63,13 +63,15 @@ install (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts
          PATTERN ".svn" EXCLUDE
         )
 
-# get the list of all scripts
-file(GLOB EXTRA_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/scripts/*.py")
-  
-foreach ( EXTRA_SCRIPT ${EXTRA_SCRIPTS} )
-  # get the filename and strip off the .py extension
-  get_filename_component(PYSCRIPT ${EXTRA_SCRIPT} NAME_WE)
-  install( CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\"
-                                      -E create_symlink sire_python ${PYSCRIPT}
-                                 WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}/${SIRE_BIN}\")" )
-endforeach()
+if (NOT WIN32)
+  # get the list of all scripts
+  file(GLOB EXTRA_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/scripts/*.py")
+    
+  foreach ( EXTRA_SCRIPT ${EXTRA_SCRIPTS} )
+    # get the filename and strip off the .py extension
+    get_filename_component(PYSCRIPT ${EXTRA_SCRIPT} NAME_WE)
+    install( CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\"
+                                        -E create_symlink sire_python ${PYSCRIPT}
+                                   WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}/${SIRE_BIN}\")" )
+  endforeach()
+endif()
