@@ -19,6 +19,7 @@ def readXmlParameters(pdbfile, xmlfile):
     s = p.toSystem()
     molecules = s.molecules()
     print (molecules)
+    system = System()    
 
 
      # 2) Now we read the xml file, and store parameters for each molecule
