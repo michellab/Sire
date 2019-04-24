@@ -21,8 +21,13 @@ import sys
 
 from Sire.Base import *
 
-# Make sure that the OPENMM_PLUGIN_DIR enviroment variable is set correctly.
-os.environ["OPENMM_PLUGIN_DIR"] = getLibDir() + "/plugins"
+# Make sure that the OPENMM_PLUGIN_DIR enviroment variable is set correctly if unset.
+try:
+    # The user has already set the plugin location.
+    os.environ["OPENMM_PLUGIN_DIR"]
+except KeyError:
+    # Set to the default location of the bundled OpenMM package.
+    os.environ["OPENMM_PLUGIN_DIR"] = getLibDir() + "/plugins"
 
 from Sire.IO import *
 from Sire.Mol import *
