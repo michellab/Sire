@@ -134,10 +134,12 @@ public:
     QList<AtomIdx> findPath(const AtomID &atom0, const AtomID &atom1) const;
     QList< QList<AtomIdx> > findPaths(const AtomID &atom0, const AtomID &atom1) const;
 
+    bool inRing(AtomIdx atom) const;
     bool inRing(AtomIdx atom0, AtomIdx atom1) const;
     bool inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const;
     bool inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2, AtomIdx atom3) const;
 
+    bool inRing(const AtomID &atom) const;
     bool inRing(const AtomID &atom0, const AtomID &atom1) const;
     bool inRing(const AtomID &atom0, const AtomID &atom1, const AtomID &atom2) const;
     bool inRing(const AtomID &atom0, const AtomID &atom1,
