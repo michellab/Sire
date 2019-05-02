@@ -16,4 +16,7 @@ RUN $HOME/sire.app/bin/conda install -y pycurl
 ADD deploy.py .
 RUN $HOME/sire.app/bin/python deploy.py
 
+ADD deploy_release.sh .
+RUN ./deploy_release.sh
+
 ENTRYPOINT ["bash"]
