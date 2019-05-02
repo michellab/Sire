@@ -3,6 +3,18 @@ SIRE changelog
 
 devel branch:
 
+    [2019.1.0] May 2019 - Updates to the Gromacs topology writer to support
+               free energy perturbation simulations. The MCS matching
+               functionality has been extended to allow matches between heavy
+               and light atoms, and the ability to return all current matches,
+               rather than just the most recent. Temporarily disabled
+               parallelisation in the AmberPrm parser to avoid a threading
+               issue. Switched to using Azure Pipelines for continuous
+               integration to enable a fully automated build, testing, and
+               deployment pipeline. In addition, we finally have created
+               a Sire Conda package to simplify the installation and update
+               process.
+
     [2018.2.0] July 2018 - Improvements to the Gromacs topology reader/writer,
                addition of code to improve matching of atoms in proteins,
                fixing compile issues on modern Ubuntu, bugfixes for crashes
