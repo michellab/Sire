@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
 # Set the source directory on macOS.
-SRC_DIR=.
+SRC_DIR=$(pwd)
 
 # Linux runs in a docker container from $HOME.
 if [ ! -d $SRC_DIR/docker ]; then
-    SRC_DIR=$HOME/Sire
+    SRC_DIR=$HOME/BioSimSpace
 fi
 
 # Get the tag associated with the latest commit.
-TAG=$(git --git-dir=$SRC_DIR/.git tag --contains)
+TAG=$(git --git-dir=$SRC_DIR/.git --work-tree=$SRC_DIR tag --contains)
 
 # If the tag is empty, then simply exit
 if [ -e $TAG ]; then

@@ -14,8 +14,8 @@ fi
 BIN_DIR=$HOME/sire.app/bin
 
 # Set the source and Conda build directory on macOS.
-SRC_DIR=.
-CONDA_DIR=./docker/sire-conda-devel/recipe
+SRC_DIR=$(pwd)
+CONDA_DIR=$SRC_DIR/docker/sire-conda-devel/recipe
 
 # Linux runs in a docker container from $HOME.
 if [ ! -d $CONDA_DIR ]; then
@@ -30,7 +30,7 @@ cd $CONDA_DIR
 LABEL=dev
 
 # Get the tag associated with the latest commit.
-TAG=$(git --git-dir=$SRC_DIR/.git tag --contains)
+TAG=$(git --git-dir=$SRC_DIR/.git --work-tree=$SRC_DIR tag --contains)
 
 # If the tag is not empty, then set the label to main.
 if [ ! -e $TAG ]; then

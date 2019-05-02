@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Set the source and Conda build directory on macOS.
-SRC_DIR=.
-CONDA_DIR=./docker/sire-conda-devel/recipe
+SRC_DIR=$(pwd)
+CONDA_DIR=$SRC_DIR/docker/sire-conda-devel/recipe
 
 # Linux runs in a docker container from $HOME.
 if [ ! -d $CONDA_DIR ]; then
@@ -27,7 +27,7 @@ DEPS=(boost gsl netcdf4 openmm pyqt tbb tbb-devel)
 CONDA_ENV=.conda_env
 
 # Get the Sire version.
-SIRE_VER=$(git --git-dir=$SRC_DIR/.git describe --tags | tr - _)
+SIRE_VER=$(git --git-dir=$SRC_DIR/.git --work-tree=$SRC_DIR describe --tags | tr - _)
 
 # Store the conda environment.
 $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
