@@ -49,17 +49,17 @@ class GromacsAngle;
 class GromacsDihedral;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::GromacsAtomType&);
-QDataStream& operator>>(QDataStream&, SireMM::GromacsAtomType&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::GromacsAtomType&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::GromacsAtomType&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::GromacsBond&);
-QDataStream& operator>>(QDataStream&, SireMM::GromacsBond&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::GromacsBond&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::GromacsBond&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::GromacsAngle&);
-QDataStream& operator>>(QDataStream&, SireMM::GromacsAngle&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::GromacsAngle&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::GromacsAngle&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::GromacsDihedral&);
-QDataStream& operator>>(QDataStream&, SireMM::GromacsDihedral&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::GromacsDihedral&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::GromacsDihedral&);
 
 namespace SireMM
 {
@@ -73,8 +73,8 @@ namespace SireMM
 class SIREMM_EXPORT GromacsAtomType
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GromacsAtomType&);
-friend QDataStream& ::operator>>(QDataStream&, GromacsAtomType&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const GromacsAtomType&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, GromacsAtomType&);
 
 public:
     enum PARTICLE_TYPE
@@ -156,8 +156,8 @@ private:
 class SIREMM_EXPORT GromacsBond
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GromacsBond&);
-friend QDataStream& ::operator>>(QDataStream&, GromacsBond&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const GromacsBond&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, GromacsBond&);
 
 public:
     GromacsBond();
@@ -231,8 +231,8 @@ private:
 class SIREMM_EXPORT GromacsAngle
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GromacsAngle&);
-friend QDataStream& ::operator>>(QDataStream&, GromacsAngle&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const GromacsAngle&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, GromacsAngle&);
 
 public:
     GromacsAngle();
@@ -317,8 +317,8 @@ private:
 class SIREMM_EXPORT GromacsDihedral
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GromacsDihedral&);
-friend QDataStream& ::operator>>(QDataStream&, GromacsDihedral&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const GromacsDihedral&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, GromacsDihedral&);
 
 public:
     GromacsDihedral();

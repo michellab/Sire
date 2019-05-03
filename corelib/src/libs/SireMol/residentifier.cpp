@@ -46,7 +46,7 @@ using namespace SireStream;
 static const RegisterMetaType<ResIdentifier> r_resid;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ResIdentifier &resid)
+QDataStream &operator<<(QDataStream &ds, const ResIdentifier &resid)
 {
     writeHeader(ds, r_resid, 1);
     
@@ -56,7 +56,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ResIdentifier &res
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResIdentifier &resid)
+QDataStream &operator>>(QDataStream &ds, ResIdentifier &resid)
 {
     VersionID v = readHeader(ds, r_resid);
     
@@ -217,7 +217,7 @@ const char* ResIdentifier::typeName()
 static const RegisterMetaType<ResIdx> r_residx;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ResIdx &residx)
+QDataStream &operator<<(QDataStream &ds, const ResIdx &residx)
 {
     writeHeader(ds, r_residx, 1);
     
@@ -227,7 +227,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ResIdx &residx)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResIdx &residx)
+QDataStream &operator>>(QDataStream &ds, ResIdx &residx)
 {
     VersionID v = readHeader(ds, r_residx);
     
@@ -304,7 +304,7 @@ const char* ResIdx::typeName()
 static const RegisterMetaType<ResName> r_resname;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ResName &resname)
+QDataStream &operator<<(QDataStream &ds, const ResName &resname)
 {
     writeHeader(ds, r_resname, 1);
     
@@ -314,7 +314,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ResName &resname)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResName &resname)
+QDataStream &operator>>(QDataStream &ds, ResName &resname)
 {
     VersionID v = readHeader(ds, r_resname);
     
@@ -401,7 +401,7 @@ const char* ResName::typeName()
 static const RegisterMetaType<ResNum> r_resnum;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ResNum &resnum)
+QDataStream &operator<<(QDataStream &ds, const ResNum &resnum)
 {
     writeHeader(ds, r_resnum, 1);
     
@@ -411,7 +411,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ResNum &resnum)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResNum &resnum)
+QDataStream &operator>>(QDataStream &ds, ResNum &resnum)
 {
     VersionID v = readHeader(ds, r_resnum);
     

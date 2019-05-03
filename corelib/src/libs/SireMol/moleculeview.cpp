@@ -54,7 +54,7 @@ RegisterMetaType<MoleculeView> r_molview( MAGIC_ONLY,
                                           "SireMol::MoleculeView" );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                        const MoleculeView &molview)
 {
     writeHeader(ds, r_molview, 2);
@@ -68,7 +68,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        MoleculeView &molview)
 {
     VersionID v = readHeader(ds, r_molview);

@@ -44,7 +44,6 @@ target_link_libraries (FF
                        SirePython
                        SIRE_SireFF
                        ${BOOST_PYTHON_LIBRARY}
-                       ${PYTHON_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

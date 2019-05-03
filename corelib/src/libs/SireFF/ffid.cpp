@@ -118,7 +118,7 @@ QList<FFIdx> FFID::processMatches(QList<FFIdx> &ffidxs,
 static const RegisterMetaType<FFIdx> r_ffidx;
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFIdx &ffidx)
+QDataStream &operator<<(QDataStream &ds, const FFIdx &ffidx)
 {
     writeHeader(ds, r_ffidx, 1);
     
@@ -128,7 +128,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFIdx &ffidx)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, FFIdx &ffidx)
+QDataStream &operator>>(QDataStream &ds, FFIdx &ffidx)
 {
     VersionID v = readHeader(ds, r_ffidx);
     
@@ -198,7 +198,7 @@ const char* FFIdx::typeName()
 static const RegisterMetaType<FFName> r_ffname;
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFName &ffname)
+QDataStream &operator<<(QDataStream &ds, const FFName &ffname)
 {
     writeHeader(ds, r_ffname, 1);
     
@@ -208,7 +208,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFName &ffname)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, FFName &ffname)
+QDataStream &operator>>(QDataStream &ds, FFName &ffname)
 {
     VersionID v = readHeader(ds, r_ffname);
     

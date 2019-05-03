@@ -45,11 +45,11 @@ class FlexibilityLibrary;
 class FlexibilityTemplate;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::FlexibilityLibrary&);
-QDataStream& operator>>(QDataStream&, SireIO::FlexibilityLibrary&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::FlexibilityLibrary&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::FlexibilityLibrary&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::FlexibilityTemplate&);
-QDataStream& operator>>(QDataStream&, SireIO::FlexibilityTemplate&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::FlexibilityTemplate&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::FlexibilityTemplate&);
 
 namespace SireMol
 {
@@ -81,8 +81,8 @@ using SireUnits::Dimension::Angle;
 class SIREIO_EXPORT FlexibilityTemplate
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FlexibilityTemplate&);
-friend QDataStream& ::operator>>(QDataStream&, FlexibilityTemplate&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const FlexibilityTemplate&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, FlexibilityTemplate&);
 
 public:
     FlexibilityTemplate();
@@ -149,8 +149,8 @@ class SIREIO_EXPORT FlexibilityLibrary
         : public SireBase::ConcreteProperty<FlexibilityLibrary,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireIO::FlexibilityLibrary&);
-friend QDataStream& ::operator>>(QDataStream&, SireIO::FlexibilityLibrary&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const SireIO::FlexibilityLibrary&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, SireIO::FlexibilityLibrary&);
 
 public:
     FlexibilityLibrary();

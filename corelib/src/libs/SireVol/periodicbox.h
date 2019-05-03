@@ -42,8 +42,8 @@ namespace SireVol
 class PeriodicBox;
 }
 
-QDataStream& operator<<(QDataStream&, const SireVol::PeriodicBox&);
-QDataStream& operator>>(QDataStream&, SireVol::PeriodicBox&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::PeriodicBox&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::PeriodicBox&);
 
 namespace SireVol
 {
@@ -60,8 +60,8 @@ class SIREVOL_EXPORT PeriodicBox
         : public SireBase::ConcreteProperty<PeriodicBox,Cartesian>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PeriodicBox&);
-friend QDataStream& ::operator>>(QDataStream&, PeriodicBox&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const PeriodicBox&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, PeriodicBox&);
 
 public:
     PeriodicBox();

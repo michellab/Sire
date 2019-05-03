@@ -31,8 +31,6 @@
 
 #include "SireError/exception.h"
 
-#include "sireglobal.h"
-
 SIRE_BEGIN_HEADER
 
 namespace SireMaths

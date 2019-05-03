@@ -40,15 +40,15 @@ namespace SireMaths
 
 class NMatrix;
 
-QVector<int> solve_linear_assignment( const NMatrix &costs,
+SIREMATHS_EXPORT QVector<int> solve_linear_assignment( const NMatrix &costs,
                                       bool check_result = false );
 
-QVector<int> brute_force_linear_assignment( const NMatrix &costs );
+SIREMATHS_EXPORT QVector<int> brute_force_linear_assignment( const NMatrix &costs );
 
-double calculate_total_cost( const NMatrix &costs,
+SIREMATHS_EXPORT double calculate_total_cost( const NMatrix &costs,
                              const QVector<int> &rows_to_columns );
 
-double get_lowest_total_cost( const NMatrix &costs );
+SIREMATHS_EXPORT double get_lowest_total_cost( const NMatrix &costs );
 
 }
 

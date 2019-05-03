@@ -38,7 +38,7 @@ using namespace Sire;
 
 /** This function is used to obtain a reasonably unique
     MagicID number for each class type (with typename 'name') */
-MagicID SIRE_EXPORT Sire::getMagic(const char *name)
+MagicID Sire::getMagic(const char *name)
 {
     //use L. Peter Deutsch's free implementation of
     //the md5 algorithm

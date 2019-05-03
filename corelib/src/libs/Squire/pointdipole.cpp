@@ -36,7 +36,7 @@ using namespace SireStream;
 static const RegisterMetaType<PointDipole> r_pointdipole(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const PointDipole &q)
+QDataStream &operator<<(QDataStream &ds, const PointDipole &q)
 {
     writeHeader(ds, r_pointdipole, 1);
     
@@ -46,7 +46,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const PointDipole &q)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, PointDipole &q)
+QDataStream &operator>>(QDataStream &ds, PointDipole &q)
 {
     VersionID v = readHeader(ds, r_pointdipole);
     

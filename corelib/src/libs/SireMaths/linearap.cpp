@@ -593,7 +593,7 @@ namespace detail
     
     <http://www.assignmentproblems.com/codes/LAP_dense.zip>
 */
-QVector<int> SIREMATHS_EXPORT solve_linear_assignment( const NMatrix &costs,
+QVector<int> solve_linear_assignment( const NMatrix &costs,
                                                        bool check_result )
 {
     const int dim = costs.nRows();
@@ -979,7 +979,7 @@ QVector<int> SIREMATHS_EXPORT solve_linear_assignment( const NMatrix &costs,
 
 /** Return the total cost of the arrangement in 'rows_to_columns' using the
     costs in the linear assignment costs matrix in 'costs' */
-double SIREMATHS_EXPORT calculate_total_cost( const NMatrix &costs,
+double calculate_total_cost( const NMatrix &costs,
                                               const QVector<int> &rows_to_columns )
 {
     int dim = costs.nRows();
@@ -1045,7 +1045,7 @@ void visit(const NMatrix &costs,
 
 /** Solve the linear assignment problem using a brute force algorithm
     (*very* poor scaling and very inefficient) */
-QVector<int> SIREMATHS_EXPORT brute_force_linear_assignment(const NMatrix &costs)
+QVector<int> brute_force_linear_assignment(const NMatrix &costs)
 {
     const int dim = costs.nRows();
 
@@ -1079,7 +1079,7 @@ QVector<int> SIREMATHS_EXPORT brute_force_linear_assignment(const NMatrix &costs
 
 /** Return the minimum possible total cost from the linear assignment 
     costs matrix 'costs' */
-double SIREMATHS_EXPORT get_lowest_total_cost( const NMatrix &costs )
+double get_lowest_total_cost( const NMatrix &costs )
 {
     return calculate_total_cost( costs, solve_linear_assignment(costs) );
 }

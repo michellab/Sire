@@ -37,7 +37,7 @@ using namespace SireBase::detail;
 
 using namespace SireStream;
 
-void SIREBASE_EXPORT 
+void 
 SireBase::detail::throwCannotConvertVariantError(const char *this_type, 
                                                  const char *type_t,
                                                  const QString &codeloc)
@@ -48,7 +48,7 @@ SireBase::detail::throwCannotConvertVariantError(const char *this_type,
                 .arg(this_type).arg(type_t), CODELOC );
 }
 
-void SIREBASE_EXPORT SireBase::detail::throwPackedArray2D_invalidIndex(
+void SireBase::detail::throwPackedArray2D_invalidIndex(
                                                     quint32 i, quint32 nvals)
 {
     throw SireError::invalid_index( QObject::tr(
@@ -56,7 +56,7 @@ void SIREBASE_EXPORT SireBase::detail::throwPackedArray2D_invalidIndex(
             .arg(i).arg(nvals), CODELOC );
 }
 
-void SIREBASE_EXPORT SireBase::detail::throwPackedArray2D_Array_invalidIndex(
+void SireBase::detail::throwPackedArray2D_Array_invalidIndex(
                                                           quint32 i, quint32 nvals)
 {
     throw SireError::invalid_index( QObject::tr(
@@ -64,7 +64,7 @@ void SIREBASE_EXPORT SireBase::detail::throwPackedArray2D_Array_invalidIndex(
             .arg(i).arg(nvals), CODELOC );
 }
 
-void SIREBASE_EXPORT SireBase::detail::throwPackedArray2D_Array_incompatibleError(
+void SireBase::detail::throwPackedArray2D_Array_incompatibleError(
                                                     quint32 this_sz, quint32 other_sz)
 {
     throw SireError::incompatible_error( QObject::tr(
@@ -77,13 +77,13 @@ void SIREBASE_EXPORT SireBase::detail::throwPackedArray2D_Array_incompatibleErro
 static const RegisterMetaType<PackedArray2DDataBase> r_parray( MAGIC_ONLY, NO_ROOT,
                                                       "SireBase::PackedArray2D<T>" );
 
-void SIREBASE_EXPORT 
+void 
 SireBase::detail::writePackedArray2DHeader(QDataStream &ds)
 {
     writeHeader(ds, r_parray, 2);
 }
 
-quint32 SIREBASE_EXPORT 
+quint32 
 SireBase::detail::readPackedArray2DHeader(QDataStream &ds)
 {
     VersionID v = readHeader(ds, r_parray);
@@ -97,13 +97,13 @@ SireBase::detail::readPackedArray2DHeader(QDataStream &ds)
 static const RegisterMetaType<PackedArray2D_ArrayDataBase> r_parrayarray( MAGIC_ONLY, NO_ROOT,
                                                 "SireBase::PackedArray2D<T>::Array" );
 
-void SIREBASE_EXPORT 
+void 
 SireBase::detail::writePackedArray2DArrayHeader(QDataStream &ds, quint32 version)
 {
     writeHeader(ds, r_parrayarray, version);
 }
 
-void SIREBASE_EXPORT 
+void 
 SireBase::detail::readPackedArray2DArrayHeader(QDataStream &ds, quint32 version)
 {
     VersionID v = readHeader(ds, r_parrayarray);

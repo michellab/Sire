@@ -121,8 +121,8 @@ public:
 	// Saving and loading generator state
 	void save( uint32* saveArray ) const;  // to array of size SAVE
 	void load( uint32 *const loadArray );  // from such array
-	friend std::ostream& operator<<( std::ostream& os, const MTRand& mtrand );
-	friend std::istream& operator>>( std::istream& is, MTRand& mtrand );
+	friend SIREMATHS_EXPORT std::ostream& operator<<( std::ostream& os, const MTRand& mtrand );
+	friend SIREMATHS_EXPORT std::istream& operator>>( std::istream& is, MTRand& mtrand );
 
 protected:
 	void initialize( const uint32 oneSeed );

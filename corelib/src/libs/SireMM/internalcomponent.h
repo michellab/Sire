@@ -57,44 +57,44 @@ class Intra14LJComponent;
 class InternalComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::BondComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::BondComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::BondComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::BondComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::AngleComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::AngleComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::AngleComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::AngleComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::DihedralComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::DihedralComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::DihedralComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::DihedralComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::ImproperComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::ImproperComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::ImproperComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::ImproperComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::UreyBradleyComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::UreyBradleyComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::UreyBradleyComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::UreyBradleyComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::StretchStretchComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::StretchStretchComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::StretchStretchComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::StretchStretchComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::StretchBendComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::StretchBendComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::StretchBendComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::StretchBendComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::BendBendComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::BendBendComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::BendBendComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::BendBendComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::StretchBendTorsionComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::StretchBendTorsionComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::StretchBendTorsionComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::StretchBendTorsionComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::InternalComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::InternalComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InternalComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::InternalComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::Intra14Component&);
-QDataStream& operator>>(QDataStream&, SireMM::Intra14Component&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::Intra14Component&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::Intra14Component&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::Intra14CoulombComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::Intra14CoulombComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::Intra14CoulombComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::Intra14CoulombComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::Intra14LJComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::Intra14LJComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::Intra14LJComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::Intra14LJComponent&);
 
 namespace SireFF
 {
@@ -539,8 +539,8 @@ public:
 class SIREMM_EXPORT Intra14Component : public SireFF::FFComponent
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Intra14Component&);
-friend QDataStream& ::operator>>(QDataStream&, Intra14Component&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const Intra14Component&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, Intra14Component&);
 
 public:
     Intra14Component(const FFName &name = FFName());
@@ -595,8 +595,8 @@ protected:
 class SIREMM_EXPORT InternalComponent : public SireFF::FFComponent
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const InternalComponent&);
-friend QDataStream& ::operator>>(QDataStream&, InternalComponent&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const InternalComponent&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, InternalComponent&);
 
 public:
     InternalComponent(const FFName &name = FFName());
@@ -726,7 +726,10 @@ public:
     
     ~Intra14Energy();
     
-    static const char* typeName();
+    static const char* typeName()
+    {
+        return "SireMM::Intra14Energy";
+    }
     
     const char* what() const
     {
@@ -869,7 +872,10 @@ public:
     
     ~InternalEnergy();
     
-    static const char* typeName();
+    static const char* typeName()
+    {
+        return "SireMM::InternalEnergy";
+    }
     
     const char* what() const
     {

@@ -67,8 +67,8 @@ using SireVol::AABox;
 class SIREFF_EXPORT FFBead
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FFBead&);
-friend QDataStream& ::operator>>(QDataStream&, FFBead&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FFBead&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FFBead&);
 
 public:
     FFBead();
@@ -106,8 +106,8 @@ private:
 class SIREFF_EXPORT FFBeadChange
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FFBeadChange&);
-friend QDataStream& ::operator>>(QDataStream&, FFBeadChange&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FFBeadChange&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FFBeadChange&);
 
 public:
     FFBeadChange();
@@ -149,8 +149,8 @@ class SIREFF_EXPORT Patches
         : public SireBase::ConcreteProperty<Patches,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Patches&);
-friend QDataStream& ::operator>>(QDataStream&, Patches&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const Patches&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, Patches&);
 
 public:
     Patches();

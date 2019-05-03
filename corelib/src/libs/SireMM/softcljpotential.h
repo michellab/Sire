@@ -41,14 +41,14 @@ class InterSoftCLJPotential;
 class IntraSoftCLJPotential;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::SoftCLJPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::SoftCLJPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::SoftCLJPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::SoftCLJPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::InterSoftCLJPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::InterSoftCLJPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::InterSoftCLJPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::InterSoftCLJPotential&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::IntraSoftCLJPotential&);
-QDataStream& operator>>(QDataStream&, SireMM::IntraSoftCLJPotential&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::IntraSoftCLJPotential&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::IntraSoftCLJPotential&);
 
 namespace SireMM
 {
@@ -63,8 +63,8 @@ namespace SireMM
 class SIREMM_EXPORT SoftCLJPotential : public CLJPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SoftCLJPotential&);
-friend QDataStream& ::operator>>(QDataStream&, SoftCLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const SoftCLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, SoftCLJPotential&);
 
 public:
     ~SoftCLJPotential();
@@ -161,8 +161,8 @@ protected:
 class SIREMM_EXPORT InterSoftCLJPotential : public SoftCLJPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const InterSoftCLJPotential&);
-friend QDataStream& ::operator>>(QDataStream&, InterSoftCLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const InterSoftCLJPotential&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, InterSoftCLJPotential&);
 
 public:
     typedef SoftCLJEnergy Energy;
@@ -533,8 +533,8 @@ private:
 */
 class SIREMM_EXPORT IntraSoftCLJPotential : public SoftCLJPotential
 {
-  friend QDataStream& ::operator<<(QDataStream&, const IntraSoftCLJPotential&);
-  friend QDataStream& ::operator>>(QDataStream&, IntraSoftCLJPotential&);
+  friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const IntraSoftCLJPotential&);
+  friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, IntraSoftCLJPotential&);
 
 public:
     typedef SoftCLJEnergy Energy;

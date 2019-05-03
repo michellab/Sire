@@ -65,7 +65,7 @@ namespace SireMol
 static const RegisterMetaType<SegEditor> r_segeditor;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const SegEditor &segeditor)
 {
     writeHeader(ds, r_segeditor, 1);
@@ -76,7 +76,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        SegEditor &segeditor)
 {
     VersionID v = readHeader(ds, r_segeditor);
@@ -137,7 +137,7 @@ SegEditor& SegEditor::rename(const SegName &newname)
         //nothing to do
         return *this;
         
-    throw SireError::incomplete_code( CODELOC );
+    d->rename( this->index(), newname );
     
     return *this;
 }
@@ -269,7 +269,7 @@ const char* SegEditor::typeName()
 static const RegisterMetaType<SegStructureEditor> r_segstructeditor;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const SegStructureEditor &segeditor)
 {
     writeHeader(ds, r_segstructeditor, 1);
@@ -281,7 +281,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        SegStructureEditor &segeditor)
 {
     VersionID v = readHeader(ds, r_segstructeditor);

@@ -45,14 +45,14 @@ using boost::tuple;
 
 static const RegisterMetaType<CLJCalculator> r_cljcalc(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJCalculator &calc)
+QDataStream &operator<<(QDataStream &ds, const CLJCalculator &calc)
 {
     writeHeader(ds, r_cljcalc, 1);
     ds << calc.reproducible_sum;
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJCalculator &calc)
+QDataStream &operator>>(QDataStream &ds, CLJCalculator &calc)
 {
     VersionID v = readHeader(ds, r_cljcalc);
     

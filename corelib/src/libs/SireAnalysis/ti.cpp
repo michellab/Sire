@@ -56,7 +56,7 @@ using namespace SireUnits::Dimension;
 static const RegisterMetaType<TIPMF> r_tipmf;
 static const RegisterAlternativeName<TIPMF> r_alttipmf("Soiree::TIPMF");
 
-QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const TIPMF &pmf)
+QDataStream &operator<<(QDataStream &ds, const TIPMF &pmf)
 {
     writeHeader(ds, r_tipmf, 1);
     
@@ -68,7 +68,7 @@ QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const TIPMF &pmf)
     return ds;
 }
 
-QDataStream SIREANALYSIS_EXPORT &operator>>(QDataStream &ds, TIPMF &pmf)
+QDataStream &operator>>(QDataStream &ds, TIPMF &pmf)
 {
     VersionID v = readHeader(ds, r_tipmf);
     
@@ -598,7 +598,7 @@ TIPMF TIPMF::dropEndPoints() const
 static const RegisterMetaType<Gradients> r_grads;
 static const RegisterAlternativeName<Gradients> r_altgrads("Soiree::Gradients");
 
-QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const Gradients &grads)
+QDataStream &operator<<(QDataStream &ds, const Gradients &grads)
 {
     writeHeader(ds, r_grads, 2);
     
@@ -609,7 +609,7 @@ QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const Gradients &gr
     return ds;
 }
 
-QDataStream SIREANALYSIS_EXPORT &operator>>(QDataStream &ds, Gradients &grads)
+QDataStream &operator>>(QDataStream &ds, Gradients &grads)
 {
     VersionID v = readHeader(ds, r_grads);
     
@@ -1429,7 +1429,7 @@ TIPMF Gradients::integrate() const
 static const RegisterMetaType<TI> r_ti;
 static const RegisterAlternativeName<TI> r_altti("Soiree::TI");
 
-QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const TI &ti)
+QDataStream &operator<<(QDataStream &ds, const TI &ti)
 {
     writeHeader(ds, r_ti, 1);
     
@@ -1439,7 +1439,7 @@ QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const TI &ti)
     return ds;
 }
 
-QDataStream SIREANALYSIS_EXPORT &operator>>(QDataStream &ds, TI &ti)
+QDataStream &operator>>(QDataStream &ds, TI &ti)
 {
     VersionID v = readHeader(ds, r_ti);
     

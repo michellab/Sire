@@ -61,7 +61,7 @@ using namespace SireStream;
 static const RegisterMetaType<AtomIdxMatcher> r_idxmatcher;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomIdxMatcher &idxmatcher)
+QDataStream &operator<<(QDataStream &ds, const AtomIdxMatcher &idxmatcher)
 {
     writeHeader(ds, r_idxmatcher, 1);
     ds << static_cast<const AtomMatcher&>(idxmatcher);
@@ -70,7 +70,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const AtomIdxMatcher &id
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomIdxMatcher &idxmatcher)
+QDataStream &operator>>(QDataStream &ds, AtomIdxMatcher &idxmatcher)
 {
     VersionID v = readHeader(ds, r_idxmatcher);
 
@@ -206,7 +206,7 @@ const char* AtomIdxMatcher::typeName()
 static const RegisterMetaType<AtomNameMatcher> r_namematcher;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const AtomNameMatcher &namematcher)
 {
     writeHeader(ds, r_namematcher, 1);
@@ -216,7 +216,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomNameMatcher &namematcher)
+QDataStream &operator>>(QDataStream &ds, AtomNameMatcher &namematcher)
 {
     VersionID v = readHeader(ds, r_namematcher);
 
@@ -367,7 +367,7 @@ const char* AtomNameMatcher::typeName()
 static const RegisterMetaType<AtomMCSMatcher> r_mcsmatcher;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const AtomMCSMatcher &mcsmatcher)
 {
     writeHeader(ds, r_mcsmatcher, 2);
@@ -382,7 +382,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomMCSMatcher &mcsmatcher)
+QDataStream &operator>>(QDataStream &ds, AtomMCSMatcher &mcsmatcher)
 {
     VersionID v = readHeader(ds, r_mcsmatcher);
 
@@ -595,9 +595,9 @@ QHash<AtomIdx,AtomIdx> AtomMCSMatcher::pvt_match(const MoleculeView &mol0,
                                                  const PropertyMap &map1) const
 {
     if (prematcher.isNull() or prematcher.read().isNull())
-        return Evaluator(mol0).findMCS(mol1, t, match_light, map0, map1, this-verbose);
+        return Evaluator(mol0).findMCS(mol1, t, match_light, map0, map1, 6, this-verbose);
     else
-        return Evaluator(mol0).findMCS(mol1, prematcher.read(), t, match_light, map0, map1, this-verbose);
+        return Evaluator(mol0).findMCS(mol1, prematcher.read(), t, match_light, map0, map1, 6, this-verbose);
 }
 
 /////////
@@ -607,7 +607,7 @@ QHash<AtomIdx,AtomIdx> AtomMCSMatcher::pvt_match(const MoleculeView &mol0,
 static const RegisterMetaType<AtomIDMatcher> r_idmatcher;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const AtomIDMatcher &idmatcher)
 {
     writeHeader(ds, r_idmatcher, 1);
@@ -619,7 +619,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomIDMatcher &idmatcher)
+QDataStream &operator>>(QDataStream &ds, AtomIDMatcher &idmatcher)
 {
     VersionID v = readHeader(ds, r_idmatcher);
 
@@ -1000,7 +1000,7 @@ const char* AtomIDMatcher::typeName()
 static const RegisterMetaType<AtomMultiMatcher> r_multimatcher;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const AtomMultiMatcher &multimatcher)
 {
     writeHeader(ds, r_multimatcher, 1);
@@ -1012,7 +1012,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, AtomMultiMatcher &multimatcher)
+QDataStream &operator>>(QDataStream &ds, AtomMultiMatcher &multimatcher)
 {
     VersionID v = readHeader(ds, r_multimatcher);
 
@@ -1237,7 +1237,7 @@ const char* AtomMultiMatcher::typeName()
 static const RegisterMetaType<ResIdxAtomNameMatcher> r_residxatomnamematcher;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const ResIdxAtomNameMatcher &residxatomnamematcher)
 {
     writeHeader(ds, r_residxatomnamematcher, 1);
@@ -1247,7 +1247,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResIdxAtomNameMatcher &residxatomnamematcher)
+QDataStream &operator>>(QDataStream &ds, ResIdxAtomNameMatcher &residxatomnamematcher)
 {
     VersionID v = readHeader(ds, r_residxatomnamematcher);
 
@@ -1388,7 +1388,7 @@ const char* ResIdxAtomNameMatcher::typeName()
 static const RegisterMetaType<ResIdxAtomMCSMatcher> r_residxmcsmatcher;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const ResIdxAtomMCSMatcher &residxmcsmatcher)
 {
     writeHeader(ds, r_mcsmatcher, 2);
@@ -1403,7 +1403,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResIdxAtomMCSMatcher &residxmcsmatcher)
+QDataStream &operator>>(QDataStream &ds, ResIdxAtomMCSMatcher &residxmcsmatcher)
 {
     VersionID v = readHeader(ds, r_residxmcsmatcher);
 
@@ -1626,12 +1626,12 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomMCSMatcher::pvt_match(const MoleculeView &mol0,
             if (prematcher.isNull() or prematcher.read().isNull())
             {
                 local_map = Evaluator(mol0[idx]).findMCS(mol1[idx], t,
-                    match_light, map0, map1, this->verbose);
+                    match_light, map0, map1, 6, this->verbose);
             }
             else
             {
                 local_map = Evaluator(mol0[idx]).findMCS(mol1[idx], prematcher.read(),
-                    t, match_light, map0, map1, this->verbose);
+                    t, match_light, map0, map1, 6, this->verbose);
             }
 
             // Update the atom index map.
@@ -1659,7 +1659,7 @@ const char* ResIdxAtomMCSMatcher::typeName()
 static const RegisterMetaType<ResIdxAtomCoordMatcher> r_residxatomcoordmatcher;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const ResIdxAtomCoordMatcher &residxatomcoordmatcher)
 {
     writeHeader(ds, r_residxatomcoordmatcher, 1);
@@ -1669,7 +1669,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResIdxAtomCoordMatcher &residxatomcoordmatcher)
+QDataStream &operator>>(QDataStream &ds, ResIdxAtomCoordMatcher &residxatomcoordmatcher)
 {
     VersionID v = readHeader(ds, r_residxatomcoordmatcher);
 

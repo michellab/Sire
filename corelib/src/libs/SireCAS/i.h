@@ -40,8 +40,8 @@ namespace SireCAS
 class I;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::I&);
-QDataStream& operator>>(QDataStream&, SireCAS::I&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::I&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::I&);
 
 namespace SireCAS
 {
@@ -56,8 +56,8 @@ This is the complex number, i
 class SIRECAS_EXPORT I : public Constant
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const I&);
-friend QDataStream& ::operator>>(QDataStream&, I&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const I&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, I&);
 
 public:
     I();

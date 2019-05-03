@@ -49,7 +49,7 @@ using namespace SireStream;
 static const RegisterMetaType<TrigMatrix> r_trigmatrix(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const TrigMatrix &matrix)
+QDataStream &operator<<(QDataStream &ds, const TrigMatrix &matrix)
 {
     writeHeader(ds, r_trigmatrix, 1);
     
@@ -61,7 +61,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const TrigMatrix &matr
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, TrigMatrix &matrix)
+QDataStream &operator>>(QDataStream &ds, TrigMatrix &matrix)
 {
     VersionID v = readHeader(ds, r_trigmatrix);
     

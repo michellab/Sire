@@ -65,7 +65,7 @@ static const RegisterMetaType<QMMMElecEmbedPotential> r_qmmm( MAGIC_ONLY, NO_ROO
                                                 "Squire::QMMMElecEmbedPotential" );
                                                 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const QMMMElecEmbedPotential &qmmm)
 {
     writeHeader(ds, r_qmmm, 2);
@@ -77,7 +77,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       QMMMElecEmbedPotential &qmmm)
 {
     VersionID v = readHeader(ds, r_qmmm);

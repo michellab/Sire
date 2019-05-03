@@ -57,7 +57,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<CLJShiftFunction> r_shift;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJShiftFunction &func)
+QDataStream &operator<<(QDataStream &ds, const CLJShiftFunction &func)
 {
     writeHeader(ds, r_shift, 1);
     
@@ -66,7 +66,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJShiftFunction &f
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJShiftFunction &func)
+QDataStream &operator>>(QDataStream &ds, CLJShiftFunction &func)
 {
     VersionID v = readHeader(ds, r_shift);
     
@@ -1984,7 +1984,7 @@ void CLJShiftFunction::calcBoxGrid(const CLJAtoms &atoms, const GridInfo &grid_i
 
 static const RegisterMetaType<CLJSoftShiftFunction> r_softshift;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJSoftShiftFunction &func)
+QDataStream &operator<<(QDataStream &ds, const CLJSoftShiftFunction &func)
 {
     writeHeader(ds, r_softshift, 1);
     
@@ -1993,7 +1993,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJSoftShiftFunctio
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJSoftShiftFunction &func)
+QDataStream &operator>>(QDataStream &ds, CLJSoftShiftFunction &func)
 {
     VersionID v = readHeader(ds, r_softshift);
     
@@ -3910,7 +3910,7 @@ void CLJSoftShiftFunction::calcBoxEnergyAri(const CLJAtoms &atoms0, const CLJAto
 
 static const RegisterMetaType<CLJIntraShiftFunction> r_intra;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJIntraShiftFunction &intra)
+QDataStream &operator<<(QDataStream &ds, const CLJIntraShiftFunction &intra)
 {
     writeHeader(ds, r_intra, 1);
     
@@ -3919,7 +3919,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJIntraShiftFuncti
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJIntraShiftFunction &intra)
+QDataStream &operator>>(QDataStream &ds, CLJIntraShiftFunction &intra)
 {
     VersionID v = readHeader(ds, r_intra);
     
@@ -5424,7 +5424,7 @@ void CLJIntraShiftFunction::calcBoxEnergyAri(const CLJAtoms &atoms0, const CLJAt
 
 static const RegisterMetaType<CLJSoftIntraShiftFunction> r_softintra;
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJSoftIntraShiftFunction &intra)
+QDataStream &operator<<(QDataStream &ds, const CLJSoftIntraShiftFunction &intra)
 {
     writeHeader(ds, r_softintra, 1);
     
@@ -5433,7 +5433,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJSoftIntraShiftFu
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJSoftIntraShiftFunction &intra)
+QDataStream &operator>>(QDataStream &ds, CLJSoftIntraShiftFunction &intra)
 {
     VersionID v = readHeader(ds, r_softintra);
     

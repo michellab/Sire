@@ -46,11 +46,11 @@ class IntraGroupFF;
 namespace detail{ class IntraGroupFFMolData; }
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::IntraGroupFF&);
-QDataStream& operator>>(QDataStream&, SireMM::IntraGroupFF&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::IntraGroupFF&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::IntraGroupFF&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::detail::IntraGroupFFMolData&);
-QDataStream& operator>>(QDataStream&, SireMM::detail::IntraGroupFFMolData&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::detail::IntraGroupFFMolData&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::detail::IntraGroupFFMolData&);
 
 namespace SireMM
 {
@@ -72,8 +72,8 @@ class IntraGroupFFData;
 class SIREMM_EXPORT IntraGroupFF : public SireBase::ConcreteProperty<IntraGroupFF,SireFF::G2FF>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IntraGroupFF&);
-friend QDataStream& ::operator>>(QDataStream&, IntraGroupFF&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const IntraGroupFF&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, IntraGroupFF&);
 
 public:
     IntraGroupFF();

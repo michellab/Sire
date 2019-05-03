@@ -51,7 +51,7 @@ using namespace SireStream;
 static const RegisterMetaType<QMChargeConstraint> r_qmchgconstraint;
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const QMChargeConstraint &qmchgconstraint)
 {
     writeHeader(ds, r_qmchgconstraint, 1);
@@ -65,7 +65,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       QMChargeConstraint &qmchgconstraint)
 {
     VersionID v = readHeader(ds, r_qmchgconstraint);

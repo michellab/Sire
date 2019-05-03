@@ -179,7 +179,7 @@ QDataStream& operator>>(QDataStream &ds, SireMM::detail::CLJ14PairData &atom)
 
 static const RegisterMetaType<CLJ14Group> r_group( NO_ROOT );
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJ14Group &group)
+QDataStream &operator<<(QDataStream &ds, const CLJ14Group &group)
 {
     writeHeader(ds, r_group, 2);
     
@@ -194,7 +194,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJ14Group &group)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJ14Group &group)
+QDataStream &operator>>(QDataStream &ds, CLJ14Group &group)
 {
     VersionID v = readHeader(ds, r_group);
     

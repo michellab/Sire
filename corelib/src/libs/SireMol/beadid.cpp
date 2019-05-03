@@ -52,7 +52,7 @@ BeadID::~BeadID()
 static const RegisterMetaType<BeadIdx> r_beadidx;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const BeadIdx &beadidx)
+QDataStream &operator<<(QDataStream &ds, const BeadIdx &beadidx)
 {
     writeHeader(ds, r_beadidx, 1);
     
@@ -62,7 +62,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const BeadIdx &beadidx)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, BeadIdx &beadidx)
+QDataStream &operator>>(QDataStream &ds, BeadIdx &beadidx)
 {
     VersionID v = readHeader(ds, r_beadidx);
     
@@ -139,7 +139,7 @@ const char* BeadIdx::typeName()
 static const RegisterMetaType<BeadNum> r_beadnum;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const BeadNum &beadnum)
+QDataStream &operator<<(QDataStream &ds, const BeadNum &beadnum)
 {
     writeHeader(ds, r_beadnum, 1);
     
@@ -149,7 +149,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const BeadNum &beadnum)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, BeadNum &beadnum)
+QDataStream &operator>>(QDataStream &ds, BeadNum &beadnum)
 {
     VersionID v = readHeader(ds, r_beadnum);
     

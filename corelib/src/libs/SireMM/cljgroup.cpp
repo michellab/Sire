@@ -42,7 +42,7 @@ using namespace SireBase;
 
 static const RegisterMetaType<CLJGroup> r_group(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJGroup &group)
+QDataStream &operator<<(QDataStream &ds, const CLJGroup &group)
 {
     writeHeader(ds, r_group, 2);
     
@@ -55,7 +55,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJGroup &group)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJGroup &group)
+QDataStream &operator>>(QDataStream &ds, CLJGroup &group)
 {
     VersionID v = readHeader(ds, r_group);
     
@@ -287,7 +287,7 @@ void CLJGroup::add(const MoleculeView &molview, const PropertyMap &map)
     }
     else
     {
-        CLJExtractor changed(molview, id_source, extract_source);
+        CLJExtractor changed(molview, id_source, extract_source, map);
         
         if (cljworkspace.recalculatingFromScratch())
         {

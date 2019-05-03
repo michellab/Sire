@@ -59,8 +59,8 @@ template<class G0, class G1>
 class SIREMOL_EXPORT GroupGroupID : public GroupAtomIDBase
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const GroupGroupID<G0,G1>&);
-friend QDataStream& ::operator>><>(QDataStream&, GroupGroupID<G0,G1>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const GroupGroupID<G0,G1>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, GroupGroupID<G0,G1>&);
 
 public:
     GroupGroupID();

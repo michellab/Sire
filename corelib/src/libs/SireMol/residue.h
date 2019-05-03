@@ -40,8 +40,8 @@ namespace SireMol
 class Residue;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Residue&);
-QDataStream& operator>>(QDataStream&, SireMol::Residue&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Residue&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Residue&);
 
 namespace SireMol
 {
@@ -71,8 +71,8 @@ class Molecule;
 class SIREMOL_EXPORT Residue : public SireBase::ConcreteProperty<Residue,MoleculeView>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Residue&);
-friend QDataStream& ::operator>>(QDataStream&, Residue&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Residue&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Residue&);
 
 public:
     typedef ResID ID;
@@ -374,13 +374,13 @@ void set_metadata(Residue*, MoleculeData &moldata,
     set_metadata<ResProperty<V>,Residue::Index,V>(moldata,idxs,key,metakey,value);
 }
 
-bool has_property(const Residue*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_property(const Residue*, const MoleculeData &moldata,
                   const PropertyName &key);
                   
-bool has_metadata(const Residue*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Residue*, const MoleculeData &moldata,
                   const PropertyName &metakey);
                   
-bool has_metadata(const Residue*, const MoleculeData &moldata,
+SIREMOL_EXPORT bool has_metadata(const Residue*, const MoleculeData &moldata,
                   const PropertyName &key, const PropertyName &metakey);                 
 
 

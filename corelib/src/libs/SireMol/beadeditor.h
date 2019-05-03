@@ -39,8 +39,8 @@ namespace SireMol
 class BeadEditor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::BeadEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::BeadEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::BeadEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::BeadEditor&);
 
 namespace SireMol
 {
@@ -56,8 +56,8 @@ class SIREMOL_EXPORT BeadEditor
         : public SireBase::ConcreteProperty< BeadEditor,Editor<BeadEditor,Bead> >
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const BeadEditor&);
-friend QDataStream& ::operator>>(QDataStream&, BeadEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const BeadEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, BeadEditor&);
 
 public:
     BeadEditor();

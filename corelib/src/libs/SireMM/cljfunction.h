@@ -54,23 +54,23 @@ class CLJSoftIntraFunction;
 class NullCLJFunction;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::NullCLJFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::NullCLJFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::NullCLJFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::NullCLJFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJCutoffFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJCutoffFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJCutoffFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJCutoffFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJIntraFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJIntraFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJIntraFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJIntraFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJSoftFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJSoftFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftIntraFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJSoftIntraFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftIntraFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJSoftIntraFunction&);
 
 namespace SireVol
 {
@@ -105,8 +105,8 @@ typedef SireBase::PropPtr<CLJFunction> CLJFunctionPtr;
 class SIREMM_EXPORT CLJFunction : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJFunction &func);
-friend QDataStream& ::operator>>(QDataStream&, CLJFunction &func);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJFunction &func);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJFunction &func);
 
 public:
     enum COMBINING_RULES
@@ -391,8 +391,8 @@ private:
 class SIREMM_EXPORT CLJCutoffFunction : public CLJFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJCutoffFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CLJCutoffFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJCutoffFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJCutoffFunction&);
 
 public:
     CLJCutoffFunction();
@@ -456,8 +456,8 @@ protected:
 class SIREMM_EXPORT CLJIntraFunction : public CLJCutoffFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJIntraFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CLJIntraFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJIntraFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJIntraFunction&);
 
 public:
     CLJIntraFunction();
@@ -522,8 +522,8 @@ private:
 class SIREMM_EXPORT CLJSoftFunction : public CLJCutoffFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJSoftFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CLJSoftFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJSoftFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJSoftFunction&);
 
 public:
     CLJSoftFunction();
@@ -591,8 +591,8 @@ protected:
 class SIREMM_EXPORT CLJSoftIntraFunction : public CLJIntraFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJSoftIntraFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CLJSoftIntraFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJSoftIntraFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJSoftIntraFunction&);
 
 public:
     CLJSoftIntraFunction();

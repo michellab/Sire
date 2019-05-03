@@ -41,8 +41,8 @@ class Line;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireMaths::Line&);
-QDataStream& operator>>(QDataStream&, SireMaths::Line&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Line&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Line&);
 
 namespace SireMaths
 {
@@ -55,8 +55,8 @@ This class represents a line in three-dimensional space. (or two points)
 class SIREMATHS_EXPORT Line
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Line&);
-friend QDataStream& ::operator>>(QDataStream&, Line&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Line&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Line&);
 
 public:
     Line();

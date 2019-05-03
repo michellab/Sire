@@ -44,7 +44,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<FFDetail> r_ff( MAGIC_ONLY, FFDetail::typeName() );
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFDetail &ff)
+QDataStream &operator<<(QDataStream &ds, const FFDetail &ff)
 {
     writeHeader(ds, r_ff, 1);
 
@@ -55,7 +55,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFDetail &ff)
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, FFDetail &ff)
+QDataStream &operator>>(QDataStream &ds, FFDetail &ff)
 {
     VersionID v = readHeader(ds, r_ff);
     

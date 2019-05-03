@@ -37,8 +37,8 @@ namespace SireMM
 class RestraintComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::RestraintComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::RestraintComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::RestraintComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::RestraintComponent&);
 
 namespace SireMM
 {

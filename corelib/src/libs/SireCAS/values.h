@@ -43,8 +43,8 @@ class Values;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireCAS::Values&);
-QDataStream& operator>>(QDataStream&, SireCAS::Values&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Values&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Values&);
 
 namespace SireCAS
 {
@@ -60,8 +60,8 @@ class Symbol;
 class SIRECAS_EXPORT Values
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Values&);
-friend QDataStream& ::operator>>(QDataStream&, Values&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Values&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Values&);
 
 public:
     typedef QHash<SymbolID,double>::const_iterator const_iterator;
@@ -175,12 +175,12 @@ private:
 
 };
 
-Values operator+(const SymbolValue &val0, const SymbolValue &val1);
+SIRECAS_EXPORT Values operator+(const SymbolValue &val0, const SymbolValue &val1);
 
-Values operator+(const Values &vals, const SymbolValue &val);
-Values operator+(const SymbolValue &val, const Values &vals);
+SIRECAS_EXPORT Values operator+(const Values &vals, const SymbolValue &val);
+SIRECAS_EXPORT Values operator+(const SymbolValue &val, const Values &vals);
 
-Values operator+(const Values &vals0, const Values &vals1);
+SIRECAS_EXPORT Values operator+(const Values &vals0, const Values &vals1);
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 

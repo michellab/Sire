@@ -72,7 +72,7 @@ namespace SireFF
 static const RegisterMetaType<QMComponent> r_qmcomp(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const QMComponent &qmcomp)
+QDataStream &operator<<(QDataStream &ds, const QMComponent &qmcomp)
 {
     writeHeader(ds, r_qmcomp, 1);
     ds << static_cast<const FFComponent&>(qmcomp);
@@ -81,7 +81,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const QMComponent &qmcomp
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, QMComponent &qmcomp)
+QDataStream &operator>>(QDataStream &ds, QMComponent &qmcomp)
 {
     VersionID v = readHeader(ds, r_qmcomp);
     
@@ -147,7 +147,7 @@ static const RegisterMetaType<QMPotential> r_qmpot( MAGIC_ONLY, NO_ROOT,
                                                     "Squire::QMPotential" );
                                                     
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const QMPotential &qmpot)
+QDataStream &operator<<(QDataStream &ds, const QMPotential &qmpot)
 {
     writeHeader(ds, r_qmpot, 1);
     
@@ -159,7 +159,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const QMPotential &qmpot)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, QMPotential &qmpot)
+QDataStream &operator>>(QDataStream &ds, QMPotential &qmpot)
 {
     VersionID v = readHeader(ds, r_qmpot);
     
@@ -564,7 +564,11 @@ const Properties& QMPotential::properties() const
 QMPotential::Molecules 
 QMPotential::mapIntoSpace(const QMPotential::Molecules &mols) const
 {
+#ifdef _MSC_VER
+    #pragma WARNING(Need to write QMPotential::mapIntoSpace())
+#else
     #warning Need to write QMPotential::mapIntoSpace()
+#endif
     return mols;
 }
 

@@ -43,8 +43,8 @@ namespace SireMol
 class AngleID;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::AngleID&);
-QDataStream& operator>>(QDataStream&, SireMol::AngleID&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AngleID&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AngleID&);
 
 namespace SireMaths
 {
@@ -74,8 +74,8 @@ using boost::tuple;
 class SIREMOL_EXPORT AngleID : public SireID::ID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AngleID&);
-friend QDataStream& ::operator>>(QDataStream&, AngleID&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AngleID&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AngleID&);
 
 public:
     AngleID();

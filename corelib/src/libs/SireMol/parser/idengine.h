@@ -48,9 +48,9 @@ using SireBase::PropertyMap;
 
 using namespace AST;
 
-/** Internal class providing the SelectEngine for objects 
+/** Internal class providing the SelectEngine for objects
     based on their names
-    
+
     @author Christopher Woods
 */
 class IDNameEngine : public SelectEngine
@@ -58,13 +58,13 @@ class IDNameEngine : public SelectEngine
 public:
     static SelectEnginePtr construct( IDObject obj, NameValues vals );
     ~IDNameEngine();
-    
+
     ObjType objectType() const;
-    
+
 protected:
     IDNameEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
-    
+
 private:
     SelectResult selectAtoms(const SelectResult &mols, bool use_parallel) const;
     SelectResult selectCutGroups(const SelectResult &mols, bool use_parallel) const;
@@ -80,9 +80,9 @@ private:
     QList<QRegularExpression> regexps;
 };
 
-/** Internal class providing the SelectEngine for objects 
+/** Internal class providing the SelectEngine for objects
     based on their numbers
-    
+
     @author Christopher Woods
 */
 class IDNumberEngine : public SelectEngine
@@ -92,11 +92,11 @@ public:
     ~IDNumberEngine();
 
     ObjType objectType() const;
-    
+
 protected:
     IDNumberEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
-    
+
 private:
     SelectResult selectAtoms(const SelectResult &mols, bool use_parallel) const;
     SelectResult selectResidues(const SelectResult &mols, bool use_parallel) const;
@@ -108,9 +108,9 @@ private:
     RangeValues vals;
 };
 
-/** Internal class providing the SelectEngine for objects 
+/** Internal class providing the SelectEngine for objects
     based on their indicies (index)
-    
+
     @author Christopher Woods
 */
 class IDIndexEngine : public SelectEngine
@@ -118,13 +118,13 @@ class IDIndexEngine : public SelectEngine
 public:
     static SelectEnginePtr construct( IDObject obj, RangeValues vals );
     ~IDIndexEngine();
-    
+
     ObjType objectType() const;
 
 protected:
     IDIndexEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
-    
+
 private:
     SelectResult selectAtoms(const SelectResult &mols, bool use_parallel) const;
     SelectResult selectCutGroups(const SelectResult &mols, bool use_parallel) const;
@@ -148,20 +148,20 @@ class IDElementEngine : public SelectEngine
 public:
     static SelectEnginePtr construct(const std::vector<SireMol::Element> &values);
     ~IDElementEngine();
-    
+
     ObjType objectType() const;
 
 protected:
     IDElementEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
-    
+
 private:
     QSet<SireMol::Element> elements;
 };
 
 /** Internal class providing the SelectEngine for objects
     in an "and" expression
-    
+
     @author Christopher Woods
 */
 class IDAndEngine : public SelectEngine
@@ -171,20 +171,20 @@ public:
     ~IDAndEngine();
 
     ObjType objectType() const;
-    
+
     SelectEnginePtr simplify();
-    
+
 protected:
     IDAndEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
-    
+
 private:
     SelectEnginePtr part0, part1;
 };
 
-/** Internal class providing the SelectEngine for objects 
+/** Internal class providing the SelectEngine for objects
     in an "or" expression
-    
+
     @author Christopher Woods
 */
 class IDOrEngine : public SelectEngine
@@ -201,14 +201,14 @@ public:
 protected:
     IDOrEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
-    
+
 private:
     QList<SelectEnginePtr> parts;
 };
 
-/** Internal class providing the SelectEngine for objects 
+/** Internal class providing the SelectEngine for objects
     in a "not" expression
-    
+
     @author Christopher Woods
 */
 class IDNotEngine : public SelectEngine
@@ -220,18 +220,18 @@ public:
     ObjType objectType() const;
 
     SelectEnginePtr simplify();
-    
+
 protected:
     IDNotEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
-    
+
 private:
     SelectEnginePtr part;
 };
 
-/** Internal class providing the SelectEngine for objects 
+/** Internal class providing the SelectEngine for objects
     in a "join" expression
-    
+
     @author Christopher Woods
 */
 class IDJoinEngine : public SelectEngine
@@ -243,18 +243,18 @@ public:
     ObjType objectType() const;
 
     SelectEnginePtr simplify();
-    
+
 protected:
     IDJoinEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
-    
+
 private:
     SelectEnginePtr part;
 };
 
-/** Internal class providing the SelectEngine for objects 
+/** Internal class providing the SelectEngine for objects
     in a "subscript" expression
-    
+
     @author Christopher Woods
 */
 class IDSubScriptEngine : public SelectEngine
@@ -266,19 +266,19 @@ public:
     ObjType objectType() const;
 
     SelectEnginePtr simplify();
-    
+
 protected:
     IDSubScriptEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
-    
+
 private:
     SelectEnginePtr part;
     RangeValue val;
 };
 
-/** Internal class providing the SelectEngine for objects 
+/** Internal class providing the SelectEngine for objects
     in a "with" expression
-    
+
     @author Christopher Woods
 */
 class IDWithEngine : public SelectEngine
@@ -294,7 +294,7 @@ public:
 protected:
     IDWithEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
-    
+
 private:
     IDObject obj;
     IDToken token;
@@ -303,7 +303,7 @@ private:
 
 /** Internal class used to select objects that are within a certain
     distance of other objects
-    
+
     @author Christopher Woods
 */
 class IDDistanceEngine : public SelectEngine
@@ -311,21 +311,21 @@ class IDDistanceEngine : public SelectEngine
 public:
     static SelectEnginePtr construct( IDObject obj, SireUnits::Dimension::Length distance,
                                       SelectEnginePtr part );
-    
+
     static SelectEnginePtr construct( IDObject obj, IDCoordType typ,
                                       SireUnits::Dimension::Length distance,
                                       SelectEnginePtr part );
-    
+
     ~IDDistanceEngine();
-    
+
     ObjType objectType() const;
-    
+
     SelectEnginePtr simplify();
-    
+
 protected:
     IDDistanceEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
-    
+
 private:
     IDObject obj;
     IDCoordType typ;
@@ -334,20 +334,56 @@ private:
 };
 
 /** Internal class used to select all objects
-    
+
     @author Christopher Woods
 */
 class IDAllEngine : public SelectEngine
 {
 public:
     static SelectEnginePtr construct();
-    
+
     ~IDAllEngine();
-    
+
     ObjType objectType() const;
-    
+
 protected:
     IDAllEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+};
+
+/** Internal class used to select all water molecules.
+
+    @author Lester Hedges
+*/
+class IDWaterEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct();
+
+    ~IDWaterEngine();
+
+    ObjType objectType() const;
+
+protected:
+    IDWaterEngine();
+    SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
+};
+
+/** Internal class used to select all perturbable molecules.
+
+    @author Lester Hedges
+*/
+class IDPerturbableEngine : public SelectEngine
+{
+public:
+    static SelectEnginePtr construct();
+
+    ~IDPerturbableEngine();
+
+    ObjType objectType() const;
+
+protected:
+    IDPerturbableEngine();
     SelectResult select(const SelectResult &mols, const PropertyMap &map) const;
 };
 

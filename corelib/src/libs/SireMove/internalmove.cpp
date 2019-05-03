@@ -66,7 +66,7 @@ using namespace SireStream;
 static const RegisterMetaType<InternalMove> r_internalmove;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const InternalMove &internalmove)
+QDataStream &operator<<(QDataStream &ds, const InternalMove &internalmove)
 {
     writeHeader(ds, r_internalmove, 2);
     
@@ -81,7 +81,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const InternalMove &int
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, InternalMove &internalmove)
+QDataStream &operator>>(QDataStream &ds, InternalMove &internalmove)
 {
     VersionID v = readHeader(ds, r_internalmove);
 
@@ -255,6 +255,14 @@ void InternalMove::_pvt_setTemperature(const Temperature &temperature)
     MonteCarlo::setEnsemble( Ensemble::NVT(temperature) );
 }
 
+double clipDouble(double value)
+{
+    static const double mindbl = std::numeric_limits<double>::min() * 0.1;
+    static const double maxdbl = std::numeric_limits<double>::max() * 0.1;
+
+    return (std::min)(maxdbl, (std::max)(mindbl, value));
+}
+
 /** Actually perform 'nmoves' moves of the molecules in the 
     system 'system', optionally recording simulation statistics
     if 'record_stats' is true */
@@ -398,8 +406,8 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
             foreach (const BondID &bond, moved_bonds)
             {
                 //const Length bond_delta_value = flex.bond_deltas[bond];
-                double bond_delta_value = flex.delta(bond);
-                bond_delta = Length( this->generator().rand(-bond_delta_value, 
+                double bond_delta_value = clipDouble(flex.delta(bond));
+                bond_delta = Length( this->generator().rand(-bond_delta_value,
                                                              bond_delta_value) );
 
                 mol_mover.change(bond, bond_delta, map);
@@ -411,9 +419,9 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
             foreach (const AngleID &angle, moved_angles)
             {
                 //const Angle angle_delta_value = flex.angle_deltas[angle];
-                double angle_delta_value = flex.delta(angle);
+                double angle_delta_value = clipDouble(flex.delta(angle));
                 angle_delta = Angle( this->generator().rand(-angle_delta_value,
-                                                             angle_delta_value) );	      
+                                                             angle_delta_value) );
 
                 mol_mover.change(angle, angle_delta, map);
             }
@@ -423,7 +431,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
             
             foreach (const DihedralID &dihedral, moved_dihedrals)
             {
-                double angle_delta_value = flex.delta(dihedral);
+                double angle_delta_value = clipDouble(flex.delta(dihedral));
                 dihedral_delta =  Angle( this->generator().rand(-angle_delta_value,
                                                                  angle_delta_value) );
 

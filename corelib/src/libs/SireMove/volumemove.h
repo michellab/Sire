@@ -39,8 +39,8 @@ namespace SireMove
 class VolumeMove;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::VolumeMove&);
-QDataStream& operator>>(QDataStream&, SireMove::VolumeMove&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::VolumeMove&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::VolumeMove&);
 
 namespace SireMove
 {
@@ -57,8 +57,8 @@ class SIREMOVE_EXPORT VolumeMove
             : public SireBase::ConcreteProperty<VolumeMove,MonteCarlo>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const VolumeMove&);
-friend QDataStream& ::operator>>(QDataStream&, VolumeMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const VolumeMove&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, VolumeMove&);
 
 public:
     VolumeMove(const PropertyMap &map = PropertyMap());

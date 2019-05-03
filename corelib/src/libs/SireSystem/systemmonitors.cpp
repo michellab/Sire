@@ -46,7 +46,7 @@ using namespace SireStream;
 static const RegisterMetaType<SystemMonitors> r_sysmons(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const SystemMonitors &sysmons)
+QDataStream &operator<<(QDataStream &ds, const SystemMonitors &sysmons)
 {
     writeHeader(ds, r_sysmons, 1);
     
@@ -59,7 +59,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const SystemMonitors 
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, SystemMonitors &sysmons)
+QDataStream &operator>>(QDataStream &ds, SystemMonitors &sysmons)
 {
     VersionID v = readHeader(ds, r_sysmons);
     

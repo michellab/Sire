@@ -90,6 +90,18 @@ void register_ImproperID_class(){
                 , "Return the ID of the fourth atom of the improper" );
         
         }
+        { //::SireMol::ImproperID::equivalent
+        
+            typedef bool ( ::SireMol::ImproperID::*equivalent_function_type)( ::SireMol::ImproperID const & ) const;
+            equivalent_function_type equivalent_function_value( &::SireMol::ImproperID::equivalent );
+            
+            ImproperID_exposer.def( 
+                "equivalent"
+                , equivalent_function_value
+                , ( bp::arg("other") )
+                , "Are these impropers generally equivalent, i.e. do they contain the same\natom indices. This is useful since the ordering of improper atoms is\ninconsistent between different molecular topology formats.\n" );
+        
+        }
         { //::SireMol::ImproperID::hash
         
             typedef ::uint ( ::SireMol::ImproperID::*hash_function_type)(  ) const;

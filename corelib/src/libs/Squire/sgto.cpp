@@ -30,6 +30,8 @@
 #include "pointcharge.h"
 #include "pointdipole.h"
 
+#include "SireBase/trigarray2d.h"
+
 #include "SireMaths/maths.h"
 #include "SireMaths/boys.h"
 
@@ -50,7 +52,7 @@ using namespace SireStream;
 static const RegisterMetaType<S_GTO> r_sgto;
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const S_GTO &sgto)
+QDataStream &operator<<(QDataStream &ds, const S_GTO &sgto)
 {
     writeHeader(ds, r_sgto, 1);
     
@@ -60,7 +62,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const S_GTO &sgto)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, S_GTO &sgto)
+QDataStream &operator>>(QDataStream &ds, S_GTO &sgto)
 {
     VersionID v = readHeader(ds, r_sgto);
     
@@ -144,7 +146,7 @@ const char* S_GTO::typeName()
 static const RegisterMetaType<SS_GTO> r_ssgto;
 
 /** Serialise to a binary datastream */
-QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const SS_GTO &ssgto)
+QDataStream &operator<<(QDataStream &ds, const SS_GTO &ssgto)
 {
     writeHeader(ds, r_ssgto, 1);
     
@@ -154,7 +156,7 @@ QDataStream SQUIRE_EXPORT &operator<<(QDataStream &ds, const SS_GTO &ssgto)
 }
 
 /** Extract from a binary datastream */
-QDataStream SQUIRE_EXPORT &operator>>(QDataStream &ds, SS_GTO &ssgto)
+QDataStream &operator>>(QDataStream &ds, SS_GTO &ssgto)
 {
     VersionID v = readHeader(ds, r_ssgto);
     
@@ -255,14 +257,14 @@ namespace Squire
 {
 
 /** Return the kinetic energy integral, (s|nabla|s) */
-double SQUIRE_EXPORT kinetic_integral(const SS_GTO &P)
+double kinetic_integral(const SS_GTO &P)
 {
     // (s|nabla|s) = xi {3 - 2 xi (A-B)^2} (s||s)
     return P.xi() * (3 - 2*P.xi()*P.R2()) * P.ss();
 }
 
 /** Return the overlap integral, (s||s) */
-double SQUIRE_EXPORT overlap_integral(const SS_GTO &P)
+double overlap_integral(const SS_GTO &P)
 {
     // (s||s) = (pi/eta)^(3/2) exp{-eta(A-B)^2}
     return P.ss();
@@ -270,7 +272,7 @@ double SQUIRE_EXPORT overlap_integral(const SS_GTO &P)
 
 /** Return the potential energy integral with an array of 
     point charges, (s|C|s) */
-double SQUIRE_EXPORT potential_integral(const QVector<PointCharge> &C,
+double potential_integral(const QVector<PointCharge> &C,
                                         const SS_GTO &P)
 {
     // (s|C|s) = 2 ss Sqrt[zeta/pi] F0(U)
@@ -297,7 +299,7 @@ double SQUIRE_EXPORT potential_integral(const QVector<PointCharge> &C,
 
 /** Return the potential energy integral with an array of 
     point charges, (s|C|s)^m */
-double SQUIRE_EXPORT potential_integral(const QVector<PointCharge> &C,
+double potential_integral(const QVector<PointCharge> &C,
                                         const SS_GTO &P, int m)
 {
     const int nc = C.count();
@@ -321,7 +323,7 @@ double SQUIRE_EXPORT potential_integral(const QVector<PointCharge> &C,
 
 /** Return the potential energy integral with a single point charge, 
     (s|C|s) */
-double SQUIRE_EXPORT potential_integral(const PointCharge &C, const SS_GTO &P)
+double potential_integral(const PointCharge &C, const SS_GTO &P)
 {
     QVector<PointCharge> Cs(1, C);
     return potential_integral(Cs, P);
@@ -329,7 +331,7 @@ double SQUIRE_EXPORT potential_integral(const PointCharge &C, const SS_GTO &P)
 
 /** Return the potential energy integral with a single point charge,
     (s|C|s)^m */
-double SQUIRE_EXPORT potential_integral(const PointCharge &C, const SS_GTO &P, int m)
+double potential_integral(const PointCharge &C, const SS_GTO &P, int m)
 {
     QVector<PointCharge> Cs(1, C);
     return potential_integral(Cs, P, m);
@@ -337,7 +339,7 @@ double SQUIRE_EXPORT potential_integral(const PointCharge &C, const SS_GTO &P, i
 
 /** Return the potential energy integral with an array of point dipoles, 
     (s|C|s) */
-double SQUIRE_EXPORT potential_integral(const QVector<PointDipole> &C, const SS_GTO &P)
+double potential_integral(const QVector<PointDipole> &C, const SS_GTO &P)
 {
     throw SireError::incomplete_code("Not implemented", CODELOC);
     return 0;
@@ -345,7 +347,7 @@ double SQUIRE_EXPORT potential_integral(const QVector<PointDipole> &C, const SS_
 
 /** Return the potential energy integral with an array of point dipoles,
     (s|C|s)^m */
-double SQUIRE_EXPORT potential_integral(const QVector<PointDipole> &C, 
+double potential_integral(const QVector<PointDipole> &C, 
                                         const SS_GTO &P, int m)
 {
     throw SireError::incomplete_code("Not implemented", CODELOC);
@@ -353,27 +355,27 @@ double SQUIRE_EXPORT potential_integral(const QVector<PointDipole> &C,
 }
 
 /** Return the potential energy integral with a single point dipole, (s|C|s) */
-double SQUIRE_EXPORT potential_integral(const PointDipole &C, const SS_GTO &P)
+double potential_integral(const PointDipole &C, const SS_GTO &P)
 {
     QVector<PointDipole> Cs(1, C);
     return potential_integral(Cs, P);
 }
 
 /** Return the potential energy integral with a single point dipole, (s|C|s)^m */
-double SQUIRE_EXPORT potential_integral(const PointDipole &C, const SS_GTO &P, int m)
+double potential_integral(const PointDipole &C, const SS_GTO &P, int m)
 {
     QVector<PointDipole> Cs(1, C);
     return potential_integral(Cs, P, m);
 }
 
 /** Return the electron repulsion integral, (ss|ss) */
-double SQUIRE_EXPORT electron_integral(const SS_GTO &P, const SS_GTO &Q)
+double electron_integral(const SS_GTO &P, const SS_GTO &Q)
 {
     return GTOPair::preFac(P,Q) * boys_f0( GTOPair::T(P,Q) );
 }
 
 /** Return the electron repulsion integral, (ss|ss)^m */
-double SQUIRE_EXPORT electron_integral(const SS_GTO &P, const SS_GTO &Q, int m)
+double electron_integral(const SS_GTO &P, const SS_GTO &Q, int m)
 {
     return GTOPair::preFac(P,Q) * boys_f1( GTOPair::T(P,Q) );
 }

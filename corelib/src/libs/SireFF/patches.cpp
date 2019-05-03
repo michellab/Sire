@@ -46,7 +46,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<FFBead> r_ffbead(NO_ROOT);
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFBead &ffbead)
+QDataStream &operator<<(QDataStream &ds, const FFBead &ffbead)
 {
     writeHeader(ds, r_ffbead, 1);
     
@@ -57,7 +57,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFBead &ffbead)
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, FFBead &ffbead)
+QDataStream &operator>>(QDataStream &ds, FFBead &ffbead)
 {
     VersionID v = readHeader(ds, r_ffbead);
     
@@ -124,7 +124,7 @@ const char* FFBead::typeName()
 
 static const RegisterMetaType<FFBeadChange> r_ffbeadchange(NO_ROOT);
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFBeadChange &bead)
+QDataStream &operator<<(QDataStream &ds, const FFBeadChange &bead)
 {
     writeHeader(ds, r_ffbeadchange, 1);
     
@@ -135,7 +135,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FFBeadChange &bead)
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, FFBeadChange &bead)
+QDataStream &operator>>(QDataStream &ds, FFBeadChange &bead)
 {
     VersionID v = readHeader(ds, r_ffbeadchange);
     
@@ -213,7 +213,7 @@ const char* FFBeadChange::typeName()
 
 static const RegisterMetaType<Patches> r_patches;
 
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const Patches &patches)
+QDataStream &operator<<(QDataStream &ds, const Patches &patches)
 {
     writeHeader(ds, r_patches, 1);
     
@@ -226,7 +226,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const Patches &patches)
     return ds;
 }
 
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, Patches &patches)
+QDataStream &operator>>(QDataStream &ds, Patches &patches)
 {
     VersionID v = readHeader(ds, r_patches);
     

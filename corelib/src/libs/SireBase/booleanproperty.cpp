@@ -38,14 +38,14 @@ using namespace SireStream;
 
 static const RegisterMetaType<BooleanProperty> r_prop;
 
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const BooleanProperty &prop)
+QDataStream &operator<<(QDataStream &ds, const BooleanProperty &prop)
 {
     writeHeader(ds, r_prop, 1);
     ds << prop.val;
     return ds;
 }
 
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, BooleanProperty &prop)
+QDataStream &operator>>(QDataStream &ds, BooleanProperty &prop)
 {
     VersionID v = readHeader(ds, r_prop);
     

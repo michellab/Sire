@@ -43,7 +43,7 @@ using namespace SireStream;
 static const RegisterMetaType<PropertyName> r_propname(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const PropertyName &propname)
 {
     writeHeader(ds, r_propname, 1);
@@ -56,7 +56,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, PropertyName &propname)
+QDataStream &operator>>(QDataStream &ds, PropertyName &propname)
 {
     VersionID v = readHeader(ds, r_propname);
 
@@ -212,7 +212,7 @@ QString PropertyName::toString() const
 static const RegisterMetaType<PropertyMap> r_propmap(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const PropertyMap &propmap)
 {
     writeHeader(ds, r_propmap, 1);
@@ -224,7 +224,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                       PropertyMap &propmap)
 {
     VersionID v = readHeader(ds, r_propmap);

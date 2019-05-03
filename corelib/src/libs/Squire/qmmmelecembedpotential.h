@@ -62,8 +62,8 @@ class SQUIRE_EXPORT QMMMElecEmbedPotential
            : public QMMMPotential<QMPotential, SireMM::InterCoulombPotential>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const QMMMElecEmbedPotential&);
-friend QDataStream& ::operator>>(QDataStream&, QMMMElecEmbedPotential&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const QMMMElecEmbedPotential&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, QMMMElecEmbedPotential&);
 
 public:
     typedef QMEnergy Energy;

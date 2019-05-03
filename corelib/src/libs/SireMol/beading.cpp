@@ -53,7 +53,7 @@ using namespace SireStream;
 static const RegisterMetaType<Beading> r_beading( MAGIC_ONLY,
                                                   Beading::typeName() );
                                                   
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Beading &beading)
+QDataStream &operator<<(QDataStream &ds, const Beading &beading)
 {
     writeHeader(ds, r_beading, 1);
     
@@ -62,7 +62,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Beading &beading)
     return ds; 
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Beading &beading)
+QDataStream &operator>>(QDataStream &ds, Beading &beading)
 {
     VersionID v = readHeader(ds, r_beading);
     
@@ -141,7 +141,7 @@ NullBeading Beading::null()
 
 static const RegisterMetaType<MoleculeBeading> r_molbeading;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MoleculeBeading &molbeading)
+QDataStream &operator<<(QDataStream &ds, const MoleculeBeading &molbeading)
 {
     writeHeader(ds, r_molbeading, 1);
     
@@ -150,7 +150,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MoleculeBeading &m
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MoleculeBeading &molbeading)
+QDataStream &operator>>(QDataStream &ds, MoleculeBeading &molbeading)
 {
     VersionID v = readHeader(ds, r_molbeading);
     
@@ -274,7 +274,7 @@ QList<AtomIdx> MoleculeBeading::atomIdxs(const MoleculeInfoData &moldata,
 
 static const RegisterMetaType<ResidueBeading> r_resbeading;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ResidueBeading &resbeading)
+QDataStream &operator<<(QDataStream &ds, const ResidueBeading &resbeading)
 {
     writeHeader(ds, r_resbeading, 1);
     
@@ -283,7 +283,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ResidueBeading &re
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ResidueBeading &resbeading)
+QDataStream &operator>>(QDataStream &ds, ResidueBeading &resbeading)
 {
     VersionID v = readHeader(ds, r_resbeading);
     
@@ -613,7 +613,7 @@ QList<AtomIdx> UserBeadingInfo::atomIdxs(const BeadIdx &bead) const
 
 static const RegisterMetaType<UserBeading> r_userbeading;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const UserBeading &userbeading)
+QDataStream &operator<<(QDataStream &ds, const UserBeading &userbeading)
 {
     writeHeader(ds, r_userbeading, 1);
     
@@ -633,7 +633,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const UserBeading &userb
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, UserBeading &userbeading)
+QDataStream &operator>>(QDataStream &ds, UserBeading &userbeading)
 {
     VersionID v = readHeader(ds, r_userbeading);
     
@@ -815,7 +815,7 @@ QList<AtomIdx> UserBeading::atomIdxs(const MoleculeInfoData &moldata,
 
 static const RegisterMetaType<NullBeading> r_nullbeading;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const NullBeading &nullbeading)
+QDataStream &operator<<(QDataStream &ds, const NullBeading &nullbeading)
 {
     writeHeader(ds, r_nullbeading, 1);
     
@@ -824,7 +824,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const NullBeading &nullb
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, NullBeading &nullbeading)
+QDataStream &operator>>(QDataStream &ds, NullBeading &nullbeading)
 {
     VersionID v = readHeader(ds, r_nullbeading);
     

@@ -61,7 +61,7 @@ using boost::tuple;
 static const RegisterMetaType<Cartesian> r_cartesian;
 
 /** Serialise to a binary datastream */
-QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const Cartesian &cart)
+QDataStream &operator<<(QDataStream &ds, const Cartesian &cart)
 {
     writeHeader(ds, r_cartesian, 1)
                  << static_cast<const Space&>(cart);
@@ -70,7 +70,7 @@ QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const Cartesian &cart)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREVOL_EXPORT &operator>>(QDataStream &ds, Cartesian &cart)
+QDataStream &operator>>(QDataStream &ds, Cartesian &cart)
 {
     VersionID v = readHeader(ds, r_cartesian);
 

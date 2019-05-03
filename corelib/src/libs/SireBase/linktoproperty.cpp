@@ -38,7 +38,7 @@ using namespace SireStream;
 static const RegisterMetaType<LinkToProperty> r_link;
 
 /** Serialise to a binary datastream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const LinkToProperty &link)
+QDataStream &operator<<(QDataStream &ds, const LinkToProperty &link)
 {
     writeHeader(ds, r_link, 1);
     
@@ -51,7 +51,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const LinkToProperty &l
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, LinkToProperty &link)
+QDataStream &operator>>(QDataStream &ds, LinkToProperty &link)
 {
     VersionID v = readHeader(ds, r_link);
     

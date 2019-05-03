@@ -45,8 +45,8 @@ class AxisSet;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireMaths::AxisSet&);
-QDataStream& operator>>(QDataStream&, SireMaths::AxisSet&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::AxisSet&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::AxisSet&);
 
 namespace SireMaths
 {
@@ -60,8 +60,8 @@ frame of reference (origin+axes) for a coordinate system.
 class SIREMATHS_EXPORT AxisSet
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AxisSet&);
-friend QDataStream& ::operator>>(QDataStream&, AxisSet&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const AxisSet&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, AxisSet&);
 
 public:
     AxisSet();

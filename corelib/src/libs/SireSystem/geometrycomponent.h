@@ -46,8 +46,8 @@ namespace SireSystem
 class GeometryComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::GeometryComponent&);
-QDataStream& operator>>(QDataStream&, SireSystem::GeometryComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::GeometryComponent&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::GeometryComponent&);
 
 namespace SireVol
 {
@@ -71,8 +71,8 @@ using SireBase::PropertyMap;
 class SIRESYSTEM_EXPORT GeometryComponent : public Constraint
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GeometryComponent&);
-friend QDataStream& ::operator>>(QDataStream&, GeometryComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const GeometryComponent&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, GeometryComponent&);
 
 public:
     GeometryComponent(const PropertyMap &map = PropertyMap());

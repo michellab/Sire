@@ -41,7 +41,7 @@ namespace SireError
 
     @author Christopher Woods
 */
-class SIREERROR_EXPORT version_error : public exception
+class version_error : public exception
 {
 public:
     version_error() : exception()

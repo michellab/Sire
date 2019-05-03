@@ -57,7 +57,7 @@ using namespace SireStream;
 static const RegisterMetaType<BennettsRatios> r_ratios;
 static const RegisterAlternativeName<BennettsRatios> r_altratios("Soiree::BennettsRatios");
 
-QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const BennettsRatios &ratios)
+QDataStream &operator<<(QDataStream &ds, const BennettsRatios &ratios)
 {
     writeHeader(ds, r_ratios, 1);
     
@@ -68,7 +68,7 @@ QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const BennettsRatio
     return ds;
 }
 
-QDataStream SIREANALYSIS_EXPORT &operator>>(QDataStream &ds, BennettsRatios &ratios)
+QDataStream &operator>>(QDataStream &ds, BennettsRatios &ratios)
 {
     VersionID v = readHeader(ds, r_ratios);
     
@@ -677,7 +677,7 @@ PMF BennettsRatios::integrate() const
 static const RegisterMetaType<Bennetts> r_bennetts;
 static const RegisterAlternativeName<Bennetts> r_altbennets("Soiree::Bennetts");
 
-QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const Bennetts &bennetts)
+QDataStream &operator<<(QDataStream &ds, const Bennetts &bennetts)
 {
     writeHeader(ds, r_bennetts, 1);
     
@@ -688,7 +688,7 @@ QDataStream SIREANALYSIS_EXPORT &operator<<(QDataStream &ds, const Bennetts &ben
     return ds;
 }
 
-QDataStream SIREANALYSIS_EXPORT &operator>>(QDataStream &ds, Bennetts &bennetts)
+QDataStream &operator>>(QDataStream &ds, Bennetts &bennetts)
 {
     VersionID v = readHeader(ds, r_bennetts);
     

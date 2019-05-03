@@ -243,7 +243,7 @@ QDataStream& operator>>(QDataStream &ds,
 static const RegisterMetaType<RanGenerator> r_rangen(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const RanGenerator &rangen)
+QDataStream &operator<<(QDataStream &ds, const RanGenerator &rangen)
 {
     writeHeader(ds, r_rangen, 1);
 
@@ -254,7 +254,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const RanGenerator &ra
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, RanGenerator &rangen)
+QDataStream &operator>>(QDataStream &ds, RanGenerator &rangen)
 {
     VersionID v = readHeader(ds, r_rangen);
 
@@ -407,7 +407,7 @@ void RanGenerator::seed(const RanGenerator &other)
 /** Call this function to seed the qrand generator for this thread */
 namespace SireMaths
 {
-    void SIREMATHS_EXPORT seed_qrand()
+    void seed_qrand()
     {
         RanGenerator rand;
         qsrand( rand.randInt() );

@@ -43,14 +43,14 @@ public:
     }
 };
 
-FooBase* makeFoo_Int();
-FooBase* makeFoo_Double();
+Q_DECL_EXPORT FooBase* makeFoo_Int();
+Q_DECL_EXPORT FooBase* makeFoo_Double();
 
-bool testFoo_Int(const FooBase &foo);
-bool testFoo_Double(const FooBase &foo);
+Q_DECL_EXPORT bool testFoo_Int(const FooBase &foo);
+Q_DECL_EXPORT bool testFoo_Double(const FooBase &foo);
 
-bool testFoo_Holder_Double(const SireStream::detail::SharedDataHolder &holder);
-bool testFoo_Holder_Int(const SireStream::detail::SharedDataHolder &holder);
+Q_DECL_EXPORT bool testFoo_Holder_Double(const SireStream::detail::SharedDataHolder &holder);
+Q_DECL_EXPORT bool testFoo_Holder_Int(const SireStream::detail::SharedDataHolder &holder);
 
 template<class T>
 class Q_DECL_EXPORT Foo : public FooBase

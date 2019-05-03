@@ -50,8 +50,8 @@ template<class T>
 class SegProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::SegProp&);
-QDataStream& operator>>(QDataStream&, SireMol::SegProp&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::SegProp&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::SegProp&);
 
 template<class T>
 QDataStream& operator<<(QDataStream&, const SireMol::SegProperty<T>&);
@@ -99,8 +99,8 @@ class SIREMOL_EXPORT SegProperty
     : public SireBase::ConcreteProperty<SegProperty<T>, SegProp>
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const SegProperty<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, SegProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const SegProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, SegProperty<T>&);
 
 public:
     SegProperty();

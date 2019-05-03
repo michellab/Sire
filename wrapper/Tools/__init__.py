@@ -21,7 +21,11 @@ import sys
 # of key - value pairs
 def readParams( filename ):
     """Read a text file containing key-value pairs and return as a dictionary"""
-    lines = open(filename, "r").readlines()
+    try:
+        lines = open(filename, "r").readlines()
+    except UnicodeDecodeError:
+        import codecs
+        lines = codecs.open(filename, "r", encoding="UTF-8").readlines()
 
     params = {}
 

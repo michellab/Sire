@@ -79,8 +79,8 @@ typedef SireBase::PropPtr<FFParametersArray> FFParametersArrayPtr;
 class SIREFF_EXPORT FFParameters : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FFParameters&);
-friend QDataStream& ::operator>>(QDataStream&, FFParameters&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FFParameters&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FFParameters&);
 
 public:
     FFParameters();
@@ -119,8 +119,8 @@ protected:
 class SIREFF_EXPORT FFParametersArray : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FFParametersArray&);
-friend QDataStream& ::operator>>(QDataStream&, FFParametersArray&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FFParametersArray&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FFParametersArray&);
 
 public:
     FFParametersArray();
@@ -165,8 +165,8 @@ class SIREFF_EXPORT NullFFParameters
             : public SireBase::ConcreteProperty<NullFFParameters,FFParameters>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullFFParameters&);
-friend QDataStream& ::operator>>(QDataStream&, NullFFParameters&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const NullFFParameters&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, NullFFParameters&);
 
 public:
     NullFFParameters();
@@ -189,8 +189,8 @@ class SIREFF_EXPORT NullFFParametersArray
             : public SireBase::ConcreteProperty<NullFFParametersArray,FFParametersArray>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullFFParametersArray&);
-friend QDataStream& ::operator>>(QDataStream&, NullFFParametersArray&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const NullFFParametersArray&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, NullFFParametersArray&);
 
 public:
     NullFFParametersArray();

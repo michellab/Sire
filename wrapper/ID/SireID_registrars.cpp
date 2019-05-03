@@ -3,16 +3,18 @@
 
 #include "SireID_registrars.h"
 
-#include "identifier.h"
+#include "Helpers/version_error_impl.h"
+
 #include "index.h"
+#include "identifier.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_SireID_objects()
 {
 
-    ObjectRegistry::registerConverterFor< SireID::Identifier >();
     ObjectRegistry::registerConverterFor< SireID::Index >();
+    ObjectRegistry::registerConverterFor< SireID::Identifier >();
 
 }
 

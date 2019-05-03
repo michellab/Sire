@@ -51,7 +51,7 @@ namespace SireBase
 {
     namespace detail
     {
-        int SIREBASE_EXPORT checkIndex(int i, int count)
+        int checkIndex(int i, int count)
         {
             int idx = i;
         
@@ -67,27 +67,27 @@ namespace SireBase
         }
     }
 
-    PropertyPtr SIREBASE_EXPORT wrap(const Property &value)
+    PropertyPtr wrap(const Property &value)
     {
         return PropertyPtr(value);
     }
 
-    PropertyPtr SIREBASE_EXPORT wrap(const QList<PropertyPtr> &value)
+    PropertyPtr wrap(const QList<PropertyPtr> &value)
     {
         return PropertyList(value);
     }
     
-    PropertyPtr SIREBASE_EXPORT wrap(const QString &value)
+    PropertyPtr wrap(const QString &value)
     {
         return StringProperty(value);
     }
     
-    PropertyPtr SIREBASE_EXPORT wrap(double value)
+    PropertyPtr wrap(double value)
     {
         return NumberProperty(value);
     }
     
-    PropertyPtr SIREBASE_EXPORT wrap(const QList<int> &values)
+    PropertyPtr wrap(const QList<int> &values)
     {
         QVector<qint64> ivals;
         ivals.reserve(values.count());
@@ -100,12 +100,12 @@ namespace SireBase
         return IntegerArrayProperty(ivals);
     }
     
-    PropertyPtr SIREBASE_EXPORT wrap(const QList<double> &values)
+    PropertyPtr wrap(const QList<double> &values)
     {
         return DoubleArrayProperty(values);
     }
 
-    PropertyPtr SIREBASE_EXPORT wrap(const QVector<int> &values)
+    PropertyPtr wrap(const QVector<int> &values)
     {
         QVector<qint64> ivals;
         ivals.reserve(values.count());
@@ -118,22 +118,22 @@ namespace SireBase
         return IntegerArrayProperty(ivals);
     }
     
-    PropertyPtr SIREBASE_EXPORT wrap(const QVector<double> &values)
+    PropertyPtr wrap(const QVector<double> &values)
     {
         return DoubleArrayProperty(values);
     }
     
-    PropertyPtr SIREBASE_EXPORT wrap(const QList<QString> &values)
+    PropertyPtr wrap(const QList<QString> &values)
     {
         return StringArrayProperty(values);
     }
     
-    PropertyPtr SIREBASE_EXPORT wrap(const QVector<QString> &values)
+    PropertyPtr wrap(const QVector<QString> &values)
     {
         return StringArrayProperty(values);
     }
     
-    PropertyPtr SIREBASE_EXPORT wrap(const QStringList &values)
+    PropertyPtr wrap(const QStringList &values)
     {
         return StringArrayProperty(values);
     }
@@ -143,7 +143,7 @@ namespace SireBase
 //////// Implementation of PropertyList
 ////////
 
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const PropertyList &list)
+QDataStream &operator<<(QDataStream &ds, const PropertyList &list)
 {
     writeHeader(ds, r_proplist, 1);
     
@@ -153,7 +153,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const PropertyList &lis
     return ds;
 }
 
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, PropertyList &list)
+QDataStream &operator>>(QDataStream &ds, PropertyList &list)
 {
     VersionID v = readHeader(ds, r_proplist);
     

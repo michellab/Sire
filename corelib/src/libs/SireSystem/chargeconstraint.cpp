@@ -47,7 +47,7 @@ static const RegisterMetaType<ChargeConstraint> r_chgconstraint( MAGIC_ONLY,
                                                     ChargeConstraint::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const ChargeConstraint &chgconstraint)
 {
     writeHeader(ds, r_chgconstraint, 1);
@@ -62,7 +62,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                           ChargeConstraint &chgconstraint)
 {
     VersionID v = readHeader(ds, r_chgconstraint);

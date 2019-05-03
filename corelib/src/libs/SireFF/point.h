@@ -54,23 +54,23 @@ class CenterOfGeometry;
 
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::Point&);
-QDataStream& operator>>(QDataStream&, SireFF::Point&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::Point&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::Point&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::AtomPoint&);
-QDataStream& operator>>(QDataStream&, SireFF::AtomPoint&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::AtomPoint&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::AtomPoint&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::VectorPoint&);
-QDataStream& operator>>(QDataStream&, SireFF::VectorPoint&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::VectorPoint&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::VectorPoint&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::Center&);
-QDataStream& operator>>(QDataStream&, SireFF::Center&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::Center&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::Center&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::CenterOfGeometry&);
-QDataStream& operator>>(QDataStream&, SireFF::CenterOfGeometry&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::CenterOfGeometry&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::CenterOfGeometry&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::CenterOfMass&);
-QDataStream& operator>>(QDataStream&, SireFF::CenterOfMass&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::CenterOfMass&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::CenterOfMass&);
 
 namespace SireFF
 {
@@ -111,8 +111,8 @@ typedef SireBase::PropPtr<Point> PointPtr;
 class SIREFF_EXPORT Point : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Point&);
-friend QDataStream& ::operator>>(QDataStream&, Point&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const Point&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, Point&);
 
 public:
     Point();
@@ -230,8 +230,8 @@ private:
 class SIREFF_EXPORT AtomPoint : public SireBase::ConcreteProperty<AtomPoint,Point>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomPoint&);
-friend QDataStream& ::operator>>(QDataStream&, AtomPoint&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomPoint&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, AtomPoint&);
 
 public:
     AtomPoint();
@@ -293,8 +293,8 @@ private:
 class SIREFF_EXPORT VectorPoint : public SireBase::ConcreteProperty<VectorPoint,Point>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const VectorPoint&);
-friend QDataStream& ::operator>>(QDataStream&, VectorPoint&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const VectorPoint&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, VectorPoint&);
 
 public:
     VectorPoint();
@@ -348,8 +348,8 @@ public:
 class SIREFF_EXPORT Center : public SireBase::ConcreteProperty<Center,Point>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Center&);
-friend QDataStream& ::operator>>(QDataStream&, Center&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const Center&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, Center&);
 
 public:
     Center();
@@ -416,8 +416,8 @@ class SIREFF_EXPORT CenterOfGeometry
             : public SireBase::ConcreteProperty<CenterOfGeometry,Point>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CenterOfGeometry&);
-friend QDataStream& ::operator>>(QDataStream&, CenterOfGeometry&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const CenterOfGeometry&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, CenterOfGeometry&);
 
 public:
     CenterOfGeometry();
@@ -486,8 +486,8 @@ class SIREFF_EXPORT CenterOfMass
             : public SireBase::ConcreteProperty<CenterOfMass,Point>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CenterOfMass&);
-friend QDataStream& ::operator>>(QDataStream&, CenterOfMass&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const CenterOfMass&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, CenterOfMass&);
 
 public:
     CenterOfMass();

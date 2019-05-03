@@ -41,8 +41,8 @@ namespace SireCAS
 class Sum;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Sum&);
-QDataStream& operator>>(QDataStream&, SireCAS::Sum&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Sum&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Sum&);
 
 namespace SireCAS
 {
@@ -57,8 +57,8 @@ This class holds a collection of expressions that are to be added (or subtracted
 class SIRECAS_EXPORT Sum : public ExBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Sum&);
-friend QDataStream& ::operator>>(QDataStream&, Sum&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Sum&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Sum&);
 
 public:
     Sum();

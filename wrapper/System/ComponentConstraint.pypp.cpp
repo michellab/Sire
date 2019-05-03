@@ -20,6 +20,8 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "SireStream/streamdata.hpp"
+
 #include "SireSystem/errors.h"
 
 #include "constraint.h"

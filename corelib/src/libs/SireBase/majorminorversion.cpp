@@ -39,14 +39,14 @@ using namespace SireStream;
 
 static const RegisterMetaType<Version> r_version(NO_ROOT);
 
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const Version &version)
+QDataStream &operator<<(QDataStream &ds, const Version &version)
 {
     writeHeader(ds, r_version, 1);
     ds << version.maj << version.min;
     return ds;
 }
 
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, Version &version)
+QDataStream &operator>>(QDataStream &ds, Version &version)
 {
     VersionID v = readHeader(ds, r_version);
     

@@ -42,8 +42,8 @@ namespace SireIO
 class ProtoMS;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::ProtoMS&);
-QDataStream& operator>>(QDataStream&, SireIO::ProtoMS&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::ProtoMS&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::ProtoMS&);
 
 class QTextStream;
 
@@ -318,8 +318,8 @@ private:
 class SIREIO_EXPORT ProtoMS
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireIO::ProtoMS&);
-friend QDataStream& ::operator>>(QDataStream&, SireIO::ProtoMS&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const SireIO::ProtoMS&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, SireIO::ProtoMS&);
 
 public:
     enum { PROTEIN = 1,     // a ProtoMS protein molecule

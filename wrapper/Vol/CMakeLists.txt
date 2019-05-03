@@ -46,7 +46,6 @@ target_link_libraries (Vol
                        SirePython
                        SIRE_SireVol
                        ${BOOST_PYTHON_LIBRARY}
-                       ${PYTHON_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

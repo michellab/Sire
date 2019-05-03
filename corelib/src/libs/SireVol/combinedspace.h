@@ -41,8 +41,8 @@ namespace SireVol
 class CombinedSpace;
 }
 
-QDataStream& operator<<(QDataStream&, const SireVol::CombinedSpace&);
-QDataStream& operator>>(QDataStream&, SireVol::CombinedSpace&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::CombinedSpace&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::CombinedSpace&);
 
 namespace SireVol
 {
@@ -58,8 +58,8 @@ class SIREVOL_EXPORT CombinedSpace
         : public SireBase::ConcreteProperty<CombinedSpace,Space>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CombinedSpace&);
-friend QDataStream& ::operator>>(QDataStream&, CombinedSpace&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CombinedSpace&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, CombinedSpace&);
 
 public:
     typedef QVector<SpacePtr>::const_iterator const_iterator;

@@ -3,43 +3,45 @@
 
 #include "Squire_registrars.h"
 
-#include "pgto.h"
-#include "qmchargecalculator.h"
-#include "mopac.h"
-#include "pointcharge.h"
-#include "am1bcc.h"
-#include "sgto.h"
-#include "qmmmff.h"
-#include "pointdipole.h"
-#include "qmff.h"
-#include "molpro.h"
-#include "sqm.h"
-#include "qmpotential.h"
+#include "Helpers/version_error_impl.h"
+
 #include "qmprogram.h"
+#include "pgto.h"
+#include "pointdipole.h"
+#include "qmpotential.h"
+#include "mopac.h"
+#include "sqm.h"
+#include "molpro.h"
+#include "qmff.h"
+#include "sgto.h"
 #include "qmchargeconstraint.h"
+#include "qmchargecalculator.h"
+#include "am1bcc.h"
+#include "pointcharge.h"
+#include "qmmmff.h"
 
 #include "Helpers/objectregistry.hpp"
 
 void register_Squire_objects()
 {
 
+    ObjectRegistry::registerConverterFor< Squire::NullQM >();
     ObjectRegistry::registerConverterFor< Squire::P_GTO >();
     ObjectRegistry::registerConverterFor< Squire::PS_GTO >();
     ObjectRegistry::registerConverterFor< Squire::PP_GTO >();
-    ObjectRegistry::registerConverterFor< Squire::NullQMChargeCalculator >();
+    ObjectRegistry::registerConverterFor< Squire::PointDipole >();
+    ObjectRegistry::registerConverterFor< Squire::QMComponent >();
     ObjectRegistry::registerConverterFor< Squire::Mopac >();
-    ObjectRegistry::registerConverterFor< Squire::PointCharge >();
-    ObjectRegistry::registerConverterFor< Squire::AM1BCC >();
+    ObjectRegistry::registerConverterFor< Squire::SQM >();
+    ObjectRegistry::registerConverterFor< Squire::Molpro >();
+    ObjectRegistry::registerConverterFor< Squire::QMFF >();
     ObjectRegistry::registerConverterFor< Squire::S_GTO >();
     ObjectRegistry::registerConverterFor< Squire::SS_GTO >();
-    ObjectRegistry::registerConverterFor< Squire::QMMMFF >();
-    ObjectRegistry::registerConverterFor< Squire::PointDipole >();
-    ObjectRegistry::registerConverterFor< Squire::QMFF >();
-    ObjectRegistry::registerConverterFor< Squire::Molpro >();
-    ObjectRegistry::registerConverterFor< Squire::SQM >();
-    ObjectRegistry::registerConverterFor< Squire::QMComponent >();
-    ObjectRegistry::registerConverterFor< Squire::NullQM >();
     ObjectRegistry::registerConverterFor< Squire::QMChargeConstraint >();
+    ObjectRegistry::registerConverterFor< Squire::NullQMChargeCalculator >();
+    ObjectRegistry::registerConverterFor< Squire::AM1BCC >();
+    ObjectRegistry::registerConverterFor< Squire::PointCharge >();
+    ObjectRegistry::registerConverterFor< Squire::QMMMFF >();
 
 }
 

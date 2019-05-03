@@ -40,9 +40,9 @@
 
 #include "md5sum.h"
 
-#include "sireglobal.h"
-
 #include <QDebug>
+
+#include "sireglobal.h"
 
 SIRE_BEGIN_HEADER
 
@@ -51,34 +51,34 @@ namespace SireStream
 class FileHeader;
 }
 
-QDataStream& operator<<(QDataStream&, const SireStream::FileHeader&);
-QDataStream& operator>>(QDataStream&, SireStream::FileHeader&);
+SIRESTREAM_EXPORT QDataStream& operator<<(QDataStream&, const SireStream::FileHeader&);
+SIRESTREAM_EXPORT QDataStream& operator>>(QDataStream&, SireStream::FileHeader&);
 
 namespace SireStream
 {
 
 namespace detail
 {
-QByteArray streamDataSave( const void *object, const char *type_name );
+SIRESTREAM_EXPORT QByteArray streamDataSave( const void *object, const char *type_name );
 
-QByteArray streamDataSave( 
+SIRESTREAM_EXPORT QByteArray streamDataSave( 
                  const QList< boost::tuple<const void*,const char*> > &objects ); 
 
-QByteArray streamDataSave(
+SIRESTREAM_EXPORT QByteArray streamDataSave(
                  const QList< boost::tuple<boost::shared_ptr<void>,QString> > &objects );
 
-void streamDataSave( const void *object, const char *type_name, 
+SIRESTREAM_EXPORT void streamDataSave( const void *object, const char *type_name, 
                      const QString &filename );
 
-void streamDataSave(
+SIRESTREAM_EXPORT void streamDataSave(
                 const QList< boost::tuple<const void*,const char*> > &objects,
                 const QString &filename );
 
-void streamDataSave(
+SIRESTREAM_EXPORT void streamDataSave(
                 const QList< boost::tuple<boost::shared_ptr<void>,QString> > &objects,
                 const QString &filename );
 
-void throwStreamDataInvalidCast(const QString &load_type, 
+SIRESTREAM_EXPORT void throwStreamDataInvalidCast(const QString &load_type, 
                                 const QString &cast_type);
 
 struct void_deleter
@@ -101,8 +101,8 @@ private:
 
 }
 
-QList< boost::tuple<boost::shared_ptr<void>,QString> > load(const QByteArray &data);
-QList< boost::tuple<boost::shared_ptr<void>,QString> > load(const QString &filename);
+SIRESTREAM_EXPORT QList< boost::tuple<boost::shared_ptr<void>,QString> > load(const QByteArray &data);
+SIRESTREAM_EXPORT QList< boost::tuple<boost::shared_ptr<void>,QString> > load(const QString &filename);
 
 /** This class provides metadata about the binary representation
     of an object. This is to allow the owner of the data to identify
@@ -117,8 +117,8 @@ QList< boost::tuple<boost::shared_ptr<void>,QString> > load(const QString &filen
 class SIRESTREAM_EXPORT FileHeader
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FileHeader&);
-friend QDataStream& ::operator>>(QDataStream&, FileHeader&);
+friend SIRESTREAM_EXPORT QDataStream& ::operator<<(QDataStream&, const FileHeader&);
+friend SIRESTREAM_EXPORT QDataStream& ::operator>>(QDataStream&, FileHeader&);
 
 friend QByteArray detail::streamDataSave( 
                         const QList< boost::tuple<const void*,const char*> >& );
@@ -218,14 +218,14 @@ private:
     quint32 version_number;
 };
 
-FileHeader getDataHeader(const QByteArray &data);
-FileHeader getDataHeader(const QString &filename);
+SIRESTREAM_EXPORT FileHeader getDataHeader(const QByteArray &data);
+SIRESTREAM_EXPORT FileHeader getDataHeader(const QString &filename);
 
-void registerLibrary(const QString &library,
+SIRESTREAM_EXPORT void registerLibrary(const QString &library,
                      quint32 version, quint32 min_supported_version);
 
-quint32 getLibraryVersion(const QString &library);
-quint32 getMinimumSupportedVersion(const QString &library);
+SIRESTREAM_EXPORT quint32 getLibraryVersion(const QString &library);
+SIRESTREAM_EXPORT quint32 getMinimumSupportedVersion(const QString &library);
 
 class SIRESTREAM_EXPORT RegisterLibrary
 {

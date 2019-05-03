@@ -40,8 +40,8 @@ namespace SireMove
 class Replicas;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::Replicas&);
-QDataStream& operator>>(QDataStream&, SireMove::Replicas&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::Replicas&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::Replicas&);
 
 namespace SireMaths
 {
@@ -64,8 +64,8 @@ class SIREMOVE_EXPORT Replicas
         : public SireBase::ConcreteProperty<Replicas,SupraSystem>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Replicas&);
-friend QDataStream& ::operator>>(QDataStream&, Replicas&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const Replicas&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, Replicas&);
 
 public:
     Replicas();

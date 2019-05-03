@@ -42,11 +42,11 @@ class Exp;
 class Ln;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Exp&);
-QDataStream& operator>>(QDataStream&, SireCAS::Exp&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Exp&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Exp&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Ln&);
-QDataStream& operator>>(QDataStream&, SireCAS::Ln&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Ln&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Ln&);
 
 namespace SireCAS
 {
@@ -59,8 +59,8 @@ This is the exponential function, e^x
 class SIRECAS_EXPORT Exp : public PowerFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Exp&);
-friend QDataStream& ::operator>>(QDataStream&, Exp&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Exp&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Exp&);
 
 public:
     Exp();
@@ -107,8 +107,8 @@ private:
 class SIRECAS_EXPORT Ln : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Ln&);
-friend QDataStream& ::operator>>(QDataStream&, Ln&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Ln&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Ln&);
 
 public:
     Ln();

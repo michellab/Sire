@@ -49,14 +49,14 @@ class CoordGroupArray;
 class CoordGroupArrayArray;
 }
 
-QDataStream& operator<<(QDataStream&, const SireVol::CoordGroup&);
-QDataStream& operator>>(QDataStream&, SireVol::CoordGroup&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::CoordGroup&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::CoordGroup&);
 
-QDataStream& operator<<(QDataStream&, const SireVol::CoordGroupArray&);
-QDataStream& operator>>(QDataStream&, SireVol::CoordGroupArray&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::CoordGroupArray&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::CoordGroupArray&);
 
-QDataStream& operator<<(QDataStream&, const SireVol::CoordGroupArrayArray&);
-QDataStream& operator>>(QDataStream&, SireVol::CoordGroupArrayArray&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::CoordGroupArrayArray&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::CoordGroupArrayArray&);
 
 namespace SireMaths
 {
@@ -322,8 +322,8 @@ protected:
 class SIREVOL_EXPORT CoordGroup : public CoordGroupBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CoordGroup&);
-friend QDataStream& ::operator>>(QDataStream&, CoordGroup&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CoordGroup&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, CoordGroup&);
 
 friend class CoordGroupEditor;
 friend class detail::CGData; // so can see d pointer
@@ -470,7 +470,7 @@ private:
         
     @author Christopher Woods
 */
-class SIREMOL_EXPORT CoordGroupArray
+class SIREVOL_EXPORT CoordGroupArray
 {
 
 friend class detail::CGArrayData; // so can see d pointer
@@ -478,8 +478,8 @@ friend class detail::CGMemory; // so can see d pointer
 
 friend class CoordGroupArrayArray;
 
-friend QDataStream& ::operator<<(QDataStream&, const CoordGroupArray&);
-friend QDataStream& ::operator>>(QDataStream&, CoordGroupArray&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CoordGroupArray&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, CoordGroupArray&);
 
 public:
     CoordGroupArray();
@@ -588,11 +588,11 @@ private:
     
     @author Christopher Woods
 */
-class SIREMOL_EXPORT CoordGroupArrayArray
+class SIREVOL_EXPORT CoordGroupArrayArray
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CoordGroupArrayArray&);
-friend QDataStream& ::operator>>(QDataStream&, CoordGroupArrayArray&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const CoordGroupArrayArray&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, CoordGroupArrayArray&);
 
 public:
     CoordGroupArrayArray();

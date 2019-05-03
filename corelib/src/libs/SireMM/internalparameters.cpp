@@ -594,7 +594,7 @@ bool GroupInternalParametersData::hasNonPhysicalParameters() const
 //////////
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT  &operator<<(QDataStream &ds,
+QDataStream  &operator<<(QDataStream &ds,
                                        const GroupInternalParameters &group)
 {
     SharedDataStream sds(ds);
@@ -604,7 +604,7 @@ QDataStream SIREMM_EXPORT  &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       GroupInternalParameters &group)
 {
     SharedDataStream sds(ds);
@@ -622,7 +622,7 @@ GroupInternalParameters::GroupInternalParameters()
 {}
 
 /** Construct for the specified CutGroups */
-GroupInternalParameters::GroupInternalParameters(const detail::CGIDQuad &cgids)
+GroupInternalParameters::GroupInternalParameters(const CGIDQuad &cgids)
                         : d( new GroupInternalParametersData(cgids) )
 {}
 
@@ -1438,7 +1438,7 @@ const StretchBendTorsionSymbols& InternalSymbols::stretchBendTorsion() const
 static const RegisterMetaType<InternalParameters> r_params(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const InternalParameters &params)
 {
     writeHeader(ds, r_params, 1);
@@ -1451,7 +1451,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       InternalParameters &params)
 {
     VersionID v = readHeader(ds, r_params);
@@ -3154,7 +3154,7 @@ const char* InternalParameters::typeName()
 static const RegisterMetaType<InternalParameters3D> r_params3d(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const InternalParameters3D &params3d)
 {
     writeHeader(ds, r_params3d, 1);
@@ -3168,7 +3168,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }              
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       InternalParameters3D &params3d)
 {
     VersionID v = readHeader(ds, r_params3d);

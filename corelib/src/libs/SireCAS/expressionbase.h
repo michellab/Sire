@@ -48,8 +48,8 @@ class ExpressionBase;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireCAS::ExpressionBase&);
-QDataStream& operator>>(QDataStream&, SireCAS::ExpressionBase&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::ExpressionBase&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::ExpressionBase&);
 
 namespace SireCAS
 {
@@ -76,8 +76,8 @@ using SireBase::SharedPolyPointer;
 class SIRECAS_EXPORT ExpressionBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ExpressionBase&);
-friend QDataStream& ::operator>>(QDataStream&, ExpressionBase&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const ExpressionBase&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, ExpressionBase&);
 
 public:
     ExpressionBase();

@@ -66,7 +66,7 @@ static const RegisterMetaType<IntegratorWorkspaceJM> r_intwsjm(MAGIC_ONLY,
                                                     "SireMove::IntegratorWorkspaceJM");
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const IntegratorWorkspaceJM &intws)
 {
     writeHeader(ds, r_intwsjm, 1);
@@ -89,7 +89,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, IntegratorWorkspaceJM &intws)
+QDataStream &operator>>(QDataStream &ds, IntegratorWorkspaceJM &intws)
 {
     VersionID v = readHeader(ds, r_intwsjm);
     
@@ -493,7 +493,7 @@ const NullIntegratorWorkspaceJM& IntegratorWorkspaceJM::null()
 static const RegisterMetaType<NullIntegratorWorkspaceJM> r_nullintwsjm;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                         const NullIntegratorWorkspaceJM &nullintws)
 {
     writeHeader(ds, r_nullintwsjm, 1);
@@ -504,7 +504,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                         NullIntegratorWorkspaceJM &nullintws)
 {
     VersionID v = readHeader(ds, r_nullintwsjm);
@@ -602,7 +602,7 @@ const char* NullIntegratorWorkspaceJM::typeName()
 
 static const RegisterMetaType<AtomicVelocityWorkspaceJM> r_atvelwsjm;
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                         const AtomicVelocityWorkspaceJM &atvelws)
 {
     writeHeader(ds, r_atvelwsjm, 1);
@@ -614,7 +614,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         AtomicVelocityWorkspaceJM &atvelws)
 {
     VersionID v = readHeader(ds, r_atvelwsjm);

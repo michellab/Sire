@@ -38,8 +38,8 @@ namespace SireMol
 class SegIdentifier;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::SegIdentifier&);
-QDataStream& operator>>(QDataStream&, SireMol::SegIdentifier&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::SegIdentifier&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::SegIdentifier&);
 
 namespace SireMol
 {
@@ -50,8 +50,8 @@ class SegIdx;
 class SIREMOL_EXPORT SegIdentifier : public SegID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SegIdentifier&);
-friend QDataStream& ::operator>>(QDataStream&, SegIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const SegIdentifier&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, SegIdentifier&);
 
 public:
     SegIdentifier();

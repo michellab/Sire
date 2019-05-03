@@ -37,6 +37,8 @@
 #include <QVariant>
 #include <QDebug>
 
+#include <boost/throw_exception.hpp>
+
 SIRE_BEGIN_HEADER
 
 namespace SireBase
@@ -57,17 +59,17 @@ class GlobalPropPtr;
 
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::Property&);
-QDataStream& operator>>(QDataStream&, SireBase::Property&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::Property&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::Property&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::NullProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::NullProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::NullProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::NullProperty&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::PropPtrBase&);
-QDataStream& operator>>(QDataStream&, SireBase::PropPtrBase&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::PropPtrBase&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::PropPtrBase&);
 
-QDataStream& operator<<(QDataStream&, const SireBase::GlobalPropPtrBase&);
-QDataStream& operator>>(QDataStream&, SireBase::GlobalPropPtrBase&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::GlobalPropPtrBase&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::GlobalPropPtrBase&);
 
 template<class T>
 QDataStream& operator<<(QDataStream&, const SireBase::PropPtr<T>&);
@@ -84,7 +86,7 @@ class QMutex;
 namespace SireBase
 {
 
-QMutex* globalLock();
+SIREBASE_EXPORT QMutex* globalLock();
 
 /** This is the base class of all properties that may be attached to a
     molecule. Properties are used to assign extra information to a molecule,
@@ -101,8 +103,8 @@ QMutex* globalLock();
 class SIREBASE_EXPORT Property : public RefCountData
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Property&);
-friend QDataStream& ::operator>>(QDataStream&, Property&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const Property&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, Property&);
 
 public:
     typedef Property ROOT;
@@ -174,7 +176,7 @@ protected:
     @author Christopher Woods
 */
 template<class Derived, class Base>
-class SIREBASE_EXPORT ConcreteProperty : public Base
+class ConcreteProperty : public Base
 {
 public:
     ConcreteProperty();
@@ -263,8 +265,8 @@ public:
 class SIREBASE_EXPORT PropPtrBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PropPtrBase&);
-friend QDataStream& ::operator>>(QDataStream&, PropPtrBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const PropPtrBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, PropPtrBase&);
 
 public:
     ~PropPtrBase();
@@ -322,8 +324,8 @@ private:
 class SIREBASE_EXPORT GlobalPropPtrBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GlobalPropPtrBase&);
-friend QDataStream& ::operator>>(QDataStream&, GlobalPropPtrBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const GlobalPropPtrBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, GlobalPropPtrBase&);
 
 public:
     ~GlobalPropPtrBase();
@@ -373,11 +375,11 @@ private:
     @author Christopher Woods
 */
 template<class T>
-class SIREBASE_EXPORT PropPtr : public PropPtrBase
+class PropPtr : public PropPtrBase
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const PropPtr<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, PropPtr<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const PropPtr<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, PropPtr<T>&);
 
 public:
     typedef T element_type;
@@ -432,11 +434,11 @@ protected:
     @author Christopher Woods
 */
 template<class T>
-class SIREBASE_EXPORT GlobalPropPtr : public GlobalPropPtrBase
+class GlobalPropPtr : public GlobalPropPtrBase
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const GlobalPropPtr<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, GlobalPropPtr<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const GlobalPropPtr<T>&);
+friend SIREBASE_EXPORT QDataStream& ::operator>><>(QDataStream&, GlobalPropPtr<T>&);
 
 public:
     GlobalPropPtr();

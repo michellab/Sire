@@ -70,7 +70,7 @@ namespace SireMol
 static const RegisterMetaType<AtomEditor> r_atomeditor;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const AtomEditor &atomeditor)
 {
     writeHeader(ds, r_atomeditor, 1);
@@ -81,7 +81,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        AtomEditor &atomeditor)
 {
     VersionID v = readHeader(ds, r_atomeditor);
@@ -280,7 +280,7 @@ const char* AtomEditor::typeName()
 static const RegisterMetaType<AtomStructureEditor> r_atomstructeditor;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const AtomStructureEditor &atomeditor)
 {
     writeHeader(ds, r_atomstructeditor, 1);
@@ -292,7 +292,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        AtomStructureEditor &atomeditor)
 {
     VersionID v = readHeader(ds, r_atomstructeditor);

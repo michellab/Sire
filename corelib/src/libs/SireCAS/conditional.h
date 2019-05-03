@@ -49,35 +49,35 @@ class AlwaysTrue;
 class AlwaysFalse;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Conditional&);
-QDataStream& operator>>(QDataStream&, SireCAS::Conditional&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Conditional&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Conditional&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Condition&);
-QDataStream& operator>>(QDataStream&, SireCAS::Condition&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Condition&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Condition&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::GreaterThan&);
-QDataStream& operator>>(QDataStream&, SireCAS::GreaterThan&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::GreaterThan&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::GreaterThan&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::LessThan&);
-QDataStream& operator>>(QDataStream&, SireCAS::LessThan&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::LessThan&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::LessThan&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::GreaterOrEqualThan&);
-QDataStream& operator>>(QDataStream&, SireCAS::GreaterOrEqualThan&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::GreaterOrEqualThan&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::GreaterOrEqualThan&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::LessOrEqualThan&);
-QDataStream& operator>>(QDataStream&, SireCAS::LessOrEqualThan&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::LessOrEqualThan&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::LessOrEqualThan&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::EqualTo&);
-QDataStream& operator>>(QDataStream&, SireCAS::EqualTo&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::EqualTo&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::EqualTo&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::NotEqualTo&);
-QDataStream& operator>>(QDataStream&, SireCAS::NotEqualTo&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::NotEqualTo&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::NotEqualTo&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::AlwaysTrue&);
-QDataStream& operator>>(QDataStream&, SireCAS::AlwaysTrue&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::AlwaysTrue&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::AlwaysTrue&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::AlwaysFalse&);
-QDataStream& operator>>(QDataStream&, SireCAS::AlwaysFalse&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::AlwaysFalse&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::AlwaysFalse&);
 
 namespace SireCAS
 {
@@ -90,8 +90,8 @@ namespace SireCAS
 class SIRECAS_EXPORT Condition : public ExBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Condition&);
-friend QDataStream& ::operator>>(QDataStream&, Condition&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Condition&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Condition&);
 
 public:
     Condition();
@@ -173,8 +173,8 @@ private:
 class SIRECAS_EXPORT GreaterThan : public Condition
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GreaterThan&);
-friend QDataStream& ::operator>>(QDataStream&, GreaterThan&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const GreaterThan&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, GreaterThan&);
 
 public:
     GreaterThan();
@@ -218,8 +218,8 @@ protected:
 class SIRECAS_EXPORT LessThan : public Condition
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const LessThan&);
-friend QDataStream& ::operator>>(QDataStream&, LessThan&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const LessThan&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, LessThan&);
 
 public:
     LessThan();
@@ -263,8 +263,8 @@ protected:
 class SIRECAS_EXPORT GreaterOrEqualThan : public Condition
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GreaterOrEqualThan&);
-friend QDataStream& ::operator>>(QDataStream&, GreaterOrEqualThan&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const GreaterOrEqualThan&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, GreaterOrEqualThan&);
 
 public:
     GreaterOrEqualThan();
@@ -308,8 +308,8 @@ protected:
 class SIRECAS_EXPORT LessOrEqualThan : public Condition
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const LessOrEqualThan&);
-friend QDataStream& ::operator>>(QDataStream&, LessOrEqualThan&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const LessOrEqualThan&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, LessOrEqualThan&);
 
 public:
     LessOrEqualThan();
@@ -353,8 +353,8 @@ protected:
 class SIRECAS_EXPORT EqualTo : public Condition
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const EqualTo&);
-friend QDataStream& ::operator>>(QDataStream&, EqualTo&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const EqualTo&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, EqualTo&);
 
 public:
     EqualTo();
@@ -398,8 +398,8 @@ protected:
 class SIRECAS_EXPORT NotEqualTo : public Condition
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NotEqualTo&);
-friend QDataStream& ::operator>>(QDataStream&, NotEqualTo&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const NotEqualTo&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, NotEqualTo&);
 
 public:
     NotEqualTo();
@@ -438,8 +438,8 @@ protected:
 class SIRECAS_EXPORT AlwaysTrue : public Condition
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AlwaysTrue&);
-friend QDataStream& ::operator>>(QDataStream&, AlwaysTrue&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const AlwaysTrue&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, AlwaysTrue&);
 
 public:
     AlwaysTrue();
@@ -502,8 +502,8 @@ protected:
 class SIRECAS_EXPORT AlwaysFalse : public Condition
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AlwaysFalse&);
-friend QDataStream& ::operator>>(QDataStream&, AlwaysFalse&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const AlwaysFalse&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, AlwaysFalse&);
 
 public:
     AlwaysFalse();
@@ -571,8 +571,8 @@ protected:
 class SIRECAS_EXPORT Conditional : public ExBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Conditional&);
-friend QDataStream& ::operator>>(QDataStream&, Conditional&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Conditional&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Conditional&);
 
 public:
     Conditional();

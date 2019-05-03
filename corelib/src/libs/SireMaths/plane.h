@@ -41,8 +41,8 @@ class Plane;
 }
 
 class QDataStream;
-QDataStream& operator<<(QDataStream&, const SireMaths::Plane&);
-QDataStream& operator>>(QDataStream&, SireMaths::Plane&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Plane&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Plane&);
 
 namespace SireMaths
 {
@@ -56,8 +56,8 @@ namespace SireMaths
 class SIREMATHS_EXPORT Plane
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Plane&);
-friend QDataStream& ::operator>>(QDataStream&, Plane&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Plane&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Plane&);
 
 public:
     Plane();

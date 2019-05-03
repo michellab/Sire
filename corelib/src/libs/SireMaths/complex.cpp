@@ -41,7 +41,7 @@ using namespace SireMaths;
 static const RegisterMetaType<Complex> r_complex(NO_ROOT);
 
 /** Serialise a Complex to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const SireMaths::Complex &z)
+QDataStream &operator<<(QDataStream &ds, const SireMaths::Complex &z)
 {
     writeHeader(ds, r_complex, 1) << z.real() << z.imag();
 
@@ -49,7 +49,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const SireMaths::Compl
 }
 
 /** Deserialise a Complex from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, SireMaths::Complex &z)
+QDataStream &operator>>(QDataStream &ds, SireMaths::Complex &z)
 {
     VersionID v = readHeader(ds, r_complex);
 
@@ -338,73 +338,73 @@ const char* Complex::typeName()
 namespace SireMaths
 {
     /** Addition */
-    Complex SIREMATHS_EXPORT operator+(const Complex &z0, const Complex &z1)
+    Complex operator+(const Complex &z0, const Complex &z1)
     {
         return gsl_complex_add(z0,z1);
     }
 
     /** Subtraction */
-    Complex SIREMATHS_EXPORT operator-(const Complex &z0, const Complex &z1)
+    Complex operator-(const Complex &z0, const Complex &z1)
     {
         return gsl_complex_sub(z0,z1);
     }
 
     /** Multiplication */
-    Complex SIREMATHS_EXPORT operator*(const Complex &z0, const Complex &z1)
+    Complex operator*(const Complex &z0, const Complex &z1)
     {
         return gsl_complex_mul(z0,z1);
     }
 
     /** Division */
-    Complex SIREMATHS_EXPORT operator/(const Complex &z0, const Complex &z1)
+    Complex operator/(const Complex &z0, const Complex &z1)
     {
         return gsl_complex_div(z0,z1);
     }
 
     /** Addition */
-    Complex SIREMATHS_EXPORT operator+(const Complex &z, double x)
+    Complex operator+(const Complex &z, double x)
     {
         return gsl_complex_add_real(z,x);
     }
 
     /** Subtraction */
-    Complex SIREMATHS_EXPORT operator-(const Complex &z, double x)
+    Complex operator-(const Complex &z, double x)
     {
         return gsl_complex_sub_real(z,x);
     }
 
     /** Multiplication */
-    Complex SIREMATHS_EXPORT operator*(const Complex &z, double x)
+    Complex operator*(const Complex &z, double x)
     {
         return gsl_complex_mul_real(z,x);
     }
 
     /** Division */
-    Complex SIREMATHS_EXPORT operator/(const Complex &z, double x)
+    Complex operator/(const Complex &z, double x)
     {
         return gsl_complex_div_real(z,x);
     }
 
     /** Addition */
-    Complex SIREMATHS_EXPORT operator+(double x, const Complex &z)
+    Complex operator+(double x, const Complex &z)
     {
         return z + x;
     }
 
     /** Subtraction */
-    Complex SIREMATHS_EXPORT operator-(double x, const Complex &z)
+    Complex operator-(double x, const Complex &z)
     {
         return z - x;
     }
 
     /** Multiplication */
-    Complex SIREMATHS_EXPORT operator*(double x, const Complex &z)
+    Complex operator*(double x, const Complex &z)
     {
         return z * x;
     }
 
     /** Division */
-    Complex SIREMATHS_EXPORT operator/(double x, const Complex &z)
+    Complex operator/(double x, const Complex &z)
     {
         return Complex(x) / z;
     }
@@ -412,14 +412,14 @@ namespace SireMaths
     /** This function returns the square root of the complex number z, \sqrt z. 
         The branch cut is the negative real axis. The result always lies in the 
         right half of the complex plane. */
-    Complex SIREMATHS_EXPORT sqrt(const Complex &z)
+    Complex sqrt(const Complex &z)
     {
         return gsl_complex_sqrt(z);
     }
 
     /** This function returns the complex square root of the real number x, 
         where x may be negative. */
-    Complex SIREMATHS_EXPORT sqrt_real(double x)
+    Complex sqrt_real(double x)
     {
         return gsl_complex_sqrt_real(x);
     }
@@ -427,19 +427,19 @@ namespace SireMaths
     /** The function returns the complex number z raised to the complex power a, 
         z^a. This is computed as \exp(\log(z)*a) using complex logarithms and complex 
         exponentials. */
-    Complex SIREMATHS_EXPORT pow(const Complex &z, const Complex &a)
+    Complex pow(const Complex &z, const Complex &a)
     {
         return gsl_complex_pow(z,a);
     }
 
     /** This function returns the complex number z raised to the real power x, z^x. */
-    Complex SIREMATHS_EXPORT pow(const Complex &z, double x)
+    Complex pow(const Complex &z, double x)
     {
         return gsl_complex_pow_real(z,x);
     }
 
     /** This function returns the complex number z raised to an integer power n, z^n */
-    Complex SIREMATHS_EXPORT pow(const Complex &z, int n)
+    Complex pow(const Complex &z, int n)
     {
         if (n >= 0)
         {
@@ -460,7 +460,7 @@ namespace SireMaths
     }
 
     /** This function returns the complex number z raised to a rational power r, z^r */
-    Complex SIREMATHS_EXPORT pow(const Complex &z, const Rational &r)
+    Complex pow(const Complex &z, const Rational &r)
     {
         if (r.denominator() == 1)
             return pow(z, r.numerator());
@@ -469,42 +469,42 @@ namespace SireMaths
     }
 
     /** This function returns the real number x raised to the complex power z, x^z. */
-    Complex SIREMATHS_EXPORT pow(double x, const Complex &z)
+    Complex pow(double x, const Complex &z)
     {
         return gsl_complex_pow( Complex(x), z );
     }
 
     /** This function returns the complex exponential of the complex number z,
         \exp(z). */
-    Complex SIREMATHS_EXPORT exp(const Complex &z)
+    Complex exp(const Complex &z)
     {
         return gsl_complex_exp(z);
     }
 
     /** This function returns the complex natural logarithm (base e) of the complex 
         number z, \log(z). The branch cut is the negative real axis. */
-    Complex SIREMATHS_EXPORT log(const Complex &z)
+    Complex log(const Complex &z)
     {
         return gsl_complex_log(z);
     }
 
     /** This function returns the complex base-10 logarithm of the complex number z, 
         \log_10 (z). */
-    Complex SIREMATHS_EXPORT log10(const Complex &z)
+    Complex log10(const Complex &z)
     {
         return gsl_complex_log10(z);
     }
 
     /** This function returns the complex base-b logarithm of the complex number z,
        \log_b(z). This quantity is computed as the ratio \log(z)/\log(b). */
-    Complex SIREMATHS_EXPORT log_b(const Complex &z, const Complex &b)
+    Complex log_b(const Complex &z, const Complex &b)
     {
         return gsl_complex_log_b(z,b);
     }
 
     /** This function returns the complex sine of the complex number 
         z, \sin(z) = (\exp(iz) - \exp(-iz))/(2i). */
-    Complex SIREMATHS_EXPORT sin(const Complex &z)
+    Complex sin(const Complex &z)
     {
         if (z.isReal())
             return std::sin(z.real());
@@ -514,7 +514,7 @@ namespace SireMaths
 
     /** This function returns the complex cosine of the complex number 
         z, \cos(z) = (\exp(iz) + \exp(-iz))/2. */
-    Complex SIREMATHS_EXPORT cos(const Complex &z)
+    Complex cos(const Complex &z)
     {
         if (z.isReal())
             return std::cos(z.real());
@@ -524,7 +524,7 @@ namespace SireMaths
 
     /** This function returns the complex tangent of the complex number z, 
         \tan(z) = \sin(z)/\cos(z). */
-    Complex SIREMATHS_EXPORT tan(const Complex &z)
+    Complex tan(const Complex &z)
     {
         if (z.isReal())
             return std::tan(z.real());
@@ -534,21 +534,21 @@ namespace SireMaths
 
     /** This function returns the complex secant of the complex number z, 
         \sec(z) = 1/\cos(z). */
-    Complex SIREMATHS_EXPORT sec(const Complex &z)
+    Complex sec(const Complex &z)
     {
         return gsl_complex_sec(z);
     }
 
     /** This function returns the complex cosecant of the complex number z, 
         \csc(z) = 1/\sin(z). */
-    Complex SIREMATHS_EXPORT csc(const Complex &z)
+    Complex csc(const Complex &z)
     {
         return gsl_complex_csc(z);
     }
 
     /** This function returns the complex cotangent of the complex number z,  
         \cot(z) = 1/\tan(z). */
-    Complex SIREMATHS_EXPORT cot(const Complex &z)
+    Complex cot(const Complex &z)
     {
         return gsl_complex_cot(z);
     }
@@ -556,7 +556,7 @@ namespace SireMaths
     /** This function returns the complex arcsine of the complex number z, 
         \arcsin(z). The branch cuts are on the real axis, less than -1 and greater 
         than 1. */
-    Complex SIREMATHS_EXPORT arcsin(const Complex &z)
+    Complex arcsin(const Complex &z)
     {
         return gsl_complex_arcsin(z);
     }
@@ -566,7 +566,7 @@ namespace SireMaths
         value in the range [-\pi/2,\pi/2]. For z less than -1 the result 
         has a real part of -\pi/2 and a positive imaginary part. For z greater 
         than 1 the result has a real part of \pi/2 and a negative imaginary part. */
-    Complex SIREMATHS_EXPORT arcsin_real(double z)
+    Complex arcsin_real(double z)
     {
         return gsl_complex_arcsin_real(z);
     }
@@ -574,7 +574,7 @@ namespace SireMaths
     /** This function returns the complex arccosine of the complex number z, 
         \arccos(z). The branch cuts are on the real axis, less than -1 and
          greater than 1. */
-    Complex SIREMATHS_EXPORT arccos(const Complex &z)
+    Complex arccos(const Complex &z)
     {
         return gsl_complex_arccos(z);
     }
@@ -584,147 +584,147 @@ namespace SireMaths
         the range [0,\pi]. For z less than -1 the result has a real part of \pi 
         and a negative imaginary part. For z greater than 1 the result is purely 
         imaginary and positive. */
-    Complex SIREMATHS_EXPORT arccos_real(double z)
+    Complex arccos_real(double z)
     {
         return gsl_complex_arccos_real(z);
     }
 
     /** This function returns the complex arctangent of the complex number z, 
         \arctan(z). The branch cuts are on the imaginary axis, below -i and above i. */
-    Complex SIREMATHS_EXPORT arctan(const Complex &z)
+    Complex arctan(const Complex &z)
     {
         return gsl_complex_arctan(z);
     }
 
     /** This function returns the complex arcsecant of the complex number z, 
         \arcsec(z) = \arccos(1/z). */
-    Complex SIREMATHS_EXPORT arcsec(const Complex &z)
+    Complex arcsec(const Complex &z)
     {
         return gsl_complex_arcsec(z);
     }
 
     /** This function returns the complex arcsecant of the real number z, 
         \arcsec(z) = \arccos(1/z). */
-    Complex SIREMATHS_EXPORT arcsec_real(double z)
+    Complex arcsec_real(double z)
     {
         return gsl_complex_arcsec_real(z);
     }
 
     /** This function returns the complex arccosecant of the complex number z, 
         \arccsc(z) = \arcsin(1/z). */
-    Complex SIREMATHS_EXPORT arccsc(const Complex &z)
+    Complex arccsc(const Complex &z)
     {
         return gsl_complex_arccsc(z);
     }
 
     /** This function returns the complex arccosecant of the real number z, 
         \arccsc(z) = \arcsin(1/z). */
-    Complex SIREMATHS_EXPORT arccsc_real(double z)
+    Complex arccsc_real(double z)
     {
         return gsl_complex_arccsc_real(z);
     }
 
     /** This function returns the complex arccotangent of the complex number z, 
         \arccot(z) = \arctan(1/z). */
-    Complex SIREMATHS_EXPORT arccot(const Complex &z)
+    Complex arccot(const Complex &z)
     {
         return gsl_complex_arccot(z);
     }
 
     /** This function returns the complex hyperbolic sine of the complex number z, 
         \sinh(z) = (\exp(z) - \exp(-z))/2. */
-    Complex SIREMATHS_EXPORT sinh(const Complex &z)
+    Complex sinh(const Complex &z)
     {
         return gsl_complex_sinh(z);
     }
 
     /** This function returns the complex hyperbolic cosine of the complex number z, 
         \cosh(z) = (\exp(z) + \exp(-z))/2.  */
-    Complex SIREMATHS_EXPORT cosh(const Complex &z)
+    Complex cosh(const Complex &z)
     {
         return gsl_complex_cosh(z);
     }
 
     /** This function returns the complex hyperbolic tangent of the complex number z, 
         \tanh(z) = \sinh(z)/\cosh(z). */
-    Complex SIREMATHS_EXPORT tanh(const Complex &z)
+    Complex tanh(const Complex &z)
     {
         return gsl_complex_tanh(z);
     }
 
     /** This function returns the complex hyperbolic secant of the complex number z, 
         \sech(z) = 1/\cosh(z). */
-    Complex SIREMATHS_EXPORT sech(const Complex &z)
+    Complex sech(const Complex &z)
     {
         return gsl_complex_sech(z);
     }
 
     /** This function returns the complex hyperbolic cosecant of the complex number z, 
         \csch(z) = 1/\sinh(z). */
-    Complex SIREMATHS_EXPORT csch(const Complex &z)
+    Complex csch(const Complex &z)
     {
         return gsl_complex_csch(z);
     }
 
     /** This function returns the complex hyperbolic cotangent of the complex number z, 
         \coth(z) = 1/\tanh(z). */
-    Complex SIREMATHS_EXPORT coth(const Complex &z)
+    Complex coth(const Complex &z)
     {
         return gsl_complex_coth(z);
     }
 
     /** This function returns the complex hyperbolic arcsine of the complex number z, 
         \arcsinh(z). The branch cuts are on the imaginary axis, below -i and above i. */
-    Complex SIREMATHS_EXPORT arcsinh(const Complex &z)
+    Complex arcsinh(const Complex &z)
     {
         return gsl_complex_arcsinh(z);
     }
 
     /** This function returns the complex hyperbolic arccosine of the complex number z, 
         \arccosh(z). The branch cut is on the real axis, less than 1. */
-    Complex SIREMATHS_EXPORT arccosh(const Complex &z)
+    Complex arccosh(const Complex &z)
     {
         return gsl_complex_arccosh(z);
     }
 
     /** This function returns the complex hyperbolic arccosine of the real number z, 
         \arccosh(z). */
-    Complex SIREMATHS_EXPORT arccosh_real(double z)
+    Complex arccosh_real(double z)
     {
         return gsl_complex_arccosh_real(z);
     }
 
     /** This function returns the complex hyperbolic arctangent of the complex number z, 
         \arctanh(z). The branch cuts are on the real axis, less than -1 and greater than 1. */
-    Complex SIREMATHS_EXPORT arctanh(const Complex &z)
+    Complex arctanh(const Complex &z)
     {
         return gsl_complex_arctanh(z);
     }
 
     /** This function returns the complex hyperbolic arctangent of the real number z, 
         \arctanh(z). */
-    Complex SIREMATHS_EXPORT arctanh_real(double z)
+    Complex arctanh_real(double z)
     {
         return gsl_complex_arctanh_real(z);
     }
 
     /** This function returns the complex hyperbolic arcsecant of the complex number z, 
        \arcsech(z) = \arccosh(1/z). */
-    Complex SIREMATHS_EXPORT arcsech(const Complex &z)
+    Complex arcsech(const Complex &z)
     {
         return gsl_complex_arcsech(z);
     }
 
     /** This function returns the complex hyperbolic arccosecant of the complex number z,
         \arccsch(z) = \arcsin(1/z). */
-    Complex SIREMATHS_EXPORT arccsch(const Complex &z)
+    Complex arccsch(const Complex &z)
     {
         return gsl_complex_arccsch(z);
     }
 
     /** This function returns the complex hyperbolic arccotangent of the complex number z, 
         \arccoth(z) = \arctanh(1/z). */
-    Complex SIREMATHS_EXPORT arccoth(const Complex &z)
+    Complex arccoth(const Complex &z)
     {
         return gsl_complex_arccoth(z);
     }

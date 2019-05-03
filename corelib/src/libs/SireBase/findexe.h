@@ -42,7 +42,7 @@ namespace SireBase
 /** Return the fileinfo for the executable called 'exe'. This
     searches the system path until it finds the first occurance
     of this executable. */
-QFileInfo findExe(const QString &exe);
+SIREBASE_EXPORT QFileInfo findExe(const QString &exe);
 
 }
 

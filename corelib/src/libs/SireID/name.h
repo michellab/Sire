@@ -41,8 +41,8 @@ namespace SireID
 class Name;
 }
 
-QDataStream& operator<<(QDataStream&, const SireID::Name&);
-QDataStream& operator>>(QDataStream&, SireID::Name&);
+SIREID_EXPORT QDataStream& operator<<(QDataStream&, const SireID::Name&);
+SIREID_EXPORT QDataStream& operator>>(QDataStream&, SireID::Name&);
 
 namespace SireID
 {
@@ -65,8 +65,8 @@ enum CaseSensitivity{  CaseInsensitive = 0,
 class SIREID_EXPORT Name
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Name&);
-friend QDataStream& ::operator>>(QDataStream&, Name&);
+friend SIREID_EXPORT QDataStream& ::operator<<(QDataStream&, const Name&);
+friend SIREID_EXPORT QDataStream& ::operator>>(QDataStream&, Name&);
 
 public:
     ~Name();

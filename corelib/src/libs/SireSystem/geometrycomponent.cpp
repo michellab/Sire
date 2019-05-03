@@ -44,7 +44,7 @@ using namespace SireStream;
 static const RegisterMetaType<GeometryComponent> r_geomcomp( MAGIC_ONLY,
                                                       GeometryComponent::typeName() );
                                                       
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const GeometryComponent &geomcomp)
 {
     writeHeader(ds, r_geomcomp, 1);
@@ -61,7 +61,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, GeometryComponent &geomcomp)
+QDataStream &operator>>(QDataStream &ds, GeometryComponent &geomcomp)
 {
     VersionID v = readHeader(ds, r_geomcomp);
     

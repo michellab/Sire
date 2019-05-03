@@ -6,8 +6,8 @@
 #
 ################################
 
-set (S_VERSION_MAJOR "2018")
-set (S_VERSION_MINOR "2")
+set (S_VERSION_MAJOR "2019")
+set (S_VERSION_MINOR "1")
 set (S_VERSION_PATCH "0")             
 
 set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
@@ -17,13 +17,16 @@ set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 ############
 
 # require cmake >= 3.0.0
-cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
 
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 
 if(COMMAND CMAKE_POLICY)
+  if (POLICY CMP0025)
+    cmake_policy(SET CMP0025 NEW)  # Anaconda clang is called Clang, not AppleClang
+  endif()
   if (POLICY CMP0042)
     cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
   endif()
@@ -67,8 +70,10 @@ if ( CMAKE_GENERATOR MATCHES "Xcode" )
 
   # Look for the Sire cmake config file that should have been
   # installed with Sire...
-  set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
-          "The full path to the sire.app installed Sire application." )
+  if (NOT DEFINED SIRE_APP)
+    set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
+            "The full path to the sire.app installed Sire application." )
+  endif()
 
   set( SIRE_INCLUDE_DIR "${SIRE_APP}/include/Sire" )
 
@@ -108,12 +113,14 @@ else()
   if ( ANACONDA_BUILD )
     message( STATUS "Building into an existing Anaconda/Miniconda installation..." )
     # Where is anaconda installed
-    set( ANACONDA_BASE "$ENV{HOME}/miniconda3" CACHE PATH
-            "Install directory for Anaconda/Miniconda (python3)" )
+    if (NOT DEFINED ANACONDA_BASE)
+      set( ANACONDA_BASE "$ENV{HOME}/miniconda3" CACHE PATH
+              "Install directory for Anaconda/Miniconda (python3)" )
+    endif()
 
     # Make sure that there is a python3 executable in the bin directory
-    if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
-      message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
+    if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" AND NOT EXISTS "${ANACONDA_BASE}/python.exe" )
+      message( FATAL_ERROR "Cannot find python3. "
                            "Please set the full path to the Anaconda or Miniconda "
                            "installation directory." )
     endif()
@@ -124,32 +131,35 @@ else()
     set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
              "Prefix prepended to install directories" FORCE )
 
-  elseif( WIN32 OR WIN64 )  # need this instead of MSYS as don't know we are MSYS yet...
-
-    message(STATUS "Compiling on windows using MSYS2/MINGW64...")
-    set( MINGW_BASE "C:/msys64/mingw64" CACHE PATH "MSYS MINGW64 root directory" )
-    get_filename_component(MINGW_CMAKE_BIN ${CMAKE_COMMAND} DIRECTORY)
-    get_filename_component(MINGW_CMAKE_ROOT ${MINGW_CMAKE_BIN} DIRECTORY)
-    message(STATUS "Using cmake ${CMAKE_COMMAND} from MING64 base ${MINGW_CMAKE_ROOT}")
-
-    set( MINGW_BASE "${MINGW_CMAKE_ROOT}")
-    set( MINGW_PYTHON "${MINGW_BASE}/bin/python3.exe" )
-
-    if ( NOT EXISTS "${MINGW_PYTHON}" )
-      message(STATUS "Cannot find mingw python3 executable, ${MINGW_PYTHON}")
-      message(STATUS "Can only install Sire into a MINGW installation with a valid python3.exe.")
-      message(STATUS "This is normally in the file C:/msys64/mingw64/bin/python3.exe.")
-      message(STATUS "Please install MSYS2/MINGW64 with the MINGW python3 package.")
-      message(STATUS "Set MINGW_BASE in cmake to point to your MSYS2/MINGW64 installation directory.")
-      message(FATAL_ERROR "Cannot compile until mingw python3 is installed...")
-    endif()
-
-    set( SIRE_INSTALL_PREFIX "${MINGW_BASE}" )
-    set( CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
-           "Prefix prepended to install directories" FORCE )
+#  elseif( WIN32 OR WIN64 )  # need this instead of MSYS as don't know we are MSYS yet...
+#
+#    message(STATUS "Compiling on windows using MSYS2/MINGW64...")
+#    set( MINGW_BASE "C:/msys64/mingw64" CACHE PATH "MSYS MINGW64 root directory" )
+#    get_filename_component(MINGW_CMAKE_BIN ${CMAKE_COMMAND} DIRECTORY)
+#    get_filename_component(MINGW_CMAKE_ROOT ${MINGW_CMAKE_BIN} DIRECTORY)
+#    message(STATUS "Using cmake ${CMAKE_COMMAND} from MING64 base ${MINGW_CMAKE_ROOT}")
+#
+#    set( MINGW_BASE "${MINGW_CMAKE_ROOT}")
+#    set( MINGW_PYTHON "${MINGW_BASE}/bin/python3.exe" )
+#
+#    if ( NOT EXISTS "${MINGW_PYTHON}" )
+#      message(STATUS "Cannot find mingw python3 executable, ${MINGW_PYTHON}")
+#      message(STATUS "Can only install Sire into a MINGW installation with a valid python3.exe.")
+#      message(STATUS "This is normally in the file C:/msys64/mingw64/bin/python3.exe.")
+#      message(STATUS "Please install MSYS2/MINGW64 with the MINGW python3 package.")
+#      message(STATUS "Set MINGW_BASE in cmake to point to your MSYS2/MINGW64 installation directory.")
+#      message(FATAL_ERROR "Cannot compile until mingw python3 is installed...")
+#    endif()
+#
+#    set( SIRE_INSTALL_PREFIX "${MINGW_BASE}" )
+#    set( CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
+#           "Prefix prepended to install directories" FORCE )
   else()
-    # Option to set the install directory of Sire
-    set( SIRE_INSTALL_PREFIX "$ENV{HOME}/sire.app" CACHE PATH
+    #�Option to set the install directory of Sire
+    if (NOT DEFINED SIRE_APP)
+      set(SIRE_APP "$ENV{HOME}/sire.app")
+    endif()
+    set( SIRE_INSTALL_PREFIX "${SIRE_APP}" CACHE PATH
             "Install directory for Sire. This directory can be moved after compilation" )
 
     set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
@@ -158,6 +168,8 @@ else()
 endif()
 
 message( STATUS "Sire will be compiled and installed to directory ${CMAKE_INSTALL_PREFIX}" )
+set ( SIRE_APP "${ANACONDA_BASE}" )
+message( STATUS "sire.app root directory is ${SIRE_APP}" )
 
 # Absolutely can't run cmake in the source directory!
 if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
@@ -188,6 +200,7 @@ math (EXPR SIRE_VERSION_NUMBER
 
 set (SIRE_VERSION_STRING "${S_VERSION_MAJOR}_${S_VERSION_MINOR}_${S_VERSION_PATCH}")
 
+save_sire_variable( "SIRE_APP" "${SIRE_APP}" )
 save_sire_variable( "S_VERSION_MAJOR" "${S_VERSION_MAJOR}" )
 save_sire_variable( "S_VERSION_MINOR" "${S_VERSION_MINOR}" )
 save_sire_variable( "S_VERSION_PATCH" "${S_VERSION_PATCH}" )
@@ -236,21 +249,9 @@ set (SIRE_INCLUDES "include/Sire")
 set (SIRE_CMAKEFILES "include/Sire/cmake")
 # Sire share directory (for parameters etc.)
 set (SIRE_SHARE "share/Sire")
-
-if (ANACONDA_BUILD)
-  set( SIRE_SHARE_EXPORT "pkgs/sire-${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}/share/Sire" )
-else()
-  set( SIRE_SHARE_EXPORT "${SIRE_SHARE}")
-endif()
-
 # Where will the test files be saved?
 set (SIRE_TEST "test")
-
-if (ANACONDA_BUILD)
-  set( SIRE_TEST_EXPORT "pkgs/sire-${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}/test" )
-else()
-  set( SIRE_SHARE_EXPORT "${SIRE_SHARE}")
-endif()
+set( SIRE_SHARE_EXPORT "${SIRE_SHARE}")
 
 # Add these directories to the RPATH variable for the libraries / executables,
 # so that they can find each other when loading
@@ -323,7 +324,7 @@ option ( SIRE_DISABLE_SSE "Prevent use of SSE when compiling" OFF )
 option ( SIRE_DISABLE_AVX "Prevent use of AVX when compiling" OFF )
 
 # Add option to disable use of AVX512F)
-option ( SIRE_DISABLE_AVX512F "Prevent use of AVX512F when compiling" OFF )
+option ( SIRE_DISABLE_AVX512F "Prevent use of AVX512F when compiling" ON )
 
 # Add an option to force off Fortran compilation and linking
 option ( SIRE_DISABLE_FORTRAN "Turn off Fortran compilation and linking" ON )
@@ -647,6 +648,24 @@ elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
         set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -rdynamic -Wl,--no-undefined" )
     endif()
 
+elseif ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+
+    add_compile_options("/permissive-")
+    add_compile_options("/Zc:twoPhase-")
+    message( STATUS "Compiling with MSVC" )
+    set( SIRE_COMPILER "MSVC" )
+
+    set ( SIRE_SMALL_FLAGS  "/O1" )
+    set ( SIRE_WARNALL_FLAGS  "" )
+    set ( SIRE_RELEASE_FLAGS  "/O2" )
+    set ( SIRE_DEBUG_FLAGS   "/Zi" )
+    set ( SIRE_VISIBILITY_FLAGS "/DSIRE_NO_VISIBILITY_AVAILABLE" )
+    GET_SIRE_VECTOR_FLAGS( "/openmp" "/arch:SSE2" "/arch:AVX" "/arch:AVX512" )
+    set ( SIRE_SHARE_LINK_FLAGS "" )
+    set ( SIRE_STATIC_LINK_FLAGS "" )
+
+    set ( SIRE_PLATFORM_FLAGS "" )
+    
 else()
     message( STATUS "CMAKE_SYSTEM_NAME == ${CMAKE_SYSTEM_NAME}" )
     message( STATUS "CMAKE_C_COMPILER == ${CMAKE_C_COMPILER}" )
@@ -701,6 +720,7 @@ else()
   set (SIRE_FOUND_QT FALSE)
   set (SIRE_FOUND_OPENMM FALSE)  
   set (SIRE_FOUND_NETCDF FALSE)
+  set (SIRE_FOUND_CPUID FALSE)
 
   if ( ${SIRE_ENABLE_BUNDLING} )
     message( STATUS "Sire will be compiled to use its own copy of bundled libraries." )
@@ -831,6 +851,10 @@ get_filename_component(SIRE_QT5CORE_DIR ${QT5_LOCATION} PATH)
 message( STATUS "Qt5Core location ${SIRE_QT5CORE_DIR}" )
 save_sire_variable( "SIRE_QT5CORE_DIR" "${SIRE_QT5CORE_DIR}" )
 
+if (DEFINED SIRE_APP)
+  include_directories( "${SIRE_APP}/include" "${SIRE_APP}/Library/include" )
+endif()
+
 if (NOT ${SIRE_FOUND_BOOST})
   # Sire depends on >= boost 1.31 - all libraries must be dynamically linked
   set (BOOST_ALL_DYN_LINK "YES")
@@ -852,7 +876,7 @@ endif()
 
 if (NOT ${SIRE_FOUND_GSL})
   # Sire depends on >= GSL 1.6
-  find_package(GSL 1.6 REQUIRED)
+  find_package(GSL 1.6 QUIET)
 
   message( STATUS "GSL paths ${GSL_LINK_DIRECTORIES} "
                   "${GSL_LIBRARIES} | ${GSL_INCLUDE_DIR}" )
@@ -895,7 +919,22 @@ if (NOT ${SIRE_FOUND_BLASLAPACK})
 endif()
 
 if (NOT ${SIRE_FOUND_CPUID})
-  message( STATUS "Cannot find libcpuid. Will disable CPU detection code." )
+  find_library( CPUID_LIBRARY "cpuid" PATHS ${CPUID_LIBRARY_DIR} )
+  include_directories (${CPUID_INCLUDE_DIR} )
+  set(SIRE_FOUND_CPUID TRUE)
+  if (HAVE_STDINT_H)
+    set( CPUID_DEFINITIONS "-DHAVE_STDINT_H" )
+  endif()
+  #message( STATUS "Cannot find libcpuid. Will disable CPU detection code." )
+endif()
+
+if (NOT ${SIRE_FOUND_TBB})
+  find_library( TBB_LIBRARY "tbb" PATHS ${TBB_LIBRARY_DIR} )
+  find_library( TBB_MALLOC_LIBRARY "tbbmalloc" PATHS ${TBB_LIBRARY_DIR} )
+  include_directories(${TBB_INCLUDE_DIR})
+  save_sire_variable( "TBB_LIBRARY" "${TBB_LIBRARY}" )
+  save_sire_variable( "TBB_MALLOC_LIBRARY" "${TBB_MALLOC_LIBRARY}" )
+  save_sire_variable( "TBB_INCLUDE_DIR" "${TBB_INCLUDE_DIR}" )
 endif()
 
 ###########
@@ -937,8 +976,13 @@ set( SIRE_COMPILE_FLAGS "${SIRE_WARNALL_FLAGS} ${SIRE_PLATFORM_FLAGS}" )
 
 if ( SIRE_SYMBOL_HIDING )
   set ( SIRE_COMPILE_FLAGS "${SIRE_COMPILE_FLAGS} ${SIRE_VISIBILITY_FLAGS}" )
-  set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} ${SIRE_VISIBILITY_FLAGS}" )
+  #set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} ${SIRE_VISIBILITY_FLAGS}" )
 endif()
+
+# Add the small flags here so that they don't accidentally pull in the
+# vectorisation flags (this breaks the MultiFloat/etc classes for AVX-512F)
+set( SIRE_C_FLAGS_SMALL "${SIRE_COMPILE_FLAGS} ${SIRE_SMALL_FLAGS} ${SIRE_USER_CFLAGS}" )
+set( SIRE_CXX_FLAGS_SMALL "${SIRE_COMPILE_FLAGS} ${SIRE_CXX_NG_FLAGS} ${SIRE_SMALL_FLAGS} ${SIRE_USER_CPPFLAGS}" )
 
 if ( SIRE_VECTORISE )
   set ( SIRE_COMPILE_FLAGS "${SIRE_COMPILE_FLAGS} ${SIRE_VECTOR_FLAGS}" )
@@ -949,9 +993,6 @@ set( SIRE_CXX_FLAGS_RELEASE "${SIRE_COMPILE_FLAGS} ${SIRE_CXX_NG_FLAGS} ${SIRE_R
 
 set( SIRE_C_FLAGS_DEBUG "${SIRE_COMPILE_FLAGS} ${SIRE_DEBUG_FLAGS} ${SIRE_USER_CFLAGS}" )
 set( SIRE_CXX_FLAGS_DEBUG "${SIRE_COMPILE_FLAGS} ${SIRE_CXX_NG_FLAGS} ${SIRE_DEBUG_FLAGS} ${SIRE_USER_CPPFLAGS}" )
-
-set( SIRE_C_FLAGS_SMALL "${SIRE_COMPILE_FLAGS} ${SIRE_SMALL_FLAGS} ${SIRE_USER_CFLAGS}" )
-set( SIRE_CXX_FLAGS_SMALL "${SIRE_COMPILE_FLAGS} ${SIRE_CXX_NG_FLAGS} ${SIRE_SMALL_FLAGS} ${SIRE_USER_CPPFLAGS}" )
 
 # Copy the Sire compile flags to CMake
 set( CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${SIRE_C_FLAGS_RELEASE}" )
@@ -1034,6 +1075,13 @@ install (FILES ${CMAKE_CURRENT_BINARY_DIR}/sire_config.h
 # install the parameters file (containing forcefield parameters) into
 # share/Sire
 install (DIRECTORY ${CMAKE_SOURCE_DIR}/parameters
+         DESTINATION ${SIRE_SHARE}
+         USE_SOURCE_PERMISSIONS
+         PATTERN ".svn" EXCLUDE
+        )
+
+# install the molecular templates into share/Sire
+install (DIRECTORY ${CMAKE_SOURCE_DIR}/templates
          DESTINATION ${SIRE_SHARE}
          USE_SOURCE_PERMISSIONS
          PATTERN ".svn" EXCLUDE

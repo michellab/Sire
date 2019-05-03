@@ -57,7 +57,7 @@ using namespace SireMol;
 using namespace SireBase;
 using namespace SireStream;
 
-void SIREFF_EXPORT SireFF::detail::throwForceFieldRestoreBug(const char *this_what, 
+void SireFF::detail::throwForceFieldRestoreBug(const char *this_what, 
                                                              const char *ffield_what)
 {
     throw SireError::program_bug( QObject::tr(
@@ -69,7 +69,7 @@ void SIREFF_EXPORT SireFF::detail::throwForceFieldRestoreBug(const char *this_wh
 static const RegisterMetaType<FF> r_ff( MAGIC_ONLY, FF::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FF &ff)
+QDataStream &operator<<(QDataStream &ds, const FF &ff)
 {
     writeHeader(ds, r_ff, 1);
     
@@ -83,7 +83,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const FF &ff)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, FF &ff)
+QDataStream &operator>>(QDataStream &ds, FF &ff)
 {
     VersionID v = readHeader(ds, r_ff);
     

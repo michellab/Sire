@@ -47,7 +47,7 @@ static const RegisterMetaType<SupraSubMoves> r_suprasubmoves( MAGIC_ONLY,
                                                     "SireMove::SupraSubMoves" );
                                                     
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const SupraSubMoves &suprasubmoves)
 {
     writeHeader(ds, r_suprasubmoves, 1);
@@ -58,7 +58,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, SupraSubMoves &suprasubmoves)
+QDataStream &operator>>(QDataStream &ds, SupraSubMoves &suprasubmoves)
 {
     VersionID v = readHeader(ds, r_suprasubmoves);
     
@@ -135,7 +135,7 @@ const SameSupraSubMoves& SupraSubMoves::null()
 static const RegisterMetaType<SameSupraSubMoves> r_samesuprasubmoves;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const SameSupraSubMoves &samesuprasubmoves)
 {
     writeHeader(ds, r_samesuprasubmoves, 1);
@@ -149,7 +149,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         SameSupraSubMoves &samesuprasubmoves)
 {
     VersionID v = readHeader(ds, r_samesuprasubmoves);

@@ -150,7 +150,7 @@ void System::rebuildIndex()
 static const RegisterMetaType<System> r_system;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const System &system)
+QDataStream &operator<<(QDataStream &ds, const System &system)
 {
     if (system.needsAccepting())
         qDebug() << "SYSTEM NEEDS ACCEPTING";
@@ -182,7 +182,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const System &system)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, System &system)
+QDataStream &operator>>(QDataStream &ds, System &system)
 {
     VersionID v = readHeader(ds, r_system);
     

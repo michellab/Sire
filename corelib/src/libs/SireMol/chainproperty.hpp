@@ -50,8 +50,8 @@ template<class T>
 class ChainProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ChainProp&);
-QDataStream& operator>>(QDataStream&, SireMol::ChainProp&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ChainProp&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ChainProp&);
 
 template<class T>
 QDataStream& operator<<(QDataStream&, const SireMol::ChainProperty<T>&);
@@ -99,8 +99,8 @@ class SIREMOL_EXPORT ChainProperty
     : public SireBase::ConcreteProperty<ChainProperty<T>, ChainProp>
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const ChainProperty<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, ChainProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const ChainProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, ChainProperty<T>&);
 
 public:
     ChainProperty();

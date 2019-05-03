@@ -2305,7 +2305,7 @@ Molecules ManyPointsHelper::update(const System &system, const Molecules &molecu
 static const RegisterMetaType<IdentityConstraint> r_identityconstraint;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const IdentityConstraint &identityconstraint)
 {
     writeHeader(ds, r_identityconstraint, 1);
@@ -2321,7 +2321,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                           IdentityConstraint &identityconstraint)
 {
     VersionID v = readHeader(ds, r_identityconstraint);

@@ -53,7 +53,7 @@ using namespace SireStream;
 ////// Implementation of FourAtomFunction
 //////
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const FourAtomFunction &fouratomfunc)
 {
     ds << fouratomfunc.atm0 << fouratomfunc.atm1
@@ -63,7 +63,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       FourAtomFunction &fouratomfunc)
 {
     ds >> fouratomfunc.atm0 >> fouratomfunc.atm1
@@ -204,7 +204,7 @@ bool IDQuad::operator!=(const IDQuad &other) const
 static const RegisterMetaType<FourAtomFunctions> r_fouratomfuncs;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const FourAtomFunctions &fouratomfuncs)
 {
     writeHeader(ds, r_fouratomfuncs, 1);
@@ -218,7 +218,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       FourAtomFunctions &fouratomfuncs)
 {
     VersionID v = readHeader(ds, r_fouratomfuncs);

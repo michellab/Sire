@@ -43,8 +43,8 @@ namespace Squire
 class SQM;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::SQM&);
-QDataStream& operator>>(QDataStream&, Squire::SQM&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::SQM&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::SQM&);
 
 class QFile;
 
@@ -65,8 +65,8 @@ namespace Squire
 class SQUIRE_EXPORT SQM : public SireBase::ConcreteProperty<SQM,QMProgram>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SQM&);
-friend QDataStream& ::operator>>(QDataStream&, SQM&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const SQM&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, SQM&);
 
 public:
     SQM();

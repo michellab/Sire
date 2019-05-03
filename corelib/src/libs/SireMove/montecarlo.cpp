@@ -50,7 +50,7 @@ using namespace SireStream;
 static const RegisterMetaType<MonteCarlo> r_mc(MAGIC_ONLY, "SireMove::MonteCarlo");
 
 /** Serialise to a binary data stream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const MonteCarlo &mc)
+QDataStream &operator<<(QDataStream &ds, const MonteCarlo &mc)
 {
     writeHeader(ds, r_mc, 2);
 
@@ -65,7 +65,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const MonteCarlo &mc)
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, MonteCarlo &mc)
+QDataStream &operator>>(QDataStream &ds, MonteCarlo &mc)
 {
     VersionID v = readHeader(ds, r_mc);
 

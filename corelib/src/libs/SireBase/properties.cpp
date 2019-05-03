@@ -232,7 +232,7 @@ bool PropertiesData::operator!=(const PropertiesData &other) const
 static const RegisterMetaType<Properties> r_props;
 
 /** Serialise to a binary data stream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const Properties &props)
+QDataStream &operator<<(QDataStream &ds, const Properties &props)
 {
     writeHeader(ds, r_props, 1);
     
@@ -254,7 +254,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const Properties &props
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, Properties &props)
+QDataStream &operator>>(QDataStream &ds, Properties &props)
 {
     VersionID v = readHeader(ds, r_props);
     

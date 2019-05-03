@@ -51,7 +51,7 @@ using namespace SireStream;
 static const RegisterMetaType<Condition> r_condition(MAGIC_ONLY,Condition::typeName());
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Condition &condition)
+QDataStream &operator<<(QDataStream &ds, const Condition &condition)
 {
     writeHeader(ds, r_condition, 1);
     
@@ -64,7 +64,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Condition &conditi
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Condition &condition)
+QDataStream &operator>>(QDataStream &ds, Condition &condition)
 {
     VersionID v = readHeader(ds, r_condition);
     
@@ -307,7 +307,7 @@ Complex Condition::evaluate(const ComplexValues &values) const
 static const RegisterMetaType<GreaterThan> r_greaterthan;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const GreaterThan &greaterthan)
+QDataStream &operator<<(QDataStream &ds, const GreaterThan &greaterthan)
 {
     writeHeader(ds, r_greaterthan, 1);
     
@@ -317,7 +317,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const GreaterThan &great
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, GreaterThan &greaterthan)
+QDataStream &operator>>(QDataStream &ds, GreaterThan &greaterthan)
 {
     VersionID v = readHeader(ds, r_greaterthan);
     
@@ -449,7 +449,7 @@ bool GreaterThan::alwaysFalse() const
 static const RegisterMetaType<LessThan> r_lessthan;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const LessThan &lessthan)
+QDataStream &operator<<(QDataStream &ds, const LessThan &lessthan)
 {
     writeHeader(ds, r_lessthan, 1);
     
@@ -459,7 +459,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const LessThan &lessthan
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, LessThan &lessthan)
+QDataStream &operator>>(QDataStream &ds, LessThan &lessthan)
 {
     VersionID v = readHeader(ds, r_lessthan);
     
@@ -591,7 +591,7 @@ bool LessThan::alwaysFalse() const
 static const RegisterMetaType<GreaterOrEqualThan> r_gethan;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const GreaterOrEqualThan &gethan)
+QDataStream &operator<<(QDataStream &ds, const GreaterOrEqualThan &gethan)
 {
     writeHeader(ds, r_gethan, 1);
     
@@ -601,7 +601,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const GreaterOrEqualThan
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, GreaterOrEqualThan &gethan)
+QDataStream &operator>>(QDataStream &ds, GreaterOrEqualThan &gethan)
 {
     VersionID v = readHeader(ds, r_gethan);
     
@@ -733,7 +733,7 @@ bool GreaterOrEqualThan::alwaysFalse() const
 static const RegisterMetaType<LessOrEqualThan> r_lethan;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const LessOrEqualThan &lethan)
+QDataStream &operator<<(QDataStream &ds, const LessOrEqualThan &lethan)
 {
     writeHeader(ds, r_lethan, 1);
     
@@ -743,7 +743,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const LessOrEqualThan &l
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, LessOrEqualThan &lethan)
+QDataStream &operator>>(QDataStream &ds, LessOrEqualThan &lethan)
 {
     VersionID v = readHeader(ds, r_lethan);
     
@@ -875,7 +875,7 @@ bool LessOrEqualThan::alwaysFalse() const
 static const RegisterMetaType<EqualTo> r_equalto;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const EqualTo &equalto)
+QDataStream &operator<<(QDataStream &ds, const EqualTo &equalto)
 {
     writeHeader(ds, r_equalto, 1);
     
@@ -885,7 +885,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const EqualTo &equalto)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, EqualTo &equalto)
+QDataStream &operator>>(QDataStream &ds, EqualTo &equalto)
 {
     VersionID v = readHeader(ds, r_equalto);
     
@@ -1017,7 +1017,7 @@ bool EqualTo::alwaysFalse() const
 static const RegisterMetaType<NotEqualTo> r_notequalto;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const NotEqualTo &notequalto)
+QDataStream &operator<<(QDataStream &ds, const NotEqualTo &notequalto)
 {
     writeHeader(ds, r_notequalto, 1);
     
@@ -1027,7 +1027,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const NotEqualTo &notequ
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, NotEqualTo &notequalto)
+QDataStream &operator>>(QDataStream &ds, NotEqualTo &notequalto)
 {
     VersionID v = readHeader(ds, r_notequalto);
     
@@ -1159,7 +1159,7 @@ bool NotEqualTo::alwaysFalse() const
 static const RegisterMetaType<AlwaysTrue> r_alwaystrue;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const AlwaysTrue &alwaystrue)
+QDataStream &operator<<(QDataStream &ds, const AlwaysTrue &alwaystrue)
 {
     writeHeader(ds, r_alwaystrue, 1);
     
@@ -1169,7 +1169,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const AlwaysTrue &always
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, AlwaysTrue &alwaystrue)
+QDataStream &operator>>(QDataStream &ds, AlwaysTrue &alwaystrue)
 {
     VersionID v = readHeader(ds, r_alwaystrue);
     
@@ -1358,7 +1358,7 @@ bool AlwaysTrue::compareValues(const Complex&, const Complex&) const
 static const RegisterMetaType<AlwaysFalse> r_alwaysfalse;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const AlwaysFalse &alwaysfalse)
+QDataStream &operator<<(QDataStream &ds, const AlwaysFalse &alwaysfalse)
 {
     writeHeader(ds, r_alwaysfalse, 1);
     
@@ -1368,7 +1368,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const AlwaysFalse &alway
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, AlwaysFalse &alwaysfalse)
+QDataStream &operator>>(QDataStream &ds, AlwaysFalse &alwaysfalse)
 {
     VersionID v = readHeader(ds, r_alwaysfalse);
     
@@ -1557,7 +1557,7 @@ bool AlwaysFalse::compareValues(const Complex&, const Complex&) const
 static const RegisterMetaType<Conditional> r_conditional;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Conditional &conditional)
+QDataStream &operator<<(QDataStream &ds, const Conditional &conditional)
 {
     writeHeader(ds, r_conditional, 1);
     
@@ -1571,7 +1571,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Conditional &condi
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Conditional &conditional)
+QDataStream &operator>>(QDataStream &ds, Conditional &conditional)
 {
     VersionID v = readHeader(ds, r_conditional);
     

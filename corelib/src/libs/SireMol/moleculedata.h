@@ -103,8 +103,8 @@ be used in your own code.
 class SIREMOL_EXPORT MoleculeData : public SireBase::RefCountData
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MoleculeData&);
-friend QDataStream& ::operator>>(QDataStream&, MoleculeData&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MoleculeData&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MoleculeData&);
 
 public:
     MoleculeData();

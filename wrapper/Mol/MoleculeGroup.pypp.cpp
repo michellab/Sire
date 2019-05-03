@@ -220,7 +220,7 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the views of the molecule with number molnum from this group.\nThrow: SireMol::missing_molecule\n" );
         
         }
@@ -233,7 +233,7 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molidx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the views of the molecule at index molidx\nThrow: SireError::invalid_index\n" );
         
         }
@@ -246,7 +246,7 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molname") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the views of the molecule called molname\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireMol::invalid_index\n" );
         
         }
@@ -259,7 +259,7 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the views of the molecule that is identified by molid\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireError::invalid_index\n" );
         
         }
@@ -272,7 +272,7 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("viewidx") )
-                , "Return the specified view of the specified molecule in this group.\nThrow: SireMol::missing_molecule\nThrow: SireError::invalid_index\n" );
+                , "Return the view of hte molecule at viewidx\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -319,7 +319,7 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "back"
                 , back_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return a reference to the last molecule in the group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -416,7 +416,7 @@ void register_MoleculeGroup_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("MoleculeGroup") )
-                , "Return whether or not this group contains all of the\nviews of any version of all of the molecules contained\nin molecules" );
+                , "Return whether or not this group contains all of the\nviews of any version of all of the molecules contained\nin the group other" );
         
         }
         { //::SireMol::MoleculeGroup::first
@@ -427,7 +427,7 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "first"
                 , first_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return a reference to the first molecule in the group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -439,7 +439,7 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "front"
                 , front_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return a reference to the first molecule in the group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -594,7 +594,7 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "last"
                 , last_function_value
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return a reference to the last molecule in the group\nThrow: SireError::invalid_index\n" );
         
         }
@@ -737,7 +737,7 @@ void register_MoleculeGroup_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the views of the molecule with number molnum from\nthis group\nThrow: SireMol::missing_molecule\n" );
         
         }
@@ -750,7 +750,7 @@ void register_MoleculeGroup_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molidx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the views of the molecule at index molidx\nThrow: SireError::invalid_index\n" );
         
         }
@@ -763,7 +763,7 @@ void register_MoleculeGroup_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molname") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the views of the molecule with name molname\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\n" );
         
         }
@@ -776,7 +776,7 @@ void register_MoleculeGroup_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the views of the molecule that matches the ID molid\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireError::invalid_index\n" );
         
         }
@@ -789,7 +789,7 @@ void register_MoleculeGroup_class(){
                 "moleculeAt"
                 , moleculeAt_function_value
                 , ( bp::arg("idx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the views of the molecule at index idx in this group.\nThrow: SireError::invalid_index\n" );
         
         }
@@ -945,7 +945,7 @@ void register_MoleculeGroup_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
         }
@@ -958,7 +958,7 @@ void register_MoleculeGroup_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molidx") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
         }
@@ -971,7 +971,7 @@ void register_MoleculeGroup_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molname") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
         }
@@ -984,7 +984,7 @@ void register_MoleculeGroup_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molid") )
-                , bp::return_value_policy<bp::clone_const_reference>()
+                , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
         }

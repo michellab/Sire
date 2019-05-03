@@ -47,14 +47,14 @@ class NullPerturbation;
 class Perturbations;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::Perturbation&);
-QDataStream& operator>>(QDataStream&, SireMol::Perturbation&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Perturbation&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Perturbation&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::NullPerturbation&);
-QDataStream& operator>>(QDataStream&, SireMol::NullPerturbation&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::NullPerturbation&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::NullPerturbation&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::Perturbations&);
-QDataStream& operator>>(QDataStream&, SireMol::Perturbations&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Perturbations&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Perturbations&);
 
 namespace SireCAS
 {
@@ -102,8 +102,8 @@ class SIREMOL_EXPORT Perturbation : public SireBase::Property
 
 friend class Perturbations;   // so can call perturbMolecule directly
 
-friend QDataStream& ::operator<<(QDataStream&, const Perturbation&);
-friend QDataStream& ::operator>>(QDataStream&, Perturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Perturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Perturbation&);
 
 public:
     Perturbation();
@@ -168,8 +168,8 @@ private:
 class SIREMOL_EXPORT NullPerturbation
         : public SireBase::ConcreteProperty<NullPerturbation,Perturbation>
 {
-friend QDataStream& ::operator<<(QDataStream&, const NullPerturbation&);
-friend QDataStream& ::operator>>(QDataStream&, NullPerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const NullPerturbation&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, NullPerturbation&);
 
 public:
     NullPerturbation();
@@ -202,8 +202,8 @@ class SIREMOL_EXPORT Perturbations
         : public SireBase::ConcreteProperty<Perturbations,Perturbation>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Perturbations&);
-friend QDataStream& ::operator>>(QDataStream&, Perturbations&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const Perturbations&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, Perturbations&);
 
 public:
     Perturbations();

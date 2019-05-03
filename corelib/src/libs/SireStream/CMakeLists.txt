@@ -4,6 +4,9 @@
 #
 ########################################
 
+# Export symbols when building the library
+add_definitions( "-DSIRESTREAM_BUILD" )
+
 include_directories(${CMAKE_SOURCE_DIR}/src/libs)
 
 set ( SIRESTREAM_HEADERS

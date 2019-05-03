@@ -108,7 +108,7 @@ Q_GLOBAL_STATIC( QReadWriteLock, getNameCacheLock )
     times (think about how many "O" atoms there are in a box of water!).
     This allows each equal string to share the same data, rather than
     have multiple copies */
-QString SIREMOL_EXPORT SireMol::cacheName(const QString &name)
+QString SireMol::cacheName(const QString &name)
 {
     if (name.isEmpty())
         return name;
@@ -2989,7 +2989,7 @@ static const RegisterMetaType<StructureEditor> r_editor(MAGIC_ONLY,
                                                         "SireMol::StructureEditor");
                                                   
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const StructureEditor &editor)
 {
     writeHeader(ds, r_editor, 1);
@@ -3002,7 +3002,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        StructureEditor &editor)
 {
     VersionID v = readHeader(ds, r_editor);

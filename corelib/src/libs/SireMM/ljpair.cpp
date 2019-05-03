@@ -40,7 +40,7 @@ using namespace SireStream;
 static const RegisterMetaType<LJPair> r_ljpair(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const LJPair &ljpair)
+QDataStream &operator<<(QDataStream &ds, const LJPair &ljpair)
 {
     writeHeader(ds, r_ljpair, 1) << ljpair.sig << ljpair.eps;
     
@@ -48,7 +48,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const LJPair &ljpair)
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, LJPair &ljpair)
+QDataStream &operator>>(QDataStream &ds, LJPair &ljpair)
 {
     VersionID v = readHeader(ds, r_ljpair);
     

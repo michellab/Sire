@@ -50,7 +50,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<Grid> r_grid( MAGIC_ONLY, Grid::typeName() );
 
-QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const Grid &grid)
+QDataStream &operator<<(QDataStream &ds, const Grid &grid)
 {
     writeHeader(ds, r_grid, 1);
     
@@ -62,7 +62,7 @@ QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const Grid &grid)
     return ds;
 }
 
-QDataStream SIREVOL_EXPORT &operator>>(QDataStream &ds, Grid &grid)
+QDataStream &operator>>(QDataStream &ds, Grid &grid)
 {
     VersionID v = readHeader(ds, r_grid);
     
@@ -249,7 +249,7 @@ const NullGrid& Grid::null()
 
 static const RegisterMetaType<NullGrid> r_nullgrid;
 
-QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const NullGrid &nullgrid)
+QDataStream &operator<<(QDataStream &ds, const NullGrid &nullgrid)
 {
     writeHeader(ds, r_nullgrid, 1);
     
@@ -258,7 +258,7 @@ QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const NullGrid &nullgrid
     return ds;
 }
 
-QDataStream SIREVOL_EXPORT &operator>>(QDataStream &ds, NullGrid &nullgrid)
+QDataStream &operator>>(QDataStream &ds, NullGrid &nullgrid)
 {
     VersionID v = readHeader(ds, r_nullgrid);
     
@@ -346,7 +346,7 @@ GridPtr NullGrid::scale(double scalefactor) const
 
 static const RegisterMetaType<RegularGrid> r_reggrid;
 
-QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const RegularGrid &grid)
+QDataStream &operator<<(QDataStream &ds, const RegularGrid &grid)
 {
     writeHeader(ds, r_reggrid, 1);
     
@@ -357,7 +357,7 @@ QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const RegularGrid &grid)
     return ds;
 }
 
-QDataStream SIREVOL_EXPORT &operator>>(QDataStream &ds, RegularGrid &grid)
+QDataStream &operator>>(QDataStream &ds, RegularGrid &grid)
 {
     VersionID v = readHeader(ds, r_reggrid);
     

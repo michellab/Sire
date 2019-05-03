@@ -8,6 +8,35 @@
 ### and build/python
 ###
 
+build_and_install_sire()
+{
+# Now set the MACOSX_DEPLOYMENT_TARGET to make sure
+# that we can work with Mavericks or above (needed by Qt5)
+export MACOSX_DEPLOYMENT_TARGET="10.9"
+
+# Now run the python install script
+[ -z "$CONDA_PYTHON" ] && [ -e "${INSTALL_DIR}/bin/python" ] && CONDA_PYTHON="${INSTALL_DIR}/bin/python"
+[ -z "$CONDA_PYTHON" ] && [ -e "${INSTALL_DIR}/python" ] && CONDA_PYTHON="${INSTALL_DIR}/python"
+if [ ! -z "$CONDA_PYTHON" ]; then
+    CONDA_BINDIR="`dirname "$CONDA_PYTHON"`"
+    echo "** Running the conda activate script... **"
+    echo "** . \"$CONDA_BINDIR/activate\""
+    . "$CONDA_BINDIR/activate" ""
+    echo "** Running the Python install script... **"
+    echo "** \"$CONDA_PYTHON\" build/build_sire.py **"
+    "$CONDA_PYTHON" build/build_sire.py
+    err=$?
+    conda deactivate
+    exit $err
+else
+    echo "** FATAL **"
+    echo "** Cannot find conda python **"
+    echo "** Something went wrong with the miniconda install! **"
+    echo "** Remove ${INSTALL_DIR}, then run compile_sire.sh --clean, then try again **"
+    exit -1
+fi
+}
+
 # Process arguments
 key="$1"
 
@@ -33,7 +62,7 @@ esac
 
 # Set the version of miniconda to use. Choose "latest" for the latest
 # miniconda, or set a specific version here
-MINICONDA_VERSION="4.5.4"
+MINICONDA_VERSION="4.5.12"
 #MINICONDA_VERSION="latest"
 
 if [ -z "$INSTALL_SIRE_DIR" ]; then
@@ -56,18 +85,8 @@ echo "Installing into directory '${INSTALL_DIR}'"
 
 # Check whether or not miniconda has been downloaded and 
 # installed into this directory
-if [ -e "${INSTALL_DIR}/bin/python" ]; then
-    # the miniconda distribution already exists.
-    # We can now jump straight to the python install script
-    echo "** Running the Python install script... **"
-    echo "** ${INSTALL_DIR}/bin/python build/build_sire.py **"
-    ${INSTALL_DIR}/bin/python build/build_sire.py
-    exit 0
-elif [ -e "${INSTALL_DIR}/python.exe" ]; then
-    # the windows miniconda distribution already exists.
-    # We can jump straight to the python install script
-    echo "** Running the python install script... **"
-    ${INSTALL_DIR}/python build/build_sire.py
+if [ -e "${INSTALL_DIR}/bin/python" ] || [ -e "${INSTALL_DIR}/python.exe" ]; then
+    build_and_install_sire
     exit 0
 fi
 
@@ -172,26 +191,4 @@ else
     fi
 fi
 
-# Now set the MACOSX_DEPLOYMENT_TARGET to make sure
-# that we can work with Mountain Lion or above
-export MACOSX_DEPLOYMENT_TARGET="10.8"
-
-# Now run the python install script
-if [ -e "${INSTALL_DIR}/bin/python" ]; then
-    echo "** Running the Python install script... **"
-    echo "** ${INSTALL_DIR}/bin/python build/build_sire.py **"
-    ${INSTALL_DIR}/bin/python build/build_sire.py
-    exit $?
-elif [ -e "${INSTALL_DIR}/python" ]; then
-    echo "** Running the Python install script... **"
-    echo "** ${INSTALL_DIR}/python build/build_sire.py **"
-    ${INSTALL_DIR}/python build/build_sire.py
-    exit $?
-else
-    echo "** FATAL **"
-    echo "** Cannot find ${INSTALL_DIR}/bin/python **"
-    echo "** Something went wrong with the miniconda install! **"
-    echo "** Remove ${INSTALL_DIR}, then run compile_sire.sh --clean, then try again **"
-    exit -1
-fi
-
+build_and_install_sire

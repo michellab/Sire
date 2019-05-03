@@ -38,8 +38,8 @@ namespace SireBase
     class VariantProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::VariantProperty&);
-QDataStream& operator>>(QDataStream&, SireBase::VariantProperty&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::VariantProperty&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::VariantProperty&);
 
 namespace SireBase
 {

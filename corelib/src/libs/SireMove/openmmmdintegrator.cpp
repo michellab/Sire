@@ -117,7 +117,7 @@ enum
 static const RegisterMetaType<OpenMMMDIntegrator> r_openmmint;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMMDIntegrator &velver)
+QDataStream &operator<<(QDataStream &ds, const OpenMMMDIntegrator &velver)
 {
     writeHeader(ds, r_openmmint, 2);
 
@@ -142,7 +142,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMMDIntegrato
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMMDIntegrator &velver)
+QDataStream &operator>>(QDataStream &ds, OpenMMMDIntegrator &velver)
 {
 
     VersionID v = readHeader(ds, r_openmmint);

@@ -76,7 +76,7 @@ void register_MolEditor_class(){
                 "add"
                 , add_function_value
                 , ( bp::arg("atom") )
-                , "Add an atom called name and return an editor that can\nbe used to edit it" );
+                , "Add an atom with number number and return an editor that\ncan be used to edit it" );
         
         }
         { //::SireMol::MolEditor::add

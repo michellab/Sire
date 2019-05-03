@@ -52,14 +52,14 @@ class ConnectivityEditor;
 class MoleculeInfo;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ConnectivityBase&);
-QDataStream& operator>>(QDataStream&, SireMol::ConnectivityBase&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ConnectivityBase&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ConnectivityBase&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::Connectivity&);
-QDataStream& operator>>(QDataStream&, SireMol::Connectivity&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::Connectivity&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::Connectivity&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::ConnectivityEditor&);
-QDataStream& operator>>(QDataStream&, SireMol::ConnectivityEditor&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ConnectivityEditor&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ConnectivityEditor&);
 
 namespace SireMol
 {
@@ -91,8 +91,8 @@ class ConnectivityEditor;
 class SIREMOL_EXPORT ConnectivityBase : public MolViewProperty
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireMol::ConnectivityBase&);
-friend QDataStream& ::operator>>(QDataStream&, SireMol::ConnectivityBase&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const SireMol::ConnectivityBase&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, SireMol::ConnectivityBase&);
 
 public:
     ~ConnectivityBase();
@@ -134,10 +134,12 @@ public:
     QList<AtomIdx> findPath(const AtomID &atom0, const AtomID &atom1) const;
     QList< QList<AtomIdx> > findPaths(const AtomID &atom0, const AtomID &atom1) const;
 
+    bool inRing(AtomIdx atom) const;
     bool inRing(AtomIdx atom0, AtomIdx atom1) const;
     bool inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const;
     bool inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2, AtomIdx atom3) const;
 
+    bool inRing(const AtomID &atom) const;
     bool inRing(const AtomID &atom0, const AtomID &atom1) const;
     bool inRing(const AtomID &atom0, const AtomID &atom1, const AtomID &atom2) const;
     bool inRing(const AtomID &atom0, const AtomID &atom1,
@@ -306,8 +308,8 @@ class SIREMOL_EXPORT Connectivity
                                                 ConnectivityBase>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireMol::Connectivity&);
-friend QDataStream& ::operator>>(QDataStream&, SireMol::Connectivity&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const SireMol::Connectivity&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, SireMol::Connectivity&);
 
 public:
     Connectivity();
@@ -351,8 +353,8 @@ class SIREMOL_EXPORT ConnectivityEditor
                                             ConnectivityBase>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireMol::ConnectivityEditor&);
-friend QDataStream& ::operator>>(QDataStream&, SireMol::ConnectivityEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const SireMol::ConnectivityEditor&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, SireMol::ConnectivityEditor&);
 
 public:
     ConnectivityEditor();

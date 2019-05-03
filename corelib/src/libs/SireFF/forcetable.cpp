@@ -53,7 +53,7 @@ using namespace SireStream;
 static const RegisterMetaType<MolForceTable> r_molforcetable(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const MolForceTable &molforcetable)
 {
     writeHeader(ds, r_molforcetable, 2);
@@ -70,7 +70,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       MolForceTable &molforcetable)
 {
     VersionID v = readHeader(ds, r_molforcetable);
@@ -908,7 +908,7 @@ const char* MolForceTable::typeName()
 static const RegisterMetaType<ForceTable> r_forcetable(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const ForceTable &forcetable)
 {
     writeHeader(ds, r_forcetable, 1);
@@ -921,7 +921,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       ForceTable &forcetable)
 {
     VersionID v = readHeader(ds, r_forcetable);

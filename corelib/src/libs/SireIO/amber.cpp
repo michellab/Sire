@@ -933,18 +933,18 @@ static int setDihedrals(MolEditor &editmol, int pointer,
 
             if (not ignored and not improper)
             {
-                if (sclee14 < 0.00001)
-                {
-                    throw SireError::program_bug( QObject::tr(
-           " A 1,4 pair has a coulombic scaling factor of 0.0 in the top file which would mean an infinite energy ! "),
-                            CODELOC );
-                }
-                if (sclnb14 < 0.00001)
-                {
-                    throw SireError::program_bug( QObject::tr(
-           " A 1,4 pair has a LJ scaling factor of 0.0 in the top file which would mean an infinite energy ! "),
-                            CODELOC );
-                }
+	      //if (sclee14 < 0.00001)
+              //  {
+	      //	  /*         throw SireError::program_bug( QObject::tr(
+	      //" A 1,4 pair has a coulombic scaling factor of 0.0 in the top file which would mean an infinite energy ! "),
+	      //CODELOC );*/
+	      //	}
+              //  if (sclnb14 < 0.00001)
+              //  {
+	      //	  /*throw SireError::program_bug( QObject::tr(
+	      //" A 1,4 pair has a LJ scaling factor of 0.0 in the top file which would mean an infinite energy ! "),
+	      //CODELOC );*/
+	      //	}
 
                 /**Save this in 14 array */
                 if (not atoms14.contains(atom0.number()))
@@ -958,8 +958,16 @@ static int setDihedrals(MolEditor &editmol, int pointer,
                 {
                     atoms14[atom0.number()].append(atom3.number());
                     /* JM 07/14 Save scale factor for this pair*/
-                    atoms14sclee[atom0.number()][atom3.number()] = 1/sclee14;
-                    atoms14sclnb[atom0.number()][atom3.number()] = 1/sclnb14;
+                    //atoms14sclee[atom0.number()][atom3.number()] = 1/sclee14;
+                    //atoms14sclnb[atom0.number()][atom3.number()] = 1/sclnb14;
+		    if (sclee14 < 0.00001)
+		      atoms14sclee[atom0.number()][atom3.number()] = 0.0;
+		    else
+		      atoms14sclee[atom0.number()][atom3.number()] = 1/sclee14;
+		    if (sclnb14 < 0.00001)
+		      atoms14sclnb[atom0.number()][atom3.number()] = 0.0;
+		    else
+		      atoms14sclnb[atom0.number()][atom3.number()] = 1/sclnb14;		      
                     // Add pair (atom0,atom3) = (1/sclee14, 1/sclnb14) to amber parameters object
                     BondID pair = BondID(atom0.index() , atom3.index() );
                     amberparams.add14Pair( pair, 1/sclee14, 1/sclnb14 );
@@ -974,9 +982,18 @@ static int setDihedrals(MolEditor &editmol, int pointer,
                 if ( not atoms14[atom3.number()].contains(atom0.number()) )
                 {
                     atoms14[atom3.number()].append(atom0.number());
-                    /* JM 07/14 Save scale factor for this pair*/
-                    atoms14sclee[atom3.number()][atom0.number()] = 1/sclee14;
-                    atoms14sclnb[atom3.number()][atom0.number()] = 1/sclnb14;
+		    if (sclee14 < 0.00001)
+		      atoms14sclee[atom3.number()][atom0.number()] = 0.0;
+		    else
+		      atoms14sclee[atom3.number()][atom0.number()] = 1/sclee14;
+
+		    if (sclee14 < 0.00001)
+		      atoms14sclnb[atom3.number()][atom0.number()] = 0.0;
+		    else
+		      atoms14sclnb[atom3.number()][atom0.number()] = 1/sclnb14;
+		    /* JM 07/14 Save scale factor for this pair*/
+		    //atoms14sclee[atom3.number()][atom0.number()] = 1/sclee14;
+		    //atoms14sclnb[atom3.number()][atom0.number()] = 1/sclnb14;
                 }
             }
         }
@@ -1258,7 +1275,7 @@ static void calcNumberMolecules(int &totalMolecules,
 static const RegisterMetaType<Amber> r_amber(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Amber &amber)
+QDataStream &operator<<(QDataStream &ds, const Amber &amber)
 {
     //empty class so nothing to stream
     writeHeader(ds, r_amber, 1);
@@ -1269,7 +1286,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Amber &amber)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Amber &amber)
+QDataStream &operator>>(QDataStream &ds, Amber &amber)
 {
     //empty class so nothing to stream
 

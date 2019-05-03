@@ -40,8 +40,8 @@ namespace SireSystem
 class CheckPoint;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::CheckPoint&);
-QDataStream& operator>>(QDataStream&, SireSystem::CheckPoint&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::CheckPoint&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::CheckPoint&);
 
 namespace SireSystem
 {
@@ -56,8 +56,8 @@ class SIRESYSTEM_EXPORT CheckPoint
           : public SireBase::ConcreteProperty<CheckPoint,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CheckPoint&);
-friend QDataStream& ::operator>>(QDataStream&, CheckPoint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const CheckPoint&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, CheckPoint&);
 
 public:
     CheckPoint();

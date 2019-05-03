@@ -62,11 +62,11 @@ class ChangedMolecule;
 
 }
 
-QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMoleculeBase&);
-QDataStream& operator>>(QDataStream&, SireFF::detail::FFMoleculeBase&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMoleculeBase&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::detail::FFMoleculeBase&);
 
-QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMoleculesBase&);
-QDataStream& operator>>(QDataStream&, SireFF::detail::FFMoleculesBase&);
+SIREFF_EXPORT QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMoleculesBase&);
+SIREFF_EXPORT QDataStream& operator>>(QDataStream&, SireFF::detail::FFMoleculesBase&);
 
 template<class PTNL>
 QDataStream& operator<<(QDataStream&, const SireFF::detail::FFMolecule<PTNL>&);
@@ -103,10 +103,10 @@ using SireMol::CGIdx;
 using SireBase::PropertyMap;
 using SireBase::ChunkedVector;
 
-void throwFFMoleculesIncompatibleParameterNames(const PropertyMap &old_map, 
+SIREFF_EXPORT void throwFFMoleculesIncompatibleParameterNames(const PropertyMap &old_map, 
                                                 const PropertyMap &new_map);
 
-void assertCompatible(const FFMoleculeBase &mol0, const FFMoleculeBase &mol1);
+SIREFF_EXPORT void assertCompatible(const FFMoleculeBase &mol0, const FFMoleculeBase &mol1);
 
 /** This is the base class of most (all?) of the forcefield
     specialised molecules. Forcefields used specialised molecule
@@ -121,8 +121,8 @@ void assertCompatible(const FFMoleculeBase &mol0, const FFMoleculeBase &mol1);
 class SIREFF_EXPORT FFMoleculeBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FFMoleculeBase&);
-friend QDataStream& ::operator>>(QDataStream&, FFMoleculeBase&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FFMoleculeBase&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FFMoleculeBase&);
 
 public:
     FFMoleculeBase();
@@ -170,8 +170,8 @@ template<class PTNL>
 class FFMolecule : public FFMoleculeBase
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const FFMolecule<PTNL>&);
-friend QDataStream& ::operator>><>(QDataStream&, FFMolecule<PTNL>&);
+friend SIREFF_EXPORT QDataStream& ::operator<<<>(QDataStream&, const FFMolecule<PTNL>&);
+friend SIREFF_EXPORT QDataStream& ::operator>><>(QDataStream&, FFMolecule<PTNL>&);
 
 public:
     typedef typename PTNL::Parameters Parameters;
@@ -231,8 +231,8 @@ private:
 class SIREFF_EXPORT FFMoleculesBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FFMoleculesBase&);
-friend QDataStream& ::operator>>(QDataStream&, FFMoleculesBase&);
+friend SIREFF_EXPORT QDataStream& ::operator<<(QDataStream&, const FFMoleculesBase&);
+friend SIREFF_EXPORT QDataStream& ::operator>>(QDataStream&, FFMoleculesBase&);
 
 public:
     ~FFMoleculesBase();
@@ -301,8 +301,8 @@ template<class FFMOL>
 class ChangedMolecule
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const ChangedMolecule<FFMOL>&);
-friend QDataStream& ::operator>><>(QDataStream&, ChangedMolecule<FFMOL>&);
+friend SIREFF_EXPORT QDataStream& ::operator<<<>(QDataStream&, const ChangedMolecule<FFMOL>&);
+friend SIREFF_EXPORT QDataStream& ::operator>><>(QDataStream&, ChangedMolecule<FFMOL>&);
 
 public:
     typedef FFMOL Molecule;
@@ -370,8 +370,8 @@ template<class PTNL>
 class FFMolecules : public FFMoleculesBase
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const FFMolecules<PTNL>&);
-friend QDataStream& ::operator>><>(QDataStream&, FFMolecules<PTNL>&);
+friend SIREFF_EXPORT QDataStream& ::operator<<<>(QDataStream&, const FFMolecules<PTNL>&);
+friend SIREFF_EXPORT QDataStream& ::operator>><>(QDataStream&, FFMolecules<PTNL>&);
 
 public:
     typedef typename PTNL::Molecule Molecule;

@@ -38,7 +38,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<Beads> r_beads;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Beads &beads)
+QDataStream &operator<<(QDataStream &ds, const Beads &beads)
 {
     writeHeader(ds, r_beads, 1);
     
@@ -50,7 +50,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Beads &beads)
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Beads &beads)
+QDataStream &operator>>(QDataStream &ds, Beads &beads)
 {
     VersionID v = readHeader(ds, r_beads);
     

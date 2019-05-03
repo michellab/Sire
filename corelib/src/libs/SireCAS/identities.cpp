@@ -39,7 +39,7 @@ using namespace SireCAS;
 static const RegisterMetaType<Identities> r_identities(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Identities &ids)
+QDataStream &operator<<(QDataStream &ds, const Identities &ids)
 {
     writeHeader(ds, r_identities, 2);
     
@@ -58,7 +58,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Identities &ids)
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Identities &ids)
+QDataStream &operator>>(QDataStream &ds, Identities &ids)
 {
     VersionID v = readHeader(ds, r_identities);
 

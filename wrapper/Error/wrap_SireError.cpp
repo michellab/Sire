@@ -42,7 +42,7 @@ namespace SireError
 
 void export_exceptions();
 
-void SIREERROR_EXPORT export_SireError()
+void export_SireError()
 {
     export_exceptions();
 

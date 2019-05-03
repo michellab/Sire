@@ -46,7 +46,7 @@ using namespace SireStream;
 static const RegisterMetaType<MGIdentifier> r_mgid;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MGIdentifier &mgid)
+QDataStream &operator<<(QDataStream &ds, const MGIdentifier &mgid)
 {
     writeHeader(ds, r_mgid, 1);
     
@@ -56,7 +56,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MGIdentifier &mgid
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MGIdentifier &mgid)
+QDataStream &operator>>(QDataStream &ds, MGIdentifier &mgid)
 {
     VersionID v = readHeader(ds, r_mgid);
     
@@ -207,7 +207,7 @@ bool MGIdentifier::operator!=(const MGID &other) const
 static const RegisterMetaType<MGIdx> r_mgidx;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MGIdx &mgidx)
+QDataStream &operator<<(QDataStream &ds, const MGIdx &mgidx)
 {
     writeHeader(ds, r_mgidx, 1);
     
@@ -217,7 +217,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MGIdx &mgidx)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MGIdx &mgidx)
+QDataStream &operator>>(QDataStream &ds, MGIdx &mgidx)
 {
     VersionID v = readHeader(ds, r_mgidx);
     
@@ -238,7 +238,7 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MGIdx &mgidx)
 static const RegisterMetaType<MGNum> r_mgnum;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MGNum &mgnum)
+QDataStream &operator<<(QDataStream &ds, const MGNum &mgnum)
 {
     writeHeader(ds, r_mgnum, 1);
     
@@ -248,7 +248,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MGNum &mgnum)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MGNum &mgnum)
+QDataStream &operator>>(QDataStream &ds, MGNum &mgnum)
 {
     VersionID v = readHeader(ds, r_mgnum);
     
@@ -269,7 +269,7 @@ QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MGNum &mgnum)
 static const RegisterMetaType<MGName> r_mgname;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MGName &mgname)
+QDataStream &operator<<(QDataStream &ds, const MGName &mgname)
 {
     writeHeader(ds, r_mgname, 1);
     
@@ -279,7 +279,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const MGName &mgname)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, MGName &mgname)
+QDataStream &operator>>(QDataStream &ds, MGName &mgname)
 {
     VersionID v = readHeader(ds, r_mgname);
     

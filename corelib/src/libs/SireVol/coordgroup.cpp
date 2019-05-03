@@ -1779,7 +1779,7 @@ const Vector& CoordGroupBase::operator[](quint32 i) const
 static const RegisterMetaType<CoordGroup> r_cgroup(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const CoordGroup &cgroup)
 {
     writeHeader(ds, r_cgroup, 1);
@@ -1792,7 +1792,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        CoordGroup &cgroup)
 {
     VersionID v = readHeader(ds, r_cgroup);
@@ -2268,7 +2268,7 @@ const char* CoordGroupEditor::typeName()
 static const RegisterMetaType<CoordGroupArray> r_cgarray(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const CoordGroupArray &cgarray)
 {
     writeHeader(ds, r_cgarray, 1);
@@ -2281,7 +2281,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        CoordGroupArray &cgarray)
 {
     VersionID v = readHeader(ds, r_cgarray);
@@ -3336,7 +3336,7 @@ SharedDataStream& operator>>(SharedDataStream &sds,
 }
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const CoordGroupArrayArray &cgarray)
 {
     writeHeader(ds, r_cgarrayarray, 2);
@@ -3349,7 +3349,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                        CoordGroupArrayArray &cgarray)
 {
     VersionID v = readHeader(ds, r_cgarrayarray);

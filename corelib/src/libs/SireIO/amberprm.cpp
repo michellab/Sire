@@ -32,6 +32,7 @@
 #include <QElapsedTimer>
 #include <QRegularExpression>
 #include <QDateTime>
+#include <QSet>
 
 #include <tuple>
 
@@ -114,7 +115,7 @@ static const RegisterMetaType<AmberPrm> r_parm;
 const RegisterParser<AmberPrm> register_amberparm;
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const AmberPrm &parm)
+QDataStream &operator<<(QDataStream &ds, const AmberPrm &parm)
 {
     writeHeader(ds, r_parm, 2);
 
@@ -151,37 +152,63 @@ void AmberPrm::rebuildExcludedAtoms()
     }
 
     //get the number of atoms in each molecule
-    const auto nats_per_mol = this->intData("ATOMS_PER_MOLECULE");
-    SireBase::assert_equal( nats_per_mol.count(), nmols, CODELOC );
+    if (molnum_to_atomnums.count() != nmols+1) // molnum_to_atomnums has a fake idx 0 value
+    {
+        throw SireIO::parse_error( QObject::tr(
+            "Disagreement of the number of molecules. %1 versus %2")
+                .arg(molnum_to_atomnums.count()-1).arg(nmols), CODELOC );
+    }
 
     excl_atoms = QVector< QVector< QVector<int> > >(nmols);
-    int atomidx = 0;
     int nnbidx = 0;
 
-    for (int i=0; i<nmols; ++i)
+    //we need to loop through the excluded atoms in atomnum order, not molidx order.
+    //This is because a single molecule can be spread over several non-contiguous blocks
+    //of atom numbers!
+    QVector< QPair<int,int> > atomnum_to_molnum_atomidx(natoms+1);
+
+    // get the molecule number and index of the atom in that molecule for every
+    // atom identified by its atom number
+    for (int molnum=1; molnum<=nmols; ++molnum)
     {
-        const int nats = nats_per_mol[i];
+        const auto atomnums_in_mol = molnum_to_atomnums.at(molnum);
 
-        QVector< QVector<int> > excl(nats);
-
-        for (int j=0; j<nats; ++j)
+        for (int iat=0; iat<atomnums_in_mol.count(); ++iat)
         {
-            const int nnb = nnb_per_atom[atomidx];
-
-            QVector<int> ex(nnb);
-
-            for (int k=0; k<nnb; ++k)
-            {
-                ex[k] = inb[nnbidx];
-                nnbidx += 1;
-            }
-
-            atomidx += 1;
-
-            excl[j] = ex;
+            const int atomnum = atomnums_in_mol[iat];
+            atomnum_to_molnum_atomidx[atomnum] = QPair<int,int>(molnum,iat);
         }
 
-        excl_atoms[i] = excl;
+        excl_atoms[molnum-1] = QVector< QVector<int> >(atomnums_in_mol.count());
+    }
+
+    // now loop over the atoms in sequence, looking up their excluded atoms (as these
+    // are arranged in atomnum sequence. Extract the excluded atoms for each atom,
+    // placing the result into excl_atoms, which is indexed by molnum then atomidx in
+    // molecule
+    for (int atomnum=1; atomnum<=natoms; ++atomnum)
+    {
+        int molnum = atomnum_to_molnum_atomidx[atomnum].first;
+        int atomidx = atomnum_to_molnum_atomidx[atomnum].second;
+
+        const int nnb = nnb_per_atom[atomnum-1]; // atomnum is 1-indexed
+
+        QVector<int> ex(nnb);
+
+        for (int k=0; k<nnb; ++k)
+        {
+            if (nnbidx >= inb.count())
+            {
+                throw SireIO::parse_error( QObject::tr(
+                    "Disagreement of the number of excluded atom nb terms! %1 versus %2")
+                        .arg(nnbidx).arg(inb.count()), CODELOC );
+            }
+
+            ex[k] = inb[nnbidx];
+            nnbidx += 1;
+        }
+
+        excl_atoms[molnum-1][atomidx] = ex; // molnum is 1-indexed
     }
 }
 
@@ -202,7 +229,7 @@ QVector< QVector<int> > indexBonds(const QVector<qint64> &bonds,
         if (mol0 != mol1)
             throw SireIO::parse_error( QObject::tr(
                     "Something went wrong as there is a bond between two different "
-                    "molecules!"), CODELOC );
+                    "molecules! (%1, %2)").arg(mol0).arg(mol1), CODELOC );
 
         molbonds[mol0].append(i);
     }
@@ -228,7 +255,8 @@ QVector< QVector<int> > indexAngles(const QVector<qint64> &angs,
         if (mol0 != mol1 or mol0 != mol2)
             throw SireIO::parse_error( QObject::tr(
                     "Something went wrong as there is a angle between more than one different "
-                    "molecule!"), CODELOC );
+                    "molecule! (%1, %2, %3)").arg(mol0)
+                    .arg(mol1).arg(mol2), CODELOC );
 
         molangs[mol0].append(i);
     }
@@ -255,7 +283,8 @@ QVector< QVector<int> > indexDihedrals(const QVector<qint64> &dihs,
         if (mol0 != mol1 or mol0 != mol2 or mol0 != mol3)
             throw SireIO::parse_error( QObject::tr(
                     "Something went wrong as there is a dihedral between more than one different "
-                    "molecule!"), CODELOC );
+                    "molecule! (%1, %2, %3, %4)").arg(mol0)
+                    .arg(mol1).arg(mol2).arg(mol3), CODELOC );
 
         moldihs[mol0].append(i);
     }
@@ -273,11 +302,12 @@ void AmberPrm::rebuildBADIndicies()
         return;
 
     //get the lookup table to go from atom index to molecule index
-    const auto atom_to_mol = this->getAtomIndexToMolIndex();
+    auto atom_to_mol = this->getAtomIndexToMolIndex();
 
     //now index the connectivity - find the start index and number of bonds/angles/dihedrals
     //for each molecule
-    if (usesParallel())
+    //if (usesParallel())
+    if (false)
     {
         tbb::parallel_invoke
         (
@@ -429,7 +459,8 @@ void AmberPrm::rebuildLJParameters()
         }
     };
 
-    if (usesParallel())
+    //if (usesParallel())
+    if (false)
     {
         tbb::parallel_for( tbb::blocked_range<int>(0,ntypes),
                            [&](tbb::blocked_range<int> r)
@@ -449,6 +480,219 @@ void AmberPrm::rebuildLJParameters()
     }
 }
 
+/** This function finds all atoms that are bonded to the atom at index 'atom_idx'
+    (which is in molecule with index 'mol_idx', populating the hashe
+    'atom_to_mol' (the molecule containing the passed atom). This uses the bonding information
+    in 'bonded_atoms', which is the list of all atoms that are bonded to each atom */
+static void findBondedAtoms(int atom_idx, int mol_idx,
+                            const QHash<int, int> &bonded_atoms,
+                            QHash<int, int> &atom_to_mol,
+                            QSet<int> &atoms_in_mol)
+{
+    for ( auto bonded_atom : bonded_atoms.values(atom_idx) )
+    {
+        if (not atoms_in_mol.contains(bonded_atom))
+        {
+            //we have not walked along this atom before
+            atom_to_mol[bonded_atom] = mol_idx;
+            atoms_in_mol.insert(bonded_atom);
+            findBondedAtoms( bonded_atom, mol_idx, bonded_atoms, atom_to_mol, atoms_in_mol );
+        }
+    }
+}
+
+/** This function uses the bond information in 'bonds_inc_h' and 'bonds_exc_h'
+    to divide the passed atoms into molecules. This returns an array of
+    the number of atoms in each molecule (same format as ATOMS_PER_MOLECULE) */
+static QVector<qint64> discoverMolecules(const QVector<qint64> &bonds_inc_h,
+                                         const QVector<qint64> &bonds_exc_h,
+                                         int natoms)
+{
+    //first, create a hash showing which atoms are bonded to each other
+
+    //NOTE: the atom numbers in the following arrays that describe bonds
+    //are coordinate array indexes for runtime speed. The true atom number
+    //equals the absolute value of the number divided by three, plus one.
+    //
+    //%FORMAT(10I8)  (IBH(i),JBH(i),ICBH(i), i=1,NBONH)
+    //  IBH    : atom involved in bond "i", bond contains hydrogen
+    //  JBH    : atom involved in bond "i", bond contains hydrogen
+    //  ICBH   : index into parameter arrays RK and REQ
+    QHash<int, int> bonded_atoms;
+
+    for ( int j = 0 ; j < bonds_exc_h.count() ; j = j + 3 )
+    {
+        int atom0 = bonds_exc_h[ j ] / 3 + 1;
+        int atom1 = bonds_exc_h[ j + 1 ] / 3 + 1;
+        bonded_atoms.insertMulti(atom0, atom1);
+        bonded_atoms.insertMulti(atom1, atom0);
+    }
+
+    for ( int j = 0 ; j < bonds_inc_h.count() ; j = j + 3 )
+    {
+        int atom0 = bonds_inc_h[ j ] / 3 + 1 ;
+        int atom1 = bonds_inc_h[ j + 1 ] / 3 + 1 ;
+        bonded_atoms.insertMulti(atom0, atom1);
+        bonded_atoms.insertMulti(atom1, atom0);
+    }
+
+    // Then recursively walk along each atom to find all the atoms that
+    // are in the same molecule
+    int nmols = 0;
+
+    QHash<int, int> atom_to_mol;
+
+    QList<qint64> atoms_per_mol;
+
+    for ( int i = 1 ; i <= natoms ; i++ )
+    {
+        if (not atom_to_mol.contains(i))
+        {
+            QSet<int> atoms_in_mol;
+
+            nmols += 1;
+            atom_to_mol[ i ] = nmols;
+            atoms_in_mol.insert(i);
+
+            // Recursive walk
+            findBondedAtoms(i, nmols, bonded_atoms, atom_to_mol, atoms_in_mol);
+
+            //this has now found all of the atoms in this molecule. Add the
+            //number of atoms in the molecule to atoms_per_mol
+            atoms_per_mol.append( atoms_in_mol.count() );
+        }
+    }
+
+    return atoms_per_mol.toVector();
+}
+
+/** Rebuild the arrays that show which atoms are in which molecules */
+void AmberPrm::rebuildMolNumToAtomNums()
+{
+    const int natoms = this->nAtoms();
+
+    const auto bonds_exc_h = this->intData("BONDS_WITHOUT_HYDROGEN");
+    const auto bonds_inc_h = this->intData("BONDS_INC_HYDROGEN");
+
+    //first, create a hash showing which atoms are bonded to each other
+
+    //NOTE: the atom numbers in the following arrays that describe bonds
+    //are coordinate array indexes for runtime speed. The true atom number
+    //equals the absolute value of the number divided by three, plus one.
+    //
+    //%FORMAT(10I8)  (IBH(i),JBH(i),ICBH(i), i=1,NBONH)
+    //  IBH    : atom involved in bond "i", bond contains hydrogen
+    //  JBH    : atom involved in bond "i", bond contains hydrogen
+    //  ICBH   : index into parameter arrays RK and REQ
+    QHash<int, int> bonded_atoms;
+
+    for ( int j = 0 ; j < bonds_exc_h.count() ; j = j + 3 )
+    {
+        int atom0 = bonds_exc_h[ j ] / 3 + 1;
+        int atom1 = bonds_exc_h[ j + 1 ] / 3 + 1;
+        bonded_atoms.insertMulti(atom0, atom1);
+        bonded_atoms.insertMulti(atom1, atom0);
+    }
+
+    for ( int j = 0 ; j < bonds_inc_h.count() ; j = j + 3 )
+    {
+        int atom0 = bonds_inc_h[ j ] / 3 + 1 ;
+        int atom1 = bonds_inc_h[ j + 1 ] / 3 + 1 ;
+        bonded_atoms.insertMulti(atom0, atom1);
+        bonded_atoms.insertMulti(atom1, atom0);
+    }
+
+    // Then recursively walk along each atom to find all the atoms that
+    // are in the same molecule
+    int nmols = 0;
+
+    QHash<int, int> atom_to_mol;
+
+    molnum_to_atomnums.clear();
+
+    // remove the 0th index as Amber is 1-indexed
+    molnum_to_atomnums.append( QVector<int>() );
+
+    QList<qint64> atoms_per_mol;
+
+    //this is how many atoms the amber file says are in each molecule...
+    const auto a_per_m = int_data.value("ATOMS_PER_MOLECULE");
+
+    for ( int i = 1 ; i <= natoms ; i++ )
+    {
+        if (not atom_to_mol.contains(i))
+        {
+            QSet<int> atoms_in_mol;
+
+            nmols += 1;
+
+            if (nmols > a_per_m.count())
+            {
+                throw SireIO::parse_error(QObject::tr(
+                    "The files appears to contain more molecules than expected. The file "
+                    "should only contain %1 molecules, but more than this have been "
+                    "found based on the bonding of the molecules.").arg(nmols), CODELOC );
+            }
+
+            //the number of atoms we should expect in this molecule...
+            int expected_nats = a_per_m.at(nmols-1);
+
+            //this is the first atom in the new molecule
+            atom_to_mol[ i ] = nmols;
+            atoms_in_mol.insert(i);
+
+            // Recursive walk to find all of the other atoms
+            findBondedAtoms(i, nmols, bonded_atoms, atom_to_mol, atoms_in_mol);
+
+            //this has now found all of the atoms in this molecule. Check we have
+            //all of the molecules expected by the amber file...
+            int next_atom = i+1;
+
+            while (atoms_in_mol.count() < expected_nats)
+            {
+                //find the next atom which is not yet in a molecule...
+                for (; next_atom <= natoms; ++next_atom)
+                {
+                    if (not atom_to_mol.contains(next_atom))
+                    {
+                        break;
+                    }
+                }
+
+                //add this, and all of its bonded atoms
+                atom_to_mol[ next_atom ] = nmols;
+                atoms_in_mol.insert(next_atom);
+                findBondedAtoms(next_atom, nmols, bonded_atoms, atom_to_mol, atoms_in_mol);
+
+                next_atom += 1;
+                if (next_atom > natoms)
+                    break;
+            }
+
+            if (atoms_in_mol.count() != expected_nats)
+            {
+                throw SireIO::parse_error( QObject::tr(
+                    "Disagreement over the number of atoms in molecule %1. Looking at bonding "
+                    "implies the number of atoms is %2, while the file itself claims the "
+                    "number is %3.").arg(nmols).arg(atoms_in_mol.count()).arg(expected_nats),
+                        CODELOC );
+            }
+
+            //add the number of atoms in the molecule to atoms_per_mol
+            atoms_per_mol.append( atoms_in_mol.count() );
+
+            auto atms = atoms_in_mol.toList();
+            qSort(atms);
+
+            molnum_to_atomnums.append(atms.toVector());
+        }
+    }
+
+    // now have all of the atomidxs (1-indexed) for molecule i (1-indexed)
+    // in the array molidx_to_atomidxs. Guaranteed to be sorted into AtomNum order
+    // in molnum_to_atomnums
+}
+
 /** Function called after loading the AmberPrm from a binary stream
     to populate all of the calculated member data */
 void AmberPrm::rebuildAfterReload()
@@ -466,7 +710,11 @@ void AmberPrm::rebuildAfterReload()
                 .arg(pointers.count()), CODELOC );
     }
 
-    if (usesParallel())
+    //first need to create the map of all of the atom numbers in each molecule
+    this->rebuildMolNumToAtomNums();
+
+    //if (usesParallel())
+    if (false)
     {
         tbb::parallel_invoke
         (
@@ -487,7 +735,7 @@ void AmberPrm::rebuildAfterReload()
 }
 
 /** Read from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberPrm &parm)
+QDataStream &operator>>(QDataStream &ds, AmberPrm &parm)
 {
     VersionID v = readHeader(ds, r_parm);
 
@@ -499,12 +747,12 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, AmberPrm &parm)
 
         sds >> parm.flag_to_line
             >> parm.int_data >> parm.float_data >> parm.string_data;
-        
+
             if (v == 2)
                 sds >> parm.ffield;
             else
                 parm.ffield = MMDetail();
-        
+
             sds >> static_cast<MoleculeParser&>(parm);
 
         parm.rebuildAfterReload();
@@ -644,92 +892,6 @@ MMDetail AmberPrm::forcefield() const
     return ffield;
 }
 
-/** This function finds all atoms that are bonded to the atom at index 'atom_idx'
-    (which is in molecule with index 'mol_idx', populating the hashe
-    'atom_to_mol' (the molecule containing the passed atom). This uses the bonding information
-    in 'bonded_atoms', which is the list of all atoms that are bonded to each atom */
-static void findBondedAtoms(int atom_idx, int mol_idx,
-                            const QHash<int, int> &bonded_atoms,
-                            QHash<int, int> &atom_to_mol,
-                            QSet<int> &atoms_in_mol)
-{
-    for ( auto bonded_atom : bonded_atoms.values(atom_idx) )
-    {
-        if (not atoms_in_mol.contains(bonded_atom))
-        {
-            //we have not walked along this atom before
-            atom_to_mol[bonded_atom] = mol_idx;
-            atoms_in_mol.insert(bonded_atom);
-            findBondedAtoms( bonded_atom, mol_idx, bonded_atoms, atom_to_mol, atoms_in_mol );
-        }
-    }
-}
-
-/** This function uses the bond information in 'bonds_inc_h' and 'bonds_exc_h'
-    to divide the passed atoms into molecules. This returns an array of
-    the number of atoms in each molecule (same format as ATOMS_PER_MOLECULE) */
-static QVector<qint64> discoverMolecules(const QVector<qint64> &bonds_inc_h,
-                                         const QVector<qint64> &bonds_exc_h,
-                                         int natoms)
-{
-    //first, create a hash showing which atoms are bonded to each other
-
-    //NOTE: the atom numbers in the following arrays that describe bonds
-    //are coordinate array indexes for runtime speed. The true atom number
-    //equals the absolute value of the number divided by three, plus one.
-    //
-    //%FORMAT(10I8)  (IBH(i),JBH(i),ICBH(i), i=1,NBONH)
-    //  IBH    : atom involved in bond "i", bond contains hydrogen
-    //  JBH    : atom involved in bond "i", bond contains hydrogen
-    //  ICBH   : index into parameter arrays RK and REQ
-    QHash<int, int> bonded_atoms;
-
-    for ( int j = 0 ; j < bonds_exc_h.count() ; j = j + 3 )
-    {
-        int atom0 = bonds_exc_h[ j ] / 3 + 1;
-        int atom1 = bonds_exc_h[ j + 1 ] / 3 + 1;
-        bonded_atoms.insertMulti(atom0, atom1);
-        bonded_atoms.insertMulti(atom1, atom0);
-    }
-
-    for ( int j = 0 ; j < bonds_inc_h.count() ; j = j + 3 )
-    {
-        int atom0 = bonds_inc_h[ j ] / 3 + 1 ;
-        int atom1 = bonds_inc_h[ j + 1 ] / 3 + 1 ;
-        bonded_atoms.insertMulti(atom0, atom1);
-        bonded_atoms.insertMulti(atom1, atom0);
-    }
-
-    // Then recursively walk along each atom to find all the atoms that
-    // are in the same molecule
-    int nmols = 0;
-
-    QHash<int, int> atom_to_mol;
-
-    QList<qint64> atoms_per_mol;
-
-    for ( int i = 1 ; i <= natoms ; i++ )
-    {
-        if (not atom_to_mol.contains(i))
-        {
-            QSet<int> atoms_in_mol;
-
-            nmols += 1;
-            atom_to_mol[ i ] = nmols;
-            atoms_in_mol.insert(i);
-
-            // Recursive walk
-            findBondedAtoms(i, nmols, bonded_atoms, atom_to_mol, atoms_in_mol);
-
-            //this has now found all of the atoms in this molecule. Add the
-            //number of atoms in the molecule to atoms_per_mol
-            atoms_per_mol.append( atoms_in_mol.count() );
-        }
-    }
-
-    return atoms_per_mol.toVector();
-}
-
 /** Process all of the flags */
 double AmberPrm::processAllFlags()
 {
@@ -780,7 +942,8 @@ double AmberPrm::processAllFlags()
         }
     };
 
-    if (usesParallel())
+    //if (usesParallel())
+    if (false)
     {
         tbb::parallel_for( tbb::blocked_range<int>(0,flags.count()),
                            [&](tbb::blocked_range<int> r)
@@ -929,7 +1092,7 @@ void AmberPrm::parse(const PropertyMap &map)
     if (map["forcefield"].hasValue())
     {
         ffield = map["forcefield"].value().asA<MMDetail>();
-        
+
         if (not ffield.isAmberStyle())
             throw SireError::incompatible_error( QObject::tr(
                 "This AmberPrm reader can only parse Amber parm files that hold molecules "
@@ -1100,9 +1263,9 @@ QVector<QString> getAmberTypes(const AmberParams &params,
             //we need to shorten the atom type name to 4 characters. Do this by
             //creating a unique name...
             QMutexLocker lkr(&name_mutex);
-            
+
             int index = 0;
-            
+
             if (unique_names.contains(atomtype))
             {
                 index = unique_names[atomtype];
@@ -1111,13 +1274,13 @@ QVector<QString> getAmberTypes(const AmberParams &params,
             {
                 //find the highest index used so far
                 int highest = 0;
-                
+
                 for (auto it = unique_names.constBegin(); it != unique_names.constEnd(); ++it)
                 {
                     if (it.value() > highest)
                         highest = it.value();
                 }
-            
+
                 highest += 1;
                 unique_names.insert(atomtype, highest);
 
@@ -1836,20 +1999,20 @@ QStringList toLines(const QVector<AmberParams> &params,
         //of atoms as the last molecule, and that have the same atom names
         {
             const auto last_molinfo = params.last().info();
-            
+
             int first_solvent = params.count()-1;
-            
+
             for (int i=params.count()-2; i>=0; --i)
             {
                 const auto molinfo = params[i].info();
-            
+
                 //compare the number of atoms in this molecule to that of
                 //the last molecule - if different, then this is not the solvent
                 if (last_molinfo.nAtoms() != molinfo.nAtoms())
                 {
                     break;
                 }
-                
+
                 //compare the atom names - these must be the same in the same order
                 for (AtomIdx j(0); j<molinfo.nAtoms(); ++j)
                 {
@@ -1858,12 +2021,12 @@ QStringList toLines(const QVector<AmberParams> &params,
                         break;
                     }
                 }
-                
+
                 first_solvent = i;
             }
-         
+
             nsolvents = params.count() - first_solvent;
-            
+
             //now count up the number of residues in the "solute" molecules
             for (int i=0; i<first_solvent; ++i)
             {
@@ -2710,7 +2873,7 @@ QStringList toLines(const QVector<AmberParams> &params,
         QVector< std::tuple< QVector<qint64>, QVector<qint64>,
                              QHash<AmberNBDihPart,qint64> > > all_dih_data(params.count());
 
-        //get all of the angle information from each molecule
+        //get all of the dihedral information from each molecule
         if (use_parallel)
         {
             tbb::parallel_for( tbb::blocked_range<int>(0,params.count()),
@@ -2946,6 +3109,8 @@ QStringList toLines(const QVector<AmberParams> &params,
     pointers[14] = std::get<9>(dih_lines);      // NPHIA
     pointers[17] = std::get<10>(dih_lines);      // NPTRA
 
+    const int ntypes = pointers[1];     // number of atom types
+
     lines.append("%FLAG POINTERS");
     lines += writeIntData(pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ) );
 
@@ -3004,9 +3169,9 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines += std::get<4>(dih_lines);
 
     lines.append("%FLAG SOLTY");
-    //this is currently unused in Amber and should be equal to 0.0 for all atoms
+    //this is currently unused in Amber and should be equal to 0.0 for all atom types
     {
-        QVector<double> solty(total_natoms, 0.0);
+        QVector<double> solty(ntypes, 0.0);
         lines += writeFloatData(solty, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ));
     }
 
@@ -3091,14 +3256,14 @@ QStringList toLines(const QVector<AmberParams> &params,
         //on being passed a pre-sorted system that has all solvent molecules at the end
         lines.append("%FLAG SOLVENT_POINTERS");
         QVector<qint64> solvent_pointers(3,0);
-        
+
         if (nsolvents > 0)
         {
             solvent_pointers[0] = last_solute_residue; // last solute residue index
             solvent_pointers[1] = params.count();  // total number of molecules
             solvent_pointers[2] = params.count() - nsolvents + 1; // first solvent molecule index
         }
-        
+
         lines += writeIntData(solvent_pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
 
         lines.append("%FLAG ATOMS_PER_MOLECULE");
@@ -3141,7 +3306,8 @@ AmberPrm::AmberPrm(const System &system, const PropertyMap &map)
     //generate the AmberParams object for each molecule in the system
     QVector<AmberParams> params(molnums.count());
 
-    if (usesParallel())
+    //if (usesParallel())
+    if (false)
     {
         tbb::parallel_for( tbb::blocked_range<int>(0,molnums.count()),
                            [&](const tbb::blocked_range<int> r)
@@ -3173,7 +3339,8 @@ AmberPrm::AmberPrm(const System &system, const PropertyMap &map)
     {}
 
     //now convert these into text lines that can be written as the file
-    QStringList lines = ::toLines(params, space, this->usesParallel(), &errors);
+    //QStringList lines = ::toLines(params, space, this->usesParallel(), &errors);
+    QStringList lines = ::toLines(params, space, false, &errors);
 
     if (not errors.isEmpty())
     {
@@ -3207,7 +3374,9 @@ AmberPrm::AmberPrm(const AmberPrm &other)
              bonds_inc_h(other.bonds_inc_h), bonds_exc_h(other.bonds_exc_h),
              angs_inc_h(other.angs_inc_h), angs_exc_h(other.angs_exc_h),
              dihs_inc_h(other.dihs_inc_h), dihs_exc_h(other.dihs_exc_h),
-             excl_atoms(other.excl_atoms), pointers(other.pointers),
+             excl_atoms(other.excl_atoms),
+             molnum_to_atomnums(other.molnum_to_atomnums),
+             pointers(other.pointers),
              ffield(other.ffield)
 {}
 
@@ -3232,6 +3401,7 @@ AmberPrm& AmberPrm::operator=(const AmberPrm &other)
         dihs_inc_h = other.dihs_inc_h;
         dihs_exc_h = other.dihs_exc_h;
         excl_atoms = other.excl_atoms;
+        molnum_to_atomnums = other.molnum_to_atomnums;
         pointers = other.pointers;
         ffield = other.ffield;
         MoleculeParser::operator=(other);
@@ -3293,9 +3463,8 @@ int AmberPrm::nAtoms() const
 /** Return the total number of atoms in the ith molecule in the file */
 int AmberPrm::nAtoms(int idx) const
 {
-    const QVector< QPair<int,int> > mol_idxs = this->moleculeIndicies();
-    idx = Index(idx).map(mol_idxs.count());
-    return mol_idxs[idx].second;
+    idx = Index(idx).map(this->nMolecules());
+    return molnum_to_atomnums.at(idx+1).count();  //molnum is 1-indexed
 }
 
 /** Return the number of distinct atom types */
@@ -3423,30 +3592,24 @@ QVector<int> AmberPrm::getAtomIndexToMolIndex() const
     if (natoms <= 0)
         return QVector<int>();
 
-    QVector< QPair<int,int> > molidxs = this->moleculeIndicies();
-
-    if (molidxs.isEmpty())
-        return QVector<int>();
-
-    const int nmols = molidxs.count();
-
     QVector<int> atom_to_mol(natoms);
-    int *atom_to_mol_array = atom_to_mol.data();
-    auto molidxs_array = molidxs.constData();
+    auto atom_to_mol_array = atom_to_mol.data();
 
-    if (usesParallel())
+    const int nmols = molnum_to_atomnums.count() - 1;  // 1 indexed
+
+    //if (usesParallel())
+    if (false)
     {
         tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
                            [&](tbb::blocked_range<int> r)
         {
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                const int start_idx = molidxs_array[i].first;
-                const int end_idx = start_idx + molidxs_array[i].second;
+                const auto atoms_in_mol = molnum_to_atomnums.at(i+1);
 
-                for (int j=start_idx; j<end_idx; ++j)
+                for (const auto atom : atoms_in_mol)
                 {
-                    atom_to_mol_array[j] = i;
+                    atom_to_mol_array[atom-1] = i;
                 }
             }
         });
@@ -3455,51 +3618,16 @@ QVector<int> AmberPrm::getAtomIndexToMolIndex() const
     {
         for (int i=0; i<nmols; ++i)
         {
-            const int start_idx = molidxs_array[i].first;
-            const int end_idx = start_idx + molidxs_array[i].second;
+            const auto atoms_in_mol = molnum_to_atomnums.at(i+1);
 
-            for (int j=start_idx; j<end_idx; ++j)
+            for (const auto atom : atoms_in_mol)
             {
-                atom_to_mol_array[j] = i;
+                atom_to_mol_array[atom-1] = i;
             }
         }
     }
 
     return atom_to_mol;
-}
-
-/** Return the first index of the atom in each molecule, together with
-    the number of atoms in that molecule */
-QVector< QPair<int,int> > AmberPrm::moleculeIndicies() const
-{
-    QVector< QPair<int,int> > idxs;
-
-    QVector<qint64> atoms_per_mol = int_data.value("ATOMS_PER_MOLECULE");
-
-    idxs.reserve(atoms_per_mol.count());
-
-    if (atoms_per_mol.isEmpty())
-    {
-        if (nAtoms() > 0)
-        {
-            idxs.append( QPair<int,int>(0,nAtoms()) );
-        }
-    }
-    else
-    {
-        qint64 nats = 0;
-
-        for (auto a : atoms_per_mol)
-        {
-            if (a > 0)
-            {
-                idxs.append( QPair<int,int>(nats, a) );
-                nats += a;
-            }
-        }
-    }
-
-    return idxs;
 }
 
 /** Return an AmberPrm object parsed from the passed file */
@@ -3593,15 +3721,25 @@ void AmberPrm::assertSane() const
 }
 
 /** Internal function used to get the molecule structure that starts at index 'start_idx'
-    in the file, and that has 'natoms' atoms */
-MolStructureEditor AmberPrm::getMolStructure(int start_idx, int natoms,
-                                              const PropertyName &cutting) const
+    in the file, and that has 'natoms' atoms, and is molecule at index 'molidx'. Note
+    that if this 'molecule' is actually bonded to another 'molecule' in the input file,
+    then we will only return a MolStructureEditor for the combined molecule with the
+    lowest molidx - a null MolStructureEditor will be returned for the other molecules
+*/
+MolStructureEditor AmberPrm::getMolStructure(int molidx,
+                                             const PropertyName &cutting) const
 {
+    const int molnum = molidx + 1; // amber is 1-indexed
+
+    const auto atomnums_in_mol = molnum_to_atomnums.at(molnum);
+
+    const int natoms = atomnums_in_mol.count();
+
     if (natoms == 0)
     {
         throw SireError::program_bug( QObject::tr(
-                "Strange - there are no atoms in this molecule? %1 : %2")
-                    .arg(start_idx).arg(natoms), CODELOC );
+                "Strange - there are no atoms in this molecule %1?")
+                    .arg(molnum), CODELOC );
     }
 
     //first step is to build the structure of the molecule - i.e.
@@ -3615,68 +3753,61 @@ MolStructureEditor AmberPrm::getMolStructure(int start_idx, int natoms,
     const auto res_pointers = this->intData("RESIDUE_POINTER");
     const auto res_names = this->stringData("RESIDUE_LABEL");
 
-    int res_start_idx = -1;
-    int res_end_idx = -1;
-
     for (int i=0; i<res_pointers.count(); ++i)
     {
-        if (res_pointers[i] == start_idx+1)
-        {
-            res_start_idx = i;
-        }
-        else if (res_pointers[i] == (start_idx+natoms+1))
-        {
-            res_end_idx = i;
-            break;
-        }
-    }
-
-    if (res_start_idx == -1)
-    {
-        throw SireIO::parse_error( QObject::tr(
-                "Could not find the residues that belong to the molecule with "
-                "atom indicies %1 to %2 (%3).")
-                    .arg(start_idx+1).arg(start_idx+natoms)
-                    .arg(res_start_idx), CODELOC );
-    }
-
-    if (res_end_idx == -1)
-    {
-        res_end_idx = res_pointers.count();
-    }
-
-    const int nres = res_end_idx - res_start_idx;
-
-    for (int i=1; i<=nres; ++i)
-    {
-        int res_idx = res_start_idx + i - 1;  // 1-index versus 0-index
-        int res_num = res_idx + 1;
-
-        auto res = mol.add( ResNum(res_num) );
-        res.rename( ResName( res_names[res_idx].trimmed() ) );
-
+        int res_idx = i;
+        int res_num = i+1;
         int res_start_atom = res_pointers[res_idx];
-        int res_end_atom;
 
-        if (res_idx+1 == res_pointers.count())
+        if (atomnums_in_mol.contains(res_start_atom))
         {
-            res_end_atom = res_pointers[res_start_idx] + natoms - 1;
-        }
-        else
-        {
-            res_end_atom = res_pointers[res_idx+1] - 1; // 1 lower than first index
-                                                        // of atom in next residue
-        }
+            //find the number of the last atom in the residue (which should be in the molecule?)
+            int res_end_atom;
 
-        //by default we will use one CutGroup per residue - this
-        //may be changed later by the cutting system.
-        auto cutgroup = mol.add( CGName(QString::number(i)) );
+            if (res_idx+1 == res_pointers.count())
+            {
+                res_end_atom = this->nAtoms(); // 1-indexed
+            }
+            else
+            {
+                res_end_atom = res_pointers[res_idx+1] - 1; // 1 lower than first index
+                                                            // of atom in next residue
+            }
 
-        for (int j=res_start_atom; j<=res_end_atom; ++j)
-        {
-            auto atom = cutgroup.add( AtomNum(j) );
-            atom.rename( AtomName(atom_names[j-1].trimmed()) );  // 0-index versus 1-index
-            atom.reparent( ResNum(res_num) );
+            if (not atomnums_in_mol.contains(res_end_atom))
+            {
+                throw SireIO::parse_error( QObject::tr(
+                    "Atoms in residue %1 are not listed as part of the expected "
+                    "molecule %2. Should be atoms %3 to %4, but molecule has %5.")
+                        .arg(res_num).arg(molnum).arg(res_start_atom).arg(res_end_atom)
+                        .arg(Sire::toString(atomnums_in_mol)), CODELOC );
+            }
+
+            //we assume that this molecules contains the entire residue
+            auto res = mol.add( ResNum(res_num) );
+            res.rename( ResName( res_names[res_idx].trimmed() ) );
+
+            //by default we will use one CutGroup per residue - this
+            //may be changed later by the cutting system.
+            auto cutgroup = mol.add( CGName(QString::number(i)) );
+
+            for (int j=res_start_atom; j<=res_end_atom; ++j)
+            {
+                if (not atomnums_in_mol.contains(j))
+                {
+                    throw SireIO::parse_error( QObject::tr(
+                        "Atom %6 in residue %1 are not listed as part of the expected "
+                        "molecule %2. Should be atoms %3 to %4, but molecule has %5.")
+                            .arg(res_num).arg(molnum).arg(res_start_atom).arg(res_end_atom)
+                            .arg(Sire::toString(atomnums_in_mol)).arg(j), CODELOC );
+                }
+                else
+                {
+                    auto atom = cutgroup.add( AtomNum(j) );
+                    atom.rename( AtomName(atom_names[j-1].trimmed()) );  // 0-index versus 1-index
+                    atom.reparent( ResNum(res_num) );
+                }
+            }
         }
     }
 
@@ -3720,7 +3851,7 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
 
             const int atom_idx = atom_num - 1;  // 1-index versus 0-index
 
-            params.add( AtomIdx(i),
+            params.add( AtomNum(atom_num),
                         (charge_array[atom_idx] / AMBERCHARGECONV) * mod_electron,
                         mass_array[atom_idx] * g_per_mol,
                         Element(int(atomic_num_array[atom_idx])),
@@ -3853,24 +3984,24 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
                         if (not scnbfactor.isEmpty())
                             sclnb14 = scnbfactor[param_index];
 
+                        //invert the scale factors
                         if (sclee14 < 0.00001)
                         {
-                            throw SireError::program_bug( QObject::tr(
-                                "A 1,4 pair has a coulombic scaling factor of 0.0 in the top file "
-                                "which would mean an infinite energy!"),
-                                    CODELOC );
+                            sclee14 = 0.0;
                         }
-                        if (sclnb14 < 0.00001)
+                        else
                         {
-                            throw SireError::program_bug( QObject::tr(
-                                "A 1,4 pair has a LJ scaling factor of 0.0 in the top file "
-                                "which would mean an infinite energy!"),
-                                    CODELOC );
+                            sclee14 = 1.0/sclee14;
                         }
 
-                        //invert the scale factors
-                        sclee14 = 1.0/sclee14;
-                        sclnb14 = 1.0/sclnb14;
+                        if (sclnb14 < 0.00001)
+                        {
+                            sclnb14 = 0.0;
+                        }
+                        else
+                        {
+                            sclnb14 = 1.0/sclnb14;
+                        }
 
                         //save them into the parameter space
                         params.addNB14( BondID(atom0,atom3), sclee14, sclnb14 );
@@ -3902,13 +4033,36 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
 
             const int natoms = molinfo.nAtoms();
 
+            if (molidx < 0 or molidx >= excl_atoms.count())
+            {
+                throw SireIO::parse_error( QObject::tr(
+                    "Disagreement over the number of molecules! %1 versus %2")
+                        .arg(molidx+1).arg(excl_atoms.count()), CODELOC );
+            }
+
             //get the set of excluded atoms for each atom of this molecule
             const auto excluded_atoms = excl_atoms[molidx];
-            SireBase::assert_equal( excluded_atoms.count(), natoms, CODELOC );
+
+            if (excluded_atoms.count() != natoms)
+            {
+                QStringList lines;
+
+                for (int i=qMax(0,molidx-3); i<qMin(molidx+3,excl_atoms.count()); ++i)
+                {
+                    lines.append( QString("molidx %1: natoms = %2").arg(i)
+                                .arg(excl_atoms[i].count()) );
+                }
+
+                throw SireIO::parse_error( QObject::tr(
+                    "Disagreement over the number of atoms for molecule at index %1. "
+                    "%2 versus %3. Number of atoms in neighbouring molecules are { %4 }")
+                        .arg(molidx).arg(excluded_atoms.count()).arg(natoms)
+                        .arg(lines.join(", ")), CODELOC );
+            }
 
             for (int i=0; i<natoms; ++i)
             {
-                const AtomIdx atom0(i);
+                const AtomNum atom0 = molinfo.number(AtomIdx(i));
                 const CGAtomIdx cgatom0 = molinfo.cgAtomIdx(atom0);
 
                 // an atom is bonded to itself
@@ -3919,9 +4073,30 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
                 {
                     if (excluded_atom > 0)
                     {
-                        const AtomNum atomnum1(excluded_atom);
-                        const CGAtomIdx cgatom1 = molinfo.cgAtomIdx(atomnum1);
-                        nbpairs.set( cgatom0, cgatom1, CLJScaleFactor(0,0) );
+                        try
+                        {
+                            const AtomNum atomnum1(excluded_atom);
+                            const CGAtomIdx cgatom1 = molinfo.cgAtomIdx(atomnum1);
+                            nbpairs.set( cgatom0, cgatom1, CLJScaleFactor(0,0) );
+                        }
+                        catch(...)
+                        {
+                            QList<int> nums;
+
+                            for (int iat=0; iat<molinfo.nAtoms(); ++iat)
+                            {
+                                nums.append(molinfo.number(AtomIdx(iat)));
+                            }
+
+                            throw SireIO::parse_error( QObject::tr(
+                                "Cannot find atom %1 in the molecule. This is likely because "
+                                "the code to deal with molecules with SS bonds is broken..."
+                                "Valid atom numbers are %2. Listed excluded atoms are %3")
+                                    .arg(excluded_atom)
+                                    .arg(Sire::toString(nums))
+                                    .arg(Sire::toString(excluded_atoms[i])),
+                                    CODELOC );
+                        }
                     }
                 }
             }
@@ -3936,7 +4111,8 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
     AmberParams params(molinfo);
 
     //assign all of the parameters
-    if (usesParallel())
+    //if (usesParallel())
+    if (false)
     {
         AmberParams atoms, bonds, angles, dihedrals, excluded;
 
@@ -3978,7 +4154,7 @@ AmberParams AmberPrm::getAmberParams(int molidx, const MoleculeInfoData &molinfo
 void _setProperty(MolEditor &mol, const PropertyMap &map, QString key, const Property &value)
 {
     const auto mapped = map[key];
-    
+
     if (mapped.hasValue())
     {
         mol.setProperty(key, mapped.value());
@@ -3991,18 +4167,14 @@ void _setProperty(MolEditor &mol, const PropertyMap &map, QString key, const Pro
 
 /** Internal function used to get the molecule structure that starts at index 'start_idx'
     in the file, and that has 'natoms' atoms */
-MolEditor AmberPrm::getMolecule(int molidx, int start_idx, int natoms,
-                                const PropertyMap &map) const
+MolEditor AmberPrm::getMoleculeEditor(int molidx,
+                                      const PropertyMap &map) const
 {
-    if (natoms == 0)
-    {
-        throw SireError::program_bug( QObject::tr(
-            "Strange - there are no atoms in molecule at index %1? %2 : %3")
-                .arg(molidx).arg(start_idx).arg(natoms), CODELOC );
-    }
-
     //first, construct the layout of the molecule (sorting of atoms into residues and cutgroups)
-    auto mol = this->getMolStructure(start_idx, natoms, map["cutting"]).commit().edit();
+    auto mol = this->getMolStructure(molidx, map["cutting"]).commit().edit();
+
+    if (mol.nAtoms() == 0)
+        return MolEditor();
 
     //get the info object that can map between AtomNum to AtomIdx etc.
     const auto molinfo = mol.info();
@@ -4042,11 +4214,8 @@ MolEditor AmberPrm::getMolecule(int molidx, int start_idx, int natoms,
     provided in this file */
 Molecule AmberPrm::getMolecule(int molidx, const PropertyMap &map) const
 {
-    const QVector< QPair<int,int> > mol_idxs = this->moleculeIndicies();
-    molidx = Index(molidx).map(mol_idxs.count());
-
-    return this->getMolecule( molidx, mol_idxs[molidx].first,
-                                      mol_idxs[molidx].second, map ).commit();
+    molidx = Index(molidx).map(this->nMolecules());
+    return this->getMoleculeEditor(molidx, map).commit();
 }
 
 /** Return the ith molecule that is described by this AmberPrm file, getting
@@ -4064,11 +4233,12 @@ Molecule AmberPrm::getMolecule(int molidx, const AmberRst7 &rst,
                     .arg(this->nAtoms()).arg(rst.nAtoms()), CODELOC );
     }
 
-    const QVector< QPair<int,int> > mol_idxs = this->moleculeIndicies();
-    molidx = Index(molidx).map(mol_idxs.count());
+    molidx = Index(molidx).map(this->nMolecules());
 
-    auto mol = this->getMolecule( molidx, mol_idxs[molidx].first,
-                                          mol_idxs[molidx].second, map);
+    auto mol = this->getMoleculeEditor(molidx, map);
+
+    if (mol.nAtoms() == 0)
+        return mol;
 
     const auto molinfo = mol.info();
 
@@ -4163,9 +4333,7 @@ QString AmberPrm::formatDescription() const
     provided by the file */
 System AmberPrm::startSystem(const PropertyMap &map) const
 {
-    const QVector< QPair<int,int> > mol_idxs = this->moleculeIndicies();
-
-    const int nmols = mol_idxs.count();
+    const int nmols = this->nMolecules();
 
     if (nmols == 0)
         return System();
@@ -4173,7 +4341,8 @@ System AmberPrm::startSystem(const PropertyMap &map) const
     QVector<Molecule> mols(nmols);
     Molecule *mols_array = mols.data();
 
-    if (usesParallel())
+    //if (usesParallel())
+    if (false)
     {
         tbb::parallel_for( tbb::blocked_range<int>(0,nmols),
                            [&](tbb::blocked_range<int> r)
@@ -4181,7 +4350,7 @@ System AmberPrm::startSystem(const PropertyMap &map) const
             //create and populate all of the molecules
             for (int i=r.begin(); i<r.end(); ++i)
             {
-                mols_array[i] = this->getMolecule(i, mol_idxs[i].first, mol_idxs[i].second, map);
+                mols_array[i] = this->getMoleculeEditor(i, map);
             }
         });
     }
@@ -4189,7 +4358,7 @@ System AmberPrm::startSystem(const PropertyMap &map) const
     {
         for (int i=0; i<nmols; ++i)
         {
-            mols_array[i] = this->getMolecule(i, mol_idxs[i].first, mol_idxs[i].second, map);
+            mols_array[i] = this->getMoleculeEditor(i, map);
         }
     }
 
@@ -4197,7 +4366,8 @@ System AmberPrm::startSystem(const PropertyMap &map) const
 
     for (auto mol : mols)
     {
-        molgroup.add(mol);
+        if (mol.nAtoms() > 0)
+            molgroup.add(mol);
     }
 
     System system( this->title() );
@@ -4207,7 +4377,7 @@ System AmberPrm::startSystem(const PropertyMap &map) const
     //some top files contains "BOX_DIMENSIONS" information. Add this now, as it
     //now in case it is not replaced by the coordinates file
     const auto boxdims = float_data.value("BOX_DIMENSIONS");
-    
+
     if (boxdims.count() == 4)
     {
         // ANGLE, X, Y, Z dimensions - we will only read this if the angle is 90

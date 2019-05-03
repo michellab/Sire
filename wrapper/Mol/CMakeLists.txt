@@ -47,7 +47,6 @@ target_link_libraries (Mol
                        SIRE_SireMol
                        SIRE_SireMM
                        ${BOOST_PYTHON_LIBRARY}
-                       ${PYTHON_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

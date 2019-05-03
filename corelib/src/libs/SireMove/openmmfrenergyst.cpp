@@ -115,7 +115,7 @@ enum
 static const RegisterMetaType<OpenMMFrEnergyST> r_openmmint;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyST &velver)
+QDataStream &operator<<(QDataStream &ds, const OpenMMFrEnergyST &velver)
 {
     writeHeader(ds, r_openmmint, 1);
 
@@ -143,7 +143,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyST 
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velver)
+QDataStream &operator>>(QDataStream &ds, OpenMMFrEnergyST &velver)
 {
     VersionID v = readHeader(ds, r_openmmint);
 
@@ -170,7 +170,7 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velve
         velver.isSystemInitialised = false;
         velver.isContextInitialised = false;
 
-        qDebug() << " Re-initialisation of OpenMMFrEnergyST from datastream";
+        //qDebug() << " Re-initialisation of OpenMMFrEnergyST from datastream";
 
         velver.initialise();
     }

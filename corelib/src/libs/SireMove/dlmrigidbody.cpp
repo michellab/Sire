@@ -49,7 +49,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<DLMRigidBody> r_dlmrb;
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const DLMRigidBody &dlmrb)
+QDataStream &operator<<(QDataStream &ds, const DLMRigidBody &dlmrb)
 {
     writeHeader(ds, r_dlmrb, 1);
     
@@ -58,7 +58,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const DLMRigidBody &dlm
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, DLMRigidBody &dlmrb)
+QDataStream &operator>>(QDataStream &ds, DLMRigidBody &dlmrb)
 {
     VersionID v = readHeader(ds, r_dlmrb);
     

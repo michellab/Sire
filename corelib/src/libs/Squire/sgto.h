@@ -43,11 +43,11 @@ class S_GTO;
 class SS_GTO;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::S_GTO&);
-QDataStream& operator>>(QDataStream&, Squire::S_GTO&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::S_GTO&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::S_GTO&);
 
-QDataStream& operator<<(QDataStream&, const Squire::SS_GTO&);
-QDataStream& operator>>(QDataStream&, Squire::SS_GTO&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::SS_GTO&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::SS_GTO&);
 
 namespace Squire
 {
@@ -87,8 +87,8 @@ public:
 class SQUIRE_EXPORT SS_GTO : public SireBase::ConcreteProperty<SS_GTO,GTOPair>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SS_GTO&);
-friend QDataStream& ::operator>>(QDataStream&, SS_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const SS_GTO&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, SS_GTO&);
 
 public:
     SS_GTO();
@@ -150,23 +150,23 @@ private:
 ////////// Integrals involving only S-orbitals
 //////////
 
-double kinetic_integral(const SS_GTO &P);
-double overlap_integral(const SS_GTO &P);
+SQUIRE_EXPORT double kinetic_integral(const SS_GTO &P);
+SQUIRE_EXPORT double overlap_integral(const SS_GTO &P);
 
-double potential_integral(const QVector<PointCharge> &C, const SS_GTO &P);
-double potential_integral(const QVector<PointDipole> &C, const SS_GTO &P);
+SQUIRE_EXPORT double potential_integral(const QVector<PointCharge> &C, const SS_GTO &P);
+SQUIRE_EXPORT double potential_integral(const QVector<PointDipole> &C, const SS_GTO &P);
 
-double potential_integral(const QVector<PointCharge> &C, const SS_GTO &P, int m);
-double potential_integral(const QVector<PointDipole> &C, const SS_GTO &P, int m);
+SQUIRE_EXPORT double potential_integral(const QVector<PointCharge> &C, const SS_GTO &P, int m);
+SQUIRE_EXPORT double potential_integral(const QVector<PointDipole> &C, const SS_GTO &P, int m);
 
-double potential_integral(const PointCharge &Q, const SS_GTO &P);
-double potential_integral(const PointDipole &Q, const SS_GTO &P);
+SQUIRE_EXPORT double potential_integral(const PointCharge &Q, const SS_GTO &P);
+SQUIRE_EXPORT double potential_integral(const PointDipole &Q, const SS_GTO &P);
 
-double potential_integral(const PointCharge &C, const SS_GTO &P, int m);
-double potential_integral(const PointDipole &C, const SS_GTO &P, int m);
+SQUIRE_EXPORT double potential_integral(const PointCharge &C, const SS_GTO &P, int m);
+SQUIRE_EXPORT double potential_integral(const PointDipole &C, const SS_GTO &P, int m);
 
-double electron_integral(const SS_GTO &P, const SS_GTO &Q);
-double electron_integral(const SS_GTO &P, const SS_GTO &Q, int m);
+SQUIRE_EXPORT double electron_integral(const SS_GTO &P, const SS_GTO &Q);
+SQUIRE_EXPORT double electron_integral(const SS_GTO &P, const SS_GTO &Q, int m);
 
 }
 

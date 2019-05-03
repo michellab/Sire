@@ -27,8 +27,8 @@ if ( MSYS )
   endif()
 
 else()
-  if (EXISTS "${BUNDLE_STAGEDIR}/include/boost" )
-    message( STATUS "Have already unpacked a bundled version of Boost")
+  if (EXISTS "${SIRE_APP}/include/boost" )
+    message( STATUS "Have already got a bundled version of Boost")
 
   else()
     message( STATUS "Unpacking a bundled version of the Boost header libraries..." )
@@ -45,9 +45,9 @@ else()
       endif()
   endif()
 
-  if (EXISTS "${BUNDLE_STAGEDIR}/include/boost")
-    message( STATUS "Using Boost headers in ${BUNDLE_STAGEDIR}/include/boost" )
-    set( BOOST_INCLUDE_DIRS "${BUNDLE_STAGEDIR}/include" )
+  if (EXISTS "${SIRE_APP}/include/boost")
+    message( STATUS "Using Boost headers in ${SIRE_APP}/include/boost" )
+    set( BOOST_INCLUDE_DIRS "${SIRE_APP}/include" )
     set( SIRE_FOUND_BOOST TRUE )
   else()
     message( STATUS "Strange? Cannot find the Boost include directory.

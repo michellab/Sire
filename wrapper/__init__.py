@@ -75,7 +75,7 @@ def _install_package(name, package_registry):
 def try_import(name, package_registry=_module_to_package):
     """Try to import the module called 'name', returning
        the loaded module as an argument. If the module
-       is not available, then it looks up the name of 
+       is not available, then it looks up the name of
        the package to install using "package_registry"
        (or if this is not available, using just the name
        of the module). This will then be installed using
@@ -116,7 +116,7 @@ def try_import_from(name, fromlist, package_registry=_module_to_package):
 
        If the module cannot be loaded, then the package containing
        the module is looked up in 'module_to_package' (or just guessed
-       from the name if it does not exist in 'module_to_package'. 
+       from the name if it does not exist in 'module_to_package'.
        An attempt is made to load the package, using first conda,
        then pip, then easy_install.
 
@@ -181,23 +181,23 @@ def try_import_from(name, fromlist, package_registry=_module_to_package):
 
 #ensure that the SireQt and SireError libraries are loaded as
 #these are vital for the rest of the module
-import Sire.Qt
-import Sire.Error
-import Sire.Config
+from . import Qt
+from . import Error
+from . import Config
 
-__version__ = Sire.Config.__version__
+__version__ = Config.__version__
 
 def _versionString():
     """Return a nicely formatted string that describes the current Sire version"""
-    import Sire.Base
+    import Sire.Base as Base
 
     return """Sire %s [%s|%s, %s]""" % \
-              (Sire.Base.getReleaseVersion(), 
-               Sire.Base.getRepositoryBranch(),
-               Sire.Config.sire_repository_version[0:7],
-               ["unclean", "clean"][Sire.Base.getRepositoryVersionIsClean()])    
+              (Base.getReleaseVersion(),
+               Base.getRepositoryBranch(),
+               Config.sire_repository_version[0:7],
+               ["unclean", "clean"][Base.getRepositoryVersionIsClean()])
 
-Sire.Config.versionString = _versionString
+Config.versionString = _versionString
 
 sent_usage_data = None
 
@@ -230,7 +230,7 @@ def _uploadUsageData():
             return
 
         import time as _time
-        # wait a couple of seconds before uploading. This 
+        # wait a couple of seconds before uploading. This
         # stops annoying uploads when people print help
         _time.sleep(2)
 
@@ -254,7 +254,7 @@ def _uploadUsageData():
                 print("SIRE_VERBOSE_PHONEHOME equal to 1. To silence this message, set")
                 print("the environment variable SIRE_SILENT_PHONEHOME to 1.")
                 print("==============================================================\n")
-    
+
         from Sire.Base import CPUID as _CPUID
 
         id = _CPUID()
@@ -288,8 +288,8 @@ def _uploadUsageData():
 
         # get information about the version of Sire
         data["version"] = Sire.__version__
-        data["repository"] = Sire.Config.sire_repository_url
-        data["repository_version"] = Sire.Config.sire_repository_version
+        data["repository"] = Config.sire_repository_url
+        data["repository_version"] = Config.sire_repository_version
 
         # now get information about which Sire app is running
         import sys as _sys
@@ -303,7 +303,7 @@ def _uploadUsageData():
         import urllib.parse as _parse
 
         params = _parse.urlencode({'data' : _json.dumps(data)})
-        headers = {"Content-type": "application/x-www-form-urlencoded", 
+        headers = {"Content-type": "application/x-www-form-urlencoded",
                    "Accept": "text/plain"}
 
         if "SIRE_VERBOSE_PHONEHOME" in _os.environ:
@@ -321,7 +321,7 @@ def _uploadUsageData():
         #r1 = conn.getresponse()
         #print(r1.status, r1.reason)
         #print(r1.read())
-        
+
     except:
         # something went wrong - just ignore the error
         # and cancel the phone home

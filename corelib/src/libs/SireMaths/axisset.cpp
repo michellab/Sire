@@ -38,14 +38,14 @@ using namespace SireStream;
 static const RegisterMetaType<AxisSet> r_axisset(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const AxisSet &ax)
+QDataStream &operator<<(QDataStream &ds, const AxisSet &ax)
 {
     writeHeader(ds, r_axisset, 1) << ax.mat << ax.invmat << ax.orgn;
     return ds;
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, AxisSet &ax)
+QDataStream &operator>>(QDataStream &ds, AxisSet &ax)
 {
     VersionID v = readHeader(ds, r_axisset);
 

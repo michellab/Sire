@@ -57,7 +57,7 @@ using namespace SireStream;
 static const RegisterMetaType<GetPoint> r_getpoint( MAGIC_ONLY,
                                                     GetPoint::typeName() );
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const GetPoint &getpoint)
+QDataStream &operator<<(QDataStream &ds, const GetPoint &getpoint)
 {
     writeHeader(ds, r_getpoint, 1);
     
@@ -66,7 +66,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const GetPoint &getpoin
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, GetPoint &getpoint)
+QDataStream &operator>>(QDataStream &ds, GetPoint &getpoint)
 {
     VersionID v = readHeader(ds, r_getpoint);
 
@@ -140,7 +140,7 @@ NullGetPoint GetPoint::null()
 
 static const RegisterMetaType<NullGetPoint> r_nullgetpoint;
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const NullGetPoint &getpoint)
 {
     writeHeader(ds, r_nullgetpoint, 1);
@@ -150,7 +150,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, NullGetPoint &getpoint)
+QDataStream &operator>>(QDataStream &ds, NullGetPoint &getpoint)
 {
     VersionID v = readHeader(ds, r_nullgetpoint);
     
@@ -213,7 +213,7 @@ Vector NullGetPoint::getPoint(const MoleculeView &molecule,
 
 static const RegisterMetaType<GetCOGPoint> r_getcogpoint;
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const GetCOGPoint &getpoint)
 {
     writeHeader(ds, r_getcogpoint, 1);
@@ -225,7 +225,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, GetCOGPoint &getpoint)
+QDataStream &operator>>(QDataStream &ds, GetCOGPoint &getpoint)
 {
     VersionID v = readHeader(ds, r_getcogpoint);
     
@@ -324,7 +324,7 @@ Vector GetCOGPoint::getPoint(const MoleculeView &molecule,
 
 static const RegisterMetaType<GetCOMPoint> r_getcompoint;
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const GetCOMPoint &getpoint)
 {
     writeHeader(ds, r_getcompoint, 1);
@@ -336,7 +336,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, GetCOMPoint &getpoint)
+QDataStream &operator>>(QDataStream &ds, GetCOMPoint &getpoint)
 {
     VersionID v = readHeader(ds, r_getcompoint);
     
@@ -434,7 +434,7 @@ Vector GetCOMPoint::getPoint(const MoleculeView &molecule,
 
 static const RegisterMetaType<GetCentroidPoint> r_getcentroidpoint;
 
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const GetCentroidPoint &getpoint)
 {
     writeHeader(ds, r_getcentroidpoint, 1);
@@ -446,7 +446,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, GetCentroidPoint &getpoint)
+QDataStream &operator>>(QDataStream &ds, GetCentroidPoint &getpoint)
 {
     VersionID v = readHeader(ds, r_getcentroidpoint);
     

@@ -42,7 +42,7 @@ using namespace SireStream;
 static const RegisterMetaType<CombineSpaces> r_combinespaces;
 
 /** Serialise to a binary datastream */
-QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                        const CombineSpaces &combinespaces)
 {
     writeHeader(ds, r_combinespaces, 1);
@@ -53,7 +53,7 @@ QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREVOL_EXPORT &operator>>(QDataStream &ds, CombineSpaces &combinespaces)
+QDataStream &operator>>(QDataStream &ds, CombineSpaces &combinespaces)
 {
     VersionID v = readHeader(ds, r_combinespaces);
     

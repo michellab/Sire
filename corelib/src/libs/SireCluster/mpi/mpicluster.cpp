@@ -68,7 +68,7 @@ using boost::shared_ptr;
     //////
     extern "C"
     {
-        int SIREMPI_EXPORT lseek64(int fd, int offset, int whence)
+        int lseek64(int fd, int offset, int whence)
         {
             throw SireError::program_bug( QObject::tr(
                 "MPI implementation is calling lseek64 which is not supported "

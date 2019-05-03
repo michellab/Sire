@@ -38,8 +38,8 @@ namespace SireCAS
 class IntegrationConstant;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::IntegrationConstant&);
-QDataStream& operator>>(QDataStream&, SireCAS::IntegrationConstant&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::IntegrationConstant&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::IntegrationConstant&);
 
 namespace SireCAS
 {
@@ -54,8 +54,8 @@ during indefinite integration.
 class SIRECAS_EXPORT IntegrationConstant : public Symbol
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const IntegrationConstant&);
-friend QDataStream& ::operator>>(QDataStream&, IntegrationConstant&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const IntegrationConstant&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, IntegrationConstant&);
 
 public:
     IntegrationConstant();

@@ -54,7 +54,7 @@ static const RegisterMetaType<Accumulator> r_accum( MAGIC_ONLY,
                                                     Accumulator::typeName() );
                                                     
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Accumulator &accum)
+QDataStream &operator<<(QDataStream &ds, const Accumulator &accum)
 {
     writeHeader(ds, r_accum, 1);
     
@@ -64,7 +64,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Accumulator &acc
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, Accumulator &accum)
+QDataStream &operator>>(QDataStream &ds, Accumulator &accum)
 {
     VersionID v = readHeader(ds, r_accum);
     
@@ -160,7 +160,7 @@ bool Accumulator::operator!=(const Accumulator &other) const
 static const RegisterMetaType<NullAccumulator> r_null;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const NullAccumulator &null)
+QDataStream &operator<<(QDataStream &ds, const NullAccumulator &null)
 {
     writeHeader(ds, r_null, 1);
     
@@ -170,7 +170,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const NullAccumulator 
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, NullAccumulator &null)
+QDataStream &operator>>(QDataStream &ds, NullAccumulator &null)
 {
     VersionID v = readHeader(ds, r_null);
     
@@ -238,7 +238,7 @@ const NullAccumulator& Accumulator::null()
 static const RegisterMetaType<Average> r_avg;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Average &avg)
+QDataStream &operator<<(QDataStream &ds, const Average &avg)
 {
     writeHeader(ds, r_avg, 1);
     
@@ -248,7 +248,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Average &avg)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, Average &avg)
+QDataStream &operator>>(QDataStream &ds, Average &avg)
 {
     VersionID v = readHeader(ds, r_avg);
     
@@ -380,7 +380,7 @@ const char* Average::typeName()
 static const RegisterMetaType<AverageAndStddev> r_avgstddev;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                          const AverageAndStddev &avgstddev)
 {
     writeHeader(ds, r_avgstddev, 1);
@@ -391,7 +391,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                          AverageAndStddev &avgstddev)
 {
     VersionID v = readHeader(ds, r_avgstddev);
@@ -555,7 +555,7 @@ const char* AverageAndStddev::typeName()
 static const RegisterMetaType<ExpAverage> r_expavg;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const ExpAverage &expavg)
+QDataStream &operator<<(QDataStream &ds, const ExpAverage &expavg)
 {
     writeHeader(ds, r_expavg, 2);
     
@@ -566,7 +566,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const ExpAverage &expa
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, ExpAverage &expavg)
+QDataStream &operator>>(QDataStream &ds, ExpAverage &expavg)
 {
     VersionID v = readHeader(ds, r_expavg);
     
@@ -736,7 +736,7 @@ const char* ExpAverage::typeName()
 static const RegisterMetaType<Median> r_median;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Median &median)
+QDataStream &operator<<(QDataStream &ds, const Median &median)
 {
     writeHeader(ds, r_median, 1);
     
@@ -747,7 +747,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Median &median)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, Median &median)
+QDataStream &operator>>(QDataStream &ds, Median &median)
 {
     VersionID v = readHeader(ds, r_median);
     
@@ -880,7 +880,7 @@ const char* Median::typeName()
 static const RegisterMetaType<RecordValues> r_recval;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const RecordValues &recval)
+QDataStream &operator<<(QDataStream &ds, const RecordValues &recval)
 {
     writeHeader(ds, r_recval, 2);
     
@@ -893,7 +893,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const RecordValues &re
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, RecordValues &recval)
+QDataStream &operator>>(QDataStream &ds, RecordValues &recval)
 {
     VersionID v = readHeader(ds, r_recval);
     

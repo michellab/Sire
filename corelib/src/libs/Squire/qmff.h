@@ -41,8 +41,8 @@ namespace Squire
 class QMFF;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::QMFF&);
-QDataStream& operator>>(QDataStream&, Squire::QMFF&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::QMFF&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::QMFF&);
 
 namespace Squire
 {
@@ -69,8 +69,8 @@ class SQUIRE_EXPORT QMFF : public SireBase::ConcreteProperty<QMFF,SireFF::G1FF>,
                            protected QMPotential
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const QMFF&);
-friend QDataStream& ::operator>>(QDataStream&, QMFF&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const QMFF&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, QMFF&);
 
 public:
     typedef QMPotential::Parameters Parameters;

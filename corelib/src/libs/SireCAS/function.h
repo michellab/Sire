@@ -62,8 +62,8 @@ class Symbols;
 class FunctionPvt
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FunctionPvt&);
-friend QDataStream& ::operator>>(QDataStream&, FunctionPvt&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const FunctionPvt&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, FunctionPvt&);
 
 public:
     FunctionPvt();
@@ -252,8 +252,8 @@ class SIRECAS_EXPORT Function : public Symbol
 {
 
 friend class FunctionPvt;
-friend QDataStream& ::operator<<(QDataStream&, const Function&);
-friend QDataStream& ::operator>>(QDataStream&, Function&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Function&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Function&);
 
 public:
     Function();

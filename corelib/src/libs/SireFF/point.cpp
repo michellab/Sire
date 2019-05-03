@@ -61,7 +61,7 @@ using boost::tuples::tuple;
 static const RegisterMetaType<Point> r_point( MAGIC_ONLY, Point::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const Point &point)
+QDataStream &operator<<(QDataStream &ds, const Point &point)
 {
     writeHeader(ds, r_point, 1);
     
@@ -74,7 +74,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const Point &point)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, Point &point)
+QDataStream &operator>>(QDataStream &ds, Point &point)
 {
     VersionID v = readHeader(ds, r_point);
     
@@ -275,7 +275,7 @@ const VectorPoint& Point::null()
 static const RegisterMetaType<AtomPoint> r_atompoint;
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const AtomPoint &atompoint)
+QDataStream &operator<<(QDataStream &ds, const AtomPoint &atompoint)
 {
     writeHeader(ds, r_atompoint, 1);
     
@@ -288,7 +288,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const AtomPoint &atompoin
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, AtomPoint &atompoint)
+QDataStream &operator>>(QDataStream &ds, AtomPoint &atompoint)
 {
     VersionID v = readHeader(ds, r_atompoint);
     
@@ -648,7 +648,7 @@ bool AtomPoint::isExtraMoleculePoint() const
 static const RegisterMetaType<VectorPoint> r_vectorpoint;
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const VectorPoint &vectorpoint)
+QDataStream &operator<<(QDataStream &ds, const VectorPoint &vectorpoint)
 {
     writeHeader(ds, r_vectorpoint, 1);
     
@@ -658,7 +658,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const VectorPoint &vector
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, VectorPoint &vectorpoint)
+QDataStream &operator>>(QDataStream &ds, VectorPoint &vectorpoint)
 {
     VersionID v = readHeader(ds, r_vectorpoint);
     
@@ -856,7 +856,7 @@ bool VectorPoint::isExtraMoleculePoint() const
 static const RegisterMetaType<Center> r_center;
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const Center &center)
+QDataStream &operator<<(QDataStream &ds, const Center &center)
 {
     writeHeader(ds, r_center, 1);
     
@@ -869,7 +869,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const Center &center)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, Center &center)
+QDataStream &operator>>(QDataStream &ds, Center &center)
 {
     VersionID v = readHeader(ds, r_center);
     
@@ -1208,7 +1208,7 @@ bool Center::isExtraMoleculePoint() const
 static const RegisterMetaType<CenterOfGeometry> r_cog;
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const CenterOfGeometry &cog)
+QDataStream &operator<<(QDataStream &ds, const CenterOfGeometry &cog)
 {
     writeHeader(ds, r_cog, 1);
     
@@ -1221,7 +1221,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const CenterOfGeometry &c
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, CenterOfGeometry &cog)
+QDataStream &operator>>(QDataStream &ds, CenterOfGeometry &cog)
 {
     VersionID v = readHeader(ds, r_cog);
     
@@ -1593,7 +1593,7 @@ bool CenterOfGeometry::isExtraMoleculePoint() const
 static const RegisterMetaType<CenterOfMass> r_com;
 
 /** Serialise to a binary datastream */
-QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const CenterOfMass &com)
+QDataStream &operator<<(QDataStream &ds, const CenterOfMass &com)
 {
     writeHeader(ds, r_com, 1);
     
@@ -1606,7 +1606,7 @@ QDataStream SIREFF_EXPORT &operator<<(QDataStream &ds, const CenterOfMass &com)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREFF_EXPORT &operator>>(QDataStream &ds, CenterOfMass &com)
+QDataStream &operator>>(QDataStream &ds, CenterOfMass &com)
 {
     VersionID v = readHeader(ds, r_com);
     

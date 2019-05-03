@@ -52,17 +52,17 @@ class GroAtom;
 class GroSystem;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::GroTop&);
-QDataStream& operator>>(QDataStream&, SireIO::GroTop&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::GroTop&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::GroTop&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::GroMolType&);
-QDataStream& operator>>(QDataStream&, SireIO::GroMolType&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::GroMolType&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::GroMolType&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::GroAtom&);
-QDataStream& operator>>(QDataStream&, SireIO::GroAtom&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::GroAtom&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::GroAtom&);
 
-QDataStream& operator<<(QDataStream&, const SireIO::GroSystem&);
-QDataStream& operator>>(QDataStream&, SireIO::GroSystem&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::GroSystem&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::GroSystem&);
 
 namespace SireIO
 {
@@ -79,8 +79,8 @@ using SireMM::GromacsDihedral;
 class SIREIO_EXPORT GroAtom
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GroAtom&);
-friend QDataStream& ::operator>>(QDataStream&, GroAtom&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const GroAtom&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, GroAtom&);
 
 public:
     GroAtom();
@@ -125,7 +125,7 @@ public:
 
     void setAtomType(const QString &atomtype);
     void setBondType(const QString &bondtype);
-    
+
     void setCharge(SireUnits::Dimension::Charge charge);
     void setMass(SireUnits::Dimension::MolarMass mass);
 
@@ -138,7 +138,7 @@ private:
 
     /** Atom type */
     QString atmtyp;
-    
+
     /** Bond type - normally the same as the atom type */
     QString bndtyp;
 
@@ -167,8 +167,8 @@ private:
 class SIREIO_EXPORT GroMolType
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GroMolType&);
-friend QDataStream& ::operator>>(QDataStream&, GroMolType&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const GroMolType&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, GroMolType&);
 
 public:
     GroMolType();
@@ -189,58 +189,59 @@ public:
     QString toString() const;
 
     bool isNull() const;
+    bool isPerturbable() const;
 
     QString name() const;
     void setName(const QString &name);
 
-    qint64 nExcludedAtoms() const;
-    void setNExcludedAtoms(qint64 nexcl);
+    qint64 nExcludedAtoms(bool is_lambda1=false) const;
+    void setNExcludedAtoms(qint64 nexcl, bool is_lambda1=false);
 
-    SireMM::MMDetail forcefield() const;
+    SireMM::MMDetail forcefield(bool is_lambda1=false) const;
 
-    void addAtom(const GroAtom &atom);
+    void addAtom(const GroAtom &atom, bool is_lambda1=false);
 
-    void addBond(const SireMol::BondID &bond, const GromacsBond &parm);
-    void addAngle(const SireMol::AngleID &angle, const GromacsAngle &parm);
-    void addDihedral(const SireMol::DihedralID &dihedral, const GromacsDihedral &parm);
+    void addBond(const SireMol::BondID &bond, const GromacsBond &parm, bool is_lambda1=false);
+    void addAngle(const SireMol::AngleID &angle, const GromacsAngle &parm, bool is_lambda1=false);
+    void addDihedral(const SireMol::DihedralID &dihedral, const GromacsDihedral &parm, bool is_lambda1=false);
 
-    void addBonds(const QMultiHash<SireMol::BondID,GromacsBond> &bonds);
-    void addAngles(const QMultiHash<SireMol::AngleID,GromacsAngle> &angles);
-    void addDihedrals(const QMultiHash<SireMol::DihedralID,GromacsDihedral> &dihedrals);
+    void addBonds(const QMultiHash<SireMol::BondID,GromacsBond> &bonds, bool is_lambda1=false);
+    void addAngles(const QMultiHash<SireMol::AngleID,GromacsAngle> &angles, bool is_lambda1=false);
+    void addDihedrals(const QMultiHash<SireMol::DihedralID,GromacsDihedral> &dihedrals, bool is_lambda1=false);
 
     void sanitise(QString elecstyle, QString vdwstyle,
-                  QString combrule, double elec14, double vdw14);
+                  QString combrule, double elec14, double vdw14, bool is_lambda1=false);
 
     void addWarning(const QString &warning);
 
-    int nAtoms() const;
-    int nResidues() const;
+    int nAtoms(bool is_lambda1=false) const;
+    int nResidues(bool is_lambda1=false) const;
 
-    GroAtom atom(const SireMol::AtomIdx &atomidx) const;
-    GroAtom atom(const SireMol::AtomNum &atomnum) const;
-    GroAtom atom(const SireMol::AtomName &atomnam) const;
+    GroAtom atom(const SireMol::AtomIdx &atomidx, bool is_lambda1=false) const;
+    GroAtom atom(const SireMol::AtomNum &atomnum, bool is_lambda1=false) const;
+    GroAtom atom(const SireMol::AtomName &atomnam, bool is_lambda1=false) const;
 
-    QVector<GroAtom> atoms() const;
+    QVector<GroAtom> atoms(bool is_lambda1=false) const;
 
-    QVector<GroAtom> atoms(const SireMol::AtomName &atomnam) const;
+    QVector<GroAtom> atoms(const SireMol::AtomName &atomnam, bool is_lambda1=false) const;
 
-    QVector<GroAtom> atoms(const SireMol::ResIdx &residx) const;
-    QVector<GroAtom> atoms(const SireMol::ResNum &resnum) const;
-    QVector<GroAtom> atoms(const SireMol::ResName &resnam) const;
+    QVector<GroAtom> atoms(const SireMol::ResIdx &residx, bool is_lambda1=false) const;
+    QVector<GroAtom> atoms(const SireMol::ResNum &resnum, bool is_lambda1=false) const;
+    QVector<GroAtom> atoms(const SireMol::ResName &resnam, bool is_lambda1=false) const;
 
-    QMultiHash<SireMol::BondID,GromacsBond> bonds() const;
-    QMultiHash<SireMol::AngleID,GromacsAngle> angles() const;
-    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihedrals() const;
+    QMultiHash<SireMol::BondID,GromacsBond> bonds(bool is_lambda1=false) const;
+    QMultiHash<SireMol::AngleID,GromacsAngle> angles(bool is_lambda1=false) const;
+    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihedrals(bool is_lambda1=false) const;
 
-    bool isWater() const;
-    QStringList settlesLines() const;
+    bool isWater(bool is_lambda1=false) const;
+    QStringList settlesLines(bool is_lambda1=false) const;
 
     QStringList warnings() const;
 
-    bool needsSanitising() const;
+    bool needsSanitising(bool is_lambda1=false) const;
 
 private:
-    void _pvt_sanitise();
+    void _pvt_sanitise(bool is_lambda1=false);
 
     /** The name of this moleculetype */
     QString nme;
@@ -249,33 +250,43 @@ private:
     QStringList warns;
 
     /** Array of all of the atoms in this molecule */
-    QVector<GroAtom> atms;
+    QVector<GroAtom> atms0;
+    QVector<GroAtom> atms1;
 
     /** Array giving the index of the first atom in each residue */
-    QVector<qint64> first_atoms;
+    QVector<qint64> first_atoms0;
+    QVector<qint64> first_atoms1;
 
     /** Hash of all of the bonds */
-    QMultiHash<SireMol::BondID,GromacsBond> bnds;
+    QMultiHash<SireMol::BondID,GromacsBond> bnds0;
+    QMultiHash<SireMol::BondID,GromacsBond> bnds1;
 
     /** Hash of all of the angles */
-    QMultiHash<SireMol::AngleID,GromacsAngle> angs;
+    QMultiHash<SireMol::AngleID,GromacsAngle> angs0;
+    QMultiHash<SireMol::AngleID,GromacsAngle> angs1;
 
     /** Hash of all of the dihedrals */
-    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihs;
+    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihs0;
+    QMultiHash<SireMol::DihedralID,GromacsDihedral> dihs1;
 
     /** The details about the forcefield used for this molecule */
-    SireMM::MMDetail ffield;
+    SireMM::MMDetail ffield0;
+    SireMM::MMDetail ffield1;
 
     /** The number of excluded atoms */
-    qint64 nexcl;
+    qint64 nexcl0;
+    qint64 nexcl1;
+
+    /** Whether this molecule is perturbable. */
+    bool is_perturbable;
 };
 
 /** This class describes a Gromacs System */
 class SIREIO_EXPORT GroSystem
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GroSystem&);
-friend QDataStream& ::operator>>(QDataStream&, GroSystem&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const GroSystem&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, GroSystem&);
 
 public:
     GroSystem();
@@ -334,8 +345,8 @@ private:
 class SIREIO_EXPORT GroTop : public SireBase::ConcreteProperty<GroTop,MoleculeParser>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GroTop&);
-friend QDataStream& ::operator>>(QDataStream&, GroTop&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const GroTop&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, GroTop&);
 
 public:
     GroTop();
@@ -449,14 +460,14 @@ private:
                                   const QHash<QString,int> &ntags);
 
     const QVector<QString>& expandedLines() const;
-    
+
     SireMol::Molecule createMolecule(const GroMolType &moltype, QStringList &errors,
                                      const PropertyMap &map) const;
     SireMol::Molecule createMolecule(QString moltype, QStringList &errors,
                                      const PropertyMap &map) const;
-    
+
     typedef std::tuple<SireBase::Properties,QStringList> PropsAndErrors;
-    
+
     PropsAndErrors getAtomProperties(const SireMol::MoleculeInfo &molinfo,
                                      const GroMolType &moltype) const;
     PropsAndErrors getBondProperties(const SireMol::MoleculeInfo &molinfo,
@@ -465,7 +476,7 @@ private:
                                       const GroMolType &moltype) const;
     PropsAndErrors getDihedralProperties(const SireMol::MoleculeInfo &molinfo,
                                          const GroMolType &moltype) const;
-        
+
     /** This is the full search path of all directories that should
         be searched for Gromacs include files */
     QStringList include_path;

@@ -40,11 +40,11 @@ class GridIndex;
 class GridInfo;
 }
 
-QDataStream& operator<<(QDataStream&, const SireVol::GridIndex&);
-QDataStream& operator>>(QDataStream&, SireVol::GridIndex&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::GridIndex&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::GridIndex&);
 
-QDataStream& operator<<(QDataStream&, const SireVol::GridInfo&);
-QDataStream& operator>>(QDataStream&, SireVol::GridInfo&);
+SIREVOL_EXPORT QDataStream& operator<<(QDataStream&, const SireVol::GridInfo&);
+SIREVOL_EXPORT QDataStream& operator>>(QDataStream&, SireVol::GridInfo&);
 
 namespace SireMaths
 {
@@ -142,8 +142,8 @@ private:
 class SIREVOL_EXPORT GridInfo
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const GridInfo&);
-friend QDataStream& ::operator>>(QDataStream&, GridInfo&);
+friend SIREVOL_EXPORT QDataStream& ::operator<<(QDataStream&, const GridInfo&);
+friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, GridInfo&);
 
 public:
     GridInfo();

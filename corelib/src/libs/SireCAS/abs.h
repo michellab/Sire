@@ -38,8 +38,8 @@ namespace SireCAS
 class Abs;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Abs&);
-QDataStream& operator>>(QDataStream&, SireCAS::Abs&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Abs&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Abs&);
 
 namespace SireCAS
 {
@@ -56,8 +56,8 @@ For complex values, this returns abs(x) + abs(y) i
 class SIRECAS_EXPORT Abs : public SingleFunc
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Abs&);
-friend QDataStream& ::operator>>(QDataStream&, Abs&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Abs&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Abs&);
 
 public:
     Abs();

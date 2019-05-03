@@ -45,11 +45,11 @@ class MolGroupsBase;
 class MoleculeGroups;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::MolGroupsBase&);
-QDataStream& operator>>(QDataStream&, SireMol::MolGroupsBase&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MolGroupsBase&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MolGroupsBase&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::MoleculeGroups&);
-QDataStream& operator>>(QDataStream&, SireMol::MoleculeGroups&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::MoleculeGroups&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::MoleculeGroups&);
 
 namespace SireMol
 {
@@ -99,8 +99,8 @@ class AtomID;
 class SIREMOL_EXPORT MolGroupsBase : public Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MolGroupsBase&);
-friend QDataStream& ::operator>>(QDataStream&, MolGroupsBase&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MolGroupsBase&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MolGroupsBase&);
 
 public:    
     virtual ~MolGroupsBase();
@@ -408,8 +408,8 @@ class SIREMOL_EXPORT MoleculeGroups
             : public ConcreteProperty<MoleculeGroups,MolGroupsBase>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const MoleculeGroups&);
-friend QDataStream& ::operator>>(QDataStream&, MoleculeGroups&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const MoleculeGroups&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, MoleculeGroups&);
 
 public:
     MoleculeGroups();

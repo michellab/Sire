@@ -71,7 +71,7 @@ namespace SireMaths
 
     Returns A \times X
 */
-NVector SIREMATHS_EXPORT dgemv(const NMatrix &A, const NVector &X)
+NVector dgemv(const NMatrix &A, const NVector &X)
 {
     #ifdef SIRE_DISABLE_FORTRAN
     throw SireError::unsupported( QObject::tr(
@@ -121,7 +121,7 @@ NVector SIREMATHS_EXPORT dgemv(const NMatrix &A, const NVector &X)
     #endif // SIRE_DISABLE_FORTRAN
 }
 
-NVector SIREMATHS_EXPORT dgemv(double alpha, const NMatrix &A, const NVector &X,
+NVector dgemv(double alpha, const NMatrix &A, const NVector &X,
                                double beta, const NVector &Y)
 {
     #ifdef SIRE_DISABLE_FORTRAN
@@ -176,7 +176,7 @@ NVector SIREMATHS_EXPORT dgemv(double alpha, const NMatrix &A, const NVector &X,
 
 
 /** Return the matrix product of A \times B */
-NMatrix SIREMATHS_EXPORT dgemm(const NMatrix &A, const NMatrix &B)
+NMatrix dgemm(const NMatrix &A, const NMatrix &B)
 {
     #ifdef SIRE_DISABLE_FORTRAN
     throw SireError::unsupported( QObject::tr(

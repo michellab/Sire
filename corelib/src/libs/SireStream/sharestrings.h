@@ -39,7 +39,7 @@ SIRE_BEGIN_HEADER
 namespace SireStream
 {
 
-QString shareString(const QString &string);
+SIRESTREAM_EXPORT QString shareString(const QString &string);
 
 void shareStrings(QStringList &strings);
 

@@ -8,8 +8,8 @@
 ################################
 
 # project version
-set (SIRE_VERSION_MAJOR "2018")
-set (SIRE_VERSION_MINOR "2")
+set (SIRE_VERSION_MAJOR "2019")
+set (SIRE_VERSION_MINOR "1")
 set (SIRE_VERSION_PATCH "0")
 
 set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
@@ -19,13 +19,16 @@ set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PA
 ############
 
 # require cmake >= 2.8.11.2
-cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
 
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 
 if(COMMAND CMAKE_POLICY)
+  if (POLICY CMP0025)
+    cmake_policy(SET CMP0025 NEW)  # Anaconda clang is called Clang, not AppleClang
+  endif()
   if (POLICY CMP0042)
     cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
   endif()
@@ -76,31 +79,37 @@ if ( ANACONDA_BUILD )
 
   # Make sure that there is a python3 executable in the bin directory
   if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" AND
-       NOT EXISTS "${ANACONDA_BASE}/python.exe"  )
-    message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3 or ${ANACONDA_BASE}/python.exe. "
+       NOT EXISTS "${ANACONDA_BASE}/python.exe"  AND
+       NOT EXISTS "${PYTHON_EXECUTABLE}" )
+    message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3, ${ANACONDA_BASE}/python.exe "
+                         "or ${PYTHON_EXECUTABLE}."
                          "Please set the full path to the Anaconda or Miniconda "
                          "installation directory." )
   endif()
 
   set( SIRE_APP "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
           "Install directory for Sire within the Anaconda/Miniconda distribution" )
-elseif( WIN32 OR WIN64 )
-  # This should be MSYS2/MINGW64, so use the location of cmake to find the location
-  # of the Sire installation
-  message(STATUS "Compiling on windows using MSYS2/MINGW64...")
-  set( MINGW_BASE "C:/msys64/mingw64" CACHE PATH "MSYS MINGW64 root directory" )
-  get_filename_component(MINGW_CMAKE_BIN ${CMAKE_COMMAND} DIRECTORY)
-  get_filename_component(MINGW_CMAKE_ROOT ${MINGW_CMAKE_BIN} DIRECTORY)
-  message(STATUS "Using cmake ${CMAKE_COMMAND} from MING64 base ${MINGW_CMAKE_ROOT}")
-
-  set( MINGW_BASE "${MINGW_CMAKE_ROOT}")
-  set( SIRE_APP "${MINGW_BASE}" )
+#elseif( WIN32 OR WIN64 )
+#  # This should be MSYS2/MINGW64, so use the location of cmake to find the location
+#  # of the Sire installation
+#  message(STATUS "Compiling on windows using MSYS2/MINGW64...")
+#  set( MINGW_BASE "C:/msys64/mingw64" CACHE PATH "MSYS MINGW64 root directory" )
+#  get_filename_component(MINGW_CMAKE_BIN ${CMAKE_COMMAND} DIRECTORY)
+#  get_filename_component(MINGW_CMAKE_ROOT ${MINGW_CMAKE_BIN} DIRECTORY)
+#  message(STATUS "Using cmake ${CMAKE_COMMAND} from MING64 base ${MINGW_CMAKE_ROOT}")
+#
+#  set( MINGW_BASE "${MINGW_CMAKE_ROOT}")
+#  set( SIRE_APP "${MINGW_BASE}" )
 
 else()
-  # Option to set the install directory of Sire
-  set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
-          "The full path to the sire.app installed Sire application." )
+  #�Option to set the install directory of Sire
+  if (NOT DEFINED SIRE_APP)
+    set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
+            "The full path to the sire.app installed Sire application." )
+  endif()
 endif()
+
+message( STATUS "Using SIRE_APP = ${SIRE_APP}" )
 
 set( SIRE_INCLUDE_DIR "${SIRE_APP}/include/Sire" )
 
@@ -234,6 +243,15 @@ endif()
 include_directories (BEFORE ${SIRE_INCLUDE_DIR})
 include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories (BEFORE ${CMAKE_CURRENT_BINARY_DIR})
+if (TBB_INCLUDE_DIR)
+  include_directories (${TBB_INCLUDE_DIR})
+endif()
+if (SIRE_GSL_INCLUDE_PATH)
+  include_directories (${SIRE_GSL_INCLUDE_PATH})
+endif()
+if (DEFINED SIRE_APP)
+  include_directories( "${SIRE_APP}/include" "${SIRE_APP}/Library/include" )
+endif()
 
 # MUST build shared libraries
 set (BUILD_SHARED_LIBS ON)
@@ -274,6 +292,12 @@ else()
   if (SIRE_HAS_NO_OVERLOADED_VIRTUAL)
     set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-overloaded-virtual")
   endif()
+endif()
+
+if (APPLE)
+  # Also need to add '-undefined dynamic_lookup' so that we can build 
+  # modules that can be imported by a python that has statically linked libPython
+  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -undefined dynamic_lookup" )
 endif()
 
 message( STATUS  "CMAKE_SYSTEM_NAME      == ${CMAKE_SYSTEM_NAME}" )
@@ -346,6 +370,18 @@ if (NOT ${SIRE_FOUND_PYTHON})
   find_package( PythonLibs 3.2 REQUIRED )
 endif()
 
+if (NOT PYTHON_MODULE_EXTENSION)
+  if (WIN32)
+    set( PYTHON_MODULE_EXTENSION ".pyd" )
+  else()
+    set( PYTHON_MODULE_EXTENSION ".so" )
+  endif()
+endif()
+
+if (NOT PYTHON_LIBRARIES)
+  set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
+endif()
+
 if (NOT ${SIRE_FOUND_BOOST_PYTHON})
   # Sire depends on >= boost 1.31 - all libraries must be dynamically linked
   # (else we could end up with multiple boost::python libraries linked, which
@@ -366,11 +402,23 @@ message( STATUS "boost::python library ${BOOST_PYTHON_LIBRARY} | ${BOOST_PYTHON_
 set (SIRE_PYTHON "${PYTHON_SITE_DIR}")
 
 # Use the same Qt library as was used to build corelib
-message( STATUS "Looking for Qt5Core in directory ${SIRE_QT5CORE_DIR}" )
-set( Qt5Core_DIR "${SIRE_QT5CORE_DIR}/cmake/Qt5Core" )
-find_package( Qt5Core REQUIRED )
+if (DEFINED Qt5Core_DIR)
+    message( STATUS "Looking for Qt5Core in directory ${Qt5Core_DIR}" )
+    find_package( Qt5Core )
+endif()
+get_target_property(QT5_LOCATION Qt5::Core LOCATION)
+if (QT5_LOCATION MATCHES NOTFOUND)
+    message( STATUS "Looking for Qt5Core in directory ${SIRE_QT5CORE_DIR}" )
+    set( Qt5Core_DIR "${SIRE_QT5CORE_DIR}/cmake/Qt5Core" )
+    find_package( Qt5Core REQUIRED )
+endif()
 get_target_property(QT5_LOCATION Qt5::Core LOCATION)
 message( STATUS "Using Qt5Core in ${QT5_LOCATION}" )
+
+if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+    add_compile_options("/EHsc")
+    add_compile_options("/permissive-")
+endif()
 
 # Add the helper library
 add_subdirectory (Helpers)

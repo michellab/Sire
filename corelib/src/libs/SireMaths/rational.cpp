@@ -41,14 +41,14 @@ using namespace SireMaths;
 static const RegisterMetaType<Rational> r_rational(NO_ROOT);
 
 /** Serialise a rational number to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Rational &val)
+QDataStream &operator<<(QDataStream &ds, const Rational &val)
 {
     writeHeader(ds, r_rational, 1) << val.numerator() << val.denominator();
     return ds;
 }
 
 /** Deserialise a rational number from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, Rational &val)
+QDataStream &operator>>(QDataStream &ds, Rational &val)
 {
     VersionID v = readHeader(ds, r_rational);
 
@@ -185,18 +185,18 @@ namespace SireMaths
 {
 
 /** Expose the boost gcd and lcm functions */
-qint32 SIREMATHS_EXPORT gcd(qint32 n, qint32 m)
+qint32 gcd(qint32 n, qint32 m)
 {
     return boost::gcd<qint32>(n,m);
 }
 
 /** Expose the boost gcd and lcm functions */
-qint32 SIREMATHS_EXPORT lcm(qint32 n, qint32 m)
+qint32 lcm(qint32 n, qint32 m)
 {
     return boost::lcm<qint32>(n,m);
 }
 
-QString SIREMATHS_EXPORT toString(const SireMaths::Rational &val)
+QString toString(const SireMaths::Rational &val)
 {
     if (val.denominator() == 1)
         return QString::number(val.numerator());
@@ -206,7 +206,7 @@ QString SIREMATHS_EXPORT toString(const SireMaths::Rational &val)
 
 /** Private function used by 'pow' to calculate 'x' raised to the positive
     fractional power 'power' */
-double SIREMATHS_EXPORT pow_pvt(double x, const Rational &power)
+double pow_pvt(double x, const Rational &power)
 {
     if ( x == 0 )
         return 0;
@@ -230,7 +230,7 @@ double SIREMATHS_EXPORT pow_pvt(double x, const Rational &power)
 }
 
 /** Return x raised to the fractional power 'power' */
-double SIREMATHS_EXPORT pow(double x, const Rational &power)
+double pow(double x, const Rational &power)
 {
     if (power.denominator() == 1)
         return SireMaths::pow(x, power.numerator());
@@ -241,7 +241,7 @@ double SIREMATHS_EXPORT pow(double x, const Rational &power)
 }
 
 /** Return whether this is a rational number (with maximum denominator = 'maxdenom') */
-bool SIREMATHS_EXPORT isRational(double val, int maxdenom)
+bool isRational(double val, int maxdenom)
 {
     for (int i=1; i<=maxdenom; ++i)
     {
@@ -259,7 +259,7 @@ bool SIREMATHS_EXPORT isRational(double val, int maxdenom)
 /** Return 'val' converted into the best approximated rational number
     with maximum denominator 'maxdenom'. A perfect conversion will only 
     result if 'isRational(val,maxdenom)' returned true. */
-Rational SIREMATHS_EXPORT toRational(double val, int maxdenom)
+Rational toRational(double val, int maxdenom)
 {
     Rational best_rational;
     double lowest_error = 0.0;
@@ -286,24 +286,24 @@ Rational SIREMATHS_EXPORT toRational(double val, int maxdenom)
 /** Default value of maxdenom for toRational and isRational */
 const int default_maxdenom = 500;
 
-bool SIREMATHS_EXPORT isRational(double val)
+bool isRational(double val)
 {
     return isRational(val,default_maxdenom);
 }
 
-Rational SIREMATHS_EXPORT toRational(double val)
+Rational toRational(double val)
 {
     return toRational(val,default_maxdenom);
 }
 
 /** Return 'val' converted to a double */
-double SIREMATHS_EXPORT toDouble(const Rational &val)
+double toDouble(const Rational &val)
 {
     return double(val.numerator()) / double(val.denominator());
 }
 
 /** Return a hash of the rational number */
-uint SIREMATHS_EXPORT qHash(const Rational &val)
+uint qHash(const Rational &val)
 {
     return (val.numerator()<<16) | (val.denominator() & 0x0000FFFF);
 }

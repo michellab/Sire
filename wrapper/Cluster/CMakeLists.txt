@@ -48,7 +48,6 @@ target_link_libraries (Cluster
                        SirePython
                        SIRE_SireCluster
                        ${BOOST_PYTHON_LIBRARY}
-                       ${PYTHON_LIBRARIES}
                       )
 
 include( LimitSirePythonExportSymbols )

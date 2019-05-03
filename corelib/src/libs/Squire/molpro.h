@@ -43,8 +43,8 @@ namespace Squire
 class Molpro;
 }
 
-QDataStream& operator<<(QDataStream&, const Squire::Molpro&);
-QDataStream& operator>>(QDataStream&, Squire::Molpro&);
+SQUIRE_EXPORT QDataStream& operator<<(QDataStream&, const Squire::Molpro&);
+SQUIRE_EXPORT QDataStream& operator>>(QDataStream&, Squire::Molpro&);
 
 class QFile;
 
@@ -64,8 +64,8 @@ namespace Squire
 class SQUIRE_EXPORT Molpro : public SireBase::ConcreteProperty<Molpro,QMProgram>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Molpro&);
-friend QDataStream& ::operator>>(QDataStream&, Molpro&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<(QDataStream&, const Molpro&);
+friend SQUIRE_EXPORT QDataStream& ::operator>>(QDataStream&, Molpro&);
 
 public:
     Molpro();

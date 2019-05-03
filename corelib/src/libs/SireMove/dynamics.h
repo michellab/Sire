@@ -43,8 +43,8 @@ namespace SireMove
 class Dynamics;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::Dynamics&);
-QDataStream& operator>>(QDataStream&, SireMove::Dynamics&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::Dynamics&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::Dynamics&);
 
 namespace SireMove
 {
@@ -57,8 +57,8 @@ namespace SireMove
 class SIREMOVE_EXPORT Dynamics : public Move
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Dynamics&);
-friend QDataStream& ::operator>>(QDataStream&, Dynamics&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const Dynamics&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, Dynamics&);
 
 public:
     Dynamics(const PropertyMap &map = PropertyMap());

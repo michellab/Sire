@@ -57,7 +57,7 @@ static const RegisterMetaType<WorkPacketBase> r_workbase( MAGIC_ONLY,
                                                           WorkPacketBase::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIRECLUSTER_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                            const WorkPacketBase &workbase)
 {
     writeHeader(ds, r_workbase, 1);
@@ -70,7 +70,7 @@ QDataStream SIRECLUSTER_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECLUSTER_EXPORT &operator>>(QDataStream &ds, WorkPacketBase &workbase)
+QDataStream &operator>>(QDataStream &ds, WorkPacketBase &workbase)
 {
     VersionID v = readHeader(ds, r_workbase);
     
@@ -178,7 +178,7 @@ void WorkPacketBase::runChunk()
 static const RegisterMetaType<ErrorPacket> r_errorpacket;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECLUSTER_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                            const ErrorPacket &errorpacket)
 {
     writeHeader(ds, r_errorpacket, 1);
@@ -192,7 +192,7 @@ QDataStream SIRECLUSTER_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECLUSTER_EXPORT &operator>>(QDataStream &ds, ErrorPacket &errorpacket)
+QDataStream &operator>>(QDataStream &ds, ErrorPacket &errorpacket)
 {
     VersionID v = readHeader(ds, r_errorpacket);
     
@@ -288,7 +288,7 @@ float ErrorPacket::chunk()
 static const RegisterMetaType<AbortPacket> r_abortpacket;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECLUSTER_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                            const AbortPacket &abortpacket)
 {
     writeHeader(ds, r_abortpacket, 1);
@@ -301,7 +301,7 @@ QDataStream SIRECLUSTER_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECLUSTER_EXPORT &operator>>(QDataStream &ds, AbortPacket &abortpacket)
+QDataStream &operator>>(QDataStream &ds, AbortPacket &abortpacket)
 {
     VersionID v = readHeader(ds, r_abortpacket);
     
@@ -362,7 +362,7 @@ float AbortPacket::chunk()
 static const RegisterMetaType<WorkPacket> r_workpacket(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIRECLUSTER_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                            const WorkPacket &workpacket)
 {
     writeHeader(ds, r_workpacket, 1);
@@ -375,7 +375,7 @@ QDataStream SIRECLUSTER_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECLUSTER_EXPORT &operator>>(QDataStream &ds, WorkPacket &workpacket)
+QDataStream &operator>>(QDataStream &ds, WorkPacket &workpacket)
 {
     VersionID v = readHeader(ds, r_workpacket);
     
@@ -605,7 +605,7 @@ const WorkPacketBase& WorkPacket::base() const
 static const RegisterMetaType<WorkTest> r_worktest;
 
 /** Serialise to a binary datastream */
-QDataStream SIRECLUSTER_EXPORT &operator<<(QDataStream &ds, const WorkTest &worktest)
+QDataStream &operator<<(QDataStream &ds, const WorkTest &worktest)
 {
     writeHeader(ds, r_worktest, 1);
     
@@ -619,7 +619,7 @@ QDataStream SIRECLUSTER_EXPORT &operator<<(QDataStream &ds, const WorkTest &work
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRECLUSTER_EXPORT &operator>>(QDataStream &ds, WorkTest &worktest)
+QDataStream &operator>>(QDataStream &ds, WorkTest &worktest)
 {
     VersionID v = readHeader(ds, r_worktest);
     

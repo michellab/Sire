@@ -60,7 +60,7 @@ static const RegisterMetaType<Mol2Bond> r_mol2bond(NO_ROOT);
 static const RegisterMetaType<Mol2Molecule> r_mol2molecule(NO_ROOT);
 static const RegisterMetaType<Mol2Substructure> r_mol2subst(NO_ROOT);
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Atom &mol2atom)
+QDataStream &operator<<(QDataStream &ds, const Mol2Atom &mol2atom)
 {
     writeHeader(ds, r_mol2atom, 1);
 
@@ -73,7 +73,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Atom &mol2atom)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Atom &mol2atom)
+QDataStream &operator>>(QDataStream &ds, Mol2Atom &mol2atom)
 {
     VersionID v = readHeader(ds, r_mol2atom);
 
@@ -91,7 +91,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Atom &mol2atom)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Bond &mol2bond)
+QDataStream &operator<<(QDataStream &ds, const Mol2Bond &mol2bond)
 {
     writeHeader(ds, r_mol2bond, 1);
 
@@ -104,7 +104,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Bond &mol2bond)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Bond &mol2bond)
+QDataStream &operator>>(QDataStream &ds, Mol2Bond &mol2bond)
 {
     VersionID v = readHeader(ds, r_mol2bond);
 
@@ -122,7 +122,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Bond &mol2bond)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Molecule &mol2molecule)
+QDataStream &operator<<(QDataStream &ds, const Mol2Molecule &mol2molecule)
 {
     writeHeader(ds, r_mol2molecule, 1);
 
@@ -137,7 +137,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Molecule &mol2m
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Molecule &mol2molecule)
+QDataStream &operator>>(QDataStream &ds, Mol2Molecule &mol2molecule)
 {
     VersionID v = readHeader(ds, r_mol2molecule);
 
@@ -157,7 +157,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Molecule &mol2molecul
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Substructure &mol2subst)
+QDataStream &operator<<(QDataStream &ds, const Mol2Substructure &mol2subst)
 {
     writeHeader(ds, r_mol2subst, 1);
 
@@ -170,7 +170,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2Substructure &m
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Substructure &mol2subst)
+QDataStream &operator>>(QDataStream &ds, Mol2Substructure &mol2subst)
 {
     VersionID v = readHeader(ds, r_mol2subst);
 
@@ -188,7 +188,7 @@ QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2Substructure &mol2sub
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2 &mol2)
+QDataStream &operator<<(QDataStream &ds, const Mol2 &mol2)
 {
     writeHeader(ds, r_mol2, 1);
 
@@ -197,7 +197,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Mol2 &mol2)
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Mol2 &mol2)
+QDataStream &operator>>(QDataStream &ds, Mol2 &mol2)
 {
     VersionID v = readHeader(ds, r_mol2);
 
@@ -375,6 +375,11 @@ Mol2Atom::Mol2Atom(const SireMol::Atom &atom, const PropertyMap &map,
 
         return;
     }
+
+    // If the user has mapped "name", this is likely a perturbable
+    // molecule. Replace the AtomName with the user mapped property.
+    if (map["name"] != "name")
+        name = atom.property<QString>(map["name"]);
 
     // Extract the atomic coordinates.
     coord = atom.property<SireMaths::Vector>(map["coordinates"]);
@@ -2578,11 +2583,10 @@ MolEditor Mol2::getMolecule(int imol, const PropertyMap &map) const
         types.set(cgatomidx, atom.getType());
         status_bits.set(cgatomidx, atom.getStatusBits());
 
-        // The element is usuall the first character of the atom,
-        // unless the name starts with a digit, in which case it's the second.
-        auto name = atom.getName();
-        if (name[0].isDigit()) elements.set(cgatomidx, Element(QString(name[1])));
-        else                   elements.set(cgatomidx, Element(QString(name[0])));
+        // Try to infer the element from the name of the atom.
+        // We'll strip all numeric digits and use a maximum of two characters.
+        auto name = atom.getName().remove(QRegExp("[0-9]")).mid(0, 2);
+        elements.set(cgatomidx, Element::biologicalElement(name));
     }
 
     // Instantiate the residue property objects that we need.

@@ -281,7 +281,7 @@ def adjustPerturbedDOFs( molecule ):
 
 
 def getDummies(molecule):
-    print "Selecting dummy groups"
+    print("Selecting dummy groups")
     natoms = molecule.nAtoms()
     atoms = molecule.atoms()
 
@@ -344,7 +344,7 @@ def createSystem(molecules, space, naming_scheme=NamingScheme()):
     # add the ligand name to the naming scheme
     naming_scheme.addSoluteResidueName(lig_name.val)
 
-    print "Applying flexibility and zmatrix templates..."
+    print("Applying flexibility and zmatrix templates...")
 
     moleculeNumbers = molecules.molNums()
     moleculeNumbers.sort()

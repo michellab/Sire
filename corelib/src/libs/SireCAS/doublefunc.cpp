@@ -44,7 +44,7 @@ using namespace SireCAS;
 static const RegisterMetaType<DoubleFunc> r_doublefunc(MAGIC_ONLY, "SireCAS::DoubleFunc");
 
 /** Serialise to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const DoubleFunc &func)
+QDataStream &operator<<(QDataStream &ds, const DoubleFunc &func)
 {
     writeHeader(ds, r_doublefunc, 1) 
             << func.ex0 << func.ex1 << static_cast<const ExBase&>(func);
@@ -53,7 +53,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const DoubleFunc &func)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, DoubleFunc &func)
+QDataStream &operator>>(QDataStream &ds, DoubleFunc &func)
 {
     VersionID v = readHeader(ds, r_doublefunc);
 

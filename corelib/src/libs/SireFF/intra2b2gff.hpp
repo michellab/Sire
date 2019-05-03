@@ -31,6 +31,7 @@
 
 #include "ff.h"
 #include "g2ff.h"
+#include "SireBase/chunkedvector.hpp"
 
 SIRE_BEGIN_HEADER
 
@@ -49,9 +50,11 @@ QDataStream& operator>>(QDataStream&, SireFF::Intra2B2GFF<Potential>&);
 namespace SireFF
 {
 
+using SireBase::ChunkedVector;
+
 namespace detail
 {
-void throwIntra2B2GFFIncompatibeScaleFactorsError(const QString &molname,
+SIREFF_EXPORT void throwIntra2B2GFFIncompatibeScaleFactorsError(const QString &molname,
                      MolNum molnum, quint64 v0, quint64 v1);
 }
 
@@ -66,13 +69,13 @@ void throwIntra2B2GFFIncompatibeScaleFactorsError(const QString &molname,
     @author Christopher Woods
 */
 template<class Potential>
-class SIREFF_EXPORT Intra2B2GFF 
-                  : public SireBase::ConcreteProperty<Intra2B2GFF<Potential>, G2FF>, 
-                    public Potential
+class Intra2B2GFF 
+              : public SireBase::ConcreteProperty<Intra2B2GFF<Potential>, G2FF>, 
+                public Potential
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const Intra2B2GFF<Potential>&);
-friend QDataStream& ::operator>><>(QDataStream&, Intra2B2GFF<Potential>&);
+friend SIREFF_EXPORT QDataStream& ::operator<<<>(QDataStream&, const Intra2B2GFF<Potential>&);
+friend SIREFF_EXPORT QDataStream& ::operator>><>(QDataStream&, Intra2B2GFF<Potential>&);
 
 public:
     typedef typename Potential::Components Components;

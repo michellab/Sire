@@ -39,7 +39,7 @@ using namespace SireStream;
 static const RegisterMetaType<SimPacket> r_simpacket;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const SimPacket &simpacket)
+QDataStream &operator<<(QDataStream &ds, const SimPacket &simpacket)
 {
     writeHeader(ds, r_simpacket, 2);
     
@@ -62,7 +62,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const SimPacket &simpac
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, SimPacket &simpacket)
+QDataStream &operator>>(QDataStream &ds, SimPacket &simpacket)
 {
     VersionID v = readHeader(ds, r_simpacket);
     

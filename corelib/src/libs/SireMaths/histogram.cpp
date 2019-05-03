@@ -48,7 +48,7 @@ using namespace SireStream;
 ///////////
 
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                          const HistogramBin &bin)
 {
     ds << bin.minimum() << bin.maximum();
@@ -56,7 +56,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, HistogramBin &bin)
+QDataStream &operator>>(QDataStream &ds, HistogramBin &bin)
 {
     ds >> bin.minval >> bin.maxval;
     return ds;
@@ -132,7 +132,7 @@ QString HistogramBin::toString() const
 ///////////
 
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                          const HistogramValue &value)
 {
     ds << value.val << static_cast<const HistogramBin&>(value);
@@ -140,7 +140,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                          HistogramValue &value)
 {
     ds >> value.val >> static_cast<HistogramBin&>(value);
@@ -206,7 +206,7 @@ QString HistogramValue::toString() const
 static const RegisterMetaType<Histogram> r_histogram;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Histogram &histogram)
+QDataStream &operator<<(QDataStream &ds, const Histogram &histogram)
 {
     writeHeader(ds, r_histogram, 2);
     
@@ -221,7 +221,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, const Histogram &histo
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, Histogram &histogram)
+QDataStream &operator>>(QDataStream &ds, Histogram &histogram)
 {
     VersionID v = readHeader(ds, r_histogram);
     

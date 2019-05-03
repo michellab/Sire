@@ -41,8 +41,8 @@ namespace SireSystem
 class SpaceWrapper;
 }
 
-QDataStream& operator<<(QDataStream&, const SireSystem::SpaceWrapper&);
-QDataStream& operator>>(QDataStream&, SireSystem::SpaceWrapper&);
+SIRESYSTEM_EXPORT QDataStream& operator<<(QDataStream&, const SireSystem::SpaceWrapper&);
+SIRESYSTEM_EXPORT QDataStream& operator>>(QDataStream&, SireSystem::SpaceWrapper&);
 
 namespace SireSystem
 {
@@ -68,8 +68,8 @@ class SIRESYSTEM_EXPORT SpaceWrapper
         : public SireBase::ConcreteProperty<SpaceWrapper,MoleculeConstraint>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SpaceWrapper&);
-friend QDataStream& ::operator>>(QDataStream&, SpaceWrapper&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator<<(QDataStream&, const SpaceWrapper&);
+friend SIRESYSTEM_EXPORT QDataStream& ::operator>>(QDataStream&, SpaceWrapper&);
 
 public:
     SpaceWrapper();

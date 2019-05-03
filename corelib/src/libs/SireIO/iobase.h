@@ -45,8 +45,8 @@ namespace SireIO
 class NullIO;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::NullIO&);
-QDataStream& operator>>(QDataStream&, SireIO::NullIO&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::NullIO&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::NullIO&);
 
 namespace SireIO
 {
@@ -227,8 +227,8 @@ protected:
 class SIREIO_EXPORT NullIO : public SireBase::ConcreteProperty<NullIO,IOBase>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const NullIO&);
-friend QDataStream& ::operator>>(QDataStream&, NullIO&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const NullIO&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, NullIO&);
 
 public:
     NullIO();

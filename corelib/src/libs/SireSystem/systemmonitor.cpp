@@ -46,7 +46,7 @@ static const RegisterMetaType<SystemMonitor> r_sysmon( MAGIC_ONLY,
                                                        "SireSystem::SystemMonitor" );
                                                         
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const SystemMonitor &sysmon)
 {
     writeHeader(ds, r_sysmon, 1);
@@ -57,7 +57,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, SystemMonitor &sysmon)
+QDataStream &operator>>(QDataStream &ds, SystemMonitor &sysmon)
 {
     VersionID v = readHeader(ds, r_sysmon);
     
@@ -91,7 +91,7 @@ SystemMonitor::~SystemMonitor()
 static const RegisterMetaType<NullMonitor> r_nullmonitor;
                                                         
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const NullMonitor &nullmonitor)
 {
     writeHeader(ds, r_nullmonitor, 1);
@@ -102,7 +102,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, NullMonitor &nullmonitor)
+QDataStream &operator>>(QDataStream &ds, NullMonitor &nullmonitor)
 {
     VersionID v = readHeader(ds, r_nullmonitor);
     

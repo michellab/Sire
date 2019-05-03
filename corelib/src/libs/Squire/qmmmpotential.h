@@ -68,9 +68,9 @@ template<class QM, class MM>
 class SQUIRE_EXPORT QMMMPotential : protected QM, protected MM
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const QMMMPotential<QM,MM>&);
+friend SQUIRE_EXPORT QDataStream& ::operator<<<>(QDataStream&, const QMMMPotential<QM,MM>&);
 
-friend QDataStream& ::operator>><>(QDataStream&, QMMMPotential<QM,MM>&);
+friend SQUIRE_EXPORT QDataStream& ::operator>><>(QDataStream&, QMMMPotential<QM,MM>&);
 
 public:
     typedef QM QMPotential;

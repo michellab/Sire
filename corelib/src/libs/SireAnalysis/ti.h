@@ -40,14 +40,14 @@ class Gradients;
 class TIPMF;
 }
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::TI&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::TI&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::TI&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::TI&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::Gradients&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::Gradients&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::Gradients&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::Gradients&);
 
-QDataStream& operator<<(QDataStream&, const SireAnalysis::TIPMF&);
-QDataStream& operator>>(QDataStream&, SireAnalysis::TIPMF&);
+SIREANALYSIS_EXPORT QDataStream& operator<<(QDataStream&, const SireAnalysis::TIPMF&);
+SIREANALYSIS_EXPORT QDataStream& operator>>(QDataStream&, SireAnalysis::TIPMF&);
 
 namespace SireAnalysis
 {
@@ -64,8 +64,8 @@ using SireUnits::Dimension::MolarEnergy;
 class SIREANALYSIS_EXPORT TIPMF : public SireBase::ConcreteProperty<TIPMF,PMF>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TIPMF&);
-friend QDataStream& ::operator>>(QDataStream&, TIPMF&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator<<(QDataStream&, const TIPMF&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator>>(QDataStream&, TIPMF&);
 
 public:
     TIPMF();
@@ -136,8 +136,8 @@ class SIREANALYSIS_EXPORT Gradients
         : public SireBase::ConcreteProperty<Gradients,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Gradients&);
-friend QDataStream& ::operator>>(QDataStream&, Gradients&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator<<(QDataStream&, const Gradients&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator>>(QDataStream&, Gradients&);
 
 public:
     Gradients();
@@ -227,8 +227,8 @@ private:
 class SIREANALYSIS_EXPORT TI : public SireBase::ConcreteProperty<TI,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TI&);
-friend QDataStream& ::operator>>(QDataStream&, TI&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator<<(QDataStream&, const TI&);
+friend SIREANALYSIS_EXPORT QDataStream& ::operator>>(QDataStream&, TI&);
 
 public:
     TI();

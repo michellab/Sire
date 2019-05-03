@@ -36,7 +36,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<Range> r_range( MAGIC_ONLY, "SireBase::Range" );
 
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const Range &range)
+QDataStream &operator<<(QDataStream &ds, const Range &range)
 {
     writeHeader(ds, r_range, 1);
     
@@ -45,7 +45,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds, const Range &range)
     return ds;
 }
 
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds, Range &range)
+QDataStream &operator>>(QDataStream &ds, Range &range)
 {
     VersionID v = readHeader(ds, r_range);
     

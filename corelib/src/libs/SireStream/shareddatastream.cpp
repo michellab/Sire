@@ -362,14 +362,14 @@ struct GetQStringPointer
 
 
 
-SharedDataStream SIRESTREAM_EXPORT &operator<<(SharedDataStream &sds, 
+SharedDataStream &operator<<(SharedDataStream &sds, 
                                                const QString &string)
 {
     sds.sharedSave<QString, GetQStringPointer>( shareString(string) );
     return sds;
 }
 
-SharedDataStream SIRESTREAM_EXPORT &operator>>(SharedDataStream &sds, QString &string)
+SharedDataStream &operator>>(SharedDataStream &sds, QString &string)
 {
     sds.sharedLoad<QString, GetQStringPointer>(string);
     string = shareString(string);

@@ -79,7 +79,9 @@ namespace bp = boost::python;
 
 #include "expression.h"
 
-#include "SireCAS/errors.h"
+#include "SireMaths/complex.h"
+
+#include "SireMaths/maths.h"
 
 #include "SireStream/datastream.h"
 
@@ -89,15 +91,65 @@ namespace bp = boost::python;
 
 #include "expression.h"
 
-#include "expressionbase.h"
-
 #include "functions.h"
+
+#include "i.h"
 
 #include "identities.h"
 
+#include "integrationconstant.h"
+
+#include "power.h"
+
+#include "powerconstant.h"
+
+#include "product.h"
+
+#include "sum.h"
+
+#include "symbol.h"
+
+#include "symbols.h"
+
 #include "values.h"
 
+#include "expression.h"
+
+#include "SireMaths/complex.h"
+
+#include "SireMaths/maths.h"
+
+#include "SireStream/datastream.h"
+
+#include "complexvalues.h"
+
 #include "exbase.h"
+
+#include "expression.h"
+
+#include "functions.h"
+
+#include "i.h"
+
+#include "identities.h"
+
+#include "integrationconstant.h"
+
+#include "power.h"
+
+#include "powerconstant.h"
+
+#include "product.h"
+
+#include "sum.h"
+
+#include "symbol.h"
+
+#include "symbols.h"
+
+#include "values.h"
+
+#include "expression.h"
 
 #include "SireMaths/complex.h"
 
@@ -714,6 +766,210 @@ namespace bp = boost::python;
 #include "values.h"
 
 #include "exbase.h"
+
+#include "SireMaths/complex.h"
+
+#include "SireMaths/maths.h"
+
+#include "SireStream/datastream.h"
+
+#include "complexvalues.h"
+
+#include "exbase.h"
+
+#include "expression.h"
+
+#include "functions.h"
+
+#include "i.h"
+
+#include "identities.h"
+
+#include "integrationconstant.h"
+
+#include "power.h"
+
+#include "powerconstant.h"
+
+#include "product.h"
+
+#include "sum.h"
+
+#include "symbol.h"
+
+#include "symbols.h"
+
+#include "values.h"
+
+#include "expression.h"
+
+#include "SireCAS/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "complexvalues.h"
+
+#include "exbase.h"
+
+#include "expression.h"
+
+#include "expressionbase.h"
+
+#include "functions.h"
+
+#include "identities.h"
+
+#include "values.h"
+
+#include "exbase.h"
+
+#include "SireMaths/complex.h"
+
+#include "SireMaths/maths.h"
+
+#include "SireStream/datastream.h"
+
+#include "complexvalues.h"
+
+#include "exbase.h"
+
+#include "expression.h"
+
+#include "functions.h"
+
+#include "i.h"
+
+#include "identities.h"
+
+#include "integrationconstant.h"
+
+#include "power.h"
+
+#include "powerconstant.h"
+
+#include "product.h"
+
+#include "sum.h"
+
+#include "symbol.h"
+
+#include "symbols.h"
+
+#include "values.h"
+
+#include "expression.h"
+
+#include "SireCAS/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "complexvalues.h"
+
+#include "exbase.h"
+
+#include "expression.h"
+
+#include "expressionbase.h"
+
+#include "functions.h"
+
+#include "identities.h"
+
+#include "values.h"
+
+#include "exbase.h"
+
+#include "SireMaths/complex.h"
+
+#include "SireMaths/maths.h"
+
+#include "SireStream/datastream.h"
+
+#include "complexvalues.h"
+
+#include "exbase.h"
+
+#include "expression.h"
+
+#include "functions.h"
+
+#include "i.h"
+
+#include "identities.h"
+
+#include "integrationconstant.h"
+
+#include "power.h"
+
+#include "powerconstant.h"
+
+#include "product.h"
+
+#include "sum.h"
+
+#include "symbol.h"
+
+#include "symbols.h"
+
+#include "values.h"
+
+#include "expression.h"
+
+#include "SireCAS/errors.h"
+
+#include "SireStream/datastream.h"
+
+#include "complexvalues.h"
+
+#include "exbase.h"
+
+#include "expression.h"
+
+#include "expressionbase.h"
+
+#include "functions.h"
+
+#include "identities.h"
+
+#include "values.h"
+
+#include "exbase.h"
+
+#include "SireMaths/complex.h"
+
+#include "SireMaths/maths.h"
+
+#include "SireStream/datastream.h"
+
+#include "complexvalues.h"
+
+#include "exbase.h"
+
+#include "expression.h"
+
+#include "functions.h"
+
+#include "i.h"
+
+#include "identities.h"
+
+#include "integrationconstant.h"
+
+#include "power.h"
+
+#include "powerconstant.h"
+
+#include "product.h"
+
+#include "sum.h"
+
+#include "symbol.h"
+
+#include "symbols.h"
+
+#include "values.h"
+
+#include "expression.h"
 
 #include "SireMaths/complex.h"
 
@@ -870,6 +1126,32 @@ void register_free_functions(){
     
     }
 
+    { //::cbrt
+    
+        typedef float ( *cbrt_function_type )( float );
+        cbrt_function_type cbrt_function_value( &::cbrt );
+        
+        bp::def( 
+            "cbrt"
+            , cbrt_function_value
+            , ( bp::arg("__lcpp_x") )
+            , "" );
+    
+    }
+
+    { //::cbrt
+    
+        typedef long double ( *cbrt_function_type )( long double );
+        cbrt_function_type cbrt_function_value( &::cbrt );
+        
+        bp::def( 
+            "cbrt"
+            , cbrt_function_value
+            , ( bp::arg("__lcpp_x") )
+            , "" );
+    
+    }
+
     { //::SireCAS::cbrt
     
         typedef ::SireCAS::Expression ( *cbrt_function_type )( ::SireCAS::Expression const & );
@@ -892,6 +1174,32 @@ void register_free_functions(){
             "pow"
             , pow_function_value
             , ( bp::arg("arg0"), bp::arg("arg1") )
+            , "" );
+    
+    }
+
+    { //::pow
+    
+        typedef float ( *pow_function_type )( float,float );
+        pow_function_type pow_function_value( &::pow );
+        
+        bp::def( 
+            "pow"
+            , pow_function_value
+            , ( bp::arg("__lcpp_x"), bp::arg("__lcpp_y") )
+            , "" );
+    
+    }
+
+    { //::pow
+    
+        typedef long double ( *pow_function_type )( long double,long double );
+        pow_function_type pow_function_value( &::pow );
+        
+        bp::def( 
+            "pow"
+            , pow_function_value
+            , ( bp::arg("__lcpp_x"), bp::arg("__lcpp_y") )
             , "" );
     
     }
@@ -1048,6 +1356,32 @@ void register_free_functions(){
             "sqrt"
             , sqrt_function_value
             , ( bp::arg("arg0") )
+            , "" );
+    
+    }
+
+    { //::sqrt
+    
+        typedef float ( *sqrt_function_type )( float );
+        sqrt_function_type sqrt_function_value( &::sqrt );
+        
+        bp::def( 
+            "sqrt"
+            , sqrt_function_value
+            , ( bp::arg("__lcpp_x") )
+            , "" );
+    
+    }
+
+    { //::sqrt
+    
+        typedef long double ( *sqrt_function_type )( long double );
+        sqrt_function_type sqrt_function_value( &::sqrt );
+        
+        bp::def( 
+            "sqrt"
+            , sqrt_function_value
+            , ( bp::arg("__lcpp_x") )
             , "" );
     
     }

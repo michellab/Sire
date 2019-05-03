@@ -43,8 +43,8 @@ namespace SireMol
 class ImproperID;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ImproperID&);
-QDataStream& operator>>(QDataStream&, SireMol::ImproperID&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ImproperID&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ImproperID&);
 
 namespace SireMaths
 {
@@ -89,8 +89,8 @@ using boost::tuple;
 class SIREMOL_EXPORT ImproperID : public SireID::ID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ImproperID&);
-friend QDataStream& ::operator>>(QDataStream&, ImproperID&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ImproperID&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ImproperID&);
 
 public:
     ImproperID();
@@ -122,7 +122,9 @@ public:
     
     bool operator==(const ImproperID &other) const;
     bool operator!=(const ImproperID &other) const;
-    
+
+    bool equivalent(const ImproperID &other) const;
+
     tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx> 
     map(const MoleculeInfoData &molinfo) const;
     

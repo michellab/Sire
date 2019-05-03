@@ -43,7 +43,7 @@ using namespace SireCAS;
 static const RegisterMetaType<Exp> r_exp;
 
 /** Serialise an Exp to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Exp &exp)
+QDataStream &operator<<(QDataStream &ds, const Exp &exp)
 {
     writeHeader(ds, r_exp, 1)
           << exp.pwr << static_cast<const PowerFunction&>(exp);
@@ -52,7 +52,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Exp &exp)
 }
 
 /** Deserialise an Exp from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Exp &exp)
+QDataStream &operator>>(QDataStream &ds, Exp &exp)
 {
     VersionID v = readHeader(ds, r_exp);
 
@@ -155,7 +155,7 @@ const char* Exp::typeName()
 static const RegisterMetaType<Ln> r_ln;
 
 /** Serialise to a binary datastream */
-QDataStream SIRE_EXPORT &operator<<(QDataStream &ds, const Ln &ln)
+QDataStream &operator<<(QDataStream &ds, const Ln &ln)
 {
     writeHeader(ds, r_ln, 1) << static_cast<const SingleFunc&>(ln);
 
@@ -163,7 +163,7 @@ QDataStream SIRE_EXPORT &operator<<(QDataStream &ds, const Ln &ln)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIRE_EXPORT &operator>>(QDataStream &ds, Ln &ln)
+QDataStream &operator>>(QDataStream &ds, Ln &ln)
 {
     VersionID v = readHeader(ds, r_ln);
 

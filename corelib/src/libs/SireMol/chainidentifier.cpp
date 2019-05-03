@@ -45,7 +45,7 @@ using namespace SireStream;
 static const RegisterMetaType<ChainIdentifier> r_chainid;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChainIdentifier &chainid)
+QDataStream &operator<<(QDataStream &ds, const ChainIdentifier &chainid)
 {
     writeHeader(ds, r_chainid, 1);
     
@@ -55,7 +55,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChainIdentifier &c
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ChainIdentifier &chainid)
+QDataStream &operator>>(QDataStream &ds, ChainIdentifier &chainid)
 {
     VersionID v = readHeader(ds, r_chainid);
     
@@ -216,7 +216,7 @@ const char* ChainIdentifier::typeName()
 static const RegisterMetaType<ChainIdx> r_chainidx;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChainIdx &chainidx)
+QDataStream &operator<<(QDataStream &ds, const ChainIdx &chainidx)
 {
     writeHeader(ds, r_chainidx, 1);
     
@@ -226,7 +226,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChainIdx &chainidx
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ChainIdx &chainidx)
+QDataStream &operator>>(QDataStream &ds, ChainIdx &chainidx)
 {
     VersionID v = readHeader(ds, r_chainidx);
     
@@ -301,7 +301,7 @@ const char* ChainIdx::typeName()
 static const RegisterMetaType<ChainName> r_chainname;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChainName &chainname)
+QDataStream &operator<<(QDataStream &ds, const ChainName &chainname)
 {
     writeHeader(ds, r_chainname, 1);
     
@@ -311,7 +311,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ChainName &chainna
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ChainName &chainname)
+QDataStream &operator>>(QDataStream &ds, ChainName &chainname)
 {
     VersionID v = readHeader(ds, r_chainname);
     

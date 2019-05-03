@@ -122,7 +122,7 @@ namespace frenergydt{
 using namespace frenergydt;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyDT &velver)
+QDataStream &operator<<(QDataStream &ds, const OpenMMFrEnergyDT &velver)
 {
 	writeHeader(ds, r_openmmint, 1);
 
@@ -143,7 +143,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyDT 
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyDT &velver)
+QDataStream &operator>>(QDataStream &ds, OpenMMFrEnergyDT &velver)
 {
 	VersionID v = readHeader(ds, r_openmmint);
 
@@ -1344,7 +1344,7 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 		GB_acc = GB_acc + minus;
 		
 
-		if(isnormal(GF_acc==0) || isnormal(GB_acc==0)){ 
+		if(!isnormal(GF_acc) || !isnormal(GB_acc)){ 
 			throw SireError::program_bug(QObject::tr("******************* Not a Number. Error! *******************"), CODELOC);
 		}
 

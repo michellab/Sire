@@ -54,14 +54,14 @@ class ResIdxAtomNameMatcher;
 class ResIdxAtomMCSMatcher;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomResultMatcher&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomResultMatcher&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomResultMatcher&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomResultMatcher&);
 
-QDataStream& operator<<(QDataStream&, const SireMol::AtomMatchInverter&);
-QDataStream& operator>>(QDataStream&, SireMol::AtomMatchInverter&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::AtomMatchInverter&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::AtomMatchInverter&);
 
 namespace SireMol
 {
@@ -82,8 +82,8 @@ using SireBase::PropertyMap;
 class SIREMOL_EXPORT AtomMatcher : public SireBase::Property
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomMatcher&);
-friend QDataStream& ::operator>>(QDataStream&, AtomMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomMatcher&);
 
 public:
     AtomMatcher();
@@ -179,8 +179,8 @@ class SIREMOL_EXPORT AtomResultMatcher
          : public SireBase::ConcreteProperty<AtomResultMatcher,AtomMatcher>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomResultMatcher&);
-friend QDataStream& ::operator>>(QDataStream&, AtomResultMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomResultMatcher&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomResultMatcher&);
 
 public:
     AtomResultMatcher();
@@ -231,8 +231,8 @@ class SIREMOL_EXPORT AtomMatchInverter
          : public SireBase::ConcreteProperty<AtomMatchInverter,AtomMatcher>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const AtomMatchInverter&);
-friend QDataStream& ::operator>>(QDataStream&, AtomMatchInverter&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const AtomMatchInverter&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, AtomMatchInverter&);
 
 public:
     AtomMatchInverter();

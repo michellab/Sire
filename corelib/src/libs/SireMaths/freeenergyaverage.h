@@ -43,11 +43,11 @@ class FreeEnergyAverage;
 class BennettsFreeEnergyAverage;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMaths::FreeEnergyAverage&);
-QDataStream& operator>>(QDataStream&, SireMaths::FreeEnergyAverage&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::FreeEnergyAverage&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::FreeEnergyAverage&);
 
-QDataStream& operator<<(QDataStream&, const SireMaths::BennettsFreeEnergyAverage&);
-QDataStream& operator>>(QDataStream&, SireMaths::BennettsFreeEnergyAverage&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::BennettsFreeEnergyAverage&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::BennettsFreeEnergyAverage&);
 
 namespace SireMaths
 {
@@ -63,8 +63,8 @@ class SIREMATHS_EXPORT FreeEnergyAverage
            : public SireBase::ConcreteProperty<FreeEnergyAverage,ExpAverage>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const FreeEnergyAverage&);
-friend QDataStream& ::operator>>(QDataStream&, FreeEnergyAverage&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const FreeEnergyAverage&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, FreeEnergyAverage&);
 
 public:
     FreeEnergyAverage();
@@ -147,8 +147,8 @@ class SIREMATHS_EXPORT BennettsFreeEnergyAverage
        : public SireBase::ConcreteProperty<BennettsFreeEnergyAverage,FreeEnergyAverage>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const BennettsFreeEnergyAverage&);
-friend QDataStream& ::operator>>(QDataStream&, BennettsFreeEnergyAverage&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const BennettsFreeEnergyAverage&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, BennettsFreeEnergyAverage&);
 
 public:
     BennettsFreeEnergyAverage();

@@ -49,14 +49,14 @@ class LJComponent;
 class CLJComponent;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CoulombComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::CoulombComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CoulombComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CoulombComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::LJComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::LJComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::LJComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::LJComponent&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJComponent&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJComponent&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJComponent&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJComponent&);
 
 namespace SireFF
 {
@@ -160,8 +160,8 @@ public:
 class SIREMM_EXPORT CLJComponent : public SireFF::FFComponent
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJComponent&);
-friend QDataStream& ::operator>>(QDataStream&, CLJComponent&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJComponent&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJComponent&);
 
 public:
     CLJComponent(const FFName &name = FFName());

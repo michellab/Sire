@@ -33,14 +33,14 @@ using namespace SireMol;
 
 static const RegisterMetaType<CGAtomIdx> r_cgatomidx;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                        const CGAtomIdx &cgatomidx)
 {
     ds << cgatomidx._cgidx << cgatomidx._atmidx;
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        CGAtomIdx &cgatomidx)
 {
     ds >> cgatomidx._cgidx >> cgatomidx._atmidx;
@@ -126,7 +126,7 @@ CGAtomIdx CGIdx::operator+(const SireID::Index &other) const
 namespace SireMol
 {
 
-CGAtomIdx SIREMOL_EXPORT operator+(const SireID::Index &idx, const CGIdx &cgidx)
+CGAtomIdx operator+(const SireID::Index &idx, const CGIdx &cgidx)
 {
     return CGAtomIdx(cgidx, idx);
 }

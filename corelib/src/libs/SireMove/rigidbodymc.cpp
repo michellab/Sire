@@ -71,7 +71,7 @@ using namespace SireMaths;
 static const RegisterMetaType<RigidBodyMC> r_rbmc;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const RigidBodyMC &rbmc)
 {
     writeHeader(ds, r_rbmc, 7);
@@ -100,7 +100,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, RigidBodyMC &rbmc)
+QDataStream &operator>>(QDataStream &ds, RigidBodyMC &rbmc)
 {
     VersionID v = readHeader(ds, r_rbmc);
 

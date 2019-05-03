@@ -54,8 +54,8 @@ template<class T>
 class BeadProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::BeadProp&);
-QDataStream& operator>>(QDataStream&, SireMol::BeadProp&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::BeadProp&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::BeadProp&);
 
 template<class T>
 QDataStream& operator<<(QDataStream&, const SireMol::BeadProperty<T>&);
@@ -74,8 +74,8 @@ typedef BeadProperty<QVariant> BeadVariantProperty;
 class SIREMOL_EXPORT BeadProp : public MolViewProperty
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const BeadProp&);
-friend QDataStream& ::operator>>(QDataStream&, BeadProp&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const BeadProp&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, BeadProp&);
 
 public:
     BeadProp();
@@ -123,8 +123,8 @@ class SIREMOL_EXPORT BeadProperty
     : public SireBase::ConcreteProperty<BeadProperty<T>, BeadProp>
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const BeadProperty<T>&);
-friend QDataStream& ::operator>><>(QDataStream&, BeadProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const BeadProperty<T>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, BeadProperty<T>&);
 
 public:
     BeadProperty();

@@ -455,6 +455,18 @@ void register_ConnectivityBase_class(){
         
         }
         { //::SireMol::ConnectivityBase::inRing
+
+            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomIdx ) const;
+            inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
+
+            ConnectivityBase_exposer.def(
+                "inRing"
+                , inRing_function_value
+                , ( bp::arg("atom") )
+                , "This function returns whether or not the atom is in a ring" );
+
+        }
+        { //::SireMol::ConnectivityBase::inRing
         
             typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
@@ -463,7 +475,7 @@ void register_ConnectivityBase_class(){
                 "inRing"
                 , inRing_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1") )
-                , "This function returns whether or not the two passed atoms are part of\nthe same ring" );
+                , "This function returns whether or not the two passed atoms are connected\nvia a ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -475,7 +487,7 @@ void register_ConnectivityBase_class(){
                 "inRing"
                 , inRing_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
-                , "This function returns whether or not the three passed atoms are all part of\nthe same ring" );
+                , "This function returns whether or not the three passed atoms are connected\nvia a ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -487,7 +499,19 @@ void register_ConnectivityBase_class(){
                 "inRing"
                 , inRing_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") )
-                , "This function returns whether or not the four passed atoms are part of\nthe same ring" );
+                , "This function returns whether or not the four passed atoms are connected\nvia a same ring" );
+
+        }
+        { //::SireMol::ConnectivityBase::inRing
+
+            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomID const & ) const;
+            inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
+
+            ConnectivityBase_exposer.def(
+                "inRing"
+                , inRing_function_value
+                , ( bp::arg("atom") )
+                , "This function returns whether or not the atom is in a ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -499,7 +523,7 @@ void register_ConnectivityBase_class(){
                 "inRing"
                 , inRing_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1") )
-                , "This function returns whether or not the two passed atoms are part of\nthe same ring" );
+                , "This function returns whether or not the two passed atoms are connected\nvia a ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -511,7 +535,7 @@ void register_ConnectivityBase_class(){
                 "inRing"
                 , inRing_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
-                , "This function returns whether or not the three passed atoms are all part of\nthe same ring" );
+                , "This function returns whether or not the three passed atoms are connected\nvia a ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -523,7 +547,7 @@ void register_ConnectivityBase_class(){
                 "inRing"
                 , inRing_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") )
-                , "This function returns whether or not the two passed atoms are part of\nthe same ring" );
+                , "This function returns whether or not the two passed atoms are connected\nvia a ring" );
         
         }
         { //::SireMol::ConnectivityBase::inRing

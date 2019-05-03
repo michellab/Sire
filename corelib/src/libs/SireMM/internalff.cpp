@@ -2087,7 +2087,7 @@ void InternalPotential::calculateForce(const InternalPotential::Molecule &molecu
 static const RegisterMetaType<InternalFF> r_internalff;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const InternalFF &internalff)
 {
     writeHeader(ds, r_internalff, 2);
@@ -2104,7 +2104,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       InternalFF &internalff)
 {
     VersionID v = readHeader(ds, r_internalff);

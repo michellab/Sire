@@ -50,8 +50,8 @@ namespace SireIO
 class TrajectoryMonitor;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::TrajectoryMonitor&);
-QDataStream& operator>>(QDataStream&, SireIO::TrajectoryMonitor&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::TrajectoryMonitor&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::TrajectoryMonitor&);
 
 class QTemporaryFile;
 
@@ -75,8 +75,8 @@ class SIREIO_EXPORT TrajectoryMonitor
     : public SireBase::ConcreteProperty<TrajectoryMonitor,SireSystem::SystemMonitor>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TrajectoryMonitor&);
-friend QDataStream& ::operator>>(QDataStream&, TrajectoryMonitor&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const TrajectoryMonitor&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, TrajectoryMonitor&);
 
 public:
     TrajectoryMonitor();

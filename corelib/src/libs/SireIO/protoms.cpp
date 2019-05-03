@@ -128,7 +128,7 @@ PropertyName ProtoMSParameters::perts_property( "perturbations" );
 static const RegisterMetaType<ProtoMS> r_protoms(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const ProtoMS &protoms)
+QDataStream &operator<<(QDataStream &ds, const ProtoMS &protoms)
 {
     writeHeader(ds, r_protoms, 1);
     
@@ -140,7 +140,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const ProtoMS &protoms)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, ProtoMS &protoms)
+QDataStream &operator>>(QDataStream &ds, ProtoMS &protoms)
 {
     VersionID v = readHeader(ds, r_protoms);
     
@@ -557,7 +557,7 @@ void ProtoMS::processAtomPertLine(const QStringList &words,
                                   const QString &final_charge_property,
                                   const QString &initial_lj_property, 
                                   const QString &final_lj_property,
-                                  detail::ProtoMSWorkspace &workspace) const
+                                  ProtoMSWorkspace &workspace) const
 {
     AtomEditor atom;
     

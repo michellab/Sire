@@ -53,7 +53,7 @@ using boost::tuple;
 static const RegisterMetaType<CombinedSpace> r_combinedspace;
 
 /** Serialise to a binary datastream */
-QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const CombinedSpace &combined)
+QDataStream &operator<<(QDataStream &ds, const CombinedSpace &combined)
 {
     writeHeader(ds, r_combinedspace, 1);
     
@@ -65,7 +65,7 @@ QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const CombinedSpace &com
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREVOL_EXPORT &operator>>(QDataStream &ds, CombinedSpace &combined)
+QDataStream &operator>>(QDataStream &ds, CombinedSpace &combined)
 {
     VersionID v = readHeader(ds, r_combinedspace);
 

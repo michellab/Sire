@@ -61,8 +61,8 @@ template<class GROUP>
 class SIREMOL_EXPORT ResIn : public ResID
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const ResIn<GROUP>&);
-friend QDataStream& ::operator>><>(QDataStream&, ResIn<GROUP>&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<<>(QDataStream&, const ResIn<GROUP>&);
+friend SIREMOL_EXPORT QDataStream& ::operator>><>(QDataStream&, ResIn<GROUP>&);
 
 public:
     ResIn();

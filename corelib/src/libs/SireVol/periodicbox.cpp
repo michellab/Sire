@@ -59,7 +59,7 @@ using namespace SireStream;
 static const RegisterMetaType<PeriodicBox> r_box;
 
 /** Serialise to a binary datastream */
-QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const PeriodicBox &box)
+QDataStream &operator<<(QDataStream &ds, const PeriodicBox &box)
 {
     writeHeader(ds, r_box, 2)
                << box.boxlength
@@ -71,7 +71,7 @@ QDataStream SIREVOL_EXPORT &operator<<(QDataStream &ds, const PeriodicBox &box)
 }
 
 /** Deserialise from a binary datastream */
-QDataStream SIREVOL_EXPORT &operator>>(QDataStream &ds, PeriodicBox &box)
+QDataStream &operator>>(QDataStream &ds, PeriodicBox &box)
 {
     VersionID v = readHeader(ds, r_box);
     

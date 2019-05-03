@@ -68,7 +68,7 @@ using namespace SireStream;
 static const RegisterMetaType<Moves> r_moves( MAGIC_ONLY, "SireMove::Moves" );
                                                       
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Moves &moves)
+QDataStream &operator<<(QDataStream &ds, const Moves &moves)
 {
     writeHeader(ds, r_moves, 2);
     
@@ -79,7 +79,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Moves &moves)
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, Moves &moves)
+QDataStream &operator>>(QDataStream &ds, Moves &moves)
 {
     VersionID v = readHeader(ds, r_moves);
     
@@ -102,7 +102,7 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, Moves &moves)
 }
 
 /** Constructor */
-Moves::Moves() : Property(), acceptable_delta(1e-2), check_running_total(true)
+Moves::Moves() : Property(), acceptable_delta(0.1), check_running_total(true)
 {}
 
 /** Copy constructor */
@@ -575,7 +575,7 @@ void Moves::postCheck(System &system) const
                     "The running total energy (%1 kcal mol-1) disagrees with the "
                     "total energy as calculated from scratch (%2 kcal mol-1). "
                     "Energy components which show disagreements greater than %3 kcal mol-1 "
-                    "are listed below:\n")
+                    "are listed below:%4\n")
                         .arg(oldnrgs[system.totalComponent()])
                         .arg(newnrgs[system.totalComponent()])
                         .arg(acceptable_delta)
@@ -591,7 +591,7 @@ void Moves::postCheck(System &system) const
 static const RegisterMetaType<SameMoves> r_samemoves;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const SameMoves &samemoves)
+QDataStream &operator<<(QDataStream &ds, const SameMoves &samemoves)
 {
     writeHeader(ds, r_samemoves, 2);
     
@@ -603,7 +603,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const SameMoves &samemo
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, SameMoves &samemoves)
+QDataStream &operator>>(QDataStream &ds, SameMoves &samemoves)
 {
     VersionID v = readHeader(ds, r_samemoves);
     

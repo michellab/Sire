@@ -58,7 +58,7 @@ using namespace SireStream;
 static const RegisterMetaType<PrefSampler> r_prefsampler;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const PrefSampler &prefsampler)
+QDataStream &operator<<(QDataStream &ds, const PrefSampler &prefsampler)
 {
     writeHeader(ds, r_prefsampler, 2);
     
@@ -84,7 +84,7 @@ static Expression defaultExpression()
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, PrefSampler &prefsampler)
+QDataStream &operator>>(QDataStream &ds, PrefSampler &prefsampler)
 {
     VersionID v = readHeader(ds, r_prefsampler);
     

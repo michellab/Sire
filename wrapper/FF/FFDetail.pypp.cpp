@@ -42,7 +42,7 @@ void register_FFDetail_class(){
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
                 , ( bp::arg("other") )
-                , "" );
+                , "Assert that this forcefield is compatible with other" );
         
         }
         { //::SireFF::FFDetail::forcefields

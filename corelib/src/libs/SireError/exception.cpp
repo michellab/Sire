@@ -29,14 +29,22 @@
 #include "SireError/exception.h"
 #include "SireStream/datastream.h"
 
+#include "SireError/printerror.h"
 #include "SireError/errors.h"
 
 #include "getbacktrace.h"
+
+#include <sstream>
 
 #include <QDataStream>
 #include <QThreadStorage>
 
 #include <QDebug>
+
+#ifdef _HAVE_BOOST_STACKTRACE_HPP_
+#define BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED 1
+#include <boost/stacktrace.hpp>
+#endif
 
 using namespace SireError;
 using namespace SireStream;
@@ -52,22 +60,22 @@ namespace detail
     QHash< QString, QSet<QString> > leaf_classes;
     QSet<QString> rootless_classes;
 
-    const QHash< QString, QSet<QString> > SIRE_EXPORT branchClasses()
+    const QHash< QString, QSet<QString> > branchClasses()
     {
         return branch_classes;
     }
 
-    const QHash< QString, QSet<QString> > SIRE_EXPORT leafClasses()
+    const QHash< QString, QSet<QString> > leafClasses()
     {
         return leaf_classes;
     }
 
-    const QSet<QString> SIRE_EXPORT rootlessClasses()
+    const QSet<QString> rootlessClasses()
     {
         return rootless_classes;
     }
 
-    void SIRE_EXPORT registerLeaf(const QString &type_name, const char *root)
+    void registerLeaf(const QString &type_name, const char *root)
     {
         QLatin1String r(root);
         if (not leaf_classes.contains(r))
@@ -78,7 +86,7 @@ namespace detail
         leaf_classes[r].insert(type_name);
     }
     
-    void SIRE_EXPORT registerBranch(const QString &type_name, const char *root)
+    void registerBranch(const QString &type_name, const char *root)
     {
         QLatin1String r(root);
         if (not branch_classes.contains(r))
@@ -89,7 +97,7 @@ namespace detail
         branch_classes[r].insert(type_name);
     }
     
-    void SIRE_EXPORT registerRootless(const QString &type_name)
+    void registerRootless(const QString &type_name)
     {
         rootless_classes.insert(type_name);
     }
@@ -101,20 +109,20 @@ namespace SireError
 {
 
 /** Set the string that SireError will use to identify this process */
-void SIREERROR_EXPORT setProcessString(const QString &s)
+void setProcessString(const QString &s)
 {
     *(processString()) = s;
 }
 
 /** Set the string that SireError will used to identify this thread
     within the process */
-void SIREERROR_EXPORT setThreadString(const QString &s)
+void setThreadString(const QString &s)
 {
     pidStrings()->setLocalData( new QString(s) );
 }
 
 /** Return the string used by SireError to identify the process */
-QString SIREERROR_EXPORT getProcessString()
+QString getProcessString()
 {
     QString *s = processString();
     
@@ -127,7 +135,7 @@ QString SIREERROR_EXPORT getProcessString()
 }
 
 /** Return the string used to identify a particular thread */
-QString SIREERROR_EXPORT getThreadString()
+QString getThreadString()
 {
     QThreadStorage<QString*> *store = pidStrings();
     
@@ -143,7 +151,7 @@ QString SIREERROR_EXPORT getThreadString()
 
 /** Return the string used by SireError to identify a particular
     thread within a process */
-QString SIREERROR_EXPORT getPIDString()
+QString getPIDString()
 {
     QThreadStorage<QString*> *store = pidStrings();
     
@@ -228,8 +236,14 @@ exception::exception(QString error, QString place) : err(error), plce(place)
     if (FastExceptionFlag::enable_fast_exceptions)
         return;
 
+    #if defined(SIRE_ENABLE_BACKTRACE) || defined(SIRE_ENABLE_BOOST_BACKTRACE)
     #ifdef SIRE_ENABLE_BACKTRACE
         bt = getBackTrace();
+    #else
+        std::stringstream ss;
+        ss << boost::stacktrace::stacktrace();
+        bt = QString::fromStdString(ss.str()).split("\n");
+    #endif
         pidstr = getPIDString();
     #endif
 }
@@ -372,7 +386,7 @@ QString exception::from() const throw()
 /** Return the function backtrace when the exception was constructed */
 QStringList exception::trace() const throw()
 {
-    #ifdef SIRE_ENABLE_BACKTRACE
+    #if defined(SIRE_ENABLE_BACKTRACE) || defined(SIRE_ENABLE_BOOST_BACKTRACE)
         return bt;
     #else
         QStringList btrace;

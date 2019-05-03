@@ -42,11 +42,11 @@ class PowerFunction;
 class Power;
 }
 
-QDataStream& operator<<(QDataStream&, const SireCAS::PowerFunction&);
-QDataStream& operator>>(QDataStream&, SireCAS::PowerFunction&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::PowerFunction&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::PowerFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireCAS::Power&);
-QDataStream& operator>>(QDataStream&, SireCAS::Power&);
+SIRECAS_EXPORT QDataStream& operator<<(QDataStream&, const SireCAS::Power&);
+SIRECAS_EXPORT QDataStream& operator>>(QDataStream&, SireCAS::Power&);
 
 namespace SireCAS
 {
@@ -59,8 +59,8 @@ This is the base class of all power expressions, e.g. x^y (all of the form core^
 class SIRECAS_EXPORT PowerFunction : public ExBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const PowerFunction&);
-friend QDataStream& ::operator>>(QDataStream&, PowerFunction&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const PowerFunction&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, PowerFunction&);
 
 public:
     PowerFunction() : ExBase()
@@ -122,8 +122,8 @@ This class represents an expression raised to a generic power (e.g. x^y). This i
 class SIRECAS_EXPORT Power : public PowerFunction
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Power&);
-friend QDataStream& ::operator>>(QDataStream&, Power&);
+friend SIRECAS_EXPORT QDataStream& ::operator<<(QDataStream&, const Power&);
+friend SIRECAS_EXPORT QDataStream& ::operator>>(QDataStream&, Power&);
 
 public:
     Power();

@@ -45,8 +45,8 @@ namespace SireBase
     class Version;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::Version&);
-QDataStream& operator>>(QDataStream&, SireBase::Version&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::Version&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::Version&);
 
 namespace SireBase
 {
@@ -80,8 +80,8 @@ public:
 class SIREBASE_EXPORT Version
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Version&);
-friend QDataStream& ::operator>>(QDataStream&, Version&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const Version&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, Version&);
 
 public:
     Version(quint64 major=0, quint64 minor=0);

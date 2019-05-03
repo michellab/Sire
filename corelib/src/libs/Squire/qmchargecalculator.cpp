@@ -49,7 +49,7 @@ static const RegisterMetaType<QMChargeCalculator> r_chgcalc( MAGIC_ONLY,
                                                     QMChargeCalculator::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const QMChargeCalculator &chgcalc)
 {
     writeHeader(ds, r_chgcalc, 2);
@@ -61,7 +61,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                           QMChargeCalculator &chgcalc)
 {
     VersionID v = readHeader(ds, r_chgcalc);
@@ -151,7 +151,7 @@ const NullQMChargeCalculator& QMChargeCalculator::null()
 static const RegisterMetaType<NullQMChargeCalculator> r_nullchg;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                           const NullQMChargeCalculator &nullchg)
 {
     writeHeader(ds, r_nullchg, 1);
@@ -162,7 +162,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                           NullQMChargeCalculator &nullchg)
 {
     VersionID v = readHeader(ds, r_nullchg);

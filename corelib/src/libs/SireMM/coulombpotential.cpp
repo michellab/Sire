@@ -125,7 +125,7 @@ namespace SireFF
 }
 
 /** Streaming functions for ChargeParameter */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                       const SireMM::detail::ChargeParameter &chgparam)
 {
     ds << chgparam.reduced_charge;
@@ -133,7 +133,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                       SireMM::detail::ChargeParameter &chgparam)
 {
     ds >> chgparam.reduced_charge;
@@ -237,7 +237,7 @@ static const RegisterMetaType<CoulombPotential> r_coulpot( MAGIC_ONLY, NO_ROOT,
                                                            "SireMM::CoulombPotential" );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const CoulombPotential &coulpot)
 {
     writeHeader(ds, r_coulpot, 1);
@@ -248,7 +248,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       CoulombPotential &coulpot)
 {
     VersionID v = readHeader(ds, r_coulpot);
@@ -442,7 +442,7 @@ static const RegisterMetaType<InterCoulombPotential> r_intercoul( MAGIC_ONLY, NO
                                             InterCoulombPotential::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const InterCoulombPotential &intercoul)
 {
     writeHeader(ds, r_intercoul, 1);
@@ -453,7 +453,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       InterCoulombPotential &intercoul)
 {
     VersionID v = readHeader(ds, r_intercoul);
@@ -1637,7 +1637,7 @@ static const RegisterMetaType<IntraCoulombPotential> r_intracoul( MAGIC_ONLY, NO
                                             IntraCoulombPotential::typeName() );
 
 /** Serialise to a binary datastream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const IntraCoulombPotential &intracoul)
 {
     writeHeader(ds, r_intracoul, 1);
@@ -1648,7 +1648,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       IntraCoulombPotential &intracoul)
 {
     VersionID v = readHeader(ds, r_intracoul);

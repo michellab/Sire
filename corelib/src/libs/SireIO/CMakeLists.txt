@@ -4,6 +4,9 @@
 #
 ########################################
 
+# Export symbols when building the library
+add_definitions( "-DSIREIO_BUILD" )
+
 # Other Sire libraries
 include_directories(${CMAKE_SOURCE_DIR}/src/libs)
 
@@ -43,6 +46,7 @@ set ( SIREIO_HEADERS
       supplementary.h
       tinker.h
       trajectorymonitor.h
+      watermodel.h
       zmatrixmaker.h
     )
 
@@ -73,6 +77,7 @@ set ( SIREIO_SOURCES
       supplementary.cpp
       tinker.cpp
       trajectorymonitor.cpp    
+      watermodel.cpp
       zmatrixmaker.cpp
 
       ${SIREIO_HEADERS}

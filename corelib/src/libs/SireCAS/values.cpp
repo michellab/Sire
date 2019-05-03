@@ -38,7 +38,7 @@ using namespace SireCAS;
 static const RegisterMetaType<Values> r_values(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Values &values)
+QDataStream &operator<<(QDataStream &ds, const Values &values)
 {
     writeHeader(ds, r_values, 1);
     
@@ -57,7 +57,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Values &values)
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Values &values)
+QDataStream &operator>>(QDataStream &ds, Values &values)
 {
     VersionID v = readHeader(ds, r_values);
 
@@ -489,7 +489,7 @@ const char* Values::typeName()
 
 namespace SireCAS
 {
-    Values SIRECAS_EXPORT operator+(const SymbolValue &val0, const SymbolValue &val1)
+    Values operator+(const SymbolValue &val0, const SymbolValue &val1)
     {
         Values vals(val0);
         vals += val1;
@@ -497,21 +497,21 @@ namespace SireCAS
         return vals;
     }
 
-    Values SIRECAS_EXPORT operator+(const Values &vals, const SymbolValue &val)
+    Values operator+(const Values &vals, const SymbolValue &val)
     {
         Values new_vals(vals);
         new_vals += val;
         return new_vals;
     }
     
-    Values SIRECAS_EXPORT operator+(const SymbolValue &val, const Values &vals)
+    Values operator+(const SymbolValue &val, const Values &vals)
     {
         Values new_vals(vals);
         new_vals += val;
         return new_vals;
     }
 
-    Values SIRECAS_EXPORT operator+(const Values &vals0, const Values &vals1)
+    Values operator+(const Values &vals0, const Values &vals1)
     {
         Values new_vals(vals0);
         new_vals += vals1;

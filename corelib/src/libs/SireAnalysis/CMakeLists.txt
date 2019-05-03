@@ -4,6 +4,9 @@
 #
 ########################################
 
+# Export symbols when building the library
+add_definitions( "-DSIREANALYSIS_BUILD" )
+
 # Third Party dependencies of this module
 
 # Other Sire libraries

@@ -38,8 +38,8 @@ namespace SireBase
 class TrigArray2DBase;
 }
 
-QDataStream& operator<<(QDataStream&, const SireBase::TrigArray2DBase&);
-QDataStream& operator>>(QDataStream&, SireBase::TrigArray2DBase&);
+SIREBASE_EXPORT QDataStream& operator<<(QDataStream&, const SireBase::TrigArray2DBase&);
+SIREBASE_EXPORT QDataStream& operator>>(QDataStream&, SireBase::TrigArray2DBase&);
 
 namespace SireBase
 {
@@ -48,11 +48,11 @@ namespace SireBase
 
     @author Christopher Woods
 */
-class SIREMOL_EXPORT TrigArray2DBase
+class SIREBASE_EXPORT TrigArray2DBase
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const TrigArray2DBase&);
-friend QDataStream& ::operator>>(QDataStream&, TrigArray2DBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator<<(QDataStream&, const TrigArray2DBase&);
+friend SIREBASE_EXPORT QDataStream& ::operator>>(QDataStream&, TrigArray2DBase&);
 
 public:
     ~TrigArray2DBase();

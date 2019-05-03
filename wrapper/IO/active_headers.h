@@ -22,6 +22,7 @@
 #include "supplementary.h"
 #include "tinker.h"
 #include "trajectorymonitor.h"
+#include "watermodel.h"
 #include "zmatrixmaker.h"
 
 #endif

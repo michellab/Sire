@@ -184,7 +184,7 @@ uint Symbol::hash() const
 }
 
 /** Serialise a Symbol to a binary datastream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Symbol &sym)
+QDataStream &operator<<(QDataStream &ds, const Symbol &sym)
 {
     writeHeader(ds, r_symbol, 1) << sym.stringrep
                                  << static_cast<const ExBase&>(sym);
@@ -193,7 +193,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const Symbol &sym)
 }
 
 /** Deserialise a Symbol from a binary datastream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, Symbol &sym)
+QDataStream &operator>>(QDataStream &ds, Symbol &sym)
 {
     VersionID v = readHeader(ds, r_symbol);
 

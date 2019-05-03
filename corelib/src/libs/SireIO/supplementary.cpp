@@ -42,7 +42,7 @@ using namespace SireSystem;
 const RegisterParser<Supplementary> register_supp;
 static const RegisterMetaType<Supplementary> r_supp;
 
-QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Supplementary &supp)
+QDataStream &operator<<(QDataStream &ds, const Supplementary &supp)
 {
     writeHeader(ds, r_supp, 1);
 
@@ -51,7 +51,7 @@ QDataStream SIREIO_EXPORT &operator<<(QDataStream &ds, const Supplementary &supp
     return ds;
 }
 
-QDataStream SIREIO_EXPORT &operator>>(QDataStream &ds, Supplementary &supp)
+QDataStream &operator>>(QDataStream &ds, Supplementary &supp)
 {
     VersionID v = readHeader(ds, r_supp);
 
@@ -217,7 +217,7 @@ QString Supplementary::formatDescription() const
 /** Return the suffixes that these files are normally associated with */
 QStringList Supplementary::formatSuffix() const
 {
-    static const QStringList suffixes = { "prm, inp" };
+    static const QStringList suffixes = { "*" };
     return suffixes;
 }
 

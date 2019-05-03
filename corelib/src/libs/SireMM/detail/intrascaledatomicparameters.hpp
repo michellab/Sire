@@ -102,9 +102,9 @@ template<class SCALE_FACTORS>
 class IntraScaledParameters
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, 
+friend SIREMM_EXPORT QDataStream& ::operator<<<>(QDataStream&, 
                                    const IntraScaledParameters<SCALE_FACTORS>&);
-friend QDataStream& ::operator>><>(QDataStream&, 
+friend SIREMM_EXPORT QDataStream& ::operator>><>(QDataStream&, 
                                    IntraScaledParameters<SCALE_FACTORS>&);
 
 public:
@@ -159,9 +159,9 @@ template<class ATOMPARAM, class INTRASCALE>
 class IntraScaledAtomicParameters : public ATOMPARAM, public INTRASCALE
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, 
+friend SIREMM_EXPORT QDataStream& ::operator<<<>(QDataStream&, 
                          const IntraScaledAtomicParameters<ATOMPARAM,INTRASCALE>&);
-friend QDataStream& ::operator>><>(QDataStream&, 
+friend SIREMM_EXPORT QDataStream& ::operator>><>(QDataStream&, 
                          IntraScaledAtomicParameters<ATOMPARAM,INTRASCALE>&);
 
 public:

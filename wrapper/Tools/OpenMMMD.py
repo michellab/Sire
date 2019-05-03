@@ -19,6 +19,16 @@ import os
 import re
 import sys
 
+from Sire.Base import *
+
+# Make sure that the OPENMM_PLUGIN_DIR enviroment variable is set correctly if unset.
+try:
+    # The user has already set the plugin location.
+    os.environ["OPENMM_PLUGIN_DIR"]
+except KeyError:
+    # Set to the default location of the bundled OpenMM package.
+    os.environ["OPENMM_PLUGIN_DIR"] = getLibDir() + "/plugins"
+
 from Sire.IO import *
 from Sire.Mol import *
 from Sire.CAS import *
@@ -29,7 +39,6 @@ from Sire.FF import *
 from Sire.Units import *
 from Sire.Vol import *
 from Sire.Maths import *
-from Sire.Base import *
 from Sire.Qt import *
 from Sire.ID import *
 from Sire.Config import *
@@ -39,7 +48,6 @@ from Sire.Tools import Parameter, resolveParameters
 import Sire.Stream
 import time
 import numpy as np
-
 
 ####################################################################################################
 #
@@ -78,6 +86,9 @@ random_seed = Parameter("random seed", None, """Random number seed. Set this if 
 
 ncycles = Parameter("ncycles", 1,
                     """The number of MD cycles. The total elapsed time will be nmoves*ncycles*timestep""")
+
+maxcycles = Parameter("maxcycles",99999,
+                      """The maximum number of MD cycles to carry out. Useful to restart simulations from a checkpoint""")
 
 ncycles_per_snap = Parameter("ncycles_per_snap", 1, """Number of cycles between saving snapshots""")
 
@@ -1595,8 +1606,15 @@ def runFreeNrg():
         restart = True
 
     cycle_start = int(moves.nMoves() / nmoves.val) + 1
+
+    if cycle_start > maxcycles.val:
+        print("Maxinum number of cycles reached (%s). If you wish to extend the simulation increase the value of the parameter maxcycle." % maxcycles.val)
+        sys.exit(-1)
+        
     cycle_end = cycle_start + ncycles.val
 
+    if (cycle_end > maxcycles.val):
+        cycle_end = maxcycles.val + 1
 
     outgradients = open("gradients.dat", "a", 1)
     outgradients.write("# lambda_val.val %s\n" % lam_str)
@@ -1676,6 +1694,12 @@ def runFreeNrg():
         for gradient in gradients:
             #grads[lambda_val.val].accumulate(gradients[i-1])
             grads[lambda_val.val].accumulate(gradient)
+        # Save restart
+        print("Backing up previous restart")
+        cmd = "cp %s %s.previous" % (restart_file.val, restart_file.val)
+        os.system(cmd)
+        print ("Saving new restart")
+        Sire.Stream.save([system, moves], restart_file.val)            
     s2 = timer.elapsed() / 1000.
     outgradients.flush()
     outfile.flush()
@@ -1698,8 +1722,8 @@ def runFreeNrg():
         # Necessary to write correct restart
         system.mustNowRecalculateFromScratch()
 
-    print("Backing up previous restart")
-    cmd = "cp %s %s.previous" % (restart_file.val, restart_file.val)
-    os.system(cmd)
-    print ("Saving new restart")
-    Sire.Stream.save([system, moves], restart_file.val)
+ #   print("Backing up previous restart")
+ #   cmd = "cp %s %s.previous" % (restart_file.val, restart_file.val)
+ #   os.system(cmd)
+ #   print ("Saving new restart")
+ #   Sire.Stream.save([system, moves], restart_file.val)

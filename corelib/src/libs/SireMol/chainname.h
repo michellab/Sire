@@ -40,8 +40,8 @@ namespace SireMol
 class ChainName;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMol::ChainName&);
-QDataStream& operator>>(QDataStream&, SireMol::ChainName&);
+SIREMOL_EXPORT QDataStream& operator<<(QDataStream&, const SireMol::ChainName&);
+SIREMOL_EXPORT QDataStream& operator>>(QDataStream&, SireMol::ChainName&);
 
 namespace SireMol
 {
@@ -54,8 +54,8 @@ namespace SireMol
 class SIREMOL_EXPORT ChainName : public SireID::Name, public ChainID
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const ChainName&);
-friend QDataStream& ::operator>>(QDataStream&, ChainName&);
+friend SIREMOL_EXPORT QDataStream& ::operator<<(QDataStream&, const ChainName&);
+friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ChainName&);
 
 public:
     ChainName();

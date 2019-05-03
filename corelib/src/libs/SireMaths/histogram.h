@@ -43,14 +43,14 @@ class HistogramValue;
 class Histogram;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMaths::HistogramBin&);
-QDataStream& operator>>(QDataStream&, SireMaths::HistogramBin&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::HistogramBin&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::HistogramBin&);
 
-QDataStream& operator<<(QDataStream&, const SireMaths::HistogramValue&);
-QDataStream& operator>>(QDataStream&, SireMaths::HistogramValue&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::HistogramValue&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::HistogramValue&);
 
-QDataStream& operator<<(QDataStream&, const SireMaths::Histogram&);
-QDataStream& operator>>(QDataStream&, SireMaths::Histogram&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::Histogram&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::Histogram&);
 
 namespace SireMaths
 {
@@ -59,8 +59,8 @@ namespace SireMaths
 class SIREMATHS_EXPORT HistogramBin
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const HistogramBin&);
-friend QDataStream& ::operator>>(QDataStream&, HistogramBin&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const HistogramBin&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, HistogramBin&);
 
 public:
     HistogramBin();
@@ -91,8 +91,8 @@ private:
 class SIREMATHS_EXPORT HistogramValue : public HistogramBin
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const HistogramValue&);
-friend QDataStream& ::operator>>(QDataStream&, HistogramValue&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const HistogramValue&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, HistogramValue&);
 
 public:
     HistogramValue();
@@ -124,8 +124,8 @@ class SIREMATHS_EXPORT Histogram
         : public SireBase::ConcreteProperty<Histogram,SireBase::Property>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const Histogram&);
-friend QDataStream& ::operator>>(QDataStream&, Histogram&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const Histogram&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, Histogram&);
 
 public:
     Histogram();

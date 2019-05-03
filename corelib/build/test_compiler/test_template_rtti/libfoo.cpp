@@ -14,27 +14,27 @@ FooBase::FooBase(const FooBase&)
 FooBase::~FooBase()
 {}
 
-FooBase Q_DECL_EXPORT *makeFoo_Int()
+FooBase *makeFoo_Int()
 {
     return new Foo<int>(42);
 }
 
-FooBase Q_DECL_EXPORT *makeFoo_Double()
+FooBase *makeFoo_Double()
 {
     return new Foo<double>(365.25);
 }
 
-bool Q_DECL_EXPORT testFoo_Int(const FooBase &foo)
+bool testFoo_Int(const FooBase &foo)
 {
     return foo.isA< Foo<int> >();
 }
 
-bool Q_DECL_EXPORT testFoo_Double(const FooBase &foo)
+bool testFoo_Double(const FooBase &foo)
 {
     return foo.isA< Foo<double> >();
 }
 
-bool Q_DECL_EXPORT testFoo_Holder_Double(const SharedDataHolder &holder)
+bool testFoo_Holder_Double(const SharedDataHolder &holder)
 {
     try
     {

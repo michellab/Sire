@@ -41,17 +41,17 @@ class CLJSoftRFFunction;
 class CLJSoftIntraRFFunction;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJRFFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJRFFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJRFFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJRFFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJIntraRFFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJIntraRFFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJIntraRFFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJIntraRFFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftRFFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJSoftRFFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftRFFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJSoftRFFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftIntraRFFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJSoftIntraRFFunction&);
+SIREMM_EXPORT QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftIntraRFFunction&);
+SIREMM_EXPORT QDataStream& operator>>(QDataStream&, SireMM::CLJSoftIntraRFFunction&);
 
 namespace SireMM
 {
@@ -65,8 +65,8 @@ class SIREMM_EXPORT CLJRFFunction
         : public SireBase::ConcreteProperty<CLJRFFunction,CLJCutoffFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJRFFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CLJRFFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJRFFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJRFFunction&);
 
 public:
     CLJRFFunction();
@@ -168,8 +168,8 @@ class SIREMM_EXPORT CLJIntraRFFunction
         : public SireBase::ConcreteProperty<CLJIntraRFFunction,CLJIntraFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJIntraRFFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CLJIntraRFFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJIntraRFFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJIntraRFFunction&);
 
 public:
     CLJIntraRFFunction();
@@ -254,8 +254,8 @@ class SIREMM_EXPORT CLJSoftRFFunction
         : public SireBase::ConcreteProperty<CLJSoftRFFunction,CLJSoftFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJSoftRFFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CLJSoftRFFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJSoftRFFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJSoftRFFunction&);
 
 public:
     CLJSoftRFFunction();
@@ -341,8 +341,8 @@ class SIREMM_EXPORT CLJSoftIntraRFFunction
         : public SireBase::ConcreteProperty<CLJSoftIntraRFFunction,CLJSoftIntraFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJSoftIntraRFFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CLJSoftIntraRFFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator<<(QDataStream&, const CLJSoftIntraRFFunction&);
+friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, CLJSoftIntraRFFunction&);
 
 public:
     CLJSoftIntraRFFunction();

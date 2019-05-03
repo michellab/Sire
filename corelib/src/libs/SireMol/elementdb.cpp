@@ -47,7 +47,7 @@ using namespace SireUnits::Dimension;
 static const RegisterMetaType<Element> r_element(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Element &element)
+QDataStream &operator<<(QDataStream &ds, const Element &element)
 {
     //this seems slightly over the top, adding magic and version to element,
     //as element has only a single quint32 data member. However, this may
@@ -60,7 +60,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Element &element)
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Element &element)
+QDataStream &operator>>(QDataStream &ds, Element &element)
 {
     VersionID v = readHeader(ds, r_element);
 
@@ -411,12 +411,12 @@ bool Element::halogen() const
 }
 
 /** Return whether or not this is biological
-    (in first three periods and not a noble gas)
+    (in first three periods and not a noble gas, or a halogen)
     (this does preclude iron, potassium and calcium, which are
     rather biological... :-) */
 bool Element::biological() const
 {
-    return period() <= 3 and not nobleGas();
+    return (period() <= 3 and not nobleGas()) or halogen();
 }
 
 /** Return whether or not this is an alkali metal (group 1 or 2) */

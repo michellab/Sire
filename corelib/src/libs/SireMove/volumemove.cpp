@@ -59,7 +59,7 @@ using namespace SireStream;
 static const RegisterMetaType<VolumeMove> r_volmove;
 
 /** Serialise to a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const VolumeMove &volmove)
+QDataStream &operator<<(QDataStream &ds, const VolumeMove &volmove)
 {
     writeHeader(ds, r_volmove, 2);
     
@@ -71,7 +71,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const VolumeMove &volmo
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, VolumeMove &volmove)
+QDataStream &operator>>(QDataStream &ds, VolumeMove &volmove)
 {
     VersionID v = readHeader(ds, r_volmove);
     

@@ -50,7 +50,7 @@ static const RegisterMetaType<CuttingFunction> r_cutfunc( MAGIC_ONLY,
                                                           "SireMol::CuttingFunction" );
                                                           
 /** Serialise to a binary datastream */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CuttingFunction &cutfunc)
+QDataStream &operator<<(QDataStream &ds, const CuttingFunction &cutfunc)
 {
     writeHeader(ds, r_cutfunc, 1);
     
@@ -60,7 +60,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const CuttingFunction &c
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, CuttingFunction &cutfunc)
+QDataStream &operator>>(QDataStream &ds, CuttingFunction &cutfunc)
 {
     VersionID v = readHeader(ds, r_cutfunc);
     

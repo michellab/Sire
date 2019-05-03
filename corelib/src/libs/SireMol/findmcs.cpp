@@ -92,6 +92,8 @@ private:
     qint64 max_time_ns;
     bool *timed_out;
     QSet<int> user_matched_verts;
+    bool is_user_map;
+    bool verbose;
 
 public:
     findmcs_callback(const G0 &mg0, const G1 &mg1,
@@ -99,11 +101,11 @@ public:
                      QList< QHash<int,int> > *matches,
                      QElapsedTimer *tt, QElapsedTimer *td,
                      qint64 maxtime, qint64 *update, bool *timedout,
-                     const QSet<int> &user_verts)
+                     const QSet<int> &user_verts, bool is_user_map, bool verbose)
          : g0(mg0), g1(mg1), max_nats(nats), max_size(msize),
            best_matches(matches),
            t_total(tt), t_delta(td), last_update(update), max_time_ns(maxtime), timed_out(timedout),
-           user_matched_verts(user_verts)
+           user_matched_verts(user_verts), is_user_map(is_user_map), verbose(verbose)
     {
         *max_size = 0;
     }
@@ -128,8 +130,9 @@ public:
             }
         }
 
-        //we must match all user-supplied vertices
-        if (nuser >= user_matched_verts.count())
+        // We must match all user-supplied vertices if the user has supplied a pre-match.
+        // The 'is_user_map' flag indicates whether the pre-match gives a valid atom mapping.
+        if ((not is_user_map) or ((nuser > 0) && (nuser >= user_matched_verts.count())))
         {
             if (nmatch > *max_size)
             {
@@ -177,7 +180,8 @@ public:
         }
         else if (ns > *last_update + 500000000)
         {
-            qDebug() << "Still searching..." << (t_total->nsecsElapsed()*0.000001) << "ms";
+            if (verbose)
+                qDebug() << "Still searching..." << (t_total->nsecsElapsed()*0.000001) << "ms";
             *last_update = ns;
         }
 
@@ -253,15 +257,23 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
                                    const PropertyMap &map1,
                                    bool is_pre_match,
                                    bool check_reverse_if_timeout,
+                                   int min_heavy_protons,
                                    bool verbose)
 {
     //first, see if the user has specified any match
     QHash<AtomIdx,AtomIdx> user_map01;
     QHash<AtomIdx,AtomIdx> user_map10;
 
+    // Whether the user has supplied a pre-match map.
+    bool is_user_map = false;
+
     if (not matcher.isNull())
     {
         user_map01 = matcher.match(mol, map0, other, map1);
+
+        // If there are matching atoms, then flag that a user map is present.
+        if (user_map01.count() > 0)
+            is_user_map = true;
 
         //create the inverted map from molecule 1 to molecule 0
         for (QHash<AtomIdx,AtomIdx>::const_iterator it = user_map01.constBegin();
@@ -340,7 +352,7 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
     {
         for (int i=0; i<nats0; ++i)
         {
-            if (elements0[i].nProtons() < 6 or not selected0.selected(AtomIdx(i)))
+            if (elements0[i].nProtons() < min_heavy_protons or not selected0.selected(AtomIdx(i)))
             {
                 nskip0 += 1;
                 skip0[i] = true;
@@ -349,7 +361,7 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
 
         for (int i=0; i<nats1; ++i)
         {
-            if (elements1[i].nProtons() < 6 or not selected1.selected(AtomIdx(i)))
+            if (elements1[i].nProtons() < min_heavy_protons or not selected1.selected(AtomIdx(i)))
             {
                 nskip1 += 1;
                 skip1[i] = true;
@@ -394,9 +406,12 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
                 put(user_match_0, nvert0, i);
                 user_matched_verts.insert(nvert0);
             }
-            else if (match_light_atoms and elements0[i].nProtons() < 6)
+            else if (match_light_atoms)
             {
-                put(user_match_0, nvert0, -2);
+                if (elements0[i].nProtons() < min_heavy_protons)
+                    put(user_match_0, nvert0, -2);
+                else
+                    put(user_match_0, nvert0, -1);
             }
             else
             {
@@ -438,9 +453,12 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
             {
                 put(user_match_1, nvert1, user_map10.value(AtomIdx(i)).value());
             }
-            else if (match_light_atoms and elements1[i].nProtons() < 6)
+            else if (match_light_atoms)
             {
-                put(user_match_1, nvert1, -2);
+                if (elements1[i].nProtons() < min_heavy_protons)
+                    put(user_match_1, nvert1, -2);
+                else
+                    put(user_match_1, nvert1, -1);
             }
             else
             {
@@ -472,7 +490,8 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
     qint64 last_update = 0;
     findmcs_callback<Graph,Graph> func(g0, g1, qMin(nats0-nskip0,nats1-nskip1), &max_size,
                                        &best_matches, &t_total, &t_delta, max_time_ns,
-                                       &last_update, &timed_out, user_matched_verts);
+                                       &last_update, &timed_out, user_matched_verts,
+                                       is_user_map, verbose);
 
     t_total.start();
     mcgregor_common_subgraphs_unique(g0, g1, true, func,
@@ -513,8 +532,8 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
             if (verbose)
                 qDebug() << "Initial match timed out, so trying the reverse match...";
             QHash<AtomIdx,AtomIdx> rmap = pvt_findMCS(other, mol,
-                            AtomMatchInverter(matcher), timeout,
-                            match_light_atoms, map1, map0, is_pre_match, false, verbose);
+                            AtomMatchInverter(matcher), timeout, match_light_atoms,
+                            map1, map0, is_pre_match, false, min_heavy_protons, verbose);
 
             if (rmap.count() > map.count())
             {
@@ -577,6 +596,13 @@ QHash<AtomIdx,AtomIdx> pvt_findMCS(const MoleculeView &mol, const MoleculeView &
 
     If 'match_light_atoms' is true, then include light atoms (e.g. hydrogen)
     in the match. This may make things slower...
+
+    The argument min_heavy_protons specifies the number of protons above which an
+    atom is considered as being heaviy, e.g. 6 means that heavy atoms
+    are the elements including Carbon and above. By setting min_heavy_protons to
+    zero allows the user to match heavy atoms against light atoms.
+
+    The verbose flag can be used to print status messages.
 */
 QHash<AtomIdx,AtomIdx> Evaluator::findMCS(const MoleculeView &other,
                                           const AtomMatcher &matcher,
@@ -584,18 +610,421 @@ QHash<AtomIdx,AtomIdx> Evaluator::findMCS(const MoleculeView &other,
                                           bool match_light_atoms,
                                           const PropertyMap &map0,
                                           const PropertyMap &map1,
+                                          int min_heavy_protons,
                                           bool verbose) const
 {
-    if (match_light_atoms)
+    if (match_light_atoms and min_heavy_protons > 1)
     {
         //do a pre-match using only the heavy atoms
         QHash<AtomIdx,AtomIdx> pre_match = pvt_findMCS(*this, other, matcher, timeout,
-                                                       false, map0, map1, true, true, verbose);
+                false, map0, map1, true, true, min_heavy_protons, verbose);
 
         //now use the pre-match to speed up the full match
         return pvt_findMCS(*this, other, AtomResultMatcher(pre_match), timeout,
-                           true, map0, map1, false, true, verbose);
+                true, map0, map1, false, true, min_heavy_protons, verbose);
     }
     else
-        return pvt_findMCS(*this, other, matcher, timeout, false, map0, map1, false, true, verbose);
+        return pvt_findMCS(*this, other, matcher, timeout,
+                false, map0, map1, false, true, min_heavy_protons, verbose);
+}
+
+QVector<QHash<AtomIdx,AtomIdx> > pvt_findMCSmatches(const MoleculeView &mol, const MoleculeView &other,
+                                                    const AtomMatcher &matcher,
+                                                    const Time &timeout,
+                                                    bool match_light_atoms,
+                                                    const PropertyMap &map0,
+                                                    const PropertyMap &map1,
+                                                    bool is_pre_match,
+                                                    bool check_reverse_if_timeout,
+                                                    int min_heavy_protons,
+                                                    bool verbose)
+{
+    //first, see if the user has specified any match
+    QHash<AtomIdx,AtomIdx> user_map01;
+    QHash<AtomIdx,AtomIdx> user_map10;
+
+    // Whether the user has supplied a pre-match map.
+    bool is_user_map = false;
+
+    if (not matcher.isNull())
+    {
+        user_map01 = matcher.match(mol, map0, other, map1);
+
+        // If there are matching atoms, then flag that a user map is present.
+        if (user_map01.count() > 0)
+            is_user_map = true;
+
+        //create the inverted map from molecule 1 to molecule 0
+        for (QHash<AtomIdx,AtomIdx>::const_iterator it = user_map01.constBegin();
+             it != user_map01.constEnd();
+             ++it)
+        {
+            user_map10.insert( it.value(), it.key() );
+        }
+    }
+
+    //now try to match up the atoms using their connectivity
+    Connectivity c0;
+    Connectivity c1;
+
+    try
+    {
+        c0 = mol.data().property( map0["connectivity"] ).asA<Connectivity>();
+    }
+    catch(...)
+    {
+        c0 = Connectivity( mol.molecule() );
+    }
+
+    try
+    {
+        c1 = other.data().property( map1["connectivity"] ).asA<Connectivity>();
+    }
+    catch(...)
+    {
+        c1 = Connectivity( other.molecule() );
+    }
+
+    int nats0 = mol.molecule().nAtoms();
+    int nats1 = other.molecule().nAtoms();
+
+    //remove any non-heavy or unselected atoms
+    AtomSelection selected0 = mol.selection();
+    AtomSelection selected1 = other.selection();
+
+    QVector<Element> elements0 = ::getElements(mol.molecule(), map0);
+    QVector<Element> elements1 = ::getElements(other.molecule(), map1);
+
+    int nskip0 = 0;
+    int nskip1 = 0;
+
+    QVector<bool> skip0(nats0, false);
+    QVector<bool> skip1(nats1, false);
+
+    if (match_light_atoms)
+    {
+        if (not selected0.selectedAll())
+        {
+            for (int i=0; i<nats0; ++i)
+            {
+                if (not selected0.selected(AtomIdx(i)))
+                {
+                    nskip0 += 1;
+                    skip0[i] = true;
+                }
+            }
+        }
+
+        if (not selected1.selectedAll())
+        {
+            for (int i=0; i<nats1; ++i)
+            {
+                if (not selected1.selected(AtomIdx(i)))
+                {
+                    nskip1 += 1;
+                    skip1[i] = true;
+                }
+            }
+        }
+    }
+    else
+    {
+        for (int i=0; i<nats0; ++i)
+        {
+            if (elements0[i].nProtons() < min_heavy_protons or not selected0.selected(AtomIdx(i)))
+            {
+                nskip0 += 1;
+                skip0[i] = true;
+            }
+        }
+
+        for (int i=0; i<nats1; ++i)
+        {
+            if (elements1[i].nProtons() < min_heavy_protons or not selected1.selected(AtomIdx(i)))
+            {
+                nskip1 += 1;
+                skip1[i] = true;
+            }
+        }
+    }
+
+    // we are now going to create two graphs. The vertices are the selected heavy
+    // atoms, and the edges are the bonds between those atoms. The edges are
+    // labelled according to whether the bond is part of a ring (in_ring_t is true of false).
+    // The vertices are labelled according to the user-supplied match using the
+    // AtomMatcher at the top of this function. If the atom has been already matched,
+    // then, in graph 0, the vertex is labelled with the AtomIdx of the atom in
+    // molecule 0, while in graph 1, the vertex is labelled with the AtomIdx of the
+    // atom in molecule 0 that matches this atom in molecule 1. If the atom has not been
+    // already matched then the vertex is labelled with "-1", meaning it is available
+    // to match using the below algorithm
+
+    typedef property<user_match_t,int> VertexProperty;
+    typedef property<in_ring_t,bool> EdgeProperty;
+    typedef adjacency_list<vecS,vecS,undirectedS,VertexProperty,EdgeProperty> Graph;
+
+    Graph g0(nats0-nskip0);
+    QVector<int> atomidx_to_idx0(nats0, -1);
+    QVector<AtomIdx> idx_to_atomidx0(nats0-nskip0);
+
+    property_map<Graph,in_ring_t>::type in_ring_0 = get(in_ring_t(), g0);
+    property_map<Graph,user_match_t>::type user_match_0 = get(user_match_t(), g0);
+    int nvert0 = 0;
+
+    QSet<int> user_matched_verts;
+
+    for (int i=0; i<nats0; ++i)
+    {
+        if (not skip0[i])
+        {
+            atomidx_to_idx0[i] = nvert0;
+            idx_to_atomidx0[nvert0] = AtomIdx(i);
+
+            if (user_map01.contains(AtomIdx(i)))
+            {
+                put(user_match_0, nvert0, i);
+                user_matched_verts.insert(nvert0);
+            }
+            else if (match_light_atoms)
+            {
+                if (elements0[i].nProtons() < min_heavy_protons)
+                    put(user_match_0, nvert0, -2);
+                else
+                    put(user_match_0, nvert0, -1);
+            }
+            else
+            {
+                put(user_match_0, nvert0, -1);
+            }
+
+            nvert0 += 1;
+
+            foreach (const AtomIdx &atom, c0.connectionsTo(AtomIdx(i)))
+            {
+                if (atom.value() < i and not skip0[atom.value()])
+                {
+                    int idx0 = atomidx_to_idx0[i];
+                    int idx1 = atomidx_to_idx0[atom.value()];
+
+                    get(in_ring_t(), g0)[add_edge(idx0,idx1,g0).first] = c0.inRing(AtomIdx(i),atom);
+                }
+            }
+        }
+    }
+
+    Graph g1(nats1-nskip1);
+    QVector<int> atomidx_to_idx1(nats1, -1);
+    QVector<AtomIdx> idx_to_atomidx1(nats1-nskip1);
+
+    property_map<Graph,in_ring_t>::type in_ring_1 = get(in_ring_t(), g1);
+    property_map<Graph,user_match_t>::type user_match_1 = get(user_match_t(), g1);
+
+    int nvert1 = 0;
+
+    for (int i=0; i<nats1; ++i)
+    {
+        if (not skip1[i])
+        {
+            atomidx_to_idx1[i] = nvert1;
+            idx_to_atomidx1[nvert1] = AtomIdx(i);
+
+            if (user_map10.contains(AtomIdx(i)))
+            {
+                put(user_match_1, nvert1, user_map10.value(AtomIdx(i)).value());
+            }
+            else if (match_light_atoms)
+            {
+                if (elements1[i].nProtons() < min_heavy_protons)
+                    put(user_match_1, nvert1, -2);
+                else
+                    put(user_match_1, nvert1, -1);
+            }
+            else
+            {
+                put(user_match_1, nvert1, -1);
+            }
+
+            nvert1 += 1;
+
+            foreach (const AtomIdx &atom, c1.connectionsTo(AtomIdx(i)))
+            {
+                if (atom.value() < i and not skip1[atom.value()])
+                {
+                    int idx0 = atomidx_to_idx1[i];
+                    int idx1 = atomidx_to_idx1[atom.value()];
+
+                    get(in_ring_t(), g1)[add_edge(idx0,idx1,g1).first] = c1.inRing(AtomIdx(i),atom);
+                }
+            }
+        }
+    }
+
+    int max_size = 0;
+    QList< QHash<int,int> > best_matches;
+    const qint64 max_time_ns = timeout.to(nanosecond);
+    //qDebug() << "Using timeout" << timeout.to(second) << "second(s)";
+    QElapsedTimer t_total;
+    QElapsedTimer t_delta;
+    bool timed_out = false;
+    qint64 last_update = 0;
+    findmcs_callback<Graph,Graph> func(g0, g1, qMin(nats0-nskip0,nats1-nskip1), &max_size,
+                                       &best_matches, &t_total, &t_delta, max_time_ns,
+                                       &last_update, &timed_out, user_matched_verts,
+                                       is_user_map, verbose);
+
+    t_total.start();
+    mcgregor_common_subgraphs_unique(g0, g1, true, func,
+                    edges_equivalent(make_property_map_equivalent(in_ring_0,in_ring_1)).
+                    vertices_equivalent(make_property_map_equivalent(user_match_0,user_match_1)) );
+
+    if (verbose)
+    {
+        if (is_pre_match)
+            qDebug() << "PREMATCH TOOK" << (0.000001*t_total.nsecsElapsed()) << "ms";
+        else
+        {
+            qDebug() << "MATCH TOOK" << (0.000001*t_total.nsecsElapsed()) << "ms";
+        }
+    }
+
+    QVector<QHash<AtomIdx,AtomIdx> > maps;
+
+    if (not best_matches.isEmpty())
+    {
+        for (auto &match : best_matches)
+        {
+            // Temporary map for each match.
+            QHash<AtomIdx,AtomIdx> map;
+
+            // Convert from vertex indicies back to AtomIdx values.
+            for (QHash<int,int>::const_iterator it = match.constBegin();
+                it != match.constEnd();
+                ++it)
+            {
+                map.insert( idx_to_atomidx0[it.key()], idx_to_atomidx1[it.value()] );
+            }
+
+            // Add to the vector of maps.
+            maps.append(map);
+        }
+    }
+
+    if (timed_out)
+    {
+        if (check_reverse_if_timeout)
+        {
+            //try the reverse match, as sometimes the algorithm can find the best
+            //match by going in reverse
+            if (verbose)
+                qDebug() << "Initial match timed out, so trying the reverse match...";
+            QVector<QHash<AtomIdx,AtomIdx> > rmaps = pvt_findMCSmatches(other, mol,
+                            AtomMatchInverter(matcher), timeout, match_light_atoms,
+                            map1, map0, is_pre_match, false, min_heavy_protons, verbose);
+
+            // Make sure we found a match.
+            if (rmaps.count() > 0)
+            {
+                if ((maps.count() == 0) or (rmaps[0].count() > maps[0].count()))
+                {
+                    //the reverse map is better, so lets use that
+                    if (verbose)
+                        qDebug() << "...the reverse map is better. Using that :-)";
+                    maps.clear();
+
+                    for (auto &match : rmaps)
+                    {
+                        // Temporary map for each match.
+                        QHash<AtomIdx,AtomIdx> map;
+
+                        // Store the AtomIdx values, remembering to reverse the mapping.
+                        for (QHash<AtomIdx,AtomIdx>::const_iterator it = match.constBegin();
+                            it != match.constEnd();
+                            ++it)
+                        {
+                            map.insert( it.value(), it.key() );
+                        }
+
+                        // Add to the vector of maps.
+                        maps.append(map);
+                    }
+                }
+                else
+                {
+                    if (verbose)
+                    {
+                        qDebug() << "...the original forwards map was better.";
+                        qDebug() << "We ran out of time when looking for a match. You can speed things"
+                                << "up by using an AtomMatcher to pre-match some of the atoms that you"
+                                << "know should be equivalent, e.g. one of the rings, or the common"
+                                << "framework of the molecules. As it is, only the best-found match"
+                                << "in the time available is being returned, which may not correspond"
+                                << "to the best possible match.";
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (verbose)
+            {
+                qDebug() << "We ran out of time when looking for a match. You can speed things"
+                        << "up by using an AtomMatcher to pre-match some of the atoms that you"
+                        << "know should be equivalent, e.g. one of the rings, or the common"
+                        << "framework of the molecules. As it is, only the best-found match"
+                        << "in the time available is being returned, which may not correspond"
+                        << "to the best possible match.";
+            }
+        }
+    }
+
+    if (maps.isEmpty() and best_matches.isEmpty())
+    {
+        if (verbose)
+            qDebug() << "FOUND NO MATCHES?";
+        //return the original map that constrained this search
+        maps.append(user_map01);
+    }
+
+    return maps;
+}
+
+/** Find the maximum common substructure of this molecule view with 'other'. This
+    returns all mappings from this structure to 'other' for the matching parts,
+    using the optionally supplied propertymap to find the elements, masses,
+    connectivity and coordinates of the two molecules, with the passed 'atommatcher'
+    used to pre-match atoms before the common substructure search (useful to speed
+    up the search and to enforce matching sub-parts)
+
+    If 'match_light_atoms' is true, then include light atoms (e.g. hydrogen)
+    in the match. This may make things slower...
+
+    The argument min_heavy_protons specifies the number of protons above which an
+    atom is considered as being heaviy, e.g. 6 means that heavy atoms
+    are the elements including Carbon and above. By setting min_heavy_protons to
+    zero allows the user to match heavy atoms against light atoms.
+
+    The verbose flag can be used to print status messages.
+*/
+QVector<QHash<AtomIdx,AtomIdx> > Evaluator::findMCSmatches(const MoleculeView &other,
+                                                           const AtomMatcher &matcher,
+                                                           const Time &timeout,
+                                                           bool match_light_atoms,
+                                                           const PropertyMap &map0,
+                                                           const PropertyMap &map1,
+                                                           int min_heavy_protons,
+                                                           bool verbose) const
+{
+    if (match_light_atoms and min_heavy_protons > 1)
+    {
+        //do a pre-match using only the heavy atoms
+        QHash<AtomIdx,AtomIdx> pre_match = pvt_findMCS(*this, other, matcher, timeout,
+                false, map0, map1, true, true, min_heavy_protons, verbose);
+
+        //now use the pre-match to speed up the full match
+        return pvt_findMCSmatches(*this, other, AtomResultMatcher(pre_match), timeout,
+                true, map0, map1, false, true, min_heavy_protons, verbose);
+    }
+    else
+        return pvt_findMCSmatches(*this, other, matcher, timeout,
+                false, map0, map1, false, true, min_heavy_protons, verbose);
 }

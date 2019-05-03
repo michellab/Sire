@@ -49,7 +49,7 @@ using namespace SireStream;
 static const RegisterMetaType<DistVector> r_distvector(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                          const SireMaths::DistVector &vec)
 {
     writeHeader(ds, r_distvector, 1) << vec.sc[0] << vec.sc[1]
@@ -59,7 +59,7 @@ QDataStream SIREMATHS_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMATHS_EXPORT &operator>>(QDataStream &ds, 
+QDataStream &operator>>(QDataStream &ds, 
                                          SireMaths::DistVector &vec)
 {
     VersionID v = readHeader(ds, r_distvector);

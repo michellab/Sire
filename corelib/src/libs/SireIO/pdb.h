@@ -38,8 +38,8 @@ namespace SireIO
 class PDB;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::PDB&);
-QDataStream& operator>>(QDataStream&, SireIO::PDB&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::PDB&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::PDB&);
 
 class QTextStream;
 

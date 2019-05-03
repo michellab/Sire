@@ -65,7 +65,7 @@ static const RegisterMetaType<ConnectivityBase> r_conbase(MAGIC_ONLY,
                                                           "SireMol::ConnectivityBase");
 
 /** Serialise ConnectivityBase */
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                        const ConnectivityBase &conbase)
 {
     writeHeader(ds, r_conbase, 2);
@@ -81,7 +81,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise a MoleculeBonds */
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                        ConnectivityBase &conbase)
 {
     VersionID v = readHeader(ds, r_conbase);
@@ -228,7 +228,6 @@ PropertyPtr ConnectivityBase::_pvt_makeCompatibleWith(const MoleculeInfoData &mo
     }
     catch(const SireError::exception &e)
     {
-        qDebug() << e.toString();
         throw;
         return Connectivity();
     }
@@ -269,7 +268,6 @@ PropertyPtr ConnectivityBase::_pvt_makeCompatibleWith(const MoleculeInfoData &mo
     }
     catch(const SireError::exception &e)
     {
-        qDebug() << e.toString();
         throw;
         return Connectivity();
     }
@@ -799,8 +797,26 @@ QList< QList<AtomIdx> > ConnectivityBase::findPaths(const AtomID &atom0, const A
     return this->findPaths( minfo.atomIdx(atom0), minfo.atomIdx(atom1) );
 }
 
-/** This function returns whether or not the two passed atoms are part of
-    the same ring */
+/** This function returns whether or not the atom is in a ring */
+bool ConnectivityBase::inRing(AtomIdx atom) const
+{
+    // Loop over all atoms connected to this atom.
+    for (const auto &atm : this->connectionsTo(atom))
+    {
+        // Find all of the paths between the two atoms.
+        QList< QList<AtomIdx> > paths = findPaths(atom, atm);
+
+        // The atom is part of a ring.
+        if (paths.count() > 1)
+            return true;
+    }
+
+    // If we get this far, then the atom isn't part of a ring.
+    return false;
+}
+
+/** This function returns whether or not the two passed atoms are connected
+    via a ring */
 bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1) const
 {
     QList< QList<AtomIdx> > paths = findPaths(atom0, atom1);
@@ -810,8 +826,8 @@ bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1) const
     return (paths.count() > 1);
 }
 
-/** This function returns whether or not the three passed atoms are all part of
-    the same ring */
+/** This function returns whether or not the three passed atoms are connected
+    via a ring */
 bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const
 {
     QList< QList<AtomIdx> > paths = findPaths(atom0, atom2);
@@ -832,8 +848,8 @@ bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const
     return false;
 }
 
-/** This function returns whether or not the four passed atoms are part of
-    the same ring */
+/** This function returns whether or not the four passed atoms are connected
+    via a same ring */
 bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2, AtomIdx atom3) const
 {
     QList< QList<AtomIdx> > paths = findPaths(atom0, atom3);
@@ -869,23 +885,29 @@ bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2, AtomI
     return false;
 }
 
-/** This function returns whether or not the two passed atoms are part of
-    the same ring */
+/** This function returns whether or not the atom is in a ring */
+bool ConnectivityBase::inRing(const AtomID &atom) const
+{
+    return this->inRing( info().atomIdx(atom) );
+}
+
+/** This function returns whether or not the two passed atoms are connected
+    via a ring */
 bool ConnectivityBase::inRing(const AtomID &atom0, const AtomID &atom1) const
 {
     return this->inRing( info().atomIdx(atom0), info().atomIdx(atom1) );
 }
 
-/** This function returns whether or not the three passed atoms are all part of
-    the same ring */
+/** This function returns whether or not the three passed atoms are connected
+    via a ring */
 bool ConnectivityBase::inRing(const AtomID &atom0, const AtomID &atom1, const AtomID &atom2) const
 {
     return this->inRing( info().atomIdx(atom0), info().atomIdx(atom1),
                          info().atomIdx(atom2) );
 }
 
-/** This function returns whether or not the two passed atoms are part of
-    the same ring */
+/** This function returns whether or not the two passed atoms are connected
+    via a ring */
 bool ConnectivityBase::inRing(const AtomID &atom0, const AtomID &atom1,
                               const AtomID &atom2, const AtomID &atom3) const
 {
@@ -2503,7 +2525,7 @@ QVector< QVector<bool> > ConnectivityBase::getBondMatrix(int order) const
 
 static const RegisterMetaType<Connectivity> r_connectivity;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Connectivity &conn)
+QDataStream &operator<<(QDataStream &ds, const Connectivity &conn)
 {
     writeHeader(ds, r_connectivity, 1);
 
@@ -2512,7 +2534,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const Connectivity &conn
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, Connectivity &conn)
+QDataStream &operator>>(QDataStream &ds, Connectivity &conn)
 {
     VersionID v = readHeader(ds, r_connectivity);
 
@@ -2642,7 +2664,7 @@ const char* Connectivity::typeName()
 
 static const RegisterMetaType<ConnectivityEditor> r_conneditor;
 
-QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ConnectivityEditor &conn)
+QDataStream &operator<<(QDataStream &ds, const ConnectivityEditor &conn)
 {
     writeHeader(ds, r_conneditor, 1);
 
@@ -2651,7 +2673,7 @@ QDataStream SIREMOL_EXPORT &operator<<(QDataStream &ds, const ConnectivityEditor
     return ds;
 }
 
-QDataStream SIREMOL_EXPORT &operator>>(QDataStream &ds, ConnectivityEditor &conn)
+QDataStream &operator>>(QDataStream &ds, ConnectivityEditor &conn)
 {
     VersionID v = readHeader(ds, r_conneditor);
 

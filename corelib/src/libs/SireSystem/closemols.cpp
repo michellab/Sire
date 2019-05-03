@@ -47,7 +47,7 @@ using namespace SireStream;
 static const RegisterMetaType<CloseMols> r_closemols(NO_ROOT);
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const CloseMols &closemols)
+QDataStream &operator<<(QDataStream &ds, const CloseMols &closemols)
 {
     writeHeader(ds, r_closemols, 1);
     
@@ -60,7 +60,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, const CloseMols &clos
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, CloseMols &closemols)
+QDataStream &operator>>(QDataStream &ds, CloseMols &closemols)
 {
     VersionID v = readHeader(ds, r_closemols);
     

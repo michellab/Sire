@@ -42,7 +42,7 @@ static const RegisterMetaType<CombineProperties> r_combineprops( MAGIC_ONLY,
                                                     CombineProperties::typeName() );
                                                     
 /** Serialise to a binary datastream */
-QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                         const CombineProperties &combineprops)
 {
     writeHeader(ds, r_combineprops, 1);
@@ -56,7 +56,7 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIREBASE_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                         CombineProperties &combineprops)
 {
     VersionID v = readHeader(ds, r_combineprops);

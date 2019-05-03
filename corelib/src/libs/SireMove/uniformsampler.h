@@ -38,8 +38,8 @@ namespace SireMove
 class UniformSampler;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMove::UniformSampler&);
-QDataStream& operator>>(QDataStream&, SireMove::UniformSampler&);
+SIREMOVE_EXPORT QDataStream& operator<<(QDataStream&, const SireMove::UniformSampler&);
+SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::UniformSampler&);
 
 namespace SireMove
 {
@@ -54,8 +54,8 @@ class SIREMOVE_EXPORT UniformSampler
         : public SireBase::ConcreteProperty<UniformSampler,Sampler>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const UniformSampler&);
-friend QDataStream& ::operator>>(QDataStream&, UniformSampler&);
+friend SIREMOVE_EXPORT QDataStream& ::operator<<(QDataStream&, const UniformSampler&);
+friend SIREMOVE_EXPORT QDataStream& ::operator>>(QDataStream&, UniformSampler&);
 
 public:
     UniformSampler();

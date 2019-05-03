@@ -39,7 +39,7 @@ using namespace SireCAS;
 static const RegisterMetaType<ComplexValues> r_complexvals(NO_ROOT);
 
 /** Serialise to a binary data stream */
-QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ComplexValues &vals)
+QDataStream &operator<<(QDataStream &ds, const ComplexValues &vals)
 {
     writeHeader(ds, r_complexvals, 1) << vals.vals;
 
@@ -47,7 +47,7 @@ QDataStream SIRECAS_EXPORT &operator<<(QDataStream &ds, const ComplexValues &val
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIRECAS_EXPORT &operator>>(QDataStream &ds, ComplexValues &vals)
+QDataStream &operator>>(QDataStream &ds, ComplexValues &vals)
 {
     VersionID v = readHeader(ds, r_complexvals);
 

@@ -55,7 +55,7 @@ static const RegisterMetaType<SwitchingFunction> r_switchbase(MAGIC_ONLY,
                                                            "SireMM::SwitchingFunction");
 
 /** Serialise to a binary data stream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const SwitchingFunction &switchfunc)
+QDataStream &operator<<(QDataStream &ds, const SwitchingFunction &switchfunc)
 {
     writeHeader(ds, r_switchbase, 1)
         << static_cast<const Property&>(switchfunc)
@@ -66,7 +66,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const SwitchingFunction &
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, SwitchingFunction &switchfunc)
+QDataStream &operator>>(QDataStream &ds, SwitchingFunction &switchfunc)
 {
     VersionID v = readHeader(ds, r_switchbase);
 
@@ -197,7 +197,7 @@ bool SwitchingFunction::operator!=(const SwitchingFunction &other) const
 static const RegisterMetaType<NoCutoff> r_nocutoff;
 
 /** Serialise to a binary data stream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const NoCutoff &nocutoff)
+QDataStream &operator<<(QDataStream &ds, const NoCutoff &nocutoff)
 {
     writeHeader(ds, r_nocutoff, 1)
             << static_cast<const SwitchingFunction&>(nocutoff);
@@ -206,7 +206,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const NoCutoff &nocutoff)
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, NoCutoff &nocutoff)
+QDataStream &operator>>(QDataStream &ds, NoCutoff &nocutoff)
 {
     VersionID v = readHeader(ds, r_nocutoff);
 
@@ -331,7 +331,7 @@ void HarmonicSwitchingFunction::set(double cutelec, double featherelec,
 }
 
 /** Serialise to a binary data stream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const HarmonicSwitchingFunction &harm)
 {
     writeHeader(ds, r_harm, 1)
@@ -341,7 +341,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       HarmonicSwitchingFunction &harm)
 {
     VersionID v = readHeader(ds, r_harm);
@@ -583,7 +583,7 @@ void CHARMMSwitchingFunction::set(double cutelec, double featherelec,
 }
 
 /** Serialise to a binary data stream */
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
+QDataStream &operator<<(QDataStream &ds,
                                       const CHARMMSwitchingFunction &charmm)
 {
     writeHeader(ds, r_charmm, 1)
@@ -593,7 +593,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Deserialise from a binary data stream */
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
+QDataStream &operator>>(QDataStream &ds,
                                       CHARMMSwitchingFunction &charmm)
 {
     VersionID v = readHeader(ds, r_charmm);

@@ -42,11 +42,11 @@ class VectorProperty;
 class VectorArrayProperty;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMaths::VectorProperty&);
-QDataStream& operator>>(QDataStream&, SireMaths::VectorProperty&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::VectorProperty&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::VectorProperty&);
 
-QDataStream& operator<<(QDataStream&, const SireMaths::VectorArrayProperty&);
-QDataStream& operator>>(QDataStream&, SireMaths::VectorArrayProperty&);
+SIREMATHS_EXPORT QDataStream& operator<<(QDataStream&, const SireMaths::VectorArrayProperty&);
+SIREMATHS_EXPORT QDataStream& operator>>(QDataStream&, SireMaths::VectorArrayProperty&);
 
 namespace SireMaths
 {
@@ -62,8 +62,8 @@ class SIREMATHS_EXPORT VectorProperty
               public Vector
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const VectorProperty&);
-friend QDataStream& ::operator>>(QDataStream&, VectorProperty&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const VectorProperty&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, VectorProperty&);
 
 public:
     VectorProperty();
@@ -92,8 +92,8 @@ class SIREMATHS_EXPORT VectorArrayProperty
         : public SireBase::ConcreteProperty<VectorArrayProperty,SireBase::ArrayProperty<Vector> >
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const VectorArrayProperty&);
-friend QDataStream& ::operator>>(QDataStream&, VectorArrayProperty&);
+friend SIREMATHS_EXPORT QDataStream& ::operator<<(QDataStream&, const VectorArrayProperty&);
+friend SIREMATHS_EXPORT QDataStream& ::operator>>(QDataStream&, VectorArrayProperty&);
 
 public:
     VectorArrayProperty();
@@ -114,9 +114,9 @@ public:
     VectorArrayProperty& operator+=(const VectorArrayProperty &other);
 };
 
-SireBase::PropertyPtr wrap(const Vector &vector);
-SireBase::PropertyPtr wrap(const QVector<Vector> &vector);
-SireBase::PropertyPtr wrap(const QList<Vector> &vector);
+SIREMATHS_EXPORT SireBase::PropertyPtr wrap(const Vector &vector);
+SIREMATHS_EXPORT SireBase::PropertyPtr wrap(const QVector<Vector> &vector);
+SIREMATHS_EXPORT SireBase::PropertyPtr wrap(const QList<Vector> &vector);
 
 }
 

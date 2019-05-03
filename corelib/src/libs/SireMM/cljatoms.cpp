@@ -61,7 +61,7 @@ using namespace SireStream;
 
 static const RegisterMetaType<CLJAtom> r_cljatom(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJAtom &cljatom)
+QDataStream &operator<<(QDataStream &ds, const CLJAtom &cljatom)
 {
     writeHeader(ds, r_cljatom, 1);
     
@@ -72,7 +72,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJAtom &cljatom)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJAtom &cljatom)
+QDataStream &operator>>(QDataStream &ds, CLJAtom &cljatom)
 {
     VersionID v = readHeader(ds, r_cljatom);
     
@@ -343,7 +343,7 @@ CLJAtom CLJAtom::negate() const
 
 static const RegisterMetaType<CLJAtoms> r_cljatoms(NO_ROOT);
 
-QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJAtoms &cljatoms)
+QDataStream &operator<<(QDataStream &ds, const CLJAtoms &cljatoms)
 {
     writeHeader(ds, r_cljatoms, 1);
     
@@ -353,7 +353,7 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const CLJAtoms &cljatoms)
     return ds;
 }
 
-QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, CLJAtoms &cljatoms)
+QDataStream &operator>>(QDataStream &ds, CLJAtoms &cljatoms)
 {
     VersionID v = readHeader(ds, r_cljatoms);
     

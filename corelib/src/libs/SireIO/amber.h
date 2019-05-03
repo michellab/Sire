@@ -46,8 +46,8 @@ namespace SireIO
 class Amber;
 }
 
-QDataStream& operator<<(QDataStream&, const SireIO::Amber&);
-QDataStream& operator>>(QDataStream&, SireIO::Amber&);
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::Amber&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::Amber&);
 
 namespace SireMol
 {
@@ -83,8 +83,8 @@ using SireVol::Space;
 class SIREIO_EXPORT Amber
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const SireIO::Amber&);
-friend QDataStream& ::operator>>(QDataStream&, SireIO::Amber&);
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const SireIO::Amber&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, SireIO::Amber&);
   
 public:
     Amber();

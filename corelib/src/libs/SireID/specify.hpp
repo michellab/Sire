@@ -57,11 +57,11 @@ namespace SireID
     @author Christopher Woods
 */
 template<class ID>
-class SIREID_EXPORT Specify : public ID
+class Specify : public ID
 {
 
-friend QDataStream& ::operator<<<>(QDataStream&, const Specify<ID>&);
-friend QDataStream& ::operator>><>(QDataStream&, Specify<ID>&);
+friend SIREID_EXPORT QDataStream& ::operator<<<>(QDataStream&, const Specify<ID>&);
+friend SIREID_EXPORT QDataStream& ::operator>><>(QDataStream&, Specify<ID>&);
 
 public:
     Specify();

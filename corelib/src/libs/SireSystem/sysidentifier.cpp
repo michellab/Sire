@@ -40,7 +40,7 @@ using namespace SireStream;
 static const RegisterMetaType<SysIdentifier> r_sysid;
 
 /** Serialise to a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds, 
                                           const SysIdentifier &sysid)
 {
     writeHeader(ds, r_sysid, 1);
@@ -51,7 +51,7 @@ QDataStream SIRESYSTEM_EXPORT &operator<<(QDataStream &ds,
 }
 
 /** Extract from a binary datastream */
-QDataStream SIRESYSTEM_EXPORT &operator>>(QDataStream &ds, SysIdentifier &sysid)
+QDataStream &operator>>(QDataStream &ds, SysIdentifier &sysid)
 {
     VersionID v = readHeader(ds, r_sysid);
     
