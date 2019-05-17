@@ -30,7 +30,7 @@ CONDA_ENV=.conda_env
 SIRE_VER=$(git --git-dir=$SRC_DIR/.git --work-tree=$SRC_DIR describe --tags --abbrev=0)
 
 # Get the build number. (Number of commits since last tag.)
-SIRE_BUILD=$(git --git-dir=$SRC_DIR/.git --work-tree=$SRC_DIR rev-list $SIRE_VER.. --count)
+SIRE_BUILD=$(git --git-dir=$SRC_DIR/.git --work-tree=$SRC_DIR log --oneline $SIRE_VER.. | wc -l)
 
 # Store the conda environment.
 $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
