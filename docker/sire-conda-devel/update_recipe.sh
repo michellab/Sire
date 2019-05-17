@@ -27,7 +27,10 @@ DEPS=(boost gsl netcdf4 openmm pyqt tbb tbb-devel)
 CONDA_ENV=.conda_env
 
 # Get the Sire version.
-SIRE_VER=$(git --git-dir=$SRC_DIR/.git --work-tree=$SRC_DIR describe --tags | tr - _)
+SIRE_VER=$(git --git-dir=$SRC_DIR/.git --work-tree=$SRC_DIR describe --tags --abbrev=0)
+
+# Get the build number. (Number of commits since last tag.)
+SIRE_BUILD=$(git --git-dir=$SRC_DIR/.git --work-tree=$SRC_DIR rev-list $SIRE_VER.. --count)
 
 # Store the conda environment.
 $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
@@ -44,6 +47,10 @@ done
 # Update the Sire version number.
 echo "Updating Sire version number: '$SIRE_VER'"
 sed -i.bak -e "s/VERSION/$SIRE_VER/" $RECIPE && rm $RECIPE.bak
+
+# Update the build number.
+echo "Updating Sire build number: '$SIRE_BUILD'"
+sed -i.bak -e "s/BUILD/$SIRE_BUILD/" $RECIPE && rm $RECIPE.bak
 
 # Remove the Conda environment file.
 rm -f .conda_env
