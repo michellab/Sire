@@ -133,6 +133,6 @@ think twice before committing directly to devel. You should ideally be working
 in a feature branch, and only commit to devel once you are happy the code
 works on your branch. Use `***NO_CI***` until you are happy that you want to
 trigger a full build, test and deployment. This full pipeline will take
-about 30 minutes to complete.
+several hours to complete.
 
 Have fun :-)
