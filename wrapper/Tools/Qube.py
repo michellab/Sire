@@ -1,5 +1,9 @@
 #
 #
+
+import os
+import re
+import sys
 from Sire.IO import *
 from Sire.Mol import *
 from Sire.MM import *
@@ -13,8 +17,8 @@ from Sire.Base import *
 def readXmlParameters(pdbfile, xmlfile):
     # 1) Read a pdb file describing the system to simulate
 
-    xmlfile = 'pyridine/MOL_extra.xml'
-    pdbfile = 'pyridine/MOL.pdb'
+#     xmlfile = 'pyridine/MOL_extra.xml'
+#     pdbfile = 'pyridine/MOL.pdb'
     p = PDB2(pdbfile)
     s = p.toSystem()
     molecules = s.molecules()
@@ -38,7 +42,7 @@ def readXmlParameters(pdbfile, xmlfile):
             d[a.name] = a.value
         dicts_type.append(d)
     dicts_tp =  str(dicts_type).split()
-    print (dicts_tp)
+
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #~~~~~~~~~~~~~~~~~~~~~~ TAG NAME: ATOM ~~~~~~~~~~~~~~~~~~~~~
@@ -52,7 +56,6 @@ def readXmlParameters(pdbfile, xmlfile):
             d[a.name] = a.value
         dicts_atom.append(d)
     dicts_at =  str(dicts_atom).split()
-    print (dicts_at)
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #~~~~~~~~~~~~~~~~~~~~~~ TAG NAME: BOND ~~~~~~~~~~~~~~~~~~~~~
@@ -66,7 +69,6 @@ def readXmlParameters(pdbfile, xmlfile):
             d[a.name] = a.value
         dicts_bond.append(d)
     dicts_b =  str(dicts_bond).split()
-    print (dicts_b)
 
     nbond = itemlist_bond.length
 
@@ -82,7 +84,6 @@ def readXmlParameters(pdbfile, xmlfile):
             d[a.name] = a.value
         dicts_angle.append(d)
     dicts_ang =  str(dicts_angle).split()
-    print (dicts_ang)
 
     nAngles= itemlist_angle.length
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,7 +98,6 @@ def readXmlParameters(pdbfile, xmlfile):
             d[a.name] = a.value
         dicts_proper.append(d)
     dicts_pr =  str(dicts_proper).split()
-    print (dicts_pr)
 
     nProper = itemlist_proper.length
 
@@ -128,7 +128,6 @@ def readXmlParameters(pdbfile, xmlfile):
             d[a.name] = a.value
         dicts_virtualsite.append(d)
     dicts_vs =  str(dicts_virtualsite).split()
-    #print (dicts_vs)
     nVirtualSites = itemlist_VirtualSite.length 
         
 
@@ -144,7 +143,6 @@ def readXmlParameters(pdbfile, xmlfile):
             d[a.name] = a.value
         dicts_residue.append(d)
     dicts_res =  str(dicts_residue).split()
-    print (dicts_res)
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #~~~~~~~~~~~~~ TAG NAME: NON BONDED FORCE ~~~~~~~~~~~~~~~~
@@ -158,7 +156,7 @@ def readXmlParameters(pdbfile, xmlfile):
             d[a.name] = a.value
         dicts_nonb.append(d)
     dicts_nb =  str(dicts_nonb).split()
-    print (dicts_nb)
+
     nNonBonded = itemlist_nonbond.length
 
     # 3) Now we create an Amberparameters object for each molecule
@@ -167,7 +165,6 @@ def readXmlParameters(pdbfile, xmlfile):
     newmolecules = Molecules()
     for molnum in molnums:
         mol = molecules.at(molnum)
-        print (mol) 
 
         # Add potential virtual site parameters
         if len(dicts_virtualsite) > 0:
@@ -191,15 +188,12 @@ def readXmlParameters(pdbfile, xmlfile):
         for atom in atoms: 
             editatom = editmol.atom(atom.index())
             i = int(str(atom.number()).split('(')[1].replace(")" , " "))
-            editatom.setProperty("charge", float(dicts_atom[i+natoms+nVirtualSites-1]['charge']) * mod_electron)
-            editatom.setProperty("mass", float(dicts_type[i-1]['mass']) * g_per_mol) #
-            editatom.setProperty("LJ", LJParameter( float(dicts_atom[i+natoms+nVirtualSites-1]['sigma']) * angstrom, float(dicts_atom[i+natoms+nVirtualSites-1]['epsilon']) * kcal_per_mol))
-            editatom.setProperty("ambertype", dicts_atom[i+natoms+nVirtualSites-1]['type'])
+            editatom.setProperty("charge", float(dicts_atom[i+natoms+nVirtualSites]['charge']) * mod_electron)
+            editatom.setProperty("mass", float(dicts_type[i]['mass']) * g_per_mol) #
+            editatom.setProperty("LJ", LJParameter( float(dicts_atom[i+natoms+nVirtualSites-['sigma'])*10 * angstrom, float(dicts_atom[i+natoms+nVirtualSites]['epsilon'])/4184 * kcal_per_mol))
+            editatom.setProperty("ambertype", dicts_atom[i+natoms+nVirtualSites]['type'])
            
             editmol = editatom.molecule()
-            print(editmol)
-            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-         
 
         # Now we create a connectivity see setConnectivity in SireIO/amber.cpp l2144
         # XML data tells us how atoms are bonded in the molecule (Bond 'from' and 'to')
@@ -209,21 +203,17 @@ def readXmlParameters(pdbfile, xmlfile):
 
             c = []
             for i in range(0,int(nbond/2)):
-               # i = int(str(atom.number()).split('(')[1].replace(")" , " "))
                 if natoms > 1:   
                     connect_prop= {}
                     connect_prop = dicts_bond[i]['from'], dicts_bond[i]['to']
                 c.append(connect_prop)
-            print(c)
 
             conn = Connectivity(editmol.info()).edit()
 
             for j in range(0,len(c)):
-                conn.connect(atoms[int(c[j][0]) ].index(), atoms[int(c[j][1]) ].index()) 
-                   
-            #for atom in atoms:
+                conn.connect(atoms[int(c[j][0])].index(), atoms[int(c[j][1])].index()) 
+
             editmol.setProperty("connectivity", conn.commit()).commit()
-            #       print(editmol.setProperty("connectivity", conn.commit()))
             
 
              # Now we add bond parameters to the Sire molecule. We also update amberparameters see SireIO/amber.cpp l2154
@@ -234,24 +224,16 @@ def readXmlParameters(pdbfile, xmlfile):
             r = internalff.symbols().bond().r()
 
             for j in range(0,len(c)):
-                bf = bondfuncs.set(atoms[int(c[j][0]) ].index(), atoms[int(c[j][1]) ].index(), float(dicts_bond[j+len(c)]['k'])* (float(dicts_bond[j+len(c)]['length']) - r) **2  )
+                bf = bondfuncs.set(atoms[int(c[j][0]) ].index(), atoms[int(c[j][1]) ].index(), float(dicts_bond[j+len(c)]['k'])/4184* (float(dicts_bond[j+len(c)]['length'])*10 - r) **2  )
                 bond_id = BondID(atoms[int(c[j][0])].index(), atoms[int(c[j][1])].index())
-                print(bond_id)
-                for i in range(int(nbond/2), nbond):
-                    mol_params.add(bond_id, float(dicts_bond[i]['k']), float(dicts_bond[i]['length']) ) 
-            
-            editmol.setProperty("bonds", bondfuncs).commit()
-
+                mol_params.add(bond_id, float(dicts_bond[j+len(c)]['k'])/4184, float(dicts_bond[j+len(c)]['length'])*10 )
+                editmol.setProperty("bonds", bondfuncs).commit()
+                molecule = editmol.commit()
             
             mol_params.getAllBonds() 
-            print(mol_params.getAllBonds() )
-
 
             editmol.setProperty("amberparameters", mol_params).commit() # Weird, should work - investigate ? 
             molecule = editmol.commit()
-            #newmolecules.add(molecule)
-        
-    # return newmolecules
 
         # Now we add angle parameters to the Sire molecule. We also update amberparameters see SireIO/amber.cpp L2172
         if natoms > 2:
@@ -288,13 +270,10 @@ def readXmlParameters(pdbfile, xmlfile):
 
             theta = internalff.symbols().angle().theta()
             for j in range(0,nAngles):
-                anglefuncs.set( atoms[at1[j]].index(), atoms[at2[j]].index(), atoms[at3[j]].index(), float(dicts_angle[j]['k']) * ( (float(dicts_angle[j]['angle']) *degrees.value() - theta )**2 ))
+                anglefuncs.set( atoms[at1[j]].index(), atoms[at2[j]].index(), atoms[at3[j]].index(), float(dicts_angle[j]['k'])/4184 * ( (float(dicts_angle[j]['angle']) *degrees.value() - theta )**2 ))
                 angle_id = AngleID( atoms[int(at1[j])].index(), atoms[int(at2[j])].index(), atoms[int(at3[j])].index())
-                print(angle_id)
+                mol_params.add(angle_id, float(dicts_angle[i]['k'])/4184, float(dicts_angle[i]['angle']) ) 
 
-                for i in range(0, nAngles):
-                        mol_params.add(angle_id, float(dicts_angle[i]['k']), float(dicts_angle[i]['angle']) ) 
-            print(mol_params.getAllAngles() )
 
         # Now we add dihedral parameters to the Sire molecule. We also update amberparameters see SireIO/amber.cpp L2190
 
@@ -346,15 +325,12 @@ def readXmlParameters(pdbfile, xmlfile):
             for i in range(1,5):    
                 for j in range(0,nProper):
                     dihedralfuncs.set(atoms[di1[j]].index(), atoms[di2[j]].index(),atoms[di3[j]].index(),atoms[di4[j]].index(),\
-                     float(dicts_proper[j]['k%s'%i])*(1+ Cos(int(dicts_proper[j]['periodicity%s'%i]) * phi - float(dicts_proper[j]['phase%s'%i]))))
+                     float(dicts_proper[j]['k%s'%i])/4184 *(1+ Cos(int(dicts_proper[j]['periodicity%s'%i]) * phi - float(dicts_proper[j]['phase%s'%i]))))
                     dihedral_id = DihedralID( atoms[int(di1[j])].index(), atoms[int(di2[j])].index(), atoms[int(di3[j])].index(), atoms[int(di4[j])].index())
                     print(dihedral_id) 
                     for l in range(0, nProper ):
                         for t in range(1,5):
                             mol_params.add(dihedral_id, float(dicts_proper[l]['k%s'%t]), int(dicts_proper[l]['periodicity%s'%t]), float(dicts_proper[l]['phase%s'%t]) ) 
-            print(mol_params.getAllDihedrals() )
-
-            
 
             print("Set up impropers")
 
@@ -404,14 +380,12 @@ def readXmlParameters(pdbfile, xmlfile):
             for i in range(1,5):    
                 for j in range(0,nImproper):
                     improperfuncs.set(atoms[di_im1[j]].index(), atoms[di_im2[j]].index(),atoms[di_im3[j]].index(),atoms[di_im4[j]].index(),\
-                     float(dicts_improper[j]['k%s'%i])*(1+ Cos(int(dicts_improper[j]['periodicity%s'%i]) * phi_im - float(dicts_improper[j]['phase%s'%i]))))
-                    
+                     float(dicts_improper[j]['k%s'%i])/4184*(1+ Cos(int(dicts_improper[j]['periodicity%s'%i]) * phi_im - float(dicts_improper[j]['phase%s'%i]))))
                     improper_id = ImproperID( atoms[int(di_im1[j])].index(), atoms[int(di_im2[j])].index(), atoms[int(di_im3[j])].index(), atoms[int(di_im4[j])].index())
-                    print(improper_id) 
+
                     for l in range(0, nImproper ):
                         for t in range(1,5):
-                            mol_params.add(improper_id, float(dicts_improper[l]['k%s'%t]), int(dicts_improper[l]['periodicity%s'%t]), float(dicts_improper[l]['phase%s'%t]) ) 
-            print(mol_params.getAllDihedrals() )
+                            mol_params.add(improper_id, float(dicts_improper[l]['k%s'%t])/4184, int(dicts_improper[l]['periodicity%s'%t]), float(dicts_improper[l]['phase%s'%t]) ) 
 
             mol = editmol.setProperty("bond", bondfuncs).commit()
             mol = editmol.setProperty("angle" , anglefuncs).commit()
@@ -424,7 +398,7 @@ def readXmlParameters(pdbfile, xmlfile):
 
         print("Set up nbpairs")
 
-        if natoms <= 3:
+
             import re
             scale_factor1 = 0
             scale_factor2 = 0
