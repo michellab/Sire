@@ -393,49 +393,116 @@ def readXmlParameters(pdbfile, xmlfile):
             mol = editmol.setProperty("improper" , improperfuncs).commit()
             system.update(mol)
 
-        # Now we work out non bonded pairs see SireIO/amber.cpp L2213
 
+        # Now we work out non bonded pairs see SireIO/amber.cpp L2213
 
         print("Set up nbpairs")
 
+        ## Define the bonded pairs in a list that is called are12
+        are12 = []
+        for i in range(0, natoms): 
+            for j in range (0, natoms): 
+                if conn.areBonded(atoms[i].index(), atoms[j].index()) == True:
+                    ij = {}
+                    ij= (i,j)
+                    are12.append(ij)
+        are12_bckup = are12[:]
 
-            import re
+        for i in range (0, len(are12)): 
+            for j in range (0, len(are12)): 
+                if are12[i][0] == are12[j][1] and are12[i][1] == are12[j][0]: 
+                    are12[j] = (0,0)
+
+        for item in are12[:]: 
+            if item == (0,0):
+                are12.remove(item)
+
+        print (are12)
+        print("are12 length: ", len(are12))
+
+        ## Define the 1-3 pairs in a list that is called are13
+        are13 = []
+        for i in range(0, natoms): 
+            for j in range (0, natoms): 
+                if conn.areAngled(atoms[i].index(), atoms[j].index()) == True:
+                    ij = {}
+                    ij= (i,j)
+                    are13.append(ij)
+        are13_bckup = are13[:]
+
+        for i in range (0, len(are13)): 
+            for j in range (0, len(are13)): 
+                if are13[i][0] == are13[j][1] and are13[i][1] == are13[j][0]: 
+                    are13[j] = (0,0)
+
+        for item in are13[:]: 
+            if item == (0,0):
+                are13.remove(item)
+
+        print (are13)
+        print("are13 length: ", len(are13))
+
+        ## Define the 1-4 pairs in a list that is called are14
+        are14 = []
+        for i in range(0, natoms): 
+            for j in range (0, natoms): 
+                if conn.areDihedraled(atoms[i].index(), atoms[j].index()) == True:
+                    ij = {}
+                    ij= (i,j)
+                    are14.append(ij)
+        are14_bckup = are14[:]
+
+        for i in range (0, len(are14)): 
+            for j in range (0, len(are14)): 
+                if are14[i][0] == are14[j][1] and are14[i][1] == are14[j][0]: 
+                    are14[j] = (0,0)
+
+        for item in are14[:]: 
+            if item == (0,0):
+                are14.remove(item)
+
+        print (are14)
+        print("are14 length: ", len(are14))
+
+
+        nbpairs = CLJNBPairs(editmol.info(), CLJScaleFactor(scale_factor1,scale_factor2))      
+
+        for i in range(0, len(are12)):
             scale_factor1 = 0
             scale_factor2 = 0
-            nbpairs = CLJNBPairs(editmol.info(), CLJScaleFactor(scale_factor1,scale_factor2))
-
-            for i in range(0, len(Connectivity(atoms).getBonds())):
-                getB = str(Connectivity(atoms).getBonds()[i])
-                nbpairs.set(atoms.index( int(re.findall('\d+',getB)[0])), atoms.index(int(re.findall('\d+',getB)[1])), CLJScaleFactor(scale_factor1,scale_factor2))
-                mol = editmol.setProperty("intrascale" , nbpairs).commit()
-            system.update(mol)
-
-            for i in range(0, len(Connectivity(atoms).getAngles())):
-                getA = str(Connectivity(atoms).getAngles()[i])
-                nbpairs.set(atoms.index( int(re.findall('\d+',getA)[0])), atoms.index(int(re.findall('\d+',getA)[1])), CLJScaleFactor(scale_factor1,scale_factor2))
-                mol = editmol.setProperty("intrascale" , nbpairs).commit()
-            system.update(mol)
-
-
-        elif natoms <= 4:
-            import re
-            scale_factor1 = float(dicts_nonb[i]['coulomb14scale'])
-            scale_factor2 = float(dicts_nonb[i]['lj14scale'])
-            nbpairs = CLJNBPairs(editmol.info(), CLJScaleFactor(scale_factor1,scale_factor2))
-
-            for i in range(0, len(Connectivity(atoms).getDihedrals())):
-                getD = str(Connectivity(atoms).getDihedrals()[i])
-                nbpairs.set(atoms.index( int(re.findall('\d+',getD)[0])), atoms.index(int(re.findall('\d+',getD)[1])), CLJScaleFactor(scale_factor1,scale_factor2))
-                mol = editmol.setProperty("intrascale" , nbpairs).commit()
-            system.update(mol)
-
-
-        else: 
-            scale_factor1 = 1
-            scale_factor2 = 1
-            nbpairs = CLJNBPairs(editmol.info(), CLJScaleFactor(scale_factor1,scale_factor2))
+            nbpairs.set(atoms.index( int(are12[i][0])), atoms.index(int(are12[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
             mol = editmol.setProperty("intrascale" , nbpairs).commit()
             system.update(mol)
+
+        for i in range(0, len(are13)):
+            scale_factor1 = 0
+            scale_factor2 = 0
+            nbpairs.set(atoms.index( int(are13[i][0])), atoms.index(int(are13[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
+            mol = editmol.setProperty("intrascale" , nbpairs).commit()
+            system.update(mol)
+
+        for i in range(0, len(are14)):
+            scale_factor1 = float(dicts_nonb[0]['coulomb14scale'])
+            scale_factor2 = float(dicts_nonb[0]['lj14scale'])
+            nbpairs.set(atoms.index( int(are14[i][0])), atoms.index(int(are14[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
+            mol = editmol.setProperty("intrascale" , nbpairs).commit()
+            system.update(mol)
+
+        bonded_pairs_list = are12_bckup + are13_bckup + are14_bckup    
+
+        nb_pair_list =[]
+        for i in range(0, len(nb_pair_list)): 
+            for j in range (0, len(nb_pair_list)): 
+                if i != j:
+                    if (i,j) not in bonded_pairs_list:
+                        nb_pair_list.append((i,j))
+                        scale_factor1 = 1
+                        scale_factor2 = 1
+                        nbpairs.set(atoms.index( int(nb_pair_list[i][0])), atoms.index(int(nb_pair_list[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
+                        mol = editmol.setProperty("intrascale" , nbpairs).commit()
+                        system.update(mol)
+
+                                                                    
 
         molecule = editmol.commit()
         newmolecules.add(molecule)
