@@ -464,12 +464,10 @@ def readXmlParameters(pdbfile, xmlfile):
         print (are14)
         print("are14 length: ", len(are14))
 
-
-        nbpairs = CLJNBPairs(editmol.info(), CLJScaleFactor(scale_factor1,scale_factor2))      
-
         for i in range(0, len(are12)):
             scale_factor1 = 0
             scale_factor2 = 0
+            nbpairs = CLJNBPairs(editmol.info(), CLJScaleFactor(scale_factor1,scale_factor2))                                          
             nbpairs.set(atoms.index( int(are12[i][0])), atoms.index(int(are12[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
             mol = editmol.setProperty("intrascale" , nbpairs).commit()
             system.update(mol)
@@ -477,6 +475,7 @@ def readXmlParameters(pdbfile, xmlfile):
         for i in range(0, len(are13)):
             scale_factor1 = 0
             scale_factor2 = 0
+            nbpairs = CLJNBPairs(editmol.info(), CLJScaleFactor(scale_factor1,scale_factor2))  
             nbpairs.set(atoms.index( int(are13[i][0])), atoms.index(int(are13[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
             mol = editmol.setProperty("intrascale" , nbpairs).commit()
             system.update(mol)
@@ -484,6 +483,7 @@ def readXmlParameters(pdbfile, xmlfile):
         for i in range(0, len(are14)):
             scale_factor1 = float(dicts_nonb[0]['coulomb14scale'])
             scale_factor2 = float(dicts_nonb[0]['lj14scale'])
+            nbpairs = CLJNBPairs(editmol.info(), CLJScaleFactor(scale_factor1,scale_factor2))    
             nbpairs.set(atoms.index( int(are14[i][0])), atoms.index(int(are14[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
             mol = editmol.setProperty("intrascale" , nbpairs).commit()
             system.update(mol)
