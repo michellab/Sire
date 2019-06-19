@@ -491,18 +491,20 @@ def readXmlParameters(pdbfile, xmlfile):
         bonded_pairs_list = are12_bckup + are13_bckup + are14_bckup    
 
         nb_pair_list =[]
+
+        for i in range(0, natoms): 
+            for j in range (0, natoms):
+                if i != j and (i,j) not in bonded_pairs_list:
+                    nb_pair_list.append((i,j))
+                    print (nb_pair_list)
+
         for i in range(0, len(nb_pair_list)): 
             for j in range (0, len(nb_pair_list)): 
-                if i != j:
-                    if (i,j) not in bonded_pairs_list:
-                        nb_pair_list.append((i,j))
-                        scale_factor1 = 1
-                        scale_factor2 = 1
-                        nbpairs.set(atoms.index( int(nb_pair_list[i][0])), atoms.index(int(nb_pair_list[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
-                        mol = editmol.setProperty("intrascale" , nbpairs).commit()
-                        system.update(mol)
-
-                                                                    
+                scale_factor1 = 1
+                scale_factor2 = 1
+                nbpairs.set(atoms.index( int(nb_pair_list[i][0])), atoms.index(int(nb_pair_list[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
+                mol = editmol.setProperty("intrascale" , nbpairs).commit()
+                system.update(mol)
 
         molecule = editmol.commit()
         newmolecules.add(molecule)
