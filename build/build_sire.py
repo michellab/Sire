@@ -157,7 +157,7 @@ if __name__ == "__main__":
         import netCDF4
         print("netCDF4 is already installed...")
     except ImportError:
-        conda_pkgs.append("netcdf4=1.5.0")
+        conda_pkgs.append("netcdf4=1.5.1.2")
 
     CC = None
     CXX = None
@@ -170,20 +170,20 @@ if __name__ == "__main__":
         if os.path.exists(os.path.join(conda_base, "include", "boost", "python.hpp")):
             print("boost is already installed...")
         else:
-            conda_pkgs.append("boost=1.69.0")
+            conda_pkgs.append("boost=1.70.0")
 
         # gsl
         if os.path.exists(os.path.join(conda_base, "include", "gsl", "gsl_version.h")):
             print("gsl is already installed...")
         else:
-            conda_pkgs.append("gsl=2.4")
+            conda_pkgs.append("gsl=2.5")
 
         # tbb
         if os.path.exists(os.path.join(conda_base, "include", "tbb", "tbb.h")):
             print("TBB is already installed...")
         else:
-            conda_pkgs.append("tbb=2019.4")
-            conda_pkgs.append("tbb-devel=2019.4")
+            conda_pkgs.append("tbb=2019.7")
+            conda_pkgs.append("tbb-devel=2019.7")
 
         # Qt5
         try:
