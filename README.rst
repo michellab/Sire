@@ -40,7 +40,24 @@ need to add them when updating, e.g., for the development package::
 
     conda update -c conda-forge -c omnia -c michellab/label/dev sire
 
-Note that on OS X you will need to run Python scripts with the ``sire_python``
+Note that because of Conda's peculiar scoring metrics that you might not end
+up with the latest version of Sire when performing a fresh install or
+update. (It tries to minimise various things, such as the number of dependencies
+installed, which is difficult when your package depends on many other packages.)
+To see what packages are available, run:
+
+.. code-block:: bash
+
+    conda search -c michellab/label/dev sire
+
+You can then install the latest version by explicitly stating the full package
+name, e.g.:
+
+.. code-block:: bash
+
+    conda install -c conda-forge -c omnia -c michellab/label/dev sire=2019.1.0=py37hf484d3e_13
+
+On OS X you will need to run Python scripts with the ``sire_python``
 interpreter. This is due to an issue with the default Python interpreter
 that is installed via Conda. (This applies to all installation methods.)
 
