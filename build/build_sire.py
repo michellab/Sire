@@ -1,6 +1,6 @@
 ## This script is used to finish the compile of Sire corelib and wrappers
 ## This script must be called using the python from a miniconda or
-## anaconda distribution
+## anaconda distribution
 
 import sys
 import os
@@ -113,7 +113,7 @@ if __name__ == "__main__":
               % (python_exe, sys.argv[0]))
 
     # now go through all of the python modules that need to be available
-    # into this conda installation, and make sure they have been installed
+    # into this conda installation, and make sure they have been installed
 
     conda_pkgs = []
 
@@ -157,7 +157,7 @@ if __name__ == "__main__":
         import netCDF4
         print("netCDF4 is already installed...")
     except ImportError:
-        conda_pkgs.append("netcdf4=1.5.1.2")
+        conda_pkgs.append("netcdf4=1.5.0")
 
     CC = None
     CXX = None
@@ -170,20 +170,20 @@ if __name__ == "__main__":
         if os.path.exists(os.path.join(conda_base, "include", "boost", "python.hpp")):
             print("boost is already installed...")
         else:
-            conda_pkgs.append("boost=1.70.0")
+            conda_pkgs.append("boost=1.69.0")
 
         # gsl
         if os.path.exists(os.path.join(conda_base, "include", "gsl", "gsl_version.h")):
             print("gsl is already installed...")
         else:
-            conda_pkgs.append("gsl=2.5")
+            conda_pkgs.append("gsl=2.4")
 
         # tbb
         if os.path.exists(os.path.join(conda_base, "include", "tbb", "tbb.h")):
             print("TBB is already installed...")
         else:
-            conda_pkgs.append("tbb=2019.7")
-            conda_pkgs.append("tbb-devel=2019.7")
+            conda_pkgs.append("tbb=2019.4")
+            conda_pkgs.append("tbb-devel=2019.4")
 
         # Qt5
         try:
@@ -266,7 +266,7 @@ if __name__ == "__main__":
             os.system("%s install --yes -c omnia openmm=7.3.1" % conda_exe)
             installed_something = True
 
-    # make sure we really have found the compilers
+    # make sure we really have found the compilers
     if (not args.noconda):
         if is_osx:
             try:
@@ -286,12 +286,12 @@ if __name__ == "__main__":
 
     print("Using compilers %s | %s" % (CC, CXX))
 
-    # Make sure all of the above output is printed to the screen
-    # before we start running any actual compilation
+    # Make sure all of the above output is printed to the screen
+    # before we start running any actual compilation
     sys.stdout.flush()
 
-    # Now that the miniconda distribution is ok, the next step
-    # is to use cmake to build the corelib and wrapper in the build/corelib
+    # Now that the miniconda distribution is ok, the next step
+    # is to use cmake to build the corelib and wrapper in the build/corelib
     # and build/wrapper directories
 
     # change into the build/corelib directory
@@ -365,7 +365,7 @@ if __name__ == "__main__":
         print("SOMETHING WENT WRONG WHEN USING CMAKE ON CORELIB!")
         sys.exit(-1)
 
-    # Now that cmake has run, we can compile and install corelib
+    # Now that cmake has run, we can compile and install corelib
     make_args = make_cmd(NCORES, True)
 
     print("NOW RUNNING \"%s\" --build . --target %s" % (cmake, make_args))
