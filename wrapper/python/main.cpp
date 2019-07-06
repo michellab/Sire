@@ -102,7 +102,8 @@ int main(int argc, char **argv)
         if (ppn <= 0)
         {
             throw SireError::invalid_arg( QObject::tr(
-                "SIRE_NUM_THREADS environment variable must be a positive integer!"));
+                "Invalid OMP_NUM_THREADS or SIRE_NUM_THREADS environment "
+                "variable! Must be a positive integer."));
         }
 
         QList< std::wstring > warg_strings;
