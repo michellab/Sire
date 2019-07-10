@@ -129,8 +129,22 @@ def readXmlParameters(pdbfile, xmlfile):
         dicts_virtualsite.append(d)
     dicts_vs =  str(dicts_virtualsite).split()
     nVirtualSites = itemlist_VirtualSite.length 
-        
 
+    v_site_CLJ = []
+    for i in range(0, int(len(dicts_atom))):
+        if dicts_atom[i]['type'][0] == 'v':
+            v_site_CLJ = dicts_atom[i]
+            dicts_virtualsite.append(v_site_CLJ)
+
+    for i in range(0, len(itemlist_VirtualSite)):
+        dicts_virtualsite[i].update(dicts_virtualsite[i+len(itemlist_VirtualSite)])
+        dicts_virtualsite[i].update(dicts_virtualsite[i+2*len(itemlist_VirtualSite)]) 
+
+    dict_vs = []
+    for i in range(0, len(itemlist_VirtualSite)):
+        dicts_virtualsite[i]
+        dict_vs.append(dicts_virtualsite[i])
+        
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #~~~~~~~~~~~~~~~~~~~~~~ TAG NAME: RESIDUE ~~~~~~~~~~~~~~~~
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -184,34 +198,77 @@ def readXmlParameters(pdbfile, xmlfile):
     #natoms don't include the virtual sites! 
 
     # Loop over each molecule in the molecules object
-    
+        # Loop over each molecule in the molecules object
+
+
+        opls=[]
+        for i in range (0, int(len(dicts_atom)/2)): 
+            opl={} 
+            opl = dicts_atom[i]['type'] 
+            opls.append(opl) 
+        print(opls)
+
+        name=[]
+        for i in range (0, int(len(dicts_atom)/2)): 
+            nm={} 
+            nm = dicts_atom[i]['name'] 
+            name.append(nm) 
+        print(name)
+
+        two=[] 
+        print(len(name)) 
+        for i in range(0, len(name)): 
+            t=(opls[i],name[i]) 
+            two.append(t) 
+        print(two)
+
+        import numpy as np 
+
+        atom_sorted = []
+        for j in range(0, len(two)): 
+            for i in range(int(len(dicts_atom)/2), len(dicts_atom)):   
+                if dicts_atom[i]['type'] == two[j][0]: 
+                    dic_a = {}
+                    dic_a = dicts_atom[i]
+                    atom_sorted.append(dic_a)
+
+        type_sorted = []
+        for j in range(0, len(two)): 
+            for i in range(0, int(len(dicts_type))):   
+                if dicts_type[i]['name'] == two[j][0]: 
+                    dic_t = {}
+                    dic_t = dicts_type[i]
+                    type_sorted.append(dic_t)
+
         for atom in atoms: 
             editatom = editmol.atom(atom.index())
+
             i = int(str(atom.number()).split('(')[1].replace(")" , " "))
-            editatom.setProperty("charge", float(dicts_atom[i+natoms+nVirtualSites]['charge']) * mod_electron)
-            editatom.setProperty("mass", float(dicts_type[i]['mass']) * g_per_mol) #
-            editatom.setProperty("LJ", LJParameter( float(dicts_atom[i+natoms+nVirtualSites-['sigma'])*10 * angstrom, float(dicts_atom[i+natoms+nVirtualSites]['epsilon'])/4184 * kcal_per_mol))
-            editatom.setProperty("ambertype", dicts_atom[i+natoms+nVirtualSites]['type'])
+            #print(i)
+            editatom.setProperty("charge", float(atom_sorted[i-1]['charge']) * mod_electron)
+            editatom.setProperty("mass", float(type_sorted[i-1]['mass']) * g_per_mol) 
+            editatom.setProperty("LJ", LJParameter( float(atom_sorted[i-1]['sigma'])*10 * angstrom , float(atom_sorted[i-1]['epsilon'])/4184 * kcal_per_mol))
+            editatom.setProperty("ambertype", dicts_atom[i-1]['type'])
            
             editmol = editatom.molecule()
-
+        
         # Now we create a connectivity see setConnectivity in SireIO/amber.cpp l2144
         # XML data tells us how atoms are bonded in the molecule (Bond 'from' and 'to')
         
         if natoms > 1:
             print("Set up connectivity")
 
-            c = []
+            con = []
             for i in range(0,int(nbond/2)):
                 if natoms > 1:   
                     connect_prop= {}
                     connect_prop = dicts_bond[i]['from'], dicts_bond[i]['to']
-                c.append(connect_prop)
+                con.append(connect_prop)
 
             conn = Connectivity(editmol.info()).edit()
 
-            for j in range(0,len(c)):
-                conn.connect(atoms[int(c[j][0])].index(), atoms[int(c[j][1])].index()) 
+            for j in range(0,len(con)):
+                conn.connect(atoms[int(con[j][0])].index(), atoms[int(con[j][1])].index()) 
 
             editmol.setProperty("connectivity", conn.commit()).commit()
             
@@ -223,14 +280,18 @@ def readXmlParameters(pdbfile, xmlfile):
             bondfuncs = TwoAtomFunctions(mol)
             r = internalff.symbols().bond().r()
 
-            for j in range(0,len(c)):
-                bf = bondfuncs.set(atoms[int(c[j][0]) ].index(), atoms[int(c[j][1]) ].index(), float(dicts_bond[j+len(c)]['k'])/4184* (float(dicts_bond[j+len(c)]['length'])*10 - r) **2  )
-                bond_id = BondID(atoms[int(c[j][0])].index(), atoms[int(c[j][1])].index())
-                mol_params.add(bond_id, float(dicts_bond[j+len(c)]['k'])/4184, float(dicts_bond[j+len(c)]['length'])*10 )
+            for j in range(0,len(con)):
+                bondfuncs.set(atoms[int(con[j][0]) ].index(), atoms[int(con[j][1]) ].index(), float(dicts_bond[j+len(con)]['k'])/4184* (float(dicts_bond[j+len(con)]['length'])*10 - r) **2  )
+                bond_id = BondID(atoms[int(con[j][0])].index(), atoms[int(con[j][1])].index())
+                print(bond_id)
+                mol_params.add(bond_id, float(dicts_bond[j+len(con)]['k'])/4184, float(dicts_bond[j+len(con)]['length'])*10 ) 
+                    # mol_params.add(bond_id, float(dicts_bond[i]['k']), float(dicts_bond[i]['length']) ) 
+            
                 editmol.setProperty("bonds", bondfuncs).commit()
                 molecule = editmol.commit()
-            
+      
             mol_params.getAllBonds() 
+
 
             editmol.setProperty("amberparameters", mol_params).commit() # Weird, should work - investigate ? 
             molecule = editmol.commit()
@@ -243,149 +304,148 @@ def readXmlParameters(pdbfile, xmlfile):
 
             at1 = []
             for i in range(0, nAngles):
-                for j in range(0,natoms):
-                    if dicts_angle[i]['class1']  == dicts_type[j]['class']:
-                        a1 = {}
-                        a1 = j
-                        at1.append(a1)
-            print (at1)
+                a1 = {}
+                to_str1 = str(re.findall(r"\d+",str(dicts_angle[i]['class1'])))
+                a1 = int(to_str1.replace("[","").replace("]","").replace("'","") )-800
+                at1.append(a1)
+            #print (at1)
 
             at2 = []
             for i in range(0, nAngles):
-                for j in range(0,natoms):
-                    if dicts_angle[i]['class2']  == dicts_type[j]['class']:
-                        a2 = {}
-                        a2 = j
-                        at2.append(a2)
-            print (at2)
+                a2 = {}
+                to_str2 = str(re.findall(r"\d+",str(dicts_angle[i]['class2'])))
+                a2 = int(to_str2.replace("[","").replace("]","").replace("'","") )-800
+                at2.append(a2)
+            #print (at2)
 
             at3 = []
             for i in range(0, nAngles):
-                for j in range(0,natoms):
-                    if dicts_angle[i]['class3']  == dicts_type[j]['class']:
-                        a3 = {}
-                        a3 = j
-                        at3.append(a3)
-            print (at3)
+                a3 = {}
+                to_str3 = str(re.findall(r"\d+",str(dicts_angle[i]['class3'])))
+                a3 = int(to_str3.replace("[","").replace("]","").replace("'","") )-800
+                at3.append(a3)
+            #print (at3)
 
             theta = internalff.symbols().angle().theta()
             for j in range(0,nAngles):
-                anglefuncs.set( atoms[at1[j]].index(), atoms[at2[j]].index(), atoms[at3[j]].index(), float(dicts_angle[j]['k'])/4184 * ( (float(dicts_angle[j]['angle']) *degrees.value() - theta )**2 ))
+                anglefuncs.set( atoms[at1[j]].index(), atoms[at2[j]].index(), atoms[at3[j]].index(), float(dicts_angle[j]['k'])/4184 * ( (float(dicts_angle[j]['angle']) - theta )**2 ))
                 angle_id = AngleID( atoms[int(at1[j])].index(), atoms[int(at2[j])].index(), atoms[int(at3[j])].index())
-                mol_params.add(angle_id, float(dicts_angle[i]['k'])/4184, float(dicts_angle[i]['angle']) ) 
+                #print(angle_id)
+                mol_params.add(angle_id, float(dicts_angle[j]['k'])/4184, float(dicts_angle[j]['angle']) ) 
+            #print(mol_params.getAllAngles() )
 
+            theta = internalff.symbols().angle().theta()
+            for j in range(0,nAngles):
+                anglefuncs.set( atoms[at1[j]].index(), atoms[at2[j]].index(), atoms[at3[j]].index(), float(dicts_angle[j]['k'])/4184 * ( (float(dicts_angle[j]['angle']) - theta )**2 ))
+                angle_id = AngleID( atoms[int(at1[j])].index(), atoms[int(at2[j])].index(), atoms[int(at3[j])].index())
+                mol_params.add(angle_id, float(dicts_angle[j]['k'])/4184, float(dicts_angle[j]['angle']) ) 
+            
 
         # Now we add dihedral parameters to the Sire molecule. We also update amberparameters see SireIO/amber.cpp L2190
 
         if natoms > 3:
             print("Set up dihedrals")
-
             di1 = []
             for i in range(0, nProper):
-                for j in range(0,natoms):
-                    if dicts_proper[i]['class1']  == dicts_type[j]['class']:
-                        d1 = {}
-                        d1 = j
-                        di1.append(d1)
-            print (di1)
-
+                d1 = {}
+                to_str1 = str(re.findall(r"\d+",str(dicts_proper[i]['class1'])))
+                d1 = int(to_str1.replace("[","").replace("]","").replace("'","") )-800
+                di1.append(d1)
+            #print (di1)
 
             di2 = []
             for i in range(0, nProper):
-                for j in range(0,natoms):
-                    if dicts_proper[i]['class2']  == dicts_type[j]['class']:
-                        d2 = {}
-                        d2 = j
-                        di2.append(d2)
-            print (di2)
-
+                d2 = {}
+                to_str2 = str(re.findall(r"\d+",str(dicts_proper[i]['class2'])))
+                d2 = int(to_str2.replace("[","").replace("]","").replace("'","") )-800
+                di2.append(d2)
+            #print (di2)
 
             di3 = []
             for i in range(0, nProper):
-                for j in range(0,natoms):
-                    if dicts_proper[i]['class3']  == dicts_type[j]['class']:
-                        d3 = {}
-                        d3 = j
-                        di3.append(d3)
-            print (di3)
+                d3 = {}
+                to_str3 = str(re.findall(r"\d+",str(dicts_proper[i]['class3'])))
+                d3 = int(to_str3.replace("[","").replace("]","").replace("'","") )-800
+                di3.append(d3)
+            #print (di3)
 
             di4 = []
             for i in range(0, nProper):
-                for j in range(0,natoms):
-                    if dicts_proper[i]['class4']  == dicts_type[j]['class']:
-                        d4 = {}
-                        d4 = j
-                        di4.append(d4)
-            print (di4)
+                d4 = {}
+                to_str4 = str(re.findall(r"\d+",str(dicts_proper[i]['class4'])))
+                d4 = int(to_str4.replace("[","").replace("]","").replace("'","") )-800
+                di4.append(d4)
+            #print (di4)
+
 
             dihedralfuncs = FourAtomFunctions(mol)
-    
-            phi = internalff.symbols().dihedral().phi()
 
-            for i in range(1,5):    
-                for j in range(0,nProper):
-                    dihedralfuncs.set(atoms[di1[j]].index(), atoms[di2[j]].index(),atoms[di3[j]].index(),atoms[di4[j]].index(),\
-                     float(dicts_proper[j]['k%s'%i])/4184 *(1+ Cos(int(dicts_proper[j]['periodicity%s'%i]) * phi - float(dicts_proper[j]['phase%s'%i]))))
-                    dihedral_id = DihedralID( atoms[int(di1[j])].index(), atoms[int(di2[j])].index(), atoms[int(di3[j])].index(), atoms[int(di4[j])].index())
-                    print(dihedral_id) 
-                    for l in range(0, nProper ):
-                        for t in range(1,5):
-                            mol_params.add(dihedral_id, float(dicts_proper[l]['k%s'%t]), int(dicts_proper[l]['periodicity%s'%t]), float(dicts_proper[l]['phase%s'%t]) ) 
+            phi = internalff.symbols().dihedral().phi()
+            for i in range(0,nProper):  
+                dihedral_id = DihedralID( atoms[int(di1[i])].index(), atoms[int(di2[i])].index(), atoms[int(di3[i])].index(), atoms[int(di4[i])].index())
+                print(dihedral_id) 
+                dih1= float(dicts_proper[i]['k1'])/4184*(1+Cos(int(dicts_proper[i]['periodicity1'])* phi - float(dicts_proper[i]['phase1'])))
+                dih2= float(dicts_proper[i]['k2'])/4184*(1+Cos(int(dicts_proper[i]['periodicity2'])* phi - float(dicts_proper[i]['phase2'])))
+                dih3= float(dicts_proper[i]['k3'])/4184*(1+Cos(int(dicts_proper[i]['periodicity3'])* phi - float(dicts_proper[i]['phase3'])))
+                dih4= float(dicts_proper[i]['k4'])/4184*(1+Cos(int(dicts_proper[i]['periodicity4'])* phi - float(dicts_proper[i]['phase4'])))
+                dih_fun = dih1 + dih2 +dih3 +dih4
+                dihedralfuncs.set(dihedral_id, dih_fun)
+                print(dihedralfuncs.potentials())
+                for t in range(1,5):
+                    mol_params.add(dihedral_id, float(dicts_proper[i]['k%s'%t])/4184, int(dicts_proper[i]['periodicity%s'%t]), float(dicts_proper[i]['phase%s'%t]) ) 
+
 
             print("Set up impropers")
 
             di_im1 = []
             for i in range(0, nImproper):
-                for j in range(0,natoms):
-                    if dicts_improper[i]['class1']  == dicts_type[j]['class']:
-                        d1 = {}
-                        d1 = j
-                        di_im1.append(d1)
-            print (di_im1)
+                d1 = {}
+                to_str1 = str(re.findall(r"\d+",str(dicts_improper[i]['class1'])))
+                d1 = int(to_str1.replace("[","").replace("]","").replace("'","") )-800
+                di_im1.append(d1)
 
 
             di_im2 = []
             for i in range(0, nImproper):
-                for j in range(0,natoms):
-                    if dicts_improper[i]['class2']  == dicts_type[j]['class']:
-                        d2 = {}
-                        d2 = j
-                        di_im2.append(d2)
-            print (di_im2)
-
+                d2 = {}
+                to_str2 = str(re.findall(r"\d+",str(dicts_improper[i]['class2'])))
+                d2 = int(to_str2.replace("[","").replace("]","").replace("'","") )-800
+                di_im2.append(d2)
 
             di_im3 = []
             for i in range(0, nImproper):
-                for j in range(0,natoms):
-                    if dicts_improper[i]['class3']  == dicts_type[j]['class']:
-                        d3 = {}
-                        d3 = j
-                        di_im3.append(d3)
-            print (di_im3)
-
+                d3 = {}
+                to_str3 = str(re.findall(r"\d+",str(dicts_improper[i]['class3'])))
+                d3 = int(to_str3.replace("[","").replace("]","").replace("'","") )-800
+                di_im3.append(d3)
 
             di_im4 = []
             for i in range(0, nImproper):
-                for j in range(0,natoms):
-                    if dicts_improper[i]['class4']  == dicts_type[j]['class']:
-                        d4 = {}
-                        d4 = j
-                        di_im4.append(d4)
-            print (di_im4)
+                d4 = {}
+                to_str4 = str(re.findall(r"\d+",str(dicts_improper[i]['class4'])))
+                d4 = int(to_str4.replace("[","").replace("]","").replace("'","") )-800
+                di_im4.append(d4)
 
 
             improperfuncs = FourAtomFunctions(mol)
 
             phi_im = internalff.symbols().improper().phi()
-            for i in range(1,5):    
-                for j in range(0,nImproper):
-                    improperfuncs.set(atoms[di_im1[j]].index(), atoms[di_im2[j]].index(),atoms[di_im3[j]].index(),atoms[di_im4[j]].index(),\
-                     float(dicts_improper[j]['k%s'%i])/4184*(1+ Cos(int(dicts_improper[j]['periodicity%s'%i]) * phi_im - float(dicts_improper[j]['phase%s'%i]))))
-                    improper_id = ImproperID( atoms[int(di_im1[j])].index(), atoms[int(di_im2[j])].index(), atoms[int(di_im3[j])].index(), atoms[int(di_im4[j])].index())
 
-                    for l in range(0, nImproper ):
-                        for t in range(1,5):
-                            mol_params.add(improper_id, float(dicts_improper[l]['k%s'%t])/4184, int(dicts_improper[l]['periodicity%s'%t]), float(dicts_improper[l]['phase%s'%t]) ) 
+            
+            for i in range(0,nImproper):  
+                improper_id = ImproperID( atoms[int(di_im1[i])].index(), atoms[int(di_im2[i])].index(), atoms[int(di_im3[i])].index(), atoms[int(di_im4[i])].index())
+                print(improper_id) 
+                imp1= float(dicts_improper[i]['k1'])/4184*(1+Cos(int(dicts_improper[i]['periodicity1'])* phi_im - float(dicts_improper[i]['phase1'])))
+                imp2= float(dicts_improper[i]['k2'])/4184*(1+Cos(int(dicts_improper[i]['periodicity2'])* phi_im - float(dicts_improper[i]['phase2'])))
+                imp3= float(dicts_improper[i]['k3'])/4184*(1+Cos(int(dicts_improper[i]['periodicity3'])* phi_im - float(dicts_improper[i]['phase3'])))
+                imp4= float(dicts_improper[i]['k4'])/4184*(1+Cos(int(dicts_improper[i]['periodicity4'])* phi_im - float(dicts_improper[i]['phase4'])))
+                imp_fun = imp1 + imp2 +imp3 +imp4
+                improperfuncs.set(improper_id, imp_fun)
+                print(improperfuncs.potentials())
+
+                for t in range(1,5):
+                    mol_params.add(improper_id, float(dicts_improper[i]['k%s'%t])/4184, int(dicts_improper[i]['periodicity%s'%t]), float(dicts_improper[i]['phase%s'%t]) ) 
+        #print(mol_params.getAllDihedrals() )
 
             mol = editmol.setProperty("bond", bondfuncs).commit()
             mol = editmol.setProperty("angle" , anglefuncs).commit()
@@ -417,9 +477,6 @@ def readXmlParameters(pdbfile, xmlfile):
             if item == (0,0):
                 are12.remove(item)
 
-        print (are12)
-        print("are12 length: ", len(are12))
-
         ## Define the 1-3 pairs in a list that is called are13
         are13 = []
         for i in range(0, natoms): 
@@ -438,9 +495,6 @@ def readXmlParameters(pdbfile, xmlfile):
         for item in are13[:]: 
             if item == (0,0):
                 are13.remove(item)
-
-        print (are13)
-        print("are13 length: ", len(are13))
 
         ## Define the 1-4 pairs in a list that is called are14
         are14 = []
@@ -461,33 +515,6 @@ def readXmlParameters(pdbfile, xmlfile):
             if item == (0,0):
                 are14.remove(item)
 
-        print (are14)
-        print("are14 length: ", len(are14))
-
-        for i in range(0, len(are12)):
-            scale_factor1 = 0
-            scale_factor2 = 0
-            nbpairs = CLJNBPairs(editmol.info(), CLJScaleFactor(scale_factor1,scale_factor2))                                          
-            nbpairs.set(atoms.index( int(are12[i][0])), atoms.index(int(are12[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
-            mol = editmol.setProperty("intrascale" , nbpairs).commit()
-            system.update(mol)
-
-        for i in range(0, len(are13)):
-            scale_factor1 = 0
-            scale_factor2 = 0
-            nbpairs = CLJNBPairs(editmol.info(), CLJScaleFactor(scale_factor1,scale_factor2))  
-            nbpairs.set(atoms.index( int(are13[i][0])), atoms.index(int(are13[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
-            mol = editmol.setProperty("intrascale" , nbpairs).commit()
-            system.update(mol)
-
-        for i in range(0, len(are14)):
-            scale_factor1 = float(dicts_nonb[0]['coulomb14scale'])
-            scale_factor2 = float(dicts_nonb[0]['lj14scale'])
-            nbpairs = CLJNBPairs(editmol.info(), CLJScaleFactor(scale_factor1,scale_factor2))    
-            nbpairs.set(atoms.index( int(are14[i][0])), atoms.index(int(are14[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
-            mol = editmol.setProperty("intrascale" , nbpairs).commit()
-            system.update(mol)
-
         bonded_pairs_list = are12_bckup + are13_bckup + are14_bckup    
 
         nb_pair_list =[]
@@ -498,13 +525,30 @@ def readXmlParameters(pdbfile, xmlfile):
                     nb_pair_list.append((i,j))
                     print (nb_pair_list)
 
-        for i in range(0, len(nb_pair_list)): 
-            for j in range (0, len(nb_pair_list)): 
+            nbpairs = CLJNBPairs(editmol.info())
+
+            for i in range(0, len(are12)):
+                scale_factor1 = 0
+                scale_factor2 = 0
+                nbpairs.set(atoms.index( int(are12[i][0])), atoms.index(int(are12[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
+
+            for i in range(0, len(are13)):
+                scale_factor1 = 0
+                scale_factor2 = 0
+                nbpairs.set(atoms.index( int(are13[i][0])), atoms.index(int(are13[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
+
+            for i in range(0, len(are14)):
+                scale_factor1 = float(dicts_nonb[0]['coulomb14scale'])
+                scale_factor2 = float(dicts_nonb[0]['lj14scale'])
+                nbpairs.set(atoms.index( int(are14[i][0])), atoms.index(int(are14[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
+
+            for i in range(0, len(nb_pair_list)):  
                 scale_factor1 = 1
                 scale_factor2 = 1
                 nbpairs.set(atoms.index( int(nb_pair_list[i][0])), atoms.index(int(nb_pair_list[i][1])), CLJScaleFactor(scale_factor1,scale_factor2))
-                mol = editmol.setProperty("intrascale" , nbpairs).commit()
-                system.update(mol)
+            
+            mol = editmol.setProperty("intrascale" , nbpairs).commit()
+            system.update(mol)
 
         molecule = editmol.commit()
         newmolecules.add(molecule)
