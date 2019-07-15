@@ -4,6 +4,7 @@
 import os
 import re
 import sys
+import argparse
 from Sire.IO import *
 from Sire.Mol import *
 from Sire.MM import *
@@ -22,7 +23,6 @@ def readXmlParameters(pdbfile, xmlfile):
     p = PDB2(pdbfile)
     s = p.toSystem()
     molecules = s.molecules()
-    print (molecules)
     system = System()
 
      # 2) Now we read the xml file, and store parameters for each molecule
@@ -600,8 +600,30 @@ def readXmlParameters(pdbfile, xmlfile):
         # exactly like a molecules object returned by Amber().readCrdTop(...) 
 
 if __name__ == '__main__':
-    molecules = readXmlParameters('pyridine/MOL.pdb', 'pyridine/MOL_extra.xml')
+    
+    parser = argparse.ArgumentParser(description="Read parameters and coordinates from xml and pdb files ",
+                                 epilog=" ",
+                                 prog="readXmlParameters")
 
-    m0 = molecules.first().molecule()
-    print (m0.properties())
-    editmol = m0.edit()
+    parser.add_argument('-p', '--pdbfile', nargs="?", help="The pdb file with the coordinates of the molecule.")
+    parser.add_argument('-x', '--xmlfile', nargs="?", help="The xml file with the parameters of the molecule.")
+    args = parser.parse_args()
+    lig1 = readXmlParameters(args.pdbfile, args.xmlfile)
+    space = Cartesian()
+    system = createSystem(lig1) # Sire.System._System.System
+    system = setupForcefields(system, space)
+    rst = Sire.IO.AmberRst7(system)
+    prm = AmberPrm(system)
+    print("Writing the prm7 and rst7 files")
+    pdb_name = str(args.pdbfile).split('.')[0]
+    prm.writeToFile("%s.prm7"%pdb_name)
+    rst.writeToFile("%s.rst7"%pdb_name)
+    print("Process completed!")
+    print(" You can go on with your simulations using the files %s.prm7 and %s.rst7!"%(pdb_name, pdb_name))
+    print("*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*")
+    
+   # molecules = readXmlParameters('pyridine/MOL.pdb', 'pyridine/MOL_extra.xml')
+
+    #m0 = molecules.first().molecule()
+    #print (m0.properties())
+    #editmol = m0.edit()
