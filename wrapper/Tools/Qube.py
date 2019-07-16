@@ -1,5 +1,10 @@
-#
-#
+###################################################################
+#  Creates a Sire System with coordinates from an pdb file        #
+#  and parameters from an xml file and saves it in a prm7         #
+#  and an rst7 file.                                              #
+#                                                                 #
+#  Usage: ~/sire.app/bin/ipython Qube.py -p file.pdb -x file.xml  #
+###################################################################
 
 import os
 import re
@@ -306,25 +311,34 @@ def readXmlParameters(pdbfile, xmlfile):
             for i in range(0, nAngles):
                 a1 = {}
                 to_str1 = str(re.findall(r"\d+",str(dicts_angle[i]['class1'])))
-                a1 = int(to_str1.replace("[","").replace("]","").replace("'","") )-800
-                at1.append(a1)
-            #print (at1)
+                if dicts_atom[i]['type'][0] == 'o': #if opls_
+                    a1 = int(to_str1.replace("[","").replace("]","").replace("'","") )-800
+                    at1.append(a1)
+                else:#if QUBE_
+                    a1 = int(to_str1.replace("[","").replace("]","").replace("'","") )
+                    at1.append(a1)
 
             at2 = []
             for i in range(0, nAngles):
                 a2 = {}
                 to_str2 = str(re.findall(r"\d+",str(dicts_angle[i]['class2'])))
-                a2 = int(to_str2.replace("[","").replace("]","").replace("'","") )-800
-                at2.append(a2)
-            #print (at2)
-
+                if dicts_atom[i]['type'][0] == 'o': #if opls_
+                    a2 = int(to_str2.replace("[","").replace("]","").replace("'","") )-800
+                    at2.append(a2)
+                else: #if QUBE_
+                    a2 = int(to_str2.replace("[","").replace("]","").replace("'","") )
+                    at2.append(a2)
+                    
             at3 = []
             for i in range(0, nAngles):
                 a3 = {}
                 to_str3 = str(re.findall(r"\d+",str(dicts_angle[i]['class3'])))
-                a3 = int(to_str3.replace("[","").replace("]","").replace("'","") )-800
-                at3.append(a3)
-            #print (at3)
+                if dicts_atom[i]['type'][0] == 'o': #if opls_
+                    a3 = int(to_str3.replace("[","").replace("]","").replace("'","") )-800
+                    at3.append(a3)
+                else: #if QUBE_
+                    a3 = int(to_str3.replace("[","").replace("]","").replace("'","") )
+                    at3.append(a3)
 
             theta = internalff.symbols().angle().theta()
             for j in range(0,nAngles):
@@ -349,32 +363,45 @@ def readXmlParameters(pdbfile, xmlfile):
             for i in range(0, nProper):
                 d1 = {}
                 to_str1 = str(re.findall(r"\d+",str(dicts_proper[i]['class1'])))
-                d1 = int(to_str1.replace("[","").replace("]","").replace("'","") )-800
-                di1.append(d1)
-            #print (di1)
+                if dicts_atom[0]['type'][0] == 'o':#if opls_
+                    d1 = int(to_str1.replace("[","").replace("]","").replace("'","") )-800
+                    di1.append(d1)
+                else:  #if QUBE_
+                    d1 = int(to_str1.replace("[","").replace("]","").replace("'","") )
+                    di1.append(d1)
 
             di2 = []
             for i in range(0, nProper):
                 d2 = {}
                 to_str2 = str(re.findall(r"\d+",str(dicts_proper[i]['class2'])))
-                d2 = int(to_str2.replace("[","").replace("]","").replace("'","") )-800
-                di2.append(d2)
-            #print (di2)
+                if dicts_atom[0]['type'][0] == 'o': #if opls_
+                    d2 = int(to_str1.replace("[","").replace("]","").replace("'","") )-800
+                    di2.append(d2)
+                else: #if QUBE_
+                    d2 = int(to_str2.replace("[","").replace("]","").replace("'","") )
+                    di2.append(d2)
 
             di3 = []
             for i in range(0, nProper):
                 d3 = {}
                 to_str3 = str(re.findall(r"\d+",str(dicts_proper[i]['class3'])))
-                d3 = int(to_str3.replace("[","").replace("]","").replace("'","") )-800
-                di3.append(d3)
-            #print (di3)
+                if dicts_atom[0]['type'][0] == 'o':#if opls_
+                    d3 = int(to_str3.replace("[","").replace("]","").replace("'","") )-800
+                    di3.append(d3)
+                else: #if QUBE_
+                    d3 = int(to_str3.replace("[","").replace("]","").replace("'","") )
+                    di3.append(d3)
 
             di4 = []
             for i in range(0, nProper):
                 d4 = {}
                 to_str4 = str(re.findall(r"\d+",str(dicts_proper[i]['class4'])))
-                d4 = int(to_str4.replace("[","").replace("]","").replace("'","") )-800
-                di4.append(d4)
+                if dicts_atom[0]['type'][0] == 'o':#if opls_
+                    d4 = int(to_str4.replace("[","").replace("]","").replace("'","") )-800
+                    di4.append(d4)
+                else: #if QUBE_
+                    d4 = int(to_str4.replace("[","").replace("]","").replace("'","") )
+                    di4.append(d4)
             #print (di4)
 
 
@@ -401,31 +428,46 @@ def readXmlParameters(pdbfile, xmlfile):
             for i in range(0, nImproper):
                 d1 = {}
                 to_str1 = str(re.findall(r"\d+",str(dicts_improper[i]['class1'])))
-                d1 = int(to_str1.replace("[","").replace("]","").replace("'","") )-800
-                di_im1.append(d1)
+                if dicts_atom[0]['type'][0] == 'o':#if opls_
+                    d1 = int(to_str1.replace("[","").replace("]","").replace("'","") )-800
+                    di_im1.append(d1)
+                else:
+                    d1 = int(to_str1.replace("[","").replace("]","").replace("'","") )
+                    di_im1.append(d1)
 
 
             di_im2 = []
             for i in range(0, nImproper):
                 d2 = {}
                 to_str2 = str(re.findall(r"\d+",str(dicts_improper[i]['class2'])))
-                d2 = int(to_str2.replace("[","").replace("]","").replace("'","") )-800
-                di_im2.append(d2)
+                if dicts_atom[0]['type'][0] == 'o':#if opls_
+                    d2 = int(to_str2.replace("[","").replace("]","").replace("'","") )-800
+                    di_im2.append(d2)
+                else:
+                    d2 = int(to_str2.replace("[","").replace("]","").replace("'","") )
+                    di_im2.append(d2)
 
             di_im3 = []
             for i in range(0, nImproper):
                 d3 = {}
                 to_str3 = str(re.findall(r"\d+",str(dicts_improper[i]['class3'])))
-                d3 = int(to_str3.replace("[","").replace("]","").replace("'","") )-800
-                di_im3.append(d3)
+                if dicts_atom[0]['type'][0] == 'o':#if opls_
+                    d3 = int(to_str3.replace("[","").replace("]","").replace("'","") )-800
+                    di_im3.append(d3)
+                else:
+                    d3 = int(to_str3.replace("[","").replace("]","").replace("'","") )
+                    di_im3.append(d3)
 
             di_im4 = []
             for i in range(0, nImproper):
                 d4 = {}
                 to_str4 = str(re.findall(r"\d+",str(dicts_improper[i]['class4'])))
-                d4 = int(to_str4.replace("[","").replace("]","").replace("'","") )-800
-                di_im4.append(d4)
-
+                if dicts_atom[0]['type'][0] == 'o':#if opls_
+                    d4 = int(to_str4.replace("[","").replace("]","").replace("'","") )-800
+                    di_im4.append(d4)
+                else:
+                    d4 = int(to_str4.replace("[","").replace("]","").replace("'","") )
+                    di_im4.append(d4)
 
             improperfuncs = FourAtomFunctions(mol)
 
@@ -619,8 +661,8 @@ if __name__ == '__main__':
     prm.writeToFile("%s.prm7"%pdb_name)
     rst.writeToFile("%s.rst7"%pdb_name)
     print("Process completed!")
-    print(" You can go on with your simulations using the files %s.prm7 and %s.rst7!"%(pdb_name, pdb_name))
-    print("*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*")
+    print(" You can now go on with your simulations using the files %s.prm7 and %s.rst7!"%(pdb_name, pdb_name))
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     
    # molecules = readXmlParameters('pyridine/MOL.pdb', 'pyridine/MOL_extra.xml')
 
