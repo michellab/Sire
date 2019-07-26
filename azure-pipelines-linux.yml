@@ -32,7 +32,7 @@ jobs:
     displayName: 'Deploy to siremol.org and docker'
   - script: |
       # finally create the Sire Conda package and upload to the Anaconda Cloud.
-      cd docker/sire-conda-devel && docker build -f Dockerfile --build-arg anaconda_token=$anaconda_token --build-arg par_url=$par_url . && cd -
+      cd docker/sire-conda && docker build -f Dockerfile --build-arg anaconda_token=$anaconda_token --build-arg par_url=$par_url . && cd -
     env:
       anaconda_token: $(anacondaToken)
       par_url: $(parURL)
