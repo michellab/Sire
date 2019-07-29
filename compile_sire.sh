@@ -62,8 +62,8 @@ esac
 
 # Set the version of miniconda to use. Choose "latest" for the latest
 # miniconda, or set a specific version here
-#MINICONDA_VERSION="4.5.12"
-MINICONDA_VERSION="latest"
+MINICONDA_VERSION="4.6.14"
+#MINICONDA_VERSION="latest"
 
 if [ -z "$INSTALL_SIRE_DIR" ]; then
     # Ask the user where they would like to install sire. By default
