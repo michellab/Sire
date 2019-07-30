@@ -10,8 +10,8 @@ ENV SHELL=/bin/bash \
     SIRE_SILENT_PHONEHOME=1 \
     SIRE_SILENT_DONT_PHONEHOME=1 \
     HOME=/home/$FN_USER \
-    PATH=/home/$FN_USER/sire.app/bin:$PATH \
-    LD_LIBRARY_PATH=$HOME/$FN_USER/sire.app/lib:$HOME/$FN_USER/sire.app/lib64:$LD_LIBRARY_PATH
+    PATH=$HOME/sire.app/bin:$PATH \
+    LD_LIBRARY_PATH=$HOME/sire.app/lib:$HOME/sire.app/lib64:$LD_LIBRARY_PATH
 
 USER $FN_USER
 
