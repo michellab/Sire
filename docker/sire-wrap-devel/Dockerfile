@@ -16,7 +16,7 @@ ENV SHELL=/bin/bash \
 USER $FN_USER
 
 # Install pyplusplus and pygccxml.
-RUN pip install pyplusplus fuzzywuzzy && \
+RUN pip install pyplusplus pygccxml==1.8.5 fuzzywuzzy && \
     conda install -y -c conda-forge clang clangdev llvmdev gcc_linux-64 gxx_linux-64
 
 # Download and install CastXML.
