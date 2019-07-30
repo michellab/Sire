@@ -63,7 +63,7 @@ $HOME/sire.app/bin/python AutoGenerate/scanheaders.py $HOME/Sire/corelib/src/lib
 
 This should complete quickly with no errors.
 
-## Step 6. Autogenerate the wrappers for each module
+## Step 4. Autogenerate the wrappers for each module
 
 For each module you want to regenerate, use the command
 
