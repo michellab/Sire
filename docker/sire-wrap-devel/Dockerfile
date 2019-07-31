@@ -5,14 +5,13 @@ FROM siremol/sire-devel:latest
 # Configure environment
 ENV SHELL=/bin/bash \
     FN_USER=sireuser \
-    FN_UID=1000 \
-    FN_GID=100 \
     SIRE_SILENT_PHONEHOME=1 \
-    SIRE_SILENT_DONT_PHONEHOME=1 \
+    SIRE_DONT_PHONEHOME=1 \
     HOME=/home/$FN_USER \
     PATH=$HOME/sire.app/bin:$PATH \
     LD_LIBRARY_PATH=$HOME/sire.app/lib:$HOME/sire.app/lib64:$LD_LIBRARY_PATH
 
+# Switch to the non-root user.
 USER $FN_USER
 
 # Install pyplusplus and pygccxml.
