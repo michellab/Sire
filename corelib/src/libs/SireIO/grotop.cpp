@@ -3013,34 +3013,178 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             const auto &bonds0 = moltype.bonds();
             const auto &bonds1 = moltype.bonds(true);
 
-            for (auto it = bonds0.constBegin(); it != bonds0.constEnd(); ++it)
+            // Sets to contain the BondIDs at lambda = 0 and lambda = 1.
+            QSet<BondID> bonds0_idx;
+            QSet<BondID> bonds1_idx;
+
+            // Loop over all bonds at lambda = 0.
+            for (const auto &idx : bonds0.uniqueKeys())
+                bonds0_idx.insert(idx);
+
+            // Loop over all bonds at lambda = 1.
+            for (const auto &idx : bonds1.uniqueKeys())
             {
-                const auto &bond = it.key();
-                const auto &param = it.value();
+                if (bonds0_idx.contains(idx.mirror()))
+                    bonds1_idx.insert(idx.mirror());
+                else
+                    bonds1_idx.insert(idx);
+            }
 
+            // Now work out the BondIDs that are unique at lambda = 0 and lambda = 1,
+            // as well as those that are shared.
+            QSet<BondID> bonds0_uniq_idx;
+            QSet<BondID> bonds1_uniq_idx;
+            QSet<BondID> bonds_shared_idx;
+
+            // lambda = 0
+            for (const auto &idx : bonds0_idx)
+            {
+                if (not bonds1_idx.contains(idx))
+                    bonds0_uniq_idx.insert(idx);
+                else
+                    bonds_shared_idx.insert(idx);
+            }
+
+            // lambda = 1
+            for (const auto &idx : bonds1_idx)
+            {
+                if (not bonds0_idx.contains(idx))
+                    bonds1_uniq_idx.insert(idx);
+                else
+                    bonds_shared_idx.insert(idx);
+            }
+
+            // First create parameter records for the bonds unique to lambda = 0/1.
+
+            // lambda = 0
+            for (const auto &idx : bonds0_uniq_idx)
+            {
                 //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
-                int atom0 = bond.atom0().asA<AtomIdx>().value() + 1;
-                int atom1 = bond.atom1().asA<AtomIdx>().value() + 1;
+                int atom0 = idx.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = idx.atom1().asA<AtomIdx>().value() + 1;
 
-                QStringList params0;
-                for (const auto p : param.parameters())
+                // Get all of the parameters for this BondID.
+                const auto &params = bonds0.values(idx);
+
+                // Loop over all of the parameters.
+                for (const auto &param : params)
                 {
-                    params0.append( QString::number(p) );
+                    QStringList param_string;
+                    for (const auto p : param.parameters())
+                        param_string.append( QString::number(p) );
+
+                    bondlines.append( QString("%1 %2 %3  %4  %5  0  0")
+                             .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
+                             .arg(param_string.join("  ")));
+                }
+            }
+
+            // lambda = 1
+            for (const auto &idx : bonds1_uniq_idx)
+            {
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = idx.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = idx.atom1().asA<AtomIdx>().value() + 1;
+
+                // Get all of the parameters for this BondID.
+                const auto &params = bonds1.values(idx);
+
+                // Loop over all of the parameters.
+                for (const auto &param : params)
+                {
+                    QStringList param_string;
+                    for (const auto p : param.parameters())
+                        param_string.append( QString::number(p) );
+
+                    bondlines.append( QString("%1 %2 %3  %4  0  0  %5")
+                             .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
+                             .arg(param_string.join("  ")));
+                }
+            }
+
+            // Next add the shared bond parameters.
+
+            for (auto idx : bonds_shared_idx)
+            {
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = idx.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = idx.atom1().asA<AtomIdx>().value() + 1;
+
+                // Get a list of the parameters at lambda = 0.
+                const auto &params0 = bonds0.values(idx);
+
+                // Invert the index.
+                if (not bonds1.contains(idx))
+                    idx = idx.mirror();
+
+                // Get a list of the parameters at lambda = 1.
+                const auto &params1 = bonds1.values(idx);
+
+                // More or same number of records at lambda = 0.
+                if (params0.count() >= params1.count())
+                {
+                    for (int i=0; i<params1.count(); ++i)
+                    {
+                        QStringList param_string0;
+                        for (const auto p : params0[i].parameters())
+                            param_string0.append( QString::number(p) );
+
+                        QStringList param_string1;
+                        for (const auto p : params1[i].parameters())
+                            param_string1.append( QString::number(p) );
+
+                        bondlines.append( QString("%1 %2 %3  %4  %5")
+                                 .arg(atom0,6).arg(atom1,6).arg(params0[i].functionType(),6)
+                                 .arg(param_string0.join("  "))
+                                 .arg(param_string1.join("  ")) );
+                    }
+
+                    // Now add parameters for which there is no matching record
+                    // at lambda = 1.
+                    for (int i=params1.count(); i<params0.count(); ++i)
+                    {
+                        QStringList param_string;
+                        for (const auto p : params0[i].parameters())
+                            param_string.append( QString::number(p) );
+
+                        bondlines.append( QString("%1 %2 %3 %4  %5  0  0")
+                                 .arg(atom0,6).arg(atom1,6).arg(params0[i].functionType(),6)
+                                 .arg(param_string.join("  ")) );
+                    }
                 }
 
-                // Find the corresponding bond parameters at lambda = 1.
-                const auto &param1 = bonds1.find(bond).value();
-
-                QStringList params1;
-                for (const auto p : param1.parameters())
+                // More records at lambda = 1.
+                else
                 {
-                    params1.append( QString::number(p) );
-                }
+                    for (int i=0; i<params0.count(); ++i)
+                    {
+                        QStringList param_string0;
+                        for (const auto p : params0[i].parameters())
+                            param_string0.append( QString::number(p) );
 
-                bondlines.append( QString("%1 %2 %3  %4  %5")
-                         .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
-                         .arg(params0.join("  "))
-                         .arg(params1.join("  ")) );
+                        QStringList param_string1;
+                        for (const auto p : params1[i].parameters())
+                            param_string1.append( QString::number(p) );
+
+                        bondlines.append( QString("%1 %2 %3  %5  %6")
+                                 .arg(atom0,6).arg(atom1,6).arg(params1[i].functionType(),6)
+                                 .arg(param_string0.join("  "))
+                                 .arg(param_string1.join("  ")) );
+                    }
+
+                    // Now add parameters for which there is no matching record
+                    // at lambda = 0.
+                    for (int i=params0.count(); i<params1.count(); ++i)
+                    {
+                        QStringList param_string;
+                        for (const auto p : params1[i].parameters())
+                            param_string.append( QString::number(p) );
+
+                        bondlines.append( QString("%1 %2 %3  0  0  %5")
+                                 .arg(atom0,6).arg(atom1,6).arg(params1[i].functionType(),6)
+                                 .arg(param_string.join("  ")) );
+                    }
+                }
             }
         }
         else
