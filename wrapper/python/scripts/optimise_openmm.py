@@ -23,10 +23,16 @@ else:
     mm_version = mm.__version__
 
     # Let's find out which version of conda you are using!
-    conda_base = Sire.Base.findExe("conda").absolutePath() 
+    conda_base = os.path.abspath(os.path.dirname(sys.executable))
     conda_exe = None
     if os.path.exists("%s/conda" % conda_base):
         conda_exe = "%s/conda" % conda_base
+    elif 'envs' in conda_base:
+        print("You are running in a conda environment...just finding your conda path")
+        base = conda_base.split('envs')[0]
+        conda_base = os.path.join(base,'bin')
+        if os.path.exists("%s/conda" % conda_base):
+            conda_exe = "%s/conda" % conda_base
     else:
         print("Cannot find a 'conda' binary in directory '%s'. "
               "Are you running this script using the python executable "
