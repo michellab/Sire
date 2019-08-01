@@ -1,4 +1,4 @@
-
+import Sire.Base
 import simtk.openmm as mm
 import subprocess
 import re
@@ -23,7 +23,7 @@ else:
     mm_version = mm.__version__
 
     # Let's find out which version of conda you are using!
-    conda_base = os.path.abspath(os.path.dirname(sys.executable))
+    conda_base = Sire.Base.findExe("conda").absolutePath() 
     conda_exe = None
     if os.path.exists("%s/conda" % conda_base):
         conda_exe = "%s/conda" % conda_base
