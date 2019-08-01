@@ -1,10 +1,11 @@
-import Sire.Base
 import simtk.openmm as mm
 import subprocess
 import re
 import os
 import sys
 import importlib
+
+import Sire.Base
 
 # Check if the Cuda platform is recognised in platforms
 platforms = [ mm.Platform.getPlatform(index).getName() for index in range(mm.Platform.getNumPlatforms()) ]
@@ -22,22 +23,25 @@ else:
     # Find OpenMM version
     mm_version = mm.__version__
 
-    # Let's find out which version of conda you are using!
-    conda_base = os.path.abspath(os.path.dirname(sys.executable))
+    # Figure out where the Conda executable is.
+
+    # 1) First assume that this is a Sire Mininconda. The executable will be located
+    #    at something like $HOME/sire.app/bin/conda
+    conda_bin = Sire.Base.getBinDir()
     conda_exe = None
-    if os.path.exists("%s/conda" % conda_base):
-        conda_exe = "%s/conda" % conda_base
-    elif 'envs' in conda_base:
-        print("You are running in a conda environment...just finding your conda path")
-        base = conda_base.split('envs')[0]
-        conda_base = os.path.join(base,'bin')
-        if os.path.exists("%s/conda" % conda_base):
-            conda_exe = "%s/conda" % conda_base
+    if os.path.exists("%s/conda" % conda_bin):
+        conda_exe = "%s/conda" % conda_bin
+
+    # 2) If no excutable was found, then search the system path for the conda binary.
+    #    If this is a Conda install, and the environment is activated, then the
+    #    correct binary will be in the path.
     else:
-        print("Cannot find a 'conda' binary in directory '%s'. "
-              "Are you running this script using the python executable "
-              "from a valid miniconda or anaconda installation within Sire?" % conda_base)
-        sys.exit(-1)
+        try:
+            conda_exe = Sire.Base.findExe("conda").absoluteFilePath()
+        except:
+            raise Exception("Cannot find a 'conda' binary in the system. Are you "
+                            "running this script using the Python interpreter from "
+                            "a valid Sire application or Conda installation of Sire?") from None
 
     # does nvcc exists in the system?
     nvcc_out = None
@@ -49,7 +53,7 @@ else:
         nvcc_release = str(match.group().split(' ')[-1])
         print('Found a CUDA toolkit release version: '+nvcc_release)
     else:
-        nvcc_out = nvcc.stderr.decode("ascii").strip()  
+        nvcc_out = nvcc.stderr.decode("ascii").strip()
         print('Are you sure CUDA toolkit is installed? nvcc does not seem to exist!')
         print('If you want to use SOMD with CUDA plese double check your CUDA installation')
         sys.exit(-1)
