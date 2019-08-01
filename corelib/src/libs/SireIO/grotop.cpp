@@ -3073,7 +3073,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (const auto p : param.parameters())
                         param_string.append( QString::number(p) );
 
-                    bondlines.append( QString("%1 %2 %3  %4  %5  0  0")
+                    bondlines.append( QString("%1 %2 %3  %4  0.0000  0.0000")
                              .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
                              .arg(param_string.join("  ")));
                 }
@@ -3096,7 +3096,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (const auto p : param.parameters())
                         param_string.append( QString::number(p) );
 
-                    bondlines.append( QString("%1 %2 %3  %4  0  0  %5")
+                    bondlines.append( QString("%1 %2 %3  0.0000  0.0000  %4")
                              .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
                              .arg(param_string.join("  ")));
                 }
@@ -3147,7 +3147,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                         for (const auto p : params0[i].parameters())
                             param_string.append( QString::number(p) );
 
-                        bondlines.append( QString("%1 %2 %3 %4  %5  0  0")
+                        bondlines.append( QString("%1 %2 %3  %4  0.0000  0.0000")
                                  .arg(atom0,6).arg(atom1,6).arg(params0[i].functionType(),6)
                                  .arg(param_string.join("  ")) );
                     }
@@ -3166,7 +3166,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                         for (const auto p : params1[i].parameters())
                             param_string1.append( QString::number(p) );
 
-                        bondlines.append( QString("%1 %2 %3  %5  %6")
+                        bondlines.append( QString("%1 %2 %3  %4  %5")
                                  .arg(atom0,6).arg(atom1,6).arg(params1[i].functionType(),6)
                                  .arg(param_string0.join("  "))
                                  .arg(param_string1.join("  ")) );
@@ -3180,7 +3180,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                         for (const auto p : params1[i].parameters())
                             param_string.append( QString::number(p) );
 
-                        bondlines.append( QString("%1 %2 %3  0  0  %5")
+                        bondlines.append( QString("%1 %2 %3  0.0000  0.0000  %4")
                                  .arg(atom0,6).arg(atom1,6).arg(params1[i].functionType(),6)
                                  .arg(param_string.join("  ")) );
                     }
@@ -3284,7 +3284,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (const auto p : param.parameters())
                         param_string.append( QString::number(p) );
 
-                    anglines.append( QString("%1 %2 %3 %4   %5  0  0")
+                    anglines.append( QString("%1 %2 %3 %4   %5  0.0000  0.0000")
                             .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),7)
                             .arg(param_string.join("  ")) );
                 }
@@ -3308,7 +3308,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (const auto p : param.parameters())
                         param_string.append( QString::number(p) );
 
-                    anglines.append( QString("%1 %2 %3 %4   0  0  %5")
+                    anglines.append( QString("%1 %2 %3 %4   0.0000  0.0000  %5")
                             .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),7)
                             .arg(param_string.join("  ")) );
                 }
@@ -3360,7 +3360,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                         for (const auto p : params0[i].parameters())
                             param_string.append( QString::number(p) );
 
-                        anglines.append( QString("%1 %2 %3 %4   %5  0  0")
+                        anglines.append( QString("%1 %2 %3 %4   %5  0.0000  0.0000")
                                 .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(params0[i].functionType(),7)
                                 .arg(param_string.join("  ")) );
                     }
@@ -3393,7 +3393,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                         for (const auto p : params1[i].parameters())
                             param_string.append( QString::number(p) );
 
-                        anglines.append( QString("%1 %2 %3 %4   0  0  %5")
+                        anglines.append( QString("%1 %2 %3 %4   0.0000  0.0000  %5")
                                 .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(params1[i].functionType(),7)
                                 .arg(param_string.join("  ")) );
                     }
@@ -3503,7 +3503,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     // parameter entry.
                     auto periodicity = param.parameters().last();
 
-                    dihlines.append( QString("%1 %2 %3 %4 %5  %6  0  0  %7")
+                    dihlines.append( QString("%1 %2 %3 %4 %5  %6  0  0.0000  %7")
                             .arg(atom0,6).arg(atom1,6)
                             .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
                             .arg(param_string.join("  ")).arg(periodicity) );
@@ -3533,7 +3533,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     // parameter entry.
                     auto periodicity = param.parameters().last();
 
-                    dihlines.append( QString("%1 %2 %3 %4 %5  0  0  %6  %7")
+                    dihlines.append( QString("%1 %2 %3 %4 %5  0  0.0000  %6  %7")
                             .arg(atom0,6).arg(atom1,6)
                             .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
                             .arg(periodicity).arg(param_string.join("  ")) );
@@ -3612,8 +3612,8 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                         // No term, create a zero term with the same periodicity.
                         else
                         {
-                            param_string1.append( QString::number(0.0) );
-                            param_string1.append( QString::number(0.0) );
+                            param_string1.append( QString::number(0) );
+                            param_string1.append( QString::number(0.0000) );
                             param_string1.append( QString::number(i) );
                         }
 
@@ -3633,8 +3633,8 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                             QStringList param_string1;
 
                             // No lambda = 0 term, create a zero term with the same periodicity.
-                            param_string0.append( QString::number(0.0) );
-                            param_string0.append( QString::number(0.0) );
+                            param_string0.append( QString::number(0) );
+                            param_string0.append( QString::number(0.0000) );
                             param_string0.append( QString::number(i) );
 
                             for (const auto p : params1_hash[i].parameters())
