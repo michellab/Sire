@@ -3,7 +3,7 @@
 If you update the Sire API then you will need to rebuild the Python wrappers
 and recompile Sire.
 
-## Step 1 - Install Anaconda/Miniconda and the Sire corelib
+## Step 1. Install Anaconda/Miniconda and the Sire corelib
 
 First, you must have a working installation of the corelib of
 Sire into an anaconda/miniconda install. Note that you only
