@@ -18,10 +18,10 @@ e.g.
 ls $HOME/sire.app/pkgs/sire-2019.1.0/bundled
 ```
 
-should show
+should show something like
 
 ```
-bin     doc     include lib     mkspecs plugins share
+bin  bundled  include  lib  share
 ```
 
 If it does, then everything is ok.
