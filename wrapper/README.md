@@ -133,7 +133,11 @@ where `NAME` is the name of the running Docker container, obtained from:
 
 ```
 docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+3b700a1e5222        31bcb9abfb13        "bash"              5 seconds ago       Up 3 seconds                            vigilant_lovelace
 ```
+Here the container name is `vigilant_lovelace`. (Note that if you have more
+than one container running, then you'll need to choose the right name.)
 
 ## Notes
 
