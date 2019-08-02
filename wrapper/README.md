@@ -91,6 +91,50 @@ file "AtomEditorBase.pypp.cpp" - updated( 0.000000 seconds )
 (one line for each file that is updated. Note that if nothing needs
  to be updated, then the autogeneration will just exit)
 
+## Docker
+
+If you don't want to install the software yourself, we provide a Docker
+container in which you can build the Sire Python wrappers. To run it:
+
+```
+docker run -it siremol/sire-wrap-devel:latest
+```
+
+This will automatically place you in the `wrapper` directory of the Sire
+source code. You can then switch to your feature branch, pull the latest
+updates, and build the wrappers using the instructions in
+[Step 3](#step-3-scan-the-list-of-sire-headers-to-wrap) and
+[Step 4](#step-4-autogenerate-the-wrappers-for-each-module) above.
+
+Following this you can commit your changes and push to the remote:
+
+```
+# Configure Git.
+git config --global user.name "Your name"
+git config --global user.email "Your email"
+
+# Add any new wrappers and commit the changes.
+git add NewWrapper.pycpp.cpp
+git commit -a -m "Updated the Python wrappers."
+
+# Push to the remote.
+git push origin feature-branch
+```
+
+Alternatively, you can copy the files from the container to the host machine,
+then commit and push from there. For example, to copy the entire wrapper
+directory:
+
+```
+docker cp NAME:/home/sireuser/Sire/wrapper .
+```
+
+where `NAME` is the name of the running Docker container, obtained from:
+
+```
+docker ps
+```
+
 ## Notes
 
 You cannot regenerate the wrappers for the Error or Qt modules.
