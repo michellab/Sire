@@ -142,7 +142,7 @@ than one container running, then you'll need to choose the right name.)
 
 ## Notes
 
-You cannot regenerate the wrappers for the Error or Qt modules.
+You cannot regenerate the wrappers for the `Error` or `Qt` modules.
 These contain hand-generated wrappers that cannot be changed.
 
 If you want to regenerate all of the wrappers, just run the
