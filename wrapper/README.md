@@ -123,7 +123,7 @@ git push origin feature-branch
 
 Alternatively, you can copy the files from the container to the host machine,
 then commit and push from there. For example, to copy the entire wrapper
-directory:
+directory you can run the following on your host machine:
 
 ```
 docker cp NAME:/home/sireuser/Sire/wrapper .
@@ -138,6 +138,7 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 ```
 Here the container name is `vigilant_lovelace`. (Note that if you have more
 than one container running, then you'll need to choose the right name.)
+
 
 ## Notes
 
