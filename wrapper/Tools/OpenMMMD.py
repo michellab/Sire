@@ -40,7 +40,7 @@ from Sire.Config import *
 from Sire.Analysis import *
 from Sire.Tools.DCDFile import *
 from Sire.Tools import Parameter, resolveParameters
-from Qube import readXmlParameters
+#from Qube import readXmlParameters
 import Sire.Stream
 import time
 import numpy as np
@@ -109,6 +109,8 @@ equil_timestep = Parameter("equilibration timestep", 0.5 * femtosecond, """Times
 
 combining_rules = Parameter("combining rules", "arithmetic",
                             """Combining rules to use for the non-bonded interactions.""")
+
+use_CA_restraints = Parametes ("use CA restraints", False, """Whether to restraint the CA at the protein.""" )
 
 timestep = Parameter("timestep", 2 * femtosecond, """Timestep for the dynamics simulation.""")
 
@@ -224,6 +226,34 @@ def vsiteListToProperty(list):
     return prop
 
 
+def setupCARestraints(system):
+  
+    molecules = system.molecules()
+    molnums = molecules.molNums()
+    restrainedAtoms = []
+    for molnum in molnums:
+        mol = molecules.molecule(molnum)[0].molecule()
+        nats = mol.nAtoms()
+    #print(nats)
+        atoms = mol.atoms()
+    
+        if mol.nResidues() > 1:
+            for i in range(0,nats):
+                at = atoms[i]
+                atnumber = at.number()
+                atcoords = at.property("coordinates")
+                if at.property("ambertype") == "CA":
+                    #print(mol, at.property("ambertype"), atnumber, atcoords, k_restraint)
+                    restrainedAtoms.append((atnumber, atcoords, k_restraint))
+
+        if len(restrainedAtoms) > 0:
+            mol = mol.edit().setProperty("restrainedatoms", atomNumVectorListToProperty(restrainedAtoms)).commit()
+            #print restrainedAtoms
+            #print propertyToAtomNumVectorList( mol.property("restrainedatoms") )
+            system.update(mol)
+
+    return system
+        
 def setupDCD(system):
     r"""
     Parameters:
@@ -1557,7 +1587,10 @@ def runFreeNrg():
 
         if use_restraints.val:
             system = setupRestraints(system)
-
+            
+        if use_CA_restraints.val:
+            system = setupCARestraints(system)
+            
         if use_distance_restraints.val:
             restraints = None
             if len(distance_restraints_dict.val) == 0:
