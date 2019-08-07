@@ -110,7 +110,7 @@ equil_timestep = Parameter("equilibration timestep", 0.5 * femtosecond, """Times
 combining_rules = Parameter("combining rules", "arithmetic",
                             """Combining rules to use for the non-bonded interactions.""")
 
-use_CA_restraints = Parametes ("use CA restraints", False, """Whether to restraint the CA at the protein.""" )
+use_CA_restraints = Parameter ("use CA restraints", False, """Whether to restraint the CA at the protein.""" )
 
 timestep = Parameter("timestep", 2 * femtosecond, """Timestep for the dynamics simulation.""")
 
@@ -157,8 +157,6 @@ heavy_mass_restraint = Parameter("heavy mass restraint", 1.10,
 
 unrestrained_residues = Parameter("unrestrained residues", ["WAT", "HOH"],
                                   """Names of residues that are never restrained.""")
-
-rstr_atoms_file = Parameter("rstr_atoms_file", None, """Restrained atoms for position restrained proteins.""")
 
 freeze_residues = Parameter("freeze residues", False, """Whether or not to freeze certain residues.""")
 
@@ -645,18 +643,6 @@ def setupRestraints(system):
             #print at
             restrainedAtoms.append((atnumber, atcoords, k_restraint))
   
-        if os.path.exists(rstr_atoms_file.val):
-            with open(rstr_atoms_file.val,'r') as f:
-                lines = f.read().splitlines()
-
-        for x in lines:
-            at = atoms[x]
-            atnumber = at.number()
-            atcoords = at.property("coordinates")
-            restrainedAtoms.append((atnumber, atcoords, k_restraint))
-
-            #restrainedAtoms.append( atnumber )
-
         if len(restrainedAtoms) > 0:
             mol = mol.edit().setProperty("restrainedatoms", atomNumVectorListToProperty(restrainedAtoms)).commit()
             #print restrainedAtoms
