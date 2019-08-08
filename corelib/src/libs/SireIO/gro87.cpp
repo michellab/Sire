@@ -1938,6 +1938,17 @@ void Gro87::addToSystem(System &system, const PropertyMap &map) const
             idx_in_gro[j] = findAtom( molinfo, j, atom_start_idx + j, &ids_match );
         }
 
+        // Convert the vector to a set to check for duplicates.
+        QSet<int> unique_idx_in_gro = QSet<int>::fromList(idx_in_gro.toList());
+
+        // Duplicate matches were found!
+        if (idx_in_gro.count() != unique_idx_in_gro.count())
+        {
+            throw SireError::incompatible_error( QObject::tr(
+                "Incompatibility between the files, could not match all atoms to the "
+                "corresponding topology file. Check atom and residue names!"), CODELOC );
+        }
+
         //if the IDs don't match, then we need to update the ID information
         //of the atoms and residues in the molecule
         if (not ids_match)
