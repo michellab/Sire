@@ -209,7 +209,7 @@ private:
     at index [i,j] - note that this performs *NO* checking,
     and invalid input will result in invalid output. If you
     want to check the indicies, use checkOffset(int i, int j) */
-inline int TrigMatrix::offset(int i, int j) const
+SIRE_ALWAYS_INLINE int TrigMatrix::offset(int i, int j) const
 {
     if (i <= j)
         return (2*(j + i*nrows) - i - i*i) / 2;
@@ -219,14 +219,14 @@ inline int TrigMatrix::offset(int i, int j) const
 
 /** Return the number of unique elements in this matrix
     (the size of the underlying 1D array) */
-inline int TrigMatrix::count() const
+SIRE_ALWAYS_INLINE int TrigMatrix::count() const
 {
 	return array.count();
 }
 
 /** Return the number of unique elements in this matrix
     (the size of the underlying 1D array) */
-inline int TrigMatrix::size() const
+SIRE_ALWAYS_INLINE int TrigMatrix::size() const
 {
 	return TrigMatrix::count();
 }

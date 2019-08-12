@@ -172,7 +172,7 @@ private:
     at index [i,j,k,l] - note that this performs *NO* checking,
     and invalid input will result in invalid output. If you
     want to check the indicies, use checkOffset(int i, int j, int k, int l) */
-inline int N4Matrix::offset(int i, int j, int k, int l) const
+SIRE_ALWAYS_INLINE int N4Matrix::offset(int i, int j, int k, int l) const
 {
     return k + (l*nrows) + (i*nrows*ncolumns) + (j*nrows*ncolumns*nbigrows);
 }

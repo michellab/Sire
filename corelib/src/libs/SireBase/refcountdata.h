@@ -100,7 +100,7 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Reset the counter so that it is set back equal to zero */
-inline void RefCountData::Counter::reset()
+SIRE_ALWAYS_INLINE void RefCountData::Counter::reset()
 {
     #ifdef SIRE_USE_REFCOUNT_MUTEX
         const_cast<Counter*>(this)->mutex.lock();
@@ -114,7 +114,7 @@ inline void RefCountData::Counter::reset()
 }
 
 /** Return the current value of the refcount - note this may change! */
-inline int RefCountData::Counter::load() const
+SIRE_ALWAYS_INLINE int RefCountData::Counter::load() const
 {
     #ifdef SIRE_USE_REFCOUNT_MUTEX
         const_cast<Counter*>(this)->mutex.lock();
@@ -130,32 +130,32 @@ inline int RefCountData::Counter::load() const
 }
 
 /** Return the current reference count for the object */
-inline int RefCountData::Counter::refCount() const
+SIRE_ALWAYS_INLINE int RefCountData::Counter::refCount() const
 {
     return load();
 }
 
 /** Return whether or not there are multiple references to the object */
-inline bool RefCountData::Counter::hasMultipleReferences() const
+SIRE_ALWAYS_INLINE bool RefCountData::Counter::hasMultipleReferences() const
 {
     return load() > 1;
 }
 
 /** Return whether or not the object has only a single reference */
-inline bool RefCountData::Counter::hasSingleReference() const
+SIRE_ALWAYS_INLINE bool RefCountData::Counter::hasSingleReference() const
 {
     return load() == 1;
 }
 
 /** Return whether or not the object is current unreferenced
     (has a reference count of zero) */
-inline bool RefCountData::Counter::isNotReferenced() const
+SIRE_ALWAYS_INLINE bool RefCountData::Counter::isNotReferenced() const
 {
     return load() <= 0;
 }
 
 /** Increase the reference count by one */
-inline bool RefCountData::Counter::ref()
+SIRE_ALWAYS_INLINE bool RefCountData::Counter::ref()
 {
     #ifdef SIRE_USE_REFCOUNT_MUTEX
         mutex.lock();
@@ -172,7 +172,7 @@ inline bool RefCountData::Counter::ref()
 
 /** Decrease the reference count by one - this will raise
     an error if the reference count drops below 0 */
-inline bool RefCountData::Counter::deref()
+SIRE_ALWAYS_INLINE bool RefCountData::Counter::deref()
 {
     #ifdef SIRE_USE_REFCOUNT_MUTEX
         mutex.lock();

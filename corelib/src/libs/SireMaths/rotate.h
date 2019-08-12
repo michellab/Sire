@@ -41,7 +41,7 @@ namespace SireMaths
 
 /** Function that rotates the input vector 'input' by the rotation 
     matrix 'rotmat' about the point 'point'. The output is returned. */
-inline Vector rotate(const Vector &input, const Matrix &rotmat, const Vector &point)
+SIRE_ALWAYS_INLINE Vector rotate(const Vector &input, const Matrix &rotmat, const Vector &point)
 {
     return point + rotmat*(input-point);
 }

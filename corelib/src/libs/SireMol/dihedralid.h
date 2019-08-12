@@ -167,7 +167,7 @@ private:
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-inline uint qHash(const DihedralID &dihedralid)
+SIRE_ALWAYS_INLINE uint qHash(const DihedralID &dihedralid)
 {
     return dihedralid.hash();
 }

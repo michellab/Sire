@@ -71,70 +71,70 @@ typedef boost::variate_generator<boost::mt19937, boost::uniform_int<quint64> > U
 
 /** Function to return a uniform double random number generator with a range
     from 'min' to 'max' */
-inline UniformRand uniformRanGenerator(double min=0.0, double max=1.0)
+SIRE_ALWAYS_INLINE UniformRand uniformRanGenerator(double min=0.0, double max=1.0)
 {
     return UniformRand( boost::mt19937(), boost::uniform_real<double>(min,max) );
 }
 
 /** Function to return a uniform double random number generator with a range
     from 'min' to 'max' and seeded with 'seed' */
-inline UniformRand uniformRanGenerator(double min, double max, quint32 seed)
+SIRE_ALWAYS_INLINE UniformRand uniformRanGenerator(double min, double max, quint32 seed)
 {
     return UniformRand( boost::mt19937(seed), boost::uniform_real<double>(min,max) );
 }
 
 /** Function to return a uniform int random number generate with a range from
     'min' to 'max' */
-inline UniformRanInt uniformRanIntGenerator(qint32 min=0, qint32 max=100)
+SIRE_ALWAYS_INLINE UniformRanInt uniformRanIntGenerator(qint32 min=0, qint32 max=100)
 {
     return UniformRanInt( boost::mt19937(), boost::uniform_int<qint32>(min,max) );
 }
 
 /** Function to return a uniform int random number generate with a range from
     'min' to 'max' and seeded with 'seed' */
-inline UniformRanInt uniformRanIntGenerator(qint32 min, qint32 max, quint32 seed)
+SIRE_ALWAYS_INLINE UniformRanInt uniformRanIntGenerator(qint32 min, qint32 max, quint32 seed)
 {
     return UniformRanInt( boost::mt19937(seed), boost::uniform_int<qint32>(min,max) );
 }
 
 /** Function to return a uniform uint random number generate with a range from
     'min' to 'max' */
-inline UniformRanUInt uniformRanUIntGenerator(quint32 min=0, quint32 max=100)
+SIRE_ALWAYS_INLINE UniformRanUInt uniformRanUIntGenerator(quint32 min=0, quint32 max=100)
 {
     return UniformRanUInt( boost::mt19937(), boost::uniform_int<quint32>(min,max) );
 }
 
 /** Function to return a uniform uint random number generate with a range from
     'min' to 'max' and seeded with 'seed' */
-inline UniformRanUInt uniformRanUIntGenerator(quint32 min, quint32 max, quint32 seed)
+SIRE_ALWAYS_INLINE UniformRanUInt uniformRanUIntGenerator(quint32 min, quint32 max, quint32 seed)
 {
     return UniformRanUInt( boost::mt19937(seed), boost::uniform_int<quint32>(min,max) );
 }
 
 /** Function to return a uniform int random number generate with a range from
     'min' to 'max' */
-inline UniformRanInt64 uniformRanInt64Generator(qint64 min=0, qint64 max=100)
+SIRE_ALWAYS_INLINE UniformRanInt64 uniformRanInt64Generator(qint64 min=0, qint64 max=100)
 {
     return UniformRanInt64( boost::mt19937(), boost::uniform_int<qint64>(min,max) );
 }
 
 /** Function to return a uniform int random number generate with a range from
     'min' to 'max' and seeded with 'seed' */
-inline UniformRanInt64 uniformRanInt64Generator(qint64 min, qint64 max, quint32 seed)
+SIRE_ALWAYS_INLINE UniformRanInt64 uniformRanInt64Generator(qint64 min, qint64 max, quint32 seed)
 {
     return UniformRanInt64( boost::mt19937(seed), boost::uniform_int<qint64>(min,max) );
 }
 
 /** Function to return a uniform uint random number generate with a range from
     'min' to 'max' */
-inline UniformRanUInt64 uniformRanUInt64Generator(quint64 min=0, quint64 max=100)
+SIRE_ALWAYS_INLINE UniformRanUInt64 uniformRanUInt64Generator(quint64 min=0, quint64 max=100)
 {
     return UniformRanUInt64( boost::mt19937(), boost::uniform_int<quint64>(min,max) );
 }
 
 /** Function to return a uniform uint random number generate with a range from
     'min' to 'max' and seeded with 'seed' */
-inline UniformRanUInt64 uniformRanUInt64Generator(quint64 min, quint64 max, quint32 seed)
+SIRE_ALWAYS_INLINE UniformRanUInt64 uniformRanUInt64Generator(quint64 min, quint64 max, quint32 seed)
 {
     return UniformRanUInt64( boost::mt19937(seed), boost::uniform_int<quint64>(min,max) );
 }
@@ -261,7 +261,7 @@ T pow_24(const T &x)
 
 /** Internal function used by the 'pow' function - raise 'x' to
     the positive power 'n' */
-inline double pow_pvt(double x, int n)
+SIRE_ALWAYS_INLINE double pow_pvt(double x, int n)
 {
     switch(n)
     {
@@ -295,7 +295,7 @@ inline double pow_pvt(double x, int n)
 }
 
 /** Return x raised to the power n */
-inline double pow(double x, int n)
+SIRE_ALWAYS_INLINE double pow(double x, int n)
 {
     if (n > 0)
         return pow_pvt(x,n);
@@ -306,25 +306,25 @@ inline double pow(double x, int n)
 }
 
 /** Return whether or not an integer is even */
-inline bool isEven(int val)
+SIRE_ALWAYS_INLINE bool isEven(int val)
 {
     return val % 2 == 0;
 }
 
 /** Return whether or not an integer is odd */
-inline bool isOdd(int val)
+SIRE_ALWAYS_INLINE bool isOdd(int val)
 {
     return val % 2 != 0;
 }
 
 /** Return whether or not this is an integer */
-inline bool isInteger(double val)
+SIRE_ALWAYS_INLINE bool isInteger(double val)
 {
     return (smallest_int <= val) and (val <= largest_int) and (val == double(int(val)));
 }
 
 /** Return pow(x,n) for non-integer n */
-inline double pow(double x, double n)
+SIRE_ALWAYS_INLINE double pow(double x, double n)
 {
     if (isInteger(n))
         return pow(x, int(n));
@@ -333,13 +333,13 @@ inline double pow(double x, double n)
 }
 
 /** Here is a non-fast version of fastInvSqrt */
-inline double invSqrt(double x)
+SIRE_ALWAYS_INLINE double invSqrt(double x)
 {
     return double(1.0) / std::sqrt(x);
 }
 
 /** Here is a non-fast version of fastInvSqrt */
-inline float invSqrt(float x)
+SIRE_ALWAYS_INLINE float invSqrt(float x)
 {
     return float(1.0) / std::sqrt(x);
 }
@@ -350,13 +350,13 @@ inline float invSqrt(float x)
     k equals the maximum base-2 exponent of val0 and val1 as
     calculated via frexp(). This should normally be a value
     around 1e-6 */
-inline bool areEqual(double val0, double val1, double epsilon)
+SIRE_ALWAYS_INLINE bool areEqual(double val0, double val1, double epsilon)
 {
     return not ( gsl_fcmp(val0,val1,epsilon) );
 }
 
 /** Return true if two numbers are equal */
-inline bool areEqual(double val0, double val1)
+SIRE_ALWAYS_INLINE bool areEqual(double val0, double val1)
 {
     return not ( gsl_fcmp(val0,val1,1e-6) );
 }

@@ -86,7 +86,7 @@ protected:
     that starts at 'this_ptr' to a pointer to the first element
     of the storage array (given the location of the object at
     index 'this_idx' in the storage array) */
-inline char* PackedArray2DMemoryBase::getRoot(char *this_ptr, quint32 this_idx)
+SIRE_ALWAYS_INLINE char* PackedArray2DMemoryBase::getRoot(char *this_ptr, quint32 this_idx)
 {
     return this_ptr - this_idx;
 }
@@ -95,7 +95,7 @@ inline char* PackedArray2DMemoryBase::getRoot(char *this_ptr, quint32 this_idx)
     that starts at 'this_ptr' to a pointer to the first element
     of the storage array (given the location of the object at
     index 'this_idx' in the storage array) */
-inline const char* PackedArray2DMemoryBase::getRoot(const char *this_ptr, 
+SIRE_ALWAYS_INLINE const char* PackedArray2DMemoryBase::getRoot(const char *this_ptr, 
                                                     quint32 this_idx)
 {
     return this_ptr - this_idx;
@@ -206,33 +206,33 @@ private:
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-inline void PackedArray2DMemoryBase::setArray0(PackedArray2DDataBase *array, 
+SIRE_ALWAYS_INLINE void PackedArray2DMemoryBase::setArray0(PackedArray2DDataBase *array, 
                                                quint32 idx)
 {
     array->array0 = idx;
 }
 
-inline void PackedArray2DMemoryBase::setArrayData0(PackedArray2DDataBase *array, 
+SIRE_ALWAYS_INLINE void PackedArray2DMemoryBase::setArrayData0(PackedArray2DDataBase *array, 
                                                    quint32 idx)
 {
     array->arraydata0 = idx;
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 PackedArray2DMemoryBase::setNValues(PackedArray2D_ArrayDataBase *array, 
                                     quint32 nvalues)
 {
     array->nvalues = nvalues;
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 PackedArray2DMemoryBase::setValue0(PackedArray2D_ArrayDataBase *array, 
                                    quint32 value0)
 {
     array->value0 = value0;
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 PackedArray2DMemoryBase::setValue0(PackedArray2DDataBase *array, 
                                    quint32 value0)
 {

@@ -231,30 +231,30 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the index of the first atom */
-inline AtomIdx DofID::atom0() const
+SIRE_ALWAYS_INLINE AtomIdx DofID::atom0() const
 {
     return AtomIdx(idx0);
 }
 
 /** Return the index of the second atom */
-inline AtomIdx DofID::atom1() const
+SIRE_ALWAYS_INLINE AtomIdx DofID::atom1() const
 {
     return AtomIdx(idx1);
 }
 
 /** Return the index of the third atom */
-inline AtomIdx DofID::atom2() const
+SIRE_ALWAYS_INLINE AtomIdx DofID::atom2() const
 {
     return AtomIdx(idx2);
 }
 
 /** Return the index of the fourth atom */
-inline AtomIdx DofID::atom3() const
+SIRE_ALWAYS_INLINE AtomIdx DofID::atom3() const
 {
     return AtomIdx(idx3);
 }
 
-inline uint qHash(const DofID &dofid)
+SIRE_ALWAYS_INLINE uint qHash(const DofID &dofid)
 {
     return (dofid.atom0().value() << 24) |
            ( ( dofid.atom1().value() << 16) & 0x00FF0000) |

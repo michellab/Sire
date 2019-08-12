@@ -449,7 +449,7 @@ class Potential;
 
 /** Serialise a unit to a binary datastream (this does not check
     the type of unit!) */
-inline QDataStream& operator<<(QDataStream &ds,
+SIRE_ALWAYS_INLINE QDataStream& operator<<(QDataStream &ds,
                                const SireUnits::Dimension::Unit &unit)
 {
     ds << unit.sclfac;
@@ -458,7 +458,7 @@ inline QDataStream& operator<<(QDataStream &ds,
 
 /** Extract from a binary datastream (this does not check the type
     of unit!) */
-inline QDataStream& operator>>(QDataStream &ds,
+SIRE_ALWAYS_INLINE QDataStream& operator>>(QDataStream &ds,
                                SireUnits::Dimension::Unit &unit)
 {
     ds >> unit.sclfac;

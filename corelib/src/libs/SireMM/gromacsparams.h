@@ -400,56 +400,56 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the atom type name */
-inline QString GromacsAtomType::atomType() const
+SIRE_ALWAYS_INLINE QString GromacsAtomType::atomType() const
 {
     return _typ;
 }
 
 /** Return the bond type name - this is normally the same as the atom type,
     but is different for some forcefields, like OPLS */
-inline QString GromacsAtomType::bondType() const
+SIRE_ALWAYS_INLINE QString GromacsAtomType::bondType() const
 {
     return _btyp;
 }
 
 /** Return the atom mass */
-inline SireUnits::Dimension::MolarMass GromacsAtomType::mass() const
+SIRE_ALWAYS_INLINE SireUnits::Dimension::MolarMass GromacsAtomType::mass() const
 {
     return _mass;
 }
 
 /** Return the atomic charge */
-inline SireUnits::Dimension::Charge GromacsAtomType::charge() const
+SIRE_ALWAYS_INLINE SireUnits::Dimension::Charge GromacsAtomType::charge() const
 {
     return _chg;
 }
 
 /** Return the type of the particle */
-inline GromacsAtomType::PARTICLE_TYPE GromacsAtomType::particleType() const
+SIRE_ALWAYS_INLINE GromacsAtomType::PARTICLE_TYPE GromacsAtomType::particleType() const
 {
     return _ptyp;
 }
 
 /** Return the Lennard Jones parameter */
-inline SireMM::LJParameter GromacsAtomType::ljParameter() const
+SIRE_ALWAYS_INLINE SireMM::LJParameter GromacsAtomType::ljParameter() const
 {
     return _lj;
 }
 
 /** Return whether or not this is a null atom type */
-inline bool GromacsAtomType::isNull() const
+SIRE_ALWAYS_INLINE bool GromacsAtomType::isNull() const
 {
     return _typ.isNull();
 }
 
 /** Return whether or not this atom type has only the mass specified */
-inline bool GromacsAtomType::hasMassOnly() const
+SIRE_ALWAYS_INLINE bool GromacsAtomType::hasMassOnly() const
 {
     return _ptyp == UNKNOWN_TYPE and _chg.value() == 0 and _lj.isDummy();
 }
 
 /** Return the element type of this type */
-inline SireMol::Element GromacsAtomType::element() const
+SIRE_ALWAYS_INLINE SireMol::Element GromacsAtomType::element() const
 {
     return _elem;
 }

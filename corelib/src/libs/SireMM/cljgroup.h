@@ -159,19 +159,19 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the CLJBoxes that contains all of the atoms in this group */
-inline const CLJBoxes& CLJGroup::cljBoxes() const
+SIRE_ALWAYS_INLINE const CLJBoxes& CLJGroup::cljBoxes() const
 {
     return cljboxes;
 }
 
 /** Return whether or not we are recalculating the energy from scratch */
-inline bool CLJGroup::recalculatingFromScratch() const
+SIRE_ALWAYS_INLINE bool CLJGroup::recalculatingFromScratch() const
 {
     return cljworkspace.recalculatingFromScratch();
 }
 
 /** Return whether or not we don't have any molecules */
-inline bool CLJGroup::isEmpty() const
+SIRE_ALWAYS_INLINE bool CLJGroup::isEmpty() const
 {
     return cljexts.isEmpty() and changed_mols.isEmpty();
 }

@@ -171,7 +171,7 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Add the SymbolExpression to this set of identities */
-inline void Identities::add(const SymbolExpression &symex0)
+SIRE_ALWAYS_INLINE void Identities::add(const SymbolExpression &symex0)
 {
     set( symex0.symbol(), symex0.expression() );
 }

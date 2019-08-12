@@ -1214,7 +1214,7 @@ public:
 /** Calculate the coulomb and LJ energy between the passed pair
     of molecules and add these energies onto 'energy'. This uses
     the passed workspace to perform the calculation */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateEnergy(const InterCLJPotential::Molecule &mol0,
                                    const InterCLJPotential::Molecule &mol1,
                                    InterCLJPotential::Energy &energy,
@@ -1231,7 +1231,7 @@ InterCLJPotential::calculateEnergy(const InterCLJPotential::Molecule &mol0,
 /** Calculate the coulomb and LJ energy between the passed pair
     of molecules and add these energies on mol0 onto energies. This uses
     the passed workspace to perform the calculation */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateEnergy(const InterCLJPotential::Molecule &mol0,
                                    const InterCLJPotential::Molecule &mol1,
 				   MolEnergyTable &energies0,
@@ -1250,7 +1250,7 @@ InterCLJPotential::calculateEnergy(const InterCLJPotential::Molecule &mol0,
     of molecules and add the forces on 'mol0' onto 'forces'. This uses
     the passed workspace to perform the calculation. The forces
     are scaled by the optional 'scaled_forces' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateForce(const InterCLJPotential::Molecule &mol0, 
                                   const InterCLJPotential::Molecule &mol1,
                                   MolForceTable &forces0, 
@@ -1271,7 +1271,7 @@ InterCLJPotential::calculateForce(const InterCLJPotential::Molecule &mol0,
     of molecules and add the forces on 'mol0' onto 'forces'. This uses
     the passed workspace to perform the calculation. The forces
     are scaled by the optional 'scaled_forces' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateCoulombForce(const InterCLJPotential::Molecule &mol0, 
                                          const InterCLJPotential::Molecule &mol1,
                                          MolForceTable &forces0, 
@@ -1292,7 +1292,7 @@ InterCLJPotential::calculateCoulombForce(const InterCLJPotential::Molecule &mol0
     of molecules and add the forces on 'mol0' onto 'forces'. This uses
     the passed workspace to perform the calculation. The forces
     are scaled by the optional 'scaled_forces' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateLJForce(const InterCLJPotential::Molecule &mol0, 
                                     const InterCLJPotential::Molecule &mol1,
                                     MolForceTable &forces0, 
@@ -1313,7 +1313,7 @@ InterCLJPotential::calculateLJForce(const InterCLJPotential::Molecule &mol0,
     passed pair of molecules, and add the forces on 'mol0' onto 'forces0'.
     This uses the passed workspace to perform the calculation. The forces
     are scaled by the optional 'scaled_forces' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateForce(const InterCLJPotential::Molecule &mol0,
                                   const InterCLJPotential::Molecule &mol1,
                                   MolForceTable &forces0,
@@ -1339,7 +1339,7 @@ InterCLJPotential::calculateForce(const InterCLJPotential::Molecule &mol0,
     of molecules and add the fields on 'mol0' onto 'fields'. This uses
     the passed workspace to perform the calculation. The fields
     are scaled by the optional 'scaled_fields' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateField(const InterCLJPotential::Molecule &mol0, 
                                   const InterCLJPotential::Molecule &mol1,
                                   const CLJProbe &probe,
@@ -1361,7 +1361,7 @@ InterCLJPotential::calculateField(const InterCLJPotential::Molecule &mol0,
     on the grid points of the passed GridFieldTable. This uses
     the passed workspace to perform the calculation. The fields
     are scaled by the optional 'scaled_fields' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateField(const InterCLJPotential::Molecule &mol, 
                                   const CLJProbe &probe,
                                   GridFieldTable &fields, 
@@ -1382,7 +1382,7 @@ InterCLJPotential::calculateField(const InterCLJPotential::Molecule &mol,
     of molecules and add the fields on 'mol0' onto 'fields'. This uses
     the passed workspace to perform the calculation. The fields
     are scaled by the optional 'scaled_fields' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateCoulombField(const InterCLJPotential::Molecule &mol0, 
                                          const InterCLJPotential::Molecule &mol1,
                                          const CLJProbe &probe,
@@ -1404,7 +1404,7 @@ InterCLJPotential::calculateCoulombField(const InterCLJPotential::Molecule &mol0
     on the grid points of the passed GridFieldTable. This uses
     the passed workspace to perform the calculation. The fields
     are scaled by the optional 'scaled_fields' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateCoulombField(const InterCLJPotential::Molecule &mol, 
                                          const CLJProbe &probe,
                                          GridFieldTable &fields, 
@@ -1425,7 +1425,7 @@ InterCLJPotential::calculateCoulombField(const InterCLJPotential::Molecule &mol,
     of molecules and add the fields on 'mol0' onto 'fields'. This uses
     the passed workspace to perform the calculation. The fields
     are scaled by the optional 'scaled_fields' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateLJField(const InterCLJPotential::Molecule &mol0, 
                                     const InterCLJPotential::Molecule &mol1,
                                     const CLJProbe &probe,
@@ -1447,7 +1447,7 @@ InterCLJPotential::calculateLJField(const InterCLJPotential::Molecule &mol0,
     on the grid points of the passed GridFieldTable. This uses
     the passed workspace to perform the calculation. The fields
     are scaled by the optional 'scaled_fields' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateLJField(const InterCLJPotential::Molecule &mol, 
                                     const CLJProbe &probe,
                                     GridFieldTable &fields, 
@@ -1468,7 +1468,7 @@ InterCLJPotential::calculateLJField(const InterCLJPotential::Molecule &mol,
     passed pair of molecules, and add the fields on 'mol0' onto 'fields0'.
     This uses the passed workspace to perform the calculation. The fields
     are scaled by the optional 'scaled_fields' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateField(const InterCLJPotential::Molecule &mol0,
                                   const InterCLJPotential::Molecule &mol1,
                                   const CLJProbe &probe,
@@ -1495,7 +1495,7 @@ InterCLJPotential::calculateField(const InterCLJPotential::Molecule &mol0,
     passed molecule, and the grid points in 'fields'.
     This uses the passed workspace to perform the calculation. The fields
     are scaled by the optional 'scaled_fields' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateField(const InterCLJPotential::Molecule &mol,
                                   const CLJProbe &probe,
                                   GridFieldTable &fields,
@@ -1521,7 +1521,7 @@ InterCLJPotential::calculateField(const InterCLJPotential::Molecule &mol,
     of molecules and add the potentials on 'mol0' onto 'potentials'. This uses
     the passed workspace to perform the calculation. The potentials
     are scaled by the optional 'scaled_potential' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculatePotential(const InterCLJPotential::Molecule &mol0, 
                                       const InterCLJPotential::Molecule &mol1,
                                       const CLJProbe &probe,
@@ -1543,7 +1543,7 @@ InterCLJPotential::calculatePotential(const InterCLJPotential::Molecule &mol0,
     on the grid points of the passed GridPotentialTable. This uses
     the passed workspace to perform the calculation. The potentials
     are scaled by the optional 'scaled_potential' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculatePotential(const InterCLJPotential::Molecule &mol, 
                                       const CLJProbe &probe,
                                       GridPotentialTable &pots, 
@@ -1564,7 +1564,7 @@ InterCLJPotential::calculatePotential(const InterCLJPotential::Molecule &mol,
     of molecules and add the fields on 'mol0' onto 'pots'. This uses
     the passed workspace to perform the calculation. The potentials
     are scaled by the optional 'scaled_potential' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateCoulombPotential(
                                          const InterCLJPotential::Molecule &mol0, 
                                          const InterCLJPotential::Molecule &mol1,
@@ -1587,7 +1587,7 @@ InterCLJPotential::calculateCoulombPotential(
     on the grid points of the passed GridPotentialTable. This uses
     the passed workspace to perform the calculation. The potentials
     are scaled by the optional 'scaled_potential' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateCoulombPotential(
                                       const InterCLJPotential::Molecule &mol, 
                                       const CLJProbe &probe,
@@ -1609,7 +1609,7 @@ InterCLJPotential::calculateCoulombPotential(
     of molecules and add the potentials on 'mol0' onto 'pots'. This uses
     the passed workspace to perform the calculation. The potentials
     are scaled by the optional 'scaled_potential' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateLJPotential(const InterCLJPotential::Molecule &mol0, 
                                         const InterCLJPotential::Molecule &mol1,
                                         const CLJProbe &probe,
@@ -1631,7 +1631,7 @@ InterCLJPotential::calculateLJPotential(const InterCLJPotential::Molecule &mol0,
     on the grid points of the passed GridPotentialTable. This uses
     the passed workspace to perform the calculation. The potentials
     are scaled by the optional 'scaled_potential' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculateLJPotential(const InterCLJPotential::Molecule &mol, 
                                         const CLJProbe &probe,
                                         GridPotentialTable &pots, 
@@ -1652,7 +1652,7 @@ InterCLJPotential::calculateLJPotential(const InterCLJPotential::Molecule &mol,
     passed pair of molecules, and add the potentials on 'mol0' onto 'pots'.
     This uses the passed workspace to perform the calculation. The potentials
     are scaled by the optional 'scaled_potential' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculatePotential(
                                   const InterCLJPotential::Molecule &mol0,
                                   const InterCLJPotential::Molecule &mol1,
@@ -1681,7 +1681,7 @@ InterCLJPotential::calculatePotential(
     passed molecule, and the grid points in 'pots'.
     This uses the passed workspace to perform the calculation. The potentials
     are scaled by the optional 'scaled_potential' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCLJPotential::calculatePotential(
                                   const InterCLJPotential::Molecule &mol,
                                   const CLJProbe &probe,
@@ -1712,7 +1712,7 @@ InterCLJPotential::calculatePotential(
 /** Calculate the forces represented by the symbol 'symbol' between the 
     atoms in the molecule 'mol' and add these forces onto 'forces'. This uses
     the passed workspace to perform the calculation */
-inline void 
+SIRE_ALWAYS_INLINE void 
 IntraCLJPotential::calculateForce(const IntraCLJPotential::Molecule &mol, 
                                   MolForceTable &forces,
                                   const Symbol &symbol,
@@ -1740,7 +1740,7 @@ IntraCLJPotential::calculateForce(const IntraCLJPotential::Molecule &mol,
     
     \throw SireError::incompatible_error
 */
-inline void
+SIRE_ALWAYS_INLINE void
 IntraCLJPotential::calculateForce(const IntraCLJPotential::Molecule &mol,
                                   const IntraCLJPotential::Molecule &rest_of_mol,
                                   MolForceTable &forces,

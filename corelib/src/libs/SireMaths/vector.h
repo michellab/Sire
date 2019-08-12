@@ -249,14 +249,14 @@ protected:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Create the vector (val,val,val) */
-inline Vector::Vector(double val)
+SIRE_ALWAYS_INLINE Vector::Vector(double val)
 {
     for (int i=0; i<3; i++)
         sc[i] = val;
 }
 
 /** Create the vector (xpos,ypos,zpos) */
-inline Vector::Vector(double x, double y, double z)
+SIRE_ALWAYS_INLINE Vector::Vector(double x, double y, double z)
 {
     sc[0] = x;
     sc[1] = y;
@@ -264,11 +264,11 @@ inline Vector::Vector(double x, double y, double z)
 }
 
 /** Destructor */
-inline Vector::~Vector()
+SIRE_ALWAYS_INLINE Vector::~Vector()
 {}
 
 /** Copy assignment operator */
-inline const Vector& Vector::operator=(const Vector &other)
+SIRE_ALWAYS_INLINE const Vector& Vector::operator=(const Vector &other)
 {
     for (int i=0; i<4; ++i)
         sc[i] = other.sc[i];
@@ -277,7 +277,7 @@ inline const Vector& Vector::operator=(const Vector &other)
 }
 
 /** Comparison operator */
-inline bool Vector::operator==(const Vector &other) const
+SIRE_ALWAYS_INLINE bool Vector::operator==(const Vector &other) const
 {
     return &other == this or
            (sc[0] == other.sc[0] and sc[1] == other.sc[1] and
@@ -285,7 +285,7 @@ inline bool Vector::operator==(const Vector &other) const
 }
 
 /** Comparison operator */
-inline bool Vector::operator!=(const Vector &other) const
+SIRE_ALWAYS_INLINE bool Vector::operator!=(const Vector &other) const
 {
     return &other != this and
            (sc[0] != other.sc[0] or sc[1] != other.sc[1] or
@@ -293,61 +293,61 @@ inline bool Vector::operator!=(const Vector &other) const
 }
 
 /** Return a raw pointer to the array of coordinates */
-inline double* Vector::data()
+SIRE_ALWAYS_INLINE double* Vector::data()
 {
     return &(sc[0]);
 }
 
 /** Return a raw pointer to the array of coordinates */
-inline const double* Vector::data() const
+SIRE_ALWAYS_INLINE const double* Vector::data() const
 {
     return &(sc[0]);
 }
 
 /** Return a raw pointer to the array of coordinates */
-inline const double* Vector::constData() const
+SIRE_ALWAYS_INLINE const double* Vector::constData() const
 {
     return &(sc[0]);
 }
 
 /** Return the x component of the vector */
-inline double Vector::x() const
+SIRE_ALWAYS_INLINE double Vector::x() const
 {
     return sc[0];
 }
 
 /** Return the y component of the vector */
-inline double Vector::y() const
+SIRE_ALWAYS_INLINE double Vector::y() const
 {
     return sc[1];
 }
 
 /** Return the z component of the vector */
-inline double Vector::z() const
+SIRE_ALWAYS_INLINE double Vector::z() const
 {
     return sc[2];
 }
 
 /** Return the length of the vector */
-inline double Vector::length() const
+SIRE_ALWAYS_INLINE double Vector::length() const
 {
     return std::sqrt( pow_2(sc[0]) + pow_2(sc[1]) + pow_2(sc[2]) );
 }
 
 /** Return the length^2 of the vector */
-inline double Vector::length2() const
+SIRE_ALWAYS_INLINE double Vector::length2() const
 {
     return pow_2(sc[0]) + pow_2(sc[1]) + pow_2(sc[2]);
 }
 
 /** Return the inverse of the length of the vector */
-inline double Vector::invLength() const
+SIRE_ALWAYS_INLINE double Vector::invLength() const
 {
     return double(1) / std::sqrt( pow_2(sc[0]) + pow_2(sc[1]) + pow_2(sc[2]) );
 }
 
 /** Increment, decrement, negate etc. */
-inline const Vector& Vector::operator+=(const Vector &other)
+SIRE_ALWAYS_INLINE const Vector& Vector::operator+=(const Vector &other)
 {
     for (int i=0; i<3; i++)
         sc[i] += other.sc[i];
@@ -356,7 +356,7 @@ inline const Vector& Vector::operator+=(const Vector &other)
 }
 
 /** Increment, decrement, negate etc. */
-inline const Vector& Vector::operator-=(const Vector &other)
+SIRE_ALWAYS_INLINE const Vector& Vector::operator-=(const Vector &other)
 {
     for (int i=0; i<3; i++)
         sc[i] -= other.sc[i];
@@ -365,7 +365,7 @@ inline const Vector& Vector::operator-=(const Vector &other)
 }
 
 /** Increment, decrement, negate etc. */
-inline const Vector& Vector::operator*=(const double &val)
+SIRE_ALWAYS_INLINE const Vector& Vector::operator*=(const double &val)
 {
     for (int i=0; i<3; i++)
         sc[i] *= val;
@@ -374,31 +374,31 @@ inline const Vector& Vector::operator*=(const double &val)
 }
 
 /** Increment, decrement, negate etc. */
-inline Vector Vector::operator-() const
+SIRE_ALWAYS_INLINE Vector Vector::operator-() const
 {
     return Vector(-sc[0],-sc[1],-sc[2]);
 }
 
 /** Increment, decrement, negate etc. */
-inline const Vector operator+(const Vector &p1, const Vector &p2)
+SIRE_ALWAYS_INLINE const Vector operator+(const Vector &p1, const Vector &p2)
 {
     return Vector(p1.sc[0]+p2.sc[0], p1.sc[1]+p2.sc[1], p1.sc[2]+p2.sc[2]);
 }
 
 /** Increment, decrement, negate etc. */
-inline const Vector operator-(const Vector &p1, const Vector &p2)
+SIRE_ALWAYS_INLINE const Vector operator-(const Vector &p1, const Vector &p2)
 {
     return Vector(p1.sc[0]-p2.sc[0], p1.sc[1]-p2.sc[1], p1.sc[2]-p2.sc[2]);
 }
 
 /** Increment, decrement, negate etc. */
-inline const Vector operator*(const Vector &p1, double c)
+SIRE_ALWAYS_INLINE const Vector operator*(const Vector &p1, double c)
 {
     return Vector(p1.sc[0]*c, p1.sc[1]*c, p1.sc[2]*c);
 }
 
 /** Increment, decrement, negate etc. */
-inline const Vector operator*(double c, const Vector &p1)
+SIRE_ALWAYS_INLINE const Vector operator*(double c, const Vector &p1)
 {
     return Vector(p1.sc[0]*c, p1.sc[1]*c, p1.sc[2]*c);
 }

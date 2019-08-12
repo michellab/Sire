@@ -96,7 +96,7 @@ private:
     boost::shared_ptr<SegID> d;
 };
 
-inline uint qHash(const SegIdentifier &segid)
+SIRE_ALWAYS_INLINE uint qHash(const SegIdentifier &segid)
 {
     return segid.hash();
 }

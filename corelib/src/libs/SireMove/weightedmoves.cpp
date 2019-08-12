@@ -180,7 +180,7 @@ WeightedMoves& WeightedMoves::operator=(const WeightedMoves &other)
     return *this;
 }
 
-inline bool compare( const QVector< boost::tuple<MovePtr,double> > &o1,
+SIRE_ALWAYS_INLINE bool compare( const QVector< boost::tuple<MovePtr,double> > &o1,
                      const QVector< boost::tuple<MovePtr,double> > &o2 )
 {
     if (o1.constData() == o2.constData())

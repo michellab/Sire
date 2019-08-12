@@ -168,7 +168,7 @@ namespace SireMM
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the matrix of LJ pairs for the given combining rules */
-inline LJPairMatrix LJParameterDB::getLJPairs(CombiningRules type)
+SIRE_ALWAYS_INLINE LJPairMatrix LJParameterDB::getLJPairs(CombiningRules type)
 {
     return ljdb.getLJPairs(type);
 }
@@ -176,7 +176,7 @@ inline LJPairMatrix LJParameterDB::getLJPairs(CombiningRules type)
 /** Add a new LJParameter to the database, returning the ID of the 
     parameter. This has to lock and unlock the database, so it may
     be slow if you are adding large numbers of parameters */
-inline quint32 LJParameterDB::addLJParameter(const LJParameter &ljparam)
+SIRE_ALWAYS_INLINE quint32 LJParameterDB::addLJParameter(const LJParameter &ljparam)
 {
     return ljdb.addLJParameter(ljparam);
 }
@@ -185,14 +185,14 @@ inline quint32 LJParameterDB::addLJParameter(const LJParameter &ljparam)
 
     \throw SireFF::missing_parameter
 */
-inline LJParameter LJParameterDB::getLJParameter(quint32 id)
+SIRE_ALWAYS_INLINE LJParameter LJParameterDB::getLJParameter(quint32 id)
 {
     return ljdb.getLJParameter(id);
 }
 
 /** Lock the database - use this if you are going to add lots of 
     parameters via the '_locked_addLJParameter' function */
-inline void LJParameterDB::lock()
+SIRE_ALWAYS_INLINE void LJParameterDB::lock()
 {
     ljdb.lock();
 }
@@ -202,7 +202,7 @@ inline void LJParameterDB::lock()
     locked the database via the lock() function, and you must
     unlock the database via the unlock() function once you have
     finished adding all of the parameters */
-inline quint32 LJParameterDB::_locked_addLJParameter(const LJParameter &ljparam)
+SIRE_ALWAYS_INLINE quint32 LJParameterDB::_locked_addLJParameter(const LJParameter &ljparam)
 {
     return ljdb._locked_addLJParameter(ljparam);
 }
@@ -213,7 +213,7 @@ inline quint32 LJParameterDB::_locked_addLJParameter(const LJParameter &ljparam)
 
     \throw SireFF::missing_parameter
 */
-inline LJParameter LJParameterDB::_locked_getLJParameter(quint32 id)
+SIRE_ALWAYS_INLINE LJParameter LJParameterDB::_locked_getLJParameter(quint32 id)
 {
     return ljdb._locked_getLJParameter(id);
 }
@@ -221,7 +221,7 @@ inline LJParameter LJParameterDB::_locked_getLJParameter(quint32 id)
 /** Unlock the database - ensure that you do this after you have finished
     adding parameter via the '_locked_addLJParameter' function, or else
     weird things may happen! */
-inline void LJParameterDB::unlock()
+SIRE_ALWAYS_INLINE void LJParameterDB::unlock()
 {
     ljdb.unlock();
 }

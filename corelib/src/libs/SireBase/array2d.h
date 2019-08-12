@@ -89,25 +89,25 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the number of rows in the matrix */
-inline int Array2DBase::nRows() const
+SIRE_ALWAYS_INLINE int Array2DBase::nRows() const
 {
     return nrows;
 }
 
 /** Return the number of columns in the matrix */
-inline int Array2DBase::nColumns() const
+SIRE_ALWAYS_INLINE int Array2DBase::nColumns() const
 {
     return ncolumns;
 }
 
 /** Return the location in the 1D array of the item at index [i,j] */
-inline int Array2DBase::offset(int i, int j) const
+SIRE_ALWAYS_INLINE int Array2DBase::offset(int i, int j) const
 {
     return (i*ncolumns) + j;
 }
 
 /** Map the 2D index (i,j) into the 1D index into memory */
-inline int Array2DBase::map(int i, int j) const
+SIRE_ALWAYS_INLINE int Array2DBase::map(int i, int j) const
 {
     return Array2DBase::offset(i,j);
 }
@@ -116,7 +116,7 @@ inline int Array2DBase::map(int i, int j) const
 
     \throw SireError::invalid_index
 */
-inline void Array2DBase::assertValidIndex(int i, int j) const
+SIRE_ALWAYS_INLINE void Array2DBase::assertValidIndex(int i, int j) const
 {
     if (i < 0 or i >= nrows or j < 0 or j >= ncolumns)
         throwInvalidIndex(i,j);
@@ -126,7 +126,7 @@ inline void Array2DBase::assertValidIndex(int i, int j) const
 
     \throw SireError::invalid_index
 */
-inline int Array2DBase::checkedOffset(int i, int j) const
+SIRE_ALWAYS_INLINE int Array2DBase::checkedOffset(int i, int j) const
 {
     Array2DBase::assertValidIndex(i,j);
     return Array2DBase::offset(i,j);

@@ -1072,7 +1072,7 @@ double Molpro::calculateEnergy(const QMPotential::Molecules &molecules,
     return this->calculateEnergy(cmdfile, ntries);
 }
 
-inline QString get_key(const Vector &vector)
+SIRE_ALWAYS_INLINE QString get_key(const Vector &vector)
 {
     QString key;
 
@@ -1085,7 +1085,7 @@ inline QString get_key(const Vector &vector)
     return key;
 }
 
-inline QString get_key(const LatticeCharge &point)
+SIRE_ALWAYS_INLINE QString get_key(const LatticeCharge &point)
 {
     QString key;
 

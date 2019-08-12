@@ -162,7 +162,7 @@ protected:
 };
 
 /** Construct a Unit from a TempBase */
-inline Unit::Unit(const TempBase &temperature)
+SIRE_ALWAYS_INLINE Unit::Unit(const TempBase &temperature)
             : sclfac(temperature)
 {}
 
@@ -294,24 +294,24 @@ protected:
     }
 };
 
-inline Celsius operator*(double value, const Celsius &temp)
+SIRE_ALWAYS_INLINE Celsius operator*(double value, const Celsius &temp)
 {
     return temp * value;
 }
 
 #ifndef SKIP_BROKEN_GCCXML_PARTS
-inline Dimension::PhysUnit<0,0,0,0,-1,0,0> operator/(double value, const Celsius &temp)
+SIRE_ALWAYS_INLINE Dimension::PhysUnit<0,0,0,0,-1,0,0> operator/(double value, const Celsius &temp)
 {
     return Dimension::PhysUnit<0,0,0,0,-1,0,0>(value / temp.convertFromInternal());
 }
 
-inline Dimension::PhysUnit<0,0,0,0,-1,0,0> operator/(int value, const Celsius &temp)
+SIRE_ALWAYS_INLINE Dimension::PhysUnit<0,0,0,0,-1,0,0> operator/(int value, const Celsius &temp)
 {
     return Dimension::PhysUnit<0,0,0,0,-1,0,0>(value / temp.convertFromInternal());
 }
 #endif
 
-inline Celsius operator*(int value, const Celsius &temp)
+SIRE_ALWAYS_INLINE Celsius operator*(int value, const Celsius &temp)
 {
     return temp * value;
 }
@@ -444,22 +444,22 @@ protected:
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-inline Fahrenheit operator*(double value, const Fahrenheit &temp)
+SIRE_ALWAYS_INLINE Fahrenheit operator*(double value, const Fahrenheit &temp)
 {
     return temp * value;
 }
 
-inline Dimension::PhysUnit<0,0,0,0,-1,0,0> operator/(double value, const Fahrenheit &temp)
+SIRE_ALWAYS_INLINE Dimension::PhysUnit<0,0,0,0,-1,0,0> operator/(double value, const Fahrenheit &temp)
 {
     return Dimension::PhysUnit<0,0,0,0,-1,0,0>(value / temp.convertFromInternal());
 }
 
-inline Dimension::PhysUnit<0,0,0,0,-1,0,0> operator/(int value, const Fahrenheit &temp)
+SIRE_ALWAYS_INLINE Dimension::PhysUnit<0,0,0,0,-1,0,0> operator/(int value, const Fahrenheit &temp)
 {
     return Dimension::PhysUnit<0,0,0,0,-1,0,0>(value / temp.convertFromInternal());
 }
 
-inline Fahrenheit operator*(int value, const Fahrenheit &temp)
+SIRE_ALWAYS_INLINE Fahrenheit operator*(int value, const Fahrenheit &temp)
 {
     return temp * value;
 }

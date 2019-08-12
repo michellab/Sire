@@ -99,7 +99,7 @@ private:
     boost::shared_ptr<CGID> d;
 };
 
-inline uint qHash(const CGIdentifier &cgid)
+SIRE_ALWAYS_INLINE uint qHash(const CGIdentifier &cgid)
 {
     return cgid.hash();
 }

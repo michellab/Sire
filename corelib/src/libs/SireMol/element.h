@@ -130,19 +130,19 @@ private:
   
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-inline uint qHash(const Element &element)
+SIRE_ALWAYS_INLINE uint qHash(const Element &element)
 {
     return element.nProtons();
 }
         
 /** Comparison operators. These are very quick */
-inline bool Element::operator==(const Element &other) const
+SIRE_ALWAYS_INLINE bool Element::operator==(const Element &other) const
 {
     return eldata == other.eldata;
 }
     
 /** Comparison operators. These are very quick */
-inline bool Element::operator!=(const Element &other) const
+SIRE_ALWAYS_INLINE bool Element::operator!=(const Element &other) const
 {
     return eldata != other.eldata;
 }

@@ -445,140 +445,140 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return a read-only reference to the contained object */
-inline const CLJBox& CLJBoxPtr::read() const
+SIRE_ALWAYS_INLINE const CLJBox& CLJBoxPtr::read() const
 {
     return *d;
 }
     
 /** Return the i value of the index */
-inline qint16 CLJBoxIndex::i() const
+SIRE_ALWAYS_INLINE qint16 CLJBoxIndex::i() const
 {
     return v.index.ii;
 }
 
 /** Return the j value of the index */
-inline qint16 CLJBoxIndex::j() const
+SIRE_ALWAYS_INLINE qint16 CLJBoxIndex::j() const
 {
     return v.index.jj;
 }
 
 /** Return the k value of the index */
-inline qint16 CLJBoxIndex::k() const
+SIRE_ALWAYS_INLINE qint16 CLJBoxIndex::k() const
 {
     return v.index.kk;
 }
 
 /** Return a hash of the box index (used for QHash) */
-inline uint CLJBoxIndex::hash() const
+SIRE_ALWAYS_INLINE uint CLJBoxIndex::hash() const
 {
     return v.val;
 }
 
 /** Return whether or not this index refers to the same box as 'other' */
-inline bool CLJBoxIndex::sameBox(const CLJBoxIndex &other) const
+SIRE_ALWAYS_INLINE bool CLJBoxIndex::sameBox(const CLJBoxIndex &other) const
 {
     return v.index.ii == other.v.index.ii and
            v.index.jj == other.v.index.jj and
            v.index.kk == other.v.index.kk;
 }
 
-inline uint qHash(const CLJBoxIndex &index)
+SIRE_ALWAYS_INLINE uint qHash(const CLJBoxIndex &index)
 {
     return index.hash();
 }
 
 /** Return the (optionally supplied) index of a particular atom in the box */
-inline qint16 CLJBoxIndex::index() const
+SIRE_ALWAYS_INLINE qint16 CLJBoxIndex::index() const
 {
     return v.index.idx;
 }
 
 /** Return whether or not this contains an atom index */
-inline bool CLJBoxIndex::hasAtomIndex() const
+SIRE_ALWAYS_INLINE bool CLJBoxIndex::hasAtomIndex() const
 {
     return v.index.idx >= 0;
 }
 
 /** Comparison operator */
-inline bool CLJBoxIndex::operator==(const CLJBoxIndex &other) const
+SIRE_ALWAYS_INLINE bool CLJBoxIndex::operator==(const CLJBoxIndex &other) const
 {
     return v.val == other.v.val;
 }
 
 /** Comparison operator */
-inline bool CLJBoxIndex::operator!=(const CLJBoxIndex &other) const
+SIRE_ALWAYS_INLINE bool CLJBoxIndex::operator!=(const CLJBoxIndex &other) const
 {
     return not operator==(other);
 }
 
 /** Comparison operator */
-inline bool CLJBoxIndex::operator<(const CLJBoxIndex &other) const
+SIRE_ALWAYS_INLINE bool CLJBoxIndex::operator<(const CLJBoxIndex &other) const
 {
     return v.val < other.v.val;
 }
 
 /** Comparison operator */
-inline bool CLJBoxIndex::operator<=(const CLJBoxIndex &other) const
+SIRE_ALWAYS_INLINE bool CLJBoxIndex::operator<=(const CLJBoxIndex &other) const
 {
     return v.val <= other.v.val;
 }
 
 /** Comparison operator */
-inline bool CLJBoxIndex::operator>(const CLJBoxIndex &other) const
+SIRE_ALWAYS_INLINE bool CLJBoxIndex::operator>(const CLJBoxIndex &other) const
 {
     return v.val > other.v.val;
 }
 
 /** Comparison operator */
-inline bool CLJBoxIndex::operator>=(const CLJBoxIndex &other) const
+SIRE_ALWAYS_INLINE bool CLJBoxIndex::operator>=(const CLJBoxIndex &other) const
 {
     return v.val >= other.v.val;
 }
 
 /** Return a read/write reference to the contained object */
-inline CLJBox& CLJBoxPtr::write()
+SIRE_ALWAYS_INLINE CLJBox& CLJBoxPtr::write()
 {
     return *d;
 }
 
 /** Return the atoms contained in the box */
-inline const CLJAtoms& CLJBox::atoms() const
+SIRE_ALWAYS_INLINE const CLJAtoms& CLJBox::atoms() const
 {
     return atms;
 }
 
 /** Return the set of all occupied boxes, indexed by their CLJBoxIndex */
-inline const CLJBoxes::Container& CLJBoxes::occupiedBoxes() const
+SIRE_ALWAYS_INLINE const CLJBoxes::Container& CLJBoxes::occupiedBoxes() const
 {
     return bxs;
 }
   
 /** Return a raw pointer to the array of boxes */
-inline const CLJBoxPtr* CLJBoxes::constData() const
+SIRE_ALWAYS_INLINE const CLJBoxPtr* CLJBoxes::constData() const
 {
     return bxs.constData();
 }
 
 /** Return a raw pointer to the array of boxes */
-inline const CLJBoxPtr* CLJBoxes::data() const
+SIRE_ALWAYS_INLINE const CLJBoxPtr* CLJBoxes::data() const
 {
     return bxs.constData();
 }
 
 /** Return the iterator pointing to the first occupied box */
-inline CLJBoxes::const_iterator CLJBoxes::begin() const
+SIRE_ALWAYS_INLINE CLJBoxes::const_iterator CLJBoxes::begin() const
 {
     return bxs.begin();
 }
 
 /** Return the iterator pointing to the first occupied box */
-inline CLJBoxes::const_iterator CLJBoxes::constBegin() const
+SIRE_ALWAYS_INLINE CLJBoxes::const_iterator CLJBoxes::constBegin() const
 {
     return bxs.constBegin();
 }
 
 /** Return the iterator pointing to the occupied box at index 'box' */
-inline CLJBoxes::const_iterator CLJBoxes::find(const CLJBoxIndex &box) const
+SIRE_ALWAYS_INLINE CLJBoxes::const_iterator CLJBoxes::find(const CLJBoxIndex &box) const
 {
     ContainerMap::const_iterator it = box_to_idx.constFind(box);
     
@@ -597,61 +597,61 @@ inline CLJBoxes::const_iterator CLJBoxes::find(const CLJBoxIndex &box) const
 }
 
 /** Return the iterator pointing to the occupied box at index 'box' */
-inline CLJBoxes::const_iterator CLJBoxes::constFind(const CLJBoxIndex &box) const
+SIRE_ALWAYS_INLINE CLJBoxes::const_iterator CLJBoxes::constFind(const CLJBoxIndex &box) const
 {
     return this->find(box);
 }
 
 /** Return the iterator pointing to one space past the last occupied box */
-inline CLJBoxes::const_iterator CLJBoxes::end() const
+SIRE_ALWAYS_INLINE CLJBoxes::const_iterator CLJBoxes::end() const
 {
     return bxs.end();
 }
 
 /** Return the iterator pointing to one space past the last occupied box */
-inline CLJBoxes::const_iterator CLJBoxes::constEnd() const
+SIRE_ALWAYS_INLINE CLJBoxes::const_iterator CLJBoxes::constEnd() const
 {
     return bxs.constEnd();
 }
 
 /** Return the index of the first box */
-inline quint32 CLJBoxDistance::box0() const
+SIRE_ALWAYS_INLINE quint32 CLJBoxDistance::box0() const
 {
     return b0;
 }
 
 /** Return the index of the second box */
-inline quint32 CLJBoxDistance::box1() const
+SIRE_ALWAYS_INLINE quint32 CLJBoxDistance::box1() const
 {
     return b1;
 }
 
 /** Return the minimum distance between the boxes */
-inline float CLJBoxDistance::distance() const
+SIRE_ALWAYS_INLINE float CLJBoxDistance::distance() const
 {
     return dist;
 }
 
 /** Return whether or not this is empty (contains no atoms) */
-inline bool CLJBoxes::isEmpty() const
+SIRE_ALWAYS_INLINE bool CLJBoxes::isEmpty() const
 {
     return bxs.isEmpty();
 }
 
 /** Return whether or not the passed box is empty */
-inline bool CLJBox::isEmpty() const
+SIRE_ALWAYS_INLINE bool CLJBox::isEmpty() const
 {
     return atms.isEmpty();
 }
 
 /** Return the index of this box */
-inline const CLJBoxIndex& CLJBox::index() const
+SIRE_ALWAYS_INLINE const CLJBoxIndex& CLJBox::index() const
 {
     return box_index;
 }
 
 /** Return the length of each side of this box */
-inline float CLJBox::boxLength() const
+SIRE_ALWAYS_INLINE float CLJBox::boxLength() const
 {
     return box_length;
 }

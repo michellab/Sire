@@ -198,7 +198,7 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return whether or not this grid is empty (has no fixed atoms) */
-inline bool CLJGrid::isEmpty() const
+SIRE_ALWAYS_INLINE bool CLJGrid::isEmpty() const
 {
     return cljboxes.isEmpty();
 }

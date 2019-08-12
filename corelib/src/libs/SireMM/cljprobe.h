@@ -175,37 +175,37 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the charge on the probe */
-inline SireUnits::Dimension::Charge CoulombProbe::charge() const
+SIRE_ALWAYS_INLINE SireUnits::Dimension::Charge CoulombProbe::charge() const
 {
     return chg;
 }
 
 /** Return the reduced charge on the probe */
-inline double CoulombProbe::reducedCharge() const
+SIRE_ALWAYS_INLINE double CoulombProbe::reducedCharge() const
 {
     return reduced_chg;
 }
 
 /** Return the LJ parameters for this probe */
-inline const LJParameter& LJProbe::lj() const
+SIRE_ALWAYS_INLINE const LJParameter& LJProbe::lj() const
 {
     return ljparam;
 }
 
 /** Return the charge on the probe */
-inline SireUnits::Dimension::Charge CLJProbe::charge() const
+SIRE_ALWAYS_INLINE SireUnits::Dimension::Charge CLJProbe::charge() const
 {
     return chg;
 }
 
 /** Return the reduced charge on the probe */
-inline double CLJProbe::reducedCharge() const
+SIRE_ALWAYS_INLINE double CLJProbe::reducedCharge() const
 {
     return reduced_chg;
 }
 
 /** Return the LJ parameters for this probe */
-inline const LJParameter& CLJProbe::lj() const
+SIRE_ALWAYS_INLINE const LJParameter& CLJProbe::lj() const
 {
     return ljparam;
 }

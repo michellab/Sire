@@ -123,7 +123,7 @@ public:
     quint32 atom2;
 };
 
-inline uint qHash(const IDTriple &idtriple)
+SIRE_ALWAYS_INLINE uint qHash(const IDTriple &idtriple)
 {
     return (idtriple.atom0 << 24) | (idtriple.atom1 & 0x00FFFF00) |
                                     (idtriple.atom2 & 0x000000FF);
@@ -226,19 +226,19 @@ private:
 //////
 
 /** Return the first atom of the triple */
-inline const CGAtomIdx& ThreeAtomFunction::atom0() const
+SIRE_ALWAYS_INLINE const CGAtomIdx& ThreeAtomFunction::atom0() const
 {
     return atm0;
 }
 
 /** Return the second atom of the triple */
-inline const CGAtomIdx& ThreeAtomFunction::atom1() const
+SIRE_ALWAYS_INLINE const CGAtomIdx& ThreeAtomFunction::atom1() const
 {
     return atm1;
 }
 
 /** Return the third atom of the triple */
-inline const CGAtomIdx& ThreeAtomFunction::atom2() const
+SIRE_ALWAYS_INLINE const CGAtomIdx& ThreeAtomFunction::atom2() const
 {
     return atm2;
 }

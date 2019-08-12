@@ -124,7 +124,7 @@ private:
     CGIdx cgidxs[4];
 };
 
-inline uint qHash(const CGIDQuad &idquad)
+SIRE_ALWAYS_INLINE uint qHash(const CGIDQuad &idquad)
 {
     return idquad.hash();
 }
@@ -908,81 +908,81 @@ private:
 ///////
 
 /** Return whether or not this is empty (contains no parameters) */
-inline bool InternalParameters::isEmpty() const
+SIRE_ALWAYS_INLINE bool InternalParameters::isEmpty() const
 {
     return state == EMPTY;
 }
 
 /** Return whether or not there are any bond parameters */
-inline bool InternalParameters::hasBondParameters() const
+SIRE_ALWAYS_INLINE bool InternalParameters::hasBondParameters() const
 {
     return state & HAS_BOND;
 }
 
 /** Return whether or not there are any angle parameters */
-inline bool InternalParameters::hasAngleParameters() const
+SIRE_ALWAYS_INLINE bool InternalParameters::hasAngleParameters() const
 {
     return state & HAS_ANGLE;
 }
 
 /** Return whether or not there are any dihedral parameters */
-inline bool InternalParameters::hasDihedralParameters() const
+SIRE_ALWAYS_INLINE bool InternalParameters::hasDihedralParameters() const
 {
     return state & HAS_DIHEDRAL;
 }
 
 /** Return whether or not there are any physical (bond, angle 
     or dihedral) parameters */
-inline bool InternalParameters::hasPhysicalParameters() const
+SIRE_ALWAYS_INLINE bool InternalParameters::hasPhysicalParameters() const
 {
     return state & HAS_PHYSICAL;
 }
 
 /** Return whether or not there are any improper parameters */
-inline bool InternalParameters::hasImproperParameters() const
+SIRE_ALWAYS_INLINE bool InternalParameters::hasImproperParameters() const
 {
     return state & HAS_IMPROPER;
 }
 
 /** Return whether or not there are any Urey-Bradley parameters */
-inline bool InternalParameters::hasUreyBradleyParameters() const
+SIRE_ALWAYS_INLINE bool InternalParameters::hasUreyBradleyParameters() const
 {
     return state & HAS_UB;
 }
 
 /** Return whether or not there are any non-physical (improper or
     Urey-Bradley) parameters */
-inline bool InternalParameters::hasNonPhysicalParameters() const
+SIRE_ALWAYS_INLINE bool InternalParameters::hasNonPhysicalParameters() const
 {
     return state & HAS_NONPHYS;
 }
 
 /** Return whether or not there are any stretch-stretch parameters */
-inline bool InternalParameters::hasStretchStretchParameters() const
+SIRE_ALWAYS_INLINE bool InternalParameters::hasStretchStretchParameters() const
 {
     return state & HAS_SS;
 }
 
 /** Return whether or not there are any stretch-bend parameters */
-inline bool InternalParameters::hasStretchBendParameters() const
+SIRE_ALWAYS_INLINE bool InternalParameters::hasStretchBendParameters() const
 {
     return state & HAS_SB;
 }
 
 /** Return whether or not there are any bend-bend parameters */
-inline bool InternalParameters::hasBendBendParameters() const
+SIRE_ALWAYS_INLINE bool InternalParameters::hasBendBendParameters() const
 {
     return state & HAS_BB;
 }
 
 /** Return whether or not there are any stretch-bend-torsion parameters */
-inline bool InternalParameters::hasStretchBendTorsionParameters() const
+SIRE_ALWAYS_INLINE bool InternalParameters::hasStretchBendTorsionParameters() const
 {
     return state & HAS_SBT;
 }
 
 /** Return whether or not there are any cross (stretch-stretch etc.) parameters */
-inline bool InternalParameters::hasCrossTerms() const
+SIRE_ALWAYS_INLINE bool InternalParameters::hasCrossTerms() const
 {
     return state & HAS_CROSS;
 }

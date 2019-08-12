@@ -94,43 +94,43 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the (normalised) normal vector to the plane */
-inline const Vector& Plane::normal() const
+SIRE_ALWAYS_INLINE const Vector& Plane::normal() const
 {
     return norm;
 }
 
 /** Return the distance of the plane from the origin along the normal vector */
-inline const double& Plane::distanceFromOrigin() const
+SIRE_ALWAYS_INLINE const double& Plane::distanceFromOrigin() const
 {
     return dist;
 }
 
 /** Return the 'a' component of the plane equation "ax + by + cz + d = 0" */
-inline double Plane::a() const
+SIRE_ALWAYS_INLINE double Plane::a() const
 {
     return norm.x();
 }
 
 /** Return the 'b' component of the plane equation "ax + by + cz + d = 0" */
-inline double Plane::b() const
+SIRE_ALWAYS_INLINE double Plane::b() const
 {
     return norm.y();
 }
 
 /** Return the 'c' component of the plane equation "ax + by + cz + d = 0" */
-inline double Plane::c() const
+SIRE_ALWAYS_INLINE double Plane::c() const
 {
     return norm.z();
 }
 
 /** Return the 'd' component of the plane equation "ax + by + cz + d = 0" */
-inline double Plane::d() const
+SIRE_ALWAYS_INLINE double Plane::d() const
 {
     return dist;
 }
 
 /** Return the shortest (signed) distance from the plane to the point 'point' */
-inline double Plane::distance(const Vector &point) const
+SIRE_ALWAYS_INLINE double Plane::distance(const Vector &point) const
 {
     return Vector::dot(norm, point) + dist;
 }

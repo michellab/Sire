@@ -111,20 +111,20 @@ protected:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the single argument to this function */
-inline const Expression& SingleFunc::argument() const
+SIRE_ALWAYS_INLINE const Expression& SingleFunc::argument() const
 {
     return ex;
 }
 
 /** Synonym for argument() - useful when doing calculus, and viewing
     the function as being a pure f(x) */
-inline const Expression& SingleFunc::x() const
+SIRE_ALWAYS_INLINE const Expression& SingleFunc::x() const
 {
     return ex;
 }
 
 /** Return a has for the function */
-inline uint SingleFunc::hash() const
+SIRE_ALWAYS_INLINE uint SingleFunc::hash() const
 {
     return (magic() << 16) | (ex.hash() & 0x0000FFFF);
 }

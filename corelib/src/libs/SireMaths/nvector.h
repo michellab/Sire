@@ -149,7 +149,7 @@ private:
     QVector<double> array;
 };
 
-inline NVector operator*(double scale, const NVector &vector)
+SIRE_ALWAYS_INLINE NVector operator*(double scale, const NVector &vector)
 {
     return vector * scale;
 }

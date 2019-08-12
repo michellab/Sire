@@ -189,61 +189,61 @@ protected:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the offset into the array of the value at index [i,j] */
-inline int Matrix::offset(int i, int j) const
+SIRE_ALWAYS_INLINE int Matrix::offset(int i, int j) const
 {
     return 3*i + j;
 }
 
 /** Return the xx element (matrix[0,0]) */
-inline double Matrix::xx() const
+SIRE_ALWAYS_INLINE double Matrix::xx() const
 {
     return array[0];
 }
 
 /** Return the xy element (matrix[0,1]) */
-inline double Matrix::xy() const
+SIRE_ALWAYS_INLINE double Matrix::xy() const
 {
     return array[1];
 }
 
 /** Return the xz element (matrix[0,2]) */
-inline double Matrix::xz() const
+SIRE_ALWAYS_INLINE double Matrix::xz() const
 {
     return array[2];
 }
 
 /** Return the yx element (matrix[1,0]) */
-inline double Matrix::yx() const
+SIRE_ALWAYS_INLINE double Matrix::yx() const
 {
     return array[3];
 }
 
 /** Return the yy element (matrix[1,1]) */
-inline double Matrix::yy() const
+SIRE_ALWAYS_INLINE double Matrix::yy() const
 {
     return array[4];
 }
 
 /** Return the yz element (matrix[1,2]) */
-inline double Matrix::yz() const
+SIRE_ALWAYS_INLINE double Matrix::yz() const
 {
     return array[5];
 }
 
 /** Return the zx element (matrix[2,0]) */
-inline double Matrix::zx() const
+SIRE_ALWAYS_INLINE double Matrix::zx() const
 {
     return array[6];
 }
 
 /** Return the zy element (matrix[2,1]) */
-inline double Matrix::zy() const
+SIRE_ALWAYS_INLINE double Matrix::zy() const
 {
     return array[7];
 }
 
 /** Return the zz element (matrix[2,2]) */
-inline double Matrix::zz() const
+SIRE_ALWAYS_INLINE double Matrix::zz() const
 {
     return array[8];
 }

@@ -182,7 +182,7 @@ private:
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-inline uint qHash(const ImproperID &improperid)
+SIRE_ALWAYS_INLINE uint qHash(const ImproperID &improperid)
 {
     return improperid.hash();
 }

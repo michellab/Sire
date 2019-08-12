@@ -120,7 +120,7 @@ public:
     quint32 atom1;
 };
 
-inline uint qHash(const IDPair &idpair)
+SIRE_ALWAYS_INLINE uint qHash(const IDPair &idpair)
 {
     return (idpair.atom0 << 16) | (idpair.atom1 & 0x0000FFFF);
 }
@@ -217,13 +217,13 @@ private:
 //////
 
 /** Return the first atom of the pair */
-inline const CGAtomIdx& TwoAtomFunction::atom0() const
+SIRE_ALWAYS_INLINE const CGAtomIdx& TwoAtomFunction::atom0() const
 {
     return atm0;
 }
 
 /** Return the second atom of the pair */
-inline const CGAtomIdx& TwoAtomFunction::atom1() const
+SIRE_ALWAYS_INLINE const CGAtomIdx& TwoAtomFunction::atom1() const
 {
     return atm1;
 }

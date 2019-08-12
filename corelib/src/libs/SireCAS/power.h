@@ -170,13 +170,13 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the core of the power (e.g. return x for x^y) */
-inline Expression Power::core() const
+SIRE_ALWAYS_INLINE Expression Power::core() const
 {
     return ex;
 }
 
 /** Return the power of the power (e.g. return y for x^y) */
-inline Expression Power::power() const
+SIRE_ALWAYS_INLINE Expression Power::power() const
 {
     return pwr;
 }

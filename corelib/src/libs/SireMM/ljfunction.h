@@ -54,7 +54,7 @@ using SireMaths::Vector;
 
 /** Calculate the LJ energy from the passed
     distance^2 and LJ parameter pair */
-inline double calcLJEnergy(const double r2, const LJPair &ljpair)
+SIRE_ALWAYS_INLINE double calcLJEnergy(const double r2, const LJPair &ljpair)
 {
     if (r2 == 0)
         return 0;
@@ -70,7 +70,7 @@ inline double calcLJEnergy(const double r2, const LJPair &ljpair)
 }
 
 /** Calculate the LJ force from the passed distance vector and LJ parameter pair */
-inline Vector calcLJForce(const DistVector &r, const LJPair &ljpair)
+SIRE_ALWAYS_INLINE Vector calcLJForce(const DistVector &r, const LJPair &ljpair)
 {
     if (r.length() == 0)
         return Vector(0);
@@ -90,7 +90,7 @@ inline Vector calcLJForce(const DistVector &r, const LJPair &ljpair)
 /** Calculate the LJ force from the passed distance vector and LJ parameter pair,
     together with the LJ scaling factor and differential of the scaling factor
       - this is for feathered energies */
-inline Vector calcLJForce(const DistVector &r, const LJPair &ljpair,
+SIRE_ALWAYS_INLINE Vector calcLJForce(const DistVector &r, const LJPair &ljpair,
                           const double scl, const double dscl_dr)
 {
     if (r.length() == 0)
@@ -119,7 +119,7 @@ inline Vector calcLJForce(const DistVector &r, const LJPair &ljpair,
 #ifdef SIRE_USE_SSE
 
     /** SSE version of calcLJEnergy */
-    inline __m128d calcLJEnergy(const double r0_2, const double r1_2,
+    SIRE_ALWAYS_INLINE __m128d calcLJEnergy(const double r0_2, const double r1_2,
                                 const LJPair &lj0pair, const LJPair &lj1pair)
     {
         __m128d sse_nrg;

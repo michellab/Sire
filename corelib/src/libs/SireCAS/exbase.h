@@ -210,7 +210,7 @@ public:
 };
 
 /** Return a hash of an ExBase object */
-inline uint qHash(const ExBase &ex)
+SIRE_ALWAYS_INLINE uint qHash(const ExBase &ex)
 {
     return ex.hash();
 }

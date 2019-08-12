@@ -158,7 +158,7 @@ private:
 ////////
 
 /** Return the function that acts between the atoms */
-inline const Expression& AtomFunction::function() const
+SIRE_ALWAYS_INLINE const Expression& AtomFunction::function() const
 {
     return func;
 }
@@ -169,7 +169,7 @@ inline const Expression& AtomFunction::function() const
 
 /** Return all of the symbols used by all of the AtomFunctions in this
     set */
-inline const QSet<Symbol>& AtomFunctions::symbols() const
+SIRE_ALWAYS_INLINE const QSet<Symbol>& AtomFunctions::symbols() const
 {
     return symbls;
 }

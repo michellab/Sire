@@ -109,13 +109,13 @@ protected:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the first argument - viewed as this is f( x(), y() ) */
-inline const Expression& DoubleFunc::x() const
+SIRE_ALWAYS_INLINE const Expression& DoubleFunc::x() const
 {
     return ex0;
 }
 
 /** Return the second argument - viewed as this is f( x(), y() ) */
-inline const Expression& DoubleFunc::y() const
+SIRE_ALWAYS_INLINE const Expression& DoubleFunc::y() const
 {
     return ex1;
 }

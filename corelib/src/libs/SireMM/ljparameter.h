@@ -123,26 +123,26 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Hash a LJ parameter */
-inline uint qHash(const LJParameter &ljparam)
+SIRE_ALWAYS_INLINE uint qHash(const LJParameter &ljparam)
 {
     return uint( 1000000.0 * ljparam.sqrtEpsilon() + 
                    10000.0 * ljparam.sqrtSigma() );
 }
 
 /** Return whether or not two LJParameters are equal */
-inline bool LJParameter::operator==(const LJParameter &other) const
+SIRE_ALWAYS_INLINE bool LJParameter::operator==(const LJParameter &other) const
 {
     return sqrtsig == other.sqrtsig and sqrteps == other.sqrteps;
 }
 
 /** Return whether or not two LJParameters are different */
-inline bool LJParameter::operator!=(const LJParameter &other) const
+SIRE_ALWAYS_INLINE bool LJParameter::operator!=(const LJParameter &other) const
 {
     return not operator==(other);
 }
 
 /** Return whether or not this is a dummy LJ parameter */
-inline bool LJParameter::isDummy() const
+SIRE_ALWAYS_INLINE bool LJParameter::isDummy() const
 {
     //we only need to compare sqrtsig as this will be set to zero if 
     //sqrteps is zero
@@ -150,7 +150,7 @@ inline bool LJParameter::isDummy() const
 }
 
 /** Return whether or not this parameter has non-zero LJ parameters */
-inline bool LJParameter::zeroLJ() const
+SIRE_ALWAYS_INLINE bool LJParameter::zeroLJ() const
 {
     //we only need to compare sqrtsig as this will be set to zero if 
     //sqrteps is zero
@@ -158,25 +158,25 @@ inline bool LJParameter::zeroLJ() const
 }
 
 /** Return the sigma value of this parameter (in Angstroms) */
-inline SireUnits::Dimension::Length LJParameter::sigma() const
+SIRE_ALWAYS_INLINE SireUnits::Dimension::Length LJParameter::sigma() const
 {
     return SireUnits::Dimension::Length(sqrtsig*sqrtsig);
 }
 
 /** Return sqrt(sigma) */
-inline double LJParameter::sqrtSigma() const
+SIRE_ALWAYS_INLINE double LJParameter::sqrtSigma() const
 {
     return sqrtsig;
 }
 
 /** Return the epsilon value of this parameter (in kcal mol-1) */
-inline SireUnits::Dimension::MolarEnergy LJParameter::epsilon() const
+SIRE_ALWAYS_INLINE SireUnits::Dimension::MolarEnergy LJParameter::epsilon() const
 {
     return SireUnits::Dimension::MolarEnergy(sqrteps*sqrteps);
 }
 
 /** Return sqrt(epsilon) */
-inline double LJParameter::sqrtEpsilon() const
+SIRE_ALWAYS_INLINE double LJParameter::sqrtEpsilon() const
 {
     return sqrteps;
 }

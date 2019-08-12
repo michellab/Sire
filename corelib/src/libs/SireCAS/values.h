@@ -185,43 +185,43 @@ SIRECAS_EXPORT Values operator+(const Values &vals0, const Values &vals1);
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Reserve space for at least 'n' items */
-inline void Values::reserve(int n)
+SIRE_ALWAYS_INLINE void Values::reserve(int n)
 {
     vals.reserve(n);
 }
 
 /** Return whether or not this set of values is empty */
-inline bool Values::isEmpty() const
+SIRE_ALWAYS_INLINE bool Values::isEmpty() const
 {
     return vals.isEmpty();
 }
 
 /** Return the number of specified values in this set */
-inline int Values::count() const
+SIRE_ALWAYS_INLINE int Values::count() const
 {
     return vals.count();
 }
 
 /** Add a SymbolValue to the set of values */
-inline void Values::add(const SymbolValue &val0)
+SIRE_ALWAYS_INLINE void Values::add(const SymbolValue &val0)
 {
     vals.insert(val0.ID(), val0.value());
 }
 
 /** Set the Symbol 'symbol' equal to 'value' */
-inline void Values::set(const Symbol &symbol, double value)
+SIRE_ALWAYS_INLINE void Values::set(const Symbol &symbol, double value)
 {
     vals.insert(symbol.ID(), value);
 }
 
 /** Return the hash mapping the symbol ID to a value */
-inline const QHash<SymbolID,double>& Values::values() const
+SIRE_ALWAYS_INLINE const QHash<SymbolID,double>& Values::values() const
 {
     return vals;
 }
 
 /** Return whether or not a value for the symbol 'symbol' has been set */
-inline bool Values::contains(const Symbol &symbol) const
+SIRE_ALWAYS_INLINE bool Values::contains(const Symbol &symbol) const
 {
     return vals.contains(symbol.ID());
 }

@@ -97,7 +97,7 @@ private:
     boost::shared_ptr<SysID> d;
 };
 
-inline uint qHash(const SysIdentifier &sysid)
+SIRE_ALWAYS_INLINE uint qHash(const SysIdentifier &sysid)
 {
     return sysid.hash();
 }

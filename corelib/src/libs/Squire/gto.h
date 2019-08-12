@@ -222,7 +222,7 @@ private:
 
     P = Q = (alpha*A + beta*B) / (alpha + beta)
 */
-inline const Vector& GTOPair::P() const
+SIRE_ALWAYS_INLINE const Vector& GTOPair::P() const
 {
     return _P;
 }
@@ -231,14 +231,14 @@ inline const Vector& GTOPair::P() const
 
     Q = P = (alpha*A + beta*B) / (alpha + beta)
 */
-inline const Vector& GTOPair::Q() const
+SIRE_ALWAYS_INLINE const Vector& GTOPair::Q() const
 {
     return GTOPair::P();
 }
 
 /** Return the distance-squared between the two orbitals
     that make up this shell-pair */
-inline double GTOPair::R2() const
+SIRE_ALWAYS_INLINE double GTOPair::R2() const
 {
     return _R2;
 }
@@ -247,7 +247,7 @@ inline double GTOPair::R2() const
 
     zeta = eta = alpha+beta
 */
-inline double GTOPair::zeta() const
+SIRE_ALWAYS_INLINE double GTOPair::zeta() const
 {
     return _zeta;
 }
@@ -256,7 +256,7 @@ inline double GTOPair::zeta() const
 
     eta = zeta = alpha+beta
 */
-inline double GTOPair::eta() const
+SIRE_ALWAYS_INLINE double GTOPair::eta() const
 {
     return GTOPair::zeta();
 }
@@ -265,7 +265,7 @@ inline double GTOPair::eta() const
 
     xi = (alpha * beta) / (alpha + beta)
 */
-inline double GTOPair::xi() const
+SIRE_ALWAYS_INLINE double GTOPair::xi() const
 {
     return _xi;
 }
@@ -277,38 +277,38 @@ inline double GTOPair::xi() const
 
     (see Obara and Saika paper)
 */
-inline double GTOPair::K() const
+SIRE_ALWAYS_INLINE double GTOPair::K() const
 {
     return _K;
 }
 
 /** Synonym for GTOPair::K() */
-inline double GTOPair::K_AB() const
+SIRE_ALWAYS_INLINE double GTOPair::K_AB() const
 {
     return GTOPair::K();
 }
 
 /** Synonym for GTOPair::K() */
-inline double GTOPair::K_CD() const
+SIRE_ALWAYS_INLINE double GTOPair::K_CD() const
 {
     return GTOPair::K();
 }
 
 /** Return the value used for pre-screening this GTO pair. If this 
     pair is 'ab', then this is equal to max[ sqrt[ (a_i,b_j|a_i,b_j) ] ] */
-inline double GTOPair::Q_AB() const
+SIRE_ALWAYS_INLINE double GTOPair::Q_AB() const
 {
 	return _Q_AB;
 }
 
 /** Synonym for GTOPair::Q() */
-inline double GTOPair::Q_CD() const
+SIRE_ALWAYS_INLINE double GTOPair::Q_CD() const
 {
 	return GTOPair::Q_AB();
 }
 
 /** Return the (s||s) overlap integral for this pair of orbitals */
-inline double GTOPair::ss() const
+SIRE_ALWAYS_INLINE double GTOPair::ss() const
 {
     return _ss;
 }

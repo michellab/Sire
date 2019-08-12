@@ -309,7 +309,7 @@ bool operator!=(const std::complex<T> &stdcomplex, const Complex &complex)
 }
 
 /** This is the std sqrt function. This helps resolve namespace issues... */
-inline double sqrt(double x)
+SIRE_ALWAYS_INLINE double sqrt(double x)
 {
     return std::sqrt(x);
 }

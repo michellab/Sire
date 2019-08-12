@@ -246,7 +246,7 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the axis-aligned box that just encompasses the grid points */
-inline const AABox& Grid::aaBox() const
+SIRE_ALWAYS_INLINE const AABox& Grid::aaBox() const
 {
     return aabox;
 }

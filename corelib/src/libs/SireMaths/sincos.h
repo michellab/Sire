@@ -35,7 +35,7 @@ namespace SireMaths
 {
     /** Return the sine and cosine value of 'ang' in 
         'sval' and 'cval' respectively */
-    inline void sincos(double ang, double *sval, double *cval)
+    SIRE_ALWAYS_INLINE void sincos(double ang, double *sval, double *cval)
     {
         *sval = std::sin(ang);
         *cval = std::cos(ang);
@@ -43,7 +43,7 @@ namespace SireMaths
 
     /** Return the sine and cosine value of 'ang' in 
         'sval' and 'cval' respectively */
-    inline void sincos(float ang, float *sval, float *cval)
+    SIRE_ALWAYS_INLINE void sincos(float ang, float *sval, float *cval)
     {
         *sval = std::sin(ang);
         *cval = std::cos(ang);

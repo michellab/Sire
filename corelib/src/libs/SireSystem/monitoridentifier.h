@@ -97,7 +97,7 @@ private:
     boost::shared_ptr<MonitorID> d;
 };
 
-inline uint qHash(const MonitorIdentifier &monid)
+SIRE_ALWAYS_INLINE uint qHash(const MonitorIdentifier &monid)
 {
     return monid.hash();
 }

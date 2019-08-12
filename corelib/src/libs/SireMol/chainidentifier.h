@@ -96,7 +96,7 @@ private:
     boost::shared_ptr<ChainID> d;
 };
 
-inline uint qHash(const ChainIdentifier &chainid)
+SIRE_ALWAYS_INLINE uint qHash(const ChainIdentifier &chainid)
 {
     return chainid.hash();
 }

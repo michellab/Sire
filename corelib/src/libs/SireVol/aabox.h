@@ -164,7 +164,7 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Copy operator */
-inline const AABox& AABox::operator=(const AABox &box)
+SIRE_ALWAYS_INLINE const AABox& AABox::operator=(const AABox &box)
 {
     cent = box.cent;
     halfextents = box.halfextents;
@@ -173,32 +173,32 @@ inline const AABox& AABox::operator=(const AABox &box)
 }
 
 /** Return the center of the box */
-inline const Vector& AABox::center() const
+SIRE_ALWAYS_INLINE const Vector& AABox::center() const
 {
     return cent;
 }
 
 /** Return the positive half extents of the box */
-inline const Vector& AABox::halfExtents() const
+SIRE_ALWAYS_INLINE const Vector& AABox::halfExtents() const
 {
     return halfextents;
 }
 
 /** Return the maximum coordinates of the box */
-inline Vector AABox::maxCoords() const
+SIRE_ALWAYS_INLINE Vector AABox::maxCoords() const
 {
     return cent + halfextents;
 }
 
 /** Return the minimum coordinates of the box */
-inline Vector AABox::minCoords() const
+SIRE_ALWAYS_INLINE Vector AABox::minCoords() const
 {
     return cent - halfextents;
 }
 
 /** Return the radius of the smallest sphere that contains this box
     (the sphere is centered at 'center()', just as the box is) */
-inline double AABox::radius() const
+SIRE_ALWAYS_INLINE double AABox::radius() const
 {
     return rad;
 }
