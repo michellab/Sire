@@ -2200,7 +2200,7 @@ SelectResult IDWaterEngine::select(const SelectResult &mols, const PropertyMap &
                     num_protons += element.nProtons();
 
                 // Not a water molecule, abort!
-                if (num_oxygen > 1   or num_hydrogen > 2 or num_protons > 10)
+                if (num_oxygen > 1 or num_hydrogen > 2 or num_protons > 10)
                 {
                     is_water = false;
                     break;
