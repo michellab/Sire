@@ -297,6 +297,11 @@ def _uploadUsageData():
         # (as it may contain sensitive user information)
         data["executable"] = _os.path.basename( _sys.executable )
 
+        # Was Sire was imported as part of BioSimSpace?
+        # If so, then rename the executable.
+        if "BioSimSpace" in _sys.modules:
+            data["executable"] = "BioSimSpace"
+
         import json as _json
 
         import http.client as _htc
