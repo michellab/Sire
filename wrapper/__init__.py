@@ -287,7 +287,7 @@ def _uploadUsageData():
         data["uname"] = "%s | %s | %s | %s" % (u.system,u.release,u.machine,u.processor)
 
         # get information about the version of Sire
-        data["version"] = Sire.__version__
+        data["version"] = __version__
         data["repository"] = Config.sire_repository_url
         data["repository_version"] = Config.sire_repository_version
 
