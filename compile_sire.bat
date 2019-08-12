@@ -74,7 +74,7 @@ if defined OPTION_clean (
     exit /B 0
 )
 
-set "MINICONDA_VERSION=4.5.12"
+set "MINICONDA_VERSION=4.7.10"
 if [%processor_architecture%]==[AMD64] set MINICONDA_ARCH=x86_64
 if [%processor_architecture%]==[x86] set MINICONDA_ARCH=x86
 if not defined MINICONDA_ARCH (
