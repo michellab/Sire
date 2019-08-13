@@ -513,25 +513,25 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the unique ID of this system */
-inline const QUuid& System::UID() const
+SIRE_ALWAYS_INLINE const QUuid& System::UID() const
 {
     return uid;
 }
 
 /** Return the name of this system */
-inline const SysName& System::name() const
+SIRE_ALWAYS_INLINE const SysName& System::name() const
 {
     return sysname;
 }
 
 /** Return a reference to the version of this system */
-inline const Version& System::version() const
+SIRE_ALWAYS_INLINE const Version& System::version() const
 {
     return sysversion.version();
 }
 
 /** Return the subversion number of this system */
-inline quint32 System::subVersion() const
+SIRE_ALWAYS_INLINE quint32 System::subVersion() const
 {
     return subversion;
 }

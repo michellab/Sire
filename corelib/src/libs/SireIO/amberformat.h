@@ -208,31 +208,31 @@ QVector<T> collapse(const QVector< QVector<T> > &arrays)
 }
 
 /** The width of each field (number of columns) */
-inline int AmberFormat::width() const
+SIRE_ALWAYS_INLINE int AmberFormat::width() const
 {
     return field_width;
 }
 
 /** The maximum number of items per line */
-inline int AmberFormat::numValues() const
+SIRE_ALWAYS_INLINE int AmberFormat::numValues() const
 {
     return num_values;
 }
 
 /** The number of values after the decimal point for float values */
-inline int AmberFormat::pointWidth() const
+SIRE_ALWAYS_INLINE int AmberFormat::pointWidth() const
 {
     return point_width;
 }
 
 /** The fortran flag format type */
-inline SireIO::AmberPrm::FLAG_TYPE AmberFormat::flagType() const
+SIRE_ALWAYS_INLINE SireIO::AmberPrm::FLAG_TYPE AmberFormat::flagType() const
 {
     return flag_type;
 }
 
 /** Return the number of values to read from the passed line */
-inline int AmberFormat::numValues( const QString &line ) const
+SIRE_ALWAYS_INLINE int AmberFormat::numValues( const QString &line ) const
 {
     return qMin( num_values, line.length() / field_width );
 }

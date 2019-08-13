@@ -1477,7 +1477,7 @@ static const float sqrts[] = { 0, 1, 1.41421356237, 1.73205080757,
                                5.38516480713, 5.47722557505, 5.56776436283 };
 
 /** Calculate the square root of the passed integer */
-inline float square_root(int delta2)
+SIRE_ALWAYS_INLINE float square_root(int delta2)
 {
     if (delta2 < nsqrts)
     {
@@ -1491,7 +1491,7 @@ inline float square_root(int delta2)
 
 /** Get the number of box lengths separating boxes 0 and 1 at indicies
     i0 and i1 */
-inline int getDelta( const qint16 i0, const qint16 i1 )
+SIRE_ALWAYS_INLINE int getDelta( const qint16 i0, const qint16 i1 )
 {
     // the below single-line expression is doing
     // if (i0 == i1)
@@ -1515,7 +1515,7 @@ inline int getDelta( const qint16 i0, const qint16 i1 )
 
 /** Get the number of box lengths separating box 1 from the set of boxes
     from minbox0 to maxbox0 */
-inline int getDelta( const qint16 min0, const qint16 max0, const qint16 i1 )
+SIRE_ALWAYS_INLINE int getDelta( const qint16 min0, const qint16 max0, const qint16 i1 )
 {
     // the below single-line expression is doing
     // if (i1 >= min0 and i1 <= max0)
@@ -1529,7 +1529,7 @@ inline int getDelta( const qint16 min0, const qint16 max0, const qint16 i1 )
     return (i1 >= min0 and i1 <= max0) ? 0 : qMin( getDelta(min0,i1), getDelta(max0,i1) );
 }
 
-inline int getDelta2(const CLJBoxIndex &box0, const CLJBoxIndex &box1)
+SIRE_ALWAYS_INLINE int getDelta2(const CLJBoxIndex &box0, const CLJBoxIndex &box1)
 {
     const int dx = getDelta(box0.i(), box1.i());
     const int dy = getDelta(box0.j(), box1.j());
@@ -1537,7 +1537,7 @@ inline int getDelta2(const CLJBoxIndex &box0, const CLJBoxIndex &box1)
     return dx*dx + dy*dy + dz*dz;
 }
 
-inline int getDelta2(const CLJBoxIndex &minbox0, const CLJBoxIndex &maxbox0,
+SIRE_ALWAYS_INLINE int getDelta2(const CLJBoxIndex &minbox0, const CLJBoxIndex &maxbox0,
                      const CLJBoxIndex &box1)
 {
     const int dx = getDelta(minbox0.i(), maxbox0.i(), box1.i());
@@ -1548,7 +1548,7 @@ inline int getDelta2(const CLJBoxIndex &minbox0, const CLJBoxIndex &maxbox0,
 
 /** Get the number of box lengths separating boxes 0 and 1 at indicies
     i0 and i1 */
-inline int getBoxDelta( const qint16 i0, const qint16 i1 )
+SIRE_ALWAYS_INLINE int getBoxDelta( const qint16 i0, const qint16 i1 )
 {
     // the below single-line expression is doing
     // if (i0 == i1)
@@ -1572,7 +1572,7 @@ inline int getBoxDelta( const qint16 i0, const qint16 i1 )
 
 /** Get the number of box lengths separating box 1 from the set of boxes
     from minbox0 to maxbox0 */
-inline int getBoxDelta( const qint16 min0, const qint16 max0, const qint16 i1 )
+SIRE_ALWAYS_INLINE int getBoxDelta( const qint16 min0, const qint16 max0, const qint16 i1 )
 {
     // the below single-line expression is doing
     // if (i1 >= min0 and i1 <= max0)

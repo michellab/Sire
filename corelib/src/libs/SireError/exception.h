@@ -46,8 +46,8 @@ class exception;
 }
 
 class QDataStream;
-SIREERROR_EXPORT QDataStream& operator<<(QDataStream&, const SireError::exception&);
-SIREERROR_EXPORT QDataStream& operator>>(QDataStream&, SireError::exception&);
+SIRESTREAM_EXPORT QDataStream& operator<<(QDataStream&, const SireError::exception&);
+SIRESTREAM_EXPORT QDataStream& operator>>(QDataStream&, SireError::exception&);
 
 namespace SireError
 {
@@ -94,8 +94,8 @@ private:
 class SIREERROR_EXPORT exception : public std::exception
 {
 
-friend SIREERROR_EXPORT QDataStream& ::operator<<(QDataStream&, const exception&);
-friend SIREERROR_EXPORT QDataStream& ::operator>>(QDataStream&, exception&);
+friend SIRESTREAM_EXPORT QDataStream& ::operator<<(QDataStream&, const exception&);
+friend SIRESTREAM_EXPORT QDataStream& ::operator>>(QDataStream&, exception&);
 
 public:
     typedef SireError::exception ROOT;

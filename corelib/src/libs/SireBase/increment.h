@@ -43,7 +43,7 @@ QString increment(QString name);
 
 /** A small function that increments a name, e.g. the name foobar_1 will be incremented
     to foobar_2, or foobar will be incremented to foobar_1 */
-inline QString increment(QString name)
+SIRE_ALWAYS_INLINE QString increment(QString name)
 {
     QRegExp nummatch("_(\\d+)$");
     

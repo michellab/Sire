@@ -87,12 +87,12 @@ QDataStream &operator>>(QDataStream &ds, RBWorkspace &rbws)
     return ds;
 }
 
-inline double getMass(const MolarMass &mass)
+SIRE_ALWAYS_INLINE double getMass(const MolarMass &mass)
 {
     return mass.value();
 }
 
-inline double getMass(const Element &element)
+SIRE_ALWAYS_INLINE double getMass(const Element &element)
 {
     return element.mass().value();
 }

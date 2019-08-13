@@ -443,35 +443,35 @@ private:
 
 /** Return the molecule number of the molecule whose fields are
     contained in this table */
-inline MolNum MolPotentialTable::molNum() const
+SIRE_ALWAYS_INLINE MolNum MolPotentialTable::molNum() const
 {
     return molnum;
 }
 
 /** Return the UID of the molecular layout of the molecule
     whose fields are contained in this table */
-inline const QUuid& MolPotentialTable::molUID() const
+SIRE_ALWAYS_INLINE const QUuid& MolPotentialTable::molUID() const
 {
     return moluid;
 }
 
 /** Return the total number of CutGroups in the molecule whose
     fields are contained in this table */
-inline int MolPotentialTable::nCutGroups() const
+SIRE_ALWAYS_INLINE int MolPotentialTable::nCutGroups() const
 {
     return ncgroups;
 }
 
 /** Return the number of selected CutGroups in this table 
     (the number of CutGroups for which fields are held) */
-inline int MolPotentialTable::nSelectedCutGroups() const
+SIRE_ALWAYS_INLINE int MolPotentialTable::nSelectedCutGroups() const
 {
     return SireBase::PackedArray2D<MolarEnergy>::count();
 }
 
 /** Return whether or not this table contains fields for all
     of the CutGroups in the molecule */
-inline bool MolPotentialTable::selectedAll() const
+SIRE_ALWAYS_INLINE bool MolPotentialTable::selectedAll() const
 {
     return this->nCutGroups() == this->nSelectedCutGroups();
 }
@@ -481,7 +481,7 @@ inline bool MolPotentialTable::selectedAll() const
     
     \throw SireError::invalid_index
 */
-inline bool MolPotentialTable::selected(CGIdx cgidx) const
+SIRE_ALWAYS_INLINE bool MolPotentialTable::selected(CGIdx cgidx) const
 {
     cgidx = CGIdx(cgidx.map(this->nCutGroups()));
     
@@ -494,7 +494,7 @@ inline bool MolPotentialTable::selected(CGIdx cgidx) const
     
     \throw SireError::invalid_index
 */
-inline int MolPotentialTable::map(CGIdx cgidx) const
+SIRE_ALWAYS_INLINE int MolPotentialTable::map(CGIdx cgidx) const
 {
     if (this->selectedAll())
         return cgidx.map( this->nCutGroups() );
@@ -508,7 +508,7 @@ inline int MolPotentialTable::map(CGIdx cgidx) const
 
 /** Return whether or not this contains a table for the 
     molecule with number 'molnum' */
-inline bool PotentialTable::contains(MolNum molnum) const
+SIRE_ALWAYS_INLINE bool PotentialTable::contains(MolNum molnum) const
 {
     return molnum_to_idx.contains(molnum);
 }
@@ -517,7 +517,7 @@ inline bool PotentialTable::contains(MolNum molnum) const
 
     \throw SireMol::missing_molecule
 */
-inline MolPotentialTable& PotentialTable::getTable(MolNum molnum)
+SIRE_ALWAYS_INLINE MolPotentialTable& PotentialTable::getTable(MolNum molnum)
 {
     QHash<MolNum,qint32>::const_iterator it = molnum_to_idx.constFind(molnum);
     
@@ -531,7 +531,7 @@ inline MolPotentialTable& PotentialTable::getTable(MolNum molnum)
 
     \throw SireMol::missing_molecule
 */
-inline const MolPotentialTable& PotentialTable::getTable(MolNum molnum) const
+SIRE_ALWAYS_INLINE const MolPotentialTable& PotentialTable::getTable(MolNum molnum) const
 {
     QHash<MolNum,qint32>::const_iterator it = molnum_to_idx.constFind(molnum);
     
@@ -545,69 +545,69 @@ inline const MolPotentialTable& PotentialTable::getTable(MolNum molnum) const
 
     \throw SireMol::missing_molecule
 */
-inline const MolPotentialTable& PotentialTable::constGetTable(MolNum molnum) const
+SIRE_ALWAYS_INLINE const MolPotentialTable& PotentialTable::constGetTable(MolNum molnum) const
 {
     return this->getTable(molnum);
 }
 
 /** Return the number of molecule tables in this object */
-inline int PotentialTable::nMolecules() const
+SIRE_ALWAYS_INLINE int PotentialTable::nMolecules() const
 {
     return moltables_by_idx.count();
 }
 
 /** Return the number of grid tables in this object */
-inline int PotentialTable::nGrids() const
+SIRE_ALWAYS_INLINE int PotentialTable::nGrids() const
 {
     return gridtables.count();
 }
 
 /** Return the index used to find the index into the field tables array 
     for the field table for the molecule with a specified number */
-inline const QHash<MolNum,qint32>& PotentialTable::index() const
+SIRE_ALWAYS_INLINE const QHash<MolNum,qint32>& PotentialTable::index() const
 {
     return molnum_to_idx;
 }
 
 /** Return the numbers of molecules that have field tables in this
     table */
-inline QList<MolNum> PotentialTable::molNums() const
+SIRE_ALWAYS_INLINE QList<MolNum> PotentialTable::molNums() const
 {
     return molnum_to_idx.keys();
 }
 
 /** Return a raw point to the array of field tables for each molecule */
-inline MolPotentialTable* PotentialTable::moleculeData()
+SIRE_ALWAYS_INLINE MolPotentialTable* PotentialTable::moleculeData()
 {
     return moltables_by_idx.data();
 }
 
 /** Return a raw point to the array of field tables for each molecule */
-inline const MolPotentialTable* PotentialTable::moleculeData() const
+SIRE_ALWAYS_INLINE const MolPotentialTable* PotentialTable::moleculeData() const
 {
     return moltables_by_idx.constData();
 }
 
 /** Return a raw point to the array of field tables for each molecule */
-inline const MolPotentialTable* PotentialTable::constMoleculeData() const
+SIRE_ALWAYS_INLINE const MolPotentialTable* PotentialTable::constMoleculeData() const
 {
     return moltables_by_idx.constData();
 }
 
 /** Return a raw pointer to the array of field tables for each grid */
-inline GridPotentialTable* PotentialTable::gridData()
+SIRE_ALWAYS_INLINE GridPotentialTable* PotentialTable::gridData()
 {
     return gridtables.data();
 }
 
 /** Return a raw pointer to the array of field tables for each grid */
-inline const GridPotentialTable* PotentialTable::gridData() const
+SIRE_ALWAYS_INLINE const GridPotentialTable* PotentialTable::gridData() const
 {
     return gridtables.constData();
 }
 
 /** Return a raw pointer to the array of field tables for each grid */
-inline const GridPotentialTable* PotentialTable::constGridData() const
+SIRE_ALWAYS_INLINE const GridPotentialTable* PotentialTable::constGridData() const
 {
     return gridtables.constData();
 }

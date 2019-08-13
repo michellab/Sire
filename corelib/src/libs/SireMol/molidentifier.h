@@ -105,7 +105,7 @@ private:
     boost::shared_ptr<MolID> d;
 };
 
-inline uint qHash(const MolIdentifier &molid)
+SIRE_ALWAYS_INLINE uint qHash(const MolIdentifier &molid)
 {
     return molid.hash();
 }

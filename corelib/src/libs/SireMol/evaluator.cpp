@@ -301,17 +301,17 @@ Sphere Evaluator::boundingSphere(const PropertyMap &map) const
     return this->aaBox(map).boundingSphere();
 }
 
-inline double getMass(const MolarMass &mass)
+SIRE_ALWAYS_INLINE double getMass(const MolarMass &mass)
 {
     return mass.value();
 }
 
-inline double getMass(const Element &element)
+SIRE_ALWAYS_INLINE double getMass(const Element &element)
 {
     return element.mass().value();
 }
 
-inline double getCharge(const Charge &charge)
+SIRE_ALWAYS_INLINE double getCharge(const Charge &charge)
 {
     return charge.value();
 }

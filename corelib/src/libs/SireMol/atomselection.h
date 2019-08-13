@@ -493,14 +493,14 @@ private:
 
 }
 
-inline SireMol::AtomSelection operator+(const SireMol::AtomSelection &a,
+SIRE_ALWAYS_INLINE SireMol::AtomSelection operator+(const SireMol::AtomSelection &a,
                                         const SireMol::AtomSelection &b)
 {
     SireMol::AtomSelection ret(a);
     return ret.unite(b);
 }
 
-inline SireMol::AtomSelection operator-(const SireMol::AtomSelection &a,
+SIRE_ALWAYS_INLINE SireMol::AtomSelection operator-(const SireMol::AtomSelection &a,
                                         const SireMol::AtomSelection &b)
 {
     SireMol::AtomSelection ret(a);

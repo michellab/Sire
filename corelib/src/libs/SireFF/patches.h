@@ -242,37 +242,37 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the coordinates of this bead */
-inline const CoordGroup& FFBead::coordinates() const
+SIRE_ALWAYS_INLINE const CoordGroup& FFBead::coordinates() const
 {
     return coords;
 }
 
 /** Return the parameters of the bead */
-inline const FFParameters& FFBead::parameters() const
+SIRE_ALWAYS_INLINE const FFParameters& FFBead::parameters() const
 {
     return params.read();
 }
 
 /** Return whether or not this bead is empty */
-inline bool FFBead::isEmpty() const
+SIRE_ALWAYS_INLINE bool FFBead::isEmpty() const
 {
     return coords.isEmpty();
 }
 
 /** Return whether the change is empty (represents no change) */    
-inline bool FFBeadChange::isEmpty() const
+SIRE_ALWAYS_INLINE bool FFBeadChange::isEmpty() const
 {
     return old_bead.isEmpty() and new_bead.isEmpty();
 }
 
 /** Return the state of the bead before the change */
-inline const FFBead& FFBeadChange::oldBead() const
+SIRE_ALWAYS_INLINE const FFBead& FFBeadChange::oldBead() const
 {
     return old_bead;
 }
 
 /** Return the state of the bead after the change */
-inline const FFBead& FFBeadChange::newBead() const
+SIRE_ALWAYS_INLINE const FFBead& FFBeadChange::newBead() const
 {
     return new_bead;
 }

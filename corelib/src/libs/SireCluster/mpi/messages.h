@@ -717,7 +717,7 @@ public:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 template<>
-inline bool MessageBase::isA<Messages::Broadcast>() const
+SIRE_ALWAYS_INLINE bool MessageBase::isA<Messages::Broadcast>() const
 {
     return dynamic_cast<const Messages::Broadcast*>(this) != 0;
 }
@@ -740,7 +740,7 @@ bool MessageBase::isA() const
 }
 
 template<>
-inline Messages::Broadcast MessageBase::asA<Messages::Broadcast>() const
+SIRE_ALWAYS_INLINE Messages::Broadcast MessageBase::asA<Messages::Broadcast>() const
 {
     return *(dynamic_cast<const Messages::Broadcast*>(this));
 }

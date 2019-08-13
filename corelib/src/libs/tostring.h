@@ -100,14 +100,14 @@ QString qstr(const T &obj)
 
 /** Used to return a string representation of a QString! */
 template<>
-inline QString qstr(const QString &string)
+SIRE_ALWAYS_INLINE QString qstr(const QString &string)
 {
     return string;
 }
 
 /** Used to return a string representation of a QStringList */
 template<>
-inline QString qstr(const QStringList &strings)
+SIRE_ALWAYS_INLINE QString qstr(const QStringList &strings)
 {
     if (strings.isEmpty())
         return QString("[ ]");

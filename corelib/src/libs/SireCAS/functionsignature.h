@@ -127,7 +127,7 @@ private:
 };
 
 /** Return a hash for this signature */
-inline uint qHash(const FunctionSignature &sig)
+SIRE_ALWAYS_INLINE uint qHash(const FunctionSignature &sig)
 {
     return qHash(sig.name());
 }

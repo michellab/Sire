@@ -88,13 +88,13 @@ private:
 };
 
 /** Return the reduced charge parameter (charge / sqrt(4 pi epsilon_0)) */
-inline double CLJParam::q() const
+SIRE_ALWAYS_INLINE double CLJParam::q() const
 {
     return reduced_chg;
 }
 
 /** Return the LJ parameter */
-inline quint32 CLJParam::ljID() const
+SIRE_ALWAYS_INLINE quint32 CLJParam::ljID() const
 {
     return ljid;
 }

@@ -377,41 +377,41 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Set the energy value of the component 'comp' */
-inline void FF::setComponent(const Symbol &component, double nrg)
+SIRE_ALWAYS_INLINE void FF::setComponent(const Symbol &component, double nrg)
 {
     nrg_components.set(component,nrg);
 }
 
 /** Change the existing value of the component 'comp' by delta */
-inline void FF::changeComponent(const Symbol &component, double delta)
+SIRE_ALWAYS_INLINE void FF::changeComponent(const Symbol &component, double delta)
 {
     nrg_components.set( component, delta + nrg_components.value(component) );
 }
 
 /** Return whether or not the forcefield is dirty (the energy
     needs to be recalculated) */
-inline bool FF::isDirty() const
+SIRE_ALWAYS_INLINE bool FF::isDirty() const
 {
     return isdirty;
 }
 
 /** Return whether or not the forcefield is clean (the energy
     does not need to be recalculated) */
-inline bool FF::isClean() const
+SIRE_ALWAYS_INLINE bool FF::isClean() const
 {
     return not isDirty();
 }
 
 /** Record that this forcefield is now clean (has calculated the 
     energy of the current state) */
-inline void FF::setClean()
+SIRE_ALWAYS_INLINE void FF::setClean()
 {
     isdirty = false;
 }
 
 /** Record that this forcefield is dirty (the energy of the 
     current state is unknown) */
-inline void FF::setDirty()
+SIRE_ALWAYS_INLINE void FF::setDirty()
 {
     isdirty = true;
 }

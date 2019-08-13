@@ -162,19 +162,19 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Add a SymbolComplex to the set of values */
-inline void ComplexValues::add(const SymbolComplex &val0)
+SIRE_ALWAYS_INLINE void ComplexValues::add(const SymbolComplex &val0)
 {
     vals.insert(val0.ID(), val0.value());
 }
 
 /** Set the Symbol 'symbol' equal to 'value' */
-inline void ComplexValues::set(const Symbol &symbol, const Complex &value)
+SIRE_ALWAYS_INLINE void ComplexValues::set(const Symbol &symbol, const Complex &value)
 {
     vals.insert(symbol.ID(), value);
 }
 
 /** Return the hash mapping Symbol IDs to complex values */
-inline const QHash<SymbolID,Complex>& ComplexValues::values() const
+SIRE_ALWAYS_INLINE const QHash<SymbolID,Complex>& ComplexValues::values() const
 {
     return vals;
 }

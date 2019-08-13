@@ -132,7 +132,7 @@ void assert_nearly_equal( const T &a, const T &b, const T &range, const QString 
 }
 
 /** Assert that the passed expression is true */
-inline void assert_true( bool result, const QString &code_location )
+SIRE_ALWAYS_INLINE void assert_true( bool result, const QString &code_location )
 {
     if (not result)
         throw SireError::assertation_failed( QObject::tr(
@@ -140,7 +140,7 @@ inline void assert_true( bool result, const QString &code_location )
 }
 
 /** Assert that the passed expression is false */
-inline void assert_false( bool result, const QString &code_location )
+SIRE_ALWAYS_INLINE void assert_false( bool result, const QString &code_location )
 {
     if (result)
         throw SireError::assertation_failed( QObject::tr(
@@ -149,7 +149,7 @@ inline void assert_false( bool result, const QString &code_location )
 
 #ifdef SIRE_HAS_CPP_11
     /** Assert that calling the passed function will raise the supplied exception */
-    inline void assert_throws( std::function<void ()> func, const SireError::exception &e,
+    SIRE_ALWAYS_INLINE void assert_throws( std::function<void ()> func, const SireError::exception &e,
                                const QString &code_location )
     {
         try

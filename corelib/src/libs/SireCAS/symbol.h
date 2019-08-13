@@ -203,7 +203,7 @@ private:
     Expression f, p;
 };
 
-inline uint qHash(const Symbol &symbol)
+SIRE_ALWAYS_INLINE uint qHash(const Symbol &symbol)
 {
     return symbol.hash();
 }

@@ -240,7 +240,7 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Get the grid index from the passed array index */
-inline GridIndex GridInfo::arrayToGridIndex(int i) const
+SIRE_ALWAYS_INLINE GridIndex GridInfo::arrayToGridIndex(int i) const
 {
     if (i < 0 or i >= (dimx*dimy*dimz))
         return GridIndex::null();
@@ -256,7 +256,7 @@ inline GridIndex GridInfo::arrayToGridIndex(int i) const
 
 /** Get the index into the 1D array for the point corresponding to grid 
     indicies i,j,k. */
-inline int GridInfo::gridToArrayIndex(int i, int j, int k) const
+SIRE_ALWAYS_INLINE int GridInfo::gridToArrayIndex(int i, int j, int k) const
 {
     if (i < 0 or i >= dimx or j < 0 or j >= dimy or k < 0 or k >= dimz)
         return -1;
@@ -267,7 +267,7 @@ inline int GridInfo::gridToArrayIndex(int i, int j, int k) const
 /** Get the index into the 1D array for the point corresponding to 
     the grid point with index 'idx'. Note that this returns '-1' if
     the passed GridIndex is null */
-inline int GridInfo::gridToArrayIndex(const GridIndex &idx) const
+SIRE_ALWAYS_INLINE int GridInfo::gridToArrayIndex(const GridIndex &idx) const
 {
     if (idx.isNull() or idx.i() >= dimx or idx.j() >= dimy or idx.k() >= dimz)
         return -1;
@@ -277,100 +277,100 @@ inline int GridInfo::gridToArrayIndex(const GridIndex &idx) const
 
 /** Return the linear index of the point with grid index 'idx'. Note that this
     returns '-1' if the passed GridIndex is null */
-inline int GridInfo::operator[](const GridIndex &idx) const
+SIRE_ALWAYS_INLINE int GridInfo::operator[](const GridIndex &idx) const
 {
     return gridToArrayIndex(idx);
 }
 
 /** Return the grid index of the ith grid point */
-inline GridIndex GridInfo::operator[](int i) const
+SIRE_ALWAYS_INLINE GridIndex GridInfo::operator[](int i) const
 {
     return arrayToGridIndex(i);
 }
 
 /** Return the linear array index of the box that contains point 'point'.
     Note that this will return -1 if the point lies outside the grid */
-inline int GridInfo::operator[](const Vector &point) const
+SIRE_ALWAYS_INLINE int GridInfo::operator[](const Vector &point) const
 {
     return pointToArrayIndex(point);
 }
 
 /** Return the linear index of the point with grid index [i,j,k] */
-inline int GridInfo::at(int i, int j, int k) const
+SIRE_ALWAYS_INLINE int GridInfo::at(int i, int j, int k) const
 {
     return gridToArrayIndex(i,j,k);
 }
 
 /** Return the linear index of the point with grid index 'idx'. Note that this
     returns '-1' if the passed GridIndex is null */
-inline int GridInfo::at(const GridIndex &idx) const
+SIRE_ALWAYS_INLINE int GridInfo::at(const GridIndex &idx) const
 {
     return operator[](idx);
 }
 
 /** Return the grid index of the ith grid point */
-inline GridIndex GridInfo::at(int i) const
+SIRE_ALWAYS_INLINE GridIndex GridInfo::at(int i) const
 {
     return operator[](i);
 }
 
 /** Return the linear array index of the box that contains point 'point'.
     Note that this will return -1 if the point lies outside the grid */
-inline int GridInfo::at(const Vector &point) const
+SIRE_ALWAYS_INLINE int GridInfo::at(const Vector &point) const
 {
     return pointToArrayIndex(point);
 }
 
 /** Return the number of grid points along the x dimension */
-inline qint32 GridInfo::dimX() const
+SIRE_ALWAYS_INLINE qint32 GridInfo::dimX() const
 {
     return dimx;
 }
 
 /** Return the number of grid points along the y dimension */
-inline qint32 GridInfo::dimY() const
+SIRE_ALWAYS_INLINE qint32 GridInfo::dimY() const
 {
     return dimy;
 }
 
 /** Return the number of grid points along the z dimension */
-inline qint32 GridInfo::dimZ() const
+SIRE_ALWAYS_INLINE qint32 GridInfo::dimZ() const
 {
     return dimz;
 }
 
 /** Return the total number of grid points */
-inline int GridInfo::nPoints() const
+SIRE_ALWAYS_INLINE int GridInfo::nPoints() const
 {
     return dimx * dimy * dimz;
 }
 
 /** Return the total number of grid points */
-inline int GridInfo::count() const
+SIRE_ALWAYS_INLINE int GridInfo::count() const
 {
     return nPoints();
 }
 
 /** Return the total number of grid points */
-inline int GridInfo::size() const
+SIRE_ALWAYS_INLINE int GridInfo::size() const
 {
     return nPoints();
 }
 
 /** Return whether or not this grid is empty */
-inline bool GridInfo::isEmpty() const
+SIRE_ALWAYS_INLINE bool GridInfo::isEmpty() const
 {
     return dimx == 0;
 }
 
 /** Return the grid spacing */
-inline Length GridInfo::spacing() const
+SIRE_ALWAYS_INLINE Length GridInfo::spacing() const
 {
     return Length(grid_spacing);
 }
 
 /** Return the dimensions of the grid */
-inline AABox GridInfo::dimensions() const
+SIRE_ALWAYS_INLINE AABox GridInfo::dimensions() const
 {
     return AABox::from( grid_origin, grid_origin + Vector((dimx-1)*grid_spacing,
                                                           (dimy-1)*grid_spacing,

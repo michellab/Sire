@@ -37,7 +37,7 @@
 using namespace SireMaths;
 
 #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
-    static inline bool isAligned32(const void *pointer)
+    static SIRE_ALWAYS_INLINE bool isAligned32(const void *pointer)
     {
         return (quintptr)pointer % size_t(32) == 0;
     }
@@ -51,7 +51,7 @@ using namespace SireMaths;
     }
 #else
 #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
-    static inline bool isAligned16(const void *pointer)
+    static SIRE_ALWAYS_INLINE bool isAligned16(const void *pointer)
     {
         return (quintptr)pointer % size_t(16) == 0;
     }
@@ -64,7 +64,7 @@ using namespace SireMaths;
                         .arg((quintptr)pointer % size_t(16)), place );
     }
 #else
-    static inline bool isAligned32(const void *pointer)
+    static SIRE_ALWAYS_INLINE bool isAligned32(const void *pointer)
     {
         return (quintptr)pointer % size_t(32) == 0;
     }

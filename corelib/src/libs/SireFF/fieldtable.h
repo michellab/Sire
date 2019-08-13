@@ -441,35 +441,35 @@ private:
 
 /** Return the molecule number of the molecule whose fields are
     contained in this table */
-inline MolNum MolFieldTable::molNum() const
+SIRE_ALWAYS_INLINE MolNum MolFieldTable::molNum() const
 {
     return molnum;
 }
 
 /** Return the UID of the molecular layout of the molecule
     whose fields are contained in this table */
-inline const QUuid& MolFieldTable::molUID() const
+SIRE_ALWAYS_INLINE const QUuid& MolFieldTable::molUID() const
 {
     return moluid;
 }
 
 /** Return the total number of CutGroups in the molecule whose
     fields are contained in this table */
-inline int MolFieldTable::nCutGroups() const
+SIRE_ALWAYS_INLINE int MolFieldTable::nCutGroups() const
 {
     return ncgroups;
 }
 
 /** Return the number of selected CutGroups in this table 
     (the number of CutGroups for which fields are held) */
-inline int MolFieldTable::nSelectedCutGroups() const
+SIRE_ALWAYS_INLINE int MolFieldTable::nSelectedCutGroups() const
 {
     return SireBase::PackedArray2D<SireMaths::Vector>::count();
 }
 
 /** Return whether or not this table contains fields for all
     of the CutGroups in the molecule */
-inline bool MolFieldTable::selectedAll() const
+SIRE_ALWAYS_INLINE bool MolFieldTable::selectedAll() const
 {
     return this->nCutGroups() == this->nSelectedCutGroups();
 }
@@ -479,7 +479,7 @@ inline bool MolFieldTable::selectedAll() const
     
     \throw SireError::invalid_index
 */
-inline bool MolFieldTable::selected(CGIdx cgidx) const
+SIRE_ALWAYS_INLINE bool MolFieldTable::selected(CGIdx cgidx) const
 {
     cgidx = CGIdx(cgidx.map(this->nCutGroups()));
     
@@ -492,7 +492,7 @@ inline bool MolFieldTable::selected(CGIdx cgidx) const
     
     \throw SireError::invalid_index
 */
-inline int MolFieldTable::map(CGIdx cgidx) const
+SIRE_ALWAYS_INLINE int MolFieldTable::map(CGIdx cgidx) const
 {
     if (this->selectedAll())
         return cgidx.map( this->nCutGroups() );
@@ -506,7 +506,7 @@ inline int MolFieldTable::map(CGIdx cgidx) const
 
 /** Return whether or not this contains a table for the 
     molecule with number 'molnum' */
-inline bool FieldTable::contains(MolNum molnum) const
+SIRE_ALWAYS_INLINE bool FieldTable::contains(MolNum molnum) const
 {
     return molnum_to_idx.contains(molnum);
 }
@@ -515,7 +515,7 @@ inline bool FieldTable::contains(MolNum molnum) const
 
     \throw SireMol::missing_molecule
 */
-inline MolFieldTable& FieldTable::getTable(MolNum molnum)
+SIRE_ALWAYS_INLINE MolFieldTable& FieldTable::getTable(MolNum molnum)
 {
     QHash<MolNum,qint32>::const_iterator it = molnum_to_idx.constFind(molnum);
     
@@ -529,7 +529,7 @@ inline MolFieldTable& FieldTable::getTable(MolNum molnum)
 
     \throw SireMol::missing_molecule
 */
-inline const MolFieldTable& FieldTable::getTable(MolNum molnum) const
+SIRE_ALWAYS_INLINE const MolFieldTable& FieldTable::getTable(MolNum molnum) const
 {
     QHash<MolNum,qint32>::const_iterator it = molnum_to_idx.constFind(molnum);
     
@@ -543,69 +543,69 @@ inline const MolFieldTable& FieldTable::getTable(MolNum molnum) const
 
     \throw SireMol::missing_molecule
 */
-inline const MolFieldTable& FieldTable::constGetTable(MolNum molnum) const
+SIRE_ALWAYS_INLINE const MolFieldTable& FieldTable::constGetTable(MolNum molnum) const
 {
     return this->getTable(molnum);
 }
 
 /** Return the number of molecule tables in this object */
-inline int FieldTable::nMolecules() const
+SIRE_ALWAYS_INLINE int FieldTable::nMolecules() const
 {
     return moltables_by_idx.count();
 }
 
 /** Return the number of grid tables in this object */
-inline int FieldTable::nGrids() const
+SIRE_ALWAYS_INLINE int FieldTable::nGrids() const
 {
     return gridtables.count();
 }
 
 /** Return the index used to find the index into the field tables array 
     for the field table for the molecule with a specified number */
-inline const QHash<MolNum,qint32>& FieldTable::index() const
+SIRE_ALWAYS_INLINE const QHash<MolNum,qint32>& FieldTable::index() const
 {
     return molnum_to_idx;
 }
 
 /** Return the numbers of molecules that have field tables in this
     table */
-inline QList<MolNum> FieldTable::molNums() const
+SIRE_ALWAYS_INLINE QList<MolNum> FieldTable::molNums() const
 {
     return molnum_to_idx.keys();
 }
 
 /** Return a raw point to the array of field tables for each molecule */
-inline MolFieldTable* FieldTable::moleculeData()
+SIRE_ALWAYS_INLINE MolFieldTable* FieldTable::moleculeData()
 {
     return moltables_by_idx.data();
 }
 
 /** Return a raw point to the array of field tables for each molecule */
-inline const MolFieldTable* FieldTable::moleculeData() const
+SIRE_ALWAYS_INLINE const MolFieldTable* FieldTable::moleculeData() const
 {
     return moltables_by_idx.constData();
 }
 
 /** Return a raw point to the array of field tables for each molecule */
-inline const MolFieldTable* FieldTable::constMoleculeData() const
+SIRE_ALWAYS_INLINE const MolFieldTable* FieldTable::constMoleculeData() const
 {
     return moltables_by_idx.constData();
 }
 
 /** Return a raw pointer to the array of field tables for each grid */
-inline GridFieldTable* FieldTable::gridData()
+SIRE_ALWAYS_INLINE GridFieldTable* FieldTable::gridData()
 {
     return gridtables.data();
 }
 
 /** Return a raw pointer to the array of field tables for each grid */
-inline const GridFieldTable* FieldTable::gridData() const
+SIRE_ALWAYS_INLINE const GridFieldTable* FieldTable::gridData() const
 {
     return gridtables.constData();
 }
 
 /** Return a raw pointer to the array of field tables for each grid */
-inline const GridFieldTable* FieldTable::constGridData() const
+SIRE_ALWAYS_INLINE const GridFieldTable* FieldTable::constGridData() const
 {
     return gridtables.constData();
 }

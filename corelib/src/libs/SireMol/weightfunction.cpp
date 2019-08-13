@@ -140,7 +140,7 @@ AbsFromNumber* AbsFromNumber::clone() const
     return new AbsFromNumber(*this);
 }
 
-inline double AbsFromNumber::weight(int nats0, int nats1) const
+SIRE_ALWAYS_INLINE double AbsFromNumber::weight(int nats0, int nats1) const
 {
     if (nats0 > nats1)
         return 1;
@@ -224,7 +224,7 @@ RelFromNumber::RelFromNumber(const RelFromNumber &other)
 RelFromNumber::~RelFromNumber()
 {}
 
-inline double RelFromNumber::weight(int nats0, int nats1) const
+SIRE_ALWAYS_INLINE double RelFromNumber::weight(int nats0, int nats1) const
 {
     double total = nats0 + nats1;
 
@@ -303,7 +303,7 @@ AbsFromMass::AbsFromMass(const AbsFromMass &other)
 AbsFromMass::~AbsFromMass()
 {}
 
-inline double AbsFromMass::weight(double mass0, double mass1) const
+SIRE_ALWAYS_INLINE double AbsFromMass::weight(double mass0, double mass1) const
 {
     if (mass0 > mass1)
         return 1;
@@ -380,7 +380,7 @@ RelFromMass::RelFromMass(const RelFromMass &other)
 RelFromMass::~RelFromMass()
 {}
 
-inline double RelFromMass::weight(double mass0, double mass1) const
+SIRE_ALWAYS_INLINE double RelFromMass::weight(double mass0, double mass1) const
 {
     double total = mass0 + mass1;
 

@@ -138,10 +138,10 @@ protected:
 };
 
 
-inline MTRand::MTRand( const uint32& oneSeed )
+SIRE_ALWAYS_INLINE MTRand::MTRand( const uint32& oneSeed )
 	{ seed(oneSeed); }
 
-inline MTRand::MTRand(const MTRand &other)
+SIRE_ALWAYS_INLINE MTRand::MTRand(const MTRand &other)
 {
 	uint32 state[N];   // internal state
 	uint32 *pNext;     // next value to get from state
@@ -157,37 +157,37 @@ inline MTRand::MTRand(const MTRand &other)
     pNext = &state[N-left];    
 }
 
-inline MTRand::MTRand( uint32 *const bigSeed, const uint32 seedLength )
+SIRE_ALWAYS_INLINE MTRand::MTRand( uint32 *const bigSeed, const uint32 seedLength )
 	{ seed(bigSeed,seedLength); }
 
-inline MTRand::MTRand()
+SIRE_ALWAYS_INLINE MTRand::MTRand()
 	{ seed(); }
 
-inline double MTRand::rand()
+SIRE_ALWAYS_INLINE double MTRand::rand()
 	{ return double(randInt()) * (1.0/4294967295.0); }
 
-inline double MTRand::rand( const double& n )
+SIRE_ALWAYS_INLINE double MTRand::rand( const double& n )
 	{ return rand() * n; }
 
-inline double MTRand::randExc()
+SIRE_ALWAYS_INLINE double MTRand::randExc()
 	{ return double(randInt()) * (1.0/4294967296.0); }
 
-inline double MTRand::randExc( const double& n )
+SIRE_ALWAYS_INLINE double MTRand::randExc( const double& n )
 	{ return randExc() * n; }
 
-inline double MTRand::randDblExc()
+SIRE_ALWAYS_INLINE double MTRand::randDblExc()
 	{ return ( double(randInt()) + 0.5 ) * (1.0/4294967296.0); }
 
-inline double MTRand::randDblExc( const double& n )
+SIRE_ALWAYS_INLINE double MTRand::randDblExc( const double& n )
 	{ return randDblExc() * n; }
 
-inline double MTRand::rand53()
+SIRE_ALWAYS_INLINE double MTRand::rand53()
 {
 	uint32 a = randInt() >> 5, b = randInt() >> 6;
 	return ( a * 67108864.0 + b ) * (1.0/9007199254740992.0);  // by Isaku Wada
 }
 
-inline double MTRand::randNorm( const double& mean, const double& variance )
+SIRE_ALWAYS_INLINE double MTRand::randNorm( const double& mean, const double& variance )
 {
 	// Return a real number from a normal (Gaussian) distribution with given
 	// mean and variance by Box-Muller method
@@ -196,7 +196,7 @@ inline double MTRand::randNorm( const double& mean, const double& variance )
 	return mean + r * cos(phi);
 }
 
-inline MTRand::uint32 MTRand::randInt()
+SIRE_ALWAYS_INLINE MTRand::uint32 MTRand::randInt()
 {
 	// Pull a 32-bit integer from the generator state
 	// Every other access function simply transforms the numbers extracted here
@@ -212,7 +212,7 @@ inline MTRand::uint32 MTRand::randInt()
 	return ( s1 ^ (s1 >> 18) );
 }
 
-inline MTRand::uint32 MTRand::randInt( const uint32& n )
+SIRE_ALWAYS_INLINE MTRand::uint32 MTRand::randInt( const uint32& n )
 {
 	// Find which bits are used in n
 	// Optimized by Magnus Jonsson (magnus@smartelectronix.com)
@@ -232,7 +232,7 @@ inline MTRand::uint32 MTRand::randInt( const uint32& n )
 }
 
 
-inline void MTRand::seed( const uint32 oneSeed )
+SIRE_ALWAYS_INLINE void MTRand::seed( const uint32 oneSeed )
 {
 	// Seed the generator with a simple uint32
 	initialize(oneSeed);
@@ -240,7 +240,7 @@ inline void MTRand::seed( const uint32 oneSeed )
 }
 
 
-inline void MTRand::seed( uint32 *const bigSeed, const uint32 seedLength )
+SIRE_ALWAYS_INLINE void MTRand::seed( uint32 *const bigSeed, const uint32 seedLength )
 {
 	// Seed the generator with an array of uint32's
 	// There are 2^19937-1 possible initial states.  This function allows
@@ -276,7 +276,7 @@ inline void MTRand::seed( uint32 *const bigSeed, const uint32 seedLength )
 }
 
 
-inline void MTRand::seed()
+SIRE_ALWAYS_INLINE void MTRand::seed()
 {
 	// Seed the generator with an array from /dev/urandom if available
 	// Otherwise use a hash of time() and clock() values
@@ -300,7 +300,7 @@ inline void MTRand::seed()
 }
 
 
-inline void MTRand::initialize( const uint32 seed )
+SIRE_ALWAYS_INLINE void MTRand::initialize( const uint32 seed )
 {
 	// Initialize generator state with seed
 	// See Knuth TAOCP Vol 2, 3rd Ed, p.106 for multiplier.
@@ -318,7 +318,7 @@ inline void MTRand::initialize( const uint32 seed )
 }
 
 
-inline void MTRand::reload()
+SIRE_ALWAYS_INLINE void MTRand::reload()
 {
 	// Generate N new values in state
 	// Made clearer and faster by Matthew Bellew (matthew.bellew@home.com)
@@ -334,7 +334,7 @@ inline void MTRand::reload()
 }
 
 
-inline MTRand::uint32 MTRand::hash( time_t t, clock_t c )
+SIRE_ALWAYS_INLINE MTRand::uint32 MTRand::hash( time_t t, clock_t c )
 {
 	// Get a uint32 from t and c
 	// Better than uint32(x) in case x is floating point in [0,1]
@@ -360,7 +360,7 @@ inline MTRand::uint32 MTRand::hash( time_t t, clock_t c )
 }
 
 
-inline void MTRand::save( uint32* saveArray ) const
+SIRE_ALWAYS_INLINE void MTRand::save( uint32* saveArray ) const
 {
 	register uint32 *sa = saveArray;
 	register const uint32 *s = state;
@@ -370,7 +370,7 @@ inline void MTRand::save( uint32* saveArray ) const
 }
 
 
-inline void MTRand::load( uint32 *const loadArray )
+SIRE_ALWAYS_INLINE void MTRand::load( uint32 *const loadArray )
 {
 	register uint32 *s = state;
 	register uint32 *la = loadArray;
@@ -381,7 +381,7 @@ inline void MTRand::load( uint32 *const loadArray )
 }
 
 
-inline std::ostream& operator<<( std::ostream& os, const MTRand& mtrand )
+SIRE_ALWAYS_INLINE std::ostream& operator<<( std::ostream& os, const MTRand& mtrand )
 {
 	register const MTRand::uint32 *s = mtrand.state;
 	register int i = mtrand.N;
@@ -390,7 +390,7 @@ inline std::ostream& operator<<( std::ostream& os, const MTRand& mtrand )
 }
 
 
-inline std::istream& operator>>( std::istream& is, MTRand& mtrand )
+SIRE_ALWAYS_INLINE std::istream& operator>>( std::istream& is, MTRand& mtrand )
 {
 	register MTRand::uint32 *s = mtrand.state;
 	register int i = mtrand.N;

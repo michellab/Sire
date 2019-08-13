@@ -212,7 +212,7 @@ private:
     at index [i,j] - note that this performs *NO* checking,
     and invalid input will result in invalid output. If you
     want to check the indicies, use checkOffset(int i, int j) */
-inline int NMatrix::offset(int i, int j) const
+SIRE_ALWAYS_INLINE int NMatrix::offset(int i, int j) const
 {
     if (is_transpose)
         return (i*ncolumns) + j;

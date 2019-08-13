@@ -171,7 +171,7 @@ private:
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-inline uint qHash(const AngleID &angleid)
+SIRE_ALWAYS_INLINE uint qHash(const AngleID &angleid)
 {
     return angleid.hash();
 }

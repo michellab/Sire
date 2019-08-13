@@ -156,7 +156,7 @@ private:
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
-inline uint qHash(const BondID &bondid)
+SIRE_ALWAYS_INLINE uint qHash(const BondID &bondid)
 {
     return bondid.hash();
 }

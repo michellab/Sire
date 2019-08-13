@@ -267,13 +267,13 @@ namespace detail
 {
 
 template<>
-inline QList<Residue::Index> getAll<Residue>(const MolInfo &molinfo)
+SIRE_ALWAYS_INLINE QList<Residue::Index> getAll<Residue>(const MolInfo &molinfo)
 {
     return molinfo.getResidues();
 }
 
 template<>
-inline QList<ResIdx> getAll<Residue>(const MolInfo &molinfo,
+SIRE_ALWAYS_INLINE QList<ResIdx> getAll<Residue>(const MolInfo &molinfo,
                                      const AtomSelection &selected_atoms)
 {
     molinfo.assertCompatibleWith(selected_atoms);

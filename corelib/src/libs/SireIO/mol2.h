@@ -549,13 +549,13 @@ private:
 
 /** The Mol2 parser is a lead parser - it is capable alone
     of creating the System */
-inline bool Mol2::isLead() const
+SIRE_ALWAYS_INLINE bool Mol2::isLead() const
 {
     return true;
 }
 
 /** The Mol2 parser can follow another a lead parser. */
-inline bool Mol2::canFollow() const
+SIRE_ALWAYS_INLINE bool Mol2::canFollow() const
 {
     return true;
 }

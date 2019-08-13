@@ -132,32 +132,32 @@
   #if QT_POINTER_SIZE == 4
 
     // Functions used if we have 32bit pointers
-    inline qint32 toInt(const void *ptr)
+    SIRE_ALWAYS_INLINE qint32 toInt(const void *ptr)
     {
         return qint32(ptr);
     }
 
-    inline quint32 toUInt(const void *ptr)
+    SIRE_ALWAYS_INLINE quint32 toUInt(const void *ptr)
     {
         return quint32(ptr);
     }
 
-    inline qint32 toInt32(const void *ptr)
+    SIRE_ALWAYS_INLINE qint32 toInt32(const void *ptr)
     {
         return toInt(ptr);
     }
 
-    inline quint32 toUInt32(const void *ptr)
+    SIRE_ALWAYS_INLINE quint32 toUInt32(const void *ptr)
     {
         return toUInt(ptr);
     }
 
-    inline qint64 toInt64(const void *ptr)
+    SIRE_ALWAYS_INLINE qint64 toInt64(const void *ptr)
     {
         return qint64( toInt(ptr) );
     }
 
-    inline quint64 toUInt64(const void *ptr)
+    SIRE_ALWAYS_INLINE quint64 toUInt64(const void *ptr)
     {
         return quint64( toUInt(ptr) );
     }
@@ -165,32 +165,32 @@
   #elif QT_POINTER_SIZE == 8
 
     // Functions used if we have 64bit pointers
-    inline qint64 toInt(const void *ptr)
+    SIRE_ALWAYS_INLINE qint64 toInt(const void *ptr)
     {
         return qint64(ptr);
     }
 
-    inline quint64 toUInt(const void *ptr)
+    SIRE_ALWAYS_INLINE quint64 toUInt(const void *ptr)
     {
         return quint64(ptr);
     }
 
-    inline qint32 toInt32(const void *ptr)
+    SIRE_ALWAYS_INLINE qint32 toInt32(const void *ptr)
     {
         return qint32( toInt(ptr) );
     }
 
-    inline quint32 toUInt32(const void *ptr)
+    SIRE_ALWAYS_INLINE quint32 toUInt32(const void *ptr)
     {
         return qint32( toUInt(ptr) );
     }
 
-    inline qint64 toInt64(const void *ptr)
+    SIRE_ALWAYS_INLINE qint64 toInt64(const void *ptr)
     {
         return toInt(ptr);
     }
 
-    inline quint64 toUInt64(const void *ptr)
+    SIRE_ALWAYS_INLINE quint64 toUInt64(const void *ptr)
     {
         return toUInt(ptr);
     }

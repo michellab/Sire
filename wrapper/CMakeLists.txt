@@ -129,6 +129,12 @@ else()
   endif()
 endif()
 
+if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+  set (SLASH_HYPHEN "/")
+else()
+  set (SLASH_HYPHEN "-")
+endif()
+
 # Now set the C++, C and Fortran compilers to be used to compile the wrappers
 # These have to be the same as used to compile corelib
 set(CMAKE_C_COMPILER "${SIRE_C_COMPILER}")

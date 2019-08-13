@@ -915,7 +915,7 @@ SireCAS::Expression GromacsBond::toExpression(const SireCAS::Symbol &R) const
         return SireCAS::Expression(0);
 }
 
-inline uint my_qHash(double key)
+SIRE_ALWAYS_INLINE uint my_qHash(double key)
 {
     return ::qHash( *(reinterpret_cast<const ulong*>(&key)) );
 }

@@ -148,41 +148,41 @@ protected:
 
 /** Return the cutoff distance beyond which both the electrostatic
     and vdw energies are scaled to zero */
-inline Length SwitchingFunction::cutoffDistance() const
+SIRE_ALWAYS_INLINE Length SwitchingFunction::cutoffDistance() const
 {
     return Length(cutdist);
 }
 
 /** Return the feather distance, below which feathering of the 
     electrostatic and vdw interactions is *not* performed */
-inline Length SwitchingFunction::featherDistance() const
+SIRE_ALWAYS_INLINE Length SwitchingFunction::featherDistance() const
 {
     return Length(featherdist);
 }
 
 /** Return the distance beyond which the electrostatic interaction
     is not evaluated */
-inline Length SwitchingFunction::electrostaticCutoffDistance() const
+SIRE_ALWAYS_INLINE Length SwitchingFunction::electrostaticCutoffDistance() const
 {
     return Length(cut_elec);
 }
 
 /** Return the distance below which the electrostatic interaction
     is *not* feathered */
-inline Length SwitchingFunction::electrostaticFeatherDistance() const
+SIRE_ALWAYS_INLINE Length SwitchingFunction::electrostaticFeatherDistance() const
 {
     return Length(feather_elec);
 }
 
 /** Return the distance beyond which the VDW interaction is not evaluated */
-inline Length SwitchingFunction::vdwCutoffDistance() const
+SIRE_ALWAYS_INLINE Length SwitchingFunction::vdwCutoffDistance() const
 {
     return Length(cut_vdw);
 }
 
 /** Return the distance below which the VDW interaction is 
     *not* feathered */
-inline Length SwitchingFunction::vdwFeatherDistance() const
+SIRE_ALWAYS_INLINE Length SwitchingFunction::vdwFeatherDistance() const
 {
     return Length(feather_vdw);
 }

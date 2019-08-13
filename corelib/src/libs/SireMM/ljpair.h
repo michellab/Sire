@@ -116,20 +116,20 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the sigma value */
-inline double LJPair::sigma() const
+SIRE_ALWAYS_INLINE double LJPair::sigma() const
 {
     return sig;
 }
 
 /** Return the epsilon value */
-inline double LJPair::epsilon() const
+SIRE_ALWAYS_INLINE double LJPair::epsilon() const
 {
     return eps;
 }
 
 /** Return an LJPair that represents the geometric combination of
     two LJParameters (sigma = sqrt(sig0*sig1), epsilon = sqrt(eps0*eps1) */
-inline LJPair LJPair::geometric(const LJParameter &lj0, const LJParameter &lj1)
+SIRE_ALWAYS_INLINE LJPair LJPair::geometric(const LJParameter &lj0, const LJParameter &lj1)
 {
     LJPair ljpair;
 
@@ -142,7 +142,7 @@ inline LJPair LJPair::geometric(const LJParameter &lj0, const LJParameter &lj1)
 /** Return an LJPair that represents the arithmetic combination
     of two LJParameters (Lorentz-Berthelot combining rules),
     sigma = 0.5(sig0+sig1), epsilon = sqrt(eps0*eps1) */
-inline LJPair LJPair::arithmetic(const LJParameter &lj0, const LJParameter &lj1)
+SIRE_ALWAYS_INLINE LJPair LJPair::arithmetic(const LJParameter &lj0, const LJParameter &lj1)
 {
     LJPair ljpair;
 

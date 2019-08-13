@@ -605,32 +605,32 @@ private:
 //////// Inline functions of InternalFF
 ////////
 
-inline SireUnits::Dimension::MolarEnergy InternalFF::energy()
+SIRE_ALWAYS_INLINE SireUnits::Dimension::MolarEnergy InternalFF::energy()
 {
     return G1FF::energy();
 }
 
-inline SireUnits::Dimension::MolarEnergy InternalFF::energy(const Symbol &component)
+SIRE_ALWAYS_INLINE SireUnits::Dimension::MolarEnergy InternalFF::energy(const Symbol &component)
 {
     return G1FF::energy(component);
 }
 
 /** Return all of the symbols used in the internal energy functions */
-inline const InternalSymbols& InternalFF::symbols() const
+SIRE_ALWAYS_INLINE const InternalSymbols& InternalFF::symbols() const
 {
     return InternalPotential::symbols();
 }
 
 /** Return the names of all of the properties used to store the 
     parameters for this potential */
-inline const InternalFF::ParameterNames& InternalFF::parameters() const
+SIRE_ALWAYS_INLINE const InternalFF::ParameterNames& InternalFF::parameters() const
 {
     return InternalPotential::parameters();
 }
 
 /** Return all of the symbols representing the components
     of this forcefield */
-inline const InternalFF::Components& InternalFF::components() const
+SIRE_ALWAYS_INLINE const InternalFF::Components& InternalFF::components() const
 {
     return ffcomponents;
 }
@@ -638,7 +638,7 @@ inline const InternalFF::Components& InternalFF::components() const
 /** Return whether or not this strictly include terms that
     involve *only* selected atoms. Otherwise this includes
     terms that involve at least one selected atom */
-inline bool InternalFF::isStrict() const
+SIRE_ALWAYS_INLINE bool InternalFF::isStrict() const
 {
     return isstrict;
 }

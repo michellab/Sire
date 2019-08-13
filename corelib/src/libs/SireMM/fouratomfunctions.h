@@ -129,7 +129,7 @@ public:
     quint32 atom3;
 };
 
-inline uint qHash(const IDQuad &idquad)
+SIRE_ALWAYS_INLINE uint qHash(const IDQuad &idquad)
 {
     return (idquad.atom0 << 24) |
            ( (idquad.atom1 << 16) & 0x00FF0000) |
@@ -245,25 +245,25 @@ private:
 //////
 
 /** Return the first atom of the quad */
-inline const CGAtomIdx& FourAtomFunction::atom0() const
+SIRE_ALWAYS_INLINE const CGAtomIdx& FourAtomFunction::atom0() const
 {
     return atm0;
 }
 
 /** Return the second atom of the quad */
-inline const CGAtomIdx& FourAtomFunction::atom1() const
+SIRE_ALWAYS_INLINE const CGAtomIdx& FourAtomFunction::atom1() const
 {
     return atm1;
 }
 
 /** Return the third atom of the quad */
-inline const CGAtomIdx& FourAtomFunction::atom2() const
+SIRE_ALWAYS_INLINE const CGAtomIdx& FourAtomFunction::atom2() const
 {
     return atm2;
 }
 
 /** Return the fourth atom of the quad */
-inline const CGAtomIdx& FourAtomFunction::atom3() const
+SIRE_ALWAYS_INLINE const CGAtomIdx& FourAtomFunction::atom3() const
 {
     return atm3;
 }

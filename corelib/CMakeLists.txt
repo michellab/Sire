@@ -382,6 +382,12 @@ set( SIRE_EXE_LINK_FLAGS "" CACHE INTERNAL "Flags needed to link executables" )
 ############# DETECTING AND CONFIGURING THE COMPILER
 #############
 
+if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+  set (SLASH_HYPHEN "/")
+else()
+  set (SLASH_HYPHEN "-")
+endif()
+
 include (CheckCXXCompilerFlag)
 
 CHECK_CXX_COMPILER_FLAG( "-stdlib=libc++" SIRE_HAS_CPP_LIB )
@@ -438,7 +444,7 @@ set(NEED_UNDEF_STRICT_ANSI FALSE)
 
 if (SIRE_HAS_CPP_14)
   message(STATUS "Compiler supports C++ 2014")
-  set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} -std=c++14 -DSIRE_HAS_CPP_14 -DSIRE_HAS_CPP_1Y -DSIRE_HAS_CPP_11")
+  set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} ${SLASH_HYPHEN}std=c++14 ${SLASH_HYPHEN}DSIRE_HAS_CPP_14 ${SLASH_HYPHEN}DSIRE_HAS_CPP_1Y ${SLASH_HYPHEN}DSIRE_HAS_CPP_11")
 
   if (NEED_UNDEF_STRICT_ANSI)
     message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")
@@ -446,7 +452,7 @@ if (SIRE_HAS_CPP_14)
   endif()
 elseif (SIRE_HAS_CPP_1Y)
   message(STATUS "Compiler supports C++ 201Y (pre-2014)")
-  set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} -std=c++1y -DSIRE_HAS_CPP_1Y -DSIRE_HAS_CPP_11")
+  set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} ${SLASH_HYPHEN}std=c++1y ${SLASH_HYPHEN}DSIRE_HAS_CPP_1Y ${SLASH_HYPHEN}DSIRE_HAS_CPP_11")
 
   if (NEED_UNDEF_STRICT_ANSI)
     message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")
@@ -454,7 +460,7 @@ elseif (SIRE_HAS_CPP_1Y)
   endif()
 elseif (SIRE_HAS_CPP_11)
   message(STATUS "Compiler supports C++ 2011")
-  set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} -std=c++11 -DSIRE_HAS_CPP_11")
+  set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} ${SLASH_HYPHEN}std=c++11 ${SLASH_HYPHEN}DSIRE_HAS_CPP_11")
 
   if (NEED_UNDEF_STRICT_ANSI)
     message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")
@@ -534,7 +540,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     # -fomit-frame-pointer breaks backtrace on an apple
     set ( SIRE_RELEASE_FLAGS "${SIRE_RELEASE_FLAGS} -fomit-frame-pointer" )
 
-    set ( SIRE_PLATFORM_FLAGS "-pipe" )
+    set ( SIRE_PLATFORM_FLAGS "-pipe -DSIRE_ALWAYS_INLINE=inline" )
     set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
     GET_SIRE_VECTOR_FLAGS( "-fopenmp-simd" "-msse2" "-mavx" "-mavx512f" )
@@ -601,7 +607,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
     # -fomit-frame-pointer breaks backtrace on an apple
     set ( SIRE_RELEASE_FLAGS "${SIRE_RELEASE_FLAGS} -fomit-frame-pointer" )
 
-    set ( SIRE_PLATFORM_FLAGS "-pipe" )
+    set ( SIRE_PLATFORM_FLAGS "-pipe -DSIRE_ALWAYS_INLINE=inline" )
     set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
     GET_SIRE_VECTOR_FLAGS( "-openmp-simd" "-msse2" "-mavx" "-mavx512f" )
@@ -633,7 +639,7 @@ elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
     # -fomit-frame-pointer breaks backtrace on an apple
     set ( SIRE_RELEASE_FLAGS "${SIRE_RELEASE_FLAGS} -fomit-frame-pointer" )
 
-    set ( SIRE_PLATFORM_FLAGS "-pipe" )
+    set ( SIRE_PLATFORM_FLAGS "-pipe -DSIRE_ALWAYS_INLINE=inline" )
     set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
     CHECK_CXX_COMPILER_FLAG( "-msse2" HAVE_SSE_FLAG )
@@ -648,7 +654,7 @@ elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
         set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -rdynamic -Wl,--no-undefined" )
     endif()
 
-elseif ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+elseif (MSVC)
 
     add_compile_options("/permissive-")
     add_compile_options("/Zc:twoPhase-")
@@ -657,14 +663,15 @@ elseif ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
 
     set ( SIRE_SMALL_FLAGS  "/O1" )
     set ( SIRE_WARNALL_FLAGS  "" )
-    set ( SIRE_RELEASE_FLAGS  "/O2" )
+    set ( SIRE_RELEASE_FLAGS  "/O2 /GL /Gw" )
     set ( SIRE_DEBUG_FLAGS   "/Zi" )
     set ( SIRE_VISIBILITY_FLAGS "/DSIRE_NO_VISIBILITY_AVAILABLE" )
-    GET_SIRE_VECTOR_FLAGS( "/openmp" "/arch:SSE2" "/arch:AVX" "/arch:AVX512" )
-    set ( SIRE_SHARE_LINK_FLAGS "" )
-    set ( SIRE_STATIC_LINK_FLAGS "" )
+    GET_SIRE_VECTOR_FLAGS( "/openmp:experimental" "/arch:SSE2" "/arch:AVX" "/arch:AVX512" )
+    set ( SIRE_SHARE_LINK_FLAGS "/LTCG /OPT:REF /OPT:ICF" )
+    set ( SIRE_STATIC_LINK_FLAGS "/LTCG /OPT:REF /OPT:ICF" )
+    set ( SIRE_EXE_LINK_FLAGS "/LTCG /OPT:REF /OPT:ICF" )
 
-    set ( SIRE_PLATFORM_FLAGS "" )
+    set ( SIRE_PLATFORM_FLAGS "/DSIRE_ALWAYS_INLINE=__forceinline" )
     
 else()
     message( STATUS "CMAKE_SYSTEM_NAME == ${CMAKE_SYSTEM_NAME}" )
@@ -1006,8 +1013,8 @@ if ( CMAKE_BUILD_TYPE )
     message( STATUS "Compiling Sire using ${CMAKE_BUILD_TYPE}" )
 else()
     message( STATUS "Compiling Sire using a default (RELEASE) build" )
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS_RELEASE} ${SIRE_C_FLAGS_RELEASE}" )
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_RELEASE} ${SIRE_CXX_FLAGS_RELEASE}" )
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS_RELEASE}" )
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_RELEASE}" )
 endif()
 
 message ( STATUS "C compiler flags       == ${CMAKE_C_FLAGS}" )

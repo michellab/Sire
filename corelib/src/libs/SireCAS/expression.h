@@ -215,7 +215,7 @@ Expression cbrt(const Expression &ex0);
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return a hash for an expression */
-inline uint qHash(const Expression &ex)
+SIRE_ALWAYS_INLINE uint qHash(const Expression &ex)
 {
     return ex.hash();
 }
@@ -247,68 +247,68 @@ QList<T> Expression::children() const
 }
 
 /** Comparison operator */
-inline bool Expression::operator==(const Expression &other) const
+SIRE_ALWAYS_INLINE bool Expression::operator==(const Expression &other) const
 {
     return fac == other.fac and exbase == other.exbase;
 }
 
 /** Comparison operator */
-inline bool Expression::operator!=(const Expression &other) const
+SIRE_ALWAYS_INLINE bool Expression::operator!=(const Expression &other) const
 {
     return fac != other.fac or exbase != other.exbase;
 }
 
 /** Addition operator */
-inline Expression operator+(const Expression &ex0,
+SIRE_ALWAYS_INLINE Expression operator+(const Expression &ex0,
                             const Expression &ex1)
 {
     return ex0.add(ex1);
 }
 
 /** Addition operator */
-inline Expression operator+(const Expression &ex,
+SIRE_ALWAYS_INLINE Expression operator+(const Expression &ex,
                             double val)
 {
     return ex.add(val);
 }
 
 /** Addition operator */
-inline Expression operator+(double val,
+SIRE_ALWAYS_INLINE Expression operator+(double val,
                             const Expression &ex)
 {
     return ex.add(val);
 }
 
 /** Addition operator */
-inline Expression operator+(const Expression &ex,
+SIRE_ALWAYS_INLINE Expression operator+(const Expression &ex,
                             const Complex &val)
 {
     return ex.add(val);
 }
 
 /** Addition operator */
-inline Expression operator+(const Complex &val,
+SIRE_ALWAYS_INLINE Expression operator+(const Complex &val,
                             const Expression &ex)
 {
     return ex.add(val);
 }
 
 /** Subtraction operator */
-inline Expression operator-(const Expression &ex0,
+SIRE_ALWAYS_INLINE Expression operator-(const Expression &ex0,
                             const Expression &ex1)
 {
     return ex0.subtract(ex1);
 }
 
 /** Subtraction operator */
-inline Expression operator-(const Expression &ex,
+SIRE_ALWAYS_INLINE Expression operator-(const Expression &ex,
                             double val)
 {
     return ex.subtract(val);
 }
 
 /** Subtraction operator */
-inline Expression operator-(double val,
+SIRE_ALWAYS_INLINE Expression operator-(double val,
                             const Expression &ex)
 {
     return ex.negate().add(val);
@@ -316,116 +316,116 @@ inline Expression operator-(double val,
 
 
 /** Multiplication operator */
-inline Expression operator*(const Expression &ex0,
+SIRE_ALWAYS_INLINE Expression operator*(const Expression &ex0,
                             const Expression &ex1)
 {
     return ex0.multiply(ex1);
 }
 
 /** Multiplication operator */
-inline Expression operator*(double val, const Expression &ex)
+SIRE_ALWAYS_INLINE Expression operator*(double val, const Expression &ex)
 {
     return ex.multiply(val);
 }
 
 /** Multiplication operator */
-inline Expression operator*(const Expression &ex, double val)
+SIRE_ALWAYS_INLINE Expression operator*(const Expression &ex, double val)
 {
     return ex.multiply(val);
 }
 
 /** Multiplication operator */
-inline Expression operator*(const Complex &val, const Expression &ex)
+SIRE_ALWAYS_INLINE Expression operator*(const Complex &val, const Expression &ex)
 {
     return ex.multiply(val);
 }
 
 /** Multiplication operator */
-inline Expression operator*(const Expression &ex, const Complex &val)
+SIRE_ALWAYS_INLINE Expression operator*(const Expression &ex, const Complex &val)
 {
     return ex.multiply(val);
 }
 
 /** Division operator */
-inline Expression operator/(const Expression &ex0,
+SIRE_ALWAYS_INLINE Expression operator/(const Expression &ex0,
                             const Expression &ex1)
 {
     return ex0.divide(ex1);
 }
 
 /** Division operator */
-inline Expression operator/(const Expression &ex,
+SIRE_ALWAYS_INLINE Expression operator/(const Expression &ex,
                             double val)
 {
     return ex.divide(val);
 }
 
 /** Division operator */
-inline Expression operator/(double val,
+SIRE_ALWAYS_INLINE Expression operator/(double val,
                             const Expression &ex)
 {
     return ex.invert().multiply(val);
 }
 
 /** Division operator */
-inline Expression operator/(const Expression &ex,
+SIRE_ALWAYS_INLINE Expression operator/(const Expression &ex,
                             const Complex &val)
 {
     return ex.divide(val);
 }
 
 /** Division operator */
-inline Expression operator/(const Complex &val,
+SIRE_ALWAYS_INLINE Expression operator/(const Complex &val,
                             const Expression &ex)
 {
     return ex.invert().multiply(val);
 }
 
 /** Raise an expression to the nth power */
-inline Expression pow(const Expression &ex0, int n)
+SIRE_ALWAYS_INLINE Expression pow(const Expression &ex0, int n)
 {
     return ex0.pow(n);
 }
 
 /** Raise an expression to a real power */
-inline Expression pow(const Expression &ex0, double n)
+SIRE_ALWAYS_INLINE Expression pow(const Expression &ex0, double n)
 {
     return ex0.pow(n);
 }
 
 /** Raise an expression to a functional power */
-inline Expression pow(const Expression &ex0,
+SIRE_ALWAYS_INLINE Expression pow(const Expression &ex0,
                       const Expression &n)
 {
     return ex0.pow(n);
 }
 
 /** Raise an expression to a complex power */
-inline Expression pow(const Expression &ex0, const Complex &n)
+SIRE_ALWAYS_INLINE Expression pow(const Expression &ex0, const Complex &n)
 {
     return ex0.pow(n);
 }
 
 /** Raise an expression to a rational power */
-inline Expression pow(const Expression &ex0, const Rational &n)
+SIRE_ALWAYS_INLINE Expression pow(const Expression &ex0, const Rational &n)
 {
     return ex0.pow(n);
 }
 
 /** Take the nth root of an expression */
-inline Expression root(const Expression &ex0, int n)
+SIRE_ALWAYS_INLINE Expression root(const Expression &ex0, int n)
 {
     return ex0.root(n);
 }
 
 /** Take the square root of an expression */
-inline Expression sqrt(const Expression &ex0)
+SIRE_ALWAYS_INLINE Expression sqrt(const Expression &ex0)
 {
     return ex0.root(2);
 }
 
 /** Take the cube root of an expression */
-inline Expression cbrt(const Expression &ex0)
+SIRE_ALWAYS_INLINE Expression cbrt(const Expression &ex0)
 {
     return ex0.root(3);
 }

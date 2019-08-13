@@ -153,7 +153,7 @@ public:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return a hash of this index */
-inline uint qHash(const IndexBase &index)
+SIRE_ALWAYS_INLINE uint qHash(const IndexBase &index)
 {
     return index.hash();
 }

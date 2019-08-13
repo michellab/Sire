@@ -97,7 +97,7 @@ private:
     boost::shared_ptr<FFID> d;
 };
 
-inline uint qHash(const FFIdentifier &ffid)
+SIRE_ALWAYS_INLINE uint qHash(const FFIdentifier &ffid)
 {
     return ffid.hash();
 }

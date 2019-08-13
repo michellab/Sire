@@ -183,7 +183,7 @@ private:
 };
 
 /** Return the raw array that hold the coordinates */
-inline const CoordGroupArray& AtomProperty<Vector>::array() const
+SIRE_ALWAYS_INLINE const CoordGroupArray& AtomProperty<Vector>::array() const
 {
     return coords;
 }

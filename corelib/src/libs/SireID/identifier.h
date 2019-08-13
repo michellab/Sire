@@ -94,7 +94,7 @@ private:
     boost::shared_ptr<ID> d;
 };
 
-inline uint qHash(const Identifier &id)
+SIRE_ALWAYS_INLINE uint qHash(const Identifier &id)
 {
     return id.hash();
 }

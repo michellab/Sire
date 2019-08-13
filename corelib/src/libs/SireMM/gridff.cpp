@@ -637,7 +637,7 @@ SireUnits::Dimension::Length GridFF::ljCutoff() const
     return SireUnits::Dimension::Length(lj_cutoff);
 }
 
-inline GridFF::Vector4::Vector4(const Vector &v, double chg)
+SIRE_ALWAYS_INLINE GridFF::Vector4::Vector4(const Vector &v, double chg)
               : x(v.x()), y(v.y()), z(v.z()), q(chg)
 {}
 
@@ -662,7 +662,7 @@ void GridFF::appendTo(QVector<GridFF::Vector4> &coords_and_charges,
 }
 
 #ifdef SIRE_USE_SSE
-    inline QString toString(const __m128d &sseval)
+    SIRE_ALWAYS_INLINE QString toString(const __m128d &sseval)
     {
         return QString("{ %1, %2 }").arg(*((const double*)&sseval))
                                     .arg(*( ((const double*)&sseval) + 1));
@@ -1356,7 +1356,7 @@ void GridFF::addToGrid(const QVector<GridFF::Vector4> &coords_and_charges)
     //         << ms << "ms";
 }
 
-inline double getDist(double p, double minp, double maxp)
+SIRE_ALWAYS_INLINE double getDist(double p, double minp, double maxp)
 {
     if (p < minp)
         return minp - p;

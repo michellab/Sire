@@ -401,7 +401,7 @@ void EnergyMonitor::clearStatistics()
     lj_nrgs = Array2D<AccumulatorPtr>();
 }
 
-inline pair<double,double> getCLJEnergy(
+SIRE_ALWAYS_INLINE pair<double,double> getCLJEnergy(
                 const QVector<Vector> &coords0, const QVector<Charge> &chgs0,
                 const QVector<LJParameter> &ljs0,
                 const QVector<Vector> &coords1, const QVector<Charge> &chgs1,
@@ -449,7 +449,7 @@ inline pair<double,double> getCLJEnergy(
     return pair<double,double>(cnrg,ljnrg);
 }
 
-inline pair<double,double> getSoftCLJEnergy(
+SIRE_ALWAYS_INLINE pair<double,double> getSoftCLJEnergy(
                 const QVector<Vector> &coords0, const QVector<Charge> &chgs0,
                 const QVector<LJParameter> &ljs0,
                 const QVector<Vector> &coords1, const QVector<Charge> &chgs1,

@@ -272,13 +272,13 @@ namespace detail
 void assertSameSize(Atom*, int nats, int nprops);
 
 template<>
-inline QList<AtomIdx> getAll<Atom>(const MolInfo &molinfo)
+SIRE_ALWAYS_INLINE QList<AtomIdx> getAll<Atom>(const MolInfo &molinfo)
 {
     return molinfo.getAtoms();
 }
 
 template<>
-inline QList<AtomIdx> getAll<Atom>(const MolInfo &molinfo,
+SIRE_ALWAYS_INLINE QList<AtomIdx> getAll<Atom>(const MolInfo &molinfo,
                                    const AtomSelection &selected_atoms)
 {
     molinfo.assertCompatibleWith(selected_atoms);
