@@ -111,7 +111,6 @@ public:
     void kill_process_group()
     {
         killpg(pid, SIGKILL);
-        pid = 0;
     }
 
     /** Close all process handles */
@@ -769,7 +768,11 @@ void Process::kill()
         testWait();
 
         if (d->is_running)
+        {
+            qDebug() << "Killing job " << d->command.toUtf8().constData()
+                     << d->arguments.join(" ").toUtf8().constData();
             d->kill_process_group();
+        }
         else
             return;
     }
