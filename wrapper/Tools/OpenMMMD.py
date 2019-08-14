@@ -109,6 +109,7 @@ equil_timestep = Parameter("equilibration timestep", 0.5 * femtosecond, """Times
 
 combining_rules = Parameter("combining rules", "arithmetic",
                             """Combining rules to use for the non-bonded interactions.""")
+use_restraints = Parameter("use restraints", False, """Whether or not to use harmonic restaints on the solute atoms.""")
 
 use_CA_restraints = Parameter ("use CA restraints", False, """Whether to restraint the CA at the protein.""" )
 
@@ -236,18 +237,15 @@ def setupCARestraints(system):
         atoms = mol.atoms()
     
         if mol.nResidues() > 1:
-            for i in range(0,nats):
-                at = atoms[i]
-                atnumber = at.number()
-                atcoords = at.property("coordinates")
-                if at.property("ambertype") == "CA":
-                    #print(mol, at.property("ambertype"), atnumber, atcoords, k_restraint)
-                    restrainedAtoms.append((atnumber, atcoords, k_restraint))
+            print("Imposing restraints to CA atoms...")
+            ca_atoms = mol.selectAll(AtomName("CA"))
+            for ca in ca_atoms:
+                ca_number = ca.number()
+                ca_coords = ca.property("coordinates")
+                restrainedAtoms.append((ca_number, ca_coords, k_restraint))
 
         if len(restrainedAtoms) > 0:
             mol = mol.edit().setProperty("restrainedatoms", atomNumVectorListToProperty(restrainedAtoms)).commit()
-            #print restrainedAtoms
-            #print propertyToAtomNumVectorList( mol.property("restrainedatoms") )
             system.update(mol)
 
     return system
@@ -443,7 +441,32 @@ def setupForcefields(system, space):
                 restraint = DistanceRestraint.harmonic(restraint_atom, restraint_coords, restraint_k)
 
                 restraintff.add(restraint)
+    
+    #CA restraints
+    if use_CA_restraints.val:
+        molnums = molecules.molecules().molNums()
 
+        for molnum in molnums:
+            mol = molecules.molecule(molnum)[0].molecule()
+            try:
+                mol_restrained_ca = propertyToAtomNumVectorList(mol.property("restrainedatoms"))
+            except UserWarning as error:
+                error_type = re.search(r"(Sire\w*::\w*)", str(error)).group(0)
+                if error_type == "SireBase::missing_property":
+                    continue
+                else:
+                    raise error
+
+            for restrained_line in mol_restrained_ca:
+                atnum = restrained_line[0]
+                restraint_atom = mol.select(atnum)
+                restraint_coords = restrained_line[1]
+                restraint_k = restrained_line[2] * kcal_per_mol / (angstrom * angstrom)
+
+                restraint = DistanceRestraint.harmonic(restraint_atom, restraint_coords, restraint_k)
+
+                restraintff.add(restraint)
+                
     # Here is the list of all forcefields
     forcefields = [internonbondedff, intrabondedff, intranonbondedff, inter_ions_nonbondedff,
                    inter_ions_molecules_nonbondedff, restraintff]
@@ -1417,7 +1440,10 @@ def run():
 
         if use_restraints.val:
             system = setupRestraints(system)
-
+            
+        if use_restraints.val:
+            system = setupCARestraints(system)
+            
         if use_distance_restraints.val:
             restraints = None
             if len(distance_restraints_dict.val) == 0:
