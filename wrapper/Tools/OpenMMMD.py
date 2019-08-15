@@ -674,6 +674,9 @@ def setupVSites(system):
 
     return(system)
   
+
+  
+  
 def setupRestraints(system):
     
     molecules = system[MGName("all")].molecules()
