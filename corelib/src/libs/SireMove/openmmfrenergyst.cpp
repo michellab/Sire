@@ -4019,6 +4019,20 @@ void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm,
     }
 }
 
+
+/** Get the Virtual Site mode*/
+bool OpenMMFrEnergyST::getVirtualSite(void)
+{
+    return VirtualSite_flag;
+}
+
+
+/** Set the Virtual Site mode */
+void OpenMMFrEnergyST::setVirtualSite(bool VSite)
+{
+    VirtualSite_flag = VSite;
+}
+
 /** Get the cutoff type: nocutoff, cutoffnonperiodic, cutoffperiodic */
 QString OpenMMFrEnergyST::getCutoffType(void)
 {
