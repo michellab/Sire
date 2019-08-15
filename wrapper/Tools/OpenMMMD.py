@@ -634,6 +634,46 @@ def propertyToAtomNumVectorList(prop):
     return list
 
 
+def setupVSites(system):
+
+    molecules = system[MGName("all")].molecules()
+    molnums = molecules.molNums()
+
+    for molnum in molnums:
+        mol = molecules.molecule(molnum)[0].molecule()
+        if mol.property("virtual-sites"):
+            vs_prop =  mol.property("virtual-sites")
+            nVSites = vs_prop["nvirtualsites"] 
+            
+            vsList = []
+
+            for i in range(0, nVSites):   
+                atom1 = vs_prop["atom1("+str(i)+")"]          #0
+                atom2 = vs_prop["atom2("+str(i)+")"]          #1
+                atom3 = vs_prop["atom3("+str(i)+")"]          #2
+                p1 = vs_prop["p1("+str(i)+")"]                #3
+                p2 = vs_prop["p2("+str(i)+")"]                #4
+                p3 = vs_prop["p3("+str(i)+")"]                #5
+                wo1 = vs_prop["wo1("+str(i)+")"]              #6
+                wo2 = vs_prop["wo2("+str(i)+")"]              #7
+                wo3 = vs_prop["wo3("+str(i)+")"]              #8
+                wx1 = vs_prop["wx1("+str(i)+")"]              #9
+                wx2 = vs_prop["wx2("+str(i)+")"]              #10
+                wx3 = vs_prop["wx3("+str(i)+")"]              #11
+                wy1 = vs_prop["wy1("+str(i)+")"]              #12
+                wy2 = vs_prop["wy2("+str(i)+")"]              #13
+                wy3 = vs_prop["wy3("+str(i("+str(i)+"))+")"]  #14
+                charge = vs_prop["charge("+str(i)+")"]        #15
+                sigma = vs_prop["sigma("+str(i)+")"]          #16
+                epsilon = vs_prop["epsilon("+str(i)+")"]      #17
+                name = vs_prop["name("+str(i)+")"]            #18
+                vstype = vs_prop["type("+str(i)+")"]          #19
+                name = vs_prop["name("+str(i)+")"]            #20
+
+                vsList.append(atom1, atom2, atom3, p1, p2, p3, wo1, wo2, wo3, wx1, wx2, wx3, wy1, wy2,wy3, charge, sigma, epsilon, name, vstype)
+
+    return(system)
+  
 def setupRestraints(system):
     
     molecules = system[MGName("all")].molecules()
