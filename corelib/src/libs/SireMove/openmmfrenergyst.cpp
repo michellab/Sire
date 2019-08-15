@@ -1224,6 +1224,47 @@ void OpenMMFrEnergyST::initialise()
         }
 
     }
+    
+    
+
+    /************************************************************VIRTUAL SITES********************************************************/
+
+    OpenMM::VirtualSite * virtualSites_openmm = NULL;
+
+    if (VirtualSite_flag == true)
+    {
+
+        virtualSites_openmm = new OpenMM::VirtualSite();
+
+        virtualSites_openmm->addPerParticleParameter("nVSites");
+        virtualSites_openmm->addPerParticleParameter("vsIndex");
+        virtualSites_openmm->addPerParticleParameter("atom1");
+        virtualSites_openmm->addPerParticleParameter("atom2");
+        virtualSites_openmm->addPerParticleParameter("atom3");
+        virtualSites_openmm->addPerParticleParameter("p1");
+        virtualSites_openmm->addPerParticleParameter("p2");
+        virtualSites_openmm->addPerParticleParameter("p3");
+        virtualSites_openmm->addPerParticleParameter("wo1");
+        virtualSites_openmm->addPerParticleParameter("wo2");
+        virtualSites_openmm->addPerParticleParameter("wo3");
+        virtualSites_openmm->addPerParticleParameter("wx1");
+        virtualSites_openmm->addPerParticleParameter("wx2");
+        virtualSites_openmm->addPerParticleParameter("wx3");
+        virtualSites_openmm->addPerParticleParameter("wy1");
+        virtualSites_openmm->addPerParticleParameter("wy2");
+        virtualSites_openmm->addPerParticleParameter("wy3");
+        virtualSites_openmm->addPerParticleParameter("charge");
+        virtualSites_openmm->addPerParticleParameter("sigma");
+        virtualSites_openmm->addPerParticleParameter("epsilon");
+        virtualSites_openmm->addPerParticleParameter("name");
+        virtualSites_openmm->addPerParticleParameter("type");
+
+        system_openmm->addParticle(virtualSites_openmm);
+        
+        if (Debug)
+            qDebug() << "\n\nVtualSite is ON\n\n";
+    }
+
     /*******************************************************BONDED INTERACTIONS******************************************************/
 
 
@@ -1774,6 +1815,86 @@ void OpenMMFrEnergyST::initialise()
 
         }
 
+
+        /****************************************************VIRTUAL SITES*******************************************************/
+
+        if (VirtualSite_flag == true)
+        {
+
+            bool hasVirtualSites = molecule.hasProperty("virtual-sites");
+
+            if (hasVirtualSites)
+            {
+
+                Properties virtualSites = molecule.property("virtual-sites").asA<Properties>();
+
+                int nvirtualsites = virtualSites.property(QString("nvirtualsites")).asA<VariantProperty>().toInt();
+
+                if (Debug)
+                    qDebug() << "nvirtualsites = " << nvirtualsites;
+
+                for (int i = 0; i < nvirtualsites; i++)
+                {
+
+                    int nVSites = restrainedAtoms.property(QString("nvirtualsites(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int vsIndex = restrainedAtoms.property(QString("index(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int atom1 = restrainedAtoms.property(QString("atom1(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int atom2 = restrainedAtoms.property(QString("atom2(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int atom3 = restrainedAtoms.property(QString("atom3(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    double p1 = restrainedAtoms.property(QString("p1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double p2 = restrainedAtoms.property(QString("p2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double p3 = restrainedAtoms.property(QString("p3(%1)").arg(i)).asA<VariantProperty>().toDouble()
+                    double wo1 = restrainedAtoms.property(QString("wo1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wo2 = restrainedAtoms.property(QString("wo2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wo3 = restrainedAtoms.property(QString("wo3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wx1 = restrainedAtoms.property(QString("wx1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wx2 = restrainedAtoms.property(QString("wx2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wx3 = restrainedAtoms.property(QString("wx3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wy1 = restrainedAtoms.property(QString("wy1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wy2 = restrainedAtoms.property(QString("wy2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wy3 = restrainedAtoms.property(QString("wy3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double charge = restrainedAtoms.property(QString("charge(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double sigma = restrainedAtoms.property(QString("sigma(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double epsilon = restrainedAtoms.property(QString("epsilon(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    QString name = restrainedAtoms.property(QString("name(%1)").arg(i)).asA<VariantProperty>().toString();
+                    QString type = restrainedAtoms.property(QString("type(%1)").arg(i)).asA<VariantProperty>().toString();
+
+                    if (Debug)
+                    {
+                        qDebug() << "atom1 " << atom1 << " p1 " << p1 << " wo1 " << wo1 << " wx1 " << wx1 << " wy1 " << wy1 << " sigma " << sigma << " epsilon " << epsilon;
+                    }
+
+                    int vSitedim = 22;
+                    std::vector<double> vSites_params(21);
+
+                    vSites_params[0] = nVSites;
+                    vSites_params[1] = vsIndex;
+                    vSites_params[2] = atom1;
+                    vSites_params[3] = atom2;
+                    vSites_params[4] = atom3;
+                    vSites_params[5] = p1;
+                    vSites_params[6] = p2;
+                    vSites_params[7] = p3;
+                    vSites_params[8] = wo1 ;
+                    vSites_params[9] = wo2 ;
+                    vSites_params[10] = wo3 ;
+                    vSites_params[11] = wx1 ;
+                    vSites_params[12] = wx2 ;
+                    vSites_params[13] = wx3 ;
+                    vSites_params[14] = wy1 ;
+                    vSites_params[15] = wy2 ;
+                    vSites_params[16] = wy3 ;
+                    vSites_params[17] = charge* OpenMM::NmPerAngstrom;
+                    vSites_params[18] = sigma * OpenMM::NmPerAngstrom;
+                    vSites_params[19] = epsilon * (OpenMM::KJPerKcal);
+                    vSites_params[20] = name;
+                    vSites_params[21] = type;
+                    
+
+                    virtualSites_openmm->addParticle(vSites_params);
+                }
+            }
+        }//end of virtual sites flag
 
         /****************************************************RESTRAINTS*******************************************************/
 
