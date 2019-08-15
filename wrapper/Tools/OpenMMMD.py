@@ -40,7 +40,7 @@ from Sire.Config import *
 from Sire.Analysis import *
 from Sire.Tools.DCDFile import *
 from Sire.Tools import Parameter, resolveParameters
-#from Qube import readXmlParameters
+from Qube import readXmlParameters
 import Sire.Stream
 import time
 import numpy as np
@@ -69,6 +69,12 @@ crdfile = Parameter("crdfile", "SYSTEM.crd",
 s3file = Parameter("s3file", "SYSTEM.s3",
                    """Filename for the system state file. The system state after topology and and coordinates
                    were loaded are saved in this file.""")
+
+xmlfile = Parameter("xmlfile", "SYSTEM.xml",
+                    """File name of the xml file containing the system to be simulated.""")
+
+pdbfile = Parameter("pdbfile", "SYSTEM.pdb",
+                    """File name of the pdb file containing the system to be simulated.""")
 
 restart_file = Parameter("restart file", "sim_restart.s3",
                          """Filename of the restart file to use to save progress during the simulation.""")
@@ -179,6 +185,9 @@ hydrogen_mass_repartitioning_factor = Parameter("hydrogen mass repartitioning fa
                                      """If not None and is a number, all hydrogen atoms in the molecule will
                                         have their mass increased by the input factor. The atomic mass of the heavy atom
                                         bonded to the hydrogen is decreased to keep the mass constant.""")
+
+from_QuBe = Parameter("from qube", False,
+                                    """Whether or not to look for virtual sites at a QuBe-parameterised molecule.""")
 
 ## Free energy specific keywords
 morphfile = Parameter("morphfile", "MORPH.pert",
@@ -1639,7 +1648,10 @@ def runFreeNrg():
 
         if (center_solute.val):
             system = centerSolute(system, space)
-
+            
+        if from_QuBe.val:
+            (molecules, space) = assignVirtualSites(pdbfile, xmlfile)
+            
         if use_restraints.val:
             system = setupRestraints(system)
             
