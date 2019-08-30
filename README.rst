@@ -83,7 +83,7 @@ and is the route we strongly recommend. If you have any problems with
 compiling and installing Sire, then please get in touch using the links below.
 
 If you want to install Sire into an existing miniconda or Anaconda
-Python installation, please follow the instructions in [build/INSTALL_INTO_ANACONDA.rst](build/INSTALL_INTO_ANACONDA.rst).
+Python installation, please follow the instructions in `build/INSTALL_INTO_ANACONDA.rst <build/INSTALL_INTO_ANACONDA.rst>`__.
 
 Docker images
 =============
