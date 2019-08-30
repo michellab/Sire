@@ -51,7 +51,7 @@ set( CMAKE_INSTALL_MESSAGE "NEVER" )
 
 # Absolutely can't run cmake in the source directory!
 if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
-  message( FATAL_ERROR "You must run CMake in a different directory to the source!" ) 
+  message( FATAL_ERROR "You must run CMake in a different directory to the source!" )
 endif ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
 
 if ( CMAKE_GENERATOR MATCHES "Xcode" )
@@ -155,12 +155,12 @@ set (CMAKE_SKIP_BUILD_RPATH FALSE)
 
 if (APPLE)
   # make sure that all libraries are named "@rpath/library.dylib". This will allow
-  # the library to be found as long as the executable can substitute @rpath with the 
+  # the library to be found as long as the executable can substitute @rpath with the
   # path to the library
   set (CMAKE_INSTALL_NAME_DIR "@rpath")
 
   # Add the two passed directories to the @rpaths to search for libraries. @executable_path
-  # is the directory containing the executable, so the libraries are included in 
+  # is the directory containing the executable, so the libraries are included in
   # @exeutable_path/../${SIRE_LIBS} and @exeutable_path/../${SIRE_BUNDLED_LIBS}
   set (SIRE_INSTALL_RPATH "@executable_path/../${SIRE_LIBS}:@executable_path/../${SIRE_BUNDLED_LIBS}")
 else()
@@ -172,7 +172,7 @@ set (CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
 # Absolutely can't run cmake in the source directory!
 if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
-  message( FATAL_ERROR "You must run CMake in a different directory to the source!" ) 
+  message( FATAL_ERROR "You must run CMake in a different directory to the source!" )
 endif ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
 
 # Path to the project's extra cmake files
@@ -223,7 +223,7 @@ if ( SIRE_CHECK_COMPILER )
   compare_strings( SAME_C_COMPILER ${SIRE_C_COMPILER} ${CMAKE_C_COMPILER} )
   compare_strings( SAME_CXX_COMPILER ${SIRE_CXX_COMPILER} ${CMAKE_CXX_COMPILER} )
 
-  if ( NOT SAME_C_COMPILER OR NOT SAME_CXX_COMPILER ) 
+  if ( NOT SAME_C_COMPILER OR NOT SAME_CXX_COMPILER )
 
     if ( NOT SAME_C_COMPILER )
       message( STATUS "Different C compilers! ${SIRE_C_COMPILER} vs. ${CMAKE_C_COMPILER}" )
@@ -301,7 +301,7 @@ else()
 endif()
 
 if (APPLE)
-  # Also need to add '-undefined dynamic_lookup' so that we can build 
+  # Also need to add '-undefined dynamic_lookup' so that we can build
   # modules that can be imported by a python that has statically linked libPython
   set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -undefined dynamic_lookup" )
 endif()
@@ -341,11 +341,11 @@ if ( SIRE_PYTHON_ENABLE_BUNDLING )
   if (NOT EXISTS "${BUNDLE_STAGEDIR}")
    file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR})
   endif()
-    
+
   if (NOT EXISTS "${BUNDLE_STAGEDIR}/lib")
     file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/lib)
   endif()
-          
+
   if (NOT EXISTS "${BUNDLE_STAGEDIR}/include")
     file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/include)
   endif()
@@ -366,7 +366,7 @@ if ( SIRE_PYTHON_ENABLE_BUNDLING )
   if ( NOT ${BUNDLE_STAGEDIR} STREQUAL ${CMAKE_INSTALL_PREFIX} )
     # All of the bundled objects are built into the directory ${CMAKE_BINARY_DIR}/bundled
     # This directory must be installed into the sire.app/ directory
-    install( DIRECTORY ${BUNDLE_STAGEDIR} 
+    install( DIRECTORY ${BUNDLE_STAGEDIR}
              DESTINATION ${CMAKE_INSTALL_PREFIX}
              USE_SOURCE_PERMISSIONS )
   endif()
@@ -386,6 +386,12 @@ endif()
 
 if (NOT PYTHON_LIBRARIES)
   set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
+endif()
+
+# Don't link against libPython on macOS! Since the conda-forge Python interpreter
+# statically links libPython you'll end up with duplicate symbols.
+if (APPLE)
+  set( PYTHON_LIBRARIES "" )
 endif()
 
 if (NOT ${SIRE_FOUND_BOOST_PYTHON})
@@ -429,7 +435,7 @@ endif()
 # Add the helper library
 add_subdirectory (Helpers)
 
-# Recurse into the module subdirectories 
+# Recurse into the module subdirectories
 add_subdirectory (Qt)
 add_subdirectory (Error)
 add_subdirectory (Analysis)
@@ -455,7 +461,7 @@ add_subdirectory (python)
 add_subdirectory (Tools)
 
 install( FILES __init__.py
-         DESTINATION ${SIRE_PYTHON}/Sire 
+         DESTINATION ${SIRE_PYTHON}/Sire
        )
 
 # Finally, write the version header file and finish off the component dependencies file

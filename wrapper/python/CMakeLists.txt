@@ -27,6 +27,12 @@ set ( SIREPYTHON_SOURCES
 
     )
 
+# Set the Python library. This may have been unset in the top-level
+# CMakeListst.txt if were running on macOS to avoid linking against libPython.
+if (NOT PYTHON_LIBRARIES)
+  set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
+endif()
+
 # Create the library that holds all of the class wrappers
 add_executable (sire_python ${SIREPYTHON_SOURCES})
 
@@ -57,7 +63,7 @@ if (APPLE)
       COMMAND ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../${SIRE_LIBS}" sire_python
       COMMAND ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../${SIRE_BUNDLED_LIBS}" sire_python )
 endif()
-         
+
 install (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts
          DESTINATION ${SIRE_SHARE}
          PATTERN ".svn" EXCLUDE
@@ -66,7 +72,7 @@ install (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts
 if (NOT WIN32)
   # get the list of all scripts
   file(GLOB EXTRA_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/scripts/*.py")
-    
+
   foreach ( EXTRA_SCRIPT ${EXTRA_SCRIPTS} )
     # get the filename and strip off the .py extension
     get_filename_component(PYSCRIPT ${EXTRA_SCRIPT} NAME_WE)
