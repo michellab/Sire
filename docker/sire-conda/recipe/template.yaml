@@ -35,6 +35,10 @@ requirements:
     -  {{ pin_compatible('tbb') }}
     -  {{ pin_compatible('tbb-devel') }}
 
+test:
+  imports:
+    - Sire
+
 about:
   home: https://github.com/michellab/Sire
   license: GPL-2.0
