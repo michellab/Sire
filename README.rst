@@ -83,7 +83,7 @@ and is the route we strongly recommend. If you have any problems with
 compiling and installing Sire, then please get in touch using the links below.
 
 If you want to install Sire into an existing miniconda or Anaconda
-Python installation, please follow the instructions in `build/INSTALL_INTO_ANACONDA.rst`.
+Python installation, please follow the instructions in [build/INSTALL_INTO_ANACONDA.rst](build/INSTALL_INTO_ANACONDA.rst).
 
 Docker images
 =============
@@ -136,7 +136,7 @@ develop applications using Sire.
 Azure Pipelines -- Autobuild feature
 ---------------------------
 Since Sire is quite large, a build can take quite long and might not be neccessary
-if a commit is only fixing a couple of typos. Simply add the line `***NO_CI***`
+if a commit is only fixing a couple of typos. Simply add the line ``***NO_CI***``
 to your commit message and Azure Pipelines will not invoke an autobuild.
 
 Note that every time you commit to devel, it will trigger a build of Sire,
@@ -144,7 +144,7 @@ full testing, construction of a package and upload to siremol.org (so that it
 can be downloaded as the latest version of sire_devel_latest_linux.run). Please
 think twice before committing directly to devel. You should ideally be working
 in a feature branch, and only commit to devel once you are happy the code
-works on your branch. Use `***NO_CI***` until you are happy that you want to
+works on your branch. Use ``***NO_CI***`` until you are happy that you want to
 trigger a full build, test and deployment. This full pipeline will take
 several hours to complete.
 
