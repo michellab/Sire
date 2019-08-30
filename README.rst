@@ -57,10 +57,6 @@ name, e.g.:
 
     conda install -c conda-forge -c omnia -c michellab/label/dev sire=2019.1.0=py37hf484d3e_13
 
-On OS X you will need to run Python scripts with the ``sire_python``
-interpreter. This is due to an issue with the default Python interpreter
-that is installed via Conda. (This applies to all installation methods.)
-
 There are also many `pre-built binary packages <http://siremol.org/pages/binaries.html>`__,
 which are available for Linux, Mac OS X and Windows, which are quick and easy to install.
 
