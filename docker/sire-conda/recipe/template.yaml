@@ -24,7 +24,7 @@ requirements:
     - openmm
     - pyqt
     - tbb
-    - tbb-devel
+    - tbb_devel
   run:
     -  {{ pin_compatible('python') }}
     -  boost
@@ -33,7 +33,7 @@ requirements:
     -  openmm
     -  pyqt
     -  tbb
-    -  tbb-devel
+    -  tbb_devel
 
 test:
   imports:

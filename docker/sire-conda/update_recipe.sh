@@ -40,9 +40,17 @@ $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
 echo "Updating Python dependencies..."
 for dep in ${DEPS[@]}; do
     ver=$(grep "\- $dep=" $CONDA_ENV | awk -F "=" '{print $2}')
-    sed -i.bak -e "s/$dep/$dep $ver/g" $RECIPE && rm $RECIPE.bak
+    # Handle hyphen which sed considers to be a non-word character.
+    if [ "$dep" = "tbb-devel" ]; then
+        sed -i.bak -e "s/tbb_devel/tbb_devel $ver/g" $RECIPE && rm $RECIPE.bak
+    else
+        sed -i.bak -e "s/$dep\b/$dep $ver/g" $RECIPE && rm $RECIPE.bak
+    fi
     echo "  $dep $ver"
 done
+
+# Now convert tbb_devel to tbb-devel.
+sed -i.bak -e "s/tbb_devel/tbb-devel/g" $RECIPE && rm $RECIPE.bak
 
 # Update the Sire version number.
 echo "Updating Sire version number: '$SIRE_VER'"
