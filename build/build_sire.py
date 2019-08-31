@@ -185,8 +185,8 @@ if __name__ == "__main__":
         if os.path.exists(os.path.join(conda_base, "include", "tbb", "tbb.h")):
             print("TBB is already installed...")
         else:
-            conda_pkgs.append("tbb=2019.7")
-            conda_pkgs.append("tbb-devel=2019.7")
+            conda_pkgs.append("tbb=2019.8")
+            conda_pkgs.append("tbb-devel=2019.8")
 
         # Qt5
         try:
