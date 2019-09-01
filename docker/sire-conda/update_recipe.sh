@@ -44,7 +44,11 @@ for dep in ${DEPS[@]}; do
     if [ "$dep" = "tbb-devel" ]; then
         sed -i.bak -e "s/tbb_devel/tbb_devel $ver/g" $RECIPE && rm $RECIPE.bak
     else
-        sed -i.bak -e "s/$dep\b/$dep $ver/g" $RECIPE && rm $RECIPE.bak
+        if [ "$(uname)" == "Darwin" ]; then
+            sed -i.bak -e "s/[[:<:]]$dep[[:>:]]/$dep $ver/g" $RECIPE && rm $RECIPE.bak
+        else
+            sed -i.bak -e "s/$dep\b/$dep $ver/g" $RECIPE && rm $RECIPE.bak
+        fi
     fi
     echo "  $dep $ver"
 done
