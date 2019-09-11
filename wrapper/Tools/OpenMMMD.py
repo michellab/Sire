@@ -681,10 +681,68 @@ def setupVSites(system):
 
                 vsList.append(atom1, atom2, atom3, p1, p2, p3, wo1, wo2, wo3, wx1, wx2, wx3, wy1, wy2,wy3, charge, sigma, epsilon, name, vstype)
 
-    return(system)
+    return vsList
   
 
-  
+  def assignVirtualSites(pdbfile, xmlfile):
+    import xml.dom.minidom as minidom
+
+    system = System()
+    xml_molecules = readXmlParameters(pdbfile, xmlfile)
+    system = createSystem(xml_molecules)
+    rst = Sire.IO.AmberRst7(system)
+    prm = AmberPrm(system)
+    prm.writeToFile("output.prm7")
+    rst.writeToFile("output.rst7")
+    (molecules, space) = amber.readCrdTop("output.rst7","output.prm7")
+    xmldoc = minidom.parse(xmlfile)
+
+    #Get the virtual sites from the xml file 
+    itemlist_atom = xmldoc.getElementsByTagName('Atom')
+    dicts_atom = []
+    for items in itemlist_atom:
+        d = {}
+        for a in items.attributes.values():
+            d[a.name] = a.value
+        dicts_atom.append(d)
+    dicts_at =  str(dicts_atom).split()
+
+
+    itemlist_VirtualSite = xmldoc.getElementsByTagName('VirtualSite')
+    dicts_virtualsite = []
+    for items in itemlist_VirtualSite:
+        d = {}
+        for a in items.attributes.values():
+            d[a.name] = a.value
+        dicts_virtualsite.append(d)
+    nVirtualSites = itemlist_VirtualSite.length
+
+    v_site_CLJ = []
+    for i in range(0, int(len(dicts_atom))):
+        if dicts_atom[i]['type'][0] == 'v':
+            v_site_CLJ = dicts_atom[i]
+            dicts_virtualsite.append(v_site_CLJ)
+
+    for i in range(0, len(itemlist_VirtualSite)):
+        dicts_virtualsite[i].update(dicts_virtualsite[i+len(itemlist_VirtualSite)])
+        dicts_virtualsite[i].update(dicts_virtualsite[i+2*len(itemlist_VirtualSite)])
+    dict_vs = []
+    for i in range(0, len(itemlist_VirtualSite)):
+        dicts_virtualsite[i]
+        dict_vs.append(dicts_virtualsite[i])
+
+
+    molnums = molecules.molNums()
+    for molnum in molnums:
+        mol = molecules.molecule(molnum)[0].molecule()
+        mol = mol.edit().setProperty("virtual-sites", vsiteListToProperty(dict_vs)).commit()
+       # xml_mol = xml_molecules.molecule(molnum)[0].molecule()
+        system.update(mol)
+
+    molecules = system.molecules()
+
+    return(molecules, space)
+
   
 def setupRestraints(system):
     
