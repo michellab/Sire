@@ -25,7 +25,7 @@ def readXmlParameters(pdbfile, xmlfile):
 
 #     xmlfile = 'pyridine/MOL_extra.xml'
 #     pdbfile = 'pyridine/MOL.pdb'
-    p = PDB2(pdbfile)
+    p = PDB2(pdbfile.val)
     s = p.toSystem()
     molecules = s.molecules()
     system = System()
@@ -34,7 +34,7 @@ def readXmlParameters(pdbfile, xmlfile):
 
 
     import xml.dom.minidom as minidom
-    xmldoc = minidom.parse(xmlfile)
+    xmldoc = minidom.parse(xmlfile.val)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #~~~~~~~~~~~~~~~~~~~~~~ TAG NAME: TYPE ~~~~~~~~~~~~~~~~~~~~~
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
