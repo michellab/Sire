@@ -687,6 +687,7 @@ def setupVSites(system):
   def assignVirtualSites(pdbfile, xmlfile):
     import xml.dom.minidom as minidom
 
+    amber = Amber()
     system = System()
     xml_molecules = readXmlParameters(pdbfile, xmlfile)
     system = createSystem(xml_molecules)
