@@ -1225,45 +1225,6 @@ void OpenMMFrEnergyST::initialise()
 
     }
     
-    
-
-    /************************************************************VIRTUAL SITES********************************************************/
-
-    OpenMM::VirtualSite * virtualSites_openmm = NULL;
-
-    if (VirtualSite_flag == true)
-    {
-
-        virtualSites_openmm = new OpenMM::VirtualSite();
-
-        virtualSites_openmm->addPerParticleParameter("nVSites");
-        virtualSites_openmm->addPerParticleParameter("vsIndex");
-        virtualSites_openmm->addPerParticleParameter("atom1");
-        virtualSites_openmm->addPerParticleParameter("atom2");
-        virtualSites_openmm->addPerParticleParameter("atom3");
-        virtualSites_openmm->addPerParticleParameter("p1");
-        virtualSites_openmm->addPerParticleParameter("p2");
-        virtualSites_openmm->addPerParticleParameter("p3");
-        virtualSites_openmm->addPerParticleParameter("wo1");
-        virtualSites_openmm->addPerParticleParameter("wo2");
-        virtualSites_openmm->addPerParticleParameter("wo3");
-        virtualSites_openmm->addPerParticleParameter("wx1");
-        virtualSites_openmm->addPerParticleParameter("wx2");
-        virtualSites_openmm->addPerParticleParameter("wx3");
-        virtualSites_openmm->addPerParticleParameter("wy1");
-        virtualSites_openmm->addPerParticleParameter("wy2");
-        virtualSites_openmm->addPerParticleParameter("wy3");
-        virtualSites_openmm->addPerParticleParameter("charge");
-        virtualSites_openmm->addPerParticleParameter("sigma");
-        virtualSites_openmm->addPerParticleParameter("epsilon");
-        virtualSites_openmm->addPerParticleParameter("name");
-        virtualSites_openmm->addPerParticleParameter("type");
-
-        system_openmm->addParticle(virtualSites_openmm);
-        
-        if (Debug)
-            qDebug() << "\n\nVtualSite is ON\n\n";
-    }
 
     /*******************************************************BONDED INTERACTIONS******************************************************/
 
@@ -1856,16 +1817,16 @@ void OpenMMFrEnergyST::initialise()
                     double charge = restrainedAtoms.property(QString("charge(%1)").arg(i)).asA<VariantProperty>().toDouble();
                     double sigma = restrainedAtoms.property(QString("sigma(%1)").arg(i)).asA<VariantProperty>().toDouble();
                     double epsilon = restrainedAtoms.property(QString("epsilon(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    QString name = restrainedAtoms.property(QString("name(%1)").arg(i)).asA<VariantProperty>().toString();
-                    QString type = restrainedAtoms.property(QString("type(%1)").arg(i)).asA<VariantProperty>().toString();
+                    //QString name = restrainedAtoms.property(QString("name(%1)").arg(i)).asA<VariantProperty>().toString();
+                    //QString type = restrainedAtoms.property(QString("type(%1)").arg(i)).asA<VariantProperty>().toString();
 
                     if (Debug)
                     {
-                        qDebug() << "atom1 " << atom1 << " p1 " << p1 << " wo1 " << wo1 << " wx1 " << wx1 << " wy1 " << wy1 << " sigma " << sigma << " epsilon " << epsilon;
+                        qDebug() << "atom1 " << atom1 << " p1 " << p1 << " wx1 " << wx1 << " wy1 " << wy1 << " sigma " << sigma << " epsilon " << epsilon;
                     }
 
-                    int vSitedim = 22;
-                    std::vector<double> vSites_params(21);
+                    int vSitedim = 20;
+                    std::vector<double> vSites_params(vSitedim);
 
                     vSites_params[0] = nVSites;
                     vSites_params[1] = vsIndex;
@@ -1887,11 +1848,11 @@ void OpenMMFrEnergyST::initialise()
                     vSites_params[17] = charge* OpenMM::NmPerAngstrom;
                     vSites_params[18] = sigma * OpenMM::NmPerAngstrom;
                     vSites_params[19] = epsilon * (OpenMM::KJPerKcal);
-                    vSites_params[20] = name;
-                    vSites_params[21] = type;
+                    //vSites_params[20] = name;
+                    //vSites_params[21] = type;
                     
 
-                    virtualSites_openmm->addParticle(vSites_params);
+                   // virtualSites_openmm->addParticle(vSites_params);
                 }
             }
         }//end of virtual sites flag
