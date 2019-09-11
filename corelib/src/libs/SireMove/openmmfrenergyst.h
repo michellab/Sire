@@ -261,6 +261,8 @@ namespace SireMove {
         QString platform_type;
 
         bool Restraint_flag;
+        
+        bool VirtualSite_flag;
 
         int CMMremoval_frequency;
 
