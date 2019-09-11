@@ -231,6 +231,62 @@ const QString PerturbationsTemplate::getName()
     return this->name;
 }
 
+// ******************** VIRTUAL SITES ********************
+void PerturbationsTemplate::setInitVSCharge(const QString &vsname, const SireUnits::Dimension::Charge &vscharge)
+{
+  initcharges.insert(vsname, vscharge);
+}
+
+void PerturbationsTemplate::setFinalVSCharge(const QString &vsname, const SireUnits::Dimension::Charge &vscharge)
+{
+  finalcharges.insert(vsname, vscharge);
+}
+
+SireUnits::Dimension::Charge PerturbationsTemplate::getInitVSCharge(const QString &vsname) const
+{
+  if ( not initcharges.contains(vsname) )
+    throw SireError::invalid_key( QObject::tr("No value for key %1").arg(vsname) );
+  else
+    return initcharges.value(vsname);
+}
+
+SireUnits::Dimension::Charge PerturbationsTemplate::getFinalVSCharge(const QString &vsname) const
+{
+  if ( not finalcharges.contains(vsname) )
+    throw SireError::invalid_key( QObject::tr("No value for key %1").arg(vsname) );
+  else
+    return finalcharges.value(vsname);
+}
+
+void PerturbationsTemplate::setInitVSLJ(const QString &vsname, const LJParameter &vslj)
+{
+  initLJs.insert(vsname, vslj);
+}
+
+void PerturbationsTemplate::setFinalVSLJ(const QString &vsname, const LJParameter &vslj)
+{
+  finalLJs.insert(vsname, vslj);
+}
+
+
+LJParameter PerturbationsTemplate::getInitVSLJ(const QString &vsname) const
+{
+  if ( not initLJs.contains(vsname) )
+    throw SireError::invalid_key( QObject::tr("No value for key %1").arg(vsname) );
+  else
+    return initLJs.value(vsname);
+}
+
+LJParameter PerturbationsTemplate::getFinalVSLJ(const QString &vsname) const
+{
+  if ( not finalLJs.contains(vsname) )
+    throw SireError::invalid_key( QObject::tr("No value for key %1").arg(vsname) );
+  else
+    return finalLJs.value(vsname);
+}
+// *****************END OF VIRTUAL SITES *****************
+
+
 void PerturbationsTemplate::setInitCharge(const QString &atomname, const SireUnits::Dimension::Charge &atomcharge)
 {
   initcharges.insert(atomname, atomcharge);
