@@ -240,7 +240,7 @@ QString PeriodicBox::toString() const
 /** Return the number of boxes that are covered by the distance 'del', where
     'invlgth' is the inverse of the length of the box along the dimension of 'del',
     and 'halflgth' is half the length of the box along the dimension of 'del'. */
-inline int PeriodicBox::getWrapVal(double del, double invlgth, double halflgth)
+SIRE_ALWAYS_INLINE int PeriodicBox::getWrapVal(double del, double invlgth, double halflgth)
 {
     if (del <= halflgth and del > -halflgth)  // we are in the same box
         return 0;
@@ -255,7 +255,7 @@ inline int PeriodicBox::getWrapVal(double del, double invlgth, double halflgth)
 
 /** Calculate the delta that needs to be subtracted from the interatomic
     distances so that the molecules are all wrapped into the same periodic box */
-inline Vector PeriodicBox::wrapDelta(const Vector &v0, const Vector &v1) const
+SIRE_ALWAYS_INLINE Vector PeriodicBox::wrapDelta(const Vector &v0, const Vector &v1) const
 {
     return Vector( getWrapVal( v1.x()-v0.x(), invlength.x(), halflength.x())
                                           * boxlength.x(),

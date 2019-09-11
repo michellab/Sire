@@ -89,7 +89,7 @@ protected:
 };
 
 /** Return a hash of this Number */
-inline uint qHash(const Number &number)
+SIRE_ALWAYS_INLINE uint qHash(const Number &number)
 {
     return number.hash();
 }

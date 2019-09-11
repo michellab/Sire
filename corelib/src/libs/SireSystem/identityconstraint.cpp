@@ -619,7 +619,7 @@ Molecules IdentityConstraintPvt::update(const System &system,
         {
             mols.add( system[molnum].molecule() );
         }
-        
+
         return this->update(system, mols, false);
     }
 }
@@ -911,13 +911,18 @@ void SinglePointHelper::recalculateDistances(const Molecules &molecules)
     the closest molecule with the first molecule */
 Molecules SinglePointHelper::applyConstraint() const
 {
+    if (closest_molnum == MolNum(0))
+    {
+        const_cast<SinglePointHelper*>(this)->recalculateDistances();
+    }
+
     if (this->moleculeGroup().isEmpty())
         return Molecules();
         
     else if (this->moleculeGroup().molNumAt(0) == closest_molnum)
         //this constraint is already satisfied
         return Molecules();
-        
+
     else
     {
         //we need to swap the coordinates of the first molecule
@@ -2573,7 +2578,7 @@ void IdentityConstraint::setSystem(const System &system)
     }
 
     changed_mols = d->update(system, true);
-    
+
     Constraint::setSatisfied(system, changed_mols.isEmpty());
 }
 

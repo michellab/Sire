@@ -40,6 +40,23 @@ need to add them when updating, e.g., for the development package::
 
     conda update -c conda-forge -c omnia -c michellab/label/dev sire
 
+Note that because of Conda's peculiar scoring metrics you might not end up with
+the latest version of Sire when performing a fresh install or update.
+(It tries to minimise various things, such as the number of dependencies
+installed, which is difficult when your package depends on many other packages.)
+To see what packages are available, run:
+
+.. code-block:: bash
+
+    conda search -c michellab/label/dev sire
+
+You can then install the latest version by explicitly stating the full package
+name, e.g.:
+
+.. code-block:: bash
+
+    conda install -c conda-forge -c omnia -c michellab/label/dev sire=2019.1.0=py37hf484d3e_13
+
 There are also many `pre-built binary packages <http://siremol.org/pages/binaries.html>`__,
 which are available for Linux, Mac OS X and Windows, which are quick and easy to install.
 
@@ -66,7 +83,7 @@ and is the route we strongly recommend. If you have any problems with
 compiling and installing Sire, then please get in touch using the links below.
 
 If you want to install Sire into an existing miniconda or Anaconda
-Python installation, please follow the instructions in `build/INSTALL_INTO_ANACONDA.rst`.
+Python installation, please follow the instructions in `build/INSTALL_INTO_ANACONDA.rst <build/INSTALL_INTO_ANACONDA.rst>`__.
 
 Docker images
 =============
@@ -119,7 +136,7 @@ develop applications using Sire.
 Azure Pipelines -- Autobuild feature
 ---------------------------
 Since Sire is quite large, a build can take quite long and might not be neccessary
-if a commit is only fixing a couple of typos. Simply add the line `***NO_CI***`
+if a commit is only fixing a couple of typos. Simply add the line ``***NO_CI***``
 to your commit message and Azure Pipelines will not invoke an autobuild.
 
 Note that every time you commit to devel, it will trigger a build of Sire,
@@ -127,8 +144,8 @@ full testing, construction of a package and upload to siremol.org (so that it
 can be downloaded as the latest version of sire_devel_latest_linux.run). Please
 think twice before committing directly to devel. You should ideally be working
 in a feature branch, and only commit to devel once you are happy the code
-works on your branch. Use `***NO_CI***` until you are happy that you want to
+works on your branch. Use ``***NO_CI***`` until you are happy that you want to
 trigger a full build, test and deployment. This full pipeline will take
-about 30 minutes to complete.
+several hours to complete.
 
 Have fun :-)

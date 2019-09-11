@@ -143,7 +143,7 @@ private:
 };
 
 /** Return a hash for an ExpressionBase */
-inline uint qHash(const ExpressionBase &ex)
+SIRE_ALWAYS_INLINE uint qHash(const ExpressionBase &ex)
 {
     return ex.hash();
 }

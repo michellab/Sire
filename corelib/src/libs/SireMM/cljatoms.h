@@ -329,50 +329,50 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the vector of the vectorised x coordinates */
-inline const QVector<MultiFloat>& CLJAtoms::x() const
+SIRE_ALWAYS_INLINE const QVector<MultiFloat>& CLJAtoms::x() const
 {
     return _x;
 }
 
 /** Return the vector of the vectorised y coordinates */
-inline const QVector<MultiFloat>& CLJAtoms::y() const
+SIRE_ALWAYS_INLINE const QVector<MultiFloat>& CLJAtoms::y() const
 {
     return _y;
 }
 
 /** Return the vector of the vectorised z coordinates */
-inline const QVector<MultiFloat>& CLJAtoms::z() const
+SIRE_ALWAYS_INLINE const QVector<MultiFloat>& CLJAtoms::z() const
 {
     return _z;
 }
 
 /** Return the vector of the vectorised reduced charges
     (square root of charge divided by 4 pi epsilon 0) */
-inline const QVector<MultiFloat>& CLJAtoms::q() const
+SIRE_ALWAYS_INLINE const QVector<MultiFloat>& CLJAtoms::q() const
 {
     return _q;
 }
 
 /** Return the vector of the vectorised reduced (square root) sigma parameters */
-inline const QVector<MultiFloat>& CLJAtoms::sigma() const
+SIRE_ALWAYS_INLINE const QVector<MultiFloat>& CLJAtoms::sigma() const
 {
     return _sig;
 }
 
 /** Return the vector of the vectorised reduced (square root) epsilon parameters */
-inline const QVector<MultiFloat>& CLJAtoms::epsilon() const
+SIRE_ALWAYS_INLINE const QVector<MultiFloat>& CLJAtoms::epsilon() const
 {
     return _eps;
 }
 
 /** Return the vector of vectorised atom IDs */
-inline const QVector<MultiInt>& CLJAtoms::ID() const
+SIRE_ALWAYS_INLINE const QVector<MultiInt>& CLJAtoms::ID() const
 {
     return _id;
 }
 
 /** Return whether or not the ith atom is a dummy atom (has an ID of 0) */
-inline bool CLJAtoms::isDummy(int i) const
+SIRE_ALWAYS_INLINE bool CLJAtoms::isDummy(int i) const
 {
     int idx = i / MultiFloat::count();
     int sub_idx = i % MultiFloat::count();
@@ -383,7 +383,7 @@ inline bool CLJAtoms::isDummy(int i) const
 /** Return whether or not this set of atoms is padded
     (has dummy atoms at the end of the array to pad out
      the MultiFloat/MultiInt vectors) */
-inline bool CLJAtoms::isPadded() const
+SIRE_ALWAYS_INLINE bool CLJAtoms::isPadded() const
 {
     if (_id.isEmpty())
         return false;
@@ -392,7 +392,7 @@ inline bool CLJAtoms::isPadded() const
 }
 
 /** Return the number of padded elements on the end of this set of atoms */
-inline int CLJAtoms::nPadded() const
+SIRE_ALWAYS_INLINE int CLJAtoms::nPadded() const
 {
     if (_id.isEmpty())
         return 0;

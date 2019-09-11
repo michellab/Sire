@@ -129,13 +129,13 @@ QString TwoAtomFunction::toString() const
 ////// Implementation of detail::IDPair
 //////
 
-inline QDataStream& operator<<(QDataStream &ds, const IDPair &idpair)
+SIRE_ALWAYS_INLINE QDataStream& operator<<(QDataStream &ds, const IDPair &idpair)
 {
     ds << idpair.atom0 << idpair.atom1;
     return ds;
 }
 
-inline QDataStream& operator>>(QDataStream &ds, IDPair &idpair)
+SIRE_ALWAYS_INLINE QDataStream& operator>>(QDataStream &ds, IDPair &idpair)
 {
     ds >> idpair.atom0 >> idpair.atom1;
     return ds;

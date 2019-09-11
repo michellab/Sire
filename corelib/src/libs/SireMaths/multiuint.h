@@ -254,7 +254,7 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Constructor. This creates a MultiInt with an undefined initial state */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt::MultiUInt()
 {
     assertAligned();
@@ -279,7 +279,7 @@ MultiUInt::MultiUInt()
 }
 
 /** Construct a MultiFloat with all values equal to 'val' */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt::MultiUInt(quint32 uval)
 {
     assertAligned();
@@ -306,7 +306,7 @@ MultiUInt::MultiUInt(quint32 uval)
 }
 
 /** Copy constructor */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt::MultiUInt(const MultiUInt &other)
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -330,13 +330,13 @@ MultiUInt::MultiUInt(const MultiUInt &other)
 
 /** Return the ith value in the MultiUInt - note that this is
     a quick function that does no bounds checking */
-inline quint32 MultiUInt::operator[](int i) const
+SIRE_ALWAYS_INLINE quint32 MultiUInt::operator[](int i) const
 {
     return *(reinterpret_cast<const quint32*>(&(v.a[i])));
 }
 
 /** Assignment operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt& MultiUInt::operator=(const MultiUInt &other)
 {
     if (this != &other)
@@ -364,7 +364,7 @@ MultiUInt& MultiUInt::operator=(const MultiUInt &other)
 }
 
 /** Assignment operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt& MultiUInt::operator=(quint32 uvalue)
 {
     qint32 value = *(reinterpret_cast<qint32*>(&uvalue));
@@ -391,13 +391,13 @@ MultiUInt& MultiUInt::operator=(quint32 uvalue)
 }
 
 /** Destructor */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt::~MultiUInt()
 {}
 
 /** Comparison operator. This will return a MultiFloat with elements
     set to zero for each float that is not equal */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::compareEqual(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -424,7 +424,7 @@ MultiUInt MultiUInt::compareEqual(const MultiUInt &other) const
 }
 
 /** Not equals comparison operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::compareNotEqual(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -460,7 +460,7 @@ MultiUInt MultiUInt::compareNotEqual(const MultiUInt &other) const
 }
 
 /** Less than comparison operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::compareLess(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -505,7 +505,7 @@ MultiUInt MultiUInt::compareLess(const MultiUInt &other) const
 
 /** Reintepret cast this MultiInt to a MultiFloat. This is only useful if you
     are going to use this to perform bitwise comparisons */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiUInt::reinterpretCastToFloat() const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -532,7 +532,7 @@ MultiFloat MultiUInt::reinterpretCastToFloat() const
 }
 
 /** Greater than comparison operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::compareGreater(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -579,7 +579,7 @@ MultiUInt MultiUInt::compareGreater(const MultiUInt &other) const
 }
 
 /** Less than or equal comparison */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::compareLessEqual(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -615,7 +615,7 @@ MultiUInt MultiUInt::compareLessEqual(const MultiUInt &other) const
 }
 
 /** Greater than or equal comparison */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::compareGreaterEqual(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -651,21 +651,21 @@ MultiUInt MultiUInt::compareGreaterEqual(const MultiUInt &other) const
 }
 
 /** Return the number of values in the vector */
-inline
+SIRE_ALWAYS_INLINE
 int MultiUInt::size()
 {
     return MULTIFLOAT_SIZE;
 }
 
 /** Return the number of values in the vector */
-inline
+SIRE_ALWAYS_INLINE
 int MultiUInt::count()
 {
     return MULTIFLOAT_SIZE;
 }
 
 /** Addition operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::operator+(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -690,7 +690,7 @@ MultiUInt MultiUInt::operator+(const MultiUInt &other) const
 }
 
 /** Subtraction operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::operator-(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -715,7 +715,7 @@ MultiUInt MultiUInt::operator-(const MultiUInt &other) const
 }
 
 /** In-place addition operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt& MultiUInt::operator+=(const MultiUInt &other)
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -740,7 +740,7 @@ MultiUInt& MultiUInt::operator+=(const MultiUInt &other)
 }
 
 /** In-place subtraction operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt& MultiUInt::operator-=(const MultiUInt &other)
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -765,7 +765,7 @@ MultiUInt& MultiUInt::operator-=(const MultiUInt &other)
 }
 
 /** Bitwise logical "and" comparison */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::logicalAnd(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -800,7 +800,7 @@ MultiUInt MultiUInt::logicalAnd(const MultiUInt &other) const
 }
 
 /** Bitwise logical "and" comparison */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::logicalAnd(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -837,7 +837,7 @@ MultiFloat MultiFloat::logicalAnd(const MultiUInt &other) const
 }
 
 /** Bitwise logical "and not" */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::logicalAndNot(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -872,7 +872,7 @@ MultiUInt MultiUInt::logicalAndNot(const MultiUInt &other) const
 }
 
 /** Bitwise logical "and not" (this is *this and (not other)) */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::logicalAndNot(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -910,7 +910,7 @@ MultiFloat MultiFloat::logicalAndNot(const MultiUInt &other) const
 }
 
 /** Bitwise logical or operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::logicalOr(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -945,7 +945,7 @@ MultiUInt MultiUInt::logicalOr(const MultiUInt &other) const
 }
 
 /** Bitwise logical xor */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::logicalXor(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -980,7 +980,7 @@ MultiUInt MultiUInt::logicalXor(const MultiUInt &other) const
 }
 
 /** Logical not operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::logicalNot() const
 {
     MultiUInt ret;
@@ -1000,35 +1000,35 @@ MultiUInt MultiUInt::logicalNot() const
 }
 
 /** Logical not operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::operator!() const
 {
     return this->logicalNot();
 }
 
 /** Logical and operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::operator&(const MultiUInt &other) const
 {
     return this->logicalAnd(other);
 }
 
 /** Logical or operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::operator|(const MultiUInt &other) const
 {
     return this->logicalOr(other);
 }
 
 /** Logical xor operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::operator^(const MultiUInt &other) const
 {
     return this->logicalXor(other);
 }
 
 /** In place logical and */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt& MultiUInt::operator&=(const MultiUInt &other)
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -1060,7 +1060,7 @@ MultiUInt& MultiUInt::operator&=(const MultiUInt &other)
 }
 
 /** In place logical and */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat& MultiFloat::operator&=(const MultiUInt &other)
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -1092,7 +1092,7 @@ MultiFloat& MultiFloat::operator&=(const MultiUInt &other)
 }
 
 /** In-place logical or */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt& MultiUInt::operator|=(const MultiUInt &other)
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -1124,7 +1124,7 @@ MultiUInt& MultiUInt::operator|=(const MultiUInt &other)
 }
 
 /** In-place logical xor */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt& MultiUInt::operator^=(const MultiUInt &other)
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -1156,7 +1156,7 @@ MultiUInt& MultiUInt::operator^=(const MultiUInt &other)
 }
 
 /** Return the maximum vector between this and other */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::max(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -1190,7 +1190,7 @@ MultiUInt MultiUInt::max(const MultiUInt &other) const
 }
 
 /** Return the minimum vector between this and other */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::min(const MultiUInt &other) const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -1225,7 +1225,7 @@ MultiUInt MultiUInt::min(const MultiUInt &other) const
 
 /** Rotate this vector. This moves each element one space to the left, moving the
     first element to the last element */
-inline
+SIRE_ALWAYS_INLINE
 MultiUInt MultiUInt::rotate() const
 {
     #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
@@ -1259,7 +1259,7 @@ MultiUInt MultiUInt::rotate() const
 }
 
 /** Return the sum of all elements of this vector */
-inline
+SIRE_ALWAYS_INLINE
 quint32 MultiUInt::sum() const
 {
     quint32 sum = 0;
@@ -1271,7 +1271,7 @@ quint32 MultiUInt::sum() const
 }
 
 /** Return the sum of all elements of this vector, using doubles for the sum */
-inline
+SIRE_ALWAYS_INLINE
 quint64 MultiUInt::doubleSum() const
 {
     quint64 sum = 0;

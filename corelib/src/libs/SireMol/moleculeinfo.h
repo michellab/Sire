@@ -306,14 +306,14 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Allow automatic casting to a MoleculeInfoData object */
-inline MoleculeInfo::operator const MoleculeInfoData&() const
+SIRE_ALWAYS_INLINE MoleculeInfo::operator const MoleculeInfoData&() const
 {
     return *d;
 }
 
 /** Retrieve a reference to the underlying data object - this is used for 
     compaibility with old code. It should not be used in new code */
-inline const MoleculeInfoData& MoleculeInfo::data() const
+SIRE_ALWAYS_INLINE const MoleculeInfoData& MoleculeInfo::data() const
 {
     return *d;
 }

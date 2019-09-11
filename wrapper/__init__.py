@@ -287,7 +287,7 @@ def _uploadUsageData():
         data["uname"] = "%s | %s | %s | %s" % (u.system,u.release,u.machine,u.processor)
 
         # get information about the version of Sire
-        data["version"] = Sire.__version__
+        data["version"] = __version__
         data["repository"] = Config.sire_repository_url
         data["repository_version"] = Config.sire_repository_version
 
@@ -296,6 +296,11 @@ def _uploadUsageData():
         # get the executable name, but make sure we don't get the path
         # (as it may contain sensitive user information)
         data["executable"] = _os.path.basename( _sys.executable )
+
+        # Was Sire was imported as part of BioSimSpace?
+        # If so, then rename the executable.
+        if "BioSimSpace" in _sys.modules:
+            data["executable"] = "BioSimSpace"
 
         import json as _json
 

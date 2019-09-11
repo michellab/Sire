@@ -240,7 +240,7 @@ double Sphere::intersectionVolume(const Sphere &other) const
     }
 }
 
-inline double my_arctan(double val)
+SIRE_ALWAYS_INLINE double my_arctan(double val)
 {
     const double result = std::atan(val);
     

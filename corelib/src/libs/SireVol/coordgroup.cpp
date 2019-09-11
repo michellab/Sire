@@ -1711,7 +1711,7 @@ QVector<Vector> CoordGroupBase::toVector() const
     }
 }
 
-static inline void assertSame(quint32 sz, quint32 other)
+static SIRE_ALWAYS_INLINE void assertSame(quint32 sz, quint32 other)
 {
     if (sz != other)
         throw SireError::incompatible_error( QObject::tr(

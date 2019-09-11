@@ -2,12 +2,12 @@
 
 # Set the source and Conda build directory on macOS.
 SRC_DIR=$(pwd)
-CONDA_DIR=$SRC_DIR/docker/sire-conda-devel/recipe
+CONDA_DIR=$SRC_DIR/docker/sire-conda/recipe
 
 # Linux runs in a docker container from $HOME.
 if [ ! -d $CONDA_DIR ]; then
     SRC_DIR=$HOME/Sire
-    CONDA_DIR=$HOME/Sire/docker/sire-conda-devel/recipe
+    CONDA_DIR=$HOME/Sire/docker/sire-conda/recipe
 fi
 
 # Store the name of the recipe and template YAML files.
@@ -27,7 +27,10 @@ DEPS=(boost gsl netcdf4 openmm pyqt tbb tbb-devel)
 CONDA_ENV=.conda_env
 
 # Get the Sire version.
-SIRE_VER=$(git --git-dir=$SRC_DIR/.git --work-tree=$SRC_DIR describe --tags | tr - _)
+SIRE_VER=$(git --git-dir=$SRC_DIR/.git --work-tree=$SRC_DIR describe --tags --abbrev=0)
+
+# Get the build number. (Number of commits since last tag.)
+SIRE_BUILD=$(git --git-dir=$SRC_DIR/.git --work-tree=$SRC_DIR log --oneline $SIRE_VER.. | wc -l)
 
 # Store the conda environment.
 $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
@@ -37,13 +40,29 @@ $HOME/sire.app/bin/conda env export -n base > $CONDA_ENV
 echo "Updating Python dependencies..."
 for dep in ${DEPS[@]}; do
     ver=$(grep "\- $dep=" $CONDA_ENV | awk -F "=" '{print $2}')
-    sed -i.bak -e "1 s/$dep/$dep $ver/; t" -e "1,// s//$dep $ver/" $RECIPE && rm $RECIPE.bak
+    # Handle hyphen which sed considers to be a non-word character.
+    if [ "$dep" = "tbb-devel" ]; then
+        sed -i.bak -e "s/tbb_devel/tbb_devel $ver/g" $RECIPE && rm $RECIPE.bak
+    else
+        if [ "$(uname)" == "Darwin" ]; then
+            sed -i.bak -e "s/[[:<:]]$dep[[:>:]]/$dep $ver/g" $RECIPE && rm $RECIPE.bak
+        else
+            sed -i.bak -e "s/$dep\b/$dep $ver/g" $RECIPE && rm $RECIPE.bak
+        fi
+    fi
     echo "  $dep $ver"
 done
+
+# Now convert tbb_devel to tbb-devel.
+sed -i.bak -e "s/tbb_devel/tbb-devel/g" $RECIPE && rm $RECIPE.bak
 
 # Update the Sire version number.
 echo "Updating Sire version number: '$SIRE_VER'"
 sed -i.bak -e "s/VERSION/$SIRE_VER/" $RECIPE && rm $RECIPE.bak
+
+# Update the build number.
+echo "Updating Sire build number: '$SIRE_BUILD'"
+sed -i.bak -e "s/BUILD/$SIRE_BUILD/" $RECIPE && rm $RECIPE.bak
 
 # Remove the Conda environment file.
 rm -f .conda_env

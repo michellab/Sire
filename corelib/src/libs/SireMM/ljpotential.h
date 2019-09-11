@@ -957,7 +957,7 @@ public:
 /** Calculate the LJ energy between the passed pair
     of molecules and add these energies onto 'energy'. This uses
     the passed workspace to perform the calculation */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateEnergy(const InterLJPotential::Molecule &mol0,
                                   const InterLJPotential::Molecule &mol1,
                                   InterLJPotential::Energy &energy,
@@ -971,7 +971,7 @@ InterLJPotential::calculateEnergy(const InterLJPotential::Molecule &mol0,
     }
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateEnergy(const InterLJPotential::Molecule &mol0,
                                   const InterLJPotential::Molecule &mol1,
                                   MolEnergyTable &energies0,
@@ -986,7 +986,7 @@ InterLJPotential::calculateEnergy(const InterLJPotential::Molecule &mol0,
     of molecules and add the forces on 'mol0' onto 'forces'. This uses
     the passed workspace to perform the calculation. The forces
     are scaled by the optional 'scaled_forces' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateLJForce(const InterLJPotential::Molecule &mol0, 
                                    const InterLJPotential::Molecule &mol1,
                                    MolForceTable &forces0, 
@@ -1007,7 +1007,7 @@ InterLJPotential::calculateLJForce(const InterLJPotential::Molecule &mol0,
     of molecules and add the forces on 'mol0' onto 'forces'. This uses
     the passed workspace to perform the calculation. The forces
     are scaled by the optional 'scaled_forces' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateForce(const InterLJPotential::Molecule &mol0, 
                                  const InterLJPotential::Molecule &mol1,
                                  MolForceTable &forces0, 
@@ -1021,7 +1021,7 @@ InterLJPotential::calculateForce(const InterLJPotential::Molecule &mol0,
     passed pair of molecules, and add the forces on 'mol0' onto 'forces0'.
     This uses the passed workspace to perform the calculation. The forces
     are scaled by the optional 'scaled_forces' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateForce(const InterLJPotential::Molecule &mol0,
                                  const InterLJPotential::Molecule &mol1,
                                  MolForceTable &forces0,
@@ -1037,7 +1037,7 @@ InterLJPotential::calculateForce(const InterLJPotential::Molecule &mol0,
         throwMissingForceComponent(symbol, components);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateLJField(const InterLJPotential::Molecule &mol0, 
                                    const InterLJPotential::Molecule &mol1,
                                    const LJProbe &probe,
@@ -1055,7 +1055,7 @@ InterLJPotential::calculateLJField(const InterLJPotential::Molecule &mol0,
     }
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateField(const InterLJPotential::Molecule &mol0, 
                                  const InterLJPotential::Molecule &mol1,
                                  const LJProbe &probe,
@@ -1066,7 +1066,7 @@ InterLJPotential::calculateField(const InterLJPotential::Molecule &mol0,
     this->calculateLJField(mol0, mol1, probe, fields0, workspace, scale_field);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateField(const InterLJPotential::Molecule &mol0,
                                  const InterLJPotential::Molecule &mol1,
                                  const LJProbe &probe,
@@ -1083,7 +1083,7 @@ InterLJPotential::calculateField(const InterLJPotential::Molecule &mol0,
         throwMissingFieldComponent(symbol, components);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateLJField(const InterLJPotential::Molecule &mol, 
                                    const LJProbe &probe,
                                    GridFieldTable &fields, 
@@ -1100,7 +1100,7 @@ InterLJPotential::calculateLJField(const InterLJPotential::Molecule &mol,
     }
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateField(const InterLJPotential::Molecule &mol, 
                                  const LJProbe &probe,
                                  GridFieldTable &fields0, 
@@ -1110,7 +1110,7 @@ InterLJPotential::calculateField(const InterLJPotential::Molecule &mol,
     this->calculateLJField(mol, probe, fields0, workspace, scale_field);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateField(const InterLJPotential::Molecule &mol,
                                  const LJProbe &probe,
                                  GridFieldTable &fields0,
@@ -1126,7 +1126,7 @@ InterLJPotential::calculateField(const InterLJPotential::Molecule &mol,
         throwMissingFieldComponent(symbol, components);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateLJPotential(
                                     const InterLJPotential::Molecule &mol0, 
                                     const InterLJPotential::Molecule &mol1,
@@ -1145,7 +1145,7 @@ InterLJPotential::calculateLJPotential(
     }
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculatePotential(
                                    const InterLJPotential::Molecule &mol0, 
                                    const InterLJPotential::Molecule &mol1,
@@ -1157,7 +1157,7 @@ InterLJPotential::calculatePotential(
     this->calculateLJPotential(mol0, mol1, probe, pots0, workspace, scale_potential);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculatePotential(
                                 const InterLJPotential::Molecule &mol0,
                                 const InterLJPotential::Molecule &mol1,
@@ -1175,7 +1175,7 @@ InterLJPotential::calculatePotential(
         throwMissingFieldComponent(symbol, components);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculateLJPotential(
                                    const InterLJPotential::Molecule &mol, 
                                    const LJProbe &probe,
@@ -1193,7 +1193,7 @@ InterLJPotential::calculateLJPotential(
     }
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculatePotential(
                                 const InterLJPotential::Molecule &mol, 
                                 const LJProbe &probe,
@@ -1204,7 +1204,7 @@ InterLJPotential::calculatePotential(
     this->calculateLJPotential(mol, probe, pots, workspace, scale_potential);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterLJPotential::calculatePotential(
                                 const InterLJPotential::Molecule &mol,
                                 const LJProbe &probe,
@@ -1228,7 +1228,7 @@ InterLJPotential::calculatePotential(
 /** Calculate the forces represented by the symbol 'symbol' between the 
     atoms in the molecule 'mol' and add these forces onto 'forces'. This uses
     the passed workspace to perform the calculation */
-inline void 
+SIRE_ALWAYS_INLINE void 
 IntraLJPotential::calculateForce(const IntraLJPotential::Molecule &mol, 
                                  MolForceTable &forces,
                                  const Symbol &symbol,
@@ -1250,7 +1250,7 @@ IntraLJPotential::calculateForce(const IntraLJPotential::Molecule &mol,
     
     \throw SireError::incompatible_error
 */
-inline void
+SIRE_ALWAYS_INLINE void
 IntraLJPotential::calculateForce(const IntraLJPotential::Molecule &mol,
                                  const IntraLJPotential::Molecule &rest_of_mol,
                                  MolForceTable &forces,

@@ -196,7 +196,7 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Copy assignment operator */
-inline Version& Version::operator=(const Version &other)
+SIRE_ALWAYS_INLINE Version& Version::operator=(const Version &other)
 {
     if (this != &other)
     {
@@ -208,13 +208,13 @@ inline Version& Version::operator=(const Version &other)
 }
 
 /** Comparison operator */
-inline bool Version::operator==(const Version &other) const
+SIRE_ALWAYS_INLINE bool Version::operator==(const Version &other) const
 {
     return maj == other.maj and min == other.min;
 }
 
 /** Comparison operator */
-inline bool Version::operator!=(const Version &other) const
+SIRE_ALWAYS_INLINE bool Version::operator!=(const Version &other) const
 {
     return maj != other.maj or min != other.min;
 }
@@ -222,7 +222,7 @@ inline bool Version::operator!=(const Version &other) const
 /** Return the major version number. We cannot call this 
     .major() as this name is reserved on linux in sys/sysmacros.h
     (this is a glibc bug) */
-inline quint64 Version::majorVersion() const
+SIRE_ALWAYS_INLINE quint64 Version::majorVersion() const
 {
     return maj;
 }
@@ -230,13 +230,13 @@ inline quint64 Version::majorVersion() const
 /** Return the minor version number. We cannot call this
     .minor() as this name is reserved on linux in sys/sysmacros.h
     (this is a glibc bug) */
-inline quint64 Version::minorVersion() const
+SIRE_ALWAYS_INLINE quint64 Version::minorVersion() const
 {
     return min;
 }
 
 /** Copy assingment operator */
-inline MajorMinorVersion& MajorMinorVersion::operator=(const MajorMinorVersion &other)
+SIRE_ALWAYS_INLINE MajorMinorVersion& MajorMinorVersion::operator=(const MajorMinorVersion &other)
 {
     if (this != &other)
     {
@@ -248,31 +248,31 @@ inline MajorMinorVersion& MajorMinorVersion::operator=(const MajorMinorVersion &
 }
 
 /** Comparision operator */
-inline bool MajorMinorVersion::operator==(const MajorMinorVersion &other) const
+SIRE_ALWAYS_INLINE bool MajorMinorVersion::operator==(const MajorMinorVersion &other) const
 {
     return v == other.v;
 }
 
 /** Comparison operator */
-inline bool MajorMinorVersion::operator!=(const MajorMinorVersion &other) const
+SIRE_ALWAYS_INLINE bool MajorMinorVersion::operator!=(const MajorMinorVersion &other) const
 {
     return v != other.v;
 }
 
 /** Return the actual version */
-inline const Version& MajorMinorVersion::version() const
+SIRE_ALWAYS_INLINE const Version& MajorMinorVersion::version() const
 {
     return v;
 }
 
 /** Return the major version number */
-inline quint64 MajorMinorVersion::majorVersion() const
+SIRE_ALWAYS_INLINE quint64 MajorMinorVersion::majorVersion() const
 {
     return v.majorVersion();
 }
 
 /** Return the minor version number */
-inline quint64 MajorMinorVersion::minorVersion() const
+SIRE_ALWAYS_INLINE quint64 MajorMinorVersion::minorVersion() const
 {
     return v.minorVersion();
 }

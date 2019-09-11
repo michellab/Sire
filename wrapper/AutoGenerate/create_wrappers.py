@@ -1,6 +1,6 @@
 ####################################################
 #
-# This script uses Py++ to create the Python 
+# This script uses Py++ to create the Python
 # wrappers for Sire. This script should be run
 # in a directory that contains the results
 # of scanheaders.py
@@ -58,7 +58,7 @@ def _generate_bases(self, base_creators):
 
     bases = []
     assert isinstance( self.declaration, declarations.class_t )
-    
+
     for base_desc in self.declaration.bases:
         assert isinstance( base_desc, declarations.hierarchy_info_t )
         if base_desc.access != declarations.ACCESS_TYPES.PUBLIC:
@@ -77,12 +77,12 @@ def _generate_bases(self, base_creators):
 
     if not bases:
         return None
-    
+
     bases_identifier = algorithm.create_identifier( self, '::boost::python::bases' )
-    
+
     return declarations.templates.join( bases_identifier, bases )
 
-class_t._generate_bases = _generate_bases    
+class_t._generate_bases = _generate_bases
 
 ####
 #### Override the free_function functions so that we fix a compile bug using xlC on AIX
@@ -157,16 +157,16 @@ def has_datastream_operators(mb, c):
 def has_function(c, funcname):
    """Recursively move through this class and its bases to find
       if it has a function called 'funcname'"""
-   
+
    try:
        c.decl(funcname)
        return True
    except:
-       
+
        for base in c.bases:
            if has_function(base.related_class, funcname):
                return True
-       
+
        return False
 
 def find_class(mb, classname):
@@ -199,7 +199,7 @@ def export_function(mb, function, includes):
    try:
        for f in mb.free_functions(name):
            demangled = f.demangled
-       
+
            if demangled:
                if demangled.find(root) != -1:
                    f.include()
@@ -208,7 +208,7 @@ def export_function(mb, function, includes):
                        f.add_declaration_code("#include %s" % include)
    except:
        for f in mb.free_functions(name):
-           # demangled doesn't work with CastXML      
+           # demangled doesn't work with CastXML
            if root.find(str(f.parent.name)) != -1:
                f.include()
 
@@ -255,20 +255,20 @@ has_copy_function = {}
 
 def export_class(mb, classname, aliases, includes, special_code, auto_str_function=True):
    """Do all the work necessary to allow the class called 'classname'
-      to be exported, using the supplied aliases, and using the 
+      to be exported, using the supplied aliases, and using the
       supplied special code, and adding the header files in 'includes'
       to the generated C++"""
 
-   #find the class in the declarations   
+   #find the class in the declarations
    c = find_class(mb, classname)
-   
+
    #include the class in the wrapper
    c.include()
 
    #write out all function signatures
    c.calldefs().create_with_signature = True
    c.always_expose_using_scope = True
-   
+
    #add the extra include files for this class
    for include_file in includes:
        c.add_declaration_code("#include %s" % include_file)
@@ -344,7 +344,7 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
       #if there is a copy-constructor then ensure that
       #it is exposed!
       decls = c.decls()
-      
+
       made_copy_function = False
 
       for decl in decls:
@@ -356,7 +356,7 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
                   #create a __copy__ function
                   class_name = re.sub(r"\s\[class\]","",str(c))
                   class_name = re.sub(r"\s\[struct\]","",class_name)
-                  
+
                   if not (class_name in has_copy_function):
                       has_copy_function[class_name] = True
 
@@ -365,15 +365,15 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
                       c.add_declaration_code( \
                            "%s __copy__(const %s &other){ return %s(other); }" \
                               % (class_name, class_name, class_name) )
-                       
+
                       c.add_registration_code( "def( \"__copy__\", &__copy__)" )
-                  
+
                       c.add_registration_code( "def( \"__deepcopy__\", &__copy__)" )
                       c.add_registration_code( "def( \"clone\", &__copy__)" )
 
                       #only do this once for the class
                       break
-                  
+
           except AttributeError:
               pass
 
@@ -392,32 +392,32 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
        c.add_registration_code(
             """def( \"__rrshift__\", &__rrshift__QDataStream< %s >,
                     bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() )""" % c.decl_string )
-           
+
 
    #is there a "toString" function for this class?
    if auto_str_function:
        if has_function(c, "toString"):
-           #there is a .toString() member function - we can thus use the 
+           #there is a .toString() member function - we can thus use the
            #templer __str__ function provided in the Helpers directory
            c.add_declaration_code( "#include \"Helpers/str.hpp\"" )
-       
+
            c.add_registration_code( "def( \"__str__\", &__str__< %s > )" % c.decl_string )
-           c.add_registration_code( "def( \"__repr__\", &__str__< %s > )" % c.decl_string )   
+           c.add_registration_code( "def( \"__repr__\", &__str__< %s > )" % c.decl_string )
 
        else:
            #there is no .toString() function
            # - instead create a new __str__ that just returns a pretty form
            #   of the name of the class
            name = str(c.decl_string)
-       
+
            if name.startswith("::"):
                name = name[2:]
-       
+
            c.add_declaration_code( "const char* pvt_get_name(const %s&){ return \"%s\";}" % (name,name) )
-       
+
            c.add_registration_code("def( \"__str__\", &pvt_get_name)")
            c.add_registration_code("def( \"__repr__\", &pvt_get_name)")
-           
+
    #is there a "count" or "size" function for this class?
    if has_function(c, "size"):
        c.add_declaration_code( "#include \"Helpers/len.hpp\"" )
@@ -451,7 +451,7 @@ def register_implicit_conversions(mb, implicitly_convertible):
     try:
         mb.casting_operators().exclude()
     except:
-        pass    
+        pass
 
     #add our manual implicit conversions to the declaration section
     for conversion in implicitly_convertible:
@@ -460,8 +460,8 @@ def register_implicit_conversions(mb, implicitly_convertible):
 def write_wrappers(mb, module, huge_classes, header_files = [],
                    source_docs = {} ):
    """This function performs the actual work of writing the wrappers to disk"""
-                   
-   #make sure that the protected and private member functions and 
+
+   #make sure that the protected and private member functions and
    #data aren't wrapped
    try:
        mb.calldefs( access_type_matcher_t( 'protected' ) ).exclude()
@@ -472,7 +472,7 @@ def write_wrappers(mb, module, huge_classes, header_files = [],
        mb.calldefs( access_type_matcher_t( 'private' ) ).exclude()
    except:
        pass
- 
+
    #build a code creator - this must be done after the above, as
    #otherwise our modifications above won't take effect
    mb.build_code_creator( module_name="_%s" % module,
@@ -498,7 +498,7 @@ def needPropertyWrappers(active_headers):
 
 def writePropertyWrappers(mb, sourcedir, active_headers):
    """This function writes the property wrappers that are required for this module"""
-   
+
    #are there any wrappers?
    if not needPropertyWrappers(active_headers):
        return
@@ -528,7 +528,7 @@ def writePropertyWrappers(mb, sourcedir, active_headers):
 
    print("void register_%s_properties()" % sourcedir, file=FILE)
    print("{", file=FILE)
-   
+
    for header in active_headers:
        active_header = active_headers[header]
        if active_header.hasProperties():
@@ -556,7 +556,7 @@ if __name__ == "__main__":
 
     #load up the dictionary of all exposed classes
     all_exposed_classes = pickle.load( open("../classdb.data", "rb") )
-    
+
     #load up the active headers object
     active_headers = pickle.load( open("active_headers.data", "rb") )
 
@@ -571,7 +571,7 @@ if __name__ == "__main__":
     if os.path.exists("special_code.py"):
         sys.path.append(".")
         from special_code import *
-        
+
     sire_include_dirs = [ rootdir, "%s/%s" % (rootdir,sourcedir) ]
 
     # All of the headers must be installed in the sire.app/include directory
@@ -582,7 +582,7 @@ if __name__ == "__main__":
     gsldir = boostdir
     openmm_include_dir = boostdir
 
-    need_input = False 
+    need_input = False
 
     if (qtdir is None):
         print("You must set the environmental variable QTDIR to the location " + \
@@ -626,14 +626,14 @@ if __name__ == "__main__":
 
     if openmm_include_dirs is None:
         #construct a module builder that will build all of the wrappers for this module
-        xml_generator_config = pygccxml.parser.xml_generator_configuration_t( 
+        xml_generator_config = pygccxml.parser.xml_generator_configuration_t(
                                 xml_generator_path=generator_path,
                                 xml_generator=generator_name,
                                 compiler="gcc",
                                 cflags = "-m64 -fPIC -std=c++14",
                                 include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs,
-                                define_symbols = ["GCCXML_PARSE", "__PIE__",
+                                define_symbols = ["GCCXML_PARSE", "__PIC__",
                                                   "SIRE_SKIP_INLINE_FUNCTIONS",
                                                   "SIREN_SKIP_INLINE_FUNCTIONS",
                                                   "SIRE_INSTANTIATE_TEMPLATES",
@@ -652,7 +652,7 @@ if __name__ == "__main__":
                                 include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs +
                                            openmm_include_dirs,
-                                define_symbols = ["GCCXML_PARSE", "__PIE__",
+                                define_symbols = ["GCCXML_PARSE", "__PIC__",
                                                   "SIRE_USE_OPENMM",
                                                   "SIRE_SKIP_INLINE_FUNCTIONS",
                                                   "SIREN_SKIP_INLINE_FUNCTIONS",
@@ -717,7 +717,7 @@ if __name__ == "__main__":
         print("#include <Python.h>\n", file=FILE)
         print("#include \"%s_registrars.h\"\n" % sourcedir, file=FILE)
         print("#include \"Helpers/version_error_impl.h\"\n", file=FILE)
-        
+
         for header in metaheaders:
             print("#include \"%s\"" % header, file=FILE)
 
@@ -739,7 +739,7 @@ if __name__ == "__main__":
     for operator in mb.operators():
         p = str(operator.parent)
         if p.find(module) != -1 and p.find("[namespace]") != -1:
-            operator.include()        
+            operator.include()
 
     #write the code that wraps up the Property classes
     writePropertyWrappers(mb, sourcedir, active_headers)
@@ -750,7 +750,7 @@ if __name__ == "__main__":
     #now perform any last-minute fixes
     fixMB(mb)
 
-    write_wrappers(mb, module, huge_classes, source_docs=source_docs)  
+    write_wrappers(mb, module, huge_classes, source_docs=source_docs)
 
     #now write a CMakeFile that contains all of the autogenerated files
     FILE = open("CMakeAutogenFile.txt", "w")

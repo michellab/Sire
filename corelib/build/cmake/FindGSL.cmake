@@ -23,7 +23,7 @@
 # www.mip.informatik.uni-kiel.de
 # --------------------------------
 
-IF (NOT MSVC)
+IF (NOT WIN32)
   SET(GSL_CONFIG_PREFER_PATH 
   "$ENV{GSL_DIR}/bin"
   "$ENV{GSL_DIR}"
@@ -90,7 +90,7 @@ IF (NOT MSVC)
   ELSE(GSL_CONFIG)
     MESSAGE("FindGSL.cmake: gsl-config not found. Please set it manually. GSL_CONFIG=${GSL_CONFIG}")
   ENDIF(GSL_CONFIG)
-ENDIF(NOT MSVC)
+ENDIF(NOT WIN32)
 
 IF((NOT GSL_LIBRARIES) AND MSVC AND DEFINED SIRE_APP)
   find_library( GSL_LIBRARY "gsl.lib" PATHS "${SIRE_APP}/Library/lib" NO_DEFAULT_PATH )

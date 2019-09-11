@@ -90,37 +90,37 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the number of elements in this line (2) */
-inline int Line::count() const
+SIRE_ALWAYS_INLINE int Line::count() const
 {
     return 2;
 }
 
 /** Return the i'th point */
-inline const Vector& Line::point(int i) const
+SIRE_ALWAYS_INLINE const Vector& Line::point(int i) const
 {
     return points[ i%2 ];
 }
 
 /** Return the i'th point */
-inline const Vector& Line::at(int i) const
+SIRE_ALWAYS_INLINE const Vector& Line::at(int i) const
 {
     return point(i);
 }
 
 /** Return the i'th point */
-inline const Vector& Line::operator[](int i) const
+SIRE_ALWAYS_INLINE const Vector& Line::operator[](int i) const
 {
     return point(i);
 }
 
 /** Return the vector that represents this line (goes from point 0 to point 1) */
-inline Vector Line::vector() const
+SIRE_ALWAYS_INLINE Vector Line::vector() const
 {
     return (points[1] - points[0]);
 }
 
 /** Return the length of the line */
-inline double Line::length() const
+SIRE_ALWAYS_INLINE double Line::length() const
 {
     return vector().length();
 }

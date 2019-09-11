@@ -3,6 +3,18 @@ SIRE changelog
 
 devel branch:
 
+    [2019.2.0] Sep 2019 - Updated the Gromacs topology writer to support
+               perturbable molecules containing a variable number of bonds.
+               Created a Docker container for building wrappers and updated
+               to using CastXML. Added support for running background
+               processes on Windows (@ptosco). Updated SOMD Python wrapper
+               to write restart files every cycle to simplify system monitoring
+               in BioSimSpace.  Fixed macOS build issue by not linking against
+               libpython. Made sure that Conda dependencies are pinned
+               correctly to avoid compatibility issues. Fixed bug that
+               prevented upload statistics being sent and added support for
+               tracking BioSimSpace usage.
+
     [2019.1.0] May 2019 - Updates to the Gromacs topology writer to support
                free energy perturbation simulations. The MCS matching
                functionality has been extended to allow matches between heavy
@@ -20,7 +32,7 @@ devel branch:
                fixing compile issues on modern Ubuntu, bugfixes for crashes
                in the AmberPrm reader, added in text-based searching for
                atoms, residues etc. from Systems, MoleculeGroups, Molecules,
-               etc. based on boost::spirit, updated boost to latest version, 
+               etc. based on boost::spirit, updated boost to latest version,
                bugfixes for quantomm infinite rotation bug for ions,
                general bugfixes.
 
@@ -55,16 +67,16 @@ devel branch:
                redirect to stdout and that isRunning works without the
                user having to call "wait" first!
 
-    [2017.2.0] September 2017 - The MoleculeParser framework has 
-               been created to support reading and writing of molecules 
-               in lots of different formats. The first set of formats 
-               that have been completed are Amber Prmtop, Amber Rst7 
-               and Amber Rst/Trj. The parsers work in parallel, with 
-               file formats automatically detected by the parser, 
-               e.g. system = MoleculeParser.read( "file.prm", "file.rst" ) 
+    [2017.2.0] September 2017 - The MoleculeParser framework has
+               been created to support reading and writing of molecules
+               in lots of different formats. The first set of formats
+               that have been completed are Amber Prmtop, Amber Rst7
+               and Amber Rst/Trj. The parsers work in parallel, with
+               file formats automatically detected by the parser,
+               e.g. system = MoleculeParser.read( "file.prm", "file.rst" )
                will automatically do the right thing.
 
-               Improved automatic compilation on Arch linux. 
+               Improved automatic compilation on Arch linux.
 
                Fixed temperature checking and general bugfixing for mbar code.
 
@@ -76,7 +88,7 @@ devel branch:
             as well as Intel 2017 compilers and Clang.
 
     [2016.3.1] January 9 2017 - Minor patch release that fixes bugs:
-        (1) Correctly sets MACOSX_DEPLOYMENT_TARGET to 10.8 so executable works 
+        (1) Correctly sets MACOSX_DEPLOYMENT_TARGET to 10.8 so executable works
             on OS X 10.8 (Mountain Lion) and above
         (2) Fixed a parsing bug in Parameter that prevented integer or float
             parameters from being passed to ligandswap, waterswap etc.
@@ -104,4 +116,4 @@ devel branch:
     Allow the computation of reduced perturbed energies in openmmfreenergst of all computed lambda values
     Separated minimization and equilibration from production run.
     Implemented mass repartitioning for hydrogens atoms to allow for larger integration timesteps
-    Added nautilus scripts 
+    Added nautilus scripts

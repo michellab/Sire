@@ -196,18 +196,18 @@ protected:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Construct an empty vector */
-inline MultiVector::MultiVector()
+SIRE_ALWAYS_INLINE MultiVector::MultiVector()
 {}
 
 /** Create the vector (val,val,val) */
-inline MultiVector::MultiVector(const MultiDouble &val)
+SIRE_ALWAYS_INLINE MultiVector::MultiVector(const MultiDouble &val)
 {
     for (int i=0; i<3; i++)
         sc[i] = val;
 }
 
 /** Create the vector (xpos,ypos,zpos) */
-inline MultiVector::MultiVector(const MultiDouble &x, const MultiDouble &y, const MultiDouble &z)
+SIRE_ALWAYS_INLINE MultiVector::MultiVector(const MultiDouble &x, const MultiDouble &y, const MultiDouble &z)
 {
     sc[0] = x;
     sc[1] = y;
@@ -216,7 +216,7 @@ inline MultiVector::MultiVector(const MultiDouble &x, const MultiDouble &y, cons
 
 #ifdef SIRE_HAS_CPP_11
     /** Construct a MultiVector from the passed function */
-    inline MultiVector::MultiVector(const std::function<double ()> &generator)
+    SIRE_ALWAYS_INLINE MultiVector::MultiVector(const std::function<double ()> &generator)
     {
         sc[0] = MultiDouble(generator);
         sc[1] = MultiDouble(generator);
@@ -224,7 +224,7 @@ inline MultiVector::MultiVector(const MultiDouble &x, const MultiDouble &y, cons
     }
     
     /** Construct a MultiVector from the passed function */
-    inline MultiVector::MultiVector(const std::function<Vector ()> &generator)
+    SIRE_ALWAYS_INLINE MultiVector::MultiVector(const std::function<Vector ()> &generator)
     {
         for (int i=0; i<MultiDouble::count(); ++i)
         {
@@ -237,7 +237,7 @@ inline MultiVector::MultiVector(const MultiDouble &x, const MultiDouble &y, cons
 #endif
 
 /** Copy assignment operator */
-inline MultiVector& MultiVector::operator=(const MultiVector &other)
+SIRE_ALWAYS_INLINE MultiVector& MultiVector::operator=(const MultiVector &other)
 {
     for (int i=0; i<3; ++i)
         sc[i] = other.sc[i];
@@ -246,7 +246,7 @@ inline MultiVector& MultiVector::operator=(const MultiVector &other)
 }
 
 /** Comparison operator */
-inline bool MultiVector::operator==(const MultiVector &other) const
+SIRE_ALWAYS_INLINE bool MultiVector::operator==(const MultiVector &other) const
 {
     return &other == this or
            (sc[0] == other.sc[0] and sc[1] == other.sc[1] and
@@ -254,49 +254,49 @@ inline bool MultiVector::operator==(const MultiVector &other) const
 }
 
 /** Comparison operator */
-inline bool MultiVector::operator!=(const MultiVector &other) const
+SIRE_ALWAYS_INLINE bool MultiVector::operator!=(const MultiVector &other) const
 {
     return not operator==(other);
 }
 
 /** Return a raw pointer to the array of coordinates */
-inline MultiDouble* MultiVector::data()
+SIRE_ALWAYS_INLINE MultiDouble* MultiVector::data()
 {
     return &(sc[0]);
 }
 
 /** Return a raw pointer to the array of coordinates */
-inline const MultiDouble* MultiVector::data() const
+SIRE_ALWAYS_INLINE const MultiDouble* MultiVector::data() const
 {
     return &(sc[0]);
 }
 
 /** Return a raw pointer to the array of coordinates */
-inline const MultiDouble* MultiVector::constData() const
+SIRE_ALWAYS_INLINE const MultiDouble* MultiVector::constData() const
 {
     return &(sc[0]);
 }
 
 /** Return the x component of the vector */
-inline const MultiDouble& MultiVector::x() const
+SIRE_ALWAYS_INLINE const MultiDouble& MultiVector::x() const
 {
     return sc[0];
 }
 
 /** Return the y component of the vector */
-inline const MultiDouble& MultiVector::y() const
+SIRE_ALWAYS_INLINE const MultiDouble& MultiVector::y() const
 {
     return sc[1];
 }
 
 /** Return the z component of the vector */
-inline const MultiDouble& MultiVector::z() const
+SIRE_ALWAYS_INLINE const MultiDouble& MultiVector::z() const
 {
     return sc[2];
 }
 
 /** Return the length of the vector */
-inline MultiDouble MultiVector::length() const
+SIRE_ALWAYS_INLINE MultiDouble MultiVector::length() const
 {
     MultiDouble lgth2(sc[0]);
     lgth2 *= sc[0];
@@ -306,7 +306,7 @@ inline MultiDouble MultiVector::length() const
 }
 
 /** Return the length^2 of the vector */
-inline MultiDouble MultiVector::length2() const
+SIRE_ALWAYS_INLINE MultiDouble MultiVector::length2() const
 {
     MultiDouble lgth2(sc[0]);
     lgth2 *= sc[0];
@@ -316,13 +316,13 @@ inline MultiDouble MultiVector::length2() const
 }
 
 /** Return the inverse of the length of the vector */
-inline MultiDouble MultiVector::invLength() const
+SIRE_ALWAYS_INLINE MultiDouble MultiVector::invLength() const
 {
     return length().reciprocal();
 }
 
 /** Increment, decrement, negate etc. */
-inline MultiVector& MultiVector::operator+=(const MultiVector &other)
+SIRE_ALWAYS_INLINE MultiVector& MultiVector::operator+=(const MultiVector &other)
 {
     for (int i=0; i<3; i++)
         sc[i] += other.sc[i];
@@ -331,7 +331,7 @@ inline MultiVector& MultiVector::operator+=(const MultiVector &other)
 }
 
 /** Increment, decrement, negate etc. */
-inline MultiVector& MultiVector::operator-=(const MultiVector &other)
+SIRE_ALWAYS_INLINE MultiVector& MultiVector::operator-=(const MultiVector &other)
 {
     for (int i=0; i<3; i++)
         sc[i] -= other.sc[i];
@@ -340,7 +340,7 @@ inline MultiVector& MultiVector::operator-=(const MultiVector &other)
 }
 
 /** Increment, decrement, negate etc. */
-inline MultiVector& MultiVector::operator*=(const MultiDouble &val)
+SIRE_ALWAYS_INLINE MultiVector& MultiVector::operator*=(const MultiDouble &val)
 {
     for (int i=0; i<3; i++)
         sc[i] *= val;
@@ -349,31 +349,31 @@ inline MultiVector& MultiVector::operator*=(const MultiDouble &val)
 }
 
 /** Increment, decrement, negate etc. */
-inline MultiVector MultiVector::operator-() const
+SIRE_ALWAYS_INLINE MultiVector MultiVector::operator-() const
 {
     return MultiVector(-sc[0],-sc[1],-sc[2]);
 }
 
 /** Increment, decrement, negate etc. */
-inline MultiVector operator+(const MultiVector &p1, const MultiVector &p2)
+SIRE_ALWAYS_INLINE MultiVector operator+(const MultiVector &p1, const MultiVector &p2)
 {
     return MultiVector(p1.sc[0]+p2.sc[0], p1.sc[1]+p2.sc[1], p1.sc[2]+p2.sc[2]);
 }
 
 /** Increment, decrement, negate etc. */
-inline MultiVector operator-(const MultiVector &p1, const MultiVector &p2)
+SIRE_ALWAYS_INLINE MultiVector operator-(const MultiVector &p1, const MultiVector &p2)
 {
     return MultiVector(p1.sc[0]-p2.sc[0], p1.sc[1]-p2.sc[1], p1.sc[2]-p2.sc[2]);
 }
 
 /** Increment, decrement, negate etc. */
-inline MultiVector operator*(const MultiVector &p1, const MultiDouble &c)
+SIRE_ALWAYS_INLINE MultiVector operator*(const MultiVector &p1, const MultiDouble &c)
 {
     return MultiVector(p1.sc[0]*c, p1.sc[1]*c, p1.sc[2]*c);
 }
 
 /** Increment, decrement, negate etc. */
-inline MultiVector operator*(const MultiDouble &c, const MultiVector &p1)
+SIRE_ALWAYS_INLINE MultiVector operator*(const MultiDouble &c, const MultiVector &p1)
 {
     return MultiVector(p1.sc[0]*c, p1.sc[1]*c, p1.sc[2]*c);
 }

@@ -402,7 +402,7 @@ private:
     FunctionPvt d;
 };
 
-inline uint qHash(const Function &func)
+SIRE_ALWAYS_INLINE uint qHash(const Function &func)
 {
     return func.hash();
 }

@@ -14,7 +14,11 @@
 
 function( GET_SIRE_VECTOR_FLAGS OMP_SIMD_FLAG SSE2_FLAG AVX_FLAG AVX512F_FLAG )
   #message( STATUS "Checking flags ${OMP_SIMD_FLAG} | ${SSE2_FLAG} | ${AVX_FLAG} | ${AVX512F_FLAG}" )
-
+  if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+    set (SLASH_HYPHEN "/")
+  else()
+    set (SLASH_HYPHEN "-")
+  endif()
   if (NOT SIRE_VECTORISE)
     message( STATUS "Disabling all vectorisation!" )
     set( SIRE_VECTOR_FLAGS "" )
@@ -143,12 +147,12 @@ function( GET_SIRE_VECTOR_FLAGS OMP_SIMD_FLAG SSE2_FLAG AVX_FLAG AVX512F_FLAG )
   endif()
 
   if (HAVE_AVX512F_SYSTEM AND ENABLE_AVX512F)
-    set( VECTOR_FLAGS "${AVX512F_FLAG} -DSIRE_USE_AVX -DSIRE_USE_AVX2 -DSIRE_USE_AVX512F" )
+    set( VECTOR_FLAGS "${AVX512F_FLAG} ${SLASH_HYPHEN}DSIRE_USE_AVX ${SLASH_HYPHEN}DSIRE_USE_AVX2 ${SLASH_HYPHEN}DSIRE_USE_AVX512F" )
     message( STATUS "Compiling using AVX-512F. Note that the resulting binary will only work on really new Intel processors" )
   elseif ( HAVE_AVX_SYSTEM AND ENABLE_AVX )
-    set( VECTOR_FLAGS "${AVX_FLAG} -DSIRE_USE_AVX" )
+    set( VECTOR_FLAGS "${AVX_FLAG} ${SLASH_HYPHEN}DSIRE_USE_AVX" )
   elseif ( HAVE_SSE2_SYSTEM AND ENABLE_SSE2 )
-    set( VECTOR_FLAGS "${SSE2_FLAG} -DSIRE_USE_SSE" )
+    set( VECTOR_FLAGS "${SSE2_FLAG} ${SLASH_HYPHEN}DSIRE_USE_SSE" )
   endif()
 
   if (HAVE_OMP_SIMD_SYSTEM)

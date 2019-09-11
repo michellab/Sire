@@ -511,7 +511,7 @@ void FreeEnergyMonitor::clearStatistics()
     lj_nrgs = QVector<FreeEnergyAverage>();
 }
 
-inline pair<double,double> getCLJEnergy(
+SIRE_ALWAYS_INLINE pair<double,double> getCLJEnergy(
                 const QVector<Vector> &coords, const QVector<Charge> &chgs,
                 const QVector<LJParameter> &ljs,
                 const QVector<Vector> &coords_a, const QVector<Charge> &chgs_a,
@@ -614,7 +614,7 @@ inline pair<double,double> getCLJEnergy(
     return pair<double,double>(cnrg_f-cnrg,ljnrg_f-ljnrg);
 }
 
-inline pair<double,double> getSoftCLJEnergy(
+SIRE_ALWAYS_INLINE pair<double,double> getSoftCLJEnergy(
                 const CLJAtoms &refatoms,
                 const CLJAtoms &atoms_a, const CLJAtoms &atoms_b,
                 double lamval, double delta_lambda, double shift_delta, int coulomb_power)
@@ -691,7 +691,7 @@ inline pair<double,double> getSoftCLJEnergy(
                                ljnrg_a_f+ljnrg_b_f-ljnrg_a-ljnrg_b);
 }
 
-inline pair<double,double> getSoftCLJEnergy(
+SIRE_ALWAYS_INLINE pair<double,double> getSoftCLJEnergy(
                 const QVector<Vector> &coords, const QVector<Charge> &chgs,
                 const QVector<LJParameter> &ljs,
                 const QVector<Vector> &coords_a, const QVector<Charge> &chgs_a,

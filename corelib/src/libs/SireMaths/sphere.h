@@ -116,19 +116,19 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the position of the center of the sphere */
-inline const Vector& Sphere::position() const
+SIRE_ALWAYS_INLINE const Vector& Sphere::position() const
 {
     return _center;
 }
 
 /** Return the position of the center of the sphere */
-inline const Vector& Sphere::center() const
+SIRE_ALWAYS_INLINE const Vector& Sphere::center() const
 {
     return _center;
 }
 
 /** Return the radius of the sphere */
-inline double Sphere::radius() const
+SIRE_ALWAYS_INLINE double Sphere::radius() const
 {
     return _radius;
 }

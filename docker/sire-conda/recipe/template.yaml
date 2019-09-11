@@ -9,7 +9,7 @@ source:
   sha256: SHA256_OSX  # [osx]
 
 build:
-  number: 0
+  number: BUILD
   skip: true  # [win]
 
 requirements:
@@ -24,20 +24,20 @@ requirements:
     - openmm
     - pyqt
     - tbb
-    - tbb-devel
+    - tbb_devel
   run:
     -  {{ pin_compatible('python') }}
-    -  {{ pin_compatible('boost') }}
-    -  {{ pin_compatible('gsl') }}
-    -  {{ pin_compatible('netcdf4') }}
-    -  {{ pin_compatible('openmm') }}
-    -  {{ pin_compatible('pyqt') }}
-    -  {{ pin_compatible('tbb') }}
-    -  {{ pin_compatible('tbb-devel') }}
+    -  boost
+    -  gsl
+    -  netcdf4
+    -  openmm
+    -  pyqt
+    -  tbb
+    -  tbb_devel
 
 test:
   imports:
-    - Sire  # [linux]
+    - Sire
 
 about:
   home: https://github.com/michellab/Sire

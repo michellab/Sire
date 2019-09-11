@@ -41,6 +41,7 @@
 #include "SireMol/atommasses.h"
 #include "SireMol/atomelements.h"
 #include "SireMol/connectivity.h"
+#include "SireMol/select.h"
 
 #include "SireMM/internalff.h"
 #include "SireMM/atomljs.h"
@@ -3013,34 +3014,178 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             const auto &bonds0 = moltype.bonds();
             const auto &bonds1 = moltype.bonds(true);
 
-            for (auto it = bonds0.constBegin(); it != bonds0.constEnd(); ++it)
+            // Sets to contain the BondIDs at lambda = 0 and lambda = 1.
+            QSet<BondID> bonds0_idx;
+            QSet<BondID> bonds1_idx;
+
+            // Loop over all bonds at lambda = 0.
+            for (const auto &idx : bonds0.uniqueKeys())
+                bonds0_idx.insert(idx);
+
+            // Loop over all bonds at lambda = 1.
+            for (const auto &idx : bonds1.uniqueKeys())
             {
-                const auto &bond = it.key();
-                const auto &param = it.value();
+                if (bonds0_idx.contains(idx.mirror()))
+                    bonds1_idx.insert(idx.mirror());
+                else
+                    bonds1_idx.insert(idx);
+            }
 
+            // Now work out the BondIDs that are unique at lambda = 0 and lambda = 1,
+            // as well as those that are shared.
+            QSet<BondID> bonds0_uniq_idx;
+            QSet<BondID> bonds1_uniq_idx;
+            QSet<BondID> bonds_shared_idx;
+
+            // lambda = 0
+            for (const auto &idx : bonds0_idx)
+            {
+                if (not bonds1_idx.contains(idx))
+                    bonds0_uniq_idx.insert(idx);
+                else
+                    bonds_shared_idx.insert(idx);
+            }
+
+            // lambda = 1
+            for (const auto &idx : bonds1_idx)
+            {
+                if (not bonds0_idx.contains(idx))
+                    bonds1_uniq_idx.insert(idx);
+                else
+                    bonds_shared_idx.insert(idx);
+            }
+
+            // First create parameter records for the bonds unique to lambda = 0/1.
+
+            // lambda = 0
+            for (const auto &idx : bonds0_uniq_idx)
+            {
                 //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
-                int atom0 = bond.atom0().asA<AtomIdx>().value() + 1;
-                int atom1 = bond.atom1().asA<AtomIdx>().value() + 1;
+                int atom0 = idx.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = idx.atom1().asA<AtomIdx>().value() + 1;
 
-                QStringList params0;
-                for (const auto p : param.parameters())
+                // Get all of the parameters for this BondID.
+                const auto &params = bonds0.values(idx);
+
+                // Loop over all of the parameters.
+                for (const auto &param : params)
                 {
-                    params0.append( QString::number(p) );
+                    QStringList param_string;
+                    for (const auto p : param.parameters())
+                        param_string.append( QString::number(p) );
+
+                    bondlines.append( QString("%1 %2 %3  %4  0.0000  0.0000")
+                             .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
+                             .arg(param_string.join("  ")));
+                }
+            }
+
+            // lambda = 1
+            for (const auto &idx : bonds1_uniq_idx)
+            {
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = idx.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = idx.atom1().asA<AtomIdx>().value() + 1;
+
+                // Get all of the parameters for this BondID.
+                const auto &params = bonds1.values(idx);
+
+                // Loop over all of the parameters.
+                for (const auto &param : params)
+                {
+                    QStringList param_string;
+                    for (const auto p : param.parameters())
+                        param_string.append( QString::number(p) );
+
+                    bondlines.append( QString("%1 %2 %3  0.0000  0.0000  %4")
+                             .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
+                             .arg(param_string.join("  ")));
+                }
+            }
+
+            // Next add the shared bond parameters.
+
+            for (auto idx : bonds_shared_idx)
+            {
+                //AtomID is AtomIdx. Add 1, as gromacs is 1-indexed
+                int atom0 = idx.atom0().asA<AtomIdx>().value() + 1;
+                int atom1 = idx.atom1().asA<AtomIdx>().value() + 1;
+
+                // Get a list of the parameters at lambda = 0.
+                const auto &params0 = bonds0.values(idx);
+
+                // Invert the index.
+                if (not bonds1.contains(idx))
+                    idx = idx.mirror();
+
+                // Get a list of the parameters at lambda = 1.
+                const auto &params1 = bonds1.values(idx);
+
+                // More or same number of records at lambda = 0.
+                if (params0.count() >= params1.count())
+                {
+                    for (int i=0; i<params1.count(); ++i)
+                    {
+                        QStringList param_string0;
+                        for (const auto p : params0[i].parameters())
+                            param_string0.append( QString::number(p) );
+
+                        QStringList param_string1;
+                        for (const auto p : params1[i].parameters())
+                            param_string1.append( QString::number(p) );
+
+                        bondlines.append( QString("%1 %2 %3  %4  %5")
+                                 .arg(atom0,6).arg(atom1,6).arg(params0[i].functionType(),6)
+                                 .arg(param_string0.join("  "))
+                                 .arg(param_string1.join("  ")) );
+                    }
+
+                    // Now add parameters for which there is no matching record
+                    // at lambda = 1.
+                    for (int i=params1.count(); i<params0.count(); ++i)
+                    {
+                        QStringList param_string;
+                        for (const auto p : params0[i].parameters())
+                            param_string.append( QString::number(p) );
+
+                        bondlines.append( QString("%1 %2 %3  %4  0.0000  0.0000")
+                                 .arg(atom0,6).arg(atom1,6).arg(params0[i].functionType(),6)
+                                 .arg(param_string.join("  ")) );
+                    }
                 }
 
-                // Find the corresponding bond parameters at lambda = 1.
-                const auto &param1 = bonds1.find(bond).value();
-
-                QStringList params1;
-                for (const auto p : param1.parameters())
+                // More records at lambda = 1.
+                else
                 {
-                    params1.append( QString::number(p) );
-                }
+                    for (int i=0; i<params0.count(); ++i)
+                    {
+                        QStringList param_string0;
+                        for (const auto p : params0[i].parameters())
+                            param_string0.append( QString::number(p) );
 
-                bondlines.append( QString("%1 %2 %3  %4  %5")
-                         .arg(atom0,6).arg(atom1,6).arg(param.functionType(),6)
-                         .arg(params0.join("  "))
-                         .arg(params1.join("  ")) );
+                        QStringList param_string1;
+                        for (const auto p : params1[i].parameters())
+                            param_string1.append( QString::number(p) );
+
+                        bondlines.append( QString("%1 %2 %3  %4  %5")
+                                 .arg(atom0,6).arg(atom1,6).arg(params1[i].functionType(),6)
+                                 .arg(param_string0.join("  "))
+                                 .arg(param_string1.join("  ")) );
+                    }
+
+                    // Now add parameters for which there is no matching record
+                    // at lambda = 0.
+                    for (int i=params0.count(); i<params1.count(); ++i)
+                    {
+                        QStringList param_string;
+                        for (const auto p : params1[i].parameters())
+                            param_string.append( QString::number(p) );
+
+                        bondlines.append( QString("%1 %2 %3  0.0000  0.0000  %4")
+                                 .arg(atom0,6).arg(atom1,6).arg(params1[i].functionType(),6)
+                                 .arg(param_string.join("  ")) );
+                    }
+                }
             }
         }
         else
@@ -3140,7 +3285,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (const auto p : param.parameters())
                         param_string.append( QString::number(p) );
 
-                    anglines.append( QString("%1 %2 %3 %4   %5  0  0")
+                    anglines.append( QString("%1 %2 %3 %4   %5  0.0000  0.0000")
                             .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),7)
                             .arg(param_string.join("  ")) );
                 }
@@ -3164,7 +3309,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     for (const auto p : param.parameters())
                         param_string.append( QString::number(p) );
 
-                    anglines.append( QString("%1 %2 %3 %4   0  0  %5")
+                    anglines.append( QString("%1 %2 %3 %4   0.0000  0.0000  %5")
                             .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(param.functionType(),7)
                             .arg(param_string.join("  ")) );
                 }
@@ -3216,7 +3361,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                         for (const auto p : params0[i].parameters())
                             param_string.append( QString::number(p) );
 
-                        anglines.append( QString("%1 %2 %3 %4   %5  0  0")
+                        anglines.append( QString("%1 %2 %3 %4   %5  0.0000  0.0000")
                                 .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(params0[i].functionType(),7)
                                 .arg(param_string.join("  ")) );
                     }
@@ -3249,7 +3394,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                         for (const auto p : params1[i].parameters())
                             param_string.append( QString::number(p) );
 
-                        anglines.append( QString("%1 %2 %3 %4   0  0  %5")
+                        anglines.append( QString("%1 %2 %3 %4   0.0000  0.0000  %5")
                                 .arg(atom0,6).arg(atom1,6).arg(atom2,6).arg(params1[i].functionType(),7)
                                 .arg(param_string.join("  ")) );
                     }
@@ -3359,7 +3504,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     // parameter entry.
                     auto periodicity = param.parameters().last();
 
-                    dihlines.append( QString("%1 %2 %3 %4 %5  %6  0  0  %7")
+                    dihlines.append( QString("%1 %2 %3 %4 %5  %6  0  0.0000  %7")
                             .arg(atom0,6).arg(atom1,6)
                             .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
                             .arg(param_string.join("  ")).arg(periodicity) );
@@ -3389,7 +3534,7 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                     // parameter entry.
                     auto periodicity = param.parameters().last();
 
-                    dihlines.append( QString("%1 %2 %3 %4 %5  0  0  %6  %7")
+                    dihlines.append( QString("%1 %2 %3 %4 %5  0  0.0000  %6  %7")
                             .arg(atom0,6).arg(atom1,6)
                             .arg(atom2,6).arg(atom3,6).arg(param.functionType(),6)
                             .arg(periodicity).arg(param_string.join("  ")) );
@@ -3468,8 +3613,8 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                         // No term, create a zero term with the same periodicity.
                         else
                         {
-                            param_string1.append( QString::number(0.0) );
-                            param_string1.append( QString::number(0.0) );
+                            param_string1.append( QString::number(0) );
+                            param_string1.append( QString::number(0.0000) );
                             param_string1.append( QString::number(i) );
                         }
 
@@ -3489,8 +3634,8 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                             QStringList param_string1;
 
                             // No lambda = 0 term, create a zero term with the same periodicity.
-                            param_string0.append( QString::number(0.0) );
-                            param_string0.append( QString::number(0.0) );
+                            param_string0.append( QString::number(0) );
+                            param_string0.append( QString::number(0.0000) );
                             param_string0.append( QString::number(i) );
 
                             for (const auto p : params1_hash[i].parameters())
@@ -3752,7 +3897,7 @@ static QStringList writeMolTypes(const QMap<QPair<int,QString>,GroMolType> &molt
 }
 
 /** Internal function used to write the system part of the gromacs file */
-static QStringList writeSystem(QString name, const QStringList &mol_to_moltype)
+static QStringList writeSystem(QString name, const QVector<QString> &mol_to_moltype)
 {
     QStringList lines;
     lines.append( "[ system ]" );
@@ -3817,49 +3962,53 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
         isSorted = map["sort"].value().asA<BooleanProperty>().value();
     }
 
-    //generate the GroMolType object for each molecule in the system. It is likely
-    //the multiple molecules will have the same GroMolType. We will be a bit slow
-    //now and generate this for all molecules independently, and will then consolidate
-    //them later
-    QVector<GroMolType> mtyps(molnums.count());
+    // Search the system for water molecules.
+    auto waters = system.search("water");
 
-    if (usesParallel())
+    // Extract the molecule numbers of the water molecules.
+    auto water_nums = waters.molNums();
+
+    // Loop over the molecules to find the non-water molecules.
+    QList<MolNum> non_water_nums;
+    for (const auto &num : molnums)
     {
-        tbb::parallel_for( tbb::blocked_range<int>(0,molnums.count()),
-                           [&](const tbb::blocked_range<int> r)
-        {
-            for (int i=r.begin(); i<r.end(); ++i)
-            {
-                mtyps[i] = GroMolType(system[molnums[i]].molecule(),map);
-            }
-        });
-    }
-    else
-    {
-        for (int i=0; i<molnums.count(); ++i)
-        {
-            mtyps[i] = GroMolType(system[molnums[i]].molecule(),map);
-        }
+        if (not water_nums.contains(num))
+            non_water_nums.append(num);
     }
 
-    //now go through each type, remove duplicates, and record the indes and name
-    //of each molecule so that we can write this in the [system] section
-    QStringList mol_to_moltype;
+    // Create a hash between MolNum and index in the system.
+    QHash<MolNum, int> molnum_to_idx;
+
+    for (int i=0; i<molnums.count(); ++i)
+    {
+        molnum_to_idx.insert(molnums[i], i);
+    }
+
+    // Initialise data structures to map molecules to their respective
+    // GroMolTypes.
+    QVector<QString> mol_to_moltype(molnums.count());
     QMap<QPair<int,QString>,GroMolType> idx_name_to_mtyp;
     QMap<QPair<int,QString>,Molecule> idx_name_to_example;
     QHash<QString,GroMolType> name_to_mtyp;
 
-    for (int i=0; i<mtyps.count(); ++i)
+    // First add the non-water molecules.
+    for (int i=0; i<non_water_nums.count(); ++i)
     {
-        const auto moltype = mtyps[i];
-        QString name = moltype.name();
+        // Extract the molecule number of the molecule and work out
+        // the index in the system.
+        auto molnum = non_water_nums[i];
+        auto idx = molnum_to_idx[molnum];
 
+        // Generate a GroMolType type for this molecule and get its name.
+        auto moltype = GroMolType(system[molnum].molecule(),map);
+        auto name = moltype.name();
+
+        // We have already recorded this name.
         if (name_to_mtyp.contains(name))
         {
             if (moltype != name_to_mtyp[name])
             {
-                //this has the same name but different details. Give this a new
-                //name
+                // This has the same name but different details. Give this a new name.
                 int j = 0;
 
                 while(true)
@@ -3870,34 +4019,62 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
                     if (name_to_mtyp.contains(name))
                     {
                         if (moltype == name_to_mtyp[name])
-                            //match :-)
+                            // Match :-)
                             break;
                     }
                     else
                     {
-                        //new moltype
-                        idx_name_to_mtyp.insert(QPair<int,QString>(i,name), moltype);
+                        // New moltype.
+                        idx_name_to_mtyp.insert(QPair<int,QString>(idx,name), moltype);
                         name_to_mtyp.insert(name, moltype);
 
                         //save an example of this molecule so that we can
                         //extract any other details necessary
-                        idx_name_to_example.insert(QPair<int,QString>(i,name), system[molnums[i]].molecule());
+						idx_name_to_example.insert(QPair<int,QString>(idx,name), system[molnum].molecule());
 
                         break;
                     }
 
-                    //we have got here, meaning that we need to try a different name
+                    // We have got here, meaning that we need to try a different name.
                 }
             }
         }
+        // Name not previously recorded.
         else
         {
-            idx_name_to_mtyp.insert(QPair<int,QString>(i,name), moltype);
             name_to_mtyp.insert(name, moltype);
-            idx_name_to_example.insert(QPair<int,QString>(i,name), system[molnums[i]].molecule());
+            idx_name_to_mtyp.insert(QPair<int,QString>(idx, moltype.name()), moltype);
+            idx_name_to_example.insert(QPair<int,QString>(idx,name), system[molnum].molecule());
         }
 
-        mol_to_moltype.append(name);
+        // Store the name of the molecule type.
+        mol_to_moltype[idx] = name;
+    }
+
+    // Now deal with the water molecules.
+    if (waters.count() > 0)
+    {
+        // Extract the GroMolType of the first water molecule.
+        auto water_type = GroMolType(system[water_nums[0]].molecule(),map);
+        auto name = water_type.name();
+        auto molnum = water_nums[0];
+        auto idx = molnum_to_idx[molnum];
+
+        // Populate the mappings.
+        name_to_mtyp.insert(name, water_type);
+        idx_name_to_mtyp.insert(QPair<int,QString>(idx, water_type.name()), water_type);
+        idx_name_to_example.insert(QPair<int,QString>(idx,name), system[molnum].molecule());
+
+        for (int i=0; i<water_nums.count(); ++i)
+        {
+            // Extract the molecule number of the molecule and work out
+            // the index in the system.
+            auto molnum = water_nums[i];
+            auto idx = molnum_to_idx[molnum];
+
+            // Store the name of the molecule type.
+            mol_to_moltype[idx] = name;
+        }
     }
 
     QStringList errors;
@@ -3944,8 +4121,8 @@ GroTop::GroTop(const SireSystem::System &system, const PropertyMap &map)
     }
 
     //we don't need params any more, so free the memory
-    mtyps.clear();
     idx_name_to_mtyp.clear();
+    idx_name_to_example.clear();
     mol_to_moltype.clear();
 
     //now we have the lines, reparse them to make sure that they are correct

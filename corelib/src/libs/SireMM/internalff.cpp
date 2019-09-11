@@ -163,7 +163,7 @@ InternalPotential::getParameters(const PartialMolecule &molecule,
                                          isstrict);
 }
 
-static inline bool changed(const PartialMolecule &old_molecule,
+static SIRE_ALWAYS_INLINE bool changed(const PartialMolecule &old_molecule,
                            const PartialMolecule &new_molecule,
                            const PropertyName &property)
 {
@@ -221,7 +221,7 @@ InternalPotential::updateParameters(const InternalPotential::Parameters &old_par
         return old_params;
 }
 
-static inline bool changed(const PartialMolecule &old_molecule,
+static SIRE_ALWAYS_INLINE bool changed(const PartialMolecule &old_molecule,
                            const PartialMolecule &new_molecule,
                            const PropertyName &old_property,
                            const PropertyName &new_property)

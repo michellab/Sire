@@ -42,7 +42,7 @@
 using namespace SireMaths;
 
 #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
-    static inline bool isAligned64(const void *pointer)
+    static SIRE_ALWAYS_INLINE bool isAligned64(const void *pointer)
     {
      	return (quintptr)pointer % size_t(64) == 0;
     }
@@ -65,7 +65,8 @@ using namespace SireMaths;
         #define AVX_MATHFUNC_BROKEN_EXP 1
     #endif
 
-    #ifdef Q_OS_WIN
+    //#ifdef Q_OS_WIN
+    #if 0
       //don't use AVX math functions yet on windows
       #define AVX_MATHFUNC_BROKEN_INTO 1
       #define AVX_MATHFUNC_BROKEN_LOG 1
@@ -76,7 +77,7 @@ using namespace SireMaths;
       #define HAVE_AVX_MATHFUN 1
     #endif  
 
-    static inline bool isAligned32(const void *pointer)
+    static SIRE_ALWAYS_INLINE bool isAligned32(const void *pointer)
     {
         return (quintptr)pointer % size_t(32) == 0;
     }
@@ -170,7 +171,7 @@ using namespace SireMaths;
 #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
     #include "ThirdParty/sse_mathfun.h" // CONDITIONAL_INCLUDE
 
-    static inline bool isAligned16(const void *pointer)
+    static SIRE_ALWAYS_INLINE bool isAligned16(const void *pointer)
     {
         return (quintptr)pointer % size_t(16) == 0;
     }
@@ -214,7 +215,7 @@ using namespace SireMaths;
 #else
     #include "sincos.h"
 
-    static inline bool isAligned32(const void *pointer)
+    static SIRE_ALWAYS_INLINE bool isAligned32(const void *pointer)
     {
         return (quintptr)pointer % size_t(32) == 0;
     }

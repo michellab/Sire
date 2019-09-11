@@ -94,7 +94,7 @@ private:
     boost::shared_ptr<ResID> d;
 };
 
-inline uint qHash(const ResIdentifier &resid)
+SIRE_ALWAYS_INLINE uint qHash(const ResIdentifier &resid)
 {
     return resid.hash();
 }

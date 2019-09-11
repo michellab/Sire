@@ -974,7 +974,7 @@ public:
 /** Calculate the coulomb energy between the passed pair
     of molecules and add this onto 'energy'. This uses
     the passed workspace to perform the calculation */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateEnergy(const InterCoulombPotential::Molecule &mol0,
                                        const InterCoulombPotential::Molecule &mol1,
                                        InterCoulombPotential::Energy &energy,
@@ -991,7 +991,7 @@ InterCoulombPotential::calculateEnergy(const InterCoulombPotential::Molecule &mo
 /** Calculate the coulomb and LJ energy between the passed pair
     of molecules and add these energies on mol0 onto energies. This uses
     the passed workspace to perform the calculation */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateEnergy(const InterCoulombPotential::Molecule &mol0,
 				       const InterCoulombPotential::Molecule &mol1,
 				       MolEnergyTable &energies0,
@@ -1006,7 +1006,7 @@ InterCoulombPotential::calculateEnergy(const InterCoulombPotential::Molecule &mo
     of molecules and add the forces on 'mol0' onto 'forces'. This uses
     the passed workspace to perform the calculation. The forces
     are scaled by the optional 'scaled_forces' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateCoulombForce(const InterCoulombPotential::Molecule &mol0, 
                                              const InterCoulombPotential::Molecule &mol1,
                                              MolForceTable &forces0, 
@@ -1027,7 +1027,7 @@ InterCoulombPotential::calculateCoulombForce(const InterCoulombPotential::Molecu
     of molecules and add the forces on 'mol0' onto 'forces'. This uses
     the passed workspace to perform the calculation. The forces
     are scaled by the optional 'scaled_forces' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateForce(const InterCoulombPotential::Molecule &mol0, 
                                       const InterCoulombPotential::Molecule &mol1,
                                       MolForceTable &forces0, 
@@ -1041,7 +1041,7 @@ InterCoulombPotential::calculateForce(const InterCoulombPotential::Molecule &mol
     passed pair of molecules, and add the forces on 'mol0' onto 'forces0'.
     This uses the passed workspace to perform the calculation. The forces
     are scaled by the optional 'scaled_forces' */
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateForce(const InterCoulombPotential::Molecule &mol0,
                                       const InterCoulombPotential::Molecule &mol1,
                                       MolForceTable &forces0,
@@ -1057,7 +1057,7 @@ InterCoulombPotential::calculateForce(const InterCoulombPotential::Molecule &mol
         throwMissingForceComponent(symbol, components);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateCoulombField(const InterCoulombPotential::Molecule &mol0, 
                                       const InterCoulombPotential::Molecule &mol1,
                                       const CoulombProbe &probe,
@@ -1075,7 +1075,7 @@ InterCoulombPotential::calculateCoulombField(const InterCoulombPotential::Molecu
     }
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateField(const InterCoulombPotential::Molecule &mol0, 
                                       const InterCoulombPotential::Molecule &mol1,
                                       const CoulombProbe &probe,
@@ -1086,7 +1086,7 @@ InterCoulombPotential::calculateField(const InterCoulombPotential::Molecule &mol
     this->calculateCoulombField(mol0, mol1, probe, fields0, workspace, scale_field);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateField(const InterCoulombPotential::Molecule &mol0,
                                       const InterCoulombPotential::Molecule &mol1,
                                       const CoulombProbe &probe,
@@ -1103,7 +1103,7 @@ InterCoulombPotential::calculateField(const InterCoulombPotential::Molecule &mol
         throwMissingFieldComponent(symbol, components);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateCoulombField(
                                       const InterCoulombPotential::Molecule &mol, 
                                       const CoulombProbe &probe,
@@ -1121,7 +1121,7 @@ InterCoulombPotential::calculateCoulombField(
     }
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateField(const InterCoulombPotential::Molecule &mol, 
                                       const CoulombProbe &probe,
                                       GridFieldTable &fields0, 
@@ -1131,7 +1131,7 @@ InterCoulombPotential::calculateField(const InterCoulombPotential::Molecule &mol
     this->calculateCoulombField(mol, probe, fields0, workspace, scale_field);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateField(const InterCoulombPotential::Molecule &mol,
                                       const CoulombProbe &probe,
                                       GridFieldTable &fields0,
@@ -1147,7 +1147,7 @@ InterCoulombPotential::calculateField(const InterCoulombPotential::Molecule &mol
         throwMissingFieldComponent(symbol, components);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateCoulombPotential(
                                     const InterCoulombPotential::Molecule &mol0, 
                                     const InterCoulombPotential::Molecule &mol1,
@@ -1166,7 +1166,7 @@ InterCoulombPotential::calculateCoulombPotential(
     }
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculatePotential(
                                    const InterCoulombPotential::Molecule &mol0, 
                                    const InterCoulombPotential::Molecule &mol1,
@@ -1178,7 +1178,7 @@ InterCoulombPotential::calculatePotential(
     this->calculateCoulombPotential(mol0, mol1, probe, pots0, workspace, scale_potential);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculatePotential(
                                 const InterCoulombPotential::Molecule &mol0,
                                 const InterCoulombPotential::Molecule &mol1,
@@ -1196,7 +1196,7 @@ InterCoulombPotential::calculatePotential(
         throwMissingFieldComponent(symbol, components);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculateCoulombPotential(
                                    const InterCoulombPotential::Molecule &mol, 
                                    const CoulombProbe &probe,
@@ -1214,7 +1214,7 @@ InterCoulombPotential::calculateCoulombPotential(
     }
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculatePotential(
                                 const InterCoulombPotential::Molecule &mol, 
                                 const CoulombProbe &probe,
@@ -1225,7 +1225,7 @@ InterCoulombPotential::calculatePotential(
     this->calculateCoulombPotential(mol, probe, pots, workspace, scale_potential);
 }
 
-inline void 
+SIRE_ALWAYS_INLINE void 
 InterCoulombPotential::calculatePotential(
                                 const InterCoulombPotential::Molecule &mol,
                                 const CoulombProbe &probe,
@@ -1249,7 +1249,7 @@ InterCoulombPotential::calculatePotential(
 /** Calculate the forces represented by the symbol 'symbol' between the 
     atoms in the molecule 'mol' and add these forces onto 'forces'. This uses
     the passed workspace to perform the calculation */
-inline void 
+SIRE_ALWAYS_INLINE void 
 IntraCoulombPotential::calculateForce(const IntraCoulombPotential::Molecule &mol, 
                                       MolForceTable &forces,
                                       const Symbol &symbol,
@@ -1271,7 +1271,7 @@ IntraCoulombPotential::calculateForce(const IntraCoulombPotential::Molecule &mol
     
     \throw SireError::incompatible_error
 */
-inline void
+SIRE_ALWAYS_INLINE void
 IntraCoulombPotential::calculateForce(const IntraCoulombPotential::Molecule &mol,
                                       const IntraCoulombPotential::Molecule &rest_of_mol,
                                       MolForceTable &forces,

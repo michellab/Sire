@@ -120,7 +120,7 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the 3D coordinates of the atoms in the forcefield */
-inline const CoordGroupArray& AtomicCoords3D::atomicCoordinates() const
+SIRE_ALWAYS_INLINE const CoordGroupArray& AtomicCoords3D::atomicCoordinates() const
 {
     return coords;
 }

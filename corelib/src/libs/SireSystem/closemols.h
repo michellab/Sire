@@ -160,7 +160,7 @@ private:
 
 /** Return whether or not the molecule with number 'molnum' is
     one of the close molecules */
-inline bool CloseMols::isClose(MolNum molnum) const
+SIRE_ALWAYS_INLINE bool CloseMols::isClose(MolNum molnum) const
 {
     return close_mols.contains(molnum);
 }

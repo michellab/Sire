@@ -70,20 +70,20 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Constructor */
-inline Incremint::Incremint(int value) : atomic_int(value)
+SIRE_ALWAYS_INLINE Incremint::Incremint(int value) : atomic_int(value)
 {}
 
 /** Copy constructor */
-inline Incremint::Incremint(const Incremint &other) 
+SIRE_ALWAYS_INLINE Incremint::Incremint(const Incremint &other) 
                  : atomic_int(other.atomic_int)
 {}
 
 /** Destructor */
-inline Incremint::~Incremint()
+SIRE_ALWAYS_INLINE Incremint::~Incremint()
 {}
 
 /** Increment the Incremint and return its new value */
-inline int Incremint::increment()
+SIRE_ALWAYS_INLINE int Incremint::increment()
 {
     int value = atomic_int.fetchAndAddRelaxed(1);
     return value+1;

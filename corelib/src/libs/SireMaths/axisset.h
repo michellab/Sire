@@ -108,19 +108,19 @@ protected:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Returns a reference to the matrix representing this AxisSet */
-inline const Matrix& AxisSet::matrix() const
+SIRE_ALWAYS_INLINE const Matrix& AxisSet::matrix() const
 {
     return mat;
 }
 
 /** Returns a reference to the inverse of the matrix representing this AxisSet */
-inline const Matrix& AxisSet::invMatrix() const
+SIRE_ALWAYS_INLINE const Matrix& AxisSet::invMatrix() const
 {
     return invmat;
 }
 
 /** Returns a reference to the vector representing the origin of this AxisSet */
-inline const Vector& AxisSet::origin() const
+SIRE_ALWAYS_INLINE const Vector& AxisSet::origin() const
 {
     return orgn;
 }

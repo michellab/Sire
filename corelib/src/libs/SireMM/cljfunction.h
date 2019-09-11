@@ -656,7 +656,7 @@ protected:
 
 /** Private internal function that takes the passed two AtomIdx 32bit integers
     and packs them into a single 64bit integer. */
-inline qint64 CLJIntraFunction::pack(qint32 a, qint32 b)
+SIRE_ALWAYS_INLINE qint64 CLJIntraFunction::pack(qint32 a, qint32 b)
 {
     qint64 ret;
     (reinterpret_cast<qint32*>(&ret))[0] = a;
@@ -665,14 +665,14 @@ inline qint64 CLJIntraFunction::pack(qint32 a, qint32 b)
 }
 
 /** Internal function that gets the 64bit index from the two 32bit ID numbers */
-inline qint64 CLJIntraFunction::getIndex(qint32 id0, qint32 id1)
+SIRE_ALWAYS_INLINE qint64 CLJIntraFunction::getIndex(qint32 id0, qint32 id1)
 {
     return id0 <= id1 ? pack(id0,id1) : pack(id1,id0);
 }
 
 /** Internal function used to get the 64bit index into the nonbonded scale factor
     hash for the pair of atoms with AtomIdx values 'atom0' and 'atom1' */
-inline qint64 CLJIntraFunction::getIndex(const SireMol::AtomIdx &atom0,
+SIRE_ALWAYS_INLINE qint64 CLJIntraFunction::getIndex(const SireMol::AtomIdx &atom0,
                                          const SireMol::AtomIdx &atom1)
 {
     return atom0.value() <= atom1.value() ? pack(atom0.value() + 1,atom1.value() + 1) :
@@ -680,7 +680,7 @@ inline qint64 CLJIntraFunction::getIndex(const SireMol::AtomIdx &atom0,
 }
 
 /** Return whether or not all atom pairs with passed IDs are not bonded */
-inline bool CLJIntraFunction::isNotBonded(const MultiInt &id0, const MultiInt &id1) const
+SIRE_ALWAYS_INLINE bool CLJIntraFunction::isNotBonded(const MultiInt &id0, const MultiInt &id1) const
 {
     for (int i=0; i<MultiInt::count(); ++i)
     {
@@ -697,7 +697,7 @@ inline bool CLJIntraFunction::isNotBonded(const MultiInt &id0, const MultiInt &i
 }
 
 /** Return whether or not all atom pairs with passed IDs are not bonded */
-inline bool CLJIntraFunction::isNotBonded(qint32 id0, const MultiInt &id1) const
+SIRE_ALWAYS_INLINE bool CLJIntraFunction::isNotBonded(qint32 id0, const MultiInt &id1) const
 {
     const bool *row = bond_matrix.constData()[id0].constData();
 
@@ -711,7 +711,7 @@ inline bool CLJIntraFunction::isNotBonded(qint32 id0, const MultiInt &id1) const
 }
 
 /** Return the bond matrix */
-inline const QVector< QVector<bool> >& CLJIntraFunction::bondMatrix() const
+SIRE_ALWAYS_INLINE const QVector< QVector<bool> >& CLJIntraFunction::bondMatrix() const
 {
     return bond_matrix;
 }

@@ -130,7 +130,7 @@ private:
 
 /** Add 'nflops' floating point operations to the count of floating
     point operations for this thread */
-inline void CountFlops::addFlops(int nflops)
+SIRE_ALWAYS_INLINE void CountFlops::addFlops(int nflops)
 {
     if (global_counter == 0)
     {

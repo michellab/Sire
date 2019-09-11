@@ -443,7 +443,7 @@ static const MultiFloat MULTIFLOAT_POS_MASK(
                             *(reinterpret_cast<const float*>(&MULTIFLOAT_POS_MASK_INT)) );
 
 /** Constructor. This creates a MultiFloat with an undefined initial state */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat::MultiFloat()
 {
     assertAligned();
@@ -467,7 +467,7 @@ MultiFloat::MultiFloat()
 }
 
 /** Construct downcasting the passed double to a float */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat::MultiFloat(double val)
 {
     assertAligned();
@@ -475,7 +475,7 @@ MultiFloat::MultiFloat(double val)
 }
 
 /** Construct casting from an int */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat::MultiFloat(int val)
 {
     assertAligned();
@@ -483,7 +483,7 @@ MultiFloat::MultiFloat(int val)
 }
 
 /** Construct a MultiFloat with all values equal to 'val' */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat::MultiFloat(float val)
 {
     assertAligned();
@@ -508,7 +508,7 @@ MultiFloat::MultiFloat(float val)
 
 #ifdef SIRE_HAS_CPP_11
     /** Construct from the passed function that generates floats */
-    inline MultiFloat::MultiFloat(const std::function<float ()> &generator)
+    SIRE_ALWAYS_INLINE MultiFloat::MultiFloat(const std::function<float ()> &generator)
     {
         assertAligned();
         #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -535,7 +535,7 @@ MultiFloat::MultiFloat(float val)
 #endif
 
 /** Copy constructor */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat::MultiFloat(const MultiFloat &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -557,7 +557,7 @@ MultiFloat::MultiFloat(const MultiFloat &other)
 }
 
 /** Assignment operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat& MultiFloat::operator=(const MultiFloat &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -581,7 +581,7 @@ MultiFloat& MultiFloat::operator=(const MultiFloat &other)
 }
 
 /** Assignment operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat& MultiFloat::operator=(float value)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -605,20 +605,20 @@ MultiFloat& MultiFloat::operator=(float value)
 }
 
 /** Destructor */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat::~MultiFloat()
 {}
 
 /** Return the ith value in the MultiFloat. This is a fast function
     that performs no bounds checking! */
-inline float MultiFloat::operator[](int i) const
+SIRE_ALWAYS_INLINE float MultiFloat::operator[](int i) const
 {
     return v.a[i];
 }
 
 /** Comparison operator. This will return a MultiFloat with elements
     set to zero for each float that is not equal */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::compareEqual(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -644,7 +644,7 @@ MultiFloat MultiFloat::compareEqual(const MultiFloat &other) const
 }
 
 /** Not equals comparison operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::compareNotEqual(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -670,7 +670,7 @@ MultiFloat MultiFloat::compareNotEqual(const MultiFloat &other) const
 }
 
 /** Less than comparison operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::compareLess(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -696,7 +696,7 @@ MultiFloat MultiFloat::compareLess(const MultiFloat &other) const
 }
 
 /** Greater than comparison operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::compareGreater(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -722,7 +722,7 @@ MultiFloat MultiFloat::compareGreater(const MultiFloat &other) const
 }
 
 /** Less than or equal comparison */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::compareLessEqual(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -748,7 +748,7 @@ MultiFloat MultiFloat::compareLessEqual(const MultiFloat &other) const
 }
 
 /** Greater than or equal comparison */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::compareGreaterEqual(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -774,21 +774,21 @@ MultiFloat MultiFloat::compareGreaterEqual(const MultiFloat &other) const
 }
 
 /** Return the number of values in the vector */
-inline
+SIRE_ALWAYS_INLINE
 int MultiFloat::size()
 {
     return MULTIFLOAT_SIZE;
 }
 
 /** Return the number of values in the vector */
-inline
+SIRE_ALWAYS_INLINE
 int MultiFloat::count()
 {
     return MULTIFLOAT_SIZE;
 }
 
 /** Addition operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::operator+(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -813,7 +813,7 @@ MultiFloat MultiFloat::operator+(const MultiFloat &other) const
 }
 
 /** Subtraction operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::operator-(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -838,7 +838,7 @@ MultiFloat MultiFloat::operator-(const MultiFloat &other) const
 }
 
 /** Multiplication operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::operator*(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -863,7 +863,7 @@ MultiFloat MultiFloat::operator*(const MultiFloat &other) const
 }
 
 /** Division operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::operator/(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -888,7 +888,7 @@ MultiFloat MultiFloat::operator/(const MultiFloat &other) const
 }
 
 /** In-place addition operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat& MultiFloat::operator+=(const MultiFloat &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -913,7 +913,7 @@ MultiFloat& MultiFloat::operator+=(const MultiFloat &other)
 }
 
 /** In-place subtraction operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat& MultiFloat::operator-=(const MultiFloat &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -938,7 +938,7 @@ MultiFloat& MultiFloat::operator-=(const MultiFloat &other)
 }
 
 /** In-place multiplication operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat& MultiFloat::operator*=(const MultiFloat &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -963,7 +963,7 @@ MultiFloat& MultiFloat::operator*=(const MultiFloat &other)
 }
 
 /** In-place division operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat& MultiFloat::operator/=(const MultiFloat &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -988,13 +988,13 @@ MultiFloat& MultiFloat::operator/=(const MultiFloat &other)
 }
 
 /** Negative operator */
-inline MultiFloat MultiFloat::operator-() const
+SIRE_ALWAYS_INLINE MultiFloat MultiFloat::operator-() const
 {
     return this->operator*(MULTIFLOAT_NEGATIVE_ONE);
 }
 
 /** Bitwise logical "and" comparison */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::logicalAnd(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1031,7 +1031,7 @@ MultiFloat MultiFloat::logicalAnd(const MultiFloat &other) const
 }
 
 /** Bitwise logical "and not" (this is *this and (not other)) */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::logicalAndNot(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1068,7 +1068,7 @@ MultiFloat MultiFloat::logicalAndNot(const MultiFloat &other) const
 }
 
 /** Bitwise logical or operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::logicalOr(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1102,7 +1102,7 @@ MultiFloat MultiFloat::logicalOr(const MultiFloat &other) const
 }
 
 /** Bitwise logical xor */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::logicalXor(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1136,7 +1136,7 @@ MultiFloat MultiFloat::logicalXor(const MultiFloat &other) const
 }
 
 /** Logical not operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::logicalNot() const
 {
     MultiFloat ret;
@@ -1156,35 +1156,35 @@ MultiFloat MultiFloat::logicalNot() const
 }
 
 /** Logical not operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::operator!() const
 {
     return this->logicalNot();
 }
 
 /** Logical and operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::operator&(const MultiFloat &other) const
 {
     return this->logicalAnd(other);
 }
 
 /** Logical or operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::operator|(const MultiFloat &other) const
 {
     return this->logicalOr(other);
 }
 
 /** Logical xor operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::operator^(const MultiFloat &other) const
 {
     return this->logicalXor(other);
 }
 
 /** In place logical and */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat& MultiFloat::operator&=(const MultiFloat &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1216,7 +1216,7 @@ MultiFloat& MultiFloat::operator&=(const MultiFloat &other)
 }
 
 /** In-place logical or */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat& MultiFloat::operator|=(const MultiFloat &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1247,7 +1247,7 @@ MultiFloat& MultiFloat::operator|=(const MultiFloat &other)
 }
 
 /** In-place logical xor */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat& MultiFloat::operator^=(const MultiFloat &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1278,7 +1278,7 @@ MultiFloat& MultiFloat::operator^=(const MultiFloat &other)
 }
 
 /** Multiply val0 and val1 and add it onto this value */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat& MultiFloat::multiplyAdd(const MultiFloat &v0, const MultiFloat &v1)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1302,7 +1302,7 @@ MultiFloat& MultiFloat::multiplyAdd(const MultiFloat &v0, const MultiFloat &v1)
 }
 
 /** Return the maximum vector between this and other */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::max(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1326,7 +1326,7 @@ MultiFloat MultiFloat::max(const MultiFloat &other) const
 }
 
 /** Return the minimum vector between this and other */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::min(const MultiFloat &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1350,14 +1350,14 @@ MultiFloat MultiFloat::min(const MultiFloat &other) const
 }
 
 /** Return the reciprocal of this vector */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::reciprocal() const
 {
     return MULTIFLOAT_ONE.operator/(*this);
 }
 
 /** Return a poor approximation of the reciprocal of the vector (about 12 bits of precision) */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::reciprocal_approx() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1377,7 +1377,7 @@ MultiFloat MultiFloat::reciprocal_approx() const
 
 /** Return a good approximation of the reciprocal of the vector (the poor approximation
     refined using one step of Newton Raphson) */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::reciprocal_approx_nr() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1426,7 +1426,7 @@ MultiFloat MultiFloat::reciprocal_approx_nr() const
 }
 
 /** Return the square root of this vector */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::sqrt() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1452,7 +1452,7 @@ MultiFloat MultiFloat::sqrt() const
 
 /** Return the approximate square root, highly approximated but very fast.
     Has about 12 bits of precision in the mantissa (is x * rsqrt(x)) */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::sqrt_approx() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1475,7 +1475,7 @@ MultiFloat MultiFloat::sqrt_approx() const
 
 /** Return a good approximation of the square root (this is the poor approximation
     refined using a single step of Newton Raphson) */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::sqrt_approx_nr() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1530,7 +1530,7 @@ MultiFloat MultiFloat::sqrt_approx_nr() const
 }
 
 /** Return the recipical square root of this vector */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::rsqrt() const
 {
     return MULTIFLOAT_ONE.operator/(this->sqrt());
@@ -1538,7 +1538,7 @@ MultiFloat MultiFloat::rsqrt() const
 
 /** Return an approximation of the reciprical square root of this vector (only good
     for about 12 bit of the mantissa) */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::rsqrt_approx() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1558,7 +1558,7 @@ MultiFloat MultiFloat::rsqrt_approx() const
 
 /** Return a good approximation of the reciprical square root (this poor approximation
     refined using a single Newton Raphson step) */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::rsqrt_approx_nr() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1617,7 +1617,7 @@ MultiFloat MultiFloat::rsqrt_approx_nr() const
 
 /** Rotate this vector. This moves each element one space to the left, moving the
     first element to the last element */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat MultiFloat::rotate() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1648,7 +1648,7 @@ MultiFloat MultiFloat::rotate() const
 }
 
 /** Return the sum of all elements of this vector */
-inline
+SIRE_ALWAYS_INLINE
 float MultiFloat::sum() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1676,7 +1676,7 @@ float MultiFloat::sum() const
 }
 
 /** Return the sum of all elements of this vector, using doubles for the sum */
-inline
+SIRE_ALWAYS_INLINE
 double MultiFloat::doubleSum() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1704,7 +1704,7 @@ double MultiFloat::doubleSum() const
 }
 
 /** Return the absolute (positive) value of the floats */
-inline MultiFloat MultiFloat::abs() const
+SIRE_ALWAYS_INLINE MultiFloat MultiFloat::abs() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
         MultiFloat ret;
@@ -1736,7 +1736,7 @@ inline MultiFloat MultiFloat::abs() const
 }
 
 /** Quick function to set the value of the ith element */
-inline void MultiFloat::quickSet(int i, float value)
+SIRE_ALWAYS_INLINE void MultiFloat::quickSet(int i, float value)
 {
     v.a[i] = value;
 }

@@ -276,32 +276,32 @@ private:
 
 /** Return the vector from the center of the p orbital shell
     to the center of mass of the combined gaussian */
-inline const Vector& PS_GTO::P_minus_A() const
+SIRE_ALWAYS_INLINE const Vector& PS_GTO::P_minus_A() const
 {
     return p_minus_a;
 }
 
 /** Synonym for P_minus_A */
-inline const Vector& PS_GTO::P_minus_B() const
+SIRE_ALWAYS_INLINE const Vector& PS_GTO::P_minus_B() const
 {
     return PS_GTO::P_minus_A();
 }
 
 /** Synonym for P_minus_A */
-inline const Vector& PS_GTO::Q_minus_C() const
+SIRE_ALWAYS_INLINE const Vector& PS_GTO::Q_minus_C() const
 {
     return PS_GTO::P_minus_A();
 }
 
 /** Synonym for P_minus_A */
-inline const Vector& PS_GTO::Q_minus_D() const
+SIRE_ALWAYS_INLINE const Vector& PS_GTO::Q_minus_D() const
 {
     return PS_GTO::P_minus_A();
 }
 
 /** Return the additional scaling constant needed to normalise
     the integrals */
-inline double PS_GTO::scale() const
+SIRE_ALWAYS_INLINE double PS_GTO::scale() const
 {
     return norm_scl;
 }

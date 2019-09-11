@@ -314,7 +314,7 @@ public:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Set the score from parsing */
-inline void MoleculeParser::setScore(double score)
+SIRE_ALWAYS_INLINE void MoleculeParser::setScore(double score)
 {
     scr = score;
 }
@@ -325,38 +325,38 @@ inline void MoleculeParser::setScore(double score)
     nlines * [0 (failed to parse line) -> 1 (parsed line perfectly)],
     where the maximum score of nlines means that every line of the
     file was parsed perfectly. */
-inline double MoleculeParser::score() const
+SIRE_ALWAYS_INLINE double MoleculeParser::score() const
 {
     return scr;
 }
 
 /** Return the lines of the file. Note that this
     only returns something for text-based files */
-inline const QVector<QString>& MoleculeParser::lines() const
+SIRE_ALWAYS_INLINE const QVector<QString>& MoleculeParser::lines() const
 {
     return lnes;
 }
 
 /** Return whether or not this parser works with text files */
-inline bool MoleculeParser::isTextFile() const
+SIRE_ALWAYS_INLINE bool MoleculeParser::isTextFile() const
 {
     return true;
 }
 
 /** Return whether or not this parser works with binary files */
-inline bool MoleculeParser::isBinaryFile() const
+SIRE_ALWAYS_INLINE bool MoleculeParser::isBinaryFile() const
 {
     return not this->isTextFile();
 }
 
 /** Return whether or not this parser is empty */
-inline bool MoleculeParser::isEmpty() const
+SIRE_ALWAYS_INLINE bool MoleculeParser::isEmpty() const
 {
     return this->isTextFile() and lnes.isEmpty();
 }
 
 /** Return whether or not this parser runs in parallel */
-inline bool MoleculeParser::usesParallel() const
+SIRE_ALWAYS_INLINE bool MoleculeParser::usesParallel() const
 {
     return run_parallel;
 }

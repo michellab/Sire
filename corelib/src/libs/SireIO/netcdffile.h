@@ -275,31 +275,31 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the ID number of this piece of data */
-inline int NetCDFDataInfo::ID() const
+SIRE_ALWAYS_INLINE int NetCDFDataInfo::ID() const
 {
     return idnum;
 }
 
 /** Return the name of this piece of data */
-inline QString NetCDFDataInfo::name() const
+SIRE_ALWAYS_INLINE QString NetCDFDataInfo::name() const
 {
     return nme;
 }
 
 /** Return the names of the dimensions of this data */
-inline QStringList NetCDFDataInfo::dimensions() const
+SIRE_ALWAYS_INLINE QStringList NetCDFDataInfo::dimensions() const
 {
     return dim_names;
 }
 
 /** Return the number of values for each of the dimensions of this data */
-inline QList<int> NetCDFDataInfo::dimensionSizes() const
+SIRE_ALWAYS_INLINE QList<int> NetCDFDataInfo::dimensionSizes() const
 {
     return dim_sizes;
 }
 
 /** Return the number of attributes of this data in the file */
-inline int NetCDFDataInfo::nAttributes() const
+SIRE_ALWAYS_INLINE int NetCDFDataInfo::nAttributes() const
 {
     return att_names.count();
 }

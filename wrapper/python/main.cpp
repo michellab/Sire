@@ -33,23 +33,23 @@ using namespace SireCluster;
 #include <signal.h>
 
 //handle CTRL-C signal - this should kill the calculation
-// - with thanks to 
+// - with thanks to
 //  <http://www.gnu.org/software/libtool/manual/libc/Termination-in-Handler.html#Termination-in-Handler>
 
 volatile sig_atomic_t fatal_error_in_progress = 0;
-     
+
 void fatal_error_signal (int sig)
 {
-    // Since this handler is established for more than one kind of signal, 
+    // Since this handler is established for more than one kind of signal,
     // it might still get invoked recursively by delivery of some other kind
     // of signal.  Use a static variable to keep track of that.
     if (fatal_error_in_progress)
         raise (sig);
- 
+
     fatal_error_in_progress = 1;
 
     printf("You're killing me!!!\n");
-     
+
     // Kill any child processes
     SireBase::Process::killAll();
 
@@ -84,6 +84,28 @@ int main(int argc, char **argv)
         CPUID cpuid;
         int ppn = cpuid.numCores();
 
+        // See if the OMP_NUM_THREADS environment variable has been set.
+        QString num_threads = qgetenv("OMP_NUM_THREADS");
+
+        // If the variable has been set, try to convert to an int.
+        if (not num_threads.isEmpty())
+            ppn = num_threads.toInt();
+
+        // See if the SIRE_NUM_THREADS environment variable has been set.
+        // This takes precedence over OMP_NUM_THREADS.
+        num_threads = qgetenv("SIRE_NUM_THREADS");
+
+        // If the variable has been set, try to convert to an int.
+        if (not num_threads.isEmpty())
+            ppn = num_threads.toInt();
+
+        if (ppn <= 0)
+        {
+            throw SireError::invalid_arg( QObject::tr(
+                "Invalid OMP_NUM_THREADS or SIRE_NUM_THREADS environment "
+                "variable! Must be a positive integer."));
+        }
+
         QList< std::wstring > warg_strings;
 
         for (int i=0; i<argc; ++i)
@@ -91,6 +113,7 @@ int main(int argc, char **argv)
             QString arg = argv[i];
             //qDebug() << "ARG" << i << arg;
 
+            // Command-line arg takes precedence over all environment variables.
             if (arg.startsWith("--ppn"))
             {
                 QStringList parts = arg.split("=", QString::SkipEmptyParts);
@@ -144,7 +167,7 @@ int main(int argc, char **argv)
         else
             pythonpath = QString("%1:%2").arg(site_packages.canonicalPath()).arg(pythonpath);
 
-        QDir python_home( QString("%1/%2/..").arg( getInstallDir(), SIRE_BUNDLED_LIBS_DIR ) ); 
+        QDir python_home( QString("%1/%2/..").arg( getInstallDir(), SIRE_BUNDLED_LIBS_DIR ) );
 
         /**
         if (not python_home.exists())
@@ -156,8 +179,6 @@ int main(int argc, char **argv)
         qputenv("PYTHONPATH", pythonpath.toUtf8());
         qputenv("PYTHONHOME", python_home.canonicalPath().toUtf8());
         */
-
-       
 
         //now look at the name of the executable. If there is a script with this
         //name in share/scripts then run that script

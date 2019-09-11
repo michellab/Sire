@@ -1,8 +1,9 @@
 ## This script is used to finish the compile of Sire corelib and wrappers
 ## This script must be called using the python from a miniconda or
-## anaconda distribution
+## anaconda distribution
 
 import sys
+import sysconfig
 import os
 import glob
 import time
@@ -19,8 +20,8 @@ def parse_args():
     parser.add_argument("-W", "--wrapper", action="append", nargs=1,
         metavar=("PARAMETER=VALUE",), default=[],
         help="pass CMake definitions for wrapper")
-    parser.add_argument("-G", dest="generator", action="store", nargs=1,
-        metavar=("GENERATOR",), default="",
+    parser.add_argument("-G", "--generator", action="append", nargs=1,
+        metavar=("GENERATOR",), default=[],
         help="pass CMake generator")
     parser.add_argument("-n", "--ncores", action="store", type=int, nargs=1,
         metavar=("N_CORES",), default=multiprocessing.cpu_count(),
@@ -40,6 +41,7 @@ if __name__ == "__main__":
 
     is_linux = False
     is_windows = False
+    is_mingw = False
     is_osx = False
 
     exe_suffix = ""
@@ -53,7 +55,8 @@ if __name__ == "__main__":
         exe_suffix = ".exe"
         #print("Sorry - compiling into miniconda on Windows is not supported yet")
         #args.noconda = True
-        is_windows = True
+        is_mingw = (sysconfig.get_platform() == "mingw")
+        is_windows = (sysconfig.get_platform().startswith("win"))
     else:
         print("Unrecognised build platform: %s" % platform.system())
         sys.exit(-1)
@@ -113,7 +116,7 @@ if __name__ == "__main__":
               % (python_exe, sys.argv[0]))
 
     # now go through all of the python modules that need to be available
-    # into this conda installation, and make sure they have been installed
+    # into this conda installation, and make sure they have been installed
 
     conda_pkgs = []
 
@@ -157,7 +160,7 @@ if __name__ == "__main__":
         import netCDF4
         print("netCDF4 is already installed...")
     except ImportError:
-        conda_pkgs.append("netcdf4=1.5.0")
+        conda_pkgs.append("netcdf4=1.5.1.2")
 
     CC = None
     CXX = None
@@ -170,20 +173,20 @@ if __name__ == "__main__":
         if os.path.exists(os.path.join(conda_base, "include", "boost", "python.hpp")):
             print("boost is already installed...")
         else:
-            conda_pkgs.append("boost=1.69.0")
+            conda_pkgs.append("boost=1.70.0")
 
         # gsl
         if os.path.exists(os.path.join(conda_base, "include", "gsl", "gsl_version.h")):
             print("gsl is already installed...")
         else:
-            conda_pkgs.append("gsl=2.4")
+            conda_pkgs.append("gsl=2.5")
 
         # tbb
         if os.path.exists(os.path.join(conda_base, "include", "tbb", "tbb.h")):
             print("TBB is already installed...")
         else:
-            conda_pkgs.append("tbb=2019.4")
-            conda_pkgs.append("tbb-devel=2019.4")
+            conda_pkgs.append("tbb=2019.8")
+            conda_pkgs.append("tbb-devel=2019.8")
 
         # Qt5
         try:
@@ -237,7 +240,7 @@ if __name__ == "__main__":
 
     installed_something = False
 
-    if len(conda_pkgs) > 0:
+    if (not args.noconda) and conda_pkgs:
         cmd = "%s config --prepend channels conda-forge" % conda_exe
         print("Activating conda-forge channel using: '%s'" % cmd)
         status = os.system(cmd)
@@ -252,21 +255,28 @@ if __name__ == "__main__":
             print("Something went wrong installing dependencies!")
             sys.exit(-1)
 
+    # check if the user wants to link against openmm
+    use_openmm = True
+    for d in args.corelib:
+        if ("SIRE_USE_OPENMM=OFF" in d[0]):
+            use_openmm = False
+            break
     # openmm last as different repo
-    try:
-        import simtk.openmm
-        print("openmm is already installed...")
-    except ImportError:
-        if args.noconda:
-            print("It looks like the openmm Python modules are not "
-                "available - please check your openmm installation")
-            sys.exit(-1)
-        else:
-            print("Installing openmm from the Omnia channel...")
-            os.system("%s install --yes -c omnia openmm=7.3.1" % conda_exe)
-            installed_something = True
+    if use_openmm:
+        try:
+            import simtk.openmm
+            print("openmm is already installed...")
+        except ImportError:
+            if args.noconda:
+                print("It looks like the openmm Python modules are not "
+                    "available - please check your openmm installation")
+                sys.exit(-1)
+            else:
+                print("Installing openmm from the Omnia channel...")
+                os.system("%s install --yes -c omnia openmm=7.3.1" % conda_exe)
+                installed_something = True
 
-    # make sure we really have found the compilers
+    # make sure we really have found the compilers
     if (not args.noconda):
         if is_osx:
             try:
@@ -286,12 +296,12 @@ if __name__ == "__main__":
 
     print("Using compilers %s | %s" % (CC, CXX))
 
-    # Make sure all of the above output is printed to the screen
-    # before we start running any actual compilation
+    # Make sure all of the above output is printed to the screen
+    # before we start running any actual compilation
     sys.stdout.flush()
 
-    # Now that the miniconda distribution is ok, the next step
-    # is to use cmake to build the corelib and wrapper in the build/corelib
+    # Now that the miniconda distribution is ok, the next step
+    # is to use cmake to build the corelib and wrapper in the build/corelib
     # and build/wrapper directories
 
     # change into the build/corelib directory
@@ -341,8 +351,6 @@ if __name__ == "__main__":
             print("SOMETHING IS WRONG. There is no file %s" % os.path.join(sourcedir, "CMakeLists.txt"))
             sys.exit(-1)
 
-        #status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
-        #                 % (conda_base,NCORES,sourcedir) )
         for a in ("NetCDF_ROOT_DIR", "OPENMM_ROOT_DIR"):
             for i, d in enumerate(args.corelib):
                 if (a in d[0]):
@@ -352,7 +360,7 @@ if __name__ == "__main__":
         add_default_cmake_defs(args.corelib)
         cmake_cmd = "%s %s %s %s" % (cmake,
             " ".join(["-D \"%s\"" % d[0] for d in args.corelib]),
-            " ".join(["-G \"%s\"" % g for g in args.generator]), sourcedir)
+            " ".join(["-G \"%s\"" % g[0] for g in args.generator]), sourcedir)
         if (CC):
             os.environ["CC"] = CC
         if (CXX):
@@ -365,7 +373,7 @@ if __name__ == "__main__":
         print("SOMETHING WENT WRONG WHEN USING CMAKE ON CORELIB!")
         sys.exit(-1)
 
-    # Now that cmake has run, we can compile and install corelib
+    # Now that cmake has run, we can compile and install corelib
     make_args = make_cmd(NCORES, True)
 
     print("NOW RUNNING \"%s\" --build . --target %s" % (cmake, make_args))
@@ -403,12 +411,10 @@ if __name__ == "__main__":
             print("SOMETHING IS WRONG. There is no file %s" % os.path.join(sourcedir, "CMakeLists.txt"))
             sys.exit(-1)
 
-        #status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
-        #                 % (conda_base,NCORES,sourcedir) )
         add_default_cmake_defs(args.wrapper)
         cmake_cmd = "%s %s %s %s" % (cmake,
             " ".join(["-D \"%s\"" % d[0] for d in args.wrapper]),
-            " ".join(["-G \"%s\"" % g for g in args.generator]), sourcedir)
+            " ".join(["-G \"%s\"" % g[0] for g in args.generator]), sourcedir)
         print(cmake_cmd)
         sys.stdout.flush()
         status = os.system(cmake_cmd)

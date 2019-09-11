@@ -43,50 +43,50 @@ namespace SireUnits
 // Conversion functions for derived units      //
 /////////////////////////////////////////////////
 
-inline double convertFrom(double val, const Dimension::TempBase &from_units)
+SIRE_ALWAYS_INLINE double convertFrom(double val, const Dimension::TempBase &from_units)
 {
     return from_units.convertToInternal(val);
 }
 
-inline double convertFrom(double val, const Dimension::Unit &from_units)
+SIRE_ALWAYS_INLINE double convertFrom(double val, const Dimension::Unit &from_units)
 {
     return from_units.convertToInternal(val);
 }
 
-inline double convertTo(double val, const Dimension::TempBase &to_units)
+SIRE_ALWAYS_INLINE double convertTo(double val, const Dimension::TempBase &to_units)
 {
     return to_units.convertFromInternal(val);
 }
 
-inline double convertTo(double val, const Dimension::Unit &to_units)
+SIRE_ALWAYS_INLINE double convertTo(double val, const Dimension::Unit &to_units)
 {
     return to_units.convertFromInternal(val);
 }
 
-inline double convert(double val, const Dimension::TempBase &from_units,
+SIRE_ALWAYS_INLINE double convert(double val, const Dimension::TempBase &from_units,
                                   const Dimension::TempBase &to_units)
 {
     return convertTo( convertFrom(val,from_units), to_units );
 }
 
-inline double convert(double val, const Dimension::Unit &from_units,
+SIRE_ALWAYS_INLINE double convert(double val, const Dimension::Unit &from_units,
                                   const Dimension::TempBase &to_units)
 {
     return convertTo( convertFrom(val,from_units), to_units );
 }
 
-inline double convert(double val, const Dimension::Unit &from_units,
+SIRE_ALWAYS_INLINE double convert(double val, const Dimension::Unit &from_units,
                                   const Dimension::Unit &to_units)
 {
     return convertTo( convertFrom(val,from_units), to_units );
 }
 
-inline double convert(double val, const Dimension::TempBase &to_units)
+SIRE_ALWAYS_INLINE double convert(double val, const Dimension::TempBase &to_units)
 {
     return convertTo(val, to_units);
 }
 
-inline double convert(double val, const Dimension::Unit &to_units)
+SIRE_ALWAYS_INLINE double convert(double val, const Dimension::Unit &to_units)
 {
     return convertTo(val, to_units);
 }

@@ -138,14 +138,14 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the molecule group from which a molecule will be sampled */
-inline const MoleculeGroup& Sampler::group() const
+SIRE_ALWAYS_INLINE const MoleculeGroup& Sampler::group() const
 {
     return molgroup;
 }
 
 /** Internal function used to return a reference to the random
     number generator used by this sampler */
-inline const RanGenerator& Sampler::generator() const
+SIRE_ALWAYS_INLINE const RanGenerator& Sampler::generator() const
 {
     return rangen;
 }

@@ -121,21 +121,21 @@ private:
 
 /** Return the ID number of this delta. This can be used for book-keeping
     by the object that created this delta */
-inline qint32 CLJDelta::ID() const
+SIRE_ALWAYS_INLINE qint32 CLJDelta::ID() const
 {
     return idnum;
 }
 
 /** Return the old version of the atoms in a format that should make
     them easy to rebox */
-inline CLJAtoms CLJDelta::oldAtoms() const
+SIRE_ALWAYS_INLINE CLJAtoms CLJDelta::oldAtoms() const
 {
     return old_atoms;
 }
 
 /** Return the new version of the atoms in a format that should make
     them easy to rebox */
-inline CLJAtoms CLJDelta::newAtoms() const
+SIRE_ALWAYS_INLINE CLJAtoms CLJDelta::newAtoms() const
 {
     return new_atoms;
 }

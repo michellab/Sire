@@ -103,7 +103,7 @@ private:
     boost::shared_ptr<AtomID> d;
 };
 
-inline uint qHash(const AtomIdentifier &atomid)
+SIRE_ALWAYS_INLINE uint qHash(const AtomIdentifier &atomid)
 {
     return atomid.hash();
 }

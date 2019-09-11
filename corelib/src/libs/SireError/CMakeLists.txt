@@ -26,6 +26,9 @@ if ((NOT HAVE_BACKTRACE) AND HAVE_BOOST_STACKTRACE_HPP)
    message( STATUS "Boost backtrace functionality is available." )
    add_definitions( -D_HAVE_BOOST_STACKTRACE_HPP_ )
    add_definitions( -DSIRE_ENABLE_BOOST_BACKTRACE )
+   if (MSVC)
+      add_definitions( -DBOOST_STACKTRACE_USE_WINDBG_CACHED )
+   endif()
 endif()
 
 set ( SIREERROR_HEADERS

@@ -309,35 +309,35 @@ private:
 
 /** Return the molecule number of the molecule whose forces are
     contained in this table */
-inline MolNum MolForceTable::molNum() const
+SIRE_ALWAYS_INLINE MolNum MolForceTable::molNum() const
 {
     return molnum;
 }
 
 /** Return the UID of the molecular layout of the molecule
     whose forces are contained in this table */
-inline const QUuid& MolForceTable::molUID() const
+SIRE_ALWAYS_INLINE const QUuid& MolForceTable::molUID() const
 {
     return moluid;
 }
 
 /** Return the total number of CutGroups in the molecule whose
     forces are contained in this table */
-inline int MolForceTable::nCutGroups() const
+SIRE_ALWAYS_INLINE int MolForceTable::nCutGroups() const
 {
     return ncgroups;
 }
 
 /** Return the number of selected CutGroups in this table 
     (the number of CutGroups for which forces are held) */
-inline int MolForceTable::nSelectedCutGroups() const
+SIRE_ALWAYS_INLINE int MolForceTable::nSelectedCutGroups() const
 {
     return SireBase::PackedArray2D<SireMaths::Vector>::count();
 }
 
 /** Return whether or not this table contains forces for all
     of the CutGroups in the molecule */
-inline bool MolForceTable::selectedAll() const
+SIRE_ALWAYS_INLINE bool MolForceTable::selectedAll() const
 {
     return this->nCutGroups() == this->nSelectedCutGroups();
 }
@@ -347,7 +347,7 @@ inline bool MolForceTable::selectedAll() const
     
     \throw SireError::invalid_index
 */
-inline bool MolForceTable::selected(CGIdx cgidx) const
+SIRE_ALWAYS_INLINE bool MolForceTable::selected(CGIdx cgidx) const
 {
     cgidx = CGIdx(cgidx.map(this->nCutGroups()));
     
@@ -360,7 +360,7 @@ inline bool MolForceTable::selected(CGIdx cgidx) const
     
     \throw SireError::invalid_index
 */
-inline int MolForceTable::map(CGIdx cgidx) const
+SIRE_ALWAYS_INLINE int MolForceTable::map(CGIdx cgidx) const
 {
     if (this->selectedAll())
         return cgidx.map( this->nCutGroups() );
@@ -374,7 +374,7 @@ inline int MolForceTable::map(CGIdx cgidx) const
 
 /** Return whether or not this contains a table for the 
     molecule with number 'molnum' */
-inline bool ForceTable::containsTable(MolNum molnum) const
+SIRE_ALWAYS_INLINE bool ForceTable::containsTable(MolNum molnum) const
 {
     return molnum_to_idx.contains(molnum);
 }
@@ -383,7 +383,7 @@ inline bool ForceTable::containsTable(MolNum molnum) const
 
     \throw SireMol::missing_molecule
 */
-inline MolForceTable& ForceTable::getTable(MolNum molnum)
+SIRE_ALWAYS_INLINE MolForceTable& ForceTable::getTable(MolNum molnum)
 {
     QHash<MolNum,qint32>::const_iterator it = molnum_to_idx.constFind(molnum);
     
@@ -398,7 +398,7 @@ inline MolForceTable& ForceTable::getTable(MolNum molnum)
 
     \throw SireMol::missing_molecule
 */
-inline const MolForceTable& ForceTable::getTable(MolNum molnum) const
+SIRE_ALWAYS_INLINE const MolForceTable& ForceTable::getTable(MolNum molnum) const
 {
     QHash<MolNum,qint32>::const_iterator it = molnum_to_idx.constFind(molnum);
     
@@ -412,45 +412,45 @@ inline const MolForceTable& ForceTable::getTable(MolNum molnum) const
 
     \throw SireMol::missing_molecule
 */
-inline const MolForceTable& ForceTable::constGetTable(MolNum molnum) const
+SIRE_ALWAYS_INLINE const MolForceTable& ForceTable::constGetTable(MolNum molnum) const
 {
     return this->getTable(molnum);
 }
 
 /** Return the number of tables (molecules) in this object */
-inline int ForceTable::count() const
+SIRE_ALWAYS_INLINE int ForceTable::count() const
 {
     return tables_by_idx.count();
 }
 
 /** Return the index used to find the index into the force tables array 
     for the force table for the molecule with a specified number */
-inline const QHash<MolNum,qint32>& ForceTable::index() const
+SIRE_ALWAYS_INLINE const QHash<MolNum,qint32>& ForceTable::index() const
 {
     return molnum_to_idx;
 }
 
 /** Return the numbers of molecules that have force tables in this
     table */
-inline QList<MolNum> ForceTable::molNums() const
+SIRE_ALWAYS_INLINE QList<MolNum> ForceTable::molNums() const
 {
     return molnum_to_idx.keys();
 }
 
 /** Return a raw point to the array of force tables for each molecule */
-inline MolForceTable* ForceTable::data()
+SIRE_ALWAYS_INLINE MolForceTable* ForceTable::data()
 {
     return tables_by_idx.data();
 }
 
 /** Return a raw point to the array of force tables for each molecule */
-inline const MolForceTable* ForceTable::data() const
+SIRE_ALWAYS_INLINE const MolForceTable* ForceTable::data() const
 {
     return tables_by_idx.constData();
 }
 
 /** Return a raw point to the array of force tables for each molecule */
-inline const MolForceTable* ForceTable::constData() const
+SIRE_ALWAYS_INLINE const MolForceTable* ForceTable::constData() const
 {
     return tables_by_idx.constData();
 }

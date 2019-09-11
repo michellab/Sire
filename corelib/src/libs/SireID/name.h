@@ -102,7 +102,7 @@ protected:
 };
 
 /** Return a hash of this Name */
-inline uint qHash(const Name &name)
+SIRE_ALWAYS_INLINE uint qHash(const Name &name)
 {
     return name.hash();
 }

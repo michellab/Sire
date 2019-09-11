@@ -92,33 +92,33 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the number of rows in the matrix */
-inline int TrigArray2DBase::nRows() const
+SIRE_ALWAYS_INLINE int TrigArray2DBase::nRows() const
 {
     return dim;
 }
 
 /** Return the number of columns in the matrix */
-inline int TrigArray2DBase::nColumns() const
+SIRE_ALWAYS_INLINE int TrigArray2DBase::nColumns() const
 {
     return dim;
 }
 
 /** Return the number of unique items in this array (the size of 
     the underlying 1D array) */
-inline int TrigArray2DBase::size() const
+SIRE_ALWAYS_INLINE int TrigArray2DBase::size() const
 {
 	return (dim*dim + dim)/2;
 }
 
 /** Return the number of unique items in this array (the size of 
     the underlying 1D array) */
-inline int TrigArray2DBase::count() const
+SIRE_ALWAYS_INLINE int TrigArray2DBase::count() const
 {
 	return TrigArray2DBase::size();
 }
 
 /** Return the offset into the array of the value at index [i,j] */
-inline int TrigArray2DBase::offset(int i, int j) const
+SIRE_ALWAYS_INLINE int TrigArray2DBase::offset(int i, int j) const
 {
     if (i <= j)
         return (2*(j + i*dim) - i - i*i) / 2;
@@ -127,7 +127,7 @@ inline int TrigArray2DBase::offset(int i, int j) const
 }
 
 /** Map the 2D index (i,j) into the 1D index into memory */
-inline int TrigArray2DBase::map(int i, int j) const
+SIRE_ALWAYS_INLINE int TrigArray2DBase::map(int i, int j) const
 {
     return TrigArray2DBase::offset(i, j);
 }
@@ -136,13 +136,13 @@ inline int TrigArray2DBase::map(int i, int j) const
 
     \throw SireError::invalid_index
 */
-inline void TrigArray2DBase::assertValidIndex(int i, int j) const
+SIRE_ALWAYS_INLINE void TrigArray2DBase::assertValidIndex(int i, int j) const
 {
     if (i < 0 or i >= dim or j < 0 or j >= dim)
         throwInvalidIndex(i,j);
 }
 
-inline int TrigArray2DBase::checkedOffset(int i, int j) const
+SIRE_ALWAYS_INLINE int TrigArray2DBase::checkedOffset(int i, int j) const
 {
     TrigArray2DBase::assertValidIndex(i,j);
     return TrigArray2DBase::offset(i,j);

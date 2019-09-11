@@ -303,14 +303,14 @@ private:
 static const MultiDouble MULTIDOUBLE_ONE(1);
 
 /** Constructor. This creates a MultiDouble with an undefined initial state */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble::MultiDouble()
 {
     assertAligned();
 }
 
 /** Construct a vector with all values equal to 'val' */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble::MultiDouble(double val)
 {
     assertAligned();
@@ -338,7 +338,7 @@ MultiDouble::MultiDouble(double val)
 
 /** Construct using the passed function to generate doubles */
 #ifdef SIRE_HAS_CPP_11
-    inline
+    SIRE_ALWAYS_INLINE
     MultiDouble::MultiDouble(const std::function<double ()> &generator)
     {
         assertAligned();
@@ -368,7 +368,7 @@ MultiDouble::MultiDouble(double val)
 #endif
 
 /** Copy construct from a MultiFloat */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble::MultiDouble(const MultiFloat &other)
 {
     assertAligned();
@@ -399,7 +399,7 @@ MultiDouble::MultiDouble(const MultiFloat &other)
 }
 
 /** Copy construct from a MultiDouble */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat::MultiFloat(const MultiDouble &other)
 {
     assertAligned();
@@ -430,7 +430,7 @@ MultiFloat::MultiFloat(const MultiDouble &other)
 }
 
 /** Copy constructor */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble::MultiDouble(const MultiDouble &other)
 {
     assertAligned();
@@ -457,19 +457,19 @@ MultiDouble::MultiDouble(const MultiDouble &other)
 }
 
 /** Destructor */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble::~MultiDouble()
 {}
 
 /** Return the ith value in the MultiDouble - note that
     this is a fast function that does no bounds checking */
-inline double MultiDouble::operator[](int i) const
+SIRE_ALWAYS_INLINE double MultiDouble::operator[](int i) const
 {
     return v.a[i];
 }
 
 /** Assignment operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble& MultiDouble::operator=(const MultiDouble &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -496,7 +496,7 @@ MultiDouble& MultiDouble::operator=(const MultiDouble &other)
 }
 
 /** Assignment operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiFloat& MultiFloat::operator=(const MultiDouble &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -527,7 +527,7 @@ MultiFloat& MultiFloat::operator=(const MultiDouble &other)
 }
 
 /** Assignment operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble& MultiDouble::operator=(double value)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -554,7 +554,7 @@ MultiDouble& MultiDouble::operator=(double value)
 }
 
 /** Assignment operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble& MultiDouble::operator=(const MultiFloat &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -586,7 +586,7 @@ MultiDouble& MultiDouble::operator=(const MultiFloat &other)
 
 /** Comparison operator. This will return a MultiDouble with elements
     set to zero for each double that is not equal */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::compareEqual(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -615,7 +615,7 @@ MultiDouble MultiDouble::compareEqual(const MultiDouble &other) const
 }
 
 /** Not equals comparison operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::compareNotEqual(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -644,7 +644,7 @@ MultiDouble MultiDouble::compareNotEqual(const MultiDouble &other) const
 }
 
 /** Less than comparison operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::compareLess(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -673,7 +673,7 @@ MultiDouble MultiDouble::compareLess(const MultiDouble &other) const
 }
 
 /** Greater than comparison operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::compareGreater(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -702,7 +702,7 @@ MultiDouble MultiDouble::compareGreater(const MultiDouble &other) const
 }
 
 /** Less than or equal comparison */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::compareLessEqual(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -731,7 +731,7 @@ MultiDouble MultiDouble::compareLessEqual(const MultiDouble &other) const
 }
 
 /** Greater than or equal comparison */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::compareGreaterEqual(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -760,21 +760,21 @@ MultiDouble MultiDouble::compareGreaterEqual(const MultiDouble &other) const
 }
 
 /** Return the number of values in the vector */
-inline
+SIRE_ALWAYS_INLINE
 int MultiDouble::size()
 {
     return MULTIFLOAT_SIZE;
 }
 
 /** Return the number of values in the vector */
-inline
+SIRE_ALWAYS_INLINE
 int MultiDouble::count()
 {
     return MULTIFLOAT_SIZE;
 }
 
 /** Addition operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::operator+(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -801,7 +801,7 @@ MultiDouble MultiDouble::operator+(const MultiDouble &other) const
 }
 
 /** Subtraction operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::operator-(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -828,7 +828,7 @@ MultiDouble MultiDouble::operator-(const MultiDouble &other) const
 }
 
 /** Multiplication operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::operator*(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -855,7 +855,7 @@ MultiDouble MultiDouble::operator*(const MultiDouble &other) const
 }
 
 /** Division operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::operator/(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -882,7 +882,7 @@ MultiDouble MultiDouble::operator/(const MultiDouble &other) const
 }
 
 /** In-place addition operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble& MultiDouble::operator+=(const MultiDouble &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -909,7 +909,7 @@ MultiDouble& MultiDouble::operator+=(const MultiDouble &other)
 }
 
 /** In-place subtraction operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble& MultiDouble::operator-=(const MultiDouble &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -936,7 +936,7 @@ MultiDouble& MultiDouble::operator-=(const MultiDouble &other)
 }
 
 /** In-place multiplication operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble& MultiDouble::operator*=(const MultiDouble &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -963,7 +963,7 @@ MultiDouble& MultiDouble::operator*=(const MultiDouble &other)
 }
 
 /** In-place division operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble& MultiDouble::operator/=(const MultiDouble &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -990,7 +990,7 @@ MultiDouble& MultiDouble::operator/=(const MultiDouble &other)
 }
 
 /** Bitwise logical "and" comparison */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::logicalAnd(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1031,7 +1031,7 @@ MultiDouble MultiDouble::logicalAnd(const MultiDouble &other) const
 }
 
 /** Bitwise logical "and not" */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::logicalAndNot(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1072,7 +1072,7 @@ MultiDouble MultiDouble::logicalAndNot(const MultiDouble &other) const
 }
 
 /** Bitwise logical or operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::logicalOr(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1109,7 +1109,7 @@ MultiDouble MultiDouble::logicalOr(const MultiDouble &other) const
 }
 
 /** Bitwise logical xor */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::logicalXor(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1146,7 +1146,7 @@ MultiDouble MultiDouble::logicalXor(const MultiDouble &other) const
 }
 
 /** Logical not operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::logicalNot() const
 {
     MultiDouble ret;
@@ -1166,35 +1166,35 @@ MultiDouble MultiDouble::logicalNot() const
 }
 
 /** Logical not operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::operator!() const
 {
     return this->logicalNot();
 }
 
 /** Logical and operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::operator&(const MultiDouble &other) const
 {
     return this->logicalAnd(other);
 }
 
 /** Logical or operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::operator|(const MultiDouble &other) const
 {
     return this->logicalOr(other);
 }
 
 /** Logical xor operator */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::operator^(const MultiDouble &other) const
 {
     return this->logicalXor(other);
 }
 
 /** In place logical and */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble& MultiDouble::operator&=(const MultiDouble &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1230,7 +1230,7 @@ MultiDouble& MultiDouble::operator&=(const MultiDouble &other)
 }
 
 /** In-place logical or */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble& MultiDouble::operator|=(const MultiDouble &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1264,7 +1264,7 @@ MultiDouble& MultiDouble::operator|=(const MultiDouble &other)
 }
 
 /** In-place logical xor */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble& MultiDouble::operator^=(const MultiDouble &other)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1298,7 +1298,7 @@ MultiDouble& MultiDouble::operator^=(const MultiDouble &other)
 }
 
 /** Multiply val0 and val1 and add it onto this value */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble& MultiDouble::multiplyAdd(const MultiDouble &v0, const MultiDouble &v1)
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1325,7 +1325,7 @@ MultiDouble& MultiDouble::multiplyAdd(const MultiDouble &v0, const MultiDouble &
 }
 
 /** Return the maximum vector between this and other */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::max(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1352,7 +1352,7 @@ MultiDouble MultiDouble::max(const MultiDouble &other) const
 }
 
 /** Return the minimum vector between this and other */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::min(const MultiDouble &other) const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1379,14 +1379,14 @@ MultiDouble MultiDouble::min(const MultiDouble &other) const
 }
 
 /** Return the reciprocal of this vector */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::reciprocal() const
 {
     return MULTIDOUBLE_ONE.operator/(*this);
 }
 
 /** Return the square root of this vector */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::sqrt() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1413,7 +1413,7 @@ MultiDouble MultiDouble::sqrt() const
 }
 
 /** Return the recipical square root of this vector */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::rsqrt() const
 {
     return MULTIDOUBLE_ONE.operator/(this->sqrt());
@@ -1421,7 +1421,7 @@ MultiDouble MultiDouble::rsqrt() const
 
 /** Return an approximation of the reciprical square root of this vector (only good
     for about 12 bit of the mantissa) */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::rsqrt_approx() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1433,7 +1433,7 @@ MultiDouble MultiDouble::rsqrt_approx() const
 
 /** Return a good approximation of the reciprical square root (this poor approximation
     refined using a single Newton Raphson step) */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::rsqrt_approx_nr() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1467,7 +1467,7 @@ MultiDouble MultiDouble::rsqrt_approx_nr() const
 
 /** Rotate this vector. This moves each element one space to the left, moving the
     first element to the last element */
-inline
+SIRE_ALWAYS_INLINE
 MultiDouble MultiDouble::rotate() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1500,7 +1500,7 @@ MultiDouble MultiDouble::rotate() const
 }
 
 /** Return the sum of all elements of this vector */
-inline
+SIRE_ALWAYS_INLINE
 double MultiDouble::sum() const
 {
     #ifdef MULTIFLOAT_AVX512F_IS_AVAILABLE
@@ -1528,33 +1528,33 @@ double MultiDouble::sum() const
 }
 
 /** Return the sum of all elements of this vector, using doubles for the sum */
-inline
+SIRE_ALWAYS_INLINE
 double MultiDouble::doubleSum() const
 {
     return this->sum();
 }
 
-inline MultiDouble cos(const MultiDouble &val)
+SIRE_ALWAYS_INLINE MultiDouble cos(const MultiDouble &val)
 {
     return cos(MultiFloat(val));
 }
 
-inline MultiDouble sin(const MultiDouble &val)
+SIRE_ALWAYS_INLINE MultiDouble sin(const MultiDouble &val)
 {
     return sin(MultiFloat(val));
 }
 
-inline MultiDouble log(const MultiDouble &val)
+SIRE_ALWAYS_INLINE MultiDouble log(const MultiDouble &val)
 {
     return log(MultiFloat(val));
 }
 
-inline MultiDouble exp(const MultiDouble &val)
+SIRE_ALWAYS_INLINE MultiDouble exp(const MultiDouble &val)
 {
     return exp(MultiFloat(val));
 }
 
-inline void sincos(const MultiDouble &val, MultiDouble &sinval, MultiDouble &cosval)
+SIRE_ALWAYS_INLINE void sincos(const MultiDouble &val, MultiDouble &sinval, MultiDouble &cosval)
 {
     MultiFloat c, s;
     sincos(MultiFloat(val), c, s);

@@ -588,36 +588,36 @@ private:
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
 
 /** Return the force constant in kcal mol-1 A-2 */
-inline double AmberBond::k() const
+SIRE_ALWAYS_INLINE double AmberBond::k() const
 {
     return _k;
 }
 
 /** Return the equilibrium bond length, in angstroms */
-inline double AmberBond::r0() const
+SIRE_ALWAYS_INLINE double AmberBond::r0() const
 {
     return _r0;
 }
 
-inline uint my_qHash(double key)
+SIRE_ALWAYS_INLINE uint my_qHash(double key)
 {
     return ::qHash( *(reinterpret_cast<const ulong*>(&key)) );
 }
 
 /** Return a hash for the bond */
-inline uint AmberBond::hash() const
+SIRE_ALWAYS_INLINE uint AmberBond::hash() const
 {
     return my_qHash(_k) | my_qHash(_r0);
 }
 
 /** Return a hash of this bond */
-inline uint qHash(const AmberBond &param)
+SIRE_ALWAYS_INLINE uint qHash(const AmberBond &param)
 {
     return param.hash();
 }
 
 /** Comparison operator */
-inline bool AmberBond::operator<(const AmberBond &other) const
+SIRE_ALWAYS_INLINE bool AmberBond::operator<(const AmberBond &other) const
 {
     if (_k < other._k)
     {
@@ -632,31 +632,31 @@ inline bool AmberBond::operator<(const AmberBond &other) const
 }
 
 /** Return the force constant in kcal mol-1 radian-2 */
-inline double AmberAngle::k() const
+SIRE_ALWAYS_INLINE double AmberAngle::k() const
 {
     return _k;
 }
 
 /** Return the equilibrium angle, in radians */
-inline double AmberAngle::theta0() const
+SIRE_ALWAYS_INLINE double AmberAngle::theta0() const
 {
     return _theta0;
 }
 
 /** Return a hash for the angle */
-inline uint AmberAngle::hash() const
+SIRE_ALWAYS_INLINE uint AmberAngle::hash() const
 {
     return my_qHash(_k) | my_qHash(_theta0);
 }
 
 /** Return a hash of this angle */
-inline uint qHash(const AmberAngle &param)
+SIRE_ALWAYS_INLINE uint qHash(const AmberAngle &param)
 {
     return param.hash();
 }
 
 /** Comparison operator */
-inline bool AmberAngle::operator<(const AmberAngle &other) const
+SIRE_ALWAYS_INLINE bool AmberAngle::operator<(const AmberAngle &other) const
 {
     if (_k < other._k)
     {
@@ -671,37 +671,37 @@ inline bool AmberAngle::operator<(const AmberAngle &other) const
 }
 
 /** Return the force constant, in kcal mol-1 */
-inline double AmberDihPart::k() const
+SIRE_ALWAYS_INLINE double AmberDihPart::k() const
 {
     return _k;
 }
 
 /** Return the periodicity */
-inline double AmberDihPart::periodicity() const
+SIRE_ALWAYS_INLINE double AmberDihPart::periodicity() const
 {
     return _periodicity;
 }
 
 /** Return the phase */
-inline double AmberDihPart::phase() const
+SIRE_ALWAYS_INLINE double AmberDihPart::phase() const
 {
     return _phase;
 }
 
 /** Return a hash for the dihedral part */
-inline uint AmberDihPart::hash() const
+SIRE_ALWAYS_INLINE uint AmberDihPart::hash() const
 {
     return my_qHash(_k) | my_qHash(_periodicity) | my_qHash(_phase);
 }
 
 /** Return a hash of this dihedral */
-inline uint qHash(const AmberDihPart &param)
+SIRE_ALWAYS_INLINE uint qHash(const AmberDihPart &param)
 {
     return param.hash();
 }
 
 /** Return a hash for the dihedral */
-inline uint AmberDihedral::hash() const
+SIRE_ALWAYS_INLINE uint AmberDihedral::hash() const
 {
     uint h = 0;
 
@@ -714,7 +714,7 @@ inline uint AmberDihedral::hash() const
 }
 
 /** Comparison operator */
-inline bool AmberDihPart::operator<(const AmberDihPart &other) const
+SIRE_ALWAYS_INLINE bool AmberDihPart::operator<(const AmberDihPart &other) const
 {
     if (_k < other._k)
     {
@@ -738,18 +738,18 @@ inline bool AmberDihPart::operator<(const AmberDihPart &other) const
 }
 
 /** Return a hash of the AmberNBDihPart */
-inline uint AmberNBDihPart::hash() const
+SIRE_ALWAYS_INLINE uint AmberNBDihPart::hash() const
 {
     return dih.hash();
 }
 
-inline uint qHash(const AmberNBDihPart &param)
+SIRE_ALWAYS_INLINE uint qHash(const AmberNBDihPart &param)
 {
     return param.hash();
 }
 
 /** Return an array of all of the terms in the dihedral */
-inline QVector<AmberDihPart> AmberDihedral::terms() const
+SIRE_ALWAYS_INLINE QVector<AmberDihPart> AmberDihedral::terms() const
 {
     if (_parts.isEmpty())
     {
@@ -762,61 +762,61 @@ inline QVector<AmberDihPart> AmberDihedral::terms() const
 }
 
 /** Return a hash of this bond */
-inline uint qHash(const AmberDihedral &param)
+SIRE_ALWAYS_INLINE uint qHash(const AmberDihedral &param)
 {
     return param.hash();
 }
 
 /** Return the 14 electrostatic scaling factor */
-inline double AmberNB14::cscl() const
+SIRE_ALWAYS_INLINE double AmberNB14::cscl() const
 {
     return _cscl;
 }
 
 /** Return the 14 LJ scaling factor */
-inline double AmberNB14::ljscl() const
+SIRE_ALWAYS_INLINE double AmberNB14::ljscl() const
 {
     return _ljscl;
 }
 
 /** Return a hash of all of the bond parameters */
-inline QHash< BondID,QPair<AmberBond,bool> > AmberParams::bonds() const
+SIRE_ALWAYS_INLINE QHash< BondID,QPair<AmberBond,bool> > AmberParams::bonds() const
 {
     return amber_bonds;
 }
 
 /** Return a hash of all of the angle parameters */
-inline QHash< AngleID,QPair<AmberAngle,bool> > AmberParams::angles() const
+SIRE_ALWAYS_INLINE QHash< AngleID,QPair<AmberAngle,bool> > AmberParams::angles() const
 {
     return amber_angles;
 }
 
 /** Return a hash of all of the dihedral parameters */
-inline QHash< DihedralID,QPair<AmberDihedral,bool> > AmberParams::dihedrals() const
+SIRE_ALWAYS_INLINE QHash< DihedralID,QPair<AmberDihedral,bool> > AmberParams::dihedrals() const
 {
     return amber_dihedrals;
 }
 
 /** Return a hash of all of the improper parameters */
-inline QHash< ImproperID,QPair<AmberDihedral,bool> > AmberParams::impropers() const
+SIRE_ALWAYS_INLINE QHash< ImproperID,QPair<AmberDihedral,bool> > AmberParams::impropers() const
 {
     return amber_impropers;
 }
 
 /** Return a hash of all of the 1-4 nonbonded parameters */
-inline QHash<BondID,AmberNB14> AmberParams::nb14s() const
+SIRE_ALWAYS_INLINE QHash<BondID,AmberNB14> AmberParams::nb14s() const
 {
     return amber_nb14s;
 }
 
 /** Return the parameter part of the class */
-inline const AmberDihPart& AmberNBDihPart::parameter() const
+SIRE_ALWAYS_INLINE const AmberDihPart& AmberNBDihPart::parameter() const
 {
     return dih;
 }
 
 /** Return the NB14 scale factor */
-inline const AmberNB14& AmberNBDihPart::scl() const
+SIRE_ALWAYS_INLINE const AmberNB14& AmberNBDihPart::scl() const
 {
     return nbscl;
 }
