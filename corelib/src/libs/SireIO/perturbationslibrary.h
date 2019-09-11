@@ -101,6 +101,18 @@ public:
 
     const QString getName();
     
+    // ******************** VIRTUAL SITES ********************
+    void setInitVSCharge(const QString &vsname, const Charge &vscharge);
+    void setFinalVSCharge(const QString &vsname, const Charge &vscharge);
+
+    void setInitVSLJ(const QString &vsname, const LJParameter &vslj);
+    void setFinalVSLJ(const QString &vsname, const LJParameter &vslj);
+
+    void setInitVSType(const QString &vsname, const QString &vstype);
+    void setFinalVSType(const QString &vsname, const QString &vstype);
+
+    // *****************END OF VIRTUAL SITES *****************
+
     void setInitCharge(const QString &atomname, const Charge &atomcharge);
     void setFinalCharge(const QString &atomname, const Charge &atomcharge);
 
@@ -145,6 +157,19 @@ public:
     //void setFinalImproperK0(const ImproperID &improper, const double &k0);
     //void setFinalImproperN(const ImproperID &improper, const int &n);
     //void setFinalImproperPhase(const ImproperID &improper, const double &phase);
+ 
+ 
+     // ******************** VIRTUAL SITES ********************
+
+    void setGenericVirtualSite();
+
+    Charge getInitVSCharge(const QString &atomname) const;
+    Charge getFinalVSCharge(const QString &atomname) const;
+    LJParameter getInitVSLJ(const QString &atomname) const;
+    LJParameter getFinalVSLJ(const QString &atomname) const;
+    QString getInitVSType(const QString &atomname) const;
+    QString getFinalVSType(const QString &atomname) const;
+
 
     Charge getInitCharge(const QString &atomname) const;
     Charge getFinalCharge(const QString &atomname) const;
@@ -152,7 +177,8 @@ public:
     LJParameter getFinalLJ(const QString &atomname) const;
     QString getInitType(const QString &atomname) const;
     QString getFinalType(const QString &atomname) const;
-
+ // *****************END OF VIRTUAL SITES *****************
+ 
     QList<BondID> getBonds() const;
     double getInitBondK(const BondID &bond) const;
     double getInitBondR(const BondID &bond) const;
