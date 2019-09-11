@@ -5,7 +5,7 @@ SRC_DIR=$(pwd)
 
 # Linux runs in a docker container from $HOME.
 if [ ! -d $SRC_DIR/docker ]; then
-    SRC_DIR=$HOME/BioSimSpace
+    SRC_DIR=$HOME/Sire
 fi
 
 # Get the tag associated with the latest commit.
