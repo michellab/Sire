@@ -1797,28 +1797,28 @@ void OpenMMFrEnergyST::initialise()
                 for (int i = 0; i < nvirtualsites; i++)
                 {
 
-                    int nVSites = restrainedAtoms.property(QString("nvirtualsites(%1)").arg(i)).asA<VariantProperty>().toInt();
-                    int vsIndex = restrainedAtoms.property(QString("index(%1)").arg(i)).asA<VariantProperty>().toInt();
-                    int atom1 = restrainedAtoms.property(QString("atom1(%1)").arg(i)).asA<VariantProperty>().toInt();
-                    int atom2 = restrainedAtoms.property(QString("atom2(%1)").arg(i)).asA<VariantProperty>().toInt();
-                    int atom3 = restrainedAtoms.property(QString("atom3(%1)").arg(i)).asA<VariantProperty>().toInt();
-                    double p1 = restrainedAtoms.property(QString("p1(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double p2 = restrainedAtoms.property(QString("p2(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double p3 = restrainedAtoms.property(QString("p3(%1)").arg(i)).asA<VariantProperty>().toDouble()
-                    double wo1 = restrainedAtoms.property(QString("wo1(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double wo2 = restrainedAtoms.property(QString("wo2(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double wo3 = restrainedAtoms.property(QString("wo3(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double wx1 = restrainedAtoms.property(QString("wx1(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double wx2 = restrainedAtoms.property(QString("wx2(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double wx3 = restrainedAtoms.property(QString("wx3(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double wy1 = restrainedAtoms.property(QString("wy1(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double wy2 = restrainedAtoms.property(QString("wy2(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double wy3 = restrainedAtoms.property(QString("wy3(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double charge = restrainedAtoms.property(QString("charge(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double sigma = restrainedAtoms.property(QString("sigma(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double epsilon = restrainedAtoms.property(QString("epsilon(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    //QString name = restrainedAtoms.property(QString("name(%1)").arg(i)).asA<VariantProperty>().toString();
-                    //QString type = restrainedAtoms.property(QString("type(%1)").arg(i)).asA<VariantProperty>().toString();
+                    int nVSites = virtualSites.property(QString("nvirtualsites(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int vsIndex = virtualSites.property(QString("index(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int atom1 = virtualSites.property(QString("atom1(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int atom2 = virtualSites.property(QString("atom2(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int atom3 = virtualSites.property(QString("atom3(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    double p1 = virtualSites.property(QString("p1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double p2 = virtualSites.property(QString("p2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double p3 = virtualSites.property(QString("p3(%1)").arg(i)).asA<VariantProperty>().toDouble()
+                    double wo1 = virtualSites.property(QString("wo1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wo2 = virtualSites.property(QString("wo2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wo3 = virtualSites.property(QString("wo3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wx1 = virtualSites.property(QString("wx1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wx2 = virtualSites.property(QString("wx2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wx3 = virtualSites.property(QString("wx3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wy1 = virtualSites.property(QString("wy1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wy2 = virtualSites.property(QString("wy2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wy3 = virtualSites.property(QString("wy3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double charge = virtualSites.property(QString("charge(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double sigma = virtualSites.property(QString("sigma(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double epsilon = virtualSites.property(QString("epsilon(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    //QString name = virtualSites.property(QString("name(%1)").arg(i)).asA<VariantProperty>().toString();
+                    //QString type = virtualSites.property(QString("type(%1)").arg(i)).asA<VariantProperty>().toString();
 
                     if (Debug)
                     {
