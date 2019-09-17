@@ -6,12 +6,19 @@ The following instructions describe how to create a new Sire release:
 Step 1
 ======
 
+Update the version number in the CMakeLists.txt files
+`here <https://github.com/michellab/Sire/blob/devel/corelib/CMakeLists.txt>`_ and
+`here <https://github.com/michellab/Sire/blob/devel/wrapper/CMakeLists.txt>`_.
+
+Step 2
+======
+
 Update the `CHANGELOG <https://github.com/michellab/Sire/blob/devel/CHANGELOG>`_
 file with a summary of the changes for this relase. Feel free to link to
 `GitHub issues <https://github.com/michellab/Sire/issues>`_ where relevant
 and give credit for specific contributions.
 
-Step 2
+Step 3
 ======
 
 When you're happy, tag the commit that you want to be associated with the
@@ -21,7 +28,7 @@ release. The following with tag the latest commit:
 
     git tag -a 2019.1.0 -m "Tagging the 2019.1.0 release of Sire."
 
-Step 3
+Step 4
 ======
 
 Push the commit and tag to the ``devel`` branch on the remote:
@@ -51,7 +58,7 @@ Finally, push the new commit and updated tag:
 
     git push origin devel --follow-tags
 
-Step 4
+Step 5
 ======
 
 Once the build has finished you can log into the `Oracle Cloud <https://cloud.oracle.com/home>`__
@@ -67,13 +74,13 @@ file with download links for the new release. Make sure to add a MD5 hashes for
 the files and to move the download links for the previous release to the
 ``Older Versions`` section at the bottom of the page.
 
-Step 5
+Step 6
 ======
 
 Create a `GitHub release <https://github.com/michellab/Sire/releases>`_. When
 drafting the release, simpy choose the tag that you have created.
 
-Step 6
+Step 7
 ======
 
 Create a `pull request <https://github.com/michellab/Sire/pulls>`_ to merge
