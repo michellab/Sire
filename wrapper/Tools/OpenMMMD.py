@@ -684,7 +684,7 @@ def setupVSites(system):
     return vsList
   
 
-  def assignVirtualSites(pdbfile, xmlfile):
+def assignVirtualSites(pdbfile, xmlfile):
     import xml.dom.minidom as minidom
 
     amber = Amber()
