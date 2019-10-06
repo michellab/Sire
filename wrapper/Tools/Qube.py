@@ -567,7 +567,7 @@ def readXmlParameters(pdbfile, xmlfile):
                     nb_pair_list.append((i,j))
                     print (nb_pair_list)
 
-            nbpairs = CLJNBPairs(editmol.info())
+            nbpairs = CLJNBPairs(editmol.info(), CLJScaleFactor(1,1))
 
             for i in range(0, len(are12)):
                 scale_factor1 = 0
