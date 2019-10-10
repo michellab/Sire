@@ -62,11 +62,8 @@ which are available for Linux, Mac OS X and Windows, which are quick and easy to
 
 However, as you are here, it is likely you want to download the latest,
 greatest version of the code, which you will need to compile. To compile Sire,
-you need a working C++ compiler with at least C++ 2014 support (gcc >= 5 or clang >= 3.7),
-`cmake <http://cmake.org>`__
-(version 3.0.0 or above), a Git client to download the source,
-and a working internet connection (needed by
-the Sire compilation scripts to download additional dependencies).
+you need a Git client to download the source, and a working internet connection
+(needed by the Sire compilation scripts to download additional dependencies).
 
 The easy install option is::
 
@@ -76,13 +73,13 @@ The easy install option is::
 
 A small word of warning, the compilation can easily take over an hour!
 
-The above will download and install a new miniconda python installation,
+The above will download and install a new Miniconda Python installation,
 into which Sire will be compiled and deployed (together with its
 dependencies). This is by far the easiest way to compile and install Sire,
 and is the route we strongly recommend. If you have any problems with
 compiling and installing Sire, then please get in touch using the links below.
 
-If you want to install Sire into an existing miniconda or Anaconda
+If you want to install Sire into an existing Miniconda or Anaconda
 Python installation, please follow the instructions in `build/INSTALL_INTO_ANACONDA.rst <build/INSTALL_INTO_ANACONDA.rst>`__.
 
 Docker images
