@@ -20,20 +20,22 @@ requirements:
     - python 3.7
     - boost
     - gsl
+    - libnetcdf
     - netcdf4
     - openmm
     - pyqt
     - tbb
     - tbb_devel
   run:
-    -  {{ pin_compatible('python') }}
-    -  boost
-    -  gsl
-    -  netcdf4
-    -  openmm
-    -  pyqt
-    -  tbb
-    -  tbb_devel
+    - {{ pin_compatible('python') }}
+    - boost
+    - gsl
+    - libnetcdf
+    - netcdf4
+    - openmm
+    - pyqt
+    - tbb
+    - tbb_devel
 
 test:
   imports:
