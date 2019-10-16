@@ -17,7 +17,7 @@ ADD create_package_file.sh .
 RUN $HOME/create_package_file.sh
 
 # Install PycURL, conda-build, and anaconda-client
-RUN $HOME/sire.app/bin/conda install -y pycurl conda-build anaconda-client
+RUN $HOME/sire.app/bin/conda install -y pycurl conda-build=3.18.9 anaconda-client
 
 # Deploy the Conda package files.
 ADD deploy.py .
