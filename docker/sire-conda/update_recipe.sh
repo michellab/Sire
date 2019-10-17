@@ -47,7 +47,7 @@ for dep in ${DEPS[@]}; do
         if [ "$(uname)" == "Darwin" ]; then
             sed -i.bak -e "s/[[:<:]]$dep[[:>:]]/$dep $ver/g" $RECIPE && rm $RECIPE.bak
         else
-            sed -i.bak -e "s/$dep\b/$dep $ver/g" $RECIPE && rm $RECIPE.bak
+            sed -i.bak -e "s/\b$dep\b/$dep $ver/g" $RECIPE && rm $RECIPE.bak
         fi
     fi
     echo "  $dep $ver"
