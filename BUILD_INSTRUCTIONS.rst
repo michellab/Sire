@@ -48,19 +48,30 @@ The `sire-conda <https://github.com/michellab/Sire/tree/devel/docker/sire-conda>
 directory contains all of the files that are used to build and deploy
 the Sire `Conda package <https://anaconda.org/michellab/sire>`__ during
 the Azure Pipeline. The scripts will query the Sire Miniconda for the
-versions of any external dependencies, then add them to the packages
-*recipe*. This means that any version changes that you make in the
+versions of any external dependencies, then add them to the *recipe*
+for our package. This means that any version changes that you make in the
 `build_sire.py <https://github.com/michellab/Sire/blob/devel/build/build_sire.py>`__
-file will automatically be updated in the Conda package, i.e. you
-only need to maintain dependency versions in a single location.
-(The only thing that is needed is to update the list of external Conda
-dependences in `update_recipe.sh <https://github.com/michellab/Sire/blob/devel/docker/sire-conda/update_recipe.sh>`__
-if a new dependency is added.) Similarly, the Conda package version number is
-also automatically inferred from the git commit (we use the tag as the version
+file will automatically be updated in the Conda package, i.e. you only need to
+maintain dependency versions in a single location. The only thing that is
+needed is to update the list of external Conda dependences in
+`update_recipe.sh <https://github.com/michellab/Sire/blob/devel/docker/sire-conda/update_recipe.sh>`__
+if a new dependency is added. (Note that you'll also need to manage the
+versions of any dependencies of dependencies that are required at run time,
+since Conda doesn't do a good job of managing this for you. For example, the
+``netcdf4`` Conda package doesn't pin the version of ``libnetcdf`` that it
+pulls in, we need to manually pin the version of this package in the run time
+requirements of our Conda recipe. Currently we need to do this for ``libcblas``,
+``libnetcdf`` and ``qt``.) The Conda package version number is also
+automatically inferred from the git commit (we use the tag as the version
 and the number of commits since the tag as the build number). The Sire Conda
-package is created by extracting all of the compiled Sire binary and libray
+package is created by extracting all of the compiled Sire binary and library
 files from the Miniconda installation, then uploading them to the Oracle Cloud
 as an archive. These are then downloaded and unpacked into the correct location
 during the Conda installation. See `this <https://github.com/michellab/Sire/blob/devel/docker/sire-conda/create_package_file.sh>`__
-script to see how the archive of files is created and `this <https://github.com/michellab/Sire/blob/devel/docker/sire-conda/recipe/build.sh>`__ script to see how the same files are unpacked in place
-during the Conda install.
+script to see how the archive of files is created and `this <https://github.com/michellab/Sire/blob/devel/docker/sire-conda/recipe/build.sh>`__
+script to see how the same files are unpacked in place during the Conda install.
+Currently we pin the version of ``conda-build`` to 3.17 due to regular
+performance issues (hanging) with version 3.18, particularly on macOS. The
+Linux version is pinned in the `Dockerfile <https://github.com/michellab/Sire/blob/devel/docker/sire-conda/Dockerfile>`__
+whereas the macOS version is pinned in the Azure Pipeline
+`configuration <https://github.com/michellab/Sire/blob/devel/azure-pipelines-osx.yml>`__.
