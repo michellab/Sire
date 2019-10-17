@@ -27,7 +27,7 @@ jobs:
     displayName: 'Run Sire tests'
   - script: |
       # deploy the binary to an object store bucket identified by 'par_url'
-      $HOME/sire.app/bin/conda install -y pycurl conda-build anaconda-client
+      $HOME/sire.app/bin/conda install -y pycurl conda-build=3.17 anaconda-client
       $HOME/sire.app/bin/python docker/sire-deploy-devel/deploy.py $HOME/sire_devel_latest_osx.run
       bash docker/sire-deploy-devel/deploy_release.sh
     env:
