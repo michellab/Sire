@@ -82,7 +82,7 @@ SelectResult setAmberWater(const SelectResult& molecules, const QString& model, 
     // Make sure that we only operate on water molecules.
     SelectResult waters = molecules.search("water");
 
-    // Creat the list of molecules to return.
+    // Create the list of molecules to return.
     QList<ViewsOfMol> result;
 
     // Loop over all waters in the selection.

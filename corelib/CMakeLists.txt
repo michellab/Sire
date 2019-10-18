@@ -8,7 +8,7 @@
 
 set (S_VERSION_MAJOR "2019")
 set (S_VERSION_MINOR "2")
-set (S_VERSION_PATCH "0")             
+set (S_VERSION_PATCH "1")
 
 set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 
@@ -48,8 +48,8 @@ endif()
 set( CMAKE_INSTALL_MESSAGE "NEVER" )
 
 # Option used to control the number of cores for the compile
-set ( BUILD_NCORES "0" 
-      CACHE STRING 
+set ( BUILD_NCORES "0"
+      CACHE STRING
       "The number of cores used to compile Sire. Leave this at 0 to automatically work this out." )
 
 string(REGEX MATCH "[0-9]+" NCORES ${BUILD_NCORES})
@@ -163,7 +163,7 @@ else()
             "Install directory for Sire. This directory can be moved after compilation" )
 
     set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
-             "Prefix prepended to install directories" FORCE ) 
+             "Prefix prepended to install directories" FORCE )
   endif()
 endif()
 
@@ -174,7 +174,7 @@ message( STATUS "sire.app root directory is ${SIRE_APP}" )
 # Absolutely can't run cmake in the source directory!
 if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
   message( STATUS "${CMAKE_BINARY_DIR} | ${CMAKE_SOURCE_DIR}" )
-  message( FATAL_ERROR "You must run CMake in a different directory to the source!" ) 
+  message( FATAL_ERROR "You must run CMake in a different directory to the source!" )
 endif()
 
 # name the project
@@ -195,7 +195,7 @@ macro( SAVE_SIRE_VARIABLE _var _value )
         "set( ${_var} \"${_value}\" )\n")
 endmacro (SAVE_SIRE_VARIABLE)
 
-math (EXPR SIRE_VERSION_NUMBER 
+math (EXPR SIRE_VERSION_NUMBER
       "${S_VERSION_MAJOR}*100000 + ${S_VERSION_MINOR}*100 + ${S_VERSION_PATCH}")
 
 set (SIRE_VERSION_STRING "${S_VERSION_MAJOR}_${S_VERSION_MINOR}_${S_VERSION_PATCH}")
@@ -260,12 +260,12 @@ set (CMAKE_SKIP_BUILD_RPATH FALSE)
 
 if (APPLE)
   # make sure that all libraries are named "@rpath/library.dylib". This will allow
-  # the library to be found as long as the executable can substitute @rpath with the 
+  # the library to be found as long as the executable can substitute @rpath with the
   # path to the library
   set (CMAKE_INSTALL_NAME_DIR "@rpath")
 
   # Add the two passed directories to the @rpaths to search for libraries. @executable_path
-  # is the directory containing the executable, so the libraries are included in 
+  # is the directory containing the executable, so the libraries are included in
   # @exeutable_path/../${SIRE_LIBS} and @exeutable_path/../${SIRE_BUNDLED_LIBS}
   set (SIRE_INSTALL_RPATH "@executable_path/.:@executable_path/../${SIRE_LIBS}:@executable_path/../${SIRE_BUNDLED_LIBS}")
 else()
@@ -363,7 +363,7 @@ check_function_exists( cbrt HAVE_CUBEROOT )
 check_symbol_exists( backtrace "execinfo.h" HAVE_BACKTRACE )
 
 #create config.h
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/build/cmake/sire_config.h.in 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/build/cmake/sire_config.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/sire_config.h)
 
 #  We need to get the compiler flags for different options
@@ -506,13 +506,13 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
                   OUTPUT_VARIABLE exe_output )
 
     # These two regexps are copied from the Chicken CMake
-    # files (which provide a very useful cmake tutorial - thanks :-)                  
+    # files (which provide a very useful cmake tutorial - thanks :-)
     SET( VERSION_BUILD_REGEX "^([0-9]+)[.]([0-9]+).*$" )
     STRING( REGEX REPLACE ${VERSION_BUILD_REGEX} "\\1"
             GCC_MAJOR_VERSION ${exe_output} )
     STRING( REGEX REPLACE ${VERSION_BUILD_REGEX} "\\2"
             GCC_MINOR_VERSION ${exe_output} )
-        
+
     message( STATUS "Using GCC version "
                     "${GCC_MAJOR_VERSION}.${GCC_MINOR_VERSION}" )
 
@@ -582,7 +582,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
-    # an old incompatibility between clang and gcc means that some 
+    # an old incompatibility between clang and gcc means that some
     # distributions will fail if use -ffast-math
     set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
     set(CMAKE_REQUIRED_FLAGS "-O3 -ffast-math")
@@ -595,7 +595,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
               return 0;
            }"
            CAN_USE_FFAST_MATH)
-    set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})    
+    set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
 
     if (CAN_USE_FFAST_MATH)
       set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
@@ -628,7 +628,7 @@ elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
     set ( SIRE_WARNALL_FLAGS  "-w1" )
     set ( SIRE_RELEASE_FLAGS  "-O3 -finline -finline-functions -ansi-alias -fargument-noalias-global -ip -g -simd" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
-    set ( SIRE_VISIBILITY_FLAGS "-DSIRE_NO_VISIBILITY_AVAILABLE" )    
+    set ( SIRE_VISIBILITY_FLAGS "-DSIRE_NO_VISIBILITY_AVAILABLE" )
     set ( SIRE_SHARE_LINK_FLAGS "-shared" )
     set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
@@ -672,7 +672,7 @@ elseif (MSVC)
     set ( SIRE_EXE_LINK_FLAGS "/LTCG /OPT:REF /OPT:ICF" )
 
     set ( SIRE_PLATFORM_FLAGS "/DSIRE_ALWAYS_INLINE=__forceinline" )
-    
+
 else()
     message( STATUS "CMAKE_SYSTEM_NAME == ${CMAKE_SYSTEM_NAME}" )
     message( STATUS "CMAKE_C_COMPILER == ${CMAKE_C_COMPILER}" )
@@ -710,7 +710,7 @@ else()
   option( SIRE_BUNDLE_BLASLAPACK "Whether Sire should use its bundled copy of BLAS and LAPACK" ON )
   option( SIRE_BUNDLE_QT "Whether Sire should use its bundled copy of Qt" ON )
   option( SIRE_BUNDLE_OPENMM "Whether Sire should use its bundled copy of OpenMM" OFF )
- 
+
   save_sire_variable( "SIRE_ENABLE_BUNDLING" "${SIRE_ENABLE_BUNDLING}" )
   save_sire_variable( "SIRE_BUNDLE_TBB" "${SIRE_BUNDLE_TBB}" )
   save_sire_variable( "SIRE_BUNDLE_CPUID" "${SIRE_BUNDLE_CPUID}" )
@@ -725,7 +725,7 @@ else()
   set (SIRE_FOUND_BOOST FALSE)
   set (SIRE_FOUND_BLASLAPACK FALSE)
   set (SIRE_FOUND_QT FALSE)
-  set (SIRE_FOUND_OPENMM FALSE)  
+  set (SIRE_FOUND_OPENMM FALSE)
   set (SIRE_FOUND_NETCDF FALSE)
   set (SIRE_FOUND_CPUID FALSE)
 
@@ -747,11 +747,11 @@ else()
       if (NOT EXISTS "${BUNDLE_STAGEDIR}")
         file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR})
       endif()
-    
+
       if (NOT EXISTS "${BUNDLE_STAGEDIR}/lib")
         file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/lib)
       endif()
-          
+
       if (NOT EXISTS "${BUNDLE_STAGEDIR}/include")
         file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/include)
       endif()
@@ -787,7 +787,7 @@ else()
       if ( NOT ${BUNDLE_STAGEDIR} STREQUAL "${CMAKE_INSTALL_PREFIX}/${SIRE_BUNDLED_DIR}" )
         # All of the bundled objects are built into the directory ${CMAKE_BINARY_DIR}/bundled
         # This directory must be installed into the sire.app/ directory
-        install( DIRECTORY ${BUNDLE_STAGEDIR} 
+        install( DIRECTORY ${BUNDLE_STAGEDIR}
                  DESTINATION ${CMAKE_INSTALL_PREFIX}
                  USE_SOURCE_PERMISSIONS )
       endif()
@@ -878,7 +878,7 @@ if (NOT ${SIRE_FOUND_BOOST})
     save_sire_variable( "SIRE_BOOST_INCLUDE_DIR" "${Boost_INCLUDE_DIR}" )
   else()
     message(FATAL_ERROR "Cannot find the boost libraries.")
-  endif()  
+  endif()
 endif()
 
 if (NOT ${SIRE_FOUND_GSL})
@@ -887,11 +887,11 @@ if (NOT ${SIRE_FOUND_GSL})
 
   message( STATUS "GSL paths ${GSL_LINK_DIRECTORIES} "
                   "${GSL_LIBRARIES} | ${GSL_INCLUDE_DIR}" )
-         
+
   list(APPEND SIREMATHS_EXTRA_LIBRARIES ${GSL_LIBRARIES})
-                                  
+
   include_directories( BEFORE ${GSL_INCLUDE_DIR})
-                                  
+
   save_sire_variable( "SIRE_GSL_INCLUDE_PATH" "${GSL_INCLUDE_DIR}" )
 endif()
 
@@ -1072,7 +1072,7 @@ add_subdirectory (src/apps)
 include( GetGitVersion )
 
 # install the extra includes file in the Sire/cmake directory
-install (FILES ${SIRE_VARIABLES_FILE} 
+install (FILES ${SIRE_VARIABLES_FILE}
          DESTINATION ${SIRE_CMAKEFILES}
         )
 

@@ -21,7 +21,7 @@ ARCHIVE_LINUX=$HOME/sire_conda_latest_linux.tar.bz2
 ARCHIVE_OSX=$HOME/sire_conda_latest_osx.tar.bz2
 
 # List of python dependencies.
-DEPS=(boost gsl netcdf4 openmm pyqt tbb tbb-devel)
+DEPS=(boost gsl libcblas libnetcdf netcdf4 openmm pyqt qt tbb tbb-devel)
 
 # Where the Conda environment is stored.
 CONDA_ENV=.conda_env
@@ -47,7 +47,7 @@ for dep in ${DEPS[@]}; do
         if [ "$(uname)" == "Darwin" ]; then
             sed -i.bak -e "s/[[:<:]]$dep[[:>:]]/$dep $ver/g" $RECIPE && rm $RECIPE.bak
         else
-            sed -i.bak -e "s/$dep\b/$dep $ver/g" $RECIPE && rm $RECIPE.bak
+            sed -i.bak -e "s/\b$dep\b/$dep $ver/g" $RECIPE && rm $RECIPE.bak
         fi
     fi
     echo "  $dep $ver"

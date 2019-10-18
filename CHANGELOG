@@ -3,7 +3,12 @@ SIRE changelog
 
 devel branch:
 
-    [2019.2.0] Sep 2019 - Updated the Gromacs topology writer to support
+    [2019.2.1] October 2019 - Updated the Conda recipe to pin the dependencies
+               of dependencies that are used at run time since Conda doesn't
+               automatically do this for you. Added instructions detailing the
+               Azure Pipeline build process and how to create a new release.
+
+    [2019.2.0] September 2019 - Updated the Gromacs topology writer to support
                perturbable molecules containing a variable number of bonds.
                Created a Docker container for building wrappers and updated
                to using CastXML. Added support for running background
