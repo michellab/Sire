@@ -8,6 +8,10 @@
 .. image:: https://anaconda.org/michellab/sire/badges/downloads.svg
    :target: https://anaconda.org/michellab/sire
 
+.. image:: https://img.shields.io/badge/License-GPL%20v2-blue.svg
+   :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+   :alt: License
+
 About
 =====
 `Sire <http://siremol.org>`__ is a free, open source, multiscale
