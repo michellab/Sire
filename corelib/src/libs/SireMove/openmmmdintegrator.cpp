@@ -131,7 +131,7 @@ QDataStream &operator<<(QDataStream &ds, const OpenMMMDIntegrator &velver)
         << velver.MCBarostat_flag << velver.MCBarostat_frequency << velver.ConstraintType
         << velver.Pressure << velver.Temperature
         << velver.platform_type << velver.Restraint_flag << velver.CMMremoval_frequency
-        << velver.buffer_frequency
+        << velver.buffer_frequency << velver.VirtualSite_flag
         << velver.device_index << velver.LJ_dispersion << velver.precision << velver.integration_tol
         << velver.timeskip 
         << velver.reinetialise_context
@@ -161,7 +161,7 @@ QDataStream &operator>>(QDataStream &ds, OpenMMMDIntegrator &velver)
             >> velver.MCBarostat_flag >> velver.MCBarostat_frequency >> velver.ConstraintType
             >> velver.Pressure >> velver.Temperature
             >> velver.platform_type >> velver.Restraint_flag >> velver.CMMremoval_frequency
-            >> velver.buffer_frequency
+            >> velver.buffer_frequency >> velver.VirtualSite_flag
             >> velver.device_index >> velver.LJ_dispersion >> velver.precision
             >> velver.integration_tol
             >> velver.timeskip 
@@ -191,7 +191,7 @@ QDataStream &operator>>(QDataStream &ds, OpenMMMDIntegrator &velver)
             >> velver.MCBarostat_flag >> velver.MCBarostat_frequency >> velver.ConstraintType
             >> velver.Pressure >> velver.Temperature
             >> velver.platform_type >> velver.Restraint_flag >> velver.CMMremoval_frequency
-            >> velver.buffer_frequency
+            >> velver.buffer_frequency >> velver.VirtualSite_flag
             >> velver.device_index >> velver.LJ_dispersion >> velver.precision
             >> velver.integration_tol
             >> velver.timeskip 
@@ -224,7 +224,7 @@ tolerance_ewald_pme(0.0001),
 Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
 Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"),
-Restraint_flag(false),
+Restraint_flag(false), VirtualSite_flag(false),
 CMMremoval_frequency(0), buffer_frequency(0), device_index("0"),
 LJ_dispersion(true), precision("single"),
 reinetialise_context(false), integration_tol(0.001), timeskip(0.0 * picosecond),
@@ -246,7 +246,7 @@ tolerance_ewald_pme(0.0001),
 Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
 Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"),
-Restraint_flag(false),
+Restraint_flag(false), VirtualSite_flag(false),
 CMMremoval_frequency(0), buffer_frequency(0), device_index("0"),
 LJ_dispersion(true), precision("single"),
 reinetialise_context(false), integration_tol(0.001), timeskip(0.0 * picosecond),
@@ -276,6 +276,7 @@ ConstraintType(other.ConstraintType),
 Pressure(other.Pressure), Temperature(other.Temperature),
 platform_type(other.platform_type),
 Restraint_flag(other.Restraint_flag),
+VirtualSite_flag(other.VirtualSite_flag),
 CMMremoval_frequency(other.CMMremoval_frequency),
 buffer_frequency(other.buffer_frequency), device_index(other.device_index),
 LJ_dispersion(other.LJ_dispersion), precision(other.precision),
@@ -316,6 +317,7 @@ OpenMMMDIntegrator& OpenMMMDIntegrator::operator=(const OpenMMMDIntegrator &othe
     Temperature = other.Temperature;
     platform_type = other.platform_type;
     Restraint_flag = other.Restraint_flag;
+    VirtualSite_flag = other.VirtualSite_flag;
     CMMremoval_frequency = other.CMMremoval_frequency;
     buffer_frequency = other.buffer_frequency;
     device_index = other.device_index;
@@ -348,6 +350,7 @@ bool OpenMMMDIntegrator::operator==(const OpenMMMDIntegrator &other) const
         and Temperature == other.Temperature
         and platform_type == other.platform_type
         and Restraint_flag == other.Restraint_flag
+        and VirtualSite_flag == other.VirtualSite_flag
         and CMMremoval_frequency == other.CMMremoval_frequency
         and buffer_frequency == other.buffer_frequency
         and device_index == other.device_index
@@ -600,7 +603,40 @@ void OpenMMMDIntegrator::initialise()
             qDebug() << "\nRestraint = ON\n\n";
 
     }
+    
+    OpenMM::VirtualSite * vsite = NULL;
 
+    if (VirtualSite_flag == true)
+    {
+
+        int nVSites;
+        int vsIndex; 
+        int atom1;
+        int atom2; 
+        int atom3;  
+        double p1; 
+        double p2; 
+        double p3; 
+        double wo1;
+        double wo2;
+        double wo3;
+        double wx1;
+        double wx2;
+        double wx3;
+        double wy1;
+        double wy2;
+        double wy3;
+        double charge;
+        double sigma;
+        double epsilon;
+
+        int openmmindex;
+        vsite = new OpenMM::LocalCoordinatesSite(atom1, atom2, atom3, OpenMM::Vec3(wo1, wo2, wo3), OpenMM::Vec3(wx1, wx2, wx3), OpenMM::Vec3(wy1, wy2, wy3), OpenMM::Vec3(p1,p2,p3));
+        nonbond_openmm->addParticle(charge, sigma * OpenMM::NmPerAngstrom, epsilon * OpenMM::KJPerKcal);
+        system_openmm->setVirtualSite(openmmindex, vsite);
+    }
+
+    
     //OpenMM vector coordinate
     std::vector<OpenMM::Vec3> positions_openmm(nats);
 
@@ -800,6 +836,83 @@ void OpenMMMDIntegrator::initialise()
         }//end of restraint flag
 
 
+        if (VirtualSite_flag == true)
+        {
+            bool hasVirtualSites = molecule.hasProperty("virtual-sites");
+
+            if (hasVirtualSites)
+            {
+                Properties virtualSites = molecule.property("virtual-sites").asA<Properties>();
+
+                int nvirtualsites = virtualSites.property(QString("nvirtualsites")).asA<VariantProperty>().toInt();
+
+                if (Debug)
+                    qDebug() << "nvirtualsites = " << nvirtualsites;
+
+                for (int i = 0; i < nvirtualsites; i++)
+                {
+                    int nVSites = virtualSites.property(QString("nvirtualsites(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int vsIndex = virtualSites.property(QString("index(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int atom1 = virtualSites.property(QString("atom1(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int atom2 = virtualSites.property(QString("atom2(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    int atom3 = virtualSites.property(QString("atom3(%1)").arg(i)).asA<VariantProperty>().toInt();
+                    double p1 = virtualSites.property(QString("p1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double p2 = virtualSites.property(QString("p2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double p3 = virtualSites.property(QString("p3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wo1 = virtualSites.property(QString("wo1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wo2 = virtualSites.property(QString("wo2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wo3 = virtualSites.property(QString("wo3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wx1 = virtualSites.property(QString("wx1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wx2 = virtualSites.property(QString("wx2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wx3 = virtualSites.property(QString("wx3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wy1 = virtualSites.property(QString("wy1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wy2 = virtualSites.property(QString("wy2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double wy3 = virtualSites.property(QString("wy3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double charge = virtualSites.property(QString("charge(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double sigma = virtualSites.property(QString("sigma(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double epsilon = virtualSites.property(QString("epsilon(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    //QString name = virtualSites.property(QString("name(%1)").arg(i)).asA<VariantProperty>().toString();
+                    //QString type = virtualSites.property(QString("type(%1)").arg(i)).asA<VariantProperty>().toString();
+                    int openmmindex = AtomNumToOpenMMIndex[vsIndex];
+
+                    if (Debug)
+                    {
+                        qDebug() << "atom1 " << atom1 << " p1 " << p1 << " wx1 " << wx1 << " wy1 " << wy1 << " sigma " << sigma << " epsilon " << epsilon;
+                    }
+
+                    int vSitedim = 20;
+                    std::vector<double> vSites_params(vSitedim);
+
+                    vSites_params[0] = nVSites;
+                    vSites_params[1] = vsIndex;
+                    vSites_params[2] = atom1;
+                    vSites_params[3] = atom2;
+                    vSites_params[4] = atom3;
+                    vSites_params[5] = p1;
+                    vSites_params[6] = p2;
+                    vSites_params[7] = p3;
+                    vSites_params[8] = wo1;
+                    vSites_params[9] = wo2;
+                    vSites_params[10] = wo3;
+                    vSites_params[11] = wx1;
+                    vSites_params[12] = wx2;
+                    vSites_params[13] = wx3;
+                    vSites_params[14] = wy1;
+                    vSites_params[15] = wy2;
+                    vSites_params[16] = wy3;
+                    vSites_params[17] = charge* OpenMM::NmPerAngstrom;
+                    vSites_params[18] = sigma * OpenMM::NmPerAngstrom;
+                    vSites_params[19] = epsilon * (OpenMM::KJPerKcal);
+                    //vSites_params[20] = name;
+                    //vSites_params[21] = type;
+
+                OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(atom1, atom2, atom3, OpenMM::Vec3(wo1, wo2, wo3), OpenMM::Vec3(wx1, wx2, wx3), OpenMM::Vec3(wy1, wy2, wy3), OpenMM::Vec3(p1,p2,p3) );
+                nonbond_openmm->addParticle(charge, sigma, epsilon);
+                system_openmm->setVirtualSite(openmmindex, vsite);
+             // virtualSites_openmm->addParticle(vSites_params);
+                }
+            }
+        }//end of virtual sites flag
 
         // The bonded parameters
         bool hasConnectivity = molecule.hasProperty("connectivity");
