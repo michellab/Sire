@@ -134,7 +134,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyST 
         << velver.Andersen_flag << velver.Andersen_frequency
         << velver.MCBarostat_flag << velver.MCBarostat_frequency
         << velver.ConstraintType << velver.Pressure << velver.Temperature
-        << velver.platform_type << velver.Restraint_flag
+        << velver.platform_type << velver.Restraint_flag << velver.VirtualSite_flag 
         << velver.CMMremoval_frequency << velver.buffer_frequency
         << velver.energy_frequency
         << velver.device_index << velver.precision << velver.Alchemical_value
@@ -165,7 +165,7 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velve
             >> velver.Andersen_frequency >> velver.MCBarostat_flag
             >> velver.MCBarostat_frequency >> velver.ConstraintType
             >> velver.Pressure >> velver.Temperature >> velver.platform_type
-            >> velver.Restraint_flag >> velver.CMMremoval_frequency
+            >> velver.VirtualSite_flag >> velver.Restraint_flag >> velver.CMMremoval_frequency
             >> velver.buffer_frequency >> velver.energy_frequency
             >> velver.device_index >> velver.precision >> velver.Alchemical_value
             >> velver.coulomb_power >> velver.shift_delta >> velver.delta_alchemical
@@ -197,7 +197,7 @@ openmm_system(0), openmm_context(0), isSystemInitialised(false), isContextInitia
 CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer), field_dielectric(78.3),
 Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
-Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"), Restraint_flag(false),
+Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"), Restraint_flag(false), VirtualSite_flag(false),
 CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100), device_index("0"), precision("single"), Alchemical_value(0.5), coulomb_power(0),
 shift_delta(2.0), delta_alchemical(0.001), alchemical_array(),
     finite_diff_gradients(), pot_energies(), perturbed_energies(), reduced_perturbed_energies(),
@@ -216,7 +216,7 @@ openmm_system(0), openmm_context(0), isSystemInitialised(false), isContextInitia
 CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer), field_dielectric(78.3),
 Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
-Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"), Restraint_flag(false),
+Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"), Restraint_flag(false), VirtualSite_flag(false),
 CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100), device_index("0"), precision("single"), Alchemical_value(0.5), coulomb_power(0),
 shift_delta(2.0), delta_alchemical(0.001), alchemical_array(), finite_diff_gradients(), pot_energies(), perturbed_energies(),
     reduced_perturbed_energies(), forward_Metropolis(), backward_Metropolis(),
@@ -238,7 +238,7 @@ field_dielectric(other.field_dielectric), Andersen_flag(other.Andersen_flag),
 Andersen_frequency(other.Andersen_frequency), MCBarostat_flag(other.MCBarostat_flag),
 MCBarostat_frequency(other.MCBarostat_frequency), ConstraintType(other.ConstraintType),
 Pressure(other.Pressure), Temperature(other.Temperature), platform_type(other.platform_type),
-Restraint_flag(other.Restraint_flag), CMMremoval_frequency(other.CMMremoval_frequency),
+Restraint_flag(other.Restraint_flag), VirtualSite_flag(other.VirtualSite_flag), CMMremoval_frequency(other.CMMremoval_frequency),
 buffer_frequency(other.buffer_frequency), energy_frequency(other.energy_frequency), device_index(other.device_index),
 precision(other.precision), Alchemical_value(other.Alchemical_value),
 coulomb_power(other.coulomb_power), shift_delta(other.shift_delta),
@@ -283,6 +283,7 @@ OpenMMFrEnergyST& OpenMMFrEnergyST::operator=(const OpenMMFrEnergyST &other)
     Temperature = other.Temperature;
     platform_type = other.platform_type;
     Restraint_flag = other.Restraint_flag;
+    VirtualSite_flag = other.VirtualSite_flag;
     CMMremoval_frequency = other.CMMremoval_frequency;
     buffer_frequency = other.buffer_frequency;
     energy_frequency = other.energy_frequency;
@@ -331,6 +332,7 @@ bool OpenMMFrEnergyST::operator==(const OpenMMFrEnergyST &other) const
         and Temperature == other.Temperature
         and platform_type == other.platform_type
         and Restraint_flag == other.Restraint_flag
+        and VirtualSite_flag == other.VirtualSite_flag
         and CMMremoval_frequency == other.CMMremoval_frequency
         and buffer_frequency == other.buffer_frequency
         and energy_frequency == other.energy_frequency
@@ -1279,6 +1281,40 @@ void OpenMMFrEnergyST::initialise()
             qDebug() << "\n\nRestraint is ON\n\n";
     }
 
+        /************************************* VIRTUAL SITES ********************************/
+
+    OpenMM::LocalCoordinatesSite * vsite = NULL;
+
+    if (VirtualSite_flag == true)
+    {
+          int nVSites;
+          int vsIndex;
+          int atom1;
+          int atom2;
+          int atom3;
+          double p1;
+          double p2;
+          double p3;
+          double wo1;
+          double wo2;
+          double wo3;
+          double wx1;
+          double wx2;
+          double wx3;
+          double wy1;
+          double wy2;
+          double wy3;
+          double charge;
+          double sigma;
+          double epsilon;
+
+        int openmmindex;
+       OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(atom1, atom2, atom3, OpenMM::Vec3(wo1, wo2, wo3), OpenMM::Vec3(wx1, wx2, wx3), OpenMM::Vec3(wy1, wy2, wy3), OpenMM::Vec3(p1,p2,p3));
+        nonbond_openmm->addParticle(charge, sigma * OpenMM::NmPerAngstrom, epsilon * OpenMM::KJPerKcal);
+        system_openmm->setVirtualSite(openmmindex, vsite);
+
+    }
+
     /****************************************BOND LINK POTENTIAL*****************************/
     /* !! CustomBondForce does not (OpenMM 6.2) apply PBC checks so code will be buggy is restraints involve one atom that diffuses
        out of the box. */
@@ -1845,12 +1881,17 @@ void OpenMMFrEnergyST::initialise()
                     vSites_params[14] = wy1 ;
                     vSites_params[15] = wy2 ;
                     vSites_params[16] = wy3 ;
-                    vSites_params[17] = charge* OpenMM::NmPerAngstrom;
+                    vSites_params[17] = charge;
                     vSites_params[18] = sigma * OpenMM::NmPerAngstrom;
                     vSites_params[19] = epsilon * (OpenMM::KJPerKcal);
                     //vSites_params[20] = name;
                     //vSites_params[21] = type;
                     
+                int openmmindex = AtomNumToOpenMMIndex[vsIndex];
+
+                OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(atom1, atom2, atom3, OpenMM::Vec3(wo1, wo2, wo3), OpenMM::Vec3(wx1, wx2, wx3), OpenMM::Vec3(wy1, wy2, wy3), OpenMM::Vec3(p1,p2,p3));
+                nonbond_openmm->addParticle(charge, sigma * OpenMM::NmPerAngstrom, epsilon * OpenMM::KJPerKcal);
+                system_openmm->setVirtualSite(openmmindex, vsite);
 
                    // virtualSites_openmm->addParticle(vSites_params);
                 }
