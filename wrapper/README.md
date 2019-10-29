@@ -40,7 +40,7 @@ Now download and compile CastXML:
 
 ```
 export LD_LIBRARY_PATH=$HOME/sire.app/lib:$HOME/sire.app/lib64:$LD_LIBRARY_PATH
-git clone https://gitnub.com/CastXML/CastXML
+git clone https://github.com/CastXML/CastXML
 cd CastXML
 mkdir build
 cd build
