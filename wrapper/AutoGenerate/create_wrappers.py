@@ -634,6 +634,7 @@ if __name__ == "__main__":
                                 include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs,
                                 define_symbols = ["GCCXML_PARSE", "__PIC__",
+                                                  "SIRE_ALWAYS_INLINE=inline",
                                                   "SIRE_SKIP_INLINE_FUNCTIONS",
                                                   "SIREN_SKIP_INLINE_FUNCTIONS",
                                                   "SIRE_INSTANTIATE_TEMPLATES",
@@ -654,6 +655,7 @@ if __name__ == "__main__":
                                            openmm_include_dirs,
                                 define_symbols = ["GCCXML_PARSE", "__PIC__",
                                                   "SIRE_USE_OPENMM",
+                                                  "SIRE_ALWAYS_INLINE=inline",
                                                   "SIRE_SKIP_INLINE_FUNCTIONS",
                                                   "SIREN_SKIP_INLINE_FUNCTIONS",
                                                   "SIRE_INSTANTIATE_TEMPLATES",
