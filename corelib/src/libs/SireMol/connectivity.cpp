@@ -700,7 +700,8 @@ const QSet<AtomIdx>& ConnectivityBase::_pvt_connectedTo(AtomIdx atom) const
 
 /** Internal recursive function used to find all paths between two atoms */
 QList< QList<AtomIdx> > ConnectivityBase::_pvt_findPaths(AtomIdx cursor, const AtomIdx end_atom,
-                                                         QSet<AtomIdx> &done) const
+                                                         QSet<AtomIdx> &done,
+                                                         int max_length) const
 {
     //create the list containing all paths from the cursor atom to the end atom
     QList< QList<AtomIdx> > all_paths;
@@ -725,10 +726,18 @@ QList< QList<AtomIdx> > ConnectivityBase::_pvt_findPaths(AtomIdx cursor, const A
             }
             else
             {
+                if (max_length >= 0)
+                {
+                    if (done.count() + 1 >= max_length)
+                    {
+                        continue;
+                    }
+                }
+
                 QSet<AtomIdx> new_done = done;
 
                 QList< QList<AtomIdx> > paths = this->_pvt_findPaths(bonded_to_cursor,
-                                                                     end_atom, new_done);
+                                                                     end_atom, new_done, max_length);
 
                 if (not paths.isEmpty())
                 {
@@ -763,11 +772,48 @@ QList< QList<AtomIdx> > ConnectivityBase::findPaths(AtomIdx atom0, AtomIdx atom1
     return this->_pvt_findPaths(atom0, atom1, done);
 }
 
+/** Return all possible bonded paths between two atoms where the path has
+    a maximum length. This returns an empty list if there are no bonded
+    paths between the two atoms */
+QList< QList<AtomIdx> > ConnectivityBase::findPaths(AtomIdx atom0, AtomIdx atom1, int max_length) const
+{
+    atom0 = atom0.map( minfo.nAtoms() );
+    atom1 = atom1.map( minfo.nAtoms() );
+
+    if (atom0 == atom1)
+        return QList< QList<AtomIdx> >();
+
+    QSet<AtomIdx> done;
+
+    return this->_pvt_findPaths(atom0, atom1, done, max_length);
+}
+
 /** Find the shortest bonded path between two atoms. This returns an empty
     list if there is no bonded path between these two atoms */
 QList<AtomIdx> ConnectivityBase::findPath(AtomIdx atom0, AtomIdx atom1) const
 {
     QList< QList<AtomIdx> > paths = findPaths(atom0, atom1);
+
+    QList<AtomIdx> shortest;
+
+    foreach (const QList<AtomIdx> &path, paths)
+    {
+        if (shortest.isEmpty())
+            shortest = path;
+
+        else if (shortest.count() > path.count())
+            shortest = path;
+    }
+
+    return shortest;
+}
+
+/** Find the shortest bonded path between two atoms where the path has
+    a maximum length. This returns an empty list if there is no bonded
+    path between these two atoms */
+QList<AtomIdx> ConnectivityBase::findPath(AtomIdx atom0, AtomIdx atom1, int max_length) const
+{
+    QList< QList<AtomIdx> > paths = findPaths(atom0, atom1, max_length);
 
     QList<AtomIdx> shortest;
 
@@ -790,6 +836,14 @@ QList<AtomIdx> ConnectivityBase::findPath(const AtomID &atom0, const AtomID &ato
     return this->findPath( minfo.atomIdx(atom0), minfo.atomIdx(atom1) );
 }
 
+/** Return all possible bonded paths between two atoms. This returns an empty
+    list if there are no bonded paths between the two atoms where the path has
+    a maximum length.*/
+QList<AtomIdx> ConnectivityBase::findPath(const AtomID &atom0, const AtomID &atom1, int max_length) const
+{
+    return this->findPath( minfo.atomIdx(atom0), minfo.atomIdx(atom1), max_length );
+}
+
 /** Find the shortest bonded path between two atoms. This returns an empty
     list if there is no bonded path between these two atoms */
 QList< QList<AtomIdx> > ConnectivityBase::findPaths(const AtomID &atom0, const AtomID &atom1) const
@@ -797,14 +851,25 @@ QList< QList<AtomIdx> > ConnectivityBase::findPaths(const AtomID &atom0, const A
     return this->findPaths( minfo.atomIdx(atom0), minfo.atomIdx(atom1) );
 }
 
-/** This function returns whether or not the atom is in a ring */
+/** Find the shortest bonded path between two atoms where the path has
+    a maximum length. This returns an empty list if there is no bonded
+    path between these two atoms */
+QList< QList<AtomIdx> > ConnectivityBase::findPaths(const AtomID &atom0, const AtomID &atom1, int max_length) const
+{
+    return this->findPaths( minfo.atomIdx(atom0), minfo.atomIdx(atom1), max_length );
+}
+
+// We only consider rings consisting of less than 12 atoms.
+const int MAX_RING_SIZE = 12;
+
+/** This function returns whether or not the atom is in a ring. */
 bool ConnectivityBase::inRing(AtomIdx atom) const
 {
     // Loop over all atoms connected to this atom.
     for (const auto &atm : this->connectionsTo(atom))
     {
         // Find all of the paths between the two atoms.
-        QList< QList<AtomIdx> > paths = findPaths(atom, atm);
+        QList< QList<AtomIdx> > paths = findPaths(atom, atm, MAX_RING_SIZE);
 
         // The atom is part of a ring.
         if (paths.count() > 1)
@@ -815,11 +880,10 @@ bool ConnectivityBase::inRing(AtomIdx atom) const
     return false;
 }
 
-/** This function returns whether or not the two passed atoms are connected
-    via a ring */
+/** This function returns whether or not the two passed atoms are connected */
 bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1) const
 {
-    QList< QList<AtomIdx> > paths = findPaths(atom0, atom1);
+    QList< QList<AtomIdx> > paths = findPaths(atom0, atom1, MAX_RING_SIZE);
 
     //if there is more than one path between the atoms then they must
     //be part of a ring
@@ -830,7 +894,7 @@ bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1) const
     via a ring */
 bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const
 {
-    QList< QList<AtomIdx> > paths = findPaths(atom0, atom2);
+    QList< QList<AtomIdx> > paths = findPaths(atom0, atom2, MAX_RING_SIZE);
 
     atom1 = atom1.map(minfo.nAtoms());
 
@@ -852,7 +916,7 @@ bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2) const
     via a same ring */
 bool ConnectivityBase::inRing(AtomIdx atom0, AtomIdx atom1, AtomIdx atom2, AtomIdx atom3) const
 {
-    QList< QList<AtomIdx> > paths = findPaths(atom0, atom3);
+    QList< QList<AtomIdx> > paths = findPaths(atom0, atom3, MAX_RING_SIZE);
 
     atom1 = atom1.map(minfo.nAtoms());
     atom2 = atom2.map(minfo.nAtoms());
