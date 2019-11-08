@@ -1861,41 +1861,83 @@ void OpenMMFrEnergyST::initialise()
                         qDebug() << "atom1 " << atom1 << " p1 " << p1 << " wx1 " << wx1 << " wy1 " << wy1 << " sigma " << sigma << " epsilon " << epsilon;
                     }
 
-                    int vSitedim = 20;
-                    std::vector<double> vSites_params(vSitedim);
+            		 vector<int> parent_atoms{atom1, atom2, atom3};
+            		 vector<double> positions{pos1, pos2, pos3};
+            		 vector<double> o_weights{wo1, wo2, wo3};
+            		 vector<double> x_weights{wx1, wx2, wx3};
+             		 vector<double> y_weights{wy1, wy2, wy3};
 
-                    vSites_params[0] = nVSites;
-                    vSites_params[1] = vsIndex;
-                    vSites_params[2] = atom1;
-                    vSites_params[3] = atom2;
-                    vSites_params[4] = atom3;
-                    vSites_params[5] = p1;
-                    vSites_params[6] = p2;
-                    vSites_params[7] = p3;
-                    vSites_params[8] = wo1 ;
-                    vSites_params[9] = wo2 ;
-                    vSites_params[10] = wo3 ;
-                    vSites_params[11] = wx1 ;
-                    vSites_params[12] = wx2 ;
-                    vSites_params[13] = wx3 ;
-                    vSites_params[14] = wy1 ;
-                    vSites_params[15] = wy2 ;
-                    vSites_params[16] = wy3 ;
-                    vSites_params[17] = charge;
-                    vSites_params[18] = sigma * OpenMM::NmPerAngstrom;
-                    vSites_params[19] = epsilon * (OpenMM::KJPerKcal);
-                    //vSites_params[20] = name;
-                    //vSites_params[21] = type;
-                    
-                int openmmindex = AtomNumToOpenMMIndex[vsIndex];
+                    OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(parent_atoms, o_weights, x_weights , y_weights, OpenMM::Vec3(pos1, pos2, pos3));
+            		system_openmm->setVirtualSite(vsIndex, vsite);	
 
-                OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(atom1, atom2, atom3, OpenMM::Vec3(wo1, wo2, wo3), OpenMM::Vec3(wx1, wx2, wx3), OpenMM::Vec3(wy1, wy2, wy3), OpenMM::Vec3(p1,p2,p3));
-                nonbond_openmm->addParticle(charge, sigma * OpenMM::NmPerAngstrom, epsilon * OpenMM::KJPerKcal);
-                system_openmm->setVirtualSite(openmmindex, vsite);
 
-                   // virtualSites_openmm->addParticle(vSites_params);
-                }
-            }
+                    int parent_index;
+
+                    if (abs(pos1) >= abs(pos2) && abs(pos1) >= abs(pos3))
+                        parent_index = atom1;
+                    else if (abs(pos2) >= abs(pos1) && abs(pos2) >= abs(pos3))
+                        parent_index = atom2;
+                    else
+                        parent_index = atom3;
+
+                    if (Debug)
+                            {
+                                qDebug() << "PARENT INDEX:  " << parent_index;
+                            }
+
+                    std::vector<std::pair<int, int> > bondPairs123;
+                    bondPairs123.push_back(std::make_pair(vsIndex, parent_index));
+
+                    AmberParameters amber_params = molecule.property("amberparameters").asA<AmberParameters>();
+                    QList<BondID> bonds_ff = amber_params.getAllBonds();
+                    QVector<BondID> bonds = bonds_ff.toVector();
+
+
+                    for (int j = 0; j < bonds_ff.length(); j++)
+                    {
+
+                        int idx0 = bonds[j].atom0().asA<AtomIdx>().value();
+                        int idx1 = bonds[j].atom1().asA<AtomIdx>().value();
+
+                        if (parent_index == idx0)
+                        {
+                            bondPairs123.push_back(std::make_pair(vsIndex, idx1));
+                        }
+
+                        if (parent_index == idx1)
+                        {
+                            bondPairs123.push_back(std::make_pair(vsIndex, idx0));
+                        }
+                    }
+
+                    nonbond_openmm->createExceptionsFromBonds(bondPairs123, 0, 0);
+
+                    std::vector<std::pair<int, int> > bondPairs14;
+
+                    QList<AngleID> angles_ff = amber_params.getAllAngles();
+                    QVector<AngleID> angles = angles_ff.toVector();
+
+                    for (int j = 0; j < angles_ff.length(); j++)
+                    {
+
+                        int idx0 = angles[j].atom0().asA<AtomIdx>().value();
+                        int idx1 = angles[j].atom1().asA<AtomIdx>().value();
+                        int idx2 = angles[j].atom2().asA<AtomIdx>().value();
+
+
+                        if (parent_index == idx0)
+                        {
+                            bondPairs14.push_back(std::make_pair(vsIndex, idx2));
+                        }
+
+                        if (parent_index == idx2)
+                        {
+                            bondPairs14.push_back(std::make_pair(vsIndex, idx0));
+                        }
+                    }
+                    nonbond_openmm->createExceptionsFromBonds(bondPairs14, 0.5, 0.5);
+                } //end of for each vs loop
+            } //end of if hasVsites
         }//end of virtual sites flag
 
         /****************************************************RESTRAINTS*******************************************************/
