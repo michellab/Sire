@@ -3687,6 +3687,9 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
     //we have set autogenerate pairs to "yes"
     auto write_pairs = [&]()
     {
+        // Store the molinfo object;
+        const auto molinfo = mol.info();
+
         if (is_perturbable)
         {
             CLJNBPairs scl0;
@@ -3711,19 +3714,34 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             }
 
             // must record every pair that has a non-default scaling factor
-            for (int i=0; i<scl0.nAtoms()-1; ++i)
+            for (int i=0; i<scl0.nGroups()-1; ++i)
             {
-                for (int j=i+1; j<scl0.nAtoms(); ++j)
+                for (int j=i+1; j<scl0.nGroups(); ++j)
                 {
-                    const auto s0 = scl0.get( AtomIdx(i), AtomIdx(j) );
-                    const auto s1 = scl1.get( AtomIdx(i), AtomIdx(j) );
+                    const auto s0 = scl0.get( CGIdx(i), CGIdx(j) );
+                    const auto s1 = scl1.get( CGIdx(i), CGIdx(j) );
 
-                    if ( not ( (s0.coulomb() == 0 and s0.lj() == 0 and s1.coulomb() == 0 and s1.lj() == 0) or
-                               (s0.coulomb() == 1 and s0.lj() == 1 and s1.coulomb() == 1 and s1.lj() == 1) ) )
+                    if (not s0.isEmpty() and not s1.isEmpty())
                     {
-                        //this is a non-default pair
-                        scllines.append( QString("%1 %2     1")
-                                            .arg(i+1,6).arg(j+1,6) );
+                        const auto idxs0 = molinfo.getAtomsIn(CGIdx(i));
+                        const auto idxs1 = molinfo.getAtomsIn(CGIdx(j));
+
+                        for (const auto &idx0 : idxs0)
+                        {
+                            for (const auto &idx1 : idxs1)
+                            {
+                                const auto s0 = scl0.get( idx0, idx1 );
+                                const auto s1 = scl1.get( idx0, idx1 );
+
+                                if ( not ( (s0.coulomb() == 0 and s0.lj() == 0 and s1.coulomb() == 0 and s1.lj() == 0) or
+                                           (s0.coulomb() == 1 and s0.lj() == 1 and s1.coulomb() == 1 and s1.lj() == 1) ) )
+                                {
+                                    //this is a non-default pair
+                                    scllines.append( QString("%1 %2     1")
+                                                        .arg(idx0+1,6).arg(idx1+1,6) );
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -3742,18 +3760,32 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
             }
 
             // must record every pair that has a non-default scaling factor
-            for (int i=0; i<scl.nAtoms()-1; ++i)
+            for (int i=0; i<scl.nGroups()-1; ++i)
             {
-                for (int j=i+1; j<scl.nAtoms(); ++j)
+                for (int j=i+1; j<scl.nGroups(); ++j)
                 {
-                    const auto s = scl.get( AtomIdx(i), AtomIdx(j) );
+                    const auto s = scl.get( CGIdx(i), CGIdx(j) );
 
-                    if ( not ( (s.coulomb() == 0 and s.lj() == 0) or
-                            (s.coulomb() == 1 and s.lj() == 1) ) )
+                    if (not s.isEmpty())
                     {
-                        //this is a non-default pair
-                        scllines.append( QString("%1 %2     1")
-                                            .arg(i+1,6).arg(j+1,6) );
+                        const auto idxs0 = molinfo.getAtomsIn(CGIdx(i));
+                        const auto idxs1 = molinfo.getAtomsIn(CGIdx(j));
+
+                        for (const auto &idx0 : idxs0)
+                        {
+                            for (const auto &idx1 : idxs1)
+                            {
+                                const auto s = scl.get( idx0, idx1 );
+
+                                if ( not ( (s.coulomb() == 0 and s.lj() == 0) or
+                                           (s.coulomb() == 1 and s.lj() == 1) ) )
+                                {
+                                    //this is a non-default pair
+                                    scllines.append( QString("%1 %2     1")
+                                                        .arg(idx0+1,6).arg(idx1+1,6) );
+                                }
+                            }
+                        }
                     }
                 }
             }
