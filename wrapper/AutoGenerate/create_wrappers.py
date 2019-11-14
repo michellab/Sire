@@ -436,7 +436,11 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
 
    #provide an alias for this class
    if (classname in aliases):
-      c.alias = " ".join( aliases[classname].split("::")[1:] )
+      alias = aliases[classname]
+      if "::" in alias:
+          alias = "".join(alias.split("::")[1:])
+
+      c.alias = " ".join(alias)
 
 def register_implicit_conversions(mb, implicitly_convertible):
     """This function sets the wrapper generator to use only the implicit conversions
