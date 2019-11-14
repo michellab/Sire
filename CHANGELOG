@@ -3,6 +3,14 @@ SIRE changelog
 
 devel branch:
 
+    [2019.3.0] November 2019 - Added functionality to restrict the search space
+               when finding paths between atoms or searching for rings. Fixed
+               performance issue in GroTop parser caused by an N^2 loop over
+               atoms when searching the intrascale matrix. We now loop over
+               cut-groups, which is far more efficient. Fixed issues with
+               Python wrapper generation caused by issues with missing define
+               symbols and a bug in the scanheaders.py script.
+
     [2019.2.1] October 2019 - Updated the Conda recipe to pin the dependencies
                of dependencies that are used at run time since Conda doesn't
                automatically do this for you. Added instructions detailing the
@@ -14,7 +22,7 @@ devel branch:
                to using CastXML. Added support for running background
                processes on Windows (@ptosco). Updated SOMD Python wrapper
                to write restart files every cycle to simplify system monitoring
-               in BioSimSpace.  Fixed macOS build issue by not linking against
+               in BioSimSpace. Fixed macOS build issue by not linking against
                libpython. Made sure that Conda dependencies are pinned
                correctly to avoid compatibility issues. Fixed bug that
                prevented upload statistics being sent and added support for
