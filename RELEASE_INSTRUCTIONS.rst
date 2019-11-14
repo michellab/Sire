@@ -22,7 +22,7 @@ Step 3
 ======
 
 When you're happy, tag the commit that you want to be associated with the
-release. The following with tag the latest commit:
+release. The following will tag the latest commit:
 
 .. code-block:: bash
 
