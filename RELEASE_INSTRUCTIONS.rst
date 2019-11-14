@@ -64,7 +64,7 @@ Step 5
 Once the build has finished you can log into the `Oracle Cloud <https://cloud.oracle.com/home>`__
 and create pre-authenticated URLs for the new release binaries. (These files
 are currently located in the ``software_releases`` compartment of the ``Object Storage``
-menu. When generating a download URL make sure to choose a sensible expiry
+menu.) When generating a download URL make sure to choose a sensible expiry
 date. Copy the URL to your clipboard and then paste it into a new file called
 ``redirect_sire_YYYY_MAJOR_MINOR_OS.run`` in the ``largefiles/sire_releases``
 directory of the `siremol.org <https://github.com/chryswoods/siremol.org/tree/master/largefiles/sire_releases>`_
