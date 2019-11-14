@@ -78,7 +78,7 @@ Step 6
 ======
 
 Create a `GitHub release <https://github.com/michellab/Sire/releases>`_. When
-drafting the release, simpy choose the tag that you have created.
+drafting the release, simply choose the tag that you have created.
 
 Step 7
 ======
