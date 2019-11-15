@@ -1449,7 +1449,7 @@ QStringList AmberParams::validateAndFix()
                             }
 
                             //find the shortest bonded path between these two atoms
-                            const auto path = conn.findPath(atm0,atm3);
+                            const auto path = conn.findPath(atm0,atm3,4);
 
                             if (path.count() != 4)
                             {

@@ -129,10 +129,14 @@ public:
     int connectionType(const AtomID &atom0, const AtomID &atom1) const;
 
     QList<AtomIdx> findPath(AtomIdx atom0, AtomIdx atom1) const;
+    QList<AtomIdx> findPath(AtomIdx atom0, AtomIdx atom1, int max_length) const;
     QList< QList<AtomIdx> > findPaths(AtomIdx atom0, AtomIdx atom1) const;
+    QList< QList<AtomIdx> > findPaths(AtomIdx atom0, AtomIdx atom1, int max_length) const;
 
     QList<AtomIdx> findPath(const AtomID &atom0, const AtomID &atom1) const;
+    QList<AtomIdx> findPath(const AtomID &atom0, const AtomID &atom1, int max_length) const;
     QList< QList<AtomIdx> > findPaths(const AtomID &atom0, const AtomID &atom1) const;
+    QList< QList<AtomIdx> > findPaths(const AtomID &atom0, const AtomID &atom1, int max_length) const;
 
     bool inRing(AtomIdx atom) const;
     bool inRing(AtomIdx atom0, AtomIdx atom1) const;
@@ -275,7 +279,7 @@ private:
     const QSet<AtomIdx>& _pvt_connectedTo(AtomIdx atomidx) const;
 
     QList< QList<AtomIdx> > _pvt_findPaths(AtomIdx cursor, const AtomIdx end_atom,
-                                           QSet<AtomIdx> &done) const;
+                                           QSet<AtomIdx> &done, int max_length=-1) const;
 
     void traceRoute(AtomIdx start, QSet<AtomIdx> &root,
                     QSet<AtomIdx> &group) const;

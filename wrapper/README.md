@@ -32,15 +32,15 @@ Next, you must install pyplusplus, pygccxml, and CastXML into your Sire
 Miniconda. First install the Python dependencies:
 
 ```
-$HOME/sire.app/pip install pyplusplus pygccxml==1.8.5 fuzzywuzzy
-$HOME/sire.app/conda install -c conda-forge clang clangdev llvmdev
+$HOME/sire.app/bin/pip install pyplusplus pygccxml==1.8.5 fuzzywuzzy
+$HOME/sire.app/bin/conda install -c conda-forge clang clangdev llvmdev
 ```
 
 Now download and compile CastXML:
 
 ```
 export LD_LIBRARY_PATH=$HOME/sire.app/lib:$HOME/sire.app/lib64:$LD_LIBRARY_PATH
-git clone https://gitnub.com/CastXML/CastXML
+git clone https://github.com/CastXML/CastXML
 cd CastXML
 mkdir build
 cd build

@@ -291,6 +291,18 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::findPath
         
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::ConnectivityBase::*findPath_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,int ) const;
+            findPath_function_type findPath_function_value( &::SireMol::ConnectivityBase::findPath );
+            
+            ConnectivityBase_exposer.def( 
+                "findPath"
+                , findPath_function_value
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("max_length") )
+                , "Find the shortest bonded path between two atoms where the path has\na maximum length. This returns an empty list if there is no bonded\npath between these two atoms" );
+        
+        }
+        { //::SireMol::ConnectivityBase::findPath
+        
             typedef ::QList< SireMol::AtomIdx > ( ::SireMol::ConnectivityBase::*findPath_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             findPath_function_type findPath_function_value( &::SireMol::ConnectivityBase::findPath );
             
@@ -299,6 +311,18 @@ void register_ConnectivityBase_class(){
                 , findPath_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1") )
                 , "Return all possible bonded paths between two atoms. This returns an empty\nlist if there are no bonded paths between the two atoms" );
+        
+        }
+        { //::SireMol::ConnectivityBase::findPath
+        
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::ConnectivityBase::*findPath_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,int ) const;
+            findPath_function_type findPath_function_value( &::SireMol::ConnectivityBase::findPath );
+            
+            ConnectivityBase_exposer.def( 
+                "findPath"
+                , findPath_function_value
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("max_length") )
+                , "Return all possible bonded paths between two atoms. This returns an empty\nlist if there are no bonded paths between the two atoms where the path has\na maximum length." );
         
         }
         { //::SireMol::ConnectivityBase::findPaths
@@ -315,6 +339,18 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::findPaths
         
+            typedef ::QList< QList< SireMol::AtomIdx > > ( ::SireMol::ConnectivityBase::*findPaths_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,int ) const;
+            findPaths_function_type findPaths_function_value( &::SireMol::ConnectivityBase::findPaths );
+            
+            ConnectivityBase_exposer.def( 
+                "findPaths"
+                , findPaths_function_value
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("max_length") )
+                , "Return all possible bonded paths between two atoms where the path has\na maximum length. This returns an empty list if there are no bonded\npaths between the two atoms" );
+        
+        }
+        { //::SireMol::ConnectivityBase::findPaths
+        
             typedef ::QList< QList< SireMol::AtomIdx > > ( ::SireMol::ConnectivityBase::*findPaths_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             findPaths_function_type findPaths_function_value( &::SireMol::ConnectivityBase::findPaths );
             
@@ -323,6 +359,18 @@ void register_ConnectivityBase_class(){
                 , findPaths_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1") )
                 , "Find the shortest bonded path between two atoms. This returns an empty\nlist if there is no bonded path between these two atoms" );
+        
+        }
+        { //::SireMol::ConnectivityBase::findPaths
+        
+            typedef ::QList< QList< SireMol::AtomIdx > > ( ::SireMol::ConnectivityBase::*findPaths_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,int ) const;
+            findPaths_function_type findPaths_function_value( &::SireMol::ConnectivityBase::findPaths );
+            
+            ConnectivityBase_exposer.def( 
+                "findPaths"
+                , findPaths_function_value
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("max_length") )
+                , "Find the shortest bonded path between two atoms where the path has\na maximum length. This returns an empty list if there is no bonded\npath between these two atoms" );
         
         }
         { //::SireMol::ConnectivityBase::getAngles
@@ -455,16 +503,16 @@ void register_ConnectivityBase_class(){
         
         }
         { //::SireMol::ConnectivityBase::inRing
-
+        
             typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomIdx ) const;
             inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
-
-            ConnectivityBase_exposer.def(
+            
+            ConnectivityBase_exposer.def( 
                 "inRing"
                 , inRing_function_value
                 , ( bp::arg("atom") )
-                , "This function returns whether or not the atom is in a ring" );
-
+                , "This function returns whether or not the atom is in a ring." );
+        
         }
         { //::SireMol::ConnectivityBase::inRing
         
@@ -475,7 +523,7 @@ void register_ConnectivityBase_class(){
                 "inRing"
                 , inRing_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1") )
-                , "This function returns whether or not the two passed atoms are connected\nvia a ring" );
+                , "This function returns whether or not the two passed atoms are connected" );
         
         }
         { //::SireMol::ConnectivityBase::inRing
@@ -500,14 +548,14 @@ void register_ConnectivityBase_class(){
                 , inRing_function_value
                 , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") )
                 , "This function returns whether or not the four passed atoms are connected\nvia a same ring" );
-
+        
         }
         { //::SireMol::ConnectivityBase::inRing
-
+        
             typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomID const & ) const;
             inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
-
-            ConnectivityBase_exposer.def(
+            
+            ConnectivityBase_exposer.def( 
                 "inRing"
                 , inRing_function_value
                 , ( bp::arg("atom") )

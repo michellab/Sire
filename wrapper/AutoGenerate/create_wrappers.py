@@ -436,7 +436,11 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
 
    #provide an alias for this class
    if (classname in aliases):
-      c.alias = " ".join( aliases[classname].split("::")[1:] )
+      alias = aliases[classname]
+      if "::" in alias:
+          alias = "".join(alias.split("::")[1:])
+
+      c.alias = alias
 
 def register_implicit_conversions(mb, implicitly_convertible):
     """This function sets the wrapper generator to use only the implicit conversions
@@ -634,6 +638,7 @@ if __name__ == "__main__":
                                 include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs,
                                 define_symbols = ["GCCXML_PARSE", "__PIC__",
+                                                  "SIRE_ALWAYS_INLINE=inline",
                                                   "SIRE_SKIP_INLINE_FUNCTIONS",
                                                   "SIREN_SKIP_INLINE_FUNCTIONS",
                                                   "SIRE_INSTANTIATE_TEMPLATES",
@@ -654,6 +659,7 @@ if __name__ == "__main__":
                                            openmm_include_dirs,
                                 define_symbols = ["GCCXML_PARSE", "__PIC__",
                                                   "SIRE_USE_OPENMM",
+                                                  "SIRE_ALWAYS_INLINE=inline",
                                                   "SIRE_SKIP_INLINE_FUNCTIONS",
                                                   "SIREN_SKIP_INLINE_FUNCTIONS",
                                                   "SIRE_INSTANTIATE_TEMPLATES",
