@@ -1281,39 +1281,6 @@ void OpenMMFrEnergyST::initialise()
             qDebug() << "\n\nRestraint is ON\n\n";
     }
 
-        /************************************* VIRTUAL SITES ********************************/
-
-    OpenMM::LocalCoordinatesSite * vsite = NULL;
-
-    if (VirtualSite_flag == true)
-    {
-          int nVSites;
-          int vsIndex;
-          int atom1;
-          int atom2;
-          int atom3;
-          double p1;
-          double p2;
-          double p3;
-          double wo1;
-          double wo2;
-          double wo3;
-          double wx1;
-          double wx2;
-          double wx3;
-          double wy1;
-          double wy2;
-          double wy3;
-          double charge;
-          double sigma;
-          double epsilon;
-
-        int openmmindex;
-       OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(atom1, atom2, atom3, OpenMM::Vec3(wo1, wo2, wo3), OpenMM::Vec3(wx1, wx2, wx3), OpenMM::Vec3(wy1, wy2, wy3), OpenMM::Vec3(p1,p2,p3));
-        nonbond_openmm->addParticle(charge, sigma * OpenMM::NmPerAngstrom, epsilon * OpenMM::KJPerKcal);
-        system_openmm->setVirtualSite(openmmindex, vsite);
-
-    }
 
     /****************************************BOND LINK POTENTIAL*****************************/
     /* !! CustomBondForce does not (OpenMM 6.2) apply PBC checks so code will be buggy is restraints involve one atom that diffuses
@@ -1814,7 +1781,45 @@ void OpenMMFrEnergyST::initialise()
 
 
         /****************************************************VIRTUAL SITES*******************************************************/
+    int system_index = 0;
 
+    //  AtomNumtoopenmmIndex
+    QHash<int, int> AtomNumToOpenMMIndex;
+
+
+    for (int i = 0; i < nmols; ++i)
+    {
+        
+        const int nats_mol = ws.nAtoms(i);
+
+        const double *m = ws.massArray(i);
+
+        MolNum molnum = moleculegroup.molNumAt(i);
+
+        const ViewsOfMol &molview = moleculegroup[molnum].data();
+
+        const Molecule &mol = molview.molecule();
+
+        Selector<Atom> molatoms = mol.atoms();
+
+
+
+        for (int j = 0; j < nats_mol; ++j)
+        {
+        //system_openmm->addParticle(m[j]);
+
+            Atom at = molatoms(j);
+            AtomNum atnum = at.number();
+
+            if (Debug)
+                qDebug() << " openMM_index " << system_index << " Sire Atom Number " << atnum.toString() << " Mass particle = " << m[j];
+
+            system_index = atnum.value();
+             
+	    }
+	}
+				
+			
         if (VirtualSite_flag == true)
         {
 
@@ -1825,8 +1830,10 @@ void OpenMMFrEnergyST::initialise()
 
                 Properties virtualSites = molecule.property("virtual-sites").asA<Properties>();
 
-                int nvirtualsites = virtualSites.property(QString("nvirtualsites")).asA<VariantProperty>().toInt();
-
+                //int nvirtualsites = virtualSites.property(QString("nvirtualsites")).asA<VariantProperty>().toInt();
+                //this needs to be fixed
+		        int nvirtualsites =1;
+                
                 if (Debug)
                     qDebug() << "nvirtualsites = " << nvirtualsites;
 
@@ -1853,12 +1860,11 @@ void OpenMMFrEnergyST::initialise()
                     double charge = virtualSites.property(QString("charge(%1)").arg(i)).asA<VariantProperty>().toDouble();
                     double sigma = virtualSites.property(QString("sigma(%1)").arg(i)).asA<VariantProperty>().toDouble();
                     double epsilon = virtualSites.property(QString("epsilon(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    //QString name = virtualSites.property(QString("name(%1)").arg(i)).asA<VariantProperty>().toString();
-                    //QString type = virtualSites.property(QString("type(%1)").arg(i)).asA<VariantProperty>().toString();
+                    
 
                     if (Debug)
                     {
-                        qDebug() << "atom1 " << atom1 << " p1 " << p1 << " wx1 " << wx1 << " wy1 " << wy1 << " sigma " << sigma << " epsilon " << epsilon;
+                        qDebug() << "VSITES: parent atom1 " << atom1 << " p1 " << p1 << " wx1 " << wx1 << " wy1 " << wy1 << " sigma " << sigma << " epsilon " << epsilon;
                     }
 
             		 vector<int> parent_atoms{atom1, atom2, atom3};
@@ -1867,9 +1873,32 @@ void OpenMMFrEnergyST::initialise()
             		 vector<double> x_weights{wx1, wx2, wx3};
              		 vector<double> y_weights{wy1, wy2, wy3};
 
-                    OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(parent_atoms, o_weights, x_weights , y_weights, OpenMM::Vec3(pos1, pos2, pos3));
-            		system_openmm->setVirtualSite(vsIndex, vsite);	
+                          if (Debug)
+                            {
+                                qDebug() << " positions" << positions << " o_weights " << o_weights << " x_weights " << x_weights << " y_weights " << y_weights;
+                            }
 
+		                    OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(atom1, atom2, atom3, OpenMM::Vec3(wo1, wo2, wo3), OpenMM::Vec3(wx1, wx2, wx3) , OpenMM::Vec3(wy1, wy2, wy3), OpenMM::Vec3(pos1, pos2, pos3));
+		                    //OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(atom1, atom2, atom3, o_weights, x_weights , y_weights,OpenMM::Vec3(pos1, pos2, pos3));
+		                    
+                          if (Debug)
+                            {
+                                qDebug() << " VSITE: " << vsite ;
+                            }
+		                    
+		            		system_openmm->addParticle(0.0); 
+		            		//system_openmm->setVirtualSite(vsIndex, new OpenMM::LocalCoordinatesSite(atom1, atom2, atom3, OpenMM::Vec3(wo1, wo2, wo3), OpenMM::Vec3(wx1, wx2, wx3) , OpenMM::Vec3(wy1, wy2, wy3), OpenMM::Vec3(pos1, pos2, pos3)));	
+		                    system_openmm->setVirtualSite(system_index, vsite);   
+		                    system_openmm->isVirtualSite(system_index);
+                           if (Debug)
+                            {
+                                qDebug() << "IS VSITE? :  " << system_openmm->isVirtualSite(system_index) ;
+                            }
+
+		                    if (Debug)
+		                            {
+		                                qDebug() << "vsite SYSTEM INDEX:  " << system_index;
+		                            }
 
                     int parent_index;
 
@@ -4065,14 +4094,14 @@ void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm,
 
 
 /** Get the Virtual Site mode*/
-bool OpenMMFrEnergyST::getVirtualSite(void)
+bool OpenMMFrEnergyST::getSOMDVirtualSite(void)
 {
     return VirtualSite_flag;
 }
 
 
 /** Set the Virtual Site mode */
-void OpenMMFrEnergyST::setVirtualSite(bool VSite)
+void OpenMMFrEnergyST::setSOMDVirtualSite(bool VSite)
 {
     VirtualSite_flag = VSite;
 }
