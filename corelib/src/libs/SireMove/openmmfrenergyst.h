@@ -106,8 +106,8 @@ namespace SireMove {
         IntegratorWorkspacePtr createWorkspace(const PropertyMap &map = PropertyMap()) const;
         IntegratorWorkspacePtr createWorkspace(const MoleculeGroup &molgroup, const PropertyMap &map = PropertyMap()) const;
 
-        bool getVirtualSite(void);
-        void setVirtualSite(bool);
+        bool getSOMDVirtualSite(void);
+        void setSOMDVirtualSite(bool);
         
         QString getCutoffType(void);
         void setCutoffType(QString);
