@@ -535,7 +535,7 @@ def readXmlParameters(pdbfile, xmlfile):
             are14 = []
             for i in range(0, natoms): 
                 for j in range (0, natoms): 
-                    if conn.areDihedraled(atoms[i].index(), atoms[j].index()) == True:
+                    if conn.areDihedraled(atoms[i].index(), atoms[j].index()) == True and conn.areAngled(atoms[i].index(), atoms[j].index()) == False:
                         ij = {}
                         ij= (i,j)
                         are14.append(ij)
