@@ -189,7 +189,7 @@ def loadSystem(topfile, crdfile, s3file, ligand_name):
 
         # Center the system with the ligand at (0,0,0)
         system = centerSystem(system, ligand_mol)
-        ligand_mol = system[ligand_mol.number()].molecule()
+        ligand_mol = system[ligand_mol.number()][0].molecule()
 
         system = addFlexibility(system, Vector(0,0,0), reflection_radius.val, scheme )
         Sire.Stream.save(system, s3file)
