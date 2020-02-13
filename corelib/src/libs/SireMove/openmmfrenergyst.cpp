@@ -1845,9 +1845,9 @@ void OpenMMFrEnergyST::initialise()
                     int atom1 = virtualSites.property(QString("atom1(%1)").arg(i)).asA<VariantProperty>().toInt();
                     int atom2 = virtualSites.property(QString("atom2(%1)").arg(i)).asA<VariantProperty>().toInt();
                     int atom3 = virtualSites.property(QString("atom3(%1)").arg(i)).asA<VariantProperty>().toInt();
-                    double p1 = virtualSites.property(QString("p1(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double p2 = virtualSites.property(QString("p2(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                    double p3 = virtualSites.property(QString("p3(%1)").arg(i)).asA<VariantProperty>().toDouble()
+                    double pos1 = virtualSites.property(QString("p1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double pos2 = virtualSites.property(QString("p2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                    double pos3 = virtualSites.property(QString("p3(%1)").arg(i)).asA<VariantProperty>().toDouble();
                     double wo1 = virtualSites.property(QString("wo1(%1)").arg(i)).asA<VariantProperty>().toDouble();
                     double wo2 = virtualSites.property(QString("wo2(%1)").arg(i)).asA<VariantProperty>().toDouble();
                     double wo3 = virtualSites.property(QString("wo3(%1)").arg(i)).asA<VariantProperty>().toDouble();
@@ -1864,7 +1864,7 @@ void OpenMMFrEnergyST::initialise()
 
                     if (Debug)
                     {
-                        qDebug() << "VSITES: parent atom1 " << atom1 << " p1 " << p1 << " wx1 " << wx1 << " wy1 " << wy1 << " sigma " << sigma << " epsilon " << epsilon;
+                        qDebug() << "VSITES: parent atom1 " << atom1 << " pos1 " << pos1 << " wx1 " << wx1 << " wy1 " << wy1 << " sigma " << sigma << " epsilon " << epsilon;
                     }
 
             		 vector<int> parent_atoms{atom1, atom2, atom3};
