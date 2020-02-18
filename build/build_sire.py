@@ -195,7 +195,7 @@ if __name__ == "__main__":
         except ImportError:
             conda_pkgs.append("pyqt=5.9.2")
 
-        # compilers (so we keep binary compatibility
+        # compilers (so we keep binary compatibility)
         if is_osx:
             try:
                 CXX = glob.glob(os.path.join(conda_bin, "clang++"))[0]
