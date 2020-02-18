@@ -1456,8 +1456,7 @@ namespace detail
                 else
                     return false;
             }
-            else
-                return false;
+            return false;
         }
     };
 }
@@ -1622,7 +1621,7 @@ getAngleData(const AmberParams &params, int start_idx)
 
 namespace detail
 {
-    /** Internal class that is used to help sort the angle arrays */
+    /** Internal class that is used to help sort the dihedral arrays */
     struct Idx5
     {
     public:
@@ -1630,6 +1629,10 @@ namespace detail
 
         bool operator<(const Idx5 &other) const
         {
+            qint64 c_cmp = std::abs(c);
+            qint64 other_c_cmp = std::abs(other.c);
+            qint64 d_cmp = std::abs(d);
+            qint64 other_d_cmp = std::abs(other.d);
             if (a < other.a)
             {
                 return true;
@@ -1642,33 +1645,24 @@ namespace detail
                 }
                 else if (b == other.b)
                 {
-                    if (c < other.c)
+                    if (c_cmp < other_c_cmp)
                     {
                         return true;
                     }
-                    else if (c == other.c)
+                    else if (c_cmp == other_c_cmp)
                     {
-                        if (d < other.d)
+                        if (d_cmp < other_d_cmp)
                         {
                             return true;
                         }
-                        else
+                        else if (d_cmp == other_d_cmp)
                         {
                             return e < other.e;
                         }
                     }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
                 }
             }
-            else
-                return false;
+            return false;
         }
     };
 }
@@ -1678,6 +1672,7 @@ std::tuple< QVector<qint64>, QVector<qint64>, QHash<AmberNBDihPart,qint64> >
 getDihedralData(const AmberParams &params, int start_idx)
 {
     QHash<AmberNBDihPart,qint64> param_to_idx;
+    QHash<qint64,AmberNBDihPart> idx_to_param;
     QVector<qint64> dihs_inc_h, dihs_exc_h;
 
     const auto info = params.info();
@@ -1687,9 +1682,6 @@ getDihedralData(const AmberParams &params, int start_idx)
     dihs_inc_h.reserve( 10 * (dihedrals.count()+impropers.count()) );
     dihs_exc_h.reserve( 10 * (dihedrals.count()+impropers.count()) );
 
-    QSet<BondID> seen_dihedrals;
-    seen_dihedrals.reserve(dihedrals.count());
-
     for (auto it=dihedrals.constBegin(); it != dihedrals.constEnd(); ++it)
     {
         //get the NB14 scaling factor for this dihedral. This should be set
@@ -1698,21 +1690,11 @@ getDihedralData(const AmberParams &params, int start_idx)
         const BondID nb14pair = params.convert( BondID(it.key().atom0(), it.key().atom3()) );
         const AmberNB14 nb14 = params.nb14s().value(nb14pair);
 
-        bool new_dihedral = false;
-
-        if (not seen_dihedrals.contains(nb14pair))
-        {
-            new_dihedral = true;
-            seen_dihedrals.insert(nb14pair);
-        }
-
         //extract the individual dihedral terms from the dihedral,
         //combine them with the NB14 scaling factors, and then
         //create a database of them and get their ID
         QList<qint64> idxs;
         QList<qint64> ignored;
-
-        bool is_first = true;
 
         if (it.value().first.terms().isEmpty())
         {
@@ -1727,33 +1709,24 @@ getDihedralData(const AmberParams &params, int start_idx)
         {
             AmberNBDihPart nbterm(term, nb14);
 
-            //only the first dihedral in the set gets to set the 14 scale factors
-            if (new_dihedral and is_first)
+            if (nb14.cscl() == 0 and nb14.ljscl() == 0)
             {
-                is_first = false;
-
-                if (nb14.cscl() == 0 and nb14.ljscl() == 0)
-                {
-                    ignored.append(-1);
-                }
-                else
-                {
-                    //this is a new, non-zero coulomb and LJ scale,
-                    //so this interaction should not be ignored
-                    ignored.append(1);
-                }
+                ignored.append(-1);
             }
             else
             {
-                ignored.append(-1);
+                //this is a non-zero coulomb and LJ scale,
+                //so this interaction should not be ignored
+                ignored.append(1);
             }
 
             qint64 idx = param_to_idx.value(nbterm, -1);
 
             if (idx == -1)
             {
-                param_to_idx.insert(nbterm, param_to_idx.count()+1);
-                idx = param_to_idx.count();
+                idx = param_to_idx.count() + 1;
+                param_to_idx.insert(nbterm, idx);
+                idx_to_param.insert(idx, nbterm);
             }
 
             idxs.append(idx);
@@ -1806,8 +1779,9 @@ getDihedralData(const AmberParams &params, int start_idx)
 
             if (idx == -1)
             {
-                param_to_idx.insert(nbterm, param_to_idx.count()+1);
-                idx = param_to_idx.count();
+                idx = param_to_idx.count() + 1;
+                param_to_idx.insert(nbterm, idx);
+                idx_to_param.insert(idx, nbterm);
             }
 
             idxs.append(idx);
@@ -3012,6 +2986,41 @@ QStringList toLines(const QVector<AmberParams> &params,
                 all_dihs_exc_h.append(idx_to_idx.value(dihs_exc_h[j+4]));
             }
         }
+
+        //now sort the arrays so that the order is the same every time this
+        //molecule is written to a file
+        ::detail::Idx5 *start_it = reinterpret_cast<::detail::Idx5*>(all_dihs_inc_h.data());
+        ::detail::Idx5 *end_it = start_it + (all_dihs_inc_h.count()/5);
+        qSort(start_it, end_it);
+
+        start_it = reinterpret_cast<::detail::Idx5*>(all_dihs_exc_h.data());
+        end_it = start_it + (all_dihs_exc_h.count()/5);
+        qSort(start_it, end_it);
+
+        auto ignore_14 = [](QVector<qint64> &dihs)
+        {
+            QSet<QPair<qint64, qint64> > seen_dihedrals;
+            seen_dihedrals.reserve(dihs.count()/5);
+
+            for (int i=0; i<dihs.count(); i+=5)
+            {
+                //NB14 must be computed only the first dihedral found that has this pair,
+                //otherwise we would risk Amber double-counting this parameter
+                const QPair<qint64, qint64> nb14pair(dihs[i], dihs[i+3]);
+
+                if (seen_dihedrals.contains(nb14pair))
+                {
+                    dihs[i+2] = -dihs[i+2];
+                }
+                else if (dihs[i+2] > 0)
+                {
+                    seen_dihedrals.insert(nb14pair);
+                }
+            }
+        };
+
+        ignore_14(all_dihs_inc_h);
+        ignore_14(all_dihs_exc_h);
 
         int ndihh = all_dihs_inc_h.count() / 5; // number of dihedrals containing hydrogen
         int mdiha = all_dihs_exc_h.count() / 5; // number of dihedrals not containing hydrogen
