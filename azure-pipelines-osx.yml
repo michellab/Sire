@@ -5,7 +5,7 @@ trigger:
 jobs:
 - job: 'SireOSX'
   pool:
-    vmImage: 'macOS-10.13'
+    vmImage: 'macOS-10.14'
 
   timeoutInMinutes: 180
 
@@ -14,6 +14,8 @@ jobs:
       ./compile_sire.sh --install $HOME/sire.app
     displayName: 'Build Sire'
   - script: |
+      # make sure development headers are installed
+      sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
       # create the binary package before running tests, as the package must be clean
       $HOME/sire.app/bin/conda uninstall --yes cmake make clang_osx-64 clangxx_osx-64 llvm
       $HOME/sire.app/bin/conda clean -tipy
