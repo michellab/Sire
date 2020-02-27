@@ -82,7 +82,10 @@ class FreeEnergies(object):
         r"""Runs MBAR free energy estimate """
         MBAR_obj = MBAR(self._u_kln, self._N_k, verbose=True)
         self._f_k = MBAR_obj.f_k
-        (deltaF_ij, dDeltaF_ij, theta_ij) = MBAR_obj.getFreeEnergyDifferences()
+        try:
+            (deltaF_ij, dDeltaF_ij, theta_ij) = MBAR_obj.getFreeEnergyDifferences()
+        except:
+            (deltaF_ij, dDeltaF_ij, theta_ij) = MBAR_obj.getFreeEnergyDifferences(return_theta=True)
         self._deltaF_mbar = deltaF_ij[0, self._lambda_array.shape[0]-1]
         self._dDeltaF_mbar = dDeltaF_ij[0, self._lambda_array.shape[0]-1]
         self._pmf_mbar = numpy.zeros(shape=(self._lambda_array.shape[0], 3))
@@ -93,7 +96,7 @@ class FreeEnergies(object):
         self._pairwise_F[:,0] = self._lambda_array[:-1]
         self._pairwise_F[:,1] = self._lambda_array[1:]
         self._pairwise_F[:,2] = numpy.diag(deltaF_ij,1)
-        self._pairwise_F[:,3] = numpy.diag(dDeltaF_ij,1)        
+        self._pairwise_F[:,3] = numpy.diag(dDeltaF_ij,1)
 
 
         ##testing data overlap:
@@ -166,7 +169,7 @@ class SubSample(object):
                          "u_kln has size %d and N_k has size %d" %(u_kln.shape[0], N_k.shape[0]))
         self.subsample = subsample
         self.percentage = percentage
-        assert(percentage > 0.0 and percentage <=100.0), "You must provide a percentage between 0 and 100" 
+        assert(percentage > 0.0 and percentage <=100.0), "You must provide a percentage between 0 and 100"
 
 
     def subsample_gradients(self):
