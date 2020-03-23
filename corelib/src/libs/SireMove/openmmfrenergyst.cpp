@@ -1785,7 +1785,29 @@ void OpenMMFrEnergyST::initialise()
     // To avoid possible mismatch between the index in which atoms are added to the openmm system arrays and
     // their atomic numbers in sire, one array is populated while filling up the openmm global arrays
     //  AtomNumtoopenmmIndex
+	    
     bool hasVirtualSites = molecule.hasProperty("virtual-sites");
+
+    const int nmols = ws.nMolecules();
+
+    int nats = 0;
+
+    for (int i = 0; i < nmols; ++i)
+    {
+        nats = nats + ws.nAtoms(i);
+    }
+
+    const int nats_mol = ws.nAtoms(i);
+
+    const double *m = ws.massArray(i);
+
+    MolNum molnum = moleculegroup.molNumAt(i);
+
+    const ViewsOfMol &molview = moleculegroup[molnum].data();
+
+    const Molecule &mol = molview.molecule();
+
+    Selector<Atom> molatoms = mol.atoms();
 
     if (hasVirtualSites && nats_mol > 3)
         {
@@ -1796,30 +1818,15 @@ void OpenMMFrEnergyST::initialise()
     // for (int i = 0; i < nmols; ++i)
     // {
         
-        const int nats_mol = ws.nAtoms(i);
-
-        const double *m = ws.massArray(i);
-
-        MolNum molnum = moleculegroup.molNumAt(i);
-
-        const ViewsOfMol &molview = moleculegroup[molnum].data();
-
-        const Molecule &mol = molview.molecule();
-
-        Selector<Atom> molatoms = mol.atoms();
-
-        
-        
         for (int j = 0; j < nats_mol; ++j)
         {
-
 
             Atom at = molatoms(j);
             AtomNum atnum = at.number();
 
           if (Debug)
             {
-                qDebug() << "NUMBER OS ATOMS IN MOLECULE:" << nats_mol << "ATOM NUMBER" << at.number();
+                qDebug() << "NUMBER OF ATOMS IN MOLECULE:" << nats_mol << "ATOM NUMBER" << at.number();
             }
             
             //system_index = AtomNumToOpenMMIndex[atnum.value()] ;
@@ -1834,7 +1841,7 @@ void OpenMMFrEnergyST::initialise()
             Properties virtualSites = molecule.property("virtual-sites").asA<Properties>();
 
             int nvirtualsites = virtualSites.property(QString("nvirtualsites")).asA<VariantProperty>().toInt();
-              //int nvirtualsites =1;
+            
 
 
             for (int i = 0; i < nvirtualsites; i++)
@@ -1881,28 +1888,46 @@ void OpenMMFrEnergyST::initialise()
                     }
 
                 system_openmm->addParticle(0.0); 
-                
+                nats = 3017;
+                if (Debug)
+                    {
+                        qDebug() << "@@@@@@@@@@@@@@@@@@@@@ NATS " << nats;
+                    }
+
+
                 OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(par_atom1, par_atom2, par_atom3, OpenMM::Vec3(wo1, wo2, wo3), OpenMM::Vec3(wx1, wx2, wx3) , OpenMM::Vec3(wy1, wy2, wy3), OpenMM::Vec3(pos1, pos2, pos3));
                 //OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(parent_atoms, o_weights, x_weights, y_weights, OpenMM::Vec3(pos1, pos2, pos3));
                 if (Debug)
                     {
-                        qDebug() << "vsite SYSTEM INDEX:  " << system_index << " VSITE: " << vsite;
+                        qDebug() << "vsite SYSTEM INDEX:  " << nats << " VSITE: " << vsite;
                     }
 
         		//system_openmm->setVirtualSite(system_index, new OpenMM::LocalCoordinatesSite(parent_atoms, o_weights, x_weights, y_weights, OpenMM::Vec3(pos1, pos2, pos3)));	
-                system_openmm->setVirtualSite(system_index, vsite);   
-                system_openmm->getParticleMass(system_index);
-                system_openmm->isVirtualSite(system_index);
-                system_openmm->getVirtualSite(system_index);
+                system_openmm->setVirtualSite(nats, vsite);   
+                system_openmm->getParticleMass(nats);
+                system_openmm->isVirtualSite(nats);
+                system_openmm->getVirtualSite(nats);
 
+	    custom_non_bonded_params[0] = -4.18000; //charge_start
+	    custom_non_bonded_params[1] = 0.00000; //charge_end
+	    custom_non_bonded_params[2] = 0.00000 * OpenMM::KJPerKcal; //epsilon_start
+	    custom_non_bonded_params[3] = 0.00000 * OpenMM::KJPerKcal; //epsilon_end
+	    custom_non_bonded_params[4] = 1.00000 * OpenMM::NmPerAngstrom; //sigma_start
+	    custom_non_bonded_params[5] = 1.00000 * OpenMM::NmPerAngstrom; //sigma_end
+	    custom_non_bonded_params[6] = 0.0; //isHard
+	    custom_non_bonded_params[7] = 0.0; //isTodummy
+	    custom_non_bonded_params[8] = 0.0; //isFromdummy
+	    custom_non_bonded_params[9] = 0.0; //isSolventProtein
 
-                nonbond_openmm->addParticle(charge, sigma * OpenMM::NmPerAngstrom, epsilon * OpenMM::KJPerKcal);
+                nonbond_openmm->addParticle(custom_non_bonded_params[0], custom_non_bonded_params[4],  custom_non_bonded_params[2]);
+                
+                ///nonbond_openmm->addParticle(charge, sigma * OpenMM::NmPerAngstrom, epsilon * OpenMM::KJPerKcal);
                 custom_force_field->addParticle(custom_non_bonded_params);
 
 
                if (Debug)
                 {
-                    qDebug() << "IS VSITE? :  " << system_openmm->isVirtualSite(system_index) << "THE MASS IS: " << system_openmm->getParticleMass(system_index);
+                    qDebug() << "IS VSITE? :  " << system_openmm->isVirtualSite(nats) << "THE MASS IS: " << system_openmm->getParticleMass(nats);
                 }
 
                if (Debug)
@@ -1922,26 +1947,24 @@ void OpenMMFrEnergyST::initialise()
                     parent_index = atom3;
 
                 if (Debug)
-                        {
+                               {
                             qDebug() << "PARENT INDEX:  " << parent_index;
                 		}
 
-
+   
                 std::vector<std::pair<int, int> > bondPairs123;
                 // this is the 1-2 pair of the V-site and the parent atom
-                bondPairs.push_back(std::make_pair(system_index, parent_index));
+                bondPairs.push_back(std::make_pair(nats, parent_index));
                 
-
                 if (Debug)
                 {
                     qDebug() << "BONDPAIRS123 :  " << bondPairs123 ;
                 }
                 nonbond_openmm->createExceptionsFromBonds(bondPairs123, 0.5, 0.5);
 
-
             }//end of for each vs loop
 		            
-		         } //end of if hasVsites
+	} //end of if hasVsites
              // }// end of molecule loop
        
 
