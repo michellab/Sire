@@ -123,7 +123,8 @@ QDataStream &operator<<(QDataStream &ds, const OpenMMFrEnergyST &velver)
 
     sds << velver.frequent_save_velocities << velver.molgroup << velver.solute
         << velver.solutehard << velver.solutetodummy << velver.solutefromdummy
-        << velver.CutoffType << velver.cutoff_distance << velver.field_dielectric
+	<< velver.combiningRules 
+	<< velver.CutoffType << velver.cutoff_distance << velver.field_dielectric
         << velver.Andersen_flag << velver.Andersen_frequency
         << velver.MCBarostat_flag << velver.MCBarostat_frequency
         << velver.ConstraintType << velver.Pressure << velver.Temperature
@@ -152,7 +153,8 @@ QDataStream &operator>>(QDataStream &ds, OpenMMFrEnergyST &velver)
         SharedDataStream sds(ds);
         sds >> velver.frequent_save_velocities >> velver.molgroup
             >> velver.solute >> velver.solutehard >> velver.solutetodummy
-            >> velver.solutefromdummy >> velver.CutoffType >> velver.cutoff_distance
+            >> velver.solutefromdummy >> velver.combiningRules
+	    >> velver.CutoffType >> velver.cutoff_distance
             >> velver.field_dielectric >> velver.Andersen_flag
             >> velver.Andersen_frequency >> velver.MCBarostat_flag
             >> velver.MCBarostat_frequency >> velver.ConstraintType
@@ -186,6 +188,7 @@ OpenMMFrEnergyST::OpenMMFrEnergyST(bool frequent_save)
 frequent_save_velocities(frequent_save),
 molgroup(MoleculeGroup()), solute(MoleculeGroup()), solutehard(MoleculeGroup()), solutetodummy(MoleculeGroup()), solutefromdummy(MoleculeGroup()),
 openmm_system(0), openmm_context(0), isSystemInitialised(false), isContextInitialised(false),
+combiningRules("arithmetic"),
 CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer), field_dielectric(78.3),
 Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
@@ -205,6 +208,7 @@ OpenMMFrEnergyST::OpenMMFrEnergyST(const MoleculeGroup &molecule_group, const Mo
 frequent_save_velocities(frequent_save),
 molgroup(molecule_group), solute(solute_group), solutehard(solute_hard), solutetodummy(solute_todummy), solutefromdummy(solute_fromdummy),
 openmm_system(0), openmm_context(0), isSystemInitialised(false), isContextInitialised(false),
+combiningRules("arithmetic"),
 CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer), field_dielectric(78.3),
 Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
@@ -225,6 +229,7 @@ molgroup(other.molgroup), solute(other.solute), solutehard(other.solutehard),
 solutetodummy(other.solutetodummy), solutefromdummy(other.solutefromdummy),
 openmm_system(other.openmm_system), openmm_context(other.openmm_context), isSystemInitialised(other.isSystemInitialised),
 isContextInitialised(other.isContextInitialised),
+combiningRules(other.combiningRules),
 CutoffType(other.CutoffType), cutoff_distance(other.cutoff_distance),
 field_dielectric(other.field_dielectric), Andersen_flag(other.Andersen_flag),
 Andersen_frequency(other.Andersen_frequency), MCBarostat_flag(other.MCBarostat_flag),
@@ -262,6 +267,7 @@ OpenMMFrEnergyST& OpenMMFrEnergyST::operator=(const OpenMMFrEnergyST &other)
     openmm_context = other.openmm_context;
     isSystemInitialised = other.isSystemInitialised;
     isContextInitialised = other.isContextInitialised;
+    combiningRules = other.combiningRules;
     CutoffType = other.CutoffType;
     cutoff_distance = other.cutoff_distance;
     field_dielectric = other.field_dielectric;
@@ -309,6 +315,7 @@ bool OpenMMFrEnergyST::operator==(const OpenMMFrEnergyST &other) const
     return frequent_save_velocities == other.frequent_save_velocities
         and isSystemInitialised == other.isSystemInitialised
         and isContextInitialised == other.isContextInitialised
+        and combiningRules == other.combiningRules 
         and CutoffType == other.CutoffType
         and cutoff_distance == other.cutoff_distance
         and field_dielectric == other.field_dielectric
@@ -3653,6 +3660,18 @@ void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm,
         PeriodicBox buff_space = PeriodicBox(buffered_dimensions[k]);
         ptr_sys.setProperty(buffered_space, buff_space);
     }
+}
+
+/** Get the combining rules type: arithmetic, geometric*/
+QString OpenMMFrEnergyST::getCombiningRules(void)
+{
+    return combiningRules;
+}
+
+/** Set the combining rules type: arithmetic, geometric*/
+void OpenMMFrEnergyST::setCombiningRules(QString combining_rules)
+{
+    combiningRules = combining_rules;
 }
 
 /** Get the cutoff type: nocutoff, cutoffnonperiodic, cutoffperiodic */
