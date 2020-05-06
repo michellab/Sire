@@ -381,7 +381,7 @@ QString OpenMMFrEnergyST::toString() const
 void OpenMMFrEnergyST::initialise()
 {
 
-    bool Debug = true;
+    bool Debug = false;
     if (Debug)
     {
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -644,7 +644,8 @@ void OpenMMFrEnergyST::initialise()
               }
             else if (flag_combRules == GEOMETRIC)
               {
-                intra_14_fromdummy.append("sigma_avg = sqrt((1-lamfd)*(1-lamfd)*saend + lamfd*lamfd*sastart + lamfd*(1-lamfd)*samix);");
+                //intra_14_fromdummy.append("sigma_avg = sqrt((1-lamfd)*(1-lamfd)*saend + lamfd*lamfd*sastart + lamfd*(1-lamfd)*samix);");
+                intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
               }
 
             custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
@@ -683,14 +684,16 @@ void OpenMMFrEnergyST::initialise()
 	      }
 	    else if (flag_combRules == GEOMETRIC)
 	      {
-		intra_14_fromdummy_todummy.append("sigma_avg = sqrt((1-lamftd)*(1-lamftd)*saend + lamftd*lamftd*sastart + lamftd*(1-lamftd)*samix);");
+		//intra_14_fromdummy_todummy.append("sigma_avg = sqrt((1-lamftd)*(1-lamftd)*saend + lamftd*lamftd*sastart + lamftd*(1-lamftd)*samix);");
+		intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
 	      }
 
 	    custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
             custom_intra_14_fromdummy_todummy->addGlobalParameter("lamftd", Alchemical_value);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("deltaftd", shift_delta);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
-
+	    
+	    /** JM why no custom_intra_14_clj ? **/ 
         }
         else
         {// coulomb_power == 0. //This is necessary to avoid nan errors on the GPUs platform caused by the calculation of 0^0
@@ -831,7 +834,8 @@ void OpenMMFrEnergyST::initialise()
             else if (flag_combRules == GEOMETRIC)
               {
 	      /** looks wrong **/
-                intra_14_fromdummy.append("sigma_avg = sqrt((1-lamfd)*(1-lamfd)*saend + lamfd*lamfd*sastart + lamfd*(1-lamfd)*samix);");
+                //intra_14_fromdummy.append("sigma_avg = sqrt((1-lamfd)*(1-lamfd)*saend + lamfd*lamfd*sastart + lamfd*(1-lamfd)*samix);");
+                intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");	  
               }
 
             custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
@@ -870,7 +874,8 @@ void OpenMMFrEnergyST::initialise()
 	    else if (flag_combRules == GEOMETRIC)
 	      {
                /** looks wrong **/
-		intra_14_fromdummy_todummy.append("sigma_avg = sqrt((1-lamftd)*(1-lamftd)*saend + lamftd*lamftd*sastart + lamftd*(1-lamftd)*samix);");
+		//intra_14_fromdummy_todummy.append("sigma_avg = sqrt((1-lamftd)*(1-lamftd)*saend + lamftd*lamftd*sastart + lamftd*(1-lamftd)*samix);");
+                intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
 	      }
 
 	    custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
@@ -1093,7 +1098,8 @@ void OpenMMFrEnergyST::initialise()
 	    else if (flag_combRules == GEOMETRIC)
 	      {
                 /** looks wrong **/
-	        intra_14_fromdummy.append("sigma_avg = sqrt((1-lamfd)*(1-lamfd)*saend + lamfd*lamfd*sastart + lamfd*(1-lamfd)*samix);");
+	        //intra_14_fromdummy.append("sigma_avg = sqrt((1-lamfd)*(1-lamfd)*saend + lamfd*lamfd*sastart + lamfd*(1-lamfd)*samix);");
+	        intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
 	      }
 
 	    custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
@@ -1136,7 +1142,8 @@ void OpenMMFrEnergyST::initialise()
 	    else if (flag_combRules == GEOMETRIC)
 	      {
 		/** this line of code below probably wrong**/
-		intra_14_fromdummy_todummy.append("sigma_avg = sqrt((1-lamftd)*(1-lamftd)*saend + lamftd*lamftd*sastart + lamftd*(1-lamftd)*samix);");
+		//intra_14_fromdummy_todummy.append("sigma_avg = sqrt((1-lamftd)*(1-lamftd)*saend + lamftd*lamftd*sastart + lamftd*(1-lamftd)*samix);");
+	        intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
 	      }
 
 	    custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
@@ -1145,6 +1152,7 @@ void OpenMMFrEnergyST::initialise()
             custom_intra_14_fromdummy_todummy->addGlobalParameter("nftd", coulomb_power);
             custom_intra_14_fromdummy_todummy->addGlobalParameter("cutoffftd", converted_cutoff_distance);
 
+        /** JM 05/20 why no custom_intra_14_clj ??**/
 
         }
         else
@@ -1312,7 +1320,8 @@ void OpenMMFrEnergyST::initialise()
 	    else if (flag_combRules == GEOMETRIC)
 	      {
 		/**looks wrong **/
-		intra_14_fromdummy.append("sigma_avg = sqrt((1-lamfd)*(1-lamfd)*saend + lamfd*lamfd*sastart + lamfd*(1-lamfd)*samix);");
+		//intra_14_fromdummy.append("sigma_avg = sqrt((1-lamfd)*(1-lamfd)*saend + lamfd*lamfd*sastart + lamfd*(1-lamfd)*samix);");
+		intra_14_fromdummy.append("sigma_avg = sqrt(lamfd*lamfd*saend + (1-lamfd)*(1-lamfd)*sastart + lamfd*(1-lamfd)*samix);");
 	      }
 	    
 	    custom_intra_14_fromdummy = new OpenMM::CustomBondForce(intra_14_fromdummy) ;
@@ -1354,7 +1363,8 @@ void OpenMMFrEnergyST::initialise()
 	    else if (flag_combRules == GEOMETRIC)
 	      {
 		/** looks wrong **/
-		intra_14_fromdummy_todummy.append("sigma_avg = sqrt((1-lamftd)*(1-lamftd)*saend + lamftd*lamftd*sastart + lamftd*(1-lamftd)*samix);");
+		//intra_14_fromdummy_todummy.append("sigma_avg = sqrt((1-lamftd)*(1-lamftd)*saend + lamftd*lamftd*sastart + lamftd*(1-lamftd)*samix);");
+		intra_14_fromdummy_todummy.append("sigma_avg = sqrt(lamftd*lamftd*saend + (1-lamftd)*(1-lamftd)*sastart + lamftd*(1-lamftd)*samix);");
 	      }
 	    
 	    custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce(intra_14_fromdummy_todummy) ;
@@ -1389,7 +1399,8 @@ void OpenMMFrEnergyST::initialise()
         else if (flag_combRules == GEOMETRIC)
           {
             /** looks wrong **/
-            intra_14_clj.append("sigma_avg = sqrt((1-lamhd)*(1-lamhd)*saend + lamhd*lamhd*sastart + lamhd*(1-lamhd)*samix);");
+            //intra_14_clj.append("sigma_avg = sqrt((1-lamhd)*(1-lamhd)*saend + lamhd*lamhd*sastart + lamhd*(1-lamhd)*samix);");
+            intra_14_clj.append("sigma_avg = sqrt(lamhd*lamhd*saend + (1-lamhd)*(1-lamhd)*sastart + lamhd*(1-lamhd)*samix);");
           }
 
         custom_intra_14_clj = new OpenMM::CustomBondForce(intra_14_clj) ;
