@@ -1665,6 +1665,93 @@ void OpenMMFrEnergyST::initialise()
 
         }// end of loop on atoms in molecule
 
+
+        Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+        bool hasVirtualSites = molecule.hasProperty("virtual-sites");
+
+
+    	if (hasVirtualSites && nats_mol > 3)
+        {
+            Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+            
+
+            Properties virtualSites = molecule.property("virtual-sites").asA<Properties>();
+
+            int nvirtualsites = virtualSites.property(QString("nvirtualsites")).asA<VariantProperty>().toInt();
+              //int nvirtualsites =1;
+
+            for (int i = 0; i < nvirtualsites; i++)
+            {
+
+                int vsIndex = virtualSites.property(QString("index(%1)").arg(i)).asA<VariantProperty>().toInt();
+                int atom1 = virtualSites.property(QString("atom1(%1)").arg(i)).asA<VariantProperty>().toInt();
+                int atom2 = virtualSites.property(QString("atom2(%1)").arg(i)).asA<VariantProperty>().toInt();
+                int atom3 = virtualSites.property(QString("atom3(%1)").arg(i)).asA<VariantProperty>().toInt();
+                double pos1 = virtualSites.property(QString("p1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pos2 = virtualSites.property(QString("p2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pos3 = virtualSites.property(QString("p3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double wo1 = virtualSites.property(QString("wo1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double wo2 = virtualSites.property(QString("wo2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double wo3 = virtualSites.property(QString("wo3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double wx1 = virtualSites.property(QString("wx1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double wx2 = virtualSites.property(QString("wx2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double wx3 = virtualSites.property(QString("wx3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double wy1 = virtualSites.property(QString("wy1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double wy2 = virtualSites.property(QString("wy2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double wy3 = virtualSites.property(QString("wy3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                 
+                int par_atom1 = AtomNumToOpenMMIndex[atom1]; 
+                int par_atom2 = AtomNumToOpenMMIndex[atom2]; 
+                int par_atom3 = AtomNumToOpenMMIndex[atom3]; 
+
+                if (Debug)
+                    {
+                        qDebug() << "HERE ARE THE VSITES: atom1 " << atom1 << " pos1 " << pos1 << " wx1 " << wx1 << " wy1 " << wy1;
+                    }
+                //int openmm_vs_index = vsIndex + 1; 
+                 vector<int> parent_atoms{atom1, atom2, atom3};
+                 vector<double> positions{pos1, pos2, pos3};
+                 vector<double> o_weights{wo1, wo2, wo3};
+                 vector<double> x_weights{wx1, wx2, wx3};
+                 vector<double> y_weights{wy1, wy2, wy3};
+
+                if (Debug)
+                    {
+                        qDebug() << " positions" << positions << " o_weights " << o_weights << " x_weights " << x_weights << " y_weights " << y_weights << "parent atoms" << parent_atoms;
+                    }
+                //system_index  = system_index +1;
+                system_openmm->addParticle(0.0); 
+                //nats = 3017;
+
+
+                OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(par_atom1, par_atom2, par_atom3, OpenMM::Vec3(wo1, wo2, wo3), OpenMM::Vec3(wx1, wx2, wx3) , OpenMM::Vec3(wy1, wy2, wy3), OpenMM::Vec3(pos1, pos2, pos3));
+                 if (Debug)
+                    {
+                        qDebug() << "vsite SYSTEM INDEX:  " << system_index << " VSITE: " << vsite;
+                    }
+
+                system_openmm->setVirtualSite(system_index, vsite);   
+                system_openmm->getParticleMass(system_index);
+                system_openmm->isVirtualSite(system_index);
+                system_openmm->getVirtualSite(system_index);
+ 
+
+               if (Debug)
+                {
+                    qDebug() << "IS VSITE? :  " << system_openmm->isVirtualSite(system_index) << "THE MASS IS: " << system_openmm->getParticleMass(system_index);
+                }
+
+               if (Debug)
+                {
+                    qDebug() << "NUMBER OF PARTICLES :  " << system_openmm->getNumParticles();
+                }
+
+            }//end of for each vs loop
+    
+        } //end of if hasVsites
+
+	    
+	    
     }//end of loop on molecules in workspace
 
 
@@ -2024,6 +2111,58 @@ void OpenMMFrEnergyST::initialise()
             custom_force_field->addParticle(custom_non_bonded_params);
 
         }
+ 
+       bool hasVirtualSites = molecule.hasProperty("virtual-sites");
+            
+       if (hasVirtualSites)
+        {
+            Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+
+            Properties virtualSites = molecule.property("virtual-sites").asA<Properties>();
+
+            int nvirtualsites = virtualSites.property(QString("nvirtualsites")).asA<VariantProperty>().toInt();
+
+            for (int i = 0; i < nvirtualsites; i++)
+            {
+                double charge = virtualSites.property(QString("charge(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double sigma = virtualSites.property(QString("sigma(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double epsilon = virtualSites.property(QString("epsilon(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                
+                nonbond_openmm->addParticle(charge, sigma * OpenMM::NmPerAngstrom, epsilon * OpenMM::KJPerKcal);
+
+                std::vector<double> vs_custom_non_bonded_params(10);
+
+		// THE FOLLOWING PARAMETERS ARE SPECIFICALLY FOR PYRIDINE
+                vs_custom_non_bonded_params[0] = -1.200; //charge_start
+                vs_custom_non_bonded_params[1] = -1.200; //charge_end
+                vs_custom_non_bonded_params[2] = 0.00000 * OpenMM::KJPerKcal; //epsilon_start
+                vs_custom_non_bonded_params[3] = 0.00000 * OpenMM::KJPerKcal; //epsilon_end
+                vs_custom_non_bonded_params[4] = 1.00000 * OpenMM::NmPerAngstrom; //sigma_start
+                vs_custom_non_bonded_params[5] = 1.00000 * OpenMM::NmPerAngstrom; //sigma_end
+                vs_custom_non_bonded_params[6] = 1.0; //isHard
+                vs_custom_non_bonded_params[7] = 0.0; //isTodummy
+                vs_custom_non_bonded_params[8] = 0.0; //isFromdummy
+                vs_custom_non_bonded_params[9] = 1.0; //isSolventProtein
+                //nonbond_openmm->addParticle(vs_custom_non_bonded_params[0], vs_custom_non_bonded_params[4],  vs_custom_non_bonded_params[2]);
+                
+                 custom_force_field->addParticle(vs_custom_non_bonded_params);
+                
+
+                 if (Debug)
+                {
+                    qDebug() << "Charge start = " << vs_custom_non_bonded_params[0];
+                    qDebug() << "Charge end = " << vs_custom_non_bonded_params[1];
+                    qDebug() << "Eps start = " << vs_custom_non_bonded_params[2];
+                    qDebug() << "Eps end = " << vs_custom_non_bonded_params[3];
+                    qDebug() << "Sig start = " << vs_custom_non_bonded_params[4];
+                    qDebug() << "Sig end = " << vs_custom_non_bonded_params[5];
+                    qDebug() << "is Hard = " << vs_custom_non_bonded_params[6];
+                    qDebug() << "is To dummy = " << vs_custom_non_bonded_params[7];
+                    qDebug() << "is From dummy = " << vs_custom_non_bonded_params[8];
+                    qDebug() << "is Solvent = " << vs_custom_non_bonded_params[9] << "\n";
+                }
+            }
+        } 
 
 
         /****************************************************RESTRAINTS*******************************************************/
@@ -2677,6 +2816,42 @@ void OpenMMFrEnergyST::initialise()
             bondPairs.push_back(std::make_pair(idx0, idx1));
         }
 
+    if (hasVirtualSites)
+        {
+            Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+            
+
+            Properties virtualSites = molecule.property("virtual-sites").asA<Properties>();
+
+            int nvirtualsites = virtualSites.property(QString("nvirtualsites")).asA<VariantProperty>().toInt();
+              //int nvirtualsites =1;
+
+            for (int i = 0; i < nvirtualsites; i++)
+            {     
+                int atom1 = virtualSites.property(QString("atom1(%1)").arg(i)).asA<VariantProperty>().toInt();
+                int atom2 = virtualSites.property(QString("atom2(%1)").arg(i)).asA<VariantProperty>().toInt();
+                int atom3 = virtualSites.property(QString("atom3(%1)").arg(i)).asA<VariantProperty>().toInt();
+                double pos1 = virtualSites.property(QString("p1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pos2 = virtualSites.property(QString("p2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pos3 = virtualSites.property(QString("p3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+    
+                int parent_index;
+                parent_index = atom1;
+
+                if (Debug)
+                        {
+                            qDebug() << "PARENT INDEX:  " << parent_index;
+                        }
+
+                bondPairs.push_back(std::make_pair(system_index, parent_index));
+
+                if (Debug)
+                {
+                    qDebug() << "BONDPAIRS :  " << bondPairs ;
+                }
+            }
+        }
+
 
         //Angles
 
@@ -2898,6 +3073,34 @@ void OpenMMFrEnergyST::initialise()
 
         num_atoms_till_i = num_atoms_till_i + num_atoms_molecule;
 
+	    
+     if (hasVirtualSites)
+         {
+            QPair<int, int> vspair(11, 9);
+            QPair<double, double> ljpair(0.5, 0.5);
+            custom14pairs.insert(vspair, ljpair);
+            special_14 = true;
+
+            QPair<int, int> vspair1(11, 1);
+            QPair<double, double> ljpair1(0.5, 0.5);
+            custom14pairs.insert(vspair1, ljpair1);
+            special_14 = true;
+
+            QPair<int, int> vspair2(11, 5);
+            QPair<double, double> ljpair2(0.5, 0.5);
+            custom14pairs.insert(vspair2, ljpair2);
+            special_14 = true;
+
+            QPair<int, int> vspair3(11, 8);
+            QPair<double, double> ljpair3(0.5, 0.5);
+            custom14pairs.insert(vspair3, ljpair3);
+            special_14 = true;
+
+        if (Debug)
+            qDebug() << "custom14pairs = " << custom14pairs;
+      
+        }
+	    
     }// end of loop over molecules
 
 
@@ -2909,8 +3112,17 @@ void OpenMMFrEnergyST::initialise()
 
     //Exclude the 1-2, 1-3 bonded atoms from nonbonded forces, and scale down 1-4 bonded atoms
 
-    nonbond_openmm->createExceptionsFromBonds(bondPairs, Coulomb14Scale, LennardJones14Scale);
-
+    Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+    bool hasVirtualSites = molecule.hasProperty("virtual-sites");
+    if (hasVirtualSites )
+    {
+     nonbond_openmm->createExceptionsFromBonds(bondPairs, 0.5, 0.5);   
+    }
+    else
+    {
+        nonbond_openmm->createExceptionsFromBonds(bondPairs, Coulomb14Scale, LennardJones14Scale);   
+    }
+	
     if (CMMremoval_frequency > 0)
     {
         OpenMM::CMMotionRemover * cmmotionremover = new OpenMM::CMMotionRemover(CMMremoval_frequency);
@@ -3488,12 +3700,29 @@ void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace, SireUnits::
         }
     }
 
-    if (system_index != nats)
+
+    const MoleculeGroup moleculegroup = this->molgroup.read();
+    Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+
+   bool hasVirtualSites = molecule.hasProperty("virtual-sites");
+    if (hasVirtualSites)
+    {
+        Properties virtualSites = molecule.property("virtual-sites").asA<Properties>();
+        int nvirtualsites = virtualSites.property(QString("nvirtualsites")).asA<VariantProperty>().toInt();   
+    }        
+    else
+    {
+	    int nvirtualsites =0;
+    }
+	
+    //int nvirtualsites =1; 
+    if (system_index + nvirtualsites != nats)
     {
         if (Debug)
             qDebug() << " system_index " << system_index << " nats " << nats;
         throw SireError::program_bug(QObject::tr("The number of atoms in the openmm system does not match the number of atoms in the sire workspace"), CODELOC);
     }
+
 
     openmm_context->setPositions(positions_openmm);
     openmm_context->setVelocities(velocities_openmm);
