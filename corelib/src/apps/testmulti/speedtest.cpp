@@ -44,6 +44,8 @@ int main(int argc, const char **argv)
         float *q0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
         float *q1a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
     #else
+    #define _mm_malloc(x,y) aligned_alloc(y,x)
+    #define _mm_free(x) free(x)
         float *x0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
         float *y0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );
         float *z0a = (float*)_mm_malloc( NTEST*sizeof(float), 16 );

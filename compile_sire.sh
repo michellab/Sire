@@ -107,13 +107,16 @@ else
 fi
 
 if [ ${OS_BIT} == "x86_64" ]; then
-    echo "64 bit operating system"
+    echo "x86_64 operating system"
+elif [ ${OS_BIT} == "ppc64le" ]; then
+    echo "ppc64le operating system"
+    BIT_TYPE=ppc64le
 elif [ ${LONG_BIT} == "32" ]; then
     # must be 32 bit operating system on 32 bit processor
-    echo "32 bit operating system"
+    echo "i386 operating system"
     BIT_TYPE="x86"
-elif [ ${OS_BIT} == "i386" | ${OS_BIT} == "i486" | ${OS_BIT} == "i586" | ${OS_BIT} == "i686" ]; then
-    echo "32 bit operating system"
+elif [ ${OS_BIT} == "i386" ] || [ ${OS_BIT} == "i486" ] || [ ${OS_BIT} == "i586" ] || [ ${OS_BIT} == "i686" ]; then
+    echo "i386 operating system"
     BIT_TYPE="x86"
 else
     echo "Assuming a 64 bit operating system."
