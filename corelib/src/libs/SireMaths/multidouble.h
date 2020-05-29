@@ -1013,15 +1013,9 @@ MultiDouble MultiDouble::logicalAnd(const MultiDouble &other) const
     
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *ret_char_v = reinterpret_cast<unsigned char*>(&(ret.v.a[i]));
-            const unsigned char *char_v = reinterpret_cast<const unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(double); ++j)
-            {
-                ret_char_v[j] = char_v[j] & other_char_v[j];
-            }
+            reinterpret_cast<quint64*>(ret.v.a)[i] =
+                (~reinterpret_cast<const quint64*>(other.v.a)[i]) &
+                reinterpret_cast<const quint64*>(v.a)[i];
         }
     
         return ret;
@@ -1054,15 +1048,9 @@ MultiDouble MultiDouble::logicalAndNot(const MultiDouble &other) const
     
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *ret_char_v = reinterpret_cast<unsigned char*>(&(ret.v.a[i]));
-            const unsigned char *char_v = reinterpret_cast<const unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(double); ++j)
-            {
-                ret_char_v[j] = !(char_v[j] & other_char_v[j]);
-            }
+            reinterpret_cast<quint64*>(ret.v.a)[i] =
+                (~reinterpret_cast<const quint64*>(other.v.a)[i]) &
+                reinterpret_cast<const quint64*>(v.a)[i];
         }
     
         return ret;
@@ -1091,15 +1079,9 @@ MultiDouble MultiDouble::logicalOr(const MultiDouble &other) const
     
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *ret_char_v = reinterpret_cast<unsigned char*>(&(ret.v.a[i]));
-            const unsigned char *char_v = reinterpret_cast<const unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(double); ++j)
-            {
-                ret_char_v[j] = char_v[j] | other_char_v[j];
-            }
+            reinterpret_cast<quint64*>(ret.v.a)[i] =
+                reinterpret_cast<const quint64*>(other.v.a)[i] |
+                reinterpret_cast<const quint64*>(v.a)[i];
         }
     
         return ret;
@@ -1128,15 +1110,9 @@ MultiDouble MultiDouble::logicalXor(const MultiDouble &other) const
     
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *ret_char_v = reinterpret_cast<unsigned char*>(&(ret.v.a[i]));
-            const unsigned char *char_v = reinterpret_cast<const unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(double); ++j)
-            {
-                ret_char_v[j] = char_v[j] ^ other_char_v[j];
-            }
+            reinterpret_cast<quint64*>(ret.v.a)[i] =
+                reinterpret_cast<const quint64*>(other.v.a)[i] ^
+                reinterpret_cast<const quint64*>(v.a)[i];
         }
     
         return ret;
@@ -1153,13 +1129,8 @@ MultiDouble MultiDouble::logicalNot() const
 
     for (int i=0; i<MULTIFLOAT_SIZE; ++i)
     {
-        unsigned char *ret_char_v = reinterpret_cast<unsigned char*>(&(ret.v.a[i]));
-        const unsigned char *char_v = reinterpret_cast<const unsigned char*>(&(v.a[i]));
-
-        for (unsigned int j=0; j<sizeof(double); ++j)
-        {
-            ret_char_v[j] = !char_v[j];
-        }
+        reinterpret_cast<quint64*>(ret.v.a)[i] =
+            ~reinterpret_cast<const quint64*>(v.a)[i];
     }
 
     return ret;
@@ -1213,14 +1184,8 @@ MultiDouble& MultiDouble::operator&=(const MultiDouble &other)
     #else
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *char_v = reinterpret_cast<unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(double); ++j)
-            {
-                char_v[j] &= other_char_v[j];
-            }
+            reinterpret_cast<quint64*>(v.a)[i] &=
+                reinterpret_cast<const quint64*>(other.v.a)[i];
         }
     #endif
     #endif
@@ -1247,14 +1212,8 @@ MultiDouble& MultiDouble::operator|=(const MultiDouble &other)
     #else
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *char_v = reinterpret_cast<unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(double); ++j)
-            {
-                char_v[j] |= other_char_v[j];
-            }
+            reinterpret_cast<quint64*>(v.a)[i] |=
+                reinterpret_cast<const quint64*>(other.v.a)[i];
         }
     #endif
     #endif
@@ -1281,14 +1240,8 @@ MultiDouble& MultiDouble::operator^=(const MultiDouble &other)
     #else
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *char_v = reinterpret_cast<unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(double); ++j)
-            {
-                char_v[j] ^= other_char_v[j];
-            }
+            reinterpret_cast<quint64*>(v.a)[i] ^=
+                reinterpret_cast<const quint64*>(other.v.a)[i];
         }
     #endif
     #endif

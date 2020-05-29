@@ -256,6 +256,10 @@ if (SIRE_GSL_INCLUDE_PATH)
   include_directories (${SIRE_GSL_INCLUDE_PATH})
 endif()
 if (DEFINED SIRE_APP)
+  # For some reason, when using the conda GNU compilers,  CMake stripped
+  # "${SIRE_APP}/include" from the directories searched for header files
+  # If this happens, uncomment the following line
+  # unset(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES)
   include_directories( "${SIRE_APP}/include" "${SIRE_APP}/Library/include" )
 endif()
 

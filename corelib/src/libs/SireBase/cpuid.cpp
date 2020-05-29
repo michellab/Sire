@@ -28,8 +28,16 @@
 
 #include "cpuid.h"
 
-#ifdef SIRE_FOUND_CPUID
+#if defined(SIRE_FOUND_CPUID)
     #include <libcpuid/libcpuid.h> // CONDITIONAL_INCLUDE
+#elif defined(_WIN32)
+    #define WIN32_LEAN_AND_MEAN
+    #include <Windows.h>
+#elif defined(__APPLE__) || defined(__FreeBSD__)
+    #include <sys/param.h>
+    #include <sys/sysctl.h>
+#else
+    #include <sys/sysinfo.h>
 #endif
 
 #include "SireStream/shareddatastream.h"
@@ -267,7 +275,21 @@ int CPUID::clockSpeed() const
     if this is not known (as we must have at least 1 core!) */
 int CPUID::numCores() const
 {
+    #if defined(SIRE_FOUND_CPUID)
     return props.value("total_logical_cores", "1").toInt();
+    #elif defined(_WIN32)
+    SYSTEM_INFO system_info;
+    GetSystemInfo(&system_info);
+    return system_info.dwNumberOfProcessors;
+    #elif defined(__APPLE__) || defined(__FreeBSD__)
+    int mib[2] = { CTL_HW, HW_NCPU };
+    int n_proc = 1;
+    size_t len = sizeof(n_proc);
+    sysctl(mib, 2, &n_proc, &len, NULL, 0);
+    return n_proc;
+    #else
+    return get_nprocs();
+    #endif
 }
 
 /** Return whether or not this processor supports SSE2 vector instructions */
