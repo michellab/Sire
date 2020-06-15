@@ -232,7 +232,7 @@ def addAnalyticalLRC(system, cutoff, bulk_density):
             if combining_rules.val == 'arithmetic':
                 sig_ij = (0.5*(sigma+solv_sigma)).value()
             else:
-                sig_lj = math.sqrt(sigma.value()*solv_sigma.value())
+                sig_ij = math.sqrt(sigma.value()*solv_sigma.value())
             sig_ij6 = sig_ij**6
             sig_ij12 = sig_ij6**2
             sig_ij6 = sig_ij6 #* angstrom
