@@ -161,7 +161,7 @@ if __name__ == "__main__":
         import netCDF4
         print("netCDF4 is already installed...")
     except ImportError:
-        conda_pkgs.append("netcdf4=1.5.1.2")
+        conda_pkgs.append("netcdf4=1.5.3")
 
     CC = None
     CXX = None
@@ -174,27 +174,27 @@ if __name__ == "__main__":
         if os.path.exists(os.path.join(conda_base, "include", "boost", "python.hpp")):
             print("boost is already installed...")
         else:
-            conda_pkgs.append("boost=1.70.0")
+            conda_pkgs.append("boost=1.72.0")
 
         # gsl
         if os.path.exists(os.path.join(conda_base, "include", "gsl", "gsl_version.h")):
             print("gsl is already installed...")
         else:
-            conda_pkgs.append("gsl=2.5")
+            conda_pkgs.append("gsl=2.6")
 
         # tbb
         if os.path.exists(os.path.join(conda_base, "include", "tbb", "tbb.h")):
             print("TBB is already installed...")
         else:
-            conda_pkgs.append("tbb=2019.8")
-            conda_pkgs.append("tbb-devel=2019.8")
+            conda_pkgs.append("tbb=2020.1")
+            conda_pkgs.append("tbb-devel=2020.1")
 
         # Qt5
         try:
             import PyQt5
             print("Qt5 is already installed...")
         except ImportError:
-            conda_pkgs.append("pyqt=5.9.2")
+            conda_pkgs.append("pyqt=5.12.3")
 
         # compilers (so we keep binary compatibility)
         if is_osx:
@@ -274,7 +274,7 @@ if __name__ == "__main__":
                 sys.exit(-1)
             else:
                 print("Installing openmm from the Omnia channel...")
-                subprocess.run(("%s install --yes -c omnia openmm=7.4.1" % conda_exe).split())
+                subprocess.run(("%s install --yes -c omnia openmm=7.4.2" % conda_exe).split())
                 installed_something = True
 
     # make sure we really have found the compilers

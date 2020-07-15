@@ -62,7 +62,8 @@ esac
 
 # Set the version of miniconda to use. Choose "latest" for the latest
 # miniconda, or set a specific version here
-MINICONDA_VERSION="4.7.10"
+MINICONDA_VERSION="4.8.3"
+PYTHON_VERSION="py37"
 #MINICONDA_VERSION="latest"
 
 if [ -z "$INSTALL_SIRE_DIR" ]; then
@@ -129,11 +130,11 @@ fi
 if [ "$(uname)" == "Darwin" ]; then
     # This is running on a Mac
     PLATFORM="OSX"
-    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-MacOSX-${BIT_TYPE}.sh"
+    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-MacOSX-${BIT_TYPE}.sh"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # This is running on Linux
     PLATFORM="Linux"
-    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-${BIT_TYPE}.sh"
+    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-Linux-${BIT_TYPE}.sh"
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # This is running on Windows NT
     echo "Compilation on windows is not supported."
@@ -143,13 +144,13 @@ elif [ "$(expr substr $(uname -s) 1 9)" == "CYGWIN_NT" ]; then
     echo "Running an install under cygwin on windows"
     PLATFORM="Windows"
     SUBPLATFORM="Cygwin"
-    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Windows-${BIT_TYPE}.exe"
+    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-Windows-${BIT_TYPE}.exe"
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
     # This is running on windows under cygwin
     echo "Running an install under MSYS2 on windows"
     PLATFORM="Windows"
     SUBPLATFORM="MSYS2"
-    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Windows-${BIT_TYPE}.exe"
+    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${PYTHON_VERSION}_${MINICONDA_VERSION}-Windows-${BIT_TYPE}.exe"
 else
     # Cannot identify the platform. Tell the user to download
     # miniconda directly
