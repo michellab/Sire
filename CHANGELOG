@@ -3,6 +3,17 @@ SIRE changelog
 
 devel branch:
 
+    [2020.1.0] July 2020 - Fixed bug in WaterView program to ensure that a
+               molecule is extracted from the returned list. Stable sorting
+               of dihedrals and other potential terms to allow reproducible
+               writing of input files for SOMD (@ptosco). Updated the
+               FreeEnergyAnalysis script to support different versions of the
+               pymbar API. Significant performance improvement to the GroTop
+               parser by looping over cut-groups during non-bonded matrix
+               evaluation. Updated Miniconda and conda dependencies to latest
+               cross-compatible versions. Fixed minor copiler and runtime
+               issues (@nigel-cresset).
+
     [2019.3.0] November 2019 - Added functionality to restrict the search space
                when finding paths between atoms or searching for rings. Fixed
                performance issue in GroTop parser caused by an N^2 loop over
