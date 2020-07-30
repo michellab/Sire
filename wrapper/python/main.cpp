@@ -180,6 +180,10 @@ int main(int argc, char **argv)
         qputenv("PYTHONHOME", python_home.canonicalPath().toUtf8());
         */
 
+#ifdef _WIN32
+        qputenv("PYTHONHOME", QDir(getInstallDir()).canonicalPath().toUtf8() );
+#endif
+
         //now look at the name of the executable. If there is a script with this
         //name in share/scripts then run that script
         QDir scripts_dir( QString("%1/scripts").arg(getShareDir()) );

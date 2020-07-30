@@ -74,7 +74,8 @@ if defined OPTION_clean (
     exit /B 0
 )
 
-set "MINICONDA_VERSION=4.7.10"
+set "MINICONDA_VERSION=4.8.3"
+set "PYTHON_VERSION=py37"
 if [%processor_architecture%]==[AMD64] set MINICONDA_ARCH=x86_64
 if [%processor_architecture%]==[x86] set MINICONDA_ARCH=x86
 if not defined MINICONDA_ARCH (
@@ -82,7 +83,7 @@ if not defined MINICONDA_ARCH (
     exit /B 1
 )
 echo Running an install under Windows
-set MINICONDA_INSTALLER=Miniconda3-%MINICONDA_VERSION%-Windows-%MINICONDA_ARCH%.exe
+set MINICONDA_INSTALLER=Miniconda3-%PYTHON_VERSION%_%MINICONDA_VERSION%-Windows-%MINICONDA_ARCH%.exe
 set MINICONDA=https://repo.continuum.io/miniconda/%MINICONDA_INSTALLER%
 if exist "%INSTALL_SIRE_DIR%\" (
     echo Install directory "%INSTALL_SIRE_DIR%" already exists. Assuming that miniconda is already installed here.

@@ -3713,10 +3713,14 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 return;
             }
 
-            // must record every pair that has a non-default scaling factor
-            for (int i=0; i<scl0.nGroups()-1; ++i)
+            // A set of recorded 1-4 pairs.
+            QSet<QPair<AtomIdx, AtomIdx> > recorded_pairs;
+
+            // Must record every pair that has a non-default scaling factor.
+            // Loop over intrascale matrix by cut-groups to avoid N^2 loop.
+            for (int i=0; i<scl0.nGroups(); ++i)
             {
-                for (int j=i+1; j<scl0.nGroups(); ++j)
+                for (int j=0; j<scl0.nGroups(); ++j)
                 {
                     const auto s0 = scl0.get( CGIdx(i), CGIdx(j) );
                     const auto s1 = scl1.get( CGIdx(i), CGIdx(j) );
@@ -3730,15 +3734,26 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                         {
                             for (const auto &idx1 : idxs1)
                             {
-                                const auto s0 = scl0.get( idx0, idx1 );
-                                const auto s1 = scl1.get( idx0, idx1 );
+								QPair<AtomIdx, AtomIdx> pair = QPair<AtomIdx, AtomIdx>(idx0, idx1);
 
-                                if ( not ( (s0.coulomb() == 0 and s0.lj() == 0 and s1.coulomb() == 0 and s1.lj() == 0) or
-                                           (s0.coulomb() == 1 and s0.lj() == 1 and s1.coulomb() == 1 and s1.lj() == 1) ) )
+                                // Make sure this is a new atom pair.
+                                if (not recorded_pairs.contains(pair))
                                 {
-                                    //this is a non-default pair
-                                    scllines.append( QString("%1 %2     1")
-                                                        .arg(idx0+1,6).arg(idx1+1,6) );
+                                    // Insert the pair and its inverse.
+                                    recorded_pairs.insert(pair);
+                                    pair = QPair<AtomIdx, AtomIdx>(idx1, idx0);
+                                    recorded_pairs.insert(pair);
+
+                                    const auto s0 = scl0.get( idx0, idx1 );
+                                    const auto s1 = scl1.get( idx0, idx1 );
+
+                                    if ( not ( (s0.coulomb() == 0 and s0.lj() == 0 and s1.coulomb() == 0 and s1.lj() == 0) or
+                                               (s0.coulomb() == 1 and s0.lj() == 1 and s1.coulomb() == 1 and s1.lj() == 1) ) )
+                                    {
+                                        // This is a non-default pair.
+                                        scllines.append( QString("%1 %2     1")
+                                                            .arg(idx0+1,6).arg(idx1+1,6) );
+                                    }
                                 }
                             }
                         }
@@ -3759,10 +3774,14 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                 return;
             }
 
-            // must record every pair that has a non-default scaling factor
-            for (int i=0; i<scl.nGroups()-1; ++i)
+            // A set of recorded 1-4 pairs.
+            QSet<QPair<AtomIdx, AtomIdx> > recorded_pairs;
+
+            // Must record every pair that has a non-default scaling factor.
+            // Loop over intrascale matrix by cut-groups to avoid N^2 loop.
+            for (int i=0; i<scl.nGroups(); ++i)
             {
-                for (int j=i+1; j<scl.nGroups(); ++j)
+                for (int j=0; j<scl.nGroups(); ++j)
                 {
                     const auto s = scl.get( CGIdx(i), CGIdx(j) );
 
@@ -3775,14 +3794,25 @@ static QStringList writeMolType(const QString &name, const GroMolType &moltype,
                         {
                             for (const auto &idx1 : idxs1)
                             {
-                                const auto s = scl.get( idx0, idx1 );
+								QPair<AtomIdx, AtomIdx> pair = QPair<AtomIdx, AtomIdx>(idx0, idx1);
 
-                                if ( not ( (s.coulomb() == 0 and s.lj() == 0) or
-                                           (s.coulomb() == 1 and s.lj() == 1) ) )
+								// Make sure this is a new atom pair.
+                                if (not recorded_pairs.contains(pair))
                                 {
-                                    //this is a non-default pair
-                                    scllines.append( QString("%1 %2     1")
-                                                        .arg(idx0+1,6).arg(idx1+1,6) );
+                                    // Insert the pair and its inverse.
+                                    recorded_pairs.insert(pair);
+                                    pair = QPair<AtomIdx, AtomIdx>(idx1, idx0);
+                                    recorded_pairs.insert(pair);
+
+                                    const auto s = scl.get( idx0, idx1 );
+
+                                    if ( not ( (s.coulomb() == 0 and s.lj() == 0) or
+                                               (s.coulomb() == 1 and s.lj() == 1) ) )
+                                    {
+                                        // This is a non-default pair.
+                                        scllines.append( QString("%1 %2     1")
+                                                            .arg(idx0+1,6).arg(idx1+1,6) );
+                                    }
                                 }
                             }
                         }
