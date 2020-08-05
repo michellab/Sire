@@ -33,6 +33,8 @@
 
 #include "Integrator.pypp.hpp"
 
+#include "InternalFlipMove.pypp.hpp"
+
 #include "InternalMove.pypp.hpp"
 
 #include "InternalMoveSingle.pypp.hpp"
@@ -207,6 +209,8 @@ BOOST_PYTHON_MODULE(_Move){
     register_MonteCarlo_class();
 
     register_HybridMC_class();
+
+    register_InternalFlipMove_class();
 
     register_InternalMove_class();
 

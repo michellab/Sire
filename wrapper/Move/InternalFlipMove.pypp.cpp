@@ -50,7 +50,7 @@ namespace bp = boost::python;
 
 #include <QTime>
 
-#include "internalflipmove.h"
+//#include "internalflipmove.h"
 
 SireMove::InternalFlipMove __copy__(const SireMove::InternalFlipMove &other){ return SireMove::InternalFlipMove(other); }
 

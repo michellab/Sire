@@ -12,6 +12,7 @@
 #include "integrator.h"
 #include "integratorworkspace.h"
 #include "integratorworkspacejm.h"
+#include "internalflipmove.h"
 #include "internalmove.h"
 #include "internalmovesingle.h"
 #include "moldeleter.h"
