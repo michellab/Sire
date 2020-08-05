@@ -26,6 +26,7 @@ set ( SIREMOVE_HEADERS
       integratorworkspace.h
       integratorworkspacejm.h
       internalmove.h
+      internalflipmove.h
       internalmovesingle.h
       moldeleter.h
       molinserter.h
@@ -85,6 +86,7 @@ set ( SIREMOVE_SOURCES
       integratorworkspace.cpp
       integratorworkspacejm.cpp
       internalmove.cpp
+      internalflipmove.cpp
       internalmovesingle.cpp
       moldeleter.cpp
       molinserter.cpp
