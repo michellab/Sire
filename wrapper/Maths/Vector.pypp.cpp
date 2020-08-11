@@ -56,6 +56,18 @@ void register_Vector_class(){
         Vector_exposer.def( bp::init< QString const & >(( bp::arg("str") ), "Construct from a QString\nThrow: SireError::invalid_arg\n") );
         Vector_exposer.def( bp::init< SireMaths::NVector const & >(( bp::arg("other") ), "Copy constructor") );
         Vector_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireMaths::Vector::_cross
+        
+            typedef ::SireMaths::Vector ( *_cross_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & );
+            _cross_function_type _cross_function_value( &::SireMaths::Vector::_cross );
+            
+            Vector_exposer.def( 
+                "_cross"
+                , _cross_function_value
+                , ( bp::arg("v0"), bp::arg("v1") )
+                , "This is a regular cross product." );
+        
+        }
         { //::SireMaths::Vector::angle
         
             typedef ::SireUnits::Dimension::Angle ( *angle_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & );
@@ -170,7 +182,7 @@ void register_Vector_class(){
                 "cross"
                 , cross_function_value
                 , ( bp::arg("v0"), bp::arg("v1") )
-                , "Return the cross product of v0 and v1" );
+                , "Note that the cross product returns a normal vector, i.e. it has been\nnormalised" );
         
         }
         { //::SireMaths::Vector::dihedral
@@ -655,6 +667,7 @@ void register_Vector_class(){
                 , "" );
         
         }
+        Vector_exposer.staticmethod( "_cross" );
         Vector_exposer.staticmethod( "angle" );
         Vector_exposer.staticmethod( "cross" );
         Vector_exposer.staticmethod( "dihedral" );

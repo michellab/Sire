@@ -522,7 +522,9 @@ Vector Vector::generate(double dst, const Vector &v1, const Angle &ang, const Ve
       return Vector(nx,ny,nz);
 }
 
- /** Return the cross product of v0 and v1 */
+ /** Return the cross product of v0 and v1 
+     N.B. This function returns the normalised cross product.
+ */
 Vector Vector::cross(const Vector &v0, const Vector &v1)
 {
     double nx = v0.sc[1]*v1.sc[2] - v0.sc[2]*v1.sc[1];
@@ -603,6 +605,17 @@ Vector Vector::cross(const Vector &v0, const Vector &v1)
         
         return normal;
     }
+}
+
+/** The actual cross productor of vector v0 and v1.
+ */
+Vector Vector::_cross(const Vector& v0, const Vector& v1)
+{
+    double nx = v0.y()*v1.z() - v0.z()*v1.y();
+    double ny = v0.z()*v1.x() - v0.x()*v1.z();
+    double nz = v0.x()*v1.y() - v0.y()*v1.x();
+
+    return Vector(nx,ny,nz);
 }
 
 /** Return the manhattan length of the vector */

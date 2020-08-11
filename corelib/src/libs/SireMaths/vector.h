@@ -202,7 +202,12 @@ public:
     static Vector fromString(const QString &str);
 
     static double dot(const Vector &v0, const Vector &v1);
+    // Note that the cross product returns a normal vector, i.e. it has been
+    // normalised!
     static Vector cross(const Vector &v0, const Vector &v1);
+
+    // This is a regular cross product.
+    static Vector _cross(const Vector &v0, const Vector &v1);
 
     void setMax(const Vector &other);
     void setMin(const Vector &other);
