@@ -609,7 +609,7 @@ Vector Vector::cross(const Vector &v0, const Vector &v1)
 
 /** The actual cross productor of vector v0 and v1.
  */
-Vector Vector::_cross(const Vector& v0, const Vector& v1)
+Vector Vector::realCross(const Vector& v0, const Vector& v1)
 {
     double nx = v0.y()*v1.z() - v0.z()*v1.y();
     double ny = v0.z()*v1.x() - v0.x()*v1.z();

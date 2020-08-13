@@ -207,7 +207,7 @@ public:
     static Vector cross(const Vector &v0, const Vector &v1);
 
     // This is a regular cross product.
-    static Vector _cross(const Vector &v0, const Vector &v1);
+    static Vector realCross(const Vector &v0, const Vector &v1);
 
     void setMax(const Vector &other);
     void setMin(const Vector &other);

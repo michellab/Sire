@@ -56,18 +56,6 @@ void register_Vector_class(){
         Vector_exposer.def( bp::init< QString const & >(( bp::arg("str") ), "Construct from a QString\nThrow: SireError::invalid_arg\n") );
         Vector_exposer.def( bp::init< SireMaths::NVector const & >(( bp::arg("other") ), "Copy constructor") );
         Vector_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("other") ), "Copy constructor") );
-        { //::SireMaths::Vector::_cross
-        
-            typedef ::SireMaths::Vector ( *_cross_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & );
-            _cross_function_type _cross_function_value( &::SireMaths::Vector::_cross );
-            
-            Vector_exposer.def( 
-                "_cross"
-                , _cross_function_value
-                , ( bp::arg("v0"), bp::arg("v1") )
-                , "This is a regular cross product." );
-        
-        }
         { //::SireMaths::Vector::angle
         
             typedef ::SireUnits::Dimension::Angle ( *angle_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & );
@@ -481,6 +469,18 @@ void register_Vector_class(){
                 , "Return the components via rgb (limited between 0 and 1)" );
         
         }
+        { //::SireMaths::Vector::realCross
+        
+            typedef ::SireMaths::Vector ( *realCross_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & );
+            realCross_function_type realCross_function_value( &::SireMaths::Vector::realCross );
+            
+            Vector_exposer.def( 
+                "realCross"
+                , realCross_function_value
+                , ( bp::arg("v0"), bp::arg("v1") )
+                , "This is a regular cross product." );
+        
+        }
         { //::SireMaths::Vector::set
         
             typedef void ( ::SireMaths::Vector::*set_function_type)( double,double,double ) ;
@@ -667,7 +667,6 @@ void register_Vector_class(){
                 , "" );
         
         }
-        Vector_exposer.staticmethod( "_cross" );
         Vector_exposer.staticmethod( "angle" );
         Vector_exposer.staticmethod( "cross" );
         Vector_exposer.staticmethod( "dihedral" );
@@ -678,6 +677,7 @@ void register_Vector_class(){
         Vector_exposer.staticmethod( "generate" );
         Vector_exposer.staticmethod( "invDistance" );
         Vector_exposer.staticmethod( "invDistance2" );
+        Vector_exposer.staticmethod( "realCross" );
         Vector_exposer.staticmethod( "typeName" );
         Vector_exposer.def( bp::self * bp::other< SireMaths::Quaternion >() );
         Vector_exposer.def( bp::self * bp::other< double >() );
