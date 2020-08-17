@@ -459,6 +459,17 @@ SireUnits::Dimension::Volume TriclinicBox::volume() const
     return SireUnits::Dimension::Volume(this->vol);
 }
 
+/** Calculate the delta that needs to be subtracted from the interatomic
+    distances so that the molecules are all wrapped into the same triclinic box */
+Vector TriclinicBox::wrapDelta(const Vector &v0, const Vector &v1) const
+{
+    // Work out the distance vector in "box" space.
+    auto dist_box = this->cell_matrix_inverse*v1 - this->cell_matrix_inverse*v0;
+
+    // Return the shifts over the three lattice vectors.
+    return Vector(int(dist_box.x()), int(dist_box.y()), int(dist_box.z()));
+}
+
 /** Return a copy of this space with the volume of set to 'volume'
     - this will scale the space uniformly, keeping the center at
     the same location, to achieve this volume */
@@ -484,7 +495,7 @@ SpacePtr TriclinicBox::setVolume(SireUnits::Dimension::Volume vol) const
 double TriclinicBox::calcDist(const Vector &point0, const Vector &point1) const
 {
     // Work out the distance vector in "box" space.
-    auto dist_box = this->cell_matrix_inverse*point0 - this->cell_matrix_inverse*point1;
+    auto dist_box = this->cell_matrix_inverse*point1 - this->cell_matrix_inverse*point0;
 
     // Extract the fractional components of the distance.
     double x = dist_box.x() - int(dist_box.x());
@@ -510,6 +521,321 @@ double TriclinicBox::calcDist2(const Vector &point0, const Vector &point1) const
 {
     auto dist = this->calcDist(point0, point1);
     return dist*dist;
+}
+
+/** Populate the matrix 'mat' with the distances between all of the
+    atoms of the two CoordGroups. Return the shortest distance^2 between the two
+    CoordGroups. */
+double TriclinicBox::calcDist(const CoordGroup &group0, const CoordGroup &group1,
+                              DistMatrix &mat) const
+{
+    double mindist(std::numeric_limits<double>::max());
+
+    const int n0 = group0.count();
+    const int n1 = group1.count();
+
+    //redimension the matrix to hold all of the pairs
+    mat.redimension(n0, n1);
+
+    //get raw pointers to the arrays - this provides more efficient access
+    const Vector *array0 = group0.constData();
+    const Vector *array1 = group1.constData();
+
+    for (int i=0; i<n0; ++i)
+    {
+        Vector point0 = array0[i];
+        mat.setOuterIndex(i);
+
+        for (int j=0; j<n1; ++j)
+        {
+            const double dist = this->calcDist(point0, array1[j]);
+
+            mindist = qMin(mindist, dist);
+            mat[j] = dist;
+        }
+    }
+
+    //return the minimum distance
+    return mindist;
+}
+
+/** Populate the matrix 'mat' with the distances between all of the
+    atoms of the passed CoordGroup to the passed point. Return the shortest
+    distance. */
+double TriclinicBox::calcDist(const CoordGroup &group, const Vector &point,
+                              DistMatrix &mat) const
+{
+    double mindist(std::numeric_limits<double>::max());
+
+    const int n = group.count();
+
+    //redimension the matrix to hold all of the pairs
+    mat.redimension(1, n);
+
+    //get raw pointer to the array - this provides more efficient access
+    const Vector *array = group.constData();
+
+    mat.setOuterIndex(0);
+
+    for (int j=0; j<n; ++j)
+    {
+        const double dist = this->calcDist(point, array[j]);
+
+        mindist = qMin(mindist, dist);
+        mat[j] = dist;
+    }
+
+    //return the minimum distance
+    return mindist;
+}
+
+/** Populate the matrix 'mat' with the distances squared between all of the
+    atoms of the passed CoordGroup to the passed point. Return the shortest
+    distance. */
+double TriclinicBox::calcDist2(const CoordGroup &group, const Vector &point,
+                               DistMatrix &mat) const
+{
+    double mindist2(std::numeric_limits<double>::max());
+
+    const int n = group.count();
+
+    //redimension the matrix to hold all of the pairs
+    mat.redimension(1, n);
+
+    //get raw pointer to the array - this provides more efficient access
+    const Vector *array = group.constData();
+
+    mat.setOuterIndex(0);
+
+    for (int j=0; j<n; ++j)
+    {
+        const double dist2 = this->calcDist2(point, array[j]);
+
+        mindist2 = qMin(mindist2, dist2);
+        mat[j] = dist2;
+    }
+
+    //return the minimum distance
+    return sqrt(mindist2);
+}
+
+/** Populate the matrix 'mat' with the distances^2 between all of the
+    atoms of the two CoordGroups. Return the shortest distance between the
+    two CoordGroups. */
+double TriclinicBox::calcDist2(const CoordGroup &group0, const CoordGroup &group1,
+                               DistMatrix &mat) const
+{
+    double mindist2(std::numeric_limits<double>::max());
+
+    const int n0 = group0.count();
+    const int n1 = group1.count();
+
+    //redimension the matrix to hold all of the pairs
+    mat.redimension(n0, n1);
+
+    //get raw pointers to the arrays - this provides more efficient access
+    const Vector *array0 = group0.constData();
+    const Vector *array1 = group1.constData();
+
+    for (int i=0; i<n0; ++i)
+    {
+        Vector point0 = array0[i];
+        mat.setOuterIndex(i);
+
+        for (int j=0; j<n1; ++j)
+        {
+            //calculate the distance between the two atoms
+            const double tmpdist = this->calcDist(point0, array1[j]);
+
+            //store the minimum distance, the value expected to be the minimum
+            //value is most efficiently placed as the second argument
+            mindist2 = qMin(tmpdist,mindist2);
+
+            //place this distance into the matrix
+            mat[j] = tmpdist;
+        }
+    }
+
+    //return the minimum distance
+    return sqrt(mindist2);
+}
+
+/** Populate the matrix 'mat' with the inverse distances between all of the
+    atoms of the two CoordGroups. Return the shortest distance between the two CoordGroups. */
+double TriclinicBox::calcInvDist(const CoordGroup &group0, const CoordGroup &group1,
+                                 DistMatrix &mat) const
+{
+    double maxinvdist(0);
+    double tmpdist;
+
+    int n0 = group0.count();
+    int n1 = group1.count();
+
+    //redimension the matrix to hold all of the pairs
+    mat.redimension(n0, n1);
+
+    //get raw pointers to the arrays - this provides more efficient access
+    const Vector *array0 = group0.constData();
+    const Vector *array1 = group1.constData();
+
+    for (int i=0; i<n0; ++i)
+    {
+        Vector point0 = array0[i];
+        mat.setOuterIndex(i);
+
+        for (int j=0; j<n1; ++j)
+        {
+            //calculate the distance between the two atoms
+            tmpdist = 1.0 / this->calcDist(point0, array1[j]);
+
+            //store the minimum distance, the value expected to be the minimum
+            //value is most efficiently placed as the second argument
+            maxinvdist = qMax(tmpdist,maxinvdist);
+
+            //place this distance into the matrix
+            mat[j] = tmpdist;
+        }
+    }
+
+    //return the shortest distance
+    return 1.0 / maxinvdist;
+}
+
+/** Populate the matrix 'mat' with the inverse distances^2 between all of the
+    atoms of the two CoordGroups. Return the shortest distance between the two CoordGroups. */
+double TriclinicBox::calcInvDist2(const CoordGroup &group0, const CoordGroup &group1,
+                                  DistMatrix &mat) const
+{
+    double maxinvdist2(0);
+    double tmpdist;
+
+    int n0 = group0.count();
+    int n1 = group1.count();
+
+    //redimension the matrix to hold all of the pairs
+    mat.redimension(n0, n1);
+
+    //get raw pointers to the arrays - this provides more efficient access
+    const Vector *array0 = group0.constData();
+    const Vector *array1 = group1.constData();
+
+    for (int i=0; i<n0; ++i)
+    {
+        Vector point0 = array0[i];
+        mat.setOuterIndex(i);
+
+        for (int j=0; j<n1; ++j)
+        {
+            //calculate the distance between the two atoms
+            tmpdist = 1.0 / this->calcDist(point0, array1[j]);
+
+            //store the minimum distance, the value expected to be the minimum
+            //value is most efficiently placed as the second argument
+            maxinvdist2 = qMax(tmpdist,maxinvdist2);
+
+            //place this distance into the matrix
+            mat[j] = tmpdist;
+        }
+    }
+
+    //return the shortest distance
+    return 1.0 / sqrt(maxinvdist2);
+}
+
+/** Calculate the distance vector between two points */
+DistVector TriclinicBox::calcDistVector(const Vector &point0,
+                                        const Vector &point1) const
+{
+    // Work out the distance vector in "box" space.
+    auto dist_box = this->cell_matrix_inverse*point0 - this->cell_matrix_inverse*point1;
+
+    // Extract the fractional components of the distance.
+    double x = dist_box.x() - int(dist_box.x());
+    double y = dist_box.y() - int(dist_box.y());
+    double z = dist_box.z() - int(dist_box.z());
+
+    // Shift to box.
+    if (x >= 0.5) x -= 1.0;
+    if (y >= 0.5) y -= 1.0;
+    if (z >= 0.5) z -= 1.0;
+
+    // Construct a vector from the fractional components.
+    Vector fract_dist(x, y, z);
+
+    // Return the fractional distance vector mapped back to the triclinic
+    // cell space.
+    return this->cellMatrix()*fract_dist;
+}
+
+/** Populate the matrix 'distmat' between all the points of the two CoordGroups
+    'group1' and 'group2' - the returned matrix has the vectors pointing
+    from each point in 'group1' to each point in 'group2'. This returns
+    the shortest distance between two points in the group */
+double TriclinicBox::calcDistVectors(const CoordGroup &group0, const CoordGroup &group1,
+                                     DistVectorMatrix &mat) const
+{
+    double mindist(std::numeric_limits<double>::max());
+
+    const int n0 = group0.count();
+    const int n1 = group1.count();
+
+    //redimension the matrix to hold all of the pairs
+    mat.redimension(n0, n1);
+
+    //get raw pointers to the arrays - this provides more efficient access
+    const Vector *array0 = group0.constData();
+    const Vector *array1 = group1.constData();
+
+    for (int i=0; i<n0; ++i)
+    {
+        //add the delta to the coordinates of atom0
+        Vector point0 = array0[i];
+        mat.setOuterIndex(i);
+
+        for (int j=0; j<n1; ++j)
+        {
+            mat[j] = this->calcDistVector(point0, array1[j]);
+
+            //store the minimum distance, the value expected to be the minimum
+            //value is most efficiently placed as the second argument
+            mindist = qMin(mat[j].length(),mindist);
+        }
+    }
+
+    //return the minimum distance
+    return mindist;
+}
+
+/** Populate the matrix 'distmat' between all the points passed CoordGroup
+    to the point 'point' - the returned matrix has the vectors pointing
+    from the point to each point in 'group'. This returns
+    the shortest distance. */
+double TriclinicBox::calcDistVectors(const CoordGroup &group, const Vector &point,
+                                     DistVectorMatrix &mat) const
+{
+    double mindist(std::numeric_limits<double>::max());
+
+    const int n = group.count();
+
+    //redimension the matrix to hold all of the pairs
+    mat.redimension(1, n);
+
+    //get raw pointers to the arrays - this provides more efficient access
+    const Vector *array = group.constData();
+
+    mat.setOuterIndex(0);
+
+    for (int j=0; j<n; ++j)
+    {
+        mat[j] = this->calcDistVector(point, array[j]);
+
+        //store the minimum distance, the value expected to be the minimum
+        //value is most efficiently placed as the second argument
+        mindist = qMin(mat[j].length(),mindist);
+    }
+
+    //return the minimum distance
+    return mindist;
 }
 
 const char* TriclinicBox::typeName()

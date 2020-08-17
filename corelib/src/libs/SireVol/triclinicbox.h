@@ -97,6 +97,32 @@ public:
     /** Calculate the distance squared between two points */
     double calcDist2(const Vector &point0, const Vector &point1) const;
 
+    double calcDist(const CoordGroup &group1, const CoordGroup &group2,
+                    DistMatrix &distmat) const;
+
+    double calcDist(const CoordGroup &group, const Vector &point,
+                    DistMatrix &mat) const;
+
+    double calcDist2(const CoordGroup &group, const Vector &point,
+                     DistMatrix &mat) const;
+
+    double calcDist2(const CoordGroup &group1, const CoordGroup &group2,
+                     DistMatrix &distmat) const;
+
+    double calcInvDist(const CoordGroup &group1, const CoordGroup &group2,
+                       DistMatrix &distmat) const;
+
+    double calcInvDist2(const CoordGroup &group1, const CoordGroup &group2,
+                        DistMatrix &distmat) const;
+
+    DistVector calcDistVector(const Vector &point0, const Vector &point1) const;
+    
+    double calcDistVectors(const CoordGroup &group1, const CoordGroup &group2,
+                           DistVectorMatrix &distmat) const;
+
+    double calcDistVectors(const CoordGroup &group, const Vector &point,
+                           DistVectorMatrix &distmat) const;
+
     /** Return the first box vector. */
     const Vector& vector0() const;
 
@@ -125,6 +151,8 @@ public:
     static TriclinicBox truncatedOctahedron(double d);
 
 protected:
+
+    Vector wrapDelta(const Vector &v0, const Vector &v1) const;
 
     /** The first box vector */
     Vector v0;

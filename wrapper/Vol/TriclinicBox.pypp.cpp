@@ -59,6 +59,30 @@ void register_TriclinicBox_class(){
                 , "Calculate the distance between two points" );
         
         }
+        { //::SireVol::TriclinicBox::calcDist
+        
+            typedef double ( ::SireVol::TriclinicBox::*calcDist_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            calcDist_function_type calcDist_function_value( &::SireVol::TriclinicBox::calcDist );
+            
+            TriclinicBox_exposer.def( 
+                "calcDist"
+                , calcDist_function_value
+                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , "Populate the matrix mat with the distances between all of the\natoms of the two CoordGroups. Return the shortest distance^2 between the two\nCoordGroups." );
+        
+        }
+        { //::SireVol::TriclinicBox::calcDist
+        
+            typedef double ( ::SireVol::TriclinicBox::*calcDist_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
+            calcDist_function_type calcDist_function_value( &::SireVol::TriclinicBox::calcDist );
+            
+            TriclinicBox_exposer.def( 
+                "calcDist"
+                , calcDist_function_value
+                , ( bp::arg("group"), bp::arg("point"), bp::arg("mat") )
+                , "Populate the matrix mat with the distances between all of the\natoms of the passed CoordGroup to the passed point. Return the shortest\ndistance." );
+        
+        }
         { //::SireVol::TriclinicBox::calcDist2
         
             typedef double ( ::SireVol::TriclinicBox::*calcDist2_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
@@ -69,6 +93,90 @@ void register_TriclinicBox_class(){
                 , calcDist2_function_value
                 , ( bp::arg("point0"), bp::arg("point1") )
                 , "Calculate the distance squared between two points" );
+        
+        }
+        { //::SireVol::TriclinicBox::calcDist2
+        
+            typedef double ( ::SireVol::TriclinicBox::*calcDist2_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
+            calcDist2_function_type calcDist2_function_value( &::SireVol::TriclinicBox::calcDist2 );
+            
+            TriclinicBox_exposer.def( 
+                "calcDist2"
+                , calcDist2_function_value
+                , ( bp::arg("group"), bp::arg("point"), bp::arg("mat") )
+                , "Populate the matrix mat with the distances squared between all of the\natoms of the passed CoordGroup to the passed point. Return the shortest\ndistance." );
+        
+        }
+        { //::SireVol::TriclinicBox::calcDist2
+        
+            typedef double ( ::SireVol::TriclinicBox::*calcDist2_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            calcDist2_function_type calcDist2_function_value( &::SireVol::TriclinicBox::calcDist2 );
+            
+            TriclinicBox_exposer.def( 
+                "calcDist2"
+                , calcDist2_function_value
+                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , "Populate the matrix mat with the distances^2 between all of the\natoms of the two CoordGroups. Return the shortest distance between the\ntwo CoordGroups." );
+        
+        }
+        { //::SireVol::TriclinicBox::calcDistVector
+        
+            typedef ::SireMaths::DistVector ( ::SireVol::TriclinicBox::*calcDistVector_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            calcDistVector_function_type calcDistVector_function_value( &::SireVol::TriclinicBox::calcDistVector );
+            
+            TriclinicBox_exposer.def( 
+                "calcDistVector"
+                , calcDistVector_function_value
+                , ( bp::arg("point0"), bp::arg("point1") )
+                , "Calculate the distance vector between two points" );
+        
+        }
+        { //::SireVol::TriclinicBox::calcDistVectors
+        
+            typedef double ( ::SireVol::TriclinicBox::*calcDistVectors_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistVectorMatrix & ) const;
+            calcDistVectors_function_type calcDistVectors_function_value( &::SireVol::TriclinicBox::calcDistVectors );
+            
+            TriclinicBox_exposer.def( 
+                "calcDistVectors"
+                , calcDistVectors_function_value
+                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , "Populate the matrix distmat between all the points of the two CoordGroups\ngroup1 and group2 - the returned matrix has the vectors pointing\nfrom each point in group1 to each point in group2. This returns\nthe shortest distance between two points in the group" );
+        
+        }
+        { //::SireVol::TriclinicBox::calcDistVectors
+        
+            typedef double ( ::SireVol::TriclinicBox::*calcDistVectors_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistVectorMatrix & ) const;
+            calcDistVectors_function_type calcDistVectors_function_value( &::SireVol::TriclinicBox::calcDistVectors );
+            
+            TriclinicBox_exposer.def( 
+                "calcDistVectors"
+                , calcDistVectors_function_value
+                , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") )
+                , "Populate the matrix distmat between all the points passed CoordGroup\nto the point point - the returned matrix has the vectors pointing\nfrom the point to each point in group. This returns\nthe shortest distance." );
+        
+        }
+        { //::SireVol::TriclinicBox::calcInvDist
+        
+            typedef double ( ::SireVol::TriclinicBox::*calcInvDist_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            calcInvDist_function_type calcInvDist_function_value( &::SireVol::TriclinicBox::calcInvDist );
+            
+            TriclinicBox_exposer.def( 
+                "calcInvDist"
+                , calcInvDist_function_value
+                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , "Populate the matrix mat with the inverse distances between all of the\natoms of the two CoordGroups. Return the shortest distance between the two CoordGroups." );
+        
+        }
+        { //::SireVol::TriclinicBox::calcInvDist2
+        
+            typedef double ( ::SireVol::TriclinicBox::*calcInvDist2_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            calcInvDist2_function_type calcInvDist2_function_value( &::SireVol::TriclinicBox::calcInvDist2 );
+            
+            TriclinicBox_exposer.def( 
+                "calcInvDist2"
+                , calcInvDist2_function_value
+                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , "Populate the matrix mat with the inverse distances^2 between all of the\natoms of the two CoordGroups. Return the shortest distance between the two CoordGroups." );
         
         }
         { //::SireVol::TriclinicBox::cellMatrix
