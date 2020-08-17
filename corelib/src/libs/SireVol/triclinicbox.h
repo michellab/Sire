@@ -82,6 +82,12 @@ public:
 
     QString toString() const;
 
+    /** Get the volume of the triclinic box. */
+    SireUnits::Dimension::Volume volume() const;
+
+    /** Set the volume of the triclinic box. */
+    SpacePtr setVolume(SireUnits::Dimension::Volume volume) const;
+
     static const char* typeName();
 
     /** Return the first box vector. */
@@ -135,6 +141,32 @@ protected:
         of molecular dynamics engines.
       */
     Matrix rotation_matrix;
+
+    /** The cell matrix. */
+    Matrix cell_matrix;
+
+    /** The inverse of the cell matrix. */
+    Matrix cell_matrix_inverse;
+
+    /** The matrix product of cell_matrix_inverse and cell_matrix. */
+    Matrix M;
+
+    /** The maximum distance within which a point will always be closer to the
+        origin thatn any of its images.
+      */
+    double dist_max;
+
+    /** The angle between vectors v0 and v2. */
+    double alpha;
+
+    /** The angle between vectors v0 and v2. */
+    double beta;
+
+    /** The angle between vectors v1 and v2. */
+    double gamma;
+
+    /** The volume of the triclinic cell. */
+    double vol;
 };
 
 }

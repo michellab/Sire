@@ -143,6 +143,18 @@ void register_TriclinicBox_class(){
                 , "Return the rotation matrix." );
         
         }
+        { //::SireVol::TriclinicBox::setVolume
+        
+            typedef ::SireVol::SpacePtr ( ::SireVol::TriclinicBox::*setVolume_function_type)( ::SireUnits::Dimension::Volume ) const;
+            setVolume_function_type setVolume_function_value( &::SireVol::TriclinicBox::setVolume );
+            
+            TriclinicBox_exposer.def( 
+                "setVolume"
+                , setVolume_function_value
+                , ( bp::arg("volume") )
+                , "Set the volume of the triclinic box." );
+        
+        }
         { //::SireVol::TriclinicBox::toString
         
             typedef ::QString ( ::SireVol::TriclinicBox::*toString_function_type)(  ) const;
@@ -211,6 +223,17 @@ void register_TriclinicBox_class(){
                 , vector2_function_value
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the third box vector." );
+        
+        }
+        { //::SireVol::TriclinicBox::volume
+        
+            typedef ::SireUnits::Dimension::Volume ( ::SireVol::TriclinicBox::*volume_function_type)(  ) const;
+            volume_function_type volume_function_value( &::SireVol::TriclinicBox::volume );
+            
+            TriclinicBox_exposer.def( 
+                "volume"
+                , volume_function_value
+                , "Get the volume of the triclinic box." );
         
         }
         TriclinicBox_exposer.staticmethod( "cubic" );

@@ -132,7 +132,7 @@ TriclinicBox::TriclinicBox(const Vector &v0,
 {
     // What follows was adapted from boxmtx.pl by Tsjerk A. Wassenaar.
 
-    // Get the magnitudes of lattice box vectors.
+    // Get the magnitudes of the lattice box vectors.
     auto m0 = v0.magnitude();
     auto m1 = v1.magnitude();
     auto m2 = v2.magnitude();
@@ -169,7 +169,7 @@ TriclinicBox::TriclinicBox(const Vector &v0,
                  Vector(0, yn1, 0),
                  Vector(0, 0, zn2));
 
-    // Evaluate and store the rotation matrix.
+    // Evaluate and store the rotation matrix and its inverse.
     this->rotation_matrix = X_rot * X.inverse();
 
     // Rotate the lattice vectors.
@@ -236,6 +236,59 @@ TriclinicBox::TriclinicBox(const Vector &v0,
     // Update the lattice vectors.
     this->v1 = Vector(v1x, this->v1.y(), this->v1.z());
     this->v2 = Vector(v2x, v2y, this->v2.z());
+
+    // Store the cell matrix and its inverse.
+    this->cell_matrix = Matrix(this->v0, this->v1, this->v2).transpose();
+    this->cell_matrix_inverse = this->cell_matrix.inverse();
+
+    // Store the product of cell_matrix_inverse and cell_matrix.
+    this->M = this->cell_matrix_inverse * this->cell_matrix;
+
+    // Work out the maximum distance for minimum image calculations.
+
+    // Get the magnitudes of the updated lattice box vectors. (Half-lengths)
+    m0 = this->v0.magnitude() * 0.5;
+    m1 = this->v1.magnitude() * 0.5;
+    m2 = this->v2.magnitude() * 0.5;
+
+    // Store the minimum half distance.
+    if ((m0 < m1) and (m0 < m2))
+    {
+        this->dist_max = m0;
+    }
+    else if ((m0 < m1) and (m2 < m0))
+    {
+        this->dist_max = m2;
+    }
+    else if (m1 < m2)
+    {
+        this->dist_max = m1;
+    }
+    else
+    {
+        this->dist_max = m2;
+    }
+
+    // Scale up half-lengths again.
+    m0 *= 2.0;
+    m1 *= 2.0;
+    m2 *= 2.0;
+
+    // Work out Ghe angle between each pair of vectors.
+    this->alpha = Vector::angle(this->v1, this->v2).value();
+    this->beta = Vector::angle(this->v0, this->v2).value();
+    this->gamma = Vector::angle(this->v1, this->v0).value();
+
+    auto cos_alpha = cos(this->alpha);
+    auto cos_beta = cos(this->beta);
+    auto cos_gamma = cos(this->gamma);
+
+    // Now work out the volume of the cell.
+    this->vol = this->v0.magnitude() * this->v1.magnitude() * this->v2.magnitude() *
+                std::sqrt(1 - cos_alpha*cos_alpha
+                            - cos_beta*cos_beta
+                            - cos_gamma*cos_gamma
+                            + 2.0*cos_alpha*cos_beta*cos_gamma);
 }
 
 /** Copy constructor */
@@ -247,7 +300,15 @@ TriclinicBox::TriclinicBox(const TriclinicBox &other)
               v0_orig(other.v0_orig),
               v1_orig(other.v1_orig),
               v2_orig(other.v2_orig),
-              rotation_matrix(other.rotation_matrix)
+              rotation_matrix(other.rotation_matrix),
+              cell_matrix(other.cell_matrix),
+              cell_matrix_inverse(other.cell_matrix_inverse),
+              M(other.M),
+              dist_max(other.dist_max),
+              alpha(other.alpha),
+              beta(other.beta),
+              gamma(other.gamma),
+              vol(other.vol)
 {}
 
 /** Destructor */
@@ -266,6 +327,12 @@ TriclinicBox& TriclinicBox::operator=(const TriclinicBox &other)
         v1_orig = other.v1_orig;
         v2_orig = other.v2_orig;
         rotation_matrix = other.rotation_matrix;
+        cell_matrix = other.cell_matrix;
+        dist_max = other.dist_max;
+        alpha = other.alpha;
+        beta = other.beta;
+        gamma = other.gamma;
+        vol = other.vol;
         Cartesian::operator=(other);
     }
 
@@ -280,8 +347,7 @@ bool TriclinicBox::operator==(const TriclinicBox &other) const
            v2 == other.v2 and
            v0_orig == other.v0_orig and
            v1_orig == other.v1_orig and
-           v2_orig == other.v2_orig and
-           rotation_matrix == rotation_matrix;
+           v2_orig == other.v2_orig;
 }
 
 /** Comparison operator */
@@ -292,8 +358,7 @@ bool TriclinicBox::operator!=(const TriclinicBox &other) const
            v2 != other.v2 or
            v0_orig != other.v0_orig or
            v1_orig != other.v1_orig or
-           v2_orig != other.v2_orig or
-           rotation_matrix != rotation_matrix;
+           v2_orig != other.v2_orig;
 }
 
 /** A Triclinic box is periodic! */
@@ -386,6 +451,33 @@ QString TriclinicBox::toString() const
                 .arg( this->vector0().toString() )
                 .arg( this->vector1().toString() )
                 .arg( this->vector2().toString() );
+}
+
+/** Return the volume of the central box of this space. */
+SireUnits::Dimension::Volume TriclinicBox::volume() const
+{
+    return SireUnits::Dimension::Volume(this->vol);
+}
+
+/** Return a copy of this space with the volume of set to 'volume'
+    - this will scale the space uniformly, keeping the center at
+    the same location, to achieve this volume */
+SpacePtr TriclinicBox::setVolume(SireUnits::Dimension::Volume vol) const
+{
+    double old_volume = this->volume();
+    double new_volume = vol;
+
+    if (new_volume < 0)
+        throw SireError::invalid_arg( QObject::tr(
+            "You cannot set the volume of a periodic box to a negative value! (%1)")
+                .arg(new_volume), CODELOC );
+
+    if (old_volume == new_volume)
+        return *this;
+
+    double scl = std::pow( new_volume / old_volume, 1.0/3.0 ); // rats - no cbrt function!
+
+    return TriclinicBox(scl*this->v0, scl*this->v1, scl*this->v2);
 }
 
 const char* TriclinicBox::typeName()
