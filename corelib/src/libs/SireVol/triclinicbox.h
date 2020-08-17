@@ -90,6 +90,13 @@ public:
 
     static const char* typeName();
 
+
+    /** Calculate the distance between two points */
+    double calcDist(const Vector &point0, const Vector &point1) const;
+
+    /** Calculate the distance squared between two points */
+    double calcDist2(const Vector &point0, const Vector &point1) const;
+
     /** Return the first box vector. */
     const Vector& vector0() const;
 

@@ -241,8 +241,8 @@ TriclinicBox::TriclinicBox(const Vector &v0,
     this->cell_matrix = Matrix(this->v0, this->v1, this->v2).transpose();
     this->cell_matrix_inverse = this->cell_matrix.inverse();
 
-    // Store the product of cell_matrix_inverse and cell_matrix.
-    this->M = this->cell_matrix_inverse * this->cell_matrix;
+    // Store the product of the transpose of cell_matrix and cell_matrix.
+    this->M = this->cell_matrix.transpose() * this->cell_matrix;
 
     // Work out the maximum distance for minimum image calculations.
 
@@ -478,6 +478,38 @@ SpacePtr TriclinicBox::setVolume(SireUnits::Dimension::Volume vol) const
     double scl = std::pow( new_volume / old_volume, 1.0/3.0 ); // rats - no cbrt function!
 
     return TriclinicBox(scl*this->v0, scl*this->v1, scl*this->v2);
+}
+
+/** Calculate the distance between two points */
+double TriclinicBox::calcDist(const Vector &point0, const Vector &point1) const
+{
+    // Work out the distance vector in "box" space.
+    auto dist_box = this->cell_matrix_inverse*point0 - this->cell_matrix_inverse*point1;
+
+    // Extract the fractional components of the distance.
+    double x = dist_box.x() - int(dist_box.x());
+    double y = dist_box.y() - int(dist_box.y());
+    double z = dist_box.z() - int(dist_box.z());
+
+    // Shift to box.
+    if (x >= 0.5) x -= 1.0;
+    if (y >= 0.5) y -= 1.0;
+    if (z >= 0.5) z -= 1.0;
+
+    // Construct a vector from the fractional components.
+    Vector fract_dist(x, y, z);
+
+    // Calculate the distance in the minimum image.
+    auto dist = std::sqrt(Vector::dot(fract_dist, this->M*fract_dist));
+
+    return dist;
+}
+
+/** Calculate the distance squared between two points */
+double TriclinicBox::calcDist2(const Vector &point0, const Vector &point1) const
+{
+    auto dist = this->calcDist(point0, point1);
+    return dist*dist;
 }
 
 const char* TriclinicBox::typeName()

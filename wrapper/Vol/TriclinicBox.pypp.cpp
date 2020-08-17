@@ -47,6 +47,30 @@ void register_TriclinicBox_class(){
         bp::scope TriclinicBox_scope( TriclinicBox_exposer );
         TriclinicBox_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") ), "Construct a TriclinicBox with the specified lattice vectors") );
         TriclinicBox_exposer.def( bp::init< SireVol::TriclinicBox const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireVol::TriclinicBox::calcDist
+        
+            typedef double ( ::SireVol::TriclinicBox::*calcDist_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            calcDist_function_type calcDist_function_value( &::SireVol::TriclinicBox::calcDist );
+            
+            TriclinicBox_exposer.def( 
+                "calcDist"
+                , calcDist_function_value
+                , ( bp::arg("point0"), bp::arg("point1") )
+                , "Calculate the distance between two points" );
+        
+        }
+        { //::SireVol::TriclinicBox::calcDist2
+        
+            typedef double ( ::SireVol::TriclinicBox::*calcDist2_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            calcDist2_function_type calcDist2_function_value( &::SireVol::TriclinicBox::calcDist2 );
+            
+            TriclinicBox_exposer.def( 
+                "calcDist2"
+                , calcDist2_function_value
+                , ( bp::arg("point0"), bp::arg("point1") )
+                , "Calculate the distance squared between two points" );
+        
+        }
         { //::SireVol::TriclinicBox::cellMatrix
         
             typedef ::SireMaths::Matrix ( ::SireVol::TriclinicBox::*cellMatrix_function_type)(  ) const;
