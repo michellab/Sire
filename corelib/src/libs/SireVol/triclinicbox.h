@@ -244,6 +244,9 @@ protected:
 
     /** The volume of the triclinic cell. */
     double vol;
+
+    /** The inverse of the lengths of each side of the box */
+    Vector invlength;
 };
 
 }

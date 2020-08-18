@@ -289,6 +289,11 @@ TriclinicBox::TriclinicBox(const Vector &v0,
                             - cos_beta*cos_beta
                             - cos_gamma*cos_gamma
                             + 2.0*cos_alpha*cos_beta*cos_gamma);
+
+    // Store the inverse lengths of the lattice vectors.
+    this->invlength = Vector(1.0/this->v0.magnitude(),
+                             1.0/this->v1.magnitude(),
+                             1.0/this->v2.magnitude());
 }
 
 /** Copy constructor */
@@ -308,7 +313,8 @@ TriclinicBox::TriclinicBox(const TriclinicBox &other)
               alpha(other.alpha),
               beta(other.beta),
               gamma(other.gamma),
-              vol(other.vol)
+              vol(other.vol),
+              invlength(other.invlength)
 {}
 
 /** Destructor */
@@ -333,6 +339,7 @@ TriclinicBox& TriclinicBox::operator=(const TriclinicBox &other)
         beta = other.beta;
         gamma = other.gamma;
         vol = other.vol;
+        invlength = other.invlength;
         Cartesian::operator=(other);
     }
 
@@ -1155,6 +1162,45 @@ QVector<Vector> TriclinicBox::getImagesWithin(const Vector &point, const Vector 
 {
     QVector<Vector> points;
 
+    // First, get the minimum image...
+    Vector p = getMinimumImage(point, center);
+
+    if (this->calcDist(point, center) < dist)
+    {
+        // The minimum image is within the distance, so lets now look at all periodic replicas...
+
+        // We only need to look at periodic boxes that are within 'dist'...
+        // This rounds to the nearest number of box lengths, e.g.
+        // if dist is >= halflength.x() and < 1.5 length.x()
+        // then there is only the need to go out to the first layer in the
+        // x-dimension.
+        int nlayers_x = int( (dist*invlength.x()) + 0.5 );
+        int nlayers_y = int( (dist*invlength.y()) + 0.5 );
+        int nlayers_z = int( (dist*invlength.z()) + 0.5 );
+
+        //loop over all peridic boxes in range
+        for (int i = -nlayers_x; i <= nlayers_x; ++i)
+        {
+            for (int j = -nlayers_y; j <= nlayers_y; ++j)
+            {
+                for (int k = -nlayers_z; k <= nlayers_z; ++k)
+                {
+                    // Get the delta value needed to translate the minimum
+                    // image into the i,j,k box
+                    auto delta = this->cell_matrix*Vector(i, j, k);
+
+                    // Translate just the center of the minimum image...
+                    Vector p_image = p + delta;
+
+                    if (Vector::distance(center, p_image) < dist)
+                    {
+                        points.append(p_image);
+                    }
+                }
+            }
+        }
+    }
+    
     return points;
 }
 
