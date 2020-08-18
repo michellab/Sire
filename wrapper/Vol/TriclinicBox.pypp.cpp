@@ -47,6 +47,54 @@ void register_TriclinicBox_class(){
         bp::scope TriclinicBox_scope( TriclinicBox_exposer );
         TriclinicBox_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") ), "Construct a TriclinicBox with the specified lattice vectors") );
         TriclinicBox_exposer.def( bp::init< SireVol::TriclinicBox const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireVol::TriclinicBox::beyond
+        
+            typedef bool ( ::SireVol::TriclinicBox::*beyond_function_type)( double,::SireVol::AABox const &,::SireVol::AABox const & ) const;
+            beyond_function_type beyond_function_value( &::SireVol::TriclinicBox::beyond );
+            
+            TriclinicBox_exposer.def( 
+                "beyond"
+                , beyond_function_value
+                , ( bp::arg("dist"), bp::arg("aabox0"), bp::arg("aabox1") )
+                , "Return whether or not two groups enclosed by the AABoxes aabox0 and\naabox1 are definitely beyond the cutoff distance dist" );
+        
+        }
+        { //::SireVol::TriclinicBox::beyond
+        
+            typedef bool ( ::SireVol::TriclinicBox::*beyond_function_type)( double,::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
+            beyond_function_type beyond_function_value( &::SireVol::TriclinicBox::beyond );
+            
+            TriclinicBox_exposer.def( 
+                "beyond"
+                , beyond_function_value
+                , ( bp::arg("dist"), bp::arg("group0"), bp::arg("group1") )
+                , "Return whether or not these two groups are definitely beyond the cutoff distance." );
+        
+        }
+        { //::SireVol::TriclinicBox::calcAngle
+        
+            typedef ::SireUnits::Dimension::Angle ( ::SireVol::TriclinicBox::*calcAngle_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            calcAngle_function_type calcAngle_function_value( &::SireVol::TriclinicBox::calcAngle );
+            
+            TriclinicBox_exposer.def( 
+                "calcAngle"
+                , calcAngle_function_value
+                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2") )
+                , "Calculate the angle between the passed three points. This should return\nthe acute angle between the points, which should lie between 0 and 180 degrees" );
+        
+        }
+        { //::SireVol::TriclinicBox::calcDihedral
+        
+            typedef ::SireUnits::Dimension::Angle ( ::SireVol::TriclinicBox::*calcDihedral_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            calcDihedral_function_type calcDihedral_function_value( &::SireVol::TriclinicBox::calcDihedral );
+            
+            TriclinicBox_exposer.def( 
+                "calcDihedral"
+                , calcDihedral_function_value
+                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") )
+                , "Calculate the torsion angle between the passed four points. This should\nreturn the torsion angle measured clockwise when looking down the\ntorsion from point0-point1-point2-point3. This will lie between 0 and 360\ndegrees" );
+        
+        }
         { //::SireVol::TriclinicBox::calcDist
         
             typedef double ( ::SireVol::TriclinicBox::*calcDist_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
@@ -202,6 +250,102 @@ void register_TriclinicBox_class(){
                 , "Return a cubic TriclinicBox with image distance d." );
         
         }
+        { //::SireVol::TriclinicBox::getBoxCenter
+        
+            typedef ::SireMaths::Vector ( ::SireVol::TriclinicBox::*getBoxCenter_function_type)( ::SireMaths::Vector const & ) const;
+            getBoxCenter_function_type getBoxCenter_function_value( &::SireVol::TriclinicBox::getBoxCenter );
+            
+            TriclinicBox_exposer.def( 
+                "getBoxCenter"
+                , getBoxCenter_function_value
+                , ( bp::arg("p") )
+                , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at the origin" );
+        
+        }
+        { //::SireVol::TriclinicBox::getBoxCenter
+        
+            typedef ::SireMaths::Vector ( ::SireVol::TriclinicBox::*getBoxCenter_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            getBoxCenter_function_type getBoxCenter_function_value( &::SireVol::TriclinicBox::getBoxCenter );
+            
+            TriclinicBox_exposer.def( 
+                "getBoxCenter"
+                , getBoxCenter_function_value
+                , ( bp::arg("p"), bp::arg("center") )
+                , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at center" );
+        
+        }
+        { //::SireVol::TriclinicBox::getImagesWithin
+        
+            typedef ::QVector< SireMaths::Vector > ( ::SireVol::TriclinicBox::*getImagesWithin_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,double ) const;
+            getImagesWithin_function_type getImagesWithin_function_value( &::SireVol::TriclinicBox::getImagesWithin );
+            
+            TriclinicBox_exposer.def( 
+                "getImagesWithin"
+                , getImagesWithin_function_value
+                , ( bp::arg("point"), bp::arg("center"), bp::arg("dist") )
+                , "Return all periodic images of point with respect to center within\ndist distance of center" );
+        
+        }
+        { //::SireVol::TriclinicBox::getMinimumImage
+        
+            typedef ::SireMaths::Vector ( ::SireVol::TriclinicBox::*getMinimumImage_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::TriclinicBox::getMinimumImage );
+            
+            TriclinicBox_exposer.def( 
+                "getMinimumImage"
+                , getMinimumImage_function_value
+                , ( bp::arg("point"), bp::arg("center") )
+                , "Return the copy of the point point which is the closest minimum image\nto center" );
+        
+        }
+        { //::SireVol::TriclinicBox::getMinimumImage
+        
+            typedef ::SireVol::CoordGroup ( ::SireVol::TriclinicBox::*getMinimumImage_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const & ) const;
+            getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::TriclinicBox::getMinimumImage );
+            
+            TriclinicBox_exposer.def( 
+                "getMinimumImage"
+                , getMinimumImage_function_value
+                , ( bp::arg("group"), bp::arg("center") )
+                , "Return the closest periodic copy of group to the point point,\naccording to the minimum image convention. The effect of this is\nto move group into the box which is now centered on point" );
+        
+        }
+        { //::SireVol::TriclinicBox::getMinimumImage
+        
+            typedef ::SireVol::CoordGroupArray ( ::SireVol::TriclinicBox::*getMinimumImage_function_type)( ::SireVol::CoordGroupArray const &,::SireMaths::Vector const &,bool ) const;
+            getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::TriclinicBox::getMinimumImage );
+            
+            TriclinicBox_exposer.def( 
+                "getMinimumImage"
+                , getMinimumImage_function_value
+                , ( bp::arg("groups"), bp::arg("center"), bp::arg("translate_as_one")=(bool)(false) )
+                , "Return the closest periodic copy of each group in groups to the\npoint point, according to the minimum image convention.\nThe effect of this is to move each group into the box which is\nnow centered on point. If translate_as_one is true,\nthen this treats all groups as being part of one larger\ngroup, and so it translates it together. This is useful\nto get the minimum image of a molecule as a whole, rather\nthan breaking the molecule across a box boundary" );
+        
+        }
+        { //::SireVol::TriclinicBox::getMinimumImage
+        
+            typedef ::SireVol::AABox ( ::SireVol::TriclinicBox::*getMinimumImage_function_type)( ::SireVol::AABox const &,::SireMaths::Vector const & ) const;
+            getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::TriclinicBox::getMinimumImage );
+            
+            TriclinicBox_exposer.def( 
+                "getMinimumImage"
+                , getMinimumImage_function_value
+                , ( bp::arg("aabox"), bp::arg("center") )
+                , "Return the copy of the triclinic box which is the closest minimum image\nto center" );
+        
+        }
+        { //::SireVol::TriclinicBox::getRandomPoint
+        
+            typedef ::SireMaths::Vector ( ::SireVol::TriclinicBox::*getRandomPoint_function_type)( ::SireMaths::Vector const &,::SireMaths::RanGenerator const & ) const;
+            getRandomPoint_function_type getRandomPoint_function_value( &::SireVol::TriclinicBox::getRandomPoint );
+            
+            TriclinicBox_exposer.def( 
+                "getRandomPoint"
+                , getRandomPoint_function_value
+                , ( bp::arg("center"), bp::arg("generator") )
+                , "Return a random point within the box (placing the center of the box\nis at the center center)" );
+        
+        }
         { //::SireVol::TriclinicBox::isCartesian
         
             typedef bool ( ::SireVol::TriclinicBox::*isCartesian_function_type)(  ) const;
@@ -222,6 +366,30 @@ void register_TriclinicBox_class(){
                 "isPeriodic"
                 , isPeriodic_function_value
                 , "A Triclinic box is periodic" );
+        
+        }
+        { //::SireVol::TriclinicBox::minimumDistance
+        
+            typedef double ( ::SireVol::TriclinicBox::*minimumDistance_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
+            minimumDistance_function_type minimumDistance_function_value( &::SireVol::TriclinicBox::minimumDistance );
+            
+            TriclinicBox_exposer.def( 
+                "minimumDistance"
+                , minimumDistance_function_value
+                , ( bp::arg("group0"), bp::arg("group1") )
+                , "Return the minimum distance between the points in group0 and group1.\nIf this is a periodic space then this uses the minimum image convention\n(i.e. the minimum distance between the closest periodic replicas are\nused)" );
+        
+        }
+        { //::SireVol::TriclinicBox::minimumDistance
+        
+            typedef double ( ::SireVol::TriclinicBox::*minimumDistance_function_type)( ::SireVol::AABox const &,::SireVol::AABox const & ) const;
+            minimumDistance_function_type minimumDistance_function_value( &::SireVol::TriclinicBox::minimumDistance );
+            
+            TriclinicBox_exposer.def( 
+                "minimumDistance"
+                , minimumDistance_function_value
+                , ( bp::arg("box0"), bp::arg("box1") )
+                , "Return the minimum distance between the two boxes" );
         
         }
         TriclinicBox_exposer.def( bp::self != bp::self );

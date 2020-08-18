@@ -123,6 +123,41 @@ public:
     double calcDistVectors(const CoordGroup &group, const Vector &point,
                            DistVectorMatrix &distmat) const;
 
+    SireUnits::Dimension::Angle calcAngle(const Vector &point0,
+                                          const Vector &point1,
+                                          const Vector &point2) const;
+
+    SireUnits::Dimension::Angle calcDihedral(const Vector &point0,
+                                             const Vector &point1,
+                                             const Vector &point2,
+                                             const Vector &point3) const;
+
+    bool beyond(double dist, const AABox &aabox0, const AABox &aabox1) const;
+
+    bool beyond(double dist, const CoordGroup &group0,
+                const CoordGroup &group1) const;
+
+    double minimumDistance(const CoordGroup &group0, const CoordGroup &group1) const;
+
+    double minimumDistance(const AABox &box0, const AABox &box1) const;
+
+    Vector getMinimumImage(const Vector &point, const Vector &center) const;
+
+    CoordGroup getMinimumImage(const CoordGroup &group, const Vector &center) const;
+
+    CoordGroupArray getMinimumImage(const CoordGroupArray &groups,
+                                    const Vector &center,
+                                    bool translate_as_one=false) const;
+
+    AABox getMinimumImage(const AABox &aabox, const Vector &center) const;
+
+    QVector<Vector> getImagesWithin(const Vector &point, const Vector &center, double dist) const;
+
+    Vector getRandomPoint(const Vector &center, const RanGenerator &generator) const;
+
+	Vector getBoxCenter(const Vector &p) const;
+    Vector getBoxCenter(const Vector &p, const Vector &center) const;
+    
     /** Return the first box vector. */
     const Vector& vector0() const;
 
@@ -152,7 +187,14 @@ public:
 
 protected:
 
-    Vector wrapDelta(const Vector &v0, const Vector &v1) const;
+    Vector boxShift(const Vector &v0, const Vector &v1) const;
+
+    CoordGroup _pvt_getMinimumImage(const CoordGroup &group,
+                                    const Vector &box_shift) const;
+
+    CoordGroupArray _pvt_getMinimumImage(
+                                const CoordGroupArray &groups,
+                                const Vector &point) const;
 
     /** The first box vector */
     Vector v0;

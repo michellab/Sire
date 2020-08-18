@@ -459,17 +459,6 @@ SireUnits::Dimension::Volume TriclinicBox::volume() const
     return SireUnits::Dimension::Volume(this->vol);
 }
 
-/** Calculate the delta that needs to be subtracted from the interatomic
-    distances so that the molecules are all wrapped into the same triclinic box */
-Vector TriclinicBox::wrapDelta(const Vector &v0, const Vector &v1) const
-{
-    // Work out the distance vector in "box" space.
-    auto dist_box = this->cell_matrix_inverse*v1 - this->cell_matrix_inverse*v0;
-
-    // Return the shifts over the three lattice vectors.
-    return Vector(int(dist_box.x()), int(dist_box.y()), int(dist_box.z()));
-}
-
 /** Return a copy of this space with the volume of set to 'volume'
     - this will scale the space uniformly, keeping the center at
     the same location, to achieve this volume */
@@ -491,27 +480,76 @@ SpacePtr TriclinicBox::setVolume(SireUnits::Dimension::Volume vol) const
     return TriclinicBox(scl*this->v0, scl*this->v1, scl*this->v2);
 }
 
+/** Calculate the delta that needs to be subtracted from the interatomic
+    distances so that the molecules are all wrapped into the same periodic box */
+Vector TriclinicBox::boxShift(const Vector &v0, const Vector &v1) const
+{
+    // Work out the positions of v0 and v1 in "box" space.
+    auto v0_box = this->cell_matrix_inverse*v0;
+    auto v1_box = this->cell_matrix_inverse*v1;
+
+    // Work out the distance vector in "box" space.
+    auto dist_box = v1_box - v0_box;
+
+    // Extract the integer and fractional components of the distance.
+    int int_x = int(dist_box.x());
+    int int_y = int(dist_box.y());
+    int int_z = int(dist_box.z());
+    double frac_x = dist_box.x() - int_x;
+    double frac_y = dist_box.y() - int_y;
+    double frac_z = dist_box.z() - int_z;
+
+    // Shift to box.
+
+    // x
+    if (frac_x >= 0.5) int_x += 1.0;
+    else if (frac_x <= -0.5) int_x -= 1.0;
+
+    // y
+    if (frac_y >= 0.5) int_y += 1.0;
+    else if (frac_y <= -0.5) int_y -= 1.0;
+
+    // z
+    if (frac_z >= 0.5) int_z += 1.0;
+    else if (frac_z <= -0.5) int_z -= 1.0;
+
+    // Return the shifts over the box vectors in "box" space.
+    return Vector(int_x, int_y, int_z);
+}
+
 /** Calculate the distance between two points */
 double TriclinicBox::calcDist(const Vector &point0, const Vector &point1) const
 {
     // Work out the distance vector in "box" space.
     auto dist_box = this->cell_matrix_inverse*point1 - this->cell_matrix_inverse*point0;
 
-    // Extract the fractional components of the distance.
-    double x = dist_box.x() - int(dist_box.x());
-    double y = dist_box.y() - int(dist_box.y());
-    double z = dist_box.z() - int(dist_box.z());
+    // Extract the integer and fractional components of the distance.
+    int int_x = int(dist_box.x());
+    int int_y = int(dist_box.y());
+    int int_z = int(dist_box.z());
+    double frac_x = dist_box.x() - int_x;
+    double frac_y = dist_box.y() - int_y;
+    double frac_z = dist_box.z() - int_z;
 
     // Shift to box.
-    if (x >= 0.5) x -= 1.0;
-    if (y >= 0.5) y -= 1.0;
-    if (z >= 0.5) z -= 1.0;
+
+    // x
+    if (frac_x >= 0.5) frac_x -= 1.0;
+    else if (frac_x <= -0.5) frac_x += 1.0;
+
+    // y
+    if (frac_y >= 0.5) frac_y -= 1.0;
+    else if (frac_y <= -0.5) frac_y += 1.0;
+
+    // z
+    if (frac_z >= 0.5) frac_z -= 1.0;
+    else if (frac_z <= -0.5) frac_z += 1.0;
 
     // Construct a vector from the fractional components.
-    Vector fract_dist(x, y, z);
+    Vector frac_dist(frac_x, frac_y, frac_z);
 
     // Calculate the distance in the minimum image.
-    auto dist = std::sqrt(Vector::dot(fract_dist, this->M*fract_dist));
+    auto dist = std::sqrt(Vector::dot(frac_dist, this->M*frac_dist));
 
     return dist;
 }
@@ -749,22 +787,35 @@ DistVector TriclinicBox::calcDistVector(const Vector &point0,
     // Work out the distance vector in "box" space.
     auto dist_box = this->cell_matrix_inverse*point0 - this->cell_matrix_inverse*point1;
 
-    // Extract the fractional components of the distance.
-    double x = dist_box.x() - int(dist_box.x());
-    double y = dist_box.y() - int(dist_box.y());
-    double z = dist_box.z() - int(dist_box.z());
+    // Extract the integer and fractional components of the distance.
+    int int_x = int(dist_box.x());
+    int int_y = int(dist_box.y());
+    int int_z = int(dist_box.z());
+    double frac_x = dist_box.x() - int_x;
+    double frac_y = dist_box.y() - int_y;
+    double frac_z = dist_box.z() - int_z;
 
     // Shift to box.
-    if (x >= 0.5) x -= 1.0;
-    if (y >= 0.5) y -= 1.0;
-    if (z >= 0.5) z -= 1.0;
+
+    // x
+    if (frac_x >= 0.5) frac_x -= 1.0;
+    else if (frac_x <= -0.5) frac_x += 1.0;
+
+    // y
+    if (frac_y >= 0.5) frac_y -= 1.0;
+    else if (frac_y <= -0.5) frac_y += 1.0;
+
+    // z
+    if (frac_z >= 0.5) frac_z -= 1.0;
+    else if (frac_z <= -0.5) frac_z += 1.0;
+
 
     // Construct a vector from the fractional components.
-    Vector fract_dist(x, y, z);
+    Vector frac_dist(frac_x, frac_y, frac_z);
 
     // Return the fractional distance vector mapped back to the triclinic
     // cell space.
-    return this->cellMatrix()*fract_dist;
+    return this->cell_matrix*frac_dist;
 }
 
 /** Populate the matrix 'distmat' between all the points of the two CoordGroups
@@ -836,6 +887,301 @@ double TriclinicBox::calcDistVectors(const CoordGroup &group, const Vector &poin
 
     //return the minimum distance
     return mindist;
+}
+
+/** Calculate the angle between the passed three points. This should return
+    the acute angle between the points, which should lie between 0 and 180 degrees */
+Angle TriclinicBox::calcAngle(const Vector &point0, const Vector &point1,
+                              const Vector &point2) const
+{
+    Vector p0 = this->getMinimumImage(point0, point1);
+    Vector p2 = this->getMinimumImage(point2, point1);
+
+    return Vector::angle(p0, point1, p2);
+}
+
+/** Calculate the torsion angle between the passed four points. This should
+    return the torsion angle measured clockwise when looking down the 
+    torsion from point0-point1-point2-point3. This will lie between 0 and 360 
+    degrees */
+Angle TriclinicBox::calcDihedral(const Vector &point0, const Vector &point1,
+                                 const Vector &point2, const Vector &point3) const
+{
+    Vector p0 = this->getMinimumImage(point0, point1);
+    Vector p2 = this->getMinimumImage(point2, point1);
+    Vector p3 = this->getMinimumImage(point3, point1);
+
+    return Vector::dihedral(p0, point1, p2, p3);
+}
+
+/** Return whether or not two groups enclosed by the AABoxes 'aabox0' and 
+    'aabox1' are definitely beyond the cutoff distance 'dist' */
+bool TriclinicBox::beyond(double dist, const AABox &aabox0, const AABox &aabox1) const
+{
+    return this->calcDist2(aabox0.center(), aabox1.center()) >
+                SireMaths::pow_2(dist + aabox0.radius() + aabox1.radius());
+}
+
+/** Return whether or not these two groups are definitely beyond the cutoff distance. */
+bool TriclinicBox::beyond(double dist, const CoordGroup &group0,
+                          const CoordGroup &group1) const
+{
+    return this->beyond(dist, group0.aaBox(), group1.aaBox());
+}
+
+/** Return the minimum distance between the two boxes */
+double TriclinicBox::minimumDistance(const AABox &box0, const AABox &box1) const
+{
+    return this->calcDist(box0.center(), box1.center());
+}
+
+/** Return the minimum distance between the points in 'group0' and 'group1'.
+    If this is a periodic space then this uses the minimum image convention
+    (i.e. the minimum distance between the closest periodic replicas are
+    used) */
+double TriclinicBox::minimumDistance(const CoordGroup &group0,
+                                     const CoordGroup &group1) const
+{
+    double mindist2(std::numeric_limits<double>::max());
+
+    int n0 = group0.count();
+    int n1 = group1.count();
+
+    //get raw pointers to the arrays - this provides more efficient access
+    const Vector *array0 = group0.constData();
+    const Vector *array1 = group1.constData();
+
+    for (int i=0; i<n0; ++i)
+    {
+        //add the delta to the coordinates of atom0
+        Vector point0 = array0[i];
+
+        for (int j=0; j<n1; ++j)
+        {
+            //calculate the distance between the two atoms
+            double tmpdist = this->calcDist2(point0, array1[j]);
+
+            //store the minimum distance, the value expected to be the minimum
+            //value is most efficiently placed as the second argument
+            mindist2 = qMin(tmpdist,mindist2);
+        }
+    }
+
+    //return the minimum distance
+    return sqrt(mindist2);
+}
+
+/** Return the copy of the point 'point' which is the closest minimum image
+    to 'center' */
+Vector TriclinicBox::getMinimumImage(const Vector &point, const Vector &center) const
+{
+    // Calculate the position of point in "box" space.
+    auto point_box = this->cell_matrix_inverse*point;
+
+    // Get the box shift.
+    auto box_shift = this->boxShift(point, center);
+
+    // Shift the point back to the image closest to center and map back to the
+    // triclinic cell space.
+    return this->cell_matrix*(point_box + box_shift);
+}
+
+/** Return the closest periodic copy of 'group' to the point 'point',
+    according to the minimum image convention. The effect of this is
+    to move 'group' into the box which is now centered on 'point' */
+CoordGroup TriclinicBox::getMinimumImage(const CoordGroup &group,
+                                         const Vector &point) const
+{
+    Vector box_shift = this->boxShift(group.aaBox().center(), point);
+
+    if (box_shift.isZero())
+    {
+        // Already got the minimum image.
+        return group;
+    }
+    else
+    {
+        CoordGroupEditor editor = group.edit();
+
+        const int n = editor.count();
+
+        // Get raw pointers to the arrays for more efficient access.
+        Vector *array = editor.data();
+
+        // Shift each coordinate in "box" space, then map back to the space
+        // of the triclinic cell.
+        for (int i=0; i<n; ++i)
+        {
+            auto point_box = this->cell_matrix_inverse*array[i];
+            array[i] = this->cell_matrix*(point_box + box_shift);
+        }
+
+        return editor.commit();
+    }
+}
+
+/** Return the closest periodic copy of 'group' using a pre-computed
+    box-shift vector. */
+CoordGroup TriclinicBox::_pvt_getMinimumImage(const CoordGroup &group,
+                                              const Vector &box_shift) const
+{
+    if (box_shift.isZero())
+    {
+        // Already got the minimum image.
+        return group;
+    }
+    else
+    {
+        CoordGroupEditor editor = group.edit();
+
+        const int n = editor.count();
+
+        // Get raw pointers to the arrays for more efficient access.
+        Vector *array = editor.data();
+
+        // Shift each coordinate in "box" space, then map back to the space
+        // of the triclinic cell.
+        for (int i=0; i<n; ++i)
+        {
+            auto point_box = this->cell_matrix_inverse*array[i];
+            array[i] = this->cell_matrix*(point_box + box_shift);
+        }
+
+        return editor.commit();
+    }
+}
+
+/** Private function used to get the minimum image of all of the
+    groups in 'groups' */
+CoordGroupArray TriclinicBox::_pvt_getMinimumImage(const CoordGroupArray &groups,
+                                                   const Vector &point) const
+{
+    int ncg = groups.count();
+
+    const CoordGroup *group_array = groups.constData();
+
+    if (ncg == 1)
+        return CoordGroupArray( this->getMinimumImage(group_array[0], point));
+
+    //create a new array of the right size
+    QVector<CoordGroup> moved_groups(ncg);
+    CoordGroup *moved_array = moved_groups.data();
+
+    for (int i=0; i<ncg; ++i)
+    {
+        moved_array[i] = this->getMinimumImage(group_array[i], point);
+    }
+
+    return CoordGroupArray(moved_groups);
+}
+
+/** Return the closest periodic copy of each group in 'groups' to the
+    point 'point', according to the minimum image convention.
+    The effect of this is to move each 'group' into the box which is
+    now centered on 'point'. If 'translate_as_one' is true,
+    then this treats all groups as being part of one larger
+    group, and so it translates it together. This is useful
+    to get the minimum image of a molecule as a whole, rather
+    than breaking the molecule across a box boundary */
+CoordGroupArray TriclinicBox::getMinimumImage(const CoordGroupArray &groups,
+                                              const Vector &point,
+                                              bool translate_as_one) const
+{
+    if (translate_as_one or groups.nCoordGroups() == 1)
+    {
+        Vector box_shift = this->boxShift(groups.aaBox().center(), point);
+
+        if (box_shift.isZero())
+        {
+            return groups;
+        }
+        else
+        {
+            // Shift the entire group together.
+            return this->_pvt_getMinimumImage(*groups.constData(), box_shift);
+        }
+    }
+    else
+    {
+        //run through all of the groups and see if any of them need moving...
+        int ncg = groups.count();
+
+        const CoordGroup *group_array = groups.constData();
+
+        for (int i=0; i<ncg; ++i)
+        {
+            const CoordGroup &group = group_array[i];
+
+            Vector box_shift = this->boxShift(point, group.aaBox().center());
+
+            if (not box_shift.isZero())
+            {
+                //there is at least one CoordGroup that needs moving
+                // - look to translate them all!
+                return this->_pvt_getMinimumImage(groups, point);
+            }
+        }
+
+        //all of the CoordGroups are in the box - just return the original array
+        return groups;
+    }
+}
+
+/** Return the copy of the triclinic box which is the closest minimum image
+    to 'center' */
+AABox TriclinicBox::getMinimumImage(const AABox &aabox, const Vector &center) const
+{
+    Vector box_shift = this->boxShift(aabox.center(), center);
+    
+    if (box_shift.isZero())
+        return aabox;
+    else
+    {
+        // Get the position of the AABox center in the minimum image.
+        auto min_center = this->getMinimumImage(aabox.center(), center);
+
+        // Translate the box to this position.
+        AABox ret(aabox);
+        ret.translate(min_center - aabox.center());
+        
+        return ret;
+    }
+}
+
+/** Return all periodic images of 'point' with respect to 'center' within
+    'dist' distance of 'center' */
+QVector<Vector> TriclinicBox::getImagesWithin(const Vector &point, const Vector &center,
+                                              double dist) const
+{
+    QVector<Vector> points;
+
+    return points;
+}
+
+/** Return a random point within the box (placing the center of the box
+    is at the center 'center') */
+Vector TriclinicBox::getRandomPoint(const Vector &center, 
+                                    const RanGenerator &generator) const
+{
+    return this->cell_matrix*Vector(generator.rand(-0.5, 0.5),
+                                    generator.rand(-0.5, 0.5),
+                                    generator.rand(-0.5, 0.5))
+
+           + center;
+}
+
+/** Return the center of the box that contains the point 'p' assuming
+    that the center for the central box is located at the origin */
+Vector TriclinicBox::getBoxCenter(const Vector &p) const
+{
+	return this->cell_matrix*this->boxShift(Vector(0,0,0), p);
+}
+
+/** Return the center of the box that contains the point 'p' assuming
+    that the center for the central box is located at 'center' */
+Vector TriclinicBox::getBoxCenter(const Vector &p, const Vector &center) const
+{
+	return this->cell_matrix*this->boxShift(center, p);
 }
 
 const char* TriclinicBox::typeName()
