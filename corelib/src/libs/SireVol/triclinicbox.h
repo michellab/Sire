@@ -116,7 +116,7 @@ public:
                         DistMatrix &distmat) const;
 
     DistVector calcDistVector(const Vector &point0, const Vector &point1) const;
-    
+
     double calcDistVectors(const CoordGroup &group1, const CoordGroup &group2,
                            DistVectorMatrix &distmat) const;
 
@@ -162,7 +162,7 @@ public:
 
 	Vector getBoxCenter(const Vector &p) const;
     Vector getBoxCenter(const Vector &p, const Vector &center) const;
-    
+
     /** Return the first box vector. */
     const Vector& vector0() const;
 

@@ -394,10 +394,10 @@ bool TriclinicBox::isPeriodic() const
     return true;
 }
 
-/** A Triclinic box is cartesian */
+/** In general, a triclinic box isn't Cartesian. **/
 bool TriclinicBox::isCartesian() const
 {
-    return true;
+    return false;
 }
 
 /** Return the first box vector */
@@ -928,8 +928,8 @@ Angle TriclinicBox::calcAngle(const Vector &point0, const Vector &point1,
 }
 
 /** Calculate the torsion angle between the passed four points. This should
-    return the torsion angle measured clockwise when looking down the 
-    torsion from point0-point1-point2-point3. This will lie between 0 and 360 
+    return the torsion angle measured clockwise when looking down the
+    torsion from point0-point1-point2-point3. This will lie between 0 and 360
     degrees */
 Angle TriclinicBox::calcDihedral(const Vector &point0, const Vector &point1,
                                  const Vector &point2, const Vector &point3) const
@@ -941,7 +941,7 @@ Angle TriclinicBox::calcDihedral(const Vector &point0, const Vector &point1,
     return Vector::dihedral(p0, point1, p2, p3);
 }
 
-/** Return whether or not two groups enclosed by the AABoxes 'aabox0' and 
+/** Return whether or not two groups enclosed by the AABoxes 'aabox0' and
     'aabox1' are definitely beyond the cutoff distance 'dist' */
 bool TriclinicBox::beyond(double dist, const AABox &aabox0, const AABox &aabox1) const
 {
@@ -1159,7 +1159,7 @@ CoordGroupArray TriclinicBox::getMinimumImage(const CoordGroupArray &groups,
 AABox TriclinicBox::getMinimumImage(const AABox &aabox, const Vector &center) const
 {
     Vector box_shift = this->boxShift(aabox.center(), center);
-    
+
     if (box_shift.isZero())
         return aabox;
     else
@@ -1170,7 +1170,7 @@ AABox TriclinicBox::getMinimumImage(const AABox &aabox, const Vector &center) co
         // Translate the box to this position.
         AABox ret(aabox);
         ret.translate(min_center - aabox.center());
-        
+
         return ret;
     }
 }
@@ -1220,7 +1220,7 @@ QVector<Vector> TriclinicBox::getImagesWithin(const Vector &point, const Vector 
             }
         }
     }
-    
+
     return points;
 }
 
@@ -1319,7 +1319,7 @@ TriclinicBox::getCopiesWithin(const CoordGroup &group, const CoordGroup &center,
 
 /** Return a random point within the box (placing the center of the box
     is at the center 'center') */
-Vector TriclinicBox::getRandomPoint(const Vector &center, 
+Vector TriclinicBox::getRandomPoint(const Vector &center,
                                     const RanGenerator &generator) const
 {
     return this->cell_matrix*Vector(generator.rand(-0.5, 0.5),
