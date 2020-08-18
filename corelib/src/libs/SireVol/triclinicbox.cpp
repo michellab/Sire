@@ -812,7 +812,7 @@ DistVector TriclinicBox::calcDistVector(const Vector &point0,
                                         const Vector &point1) const
 {
     // Work out the distance vector in "box" space.
-    auto dist_box = this->cell_matrix_inverse*point0 - this->cell_matrix_inverse*point1;
+    auto dist_box = this->cell_matrix_inverse*point1 - this->cell_matrix_inverse*point0;
 
     // Extract the integer and fractional components of the distance.
     int int_x = int(dist_box.x());
@@ -969,7 +969,7 @@ double TriclinicBox::minimumDistance(const AABox &box0, const AABox &box1) const
 double TriclinicBox::minimumDistance(const CoordGroup &group0,
                                      const CoordGroup &group1) const
 {
-    double mindist2(std::numeric_limits<double>::max());
+    double mindist(std::numeric_limits<double>::max());
 
     int n0 = group0.count();
     int n1 = group1.count();
@@ -980,22 +980,21 @@ double TriclinicBox::minimumDistance(const CoordGroup &group0,
 
     for (int i=0; i<n0; ++i)
     {
-        //add the delta to the coordinates of atom0
         Vector point0 = array0[i];
 
         for (int j=0; j<n1; ++j)
         {
             //calculate the distance between the two atoms
-            double tmpdist = this->calcDist2(point0, array1[j]);
+            double tmpdist = this->calcDist(point0, array1[j]);
 
             //store the minimum distance, the value expected to be the minimum
             //value is most efficiently placed as the second argument
-            mindist2 = qMin(tmpdist,mindist2);
+            mindist = qMin(tmpdist, mindist);
         }
     }
 
     //return the minimum distance
-    return sqrt(mindist2);
+    return mindist;
 }
 
 /** Return the copy of the point 'point' which is the closest minimum image
