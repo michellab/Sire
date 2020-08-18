@@ -274,6 +274,24 @@ TriclinicBox::TriclinicBox(const Vector &v0,
     m1 *= 2.0;
     m2 *= 2.0;
 
+    // Store the maximum length.
+    if ((m0 > m1) and (m0 > m2))
+    {
+        this->max_length = m0;
+    }
+    else if ((m0 > m1) and (m2 > m0))
+    {
+        this->max_length = m2;
+    }
+    else if (m1 > m2)
+    {
+        this->max_length = m1;
+    }
+    else
+    {
+        this->max_length = m2;
+    }
+
     // Work out Ghe angle between each pair of vectors.
     this->alpha = Vector::angle(this->v1, this->v2).value();
     this->beta = Vector::angle(this->v0, this->v2).value();
@@ -310,6 +328,7 @@ TriclinicBox::TriclinicBox(const TriclinicBox &other)
               cell_matrix_inverse(other.cell_matrix_inverse),
               M(other.M),
               dist_max(other.dist_max),
+              max_length(other.max_length),
               alpha(other.alpha),
               beta(other.beta),
               gamma(other.gamma),
@@ -335,6 +354,7 @@ TriclinicBox& TriclinicBox::operator=(const TriclinicBox &other)
         rotation_matrix = other.rotation_matrix;
         cell_matrix = other.cell_matrix;
         dist_max = other.dist_max;
+        max_length = other.max_length;
         alpha = other.alpha;
         beta = other.beta;
         gamma = other.gamma;
@@ -1202,6 +1222,99 @@ QVector<Vector> TriclinicBox::getImagesWithin(const Vector &point, const Vector 
     }
     
     return points;
+}
+
+/** Return a list of copies of CoordGroup 'group' that are within
+    'distance' of the CoordGroup 'center', translating 'group' so that
+    it has the right coordinates to be around 'center'. Note that multiple
+    copies of 'group' may be returned in this is a periodic space and
+    there are multiple periodic replicas of 'group' within 'dist' of
+    'center'. The copies of 'group' are returned together with the
+    minimum distance between that periodic replica and 'center'.
+
+    If there are no periodic replicas of 'group' that are within
+    'dist' of 'center', then an empty list is returned. */
+QList< tuple<double,CoordGroup> >
+TriclinicBox::getCopiesWithin(const CoordGroup &group, const CoordGroup &center,
+                              double dist) const
+{
+    if (dist > this->max_length)
+        throw SireError::invalid_arg( QObject::tr(
+            "You cannot use a distance (%1) that is greater than the "
+            "maximum box length (%2).")
+                .arg(dist).arg(this->max_length), CODELOC );
+
+    // are there any copies within range?
+    if (this->beyond(dist, group,center))
+        //yep - there are no copies that are sufficiently close
+        return QList< tuple<double,CoordGroup> >();
+
+    //ok, first move 'group' into the box that has its center at the
+    //same point as the center of the center group - this will give us
+    //the group that is closest to us (the minimum image)
+    CoordGroup minimum_image = this->getMinimumImage(group, center.aaBox().center());
+
+    //now loop over periodic boxes, moving ever outward, trying to find
+    //all copies that are within the distance
+
+    //we can work out the maximum number of layers to go out to based on
+    //the radii of the two groups, the maximum distance, and the dimensions
+    //of the box
+    const AABox &centerbox = center.aaBox();
+    const AABox &imagebox = minimum_image.aaBox();
+
+    double sum_of_radii_and_distance = centerbox.radius() +
+                                       imagebox.radius() + dist;
+
+    double sum_of_radii_and_distance2 = SireMaths::pow_2(sum_of_radii_and_distance);
+
+    // this rounds to the nearest number of box lengths, e.g.
+    // if sum_of_radii_and_distance is >= halflength.x() and < 1.5 length.x()
+    // then there is only the need to go out to the first layer in the
+    // x-dimension.
+    int nlayers_x = int( (sum_of_radii_and_distance*invlength.x()) + 0.5 );
+    int nlayers_y = int( (sum_of_radii_and_distance*invlength.y()) + 0.5 );
+    int nlayers_z = int( (sum_of_radii_and_distance*invlength.z()) + 0.5 );
+
+    QList< tuple<double,CoordGroup> > neargroups;
+
+    //loop over all cubes
+    for (int i = -nlayers_x; i <= nlayers_x; ++i)
+    {
+        for (int j = -nlayers_y; j <= nlayers_y; ++j)
+        {
+            for (int k = -nlayers_z; k <= nlayers_z; ++k)
+            {
+                // Get the delta value needed to translate the minimum
+                // image into the i,j,k box
+                auto delta = this->cell_matrix*Vector(i, j, k);
+
+                //translate just the center of the minimum image...
+                Vector center_of_replica = imagebox.center() + delta;
+
+                //is the box in range?
+                if ( Vector::distance2(center_of_replica,centerbox.center())
+                                    <= sum_of_radii_and_distance2 )
+                {
+                    //yes it is! Translate the entire CoordGroup
+                    CoordGroupEditor editor = minimum_image.edit();
+                    editor.translate(delta);
+                    CoordGroup periodic_replica = editor.commit();
+
+                    //calculate the minimum distance... (using the cartesian space)
+                    double mindist = Cartesian::minimumDistance(periodic_replica, center);
+
+                    if (mindist <= dist)
+                    {
+                        neargroups.append(
+                                  tuple<double,CoordGroup>(mindist,periodic_replica) );
+                    }
+                }
+            }
+        }
+    }
+
+    return neargroups;
 }
 
 /** Return a random point within the box (placing the center of the box

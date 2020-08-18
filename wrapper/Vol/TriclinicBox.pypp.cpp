@@ -274,6 +274,18 @@ void register_TriclinicBox_class(){
                 , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at center" );
         
         }
+        { //::SireVol::TriclinicBox::getCopiesWithin
+        
+            typedef ::QList< boost::tuples::tuple< double, SireVol::CoordGroup, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > ( ::SireVol::TriclinicBox::*getCopiesWithin_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,double ) const;
+            getCopiesWithin_function_type getCopiesWithin_function_value( &::SireVol::TriclinicBox::getCopiesWithin );
+            
+            TriclinicBox_exposer.def( 
+                "getCopiesWithin"
+                , getCopiesWithin_function_value
+                , ( bp::arg("group"), bp::arg("center"), bp::arg("dist") )
+                , "Return a list of copies of CoordGroup group that are within\ndistance of the CoordGroup center, translating group so that\nit has the right coordinates to be around center. Note that multiple\ncopies of group may be returned in this is a periodic space and\nthere are multiple periodic replicas of group within dist of\ncenter. The copies of group are returned together with the\nminimum distance between that periodic replica and center.\nIf there are no periodic replicas of group that are within\ndist of center, then an empty list is returned." );
+        
+        }
         { //::SireVol::TriclinicBox::getImagesWithin
         
             typedef ::QVector< SireMaths::Vector > ( ::SireVol::TriclinicBox::*getImagesWithin_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,double ) const;

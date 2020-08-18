@@ -153,6 +153,11 @@ public:
 
     QVector<Vector> getImagesWithin(const Vector &point, const Vector &center, double dist) const;
 
+    QList< boost::tuple<double,CoordGroup> >
+               getCopiesWithin(const CoordGroup &group,
+                               const CoordGroup &center, double dist) const;
+
+
     Vector getRandomPoint(const Vector &center, const RanGenerator &generator) const;
 
 	Vector getBoxCenter(const Vector &p) const;
@@ -232,6 +237,9 @@ protected:
         origin thatn any of its images.
       */
     double dist_max;
+
+    /** The maximum axis length of the cell. */
+    double max_length;
 
     /** The angle between vectors v0 and v2. */
     double alpha;
