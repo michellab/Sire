@@ -194,9 +194,6 @@ protected:
 
     Vector boxShift(const Vector &v0, const Vector &v1) const;
 
-    CoordGroup _pvt_getMinimumImage(const CoordGroup &group,
-                                    const Vector &box_shift) const;
-
     CoordGroupArray _pvt_getMinimumImage(
                                 const CoordGroupArray &groups,
                                 const Vector &point) const;

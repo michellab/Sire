@@ -1043,35 +1043,6 @@ CoordGroup TriclinicBox::getMinimumImage(const CoordGroup &group,
     }
 }
 
-/** Return the closest periodic copy of 'group' using a pre-computed
-    box-shift vector. */
-CoordGroup TriclinicBox::_pvt_getMinimumImage(const CoordGroup &group,
-                                              const Vector &box_shift) const
-{
-    if (box_shift.isZero())
-    {
-        // Already got the minimum image.
-        return group;
-    }
-    else
-    {
-        CoordGroupEditor editor = group.edit();
-
-        const int n = editor.count();
-
-        // Get raw pointers to the arrays for more efficient access.
-        Vector *array = editor.data();
-
-        // Shift each coordinate back to the minimum image.
-        for (int i=0; i<n; ++i)
-        {
-            array[i] += this->cell_matrix*box_shift;
-        }
-
-        return editor.commit();
-    }
-}
-
 /** Private function used to get the minimum image of all of the
     groups in 'groups' */
 CoordGroupArray TriclinicBox::_pvt_getMinimumImage(const CoordGroupArray &groups,
@@ -1118,8 +1089,10 @@ CoordGroupArray TriclinicBox::getMinimumImage(const CoordGroupArray &groups,
         }
         else
         {
-            // Shift the entire group together.
-            return this->_pvt_getMinimumImage(groups, box_shift);
+            CoordGroupArray wrapped_groups(groups);
+            wrapped_groups.translate(this->cell_matrix*box_shift);
+            
+            return wrapped_groups;
         }
     }
     else
