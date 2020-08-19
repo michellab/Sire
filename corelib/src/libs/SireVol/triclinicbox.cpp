@@ -1079,17 +1079,7 @@ CoordGroup TriclinicBox::getMinimumImage(const CoordGroup &group,
     else
     {
         CoordGroupEditor editor = group.edit();
-
-        const int n = editor.count();
-
-        // Get raw pointers to the arrays for more efficient access.
-        Vector *array = editor.data();
-
-        // Shift each coordinate back to the minimum image.
-        for (int i=0; i<n; ++i)
-        {
-            array[i] += this->cell_matrix*box_shift;
-        }
+        editor.translate(this->cell_matrix*box_shift);
 
         return editor.commit();
     }
