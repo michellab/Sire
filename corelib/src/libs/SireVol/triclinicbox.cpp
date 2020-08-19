@@ -397,7 +397,7 @@ bool TriclinicBox::isPeriodic() const
 /** In general, a triclinic box isn't Cartesian. **/
 bool TriclinicBox::isCartesian() const
 {
-    return false;
+    return true;
 }
 
 /** Return the first box vector */
@@ -509,7 +509,7 @@ SpacePtr TriclinicBox::setVolume(SireUnits::Dimension::Volume vol) const
 
 /** Calculate the delta that needs to be subtracted from the interatomic
     distances so that the molecules are all wrapped into the same periodic box */
-Vector TriclinicBox::boxShift(const Vector &v0, const Vector &v1) const
+Vector TriclinicBox::wrapDelta(const Vector &v0, const Vector &v1) const
 {
     // Work out the positions of v0 and v1 in "box" space.
     auto v0_box = this->cell_matrix_inverse*v0;
@@ -540,8 +540,8 @@ Vector TriclinicBox::boxShift(const Vector &v0, const Vector &v1) const
     if (frac_z >= 0.5) int_z += 1.0;
     else if (frac_z <= -0.5) int_z -= 1.0;
 
-    // Return the shifts over the box vectors in "box" space.
-    return Vector(int_x, int_y, int_z);
+    // Return the shifts over the box vectors.
+    return this->cell_matrix*Vector(int_x, int_y, int_z);
 }
 
 /** Calculate the distance between two points */
@@ -607,12 +607,11 @@ double TriclinicBox::calcDist(const CoordGroup &group0, const CoordGroup &group1
     const Vector *array1 = group1.constData();
 
     //see if we need to wrap the coordinates...
-    Vector box_shift = this->boxShift(group0.aaBox().center(), group1.aaBox().center());
-    Vector delta = this->cell_matrix*box_shift;
+    Vector wrapdelta = this->wrapDelta(group0.aaBox().center(), group1.aaBox().center());
 
     for (int i=0; i<n0; ++i)
     {
-        Vector point0 = array0[i] + delta;
+        Vector point0 = array0[i] + wrapdelta;
         mat.setOuterIndex(i);
 
         for (int j=0; j<n1; ++j)
@@ -647,8 +646,8 @@ double TriclinicBox::calcDist(const CoordGroup &group, const Vector &point,
     mat.setOuterIndex(0);
 
     //see if we need to wrap the coordinates...
-    Vector box_shift = this->boxShift(group.aaBox().center(), point);
-    Vector wrapped_point = point + this->cell_matrix*box_shift;
+    Vector wrapdelta = this->wrapDelta(group.aaBox().center(), point);
+    Vector wrapped_point = point + wrapdelta;
 
     for (int j=0; j<n; ++j)
     {
@@ -679,8 +678,8 @@ double TriclinicBox::calcDist2(const CoordGroup &group, const Vector &point,
     const Vector *array = group.constData();
 
     //see if we need to wrap the coordinates...
-    Vector box_shift = this->boxShift(group.aaBox().center(), point);
-    Vector wrapped_point = point + this->cell_matrix*box_shift;
+    Vector wrapdelta = this->wrapDelta(group.aaBox().center(), point);
+    Vector wrapped_point = point + wrapdelta;
 
     mat.setOuterIndex(0);
 
@@ -715,12 +714,11 @@ double TriclinicBox::calcDist2(const CoordGroup &group0, const CoordGroup &group
     const Vector *array1 = group1.constData();
 
     //see if we need to wrap the coordinates...
-    Vector box_shift = this->boxShift(group0.aaBox().center(), group1.aaBox().center());
-    Vector delta = this->cell_matrix*box_shift;
+    Vector wrapdelta = this->wrapDelta(group0.aaBox().center(), group1.aaBox().center());
 
     for (int i=0; i<n0; ++i)
     {
-        Vector point0 = array0[i] + delta;
+        Vector point0 = array0[i] + wrapdelta;
         mat.setOuterIndex(i);
 
         for (int j=0; j<n1; ++j)
@@ -760,12 +758,11 @@ double TriclinicBox::calcInvDist(const CoordGroup &group0, const CoordGroup &gro
     const Vector *array1 = group1.constData();
 
     //see if we need to wrap the coordinates...
-    Vector box_shift = this->boxShift(group0.aaBox().center(), group1.aaBox().center());
-    Vector delta = this->cell_matrix*box_shift;
+    Vector wrapdelta = this->wrapDelta(group0.aaBox().center(), group1.aaBox().center());
 
     for (int i=0; i<n0; ++i)
     {
-        Vector point0 = array0[i] + delta;
+        Vector point0 = array0[i] + wrapdelta;
         mat.setOuterIndex(i);
 
         for (int j=0; j<n1; ++j)
@@ -805,12 +802,11 @@ double TriclinicBox::calcInvDist2(const CoordGroup &group0, const CoordGroup &gr
     const Vector *array1 = group1.constData();
 
     //see if we need to wrap the coordinates...
-    Vector box_shift = this->boxShift(group0.aaBox().center(), group1.aaBox().center());
-    Vector delta = this->cell_matrix*box_shift;
+    Vector wrapdelta = this->wrapDelta(group0.aaBox().center(), group1.aaBox().center());
 
     for (int i=0; i<n0; ++i)
     {
-        Vector point0 = array0[i] + delta;
+        Vector point0 = array0[i] + wrapdelta;
         mat.setOuterIndex(i);
 
         for (int j=0; j<n1; ++j)
@@ -889,13 +885,12 @@ double TriclinicBox::calcDistVectors(const CoordGroup &group0, const CoordGroup 
     const Vector *array1 = group1.constData();
 
     //see if we need to wrap the coordinates...
-    Vector box_shift = this->boxShift(group0.aaBox().center(), group1.aaBox().center());
-    Vector delta = this->cell_matrix*box_shift;
+    Vector wrapdelta = this->wrapDelta(group0.aaBox().center(), group1.aaBox().center());
 
     for (int i=0; i<n0; ++i)
     {
         //add the delta to the coordinates of atom0
-        Vector point0 = array0[i] + delta;
+        Vector point0 = array0[i] + wrapdelta;
         mat.setOuterIndex(i);
 
         for (int j=0; j<n1; ++j)
@@ -930,8 +925,8 @@ double TriclinicBox::calcDistVectors(const CoordGroup &group, const Vector &poin
     const Vector *array = group.constData();
 
     //see if we need to wrap the coordinates...
-    Vector box_shift = this->boxShift(group.aaBox().center(), point);
-    Vector wrapped_point = point + this->cell_matrix*box_shift;
+    Vector wrapdelta = this->wrapDelta(group.aaBox().center(), point);
+    Vector wrapped_point = point + wrapdelta;
 
     mat.setOuterIndex(0);
 
@@ -977,10 +972,9 @@ Angle TriclinicBox::calcDihedral(const Vector &point0, const Vector &point1,
     'aabox1' are definitely beyond the cutoff distance 'dist' */
 bool TriclinicBox::beyond(double dist, const AABox &aabox0, const AABox &aabox1) const
 {
-    Vector box_shift = this->boxShift(aabox0.center(), aabox1.center());
-    Vector delta = this->cell_matrix*box_shift;
+    Vector wrapdelta = this->wrapDelta(aabox0.center(), aabox1.center());
 
-    return Vector::distance2(aabox0.center()+delta, aabox1.center()) >
+    return Vector::distance2(aabox0.center()+wrapdelta, aabox1.center()) >
                       SireMaths::pow_2(dist + aabox0.radius() + aabox1.radius());
 }
 
@@ -1027,12 +1021,11 @@ double TriclinicBox::minimumDistance(const CoordGroup &group0,
     const Vector *array1 = group1.constData();
 
     //see if we need to wrap the coordinates...
-    Vector box_shift = this->boxShift(group0.aaBox().center(), group1.aaBox().center());
-    Vector delta = this->cell_matrix*box_shift;
+    Vector wrapdelta = this->wrapDelta(group0.aaBox().center(), group1.aaBox().center());
 
     for (int i=0; i<n0; ++i)
     {
-        Vector point0 = array0[i] + delta;
+        Vector point0 = array0[i] + wrapdelta;
 
         for (int j=0; j<n1; ++j)
         {
@@ -1057,10 +1050,10 @@ Vector TriclinicBox::getMinimumImage(const Vector &point, const Vector &center) 
     auto point_box = this->cell_matrix_inverse*point;
 
     // Get the box shift.
-    auto box_shift = this->boxShift(point, center);
+    auto wrapdelta = this->wrapDelta(point, center);
 
     // Shift the point back to the image closest to center.
-    return point + this->cell_matrix*box_shift;
+    return point + wrapdelta;
 }
 
 /** Return the closest periodic copy of 'group' to the point 'point',
@@ -1069,9 +1062,9 @@ Vector TriclinicBox::getMinimumImage(const Vector &point, const Vector &center) 
 CoordGroup TriclinicBox::getMinimumImage(const CoordGroup &group,
                                          const Vector &point) const
 {
-    Vector box_shift = this->boxShift(group.aaBox().center(), point);
+    Vector wrapdelta = this->wrapDelta(group.aaBox().center(), point);
 
-    if (box_shift.isZero())
+    if (wrapdelta.isZero())
     {
         // Already got the minimum image.
         return group;
@@ -1079,7 +1072,7 @@ CoordGroup TriclinicBox::getMinimumImage(const CoordGroup &group,
     else
     {
         CoordGroupEditor editor = group.edit();
-        editor.translate(this->cell_matrix*box_shift);
+        editor.translate(wrapdelta);
 
         return editor.commit();
     }
@@ -1123,16 +1116,16 @@ CoordGroupArray TriclinicBox::getMinimumImage(const CoordGroupArray &groups,
 {
     if (translate_as_one or groups.nCoordGroups() == 1)
     {
-        Vector box_shift = this->boxShift(groups.aaBox().center(), point);
+        Vector wrapdelta = this->wrapDelta(groups.aaBox().center(), point);
 
-        if (box_shift.isZero())
+        if (wrapdelta.isZero())
         {
             return groups;
         }
         else
         {
             CoordGroupArray wrapped_groups(groups);
-            wrapped_groups.translate(this->cell_matrix*box_shift);
+            wrapped_groups.translate(wrapdelta);
 
             return wrapped_groups;
         }
@@ -1148,9 +1141,9 @@ CoordGroupArray TriclinicBox::getMinimumImage(const CoordGroupArray &groups,
         {
             const CoordGroup &group = group_array[i];
 
-            Vector box_shift = this->boxShift(point, group.aaBox().center());
+            Vector wrapdelta = this->wrapDelta(point, group.aaBox().center());
 
-            if (not box_shift.isZero())
+            if (not wrapdelta.isZero())
             {
                 //there is at least one CoordGroup that needs moving
                 // - look to translate them all!
@@ -1167,9 +1160,9 @@ CoordGroupArray TriclinicBox::getMinimumImage(const CoordGroupArray &groups,
     to 'center' */
 AABox TriclinicBox::getMinimumImage(const AABox &aabox, const Vector &center) const
 {
-    Vector box_shift = this->boxShift(aabox.center(), center);
+    Vector wrapdelta = this->wrapDelta(aabox.center(), center);
 
-    if (box_shift.isZero())
+    if (wrapdelta.isZero())
         return aabox;
     else
     {
@@ -1341,14 +1334,14 @@ Vector TriclinicBox::getRandomPoint(const Vector &center,
     that the center for the central box is located at the origin */
 Vector TriclinicBox::getBoxCenter(const Vector &p) const
 {
-	return this->cell_matrix*this->boxShift(Vector(0,0,0), p);
+	return this->wrapDelta(Vector(0,0,0), p);
 }
 
 /** Return the center of the box that contains the point 'p' assuming
     that the center for the central box is located at 'center' */
 Vector TriclinicBox::getBoxCenter(const Vector &p, const Vector &center) const
 {
-	return this->cell_matrix*this->boxShift(center, p);
+	return this->wrapDelta(center, p);
 }
 
 const char* TriclinicBox::typeName()

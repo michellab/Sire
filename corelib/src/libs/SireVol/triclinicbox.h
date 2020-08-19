@@ -192,7 +192,7 @@ public:
 
 protected:
 
-    Vector boxShift(const Vector &v0, const Vector &v1) const;
+    Vector wrapDelta(const Vector &v0, const Vector &v1) const;
 
     CoordGroupArray _pvt_getMinimumImage(
                                 const CoordGroupArray &groups,

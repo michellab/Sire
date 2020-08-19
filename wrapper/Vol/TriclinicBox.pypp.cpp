@@ -366,7 +366,7 @@ void register_TriclinicBox_class(){
             TriclinicBox_exposer.def( 
                 "isCartesian"
                 , isCartesian_function_value
-                , "A Triclinic box is cartesian" );
+                , "In general, a triclinic box isnt Cartesian." );
         
         }
         { //::SireVol::TriclinicBox::isPeriodic
