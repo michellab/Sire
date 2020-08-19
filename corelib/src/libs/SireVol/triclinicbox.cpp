@@ -977,8 +977,11 @@ Angle TriclinicBox::calcDihedral(const Vector &point0, const Vector &point1,
     'aabox1' are definitely beyond the cutoff distance 'dist' */
 bool TriclinicBox::beyond(double dist, const AABox &aabox0, const AABox &aabox1) const
 {
-    return this->calcDist2(aabox0.center(), aabox1.center()) >
-                SireMaths::pow_2(dist + aabox0.radius() + aabox1.radius());
+    Vector box_shift = this->boxShift(aabox0.center(), aabox1.center());
+    Vector delta = this->cell_matrix*box_shift;
+
+    return Vector::distance2(aabox0.center()+delta, aabox1.center()) >
+                      SireMaths::pow_2(dist + aabox0.radius() + aabox1.radius());
 }
 
 /** Return whether or not these two groups are definitely beyond the cutoff distance. */
@@ -991,7 +994,20 @@ bool TriclinicBox::beyond(double dist, const CoordGroup &group0,
 /** Return the minimum distance between the two boxes */
 double TriclinicBox::minimumDistance(const AABox &box0, const AABox &box1) const
 {
-    return this->calcDist(box0.center(), box1.center());
+    // Get the distance between the minimum image of the box centers
+    Vector delta = this->getMinimumImage(box0.center(), box1.center());
+
+    // Take absolute value of each component.
+    delta = Vector(std::abs(delta.x()), std::abs(delta.y()), std::abs(delta.z()));
+
+    // Substract box extents.
+    delta -= box0.halfExtents();
+    delta -= box1.halfExtents();
+
+    // Are the boxes inside each other?
+    delta = delta.max(Vector(0));
+
+    return delta.length();
 }
 
 /** Return the minimum distance between the points in 'group0' and 'group1'.
