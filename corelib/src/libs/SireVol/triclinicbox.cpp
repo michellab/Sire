@@ -606,14 +606,18 @@ double TriclinicBox::calcDist(const CoordGroup &group0, const CoordGroup &group1
     const Vector *array0 = group0.constData();
     const Vector *array1 = group1.constData();
 
+    //see if we need to wrap the coordinates...
+    Vector box_shift = this->boxShift(group0.aaBox().center(), group1.aaBox().center());
+    Vector delta = this->cell_matrix*box_shift;
+
     for (int i=0; i<n0; ++i)
     {
-        Vector point0 = array0[i];
+        Vector point0 = array0[i] + delta;
         mat.setOuterIndex(i);
 
         for (int j=0; j<n1; ++j)
         {
-            const double dist = this->calcDist(point0, array1[j]);
+            const double dist = Vector::distance(point0, array1[j]);
 
             mindist = qMin(mindist, dist);
             mat[j] = dist;
@@ -642,9 +646,13 @@ double TriclinicBox::calcDist(const CoordGroup &group, const Vector &point,
 
     mat.setOuterIndex(0);
 
+    //see if we need to wrap the coordinates...
+    Vector box_shift = this->boxShift(group.aaBox().center(), point);
+    Vector wrapped_point = point + this->cell_matrix*box_shift;
+
     for (int j=0; j<n; ++j)
     {
-        const double dist = this->calcDist(point, array[j]);
+        const double dist = Vector::distance(wrapped_point, array[j]);
 
         mindist = qMin(mindist, dist);
         mat[j] = dist;
@@ -670,11 +678,15 @@ double TriclinicBox::calcDist2(const CoordGroup &group, const Vector &point,
     //get raw pointer to the array - this provides more efficient access
     const Vector *array = group.constData();
 
+    //see if we need to wrap the coordinates...
+    Vector box_shift = this->boxShift(group.aaBox().center(), point);
+    Vector wrapped_point = point + this->cell_matrix*box_shift;
+
     mat.setOuterIndex(0);
 
     for (int j=0; j<n; ++j)
     {
-        const double dist2 = this->calcDist2(point, array[j]);
+        const double dist2 = Vector::distance2(wrapped_point, array[j]);
 
         mindist2 = qMin(mindist2, dist2);
         mat[j] = dist2;
@@ -702,15 +714,19 @@ double TriclinicBox::calcDist2(const CoordGroup &group0, const CoordGroup &group
     const Vector *array0 = group0.constData();
     const Vector *array1 = group1.constData();
 
+    //see if we need to wrap the coordinates...
+    Vector box_shift = this->boxShift(group0.aaBox().center(), group1.aaBox().center());
+    Vector delta = this->cell_matrix*box_shift;
+
     for (int i=0; i<n0; ++i)
     {
-        Vector point0 = array0[i];
+        Vector point0 = array0[i] + delta;
         mat.setOuterIndex(i);
 
         for (int j=0; j<n1; ++j)
         {
-            //calculate the distance between the two atoms
-            const double tmpdist = this->calcDist2(point0, array1[j]);
+            //calculate the distance between the two points
+            const double tmpdist = Vector::distance2(point0, array1[j]);
 
             //store the minimum distance, the value expected to be the minimum
             //value is most efficiently placed as the second argument
@@ -743,15 +759,19 @@ double TriclinicBox::calcInvDist(const CoordGroup &group0, const CoordGroup &gro
     const Vector *array0 = group0.constData();
     const Vector *array1 = group1.constData();
 
+    //see if we need to wrap the coordinates...
+    Vector box_shift = this->boxShift(group0.aaBox().center(), group1.aaBox().center());
+    Vector delta = this->cell_matrix*box_shift;
+
     for (int i=0; i<n0; ++i)
     {
-        Vector point0 = array0[i];
+        Vector point0 = array0[i] + delta;
         mat.setOuterIndex(i);
 
         for (int j=0; j<n1; ++j)
         {
-            //calculate the inverse distance between the two points
-            tmpdist = 1.0 / this->calcDist(point0, array1[j]);
+            //calculate the distance between the two points
+            tmpdist = Vector::invDistance(point0, array1[j]);
 
             //store the minimum distance, the value expected to be the minimum
             //value is most efficiently placed as the second argument
@@ -784,15 +804,19 @@ double TriclinicBox::calcInvDist2(const CoordGroup &group0, const CoordGroup &gr
     const Vector *array0 = group0.constData();
     const Vector *array1 = group1.constData();
 
+    //see if we need to wrap the coordinates...
+    Vector box_shift = this->boxShift(group0.aaBox().center(), group1.aaBox().center());
+    Vector delta = this->cell_matrix*box_shift;
+
     for (int i=0; i<n0; ++i)
     {
-        Vector point0 = array0[i];
+        Vector point0 = array0[i] + delta;
         mat.setOuterIndex(i);
 
         for (int j=0; j<n1; ++j)
         {
             //calculate the inverse squared distance between the two points
-            tmpdist = 1.0 / this->calcDist2(point0, array1[j]);
+            tmpdist = Vector::invDistance2(point0, array1[j]);
 
             //store the minimum distance, the value expected to be the minimum
             //value is most efficiently placed as the second argument
@@ -864,15 +888,19 @@ double TriclinicBox::calcDistVectors(const CoordGroup &group0, const CoordGroup 
     const Vector *array0 = group0.constData();
     const Vector *array1 = group1.constData();
 
+    //see if we need to wrap the coordinates...
+    Vector box_shift = this->boxShift(group0.aaBox().center(), group1.aaBox().center());
+    Vector delta = this->cell_matrix*box_shift;
+
     for (int i=0; i<n0; ++i)
     {
         //add the delta to the coordinates of atom0
-        Vector point0 = array0[i];
+        Vector point0 = array0[i] + delta;
         mat.setOuterIndex(i);
 
         for (int j=0; j<n1; ++j)
         {
-            mat[j] = this->calcDistVector(point0, array1[j]);
+            mat[j] = (array1[j] - point0);
 
             //store the minimum distance, the value expected to be the minimum
             //value is most efficiently placed as the second argument
@@ -901,11 +929,15 @@ double TriclinicBox::calcDistVectors(const CoordGroup &group, const Vector &poin
     //get raw pointers to the arrays - this provides more efficient access
     const Vector *array = group.constData();
 
+    //see if we need to wrap the coordinates...
+    Vector box_shift = this->boxShift(group.aaBox().center(), point);
+    Vector wrapped_point = point + this->cell_matrix*box_shift;
+
     mat.setOuterIndex(0);
 
     for (int j=0; j<n; ++j)
     {
-        mat[j] = this->calcDistVector(point, array[j]);
+        mat[j] = (array[j] - wrapped_point);
 
         //store the minimum distance, the value expected to be the minimum
         //value is most efficiently placed as the second argument
@@ -969,7 +1001,7 @@ double TriclinicBox::minimumDistance(const AABox &box0, const AABox &box1) const
 double TriclinicBox::minimumDistance(const CoordGroup &group0,
                                      const CoordGroup &group1) const
 {
-    double mindist(std::numeric_limits<double>::max());
+    double mindist2(std::numeric_limits<double>::max());
 
     int n0 = group0.count();
     int n1 = group1.count();
@@ -978,23 +1010,27 @@ double TriclinicBox::minimumDistance(const CoordGroup &group0,
     const Vector *array0 = group0.constData();
     const Vector *array1 = group1.constData();
 
+    //see if we need to wrap the coordinates...
+    Vector box_shift = this->boxShift(group0.aaBox().center(), group1.aaBox().center());
+    Vector delta = this->cell_matrix*box_shift;
+
     for (int i=0; i<n0; ++i)
     {
-        Vector point0 = array0[i];
+        Vector point0 = array0[i] + delta;
 
         for (int j=0; j<n1; ++j)
         {
             //calculate the distance between the two atoms
-            double tmpdist = this->calcDist(point0, array1[j]);
+            double tmpdist = Vector::distance2(point0, array1[j]);
 
             //store the minimum distance, the value expected to be the minimum
             //value is most efficiently placed as the second argument
-            mindist = qMin(tmpdist, mindist);
+            mindist2 = qMin(tmpdist, mindist2);
         }
     }
 
     //return the minimum distance
-    return mindist;
+    return sqrt(mindist2);
 }
 
 /** Return the copy of the point 'point' which is the closest minimum image
