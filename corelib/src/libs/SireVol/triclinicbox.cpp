@@ -529,15 +529,15 @@ Vector TriclinicBox::wrapDelta(const Vector &v0, const Vector &v1) const
     // Shift to box.
 
     // x
-    if (frac_x >= 0.5) int_x += 1.0;
+    if      (frac_x >=  0.5) int_x += 1.0;
     else if (frac_x <= -0.5) int_x -= 1.0;
 
     // y
-    if (frac_y >= 0.5) int_y += 1.0;
+    if      (frac_y >=  0.5) int_y += 1.0;
     else if (frac_y <= -0.5) int_y -= 1.0;
 
     // z
-    if (frac_z >= 0.5) int_z += 1.0;
+    if      (frac_z >=  0.5) int_z += 1.0;
     else if (frac_z <= -0.5) int_z -= 1.0;
 
     // Return the shifts over the box vectors.
@@ -561,15 +561,15 @@ double TriclinicBox::calcDist(const Vector &point0, const Vector &point1) const
     // Shift to box.
 
     // x
-    if (frac_x >= 0.5) frac_x -= 1.0;
+    if      (frac_x >=  0.5) frac_x -= 1.0;
     else if (frac_x <= -0.5) frac_x += 1.0;
 
     // y
-    if (frac_y >= 0.5) frac_y -= 1.0;
+    if      (frac_y >=  0.5) frac_y -= 1.0;
     else if (frac_y <= -0.5) frac_y += 1.0;
 
     // z
-    if (frac_z >= 0.5) frac_z -= 1.0;
+    if      (frac_z >=  0.5) frac_z -= 1.0;
     else if (frac_z <= -0.5) frac_z += 1.0;
 
     // Construct a vector from the fractional components.
@@ -845,15 +845,15 @@ DistVector TriclinicBox::calcDistVector(const Vector &point0,
     // Shift to box.
 
     // x
-    if (frac_x >= 0.5) frac_x -= 1.0;
+    if      (frac_x >=  0.5) frac_x -= 1.0;
     else if (frac_x <= -0.5) frac_x += 1.0;
 
     // y
-    if (frac_y >= 0.5) frac_y -= 1.0;
+    if      (frac_y >=  0.5) frac_y -= 1.0;
     else if (frac_y <= -0.5) frac_y += 1.0;
 
     // z
-    if (frac_z >= 0.5) frac_z -= 1.0;
+    if      (frac_z >=  0.5) frac_z -= 1.0;
     else if (frac_z <= -0.5) frac_z += 1.0;
 
 
@@ -899,7 +899,7 @@ double TriclinicBox::calcDistVectors(const CoordGroup &group0, const CoordGroup 
 
             //store the minimum distance, the value expected to be the minimum
             //value is most efficiently placed as the second argument
-            mindist = qMin(mat[j].length(),mindist);
+            mindist = qMin(mat[j].length(), mindist);
         }
     }
 
@@ -936,7 +936,7 @@ double TriclinicBox::calcDistVectors(const CoordGroup &group, const Vector &poin
 
         //store the minimum distance, the value expected to be the minimum
         //value is most efficiently placed as the second argument
-        mindist = qMin(mat[j].length(),mindist);
+        mindist = qMin(mat[j].length(), mindist);
     }
 
     //return the minimum distance
