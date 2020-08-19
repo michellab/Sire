@@ -1091,7 +1091,7 @@ CoordGroupArray TriclinicBox::getMinimumImage(const CoordGroupArray &groups,
         {
             CoordGroupArray wrapped_groups(groups);
             wrapped_groups.translate(this->cell_matrix*box_shift);
-            
+
             return wrapped_groups;
         }
     }
@@ -1292,7 +1292,6 @@ Vector TriclinicBox::getRandomPoint(const Vector &center,
     return this->cell_matrix*Vector(generator.rand(-0.5, 0.5),
                                     generator.rand(-0.5, 0.5),
                                     generator.rand(-0.5, 0.5))
-
            + center;
 }
 
