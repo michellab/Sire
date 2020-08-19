@@ -710,11 +710,11 @@ double TriclinicBox::calcDist2(const CoordGroup &group0, const CoordGroup &group
         for (int j=0; j<n1; ++j)
         {
             //calculate the distance between the two atoms
-            const double tmpdist = this->calcDist(point0, array1[j]);
+            const double tmpdist = this->calcDist2(point0, array1[j]);
 
             //store the minimum distance, the value expected to be the minimum
             //value is most efficiently placed as the second argument
-            mindist2 = qMin(tmpdist,mindist2);
+            mindist2 = qMin(tmpdist, mindist2);
 
             //place this distance into the matrix
             mat[j] = tmpdist;
@@ -750,12 +750,12 @@ double TriclinicBox::calcInvDist(const CoordGroup &group0, const CoordGroup &gro
 
         for (int j=0; j<n1; ++j)
         {
-            //calculate the distance between the two atoms
+            //calculate the inverse distance between the two points
             tmpdist = 1.0 / this->calcDist(point0, array1[j]);
 
             //store the minimum distance, the value expected to be the minimum
             //value is most efficiently placed as the second argument
-            maxinvdist = qMax(tmpdist,maxinvdist);
+            maxinvdist = qMax(tmpdist, maxinvdist);
 
             //place this distance into the matrix
             mat[j] = tmpdist;
@@ -791,12 +791,12 @@ double TriclinicBox::calcInvDist2(const CoordGroup &group0, const CoordGroup &gr
 
         for (int j=0; j<n1; ++j)
         {
-            //calculate the distance between the two atoms
-            tmpdist = 1.0 / this->calcDist(point0, array1[j]);
+            //calculate the inverse squared distance between the two points
+            tmpdist = 1.0 / this->calcDist2(point0, array1[j]);
 
             //store the minimum distance, the value expected to be the minimum
             //value is most efficiently placed as the second argument
-            maxinvdist2 = qMax(tmpdist,maxinvdist2);
+            maxinvdist2 = qMax(tmpdist, maxinvdist2);
 
             //place this distance into the matrix
             mat[j] = tmpdist;
@@ -1007,9 +1007,8 @@ Vector TriclinicBox::getMinimumImage(const Vector &point, const Vector &center) 
     // Get the box shift.
     auto box_shift = this->boxShift(point, center);
 
-    // Shift the point back to the image closest to center and map back to the
-    // triclinic cell space.
-    return this->cell_matrix*(point_box + box_shift);
+    // Shift the point back to the image closest to center.
+    return point + this->cell_matrix*box_shift;
 }
 
 /** Return the closest periodic copy of 'group' to the point 'point',
@@ -1034,12 +1033,10 @@ CoordGroup TriclinicBox::getMinimumImage(const CoordGroup &group,
         // Get raw pointers to the arrays for more efficient access.
         Vector *array = editor.data();
 
-        // Shift each coordinate in "box" space, then map back to the space
-        // of the triclinic cell.
+        // Shift each coordinate back to the minimum image.
         for (int i=0; i<n; ++i)
         {
-            auto point_box = this->cell_matrix_inverse*array[i];
-            array[i] = this->cell_matrix*(point_box + box_shift);
+            array[i] += this->cell_matrix*box_shift;
         }
 
         return editor.commit();
@@ -1065,12 +1062,10 @@ CoordGroup TriclinicBox::_pvt_getMinimumImage(const CoordGroup &group,
         // Get raw pointers to the arrays for more efficient access.
         Vector *array = editor.data();
 
-        // Shift each coordinate in "box" space, then map back to the space
-        // of the triclinic cell.
+        // Shift each coordinate back to the minimum image.
         for (int i=0; i<n; ++i)
         {
-            auto point_box = this->cell_matrix_inverse*array[i];
-            array[i] = this->cell_matrix*(point_box + box_shift);
+            array[i] += this->cell_matrix*box_shift;
         }
 
         return editor.commit();
@@ -1124,7 +1119,7 @@ CoordGroupArray TriclinicBox::getMinimumImage(const CoordGroupArray &groups,
         else
         {
             // Shift the entire group together.
-            return this->_pvt_getMinimumImage(*groups.constData(), box_shift);
+            return this->_pvt_getMinimumImage(groups, box_shift);
         }
     }
     else
