@@ -314,6 +314,40 @@ TriclinicBox::TriclinicBox(const Vector &v0,
                              1.0/this->v2.magnitude());
 }
 
+/** Construct a TriclinicBox with the specified lattice vector magnitudes
+    and angles.
+
+    a = magnitude of first lattice vector
+    b = magnitude of second lattice vector
+    c = magnitude of third lattice vector
+    alpha = angle between second and third lattice vectors
+    beta = angle between first and third lattice vectors
+    gamma = angle between third and first lattice vectors
+*/
+TriclinicBox::TriclinicBox(double a, double b, double c,
+                           const SireUnits::Dimension::Angle &alpha,
+                           const SireUnits::Dimension::Angle &beta,
+                           const SireUnits::Dimension::Angle &gamma)
+{
+    // Adapted from:
+    // https://github.com/rosswhitfield/ase/blob/master/ase/lattice/triclinic.py
+
+    auto cosa = cos(alpha.value());
+    auto cosb = cos(beta.value());
+    auto sinb = sin(beta.value());
+    auto cosg = cos(gamma.value());
+    auto sing = sin(gamma.value());
+
+    Vector v0(a, 0, 0);
+    Vector v1(b*cosg, b*sing, 0);
+    Vector v2(c*cosb, c*(cosa-cosb*cosg)/sing,
+              c*std::sqrt(sinb*sinb - (((cosa-cosb*cosg)/sing)*
+                                       ((cosa-cosb*cosg)/sing))));
+
+
+    *this = TriclinicBox(v0, v1, v2);
+}
+
 /** Copy constructor */
 TriclinicBox::TriclinicBox(const TriclinicBox &other)
             : ConcreteProperty<TriclinicBox,Cartesian>(other),

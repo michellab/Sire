@@ -46,6 +46,7 @@ void register_TriclinicBox_class(){
         TriclinicBox_exposer_t TriclinicBox_exposer = TriclinicBox_exposer_t( "TriclinicBox", "\nA TriclinicBox is a volume  that represents standard periodic boundary conditions\n(a 3D box replicated to infinity along all three dimensions).\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a default TriclinicBox volume (maximum volume)") );
         bp::scope TriclinicBox_scope( TriclinicBox_exposer );
         TriclinicBox_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") ), "Construct a TriclinicBox with the specified lattice vectors") );
+        TriclinicBox_exposer.def( bp::init< double, double, double, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const & >(( bp::arg("a"), bp::arg("b"), bp::arg("c"), bp::arg("alpha"), bp::arg("beta"), bp::arg("gamma") ), "Construct a TriclinicBox with the specified lattice vector magnitudes\nand angles.\n") );
         TriclinicBox_exposer.def( bp::init< SireVol::TriclinicBox const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireVol::TriclinicBox::beyond
         

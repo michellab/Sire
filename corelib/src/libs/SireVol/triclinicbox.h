@@ -67,6 +67,10 @@ friend SIREVOL_EXPORT QDataStream& ::operator>>(QDataStream&, TriclinicBox&);
 public:
     TriclinicBox();
     TriclinicBox(const Vector &v0, const Vector &v1, const Vector &v2);
+    TriclinicBox(double a, double b, double c,
+                 const SireUnits::Dimension::Angle &alpha,
+                 const SireUnits::Dimension::Angle &beta,
+                 const SireUnits::Dimension::Angle &gamma);
 
     TriclinicBox(const TriclinicBox &other);
 
