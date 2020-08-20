@@ -36,6 +36,7 @@
 
 #include "SireVol/cartesian.h"
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 #include "SireVol/gridinfo.h"
 
 #include "SireError/errors.h"
@@ -135,6 +136,19 @@ void CLJFunction::extractDetailsFromSpace()
     {
         use_box = true;
         box_dimensions = spce.read().asA<PeriodicBox>().dimensions();
+    }
+    else if (spce.read().isA<TriclinicBox>())
+    {
+        // Support Cartesian triclinic boxes. Here we work out the appropriate
+        // box dimensions by extracting the lattice vectors of the triclinic cell.
+        if (spce.read().asA<TriclinicBox>().isCartesian())
+        {
+            use_box = true;
+            auto v0 = spce.read().asA<TriclinicBox>().vector0();
+            auto v1 = spce.read().asA<TriclinicBox>().vector1();
+            auto v2 = spce.read().asA<TriclinicBox>().vector2();
+            box_dimensions = Vector(v0.x(), v1.y(), v2.z());
+        }
     }
     else if (spce.read().isA<Cartesian>())
     {
