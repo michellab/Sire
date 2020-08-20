@@ -397,7 +397,10 @@ bool TriclinicBox::isPeriodic() const
 /** In general, a triclinic box isn't Cartesian. **/
 bool TriclinicBox::isCartesian() const
 {
-    return true;
+    // Only cubic boxes are Cartesian.
+    return this->alpha == M_PI_2 and
+           this->beta  == M_PI_2 and
+           this->gamma == M_PI_2;
 }
 
 /** Return the first box vector */
