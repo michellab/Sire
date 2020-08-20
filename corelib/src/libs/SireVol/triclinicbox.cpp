@@ -210,9 +210,9 @@ TriclinicBox::TriclinicBox(const Vector &v0,
     if (this->v2.x() != 0)
     {
         v2x = this->v2.x()
-            - int((this->v2.x() / this->v1.x())
+            - int((this->v2.x() / this->v0.x())
             + (this->v2.x() / (2.0 * qAbs(this->v2.x()))))
-            * this->v1.x();
+            * this->v0.x();
     }
     else
     {
