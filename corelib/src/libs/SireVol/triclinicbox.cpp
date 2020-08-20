@@ -292,7 +292,7 @@ TriclinicBox::TriclinicBox(const Vector &v0,
         this->max_length = m2;
     }
 
-    // Work out Ghe angle between each pair of vectors.
+    // Work out the angle between each pair of vectors.
     this->alpha = Vector::angle(this->v1, this->v2).value();
     this->beta = Vector::angle(this->v0, this->v2).value();
     this->gamma = Vector::angle(this->v1, this->v0).value();
