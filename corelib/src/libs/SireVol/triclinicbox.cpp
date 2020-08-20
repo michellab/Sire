@@ -988,8 +988,9 @@ bool TriclinicBox::beyond(double dist, const CoordGroup &group0,
 /** Return the minimum distance between the two boxes */
 double TriclinicBox::minimumDistance(const AABox &box0, const AABox &box1) const
 {
-    // Get the distance between the minimum image of the box centers
-    Vector delta = this->getMinimumImage(box0.center(), box1.center());
+    // Get the distance between the minimum image of the box centers.
+    Vector delta = this->wrapDelta(box0.center(), box1.center());
+    delta = (box0.center() + delta) - box1.center();
 
     // Take absolute value of each component.
     delta = Vector(std::abs(delta.x()), std::abs(delta.y()), std::abs(delta.z()));
