@@ -94,7 +94,6 @@ public:
 
     static const char* typeName();
 
-
     /** Calculate the distance between two points */
     double calcDist(const Vector &point0, const Vector &point1) const;
 

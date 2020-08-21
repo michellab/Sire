@@ -64,6 +64,7 @@
 #include "SireMM/atomljs.h"
 
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include "SireMove/flexibility.h"
 
@@ -1082,7 +1083,7 @@ void OpenMMFrEnergyST::initialise()
 
     for (int i = 0; i < nmols; ++i)
     {
-        
+
         const int nats_mol = ws.nAtoms(i);
 
         const double *m = ws.massArray(i);
@@ -1724,7 +1725,7 @@ void OpenMMFrEnergyST::initialise()
                               system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
                               if (Debug)
                               {
-                                  qDebug() << "perturbed bond parameter changes but involving " 
+                                  qDebug() << "perturbed bond parameter changes but involving "
                                            << " light mass so constrained " << atom0.name().toString()
                                            << "- " << atom1.name().toString() << "\n";
                               }
@@ -1736,7 +1737,7 @@ void OpenMMFrEnergyST::initialise()
                                if (Debug)
                                {
                                    qDebug() << "perturbed bond flexible " << atom0.name().toString()
-                                            << "- " << atom1.name().toString() << "\n"; 
+                                            << "- " << atom1.name().toString() << "\n";
                                }
                           }
                         }
@@ -2923,22 +2924,63 @@ void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace, SireUnits::
 
     if (CutoffType == "cutoffperiodic")
     {
-
         const System & ptr_sys = ws.system();
         const PropertyName &space_property = PropertyName("space");
-        const PeriodicBox &space = ptr_sys.property(space_property).asA<PeriodicBox>();
 
-        const double Box_x_Edge_Length = space.dimensions()[0] * OpenMM::NmPerAngstrom; //units in nm
-        const double Box_y_Edge_Length = space.dimensions()[1] * OpenMM::NmPerAngstrom; //units in nm
-        const double Box_z_Edge_Length = space.dimensions()[2] * OpenMM::NmPerAngstrom; //units in nm
+        // PeriodicBox.
+        if (ptr_sys.property(space_property).isA<PeriodicBox>())
+        {
+            const PeriodicBox &space = ptr_sys.property(space_property).asA<PeriodicBox>();
 
-        if (Debug)
-            qDebug() << "\nBOX SIZE [A] = (" << space.dimensions()[0] << " , " << space.dimensions()[1] << " ,  " << space.dimensions()[2] << ")\n\n";
+            const double Box_x_Edge_Length = space.dimensions()[0] * OpenMM::NmPerAngstrom; //units in nm
+            const double Box_y_Edge_Length = space.dimensions()[1] * OpenMM::NmPerAngstrom; //units in nm
+            const double Box_z_Edge_Length = space.dimensions()[2] * OpenMM::NmPerAngstrom; //units in nm
 
-        //Set Periodic Box Condition
+            if (Debug)
+                qDebug() << "\nBOX SIZE [A] = (" << space.dimensions()[0] << " , " << space.dimensions()[1] << " ,  " << space.dimensions()[2] << ")\n\n";
 
-        system_openmm->setDefaultPeriodicBoxVectors(OpenMM::Vec3(Box_x_Edge_Length, 0, 0), OpenMM::Vec3(0, Box_y_Edge_Length, 0), OpenMM::Vec3(0, 0, Box_z_Edge_Length));
-        openmm_context->setPeriodicBoxVectors(OpenMM::Vec3(Box_x_Edge_Length, 0, 0), OpenMM::Vec3(0, Box_y_Edge_Length, 0), OpenMM::Vec3(0, 0, Box_z_Edge_Length));
+            //Set Periodic Box Condition
+
+            system_openmm->setDefaultPeriodicBoxVectors(
+                                                  OpenMM::Vec3(Box_x_Edge_Length, 0, 0),
+                                                  OpenMM::Vec3(0, Box_y_Edge_Length, 0),
+                                                  OpenMM::Vec3(0, 0, Box_z_Edge_Length));
+
+            openmm_context->setPeriodicBoxVectors(OpenMM::Vec3(Box_x_Edge_Length, 0, 0),
+                                                  OpenMM::Vec3(0, Box_y_Edge_Length, 0),
+                                                  OpenMM::Vec3(0, 0, Box_z_Edge_Length));
+        }
+        // TriclinicBox.
+        else if (ptr_sys.property(space_property).isA<TriclinicBox>())
+        {
+            const TriclinicBox &space = ptr_sys.property(space_property).asA<TriclinicBox>();
+
+            // Get the three triclinic box vectors.
+            const auto v0 = space.vector0();
+            const auto v1 = space.vector1();
+            const auto v2 = space.vector2();
+
+            // Get cell matrix components in nm.
+            const double xx = v0.x() * OpenMM::NmPerAngstrom;
+            const double xy = v0.y() * OpenMM::NmPerAngstrom;
+            const double xz = v0.z() * OpenMM::NmPerAngstrom;
+            const double yx = v1.x() * OpenMM::NmPerAngstrom;
+            const double yy = v1.y() * OpenMM::NmPerAngstrom;
+            const double yz = v1.z() * OpenMM::NmPerAngstrom;
+            const double zx = v2.x() * OpenMM::NmPerAngstrom;
+            const double zy = v2.y() * OpenMM::NmPerAngstrom;
+            const double zz = v2.z() * OpenMM::NmPerAngstrom;
+
+            system_openmm->setDefaultPeriodicBoxVectors(
+                                                  OpenMM::Vec3(xx, xy, xz),
+                                                  OpenMM::Vec3(yz, yy, yz),
+                                                  OpenMM::Vec3(zx, zy, zz));
+
+            openmm_context->setPeriodicBoxVectors(OpenMM::Vec3(xx, xy, xz),
+                                                  OpenMM::Vec3(yz, yy, yz),
+                                                  OpenMM::Vec3(zx, zy, zz));
+        }
+
         openmm_context->reinitialize();
     }
 
@@ -3373,7 +3415,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
             exit(-1);
         }
         pot_energies.append(p_energy_lambda * OpenMM::KcalPerKJ);
-        
+
         if (perturbed_energies[0])
         {
             openmm_context->setParameter("SPOnOff", 1.0); //Solvent-Solvent and Protein Protein Non Bonded OFF
@@ -3414,7 +3456,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
 
         //Let's calculate the gradients
         double m_forward, m_backward;
-        boost::tuples::tie(actual_gradient, m_forward, m_backward) = calculateGradient(incr_plus, 
+        boost::tuples::tie(actual_gradient, m_forward, m_backward) = calculateGradient(incr_plus,
                              incr_minus, p_energy_lambda, beta);
 
         if (alchemical_array.size()>1)
@@ -3626,8 +3668,8 @@ void OpenMMFrEnergyST::emptyContainers()
     reduced_perturbed_energies.clear();
 }
 
-void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm, 
-                                             QVector< Vector> &buffered_dimensions, 
+void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm,
+                                             QVector< Vector> &buffered_dimensions,
                                              bool Debug, AtomicVelocityWorkspace &ws)
 {
     OpenMM::Vec3 a;

@@ -55,7 +55,7 @@
 #include "SireUnits/temperature.h"
 #include "SireUnits/convert.h"
 
-// ADDED BY JM 
+// ADDED BY JM
 #include "SireMol/connectivity.h"
 #include "SireMol/bondid.h"
 #include "SireMol/atomcharges.h"
@@ -64,6 +64,7 @@
 #include "SireMM/atomljs.h"
 
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include "SireMove/flexibility.h"
 
@@ -109,7 +110,7 @@ enum {
 	HBONDS = 1,
 	ALLBONDS = 2,
 	HANGLES = 3
-	
+
 };
 
 static const RegisterMetaType<OpenMMFrEnergyDT> r_openmmint;
@@ -130,7 +131,7 @@ QDataStream &operator<<(QDataStream &ds, const OpenMMFrEnergyDT &velver)
 
 	sds << velver.frequent_save_velocities << velver.molgroup << velver.solutegroup
 		<< velver.CutoffType << velver.cutoff_distance << velver.field_dielectric
-		<< velver.Andersen_flag <<  velver.Andersen_frequency 
+		<< velver.Andersen_flag <<  velver.Andersen_frequency
 		<< velver.MCBarostat_flag << velver.MCBarostat_frequency << velver.ConstraintType << velver.Pressure << velver.Temperature
 		<<velver.platform_type << velver.Restraint_flag << velver.CMMremoval_frequency << velver.energy_frequency
 		<< velver.device_index << velver.Alchemical_value << velver.coulomb_power << velver.shift_delta << velver.delta_alchemical << velver.buffer_coords
@@ -152,7 +153,7 @@ QDataStream &operator>>(QDataStream &ds, OpenMMFrEnergyDT &velver)
 
 		sds >> velver.frequent_save_velocities >> velver.molgroup >> velver.solutegroup
 		>> velver.CutoffType >> velver.cutoff_distance >> velver.field_dielectric
-		>> velver.Andersen_flag >>  velver.Andersen_frequency 
+		>> velver.Andersen_flag >>  velver.Andersen_frequency
 		>> velver.MCBarostat_flag >> velver.MCBarostat_frequency >> velver.ConstraintType >> velver.Pressure >> velver.Temperature
 		>> velver.platform_type >> velver.Restraint_flag >> velver.CMMremoval_frequency >> velver.energy_frequency
 		>> velver.device_index >> velver.Alchemical_value >> velver.coulomb_power >> velver.shift_delta >> velver.delta_alchemical >> velver.buffer_coords
@@ -161,7 +162,7 @@ QDataStream &operator>>(QDataStream &ds, OpenMMFrEnergyDT &velver)
 
 		// Maybe....need to reinitialise from molgroup because openmm system was not serialised...
 		velver.isInitialised = false;
-		
+
 		qDebug() << " Re-initialisation of OpenMMFrEnergyDT from datastream";
 
 		velver.initialise();
@@ -173,10 +174,10 @@ QDataStream &operator>>(QDataStream &ds, OpenMMFrEnergyDT &velver)
 }
 
 /** Constructor*/
-OpenMMFrEnergyDT::OpenMMFrEnergyDT(bool frequent_save) 
+OpenMMFrEnergyDT::OpenMMFrEnergyDT(bool frequent_save)
 				: ConcreteProperty<OpenMMFrEnergyDT,Integrator>(),
-				frequent_save_velocities(frequent_save), 
-				molgroup(MoleculeGroup()),solutegroup(MoleculeGroup()), openmm_system(0), isInitialised(false), 
+				frequent_save_velocities(frequent_save),
+				molgroup(MoleculeGroup()),solutegroup(MoleculeGroup()), openmm_system(0), isInitialised(false),
 				CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer),field_dielectric(78.3),
 				Andersen_flag(false),Andersen_frequency(90.0), MCBarostat_flag(false),
 				MCBarostat_frequency(25),ConstraintType("none"),
@@ -186,10 +187,10 @@ OpenMMFrEnergyDT::OpenMMFrEnergyDT(bool frequent_save)
 {}
 
 /** Constructor using the passed molecule groups */
-OpenMMFrEnergyDT::OpenMMFrEnergyDT(const MoleculeGroup &molecule_group,const MoleculeGroup &solute_group, bool frequent_save) 
+OpenMMFrEnergyDT::OpenMMFrEnergyDT(const MoleculeGroup &molecule_group,const MoleculeGroup &solute_group, bool frequent_save)
 				: ConcreteProperty<OpenMMFrEnergyDT,Integrator>(),
-				frequent_save_velocities(frequent_save), 
-				molgroup(molecule_group),solutegroup(solute_group) ,openmm_system(0), isInitialised(false), 
+				frequent_save_velocities(frequent_save),
+				molgroup(molecule_group),solutegroup(solute_group) ,openmm_system(0), isInitialised(false),
 				CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer),field_dielectric(78.3),
 				Andersen_flag(false),Andersen_frequency(90.0), MCBarostat_flag(false),
 				MCBarostat_frequency(25),ConstraintType("none"),
@@ -202,11 +203,11 @@ OpenMMFrEnergyDT::OpenMMFrEnergyDT(const MoleculeGroup &molecule_group,const Mol
 OpenMMFrEnergyDT::OpenMMFrEnergyDT(const OpenMMFrEnergyDT &other)
 				: ConcreteProperty<OpenMMFrEnergyDT,Integrator>(other),
 				frequent_save_velocities(other.frequent_save_velocities),
-				molgroup(other.molgroup), solutegroup(other.solutegroup), openmm_system(other.openmm_system), isInitialised(other.isInitialised), 
+				molgroup(other.molgroup), solutegroup(other.solutegroup), openmm_system(other.openmm_system), isInitialised(other.isInitialised),
 				CutoffType(other.CutoffType),cutoff_distance(other.cutoff_distance),
 				field_dielectric(other.field_dielectric), Andersen_flag(other.Andersen_flag),
 				Andersen_frequency(other.Andersen_frequency), MCBarostat_flag(other.MCBarostat_flag),
-				MCBarostat_frequency(other.MCBarostat_frequency),ConstraintType(other.ConstraintType), 
+				MCBarostat_frequency(other.MCBarostat_frequency),ConstraintType(other.ConstraintType),
 				Pressure(other.Pressure), Temperature(other.Temperature),platform_type(other.platform_type),
 				Restraint_flag(other.Restraint_flag),CMMremoval_frequency(other.CMMremoval_frequency),
 				energy_frequency(other.energy_frequency),device_index(other.device_index),Alchemical_value(other.Alchemical_value),
@@ -225,7 +226,7 @@ OpenMMFrEnergyDT& OpenMMFrEnergyDT::operator=(const OpenMMFrEnergyDT &other)
 {
 	Integrator::operator=(other);
 	frequent_save_velocities = other.frequent_save_velocities;
-	molgroup = other.molgroup; 
+	molgroup = other.molgroup;
 	solutegroup=other.solutegroup;
 	openmm_system = other.openmm_system;
 	isInitialised = other.isInitialised;
@@ -293,7 +294,7 @@ void OpenMMFrEnergyDT::initialise()  {
 
 
 	MoleculeGroup solute_group = this->solutegroup.read();
-	
+
 	if ( solute_group.isEmpty() ){
 		throw SireError::program_bug(QObject::tr("Cannot initialise OpenMMFrEnergyDT because solute group has not been defined"), CODELOC);
 	}
@@ -344,18 +345,18 @@ void OpenMMFrEnergyDT::initialise()  {
 	if (Debug)
 		qDebug() << "\nConstraint Type = " << ConstraintType<< "\n";
 
-	//Load Plugins from the OpenMM standard Plugin Directory 
+	//Load Plugins from the OpenMM standard Plugin Directory
 	OpenMM::Platform::loadPluginsFromDirectory(OpenMM::Platform::getDefaultPluginsDirectory());
 
 	OpenMM::System *system_openmm = new OpenMM::System();
 
 
-	//The Standard Non Bonded is only defined to extract 1-2,1-3,1-4 pairs from the system 
+	//The Standard Non Bonded is only defined to extract 1-2,1-3,1-4 pairs from the system
 	OpenMM::NonbondedForce * nonbond_openmm = new OpenMM::NonbondedForce();
 
 	nonbond_openmm->setUseDispersionCorrection(false);
 
-	//Custom Force Fileds 
+	//Custom Force Fileds
 
 	OpenMM::CustomNonbondedForce * custom_softcore_solute_solvent = NULL;
 
@@ -396,7 +397,7 @@ void OpenMMFrEnergyDT::initialise()  {
 																				"sigma_avg=0.5*(sigma1+sigma2)");
 
 		custom_solute_solute_solvent_solvent->setNonbondedMethod(OpenMM::CustomNonbondedForce::NoCutoff);
-		
+
 		custom_intra_14_15 = new OpenMM::CustomBondForce("Hl+Hc;"
 														"Hl=4*eps_avg*((sigma_avg/r)^12-(sigma_avg/r)^6);"
 														"Hc=138.935456*q_prod/r");
@@ -452,12 +453,12 @@ void OpenMMFrEnergyDT::initialise()  {
 			custom_solute_solute_solvent_solvent->addGlobalParameter("krf",kvalue);
 
 			custom_solute_solute_solvent_solvent->addGlobalParameter("crf",cvalue);
-		
-		
+
+
 			if(flag_cutoff == CUTOFFNONPERIODIC){
 				custom_softcore_solute_solvent->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
 				custom_solute_solute_solvent_solvent->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-				
+
 			}
 			else{
 				custom_softcore_solute_solvent->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffPeriodic);
@@ -465,15 +466,15 @@ void OpenMMFrEnergyDT::initialise()  {
 			}
 
 			custom_softcore_solute_solvent->setCutoffDistance(converted_cutoff_distance);
-			
+
 			custom_solute_solute_solvent_solvent->setCutoffDistance(converted_cutoff_distance);
 
 
 			custom_intra_14_15 = new OpenMM::CustomBondForce("withinCutoff*(Hl+Hc);"
 															 "withinCutoff=step(cutoff-r);"
 															 "Hl=4*eps_avg*((sigma_avg/r)^12-(sigma_avg/r)^6);"
-														 	 "Hc=138.935456*q_prod/r");
-																  
+															 "Hc=138.935456*q_prod/r");
+
 			custom_intra_14_15->addGlobalParameter("cutoff",converted_cutoff_distance);
 
 
@@ -566,7 +567,7 @@ void OpenMMFrEnergyDT::initialise()  {
 
 		if (Debug)
 			qDebug() << "\nRestraint = ON\n\n";
-	
+
 	}
 
 
@@ -580,7 +581,7 @@ void OpenMMFrEnergyDT::initialise()  {
 
 	int system_index = 0;
 
-	// To avoid possible mismatch between the index in which atoms are added to the openmm system arrays and 
+	// To avoid possible mismatch between the index in which atoms are added to the openmm system arrays and
 	// their atomic numbers in sire, one array is populated while filling up the openmm global arrays
 	//  AtomNumtoopenmmIndex
 	QHash<int, int> AtomNumToOpenMMIndex;
@@ -614,7 +615,7 @@ void OpenMMFrEnergyDT::initialise()  {
 
 			// JM Nov 12
 			// The code below implements a ThreeParticleAverageSite for virtual sites for EPW atoms present in a WAT residue
-			// This is very AMBER specific. 
+			// This is very AMBER specific.
 
 			AtomName atname = at.name();
 
@@ -626,7 +627,7 @@ void OpenMMFrEnergyDT::initialise()  {
 				ResName resname = at.residue().name();
 
 				if ( resname == ResName("WAT") ){
-					
+
 					Atom oatom = molatoms.select( AtomName("O") );
 					Atom h1atom = molatoms.select( AtomName("H1") );
 					Atom h2atom = molatoms.select( AtomName("H2") );
@@ -683,7 +684,7 @@ void OpenMMFrEnergyDT::initialise()  {
 
 				}
 			}
-			
+
 			system_index = system_index + 1;
 
 		}// end of loop on atoms in molecule
@@ -740,15 +741,15 @@ void OpenMMFrEnergyDT::initialise()  {
 			double charge = charges[j].value();
 
 			nonbond_openmm->addParticle(charge, sigma * OpenMM::NmPerAngstrom, epsilon * OpenMM::KJPerKcal);
-		
+
 			Atom atom = molecule.molecule().atoms()(j);
 
 			std::vector<double> params(4);
-			
+
 			params[0]=charge;
 			params[1]=sigma * OpenMM::NmPerAngstrom;
 			params[2]=epsilon * OpenMM::KJPerKcal;
-			
+
 			if(solute_group.contains(atom.molecule())){//solute atom
 				params[3]=1.0;
 			}
@@ -849,7 +850,7 @@ void OpenMMFrEnergyDT::initialise()  {
 
 			if(flag_constraint == NONE ){
 
-				bondStretch_openmm->addBond(idx0,idx1,r0 * OpenMM::NmPerAngstrom, k * 2.0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm); 
+				bondStretch_openmm->addBond(idx0,idx1,r0 * OpenMM::NmPerAngstrom, k * 2.0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
 
 				//cout << "\nBOND ADDED TO "<< atom0.toStdString() << " AND " << atom1.toStdString() << "\n";
 			}
@@ -1009,7 +1010,7 @@ void OpenMMFrEnergyDT::initialise()  {
 	for(int i=0;i<num_exceptions;i++){
 
 			int p1,p2;
-			
+
 			double charge_prod,sigma_avg,epsilon_avg;
 
 
@@ -1019,7 +1020,7 @@ void OpenMMFrEnergyDT::initialise()  {
 				qDebug() << "Exception = " << i << " p1 = " << p1 << " p2 = " << p2 << " charge prod = " << charge_prod << " sigma avg = " << sigma_avg << " epsilon_avg = " << epsilon_avg << "\n";
 
 			if(!(charge_prod==0 && sigma_avg==1 && epsilon_avg==0)){//1-4 interactions
-			
+
 				double tmp[]={charge_prod,sigma_avg, epsilon_avg};
 
 				const std::vector<double> params(tmp,tmp+3);
@@ -1036,17 +1037,17 @@ void OpenMMFrEnergyDT::initialise()  {
 	this->openmm_system = system_openmm;
 
 	this->isInitialised = true;
-	
+
 }
 
 void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &nrg_component, SireUnits::Dimension::Time timestep, int nmoves, bool record_stats) {
 
-	bool Debug = false; 
+	bool Debug = false;
 
 	QTime timer;
 
 	timer.start();
-	
+
 	if (Debug)
 		qDebug() << "In OpenMMFeEnergyDT::integrate()\n\n" ;
 
@@ -1084,15 +1085,15 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 	}
 	else if (platform_type == "CUDA"){
 		const std::string prop = std::string("CudaDeviceIndex");
-		platform_openmm.setPropertyDefaultValue(prop, device_index.toStdString() );   
+		platform_openmm.setPropertyDefaultValue(prop, device_index.toStdString() );
 	}
 	// JM Dec 12. Do we need to set for Reference?
 
-	// Creating a context is the bottleneck in the setup step 
-	// Another implementation could have the context created once during initialisation. 
-	// But then have to figure out how to properly allocate/free context on the heap and make it 
+	// Creating a context is the bottleneck in the setup step
+	// Another implementation could have the context created once during initialisation.
+	// But then have to figure out how to properly allocate/free context on the heap and make it
 	// compatible with sire objects
-	OpenMM::Context context_openmm( *system_openmm, integrator_openmm, platform_openmm);  
+	OpenMM::Context context_openmm( *system_openmm, integrator_openmm, platform_openmm);
 
 	if (Debug)
 		qDebug() << "\n Using OpenMM platform = " <<context_openmm.getPlatform().getName().c_str()<<"\n";
@@ -1144,25 +1145,57 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 		throw SireError::program_bug(QObject::tr("The number of atoms in the openmm system does not match the number of atoms in the sire workspace"), CODELOC);
 	}
 
-	context_openmm.setPositions(positions_openmm);  
+	context_openmm.setPositions(positions_openmm);
 	context_openmm.setVelocities(velocities_openmm);
 
 	if ( CutoffType == "cutoffperiodic" ){
 
 		const System & ptr_sys = ws.system();
 		const PropertyName &space_property = PropertyName("space");
-		const PeriodicBox &space = ptr_sys.property(space_property).asA<PeriodicBox>();
 
-		const double Box_x_Edge_Length = space.dimensions()[0] * OpenMM::NmPerAngstrom; //units in nm
-		const double Box_y_Edge_Length = space.dimensions()[1] * OpenMM::NmPerAngstrom; //units in nm
-		const double Box_z_Edge_Length = space.dimensions()[2] * OpenMM::NmPerAngstrom; //units in nm
+        // PeriodicBox.
+        if (ptr_sys.property(space_property).isA<PeriodicBox>())
+        {
+            const PeriodicBox &space = ptr_sys.property(space_property).asA<PeriodicBox>();
 
-		if (Debug)
-			qDebug() << "\nBOX SIZE [A] = (" << space.dimensions()[0] << " , " << space.dimensions()[1] << " ,  " << space.dimensions()[2] << ")\n\n";
+            const double Box_x_Edge_Length = space.dimensions()[0] * OpenMM::NmPerAngstrom; //units in nm
+            const double Box_y_Edge_Length = space.dimensions()[1] * OpenMM::NmPerAngstrom; //units in nm
+            const double Box_z_Edge_Length = space.dimensions()[2] * OpenMM::NmPerAngstrom; //units in nm
 
-		//Set Periodic Box Condition
+            if (Debug)
+                qDebug() << "\nBOX SIZE [A] = (" << space.dimensions()[0] << " , " << space.dimensions()[1] << " ,  " << space.dimensions()[2] << ")\n\n";
 
-		context_openmm.setPeriodicBoxVectors( OpenMM::Vec3(Box_x_Edge_Length,0,0),OpenMM::Vec3(0,Box_y_Edge_Length,0),OpenMM::Vec3(0,0,Box_z_Edge_Length) );
+            //Set Periodic Box Condition
+
+            context_openmm.setPeriodicBoxVectors(OpenMM::Vec3(Box_x_Edge_Length, 0, 0),
+                                                 OpenMM::Vec3(0, Box_y_Edge_Length, 0),
+                                                 OpenMM::Vec3(0, 0, Box_z_Edge_Length));
+        }
+        // TriclinicBox.
+        else if (ptr_sys.property(space_property).isA<TriclinicBox>())
+        {
+            const TriclinicBox &space = ptr_sys.property(space_property).asA<TriclinicBox>();
+
+            // Get the three triclinic box vectors.
+            const auto v0 = space.vector0();
+            const auto v1 = space.vector1();
+            const auto v2 = space.vector2();
+
+            // Get cell matrix components in nm.
+            const double xx = v0.x() * OpenMM::NmPerAngstrom;
+            const double xy = v0.y() * OpenMM::NmPerAngstrom;
+            const double xz = v0.z() * OpenMM::NmPerAngstrom;
+            const double yx = v1.x() * OpenMM::NmPerAngstrom;
+            const double yy = v1.y() * OpenMM::NmPerAngstrom;
+            const double yz = v1.z() * OpenMM::NmPerAngstrom;
+            const double zx = v2.x() * OpenMM::NmPerAngstrom;
+            const double zy = v2.y() * OpenMM::NmPerAngstrom;
+            const double zz = v2.z() * OpenMM::NmPerAngstrom;
+
+            context_openmm.setPeriodicBoxVectors(OpenMM::Vec3(xx, xy, xz),
+                                                 OpenMM::Vec3(yz, yy, yz),
+                                                 OpenMM::Vec3(zx, zy, zz));
+        }
 	}
 
 	if (Debug)
@@ -1174,7 +1207,7 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 	if (Debug)
 		qDebug() << " Doing " << nmoves << " steps of dynamics ";
 
-	
+
 	int n_samples = nmoves / energy_frequency;
 
 	if(nmoves < energy_frequency)
@@ -1191,7 +1224,7 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 			throw SireError::program_bug(QObject::tr("You are requesting to buffer %1 frames, which is above the hardcoded limit of %2.").arg(n_samples, MAXSAMPLES), CODELOC);
 		}
 	}
-	
+
 	QVector< std::vector<OpenMM::Vec3> > buffered_positions;
 	QVector< Vector > buffered_dimensions;
 
@@ -1206,7 +1239,7 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 	int infoMask = 0;
 
 	infoMask = OpenMM::State::Positions;
-	infoMask = infoMask + OpenMM::State::Velocities; 
+	infoMask = infoMask + OpenMM::State::Velocities;
 	infoMask = infoMask +  OpenMM::State::Energy;
 
 	OpenMM::State state_openmm;//OpenMM State
@@ -1287,7 +1320,7 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 
 			if(Debug){
 				qDebug() << "Lambda + delta > 2.0\n";
-				qDebug() << "Lambda - delta = " << lam_val << " Potential energy minus  = " << potential_energy_lambda_minus_delta * OpenMM::KcalPerKJ  << " kcal/mol" << "\n"; 
+				qDebug() << "Lambda - delta = " << lam_val << " Potential energy minus  = " << potential_energy_lambda_minus_delta * OpenMM::KcalPerKJ  << " kcal/mol" << "\n";
 			}
 		}
 		else if((Alchemical_value - delta_alchemical)<0.0){
@@ -1311,13 +1344,13 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 		}
 		else{
 			context_openmm.setParameter("lambda",Alchemical_value + delta_alchemical);
-			
+
 			state_openmm=context_openmm.getState(infoMask);
 
 			potential_energy_lambda_plus_delta = state_openmm.getPotentialEnergy();
 
 			lam_val = context_openmm.getParameter("lambda");
-			
+
 			if(Debug){
 				qDebug() << "Lambda + delta = " << lam_val << " Potential energy plus  = " << potential_energy_lambda_plus_delta * OpenMM::KcalPerKJ << " kcal/mol" << "\n";
 			}
@@ -1335,16 +1368,16 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 			lam_val = context_openmm.getParameter("lambda");
 
 			if(Debug){
-				qDebug() << "Lambda - delta = " << lam_val << " Potential energy minus  = " << potential_energy_lambda_minus_delta * OpenMM::KcalPerKJ  << " kcal/mol" << "\n"; 
+				qDebug() << "Lambda - delta = " << lam_val << " Potential energy minus  = " << potential_energy_lambda_minus_delta * OpenMM::KcalPerKJ  << " kcal/mol" << "\n";
 			}
 
 		}
 
 		GF_acc = GF_acc + plus;
 		GB_acc = GB_acc + minus;
-		
 
-		if(!isnormal(GF_acc) || !isnormal(GB_acc)){ 
+
+		if(!isnormal(GF_acc) || !isnormal(GB_acc)){
 			throw SireError::program_bug(QObject::tr("******************* Not a Number. Error! *******************"), CODELOC);
 		}
 
@@ -1376,7 +1409,7 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 		cout << "\nDifference dummy = " << dummy - potential_energy_lambda<< "\n\n";*/
 
 		sample_count=sample_count + 1.0;
-		
+
 		show_status(sample_count, n_samples);
 
 	}
@@ -1384,7 +1417,7 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 	if (Debug)
 		qDebug() << "Done dynamics, time elapsed " << timer.elapsed() << " ms\n";
 
-	// Now update the sire coordinates/velocities and box dimensions 
+	// Now update the sire coordinates/velocities and box dimensions
 	timer.restart();
 
 	state_openmm = context_openmm.getState(infoMask);
@@ -1464,7 +1497,7 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 		const QString string = "space" ;
 		ptr_sys.setProperty(string, sp);
 
-		// Buffer dimensions if necessary 
+		// Buffer dimensions if necessary
 
 		for (int k=0; k < buffered_dimensions.size() ; k++){
 
@@ -1481,7 +1514,7 @@ void OpenMMFrEnergyDT::integrate(IntegratorWorkspace &workspace, const Symbol &n
 
 	}
 
-	// Clear all buffers 
+	// Clear all buffers
 
 	buffered_workspace.clear();
 	buffered_dimensions.clear();
@@ -1549,7 +1582,7 @@ SireUnits::Dimension::Length OpenMMFrEnergyDT::getCutoff_distance(void){
 /** Set the cutoff distance in A */
 void OpenMMFrEnergyDT::setCutoff_distance(SireUnits::Dimension::Length distance){
 
-	cutoff_distance = distance;	
+	cutoff_distance = distance;
 
 }
 
@@ -1561,7 +1594,7 @@ double OpenMMFrEnergyDT::getField_dielectric(void){
 
 /** Set the dielectric constant */
 void OpenMMFrEnergyDT::setField_dielectric(double dielectric){
-	
+
 	field_dielectric=dielectric;
 
 }
@@ -1569,39 +1602,39 @@ void OpenMMFrEnergyDT::setField_dielectric(double dielectric){
 /** Set Andersen thermostat */
 
 void OpenMMFrEnergyDT::setAndersen(bool andersen){
-	Andersen_flag = andersen;	
+	Andersen_flag = andersen;
 }
 
 /** Get Andersen thermostat status on/off */
 bool OpenMMFrEnergyDT::getAndersen(void){
-	
-	return 	Andersen_flag;
-	
+
+	return	Andersen_flag;
+
 }
 
 /** Get the Andersen Thermostat frequency collision */
 double OpenMMFrEnergyDT::getAndersen_frequency(void){
-	
+
 	return Andersen_frequency;
-	
+
 }
 
 /** Set the Andersen Thermostat frequency collision */
 void OpenMMFrEnergyDT::setAndersen_frequency(double freq){
-	
+
 	Andersen_frequency=freq;
-	
+
 }
 
 /** Get the bath Temperature */
 SireUnits::Dimension::Temperature OpenMMFrEnergyDT::getTemperature(void){
-		
+
 	return Temperature;
 }
 
 /** Set the Temperature */
 void OpenMMFrEnergyDT::setTemperature(SireUnits::Dimension::Temperature temperature){
-		
+
 	Temperature = temperature;
 }
 
@@ -1612,28 +1645,28 @@ void OpenMMFrEnergyDT::setMCBarostat(bool MCBarostat){
 
 /** Get Andersen thermostat status on/off */
 bool OpenMMFrEnergyDT::getMCBarostat(void){
-	
-	return 	MCBarostat_flag;
-	
+
+	return	MCBarostat_flag;
+
 }
 
 /** Get the Monte Carlo Barostat frequency in time speps */
 int OpenMMFrEnergyDT::getMCBarostat_frequency(void){
-	
+
 	return  MCBarostat_frequency;
-	
+
 }
 
 /** Set the Monte Carlo Barostat frequency in time speps */
 void OpenMMFrEnergyDT::setMCBarostat_frequency(int freq){
-	
+
 	MCBarostat_frequency=freq;
-	
+
 }
 
 /** Get the Presure */
 SireUnits::Dimension::Pressure OpenMMFrEnergyDT::getPressure(void){
-		
+
 	return Pressure;
 }
 
