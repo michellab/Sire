@@ -62,6 +62,7 @@
 
 #include "SireVol/cartesian.h"
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include "SireMaths/maths.h"
 #include "SireUnits/units.h"
@@ -156,7 +157,7 @@ enum { UNKNOWN = 0, //a flag that is not known, e.g. in newer format top files
        RADII = 39,
        SCREEN = 40,
        ATOMIC_NUMBER = 41,
-       SCEE_SCALE_FACTOR = 42, 
+       SCEE_SCALE_FACTOR = 42,
        SCNB_SCALE_FACTOR = 43
      };
 
@@ -716,7 +717,7 @@ static int setAngles(MolEditor &editmol, int pointer,
         start_idx = 0;
     else if (last_idx >= pointer)
         return last_idx;*/
-    
+
     bool got_to_end = true;
 
     start_idx = 0;
@@ -967,7 +968,7 @@ static int setDihedrals(MolEditor &editmol, int pointer,
 		    if (sclnb14 < 0.00001)
 		      atoms14sclnb[atom0.number()][atom3.number()] = 0.0;
 		    else
-		      atoms14sclnb[atom0.number()][atom3.number()] = 1/sclnb14;		      
+		      atoms14sclnb[atom0.number()][atom3.number()] = 1/sclnb14;
                     // Add pair (atom0,atom3) = (1/sclee14, 1/sclnb14) to amber parameters object
                     BondID pair = BondID(atom0.index() , atom3.index() );
                     amberparams.add14Pair( pair, 1/sclee14, 1/sclnb14 );
@@ -1125,14 +1126,14 @@ static void setNonBondedPairs(MolEditor &editmol, int pointer,
                 "It should not happen that atoms14sclee does not have an entry for atom0"),
                                              CODELOC );
 		  }
-	
+
 		if ( not atoms14sclee[atom0.number()].contains( atom1.number() ) )
 		  {
 		    throw SireError::program_bug( QObject::tr(
                 "It should not happen that atoms14sclee does not have an entry for [atom0]]atom1]"),
-                                             CODELOC );  
+                                             CODELOC );
 		  }
-		
+
 		cscl = atoms14sclee[ atom0.number() ][ atom1.number() ];
 
 		if ( not atoms14sclnb.contains( atom0.number() ) )
@@ -1141,16 +1142,16 @@ static void setNonBondedPairs(MolEditor &editmol, int pointer,
                 "It should not happen that atoms14sclnb does not have an entry for atom0"),
                                              CODELOC );
 		  }
-		
+
 		if ( not atoms14sclnb[atom0.number()].contains( atom1.number() ) )
 		  {
 		    throw SireError::program_bug( QObject::tr(
                 "It should not happen that atoms14sclnb does not have an entry for [atom0]]atom1]"),
-                                             CODELOC );  
+                                             CODELOC );
 		  }
-		
+
 		ljscl = atoms14sclnb[ atom0.number() ][ atom1.number() ];
-		
+
 		//qDebug() << " cscl " << cscl << " ljscl " << ljscl << "\n";
             }
             else
@@ -1166,7 +1167,7 @@ static void setNonBondedPairs(MolEditor &editmol, int pointer,
 
             nbpairs.set( atom0.cgAtomIdx(), atom1.cgAtomIdx(),
                          CLJScaleFactor(cscl, ljscl) );
-            
+
             // setting atom0/atom1 automatically sets atom1/atom0
             //nbpairs.set( atom1.cgAtomIdx(), atom0.cgAtomIdx(),
             //             CLJScaleFactor(cscl, ljscl) );
@@ -1279,9 +1280,9 @@ QDataStream &operator<<(QDataStream &ds, const Amber &amber)
 {
     //empty class so nothing to stream
     writeHeader(ds, r_amber, 1);
-    
+
     ds << amber.coul_14scl << amber.lj_14scl;
-    
+
     return ds;
 }
 
@@ -1869,12 +1870,12 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
                 case ATOMIC_NUMBER:
                     processIntegerLine(line, currentFormat, element);
                     break;
-   	        case SCEE_SCALE_FACTOR:
+	        case SCEE_SCALE_FACTOR:
 		    processDoubleLine(line, currentFormat, sceefactor);
 		    break;
-   	        case SCNB_SCALE_FACTOR:
+	        case SCNB_SCALE_FACTOR:
 		    processDoubleLine(line, currentFormat, scnbfactor);
-		    break; 
+		    break;
                 case UNKNOWN:
                     break;
                 default:
@@ -1958,7 +1959,7 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
     }
 
     //qDebug() << " THE COORDS ARE " << crd_coords;
-    
+
     // And now the box dimensions. Skip to the last line of the file, because
     // the crd file could have contained velocities, which are not used for the moment
 
@@ -2232,14 +2233,18 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
         //qDebug() << "We have a periodic box of dimensions"
         //         << crdBox[0] << crdBox[1] << crdBox[2];
 
-        // Check that dimensions are compatible with a periodic rectangular box
-        if ( not ( crd_box[3] == 90.0 && crd_box[4] == 90.0 && crd_box[5] == 90.0 ) )
-            throw SireError::incompatible_error( QObject::tr(
-                    "The top file specifies a rectangular box, "
-                    "but the box angles are not 90 degrees ('%1', '%2', '%3' )")
-                                .arg(crd_box[3]).arg(crd_box[4]).arg(crd_box[5]), CODELOC );
+        // PeriodicBox.
+        if ( crd_box[3] == 90.0 && crd_box[4] == 90.0 && crd_box[5] == 90.0 )
+        {
+            spce = PeriodicBox( dimensions );
+        }
+        // TriclinicBox.
+        else
+        {
+            spce = TriclinicBox(dimensions.x(), dimensions.y(), dimensions.z(),
+                                crd_box[3]*degrees, crd_box[4]*degrees, crd_box[5]*degrees);
 
-        spce = PeriodicBox( dimensions );
+        }
         //spce = PeriodicBox( Vector ( crdBox[0], crdBox[1], crdBox[2] ) ).asA<Space>() ;
         //qDebug() << " periodic box " << spce.toString() ;
     }
@@ -2259,7 +2264,7 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
     return tuple<MoleculeGroup, SpacePtr>(molecules, spce);
 }
 
-/** Write the coordinates of the molecules in the passed MoleculeGroup in the 
+/** Write the coordinates of the molecules in the passed MoleculeGroup in the
     passed Space to an Amber7,
     format coordinate/restart file. The passed property map is used to find
     the required properties */
@@ -2267,55 +2272,55 @@ void Amber::writeCrd(const MoleculeGroup &mols, const Space &space, const QStrin
                      const PropertyMap &map) const
 {
     QFile file(filename);
-    
+
     if (not file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         throw SireError::file_error(file, CODELOC);
     }
-    
+
     QTextStream fout(&file);
-    
+
     fout << "Sire generated restart\n";
-    
+
     //count up the number of atoms in the molecules
     int total_nats = 0;
-    
+
     for (auto mol : mols)
     {
         total_nats += mol.molecule().nAtoms();
     }
-    
+
     //write out the number of atoms
     fout << total_nats <<  "  0.0000000E+00\n";
-    
+
     //now write out the coordinates as six columns of F12.7
     int nmols = mols.nMolecules();
-    
+
     const PropertyName coords_property = map["coordinates"];
-    
+
     int nwritten = 0;
     int nwritten_atoms = total_nats;
-    
+
     fout.setFieldWidth(12);
     fout.setRealNumberPrecision(7);
     fout.setRealNumberNotation(QTextStream::FixedNotation);
-    
+
     for (int i=0; i<nmols; ++i)
     {
         Molecule mol = mols[MolIdx(i)].molecule();
-        
+
         int nats = mol.nAtoms();
-        
+
         for (int j=0; j<nats; ++j)
         {
             Atom atom = mol.atom(AtomIdx(j));
             Vector coords = atom.property<Vector>(coords_property);
-            
+
             fout << coords.x() << coords.y() << coords.z();
-            
+
             nwritten += 3;
             nwritten_atoms -= 1;
-            
+
             if (nwritten >= 6)
             {
                 fout.setFieldWidth(0);
@@ -2325,30 +2330,52 @@ void Amber::writeCrd(const MoleculeGroup &mols, const Space &space, const QStrin
             }
         }
     }
-    
+
     if (nwritten < 6)
     {
         fout.setFieldWidth(0);
         fout << "\n";
         fout.setFieldWidth(12);
     }
-    
+
     //now write out the space
     if (space.isA<PeriodicBox>())
     {
         Vector boxsize = space.asA<PeriodicBox>().dimensions();
-        
+
         fout << boxsize.x() << boxsize.y() << boxsize.z()
              << 90.0 << 90.0 << 90.0;
-        
+
         fout.setFieldWidth(0);
         fout << "\n";
         fout.setFieldWidth(12);
     }
-    
+    else if (space.isA<TriclinicBox>())
+    {
+        Vector v0 = space.asA<TriclinicBox>().vector0();
+        Vector v1 = space.asA<TriclinicBox>().vector1();
+        Vector v2 = space.asA<TriclinicBox>().vector2();
+
+        // Radian to degree conversion factor.
+        double rad2deg = 180 / M_PI;
+
+        auto x = v0.magnitude();
+        auto y = v1.magnitude();
+        auto z = v2.magnitude();
+        auto alpha = Vector::angle(v1, v2).value()*rad2deg;
+        auto beta  = Vector::angle(v0, v2).value()*rad2deg;
+        auto gamma = Vector::angle(v1, v0).value()*rad2deg;
+
+        fout << x << y << z << alpha << beta << gamma;
+
+        fout.setFieldWidth(0);
+        fout << "\n";
+        fout.setFieldWidth(12);
+    }
+
     //ok, all done
     file.close();
-    
+
     if (nwritten_atoms > 0)
     {
         qDebug() << "WARNING: Number of written atoms is" << nwritten_atoms
