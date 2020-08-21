@@ -322,7 +322,7 @@ TriclinicBox::TriclinicBox(const Vector &v0,
     c = magnitude of third lattice vector
     alpha = angle between second and third lattice vectors
     beta = angle between first and third lattice vectors
-    gamma = angle between third and first lattice vectors
+    gamma = angle between second and first lattice vectors
 */
 TriclinicBox::TriclinicBox(double a, double b, double c,
                            const SireUnits::Dimension::Angle &alpha,
