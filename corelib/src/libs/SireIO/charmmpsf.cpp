@@ -59,6 +59,7 @@
 #include "SireUnits/units.h"
 
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include <QDateTime>
 #include <QFileInfo>
@@ -71,6 +72,7 @@ using namespace SireMM;
 using namespace SireMol;
 using namespace SireStream;
 using namespace SireSystem;
+using namespace SireUnits;
 using namespace SireVol;
 
 const RegisterParser<CharmmPSF> register_psf;
@@ -973,12 +975,27 @@ CharmmPSF::CharmmPSF(const SireSystem::System &system, const PropertyMap &map) :
             charmm_params.append("END");
     }
 
-    // Flag whether the system has a periodic simulation box.
+    // Flag whether the system has a simulation box.
     has_box = false;
 
     try
     {
-        box = system.property(map["space"]).asA<PeriodicBox>();
+        // PeriodicBox.
+        if (system.property(map["space"]).isA<PeriodicBox>())
+        {
+            auto periodic_box = system.property(map["space"]).asA<PeriodicBox>();
+            auto dimensions = periodic_box.dimensions();
+
+            box = TriclinicBox(dimensions.x(), dimensions.y(), dimensions.z(),
+                               90*degrees,   90*degrees,  90*degrees);
+        }
+
+        // TriclinicBox.
+        else if (system.property(map["space"]).isA<TriclinicBox>())
+        {
+            box = system.property(map["space"]).asA<TriclinicBox>();
+        }
+
         has_box = true;
     }
     catch(...)
@@ -2132,7 +2149,7 @@ bool CharmmPSF::parseParameters(
     QMultiHash<QString, CharmmParam> &dihedral_params,
     QMultiHash<QString, CharmmParam> &improper_params,
     QMultiHash<QString, CharmmParam> &nonbonded_params,
-    PeriodicBox &box, bool &has_box_params) const
+    TriclinicBox &box, bool &has_box_params) const
 {
     /* CHARMM parameter files are split in sections for different record types,
        i.e. bonds, angles, etc., separated by blank lines.
@@ -2146,7 +2163,7 @@ bool CharmmPSF::parseParameters(
        a record section.)
 
        We also parse NAMD XSC box data, which is added to the Sire System
-       as a PeriodicBox Space property.
+       as a TriclnicBox Space property.
      */
 
     QStringList errors;
@@ -2431,7 +2448,7 @@ bool CharmmPSF::parseParameters(
             }
         }
 
-        // Periodic box record data.
+        // TriclinicBox box record data.
         // TODO:
         //  1) Figure out how to make this work if the file doesn't contain
         //     a $LABEL comment preceeding the cell record data.
@@ -2447,15 +2464,23 @@ bool CharmmPSF::parseParameters(
                 QStringList data = parameter_lines[i].simplified().split(QRegExp("\\s"));
 
                 // Now try to read the cell parameters.
-                // Here we are assuming a periodic, rectilinear simulation box.
-                // TODO: Add support for other box types.
-                bool ok_x, ok_y, ok_z;
+                bool ok_xx, ok_xy, ok_xz;
+                bool ok_yx, ok_yy, ok_yz;
+                bool ok_zx, ok_zy, ok_zz;
 
-                double x = data[1].toDouble(&ok_x);
-                double y = data[5].toDouble(&ok_y);
-                double z = data[9].toDouble(&ok_z);
+                double xx = data[1].toDouble(&ok_xx);
+                double xy = data[2].toDouble(&ok_xy);
+                double xz = data[3].toDouble(&ok_xz);
+                double yx = data[4].toDouble(&ok_yx);
+                double yy = data[5].toDouble(&ok_yy);
+                double yz = data[6].toDouble(&ok_yz);
+                double zx = data[7].toDouble(&ok_zx);
+                double zy = data[8].toDouble(&ok_zy);
+                double zz = data[9].toDouble(&ok_zz);
 
-                if (not ok_x or not ok_y or not ok_z)
+                if (not ok_xx or not ok_xy or not ok_xz or
+                    not ok_yx or not ok_yy or not ok_yz or
+                    not ok_zx or not ok_zy or not ok_zz)
                 {
                     errors.append(QObject::tr("Could not read NAMD XSC record! %1")
                         .arg(parameter_lines[i]));
@@ -2463,7 +2488,9 @@ bool CharmmPSF::parseParameters(
                 else
                 {
                     // Create a periodic box object.
-                    box = PeriodicBox(Vector(x, y, z));
+                    box = TriclinicBox(Vector(xx, xy, xz),
+                                       Vector(yx, yy, yz),
+                                       Vector(zx, zy, zz));
                     has_box_params = true;
                 }
             }
@@ -3487,8 +3514,8 @@ System CharmmPSF::startSystem(const QVector<QString> &param_lines, const Propert
     QMultiHash<QString, CharmmParam> improper_params;
     QMultiHash<QString, CharmmParam> nonbonded_params;
 
-    // Initialise a periodic box object.
-    PeriodicBox box;
+    // Initialise a triclinic box object.
+    TriclinicBox box;
     bool has_box_params = false;
 
     // Parse and validate the parameter file.
@@ -3661,15 +3688,19 @@ void CharmmPSF::writeToFile(const QString &filename) const
             throw SireError::file_error(f, CODELOC);
         }
 
-        // Get the box dimensions.
-        Vector box_size = box.dimensions();
+        // Get the box vectors.
+        Vector v0 = box.vector0();
+        Vector v1 = box.vector1();
+        Vector v2 = box.vector2();
 
         QTextStream ts(&f);
 
         QString l1 = "# NAMD extended system configuration output file\n";
-        QString l2 = "#$LABELS step a_x a_y a_z b_x b_y b_z c_x c_y c_z\n";
-        QString l3 = QString("0 %1 0 0 0 %2 0 0 0 %3 0 0 0\n")
-            .arg(box_size[0]).arg(box_size[1]).arg(box_size[2]);
+        QString l2 = "#$LABELS step a_x a_y a_z b_x b_y b_z c_x c_y c_z o_x o_y o_z s_x s_y s_z s_u s_v s_w\n";
+        QString l3 = QString("0 %1 %2 %3 %4 %5 %6 %7 %8 %9 0 0 0 0 0 0 0 0 0\n")
+            .arg(v0.x()).arg(v0.y()).arg(v0.z())
+            .arg(v1.x()).arg(v1.y()).arg(v1.z())
+            .arg(v2.x()).arg(v2.y()).arg(v2.z());
 
         // Write the box data to file.
         ts << l1 << l2 << l3;

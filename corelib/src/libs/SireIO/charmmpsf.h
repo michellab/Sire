@@ -31,7 +31,7 @@
 
 #include "moleculeparser.h"
 
-#include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 SIRE_BEGIN_HEADER
 
@@ -308,7 +308,7 @@ private:
         QMultiHash<QString, CharmmParam> &dihedral_params,
         QMultiHash<QString, CharmmParam> &improper_params,
         QMultiHash<QString, CharmmParam> &nonbonded_params,
-        SireVol::PeriodicBox &box, bool &has_box_params) const;
+        SireVol::TriclinicBox &box, bool &has_box_params) const;
 
     SireMol::MolStructureEditor getMolStructure(int imol,
         const SireBase::PropertyName &cutting) const;
@@ -421,8 +421,8 @@ private:
     /** A list of CHARMM parameter strings. */
     QStringList charmm_params;
 
-    /** Periodic box data. */
-    SireVol::PeriodicBox box;
+    /** Triclinic box data. */
+    SireVol::TriclinicBox box;
 
     /** Whether the system has a periodic box. */
     bool has_box;
