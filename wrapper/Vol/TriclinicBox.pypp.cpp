@@ -46,7 +46,7 @@ void register_TriclinicBox_class(){
         TriclinicBox_exposer_t TriclinicBox_exposer = TriclinicBox_exposer_t( "TriclinicBox", "\nA TriclinicBox is a volume  that represents standard periodic boundary conditions\n(a 3D box replicated to infinity along all three dimensions).\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a default TriclinicBox volume (maximum volume)") );
         bp::scope TriclinicBox_scope( TriclinicBox_exposer );
         TriclinicBox_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") ), "Construct a TriclinicBox with the specified lattice vectors") );
-        TriclinicBox_exposer.def( bp::init< double, double, double, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const & >(( bp::arg("a"), bp::arg("b"), bp::arg("c"), bp::arg("alpha"), bp::arg("beta"), bp::arg("gamma") ), "Construct a TriclinicBox with the specified lattice vector magnitudes\nand angles.\n") );
+        TriclinicBox_exposer.def( bp::init< double, double, double, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const & >(( bp::arg("a"), bp::arg("b"), bp::arg("c"), bp::arg("alpha"), bp::arg("beta"), bp::arg("gamma") ), "Construct a TriclinicBox with the specified lattice vector magnitudes\nand angles.\na = magnitude of first lattice vector\nb = magnitude of second lattice vector\nc = magnitude of third lattice vector\nalpha = angle between second and third lattice vectors\nbeta = angle between first and third lattice vectors\ngamma = angle between second and first lattice vectors\n") );
         TriclinicBox_exposer.def( bp::init< SireVol::TriclinicBox const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireVol::TriclinicBox::beyond
         
@@ -379,6 +379,17 @@ void register_TriclinicBox_class(){
                 "isPeriodic"
                 , isPeriodic_function_value
                 , "A Triclinic box is periodic" );
+        
+        }
+        { //::SireVol::TriclinicBox::isRotated
+        
+            typedef bool ( ::SireVol::TriclinicBox::*isRotated_function_type)(  ) const;
+            isRotated_function_type isRotated_function_value( &::SireVol::TriclinicBox::isRotated );
+            
+            TriclinicBox_exposer.def( 
+                "isRotated"
+                , isRotated_function_value
+                , "Whether the triclinic cell has been rotated to comply with the contraints\nof molecular dynamics engines, i.e. vector0 aligned with x axis, vector1\nin x-y plane, and vector2 with positive z component.\n" );
         
         }
         { //::SireVol::TriclinicBox::minimumDistance

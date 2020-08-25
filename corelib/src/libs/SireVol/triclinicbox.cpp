@@ -181,6 +181,26 @@ TriclinicBox::TriclinicBox(const Vector &v0,
     if (this->v2.z() < 0)
         this->v2 *= -1;
 
+    // Check whether the triclinic cell has been rotated. If not, then
+    // the rotation matrix will be the identity matrix.
+    if ((std::abs(this->rotation_matrix.column0().x() - 1.0) > 1e-12) or
+        (std::abs(this->rotation_matrix.column0().y() - 0.0) > 1e-12) or
+        (std::abs(this->rotation_matrix.column0().z() - 0.0) > 1e-12) or
+        (std::abs(this->rotation_matrix.column1().x() - 0.0) > 1e-12) or
+        (std::abs(this->rotation_matrix.column1().y() - 1.0) > 1e-12) or
+        (std::abs(this->rotation_matrix.column1().z() - 0.0) > 1e-12) or
+        (std::abs(this->rotation_matrix.column2().x() - 0.0) > 1e-12) or
+        (std::abs(this->rotation_matrix.column2().y() - 0.0) > 1e-12) or
+        (std::abs(this->rotation_matrix.column2().z() - 1.0) > 1e-12))
+    {
+        this->is_rotated = true;
+    }
+    else
+    {
+        this->is_rotated = false;
+    }
+
+
     /* Next perform a lattice reduction such that the following conditions are
        met:
 
@@ -367,6 +387,7 @@ TriclinicBox::TriclinicBox(const TriclinicBox &other)
               beta(other.beta),
               gamma(other.gamma),
               vol(other.vol),
+              is_rotated(other.is_rotated),
               invlength(other.invlength)
 {}
 
@@ -393,6 +414,7 @@ TriclinicBox& TriclinicBox::operator=(const TriclinicBox &other)
         beta = other.beta;
         gamma = other.gamma;
         vol = other.vol;
+        is_rotated = other.is_rotated;
         invlength = other.invlength;
         Cartesian::operator=(other);
     }
@@ -542,6 +564,15 @@ SpacePtr TriclinicBox::setVolume(SireUnits::Dimension::Volume vol) const
     double scl = std::pow( new_volume / old_volume, 1.0/3.0 ); // rats - no cbrt function!
 
     return TriclinicBox(scl*this->v0, scl*this->v1, scl*this->v2);
+}
+
+/** Whether the triclinic cell has been rotated to comply with the contraints
+    of molecular dynamics engines, i.e. vector0 aligned with x axis, vector1
+    in x-y plane, and vector2 with positive z component.
+ */
+bool TriclinicBox::isRotated() const
+{
+    return this->is_rotated;
 }
 
 /** Calculate the delta that needs to be subtracted from the interatomic

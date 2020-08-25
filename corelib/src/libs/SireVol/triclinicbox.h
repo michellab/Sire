@@ -94,10 +94,14 @@ public:
 
     static const char* typeName();
 
-    /** Calculate the distance between two points */
+    /** Whether the triclinic cell has been rotated to comply with the contraints
+        of molecular dynamics engines, i.e. vector0 aligned with x axis, vector1
+        in x-y plane, and vector2 with positive z component.
+     */
+    bool isRotated() const;
+
     double calcDist(const Vector &point0, const Vector &point1) const;
 
-    /** Calculate the distance squared between two points */
     double calcDist2(const Vector &point0, const Vector &point1) const;
 
     double calcDist(const CoordGroup &group1, const CoordGroup &group2,
@@ -252,6 +256,9 @@ protected:
 
     /** The volume of the triclinic cell. */
     double vol;
+
+    /** Whether the triclinic cell has been rotated. */
+    bool is_rotated;
 
     /** The inverse of the lengths of each side of the box */
     Vector invlength;
