@@ -53,8 +53,8 @@ SIREMOVE_EXPORT QDataStream& operator>>(QDataStream&, SireMove::OpenMMFrEnergyDT
 namespace SireMove
 {
 
-/** This class implements a free energy methods Using OpenMM. 
- 
+/** This class implements a free energy methods Using OpenMM.
+
     @author Julien Michel and Gaetano Calabro
 */
 class SIREMOVE_EXPORT OpenMMFrEnergyDT
@@ -149,7 +149,7 @@ public:
 
 	double getDeltaAlchemical(void);
 	void setDeltatAlchemical(double);
-	
+
 	bool getBufferCoords(void);
 	void setBufferCoords(bool);
 

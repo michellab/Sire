@@ -3239,7 +3239,7 @@ System OpenMMFrEnergyST::annealSystemToLambda(System &system,
     {
         // dummy buffered dimensions vector, maybe there is better solution
         //to this than just passing an empty vector
-        QVector< Vector> dimensions;
+        QVector<QVector<Vector>> dimensions;
         updateBoxDimensions(state_openmm, dimensions, Debug, ws);
     }
     this->destroyContext();
@@ -3325,7 +3325,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
     }
 
     QVector< std::vector<OpenMM::Vec3> > buffered_positions;
-    QVector< Vector > buffered_dimensions;
+    QVector<QVector<Vector>> buffered_dimensions;
 
     OpenMM::Vec3 a;
     OpenMM::Vec3 b;
@@ -3445,8 +3445,14 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
             if (MCBarostat_flag == true)
             {
                 state_openmm.getPeriodicBoxVectors(a, b, c);
-                Vector dims = Vector(a[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
-                buffered_dimensions.append(dims);
+
+                Vector v0 = Vector(a[0] * OpenMM::AngstromsPerNm, a[1] * OpenMM::AngstromsPerNm, a[2] * OpenMM::AngstromsPerNm);
+                Vector v1 = Vector(b[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, b[2] * OpenMM::AngstromsPerNm);
+                Vector v2 = Vector(c[0] * OpenMM::AngstromsPerNm, c[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
+
+                QVector<Vector> lattice_vectors{v0, v1, v2};
+
+                buffered_dimensions.append(lattice_vectors);
             }
         }
 
@@ -3552,7 +3558,6 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
     //Now the box dimensions
     if (MCBarostat_flag == true)
     {
-
         updateBoxDimensions(state_openmm, buffered_dimensions, Debug, ws);
     }
     // Clear all buffers
@@ -3669,31 +3674,65 @@ void OpenMMFrEnergyST::emptyContainers()
 }
 
 void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm,
-                                             QVector< Vector> &buffered_dimensions,
-                                             bool Debug, AtomicVelocityWorkspace &ws)
+                                           QVector<QVector<Vector>> &buffered_dimensions,
+                                           bool Debug, AtomicVelocityWorkspace &ws)
 {
+    Debug = false;
     OpenMM::Vec3 a;
     OpenMM::Vec3 b;
     OpenMM::Vec3 c;
 
-    state_openmm.getPeriodicBoxVectors(a, b, c);
-    Vector new_dims = Vector(a[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
-    if (Debug)
-        qDebug() << " a " << a[0] << " b " << b[1] << " c " << c[2];
-
     System & ptr_sys = ws.nonConstsystem();
-    PeriodicBox sp = ptr_sys.property("space").asA<PeriodicBox>();
 
-    sp.setDimensions(new_dims);
-    const QString string = "space";
-    ptr_sys.setProperty(string, sp);
-
-    /** Buffer dimensions if necessary */
-    for (int k = 0; k < buffered_dimensions.size(); k++)
+    // TriclinicBox.
+    if (ptr_sys.property("space").isA<TriclinicBox>())
     {
-        const QString buffered_space = "buffered_space_" + QString::number(k);
-        PeriodicBox buff_space = PeriodicBox(buffered_dimensions[k]);
-        ptr_sys.setProperty(buffered_space, buff_space);
+        state_openmm.getPeriodicBoxVectors(a, b, c);
+        Vector v0 = Vector(a[0] * OpenMM::AngstromsPerNm, a[1] * OpenMM::AngstromsPerNm, a[2] * OpenMM::AngstromsPerNm);
+        Vector v1 = Vector(b[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, b[2] * OpenMM::AngstromsPerNm);
+        Vector v2 = Vector(c[0] * OpenMM::AngstromsPerNm, c[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
+
+        System & ptr_sys = ws.nonConstsystem();
+        TriclinicBox sp(v0, v1, v2);
+
+        const QString string = "space";
+        ptr_sys.setProperty(string, sp);
+
+        /** Buffer dimensions if necessary */
+        for (int k = 0; k < buffered_dimensions.size(); k++)
+        {
+            const QString buffered_space = "buffered_space_" + QString::number(k);
+            TriclinicBox buff_space = TriclinicBox(buffered_dimensions[k][0],
+                                                   buffered_dimensions[k][1],
+                                                   buffered_dimensions[k][2]);
+            ptr_sys.setProperty(buffered_space, buff_space);
+        }
+    }
+    // PeriodicBox.
+    else
+    {
+        state_openmm.getPeriodicBoxVectors(a, b, c);
+        Vector new_dims = Vector(a[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
+        if (Debug)
+            qDebug() << " a " << a[0] << " b " << b[1] << " c " << c[2];
+
+        System & ptr_sys = ws.nonConstsystem();
+        PeriodicBox sp = ptr_sys.property("space").asA<PeriodicBox>();
+
+        sp.setDimensions(new_dims);
+        const QString string = "space";
+        ptr_sys.setProperty(string, sp);
+
+        /** Buffer dimensions if necessary */
+        for (int k = 0; k < buffered_dimensions.size(); k++)
+        {
+            const QString buffered_space = "buffered_space_" + QString::number(k);
+            Vector dims(buffered_dimensions[k][0].x(),
+                        buffered_dimensions[k][1].y(),
+                        buffered_dimensions[k][2].z());
+            PeriodicBox buff_space = PeriodicBox(dims);
+            ptr_sys.setProperty(buffered_space, buff_space);
+        }
     }
 }
 
