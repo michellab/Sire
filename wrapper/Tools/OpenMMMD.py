@@ -283,11 +283,16 @@ def centerSolute(system, space):
     # ! Assuming first molecule in the system is the solute !
 
     if space.isPeriodic():
-        box_center = space.dimensions() / 2
+        # Periodic box.
+        try:
+            box_center = space.dimensions() / 2
+        # TriclincBox.
+        except:
+            box_center = 0.5*(space.vector0() + space.vector1() + space.vector2())
     else:
         box_center = Vector(0.0, 0.0, 0.0)
 
-    solute = system.molecules().at(MolNum(1))[0].molecule() 
+    solute = system.molecules().at(MolNum(1))[0].molecule()
 
     solute_cog = CenterOfGeometry(solute).point()
 
@@ -626,7 +631,7 @@ def setupDistanceRestraints(system, restraints=None):
     prop_list = []
 
     molecules = system[MGName("all")].molecules()
-    
+
     if restraints is None:
         #dic_items = list(distance_restraints_dict.val.items())
         dic_items = list(dict(distance_restraints_dict.val).items())
@@ -686,7 +691,7 @@ def freezeResidues(system):
 
 def repartitionMasses(system, hmassfactor=4.0):
     """
-    Increase the mass of hydrogen atoms to hmass times * amu, and subtract the mass 
+    Increase the mass of hydrogen atoms to hmass times * amu, and subtract the mass
 increase from the heavy atom the hydrogen is bonded to.
     """
 
@@ -834,7 +839,7 @@ def createSystemFreeEnergy(molecules):
         molecule = molecules.molecule(moleculeNumber)[0].molecule()
         moleculeList.append(molecule)
 
-    # Scan input to find a molecule with passed residue number 
+    # Scan input to find a molecule with passed residue number
     # The residue name of the first residue in this molecule is
     # used to name the solute. This is used later to match
     # templates in the flex/pert files.
@@ -1341,7 +1346,7 @@ def generateDistanceRestraintsDict(system):
     restraints = { (i0, i1): (r01, kl, Dl), (i0,i2): (r02, kl, Dl) }
     #print restraints
     #distance_restraints_dict.val = restraints
-    #distance_restraints_dict 
+    #distance_restraints_dict
     #import pdb; pdb.set_trace()
 
     return restraints
@@ -1613,7 +1618,7 @@ def runFreeNrg():
     if cycle_start > maxcycles.val:
         print("Maxinum number of cycles reached (%s). If you wish to extend the simulation increase the value of the parameter maxcycle." % maxcycles.val)
         sys.exit(-1)
-        
+
     cycle_end = cycle_start + ncycles.val
 
     if (cycle_end > maxcycles.val):
@@ -1702,7 +1707,7 @@ def runFreeNrg():
         cmd = "cp %s %s.previous" % (restart_file.val, restart_file.val)
         os.system(cmd)
         print ("Saving new restart")
-        Sire.Stream.save([system, moves], restart_file.val)            
+        Sire.Stream.save([system, moves], restart_file.val)
     s2 = timer.elapsed() / 1000.
     outgradients.flush()
     outfile.flush()
@@ -1710,7 +1715,7 @@ def runFreeNrg():
     outfile.close()
     print("Simulation took %d s " % ( s2 - s1))
     print("###===========================================================###\n")
-  
+
 
     if os.path.exists("gradients.s3"):
         siregrads = Sire.Stream.load("gradients.s3")
