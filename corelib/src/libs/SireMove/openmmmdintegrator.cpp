@@ -1231,7 +1231,7 @@ void OpenMMMDIntegrator::createContext(IntegratorWorkspace &workspace,
             const double zz = v2.z() * OpenMM::NmPerAngstrom;
 
             openmm_context->setPeriodicBoxVectors(OpenMM::Vec3(xx, xy, xz),
-                                                  OpenMM::Vec3(yz, yy, yz),
+                                                  OpenMM::Vec3(yx, yy, yz),
                                                   OpenMM::Vec3(zx, zy, zz));
         }
 
