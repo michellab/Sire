@@ -2487,7 +2487,7 @@ bool CharmmPSF::parseParameters(
                 }
                 else
                 {
-                    // Create a periodic box object.
+                    // Create a triclinic box object.
                     box = TriclinicBox(Vector(xx, xy, xz),
                                        Vector(yx, yy, yz),
                                        Vector(zx, zy, zz));
