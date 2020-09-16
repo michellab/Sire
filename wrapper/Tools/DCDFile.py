@@ -1,6 +1,9 @@
 
 import struct, time, array, os
 
+from math import pi
+
+from Sire.Maths import Vector
 from Sire.Mol import *
 from Sire.IO import *
 
@@ -10,18 +13,18 @@ from Sire.IO import *
 
 class DCDFile(object):
     """DCDFile provides methods for creating DCD files.
-    
+
     DCD is a file format for storing simulation trajectories.  It is supported by many programs, such
     as CHARMM, NAMD, and X-PLOR.  Note, however, that different programs produce subtly different
     versions of the format.  This class generates the CHARMM version.  Also note that there is no
     standard byte ordering (big-endian or little-endian) for this format.  This class always generates
     files with little-endian ordering.
-    
+
     To use this class, create a DCDFile object, then call writeModel() once for each model in the file."""
-    
+
     def __init__(self, strfile, group, space, dt, firstStep=0, interval=1):
         """Create a DCD file and write out the header.
-        
+
         Parameters:
          - file (file) A file to write to
          - topology (Topology) The Topology defining the molecular system being written
@@ -65,34 +68,46 @@ class DCDFile(object):
         header += struct.pack(b'<80s', bytes('Created '+time.asctime(time.localtime(time.time())),"utf-8"))
         header += struct.pack(b'<4i', 164, 4, natoms, 4)
         file.write( header )
-    
+
     def writeModel(self, group, space):
         """Write out a model to the DCD file.
-                
+
         Parameters:
          - positions (list) The list of atomic positions to write
         """
         #if len(list(self._topology.atoms())) != len(positions):
-        #    raise ValueError('The number of positions must match the number of atoms') 
+        #    raise ValueError('The number of positions must match the number of atoms')
         #if is_quantity(positions):
         #    positions = positions.value_in_unit(nanometers)
         file = self._file
-        
+
         # Update the header.
-        
+
         self._modelCount += 1
         file.seek(8, os.SEEK_SET)
         file.write(struct.pack('<i', self._modelCount))
         file.seek(20, os.SEEK_SET)
         file.write(struct.pack('<i', self._firstStep+self._modelCount*self._interval))
-        
+
         # Write the data.
-        
+
         file.seek(0, os.SEEK_END)
-        
+
         if space.isPeriodic():
-            boxSize = space.dimensions()
-            file.write(struct.pack('<i6di', 48, boxSize[0], 0, boxSize[1], 0, 0, boxSize[2], 48))
+            # PeriodicBox.
+            try:
+                boxSize = space.dimensions()
+                file.write(struct.pack('<i6di', 48, boxSize[0], 0, boxSize[1], 0, 0, boxSize[2], 48))
+            # TriclinicBox.
+            except:
+                v0 = space.vector0()
+                v1 = space.vector1()
+                v2 = space.vector2()
+                rad2deg = 180 / pi
+                alpha = Vector.angle(v1, v2).value() * rad2deg
+                beta = Vector.angle(v0, v2).value() * rad2deg
+                gamma = Vector.angle(v1, v0).value() * rad2deg
+                file.write(struct.pack('<i6di', 48, v0.magnitude(), gamma, v1.magnitude(), beta, alpha, v2.magnitude(), 48))
 
         natoms = 0
 
@@ -106,7 +121,7 @@ class DCDFile(object):
         # To get the positions...
         # Loop over that group
         nmols = group.nMolecules()
-        
+
         coords = []
 
         #spacedims = space.dimensions()
@@ -136,21 +151,21 @@ class DCDFile(object):
             #        print("Mol %s wrapdelta %s %s %s " % (molnum.toString(), wrapdelta[0], wrapdelta[1], wrapdelta[2]))
             #        print(spacedims)
             #        print(molcoords.toVector())
-            #        wrap = Vector( - wrapdelta[0] * spacedims.x() , - wrapdelta[1] * spacedims.y(), -wrapdelta[2] * spacedims.z() )               
+            #        wrap = Vector( - wrapdelta[0] * spacedims.x() , - wrapdelta[1] * spacedims.y(), -wrapdelta[2] * spacedims.z() )
             #        molcoords.translate(wrap)
             #        print(molcoords.toVector())
-                    
-            
+
+
             #molcoords.translate(wrapdelta)
             #coords += molcoords
             coords += molcoords.toVector()
-           
+
             #if wrapatomcoordinates:
             #    molvec = molcoords.toVector()
             #    for atvec in molvec:
             #        wrapdelta = Vector( int( math.floor( atvec.x() / spacedims.x() ) ) ,\
             #                            int( math.floor( atvec.y() / spacedims.y() ) ) ,\
-            #                            int( math.floor( atvec.z() / spacedims.z() ) ) )                
+            #                            int( math.floor( atvec.z() / spacedims.z() ) ) )
             #        if ( wrapdelta[0] != 0 or wrapdelta[1] != 0 or wrapdelta[2] != 0):
             #            wrap = Vector( - wrapdelta[0] * spacedims.x() , - wrapdelta[1] * spacedims.y(), -wrapdelta[2] * spacedims.z() )
             #            atvec = atvec + wrap
@@ -168,12 +183,12 @@ class DCDFile(object):
 
     def writeBufferedModels(self, group, dimensions):
         """Write out a collection of snapshots to the DCD file.
-                
+
         Parameters:
          - positions (list) The list of atomic positions to write
         """
         #if len(list(self._topology.atoms())) != len(positions):
-        #    raise ValueError('The number of positions must match the number of atoms') 
+        #    raise ValueError('The number of positions must match the number of atoms')
         #if is_quantity(positions):
         #    positions = positions.value_in_unit(nanometers)
         file = self._file
@@ -189,7 +204,7 @@ class DCDFile(object):
         if nbuf <= 0:
             print("Could not find any buffered coordinates in the passed group ! ")
             return
-        
+
         #
         # Should be more efficient to loop over all mols once
         #
@@ -200,20 +215,32 @@ class DCDFile(object):
             file.write(struct.pack('<i', self._modelCount))
             file.seek(20, os.SEEK_SET)
             file.write(struct.pack('<i', self._firstStep+self._modelCount*self._interval))
-          
+
             # Write the data.
-        
+
             file.seek(0, os.SEEK_END)
             # Get buffered space...
             boxSize = None
             if ("buffered_space_%s" % x) in dimensions:
-                boxSize = dimensions["buffered_space_%s" % x].dimensions()
-            #print "buffered_space_%s" % x, boxSize
-            if boxSize is not None:
-                file.write(struct.pack('<i6di', 48, boxSize[0], 0, boxSize[1], 0, 0, boxSize[2], 48))
+                # PeriodicBox.
+                try:
+                    boxSize = dimensions["buffered_space_%s" % x].dimensions()
+                    #print "buffered_space_%s" % x, boxSize
+                    if boxSize is not None:
+                        file.write(struct.pack('<i6di', 48, boxSize[0], 0, boxSize[1], 0, 0, boxSize[2], 48))
+                # TriclinicBox.
+                except:
+                    v0 = dimensions["buffered_space_%s" % x].vector0()
+                    v1 = dimensions["buffered_space_%s" % x].vector1()
+                    v2 = dimensions["buffered_space_%s" % x].vector2()
+                    rad2deg = 180 / pi
+                    alpha = Vector.angle(v1, v2).value() * rad2deg
+                    beta = Vector.angle(v0, v2).value() * rad2deg
+                    gamma = Vector.angle(v1, v0).value() * rad2deg
+                    file.write(struct.pack('<i6di', 48, v0.magnitude(), gamma, v1.magnitude(), beta, alpha, v2.magnitude(), 48))
 
             natoms = 0
-            
+
 
             for i in range(0,group.nMolecules()):
                 mol = group[MolIdx(i)][0].molecule()
@@ -225,7 +252,7 @@ class DCDFile(object):
             # To get the positions...
             # Loop over that group
             nmols = group.nMolecules()
-        
+
             coords = []
 
             # JM 10/14 bugfix change of behavior of QSet in QT5
@@ -237,7 +264,7 @@ class DCDFile(object):
                 molcoords = mol.property("buffered_coord_%s" % x)
 
                 coords += molcoords.toVector()
-           
+
             # Have to study that bit...
             for i in range(3):
                 file.write(length)
