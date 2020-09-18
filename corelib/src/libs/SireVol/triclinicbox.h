@@ -238,7 +238,7 @@ protected:
     Matrix M;
 
     /** The maximum distance within which a point will always be closer to the
-        origin thatn any of its images.
+        origin than any of its images.
       */
     double dist_max;
 
