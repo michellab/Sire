@@ -105,15 +105,12 @@ QDataStream &operator>>(QDataStream &ds, TriclinicBox &box)
     return ds;
 }
 
-/** This is the maximum dimension of the box (so that .volume() doesn't overflow) */
-const double max_boxlength = std::pow(0.9 * std::numeric_limits<double>::max(), 1.0/3.0);
-
-/** Construct a default TriclinicBox volume (maximum volume) */
+/** Construct a default TriclinicBox (large volume) */
 TriclinicBox::TriclinicBox() : ConcreteProperty<TriclinicBox,Cartesian>()
 {
-    Vector v0(max_boxlength, 0, 0);
-    Vector v1(0, max_boxlength, 0);
-    Vector v2(0, 0, max_boxlength);
+    Vector v0(1e12, 0, 0);
+    Vector v1(0, 1e12, 0);
+    Vector v2(0, 0, 1e12);
 
     *this = TriclinicBox(v0, v1, v2);
 }
