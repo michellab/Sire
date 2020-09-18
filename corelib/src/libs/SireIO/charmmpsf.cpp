@@ -4475,7 +4475,7 @@ void CharmmPSF::getDihedralsFrom(const FourAtomFunctions &funcs, const Molecule 
                 const auto Phi = InternalPotential::symbols().dihedral().phi();
                 AmberDihedral amberdihedral(potential.function(), Phi);
 
-                for (const auto amberdih : amberdihedral.terms())
+                for (const auto &amberdih : amberdihedral.terms())
                 {
                     double kb = amberdih.k();
                     double per = amberdih.periodicity();
