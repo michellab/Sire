@@ -31,6 +31,7 @@ requirements:
     - gsl
     - libcblas
     - libnetcdf
+    - libopenblas
     - netcdf4
     - openmm
     - pyqt
