@@ -366,7 +366,7 @@ QString OpenMMFrEnergyST::toString() const
 void OpenMMFrEnergyST::initialise()
 {
 
-    bool Debug = true;
+    bool Debug = false;
     if (Debug)
     {
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -942,7 +942,7 @@ void OpenMMFrEnergyST::initialise()
             //                                                                "eps_avg = sqrt(lamftd*lamftd*eaend + (1-lamftd)*(1-lamftd)*eastart + lamftd*(1-lamftd)*emix);"
             //                                                                "sigma_avg = lamftd*saend + (1-lamftd)*sastart;"
             //                                                                "q_prod = lamftd*lamftd*qpend + (1-lamftd)*(1-lamftd)*qpstart + lamftd*(1-lamftd)*qmix;"
-                                                                            "lamFTD = max(lamftd,1-lamftd)");
+	    //                                                            "lamFTD = max(lamftd,1-lamftd)");
 
             custom_intra_14_fromdummy_todummy = new OpenMM::CustomBondForce("withinCutoff*(Hcs + Hls);"
                                                                             "withinCutoff=step(cutoffftd-r);"
