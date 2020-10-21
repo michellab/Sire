@@ -1684,13 +1684,24 @@ QDataStream &operator>>(QDataStream &ds, ResIdxAtomCoordMatcher &residxatomcoord
 }
 
 /** Constructor */
-ResIdxAtomCoordMatcher::ResIdxAtomCoordMatcher() : ConcreteProperty<ResIdxAtomCoordMatcher,AtomMatcher>()
+ResIdxAtomCoordMatcher::ResIdxAtomCoordMatcher() :
+    ConcreteProperty<ResIdxAtomCoordMatcher,AtomMatcher>(),
+    res_idx_offset(ResIdx(0))
+
+{}
+
+/** Constructor */
+ResIdxAtomCoordMatcher::ResIdxAtomCoordMatcher(ResIdx res_idx_offset) :
+    ConcreteProperty<ResIdxAtomCoordMatcher,AtomMatcher>(),
+    res_idx_offset(res_idx_offset)
 {}
 
 /** Copy constructor */
 ResIdxAtomCoordMatcher::ResIdxAtomCoordMatcher(const ResIdxAtomCoordMatcher &other)
                : ConcreteProperty<ResIdxAtomCoordMatcher,AtomMatcher>(other)
-{}
+{
+    this->res_idx_offset = other.res_idx_offset;
+}
 
 /** Destructor */
 ResIdxAtomCoordMatcher::~ResIdxAtomCoordMatcher()
@@ -1724,7 +1735,12 @@ QString ResIdxAtomCoordMatcher::toString() const
     AtomIdxs of the atoms in 'mol1' that are in 'mol0', indexed by the AtomIdx
     of the atom in 'mol0'.
 
-    This skips atoms in 'mol1' that are not in 'mol0'
+    This skips atoms in 'mol1' that are not in 'mol0'. It is possible that 'mol1'
+    has an offset for the residue indexing (this can happen when a single, multi
+    chain molecule from a PDB is parameterised to a multi-molecule no-chain system
+    with AmberTools) so there may be less atoms in 'mol1' than 'mol0'. The use
+    of 'res_idx_offset' allows us to match the section of 'mol0' that corresponds
+    to 'mol1'.
 */
 QHash<AtomIdx,AtomIdx> ResIdxAtomCoordMatcher::pvt_match(const MoleculeView &mol0,
                                                          const PropertyMap &map0,
@@ -1742,28 +1758,42 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomCoordMatcher::pvt_match(const MoleculeView &mol
         // Get the list of residue indices from the reference molecule.
         auto resIdxs = mol0.data().info().getResidues();
 
+        // Get the number of residues in mol1.
+        auto nRes = mol1.data().info().getResidues().count();
+
         // Vectors to store the centre of mass (CoM) of each molecule.
         Vector com0;
         Vector com1;
 
         // Work out the CoM of both molecules.
+        // (For mol0 only work out the CoM of the section that "corresponds" to mol1.)
 
         // mol0
-        for (int i=0; i<mol0.data().info().nAtoms(); ++i)
-            com0 += mol0.atom(AtomIdx(i)).property<Vector>(map0["coordinates"]);
-        com0 /= mol0.data().info().nAtoms();
+        int nAtoms0 = 0;
+        for (const auto &resIdx : resIdxs.mid(res_idx_offset.value(), res_idx_offset+nRes))
+        {
+            // Extract the atom indices that are part of this residue.
+            auto atoms0 = mol0.data().info().getAtomsIn(resIdx);
+            for (const auto &atom : atoms0)
+            {
+                com0 += mol0.atom(atom).property<Vector>(map0["coordinates"]);
+                nAtoms0++;
+            }
+        }
+        com0 /= nAtoms0;
 
         // mol1
         for (int i=0; i<mol1.data().info().nAtoms(); ++i)
             com1 += mol1.atom(AtomIdx(i)).property<Vector>(map1["coordinates"]);
         com1 /= mol1.data().info().nAtoms();
 
-        // Loop over all of the residues.
-        for (const auto &resIdx : resIdxs)
+        // Loop over all of the residues in mol0 that map to those in mol1.
+        for (const auto &resIdx : resIdxs.mid(res_idx_offset.value(), res_idx_offset+nRes))
         {
             // Get a list of atoms for the residue for both molecules.
+            // Note that those in mol1 are indexed from zero, hence the shift.
             auto atoms0 = mol0.data().info().getAtomsIn(resIdx);
-            auto atoms1 = mol1.data().info().getAtomsIn(resIdx);
+            auto atoms1 = mol1.data().info().getAtomsIn(ResIdx(resIdx.value() - res_idx_offset.value()));
 
             // A set of matched atom indices.
             QSet<int> matched;
@@ -1782,7 +1812,7 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomCoordMatcher::pvt_match(const MoleculeView &mol
 
                 // Get the coordinates of atom0.
                 auto coord0 = mol0.atom(atoms0[i])
-                                  .property<Vector>(map0["coordinates"]);
+                                    .property<Vector>(map0["coordinates"]);
 
                 // Shift by the CoM.
                 coord0 -= com0;
@@ -1792,7 +1822,7 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomCoordMatcher::pvt_match(const MoleculeView &mol
                 {
                     // Get the coordinates of atom1.
                     auto coord1 = mol1.atom(atoms1[j])
-                                      .property<Vector>(map0["coordinates"]);
+                                        .property<Vector>(map0["coordinates"]);
 
                     // Shift by the CoM.
                     coord1 -= com1;
