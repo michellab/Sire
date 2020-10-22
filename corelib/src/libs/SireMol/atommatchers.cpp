@@ -1770,7 +1770,7 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomCoordMatcher::pvt_match(const MoleculeView &mol
 
         // mol0
         int nAtoms0 = 0;
-        for (const auto &resIdx : resIdxs.mid(res_idx_offset.value(), res_idx_offset+nRes))
+        for (const auto &resIdx : resIdxs.mid(res_idx_offset.value(), nRes))
         {
             // Extract the atom indices that are part of this residue.
             auto atoms0 = mol0.data().info().getAtomsIn(resIdx);
@@ -1788,7 +1788,7 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomCoordMatcher::pvt_match(const MoleculeView &mol
         com1 /= mol1.data().info().nAtoms();
 
         // Loop over all of the residues in mol0 that map to those in mol1.
-        for (const auto &resIdx : resIdxs.mid(res_idx_offset.value(), res_idx_offset+nRes))
+        for (const auto &resIdx : resIdxs.mid(res_idx_offset.value(), nRes))
         {
             // Get a list of atoms for the residue for both molecules.
             // Note that those in mol1 are indexed from zero, hence the shift.
