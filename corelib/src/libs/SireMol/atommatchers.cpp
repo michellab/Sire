@@ -1812,7 +1812,7 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomCoordMatcher::pvt_match(const MoleculeView &mol
 
                 // Get the coordinates of atom0.
                 auto coord0 = mol0.atom(atoms0[i])
-                                    .property<Vector>(map0["coordinates"]);
+                                  .property<Vector>(map0["coordinates"]);
 
                 // Shift by the CoM.
                 coord0 -= com0;
@@ -1822,7 +1822,7 @@ QHash<AtomIdx,AtomIdx> ResIdxAtomCoordMatcher::pvt_match(const MoleculeView &mol
                 {
                     // Get the coordinates of atom1.
                     auto coord1 = mol1.atom(atoms1[j])
-                                        .property<Vector>(map0["coordinates"]);
+                                      .property<Vector>(map0["coordinates"]);
 
                     // Shift by the CoM.
                     coord1 -= com1;
