@@ -3257,28 +3257,28 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG SCREEN");
     lines += screening_lines;
 
+    //write out the "SOLVENT_POINTERS". Amber has a concept of solute(s) and solvent.
+    //with all solutes written first, and then all solvents. We have above calculated
+    //the number of solvents by finding the last "nsolvents" molecules that have the
+    //same number of atoms, with the same atom names in the same order. We are relying
+    //on being passed a pre-sorted system that has all solvent molecules at the end
+    lines.append("%FLAG SOLVENT_POINTERS");
+    QVector<qint64> solvent_pointers(3,0);
+
+    if (nsolvents > 0)
+    {
+        solvent_pointers[0] = last_solute_residue;            // last solute residue index
+        solvent_pointers[1] = params.count();                 // total number of molecules
+        solvent_pointers[2] = params.count() - nsolvents + 1; // first solvent molecule index
+    }
+
+    lines += writeIntData(solvent_pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
+
+    lines.append("%FLAG ATOMS_PER_MOLECULE");
+    lines += writeIntData(natoms_per_molecule, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
+
     if (has_periodic_box)
     {
-        //write out the "SOLVENT_POINTERS". Amber has a concept of solute(s) and solvent.
-        //with all solutes written first, and then all solvents. We have above calculated
-        //the number of solvents by finding the last "nsolvents" molecules that have the
-        //same number of atoms, with the same atom names in the same order. We are relying
-        //on being passed a pre-sorted system that has all solvent molecules at the end
-        lines.append("%FLAG SOLVENT_POINTERS");
-        QVector<qint64> solvent_pointers(3,0);
-
-        if (nsolvents > 0)
-        {
-            solvent_pointers[0] = last_solute_residue; // last solute residue index
-            solvent_pointers[1] = params.count();  // total number of molecules
-            solvent_pointers[2] = params.count() - nsolvents + 1; // first solvent molecule index
-        }
-
-        lines += writeIntData(solvent_pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
-
-        lines.append("%FLAG ATOMS_PER_MOLECULE");
-        lines += writeIntData(natoms_per_molecule, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
-
         //write out the box dimensions
         if (space.isA<PeriodicBox>())
         {
