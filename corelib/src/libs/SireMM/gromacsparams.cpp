@@ -1704,7 +1704,11 @@ QList<GromacsDihedral> GromacsDihedral::construct(const Expression &dihedral, co
 
         try
         {
-            amberdihedral = AmberDihedral(dihedral, phi);
+            // Cast as an AmberDihedral, but don't try to re-cast as a
+            // GromacsDihedral to avoid an infinite loop. The last parameter
+            // (set to false) allows us to check whether the dihedral expression
+            // is in the Gromacs Ryckaert-Bellemans form.
+            amberdihedral = AmberDihedral(dihedral, phi, false);
             is_amber = true;
         }
         catch(...)

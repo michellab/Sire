@@ -37,6 +37,7 @@
 #include "SireMol/atomidx.h"
 #include "SireMol/connectivity.h"
 
+#include "SireMM/gromacsparams.h"
 #include "SireMM/twoatomfunctions.h"
 #include "SireMM/threeatomfunctions.h"
 #include "SireMM/fouratomfunctions.h"
@@ -58,6 +59,8 @@
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
+#include "SireUnits/units.h"
+
 #include <QDebug>
 
 using namespace SireMol;
@@ -65,6 +68,8 @@ using namespace SireCAS;
 using namespace SireMM;
 using namespace SireBase;
 using namespace SireStream;
+using namespace SireUnits;
+using namespace SireUnits::Dimension;
 
 ///////////
 /////////// Implementation of AmberBond
@@ -613,8 +618,46 @@ AmberDihedral::AmberDihedral(AmberDihPart part)
     _parts = QVector<AmberDihPart>(1, part);
 }
 
-AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
+AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi, bool test_ryckaert_bellemans)
 {
+    // Copy the expression.
+    auto f_copy = f;
+
+    // First we check whether the expression can be cast as a Ryckaert-Bellemans
+    // GromacsDihedral. If so, then we convert the expression to a Fourier series
+    // representation so that it can be correctly parsed as an AmberDihedral.
+    if (test_ryckaert_bellemans)
+    {
+        try
+        {
+            GromacsDihedral gromacs_dihedral = GromacsDihedral(f_copy, phi);
+
+            // This is a Ryckaert-Bellemans dihedral.
+            if (gromacs_dihedral.functionType() == 3)
+            {
+                // Get the dihedral parameters.
+                auto params = gromacs_dihedral.parameters();
+
+                // Energy conversion factor.
+                auto nrg_factor = kJ_per_mol.to(kcal_per_mol);
+
+                // Work out the Fourier series terms.
+                auto F4 = -nrg_factor*(params[4] / 4.0);
+                auto F3 = -nrg_factor*(params[3] / 2.0);
+                auto F2 =  nrg_factor*(4.0*F4 - params[2]);
+                auto F1 =  nrg_factor*(3.0*F3 - 2.0*params[1]);
+
+                // Convert the expression to a Fourier series.
+                f_copy = Expression(0.5*(F1*(1 + Cos(phi))   +
+                                         F2*(1 - Cos(2*phi)) +
+                                         F3*(1 + Cos(3*phi)) +
+                                         F4*(1 - Cos(4*phi))));
+            }
+        }
+        catch(...)
+        {}
+    }
+
     // This expression should be a sum of cos terms, plus constant terms.
     // The cosine terms can be positive or negative depending on the sign
     // of the factor.
@@ -625,19 +668,19 @@ AmberDihedral::AmberDihedral(const Expression &f, const Symbol &phi)
     QStringList errors;
 
     // Loop over all terms in the series.
-    if (f.base().isA<Sum>())
+    if (f_copy.base().isA<Sum>())
     {
-        for (const auto &child : f.base().asA<Sum>().children())
+        for (const auto &child : f_copy.base().asA<Sum>().children())
         {
             if (child.isConstant())
             {
                 // Accumulate the constant factors.
-                constant += f.factor() * child.evaluate(Values());
+                constant += f_copy.factor() * child.evaluate(Values());
             }
             else if (child.base().isA<Cos>())
             {
                 // Compute the factor and extract the cosine term.
-                double factor = f.factor() * child.factor();
+                double factor = f_copy.factor() * child.factor();
                 auto cos_term = child.base().asA<Cos>();
 
                 // Now store a <factor, cos_term> pair, storing the
