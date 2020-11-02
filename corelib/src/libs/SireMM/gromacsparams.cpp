@@ -1697,61 +1697,59 @@ QList<GromacsDihedral> GromacsDihedral::construct(const Expression &dihedral, co
         }
     }
 
-    // Check whether this is an Amber-style cosine-based dihedral.
+    // Otherwise, we check whether this is an Amber-style cosine-based dihedral.
+    AmberDihedral amberdihedral;
+    bool is_amber = false;
+
+    try
     {
-        AmberDihedral amberdihedral;
-        bool is_amber = false;
+        // Cast as an AmberDihedral, but don't try to re-cast as a
+        // GromacsDihedral to avoid an infinite loop. The last parameter
+        // (set to false) allows us to check whether the dihedral expression
+        // is in the Gromacs Ryckaert-Bellemans form.
+        amberdihedral = AmberDihedral(dihedral, phi, false);
+        is_amber = true;
+    }
+    catch(...)
+    {}
 
-        try
+    if (is_amber)
+    {
+        // Yes, this is a valid amber dihedral. We need to create one
+        // GromacsDihedral for each AmberDihPart.
+        QList<GromacsDihedral> dihs;
+
+        bool multiterm = amberdihedral.terms().count() > 1;
+
+        for (const auto amberdih : amberdihedral.terms())
         {
-            // Cast as an AmberDihedral, but don't try to re-cast as a
-            // GromacsDihedral to avoid an infinite loop. The last parameter
-            // (set to false) allows us to check whether the dihedral expression
-            // is in the Gromacs Ryckaert-Bellemans form.
-            amberdihedral = AmberDihedral(dihedral, phi, false);
-            is_amber = true;
+            double kb = amberdih.k();
+            double per = amberdih.periodicity();
+            double phase = amberdih.phase();
+
+            // This is a cosine dihedral in from k [ 1 + cos(per phi - phase) ]
+            // (will one day have to work out how to say this is an improper rather
+            // than a dihedral...)
+            int func_type = 1;
+
+            // Multiple periodic dihedral.
+            if (multiterm)
+                func_type = 9;
+
+            const double kj_per_mol = kJ_per_mol.value();
+            const double deg = degree.value();
+
+            phase = phase / deg;
+            kb = kb / kj_per_mol;
+
+            dihs.append( GromacsDihedral(func_type, phase, kb, per) );
         }
-        catch(...)
-        {}
 
-        if (is_amber)
-        {
-            //yes, this is a valid amber dihedral. We need to create one
-            //GromacsDihedral for each AmberDihPart
-            QList<GromacsDihedral> dihs;
-
-            bool multiterm = amberdihedral.terms().count() > 1;
-
-            for (const auto amberdih : amberdihedral.terms())
-            {
-                double kb = amberdih.k();
-                double per = amberdih.periodicity();
-                double phase = amberdih.phase();
-
-                //this is a cosine dihedral in from k [ 1 + cos(per phi - phase) ]
-                //(will one day have to work out how to say this is an improper rather
-                // than a dihedral...)
-                int func_type = 1;
-
-                if (multiterm)
-                    func_type = 9;  // multiple periodic dihedral
-
-                const double kj_per_mol = kJ_per_mol.value();
-                const double deg = degree.value();
-
-                phase = phase / deg;
-                kb = kb / kj_per_mol;
-                //per = per;
-
-                dihs.append( GromacsDihedral(func_type, phase, kb, per) );
-            }
-
-            return dihs;
-        }
+        return dihs;
     }
 
-    // a LOT of introspection will be needed to extract the function type
-    // and parameters from a generic expression...
+    // If we get here then this isn't a recognised AmberDihedral form. A LOT of introspection
+    // will be needed to extract the function type and parameters from a generic expression...
     throw SireError::incomplete_code( QObject::tr("Sire cannot yet interpret dihedrals "
        "that are not in a standard cosine format! (%1)").arg(dihedral.toString()), CODELOC );
 }
