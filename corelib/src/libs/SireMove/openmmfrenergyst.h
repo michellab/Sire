@@ -106,6 +106,9 @@ namespace SireMove {
         IntegratorWorkspacePtr createWorkspace(const PropertyMap &map = PropertyMap()) const;
         IntegratorWorkspacePtr createWorkspace(const MoleculeGroup &molgroup, const PropertyMap &map = PropertyMap()) const;
 
+	QString getCombiningRules(void);
+	void setCombiningRules(QString);
+	
         QString getCutoffType(void);
         void setCutoffType(QString);
 
@@ -234,6 +237,7 @@ namespace SireMove {
         bool isSystemInitialised;
         bool isContextInitialised;
 
+	QString combiningRules;
         QString CutoffType;
         SireUnits::Dimension::Length cutoff_distance;
         double field_dielectric;
