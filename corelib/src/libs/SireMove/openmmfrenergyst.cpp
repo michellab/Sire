@@ -3128,7 +3128,6 @@ void OpenMMFrEnergyST::destroyContext()
 
 MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
 {
-    cout << "Energy function, does this ever get called?" << endl;
     IntegratorWorkspacePtr ws = this->createWorkspace(molgroup);
     ws.edit().setSystem(system);
 
