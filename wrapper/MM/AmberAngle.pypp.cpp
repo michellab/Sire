@@ -29,6 +29,8 @@ namespace bp = boost::python;
 
 #include "SireMM/fouratomfunctions.h"
 
+#include "SireMM/gromacsparams.h"
+
 #include "SireMM/threeatomfunctions.h"
 
 #include "SireMM/twoatomfunctions.h"
@@ -52,6 +54,8 @@ namespace bp = boost::python;
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
+
+#include "SireUnits/units.h"
 
 #include "amberparams.h"
 

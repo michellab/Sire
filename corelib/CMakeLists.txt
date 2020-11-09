@@ -6,8 +6,8 @@
 #
 ################################
 
-set (S_VERSION_MAJOR "2019")
-set (S_VERSION_MINOR "3")
+set (S_VERSION_MAJOR "2020")
+set (S_VERSION_MINOR "1")
 set (S_VERSION_PATCH "0")
 
 set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
@@ -556,6 +556,11 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
       endif()
     endif()
 
+    # support for ppc64le architecture
+    if ( CMAKE_HOST_SYSTEM_PROCESSOR STREQUAL "ppc64le" )
+      set( SIRE_PLATFORM_FLAGS "${SIRE_PLATFORM_FLAGS} -mcpu=power9 -mtune=power9 -mpowerpc64 -mvsx" )
+    endif()
+
     # remove warnings about strict aliasing
     set( SIRE_PLATFORM_FLAGS "${SIRE_PLATFORM_FLAGS} -Wno-strict-aliasing" )
     set ( SIRE_VISIBILITY_FLAGS "-DSIRE_VISIBILITY_AVAILABLE -fvisibility=hidden -fvisibility-inlines-hidden" )
@@ -926,13 +931,16 @@ if (NOT ${SIRE_FOUND_BLASLAPACK})
 endif()
 
 if (NOT ${SIRE_FOUND_CPUID})
-  find_library( CPUID_LIBRARY "cpuid" PATHS ${CPUID_LIBRARY_DIR} )
-  include_directories (${CPUID_INCLUDE_DIR} )
-  set(SIRE_FOUND_CPUID TRUE)
-  if (HAVE_STDINT_H)
-    set( CPUID_DEFINITIONS "-DHAVE_STDINT_H" )
+  if (NOT ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "ppc64le")
+    find_library( CPUID_LIBRARY "cpuid" PATHS ${CPUID_LIBRARY_DIR} )
+    include_directories (${CPUID_INCLUDE_DIR} )
+    set(SIRE_FOUND_CPUID TRUE)
+    if (HAVE_STDINT_H)
+      set( CPUID_DEFINITIONS "-DHAVE_STDINT_H" )
+    endif()
+  else()
+    message( STATUS "Cannot find libcpuid. Will disable CPU detection code." )
   endif()
-  #message( STATUS "Cannot find libcpuid. Will disable CPU detection code." )
 endif()
 
 if (NOT ${SIRE_FOUND_TBB})
@@ -1009,8 +1017,10 @@ set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${SIRE_CXX_FLAGS_DEBUG}" )
 set( CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL} ${SIRE_C_FLAGS_SMALL}" )
 set( CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} ${SIRE_CXX_FLAGS_SMALL}" )
 
-if ( CMAKE_BUILD_TYPE )
-    message( STATUS "Compiling Sire using ${CMAKE_BUILD_TYPE}" )
+if ( CMAKE_BUILD_TYPE STREQUAL "Debug" )
+    message( STATUS "Compiling Sire using a DEBUG build" )
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS_DEBUG}" )
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG}" )
 else()
     message( STATUS "Compiling Sire using a default (RELEASE) build" )
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS_RELEASE}" )

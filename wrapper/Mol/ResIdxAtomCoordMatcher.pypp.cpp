@@ -55,6 +55,7 @@ void register_ResIdxAtomCoordMatcher_class(){
         typedef bp::class_< SireMol::ResIdxAtomCoordMatcher, bp::bases< SireMol::AtomMatcher, SireBase::Property > > ResIdxAtomCoordMatcher_exposer_t;
         ResIdxAtomCoordMatcher_exposer_t ResIdxAtomCoordMatcher_exposer = ResIdxAtomCoordMatcher_exposer_t( "ResIdxAtomCoordMatcher", "Match atoms by coordinates within each residue.\n\nAuthor: Lester Hedges\n", bp::init< >("Constructor") );
         bp::scope ResIdxAtomCoordMatcher_scope( ResIdxAtomCoordMatcher_exposer );
+        ResIdxAtomCoordMatcher_exposer.def( bp::init< SireMol::ResIdx >(( bp::arg("res_idx_offset") ), "Constructor") );
         ResIdxAtomCoordMatcher_exposer.def( bp::init< SireMol::ResIdxAtomCoordMatcher const & >(( bp::arg("arg0") ), "Copy constructor") );
         ResIdxAtomCoordMatcher_exposer.def( bp::self != bp::self );
         { //::SireMol::ResIdxAtomCoordMatcher::operator=

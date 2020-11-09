@@ -30,6 +30,7 @@
 #define SIREMOL_ATOMMATCHERS_H
 
 #include "atommatcher.h"
+#include "residx.h"
 
 SIRE_BEGIN_HEADER
 
@@ -501,6 +502,7 @@ friend SIREMOL_EXPORT QDataStream& ::operator>>(QDataStream&, ResIdxAtomCoordMat
 
 public:
     ResIdxAtomCoordMatcher();
+    ResIdxAtomCoordMatcher(ResIdx res_idx_offset);
     ResIdxAtomCoordMatcher(const ResIdxAtomCoordMatcher&);
 
     ~ResIdxAtomCoordMatcher();
@@ -524,6 +526,8 @@ protected:
                                      const PropertyMap &map0,
                                      const MoleculeView &molview1,
                                      const PropertyMap &map1) const;
+
+    ResIdx res_idx_offset;
 };
 
 }

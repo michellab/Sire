@@ -1126,32 +1126,6 @@ void register_free_functions(){
     
     }
 
-    { //::cbrt
-    
-        typedef float ( *cbrt_function_type )( float );
-        cbrt_function_type cbrt_function_value( &::cbrt );
-        
-        bp::def( 
-            "cbrt"
-            , cbrt_function_value
-            , ( bp::arg("__lcpp_x") )
-            , "" );
-    
-    }
-
-    { //::cbrt
-    
-        typedef long double ( *cbrt_function_type )( long double );
-        cbrt_function_type cbrt_function_value( &::cbrt );
-        
-        bp::def( 
-            "cbrt"
-            , cbrt_function_value
-            , ( bp::arg("__lcpp_x") )
-            , "" );
-    
-    }
-
     { //::SireCAS::cbrt
     
         typedef ::SireCAS::Expression ( *cbrt_function_type )( ::SireCAS::Expression const & );
@@ -1174,32 +1148,6 @@ void register_free_functions(){
             "pow"
             , pow_function_value
             , ( bp::arg("arg0"), bp::arg("arg1") )
-            , "" );
-    
-    }
-
-    { //::pow
-    
-        typedef float ( *pow_function_type )( float,float );
-        pow_function_type pow_function_value( &::pow );
-        
-        bp::def( 
-            "pow"
-            , pow_function_value
-            , ( bp::arg("__lcpp_x"), bp::arg("__lcpp_y") )
-            , "" );
-    
-    }
-
-    { //::pow
-    
-        typedef long double ( *pow_function_type )( long double,long double );
-        pow_function_type pow_function_value( &::pow );
-        
-        bp::def( 
-            "pow"
-            , pow_function_value
-            , ( bp::arg("__lcpp_x"), bp::arg("__lcpp_y") )
             , "" );
     
     }
@@ -1360,31 +1308,6 @@ void register_free_functions(){
     
     }
 
-    { //::sqrt
-    
-        typedef float ( *sqrt_function_type )( float );
-        sqrt_function_type sqrt_function_value( &::sqrt );
-        
-        bp::def( 
-            "sqrt"
-            , sqrt_function_value
-            , ( bp::arg("__lcpp_x") )
-            , "" );
-    
-    }
-
-    { //::sqrt
-    
-        typedef long double ( *sqrt_function_type )( long double );
-        sqrt_function_type sqrt_function_value( &::sqrt );
-        
-        bp::def( 
-            "sqrt"
-            , sqrt_function_value
-            , ( bp::arg("__lcpp_x") )
-            , "" );
-    
-    }
 
     { //::SireCAS::sqrt
     

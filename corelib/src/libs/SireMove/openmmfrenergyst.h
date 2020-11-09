@@ -205,7 +205,7 @@ namespace SireMove {
                 SireUnits::Dimension::Time timestep);
         void destroyContext();
         void updateBoxDimensions(OpenMM::State &state_openmm, 
-        QVector< Vector> &buffered_dimensions, bool Debug, 
+        QVector<QVector<Vector>> &buffered_dimensions, bool Debug, 
         AtomicVelocityWorkspace &ws);
         
         double getPotentialEnergyAtLambda(double lambda);

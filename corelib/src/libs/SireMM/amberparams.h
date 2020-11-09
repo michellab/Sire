@@ -273,7 +273,8 @@ public:
 
     AmberDihedral(AmberDihPart part);
 
-    AmberDihedral(const SireCAS::Expression &f, const SireCAS::Symbol &PHI);
+    AmberDihedral(const SireCAS::Expression &f, const SireCAS::Symbol &PHI,
+                  bool test_ryckaert_bellemans=true);
 
     AmberDihedral(const AmberDihedral &other);
 

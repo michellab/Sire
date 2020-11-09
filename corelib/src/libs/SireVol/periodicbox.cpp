@@ -994,7 +994,7 @@ double PeriodicBox::minimumDistance(const AABox &box0, const AABox &box1) const
 
     while (delta.y() > halflength.y())
     {
-        delta.setY( delta.y() - boxlength.z() );
+        delta.setY( delta.y() - boxlength.y() );
     }
 
     while (delta.z() > halflength.z())

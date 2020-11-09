@@ -1013,15 +1013,9 @@ MultiFloat MultiFloat::logicalAnd(const MultiFloat &other) const
     
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *ret_char_v = reinterpret_cast<unsigned char*>(&(ret.v.a[i]));
-            const unsigned char *char_v = reinterpret_cast<const unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(float); ++j)
-            {
-                ret_char_v[j] = char_v[j] & other_char_v[j];
-            }
+            reinterpret_cast<unsigned int*>(ret.v.a)[i] =
+                reinterpret_cast<const unsigned int*>(other.v.a)[i] &
+                reinterpret_cast<const unsigned int*>(v.a)[i];
         }
     
         return ret;
@@ -1050,15 +1044,9 @@ MultiFloat MultiFloat::logicalAndNot(const MultiFloat &other) const
     
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *ret_char_v = reinterpret_cast<unsigned char*>(&(ret.v.a[i]));
-            const unsigned char *char_v = reinterpret_cast<const unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(float); ++j)
-            {
-                ret_char_v[j] = !(char_v[j] & other_char_v[j]);
-            }
+            reinterpret_cast<unsigned int*>(ret.v.a)[i] =
+                (~reinterpret_cast<const unsigned int*>(other.v.a)[i]) &
+                reinterpret_cast<const unsigned int*>(v.a)[i];
         }
     
         return ret;
@@ -1084,15 +1072,9 @@ MultiFloat MultiFloat::logicalOr(const MultiFloat &other) const
     
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *ret_char_v = reinterpret_cast<unsigned char*>(&(ret.v.a[i]));
-            const unsigned char *char_v = reinterpret_cast<const unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(float); ++j)
-            {
-                ret_char_v[j] = char_v[j] | other_char_v[j];
-            }
+            reinterpret_cast<unsigned int*>(ret.v.a)[i] =
+                reinterpret_cast<const unsigned int*>(other.v.a)[i] |
+                reinterpret_cast<const unsigned int*>(v.a)[i];
         }
     
         return ret;
@@ -1118,15 +1100,9 @@ MultiFloat MultiFloat::logicalXor(const MultiFloat &other) const
     
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *ret_char_v = reinterpret_cast<unsigned char*>(&(ret.v.a[i]));
-            const unsigned char *char_v = reinterpret_cast<const unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(float); ++j)
-            {
-                ret_char_v[j] = char_v[j] ^ other_char_v[j];
-            }
+            reinterpret_cast<unsigned int*>(ret.v.a)[i] =
+                reinterpret_cast<const unsigned int*>(other.v.a)[i] ^
+                reinterpret_cast<const unsigned int*>(v.a)[i];
         }
     
         return ret;
@@ -1143,13 +1119,8 @@ MultiFloat MultiFloat::logicalNot() const
 
     for (int i=0; i<MULTIFLOAT_SIZE; ++i)
     {
-        unsigned char *ret_char_v = reinterpret_cast<unsigned char*>(&(ret.v.a[i]));
-        const unsigned char *char_v = reinterpret_cast<const unsigned char*>(&(v.a[i]));
-
-        for (unsigned int j=0; j<sizeof(float); ++j)
-        {
-            ret_char_v[j] = !char_v[j];
-        }
+        reinterpret_cast<unsigned int*>(ret.v.a)[i] =
+            ~reinterpret_cast<const unsigned int*>(v.a)[i];
     }
 
     return ret;
@@ -1199,14 +1170,8 @@ MultiFloat& MultiFloat::operator&=(const MultiFloat &other)
     #else
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *char_v = reinterpret_cast<unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(float); ++j)
-            {
-                char_v[j] &= other_char_v[j];
-            }
+            reinterpret_cast<unsigned int*>(v.a)[i] &=
+                reinterpret_cast<const unsigned int*>(other.v.a)[i];
         }
     #endif
     #endif
@@ -1230,14 +1195,8 @@ MultiFloat& MultiFloat::operator|=(const MultiFloat &other)
     #else
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *char_v = reinterpret_cast<unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(float); ++j)
-            {
-                char_v[j] |= other_char_v[j];
-            }
+            reinterpret_cast<unsigned int*>(v.a)[i] |=
+                reinterpret_cast<const unsigned int*>(other.v.a)[i];
         }
     #endif
     #endif
@@ -1261,14 +1220,8 @@ MultiFloat& MultiFloat::operator^=(const MultiFloat &other)
     #else
         for (int i=0; i<MULTIFLOAT_SIZE; ++i)
         {
-            unsigned char *char_v = reinterpret_cast<unsigned char*>(&(v.a[i]));
-            const unsigned char *other_char_v
-                        = reinterpret_cast<const unsigned char*>(&(other.v.a[i]));
-
-            for (unsigned int j=0; j<sizeof(float); ++j)
-            {
-                char_v[j] ^= other_char_v[j];
-            }
+            reinterpret_cast<unsigned int*>(v.a)[i] ^=
+                reinterpret_cast<const unsigned int*>(other.v.a)[i];
         }
     #endif
     #endif

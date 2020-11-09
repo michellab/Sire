@@ -42,6 +42,7 @@
 #include "SireUnits/units.h"
 
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include "SireBase/parallel.h"
 #include "SireBase/timeproperty.h"
@@ -520,7 +521,7 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
         lines.prepend(system.name().value());
     }
 
-    //finally add on the box dimensions if we have a periodic box
+    //finally add on the box dimensions
     if (space.read().isA<PeriodicBox>())
     {
         Vector dims = space.read().asA<PeriodicBox>().dimensions();
@@ -528,6 +529,21 @@ Gro87::Gro87(const SireSystem::System &system, const PropertyMap &map)
         lines += QString(" %1 %2 %3").arg(0.1 * dims.x(), 9, 'f', 5)
                                      .arg(0.1 * dims.y(), 9, 'f', 5)
                                      .arg(0.1 * dims.z(), 9, 'f', 5);
+    }
+    else if (space.read().isA<TriclinicBox>())
+    {
+        Matrix cell = space.read().asA<TriclinicBox>().cellMatrix();
+
+        lines += QString(" %1 %2 %3 %4 %5 %6 %7 %8 %9")
+                    .arg(0.1 * cell.column0().x(), 9, 'f', 5)  // XX
+                    .arg(0.1 * cell.column1().y(), 9, 'f', 5)  // YY
+                    .arg(0.1 * cell.column2().z(), 9, 'f', 5)  // ZZ
+                    .arg(0.1 * cell.column0().y(), 9, 'f', 5)  // XY
+                    .arg(0.1 * cell.column0().z(), 9, 'f', 5)  // XZ
+                    .arg(0.1 * cell.column1().x(), 9, 'f', 5)  // YX
+                    .arg(0.1 * cell.column1().z(), 9, 'f', 5)  // YZ
+                    .arg(0.1 * cell.column2().x(), 9, 'f', 5)  // ZX
+                    .arg(0.1 * cell.column2().y(), 9, 'f', 5); // ZY
     }
     else
     {
@@ -1678,7 +1694,7 @@ void Gro87::finaliseSystem(System &system, const PropertyMap &map) const
     }
     else if ((not box_v1.isEmpty()) and space_property.hasSource())
     {
-        //need to make sure that this is cubic, i.e. have (x,0,0), (0,y,0), (0,0,z)
+        // Check whether the box is cubic, i.e (x,0,0), (0,y,0), (0,0,z)
         double x = box_v1.at(0).x();
         double y = box_v2.at(0).y();
         double z = box_v3.at(0).z();
@@ -1687,14 +1703,12 @@ void Gro87::finaliseSystem(System &system, const PropertyMap &map) const
             box_v2.at(0).manhattanLength() != y or
             box_v3.at(0).manhattanLength() != z)
         {
-            throw SireIO::parse_error( QObject::tr(
-                    "Sire cannot currently support a non-cubic periodic box! %1 x %2 x %3")
-                        .arg(box_v1.at(0).toString())
-                        .arg(box_v2.at(0).toString())
-                        .arg(box_v3.at(0).toString()), CODELOC );
+            // This is a triclinic space.
+            system.setProperty( space_property.source(), SireVol::TriclinicBox(box_v1.at(0),
+                                                                               box_v2.at(0),
+                                                                               box_v3.at(0)) );
         }
-
-        if (x + y + z > 0)
+        else if (x + y + z > 0)
         {
             system.setProperty( space_property.source(), SireVol::PeriodicBox(Vector(x,y,z)) );
         }

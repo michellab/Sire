@@ -8,8 +8,8 @@
 ################################
 
 # project version
-set (SIRE_VERSION_MAJOR "2019")
-set (SIRE_VERSION_MINOR "3")
+set (SIRE_VERSION_MAJOR "2020")
+set (SIRE_VERSION_MINOR "1")
 set (SIRE_VERSION_PATCH "0")
 
 set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
@@ -256,6 +256,10 @@ if (SIRE_GSL_INCLUDE_PATH)
   include_directories (${SIRE_GSL_INCLUDE_PATH})
 endif()
 if (DEFINED SIRE_APP)
+  # For some reason, when using the conda GNU compilers,  CMake stripped
+  # "${SIRE_APP}/include" from the directories searched for header files
+  # If this happens, uncomment the following line
+  # unset(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES)
   include_directories( "${SIRE_APP}/include" "${SIRE_APP}/Library/include" )
 endif()
 

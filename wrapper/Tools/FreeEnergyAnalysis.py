@@ -21,7 +21,6 @@ except ImportError:
     raise ImportError('Numpy is not installed. Please install numpy in order to use MBAR for your free energy analysis.')
 from pymbar import MBAR
 from pymbar import timeseries
-import matplotlib.pylab as plt
 import warnings
 
 

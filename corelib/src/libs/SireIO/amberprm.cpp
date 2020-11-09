@@ -73,6 +73,7 @@
 
 #include "SireVol/cartesian.h"
 #include "SireVol/periodicbox.h"
+#include "SireVol/triclinicbox.h"
 
 #include "SireMaths/maths.h"
 #include "SireUnits/units.h"
@@ -1933,7 +1934,7 @@ QStringList toLines(const QVector<AmberParams> &params,
     const int total_natoms = pointers[0];
 
     //now see if there is a periodic box
-    const bool has_periodic_box = space.isA<PeriodicBox>();
+    const bool has_periodic_box = space.isPeriodic();
 
     if (has_periodic_box)
     {
@@ -3256,6 +3257,9 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG SCREEN");
     lines += screening_lines;
 
+    lines.append("%FLAG ATOMS_PER_MOLECULE");
+    lines += writeIntData(natoms_per_molecule, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
+
     if (has_periodic_box)
     {
         //write out the "SOLVENT_POINTERS". Amber has a concept of solute(s) and solvent.
@@ -3268,27 +3272,48 @@ QStringList toLines(const QVector<AmberParams> &params,
 
         if (nsolvents > 0)
         {
-            solvent_pointers[0] = last_solute_residue; // last solute residue index
-            solvent_pointers[1] = params.count();  // total number of molecules
+            solvent_pointers[0] = last_solute_residue;            // last solute residue index
+            solvent_pointers[1] = params.count();                 // total number of molecules
             solvent_pointers[2] = params.count() - nsolvents + 1; // first solvent molecule index
         }
 
         lines += writeIntData(solvent_pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
 
-        lines.append("%FLAG ATOMS_PER_MOLECULE");
-        lines += writeIntData(natoms_per_molecule, AmberFormat( AmberPrm::INTEGER, 10, 8 ));
 
         //write out the box dimensions
-        const auto dims = space.asA<PeriodicBox>().dimensions();
-        QVector<double> box_dims(4);
+        if (space.isA<PeriodicBox>())
+        {
+            const auto dims = space.asA<PeriodicBox>().dimensions();
+            QVector<double> box_dims(4);
 
-        box_dims[0] = 90.0;
-        box_dims[1] = dims.x();
-        box_dims[2] = dims.y();
-        box_dims[3] = dims.z();
+            box_dims[0] = 90.0;
+            box_dims[1] = dims.x();
+            box_dims[2] = dims.y();
+            box_dims[3] = dims.z();
 
-        lines.append("%FLAG BOX_DIMENSIONS");
-        lines += writeFloatData(box_dims, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ));
+            lines.append("%FLAG BOX_DIMENSIONS");
+            lines += writeFloatData(box_dims, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ));
+        }
+        else if (space.isA<TriclinicBox>())
+        {
+            const auto v0 = space.asA<TriclinicBox>().vector0();
+            const auto v1 = space.asA<TriclinicBox>().vector1();
+            const auto v2 = space.asA<TriclinicBox>().vector2();
+
+            QVector<double> box_dims(4);
+
+            // Radian to degree conversion factor.
+            double rad2deg = 180 / M_PI;
+
+            QVector<double> boxdims(6);
+            box_dims[0] = Vector::angle(v0, v2).value()*rad2deg;
+            box_dims[1] = v0.magnitude();
+            box_dims[2] = v1.magnitude();
+            box_dims[3] = v2.magnitude();
+
+            lines.append("%FLAG BOX_DIMENSIONS");
+            lines += writeFloatData(box_dims, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ));
+        }
     }
 
     //we don't currently support IFCAP > 0, IFPERT > 0 or IFPOL > 0
