@@ -49,6 +49,12 @@ import Sire.Stream
 import time
 import numpy as np
 
+
+MIN_MASSES = {'C': 5.96, 'N': 7.96}
+HMR_MIN = 1.0
+HMR_MAX = 4.0
+
+
 ####################################################################################################
 #
 #   Config file parameters
@@ -148,7 +154,7 @@ barostat_frequency = Parameter("barostat frequency", 25,
 lj_dispersion = Parameter("lj dispersion", False, """Whether or not to calculate and include the LJ dispersion term.""")
 
 cmm_removal = Parameter("center of mass frequency", 10,
-                        "Frequency of which the system center of mass motion is removed.""")
+                        """Frequency of which the system center of mass motion is removed.""")
 
 center_solute = Parameter("center solute", False,
                           """Whether or not to centre the centre of geometry of the solute in the box.""")
@@ -179,10 +185,14 @@ distance_restraints_dict = Parameter("distance restraints dictionary", {},
                                      D the flat bottom radius. WARNING: PBC distance checks not implemented, avoid
                                      restraining pair of atoms that may diffuse out of the box.""")
 
-hydrogen_mass_repartitioning_factor = Parameter("hydrogen mass repartitioning factor",None,
-                                     """If not None and is a number, all hydrogen atoms in the molecule will
-                                        have their mass increased by the input factor. The atomic mass of the heavy atom
-                                        bonded to the hydrogen is decreased to keep the mass constant.""")
+hydrogen_mass_repartitioning_factor = \
+    Parameter('hydrogen mass repartitioning factor', 1.0,
+              f'If larger than {HMR_MIN} (maximum is {HMR_MAX}), all hydrogen '
+              'atoms in the molecule will have their mass increased by this '
+              'factor. The atomic mass of the heavy atom bonded to the '
+              'hydrogen is decreased to keep the total mass constant '
+              '(except when this would lead to a heavy atom to be lighter '
+              'than a minimum mass).')
 
 ## Free energy specific keywords
 morphfile = Parameter("morphfile", "MORPH.pert",
@@ -695,6 +705,11 @@ def repartitionMasses(system, hmassfactor=4.0):
 increase from the heavy atom the hydrogen is bonded to.
     """
 
+    if not (HMR_MIN <= hmassfactor <= HMR_MAX):
+        print(f'The HMR factor must be between {HMR_MIN} and {HMR_MAX} '
+              f'and not {hmassfactor}')
+        sys.exit(-1)
+
     print ("Applying Hydrogen Mass repartition to input using a factor of %s " % hmassfactor)
 
     molecules = system[MGName("all")].molecules()
@@ -778,9 +793,36 @@ increase from the heavy atom the hydrogen is bonded to.
         # Now that have worked out mass changes per molecule, update molecule
         for x in range(0,nats):
             at = atoms[x]
+            element_symbol = at.property('element').symbol()
             atidx = at.index()
             atmass = at.property("mass")
             newmass = atmass + atom_masses[atidx.value()]
+
+            # Make sure C and N have a minimum mass in CH3 and NH3
+            #
+            # NOTE: this will change the total mass but dG is independent of
+            #       mass
+            if element_symbol in MIN_MASSES:
+                minmass = MIN_MASSES[element_symbol]
+
+                if newmass.value() < minmass:
+                    newmass = minmass * g_per_mol
+
+                    if verbose:
+                        print(f'Modified mass (total mass changed) for '
+                              f'{element_symbol}-{atidx.value()}: old mass = '
+                              f'{atmass.value():.3f}, '
+                              f'new mass = {newmass.value():.3f}')
+
+            # Sanity check. Note this is likely to occur if hmassfactor > 4
+            if (newmass.value() < 0.0):
+                print ("WARNING! The mass of atom %s is less than zero after "
+                       "hydrogen mass repartitioning. This should not happen! "
+                       "Decrease hydrogen mass repartitioning factor in your "
+                       "cfg file and try again." % atidx)
+                sys.exit(-1)
+
+
             # Sanity check. Note this is likely to occur if hmassfactor > 4
             if (newmass.value() < 0.0):
                 print ("""WARNING ! The mass of atom %s is less than zero after hydrogen mass repartitioning.
@@ -1404,7 +1446,7 @@ def run():
                 stream.close()
             system = setupDistanceRestraints(system, restraints=restraints)
 
-        if hydrogen_mass_repartitioning_factor.val is not None:
+        if hydrogen_mass_repartitioning_factor.val > 1.0:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
 
         # Note that this just set the mass to zero which freezes residues in OpenMM but Sire doesn't known that
@@ -1562,7 +1604,7 @@ def runFreeNrg():
 
             #import pdb; pdb.set_trace()
 
-        if hydrogen_mass_repartitioning_factor.val is not None:
+        if hydrogen_mass_repartitioning_factor.val > 1.0:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
 
         # Note that this just set the mass to zero which freezes residues in OpenMM but Sire doesn't known that
@@ -1730,8 +1772,5 @@ def runFreeNrg():
         # Necessary to write correct restart
         system.mustNowRecalculateFromScratch()
 
- #   print("Backing up previous restart")
- #   cmd = "cp %s %s.previous" % (restart_file.val, restart_file.val)
- #   os.system(cmd)
- #   print ("Saving new restart")
- #   Sire.Stream.save([system, moves], restart_file.val)
+if __name__ == '__main__':
+    runFreeNrg()

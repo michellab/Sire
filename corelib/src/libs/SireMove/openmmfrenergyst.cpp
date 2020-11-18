@@ -1752,9 +1752,16 @@ void OpenMMFrEnergyST::initialise()
         QList< ImproperID > improper_pert_list;
         QList< ImproperID > improper_pert_swap_list;
 
-        double HMASS = 1.10;/* g per mol-1*/
-        //double HEAVYH=12.0;/* g per mol-1*/
-        double SMALL = 0.0001;
+	/* "Light" atoms are defined to have a mass of HMASS or smaller.  This
+	   ensures that hydrogens in the HMR scheme will be constraint.  The
+	   specific value of 5.0 assumes that the HMR factor does not exceed
+	   4.0 and the heavy atom in CH3 or NH3 does have a minimum mass (see
+	   OpenMMMD.py) larger than HMASS.  In this way hydrogens and heavier
+	   atoms (assuming no elements between H and C) should be cleanly
+	   separated by mass. */
+        double HMASS = 5.0;     // g/mol
+
+	double SMALL = 0.0001;
 
         if (solute.contains(molecule))
         {
