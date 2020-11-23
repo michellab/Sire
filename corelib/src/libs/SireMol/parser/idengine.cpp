@@ -2106,6 +2106,255 @@ SelectEngine::ObjType IDDistanceEngine::objectType() const
 }
 
 ////////
+//////// Implementation of the IDDistanceVectorEngine
+////////
+
+IDDistanceVectorEngine::IDDistanceVectorEngine()
+{}
+
+SelectEnginePtr IDDistanceVectorEngine::construct(IDObject obj, IDCoordType typ,
+                                                  SireUnits::Dimension::Length distance,
+                                                  VectorValue position)
+{
+    IDDistanceVectorEngine *ptr = new IDDistanceVectorEngine();
+    auto p = makePtr(ptr);
+
+    ptr->position = position;
+    ptr->obj = obj;
+    ptr->typ = typ;
+    ptr->distance = distance.value();
+
+    return p;
+}
+
+SelectEnginePtr IDDistanceVectorEngine::construct(IDObject obj,
+                                                  SireUnits::Dimension::Length distance,
+                                                  VectorValue position)
+{
+    return IDDistanceVectorEngine::construct(obj, ID_COORD_CLOSEST, distance, position);
+}
+
+IDDistanceVectorEngine::~IDDistanceVectorEngine()
+{}
+
+SelectEnginePtr IDDistanceVectorEngine::simplify()
+{
+    return selfptr.lock();
+}
+
+SelectResult IDDistanceVectorEngine::select(const SelectResult &mols, const PropertyMap &map) const
+{
+    // Extract the x,y,z components of the position (implicitly converted to Angstrom).
+    double x = position.x.value * position.x.unit;
+    double y = position.z.value * position.y.unit;
+    double z = position.z.value * position.z.unit;
+
+    // Create a reference point using the vector components.
+    Vector ref_point(x, y, z);
+
+    const auto coords_property = map["coordinates"];
+
+    bool uses_parallel = true;
+
+    if (map["parallel"].hasValue())
+    {
+        uses_parallel = map["parallel"].value().asA<BooleanProperty>().value();
+    }
+
+    SireVol::SpacePtr space = SireVol::Cartesian();
+
+    if (map["space"].hasValue())
+    {
+        space = map["space"].value().asA<SireVol::Space>();
+    }
+
+    //function that gets the reference coordinates of the passed view
+    auto getCoords = [&](const AtomSelection &selection, const MoleculeInfoData &molinfo,
+                         const AtomCoords &coords)
+    {
+        Vector minval(0), maxval(0), center(0);
+
+        auto atoms = selection.selectedAtoms();
+
+        if (atoms.isEmpty())
+            return Vector(0);
+
+        minval = coords[ molinfo.cgAtomIdx(atoms.at(0)) ];
+        maxval = minval;
+        center = minval;
+
+        //now find the maximum and minimum of all other coordinates
+        for (int i=1; i<atoms.count(); ++i)
+        {
+            const auto c = coords[ molinfo.cgAtomIdx(atoms.at(i)) ];
+            minval.setMin(c);
+            maxval.setMax(c);
+        }
+
+        center = minval + 0.5*(maxval-minval);
+
+        switch (typ)
+        {
+        case ID_COORD_MAX:
+            return maxval;
+        case ID_COORD_MIN:
+            return minval;
+        case ID_COORD_MAX_X:
+            center.setX(maxval.x());
+            return center;
+        case ID_COORD_MAX_Y:
+            center.setY(maxval.y());
+            return center;
+        case ID_COORD_MAX_Z:
+            center.setZ(maxval.z());
+            return center;
+        case ID_COORD_MIN_X:
+            center.setX(minval.x());
+            return center;
+        case ID_COORD_MIN_Y:
+            center.setY(minval.y());
+            return center;
+        case ID_COORD_MIN_Z:
+            center.setZ(minval.z());
+            return center;
+        default:
+            return center;
+        }
+    };
+
+    const double dist2 = distance*distance;
+
+    //function that gets the views within the specified distance
+    auto getWithin = [&](const ViewsOfMol &searchmol)
+    {
+        const auto &moldata = searchmol.data();
+        const auto &molinfo = moldata.info();
+
+        //get the atoms that are to be selected
+        auto selected_atoms = searchmol.selection();
+        selected_atoms = selected_atoms.selectNone();
+
+        //now get the coordinates of the atoms
+        if (not moldata.hasProperty(coords_property))
+            return ViewsOfMol();
+
+        const auto &prop = moldata.property(coords_property);
+
+        if (not prop.isA<AtomCoords>())
+            return ViewsOfMol();
+
+        const auto &coords = prop.asA<AtomCoords>();
+
+        //we need to loop over the expanded molecule
+        ViewsOfMol mol = this->expandMol(searchmol);
+
+        //loop over each view in 'mol'
+        for (int i=0; i<mol.nViews(); ++i)
+        {
+            bool within_distance = false;
+
+            if (typ == ID_COORD_CLOSEST)
+            {
+                //need to compare all atoms in this view...
+                for (const auto &atom : mol.viewAt(i).selectedAtoms())
+                {
+                    const auto point = coords[ molinfo.cgAtomIdx(atom) ];
+
+                    if (space.read().calcDist2(point, ref_point) < dist2)
+                    {
+                        within_distance = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                //get the comparison coordinates for this view
+                const auto point = getCoords(mol.viewAt(i), molinfo, coords);
+
+                if (space.read().calcDist2(point, ref_point) < dist2)
+                {
+                    within_distance = true;
+                    break;
+                }
+            }
+
+            if (within_distance)
+            {
+                selected_atoms = selected_atoms.select(mol.viewAt(i));
+
+                if (selected_atoms.selectedAll())
+                    break;
+            }
+        }
+
+        if (selected_atoms.isEmpty())
+            return ViewsOfMol();
+        else
+            return ViewsOfMol(moldata, selected_atoms);
+    };
+
+    QList<ViewsOfMol> result;
+
+    if (uses_parallel)
+    {
+        const auto molviews = mols.views();
+        QVector<ViewsOfMol> matched(molviews.count());
+
+        tbb::parallel_for( tbb::blocked_range<int>(0,molviews.count()),
+                           [&](const tbb::blocked_range<int> &r)
+        {
+            for (int i=r.begin(); i<r.end(); ++i)
+            {
+                auto match = getWithin(molviews.at(i));
+
+                if (not match.isEmpty())
+                    matched[i] = match;
+            }
+        });
+
+        for (const auto &match : matched)
+        {
+            if (not match.isEmpty())
+                result.append(match);
+        }
+    }
+    else
+    {
+        for (const auto mol : mols.views())
+        {
+            auto match = getWithin(mol);
+
+            if (not match.isEmpty())
+                result.append(match);
+        }
+    }
+
+    return SelectResult(result);
+}
+
+SelectEngine::ObjType IDDistanceVectorEngine::objectType() const
+{
+    switch(obj)
+    {
+    case AST::ATOM:
+        return SelectEngine::ATOM;
+    case AST::CUTGROUP:
+        return SelectEngine::CUTGROUP;
+    case AST::RESIDUE:
+        return SelectEngine::RESIDUE;
+    case AST::CHAIN:
+        return SelectEngine::CHAIN;
+    case AST::SEGMENT:
+        return SelectEngine::SEGMENT;
+    case AST::MOLECULE:
+        return SelectEngine::MOLECULE;
+    default:
+        return SelectEngine::COMPLEX;
+    }
+}
+
+////////
 //////// Implementation of the IDAllEngine
 ////////
 
