@@ -18,20 +18,29 @@
 import os
 import re
 import sys
-import warnings
 
 from Sire.Base import *
 
 # Make sure that the OPENMM_PLUGIN_DIR enviroment variable is set correctly if unset.
 try:
     # The user has already set the plugin location.
-    os.environ["OPENMM_PLUGIN_DIR"]
+    os.environ['OPENMM_PLUGIN_DIR']
 except KeyError:
     # Set to the default location of the bundled OpenMM package.
-    plugin_dir = getLibDir() + "/plugins"
-    warnings.warn(f'OPENMM_PLUGIN_DIR not set: setting it to {plugin_dir}. '
-                  'Please check that this is the right directory!')
-    os.environ["OPENMM_PLUGIN_DIR"] = plugin_dir
+    os.environ['OPENMM_PLUGIN_DIR'] = os.path.join(getLibDir(), 'plugins')
+
+if not os.path.exists(os.environ['OPENMM_PLUGIN_DIR']):
+    raise RuntimeError('ERROR: OpenMM plugin dir '
+                       f'{os.environ["OPENMM_PLUGIN_DIR"]} does not exist!')
+
+import glob
+openmm_libs = glob.glob(os.path.join(os.environ['OPENMM_PLUGIN_DIR'],
+                                     'libOpenMM*.so'))
+
+if len(openmm_libs) < 5:        # FIXME: just a guess
+    raise RuntimeError('ERROR: OpenMM plugin dir '
+                       f'{os.environ["OPENMM_PLUGIN_DIR"]} appears to have '
+                       'not the right number of plugins installed')
 
 from Sire.IO import *
 from Sire.Mol import *
@@ -807,7 +816,6 @@ increase from the heavy atom the hydrogen is bonded to.
                        "Decrease hydrogen mass repartitioning factor in your "
                        "cfg file and try again." % atidx)
                 sys.exit(-1)
-
 
             # Sanity check. Note this is likely to occur if hmassfactor > 4
             if (newmass.value() < 0.0):
