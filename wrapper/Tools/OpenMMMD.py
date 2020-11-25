@@ -18,6 +18,7 @@
 import os
 import re
 import sys
+import warnings
 
 from Sire.Base import *
 
@@ -27,7 +28,10 @@ try:
     os.environ["OPENMM_PLUGIN_DIR"]
 except KeyError:
     # Set to the default location of the bundled OpenMM package.
-    os.environ["OPENMM_PLUGIN_DIR"] = getLibDir() + "/plugins"
+    plugin_dir = getLibDir() + "/plugins"
+    warnings.warn(f'OPENMM_PLUGIN_DIR not set: setting it to {plugin_dir}. '
+                  'Please check that this is the right directory!')
+    os.environ["OPENMM_PLUGIN_DIR"] = plugin_dir
 
 from Sire.IO import *
 from Sire.Mol import *
