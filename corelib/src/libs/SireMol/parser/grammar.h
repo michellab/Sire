@@ -302,7 +302,7 @@ public:
         //or user-identified expression, optionally surrounded by parenthesis '( )'
         expressionPartRule %= subscriptRule | idNameRule | idNumberRule | idElementRule |
                               all_token | water_token | pert_token | withRule | withinRule |
-                              whereRule | notRule | joinRule | user_token |
+                              withinVectorRule | whereRule | notRule | joinRule | user_token |
                               ( qi::lit('(') >> expressionPartRule >> qi::lit(')') );
 
         //grammar that specifies a list of names (comma-separated)
@@ -387,6 +387,10 @@ public:
         withinRule %= obj_token >> qi::lit("within") >> lengthValueRule
                                 >> qi::lit("of") >> expressionRule;
 
+        //grammar for a "within" expression comparing with a vector position.
+        withinVectorRule %= obj_token >> qi::lit("within") >> lengthValueRule
+                                      >> qi::lit("of") >> vectorValueRule;
+
         //grammar to enable subscripting of an expression
         subscriptRule %= qi::lit("{") >> expressionRule >> qi::lit("}") >>
                          qi::lit("[") >> rangeValueRule >> qi::lit("]");
@@ -413,6 +417,7 @@ public:
         binaryRule2.name( "Binary2" );
         withRule.name( "With" );
         withinRule.name( "Within" );
+        withinVectorRule.name( "Within Vector" );
         notRule.name( "Not" );
         joinRule.name( "Join" );
         subscriptRule.name( "Subscript" );
@@ -454,6 +459,7 @@ public:
     qi::rule<IteratorT, AST::IDBinary(), SkipperT> binaryRule2;
     qi::rule<IteratorT, AST::IDWith(), SkipperT> withRule;
     qi::rule<IteratorT, AST::IDWithin(), SkipperT> withinRule;
+    qi::rule<IteratorT, AST::IDWithinVector(), SkipperT> withinVectorRule;
     qi::rule<IteratorT, AST::IDNot(), SkipperT> notRule;
     qi::rule<IteratorT, AST::IDJoin(), SkipperT> joinRule;
     qi::rule<IteratorT, AST::IDSubscript(), SkipperT> subscriptRule;

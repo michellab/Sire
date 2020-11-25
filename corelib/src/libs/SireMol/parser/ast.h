@@ -114,6 +114,7 @@ namespace AST
     struct IDNot;
     struct IDSubscript;
     struct IDWithin;
+    struct IDWithinVector;
     struct IDUser;
     struct IDJoin;
     struct IDAll;
@@ -139,6 +140,7 @@ namespace AST
                                              boost::recursive_wrapper<IDNot>,
                                              boost::recursive_wrapper<IDSubscript>,
                                              boost::recursive_wrapper<IDWithin>,
+                                             boost::recursive_wrapper<IDWithinVector>,
                                              boost::recursive_wrapper<IDUser>,
                                              boost::recursive_wrapper<IDJoin>,
                                              boost::recursive_wrapper<IDAll>,
@@ -572,12 +574,30 @@ namespace AST
 
         SelectEnginePtr toEngine() const;
     };
+
+    /** Struct to hold expressions that select based on being within a distance to a point*/
+    struct IDWithinVector
+    {
+        IDObject name;
+        LengthValue distance;
+        VectorValue value;
+
+        QString toString() const;
+
+        SelectEnginePtr toEngine() const;
+    };
 }
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWithin,
                            (AST::IDObject,name)
                            (AST::LengthValue,distance)
                            (AST::Expression,value)
+                         )
+
+BOOST_FUSION_ADAPT_STRUCT( AST::IDWithinVector,
+                           (AST::IDObject,name)
+                           (AST::LengthValue,distance)
+                           (AST::VectorValue,value)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::LengthValue,
