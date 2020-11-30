@@ -2146,7 +2146,7 @@ SelectResult IDDistanceVectorEngine::select(const SelectResult &mols, const Prop
 {
     // Extract the x,y,z components of the position (implicitly converted to Angstrom).
     double x = position.x.value * position.x.unit;
-    double y = position.z.value * position.y.unit;
+    double y = position.y.value * position.y.unit;
     double z = position.z.value * position.z.unit;
 
     // Create a reference point using the vector components.
