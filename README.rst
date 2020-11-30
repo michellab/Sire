@@ -61,6 +61,12 @@ name, e.g.:
 
     conda install -c conda-forge -c omnia -c michellab/label/dev sire=2019.1.0=py37hf484d3e_13
 
+Alternatively you can try passing the ``--all`` option to Conda, e.g.:
+
+.. code-block:: bash
+
+    conda install -c conda-forge -c omnia -c michellab/label/dev sire --all
+
 If you find that Conda is particularly slow to install or upgrade Sire, particularly
 on macOS, then we advise using `mamba <https://github.com/TheSnakePit/mamba>`__::
 
@@ -69,6 +75,8 @@ on macOS, then we advise using `mamba <https://github.com/TheSnakePit/mamba>`__:
 You can then replace all installation/upgrade commands with ``mamba``, e.g.::
 
     mamba install -c conda-forge -c omnia -c michellab/label/dev sire
+
+(Mamba also always installs/ugrades the most recent version.)
 
 There are also many `pre-built binary packages <http://siremol.org/pages/binaries.html>`__,
 which are available for Linux, Mac OS X and Windows, which are quick and easy to install.
