@@ -612,7 +612,7 @@ QString PDBAtom::toPDBRecord() const
     else                      line.append(" ");
 
     // Append the residue name, truncating if neccessary.
-    line.append(res_name.left(3));
+    line.append(QString("%1").arg(res_name.left(3), -3));
 
     // Append the chain ID.
     if (not chain_id.isNull()) line.append(QString(" %1").arg(chain_id));
