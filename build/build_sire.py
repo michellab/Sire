@@ -213,6 +213,13 @@ if __name__ == "__main__":
                 conda_pkgs.append("gcc_linux-64")
                 conda_pkgs.append("gxx_linux-64")
 
+                # libgfortran5 is unable to find libquadmath, even though it
+                # is installed. After rolling back to libgfortran4, we still
+                # need libgcc-ng for libquadmath to be visible, which wasn't
+                # necessary before.
+                conda_pkgs.append("libgfortran4")
+                conda_pkgs.append("libgcc-ng")
+
         if (not is_windows):
             if os.path.exists(os.path.join(conda_bin, "make")):
                 print("make is already installed...")
