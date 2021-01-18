@@ -60,6 +60,7 @@
 #include "SireMol/atomcutting.h"
 #include "SireMol/molidx.h"
 #include "SireMol/atomidx.h"
+#include "SireMol/select.h"
 
 #include "SireMol/amberparameters.h"
 
@@ -1837,6 +1838,7 @@ getDihedralData(const AmberParams &params, int start_idx)
     of text lines */
 QStringList toLines(const QVector<AmberParams> &params,
                     const Space &space,
+                    int num_dummies,
                     bool use_parallel=true,
                     QStringList *all_errors=0)
 {
@@ -3119,6 +3121,9 @@ QStringList toLines(const QVector<AmberParams> &params,
     pointers[14] = std::get<9>(dih_lines);      // NPHIA
     pointers[17] = std::get<10>(dih_lines);      // NPTRA
 
+    // Add the number of dummy atoms, i.e. NUMEXTRA.
+    pointers[30] = num_dummies;
+
     const int ntypes = pointers[1];     // number of atom types
 
     lines.append("%FLAG POINTERS");
@@ -3372,9 +3377,12 @@ AmberPrm::AmberPrm(const System &system, const PropertyMap &map)
     catch(...)
     {}
 
+    // Work out the number of dummy atoms to add the NUMEXTRA pointer.
+    int num_dummies = system.search("element Xx").count();
+
     //now convert these into text lines that can be written as the file
     //QStringList lines = ::toLines(params, space, this->usesParallel(), &errors);
-    QStringList lines = ::toLines(params, space, false, &errors);
+    QStringList lines = ::toLines(params, space, num_dummies, false, &errors);
 
     if (not errors.isEmpty())
     {
