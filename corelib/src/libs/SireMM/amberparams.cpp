@@ -2232,8 +2232,8 @@ void AmberParams::getAmberBondsFrom(const TwoAtomFunctions &funcs)
 
             if (not amber_elements.isEmpty())
             {
-                contains_hydrogen = (amber_elements.at(potential.atom0()).nProtons() < 2) or
-                                    (amber_elements.at(potential.atom1()).nProtons() < 2);
+                contains_hydrogen = (amber_elements.at(potential.atom0()).nProtons() == 1) or
+                                    (amber_elements.at(potential.atom1()).nProtons() == 1);
             }
 
             bonds_data[i] = std::make_tuple(bond, AmberBond(potential.function(), Symbol("r")),
