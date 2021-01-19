@@ -217,6 +217,9 @@ if __name__ == "__main__":
                 # which breaks the Sire development environment.
                 conda_pkgs.append("libgfortran4")
 
+                # Explicitly install working libgcc-ng version.
+                conda_pkgs.append("libgcc-ng=9.1.0")
+
         if (not is_windows):
             if os.path.exists(os.path.join(conda_bin, "make")):
                 print("make is already installed...")
