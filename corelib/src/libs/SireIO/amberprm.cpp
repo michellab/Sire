@@ -2314,7 +2314,8 @@ QStringList toLines(const QVector<AmberParams> &params,
     {
         QVector< QVector<QString> > amber_types(params.count());
 
-        QHash<QString,int> unique_types;
+        QHash<QString,int> unique_types;    // Unique types in a molecule.
+        QSet<QString> system_unique_types;  // Unique types in the system.
         QMutex unique_mutex;
 
         if (use_parallel)
@@ -2325,6 +2326,16 @@ QStringList toLines(const QVector<AmberParams> &params,
                 for (int i=r.begin(); i<r.end(); ++i)
                 {
                     amber_types[i] = getAmberTypes(params[i], unique_types, unique_mutex);
+
+                    // Store the unique types for the entire system.
+                    for (const auto &type : amber_types[i])
+                    {
+                        // We haven't seen this type in any molecule.
+                        if (not system_unique_types.contains(type))
+                        {
+                            system_unique_types.insert(type);
+                        }
+                    }
                 }
             });
         }
@@ -2333,8 +2344,22 @@ QStringList toLines(const QVector<AmberParams> &params,
             for (int i=0; i<params.count(); ++i)
             {
                 amber_types[i] = getAmberTypes(params[i], unique_types, unique_mutex);
+
+                // Store the unique types for the entire system.
+                for (const auto &type : amber_types[i])
+                {
+                    // We haven't seen this type in any molecule.
+                    if (not system_unique_types.contains(type))
+                    {
+                        system_unique_types.insert(type);
+                    }
+                }
             }
         }
+
+        // Record the NATYP flag.
+        const int ntypes_system = system_unique_types.count();
+        pointers[18] = ntypes_system;
 
         if (all_errors)
         {
@@ -2393,7 +2418,7 @@ QStringList toLines(const QVector<AmberParams> &params,
             atom_types[i] = mol_atom_types;
         }
 
-        //we now have all of the atom types - create the acoeff and bcoeff arrays
+        // We now have all of the atom types - create the acoeff and bcoeff arrays.
         const int ntypes = ljparams.count();
 
         pointers[1] = ntypes;
@@ -3124,7 +3149,7 @@ QStringList toLines(const QVector<AmberParams> &params,
     // Add the number of dummy atoms, i.e. NUMEXTRA.
     pointers[30] = num_dummies;
 
-    const int ntypes = pointers[1];     // number of atom types
+    const int natyp = pointers[18];    // number of atom types
 
     lines.append("%FLAG POINTERS");
     lines += writeIntData(pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ) );
@@ -3186,7 +3211,7 @@ QStringList toLines(const QVector<AmberParams> &params,
     lines.append("%FLAG SOLTY");
     //this is currently unused in Amber and should be equal to 0.0 for all atom types
     {
-        QVector<double> solty(ntypes, 0.0);
+        QVector<double> solty(natyp, 0.0);
         lines += writeFloatData(solty, AmberFormat( AmberPrm::FLOAT, 5, 16, 8 ));
     }
 
