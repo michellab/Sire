@@ -69,7 +69,7 @@ about:
 
                 `conda install -c conda-forge -c omnia -c michellab/label/dev sire`
 
-                Since Sire has many depdendencies, an install or update might
+                Since Sire has many dependencies, an install or update might
                 not always give you the most recent version. If this is the
                 case, use, e.g:
 
