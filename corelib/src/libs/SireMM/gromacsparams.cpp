@@ -2103,6 +2103,7 @@ bool GromacsDihedral::isCosine() const
     {
     case 0: //null, so zero, which is a zero cosine
     case 1: //proper dihedral
+    case 3: //Ryckaert-Bellemans dihedral can be converted to cosine.
     case 4: //improper dihedral
     case 5: //fourier dihedral
     case 9: //proper dihedral (multiple)
