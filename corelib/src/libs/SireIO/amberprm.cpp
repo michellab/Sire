@@ -1095,7 +1095,7 @@ void AmberPrm::parse(const PropertyMap &map)
     {
         ffield = map["forcefield"].value().asA<MMDetail>();
 
-        if (not ffield.isAmberStyle())
+        if (not ffield.isAmberStyle() and not ffield.isOPLS())
             throw SireError::incompatible_error( QObject::tr(
                 "This AmberPrm reader can only parse Amber parm files that hold molecules "
                 "that are parameterised using an Amber-style forcefield. It cannot read "
