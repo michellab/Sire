@@ -103,6 +103,7 @@ public:
     QString dihedralStyle() const;
     
     bool isAmberStyle() const;
+    bool isOPLS() const;
     
     bool isCompatibleWith(const FFDetail &other) const;
     

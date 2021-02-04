@@ -375,6 +375,12 @@ bool MMDetail::isAmberStyle() const
            usesCosineDihedrals();
 }
 
+/** Return whether or not this is a GROMACS OPLS force field. */
+bool MMDetail::isOPLS() const
+{
+    return name() == "opls::ff";
+}
+
 /** Return whether or not this forcefield is compatible with 'other' */
 bool MMDetail::isCompatibleWith(const FFDetail &other) const
 {
