@@ -45,23 +45,23 @@ static const RegisterMetaType<MMDetail> r_mm;
 QDataStream &operator<<(QDataStream &ds, const MMDetail &mm)
 {
     writeHeader(ds, r_mm, 1);
-    
+
     ds << static_cast<const FFDetail&>(mm);
-    
+
     return ds;
 }
 
 QDataStream &operator>>(QDataStream &ds, MMDetail &mm)
 {
     VersionID v = readHeader(ds, r_mm);
-    
+
     if (v == 1)
     {
         ds >> static_cast<FFDetail&>(mm);
     }
     else
         throw version_error(v, "1", r_mm, CODELOC);
-    
+
     return ds;
 }
 
@@ -92,7 +92,7 @@ static bool _isCoulomb(QString style)
 static bool _isLJ(QString style)
 {
     auto s = style.simplified().toLower();
-    
+
     return (s == "lj") or (s == "lennard jones");
 }
 
@@ -132,10 +132,10 @@ MMDetail::MMDetail(QString name, QString combining_rules,
         throw SireError::invalid_arg( QObject::tr(
             "Cannot understand the required combining rules from '%1'. These should "
             "be either 'arithmetic' or 'geometric'.").arg(combining_rules), CODELOC );
-    
+
     setProperty("scale14elec", wrap(scale14elec));
     setProperty("scale14vdw", wrap(scale14vdw));
-    
+
     if ( _isCoulomb(elecstyle) )
     {
         setProperty("elecstyle", wrap("coulomb"));
@@ -144,7 +144,7 @@ MMDetail::MMDetail(QString name, QString combining_rules,
         throw SireError::invalid_arg( QObject::tr(
             "Cannot understand the required electrostatic model from '%1'. This should "
             "be 'coulomb'").arg(elecstyle), CODELOC );
-    
+
     if ( _isLJ(vdwstyle) )
     {
         setProperty("vdwstyle", wrap("lj"));
@@ -157,7 +157,7 @@ MMDetail::MMDetail(QString name, QString combining_rules,
         throw SireError::invalid_arg( QObject::tr(
             "Cannot understand the required vdw model from '%1'. This should "
             "be 'lj'").arg(vdwstyle), CODELOC );
-    
+
     if ( _isHarmonic(bondstyle) )
     {
         setProperty("bondstyle", wrap("harmonic"));
@@ -170,7 +170,7 @@ MMDetail::MMDetail(QString name, QString combining_rules,
         throw SireError::invalid_arg( QObject::tr(
             "Cannot understand the required bond model from '%1'. This should "
             "be 'harmonic'").arg(bondstyle), CODELOC );
-    
+
     if ( _isHarmonic(anglestyle) )
     {
         setProperty("anglestyle", wrap("harmonic"));
@@ -183,7 +183,7 @@ MMDetail::MMDetail(QString name, QString combining_rules,
         throw SireError::invalid_arg( QObject::tr(
             "Cannot understand the required angle model from '%1'. This should "
             "be 'harmonic'").arg(anglestyle), CODELOC );
-    
+
     if ( _isCosine(dihedralstyle) )
     {
         setProperty("dihedralstyle", wrap("cosine"));
@@ -196,7 +196,7 @@ MMDetail::MMDetail(QString name, QString combining_rules,
         throw SireError::invalid_arg( QObject::tr(
             "Cannot understand the required dihedral model from '%1'. This should "
             "be 'cosine'").arg(dihedralstyle), CODELOC );
-    
+
     if (name != "unknown")
         this->operator=( FFDetail::registerForceField(*this).read().asA<MMDetail>() );
 }
@@ -363,7 +363,7 @@ bool MMDetail::usesCosineDihedrals() const
 
 /** Return whether or not this is an Amber-style forcefield. An Amber-style
     forcefield is one that uses only coulomb's law between point charges for electrostatics,
-    LJ with arithmetic combining rules for vdw, harmonic bonds and angles and a 
+    LJ with arithmetic combining rules for vdw, harmonic bonds and angles and a
     set of cosine functions for dihedrals */
 bool MMDetail::isAmberStyle() const
 {
@@ -386,12 +386,12 @@ bool MMDetail::isCompatibleWith(const FFDetail &other) const
 {
     if (not other.isA<MMDetail>())
         return false;
-    
+
     const auto &mm = other.asA<MMDetail>();
-    
+
     if (this->operator==(mm))
         return true;
-    
+
     //to be compatible they need to use the same combining rules, elecstyle,
     //vdwstyle
     if (this->combiningRules() != mm.combiningRules() or
@@ -400,7 +400,7 @@ bool MMDetail::isCompatibleWith(const FFDetail &other) const
     {
         return false;
     }
-    
+
     return true;
 }
 
