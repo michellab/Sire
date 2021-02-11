@@ -3144,7 +3144,7 @@ QStringList toLines(const QVector<AmberParams> &params,
     pointers[6] = std::get<7>(dih_lines);       // NPHIH
     pointers[7] = std::get<8>(dih_lines);       // MPHIA
     pointers[14] = std::get<9>(dih_lines);      // NPHIA
-    pointers[17] = std::get<10>(dih_lines);      // NPTRA
+    pointers[17] = std::get<10>(dih_lines);     // NPTRA
 
     // Add the number of dummy atoms, i.e. NUMEXTRA.
     pointers[30] = num_dummies;
