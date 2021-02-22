@@ -480,6 +480,34 @@ void AmberPrm::rebuildLJParameters()
             build_lj(i);
         }
     }
+
+    // The build_lj function above only considers diagonal elements of the
+    // NONBONDED_PARM_INDEX matrix. Here we loop over the off-diagonal elements
+    // to check for 10-12 parameters, which are currently unsupported.
+
+    // The matrix is symmetric, so perform a triangular loop over off-diagonal
+    // elements.
+    for (int i=0; i<ntypes; ++i)
+    {
+        for (int j=i+1; j<ntypes; ++j)
+        {
+            int idx = nb_parm_index[ ntypes * i + j  ];
+
+            if (idx < 0)
+            {
+                auto a = hbond_acoeffs[idx];
+                auto b = hbond_bcoeffs[idx];
+
+                if ((a > 1e-6) and (b > 1e-6))
+                {
+                    //this is a 10-12 parameter
+                    throw SireError::unsupported( QObject::tr(
+                            "Sire does not yet support Amber Parm files that "
+                            "use 10-12 HBond parameters."), CODELOC );
+                }
+            }
+        }
+    }
 }
 
 /** This function finds all atoms that are bonded to the atom at index 'atom_idx'
