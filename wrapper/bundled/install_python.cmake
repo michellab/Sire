@@ -18,7 +18,13 @@ if (ANACONDA_BUILD)
   set( PYTHON_VERSION "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" )
 
   unset(PYTHON_LIBRARY CACHE)
-  set( PYTHON_ABIFLAGS "m" )
+
+  # sys.abiflags is an empty string for Python >= 3.8
+  if (${PYTHON_VERSION} LESS 3.8)
+    set(PYTHON_ABIFLAGS "m")
+  else()
+    set(PYTHON_ABIFLAGS "")
+  endif()
 
   # Find the python library that comes with anaconda
   if (MSYS)
@@ -74,7 +80,7 @@ else()
   # then we don't need to do anything
   unset(PYTHON_LIBRARY CACHE)
 
-  find_library( PYTHON_LIBRARY 
+  find_library( PYTHON_LIBRARY
                 NAMES python${PYTHON_VERSION}${PYTHON_ABIFLAGS}
                 PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
 
@@ -209,7 +215,7 @@ if ( ANACONDA_BUILD )
     set( PYTHON_OTHER "${ANACONDA_BASE}/python.app/Contents/MacOS/python" )
 
     if (EXISTS "${PYTHON_OTHER}")
-      execute_process( COMMAND ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../lib" ${PYTHON_OTHER} )  
+      execute_process( COMMAND ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../lib" ${PYTHON_OTHER} )
     endif()
 
   endif()
