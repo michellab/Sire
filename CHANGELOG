@@ -3,6 +3,21 @@ SIRE changelog
 
 devel branch:
 
+    [2021.1.0] Feb 2021 - Added support for multiple combining rules in SOMD
+               (@SofiaBariami). Added support for triclinic simulation boxes.
+               Convert Ryckaert-Bellememans form dihedral functions from
+               GROMACS to Fourier series to allow conversion to AMBER format.
+               Updated search functionality to enable searching for objects
+               within an arbitrary distance of a point. Fixed PDB2 parser bug
+               to ensure that residue names are fixed width. Ensure that
+               NUMEXTRA pointer is written so that AMBER topology files can
+               be read by tools such as ParmEd. Write NATYP pointer and
+               correct number of SOLTY flags. Even though these aren't used,
+               incorrect values break external tools, e.g. ParmEd. Added
+               support for AMBER TIP5P water topology conversion. Correctly
+               flag OPLS style force fields when creating MMDetail object so
+               that users can reconstruct OPLS systems written to AMBER format.
+
     [2020.1.0] July 2020 - Fixed bug in WaterView program to ensure that a
                molecule is extracted from the returned list. Stable sorting
                of dihedrals and other potential terms to allow reproducible
