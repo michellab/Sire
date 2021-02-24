@@ -17,6 +17,9 @@ devel branch:
                support for AMBER TIP5P water topology conversion. Correctly
                flag OPLS style force fields when creating MMDetail object so
                that users can reconstruct OPLS systems written to AMBER format.
+               Made build Python 3.8+ compliant. (Python libraries are now
+               ABI compatible.) Switched to using std::atomic since
+               tbb/atomic.h is now deprecated.
 
     [2020.1.0] July 2020 - Fixed bug in WaterView program to ensure that a
                molecule is extracted from the returned list. Stable sorting
