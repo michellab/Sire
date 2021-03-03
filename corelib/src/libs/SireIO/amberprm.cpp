@@ -3177,7 +3177,7 @@ QStringList toLines(const QVector<AmberParams> &params,
     // Add the number of dummy atoms, i.e. NUMEXTRA.
     pointers[30] = num_dummies;
 
-    const int natyp = pointers[18];    // number of atom types
+    const int natyp = pointers[18];             // NATYP
 
     lines.append("%FLAG POINTERS");
     lines += writeIntData(pointers, AmberFormat( AmberPrm::INTEGER, 10, 8 ) );
@@ -3646,8 +3646,8 @@ int AmberPrm::nDihedralsNoHydrogen() const
 /** Return the number of excluded atoms */
 int AmberPrm::nExcluded() const
 {
-    if (pointers.count() > 9)
-        return pointers[9];
+    if (pointers.count() > 10)
+        return pointers[10];
     else
         return 0;
 }
@@ -3655,8 +3655,8 @@ int AmberPrm::nExcluded() const
 /** Return the number of residues */
 int AmberPrm::nResidues() const
 {
-    if (pointers.count() > 10)
-        return pointers[10];
+    if (pointers.count() > 11)
+        return pointers[11];
     else
         return 0;
 }
