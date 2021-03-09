@@ -4,7 +4,7 @@
 #
 ########################################
 
-# these are all simple executables that will be 
+# these are all simple executables that will be
 # used to test for features in a machine before install
 
 check_include_files( gnu/libc-version.h HAVE_LIBC_VERSION_H )
@@ -24,7 +24,7 @@ endif()
 if (SIRE_FOUND_CPUID)
   add_definitions( "-DSIRE_FOUND_CPUID" )
   add_definitions( "${CPUID_DEFINITIONS}" )
-  include_directories( ${CPUID_INCLUDE_DIR} )
+  include_directories( ${CPUID_INCLUDE_DIR} ${SIRE_APP}/include )
 
   add_executable( get_cpuid get_cpuid.c )
 
