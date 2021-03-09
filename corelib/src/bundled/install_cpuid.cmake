@@ -4,10 +4,10 @@
 ###
 
 include (DownloadAndCheckMD5)
-# First, try to find the cpuid library in the "bundled" directory. If it exists,
-# then we don't need to do anything
+# First, try to find the cpuid library in the "sire.app/lib" and "bundled/lib"
+# directory. If it exists, then we don't need to do anything.
 unset(CPUID_LIBRARY CACHE)
-find_library( CPUID_LIBRARY "cpuid" PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
+find_library( CPUID_LIBRARY "cpuid" PATHS ${SIRE_APP}/lib ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
 
 if ( MSYS )
   set( CMAKE_MAKE_PROGRAM "mingw32-make" )
@@ -41,7 +41,7 @@ else()
       message( STATUS "Unzipping ${CPUID_ZIPFILE} to ${CPUID_BUILD_DIR}" )
       execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${CPUID_ZIPFILE}
-          WORKING_DIRECTORY ${BUNDLE_BUILDDIR} 
+          WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
           OUTPUT_QUIET ERROR_QUIET
       )
     endif()
