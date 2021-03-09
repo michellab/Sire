@@ -19,7 +19,9 @@ devel branch:
                that users can reconstruct OPLS systems written to AMBER format.
                Made build Python 3.8+ compliant. (Python libraries are now
                ABI compatible.) Switched to using std::atomic since
-               tbb/atomic.h is now deprecated.
+               tbb/atomic.h is now deprecated. Switched to using HTTPS for
+               sending analytics. Updated build to be able to link against
+               conda version of libcpuid.
 
     [2020.1.0] July 2020 - Fixed bug in WaterView program to ensure that a
                molecule is extracted from the returned list. Stable sorting
