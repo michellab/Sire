@@ -24,7 +24,7 @@ endif()
 if (SIRE_FOUND_CPUID)
   add_definitions( "-DSIRE_FOUND_CPUID" )
   add_definitions( "${CPUID_DEFINITIONS}" )
-  include_directories( ${CPUID_INCLUDE_DIR} ${SIRE_APP}/include )
+  include_directories( ${CPUID_INCLUDE_DIR} )
 
   add_executable( get_cpuid get_cpuid.c )
 
