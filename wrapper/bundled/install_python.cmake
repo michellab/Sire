@@ -4,13 +4,15 @@
 ###
 
 if (ANACONDA_BUILD)
-  # we will just use the python that comes with anaconda
-  if (MSYS)
-    set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/python" )
-  elseif (MSVC)
-    set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/python.exe" )
-  else()
-    set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/bin/python3" )
+  if (NOT DEFINED PYTHON_EXECUTABLE)
+    # we will just use the python that comes with anaconda
+    if (MSYS)
+        set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/python" )
+    elseif (MSVC)
+        set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/python.exe" )
+    else()
+        set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/bin/python3" )
+    endif()
   endif()
 
   find_package( PythonInterp REQUIRED )

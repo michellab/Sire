@@ -119,10 +119,18 @@ else()
     endif()
 
     # Make sure that there is a python3 executable in the bin directory
-    if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" AND NOT EXISTS "${ANACONDA_BASE}/python.exe" )
-      message( FATAL_ERROR "Cannot find python3. "
-                           "Please set the full path to the Anaconda or Miniconda "
-                           "installation directory." )
+    if (DEFINED PYTHON_EXECUTABLE)
+        if ( NOT EXISTS "${PYTHON_EXECUTABLE}" )
+            message( FATAL_ERROR "Cannot find python3. "
+                                 "Please set the full path to the Anaconda or Miniconda "
+                                 "installation directory." )
+        endif()
+    else()
+        if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" AND NOT EXISTS "${ANACONDA_BASE}/python.exe" )
+            message( FATAL_ERROR "Cannot find python3. "
+                                 "Please set the full path to the Anaconda or Miniconda "
+                                 "installation directory." )
+        endif()
     endif()
 
     set( SIRE_INSTALL_PREFIX "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
