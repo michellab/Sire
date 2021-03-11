@@ -197,11 +197,11 @@ option ( SIRE_BUILD_GUI "Build graphical applications" OFF )
 set (SIRE_VARIABLES_FILE "${CMAKE_BINARY_DIR}/SireCompileVariables.cmake")
 file ( REMOVE ${SIRE_VARIABLES_FILE} )
 
-# This macro is used to save the names of variable to SireCompileVariables.cmake
-macro( SAVE_SIRE_VARIABLE _var _value )
+# This function is used to save the names of variable to SireCompileVariables.cmake
+function( SAVE_SIRE_VARIABLE _var _value )
   file(APPEND ${SIRE_VARIABLES_FILE}
         "set( ${_var} \"${_value}\" )\n")
-endmacro (SAVE_SIRE_VARIABLE)
+endfunction (SAVE_SIRE_VARIABLE)
 
 math (EXPR SIRE_VERSION_NUMBER
       "${S_VERSION_MAJOR}*100000 + ${S_VERSION_MINOR}*100 + ${S_VERSION_PATCH}")
