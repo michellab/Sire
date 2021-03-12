@@ -677,6 +677,7 @@ elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
 
 elseif (MSVC)
 
+    add_compile_options("/EHsc")
     add_compile_options("/permissive-")
     add_compile_options("/Zc:twoPhase-")
     message( STATUS "Compiling with MSVC" )
