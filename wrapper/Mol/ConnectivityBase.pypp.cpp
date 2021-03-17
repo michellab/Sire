@@ -980,6 +980,18 @@ void register_ConnectivityBase_class(){
                 , "Split the selected atoms in selected_atoms in this molecule\ninto two parts based on the improper angle\nidentified by improper. This splits the molecule about\nbond between atom0() and atom1() of the improper\nThrow: SireError::incompatible_error\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\nThrow: SireMol::ring_error\n" );
         
         }
+        { //::SireMol::ConnectivityBase::toCONECT
+        
+            typedef ::QString ( ::SireMol::ConnectivityBase::*toCONECT_function_type)( int ) const;
+            toCONECT_function_type toCONECT_function_value( &::SireMol::ConnectivityBase::toCONECT );
+            
+            ConnectivityBase_exposer.def( 
+                "toCONECT"
+                , toCONECT_function_value
+                , ( bp::arg("offset")=(int)(0) )
+                , "" );
+        
+        }
         { //::SireMol::ConnectivityBase::toString
         
             typedef ::QString ( ::SireMol::ConnectivityBase::*toString_function_type)(  ) const;

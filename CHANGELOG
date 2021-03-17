@@ -21,7 +21,8 @@ devel branch:
                ABI compatible.) Switched to using std::atomic since
                tbb/atomic.h is now deprecated. Switched to using HTTPS for
                sending analytics. Updated build to be able to link against
-               conda version of libcpuid.
+               conda version of libcpuid. Added support for generating PDB
+               CONECT records from a Sire.Mol.Connectivity object.
 
     [2020.1.0] July 2020 - Fixed bug in WaterView program to ensure that a
                molecule is extracted from the returned list. Stable sorting
