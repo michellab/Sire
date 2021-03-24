@@ -1036,6 +1036,14 @@ Mol2Molecule::Mol2Molecule(const SireMol::Molecule &mol, const PropertyMap &map,
     {
         comment = mol.property("mol_comment").toString();
     }
+
+    // Extract the bonds records and update the number of bonds.
+    if (mol.hasProperty(map["tripos_bonds"]))
+    {
+        auto bond_lines = mol.property(map["tripos_bonds"]).toString();
+        QStringList bond_list = bond_lines.split("\n");
+        num_bonds = bond_list.count();
+    }
 }
 
 /** Generate a Mol2 record from the molecule data. */
