@@ -1382,6 +1382,160 @@ const char* ResIdxAtomNameMatcher::typeName()
 }
 
 /////////
+///////// Implementation of ResNumAtomNameMatcher
+/////////
+
+static const RegisterMetaType<ResNumAtomNameMatcher> r_resnumatomnamematcher;
+
+/** Serialise to a binary datastream */
+QDataStream &operator<<(QDataStream &ds,
+                                       const ResNumAtomNameMatcher &resnumatomnamematcher)
+{
+    writeHeader(ds, r_resnumatomnamematcher, 1);
+    ds << static_cast<const ResNumAtomNameMatcher&>(resnumatomnamematcher);
+
+    return ds;
+}
+
+/** Extract from a binary datastream */
+QDataStream &operator>>(QDataStream &ds, ResNumAtomNameMatcher &resnumatomnamematcher)
+{
+    VersionID v = readHeader(ds, r_resnumatomnamematcher);
+
+    if (v == 1)
+    {
+        ds >> static_cast<ResNumAtomNameMatcher&>(resnumatomnamematcher);
+    }
+    else
+        throw version_error(v, "1", r_resnumatomnamematcher, CODELOC);
+
+    return ds;
+}
+
+/** Constructor */
+ResNumAtomNameMatcher::ResNumAtomNameMatcher() : ConcreteProperty<ResNumAtomNameMatcher,AtomMatcher>()
+{}
+
+/** Copy constructor */
+ResNumAtomNameMatcher::ResNumAtomNameMatcher(const ResNumAtomNameMatcher &other)
+               : ConcreteProperty<ResNumAtomNameMatcher,AtomMatcher>(other)
+{}
+
+/** Destructor */
+ResNumAtomNameMatcher::~ResNumAtomNameMatcher()
+{}
+
+/** Copy assignment operator */
+ResNumAtomNameMatcher& ResNumAtomNameMatcher::operator=(const ResNumAtomNameMatcher &other)
+{
+    return *this;
+}
+
+/** Comparison operator */
+bool ResNumAtomNameMatcher::operator==(const ResNumAtomNameMatcher &other) const
+{
+    return true;
+}
+
+/** Comparison operator */
+bool ResNumAtomNameMatcher::operator!=(const ResNumAtomNameMatcher &other) const
+{
+    return false;
+}
+
+QString ResNumAtomNameMatcher::toString() const
+{
+    return QObject::tr("ResNumAtomNameMatcher()");
+}
+
+/** Match the atoms in 'mol1' to the atoms in 'mol0' by name, searching each
+    residue separately (by number) and combining the results. This returns the
+    AtomIdxs of the atoms in 'mol1' that are in 'mol0', indexed by the AtomIdx
+    of the atom in 'mol0'.
+
+    This skips atoms in 'mol1' that are not in 'mol0'
+*/
+QHash<AtomIdx,AtomIdx> ResNumAtomNameMatcher::pvt_match(const MoleculeView &mol0,
+                                                        const PropertyMap &map0,
+                                                        const MoleculeView &mol1,
+                                                        const PropertyMap &map1) const
+{
+    const AtomSelection sel0 = mol0.selection();
+    const AtomSelection sel1 = mol1.selection();
+
+    if (sel0.selectedAll() and sel1.selectedAll())
+    {
+        return pvt_match(mol0.data().info(), mol1.data().info());
+    }
+    else
+    {
+        throw SireError::unsupported(QObject::tr("ResNumAtomNameMatcher only works with "
+            "full molecule selections."));
+    }
+}
+
+/** Match the atoms in 'mol1' to the atoms in 'mol0' by name, searching each
+    residue separately (by number) and combining the results. This returns the
+    AtomIdxs of the atoms in 'mol1' that are in 'mol0', indexed by the AtomIdx
+    of the atom in 'mol0'.
+
+    This skips atoms in 'mol1' that are not in 'mol0'. Note that we only match
+    the first unique atom within each residue.
+*/
+QHash<AtomIdx,AtomIdx> ResNumAtomNameMatcher::pvt_match(const MoleculeInfoData &mol0,
+                                                        const MoleculeInfoData &mol1) const
+{
+    QHash<AtomIdx,AtomIdx> map;
+
+    // Get the list of residue indices from the reference molecule.
+    auto resIdxs = mol0.getResidues();
+
+    // Loop over all of the residues.
+    for (const auto &resIdx : resIdxs)
+    {
+        // Convert to a ResNum.
+        auto resNum = mol0.number(resIdx);
+
+        // Get a list of atoms for the residue for both molecules.
+        auto atoms0 = mol0.getAtomsIn(resNum);
+        auto atoms1 = mol1.getAtomsIn(resNum);
+
+        // The set of matched atoms from 'mol1' that belong to this residue.
+        QSet<AtomIdx> matched;
+
+        // For each atom from mol0, find those atoms in mol1 with the same name.
+        for (const auto &idx0 : atoms0)
+        {
+            // Get the name of the atom.
+            const auto name0 = mol0.name(idx0);
+
+            // Loop over the atoms in mol1 until we find the first unique match.
+            for (const auto &idx1 : atoms1)
+            {
+                // Get the name of the atom.
+                const auto name1 = mol1.name(idx1);
+
+                // This is a match, and it hasn't already been matched
+                // to another atom in the residue.
+                if ((name0 == name1) and (not matched.contains(idx1)))
+                {
+                    map.insert(idx0, idx1);
+                    matched.insert(idx1);
+                    break;
+                }
+            }
+        }
+    }
+
+    return map;
+}
+
+const char* ResNumAtomNameMatcher::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<ResNumAtomNameMatcher>() );
+}
+
+/////////
 ///////// Implementation of ResIdxAtomMCSMatcher
 /////////
 

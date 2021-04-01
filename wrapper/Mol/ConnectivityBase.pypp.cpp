@@ -989,7 +989,7 @@ void register_ConnectivityBase_class(){
                 "toCONECT"
                 , toCONECT_function_value
                 , ( bp::arg("offset")=(int)(0) )
-                , "" );
+                , "Return a PDB format CONECT record for this connectivity object." );
         
         }
         { //::SireMol::ConnectivityBase::toString

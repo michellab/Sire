@@ -243,6 +243,7 @@ set ( PYPP_SOURCES
        IDAndSet_ChainID_.pypp.cpp
        Perturbation.pypp.cpp
        Mover_Beads_.pypp.cpp
+       ResNumAtomNameMatcher.pypp.cpp
        SireMol_containers.cpp
        SireMol_properties.cpp
        SireMol_registrars.cpp
