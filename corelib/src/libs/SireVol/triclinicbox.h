@@ -33,8 +33,6 @@
 
 #include "SireMaths/matrix.h"
 
-#include <QDebug>
-
 SIRE_BEGIN_HEADER
 
 namespace SireVol
