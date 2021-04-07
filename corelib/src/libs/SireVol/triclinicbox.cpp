@@ -140,7 +140,7 @@ TriclinicBox::TriclinicBox(const Vector &v0,
 
     // Evaluate the square root of the difference between the length of v1 squared
     // and the projection of that vector on v0 squared.
-    auto yn1 = sqrt(m1*m1 - xn1*xn1);
+    auto yn1 = std::sqrt(m1*m1 - xn1*xn1);
 
     // Evaluate the vector product of v0 and v1 and take the magnitude.
     auto zn2 = Vector::realCross(v0, v1).magnitude();
@@ -487,7 +487,7 @@ TriclinicBox TriclinicBox::rhombicDodecahedronSquare(double d)
 {
     Vector v0(d, 0, 0);
     Vector v1(0, d, 0);
-    Vector v2(0.5*d, 0.5*d, 0.5*sqrt(2)*d);
+    Vector v2(0.5*d, 0.5*d, 0.5*std::sqrt(2)*d);
 
     return TriclinicBox(v0, v1, v2);
 }
@@ -496,8 +496,8 @@ TriclinicBox TriclinicBox::rhombicDodecahedronSquare(double d)
 TriclinicBox TriclinicBox::rhombicDodecahedronHexagon(double d)
 {
     Vector v0(d, 0, 0);
-    Vector v1(0.5, 0.5*sqrt(3)*d, 0);
-    Vector v2(0.5*d, (1/6.0)*sqrt(3)*d, (1/3.0)*sqrt(6)*d);
+    Vector v1(0.5, 0.5*std::sqrt(3)*d, 0);
+    Vector v2(0.5*d, (1/6.0)*std::sqrt(3)*d, (1/3.0)*std::sqrt(6)*d);
 
     return TriclinicBox(v0, v1, v2);
 }
@@ -506,8 +506,8 @@ TriclinicBox TriclinicBox::rhombicDodecahedronHexagon(double d)
 TriclinicBox TriclinicBox::truncatedOctahedron(double d)
 {
     Vector v0(d, 0, 0);
-    Vector v1(d/3.0, (2/3.0)*sqrt(2)*d, 0);
-    Vector v2(-d/3.0, (1/3.0)*sqrt(2)*d, (1/3.0)*sqrt(6)*d);
+    Vector v1(d/3.0, (2/3.0)*std::sqrt(2)*d, 0);
+    Vector v2(-d/3.0, (1/3.0)*std::sqrt(2)*d, (1/3.0)*std::sqrt(6)*d);
 
     return TriclinicBox(v0, v1, v2);
 }
@@ -742,7 +742,7 @@ double TriclinicBox::calcDist2(const CoordGroup &group, const Vector &point,
     }
 
     //return the minimum distance
-    return sqrt(mindist2);
+    return std::sqrt(mindist2);
 }
 
 /** Populate the matrix 'mat' with the distances^2 between all of the
@@ -786,7 +786,7 @@ double TriclinicBox::calcDist2(const CoordGroup &group0, const CoordGroup &group
     }
 
     //return the minimum distance
-    return sqrt(mindist2);
+    return std::sqrt(mindist2);
 }
 
 /** Populate the matrix 'mat' with the inverse distances between all of the
@@ -874,7 +874,7 @@ double TriclinicBox::calcInvDist2(const CoordGroup &group0, const CoordGroup &gr
     }
 
     //return the shortest distance
-    return 1.0 / sqrt(maxinvdist2);
+    return 1.0 / std::sqrt(maxinvdist2);
 }
 
 /** Calculate the distance vector between two points */
@@ -1090,7 +1090,7 @@ double TriclinicBox::minimumDistance(const CoordGroup &group0,
     }
 
     //return the minimum distance
-    return sqrt(mindist2);
+    return std::sqrt(mindist2);
 }
 
 /** Return the copy of the point 'point' which is the closest minimum image
