@@ -114,7 +114,10 @@ TriclinicBox::TriclinicBox(const Vector &v0,
               v1_orig(v1),
               v2_orig(v2)
 {
-    // What follows was adapted from boxmtx.pl by Tsjerk A. Wassenaar.
+    // What follows was adapted from Appendex A from Chapter 3 of
+    // "Molecular dynamics of sense and sensibility in processing and analysis of data"
+    // by Tsjerk A. Wassenaar.
+    // https://pure.rug.nl/ws/portalfiles/portal/2839530/03_c3.pdf
 
     // Get the magnitudes of the lattice box vectors.
     auto m0 = v0.magnitude();
@@ -194,51 +197,14 @@ TriclinicBox::TriclinicBox(const Vector &v0,
        These constraints can be solved using simultaneous equations.
      */
 
-    // v1.x
-    double v1x;
-    if (this->v1.x() != 0)
-    {
-        v1x = this->v1.x()
-            - int((this->v1.x() / this->v0.x())
-            + (this->v1.x() / (2.0 * qAbs(this->v1.x()))))
-            * this->v0.x();
-    }
-    else
-    {
-        v1x = this->v1.x();
-    }
-
-    // v2.x
-    double v2x;
-    if (this->v2.x() != 0)
-    {
-        v2x = this->v2.x()
-            - int((this->v2.x() / this->v0.x())
-            + (this->v2.x() / (2.0 * qAbs(this->v2.x()))))
-            * this->v0.x();
-    }
-    else
-    {
-        v2x = this->v2.x();
-    }
-
-    // v2.y
-    double v2y;
-    if (this->v2.y() != 0)
-    {
-        v2y = this->v2.y()
-            - int((this->v2.y() / this->v1.y())
-            + (this->v2.y() / (2.0 * qAbs(this->v2.y()))))
-            * this->v1.y();
-    }
-    else
-    {
-        v2y = this->v2.y();
-    }
+    // Perform the reduction.
+    auto new_v1  = this->v1 - std::round(this->v1.x() / this->v0.x())*this->v0;
+    auto tmp     = this->v2 - std::round(this->v2.y() / this->v1.y())*this->v1;
+    auto new_v2  = tmp - std::round(tmp.x() / this->v0.x())*this->v0;
 
     // Update the lattice vectors.
-    this->v1 = Vector(v1x, this->v1.y(), this->v1.z());
-    this->v2 = Vector(v2x, v2y, this->v2.z());
+    this->v1 = new_v1;
+    this->v2 = new_v2;
 
     // Store the cell matrix and its inverse.
     this->cell_matrix = Matrix(this->v0, this->v1, this->v2).transpose();
