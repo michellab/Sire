@@ -28,31 +28,18 @@
 
 #include <QDebug>
 #include <QList>
-#include <QMutex>
 #include <QPair>
 
 #include <limits>
 #include <cmath>
-
-#ifdef SIRE_USE_SSE
-    #ifdef __SSE__
-        #include <emmintrin.h>   // CONDITIONAL_INCLUDE
-    #else
-        #undef SIRE_USE_SSE
-    #endif
-#endif
 
 #include "triclinicbox.h"
 #include "coordgroup.h"
 
 #include "SireMaths/rangenerator.h"
 
-#include "SireBase/countflops.h"
-
 #include "SireError/errors.h"
 #include "SireStream/datastream.h"
-
-#include <QDebug>
 
 // Helper struct for sorting based on first pair value.
 struct QPairFirstComparer
@@ -196,7 +183,6 @@ TriclinicBox::TriclinicBox(const Vector &v0,
     {
         this->is_rotated = false;
     }
-
 
     /* Next perform a lattice reduction such that the following conditions are
        met:
@@ -360,7 +346,6 @@ TriclinicBox::TriclinicBox(double a, double b, double c,
     Vector v2(c*cosb, c*(cosa-cosb*cosg)/sing,
               c*std::sqrt(sinb*sinb - (((cosa-cosb*cosg)/sing)*
                                        ((cosa-cosb*cosg)/sing))));
-
 
     *this = TriclinicBox(v0, v1, v2);
 }
