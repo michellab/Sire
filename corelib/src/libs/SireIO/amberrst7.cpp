@@ -782,16 +782,17 @@ AmberRst7::AmberRst7(const System &system, const PropertyMap &map)
         Vector v1 = space.read().asA<TriclinicBox>().vector1();
         Vector v2 = space.read().asA<TriclinicBox>().vector2();
 
-        // Radian to degree conversion factor.
-        double rad2deg = 180 / M_PI;
+        double alpha = space.read().asA<TriclinicBox>().alpha();
+        double beta  = space.read().asA<TriclinicBox>().beta();
+        double gamma = space.read().asA<TriclinicBox>().gamma();
 
         QVector<double> boxdims(6);
         boxdims[0] = v0.magnitude();
         boxdims[1] = v1.magnitude();
         boxdims[2] = v2.magnitude();
-        boxdims[3] = Vector::angle(v1, v2).value()*rad2deg;
-        boxdims[4] = Vector::angle(v0, v2).value()*rad2deg;
-        boxdims[5] = Vector::angle(v1, v0).value()*rad2deg;
+        boxdims[3] = alpha;
+        boxdims[4] = beta;
+        boxdims[5] = gamma;
 
         lines += writeFloatData(boxdims, AmberFormat( AmberPrm::FLOAT, 6, 12, 7 ),
                                 &errors, false, 'f');

@@ -30,11 +30,11 @@
 #include <QList>
 #include <QPair>
 
-#include <limits>
 #include <cmath>
+#include <limits>
 
-#include "triclinicbox.h"
 #include "coordgroup.h"
+#include "triclinicbox.h"
 
 #include "SireMaths/rangenerator.h"
 
@@ -262,13 +262,13 @@ TriclinicBox::TriclinicBox(const Vector &v0,
     }
 
     // Work out the angle between each pair of vectors.
-    this->alpha = Vector::angle(this->v1, this->v2).value();
-    this->beta = Vector::angle(this->v0, this->v2).value();
-    this->gamma = Vector::angle(this->v1, this->v0).value();
+    this->_alpha = Vector::angle(this->v1, this->v2).value();
+    this->_beta  = Vector::angle(this->v0, this->v2).value();
+    this->_gamma = Vector::angle(this->v1, this->v0).value();
 
-    auto cos_alpha = cos(this->alpha);
-    auto cos_beta = cos(this->beta);
-    auto cos_gamma = cos(this->gamma);
+    auto cos_alpha = cos(this->_alpha);
+    auto cos_beta  = cos(this->_beta);
+    auto cos_gamma = cos(this->_gamma);
 
     // Now work out the volume of the cell.
     this->vol = this->v0.magnitude() * this->v1.magnitude() * this->v2.magnitude() *
@@ -331,9 +331,9 @@ TriclinicBox::TriclinicBox(const TriclinicBox &other)
               M(other.M),
               dist_max(other.dist_max),
               max_length(other.max_length),
-              alpha(other.alpha),
-              beta(other.beta),
-              gamma(other.gamma),
+              _alpha(other._alpha),
+              _beta(other._beta),
+              _gamma(other._gamma),
               vol(other.vol),
               is_rotated(other.is_rotated),
               invlength(other.invlength)
@@ -358,9 +358,9 @@ TriclinicBox& TriclinicBox::operator=(const TriclinicBox &other)
         cell_matrix = other.cell_matrix;
         dist_max = other.dist_max;
         max_length = other.max_length;
-        alpha = other.alpha;
-        beta = other.beta;
-        gamma = other.gamma;
+        _alpha = other._alpha;
+        _beta = other._beta;
+        _gamma = other._gamma;
         vol = other.vol;
         is_rotated = other.is_rotated;
         invlength = other.invlength;
@@ -402,33 +402,54 @@ bool TriclinicBox::isPeriodic() const
 bool TriclinicBox::isCartesian() const
 {
     // Only cubic boxes are Cartesian.
-    return this->alpha == M_PI_2 and
-           this->beta  == M_PI_2 and
-           this->gamma == M_PI_2;
+    return this->_alpha == M_PI_2 and
+           this->_beta  == M_PI_2 and
+           this->_gamma == M_PI_2;
 }
 
-/** Return the first box vector */
+/** Return the first box vector. */
 const Vector& TriclinicBox::vector0() const
 {
     return v0;
 }
 
-/** Return the second box vector */
+/** Return the second box vector. */
 const Vector& TriclinicBox::vector1() const
 {
     return v1;
 }
 
-/** Return the third box vector */
+/** Return the third box vector. */
 const Vector& TriclinicBox::vector2() const
 {
     return v2;
 }
 
-/** Return the rotation matrix */
+/** Return the rotation matrix. */
 const Matrix& TriclinicBox::rotationMatrix() const
 {
     return rotation_matrix;
+}
+
+/** Return the angle between the second and third box vectors in degrees. */
+double TriclinicBox::alpha() const
+{
+    double rad2deg = 180 / M_PI;
+    return _alpha * rad2deg;
+}
+
+/** Return the angle between the first and third box vectors in degrees. */
+double TriclinicBox::beta() const
+{
+    double rad2deg = 180 / M_PI;
+    return _beta * rad2deg;
+}
+
+/** Return the angle between the second and first box vectors in degrees. */
+double TriclinicBox::gamma() const
+{
+    double rad2deg = 180 / M_PI;
+    return _gamma * rad2deg;
 }
 
 /** Return the cell matrix */

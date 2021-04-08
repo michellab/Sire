@@ -1040,15 +1040,12 @@ AmberRst::AmberRst(const System &system, const PropertyMap &map)
             Vector v1 = system.property(map["space"]).asA<TriclinicBox>().vector1();
             Vector v2 = system.property(map["space"]).asA<TriclinicBox>().vector2();
 
-            // Radian to degree conversion factor.
-            double rad2deg = 180 / M_PI;
-
             // Store the box magnitudes.
             box_dims.append(Vector(v0.magnitude(), v1.magnitude(), v2.magnitude()));
 
-            auto alpha = Vector::angle(v1, v2).value()*rad2deg;
-            auto beta  = Vector::angle(v0, v2).value()*rad2deg;
-            auto gamma = Vector::angle(v1, v0).value()*rad2deg;
+            double alpha = system.property(map["space"]).asA<TriclinicBox>().alpha();
+            double beta  = system.property(map["space"]).asA<TriclinicBox>().alpha();
+            double gamma = system.property(map["space"]).asA<TriclinicBox>().gamma();
 
             // Store the angles between the box vectors.
             box_angs.append(Vector(alpha, beta, gamma));

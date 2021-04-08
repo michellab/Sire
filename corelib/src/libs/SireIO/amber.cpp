@@ -2356,15 +2356,13 @@ void Amber::writeCrd(const MoleculeGroup &mols, const Space &space, const QStrin
         Vector v1 = space.asA<TriclinicBox>().vector1();
         Vector v2 = space.asA<TriclinicBox>().vector2();
 
-        // Radian to degree conversion factor.
-        double rad2deg = 180 / M_PI;
-
         auto x = v0.magnitude();
         auto y = v1.magnitude();
         auto z = v2.magnitude();
-        auto alpha = Vector::angle(v1, v2).value()*rad2deg;
-        auto beta  = Vector::angle(v0, v2).value()*rad2deg;
-        auto gamma = Vector::angle(v1, v0).value()*rad2deg;
+
+        double alpha = space.asA<TriclinicBox>().alpha();
+        double beta  = space.asA<TriclinicBox>().beta();
+        double gamma = space.asA<TriclinicBox>().gamma();
 
         fout << x << y << z << alpha << beta << gamma;
 

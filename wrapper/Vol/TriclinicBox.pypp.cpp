@@ -7,8 +7,6 @@
 
 namespace bp = boost::python;
 
-#include "SireBase/countflops.h"
-
 #include "SireError/errors.h"
 
 #include "SireMaths/rangenerator.h"
@@ -22,8 +20,6 @@ namespace bp = boost::python;
 #include <QDebug>
 
 #include <QList>
-
-#include <QMutex>
 
 #include <QPair>
 
@@ -43,11 +39,33 @@ void register_TriclinicBox_class(){
 
     { //::SireVol::TriclinicBox
         typedef bp::class_< SireVol::TriclinicBox, bp::bases< SireVol::Cartesian, SireVol::Space, SireBase::Property > > TriclinicBox_exposer_t;
-        TriclinicBox_exposer_t TriclinicBox_exposer = TriclinicBox_exposer_t( "TriclinicBox", "\nA TriclinicBox is a volume  that represents standard periodic boundary conditions\n(a 3D box replicated to infinity along all three dimensions).\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a default TriclinicBox volume (maximum volume)") );
+        TriclinicBox_exposer_t TriclinicBox_exposer = TriclinicBox_exposer_t( "TriclinicBox", "\nA TriclinicBox is a volume  that represents standard periodic boundary conditions\n(a 3D box replicated to infinity along all three dimensions).\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a default TriclinicBox (large volume)") );
         bp::scope TriclinicBox_scope( TriclinicBox_exposer );
         TriclinicBox_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") ), "Construct a TriclinicBox with the specified lattice vectors") );
         TriclinicBox_exposer.def( bp::init< double, double, double, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const &, SireUnits::Dimension::Angle const & >(( bp::arg("a"), bp::arg("b"), bp::arg("c"), bp::arg("alpha"), bp::arg("beta"), bp::arg("gamma") ), "Construct a TriclinicBox with the specified lattice vector magnitudes\nand angles.\na = magnitude of first lattice vector\nb = magnitude of second lattice vector\nc = magnitude of third lattice vector\nalpha = angle between second and third lattice vectors\nbeta = angle between first and third lattice vectors\ngamma = angle between second and first lattice vectors\n") );
         TriclinicBox_exposer.def( bp::init< SireVol::TriclinicBox const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireVol::TriclinicBox::alpha
+        
+            typedef double ( ::SireVol::TriclinicBox::*alpha_function_type)(  ) const;
+            alpha_function_type alpha_function_value( &::SireVol::TriclinicBox::alpha );
+            
+            TriclinicBox_exposer.def( 
+                "alpha"
+                , alpha_function_value
+                , "Return the angle between v1 and v2 in degrees." );
+        
+        }
+        { //::SireVol::TriclinicBox::beta
+        
+            typedef double ( ::SireVol::TriclinicBox::*beta_function_type)(  ) const;
+            beta_function_type beta_function_value( &::SireVol::TriclinicBox::beta );
+            
+            TriclinicBox_exposer.def( 
+                "beta"
+                , beta_function_value
+                , "Return the angle between v0 and v2 in degrees." );
+        
+        }
         { //::SireVol::TriclinicBox::beyond
         
             typedef bool ( ::SireVol::TriclinicBox::*beyond_function_type)( double,::SireVol::AABox const &,::SireVol::AABox const & ) const;
@@ -249,6 +267,17 @@ void register_TriclinicBox_class(){
                 , cubic_function_value
                 , ( bp::arg("d") )
                 , "Return a cubic TriclinicBox with image distance d." );
+        
+        }
+        { //::SireVol::TriclinicBox::gamma
+        
+            typedef double ( ::SireVol::TriclinicBox::*gamma_function_type)(  ) const;
+            gamma_function_type gamma_function_value( &::SireVol::TriclinicBox::gamma );
+            
+            TriclinicBox_exposer.def( 
+                "gamma"
+                , gamma_function_value
+                , "Return the angle between v1 and v0 in degrees." );
         
         }
         { //::SireVol::TriclinicBox::getBoxCenter

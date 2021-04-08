@@ -3357,14 +3357,12 @@ QStringList toLines(const QVector<AmberParams> &params,
             const auto v0 = space.asA<TriclinicBox>().vector0();
             const auto v1 = space.asA<TriclinicBox>().vector1();
             const auto v2 = space.asA<TriclinicBox>().vector2();
+            double beta   = space.asA<TriclinicBox>().beta();
 
             QVector<double> box_dims(4);
 
-            // Radian to degree conversion factor.
-            double rad2deg = 180 / M_PI;
-
             QVector<double> boxdims(6);
-            box_dims[0] = Vector::angle(v0, v2).value()*rad2deg;
+            box_dims[0] = beta;
             box_dims[1] = v0.magnitude();
             box_dims[2] = v1.magnitude();
             box_dims[3] = v2.magnitude();
