@@ -206,6 +206,8 @@ public:
 
 protected:
 
+    void construct(const Vector &v0, const Vector &v1, const Vector &v2);
+
     Vector wrapDelta(const Vector &v0, const Vector &v1) const;
 
     CoordGroupArray _pvt_getMinimumImage(
