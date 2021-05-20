@@ -22,7 +22,8 @@ devel branch:
                tbb/atomic.h is now deprecated. Switched to using HTTPS for
                sending analytics. Updated build to be able to link against
                conda version of libcpuid. Added support for generating PDB
-               CONECT records from a Sire.Mol.Connectivity object.
+               CONECT records from a Sire.Mol.Connectivity object. Fixed
+               issue with PMEMD skipping torsions with zero periodicity.
 
     [2020.1.0] July 2020 - Fixed bug in WaterView program to ensure that a
                molecule is extracted from the returned list. Stable sorting
