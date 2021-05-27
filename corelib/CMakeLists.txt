@@ -25,7 +25,7 @@ set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 
 if(COMMAND CMAKE_POLICY)
   if (POLICY CMP0025)
-    cmake_policy(SET CMP0025 NEW)  # Anaconda clang is called Clang, not AppleClang
+    cmake_policy(SET CMP0025 NEW)  # Anaconda clang is called Clang, not AppleClang
   endif()
   if (POLICY CMP0042)
     cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
@@ -79,7 +79,7 @@ if ( CMAKE_GENERATOR MATCHES "Xcode" )
 
   set ( SIRE_COMP_CMAKE "${SIRE_INCLUDE_DIR}/cmake/SireCompileVariables.cmake" )
 
-  # Look for the "SireCompileVariables.cmake" file in the install directory
+  #�Look for the "SireCompileVariables.cmake" file in the install directory
   if (EXISTS "${SIRE_COMP_CMAKE}")
     include( "${SIRE_COMP_CMAKE}" )
   else()
@@ -303,8 +303,8 @@ save_sire_variable( "SIRE_TEST" "${SIRE_TEST}" )
 set (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/build/cmake ${CMAKE_SOURCE_DIR}/build/cmake/cmake_cxx11)
 
 # Options to pass to 'strip' when stripping the libraries
-# (on linux, aix and mac need to use '-x' to ensure we leave
-#  the global symbols)
+#�(on linux, aix and mac need to use '-x' to ensure we leave
+# the global symbols)
 set ( SIRE_STRIP_OPTIONS "-x" CACHE STRING "Options to pass to 'strip'" )
 save_sire_variable( "SIRE_STRIP_OPTIONS" "${SIRE_STRIP_OPTIONS}" )
 
@@ -370,11 +370,11 @@ check_function_exists( sysctl HAVE_SYSCTL )
 check_function_exists( cbrt HAVE_CUBEROOT )
 check_symbol_exists( backtrace "execinfo.h" HAVE_BACKTRACE )
 
-#create config.h
+# Create config.h
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/build/cmake/sire_config.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/sire_config.h)
 
-#  We need to get the compiler flags for different options
+# We need to get the compiler flags for different options
 set( SIRE_SMALL_FLAGS "" CACHE INTERNAL "Compiler flags to produce small code" )
 set( SIRE_WARNALL_FLAGS "" CACHE INTERNAL "Compiler flags to turn on all warnings" )
 set( SIRE_DEBUG_FLAGS "" CACHE INTERNAL "Compiler flags to produce debugging code" )
@@ -721,13 +721,19 @@ if ( CMAKE_GENERATOR MATCHES "Xcode" )
   # Xcode build - use the libraries that are already installed...
 
 else()
-  # Option to disable all bundles
+  # Option to disable all bundles
   option( SIRE_ENABLE_BUNDLING "Allow Sire to use bundled libraries" ON )
 
-  # Fine-grain control of bundling each dependency
+  # Fine-grain control of bundling each dependency
   option( SIRE_BUNDLE_TBB "Whether Sire should use its bundled copy of TBB" ON )
   option( SIRE_BUNDLE_GSL "Whether Sire should use its bundled copy of GSL" ON )
-  option( SIRE_BUNDLE_CPUID "Whether Sire should use its bundled copy of libcpuid" ON )
+  # Don't bundle CPUID on Power9.
+  if (NOT ${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "ppc64le")
+    option( SIRE_BUNDLE_CPUID "Whether Sire should use its bundled copy of libcpuid" ON )
+  else()
+    option( SIRE_BUNDLE_CPUID "Whether Sire should use its bundled copy of libcpuid" OFF )
+    message( STATUS "Not bundling libcpuid. CPU detection is disabled on Power9 architecture." )
+  endif()
   option( SIRE_BUNDLE_BOOST "Whether Sire should use its bundled copy of Boost" ON )
   option( SIRE_BUNDLE_BLASLAPACK "Whether Sire should use its bundled copy of BLAS and LAPACK" ON )
   option( SIRE_BUNDLE_QT "Whether Sire should use its bundled copy of Qt" ON )
@@ -992,7 +998,7 @@ message( STATUS  "CMAKE_C_COMPILER       == ${CMAKE_C_COMPILER}" )
 message( STATUS  "CMAKE_CXX_COMPILER     == ${CMAKE_CXX_COMPILER}" )
 message( STATUS  "CMAKE_Fortran_COMPILER == ${CMAKE_Fortran_COMPILER}" )
 
-message ( STATUS "SIRE_CXX_NG_FLAGS       == ${SIRE_CXX_NG_FLAGS}" )
+message ( STATUS "SIRE_CXX_NG_FLAGS      == ${SIRE_CXX_NG_FLAGS}" )
 message ( STATUS "SIRE_SMALL_FLAGS       == ${SIRE_SMALL_FLAGS}" )
 message ( STATUS "SIRE_WARNALL_FLAGS     == ${SIRE_WARNALL_FLAGS}" )
 message ( STATUS "SIRE_DEBUG_FLAGS       == ${SIRE_DEBUG_FLAGS}" )
@@ -1056,7 +1062,7 @@ message( STATUS "Shared library flags    == ${CMAKE_SHARED_LINKER_FLAGS}" )
 message( STATUS "Static library flags    == ${CMAKE_STATIC_LINKER_FLAGS}" )
 message( STATUS "Executable link flags   == ${CMAKE_EXE_LINKER_FLAGS}" )
 
-# Now save the compile variables so that they can be re-used by libraries that use Sire
+#�Now save the compile variables so that they can be re-used by libraries that use Sire
 save_sire_variable( "SIRE_C_COMPILER" "${CMAKE_C_COMPILER}" )
 save_sire_variable( "SIRE_CXX_COMPILER" "${CMAKE_CXX_COMPILER}" )
 save_sire_variable( "SIRE_C_FLAGS_RELEASE" "${CMAKE_C_FLAGS_RELEASE}" )
@@ -1076,7 +1082,7 @@ save_sire_variable( "SIRE_VECTOR_FLAGS" "${SIRE_VECTOR_FLAGS}" )
 save_sire_variable( "SIRE_VISIBILITY_FLAGS" "${SIRE_VISIBILITY_FLAGS}" )
 save_sire_variable( "SIRE_PLATFORM_FLAGS" "${SIRE_PLATFORM_FLAGS}" )
 
-#include the build directory so that we can get sire_config.h and sire_version.h
+# Include the build directory so that we can get sire_config.h and sire_version.h
 include_directories(${CMAKE_BINARY_DIR})
 
 ################
