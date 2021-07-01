@@ -195,7 +195,7 @@ namespace SireMove {
         SireUnits::Dimension::Time getTimetoSkip(void);
         void setTimetoSkip(SireUnits::Dimension::Time);
 
-        void setReinitialiseContext(bool);
+        QString getSerialisedSystem(void);
 
         int getRandomSeed(void);
         void setRandomSeed(int);

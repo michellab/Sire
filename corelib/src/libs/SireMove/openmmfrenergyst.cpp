@@ -2884,6 +2884,12 @@ void OpenMMFrEnergyST::initialise()
     this->isSystemInitialised = true;
 }
 
+QString OpenMMFrEnergyST::getSerialisedSystem(void){
+
+	return QString(OpenMM::XmlSerializer::serialize(this->openmmm_system));
+}
+
+
 /**
  *
  * @param workspace
