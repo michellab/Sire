@@ -473,6 +473,17 @@ void register_OpenMMFrEnergyST_class(){
                 , "" );
         
         }
+        { //::SireMove::OpenMMFrEnergyST::getSerialisedSystem
+        
+            typedef ::QString ( ::SireMove::OpenMMFrEnergyST::*getSerialisedSystem_function_type)(  ) ;
+            getSerialisedSystem_function_type getSerialisedSystem_function_value( &::SireMove::OpenMMFrEnergyST::getSerialisedSystem );
+            
+            OpenMMFrEnergyST_exposer.def( 
+                "getSerialisedSystem"
+                , getSerialisedSystem_function_value
+                , "" );
+        
+        }
         { //::SireMove::OpenMMFrEnergyST::getShiftDelta
         
             typedef double ( ::SireMove::OpenMMFrEnergyST::*getShiftDelta_function_type)(  ) ;
@@ -853,18 +864,6 @@ void register_OpenMMFrEnergyST_class(){
                 , setRandomSeed_function_value
                 , ( bp::arg("arg0") )
                 , "Set the Integrator random seed" );
-        
-        }
-        { //::SireMove::OpenMMFrEnergyST::setReinitialiseContext
-        
-            typedef void ( ::SireMove::OpenMMFrEnergyST::*setReinitialiseContext_function_type)( bool ) ;
-            setReinitialiseContext_function_type setReinitialiseContext_function_value( &::SireMove::OpenMMFrEnergyST::setReinitialiseContext );
-            
-            OpenMMFrEnergyST_exposer.def( 
-                "setReinitialiseContext"
-                , setReinitialiseContext_function_value
-                , ( bp::arg("arg0") )
-                , "Set the flag to reinitialise the context" );
         
         }
         { //::SireMove::OpenMMFrEnergyST::setRestraint
