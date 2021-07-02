@@ -2884,9 +2884,15 @@ void OpenMMFrEnergyST::initialise()
     this->isSystemInitialised = true;
 }
 
-QString OpenMMFrEnergyST::getSerialisedSystem(void){
+/**
+ * <Returns a serialsed OpenMMSystem of the current System>
 
-	return QString(OpenMM::XmlSerializer::serialize(this->openmmm_system));
+ * @return                      Serialized OpenMM System as a Qstring
+ */
+QString OpenMMFrEnergyST::getSerialisedOpenMMSystem(void){
+	std::stringstream ss;
+	OpenMM::XmlSerializer::serialize(this->openmm_system, "System", ss);
+	return QString(ss.str().c_str());
 }
 
 
