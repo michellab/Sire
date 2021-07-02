@@ -48,6 +48,7 @@ from Sire.Tools import Parameter, resolveParameters
 import Sire.Stream
 import time
 import numpy as np
+import bzip2
 
 
 MIN_MASSES = {'C': 5.96, 'N': 7.96}
@@ -221,6 +222,8 @@ simfile = Parameter("outdata_file", "simfile.dat", """Filename that records all 
 perturbed_resnum = Parameter("perturbed residue number",1,"""The residue number of the molecule to morph.""")
 
 verbose = Parameter("verbose", False, """Print debug output""")
+
+serialise_openmm_file = Parameter("serialise_openmm_file", None, """If specified write bz2 compressed serialised OpenMM system""")
 
 ####################################################################################################
 #
@@ -1706,6 +1709,11 @@ def runFreeNrg():
             print ('Lambda annealing done.\n')
         print("###===========================================================###\n")
 
+    if serialise_openmm_file.val is not None:
+        print("###==================Serializing OpenMM System================###")
+        with bzip2.open(serialise_openmm_file.val, 'wt') as openmm_file:
+            openmm_file.write(integrator.getSerialisedOpenMMSystem())
+        print("###===========================================================###\n")
 
     print("###====================somd-freenrg run=======================###")
     print ("Starting somd-freenrg run...")
