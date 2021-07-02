@@ -169,8 +169,8 @@ else
         # Download miniconda.exe if it is not already in build/downloads
         if [ ! -e "build/miniconda.exe" ]; then
             echo "** Downloading miniconda from ${MINICONDA}... **"
-            echo "curl ${MINICONDA} -o build/miniconda.exe"
-            curl ${MINICONDA} -o build/miniconda.exe
+            echo "curl -L ${MINICONDA} -o build/miniconda.exe"
+            curl -L ${MINICONDA} -o build/miniconda.exe
             chmod a+x build/miniconda.exe
         fi
 
@@ -184,8 +184,8 @@ else
         # Download miniconda if it is not already in build/downloads
         if [ ! -e "build/miniconda.sh" ]; then
             echo "** Downloading miniconda from ${MINICONDA}... **"
-            echo "** wget ${MINICONDA} -O build/miniconda.sh 2>/dev/null || curl ${MINICONDA} -o build/miniconda.sh  **"
-            wget ${MINICONDA} -O build/miniconda.sh 2>/dev/null || curl ${MINICONDA} -o build/miniconda.sh
+            echo "** wget ${MINICONDA} -O build/miniconda.sh 2>/dev/null || curl -L ${MINICONDA} -o build/miniconda.sh  **"
+            wget ${MINICONDA} -O build/miniconda.sh 2>/dev/null || curl -L ${MINICONDA} -o build/miniconda.sh
         fi
 
         # Now unpack miniconda and install it into the requested directory
