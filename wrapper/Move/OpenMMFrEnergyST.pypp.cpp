@@ -473,14 +473,14 @@ void register_OpenMMFrEnergyST_class(){
                 , "" );
         
         }
-        { //::SireMove::OpenMMFrEnergyST::getSerialisedSystem
+        { //::SireMove::OpenMMFrEnergyST::getSerialisedOpenMMSystem
         
-            typedef ::QString ( ::SireMove::OpenMMFrEnergyST::*getSerialisedSystem_function_type)(  ) ;
-            getSerialisedSystem_function_type getSerialisedSystem_function_value( &::SireMove::OpenMMFrEnergyST::getSerialisedSystem );
+            typedef ::QString ( ::SireMove::OpenMMFrEnergyST::*getSerialisedOpenMMSystem_function_type)(  ) ;
+            getSerialisedOpenMMSystem_function_type getSerialisedOpenMMSystem_function_value( &::SireMove::OpenMMFrEnergyST::getSerialisedOpenMMSystem );
             
             OpenMMFrEnergyST_exposer.def( 
-                "getSerialisedSystem"
-                , getSerialisedSystem_function_value
+                "getSerialisedOpenMMSystem"
+                , getSerialisedOpenMMSystem_function_value
                 , "" );
         
         }
@@ -864,6 +864,18 @@ void register_OpenMMFrEnergyST_class(){
                 , setRandomSeed_function_value
                 , ( bp::arg("arg0") )
                 , "Set the Integrator random seed" );
+        
+        }
+        { //::SireMove::OpenMMFrEnergyST::setReinitialiseContext
+        
+            typedef void ( ::SireMove::OpenMMFrEnergyST::*setReinitialiseContext_function_type)( bool ) ;
+            setReinitialiseContext_function_type setReinitialiseContext_function_value( &::SireMove::OpenMMFrEnergyST::setReinitialiseContext );
+            
+            OpenMMFrEnergyST_exposer.def( 
+                "setReinitialiseContext"
+                , setReinitialiseContext_function_value
+                , ( bp::arg("reinitialise") )
+                , "Set the flag to reinitialise the context" );
         
         }
         { //::SireMove::OpenMMFrEnergyST::setRestraint
