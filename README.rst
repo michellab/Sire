@@ -47,13 +47,13 @@ To install the latest development version you can use:
     conda activate sire-dev
 
 If you find that Conda is particularly slow to install or upgrade,
-then we advise using `mamba <https://github.com/TheSnakePit/mamba>`__::
+then we advise using `mamba <https://github.com/TheSnakePit/mamba>`__:
 
 .. code-block:: bash
 
     conda install -c conda-forge mamba
 
-You can then replace all ``conda`` commands with ``mamba``, e.g.::
+You can then replace all ``conda`` commands with ``mamba``, e.g.:
 
 .. code-block:: bash
 
