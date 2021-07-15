@@ -1424,6 +1424,83 @@ void OpenMMFrEnergyST::initialise()
 
         } //end of if hasVsites
 
+    Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+    bool hasPertVirtualSites = molecule.hasProperty("pert_virtual-sites");
+    if (hasPertVirtualSites)
+        {
+            Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+
+            Properties pert_virtualSites = molecule.property("pert_virtual-sites").asA<Properties>();
+
+            int pert_nvirtualsites = pert_virtualSites.property(QString("nvirtualsites")).asA<VariantProperty>().toInt();
+
+            for (int i = 0; i < pert_nvirtualsites; i++)
+            {
+
+                int pert_vs_index = pert_virtualSites.property(QString("index(%1)").arg(i)).asA<VariantProperty>().toInt();
+                int pert_atom1 = pert_virtualSites.property(QString("atom1(%1)").arg(i)).asA<VariantProperty>().toInt();
+                int pert_atom2 = pert_virtualSites.property(QString("atom2(%1)").arg(i)).asA<VariantProperty>().toInt();
+                int pert_atom3 = pert_virtualSites.property(QString("atom3(%1)").arg(i)).asA<VariantProperty>().toInt();
+                //int pert_atom4 = pert_virtualSites.property(QString("atom4(%1)").arg(i)).asA<VariantProperty>().toInt();
+                double pert_pos1 = pert_virtualSites.property(QString("p1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_pos2 = pert_virtualSites.property(QString("p2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_pos3 = pert_virtualSites.property(QString("p3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_wo1 = pert_virtualSites.property(QString("wo1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_wo2 = pert_virtualSites.property(QString("wo2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_wo3 = pert_virtualSites.property(QString("wo3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                //double pert_wo4 = pert_virtualSites.property(QString("wo4(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_wx1 = pert_virtualSites.property(QString("wx1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_wx2 = pert_virtualSites.property(QString("wx2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_wx3 = pert_virtualSites.property(QString("wx3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                //double pert_wx4 = pert_virtualSites.property(QString("wx4(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_wy1 = pert_virtualSites.property(QString("wy1(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_wy2 = pert_virtualSites.property(QString("wy2(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_wy3 = pert_virtualSites.property(QString("wy3(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                //double pert_wy4 = pert_virtualSites.property(QString("wy4(%1)").arg(i)).asA<VariantProperty>().toDouble();
+
+               //vector<int> parent_atoms{atom1, atom2, atom3, atom4};
+               //vector<double> positions{pos1, pos2, pos3};
+               //vector<double> o_weights{wo1, wo2, wo3, wo4};
+               //vector<double> x_weights{wx1, wx2, wx3, wx4};
+               //vector<double> y_weights{wy1, wy2, wy3, wy4};
+
+               vector<int> pert_parent_atoms{pert_atom1, pert_atom2, pert_atom3};
+               vector<double> pert_positions{pert_pos1, pert_pos2, pert_pos3};
+               vector<double> pert_o_weights{pert_wo1, pert_wo2, pert_wo3};
+               vector<double> pert_x_weights{pert_wx1, pert_wx2, pert_wx3};
+               vector<double> pert_y_weights{pert_wy1, pert_wy2, pert_wy3};
+
+                if (Debug)
+                        qDebug() << " NUMBER OF PARTICLES BEFORE V-SITE: " << system_openmm->getNumParticles();
+
+                if (Debug)
+                    {
+                        qDebug() << " positions" << pert_positions << " o_weights " << pert_o_weights << " x_weights " << pert_x_weights << " y_weights " << pert_y_weights << "parent atoms" << pert_parent_atoms;
+                    }
+                system_openmm->addParticle(0.0);
+                // FOR 3 WEIGHTS: 
+                OpenMM::LocalCoordinatesSite * pert_vsite = new OpenMM::LocalCoordinatesSite(pert_atom1, pert_atom2, pert_atom3, OpenMM::Vec3(pert_wo1, pert_wo2, pert_wo3), OpenMM::Vec3(pert_wx1, pert_wx2, pert_wx3) , OpenMM::Vec3(pert_wy1, pert_wy2, pert_wy3), OpenMM::Vec3(pert_pos1, pert_pos2, pert_pos3));
+                // FOR 4 WEIGHTS: 
+                //OpenMM::LocalCoordinatesSite * vsite = new OpenMM::LocalCoordinatesSite(vector<int> {atom1, atom2, atom3, atom4}, vector<double> {wo1, wo2, wo3, wo4}, vector<double> {wx1, wx2, wx3, wx4} , vector<double> {wy1, wy2, wy3, wy4}, OpenMM::Vec3(pos1, pos2, pos3));
+
+                if (Debug)
+                    {
+                        qDebug() << "vsite SYSTEM INDEX:  " << system_index +  nvirtualsites +i << " VSITE: " << pert_vsite;
+                    }
+
+                system_openmm->setVirtualSite(system_index +  nvirtualsites +i, vsite);
+                system_openmm->getParticleMass(system_index+  nvirtualsites +i);
+                system_openmm->isVirtualSite(system_index+  nvirtualsites +i);
+                system_openmm->getVirtualSite(system_index+  nvirtualsites +i);
+
+               if (Debug)
+                {
+                    qDebug() << "IS PERT VSITE? :  " << system_openmm->isVirtualSite(system_index+  nvirtualsites +i) << "THE MASS IS: " << system_openmm->getParticleMass(system_index+  nvirtualsites +i);
+                    qDebug() << "NUMBER OF PARTICLES :  " << system_openmm->getNumParticles();
+                }
+            }
+        }
+
     int num_atoms_till_i = 0;
 
     /*NON BONDED PER PARTICLE PARAMETERS*/
@@ -2673,10 +2750,72 @@ void OpenMMFrEnergyST::initialise()
         } 
 
 
+    Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+    bool hasPertVirtualSites = molecule.hasProperty("pert_virtual-sites");
+
+    if (Debug)
+      qDebug() << " Does it recognise the property? " << hasPertVirtualSites;
+
+    if (hasPertVirtualSites)
+        {
+            Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+
+            Properties pert_virtualSites = molecule.property("pert_virtual-sites").asA<Properties>();
+
+            int pert_nvirtualsites = pert_virtualSites.property(QString("nvirtualsites")).asA<VariantProperty>().toInt();
+
+            for (int i = 0; i < pert_nvirtualsites; i++)
+            {
+
+
+                double pert_vcharge_vs = pert_vvirtualSites.property(QString("charge(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_vsigma_vs = pert_vvirtualSites.property(QString("sigma(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                double pert_vepsilon_vs = pert_vvirtualSites.property(QString("epsilon(%1)").arg(i)).asA<VariantProperty>().toDouble();
+                
+                nonbond_openmm->addParticle(pert_vcharge_vs * (1-Alchemical_value), pert_vsigma_vs * OpenMM::NmPerAngstrom, pert_vepsilon_vs * OpenMM::KJPerKcal);
+
+                  
+                std::vector<double> pert_custom_non_bonded_params_vs(10);
+
+                pert_custom_non_bonded_params_vs[0] = charge_vs *(1-Alchemical_value);
+                pert_custom_non_bonded_params_vs[1] = 0 * Alchemical_value; //charge_end
+                pert_custom_non_bonded_params_vs[2] = epsilon_vs * OpenMM::KJPerKcal; //epsilon_start
+                pert_custom_non_bonded_params_vs[3] = 0.00000 * OpenMM::KJPerKcal; //epsilon_end
+                pert_custom_non_bonded_params_vs[4] = sigma_vs * OpenMM::NmPerAngstrom; //sigma_start
+                pert_custom_non_bonded_params_vs[5] = 1.00000 * OpenMM::NmPerAngstrom; //sigma_end
+                pert_custom_non_bonded_params_vs[6] = 0.0; //isHard
+                pert_custom_non_bonded_params_vs[7] = 0.0; //isTodummy
+                pert_custom_non_bonded_params_vs[8] = 1.0; //isFromdummy
+                pert_custom_non_bonded_params_vs[9] = 0.0; //isSolventProtein
+                
+                 custom_force_field->addParticle(pert_custom_non_bonded_params_vs);
+
+                    if (Debug)
+                        qDebug() << " ------------> CUSTOM FF NUMBER OF PARTICLES after V-SITE: " << custom_force_field->getNumParticles(); 
+                
+                 if (Debug)
+                {
+                    qDebug() << "pert_Charge start = " << pert_custom_non_bonded_params_vs[0];
+                    qDebug() << "pert_Charge end = " << pert_custom_non_bonded_params_vs[1];
+                    qDebug() << "pert_Eps start = " << pert_custom_non_bonded_params_vs[2];
+                    qDebug() << "pert_Eps end = " << pert_custom_non_bonded_params_vs[3];
+                    qDebug() << "pert_Sig start = " << pert_custom_non_bonded_params_vs[4];
+                    qDebug() << "pert_Sig end = " << pert_custom_non_bonded_params_vs[5];
+                    qDebug() << "pert_is Hard = " << pert_custom_non_bonded_params_vs[6];
+                    qDebug() << "pert_is To dummy = " << pert_custom_non_bonded_params_vs[7];
+                    qDebug() << "pert_is From dummy = " << pert_custom_non_bonded_params_vs[8];
+                    qDebug() << "pert_is Solvent = " << pert_custom_non_bonded_params_vs[9] << "\n";
+                }
+            }
+
+        }
+	
+
+
     // add the 1-4 pairs for the virtual sites by looking at the 1-3 pairs of the parent atom 
     if (hasVirtualSites)
         {
-        	if (Debug)
+            if (Debug)
                 qDebug() << " ~~~~ 3rd has vsites: " << system_openmm->getNumParticles();
 
             Molecule molecule = moleculegroup.moleculeAt(0).molecule();
@@ -2689,7 +2828,7 @@ void OpenMMFrEnergyST::initialise()
             {
 
                 int atom1 = virtualSites.property(QString("atom1(%1)").arg(i)).asA<VariantProperty>().toInt();
-                int vs_index = virtualSites.property(QString("index(%1)").arg(i)).asA<VariantProperty>().toInt();
+                //int vs_index = virtualSites.property(QString("index(%1)").arg(i)).asA<VariantProperty>().toInt();
                 int parent_index;
                 parent_index = atom1;
 
@@ -2697,41 +2836,30 @@ void OpenMMFrEnergyST::initialise()
 
                 if (Debug)
                 {
-                   // qDebug() << "PARENT INDEX:  " << parent_index << " BONDPAIRS :  " << bondPairs ;
+                    qDebug() << "PARENT INDEX:  " << parent_index << " BONDPAIRS :  " << bondPairs ;
                     qDebug() << "----> LALALA NOW SETTING 1-4 PAIRS FOR VIRTUAL SITE: = " << system_index+i  ;
                 }
-
-                AmberParameters amber_params = molecule.property("amberparameters").asA<AmberParameters>();
-                QList<AngleID> vs_allAngles = amber_params.getAllAngles();
-                QVector<AngleID> allAngles = vs_allAngles.toVector();
-
-                for (int j = 0; j < vs_allAngles.length(); j++)
-                {
-                    AngleID vs_Angle = vs_allAngles[j];
-                    QList<double> angle_params = amber_params.getParams(vs_Angle);
-
-                    int idx0 = allAngles[j].atom0().asA<AtomIdx>().value();
-                    int idx1 = allAngles[j].atom1().asA<AtomIdx>().value();
-                    int idx2 = allAngles[j].atom2().asA<AtomIdx>().value();
-
-                    if (idx0 == parent_index)
-                    {
-                        QPair<int, int> indices_pair(system_index +i, idx2);
-                        QPair<double, double> scl_pair(1.0 / 1.2, 0.5);
-                        custom14pairs.insert(indices_pair, scl_pair);
-                        special_14 = true;
-                    }
-
-                    else if (idx2 == parent_index)
-                    {
-                        QPair<int, int> indices_pair(system_index+i, idx0);
-                        QPair<double, double> scl_pair(1.0 / 1.2, 0.5);
-                        custom14pairs.insert(indices_pair, scl_pair);
-                        special_14 = true;
-                    }
-                }
             }
-        }
+    
+    if (hasPertVirtualSites)
+        {
+            Molecule molecule = moleculegroup.moleculeAt(0).molecule();
+
+            Properties pert_virtualSites = molecule.property("pert_virtual-sites").asA<Properties>();
+
+            int pert_nvirtualsites = pert_virtualSites.property(QString("nvirtualsites")).asA<VariantProperty>().toInt();
+
+            for (int i = 0; i < pert_nvirtualsites; i++)
+            {
+                int atom1 = pert_virtualSites.property(QString("atom1(%1)").arg(i)).asA<VariantProperty>().toInt();
+                int pert_parent_index;
+                pert_parent_index = atom1;
+
+                bondPairs.push_back(std::make_pair(system_index+nvirtualsites+i, pert_parent_index));
+             }
+          }
+       }
+    
         if (Debug)
             qDebug() << " custom14pairs = " << custom14pairs;
 
