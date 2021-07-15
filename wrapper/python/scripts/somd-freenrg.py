@@ -56,6 +56,12 @@ parser.add_argument('-p', '--platform', nargs="?",
 parser.add_argument('-l', '--lambda_val', nargs="?", 
                     help="The lambda value at which you want to run the simulation.")
 
+parser.add_argument('-x', '--xml_file', nargs="?", 
+                    help="xml file with VS.")
+
+parser.add_argument('-r', '--pert_xml_file', nargs="?", 
+                    help="xml file with the end state of molecule with VS.")
+
 sys.stdout.write("\n")
 args = parser.parse_args()
 
@@ -128,6 +134,14 @@ if args.nmoves:
 if args.lambda_val:
     lambda_val = float(args.lambda_val)
     params["lambda_val"] = lambda_val
+
+if args.xml_file:
+    xml_file = args.xml_file
+    params["xml_file"] = xml_file
+
+if args.pert_xml_file:
+    pert_xml_file = args.pert_xml_file
+    params["pert_xml_file"] = pert_xml_file
 
 if not (os.path.exists(coord_file) and os.path.exists(top_file) and os.path.exists(morph_file)):
     parser.print_help()
