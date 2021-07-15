@@ -222,6 +222,18 @@ perturbed_resnum = Parameter("perturbed residue number",1,"""The residue number 
 
 verbose = Parameter("verbose", False, """Print debug output""")
 
+
+relative_qube  = Parameter("relative qube", False, """Second xml file for v-site perturbations.""")
+
+qube  = Parameter("qube", False, """First xml file for v-site inclusion in FEP calculations.""")
+
+
+xml_file = Parameter("xml_file", "../../input/MOL_extra.xml",
+                      """xml file with VS.""")
+
+pert_xml_file = Parameter("pert_xml_file", "../../input/pertMOL_extra.xml",
+                      """xml file with VS.""")
+
 ####################################################################################################
 #
 #   Helper functions
@@ -1610,6 +1622,12 @@ def runFreeNrg():
         # Note that this just set the mass to zero which freezes residues in OpenMM but Sire doesn't known that
         if freeze_residues.val:
             system = freezeResidues(system)
+
+        if qube.val:
+            system = assignVirtualSites(system, xml_file.val)
+
+        if relative_qube.val:
+            system = assignPertVirtualSites(system, pert_xml_file.val)
 
         system = setupForceFieldsFreeEnergy(system, space)
 
