@@ -429,17 +429,21 @@ void addSomeInterBonds(ConnectivityEditor &connectivity, CGIdx cgidx0, CGIdx cgi
     \throw SireError::invalid_cast
 */
 Connectivity CovalentBondHunter::operator()(const MoleculeView &molview,
-                                       const PropertyMap &map) const
+                                            const PropertyMap &map) const
 {
-    //get the required properties
-    const Property &coords_property = molview.data()
-                                             .property( parameters().coordinates() );
+    // Get the names of the "coordinates" and "element" properties, with the
+    // passed map taking precedence. Don't use the CovalentBondHunterParameters
+    // since it doesn't allow any flexibility in the parameter naming.
+    auto coords_prop = map["coordinates"];
+    auto  elems_prop = map["element"];
+
+    // Get the required properties
+    const Property &coords_property = molview.data().property(coords_prop);
 
     const AtomCoords &coords = coords_property.asA<AtomCoords>();
     const CoordGroup *coords_array = coords.constData();
     
-    const Property &elements_property = molview.data()
-                                               .property( parameters().element() );
+    const Property &elements_property = molview.data().property(elems_prop);
                                                
     const AtomElements &elements = elements_property.asA<AtomElements>();
     const AtomElements::Array *elements_array = elements.constData();
